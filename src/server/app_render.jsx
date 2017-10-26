@@ -6,17 +6,34 @@ import universalRender from '../shared/UniversalRender';
 import models from 'db/models';
 import secureRandom from 'secure-random';
 import ErrorPage from 'server/server-error';
+import fs from 'fs';
 
 const path = require('path');
 const ROOT = path.join(__dirname, '../..');
 
 const DB_RECONNECT_TIMEOUT = process.env.NODE_ENV === 'development' ? 1000 * 60 * 60 : 1000 * 60 * 10;
 
+function getSupportedLocales() {
+    const locales = [];
+    const files = fs.readdirSync(path.join(ROOT, 'src/app/locales'));
+    for (const filename of files) {
+        const match_res = filename.match(/(\w+)\.json?$/)
+        if (match_res) locales.push(match_res[1]);
+    }
+    return locales;
+}
+
+const supported_locales = getSupportedLocales();
+
 async function appRender(ctx) {
     const store = {};
     try {
         let login_challenge = ctx.session.login_challenge;
-        let userPreferences = {};
+        let locale = ctx.getLocaleFromHeader();
+        if (locale) locale = locale.substring(0, 2);
+        const locale_is_supported = supported_locales.find(l => l === locale);
+        if (!locale_is_supported) locale = 'en';
+        let userPreferences = {locale};
         if (!login_challenge) {
             login_challenge = secureRandom.randomBuffer(16).toString('hex');
             ctx.session.login_challenge = login_challenge;

@@ -603,7 +603,7 @@
     "withdraw_funds_after_the_required_3_day_waiting_period": "Retirada de fondos después del periodo de 3 días de espera",
     "from": "De",
     "to": "Para",
-    "asset_currently_collecting": "%(asset)s recolectando actualmente %(interest)s%% APR."
+    "asset_currently_collecting": "%(asset)s recolectando actualmente %(interest)s%% APR.",
     "beware_of_spam_and_phishing_links": "Beware of spam and phishing links in transfer memos. Do not open links from users you do not trust. Do not provide your private keys to any third party websites."
   },
   "userwallet_jsx": {

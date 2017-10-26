@@ -4,11 +4,30 @@ import types, {
     toggleNotificationGroups,
 } from 'app/components/elements/notification/type';
 
-//const YO = '/yo';
+//let YO = '/yo';
+//let YO = 'https://yo.steemitdev.com';
+let YO = 'https://api.steemitdev.com';
+let testMode = true;
+const y = {
+    local: () => {
+        YO = '/yo';
+    },
+    yo: () => {
+        YO = 'https://yo.steemitdev.com';
+    },
+    jussi: () => {
+        YO = 'https://api.steemitdev.com\'';
+    },
+    testMode: (on) => {
+        const enabled = (typeof on === 'undefined')? !testMode : !!on;
+        console.log("setting notifications test mode to ", enabled)
+        testMode = on;
+    }
+}
 
-//const YO = 'https://yo.steemitdev.com';
-const YO = 'https://api.steemitdev.com';
-
+if(typeof window !== 'undefined') {
+    window.y = y;
+}
 /**
  * Re-formats API notifications response a little bit.
  *
@@ -21,7 +40,7 @@ function normalize(res) {
         const resp = {
             ...n,
             id: n.notify_id.toString(),
-            shown: n.seen,
+            shown: n.shown,
             notificationType: n.notify_type,
         }
         if(resp.data.item && resp.data.item.parent_summary) {
@@ -88,7 +107,7 @@ export function fetchAllNotifications(username) {
             id: 1,
             method: 'yo.get_notifications',
             params: {
-                test: true, // Todo: for dev only! Do not merge if present!
+                test: testMode, // Todo: for dev only! Do not merge if present!
                 notify_type: 'vote', // Todo: for dev only! Do not merge if present!
                 //username, // Todo: for dev only! Do not merge if present!
                 username: 'test_user', // Todo: for dev only! Do not merge if present!
@@ -131,7 +150,7 @@ export function fetchSomeNotifications({ username, before, after, filterTypes })
             id: 1,
             method: 'yo.get_notifications',
             params: {
-                test: true, // Todo: for dev only! Do not merge if present!
+                test: testMode, // Todo: for dev only! Do not merge if present!
                 notify_type: 'vote', // Todo: for dev only! Do not merge if present!
                 //username, // Todo: for dev only! Do not merge if present!
                 username: 'test_user', // Todo: for dev only! Do not merge if present!
@@ -162,7 +181,7 @@ export function markAsRead(ids) {
             id: 1,
             method: 'yo.mark_read',
             params: {
-                test: true, // Todo: for dev only! Do not merge if present!
+                test: testMode, // Todo: for dev only! Do not merge if present!
                 ids: ids.map(id => parseInt(id, 10)),
             },
         }),
@@ -190,7 +209,7 @@ export function markAsUnread(ids) {
             id: 1,
             method: 'yo.mark_unread',
             params: {
-                test: true, // Todo: for dev only! Do not merge if present!
+                test: testMode, // Todo: for dev only! Do not merge if present!
                 ids: ids.map(id => parseInt(id, 10)),
             },
         }),
@@ -216,9 +235,9 @@ export function markAsShown(ids) {
         body: JSON.stringify({
             jsonrpc: '2.0',
             id: 1,
-            method: 'yo.mark_seen',
+            method: 'yo.mark_shown',
             params: {
-                test: true, // Todo: for dev only! Do not merge if present!
+                test: testMode, // Todo: for dev only! Do not merge if present!
                 ids: ids.map(id => parseInt(id, 10)),
             },
         }),
@@ -251,7 +270,7 @@ export function getNotificationSettings(username) {
             id: 1,
             method: 'yo.get_transports',
             params: {
-                test: true, // Todo: for dev only! Do not merge if present!
+                test: testMode, // Todo: for dev only! Do not merge if present!
                 username,
             },
         }),
@@ -261,6 +280,38 @@ export function getNotificationSettings(username) {
     .catch(error => {
         return { error };
     });
+}
+
+/**
+ *
+ * @param username
+ * @returns {Promise.<TResult>}
+ */
+export function resetStatuses(username) {
+    return fetch(YO, {
+        method: 'post',
+        credentials: 'same-origin',
+        headers: {
+            Accept: 'application/json',
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify({
+            jsonrpc: '2.0',
+            id: 1,
+            method: 'yo.reset_statuses',
+            params: {
+                test: testMode, // Todo: for dev only! Do not merge if present!
+                username
+            },
+        }),
+    }).then(r => r.json()).then(res => {
+        if (res) {
+            console.log(res);
+        }
+    })
+        .catch(error => {
+            return { error };
+        });
 }
 
 /**
@@ -282,7 +333,7 @@ export function saveNotificationSettings(username, settings) {
             id: 1,
             method: 'yo.set_transports',
             params: {
-                test: true, // Todo: for dev only! Do not merge if present!
+                test: testMode, // Todo: for dev only! Do not merge if present!
                 username,
                 transports: denormalizeSettingsToApi(settings),
             },

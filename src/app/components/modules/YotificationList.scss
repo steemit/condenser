@@ -1,32 +1,48 @@
 .NotificationMenuWrapper {
-    max-height:90vh;
-    overflow-y:auto;
-}
-ul.Notifications {
-    list-style: none outside;
-    > li.item {
-        padding-left:1rem;
-        padding-right:1rem;
-    }
-
+    max-height: 90vh;
+    overflow-y: auto;
 
 }
+
 
 .NotificationsModule {
-    > ul {
-        margin:0;
+    &.no-notifications {
+        ul.Notifications {
+            background: url(../icons/notifications/tropical.png);
+            background-repeat: no-repeat;
+            background-position: center;
+        }
     }
+    &.Dropdown {
+        >ul.Notifications {
+            min-height: 135px;
+        }
+        >.footer.get-more {
+            border-bottom:none;
+        }
+    }
+    > ul {
+        margin: 0;
+    }
+
+    ul.Notifications {
+        list-style: none outside;
+        min-height: 200px;
+        > li.item {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+    }
+
     > .title {
         &.absolute {
-            @include breakpoint(large) {
-                background: $white;
-                left:0px;
-                position: absolute;
-                top: 0px;
-                width: 100%;
+            background: $white;
+            left:0px;
+            position: absolute;
+            top: 0px;
+            width: 100%;
 
-            }
-            @include breakpoint(medium down) {
+            @media (max-height: 600px) {
                 display:none;
             }
         }
@@ -48,17 +64,21 @@ ul.Notifications {
 
         .controls-right {
             float:right;
+            margin-left: 20px;
         }
+
         .ptc {
             color:$notif_dd_ctrl_color;
             font-weight:normal;
             font-size:0.8rem;
             margin-right:1rem!important;
         }
+
         a {
             display:inline-block;
             color:$notif_dd_ctrl_color;
             padding:0px;
+
             .Icon {
                 fill:$notif_dd_ctrl_color;
                 margin-right:0;
@@ -67,7 +87,6 @@ ul.Notifications {
     }
 
     > .title {
-
         font-size:1.1rem;
 
         a {
@@ -204,6 +223,7 @@ ul.Notifications {
                 font-weight:bold;
                 font-size:1rem;
                 text-transform: lowercase;
+                display: inline;
             }
         }
         .rightControls {

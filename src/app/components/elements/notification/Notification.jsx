@@ -95,7 +95,7 @@ class NotificationLink extends React.Component {
                         <div className="Userpic" dangerouslySetInnerHTML={{ __html: badges.important}} />
                     </div> )
                 break
-            case type.TAG :
+            case type.MENTION :
             case type.VOTE :
                 localeAction = localeRoot + '.actionComment'
                 if(0 === item.depth) {

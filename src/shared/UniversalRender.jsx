@@ -125,6 +125,7 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
         if (url.indexOf('/curation-rewards') !== -1) url = url.replace(/\/curation-rewards$/, '/transfers');
         if (url.indexOf('/author-rewards') !== -1) url = url.replace(/\/author-rewards$/, '/transfers');
 
+        //todo: this line is triggering a node exception when client hard reloads the page in dev. Doesn't seem to be a production issue, but should be noted.
         onchain = await api.getStateAsync(url);
 
         if (Object.getOwnPropertyNames(onchain.accounts).length === 0 && (url.match(routeRegex.UserProfile1) || url.match(routeRegex.UserProfile3))) { // protect for invalid account

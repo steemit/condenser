@@ -16,6 +16,7 @@ import badges from './icon'
 class NotificationLink extends React.Component {
     constructor(notification, ...args) {
         super(notification, ...args)
+        console.log(this.props)
         this.state = {
             id: notification.id,
             onClick: notification.onClick
@@ -39,7 +40,7 @@ class NotificationLink extends React.Component {
     }
 
     render() {
-        const amount = this.props.amount
+        const amount = this.props.data.amount
         const author = this.props.data.author
         const classNames = (this.props.read)? '' : 'unread'
         const created = this.props.created
@@ -74,7 +75,7 @@ class NotificationLink extends React.Component {
                 break
             case type.RECEIVE_STEEM :
                 headerContent = <span><span className="user">{ author }</span>  { tt(localeAction) }</span>
-                bodyContent = <span>{ amount } { tt("g.steem") }</span>
+                bodyContent = <span>{ amount } <span className="subject"> { tt("g.steem") }</span></span>
                 break
             case type.RESTEEM :
                 headerContent = <span><span className="user">{ author }</span> { tt(localeAction) }</span>

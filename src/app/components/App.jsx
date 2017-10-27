@@ -214,11 +214,6 @@ class App extends React.Component {
                         </a>
                     </li>
                     <li>
-                        <a onClick={() => depositSteem(username)}>
-                            {tt('navigation.buy_LIQUID_TOKEN', {LIQUID_TOKEN})}
-                        </a>
-                    </li>
-                    <li>
                         <a href="/market" onClick={this.navigate}>
                             {tt('navigation.currency_market')}
                         </a>
@@ -240,6 +235,11 @@ class App extends React.Component {
                     </li>
                 </ul>
                 <ul className="vertical menu">
+                    <li>
+                        <a onClick={() => depositSteem(username)}>
+                            {tt('navigation.buy_LIQUID_TOKEN', {LIQUID_TOKEN})}&nbsp;<Icon name="extlink" />
+                        </a>
+                    </li>                
                     <li>
                         <a href="https://thesteemitshop.com/" target="_blank" rel="noopener noreferrer">
                             {tt('navigation.shop')}&nbsp;<Icon name="extlink" />

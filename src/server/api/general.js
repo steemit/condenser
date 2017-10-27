@@ -448,16 +448,8 @@ export default function useGeneralApi(app) {
         }
         try {
             const json = JSON.stringify(payload);
-            if (json.length > 1024) throw new Error('data too long');
-            const userPreferences = yield models.UserPreferences.findOne({
-                attributes: ['id', 'json'],
-                where: {account: this.session.a}
-            });
-            if (userPreferences) {
-                yield userPreferences.update({json});
-            } else {
-                yield models.UserPreferences.create({account: this.session.a, json});
-            }
+            if (json.length > 1024) throw new Error('the data is too long');
+            this.session.user_prefs = json;
             this.body = JSON.stringify({status: 'ok'});
         } catch (error) {
             console.error('Error in /setUserPreferences api call', this.session.uid, error);

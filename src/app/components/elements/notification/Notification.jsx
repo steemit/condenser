@@ -73,7 +73,8 @@ class NotificationLink extends React.Component {
                 bodyContent = item.summary
                 break
             case type.RECEIVE_STEEM :
-                headerContent = <span><span className="subject">{ amount } { tt("g.steem") }</span> { tt(localeAction) } <span className="user">{ author }</span></span>
+                headerContent = <span><span className="user">{ author }</span>  { tt(localeAction) }</span>
+                bodyContent = <span>{ amount } { tt("g.steem") }</span>
                 break
             case type.RESTEEM :
                 headerContent = <span><span className="user">{ author }</span> { tt(localeAction) }</span>

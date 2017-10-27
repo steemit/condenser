@@ -708,7 +708,7 @@
             "subject": "Notice"
         },
         "receive": {
-            "action": "received from"
+            "action": "paid you with"
         },
         "resteem": {
             "action": "resteemed"

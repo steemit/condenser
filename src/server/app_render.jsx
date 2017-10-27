@@ -39,8 +39,8 @@ async function appRender(ctx) {
         if (!userPreferences.locale) {
             let locale = ctx.getLocaleFromHeader();
             if (locale) locale = locale.substring(0, 2);
-            const locale_is_supported = supported_locales.find(l => l === locale);
-            if (!locale_is_supported) locale = 'en';
+            const localeIsSupported = supportedLocales.find(l => l === locale);
+            if (!localeIsSupported) locale = 'en';
             userPreferences.locale = locale;
         }
 

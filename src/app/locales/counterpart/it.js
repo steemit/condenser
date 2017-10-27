@@ -11,7 +11,7 @@ module.exports = {
             date: {
                 'default':  '%a, %e %b %Y',
                 long:       '%A, %B %o, %Y',
-                short:      '%b %e'
+                short:      '%e %b'
             },
 
             time: {

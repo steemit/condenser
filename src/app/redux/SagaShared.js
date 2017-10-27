@@ -53,7 +53,15 @@ function* showTransactionErrorNotification() {
 }
 
 export function* getContent({author, permlink, resolve, reject}) {
-    const content = yield call([api, api.getContentAsync], author, permlink);
+    let content;
+    while(!content) {
+        content = yield call([api, api.getContentAsync], author, permlink);
+        if(content["author"] == "") { // retry if content not found. #1870
+            content = null;
+            yield call(wait, 3000);
+        }
+    }
+
     yield put(g.actions.receiveContent({content}))
     if (resolve && content) {
         resolve(content);

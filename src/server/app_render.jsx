@@ -28,12 +28,23 @@ const supportedLocales = getSupportedLocales();
 async function appRender(ctx) {
     const store = {};
     try {
+        let userPreferences = {};
+        if (ctx.session.user_prefs) {
+            try {
+                userPreferences = JSON.parse(ctx.session.user_prefs);
+            } catch (err) {
+                console.error('cannot parse user preferences:', ctx.session.uid, err);
+            }
+        }
+        if (!userPreferences.locale) {
+            let locale = ctx.getLocaleFromHeader();
+            if (locale) locale = locale.substring(0, 2);
+            const locale_is_supported = supported_locales.find(l => l === locale);
+            if (!locale_is_supported) locale = 'en';
+            userPreferences.locale = locale;
+        }
+
         let login_challenge = ctx.session.login_challenge;
-        let locale = ctx.getLocaleFromHeader();
-        if (locale) locale = locale.substring(0, 2);
-        const localeIsSupported = supportedLocales.find(l => l === locale);
-        if (!localeIsSupported) locale = 'en';
-        let userPreferences = {locale};
         if (!login_challenge) {
             login_challenge = secureRandom.randomBuffer(16).toString('hex');
             ctx.session.login_challenge = login_challenge;
@@ -99,16 +110,6 @@ async function appRender(ctx) {
             });
             if (account_recovery_record) {
                 offchain.recover_account = account_recovery_record.account_name;
-            }
-        }
-        if (ctx.session.a) {
-            const userPreferencesRecord = await models.UserPreferences.findOne({
-                attributes: ['json'],
-                where: {account: ctx.session.a},
-                logging: false
-            });
-            if (userPreferencesRecord) {
-                userPreferences = JSON.parse(userPreferencesRecord.json);
             }
         }
 

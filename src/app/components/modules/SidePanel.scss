@@ -4,7 +4,7 @@ $menu-width: 250px;
   display: block;
 
   .menu > li.last {
-    border-bottom: $color-border-dark;   
+    border-bottom: 1px solid $color-border-dark;   
     color: $color-text-gray-light;  
   }
 

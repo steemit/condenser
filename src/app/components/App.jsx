@@ -127,6 +127,7 @@ class App extends React.Component {
             depositSteem, signup_bonus, username} = this.props;
         const lp = false; //location.pathname === '/';
         const miniHeader = location.pathname === '/create_account' || location.pathname === '/pick_account';
+        const headerHidden = miniHeader && location.search === '?whistle_signup'
         const params_keys = Object.keys(params);
         const ip = location.pathname === '/' || (params_keys.length === 2 && params_keys[0] === 'order' && params_keys[1] === 'category');
         const alert = this.props.error || flash.get('alert') || flash.get('error');
@@ -288,7 +289,7 @@ class App extends React.Component {
                     </li>
                 </ul>
             </SidePanel>
-            {miniHeader ? <MiniHeader /> : <Header toggleOffCanvasMenu={this.toggleOffCanvasMenu} menuOpen={this.state.open} />}
+            {miniHeader ? headerHidden ? null : <MiniHeader /> : <Header toggleOffCanvasMenu={this.toggleOffCanvasMenu} menuOpen={this.state.open} />}
             <div className="App__content">
                 {welcome_screen}
                 {callout}

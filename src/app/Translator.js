@@ -30,7 +30,7 @@ class Translator extends React.Component {
 
 export default connect(
     (state, ownProps) => {
-        const locale = state.user.get('locale');
+        const locale = 'en'; // temporary, real i18n support will be added later
         return {...ownProps, locale};
     }
 )(Translator);

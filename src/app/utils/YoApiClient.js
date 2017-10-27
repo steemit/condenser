@@ -133,7 +133,7 @@ export function fetchAllNotifications(username) {
  * @param {String[]} types only these notification types
  *
  */
-export function fetchSomeNotifications({ username, before, after, filterTypes }) { // Todo: filter by types once api allows for it
+export function fetchSomeNotifications({ username, before, after, types }) { // Todo: filter by types once api allows for it
     const beforeOrAfterParams = {};
     if (after) beforeOrAfterParams.updated_after = after;
     if (before) beforeOrAfterParams.created_before = before;
@@ -151,7 +151,7 @@ export function fetchSomeNotifications({ username, before, after, filterTypes })
             method: 'yo.get_notifications',
             params: {
                 test: testMode, // Todo: for dev only! Do not merge if present!
-                notify_types: filterTypes,
+                notify_types: types,
                 //username, // Todo: for dev only! Do not merge if present!
                 username: 'test_user', // Todo: for dev only! Do not merge if present!
                 ...beforeOrAfterParams,

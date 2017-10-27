@@ -14,6 +14,17 @@
   font-size: inherit;
 }
 
+a {
+  transition: 0.2s all ease-in-out;
+  @include themify($themes) {
+    color: themed('textColorAccent');  
+  } 
+  &:hover, &:focus {
+    @include themify($themes) {
+      color: themed('textColorAccentHover');  
+    } 
+  }
+}
 
 div[role=dialog] {
   z-index: 500;

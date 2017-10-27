@@ -155,7 +155,9 @@
     padding: 0.25rem 0.5rem;
     font-size: 82.5%;
     display: block;
-    color: #666;
+    @include themify($themes) {
+      color: themed('textColorSecondary');  
+    }  
   }
 }
 

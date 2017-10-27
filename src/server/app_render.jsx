@@ -23,7 +23,7 @@ function getSupportedLocales() {
     return locales;
 }
 
-const supported_locales = getSupportedLocales();
+const supportedLocales = getSupportedLocales();
 
 async function appRender(ctx) {
     const store = {};
@@ -31,8 +31,8 @@ async function appRender(ctx) {
         let login_challenge = ctx.session.login_challenge;
         let locale = ctx.getLocaleFromHeader();
         if (locale) locale = locale.substring(0, 2);
-        const locale_is_supported = supported_locales.find(l => l === locale);
-        if (!locale_is_supported) locale = 'en';
+        const localeIsSupported = supportedLocales.find(l => l === locale);
+        if (!localeIsSupported) locale = 'en';
         let userPreferences = {locale};
         if (!login_challenge) {
             login_challenge = secureRandom.randomBuffer(16).toString('hex');

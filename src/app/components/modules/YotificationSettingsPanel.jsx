@@ -4,18 +4,20 @@
 
 import React from 'react';
 import {connect} from 'react-redux'
+import classNames from 'classnames';
 import tt from 'counterpart';
 import { toggleNotificationGroupNames } from 'app/components/elements/notification/type';
+import Icon from 'app/components/elements/Icon'
 import IOSToggle from 'app/components/elements/IOSToggle';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 
 const TRANSPORT_WEBSITE = 'wwwpoll';
+const TRANSPORT_SMS = 'sms';
+const TRANSPORT_EMAIL = 'email';
+
+const activeTransports = [TRANSPORT_WEBSITE, TRANSPORT_EMAIL, TRANSPORT_SMS];
 
 class YotificatonSettingsPanel extends React.Component {
-
-    componentWillMount = () => { //eslint-disable-line no-undef
-        this.props.loadGroups();
-    }
 
     onToggleGroup = (transport, groupName, checked) => { //eslint-disable-line no-undef
         this.props.toggleGroup(transport, groupName, checked);
@@ -26,30 +28,64 @@ class YotificatonSettingsPanel extends React.Component {
             isFetching,
             isSaving,
             groups,
-            transport
+            transportName
         } = this.props;
 
         const toggles = [];
         toggleNotificationGroupNames.forEach(groupName => {
             toggles.push(<li key={groupName}>{tt('settings_jsx.notifications.meta_types.' + groupName)} {
-                (isFetching || isSaving || (undefined == groups.getIn([transport, 'notification_types', groupName]))) ?
+                (isFetching || isSaving || (undefined == groups.getIn([transportName, 'notification_types', groupName]))) ?
                     <LoadingIndicator type="circle" inline />
                     : <IOSToggle
                         className="yotification-toggle"
-                        onClick={(checked) => this.onToggleGroup(this.props.transport, groupName, checked)}
-                        checked={groups.getIn([transport, 'notification_types', groupName])}
+                        onClick={(checked) => this.onToggleGroup(this.props.transportName, groupName, checked)}
+                        checked={groups.getIn([transportName, 'notification_types', groupName])}
                         value={groupName}
                     />}
             </li>);
         })
 
         return (
-            <div className={'YotificationSettingsPanel ' + this.props.className}>
-                <h4>{tt('settings_jsx.notifications.title')} {(this.props.isSaving)? <LoadingIndicator type="circle" inline style={{float: 'right'}} /> : null}</h4>
+            <div className="YotificationSettingsPanel">
+                <div className="panel-header">
+                    <div className="panel-icon">
+                        <Icon name={tt(`settings_jsx.notifications.transports.${transportName}.icon`)} size="2x"/>
+                    </div>
+                    <div className="panel-title ">
+                        <span className="main-title">{tt(`settings_jsx.notifications.transports.${transportName}.title`)}</span>
+                        <span className="sub-title">{tt(`settings_jsx.notifications.transports.${transportName}.sub_title`)}</span>
+                    </div>
+                </div>
+
                 <ul>{toggles}</ul>
             </div>
         );
     }
+}
+
+class YotificatonSettingsRootPanel extends React.Component {
+    componentWillMount = () => { //eslint-disable-line no-undef
+        this.props.loadGroups();
+    }
+
+    render() {
+        const {
+            isFetching,
+            isSaving,
+            groups
+        } = this.props;
+
+        const transportSettings = activeTransports.reduce((settings, transportName) => {
+            settings.push(<YotificatonSettingsPanel toggleGroup={this.props.toggleGroup} key={transportName} transportName={transportName} groups={groups} isFetching={isFetching} isSaving={isSaving} />);
+            return settings;
+        }, []);
+
+        return (<div className={classNames('YotificatonSettingsRootPanel',this.props.className)} style={{marginTop:'20px', marginBottom:'20px'}}>
+            <h4>{tt('settings_jsx.notifications.title')} {(this.props.isSaving)? <LoadingIndicator type="circle" inline style={{float: 'right'}} /> : null}</h4>
+            {transportSettings}
+        </div>);
+    }
+
 }
 
 export default connect(
@@ -59,7 +95,6 @@ export default connect(
             ...ownProps,
             isFetching: state.notificationsettings.isFetching,
             isSaving: state.notificationsettings.isSaving,
-            transport: TRANSPORT_WEBSITE,
             groups: state.notificationsettings.groups
         }
     },
@@ -70,6 +105,7 @@ export default connect(
             });
         },
         toggleGroup: (transport, group, checked) => { //eslint-disable-line no-unused-vars
+            console.log('toggleGroup: (transport, group, checked) ', transport, group,checked)
             dispatch({
                 type: 'notificationsettings/TOGGLE_GROUP',
                 transport,
@@ -77,4 +113,4 @@ export default connect(
             });
         }
     })
-)(YotificatonSettingsPanel);
+)(YotificatonSettingsRootPanel);

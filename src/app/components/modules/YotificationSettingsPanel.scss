@@ -1,4 +1,28 @@
-.YotificationSettingsPanel {
+.YotificatonSettingsRootPanel {
+    margin:30px, 0px;
+    .YotificationSettingsPanel {
+        margin-top:20px;
+        .panel-header {
+            height: 50px;
+            .panel-icon {
+                width:50px;
+                float:left;
+                text-align: center;
+                padding-top:5px;
+            }
+            .panel-title {
+                float:left;
+                .main-title {
+                    font-weight:bold;
+                    display:block;
+                }
+                .sub-title {
+                    font-size:12px;
+                    display:block;
+                }
+            }
+        }
+    }
     ul {
         list-style:none;
         margin: 0px;

@@ -61,6 +61,8 @@ function normalize(res) {
  * @return {Object}
  */
 export function normalizeSettingsFromApi(transportsFromApi) {
+
+    console.log('normalizeSettingsFromApi(transportsFromApi)', transportsFromApi)
     // For each of the transports coming through from the API,
     // If the API's notification_types is truthy,
     // Transform array of enabled types into a Map based on our type->group mapping config,

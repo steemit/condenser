@@ -586,9 +586,22 @@
     "not_safe_for_work_nsfw_content": "Not safe for work (NSFW) content",
     "notifications": {
       "title": "Notification settings",
-      "transport_website": {
-        "title": "Website notifications",
-        "sub_title": "Appears on Steemit.com"
+      "transports": {
+        "wwwpoll": {
+          "title": "Website notifications",
+          "sub_title": "Appears on Steemit.com",
+          "icon":"notify-outline"
+        },
+        "sms": {
+          "title": "SMS notifications",
+          "sub_title": "For security alerts",
+          "icon":"chat-bubble-outline"
+        },
+        "email": {
+          "title": "Email notifications",
+          "sub_title": "Straight to your inbox",
+          "icon":"mail-outline"
+        }
       },
       "meta_types": {
         "security": "Security setting changes",

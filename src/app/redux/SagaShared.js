@@ -1,9 +1,10 @@
 import {fromJS} from 'immutable'
 import {call, put, select} from 'redux-saga/effects';
 import g from 'app/redux/GlobalReducer'
-import {takeEvery} from 'redux-saga';
+import {takeEvery, takeLatest} from 'redux-saga';
 import tt from 'counterpart';
 import {api} from 'steem';
+import {setUserPreferences} from 'app/utils/ServerApiClient';
 
 const wait = ms => (
     new Promise(resolve => {
@@ -11,7 +12,7 @@ const wait = ms => (
     })
 );
 
-export const sharedWatches = [watchGetState, watchTransactionErrors]
+export const sharedWatches = [watchGetState, watchTransactionErrors, watchUserSettingsUpdates]
 
 export function* getAccount(username, force = false) {
     let account = yield select(state => state.global.get('accounts').get(username))
@@ -52,11 +53,27 @@ function* showTransactionErrorNotification() {
 }
 
 export function* getContent({author, permlink, resolve, reject}) {
-    const content = yield call([api, api.getContentAsync], author, permlink);
+    let content;
+    while(!content) {
+        content = yield call([api, api.getContentAsync], author, permlink);
+        if(content["author"] == "") { // retry if content not found. #1870
+            content = null;
+            yield call(wait, 3000);
+        }
+    }
+
     yield put(g.actions.receiveContent({content}))
     if (resolve && content) {
         resolve(content);
     } else if (reject && !content) {
         reject();
     }
+}
+
+function* saveUserPreferences({payload}) {
+    yield setUserPreferences(payload);
+}
+
+function* watchUserSettingsUpdates() {
+    yield* takeLatest('SET_USER_PREFERENCES', saveUserPreferences);
 }

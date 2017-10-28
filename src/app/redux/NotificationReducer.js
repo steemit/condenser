@@ -180,8 +180,20 @@ const errorMsg = (state = null, action = { type: null }) => {
     }
 };
 
+export const allIds = (state = Set(), action = { type: null }) => {
+    switch (action.type) {
+        case 'notification/RECEIVE_ALL':
+            return Set.fromKeys(apiToMap(action.payload));
+        case 'notification/APPEND_SOME':
+            return state.union(Set.fromKeys(apiToMap(action.payload)));
+        default:
+            return state;
+    }
+}
+
 const notificationReducer = combineReducers({
     byId,
+    allIds,
     idsReadPending: createUpdatedList({ prop: 'read', val: true }),
     idsUnreadPending: createUpdatedList({ prop: 'read', val: false }),
     idsShownPending: createUpdatedList({ prop: 'shown', val: true }),

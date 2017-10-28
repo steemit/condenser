@@ -7,7 +7,7 @@
 }
 
 .UserProfile__top-nav {
-  background-color: #333333;
+  background-color: $color-blue-dark;  
   padding: 0;
   .row {
       .columns {
@@ -22,15 +22,22 @@
       transform: translate3d( 0, 0, 0);
       padding-left: 0.7rem;
       padding-right: 0.7rem;
-      color: $white;
       background-color: transparent;
-      &:hover {
-          background-color: #555;
+      @include themify($themes) {
+        color: themed('textColorSecondary');  
+      }        
+      &:hover, &:focus {
+        @include themify($themes) {
+          background-color: themed('backgroundColor');  
+          color: themed('textColorPrimary');  
+        }  
       }
       &.active {
-          background-color: $white;
+          @include themify($themes) {
+            background-color: themed('backgroundColor');  
+            color: themed('textColorPrimary');  
+          }            
           z-index: 2;
-          color: $black;
           font-weight: bold;
         }
   }

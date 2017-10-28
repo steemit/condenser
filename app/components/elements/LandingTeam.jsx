@@ -103,7 +103,7 @@ export default class LandingTeam extends React.Component {
 
             <div data-wow-delay="1s" className="wow fadeIn small-12 medium-4 large-3 columns small-centered Team__member ">
                 <div className="Team__members__image-wrapper">
-                    <img className="Team__member__img" src="" />
+                    <img className="Team__member__img" src="images/landing/dankinescop.jpeg" />
                 </div>
                 <strong>Денис Белых</strong>
                 <p>Support Manager</p>
@@ -222,18 +222,6 @@ export default class LandingTeam extends React.Component {
 
             <div data-wow-delay="1s" className="wow fadeIn small-12 medium-12 large-3 columns small-centered Team__member ">
                 <div className="Team__members__image-wrapper">
-                    <img className="Team__member__img" src="https://diliart.com/image/ava/Ava.png" />
-                </div>
-                <strong>Прищепа Дмитрий</strong>
-                <p>Посол Голоса, г.Покровск</p>
-                <ul>
-                    <li><a href="mailto:pridminik@gmail.com" title="mail to pridminik@gmail.com"><Icon name="envelope" size="2x" /></a></li>
-                    <li><a href="/@fargo123"><Icon name={APP_ICON} size="2x" /></a></li>
-                </ul>
-            </div>
-
-            <div data-wow-delay="1s" className="wow fadeIn small-12 medium-12 large-3 columns small-centered Team__member ">
-                <div className="Team__members__image-wrapper">
                     <img className="Team__member__img" src="https://img-fotki.yandex.ru/get/5905/201655053.f2/0_12324d_912d44b6_orig.jpg" />
                 </div>
                 <strong>Василий Никитинский</strong>
@@ -246,9 +234,21 @@ export default class LandingTeam extends React.Component {
 
             <div data-wow-delay="1s" className="wow fadeIn small-12 medium-12 large-3 columns small-centered Team__member ">
                 <div className="Team__members__image-wrapper">
+                    <img className="Team__member__img" src="https://diliart.com/image/ava/Ava.png" />
+                </div>
+                <strong>Прицепа Дмитрий</strong>
+                <p>Посол Голоса, г.Покровск</p>
+                <ul>
+                    <li><a href="mailto:pridminik@gmail.com" title="mail to pridminik@gmail.com"><Icon name="envelope" size="2x" /></a></li>
+                    <li><a href="/@fargo123"><Icon name={APP_ICON} size="2x" /></a></li>
+                </ul>
+            </div>
+
+            <div data-wow-delay="1s" className="wow fadeIn small-12 medium-12 large-3 columns small-centered Team__member ">
+                <div className="Team__members__image-wrapper">
                     <img className="Team__member__img" src="http://s015.radikal.ru/i331/1708/50/b8ea656185f6.jpg" />
                 </div>
-                <strong>Игорь Кононенко</strong>
+                <strong>Игорь Ягубков</strong>
                 <p>Посол Голоса, г.Пермь</p>
                 <ul>
                     <li><a href="mailto:akciirosta@yndex.ru" title="mail to akciirosta@yndex.ru"><Icon name="envelope" size="2x" /></a></li>
@@ -260,7 +260,7 @@ export default class LandingTeam extends React.Component {
                 <div className="Team__members__image-wrapper">
                     <img className="Team__member__img" src="https://lh3.googleusercontent.com/-adSQxNcceaI/WalCT1S_kcI/AAAAAAAACBI/oicJ4-LmVtIQPwysh4-NFm9j_AftXQAWACEwYBhgL/w140-h140-p/photo_2017-09-01_14-17-49.jpg" />
                 </div>
-                <strong>Игорь</strong>
+                <strong>Игорь Кононенко</strong>
                 <p>Посол Голоса, г.Запорожье</p>
                 <ul>
                     <li><a href="mailto:goryakon@gmail.com" title="mail to goryakon@gmail.com"><Icon name="envelope" size="2x" /></a></li>

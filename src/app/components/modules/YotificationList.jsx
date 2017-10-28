@@ -7,6 +7,7 @@ import Notification from 'app/components/elements/notification';
 import { filters } from 'app/components/elements/notification/type';
 import { Link } from 'react-router'
 import debounce from 'lodash.debounce';
+import Immutable from 'immutable';
 import React from 'react';
 import Url from 'app/utils/Url';
 
@@ -29,9 +30,11 @@ function topPosition(domElt) {
     return domElt.offsetTop + topPosition(domElt.offsetParent);
 }
 
-const renderNotificationList = (notifications = [], onViewAll) => {
+const renderNotificationList = (notifications, filterIds, onViewAll) => {
     const notificationList = [];
-    notifications.forEach( notification => {
+    const ids = filterIds;
+    ids.forEach(id => {
+        const notification = notifications.get(id);
         if(!notification.hide) {
             notificationList.push( <li className={classNames("item", {unread: (!notification.read)})} key={notification.id}><Notification {...notification} onClick={onViewAll} /></li> );
         }
@@ -44,8 +47,10 @@ const renderFilterList = (props) => {
     let className = (props.filter === FILTER_ALL)? 'selected' : '';
     const filterLIs = Object.keys(filters).reduce((list, filter) => {
         className = (filter === props.filter)? 'selected' : '';
+        const dest = Url.notifications(filter);
+        const text = locales(`notifications.filters.${filter}`);
         list.push(<li key={filter} className={className}><Link
-            to={Url.notifications(filter)}>{locales(`notifications.filters.${filter}`)}</Link></li>);
+            to={dest}>{text}</Link></li>);
         return list;
     }, [<li key="legend" className="selected">{tt("notifications.filters._label")}</li>, <li key="all" className={className}><Link to={Url.notifications()}>{tt('notifications.filters.all')}</Link></li>]);
     return ( <ul className="menu">{filterLIs}</ul>);
@@ -100,18 +105,18 @@ class YotificationList extends React.Component {
 
 
     markDisplayedRead = () => { //eslint-disable-line no-undef
-        this.props.updateSome(this.props.notifications, {read: true} );
+        this.props.updateSome(this.props.filterIds.toArray(), {read: true} );
     }
 
     markDisplayedHidden = () => { //eslint-disable-line no-undef
-        this.props.updateSome(this.props.notifications, {hide: true} );
+        this.props.updateSome(this.props.filterIds.toArray(), {hide: true} );
     }
 
     markDisplayedShownWithDelay = () => { //eslint-disable-line no-undef
         const self = this;
         clearTimeout(this.markDisplayedShownTimeout);
         this.markDisplayedShownTimeout = setTimeout(() => {
-            self.props.updateSome(this.props.notifications, {shown: true} );
+            self.props.updateSome(this.props.filterIds.toArray(), {shown: true} );
         }, TIMEOUT_MARK_SHOWN_MILLIS)
     }
     appendSome = () => { //eslint-disable-line no-undef
@@ -164,7 +169,7 @@ class YotificationList extends React.Component {
 
                 {this.renderTitle()}
                 {(this.state.showFilters)? renderFilterList(this.props) : null}
-                {renderNotificationList(this.props.notifications, this.props.onViewAll)}
+                {renderNotificationList(this.props.notifications, this.props.filterIds, this.props.onViewAll)}
                 {this.renderTitle(true)}
 
                 <div className="footer get-more">
@@ -187,7 +192,8 @@ class YotificationList extends React.Component {
 YotificationList.propTypes = {
     updateSome: React.PropTypes.func.isRequired,
     appendSome: React.PropTypes.func.isRequired,
-    //notifications: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
+    notifications: React.PropTypes.instanceOf(Immutable.Map).isRequired,
+    filterIds: React.PropTypes.instanceOf(Immutable.Set).isRequired,
     layout: React.PropTypes.oneOf([LAYOUT_PAGE, LAYOUT_DROPDOWN]),
     showClearAll: React.PropTypes.bool.isRequired,
     noMoreToFetch: React.PropTypes.bool.isRequired,
@@ -205,11 +211,8 @@ export default connect(
     (state, ownProps) => {
         const filter = (ownProps.filter && filters[ownProps.filter]) ? ownProps.filter : FILTER_ALL;
         let allRead = true;
-        const notifications = filter === FILTER_ALL
-            ? state.notification.byId
-            : state.notification.byId.filter((v, id) => state.notification.byUserFacingType[filter].includes(id));
 
-        notifications.forEach((n) => {
+        state.notification.byId.forEach((n) => {
             if (n.read === false) {
                 allRead = false;
                 return false;
@@ -221,26 +224,21 @@ export default connect(
         const noMoreToFetch = state.notification.lastFetchBeforeCount.get(filterToken) === 0;
 
         return {
-            notifications,
             ...ownProps,
-            filter,
+            notifications: state.notification.byId,
+            filterIds: filter === FILTER_ALL ? state.notification.allIds : state.notification.byUserFacingType[filter],
             noMoreToFetch,
             isFetchingBefore: state.notification.isFetchingBefore,
             showClearAll: allRead,
         }
     },
     dispatch => ({
-        updateSome: (notifications, changes) => {
-            const ids = [];
-            notifications.forEach((n) => {
-                ids.push(n.id);
-            });
-            const action = {
+        updateSome: (ids, changes) => {
+            dispatch({
                 type: 'notification/UPDATE_SOME',
                 ids,
                 updates: changes
-            };
-            dispatch(action);
+            });
         },
         appendSome: (notificationTypes) => {
             console.log(notificationTypes)

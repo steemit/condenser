@@ -69,8 +69,7 @@
         color: $white;
     }
     > div.column {
-        background: #23579d; /* for older browsers */
-        background: linear-gradient(to bottom, #1a4072 0%, #23579d 100%);
+        background: $color-blue-black;
         background-size: cover;
         background-repeat: no-repeat;
         background-position: 50% 50%;

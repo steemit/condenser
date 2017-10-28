@@ -60,3 +60,9 @@ input, textarea, select {
 // .hoverShowTrigger:hover > .hoverShow {
 //     visibility: visible;
 // }
+
+label {
+  @include themify($themes) {
+    color: themed('textColorPrimary');  
+  }    
+}

@@ -217,7 +217,7 @@ class Witnesses extends Component {
                                         <div>{tt('witnesses_jsx.missed_1')}</div>
                                         <div>{tt('witnesses_jsx.missed_2')}</div>
                                     </th>
-                                    <th>{tt('witnesses_jsx.last_block')}</th>
+                                    <th style={{textAlign: 'center'}}>{tt('witnesses_jsx.last_block')}</th>
                                     <th>{tt('witnesses_jsx.price_feed')}</th>
                                     <th>{tt('witnesses_jsx.props')}</th>
                                     <th>{tt('witnesses_jsx.version')}</th>

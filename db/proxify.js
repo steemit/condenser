@@ -2,6 +2,11 @@ async function proxify(method, context, proxy, lifetime /*, options */) {
   const options = [].slice.call(arguments).splice(4);
   const proxyKey = method + JSON.stringify(options);
   let res = [];
+
+  if (process.env.NODE_ENV === 'development') {
+    return await context[method].apply(context, options);
+  }
+
   try {
     const cache = await proxy.call('chaindb_get', proxyKey);
     if (cache && cache.length >= 1)

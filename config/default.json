@@ -103,6 +103,12 @@
     "port": "3301",
     "username": "guest"
   },
+  "chainproxy": {
+    "host": "localhost",
+    "password": "",
+    "port": "3301",
+    "username": "guest"
+  },
   "telesign": {
     "customer_id": false,
     "rest_api_key": false

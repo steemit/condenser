@@ -77,6 +77,12 @@
     "port": "SDC_TARANTOOL_PORT",
     "username": "SDC_TARANTOOL_USERNAME"
   },
+  "chainproxy": {
+    "host": "SDC_CHAIN_PROXY_HOSTNAME",
+    "password": "SDC_CHAIN_PROXY_PASSWORD",
+    "port": "SDC_CHAIN_PROXY_PORT",
+    "username": "SDC_CHAIN_PROXY_USERNAME"
+  },
   "telesign": {
     "customer_id": "SDC_TELESIGN_CUSTOMER_ID",
     "rest_api_key": "SDC_TELESIGN_API_KEY"

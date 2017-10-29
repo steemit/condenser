@@ -23,7 +23,7 @@ function notify(account, nparams, title, body, url, pic) {
 
 async function process_queue() {
     try {
-        const queue = await Tarantool.instance().call('webpush_get_delivery_queue');
+        const queue = await Tarantool.instance('tarantool').call('webpush_get_delivery_queue');
         console.log('processing web push notifications queue, length: ', queue.length);
         for (const n of queue) {
             if (n.length === 0) return;
@@ -35,7 +35,7 @@ async function process_queue() {
                 } catch (err) {
                     console.error('-- error in notify -->', account, nparams, err);
                     if (err.statusCode && err.statusCode == 410) {
-                        await Tarantool.instance().call('webpush_unsubscribe', account, nparams.keys.auth);
+                        await Tarantool.instance('tarantool').call('webpush_unsubscribe', account, nparams.keys.auth);
                     }
                 }
             }

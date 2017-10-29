@@ -42,7 +42,7 @@ export default function useGeneralApi(app) {
         }
 
         try {
-            const lock_entity_res = yield Tarantool.instance().call('lock_entity', user_id+'');
+            const lock_entity_res = yield Tarantool.instance('tarantool').call('lock_entity', user_id+'');
             if (!lock_entity_res[0][0]) {
                 console.log('-- /accounts lock_entity -->', user_id, lock_entity_res[0][0]);
                 this.body = JSON.stringify({error: 'Conflict'});
@@ -179,7 +179,7 @@ export default function useGeneralApi(app) {
             this.status = 500;
         } finally {
             // console.log('-- /accounts unlock_entity -->', user_id);
-            try { yield Tarantool.instance().call('unlock_entity', user_id + ''); } catch(e) {/* ram lock */}
+            try { yield Tarantool.instance('tarantool').call('unlock_entity', user_id + ''); } catch(e) {/* ram lock */}
         }
         recordWebEvent(this, 'api/accounts', account ? account.name : 'n/a');
     });
@@ -326,7 +326,7 @@ export default function useGeneralApi(app) {
             let views = 1, unique = true;
             if (config.has('tarantool') && config.has('tarantool.host')) {
                 try {
-                    const res = yield Tarantool.instance().call('page_view', page, remote_ip, this.session.uid, ref);
+                    const res = yield Tarantool.instance('tarantool').call('page_view', page, remote_ip, this.session.uid, ref);
                     unique = res[0][0];
                 } catch (e) {}
             }

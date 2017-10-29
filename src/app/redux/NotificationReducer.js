@@ -1,6 +1,6 @@
 import { Map, OrderedMap, Set } from 'immutable';
 import { combineReducers } from 'redux';
-import allTypes, { filters } from 'app/components/elements/notification/type';
+import { filters } from 'app/components/elements/notification/type';
 
 /**
  * Normalizes API payload.
@@ -123,23 +123,10 @@ export const createMultiTypeList = (filtertypes) => (state = Set(), action = { t
     }
 };
 
-const generateByTypeReducers = (types, listCreator) => {
-    return types.reduce((acc, cur) => {
-        return {
-            ...acc,
-            [cur]: listCreator({ prop: 'notificationType', val: cur }),
-        };
-    }, {});
-};
-
-const generateUserfacingTypesReducers = (filtermap, listCreator) => {
-    return Object.keys(filtermap).reduce((acc, cur) => {
-        return {
-            ...acc,
-            [cur]: listCreator(filtermap[cur]),
-        }
-    }, {});
-}
+const generateUserfacingTypesReducers = (filtermap, listCreator) => Object.keys(filtermap).reduce((acc, cur) => ({
+    ...acc,
+    [cur]: listCreator(filtermap[cur]),
+}), {});
 
 const isFetching = (state = false, action = { type: null }) => {
     switch (action.type) {
@@ -199,7 +186,6 @@ const notificationReducer = combineReducers({
     idsShownPending: createUpdatedList({ prop: 'shown', val: true }),
     unread: createList({ prop: 'read', val: false }),
     unshown: createList({ prop: 'shown', val: false }),
-    byType: combineReducers(generateByTypeReducers(allTypes, createList)),
     byUserFacingType: combineReducers(generateUserfacingTypesReducers(filters, createMultiTypeList)),
     isFetching,
     isFetchingBefore,

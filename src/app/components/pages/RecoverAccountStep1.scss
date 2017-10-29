@@ -1,5 +1,6 @@
 
-.Settings {
+.RestoreAccount {
+
 	.button {
 		text-decoration: none;
 		font-weight: bold;
@@ -36,22 +37,5 @@
 				color: themed('buttonText');
 			}	    	
 	    }
-	}
-	.success, .error {
-		text-transform: capitalize;
-		padding-left: 8px;		
-	}
-	.success {
-		@include themify($themes) {
-			color: themed('textColorAccent');
-		}			
 	}	
-	p.error {
-		position: relative;
-		top: 4px;
-		line-height: 1.2;
-	}
-	div.error {
-		padding-left: 0;
-	}
 }

@@ -25,6 +25,10 @@ input, textarea, select {
     color: $alert-color;
     margin-bottom: 10px;
 }
+p.error {
+  padding-top: 6px;
+  line-height: 1.1;
+}
 .warning {
     color: darkgoldenrod;
     margin-bottom: 10px;

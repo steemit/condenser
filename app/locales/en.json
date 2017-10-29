@@ -621,17 +621,34 @@
   "witnesses_jsx": {
     "witness_thread": "witness thread",
     "top_witnesses": "Witness Voting",
-    "you_have_votes_remaining": "You have {votesCount, plural,\n=0 {no votes}\none {1 vote}\nother {%(votesCount)s votes}} remaining",
     "you_can_vote_for_maximum_of_witnesses": "You can vote for a maximum of 30 witnesses",
     "witness": "Witness",
     "information": "Information",
+    "approval": "Votes",
+    "missed_1": "Missed",
+    "missed_2": "blocks",
+    "last_block": "Last block",
+    "price_feed": "Price feed",
+    "props": "Props",
+    "reg_fee": "Registration fee",
+    "apr": "APR",
+    "block_size": "Block size",
+    "witness_deactive": "Withness suspended the signature of the blocks",
+    "no_price_feed": "Withness did not publish the price feed",
+    "version": "Version",
     "if_you_want_to_vote_outside_of_top_enter_account_name": "If you would like to vote for a witness outside of the top 50, enter the account name below to cast a vote",
     "set_witness_proxy": "You can also choose a proxy that will vote for witnesses for you. This will reset your current witness selection.",
     "witness_set": "You have set a voting proxy. If you would like to reenable manual voting, please clear your proxy.",
     "witness_proxy_current": "Your current proxy is",
     "witness_proxy_set": "Set proxy",
     "witness_proxy_clear": "Clear proxy",
-    "proxy_update_error": "Your proxy was not updated"
+    "proxy_update_error": "Your proxy was not updated",
+    "you_have_votes_remaining": "",
+    "you_have_votes_remaining_count": {
+      "zero": "You have no votes remaining",
+      "one": "You have 1 vote remaining",
+      "other": "You have %(count)s votes remaining"
+    }
   },
   "votesandcomments_jsx": {
     "no_responses_yet_click_to_respond": "No responses yet. Click to respond.",

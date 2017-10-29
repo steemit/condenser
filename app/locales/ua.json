@@ -921,6 +921,18 @@
   "witnesses_jsx": {
     "witness_thread": "пост делегата",
     "top_witnesses": "Топ делегатів",
+    "approval": "Глосiв",
+    "missed_1": "Пропущено",
+    "missed_2": "блоків",
+    "last_block": "Останній блок",
+    "price_feed": "Прайс фід",
+    "props": "Параметри",
+    "reg_fee": "Комісія за реєстрацію",
+    "apr": "APR",
+    "block_size": "Размір блоку",
+    "witness_deactive": "Делегат призупинив підпис блоків",
+    "no_price_feed": "Делегат не опублікував прайс фід",
+    "version": "Версія",
     "you_have_votes_remaining": "У Вас залишилося ",
     "you_have_votes_remaining_count": {
       "zero": "0 голосів",

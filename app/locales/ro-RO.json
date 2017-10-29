@@ -932,6 +932,18 @@
   "witnesses_jsx":{
     "witness_thread":"postarea delegatului",
     "top_witnesses":"Top delegați",
+    "approval": "Глосов",
+    "missed_1": "Пропущенно",
+    "missed_2": "блоков",
+    "last_block": "Последний блок",
+    "price_feed": "Прайс фид",
+    "props": "Параметры",
+    "reg_fee": "Комиссия за регистрацию",
+    "apr": "APR",
+    "block_size": "Размер блока",
+    "witness_deactive": "Делегат приостановил подпись блоков",
+    "no_price_feed": "Делегат не опубликовал прайс фид",
+    "version": "Версия",
     "you_have_votes_remaining":"V-a rămas ",
     "you_have_votes_remaining_count":{
       "zero":"0 voturi",

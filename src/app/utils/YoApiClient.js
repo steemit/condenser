@@ -61,8 +61,6 @@ function normalize(res) {
  * @return {Object}
  */
 export function normalizeSettingsFromApi(transportsFromApi) {
-
-    console.log('normalizeSettingsFromApi(transportsFromApi)', transportsFromApi)
     // For each of the transports coming through from the API,
     // If the API's notification_types is truthy,
     // Transform array of enabled types into a Map based on our type->group mapping config,
@@ -285,7 +283,7 @@ export function getNotificationSettings(username) {
 }
 
 /**
- *
+ * Todo: for dev only! Do not merge if present!
  * @param username
  * @returns {Promise.<TResult>}
  */
@@ -308,7 +306,7 @@ export function resetStatuses(username) {
         }),
     }).then(r => r.json()).then(res => {
         if (res) {
-            console.log(res);
+            console.log(res); // Todo: for dev only! Do not merge if present!
         }
     })
         .catch(error => {

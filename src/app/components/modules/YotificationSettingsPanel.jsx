@@ -105,7 +105,7 @@ export default connect(
             });
         },
         toggleGroup: (transport, group, checked) => { //eslint-disable-line no-unused-vars
-            console.log('toggleGroup: (transport, group, checked) ', transport, group,checked)
+            console.log('toggleGroup: (transport, group, checked) ', transport, group,checked);  // Todo: for dev only! Do not merge if present!
             dispatch({
                 type: 'notificationsettings/TOGGLE_GROUP',
                 transport,

@@ -1,18 +1,6 @@
 
 .UserWallet__buysp {
-  &.button.hollow {
-    transition: 0.2s all ease-in-out;
-    @include themify($themes) {
-      border: themed('borderAccent');  
-      color: themed('textColorAccent');  
-    } 
-    &:hover {
-      @include themify($themes) {
-        border: themed('borderDark');  
-        color: themed('textColorPrimary');  
-      }       
-    }     
-  }
+  @extend .e-btn-hollow;
 }
 
 .UserWallet__balance {

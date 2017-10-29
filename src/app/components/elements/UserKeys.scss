@@ -9,4 +9,7 @@
 		  }      
 	  }
 	}
+	.button.hollow {
+		@extend .e-btn-hollow;
+	}
 }

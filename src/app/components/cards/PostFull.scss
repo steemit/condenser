@@ -6,7 +6,12 @@
   @include themify($themes) {
       border-bottom: themed('border');  
   } 
-
+  .button.hollow {
+    @include themify($themes) {
+        border: themed('borderAccent');  
+        color: themed('textColorAccent');  
+    }     
+  }
 
   .ReplyEditor {
     margin-top: 1rem;
@@ -52,6 +57,11 @@
 }
 
 .PostFull__header {
+  padding-bottom: 1em;
+  margin-bottom: 8px;
+  @include themify($themes) {
+    border-bottom: themed('border');  
+  } 
   > h1 {
     overflow: hidden;
     font-family: $body-font-family;

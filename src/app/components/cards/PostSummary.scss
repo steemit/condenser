@@ -23,14 +23,14 @@ ul.PostsList__summaries {
   }
 
   .nsfw-flag {
-     color: #C00;
-     border: 1px solid #C00;
+     color: $color-red;
+     border: 1px solid $color-red;
      font-size: 75%;
      border-radius: 3px;
      font-weight: normal;
      font-family: Arial;
      margin: 0 0.1rem;
-     padding: 3px 5px;
+     padding: 2px 5px;
   }
 }
 
@@ -219,7 +219,19 @@ ul.PostsList__summaries {
   }
 }
 
-
+.articles__summary {
+    .nsfw-flag {
+     color: $color-red;
+     border: 1px solid $color-red;
+     font-size: 75%;
+     border-radius: 3px;
+     font-weight: normal;
+     font-family: Arial;
+     margin: 0 0.1rem;
+     padding: 2px 5px;
+     margin-right: 5px;
+  }
+}
 
 
 

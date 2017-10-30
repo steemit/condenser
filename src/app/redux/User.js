@@ -12,8 +12,6 @@ const defaultState = fromJS({
     show_signup_modal: false,
     pub_keys_used: null,
     locale: DEFAULT_LANGUAGE,
-    layout_style: 'list',
-    nightmode: false,
 });
 
 if (process.env.BROWSER) {
@@ -79,14 +77,6 @@ export default createModule({
         { action: 'CHANGE_LANGUAGE', reducer: (state, {payload}) => {
             return state.set('locale', payload)}
         },
-        { action: 'TOGGLE_LAYOUT_STYLE', reducer: state => {
-            const currentStyle = state.get('layout_style');
-            const nextStyle = (currentStyle === 'blog') ? 'list' : 'blog';
-            return state.set('layout_style', nextStyle);
-        }},
-        { action: 'TOGGLE_NIGHTMODE', reducer: state => {
-            return state.set('nightmode', !state.get('nightmode'));
-        }},
         { action: 'SHOW_TRANSFER', reducer: state => state.set('show_transfer_modal', true) },
         { action: 'HIDE_TRANSFER', reducer: state => state.set('show_transfer_modal', false) },
         { action: 'SHOW_POWERDOWN', reducer: state => state.set('show_powerdown_modal', true) },

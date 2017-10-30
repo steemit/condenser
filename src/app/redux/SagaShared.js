@@ -62,10 +62,20 @@ export function* getContent({author, permlink, resolve, reject}) {
     }
 }
 
+/**
+ * Save this user's preferences, either directly from the submitted payload or from whatever's saved in the store currently.
+ *
+ * @param {Object?} params.payload
+ */
 function* saveUserPreferences({payload}) {
-    yield setUserPreferences(payload);
+    if (payload) {
+        yield setUserPreferences(payload);
+    }
+
+    const prefs = yield select(state => state.app.get('user_preferences'));
+    yield setUserPreferences(prefs.toJS());
 }
 
 function* watchUserSettingsUpdates() {
-    yield* takeLatest('SET_USER_PREFERENCES', saveUserPreferences);
+    yield* takeLatest(['SET_USER_PREFERENCES', 'TOGGLE_NIGHTMODE', 'TOGGLE_BLOGMODE'], saveUserPreferences);
 }

@@ -43,7 +43,6 @@ async function appRender(ctx) {
             if (!localeIsSupported) locale = 'en';
             userPreferences.locale = locale;
         }
-
         let login_challenge = ctx.session.login_challenge;
         if (!login_challenge) {
             login_challenge = secureRandom.randomBuffer(16).toString('hex');

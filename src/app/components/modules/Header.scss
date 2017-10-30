@@ -54,6 +54,7 @@
     @extend .e-btn;
     margin-right: 22px;
     margin-left: 16px;
+    text-shadow: 0 1px 0 rgba(0,0,0,0.20);
   }
   a {
     @extend .link;
@@ -154,11 +155,18 @@ ul > li > .button {
 .Header__top-steemit {
   margin-right: -22px;
   .beta {
-    position: relative;
-    top: 14px;
-    right: 22px;
+    position: absolute;
+    top: 43px;
+    left: 140px;
     font-size: 0.7rem;
-    color: #4ba2f2;
+    @include opacity(0);
+    display: none;
+    @include themify($themes) {
+      color: themed('textColorSecondary');
+    }
+    @include MQ(L) {
+      display: block;
+    }
   }
 }
 
@@ -178,3 +186,48 @@ ul > li > .button {
   margin-right: 4rem;
   color: #ec5840;
 }
+
+
+.logo-new {
+  transition: 0.2s ease-in-out;
+  display: none;
+  transition: 0.2s all ease-in-out;
+  &--mobile {
+    display: block;
+    width: 30px;
+    height: 30px;
+    @media only screen and (min-width: 400px) {
+      display: none;
+    }
+  }
+  &--desktop {
+    display: none;
+    width: 120px;
+    height: auto;
+    @media only screen and (min-width: 400px) {
+      display: block;
+    }     
+    @include MQ(M) {
+      width: 144px;
+      height: auto;
+    }    
+  }
+  
+  .icon-svg {
+    @include themify($themes) {
+      fill: themed('colorAccent');
+    }
+  }
+}
+
+
+.Header__top-logo:hover {
+  .logo-new {
+    .icon-svg {
+      @include themify($themes) {
+        fill: themed('colorAccentReverse');
+      }
+    }
+  }
+}
+

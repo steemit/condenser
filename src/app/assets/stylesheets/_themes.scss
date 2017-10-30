@@ -204,6 +204,7 @@ $themes: (
       background-color: themed('buttonBackgroundHover');  
       box-shadow: 2px 2px 2px 0 rgba(0,0,0,0.1), 7px 7px 0 0 themed('buttonBoxShadowHover');   
       color: themed('buttonTextHover');
+      text-shadow: 0 1px 0 rgba(0,0,0,0.20);
     }
   }
   &:visited, &:active {

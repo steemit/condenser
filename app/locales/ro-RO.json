@@ -932,8 +932,8 @@
   "witnesses_jsx":{
     "witness_thread":"postarea delegatului",
     "top_witnesses":"Top delegați",
-    "approval": "Глосов",
-    "missed_1": "Пропущенно",
+    "approval": "Голосов",
+    "missed_1": "Пропущено",
     "missed_2": "блоков",
     "last_block": "Последний блок",
     "price_feed": "Прайс фид",

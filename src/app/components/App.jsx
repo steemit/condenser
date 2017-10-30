@@ -327,7 +327,7 @@ export default connect(
                 !state.offchain.get('account') &&
                 state.offchain.get('new_visit'),
             username: state.user.getIn(['current', 'username']) || state.offchain.get('account') || '',
-            nightmodeEnabled: state.user.get('nightmode'),
+            nightmodeEnabled: state.app.getIn(['user_preferences', 'nightmode']),
         };
     },
     dispatch => ({

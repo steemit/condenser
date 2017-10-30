@@ -129,7 +129,7 @@ export default connect(
             username,
             loggedIn,
             probablyLoggedIn: false,
-            nightmodeEnabled: state.user.get('nightmode'),
+            nightmodeEnabled: state.user.getIn(['user_preferences', 'nightmode']),
         }
     },
     dispatch => ({
@@ -143,7 +143,7 @@ export default connect(
         },
         toggleNightmode: e => {
             if (e) e.preventDefault();
-            dispatch(user.actions.toggleNightmode());
+            dispatch({ type: 'TOGGLE_NIGHTMODE' });
         },
     })
 )(TopRightMenu);

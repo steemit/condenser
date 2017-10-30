@@ -67,5 +67,8 @@ export default function reducer(state = defaultState, action) {
     if (action.type === 'SET_USER_PREFERENCES') {
         res = res.set('user_preferences', Map(action.payload));
     }
+    if (action.type === 'TOGGLE_NIGHTMODE') {
+        res = res.setIn(['user_preferences', 'nightmode'], !res.getIn(['user_preferences', 'nightmode']));
+    }
     return res;
 }

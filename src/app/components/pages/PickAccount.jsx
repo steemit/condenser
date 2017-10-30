@@ -99,7 +99,7 @@ class PickAccount extends React.Component {
 
         const {loggedIn, logout, offchainUser, serverBusy} = this.props;
         const submit_btn_disabled = loading || !name || name_error;
-        const submit_btn_class = 'button action CreateAccount__btn' + (submit_btn_disabled ? ' disabled' : '');
+        const submit_btn_class = 'action btn-continue' + (submit_btn_disabled ? ' disabled' : '');
 
         const account_status = offchainUser ? offchainUser.get('account_status') : null;
 
@@ -213,7 +213,7 @@ class PickAccount extends React.Component {
                             <input disabled={submit_btn_disabled} type="submit" className={submit_btn_class} value="Continue" />
                         </form>
                         <br />
-                        <p className="secondary">Already have an account? <Link to="/login.html">Login</Link></p>
+                        <p className="secondary">Got an account? <Link to="/login.html">Login</Link></p>
                     </div>
                 </div>
             </div>

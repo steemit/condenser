@@ -209,9 +209,10 @@ $themes: (
   }
   &:visited, &:active {
     @include themify($themes) {
-      color: themed('ButtonText');  
+      color: themed('buttonText');  
     } 
   } 
+
 }
 .button.disabled, .button[disabled] {
     opacity: 0.25;

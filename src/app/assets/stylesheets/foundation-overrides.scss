@@ -12,6 +12,14 @@
   box-shadow: 1px 1px 5px 0px rgba(50, 50, 50, 0.75);
   z-index: 1000;
   font-size: inherit;
+  background-color: $color-white;  
+
+  .VerticalMenu {
+    a:hover {
+      background-color: #f6f6f6;
+      color: $color-teal-dark;
+    }     
+  }
 }
 
 a {

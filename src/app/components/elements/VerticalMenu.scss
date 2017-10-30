@@ -4,7 +4,7 @@
 
   .Icon {
     padding-left: 0.1rem;
-    margin-right: 0.5rem;
+    margin-right: 14px;
     top: 0;
   }
 
@@ -31,7 +31,8 @@
   > li.title {
     padding: 0.4rem;
     font-weight: bold;
-    text-align: center;
+    text-align:left;
+    padding-left: 16px;
     @include themify($themes) {
       border-bottom: themed('border');        
     }    

@@ -28,6 +28,7 @@
   padding: 1rem;
   background: #dff0d8;
   border-radius: 5px;
+  color: $color-blue-black;
   @include themify($themes) {
     border: themed('border');  
   }     

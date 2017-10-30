@@ -60,6 +60,11 @@ function convertEntriesToArrays(obj) {
 
 // some redirects
 app.use(function*(next) {
+    // normalize url
+    if (this.url.indexOf('%') !== -1) {
+        this.redirect(decodeURIComponent(this.url));
+        return;
+    }
     // redirect to home page/feed if known account
     if (this.method === 'GET' && this.url === '/' && this.session.a) {
         this.status = 302;

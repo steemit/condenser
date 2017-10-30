@@ -77,5 +77,5 @@ function* saveUserPreferences({payload}) {
 }
 
 function* watchUserSettingsUpdates() {
-    yield* takeLatest(['SET_USER_PREFERENCES', 'TOGGLE_NIGHTMODE'], saveUserPreferences);
+    yield* takeLatest(['SET_USER_PREFERENCES', 'TOGGLE_NIGHTMODE', 'TOGGLE_BLOGMODE'], saveUserPreferences);
 }

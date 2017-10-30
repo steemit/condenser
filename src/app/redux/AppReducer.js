@@ -25,6 +25,7 @@ const defaultState = Map({
         locale: null,
         nsfwPref: 'warn',
         theme: 'light',
+        blogmode: false,
         currency: 'USD'
     })
 });
@@ -69,6 +70,9 @@ export default function reducer(state = defaultState, action) {
     }
     if (action.type === 'TOGGLE_NIGHTMODE') {
         res = res.setIn(['user_preferences', 'nightmode'], !res.getIn(['user_preferences', 'nightmode']));
+    }
+    if (action.type === 'TOGGLE_BLOGMODE') {
+        res = res.setIn(['user_preferences', 'blogmode'], !res.getIn(['user_preferences', 'blogmode']));
     }
     return res;
 }

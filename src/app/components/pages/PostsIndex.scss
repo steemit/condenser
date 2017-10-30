@@ -660,7 +660,16 @@ a#changeLayout:focus {
     .content-container {
       max-width: 1520px;
     }
-
+    .c-sidebar { 
+      &--right {
+        display: none;
+        order: 3;
+        @include MQ(L) {
+          display: block;
+          margin-right: 1em;
+        }
+      }    
+    }
     .articles {
       padding: 1.5em 1.5em;
       max-width: none;

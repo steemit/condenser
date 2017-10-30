@@ -102,8 +102,10 @@ ul.PostsList__summaries {
   text-overflow: ellipsis;
 
   a {
-    color: inherit;
     display: inline;
+    @include themify($themes) {
+      color: themed('textColorPrimary');  
+    }    
   }
 }
 

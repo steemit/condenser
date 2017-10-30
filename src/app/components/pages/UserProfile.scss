@@ -23,14 +23,9 @@
       padding-left: 0.7rem;
       padding-right: 0.7rem;
       background-color: transparent;
-      @include themify($themes) {
-        color: themed('textColorSecondary');  
-      }        
+      color: $color-white;
       &:hover, &:focus {
-        @include themify($themes) {
-          background-color: themed('backgroundColor');  
-          color: themed('textColorPrimary');  
-        }  
+        background-color: $color-blue-black;
       }
       &.active {
           @include themify($themes) {

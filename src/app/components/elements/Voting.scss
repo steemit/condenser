@@ -35,12 +35,12 @@
   }
   path {
     @include themify($themes) {
-      fill: themed('colorAccent');
+      fill: themed('textColorAccent');
     }       
   }
   circle {
       @include themify($themes) {
-        stroke: themed('colorAccent');
+        stroke: themed('textColorAccent');
       }       
   }
   // exclude small devices

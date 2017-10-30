@@ -184,7 +184,6 @@ class Header extends React.Component {
                             <ul className="menu">
                                 <li className="Header__top-logo">
                                     <Link to={logo_link}>
-                                        {/* <Icon name="logotype" size="2x" /> JSX Comment */}
 
                                         <svg className="logo-new logo-new--mobile" viewBox="0 0 38 38" version="1.1">
                                         <title>Steemit Logo</title>

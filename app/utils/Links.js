@@ -14,7 +14,7 @@ const urlSet = ({domain = domainPath, path} = {}) => {
 /**
     Unless your using a 'g' (glob) flag you can store and re-use your regular expression.  Use the cache below.  If your using a glob (for example: replace all), the regex object becomes stateful and continues where it left off when called with the same string so naturally the regexp object can't be cached for long.
 */
-export const any = (flags = 'i') => new RegExp(urlSet(), flags)
+export const any = (flags = 'ig') => new RegExp(urlSet(), flags)
 export const local = (flags = 'i') => new RegExp(urlSet({domain: '(?:localhost|(?:.*\\.)?' + APP_DOMAIN + ')'}), flags)
 export const remote = (flags = 'i') => new RegExp(urlSet({domain: `(?!localhost|(?:.*\\.)?'${APP_DOMAIN}')${domainPath}`}), flags)
 export const youTube = (flags = 'i') => new RegExp(urlSet({domain: '(?:(?:.*\.)?youtube.com|youtu.be)'}), flags)

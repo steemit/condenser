@@ -1,8 +1,7 @@
 import { takeLatest } from 'redux-saga';
 import { call, put, take, fork, race, select } from 'redux-saga/effects';
 import {
-    fetchAllNotifications,
-    fetchSomeNotifications,
+    fetchNotifications,
     markAsRead,
     markAsUnread,
     markAsShown,
@@ -93,11 +92,6 @@ function* watchPollData() {
                     type: 'notification/SENT_UPDATES',
                     updates: { read: true },
                 });
-
-                yield put({
-                    type: 'notification/APPEND_SOME',
-                    payload,
-                });
             }
         }
 
@@ -114,11 +108,6 @@ function* watchPollData() {
                     type: 'notification/SENT_UPDATES',
                     updates: { read: false },
                 });
-
-                yield put({
-                    type: 'notification/APPEND_SOME',
-                    payload,
-                });
             }
         }
 
@@ -134,11 +123,6 @@ function* watchPollData() {
                 yield put({
                     type: 'notification/SENT_UPDATES',
                     updates: { shown: true },
-                });
-
-                yield put({
-                    type: 'notification/APPEND_SOME',
-                    payload,
                 });
             }
         }
@@ -157,7 +141,7 @@ function* watchPollData() {
  */
 export function* fetchAll() {
     const username = yield select(getUsernameFromState);
-    const payload = yield call(fetchAllNotifications, username);
+    const payload = yield call(fetchNotifications, username);
 
     if (payload.error) {
         yield put({
@@ -200,7 +184,7 @@ export function* fetchSome({ types = null, direction = 'after' }) {
             filter[direction] = timestamp;
         }
 
-        const payload = yield call(fetchSomeNotifications, {
+        const payload = yield call(fetchNotifications, {
             username,
             types,
             ...filter,
@@ -271,7 +255,5 @@ export function* NotificationFetchSaga() {
     yield [
         takeLatest('notification/FETCH_ALL', fetchAll),
         takeLatest('notification/FETCH_SOME', fetchSome),
-        //takeEvery('notification/UPDATE_ONE', updateOne),
-        //takeEvery('notification/UPDATE_SOME', updateSome),
     ];
 }

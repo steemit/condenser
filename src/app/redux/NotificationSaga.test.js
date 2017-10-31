@@ -4,7 +4,7 @@
 import chai, { expect } from 'chai';
 import sinon from 'sinon';
 import { call, put, select } from 'redux-saga/effects';
-import { fetchAllNotifications, fetchSomeNotifications } from 'app/utils/YoApiClient';
+import { fetchNotifications } from 'app/utils/YoApiClient';
 import { fetchAll, fetchSome, getUsernameFromState, getNotificationsById } from './NotificationSaga';
 
 describe('fetchAll', () => {
@@ -15,7 +15,7 @@ describe('fetchAll', () => {
         expect(withUsername).to.deep.equal(select(getUsernameFromState));
 
         const withPayload = gen.next('basil frankenweiler').value;
-        expect(withPayload).to.deep.equal(call(fetchAllNotifications, 'basil frankenweiler'));
+        expect(withPayload).to.deep.equal(call(fetchNotifications, 'basil frankenweiler'));
 
         const fetch = gen.next({ data: 'from online' }).value;
         expect(fetch).to.deep.equal(put({ type: 'notification/RECEIVE_ALL', payload: { data: 'from online' } }));

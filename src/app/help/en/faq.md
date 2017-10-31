@@ -162,7 +162,7 @@
 - <a href="/faq.html#Who_are_the_Steemit_co_founders">Who are the Steemit co-founders?</a>
 - <a href="/faq.html#Can_I_invest_in_Steemit">Can I invest in Steemit?</a>
 - <a href="/faq.html#What_does_Steemit_s_development_roadmap_look_like">What does Steemit’s development roadmap look like?</a>
-- <a href="/faq.html#Am_I_allowed_to_use_the_Steemit_logo">Am I allowed to use the Steemit logo?</a>
+- <a href="/faq.html#Am_I_allowed_to_use_the_Steem_and_Steemit_logos">Am I allowed to use the Steem and Steemit logos?</a>
 - <a href="/faq.html#Can_I_purchase_official_Steemit_merchandise">Can I purchase official Steemit merchandise?</a>
 - <a href="/faq.html#Did_Steemit__pre_mine__tokens">Did Steemit "pre-mine" tokens?</a>
 - <a href="/faq.html#What_is_the_Steemit_Privacy_Policy">What is the Steemit Privacy Policy?</a>
@@ -1217,10 +1217,12 @@ You can view the 2017 Roadmap here:
 https://steemit.com/steemit/@steemitblog/steemit-2017-roadmap
 
 <a href="/faq.html#Table_of_Contents_Steemit__Inc">^</a>
-<a class="anchor" name="Am_I_allowed_to_use_the_Steemit_logo"></a>
-## Am I allowed to use the Steemit logo?
+<a class="anchor" name="Am_I_allowed_to_use_the_Steem_and_Steemit_logos"></a>
+## Am I allowed to use the Steem and Steemit logos?
 
-Currently, the Steem and Steemit logos are the same and is free to use. In the future, Steemit, Inc. will have its own logo so that it can be distinguished from Steem. The Steemit logo will be proprietary while Steem and its three S-shaped squiggles will remain open for public use.
+The steemit brand and logo are protected by intellectual property laws including copyright and other proprietary rights of the United States and foreign countries. You may not make unauthorized commercial use of, reproduce, prepare derivative works, distribute copies, perform, or publicly display the steemit logo or brand, except as permitted by the doctrine of fair use or as authorized in writing by us.
+
+The Steem logo will remain free for anyone to use based on the Creative Commons CC0 license, which makes it safe to use without asking for permission or giving credit, including for commercial purposes.
 
 <a href="/faq.html#Table_of_Contents_Steemit__Inc">^</a>
 <a class="anchor" name="Can_I_purchase_official_Steemit_merchandise"></a>

@@ -182,7 +182,7 @@ class TransferForm extends Component {
                                 type="text"
                                 placeholder={tt('transfer_jsx.send_to_account')}
                                 onChange={this.onChangeTo}
-                                autoComplete="off"
+                                autoComplete="on"
                                 autoCorrect="off"
                                 autoCapitalize="off"
                                 spellCheck="false"

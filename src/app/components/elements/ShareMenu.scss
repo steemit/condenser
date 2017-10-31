@@ -12,9 +12,16 @@
         float: left;
         padding-left: 4px;
     }
+    li > a {
+        transition: 0.2s all ease-in-out;
+    }
     li > a:hover {
         color: #ffffff;
-        svg {fill: #1A5099;}
+        svg {
+            @include themify($themes) {
+              fill: themed('colorAccent');
+            }  
+        }
     }
     li > a:link {
         text-decoration: none;

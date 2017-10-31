@@ -11,13 +11,17 @@
     visibility: hidden;
     min-width: 145px;
     z-index: 1000;
-    background-color: #fff;
     display: block;
-    border: 1px solid $medium-gray;
     border-radius: $global-radius;
     opacity: 0;
     position: absolute;
     top: 100%;
+    padding: 2px;
+
+    @include themify($themes) {
+      background-color: themed('backgroundColor');
+      border: themed('borderDark');    
+    }     
 
     // width: auto;
     transform: translateY(10%);
@@ -30,6 +34,18 @@
     opacity: 1;
     transform: translateX(0%);
     transition-delay: 0s;
+
+    a {
+      transition: 0.2s all ease-in-out;
+      @include themify($themes) {
+        color: themed('textColorPrimary');  
+      }       
+      &:hover {
+        @include themify($themes) {
+          color: themed('textColorAccent');  
+        } 
+      }
+    }
   }
 
   .DropdownMenu.move-left {

@@ -36,21 +36,23 @@ if(typeof window !== 'undefined') {
  *
  * @return {Array}
  */
-function normalize(res) {
-    return res.map(n => {
-        const resp = {
-            ...n,
-            id: n.notify_id.toString(),
-            shown: n.shown,
-            notificationType: n.notify_type,
-        }
-        if(resp.data.item && resp.data.item.parent_summary) {
-            resp.data.item.parentSummary = resp.data.item.parent_summary;
-            resp.data.item.parent_summary = undefined;
-        }
-        return resp;
-    });
-}
+export const normalize = (res) => res.map(fromApi => {
+    const normalized = {
+        ...fromApi,
+        id: fromApi.notify_id.toString(),
+        notificationType: fromApi.notify_type,
+    };
+
+    delete normalized.notify_id;
+    delete normalized.notify_type;
+
+    if (fromApi.data.item && fromApi.data.item.parent_summary) {
+        normalized.data.item.parentSummary = fromApi.data.item.parent_summary;
+        delete normalized.data.item.parent_summary;
+    }
+
+    return normalized;
+});
 
 /**
  * Cleans up settings from Yo.

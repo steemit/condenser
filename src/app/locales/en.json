@@ -101,7 +101,6 @@
     "submit_a_story": "Post",
     "tag": "Tag",
     "to": " to ",
-    "topics": "Topics",
     "all_tags": "All tags",
     "transfer": "Transfer ",
     "trending_topics": "Trending Topics",
@@ -481,8 +480,6 @@
   "postsummary_jsx": {
     "resteemed": "Resteemed",
     "resteemed_by": "Resteemed by",
-    "this_post_is": "This post is",
-    "you_can": "You can",
     "reveal_it": "Reveal this post",
     "adjust_your": "adjust your",
     "display_preferences": "display preferences",

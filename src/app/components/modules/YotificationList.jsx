@@ -84,7 +84,6 @@ class YotificationList extends React.Component {
         } else if(LAYOUT_DROPDOWN === this.state.layout) {
             this.rootEl.parentElement.addEventListener('scroll', this.scrollListenerDropdown, {capture: false, passive: true});
         }
-        this.markDisplayedShownWithDelay();
     }
 
 

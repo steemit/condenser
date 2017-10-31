@@ -54,6 +54,7 @@
     "password": "Contraseña",
     "payouts": "Pagos",
     "permissions": "Permisos",
+    "phishy_message": "Link expanded to plain text; beware of a potential phishing attempt",
     "post": "Publicación",
     "post_as": "Publicar como",
     "posts": "Publicaciones",
@@ -98,7 +99,6 @@
     "submit_a_story": "Publicar",
     "tag": "Etiqueta",
     "to": "hasta",
-    "topics": "Temas",
     "all_tags": "All tags",
     "transfer": "Transferir",
     "trending_topics": "Temas Tendencia",
@@ -204,6 +204,11 @@
       "zero": "Sin Respuestas",
       "one": "%(count)s Respuesta",
       "other": "%(count)s Respuestas"
+    },
+    "post_key_warning": {
+        "confirm": "You are about to publish a STEEM private key or master password. You will probably lose control of the associated account and all its funds.",
+        "warning": "Legitimate users, including employees of Steemit Inc., will never ask you for a private key or master password.",
+        "checkbox": "I understand"
     }
   },
   "navigation": {
@@ -473,8 +478,6 @@
   "postsummary_jsx": {
     "resteemed": "Reesteemeado",
     "resteemed_by": "Resteemeado por",
-    "this_post_is": "Este post es",
-    "you_can": "Tú puedes",
     "reveal_it": "revelarlo",
     "adjust_your": "ajustar tu",
     "display_preferences": "Visualizar preferencias",
@@ -549,8 +552,8 @@
     "keep_me_logged_in": "Manténme logeado",
     "amazing_community": "comunidad increíble",
     "to_comment_and_reward_others": "para comentar y recompensar a otros",
-    "sign_up_now_to_earn": "Regístrate ahora para ganar",
-    "free_money": "¡DINERO GRATIS!",
+    "signup_button": "Sign up now to earn ",
+    "signup_button_emphasis": "FREE STEEM!",
     "returning_users": "Usuarios que vuelven",
     "join_our": "Únete a nuestro"
   },

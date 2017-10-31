@@ -292,7 +292,9 @@ export default class UserProfile extends React.Component {
                 </div>
                 break;
             case SECTION_NOTIFICATIONS :
-                tab_content = <Notifications subsection={subsection} />
+                if(isMyAccount) {
+                    tab_content = <Notifications subsection={subsection}/>
+                }
                 break;
             case SECTION_BLOG :
                 if (account.blog) {

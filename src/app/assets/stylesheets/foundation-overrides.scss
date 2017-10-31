@@ -98,5 +98,16 @@ tbody tr:nth-child(even) {
   }  
 }
 
+.reveal-overlay {
+  background-color: rgba(0, 0, 0, 0.88);
+  transition: 0.2s all ease-in-out;
+}
+
+.reveal {
+  box-shadow: 2px 2px 2px 0 rgba(0,0,0,0.1), 7px 7px 0 0 $color-teal;   
+  border-radius: 0;
+  border: transparent;
+  transition: 0.2s all ease-in-out;
+}
 
 

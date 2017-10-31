@@ -12,6 +12,7 @@ form {
   }
   .success {
     color: $success-color;
+    transition: 0.3s all ease-in-out;
   }
 }
 button {
@@ -24,10 +25,16 @@ input, textarea, select {
 .error {
     color: $alert-color;
     margin-bottom: 10px;
+    transition: 0.3s all ease-in-out;
+}
+p.error {
+  padding-top: 6px;
+  line-height: 1.1;
 }
 .warning {
     color: darkgoldenrod;
     margin-bottom: 10px;
+    transition: 0.3s all ease-in-out;
 }
 .darkred {
     color: darkred;
@@ -60,3 +67,9 @@ input, textarea, select {
 // .hoverShowTrigger:hover > .hoverShow {
 //     visibility: visible;
 // }
+
+label {
+  @include themify($themes) {
+    color: themed('textColorPrimary');  
+  }    
+}

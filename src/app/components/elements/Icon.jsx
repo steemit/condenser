@@ -12,9 +12,12 @@ const icons = [
     'twitter',
     'linkedin',
     'link',
+    'logo',
+    'logotype',
     'clock',
     'extlink',
     'steem',
+    'steempower',
     'ether',
     'bitcoin',
     'bitshares',
@@ -45,6 +48,7 @@ const icons = [
     'replies',
     'home',
     'reply',
+    '100',
     'pencil2'
 ];
 const icons_map = {};

@@ -99,7 +99,7 @@ class PickAccount extends React.Component {
 
         const {loggedIn, logout, offchainUser, serverBusy} = this.props;
         const submit_btn_disabled = loading || !name || name_error;
-        const submit_btn_class = 'button action' + (submit_btn_disabled ? ' disabled' : '');
+        const submit_btn_class = 'action btn-continue' + (submit_btn_disabled ? ' disabled' : '');
 
         const account_status = offchainUser ? offchainUser.get('account_status') : null;
 
@@ -199,8 +199,8 @@ class PickAccount extends React.Component {
                         <br />
                         <Progress tabIndex="0" value={10} max={100} />
                         <br />
-                        <h4 style={{ color: "#4078c0" }}>Welcome to Steemit</h4>
-                        <div className="secondary">
+                        <h4 className="CreateAccount__title">Welcome to Steemit</h4>
+                        <div>
                              <p>Your account name is how you will be known on steemit.com.<br />
                                  {/*Your account name <strong>can never be changed</strong>, so please choose carefully.*/}</p>
                         </div>
@@ -210,10 +210,10 @@ class PickAccount extends React.Component {
                                 <input type="text" name="name" autoComplete="off" onChange={this.onNameChange} value={name} placeholder={"Name..."} />
                                 <p>{name_error}</p>
                             </div>
-                            <input disabled={submit_btn_disabled} type="submit" className={submit_btn_class} value="CONTINUE" />
+                            <input disabled={submit_btn_disabled} type="submit" className={submit_btn_class} value="Continue" />
                         </form>
                         <br />
-                        <p className="secondary">Already have an account? <Link to="/login.html">Login</Link></p>
+                        <p className="secondary">Got an account? <Link to="/login.html">Login</Link></p>
                     </div>
                 </div>
             </div>

@@ -54,6 +54,7 @@
     "password": "Password",
     "payouts": "Payouts",
     "permissions": "Permissions",
+    "phishy_message": "Link expanded to plain text; beware of a potential phishing attempt",
     "post": "Post",
     "post_as": "Post as",
     "posts": "Posts",
@@ -90,15 +91,17 @@
     "settings": "Settings",
     "share_this_post": "Share this post",
     "show": "Show",
-    "sign_in": "Sign In",
-    "sign_up": "Sign Up",
+    "sign_in": "Sign in",
+    "sign_up": "Sign up",
     "since": "since",
     "submit": "Submit",
     "power_up": "Power Up",
-    "submit_a_story": "Submit a Story",
+    "submit_a_story": "Post",
     "tag": "Tag",
     "to": " to ",
     "topics": "Topics",
+    "toggle_nightmode": "Toggle Night Mode",
+    "all_tags": "All tags",
     "transfer": "Transfer ",
     "trending_topics": "Trending Topics",
     "type": "Type",
@@ -190,8 +193,8 @@
       "value_posts": "low value posts"
     },
     "read_only_mode": "Due to server maintenance we are running in read only mode. We are sorry for the inconvenience.",
-    "tags_and_topics": "Tags and Topics",
-    "show_more_topics": "Show more topics",
+    "tags_and_topics": "Tags",
+    "show_more_topics": "View all tags",
     "basic": "Basic",
     "advanced": "Advanced",
     "views": {
@@ -203,6 +206,11 @@
       "zero": "No Responses",
       "one": "%(count)s Response",
       "other": "%(count)s Responses"
+    },
+    "post_key_warning": {
+        "confirm": "You are about to publish a STEEM private key or master password. You will probably lose control of the associated account and all its funds.",
+        "warning": "Legitimate users, including employees of Steemit Inc., will never ask you for a private key or master password.",
+        "checkbox": "I understand"
     }
   },
   "navigation": {
@@ -222,11 +230,13 @@
     "learn_more": "Learn More",
     "welcome": "Welcome",
     "faq": "FAQ",
+    "shop": "The Steemit Shop",
     "chat": "Steemit Chat",
     "app_center": "Steemit App Center",
     "api_docs": "Steemit API Docs",
+    "bluepaper": "Steem Bluepaper",
     "whitepaper": "Steem Whitepaper",
-    "intro_tagline": "Money talks.",
+    "intro_tagline": "Money talks",
     "intro_paragraph": "Your voice is worth something. Join the community that pays you to post and curate high quality content."
   },
   "main_menu": {
@@ -329,6 +339,11 @@
     "user_hasnt_started_bloggin_yet": "Looks like %(name)s hasn't started blogging yet!",
     "user_hasnt_followed_anything_yet": "Looks like %(name)s might not be following anyone yet! If %(name)s recently added new users to follow, their personalized feed will populate once new content is available.",
     "user_hasnt_had_any_replies_yet": "%(name)s hasn't had any replies yet",
+    "looks_like_you_havent_posted_anything_yet": "Looks like you haven't posted anything yet.",
+    "create_a_post": "Create a Post",
+    "explore_trending_articles": "Explore Trending Articles",
+    "read_the_quick_start_guide": "Read The Quick Start Guide",
+    "browse_the_faq": "Browse The FAQ",
     "followers": "Followers",
     "this_is_users_reputations_score_it_is_based_on_history_of_votes": "This is %(name)s's reputation score.\n\nThe reputation score is based on the history of votes received by the account, and is used to hide low quality content.",
     "follower_count": {
@@ -465,9 +480,7 @@
   "postsummary_jsx": {
     "resteemed": "Resteemed",
     "resteemed_by": "Resteemed by",
-    "this_post_is": "This post is",
-    "you_can": "You can",
-    "reveal_it": "reveal it",
+    "reveal_it": "Reveal this post",
     "adjust_your": "adjust your",
     "display_preferences": "display preferences",
     "create_an_account": "create an account",
@@ -541,8 +554,9 @@
     "keep_me_logged_in": "Keep me logged in",
     "amazing_community": "amazing community",
     "to_comment_and_reward_others": " to comment and reward others.",
-    "sign_up_now_to_earn": "Sign up now to earn ",
-    "free_money": "FREE MONEY!",
+    "signup_button": "Sign up now to earn ",
+    "signup_button_emphasis": "FREE STEEM!",
+    "sign_up_get_steem": "Sign up. Get STEEM",
     "returning_users": "Returning Users: ",
     "join_our": "Join our"
   },
@@ -595,7 +609,8 @@
     "withdraw_funds_after_the_required_3_day_waiting_period": "Withdraw funds after the required 3 day waiting period.",
     "from": "From",
     "to": "To",
-    "asset_currently_collecting": "%(asset)s currently collecting %(interest)s%% APR."
+    "asset_currently_collecting": "%(asset)s currently collecting %(interest)s%% APR.",
+    "beware_of_spam_and_phishing_links": "Beware of spam and phishing links in transfer memos. Do not open links from users you do not trust. Do not provide your private keys to any third party websites."
   },
   "userwallet_jsx": {
     "conversion_complete_tip": "Will complete on",
@@ -620,7 +635,7 @@
     "power_down": "Power Down",
     "amount": "Amount",
     "already_power_down": "You are already powering down %(AMOUNT)s %(LIQUID_TICKER)s (%(WITHDRAWN)s %(LIQUID_TICKER)s paid out so far). Note that if you change the power down amount the payout schedule will reset.",
-    "delegating": "You are delegating %(AMOUNT)s %(LIQUID_TICKER)s. That amount is locked up and not available to power down until the delgation is removed and a full reward period has passed.",
+    "delegating": "You are delegating %(AMOUNT)s %(LIQUID_TICKER)s. That amount is locked up and not available to power down until the delegation is removed and a full reward period has passed.",
     "per_week": "That's ~%(AMOUNT)s %(LIQUID_TICKER)s per week.",
     "warning": "Leaving less than %(AMOUNT)s %(VESTING_TOKEN)s in your account is not recommended and can leave your account in a unusable state.",
     "error": "Unable to power down (ERROR: %(MESSAGE)s)"

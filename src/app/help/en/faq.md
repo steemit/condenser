@@ -1220,7 +1220,7 @@ https://steemit.com/steemit/@steemitblog/steemit-2017-roadmap
 <a class="anchor" name="Am_I_allowed_to_use_the_Steem_and_Steemit_logos"></a>
 ## Am I allowed to use the Steem and Steemit logos?
 
-The steemit brand and logo are protected by intellectual property laws including copyright and other proprietary rights of the United States and foreign countries. You may not make unauthorized commercial use of, reproduce, prepare derivative works, distribute copies, perform, or publicly display the steemit logo or brand, except as permitted by the doctrine of fair use or as authorized in writing by us.
+The steemit brand and logo are protected by intellectual property laws including copyright and other proprietary rights of the United States and foreign countries. One may not make unauthorized commercial use of, reproduce, prepare derivative works, distribute copies, perform, or publicly display the steemit logo or brand, except as permitted by the doctrine of fair use or as authorized in writing by us.
 
 The Steem logo should remain free for anyone to use based on the Creative Commons CC0 license, which makes it safe to use without asking for permission or giving credit, including for commercial purposes.
 

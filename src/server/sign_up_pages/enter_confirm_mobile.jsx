@@ -306,7 +306,7 @@ recovery should your account ever be compromised.</em></p>
         );
 
         const body = renderToString(
-            <div className="App">
+            <div className="App CreateAccount">
                 <MiniHeader />
                 <br />
                 <div className="row" style={{ maxWidth: "32rem" }}>
@@ -341,7 +341,7 @@ recovery should your account ever be compromised.</em></p>
                         <input
                             type="submit"
                             className="button"
-                            value="CONTINUE"
+                            value="Continue"
                         />
                     </form>
                 </div>

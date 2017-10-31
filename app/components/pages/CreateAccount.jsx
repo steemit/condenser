@@ -31,7 +31,8 @@ class CreateAccount extends React.Component {
             server_error: '',
             loading: false,
             cryptographyFailure: false,
-            showRules: false
+            showRules: false,
+            allBoxChecked: false
         };
         this.onSubmit = this.onSubmit.bind(this);
         this.onNameChange = this.onNameChange.bind(this);
@@ -107,8 +108,8 @@ class CreateAccount extends React.Component {
         });
     }
 
-    onPasswordChange(password, password_valid) {
-        this.setState({password, password_valid});
+    onPasswordChange(password, password_valid, allBoxChecked) {
+        this.setState({password, password_valid, allBoxChecked});
     }
 
     onNameChange(e) {
@@ -152,7 +153,7 @@ class CreateAccount extends React.Component {
 
         const {
             name, password_valid, showPasswordString,
-            name_error, server_error, loading, cryptographyFailure, showRules
+            name_error, server_error, loading, cryptographyFailure, showRules, allBoxChecked
         } = this.state;
 
         const {loggedIn, logout, offchainUser, serverBusy} = this.props;
@@ -296,7 +297,7 @@ class CreateAccount extends React.Component {
                                 </div>
                             </noscript>
                             {loading && <LoadingIndicator type="circle" />}
-                            <input disabled={submit_btn_disabled} type="submit" className={submit_btn_class + ' uppercase'} value={tt('g.sign_up')} />
+                            <input disabled={submit_btn_disabled} type="submit" className={submit_btn_class + ' uppercase'} value={tt('g.sign_up')} disabled={!allBoxChecked || !password_valid}/>
                         </form>
                     </div>
                 </div>

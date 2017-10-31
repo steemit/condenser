@@ -949,5 +949,9 @@
     "witness_proxy_set": "Установить прокси",
     "witness_proxy_clear": "Очистить прокси",
     "proxy_update_error": "Ваш прокси не был обновлен"
+  },
+  "generated_password_input": {
+    "i_have_read_and_agree_to_the": "Я прочитав і згоден з",
+    "terms_of_service": "Умовами користування"
   }
 }

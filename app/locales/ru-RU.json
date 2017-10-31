@@ -973,6 +973,10 @@
     "witness_proxy_clear": "Очистить прокси",
     "proxy_update_error": "Ваш прокси не был обновлен"
   },
+  "generated_password_input": {
+    "i_have_read_and_agree_to_the": "Я прочитал и согласен с",
+    "terms_of_service": "Условиями пользования"
+  },
   "asset_create_jsx": {
     "header": "Создать актив",
     "symbol":"Тикер",

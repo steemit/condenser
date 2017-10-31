@@ -959,5 +959,9 @@
     "witness_proxy_set":"Postavi proxy",
     "witness_proxy_clear":"Obriši proxy",
     "proxy_update_error":"Vaš poxy nije ažuriran"
+  },
+  "generated_password_input": {
+    "i_have_read_and_agree_to_the": "Я прочитал и согласен с",
+    "terms_of_service": "Условиями пользования"
   }
 }

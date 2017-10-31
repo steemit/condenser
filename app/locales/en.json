@@ -964,5 +964,9 @@
     "not_supported_email_address": "Not a supported email address",
     "please_make_sure_you_dont_use_temporary_email_providers_contact_SUPPORT_EMAIL": "Please make sure you dont use a temporary email address when contacting %(SUPPORT_EMAIL)s .",
     "successfully_authenticated_with": "Sucessfully authenticated with"
+  },
+  "generated_password_input": {
+    "i_have_read_and_agree_to_the": "I have read and agree to the",
+    "terms_of_service": "Terms of service"
   }
 }

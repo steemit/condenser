@@ -960,5 +960,9 @@
     "witness_proxy_set":"Setează proxy",
     "witness_proxy_clear":"Șterge proxy",
     "proxy_update_error":"Proxy-ul dvs. nu a fost actualizat"
+  },
+  "generated_password_input": {
+    "i_have_read_and_agree_to_the": "Я прочитал и согласен с",
+    "terms_of_service": "Условиями пользования"
   }
 }

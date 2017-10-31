@@ -178,6 +178,12 @@
 
 .explore-post {
   margin-right: 0px!important;
+  cursor: pointer;
+  &:hover {
+    svg {
+      fill: $color-teal;
+    }
+  }
 }
 
 input.share-box {

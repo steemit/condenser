@@ -22,8 +22,12 @@
   overflow-y: scroll;
   @include themify($themes) {
     border-bottom: themed('border');  
-    background-color: themed('navBackgroundColor');
   } 
+  @media screen and (min-width: 60rem) {  
+    @include themify($themes) {
+      border-bottom: themed('borderTransparent');  
+    } 
+  }
 }
 
 .PostsList__post_top_bar {
@@ -32,6 +36,14 @@
   height: 3rem;
   margin: 0 auto;
   overflow: hidden;
+  @include themify($themes) {
+    background-color: themed('navBackgroundColor');
+  } 
+  @media screen and (min-width: 60rem) {  
+    @include themify($themes) {
+      background-color: themed('backgroundTransparent');  
+    } 
+  }
   a {
     span.Icon path {
       @include themify($themes) {

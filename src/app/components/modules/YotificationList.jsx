@@ -15,9 +15,6 @@ export const LAYOUT_PAGE = 'Page';
 export const LAYOUT_DROPDOWN = 'Dropdown';
 export const FILTER_ALL = 'all';
 
-const TIMEOUT_MARK_SHOWN_MILLIS = 3000;
-
-
 /**
  * Find the absolute offset relative to the window
  * @param domElt
@@ -56,8 +53,6 @@ const renderFilterList = (props) => {
     return ( <ul className="menu">{filterLIs}</ul>);
 }
 
-//todo: make functional
-
 
 class YotificationList extends React.Component {
     constructor(props) {
@@ -92,17 +87,6 @@ class YotificationList extends React.Component {
         this.markDisplayedShownWithDelay();
     }
 
-    shouldComponentUpdate(nextProps, nextState) { //eslint-disable-line
-        if(this.props.filter != nextProps.filter) {
-            this.markDisplayedShownWithDelay();
-        }
-        return true;
-    }
-
-    componentWillUnmount() {
-        clearTimeout(this.markDisplayedShownTimeout);
-    }
-
 
     markDisplayedRead = () => { //eslint-disable-line no-undef
         this.props.updateSome(this.props.filterIds.toArray(), {read: true} );
@@ -112,13 +96,6 @@ class YotificationList extends React.Component {
         this.props.updateSome(this.props.filterIds.toArray(), {hide: true} );
     }
 
-    markDisplayedShownWithDelay = () => { //eslint-disable-line no-undef
-        const self = this;
-        clearTimeout(this.markDisplayedShownTimeout);
-        this.markDisplayedShownTimeout = setTimeout(() => {
-            self.props.updateSome(this.props.filterIds.toArray(), {shown: true} );
-        }, TIMEOUT_MARK_SHOWN_MILLIS)
-    }
     appendSome = () => { //eslint-disable-line no-undef
         this.props.appendSome((this.props.filter !== FILTER_ALL)? filters[this.props.filter] : false);
     }

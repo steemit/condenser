@@ -1,11 +1,10 @@
 import React, {PropTypes, Component} from 'react';
-import {connect} from 'react-redux';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import Icon from 'app/components/elements/Icon';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import tt from 'counterpart';
 
-class ExplorePost extends Component {
+export default class ExplorePost extends Component {
 
     static propTypes = {
         permlink: PropTypes.string.isRequired
@@ -80,4 +79,3 @@ class ExplorePost extends Component {
     }
 }
 
-export default connect()(ExplorePost)

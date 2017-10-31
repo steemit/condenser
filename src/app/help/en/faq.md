@@ -1222,7 +1222,7 @@ https://steemit.com/steemit/@steemitblog/steemit-2017-roadmap
 
 The steemit brand and logo are protected by intellectual property laws including copyright and other proprietary rights of the United States and foreign countries. You may not make unauthorized commercial use of, reproduce, prepare derivative works, distribute copies, perform, or publicly display the steemit logo or brand, except as permitted by the doctrine of fair use or as authorized in writing by us.
 
-The Steem logo will remain free for anyone to use based on the Creative Commons CC0 license, which makes it safe to use without asking for permission or giving credit, including for commercial purposes.
+The Steem logo should remain free for anyone to use based on the Creative Commons CC0 license, which makes it safe to use without asking for permission or giving credit, including for commercial purposes.
 
 <a href="/faq.html#Table_of_Contents_Steemit__Inc">^</a>
 <a class="anchor" name="Can_I_purchase_official_Steemit_merchandise"></a>

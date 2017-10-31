@@ -54,6 +54,7 @@
     "password": "Password",
     "payouts": "Pagamenti",
     "permissions": "Permessi",
+    "phishy_message": "Link expanded to plain text; beware of a potential phishing attempt",
     "post": "Post",
     "post_as": "Pubblica come",
     "posts": "Posts",
@@ -98,7 +99,7 @@
     "submit_a_story": "Post",
     "tag": "Tag",
     "to": "a",
-    "topics": "Argomenti",
+    "all_tags": "All tags",
     "transfer": "Trasferisci",
     "trending_topics": "Trending Topics",
     "type": "Scrivi",
@@ -203,6 +204,11 @@
       "zero": "Nessuna Risposta",
       "one": "%(count)s Risposta",
       "other": "%(count)s Risposte"
+    },
+    "post_key_warning": {
+        "confirm": "You are about to publish a STEEM private key or master password. You will probably lose control of the associated account and all its funds.",
+        "warning": "Legitimate users, including employees of Steemit Inc., will never ask you for a private key or master password.",
+        "checkbox": "I understand"
     }
   },
   "navigation": {
@@ -222,9 +228,11 @@
     "learn_more": "Scopri di più",
     "welcome": "Benvenuto",
     "faq": "FAQ",
+    "shop": "The Steemit Shop",
     "chat": "Steemit Chat",
     "app_center": "Steemit App Center",
     "api_docs": "Steemit API Docs",
+    "bluepaper": "Steem Bluepaper",
     "whitepaper": "Steem Whitepaper",
     "intro_tagline": "Il denaro parla",
     "intro_paragraph": "La tua voce vale qualcosa. Entra nella comunità che ti pagare per pubblicare e curare contenuti di alta qualità."
@@ -328,8 +336,13 @@
     "user_hasnt_made_any_posts_yet": "Sembra che %(name)snon abbia ancora pubblicato nessun post! ",
     "user_hasnt_started_bloggin_yet": "Sembra che %(name)s non abbia ancora iniziato a scrivere!",
     "user_hasnt_followed_anything_yet": "Sembra che %(name)snon stia seguendo ancora nessuno! Se %(name)sha aggiunto di recente nuovi utenti da seguire, il feed personalizzato si riempirà di contenuti non appena ce ne saranno di nuovi. ",
-    "user_hasnt_had_any_replies_yet": "%(name)snon ha ancora ricevuto risposte",
-    "followers": "Follower",
+    "user_hasnt_had_any_replies_yet": "%(name)s hasn't had any replies yet",
+    "looks_like_you_havent_posted_anything_yet": "Looks like you haven't posted anything yet.",
+    "create_a_post": "Create a Post",
+    "explore_trending_articles": "Explore Trending Articles",
+    "read_the_quick_start_guide": "Read The Quick Start Guide",
+    "browse_the_faq": "Browse The FAQ",
+    "followers": "Followers",
     "this_is_users_reputations_score_it_is_based_on_history_of_votes": "Questo è il livello di reputazione di %(name)s. \n\nIl livello di reputazione si basa sulla storia dei voti ricevuti dall'account e viene utilizzato per nascondere contenuti di scarsa qualità. ",
     "follower_count": {
       "zero": "Nessun follower",
@@ -465,8 +478,6 @@
   "postsummary_jsx": {
     "resteemed": "Condiviso",
     "resteemed_by": "Condiviso da",
-    "this_post_is": "Questo post è",
-    "you_can": "Puoi",
     "reveal_it": "mostra",
     "adjust_your": "sistema il tuo",
     "display_preferences": "mostrare le tue preferenze",
@@ -541,9 +552,9 @@
     "keep_me_logged_in": "Voglio restare connesso",
     "amazing_community": "una comunità incredibile",
     "to_comment_and_reward_others": "per commentare e premiare gli altri. ",
-    "sign_up_now_to_earn": "Registrati ora per guadagnare",
-    "free_money": "SOLDI GRATIS!",
     "sign_up_get_steem": "Sign up. Get STEEM",
+    "signup_button": "Sign up now to earn ",
+    "signup_button_emphasis": "FREE STEEM!",
     "returning_users": "Utenti di ritorno:",
     "join_our": "Unisciti al nostro"
   },
@@ -596,7 +607,8 @@
     "withdraw_funds_after_the_required_3_day_waiting_period": "Preleva fondi dopo il periodo di attesa necessario di 3 giorni.",
     "from": "Da",
     "to": "A",
-    "asset_currently_collecting": "%(asset)s attualmente percepiscono %(interest)s%% ISC."
+    "asset_currently_collecting": "%(asset)s attualmente percepiscono %(interest)s%% ISC.",
+    "beware_of_spam_and_phishing_links": "Beware of spam and phishing links in transfer memos. Do not open links from users you do not trust. Do not provide your private keys to any third party websites."
   },
   "userwallet_jsx": {
     "conversion_complete_tip": "Si completerà su",

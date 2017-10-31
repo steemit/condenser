@@ -14,12 +14,12 @@ class ExplorePost extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            copied: false
+            copied_first: false,
+            copied_second: false,
         };
-        this.onCopy = this.onCopy.bind(this);
+
         this.Golosd = this.Golosd.bind(this);
         this.Golosdb = this.Golosdb.bind(this);
-        this.Busy = this.Busy.bind(this);
     }
 
     Golosd() {
@@ -30,33 +30,46 @@ class ExplorePost extends Component {
         serverApiRecordEvent('GolosdbView', this.props.permlink);
     }
 
-    Busy() {
-        serverApiRecordEvent('Busy view', this.props.permlink);
-    }
-
-    onCopy() {
-        this.setState({
-            copied: true
-        });
-    }
-
     render() {
         const link = this.props.permlink;
         const golosd = 'http://golosd.com' + link;
         const golosdb = 'https://golosdb.com' + link;
-        const busy = 'https://busy.org' + link;
         const golosio = 'https://golos.io' + link;
-        let text = this.state.copied == true ? tt('explorepost_jsx.copied') : tt('explorepost_jsx.copy');
+        const golosioCE = 'https://golos.io' + link.replace(/@/g, '%40');
+
         return (
             <span className="ExplorePost">
                 <h4>{tt('g.share_this_post')}</h4>
                 <hr />
                 <div className="input-group">
                     <input className="input-group-field share-box" type="text" value={golosio} onChange={(e) => e.preventDefault()} />
-                    <CopyToClipboard text={golosio} onCopy={this.onCopy} className="ExplorePost__copy-button input-group-label">
-                      <span>{text}</span>
+                    <CopyToClipboard 
+                        text={golosio} 
+                        onCopy={() => {
+                                this.setState({copied_first: true});
+                                serverApiRecordEvent('ExplorePost', this.props.permlink);
+                            }
+                        } 
+                        className="ExplorePost__copy-button input-group-label"
+                    >
+                      <span>{this.state.copied_first ? tt('explorepost_jsx.copied') : tt('explorepost_jsx.copy')}</span>
                     </CopyToClipboard>
                 </div>
+                <div className="input-group">
+                    <input className="input-group-field share-box" type="text" value={golosioCE} onChange={(e) => e.preventDefault()} />
+                    <CopyToClipboard 
+                        text={golosioCE} 
+                        onCopy={() => {
+                                this.setState({copied_second: true});
+                                serverApiRecordEvent('ExplorePost', this.props.permlink);
+                            }
+                        } 
+                        className="ExplorePost__copy-button input-group-label"
+                    >
+                      <span>{this.state.copied_second ? tt('explorepost_jsx.copied') : tt('explorepost_jsx.copy')}</span>
+                    </CopyToClipboard>
+                </div>
+                <hr />
                 <h5>{tt('explorepost_jsx.alternative_sources')}</h5>
                 <ul>
                     <li><a href={golosd} onClick={this.Golosd} target="_blank">golosd.com <Icon name="extlink" /></a></li>
@@ -67,5 +80,4 @@ class ExplorePost extends Component {
     }
 }
 
-export default connect(
-)(ExplorePost)
+export default connect()(ExplorePost)

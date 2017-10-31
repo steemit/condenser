@@ -13,14 +13,23 @@ import Url from 'app/utils/Url'
 import * as type from './type'
 import badges from './icon'
 
+const TIMEOUT_MARK_SHOWN_MILLIS = 3000;
+
 class NotificationLink extends React.Component {
     constructor(notification, ...args) {
         super(notification, ...args)
-        console.log(this.props)
         this.state = {
             id: notification.id,
             onClick: notification.onClick
         }
+    }
+
+    componentDidMount() {
+        this.cueMarkShown();
+    }
+
+    componentWillUnmount() {
+        clearTimeout(this.markShownTimeout);
     }
 
     markReadDefault = (e) => {
@@ -31,6 +40,14 @@ class NotificationLink extends React.Component {
         e.preventDefault()
         e.stopPropagation()
         this.props.markRead(this.state.id)
+    }
+
+    cueMarkShown = () => { //eslint-disable-line no-undef
+        const self = this;
+        clearTimeout(this.markShownTimeout);
+        this.markShownTimeout = setTimeout(() => {
+            self.props.markShown(this.props.id);
+        }, TIMEOUT_MARK_SHOWN_MILLIS)
     }
 
     markUnread = (e) => {
@@ -90,7 +107,7 @@ class NotificationLink extends React.Component {
                 bodyContent = tt(`${localeRoot}.body`)
                 picture =( <div className="Userpic" dangerouslySetInnerHTML={{ __html: badges.important}} /> )
                 break
-            case type.TAG :
+            case type.MENTION :
             case type.VOTE :
                 localeAction = localeRoot + '.actionComment'
                 if(0 === item.depth) {
@@ -162,5 +179,15 @@ export default connect(
                     read: false
                 }
             })
+        },
+        markShown: e => {
+            dispatch({
+                type: 'notification/UPDATE_ONE',
+                id: e,
+                updates: {
+                    shown: true
+                }
+            })
         }
+
     }))(NotificationLink)

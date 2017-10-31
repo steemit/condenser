@@ -229,7 +229,7 @@ class Witnesses extends Component {
                         </table>
                     </div>
                 </div>}
-                {/**
+                
                 {current_proxy && current_proxy.length ? null :
                     <div className="row">
                         <div className="column">
@@ -256,7 +256,7 @@ class Witnesses extends Component {
                         </div>
                     </div>
                 }
-                
+              {/**  
                 <div className="row">
                     <div className="column">
                         <p>{tt(current_proxy && current_proxy.length ? 'witnesses_jsx.witness_set' : 'witnesses_jsx.set_witness_proxy', {proxy: current_proxy})}</p>

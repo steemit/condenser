@@ -636,7 +636,7 @@
     "witness_deactive": "Withness suspended the signature of the blocks",
     "no_price_feed": "Withness did not publish the price feed",
     "version": "Version",
-    "if_you_want_to_vote_outside_of_top_enter_account_name": "If you would like to vote for a witness outside of the top 50, enter the account name below to cast a vote",
+    "if_you_want_to_vote_outside_of_top_enter_account_name": "If you would like to vote for a witness outside of the top 100, enter the account name below to cast a vote",
     "set_witness_proxy": "You can also choose a proxy that will vote for witnesses for you. This will reset your current witness selection.",
     "witness_set": "You have set a voting proxy. If you would like to reenable manual voting, please clear your proxy.",
     "witness_proxy_current": "Your current proxy is",

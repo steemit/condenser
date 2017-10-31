@@ -952,7 +952,7 @@
     "you_can_vote_for_maximum_of_witnesses":"Možete glasati za najviše 30 svedoka",
     "witness":"Svedoci",
     "information":"Informacija",
-    "if_you_want_to_vote_outside_of_top_enter_account_name":"Ukoliko želite da glasate za spoljne svedoke koji nisumedju prvih 50, unesite ime naloga u nastavku kako bi ste dali svoj glas",
+    "if_you_want_to_vote_outside_of_top_enter_account_name":"Ukoliko želite da glasate za spoljne svedoke koji nisumedju prvih 100, unesite ime naloga u nastavku kako bi ste dali svoj glas",
     "set_witness_proxy":"Takođe možete da izaberete proxy koji će glasati za svedoke umesto vas. Ovo će resetovati vaš trenutni izbor svedoka.",
     "witness_set":"Vi ste postavili proxy glasanje. Ako želite da omogućite upotrebu manualnog glasanja, obrišite proxy.",
     "witness_proxy_current":"Vaš trenutni proxy je",

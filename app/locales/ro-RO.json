@@ -953,7 +953,7 @@
     "you_can_vote_for_maximum_of_witnesses":"Puteți vota maxim pentru 30 de delegați",
     "witness":"Delegați",
     "information":"Informație",
-    "if_you_want_to_vote_outside_of_top_enter_account_name":"Dacă doriți să votați pentru un delegat înafara TOP 50, introduceți mai jos numele contului ",
+    "if_you_want_to_vote_outside_of_top_enter_account_name":"Dacă doriți să votați pentru un delegat înafara TOP 100, introduceți mai jos numele contului ",
     "set_witness_proxy":"Puteți selecta de asemenea un proxy, care va vota pentru delegați în locul dvs. . Acest lucru va reseta selecția curentă a delegaților.",
     "witness_set":"Ați setat proxy pentru votare. Dacă doriți să votați maniual, vă rugăm să curățați câmpul proxy.",
     "witness_proxy_current":"Proxy curent",

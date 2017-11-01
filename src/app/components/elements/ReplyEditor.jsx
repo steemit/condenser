@@ -427,7 +427,7 @@ class ReplyEditor extends React.Component {
                             {isStory && !isEdit && <div className="ReplyEditor__options float-right text-right">
 
                                 {tt('g.rewards')} &nbsp;
-                                <select value={this.state.payoutType} onChange={this.onPayoutTypeChange} style={{color: this.state.payoutType == '0%' ? 'orange' : 'inherit'}}>
+                                <select value={this.state.payoutType} onChange={this.onPayoutTypeChange} style={{color: this.state.payoutType == '0%' ? 'orange' : ''}}>
                                     <option value="100%">{tt('reply_editor.power_up_100')}</option>
                                     <option value="50%">{tt('reply_editor.default_50_50')}</option>
                                     <option value="0%">{tt('reply_editor.decline_payout')}</option>

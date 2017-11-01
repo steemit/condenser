@@ -26,7 +26,7 @@ class PostsIndex extends React.Component {
         requestData: PropTypes.func,
         loading: PropTypes.bool,
         username: PropTypes.string,
-        layoutStyle: PropTypes.string,
+        blogmode: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -134,7 +134,7 @@ class PostsIndex extends React.Component {
             }
         }
 
-        const layoutClass = (this.props.layoutStyle === 'blog') ? ' layout-block' : ' layout-list';
+        const layoutClass = this.props.blogmode ? ' layout-block' : ' layout-list';
 
         return (
             <div className={'PostsIndex row' + (fetching ? ' fetching' : '') + layoutClass}>
@@ -192,7 +192,7 @@ module.exports = {
                 loading: state.app.get('loading'),
                 accounts: state.global.get('accounts'),
                 username: state.user.getIn(['current', 'username']) || state.offchain.get('account'),
-                layoutStyle: state.user.get('layout_style'),
+                blogmode: state.app.getIn(['user_preferences', 'blogmode']),
             };
         },
         (dispatch) => {

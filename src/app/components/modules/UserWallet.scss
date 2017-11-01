@@ -1,9 +1,17 @@
+
+.UserWallet__buysp {
+  @extend .e-btn-hollow;
+}
+
 .UserWallet__balance {
   padding-bottom: 1rem;
   padding-top: 1rem;
 
   &.UserWallet__balance.zebra {
-      background: #f2f2f2;
+      @include themify($themes) {
+        background-color: themed('tableRowEvenBackgroundColor');  
+        color: themed('textColorPrimary');  
+      }   
   }
 }
 
@@ -18,9 +26,12 @@
 .UserWallet__claimbox {
   margin: 1.5rem 0 0.5rem;
   padding: 1rem;
-  border: 1px solid #d6e9c6;
   background: #dff0d8;
   border-radius: 5px;
+  color: $color-blue-black;
+  @include themify($themes) {
+    border: themed('border');  
+  }     
 
   .button {
     background: #337ab7;
@@ -38,16 +49,28 @@
 
 .WalletSubMenu {
   > li > a {
-    color: $dark-gray;
-    &:hover {
-      color: $black;
+    transition: 0.2s all ease-in-out;
+    @include themify($themes) {
+      color: themed('textColorSecondary');  
+    }  
+
+    &:hover, &:focus {
+      @include themify($themes) {
+        color: themed('textColorAccent');  
+      }  
     }
   }
   > li > a.active {
-    color: $black;
+    cursor: default;
+    @include themify($themes) {
+      color: themed('textColorPrimary');  
+    }     
     font-weight: bold;
   }
-  border-bottom: 1px solid $medium-gray;
+  @include themify($themes) {
+    border-bottom: themed('border');  
+  }       
+
   margin: 0.5rem 0 1rem;
 }
 

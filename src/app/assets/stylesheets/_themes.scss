@@ -3,15 +3,21 @@ $themes: (
     colorAccent: $color-blue,
     colorAccentHover: $color-blue-original-light,
     colorAccentReverse: $color-blue-original-light,
+    colorWhite: $color-white,
     backgroundColor: $color-background-off-white,
     backgroundColorOpaque: $color-background-off-white,
+    backgroundTransparent: transparent,
     moduleBackgroundColor: $color-white,
+    menuBackgroundColor: $color-background-dark,
     moduleMediumBackgroundColor: $color-white,
+    navBackgroundColor: $color-white,
     // moduleMediumBackgroundColor: $color-transparent,
+    tableRowEvenBackgroundColor: #f4f4f4,
     border: 1px solid $color-border-light,
     borderLight: 1px solid $color-border-light-lightest,
     borderDark: 1px solid $color-text-gray,
     borderAccent: 1px solid $color-blue,
+    borderTransparent: transparent,
     iconColorSecondary: #cacaca,
     textColorPrimary: $color-text-dark,
     textColorSecondary: $color-text-gray,
@@ -29,14 +35,20 @@ $themes: (
     colorAccent: $color-teal,
     colorAccentHover: $color-teal-dark,
     colorAccentReverse: $color-blue-black,
+    colorWhite: $color-white,
     backgroundColor: $color-background-off-white,
     backgroundColorOpaque: $color-background-off-white,    
+    backgroundTransparent: transparent,
     moduleBackgroundColor: $color-white,
+    menuBackgroundColor: $color-background-dark,
     moduleMediumBackgroundColor: $color-transparent,
+    navBackgroundColor: $color-white,
+    tableRowEvenBackgroundColor: #f4f4f4,
     border: 1px solid $color-border-light,
     borderLight: 1px solid $color-border-light-lightest,
     borderDark: 1px solid $color-text-gray,
     borderAccent: 1px solid $color-teal,
+    borderTransparent: transparent,
     iconColorSecondary: #cacaca,
     textColorPrimary: $color-text-dark,
     textColorSecondary: $color-text-gray,
@@ -55,19 +67,25 @@ $themes: (
     colorAccent: $color-teal,
     colorAccentHover: $color-teal,
     colorAccentReverse: $color-white,
+    colorWhite: $color-white,
     backgroundColor: $color-background-dark,
     backgroundColorOpaque: $color-blue-dark,
     moduleBackgroundColor: $color-background-dark,
+    backgroundTransparent: transparent,
+    menuBackgroundColor: $color-blue-dark,
     moduleMediumBackgroundColor: $color-background-dark,
+    navBackgroundColor: $color-background-dark,
+    tableRowEvenBackgroundColor: #212C33,
     border: 1px solid $color-border-dark,
     borderLight: 1px solid $color-border-dark-lightest,
     borderDark: 1px solid $color-text-gray-light,
     borderAccent: 1px solid $color-teal,
+    borderTransparent: transparent,
     iconColorSecondary: $color-text-gray-light,
     textColorPrimary: $color-text-white,
     textColorSecondary: $color-text-gray-light,
-    textColorAccent: $color-teal-light,
-    textColorAccentHover: $color-teal,
+    textColorAccent: $color-teal,
+    textColorAccentHover: $color-teal-light,
     textColorError: $color-text-red,
     contentBorderAccent: $color-teal,
     buttonBackground: $color-white,
@@ -158,3 +176,66 @@ $themes: (
     }
   }
 }
+
+.e-btn-hollow {
+  background-color: transparent;
+  transition: 0.2s all ease-in-out;
+  box-shadow: 0px 0px 0px 0 rgba(0,0,0,0);
+  @include themify($themes) {
+    border: themed('borderAccent');  
+    color: themed('textColorAccent');  
+  } 
+  &:hover {
+    @include themify($themes) {
+      border: themed('borderDark');  
+      color: themed('textColorPrimary');  
+    }       
+  }     
+}
+
+.e-btn {
+  text-decoration: none;
+  font-weight: bold;
+  transition: 0.2s all ease-in-out;
+  text-transform: capitalize;
+  border-radius: 0;
+  @include font-size(18px);       
+  @include themify($themes) {
+    background-color: themed('buttonBackground');  
+    box-shadow: 0px 0px 0px 0 rgba(0,0,0,0), 5px 5px 0 0 themed('buttonBoxShadow');   
+    color: themed('buttonText');
+  }
+  &:hover, &:focus {
+    @include themify($themes) {
+      background-color: themed('buttonBackgroundHover');  
+      box-shadow: 2px 2px 2px 0 rgba(0,0,0,0.1), 7px 7px 0 0 themed('buttonBoxShadowHover');   
+      color: themed('buttonTextHover');
+      text-shadow: 0 1px 0 rgba(0,0,0,0.20);
+    }
+  }
+  &:visited, &:active {
+    @include themify($themes) {
+      color: themed('buttonText');  
+    } 
+  } 
+
+}
+.button.disabled, .button[disabled] {
+    opacity: 0.25;
+    cursor: not-allowed;
+    box-shadow: 0px 0px 0px 0 rgba(0,0,0,0);
+      @include themify($themes) {
+        background-color: themed('buttonBackground');  
+        box-shadow: 0px 0px 0px 0 rgba(0,0,0,0);
+        color: themed('buttonText');
+      }    
+    &:hover {
+      @include themify($themes) {
+        background-color: themed('buttonBackground');  
+        box-shadow: 0px 0px 0px 0 rgba(0,0,0,0);
+        color: themed('buttonText');
+      }       
+    }
+}
+
+

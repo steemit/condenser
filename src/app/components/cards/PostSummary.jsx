@@ -16,7 +16,7 @@ import UserNames from 'app/components/elements/UserNames';
 import tt from 'counterpart';
 import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 import proxifyImageUrl from 'app/utils/ProxifyUrl';
-import Userpic from 'app/components/elements/Userpic';
+import Userpic, { avatarSize } from 'app/components/elements/Userpic';
 
 function isLeftClickEvent(event) {
     return event.button === 0
@@ -140,7 +140,7 @@ class PostSummary extends React.Component {
               { !isNsfw
                     ?  <div className="user__col user__col--left">
                             <a className="user__link" href={'/@' + p.author}>
-                                <Userpic account={p.author} />
+                                <Userpic account={p.author} size={avatarSize.small} />
                             </a>
                         </div>                       
                     : null

@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import user from 'app/redux/User';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
-import Userpic from 'app/components/elements/Userpic';
+import Userpic, {avatarSize} from 'app/components/elements/Userpic';
 import transaction from 'app/redux/Transaction'
 import {List} from 'immutable'
 import tt from 'counterpart';
@@ -352,7 +352,7 @@ class CommentImpl extends React.Component {
           <div className={commentClasses.join(' ')} id={anchor_link} itemScope itemType="http://schema.org/comment">
             {depth_indicator}
             <div className="Comment__Userpic show-for-medium">
-              <Userpic account={comment.author} />
+              <Userpic account={comment.author} size={avatarSize.large} />
             </div>
             <div className={innerCommentClass}>
               <div className="Comment__header">
@@ -362,7 +362,7 @@ class CommentImpl extends React.Component {
                 </div>
                 <span className="Comment__header-user">
                   <div className="Comment__Userpic-small">
-                    <Userpic account={comment.author} />
+                    <Userpic account={comment.author} size={avatarSize.large} />
                   </div>
                   <Author author={comment.author} authorRepLog10={authorRepLog10} />
                 </span>

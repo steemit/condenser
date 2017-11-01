@@ -47,8 +47,8 @@ class PickAccount extends React.Component {
         this.setState({server_error: '', loading: true});
         const {name} = this.state;
         if (!name) return;
-
-        window.location = "/enter_email?account=" + name;
+        const whistle_signup = window.location.search && window.location.search.indexOf('whistle_signup') > 0 ? '&whistle_signup=1' : '';
+        window.location = "/enter_email?account=" + name + whistle_signup;
     }
 
     onPasswordChange(password, password_valid) {

@@ -177,6 +177,10 @@ export default function useEnterAndConfirmEmailPages(app) {
 
     router.get("/enter_email", function*() {
         console.log("-- /enter_email -->", this.session.uid, this.session.user, this.request.query.account);
+        if (this.request.query.whistle_signup) {
+            console.log('/enter_email whistle_signup', this.session.uid, this.session.user, this.request.query.account);
+            this.session.whistle_signup = this.request.query.whistle_signup;
+        }
         const picked_account_name = this.session.picked_account_name = this.request.query.account;
         if (!picked_account_name) {
             this.flash = { error: "Please select your account name" };

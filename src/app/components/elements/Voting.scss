@@ -3,6 +3,11 @@
   span {
     white-space: nowrap !important;
   }
+  .dropdown-pane {
+    @include themify($themes) {
+      border: themed('borderDark');  
+    }    
+  }
 }
 
 .Voting__button {
@@ -23,6 +28,35 @@
 
 .Voting__about-flag {
     margin-right: 30px;
+    .button {
+      
+  text-decoration: none;
+  font-weight: bold;
+  transition: 0.2s all ease-in-out;
+  text-transform: capitalize;
+  border-radius: 0;
+  @include font-size(18px);       
+  @include themify($themes) {
+    background-color: themed('buttonBackground');  
+    box-shadow: 0px 0px 0px 0 rgba(0,0,0,0), 5px 5px 0 0 themed('buttonBoxShadow');   
+    color: themed('buttonText');
+  }
+  &:hover, &:focus {
+    @include themify($themes) {
+      background-color: themed('buttonBackgroundHover');  
+      box-shadow: 2px 2px 2px 0 rgba(0,0,0,0.1), 7px 7px 0 0 themed('buttonBoxShadowHover');   
+      color: themed('buttonTextHover');
+      text-shadow: 0 1px 0 rgba(0,0,0,0.20);
+    }
+  }
+  &:visited, &:active {
+    @include themify($themes) {
+      color: themed('buttonText');  
+    } 
+  } 
+
+
+    }
 }
 
 .Voting__button-up {
@@ -35,12 +69,12 @@
   }
   path {
     @include themify($themes) {
-      fill: themed('colorAccent');
+      fill: themed('textColorAccent');
     }       
   }
   circle {
       @include themify($themes) {
-        stroke: themed('colorAccent');
+        stroke: themed('textColorAccent');
       }       
   }
   // exclude small devices
@@ -71,7 +105,7 @@
 .Voting__button-up.votingUp {
   padding-right: 0.5rem;
   svg {
-    border: 1px solid #4BA2F2;
+    border: 1px solid $color-teal;
     border-radius: 50%;
     border-right-color: transparent;
     border-top-color: transparent;
@@ -155,7 +189,9 @@
     padding: 0.25rem 0.5rem;
     font-size: 82.5%;
     display: block;
-    color: #666;
+    @include themify($themes) {
+      color: themed('textColorSecondary');  
+    }  
   }
 }
 
@@ -185,6 +221,10 @@
 .Voting__adjust_weight_down {
     @extend .Voting__adjust_weight;
 
+    @include themify($themes) {
+      background-color: themed('backgroundColor'); 
+    } 
+
     right: 0;
     width: auto !important;
     max-width: 500px;
@@ -196,10 +236,13 @@
       white-space: normal !important;
     }
     .weight-display {
-      color: #C00 !important;
+      color: $color-red !important;
     }
     .rangeslider {
       margin-right: 2rem;
+    }
+    .close-button {
+      right: 0;
     }
 }
 
@@ -245,7 +288,7 @@
       display: inline-block;
       position: absolute;
       &:active {
-        background: #4ba2f2;
+        background: $color-teal;
       }
     }
   }
@@ -257,7 +300,7 @@
     margin-top: 18px;
     .rangeslider__fill {
       height: 100%;
-      background: #4ba2f2;
+      background: $color-teal;
       box-shadow: none;
       left: 0;
     }
@@ -301,6 +344,8 @@
     }
   }
 }
+
+
 
 /* Pulse for upvote action */
 @-webkit-keyframes pulse {

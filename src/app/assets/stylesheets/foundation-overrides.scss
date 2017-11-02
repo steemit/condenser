@@ -53,7 +53,13 @@ button, .button {
 }
 
 .callout {
-    margin-top: 1rem;
+  margin-top: 1rem;
+  @include themify($themes) {
+    color: themed('textColorPrimary');  
+    background-color: themed('highlightBackgroundColor');  
+    border: themed('border');  
+  }     
+
 }
 
 .close-button {

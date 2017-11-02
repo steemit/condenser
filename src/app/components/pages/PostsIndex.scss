@@ -421,7 +421,7 @@
       top: -4px; 
       margin-top: 12px; 
       @include themify($themes) {
-          color: themed('textColorPrimary');  
+          color: themed('textColorSecondary');  
       }       
       @media only screen and (min-width: 370px) {
         margin-top: 0; 

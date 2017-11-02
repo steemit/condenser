@@ -139,6 +139,7 @@ class Settings extends React.Component {
                             <option value="ru">Russian</option>
                             <option value="fr">French</option>
                             <option value="it">Italian</option>
+                            <option value="ja">Japanese</option>
                         </select>
                     </label>
                 </div>

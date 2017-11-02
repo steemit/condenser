@@ -58,24 +58,27 @@
       border-right: none;
     }
     a {
-      color: $dark-gray;
-      @include hoverUnderline;
+      @include themify($themes) {
+        color: themed('textColorSecondary');
+      }
     }
   }
 }
 
 .Comment__header {
   margin-left: 62px;
-  color: $dark-gray;
+    @include themify($themes) {
+      color: themed('textColorSecondary');
+    }
 }
 
 .Comment__header-user {
   color: $black;
   font-size: 100%;
   font-weight: 600;
-  a {
-    color: $black;
-    @include hoverUnderline;
+  a {    
+    @extend .link;
+    @extend .link--primary;
   }
 }
 

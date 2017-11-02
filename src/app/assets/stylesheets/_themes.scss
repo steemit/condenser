@@ -150,6 +150,11 @@ $themes: (
     @include themify($themes) {
         color: themed('textColorPrimary');  
     }
+    &:visited, &:active {
+      @include themify($themes) {
+          color: themed('textColorPrimary');  
+      } 
+    }     
     &:hover, &:focus {
       @include themify($themes) {
           color: themed('textColorAccent');  
@@ -161,21 +166,31 @@ $themes: (
     @include themify($themes) {
         color: themed('textColorSecondary');  
     }
+    &:visited, &:active {
+      @include themify($themes) {
+          color: themed('textColorSecondary');  
+      } 
+    }    
     &:hover, &:focus {
       @include themify($themes) {
           color: themed('textColorAccent');  
       } 
-    }
+    }        
   }
   &--accent {
     @include themify($themes) {
         color: themed('textColorAccent');  
     }
+    &:visited, &:active {
+      @include themify($themes) {
+          color: themed('textColorAccent');  
+      } 
+    }    
     &:hover, &:focus {
       @include themify($themes) {
           color: themed('textColorAccentHover');  
       } 
-    }
+    }            
   }
 }
 

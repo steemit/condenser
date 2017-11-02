@@ -39,7 +39,7 @@
   padding: 14px;
   @include themify($themes) {
     border: themed('borderAccent');
-    background-color: themed('highlightedCommentBackgroundColor');
+    background-color: themed('highlightBackgroundColor');
   }
 }
 

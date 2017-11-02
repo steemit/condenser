@@ -6,7 +6,7 @@ import es from 'react-intl/locale-data/es';
 import ru from 'react-intl/locale-data/ru';
 import fr from 'react-intl/locale-data/fr';
 import it from 'react-intl/locale-data/it';
-import it from 'react-intl/locale-data/ja';
+import ja from 'react-intl/locale-data/ja';
 import {DEFAULT_LANGUAGE} from 'app/client_config';
 import tt from 'counterpart';
 

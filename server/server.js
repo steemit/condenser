@@ -15,6 +15,7 @@ import useGeneralApi from './api/general';
 import useAccountRecoveryApi from './api/account_recovery';
 import useNotificationsApi from './api/notifications';
 import {proxyRoutes as useProxyRoutes} from './api/proxy';
+import {ratesRoutes as useRatesRoutes} from './api/rates';
 import useEnterAndConfirmEmailPages from './server_pages/enter_confirm_email';
 import useEnterAndConfirmMobilePages from './server_pages/enter_confirm_mobile';
 import useUserJson from './json/user_json';
@@ -195,6 +196,7 @@ useAccountRecoveryApi(app);
 useGeneralApi(app);
 useNotificationsApi(app);
 useProxyRoutes(app);
+useRatesRoutes(app);
 
 // helmet wants some things as bools and some as lists, makes config difficult.
 // our config uses strings, this splits them to lists on whitespace.

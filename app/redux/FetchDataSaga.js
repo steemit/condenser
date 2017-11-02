@@ -366,23 +366,16 @@ export function* watchFetchExchangeRates() {
 }
 
 export function* fetchExchangeRates() {
+  const fourHours = 1000 * 60 * 60 * 4;
+
   try {
     const created = localStorage.getItem('xchange.created') || 0;
-    const halfDay = 1000 * 60 * 60 * 12;
-    const goldPair = 'XAUUSD';
-    const yahooapis = 'https://query.yahooapis.com/v1/public/';
 
     let pickedCurrency = localStorage.getItem('xchange.picked') || DEFAULT_CURRENCY;
     if (pickedCurrency.localeCompare(DEBT_TOKEN_SHORT) == 0) {
       pickedCurrency = DEFAULT_CURRENCY;
     }
-    const query = 'yql?q=select%20*%20from%20yahoo.finance.xchange%20where%20pair%3D%22'
-      + goldPair
-      + '%2C'
-      + 'USD' + pickedCurrency
-      + '%22&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys'
-    ;
-    if (Date.now() - created < halfDay) {
+    if (Date.now() - created < fourHours) {
       return;
     }
     // xchange rates are outdated or not exists
@@ -390,51 +383,41 @@ export function* fetchExchangeRates() {
 
     yield put({type: 'global/FETCHING_JSON', payload: true});
 
-    let result = yield call(fetch, yahooapis + query);
-    result = yield result.json()
+    let result = yield call(fetch, '/api/v1/rates/');
+    result = yield result.json();
 
     if (result.error) {
       console.log('~~ Saga fetchExchangeRates error ~~>', '[0] The result is undefined.');
-      setDefaultExchangeValues();
+      storeExchangeValues();
       yield put({type: 'global/FETCHING_XCHANGE', payload: false});
       return;
     }
-    const vals = result.query.results.rate;
-    if (typeof vals == 'object' && vals.Name == 'N/A') {
-      console.log('~~ Saga fetchExchangeRates error ~~>', '[1] The result is undefined.');
-      setDefaultExchangeValues();
-      yield put({type: 'global/FETCHING_XCHANGE', payload: false});
-      return;
+    if (
+      typeof result === 'object' &&
+      typeof result.rates === 'object' &&
+      typeof result.rates.XAU === 'number' &&
+      typeof result.rates[pickedCurrency] === 'number'
+    ) {
+      // store result into localstorage
+      storeExchangeValues(Date.now(), 1/result.rates.XAU, result.rates[pickedCurrency], pickedCurrency);
     }
-    else if (Array.isArray(vals)) {
-      for (var i = 1; i < vals.length; i++) {
-        // starts from second pair
-        if (vals[i].Name == 'N/A') {
-          console.log('~~ Saga fetchExchangeRates error ~~>', '[2] The result is undefined.');
-          setDefaultExchangeValues();
-          yield put({type: 'global/FETCHING_XCHANGE', payload: false});
-          return;
-        }
-      }
+    else {
+      console.log('~~ Saga fetchExchangeRates error ~~>', 'The result is undefined.');
+      storeExchangeValues();
     }
-    // store result into localstorage
-    localStorage.setItem('xchange.created', new Date(result.query.created).getTime());
-    localStorage.setItem('xchange.gold', vals[0].Rate);
-    localStorage.setItem('xchange.pair', vals[1].Rate);
-    localStorage.setItem('xchange.picked', pickedCurrency);
     yield put({type: 'global/FETCHING_XCHANGE', payload: false});
   }
   catch(error) {
     // set default values
-    setDefaultExchangeValues();
+    storeExchangeValues();
     console.error('~~ Saga fetchExchangeRates error ~~>', error);
     yield put({type: 'global/FETCHING_XCHANGE', payload: false});
   }
 }
 
-function setDefaultExchangeValues() {
-  localStorage.setItem('xchange.created', 0);
-  localStorage.setItem('xchange.gold', 1);
-  localStorage.setItem('xchange.pair', 1);
-  localStorage.setItem('xchange.picked', DEBT_TOKEN_SHORT);
+function storeExchangeValues(created, gold, pair, picked) {
+  localStorage.setItem('xchange.created', created || 0);
+  localStorage.setItem('xchange.gold', gold || 1);
+  localStorage.setItem('xchange.pair', pair || 1);
+  localStorage.setItem('xchange.picked', picked || DEBT_TOKEN_SHORT);
 }

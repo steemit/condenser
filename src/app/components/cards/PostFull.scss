@@ -111,10 +111,10 @@
     } 
   }
   a, .FoundationDropdownMenu__label {
-    color: $dark-gray;
     font-size: 94%;
     font-weight: 600;
-    @include hoverUnderline;
+    @extend .link;
+    @extend .link--secondary;
   }
   .Voting {
     //padding-right: 1rem;

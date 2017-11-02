@@ -39,9 +39,9 @@
     box-shadow: 0px 0px 0px 0 rgba(0,0,0,0);
   }
   &__step {
-    padding-top: 1em;
+    padding-top: 2em;
   }
-  .btn-continue {
+  .btn-continue, .button.g-recaptcha {
     text-decoration: none;
     font-weight: bold;
     transition: 0.2s all ease-in-out;

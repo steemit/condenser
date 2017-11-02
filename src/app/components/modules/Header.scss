@@ -213,6 +213,7 @@ ul > li.Header__top-logo > a {
   }
   
   .icon-svg {
+    fill: $color-teal;
     @include themify($themes) {
       fill: themed('colorAccent');
     }
@@ -220,9 +221,12 @@ ul > li.Header__top-logo > a {
 }
 
 
+
+
 .Header__top-logo:hover {
   .logo-new {
     .icon-svg {
+      fill: $color-blue-black;
       @include themify($themes) {
         fill: themed('colorAccentReverse');
       }

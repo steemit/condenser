@@ -140,4 +140,8 @@
 
 .App__announcement {
   padding-right: 40px;
+  padding-top: 40px; 
+  .close-button {
+    right: 0;
+  }
 }

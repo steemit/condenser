@@ -231,3 +231,18 @@ ul > li > .button {
   }
 }
 
+.Header__top-logo a {
+  &:visited, &:active {
+    .logo-new {
+      .icon-svg {      
+        @include themify($themes) {
+            fill: themed('ColorAccent');  
+        }
+      }
+    } 
+  }        
+}
+
+
+
+

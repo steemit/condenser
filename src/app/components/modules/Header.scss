@@ -98,14 +98,13 @@ ul > li.Header__top-logo > a {
   transition: none;
 }
 
-ul > li > .button {
-  padding-top: 0.2rem;
-  padding-bottom: 0.2rem;
+.Header {
+  ul > li > .button {
+    padding-top: 0.2rem;
+    padding-bottom: 0.2rem;
+  }
 }
 
-//ul > li.submit-story {
-//  padding-top: 0.4rem;
-//}
 
 .Header__sub-nav {
   position: relative;

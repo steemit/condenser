@@ -131,5 +131,6 @@
     "app_name": "Golos.io",
     "log_level": "info"
   },
-  "blockcypher_token": "blockcypher token"
+  "blockcypher_token": "blockcypher token",
+  "openexchangerates_app_id": "app id"
 }

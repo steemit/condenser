@@ -82,6 +82,7 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
 
     if (process.env.BROWSER) {
         const store = createStore(rootReducer, initial_state, middleware);
+        window.store = store; //todo: remove
         sagaMiddleware.run(PollDataSaga).done
             .then(() => console.log('PollDataSaga is finished'))
             .catch(err => console.log('PollDataSaga is finished with error', err));
@@ -89,8 +90,8 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
         const history = syncHistoryWithStore(browserHistory, store);
 
         const scroll = useScroll((prevLocation, context) => {
-            if (context.location.hash || context.location.action === 'POP') return false;
-            return !prevLocation || prevLocation.location.pathname !== context.location.pathname;
+            //useScroll emits a 'POP' event on page load (because dumb?) so rather !PUSH, we check for null
+            return (prevLocation !== null && context.location.action === 'POP')
         });
         if (process.env.NODE_ENV === 'production') {
             console.log('%c%s', 'color: red; background: yellow; font-size: 24px;', 'WARNING!');

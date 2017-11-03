@@ -255,12 +255,14 @@ $themes: (
     }
 }
 
-.e-btn {
+// This class doesn't applying theming. To be used when there are no theming classes available (e.g. in modals and static server pages in signup)
+
+.e-btn {  
   &--black-btn {
     background-color: $color-blue-black;
     box-shadow: 0px 0px 0px 0 rgba(0,0,0,0), 5px 5px 0 0 $color-teal;   
     color: $color-white;
-
+    transition: 0.2s all ease-in-out;
     &:hover, &:focus {
       background-color: $color-teal;
       box-shadow: 2px 2px 2px 0 rgba(0,0,0,0.1), 7px 7px 0 0 $color-blue-black;   
@@ -272,17 +274,38 @@ $themes: (
       box-shadow: 0px 0px 0px 0 rgba(0,0,0,0), 5px 5px 0 0 $color-teal;   
       color: $color-white;
     } 
-  }
-  &.disabled, &[disabled] {
-    opacity: 0.25;
-    cursor: not-allowed;
-    box-shadow: 0px 0px 0px 0 rgba(0,0,0,0);
-    &:hover, &:focus {
+    &.disabled, &[disabled] {
+      opacity: 0.25;
+      cursor: not-allowed;
       box-shadow: 0px 0px 0px 0 rgba(0,0,0,0);
-      background-color: $color-blue-black;
-      color: $color-white;      
+      &:hover, &:focus {
+        box-shadow: 0px 0px 0px 0 rgba(0,0,0,0);
+        background-color: $color-blue-black;
+        color: $color-white;      
+      }
     }
-  }  
+    &.hollow {
+      background-color: transparent;
+      box-shadow: 0px 0px 0px 0 rgba(0,0,0,0);
+      color: $color-text-gray;
+      font-weight: normal;
+      transition: 0.2s all ease-in-out;
+      border: transparent;
+      &:hover, &:focus {
+        background-color: transparent;
+        box-shadow: 0px 0px 0px 0 rgba(0,0,0,0);
+        color: $color-blue-dark;
+        font-weight: normal;        
+        text-shadow: 0 1px 0 rgba(0,0,0,0.0);
+      }
+      &:visited, &:active {
+        background-color: transparent;
+        box-shadow: 0px 0px 0px 0 rgba(0,0,0,0);
+        color: $color-text-gray;
+        font-weight: normal;
+      }       
+    }
+  }
 }
 
 

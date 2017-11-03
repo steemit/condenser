@@ -162,7 +162,8 @@ class CommentImpl extends React.Component {
             if (comment_el) {
                 comment_el.scrollIntoView(true)
                 const scrollingEl = document.scrollingElement || document.documentElement;
-                scrollingEl.scrollTop -= 100; 
+                scrollingEl.scrollTop -= 100;
+                this.setState({highlight: true});
             }
         }
     }

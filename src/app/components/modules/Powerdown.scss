@@ -19,6 +19,7 @@
     @extend .e-btn;
     @extend .e-btn--black-btn;
     margin: 14px;
+    min-width: 100px;
   }
 
   .powerdown-notes {

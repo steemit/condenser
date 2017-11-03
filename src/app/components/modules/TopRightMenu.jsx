@@ -20,7 +20,7 @@ const defaultNavigate = (e) => {
     browserHistory.push(a.pathname + a.search + a.hash);
 };
 
-function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate, toggleOffCanvasMenu, probablyLoggedIn}) {
+function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate, toggleOffCanvasMenu, probablyLoggedIn, nightmodeEnabled, toggleNightmode}) {
     const mcn = 'menu' + (vertical ? ' vertical show-for-small-only' : '');
     const mcl = vertical ? '' : ' sub-menu';
     const lcn = vertical ? '' : 'show-for-medium';
@@ -42,6 +42,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
             {link: comments_link, icon: 'replies', value: tt('g.comments')},
             {link: replies_link, icon: 'reply', value: tt('g.replies'), addon: <NotifiCounter fields="comment_reply" />},
             {link: wallet_link, icon: 'wallet', value: tt('g.wallet'), addon: <NotifiCounter fields="follow,send,receive,account_update" />},
+            {link: '#', icon: 'eye', onClick: toggleNightmode, value: tt('g.toggle_nightmode') },
             {link: reset_password_link, icon: 'key', value: tt('g.change_password')},
             {link: settings_link, icon: 'cog', value: tt('g.settings')},
             loggedIn ?
@@ -107,7 +108,9 @@ TopRightMenu.propTypes = {
     logout: React.PropTypes.func.isRequired,
     vertical: React.PropTypes.bool,
     navigate: React.PropTypes.func,
-    toggleOffCanvasMenu: React.PropTypes.func
+    toggleOffCanvasMenu: React.PropTypes.func,
+    nightmodeEnabled: React.PropTypes.bool,
+    toggleNightmode: React.PropTypes.func,
 };
 
 export default connect(
@@ -124,7 +127,8 @@ export default connect(
         return {
             username,
             loggedIn,
-            probablyLoggedIn: false
+            probablyLoggedIn: false,
+            nightmodeEnabled: state.user.getIn(['user_preferences', 'nightmode']),
         }
     },
     dispatch => ({
@@ -135,6 +139,10 @@ export default connect(
         logout: e => {
             if (e) e.preventDefault();
             dispatch({type: 'user/LOGOUT'})
-        }
+        },
+        toggleNightmode: e => {
+            if (e) e.preventDefault();
+            dispatch({ type: 'TOGGLE_NIGHTMODE' });
+        },
     })
 )(TopRightMenu);

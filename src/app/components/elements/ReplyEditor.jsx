@@ -36,7 +36,7 @@ class ReplyEditor extends React.Component {
         category: React.PropTypes.string, // initial value
         title: React.PropTypes.string, // initial value
         body: React.PropTypes.string, // initial value
-        richTextEditor: React.PropTypes.function,
+        richTextEditor: React.PropTypes.func,
     }
 
     static defaultProps = {
@@ -425,7 +425,7 @@ class ReplyEditor extends React.Component {
                             {isStory && !isEdit && <div className="ReplyEditor__options float-right text-right">
 
                                 {tt('g.rewards')} &nbsp;
-                                <select value={this.state.payoutType} onChange={this.onPayoutTypeChange} style={{color: this.state.payoutType == '0%' ? 'orange' : 'inherit'}}>
+                                <select value={this.state.payoutType} onChange={this.onPayoutTypeChange} style={{color: this.state.payoutType == '0%' ? 'orange' : ''}}>
                                     <option value="100%">{tt('reply_editor.power_up_100')}</option>
                                     <option value="50%">{tt('reply_editor.default_50_50')}</option>
                                     <option value="0%">{tt('reply_editor.decline_payout')}</option>
@@ -492,9 +492,10 @@ function stateFromMarkdown(RichTextEditor, markdown) {
     return stateFromHtml(RichTextEditor, html)
 }
 
-import {connect} from 'react-redux'
+import {connect} from 'react-redux';
+const richTextEditor = process.env.BROWSER ? require('react-rte-image').default : null;
 
-export default (formId, richTextEditor = null) => connect(
+export default (formId) => connect(
     // mapStateToProps
     (state, ownProps) => {
         const username = state.user.getIn(['current', 'username'])

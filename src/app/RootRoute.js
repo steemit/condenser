@@ -1,9 +1,9 @@
-// polyfill webpack require.ensure
-if (typeof require.ensure !== 'function') require.ensure = (d, c) => c(require);
-
 import App from 'app/components/App';
 import PostsIndex from 'app/components/pages/PostsIndex';
 import resolveRoute from './ResolveRoute';
+
+// polyfill webpack require.ensure
+if (typeof require.ensure !== 'function') require.ensure = (d, c) => c(require);
 
 export default {
     path: '/',
@@ -80,9 +80,9 @@ export default {
             //});
         } else if (route.page === 'SubmitPost') {
             if (process.env.BROWSER) {
-                require.ensure([], (require) => {
+                // require.ensure([], (require) => {
                     cb(null, [require('app/components/pages/SubmitPost')]);
-                });
+                // });
             } else {
                 cb(null, [require('app/components/pages/SubmitPostServerRender')]);
             }

@@ -767,7 +767,8 @@
     "move_funds_to_another_account": "Надіслати кошти на інший рахунок.",
     "protect_funds_by_requiring_a_3_day_withdraw_waiting_period": "Захистіть кошти від виведення 3-х денним періодом очікування.",
     "withdraw_funds_after_the_required_3_day_waiting_period": "Зняти кошти після необхідного 3-х денного періоду очікування.",
-    "balance": "Баланс"
+    "balance": "Баланс",
+    "private_key_in_memo" : "Не пишіть в цьому полі свої приватні ключі!"
   },
   "transferhistoryrow_jsx": {
     "to_savings": "у сейф",

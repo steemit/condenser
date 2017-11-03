@@ -69,6 +69,10 @@ export function formatAmount(amount){
     return amount
 }
 
+export function checkMemo(memoValue){
+    return !/[PK5]/.test(memoValue.charAt(0))
+}
+
 export function countDecimals(amount) {
     if(amount == null) return amount    
     amount = String(amount).match(/[\d\.]+/g).join('') // just dots and digits

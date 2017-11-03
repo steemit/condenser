@@ -7,7 +7,7 @@ import user from 'app/redux/User';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import runTests, {browserTests} from 'app/utils/BrowserTests';
 import {validate_account_name} from 'app/utils/ChainValidation';
-import {countDecimals, formatAmount} from 'app/utils/ParsersAndFormatters';
+import {countDecimals, formatAmount, checkMemo} from 'app/utils/ParsersAndFormatters';
 import tt from 'counterpart';
 import { LIQUID_TICKER, DEBT_TICKER , VESTING_TOKEN2 } from 'app/client_config';
 
@@ -85,6 +85,7 @@ class TransferForm extends Component {
                 memo:
                     values.memo && (!browserTests.memo_encryption && /^#/.test(values.memo)) ?
                     'Encrypted memos are temporarily unavailable (issue #98)' :
+                    !checkMemo(values.memo) ? tt('transfer_jsx.private_key_in_memo') :
                     null,
             })
         })

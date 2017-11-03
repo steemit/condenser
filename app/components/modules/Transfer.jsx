@@ -7,7 +7,7 @@ import user from 'app/redux/User';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import runTests, {browserTests} from 'app/utils/BrowserTests';
 import {validate_account_name} from 'app/utils/ChainValidation';
-import {countDecimals} from 'app/utils/ParsersAndFormatters';
+import {countDecimals, formatAmount} from 'app/utils/ParsersAndFormatters';
 import tt from 'counterpart';
 import { LIQUID_TICKER, DEBT_TICKER , VESTING_TOKEN2 } from 'app/client_config';
 
@@ -75,8 +75,7 @@ class TransferForm extends Component {
                 to:
                     ! values.to ? tt('g.required') : validate_account_name(values.to),
                 amount:
-                    ! values.amount ? tt('g.required') :
-                    ! /^[0-9]*\.?[0-9]*/.test(values.amount) ? tt('transfer_jsx.amount_is_in_form') :
+                    ! values.amount ? tt('g.required') :                    
                     insufficientFunds(values.asset, values.amount) ? tt('transfer_jsx.insufficient_funds') :
                     countDecimals(values.amount) > 3 ? tt('transfer_jsx.use_only_3_digits_of_precison') :
                     null,
@@ -117,6 +116,11 @@ class TransferForm extends Component {
     onChangeTo = (e) => {
         const {value} = e.target
         this.state.to.props.onChange(value.toLowerCase().trim())
+    }
+
+    onChangeAmount = (e) => {
+        const {value} = e.target
+        this.state.amount.props.onChange(formatAmount(value))
     }
 
     render() {
@@ -207,7 +211,7 @@ class TransferForm extends Component {
                     <div className="column small-2" style={{paddingTop: 5}}>{tt('g.amount')}</div>
                     <div className="column small-10">
                         <div className="input-group" style={{marginBottom: 5}}>
-                            <input type="text" placeholder={tt('g.amount')} {...amount.props} ref="amount" autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck="false" disabled={loading} />
+                            <input type="text" placeholder={tt('g.amount')} {...amount.props} ref="amount" autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck="false" disabled={loading} onChange={(e) => this.onChangeAmount(e)}/>
                             {asset && <span className="input-group-label" style={{paddingLeft: 0, paddingRight: 0}}>
                                 <select {...asset.props} placeholder={tt('transfer_jsx.asset')} disabled={loading} style={{minWidth: "5rem", height: "inherit", backgroundColor: "transparent", border: "none"}}>
                                     <option value={LIQUID_TICKER}>{LIQUID_TOKEN}</option>

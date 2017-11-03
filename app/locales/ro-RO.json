@@ -779,7 +779,8 @@
     "move_funds_to_another_account":"Trimiteți fondurile spre un alt cont.",
     "protect_funds_by_requiring_a_3_day_withdraw_waiting_period":"Protejați fondurile de la retragere pe o perioadă 3 zile.",
     "withdraw_funds_after_the_required_3_day_waiting_period":"Retrageți după perioada de așteptare necesară de 3 zile.",
-    "balance":"Balanța"
+    "balance":"Balanța",
+    "private_key_in_memo" : "Do not write your private keys in this field!"    
   },
   "transferhistoryrow_jsx":{
     "to_savings":"în seif",

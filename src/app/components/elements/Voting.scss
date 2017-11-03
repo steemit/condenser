@@ -347,30 +347,32 @@
 
 
 
+
+
 /* Pulse for upvote action */
 @-webkit-keyframes pulse {
     0% {
-        -webkit-box-shadow: 0 0 0 0 rgba(75, 162, 242, 2);
+        -webkit-box-shadow: 0 0 0 0 rgba(6, 214, 169, 2);
     }
     70% {
-        -webkit-box-shadow: 0 0 0 10px rgba(75, 162, 242, 1);
+        -webkit-box-shadow: 0 0 0 10px rgba(6, 214, 169, 1);
     }
     100% {
-        -webkit-box-shadow: 0 0 0 0 rgba(75, 162, 242, 1);
+        -webkit-box-shadow: 0 0 0 0 rgba(6, 214, 169, 1);
     }
 }
 @keyframes pulse {
     0% {
-        -moz-box-shadow: 0 0 0 0 rgba(75, 162, 242, 2);
-        box-shadow: 0 0 0 0 rgba(75, 162, 242, 2);
+        -moz-box-shadow: 0 0 0 0 rgba(6, 214, 169, 2);
+        box-shadow: 0 0 0 0 rgba(6, 214, 169, 2);
     }
     70% {
-        -moz-box-shadow: 0 0 0 10px rgba(204,169,44, 0);
-        box-shadow: 0 0 0 10px rgba(204,169,44, 0);
+        -moz-box-shadow: 0 0 0 10px rgba(6, 214, 169, 0);
+        box-shadow: 0 0 0 10px rgba(6, 214, 169, 0);
     }
     100% {
-        -moz-box-shadow: 0 0 0 0 rgba(204,169,44, 0);
-        box-shadow: 0 0 0 0 rgba(204,169,44, 0);
+        -moz-box-shadow: 0 0 0 0 rgba(6, 214, 169, 0);
+        box-shadow: 0 0 0 0 rgba(6, 214, 169, 0);
     }
 }
 

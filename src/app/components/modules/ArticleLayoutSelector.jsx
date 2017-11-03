@@ -1,7 +1,6 @@
 /* eslint react/prop-types: 0 */
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import user from 'app/redux/User';
 
 class ArticleLayoutSelector extends React.Component {
     render() {

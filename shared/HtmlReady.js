@@ -1,5 +1,5 @@
 import xmldom from 'xmldom'
-import linksRe from 'app/utils/Links'
+import linksRe, { any as linksAny } from 'app/utils/Links'
 import {validate_account_name} from 'app/utils/ChainValidation'
 import {detransliterate} from 'app/utils/ParsersAndFormatters'
 import { isWhite } from 'app/utils/EmbedContentWhitelist'
@@ -227,7 +227,7 @@ function linkify(content, mutate, hashtags, usertags, images, links) {
 			)
 	})
 
-    content = content.replace(linksRe.any, ln => {
+    content = content.replace(linksAny('gi'), ln => {
         if(linksRe.image.test(ln)) {
             if(images) images.add(ln)
             return `<img src="${ipfsPrefix(ln)}" />`

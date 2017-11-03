@@ -34,6 +34,7 @@ import { notificationsArrayToMap } from 'app/utils/Notifications';
 import { routeRegex } from 'app/ResolveRoute';
 import { contentStats } from 'app/utils/StateFunctions';
 import ScrollBehavior from 'scroll-behavior';
+import createLoggerMiddleware from 'app/redux/LoggerMiddleware';
 
 import { api } from '@steemit/steem-js';
 
@@ -198,14 +199,55 @@ const sagaMiddleware = createSagaMiddleware(
     ...marketWatches
 );
 
+const loggerMiddleware = createLoggerMiddleware({
+    includeActionInCrumbs: (action) => action.type && action.type.indexOf('EFFECT_') !== 0,
+    actionIsError: (action) => action.type && action.type.indexOf('ERROR') > -1 && action.type !== 'user/LOGIN_ERROR',
+    sanitizeAction: (action) => {
+        switch (action.type) {
+            case 'user/SET_USER':
+                return {
+                    ...action,
+                    payload: {
+                        ...action.payload,
+                        private_keys: undefined,
+                    },
+                };
+            default:
+                return action;
+        }
+    },
+    // This will be much simpler when we switch to a fully Immutable state tree:
+    sanitizeState: state => Object.keys(state).reduce((acc, k) => {
+        let substate;
+
+        if (k === 'routing' || k === 'form') {
+            substate = state[k];
+        } else {
+            substate = state[k].toJS();
+            if (k === 'user' && substate.current) delete substate.current.private_keys;
+        }
+
+        return {
+            ...acc,
+            [k]: substate,
+        };
+    }, {}),
+});
+
 let middleware;
 
 if (process.env.BROWSER && process.env.NODE_ENV === 'development') {
     const composeEnhancers =
         window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose; // eslint-disable-line no-underscore-dangle
-    middleware = composeEnhancers(applyMiddleware(sagaMiddleware));
+    middleware = composeEnhancers(
+        applyMiddleware(sagaMiddleware),
+        applyMiddleware(loggerMiddleware),
+    );
 } else {
-    middleware = applyMiddleware(sagaMiddleware);
+    middleware = compose(
+        applyMiddleware(sagaMiddleware),
+        applyMiddleware(createLoggerMiddleware()),
+    );
 }
 
 const runRouter = (location, routes) => {

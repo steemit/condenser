@@ -216,6 +216,7 @@ $themes: (
   transition: 0.2s all ease-in-out;
   text-transform: capitalize;
   border-radius: 0;
+  text-decoration: none;
   @include font-size(18px);       
   @include themify($themes) {
     background-color: themed('buttonBackground');  
@@ -258,11 +259,10 @@ $themes: (
 // This class doesn't applying theming. To be used when there are no theming classes available (e.g. in modals and static server pages in signup)
 
 .e-btn {  
-  &--black-btn {
+  &--black {
     background-color: $color-blue-black;
     box-shadow: 0px 0px 0px 0 rgba(0,0,0,0), 5px 5px 0 0 $color-teal;   
     color: $color-white;
-    transition: 0.2s all ease-in-out;
     &:hover, &:focus {
       background-color: $color-teal;
       box-shadow: 2px 2px 2px 0 rgba(0,0,0,0.1), 7px 7px 0 0 $color-blue-black;   

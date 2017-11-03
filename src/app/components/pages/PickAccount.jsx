@@ -99,7 +99,7 @@ class PickAccount extends React.Component {
 
         const {loggedIn, logout, offchainUser, serverBusy} = this.props;
         const submit_btn_disabled = loading || !name || name_error;
-        const submit_btn_class = 'action btn-continue' + (submit_btn_disabled ? ' disabled' : '');
+        const submit_btn_class = 'button action' + (submit_btn_disabled ? ' disabled' : '');
 
         const account_status = offchainUser ? offchainUser.get('account_status') : null;
 

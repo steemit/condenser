@@ -90,6 +90,9 @@ class MarkdownViewer extends Component {
             cleanText = sanitize(renderedText, sanitizeConfig({large, highQualityPost, noImage: noImage && allowNoImage}))
         }
 
+        //sanitize escape &mdash; to &amp;mdash;
+        cleanText = cleanText.replace(/&amp;mdash;/g, '&mdash;')
+
         if(/<\s*script/ig.test(cleanText)) {
             // Not meant to be complete checking, just a secondary trap and red flag (code can change)
             console.error('Refusing to render script tag in post text', cleanText)

@@ -712,6 +712,14 @@
     "profile_image_url":"Adăugați adresa URL a imaginii",
     "cover_image_url": "Cover image url",
     "profile_name":"Numele afișat",
+    "profile_gender": {
+      "title": "Gen",
+      "genders": {
+        "undefined": "Nedefinit",
+        "male": "Masculin",
+        "female": "Femeie"
+      }
+    },
     "profile_about":"Despre poriect",
     "profile_location":"Locația",
     "profile_website":"Siteul"
@@ -932,6 +940,18 @@
   "witnesses_jsx":{
     "witness_thread":"postarea delegatului",
     "top_witnesses":"Top delegați",
+    "approval": "Голосов",
+    "missed_1": "Пропущено",
+    "missed_2": "блоков",
+    "last_block": "Последний блок",
+    "price_feed": "Прайс фид",
+    "props": "Параметры",
+    "reg_fee": "Комиссия за регистрацию",
+    "apr": "APR",
+    "block_size": "Размер блока",
+    "witness_deactive": "Делегат приостановил подпись блоков",
+    "no_price_feed": "Делегат не опубликовал прайс фид",
+    "version": "Версия",
     "you_have_votes_remaining":"V-a rămas ",
     "you_have_votes_remaining_count":{
       "zero":"0 voturi",
@@ -941,12 +961,16 @@
     "you_can_vote_for_maximum_of_witnesses":"Puteți vota maxim pentru 30 de delegați",
     "witness":"Delegați",
     "information":"Informație",
-    "if_you_want_to_vote_outside_of_top_enter_account_name":"Dacă doriți să votați pentru un delegat înafara TOP 50, introduceți mai jos numele contului ",
+    "if_you_want_to_vote_outside_of_top_enter_account_name":"Dacă doriți să votați pentru un delegat înafara TOP 100, introduceți mai jos numele contului ",
     "set_witness_proxy":"Puteți selecta de asemenea un proxy, care va vota pentru delegați în locul dvs. . Acest lucru va reseta selecția curentă a delegaților.",
     "witness_set":"Ați setat proxy pentru votare. Dacă doriți să votați maniual, vă rugăm să curățați câmpul proxy.",
     "witness_proxy_current":"Proxy curent",
     "witness_proxy_set":"Setează proxy",
     "witness_proxy_clear":"Șterge proxy",
     "proxy_update_error":"Proxy-ul dvs. nu a fost actualizat"
+  },
+  "generated_password_input": {
+    "i_have_read_and_agree_to_the": "Я прочитал и согласен с",
+    "terms_of_service": "Условиями пользования"
   }
 }

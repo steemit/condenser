@@ -724,6 +724,14 @@
     "profile_image_url": "Добавьте URL Вашего изображения",
     "cover_image_url": "Добавьте URL Вашей обложки",
     "profile_name": "Отображаемое имя",
+    "profile_gender": {
+      "title": "Пол",
+      "genders": {
+        "undefined": "Неизвестен",
+        "male": "Мужской",
+        "female": "Женский"
+      }
+    },
     "profile_about": "О проекте",
     "profile_location": "Местоположение",
     "profile_website": "Веб-сайт"
@@ -944,6 +952,18 @@
   "witnesses_jsx": {
     "witness_thread": "пост делегата",
     "top_witnesses": "Топ делегатов",
+    "approval": "Голосов",
+    "missed_1": "Пропущено",
+    "missed_2": "блоков",
+    "last_block": "Последний блок",
+    "price_feed": "Прайс фид",
+    "props": "Параметры",
+    "reg_fee": "Комиссия за регистрацию",
+    "apr": "APR",
+    "block_size": "Размер блока",
+    "witness_deactive": "Делегат приостановил подпись блоков",
+    "no_price_feed": "Делегат не опубликовал прайс фид",
+    "version": "Версия",
     "you_have_votes_remaining": "У Вас осталось ",
     "you_have_votes_remaining_count": {
       "zero": "0 голосов",
@@ -953,13 +973,17 @@
     "you_can_vote_for_maximum_of_witnesses": "Вы можете голосовать максимум за 30 делегатов",
     "witness": "Делегаты",
     "information": "Информация",
-    "if_you_want_to_vote_outside_of_top_enter_account_name": "Если Вы хотите проголосовать за делегата вне TOP 50, введите имя аккаунта ниже",
+    "if_you_want_to_vote_outside_of_top_enter_account_name": "Если Вы хотите проголосовать за делегата вне TOP 100, введите имя аккаунта ниже",
     "set_witness_proxy": "Вы также можете выбрать прокси, который будет вместо Вас голосовать за делегатов. Это сбросит Ваш текущий выбор делегата.",
     "witness_set": "Вы установили прокси для голосования. Если Вы хотите голосовать вручную, пожалуйста, очистите ваш прокси.",
     "witness_proxy_current": "Ваш текущий прокси",
     "witness_proxy_set": "Установить прокси",
     "witness_proxy_clear": "Очистить прокси",
     "proxy_update_error": "Ваш прокси не был обновлен"
+  },
+  "generated_password_input": {
+    "i_have_read_and_agree_to_the": "Я прочитал и согласен с",
+    "terms_of_service": "Условиями пользования"
   },
   "asset_create_jsx": {
     "header": "Создать актив",

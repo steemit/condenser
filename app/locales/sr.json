@@ -711,6 +711,14 @@
     "profile_image_url":"URL za profilnu sliku",
     "cover_image_url": "Cover image url",
     "profile_name":"Pokazati ime",
+    "profile_gender": {
+      "title": "Pol",
+      "genders": {
+        "undefined": "Nedefinisan",
+        "male": "Muški",
+        "female": "Zenski"
+      }
+    },
     "profile_about":"O profilu",
     "profile_location":"Lokacija",
     "profile_website":"Website"
@@ -931,21 +939,37 @@
   "witnesses_jsx":{
     "witness_thread":"Teme svedoka",
     "top_witnesses":"Glasanje za svedoka",
-    "you_have_votes_remaining":"You have %(votesCount, plural, =0 %(no votes)s one %(1 vote)s other %({votesCount)s votes)s} remaining",
-    "you_have_votes_remaining_count":{
-      "zero":"0 голосов",
-      "one":"1 голос",
-      "other":"%(count)s голосов"
+    "approval": "Голосов",
+    "missed_1": "Пропущено",
+    "missed_2": "блоков",
+    "last_block": "Последний блок",
+    "price_feed": "Прайс фид",
+    "props": "Параметры",
+    "reg_fee": "Комиссия за регистрацию",
+    "apr": "APR",
+    "block_size": "Размер блока",
+    "witness_deactive": "Делегат приостановил подпись блоков",
+    "no_price_feed": "Делегат не опубликовал прайс фид",
+    "version": "Версия",
+    "you_have_votes_remaining": "У Вас осталось ",
+    "you_have_votes_remaining_count": {
+      "zero": "0 голосов",
+      "one": "1 голос",
+      "other": "%(count)s голосов"
     },
     "you_can_vote_for_maximum_of_witnesses":"Možete glasati za najviše 30 svedoka",
     "witness":"Svedoci",
     "information":"Informacija",
-    "if_you_want_to_vote_outside_of_top_enter_account_name":"Ukoliko želite da glasate za spoljne svedoke koji nisumedju prvih 50, unesite ime naloga u nastavku kako bi ste dali svoj glas",
+    "if_you_want_to_vote_outside_of_top_enter_account_name":"Ukoliko želite da glasate za spoljne svedoke koji nisumedju prvih 100, unesite ime naloga u nastavku kako bi ste dali svoj glas",
     "set_witness_proxy":"Takođe možete da izaberete proxy koji će glasati za svedoke umesto vas. Ovo će resetovati vaš trenutni izbor svedoka.",
     "witness_set":"Vi ste postavili proxy glasanje. Ako želite da omogućite upotrebu manualnog glasanja, obrišite proxy.",
     "witness_proxy_current":"Vaš trenutni proxy je",
     "witness_proxy_set":"Postavi proxy",
     "witness_proxy_clear":"Obriši proxy",
     "proxy_update_error":"Vaš poxy nije ažuriran"
+  },
+  "generated_password_input": {
+    "i_have_read_and_agree_to_the": "Я прочитал и согласен с",
+    "terms_of_service": "Условиями пользования"
   }
 }

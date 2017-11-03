@@ -701,6 +701,14 @@
     "profile_image_url": "Додайте URL Вашого зображення",
     "cover_image_url": "Додайте URL Вашої обкладинки",
     "profile_name": "Відображаєме ім'я ",
+    "profile_gender": {
+      "title": "Стать",
+      "genders": {
+        "undefined": "Невизначено",
+        "male": "Чоловічий",
+        "female": "Жіночий"
+      }
+    },
     "profile_about": "Про проект",
     "profile_location": "Місцезнаходження",
     "profile_website": "Веб-сайт"
@@ -921,6 +929,18 @@
   "witnesses_jsx": {
     "witness_thread": "пост делегата",
     "top_witnesses": "Топ делегатів",
+    "approval": "Голосiв",
+    "missed_1": "Пропущено",
+    "missed_2": "блоків",
+    "last_block": "Останній блок",
+    "price_feed": "Прайс фід",
+    "props": "Параметри",
+    "reg_fee": "Комісія за реєстрацію",
+    "apr": "APR",
+    "block_size": "Размір блоку",
+    "witness_deactive": "Делегат призупинив підпис блоків",
+    "no_price_feed": "Делегат не опублікував прайс фід",
+    "version": "Версія",
     "you_have_votes_remaining": "У Вас залишилося ",
     "you_have_votes_remaining_count": {
       "zero": "0 голосів",
@@ -930,12 +950,16 @@
     "you_can_vote_for_maximum_of_witnesses": "Ви можете голосувати максимум за 30 делегатів",
     "witness": "Делегати",
     "information": "Інформація",
-    "if_you_want_to_vote_outside_of_top_enter_account_name": "Якщо Ви хочете проголосувати за делегата поза TOP 50, введіть ім'я акаунту нижче",
+    "if_you_want_to_vote_outside_of_top_enter_account_name": "Якщо Ви хочете проголосувати за делегата поза TOP 100, введіть ім'я акаунту нижче",
     "set_witness_proxy": "Вы также можете выбрать прокси, который будет вместо Вас голосовать за делегатов. Это сбросит Ваш текущий выбор делегата.",
     "witness_set": "Вы установили прокси для голосования. Если Вы хотите голосовать вручную, пожалуйста, очистите ваш прокси.",
     "witness_proxy_current": "Ваш текущий прокси",
     "witness_proxy_set": "Установить прокси",
     "witness_proxy_clear": "Очистить прокси",
     "proxy_update_error": "Ваш прокси не был обновлен"
+  },
+  "generated_password_input": {
+    "i_have_read_and_agree_to_the": "Я прочитав і згоден з",
+    "terms_of_service": "Умовами користування"
   }
 }

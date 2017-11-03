@@ -1,14 +1,18 @@
 import TarantoolDriver from 'tarantool-driver';
 
 const config = require('config');
-let instance = null;
+const instance = {
+  'tarantool': null,
+  'chainproxy': null
+};
 
 class Tarantool {
-    constructor() {
-        const host = config.get('tarantool.host');
-        const port = config.get('tarantool.port');
-        const username = config.get('tarantool.username');
-        const password = config.get('tarantool.password');
+    constructor(key) {
+        this.key = key;
+        const host = config.get(key + '.host');
+        const port = config.get(key + '.port');
+        const username = config.get(key + '.username');
+        const password = config.get(key + '.password');
         const connection = this.connection = new TarantoolDriver({host, port});
         this.ready_promise = new Promise((resolve, reject) => {
             connection.connect()
@@ -23,7 +27,7 @@ class Tarantool {
             .then(() => this.connection[call_name].apply(this.connection, args))
             .catch(error => {
                 if (error.message.indexOf('connect') >= 0)
-                    instance = null;
+                    instance[this.key] = null;
                 return Promise.reject(error);
             });
     }
@@ -54,9 +58,9 @@ class Tarantool {
     }
 }
 
-Tarantool.instance = function () {
-    if (!instance) instance = new Tarantool();
-    return instance;
+Tarantool.instance = function (key) {
+    if (!instance[key]) instance[key] = new Tarantool(key);
+    return instance[key];
 };
 
 export default Tarantool;

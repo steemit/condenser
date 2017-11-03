@@ -1,10 +1,10 @@
 import React from 'react';
-import {key_utils} from 'golos-js/lib/auth/ecc';
+import { key_utils } from 'golos-js/lib/auth/ecc';
 import tt from 'counterpart';
-import { APP_NAME } from 'app/client_config';
+import { APP_NAME, TERMS_OF_SERVICE_URL } from 'app/client_config';
 
 function allChecked(confirmCheckboxes) {
-    return confirmCheckboxes.box1 && confirmCheckboxes.box2;
+    return confirmCheckboxes.box1 && confirmCheckboxes.box2 && confirmCheckboxes.box3;
 }
 
 export default class GeneratedPasswordInput extends React.Component {
@@ -21,7 +21,7 @@ export default class GeneratedPasswordInput extends React.Component {
             generatedPassword: 'P' + key_utils.get_random_key().toWif(),
             confirmPassword: '',
             confirmPasswordError: '',
-            confirmCheckboxes: {box1: false, box2: false},
+            confirmCheckboxes: {box1: false, box2: false, box3: false}
         };
         this.confirmPasswordChange = this.confirmPasswordChange.bind(this);
         this.confirmCheckChange = this.confirmCheckChange.bind(this);
@@ -32,7 +32,7 @@ export default class GeneratedPasswordInput extends React.Component {
         confirmCheckboxes[e.target.name] = e.target.checked;
         this.setState({confirmCheckboxes});
         const {confirmPassword, generatedPassword} = this.state;
-        this.props.onChange(confirmPassword, confirmPassword && confirmPassword === generatedPassword && allChecked(confirmCheckboxes));
+        this.props.onChange(confirmPassword, confirmPassword && confirmPassword === generatedPassword, allChecked(confirmCheckboxes));
     }
 
     confirmPasswordChange(e) {
@@ -41,7 +41,7 @@ export default class GeneratedPasswordInput extends React.Component {
         let confirmPasswordError = '';
         if (confirmPassword && confirmPassword !== generatedPassword) confirmPasswordError = tt('g.passwords_do_not_match');
         this.setState({confirmPassword, confirmPasswordError});
-        this.props.onChange(confirmPassword, confirmPassword && confirmPassword === generatedPassword && allChecked(confirmCheckboxes));
+        this.props.onChange(confirmPassword, confirmPassword && confirmPassword === generatedPassword, allChecked(confirmCheckboxes));
     }
 
     render() {
@@ -70,6 +70,10 @@ export default class GeneratedPasswordInput extends React.Component {
                     </label>
                     <label><input type="checkbox" name="box2" onChange={this.confirmCheckChange} checked={confirmCheckboxes.box2} />
                         {tt('g.i_saved_password')}.
+                    </label>
+                    <label><input type="checkbox" name="box3" onChange={this.confirmCheckChange} checked={confirmCheckboxes.box3} />
+                        {tt('generated_password_input.i_have_read_and_agree_to_the')}&nbsp;
+                        <a href={TERMS_OF_SERVICE_URL} target="_blank">{tt('generated_password_input.terms_of_service')}</a>.
                     </label>
                 </div>
             </div>

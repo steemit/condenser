@@ -115,7 +115,7 @@ export function* fetchState(location_change_action) {
             }
           }
           else if (parts[0] === 'witnesses' || parts[0] === '~witnesses') {
-            const wits = yield call([api, api.getWitnessesByVoteAsync], '', 50);
+            const wits = yield call([api, api.getWitnessesByVoteAsync], '', 100);
             for (var key in wits) state.witnesses[wits[key].owner] = wits[key];
           }
           else if ([ 'trending', 'trending30', 'promoted', 'responses', 'hot', 'votes', 'cashout', 'active', 'created', 'recent' ].indexOf(parts[0]) >= 0) {

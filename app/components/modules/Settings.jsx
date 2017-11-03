@@ -3,7 +3,7 @@ import {connect} from 'react-redux'
 import user from 'app/redux/User';
 import g from 'app/redux/GlobalReducer';
 import tt from 'counterpart';
-import { CURRENCIES, DEFAULT_CURRENCY, CURRENCY_COOKIE_KEY, LANGUAGES, DEFAULT_LANGUAGE, LOCALE_COOKIE_KEY, THEMES, DEFAULT_THEME } from 'app/client_config'
+import { CURRENCIES, DEFAULT_CURRENCY, CURRENCY_COOKIE_KEY, LANGUAGES, DEFAULT_LANGUAGE, LOCALE_COOKIE_KEY, THEMES, DEFAULT_THEME, USER_GENDER } from 'app/client_config'
 import transaction from 'app/redux/Transaction'
 import o2j from 'shared/clash/object2json'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
@@ -30,12 +30,13 @@ class Settings extends React.Component {
         reactForm({
             instance: this,
             name: 'accountSettings',
-            fields: ['profile_image', 'cover_image', 'name', 'about', 'location', 'website'],
+            fields: ['profile_image', 'cover_image', 'name', 'gender', 'about', 'location', 'website'],
             initialValues: props.profile,
             validation: values => ({
                 profile_image: values.profile_image && !/^https?:\/\//.test(values.profile_image) ? tt('settings_jsx.invalid_url') : null,
                 cover_image: values.cover_image && !/^https?:\/\//.test(values.cover_image) ? tt('settings_jsx.invalid_url') : null,
                 name: values.name && values.name.length > 20 ? tt('settings_jsx.name_is_too_long') : values.name && /^\s*@/.test(values.name) ? tt('settings_jsx.name_must_not_begin_with') : null,
+                gender: values.gender && values.gender.length > 20 ? tt('settings_jsx.name_is_too_long') : values.gender && /^\s*@/.test(values.gender) ? tt('settings_jsx.name_must_not_begin_with') : null,                
                 about: values.about && values.about.length > 160 ? tt('settings_jsx.about_is_too_long') : null,
                 location: values.location && values.location.length > 30 ? tt('settings_jsx.location_is_too_long') : null,
                 website: values.website && values.website.length > 100 ? tt('settings_jsx.website_url_is_too_long') : values.website && !/^https?:\/\//.test(values.website) ? tt('settings_jsx.invalid_url') : null,
@@ -102,12 +103,13 @@ class Settings extends React.Component {
         if(!metaData.profile) metaData.profile = {}
         delete metaData.user_image; // old field... cleanup
 
-        const {profile_image, cover_image, name, about, location, website} = this.state
+        const {profile_image, cover_image, name, gender, about, location, website} = this.state
 
         // Update relevant fields
         metaData.profile.profile_image = profile_image.value
         metaData.profile.cover_image = cover_image.value
         metaData.profile.name = name.value
+        metaData.profile.gender = gender.value        
         metaData.profile.about = about.value
         metaData.profile.location = location.value
         metaData.profile.website = website.value
@@ -116,6 +118,7 @@ class Settings extends React.Component {
         if(!metaData.profile.profile_image) delete metaData.profile.profile_image;
         if(!metaData.profile.cover_image) delete metaData.profile.cover_image;
         if(!metaData.profile.name) delete metaData.profile.name;
+        if(!metaData.profile.gender) delete metaData.profile.gender;        
         if(!metaData.profile.about) delete metaData.profile.about;
         if(!metaData.profile.location) delete metaData.profile.location;
         if(!metaData.profile.website) delete metaData.profile.website;
@@ -161,7 +164,7 @@ class Settings extends React.Component {
         const {submitting, valid, touched} = this.state.accountSettings
         const disabled = !props.isOwnAccount || state.loading || submitting || !valid || !touched
 
-        const {profile_image, cover_image, name, about, location, website} = this.state
+        const {profile_image, cover_image, name, about, gender, location, website} = this.state
 
         const {follow, account, isOwnAccount} = this.props
         const following = follow && follow.getIn(['getFollowingAsync', account.name]);
@@ -224,7 +227,18 @@ class Settings extends React.Component {
                         <input type="text" {...name.props} maxLength="20" autoComplete="off" />
                     </label>
                     <div className="error">{name.touched && name.error}</div>
-
+                    
+                    <label>
+                        {tt('settings_jsx.profile_gender.title')}
+                        <select {...gender.props}>
+                            {USER_GENDER.map(i => {
+                                return <option key={i} value={i}>{tt('settings_jsx.profile_gender.genders.' + i)}</option>
+                                })
+                            }
+                        </select>
+                    </label>
+                    <div className="error">{gender.touched && gender.error}</div>
+                    
                     <label>
                         {tt('settings_jsx.profile_about')}
                         <input type="text" {...about.props} maxLength="160" autoComplete="off" />

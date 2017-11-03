@@ -28,7 +28,7 @@ export default function useNotificationsApi(app) {
             this.body = []; return;
         }
         try {
-            const res = yield Tarantool.instance().select('notifications', 0, 1, 0, 'eq', account);
+            const res = yield Tarantool.instance('tarantool').select('notifications', 0, 1, 0, 'eq', account);
             this.body = toResArray(res);
         } catch (error) {
             console.error('-- /notifications/:account error -->', this.session.uid, error.message);
@@ -49,7 +49,7 @@ export default function useNotificationsApi(app) {
         try {
             let res;
             for(const id of fields) {
-                res = yield Tarantool.instance().call('notification_read', account, id);
+                res = yield Tarantool.instance('tarantool').call('notification_read', account, id);
             }
             this.body = toResArray(res);
         } catch (error) {
@@ -69,7 +69,7 @@ export default function useNotificationsApi(app) {
             if (!account || account !== this.session.a) return;
             if (!webpush_params || !webpush_params.endpoint || !webpush_params.endpoint.match(/^https:\/\/android\.googleapis\.com/)) return;
             if (!webpush_params.keys || !webpush_params.keys.auth) return;
-            yield Tarantool.instance().call('webpush_subscribe', account, webpush_params);
+            yield Tarantool.instance('tarantool').call('webpush_subscribe', account, webpush_params);
         } catch (error) {
             console.error('-- POST /notifications/register error -->', this.session.uid, error.message);
         }

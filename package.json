@@ -25,7 +25,6 @@
   "author": "Golos.io",
   "license": "MIT",
   "dependencies": {
-    "@steem/crypto-session": "git+https://github.com/steemit/crypto-session.git#83a90b319ce5bc6a70362d52a15a815de7e729bb",
     "assert": "^1.3.0",
     "autoprefixer-loader": "^3.2.0",
     "babel-cli": "^6.22.2",
@@ -85,6 +84,8 @@
     "koa-session": "^3.3.1",
     "koa-static-cache": "^3.1.2",
     "lodash.debounce": "^4.0.7",
+    "libsodium": "0.4.8",
+    "libsodium-wrappers": "0.4.8",
     "medium-editor-insert-plugin": "^2.3.2",
     "minimist": "^1.2.0",
     "mysql": "^2.10.2",

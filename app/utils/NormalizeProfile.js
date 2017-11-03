@@ -41,13 +41,15 @@ export default function normalizeProfile(account) {
     }
 
     // Read & normalize
-    let { name, about, location, website, profile_image, cover_image } = profile
+    let { name, gender, about, location, website, profile_image, cover_image } = profile
 
     name = truncate(name, 20)
+    gender = truncate(gender, 20)
     about = truncate(about, 160)
     location = truncate(location, 30)
 
     if(/^@/.test(name)) name = null;
+    if(/^@/.test(gender)) gender = null;
     if(website && website.length > 100) website = null;
     if (website && website.indexOf("http") === -1) {
         website = 'http://' + website;
@@ -65,6 +67,7 @@ export default function normalizeProfile(account) {
 
     return {
         name,
+        gender,
         about,
         location,
         website,

@@ -403,7 +403,7 @@ export default class UserProfile extends React.Component {
             </div>
          </div>;
 
-        const { name, location, about, website, cover_image } = normalizeProfile(account)
+        const { name, gender, location, about, website, cover_image } = normalizeProfile(account)
         const website_label = website ? website.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '') : null
 
         let cover_image_style = {}
@@ -411,6 +411,11 @@ export default class UserProfile extends React.Component {
             const cover_image_url = $STM_Config.img_proxy_prefix ? $STM_Config.img_proxy_prefix + '0x0' + '/' + cover_image : null
             cover_image_style = {backgroundImage: "url(" + cover_image_url + ")"}
         }
+        
+        let genderIcon;    
+        if (gender && gender != "undefined")
+            genderIcon = <span><Icon name={gender} /></span>
+        
 
         return (
             <div className="UserProfile">
@@ -427,6 +432,7 @@ export default class UserProfile extends React.Component {
                         <h1>
                             <Userpic account={account.name} hideIfDefault />
                             {name || account.name}{' '}
+                            {genderIcon}
                             <Tooltip t={tt('user_profile.this_is_users_reputations_score_it_is_based_on_history_of_votes', {name: accountname})}>
                                 <span className="UserProfile__rep">({rep})</span>
                             </Tooltip>

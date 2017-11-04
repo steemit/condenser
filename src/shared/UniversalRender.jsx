@@ -82,7 +82,6 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
 
     if (process.env.BROWSER) {
         const store = createStore(rootReducer, initial_state, middleware);
-        window.store = store; //todo: remove
         sagaMiddleware.run(PollDataSaga).done
             .then(() => console.log('PollDataSaga is finished'))
             .catch(err => console.log('PollDataSaga is finished with error', err));

@@ -64,8 +64,17 @@ export const repLog10 = rep2 => {
     return out
 }
 
+export function formatAmount(amount){
+    amount = amount.replace(/[^\d\.\,]/g,"").replace(/,/, '.');
+    return amount
+}
+
+export function checkMemo(memoValue){
+    return !/[PK5]/.test(memoValue.charAt(0))
+}
+
 export function countDecimals(amount) {
-    if(amount == null) return amount
+    if(amount == null) return amount    
     amount = String(amount).match(/[\d\.]+/g).join('') // just dots and digits
     const parts = amount.split('.')
     return parts.length > 2 ? undefined : parts.length === 1 ? 0 : parts[1].length

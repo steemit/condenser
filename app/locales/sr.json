@@ -192,6 +192,7 @@
     "continue":"Nastavi",
     "convert":"Konvertuj",
     "created":"kreiran",
+    "old": "Сначала старые",
     "date":"Datum",
     "delete":"Obriši",
     "dismiss":"Odbaci",
@@ -785,7 +786,9 @@
     "move_funds_to_another_account":"Prenesi sredstva na drugi Golos račun.",
     "protect_funds_by_requiring_a_3_day_withdraw_waiting_period":"Zaštitite sredstva zahtevajući 3-dnevni period povlačenja.",
     "withdraw_funds_after_the_required_3_day_waiting_period":"Povući sredstva nakon potrebnog 3 danevnog perioda čekanja.",
-    "balance":"Balans"
+    "balance":"Balans",
+    "private_key_in_memo" : "Do not write your private keys in this field!"
+    
   },
   "transferhistoryrow_jsx":{
     "to_savings":"в сейф",

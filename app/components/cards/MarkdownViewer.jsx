@@ -90,8 +90,8 @@ class MarkdownViewer extends Component {
             cleanText = sanitize(renderedText, sanitizeConfig({large, highQualityPost, noImage: noImage && allowNoImage}))
         }
 
-        //sanitize escape &mdash; to &amp;mdash;
-        cleanText = cleanText.replace(/&amp;mdash;/g, '&mdash;')
+        //sanitize escaped &mdash; to &amp;mdash; and so on
+        cleanText = cleanText.replace(/&amp;(mdash|rdquo|ndash|ldquo)/g, string => string.replace(/&amp;/, '&'))
 
         if(/<\s*script/ig.test(cleanText)) {
             // Not meant to be complete checking, just a secondary trap and red flag (code can change)

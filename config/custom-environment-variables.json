@@ -105,5 +105,6 @@
   "newrelic": {
     "license_key": "SDC_NEWRELIC_KEY"
   },
-  "blockcypher_token": "SDC_BLOCKCYPHER_TOKEN"
+  "blockcypher_token": "SDC_BLOCKCYPHER_TOKEN",
+  "openexchangerates_app_id": "SDC_OPENEXCHANGERATES_APP_ID"
 }

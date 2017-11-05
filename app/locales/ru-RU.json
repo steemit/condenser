@@ -204,7 +204,8 @@
     "confirm_unfollow": "Вы действительно хотите отменить подписку на этого пользователя?",
     "continue": "продолжить",
     "convert": "Конвертировать",
-    "created": "Новое",
+    "created": "Сначала новые",
+    "old" : "Сначала старые",
     "date": "Дата",
     "delete": "Удалить",
     "dismiss": "Скрыть",
@@ -798,7 +799,8 @@
     "move_funds_to_another_account": "Отправить средства на другой аккаунт.",
     "protect_funds_by_requiring_a_3_day_withdraw_waiting_period": "Защитите средства от вывода 3-х дневным периодом ожидания.",
     "withdraw_funds_after_the_required_3_day_waiting_period": "Снять средства после необходимого 3-х дневного периода ожидания.",
-    "balance": "Баланс"
+    "balance": "Баланс",
+    "private_key_in_memo" : "Не пишите в этом поле свои приватные ключи!"
   },
   "transferhistoryrow_jsx": {
     "to_savings": "в сейф",

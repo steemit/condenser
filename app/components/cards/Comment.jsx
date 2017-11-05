@@ -83,7 +83,21 @@ export function sortComments( cont, comments, sort_order ) {
                 }
                 // If SBD payouts were equal, fall back to rshares sorting
                 return netRshares(bcontent).compare(netRshares(acontent))
-              }
+              },
+        old: (a, b) => {
+            const acontent = cont.get(a);
+            const bcontent = cont.get(b);
+
+            if (netNegative(acontent)) {
+                return 1;
+            } else if (netNegative(bcontent)) {
+                return -1;
+            }
+            const aactive = Date.parse( acontent.get('created') );
+            const bactive = Date.parse( bcontent.get('created') );        
+
+            return aactive - bactive;
+        }
   }
   comments.sort( sort_orders[sort_order] );
 };

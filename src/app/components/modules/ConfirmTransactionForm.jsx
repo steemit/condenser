@@ -78,11 +78,11 @@ const typeName = confirmBroadcastOperation => {
 export default connect(
     // mapStateToProps
     (state) => {
-        const confirmBroadcastOperation = state.transaction.get('confirmBroadcastOperation')
-        const confirmErrorCallback = state.transaction.get('confirmErrorCallback')
-        const confirm = state.transaction.get('confirm')
-        const warning = state.transaction.get('warning')
-        const checkbox = state.transaction.get('checkbox')
+        const confirmBroadcastOperation = state.getIn(['transaction', 'confirmBroadcastOperation'])
+        const confirmErrorCallback = state.getIn(['transaction', 'confirmErrorCallback'])
+        const confirm = state.getIn(['transaction', 'confirm'])
+        const warning = state.getIn(['transaction', 'warning'])
+        const checkbox = state.getIn(['transaction', 'checkbox'])
         return {
             confirmBroadcastOperation,
             confirmErrorCallback,

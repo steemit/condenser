@@ -225,9 +225,9 @@ module.exports = {
     component: connect(
         state => {
             return {
-                loggedIn: !!state.user.get('current'),
-                offchainUser: state.offchain.get('user'),
-                serverBusy: state.offchain.get('serverBusy')
+                loggedIn: !!state.getIn(['user', 'current']),
+                offchainUser: state.getIn(['offchain', 'user']),
+                serverBusy: state.getIn(['offchain', 'serverBusy'])
             }
         },
         dispatch => ({

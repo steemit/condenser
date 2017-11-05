@@ -261,10 +261,10 @@ import {connect} from 'react-redux'
 export default connect(
     // mapStateToProps
     (state, ownProps) => {
-        const initialValues = state.user.get('transfer_defaults', Map()).toJS();
+        const initialValues = state.getIn(['user', 'transfer_defaults'], Map()).toJS();
         const toVesting = initialValues.asset === 'VESTS';
-        const currentUser = state.user.getIn(['current']);
-        const currentAccount = state.global.getIn(['accounts', currentUser.get('username')]);
+        const currentUser = state.getIn(['user', 'current']);
+        const currentAccount = state.getIn(['global', 'accounts', currentUser.get('username')]);
 
         if(!toVesting && !initialValues.transferType)
             initialValues.transferType = 'Transfer to Account';

@@ -260,9 +260,9 @@ export default connect(
 
     // mapStateToProps
     (state) => {
-        const login_error = state.user.get('login_error')
-        const currentUser = state.user.get('current')
-        const loginBroadcastOperation = state.user.get('loginBroadcastOperation')
+        const login_error = state.getIn(['user', 'login_error'])
+        const currentUser = state.getIn(['user', 'current'])
+        const loginBroadcastOperation = state.getIn(['user', 'loginBroadcastOperation'])
 
         const initialValues = {
             saveLogin: saveLoginDefault,
@@ -270,14 +270,14 @@ export default connect(
 
         // The username input has a value prop, so it should not use initialValues
         const initialUsername = currentUser && currentUser.has('username') ? currentUser.get('username') : urlAccountName()
-        const loginDefault = state.user.get('loginDefault')
+        const loginDefault = state.getIn(['user', 'loginDefault'])
         if(loginDefault) {
             const {username, authType} = loginDefault.toJS()
             if(username && authType) initialValues.username = username + '/' + authType
         } else if (initialUsername) {
             initialValues.username = initialUsername;
         }
-        const offchainUser = state.offchain.get('user');
+        const offchainUser = state.getIn(['offchain', 'user']);
         if (!initialUsername && offchainUser && offchainUser.get('account')) {
             initialValues.username = offchainUser.get('account');
         }
@@ -291,7 +291,7 @@ export default connect(
             initialValues,
             initialUsername,
             msg,
-            offchain_user: state.offchain.get('user')
+            offchain_user: state.getIn(['offchain', 'user'])
         }
     },
 

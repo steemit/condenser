@@ -498,7 +498,7 @@ const richTextEditor = process.env.BROWSER ? require('react-rte-image').default 
 export default (formId) => connect(
     // mapStateToProps
     (state, ownProps) => {
-        const username = state.user.getIn(['current', 'username'])
+        const username = state.getIn(['user', 'current', 'username'])
         const fields = ['body', 'autoVote:checked']
         const {type, parent_author, jsonMetadata} = ownProps
         const isEdit = type === 'edit'
@@ -542,7 +542,7 @@ export default (formId) => connect(
             successCallback, errorCallback, startLoadingIndicator
         }) => {
             // const post = state.global.getIn(['content', author + '/' + permlink])
-            const username = state.user.getIn(['current', 'username'])
+            const username = state.getIn(['user', 'current', 'username'])
 
             const isEdit = type === 'edit'
             const isNew = /^submit_/.test(type)

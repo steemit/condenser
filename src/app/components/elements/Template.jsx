@@ -53,7 +53,7 @@ import {connect} from 'react-redux'
 
 export default connect(
     (state, ownProps) => {
-        // const username = state.user.getIn(['current', 'username'])
+        // const username = state.getIn(['user', 'current', 'username'])
         return {
             ...ownProps,
             // username,

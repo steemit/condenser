@@ -80,8 +80,8 @@ class SignUp extends React.Component {
 export default connect(
     state => {
         return {
-            signup_bonus: state.offchain.get('signup_bonus'),
-            serverBusy: state.offchain.get('serverBusy')
+            signup_bonus: state.getIn(['offchain', 'signup_bonus']),
+            serverBusy: state.getIn(['offchain', 'serverBusy'])
         };
     }
 )(SignUp);

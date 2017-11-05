@@ -104,7 +104,7 @@ export function* findSigningKey({opType, username, password}) {
         authTypes = 'active, owner'
     authTypes = authTypes.split(', ')
 
-    const currentUser = yield select(state => state.user.get('current'))
+    const currentUser = yield select(state => state.getIn(['user', 'current']))
     const currentUsername = currentUser && currentUser.get('username')
 
     username = username || currentUsername

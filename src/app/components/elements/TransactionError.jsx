@@ -51,7 +51,7 @@ export default connect(
     // mapStateToProps
     (state, ownProps) => {
         const {opType} = ownProps
-        const error = state.transaction.getIn(['TransactionError', opType]) || Map()
+        const error = state.getIn(['transaction', 'TransactionError', opType]) || Map()
         const {key, exception} = error.toJS()
         return {
             ...ownProps,

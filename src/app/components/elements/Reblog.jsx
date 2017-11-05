@@ -74,7 +74,7 @@ export default class Reblog extends React.Component {
 }
 module.exports = connect(
     (state, ownProps) => {
-        const account = state.user.getIn(['current', 'username']) || state.offchain.get('account')
+        const account = state.getIn(['user', 'current', 'username']) || state.getIn(['offchain', 'account'])
         return {...ownProps, account}
     },
     dispatch => ({

@@ -89,7 +89,7 @@ export default connect(
     (state, ownProps) => {
         return {
             ...ownProps,
-            suggestedPassword: state.global.get('suggestedPassword'),
+            suggestedPassword: state.getIn(['global', 'suggestedPassword']),
         }
     },
     // mapDispatchToProps

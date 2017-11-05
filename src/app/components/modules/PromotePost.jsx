@@ -101,8 +101,8 @@ class PromotePost extends Component {
 
 export default connect(
     (state, ownProps) => {
-        const currentUser = state.user.getIn(['current']);
-        const currentAccount = state.global.getIn(['accounts', currentUser.get('username')]);
+        const currentUser = state.getIn(['user', 'current']);
+        const currentAccount = state.getIn(['global', 'accounts', currentUser.get('username')]);
         return {...ownProps, currentAccount, currentUser}
     },
 

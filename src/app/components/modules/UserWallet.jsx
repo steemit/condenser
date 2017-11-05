@@ -397,18 +397,18 @@ export default connect(
     // mapStateToProps
     (state, ownProps) => {
         let price_per_steem = undefined
-        const feed_price = state.global.get('feed_price')
+        const feed_price = state.getIn(['global', 'feed_price'])
         if(feed_price && feed_price.has('base') && feed_price.has('quote')) {
             const {base, quote} = feed_price.toJS()
             if(/ SBD$/.test(base) && / STEEM$/.test(quote))
                 price_per_steem = parseFloat(base.split(' ')[0])
         }
-        const savings_withdraws = state.user.get('savings_withdraws')
-        const gprops = state.global.get('props');
+        const savings_withdraws = state.getIn(['user', 'savings_withdraws'])
+        const gprops = state.getIn(['global', 'props']);
         const sbd_interest = gprops.get('sbd_interest_rate')
         return {
             ...ownProps,
-            open_orders: state.market.get('open_orders'),
+            open_orders: state.getIn(['market', 'open_orders']),
             price_per_steem,
             savings_withdraws,
             sbd_interest,

@@ -24,7 +24,7 @@ const defaultState = Map({
     user_preferences: Map({
         locale: null,
         nsfwPref: 'warn',
-        theme: 'light',
+        nightmode: false,
         blogmode: false,
         currency: 'USD'
     })

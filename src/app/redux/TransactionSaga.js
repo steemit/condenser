@@ -54,7 +54,7 @@ function* preBroadcast_transfer({operation}) {
         memoStr = memoStr.trim()
         if(/^#/.test(memoStr)) {
             const memo_private = yield select(
-                state => state.user.getIn(['current', 'private_keys', 'memo_private'])
+                state => state.getIn(['user', 'current', 'private_keys', 'memo_private'])
             )
             if(!memo_private) throw new Error('Unable to encrypt memo, missing memo private key')
             const account = yield call(getAccount, operation.to)

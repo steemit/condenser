@@ -53,7 +53,7 @@ export function* watchRemoveHighSecurityKeys() {
 }
 
 function* loadSavingsWithdraw() {
-    const username = yield select(state => state.user.getIn(['current', 'username']))
+    const username = yield select(state => state.getIn(['user', 'current', 'username']))
     const to = yield call([api, api.getSavingsWithdrawToAsync], username)
     const fro = yield call([api, api.getSavingsWithdrawFromAsync], username)
 
@@ -94,7 +94,7 @@ function* removeHighSecurityKeys({payload: {pathname}}) {
 function* usernamePasswordLogin(action) {
     // Sets 'loading' while the login is taking place.  The key generation can take a while on slow computers.
     yield call(usernamePasswordLogin2, action)
-    const current = yield select(state => state.user.get('current'))
+    const current = yield select(state => state.getIn(['user', 'current']))
     if(current) {
         const username = current.get('username')
         yield fork(loadFollows, "getFollowingAsync", username, 'blog')
@@ -125,7 +125,7 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
     }
     // no saved password
     if (!username || !password) {
-        const offchain_account = yield select(state => state.offchain.get('account'))
+        const offchain_account = yield select(state => state.getIn(['offchain', 'account']))
         if (offchain_account) serverApiLogout()
         return
     }
@@ -136,7 +136,7 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
         [username, userProvidedRole] = username.split('/')
     }
 
-    const pathname = yield select(state => state.global.get('pathname'))
+    const pathname = yield select(state => state.getIn(['global', 'pathname']))
     const highSecurityLogin =
         // /owner|active/.test(userProvidedRole) ||
         // isHighSecurityOperations.indexOf(operationType) !== -1 ||
@@ -177,7 +177,7 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
         private_keys = private_keys.set('memo_private', PrivateKey.fromWif(memoWif))
 
     yield call(accountAuthLookup, {payload: {account, private_keys, highSecurityLogin, login_owner_pubkey}})
-    let authority = yield select(state => state.user.getIn(['authority', username]))
+    let authority = yield select(state => state.getIn(['user', 'authority', username]))
     const hasActiveAuth = authority.get('active') === 'full'
     if(!highSecurityLogin) {
         const accountName = account.get('name')
@@ -253,7 +253,7 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
 
     try {
         // const challengeString = yield serverApiLoginChallenge()
-        const offchainData = yield select(state => state.offchain)
+        const offchainData = yield select(state => state.get('offchain'))
         const serverAccount = offchainData.get('account')
         const challengeString = offchainData.get('login_challenge')
         if (!serverAccount && challengeString) {
@@ -283,9 +283,9 @@ function* saveLogin_localStorage() {
     }
     localStorage.removeItem('autopost2')
     const [username, private_keys, login_owner_pubkey] = yield select(state => ([
-        state.user.getIn(['current', 'username']),
-        state.user.getIn(['current', 'private_keys']),
-        state.user.getIn(['current', 'login_owner_pubkey']),
+        state.getIn(['user', 'current', 'username']),
+        state.getIn(['user', 'current', 'private_keys']),
+        state.getIn(['user', 'current', 'login_owner_pubkey']),
     ]))
     if (!username) {
         console.error('Not logged in')
@@ -297,7 +297,7 @@ function* saveLogin_localStorage() {
         console.error('No posting key to save?')
         return
     }
-    const account = yield select(state => state.global.getIn(['accounts', username]))
+    const account = yield select(state => state.getIn(['global', 'accounts', username]))
     if(!account) {
         console.error('Missing global.accounts[' + username + ']')
         return
@@ -338,14 +338,14 @@ function* loginError({payload: {/*error*/}}) {
     If the owner key was changed after the login owner key, this function will find the next owner key history record after the change and store it under user.previous_owner_authority.
 */
 function* lookupPreviousOwnerAuthority({payload: {}}) {
-    const current = yield select(state => state.user.get('current'))
+    const current = yield select(state => state.getIn(['user', 'current']))
     if(!current) return
 
     const login_owner_pubkey = current.get('login_owner_pubkey')
     if(!login_owner_pubkey) return
 
     const username = current.get('username')
-    const key_auths = yield select(state => state.global.getIn(['accounts', username, 'owner', 'key_auths']))
+    const key_auths = yield select(state => state.getIn(['global', 'accounts', username, 'owner', 'key_auths']))
     if (key_auths && key_auths.find(key => key.get(0) === login_owner_pubkey)) {
         // console.log('UserSaga ---> Login matches current account owner');
         return
@@ -384,7 +384,7 @@ function* uploadImage({payload: {file, dataUrl, filename = 'image.txt', progress
         _progress(msg)
     }
 
-    const stateUser = yield select(state => state.user)
+    const stateUser = yield select(state => state.get('user'))
     const username = stateUser.getIn(['current', 'username'])
     const d = stateUser.getIn(['current', 'private_keys', 'posting_private'])
     if(!username) {

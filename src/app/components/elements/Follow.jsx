@@ -106,12 +106,12 @@ module.exports = connect(
     (state, ownProps) => {
         let {follower} = ownProps;
         if(!follower) {
-            const current_user = state.user.get('current');
+            const current_user = state.getIn(['user', 'current']);
             follower = current_user ? current_user.get('username') : null
         }
 
         const {following} = ownProps
-        const f = state.global.getIn(['follow', 'getFollowingAsync', follower], emptyMap)
+        const f = state.getIn(['global', 'follow', 'getFollowingAsync', follower], emptyMap)
 
         // the line below was commented out by val - I think it's broken so sometimes the loading indicator is shown forever
         // const loading = f.get('blog_loading', false) || f.get('ignore_loading', false)

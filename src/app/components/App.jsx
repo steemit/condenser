@@ -315,15 +315,15 @@ App.propTypes = {
 export default connect(
     state => {
         return {
-            error: state.app.get('error'),
-            flash: state.offchain.get('flash'),
-            signup_bonus: state.offchain.get('signup_bonus'),
-            new_visitor: !state.user.get('current') &&
-                !state.offchain.get('user') &&
-                !state.offchain.get('account') &&
-                state.offchain.get('new_visit'),
-            username: state.user.getIn(['current', 'username']) || state.offchain.get('account') || '',
-            nightmodeEnabled: state.app.getIn(['user_preferences', 'nightmode']),
+            error: state.getIn(['app', 'error']),
+            flash: state.getIn(['offchain', 'flash']),
+            signup_bonus: state.getIn(['offchain', 'signup_bonus']),
+            new_visitor: !state.getIn(['user', 'current']) &&
+                !state.getIn(['offchain', 'user']) &&
+                !state.getIn(['offchain', 'account']) &&
+                state.getIn(['offchain', 'new_visit']),
+            username: state.getIn(['user', 'current', 'username']) || state.getIn(['offchain', 'account']) || '',
+            nightmodeEnabled: state.getIn(['app', 'user_preferences', 'nightmode']),
         };
     },
     dispatch => ({

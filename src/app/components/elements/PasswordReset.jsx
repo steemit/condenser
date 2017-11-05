@@ -32,7 +32,7 @@ export default connect(
     (state, ownProps) => {
         const {account} = ownProps
         const accountName = account.get('name')
-        const current = state.user.get('current')
+        const current = state.getIn(['user', 'current'])
         const username = current && current.get('username')
         const isMyAccount = username === accountName
         return {...ownProps, isMyAccount, accountName}

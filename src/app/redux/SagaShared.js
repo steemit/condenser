@@ -14,7 +14,7 @@ const wait = ms => (
 export const sharedWatches = [watchGetState, watchTransactionErrors, watchUserSettingsUpdates]
 
 export function* getAccount(username, force = false) {
-    let account = yield select(state => state.global.get('accounts').get(username))
+    let account = yield select(state => state.getIn(['global', 'accounts', username]))
     if (force || !account) {
         [account] = yield call([api, api.getAccountsAsync], [username])
         if(account) {
@@ -44,7 +44,7 @@ export function* watchTransactionErrors() {
 }
 
 function* showTransactionErrorNotification() {
-    const errors = yield select(state => state.transaction.get('errors'));
+    const errors = yield select(state => state.getIn(['transaction', 'errors']));
     for (const [key, message] of errors) {
         yield put({type: 'ADD_NOTIFICATION', payload: {key, message}});
         yield put({type: 'transaction/DELETE_ERROR', payload: {key}});
@@ -80,7 +80,7 @@ function* saveUserPreferences({payload}) {
         yield setUserPreferences(payload);
     }
 
-    const prefs = yield select(state => state.app.get('user_preferences'));
+    const prefs = yield select(state => state.getIn(['app', 'user_preferences']));
     yield setUserPreferences(prefs.toJS());
 }
 

@@ -270,7 +270,7 @@ class PostSummary extends React.Component {
 export default connect(
     (state, props) => {
         const {post} = props;
-        const content = state.global.get('content').get(post);
+        const content = state.getIn(['global', 'content']).get(post);
         let pending_payout = 0;
         let total_payout = 0;
         if (content) {
@@ -279,8 +279,8 @@ export default connect(
         }
         return {
             post, content, pending_payout, total_payout,
-            username: state.user.getIn(['current', 'username']) || state.offchain.get('account'),
-            blogmode: state.app.getIn(['user_preferences', 'blogmode']),
+            username: state.getIn(['user', 'current', 'username']) || state.getIn(['offchain', 'account']),
+            blogmode: state.getIn(['app', 'user_preferences', 'blogmode']),
         };
     },
 

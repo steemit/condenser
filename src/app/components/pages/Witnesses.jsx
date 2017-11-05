@@ -207,13 +207,13 @@ module.exports = {
     path: '/~witnesses(/:witness)',
     component: connect(
         (state) => {
-            const current_user = state.user.get('current');
+            const current_user = state.getIn(['user', 'current']);
             const username = current_user && current_user.get('username')
-            const current_account = current_user && state.global.getIn(['accounts', username])
+            const current_account = current_user && state.getIn(['global', 'accounts', username])
             const witness_votes = current_account && current_account.get('witness_votes').toSet();
             const current_proxy = current_account && current_account.get('proxy');
             return {
-                witnesses: state.global.get('witnesses'),
+                witnesses: state.getIn(['global', 'witnesses']),
                 username,
                 witness_votes,
                 current_proxy

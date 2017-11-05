@@ -119,16 +119,16 @@ export default connect(
             return {
                 username: null,
                 loggedIn: false,
-                probablyLoggedIn: !!state.offchain.get('account')
+                probablyLoggedIn: !!state.getIn(['offchain', 'account'])
             }
         }
-        const username = state.user.getIn(['current', 'username']);
+        const username = state.getIn(['user', 'current', 'username']);
         const loggedIn = !!username;
         return {
             username,
             loggedIn,
             probablyLoggedIn: false,
-            nightmodeEnabled: state.user.getIn(['user_preferences', 'nightmode']),
+            nightmodeEnabled: state.getIn(['user', 'user_preferences', 'nightmode']),
         }
     },
     dispatch => ({

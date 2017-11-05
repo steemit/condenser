@@ -211,12 +211,12 @@ class PostsList extends React.Component {
 
 export default connect(
     (state, props) => {
-        const pathname = state.app.get('location').pathname;
-        const current = state.user.get('current')
-        const username = current ? current.get('username') : state.offchain.get('account')
-        const content = state.global.get('content');
-        const ignore_result = state.global.getIn(['follow', 'getFollowingAsync', username, 'ignore_result']);
-        const userPreferences = state.app.get('user_preferences').toJS();
+        const pathname = state.getIn(['app', 'location']).pathname;
+        const current = state.getIn(['user', 'current'])
+        const username = current ? current.get('username') : state.getIn(['offchain', 'account'])
+        const content = state.getIn(['global', 'content']);
+        const ignore_result = state.getIn(['global', 'follow', 'getFollowingAsync', username, 'ignore_result']);
+        const userPreferences = state.getIn(['app', 'user_preferences']).toJS();
         const nsfwPref = userPreferences.nsfwPref || 'warn';
         return {...props, username, content, ignore_result, pathname, nsfwPref};
     },

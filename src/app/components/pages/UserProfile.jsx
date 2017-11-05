@@ -446,20 +446,20 @@ module.exports = {
     path: '@:accountname(/:section)',
     component: connect(
         state => {
-            const wifShown = state.global.get('UserKeys_wifShown')
-            const current_user = state.user.get('current')
+            const wifShown = state.getIn(['global', 'UserKeys_wifShown'])
+            const current_user = state.getIn(['user', 'current'])
             // const current_account = current_user && state.global.getIn(['accounts', current_user.get('username')])
 
             return {
-                discussions: state.global.get('discussion_idx'),
+                discussions: state.getIn(['global', 'discussion_idx']),
                 current_user,
                 // current_account,
                 wifShown,
-                loading: state.app.get('loading'),
-                global_status: state.global.get('status'),
-                accounts: state.global.get('accounts'),
-                follow: state.global.get('follow'),
-                follow_count: state.global.get('follow_count')
+                loading: state.getIn(['app', 'loading']),
+                global_status: state.getIn(['global', 'status']),
+                accounts: state.getIn(['global', 'accounts']),
+                follow: state.getIn(['global', 'follow']),
+                follow_count: state.getIn(['global', 'follow_count'])
             };
         },
         dispatch => ({

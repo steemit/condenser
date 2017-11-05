@@ -92,7 +92,7 @@ export default connect(
     (state, ownProps) => {
         const {account} = ownProps
         const accountName = account.get('name')
-        const current = state.user.get('current')
+        const current = state.getIn(['user', 'current'])
         const username = current && current.get('username')
         const isMyAccount = username === accountName
         const authLogin = isMyAccount ? {username, password: current.get('password')} : null
@@ -103,7 +103,7 @@ export default connect(
         if(!privateKeys)
             privateKeys = emptyMap
 
-        const auth = state.user.getIn(['authority', accountName])
+        const auth = state.getIn(['user', 'authority', accountName])
         return {...ownProps, auth, authLogin, privateKeys}
     },
     dispatch => ({

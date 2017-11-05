@@ -79,9 +79,9 @@ export default reduxForm(
     { form: 'convertToSteem', fields: ['amount'] },
     // mapStateToProps
     (state, ownProps) => {
-        const current = state.user.get('current')
+        const current = state.getIn(['user', 'current'])
         const username = current.get('username')
-        const account = state.global.getIn(['accounts', username])
+        const account = state.getIn(['global', 'accounts', username])
         const sbd_balance = account.get('sbd_balance')
         const max = sbd_balance.split(' ')[0]
         const validate = values => ({

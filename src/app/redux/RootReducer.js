@@ -1,6 +1,6 @@
 import {Map, fromJS} from 'immutable';
-import {combineReducers} from 'redux';
-import {routerReducer} from 'react-router-redux';
+import {combineReducers} from 'redux-immutable';
+import { LOCATION_CHANGE } from 'react-router-redux';
 import appReducer from './AppReducer';
 import globalReducer from './GlobalReducer';
 import marketReducer from './MarketReducer';
@@ -9,6 +9,14 @@ import transactionReducer from './TransactionReducer';
 import offchain from './Offchain';
 import {reducer as formReducer} from 'redux-form'; // @deprecated, instead use: app/utils/ReactForm.js
 import {contentStats} from 'app/utils/StateFunctions'
+
+const routerReducer = (state = Map({ locationBeforeTransitions: null }), action) => {
+    if (action.type === LOCATION_CHANGE) {
+        return state.set('locationBeforeTransitions', action.payload);
+    }
+
+    return state;
+};
 
 function initReducer(reducer, type) {
     return (state, action) => {

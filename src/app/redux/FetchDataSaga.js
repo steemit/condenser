@@ -32,7 +32,7 @@ export function* fetchState(location_change_action) {
 
     // `ignore_fetch` case should only trigger on initial page load. No need to call
     // fetchState immediately after loading fresh state from the server. Details: #593
-    const server_location = yield select(state => state.offchain.get('server_location'));
+    const server_location = yield select(state => state.getIn(['offchain', 'server_location']));
     const ignore_fetch = (pathname === server_location && is_initial_state)
     is_initial_state = false;
     if(ignore_fetch) return;

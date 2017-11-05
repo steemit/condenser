@@ -72,7 +72,7 @@ emitter.addWinListener( (experimentName, variantName) => {
 ExperimentWrapper = connect(
     state => {
         return {
-            uid: state.offchain.get('uid')
+            uid: state.getIn(['offchain', 'uid'])
         }
     }
 )(ExperimentWrapper);

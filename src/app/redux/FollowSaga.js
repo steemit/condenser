@@ -21,13 +21,13 @@ export function* fetchFollowCount(account) {
 
 // Test limit with 2 (not 1, infinate looping)
 export function* loadFollows(method, account, type, force = false) {
-    if(yield select(state => state.global.getIn(['follow', method, account, type + '_loading']))) {
+    if(yield select(state => state.getIn(['global', 'follow', method, account, type + '_loading']))) {
         // console.log('Already loading', method, account, type)
         return
     }
 
     if(!force) {
-        const hasResult = yield select(state => state.global.hasIn(['follow', method, account, type + '_result']))
+        const hasResult = yield select(state => state.hasIn(['global', 'follow', method, account, type + '_result']))
         if(hasResult) {
             // console.log('Already loaded', method, account, type)
             return

@@ -136,7 +136,7 @@ class Powerdown extends React.Component {
 export default connect(
     // mapStateToProps
     (state, ownProps) => {
-        const values = state.user.get('powerdown_defaults')
+        const values = state.getIn(['user', 'powerdown_defaults'])
         const account = values.get('account')
         const to_withdraw = parseFloat(values.get('to_withdraw')) / 1e6
         const withdrawn = parseFloat(values.get('withdrawn')) / 1e6

@@ -530,15 +530,15 @@ const DEFAULT_EXPIRE = 0xFFFFFFFF//Math.floor((Date.now() / 1000) + (60 * 60 * 2
 module.exports = {
     path: 'market',
     component: connect(state => {
-        const username = state.user.get('current') ? state.user.get('current').get('username') : null;
+        const username = state.getIn(['user', 'current']) ? state.getIn(['current', 'username']) : null;
         return {
-            orderbook:   state.market.get('orderbook'),
-            open_orders: process.env.BROWSER ? state.market.get('open_orders') : [],
-            ticker:      state.market.get('ticker'),
-            account:     state.global.getIn(['accounts', username]),
-            history:     state.market.get('history'),
+            orderbook:   state.getIn(['market', 'orderbook']),
+            open_orders: process.env.BROWSER ? state.getIn(['market', 'open_orders']) : [],
+            ticker:      state.getIn(['market', 'ticker']),
+            account:     state.getIn(['global', 'accounts', username]),
+            history:     state.getIn(['market', 'history']),
             user:        username,
-            feed:        state.global.get('feed_price').toJS()
+            feed:        state.getIn(['global', 'feed_price']).toJS()
         }
     },
     dispatch => ({

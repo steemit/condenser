@@ -93,7 +93,7 @@ const emptyMap = Map()
 export default connect(
     state => {
         return {
-            active_dialogs: state.global.get('active_dialogs') || emptyMap,
+            active_dialogs: state.getIn(['global', 'active_dialogs']) || emptyMap,
         }
     },
     dispatch => ({

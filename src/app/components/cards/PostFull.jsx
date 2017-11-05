@@ -369,7 +369,7 @@ export default connect(
     // mapStateToProps
     (state, ownProps) => ({
         ...ownProps,
-        username: state.user.getIn(['current', 'username']),
+        username: state.getIn(['user', 'current', 'username']),
     }),
 
     // mapDispatchToProps

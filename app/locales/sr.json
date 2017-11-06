@@ -684,7 +684,9 @@
     "update_post":"Ažuriraj Post",
     "feedback_placeholder":"Написать...",
     "unable_to_contact_the_server":"Не удалось связаться с сервером",
-    "please_insert_only_image_files":"Вставляйте только файлы изображений"
+    "please_insert_only_image_files":"Вставляйте только файлы изображений",
+    "questions_or_requests": "You can always send detailed questions or requests to us by e-mail:",
+    "support_by_telegram": "In addition, for operational technical assistance, we have introduced a Voice Support Service in Telegram"
   },
   "savingswithdrawhistory_jsx":{
     "cancel_this_withdraw_request":"Otkaži ovaj nalog za transfer?",
@@ -788,7 +790,7 @@
     "withdraw_funds_after_the_required_3_day_waiting_period":"Povući sredstva nakon potrebnog 3 danevnog perioda čekanja.",
     "balance":"Balans",
     "private_key_in_memo" : "Do not write your private keys in this field!"
-    
+
   },
   "transferhistoryrow_jsx":{
     "to_savings":"в сейф",

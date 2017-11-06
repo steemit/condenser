@@ -384,7 +384,8 @@ class ReplyEditor extends React.Component {
                           <Link to="/submit.html"><Icon name="pencil" /> {tt('g.submit_a_story')}</Link>
                           {tt('reply_editor.feedback_welcome.message4')}
                         </p>
-                        <p>{capitalizeFirstLetter(tt('g.or'))} <a href={"mailto:" + SUPPORT_EMAIL}>{tt('createaccount_jsx.send_us_email')}</a></p>
+                        <p>{tt('reply_editor.questions_or_requests')} <a href={"mailto:" + SUPPORT_EMAIL}>{SUPPORT_EMAIL}</a>.</p>
+                        <p>{tt('reply_editor.support_by_telegram')} — <a href="https://t.me/golos_support">https://t.me/golos_support</a>.</p>
                         <p>{tt('reply_editor.feedback_welcome.message5')}</p>
                       </div>
                     }

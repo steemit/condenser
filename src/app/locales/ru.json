@@ -54,6 +54,7 @@
     "password": "Пароль",
     "payouts": "Выплаты",
     "permissions": "Разрешения",
+    "phishy_message": "Link expanded to plain text; beware of a potential phishing attempt",
     "post": "Пост",
     "post_as": "Запостить как",
     "posts": "Посты",
@@ -67,7 +68,7 @@
     "re": "RE",
     "re_to": "RE: %(topic)s",
     "recent_password": "Недавний пароль",
-    "receive": "Получить ",
+    "receive": "Получено ",
     "remove": "Удалить",
     "remove_vote": "Убрать голос",
     "replied_to": "ответил %(account)s",
@@ -76,6 +77,8 @@
     "reply_count": {
       "zero": "нет ответов",
       "one": "1 ответ",
+      "few": "%(count)s ответа",
+      "many": "%(count)s ответов",
       "other": "%(count)s ответов"
     },
     "reputation": "Репутация",
@@ -96,10 +99,10 @@
     "submit": "Отправить",
     "power_up": "Усилить силу голоса",
     "submit_a_story": "Добавить пост",
-    "tag": "Тэг",
+    "tag": "Тег",
     "to": " к ",
-    "topics": "Топики",
-    "transfer": "Передать ",
+    "all_tags": "All tags",
+    "transfer": "Перевод ",
     "trending_topics": "Популярное",
     "type": "Тип",
     "unfollow": "Отписаться",
@@ -189,20 +192,29 @@
       "show_less": "Показать меньше",
       "value_posts": "меньше сообщений низкой стоимости"
     },
-    "account_creation_succes": "Ваш аккаунт был успешно создан!",
-    "requires_auth_key": "Эта операция требует вашего %(authType)s ключа (или используйте главный пароль)",
-    "keep_me_logged_in": "Оставить меня залогиненным",
+    "read_only_mode": "По техническим причинам вебсайт доступен только для чтения, приносим свои извинения.",
+    "tags_and_topics": "Теги и темы",
+    "show_more_topics": "Показать больше тем",
     "basic": "Базовый",
     "advanced": "Подробнее",
     "views": {
       "zero": "Нет просмотров",
       "one": "%(count)s просмотр",
+      "few": "%(count)s просмотра",
+      "many": "%(count)s просмотров",
       "other": "%(count)s просмотров"
     },
     "responses": {
       "zero": "Нет ответов",
       "one": "%(count)s ответ",
+      "few": "%(count)s ответа",
+      "many": "%(count)s ответов",
       "other": "%(count)s ответов"
+    },
+    "post_key_warning": {
+      "confirm": "Вы собираетесь опубликовать ваш приватный ключ или мастер-пароль, это может привести к потере вашего акканта и всех средств на нем.",
+      "warning": "Если кто-то попросил вас опубликовать или показать ваш приватный ключ, это возможно злоумышленник, который пытается украсть ваши токены.",
+      "checkbox": "Я понял"
     }
   },
   "navigation": {
@@ -211,23 +223,25 @@
     "APP_NAME_whitepaper": "Белая книга %(APP_NAME)s",
     "buy_LIQUID_TOKEN": "Купить %(LIQUID_TOKEN)s",
     "sell_LIQUID_TOKEN": "Продать %(LIQUID_TOKEN)s",
-    "market": "Биржа",
-    "currency_market": "Валютный рынок",
-    "stolen_account_recovery": "Возврат украденного аккаунта",
+    "currency_market": "Биржа",
+    "stolen_account_recovery": "Восстановление украденного аккаунта",
     "change_account_password": "Изменить пароль аккаунта",
-    "APP_NAME_api_docs": "%(APP_NAME)s API-документация",
-    "APP_NAME_chat": "%(APP_NAME)s чат",
     "witnesses": "Делегаты",
     "vote_for_witnesses": "Проголосовать за делегатов",
     "privacy_policy": "Политика Конфиденциальности",
     "terms_of_service": "Условия пользования",
-    "sign_up": "Регистрация",
+    "sign_up": "Присоединиться",
+    "learn_more": "Документация",
     "welcome": "Добро пожаловать",
     "faq": "ЧаВО",
+    "shop": "Магазин Steemit",
     "chat": "Чат Steemit",
     "app_center": "Центр приложений Steemit",
     "api_docs": "API-документация Steemit",
-    "whitepaper": "Белая книга Steem"
+    "bluepaper": "Синяя бумага Steem",
+    "whitepaper": "Белая книга Steem",
+    "intro_tagline": "Здесь говорят деньги.",
+    "intro_paragraph": "Ваше мнение имеет цену. Присоединяйтесь к сообществу, которое платит за контент и за работу по отбору самого лучшего контента."
   },
   "main_menu": {
     "hot": "актуальное",
@@ -237,7 +251,7 @@
     "shorten_title": "Сократите заголовок",
     "exceeds_maximum_length": "Превышает максимальную длину (%(maxKb)sKB)",
     "including_the_category": "(включая категорию «%(rootCategory)s»)",
-    "use_limited_amount_of_tags": "У вас %(tagsLength)s тэгов, включая %(includingCategory)s. Пожалуйста, используйте не более 5 в посте и категории.",
+    "use_limited_amount_of_tags": "У вас %(tagsLength)s тегов, включая %(includingCategory)s. Пожалуйста, используйте не более 5 в посте и категории.",
     "are_you_sure_you_want_to_clear_this_form": "Вы уверены, что вы хотите очистить эту форму?",
     "uploading": "Загрузка",
     "draft_saved": "Черновик сохранен.",
@@ -257,13 +271,13 @@
     "markdown_not_supported": "Markdown здесь не поддерживается"
   },
   "category_selector_jsx": {
-    "tag_your_story": "Добавь тэги (до 5 штук), первый тэг станет основной категорией.",
-    "select_a_tag": "Выбрать тэг",
+    "tag_your_story": "Добавь теги (до 5 штук), первый тег станет основной категорией.",
+    "select_a_tag": "Выбрать тег",
     "maximum_tag_length_is_24_characters": "Максимальная длина категории 24 знака",
     "use_limited_amount_of_categories": "Пожалуйста, используйте только %(amount)s категории",
     "use_only_lowercase_letters": "Используйте только символы нижнего регистра",
     "use_one_dash": "Используйте только одно тире",
-    "use_spaces_to_separate_tags": "Используйте пробел чтобы разделить тэги",
+    "use_spaces_to_separate_tags": "Используйте пробел чтобы разделить теги",
     "use_only_allowed_characters": "Используйте только строчные буквы, цифры и одно тире",
     "must_start_with_a_letter": "Должно начинаться с буквы",
     "must_end_with_a_letter_or_number": "Должно заканчиваться с буквы или номера"
@@ -329,21 +343,32 @@
     "user_hasnt_started_bloggin_yet": "Похоже. что %(name)s еще не завёл блог!",
     "user_hasnt_followed_anything_yet": "Похоже, что %(name)s еще ни на кого не подписан! Если, %(name)s недавно подписался на новых пользователей, их персонализированный канал будет заполняться сразу после появления нового контента.",
     "user_hasnt_had_any_replies_yet": "%(name)s еще не получил ответов",
-    "users_curation_rewards": "Кураторские вознаграждения %(name)s",
-    "users_permissions": "Разрешения %(name)s",
+    "looks_like_you_havent_posted_anything_yet": "Похоже, ты еще ничего не опубликовал.",
+    "create_a_post": "Создать сообщение",
+    "explore_trending_articles": "Посмотреть статьи, набирающие популярность",
+    "read_the_quick_start_guide": "Прочтите краткое руководство",
+    "browse_the_faq": "Просмотреть ЧаВО",
+    "followers": "Подписчики",
+    "this_is_users_reputations_score_it_is_based_on_history_of_votes": "Это репутация %(name)s.\n\nРепутация рассчитывается на основе истории полученных голосов и используется для сокрытия низкокачественного контента.",
     "follower_count": {
       "zero": "Нет подписчиков",
       "one": "1 подписчик",
+      "few": "%(count)s подписчика",
+      "many": "%(count)s подписчиков",
       "other": "%(count)s подписчиков"
     },
     "followed_count": {
       "zero": "Ни на кого не подписан",
       "one": "1 подписок",
+      "few": "%(count)s подписки",
+      "many": "%(count)s подписок",
       "other": "%(count)s подписок"
     },
     "post_count": {
       "zero": "Постов нет",
       "one": "1 пост",
+      "few": "%(count)s поста",
+      "many": "%(count)s постов",
       "other": "%(count)s постов"
     }
   },
@@ -361,26 +386,28 @@
     "comments_were_hidden_due_to_low_ratings": "Комментарии были скрыты из-за низкого рейтинга"
   },
   "voting_jsx": {
-    "stop_seeing_content_from_this_user": "Перестать видеть контент от этого пользователя",
+    "flagging_post_can_remove_rewards_the_flag_should_be_used_for_the_following": "Голосование против уменьшает вознаграждение и снижает позицию в рейтинге.",
     "disagreement_on_rewards": "Несогласие с вознаграждением",
     "fraud_or_plagiarism": "Мошенничество или плагиат",
     "hate_speech_or_internet_trolling": "Разжигание ненависти или Интернет троллинг",
     "intentional_miss_categorized_content_or_spam": "Преднамеренная неправильная категоризация контента или спам",
     "pending_payout": "Ожидаемая выплата",
-    "confirm_flag": "Подтвердить голос против",
-    "begin_recovery": "Начать восстановление",
-    "APP_NAME_app_center": "Центр приложений %(APP_NAME)s",
-    "your_existing_DEBT_TOKEN_are_liquid_and_transferable": "Ваши существующие %(DEBT_TOKEN)s ликвидны и перемещаемы. Возможно, вы хотите торговать %(DEBT_TOKEN)s напрямую на этом сайте в разделе %(link)s или перевести на внешний рынок.",
-    "trending_30_day": "популярное (30 дней)",
-    "this_password_is_bound_to_your_accounts_private_key": "Этот пароль привязан к активному ключу вашего аккаунта и не может быть использован для входа на эту страницу. Вы можете использовать его для входа на другие более защищенные страницы как Кошелек или Маркет.",
-    "potential_payout": "Потенциальная выплата",
-    "authors": "Авторы",
-    "paste_a_youtube_or_vimeo_and_press_enter": "Вставьте YouTube или Vimeo ссылку и нажмите Enter",
-    "there_was_an_error_uploading_your_image": "Произошла ошибка во время загрузки изображения",
-    "please_remove_following_html_elements": "Пожалуйста удалите эти HTML элементы из вашего поста: ",
+    "payout_declined": "Автор отказался от вознаграждения",
+    "max_accepted_payout": "Максимально допустимое вознаграждение: $%(value)s",
+    "promotion_cost": "Цена продвижения: $%(value)s",
+    "past_payouts": "Предыдущие выплаты $%(value)s",
+    "past_payouts_author": " - Авторские $%(value)s",
+    "past_payouts_curators": " - Кураторские $%(value)s",
+    "we_will_reset_curation_rewards_for_this_post": "это сбросит выплаты за курирование",
+    "removing_your_vote": "Удаление голоса",
+    "changing_to_an_upvote": "Изменить на голосование 'за'",
+    "changing_to_a_downvote": "Изменить на голосование 'против'",
+    "confirm_flag": "Подтвердить голос 'против'",
     "and_more": "и %(count)s больше",
     "votes_plural": {
       "one": "%(count)s голоса",
+      "few": "%(count)s голоса",
+      "many": "%(count)s голосов",
       "other": "%(count)s голосов"
     }
   },
@@ -390,6 +417,8 @@
     "you_have_votes_remaining": {
       "zero": "У Вас не осталось голосов",
       "one": "У Вас остался 1 голос",
+      "few": "У Вас осталось %(count)s голоса",
+      "many": "У Вас осталось %(count)s голосов",
       "other": "У Вас осталось %(count)s голосов"
     },
     "you_can_vote_for_maximum_of_witnesses": "Вы можете голосовать максимум за 30 делегатов",
@@ -408,11 +437,15 @@
     "response_count_tooltip": {
       "zero": "ответов пока нет. Нажмите чтобы ответить.",
       "one": "1 ответ. Нажмите чтобы ответить.",
+      "few": "%(count)s ответа. Нажмите чтобы ответить.",
+      "many": "%(count)s ответов. Нажмите чтобы ответить.",
       "other": "%(count)s ответов. Нажмите чтобы ответить."
     },
     "vote_count": {
       "zero": "нет голосов",
       "one": "1 голос",
+      "few": "%(count)s голоса",
+      "many": "%(count)s голосов",
       "other": "%(count)s голосов"
     }
   },
@@ -434,23 +467,23 @@
     "after_printing_write_down_your_user_name": "После печати запишите ваше имя пользователя"
   },
   "converttosteem_jsx": {
-    "DEBT_TOKEN_will_be_unavailable": "Эта операция будет проходить 3-5 дней от настоящего момента и ее нельзя отменить. Эти %(DEBT_TOKEN)s мгновенно станут недоступны",
-    "about_APP_NAME": "О %(APP_NAME)s",
-    "APP_NAME_is_a_social_media_platform_where_everyone_gets_paid": "%(APP_NAME)s - это социальная медиа платформа в которой каждый зарабатывает за создание и курирование контента. Он использует надежную систему цифровых очков под названием %(LIQUID_TOKEN)s, который поддерживает реальную ценность для цифровых наград через выявление рыночной цены и ликвидности.",
-    "learn_more_at_LANDING_PAGE_URL": "Узнать больше в %(LANDING_PAGE_URL)s"
+    "your_existing_DEBT_TOKEN_are_liquid_and_transferable": "Ваши %(DEBT_TOKEN)s токены ликвидны. Вы можете конвертировать %(DEBT_TOKEN)s на этом сайте (%(link)s) или вывести на биржу/обменник.",
+    "this_is_a_price_feed_conversion": "Конвертация на сайте выполняется три с половиной дня - это требуется, чтобы исключить манипуляции с ценами.",
+    "convert_to_LIQUID_TOKEN": "Ковертировать в %(LIQUID_TOKEN)s",
+    "DEBT_TOKEN_will_be_unavailable": "Эта операция будет проходить 3-5 дней от настоящего момента и ее нельзя отменить. Эти %(DEBT_TOKEN)s мгновенно станут недоступны"
   },
   "tips_js": {
-    "liquid_token": "Перемещаемые цифровые токены, которые могут переданы куда угодно в любой момент.<br/>%(LIQUID_TOKEN)s может быть конвертирован в %(VESTING_TOKEN)s, этот процесс называется \"увеличение Силы Голоса\".",
-    "tokens_worth_about_AMOUNT_of_LIQUID_TOKEN": "Перемещаемые цифровые токены, цена которых всегда равна %(amount)s в %(LIQUID_TOKEN)s.",
+    "liquid_token": "Ликвидные цифровые токены, которые могут переданы куда угодно в любой момент.<br/>%(LIQUID_TOKEN)s может быть конвертирован в %(VESTING_TOKEN)s, этот процесс называется \"увеличение Силы Голоса\".",
+    "influence_token": "Токены дают вам возможность влиять на вознаграждения за контент, а также возможность зарабатывать на курации контента.",
     "estimated_value": "Сметная стоимость основана на среднем значении %(LIQUID_TOKEN)s в долларах США.",
-    "VESTING_TOKEN_is_non_transferable_and_requires_convert_back_to_LIQUID_TOKEN": "%(VESTING_TOKEN)s нельзя передавать, и нужно 3 месяца (13 выплат) чтобы перевести обратно в %(LIQUID_TOKEN)s.",
-    "converted_VESTING_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again": "Конвертированная %(VESTING_TOKEN)s может быть отправлена себе или кому-то еще, но не может быть передана вновь без конвертирования назад в %(LIQUID_TOKEN)s.",
+    "non_transferable": "%(VESTING_TOKEN)s - не ликвидные токены, требуется три месяца (13 еженедальных выплат) чтобы сконвертировать их в ликвидные токены %(LIQUID_TOKEN)s.",
+    "converted_VESTING_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again": "Конвертированные %(VESTING_TOKEN)s токены могут быть отправлены себе или кому-либо еще, но не могут быть переданы вновь без конвертации в %(LIQUID_TOKEN)s.",
     "part_of_your_steem_power_is_currently_delegated": "Часть STEEM POWER вам делегирована, это увеличивает ваше влияние на платформе. Количество делегированных токенов со временем может изменяться."
   },
   "promote_post_jsx": {
     "promote_post": "Продвинуть пост",
     "spend_your_DEBT_TOKEN_to_advertise_this_post": "Используйте ваши %(DEBT_TOKEN)s чтобы прорекламировать этот пост в секции продвигаемого контента",
-    "requires_5_or_more_reddit_comment_karma": "необходимо 5 или больше Reddit кармы комментирования",
+    "you_successfully_promoted_this_post": "Операция продвижения успешно завершена",
     "this_post_was_hidden_due_to_low_ratings": "Этот пост был скрыт из-за низкого рейтинга"
   },
   "about_jsx": {
@@ -465,8 +498,6 @@
   "postsummary_jsx": {
     "resteemed": "Поделиться",
     "resteemed_by": "Репостнуто",
-    "this_post_is": "Этот пост",
-    "you_can": "Вы можете",
     "reveal_it": "посмотреть пост",
     "adjust_your": "откорректируйте свои",
     "display_preferences": "настройки отображения",
@@ -520,9 +551,9 @@
     "the_latest_versions_of": "Последние версии ",
     "are_well_tested_and_known_to_work_with": "хорошо протестированы и работают с %(APP_URL)s.",
     "due_to_server_maintenance": "Из-за технического обслуживания сервера мы работаем в режиме чтения. Извините за неудобства.",
+    "login_to_vote": "Войти, чтобы проголосовать",
     "login_to_post": "Войти, чтобы написать пост",
     "login_to_comment": "Войти, чтобы оставить комментарий",
-    "login_to_your_steem_account": "Войти в свой Steem аккаунт",
     "posting": "Постинг",
     "active_or_owner": "Активный или Владельца",
     "this_password_is_bound_to_your_account_owner_key": "Этот пароль привязан к главному ключу аккаунта и не может быть использован для входа на этот сайт.",
@@ -541,8 +572,9 @@
     "keep_me_logged_in": "Оставить меня залогиненным",
     "amazing_community": "удивительное сообщество",
     "to_comment_and_reward_others": " комментировать и вознаграждать других.",
-    "sign_up_now_to_earn": "Зарегистрируйтесь сейчас, чтобы заработать ",
-    "free_money": "ЛЕГКИЕ ДЕНЬГИ!",
+    "sign_up_get_steem": "Sign up. Get STEEM",
+    "signup_button": "Зарегистрируйтесь",
+    "signup_button_emphasis": " сейчас!",
     "returning_users": "Вернувшиеся пользователи: ",
     "join_our": "Присоединяйтесь к нашему"
   },
@@ -595,7 +627,8 @@
     "withdraw_funds_after_the_required_3_day_waiting_period": "Снять средства после необходимого 3 дневного периода ожидания.",
     "from": "От",
     "to": "Кому",
-    "asset_currently_collecting": "начисляемые годовые на %(asset)s: %(interest)s%%."
+    "asset_currently_collecting": "начисляемые годовые на %(asset)s: %(interest)s%%.",
+    "beware_of_spam_and_phishing_links": "Остерегайтесь спама и фишинговых ссылок в передачах. Не открывайте ссылки от пользователей, которым вы не доверяете. Не предоставляйте свои личные ключи третьим сторонам."
   },
   "userwallet_jsx": {
     "conversion_complete_tip": "Завершается",
@@ -608,19 +641,28 @@
     "withdraw_LIQUID_TOKEN": "Снять %(LIQUID_TOKEN)s",
     "withdraw_DEBT_TOKENS": "Снять %(DEBT_TOKENS)s",
     "tokens_worth_about_1_of_LIQUID_TICKER": "Стоимость токенов $1.00 в %(LIQUID_TICKER)s, начисляемые годовые %(sbdInterest)s%%.",
-    "balances": "БАЛАНСЫ",
-    "buy_LIQUID_TOKEN_or_VESTING_TOKEN": "Купить %(LIQUID_TOKEN)s или %(VESTING_TOKEN)s",
+    "savings": "Сберегательный счет",
+    "estimated_account_value": "Приблизительная стоимость аккаунта",
     "next_power_down_is_scheduled_to_happen": "Следующее понижение силы голоса будет",
-    "transfers_are_temporary_disabled": "Transfers are temporary disabled.",
+    "transfers_are_temporary_disabled": "Переводы временно преостановлены.",
     "history": "ИСТОРИЯ",
     "redeem_rewards": "Получить вознаграждение",
-    "savings": "Сейф"
+    "buy_steem_or_steem_power": "Купить STEEM или STEEM POWER"
+  },
+  "powerdown_jsx": {
+    "power_down": "Уменьшить силу голоса (power down)",
+    "amount": "Количество",
+    "already_power_down": "Вы уже запустили понижение силы голоса на %(AMOUNT)s %(LIQUID_TICKER)s (%(WITHDRAWN)s %(LIQUID_TICKER)s уже выплачено). Если вы измените количество, отсчет времени сбросится и составит 13 недель от сегодняшего дня.",
+    "delegating": "Вы делегируете %(AMOUNT)s %(LIQUID_TICKER)s. Это количество заблокировано и не может быть выведено пока делегирование не будет отменено и не пройдет один полный цикл выплат вознаграждений.",
+    "per_week": "Это ~%(AMOUNT)s %(LIQUID_TICKER)s в неделю.",
+    "warning": "Оставлять меньше чем %(AMOUNT)s %(LIQUID_TICKER)s не рекомендуется, т.к. это может остановить все транзакции с использованием это аккаунта.",
+    "error": "Неполучается уменьшить силу голоса (ERROR: %(MESSAGE)s)"
   },
   "checkloginowner_jsx": {
-    "estimated_account_value": "Оценка стоимости аккаунта",
-    "next_power_down_is_scheduled_to_happen": "Следующее понижение Силы запланировано на",
-    "transfers_are_temporary_disabled": "Переводы временно отключены.",
-    "history": "ИСТОРИЯ",
+    "your_password_permissions_were_reduced": "Your password permissions were reduced",
+    "if_you_did_not_make_this_change": "If you did not make this change please",
+    "ownership_changed_on": "Владелец аккаунта или пароль были изменены ",
+    "deadline_for_recovery_is": "Вы можете восстановить доступ до ",
     "i_understand_dont_show_again": "Понятно, больше не показывать"
   }
 }

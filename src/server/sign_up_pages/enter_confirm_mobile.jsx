@@ -118,10 +118,10 @@ export default function useEnterAndConfirmMobilePages(app) {
         const country = this.query.country;
 
         const body = renderToString(
-            <div className="App">
+            <div className="App CreateAccount">
                 <MiniHeader />
                 <br />
-                <div className="row" style={{ maxWidth: "32rem" }}>
+                <div className="row CreateAccount__step" style={{ maxWidth: "32rem" }}>
                     <div className="column">
                         <Progress tabIndex="0" value={90} max={100} />
                         <form
@@ -129,30 +129,22 @@ export default function useEnterAndConfirmMobilePages(app) {
                             action="/submit_mobile"
                             method="POST"
                         >
-                            <h4 style={{ color: "#4078c0" }}>
+                            <h4 className="CreateAccount__title">
                                 Almost there!
                             </h4>
 
 
-                            <div className="secondary">
 
-				We need to send you a quick text.
-                                <br />
-                                <br />
-				With each Steemit account comes a free initial
+				<p>We need to send you a quick text. </p>
+                   
+				<p>With each Steemit account comes a free initial
 				grant of Steem Power!  Phone verification helps
-				cut down on spam accounts.
+				cut down on spam accounts.</p>
 
-                                <br />
-                                <br />
-
-				<em>Your phone number will not be used for any
+				<p><em>Your phone number will not be used for any
 other purpose other than account verification and (potentially) account
-recovery should your account ever be compromised.</em>
+recovery should your account ever be compromised.</em></p>
 
-
-                            </div>
-                            <br />
                             <input type="hidden" name="csrf" value={this.csrf} />
                             <label>
                                 Country Code
@@ -176,8 +168,8 @@ recovery should your account ever be compromised.</em>
                             <div className="error">{this.flash.error}</div>
                             <input
                                 type="submit"
-                                className="button"
-                                value="CONTINUE"
+                                className="btn-continue"
+                                value="Continue"
                             />
                         </form>
                     </div>
@@ -314,7 +306,7 @@ recovery should your account ever be compromised.</em>
         );
 
         const body = renderToString(
-            <div className="App">
+            <div className="App CreateAccount">
                 <MiniHeader />
                 <br />
                 <div className="row" style={{ maxWidth: "32rem" }}>
@@ -349,7 +341,7 @@ recovery should your account ever be compromised.</em>
                         <input
                             type="submit"
                             className="button"
-                            value="CONTINUE"
+                            value="Continue"
                         />
                     </form>
                 </div>

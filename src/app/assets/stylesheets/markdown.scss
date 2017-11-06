@@ -87,6 +87,10 @@
     line-height: 150%;
     margin: 0 0 1.5rem 0;
   }
+  a {
+    @extend .link;
+    @extend .link--accent;
+  }
 
   img {
     width: auto;
@@ -142,8 +146,16 @@
       top: 0;
     }
   }
-
+  blockquote {
+    @include themify($themes) {
+      border-left: themed('borderDark');
+    }       
+  }
   blockquote > p {
-    color: rgba(0,0,0,.6);
+    @include themify($themes) {
+      color: themed('textColorSecondary');
+    }    
   }
 }
+
+

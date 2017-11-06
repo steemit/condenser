@@ -74,7 +74,7 @@ To comment on a post, or reply to an existing comment, click on the "Reply" link
 <a class="anchor" name="Creating_Posts"></a>
 ### Creating Posts
 
-To create a post, click on the "Submit a Story" link in the upper right corner.
+To create a post, click on the "Post" link in the upper right corner.
 
 Posts have three main parts: Title, Content, Tags.
 

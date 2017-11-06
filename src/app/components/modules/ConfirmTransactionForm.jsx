@@ -10,12 +10,17 @@ class ConfirmTransactionForm extends Component {
         //Steemit
         onCancel: PropTypes.func,
         warning: PropTypes.string,
+        checkbox: PropTypes.string,
         // redux-form
         confirm: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
         confirmBroadcastOperation: PropTypes.object,
         confirmErrorCallback: PropTypes.func,
         okClick: PropTypes.func,
     };
+    constructor() {
+        super()
+        this.state = {checkboxChecked: false}
+    }
     componentDidMount() {
         document.body.addEventListener('click', this.closeOnOutsideClick);
     }
@@ -35,18 +40,30 @@ class ConfirmTransactionForm extends Component {
         const {okClick, confirmBroadcastOperation} = this.props
         okClick(confirmBroadcastOperation)
     }
+    onCheckbox = (e) => {
+        const checkboxChecked = e.target.checked
+        this.setState({checkboxChecked})
+    }
     render() {
-        const {onCancel, okClick} = this
-        const {confirm, confirmBroadcastOperation, warning} = this.props
+        const {onCancel, okClick, onCheckbox} = this
+        const {confirm, confirmBroadcastOperation, warning, checkbox} = this.props
+        const {checkboxChecked} = this.state
         const conf = typeof confirm === 'function' ? confirm() : confirm
         return (
            <div className="ConfirmTransactionForm">
                <h4>{typeName(confirmBroadcastOperation)}</h4>
                <hr />
                <div>{conf}</div>
-               {warning ? <div style={{paddingTop: 10}} className="error">{warning}</div> : null}
+               {warning ? <div style={{paddingTop: 10, fontWeight: 'bold'}} className="error">{warning}</div> : null}
+               {checkbox ?
+                    <div>
+                        <label htmlFor="checkbox">
+                            <input id="checkbox" type="checkbox" checked={checkboxChecked} onChange={this.onCheckbox} />
+                            {checkbox}
+                        </label>
+                    </div> : null}
                <br />
-               <button className="button" onClick={okClick}>{tt('g.ok')}</button>
+               <button className="button" onClick={okClick} disabled={!(checkbox === undefined || checkboxChecked)}>{tt('g.ok')}</button>
                <button type="button hollow" className="button hollow" onClick={onCancel}>{tt('g.cancel')}</button>
            </div>
        )
@@ -66,11 +83,13 @@ export default connect(
         const confirmErrorCallback = state.transaction.get('confirmErrorCallback')
         const confirm = state.transaction.get('confirm')
         const warning = state.transaction.get('warning')
+        const checkbox = state.transaction.get('checkbox')
         return {
             confirmBroadcastOperation,
             confirmErrorCallback,
             confirm,
-            warning
+            warning,
+            checkbox
         }
     },
     // mapDispatchToProps

@@ -11,13 +11,13 @@ function addSiteMeta(metas) {
     metas.push({property: 'og:site_name', content: 'Steemit'});
     metas.push({property: 'og:title', content: 'Steemit'});
     metas.push({property: 'og:description', content: site_desc});
-    metas.push({property: 'og:image', content: 'https://steemit.com/images/steemit-share.png'});
+    metas.push({property: 'og:image', content: 'https://steemit.com/images/steemit.png'});
     metas.push({property: 'fb:app_id', content: $STM_Config.fb_app});
     metas.push({name: 'twitter:card', content: 'summary'});
     metas.push({name: 'twitter:site', content: '@steemit'});
     metas.push({name: 'twitter:title', content: '#Steemit'});
     metas.push({name: 'twitter:description', site_desc});
-    metas.push({name: 'twitter:image', content: 'https://steemit.com/images/steemit-share.png'});
+    metas.push({name: 'twitter:image', content: 'https://steemit.com/images/steemit.png'});
 }
 
 export default function extractMeta(chain_data, rp) {
@@ -44,7 +44,7 @@ export default function extractMeta(chain_data, rp) {
             metas.push({property: 'og:title',        content: title});
             metas.push({property: 'og:type',         content: 'article'});
             metas.push({property: 'og:url',          content: url});
-            metas.push({property: 'og:image',        content: image || 'https://steemit.com/images/steemit-share.png'});
+            metas.push({property: 'og:image',        content: image || 'https://steemit.com/images/steemit.png'});
             metas.push({property: 'og:description',  content: desc});
             metas.push({property: 'og:site_name',    content: 'Steemit'});
             metas.push({property: 'fb:app_id',       content: $STM_Config.fb_app});
@@ -56,7 +56,7 @@ export default function extractMeta(chain_data, rp) {
             metas.push({name: 'twitter:site',        content: '@steemit'});
             metas.push({name: 'twitter:title',       content: title});
             metas.push({name: 'twitter:description', content: desc});
-            metas.push({name: 'twitter:image',       content: image || 'https://steemit.com/images/steemit-twshare.png'});
+            metas.push({name: 'twitter:image',       content: image || 'https://steemit.com/images/steemit-twshare-2.png'});
         } else {
             addSiteMeta(metas);
         }
@@ -65,7 +65,7 @@ export default function extractMeta(chain_data, rp) {
         let {name, about, profile_image} = normalizeProfile(account);
         if(name == null) name = account.name;
         if(about == null) about = "Join thousands on steemit who share, post and earn rewards.";
-        if(profile_image == null) profile_image = 'https://steemit.com/images/steemit-twshare.png';
+        if(profile_image == null) profile_image = 'https://steemit.com/images/steemit-twshare-2.png';
         // Set profile tags
         const title = `@${account.name}`;
         const desc  = `The latest posts from ${name}. Follow me at @${account.name}. ${about}`;

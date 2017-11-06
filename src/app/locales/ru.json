@@ -54,6 +54,7 @@
     "password": "Пароль",
     "payouts": "Выплаты",
     "permissions": "Разрешения",
+    "phishy_message": "Link expanded to plain text; beware of a potential phishing attempt",
     "post": "Пост",
     "post_as": "Запостить как",
     "posts": "Посты",
@@ -67,7 +68,7 @@
     "re": "RE",
     "re_to": "RE: %(topic)s",
     "recent_password": "Недавний пароль",
-    "receive": "Получить ",
+    "receive": "Получено ",
     "remove": "Удалить",
     "remove_vote": "Убрать голос",
     "replied_to": "ответил %(account)s",
@@ -76,6 +77,8 @@
     "reply_count": {
       "zero": "нет ответов",
       "one": "1 ответ",
+      "few": "%(count)s ответа",
+      "many": "%(count)s ответов",
       "other": "%(count)s ответов"
     },
     "reputation": "Репутация",
@@ -96,10 +99,10 @@
     "submit": "Отправить",
     "power_up": "Усилить силу голоса",
     "submit_a_story": "Добавить пост",
-    "tag": "Тэг",
+    "tag": "Тег",
     "to": " к ",
-    "topics": "Топики",
-    "transfer": "Передать ",
+    "all_tags": "All tags",
+    "transfer": "Перевод ",
     "trending_topics": "Популярное",
     "type": "Тип",
     "unfollow": "Отписаться",
@@ -197,12 +200,21 @@
     "views": {
       "zero": "Нет просмотров",
       "one": "%(count)s просмотр",
+      "few": "%(count)s просмотра",
+      "many": "%(count)s просмотров",
       "other": "%(count)s просмотров"
     },
     "responses": {
       "zero": "Нет ответов",
       "one": "%(count)s ответ",
+      "few": "%(count)s ответа",
+      "many": "%(count)s ответов",
       "other": "%(count)s ответов"
+    },
+    "post_key_warning": {
+      "confirm": "Вы собираетесь опубликовать ваш приватный ключ или мастер-пароль, это может привести к потере вашего акканта и всех средств на нем.",
+      "warning": "Если кто-то попросил вас опубликовать или показать ваш приватный ключ, это возможно злоумышленник, который пытается украсть ваши токены.",
+      "checkbox": "Я понял"
     }
   },
   "navigation": {
@@ -227,7 +239,7 @@
     "app_center": "Центр приложений Steemit",
     "api_docs": "API-документация Steemit",
     "bluepaper": "Синяя бумага Steem",
-    "whitepaper": "Белая книга Steem"
+    "whitepaper": "Белая книга Steem",
     "intro_tagline": "Здесь говорят деньги.",
     "intro_paragraph": "Ваше мнение имеет цену. Присоединяйтесь к сообществу, которое платит за контент и за работу по отбору самого лучшего контента."
   },
@@ -239,7 +251,7 @@
     "shorten_title": "Сократите заголовок",
     "exceeds_maximum_length": "Превышает максимальную длину (%(maxKb)sKB)",
     "including_the_category": "(включая категорию «%(rootCategory)s»)",
-    "use_limited_amount_of_tags": "У вас %(tagsLength)s тэгов, включая %(includingCategory)s. Пожалуйста, используйте не более 5 в посте и категории.",
+    "use_limited_amount_of_tags": "У вас %(tagsLength)s тегов, включая %(includingCategory)s. Пожалуйста, используйте не более 5 в посте и категории.",
     "are_you_sure_you_want_to_clear_this_form": "Вы уверены, что вы хотите очистить эту форму?",
     "uploading": "Загрузка",
     "draft_saved": "Черновик сохранен.",
@@ -259,13 +271,13 @@
     "markdown_not_supported": "Markdown здесь не поддерживается"
   },
   "category_selector_jsx": {
-    "tag_your_story": "Добавь тэги (до 5 штук), первый тэг станет основной категорией.",
-    "select_a_tag": "Выбрать тэг",
+    "tag_your_story": "Добавь теги (до 5 штук), первый тег станет основной категорией.",
+    "select_a_tag": "Выбрать тег",
     "maximum_tag_length_is_24_characters": "Максимальная длина категории 24 знака",
     "use_limited_amount_of_categories": "Пожалуйста, используйте только %(amount)s категории",
     "use_only_lowercase_letters": "Используйте только символы нижнего регистра",
     "use_one_dash": "Используйте только одно тире",
-    "use_spaces_to_separate_tags": "Используйте пробел чтобы разделить тэги",
+    "use_spaces_to_separate_tags": "Используйте пробел чтобы разделить теги",
     "use_only_allowed_characters": "Используйте только строчные буквы, цифры и одно тире",
     "must_start_with_a_letter": "Должно начинаться с буквы",
     "must_end_with_a_letter_or_number": "Должно заканчиваться с буквы или номера"
@@ -336,23 +348,27 @@
     "explore_trending_articles": "Посмотреть статьи, набирающие популярность",
     "read_the_quick_start_guide": "Прочтите краткое руководство",
     "browse_the_faq": "Просмотреть ЧаВО",
-    "users_curation_rewards": "Кураторские вознаграждения %(name)s",
-    "users_permissions": "Разрешения %(name)s",
     "followers": "Подписчики",
     "this_is_users_reputations_score_it_is_based_on_history_of_votes": "Это репутация %(name)s.\n\nРепутация рассчитывается на основе истории полученных голосов и используется для сокрытия низкокачественного контента.",
     "follower_count": {
       "zero": "Нет подписчиков",
       "one": "1 подписчик",
+      "few": "%(count)s подписчика",
+      "many": "%(count)s подписчиков",
       "other": "%(count)s подписчиков"
     },
     "followed_count": {
       "zero": "Ни на кого не подписан",
       "one": "1 подписок",
+      "few": "%(count)s подписки",
+      "many": "%(count)s подписок",
       "other": "%(count)s подписок"
     },
     "post_count": {
       "zero": "Постов нет",
       "one": "1 пост",
+      "few": "%(count)s поста",
+      "many": "%(count)s постов",
       "other": "%(count)s постов"
     }
   },
@@ -390,6 +406,8 @@
     "and_more": "и %(count)s больше",
     "votes_plural": {
       "one": "%(count)s голоса",
+      "few": "%(count)s голоса",
+      "many": "%(count)s голосов",
       "other": "%(count)s голосов"
     }
   },
@@ -399,6 +417,8 @@
     "you_have_votes_remaining": {
       "zero": "У Вас не осталось голосов",
       "one": "У Вас остался 1 голос",
+      "few": "У Вас осталось %(count)s голоса",
+      "many": "У Вас осталось %(count)s голосов",
       "other": "У Вас осталось %(count)s голосов"
     },
     "you_can_vote_for_maximum_of_witnesses": "Вы можете голосовать максимум за 30 делегатов",
@@ -417,11 +437,15 @@
     "response_count_tooltip": {
       "zero": "ответов пока нет. Нажмите чтобы ответить.",
       "one": "1 ответ. Нажмите чтобы ответить.",
+      "few": "%(count)s ответа. Нажмите чтобы ответить.",
+      "many": "%(count)s ответов. Нажмите чтобы ответить.",
       "other": "%(count)s ответов. Нажмите чтобы ответить."
     },
     "vote_count": {
       "zero": "нет голосов",
       "one": "1 голос",
+      "few": "%(count)s голоса",
+      "many": "%(count)s голосов",
       "other": "%(count)s голосов"
     }
   },
@@ -474,8 +498,6 @@
   "postsummary_jsx": {
     "resteemed": "Поделиться",
     "resteemed_by": "Репостнуто",
-    "this_post_is": "Этот пост",
-    "you_can": "Вы можете",
     "reveal_it": "посмотреть пост",
     "adjust_your": "откорректируйте свои",
     "display_preferences": "настройки отображения",
@@ -550,8 +572,9 @@
     "keep_me_logged_in": "Оставить меня залогиненным",
     "amazing_community": "удивительное сообщество",
     "to_comment_and_reward_others": " комментировать и вознаграждать других.",
-    "sign_up_now_to_earn": "Зарегистрируйтесь сейчас, чтобы заработать ",
-    "free_money": "ЛЕГКИЕ ДЕНЬГИ!",
+    "sign_up_get_steem": "Sign up. Get STEEM",
+    "signup_button": "Зарегистрируйтесь",
+    "signup_button_emphasis": " сейчас!",
     "returning_users": "Вернувшиеся пользователи: ",
     "join_our": "Присоединяйтесь к нашему"
   },

@@ -42,7 +42,8 @@ const sagaMiddleware = createSagaMiddleware(
 let middleware;
 
 if (process.env.BROWSER && process.env.NODE_ENV === 'development') {
-    middleware = compose(
+    const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+    middleware = composeEnhancers(
         applyMiddleware(sagaMiddleware)
     );
 } else {
@@ -58,7 +59,7 @@ const onRouterError = (error) => {
     console.error('onRouterError', error);
 };
 
-async function universalRender({ location, initial_state, offchain, ErrorPage, tarantool }) {
+async function universalRender({ location, initial_state, offchain, ErrorPage, tarantool, userPreferences }) {
     let error, redirect, renderProps;
     try {
         [error, redirect, renderProps] = await runRouter(location, RootRoute);
@@ -88,8 +89,8 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
         const history = syncHistoryWithStore(browserHistory, store);
 
         const scroll = useScroll((prevLocation, context) => {
-            if (context.location.hash || context.location.action === 'POP') return false;
-            return !prevLocation || prevLocation.location.pathname !== context.location.pathname;
+            //useScroll emits a 'POP' event on page load (because dumb?) so rather !PUSH, we check for null
+            return (prevLocation !== null && context.location.action === 'POP')
         });
         if (process.env.NODE_ENV === 'production') {
             console.log('%c%s', 'color: red; background: yellow; font-size: 24px;', 'WARNING!');
@@ -168,6 +169,7 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
         offchain.server_location = location;
         server_store = createStore(rootReducer, { global: onchain, offchain});
         server_store.dispatch({type: '@@router/LOCATION_CHANGE', payload: {pathname: location}});
+        server_store.dispatch({type: 'SET_USER_PREFERENCES', payload: userPreferences});
         if (offchain.account) {
             try {
                 const notifications = await tarantool.select('notifications', 0, 1, 0, 'eq', offchain.account);

@@ -8,6 +8,7 @@ bitterx
 bittex
 bittrax
 bittre
+bittrec
 bittres
 bittrex.com
 bittrexe
@@ -92,6 +93,9 @@ minnowboster
 minowbooster
 blocktades
 bloocktrades
+bloctrades
+blocktradess
+blocktrade
 `.trim().split('\n');
 
 export default list;

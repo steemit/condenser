@@ -21,7 +21,7 @@ const defaultNavigate = (e) => {
     browserHistory.push(a.pathname + a.search + a.hash);
 };
 
-function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate, toggleOffCanvasMenu, probablyLoggedIn}) {
+function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate, toggleOffCanvasMenu, probablyLoggedIn, nightmodeEnabled, toggleNightmode}) {
     const mcn = 'menu' + (vertical ? ' vertical show-for-small-only' : '');
     const mcl = vertical ? '' : ' sub-menu';
     const lcn = vertical ? '' : 'show-for-medium';
@@ -35,6 +35,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
     const comments_link = `/@${username}/comments`;
     const reset_password_link = `/@${username}/password`;
     const settings_link = `/@${username}/settings`;
+    const tt_search = tt('g.search');
     if (loggedIn) { // change back to if(username) after bug fix:  Clicking on Login does not cause drop-down to close #TEMP!
         const user_menu = [
             {link: feed_link, icon: "home", value: tt('g.feed'), addon: <NotifiCounter fields="feed" />},
@@ -42,6 +43,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
             {link: comments_link, icon: 'replies', value: tt('g.comments')},
             {link: replies_link, icon: 'reply', value: tt('g.replies'), addon: <NotifiCounter fields="comment_reply" />},
             {link: wallet_link, icon: 'wallet', value: tt('g.wallet'), addon: <NotifiCounter fields="follow,send,receive,account_update" />},
+            {link: '#', icon: 'eye', onClick: toggleNightmode, value: tt('g.toggle_nightmode') },
             {link: reset_password_link, icon: 'key', value: tt('g.change_password')},
             {link: settings_link, icon: 'cog', value: tt('g.settings')},
             loggedIn ?
@@ -50,7 +52,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
         ];
         return (
             <ul className={mcn + mcl}>
-                <li className={lcn + " Header__search"}><a href="/static/search.html" title="Search">{vertical ? <span>Search</span> : <Icon name="search" />}</a></li>
+                <li className={lcn + " Header__search"}><a href="/static/search.html" title={tt_search}>{vertical ? <span>{tt_search}</span> : <Icon name="search" />}</a></li>
                 {submit_story}
                 {!vertical && submit_icon}
                 <LinkWithDropdown
@@ -77,7 +79,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
     if (probablyLoggedIn) {
         return (
             <ul className={mcn + mcl}>
-                {!vertical && <li className="Header__search"><a href="/static/search.html" title="Search"><Icon name="search" /></a></li>}
+                {!vertical && <li className="Header__search"><a href="/static/search.html" title={tt_search}><Icon name="search" /></a></li>}
                 <li className={lcn} style={{paddingTop: 0, paddingBottom: 0}}><LoadingIndicator type="circle" inline /></li>
                 {toggleOffCanvasMenu && <li className="toggle-menu Header__hamburger"><a href="#" onClick={toggleOffCanvasMenu}>
                     <span className="hamburger" />
@@ -87,7 +89,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
     }
     return (
         <ul className={mcn + mcl}>
-            {!vertical && <li className="Header__search"><a href="/static/search.html" title="Search"><Icon name="search" /></a></li>}
+            {!vertical && <li className="Header__search"><a href="/static/search.html" title={tt_search}><Icon name="search" /></a></li>}
             <li className={lcn}><a href="/pick_account">{tt('g.sign_up')}</a></li>
             <li className={lcn}><a href="/login.html" onClick={showLogin}>{tt('g.login')}</a></li>
             {submit_story}
@@ -107,7 +109,9 @@ TopRightMenu.propTypes = {
     logout: React.PropTypes.func.isRequired,
     vertical: React.PropTypes.bool,
     navigate: React.PropTypes.func,
-    toggleOffCanvasMenu: React.PropTypes.func
+    toggleOffCanvasMenu: React.PropTypes.func,
+    nightmodeEnabled: React.PropTypes.bool,
+    toggleNightmode: React.PropTypes.func,
 };
 
 export default connect(
@@ -124,7 +128,8 @@ export default connect(
         return {
             username,
             loggedIn,
-            probablyLoggedIn: false
+            probablyLoggedIn: false,
+            nightmodeEnabled: state.user.getIn(['user_preferences', 'nightmode']),
         }
     },
     dispatch => ({
@@ -135,6 +140,10 @@ export default connect(
         logout: e => {
             if (e) e.preventDefault();
             dispatch(user.actions.logout())
-        }
+        },
+        toggleNightmode: e => {
+            if (e) e.preventDefault();
+            dispatch({ type: 'TOGGLE_NIGHTMODE' });
+        },
     })
 )(TopRightMenu);

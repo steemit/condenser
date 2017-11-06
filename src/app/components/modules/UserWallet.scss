@@ -20,16 +20,10 @@
   margin-top: 1rem;
 }
 
-.UserWallet__dropdown {
-}
-
 .UserWallet__claimbox {
   margin: 1.5rem 0 0.5rem;
   padding: 1rem 1rem 1.1rem 1rem;
   border-radius: 5px;
-
-
-
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -42,8 +36,6 @@
   }     
 
   &-text {
-    // position: absolute;
-    // left: 0;
     font-weight: bold;
   }
   .button {

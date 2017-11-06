@@ -38,7 +38,7 @@ class Topics extends React.Component {
 
         if (compact) {
             return <select className={cn} onChange={(e) => browserHistory.push(e.target.value)} value={currentValue}>
-                <option key={'*'} value={'/' + order}>{tt('g.topics')}...</option>
+                <option key={'*'} value={'/' + order}>{tt('g.all_tags')}</option>
                 {categories.map(cat => {
                     const link = order ? `/${order}/${cat}` : `/${cat}`;
                     return <option key={cat} value={link}>{cat}</option>
@@ -48,19 +48,24 @@ class Topics extends React.Component {
 
         categories = categories.map(cat => {
             const link = order ? `/${order}/${cat}` : `/hot/${cat}`;
-            return (<li key={cat}>
-                        <Link to={link} activeClassName="active">{cat}</Link>
+            return (<li className="c-sidebar__list-item" key={cat}>
+                        <Link to={link} className="c-sidebar__link" activeClassName="active">{cat}</Link>
                     </li>);
         });
         return (
-            <ul className={cn}>
-                <li className="Topics__title" key={'*'}>{tt('g.tags_and_topics')}</li>
-                <hr />
-               {categories}
-               <li className="show-more">
-                   <Link to={`/tags`}>{tt('g.show_more_topics')}..</Link>
-               </li>
-            </ul>
+            <div className="c-sidebar__module">
+                <div className="c-sidebar__header">
+                    <h3 className="c-sidebar__h3" key={'*'}>{tt('g.tags_and_topics')}</h3>
+                </div>
+                <div className="c-sidebar__content">
+                    <ul className="c-sidebar__list">
+                        {categories}
+                        <li className="c-sidebar__link">
+                            <Link className="c-sidebar__link c-sidebar__link--emphasis" to={`/tags`}>{tt('g.show_more_topics')}..</Link>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         );
     }
 }
@@ -68,3 +73,4 @@ class Topics extends React.Component {
 export default connect(state => ({
     categories: state.global.get('tag_idx')
 }))(Topics);
+

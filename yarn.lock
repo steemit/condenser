@@ -2225,7 +2225,7 @@ delayed-stream@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/delayed-stream/-/delayed-stream-1.0.0.tgz#df3ae199acadfb7d440aaae0b29e2272b24ec619"
 
-delegates@^1.0.0:
+delegates@1.0.0, delegates@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/delegates/-/delegates-1.0.0.tgz#84c6e159b81904fdca59a0ef44cd870d31250f9a"
 
@@ -3745,7 +3745,7 @@ hide-powered-by@1.0.0:
   resolved "https://registry.yarnpkg.com/hide-powered-by/-/hide-powered-by-1.0.0.tgz#4a85ad65881f62857fc70af7174a1184dccce32b"
 
 highcharts@^4.2.3, highcharts@^4.2.5:
-  version v4.2.7
+  version "4.2.7"
   resolved "https://registry.yarnpkg.com/highcharts/-/highcharts-4.2.7.tgz#45cbed8e99c9c042e95f9c51076726496f686862"
 
 history@^3.0.0:
@@ -4580,6 +4580,12 @@ koa-is-json@1, koa-is-json@^1.0.0:
 koa-isbot@^0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/koa-isbot/-/koa-isbot-0.1.1.tgz#980e2546c697e3b9278c5fd32fe37e1374fe8253"
+
+koa-locale@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/koa-locale/-/koa-locale-1.3.0.tgz#95289ae6fa4098804a1ee8aadd46b0af1c82cbcb"
+  dependencies:
+    delegates "1.0.0"
 
 koa-logger@^1.3.0:
   version "1.3.1"
@@ -5902,6 +5908,10 @@ performance-now@^0.2.0:
 performance-now@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/performance-now/-/performance-now-2.1.0.tgz#6309f4e0e5fa913ec1c69307ae364b4b377c9e7b"
+
+picturefill@^3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/picturefill/-/picturefill-3.0.2.tgz#fa3d35fffbef5ab5300fe2ad9dca8f2e36cba27b"
 
 pify@^2.0.0, pify@^2.3.0:
   version "2.3.0"
@@ -7475,9 +7485,9 @@ stdout-stream@^1.4.0:
   dependencies:
     readable-stream "^2.0.1"
 
-"steem@github:steemit/steem-js#ec4439c":
-  version "0.6.4"
-  resolved "https://codeload.github.com/steemit/steem-js/tar.gz/ec4439c"
+"steem@github:steemit/steem-js#72a36c835a74f446da47e36feea5d5f1f4dde55b":
+  version "0.6.5"
+  resolved "https://codeload.github.com/steemit/steem-js/tar.gz/72a36c835a74f446da47e36feea5d5f1f4dde55b"
   dependencies:
     bigi "^1.4.2"
     bluebird "^3.4.6"

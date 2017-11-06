@@ -3,15 +3,13 @@ ul.PostsList__summaries {
 }
 
 .PostSummary {
-  padding: 0 0 0.5rem;
+  // padding: 0 0 0.5rem;
   margin: 0 0 1.25vw;
-  background-color: #fff;
   clear: left;
   @include clearfix;
 
   .PostSummary__nsfw-warning {
-    border: 1px solid $medium-gray;
-    border-radius: 0.5rem;
+    border: 1px solid $color-border-light;
     padding: 0.75rem 2rem;
     min-height: 80px;
     .PostSummary__footer {
@@ -25,14 +23,14 @@ ul.PostsList__summaries {
   }
 
   .nsfw-flag {
-     color: #C00;
-     border: 1px solid #C00;
+     color: $color-red;
+     border: 1px solid $color-red;
      font-size: 75%;
      border-radius: 3px;
      font-weight: normal;
      font-family: Arial;
      margin: 0 0.1rem;
-     padding: 0 0.2rem;
+     padding: 2px 5px;
   }
 }
 
@@ -54,7 +52,6 @@ ul.PostsList__summaries {
 
   img {
     margin: 0 auto;
-    margin-top: 0.2rem;
     display: block;
     max-width: 100%;
     max-height: 80vw;
@@ -97,15 +94,24 @@ ul.PostsList__summaries {
   width: auto;
   padding: 0.3rem 0.1rem 0.15rem;
   font-family: "Helvetica Neue", Helvetica, Verdana, Arial, sans-serif;
-  color: #666;
+  @include themify($themes) {
+    color: themed('textColorPrimary');  
+  }
   overflow: hidden;
   line-height: 1.4;
-  white-space: nowrap;
   text-overflow: ellipsis;
 
   a {
-    color: inherit;
     display: inline;
+    @include themify($themes) {
+      color: themed('textColorPrimary');  
+    }    
+  }
+}
+
+.layout-list .PostSummary__body {
+  @include MQ(M) {
+    white-space: nowrap;
   }
 }
 
@@ -132,13 +138,14 @@ ul.PostsList__summaries {
     @include hoverUnderline;
   }
   padding-left: 1rem;
-  margin-left: 1rem;
-  border-left: 1px solid #cacaca;
+  @include themify($themes) {
+    border-left: themed('borderLight'); 
+  } 
 
   .Reblog__button {
     margin-right: 1rem;
     padding-right: 1rem;
-    border-right: 1px solid #cacaca;
+    border-right: transparent;
   }
 }
 
@@ -169,10 +176,10 @@ ul.PostsList__summaries {
 /* Small only */
 @media screen and (max-width: 39.9375em) {
   .PostSummary {
-    padding: 1rem 0.5rem;
+    // padding: 1rem 0.5rem;
     margin-bottom: 0;
     border: none;
-    border-top: 1px solid $light-gray;
+    // border-top: 1px solid $light-gray;
   }
   .PostSummary__image {
     float: none;
@@ -203,7 +210,7 @@ ul.PostsList__summaries {
   }
   .PostSummary__time_author_category {
     margin-left: 0;
-    border-left: 1px solid #cacaca;
+    border-left: 1px solid $color-border-light;
     .Reblog__button {
         margin-right: 1rem;
         padding-right: 1rem;
@@ -211,3 +218,20 @@ ul.PostsList__summaries {
     }
   }
 }
+
+.articles__summary {
+    .nsfw-flag {
+     color: $color-red;
+     border: 1px solid $color-red;
+     font-size: 75%;
+     border-radius: 3px;
+     font-weight: normal;
+     font-family: Arial;
+     margin: 0 0.1rem;
+     padding: 2px 5px;
+     margin-right: 5px;
+  }
+}
+
+
+

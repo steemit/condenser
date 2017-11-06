@@ -1,6 +1,9 @@
 .VotesAndComments {
   path {
-    fill: $medium-gray;
+    transition: 0.2s all ease-in-out;
+    @include themify($themes) {
+     fill: themed('iconColorSecondary'); 
+    }       
   }
   circle {
     stroke: none;
@@ -13,11 +16,13 @@
 
 .VotesAndComments__votes {
   padding-right: 1rem;
-  border-right: 1px solid $medium-gray;
+  @include themify($themes) {
+    border-right: themed('borderLight'); 
+  }   
 }
 
 .VotesAndComments__comments {
-  padding-left: 1rem;
+  padding: 0 1rem;
 }
 
 /* Small only */

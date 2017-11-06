@@ -5,8 +5,12 @@
   padding: 0 3px;
   margin-left: 2px;
   margin-right: 2px;
-  background-color: #f8f8f8;
+  background-color: transparent;
   border-radius: 50%;
-  border: 1px solid #dadada;
-  color: $dark-gray;
+  position: relative;
+  top: -1px;
+  @include themify($themes) {
+    color: themed('textColorPrimary');
+    border: themed('borderDark');
+  }  
 }

@@ -116,17 +116,17 @@ class ChangePassword extends React.Component {
                             <hr />
                             <p>
                                 {tt('g.the_rules_of_APP_NAME.one', {APP_NAME})}
-                                <br/>
+                                <br />
                                 {tt('g.the_rules_of_APP_NAME.second', {APP_NAME})}
-                                <br/>
+                                <br />
                                 {tt('g.the_rules_of_APP_NAME.third', {APP_NAME})}
-                                <br/>
+                                <br />
                                 {tt('g.the_rules_of_APP_NAME.fourth')}
-                                <br/>
+                                <br />
                                 {tt('g.the_rules_of_APP_NAME.fifth')}
-                                <br/>
+                                <br />
                                 {tt('g.the_rules_of_APP_NAME.sixth')}
-                                <br/>
+                                <br />
                                 {tt('g.the_rules_of_APP_NAME.seventh')}
                             </p>
                         <hr />
@@ -164,7 +164,7 @@ class ChangePassword extends React.Component {
                             </label>
                         </span>
                         ||
-                        <center><button type="button" className="button hollow" onClick={this.generateWif}>{tt('g.click_to_generate_password')}</button></center>
+                        <button type="button" className="button hollow" onClick={this.generateWif}>{tt('g.click_to_generate_password')}</button>
                     }
 
                     <br></br>
@@ -178,14 +178,14 @@ class ChangePassword extends React.Component {
 
                     <br />
 
-                    <label><input {...cleanReduxInput(confirmCheck)} type="checkbox" /> {tt('g.understand_that_APP_NAME_cannot_recover_password', {APP_NAME})}.</label>
+                    <label><input {...cleanReduxInput(confirmCheck)} type="checkbox" /> {tt('g.understand_that_APP_NAME_cannot_recover_password', {APP_NAME})}</label>
                     {confirmCheck.touched && confirmCheck.error && <div className="error">{confirmCheck.error}</div>}
 
-                    <label><input {...cleanReduxInput(confirmSaved)} type="checkbox" />{tt('g.i_saved_password')}.</label>
+                    <label><input {...cleanReduxInput(confirmSaved)} type="checkbox" />{tt('g.i_saved_password')}</label>
                     {confirmSaved.touched && confirmSaved.error && <div className="error">{confirmSaved.error}</div>}
                     <br />
                     {loading && <div><LoadingIndicator type="circle" /></div>}
-                    {!loading && <div>
+                    {!loading && <div className="ChangePassword__btn-container">
                         <div className="error">{error2}</div>
                         <button type="submit" className="button" disabled={loading}>
                             {tt('g.update_password')}

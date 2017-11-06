@@ -14,6 +14,7 @@ import {List} from 'immutable'
 import tt from 'counterpart';
 import {parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
 import {Long} from 'bytebuffer';
+import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 
 // returns true if the comment has a 'hide' flag AND has no descendants w/ positive payout
 function hideSubtree(cont, c) {
@@ -159,9 +160,10 @@ class CommentImpl extends React.Component {
         if (window.location.hash == this.props.anchor_link) {
             const comment_el = document.getElementById(this.props.anchor_link)
             if (comment_el) {
-                comment_el.scrollIntoView(true);
-                document.body.scrollTop -= 200;
-                this.setState({highlight: true})
+                comment_el.scrollIntoView(true)
+                const scrollingEl = document.scrollingElement || document.documentElement;
+                scrollingEl.scrollTop -= 100;
+                this.setState({highlight: true});
             }
         }
     }
@@ -258,6 +260,9 @@ class CommentImpl extends React.Component {
         // const get_asset_value = ( asset_str ) => { return parseFloat( asset_str.split(' ')[0] ); }
         // const steem_supply = this.props.global.getIn(['props','current_supply']);
 
+        // hide images if author is in blacklist
+        const hideImages = ImageUserBlockList.includes(author)
+
         const showDeleteOption = username === author && allowDelete
         const showEditOption = username === author
         const showReplyOption = comment.depth < 255
@@ -272,6 +277,7 @@ class CommentImpl extends React.Component {
                 formId={post + '-viewer'}
                 text={comment.body}
                 noImage={noImage || gray}
+                hideImages={hideImages}
                 jsonMetadata={jsonMetadata} />);
             controls = (<div>
               <Voting post={post} />

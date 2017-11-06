@@ -72,6 +72,8 @@
   }
 }
 
+
+
 .Comment__header_collapse {
   float: right;
   > a {
@@ -91,13 +93,17 @@
 
 .Comment__footer {
   margin-left: 62px;
-  color: $dark-gray;
+  @include themify($themes) {
+    color: themed('textColorPrimary');
+  }
   a {
-    color: $dark-gray;
-    @include hoverUnderline;
+   @extend .link;
+   @extend .link--primary;
   }
   .Voting__voters_list {
-    border-right: 1px solid $medium-gray;
+    @include themify($themes) {
+      border-right: themed('border');
+    }
     padding-right: 1rem;
     margin-right: 1rem;
   }
@@ -119,7 +125,6 @@
     border-top: 1px solid $light-gray;
     padding-top: 1rem;
     clear: none;
-    background: white;
     button {
       opacity: 0.35;
       &:hover {opacity: 0.5;}

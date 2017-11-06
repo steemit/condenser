@@ -5,7 +5,6 @@ import Slider from 'react-rangeslider';
 import Icon from 'app/components/elements/Icon';
 import FormattedAsset from 'app/components/elements/FormattedAsset';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
-import pluralize from 'pluralize';
 import {formatDecimal, parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
@@ -14,12 +13,12 @@ import CloseButton from 'react-foundation-components/lib/global/close-button';
 import tt from 'counterpart';
 
 const ABOUT_FLAG = <div>
-    <p>Flagging a post can remove rewards and make this material less visible.  Some common reasons to flag:</p>
+    <p>{tt('voting_jsx.flagging_post_can_remove_rewards_the_flag_should_be_used_for_the_following')}</p>
     <ul>
-        <li>Disagreement on rewards</li>
-        <li>Fraud or Plagiarism</li>
-        <li>Hate Speech or Internet Trolling</li>
-        <li>Intentional miscategorized content or Spam</li>
+        <li>{tt('voting_jsx.disagreement_on_rewards')}</li>
+        <li>{tt('voting_jsx.fraud_or_plagiarism')}</li>
+        <li>{tt('voting_jsx.hate_speech_or_internet_trolling')}</li>
+        <li>{tt('voting_jsx.intentional_miss_categorized_content_or_spam')}</li>
     </ul>
 </div>;
 
@@ -144,7 +143,7 @@ class Voting extends React.Component {
             // myVote === current vote
             const dropdown = <FoundationDropdown show={showWeight} onHide={() => this.setState({showWeight: false})} className="Voting__adjust_weight_down">
                 {(myVote == null || myVote === 0) && net_vesting_shares > VOTE_WEIGHT_DROPDOWN_THRESHOLD &&
-                    <div>
+                    <div className="weight-container">
                         <div className="weight-display">- {weight / 100}%</div>
                         <Slider min={100} max={10000} step={100} value={weight} onChange={this.handleWeightChange} />
                     </div>
@@ -189,24 +188,24 @@ class Voting extends React.Component {
         const payoutItems = [];
 
         if(cashout_active) {
-            payoutItems.push({value: 'Potential Payout $' + formatDecimal(pending_payout).join('')});
+            payoutItems.push({value: tt('voting_jsx.pending_payout', {value: formatDecimal(pending_payout).join('')})});
         }
         if(cashout_active) {
             payoutItems.push({value: <TimeAgoWrapper date={cashout_time} />});
         }
 
         if(max_payout == 0) {
-            payoutItems.push({value: 'Payout Declined'})
+            payoutItems.push({value: tt('voting_jsx.payout_declined')})
         } else if (max_payout < 1000000) {
-            payoutItems.push({value: 'Max Accepted Payout $' + formatDecimal(max_payout).join('')})
+            payoutItems.push({value: tt('voting_jsx.max_accepted_payout', {value: formatDecimal(max_payout).join('')})})
         }
         if(promoted > 0) {
-            payoutItems.push({value: 'Promotion Cost $' + formatDecimal(promoted).join('')});
+            payoutItems.push({value: tt('voting_jsx.promotion_cost', {value: formatDecimal(promoted).join('')})});
         }
         if(total_author_payout > 0) {
-            payoutItems.push({value: 'Past Payouts $' + formatDecimal(total_author_payout + total_curator_payout).join('')});
-            payoutItems.push({value: ' - Author: $' + formatDecimal(total_author_payout).join('')});
-            payoutItems.push({value: ' - Curators: $' + formatDecimal(total_curator_payout).join('')});
+            payoutItems.push({value: tt('voting_jsx.past_payouts', {value: formatDecimal(total_author_payout + total_curator_payout).join('')})});
+            payoutItems.push({value: tt('voting_jsx.past_payouts_author', {value: formatDecimal(total_author_payout).join('')})});
+            payoutItems.push({value: tt('voting_jsx.past_payouts_curators', {value: formatDecimal(total_curator_payout).join('')})});
         }
         const payoutEl = <DropdownMenu el="div" items={payoutItems}>
             <span style={payout_limit_hit ? {opacity: '0.5'} : {}}>
@@ -227,9 +226,9 @@ class Voting extends React.Component {
                 voters.push({value: (sign > 0 ? '+ ' : '- ') + voter, link: '/@' + voter})
             }
             if (total_votes > voters.length) {
-                voters.push({value: <span>&hellip; and {(total_votes - voters.length)} {tt('g.more')}</span>});
+                voters.push({value: <span>&hellip; {tt('voting_jsx.and_more', {count: total_votes - voters.length})}</span>});
             }
-            voters_list = <DropdownMenu selected={pluralize('votes', total_votes, true)} className="Voting__voters_list" items={voters} el="div" />;
+            voters_list = <DropdownMenu selected={tt('voting_jsx.votes_plural', {count: total_votes})} className="Voting__voters_list" items={voters} el="div" />;
         }
 
         let voteUpClick = this.voteUp;
@@ -249,7 +248,7 @@ class Voting extends React.Component {
             <span className="Voting">
                 <span className="Voting__inner">
                     <span className={classUp}>
-                        {votingUpActive ? up : <a href="#" onClick={voteUpClick} title={tt(myVote > 0 ? 'g.remove_vote' : 'g.upvote')}>{up}</a>}
+                        {votingUpActive ? up : <a href="#" onClick={voteUpClick} title={myVote > 0 ? tt('g.remove_vote') : tt('g.upvote')}>{up}</a>}
                         {dropdown}
                     </span>
                     {payoutEl}
@@ -303,7 +302,7 @@ export default connect(
             dispatch(transaction.actions.broadcastOperation({
                 type: 'vote',
                 operation: {voter: username, author, permlink, weight,
-                    __config: {title: weight < 0 ? 'Confirm Flag' : null},
+                    __config: {title: weight < 0 ? tt('voting_jsx.confirm_flag') : null},
                 },
                 confirm,
             }))

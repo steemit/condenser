@@ -28,6 +28,7 @@ $themes: (
     buttonBackground: $color-blue-original-dark,
     buttonBackgroundHover: $color-blue-original-light,
     buttonText: $color-text-white,
+    buttonTextShadow: 0 1px 0 rgba(0,0,0,0.20),
     buttonTextHover: $color-text-white,
     buttonBoxShadow: $color-transparent,        
   ),
@@ -60,6 +61,7 @@ $themes: (
     buttonBackground: $color-blue-black,
     buttonBackgroundHover: $color-teal,
     buttonText: $color-text-white,
+    buttonTextShadow: 0 1px 0 rgba(0,0,0,0.20),
     buttonTextHover: $color-white,
     buttonBoxShadow: $color-teal,
     buttonBoxShadowHover: $color-blue-black,    
@@ -92,7 +94,8 @@ $themes: (
     contentBorderAccent: $color-teal,
     buttonBackground: $color-white,
     buttonBackgroundHover: $color-teal,
-    buttonText: $color-blue-black,
+    buttonText: $color-text-white,
+    buttonTextShadow: 0 1px 0 rgba(0,0,0,0),
     buttonTextHover: $color-white,
     buttonBoxShadow: $color-teal,
     buttonBoxShadowHover: $color-white,
@@ -228,7 +231,7 @@ $themes: (
       background-color: themed('buttonBackgroundHover');  
       box-shadow: 2px 2px 2px 0 rgba(0,0,0,0.1), 7px 7px 0 0 themed('buttonBoxShadowHover');   
       color: themed('buttonTextHover');
-      text-shadow: 0 1px 0 rgba(0,0,0,0.20);
+      text-shadow: themed('buttonTextShadow');
     }
   }
   &:visited, &:active {

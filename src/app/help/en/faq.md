@@ -1223,10 +1223,7 @@ Currently, the Steem and Steemit logos are the same and is free to use. In the f
 <a class="anchor" name="Can_I_purchase_official_Steemit_merchandise"></a>
 ## Can I purchase official Steemit merchandise?
 
-There is no official merchandise yet, but it is easy to make Steemit gear on zazzle.com or similar websites. 
-
-Here is a post with instructions from @artist1989:
-https://steemit.com/art/@artist1989/custom-steem-and-steemit-art-and-instructions-on-how-to-create-your-very-own-steem-steemit-gear-t-shirts-coffee-mugs-etc
+Yes. Official Steemit merchandise can be purchased from [The Steemit Shop](https://thesteemitshop.com/).
 
 <a href="/faq.html#Table_of_Contents_Steemit__Inc">^</a>
 <a class="anchor" name="Did_Steemit__pre_mine__tokens"></a>

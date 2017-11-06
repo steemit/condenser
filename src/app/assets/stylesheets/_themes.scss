@@ -94,7 +94,7 @@ $themes: (
     contentBorderAccent: $color-teal,
     buttonBackground: $color-white,
     buttonBackgroundHover: $color-teal,
-    buttonText: $color-text-white,
+    buttonText: $color-blue-dark,
     buttonTextShadow: 0 1px 0 rgba(0,0,0,0),
     buttonTextHover: $color-white,
     buttonBoxShadow: $color-teal,
@@ -237,6 +237,11 @@ $themes: (
   &:visited, &:active {
     @include themify($themes) {
       color: themed('buttonText');  
+    }
+    &:hover, &:focus {
+      @include themify($themes) {
+        color: themed('buttonTextHover');  
+      }
     } 
   } 
 }

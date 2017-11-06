@@ -164,7 +164,6 @@ $themes: (
       } 
     }
   }
-
   &--secondary {
     @include themify($themes) {
         color: themed('textColorSecondary');  
@@ -248,24 +247,24 @@ $themes: (
 }
 
 .button.disabled, .button[disabled] {
-    opacity: 0.25;
-    cursor: not-allowed;
-    box-shadow: 0px 0px 0px 0 rgba(0,0,0,0);
-      @include themify($themes) {
-        background-color: themed('buttonBackground');  
-        box-shadow: 0px 0px 0px 0 rgba(0,0,0,0);
-        color: themed('buttonText');
-      }    
-    &:hover {
-      @include themify($themes) {
-        background-color: themed('buttonBackground');  
-        box-shadow: 0px 0px 0px 0 rgba(0,0,0,0);
-        color: themed('buttonText');
-      }       
-    }
+  opacity: 0.25;
+  cursor: not-allowed;
+  box-shadow: 0px 0px 0px 0 rgba(0,0,0,0);
+    @include themify($themes) {
+      background-color: themed('buttonBackground');  
+      box-shadow: 0px 0px 0px 0 rgba(0,0,0,0);
+      color: themed('buttonText');
+    }    
+  &:hover {
+    @include themify($themes) {
+      background-color: themed('buttonBackground');  
+      box-shadow: 0px 0px 0px 0 rgba(0,0,0,0);
+      color: themed('buttonText');
+    }       
+  }
 }
 
-// This class doesn't applying theming. To be used when there are no theming classes available (e.g. in modals and static server pages in signup)
+// This button class doesn't applying theming (just straight styles). To be used when there are no theming classes available (e.g. in modals and static server pages in signup)
 
 .e-btn {  
   &--black {
@@ -316,7 +315,3 @@ $themes: (
     }
   }
 }
-
-
-
-

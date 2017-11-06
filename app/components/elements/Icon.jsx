@@ -60,6 +60,7 @@ const icons = [
     'info_o',
     'feedback',
     'rocket-chat',
+    'telegram',
     'cog',
     'enter',
     'profile',

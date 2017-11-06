@@ -63,3 +63,17 @@ li.wrap-rocket-chat {
   }
 }
 
+li.wrap-telegram {
+  > a > span.Icon {
+    width: 1.5rem !important;
+    height: 1.5rem !important;
+    svg {
+      width: 1.5rem !important;
+      height: 1.5rem !important;
+      > path {
+        fill: #ffffff;
+      }
+    }
+  }
+}
+

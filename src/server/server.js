@@ -30,6 +30,7 @@ import config from 'config';
 import { routeRegex } from 'app/ResolveRoute';
 import secureRandom from 'secure-random';
 import userIllegalContent from 'app/utils/userIllegalContent';
+import koaLocale from 'koa-locale';
 
 if(cluster.isMaster)
     console.log('application server starting, please wait.');
@@ -61,6 +62,7 @@ csrf(app);
 
 app.use(mount(grant));
 app.use(flash({ key: 'flash' }));
+koaLocale(app);
 
 function convertEntriesToArrays(obj) {
     return Object.keys(obj).reduce((result, key) => {
@@ -73,8 +75,15 @@ const service_worker_js_content = fs
     .readFileSync(path.join(__dirname, './service-worker.js'))
     .toString();
 
-// some redirects
-app.use(function*(next) {
+// some redirects and health status
+app.use(function* (next) {
+
+    if (this.method === 'GET' && this.url === '/.well-known/healthcheck.json') {
+        this.status = 200;
+        this.body = {status: 'ok'};
+        return;
+    }
+
     // redirect to home page/feed if known account
     if (this.method === 'GET' && this.url === '/' && this.session.a) {
         this.status = 302;

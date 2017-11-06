@@ -26,7 +26,7 @@ class VotesAndComments extends React.Component {
         const {comments, commentsLink, post_obj} = this.props;
         const total_votes = post_obj.getIn(['stats', 'total_votes']);
         let comments_tooltip = tt('votesandcomments_jsx.no_responses_yet_click_to_respond');
-        if (comments > 0) comments_tooltip = `${tt('votesandcomments_jsx.response_count', {count: comments})}. ${tt('votesandcomments_jsx.click_to_respond')}.`
+        if (comments > 0) comments_tooltip = tt('votesandcomments_jsx.response_count_tooltip', {count: comments});
 
         return (
             <span className="VotesAndComments">

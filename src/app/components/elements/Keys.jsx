@@ -41,7 +41,24 @@ class Keys extends Component {
             pubkeys = authorities.map(a => a.get(0))
         }
         const rowClass = 'hoverBackground'
-        let idx = 0
+        let idx = 0;
+        let tt_auth_type;
+        switch (authType.toLowerCase()) {
+            case 'owner':
+                tt_auth_type = tt('g.owner');
+                break;
+            case 'active':
+                tt_auth_type = tt('g.active');
+                break;
+            case 'posting':
+                tt_auth_type = tt('g.posting');
+                break;
+            case 'memo':
+                tt_auth_type = tt('g.memo');
+                break;
+            default:
+                tt_auth_type = authType;
+        }
         const auths = pubkeys.map(pubkey => (
             <div key={idx++}>
                 <div className="row">
@@ -62,7 +79,7 @@ class Keys extends Component {
             <span>
                 <div className="row">
                     <div className="column small-12">
-                        <label>{tt('g.' + authType.toLowerCase())}</label>
+                        <label>{tt_auth_type}</label>
                         {auths}
                     </div>
                 </div>

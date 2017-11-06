@@ -1,16 +1,16 @@
 import config from 'config';
-const newrelic = config.get('newrelic') ? require('newrelic') : undefined;
 
 import * as steem from 'steem';
-
-delete process.env.BROWSER;
 
 const path = require('path');
 const ROOT = path.join(__dirname, '../..');
 
 // Tell `require` calls to look into `/app` also
 // it will avoid `../../../../../` require strings
-process.env.NODE_PATH = path.resolve(__dirname, '..');
+
+// use Object.assign to bypass transform-inline-environment-variables-babel-plugin (process.env.NODE_PATH= will not work)
+Object.assign(process.env, {NODE_PATH: path.resolve(__dirname, '..')});
+
 require('module').Module._initPaths();
 
 // Load Intl polyfill
@@ -47,11 +47,6 @@ global.webpackIsomorphicTools.server(ROOT, () => {
         steem.config.set('address_prefix', config.get('address_prefix'));
         steem.config.set('chain_id', config.get('chain_id'));
 
-        if (newrelic) {
-            steem.api.on('track-performance', (method, time_taken) => {
-                newrelic.recordMetric(`WebTransaction/Performance/steem-js/${method}`, time_taken / 1000.0);
-            });
-        }
         // const CliWalletClient = require('shared/api_client/CliWalletClient').default;
         // if (process.env.NODE_ENV === 'production') connect_promises.push(CliWalletClient.instance().connect_promise());
         try {

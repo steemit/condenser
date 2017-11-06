@@ -4,7 +4,7 @@ import React from "react";
 import { renderToString } from "react-dom/server";
 import models from "db/models";
 import ServerHTML from "server/server-html";
-import twilioVerify from "server/utils/twilio";
+// import twilioVerify from "server/utils/twilio";
 import teleSignVerify from "server/utils/teleSign";
 import CountryCode from "app/components/elements/CountryCode";
 import { getRemoteIp, checkCSRF } from "server/utils/misc";
@@ -77,6 +77,21 @@ function* confirmMobileHandler(e) {
         return;
     }
 
+    const number_of_created_accounts = yield models.sequelize.query(
+        `select count(*) as result from identities i join accounts a on a.user_id=i.user_id where i.provider='phone' and i.phone=:phone and a.created=1 and a.ignored<>1`,
+        { replacements: { phone: mid.phone }, type: models.sequelize.QueryTypes.SELECT }
+    );
+    if (number_of_created_accounts && number_of_created_accounts[0].result > 0) {
+        console.log(
+            "-- /confirm_mobile there are created accounts -->",
+            user.id,
+            mid.phone
+        );
+        this.flash = { error: "This phone number has already been used" };
+        this.redirect('/enter_mobile');
+        return;
+    }
+
     // successful new verified phone number
     yield mid.update({ provider: 'phone', verified: true });
     if (user.account_status === 'onhold') yield user.update({account_status: 'waiting'});
@@ -103,10 +118,10 @@ export default function useEnterAndConfirmMobilePages(app) {
         const country = this.query.country;
 
         const body = renderToString(
-            <div className="App">
+            <div className="App CreateAccount">
                 <MiniHeader />
                 <br />
-                <div className="row" style={{ maxWidth: "32rem" }}>
+                <div className="row CreateAccount__step" style={{ maxWidth: "32rem" }}>
                     <div className="column">
                         <Progress tabIndex="0" value={90} max={100} />
                         <form
@@ -114,30 +129,22 @@ export default function useEnterAndConfirmMobilePages(app) {
                             action="/submit_mobile"
                             method="POST"
                         >
-                            <h4 style={{ color: "#4078c0" }}>
+                            <h4 className="CreateAccount__title">
                                 Almost there!
                             </h4>
 
 
-                            <div className="secondary">
 
-				We need to send you a quick text.
-                                <br />
-                                <br />
-				With each Steemit account comes a free initial
+				<p>We need to send you a quick text. </p>
+                   
+				<p>With each Steemit account comes a free initial
 				grant of Steem Power!  Phone verification helps
-				cut down on spam accounts.
+				cut down on spam accounts.</p>
 
-                                <br />
-                                <br />
-
-				<em>Your phone number will not be used for any
+				<p><em>Your phone number will not be used for any
 other purpose other than account verification and (potentially) account
-recovery should your account ever be compromised.</em>
+recovery should your account ever be compromised.</em></p>
 
-
-                            </div>
-                            <br />
                             <input type="hidden" name="csrf" value={this.csrf} />
                             <label>
                                 Country Code
@@ -161,8 +168,8 @@ recovery should your account ever be compromised.</em>
                             <div className="error">{this.flash.error}</div>
                             <input
                                 type="submit"
-                                className="button"
-                                value="CONTINUE"
+                                className="btn-continue"
+                                value="Continue"
                             />
                         </form>
                     </div>
@@ -201,7 +208,7 @@ recovery should your account ever be compromised.</em>
             return;
         }
 
-        const phone = digits(parseInt(country) + localPhone);
+        let phone = digits(parseInt(country) + localPhone);
 
         // const blocked_prefixes = yield models.List.findAll({
         //     attributes: ["id", "value"],
@@ -217,18 +224,6 @@ recovery should your account ever be compromised.</em>
         //     }
         // }
 
-        const number_of_created_accounts = yield models.sequelize.query(`select count(*) as result from identities i join accounts a on a.user_id=i.user_id where i.provider='phone' and i.phone='${phone}' and a.created=1 and a.ignored<>1`);
-        if (number_of_created_accounts && number_of_created_accounts[0][0].result > 0) {
-            console.log(
-                "-- /submit_mobile there are created accounts -->",
-                user_id,
-                phone
-            );
-            this.flash = { error: "This phone number has already been used" };
-            this.redirect(enterMobileUrl);
-            return;
-        }
-
         const confirmation_code = parseInt(
             secureRandom.randomBuffer(8).toString("hex"),
             16
@@ -239,6 +234,7 @@ recovery should your account ever be compromised.</em>
         let mid = yield models.Identity.findOne({
             where: { user_id, provider: "phone" }
         });
+
         if (mid) {
             if (mid.verified) {
                 if (mid.phone === phone) {
@@ -260,25 +256,7 @@ recovery should your account ever be compromised.</em>
                 this.redirect(enterMobileUrl);
                 return;
             }
-            yield mid.update({ confirmation_code, phone });
-        } else {
-            mid = yield models.Identity.create({
-                provider: "phone",
-                user_id,
-                uid: this.session.uid,
-                phone,
-                verified: false,
-                confirmation_code
-            });
         }
-        console.log(
-            '-- /submit_mobile -->',
-            this.session.uid,
-            this.session.user,
-            phone,
-            mid.id
-        );
-        const ip = getRemoteIp(this.req);
 
         // const twilioResult = yield twilioVerify(phone);
         // console.log('-- /submit_mobile twilioResult -->', twilioResult);
@@ -293,20 +271,42 @@ recovery should your account ever be compromised.</em>
         const verifyResult = yield teleSignVerify({
             mobile: phone,
             confirmation_code,
-            ip,
+            ip: getRemoteIp(this.req),
             ignore_score: true //twilioResult === 'pass'
         });
-        if (verifyResult && verifyResult.score) {
-            mid.update({score: verifyResult.score});
-        }
-        if (verifyResult && verifyResult.error) {
+
+        if (verifyResult.error) {
             this.flash = { error: verifyResult.error };
             this.redirect(enterMobileUrl);
             return;
         }
 
+        phone = verifyResult.phone;
+
+        if (mid) {
+            yield mid.update({confirmation_code, phone, score: verifyResult.score});
+        } else {
+            mid = yield models.Identity.create({
+                provider: "phone",
+                user_id,
+                uid: this.session.uid,
+                phone,
+                verified: false,
+                confirmation_code,
+                score: verifyResult.score
+            });
+        }
+
+        console.log(
+            '-- /submit_mobile -->',
+            this.session.uid,
+            this.session.user,
+            phone,
+            mid.id
+        );
+
         const body = renderToString(
-            <div className="App">
+            <div className="App CreateAccount">
                 <MiniHeader />
                 <br />
                 <div className="row" style={{ maxWidth: "32rem" }}>
@@ -341,7 +341,7 @@ recovery should your account ever be compromised.</em>
                         <input
                             type="submit"
                             className="button"
-                            value="CONTINUE"
+                            value="Continue"
                         />
                     </form>
                 </div>

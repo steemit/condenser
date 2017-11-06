@@ -2,12 +2,9 @@ import React from 'react';
 import {connect} from 'react-redux'
 import user from 'app/redux/User';
 import tt from 'counterpart';
-import {ALLOWED_CURRENCIES} from 'app/client_config'
-import store from 'store';
 import transaction from 'app/redux/Transaction'
 import o2j from 'shared/clash/object2json'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
-import Userpic from 'app/components/elements/Userpic';
 import reactForm from 'app/utils/ReactForm'
 import UserList from 'app/components/elements/UserList';
 
@@ -15,15 +12,13 @@ import UserList from 'app/components/elements/UserList';
 class Settings extends React.Component {
 
     constructor(props) {
-        super()
-        this.initForm(props)
-        this.onNsfwPrefChange = this.onNsfwPrefChange.bind(this)
-        this.onNsfwPrefSubmit = this.onNsfwPrefSubmit.bind(this)
-    }
-
-    state = {
-        errorMessage: '',
-        successMessage: '',
+        super(props);
+        this.state = {
+            errorMessage: '',
+            successMessage: '',
+        }
+        this.initForm(props);
+        this.onNsfwPrefChange = this.onNsfwPrefChange.bind(this);
     }
 
     initForm(props) {
@@ -53,14 +48,8 @@ class Settings extends React.Component {
 
     onNsfwPrefChange(e) {
         const nsfwPref = e.currentTarget.value;
-        this.setState({nsfwPref: nsfwPref})
-    }
-
-    onNsfwPrefSubmit(e) {
-        const {accountname} = this.props;
-        const {nsfwPref} = this.state;
-        localStorage.setItem('nsfwPref-'+accountname, nsfwPref)
-        this.setState({oldNsfwPref: nsfwPref})
+        const userPreferences = {...this.props.user_preferences, nsfwPref}
+        this.props.setUserPreferences(userPreferences)
     }
 
     handleSubmit = ({updateInitialValues}) => {
@@ -123,9 +112,9 @@ class Settings extends React.Component {
     }
 
     handleLanguageChange = (event) => {
-        const language = event.target.value
-        store.set('language', language)
-        this.props.changeLanguage(language)
+        const locale = event.target.value;
+        const userPreferences = {...this.props.user_preferences, locale}
+        this.props.setUserPreferences(userPreferences)
     }
 
     render() {
@@ -136,22 +125,25 @@ class Settings extends React.Component {
 
         const {profile_image, cover_image, name, about, location, website} = this.state
 
-        const {follow, account, isOwnAccount, locale} = this.props
+        const {follow, account, isOwnAccount, user_preferences} = this.props
         const following = follow && follow.getIn(['getFollowingAsync', account.name]);
         const ignores = isOwnAccount && following && following.get('ignore_result')
 
         return <div className="Settings">
-            {/*<div className="row">*/}
-                {/*<div className="small-12 medium-6 large-4 columns">*/}
-                    {/*<label>{tt('g.choose_language')}*/}
-                        {/*<select defaultValue={locale} onChange={this.handleLanguageChange}>*/}
-                            {/*<option value="en">English</option>*/}
-                            {/*<option value="es">Spanish</option>*/}
-                        {/*</select>*/}
-                    {/*</label>*/}
-                {/*</div>*/}
-            {/*</div>*/}
-            {/*<br />*/}
+            <div className="row">
+                <div className="small-12 medium-6 large-4 columns">
+                    <label>{tt('g.choose_language')}
+                        <select defaultValue={user_preferences.locale} onChange={this.handleLanguageChange}>
+                            <option value="en">English</option>
+                            <option value="es">Spanish</option>
+                            <option value="ru">Russian</option>
+                            <option value="fr">French</option>
+                            <option value="it">Italian</option>
+                        </select>
+                    </label>
+                </div>
+            </div>
+            <br />
             <div className="row">
                 <form onSubmit={this.handleSubmitForm} className="small-12 medium-6 large-4 columns">
                     <h4>{tt('settings_jsx.public_profile_settings')}</h4>
@@ -212,14 +204,12 @@ class Settings extends React.Component {
                         <div>
                             {tt('settings_jsx.not_safe_for_work_nsfw_content')}
                         </div>
-                        <select value={this.state.nsfwPref} onChange={this.onNsfwPrefChange}>
+                        <select value={user_preferences.nsfwPref} onChange={this.onNsfwPrefChange}>
                             <option value="hide">{tt('settings_jsx.always_hide')}</option>
                             <option value="warn">{tt('settings_jsx.always_warn')}</option>
                             <option value="show">{tt('settings_jsx.always_show')}</option>
                         </select>
                         <br />
-                        <br />
-                        <input type="submit" onClick={this.onNsfwPrefSubmit} className="button" value={tt('settings_jsx.update')} disabled={this.state.nsfwPref == this.state.oldNsfwPref} />
                         <div>&nbsp;</div>
                     </div>
                 </div>}
@@ -244,7 +234,7 @@ export default connect(
         let metaData = account ? o2j.ifStringParseJSON(account.json_metadata) : {}
         if (typeof metaData === 'string') metaData = o2j.ifStringParseJSON(metaData); // issue #1237
         const profile = metaData && metaData.profile ? metaData.profile : {};
-        const locale = state.user.get('locale');
+        const user_preferences = state.app.get('user_preferences').toJS();
 
         return {
             account,
@@ -253,7 +243,7 @@ export default connect(
             isOwnAccount: username == accountname,
             profile,
             follow: state.global.get('follow'),
-            locale,
+            user_preferences,
             ...ownProps
         }
     },
@@ -265,6 +255,9 @@ export default connect(
         updateAccount: ({successCallback, errorCallback, ...operation}) => {
             const options = {type: 'account_update', operation, successCallback, errorCallback}
             dispatch(transaction.actions.broadcastOperation(options))
+        },
+        setUserPreferences: (payload) => {
+            dispatch({type: 'SET_USER_PREFERENCES', payload})
         }
     })
 )(Settings)

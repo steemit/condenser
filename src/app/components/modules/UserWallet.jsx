@@ -23,7 +23,9 @@ const assetPrecision = 1000;
 class UserWallet extends React.Component {
     constructor() {
         super();
-        this.state = {};
+        this.state = {
+            claimInProgress: false,
+        };
         this.onShowDepositSteem = (e) => {
             if (e && e.preventDefault) e.preventDefault();
             const name = this.props.current_user.get('username');
@@ -57,6 +59,12 @@ class UserWallet extends React.Component {
         };
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'UserWallet');
     }
+
+    handleClaimRewards = (account) => {
+        this.setState({ claimInProgress: true }); // disable the claim button
+        this.props.claimRewards(account);
+    }
+
     render() {
         const {onShowDepositSteem, onShowWithdrawSteem,
             onShowDepositSBD, onShowWithdrawSBD, onShowDepositPower} = this;
@@ -266,7 +274,7 @@ class UserWallet extends React.Component {
                     <div className="columns small-12">
                         <div className="UserWallet__claimbox">
                             Your current rewards: {rewards_str}
-                            <button className="button hollow float-right" onClick={e => {this.props.claimRewards(account)}}>{tt('userwallet_jsx.redeem_rewards')}</button>
+                            <button disabled={this.state.claimInProgress} className="button hollow float-right" onClick={e => {this.handleClaimRewards(account)}}>{tt('userwallet_jsx.redeem_rewards')}</button>
                         </div>
                     </div>
                 </div>
@@ -373,6 +381,9 @@ class UserWallet extends React.Component {
                 <div className="column small-12">
                     {/** history */}
                     <h4>{tt('userwallet_jsx.history')}</h4>
+                    <div className="secondary">
+                        <span>{tt('transfer_jsx.beware_of_spam_and_phishing_links')}</span>
+                    </div>
                     <table>
                         <tbody>
                         {transfer_log}

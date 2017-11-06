@@ -67,9 +67,6 @@
 
 .Comment__header {
   margin-left: 62px;
-    @include themify($themes) {
-      color: themed('textColorSecondary');
-    }
 }
 
 .Comment__header-user {

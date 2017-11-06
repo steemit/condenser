@@ -220,6 +220,7 @@ $themes: (
   text-transform: capitalize;
   border-radius: 0;
   text-decoration: none;
+  text-transform: capitalize;
   @include font-size(18px);       
   @include themify($themes) {
     background-color: themed('buttonBackground');  

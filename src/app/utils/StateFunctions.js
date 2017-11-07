@@ -7,14 +7,34 @@ import {fromJS} from 'immutable';
 
 export const numberWithCommas = (x) => x.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 
-export function vestsToSp(state, vesting_shares) {
+export function vestsToSpf(state, vesting_shares) {
     const {global} = state
-    const vests = assetFloat(vesting_shares, VEST_TICKER)
+    let vests = vesting_shares
+    if (typeof vesting_shares === 'string') {
+        vests = assetFloat(vesting_shares, VEST_TICKER)
+    }
     const total_vests = assetFloat(global.getIn(['props', 'total_vesting_shares']), VEST_TICKER)
     const total_vest_steem = assetFloat(global.getIn(['props', 'total_vesting_fund_steem']), LIQUID_TICKER)
-    const vesting_steemf = total_vest_steem * (vests / total_vests);
-    const steem_power = vesting_steemf.toFixed(3)
-    return steem_power
+    return total_vest_steem * (vests / total_vests)
+}
+
+export function vestsToSp(state, vesting_shares) {
+    return vestsToSpf(state, vesting_shares).toFixed(3)
+}
+
+export function spToVestsf(state, steem_power) {
+    const {global} = state
+    let power = steem_power
+    if (typeof power === 'string') {
+        power = assetFloat(power, LIQUID_TICKER)
+    }
+    const total_vests = assetFloat(global.getIn(['props', 'total_vesting_shares']), VEST_TICKER)
+    const total_vest_steem = assetFloat(global.getIn(['props', 'total_vesting_fund_steem']), LIQUID_TICKER)
+    return (steem_power / total_vest_steem) * total_vests
+}
+
+export function spToVests(state, vesting_shares) {
+    return spToVestsf(state, vesting_shares).toFixed(6)
 }
 
 export function vestingSteem(account, gprops) {
@@ -104,7 +124,7 @@ export function contentStats(content) {
     const hasPendingPayout = parsePayoutAmount(content.get('pending_payout_value')) >= 0.02
     const authorRepLog10 = repLog10(content.get('author_reputation'))
 
-    const gray = !hasPendingPayout && (authorRepLog10 < 1 || (authorRepLog10 < 65 && meetsGrayThreshold))
+    const gray = !hasPendingPayout && (authorRepLog10 < 1 || meetsGrayThreshold)
     const hide = !hasPendingPayout && (authorRepLog10 < 0) // rephide
 
     // Combine tags+category to check nsfw status

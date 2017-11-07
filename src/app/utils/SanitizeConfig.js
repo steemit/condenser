@@ -1,3 +1,4 @@
+import { getPhishingWarningMessage } from 'shared/HtmlReady'; // the only allowable title attribute for a div
 
 const iframeWhitelist = [
     {
@@ -48,7 +49,8 @@ export default ({large = true, highQualityPost = true, noImage = false, sanitize
             'webkitallowfullscreen', 'mozallowfullscreen'],
 
         // class attribute is strictly whitelisted (below)
-        div: ['class'],
+        // and title is only set in the case of a phishing warning
+        div: ['class', 'title'],
 
         // style is subject to attack, filtering more below
         td: ['style'],
@@ -91,17 +93,18 @@ export default ({large = true, highQualityPost = true, noImage = false, sanitize
 
             // replace http:// with // to force https when needed
             src = src.replace(/^http:\/\//i, '//')
-
             let atts = {src}
             if(alt && alt !== '') atts.alt = alt
             return {tagName, attribs: atts}
         },
         div: (tagName, attribs) => {
             const attys = {}
-            const classWhitelist = ['pull-right', 'pull-left', 'text-justify', 'text-rtl', 'text-center', 'text-right', 'videoWrapper']
+            const classWhitelist = ['pull-right', 'pull-left', 'text-justify', 'text-rtl', 'text-center', 'text-right', 'videoWrapper', 'phishy']
             const validClass = classWhitelist.find(e => attribs.class == e)
             if(validClass)
                 attys.class = validClass
+            if (validClass === 'phishy' && attribs.title === getPhishingWarningMessage())
+                attys.title = attribs.title
             return {
                 tagName,
                 attribs: attys

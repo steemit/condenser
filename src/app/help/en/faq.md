@@ -43,6 +43,7 @@
 - <a href="/faq.html#Will_I_receive_notifications_when_there_is_activity_with_my_account">Will I receive notifications when there is activity with my account?</a>
 - <a href="/faq.html#What_is_shown_in_my_profile">What is shown in my profile?</a>
 - <a href="/faq.html#How_do_I_change_my_avatar_image_and_other_profile_information">How do I change my avatar image and other profile information?</a>
+- <a href="/faq.html#What_is_the_recommend_size_for_the_cover_image">What is the recommend size for the cover image?</a>
 - <a href="/faq.html#How_can_I_control_whether_I_see__Not_Safe_For_Work___NSFW__content">How can I control whether I see "Not Safe For Work" (NSFW) content?</a>
 - <a href="/faq.html#How_do_I_search_for_content">How do I search for content?</a>
 - <a href="/faq.html#Can_I_see_which_users_I_have_muted">Can I see which users I have muted?</a>
@@ -55,6 +56,8 @@
 - <a href="/faq.html#What_can_users_post_to_Steemit">What can users post to Steemit?</a>
 - <a href="/faq.html#What_are_the_different_choices_for_post_rewards__50__50___Power_Up_100___Decline_Payout">What are the different choices for post rewards (50%/50%, Power Up 100%, Decline Payout)?</a>
 - <a href="/faq.html#How_do_I_add_images_and_photos_to_my_posts">How do I add images and photos to my posts?</a>
+- <a href="/faq.html#How_do_I_set_the_thumbnail_image_for_my_post">How do I set the thumbnail image for my post?</a>
+- <a href="/faq.html#What_is_the_recommend_aspect_ratio_for_thumbnail_images">What is the recommend aspect ratio for thumbnail images?</a>
 - <a href="/faq.html#How_do_I_add_videos_to_my_posts">How do I add videos to my posts?</a>
 - <a href="/faq.html#Is_there_a_way_I_can_make_my_images_smaller">Is there a way I can make my images smaller?</a>
 - <a href="/faq.html#What_are_tags">What are tags?</a>
@@ -96,6 +99,7 @@
 - <a href="/faq.html#Is_there_a_way_for_me_to_convert_my_Steem_Dollars_to_STEEM_without_waiting_3_5_days">Is there a way for me to convert my Steem Dollars to STEEM without waiting 3.5 days?</a>
 - <a href="/faq.html#What_can_I_do_with_my_STEEM_tokens">What can I do with my STEEM tokens?</a>
 - <a href="/faq.html#What_can_I_do_with_my_SBD_tokens">What can I do with my SBD tokens?</a>
+- <a href="/faq.html#What_is_a_MVEST">What is a MVEST?</a>
 - <a href="/faq.html#Can_I_sell_goods_and_services_on_Steemit">Can I sell goods and services on Steemit?</a>
 - <a href="/faq.html#How_can_I_withdraw_my_STEEM_or_SBD_coins">How can I withdraw my STEEM or SBD coins?</a>
 - <a href="/faq.html#Will_I_get_a_1099_from_Steemit">Will I get a 1099 from Steemit?</a>
@@ -155,7 +159,7 @@
 
 <a class="anchor" name="Table_of_Contents_Steemit__Inc"></a>
 ### Steemit, Inc.
-- <a href="/faq.html#Who_are_the_Steemit_co_founders">Who are the Steemit co-founders?</a>
+- <a href="/faq.html#Who_is_the_CEO_of_Steemit">Who is the CEO of Steemit?</a>
 - <a href="/faq.html#Can_I_invest_in_Steemit">Can I invest in Steemit?</a>
 - <a href="/faq.html#What_does_Steemit_s_development_roadmap_look_like">What does Steemit’s development roadmap look like?</a>
 - <a href="/faq.html#Am_I_allowed_to_use_the_Steemit_logo">Am I allowed to use the Steemit logo?</a>
@@ -172,7 +176,7 @@
 - <a href="/faq.html#What_do_I_do_if_I_lost_my_password_keys">What do I do if I lost my password/keys?</a>
 - <a href="/faq.html#Are_my_STEEM_and_Steem_Dollar_tokens_insured_in_the_event_of_a_hack_or_if_someone_takes_over_my_account">Are my STEEM and Steem Dollar tokens insured in the event of a hack or if someone takes over my account?</a>
 - <a href="/faq.html#What_should_I_do_if_I_discover_that_someone_hacked_my_account">What should I do if I discover that someone hacked my account?</a>
-- <a href="/faq.html#How_does_the_recovery_process_work">How does the recovery process work?</a>
+- <a href="/faq.html#How_does_the_stolen_account_recovery_process_work">How does the stolen account recovery process work?</a>
 - <a href="/faq.html#How_do_I_report_a_security_vulnerability">How do I report a security vulnerability?</a>
 
 <a class="anchor" name="Table_of_Contents_Developers"></a>
@@ -452,7 +456,7 @@ Currently, there are no options to receive notifications for votes directly on S
 
 At the top of your profile is your display name and reputation score. Below your display name is the number of followers you have, the number of posts and comments you have written, and the number of people you are following. It also shows the month and year when your account was created.
 
-You have the option to change your avatar and display name on the Settings page. There, you can set additional information such as "about" information, your location, and add a link to a website of your choosing.
+You have the option to change your avatar and display name on the Settings page. There, you can set additional information such as "about" information, your location, and add a link to a website of your choosing. You also have the option to set a cover image for your profile.
 
 You can view your own profile by clicking on the link to your Blog in your account menu.
 
@@ -460,7 +464,13 @@ You can view your own profile by clicking on the link to your Blog in your accou
 <a class="anchor" name="How_do_I_change_my_avatar_image_and_other_profile_information"></a>
 ## How do I change my avatar image and other profile information?
 
-Your profile info and avatar image are set in your Settings page. In order to update your avatar picture, you will need to host the image somewhere. This can be done by uploading it to a Steemit comment or post, or using a third-party image host such as <a href="http://postimage.io/">Postimage</a>.  Once your image is uploaded, copy its URL and paste it into the "Profile Picture URL" box. Then click the Update button and enter your password or active key.
+Your profile info, avatar image, and cover image are set in your Settings page. In order to update your avatar picture and cover image, you will need to host the images somewhere. This can be done by uploading it to a Steemit comment or post, or using a third-party image host such as <a href="http://postimage.io/">Postimage</a>.  Once your image is uploaded, copy its URL and paste it into the "Profile Picture URL" box for the avatar, or the "Cover Image URL" box for the cover image. Then click the Update button and enter your password or active key.
+
+<a href="/faq.html#Table_of_Contents_Site_Navigation">^</a>
+<a class="anchor" name="What_is_the_recommend_size_for_the_cover_image"></a>
+## What is the recommend size for the cover image?
+
+The cover image will be resized/scaled depending on the device being used. Therefore it is recommend to use an image that will still look good when cropped or resized. A 2048x512 image is the optimal size to work for most devices.
 
 <a href="/faq.html#Table_of_Contents_Site_Navigation">^</a>
 <a class="anchor" name="How_can_I_control_whether_I_see__Not_Safe_For_Work___NSFW__content"></a>
@@ -529,6 +539,18 @@ You can browse your hard drive to add an image by clicking on the "selecting the
 If you have an image copied to your clipboard, you can simply paste (`ctrl + v`) while in the post/comment editor, and your image will be uploaded into your post or comment. Due to the file size of these pasted images, this method is only recommended for simple graphics. Photos (.JPG) should be uploaded from your disk.
 
 Pictures can also be hosted on an external site. Paste the image's web address (URL) into the editor and it will automatically be added.
+
+<a href="/faq.html#Table_of_Contents_Posting">^</a>
+<a class="anchor" name="How_do_I_set_the_thumbnail_image_for_my_post"></a>
+## How do I set the thumbnail image for my post?
+
+The first image in the post will automatically be set as the thumbnail image.
+
+<a href="/faq.html#Table_of_Contents_Posting">^</a>
+<a class="anchor" name="What_is_the_recommend_aspect_ratio_for_thumbnail_images"></a>
+## What is the recommend aspect ratio for thumbnail images?
+
+The recommend aspect ratio for thumbnail images is 16x9.
 
 <a href="/faq.html#Table_of_Contents_Posting">^</a>
 <a class="anchor" name="How_do_I_add_videos_to_my_posts"></a>
@@ -628,7 +650,7 @@ Language-specific groups include:
 <a class="anchor" name="Can_I_delete_something_I_posted"></a>
 ## Can I delete something I posted?
 
-The blockchain will always contain the full edit history of posts and comments, so it can never be completely deleted. If you would like to update a post so that users cannot see the content via Steemit.com, you can edit the post and replace it with blank content.
+The blockchain will always contain the full edit history of posts and comments, so it can never be completely deleted. If you would like to update a post so that users cannot see the content via Steemit.com, you can edit the post and replace it with blank content for as long as the post is active. After seven days, the post can no longer be edited.
 
 <a href="/faq.html#Table_of_Contents_Posting">^</a>
 <a class="anchor" name="What_does__Promoting__a_post_do"></a>
@@ -833,6 +855,12 @@ Depending on market conditions, users may get more STEEM for their SBD by tradin
 - Exchange for STEEM in the internal market
 - Withdraw to an exchange, and trade for BTC or other digital tokens
 - Purchase items through third-party stores that accept SBD tokens
+
+<a href="/faq.html#Table_of_Contents_Economics">^</a>
+<a class="anchor" name="What_is_a_MVEST"></a>
+## What is a MVEST?
+
+A VEST is a unit of measurement for STEEM Power. A MVEST is one million VESTS. The amount of STEEM Power in one MVEST can be found on <a href="https://steemd.com/">steemd.com</a> as `steem_per_mvests`.
 
 <a href="/faq.html#Table_of_Contents_Economics">^</a>
 <a class="anchor" name="Can_I_sell_goods_and_services_on_Steemit"></a>
@@ -1164,14 +1192,11 @@ No. Proof of work mining has been removed from Steem.
 <a href="/faq.html#Table_of_Contents_Blockchain">^</a>
 # Steemit, Inc.
 
-<a class="anchor" name="Who_are_the_Steemit_co_founders"></a>
-## Who are the Steemit co-founders?
+<a class="anchor" name="Who_is_the_CEO_of_Steemit"></a>
+## Who is the CEO of Steemit?
 
-Ned Scott, CEO of Steemit, @ned
+Ned Scott, @ned
 https://www.linkedin.com/in/nedscott
-
-Daniel Larimer, CTO of Steemit, @dan @dantheman
-https://www.linkedin.com/in/daniel-larimer-0a367089
 
 <a href="/faq.html#Table_of_Contents_Steemit__Inc">^</a>
 <a class="anchor" name="Can_I_invest_in_Steemit"></a>
@@ -1198,10 +1223,7 @@ Currently, the Steem and Steemit logos are the same and is free to use. In the f
 <a class="anchor" name="Can_I_purchase_official_Steemit_merchandise"></a>
 ## Can I purchase official Steemit merchandise?
 
-There is no official merchandise yet, but it is easy to make Steemit gear on zazzle.com or similar websites. 
-
-Here is a post with instructions from @artist1989:
-https://steemit.com/art/@artist1989/custom-steem-and-steemit-art-and-instructions-on-how-to-create-your-very-own-steem-steemit-gear-t-shirts-coffee-mugs-etc
+Yes. Official Steemit merchandise can be purchased from [The Steemit Shop](https://thesteemitshop.com/).
 
 <a href="/faq.html#Table_of_Contents_Steemit__Inc">^</a>
 <a class="anchor" name="Did_Steemit__pre_mine__tokens"></a>
@@ -1274,19 +1296,17 @@ No, liquid tokens can not be taken back if stolen or sent to the wrong account. 
 <a class="anchor" name="What_should_I_do_if_I_discover_that_someone_hacked_my_account"></a>
 ## What should I do if I discover that someone hacked my account?
 
-If you made your account through Steemit and it is compromised, immediately visit the <a href="https://steemit.com/recover_account_step_1">Stolen Account Recovery</a> page. This link is also available in the main site menu. You will need to provide your account name and a master password that was used in the last 30 days.
+If you made your account through Steemit and it is compromised, immediately visit the <a href="https://steemit.com/recover_account_step_1">Stolen Account Recovery</a> page. This link is also available in the main site menu. You will need to provide the email address that you used when you signed up, your account name, and a master password that was used in the last 30 days.
 
 <a href="/faq.html#Table_of_Contents_Security">^</a>
-<a class="anchor" name="How_does_the_recovery_process_work"></a>
-## How does the recovery process work?
+<a class="anchor" name="How_does_the_stolen_account_recovery_process_work"></a>
+## How does the stolen account recovery process work?
 
-In Steem, to be able to recover a compromised account, each account has another account assigned as its designated recovery agent. This is someone who can identify you independently of your key.
+If your password has been changed without your consent, then the account designated as your recovery account can generate a new owner key for the account. The account recovery must be completed within 30 days of the password being changed, and you must supply a recent owner key that was valid within the last 30 days.
 
-Steemit Inc. owns the default recovery account (@steem) for all users who sign up using Steemit.com. Steemit can identify users by their email, Facebook, and Reddit logins if you made an account using Steemit.com.
+Steemit Inc. owns the default recovery account (@steem) for all users who sign up using Steemit.com. Steemit can identify users by their original email, Facebook, or Reddit logins that were used to signup via Steemit.com.
 
-Advanced users using the blockchain software can recover accounts that have different recovery accounts assigned. If your password has been changed without your consent, then the account designated as your recovery account can generate a new owner key after you've supplied a recent owner key (valid in the last 30 days) for the account.
-
-If you don't have the master password or owner key that was valid the past 30 days, then your account will be unrecoverable.
+If you don't have the master password or owner key that was valid the past 30 days, or are unable to prove that you are the original owner of the account, then your account will be unrecoverable.
 
 <a href="/faq.html#Table_of_Contents_Security">^</a>
 <a class="anchor" name="How_do_I_report_a_security_vulnerability"></a>

@@ -20,6 +20,13 @@ const defaultState = Map({
         account_update: 0,
         message: 0,
         receive: 0
+    }),
+    user_preferences: Map({
+        locale: null,
+        nsfwPref: 'warn',
+        theme: 'light',
+        blogmode: false,
+        currency: 'USD'
     })
 });
 
@@ -57,6 +64,15 @@ export default function reducer(state = defaultState, action) {
             nc.follow = 0;
         }
         res = res.set('notificounters', Map(nc));
+    }
+    if (action.type === 'SET_USER_PREFERENCES') {
+        res = res.set('user_preferences', Map(action.payload));
+    }
+    if (action.type === 'TOGGLE_NIGHTMODE') {
+        res = res.setIn(['user_preferences', 'nightmode'], !res.getIn(['user_preferences', 'nightmode']));
+    }
+    if (action.type === 'TOGGLE_BLOGMODE') {
+        res = res.setIn(['user_preferences', 'blogmode'], !res.getIn(['user_preferences', 'blogmode']));
     }
     return res;
 }

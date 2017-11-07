@@ -49,6 +49,8 @@ mkdir tmp
 
 Install at least Node v7.5 if you don't already have it. We recommend using `nvm` to do this as it's both the simplest way to install and manage installed version(s) of node. If you need `nvm`, you can get it at [https://github.com/creationix/nvm](https://github.com/creationix/nvm).
 
+Condenser is known to successfully build using node 7.5, npm 4.1.2, and yarn 1.1.0.
+
 Using nvm, you would install like this:
 ```bash
 nvm install v7.5
@@ -155,11 +157,6 @@ mysql -u root
 
 This is a required step in order for the database to be 'ready' for condenser's use.
 
-Install these modules globally:
-
-```bash
-yarn global add sequelize sequelize-cli pm2 mysql mysql2
-```
 
 Edit the file `src/db/config/config.json` using your favorite command line text editor being sure that the username, password, host, and database name are set correctly and match your newly configured mysql setup.
 
@@ -167,7 +164,7 @@ Run `sequelize db:migrate` in `src/db` directory, like this:
 
 ```bash
 cd src/db
-sequelize db:migrate
+yarn exec sequelize db:migrate
 ```
 
 #### Install Tarantool - Production Only
@@ -202,7 +199,7 @@ user@example:~$ tarantool
 - Component's stylesheet file name should match component name
 
 ##### Js & Jsx
-We are using _Airbnb JavaScript Style Guide_ with some modifications (see .eslintrc).
+We are using _[Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript)_ with some modifications (see .eslintrc).
 Please run _eslint_ in the working directory before committing your changes and make sure you didn't introduce any new styling issues.
 
 ##### CSS & SCSS

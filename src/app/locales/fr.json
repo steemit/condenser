@@ -54,6 +54,7 @@
     "password": "Mot de passe",
     "payouts": "Gains",
     "permissions": "Permissions",
+    "phishy_message": "Link expanded to plain text; beware of a potential phishing attempt",
     "post": "Poster",
     "post_as": "Poster en tant que",
     "posts": "Articles",
@@ -98,7 +99,7 @@
     "submit_a_story": "Poster",
     "tag": "Mot clé",
     "to": "vers",
-    "topics": "Sujets",
+    "all_tags": "All tags",
     "transfer": "Transférer",
     "trending_topics": "Sujets en vogue",
     "type": "Genre",
@@ -203,6 +204,11 @@
       "zero": "Pas de réponse",
       "one": "%(count)s réponse",
       "other": "%(count)s réponses"
+    },
+    "post_key_warning": {
+        "confirm": "You are about to publish a STEEM private key or master password. You will probably lose control of the associated account and all its funds.",
+        "warning": "Legitimate users, including employees of Steemit Inc., will never ask you for a private key or master password.",
+        "checkbox": "I understand"
     }
   },
   "navigation": {
@@ -222,10 +228,12 @@
     "learn_more": "En savoir plus",
     "welcome": "Bienvenue",
     "faq": "FAQ",
+    "shop": "The Steemit Shop",
     "chat": "Salons de discussion Steemit",
     "app_center": "Centre d'applications Steemit",
     "api_docs": "Documentation API sur Steemit",
     "whitepaper": "Livre blanc sur le Steem",
+    "bluepaper": "Steem Bluepaper",
     "intro_tagline": "Présentations sur la monnaie",
     "intro_paragraph": "Votre voix vaut quelque chose. Rejoignez la communauté qui vous rémunère pour vos articles et participez à la curation du contenu de qualité."
   },
@@ -329,7 +337,12 @@
     "user_hasnt_started_bloggin_yet": "Il semblerait que %(name)s n'ait pas encore commencer à blogger.",
     "user_hasnt_followed_anything_yet": "Il semblerait que %(name)s ne soit fan de personne. Dans le cas où %(name)s s'abonnerait au fil d'autres utilisateurs, son flux sera automatiquement rempli avec du nouveau contenu.",
     "user_hasnt_had_any_replies_yet": "%(name)s n'a pas encore reçu de réponse",
-    "followers": "Fans",
+    "looks_like_you_havent_posted_anything_yet": "Looks like you haven't posted anything yet.",
+    "create_a_post": "Create a Post",
+    "explore_trending_articles": "Explore Trending Articles",
+    "read_the_quick_start_guide": "Read The Quick Start Guide",
+    "browse_the_faq": "Browse The FAQ",
+    "followers": "Followers",
     "this_is_users_reputations_score_it_is_based_on_history_of_votes": "Ceci est le score de réputation de %(name)s. \n\nLe score de réputation est basé sur l'historique des votes reçus par l'utilisateur, et est utilisé pour masquer le contenu de basse qualité.",
     "follower_count": {
       "zero": "Pas de fans",
@@ -465,8 +478,6 @@
   "postsummary_jsx": {
     "resteemed": "Resteemé",
     "resteemed_by": "Resteemé par",
-    "this_post_is": "Cet article est",
-    "you_can": "Vous pouvez",
     "reveal_it": "Révélez-le",
     "adjust_your": "Ajustez vos",
     "display_preferences": "préférences visuelles",
@@ -541,8 +552,9 @@
     "keep_me_logged_in": "Gardez-moi connecté",
     "amazing_community": "communauté extraordinaire",
     "to_comment_and_reward_others": " pour commenter et récompenser les autres.",
-    "sign_up_now_to_earn": "Inscrivez-vous maintenant pour gagner ",
-    "free_money": "ARGENT GRATUIT!",
+    "sign_up_get_steem": "Sign up. Get STEEM",
+    "signup_button": "Sign up now to earn ",
+    "signup_button_emphasis": "FREE STEEM!",
     "returning_users": "Utilisateurs de retour :",
     "join_our": "Rejoignez notre"
   },
@@ -595,7 +607,8 @@
     "withdraw_funds_after_the_required_3_day_waiting_period": "Retirer les fonds après la période de 3 jours de latence requise",
     "from": "De",
     "to": "A",
-    "asset_currently_collecting": "%(asset)s collectant actuellement %(interest)s %% d'APR."
+    "asset_currently_collecting": "%(asset)s collectant actuellement %(interest)s %% d'APR.",
+    "beware_of_spam_and_phishing_links": "Beware of spam and phishing links in transfer memos. Do not open links from users you do not trust. Do not provide your private keys to any third party websites."
   },
   "userwallet_jsx": {
     "conversion_complete_tip": "S'achèvera le",

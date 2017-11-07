@@ -97,7 +97,7 @@ class Post extends React.Component {
 
         sortComments( content, replies, sort_order );
 
-        // Don't render too many comments
+        // Don't render too many comments on server-side
         const commentLimit = (global['process'] !== undefined) ? 500 : 1000
         if (replies.length > commentLimit) {
             console.log(`Too many comments, ${ replies.length - commentLimit } omitted.`)

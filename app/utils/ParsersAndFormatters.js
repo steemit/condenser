@@ -70,11 +70,11 @@ export function formatAmount(amount){
 }
 
 export function checkMemo(memoValue){
-    return !/[PK5]/.test(memoValue.charAt(0))
+    return typeof memoValue !== 'undefined' && memoValue.length == 52 && /[PK5]/.test(memoValue.charAt(0))
 }
 
 export function countDecimals(amount) {
-    if(amount == null) return amount    
+    if(amount == null) return amount
     amount = String(amount).match(/[\d\.]+/g).join('') // just dots and digits
     const parts = amount.split('.')
     return parts.length > 2 ? undefined : parts.length === 1 ? 0 : parts[1].length

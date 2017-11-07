@@ -75,7 +75,7 @@ class TransferForm extends Component {
                 to:
                     ! values.to ? tt('g.required') : validate_account_name(values.to),
                 amount:
-                    ! values.amount ? tt('g.required') :                    
+                    ! values.amount ? tt('g.required') :
                     insufficientFunds(values.asset, values.amount) ? tt('transfer_jsx.insufficient_funds') :
                     countDecimals(values.amount) > 3 ? tt('transfer_jsx.use_only_3_digits_of_precison') :
                     null,
@@ -85,7 +85,7 @@ class TransferForm extends Component {
                 memo:
                     values.memo && (!browserTests.memo_encryption && /^#/.test(values.memo)) ?
                     'Encrypted memos are temporarily unavailable (issue #98)' :
-                    !checkMemo(values.memo) ? tt('transfer_jsx.private_key_in_memo') :
+                    checkMemo(values.memo) ? tt('transfer_jsx.private_key_in_memo') :
                     null,
             })
         })

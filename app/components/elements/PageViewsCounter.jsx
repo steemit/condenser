@@ -6,7 +6,8 @@ import tt from 'counterpart';
 export default class PageViewsCounter extends React.Component {
 
     static propTypes = {
-        hidden: React.PropTypes.bool
+      aiPosts: React.PropTypes.array,
+      hidden: React.PropTypes.bool
     };
 
     static defaultProps = {
@@ -22,7 +23,7 @@ export default class PageViewsCounter extends React.Component {
     pageView() {
         let ref = document.referrer || '';
         if (ref.match('://' + window.location.hostname)) ref = '';
-        recordPageView(window.location.pathname, ref).then(views => this.setState({views}));
+        recordPageView(window.location.pathname, ref, this.props.aiPosts || []).then(views => this.setState({views}));
         this.last_page = window.location.pathname;
     }
 

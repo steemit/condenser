@@ -189,7 +189,9 @@ class PostsList extends React.Component {
             ignore_result, account} = this.props;
         const {thumbSize, showPost, nsfwPref} = this.state
         const postsInfo = [];
+        let aiPosts = [];
         posts.forEach((item) => {
+            showPost && aiPosts.push(item);
             const cont = content.get(item);
             if(!cont) {
                 console.error('PostsList --> Missing cont key', item)
@@ -200,6 +202,10 @@ class PostsList extends React.Component {
             if(!(ignore || hide) || showSpam) // rephide
                 postsInfo.push({item, ignore})
         });
+        if (showPost) {
+          const sliceCount = 5, index = aiPosts.indexOf(showPost);
+          aiPosts = aiPosts.slice(index < sliceCount ? 0 : index - sliceCount, index + sliceCount + 1);
+        }
         const renderSummary = items => items.map(item => <li key={item.item}>
             <PostSummary
                 account={account}
@@ -229,7 +235,7 @@ class PostsList extends React.Component {
                         </div>
                     </div>
                     <div className="PostsList__post_container">
-                        <Post post={showPost} />
+                        <Post post={showPost} aiPosts={aiPosts} />
                     </div>
                 </div>}
             </div>

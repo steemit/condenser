@@ -75,6 +75,7 @@ class PostFull extends React.Component {
         /* Show extra options (component is being viewed alone) */
         cont: React.PropTypes.object.isRequired,
         post: React.PropTypes.string.isRequired,
+        aiPosts: React.PropTypes.array,
 
         // connector props
         username: React.PropTypes.string,
@@ -209,7 +210,7 @@ class PostFull extends React.Component {
     };
 
     render() {
-        const {props: {username, post}, state: {PostFullReplyEditor, PostFullEditEditor, formId, showReply, showEdit},
+        const {props: {username, post, aiPosts}, state: {PostFullReplyEditor, PostFullEditEditor, formId, showReply, showEdit},
             onShowReply, onShowEdit, onDeletePost} = this
         const post_content = this.props.cont.get(this.props.post);
         if (!post_content) return null;
@@ -359,7 +360,7 @@ class PostFull extends React.Component {
                             </Link>
                         </span>
                         <span className="PostFull__views">
-                            <PageViewsCounter hidden={false} sinceDate={isPreViewCount ? 'Dec 2016' : null} />
+                            <PageViewsCounter aiPosts={aiPosts} hidden={false} sinceDate={isPreViewCount ? 'Dec 2016' : null} />
                         </span>
                         <ShareMenu menu={share_menu} />
                         <button className="explore-post" title={tt('g.share_this_post')} onClick={this.showExplorePost}>

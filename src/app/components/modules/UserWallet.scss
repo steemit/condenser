@@ -20,29 +20,33 @@
   margin-top: 1rem;
 }
 
-.UserWallet__dropdown {
-}
-
 .UserWallet__claimbox {
   margin: 1.5rem 0 0.5rem;
-  padding: 1rem;
-  background: #dff0d8;
+  padding: 1rem 1rem 1.1rem 1rem;
   border-radius: 5px;
-  color: $color-blue-black;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+
   @include themify($themes) {
     border: themed('border');  
+    background-color: themed('highlightBackgroundColor');  
+    color: themed('textColorPrimary');  
   }     
 
+  &-text {
+    font-weight: bold;
+  }
   .button {
-    background: #337ab7;
-    border-color: #2e6da4;
-    color: white;
-    margin-top: -0.5rem;
+    @extend .e-btn;
+    @include font-size(14px);
+    margin: 0;
   }
   // spacing for mobile collapse
-  @media only screen and (max-width: 30em) {
+  @media only screen and (max-width: 680px) {
       .button {
-          margin-top: 1.5rem;
+        margin: 8px 0 0 0;
       }
   }
 }

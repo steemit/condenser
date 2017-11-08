@@ -11,7 +11,7 @@ $themes: (
     menuBackgroundColor: $color-background-dark,
     moduleMediumBackgroundColor: $color-white,
     navBackgroundColor: $color-white,
-    // moduleMediumBackgroundColor: $color-transparent,
+    highlightBackgroundColor: #f3faf0,
     tableRowEvenBackgroundColor: #f4f4f4,
     border: 1px solid $color-border-light,
     borderLight: 1px solid $color-border-light-lightest,
@@ -28,6 +28,7 @@ $themes: (
     buttonBackground: $color-blue-original-dark,
     buttonBackgroundHover: $color-blue-original-light,
     buttonText: $color-text-white,
+    buttonTextShadow: 0 1px 0 rgba(0,0,0,0.20),
     buttonTextHover: $color-text-white,
     buttonBoxShadow: $color-transparent,        
   ),
@@ -43,6 +44,7 @@ $themes: (
     menuBackgroundColor: $color-background-dark,
     moduleMediumBackgroundColor: $color-transparent,
     navBackgroundColor: $color-white,
+    highlightBackgroundColor: #f3faf0,
     tableRowEvenBackgroundColor: #f4f4f4,
     border: 1px solid $color-border-light,
     borderLight: 1px solid $color-border-light-lightest,
@@ -59,6 +61,7 @@ $themes: (
     buttonBackground: $color-blue-black,
     buttonBackgroundHover: $color-teal,
     buttonText: $color-text-white,
+    buttonTextShadow: 0 1px 0 rgba(0,0,0,0.20),
     buttonTextHover: $color-white,
     buttonBoxShadow: $color-teal,
     buttonBoxShadowHover: $color-blue-black,    
@@ -75,6 +78,7 @@ $themes: (
     menuBackgroundColor: $color-blue-dark,
     moduleMediumBackgroundColor: $color-background-dark,
     navBackgroundColor: $color-background-dark,
+    highlightBackgroundColor: $color-blue-black-darkest,
     tableRowEvenBackgroundColor: #212C33,
     border: 1px solid $color-border-dark,
     borderLight: 1px solid $color-border-dark-lightest,
@@ -90,7 +94,8 @@ $themes: (
     contentBorderAccent: $color-teal,
     buttonBackground: $color-white,
     buttonBackgroundHover: $color-teal,
-    buttonText: $color-blue-black,
+    buttonText: $color-blue-dark,
+    buttonTextShadow: 0 1px 0 rgba(0,0,0,0),
     buttonTextHover: $color-white,
     buttonBoxShadow: $color-teal,
     buttonBoxShadowHover: $color-white,
@@ -148,32 +153,46 @@ $themes: (
     @include themify($themes) {
         color: themed('textColorPrimary');  
     }
+    &:visited, &:active {
+      @include themify($themes) {
+          color: themed('textColorPrimary');  
+      } 
+    }     
     &:hover, &:focus {
       @include themify($themes) {
           color: themed('textColorAccent');  
       } 
     }
   }
-
   &--secondary {
     @include themify($themes) {
         color: themed('textColorSecondary');  
     }
+    &:visited, &:active {
+      @include themify($themes) {
+          color: themed('textColorSecondary');  
+      } 
+    }    
     &:hover, &:focus {
       @include themify($themes) {
           color: themed('textColorAccent');  
       } 
-    }
+    }        
   }
   &--accent {
     @include themify($themes) {
         color: themed('textColorAccent');  
     }
+    &:visited, &:active {
+      @include themify($themes) {
+          color: themed('textColorAccent');  
+      } 
+    }    
     &:hover, &:focus {
       @include themify($themes) {
           color: themed('textColorAccentHover');  
       } 
-    }
+    }            
   }
 }
 
@@ -199,6 +218,8 @@ $themes: (
   transition: 0.2s all ease-in-out;
   text-transform: capitalize;
   border-radius: 0;
+  text-decoration: none;
+  text-transform: capitalize;
   @include font-size(18px);       
   @include themify($themes) {
     background-color: themed('buttonBackground');  
@@ -210,32 +231,87 @@ $themes: (
       background-color: themed('buttonBackgroundHover');  
       box-shadow: 2px 2px 2px 0 rgba(0,0,0,0.1), 7px 7px 0 0 themed('buttonBoxShadowHover');   
       color: themed('buttonTextHover');
-      text-shadow: 0 1px 0 rgba(0,0,0,0.20);
+      text-shadow: themed('buttonTextShadow');
     }
   }
   &:visited, &:active {
     @include themify($themes) {
       color: themed('buttonText');  
+    }
+    &:hover, &:focus {
+      @include themify($themes) {
+        color: themed('buttonTextHover');  
+      }
     } 
   } 
-
 }
+
 .button.disabled, .button[disabled] {
-    opacity: 0.25;
-    cursor: not-allowed;
-    box-shadow: 0px 0px 0px 0 rgba(0,0,0,0);
-      @include themify($themes) {
-        background-color: themed('buttonBackground');  
+  opacity: 0.25;
+  cursor: not-allowed;
+  box-shadow: 0px 0px 0px 0 rgba(0,0,0,0);
+    @include themify($themes) {
+      background-color: themed('buttonBackground');  
+      box-shadow: 0px 0px 0px 0 rgba(0,0,0,0);
+      color: themed('buttonText');
+    }    
+  &:hover {
+    @include themify($themes) {
+      background-color: themed('buttonBackground');  
+      box-shadow: 0px 0px 0px 0 rgba(0,0,0,0);
+      color: themed('buttonText');
+    }       
+  }
+}
+
+// This button class doesn't applying theming (just straight styles). To be used when there are no theming classes available (e.g. in modals and static server pages in signup)
+
+.e-btn {  
+  &--black {
+    background-color: $color-blue-black;
+    box-shadow: 0px 0px 0px 0 rgba(0,0,0,0), 5px 5px 0 0 $color-teal;   
+    color: $color-white;
+    &:hover, &:focus {
+      background-color: $color-teal;
+      box-shadow: 2px 2px 2px 0 rgba(0,0,0,0.1), 7px 7px 0 0 $color-blue-black;   
+      color: $color-white;
+      text-shadow: 0 1px 0 rgba(0,0,0,0.20);
+    }
+    &:visited, &:active {
+      background-color: $color-blue-black;
+      box-shadow: 0px 0px 0px 0 rgba(0,0,0,0), 5px 5px 0 0 $color-teal;   
+      color: $color-white;
+    } 
+    &.disabled, &[disabled] {
+      opacity: 0.25;
+      cursor: not-allowed;
+      box-shadow: 0px 0px 0px 0 rgba(0,0,0,0);
+      &:hover, &:focus {
         box-shadow: 0px 0px 0px 0 rgba(0,0,0,0);
-        color: themed('buttonText');
-      }    
-    &:hover {
-      @include themify($themes) {
-        background-color: themed('buttonBackground');  
+        background-color: $color-blue-black;
+        color: $color-white;      
+      }
+    }
+    &.hollow {
+      background-color: transparent;
+      box-shadow: 0px 0px 0px 0 rgba(0,0,0,0);
+      color: $color-text-gray;
+      font-weight: normal;
+      transition: 0.2s all ease-in-out;
+      border: transparent;
+      &:hover, &:focus {
+        background-color: transparent;
         box-shadow: 0px 0px 0px 0 rgba(0,0,0,0);
-        color: themed('buttonText');
+        color: $color-blue-dark;
+        font-weight: normal;        
+        text-shadow: 0 1px 0 rgba(0,0,0,0.0);
+      }
+      &:visited, &:active {
+        background-color: transparent;
+        box-shadow: 0px 0px 0px 0 rgba(0,0,0,0);
+        color: $color-text-gray;
+        font-weight: normal;
       }       
     }
+  }
 }
-
-

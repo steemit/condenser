@@ -168,7 +168,7 @@ recovery should your account ever be compromised.</em></p>
                             <div className="error">{this.flash.error}</div>
                             <input
                                 type="submit"
-                                className="btn-continue"
+                                className="button"
                                 value="Continue"
                             />
                         </form>

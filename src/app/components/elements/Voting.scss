@@ -1,5 +1,6 @@
 .Voting {
   white-space: nowrap !important;
+  float: right;
   span {
     white-space: nowrap !important;
   }
@@ -125,6 +126,7 @@
     font-size: 80%;
     vertical-align: 15%;
     padding-right: 0.1rem;
+    cursor: default;
   }
 
   a:hover path {

@@ -323,12 +323,13 @@
   }
   &__header {
     padding-top:5px;
-    padding-bottom: 1em;
+    padding-bottom: 10px;
     position: relative;
     display: flex;
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
+    line-height: 1;
     @include MQ(M) {
       padding-top: 0;
     }
@@ -375,11 +376,11 @@
   &__h1 {
     font-family: $font-primary;
     font-weight: bold;
-    @include font-size(20px);     
+    @include font-size(18px);     
     margin: 0;
     text-transform: capitalize;
     @include MQ(M) {
-      @include font-size(22px);       
+      @include font-size(18px);       
     }
   }
   &__h2 {
@@ -641,8 +642,10 @@ a#changeLayout:focus {
   outline: none;
 }
 
-@include MQ(M) {
-  .layout-list {
+
+
+.layout-list {
+  @include MQ(M) {
     transition: 0.3s all ease-in-out;
 
     .icon-svg {
@@ -797,22 +800,19 @@ a#changeLayout:focus {
   }
 }
 
-@include MQ(L) {
-  .layout-list {
+
+.layout-list {
+  @include MQ(L) {
     .articles {
       padding: 1.5em 3em; 
     }
   }
-}
-
-@include MQ(XL) {
-  .layout-list {
+  @include MQ(XL) {
     .articles {
       padding: 1.5em 4em; 
     }
-  }
+  }  
 }
-
 
 .layout-list .user .Userpic {
   width: 24px !important;
@@ -828,6 +828,64 @@ a#changeLayout:focus {
 //   width: 48px !important;
 //   height: 48px !important;
 // }
+
+
+.layout-compressed {
+  @extend .layout-list;
+
+  @include MQ(M) {
+    .Userpic {
+      display: none;
+    }
+    .articles {
+      &__summary {
+        margin: 0 0 10px;
+        padding-bottom: 0;
+        @include themify($themes) {
+          border-bottom: themed('borderTransparent'); 
+        }       
+      }
+      &__summary-header {
+        padding: 2px 0;
+      }
+      &__summary-footer {
+        padding: 0;
+      }
+      &__h2 {
+        @include font-size(14px);
+        padding-bottom: 2px;
+      }
+      .PostSummary__body {
+        padding: 0;
+        @include font-size(14px);
+      }
+      &__content-block {
+        &--img {
+          margin-right: 12px;
+        }
+      }
+      &__feature-img-container {
+        width: 90px;
+        height: 56px;
+      }
+      &__hr {
+        margin-bottom: 12px;
+      }
+    }
+    .c-sidebar {
+      &__content {
+        @include font-size(14px);
+      }
+    }
+    .user {
+      &__name {
+        a {
+          font-weight: normal;
+        }
+      }
+    }  
+  }
+}
 
 
 .icon-svg {

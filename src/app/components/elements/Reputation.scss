@@ -1,5 +1,5 @@
 .Reputation {
-   @include font-size(14px);
+   @include font-size(13px);
   line-height: 1;
   padding: 0;
   margin-left: -1px;
@@ -8,4 +8,7 @@
   @include themify($themes) {
     color: themed('textColorPrimary');
   }  
+  @include MQ(M) {
+    @include font-size(14px);
+  }
 }

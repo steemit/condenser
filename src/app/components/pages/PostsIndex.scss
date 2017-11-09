@@ -528,6 +528,10 @@
   align-items: center;
   &__col {
     line-height: 1;
+    &--right {
+      position: relative;
+      top: -2px;
+    }
   }
   &__link {
     @extend .link;
@@ -785,6 +789,9 @@ a#changeLayout:focus {
       &__name {
         @include font-size(15px);               
         font-weight: normal;
+        a {
+          @include font-size(14px);               
+        }
       }
     }
   }

@@ -134,7 +134,7 @@ class PostsIndex extends React.Component {
             }
         }
 
-        const layoutClass = this.props.blogmode ? ' layout-block' : ' layout-compressed';
+        const layoutClass = this.props.blogmode ? ' layout-block' : ' layout-list';
 
         return (
             <div className={'PostsIndex row' + (fetching ? ' fetching' : '') + layoutClass}>

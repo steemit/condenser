@@ -8,13 +8,12 @@ import {fromJS} from 'immutable';
 export const numberWithCommas = (x) => x.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 
 export function vestsToSpf(state, vesting_shares) {
-    const {global} = state
     let vests = vesting_shares
     if (typeof vesting_shares === 'string') {
         vests = assetFloat(vesting_shares, VEST_TICKER)
     }
-    const total_vests = assetFloat(global.getIn(['props', 'total_vesting_shares']), VEST_TICKER)
-    const total_vest_steem = assetFloat(global.getIn(['props', 'total_vesting_fund_steem']), LIQUID_TICKER)
+    const total_vests = assetFloat(state.getIn(['global', 'props', 'total_vesting_shares']), VEST_TICKER)
+    const total_vest_steem = assetFloat(state.getIn(['global', 'props', 'total_vesting_fund_steem']), LIQUID_TICKER)
     return total_vest_steem * (vests / total_vests)
 }
 
@@ -23,13 +22,12 @@ export function vestsToSp(state, vesting_shares) {
 }
 
 export function spToVestsf(state, steem_power) {
-    const {global} = state
     let power = steem_power
     if (typeof power === 'string') {
         power = assetFloat(power, LIQUID_TICKER)
     }
-    const total_vests = assetFloat(global.getIn(['props', 'total_vesting_shares']), VEST_TICKER)
-    const total_vest_steem = assetFloat(global.getIn(['props', 'total_vesting_fund_steem']), LIQUID_TICKER)
+    const total_vests = assetFloat(state.getIn(['global', 'props', 'total_vesting_shares']), VEST_TICKER)
+    const total_vest_steem = assetFloat(state.getIn(['global', 'props', 'total_vesting_fund_steem']), LIQUID_TICKER)
     return (steem_power / total_vest_steem) * total_vests
 }
 

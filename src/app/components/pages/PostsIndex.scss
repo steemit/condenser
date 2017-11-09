@@ -530,6 +530,7 @@
 .user {
   display: flex;
   align-items: center;
+  margin-right: 8px;
   &__col {
     line-height: 1;
     &--right {
@@ -569,7 +570,10 @@
     a {
       @extend .link--primary;
       font-weight: bold;
-      @include font-size(16px);        
+      @include font-size(14px); 
+      @include MQ(M) {
+        @include font-size(16px); 
+      }       
     }
   }
   &__username, &__reputation {

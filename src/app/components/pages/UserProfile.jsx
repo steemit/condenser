@@ -31,6 +31,7 @@ import Callout from 'app/components/elements/Callout';
 import normalizeProfile from 'app/utils/NormalizeProfile';
 import userIllegalContent from 'app/utils/userIllegalContent';
 import proxifyImageUrl from 'app/utils/ProxifyUrl';
+import ArticleLayoutSelector from 'app/components/modules/ArticleLayoutSelector';
 
 export default class UserProfile extends React.Component {
     constructor() {
@@ -67,7 +68,8 @@ export default class UserProfile extends React.Component {
             np.loading !== this.props.loading ||
             np.location.pathname !== this.props.location.pathname ||
             np.routeParams.accountname !== this.props.routeParams.accountname ||
-            np.follow_count !== this.props.follow_count
+            np.follow_count !== this.props.follow_count  ||
+            np.blogmode !== this.props.blogmode
         )
     }
 
@@ -312,10 +314,29 @@ export default class UserProfile extends React.Component {
             tab_content = <div>Unavailable For Legal Reasons.</div>;
         }
 
+        const layoutClass = this.props.blogmode ? ' layout-block' : ' layout-list';
+
+        const blog_header = (
+            <div>
+                <div className="articles__header">
+                    <div className="articles__header-col">
+                        <h1 className="articles__h1">{isMyAccount ? 'My blog' : 'Blog'}</h1>
+                    </div>
+                    <div className="articles__header-col articles__header-col--right">
+                        <ArticleLayoutSelector />
+                    </div>         
+                </div> 
+                <hr className="articles__hr" /> 
+            </div>
+        );
+
+
+
         if (!(section === 'transfers' || section === 'permissions' || section === 'password')) {
             tab_content = <div className="row">
-                <div className="UserProfile__tab_content layout-list column">
+                <div className={'UserProfile__tab_content column' + layoutClass + " " + section}>
                     <article className="articles">
+                        {section === 'blog' ? blog_header : null }
                         {tab_content}
                     </article>
                 </div>
@@ -461,7 +482,8 @@ module.exports = {
                 global_status: state.global.get('status'),
                 accounts: state.global.get('accounts'),
                 follow: state.global.get('follow'),
-                follow_count: state.global.get('follow_count')
+                follow_count: state.global.get('follow_count'),
+                blogmode: state.app.getIn(['user_preferences', 'blogmode'])
             };
         },
         dispatch => ({

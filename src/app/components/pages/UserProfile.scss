@@ -1,5 +1,11 @@
 .UserProfile {
     margin-top: -1.5rem;
+
+    .articles {
+      @include MQ(M) {
+        margin: 0 auto;
+      }
+    }
 }
 
 .UserProfile__tab_content {
@@ -192,3 +198,13 @@
         }
     }
 }
+
+// Temporary fix to prevent alternate User Profile pages outside the blog from taking the narrow layout.
+
+.UserProfile {
+  &__tab_content.layout-block.settings, &__tab_content.layout-block.comments, &__tab_content.layout-block.recent-replies, &__tab_content.layout-block.curation-rewards, &__tab_content.layout-block.author-rewards {
+    @extend .layout-list;
+  }
+}
+
+

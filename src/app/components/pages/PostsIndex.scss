@@ -279,7 +279,11 @@
         }
       }   
   }
-
+  &__resteem-icon {
+    position: relative;
+    top: -1px;
+    padding-right: 2px;
+  }
   &__summary-header {
     display: flex;
     align-items: center;
@@ -357,11 +361,15 @@
       }
   }
   &__resteem-text {
-    @include font-size(14px);     
-    margin-bottom: 4px;
+    @include font-size(13px);     
+    margin-bottom: 0px;
     @include themify($themes) {
         color: themed('textColorSecondary');  
-    }   
+    }  
+    @include MQ(M) {
+      margin-bottom: 2px;
+      @include font-size(14px);
+    } 
   }
   &__resteem-username {
     @extend .link--secondary;
@@ -568,6 +576,7 @@
     line-height: 1.2;
 
     a {
+      @extend .link;
       @extend .link--primary;
       font-weight: bold;
       @include font-size(14px); 
@@ -648,8 +657,6 @@
 a#changeLayout:focus {
   outline: none;
 }
-
-
 
 .layout-list {
   @include MQ(M) {
@@ -783,10 +790,6 @@ a#changeLayout:focus {
         padding-bottom: 0;
         border-bottom: transparent;
       }
-      &__resteem-icon {
-        position: relative;
-        top: -2px;
-      }
       &__resteem, &__content-block--text, &__metadata {
         @include MQ(M) {
           padding-left: 0;
@@ -830,12 +833,6 @@ a#changeLayout:focus {
 .layout-block .Userpic {
   margin-right: 8px;
 }
-
-// .Comment__Userpic .Userpic {
-//   width: 48px !important;
-//   height: 48px !important;
-// }
-
 
 .layout-compressed {
   @extend .layout-list;
@@ -924,6 +921,7 @@ a#changeLayout:focus {
 
 
 .articles__resteem .username {
+    @extend .link;
     @extend .link--secondary;
     text-decoration: none;
 }

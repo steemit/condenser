@@ -371,7 +371,10 @@
     padding-left: 8px;
     display: inline-block;
     position: relative;
-    top: 0px;
+    top: -1px;
+    transform: scale(0.9);
+    transform-origin: center;
+
   }
   &__h1 {
     font-family: $font-primary;

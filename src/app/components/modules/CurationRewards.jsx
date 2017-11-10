@@ -95,11 +95,6 @@ class CurationRewards extends React.Component {
 
 
         return (<div className="UserWallet">
-            <div className="row">
-                <div className="column small-12">
-                    <h4 className="uppercase">{tt('g.curation_rewards')}</h4>
-                </div>
-            </div>
             <div className="UserWallet__balance UserReward__row row">
                 <div className="column small-12 medium-8">
                     {tt('curationrewards_jsx.estimated_curation_rewards_last_week')}:
@@ -133,6 +128,7 @@ class CurationRewards extends React.Component {
 
 export default connect(
     // mapStateToProps
+
     (state, ownProps) => {
         return {
             state,

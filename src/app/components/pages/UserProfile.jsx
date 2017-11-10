@@ -314,13 +314,34 @@ export default class UserProfile extends React.Component {
             tab_content = <div>Unavailable For Legal Reasons.</div>;
         }
 
+
+        var page_title = "";
+        // Page title
+        if (isMyAccount && section === 'blog') {
+            page_title = "My blog";
+        } else if (!isMyAccount && section === 'blog') {
+            page_title = "Blog";
+        }  else if (section === 'comments') {
+            page_title = "Comments on my blog posts";
+        }  else if (section === 'recent-replies') {
+            page_title = "Replies to my comments";
+        }  else if (section === 'settings') {
+            page_title = "Settings";
+        }  else if (section === 'curation-rewards') {
+            page_title = tt('g.curation_rewards');
+        }  else if (section === 'author-rewards') {
+            page_title = tt('g.author_rewards');
+        }
+
+        
+
         const layoutClass = this.props.blogmode ? ' layout-block' : ' layout-list';
 
         const blog_header = (
             <div>
                 <div className="articles__header">
                     <div className="articles__header-col">
-                        <h1 className="articles__h1">{isMyAccount ? 'My blog' : 'Blog'}</h1>
+                        <h1 className="articles__h1">{page_title}</h1>
                     </div>
                     <div className="articles__header-col articles__header-col--right">
                         <ArticleLayoutSelector />
@@ -336,7 +357,7 @@ export default class UserProfile extends React.Component {
             tab_content = <div className="row">
                 <div className={'UserProfile__tab_content column' + layoutClass + " " + section}>
                     <article className="articles">
-                        {section === 'blog' ? blog_header : null }
+                        {section === 'blog' || 'comments' ? blog_header : null }
                         {tab_content}
                     </article>
                 </div>

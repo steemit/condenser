@@ -7,8 +7,6 @@
   z-index: 300;
   overflow-x: hidden;
   overflow-y: scroll;
-  background-color: $white;
-  // padding: 0 .9rem;
   -webkit-overflow-scrolling: touch;
   backface-visibility: hidden;
 }
@@ -22,7 +20,14 @@
   height: 3rem;
   overflow-x: hidden;
   overflow-y: scroll;
-  border-bottom: 1px solid $light-gray;
+  @include themify($themes) {
+    border-bottom: themed('border');  
+  } 
+  @media screen and (min-width: 60rem) {  
+    @include themify($themes) {
+      border-bottom: themed('borderTransparent');  
+    } 
+  }
 }
 
 .PostsList__post_top_bar {
@@ -30,11 +35,20 @@
   width: 100%;
   height: 3rem;
   margin: 0 auto;
-  background-color: $white;
   overflow: hidden;
+  @include themify($themes) {
+    background-color: themed('navBackgroundColor');
+  } 
+  @media screen and (min-width: 60rem) {  
+    @include themify($themes) {
+      background-color: themed('backgroundTransparent');  
+    } 
+  }
   a {
     span.Icon path {
-      fill: map-get($foundation-palette, 'primary');
+      @include themify($themes) {
+        fill: themed('textColorAccent');  
+      } 
     }
   }
   > .close-button {

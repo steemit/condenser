@@ -123,7 +123,7 @@ class Witnesses extends React.Component {
 
 
         return (
-            <div>
+            <div className="Witnesses">
                 <div className="row">
                     <div className="column">
                         <h2>{tt('witnesses_jsx.top_witnesses')}</h2>

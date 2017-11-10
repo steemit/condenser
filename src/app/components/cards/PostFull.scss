@@ -3,7 +3,15 @@
   padding-top: 2rem;
   margin: 0 auto;
   max-width: 50rem;
-  border-bottom: 1px solid $light-gray;
+  @include themify($themes) {
+      border-bottom: themed('border');  
+  } 
+  .button.hollow {
+    @include themify($themes) {
+        border: themed('borderAccent');  
+        color: themed('textColorAccent');  
+    }     
+  }
 
   .ReplyEditor {
     margin-top: 1rem;
@@ -11,9 +19,12 @@
 }
 
 .PostFull__time_author_category {
-  color: $dark-gray;
   font-weight: 400;
-  border-right: 1px solid $medium-gray;
+  @include themify($themes) {
+      border-right: themed('border');  
+      color: themed('textColorSecondary');
+  }
+
   padding-right: .6rem;
   margin-right: .6rem;
   > span {
@@ -46,6 +57,11 @@
 }
 
 .PostFull__header {
+  padding-bottom: 1em;
+  margin-bottom: 8px;
+  @include themify($themes) {
+    border-bottom: themed('border');  
+  } 
   > h1 {
     overflow: hidden;
     font-family: $body-font-family;
@@ -68,7 +84,9 @@
     .Icon.clock {
       top: 5px;
       svg {
-        fill: $dark-gray;
+        @include themify($themes) {
+            fill: themed('textColorSecondary');  
+        } 
       }
     }
   }
@@ -88,20 +106,24 @@
   line-height: 2rem;
   font-size: 94%;
   svg {
-    fill: $dark-gray;
+    @include themify($themes) {
+        fill: themed('textColorSecondary');  
+    } 
   }
   a, .FoundationDropdownMenu__label {
-    color: $dark-gray;
     font-size: 94%;
     font-weight: 600;
-    @include hoverUnderline;
+    @extend .link;
+    @extend .link--secondary;
   }
   .Voting {
     //padding-right: 1rem;
     //margin-right: 1rem;
   }
   .VerticalMenu > li > a {
-    color: $dark-gray;
+    @include themify($themes) {
+      fill: themed('textColorSecondary');  
+    } 
   }
   span {
     white-space: normal;
@@ -110,34 +132,40 @@
   .Reblog__button {
     padding-right: .4rem;
     margin-right: .4rem;
-    border-right: 1px solid $medium-gray;
+    @include themify($themes) {
+        border-right: themed('border');  
+    }    
   }
 }
 
 .PostFull__responses {
   padding-right: .4rem;
-  //margin-right: 1rem;
-  //border-right: 1px solid $medium-gray;
 }
 
 .PostFull__views {
   padding-right: .4rem;
   margin-right: .4rem;
-  color: $dark-gray;
   font-size: 94%;
   font-weight: 600;
-  border-right: 1px solid $medium-gray;
+  @include themify($themes) {
+      border-right: themed('border');  
+      fill: themed('textColorSecondary');  
+  }  
 }
 
 .PostFull__reply {
   padding-right: .4rem;
   margin-right: .4rem;
-  border-right: 1px solid $medium-gray;
+  @include themify($themes) {
+      border-right: themed('border');  
+  }    
   a {margin: 0 0.15rem;}
 }
 
 .PostFull__lifetime {
-  color: $dark-gray;
+  @include themify($themes) {
+    fill: themed('textColorSecondary');  
+  }   
   font-size: 80%;
 }
 
@@ -150,6 +178,12 @@
 
 .explore-post {
   margin-right: 0px!important;
+  cursor: pointer;
+  &:hover {
+    svg {
+      fill: $color-teal;
+    }
+  }
 }
 
 input.share-box {

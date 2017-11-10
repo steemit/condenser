@@ -260,7 +260,7 @@ class PostFull extends React.Component {
 
         let post_header = (<h1 className="entry-title">
           {content.title}
-          {full_power && <span title={tt('g.powered_up_100')}><Icon name="steem" /></span>}
+          {full_power && <span title={tt('g.powered_up_100')}><Icon name="steempower" /></span>}
         </h1>);
         if(content.depth > 0) {
             const parent_link = pathTo.post(content.parent_author, content.parent_permlink);

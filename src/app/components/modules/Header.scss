@@ -7,17 +7,36 @@
   z-index: 100;
   background-color: $white;
   box-shadow: 0 2px 4px 0 rgba(0,0,0,0.05);
+  @include themify($themes) {
+    background-color: themed('navBackgroundColor');  
+    border-bottom: themed('border');  
+  }   
   h3 {
     padding-left: 1rem;
     margin-bottom: 0;
   }
   .menu {
-    background-color: $white;
+    // background-color: $white;
     padding-left: 0;
     .hamburger {
       @include hamburger();
       position: relative;
       top: 2px;
+      &::after {
+        transition: 0.2s all ease-in-out;
+        @include themify($themes) {
+          background: themed('textColorPrimary');  
+          box-shadow: 0 7px 0 themed('textColorPrimary'), 0 14px 0 themed('textColorPrimary');  
+        } 
+      }
+      &:hover {
+        &::after {
+          @include themify($themes) {
+            background: themed('textColorAccent');  
+            box-shadow: 0 7px 0 themed('textColorAccent'), 0 14px 0 themed('textColorAccent');  
+          } 
+        }        
+      }         
     }
   }
   ul.menu > li.toggle-menu > a {
@@ -27,16 +46,25 @@
     margin: 0.2rem 0;
   }
   svg > path {
-    fill: $dark-gray;
+    @include themify($themes) {
+      fill: themed('textColorPrimary');  
+    } 
   }
-  //.submit-story {
-  //  margin-right: 1rem;
-  //}
+  li.submit-story > a {
+    @extend .e-btn;
+    margin-right: 22px;
+    margin-left: 16px;
+  }
+  a {
+    @extend .link;
+    @extend .link--primary;
+    font-family: helvetica, sans-serif;
+  }
 }
 
 .Header__top {
-  background-color: $white;
-  border-bottom: 1px solid $light-gray;
+  // background-color: $white;
+  
   padding: 0.25rem 0;
   transition: all 0.3s ease-out;
   @media print, screen and (min-width: 52.5em) {
@@ -70,14 +98,13 @@ ul > li.Header__top-logo > a {
   transition: none;
 }
 
-ul > li > .button {
-  padding-top: 0.2rem;
-  padding-bottom: 0.2rem;
+.Header {
+  ul > li > .button {
+    padding-top: 0.2rem;
+    padding-bottom: 0.2rem;
+  }
 }
 
-//ul > li.submit-story {
-//  padding-top: 0.4rem;
-//}
 
 .Header__sub-nav {
   position: relative;
@@ -127,11 +154,18 @@ ul > li > .button {
 .Header__top-steemit {
   margin-right: -22px;
   .beta {
-    position: relative;
-    top: 14px;
-    right: 22px;
+    position: absolute;
+    top: 43px;
+    left: 140px;
     font-size: 0.7rem;
-    color: #4ba2f2;
+    @include opacity(0);
+    display: none;
+    @include themify($themes) {
+      color: themed('textColorSecondary');
+    }
+    @include MQ(L) {
+      display: block;
+    }
   }
 }
 
@@ -150,4 +184,60 @@ ul > li > .button {
 .ConnectionError {
   margin-right: 4rem;
   color: #ec5840;
+}
+
+.logo-new {
+  transition: 0.2s ease-in-out;
+  display: none;
+  transition: 0.2s all ease-in-out;
+  &--mobile {
+    display: block;
+    width: 30px;
+    height: 30px;
+    @media only screen and (min-width: 400px) {
+      display: none;
+    }
+  }
+  &--desktop {
+    display: none;
+    width: 120px;
+    height: auto;
+    @media only screen and (min-width: 400px) {
+      display: block;
+    }     
+    @include MQ(M) {
+      width: 144px;
+      height: auto;
+    }    
+  }
+  
+  .icon-svg {
+    fill: $color-teal;
+    @include themify($themes) {
+      fill: themed('colorAccent');
+    }
+  }
+}
+
+.Header__top-logo:hover {
+  .logo-new {
+    .icon-svg {
+      fill: $color-blue-black;
+      @include themify($themes) {
+        fill: themed('colorAccentReverse');
+      }
+    }
+  }
+}
+
+.Header__top-logo a {
+  &:visited, &:active {
+    .logo-new {
+      .icon-svg {      
+        @include themify($themes) {
+            fill: themed('ColorAccent');  
+        }
+      }
+    } 
+  }        
 }

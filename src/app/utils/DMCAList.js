@@ -43,4 +43,5 @@ export default `
 /elvinanurhaliza/photography-flowers-finepix-s4800
 /elvinanurhaliza/photohraphy-dewy-flowers
 /elvinanurhaliza/spider-finepix-s4800-reptiles-etc
+/seanfrederic/feature-film-loco-i-m-a-producer-on-starts-filming-soon
 `.trim().split('\n');

@@ -274,8 +274,8 @@ class UserWallet extends React.Component {
             claimbox = <div className="row">
                     <div className="columns small-12">
                         <div className="UserWallet__claimbox">
-                            Your current rewards: {rewards_str}
-                            <button disabled={this.state.claimInProgress} className="button hollow float-right" onClick={e => {this.handleClaimRewards(account)}}>{tt('userwallet_jsx.redeem_rewards')}</button>
+                            <span className="UserWallet__claimbox-text">Your current rewards: {rewards_str}</span>
+                            <button disabled={this.state.claimInProgress} className="button" onClick={e => {this.handleClaimRewards(account)}}>{tt('userwallet_jsx.redeem_rewards')}</button>
                         </div>
                     </div>
                 </div>

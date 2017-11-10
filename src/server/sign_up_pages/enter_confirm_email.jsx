@@ -195,20 +195,19 @@ export default function useEnterAndConfirmEmailPages(app) {
         if (this.request.query && this.request.query.email)
             default_email = this.request.query.email;
         const body = renderToString(
-            <div className="App">
+            <div className="App CreateAccount">
                 <MiniHeader />
                 <br />
-                <div className="row" style={{ maxWidth: "32rem" }}>
+                <div className="row CreateAccount__step" style={{ maxWidth: "32rem" }}>
                     <div className="column">
                         <Progress tabIndex="0" value={50} max={100} />
                         <form id="submit_email" action={pathTo.submitEmail()} method="POST">
                             <h4 style={{ color: "#4078c0" }}>
                                 Please provide your email address to continue
                             </h4>
-                            <p className="secondary">
-                                We need your email address to ensure that we can contact you to verify account ownership in the event that your account is ever compromised.
+                            <p>
+                                We use this to contact you and verify account ownership if this account is ever compromised. We'll send a confirmation link, so please use a valid email.
                             </p>
-                            <p className="secondary">Please make sure that you enter a <strong>valid</strong> email so that you receive the confirmation link.</p>
                             <input
                                 type="hidden"
                                 name="csrf"
@@ -240,7 +239,7 @@ export default function useEnterAndConfirmEmailPages(app) {
                                 <input
                                     type="submit"
                                     className="button"
-                                    value="CONTINUE" />
+                                    value="Continue" />
                             }
                         </form>
                     </div>

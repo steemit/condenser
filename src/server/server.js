@@ -28,6 +28,8 @@ import Grant from 'grant-koa';
 import config from 'config';
 import secureRandom from 'secure-random';
 import {pathTo} from 'app/Routes';
+import userIllegalContent from 'app/utils/userIllegalContent';
+import koaLocale from 'koa-locale';
 
 if(cluster.isMaster)
     console.log('application server starting, please wait.');
@@ -59,6 +61,7 @@ csrf(app);
 
 app.use(mount(grant));
 app.use(flash({ key: 'flash' }));
+koaLocale(app);
 
 function convertEntriesToArrays(obj) {
     return Object.keys(obj).reduce((result, key) => {

@@ -320,13 +320,13 @@ export default class UserProfile extends React.Component {
         if (isMyAccount && section === 'blog') {
             page_title = "My blog";
         } else if (!isMyAccount && section === 'blog') {
-            page_title = "Blog";
+            page_title = tt('g.blog');
         }  else if (section === 'comments') {
             page_title = "Comments on my blog posts";
         }  else if (section === 'recent-replies') {
             page_title = "Replies to my comments";
         }  else if (section === 'settings') {
-            page_title = "Settings";
+            page_title = tt('g.settings');
         }  else if (section === 'curation-rewards') {
             page_title = tt('g.curation_rewards');
         }  else if (section === 'author-rewards') {

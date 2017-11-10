@@ -314,7 +314,6 @@ export default class UserProfile extends React.Component {
             tab_content = <div>Unavailable For Legal Reasons.</div>;
         }
 
-
         var page_title = "";
         // Page title
         if (isMyAccount && section === 'blog') {
@@ -333,8 +332,6 @@ export default class UserProfile extends React.Component {
             page_title = tt('g.author_rewards');
         }
 
-        
-
         const layoutClass = this.props.blogmode ? ' layout-block' : ' layout-list';
 
         const blog_header = (
@@ -350,8 +347,6 @@ export default class UserProfile extends React.Component {
                 <hr className="articles__hr" /> 
             </div>
         );
-
-
 
         if (!(section === 'transfers' || section === 'permissions' || section === 'password')) {
             tab_content = <div className="row">

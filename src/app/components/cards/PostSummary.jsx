@@ -128,7 +128,7 @@ class PostSummary extends React.Component {
             <Userpic account={p.author} />
             <Author author={p.author} authorRepLog10={authorRepLog10} follow={false} mute={false} />
             {} {tt('g.in')} <TagList post={p} single />&nbsp;•&nbsp;
-            <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}><TimeAgoWrapper date={p.created} className="updated" /></a>
+            <Link to={title_link_url}><TimeAgoWrapper date={p.created} className="updated" /></Link>
         </span>);
 
         // New Post Summary heading
@@ -148,12 +148,12 @@ class PostSummary extends React.Component {
                     <span className="user__name"><Author author={p.author} authorRepLog10={authorRepLog10} follow={false} mute={false} /></span>
 
                     <span className="articles__tag-link">{tt('g.in')}&nbsp;<TagList post={p} single />&nbsp;•&nbsp;</span>
-                    <a className="timestamp__link" href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}>
+                    <Link className="timestamp__link" to={title_link_url} >
                         <span className="timestamp__time"><TimeAgoWrapper date={p.created} className="updated" /></span>
 
                         {full_power && <span className="articles__icon-100" title={tt('g.powered_up_100')}><Icon name="steempower" /></span>}
 
-                    </a>
+                    </Link>
                 </div>
             </div>
             <div className="articles__flag">
@@ -248,9 +248,9 @@ class PostSummary extends React.Component {
                 <div className={'articles__content hentry' + (thumb ? ' with-image ' : ' ') + commentClasses.join(' ')} itemScope itemType ="http://schema.org/blogPost">
                   { thumb
                         ? <div className="articles__content-block articles__content-block--img">
-                            <a className="articles__link" href="#">
+                            <Link className="articles__link" to={title_link_url}>
                                 {thumb}
-                            </a>
+                            </Link>
                         </div>
                         : null
                     }

@@ -313,14 +313,14 @@ export default function useGeneralApi(app) {
 
     router.post('/page_view', koaBody, function *() {
         const params = this.request.body;
-        const {csrf, page, ref} = typeof(params) === 'string' ? JSON.parse(params) : params;
+        const {csrf, page, ref, posts} = typeof(params) === 'string' ? JSON.parse(params) : params;
         if (!checkCSRF(this, csrf)) return;
         if (page.match(/\/feed$/)) {
             this.body = JSON.stringify({views: 0});
             return;
         }
         console.log('-- /page_view -->', this.session.uid, page);
-        recordWebEvent(this, 'PageView', page);
+        recordWebEvent(this, 'PageView', JSON.stringify(posts));
         const remote_ip = getRemoteIp(this.req);
         try {
             let views = 1, unique = true;

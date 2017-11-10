@@ -16,6 +16,7 @@ class Post extends React.Component {
     static propTypes = {
         content: React.PropTypes.object.isRequired,
         post: React.PropTypes.string,
+        aiPosts: React.PropTypes.array,
         routeParams: React.PropTypes.object,
         location: React.PropTypes.object,
         signup_bonus: React.PropTypes.string,
@@ -62,6 +63,7 @@ class Post extends React.Component {
         const {current_user, ignoring, signup_bonus, content} = this.props
         const {showNegativeComments, commentHidden, showAnyway} = this.state
         let post = this.props.post;
+        const aiPosts = this.props.aiPosts;
         if (!post) {
             const route_params = this.props.routeParams;
             post = route_params.username + '/' + route_params.slug;
@@ -163,15 +165,15 @@ class Post extends React.Component {
                 </div>
             </center>
 
-		if(blockedUsers.includes(post.split("/")[0])) {
-			return (<IllegalContentMessage />)
-		}
+          if(blockedUsers.includes(post.split("/")[0])) {
+            return (<IllegalContentMessage />)
+          }
 
         return (
             <div className="Post">
                 <div className="row">
                     <div className="column">
-                        <PostFull post={post} cont={content} />
+                        <PostFull post={post} cont={content} aiPosts={aiPosts} />
                     </div>
                 </div>
                 {!current_user && <div className="row">

@@ -106,11 +106,6 @@ class AuthorRewards extends React.Component {
              </nav>
         );
         return (<div className="UserWallet">
-            <div className="row">
-                <div className="column small-12">
-                    <h4 className="uppercase">{tt('g.author_rewards')}</h4>
-                </div>
-            </div>
             <div className="UserWallet__balance UserReward__row row">
                 <div className="column small-12 medium-8">
                     {tt('authorrewards_jsx.estimated_author_rewards_last_week')}:

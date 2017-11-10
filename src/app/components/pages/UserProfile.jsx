@@ -316,20 +316,35 @@ export default class UserProfile extends React.Component {
 
         var page_title = "";
         // Page title
-        if (isMyAccount && section === 'blog') {
-            page_title = "My blog";
-        } else if (!isMyAccount && section === 'blog') {
-            page_title = tt('g.blog');
-        }  else if (section === 'comments') {
-            page_title = "Comments on my blog posts";
-        }  else if (section === 'recent-replies') {
-            page_title = "Replies to my comments";
-        }  else if (section === 'settings') {
-            page_title = tt('g.settings');
-        }  else if (section === 'curation-rewards') {
-            page_title = tt('g.curation_rewards');
-        }  else if (section === 'author-rewards') {
-            page_title = tt('g.author_rewards');
+
+        if (isMyAccount) {
+            if (section === 'blog') {
+                page_title = "My blog";
+            } else if (section === 'comments') {
+                page_title = "My comments";
+            }  else if (section === 'recent-replies') {
+                page_title = "Replies to me";                
+            } else if (section === 'settings') {
+                page_title = tt('g.settings');             
+            }  else if (section === 'curation-rewards') {
+                page_title = tt('g.curation_rewards');
+            }  else if (section === 'author-rewards') {
+                page_title = tt('g.author_rewards');            
+            }
+        } else {
+            if (section === 'blog') {
+                page_title = tt('g.blog');
+            } else if (section === 'comments') {
+                page_title = tt('g.comments');
+            }  else if (section === 'recent-replies') {
+                page_title = tt('g.replies');                
+            } else if (section === 'settings') {
+                page_title = tt('g.settings');             
+            }  else if (section === 'curation-rewards') {
+                page_title = tt('g.curation_rewards');
+            }  else if (section === 'author-rewards') {
+                page_title = tt('g.author_rewards');            
+            }            
         }
 
         const layoutClass = this.props.blogmode ? ' layout-block' : ' layout-list';

@@ -128,8 +128,7 @@ class AuthorRewards extends React.Component {
             <div className="row">
                 <div className="column small-12">
                     {/** history */}
-                    <h4 className="uppercase">{tt('authorrewards_jsx.author_rewards_history')}</h4>
-                    {navButtons}
+                    <h4>{tt('authorrewards_jsx.author_rewards_history')}</h4>
                     <table>
                         <tbody>
                         {author_log}

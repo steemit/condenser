@@ -110,7 +110,7 @@
   .Voting__voters_list {
     @include themify($themes) {
       border-right: themed('border');
-    }  
+    }
     padding-right: 1rem;
     margin-right: 1rem;
     transition: 0.3s all ease-in-out;

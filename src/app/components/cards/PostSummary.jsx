@@ -248,9 +248,9 @@ class PostSummary extends React.Component {
                 <div className={'articles__content hentry' + (thumb ? ' with-image ' : ' ') + commentClasses.join(' ')} itemScope itemType ="http://schema.org/blogPost">
                   { thumb
                         ? <div className="articles__content-block articles__content-block--img">
-                            <a className="articles__link" href="#">
+                            <Link className="articles__link" to={title_link_url}>
                                 {thumb}
-                            </a>
+                            </Link>
                         </div>
                         : null
                     }

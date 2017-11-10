@@ -4,6 +4,7 @@ import Portal from 'react-portal'
 import position from 'selection-position'
 import Icon from 'app/components/elements/Icon';
 import ReactDOMServer from 'react-dom/server'
+import { APP_DOMAIN } from 'app/client_config'
 
 import {getCollapsedClientRect} from 'app/utils/SlateEditor/Helpers'
 import demoState from 'app/utils/SlateEditor/DemoState'
@@ -183,7 +184,7 @@ export default class SlateEditor extends React.Component {
         }
 
         else if (state.isExpanded) {
-            const href = window.prompt('Enter the URL of the link:', 'http://golos.io')
+            const href = window.prompt('Enter the URL of the link:', `http://golos.io`)
             if(href) {
                 state = state
                     .transform()

@@ -1,6 +1,7 @@
 import config from 'config';
 import webPush from 'web-push';
 import Tarantool from '../db/tarantool';
+import { APP_DOMAIN } from 'app/client_config'
 
 webPush.setGCMAPIKey(config.get('notify.gcm_key'));
 
@@ -10,7 +11,7 @@ function notify(account, nparams, title, body, url, pic) {
         title,
         body,
         url,
-        icon: pic || 'https://golos.io/favicon.ico'  //FIXME domain name from config
+        icon: pic || `https://${APP_DOMAIN}/favicon.ico`
     });
     return new Promise((resolve, reject) => {
         webPush.sendNotification(nparams, payload).then(function() {

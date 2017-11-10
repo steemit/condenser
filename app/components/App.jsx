@@ -19,7 +19,7 @@ import MiniHeader from 'app/components/modules/MiniHeader';
 import tt from 'counterpart';
 import PageViewsCounter from 'app/components/elements/PageViewsCounter';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
-import { VEST_TICKER, WIKI_URL, LANDING_PAGE_URL, ABOUT_PAGE_URL, WHITEPAPER_URL, TERMS_OF_SERVICE_URL, PRIVACY_POLICY_URL, THEMES, DEFAULT_THEME } from 'app/client_config';
+import { APP_DOMAIN, VEST_TICKER, WIKI_URL, LANDING_PAGE_URL, ABOUT_PAGE_URL, WHITEPAPER_URL, TERMS_OF_SERVICE_URL, PRIVACY_POLICY_URL, THEMES, DEFAULT_THEME } from 'app/client_config';
 import LocalizedCurrency from 'app/components/elements/LocalizedCurrency';
 
 class App extends React.Component {
@@ -140,12 +140,12 @@ class App extends React.Component {
                         <CloseButton onClick={() => this.setState({showCallout: false})} />
                         <ul>
                             <li>
-                                <a href="https://golos.io/steemit/@steemitblog/steemit-com-is-now-open-source">
+                                <a href={`https://${APP_DOMAIN}/steemit/@steemitblog/steemit-com-is-now-open-source`}>
                                     {tt('submit_a_story.APP_NAME_is_now_open_source', {APP_NAME})}
                                 </a>
                             </li>
                             <li>
-                                <a href="https://golos.io/steemit/@steemitblog/all-recovered-accounts-have-been-fully-refunded">
+                                <a href={`https://${APP_DOMAIN}/steemit/@steemitblog/all-recovered-accounts-have-been-fully-refunded`}>
                                     {tt('submit_a_story.all_accounts_refunded')}
                                 </a>
                             </li>
@@ -256,7 +256,7 @@ class App extends React.Component {
                 </ul>
                 <ul className="vertical menu">
                     <li>
-                      <a href="https://golos.io/ru--golos/@golos/dogovor-kupli-prodazhi-tokenov-sila-golosa" onClick={this.navigate} rel="nofollow">
+                      <a href={`https://${APP_DOMAIN}/ru--golos/@golos/dogovor-kupli-prodazhi-tokenov-sila-golosa`} onClick={this.navigate} rel="nofollow">
                             {tt("navigation.sale_agreement")}
                         </a>
                     </li>

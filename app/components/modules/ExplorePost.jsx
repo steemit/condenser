@@ -3,6 +3,7 @@ import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import Icon from 'app/components/elements/Icon';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import tt from 'counterpart';
+import { APP_DOMAIN } from 'app/client_config';
 
 export default class ExplorePost extends Component {
 
@@ -33,8 +34,8 @@ export default class ExplorePost extends Component {
         const link = this.props.permlink;
         const golosd = 'http://golosd.com' + link;
         const golosdb = 'https://golosdb.com' + link;
-        const golosio = 'https://golos.io' + link;
-        const golosioCE = 'https://golos.io' + link.replace(/@/g, '%40');
+        const golosio = `https://${APP_DOMAIN}` + link;
+        const golosioCE = `https://${APP_DOMAIN}` + link.replace(/@/g, '%40');
 
         return (
             <span className="ExplorePost">

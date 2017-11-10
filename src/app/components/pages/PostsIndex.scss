@@ -180,16 +180,12 @@
   }
 }
 
-
-
-
 .PostsIndex.row.layout-list {
   max-width: none;
   @include MQ(L) {
     max-width: 1600px;
   }
 }
-
 
 .articles {
     font-family: helvetica, sans-serif;
@@ -650,8 +646,6 @@
   } 
 }
 
-
-
 // Compressed list view CSS
 
 a#changeLayout:focus {
@@ -921,6 +915,9 @@ a#changeLayout:focus {
   }
 }
 
+.PostsIndex .Voting {
+  float: right;
+}
 
 
 .articles__resteem .username {

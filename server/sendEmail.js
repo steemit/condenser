@@ -8,6 +8,7 @@ export default function sendEmail(template, to, params, from = null) {
         console.log(`mail: to <${to}>, from <${config.get('postmark.from')}>, template ${template} (not sent due to not production env)`);
         return;
     }
+    params.url = config.get("server.protocol") + '://' + config.get("server.host");
     const templateId = config.get('postmark.templates')[template];
     if (!templateId) throw new Error(`can't find postmark email template ${template}`);
     client.sendEmailWithTemplate({

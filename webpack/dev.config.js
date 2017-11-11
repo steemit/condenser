@@ -25,9 +25,6 @@ module.exports = {
                 BROWSER: JSON.stringify(true),
                 NODE_ENV: JSON.stringify('development'),
                 VERSION: JSON.stringify(git.long())
-            },
-            global: {
-                TYPED_ARRAY_SUPPORT: JSON.stringify(false)
             }
         }),
         ...baseConfig.plugins,

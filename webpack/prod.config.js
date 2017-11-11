@@ -10,9 +10,6 @@ module.exports = {
                 BROWSER: JSON.stringify(true),
                 NODE_ENV: JSON.stringify('production'),
                 VERSION: JSON.stringify(git.long())
-            },
-            global: {
-                TYPED_ARRAY_SUPPORT: JSON.stringify(false)
             }
         }),
         new webpack.optimize.UglifyJsPlugin({

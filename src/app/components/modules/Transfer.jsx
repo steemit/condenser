@@ -2,6 +2,9 @@ import React, { PropTypes, Component } from 'react';
 import ReactDOM from 'react-dom';
 import reactForm from 'app/utils/ReactForm';
 import { Map } from 'immutable';
+import Autocomplete from 'react-autocomplete';
+import tt from 'counterpart';
+
 import * as transactionActions from 'app/redux/TransactionReducer';
 import * as userActions from 'app/redux/UserReducer';
 import * as globalActions from 'app/redux/GlobalReducer';
@@ -12,7 +15,6 @@ import {
     validate_memo_field,
 } from 'app/utils/ChainValidation';
 import { countDecimals } from 'app/utils/ParsersAndFormatters';
-import tt from 'counterpart';
 import { APP_NAME, LIQUID_TOKEN, VESTING_TOKEN } from 'app/client_config';
 
 /** Warning .. This is used for Power UP too. */
@@ -22,22 +24,81 @@ class TransferForm extends Component {
         currentUser: PropTypes.object.isRequired,
         toVesting: PropTypes.bool.isRequired,
         currentAccount: PropTypes.object.isRequired,
+        following: PropTypes.object.isRequired,
     };
 
     constructor(props) {
         super();
         const { transferToSelf } = props;
-        this.state = { advanced: !transferToSelf };
+        this.state = {
+            advanced: !transferToSelf,
+            transferTo: false,
+            autocompleteUsers: [],
+        };
         this.initForm(props);
     }
 
     componentDidMount() {
         setTimeout(() => {
             const { advanced } = this.state;
-            if (advanced) ReactDOM.findDOMNode(this.refs.to).focus();
+            if (advanced) this.to.focus();
             else ReactDOM.findDOMNode(this.refs.amount).focus();
         }, 300);
+
         runTests();
+
+        this.buildTransferAutocomplete();
+    }
+
+    buildTransferAutocomplete() {
+        // Get names for the recent account transfers
+        const labelPreviousTransfers = tt(
+            'transfer_jsx.autocomplete_previous_transfers'
+        );
+        const labelFollowingUser = tt(
+            'transfer_jsx.autocomplete_user_following'
+        );
+
+        const transferToLog = this.props.currentAccount
+            .get('transfer_history')
+            .reduce((acc, cur) => {
+                if (cur.getIn([1, 'op', 0]) === 'transfer') {
+                    const username = cur.getIn([1, 'op', 1, 'to']);
+                    const numTransfers = acc.get(username)
+                        ? acc.get(username).numTransfers + 1
+                        : 1;
+                    return acc.set(username, {
+                        username,
+                        label: `${numTransfers} ${labelPreviousTransfers}`,
+                        numTransfers,
+                    });
+                }
+                return acc;
+            }, Map())
+            // Limit transfer log to 20
+            .slice(0, 20);
+
+        // Build a combined list of users you follow & have previously transferred to,
+        // and sort it by the number of previous transfers.
+        this.setState({
+            autocompleteUsers: this.props.following
+                .toOrderedMap()
+                .map(username => ({
+                    username,
+                    label: labelFollowingUser,
+                    numTransfers: 0,
+                }))
+                // Limit following list to 20
+                .slice(0, 20)
+                .merge(transferToLog)
+                .sortBy(u => u.numTransfers)
+                .reverse()
+                .toArray(),
+        });
+    }
+
+    matchAutocompleteUser(item, value) {
+        return item.username.toLowerCase().indexOf(value.toLowerCase()) > -1;
     }
 
     onAdvanced = e => {
@@ -141,9 +202,11 @@ class TransferForm extends Component {
         this.state.amount.props.onChange(this.balanceValue().split(' ')[0]);
     };
 
-    onChangeTo = e => {
-        const { value } = e.target;
+    onChangeTo = value => {
         this.state.to.props.onChange(value.toLowerCase().trim());
+        this.setState({
+            to: { ...this.state.to, value: value.toLowerCase().trim() },
+        });
     };
 
     render() {
@@ -167,6 +230,7 @@ class TransferForm extends Component {
         const { loading, trxError, advanced } = this.state;
         const {
             currentUser,
+            currentAccount,
             toVesting,
             transferToSelf,
             dispatchSubmit,
@@ -175,6 +239,7 @@ class TransferForm extends Component {
         const { submitting, valid, handleSubmit } = this.state.transfer;
         // const isMemoPrivate = memo && /^#/.test(memo.value); -- private memos are not supported yet
         const isMemoPrivate = false;
+
         const form = (
             <form
                 onSubmit={handleSubmit(({ data }) => {
@@ -248,20 +313,58 @@ class TransferForm extends Component {
                                 style={{ marginBottom: '1.25rem' }}
                             >
                                 <span className="input-group-label">@</span>
-                                <input
-                                    className="input-group-field"
-                                    ref="to"
-                                    type="text"
-                                    placeholder={tt(
-                                        'transfer_jsx.send_to_account'
+                                <Autocomplete
+                                    wrapperStyle={{
+                                        display: 'inline-block',
+                                        width: '100%',
+                                    }}
+                                    inputProps={{
+                                        type: 'text',
+                                        className: 'input-group-field',
+                                        autoComplete: 'off',
+                                        autoCorrect: 'off',
+                                        autoCapitalize: 'off',
+                                        spellCheck: 'false',
+                                        disabled: loading,
+                                    }}
+                                    renderMenu={items => (
+                                        <div
+                                            className="react-autocomplete-input"
+                                            children={items}
+                                        />
                                     )}
-                                    onChange={this.onChangeTo}
-                                    autoComplete="off"
-                                    autoCorrect="off"
-                                    autoCapitalize="off"
-                                    spellCheck="false"
-                                    disabled={loading}
-                                    {...to.props}
+                                    ref={el => (this.to = el)}
+                                    getItemValue={item => item.username}
+                                    items={this.state.autocompleteUsers}
+                                    shouldItemRender={
+                                        this.matchAutocompleteUser
+                                    }
+                                    renderItem={(item, isHighlighted) => (
+                                        <div
+                                            className={
+                                                isHighlighted ? 'active' : ''
+                                            }
+                                        >
+                                            {`${item.username} (${item.label})`}
+                                        </div>
+                                    )}
+                                    value={this.state.to.value || ''}
+                                    onChange={e => {
+                                        this.setState({
+                                            to: {
+                                                ...this.state.to,
+                                                value: e.target.value,
+                                            },
+                                        });
+                                    }}
+                                    onSelect={val =>
+                                        this.setState({
+                                            to: {
+                                                ...this.state.to,
+                                                value: val,
+                                            },
+                                        })
+                                    }
                                 />
                             </div>
                             {to.touched && to.blur && to.error ? (
@@ -465,6 +568,12 @@ export default connect(
             currentAccount,
             toVesting,
             transferToSelf,
+            following: state.global.getIn([
+                'follow',
+                'getFollowingAsync',
+                currentUser.get('username'),
+                'blog_result',
+            ]),
             initialValues,
         };
     },

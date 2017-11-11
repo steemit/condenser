@@ -88,8 +88,15 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
 
         const history = syncHistoryWithStore(browserHistory, store);
 
-        const scroll = useScroll();
-        
+        const scroll = useScroll( (previous, { location }) => {
+            if(location.hash) { //in situations where we have a hash url, and we are navigating forward, we want to abdicate scrolling to Post.jsx (we don't want to scroll here)
+                if((previous === null && location.action === 'POP') || (previous !== null && location.action === 'PUSH') ) {
+                    return false;
+                }
+            }
+            return true;
+        } );
+
         if (process.env.NODE_ENV === 'production') {
             console.log('%c%s', 'color: red; background: yellow; font-size: 24px;', 'WARNING!');
             console.log('%c%s', 'color: black; font-size: 16px;', 'This is a developer console, you must read and understand anything you paste or type here or you could compromise your account and your private keys.');

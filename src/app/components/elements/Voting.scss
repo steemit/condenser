@@ -177,7 +177,7 @@
   }
 }
 
-.DropdownMenu.Voting__voters_list ul {
+.DropdownMenu.Voting__voters_list ul, .DropdownMenu.Voting__flaggers_list ul {
   li > a {
     //font-weight: 200;
   }

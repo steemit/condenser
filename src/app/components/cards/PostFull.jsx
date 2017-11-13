@@ -60,11 +60,10 @@ function TimeAuthorCategory({content, authorRepLog10, showTags}) {
 function TimeAuthorCategoryLarge({content, authorRepLog10}) {
     return (
       <span className="PostFull__time_author_category_large vcard">
-        <TimeAgoWrapper date={content.created} className="updated float-right" />
         <Userpic account={content.author} />
         <div className="right-side">
           <Author author={content.author} authorRepLog10={authorRepLog10} />
-          <span> {tt('g.in')} <TagList post={content} single /></span>
+          <span> {tt('g.in')} <TagList post={content} single /></span>  •&nbsp; <TimeAgoWrapper date={content.created} className="updated" />
         </div>
       </span>
     );

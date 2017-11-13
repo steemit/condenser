@@ -3,6 +3,7 @@ import React from 'react';
 import { Link } from 'react-router';
 import {connect} from 'react-redux';
 import { browserHistory } from 'react-router';
+import classnames from 'classnames';
 import transaction from 'app/redux/Transaction';
 import user from 'app/redux/User';
 import Icon from 'app/components/elements/Icon'
@@ -347,7 +348,7 @@ export default class UserProfile extends React.Component {
             }
         }
 
-        const layoutClass = this.props.blogmode ? ' layout-block' : ' layout-list';
+        const layoutClass = this.props.blogmode ? 'layout-block' : 'layout-list';
 
         const blog_header = (
             <div>
@@ -365,7 +366,7 @@ export default class UserProfile extends React.Component {
 
         if (!(section === 'transfers' || section === 'permissions' || section === 'password')) {
             tab_content = <div className="row">
-                <div className={'UserProfile__tab_content column' + layoutClass + " " + section}>
+                <div className={classnames('UserProfile__tab_content', 'column', layoutClass, section)}>
                     <article className="articles">
                         {section === 'blog' || 'comments' ? blog_header : null }
                         {tab_content}

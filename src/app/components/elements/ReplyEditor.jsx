@@ -389,13 +389,11 @@ class ReplyEditor extends React.Component {
                                                   autoComplete="off"
                                                   tabIndex={2} />
                                     </Dropzone>
-                                {type === 'submit_story' &&
                                 <p className="drag-and-drop">
                                     {tt('reply_editor.insert_images_by_dragging_dropping')}
                                     {noClipboardData ? '' : tt('reply_editor.pasting_from_the_clipboard')}
                                     {tt('reply_editor.or_by')} <a onClick={this.onOpenClick}>{tt('reply_editor.selecting_them')}</a>.
                                 </p>
-                                }
                                 {progress.message && <div className="info">{progress.message}</div>}
                                 {progress.error && <div className="error">{tt('reply_editor.image_upload')} : {progress.error}</div>}
                                 </span>

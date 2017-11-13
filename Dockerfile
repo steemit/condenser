@@ -8,7 +8,7 @@ RUN npm install -g yarn
 WORKDIR /var/app
 RUN mkdir -p /var/app
 ADD package.json /var/app/package.json
-RUN yarn
+RUN yarn install --non-interactive --frozen-lockfile
 
 COPY . /var/app
 
@@ -20,8 +20,8 @@ COPY . /var/app
 #  npm run build
 
 RUN mkdir tmp && \
-  npm test && \
-  npm run-script build
+  yarn test && \
+  yarn run build
 
 ENV PORT 8080
 ENV NODE_ENV production

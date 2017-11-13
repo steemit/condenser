@@ -15,16 +15,6 @@ class SignUp extends React.Component {
     render() {
         const APP_NAME = tt('g.APP_NAME');
 
-        if ($STM_Config.read_only_mode) {
-            return <div className="row">
-                <div className="column">
-                    <div className="callout alert">
-                        <p>{tt("g.read_only_mode")}</p>
-                    </div>
-                </div>
-            </div>;
-        }
-
         if (this.props.serverBusy || $STM_Config.disable_signups) {
             return <div className="row">
                 <div className="column callout" style={{margin: '20px', padding: '40px'}}>

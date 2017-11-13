@@ -161,8 +161,7 @@ function* broadcastOperation({payload:
 }
 
 function* broadcastPayload({payload: {operations, keys, username, successCallback, errorCallback}}) {
-    // console.log('broadcastPayload')
-    if ($STM_Config.read_only_mode) return;
+
     for (const [type] of operations) // see also transaction/ERROR
         yield put(tr.actions.remove({key: ['TransactionError', type]}))
 

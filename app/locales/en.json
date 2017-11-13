@@ -236,7 +236,6 @@
       "value_posts": "low value posts"
     },
 
-    "read_only_mode": "Due to server maintenance we are running in read only mode. We are sorry for the inconvenience.",
     "membership_invitation_only": "Membership to %(APP_DOMAIN)s is now under invitation only because of unexpectedly high sign up rate.",
     "submit_email_to_get_on_waiting_list": "Submit your email to get on the waiting list",
     "show_less_low_value_posts": "Show fewer low value posts",

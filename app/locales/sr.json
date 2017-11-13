@@ -374,7 +374,6 @@
       "show_less":"Prikaži manje",
       "value_posts":"postovi sa niskim rejtingom"
     },
-    "read_only_mode":"Zbog održavanja servera, server radi u režimu Read-only. Žao nam je zbog neprijatnosti.",
     "membership_invitation_only":"Ćlanarina za %(APP_URL)s je sada pod opcijom pozivnice samo zbog neočekivano visoke stope registracije novih korisnika.",
     "submit_email_to_get_on_waiting_list":"Pošaljite svoj email da se upišete na listu čekanja",
     "show_less_low_value_posts":"Prikaži manje postova sa niskim rejtingom",

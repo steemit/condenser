@@ -72,10 +72,10 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
     const mcl = vertical ? '' : ' sub-menu';
     const lcn = vertical ? '' : 'show-for-medium';
     const nav = navigate || defaultNavigate;
-    const submitStory = $STM_Config.read_only_mode ? null : <li className={lcn + ' submit-story'}>
+    const submitStory = <li className={lcn + ' submit-story'}>
       <a href="/submit.html" onClick={nav}>{tt('g.submit_a_story')}</a>
     </li>;
-    const submitStoryPencil = $STM_Config.read_only_mode ? null : <li className="show-for-small-only">
+    const submitStoryPencil = <li className="show-for-small-only">
       <Link to="/submit.html"><Icon name="pencil" /></Link>
     </li>;
     // const golosFest = <li className={lcn + ' buttons'}><Link to="/created/ru--godgolosu" className="button alert fest">{tt('g.golos_fest')}</Link></li>;

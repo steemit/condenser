@@ -120,15 +120,6 @@ class LoginForm extends Component {
             </div>;
         }
 
-        if ($STM_Config.read_only_mode) {
-            return <div className="row">
-                <div className="column">
-                    <div className="callout alert">
-                        <p>{tt('loginform_jsx.due_to_server_maintenance')}</p></div>
-                </div>
-            </div>;
-        }
-
         const {loginBroadcastOperation, dispatchSubmit, afterLoginRedirectToWelcome, msg} = this.props;
         const {username, password, saveLogin} = this.state;
         const {submitting, valid, handleSubmit} = this.state.login;

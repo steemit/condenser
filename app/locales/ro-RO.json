@@ -374,7 +374,6 @@
       "show_less":"Arată mai puțin",
       "value_posts":"postări cu remunerare mai mică"
     },
-    "read_only_mode":"Din cauza lucrărilor de întreținere, serverul lucrează în mod de citire. Ne pare rău pentru neplăcerile create.",
     "membership_invitation_only":"Din cauza ratei neașteptat de mare de înregistrare, pentru a deveni un utilizator al %(APP_URL)s acum e posibil doar cu invitație.",
     "submit_email_to_get_on_waiting_list":"Adăugați adresa de e-mail pentru a ajunge pe o listă de așteptare.",
     "show_less_low_value_posts":"Afișează mesajele cu recompensă mai mică",

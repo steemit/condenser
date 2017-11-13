@@ -10,10 +10,11 @@ const iframeWhitelist = [
             return 'https://player.vimeo.com/video/' + m[1]
         }
     },
-    { re: /^(https?:)?\/\/www.youtube.com\/embed\/.*/i,
-      fn: (src) => {
-        return src.replace(/\?.+$/, ''); // strip query string (yt: autoplay=1,controls=0,showinfo=0, etc)
-      }
+    { 
+        re: /^(https?:)?\/\/www.youtube.com\/embed\/.*/i,
+        fn: (src) => {
+            return src.replace(/\?.+$/, ''); // strip query string (yt: autoplay=1,controls=0,showinfo=0, etc)
+        }
     },
     {
         re: /^https:\/\/w.soundcloud.com\/player\/.*/i,
@@ -27,7 +28,15 @@ const iframeWhitelist = [
                 '&show_user=true&show_reposts=false&visual=true'
         }
     },
-    { re: /^(https?:)?\/\/www.google.com\/maps\/*/i,
+    { 
+        re: /^(https?:)?\/\/www.google.com\/maps\/*/i,
+        fn: (src) => {
+            if(!src) return null;
+            return src;
+        }
+    },
+    { 
+        re: /^(https?:)?\/\/app.powerbi.com\/view\/*/i,
         fn: (src) => {
             if(!src) return null;
             return src;
@@ -76,8 +85,8 @@ export default ({large = true, highQualityPost = true, noImage = false, sanitize
                             webkitallowfullscreen: 'webkitallowfullscreen', // deprecated but required for vimeo : https://vimeo.com/forums/help/topic:278181
                             mozallowfullscreen: 'mozallowfullscreen',       // deprecated but required for vimeo
                             src,
-                            width:  large ? '640' : '480',
-                            height: large ? '360' : '270',
+                            width: large ? '800' : '480',
+                            height: large ? '600' : '270',
                         },
                     }
                 }

@@ -31,6 +31,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
     const feed_link = `/@${username}/feed`;
     const replies_link = `/@${username}/recent-replies`;
     const wallet_link = `/@${username}/transfers`;
+    const market_link = '/market';
     const account_link = `/@${username}`;
     const comments_link = `/@${username}/comments`;
     const reset_password_link = `/@${username}/password`;
@@ -43,6 +44,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
             {link: comments_link, icon: 'replies', value: tt('g.comments')},
             {link: replies_link, icon: 'reply', value: tt('g.replies'), addon: <NotifiCounter fields="comment_reply" />},
             {link: wallet_link, icon: 'wallet', value: tt('g.wallet'), addon: <NotifiCounter fields="follow,send,receive,account_update" />},
+            {link: market_link, icon: 'steemblack', value: tt('navigation.currency_market')},
             {link: '#', icon: 'eye', onClick: toggleNightmode, value: tt('g.toggle_nightmode') },
             {link: reset_password_link, icon: 'key', value: tt('g.change_password')},
             {link: settings_link, icon: 'cog', value: tt('g.settings')},

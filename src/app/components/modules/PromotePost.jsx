@@ -80,6 +80,7 @@ class PromotePost extends Component {
         const submitDisabled = !amount;
 
         return (
+<<<<<<< HEAD
             <div className="PromotePost row">
                 <div className="column small-12">
                     <form
@@ -145,6 +146,35 @@ class PromotePost extends Component {
                 </div>
             </div>
         );
+=======
+           <div className="PromotePost row">
+               <div className="column small-12">
+                   <form onSubmit={this.onSubmit} onChange={() => this.setState({trxError: ''})}>
+                       <h4>{tt('promote_post_jsx.promote_post')}</h4>
+                       <p>{tt('promote_post_jsx.spend_your_DEBT_TOKEN_to_advertise_this_post', {DEBT_TOKEN})}.</p>
+                       <hr />
+                       <div className="row">
+                           <div className="column small-6 large-4">
+                               <label>{tt('g.amount')}</label>
+                               <div className="input-group">
+                                   <input className="input-group-field" type="text" placeholder={tt('g.amount')} value={amount} ref="amount" autoComplete="off" disabled={loading} onChange={this.amountChange} />
+                                   <span className="input-group-label">{DEBT_TOKEN_SHORT + ' '} ({CURRENCY_SIGN})</span>
+                                   <div className="error">{amountError}</div>
+                               </div>
+                           </div>
+                       </div>
+                       <div>{`${tt('g.balance')}: ${balance} ${DEBT_TOKEN_SHORT} (${CURRENCY_SIGN})`}</div>
+                       <br />
+                       {loading && <span><LoadingIndicator type="circle" /><br /></span>}
+                       {!loading && <span>
+                           {trxError && <div className="error">{trxError}</div>}
+                           <button type="submit" className="button" disabled={submitDisabled}>{tt('g.promote')}</button>
+                        </span>}
+                   </form>
+               </div>
+           </div>
+       )
+>>>>>>> Fixes tiny text field bug on small screens
     }
 }
 

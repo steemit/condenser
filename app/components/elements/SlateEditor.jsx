@@ -4,7 +4,6 @@ import Portal from 'react-portal'
 import position from 'selection-position'
 import Icon from 'app/components/elements/Icon';
 import ReactDOMServer from 'react-dom/server'
-import { APP_DOMAIN } from 'app/client_config'
 
 import {getCollapsedClientRect} from 'app/utils/SlateEditor/Helpers'
 import demoState from 'app/utils/SlateEditor/DemoState'

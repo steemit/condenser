@@ -20,7 +20,7 @@ import PageViewsCounter from 'app/components/elements/PageViewsCounter';
 import ShareMenu from 'app/components/elements/ShareMenu';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import Userpic from 'app/components/elements/Userpic';
-import { APP_DOMAIN, APP_NAME, APP_ICON, APP_NAME_LATIN, SEO_TITLE } from 'app/client_config';
+import { APP_NAME, APP_ICON, APP_NAME_LATIN, SEO_TITLE } from 'app/client_config';
 import { isPostVisited, visitPost } from 'app/utils/helpers';
 import tt from 'counterpart';
 
@@ -236,6 +236,7 @@ class PostFull extends React.Component {
 
         const replyParams = {author, permlink, parent_author, parent_permlink, category, title, body}
 
+        const APP_DOMAIN = $STM_Config.site_domain
         this.share_params = {
             link,
             url: 'https://' + APP_DOMAIN + link,

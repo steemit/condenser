@@ -18,7 +18,8 @@ import Dropzone from 'react-dropzone'
 import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdown'
 import VerticalMenu from 'app/components/elements/VerticalMenu'
 import tt from 'counterpart'
-import {APP_DOMAIN, DEBT_TICKER, DEFAULT_DOMESTIC, DOMESTIC, SUPPORT_EMAIL} from 'app/client_config'
+import { getURL } from 'app/utils/URLConstants'
+import { DEBT_TICKER, DEFAULT_DOMESTIC, DOMESTIC, SUPPORT_EMAIL } from 'app/client_config'
 import Icon from 'app/components/elements/Icon.jsx'
 import {detransliterate, capitalizeFirstLetter} from 'app/utils/ParsersAndFormatters';
 
@@ -500,7 +501,7 @@ class ReplyEditor extends React.Component {
                         </div>
                         {!loading && !rte && body.value && <div className={'Preview ' + vframe_section_shrink_class}>
                             {!isHtml && (<div className="float-right">
-											<a target="_blank" href={`https://${APP_DOMAIN}/ru--golos/@on0tole/osnovy-oformleniya-postov-na-golose-polnyi-kurs-po-rabote-s-markdown`}>
+											<a target="_blank" href={getURL('MARKDOWN_STYLING_GUIDE')}>
 												{tt('reply_editor.markdown_styling_guide')}
 											</a>
 										</div>)

@@ -7,7 +7,7 @@ export const APP_NAME_UPPERCASE = 'GOLOS'
 export const APP_ICON = 'golos'
 // FIXME figure out best way to do this on both client and server from env
 // vars. client should read $STM_Config, server should read config package.
-export const APP_DOMAIN = 'golos.blog' ////!!!! URGENT
+export const APP_DOMAIN = 'golos.io'
 export const LIQUID_TOKEN = 'Голос'
 // sometimes it's impossible to use html tags to style coin name, hence usage of _UPPERCASE modifier
 export const LIQUID_TOKEN_UPPERCASE = 'ГОЛОС'
@@ -24,12 +24,6 @@ export const DEBT_TOKEN = 'Золотой'
 export const DEBT_TOKENS = 'Золотые'
 export const CURRENCY_SIGN = '₽≈'
 export const TOKEN_WORTH = '~1 мг золота'
-export const WIKI_URL = 'https://wiki.' + APP_DOMAIN + '/'
-export const LANDING_PAGE_URL = 'https://' + APP_DOMAIN + '/about'
-export const TERMS_OF_SERVICE_URL = 'https://' + APP_DOMAIN + '/legal/terms_of_service.pdf'
-export const PRIVACY_POLICY_URL = 'https://' + APP_DOMAIN + '/ru--konfidenczialxnostx/@golos/politika-konfidencialnosti'
-export const WHITEPAPER_URL = 'https://' + APP_DOMAIN + '/ru--golos/@golos/golos-russkoyazychnaya-socialno-mediinaya-blokchein-platforma'
-
 
 // these are dealing with asset types, not displaying to client, rather sending data over websocket
 export const LIQUID_TICKER = 'GOLOS'

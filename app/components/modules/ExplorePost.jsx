@@ -3,7 +3,6 @@ import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import Icon from 'app/components/elements/Icon';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import tt from 'counterpart';
-import { APP_DOMAIN } from 'app/client_config';
 
 export default class ExplorePost extends Component {
 
@@ -31,6 +30,7 @@ export default class ExplorePost extends Component {
     }
 
     render() {
+        const APP_DOMAIN = $STM_Config.site_domain
         const link = this.props.permlink;
         const golosd = 'http://golosd.com' + link;
         const golosdb = 'https://golosdb.com' + link;

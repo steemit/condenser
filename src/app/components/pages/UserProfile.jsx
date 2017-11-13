@@ -319,17 +319,17 @@ export default class UserProfile extends React.Component {
 
         if (isMyAccount) {
             if (section === 'blog') {
-                page_title = "My blog";
+                page_title = tt('g.myblog');
             } else if (section === 'comments') {
-                page_title = "My comments";
+                page_title = tt('g.mycomments');
             }  else if (section === 'recent-replies') {
-                page_title = "Replies to me";                
+                page_title = tt('g.myreplies');
             } else if (section === 'settings') {
-                page_title = tt('g.settings');             
+                page_title = tt('g.settings');
             }  else if (section === 'curation-rewards') {
                 page_title = tt('g.curation_rewards');
             }  else if (section === 'author-rewards') {
-                page_title = tt('g.author_rewards');            
+                page_title = tt('g.author_rewards');
             }
         } else {
             if (section === 'blog') {
@@ -337,14 +337,14 @@ export default class UserProfile extends React.Component {
             } else if (section === 'comments') {
                 page_title = tt('g.comments');
             }  else if (section === 'recent-replies') {
-                page_title = tt('g.replies');                
+                page_title = tt('g.replies');
             } else if (section === 'settings') {
-                page_title = tt('g.settings');             
+                page_title = tt('g.settings');
             }  else if (section === 'curation-rewards') {
                 page_title = tt('g.curation_rewards');
             }  else if (section === 'author-rewards') {
-                page_title = tt('g.author_rewards');            
-            }            
+                page_title = tt('g.author_rewards');
+            }
         }
 
         const layoutClass = this.props.blogmode ? ' layout-block' : ' layout-list';
@@ -357,9 +357,9 @@ export default class UserProfile extends React.Component {
                     </div>
                     <div className="articles__header-col articles__header-col--right">
                         <ArticleLayoutSelector />
-                    </div>         
-                </div> 
-                <hr className="articles__hr" /> 
+                    </div>
+                </div>
+                <hr className="articles__hr" />
             </div>
         );
 

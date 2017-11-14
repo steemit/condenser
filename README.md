@@ -36,6 +36,13 @@ docker build -t="myname/condenser:mybranch" .
 docker run -it -p 8080:8080 myname/condenser:mybranch
 ```
 
+#### Debugging
+
+To starting debugging your local install refer to the following instructions.
+
+https://steemit.com/steemdev/@codewithcheese/understanding-steemit-source-code-with-chrome-devtools
+
+
 ## Building from source without docker (the 'traditional' way):
 
 #### Clone the repository and make a tmp folder

@@ -42,6 +42,16 @@ export default class UserProfile extends React.Component {
         this.loadMore = this.loadMore.bind(this);
     }
 
+    componentDidMount() {
+        window.addEventListener("resize", this.resize.bind(this));
+        this.resize();
+    }
+
+    resize() {
+        this.setState({showMobileCover: window.innerWidth <= 639});
+        this.forceUpdate();
+    }
+
     shouldComponentUpdate(np) {
         const {follow} = this.props;
         const {follow_count} = this.props;
@@ -434,7 +444,7 @@ export default class UserProfile extends React.Component {
             </div>
          </div>;
 
-        const {name, location, about, website, cover_image} = normalizeProfile(account);
+        const {name, location, about, website, cover_image, cover_image_mobile} = normalizeProfile(account);
         const website_label = website ? website.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '') : null
 
         let cover_image_style = {}
@@ -442,12 +452,19 @@ export default class UserProfile extends React.Component {
             cover_image_style = {backgroundImage: "url(" + proxifyImageUrl(cover_image, '2048x512') + ")"}
         }
 
+        let cover_image_mobile_style = {}
+        if(cover_image_mobile) {
+            cover_image_mobile_style = {backgroundImage: "url(" + proxifyImageUrl(cover_image_mobile, '640x512') + ")"}
+        }
+
+        const showMobileCover = this.state.showMobileCover;
+
         return (
             <div className="UserProfile">
 
                 <div className="UserProfile__banner row expanded">
 
-                    <div className="column" style={cover_image_style}>
+                    <div className="column" style={showMobileCover ? cover_image_mobile_style : cover_image_style}>
                         <div style={{position: "relative"}}>
                             <div className="UserProfile__buttons hide-for-small-only">
                                 <Follow follower={username} following={accountname} />

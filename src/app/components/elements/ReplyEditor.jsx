@@ -665,6 +665,11 @@ class ReplyEditor extends React.Component {
                                                     'reply_editor.power_up_100'
                                                 )}
                                             </option>
+                                            <option value="75%">
+                                                {tt(
+                                                    'reply_editor.default_75_25'
+                                                )}
+                                            </option>
                                             <option value="50%">
                                                 {tt(
                                                     'reply_editor.default_50_50'
@@ -969,6 +974,11 @@ export default formId =>
                             __config.comment_options = {
                                 percent_steem_dollars: 0, // 10000 === 100% (of 50%)
                             };
+                            break;
+                        case '75%': // 75% steem power payout
+                            __config.comment_options = {
+                                percent_steem_dollars: 5000, // 5000 === 50% (of 50%)
+                            }
                             break;
                         default: // 50% steem power, 50% sd+steem
                     }

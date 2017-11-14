@@ -192,6 +192,8 @@ class PickAccount extends React.Component {
             }
         }
 
+        const whistle_signup = window.location.search && window.location.search.indexOf('whistle_signup') > 0;
+
         return (
             <div>
                 <div className="CreateAccount row">
@@ -213,7 +215,7 @@ class PickAccount extends React.Component {
                             <input disabled={submit_btn_disabled} type="submit" className={submit_btn_class} value="Continue" />
                         </form>
                         <br />
-                        <p className="secondary">Got an account? <Link to="/login.html">Login</Link></p>
+                        { whistle_signup ? null : <p className="secondary">Got an account? <Link to="/login.html">Login</Link></p> }
                     </div>
                 </div>
             </div>

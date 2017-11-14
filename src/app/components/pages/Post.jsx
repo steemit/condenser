@@ -14,6 +14,8 @@ import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import { INVEST_TOKEN_UPPERCASE } from 'app/client_config';
 
+import { isLoggedIn } from 'app/utils/UserUtil';
+
 class Post extends React.Component {
 
     static propTypes = {
@@ -169,7 +171,7 @@ class Post extends React.Component {
                         <PostFull post={post} cont={content} />
                     </div>
                 </div>
-                {!current_user && <div className="row">
+                {!isLoggedIn() && <div className="row">
                     <div className="column">
                         <div className="Post__promo">
                             {tt('g.next_7_strings_single_block.authors_get_paid_when_people_like_you_upvote_their_post')}.

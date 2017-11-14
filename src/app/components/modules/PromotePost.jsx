@@ -75,7 +75,7 @@ class PromotePost extends Component {
                        <p>{tt('promote_post_jsx.spend_your_DEBT_TOKEN_to_advertise_this_post', {DEBT_TOKEN})}.</p>
                        <hr />
                        <div className="row">
-                           <div className="column small-6 large-4">
+                           <div className="column small-7 medium-5 large-4">
                                <label>{tt('g.amount')}</label>
                                <div className="input-group">
                                    <input className="input-group-field" type="text" placeholder={tt('g.amount')} value={amount} ref="amount" autoComplete="off" disabled={loading} onChange={this.amountChange} />

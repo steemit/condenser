@@ -256,6 +256,8 @@
     "image_upload": "Téléchargement d'image",
     "power_up_100": "Conversion en influence à 100%%",
     "default_50_50": "Par défaut (50 %%/ 50%%)",
+    "default_75_25": "Par défaut (75 %%/ 25%%)",
+    "default_25_75": "Par défaut (25 %%/ 75%%)",
     "decline_payout": "Refuser les gains",
     "check_this_to_auto_upvote_your_post": "Cocher cette case pour auto-voter pour votre article",
     "markdown_styling_guide": "Guide stylistique pour le format Markdown",

@@ -257,7 +257,7 @@ class App extends React.Component {
                         </a>
                     </li>
                     <li className="last">
-                        <a href="https://steemit.github.io/steemit-docs/" target="_blank" rel="noopener noreferrer">
+                        <a href="https://developers.steem.io/" target="_blank" rel="noopener noreferrer">
                             {tt('navigation.api_docs')}&nbsp;<Icon name="extlink" />
                         </a>
                     </li>

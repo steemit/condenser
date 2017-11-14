@@ -12,7 +12,7 @@ import MiniHeader from "app/components/modules/MiniHeader";
 import secureRandom from "secure-random";
 import Mixpanel from "mixpanel";
 import Progress from "react-foundation-components/lib/global/progress-bar";
-import {api} from 'steem';
+import {api} from '@steemit/steem-js';
 
 const path = require('path');
 const ROOT = path.join(__dirname, '../../..');

@@ -1,6 +1,6 @@
 import config from 'config';
 
-import * as steem from 'steem';
+import * as steem from '@steemit/steem-js';
 
 const path = require('path');
 const ROOT = path.join(__dirname, '../..');

@@ -92,8 +92,6 @@ const sagaMiddleware = createSagaMiddleware(
     ...marketWatches
 );
 
-const TOP_OFFSET = 70; //this should be declared in a sass file. The way the offset 'happens' currently is via a collection of padding and margin values on different elements; pretty bad. Once that's fixed, we can move this declaration to a central location and have it all work in lockstep.
-
 let middleware;
 
 if (process.env.BROWSER && process.env.NODE_ENV === 'development') {

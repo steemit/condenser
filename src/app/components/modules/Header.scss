@@ -91,6 +91,41 @@
           padding: 0 1rem;
       }
   }
+
+  .input-group {
+    margin-bottom: 0;
+    margin-left: -1.2rem;
+  }
+
+  .input-group-button {
+    padding-left: .4rem;
+  }
+
+  input[type='text'] {
+    min-width: 7rem;
+    max-width: 15rem;
+    text-align: left;
+    border-radius: 3px;
+    border: 1px solid transparent;
+    box-shadow: none;
+    border-radius: 0;
+    padding-left: 24px;
+    transition: 0.3s ease-in;
+    position: relative;
+    left: -1.5em;
+    font-family: helvetica, sans-serif;
+    font-size: 16px;
+    background: transparent;
+    @media only screen and (min-width: 59.875em) {
+      &:hover, &:focus {
+        box-shadow: 2px 2px 0 0 $color-teal;
+      }
+    }
+    @include themify($themes) {
+        color: themed('textColorPrimary');  
+        caret-color: themed('textColorAccent');  
+    }    
+  }
 }
 
 ul > li.Header__top-logo > a {

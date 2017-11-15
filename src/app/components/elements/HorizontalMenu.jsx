@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import Icon from 'app/components/elements/Icon';
+import tt from 'counterpart';
 
 export default class HorizontalMenu extends React.Component {
     static propTypes = {
@@ -8,10 +9,17 @@ export default class HorizontalMenu extends React.Component {
         title: React.PropTypes.string,
         className: React.PropTypes.string,
         hideValue: React.PropTypes.string,
+        includeSearch: React.PropTypes.bool,
     };
 
     render() {
-        const { items, title, className, hideValue } = this.props;
+        const {
+            items,
+            title,
+            className,
+            hideValue,
+            includeSearch,
+        } = this.props;
         return (
             <ul
                 className={

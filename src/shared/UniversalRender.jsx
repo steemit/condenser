@@ -26,9 +26,33 @@ import extractMeta from 'app/utils/ExtractMeta';
 import Translator from 'app/Translator';
 import {notificationsArrayToMap} from 'app/utils/Notifications';
 import {routeRegex} from "app/ResolveRoute";
-import {contentStats} from 'app/utils/StateFunctions'
+import {contentStats} from 'app/utils/StateFunctions';
+import ScrollBehavior from 'scroll-behavior';
 
 import {api} from 'steem';
+
+
+const calcOffsetRoot = (startEl) => {
+    let offset = 0;
+    let el = startEl;
+    while(el) {
+        offset += el.offsetTop;
+        el = el.offsetParent;
+    }
+    return offset;
+}
+
+class OffsetScrollBehavior extends ScrollBehavior {
+    scrollToTarget(element, target) {
+        const el = (typeof target === 'string') ? document.getElementById(target) : false;
+        if(el) {
+            const header = document.getElementsByTagName('header')[0]; //this dimension ideally would be pulled from a scss file.
+            super.scrollToTarget(element, [0, (calcOffsetRoot(el) - ((header)? header.offsetHeight : 0) - 5)]);
+        } else {
+            super.scrollToTarget(element, target);
+        }
+    }
+}
 
 const sagaMiddleware = createSagaMiddleware(
     ...userWatches, // keep first to remove keys early when a page change happens
@@ -38,6 +62,8 @@ const sagaMiddleware = createSagaMiddleware(
     ...transactionWatches,
     ...marketWatches
 );
+
+const TOP_OFFSET = 70; //this should be declared in a sass file. The way the offset 'happens' currently is via a collection of padding and margin values on different elements; pretty bad. Once that's fixed, we can move this declaration to a central location and have it all work in lockstep.
 
 let middleware;
 
@@ -88,14 +114,19 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
 
         const history = syncHistoryWithStore(browserHistory, store);
 
-        const scroll = useScroll( (previous, { location }) => {
-            if(location.hash) { //in situations where we have a hash url, and we are navigating forward, we want to abdicate scrolling to Post.jsx (we don't want to scroll here)
-                if((previous === null && location.action === 'POP') || (previous !== null && location.action === 'PUSH') ) {
-                    return false;
+        const scroll = useScroll({
+            createScrollBehavior: config => new OffsetScrollBehavior(config),
+            shouldUpdateScroll: function(prevLocation, {location}) {
+                if(location.hash) {
+                    if((prevLocation === null && location.action === 'POP')
+                        || (location.action === 'PUSH')
+                    ) {
+                        return location.hash;
+                    }
                 }
+                return true;
             }
-            return true;
-        } );
+        });
 
         if (process.env.NODE_ENV === 'production') {
             console.log('%c%s', 'color: red; background: yellow; font-size: 24px;', 'WARNING!');

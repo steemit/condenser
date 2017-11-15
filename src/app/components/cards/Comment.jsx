@@ -10,7 +10,6 @@ import user from 'app/redux/User';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Userpic from 'app/components/elements/Userpic';
 import transaction from 'app/redux/Transaction'
-import {List} from 'immutable'
 import tt from 'counterpart';
 import {parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
 import {Long} from 'bytebuffer';
@@ -156,22 +155,10 @@ class CommentImpl extends React.Component {
     }
 
     componentDidMount() {
-        // Jump to comment via hash (note: comment element's id has a hash(#) in it)
-
         if (window.location.hash == this.props.anchor_link) {
-            const comment_el = document.getElementById(this.props.anchor_link)
-            if (comment_el) {
-                comment_el.scrollIntoView(true)
-                const scrollingEl = document.scrollingElement || document.documentElement;
-                scrollingEl.scrollTop -= 150;
-                this.setState({highlight: true}); // eslint-disable-line react/no-did-mount-set-state
-            }
+            this.setState({highlight: true}); // eslint-disable-line react/no-did-mount-set-state
         }
     }
-
-    //componentWillReceiveProps(np) {
-    //    this._checkHide(np);
-    //}
 
     /**
      * - `hide` is based on author reputation, and will hide the entire post on initial render.

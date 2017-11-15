@@ -23,8 +23,7 @@ class Post extends React.Component {
         post: React.PropTypes.string,
         routeParams: React.PropTypes.object,
         location: React.PropTypes.object,
-        signup_bonus: React.PropTypes.string,
-        current_user: React.PropTypes.object,
+        signup_bonus: React.PropTypes.string
     };
     constructor() {
         super();
@@ -36,13 +35,6 @@ class Post extends React.Component {
             window.location = '/pick_account';
         };
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'Post')
-    }
-
-    componentDidMount() {
-        if (window.location.hash.indexOf('comments') !== -1) {
-            const comments_el = document.getElementById('comments');
-            if (comments_el) comments_el.scrollIntoView();
-        }
     }
 
     toggleNegativeReplies = (e) => {
@@ -62,7 +54,7 @@ class Post extends React.Component {
 
     render() {
         const {showSignUp} = this
-        const {current_user, signup_bonus, content} = this.props
+        const {signup_bonus, content} = this.props
         const {showNegativeComments, commentHidden, showAnyway} = this.state
         let post = this.props.post;
         if (!post) {
@@ -181,7 +173,7 @@ class Post extends React.Component {
                         </div>
                     </div>
                 </div>}
-                <div id="comments" className="Post_comments row hfeed">
+                <div id="#comments" className="Post_comments row hfeed">
                     <div className="column large-12">
                         <div className="Post_comments__content">
                             {positiveComments.length ?
@@ -211,8 +203,7 @@ export default connect(state => {
     return {
         content: state.global.get('content'),
         signup_bonus: state.offchain.get('signup_bonus'),
-        current_user,
-        ignoring,
+        ignoring
     }
 }
 )(Post);

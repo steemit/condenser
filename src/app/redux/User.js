@@ -11,7 +11,7 @@ const defaultState = fromJS({
     show_promote_post_modal: false,
     show_signup_modal: false,
     pub_keys_used: null,
-    locale: DEFAULT_LANGUAGE
+    locale: DEFAULT_LANGUAGE,
 });
 
 if (process.env.BROWSER) {

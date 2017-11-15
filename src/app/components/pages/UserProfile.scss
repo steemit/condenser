@@ -1,5 +1,11 @@
 .UserProfile {
     margin-top: -1.5rem;
+
+    .articles {
+      @include MQ(M) {
+        margin: 0 auto;
+      }
+    }
 }
 
 .UserProfile__tab_content {
@@ -7,7 +13,7 @@
 }
 
 .UserProfile__top-nav {
-  background-color: #333333;
+  background-color: $color-blue-dark;  
   padding: 0;
   .row {
       .columns {
@@ -22,15 +28,17 @@
       transform: translate3d( 0, 0, 0);
       padding-left: 0.7rem;
       padding-right: 0.7rem;
-      color: $white;
       background-color: transparent;
-      &:hover {
-          background-color: #555;
+      color: $color-white;
+      &:hover, &:focus {
+        background-color: $color-blue-black;
       }
       &.active {
-          background-color: $white;
+          @include themify($themes) {
+            background-color: themed('backgroundColor');  
+            color: themed('textColorPrimary');  
+          }            
           z-index: 2;
-          color: $black;
           font-weight: bold;
         }
   }
@@ -62,8 +70,7 @@
         color: $white;
     }
     > div.column {
-        background: #23579d; /* for older browsers */
-        background: linear-gradient(to bottom, #1a4072 0%, #23579d 100%);
+        background: $color-blue-black;
         background-size: cover;
         background-repeat: no-repeat;
         background-position: 50% 50%;
@@ -191,3 +198,31 @@
         }
     }
 }
+
+// Temporary fix to prevent alternate User Profile pages outside the blog from taking the narrow layout.
+
+.UserProfile {
+  .articles {
+      margin-bottom: 4em;
+    &__h1 {
+      text-transform: none;
+      @include MQ(M) {
+        @include font-size(20px);
+      }
+    }
+  }
+  &__tab_content.layout-block.settings, &__tab_content.layout-block.curation-rewards, &__tab_content.layout-block.author-rewards {
+    .articles {
+        padding: 1.5em 1.5em;
+        max-width: 1056px;
+        @include MQ(XL) { 
+          min-width: 1050px;
+        }
+    }
+  }
+  .settings .articles__layout-selector, .curation-rewards .articles__layout-selector, .author-rewards .articles__layout-selector  {
+      display: none;
+    }
+}
+
+

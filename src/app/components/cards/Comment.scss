@@ -18,6 +18,9 @@
   position: relative;
   top: 0.4rem;
   padding-right: 0.6rem;
+  @include MQ(M) {
+    top: 0.2rem;
+  }
 }
 
 .Comment__Userpic-small {
@@ -33,7 +36,11 @@
 }
 
 .Comment .highlighted {
-  background: #FFD;
+  padding: 14px;
+  @include themify($themes) {
+    border: themed('borderAccent');
+    background-color: themed('highlightBackgroundColor');
+  }
 }
 
 .Comment.collapsed {
@@ -51,26 +58,28 @@
       border-right: none;
     }
     a {
-      color: $dark-gray;
-      @include hoverUnderline;
+      @include themify($themes) {
+        color: themed('textColorSecondary');
+      }
     }
   }
 }
 
 .Comment__header {
   margin-left: 62px;
-  color: $dark-gray;
 }
 
 .Comment__header-user {
   color: $black;
   font-size: 100%;
   font-weight: 600;
-  a {
-    color: $black;
-    @include hoverUnderline;
+  a {    
+    @extend .link;
+    @extend .link--primary;
   }
 }
+
+
 
 .Comment__header_collapse {
   float: right;
@@ -91,16 +100,34 @@
 
 .Comment__footer {
   margin-left: 62px;
-  color: $dark-gray;
+  @include themify($themes) {
+    color: themed('textColorPrimary');
+  }
   a {
-    color: $dark-gray;
-    @include hoverUnderline;
+   @extend .link;
+   @extend .link--primary;
   }
   .Voting__voters_list {
-    border-right: 1px solid $medium-gray;
+    @include themify($themes) {
+      border-right: themed('border');
+    }
     padding-right: 1rem;
     margin-right: 1rem;
+    transition: 0.3s all ease-in-out;
+    .dropdown-arrow {
+      position: relative;
+      top: 3px;
+      left: -2px;
+    }     
+    &:hover {
+      .Icon.dropdown-arrow polygon {
+          @include themify($themes) {
+            fill: themed('textColorAccent');
+          }     
+      }      
+    }
   }
+
   .Comment__footer__controls {
     a {margin: 0 0.2rem;}
   }
@@ -119,7 +146,6 @@
     border-top: 1px solid $light-gray;
     padding-top: 1rem;
     clear: none;
-    background: white;
     button {
       opacity: 0.35;
       &:hover {opacity: 0.5;}
@@ -199,5 +225,8 @@
 
   .depth.di-6 {
     left: -100px;
+  }
+  .Comment .highlighted { 
+    padding-left: 0;
   }
 }

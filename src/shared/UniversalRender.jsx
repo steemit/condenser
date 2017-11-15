@@ -43,7 +43,7 @@ const calcOffsetRoot = (startEl) => {
 }
 
 //BEGIN: SCROLL CODE
-const SCROLL_TOP_TRIES = 20;
+const SCROLL_TOP_TRIES = 30;
 const SCROLL_TOP_DELAY_MS = 100;
 const SCROLL_TOP_EXTRA_PIXEL_OFFSET = 3;
 
@@ -55,12 +55,13 @@ let scrollTopTimeout = null;
  * @param top - number of pixels to scroll from top of document
  * @param triesRemaining - number of attempts remaining
  */
-const scrollTop = (top, triesRemaining) => {
+const scrollTop = (el, topOffset, triesRemaining) => {
     const currentTop = Math.ceil(document.scrollingElement.scrollTop);
+    const top = calcOffsetRoot(el) + topOffset;
     if(currentTop < top) {
         window.scrollTo(0, top);
         if(triesRemaining > 0) {
-            scrollTopTimeout = setTimeout(() => scrollTop(top, (triesRemaining-1) ), SCROLL_TOP_DELAY_MS);
+            scrollTopTimeout = setTimeout(() => scrollTop(el, topOffset, (triesRemaining-1) ), SCROLL_TOP_DELAY_MS);
         }
     }
 }
@@ -74,8 +75,8 @@ class OffsetScrollBehavior extends ScrollBehavior {
         const el = (typeof target === 'string') ? document.getElementById(target) : false;
         if(el) {
             const header = document.getElementsByTagName('header')[0]; //this dimension ideally would be pulled from a scss file.
-            const top = (calcOffsetRoot(el) - ((header)? header.offsetHeight : 0)) - SCROLL_TOP_EXTRA_PIXEL_OFFSET;
-            scrollTop(top, SCROLL_TOP_TRIES);
+            const topOffset = (((header)? header.offsetHeight : 0) + SCROLL_TOP_EXTRA_PIXEL_OFFSET) * (-1);
+            scrollTop(el, topOffset, SCROLL_TOP_TRIES);
         } else {
             super.scrollToTarget(element, target);
         }

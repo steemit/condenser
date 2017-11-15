@@ -42,17 +42,46 @@ const calcOffsetRoot = (startEl) => {
     return offset;
 }
 
+//BEGIN: SCROLL CODE
+const SCROLL_TOP_TRIES = 10;
+const SCROLL_TOP_DELAY_MS = 50;
+const SCROLL_TOP_EXTRA_PIXEL_OFFSET = 3;
+
+let scrollTopTimeout = null;
+
+/**
+ * raison d'être: support hash link navigation into slow-to-render page sections.
+ *
+ * @param top - number of pixels to scroll from top of document
+ * @param triesRemaining - number of attempts remaining
+ */
+const scrollTop = (top, triesRemaining) => {
+    const currentTop = Math.ceil(document.scrollingElement.scrollTop);
+    if(currentTop < top) {
+        window.scrollTo(0, top);
+        if(triesRemaining > 0) {
+            scrollTopTimeout = setTimeout(() => scrollTop(top, (triesRemaining-1) ), SCROLL_TOP_DELAY_MS);
+        }
+    }
+}
+
+/**
+ * raison d'être: on hash link navigation, calculate the appropriate y-scroll with a fixed position top menu
+ */
 class OffsetScrollBehavior extends ScrollBehavior {
     scrollToTarget(element, target) {
+        clearTimeout(scrollTopTimeout);
         const el = (typeof target === 'string') ? document.getElementById(target) : false;
         if(el) {
             const header = document.getElementsByTagName('header')[0]; //this dimension ideally would be pulled from a scss file.
-            super.scrollToTarget(element, [0, (calcOffsetRoot(el) - ((header)? header.offsetHeight : 0) - 5)]);
+            const top = (calcOffsetRoot(el) - ((header)? header.offsetHeight : 0)) - SCROLL_TOP_EXTRA_PIXEL_OFFSET;
+            scrollTop(top, SCROLL_TOP_TRIES);
         } else {
             super.scrollToTarget(element, target);
         }
     }
 }
+//END: SCROLL CODE
 
 const sagaMiddleware = createSagaMiddleware(
     ...userWatches, // keep first to remove keys early when a page change happens
@@ -117,6 +146,7 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
         const scroll = useScroll({
             createScrollBehavior: config => new OffsetScrollBehavior(config),
             shouldUpdateScroll: function(prevLocation, {location}) {
+                //we want to navigate to the corresponding id=<hash> element on 'PUSH' navigation (prev null + POP is a new window url nav ~= 'PUSH')
                 if(location.hash) {
                     if((prevLocation === null && location.action === 'POP')
                         || (location.action === 'PUSH')

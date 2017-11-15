@@ -43,7 +43,7 @@ const calcOffsetRoot = (startEl) => {
 }
 
 //BEGIN: SCROLL CODE
-const SCROLL_TOP_TRIES = 10;
+const SCROLL_TOP_TRIES = 20;
 const SCROLL_TOP_DELAY_MS = 50;
 const SCROLL_TOP_EXTRA_PIXEL_OFFSET = 3;
 

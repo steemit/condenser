@@ -91,6 +91,26 @@
           padding: 0 1rem;
       }
   }
+
+  .input-group {
+    margin-bottom: 0;
+  }
+
+  .input-group-button {
+    padding-left: .4rem;
+  }
+
+  input[type='text'] {
+    min-width: 7rem;
+    max-width: 15rem;
+    text-align: left;
+    border-radius: 3px;
+    border: 0px transparent;
+
+    &:hover, &:focus {
+      border-bottom: 1px solid $color-teal;
+    }
+  }
 }
 
 ul > li.Header__top-logo > a {

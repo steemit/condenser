@@ -18,7 +18,8 @@ module.exports = function (sequelize, DataTypes) {
         waiting_list: DataTypes.BOOLEAN,
         bot: DataTypes.BOOLEAN,
         sign_up_meta: DataTypes.TEXT,
-        account_status: DataTypes.STRING
+        account_status: DataTypes.STRING,
+        settings: DataTypes.TEXT
     }, {
         tableName: 'users',
         createdAt   : 'created_at',

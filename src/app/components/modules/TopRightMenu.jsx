@@ -113,16 +113,8 @@ function TopRightMenu({
         ];
         return (
             <ul className={mcn + mcl}>
-                <li className={lcn + ' Header__search'}>
-                    <a href="/static/search.html" title={tt_search}>
-                        {vertical ? (
-                            <span>{tt_search}</span>
-                        ) : (
-                            <Icon name="search" />
-                        )}
-                    </a>
-                </li>
-                {!pathCheck ? submit_story : null}
+                <li className={"show-for-small-only Header__search"}><a href="/static/search.html" title={tt_search}>{vertical ? <span>{tt_search}</span> : <Icon name="search" />}</a></li>
+                {submit_story}
                 {!vertical && submit_icon}
                 <LinkWithDropdown
                     closeOnClickOutside
@@ -160,6 +152,7 @@ function TopRightMenu({
     if (probablyLoggedIn) {
         return (
             <ul className={mcn + mcl}>
+                <li className={"show-for-small-only Header__search"}><a href="/static/search.html" title={tt_search}>{vertical ? <span>{tt_search}</span> : <Icon name="search" />}</a></li>
                 <li className={lcn} style={{paddingTop: 0, paddingBottom: 0}}><LoadingIndicator type="circle" inline /></li>
                 {toggleOffCanvasMenu && <li className="toggle-menu Header__hamburger"><a href="#" onClick={toggleOffCanvasMenu}>
                     <span className="hamburger" />
@@ -169,6 +162,7 @@ function TopRightMenu({
     }
     return (
         <ul className={mcn + mcl}>
+            <li className={"show-for-small-only Header__search"}><a href="/static/search.html" title={tt_search}>{vertical ? <span>{tt_search}</span> : <Icon name="search" />}</a></li>
             <li className={lcn}><a href="/pick_account">{tt('g.sign_up')}</a></li>
             <li className={lcn}><a href="/login.html" onClick={showLogin}>{tt('g.login')}</a></li>
             {submit_story}

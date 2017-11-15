@@ -294,7 +294,7 @@ class Header extends React.Component {
                                 </li>
                                 <li className="Header__top-steemit show-for-medium noPrint"><Link to={logo_link}><span className="beta fade-in--10">beta</span></Link></li>
                                 {selected_sort_order && <DropdownMenu className="Header__sort-order-menu menu-hide-for-large" items={sort_order_menu} selected={selected_sort_order[1]} el="li" />}
-                                <HorizontalMenu items={sort_order_menu_horizontal} includeSearch={true} />
+                                <HorizontalMenu className="show-for-medium" items={sort_order_menu_horizontal} includeSearch={true} />
                             </ul>
                         </div>
                         <div className="columns shrink">

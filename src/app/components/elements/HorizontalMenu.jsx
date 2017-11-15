@@ -9,7 +9,7 @@ export default class HorizontalMenu extends React.Component {
         title: React.PropTypes.string,
         className: React.PropTypes.string,
         hideValue: React.PropTypes.string,
-        includeSearch: React.PropTypes.boolean,
+        includeSearch: React.PropTypes.bool,
     };
 
     render() {
@@ -25,7 +25,7 @@ export default class HorizontalMenu extends React.Component {
                                 <Icon name="search" />
                             </button>
                         </div>
-                        <input type="text" textAlign="left" placeholder="search" className="input-group-field" name="q" autoComplete="off"></input>
+                        <input type="text" placeholder="search" className="input-group-field" name="q" autoComplete="off"></input>
                     </div>
                 </form>
             </li>

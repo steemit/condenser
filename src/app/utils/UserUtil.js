@@ -5,6 +5,7 @@
 
 
 let store = false;
+const MSG_STORE_NOT_SET = 'store is not set';
 
 export const setStore = (theStore) => {
     if(!store) {
@@ -21,12 +22,16 @@ export const setStore = (theStore) => {
  * @returns {boolean}
  */
 export const currentUser = () => {
-    const state = store.getState();
-    if(state.user) {
-        const current = state.user.getIn(['current']);
-        if(current) {
-            return current;
+    if (store) {
+        const state = store.getState();
+        if (state.user) {
+            const current = state.user.getIn(['current']);
+            if (current) {
+                return current;
+            }
         }
+    } else {
+        console.warn(MSG_STORE_NOT_SET);
     }
     return false;
 }
@@ -37,12 +42,16 @@ export const currentUser = () => {
  * @returns {boolean}
  */
 export const currentUsername = () => {
-    const state = store.getState();
-    if(state.user) {
-        const uName = state.user.getIn(['current', 'username']);
-        if(uName) {
-            return uName;
+    if (store) {
+        const state = store.getState();
+        if (state.user) {
+            const uName = state.user.getIn(['current', 'username']);
+            if (uName) {
+                return uName;
+            }
         }
+    } else {
+        console.warn(MSG_STORE_NOT_SET);
     }
     return false;
 }

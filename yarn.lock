@@ -10,7 +10,7 @@
     libsodium "^0.4.8"
     libsodium-wrappers "^0.4.8"
 
-"@steemit/steem-js@^0.6.5":
+"@steemit/steem-js@0.6.5":
   version "0.6.5"
   resolved "https://registry.yarnpkg.com/@steemit/steem-js/-/steem-js-0.6.5.tgz#a571eed61c71dd9bbae411da195732c9aaf34f3b"
   dependencies:

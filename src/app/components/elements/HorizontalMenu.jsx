@@ -14,22 +14,6 @@ export default class HorizontalMenu extends React.Component {
 
     render() {
         const {items, title, className, hideValue, includeSearch} = this.props;
-        const headerSearchInput = (
-            <li className={"Header__search-input"}>
-                <form className="column"
-                    action="/static/search.html"
-                    method="GET">
-                    <div className="input-group">
-                        <div className="input-group-button">
-                            <button href="/static/search.html" type="submit" title={tt('g.search')}>
-                                <Icon name="search" />
-                            </button>
-                        </div>
-                        <input type="text" placeholder="search" className="input-group-field" name="q" autoComplete="off"></input>
-                    </div>
-                </form>
-            </li>
-        )
         return <ul className={'HorizontalMenu menu' + (className ? ' ' + className : '')}>
             {title && <li className="title">{title}</li>}
             {items.map(i => {
@@ -44,7 +28,6 @@ export default class HorizontalMenu extends React.Component {
                     }
                 </li>
             })}
-            {includeSearch && headerSearchInput}
         </ul>;
     }
 }

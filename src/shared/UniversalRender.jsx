@@ -26,9 +26,63 @@ import extractMeta from 'app/utils/ExtractMeta';
 import Translator from 'app/Translator';
 import {notificationsArrayToMap} from 'app/utils/Notifications';
 import {routeRegex} from "app/ResolveRoute";
-import {contentStats} from 'app/utils/StateFunctions'
+import {contentStats} from 'app/utils/StateFunctions';
+import ScrollBehavior from 'scroll-behavior';
 
 import {api} from 'steem';
+
+
+const calcOffsetRoot = (startEl) => {
+    let offset = 0;
+    let el = startEl;
+    while(el) {
+        offset += el.offsetTop;
+        el = el.offsetParent;
+    }
+    return offset;
+}
+
+//BEGIN: SCROLL CODE
+const SCROLL_TOP_TRIES = 30;
+const SCROLL_TOP_DELAY_MS = 100;
+const SCROLL_TOP_EXTRA_PIXEL_OFFSET = 3;
+
+let scrollTopTimeout = null;
+
+/**
+ * raison d'être: support hash link navigation into slow-to-render page sections.
+ *
+ * @param top - number of pixels to scroll from top of document
+ * @param triesRemaining - number of attempts remaining
+ */
+const scrollTop = (el, topOffset, triesRemaining) => {
+    const currentTop = Math.ceil(document.scrollingElement.scrollTop);
+    const top = calcOffsetRoot(el) + topOffset;
+    if(currentTop < top) {
+        window.scrollTo(0, top);
+        if(triesRemaining > 0) {
+            scrollTopTimeout = setTimeout(() => scrollTop(el, topOffset, (triesRemaining-1) ), SCROLL_TOP_DELAY_MS);
+        }
+    }
+}
+
+/**
+ * raison d'être: on hash link navigation, calculate the appropriate y-scroll with a fixed position top menu
+ */
+class OffsetScrollBehavior extends ScrollBehavior {
+    scrollToTarget(element, target) {
+        clearTimeout(scrollTopTimeout);
+        const el = (typeof target === 'string') ? document.getElementById(target) : false;
+        if(el) {
+            const header = document.getElementsByTagName('header')[0]; //this dimension ideally would be pulled from a scss file.
+            const topOffset = (((header)? header.offsetHeight : 0) + SCROLL_TOP_EXTRA_PIXEL_OFFSET) * (-1);
+            scrollTop(el, topOffset, SCROLL_TOP_TRIES);
+        } else {
+            super.scrollToTarget(element, target);
+        }
+    }
+}
+//END: SCROLL CODE
 
 const sagaMiddleware = createSagaMiddleware(
     ...userWatches, // keep first to remove keys early when a page change happens
@@ -88,8 +142,21 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
 
         const history = syncHistoryWithStore(browserHistory, store);
 
-        const scroll = useScroll();
-        
+        const scroll = useScroll({
+            createScrollBehavior: config => new OffsetScrollBehavior(config),
+            shouldUpdateScroll: function(prevLocation, {location}) {
+                //we want to navigate to the corresponding id=<hash> element on 'PUSH' navigation (prev null + POP is a new window url nav ~= 'PUSH')
+                if(location.hash) {
+                    if((prevLocation === null && location.action === 'POP')
+                        || (location.action === 'PUSH')
+                    ) {
+                        return location.hash;
+                    }
+                }
+                return true;
+            }
+        });
+
         if (process.env.NODE_ENV === 'production') {
             console.log('%c%s', 'color: red; background: yellow; font-size: 24px;', 'WARNING!');
             console.log('%c%s', 'color: black; font-size: 16px;', 'This is a developer console, you must read and understand anything you paste or type here or you could compromise your account and your private keys.');

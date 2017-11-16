@@ -115,9 +115,12 @@ class PostFull extends React.Component {
             formId,
             PostFullReplyEditor: ReplyEditor(formId + '-reply'),
             PostFullEditEditor: ReplyEditor(formId + '-edit')
-        })
+        });
         if (process.env.BROWSER) {
-            let showEditor = localStorage.getItem('showEditor-' + formId)
+            let showEditor = localStorage.getItem('showEditor-' + formId);
+            if (this.props.username) {
+                this.setState({showReply: true});
+            }
             if (showEditor) {
                 showEditor = JSON.parse(showEditor)
                 if (showEditor.type === 'reply') {
@@ -134,6 +137,12 @@ class PostFull extends React.Component {
         const names = 'cont, post, username'.split(', ');
         return names.findIndex(name => this.props[name] !== nextProps[name]) !== -1 ||
             this.state !== nextState
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.username && process.env.BROWSER) {
+            this.setState({showReply: true});
+        }
     }
 
     fbShare(e) {
@@ -189,13 +198,13 @@ class PostFull extends React.Component {
 
     render() {
         const {props: {username, post}, state: {PostFullReplyEditor, PostFullEditEditor, formId, showReply, showEdit},
-            onShowReply, onShowEdit, onDeletePost} = this
+            onShowReply, onShowEdit, onDeletePost} = this;
         const post_content = this.props.cont.get(this.props.post);
         if (!post_content) return null;
         const p = extractContent(immutableAccessor, post_content);
         const content = post_content.toJS();
-        const {author, permlink, parent_author, parent_permlink} = content
-        const jsonMetadata = this.state.showReply ? null : p.json_metadata
+        const {author, permlink, parent_author, parent_permlink} = content;
+        const jsonMetadata = this.state.showReply ? null : p.json_metadata;
         // let author_link = '/@' + content.author;
         let link = `/@${content.author}/${content.permlink}`;
         if (content.category) link = `/${content.category}${link}`;
@@ -204,9 +213,9 @@ class PostFull extends React.Component {
         if (process.env.BROWSER && title) document.title = title + ' — '+ APP_NAME;
 
         let content_body = content.body;
-        const url = `/${category}/@${author}/${permlink}`
+        const url = `/${category}/@${author}/${permlink}`;
         const bDMCAStop = DMCAList.includes(url);
-        const bIllegalContentUser = userIllegalContent.includes(content.author)
+        const bIllegalContentUser = userIllegalContent.includes(content.author);
         if(bDMCAStop) {
             content_body = tt('postfull_jsx.this_post_is_not_available_due_to_a_copyright_claim')
         }
@@ -215,12 +224,12 @@ class PostFull extends React.Component {
             content_body = 'Not available for legal reasons.'
         }
 
-        const bShowLoading = (!bIllegalContentUser && !bDMCAStop && content.body.length < content.body_length)
+        const bShowLoading = (!bIllegalContentUser && !bDMCAStop && content.body.length < content.body_length);
 
         // hide images if user is on blacklist
-        const hideImages = ImageUserBlockList.includes(content.author)
+        const hideImages = ImageUserBlockList.includes(content.author);
 
-        const replyParams = {author, permlink, parent_author, parent_permlink, category, title, body}
+        const replyParams = {author, permlink, parent_author, parent_permlink, category, title, body};
 
         this.share_params = {
             link,

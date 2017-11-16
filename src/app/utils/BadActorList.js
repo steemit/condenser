@@ -96,6 +96,9 @@ bloocktrades
 bloctrades
 blocktradess
 blocktrade
+steempay
+steempays
+steemitpay
 `.trim().split('\n');
 
 export default list;

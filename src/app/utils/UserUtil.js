@@ -5,6 +5,7 @@
 
 
 let store = false;
+const MSG_STORE_NOT_SET = 'store is not set';
 
 export const setStore = (theStore) => {
     if(!store) {
@@ -29,6 +30,8 @@ export const currentUser = () => {
                 return current;
             }
         }
+    } else {
+        console.warn(MSG_STORE_NOT_SET);
     }
     return false;
 }
@@ -47,6 +50,8 @@ export const currentUsername = () => {
                 return uName;
             }
         }
+    } else {
+        console.warn(MSG_STORE_NOT_SET);
     }
     return false;
 }

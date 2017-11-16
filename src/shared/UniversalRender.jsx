@@ -5,11 +5,10 @@ import Iso from 'iso';
 import React from 'react';
 import { render } from 'react-dom';
 import { renderToString } from 'react-dom/server';
-import { Router, RouterContext, match, applyRouterMiddleware } from 'react-router';
+import { Router, RouterContext, match, applyRouterMiddleware, browserHistory } from 'react-router';
 import { Provider } from 'react-redux';
 import RootRoute from 'app/RootRoute';
 import {createStore, applyMiddleware, compose} from 'redux';
-import { browserHistory } from 'react-router';
 import { useScroll } from 'react-router-scroll';
 import createSagaMiddleware from 'redux-saga';
 import { syncHistoryWithStore } from 'react-router-redux';
@@ -40,11 +39,11 @@ const calcOffsetRoot = (startEl) => {
         el = el.offsetParent;
     }
     return offset;
-}
+};
 
 //BEGIN: SCROLL CODE
-const SCROLL_TOP_TRIES = 30;
-const SCROLL_TOP_DELAY_MS = 100;
+const SCROLL_TOP_TRIES = 100;
+const SCROLL_TOP_DELAY_MS = 50;
 const SCROLL_TOP_EXTRA_PIXEL_OFFSET = 3;
 
 let scrollTopTimeout = null;
@@ -52,16 +51,27 @@ let scrollTopTimeout = null;
 /**
  * raison d'être: support hash link navigation into slow-to-render page sections.
  *
- * @param top - number of pixels to scroll from top of document
- * @param triesRemaining - number of attempts remaining
+ * @param {htmlElement} el - the element to which we wish to scroll
+ * @param {number} topOffset - number of pixels to add to the scroll. (would be a negative number if fixed header)
+ * @param {Object} prevDocumentInfo -
+ *          .scrollHeight {number} - document.body.scrollHeight
+ *          .scrollTop {number} - ~document.scrollingElement.scrollTop
+ *          .scrollTarget {number} - the previously calculated scroll target
+ * @param {number} triesRemaining - number of attempts remaining
  */
-const scrollTop = (el, topOffset, triesRemaining) => {
-    const currentTop = Math.ceil(document.scrollingElement.scrollTop);
-    const top = calcOffsetRoot(el) + topOffset;
-    if(currentTop < top) {
-        window.scrollTo(0, top);
+const scrollTop = (el, topOffset, prevDocumentInfo, triesRemaining) => {
+    const documentInfo = {
+        scrollHeight: document.body.scrollHeight,
+        scrollTop: Math.ceil(document.scrollingElement.scrollTop),
+        scrollTarget: calcOffsetRoot(el) + topOffset
+    };
+
+    if(documentInfo.scrollTop < documentInfo.scrollTarget
+        || prevDocumentInfo.scrollTarget < documentInfo.scrollTarget
+        || prevDocumentInfo.scrollHeight < documentInfo.scrollHeight) {
+        window.scrollTo(0, documentInfo.scrollTarget);
         if(triesRemaining > 0) {
-            scrollTopTimeout = setTimeout(() => scrollTop(el, topOffset, (triesRemaining-1) ), SCROLL_TOP_DELAY_MS);
+            scrollTopTimeout = setTimeout(() => scrollTop(el, topOffset, documentInfo, (triesRemaining-1)), SCROLL_TOP_DELAY_MS);
         }
     }
 }
@@ -76,7 +86,12 @@ class OffsetScrollBehavior extends ScrollBehavior {
         if(el) {
             const header = document.getElementsByTagName('header')[0]; //this dimension ideally would be pulled from a scss file.
             const topOffset = (((header)? header.offsetHeight : 0) + SCROLL_TOP_EXTRA_PIXEL_OFFSET) * (-1);
-            scrollTop(el, topOffset, SCROLL_TOP_TRIES);
+            const documentInfo = {
+                scrollHeight: document.body.scrollHeight,
+                scrollTop: Math.ceil(document.scrollingElement.scrollTop),
+                scrollTarget: 0
+            };
+            scrollTop(el, topOffset, documentInfo, SCROLL_TOP_TRIES);
         } else {
             super.scrollToTarget(element, target);
         }
@@ -96,7 +111,7 @@ const sagaMiddleware = createSagaMiddleware(
 let middleware;
 
 if (process.env.BROWSER && process.env.NODE_ENV === 'development') {
-    const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+    const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose; // eslint-disable-line no-underscore-dangle
     middleware = composeEnhancers(
         applyMiddleware(sagaMiddleware)
     );
@@ -144,7 +159,7 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
 
         const scroll = useScroll({
             createScrollBehavior: config => new OffsetScrollBehavior(config),
-            shouldUpdateScroll: function(prevLocation, {location}) {
+            shouldUpdateScroll: (prevLocation, {location}) => { // eslint-disable-line no-shadow
                 //we want to navigate to the corresponding id=<hash> element on 'PUSH' navigation (prev null + POP is a new window url nav ~= 'PUSH')
                 if(location.hash) {
                     if((prevLocation === null && location.action === 'POP')

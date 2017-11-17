@@ -3,6 +3,7 @@ import React from 'react';
 import { Link } from 'react-router';
 import {connect} from 'react-redux';
 import { browserHistory } from 'react-router';
+import classnames from 'classnames';
 import transaction from 'app/redux/Transaction';
 import user from 'app/redux/User';
 import Icon from 'app/components/elements/Icon'
@@ -31,6 +32,7 @@ import Callout from 'app/components/elements/Callout';
 import normalizeProfile from 'app/utils/NormalizeProfile';
 import userIllegalContent from 'app/utils/userIllegalContent';
 import proxifyImageUrl from 'app/utils/ProxifyUrl';
+import ArticleLayoutSelector from 'app/components/modules/ArticleLayoutSelector';
 
 export default class UserProfile extends React.Component {
     constructor() {
@@ -67,7 +69,8 @@ export default class UserProfile extends React.Component {
             np.loading !== this.props.loading ||
             np.location.pathname !== this.props.location.pathname ||
             np.routeParams.accountname !== this.props.routeParams.accountname ||
-            np.follow_count !== this.props.follow_count
+            np.follow_count !== this.props.follow_count  ||
+            np.blogmode !== this.props.blogmode
         )
     }
 
@@ -312,10 +315,60 @@ export default class UserProfile extends React.Component {
             tab_content = <div>Unavailable For Legal Reasons.</div>;
         }
 
+        var page_title = "";
+        // Page title
+
+        if (isMyAccount) {
+            if (section === 'blog') {
+                page_title = tt('g.myblog');
+            } else if (section === 'comments') {
+                page_title = tt('g.mycomments');
+            }  else if (section === 'recent-replies') {
+                page_title = tt('g.myreplies');
+            } else if (section === 'settings') {
+                page_title = tt('g.settings');
+            }  else if (section === 'curation-rewards') {
+                page_title = tt('g.curation_rewards');
+            }  else if (section === 'author-rewards') {
+                page_title = tt('g.author_rewards');
+            }
+        } else {
+            if (section === 'blog') {
+                page_title = tt('g.blog');
+            } else if (section === 'comments') {
+                page_title = tt('g.comments');
+            }  else if (section === 'recent-replies') {
+                page_title = tt('g.replies');
+            } else if (section === 'settings') {
+                page_title = tt('g.settings');
+            }  else if (section === 'curation-rewards') {
+                page_title = tt('g.curation_rewards');
+            }  else if (section === 'author-rewards') {
+                page_title = tt('g.author_rewards');
+            }
+        }
+
+        const layoutClass = this.props.blogmode ? 'layout-block' : 'layout-list';
+
+        const blog_header = (
+            <div>
+                <div className="articles__header">
+                    <div className="articles__header-col">
+                        <h1 className="articles__h1">{page_title}</h1>
+                    </div>
+                    <div className="articles__header-col articles__header-col--right">
+                        <ArticleLayoutSelector />
+                    </div>
+                </div>
+                <hr className="articles__hr" />
+            </div>
+        );
+
         if (!(section === 'transfers' || section === 'permissions' || section === 'password')) {
             tab_content = <div className="row">
-                <div className="UserProfile__tab_content layout-list column">
+                <div className={classnames('UserProfile__tab_content', 'column', layoutClass, section)}>
                     <article className="articles">
+                        {section === 'blog' || 'comments' ? blog_header : null }
                         {tab_content}
                     </article>
                 </div>
@@ -461,7 +514,8 @@ module.exports = {
                 global_status: state.global.get('status'),
                 accounts: state.global.get('accounts'),
                 follow: state.global.get('follow'),
-                follow_count: state.global.get('follow_count')
+                follow_count: state.global.get('follow_count'),
+                blogmode: state.app.getIn(['user_preferences', 'blogmode'])
             };
         },
         dispatch => ({

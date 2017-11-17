@@ -15,7 +15,7 @@
     margin-top: 10px;
   }
 
-  .button.button {
+  .button {
     margin: 14px;
   }
 
@@ -42,7 +42,7 @@
       display: inline-block;
       position: absolute;
       &:active {
-        background: #4ba2f2;
+        background: $color-teal;
       }
     }
   }
@@ -52,7 +52,7 @@
     margin: 18px;
     .rangeslider__fill {
       height: 100%;
-      background: #4ba2f2;
+      background: $color-teal;
       box-shadow: none;
       left: 0;
     }

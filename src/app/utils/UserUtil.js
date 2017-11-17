@@ -64,6 +64,4 @@ export const isOwnAccount = (username) => {
  *
  * @returns {boolean}
  */
-export const isLoggedIn = () => {
-    return localStorage.getItem('autopost2')? true : false;
-}
+export const isLoggedIn = () => typeof localStorage !== 'undefined' && !!localStorage.getItem('autopost2');

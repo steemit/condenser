@@ -6,12 +6,9 @@ import LoginForm from 'app/components/modules/LoginForm';
 import ConfirmTransactionForm from 'app/components/modules/ConfirmTransactionForm';
 import Transfer from 'app/components/modules/Transfer';
 import SignUp from 'app/components/modules/SignUp';
-import user from 'app/redux/User';
 import Powerdown from 'app/components/modules/Powerdown';
-import tr from 'app/redux/Transaction';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import {NotificationStack} from 'react-notification';
-import {OrderedSet} from 'immutable';
 import TermsAgree from 'app/components/modules/TermsAgree';
 
 class Modals extends React.Component {
@@ -87,40 +84,40 @@ class Modals extends React.Component {
 export default connect(
     state => {
         return {
-            show_login_modal: state.user.get('show_login_modal'),
-            show_confirm_modal: state.transaction.get('show_confirm_modal'),
-            show_transfer_modal: state.user.get('show_transfer_modal'),
-            show_powerdown_modal: state.user.get('show_powerdown_modal'),
-            show_promote_post_modal: state.user.get('show_promote_post_modal'),
-            show_signup_modal: state.user.get('show_signup_modal'),
-            notifications: state.app.get('notifications'),
-            show_terms_modal: state.user.get('show_terms_modal')
+            show_login_modal: state.getIn(['user', 'show_login_modal']),
+            show_confirm_modal: state.getIn(['transaction', 'show_confirm_modal']),
+            show_transfer_modal: state.getIn(['user', 'show_transfer_modal']),
+            show_powerdown_modal: state.getIn(['user', 'show_powerdown_modal']),
+            show_promote_post_modal: state.getIn(['user', 'show_promote_post_modal']),
+            show_signup_modal: state.getIn(['user', 'show_signup_modal']),
+            notifications: state.getIn(['app', 'notifications']),
+            show_terms_modal: state.getIn(['user', 'show_terms_modal'])
         }
     },
     dispatch => ({
         hideLogin: e => {
             if (e) e.preventDefault();
-            dispatch(user.actions.hideLogin())
+            dispatch({type: 'user/HIDE_LOGIN'})
         },
         hideConfirm: e => {
             if (e) e.preventDefault();
-            dispatch(tr.actions.hideConfirm())
+            dispatch({type: 'transaction/HIDE_CONFIRM'})
         },
         hideTransfer: e => {
             if (e) e.preventDefault();
-            dispatch(user.actions.hideTransfer())
+            dispatch({type: 'user/HIDE_TRANSFER'})
         },
         hidePowerdown: e => {
             if (e) e.preventDefault();
-            dispatch(user.actions.hidePowerdown())
+            dispatch({type: 'user/HIDE_POWERDOWN'})
         },
         hidePromotePost: e => {
             if (e) e.preventDefault();
-            dispatch(user.actions.hidePromotePost())
+            dispatch({type: 'user/HIDE_PROMOTE_POST'})
         },
         hideSignUp: e => {
             if (e) e.preventDefault();
-            dispatch(user.actions.hideSignUp())
+            dispatch({type: 'user/HIDE_SIGN_UP'})
         },
         // example: addNotification: ({key, message}) => dispatch({type: 'ADD_NOTIFICATION', payload: {key, message}}),
         removeNotification: (key) => dispatch({type: 'REMOVE_NOTIFICATION', payload: {key}})

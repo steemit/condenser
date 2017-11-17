@@ -1,8 +1,5 @@
 /* eslint react/prop-types: 0 */
 import React, { PropTypes, Component } from 'react';
-import transaction from 'app/redux/Transaction'
-import g from 'app/redux/GlobalReducer'
-import user from 'app/redux/User'
 import {validate_account_name} from 'app/utils/ChainValidation';
 import runTests from 'app/utils/BrowserTests';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
@@ -263,9 +260,9 @@ export default connect(
 
     // mapStateToProps
     (state) => {
-        const login_error = state.user.get('login_error')
-        const currentUser = state.user.get('current')
-        const loginBroadcastOperation = state.user.get('loginBroadcastOperation')
+        const login_error = state.getIn(['user', 'login_error'])
+        const currentUser = state.getIn(['user', 'current'])
+        const loginBroadcastOperation = state.getIn(['user', 'loginBroadcastOperation'])
 
         const initialValues = {
             saveLogin: saveLoginDefault,
@@ -273,14 +270,14 @@ export default connect(
 
         // The username input has a value prop, so it should not use initialValues
         const initialUsername = currentUser && currentUser.has('username') ? currentUser.get('username') : urlAccountName()
-        const loginDefault = state.user.get('loginDefault')
+        const loginDefault = state.getIn(['user', 'loginDefault'])
         if(loginDefault) {
             const {username, authType} = loginDefault.toJS()
             if(username && authType) initialValues.username = username + '/' + authType
         } else if (initialUsername) {
             initialValues.username = initialUsername;
         }
-        const offchainUser = state.offchain.get('user');
+        const offchainUser = state.getIn(['offchain', 'user']);
         if (!initialUsername && offchainUser && offchainUser.get('account')) {
             initialValues.username = offchainUser.get('account');
         }
@@ -294,32 +291,32 @@ export default connect(
             initialValues,
             initialUsername,
             msg,
-            offchain_user: state.offchain.get('user')
+            offchain_user: state.getIn(['offchain', 'user'])
         }
     },
 
     // mapDispatchToProps
     dispatch => ({
         dispatchSubmit: (data, loginBroadcastOperation, afterLoginRedirectToWelcome) => {
-            const {password, saveLogin} = data
-            const username = data.username.trim().toLowerCase()
+            const {password, saveLogin} = data;
+            const username = data.username.trim().toLowerCase();
             if (loginBroadcastOperation) {
-                const {type, operation, successCallback, errorCallback} = loginBroadcastOperation.toJS()
-                dispatch(transaction.actions.broadcastOperation({type, operation, username, password, successCallback, errorCallback}))
-                dispatch(user.actions.usernamePasswordLogin({username, password, saveLogin, afterLoginRedirectToWelcome, operationType: type}))
-                dispatch(user.actions.closeLogin())
+                const {type, operation, successCallback, errorCallback} = loginBroadcastOperation.toJS();
+                dispatch({type: 'transaction/BROADCAST_OPERATION', payload: {type, operation, username, password, successCallback, errorCallback}});
+                dispatch({type: 'user/USERNAME_PASSWORD_LOGIN', payload: {username, password, saveLogin, afterLoginRedirectToWelcome, operationType: type}});
+                dispatch({type: 'user/CLOSE_LOGIN'});
             } else {
-                dispatch(user.actions.usernamePasswordLogin({username, password, saveLogin, afterLoginRedirectToWelcome}))
+                dispatch({type: 'user/USERNAME_PASSWORD_LOGIN', payload: {username, password, saveLogin, afterLoginRedirectToWelcome}});
             }
         },
-        clearError: () => { if (hasError) dispatch(user.actions.loginError({error: null})) },
+        clearError: () => { if (hasError) dispatch({type: 'user/LOGIN_ERROR', payload: {error: null}}) },
         qrReader: (dataCallback) => {
-            dispatch(g.actions.showDialog({name: 'qr_reader', params: {handleScan: dataCallback}}));
+            dispatch({type: 'global/SHOW_DIALOG', payload: {name: 'qr_reader', params: {handleScan: dataCallback}}});
         },
         showChangePassword: (username, defaultPassword) => {
-            dispatch(user.actions.closeLogin())
-            dispatch(g.actions.remove({key: 'changePassword'}))
-            dispatch(g.actions.showDialog({name: 'changePassword', params: {username, defaultPassword}}))
+            dispatch({type: 'user/CLOSE_LOGIN'});
+            dispatch({type: 'global/REMOVE', payload: {key: 'changePassword'}});
+            dispatch({type: 'global/SHOW_DIALOG', payload: {name: 'changePassword', params: {username, defaultPassword}}});
         },
     })
 )(LoginForm)

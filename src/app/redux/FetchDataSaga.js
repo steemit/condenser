@@ -2,9 +2,7 @@ import {takeLatest, takeEvery} from 'redux-saga';
 import {call, put, select, fork} from 'redux-saga/effects';
 import {loadFollows, fetchFollowCount} from 'app/redux/FollowSaga';
 import {getContent} from 'app/redux/SagaShared';
-import GlobalReducer from './GlobalReducer';
 import constants from './constants';
-import {fromJS, Map} from 'immutable'
 import {api} from 'steem';
 
 export const fetchDataWatches = [watchLocationChange, watchDataRequests, watchFetchJsonRequests, watchFetchState, watchGetContent];
@@ -34,7 +32,7 @@ export function* fetchState(location_change_action) {
 
     // `ignore_fetch` case should only trigger on initial page load. No need to call
     // fetchState immediately after loading fresh state from the server. Details: #593
-    const server_location = yield select(state => state.offchain.get('server_location'));
+    const server_location = yield select(state => state.getIn(['offchain', 'server_location']));
     const ignore_fetch = (pathname === server_location && is_initial_state)
     is_initial_state = false;
     if(ignore_fetch) return;
@@ -49,7 +47,7 @@ export function* fetchState(location_change_action) {
     yield put({type: 'FETCH_DATA_BEGIN'});
     try {
         const state = yield call([api, api.getStateAsync], url)
-        yield put(GlobalReducer.actions.receiveState(state));
+        yield put({type: 'global/RECEIVE_STATE', payload: state});
     } catch (error) {
         console.error('~~ Saga fetchState error ~~>', url, error);
         yield put({type: 'global/STEEM_API_ERROR', error: error.message});
@@ -191,7 +189,7 @@ export function* fetchData(action) {
     yield put({type: 'FETCH_DATA_BEGIN'});
     try {
         const data = yield call([api, api[call_name]], ...args);
-        yield put(GlobalReducer.actions.receiveData({data, order, category, author, permlink, accountname}));
+        yield put({type: 'global/RECEIVE_DATA', payload: {data, order, category, author, permlink, accountname}});
     } catch (error) {
         console.error('~~ Saga fetchData error ~~>', call_name, args, error);
         yield put({type: 'global/STEEM_API_ERROR', error: error.message});
@@ -237,9 +235,9 @@ export function* fetchMeta({payload: {id, link}}) {
         if(!meta.image) {
             meta.image = meta['twitter:image:src']
         }
-        yield put(GlobalReducer.actions.receiveMeta({id, meta}))
+        yield put({type: 'global/RECEIVE_META', payload: {id, meta}})
     } catch(error) {
-        yield put(GlobalReducer.actions.receiveMeta({id, meta: {error}}))
+        yield put({type: 'global/RECEIVE_META', payload: {id, meta: {error}}})
     }
 }
 
@@ -265,9 +263,9 @@ function* fetchJson({payload: {id, url, body, successCallback, skipLoading = fal
         let result = yield skipLoading ? fetch(url, payload) : call(fetch, url, payload)
         result = yield result.json()
         if(successCallback) result = successCallback(result)
-        yield put(GlobalReducer.actions.fetchJsonResult({id, result}))
+        yield put({type: 'global/FETCH_JSON_RESULT', payload: {id, result}})
     } catch(error) {
         console.error('fetchJson', error)
-        yield put(GlobalReducer.actions.fetchJsonResult({id, error}))
+        yield put({type: 'global/FETCH_JSON_RESULT', payload: {id, error}})
     }
 }

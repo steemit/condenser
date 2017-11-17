@@ -97,6 +97,6 @@ export default class TagsIndex extends React.Component {
 module.exports = {
     path: 'tags(/:order)',
     component: connect(state => ({
-        tagsAll: state.global.get('tags')
+        tagsAll: state.getIn(['global', 'tags'])
     }))(TagsIndex)
 };

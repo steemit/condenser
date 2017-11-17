@@ -2,7 +2,6 @@ import React from 'react';
 import {connect} from 'react-redux';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import Reveal from 'react-foundation-components/lib/global/reveal';
-import g from 'app/redux/GlobalReducer'
 import {Map, List} from 'immutable'
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import QrReader from 'app/components/elements/QrReader'
@@ -94,12 +93,12 @@ const emptyMap = Map()
 export default connect(
     state => {
         return {
-            active_dialogs: state.global.get('active_dialogs') || emptyMap,
+            active_dialogs: state.getIn(['global', 'active_dialogs']) || emptyMap,
         }
     },
     dispatch => ({
         hide: name => {
-            dispatch(g.actions.hideDialog({name}))
+            dispatch({type: 'global/HIDE_DIALOG', payload: {name}})
         },
     })
 )(Dialogs)

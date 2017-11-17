@@ -12,6 +12,7 @@ import {createStore, applyMiddleware, compose} from 'redux';
 import { useScroll } from 'react-router-scroll';
 import createSagaMiddleware from 'redux-saga';
 import { syncHistoryWithStore } from 'react-router-redux';
+import { Map, fromJS } from 'immutable';
 import rootReducer from 'app/redux/RootReducer';
 import {fetchDataWatches} from 'app/redux/FetchDataSaga';
 import {marketWatches} from 'app/redux/MarketSaga';
@@ -150,12 +151,14 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
     }
 
     if (process.env.BROWSER) {
-        const store = createStore(rootReducer, initial_state, middleware);
+        const store = createStore(rootReducer, fromJS(initial_state), middleware);
         sagaMiddleware.run(PollDataSaga).done
             .then(() => console.log('PollDataSaga is finished'))
             .catch(err => console.log('PollDataSaga is finished with error', err));
 
-        const history = syncHistoryWithStore(browserHistory, store);
+        const history = syncHistoryWithStore(browserHistory, store, {
+            selectLocationState: state => state.get('routing').toJS(),
+        });
 
         const scroll = useScroll({
             createScrollBehavior: config => new OffsetScrollBehavior(config),
@@ -247,7 +250,7 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
 
         offchain.signup_bonus = sdDisp;
         offchain.server_location = location;
-        server_store = createStore(rootReducer, { global: onchain, offchain});
+        server_store = createStore(rootReducer, Map({ global: onchain, offchain }));
         server_store.dispatch({type: '@@router/LOCATION_CHANGE', payload: {pathname: location}});
         server_store.dispatch({type: 'SET_USER_PREFERENCES', payload: userPreferences});
         if (offchain.account) {

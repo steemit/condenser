@@ -1,9 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {connect} from 'react-redux';
-//import Highcharts from 'highcharts';
-
-import transaction from 'app/redux/Transaction'
 import TransactionError from 'app/components/elements/TransactionError'
 import DepthChart from 'app/components/elements/DepthChart';
 import Orderbook from "app/components/elements/Orderbook";
@@ -533,15 +530,15 @@ const DEFAULT_EXPIRE = 0xFFFFFFFF//Math.floor((Date.now() / 1000) + (60 * 60 * 2
 module.exports = {
     path: 'market',
     component: connect(state => {
-        const username = state.user.get('current') ? state.user.get('current').get('username') : null;
+        const username = state.getIn(['user', 'current']) ? state.getIn(['current', 'username']) : null;
         return {
-            orderbook:   state.market.get('orderbook'),
-            open_orders: process.env.BROWSER ? state.market.get('open_orders') : [],
-            ticker:      state.market.get('ticker'),
-            account:     state.global.getIn(['accounts', username]),
-            history:     state.market.get('history'),
+            orderbook:   state.getIn(['market', 'orderbook']),
+            open_orders: process.env.BROWSER ? state.getIn(['market', 'open_orders']) : [],
+            ticker:      state.getIn(['market', 'ticker']),
+            account:     state.getIn(['global', 'accounts', username]),
+            history:     state.getIn(['market', 'history']),
             user:        username,
-            feed:        state.global.get('feed_price').toJS()
+            feed:        state.getIn(['global', 'feed_price']).toJS()
         }
     },
     dispatch => ({
@@ -559,13 +556,13 @@ module.exports = {
         cancelOrder: (owner, orderid, successCallback) => {
             const confirm = tt('market_jsx.order_cancel_confirm', {order_id: orderid, user: owner})
             const successMessage = tt('market_jsx.order_cancelled', {order_id: orderid})
-            dispatch(transaction.actions.broadcastOperation({
+            dispatch({type: 'transaction/BROADCAST_OPERATION', payload: {
                 type: 'limit_order_cancel',
                 operation: {owner, orderid/*, __config: {successMessage}*/},
                 confirm,
                 successCallback: () => {successCallback(successMessage);}
                 //successCallback
-            }))
+            }})
         },
         placeOrder: (owner, amount_to_sell, min_to_receive, effectivePrice, priceWarning, marketPrice, successCallback, fill_or_kill = false, expiration = DEFAULT_EXPIRE) => {
             // create_order jsc 12345 "1.000 SBD" "100.000 STEEM" true 1467122240 false
@@ -588,14 +585,14 @@ module.exports = {
                 warning = isSell ? tt('market_jsx.price_warning_below', warning_args) : tt('market_jsx.price_warning_above', warning_args);
             }
             const orderid = Math.floor(Date.now() / 1000)
-            dispatch(transaction.actions.broadcastOperation({
+            dispatch({type: 'transaction/BROADCAST_OPERATION', payload: {
                 type: 'limit_order_create',
                 operation: {owner, amount_to_sell, min_to_receive, fill_or_kill, expiration, orderid}, //,
                     //__config: {successMessage}},
                 confirm,
                 warning,
                 successCallback: () => {successCallback(successMessage);}
-            }))
+            }})
         }
     })
     )(Market)

@@ -119,7 +119,7 @@ export default reduxForm(
     { form: 'KeyEdit', fields: ['password', 'confirm'], validate: keyValidate},
     (state, ownProps) => {
         const {oldAuth} = ownProps
-        const private_keys = state.user.getIn(['current', 'private_keys'])
+        const private_keys = state.getIn(['user', 'current', 'private_keys'])
         const privateKey = private_keys && private_keys.find(d => d.toPublicKey().toString() === oldAuth)
         return {...ownProps, privateKey, oldAuth}
     },

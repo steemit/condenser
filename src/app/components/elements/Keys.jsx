@@ -2,8 +2,6 @@
 import React, {PropTypes, Component} from 'react'
 import {Map, List} from 'immutable'
 import {connect} from 'react-redux'
-import user from 'app/redux/User'
-import g from 'app/redux/GlobalReducer'
 import ShowKey from 'app/components/elements/ShowKey'
 import tt from 'counterpart';
 
@@ -94,7 +92,7 @@ export default connect(
     (state, ownProps) => {
         const {account} = ownProps
         const accountName = account.get('name')
-        const current = state.user.get('current')
+        const current = state.getIn(['user', 'current'])
         const username = current && current.get('username')
         const isMyAccount = username === accountName
         const authLogin = isMyAccount ? {username, password: current.get('password')} : null
@@ -105,14 +103,14 @@ export default connect(
         if(!privateKeys)
             privateKeys = emptyMap
 
-        const auth = state.user.getIn(['authority', accountName])
+        const auth = state.getIn(['user', 'authority', accountName])
         return {...ownProps, auth, authLogin, privateKeys}
     },
     dispatch => ({
         showChangePassword: (username, authType, priorAuthKey) => {
             const name = 'changePassword'
-            dispatch(g.actions.remove({key: name}))
-            dispatch(g.actions.showDialog({name, params: {username, authType, priorAuthKey}}))
+            dispatch({type: 'global/REMOVE', payload: {key: name}})
+            dispatch({type: 'global/SHOW_DIALOG', payload: {name, params: {username, authType, priorAuthKey}}})
         },
     })
 )(Keys)

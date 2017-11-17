@@ -91,7 +91,7 @@ import {connect} from 'react-redux'
 export default connect(
     // mapStateToProps
     (state, ownProps) => {
-        const current = state.user.get('current')
+        const current = state.getIn(['user', 'current'])
         const login_owner_pubkey = current && current.get('login_owner_pubkey')
         const previous_owner_authority = current && current.get('previous_owner_authority')
         return {

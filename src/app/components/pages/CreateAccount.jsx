@@ -3,7 +3,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
-import user from 'app/redux/User';
 import {PrivateKey} from 'steem/lib/auth/ecc';
 import {validate_account_name} from 'app/utils/ChainValidation';
 import runTests from 'app/utils/BrowserTests';
@@ -314,21 +313,21 @@ module.exports = {
     component: connect(
         state => {
             return {
-                loggedIn: !!state.user.get('current'),
-                offchainUser: state.offchain.get('user'),
-                serverBusy: state.offchain.get('serverBusy'),
-                suggestedPassword: state.global.get('suggestedPassword'),
+                loggedIn: !!state.getIn(['user', 'current']),
+                offchainUser: state.getIn(['offchain', 'user']),
+                serverBusy: state.getIn(['offchain', 'serverBusy']),
+                suggestedPassword: state.getIn(['global', 'suggestedPassword']),
             }
         },
         dispatch => ({
-            loginUser: (username, password) => dispatch(user.actions.usernamePasswordLogin({username, password, saveLogin: true})),
+            loginUser: (username, password) => dispatch({type: 'user/USERNAME_PASSWORD_LOGIN', payload: {username, password, saveLogin: true}}),
             logout: e => {
                 if (e) e.preventDefault();
-                dispatch(user.actions.logout())
+                dispatch({type: 'user/LOGOUT'})
             },
             showTerms: e => {
                 if (e) e.preventDefault();
-                dispatch(user.actions.showTerms())
+                dispatch({type: 'user/SHOW_TERMS'})
             }
         })
     )(CreateAccount)

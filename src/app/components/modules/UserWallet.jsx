@@ -2,7 +2,6 @@
 import React from 'react';
 import {connect} from 'react-redux'
 import {Link} from 'react-router'
-import g from 'app/redux/GlobalReducer'
 import SavingsWithdrawHistory from 'app/components/elements/SavingsWithdrawHistory';
 import TransferHistoryRow from 'app/components/cards/TransferHistoryRow';
 import TransactionError from 'app/components/elements/TransactionError';
@@ -16,7 +15,6 @@ import {FormattedHTMLMessage} from 'app/Translator';
 import tt from 'counterpart';
 import {List} from 'immutable'
 import { LIQUID_TOKEN, LIQUID_TICKER, DEBT_TOKENS, VESTING_TOKEN } from 'app/client_config';
-import transaction from 'app/redux/Transaction';
 
 const assetPrecision = 1000;
 
@@ -399,18 +397,18 @@ export default connect(
     // mapStateToProps
     (state, ownProps) => {
         let price_per_steem = undefined
-        const feed_price = state.global.get('feed_price')
+        const feed_price = state.getIn(['global', 'feed_price'])
         if(feed_price && feed_price.has('base') && feed_price.has('quote')) {
             const {base, quote} = feed_price.toJS()
             if(/ SBD$/.test(base) && / STEEM$/.test(quote))
                 price_per_steem = parseFloat(base.split(' ')[0])
         }
-        const savings_withdraws = state.user.get('savings_withdraws')
-        const gprops = state.global.get('props');
+        const savings_withdraws = state.getIn(['user', 'savings_withdraws'])
+        const gprops = state.getIn(['global', 'props']);
         const sbd_interest = gprops.get('sbd_interest_rate')
         return {
             ...ownProps,
-            open_orders: state.market.get('open_orders'),
+            open_orders: state.getIn(['market', 'open_orders']),
             price_per_steem,
             savings_withdraws,
             sbd_interest,
@@ -432,21 +430,21 @@ export default connect(
                 reward_vests: account.get('reward_vesting_balance')
             };
 
-            dispatch(transaction.actions.broadcastOperation({
+            dispatch({type: 'transaction/BROADCAST_OPERATION', payload: {
                 type: 'claim_reward_balance',
                 operation,
                 successCallback,
-            }))
+            }})
         },
         convertToSteem: (e) => {
             e.preventDefault()
             const name = 'convertToSteem';
-            dispatch(g.actions.showDialog({name}))
+            dispatch({type: 'global/SHOW_DIALOG', payload: {name}})
         },
         showChangePassword: (username) => {
             const name = 'changePassword';
-            dispatch(g.actions.remove({key: name}));
-            dispatch(g.actions.showDialog({name, params: {username}}))
+            dispatch({type: 'global/REMOVE', payload: {key: name}});
+            dispatch({type: 'global/SHOW_DIALOG', payload: {name, params: {username}}})
         },
     })
 )(UserWallet)

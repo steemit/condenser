@@ -182,7 +182,7 @@ module.exports = {
     component: connect(
         state => {
             return {
-                account_to_recover: state.offchain.get('recover_account'),
+                account_to_recover: state.getIn(['offchain', 'recover_account']),
             };
         },
         dispatch => ({

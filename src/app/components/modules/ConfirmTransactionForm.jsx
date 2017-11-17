@@ -1,6 +1,5 @@
 import React, { PropTypes, Component } from 'react';
 import {connect} from 'react-redux'
-import transaction from 'app/redux/Transaction'
 import {findParent} from 'app/utils/DomUtils';
 import tt from 'counterpart';
 
@@ -79,11 +78,11 @@ const typeName = confirmBroadcastOperation => {
 export default connect(
     // mapStateToProps
     (state) => {
-        const confirmBroadcastOperation = state.transaction.get('confirmBroadcastOperation')
-        const confirmErrorCallback = state.transaction.get('confirmErrorCallback')
-        const confirm = state.transaction.get('confirm')
-        const warning = state.transaction.get('warning')
-        const checkbox = state.transaction.get('checkbox')
+        const confirmBroadcastOperation = state.getIn(['transaction', 'confirmBroadcastOperation'])
+        const confirmErrorCallback = state.getIn(['transaction', 'confirmErrorCallback'])
+        const confirm = state.getIn(['transaction', 'confirm'])
+        const warning = state.getIn(['transaction', 'warning'])
+        const checkbox = state.getIn(['transaction', 'checkbox'])
         return {
             confirmBroadcastOperation,
             confirmErrorCallback,
@@ -95,8 +94,8 @@ export default connect(
     // mapDispatchToProps
     dispatch => ({
         okClick: (confirmBroadcastOperation) => {
-            dispatch(transaction.actions.hideConfirm())
-            dispatch(transaction.actions.broadcastOperation({...(confirmBroadcastOperation.toJS())}))
+            dispatch({type: 'transaction/HIDE_CONFIRM'})
+            dispatch({type: 'transaction/BROADCAST_OPERATION', payload: {...(confirmBroadcastOperation.toJS())}})
         }
     })
 )(ConfirmTransactionForm)

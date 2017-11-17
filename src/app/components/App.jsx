@@ -3,8 +3,6 @@ import {connect} from 'react-redux';
 import AppPropTypes from 'app/utils/AppPropTypes';
 import Header from 'app/components/modules/Header';
 import LpFooter from 'app/components/modules/lp/LpFooter';
-import user from 'app/redux/User';
-import g from 'app/redux/GlobalReducer';
 import TopRightMenu from 'app/components/modules/TopRightMenu';
 import { browserHistory } from 'react-router';
 import classNames from 'classnames';
@@ -317,25 +315,24 @@ App.propTypes = {
 export default connect(
     state => {
         return {
-            error: state.app.get('error'),
-            flash: state.offchain.get('flash'),
-            signup_bonus: state.offchain.get('signup_bonus'),
-            new_visitor: !state.user.get('current') &&
-                !state.offchain.get('user') &&
-                !state.offchain.get('account') &&
-                state.offchain.get('new_visit'),
-            username: state.user.getIn(['current', 'username']) || state.offchain.get('account') || '',
-            nightmodeEnabled: state.app.getIn(['user_preferences', 'nightmode']),
+            error: state.getIn(['app', 'error']),
+            flash: state.getIn(['offchain', 'flash']),
+            signup_bonus: state.getIn(['offchain', 'signup_bonus']),
+            new_visitor: !state.getIn(['user', 'current']) &&
+                !state.getIn(['offchain', 'user']) &&
+                !state.getIn(['offchain', 'account']) &&
+                state.getIn(['offchain', 'new_visit']),
+            username: state.getIn(['user', 'current', 'username']) || state.getIn(['offchain', 'account']) || '',
+            nightmodeEnabled: state.getIn(['app', 'user_preferences', 'nightmode']),
         };
     },
     dispatch => ({
         loginUser: () =>
-            dispatch(user.actions.usernamePasswordLogin()),
+            dispatch({type: 'user/USERNAME_PASSWORD_LOGIN', payload: {}}),
         depositSteem: (username) => {
             const new_window = window.open();
             new_window.opener = null;
             new_window.location = 'https://blocktrades.us/?input_coin_type=btc&output_coin_type=steem&receive_address=' + username;
-            //dispatch(g.actions.showDialog({name: 'blocktrades_deposit', params: {outputCoinType: 'VESTS'}}));
         },
     })
 )(App);

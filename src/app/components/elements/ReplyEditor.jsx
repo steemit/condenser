@@ -1,6 +1,5 @@
 import React from 'react';
 import reactForm from 'app/utils/ReactForm'
-import transaction from 'app/redux/Transaction';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer'
 import CategorySelector from 'app/components/cards/CategorySelector'
 import {validateCategory} from 'app/components/cards/CategorySelector'
@@ -10,7 +9,6 @@ import Tooltip from 'app/components/elements/Tooltip'
 import sanitizeConfig, {allowedTags} from 'app/utils/SanitizeConfig'
 import sanitize from 'sanitize-html'
 import HtmlReady from 'shared/HtmlReady'
-import g from 'app/redux/GlobalReducer'
 import {Set} from 'immutable'
 import Remarkable from 'remarkable'
 import Dropzone from 'react-dropzone'
@@ -500,7 +498,7 @@ const richTextEditor = process.env.BROWSER ? require('react-rte-image').default 
 export default (formId) => connect(
     // mapStateToProps
     (state, ownProps) => {
-        const username = state.user.getIn(['current', 'username'])
+        const username = state.getIn(['user', 'current', 'username'])
         const fields = ['body', 'autoVote:checked']
         const {type, parent_author, jsonMetadata} = ownProps
         const isEdit = type === 'edit'
@@ -527,10 +525,10 @@ export default (formId) => connect(
     // mapDispatchToProps
     dispatch => ({
         clearMetaData: (id) => {
-            dispatch(g.actions.clearMeta({id}))
+            dispatch({type: 'global/CLEAR_META', payload: {id}})
         },
         setMetaData: (id, jsonMetadata) => {
-            dispatch(g.actions.setMetaData({id, meta: jsonMetadata ? jsonMetadata.steem : null}))
+            dispatch({type: 'global/SET_META_DATA', payload: {id, meta: jsonMetadata ? jsonMetadata.steem : null}})
         },
         uploadImage: (file, progress) => {
             dispatch({
@@ -544,7 +542,7 @@ export default (formId) => connect(
             successCallback, errorCallback, startLoadingIndicator
         }) => {
             // const post = state.global.getIn(['content', author + '/' + permlink])
-            const username = state.user.getIn(['current', 'username'])
+            const username = state.getIn(['user', 'current', 'username'])
 
             const isEdit = type === 'edit'
             const isNew = /^submit_/.test(type)
@@ -647,12 +645,12 @@ export default (formId) => connect(
                 json_metadata: meta,
                 __config
             }
-            dispatch(transaction.actions.broadcastOperation({
+            dispatch({type: 'transaction/BROADCAST_OPERATION', payload: {
                 type: 'comment',
                 operation,
                 errorCallback,
                 successCallback,
-            }))
+            }})
         },
     })
 )(ReplyEditor)

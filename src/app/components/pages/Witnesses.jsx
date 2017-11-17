@@ -3,10 +3,8 @@ import {connect} from 'react-redux';
 import { Link } from 'react-router';
 import links from 'app/utils/Links'
 import Icon from 'app/components/elements/Icon';
-import transaction from 'app/redux/Transaction'
 import ByteBuffer from 'bytebuffer'
 import {is} from 'immutable'
-import g from 'app/redux/GlobalReducer';
 import tt from 'counterpart';
 
 const Long = ByteBuffer.Long
@@ -209,13 +207,13 @@ module.exports = {
     path: '/~witnesses(/:witness)',
     component: connect(
         (state) => {
-            const current_user = state.user.get('current');
+            const current_user = state.getIn(['user', 'current']);
             const username = current_user && current_user.get('username')
-            const current_account = current_user && state.global.getIn(['accounts', username])
+            const current_account = current_user && state.getIn(['global', 'accounts', username])
             const witness_votes = current_account && current_account.get('witness_votes').toSet();
             const current_proxy = current_account && current_account.get('proxy');
             return {
-                witnesses: state.global.get('witnesses'),
+                witnesses: state.getIn(['global', 'witnesses']),
                 username,
                 witness_votes,
                 current_proxy
@@ -224,25 +222,25 @@ module.exports = {
         (dispatch) => {
             return {
                 accountWitnessVote: (username, witness, approve) => {
-                    dispatch(transaction.actions.broadcastOperation({
+                    dispatch({type: 'transaction/BROADCAST_OPERATION', payload: {
                         type: 'account_witness_vote',
                         operation: {account: username, witness, approve},
-                    }))
+                    }})
                 },
                 accountWitnessProxy: (account, proxy, stateCallback) => {
-                    dispatch(transaction.actions.broadcastOperation({
+                    dispatch({type: 'transaction/BROADCAST_OPERATION', payload: {
                         type: 'account_witness_proxy',
                         operation: {account, proxy},
                         confirm: proxy.length ? "Set proxy to: " + proxy : "You are about to remove your proxy.",
                         successCallback: () => {
-                            dispatch(g.actions.updateAccountWitnessProxy({account, proxy}));
+                            dispatch({type: 'global/UPDATE_ACCOUNT_WITNESS_PROXY', payload: {account, proxy}});
                             stateCallback({proxyFailed: false, proxy: ""});
                         },
                         errorCallback: (e) => {
                             console.log('error:', e);
                             stateCallback({proxyFailed: true});
                         }
-                    }))
+                    }})
                 }
             }
         }

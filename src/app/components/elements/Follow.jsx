@@ -2,10 +2,8 @@ import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
-import transaction from 'app/redux/Transaction';
 import {Set, Map} from 'immutable'
 import tt from 'counterpart';
-import user from 'app/redux/User';
 
 const {string, bool, any} = PropTypes;
 
@@ -108,12 +106,12 @@ module.exports = connect(
     (state, ownProps) => {
         let {follower} = ownProps;
         if(!follower) {
-            const current_user = state.user.get('current');
+            const current_user = state.getIn(['user', 'current']);
             follower = current_user ? current_user.get('username') : null
         }
 
         const {following} = ownProps
-        const f = state.global.getIn(['follow', 'getFollowingAsync', follower], emptyMap)
+        const f = state.getIn(['global', 'follow', 'getFollowingAsync', follower], emptyMap)
 
         // the line below was commented out by val - I think it's broken so sometimes the loading indicator is shown forever
         // const loading = f.get('blog_loading', false) || f.get('ignore_loading', false)
@@ -135,7 +133,7 @@ module.exports = connect(
         updateFollow: (follower, following, action, done) => {
             const what = action ? [action] : [];
             const json = ['follow', {follower, following, what}];
-            dispatch(transaction.actions.broadcastOperation({
+            dispatch({type: 'transaction/BROADCAST_OPERATION', payload: {
                 type: 'custom_json',
                 operation: {
                     id: 'follow',
@@ -144,11 +142,11 @@ module.exports = connect(
                 },
                 successCallback: done,
                 errorCallback: done,
-            }))
+            }})
         },
         showLogin: e => {
             if (e) e.preventDefault();
-            dispatch(user.actions.showLogin())
+            dispatch({type: 'user/SHOW_LOGIN'})
         },
     })
 )(Follow);

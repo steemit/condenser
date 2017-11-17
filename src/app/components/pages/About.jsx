@@ -2,8 +2,6 @@ import React from 'react';
 import { APP_NAME, LANDING_PAGE_URL } from 'app/client_config';
 import tt from 'counterpart';
 
-console.log('-- APP_NAME -->', APP_NAME);
-
 class About extends React.Component {
     render() {
         return (

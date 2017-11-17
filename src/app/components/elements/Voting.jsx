@@ -293,10 +293,10 @@ export default connect(
         vote: (weight, {author, permlink, username, myVote}) => {
             const confirm = () => {
                 if(myVote == null) return null
-                const t = tt('voting_jsx.we_will_reset_curation_rewards_for_this_post')
-                if(weight === 0) return tt('voting_jsx.removing_your_vote') + t
-                if(weight > 0) return tt('voting_jsx.changing_to_an_upvote') + t
-                if(weight < 0) return tt('voting_jsx.changing_to_a_downvote') + t
+                const t = tt('voting_jsx.we_will_reset_curation_rewards_for_this_post');
+                if(weight === 0) return tt('voting_jsx.removing_your_vote') + " " + t;
+                if(weight > 0) return tt('voting_jsx.changing_to_an_upvote') + " " + t;
+                if(weight < 0) return tt('voting_jsx.changing_to_a_downvote') + " " + t;
                 return null
             }
             dispatch(transaction.actions.broadcastOperation({

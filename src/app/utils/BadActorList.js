@@ -26,6 +26,7 @@ btrex
 bttrex
 ittrex
 bittrex-deposit
+openledgerdex
 poloiex
 poloinex
 polomiex

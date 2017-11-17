@@ -66,6 +66,9 @@ const scrollTop = (el, topOffset, prevDocumentInfo, triesRemaining) => {
         scrollTarget: calcOffsetRoot(el) + topOffset
     };
 
+    if(prevDocumentInfo.scrollTop > documentInfo.scrollTop) { //detecting that the user has scrolled in an up direction
+        return;
+    }
     if(documentInfo.scrollTop < documentInfo.scrollTarget
         || prevDocumentInfo.scrollTarget < documentInfo.scrollTarget
         || prevDocumentInfo.scrollHeight < documentInfo.scrollHeight) {

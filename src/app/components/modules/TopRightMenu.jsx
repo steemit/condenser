@@ -21,7 +21,7 @@ const defaultNavigate = (e) => {
     browserHistory.push(a.pathname + a.search + a.hash);
 };
 
-function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate, toggleOffCanvasMenu, probablyLoggedIn, nightmodeEnabled, toggleNightmode}) {
+function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate, toggleOffCanvasMenu, probablyLoggedIn, nightmodeEnabled, toggleNightmode, pricePerSteem}) {
     const mcn = 'menu' + (vertical ? ' vertical show-for-small-only' : '');
     const mcl = vertical ? '' : ' sub-menu';
     const lcn = vertical ? '' : 'show-for-medium';
@@ -36,8 +36,10 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
     const reset_password_link = `/@${username}/password`;
     const settings_link = `/@${username}/settings`;
     const tt_search = tt('g.search');
+
     if (loggedIn) { // change back to if(username) after bug fix:  Clicking on Login does not cause drop-down to close #TEMP!
         const user_menu = [
+            {link: wallet_link, icon: "steem", value: 'STEEM = $' + pricePerSteem + ' USD'},
             {link: feed_link, icon: "home", value: tt('g.feed'), addon: <NotifiCounter fields="feed" />},
             {link: account_link, icon: 'profile', value: tt('g.blog')},
             {link: comments_link, icon: 'replies', value: tt('g.comments')},
@@ -112,6 +114,7 @@ TopRightMenu.propTypes = {
     toggleOffCanvasMenu: React.PropTypes.func,
     nightmodeEnabled: React.PropTypes.bool,
     toggleNightmode: React.PropTypes.func,
+    pricePerSteem: React.PropTypes.number,
 };
 
 export default connect(
@@ -125,11 +128,22 @@ export default connect(
         }
         const username = state.user.getIn(['current', 'username']);
         const loggedIn = !!username;
+
+        // Add price per steem in user profile
+        let pricePerSteem = undefined
+        const feed_price = state.global.get('feed_price')
+        if(feed_price && feed_price.has('base') && feed_price.has('quote')) {
+            const {base, quote} = feed_price.toJS()
+            if(/ SBD$/.test(base) && / STEEM$/.test(quote))
+                pricePerSteem = parseFloat(base.split(' ')[0])
+        }
+
         return {
             username,
             loggedIn,
             probablyLoggedIn: false,
             nightmodeEnabled: state.user.getIn(['user_preferences', 'nightmode']),
+            pricePerSteem: pricePerSteem,
         }
     },
     dispatch => ({

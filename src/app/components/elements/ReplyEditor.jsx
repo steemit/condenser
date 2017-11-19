@@ -143,7 +143,7 @@ class ReplyEditor extends React.Component {
     initForm(props) {
         const {isStory, type, fields} = props
         const isEdit = type === 'edit'
-        const maxKb = isStory ? 100 : 16
+        const maxKb = isStory ? 65 : 16
         reactForm({
             fields,
             instance: this,
@@ -157,7 +157,7 @@ class ReplyEditor extends React.Component {
                 ),
                 category: isStory && validateCategory(values.category, !isEdit),
                 body: !values.body ? tt('g.required') :
-                    values.body.length > maxKb * 1024 ? tt('reply_editor.exceeds_maximum_length', maxKb) :
+                    values.body.length > maxKb * 1024 ? tt('reply_editor.exceeds_maximum_length', {maxKb}) :
                         null
             })
         })

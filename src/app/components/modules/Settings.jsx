@@ -19,6 +19,7 @@ class Settings extends React.Component {
         }
         this.initForm(props);
         this.onNsfwPrefChange = this.onNsfwPrefChange.bind(this);
+        this.escFunction = this.escFunction.bind(this);
     }
 
     initForm(props) {
@@ -44,6 +45,21 @@ class Settings extends React.Component {
         const {accountname} = this.props
         const nsfwPref = (process.env.BROWSER ? localStorage.getItem('nsfwPref-' + accountname) : null) || 'warn'
         this.setState({nsfwPref, oldNsfwPref: nsfwPref})
+    }
+
+    // Handle user pressing escape in form
+    componentDidMount(){
+        document.addEventListener("keydown", this.escFunction, false);
+    }
+
+    componentWillUnmount(){
+        document.removeEventListener("keydown", this.escFunction, false);
+    }
+
+    escFunction(event){
+        if(event.keyCode === 27) {
+            this.setState({loading: false})
+        }
     }
 
     onNsfwPrefChange(e) {

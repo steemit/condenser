@@ -6,8 +6,7 @@ import LpFooter from 'app/components/modules/lp/LpFooter';
 import user from 'app/redux/User';
 import g from 'app/redux/GlobalReducer';
 import TopRightMenu from 'app/components/modules/TopRightMenu';
-import { browserHistory } from 'react-router';
-import classNames from 'classnames';
+import { browserHistory, Link } from 'react-router';
 import SidePanel from 'app/components/modules/SidePanel';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import Dialogs from 'app/components/modules/Dialogs';
@@ -19,7 +18,7 @@ import MiniHeader from 'app/components/modules/MiniHeader';
 import tt from 'counterpart';
 import PageViewsCounter from 'app/components/elements/PageViewsCounter';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
-import { VEST_TICKER, WIKI_URL, LANDING_PAGE_URL, ABOUT_PAGE_URL, WHITEPAPER_URL, TERMS_OF_SERVICE_URL, PRIVACY_POLICY_URL, THEMES, DEFAULT_THEME } from 'app/client_config';
+import {APP_ICON, VEST_TICKER, WIKI_URL, LANDING_PAGE_URL, ABOUT_PAGE_URL, WHITEPAPER_URL, TERMS_OF_SERVICE_URL, PRIVACY_POLICY_URL, THEMES, DEFAULT_THEME } from 'app/client_config';
 import LocalizedCurrency from 'app/components/elements/LocalizedCurrency';
 import { getURL } from 'app/utils/URLConstants'
 
@@ -127,22 +126,19 @@ class App extends React.Component {
         if (this.state.showCallout && (alert || warning || success)) {
             callout = <div className="App__announcement row">
                 <div className="column">
-                    <div className={classNames('callout', {alert}, {warning}, {success})}>
+                    <div className='callout'>
                         <CloseButton onClick={() => this.setState({showCallout: false})} />
                         <p>{alert || warning || success}</p>
                     </div>
                 </div>
             </div>;
         }
-        else if (false && ip && this.state.showCallout) {
+        else if ($STM_Config.site_domain === 'golos.blog' && ip && this.state.showCallout) {
             callout = <div className="App__announcement row">
                 <div className="column">
-                    <div className={classNames('callout success', {alert}, {warning}, {success})}>
+                    <div className="callout success">
                         <CloseButton onClick={() => this.setState({showCallout: false})} />
-                        <ul>
-                            <li>
-                            </li>
-                        </ul>
+                        <Link to="/golosio/@golosio/roskomnadzor-razblokiroval-golos-io" ><Icon className="logo-icon" name={APP_ICON} />&nbsp;{tt('g.announcement_text')}</Link>
                     </div>
                 </div>
             </div>

@@ -159,14 +159,9 @@ export function* fetchState(location_change_action) {
               state.tags[trending_tags[i].name] = trending_tags[i]
             }
           }
-          else {
-            // NOTHING
-          }
+          
           state.tag_idx = { trending: trending_tags.map(t => t.name) };
-
-          for (var key in state.content)
-            state.content[key].active_votes = yield call([api, api.getActiveVotesAsync], state.content[key].author, state.content[key].permlink);
-
+         
           yield put({type: 'global/FETCHING_STATE', payload: false});
         }
 

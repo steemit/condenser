@@ -6,17 +6,44 @@ import universalRender from '../shared/UniversalRender';
 import models from 'db/models';
 import secureRandom from 'secure-random';
 import ErrorPage from 'server/server-error';
+import fs from 'fs';
 
 const path = require('path');
 const ROOT = path.join(__dirname, '../..');
 
 const DB_RECONNECT_TIMEOUT = process.env.NODE_ENV === 'development' ? 1000 * 60 * 60 : 1000 * 60 * 10;
 
+function getSupportedLocales() {
+    const locales = [];
+    const files = fs.readdirSync(path.join(ROOT, 'src/app/locales'));
+    for (const filename of files) {
+        const match_res = filename.match(/(\w+)\.json?$/)
+        if (match_res) locales.push(match_res[1]);
+    }
+    return locales;
+}
+
+const supportedLocales = getSupportedLocales();
+
 async function appRender(ctx) {
     const store = {};
     try {
-        let login_challenge = ctx.session.login_challenge;
         let userPreferences = {};
+        if (ctx.session.user_prefs) {
+            try {
+                userPreferences = JSON.parse(ctx.session.user_prefs);
+            } catch (err) {
+                console.error('cannot parse user preferences:', ctx.session.uid, err);
+            }
+        }
+        if (!userPreferences.locale) {
+            let locale = ctx.getLocaleFromHeader();
+            if (locale) locale = locale.substring(0, 2);
+            const localeIsSupported = supportedLocales.find(l => l === locale);
+            if (!localeIsSupported) locale = 'en';
+            userPreferences.locale = locale;
+        }
+        let login_challenge = ctx.session.login_challenge;
         if (!login_challenge) {
             login_challenge = secureRandom.randomBuffer(16).toString('hex');
             ctx.session.login_challenge = login_challenge;
@@ -82,16 +109,6 @@ async function appRender(ctx) {
             });
             if (account_recovery_record) {
                 offchain.recover_account = account_recovery_record.account_name;
-            }
-        }
-        if (ctx.session.a) {
-            const userPreferencesRecord = await models.UserPreferences.findOne({
-                attributes: ['json'],
-                where: {account: ctx.session.a},
-                logging: false
-            });
-            if (userPreferencesRecord) {
-                userPreferences = JSON.parse(userPreferencesRecord.json);
             }
         }
 

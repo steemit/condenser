@@ -4,26 +4,34 @@ $menu-width: 250px;
   display: block;
 
   .menu > li.last {
-    border-bottom: 1px solid #777;
+    border-bottom: 1px solid $color-border-dark;   
+    color: $color-text-gray-light;  
   }
 
   > div {
-    background-color: #555;
-    color: #fff;
+    background-color: $color-blue-black-darkest;
+    color: $color-white;
     padding-top: 3rem;
     .close-button {
-      color: #fff;
+      color: $color-white;
     }
     .menu > li {
       > a {
-        color: #fff;
-        border-top: 1px solid #777;
+        transition: 0.2s all ease-in-out;
+        border-top: 1px solid $color-blue-black;
+        color: $color-white;
+        border-bottom: 1px solid $color-blue-black-darkest;
       }
-      > a:hover {
-        background-color: #666;
+      > a:hover, &:focus {
+        background-color:  $color-blue-black;
+        border-bottom: 1px solid $color-teal;
+
+        path {
+          fill: $color-teal;     
+        }
       }
       path {
-        fill: #fff;
+        fill: $color-text-gray-light;
       }
     }
     ul:nth-of-type(n+3) {
@@ -57,6 +65,11 @@ $menu-width: 250px;
       transform: translate3d(-$menu-width, 0, 0);
       visibility: visible;
     }
+  }
+  .Icon.extlink {
+    position: relative;
+    top: 3px;
+    left: 2px;
   }
 }
 

@@ -5,6 +5,10 @@ import chai, { expect } from 'chai';
 import HtmlReady from './HtmlReady';
 
 describe('htmlready', () => {
+    before(() => {
+        global.$STM_Config = {};
+    });
+
     it('should return plain text without html unmolested', () => {
         const teststring = 'teststring lol';
         expect(HtmlReady(teststring).html).to.equal(teststring);
@@ -34,4 +38,11 @@ describe('htmlready', () => {
         const resnoendingslash = HtmlReady(noendingslash).html;
         expect(resnoendingslash).to.equal(cleansednoendingslash);
     });
+
+    it('should allow more than one link per post', () => {
+        const somanylinks = '<xml xmlns="http://www.w3.org/1999/xhtml">https://foo.com and https://blah.com</xml>';
+        const htmlified = '<xml xmlns="http://www.w3.org/1999/xhtml"><span><a href="https://foo.com">https://foo.com</a> and <a href="https://blah.com">https://blah.com</a></span></xml>';
+        const res = HtmlReady(somanylinks).html;
+        expect(res).to.equal(htmlified);
+    })
 });

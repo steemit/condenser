@@ -1,3 +1,9 @@
+.Post {
+  @include themify($themes) {
+    background-color: themed('moduleBackgroundColor');  
+  }    
+}
+
 .PostFull {
   padding-bottom: 1rem;
   padding-top: 2rem;
@@ -33,21 +39,27 @@
 }
 
 .PostFull__time_author_category_large {
-  margin: 1.75rem 0 1.2rem 0;
-  
+  margin: 1rem 0 1rem 0;
+  line-height: 1.2;
   @include themify($themes) {
       color: themed('textColorSecondary');  
     }   
-
-  strong, a {color: #999}
+  strong, a {
+    @include themify($themes) {
+      color: themed('textColorSecondary');  
+    }  
+  }
   font-size: 120%;
-  display: block;
+  display: flex;
+  align-items: center;
   > .Userpic {
     margin-top: -4px;
     float: left;
   }
   > .right-side {
-    margin-left: 60px;
+    margin-left: 12px;
+    position: relative;
+    top: -2px;
   }
 }
 
@@ -57,8 +69,6 @@
 }
 
 .PostFull__header {
-  padding-bottom: 1em;
-  margin-bottom: 8px;
   @include themify($themes) {
     border-bottom: themed('border');  
   } 
@@ -111,10 +121,10 @@
     } 
   }
   a, .FoundationDropdownMenu__label {
-    color: $dark-gray;
     font-size: 94%;
     font-weight: 600;
-    @include hoverUnderline;
+    @extend .link;
+    @extend .link--secondary;
   }
   .Voting {
     //padding-right: 1rem;
@@ -215,7 +225,8 @@ input.share-box {
 @media screen and (max-width: 39.9375em) {
   .Post {
     width: 100%;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: visible;
   }
   .PostFull__footer > .column {
     -webkit-box-flex: 0;

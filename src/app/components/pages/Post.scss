@@ -25,25 +25,9 @@
   @include themify($themes) {
     border-bottom: themed('border');  
   } 
-  .sign-up {
-      @include themify($themes) {
-          background-color: themed('buttonBackground');  
-          color: themed('buttonText');
-          box-shadow: themed('buttonBoxShadow');
-      } 
+  .button { 
       margin-top: 1rem;
       text-transform: none;
-      transition: 0.2s all ease-in-out;
-      &:hover {
-        @include themify($themes) {
-            background-color: themed('buttonBackgroundHover');  
-            color: themed('buttonTextHover');
-            box-shadow: themed('buttonBoxShadowHover');
-        }         
-      }
-  }
-  .free-money {
-      font-weight: bold;
   }
 }
 

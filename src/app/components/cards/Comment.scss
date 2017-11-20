@@ -113,7 +113,21 @@
     }
     padding-right: 1rem;
     margin-right: 1rem;
+    transition: 0.3s all ease-in-out;
+    .dropdown-arrow {
+      position: relative;
+      top: 3px;
+      left: -2px;
+    }     
+    &:hover {
+      .Icon.dropdown-arrow polygon {
+          @include themify($themes) {
+            fill: themed('textColorAccent');
+          }     
+      }      
+    }
   }
+
   .Comment__footer__controls {
     a {margin: 0 0.2rem;}
   }

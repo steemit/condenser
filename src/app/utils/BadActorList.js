@@ -26,6 +26,9 @@ btrex
 bttrex
 ittrex
 bittrex-deposit
+blockrades
+blocktraades
+blocktradse
 poloiex
 poloinex
 polomiex
@@ -92,10 +95,14 @@ shapeshif
 shapeshift
 randomwhale
 randowale
+randwhale
 coinpayments
 minnowboost
 minnowboster
 minowbooster
+minnowbooste
+minnowboooster
+minnnowbooster
 blocktades
 bloocktrades
 bloctrades

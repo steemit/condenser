@@ -2,7 +2,6 @@ import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
 // import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
-import transaction from 'app/redux/Transaction';
 import Icon from 'app/components/elements/Icon';
 import tt from 'counterpart';
 
@@ -75,13 +74,13 @@ export default class Reblog extends React.Component {
 }
 module.exports = connect(
     (state, ownProps) => {
-        const account = state.user.getIn(['current', 'username']) || state.offchain.get('account')
+        const account = state.getIn(['user', 'current', 'username']) || state.getIn(['offchain', 'account'])
         return {...ownProps, account}
     },
     dispatch => ({
         reblog: (account, author, permlink, successCallback, errorCallback) => {
             const json = ['reblog', {account, author, permlink}]
-            dispatch(transaction.actions.broadcastOperation({
+            dispatch({type: 'transaction/BROADCAST_OPERATION', payload: {
                 type: 'custom_json',
                 confirm: tt('g.are_you_sure'),
                 operation: {
@@ -91,7 +90,7 @@ module.exports = connect(
                     __config: {title: tt('g.resteem_this_post')}
                 },
                 successCallback, errorCallback,
-            }))
+            }})
         },
     })
 )(Reblog)

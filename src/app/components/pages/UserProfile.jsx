@@ -4,8 +4,6 @@ import { Link } from 'react-router';
 import {connect} from 'react-redux';
 import { browserHistory } from 'react-router';
 import classnames from 'classnames';
-import transaction from 'app/redux/Transaction';
-import user from 'app/redux/User';
 import Icon from 'app/components/elements/Icon'
 import UserKeys from 'app/components/elements/UserKeys';
 import PasswordReset from 'app/components/elements/PasswordReset';
@@ -501,47 +499,47 @@ module.exports = {
     path: '@:accountname(/:section)',
     component: connect(
         state => {
-            const wifShown = state.global.get('UserKeys_wifShown')
-            const current_user = state.user.get('current')
+            const wifShown = state.getIn(['global', 'UserKeys_wifShown'])
+            const current_user = state.getIn(['user', 'current'])
             // const current_account = current_user && state.global.getIn(['accounts', current_user.get('username')])
 
             return {
-                discussions: state.global.get('discussion_idx'),
+                discussions: state.getIn(['global', 'discussion_idx']),
                 current_user,
                 // current_account,
                 wifShown,
-                loading: state.app.get('loading'),
-                global_status: state.global.get('status'),
-                accounts: state.global.get('accounts'),
-                follow: state.global.get('follow'),
-                follow_count: state.global.get('follow_count'),
-                blogmode: state.app.getIn(['user_preferences', 'blogmode'])
+                loading: state.getIn(['app', 'loading']),
+                global_status: state.getIn(['global', 'status']),
+                accounts: state.getIn(['global', 'accounts']),
+                follow: state.getIn(['global', 'follow']),
+                follow_count: state.getIn(['global', 'follow_count']),
+                blogmode: state.getIn(['app', 'user_preferences', 'blogmode']),
             };
         },
         dispatch => ({
-            login: () => {dispatch(user.actions.showLogin())},
-            clearTransferDefaults: () => {dispatch(user.actions.clearTransferDefaults())},
+            login: () => {dispatch({type: 'user/SHOW_LOGIN'})},
+            clearTransferDefaults: () => {dispatch({type: 'user/CLEAR_TRANSFER_DEFAULTS'})},
             showTransfer: (transferDefaults) => {
-                dispatch(user.actions.setTransferDefaults(transferDefaults))
-                dispatch(user.actions.showTransfer())
+                dispatch({type: 'user/SET_TRANSFER_DEFAULTS', payload: transferDefaults})
+                dispatch({type: 'user/SHOW_TRANSFER'})
             },
-            clearPowerdownDefaults: () => {dispatch(user.actions.clearPowerdownDefaults())},
+            clearPowerdownDefaults: () => {dispatch({type: 'user/CLEAR_POWERDOWN_DEFAULTS'})},
             showPowerdown: (powerdownDefaults) => {
                 console.log('power down defaults:', powerdownDefaults)
-                dispatch(user.actions.setPowerdownDefaults(powerdownDefaults))
-                dispatch(user.actions.showPowerdown())
+                dispatch({type: 'user/SET_POWERDOWN_DEFAULTS', payload: powerdownDefaults})
+                dispatch({type: 'user/SHOW_POWERDOWN'})
             },
             withdrawVesting: ({account, vesting_shares, errorCallback, successCallback}) => {
                 const successCallbackWrapper = (...args) => {
                     dispatch({type: 'global/GET_STATE', payload: {url: `@${account}/transfers`}})
                     return successCallback(...args)
                 }
-                dispatch(transaction.actions.broadcastOperation({
+                dispatch({type: 'transaction/BROADCAST_OPERATION', payload: {
                     type: 'withdraw_vesting',
                     operation: {account, vesting_shares},
                     errorCallback,
                     successCallback: successCallbackWrapper,
-                }))
+                }})
             },
             requestData: (args) => dispatch({type: 'REQUEST_DATA', payload: args}),
         })

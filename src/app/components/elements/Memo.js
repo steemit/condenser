@@ -39,7 +39,7 @@ class Memo extends React.Component {
 
 export default connect(
     (state, ownProps) => {
-        const currentUser = state.user.get('current')
+        const currentUser = state.getIn(['user', 'current'])
         const myAccount = currentUser && ownProps.username === currentUser.get('username')
         const memo_private = myAccount && currentUser ?
             currentUser.getIn(['private_keys', 'memo_private']) : null

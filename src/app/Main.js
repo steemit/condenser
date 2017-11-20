@@ -1,6 +1,7 @@
 import 'babel-core/register';
 import 'babel-polyfill';
 import 'whatwg-fetch';
+import { Map, fromJS } from 'immutable';
 import './assets/stylesheets/app.scss';
 import plugins from 'app/utils/JsPlugins';
 import Iso from 'iso';
@@ -89,7 +90,7 @@ function runApp(initial_state) {
     }
 
     const location = `${window.location.pathname}${window.location.search}${window.location.hash}`;
-    universalRender({history, location, initial_state})
+    universalRender({history, location, initial_state: Map(initial_state)})
     .catch(error => {
         console.error(error);
         serverApiRecordEvent('client_error', error);

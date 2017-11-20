@@ -2,7 +2,6 @@ import {fromJS, Set, List} from 'immutable'
 import {takeLatest} from 'redux-saga';
 import {call, put, select, fork} from 'redux-saga/effects';
 import {accountAuthLookup} from 'app/redux/AuthSaga'
-import user from 'app/redux/User'
 import {getAccount} from 'app/redux/SagaShared'
 import {browserHistory} from 'react-router'
 import {serverApiLogin, serverApiLogout} from 'app/utils/ServerApiClient';
@@ -26,7 +25,7 @@ export const userWatches = [
     uploadImageWatch,
 ]
 
-const highSecurityPages = Array(/\/market/, /\/@.+\/(transfers|permissions|password)/, /\/~witnesses/)
+const highSecurityPages = [/\/market/, /\/@.+\/(transfers|permissions|password)/, /\/~witnesses/]
 
 function* lookupPreviousOwnerAuthorityWatch() {
     yield* takeLatest('user/lookupPreviousOwnerAuthority', lookupPreviousOwnerAuthority);
@@ -54,7 +53,7 @@ export function* watchRemoveHighSecurityKeys() {
 }
 
 function* loadSavingsWithdraw() {
-    const username = yield select(state => state.user.getIn(['current', 'username']))
+    const username = yield select(state => state.getIn(['user', 'current', 'username']))
     const to = yield call([api, api.getSavingsWithdrawToAsync], username)
     const fro = yield call([api, api.getSavingsWithdrawFromAsync], username)
 
@@ -65,10 +64,10 @@ function* loadSavingsWithdraw() {
     const withdraws = List(fromJS(m).values())
         .sort((a, b) => strCmp(a.get('complete'), b.get('complete')))
 
-    yield put(user.actions.set({
+    yield put({type: 'user/SET', payload: {
         key: 'savings_withdraws',
         value: withdraws,
-    }))
+    }})
 }
 
 const strCmp = (a, b) => a > b ? 1 : a < b ? -1 : 0
@@ -84,7 +83,7 @@ function* removeHighSecurityKeys({payload: {pathname}}) {
     // from getting logged out when they click on Permissions (which is really bad because that tab
     // disappears again).
     if(!highSecurityPage)
-        yield put(user.actions.removeHighSecurityKeys())
+        yield put({type: 'user/REMOVE_HIGH_SECURITY_KEYS'})
 }
 
 /**
@@ -95,7 +94,7 @@ function* removeHighSecurityKeys({payload: {pathname}}) {
 function* usernamePasswordLogin(action) {
     // Sets 'loading' while the login is taking place.  The key generation can take a while on slow computers.
     yield call(usernamePasswordLogin2, action)
-    const current = yield select(state => state.user.get('current'))
+    const current = yield select(state => state.getIn(['user', 'current']))
     if(current) {
         const username = current.get('username')
         yield fork(loadFollows, "getFollowingAsync", username, 'blog')
@@ -127,7 +126,7 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
     }
     // no saved password
     if (!username || !password) {
-        const offchain_account = yield select(state => state.offchain.get('account'))
+        const offchain_account = yield select(state => state.getIn(['offchain', 'account']))
         if (offchain_account) serverApiLogout()
         return
     }
@@ -138,7 +137,7 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
         [username, userProvidedRole] = username.split('/')
     }
 
-    const pathname = yield select(state => state.global.get('pathname'))
+    const pathname = yield select(state => state.getIn(['global', 'pathname']))
     const highSecurityLogin =
         // /owner|active/.test(userProvidedRole) ||
         // isHighSecurityOperations.indexOf(operationType) !== -1 ||
@@ -148,12 +147,12 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
 
     const account = yield call(getAccount, username)
     if (!account) {
-        yield put(user.actions.loginError({ error: 'Username does not exist' }))
+        yield put({type: 'user/LOGIN_ERROR', payload: { error: 'Username does not exist' }})
         return
     }
     //dmca user block
     if (username && DMCAUserList.includes(username)) {
-        yield put(user.actions.loginError({ error: translate('terms_violation') }))
+        yield put({type: 'user/LOGIN_ERROR', payload: { error: translate('terms_violation') }})
         return
     }
 
@@ -179,34 +178,25 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
         private_keys = private_keys.set('memo_private', PrivateKey.fromWif(memoWif))
 
     yield call(accountAuthLookup, {payload: {account, private_keys, highSecurityLogin, login_owner_pubkey}})
-    let authority = yield select(state => state.user.getIn(['authority', username]))
+    let authority = yield select(state => state.getIn(['user', 'authority', username]))
     const hasActiveAuth = authority.get('active') === 'full'
     if(!highSecurityLogin) {
         const accountName = account.get('name')
         authority = authority.set('active', 'none')
-        yield put(user.actions.setAuthority({accountName, auth: authority}))
+        yield put({type: 'user/SET_AUTHORITY', payload: {accountName, auth: authority}})
     }
     const fullAuths = authority.reduce((r, auth, type) => (auth === 'full' ? r.add(type) : r), Set())
     if (!fullAuths.size) {
         localStorage.removeItem('autopost2')
         const owner_pub_key = account.getIn(['owner', 'key_auths', 0, 0]);
-        // const pub_keys = yield select(state => state.user.get('pub_keys_used'))
-        // serverApiRecordEvent('login_attempt', JSON.stringify({name: username, ...pub_keys, cur_owner: owner_pub_key}))
-        // FIXME pls parameterize opaque things like this into a constants file
-        // code like this requires way too much historical knowledge to
-        // understand.
-        if (owner_pub_key === 'STM7sw22HqsXbz7D2CmJfmMwt9rimtk518dRzsR1f8Cgw52dQR1pR') {
-            yield put(user.actions.loginError({ error: 'Hello. Your account may have been compromised. We are working on restoring an access to your account. Please send an email to support@steemit.com.' }))
-            return
-        }
         if(login_owner_pubkey === owner_pub_key || login_wif_owner_pubkey === owner_pub_key) {
-            yield put(user.actions.loginError({ error: 'owner_login_blocked' }))
+            yield put({type: 'user/LOGIN_ERROR', payload: { error: 'owner_login_blocked' }})
         } else if(!highSecurityLogin && hasActiveAuth) {
-            yield put(user.actions.loginError({ error: 'active_login_blocked' }))
+            yield put({type: 'user/LOGIN_ERROR', payload: { error: 'active_login_blocked' }})
         } else {
             const generated_type = password[0] === 'P' && password.length > 40;
             serverApiRecordEvent('login_attempt', JSON.stringify({name: username, login_owner_pubkey, owner_pub_key, generated_type}))
-            yield put(user.actions.loginError({ error: 'Incorrect Password' }))
+            yield put({type: 'user/LOGIN_ERROR', payload: { error: 'Incorrect Password' }})
         }
         return
     }
@@ -231,7 +221,7 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
             posting_pubkey === owner_pubkey ||
             posting_pubkey === active_pubkey
         ) {
-            yield put(user.actions.loginError({ error: 'This login gives owner or active permissions and should not be used here.  Please provide a posting only login.' }))
+            yield put({type: 'user/LOGIN_ERROR', payload: { error: 'This login gives owner or active permissions and should not be used here.  Please provide a posting only login.' }})
             localStorage.removeItem('autopost2')
             return
         }
@@ -251,22 +241,22 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
         if(username) feedURL = '/@' + username + '/feed';
         // Keep the posting key in RAM but only when not signing an operation.
         // No operation or the user has checked: Keep me logged in...
-        yield put(user.actions.setUser({username, private_keys, login_owner_pubkey, vesting_shares: account.get('vesting_shares'),
+        yield put({type: 'user/SET_USER', payload: {username, private_keys, login_owner_pubkey, vesting_shares: account.get('vesting_shares'),
          received_vesting_shares: account.get('received_vesting_shares'),
-         delegated_vesting_shares: account.get('delegated_vesting_shares')}))
+         delegated_vesting_shares: account.get('delegated_vesting_shares')}})
     } else {
         if(username) feedURL = '/@' + username + '/feed';
-        yield put(user.actions.setUser({username, vesting_shares: account.get('vesting_shares'),
+        yield put({type: 'user/SET_USER', payload: {username, vesting_shares: account.get('vesting_shares'),
             received_vesting_shares: account.get('received_vesting_shares'),
-            delegated_vesting_shares: account.get('delegated_vesting_shares')}))
+            delegated_vesting_shares: account.get('delegated_vesting_shares')}})
     }
 
     if (!autopost && saveLogin)
-        yield put(user.actions.saveLogin());
+        yield put({type: 'user/SAVE_LOGIN'});
 
     try {
         // const challengeString = yield serverApiLoginChallenge()
-        const offchainData = yield select(state => state.offchain)
+        const offchainData = yield select(state => state.get('offchain'))
         const serverAccount = offchainData.get('account')
         const challengeString = offchainData.get('login_challenge')
         if (!serverAccount && challengeString) {
@@ -300,9 +290,9 @@ function* saveLogin_localStorage() {
     }
     localStorage.removeItem('autopost2')
     const [username, private_keys, login_owner_pubkey] = yield select(state => ([
-        state.user.getIn(['current', 'username']),
-        state.user.getIn(['current', 'private_keys']),
-        state.user.getIn(['current', 'login_owner_pubkey']),
+        state.getIn(['user', 'current', 'username']),
+        state.getIn(['user', 'current', 'private_keys']),
+        state.getIn(['user', 'current', 'login_owner_pubkey']),
     ]))
     if (!username) {
         console.error('Not logged in')
@@ -314,7 +304,7 @@ function* saveLogin_localStorage() {
         console.error('No posting key to save?')
         return
     }
-    const account = yield select(state => state.global.getIn(['accounts', username]))
+    const account = yield select(state => state.getIn(['global', 'accounts', username]))
     if(!account) {
         console.error('Missing global.accounts[' + username + ']')
         return
@@ -341,7 +331,7 @@ function* saveLogin_localStorage() {
 }
 
 function* logout() {
-    yield put(user.actions.saveLoginConfirm(false)) // Just incase it is still showing
+    yield put({type: 'user/SAVE_LOGIN_CONFIRM', payload: false}) // Just incase it is still showing
     if (process.env.BROWSER)
         localStorage.removeItem('autopost2')
     serverApiLogout();
@@ -355,14 +345,14 @@ function* loginError({payload: {/*error*/}}) {
     If the owner key was changed after the login owner key, this function will find the next owner key history record after the change and store it under user.previous_owner_authority.
 */
 function* lookupPreviousOwnerAuthority({payload: {}}) {
-    const current = yield select(state => state.user.get('current'))
+    const current = yield select(state => state.getIn(['user', 'current']))
     if(!current) return
 
     const login_owner_pubkey = current.get('login_owner_pubkey')
     if(!login_owner_pubkey) return
 
     const username = current.get('username')
-    const key_auths = yield select(state => state.global.getIn(['accounts', username, 'owner', 'key_auths']))
+    const key_auths = yield select(state => state.getIn(['global', 'accounts', username, 'owner', 'key_auths']))
     if (key_auths && key_auths.find(key => key.get(0) === login_owner_pubkey)) {
         // console.log('UserSaga ---> Login matches current account owner');
         return
@@ -387,7 +377,7 @@ function* lookupPreviousOwnerAuthority({payload: {}}) {
         return
     }
     // console.log('UserSage ---> previous_owner_authority', previous_owner_authority.toJS())
-    yield put(user.actions.setUser({previous_owner_authority}))
+    yield put({type: 'user/SET_USER', payload: {previous_owner_authority}})
 }
 
 function* uploadImageWatch() {
@@ -401,7 +391,7 @@ function* uploadImage({payload: {file, dataUrl, filename = 'image.txt', progress
         _progress(msg)
     }
 
-    const stateUser = yield select(state => state.user)
+    const stateUser = yield select(state => state.get('user'))
     const username = stateUser.getIn(['current', 'username'])
     const d = stateUser.getIn(['current', 'private_keys', 'posting_private'])
     if(!username) {

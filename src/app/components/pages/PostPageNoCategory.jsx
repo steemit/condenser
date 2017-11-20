@@ -56,7 +56,7 @@ class PostWrapper extends React.Component {
 const StoreWrapped = connect(
     state => {
         return {
-            content: state.global.get('content')
+            content: state.getIn(['global', 'content'])
         };
     },
     dispatch => ({

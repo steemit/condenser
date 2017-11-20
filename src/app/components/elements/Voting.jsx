@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import transaction from 'app/redux/Transaction';
 import Slider from 'react-rangeslider';
 import Icon from 'app/components/elements/Icon';
 import FormattedAsset from 'app/components/elements/FormattedAsset';
@@ -262,20 +261,20 @@ class Voting extends React.Component {
 export default connect(
     // mapStateToProps
     (state, ownProps) => {
-        const post = state.global.getIn(['content', ownProps.post])
+        const post = state.getIn(['global', 'content', ownProps.post])
         if (!post) return ownProps
         const author = post.get('author')
         const permlink = post.get('permlink')
         const active_votes = post.get('active_votes')
         const is_comment = post.get('parent_author') !== ''
 
-        const current_account = state.user.get('current')
+        const current_account = state.getIn(['user', 'current'])
         const username = current_account ? current_account.get('username') : null;
         const vesting_shares = current_account ? current_account.get('vesting_shares') : 0.0;
         const delegated_vesting_shares = current_account ? current_account.get('delegated_vesting_shares') : 0.0;
         const received_vesting_shares = current_account ? current_account.get('received_vesting_shares') : 0.0;
         const net_vesting_shares = vesting_shares - delegated_vesting_shares + received_vesting_shares;
-        const voting = state.global.get(`transaction_vote_active_${author}_${permlink}`)
+        const voting = state.getIn(['global', `transaction_vote_active_${author}_${permlink}`])
 
         return {
             post: ownProps.post,
@@ -299,13 +298,13 @@ export default connect(
                 if(weight < 0) return tt('voting_jsx.changing_to_a_downvote') + t
                 return null
             }
-            dispatch(transaction.actions.broadcastOperation({
+            dispatch({type: 'transaction/BROADCAST_OPERATION', payload: {
                 type: 'vote',
                 operation: {voter: username, author, permlink, weight,
                     __config: {title: weight < 0 ? tt('voting_jsx.confirm_flag') : null},
                 },
                 confirm,
-            }))
+            }})
         },
     })
 )(Voting)

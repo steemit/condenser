@@ -1,7 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import {connect} from 'react-redux';
 import ReactDOM from 'react-dom';
-import transaction from 'app/redux/Transaction';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import { DEBT_TOKEN, DEBT_TOKEN_SHORT, CURRENCY_SIGN, DEBT_TICKER} from 'app/client_config';
 import tt from 'counterpart';
@@ -43,7 +42,6 @@ class PromotePost extends Component {
         const {author, permlink, onClose} = this.props
         const {amount} = this.state
         this.setState({loading: true});
-        console.log('-- PromotePost.onSubmit -->');
         this.props.dispatchSubmit({amount, asset: DEBT_TICKER, author, permlink, onClose,
             currentUser: this.props.currentUser, errorCallback: this.errorCallback});
     }
@@ -103,8 +101,8 @@ class PromotePost extends Component {
 
 export default connect(
     (state, ownProps) => {
-        const currentUser = state.user.getIn(['current']);
-        const currentAccount = state.global.getIn(['accounts', currentUser.get('username')]);
+        const currentUser = state.getIn(['user', 'current']);
+        const currentAccount = state.getIn(['global', 'accounts', currentUser.get('username')]);
         return {...ownProps, currentAccount, currentUser}
     },
 
@@ -122,12 +120,12 @@ export default connect(
                 memo: `@${author}/${permlink}`,
                 __config: {successMessage: tt('promote_post_jsx.you_successfully_promoted_this_post') + '.'}
             }
-            dispatch(transaction.actions.broadcastOperation({
+            dispatch({type: 'transaction/BROADCAST_OPERATION', payload: {
                 type: 'transfer',
                 operation,
                 successCallback,
                 errorCallback
-            }))
+            }})
         }
     })
 )(PromotePost)

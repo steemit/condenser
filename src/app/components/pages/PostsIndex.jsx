@@ -187,12 +187,12 @@ module.exports = {
     component: connect(
         (state) => {
             return {
-                discussions: state.global.get('discussion_idx'),
-                status: state.global.get('status'),
-                loading: state.app.get('loading'),
-                accounts: state.global.get('accounts'),
-                username: state.user.getIn(['current', 'username']) || state.offchain.get('account'),
-                blogmode: state.app.getIn(['user_preferences', 'blogmode']),
+                discussions: state.getIn(['global', 'discussion_idx']),
+                status: state.getIn(['global', 'status']),
+                loading: state.getIn(['app', 'loading']),
+                accounts: state.getIn(['global', 'accounts']),
+                username: state.getIn(['user', 'current', 'username']) || state.getIn(['offchain', 'account']),
+                blogmode: state.getIn(['app', 'user_preferences', 'blogmode']),
             };
         },
         (dispatch) => {

@@ -3,8 +3,6 @@ import { Link } from 'react-router';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Icon from 'app/components/elements/Icon';
 import { connect } from 'react-redux';
-import user from 'app/redux/User';
-import transaction from 'app/redux/Transaction'
 import Voting from 'app/components/elements/Voting';
 import Reblog from 'app/components/elements/Reblog';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer';
@@ -370,20 +368,20 @@ export default connect(
     // mapStateToProps
     (state, ownProps) => ({
         ...ownProps,
-        username: state.user.getIn(['current', 'username']),
+        username: state.getIn(['user', 'current', 'username']),
     }),
 
     // mapDispatchToProps
     dispatch => ({
-        dispatchSubmit: (data) => { dispatch(user.actions.usernamePasswordLogin({...data})) },
-        clearError: () => { dispatch(user.actions.loginError({error: null})) },
-        unlock: () => { dispatch(user.actions.showLogin()) },
+        dispatchSubmit: (data) => { dispatch({type: 'user/USERNAME_PASSWORD_LOGIN', payload: {...data}}) },
+        clearError: () => { dispatch({type: 'user/LOGIN_ERROR', payload: {error: null}}) },
+        unlock: () => { dispatch({type: 'user/SHOW_LOGIN'}) },
         deletePost: (author, permlink) => {
-            dispatch(transaction.actions.broadcastOperation({
+            dispatch({type: 'transaction/BROADCAST_OPERATION', payload: {
                 type: 'delete_comment',
                 operation: {author, permlink},
                 confirm: tt('g.are_you_sure')
-            }));
+            }});
         },
         showPromotePost: (author, permlink) => {
             dispatch({type: 'global/SHOW_DIALOG', payload: {name: 'promotePost', params: {author, permlink}}});

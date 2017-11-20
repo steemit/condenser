@@ -52,7 +52,7 @@ export default connect(
         const {account, hideIfDefault} = ownProps
         return {
             account,
-            json_metadata: state.global.getIn(['accounts', account, 'json_metadata']),
+            json_metadata: state.getIn(['global', 'accounts', account, 'json_metadata']),
             hideIfDefault,
         }
     }

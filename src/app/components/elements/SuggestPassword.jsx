@@ -2,7 +2,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {renderToString} from 'react-dom/server'
-import g from 'app/redux/GlobalReducer'
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import Icon from 'app/components/elements/Icon'
 import tt from 'counterpart';
@@ -90,7 +89,7 @@ export default connect(
     (state, ownProps) => {
         return {
             ...ownProps,
-            suggestedPassword: state.global.get('suggestedPassword'),
+            suggestedPassword: state.getIn(['global', 'suggestedPassword']),
         }
     },
     // mapDispatchToProps
@@ -99,7 +98,7 @@ export default connect(
             const PASSWORD_LENGTH = 32
             const private_key = key_utils.get_random_key()
             const suggestedPassword = private_key.toWif().substring(3, 3 + PASSWORD_LENGTH)
-            dispatch(g.actions.set({key: 'suggestedPassword', value: suggestedPassword}))
+            dispatch({type: 'global/SET', payload: {key: 'suggestedPassword', value: suggestedPassword}})
         },
     })
 )(SuggestPassword)

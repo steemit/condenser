@@ -1,6 +1,5 @@
 import {fromJS} from 'immutable'
 import {call, put, select} from 'redux-saga/effects';
-import g from 'app/redux/GlobalReducer'
 import {takeEvery, takeLatest} from 'redux-saga';
 import tt from 'counterpart';
 import {api} from 'steem';
@@ -15,12 +14,12 @@ const wait = ms => (
 export const sharedWatches = [watchGetState, watchTransactionErrors, watchUserSettingsUpdates]
 
 export function* getAccount(username, force = false) {
-    let account = yield select(state => state.global.get('accounts').get(username))
+    let account = yield select(state => state.getIn(['global', 'accounts', username]))
     if (force || !account) {
         [account] = yield call([api, api.getAccountsAsync], [username])
         if(account) {
             account = fromJS(account)
-            yield put(g.actions.receiveAccount({account}))
+            yield put({type: 'global/RECEIVE_ACCOUNT', payload: {account}})
         }
     }
     return account
@@ -33,7 +32,7 @@ export function* watchGetState() {
 export function* getState({payload: {url}}) {
     try {
         const state = yield call([api, api.getStateAsync], url)
-        yield put(g.actions.receiveState(state));
+        yield put({type: 'global/RECEIVE_STATE', payload: state});
     } catch (error) {
         console.error('~~ Saga getState error ~~>', url, error);
         yield put({type: 'global/STEEM_API_ERROR', error: error.message});
@@ -45,7 +44,7 @@ export function* watchTransactionErrors() {
 }
 
 function* showTransactionErrorNotification() {
-    const errors = yield select(state => state.transaction.get('errors'));
+    const errors = yield select(state => state.getIn(['transaction', 'errors']));
     for (const [key, message] of errors) {
         yield put({type: 'ADD_NOTIFICATION', payload: {key, message}});
         yield put({type: 'transaction/DELETE_ERROR', payload: {key}});
@@ -62,7 +61,8 @@ export function* getContent({author, permlink, resolve, reject}) {
         }
     }
 
-    yield put(g.actions.receiveContent({content}))
+    yield put({type: 'global/RECEIVE_CONTENT', payload: {content}});
+
     if (resolve && content) {
         resolve(content);
     } else if (reject && !content) {
@@ -80,7 +80,7 @@ function* saveUserPreferences({payload}) {
         yield setUserPreferences(payload);
     }
 
-    const prefs = yield select(state => state.app.get('user_preferences'));
+    const prefs = yield select(state => state.getIn(['app', 'user_preferences']));
     yield setUserPreferences(prefs.toJS());
 }
 

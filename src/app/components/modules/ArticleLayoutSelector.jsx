@@ -1,7 +1,6 @@
 /* eslint react/prop-types: 0 */
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import user from 'app/redux/User';
 
 class ArticleLayoutSelector extends React.Component {
     render() {
@@ -22,7 +21,7 @@ class ArticleLayoutSelector extends React.Component {
 
 export default connect(
     state => ({
-        blogmode: state.app.getIn(['user_preferences', 'blogmode']),
+        blogmode: state.getIn(['app', 'user_preferences', 'blogmode']),
     }),
     dispatch => ({
         toggleBlogmode: () => {

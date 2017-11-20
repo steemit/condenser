@@ -1,10 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux'
 import g from 'app/redux/GlobalReducer'
-import reactForm from 'app/utils/ReactForm'
 import Slider from 'react-rangeslider';
-import transaction from 'app/redux/Transaction';
-import user from 'app/redux/User';
 import tt from 'counterpart'
 import {VEST_TICKER, LIQUID_TICKER, VESTING_TOKEN} from 'app/client_config'
 import {numberWithCommas, spToVestsf, vestsToSpf, vestsToSp, assetFloat} from 'app/utils/StateFunctions'
@@ -30,7 +27,7 @@ class Powerdown extends React.Component {
 
     render() {
         const {broadcasting, new_withdraw, manual_entry} = this.state
-        const {account, available_shares, withdrawn, to_withdraw, vesting_shares, delegated_vesting_shares} = this.props
+        const {account, withdrawn, to_withdraw, vesting_shares, delegated_vesting_shares} = this.props
         const formatSp = (amount) => numberWithCommas(vestsToSp(this.props.state, amount))
         const sliderChange = (value) => {
             this.setState({new_withdraw: value, manual_entry: false})
@@ -55,8 +52,12 @@ class Powerdown extends React.Component {
             if (withdraw > vesting_shares - delegated_vesting_shares) {
                 withdraw = vesting_shares - delegated_vesting_shares
             }
-            const vesting_shares = `${ withdraw.toFixed(6) } ${ VEST_TICKER }`
-            this.props.withdrawVesting({account, vesting_shares, errorCallback, successCallback})
+            this.props.withdrawVesting({
+                account,
+                vesting_shares: `${withdraw.toFixed(6)} ${VEST_TICKER}`,
+                errorCallback,
+                successCallback
+            })
         }
 
         const notes = []
@@ -135,7 +136,7 @@ class Powerdown extends React.Component {
 export default connect(
     // mapStateToProps
     (state, ownProps) => {
-        const values = state.user.get('powerdown_defaults')
+        const values = state.getIn(['user', 'powerdown_defaults'])
         const account = values.get('account')
         const to_withdraw = parseFloat(values.get('to_withdraw')) / 1e6
         const withdrawn = parseFloat(values.get('withdrawn')) / 1e6
@@ -157,7 +158,7 @@ export default connect(
     // mapDispatchToProps
     dispatch => ({
         successCallback: () => {
-            dispatch(user.actions.hidePowerdown())
+            dispatch({type: 'user/HIDE_POWERDOWN'})
         },
         powerDown: (e) => {
             e.preventDefault()
@@ -169,12 +170,12 @@ export default connect(
                 dispatch({type: 'global/GET_STATE', payload: {url: `@${account}/transfers`}})
                 return successCallback(...args)
             }
-            dispatch(transaction.actions.broadcastOperation({
+            dispatch({type: 'transaction/BROADCAST_OPERATION', payload: {
                 type: 'withdraw_vesting',
                 operation: {account, vesting_shares},
                 errorCallback,
                 successCallback: successCallbackWrapper,
-            }))
+            }})
         },
     })
 )(Powerdown)

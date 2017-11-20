@@ -1,7 +1,6 @@
 import React, {PropTypes, Component} from 'react'
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import Keys from 'app/components/elements/Keys'
-import g from 'app/redux/GlobalReducer'
 import {connect} from 'react-redux';
 import QRCode from 'react-qr'
 import tt from 'counterpart';
@@ -106,20 +105,20 @@ export default connect(
     (state, ownProps) => {
         const {account} = ownProps
         const accountName = account.get('name')
-        const current = state.user.get('current')
+        const current = state.getIn(['user', 'current'])
         const username = current && current.get('username')
         const isMyAccount = username === accountName
-        const wifShown = state.global.get('UserKeys_wifShown')
+        const wifShown = state.getIn(['global', 'UserKeys_wifShown'])
         return {...ownProps, isMyAccount, wifShown, accountName}
     },
     dispatch => ({
         setWifShown: (shown) => {
-            dispatch(g.actions.receiveState({UserKeys_wifShown: shown}))
+            dispatch({type: 'global/RECEIVE_STATE', payload: {UserKeys_wifShown: shown}})
         },
         showChangePassword: (username) => {
             const name = 'changePassword'
-            dispatch(g.actions.remove({key: name}))
-            dispatch(g.actions.showDialog({name, params: {username}}))
+            dispatch({type: 'global/REMOVE', payload: {key: name}})
+            dispatch({type: 'global/SHOW_DIALOG', payload: {name, params: {username}}})
         },
     })
 )(UserKeys)

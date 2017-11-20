@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router';
 import {connect} from 'react-redux';
 import Icon from 'app/components/elements/Icon';
-import user from 'app/redux/User';
 import Userpic from 'app/components/elements/Userpic';
 import { browserHistory } from 'react-router';
 import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdown';
@@ -120,26 +119,26 @@ export default connect(
             return {
                 username: null,
                 loggedIn: false,
-                probablyLoggedIn: !!state.offchain.get('account')
+                probablyLoggedIn: !!state.getIn(['offchain', 'account'])
             }
         }
-        const username = state.user.getIn(['current', 'username']);
+        const username = state.getIn(['user', 'current', 'username']);
         const loggedIn = !!username;
         return {
             username,
             loggedIn,
             probablyLoggedIn: false,
-            nightmodeEnabled: state.user.getIn(['user_preferences', 'nightmode']),
+            nightmodeEnabled: state.getIn(['user', 'user_preferences', 'nightmode']),
         }
     },
     dispatch => ({
         showLogin: e => {
             if (e) e.preventDefault();
-            dispatch(user.actions.showLogin())
+            dispatch({type: 'user/SHOW_LOGIN'})
         },
         logout: e => {
             if (e) e.preventDefault();
-            dispatch(user.actions.logout())
+            dispatch({type: 'user/LOGOUT'})
         },
         toggleNightmode: e => {
             if (e) e.preventDefault();

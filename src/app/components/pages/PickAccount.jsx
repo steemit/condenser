@@ -6,7 +6,6 @@ import Progress from 'react-foundation-components/lib/global/progress-bar';
 import { Link } from 'react-router';
 import classNames from 'classnames';
 import {api} from 'steem';
-import user from 'app/redux/User';
 import {validate_account_name} from 'app/utils/ChainValidation';
 import runTests from 'app/utils/BrowserTests';
 
@@ -226,16 +225,16 @@ module.exports = {
     component: connect(
         state => {
             return {
-                loggedIn: !!state.user.get('current'),
-                offchainUser: state.offchain.get('user'),
-                serverBusy: state.offchain.get('serverBusy')
+                loggedIn: !!state.getIn(['user', 'current']),
+                offchainUser: state.getIn(['offchain', 'user']),
+                serverBusy: state.getIn(['offchain', 'serverBusy'])
             }
         },
         dispatch => ({
-            loginUser: (username, password) => dispatch(user.actions.usernamePasswordLogin({username, password, saveLogin: true})),
+            loginUser: (username, password) => dispatch({type: 'user/USERNAME_PASSWORD_LOGIN', payload: {username, password, saveLogin: true}}),
             logout: e => {
                 if (e) e.preventDefault();
-                dispatch(user.actions.logout())
+                dispatch({type: 'user/LOGOUT'})
             }
         })
     )(PickAccount)

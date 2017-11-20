@@ -15,7 +15,7 @@ class NotifiCounter extends React.Component {
 
 export default connect(
     (state, props) => {
-        const counters = state.app.get('notificounters');
+        const counters = state.getIn(['app', 'notificounters']);
         const fields = props.fields.replace(/\s/g,'').split(',');
         const value = counters ? fields.reduce((res, field) => res + counters.get(field), 0) : null;
         return {value};

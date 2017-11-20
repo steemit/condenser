@@ -3,7 +3,6 @@ import { Link, browserHistory } from 'react-router';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Icon from 'app/components/elements/Icon';
 import { connect } from 'react-redux';
-import user from 'app/redux/User';
 import Reblog from 'app/components/elements/Reblog';
 import Voting from 'app/components/elements/Voting';
 import {immutableAccessor} from 'app/utils/Accessors';
@@ -272,7 +271,7 @@ class PostSummary extends React.Component {
 export default connect(
     (state, props) => {
         const {post} = props;
-        const content = state.global.get('content').get(post);
+        const content = state.getIn(['global', 'content']).get(post);
         let pending_payout = 0;
         let total_payout = 0;
         if (content) {
@@ -281,13 +280,13 @@ export default connect(
         }
         return {
             post, content, pending_payout, total_payout,
-            username: state.user.getIn(['current', 'username']) || state.offchain.get('account'),
-            blogmode: state.app.getIn(['user_preferences', 'blogmode']),
+            username: state.getIn(['user', 'current', 'username']) || state.getIn(['offchain', 'account']),
+            blogmode: state.getIn(['app', 'user_preferences', 'blogmode']),
         };
     },
 
     (dispatch) => ({
-        dispatchSubmit: data => { dispatch(user.actions.usernamePasswordLogin({...data})) },
-        clearError: () => { dispatch(user.actions.loginError({error: null})) }
+        dispatchSubmit: data => { dispatch({type: 'user/USERNAME_PASSWORD_LOGIN', payload: {...data}}) },
+        clearError: () => { dispatch({type: 'user/LOGIN_ERROR', payload: {error: null}}) }
     })
 )(PostSummary)

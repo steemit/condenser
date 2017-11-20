@@ -194,16 +194,16 @@ class Post extends React.Component {
 const emptySet = Set()
 
 export default connect(state => {
-    const current_user = state.user.get('current')
+    const current_user = state.getIn(['user', 'current'])
     let ignoring
     if(current_user) {
         const key = ['follow', 'getFollowingAsync', current_user.get('username'), 'ignore_result']
-        ignoring = state.global.getIn(key, emptySet)
+        ignoring = state.getIn(['global', key], emptySet)
     }
     return {
-        content: state.global.get('content'),
-        signup_bonus: state.offchain.get('signup_bonus'),
-        ignoring
+        content: state.getIn(['global', 'content']),
+        signup_bonus: state.getIn(['offchain', 'signup_bonus']),
+        ignoring,
     }
 }
 )(Post);

@@ -1,7 +1,6 @@
 import {takeEvery} from 'redux-saga';
 import {call, put, select} from 'redux-saga/effects';
 import {Set, Map, fromJS, List} from 'immutable'
-import user from 'app/redux/User'
 import {getAccount} from 'app/redux/SagaShared'
 import {PrivateKey} from 'steem/lib/auth/ecc';
 import {api} from 'steem';
@@ -43,7 +42,7 @@ export function* accountAuthLookup({payload: {account, private_keys, login_owner
     }
     const accountName = account.get('name')
     const pub_keys_used = {posting: toPub(posting), active: toPub(active), owner: login_owner_pubkey};
-    yield put(user.actions.setAuthority({accountName, auth, pub_keys_used}))
+    yield put({type: 'user/SET_AUTHORITY', payload: {accountName, auth, pub_keys_used}});
 }
 
 /**
@@ -105,7 +104,7 @@ export function* findSigningKey({opType, username, password}) {
         authTypes = 'active, owner'
     authTypes = authTypes.split(', ')
 
-    const currentUser = yield select(state => state.user.get('current'))
+    const currentUser = yield select(state => state.getIn(['user', 'current']))
     const currentUsername = currentUser && currentUser.get('username')
 
     username = username || currentUsername

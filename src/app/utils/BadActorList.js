@@ -84,6 +84,7 @@ blocktrade
 blocktradees
 blocktraded
 blocktrader
+blocktrads
 bocktrades
 changelly.com
 changely

@@ -10,7 +10,7 @@ import runTests from 'app/utils/BrowserTests';
 import g from 'app/redux/GlobalReducer';
 import GeneratedPasswordInput from 'app/components/elements/GeneratedPasswordInput';
 import CountryCode from "app/components/elements/CountryCode";
-import { APP_DOMAIN, SUPPORT_EMAIL } from 'app/client_config';
+import { APP_DOMAIN, SUPPORT_EMAIL, PHONE_SERVICE } from 'app/client_config';
 import tt from 'counterpart';
 import {api} from 'golos-js';
 import SignupProgressBar from 'app/components/elements/SignupProgressBar';
@@ -25,29 +25,32 @@ class CreateAccount extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            sms_code: Math.round(Math.random() * 10000),
             rnd_verification: Math.round(Math.random() * 15 + 5),
-            phone: '',
-            country: 0,
+            intervalId: 0,
+            // mobile: '',
+            // country: 0,
+            code_expiration: 300,
             name: '',
             password: '',
             password_valid: '',
             name_error: '',
-            phone_hint: '',
-            phone_error: '',
+            // mobile_hint: '',
+            // mobile_error: '',
             server_error: '',
             loading: false,
-            phoneOk: false,
-            phoneChecking: false,
+            mobileOk: false,
+            mobileChecking: false,
             cryptographyFailure: false,
             showRules: false,
             showMobileRules: false,
             allBoxChecked: false
         };
         this.onSubmit = this.onSubmit.bind(this);
-        this.onMobileChange = this.onMobileChange.bind(this);
+        // this.onMobileChange = this.onMobileChange.bind(this);
         this.onNameChange = this.onNameChange.bind(this);
         this.onPasswordChange = this.onPasswordChange.bind(this);
-        this.onClickSendCode = this.onClickSendCode.bind(this);
+        this.timer = this.timer.bind(this);
     }
 
     componentDidMount() {
@@ -56,9 +59,27 @@ class CreateAccount extends React.Component {
             console.error('CreateAccount - cryptoTestResult: ', cryptoTestResult);
             this.setState({cryptographyFailure: true}); // TODO: do not use setState in componentDidMount
         }
-        this.validateMobilePhone();
+        const intervalId = setInterval(this.timer, 1000);
+        this.setState({intervalId});
+        // this.validateMobilePhone();
         // Facebook Pixel events #200
         //if (process.env.BROWSER) fbq('track', 'Lead');
+    }
+
+    componentWillUnmount() {
+        // use intervalId from the state to clear the interval
+        clearInterval(this.state.intervalId);
+    }
+
+    timer() {
+        const code_expiration = this.state.code_expiration - 1;
+        const rnd_verification = this.state.rnd_verification - 1;
+        if (code_expiration >= 0 && rnd_verification >= 0) {
+            this.setState({code_expiration, rnd_verification});
+        } else {
+            this.setState({mobileOk: true});
+            clearInterval(this.state.intervalId);
+        }
     }
 
     onSubmit(e) {
@@ -99,7 +120,7 @@ class CreateAccount extends React.Component {
             if (res.error || res.status !== 'ok') {
                 console.error('CreateAccount server error', res.error);
                 if (res.error === 'Unauthorized') {
-                    // window.location = '/enter_email';
+                    window.location = '/enter_email';
                 }
                 this.setState({server_error: res.error || tt('g.unknown'), loading: false});
             } else {
@@ -124,73 +145,33 @@ class CreateAccount extends React.Component {
         this.setState({password, password_valid, allBoxChecked});
     }
 
-    onMobileChange(e) {
-        const phone = e.target.value.trim().toLowerCase();
-        this.validateMobilePhone(phone);
-        this.setState({phone});
-    }
+  //   onMobileChange(e) {
+  //       const mobile = e.target.value.trim().toLowerCase();
+  //       this.validateMobilePhone(mobile);
+  //       this.setState({mobile});
+  //   }
 
-    validateMobilePhone(value) {
-      let phone_error = '';
-      let phone_hint = '';
-      if (value == null || value.length === 0) {
-        phone_error = tt('mobilevalidation_js.not_be_empty');
-      }
-      else if (!/^[0-9]{1,45}$/.test(value)) {
-        phone_error = tt('mobilevalidation_js.have_only_digits');
-      }
-      else if (value.length < 7) {
-        phone_error = tt('mobilevalidation_js.be_longer');
-      }
+  //   validateMobilePhone(value) {
+  //     let mobile_error = '';
+  //     let mobile_hint = '';
+  //     if (value == null || value.length === 0) {
+  //       mobile_error = tt('mobilevalidation_js.not_be_empty');
+  //     }
+  //     else if (! /[0-9]$/.test(value)) {
+  //       mobile_error = tt('mobilevalidation_js.have_only_digits');
+  //     }
+  //     else if (value.length < 7) {
+  //       mobile_error = tt('mobilevalidation_js.be_longer');
+  //     }
 
-      if (phone_error.length) {
-        phone_error = tt('createaccount_jsx.phone_number') + " " + phone_error;
-      }
-      else {
-        phone_hint = '';
-      }
-      this.setState({phone_error, phone_hint});
-    }
-
-    onClickSendCode(e) {
-        // fetch
-        // this.setState({phoneChecking: true});
-        // setTimeout(function () {
-        //   this.setState({phoneOk: true});
-        // }.bind(this), Math.round(Math.random() * 5 + 5)*1000)
-        // createAccount
-        const {phone, country} = this.state
-        fetch('/send_code', {
-          method: 'post',
-          mode: 'no-cors',
-          credentials: 'same-origin',
-          headers: {
-              Accept: 'application/json',
-              'Content-type': 'application/json'
-          },
-          body: JSON.stringify({
-              csrf: $STM_csrf,
-              name,
-              country
-            })
-        // }).then(r => r.json()).then(res => {
-        }).then(res => {
-            console.log(res.body);
-          // if (res.error || res.status !== 'ok') {
-          //     console.error('CreateAccount server error', res.error);
-          //     if (res.error === 'Unauthorized') {
-          //         window.location = '/enter_email';
-          //     }
-          //     this.setState({server_error: res.error || tt('g.unknown'), loading: false});
-          // } else {
-          //     window.location = `/login.html#account=${name}&msg=accountcreated`;
-          // }
-      }).catch(error => {
-          console.error('Caught /send_code server error', error);
-          // console.error('Caught CreateAccount server error', error);
-          // this.setState({server_error: (error.message ? error.message : error), loading: false});
-      });
-  }
+  //     if (mobile_error.length) {
+  //       mobile_error = tt('createaccount_jsx.phone_number') + " " + mobile_error;
+  //     }
+  //     else {
+  //       mobile_hint = 'Gratest';
+  //     }
+  //     this.setState({mobile_error, mobile_hint});
+  // }
 
     onNameChange(e) {
         const name = e.target.value.trim().toLowerCase();
@@ -232,8 +213,8 @@ class CreateAccount extends React.Component {
         const APP_NAME = tt('g.APP_NAME');
 
         const {
-            phone, country, name, password_valid, showPasswordString,
-            name_error, phone_hint, phone_error, server_error, loading, phoneOk, phoneChecking, cryptographyFailure, showRules, showMobileRules, allBoxChecked
+            code_expiration, country, name, password_valid, showPasswordString, sms_code,
+            name_error, server_error, loading, mobileOk, mobileChecking, cryptographyFailure, showRules, showMobileRules, allBoxChecked
         } = this.state;
 
         const {loggedIn, logout, offchainUser, serverBusy} = this.props;
@@ -244,7 +225,7 @@ class CreateAccount extends React.Component {
             ! password_valid ||
             ! allBoxChecked ||
             ! password_valid ||
-            ! phoneOk;
+            ! mobileOk;
         const submit_btn_class = 'button action' + (submit_btn_disabled ? ' disabled' : '');
 
         if (serverBusy || $STM_Config.disable_signups) {
@@ -276,7 +257,7 @@ class CreateAccount extends React.Component {
         // if (!offchainUser) {
         //     return <SignUp />;
         // }
-console.log('loggedIn', loggedIn)
+
         if (loggedIn) {
             return <div className="row">
                 <div className="column">
@@ -330,6 +311,13 @@ console.log('loggedIn', loggedIn)
                 </div>;
             }
         }
+        let sms_send_message = <div>
+            <h4>Отправте смс сообщение с кодом</h4>
+            <h1 style={{color:'red'}}>{sms_code}</h1>
+            на номер<br/>
+            <h4 style={{color: '#333'}}>{PHONE_SERVICE}</h4>
+            <span>После отправки смс сообщения дождитесь результата проверки сервера. Код истекает через <b style={{color: 'black'}}>{code_expiration}</b> секунд.</span>
+        </div>;
 
         return (
             <div>
@@ -352,6 +340,7 @@ console.log('loggedIn', loggedIn)
                         </div> : <div className="text-left"><p>
                             <a className="CreateAccount__rules-button" href="#" onClick={() => this.setState({showMobileRules: true})}>{tt('createaccount_jsx.why_send_sms')}&nbsp;&darr;</a>
                         </p></div>}
+                        <div className={(mobileOk ? 'secondary' : 'warning') + ' callout CreateAccount__sms'}>{sms_send_message}</div>
                         {showRules ? <div className="CreateAccount__rules">
                             <p>
                                 {tt('g.the_rules_of_APP_NAME.one', {APP_NAME})}<br/>
@@ -372,27 +361,26 @@ console.log('loggedIn', loggedIn)
                             <a className="CreateAccount__rules-button" href="#" onClick={() => this.setState({showRules: true})}>{tt('g.show_rules')}&nbsp;&darr;</a>
                         </p></div>}
                         <form onSubmit={this.onSubmit} autoComplete="off" noValidate method="post">
-                            <div>
+                            {/*<div>
                                 <label className="uppercase">
                                     <span style={{color: 'red'}}>*</span> {tt('createaccount_jsx.country_code')}
-                                    <CountryCode disabled={phoneChecking} name="country" value={country} />
+                                    <CountryCode name="country" value={country} />
                                 </label><p></p>
                             </div>
-                            <div className={(phone_error ? 'error' : '') + (phone_hint ? 'success' : '')}>
+                            <div className={(mobile_error ? 'error' : '') + (mobile_hint ? 'success' : '')}>
                                 <label className="uppercase">
                                     <span style={{color: 'red'}}>*</span> {tt('createaccount_jsx.phone_number')} <span style={{color: 'red'}}>{tt('createaccount_jsx.without_country_code')}</span>
-                                    <input type="text" name="phone" autoComplete="off" disabled={phoneChecking} onChange={this.onMobileChange} value={phone} />
+                                    <input type="text" name="mobile" autoComplete="off" disabled={mobileChecking} onChange={this.onMobileChange} value={mobile} />
                                 </label>
-                                <p>{phone_error || phone_hint}</p>
-                                <p><a className={'button holow uppercase ' + (!phone_hint ? 'disabled' : '')} href="">Получить код</a></p>
-                            </div>
+                                <p>{mobile_error || mobile_hint}</p>
+                            </div>*/}
                             <div className={name_error ? 'error' : ''}>
                                 <label className="uppercase">{tt('g.username')}
-                                    <input type="text" name="name" autoComplete="off" disabled={! phoneOk} onChange={this.onNameChange} value={name} />
+                                    <input type="text" name="name" autoComplete="off" disabled={! mobileOk} onChange={this.onNameChange} value={name} />
                                 </label>
                                 <p>{name_error}</p>
                             </div>
-                            <GeneratedPasswordInput onChange={this.onPasswordChange} disabled={!phoneOk || loading} showPasswordString={name.length > 0 && !name_error} />
+                            <GeneratedPasswordInput onChange={this.onPasswordChange} disabled={! mobileOk || loading} showPasswordString={name.length > 0 && !name_error} />
                             <br />
                             {next_step}
                             <noscript>

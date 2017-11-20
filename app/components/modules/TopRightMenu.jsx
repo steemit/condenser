@@ -65,7 +65,7 @@ const calculateEstimateOutput = ({a, p, sw, g}) => {
   return Number( ( (total_steem * p) + total_sbd).toFixed(2) );
 }
 
-function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops, username, showLogin, logout, loggedIn, vertical, navigate, toggleOffCanvasMenu, probablyLoggedIn, showSignUp, location, changeLanguage}) {
+function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops, username, showLogin, logout, loggedIn, vertical, navigate, toggleOffCanvasMenu, probablyLoggedIn, location, changeLanguage}) {
     const APP_NAME = tt('g.APP_NAME');
 
     const mcn = 'menu' + (vertical ? ' vertical show-for-small-only' : '');
@@ -209,7 +209,7 @@ const estimateOutput = <LocalizedCurrency amount={calculateEstimateOutput({a:acc
             {!inIco && telegramItem}
             {!inIco && rocketchatItem}
             {!inIco && !probablyLoggedIn && <li className={lcn}>
-              <a href="#" onClick={showSignUp}>{tt('g.sign_up')}</a>
+              <a href="/create_account">{tt('g.sign_up')}</a>
             </li>}
             {!inIco && !probablyLoggedIn && <li className={lcn}>
               <a href="/login.html" onClick={showLogin}>{tt('g.login')}</a>
@@ -236,8 +236,7 @@ TopRightMenu.propTypes = {
     logout: React.PropTypes.func.isRequired,
     vertical: React.PropTypes.bool,
     navigate: React.PropTypes.func,
-    toggleOffCanvasMenu: React.PropTypes.func,
-    showSignUp: React.PropTypes.func.isRequired
+    toggleOffCanvasMenu: React.PropTypes.func
 };
 
 export default connect(
@@ -289,10 +288,6 @@ export default connect(
         showLogin: e => {
             if (e) e.preventDefault();
             dispatch(user.actions.showLogin())
-        },
-        showSignUp: e => {
-            if (e) e.preventDefault();
-            dispatch(user.actions.showSignUp())
         },
         logout: e => {
             if (e) e.preventDefault();

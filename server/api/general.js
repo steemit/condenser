@@ -217,7 +217,7 @@ export default function useGeneralApi(app) {
         console.log('-- /login_account -->', this.session.uid, account);
         try {
             const db_account = yield models.Account.findOne(
-                {attributes: ['user_id'], where: {name: esc(account)}, logging: false}
+                {attributes: ['user_id', 'uid'], where: {name: esc(account)}, logging: false}
             );
             if (db_account) this.session.user = db_account.user_id;
 
@@ -247,7 +247,10 @@ export default function useGeneralApi(app) {
                         }
                         const {posting: {key_auths: [[posting_pubkey, weight]], weight_threshold}} = chainAccount
                         verify('posting', signatures.posting, posting_pubkey, weight, weight_threshold)
-                        if (auth.posting) this.session.a = account;
+                        if (auth.posting) {
+                          this.session.a = account;
+                          this.session.uid = db_account.uid;
+                        }
                     }
                 }
             }
@@ -273,7 +276,7 @@ export default function useGeneralApi(app) {
         if (!checkCSRF(this, csrf)) return;
         console.log('-- /logout_account -->', this.session.uid);
         try {
-            this.session.a = null;
+          this.session.a = this.session.user = this.session.uid = null;
             this.body = JSON.stringify({status: 'ok'});
         } catch (error) {
             console.error('Error in /logout_account api call', this.session.uid, error);

@@ -54,6 +54,11 @@
     "must_start_with_a_letter": "Должно начинаться с буквы",
     "must_end_with_a_letter_or_number": "Должно заканчиваться с буквы или номера"
   },
+  "mobilevalidation_js": {
+    "not_be_empty": "не может быть пустым",
+    "be_longer": "должен быть длиннее",
+    "have_only_digits": "должен состоять только из цифр"
+  },
   "chainvalidation_js": {
     "account_name_should": "Имя аккаунта должно ",
     "asset_name_should": "Asset name should ",

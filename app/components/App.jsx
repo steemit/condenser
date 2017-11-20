@@ -28,7 +28,6 @@ class App extends React.Component {
         super(props);
         this.state = {open: null, showCallout: true, showBanner: true, expandCallout: false};
         this.toggleOffCanvasMenu = this.toggleOffCanvasMenu.bind(this);
-        this.showSignUp = this.props.showSignUp.bind(this);
         this.checkLogin = this.checkLogin.bind(this);
         // this.shouldComponentUpdate = shouldComponentUpdate(this, 'App')
     }
@@ -158,7 +157,7 @@ class App extends React.Component {
                             <h2>{tt('submit_a_story.welcome_to_the_blockchain')}</h2>
                             <h4>{tt('submit_a_story.your_voice_is_worth_something')}</h4>
                             <br />
-                            <a className="button" href="#" onClick={this.showSignUp}> <b>{tt('navigation.sign_up')}</b> </a>
+                            <a className="button" href="/create_account"> <b>{tt('navigation.sign_up')}</b> </a>
                             &nbsp; &nbsp; &nbsp;
                             <a className="button hollow uppercase" href="/welcome" target="_blank" onClick={this.learnMore}> <b>{tt('submit_a_story.learn_more')}</b> </a>
                             <br />
@@ -278,8 +277,7 @@ App.propTypes = {
     signup_bonus: React.PropTypes.string,
     loginUser: React.PropTypes.func.isRequired,
     logoutUser: React.PropTypes.func.isRequired,
-    depositSteem: React.PropTypes.func.isRequired,
-    showSignUp: React.PropTypes.func.isRequired
+    depositSteem: React.PropTypes.func.isRequired
 };
 
 export default connect(
@@ -302,10 +300,6 @@ export default connect(
             dispatch(user.actions.logout()),
         depositSteem: () => {
             dispatch(g.actions.showDialog({name: 'blocktrades_deposit', params: {outputCoinType: VEST_TICKER}}));
-        },
-        showSignUp: e => {
-            if (e) e.preventDefault();
-            dispatch(user.actions.showSignUp())
         },
         loadExchangeRates: () => {
             dispatch(g.actions.fetchExchangeRates())

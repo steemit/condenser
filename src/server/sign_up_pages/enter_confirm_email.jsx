@@ -37,16 +37,12 @@ function* confirmEmailHandler() {
     const confirmation_code = this.params && this.params.code
         ? this.params.code
         : this.request.body.code;
-    console.log(
-        "-- /confirm_email -->",
-        this.session.uid,
-        this.session.user,
-        confirmation_code
-    );
+    console.log("-- /confirm_email -->", this.session.uid, this.session.user, confirmation_code);
     const eid = yield models.Identity.findOne({
         where: { confirmation_code, provider: "email"}
     });
     if (!eid) {
+        console.log("confirmation code not found", this.session.uid, this.session.user, confirmation_code);
         this.status = 401;
         this.body = "confirmation code not found";
         return;
@@ -198,20 +194,19 @@ export default function useEnterAndConfirmEmailPages(app) {
         if (this.request.query && this.request.query.email)
             default_email = this.request.query.email;
         const body = renderToString(
-            <div className="App">
+            <div className="App CreateAccount">
                 <MiniHeader />
                 <br />
-                <div className="row" style={{ maxWidth: "32rem" }}>
+                <div className="row CreateAccount__step" style={{ maxWidth: "32rem" }}>
                     <div className="column">
                         <Progress tabIndex="0" value={50} max={100} />
                         <form id="submit_email" action="/submit_email" method="POST">
-                            <h4 style={{ color: "#4078c0" }}>
-                                Please provide your email address to continue
+                            <h4 className="CreateAccount__title">
+                                Your email address, please
                             </h4>
-                            <p className="secondary">
-                                We need your email address to ensure that we can contact you to verify account ownership in the event that your account is ever compromised.
+                            <p>
+                                We use this to contact you and verify account ownership if this account is ever compromised. We'll send a confirmation link, so please use a valid email.
                             </p>
-                            <p className="secondary">Please make sure that you enter a <strong>valid</strong> email so that you receive the confirmation link.</p>
                             <input
                                 type="hidden"
                                 name="csrf"
@@ -243,7 +238,7 @@ export default function useEnterAndConfirmEmailPages(app) {
                                 <input
                                     type="submit"
                                     className="button"
-                                    value="CONTINUE" />
+                                    value="Continue" />
                             }
                         </form>
                     </div>

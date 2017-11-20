@@ -55,13 +55,6 @@ class App extends React.Component {
         }
     }
 
-    componentWillReceiveProps(nextProps) {
-        // setTimeout(() => this.setState({showCallout: false}), 15000);
-        if (nextProps.location.pathname !== this.props.location.pathname) {
-            this.setState({showBanner: false, showCallout: false})
-        }
-    }
-
     componentWillReceiveProps(np) {
         /* Add listener if the next page requires entropy and the current page didn't */
         if (pageRequiresEntropy(np.location.pathname) && !pageRequiresEntropy(this.props.location.pathname)) {
@@ -94,7 +87,8 @@ class App extends React.Component {
             p.flash !== n.flash ||
             this.state.open !== nextState.open ||
             this.state.showBanner !== nextState.showBanner ||
-            this.state.showCallout !== nextState.showCallout
+            this.state.showCallout !== nextState.showCallout ||
+            p.nightmodeEnabled !== n.nightmodeEnabled
         );
     }
 
@@ -131,9 +125,10 @@ class App extends React.Component {
 
     render() {
         const {location, params, children, flash, new_visitor,
-            depositSteem, signup_bonus, username} = this.props;
+            depositSteem, signup_bonus, username, nightmodeEnabled} = this.props;
         const lp = false; //location.pathname === '/';
         const miniHeader = location.pathname === '/create_account' || location.pathname === '/pick_account';
+        const headerHidden = miniHeader && location.search === '?whistle_signup'
         const params_keys = Object.keys(params);
         const ip = location.pathname === '/' || (params_keys.length === 2 && params_keys[0] === 'order' && params_keys[1] === 'category');
         const alert = this.props.error || flash.get('alert') || flash.get('error');
@@ -188,17 +183,17 @@ class App extends React.Component {
                             <h4>{tt('navigation.intro_paragraph')}</h4>
                             <br />
                             <a className="button button--primary" href="/pick_account"> <b>{tt('navigation.sign_up')}</b> </a>
-                            &nbsp; &nbsp; &nbsp;
-                            <a className="button hollow uppercase" href="https://steem.io" target="_blank" rel="noopener noreferrer" onClick={this.learnMore}> <b>{tt('navigation.learn_more')}</b> </a>
-                            <br />
-                            <br />
+                            {/* JSX Comment  &nbsp; &nbsp; &nbsp;
+                            <a className="button hollow uppercase" href="https://steem.io" target="_blank" rel="noopener noreferrer" onClick={this.learnMore}> <b>{tt('navigation.learn_more')}</b> </a> */}
                         </div>
                     </div>
                 </div>
             );
         }
 
-        return <div className={'App' + (lp ? ' LP' : '') + (ip ? ' index-page' : '') + (miniHeader ? ' mini-header' : '')}
+        const themeClass = nightmodeEnabled ? ' theme-dark' : ' theme-light';
+
+        return <div className={'App' + themeClass + (lp ? ' LP' : '') + (ip ? ' index-page' : '') + (miniHeader ? ' mini-header' : '')}
                     ref="App_root"
                 >
             <SidePanel ref="side_panel" alignment="right">
@@ -217,11 +212,6 @@ class App extends React.Component {
                     <li>
                         <a href="/tags" onClick={this.navigate}>
                             {tt('navigation.explore')}
-                        </a>
-                    </li>
-                    <li>
-                        <a onClick={() => depositSteem(username)}>
-                            {tt('navigation.buy_LIQUID_TOKEN', {LIQUID_TOKEN})}
                         </a>
                     </li>
                     <li>
@@ -247,6 +237,16 @@ class App extends React.Component {
                 </ul>
                 <ul className="vertical menu">
                     <li>
+                        <a onClick={() => depositSteem(username)}>
+                            {tt('navigation.buy_LIQUID_TOKEN', {LIQUID_TOKEN})}&nbsp;<Icon name="extlink" />
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://thesteemitshop.com/" target="_blank" rel="noopener noreferrer">
+                            {tt('navigation.shop')}&nbsp;<Icon name="extlink" />
+                        </a>
+                    </li>
+                    <li>
                         <a href="https://steemit.chat/home" target="_blank" rel="noopener noreferrer">
                             {tt('navigation.chat')}&nbsp;<Icon name="extlink" />
                         </a>
@@ -257,14 +257,19 @@ class App extends React.Component {
                         </a>
                     </li>
                     <li className="last">
-                        <a href="https://steemit.github.io/steemit-docs/" target="_blank" rel="noopener noreferrer">
+                        <a href="https://developers.steem.io/" target="_blank" rel="noopener noreferrer">
                             {tt('navigation.api_docs')}&nbsp;<Icon name="extlink" />
                         </a>
                     </li>
                 </ul>
                 <ul className="vertical menu">
                     <li>
-                        <a href="https://steem.io/SteemWhitePaper.pdf" onClick={this.navigate}>
+                        <a href="https://steem.io/steem-bluepaper.pdf" target="_blank" rel="noopener noreferrer">
+                            {tt('navigation.bluepaper')}&nbsp;<Icon name="extlink" />
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://steem.io/SteemWhitePaper.pdf" target="_blank" rel="noopener noreferrer">
                             {tt('navigation.whitepaper')}&nbsp;<Icon name="extlink" />
                         </a>
                     </li>
@@ -285,7 +290,7 @@ class App extends React.Component {
                     </li>
                 </ul>
             </SidePanel>
-            {miniHeader ? <MiniHeader /> : <Header toggleOffCanvasMenu={this.toggleOffCanvasMenu} menuOpen={this.state.open} />}
+            {miniHeader ? headerHidden ? null : <MiniHeader /> : <Header toggleOffCanvasMenu={this.toggleOffCanvasMenu} menuOpen={this.state.open} />}
             <div className="App__content">
                 {welcome_screen}
                 {callout}
@@ -319,7 +324,8 @@ export default connect(
                 !state.offchain.get('user') &&
                 !state.offchain.get('account') &&
                 state.offchain.get('new_visit'),
-            username: state.user.getIn(['current', 'username']) || state.offchain.get('account') || ''
+            username: state.user.getIn(['current', 'username']) || state.offchain.get('account') || '',
+            nightmodeEnabled: state.app.getIn(['user_preferences', 'nightmode']),
         };
     },
     dispatch => ({

@@ -9,6 +9,9 @@ import {api} from 'steem';
 import user from 'app/redux/User';
 import {validate_account_name} from 'app/utils/ChainValidation';
 import runTests from 'app/utils/BrowserTests';
+import {PARAM_VIEW_MODE} from 'shared/constants';
+import {makeParams} from 'app/utils/Links';
+
 
 class PickAccount extends React.Component {
 
@@ -19,6 +22,8 @@ class PickAccount extends React.Component {
 
     constructor(props) {
         super(props);
+
+        console.log('PickAccount');
         this.state = {
             name: '',
             password: '',
@@ -48,8 +53,11 @@ class PickAccount extends React.Component {
         this.setState({server_error: '', loading: true});
         const {name} = this.state;
         if (!name) return;
-
-        window.location = "/enter_email?account=" + name;
+        const params = {account: name};
+        if(this.props.viewMode) {
+            params[PARAM_VIEW_MODE] = this.props.viewMode;
+        }
+        window.location = "/enter_email" + makeParams(params, true);
     }
 
     onPasswordChange(password, password_valid) {
@@ -213,7 +221,7 @@ class PickAccount extends React.Component {
                             <input disabled={submit_btn_disabled} type="submit" className={submit_btn_class} value="Continue" />
                         </form>
                         <br />
-                        <p className="secondary">Got an account? <Link to="/login.html">Login</Link></p>
+                        <p className="secondary whistle-hidden">Got an account? <Link to="/login.html">Login</Link></p>
                     </div>
                 </div>
             </div>
@@ -226,6 +234,7 @@ module.exports = {
     component: connect(
         state => {
             return {
+                viewMode: state.app.get('viewMode'),
                 loggedIn: !!state.user.get('current'),
                 offchainUser: state.offchain.get('user'),
                 serverBusy: state.offchain.get('serverBusy')

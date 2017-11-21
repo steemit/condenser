@@ -1,5 +1,11 @@
 .UserProfile {
     margin-top: -1.5rem;
+
+    .articles {
+      @include MQ(M) {
+        margin: 0 auto;
+      }
+    }
 }
 
 .UserProfile__tab_content {
@@ -192,3 +198,31 @@
         }
     }
 }
+
+// Temporary fix to prevent alternate User Profile pages outside the blog from taking the narrow layout.
+
+.UserProfile {
+  .articles {
+      margin-bottom: 4em;
+    &__h1 {
+      text-transform: none;
+      @include MQ(M) {
+        @include font-size(20px);
+      }
+    }
+  }
+  &__tab_content.layout-block.settings, &__tab_content.layout-block.curation-rewards, &__tab_content.layout-block.author-rewards {
+    .articles {
+        padding: 1.5em 1.5em;
+        max-width: 1056px;
+        @include MQ(XL) { 
+          min-width: 1050px;
+        }
+    }
+  }
+  .settings .articles__layout-selector, .curation-rewards .articles__layout-selector, .author-rewards .articles__layout-selector  {
+      display: none;
+    }
+}
+
+

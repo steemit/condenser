@@ -81,16 +81,19 @@ class PostSummary extends React.Component {
                 <div className="articles__resteem">
                     <p className="articles__resteem-text">
                         <span className="articles__resteem-icon"><Icon name="reblog" /></span>
-                        {tt('postsummary_jsx.resteemed_by')} <UserNames names={reblogged_by} />
+                        <UserNames names={reblogged_by} /> {tt('postsummary_jsx.resteemed')} 
                     </p>
                 </div>)
         }
 
         // 'account' is the current blog being viewed, if applicable.
         if(account && account != content.get('author')) {
-            reblogged_by = (<div className="PostSummary__reblogged_by">
-                               <Icon name="reblog" /> {tt('postsummary_jsx.resteemed')}
-                           </div>)
+            reblogged_by = (<div className="articles__resteem">
+                                <p className="articles__resteem-text">
+                                    <span className="articles__resteem-icon"><Icon name="reblog" /></span>
+                                    {tt('postsummary_jsx.resteemed')} 
+                                </p>
+                            </div>)
         }
 
         const {gray, authorRepLog10, flagWeight, isNsfw} = content.get('stats', Map()).toJS()
@@ -128,7 +131,7 @@ class PostSummary extends React.Component {
             <Userpic account={p.author} />
             <Author author={p.author} authorRepLog10={authorRepLog10} follow={false} mute={false} />
             {} {tt('g.in')} <TagList post={p} single />&nbsp;•&nbsp;
-            <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}><TimeAgoWrapper date={p.created} className="updated" /></a>
+            <Link to={title_link_url}><TimeAgoWrapper date={p.created} className="updated" /></Link>
         </span>);
 
         // New Post Summary heading
@@ -148,15 +151,15 @@ class PostSummary extends React.Component {
                     <span className="user__name"><Author author={p.author} authorRepLog10={authorRepLog10} follow={false} mute={false} /></span>
 
                     <span className="articles__tag-link">{tt('g.in')}&nbsp;<TagList post={p} single />&nbsp;•&nbsp;</span>
-                    <a className="timestamp__link" href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}>
+                    <Link className="timestamp__link" to={title_link_url} >
                         <span className="timestamp__time"><TimeAgoWrapper date={p.created} className="updated" /></span>
 
                         {full_power && <span className="articles__icon-100" title={tt('g.powered_up_100')}><Icon name="steempower" /></span>}
 
-                    </a>
+                    </Link>
                 </div>
             </div>
-            <div className="articles__flag">
+            <div className="articles__flag clearfix">
               <Voting post={post} flag />
             </div>
           </div>
@@ -248,9 +251,9 @@ class PostSummary extends React.Component {
                 <div className={'articles__content hentry' + (thumb ? ' with-image ' : ' ') + commentClasses.join(' ')} itemScope itemType ="http://schema.org/blogPost">
                   { thumb
                         ? <div className="articles__content-block articles__content-block--img">
-                            <a className="articles__link" href="#">
+                            <Link className="articles__link" to={title_link_url}>
                                 {thumb}
-                            </a>
+                            </Link>
                         </div>
                         : null
                     }

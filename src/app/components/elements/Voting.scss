@@ -27,36 +27,33 @@
 }
 
 .Voting__about-flag {
-    margin-right: 30px;
-    .button {
-      
-  text-decoration: none;
-  font-weight: bold;
-  transition: 0.2s all ease-in-out;
-  text-transform: capitalize;
-  border-radius: 0;
-  @include font-size(18px);       
-  @include themify($themes) {
-    background-color: themed('buttonBackground');  
-    box-shadow: 0px 0px 0px 0 rgba(0,0,0,0), 5px 5px 0 0 themed('buttonBoxShadow');   
-    color: themed('buttonText');
-  }
-  &:hover, &:focus {
+  margin-right: 30px;
+  .button {  
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.2s all ease-in-out;
+    text-transform: capitalize;
+    border-radius: 0;
+    @include font-size(18px);       
     @include themify($themes) {
-      background-color: themed('buttonBackgroundHover');  
-      box-shadow: 2px 2px 2px 0 rgba(0,0,0,0.1), 7px 7px 0 0 themed('buttonBoxShadowHover');   
-      color: themed('buttonTextHover');
-      text-shadow: 0 1px 0 rgba(0,0,0,0.20);
+      background-color: themed('buttonBackground');  
+      box-shadow: 0px 0px 0px 0 rgba(0,0,0,0), 5px 5px 0 0 themed('buttonBoxShadow');   
+      color: themed('buttonText');
     }
-  }
-  &:visited, &:active {
-    @include themify($themes) {
-      color: themed('buttonText');  
+    &:hover, &:focus {
+      @include themify($themes) {
+        background-color: themed('buttonBackgroundHover');  
+        box-shadow: 2px 2px 2px 0 rgba(0,0,0,0.1), 7px 7px 0 0 themed('buttonBoxShadowHover');   
+        color: themed('buttonTextHover');
+        text-shadow: 0 1px 0 rgba(0,0,0,0.20);
+      }
+    }
+    &:visited, &:active {
+      @include themify($themes) {
+        color: themed('buttonText');  
+      } 
     } 
-  } 
-
-
-    }
+  }
 }
 
 .Voting__button-up {
@@ -128,6 +125,7 @@
     font-size: 80%;
     vertical-align: 15%;
     padding-right: 0.1rem;
+    cursor: default;
   }
 
   a:hover path {
@@ -345,35 +343,32 @@
   }
 }
 
-
-
 /* Pulse for upvote action */
 @-webkit-keyframes pulse {
     0% {
-        -webkit-box-shadow: 0 0 0 0 rgba(75, 162, 242, 2);
+        -webkit-box-shadow: 0 0 0 0 rgba(6, 214, 169, 2);
     }
     70% {
-        -webkit-box-shadow: 0 0 0 10px rgba(75, 162, 242, 1);
+        -webkit-box-shadow: 0 0 0 10px rgba(6, 214, 169, 1);
     }
     100% {
-        -webkit-box-shadow: 0 0 0 0 rgba(75, 162, 242, 1);
+        -webkit-box-shadow: 0 0 0 0 rgba(6, 214, 169, 1);
     }
 }
 @keyframes pulse {
     0% {
-        -moz-box-shadow: 0 0 0 0 rgba(75, 162, 242, 2);
-        box-shadow: 0 0 0 0 rgba(75, 162, 242, 2);
+        -moz-box-shadow: 0 0 0 0 rgba(6, 214, 169, 2);
+        box-shadow: 0 0 0 0 rgba(6, 214, 169, 2);
     }
     70% {
-        -moz-box-shadow: 0 0 0 10px rgba(204,169,44, 0);
-        box-shadow: 0 0 0 10px rgba(204,169,44, 0);
+        -moz-box-shadow: 0 0 0 10px rgba(6, 214, 169, 0);
+        box-shadow: 0 0 0 10px rgba(6, 214, 169, 0);
     }
     100% {
-        -moz-box-shadow: 0 0 0 0 rgba(204,169,44, 0);
-        box-shadow: 0 0 0 0 rgba(204,169,44, 0);
+        -moz-box-shadow: 0 0 0 0 rgba(6, 214, 169, 0);
+        box-shadow: 0 0 0 0 rgba(6, 214, 169, 0);
     }
 }
-
 
 .weight-container {
   min-width: 300px;

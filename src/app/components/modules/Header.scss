@@ -98,14 +98,13 @@ ul > li.Header__top-logo > a {
   transition: none;
 }
 
-ul > li > .button {
-  padding-top: 0.2rem;
-  padding-bottom: 0.2rem;
+.Header {
+  ul > li > .button {
+    padding-top: 0.2rem;
+    padding-bottom: 0.2rem;
+  }
 }
 
-//ul > li.submit-story {
-//  padding-top: 0.4rem;
-//}
 
 .Header__sub-nav {
   position: relative;
@@ -174,6 +173,15 @@ ul > li > .button {
   .VerticalMenu {
     left: 0;
   }
+  .Icon.dropdown-arrow {
+    position: relative;
+    top: 3px;
+  }
+  .Icon.dropdown-arrow polygon {
+    @include themify($themes) {
+      fill: themed('textColorPrimary');
+    }
+  }
 }
 
 .logo {
@@ -186,7 +194,6 @@ ul > li > .button {
   margin-right: 4rem;
   color: #ec5840;
 }
-
 
 .logo-new {
   transition: 0.2s ease-in-out;
@@ -214,16 +221,17 @@ ul > li > .button {
   }
   
   .icon-svg {
+    fill: $color-teal;
     @include themify($themes) {
       fill: themed('colorAccent');
     }
   }
 }
 
-
 .Header__top-logo:hover {
   .logo-new {
     .icon-svg {
+      fill: $color-blue-black;
       @include themify($themes) {
         fill: themed('colorAccentReverse');
       }
@@ -231,3 +239,14 @@ ul > li > .button {
   }
 }
 
+.Header__top-logo a {
+  &:visited, &:active {
+    .logo-new {
+      .icon-svg {      
+        @include themify($themes) {
+            fill: themed('ColorAccent');  
+        }
+      }
+    } 
+  }        
+}

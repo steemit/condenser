@@ -19,7 +19,9 @@
     "production": "NODE_ENV=production node lib/server/index.js",
     "start": "NODE_ENV=development babel-node ./webpack/dev-server.js",
     "webpush": "node ./scripts/webpush_notify.js",
-    "checktranslations": "node scripts/check_translations.js"
+    "checktranslations": "node scripts/check_translations.js",
+    "storybook": "start-storybook -p 9001 -c .storybook",
+    "storybook-build": "build-storybook -c .storybook -o docs" 
   },
   "author": "Steemit, Inc.",
   "license": "MIT",
@@ -149,6 +151,8 @@
     "xmldom": "^0.1.22"
   },
   "devDependencies": {
+    "@storybook/addon-knobs": "^3.2.17",
+    "@storybook/react": "^3.2.16",
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
     "chai": "^3.5.0",
     "chai-immutable": "^1.5.3",
@@ -190,6 +194,9 @@
     "npm": ">=5.4.2"
   },
   "lint-staged": {
-    "src/**/*.js*": ["prettier --write", "git add"]
+    "src/**/*.js*": [
+      "prettier --write",
+      "git add"
+    ]
   }
 }

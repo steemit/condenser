@@ -31,7 +31,7 @@ function* pollData() {
         }
 
         try {
-            const data = yield call([api, api.getDynamicGlobalPropertiesAsync]);
+            // const data = yield call([api, api.getDynamicGlobalPropertiesAsync]); // called, but not used
             // console.log('-- pollData.pollData -->', data);
             // const data = yield call([api, api.getDiscussionsByCreatedAsync], {limit: 10});
             // yield put(GlobalReducer.actions.receiveRecentPosts({data}));

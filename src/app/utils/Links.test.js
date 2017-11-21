@@ -48,6 +48,27 @@ describe('Links', () => {
     })
 })
 
+describe('makeParams', () => {
+    it('creates an empty string when there are no params', () => {
+        assert(linksRe.makeParams([]) === '', 'not empty on array')
+        assert(linksRe.makeParams({}) === '', 'not empty on object')
+        assert(linksRe.makeParams({}, true) === '', 'not empty on object with prefix true')
+        assert(linksRe.makeParams([], true) === '', 'not empty on array with prefix true')
+        assert(linksRe.makeParams([], '?') === '', 'not empty on array with prefix string')
+        assert(linksRe.makeParams({}, '?') === '', 'not empty on object  with prefix string')
+    });
+    it('creates the correct string when passed an array', () => {
+        assert(linksRe.makeParams(['bop=boop','troll=bridge']) === 'bop=boop&troll=bridge', 'incorrect string')
+        assert(linksRe.makeParams(['bop=boop','troll=bridge'], true) === '?bop=boop&troll=bridge', 'incorrect string with prefix true')
+        assert(linksRe.makeParams(['bop=boop','troll=bridge'], '&') === '&bop=boop&troll=bridge', 'incorrect string with prefix &')
+    });
+    it('creates the correct string when passed an object', () => {
+        assert(linksRe.makeParams({bop: 'boop',troll: 'bridge'}) === 'bop=boop&troll=bridge', 'incorrect string')
+        assert(linksRe.makeParams({bop: 'boop',troll: 'bridge'}, true) === '?bop=boop&troll=bridge', 'incorrect string with prefix true')
+        assert(linksRe.makeParams({bop: 'boop',troll: 'bridge'}, '&') === '&bop=boop&troll=bridge', 'incorrect string with prefix &')
+    });
+});
+
 // 1st in the browser it is very expensive to re-create a regular expression many times, however, in nodejs is is very in-expensive (it is as if it is caching it).
 describe('Performance', () => {
     const largeData = secureRandom.randomBuffer(1024 * 10).toString('hex')

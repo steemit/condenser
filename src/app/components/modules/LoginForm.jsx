@@ -46,8 +46,8 @@ class LoginForm extends Component {
             if (onCancel) onCancel()
         };
         this.qrReader = () => {
-            const {qrReader} = props
-            const {password} = this.state
+            const {qrReader} = props;
+            const {password} = this.state;
             qrReader(data => {password.props.onChange(data)})
         };
         this.initForm(props)
@@ -248,7 +248,7 @@ function urlAccountName() {
 function checkPasswordChecksum(password) {
     // A Steemit generated password is a WIF prefixed with a P ..
     // It is possible to login directly with a WIF
-    const wif = /^P/.test(password) ? password.substring(1) : password
+    const wif = /^P/.test(password) ? password.substring(1) : password;
 
     if(!/^5[HJK].{45,}/i.test(wif)) {// 51 is the wif length
         // not even close
@@ -263,19 +263,19 @@ export default connect(
 
     // mapStateToProps
     (state) => {
-        const login_error = state.user.get('login_error')
-        const currentUser = state.user.get('current')
-        const loginBroadcastOperation = state.user.get('loginBroadcastOperation')
+        const login_error = state.user.get('login_error');
+        const currentUser = state.user.get('current');
+        const loginBroadcastOperation = state.user.get('loginBroadcastOperation');
 
         const initialValues = {
             saveLogin: saveLoginDefault,
         }
 
         // The username input has a value prop, so it should not use initialValues
-        const initialUsername = currentUser && currentUser.has('username') ? currentUser.get('username') : urlAccountName()
-        const loginDefault = state.user.get('loginDefault')
+        const initialUsername = currentUser && currentUser.has('username') ? currentUser.get('username') : urlAccountName();
+        const loginDefault = state.user.get('loginDefault');
         if(loginDefault) {
-            const {username, authType} = loginDefault.toJS()
+            const {username, authType} = loginDefault.toJS();
             if(username && authType) initialValues.username = username + '/' + authType
         } else if (initialUsername) {
             initialValues.username = initialUsername;

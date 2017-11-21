@@ -52,19 +52,19 @@ describe('makeParams', () => {
     it('creates an empty string when there are no params', () => {
         assert(linksRe.makeParams([]) === '', 'not empty on array')
         assert(linksRe.makeParams({}) === '', 'not empty on object')
-        assert(linksRe.makeParams({}, true) === '', 'not empty on object with prefix true')
-        assert(linksRe.makeParams([], true) === '', 'not empty on array with prefix true')
+        assert(linksRe.makeParams({}, false) === '', 'not empty on object with prefix false')
+        assert(linksRe.makeParams([], false) === '', 'not empty on array with prefix false')
         assert(linksRe.makeParams([], '?') === '', 'not empty on array with prefix string')
         assert(linksRe.makeParams({}, '?') === '', 'not empty on object  with prefix string')
     });
     it('creates the correct string when passed an array', () => {
-        assert(linksRe.makeParams(['bop=boop','troll=bridge']) === 'bop=boop&troll=bridge', 'incorrect string')
-        assert(linksRe.makeParams(['bop=boop','troll=bridge'], true) === '?bop=boop&troll=bridge', 'incorrect string with prefix true')
+        assert(linksRe.makeParams(['bop=boop','troll=bridge']) === '?bop=boop&troll=bridge', 'incorrect string with')
+        assert(linksRe.makeParams(['bop=boop','troll=bridge'], false) === 'bop=boop&troll=bridge', 'incorrect string with prefix false')
         assert(linksRe.makeParams(['bop=boop','troll=bridge'], '&') === '&bop=boop&troll=bridge', 'incorrect string with prefix &')
     });
     it('creates the correct string when passed an object', () => {
-        assert(linksRe.makeParams({bop: 'boop',troll: 'bridge'}) === 'bop=boop&troll=bridge', 'incorrect string')
-        assert(linksRe.makeParams({bop: 'boop',troll: 'bridge'}, true) === '?bop=boop&troll=bridge', 'incorrect string with prefix true')
+        assert(linksRe.makeParams({bop: 'boop',troll: 'bridge'}) === '?bop=boop&troll=bridge', 'incorrect string')
+        assert(linksRe.makeParams({bop: 'boop',troll: 'bridge'}, false) === 'bop=boop&troll=bridge', 'incorrect string with prefix false')
         assert(linksRe.makeParams({bop: 'boop',troll: 'bridge'}, '&') === '&bop=boop&troll=bridge', 'incorrect string with prefix &')
     });
 });

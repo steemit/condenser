@@ -46,7 +46,7 @@ export const makeParams = (params, prefix) => {
         });
     }
     if(paramsList.length > 0) {
-        return ((prefix)? ((typeof prefix === 'string')? prefix : '?') : '') + paramsList.join('&');
+        return ((prefix !== false)? ((typeof prefix === 'string')? prefix : '?') : '') + paramsList.join('&');
     }
     return '';
 }
@@ -56,3 +56,4 @@ export const makeParams = (params, prefix) => {
 
 // About performance
 // Using exec on the same regex object requires a new regex to be created and compile for each text (ex: post).  Instead replace can be used `body.replace(remoteRe, l => {` discarding the result for better performance`}).  Re-compiling is a chrome bottleneck but did not effect nodejs.
+

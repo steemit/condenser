@@ -35,7 +35,24 @@ export default {
     ipfsPrefix: /(https?:\/\/.*)?\/ipfs/i,
 }
 
-//possible this should go somewhere else.
+//todo: possible this should go somewhere else.
+/**
+ * Returns a new object extended from outputParams with [key] == inputParams[key] if the value is in allowedValues
+ * @param outputParams
+ * @param inputParams
+ * @param key
+ * @param allowedValues
+ * @returns {*}
+ */
+export const addToParams = (outputParams, inputParams, key, allowedValues) => {
+    const respParams = Object.assign({}, outputParams);
+    if(inputParams[key] && allowedValues.indexOf(inputParams[key]) > -1) {
+        respParams[key] = inputParams[key];
+    }
+    return respParams;
+}
+
+//todo: possible this should go somewhere else.
 export const makeParams = (params, prefix) => {
     let paramsList = [];
     if(params.constructor === Array) {

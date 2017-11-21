@@ -140,7 +140,7 @@ class LoginForm extends Component {
             postType = 'Login to Follow Users'
         } else if (loginBroadcastOperation) {
             // check for post or comment in operation
-            postType = loginBroadcastOperation.getIn(['operation', 'title']) ? tt('loginform_jsx.login_to_post') : tt('loginform_jsx.login_to_comment');
+            postType = loginBroadcastOperation.getIn(['operation', 'title']) ? tt('loginform_jsx.login_to_post') : tt('g.confirm_password');
         }
         const title = postType ? postType : tt('g.login');
         const authType = /^vote|comment/.test(opType) ? tt('loginform_jsx.posting') : tt('loginform_jsx.active_or_owner');
@@ -199,7 +199,7 @@ class LoginForm extends Component {
                 </div>}
                 <div>
                     <label className="LoginForm__save-login" htmlFor="saveLogin">
-                        
+
                         <input id="saveLogin" type="checkbox" ref="pw" {...saveLogin.props} onChange={this.saveLoginToggle} disabled={submitting} />&nbsp;{tt('loginform_jsx.keep_me_logged_in')}</label>
                 </div>
                 <div className="login-modal-buttons">

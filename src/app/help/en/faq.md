@@ -1223,7 +1223,7 @@ The Steemit brand and logo are protected by intellectual property laws, includin
 
 Steemit also considers posts which are created on the Steem blockchain and earn rewards through the blockchain rewards mechanism an authorized form of commercial use.
 
-The Steem logo is licensed under Creative Commons CC0, meaning you’re free to copy, modify, or distribute (even for commercial purposes) without needing to ask permission or give attribution.
+The blue Steem logo is licensed under Creative Commons CC0, meaning you’re free to copy, modify, or distribute (even for commercial purposes) without needing to ask permission or give attribution.
 
 <a href="/faq.html#Table_of_Contents_Steemit__Inc">^</a>
 <a class="anchor" name="Can_I_purchase_official_Steemit_merchandise"></a>

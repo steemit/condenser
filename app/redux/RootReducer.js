@@ -2,7 +2,6 @@ import {Map, fromJS} from 'immutable';
 import {combineReducers} from 'redux';
 import {routerReducer} from 'react-router-redux';
 import appReducer from './AppReducer';
-//import discussionReducer from './DiscussionReducer';
 import globalReducerModule from './GlobalReducer';
 import marketReducerModule from './MarketReducer';
 import assetsReducerModule from './AssetsReducer';
@@ -51,9 +50,7 @@ export default combineReducers({
     market: initReducer(marketReducerModule.reducer),
     offchain: initReducer(offchain),
     user: initReducer(user.reducer),
-    // auth: initReducer(auth.reducer),
     transaction: initReducer(transaction.reducer),
-    //discussion: initReducer(discussionReducer),
     discussion: initReducer((state = {}) => state),
     routing: initReducer(routerReducer),
     app: initReducer(appReducer),

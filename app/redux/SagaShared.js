@@ -1,17 +1,14 @@
-import {fromJS} from 'immutable'
-import {call, put, select} from 'redux-saga/effects';
+import { fromJS } from 'immutable'
+import { call, put, select } from 'redux-saga/effects';
+import { takeEvery } from 'redux-saga';
 import g from 'app/redux/GlobalReducer'
-import {takeEvery} from 'redux-saga';
 import tt from 'counterpart';
-import {api} from 'golos-js';
+import { api } from 'golos-js';
 
-const wait = ms => (
-    new Promise(resolve => {
-        setTimeout(() => resolve(), ms)
-    })
-);
-
-export const sharedWatches = [watchGetState, watchTransactionErrors]
+export const sharedWatches = [
+    watchGetState,
+    watchTransactionErrors
+]
 
 export function* getAccount(username, force = false) {
     let account = yield select(state => state.global.get('accounts').get(username))

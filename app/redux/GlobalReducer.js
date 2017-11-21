@@ -27,16 +27,16 @@ export default createModule({
             }
         },
         {
-          action: 'FETCHING_JSON',
-          reducer: (state, {payload: fetchingJson}) => {
-              return state.mergeDeep({fetchingJson: fetchingJson});
-          }
+            action: 'FETCHING_JSON',
+            reducer: (state, {payload: fetchingJson}) => {
+                return state.mergeDeep({fetchingJson: fetchingJson});
+            }
         },
         {
-          action: 'FETCHING_XCHANGE',
-          reducer: (state, {payload: fetchingXchange}) => {
-            return state.mergeDeep({fetchingXchange: fetchingXchange});
-          }
+            action: 'FETCHING_XCHANGE',
+            reducer: (state, {payload: fetchingXchange}) => {
+                return state.mergeDeep({fetchingXchange: fetchingXchange});
+            }
         },
         {
             action: 'RECEIVE_STATE',
@@ -110,7 +110,7 @@ export default createModule({
                 })
             }
         },
-        { // works...
+        {
             action: 'LINK_REPLY',
             reducer: (state, {payload: op}) => {
                 const {author, permlink, parent_author = '', parent_permlink = ''} = op
@@ -122,13 +122,13 @@ export default createModule({
                     l => (l.findIndex(i => i === key) === -1 ? l.push(key) : l))
             }
         },
-        { // works...
+        {
             action: 'UPDATE_ACCOUNT_WITNESS_VOTE',
             reducer: (state, {payload: {account, witness, approve}}) =>
                 state.updateIn(['accounts', account, 'witness_votes'], Set(),
                     votes => (approve ? Set(votes).add(witness) : Set(votes).remove(witness)))
         },
-        { // works...
+        {
             action: 'UPDATE_ACCOUNT_WITNESS_PROXY',
             reducer: (state, {payload: {account, proxy}}) =>
                     state.setIn(['accounts', account, 'proxy'], proxy)

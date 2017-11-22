@@ -14,16 +14,14 @@ import {makeParams} from 'app/utils/Links';
 
 
 class PickAccount extends React.Component {
-
     static propTypes = {
         loginUser: React.PropTypes.func.isRequired,
         serverBusy: React.PropTypes.bool
     };
 
+
     constructor(props) {
         super(props);
-
-        console.log('PickAccount');
         this.state = {
             name: '',
             password: '',
@@ -57,7 +55,7 @@ class PickAccount extends React.Component {
         if(this.props.viewMode) {
             params[PARAM_VIEW_MODE] = this.props.viewMode;
         }
-        window.location = "/enter_email" + makeParams(params, true);
+        window.location = "/enter_email" + makeParams(params);
     }
 
     onPasswordChange(password, password_valid) {

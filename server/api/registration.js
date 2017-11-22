@@ -1,5 +1,6 @@
 import koa_router from 'koa-router';
 import koa_body from 'koa-body';
+import config from 'config';
 import models from 'db/models';
 import {checkCSRF, getRemoteIp, rateLimitReq} from 'server/utils/misc';
 import sendVerifySMS from 'server/utils/twilio';
@@ -89,7 +90,7 @@ export default function useRegistrationApi(app) {
   });
 
   router.post("/check_code", koaBody, function*() {
-    if (rateLimitReq(this, this.req, 5)) return;
+    if (rateLimitReq(this, this.req)) return;
     const body = this.request.body;
     let params = {};
     if (typeof(body) === 'string') {

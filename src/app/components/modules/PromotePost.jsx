@@ -40,8 +40,8 @@ class PromotePost extends Component {
 
     onSubmit(e) {
         e.preventDefault();
-        const {author, permlink, onClose} = this.props
-        const {amount} = this.state
+        const {author, permlink, onClose} = this.props;
+        const {amount} = this.state;
         this.setState({loading: true});
         console.log('-- PromotePost.onSubmit -->');
         this.props.dispatchSubmit({amount, asset: DEBT_TICKER, author, permlink, onClose,
@@ -75,7 +75,7 @@ class PromotePost extends Component {
                        <p>{tt('promote_post_jsx.spend_your_DEBT_TOKEN_to_advertise_this_post', {DEBT_TOKEN})}.</p>
                        <hr />
                        <div className="row">
-                           <div className="column small-4">
+                           <div className="column small-5">
                                <label>{tt('g.amount')}</label>
                                <div className="input-group">
                                    <input className="input-group-field" type="text" placeholder={tt('g.amount')} value={amount} ref="amount" autoComplete="off" disabled={loading} onChange={this.amountChange} />
@@ -111,9 +111,9 @@ export default connect(
     // mapDispatchToProps
     dispatch => ({
         dispatchSubmit: ({amount, asset, author, permlink, currentUser, onClose, errorCallback}) => {
-            const username = currentUser.get('username')
+            const username = currentUser.get('username');
             const successCallback = () => {
-                dispatch({type: 'global/GET_STATE', payload: {url: `@${username}/transfers`}}) // refresh transfer history
+                dispatch({type: 'global/GET_STATE', payload: {url: `@${username}/transfers`}}); // refresh transfer history
                 onClose()
             }
             const operation = {

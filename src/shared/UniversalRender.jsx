@@ -132,7 +132,8 @@ const onRouterError = (error) => {
     console.error('onRouterError', error);
 };
 
-async function universalRender({ location, initial_state, offchain, ErrorPage, tarantool, userPreferences }) {
+async function universalRender({location, initial_state, offchain, ErrorPage, tarantool, userPreferences}) {
+
     let error, redirect, renderProps;
     try {
         [error, redirect, renderProps] = await runRouter(location, RootRoute);
@@ -251,7 +252,7 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
 
         offchain.signup_bonus = sdDisp;
         offchain.server_location = location;
-        server_store = createStore(rootReducer, { global: onchain, offchain});
+        server_store = createStore(rootReducer, { app: initial_state.app, global: onchain, offchain});
         server_store.dispatch({type: '@@router/LOCATION_CHANGE', payload: {pathname: location}});
         server_store.dispatch({type: 'SET_USER_PREFERENCES', payload: userPreferences});
         if (offchain.account) {

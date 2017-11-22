@@ -26,7 +26,7 @@
     "delete": "Borrar",
     "dismiss": "Descartar",
     "edit": "Editar",
-    "email": "Email",
+    "email": "Correo electrónico",
     "feed": "Favoritos",
     "follow": "Seguir",
     "for": "para",
@@ -43,18 +43,21 @@
     "logout": "Cerrar sesión",
     "memo": "Memo",
     "mute": "Silenciar",
+    "myblog": "My blog",
+    "mycomments": "My comments",
+    "myreplies": "Replies to me",
     "new": "nuevo",
     "newer": "Nuevo",
     "next": "Próximo",
     "no": "No",
-    "ok": "Ok",
+    "ok": "Aceptar",
     "older": "Más viejo",
     "or": "o",
     "order_placed": "Órden dispuesta",
     "password": "Contraseña",
     "payouts": "Pagos",
     "permissions": "Permisos",
-    "phishy_message": "Link expanded to plain text; beware of a potential phishing attempt",
+    "phishy_message": "Enlace expandido a texto simple; tenga cuidado con un posible intento de suplantación de identidad",
     "post": "Publicación",
     "post_as": "Publicar como",
     "posts": "Publicaciones",
@@ -95,11 +98,13 @@
     "sign_up": "Inscribirse",
     "since": "desde",
     "submit": "Enviar",
-    "power_up": "Power Up",
+    "power_up": "Transferir a SP",
     "submit_a_story": "Publicar",
     "tag": "Etiqueta",
     "to": "hasta",
-    "all_tags": "All tags",
+    "topics": "Temas",
+    "toggle_nightmode": "Alternar Modo nocturno",
+    "all_tags": "Todas las etiquetas",
     "transfer": "Transferir",
     "trending_topics": "Temas Tendencia",
     "type": "Tipo",
@@ -206,9 +211,9 @@
       "other": "%(count)s Respuestas"
     },
     "post_key_warning": {
-        "confirm": "You are about to publish a STEEM private key or master password. You will probably lose control of the associated account and all its funds.",
-        "warning": "Legitimate users, including employees of Steemit Inc., will never ask you for a private key or master password.",
-        "checkbox": "I understand"
+      "confirm": "Está a punto de publicar una clave privada o contraseña maestra de STEEM. Existe la probabilidad de que pierda el control de la cuenta correspondiente y los fondos en ella.",
+      "warning": "Los usuarios legítimos, lo que incluye los empleados de Steemit Inc., nunca le pedirán una clave privada o contraseña maestra.",
+      "checkbox": "Entendido"
     }
   },
   "navigation": {
@@ -228,7 +233,7 @@
     "learn_more": "Para saber más",
     "welcome": "Bienvenido",
     "faq": "Preguntas Frecuentes",
-    "shop": "The Steemit Shop",
+    "shop": "Tienda \"The Steemit Shop\"",
     "chat": "Chat de Steemit",
     "app_center": "Centro de Aplicaciones Steemit",
     "api_docs": "Documentos API de Steemit",
@@ -254,7 +259,7 @@
     "pasting_from_the_clipboard": "pegando desde el portapapeles,",
     "selecting_them": "Seleccionándolos",
     "image_upload": "Subir imagen",
-    "power_up_100": "Power Up 100%%",
+    "power_up_100": "100%% a STEEM Power",
     "default_50_50": "Por defecto (50 1%% / 50 1%%)",
     "decline_payout": "Rechazar Pago",
     "check_this_to_auto_upvote_your_post": "Seleciona para autovotarte el post",
@@ -337,11 +342,11 @@
     "user_hasnt_started_bloggin_yet": "Parece que %(name)s aún no ha comenzado su blog",
     "user_hasnt_followed_anything_yet": "Parece que %(name)s aún no está siguiendo a nadie. Si %(name)s acaba de añadir nuevas cuentas para seguir, el feed personalizado aparecerá cuando el nuevo contenido esté disponible.",
     "user_hasnt_had_any_replies_yet": "%(name)s todavía no ha tenido ninguna respuesta",
-    "looks_like_you_havent_posted_anything_yet": "Looks like you haven't posted anything yet.",
-    "create_a_post": "Create a Post",
-    "explore_trending_articles": "Explore Trending Articles",
-    "read_the_quick_start_guide": "Read The Quick Start Guide",
-    "browse_the_faq": "Browse The FAQ",
+    "looks_like_you_havent_posted_anything_yet": "Al parecer usted aún no ha publicado nada.",
+    "create_a_post": "Crear una publicación",
+    "explore_trending_articles": "Explorar publicaciones en tendencia",
+    "read_the_quick_start_guide": "Lea la guía de inicio rápido",
+    "browse_the_faq": "Revise las preguntas frecuentes",
     "followers": "Seguidores",
     "this_is_users_reputations_score_it_is_based_on_history_of_votes": "Esto es la reputación de %(name)s's. La reputación está basada en la historia de votos recibidos por la cuenta y se usa para esconder contenido de baja calidad.",
     "follower_count": {
@@ -357,7 +362,7 @@
     "post_count": {
       "zero": "Sin publicaciones",
       "one": "1 publicación",
-      "other": "%(count)s posts"
+      "other": "%(count)s publicaciones"
     }
   },
   "authorrewards_jsx": {
@@ -552,9 +557,9 @@
     "keep_me_logged_in": "Manténme logeado",
     "amazing_community": "comunidad increíble",
     "to_comment_and_reward_others": "para comentar y recompensar a otros",
-    "sign_up_get_steem": "Sign up. Get STEEM",
-    "signup_button": "Sign up now to earn ",
-    "signup_button_emphasis": "FREE STEEM!",
+    "signup_button": "Regístrese ahora para empezar a ganar ",
+    "signup_button_emphasis": "¡STEEM GRATIS!",
+    "sign_up_get_steem": "Regístrese. Obtenga STEEM",
     "returning_users": "Usuarios que vuelven",
     "join_our": "Únete a nuestro"
   },
@@ -608,7 +613,7 @@
     "from": "De",
     "to": "Para",
     "asset_currently_collecting": "%(asset)s recolectando actualmente %(interest)s%% APR.",
-    "beware_of_spam_and_phishing_links": "Beware of spam and phishing links in transfer memos. Do not open links from users you do not trust. Do not provide your private keys to any third party websites."
+    "beware_of_spam_and_phishing_links": "Tenga cuidado con los enlaces de spam y suplantación de identidad en los memos. No abra enlaces de usuarios en quienes no confíe. No entregue sus claves privadas en otras páginas web."
   },
   "userwallet_jsx": {
     "conversion_complete_tip": "Se completará el",
@@ -630,7 +635,7 @@
     "buy_steem_or_steem_power": "Compra STEEM o STEEM POWER."
   },
   "powerdown_jsx": {
-    "power_down": "Power Down",
+    "power_down": "Transferir a STEEM",
     "amount": "Cantidad",
     "already_power_down": "Estás haciendo un power down de %(AMOUNT)s%(LIQUID_TICKER)s (%(WITHDRAWN)s%(LIQUID_TICKER)shan sido pagados hasta ahora). Ten en cuenta que si cambias la cantidad de \"power down\" la fecha de pago se reinicializará.",
     "delegating": "Estás delegando %(AMOUNT)s%(LIQUID_TICKER)s. Esa cantidad está \"bloquedada\" y no podrás hacer \"power down\" con ella hasta que hayas cancelado la delegación y el periodo de pagos  haya vencido.",

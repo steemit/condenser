@@ -9,11 +9,15 @@ import { DEBT_TOKEN_SHORT, DEFAULT_CURRENCY, IGNORE_TAGS, PUBLIC_API, SELECT_TAG
 import cookie from "react-cookie";
 import {api} from 'golos-js';
 
-export const fetchDataWatches = [watchLocationChange, watchDataRequests, watchFetchJsonRequests, watchFetchState, watchGetContent, watchPayoutWindowRequests, watchFetchExchangeRates];
-
-export function* watchDataRequests() {
-    yield* takeLatest('REQUEST_DATA', fetchData);
-}
+export const fetchDataWatches = [
+    watchLocationChange,
+    watchDataRequests,
+    watchFetchJsonRequests,
+    watchFetchState,
+    watchGetContent,
+    watchPayoutWindowRequests,
+    watchFetchExchangeRates
+];
 
 export function* watchGetContent() {
     yield* takeEvery('GET_CONTENT', getContentCaller);
@@ -21,6 +25,14 @@ export function* watchGetContent() {
 
 export function* getContentCaller(action) {
     yield getContent(action.payload);
+}
+
+export function* watchLocationChange() {
+    yield* takeLatest('@@router/LOCATION_CHANGE', fetchState);
+}
+
+export function* watchFetchState() {
+    yield* takeLatest('FETCH_STATE', fetchState);
 }
 
 let is_initial_state = true;
@@ -67,30 +79,19 @@ export function* fetchState(location_change_action) {
           yield put({type: 'global/FETCHING_STATE', payload: true});
           const dynamic_global_properties = yield call([api, api.getDynamicGlobalPropertiesAsync])
           const feed_history              = yield call([api, api.getFeedHistoryAsync])
-          const witness_schedule          = yield call([api, api.getWitnessScheduleAsync])
 
           state.current_route = url;
           state.props = dynamic_global_properties;
-          state.category_idx = { "active": [], "recent": [], "best": [] };
           state.categories = {};
           state.tags = {};
           state.content = {};
           state.accounts = {};
-          state.pow_queue = [];
           state.witnesses = {};
           state.discussion_idx = {};
-          state.witness_schedule = witness_schedule;
           state.feed_price = feed_history.current_median_history; // { "base":"1.000 GBG", "quote":"1.895 GOLOS" },
 
           state.select_tags = [];
           state.filter_tags = [];
-
-          // by default trending tags limit=50, but if we in '/tags/' path then limit = 250
-          let tags_limit = 50;
-          if (parts[0] == "tags") {
-            tags_limit = 250
-          }
-          const trending_tags = yield call([api, api.getTrendingTagsAsync], '',`${tags_limit}`);
 
           if (parts[0][0] === '@') {
             const uname = parts[0].substr(1)
@@ -116,7 +117,7 @@ export function* fetchState(location_change_action) {
           }
           else if (parts[0] === 'witnesses' || parts[0] === '~witnesses') {
             const wits = yield call([api, api.getWitnessesByVoteAsync], '', 100);
-            for (var key in wits) state.witnesses[wits[key].owner] = wits[key];
+            for (let key in wits) state.witnesses[wits[key].owner] = wits[key];
           }
           else if ([ 'trending', 'trending30', 'promoted', 'responses', 'hot', 'votes', 'cashout', 'active', 'created', 'recent' ].indexOf(parts[0]) >= 0) {
             const args = [{
@@ -140,7 +141,7 @@ export function* fetchState(location_change_action) {
             let accounts = []
             let discussion_idxes = {}
             discussion_idxes[ PUBLIC_API[parts[0]][1] ] = []
-            for (var i in discussions) {
+            for (let i in discussions) {
               const key = discussions[i].author + '/' + discussions[i].permlink;
               discussion_idxes[ PUBLIC_API[parts[0]][1] ].push(key);
               if (discussions[i].author && discussions[i].author.length)
@@ -150,23 +151,18 @@ export function* fetchState(location_change_action) {
             const discussions_key = typeof tag === 'string' && tag.length ? tag : state.select_tags.sort().join('/')
             state.discussion_idx[discussions_key] = discussion_idxes
             accounts = yield call([api, api.getAccountsAsync], accounts);
-            for (var i in accounts) {
+            for (let i in accounts) {
               state.accounts[ accounts[i].name ] = accounts[i]
             }
           }
           else if (parts[0] == "tags") {
-            for (var i in trending_tags) {
+            // by default trending tags limit=50, but if we in '/tags/' path then limit = 250
+            const trending_tags = yield call([api, api.getTrendingTagsAsync], '', parts[0] == "tags" ? '250' : '50');
+            for (let i in trending_tags) {
               state.tags[trending_tags[i].name] = trending_tags[i]
             }
           }
-          else {
-            // NOTHING
-          }
-          state.tag_idx = { trending: trending_tags.map(t => t.name) };
-
-          for (var key in state.content)
-            state.content[key].active_votes = yield call([api, api.getActiveVotesAsync], state.content[key].author, state.content[key].permlink);
-
+         
           yield put({type: 'global/FETCHING_STATE', payload: false});
         }
 
@@ -178,12 +174,8 @@ export function* fetchState(location_change_action) {
     }
 }
 
-export function* watchLocationChange() {
-    yield* takeLatest('@@router/LOCATION_CHANGE', fetchState);
-}
-
-export function* watchFetchState() {
-    yield* takeLatest('FETCH_STATE', fetchState);
+export function* watchDataRequests() {
+    yield* takeLatest('REQUEST_DATA', fetchData);
 }
 
 export function* fetchData(action) {
@@ -266,46 +258,46 @@ export function* fetchData(action) {
 // export function* watchMetaRequests() {
 //     yield* takeLatest('global/REQUEST_META', fetchMeta);
 // }
-export function* fetchMeta({payload: {id, link}}) {
-    try {
-        const metaArray = yield call(() => new Promise((resolve, reject) => {
-            function reqListener() {
-                const resp = JSON.parse(this.responseText)
-                if (resp.error) {
-                    reject(resp.error)
-                    return
-                }
-                resolve(resp)
-            }
-            const oReq = new XMLHttpRequest()
-            oReq.addEventListener('load', reqListener)
-            oReq.open('GET', '/http_metadata/' + link)
-            oReq.send()
-        }))
-        const {title, metaTags} = metaArray
-        let meta = {title}
-        for (let i = 0; i < metaTags.length; i++) {
-            const [name, content] = metaTags[i]
-            meta[name] = content
-        }
-        // http://postimg.org/image/kbefrpbe9/
-        meta = {
-            link,
-            card: meta['twitter:card'],
-            site: meta['twitter:site'], // @username tribbute
-            title: meta['twitter:title'],
-            description: meta['twitter:description'],
-            image: meta['twitter:image'],
-            alt: meta['twitter:alt'],
-        }
-        if(!meta.image) {
-            meta.image = meta['twitter:image:src']
-        }
-        yield put(GlobalReducer.actions.receiveMeta({id, meta}))
-    } catch(error) {
-        yield put(GlobalReducer.actions.receiveMeta({id, meta: {error}}))
-    }
-}
+// export function* fetchMeta({payload: {id, link}}) {
+//     try {
+//         const metaArray = yield call(() => new Promise((resolve, reject) => {
+//             function reqListener() {
+//                 const resp = JSON.parse(this.responseText)
+//                 if (resp.error) {
+//                     reject(resp.error)
+//                     return
+//                 }
+//                 resolve(resp)
+//             }
+//             const oReq = new XMLHttpRequest()
+//             oReq.addEventListener('load', reqListener)
+//             oReq.open('GET', '/http_metadata/' + link)
+//             oReq.send()
+//         }))
+//         const {title, metaTags} = metaArray
+//         let meta = {title}
+//         for (let i = 0; i < metaTags.length; i++) {
+//             const [name, content] = metaTags[i]
+//             meta[name] = content
+//         }
+//         // http://postimg.org/image/kbefrpbe9/
+//         meta = {
+//             link,
+//             card: meta['twitter:card'],
+//             site: meta['twitter:site'], // @username tribbute
+//             title: meta['twitter:title'],
+//             description: meta['twitter:description'],
+//             image: meta['twitter:image'],
+//             alt: meta['twitter:alt'],
+//         }
+//         if(!meta.image) {
+//             meta.image = meta['twitter:image:src']
+//         }
+//         yield put(GlobalReducer.actions.receiveMeta({id, meta}))
+//     } catch(error) {
+//         yield put(GlobalReducer.actions.receiveMeta({id, meta: {error}}))
+//     }
+// }
 
 export function* watchFetchJsonRequests() {
     yield* takeEvery('global/FETCH_JSON', fetchJson);

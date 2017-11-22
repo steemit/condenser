@@ -149,26 +149,18 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
 
           _state.current_route = url;
           _state.props = await proxify('getDynamicGlobalPropertiesAsync', api, chainproxy, 10);
-          _state.category_idx = { "active": [], "recent": [], "best": [] };
           _state.categories = {};
           _state.tags = {};
           _state.content = {};
           _state.accounts = {};
-          _state.pow_queue = [];
           _state.witnesses = {};
           _state.discussion_idx = {};
-          _state.witness_schedule = await api.getWitnessScheduleAsync();
           _state.feed_price = feed_history.current_median_history; // { "base":"1.000 GBG", "quote":"1.895 GOLOS" },
 
           _state.select_tags = [];
-          // _state.filter_tags = [];
 
           // by default trending tags limit=50, but if we in '/tags/' path then limit = 250
-          let tags_limit = 50;
-          if (parts[0] == "tags") {
-            tags_limit = 250
-          }
-          const trending_tags = await proxify('getTrendingTagsAsync', api, chainproxy, 60, '',`${tags_limit}`);
+          const trending_tags = await proxify('getTrendingTagsAsync', api, chainproxy, 60, '', parts[0] == "tags" ? '250' : '50');
 
           if (parts[0][0] === '@') {
             const uname = parts[0].substr(1)
@@ -179,7 +171,7 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
             switch (parts[1]) {
               case 'transfers':
                 const history = await proxify('getAccountHistoryAsync', api, chainproxy, 30, uname, -1, 1000);
-                for (var key in history) {
+                for (let key in history) {
                   switch (history[key][1].op) {
                     case 'transfer_to_vesting':
                     case 'withdraw_vesting':
@@ -229,7 +221,7 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
               case 'recent-replies':
                 const replies = await proxify('getRepliesByLastUpdateAsync', api, chainproxy, 30, uname, '', 50);
                 _state.accounts[uname].recent_replies = []
-                for (var key in replies) {
+                for (let key in replies) {
                   const reply_ref = replies[key].author + "/" + replies[key].permlink;
                   _state.content[reply_ref] = replies[key];
                   _state.accounts[uname].recent_replies.push(reply_ref);
@@ -250,8 +242,8 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
             }
           }
           else if (parts[0] === 'witnesses' || parts[0] === '~witnesses') {
-            const wits = await api[PUBLIC_API.witnesses[0]]('', 100);
-            for (var key in wits) _state.witnesses[wits[key].owner] = wits[key];
+            const wits = await api.getWitnessesByVoteAsync('', 100);
+            for (let key in wits) _state.witnesses[wits[key].owner] = wits[key];
           }
           else if ([
               'trending',
@@ -288,7 +280,7 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
             let accounts = []
             let discussion_idxes = {}
             discussion_idxes[ PUBLIC_API[parts[0]][1] ] = []
-            for (var i in discussions) {
+            for (let i in discussions) {
               const key = discussions[i].author + '/' + discussions[i].permlink;
               discussion_idxes[ PUBLIC_API[parts[0]][1] ].push(key);
               if (discussions[i].author && discussions[i].author.length)
@@ -298,23 +290,17 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
             const discussions_key = typeof tag === 'string' && tag.length ? tag : _state.select_tags.sort().join('/')
             _state.discussion_idx[discussions_key] = discussion_idxes;
             accounts = await proxify('getAccountsAsync', api, chainproxy, 30, accounts);
-            for (var i in accounts) {
+            for (let i in accounts) {
               _state.accounts[ accounts[i].name ] = accounts[i]
             }
           }
           else if (parts[0] == "tags") {
-            for (var i in trending_tags) {
+            for (let i in trending_tags) {
               _state.tags[trending_tags[i].name] = trending_tags[i]
             }
           }
-          else {
-            // NOTHING
-          }
 
           _state.tag_idx = { "trending": trending_tags.map(t => t.name) };
-
-          for (var key in _state.content)
-            _state.content[key].active_votes =[] // await api.getActiveVotesAsync(_state.content[key].author, _state.content[key].permlink);
 
           onchain = _state
         }
@@ -329,7 +315,7 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
 
         // If we are not loading a post, truncate state data to bring response size down.
         if (!url.match(routeRegex.Post)) {
-            for (var key in onchain.content) {
+            for (let key in onchain.content) {
                 //onchain.content[key]['body'] = onchain.content[key]['body'].substring(0, 1024) // TODO: can be removed. will be handled by steemd
                 // Count some stats then remove voting data. But keep current user's votes. (#1040)
                 onchain.content[key]['stats'] = contentStats(onchain.content[key])

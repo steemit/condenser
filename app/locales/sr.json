@@ -54,6 +54,14 @@
     "must_start_with_a_letter":"Mora početi sa slovom",
     "must_end_with_a_letter_or_number":"Mora da se završi sa slovom ili brojem"
   },
+  "mobilevalidation_js": {
+    "not_be_empty": "not be empty",
+    "be_longer": "be longer",
+    "have_only_digits": "have only digits",
+    "you_can_change_your_number": "You can select another one phone number.",
+    "select_another_number": "Select another phone",
+    "waiting_from_you": "Waiting SMS message with confirmation code from your number."
+  },
   "chainvalidation_js":{
     "account_name_should":"Korisničko ime ",
     "not_be_empty":"nije prazna.",
@@ -266,7 +274,7 @@
     "settings":"Podešavanja",
     "share_this_post":"Поделиться этим постом",
     "show":"Prikaži",
-    "show_rules": "Show rules",
+    "show_rules": "Show security rules",
     "sign_in":"Войти",
     "sign_up":"Registruj se",
     "since":"начиная с",

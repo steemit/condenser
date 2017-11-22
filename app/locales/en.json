@@ -121,7 +121,7 @@
     "settings": "Settings",
     "share_this_post": "Share this post",
     "show": "Show",
-    "show_rules": "Show rules",
+    "show_rules": "Show security rules",
     "sign_in": "Sign In",
     "sign_up": "Sign Up",
     "since": "since",
@@ -881,6 +881,14 @@
     "free_money": "FREE MONEY!",
     "returning_users": "Returning Users: ",
     "join_our": "Join our"
+  },
+  "mobilevalidation_js": {
+    "not_be_empty": "not be empty",
+    "be_longer": "be longer",
+    "have_only_digits": "have only digits",
+    "you_can_change_your_number": "You can select another one phone number.",
+    "select_another_number": "Select another phone",
+    "waiting_from_you": "Waiting SMS message with confirmation code from your number."
   },
   "chainvalidation_js": {
     "account_name_should": "Account name should ",

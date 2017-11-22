@@ -54,6 +54,14 @@
     "must_start_with_a_letter":"Trebuie să se înceapă cu o literă",
     "must_end_with_a_letter_or_number":"Trebuie să se termine cu o literă sau un număr"
   },
+  "mobilevalidation_js": {
+    "not_be_empty": "not be empty",
+    "be_longer": "be longer",
+    "have_only_digits": "have only digits",
+    "you_can_change_your_number": "You can select another one phone number.",
+    "select_another_number": "Select another phone",
+    "waiting_from_you": "Waiting SMS message with confirmation code from your number."
+  },
   "chainvalidation_js":{
     "account_name_should":"Numele contului ar trebui să fie ",
     "not_be_empty":"nu poate fi gol.",
@@ -266,7 +274,7 @@
     "settings":"Setări",
     "share_this_post":"Distribuiți această postare",
     "show":"Arată",
-    "show_rules": "Arată rules",
+    "show_rules": "Arată sigur rules",
     "sign_in":"Întră",
     "sign_up":"Înregistreazî-te",
     "since":"începând cu",

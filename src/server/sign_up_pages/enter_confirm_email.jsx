@@ -180,7 +180,7 @@ export default function useEnterAndConfirmEmailPages(app) {
     router.get("/enter_email", function*() {
         console.log("-- /enter_email -->", this.session.uid, this.session.user, this.request.query.account);
         const params = addToParams({}, this.request.query, PARAM_VIEW_MODE, [VIEW_MODE_WHISTLE]);
-        const viewMode = (params[PARAM_VIEW_MODE]) ?  params[PARAM_VIEW_MODE] : '';
+        const viewMode = (params[PARAM_VIEW_MODE]) ? params[PARAM_VIEW_MODE] : '';
         const picked_account_name = this.session.picked_account_name = this.request.query.account;
         if (!picked_account_name) {
             this.flash = { error: "Please select your account name" };

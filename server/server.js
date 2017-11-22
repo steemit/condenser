@@ -14,10 +14,9 @@ import useRedirects from './redirects';
 import useGeneralApi from './api/general';
 import useAccountRecoveryApi from './api/account_recovery';
 import useNotificationsApi from './api/notifications';
+import useRegistrationApi from './api/registration';
 import {proxyRoutes as useProxyRoutes} from './api/proxy';
 import {ratesRoutes as useRatesRoutes} from './api/rates';
-import useEnterAndConfirmEmailPages from './server_pages/enter_confirm_email';
-import useEnterAndConfirmMobilePages from './server_pages/enter_confirm_mobile';
 import useUserJson from './json/user_json';
 import usePostJson from './json/post_json';
 import isBot from 'koa-isbot';
@@ -187,8 +186,7 @@ app.use(function*(next) {
 });
 
 useRedirects(app);
-useEnterAndConfirmEmailPages(app);
-useEnterAndConfirmMobilePages(app);
+useRegistrationApi(app);
 useUserJson(app);
 usePostJson(app);
 

@@ -54,6 +54,14 @@
     "must_start_with_a_letter":"Trebuie să se înceapă cu o literă",
     "must_end_with_a_letter_or_number":"Trebuie să se termine cu o literă sau un număr"
   },
+  "mobilevalidation_js": {
+    "not_be_empty": "not be empty",
+    "be_longer": "be longer",
+    "have_only_digits": "have only digits",
+    "you_can_change_your_number": "You can select another one phone number.",
+    "select_another_number": "Select another phone",
+    "waiting_from_you": "Waiting SMS message with confirmation code from your number."
+  },
   "chainvalidation_js":{
     "account_name_should":"Numele contului ar trebui să fie ",
     "not_be_empty":"nu poate fi gol.",
@@ -77,6 +85,7 @@
     "DEBT_TOKEN_will_be_unavailable":"Conversia aurului va fi în termen de 3,5 zile de la lansare. Nu poate fi anulată. După ce a început conversia, monedele nu vor fi disponibile."
   },
   "createaccount_jsx":{
+    "will_be_send_to_phone_number": "Message will be send to: +",
     "our_records_indicate_you_already_have_account":"Înregistrările noastre indică faptul că aveți deja contul %(APP_NAME)s",
     "in_order_to_prevent_abuse_APP_NAME_can_only_register_one_account_per_user":"Pentru a preveni abuzurile %(APP_NAME)s poate înregistra un singur cont pentru fiecare utilizator de confirmat.",
     "next_3_blocks":{
@@ -266,7 +275,7 @@
     "settings":"Setări",
     "share_this_post":"Distribuiți această postare",
     "show":"Arată",
-    "show_rules": "Arată rules",
+    "show_rules": "Arată sigur rules",
     "sign_in":"Întră",
     "sign_up":"Înregistreazî-te",
     "since":"începând cu",

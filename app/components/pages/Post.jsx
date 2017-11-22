@@ -27,10 +27,6 @@ class Post extends React.Component {
         this.state = {
             showNegativeComments: false
         };
-        this.showSignUp = () => {
-            serverApiRecordEvent('SignUp', 'Post Promo');
-            window.location = '/enter_email';
-        };
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'Post')
     }
 
@@ -59,7 +55,6 @@ class Post extends React.Component {
     render() {
         const LIQUID_TOKEN = tt('token_names.LIQUID_TOKEN')
 
-        const {showSignUp} = this
         const {current_user, ignoring, signup_bonus, content} = this.props
         const {showNegativeComments, commentHidden, showAnyway} = this.state
         let post = this.props.post;
@@ -182,7 +177,7 @@ class Post extends React.Component {
                             {tt('g.next_7_strings_sinngle_block.authors_get_paid_when_people_like_you_upvote_their_post')}.
                             <br /> {tt('g.next_7_strings_sinngle_block.if_you_enjoyed_what_you_read_earn_amount')}
                             <br />
-                            <button type="button" className="button sign-up" onClick={showSignUp}>{tt('g.next_7_strings_sinngle_block.sign_up_now_to_receive')}<span className="free-money">{tt('g.next_7_strings_sinngle_block.free_steem', {LIQUID_TOKEN})}</span></button>
+                            <a className="button sign-up" href="/create_account">{tt('g.next_7_strings_sinngle_block.sign_up_now_to_receive')}<span className="free-money">{tt('g.next_7_strings_sinngle_block.free_steem', {LIQUID_TOKEN})}</span></a>
                         </div>
                     </div>
                 </div>}

@@ -122,7 +122,7 @@
     "settings": "Settings",
     "share_this_post": "Share this post",
     "show": "Show",
-    "show_rules": "Show rules",
+    "show_rules": "Show security rules",
     "sign_in": "Sign In",
     "sign_up": "Sign Up",
     "since": "since",
@@ -545,6 +545,8 @@
     "comments_were_hidden_due_to_low_ratings": "Comments were hidden due to low ratings"
   },
   "createaccount_jsx": {
+    "get_code": "Get confirmation code",
+    "will_be_send_to_phone_number": "Message will be send to: +",
     "our_records_indicate_you_already_have_account": "Our records indicate that you already have %(APP_NAME)s account",
     "in_order_to_prevent_abuse_APP_NAME_can_only_register_one_account_per_user": "In order to prevent abuse %(APP_NAME)s can only register one account per verified user.",
     "next_3_blocks": {
@@ -882,6 +884,14 @@
     "free_money": "FREE MONEY!",
     "returning_users": "Returning Users: ",
     "join_our": "Join our"
+  },
+  "mobilevalidation_js": {
+    "not_be_empty": "not be empty",
+    "be_longer": "be longer",
+    "have_only_digits": "have only digits",
+    "you_can_change_your_number": "You can select another one phone number.",
+    "select_another_number": "Select another phone",
+    "waiting_from_you": "Waiting SMS message with confirmation code from your number."
   },
   "chainvalidation_js": {
     "account_name_should": "Account name should ",

@@ -51,7 +51,7 @@ export default class GeneratedPasswordInput extends React.Component {
             <div className="GeneratedPasswordInput">
                 <div className="GeneratedPasswordInput__field">
                     <label className="uppercase">{tt('g.generated_password')}<br />
-                        <code className="GeneratedPasswordInput__generated_password">{showPasswordString ? generatedPassword : '-'}</code>
+                        <code className={(disabled ? 'disabled ' : '') + 'GeneratedPasswordInput__generated_password'}>{showPasswordString ? generatedPassword : '-'}</code>
                         <div className="GeneratedPasswordInput__backup_text">
                             {tt('g.backup_password_by_storing_it')}
                         </div>
@@ -65,13 +65,13 @@ export default class GeneratedPasswordInput extends React.Component {
                     <div className="error">{confirmPasswordError}</div>
                 </div>
                 <div className="GeneratedPasswordInput__checkboxes">
-                    <label><input type="checkbox" name="box1" onChange={this.confirmCheckChange} checked={confirmCheckboxes.box1} />
-                        {tt('g.understand_that_APP_NAME_cannot_recover_password', {APP_NAME})}.
+                    <label><input type="checkbox" name="box1" onChange={this.confirmCheckChange} checked={confirmCheckboxes.box1} disabled={disabled} />
+                        {tt('g.understand_that_APP_NAME_cannot_recover_password', {APP_NAME: "GOLOS.io"})}.
                     </label>
-                    <label><input type="checkbox" name="box2" onChange={this.confirmCheckChange} checked={confirmCheckboxes.box2} />
+                    <label><input type="checkbox" name="box2" onChange={this.confirmCheckChange} checked={confirmCheckboxes.box2} disabled={disabled} />
                         {tt('g.i_saved_password')}.
                     </label>
-                    <label><input type="checkbox" name="box3" onChange={this.confirmCheckChange} checked={confirmCheckboxes.box3} />
+                    <label><input type="checkbox" name="box3" onChange={this.confirmCheckChange} checked={confirmCheckboxes.box3} disabled={disabled} />
                         {tt('generated_password_input.i_have_read_and_agree_to_the')}&nbsp;
                         <a href={TERMS_OF_SERVICE_URL} target="_blank">{tt('generated_password_input.terms_of_service')}</a>.
                     </label>

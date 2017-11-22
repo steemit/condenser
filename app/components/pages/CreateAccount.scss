@@ -11,3 +11,24 @@
   font-size: 0.8rem;
   color: $dark-gray;
 }
+
+.CreateAccount__sms {
+  padding-right: 3rem;
+  padding-left: 3rem;
+}
+
+.CreateAccount {
+  form {
+    .callout {
+      .LoadingIndicator {
+        float: left;
+      }
+    }
+    .button {
+      padding: 0.5em 0.75em;
+    }
+    .success {
+      color: #268c4c;
+    }
+  }
+}

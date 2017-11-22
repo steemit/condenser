@@ -31,7 +31,7 @@ class CreateAccount extends React.Component {
               status: '',
               message: ''
             },
-            fetchCounter: 20, // 5 minutes (20 * 15 seconds = 300)
+            fetchCounter: 0,
             phone: '',
             country: 7,
             name: '',
@@ -57,11 +57,11 @@ class CreateAccount extends React.Component {
         this.onCheckCode = this.onCheckCode.bind(this);
     }
 
-    checkTimer() {
-      const fetchCounter = this.state.fetchCounter - 1;
-      if (fetchCounter > 0) {
+    timer() {
+      const fetchCounter = this.state.fetchCounter + 1;
+      if (fetchCounter < 429) { // 3 hours ~ 429 * (11 seconds + SQRT(fetch count))
           this.setState({ fetchCounter });
-          this.timeoutId = setTimeout(this.onCheckCode.bind(this), 1000 * 15)
+          this.timeoutId = setTimeout(this.onCheckCode.bind(this), 1000 * Math.ceil(11 + Math.sqrt(fetchCounter)))
       }
     }
 
@@ -176,50 +176,50 @@ class CreateAccount extends React.Component {
       };
       switch (o.status) {
         case "select_country":
-        fetch_state.message = "Please select a country code";
-        break;
+          fetch_state.message = "Please select a country code";
+          break;
 
         case "provide_phone":
-        fetch_state.message = "Please provide a phone number";
-        break;
+          fetch_state.message = "Please provide a phone number";
+          break;
 
         case "already_used":
-        fetch_state.message = tt('createaccount_jsx.this_phone_number_has_already_been_used');
-        break;
+          fetch_state.message = tt('createaccount_jsx.this_phone_number_has_already_been_used');
+          break;
 
         case "session":
-        fetch_state.message = '';
-        break;
+          fetch_state.message = '';
+          break;
 
         case "waiting":
-        fetch_state.checking = true;
-        fetch_state.message = tt('mobilevalidation_js.waiting_from_you');
-        this.checkTimer();
-        break;
+          fetch_state.checking = true;
+          fetch_state.message = tt('mobilevalidation_js.waiting_from_you');
+          this.timer();
+          break;
 
         case "done":
-        fetch_state.checking = true;
-        fetch_state.success = true;
-        fetch_state.message = tt('createaccount_jsx.phone_number_has_been_verified');
-        break;
+          fetch_state.checking = true;
+          fetch_state.success = true;
+          fetch_state.message = tt('createaccount_jsx.phone_number_has_been_verified');
+          break;
 
         case "attempts_10":
-        fetch_state.checking = true;
-        fetch_state.message = 'Confirmation was attempted a moment ago. You can try again only in 10 seconds';
-        break;
+          fetch_state.checking = true;
+          fetch_state.message = 'Confirmation was attempted a moment ago. You can try again only in 10 seconds';
+          break;
 
         case "attempts_300":
-        fetch_state.checking = true;
-        fetch_state.message = 'Confirmation was attempted a moment ago. You can try again only in 5 minutes';
-        break;
+          fetch_state.checking = true;
+          fetch_state.message = 'Confirmation was attempted a moment ago. You can try again only in 5 minutes';
+          break;
 
         case "error":
-        fetch_state.message = o.error;
-        break;
+          fetch_state.message = o.error;
+          break;
 
         default:
-        fetch_state.message = tt('g.unknown');
-        break;
+          fetch_state.message = tt('g.unknown');
+          break;
       }
       this.setState({ fetch_state });
     }
@@ -234,7 +234,7 @@ class CreateAccount extends React.Component {
         const {phone, country} = this.state;
 
         this.setState({
-          fetchCounter: 20,
+          fetchCounter: 0,
           fetch_state: {checking: true}
         });
 
@@ -266,7 +266,6 @@ class CreateAccount extends React.Component {
           }
           return res.json();
         }).then(res => {
-          console.log('send_code.res.json', res);
           this.updateFetchingState(res)
         }).catch(error => {
           console.error('Caught /send_code server error', error);
@@ -292,7 +291,6 @@ class CreateAccount extends React.Component {
         }
         return res.json();
       }).then(res => {
-        console.log('check_code.res.json', res);
         this.updateFetchingState(res)
       }).catch(error => {
         console.error('Caught /send_code server error', error);
@@ -421,6 +419,7 @@ class CreateAccount extends React.Component {
         }
 
         let phone_step = null;
+        let showMobileForm = fetch_state.status === "waiting" || fetch_state.status === "done" ? false : true;
         if (fetch_state.message) {
           let message = fetch_state.message;
           let calloutClass = fetch_state.success ? " success" : " alert";
@@ -501,21 +500,27 @@ class CreateAccount extends React.Component {
                         <form onSubmit={this.onSubmit} autoComplete="off" noValidate method="post">
 
                             {mobileRules}
-                            <div>
+                            {showMobileForm &&
+                              <div>
                                 <label className="uppercase">
-                                    <span style={{color: 'red'}}>*</span> {tt('createaccount_jsx.country_code')}
-                                    <CountryCode onChange={this.onCountryChange} disabled={fetch_state.checking} name="country" value={country} />
+                                  <span style={{color: 'red'}}>*</span> {tt('createaccount_jsx.country_code')}
+                                  <CountryCode onChange={this.onCountryChange} disabled={fetch_state.checking} name="country" value={country} />
                                 </label><p></p>
-                            </div>
-                            <div className={(phone_error ? 'error' : '') + (phone_hint ? 'success' : '')}>
+                              </div>
+                            }
+                            {showMobileForm &&
+                              <div className={(phone_error ? 'error' : '') + (phone_hint ? 'success' : '')}>
                                 <label className="uppercase">
-                                    <span style={{color: 'red'}}>*</span> {tt('createaccount_jsx.phone_number')} <span style={{color: 'red'}}>{tt('createaccount_jsx.without_country_code')}</span>
-                                    <input type="text" name="phone" autoComplete="off" disabled={fetch_state.checking} onChange={this.onMobileChange} value={phone} />
+                                  <span style={{color: 'red'}}>*</span> {tt('createaccount_jsx.phone_number')} <span style={{color: 'red'}}>{tt('createaccount_jsx.without_country_code')}</span>
+                                  <input type="text" name="phone" autoComplete="off" disabled={fetch_state.checking} onChange={this.onMobileChange} value={phone} />
                                 </label>
                                 <p>{phone_error || phone_hint}</p>
-                                {phone_step}
-                                <p><a className={'button holow uppercase ' + ( (fetch_state.checking && fetch_state.success) || !phone_hint ? 'disabled' : '')} onClick={this.onClickSendCode}>Получить код</a></p>
-                            </div>
+                              </div>
+                            }
+                            {phone_step}
+                            {showMobileForm &&
+                              <p><a className={'button holow uppercase ' + ( (fetch_state.checking && fetch_state.success) || !phone_hint ? 'disabled' : '')} onClick={this.onClickSendCode}>Получить код</a></p>
+                            }
 
                             {passwordRules}
                             <div className={name_error ? 'error' : ''}>

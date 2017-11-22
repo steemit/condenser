@@ -42,9 +42,10 @@ const calcOffsetRoot = (startEl) => {
 };
 
 //BEGIN: SCROLL CODE
-const SCROLL_TOP_TRIES = 100;
-const SCROLL_TOP_DELAY_MS = 50;
+const SCROLL_TOP_TRIES = 50;
+const SCROLL_TOP_DELAY_MS = 100;
 const SCROLL_TOP_EXTRA_PIXEL_OFFSET = 3;
+const SCROLL_UP_FUDGE_PIXELS = 10;
 
 let scrollTopTimeout = null;
 
@@ -66,6 +67,9 @@ const scrollTop = (el, topOffset, prevDocumentInfo, triesRemaining) => {
         scrollTarget: calcOffsetRoot(el) + topOffset
     };
 
+    if(prevDocumentInfo.scrollTop > (documentInfo.scrollTop + SCROLL_UP_FUDGE_PIXELS)) { //detecting that the user has scrolled in an up direction
+        return;
+    }
     if(documentInfo.scrollTop < documentInfo.scrollTarget
         || prevDocumentInfo.scrollTarget < documentInfo.scrollTarget
         || prevDocumentInfo.scrollHeight < documentInfo.scrollHeight) {

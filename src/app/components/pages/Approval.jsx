@@ -18,12 +18,7 @@ class Approval extends React.Component {
 
     render() {
         if(process.env.BROWSER && this.props.viewMode === VIEW_MODE_WHISTLE) {
-            try {
-                window.postMessage(WHISTLE_SIGNUP_COMPLETE);
-            } catch(e) {
-                console.error('Cannot window.postMessage when not in whistle app');
-            }
-
+            window.postMessage(WHISTLE_SIGNUP_COMPLETE);
         }
         let body = '';
         if (this.state.confirm_email) {

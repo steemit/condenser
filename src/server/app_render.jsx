@@ -8,6 +8,7 @@ import models from 'db/models';
 import secureRandom from 'secure-random';
 import ErrorPage from 'server/server-error';
 import fs from 'fs';
+import {determineViewMode} from "../app/utils/Links";
 
 const path = require('path');
 const ROOT = path.join(__dirname, '../..');
@@ -113,7 +114,7 @@ async function appRender(ctx) {
         }
         const initial_state = {
             app: {
-                viewMode: (ctx.request.search.indexOf(PARAM_VIEW_MODE + '=' + VIEW_MODE_WHISTLE) > -1)? VIEW_MODE_WHISTLE : ''
+                viewMode: determineViewMode(ctx.request.search)
             }
         }
 

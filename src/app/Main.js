@@ -9,6 +9,7 @@ import universalRender from 'shared/UniversalRender';
 import ConsoleExports from './utils/ConsoleExports';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import * as steem from 'steem';
+import {determineViewMode} from "app/utils/Links";
 
 
 window.onerror = error => {
@@ -89,7 +90,8 @@ function runApp(initial_state) {
         window.$STM_csrf = initial_state.offchain.csrf;
         delete initial_state.offchain.csrf;
     }
-    initial_state.app.viewMode = (window.location.search.indexOf(PARAM_VIEW_MODE + '=' + VIEW_MODE_WHISTLE) > -1)? VIEW_MODE_WHISTLE : '';
+
+    initial_state.app.viewMode = determineViewMode(window.location.search);
 
     const location = `${window.location.pathname}${window.location.search}${window.location.hash}`;
     universalRender({history, location, initial_state})

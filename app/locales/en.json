@@ -544,6 +544,8 @@
     "comments_were_hidden_due_to_low_ratings": "Comments were hidden due to low ratings"
   },
   "createaccount_jsx": {
+    "get_code": "Get confirmation code",
+    "will_be_send_to_phone_number": "Message will be send to: +",
     "our_records_indicate_you_already_have_account": "Our records indicate that you already have %(APP_NAME)s account",
     "in_order_to_prevent_abuse_APP_NAME_can_only_register_one_account_per_user": "In order to prevent abuse %(APP_NAME)s can only register one account per verified user.",
     "next_3_blocks": {

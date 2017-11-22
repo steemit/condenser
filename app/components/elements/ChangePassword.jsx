@@ -178,7 +178,7 @@ class ChangePassword extends React.Component {
 
                     <br />
 
-                    <label><input {...cleanReduxInput(confirmCheck)} type="checkbox" /> {tt('g.understand_that_APP_NAME_cannot_recover_password', {APP_NAME})}.</label>
+                    <label><input {...cleanReduxInput(confirmCheck)} type="checkbox" /> {tt('g.understand_that_APP_NAME_cannot_recover_password', {APP_NAME: "GOLOS.io"})}.</label>
                     {confirmCheck.touched && confirmCheck.error && <div className="error">{confirmCheck.error}</div>}
 
                     <label><input {...cleanReduxInput(confirmSaved)} type="checkbox" />{tt('g.i_saved_password')}.</label>

@@ -105,13 +105,13 @@ export default function useGeneralApi(app) {
             }
 
             // check email
-            const eid = yield models.Identity.findOne(
-                {attributes: ['id'], where: {user_id, provider: 'email', verified: true}, order: 'id DESC'}
-            );
-            if (!eid) {
-                console.log(`api /accounts: not confirmed email for user ${this.session.uid} #${user_id}`);
-                throw new Error('Email address is not confirmed');
-            }
+            // const eid = yield models.Identity.findOne(
+            //     {attributes: ['id'], where: {user_id, provider: 'email', verified: true}, order: 'id DESC'}
+            // );
+            // if (!eid) {
+            //     console.log(`api /accounts: not confirmed email for user ${this.session.uid} #${user_id}`);
+            //     throw new Error('Email address is not confirmed');
+            // }
 
             // // check phone
             const mid = yield models.Identity.findOne(

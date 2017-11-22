@@ -85,6 +85,7 @@
     "DEBT_TOKEN_will_be_unavailable":"Conversia aurului va fi în termen de 3,5 zile de la lansare. Nu poate fi anulată. După ce a început conversia, monedele nu vor fi disponibile."
   },
   "createaccount_jsx":{
+    "will_be_send_to_phone_number": "Message will be send to: +",
     "our_records_indicate_you_already_have_account":"Înregistrările noastre indică faptul că aveți deja contul %(APP_NAME)s",
     "in_order_to_prevent_abuse_APP_NAME_can_only_register_one_account_per_user":"Pentru a preveni abuzurile %(APP_NAME)s poate înregistra un singur cont pentru fiecare utilizator de confirmat.",
     "next_3_blocks":{

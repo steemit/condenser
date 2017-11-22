@@ -38,7 +38,8 @@ export default function sendVerifySMS(phone, confirmation_code) {
     client.messages.create({
       from: senderId,
       to: phone,
-      body: "GOLOS.io\nPlease send confirmation code " + confirmation_code + " to this number " + senderId
+      // body: "GOLOS.io\nPlease send confirmation code " + confirmation_code + " to this number " + senderId
+      body: "GOLOS.io \nДля подтверждения регистрации отправьте код " + confirmation_code + " на номер " + senderId
     }, function(error, result) {
       if (error) {
         console.error('Twilio error', JSON.stringify(error, null, 2));

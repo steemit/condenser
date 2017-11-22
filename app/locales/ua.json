@@ -85,6 +85,8 @@
     "DEBT_TOKEN_will_be_unavailable": "Конвертація золотих відбуватиметься протягом 3.5 днів з моменту запуску. Скасувати її не можна. Після запуску конвертації, конвертовані монети стануть недоступні."
   },
   "createaccount_jsx": {
+    "get_code": "Get confirmation code",
+    "will_be_send_to_phone_number": "Message will be send to: +",
     "our_records_indicate_you_already_have_account": "Наші записи показують, що у Вас вже є  %(APP_NAME)s акаунт",
     "in_order_to_prevent_abuse_APP_NAME_can_only_register_one_account_per_user": "Щоб запобігти зловживанню %(APP_NAME)s може зареєструвати тільки один акаунт для кожного підтвердженого користувача.",
     "next_3_blocks": {

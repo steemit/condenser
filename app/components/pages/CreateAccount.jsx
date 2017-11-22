@@ -135,7 +135,7 @@ class CreateAccount extends React.Component {
 
     onCountryChange(e) {
       const country = e.target.value.trim().toLowerCase();
-      const phone_hint = this.state.phone.length ? 'Сообщение будет отправлено на номер: +' + country + this.state.phone : '';
+      const phone_hint = this.state.phone.length ? tt('createaccount_jsx.will_be_send_to_phone_number') + country + this.state.phone : '';
       this.setState({country, phone_hint});
     }
 
@@ -162,7 +162,7 @@ class CreateAccount extends React.Component {
         phone_error = tt('createaccount_jsx.phone_number') + " " + phone_error;
       }
       else {
-        phone_hint = 'Сообщение будет отправлено на номер: +' + this.state.country + value;
+        phone_hint = tt('createaccount_jsx.will_be_send_to_phone_number') + this.state.country + value;
       }
       this.setState({phone_error, phone_hint});
     }
@@ -421,18 +421,19 @@ class CreateAccount extends React.Component {
         let phone_step = null;
         let showMobileForm = fetch_state.status === "waiting" || fetch_state.status === "done" ? false : true;
         if (fetch_state.message) {
-          let message = fetch_state.message;
           let calloutClass = fetch_state.success ? " success" : " alert";
           if (fetch_state.status === "waiting") {
             calloutClass = '';
-            message = <p>
-              <LoadingIndicator type="circle" />&nbsp;{message + " "}
+            phone_step = <div className={"callout" + calloutClass}>
+              <LoadingIndicator type="circle" />&nbsp;{fetch_state.message + " "}
               {tt('mobilevalidation_js.you_can_change_your_number') + " "}<a onClick={this.onClickSelectAnotherPhone}>{tt('mobilevalidation_js.select_another_number')}</a>.
-            </p>
+            </div>;
           }
-          phone_step = <div className={"callout" + calloutClass}>
-            {message}
-          </div>;
+          else {
+            phone_step = <div className={"callout" + calloutClass}>
+              {fetch_state.message}
+            </div>;
+          }
         }
 
         let next_step = null;
@@ -454,11 +455,8 @@ class CreateAccount extends React.Component {
         }
 
         const mobileRules = showMobileRules ? <div className="CreateAccount__rules">
-            <p>
-              {tt('createaccount_jsx.mobile_description.one', {APP_NAME: tt('g.APP_NAME')})}<br/>
-              {tt('createaccount_jsx.mobile_description.second')}<br/>
-              {tt('createaccount_jsx.mobile_description.fourth')}
-            </p>
+            <p>{tt('createaccount_jsx.mobile_description.one', {APP_NAME: "GOLOS.io"})}</p>
+            <p>{tt('createaccount_jsx.mobile_description.second')}</p>
             <div className="text-left">
               <a className="CreateAccount__rules-button" href="#" onClick={() => this.setState({showMobileRules: false})}>
                 {tt('g.close')}&nbsp;&uarr;
@@ -498,17 +496,14 @@ class CreateAccount extends React.Component {
                         <h2>{tt('g.sign_up')}</h2>
                         <hr />
                         <form onSubmit={this.onSubmit} autoComplete="off" noValidate method="post">
-
                             {mobileRules}
-                            {showMobileForm &&
+                            {showMobileForm && <div>
                               <div>
                                 <label className="uppercase">
                                   <span style={{color: 'red'}}>*</span> {tt('createaccount_jsx.country_code')}
                                   <CountryCode onChange={this.onCountryChange} disabled={fetch_state.checking} name="country" value={country} />
                                 </label><p></p>
                               </div>
-                            }
-                            {showMobileForm &&
                               <div className={(phone_error ? 'error' : '') + (phone_hint ? 'success' : '')}>
                                 <label className="uppercase">
                                   <span style={{color: 'red'}}>*</span> {tt('createaccount_jsx.phone_number')} <span style={{color: 'red'}}>{tt('createaccount_jsx.without_country_code')}</span>
@@ -516,10 +511,10 @@ class CreateAccount extends React.Component {
                                 </label>
                                 <p>{phone_error || phone_hint}</p>
                               </div>
-                            }
+                            </div>}
                             {phone_step}
                             {showMobileForm &&
-                              <p><a className={'button holow uppercase ' + ( (fetch_state.checking && fetch_state.success) || !phone_hint ? 'disabled' : '')} onClick={this.onClickSendCode}>Получить код</a></p>
+                              <p><a className={'button holow uppercase ' + ( (fetch_state.checking && fetch_state.success) || !phone_hint ? 'disabled' : '')} onClick={!(fetch_state.checking && fetch_state.success) && phone_hint && this.onClickSendCode}>{tt('createaccount_jsx.get_code')}</a></p>
                             }
 
                             {passwordRules}

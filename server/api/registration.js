@@ -86,7 +86,7 @@ export default function useRegistrationApi(app) {
       return;
     }
     yield mid.update({ verified: true });
-    this.body = "Thank you for validating your phone number";
+    this.body = "GOLOS.io \nСпасибо за подтверждение вашего номера телефона";
   });
 
   router.post("/check_code", koaBody, function*() {

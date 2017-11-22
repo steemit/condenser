@@ -25,9 +25,15 @@ class CreateAccount extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            rnd_verification: Math.round(Math.random() * 15 + 5),
+            fetch_state: {
+              checking : false,
+              success: false,
+              status: '',
+              message: ''
+            },
+            fetchCounter: 20, // 5 minutes (20 * 15 seconds = 300)
             phone: '',
-            country: 0,
+            country: 7,
             name: '',
             password: '',
             password_valid: '',
@@ -36,18 +42,27 @@ class CreateAccount extends React.Component {
             phone_error: '',
             server_error: '',
             loading: false,
-            phoneOk: false,
-            phoneChecking: false,
             cryptographyFailure: false,
             showRules: false,
             showMobileRules: false,
             allBoxChecked: false
         };
         this.onSubmit = this.onSubmit.bind(this);
+        this.onCountryChange = this.onCountryChange.bind(this);
         this.onMobileChange = this.onMobileChange.bind(this);
         this.onNameChange = this.onNameChange.bind(this);
         this.onPasswordChange = this.onPasswordChange.bind(this);
         this.onClickSendCode = this.onClickSendCode.bind(this);
+        this.onClickSelectAnotherPhone = this.onClickSelectAnotherPhone.bind(this);
+        this.onCheckCode = this.onCheckCode.bind(this);
+    }
+
+    checkTimer() {
+      const fetchCounter = this.state.fetchCounter - 1;
+      if (fetchCounter > 0) {
+          this.setState({ fetchCounter });
+          this.timeoutId = setTimeout(this.onCheckCode.bind(this), 1000 * 15)
+      }
     }
 
     componentDidMount() {
@@ -56,9 +71,12 @@ class CreateAccount extends React.Component {
             console.error('CreateAccount - cryptoTestResult: ', cryptoTestResult);
             this.setState({cryptographyFailure: true}); // TODO: do not use setState in componentDidMount
         }
-        this.validateMobilePhone();
-        // Facebook Pixel events #200
-        //if (process.env.BROWSER) fbq('track', 'Lead');
+        this.onCheckCode();
+    }
+
+    componentWillUnmount() {
+      clearTimeout(this.timeoutId);
+      this.timeoutId = false;
     }
 
     onSubmit(e) {
@@ -104,15 +122,6 @@ class CreateAccount extends React.Component {
                 this.setState({server_error: res.error || tt('g.unknown'), loading: false});
             } else {
                 window.location = `/login.html#account=${name}&msg=accountcreated`;
-                // this.props.loginUser(name, password);
-                // const redirect_page = localStorage.getItem('redirect');
-                // if (redirect_page) {
-                //     localStorage.removeItem('redirect');
-                //     browserHistory.push(redirect_page);
-                // }
-                // else {
-                //     browserHistory.push('/@' + name);
-                // }
             }
         }).catch(error => {
             console.error('Caught CreateAccount server error', error);
@@ -122,6 +131,12 @@ class CreateAccount extends React.Component {
 
     onPasswordChange(password, password_valid, allBoxChecked) {
         this.setState({password, password_valid, allBoxChecked});
+    }
+
+    onCountryChange(e) {
+      const country = e.target.value.trim().toLowerCase();
+      const phone_hint = this.state.phone.length ? 'Сообщение будет отправлено на номер: +' + country + this.state.phone : '';
+      this.setState({country, phone_hint});
     }
 
     onMobileChange(e) {
@@ -147,20 +162,83 @@ class CreateAccount extends React.Component {
         phone_error = tt('createaccount_jsx.phone_number') + " " + phone_error;
       }
       else {
-        phone_hint = '';
+        phone_hint = 'Сообщение будет отправлено на номер: +' + this.state.country + value;
       }
       this.setState({phone_error, phone_hint});
     }
 
+    updateFetchingState(o) {
+      let fetch_state = {
+        checking : false,
+        success: false,
+        status: o.status,
+        message: ''
+      };
+      switch (o.status) {
+        case "select_country":
+        fetch_state.message = "Please select a country code";
+        break;
+
+        case "provide_phone":
+        fetch_state.message = "Please provide a phone number";
+        break;
+
+        case "already_used":
+        fetch_state.message = tt('createaccount_jsx.this_phone_number_has_already_been_used');
+        break;
+
+        case "session":
+        fetch_state.message = '';
+        break;
+
+        case "waiting":
+        fetch_state.checking = true;
+        fetch_state.message = tt('mobilevalidation_js.waiting_from_you');
+        this.checkTimer();
+        break;
+
+        case "done":
+        fetch_state.checking = true;
+        fetch_state.success = true;
+        fetch_state.message = tt('createaccount_jsx.phone_number_has_been_verified');
+        break;
+
+        case "attempts_10":
+        fetch_state.checking = true;
+        fetch_state.message = 'Confirmation was attempted a moment ago. You can try again only in 10 seconds';
+        break;
+
+        case "attempts_300":
+        fetch_state.checking = true;
+        fetch_state.message = 'Confirmation was attempted a moment ago. You can try again only in 5 minutes';
+        break;
+
+        case "error":
+        fetch_state.message = o.error;
+        break;
+
+        default:
+        fetch_state.message = tt('g.unknown');
+        break;
+      }
+      this.setState({ fetch_state });
+    }
+
+    onClickSelectAnotherPhone(e) {
+      clearTimeout(this.timeoutId);
+      this.timeoutId = false;
+      this.setState({ fetch_state: {checking: false} });
+    }
+
     onClickSendCode(e) {
-        // fetch
-        // this.setState({phoneChecking: true});
-        // setTimeout(function () {
-        //   this.setState({phoneOk: true});
-        // }.bind(this), Math.round(Math.random() * 5 + 5)*1000)
-        // createAccount
-        const {phone, country} = this.state
-        fetch('/send_code', {
+        const {phone, country} = this.state;
+
+        this.setState({
+          fetchCounter: 20,
+          fetch_state: {checking: true}
+        });
+
+        fetch('/api/v1/send_code', {
           method: 'post',
           mode: 'no-cors',
           credentials: 'same-origin',
@@ -170,27 +248,57 @@ class CreateAccount extends React.Component {
           },
           body: JSON.stringify({
               csrf: $STM_csrf,
-              name,
+              phone,
               country
             })
-        // }).then(r => r.json()).then(res => {
         }).then(res => {
-            console.log(res.body);
-          // if (res.error || res.status !== 'ok') {
-          //     console.error('CreateAccount server error', res.error);
-          //     if (res.error === 'Unauthorized') {
-          //         window.location = '/enter_email';
-          //     }
-          //     this.setState({server_error: res.error || tt('g.unknown'), loading: false});
-          // } else {
-          //     window.location = `/login.html#account=${name}&msg=accountcreated`;
-          // }
-      }).catch(error => {
+          if (res.status !== 200) {
+            let suffix = '';
+            switch (res.status) {
+              case 429:
+                suffix = '. Please wait a moment and try again.'
+                break;
+
+              default:
+                break;
+            }
+            return {status: "error", error: res.status + " " + res.statusText + suffix}
+          }
+          return res.json();
+        }).then(res => {
+          console.log('send_code.res.json', res);
+          this.updateFetchingState(res)
+        }).catch(error => {
           console.error('Caught /send_code server error', error);
-          // console.error('Caught CreateAccount server error', error);
-          // this.setState({server_error: (error.message ? error.message : error), loading: false});
+          this.updateFetchingState({status: "error", error: error.message ? error.message : error})
+        });
+    }
+
+    onCheckCode(e) {
+      // this.setState({ fetch_state: {checking: true} });
+
+      fetch('/api/v1/check_code', {
+        method: 'post',
+        mode: 'no-cors',
+        credentials: 'same-origin',
+        headers: {
+            Accept: 'application/json',
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify({ csrf: $STM_csrf })
+      }).then(res => {
+        if (res.status !== 200) {
+          return {status: "error", error: res.status + " " + res.statusText}
+        }
+        return res.json();
+      }).then(res => {
+        console.log('check_code.res.json', res);
+        this.updateFetchingState(res)
+      }).catch(error => {
+        console.error('Caught /send_code server error', error);
+        this.updateFetchingState({status: "error", error: error.message ? error.message : error})
       });
-  }
+    }
 
     onNameChange(e) {
         const name = e.target.value.trim().toLowerCase();
@@ -232,11 +340,11 @@ class CreateAccount extends React.Component {
         const APP_NAME = tt('g.APP_NAME');
 
         const {
-            phone, country, name, password_valid, showPasswordString,
-            name_error, phone_hint, phone_error, server_error, loading, phoneOk, phoneChecking, cryptographyFailure, showRules, showMobileRules, allBoxChecked
+            fetch_state, phone, country, name, password_valid, showPasswordString,
+            name_error, phone_hint, phone_error, server_error, loading, cryptographyFailure, showRules, showMobileRules, allBoxChecked
         } = this.state;
 
-        const {loggedIn, logout, offchainUser, serverBusy} = this.props;
+        const {loggedIn, logout, offchainUser, serverBusy, onClickSendCode} = this.props;
         const submit_btn_disabled =
               loading ||
             ! name ||
@@ -244,7 +352,7 @@ class CreateAccount extends React.Component {
             ! password_valid ||
             ! allBoxChecked ||
             ! password_valid ||
-            ! phoneOk;
+            ! (fetch_state.checking && fetch_state.success);
         const submit_btn_class = 'button action' + (submit_btn_disabled ? ' disabled' : '');
 
         if (serverBusy || $STM_Config.disable_signups) {
@@ -276,7 +384,6 @@ class CreateAccount extends React.Component {
         // if (!offchainUser) {
         //     return <SignUp />;
         // }
-console.log('loggedIn', loggedIn)
         if (loggedIn) {
             return <div className="row">
                 <div className="column">
@@ -313,6 +420,22 @@ console.log('loggedIn', loggedIn)
             </div>;
         }
 
+        let phone_step = null;
+        if (fetch_state.message) {
+          let message = fetch_state.message;
+          let calloutClass = fetch_state.success ? " success" : " alert";
+          if (fetch_state.status === "waiting") {
+            calloutClass = '';
+            message = <p>
+              <LoadingIndicator type="circle" />&nbsp;{message + " "}
+              {tt('mobilevalidation_js.you_can_change_your_number') + " "}<a onClick={this.onClickSelectAnotherPhone}>{tt('mobilevalidation_js.select_another_number')}</a>.
+            </p>
+          }
+          phone_step = <div className={"callout" + calloutClass}>
+            {message}
+          </div>;
+        }
+
         let next_step = null;
         if (server_error) {
             if (server_error === 'Email address is not confirmed') {
@@ -331,68 +454,77 @@ console.log('loggedIn', loggedIn)
             }
         }
 
+        const mobileRules = showMobileRules ? <div className="CreateAccount__rules">
+            <p>
+              {tt('createaccount_jsx.mobile_description.one', {APP_NAME: tt('g.APP_NAME')})}<br/>
+              {tt('createaccount_jsx.mobile_description.second')}<br/>
+              {tt('createaccount_jsx.mobile_description.fourth')}
+            </p>
+            <div className="text-left">
+              <a className="CreateAccount__rules-button" href="#" onClick={() => this.setState({showMobileRules: false})}>
+                {tt('g.close')}&nbsp;&uarr;
+              </a>
+            </div>
+            <hr />
+          </div> : <div className="text-left"><p>
+              <a className="CreateAccount__rules-button" href="#" onClick={() => this.setState({showMobileRules: true})}>{tt('createaccount_jsx.why_send_sms')}&nbsp;&darr;</a>
+          </p></div>
+        ;
+
+        const passwordRules = showRules ? <div className="CreateAccount__rules">
+            <p>
+              {tt('g.the_rules_of_APP_NAME.one', {APP_NAME})}<br/>
+              {tt('g.the_rules_of_APP_NAME.second', {APP_NAME})}<br/>
+              {tt('g.the_rules_of_APP_NAME.third', {APP_NAME})}<br/>
+              {tt('g.the_rules_of_APP_NAME.fourth')}<br/>
+              {tt('g.the_rules_of_APP_NAME.fifth')}<br/>
+              {tt('g.the_rules_of_APP_NAME.sixth')}<br/>
+              {tt('g.the_rules_of_APP_NAME.seventh')}
+            </p>
+            <div className="text-left">
+              <a className="CreateAccount__rules-button" href="#" onClick={() => this.setState({showRules: false})}>
+                  {tt('g.close')}&nbsp;&uarr;
+              </a>
+            </div>
+            <hr />
+          </div> : <div className="text-left"><p>
+            <a className="CreateAccount__rules-button" href="#" onClick={() => this.setState({showRules: true})}>{tt('g.show_rules')}&nbsp;&darr;</a>
+          </p></div>
+        ;
+
         return (
             <div>
                 <div className="CreateAccount row">
                     <div className="column" style={{maxWidth: '36rem', margin: '0 auto'}}>
                         <h2>{tt('g.sign_up')}</h2>
                         <hr />
-                        {showMobileRules ? <div className="CreateAccount__rules">
-                            <p>
-                                {tt('createaccount_jsx.mobile_description.one', {APP_NAME: tt('g.APP_NAME')})}<br/>
-                                {tt('createaccount_jsx.mobile_description.second')}<br/>
-                                {tt('createaccount_jsx.mobile_description.fourth')}
-                            </p>
-                            <div className="text-left">
-                                <a className="CreateAccount__rules-button" href="#" onClick={() => this.setState({showMobileRules: false})}>
-                                    {tt('g.close')}&nbsp;&uarr;
-                                </a>
-                            </div>
-                            <hr />
-                        </div> : <div className="text-left"><p>
-                            <a className="CreateAccount__rules-button" href="#" onClick={() => this.setState({showMobileRules: true})}>{tt('createaccount_jsx.why_send_sms')}&nbsp;&darr;</a>
-                        </p></div>}
-                        {showRules ? <div className="CreateAccount__rules">
-                            <p>
-                                {tt('g.the_rules_of_APP_NAME.one', {APP_NAME})}<br/>
-                                {tt('g.the_rules_of_APP_NAME.second', {APP_NAME})}<br/>
-                                {tt('g.the_rules_of_APP_NAME.third', {APP_NAME})}<br/>
-                                {tt('g.the_rules_of_APP_NAME.fourth')}<br/>
-                                {tt('g.the_rules_of_APP_NAME.fifth')}<br/>
-                                {tt('g.the_rules_of_APP_NAME.sixth')}<br/>
-                                {tt('g.the_rules_of_APP_NAME.seventh')}
-                            </p>
-                            <div className="text-left">
-                                <a className="CreateAccount__rules-button" href="#" onClick={() => this.setState({showRules: false})}>
-                                    {tt('g.close')}&nbsp;&uarr;
-                                </a>
-                            </div>
-                            <hr />
-                        </div> : <div className="text-left"><p>
-                            <a className="CreateAccount__rules-button" href="#" onClick={() => this.setState({showRules: true})}>{tt('g.show_rules')}&nbsp;&darr;</a>
-                        </p></div>}
                         <form onSubmit={this.onSubmit} autoComplete="off" noValidate method="post">
+
+                            {mobileRules}
                             <div>
                                 <label className="uppercase">
                                     <span style={{color: 'red'}}>*</span> {tt('createaccount_jsx.country_code')}
-                                    <CountryCode disabled={phoneChecking} name="country" value={country} />
+                                    <CountryCode onChange={this.onCountryChange} disabled={fetch_state.checking} name="country" value={country} />
                                 </label><p></p>
                             </div>
                             <div className={(phone_error ? 'error' : '') + (phone_hint ? 'success' : '')}>
                                 <label className="uppercase">
                                     <span style={{color: 'red'}}>*</span> {tt('createaccount_jsx.phone_number')} <span style={{color: 'red'}}>{tt('createaccount_jsx.without_country_code')}</span>
-                                    <input type="text" name="phone" autoComplete="off" disabled={phoneChecking} onChange={this.onMobileChange} value={phone} />
+                                    <input type="text" name="phone" autoComplete="off" disabled={fetch_state.checking} onChange={this.onMobileChange} value={phone} />
                                 </label>
                                 <p>{phone_error || phone_hint}</p>
-                                <p><a className={'button holow uppercase ' + (!phone_hint ? 'disabled' : '')} href="">Получить код</a></p>
+                                {phone_step}
+                                <p><a className={'button holow uppercase ' + ( (fetch_state.checking && fetch_state.success) || !phone_hint ? 'disabled' : '')} onClick={this.onClickSendCode}>Получить код</a></p>
                             </div>
+
+                            {passwordRules}
                             <div className={name_error ? 'error' : ''}>
                                 <label className="uppercase">{tt('g.username')}
-                                    <input type="text" name="name" autoComplete="off" disabled={! phoneOk} onChange={this.onNameChange} value={name} />
+                                    <input type="text" name="name" autoComplete="off" disabled={! (fetch_state.checking && fetch_state.success)} onChange={this.onNameChange} value={name} />
                                 </label>
                                 <p>{name_error}</p>
                             </div>
-                            <GeneratedPasswordInput onChange={this.onPasswordChange} disabled={!phoneOk || loading} showPasswordString={name.length > 0 && !name_error} />
+                            <GeneratedPasswordInput onChange={this.onPasswordChange} disabled={!(fetch_state.checking && fetch_state.success) || loading} showPasswordString={name.length > 0 && !name_error} />
                             <br />
                             {next_step}
                             <noscript>

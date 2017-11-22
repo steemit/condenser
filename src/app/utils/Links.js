@@ -1,3 +1,4 @@
+import {PARAM_VIEW_MODE, VIEW_MODE_WHISTLE} from "../../shared/constants";
 
 const urlChar = '[^\\s"<>\\]\\[\\(\\)]'
 const urlCharEnd = urlChar.replace(/\]$/, '.,\']') // insert bad chars to end on
@@ -35,7 +36,7 @@ export default {
     ipfsPrefix: /(https?:\/\/.*)?\/ipfs/i,
 }
 
-//todo: possible this should go somewhere else.
+//TODO: possible this should go somewhere else.
 /**
  * Returns a new object extended from outputParams with [key] == inputParams[key] if the value is in allowedValues
  * @param outputParams
@@ -52,7 +53,7 @@ export const addToParams = (outputParams, inputParams, key, allowedValues) => {
     return respParams;
 }
 
-//todo: possible this should go somewhere else.
+//TODO: possible this should go somewhere else.
 export const makeParams = (params, prefix) => {
     let paramsList = [];
     if(params.constructor === Array) {
@@ -64,6 +65,24 @@ export const makeParams = (params, prefix) => {
     }
     if(paramsList.length > 0) {
         return ((prefix !== false)? ((typeof prefix === 'string')? prefix : '?') : '') + paramsList.join('&');
+    }
+    return '';
+}
+
+/**
+ *
+ * @param {string} search - window.location.search formatted string (may omit '?')
+ * @returns {string}
+ */
+export const determineViewMode = (search) => {
+    const searchList = (search.indexOf('?') === 0) ? search.substr(1).split('&') : search.split('&');
+    for(let i = 0; i < searchList.length; i++) {
+        if(searchList[i].indexOf(PARAM_VIEW_MODE) === 0) {
+            if(searchList[i] == (PARAM_VIEW_MODE + '=' + VIEW_MODE_WHISTLE)) { //we only want to support known view modes.
+                return VIEW_MODE_WHISTLE;
+            }
+            return '';
+        }
     }
     return '';
 }

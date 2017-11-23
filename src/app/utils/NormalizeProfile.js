@@ -35,7 +35,7 @@ export default function normalizeProfile(account) {
     }
 
     // Read & normalize
-    let {name, about, location, website, profile_image, cover_image} = profile
+    let {name, about, location, website, profile_image, cover_image, cover_image_mobile} = profile
 
     name = truncate(name, 20)
     about = truncate(about, 160)
@@ -56,6 +56,7 @@ export default function normalizeProfile(account) {
 
     if(profile_image && !/^https?:\/\//.test(profile_image)) profile_image = null;
     if(cover_image && !/^https?:\/\//.test(cover_image)) cover_image = null;
+    if(cover_image_mobile && !/^https?:\/\//.test(cover_image_mobile)) cover_image_mobile = null;
 
     return {
         name,
@@ -64,5 +65,6 @@ export default function normalizeProfile(account) {
         website,
         profile_image,
         cover_image,
+        cover_image_mobile,
     };
 }

@@ -25,11 +25,12 @@ class Settings extends React.Component {
         reactForm({
             instance: this,
             name: 'accountSettings',
-            fields: ['profile_image', 'cover_image', 'name', 'about', 'location', 'website'],
+            fields: ['profile_image', 'cover_image', 'cover_image_mobile', 'name', 'about', 'location', 'website'],
             initialValues: props.profile,
             validation: values => ({
                 profile_image: values.profile_image && !/^https?:\/\//.test(values.profile_image) ? tt('settings_jsx.invalid_url') : null,
                 cover_image: values.cover_image && !/^https?:\/\//.test(values.cover_image) ? tt('settings_jsx.invalid_url') : null,
+                cover_image_mobile: values.cover_image_mobile && !/^https?:\/\//.test(values.cover_image_mobile) ? tt('settings_jsx.invalid_url') : null,
                 name: values.name && values.name.length > 20 ? tt('settings_jsx.name_is_too_long') : values.name && /^\s*@/.test(values.name) ? tt('settings_jsx.name_must_not_begin_with') : null,
                 about: values.about && values.about.length > 160 ? tt('settings_jsx.about_is_too_long') : null,
                 location: values.location && values.location.length > 30 ? tt('settings_jsx.location_is_too_long') : null,
@@ -58,11 +59,12 @@ class Settings extends React.Component {
         if(!metaData.profile) metaData.profile = {}
         delete metaData.user_image; // old field... cleanup
 
-        const {profile_image, cover_image, name, about, location, website} = this.state
+        const {profile_image, cover_image, cover_image_mobile, name, about, location, website} = this.state
 
         // Update relevant fields
         metaData.profile.profile_image = profile_image.value
         metaData.profile.cover_image = cover_image.value
+        metaData.profile.cover_image_mobile = cover_image_mobile.value
         metaData.profile.name = name.value
         metaData.profile.about = about.value
         metaData.profile.location = location.value
@@ -71,6 +73,7 @@ class Settings extends React.Component {
         // Remove empty keys
         if(!metaData.profile.profile_image) delete metaData.profile.profile_image;
         if(!metaData.profile.cover_image) delete metaData.profile.cover_image;
+        if(!metaData.profile.cover_image_mobile) delete metaData.profile.cover_image_mobile;
         if(!metaData.profile.name) delete metaData.profile.name;
         if(!metaData.profile.about) delete metaData.profile.about;
         if(!metaData.profile.location) delete metaData.profile.location;
@@ -123,7 +126,7 @@ class Settings extends React.Component {
         const {submitting, valid, touched} = this.state.accountSettings
         const disabled = !props.isOwnAccount || state.loading || submitting || !valid || !touched
 
-        const {profile_image, cover_image, name, about, location, website} = this.state
+        const {profile_image, cover_image, cover_image_mobile, name, about, location, website} = this.state
 
         const {follow, account, isOwnAccount, user_preferences} = this.props
         const following = follow && follow.getIn(['getFollowingAsync', account.name]);
@@ -158,6 +161,12 @@ class Settings extends React.Component {
                         <input type="url" {...cover_image.props} autoComplete="off" />
                     </label>
                     <div className="error">{cover_image.blur && cover_image.touched && cover_image.error}</div>
+
+                    <label>
+                        {tt('settings_jsx.cover_image_url_mobile')}
+                        <input type="url" {...cover_image_mobile.props} autoComplete="off" />
+                    </label>
+                    <div className="error">{cover_image_mobile.blur && cover_image_mobile.touched && cover_image_mobile.error}</div>
 
                     <label>
                         {tt('settings_jsx.profile_name')}

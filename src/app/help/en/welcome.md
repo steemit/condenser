@@ -8,8 +8,7 @@ Below that is a section of "Helpful Posts from Steemit Users", which contains a 
 
 Below that is a list of recommended users to follow, a collection of other resources including the <a href="/faq.html">FAQ Page</a>, and information on where to find live help. 
 
-<a class="anchor" name="Table_of_Contents"></a>
-## Table of Contents
+## Table of Contents <a class="anchor" name="Table_of_Contents"></a>
 
 ### Quick Start Guide
 
@@ -303,8 +302,7 @@ It is not required either, but if you have other social media accounts (Twitter,
 
 ***
 
-<a class="anchor" name="Helpful_Posts_from_Steemit_Users"></a>
-## Helpful Posts from Steemit Users
+## Helpful Posts from Steemit Users <a class="anchor" name="Helpful_Posts_from_Steemit_Users"></a>
 
 - [Posting and Markdown Basics](https://steemit.com/steemit/@thecryptofiend/markdown-basics-for-beginners)
 - [Tons of Ways to Spend Your Hard Earned STEEM/SBD](https://steemit.com/steem/@timcliff/the-steem-economy-tons-of-ways-to-spend-your-hard-earned-steem-sbd)

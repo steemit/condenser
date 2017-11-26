@@ -30,6 +30,9 @@
       color: #444;
       font-weight: 600;
       line-height: 1;
+      @include themify($themes) {
+        color: $color-text-gray;
+      }
     }
 
     .Author__username {
@@ -37,6 +40,9 @@
       font-size: 90%;
       font-weight: 400;
       color: #666;
+      @include themify($themes) {
+        color: $color-text-gray;
+      }
     }
 
     .Author__bio {

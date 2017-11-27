@@ -1,6 +1,7 @@
 import 'babel-core/register';
 import 'babel-polyfill';
 import 'whatwg-fetch';
+import {VIEW_MODE_WHISTLE, PARAM_VIEW_MODE} from 'shared/constants';
 import './assets/stylesheets/app.scss';
 import plugins from 'app/utils/JsPlugins';
 import Iso from 'iso';
@@ -8,14 +9,16 @@ import universalRender from 'shared/UniversalRender';
 import ConsoleExports from './utils/ConsoleExports';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import * as steem from 'steem';
+import {determineViewMode} from "app/utils/Links";
+
 
 window.onerror = error => {
     if (window.$STM_csrf) serverApiRecordEvent('client_error', error);
 };
 
-const CMD_LOG_T = 'log-t'
-const CMD_LOG_TOGGLE = 'log-toggle'
-const CMD_LOG_O = 'log-on'
+const CMD_LOG_T = 'log-t';
+const CMD_LOG_TOGGLE = 'log-toggle';
+const CMD_LOG_O = 'log-on';
 
 try {
     if(process.env.NODE_ENV === 'development') {
@@ -88,6 +91,8 @@ function runApp(initial_state) {
         delete initial_state.offchain.csrf;
     }
 
+    initial_state.app.viewMode = determineViewMode(window.location.search);
+
     const location = `${window.location.pathname}${window.location.search}${window.location.hash}`;
     universalRender({history, location, initial_state})
     .catch(error => {
@@ -98,9 +103,12 @@ function runApp(initial_state) {
 
 if (!window.Intl) {
     require.ensure(['intl/dist/Intl'], (require) => {
-        window.IntlPolyfill = window.Intl = require('intl/dist/Intl')
-        require('intl/locale-data/jsonp/en-US.js')
-        require('intl/locale-data/jsonp/es.js')
+        window.IntlPolyfill = window.Intl = require('intl/dist/Intl');
+        require('intl/locale-data/jsonp/en-US.js');
+        require('intl/locale-data/jsonp/es.js');
+        require('intl/locale-data/jsonp/ru.js');
+        require('intl/locale-data/jsonp/fr.js');
+        require('intl/locale-data/jsonp/it.js');
         Iso.bootstrap(runApp);
     }, "IntlBundle");
 }

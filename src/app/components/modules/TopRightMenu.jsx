@@ -21,7 +21,7 @@ const defaultNavigate = (e) => {
     browserHistory.push(a.pathname + a.search + a.hash);
 };
 
-function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate, toggleOffCanvasMenu, probablyLoggedIn}) {
+function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate, toggleOffCanvasMenu, probablyLoggedIn, nightmodeEnabled, toggleNightmode, userPath}) {
     const mcn = 'menu' + (vertical ? ' vertical show-for-small-only' : '');
     const mcl = vertical ? '' : ' sub-menu';
     const lcn = vertical ? '' : 'show-for-medium';
@@ -36,6 +36,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
     const reset_password_link = `/@${username}/password`;
     const settings_link = `/@${username}/settings`;
     const tt_search = tt('g.search');
+    const pathCheck = userPath === '/submit.html' ? true : null;
     if (loggedIn) { // change back to if(username) after bug fix:  Clicking on Login does not cause drop-down to close #TEMP!
         const user_menu = [
             {link: feed_link, icon: "home", value: tt('g.feed'), addon: <NotifiCounter fields="feed" />},
@@ -43,6 +44,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
             {link: comments_link, icon: 'replies', value: tt('g.comments')},
             {link: replies_link, icon: 'reply', value: tt('g.replies'), addon: <NotifiCounter fields="comment_reply" />},
             {link: wallet_link, icon: 'wallet', value: tt('g.wallet'), addon: <NotifiCounter fields="follow,send,receive,account_update" />},
+            {link: '#', icon: 'eye', onClick: toggleNightmode, value: tt('g.toggle_nightmode') },
             {link: reset_password_link, icon: 'key', value: tt('g.change_password')},
             {link: settings_link, icon: 'cog', value: tt('g.settings')},
             loggedIn ?
@@ -52,7 +54,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
         return (
             <ul className={mcn + mcl}>
                 <li className={lcn + " Header__search"}><a href="/static/search.html" title={tt_search}>{vertical ? <span>{tt_search}</span> : <Icon name="search" />}</a></li>
-                {submit_story}
+                {!pathCheck ? submit_story : null}
                 {!vertical && submit_icon}
                 <LinkWithDropdown
                     closeOnClickOutside
@@ -108,7 +110,9 @@ TopRightMenu.propTypes = {
     logout: React.PropTypes.func.isRequired,
     vertical: React.PropTypes.bool,
     navigate: React.PropTypes.func,
-    toggleOffCanvasMenu: React.PropTypes.func
+    toggleOffCanvasMenu: React.PropTypes.func,
+    nightmodeEnabled: React.PropTypes.bool,
+    toggleNightmode: React.PropTypes.func,
 };
 
 export default connect(
@@ -120,12 +124,15 @@ export default connect(
                 probablyLoggedIn: !!state.offchain.get('account')
             }
         }
+        const userPath = state.routing.locationBeforeTransitions.pathname;
         const username = state.user.getIn(['current', 'username']);
         const loggedIn = !!username;
         return {
             username,
             loggedIn,
-            probablyLoggedIn: false
+            userPath,
+            probablyLoggedIn: false,
+            nightmodeEnabled: state.user.getIn(['user_preferences', 'nightmode']),
         }
     },
     dispatch => ({
@@ -136,6 +143,10 @@ export default connect(
         logout: e => {
             if (e) e.preventDefault();
             dispatch(user.actions.logout())
-        }
+        },
+        toggleNightmode: e => {
+            if (e) e.preventDefault();
+            dispatch({ type: 'TOGGLE_NIGHTMODE' });
+        },
     })
 )(TopRightMenu);

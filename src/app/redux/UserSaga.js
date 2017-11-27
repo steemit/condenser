@@ -114,6 +114,7 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
         operationType /*high security*/, afterLoginRedirectToWelcome
 }}) {
     // login, using saved password
+    let feedURL;
     let autopost, memoWif, login_owner_pubkey, login_wif_owner_pubkey
     if (!username && !password) {
         const data = localStorage.getItem('autopost2')
@@ -242,10 +243,11 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
     if(
         memo_pubkey === owner_pubkey ||
         memo_pubkey === active_pubkey
-    )
+    ) {
         // Memo key could be saved in local storage.. In RAM it is not purged upon LOCATION_CHANGE
         private_keys = private_keys.remove('memo_private')
-
+    }
+    if(username) feedURL = pathTo.userFeed(username);
     // If user is signing operation by operaion and has no saved login, don't save to RAM
     if(!operationType || saveLogin) {
         // Keep the posting key in RAM but only when not signing an operation.
@@ -255,8 +257,8 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
          delegated_vesting_shares: account.get('delegated_vesting_shares')}))
     } else {
         yield put(user.actions.setUser({username, vesting_shares: account.get('vesting_shares'),
-         received_vesting_shares: account.get('received_vesting_shares'),
-         delegated_vesting_shares: account.get('delegated_vesting_shares')}))
+            received_vesting_shares: account.get('received_vesting_shares'),
+            delegated_vesting_shares: account.get('delegated_vesting_shares')}))
     }
 
     if (!autopost && saveLogin)
@@ -284,7 +286,11 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
         // Does not need to be fatal
         console.error('Server Login Error', error);
     }
-    if (afterLoginRedirectToWelcome) browserHistory.push(pathTo.welcome());
+    if (afterLoginRedirectToWelcome) {
+        browserHistory.push(pathTo.welcome())
+    } else if(feedURL) {
+        if(document.location.pathname === '/') browserHistory.push(feedURL);
+    }
 }
 
 function* saveLogin_localStorage() {

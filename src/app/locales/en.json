@@ -43,6 +43,9 @@
     "logout": "Logout",
     "memo": "Memo",
     "mute": "Mute",
+    "myblog": "My blog",
+    "mycomments": "My comments",
+    "myreplies": "Replies to me",
     "new": "new",
     "newer": "Newer",
     "next": "Next",
@@ -478,7 +481,7 @@
     "images_were_hidden_due_to_low_ratings": "Images were hidden due to low ratings."
   },
   "postsummary_jsx": {
-    "resteemed": "Resteemed",
+    "resteemed": "resteemed",
     "resteemed_by": "Resteemed by",
     "reveal_it": "Reveal this post",
     "adjust_your": "adjust your",

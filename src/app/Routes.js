@@ -113,7 +113,7 @@ export const pathTo = {
     userAuthorRewards: name => `/${name}/author-rewards`,
     search: () => '/s/search',
     compose: () => '/c/submit',
-    signup: () => '/c/pick_account',
+    signup: params => params ? `/c/pick_account?${params}` : '/c/pick_account',
     login: () => '/c/login',
     post: (author, permlink) => `/${author}/${permlink}`,
     comment: (post_author, post_permlink, comment_author, comment_permlink) => {
@@ -129,16 +129,19 @@ export const pathTo = {
     tos: () => '/s/tos',
     changePassword: () => '/c/change_password',
     createAccount: () => '/c/create_account',
-    signUpApproval: confirm_email => confirm_email ? '/approval?confirm_email=true' : '/c/approval',
+    signUpApproval: params => params ? `/c/approval?${params}` : `/c/approval`,
     recoverAccount: step => `/c/recover_account_step_${step}`,
     waitingList: () => '/c/waiting_list',
     market: () => '/c/market',
     witnesses: () => '/c/witnesses',
     enterEmail: (email, account) => (email || account) ? `/c/enter_email?email=${email}&account=${account}` : '/c/enter_email',
-    submitEmail: () => '/c/submit_email',
-    enterMobile: (phone, country) => phone ? `/enter_mobile?phone=${phone}&country=${country}`: '/c/enter_mobile',
-    submitMobile: () => '/c/submit_mobile',
-    confirmMobile: with_code => with_code ? '/c/confirm_mobile/:code' : '/c/confirm_mobile',
+    submitEmail: params => params ? `/c/submit_email?${params}` : '/c/submit_email',
+    confirmEmail: () => '/c/confirm_email',
+    confirmEmailGet: () => '/c/confirm_email/:code',
+    enterMobile: params => params ? `/c/enter_mobile?${params}` : '/c/enter_mobile',
+    submitMobile: params => params ? `/c/submit_mobile?${params}` : '/c/submit_mobile',
+    confirmMobile: params => params ? `/c/confirm_mobile?${params}` : '/c/confirm_mobile',
+    confirmMobileGet: () => '/c/confirm_mobile/:code',
 };
 
 export function routeToSteemdUrl(route) {

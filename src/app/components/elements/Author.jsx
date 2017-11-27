@@ -102,8 +102,7 @@ class Author extends React.Component {
         return (
             <span className="Author">
                 <span itemProp="author" itemScope itemType="http://schema.org/Person">
-                    <strong><Link className="ptc" ref={(link) => {this.authorProfileLink = link}} to={pathTo.userProfile(author)}>{author}<Icon name="dropdown-arrow" /></Link></strong>
-                    <Reputation value={authorRepLog10} />
+                    <strong><Link className="ptc" ref={(link) => {this.authorProfileLink = link}} to={pathTo.userProfile(author)}>{author} <Reputation value={authorRepLog10} /><Icon name="dropdown-arrow" /></Link></strong>
                 </span>
                 <Overlay
                     show={this.state.show}

@@ -3,6 +3,8 @@ import koa_body from "koa-body";
 import React from "react";
 import { renderToString } from "react-dom/server";
 import models from "db/models";
+import {PARAM_VIEW_MODE, VIEW_MODE_WHISTLE} from "shared/constants";
+import {addToParams, makeParams} from 'app/utils/Links';
 import ServerHTML from "server/server-html";
 // import twilioVerify from "server/utils/twilio";
 import teleSignVerify from "server/utils/teleSign";
@@ -41,6 +43,9 @@ const assets = Object.assign({}, require(assets_file), { script: [] });
 
 function* confirmMobileHandler(e) {
     if (!checkCSRF(this, this.request.body.csrf)) return;
+    const params = addToParams({}, this.request.query, PARAM_VIEW_MODE, [VIEW_MODE_WHISTLE]);
+    const enterMobileUrl = pathTo.enterMobile(makeParams(params));
+
     const confirmation_code = this.params && this.params.code
         ? this.params.code
         : this.request.body.code;
@@ -57,7 +62,7 @@ function* confirmMobileHandler(e) {
     });
     if (!user) {
         this.flash = { error: "User session not found, please make sure you have cookies enabled in your browser for this website" };
-        this.redirect(pathTo.enterMobile());
+        this.redirect(enterMobileUrl);
         return;
     }
     const mid = yield models.Identity.findOne({
@@ -66,7 +71,7 @@ function* confirmMobileHandler(e) {
 
     if (!mid) {
         this.flash = { error: "Wrong confirmation code" };
-        this.redirect(pathTo.enterMobile());
+        this.redirect(enterMobileUrl);
         return;
     }
 
@@ -74,7 +79,7 @@ function* confirmMobileHandler(e) {
     if (hours_ago > 24.0) {
         this.status = 401;
         this.flash = { error: "Confirmation code has been expired" };
-        this.redirect(pathTo.enterMobile());
+        this.redirect(enterMobileUrl);
         return;
     }
 
@@ -89,7 +94,7 @@ function* confirmMobileHandler(e) {
             mid.phone
         );
         this.flash = { error: "This phone number has already been used" };
-        this.redirect(pathTo.enterMobile());
+        this.redirect(enterMobileUrl);
         return;
     }
 
@@ -100,7 +105,7 @@ function* confirmMobileHandler(e) {
         mixpanel.track("SignupStepPhone", { distinct_id: this.session.uid });
 
     console.log("--/Success phone redirecting user", this.session.user);
-    this.redirect(pathTo.signUpApproval());
+    this.redirect(pathTo.signUpApproval(makeParams(params)));
 }
 
 export default function useEnterAndConfirmMobilePages(app) {
@@ -114,20 +119,22 @@ export default function useEnterAndConfirmMobilePages(app) {
             this.session.uid,
             this.session.user
         );
+        const params = addToParams({}, this.request.query, PARAM_VIEW_MODE, [VIEW_MODE_WHISTLE]);
+        const viewMode = (params[PARAM_VIEW_MODE]) ?  params[PARAM_VIEW_MODE] : '';
 
         const phone = this.query.phone;
         const country = this.query.country;
 
         const body = renderToString(
             <div className="App CreateAccount">
-                <MiniHeader />
+                {(viewMode !== VIEW_MODE_WHISTLE)? <MiniHeader /> : null}
                 <br />
                 <div className="row CreateAccount__step" style={{ maxWidth: "32rem" }}>
                     <div className="column">
                         <Progress tabIndex="0" value={90} max={100} />
                         <form
                             className="column"
-                            action={pathTo.submitMobile()}
+                            action={pathTo.submitMobile(makeParams(params))}
                             method="POST"
                         >
                             <h4 className="CreateAccount__title">
@@ -137,7 +144,7 @@ export default function useEnterAndConfirmMobilePages(app) {
 
 
 				<p>We need to send you a quick text. </p>
-                   
+
 				<p>With each Steemit account comes a free initial
 				grant of Steem Power!  Phone verification helps
 				cut down on spam accounts.</p>
@@ -187,15 +194,20 @@ recovery should your account ever be compromised.</em></p>
     router.post(pathTo.submitMobile(), koaBody, function*() {
         if (!checkCSRF(this, this.request.body.csrf)) return;
         const user_id = this.session.user;
+        const country = this.request.body.country;
+        const localPhone = this.request.body.phone
+        const params = addToParams({}, this.request.query, PARAM_VIEW_MODE, [VIEW_MODE_WHISTLE]);
+        const viewMode = (params[PARAM_VIEW_MODE]) ?  params[PARAM_VIEW_MODE] : '';
+
         if (!user_id) {
             this.flash = { error: "Your session has been interrupted, please start over" };
-            this.redirect(pathTo.signup());
+            this.redirect(pathTo.signup(makeParams(params)));
             return;
         }
+        params.country = country;
+        params.phone = localPhone;
 
-        const country = this.request.body.country;
-        const localPhone = this.request.body.phone;
-        const enterMobileUrl = pathTo.enterMobile(localPhone, country);
+        const enterMobileUrl = pathTo.enterMobile(makeParams(params));
 
         if (!country || country === "") {
             this.flash = { error: "Please select a country code" };
@@ -244,7 +256,7 @@ recovery should your account ever be compromised.</em></p>
                         mixpanel.track("SignupStep3", {
                             distinct_id: this.session.uid
                         });
-                    this.redirect(pathTo.signUpApproval());
+                    this.redirect(pathTo.signUpApproval(makeParams(params)));
                     return;
                 }
                 yield mid.update({ verified: false, phone });
@@ -308,7 +320,7 @@ recovery should your account ever be compromised.</em></p>
 
         const body = renderToString(
             <div className="App CreateAccount">
-                <MiniHeader />
+                {(viewMode !== VIEW_MODE_WHISTLE)? <MiniHeader /> : null}
                 <br />
                 <div className="row" style={{ maxWidth: "32rem" }}>
                     <div className="column">
@@ -325,7 +337,7 @@ recovery should your account ever be compromised.</em></p>
                 <div className="row" style={{ maxWidth: "32rem" }}>
                     <form
                         className="column"
-                        action={pathTo.confirmMobile()}
+                        action={pathTo.confirmMobile(makeParams(params))}
                         method="POST"
                     >
                         <input type="hidden" name="csrf" value={this.csrf} />
@@ -353,7 +365,7 @@ recovery should your account ever be compromised.</em></p>
             renderToString(<ServerHTML {...props} />);
     });
 
-    router.get(pathTo.confirmMobile(true), confirmMobileHandler);
+    router.get(pathTo.confirmMobileGet(), confirmMobileHandler);
     router.post(pathTo.confirmMobile(), koaBody, confirmMobileHandler);
 }
 

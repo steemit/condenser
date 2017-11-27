@@ -173,6 +173,15 @@ ul > li.Header__top-logo > a {
   .VerticalMenu {
     left: 0;
   }
+  .Icon.dropdown-arrow {
+    position: relative;
+    top: 3px;
+  }
+  .Icon.dropdown-arrow polygon {
+    @include themify($themes) {
+      fill: themed('textColorPrimary');
+    }
+  }
 }
 
 .logo {

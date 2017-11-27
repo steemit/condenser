@@ -14,6 +14,8 @@ import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import { INVEST_TOKEN_UPPERCASE } from 'app/client_config';
 
+import { isLoggedIn } from 'app/utils/UserUtil';
+
 class Post extends React.Component {
 
     static propTypes = {
@@ -21,8 +23,7 @@ class Post extends React.Component {
         post: React.PropTypes.string,
         routeParams: React.PropTypes.object,
         location: React.PropTypes.object,
-        signup_bonus: React.PropTypes.string,
-        current_user: React.PropTypes.object,
+        signup_bonus: React.PropTypes.string
     };
     constructor() {
         super();
@@ -34,13 +35,6 @@ class Post extends React.Component {
             window.location = '/pick_account';
         };
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'Post')
-    }
-
-    componentDidMount() {
-        if (window.location.hash.indexOf('comments') !== -1) {
-            const comments_el = document.getElementById('comments');
-            if (comments_el) comments_el.scrollIntoView();
-        }
     }
 
     toggleNegativeReplies = (e) => {
@@ -60,7 +54,7 @@ class Post extends React.Component {
 
     render() {
         const {showSignUp} = this
-        const {current_user, signup_bonus, content} = this.props
+        const {signup_bonus, content} = this.props
         const {showNegativeComments, commentHidden, showAnyway} = this.state
         let post = this.props.post;
         if (!post) {
@@ -89,13 +83,21 @@ class Post extends React.Component {
             }
         }
 
-        const replies = dis.get('replies').toJS();
+        let replies = dis.get('replies').toJS();
 
         let sort_order = 'trending';
         if( this.props.location && this.props.location.query.sort )
            sort_order = this.props.location.query.sort;
 
         sortComments( content, replies, sort_order );
+
+        // Don't render too many comments on server-side
+        const commentLimit = 100;
+        if (global['process'] !== undefined && replies.length > commentLimit) {
+            console.log(`Too many comments, ${ replies.length - commentLimit } omitted.`);
+            replies = replies.slice(0, commentLimit);
+        }
+
         const positiveComments = replies
             .map(reply => (
                 <Comment
@@ -112,9 +114,9 @@ class Post extends React.Component {
         const negativeGroup = commentHidden &&
             (<div className="hentry Comment root Comment__negative_group">
                 <p>
-                    {tt(showNegativeComments ? 'post_jsx.now_showing_comments_with_low_ratings' : 'post_jsx.comments_were_hidden_due_to_low_ratings')}.{' '}
+                    {showNegativeComments ? tt('post_jsx.now_showing_comments_with_low_ratings') : tt('post_jsx.comments_were_hidden_due_to_low_ratings')}.{' '}
                     <button className="button hollow tiny float-right" onClick={e => this.toggleNegativeReplies(e)}>
-                        {tt(showNegativeComments ? 'g.hide' :'g.show')}
+                        {showNegativeComments ? tt('g.hide') : tt('g.show')}
                     </button>
                 </p>
             </div>);
@@ -161,17 +163,17 @@ class Post extends React.Component {
                         <PostFull post={post} cont={content} />
                     </div>
                 </div>
-                {!current_user && <div className="row">
+                {!isLoggedIn() && <div className="row">
                     <div className="column">
                         <div className="Post__promo">
                             {tt('g.next_7_strings_single_block.authors_get_paid_when_people_like_you_upvote_their_post')}.
                             <br />{tt('g.next_7_strings_single_block.if_you_enjoyed_what_you_read_earn_amount', {amount: '$'+localizedCurrency(signup_bonus.substring(1)), INVEST_TOKEN_UPPERCASE})}
                             <br />
-                            <button type="button" className="button sign-up" onClick={showSignUp}>{tt('g.next_7_strings_single_block.sign_up_earn_steem')}<span className="free-money">{tt('g.next_7_strings_single_block.free_steem')}</span></button>
+                            <button type="button" className="button e-btn" onClick={showSignUp}>{tt('loginform_jsx.sign_up_get_steem')}</button>
                         </div>
                     </div>
                 </div>}
-                <div id="comments" className="Post_comments row hfeed">
+                <div id="#comments" className="Post_comments row hfeed">
                     <div className="column large-12">
                         <div className="Post_comments__content">
                             {positiveComments.length ?
@@ -201,8 +203,7 @@ export default connect(state => {
     return {
         content: state.global.get('content'),
         signup_bonus: state.offchain.get('signup_bonus'),
-        current_user,
-        ignoring,
+        ignoring
     }
 }
 )(Post);

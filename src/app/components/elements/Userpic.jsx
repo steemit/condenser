@@ -1,53 +1,58 @@
-import React, {Component, PropTypes} from 'react';
-import {connect} from 'react-redux';
+import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
+import { imageProxy } from 'app/utils/ProxifyUrl';
+
+export const SIZE_SMALL = 'small';
+export const SIZE_MED = 'medium';
+export const SIZE_LARGE = 'large';
+
+const sizeList = [SIZE_SMALL, SIZE_MED, SIZE_LARGE]
+
+export const avatarSize = {
+    small: SIZE_SMALL,
+    medium: SIZE_MED,
+    large: SIZE_LARGE
+};
 
 class Userpic extends Component {
-    static propTypes = {
-        account: PropTypes.string
-    }
 
     shouldComponentUpdate = shouldComponentUpdate(this, 'Userpic')
 
     render() {
-        const {json_metadata, width, height} = this.props
+        const {account, json_metadata, size} = this.props
         const hideIfDefault = this.props.hideIfDefault || false
+        const avSize = (size && sizeList.indexOf(size) > -1)? '/' + size : '';
 
-        let url = null;
 
         // try to extract image url from users metaData
-        try {
-            const md = JSON.parse(json_metadata);
-            if(md.profile) url = md.profile.profile_image;
-        } catch (e) {}
-
-        if (url && /^(https?:)\/\//.test(url)) {
-            const size = width && width > 48 ? '320x320' : '120x120';
-            if($STM_Config.img_proxy_prefix) {
-                url = $STM_Config.img_proxy_prefix + size + '/' + url;
-            }
-        } else {
-            if(hideIfDefault) {
+        if(hideIfDefault) {
+            try {
+                const md = JSON.parse(json_metadata);
+                if (!/^(https?:)\/\//.test(md.profile.profile_image)) {
+                    return null;
+                }
+            } catch (e) {
                 return null;
             }
-            url = require('assets/images/user.png');
         }
 
-        const style = {backgroundImage: 'url(' + url + ')',
-                       width: (width || 48) + 'px',
-                       height: (height || 48) + 'px'}
+        const style = {backgroundImage: 'url(' + imageProxy() + `u/${account}/avatar${avSize})` };
 
         return (<div className="Userpic" style={style} />)
     }
 }
 
+Userpic.propTypes = {
+    account: PropTypes.string.isRequired
+}
+
 export default connect(
     (state, ownProps) => {
-        const {account, width, height, hideIfDefault} = ownProps
+        const {account, hideIfDefault} = ownProps
         return {
+            account,
             json_metadata: state.global.getIn(['accounts', account, 'json_metadata']),
-            width,
-            height,
             hideIfDefault,
         }
     }

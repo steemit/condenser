@@ -95,11 +95,6 @@ class CurationRewards extends React.Component {
 
 
         return (<div className="UserWallet">
-            <div className="row">
-                <div className="column small-12">
-                    <h4 className="uppercase">{tt('g.curation_rewards')}</h4>
-                </div>
-            </div>
             <div className="UserWallet__balance UserReward__row row">
                 <div className="column small-12 medium-8">
                     {tt('curationrewards_jsx.estimated_curation_rewards_last_week')}:
@@ -108,33 +103,6 @@ class CurationRewards extends React.Component {
                     {numberWithCommas(vestsToSp(this.props.state, rewardsWeek + " " + VEST_TICKER)) + " " + VESTING_TOKEN}
                 </div>
             </div>
-
-            {/*  -- These estimates have been causing issus, see #600 --
-            <div className="UserWallet__balance UserReward__row row">
-                <div className="column small-12 medium-8">
-                    {tt('curationrewards_jsx.curation_rewards_last_24_hours')}:
-                </div>
-                <div className="column small-12 medium-3">
-                    {numberWithCommas(vestsToSp(this.props.state, rewards24 + " " + VEST_TICKER)) + " " + VESTING_TOKEN}
-                </div>
-            </div>
-            <div className="UserWallet__balance UserReward__row row">
-                <div className="column small-12 medium-8">
-                    {tt('curationrewards_jsx.daily_average_curation_rewards')}:
-                </div>
-                <div className="column small-12 medium-3">
-                    {numberWithCommas(vestsToSp(this.props.state, averageCuration + " " + VEST_TICKER)) + " " + VESTING_TOKEN}
-                </div>
-            </div>
-            <div className="UserWallet__balance UserReward__row row">
-                <div className="column small-12 medium-8">
-                    {tt(!hasFullWeek ? 'estimated_curation_rewards_last_week' : 'curation_rewards_last_week')}:
-                </div>
-                <div className="column small-12 medium-3">
-                    {numberWithCommas(vestsToSp(this.props.state, (hasFullWeek ? rewardsWeek : averageCuration * 7) + " " + VEST_TICKER)) + " " + VESTING_TOKEN}
-                </div>
-            </div>
-            */}
             <div className="row">
                 <div className="column small-12">
                     <hr />
@@ -144,8 +112,7 @@ class CurationRewards extends React.Component {
             <div className="row">
                 <div className="column small-12">
                     {/** history */}
-                    <h4 className="uppercase">{tt('curationrewards_jsx.curation_rewards_history')}</h4>
-                    {navButtons}
+                    <h4>{tt('curationrewards_jsx.curation_rewards_history')}</h4>
                     <table>
                         <tbody>
                         {curation_log}

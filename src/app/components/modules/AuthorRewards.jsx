@@ -106,11 +106,6 @@ class AuthorRewards extends React.Component {
              </nav>
         );
         return (<div className="UserWallet">
-            <div className="row">
-                <div className="column small-12">
-                    <h4 className="uppercase">{tt('g.author_rewards')}</h4>
-                </div>
-            </div>
             <div className="UserWallet__balance UserReward__row row">
                 <div className="column small-12 medium-8">
                     {tt('authorrewards_jsx.estimated_author_rewards_last_week')}:
@@ -124,46 +119,6 @@ class AuthorRewards extends React.Component {
                 </div>
             </div>
 
-            {/*  -- These estimates have been causing issus, see #600 --
-            <div className="UserWallet__balance UserReward__row row">
-                <div className="column small-12 medium-8">
-                    {tt('author_rewards_last_24_hours')}:
-                </div>
-                <div className="column small-12 medium-4">
-                    {numberWithCommas(vestsToSp(this.props.state, rewards24Vests + " " + VEST_TICKER)) + " " + VESTING_TOKEN}
-                    <br />
-                    {rewards24Steem.toFixed(3) + " " + LIQUID_TICKER}
-                    <br />
-                    {rewards24SBD.toFixed(3) + " " + DEBT_TOKEN_SHORT}
-                </div>
-            </div>
-
-            <div className="UserWallet__balance UserReward__row row">
-                <div className="column small-12 medium-8">
-                    {tt('authorrewards_jsx.daily_average_author_rewards')}
-                </div>
-                <div className="column small-12 medium-4">
-                    {numberWithCommas(vestsToSp(this.props.state, averageCurationVests + " " + VEST_TICKER)) + " " + VESTING_TOKEN}
-                    <br />
-                    {averageCurationSteem.toFixed(3) + " " + LIQUID_TICKER}
-                    <br />
-                    {averageCurationSBD.toFixed(3) + " " + DEBT_TOKEN_SHORT}
-                </div>
-            </div>
-            <div className="UserWallet__balance UserReward__row row">
-                <div className="column small-12 medium-8">
-                    {tt(!hasFullWeek ? 'estimated_author_rewards_last_week' : 'author_rewards_last_week')}:
-                </div>
-                <div className="column small-12 medium-4">
-                    {numberWithCommas(vestsToSp(this.props.state, (hasFullWeek ? rewardsWeekVests : averageCurationVests * 7) + " " + VEST_TICKER)) + " " + VESTING_TOKEN}
-                    <br />
-                    {(hasFullWeek ? rewardsWeekSteem : averageCurationSteem * 7).toFixed(3) + " " + LIQUID_TICKER}
-                    <br />
-                    {(hasFullWeek ? rewardsWeekSBD : averageCurationSBD * 7).toFixed(3) + " " + DEBT_TOKEN_SHORT}
-                </div>
-            </div>
-            */}
-
             <div className="row">
                 <div className="column small-12">
                     <hr />
@@ -173,8 +128,7 @@ class AuthorRewards extends React.Component {
             <div className="row">
                 <div className="column small-12">
                     {/** history */}
-                    <h4 className="uppercase">{tt('authorrewards_jsx.author_rewards_history')}</h4>
-                    {navButtons}
+                    <h4>{tt('authorrewards_jsx.author_rewards_history')}</h4>
                     <table>
                         <tbody>
                         {author_log}

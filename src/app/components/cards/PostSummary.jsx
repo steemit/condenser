@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, browserHistory } from 'react-router';
+import { Link } from 'react-router';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Icon from 'app/components/elements/Icon';
 import { connect } from 'react-redux';
@@ -18,21 +18,6 @@ import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 import proxifyImageUrl from 'app/utils/ProxifyUrl';
 import Userpic, { avatarSize } from 'app/components/elements/Userpic';
 
-function isLeftClickEvent(event) {
-    return event.button === 0
-}
-
-function isModifiedEvent(event) {
-    return !!(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey)
-}
-
-function navigate(e, onClick, post, url) {
-    if (isModifiedEvent(e) || !isLeftClickEvent(e)) return;
-    e.preventDefault();
-    if (onClick) onClick(post, url);
-    else browserHistory.push(url);
-}
-
 class PostSummary extends React.Component {
     static propTypes = {
         post: React.PropTypes.string.isRequired,
@@ -41,7 +26,6 @@ class PostSummary extends React.Component {
         content: React.PropTypes.object.isRequired,
         thumbSize: React.PropTypes.string,
         nsfwPref: React.PropTypes.string,
-        onClick: React.PropTypes.func
     };
 
     constructor() {
@@ -66,7 +50,7 @@ class PostSummary extends React.Component {
     }
 
     render() {
-        const {thumbSize, ignore, onClick} = this.props;
+        const {thumbSize, ignore} = this.props;
         const {post, content} = this.props;
         const {account} = this.props;
         if (!content) return null;
@@ -224,7 +208,7 @@ class PostSummary extends React.Component {
 
             if (this.props.blogmode) {
                 thumb = (
-                    <span onClick={e => navigate(e, onClick, post, p.link)} className="articles__feature-img-container">
+                    <span className="articles__feature-img-container">
                         <img className="articles__feature-img" src={blogSize} />
                     </span>
                 );
@@ -232,7 +216,7 @@ class PostSummary extends React.Component {
                 const listSize = proxifyImageUrl(p.image_link, '256x512').replace(/ /g, '%20');
 
                 thumb = (
-                    <span onClick={e => navigate(e, onClick, post, p.link)} className="articles__feature-img-container">
+                    <span  className="articles__feature-img-container">
                         <picture className="articles__feature-img">
                             <source srcSet={listSize} media="(min-width: 1000px)" />
                             <img srcSet={blogSize} />

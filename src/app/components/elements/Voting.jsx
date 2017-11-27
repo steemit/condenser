@@ -15,12 +15,12 @@ import CloseButton from 'react-foundation-components/lib/global/close-button';
 import tt from 'counterpart';
 
 const ABOUT_FLAG = <div>
-    <p>Flagging a post can remove rewards and make this material less visible.  Some common reasons to flag:</p>
+    <p>{tt('voting_jsx.flagging_post_can_remove_rewards_the_flag_should_be_used_for_the_following')}</p>
     <ul>
-        <li>Disagreement on rewards</li>
-        <li>Fraud or Plagiarism</li>
-        <li>Hate Speech or Internet Trolling</li>
-        <li>Intentional miscategorized content or Spam</li>
+        <li>{tt('voting_jsx.disagreement_on_rewards')}</li>
+        <li>{tt('voting_jsx.fraud_or_plagiarism')}</li>
+        <li>{tt('voting_jsx.hate_speech_or_internet_trolling')}</li>
+        <li>{tt('voting_jsx.intentional_miss_categorized_content_or_spam')}</li>
     </ul>
 </div>;
 
@@ -31,7 +31,7 @@ const VotingOverlay = (props) => {
     return (
         <div className="Voting__adjust_weight_down" style={{...props.style}}>
             {(props.myVote == null || props.myVote === 0) && props.netVestingShares > VOTE_WEIGHT_DROPDOWN_THRESHOLD &&
-                <div>
+                <div className="weight-container">
                     <div className="weight-display">- {props.weight / 100}%</div>
                     <Slider min={100} max={10000} step={100} value={props.weight} onChange={props.handleWeightChange} />
                 </div>
@@ -181,9 +181,7 @@ class Voting extends React.Component {
                 <span className={classDown} ref={'target'}>
                     {flagWeight > 0 && <span className="Voting__button-downvotes">{"•".repeat(flagWeight)}</span>}
                     {votingDownActive ? down : <a href="#" onClick={flagClickAction} title="Flag">{down}</a>}
-
                     {dropdown}
-
                 </span>
             </span>
         }
@@ -211,24 +209,24 @@ class Voting extends React.Component {
         const payoutItems = [];
 
         if(cashout_active) {
-            payoutItems.push({value: 'Potential Payout $' + formatDecimal(pending_payout).join('')});
+            payoutItems.push({value: tt('voting_jsx.pending_payout', {value: formatDecimal(pending_payout).join('')})});
         }
         if(cashout_active) {
             payoutItems.push({value: <TimeAgoWrapper date={cashout_time} />});
         }
 
         if(max_payout == 0) {
-            payoutItems.push({value: 'Payout Declined'})
+            payoutItems.push({value: tt('voting_jsx.payout_declined')})
         } else if (max_payout < 1000000) {
-            payoutItems.push({value: 'Max Accepted Payout $' + formatDecimal(max_payout).join('')})
+            payoutItems.push({value: tt('voting_jsx.max_accepted_payout', {value: formatDecimal(max_payout).join('')})})
         }
         if(promoted > 0) {
-            payoutItems.push({value: 'Promotion Cost $' + formatDecimal(promoted).join('')});
+            payoutItems.push({value: tt('voting_jsx.promotion_cost', {value: formatDecimal(promoted).join('')})});
         }
         if(total_author_payout > 0) {
-            payoutItems.push({value: 'Past Payouts $' + formatDecimal(total_author_payout + total_curator_payout).join('')});
-            payoutItems.push({value: ' - Author: $' + formatDecimal(total_author_payout).join('')});
-            payoutItems.push({value: ' - Curators: $' + formatDecimal(total_curator_payout).join('')});
+            payoutItems.push({value: tt('voting_jsx.past_payouts', {value: formatDecimal(total_author_payout + total_curator_payout).join('')})});
+            payoutItems.push({value: tt('voting_jsx.past_payouts_author', {value: formatDecimal(total_author_payout).join('')})});
+            payoutItems.push({value: tt('voting_jsx.past_payouts_curators', {value: formatDecimal(total_curator_payout).join('')})});
         }
         const payoutEl = <DropdownMenu el="div" items={payoutItems}>
             <span style={payout_limit_hit ? {opacity: '0.5'} : {}}>
@@ -325,7 +323,7 @@ export default connect(
             dispatch(transaction.actions.broadcastOperation({
                 type: 'vote',
                 operation: {voter: username, author, permlink, weight,
-                    __config: {title: weight < 0 ? 'Confirm Flag' : null},
+                    __config: {title: weight < 0 ? tt('voting_jsx.confirm_flag') : null},
                 },
                 confirm,
             }))

@@ -27,67 +27,28 @@ class PostsList extends React.Component {
         showSpam: PropTypes.bool,
         fetchState: PropTypes.func.isRequired,
         pathname: PropTypes.string,
+        nsfwPref: PropTypes.string.isRequired
     };
 
     static defaultProps = {
         showSpam: false,
-    }
+        loading: false
+    };
 
     constructor() {
         super();
         this.state = {
             thumbSize: 'desktop',
-            showNegativeComments: false,
-            nsfwPref: 'warn',
-            showPost: null
+            showNegativeComments: false
         }
         this.scrollListener = this.scrollListener.bind(this);
-        this.onPostClick = this.onPostClick.bind(this);
         this.onBackButton = this.onBackButton.bind(this);
         this.closeOnOutsideClick = this.closeOnOutsideClick.bind(this);
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'PostsList')
     }
 
-    componentWillMount() {
-        this.readNsfwPref()
-    }
-
-    readNsfwPref() {
-        if(!process.env.BROWSER) return
-        const {username} = this.props
-        const key = 'nsfwPref' + (username ? '-' + username : '')
-        const nsfwPref = localStorage.getItem(key) || 'warn'
-        this.setState({nsfwPref})
-    }
-
     componentDidMount() {
         this.attachScrollListener();
-    }
-
-    componentWillUpdate() {
-        const location = `${window.location.pathname}${window.location.search}${window.location.hash}`;
-        if (this.state.showPost && (location !== this.post_url)) {
-            this.setState({showPost: null});
-        }
-        this.readNsfwPref();
-    }
-
-    componentDidUpdate(prevProps, prevState) {
-        if (this.state.showPost && !prevState.showPost) {
-            document.getElementsByTagName('body')[0].className = 'with-post-overlay';
-            window.addEventListener('popstate', this.onBackButton);
-            window.addEventListener('keydown', this.onBackButton);
-            const post_overlay = document.getElementById('post_overlay');
-            if (post_overlay) {
-                post_overlay.addEventListener('click', this.closeOnOutsideClick);
-                post_overlay.focus();
-            }
-        }
-        if (!this.state.showPost && prevState.showPost) {
-            window.history.pushState({}, '', this.props.pathname);
-            document.getElementsByTagName('body')[0].className = '';
-            this.post_url = null;
-        }
     }
 
     componentWillUnmount() {
@@ -103,7 +64,6 @@ class PostsList extends React.Component {
         if ('keyCode' in e && e.keyCode !== 27) return;
         window.removeEventListener('popstate', this.onBackButton);
         window.removeEventListener('keydown', this.onBackButton);
-        this.closePostModal();
     }
 
     closeOnOutsideClick(e) {
@@ -116,11 +76,6 @@ class PostsList extends React.Component {
                 this.closePostModal();
             }
         }
-    }
-
-    closePostModal = () => {
-        window.document.title = this.state.prevTitle;
-        this.setState({showPost: null, prevTitle: null});
     }
 
     fetchIfNeeded() {
@@ -163,18 +118,10 @@ class PostsList extends React.Component {
         window.removeEventListener('resize', this.scrollListener);
     }
 
-    onPostClick(post, url) {
-        this.post_url = url;
-        this.props.fetchState(url);
-        this.props.removeHighSecurityKeys();
-        this.setState({showPost: post, prevTitle: window.document.title});
-        window.history.pushState({}, '', url);
-    }
-
     render() {
         const {posts, showSpam, loading, category, content,
-            ignore_result, account} = this.props;
-        const {thumbSize, showPost, nsfwPref} = this.state
+            ignore_result, account, nsfwPref} = this.props;
+        const {thumbSize} = this.state;
         const postsInfo = [];
         posts.forEach((item) => {
             const cont = content.get(item);
@@ -193,7 +140,6 @@ class PostsList extends React.Component {
                 post={item.item}
                 thumbSize={thumbSize}
                 ignore={item.ignore}
-                onClick={this.onPostClick}
                 nsfwPref={nsfwPref}
             />
         </li>)
@@ -204,19 +150,6 @@ class PostsList extends React.Component {
                     {renderSummary(postsInfo)}
                 </ul>
                 {loading && <center><LoadingIndicator style={{marginBottom: "2rem"}} type="circle" /></center>}
-                {showPost && <div id="post_overlay" className="PostsList__post_overlay" tabIndex={0}>
-                    <div className="PostsList__post_top_overlay">
-                        <div className="PostsList__post_top_bar">
-                            <ul className="menu back-button-menu">
-                                <li><a onClick={(e) => {e.preventDefault(); this.setState({showPost: null}) }} href="#"><i><Icon name="chevron-left" /></i> <span>{tt('g.go_back')}</span></a></li>
-                            </ul>
-                            <CloseButton onClick={this.closePostModal} />
-                        </div>
-                    </div>
-                    <div className="PostsList__post_container">
-                        <Post post={showPost} />
-                    </div>
-                </div>}
             </div>
         );
     }
@@ -229,7 +162,9 @@ export default connect(
         const username = current ? current.get('username') : state.offchain.get('account')
         const content = state.global.get('content');
         const ignore_result = state.global.getIn(['follow', 'getFollowingAsync', username, 'ignore_result']);
-        return {...props, username, content, ignore_result, pathname};
+        const userPreferences = state.app.get('user_preferences').toJS();
+        const nsfwPref = userPreferences.nsfwPref || 'warn';
+        return {...props, username, content, ignore_result, pathname, nsfwPref};
     },
     dispatch => ({
         fetchState: (pathname) => {

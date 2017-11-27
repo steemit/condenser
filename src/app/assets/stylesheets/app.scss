@@ -1,12 +1,21 @@
+
 @import "./foundation-settings";
 @import "~foundation-sites/scss/foundation";
 
 @include foundation-everything(true);
 
+@import "./variables";
+@import "./mixins";
+@import "./layout";
+@import "./themes";
+
 @import "./foundation-overrides";
+
+@import './animation';
+
 @import "./fonts";
 @import "./forms";
-@import "./mixins";
+
 @import "./markdown";
 @import "./notifications";
 @import "src/app/components/all";
@@ -53,22 +62,49 @@ a, path, circle {
   text-transform: uppercase;
 }
 
+.whistle-view {
+    .whistle-hidden {
+        display:none !important;
+    }
+}
+
+
+
 .secondary {
-  color: $dark-gray;
+  @include themify($themes) {
+    color: themed('textColorSecondary');
+  }
   font-size: 90%;
   a {
+    transition: 0.2s all ease-in-out;
     color: $dark-gray;
-    text-decoration: underline;
+    @include themify($themes) {
+      color: themed('textColorSecondary');
+    }
+    :hover {
+      @include themify($themes) {
+        color: themed('textColorAccent');
+      }
+    }
+
   }
 }
 
 .ptc,
 a.ptc {
-  color: $black;
+    cursor:pointer;
   text-decoration: none;
-  &:hover {
+  transition: 0.2s all ease-in-out;
+  @include themify($themes) {
+    color: themed('textColorPrimary');
+  }
+
+  &:hover, &:focus {
     color: $dark-gray;
     text-decoration: none;
+    @include themify($themes) {
+        color: themed('textColorAccent');
+    }
   }
 }
 
@@ -133,8 +169,33 @@ a.ptc {
   }
 }
 
-.anchor { padding-top: 90px; }
+.anchor {
+  padding-top: 68px;
+  margin-top: -68px;
+  position: relative;
+  display: block;
+}
 
 h1, h2, h3, h4, h5, h6 {
   line-height: 1.2 !important;
 }
+
+.c-sidebar {
+  width: 100%;
+  max-width: 240px;
+  font-family: helvetica, sans-serif;
+  &__module {
+      padding: 1.5em 2em;
+    @include themify($themes) {
+        background-color: themed('moduleBackgroundColor');
+        border: themed('border');
+    }
+  }
+}
+
+.phishy {
+  display: inline;
+  color: red;
+}
+
+

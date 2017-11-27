@@ -5,8 +5,8 @@
   }
   .dropdown-pane {
     @include themify($themes) {
-      border: themed('borderDark');  
-    }    
+      border: themed('borderDark');
+    }
   }
 }
 
@@ -28,31 +28,31 @@
 
 .Voting__about-flag {
   margin-right: 30px;
-  .button {  
+  .button {
     text-decoration: none;
     font-weight: bold;
     transition: 0.2s all ease-in-out;
     text-transform: capitalize;
     border-radius: 0;
-    @include font-size(18px);       
+    @include font-size(18px);
     @include themify($themes) {
-      background-color: themed('buttonBackground');  
-      box-shadow: 0px 0px 0px 0 rgba(0,0,0,0), 5px 5px 0 0 themed('buttonBoxShadow');   
+      background-color: themed('buttonBackground');
+      box-shadow: 0px 0px 0px 0 rgba(0,0,0,0), 5px 5px 0 0 themed('buttonBoxShadow');
       color: themed('buttonText');
     }
     &:hover, &:focus {
       @include themify($themes) {
-        background-color: themed('buttonBackgroundHover');  
-        box-shadow: 2px 2px 2px 0 rgba(0,0,0,0.1), 7px 7px 0 0 themed('buttonBoxShadowHover');   
+        background-color: themed('buttonBackgroundHover');
+        box-shadow: 2px 2px 2px 0 rgba(0,0,0,0.1), 7px 7px 0 0 themed('buttonBoxShadowHover');
         color: themed('buttonTextHover');
         text-shadow: 0 1px 0 rgba(0,0,0,0.20);
       }
     }
     &:visited, &:active {
       @include themify($themes) {
-        color: themed('buttonText');  
-      } 
-    } 
+        color: themed('buttonText');
+      }
+    }
   }
 }
 
@@ -67,12 +67,12 @@
   path {
     @include themify($themes) {
       fill: themed('textColorAccent');
-    }       
+    }
   }
   circle {
       @include themify($themes) {
         stroke: themed('textColorAccent');
-      }       
+      }
   }
   // exclude small devices
   @media screen and (min-width: 39.9375em) {
@@ -91,7 +91,7 @@
         @include themify($themes) {
           fill: themed('colorAccent');
           stroke: themed('colorAccent');
-        }   
+        }
     }
     svg {
         background-size: contain;
@@ -146,7 +146,7 @@
     @include themify($themes) {
       fill: themed('colorAccent');
       stroke: themed('colorAccent');
-    }    
+    }
 }
 
 .Voting__button--upvoted a:hover path {
@@ -157,7 +157,7 @@
     @include themify($themes) {
       fill: themed('colorAccentHover');
       stroke: themed('colorAccentHover');
-    }  
+    }
 }
 
 .Voting__button--downvoted path {
@@ -188,15 +188,15 @@
     font-size: 82.5%;
     display: block;
     @include themify($themes) {
-      color: themed('textColorSecondary');  
-    }  
+      color: themed('textColorSecondary');
+    }
   }
 }
 
 .Voting__inner {
   @include themify($themes) {
-    border-right: themed('borderLight'); 
-  } 
+    border-right: themed('borderLight');
+  }
   padding-right: .8rem;
   margin-right: .6rem;
   .DropdownMenu .Icon.dropdown-arrow {
@@ -217,15 +217,21 @@
 }
 
 .Voting__adjust_weight_down {
+    position: absolute;
     @extend .Voting__adjust_weight;
 
     @include themify($themes) {
-      background-color: themed('backgroundColor'); 
-    } 
+      background-color: themed('backgroundColor');
+    }
 
     right: 0;
     width: auto !important;
     max-width: 500px;
+    z-index: 333;
+    box-shadow: 1px 1px 5px 0 rgba(50,50,50,.75);
+    background-color: #fefefe;
+    border: 1px solid #cacaca;
+    display: block;
 
     div.clear {
       clear: both;

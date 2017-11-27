@@ -1,4 +1,8 @@
 import React, {PropTypes} from 'react';
+import {connect} from 'react-redux';
+import tt from 'counterpart';
+import * as userActions from 'app/redux/UserReducer';
+import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
 import PostSummary from 'app/components/cards/PostSummary';
 import Post from 'app/components/pages/Post';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
@@ -7,8 +11,6 @@ import CloseButton from 'react-foundation-components/lib/global/close-button';
 import {findParent} from 'app/utils/DomUtils';
 import Icon from 'app/components/elements/Icon';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
-import {connect} from 'react-redux'
-import tt from 'counterpart';
 
 function topPosition(domElt) {
     if (!domElt) {
@@ -168,10 +170,10 @@ export default connect(
     },
     dispatch => ({
         fetchState: (pathname) => {
-            dispatch({type: 'FETCH_STATE', payload: {pathname}})
+            dispatch(fetchDataSagaActions.fetchState({pathname}));
         },
         removeHighSecurityKeys: () => {
-            dispatch({type: 'user/REMOVE_HIGH_SECURITY_KEYS'})
+            dispatch(userActions.removeHighSecurityKeys());
         }
     })
 )(PostsList)

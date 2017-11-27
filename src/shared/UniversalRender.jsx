@@ -8,6 +8,7 @@ import { renderToString } from 'react-dom/server';
 import { Router, RouterContext, match, applyRouterMiddleware, browserHistory } from 'react-router';
 import { Provider } from 'react-redux';
 import RootRoute from 'app/RootRoute';
+import * as appActions from 'app/redux/AppReducer';
 import {createStore, applyMiddleware, compose} from 'redux';
 import { useScroll } from 'react-router-scroll';
 import createSagaMiddleware from 'redux-saga';
@@ -328,11 +329,11 @@ async function universalRender({location, initial_state, offchain, ErrorPage, ta
         offchain.server_location = location;
         server_store = createStore(rootReducer, { app: initial_state.app, global: onchain, offchain});
         server_store.dispatch({type: '@@router/LOCATION_CHANGE', payload: {pathname: location}});
-        server_store.dispatch({type: 'SET_USER_PREFERENCES', payload: userPreferences});
+        server_store.dispatch(appActions.setUserPreferences(userPreferences));
         if (offchain.account) {
             try {
                 const notifications = await tarantool.select('notifications', 0, 1, 0, 'eq', offchain.account);
-                server_store.dispatch({type: 'UPDATE_NOTIFICOUNTERS', payload: notificationsArrayToMap(notifications)});
+                server_store.dispatch(appActions.updateNotificounters(notificationsArrayToMap(notifications)));
             } catch(e) {
                 console.warn('WARNING! cannot retrieve notifications from tarantool in universalRender:', e.message);
             }

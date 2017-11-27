@@ -4,6 +4,8 @@ import request from "co-request";
 import React from "react";
 import { renderToString } from "react-dom/server";
 import models from "db/models";
+import {PARAM_VIEW_MODE, VIEW_MODE_WHISTLE} from "shared/constants";
+import {addToParams, makeParams} from 'app/utils/Links';
 import ServerHTML from "../server-html";
 import sendEmail from "../sendEmail";
 import { getRemoteIp, checkCSRF } from "server/utils/misc";
@@ -37,16 +39,12 @@ function* confirmEmailHandler() {
     const confirmation_code = this.params && this.params.code
         ? this.params.code
         : this.request.body.code;
-    console.log(
-        "-- /confirm_email -->",
-        this.session.uid,
-        this.session.user,
-        confirmation_code
-    );
+    console.log("-- /confirm_email -->", this.session.uid, this.session.user, confirmation_code);
     const eid = yield models.Identity.findOne({
         where: { confirmation_code, provider: "email"}
     });
     if (!eid) {
+        console.log("confirmation code not found", this.session.uid, this.session.user, confirmation_code);
         this.status = 401;
         this.body = "confirmation code not found";
         return;
@@ -75,8 +73,6 @@ function* confirmEmailHandler() {
             this.session.uid,
             eid.email
         );
-        this.session.uid = undefined;
-        this.session.user = undefined;
         this.flash = {error: 'This email has already been used'};
         this.redirect('/pick_account');
         return;
@@ -183,37 +179,38 @@ export default function useEnterAndConfirmEmailPages(app) {
 
     router.get("/enter_email", function*() {
         console.log("-- /enter_email -->", this.session.uid, this.session.user, this.request.query.account);
+        const params = addToParams({}, this.request.query, PARAM_VIEW_MODE, [VIEW_MODE_WHISTLE]);
+        const viewMode = (params[PARAM_VIEW_MODE]) ? params[PARAM_VIEW_MODE] : '';
         const picked_account_name = this.session.picked_account_name = this.request.query.account;
         if (!picked_account_name) {
             this.flash = { error: "Please select your account name" };
-            this.redirect('/pick_account');
+            this.redirect('/pick_account' + makeParams(params));
             return;
         }
         // check for existing account
         const check_account_res = yield api.getAccountsAsync([picked_account_name]);
         if (check_account_res && check_account_res.length > 0) {
             this.flash = { error: `${picked_account_name} is already taken, please try another name` };
-            this.redirect('/pick_account');
+            this.redirect('/pick_account' + makeParams(params));
             return;
         }
         let default_email = "";
         if (this.request.query && this.request.query.email)
             default_email = this.request.query.email;
         const body = renderToString(
-            <div className="App">
-                <MiniHeader />
+            <div className="App CreateAccount">
+                {(viewMode !== VIEW_MODE_WHISTLE)? <MiniHeader /> : null}
                 <br />
-                <div className="row" style={{ maxWidth: "32rem" }}>
+                <div className="row CreateAccount__step" style={{ maxWidth: "32rem" }}>
                     <div className="column">
                         <Progress tabIndex="0" value={50} max={100} />
-                        <form id="submit_email" action="/submit_email" method="POST">
-                            <h4 style={{ color: "#4078c0" }}>
-                                Please provide your email address to continue
+                        <form id="submit_email" action={'/submit_email' + makeParams(params)} method="POST">
+                            <h4 className="CreateAccount__title">
+                                Your email address, please
                             </h4>
-                            <p className="secondary">
-                                We need your email address to ensure that we can contact you to verify account ownership in the event that your account is ever compromised.
+                            <p>
+                                We use this to contact you and verify account ownership if this account is ever compromised. We'll send a confirmation link, so please use a valid email.
                             </p>
-                            <p className="secondary">Please make sure that you enter a <strong>valid</strong> email so that you receive the confirmation link.</p>
                             <input
                                 type="hidden"
                                 name="csrf"
@@ -245,7 +242,7 @@ export default function useEnterAndConfirmEmailPages(app) {
                                 <input
                                     type="submit"
                                     className="button"
-                                    value="CONTINUE" />
+                                    value="Continue" />
                             }
                         </form>
                     </div>
@@ -261,16 +258,17 @@ export default function useEnterAndConfirmEmailPages(app) {
 
     router.post("/submit_email", koaBody, function*() {
         if (!checkCSRF(this, this.request.body.csrf)) return;
-
+        const params = addToParams({}, this.request.query, PARAM_VIEW_MODE, [VIEW_MODE_WHISTLE]);
         let {email, account} = this.request.body;
-        console.log('-- /submit_email -->', this.session.uid, email, account);
+        console.log('-- /submit_email -->', this.session.uid, email, account, this.request.query[PARAM_VIEW_MODE]);
+
         if (!email) {
             this.flash = { error: "Please provide an email address" };
-            this.redirect(`/enter_email?account=${account}`);
+            this.redirect(`/enter_email?account=${account}` + makeParams(params, '&'));
             return;
         }
-        email = email.trim().toLowerCase();
-        account = account.trim().toLowerCase();
+        email = params.email = email.trim().toLowerCase();
+        account = params.account = account.trim().toLowerCase();
 
         //recaptcha
         if (config.get('recaptcha.site_key')) {
@@ -284,7 +282,7 @@ export default function useEnterAndConfirmEmailPages(app) {
                 this.flash = {
                     error: "Failed captcha verification, please try again"
                 };
-                this.redirect(`/enter_email?email=${email}&account=${account}`);
+                this.redirect(`/enter_email` + makeParams(params));
                 return;
             }
         }
@@ -298,38 +296,28 @@ export default function useEnterAndConfirmEmailPages(app) {
                 email
             );
             this.flash = { error: "Not valid email address" };
-            this.redirect(`/enter_email?email=${email}&account=${account}`);
+            this.redirect(`/enter_email` + makeParams(params));
             return;
         }
 
         try {
-            let user = yield models.User.findOne({ attributes: ['id'], where: { id: this.session.user }});
-            if (user) {
-                const data = user.sign_up_meta ? JSON.parse(user.sign_up_meta) : {};
-                data.last_step = 2;
-                yield user.update({
-                    sign_up_meta: JSON.stringify(data)
-                });
-            } else {
-                // create user
-                console.log("-- /Creating User -->");
-                user = yield models.User.create({
-                    uid: this.session.uid,
-                    remote_ip: getRemoteIp(this.request.req),
-                    sign_up_meta: JSON.stringify({last_step: 2}),
-                    account_status: 'waiting'
-                });
-                this.session.user = user.id;
-            }
-            // create referer attribute
-            const user_att = yield models.UserAttribute.findOne({ attributes: ['user_id', 'type_of'], where: { user_id: user.id, type_of: 'referer' }});
-            if (!user_att && this.session.r) {
-                yield models.UserAttribute.create({
-                    user_id: user.id,
-                    value: this.session.r,
-                    type_of: 'referer'
-                });
-            }
+            // create user, use new uid
+            const old_uid = this.session.uid;
+            this.session.uid = secureRandom.randomBuffer(13).toString('hex');
+            const user = yield models.User.create({
+                uid: this.session.uid,
+                remote_ip: getRemoteIp(this.request.req),
+                sign_up_meta: JSON.stringify({last_step: 2}),
+                account_status: 'waiting'
+            });
+            this.session.user = user.id;
+            console.log('-- /submit_email created new user -->', old_uid, this.session.uid, user.id);
+
+            yield models.UserAttribute.create({
+                user_id: user.id,
+                value: this.session.r,
+                type_of: 'referer'
+            });
 
             const confirmation_code = secureRandom.randomBuffer(13).toString("hex");
             // create identity
@@ -367,12 +355,12 @@ export default function useEnterAndConfirmEmailPages(app) {
             }
         } catch (error) {
             this.flash = {error: 'Internal Server Error'};
-            this.redirect(`/enter_email?email=${email}&account=${account}`);
+            this.redirect('/enter_email' +  + makeParams(params));
             console.error('Error in /submit_email :', this.session.uid, error.toString());
         }
 
         // redirect to phone verification
-        this.redirect("/enter_mobile");
+        this.redirect("/enter_mobile" + makeParams(params));
     });
 
     router.get("/confirm_email/:code", confirmEmailHandler);

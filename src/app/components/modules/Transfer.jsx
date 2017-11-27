@@ -125,7 +125,6 @@ class TransferForm extends Component {
             'Transfer to Savings': tt('transfer_jsx.protect_funds_by_requiring_a_3_day_withdraw_waiting_period'),
             'Savings Withdraw': tt('transfer_jsx.withdraw_funds_after_the_required_3_day_waiting_period'),
         };
-        const powerTip2 = tt('tips_js.VESTING_TOKEN_is_non_transferable_and_requires_convert_back_to_LIQUID_TOKEN', {LIQUID_TOKEN, VESTING_TOKEN})
         const powerTip3 = tt('tips_js.converted_VESTING_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again', {LIQUID_TOKEN, VESTING_TOKEN})
         const {to, amount, asset, memo} = this.state;
         const {loading, trxError, advanced} = this.state;
@@ -236,10 +235,10 @@ class TransferForm extends Component {
                         {!loading && <span>
                             {trxError && <div className="error">{trxError}</div>}
                             <button type="submit" disabled={submitting || !valid} className="button">
-                                {tt(toVesting ? 'g.power_up' : 'g.submit')}
+                                {toVesting ? tt('g.power_up') : tt('g.submit')}
                             </button>
                             {transferToSelf && <button className="button hollow no-border" disabled={submitting}
-                                                       onClick={this.onAdvanced}>{tt(advanced ? 'g.basic' : 'g.advanced')}</button>}
+                                                       onClick={this.onAdvanced}>{advanced ? tt('g.basic') : tt('g.advanced')}</button>}
                         </span>}
                     </div>
                 </div>

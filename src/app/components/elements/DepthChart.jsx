@@ -74,7 +74,6 @@ class DepthChart extends React.Component {
             return null;
         }
         const depth_chart_config = generateDepthChart(bids, asks);
-
         return (
             <div className="DepthChart"><ReactHighcharts ref="depthChart" config={depth_chart_config} /></div>
         );
@@ -163,10 +162,10 @@ function generateDepthChart(bidsArray, asksArray) {
             lineWidth: 2,
             labels: {
                 align: "left",
-                formatter: function () {
-                    let value = this.value / precision;
-                    return '$' + (value > 10e6 ? (value / 10e6).toFixed(2) + "M" :
-                        value > 10000 ? (value / 10e3).toFixed(2) + "k" :
+                formatter: function() {
+                    const value = this.value / precision;
+                    return '$' + (value > 1e6 ? (value / 1e6).toFixed(3) + "M" :
+                        value > 10000 ? (value / 1e3).toFixed(0) + "k" :
                         value);
                 }
             },

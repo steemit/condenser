@@ -7,8 +7,6 @@
   z-index: 300;
   overflow-x: hidden;
   overflow-y: scroll;
-  background-color: $white;
-  // padding: 0 .9rem;
   -webkit-overflow-scrolling: touch;
   backface-visibility: hidden;
 }
@@ -22,7 +20,14 @@
   height: 3rem;
   overflow-x: hidden;
   overflow-y: scroll;
-  border-bottom: 1px solid $light-gray;
+  @include themify($themes) {
+    border-bottom: themed('border');  
+  } 
+  @media screen and (min-width: 60rem) {  
+    @include themify($themes) {
+      border-bottom: themed('borderTransparent');  
+    } 
+  }
 }
 
 .PostsList__post_top_bar {
@@ -30,11 +35,20 @@
   width: 100%;
   height: 3rem;
   margin: 0 auto;
-  background-color: $white;
   overflow: hidden;
+  @include themify($themes) {
+    background-color: themed('navBackgroundColor');
+  } 
+  @media screen and (min-width: 60rem) {  
+    @include themify($themes) {
+      background-color: themed('backgroundTransparent');  
+    } 
+  }
   a {
     span.Icon path {
-      fill: map-get($foundation-palette, 'primary');
+      @include themify($themes) {
+        fill: themed('textColorAccent');  
+      } 
     }
   }
   > .close-button {
@@ -46,13 +60,12 @@
 
 .PostsList__post_container {
   position: relative;
-  background-color: $white;
+  @include themify($themes) {
+      background-color: themed('moduleBackgroundColor');       
+    }
   margin: 1rem auto;
   padding: 2rem 0.9rem 0 0.9rem;
   transform: translateZ(0);
-  .PostFull {
-    background-color: $white;
-  }
 }
 
 body.with-post-overlay {
@@ -61,7 +74,7 @@ body.with-post-overlay {
 
 @media screen and (min-width: 60rem) {
   .PostsList__post_overlay {
-    background-color: rgba(150, 150, 150, 0.9);
+    background-color: rgba(0, 0, 0, 0.85);
   }
   .PostsList__post_top_overlay {
     border-bottom: none;
@@ -77,9 +90,11 @@ body.with-post-overlay {
     }
   }
   .PostsList__post_container {
-    border-radius: 3px;
     width: 56rem;
-    box-shadow: 0 0 5px 0px rgba(64,64,64,1);
+    margin-bottom: 3em;
+    @include themify($themes) {
+      box-shadow: 5px 5px 0 0 themed('contentBorderAccent');        
+    }    
   }
 }
 

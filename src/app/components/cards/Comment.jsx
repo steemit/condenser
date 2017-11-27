@@ -10,10 +10,10 @@ import user from 'app/redux/User';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Userpic from 'app/components/elements/Userpic';
 import transaction from 'app/redux/Transaction'
-import {List} from 'immutable'
 import tt from 'counterpart';
 import {parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
 import {Long} from 'bytebuffer';
+import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 
 // returns true if the comment has a 'hide' flag AND has no descendants w/ positive payout
 function hideSubtree(cont, c) {
@@ -155,20 +155,10 @@ class CommentImpl extends React.Component {
     }
 
     componentDidMount() {
-        // Jump to comment via hash (note: comment element's id has a hash(#) in it)
         if (window.location.hash == this.props.anchor_link) {
-            const comment_el = document.getElementById(this.props.anchor_link)
-            if (comment_el) {
-                comment_el.scrollIntoView(true);
-                document.body.scrollTop -= 200;
-                this.setState({highlight: true})
-            }
+            this.setState({highlight: true}); // eslint-disable-line react/no-did-mount-set-state
         }
     }
-
-    //componentWillReceiveProps(np) {
-    //    this._checkHide(np);
-    //}
 
     /**
      * - `hide` is based on author reputation, and will hide the entire post on initial render.
@@ -258,6 +248,9 @@ class CommentImpl extends React.Component {
         // const get_asset_value = ( asset_str ) => { return parseFloat( asset_str.split(' ')[0] ); }
         // const steem_supply = this.props.global.getIn(['props','current_supply']);
 
+        // hide images if author is in blacklist
+        const hideImages = ImageUserBlockList.includes(author)
+
         const showDeleteOption = username === author && allowDelete
         const showEditOption = username === author
         const showReplyOption = comment.depth < 255
@@ -272,6 +265,7 @@ class CommentImpl extends React.Component {
                 formId={post + '-viewer'}
                 text={comment.body}
                 noImage={noImage || gray}
+                hideImages={hideImages}
                 jsonMetadata={jsonMetadata} />);
             controls = (<div>
               <Voting post={post} />
@@ -346,10 +340,10 @@ class CommentImpl extends React.Component {
         return (
           <div className={commentClasses.join(' ')} id={anchor_link} itemScope itemType="http://schema.org/comment">
             {depth_indicator}
-            <div className="Comment__Userpic show-for-medium">
-              <Userpic account={comment.author} />
-            </div>
             <div className={innerCommentClass}>
+                <div className="Comment__Userpic show-for-medium">
+                  <Userpic account={comment.author} />
+                </div>
               <div className="Comment__header">
                 <div className="Comment__header_collapse">
                   <Voting post={post} flag />

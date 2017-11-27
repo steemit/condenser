@@ -109,12 +109,12 @@ export default class Orderbook extends React.Component {
                   <ul className="pager">
                     <li>
                         <div className={"button tiny hollow " + (buy ? "float-left" : "float-left") + (currentIndex === 0 ? " disabled" : "")} onClick={this._setBuySellPage.bind(this, false)} aria-label="Previous">
-                            <span aria-hidden="true">&larr; {tt(buy ? 'market_jsx.higher' : 'market_jsx.lower')}</span>
+                            <span aria-hidden="true">&larr; {buy ? tt('market_jsx.higher') : tt('market_jsx.lower')}</span>
                         </div>
                     </li>
                     <li>
                         <div className={"button tiny hollow " + (buy ? "float-right" : "float-right") + (currentIndex >= (orders.length - 10) ? " disabled" : "")} onClick={this._setBuySellPage.bind(this, true)} aria-label="Next">
-                            <span aria-hidden="true">{tt(buy ? 'market_jsx.lower' : 'market_jsx.higher')} &rarr;</span>
+                            <span aria-hidden="true">{buy ? tt('market_jsx.lower') : tt('market_jsx.higher')} &rarr;</span>
                         </div>
                     </li>
                   </ul>

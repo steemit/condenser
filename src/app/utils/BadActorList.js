@@ -8,6 +8,7 @@ bitterx
 bittex
 bittrax
 bittre
+bittrec
 bittres
 bittrex.com
 bittrexe
@@ -25,6 +26,9 @@ btrex
 bttrex
 ittrex
 bittrex-deposit
+blockrades
+blocktraades
+blocktradse
 poloiex
 poloinex
 polomiex
@@ -77,20 +81,33 @@ polnoiex
 polonyex
 polonied
 polonixe
+blockrade
 blocktardes
 blocktrade
+blocktradees
+blocktraded
+blocktrader
+blocktrads
 bocktrades
 changelly.com
 changely
 shapeshif
 shapeshift
 randomwhale
+randowale
+randwhale
 coinpayments
 minnowboost
 minnowboster
 minowbooster
+minnowbooste
+minnowboooster
+minnnowbooster
 blocktades
 bloocktrades
+bloctrades
+blocktradess
+blocktrade
 `.trim().split('\n');
 
 export default list;

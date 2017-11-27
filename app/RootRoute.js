@@ -13,6 +13,8 @@ export default {
             cb(null, [require('app/components/pages/Landing')]);
         } else if (route.page === 'Welcome') {
             cb(null, [require('app/components/pages/Welcome')]);
+        } else if (route.page === 'Start') {
+            cb(null, [require('app/components/pages/Start')]);
         } else if (route.page === 'Faq') {
             cb(null, [require('app/components/pages/Faq')]);
         } else if (route.page === 'Login') {

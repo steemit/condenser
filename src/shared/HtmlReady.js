@@ -1,6 +1,10 @@
 import xmldom from 'xmldom'
-import linksRe from 'app/utils/Links'
+import tt from 'counterpart'
+import linksRe, { any as linksAny } from 'app/utils/Links'
 import {validate_account_name} from 'app/utils/ChainValidation'
+import proxifyImageUrl from 'app/utils/ProxifyUrl'
+
+export const getPhishingWarningMessage = () => tt('g.phishy_message');
 
 const noop = () => {}
 const DOMParser = new xmldom.DOMParser({
@@ -133,6 +137,16 @@ function link(state, child) {
             if(! /^\/(?!\/)|(https?:)?\/\//.test(url)) {
                 child.setAttribute('href', "https://"+url)
             }
+
+            // Unlink potential phishing attempts
+            if (child.textContent.match(/https?:\/\/(.*@)?(www\.)?steemit\.com/)
+                && !url.match(/https?:\/\/(.*@)?(www\.)?steemit\.com/)) {
+                const phishyDiv = child.ownerDocument.createElement('div');
+                phishyDiv.textContent = `${child.textContent} / ${url}`;
+                phishyDiv.setAttribute('title', getPhishingWarningMessage());
+                phishyDiv.setAttribute('class', 'phishy');
+                child.parentNode.replaceChild(phishyDiv, child);
+            }
         }
     }
 }
@@ -177,12 +191,11 @@ function img(state, child) {
 
 // For all img elements with non-local URLs, prepend the proxy URL (e.g. `https://img0.steemit.com/0x0/`)
 function proxifyImages(doc) {
-    if (!$STM_Config.img_proxy_prefix) return
     if (!doc) return;
     [...doc.getElementsByTagName('img')].forEach(node => {
         const url = node.getAttribute('src')
         if(! linksRe.local.test(url))
-            node.setAttribute('src', $STM_Config.img_proxy_prefix + '0x0/' + url)
+            node.setAttribute('src', proxifyImageUrl(url, true))
     })
 }
 
@@ -231,7 +244,7 @@ function linkify(content, mutate, hashtags, usertags, images, links) {
         )
     })
 
-    content = content.replace(linksRe.any, ln => {
+    content = content.replace(linksAny('gi'), ln => {
         if(linksRe.image.test(ln)) {
             if(images) images.add(ln)
             return `<img src="${ipfsPrefix(ln)}" />`

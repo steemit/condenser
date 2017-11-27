@@ -1,6 +1,6 @@
 /// Font size attribute applied to `<html>` and `<body>`. We use 100% by default so the value is inherited from the user's browser settings.
 /// @type Number
-$global-font-size: 105% !default;
+$global-font-size: 100% !default;
 
 /// Default line height for all type. `$global-lineheight` is 24px while `$global-font-size` is 16px
 /// @type Number
@@ -27,6 +27,10 @@ $medium-gray: #cacaca !default;
 /// Color used for dark gray UI items.
 /// @type Color
 $dark-gray: #8a8a8a !default;
+
+//$dark-blue: #1A5099 !default; //not used yet
+
+$light-blue: #4ba2f2 !default;
 
 /// Color used for black ui items.
 /// @type Color

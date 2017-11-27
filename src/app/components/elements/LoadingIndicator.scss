@@ -126,20 +126,34 @@
     }
 }
 
-.LoadingIndicator.circle.inline {
-  display: inline-block;
-  position: relative;
-  top: 6px;
+.LoadingIndicator.circle {
+    $circle-radius: 16px;
+    &.inline {
+        display: inline-block;
+        position: relative;
+        top: 6px;
+    }
+    &.circle-strong {
+        padding-top:2em;
+        padding-bottom:2em;
+        div {
+            border-width:1px;
+            border-color: $color-teal;
+            border-right-color: transparent;
+            border-top-color: transparent;
+        }
+    }
+
+    div {
+        width: $circle-radius;
+        height: $circle-radius;
+        margin: 4px;
+        border: 1px solid $color-teal;
+        border-radius: 50%;
+        border-right-color: transparent;
+        border-top-color: transparent;
+        animation: loading 500ms infinite linear;
+    }
 }
 
-.LoadingIndicator.circle > div {
-  width: 16px;
-  height: 16px;
-  margin: 4px;
-  border: 1px solid $dark-gray;
-  border-radius: 50%;
-  border-right-color: transparent;
-  border-top-color: transparent;
-  animation: loading 500ms infinite linear;
-}
 

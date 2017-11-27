@@ -15,12 +15,14 @@ export default createModule({
                 const operation = fromJS(payload.operation)
                 const confirm = payload.confirm
                 const warning = payload.warning
+                const checkbox = payload.checkbox
                 return state.merge({
                     show_confirm_modal: true,
                     confirmBroadcastOperation: operation,
                     confirmErrorCallback: payload.errorCallback,
                     confirm,
-                    warning
+                    warning,
+                    checkbox
                 })
             }
         },

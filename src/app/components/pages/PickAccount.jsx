@@ -2,19 +2,23 @@
 /*global $STM_csrf, $STM_Config */
 import React from 'react';
 import {connect} from 'react-redux';
-import user from 'app/redux/User';
-import {api} from 'steem';
-import {validate_account_name} from 'app/utils/ChainValidation';
-import runTests from 'app/utils/BrowserTests';
 import Progress from 'react-foundation-components/lib/global/progress-bar';
 import { Link } from 'react-router';
+import classNames from 'classnames';
+import {api} from 'steem';
+import user from 'app/redux/User';
+import {validate_account_name} from 'app/utils/ChainValidation';
+import runTests from 'app/utils/BrowserTests';
+import {PARAM_VIEW_MODE} from 'shared/constants';
+import {makeParams} from 'app/utils/Links';
+
 
 class PickAccount extends React.Component {
-
     static propTypes = {
         loginUser: React.PropTypes.func.isRequired,
         serverBusy: React.PropTypes.bool
     };
+
 
     constructor(props) {
         super(props);
@@ -47,8 +51,11 @@ class PickAccount extends React.Component {
         this.setState({server_error: '', loading: true});
         const {name} = this.state;
         if (!name) return;
-
-        window.location = "/enter_email?account=" + name;
+        const params = {account: name};
+        if(this.props.viewMode) {
+            params[PARAM_VIEW_MODE] = this.props.viewMode;
+        }
+        window.location = "/enter_email" + makeParams(params);
     }
 
     onPasswordChange(password, password_valid) {
@@ -99,15 +106,14 @@ class PickAccount extends React.Component {
 
         const {loggedIn, logout, offchainUser, serverBusy} = this.props;
         const submit_btn_disabled = loading || !name || name_error;
-        const submit_btn_class = 'button action' + (submit_btn_disabled ? ' disabled' : '');
-
+        const submit_btn_class = classNames('button action', {disabled: submit_btn_disabled});
         const account_status = offchainUser ? offchainUser.get('account_status') : null;
 
         if (serverBusy || $STM_Config.disable_signups) {
             return <div className="row">
                 <div className="column">
                     <div className="callout alert">
-                        <p>Membership to Steemit.com is now under invitation only because of unexpectedly high sign up rate.</p>
+                        <p>The creation of new accounts is temporarily disabled.</p>
                     </div>
                 </div>
             </div>;
@@ -116,10 +122,10 @@ class PickAccount extends React.Component {
             return <div className="row">
                 <div className="column">
                     <div className="callout alert">
-                        <h4>Cryptography test failed</h4>
+                        <h4>Browser Out of Date</h4>
                         <p>We will be unable to create your Steem account with this browser.</p>
                         <p>The latest versions of <a href="https://www.google.com/chrome/">Chrome</a> and <a href="https://www.mozilla.org/en-US/firefox/new/">Firefox</a>
-                            are well tested and known to work with steemit.com.</p>
+                            are well-tested and known to work well with steemit.com.</p>
                     </div>
                 </div>
             </div>;
@@ -129,7 +135,7 @@ class PickAccount extends React.Component {
             return <div className="row">
                 <div className="column">
                     <div className="callout alert">
-                        <p>You need to <a href="#" onClick={logout}>Logout</a> before you can create another account.</p>
+                        <p>You need to <a href="#" onClick={logout}>Logout</a> before you can create an additional account.</p>
                         <p>Please note that Steemit can only register one account per verified user.</p>
                     </div>
                 </div>
@@ -141,9 +147,8 @@ class PickAccount extends React.Component {
                 <div className="column">
                     <br />
                     <div className="callout alert">
-                        <p>Your sign up request is not confirmed yet, we will send you a confirmation email as soon as we process it.</p>
-                        <p>It usually takes up to one business day to process a request, please be patient.</p>
-                        <p>Drop us a <a href="mailto:support@steemit.com?subject=Sign Up">message</a> if it takes longer or you need to sign up sooner.</p>
+                        <p>Your sign up request is being processed and you will receive an email from us when it is ready.</p>
+                        <p>Signup requests can take up to 7 days to be processed, but usually complete in a day or two.</p>
                     </div>
                 </div>
             </div>;
@@ -155,7 +160,7 @@ class PickAccount extends React.Component {
                     <br />
                     <div className="callout success">
                         <p>Congratulations! Your sign up request has been approved.</p>
-                        <p><Link to="/create_account">Proceed to Create Account Form</Link></p>
+                        <p><Link to="/create_account">Let's get your account created!</Link></p>
                     </div>
                 </div>
             </div>;
@@ -187,7 +192,7 @@ class PickAccount extends React.Component {
                 </div>;
             } else {
                 next_step = <div className="callout alert">
-                    <h5>Couldn't create account. Server returned the following error:</h5>
+                    <h5>Couldn't create account. The server returned the following error:</h5>
                     <p>{server_error}</p>
                 </div>;
             }
@@ -200,9 +205,9 @@ class PickAccount extends React.Component {
                         <br />
                         <Progress tabIndex="0" value={10} max={100} />
                         <br />
-                        <h4 style={{ color: "#4078c0" }}>Welcome to Steemit</h4>
-                        <div className="secondary">
-                             <p>Your account name is how you will be known on Steemit.<br />
+                        <h4 className="CreateAccount__title">Welcome to Steemit</h4>
+                        <div>
+                             <p>Your account name is how you will be known on steemit.com.<br />
                                  {/*Your account name <strong>can never be changed</strong>, so please choose carefully.*/}</p>
                         </div>
                         <form onSubmit={this.onSubmit} autoComplete="off" noValidate method="post">
@@ -211,10 +216,10 @@ class PickAccount extends React.Component {
                                 <input type="text" name="name" autoComplete="off" onChange={this.onNameChange} value={name} placeholder={"Name..."} />
                                 <p>{name_error}</p>
                             </div>
-                            <input disabled={submit_btn_disabled} type="submit" className={submit_btn_class} value="CONTINUE" />
+                            <input disabled={submit_btn_disabled} type="submit" className={submit_btn_class} value="Continue" />
                         </form>
                         <br />
-                        <p className="secondary">Already have an account? <Link to="/login.html">Login</Link></p>
+                        <p className="secondary whistle-hidden">Got an account? <Link to="/login.html">Login</Link></p>
                     </div>
                 </div>
             </div>
@@ -227,6 +232,7 @@ module.exports = {
     component: connect(
         state => {
             return {
+                viewMode: state.app.get('viewMode'),
                 loggedIn: !!state.user.get('current'),
                 offchainUser: state.offchain.get('user'),
                 serverBusy: state.offchain.get('serverBusy')

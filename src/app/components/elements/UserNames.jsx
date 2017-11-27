@@ -4,7 +4,7 @@ import DropdownMenu from 'app/components/elements/DropdownMenu';
 import { Link } from 'react-router';
 
 function userLink(name) {
-    return <Link key={name} to={'/@'+name}>{name}</Link>
+    return <Link className="username" key={name} to={'/@'+name}>{name}</Link>
 }
 
 class UserNames extends Component {

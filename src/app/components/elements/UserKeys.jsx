@@ -76,7 +76,7 @@ class UserKeys extends Component {
                 </div>
             </span>
         })
-        return (<div className="row">
+        return (<div className="UserKeys row">
             <div style={{paddingBottom: 10}} className="column small-12">
                 <Keys account={account} authType="posting" onKey={onKey.Posting} />
                 <span className="secondary">{tt('userkeys_jsx.posting_key_is_required_it_should_be_different')}</span>

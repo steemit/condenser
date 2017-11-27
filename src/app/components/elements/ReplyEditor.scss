@@ -1,12 +1,30 @@
 .ReplyEditor {
   max-width: 54rem;
   margin-bottom: 0.5rem;
+  padding-bottom: 2em;
   .vframe {
     display: block;
     .public-DraftEditor-content {
       height: 20em;
       resize: vertical;
+      color: #333;
     }
+  }
+  .button {
+    @extend .e-btn;
+    margin-bottom: 2em;
+  }
+  .button.hollow.no-border {
+    background-color: transparent;
+    box-shadow: 0 0 0 rgba(0,0,0,0.0);
+    text-decoration: none;
+    @extend .link;   
+    @extend .link--secondary;
+    font-weight: normal;
+    @include font-size(14px);
+    outline: none;
+    text-shadow: 0 0 0 rgba(0,0,0,0.0);
+    border: transparent;
   }
 }
 

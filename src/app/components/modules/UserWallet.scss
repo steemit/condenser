@@ -1,9 +1,17 @@
+
+.UserWallet__buysp {
+  @extend .e-btn-hollow;
+}
+
 .UserWallet__balance {
   padding-bottom: 1rem;
   padding-top: 1rem;
 
   &.UserWallet__balance.zebra {
-      background: #f2f2f2;
+      @include themify($themes) {
+        background-color: themed('tableRowEvenBackgroundColor');  
+        color: themed('textColorPrimary');  
+      }   
   }
 }
 
@@ -12,42 +20,61 @@
   margin-top: 1rem;
 }
 
-.UserWallet__dropdown {
-}
-
 .UserWallet__claimbox {
   margin: 1.5rem 0 0.5rem;
-  padding: 1rem;
-  border: 1px solid #d6e9c6;
-  background: #dff0d8;
+  padding: 1rem 1rem 1.1rem 1rem;
   border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
 
+  @include themify($themes) {
+    border: themed('border');  
+    background-color: themed('highlightBackgroundColor');  
+    color: themed('textColorPrimary');  
+  }     
+
+  &-text {
+    font-weight: bold;
+  }
   .button {
-    background: #337ab7;
-    border-color: #2e6da4;
-    color: white;
-    margin-top: -0.5rem;
+    @extend .e-btn;
+    @include font-size(14px);
+    margin: 0;
   }
   // spacing for mobile collapse
-  @media only screen and (max-width: 30em) {
+  @media only screen and (max-width: 680px) {
       .button {
-          margin-top: 1.5rem;
+        margin: 8px 0 0 0;
       }
   }
 }
 
 .WalletSubMenu {
   > li > a {
-    color: $dark-gray;
-    &:hover {
-      color: $black;
+    transition: 0.2s all ease-in-out;
+    @include themify($themes) {
+      color: themed('textColorSecondary');  
+    }  
+
+    &:hover, &:focus {
+      @include themify($themes) {
+        color: themed('textColorAccent');  
+      }  
     }
   }
   > li > a.active {
-    color: $black;
+    cursor: default;
+    @include themify($themes) {
+      color: themed('textColorPrimary');  
+    }     
     font-weight: bold;
   }
-  border-bottom: 1px solid $medium-gray;
+  @include themify($themes) {
+    border-bottom: themed('border');  
+  }       
+
   margin: 0.5rem 0 1rem;
 }
 

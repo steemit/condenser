@@ -23,7 +23,7 @@ export default {
         new webpack.DefinePlugin({
             'process.env': {
                 BROWSER: JSON.stringify(true),
-                NODE_ENV: JSON.stringify('development'),
+                // NODE_ENV: JSON.stringify('development'),
                 VERSION: JSON.stringify(git.long())
             },
             global: {

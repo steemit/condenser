@@ -10,7 +10,16 @@ import ConsoleExports from './utils/ConsoleExports';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import * as steem from 'steem';
 import {determineViewMode} from "app/utils/Links";
+import config from 'config';
 
+
+console.log('process.env.NODE_ENV', process.env.NODE_ENV)
+//console.log('Iains config', config.get('iain'))
+
+console.log('config', config)
+console.log(config.get('session_key'));
+console.log('config util1', config.util.getEnv());
+console.log('config util', config.util.getEnv('NODE_ENV'));
 
 window.onerror = error => {
     if (window.$STM_csrf) serverApiRecordEvent('client_error', error);

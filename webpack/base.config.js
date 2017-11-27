@@ -2,6 +2,12 @@ import path from 'path';
 import webpack from 'webpack';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import writeStats from './utils/write-stats';
+import config from 'config';
+import fs from 'fs';
+
+
+// https://github.com/lorenwest/node-config/wiki/Webpack-Usage
+fs.writeFileSync(path.resolve(__dirname, '../config/client.json'), JSON.stringify(config))
 
 const Webpack_isomorphic_tools_plugin = require('webpack-isomorphic-tools/plugin');
 const webpack_isomorphic_tools_plugin =
@@ -100,7 +106,8 @@ export default {
     resolve: {
         alias: {
             react: path.join(__dirname, '../node_modules', 'react'),
-            assets: path.join(__dirname, '../src/app/assets')
+            assets: path.join(__dirname, '../src/app/assets'),
+            config: path.resolve(__dirname, '../config/client.json')
         },
         extensions: ['.js', '.json', '.jsx'],
         modules: [

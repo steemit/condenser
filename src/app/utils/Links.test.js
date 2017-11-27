@@ -2,6 +2,7 @@
 import assert from 'assert'
 import secureRandom from 'secure-random'
 import links, * as linksRe from 'app/utils/Links'
+import {PARAM_VIEW_MODE, VIEW_MODE_WHISTLE} from "../../shared/constants";
 
 describe('Links', () => {
     it('all', () => {
@@ -47,6 +48,47 @@ describe('Links', () => {
         matchNot(linksRe.image(), ['http://imgur.com/iznWRVq', 'https://openmerchantaccount.com/'])
     })
 })
+
+describe('makeParams', () => {
+    it('creates an empty string when there are no params', () => {
+        assert(linksRe.makeParams([]) === '', 'not empty on array');
+        assert(linksRe.makeParams({}) === '', 'not empty on object');
+        assert(linksRe.makeParams({}, false) === '', 'not empty on object with prefix false');
+        assert(linksRe.makeParams([], false) === '', 'not empty on array with prefix false');
+        assert(linksRe.makeParams([], '?') === '', 'not empty on array with prefix string');
+        assert(linksRe.makeParams({}, '?') === '', 'not empty on object  with prefix string');
+    });
+    it('creates the correct string when passed an array', () => {
+        assert(linksRe.makeParams(['bop=boop','troll=bridge']) === '?bop=boop&troll=bridge', 'incorrect string with');
+        assert(linksRe.makeParams(['bop=boop','troll=bridge'], false) === 'bop=boop&troll=bridge', 'incorrect string with prefix false');
+        assert(linksRe.makeParams(['bop=boop','troll=bridge'], '&') === '&bop=boop&troll=bridge', 'incorrect string with prefix &');
+    });
+    it('creates the correct string when passed an object', () => {
+        assert(linksRe.makeParams({bop: 'boop',troll: 'bridge'}) === '?bop=boop&troll=bridge', 'incorrect string');
+        assert(linksRe.makeParams({bop: 'boop',troll: 'bridge'}, false) === 'bop=boop&troll=bridge', 'incorrect string with prefix false');
+        assert(linksRe.makeParams({bop: 'boop',troll: 'bridge'}, '&') === '&bop=boop&troll=bridge', 'incorrect string with prefix &');
+    });
+});
+
+describe('determineViewMode', () => {
+    it('returns empty string when no parameter in search', () => {
+        assert(linksRe.determineViewMode('') === '', linksRe.determineViewMode('') + 'not empty on empty string');
+        assert(linksRe.determineViewMode('?afs=asdf') === '', 'not empty on incorrect parameter');
+        assert(linksRe.determineViewMode('?afs=asdf&apple=sauce') === '', 'not empty on incorrect parameter');
+    });
+
+    it('returns empty string when unrecognized value for parameter in search', () => {
+        assert(linksRe.determineViewMode(`?${PARAM_VIEW_MODE}=asd`) === '', 'not empty on incorrect parameter value');
+        assert(linksRe.determineViewMode(`?${PARAM_VIEW_MODE}=${VIEW_MODE_WHISTLE}1`) === '', 'not empty on incorrect parameter value');
+        assert(linksRe.determineViewMode(`?${PARAM_VIEW_MODE}=asdf&apple=sauce`) === '', 'not empty on incorrect parameter value');
+        assert(linksRe.determineViewMode(`?apple=sauce&${PARAM_VIEW_MODE}=asdf`) === '', 'not empty on incorrect parameter value');
+    });
+    it('returns correct value when recognized value for parameter in search', () => {
+        assert(linksRe.determineViewMode(`?${PARAM_VIEW_MODE}=${VIEW_MODE_WHISTLE}`) === VIEW_MODE_WHISTLE, 'wrong response on correct parameter');
+        assert(linksRe.determineViewMode(`?${PARAM_VIEW_MODE}=${VIEW_MODE_WHISTLE}&apple=sauce`) === VIEW_MODE_WHISTLE, 'wrong response on correct parameter');
+        assert(linksRe.determineViewMode(`?apple=sauce&${PARAM_VIEW_MODE}=${VIEW_MODE_WHISTLE}`) === VIEW_MODE_WHISTLE, 'wrong response on correct parameter');
+    });
+});
 
 // 1st in the browser it is very expensive to re-create a regular expression many times, however, in nodejs is is very in-expensive (it is as if it is caching it).
 describe('Performance', () => {

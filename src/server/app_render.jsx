@@ -1,16 +1,17 @@
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import Tarantool from 'db/tarantool';
+import {VIEW_MODE_WHISTLE, PARAM_VIEW_MODE} from '../shared/constants';
 import ServerHTML from './server-html';
 import universalRender from '../shared/UniversalRender';
 import models from 'db/models';
 import secureRandom from 'secure-random';
 import ErrorPage from 'server/server-error';
 import fs from 'fs';
+import {determineViewMode} from "../app/utils/Links";
 
 const path = require('path');
 const ROOT = path.join(__dirname, '../..');
-
 const DB_RECONNECT_TIMEOUT = process.env.NODE_ENV === 'development' ? 1000 * 60 * 60 : 1000 * 60 * 10;
 
 function getSupportedLocales() {
@@ -111,8 +112,13 @@ async function appRender(ctx) {
                 offchain.recover_account = account_recovery_record.account_name;
             }
         }
+        const initial_state = {
+            app: {
+                viewMode: determineViewMode(ctx.request.search)
+            }
+        }
 
-        const { body, title, statusCode, meta } = await universalRender({location: ctx.request.url, store, offchain, ErrorPage, tarantool: Tarantool.instance(), userPreferences});
+        const { body, title, statusCode, meta } = await universalRender({initial_state, location: ctx.request.url, store, offchain, ErrorPage, tarantool: Tarantool.instance(), userPreferences});
 
         // Assets name are found in `webpack-stats` file
         const assets_filename = ROOT + (process.env.NODE_ENV === 'production' ? '/tmp/webpack-stats-prod.json' : '/tmp/webpack-stats-dev.json');

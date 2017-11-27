@@ -2,11 +2,14 @@
   display: none;
   .active > a {
     background: none;
-    color: $black;
     font-weight: 600;
+    @include themify($themes) {
+      color: themed('textColorAccent');  
+    }  
+
   }
   li > a:hover {
-    color: $black;
+    // color: $black;
   }
   > li:first-child > a {
     padding-left: 0;

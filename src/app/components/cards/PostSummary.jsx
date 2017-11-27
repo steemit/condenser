@@ -81,7 +81,7 @@ class PostSummary extends React.Component {
                 <div className="articles__resteem">
                     <p className="articles__resteem-text">
                         <span className="articles__resteem-icon"><Icon name="reblog" /></span>
-                        <UserNames names={reblogged_by} /> {tt('postsummary_jsx.resteemed')} 
+                        <UserNames names={reblogged_by} /> {tt('postsummary_jsx.resteemed')}
                     </p>
                 </div>)
         }
@@ -91,7 +91,7 @@ class PostSummary extends React.Component {
             reblogged_by = (<div className="articles__resteem">
                                 <p className="articles__resteem-text">
                                     <span className="articles__resteem-icon"><Icon name="reblog" /></span>
-                                    {tt('postsummary_jsx.resteemed')} 
+                                    {tt('postsummary_jsx.resteemed')}
                                 </p>
                             </div>)
         }
@@ -199,7 +199,7 @@ class PostSummary extends React.Component {
                     <article className={'PostSummary hentry'} itemScope itemType ="http://schema.org/blogPost">
                         <div className="PostSummary__nsfw-warning">
                             {summary_header}
-                            <span className="nsfw-flag">nsfw</span>&nbsp;&nbsp;<a href="#" onClick={this.onRevealNsfw}>{tt('postsummary_jsx.reveal_it')}</a> {tt('g.or') + ' '}
+                            <span className="nsfw-flag">nsfw</span>&nbsp;&nbsp;<span className="ptc" role="button" onClick={this.onRevealNsfw}>{tt('postsummary_jsx.reveal_it')}</span> {tt('g.or') + ' '}
                             {username ? <span>{tt('postsummary_jsx.adjust_your')} <Link to={`/@${username}/settings`}>{tt('postsummary_jsx.display_preferences')}</Link>.</span>
                                 : <span><Link to="/pick_account">{tt('postsummary_jsx.create_an_account')}</Link> {tt('postsummary_jsx.to_save_your_preferences')}.</span>}
 

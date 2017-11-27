@@ -45,6 +45,11 @@ class CategorySelector extends React.Component {
             } else
                 this.props.onChange(e)
         }
+        this.categoryInputOnChange = (e) => {
+          e.preventDefault()
+          e.target.value = e.target.value.toLowerCase()
+          this.props.onChange(e)
+        }
     }
     render() {
         const {trending, tabIndex, disabled} = this.props
@@ -56,7 +61,7 @@ class CategorySelector extends React.Component {
 
         const impProps = {...this.props}
         const categoryInput =
-          <input type="text" {...cleanReduxInput(impProps)} ref="categoryRef" tabIndex={tabIndex} disabled={disabled} />
+          <input type="text" {...cleanReduxInput(impProps)} ref="categoryRef" tabIndex={tabIndex} disabled={disabled} onChange={this.categoryInputOnChange}/>
 
         const categorySelect = (
           <select {...cleanReduxInput(this.props)} onChange={this.categorySelectOnChange} ref="categoryRef" tabIndex={tabIndex} disabled={disabled}>

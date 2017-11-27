@@ -5,8 +5,8 @@ import {immutableCore, global_object} from 'app/utils/Assets/assets_fake_data';
 const defaultState = {
     assets: {},
     asset: {},
-    core: immutableCore,
-    globalObject: global_object
+    core: {},
+    globalObject:{}
 };
 
 export default createModule({

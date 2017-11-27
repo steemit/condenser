@@ -162,6 +162,9 @@ export function* fetchState(location_change_action) {
               state.tags[trending_tags[i].name] = trending_tags[i]
             }
           }
+
+          for (var key in state.content)
+            state.content[key].active_votes = []
          
           yield put({type: 'global/FETCHING_STATE', payload: false});
         }

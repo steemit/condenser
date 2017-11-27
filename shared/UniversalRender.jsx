@@ -302,6 +302,9 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
 
           _state.tag_idx = { "trending": trending_tags.map(t => t.name) };
 
+          for (var key in _state.content)
+            _state.content[key].active_votes = []
+
           onchain = _state
         }
 

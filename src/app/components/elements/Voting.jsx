@@ -215,6 +215,7 @@ class Voting extends React.Component {
         </DropdownMenu>;
 
         let voters_list = null;
+        let all_flags = [];
         if (showList && total_votes > 0 && active_votes) {
             const avotes = active_votes.toJS();
             avotes.sort((a, b) => Math.abs(parseInt(a.rshares)) > Math.abs(parseInt(b.rshares)) ? -1 : 1)
@@ -222,13 +223,31 @@ class Voting extends React.Component {
             for( let v = 0; v < avotes.length && voters.length < MAX_VOTES_DISPLAY; ++v ) {
                 const {percent, voter} = avotes[v]
                 const sign = Math.sign(percent)
-                if(sign === 0) continue
-                voters.push({value: (sign > 0 ? '+ ' : '- ') + voter, link: '/@' + voter})
+                if (sign === 0) {
+                    continue
+                } else if (sign > 0) {
+                    voters.push({value: '+ ' + voter, link: '/@' + voter})
+                } else if (sign < 0) {
+                    voters.push({value: '- ' + voter, link: '/@' + voter})
+                    all_flags.push({value: 'flag_' + voter, link: '/@' + voter, label: '- ' + voter})
+                }
             }
             if (total_votes > voters.length) {
                 voters.push({value: <span>&hellip; {tt('voting_jsx.and_more', {count: total_votes - voters.length})}</span>});
             }
             voters_list = <DropdownMenu selected={tt('voting_jsx.votes_plural', {count: total_votes})} className="Voting__voters_list" items={voters} el="div" />;
+        }
+
+        let flags_list = null;
+        if (showList && all_flags.length > 0) {
+            let flags = [];
+            for( let v = 0; v < all_flags.length; ++v && flags < MAX_VOTES_DISPLAY) {
+                flags.push(all_flags[v]);
+            }
+            if( all_flags.length > flags.length ) {
+                flags.push({value: <span>&hellip; {tt('voting_jsx.and_more', {count: all_flags - flags.length})}</span>});
+            }
+            flags_list = <DropdownMenu selected={tt('voting_jsx.flags_plural', {count: flags.length})} className="Voting__flags_list" items={flags} el="div" />;
         }
 
         let voteUpClick = this.voteUp;
@@ -254,6 +273,7 @@ class Voting extends React.Component {
                     {payoutEl}
                 </span>
                 {voters_list}
+                {flags_list}
             </span>
         );
     }

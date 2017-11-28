@@ -335,7 +335,7 @@ class PostFull extends React.Component {
                 <TimeAuthorCategory content={content} authorRepLog10={authorRepLog10} />
                 <Voting post={post} />
               </div>
-              <div className="RightShare__Menu small-11 medium-5 large-5 columns text-right">
+              <div className="RightShare__Menu small-10 medium-4 large-4 columns text-right">
                 {!readonly && <Reblog author={author} permlink={permlink} />}
                 <span className="PostFull__reply">
                   {showReplyOption && <a onClick={onShowReply}>{tt('g.reply')}</a>}

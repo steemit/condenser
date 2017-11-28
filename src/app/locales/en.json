@@ -400,6 +400,10 @@
     "votes_plural": {
       "one": "%(count)s vote",
       "other": "%(count)s votes"
+    },
+    "flags_plural": {
+      "one": "%(count)s flag",
+      "other": "%(count)s flags"
     }
   },
   "witnesses_jsx": {

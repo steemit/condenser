@@ -12,6 +12,7 @@ import {PrivateKey, Signature, hash} from 'steem/lib/auth/ecc';
 import {api} from 'steem';
 import {translate} from 'app/Translator';
 import DMCAUserList from 'app/utils/DMCAUserList';
+import config from 'config';
 
 
 export const userWatches = [

@@ -11,6 +11,8 @@ import GeneratedPasswordInput from 'app/components/elements/GeneratedPasswordInp
 import {saveCords} from 'app/utils/ServerApiClient';
 import {api} from 'steem';
 import { Link } from 'react-router';
+import config from 'config';
+
 
 class CreateAccount extends React.Component {
 

@@ -12,6 +12,7 @@ import {DEBT_TICKER} from 'app/client_config'
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient'
 import {PrivateKey, PublicKey} from 'steem/lib/auth/ecc';
 import {api, broadcast, auth, memo} from 'steem';
+import config from 'config';
 
 export const transactionWatches = [
     watchForBroadcast,

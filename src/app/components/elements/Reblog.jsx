@@ -5,6 +5,7 @@ import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import transaction from 'app/redux/Transaction';
 import Icon from 'app/components/elements/Icon';
 import tt from 'counterpart';
+import config from 'config';
 
 const {string, func} = PropTypes
 

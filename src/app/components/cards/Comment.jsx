@@ -6,6 +6,7 @@ import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import Voting from 'app/components/elements/Voting';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
+import config from 'config';
 import user from 'app/redux/User';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Userpic from 'app/components/elements/Userpic';

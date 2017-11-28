@@ -3,7 +3,8 @@ import Slate, { Editor, Mark, Raw, Html } from 'slate'
 import Portal from 'react-portal'
 import position from 'selection-position'
 import Icon from 'app/components/elements/Icon';
-import ReactDOMServer from 'react-dom/server'
+import ReactDOMServer from 'react-dom/server';
+import config from 'config';
 
 import {getCollapsedClientRect} from 'app/utils/SlateEditor/Helpers'
 import demoState from 'app/utils/SlateEditor/DemoState'

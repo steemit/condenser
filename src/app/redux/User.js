@@ -2,6 +2,8 @@ import {fromJS} from 'immutable';
 import createModule from 'redux-modules';
 import { DEFAULT_LANGUAGE } from 'app/client_config';
 import store from 'store';
+import config from 'config';
+
 
 const defaultState = fromJS({
     current: null,

@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import config from 'config';
 
 export default class Qr extends React.Component {
     static propTypes = {

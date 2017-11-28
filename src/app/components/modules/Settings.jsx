@@ -7,6 +7,7 @@ import o2j from 'shared/clash/object2json'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
 import reactForm from 'app/utils/ReactForm'
 import UserList from 'app/components/elements/UserList';
+import config from 'config';
 
 
 class Settings extends React.Component {

@@ -10,6 +10,7 @@ import VerticalMenu from 'app/components/elements/VerticalMenu';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import NotifiCounter from 'app/components/elements/NotifiCounter';
 import tt from 'counterpart';
+import config from 'config';
 
 const defaultNavigate = (e) => {
     if (e.metaKey || e.ctrlKey) {

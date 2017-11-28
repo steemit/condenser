@@ -1,5 +1,6 @@
 import React from 'react'
-import MarkdownViewer from 'app/components/cards/MarkdownViewer'
+import MarkdownViewer from 'app/components/cards/MarkdownViewer';
+import config from 'config';
 
 class XSS extends React.Component {
     render() {

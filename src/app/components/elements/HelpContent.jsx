@@ -2,6 +2,7 @@ import React from "react";
 import MarkdownViewer from 'app/components/cards/MarkdownViewer';
 import Icon from 'app/components/elements/Icon';
 import {renderToString} from 'react-dom/server';
+import config from 'config';
 
 if (!process.env.BROWSER) {
     const cache = {};

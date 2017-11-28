@@ -11,7 +11,7 @@ import {validate_account_name} from 'app/utils/ChainValidation';
 import runTests from 'app/utils/BrowserTests';
 import {PARAM_VIEW_MODE} from 'shared/constants';
 import {makeParams} from 'app/utils/Links';
-
+import config from 'config';
 
 class PickAccount extends React.Component {
     static propTypes = {

@@ -11,6 +11,7 @@ import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import tt from 'counterpart';
 import { APP_URL } from 'app/client_config';
 import {PrivateKey, PublicKey} from 'steem/lib/auth/ecc';
+import config from 'config';
 
 class LoginForm extends Component {
 

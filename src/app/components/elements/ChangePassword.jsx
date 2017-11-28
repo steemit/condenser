@@ -8,6 +8,7 @@ import tt from 'counterpart';
 import { APP_NAME } from 'app/client_config';
 import {PrivateKey, PublicKey, key_utils} from 'steem/lib/auth/ecc';
 import {api} from 'steem';
+import config from 'config';
 
 const {string, oneOf} = React.PropTypes
 

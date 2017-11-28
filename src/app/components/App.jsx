@@ -1,5 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import config from 'config';
 import AppPropTypes from 'app/utils/AppPropTypes';
 import Header from 'app/components/modules/Header';
 import LpFooter from 'app/components/modules/lp/LpFooter';

@@ -14,7 +14,8 @@ import g from 'app/redux/GlobalReducer'
 import {Set} from 'immutable'
 import Remarkable from 'remarkable'
 import Dropzone from 'react-dropzone'
-import tt from 'counterpart'
+import tt from 'counterpart';
+import config from 'config';
 
 const remarkable = new Remarkable({ html: true, linkify: false, breaks: true })
 

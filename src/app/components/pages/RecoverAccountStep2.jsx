@@ -6,6 +6,7 @@ import tt from 'counterpart';
 import Callout from 'app/components/elements/Callout';
 import {PrivateKey} from 'steem/lib/auth/ecc';
 import {api} from 'steem';
+import config from 'config';
 
 function passwordToOwnerPubKey(account_name, password) {
     let pub_key;

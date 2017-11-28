@@ -1,6 +1,7 @@
 import React from 'react';
 import LoginForm from 'app/components/modules/LoginForm';
 import tt from 'counterpart';
+import config from 'config';
 
 class Login extends React.Component {
     render() {

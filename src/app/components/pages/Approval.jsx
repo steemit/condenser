@@ -1,6 +1,8 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {VIEW_MODE_WHISTLE, WHISTLE_SIGNUP_COMPLETE} from 'shared/constants';
+import config from 'config';
+
 
 class Approval extends React.Component {
     constructor(props) {

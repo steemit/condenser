@@ -1,6 +1,7 @@
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import Tarantool from 'db/tarantool';
+import config from 'config';
 import {VIEW_MODE_WHISTLE, PARAM_VIEW_MODE} from '../shared/constants';
 import ServerHTML from './server-html';
 import universalRender from '../shared/UniversalRender';
@@ -12,7 +13,7 @@ import {determineViewMode} from "../app/utils/Links";
 
 const path = require('path');
 const ROOT = path.join(__dirname, '../..');
-const DB_RECONNECT_TIMEOUT = process.env.NODE_ENV === 'development' ? 1000 * 60 * 60 : 1000 * 60 * 10;
+const DB_RECONNECT_TIMEOUT = config.util.getEnv('NODE_ENV') === 'development' ? 1000 * 60 * 60 : 1000 * 60 * 10;
 
 function getSupportedLocales() {
     const locales = [];
@@ -121,11 +122,11 @@ async function appRender(ctx) {
         const { body, title, statusCode, meta } = await universalRender({initial_state, location: ctx.request.url, store, offchain, ErrorPage, tarantool: Tarantool.instance(), userPreferences});
 
         // Assets name are found in `webpack-stats` file
-        const assets_filename = ROOT + (process.env.NODE_ENV === 'production' ? '/tmp/webpack-stats-prod.json' : '/tmp/webpack-stats-dev.json');
+        const assets_filename = ROOT + (config.util.getEnv('NODE_ENV') === 'production' ? '/tmp/webpack-stats-prod.json' : '/tmp/webpack-stats-dev.json');
         const assets = require(assets_filename);
 
         // Don't cache assets name on dev
-        if (process.env.NODE_ENV === 'development') {
+        if (config.util.getEnv('NODE_ENV') === 'development') {
             delete require.cache[require.resolve(assets_filename)];
         }
 

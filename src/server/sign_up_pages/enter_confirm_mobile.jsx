@@ -26,7 +26,7 @@ if (config.has("mixpanel") && config.get("mixpanel")) {
 }
 
 var assets_file = ROOT + "/tmp/webpack-stats-dev.json";
-if (process.env.NODE_ENV === "production") {
+if (config.util.getEnv('NODE_ENV')=== "production") {
     assets_file = ROOT + "/tmp/webpack-stats-prod.json";
 }
 

@@ -27,6 +27,7 @@ import {notificationsArrayToMap} from 'app/utils/Notifications';
 import {routeRegex} from "app/ResolveRoute";
 import {contentStats} from 'app/utils/StateFunctions';
 import ScrollBehavior from 'scroll-behavior';
+import config from 'config';
 
 import {api} from 'steem';
 
@@ -114,7 +115,9 @@ const sagaMiddleware = createSagaMiddleware(
 
 let middleware;
 
-if (process.env.BROWSER && process.env.NODE_ENV === 'development') {
+// TODO: AFAIK config.BROWSER is always true...
+/*
+if (config.BROWSER && config.NODE_ENV === 'development') {
     const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose; // eslint-disable-line no-underscore-dangle
     middleware = composeEnhancers(
         applyMiddleware(sagaMiddleware)
@@ -122,6 +125,9 @@ if (process.env.BROWSER && process.env.NODE_ENV === 'development') {
 } else {
     middleware = applyMiddleware(sagaMiddleware);
 }
+*/
+middleware = applyMiddleware(sagaMiddleware);
+
 
 const runRouter = (location, routes) => {
     return new Promise((resolve) =>
@@ -153,8 +159,8 @@ async function universalRender({location, initial_state, offchain, ErrorPage, ta
             body: renderToString(<NotFound />)
         };
     }
-
-    if (process.env.BROWSER) {
+    // TODO: I am not aware of when or why this would evaluate to false.
+    if (config.BROWSER) {
         const store = createStore(rootReducer, initial_state, middleware);
         sagaMiddleware.run(PollDataSaga).done
             .then(() => console.log('PollDataSaga is finished'))
@@ -177,7 +183,7 @@ async function universalRender({location, initial_state, offchain, ErrorPage, ta
             }
         });
 
-        if (process.env.NODE_ENV === 'production') {
+        if (config.NODE_ENV === 'production') {
             console.log('%c%s', 'color: red; background: yellow; font-size: 24px;', 'WARNING!');
             console.log('%c%s', 'color: black; font-size: 16px;', 'This is a developer console, you must read and understand anything you paste or type here or you could compromise your account and your private keys.');
         }

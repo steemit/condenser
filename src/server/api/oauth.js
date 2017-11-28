@@ -1,5 +1,6 @@
 import route from 'koa-route';
 import Purest from 'purest';
+import config from 'config';
 import models from 'db/models';
 import findUser from 'db/utils/find_user';
 import {esc, escAttrs} from 'db/models';
@@ -13,7 +14,7 @@ function logErrorAndRedirect(ctx, where, error) {
     if (error.toString()) msg = error.toString()
     else msg = error.error && error.error.message ? error.error.message : (error.msg || JSON.stringify(error));
     console.error(`oauth error [${where}|${s.user}|${s.uid}]|${ctx.req.headers['user-agent']}: ${msg}`);
-    if (process.env.NODE_ENV === 'development') console.log(error.stack);
+    if (config.util.getEnv('NODE_ENV') === 'development') console.log(error.stack);
     ctx.flash = {alert: `${where} error: ${msg}`};
     ctx.redirect('/');
     return null;

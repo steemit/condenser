@@ -1,6 +1,7 @@
 import koa_router from "koa-router";
 import koa_body from "koa-body";
 import request from "co-request";
+import config from "config";
 import React from "react";
 import { renderToString } from "react-dom/server";
 import models from "db/models";
@@ -9,7 +10,6 @@ import {addToParams, makeParams} from 'app/utils/Links';
 import ServerHTML from "../server-html";
 import sendEmail from "../sendEmail";
 import { getRemoteIp, checkCSRF } from "server/utils/misc";
-import config from "config";
 import MiniHeader from "app/components/modules/MiniHeader";
 import secureRandom from "secure-random";
 import Mixpanel from "mixpanel";
@@ -19,14 +19,14 @@ import {api} from 'steem';
 const path = require('path');
 const ROOT = path.join(__dirname, '../../..');
 
-// FIXME copy paste code, refactor mixpanel out
+// FIXME copy paste code, refactor mixpanel out.
 let mixpanel = null;
 if (config.has("mixpanel") && config.get("mixpanel")) {
     mixpanel = Mixpanel.init(config.get("mixpanel"));
 }
 
 let assets_file = ROOT + "/tmp/webpack-stats-dev.json";
-if (process.env.NODE_ENV === "production") {
+if (config.util.getEnv('NODE_ENV') === "production") {
     assets_file = ROOT + "/tmp/webpack-stats-prod.json";
 }
 
@@ -372,7 +372,7 @@ export default function useEnterAndConfirmEmailPages(app) {
 }
 
 function* checkRecaptcha(ctx) {
-    if (process.env.NODE_ENV !== "production") return true;
+    if (config.util.getEnv('NODE_ENV') !== "production") return true;
     const recaptcha = ctx.request.body["g-recaptcha-response"];
     const verificationUrl = "https://www.google.com/recaptcha/api/siteverify?secret=" +
         config.get("recaptcha.secret_key") +

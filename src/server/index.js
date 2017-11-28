@@ -9,6 +9,7 @@ const ROOT = path.join(__dirname, '../..');
 // it will avoid `../../../../../` require strings
 
 // use Object.assign to bypass transform-inline-environment-variables-babel-plugin (process.env.NODE_PATH= will not work)
+// TODO: put whatever this is doing into config.
 Object.assign(process.env, {NODE_PATH: path.resolve(__dirname, '..')});
 
 require('module').Module._initPaths();

@@ -40,7 +40,7 @@ const grant = new Grant(config.grant);
 
 const app = new Koa();
 app.name = 'Steemit app';
-const env = process.env.NODE_ENV || 'development';
+const env = config.util.getEnv('NODE_ENV');
 // cache of a thousand days
 const cacheOpts = { maxAge: 86400000, gzip: true };
 

@@ -1,6 +1,7 @@
 // borrowed from https://github.com/gpbl/isomorphic500/blob/master/webpack%2Futils%2Fwrite-stats.js
 import fs from 'fs';
 import path from 'path';
+import config from 'config';
 
 export default function (stats) {
     const publicPath = this.options.output.publicPath;
@@ -41,7 +42,7 @@ export default function (stats) {
 
     const content = {script, style, images};
 
-    const filename = process.env.NODE_ENV === 'production' ? 'webpack-stats-prod.json' : 'webpack-stats-dev.json';
+    const filename = config.NODE_ENV === 'production' ? 'webpack-stats-prod.json' : 'webpack-stats-dev.json';
     const filepath = path.resolve(__dirname, '../../tmp/' + filename);
     fs.writeFileSync(filepath, JSON.stringify(content, null, 4));
     console.error('updated', filename);

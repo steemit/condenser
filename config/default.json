@@ -1,5 +1,6 @@
 {
   "NODE_ENV": "production",
+  "BROWSER": "true",
   "database_url": "mysql://root:password@127.0.0.1/steemit_dev",
   "disable_signups": false,
   "facebook_app_id": false,
@@ -35,7 +36,7 @@
     "directives": {
       "childSrc": "'self' www.youtube.com staticxx.facebook.com w.soundcloud.com player.vimeo.com",
       "connectSrc": "'self' steemit.com wss://steemd.steemit.com api.blocktrades.us",
-      "defaultSrc": "'self' www.youtube.com staticxx.facebook.com player.vimeo.com",
+      "defaultSrc": "'self' www.youtube.com staticxx.facebook.cogit stm player.vimeo.com",
       "fontSrc": "data: fonts.gstatic.com",
       "frameAncestors": "'none'",
       "imgSrc": "* data:",

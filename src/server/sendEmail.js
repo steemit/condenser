@@ -4,7 +4,7 @@ import config from 'config';
 const sg = sendgrid(config.get('sendgrid.key'));
 
 export default function sendEmail(template, to, params, from = null) {
-    if (process.env.NODE_ENV !== 'production') {
+    if (config.util.getEnv('NODE_ENV') !== 'production') {
         console.log(`mail: to <${to}>, from <${from}>, template ${template} (not sent due to not production env)`);
         return;
     }

@@ -1,21 +1,44 @@
+  .landing-start{
+    font-family: 'Open Sans', sans-serif;
+    font-style: normal;
+    color: #272d2e;
+  }
   .landing-start-block{
     h1, h2, h3 {
         text-align: center;
     }
-    h2, h3{
-        font-weight: 200
+    h1{
+        font-size: 75px;
+        line-height: 85px;    
+        font-weight: 400;
     }
     h2{
+        font-size: 40px;
+        line-height: 50px;
+        font-weight: 400;
         padding-top: 1rem;
         padding-bottom: 1rem        
+    }
+    h3{
+        font-size: 30px;
+        line-height: 40px;
+        font-weight: 300;
     }
     margin-bottom: 3rem;
   }
 
-  .landing-start-block-text{
-      font-size: 1.6rem;
-      font-weight: 200;
+  .landing-start-block-title-text{
+      font-size: 25px;
+      font-style: normal;      
+      line-height: 30px;      
+      font-weight: 300;
   }
+
+  .landing-start-block-text{
+    font-size: 22px;
+    line-height: 25px;      
+    font-weight: 300;
+}
 
   .landing-start-block-center{
       margin-top: 1rem;

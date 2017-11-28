@@ -131,7 +131,7 @@ function generateDepthChart(bidsArray, asksArray) {
 
     const {min, max} = getMinMax(bids, asks);
 
-    if(process.env.BROWSER) {
+    if(config.BROWSER) {
         if(bids[0]) {
             series.push({step: 'right', name: tt('g.bid'), color: 'rgba(0,150,0,1.0)', fillColor: 'rgba(0,150,0,0.2)', tooltip: {valueSuffix: ' ' + LIQUID_TICKER},
              data:  bids})

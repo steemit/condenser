@@ -101,7 +101,7 @@ let lastAccount
 let cachedPosts
 
 function getRebloggedList(account) {
-    if(!process.env.BROWSER)
+    if(!config.BROWSER)
         return []
 
     if(lastAccount === account)

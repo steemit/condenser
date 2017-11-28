@@ -13,20 +13,20 @@ const request_base = {
 };
 
 export function serverApiLogin(account, signatures) {
-    if (!process.env.BROWSER || window.$STM_ServerBusy) return;
+    if (!config.BROWSER || window.$STM_ServerBusy) return;
     const request = Object.assign({}, request_base, {body: JSON.stringify({account, signatures, csrf: $STM_csrf})});
     fetch('/api/v1/login_account', request);
 }
 
 export function serverApiLogout() {
-    if (!process.env.BROWSER || window.$STM_ServerBusy) return;
+    if (!config.BROWSER || window.$STM_ServerBusy) return;
     const request = Object.assign({}, request_base, {body: JSON.stringify({csrf: $STM_csrf})});
     fetch('/api/v1/logout_account', request);
 }
 
 let last_call;
 export function serverApiRecordEvent(type, val, rate_limit_ms = 5000) {
-    if (!process.env.BROWSER || window.$STM_ServerBusy) return;
+    if (!config.BROWSER || window.$STM_ServerBusy) return;
     if (last_call && (new Date() - last_call) < rate_limit_ms) return;
     last_call = new Date();
     const value = val && val.stack ? `${val.toString()} | ${val.stack}` : val;
@@ -38,7 +38,7 @@ export function serverApiRecordEvent(type, val, rate_limit_ms = 5000) {
 }
 
 export function getNotifications(account) {
-    if (!process.env.BROWSER || window.$STM_ServerBusy) return Promise.resolve(null);
+    if (!config.BROWSER || window.$STM_ServerBusy) return Promise.resolve(null);
     const request = Object.assign({}, request_base, {method: 'get'});
     return fetch(`/api/v1/notifications/${account}`, request).then(r => r.json()).then(res => {
         return notificationsArrayToMap(res);
@@ -46,7 +46,7 @@ export function getNotifications(account) {
 }
 
 export function markNotificationRead(account, fields) {
-    if (!process.env.BROWSER || window.$STM_ServerBusy) return Promise.resolve(null);
+    if (!config.BROWSER || window.$STM_ServerBusy) return Promise.resolve(null);
     const request = Object.assign({}, request_base, {method: 'put', mode: 'cors'});
     const field_nums_str = fields.map(f => NTYPES.indexOf(f)).join('-');
     return fetch(`/api/v1/notifications/${account}/${field_nums_str}`, request).then(r => r.json()).then(res => {
@@ -64,7 +64,7 @@ export function recordPageView(page, ref, account) {
     api.call('overseer.pageview', {page, referer: ref, account}, (error) => {
         // if (error) console.warn('overseer error', error, error.data);
     });
-    if (!process.env.BROWSER || window.$STM_ServerBusy) return Promise.resolve(0);
+    if (!config.BROWSER || window.$STM_ServerBusy) return Promise.resolve(0);
     const request = Object.assign({}, request_base, {body: JSON.stringify({csrf: $STM_csrf, page, ref})});
     last_page_promise = fetch(`/api/v1/page_view`, request).then(r => r.json()).then(res => {
         last_views = res.views;
@@ -75,7 +75,7 @@ export function recordPageView(page, ref, account) {
 }
 
 export function webPushRegister(account, webpush_params) {
-    if (!process.env.BROWSER || window.$STM_ServerBusy) return;
+    if (!config.BROWSER || window.$STM_ServerBusy) return;
     const request = Object.assign({}, request_base, {body: JSON.stringify({csrf: $STM_csrf, account, webpush_params})});
     fetch('/api/v1/notifications/register', request);
 }
@@ -91,12 +91,12 @@ export function saveCords(x, y) {
 }
 
 export function setUserPreferences(payload) {
-    if (!process.env.BROWSER || window.$STM_ServerBusy) return Promise.resolve();
+    if (!config.BROWSER || window.$STM_ServerBusy) return Promise.resolve();
     const request = Object.assign({}, request_base, {body: JSON.stringify({csrf: window.$STM_csrf, payload})});
     return fetch('/api/v1/setUserPreferences', request);
 }
 
-if (process.env.BROWSER) {
+if (config.BROWSER) {
     window.getNotifications = getNotifications;
     window.markNotificationRead = markNotificationRead;
 }

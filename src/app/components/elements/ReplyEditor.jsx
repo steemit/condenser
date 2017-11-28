@@ -60,7 +60,7 @@ class ReplyEditor extends React.Component {
         const {setMetaData, formId, jsonMetadata} = this.props
         setMetaData(formId, jsonMetadata)
 
-        if(process.env.BROWSER) {
+        if(config.BROWSER) {
             // Check for rte editor preference
             let rte = this.props.isStory && JSON.parse(localStorage.getItem('replyEditorData-rte') || RTE_DEFAULT);
             let raw = null;
@@ -108,7 +108,7 @@ class ReplyEditor extends React.Component {
     shouldComponentUpdate = shouldComponentUpdate(this, 'ReplyEditor')
 
     componentWillUpdate(nextProps, nextState) {
-        if(process.env.BROWSER) {
+        if(config.BROWSER) {
             const ts = this.state
             const ns = nextState
 
@@ -370,7 +370,7 @@ class ReplyEditor extends React.Component {
                         </div>
 
                         <div className={'ReplyEditor__body ' + (rte ? `rte ${vframe_section_class}` : vframe_section_shrink_class)}>
-                            {process.env.BROWSER && rte ?
+                            {config.BROWSER && rte ?
                                 <RichTextEditor ref="rte"
                                                 readOnly={loading}
                                                 value={this.state.rte_value}
@@ -496,7 +496,7 @@ function stateFromMarkdown(RichTextEditor, markdown) {
 }
 
 import {connect} from 'react-redux';
-const richTextEditor = process.env.BROWSER ? require('react-rte-image').default : null;
+const richTextEditor = config.BROWSER ? require('react-rte-image').default : null;
 
 export default (formId) => connect(
     // mapStateToProps

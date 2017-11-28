@@ -16,7 +16,7 @@ const defaultState = fromJS({
     locale: DEFAULT_LANGUAGE,
 });
 
-if (process.env.BROWSER) {
+if (config.BROWSER) {
     const locale = store.get('language');
     if (locale) defaultState.locale = locale;
 }

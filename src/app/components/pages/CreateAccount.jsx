@@ -159,7 +159,7 @@ class CreateAccount extends React.Component {
     }
 
     render() {
-        if (!process.env.BROWSER) { // don't render this page on the server - it will not work until rendered in browser
+        if (!config.BROWSER) { // don't render this page on the server - it will not work until rendered in browser
             return <div className="CreateAccount row ">
                 <div className="column">
                     <p className="text-center">LOADING..</p>

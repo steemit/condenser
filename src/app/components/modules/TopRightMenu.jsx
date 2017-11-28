@@ -118,7 +118,7 @@ TopRightMenu.propTypes = {
 
 export default connect(
     state => {
-        if (!process.env.BROWSER) {
+        if (!config.BROWSER) {
             return {
                 username: null,
                 loggedIn: false,

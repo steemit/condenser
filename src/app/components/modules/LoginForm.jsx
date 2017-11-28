@@ -100,7 +100,7 @@ class LoginForm extends Component {
     };
 
     render() {
-        if (!process.env.BROWSER) {
+        if (!config.BROWSER) {
             return <div className="row">
                 <div className="column">
                     <p>{('loading')}...</p>
@@ -234,7 +234,7 @@ class LoginForm extends Component {
 
 let hasError
 let saveLoginDefault = true
-if (process.env.BROWSER) {
+if (config.BROWSER) {
     const s = localStorage.getItem('saveLogin')
     if (s === 'no') saveLoginDefault = false
 }

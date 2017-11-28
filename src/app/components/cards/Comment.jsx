@@ -128,7 +128,7 @@ class CommentImpl extends React.Component {
             this.saveOnShow(!showEdit ? 'edit' : null)
         }
         this.saveOnShow = (type) => {
-            if(process.env.BROWSER) {
+            if(config.BROWSER) {
                 const {cont} = this.props;
                 const content = cont.get(this.props.content)
                 const formId = content.get('author') + '/' + content.get('permlink')
@@ -194,7 +194,7 @@ class CommentImpl extends React.Component {
         const post = content.get('author') + '/' + content.get('permlink')
         const PostReplyEditor = ReplyEditor(post + '-reply')
         const PostEditEditor = ReplyEditor(post + '-edit')
-        if(process.env.BROWSER) {
+        if(config.BROWSER) {
             const formId = post
             let showEditor = localStorage.getItem('showEditor-' + formId)
             if(showEditor) {

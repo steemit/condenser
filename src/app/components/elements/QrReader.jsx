@@ -19,7 +19,7 @@ export default class Qr extends React.Component {
         const {handleError, handleScan} = this
         // Watch out, QrReader can mess up the nodejs server, tries to ref `navigator`
         // The server does not need a QrReader anyways
-        if(!process.env.BROWSER) return <span></span>
+        if(!config.BROWSER) return <span></span>
         return <span></span>
         // a) Leaves the camera on when closing dialog - react-qr-reader v0.2.4
         // b) Only saw this work in Chrome - 0.2.4

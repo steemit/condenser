@@ -295,7 +295,7 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
 }
 
 function* saveLogin_localStorage() {
-    if (!process.env.BROWSER) {
+    if (!config.BROWSER) {
         console.error('Non-browser environment, skipping localstorage')
         return
     }
@@ -343,7 +343,7 @@ function* saveLogin_localStorage() {
 
 function* logout() {
     yield put(user.actions.saveLoginConfirm(false)) // Just incase it is still showing
-    if (process.env.BROWSER)
+    if (config.BROWSER)
         localStorage.removeItem('autopost2')
     serverApiLogout();
 }

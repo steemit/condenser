@@ -23,7 +23,7 @@ let plugins = []
 import InsertBlockOnEnter from 'slate-insert-block-on-enter'
 import TrailingBlock from 'slate-trailing-block'
 
-if(process.env.BROWSER) {
+if(config.BROWSER) {
     //import InsertImages from 'slate-drop-or-paste-images'
     const InsertImages = require('slate-drop-or-paste-images').default
 

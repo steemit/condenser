@@ -92,7 +92,7 @@ class PickAccount extends React.Component {
     }
 
     render() {
-        if (!process.env.BROWSER) { // don't render this page on the server
+        if (!config.BROWSER) { // don't render this page on the server
             return <div className="row">
                 <div className="column">
                     <p className="text-center">LOADING..</p>

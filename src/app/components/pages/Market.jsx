@@ -537,7 +537,7 @@ module.exports = {
         const username = state.user.get('current') ? state.user.get('current').get('username') : null;
         return {
             orderbook:   state.market.get('orderbook'),
-            open_orders: process.env.BROWSER ? state.market.get('open_orders') : [],
+            open_orders: config.BROWSER ? state.market.get('open_orders') : [],
             ticker:      state.market.get('ticker'),
             account:     state.global.getIn(['accounts', username]),
             history:     state.market.get('history'),

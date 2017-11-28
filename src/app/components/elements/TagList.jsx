@@ -5,7 +5,7 @@ import config from 'config';
 
 export default ({post, horizontal, single}) => {
     let sort_order = 'trending';
-    if (process.env.BROWSER && window.last_sort_order) sort_order = window.last_sort_order;
+    if (config.BROWSER && window.last_sort_order) sort_order = window.last_sort_order;
 
     if (single) return <Link to={`/${sort_order}/${post.category}`}>{post.category}</Link>;
 

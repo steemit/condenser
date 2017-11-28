@@ -117,7 +117,7 @@ class PostFull extends React.Component {
             PostFullReplyEditor: ReplyEditor(formId + '-reply'),
             PostFullEditEditor: ReplyEditor(formId + '-edit')
         })
-        if (process.env.BROWSER) {
+        if (config.BROWSER) {
             let showEditor = localStorage.getItem('showEditor-' + formId)
             if (showEditor) {
                 showEditor = JSON.parse(showEditor)
@@ -202,7 +202,7 @@ class PostFull extends React.Component {
         if (content.category) link = `/${content.category}${link}`;
 
         const {category, title, body} = content;
-        if (process.env.BROWSER && title) document.title = title + ' — '+ APP_NAME;
+        if (config.BROWSER && title) document.title = title + ' — '+ APP_NAME;
 
         let content_body = content.body;
         const url = `/${category}/@${author}/${permlink}`
@@ -396,7 +396,7 @@ export default connect(
 )(PostFull)
 
 const saveOnShow = (formId, type) => {
-    if (process.env.BROWSER) {
+    if (config.BROWSER) {
         if (type)
             localStorage.setItem('showEditor-' + formId, JSON.stringify({type}, null, 0))
         else {

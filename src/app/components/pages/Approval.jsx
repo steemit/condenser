@@ -19,7 +19,7 @@ class Approval extends React.Component {
     }
 
     render() {
-        if(process.env.BROWSER && this.props.viewMode === VIEW_MODE_WHISTLE) {
+        if(config.BROWSER && this.props.viewMode === VIEW_MODE_WHISTLE) {
             window.postMessage(WHISTLE_SIGNUP_COMPLETE);
         }
         let body = '';

@@ -421,7 +421,7 @@ export default class UserProfile extends React.Component {
                 </ul>
             </div>
             <div className="columns shrink">
-                <ul className="menu" style={{flexWrap: "wrap"}}>
+                <ul className="menu" style={{marginRight: "55px", flexWrap: "wrap"}}>
                     <li>
                         <a href={`/@${accountname}/transfers`} className={walletClass} onClick={e => { e.preventDefault(); browserHistory.push(e.target.pathname); return false; }}>
                             {tt('g.wallet')} {isMyAccount && <NotifiCounter fields="send,receive,account_update" />}

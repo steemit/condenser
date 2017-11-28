@@ -4,8 +4,10 @@
     color: #272d2e;
   }
   .landing-start-block{
-    h1, h2, h3 {
+    h1, h2, h3, h5 {
         text-align: center;
+        font-family: 'Open Sans', sans-serif;
+        font-style: normal;
     }
     h1{
         font-size: 75px;
@@ -17,17 +19,29 @@
         line-height: 50px;
         font-weight: 400;
         padding-top: 1rem;
-        padding-bottom: 1rem        
+        padding-bottom: 1rem;
     }
     h3{
         font-size: 30px;
         line-height: 40px;
         font-weight: 300;
     }
+    h5{
+        font-size: 18px;
+        line-height: 20px;
+        font-weight: 400;
+        letter-spacing: -0.5px;
+        color: #347EC6;
+        word-wrap: normal;
+        text-align: left;
+        text-transform: uppercase;
+    }
     margin-bottom: 3rem;
   }
 
-  .landing-start-block-title-text{
+.landing-start-block-title-text{
+    font-family: 'Open Sans', sans-serif;
+    color: #272d2e;
       font-size: 25px;
       font-style: normal;      
       line-height: 30px;      
@@ -35,9 +49,18 @@
   }
 
   .landing-start-block-text{
+    font-family: 'Open Sans', sans-serif;    
     font-size: 22px;
     line-height: 25px;      
     font-weight: 300;
+}
+
+.landing-start-block-icon-text{
+    font-family: 'Open Sans', sans-serif;    
+    font-size: 16px;
+    line-height: 25px;      
+    font-weight: 300;
+    text-align: left;
 }
 
   .landing-start-block-center{
@@ -71,7 +94,7 @@
     max-width: 55rem;    
  }
   .landing-start-block .row{
-      max-width: 55rem;
+      max-width: 70rem;
   }
   
   .landing-start-block:nth-child(2n+1) {

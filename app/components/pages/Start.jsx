@@ -58,24 +58,36 @@ class Start extends React.Component {
                         <div className='row'>
 
                             <div className='column large-3 medium-3 small-3'>
-                                <img
+                            <p className='landing-start-block-center'><img
                                     className='landing-start-round-img'
-                                    src='/images/landing/start/icons_01.png'/>
+                                    src='/images/landing/start/icons_01.png'/></p>
+                                <h5>Социальная значимость</h5>
+                                <p className='landing-start-block-icon-text'>Наше сообщество ценит мнения, истории и творческий контент.</p>
+
                             </div>
                             <div className='column large-3 medium-3 small-3'>
-                                <img
+                            <p className='landing-start-block-center'><img
                                     className='landing-start-round-img'
-                                    src='/images/landing/start/icons_02.png'/>
+                                    src='/images/landing/start/icons_02.png'/></p>
+                                <h5>Выгодно для блогинга</h5>
+                                <p className='landing-start-block-icon-text'>Мы вознаграждаем как авторов, так и читателей  — тех, кто оценивает и комментирует публикации</p>
+
                             </div>
                             <div className='column large-3 medium-3 small-3'>
-                                <img
+                                <p className='landing-start-block-center'><img
                                     className='landing-start-round-img'
-                                    src='/images/landing/start/icons_03.png'/>
+                                    src='/images/landing/start/icons_03.png'/></p>
+                                <h5>В интересах каждого</h5>
+                                <p className='landing-start-block-icon-text'>Писать можно обо всем на свете — расскажите о ракетостроении или выложите фотографию любимого кота</p>
+
                             </div>
                             <div className='column large-3 medium-3 small-3'>
-                                <img
+                            <p className='landing-start-block-center'><img
                                     className='landing-start-round-img'
-                                    src='/images/landing/start/icons_04.png'/>
+                                    src='/images/landing/start/icons_04.png'/></p>
+                                <h5>Инновационная модель</h5>
+                                <p className='landing-start-block-icon-text'>Golos.io работает на блокчейне, а значит информация пользователей принадлежит только им</p>
+
                             </div>
 
                             <div className='landing-start-block-center column large-12 medium-12 small-12'>

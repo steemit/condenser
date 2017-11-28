@@ -19,9 +19,7 @@ COPY . /var/app
 #  ./node_modules/.bin/eslint . && \
 #  npm run build
 
-RUN mkdir tmp && \
-  npm test && \
-  npm run-script build
+RUN yarn test && yarn build
 
 ENV PORT 8080
 ENV NODE_ENV production

@@ -46,7 +46,7 @@ class App extends React.Component {
     }
 
     componentWillMount() {
-        if (config.BROWSER) localStorage.removeItem('autopost') // July 14 '16 compromise, renamed to autopost2
+        if (process.env.BROWSER) localStorage.removeItem('autopost') // July 14 '16 compromise, renamed to autopost2
         this.props.loginUser();
     }
 
@@ -164,7 +164,7 @@ class App extends React.Component {
                 </div>
             </div>
         }
-        if ($STM_Config.read_only_mode && this.state.showCallout) {
+        if (config.read_only_mode && this.state.showCallout) {
             callout = <div className="App__announcement row">
                 <div className="column">
                     <div className={classNames('callout warning', {alert}, {warning}, {success})}>

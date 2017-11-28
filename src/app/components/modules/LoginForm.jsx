@@ -100,7 +100,7 @@ class LoginForm extends Component {
     };
 
     render() {
-        if (!config.BROWSER) {
+        if (!process.env.BROWSER) {
             return <div className="row">
                 <div className="column">
                     <p>{('loading')}...</p>
@@ -119,7 +119,7 @@ class LoginForm extends Component {
             </div>;
         }
 
-        if ($STM_Config.read_only_mode) {
+        if (config.read_only_mode) {
             return <div className="row">
                 <div className="column">
                     <div className="callout alert">
@@ -234,7 +234,8 @@ class LoginForm extends Component {
 
 let hasError
 let saveLoginDefault = true
-if (config.BROWSER) {
+
+if (process.env.BROWSER) {
     const s = localStorage.getItem('saveLogin')
     if (s === 'no') saveLoginDefault = false
 }

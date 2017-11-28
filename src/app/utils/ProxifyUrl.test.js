@@ -4,7 +4,7 @@ import proxifyImageUrl from './ProxifyUrl'
 
 describe('ProxifyUrl', () => {
     before(() => {
-        global.$STM_Config = {img_proxy_prefix: 'https://steemitimages.com/'};
+        config = {img_proxy_prefix: 'https://steemitimages.com/'};
     });
     it('naked URL', () => {
         testCase('https://example.com/img.png', '100x200', 'https://steemitimages.com/100x200/https://example.com/img.png')

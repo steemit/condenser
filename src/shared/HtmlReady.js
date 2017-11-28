@@ -3,6 +3,7 @@ import tt from 'counterpart'
 import linksRe, { any as linksAny } from 'app/utils/Links'
 import {validate_account_name} from 'app/utils/ChainValidation'
 import proxifyImageUrl from 'app/utils/ProxifyUrl'
+import config from 'config'
 
 export const getPhishingWarningMessage = () => tt('g.phishy_message');
 
@@ -310,12 +311,12 @@ function embedVimeoNode(child, links, /*images*/) {try{
 } catch(error) {console.log(error); return false}}
 
 function ipfsPrefix(url) {
-    if($STM_Config.ipfs_prefix) {
+    if(config.ipfs_prefix) {
         // Convert //ipfs/xxx  or /ipfs/xxx  into  https://steemit.com/ipfs/xxxxx
         if(/^\/?\/ipfs\//.test(url)) {
             const slash = url.charAt(1) === '/' ? 1 : 0
             url = url.substring(slash + '/ipfs/'.length) // start with only 1 /
-            return $STM_Config.ipfs_prefix + '/' + url
+            return config.ipfs_prefix + '/' + url
         }
     }
     return url

@@ -92,7 +92,7 @@ class PickAccount extends React.Component {
     }
 
     render() {
-        if (!config.BROWSER) { // don't render this page on the server
+        if (!process.env.BROWSER) { // don't render this page on the server
             return <div className="row">
                 <div className="column">
                     <p className="text-center">LOADING..</p>
@@ -109,7 +109,7 @@ class PickAccount extends React.Component {
         const submit_btn_class = classNames('button action', {disabled: submit_btn_disabled});
         const account_status = offchainUser ? offchainUser.get('account_status') : null;
 
-        if (serverBusy || $STM_Config.disable_signups) {
+        if (serverBusy || config.disable_signups) {
             return <div className="row">
                 <div className="column">
                     <div className="callout alert">

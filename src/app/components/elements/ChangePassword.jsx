@@ -83,7 +83,7 @@ class ChangePassword extends React.Component {
             password.value, twofa.value, success, error)
     }
     render() {
-        if (!config.BROWSER) { // don't render this page on the server
+        if (!process.env.BROWSER) { // don't render this page on the server
             return <div className="row">
                 <div className="column">
                     {tt('g.loading')}..

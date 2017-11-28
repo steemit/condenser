@@ -43,7 +43,7 @@ class Settings extends React.Component {
 
     componentWillMount() {
         const {accountname} = this.props
-        const nsfwPref = (config.BROWSER ? localStorage.getItem('nsfwPref-' + accountname) : null) || 'warn'
+        const nsfwPref = (process.env.BROWSER ? localStorage.getItem('nsfwPref-' + accountname) : null) || 'warn'
         this.setState({nsfwPref, oldNsfwPref: nsfwPref})
     }
 

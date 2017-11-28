@@ -86,7 +86,7 @@ export default function useGeneralApi(app) {
         const account = typeof(params) === 'string' ? JSON.parse(params) : params;
         if (!checkCSRF(this, account.csrf)) return;
         logRequest('accounts', this, {account})
-        if ($STM_Config.disable_signups) {
+        if (config.disable_signups) {
             this.body = JSON.stringify({error: 'New signups are temporary disabled.'});
             this.status = 401;
             return;

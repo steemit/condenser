@@ -2,6 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import SvgImage from 'app/components/elements/SvgImage';
 import AddToWaitingList from 'app/components/modules/AddToWaitingList';
+import config from 'config';
 
 class SignUp extends React.Component {
     constructor() {
@@ -9,7 +10,7 @@ class SignUp extends React.Component {
         this.state = {waiting_list: false};
     }
     render() {
-        if ($STM_Config.read_only_mode) {
+        if (config.read_only_mode) {
             return <div className="row">
                 <div className="column">
                     <div className="callout alert">
@@ -18,7 +19,7 @@ class SignUp extends React.Component {
             </div>;
         }
         
-        if (this.props.serverBusy || $STM_Config.disable_signups) {
+        if (this.props.serverBusy || config.disable_signups) {
             return <div className="row">
                 <div className="column callout" style={{margin: '20px', padding: '40px'}}>
                     <p>Membership to Steemit.com is now under invitation only because of unexpectedly high sign up rate.

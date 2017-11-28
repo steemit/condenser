@@ -80,7 +80,7 @@ export default {
             cb(null, [require('app/components/pages/Witnesses')]);
             //});
         } else if (route.page === 'SubmitPost') {
-            if (config.BROWSER) {
+            if (process.env.BROWSER) {
                 // require.ensure([], (require) => {
                     cb(null, [require('app/components/pages/SubmitPost')]);
                 // });
@@ -108,7 +108,7 @@ export default {
             //});
         } else {
             //require.ensure([], (require) => {
-            cb(config.BROWSER ? null : Error(404), [require('app/components/pages/NotFound')]);
+            cb(process.env.BROWSER ? null : Error(404), [require('app/components/pages/NotFound')]);
             //});
         }
     },

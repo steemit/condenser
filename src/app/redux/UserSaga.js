@@ -295,7 +295,7 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
 }
 
 function* saveLogin_localStorage() {
-    if (!config.BROWSER) {
+    if (!process.env.BROWSER) {
         console.error('Non-browser environment, skipping localstorage')
         return
     }
@@ -343,7 +343,7 @@ function* saveLogin_localStorage() {
 
 function* logout() {
     yield put(user.actions.saveLoginConfirm(false)) // Just incase it is still showing
-    if (config.BROWSER)
+    if (process.env.BROWSER)
         localStorage.removeItem('autopost2')
     serverApiLogout();
 }
@@ -452,7 +452,7 @@ function* uploadImage({payload: {file, dataUrl, filename = 'image.txt', progress
     }
 
     const sig = Signature.signBufferSha256(bufSha, d)
-    const postUrl = `${$STM_Config.upload_image}/${username}/${sig.toHex()}`
+    const postUrl = `${config.upload_image}/${username}/${sig.toHex()}`
 
     const xhr = new XMLHttpRequest()
     xhr.open('POST', postUrl)

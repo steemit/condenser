@@ -1,5 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
+import config from 'config';
 
 export default connect(
     (state, ownProps) => ownProps,
@@ -81,7 +82,7 @@ class Image extends React.Component {
         const isFocused = state.selection.hasEdgeIn(node)
         const className = isFocused ? 'active' : null
 
-        const prefix = $STM_Config.img_proxy_prefix ? ($STM_Config.img_proxy_prefix + '0x0/') : ''
+        const prefix = config.img_proxy_prefix ? (config.img_proxy_prefix + '0x0/') : ''
 
         const alt = node.data.get('alt')
         const src = node.data.get('src')

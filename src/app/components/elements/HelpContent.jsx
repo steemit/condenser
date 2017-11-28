@@ -4,7 +4,7 @@ import Icon from 'app/components/elements/Icon';
 import {renderToString} from 'react-dom/server';
 import config from 'config';
 
-if (!config.BROWSER) {
+if (!process.env.BROWSER) {
     const cache = {};
     // please note we don't need to define require.context for client side rendering because it's defined by webpack
     const path = require('path');

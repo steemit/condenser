@@ -117,7 +117,7 @@ class PostFull extends React.Component {
             PostFullReplyEditor: ReplyEditor(formId + '-reply'),
             PostFullEditEditor: ReplyEditor(formId + '-edit')
         })
-        if (config.BROWSER) {
+        if (process.env.BROWSER) {
             let showEditor = localStorage.getItem('showEditor-' + formId)
             if (showEditor) {
                 showEditor = JSON.parse(showEditor)
@@ -202,7 +202,7 @@ class PostFull extends React.Component {
         if (content.category) link = `/${content.category}${link}`;
 
         const {category, title, body} = content;
-        if (config.BROWSER && title) document.title = title + ' — '+ APP_NAME;
+        if (process.env.BROWSER && title) document.title = title + ' — '+ APP_NAME;
 
         let content_body = content.body;
         const url = `/${category}/@${author}/${permlink}`
@@ -292,7 +292,7 @@ class PostFull extends React.Component {
         }
 
         const archived = post_content.get('cashout_time') === '1969-12-31T23:59:59' // TODO: audit after HF19. #1259
-        const readonly = archived || $STM_Config.read_only_mode
+        const readonly = archived || config.read_only_mode
         const showPromote = username && !archived && post_content.get('depth') == 0
         const showReplyOption = post_content.get('depth') < 255
         const showEditOption = username === author
@@ -396,7 +396,7 @@ export default connect(
 )(PostFull)
 
 const saveOnShow = (formId, type) => {
-    if (config.BROWSER) {
+    if (process.env.BROWSER) {
         if (type)
             localStorage.setItem('showEditor-' + formId, JSON.stringify({type}, null, 0))
         else {

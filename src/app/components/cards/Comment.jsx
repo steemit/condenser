@@ -128,7 +128,7 @@ class CommentImpl extends React.Component {
             this.saveOnShow(!showEdit ? 'edit' : null)
         }
         this.saveOnShow = (type) => {
-            if(config.BROWSER) {
+            if(process.env.BROWSER) {
                 const {cont} = this.props;
                 const content = cont.get(this.props.content)
                 const formId = content.get('author') + '/' + content.get('permlink')
@@ -194,7 +194,7 @@ class CommentImpl extends React.Component {
         const post = content.get('author') + '/' + content.get('permlink')
         const PostReplyEditor = ReplyEditor(post + '-reply')
         const PostEditEditor = ReplyEditor(post + '-edit')
-        if(config.BROWSER) {
+        if(process.env.BROWSER) {
             const formId = post
             let showEditor = localStorage.getItem('showEditor-' + formId)
             if(showEditor) {
@@ -256,7 +256,7 @@ class CommentImpl extends React.Component {
         const showEditOption = username === author
         const showReplyOption = comment.depth < 255
         const archived = comment.cashout_time === '1969-12-31T23:59:59' // TODO: audit after HF19. #1259
-        const readonly = archived || $STM_Config.read_only_mode
+        const readonly = archived || config.read_only_mode
 
         let body = null;
         let controls = null;

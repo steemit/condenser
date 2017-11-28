@@ -114,7 +114,7 @@ class RecoverAccountStep2 extends React.Component {
     }
 
     render() {
-        if (!config.BROWSER) { // don't render this page on the server
+        if (!process.env.BROWSER) { // don't render this page on the server
             return <div className="row">
                 <div className="column">
                     {tt('g.loading')}..

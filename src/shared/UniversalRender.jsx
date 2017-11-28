@@ -115,7 +115,7 @@ const sagaMiddleware = createSagaMiddleware(
 
 let middleware;
 
-if (config.BROWSER && config.NODE_ENV === 'development') {
+if (process.env.BROWSER && config.NODE_ENV === 'development') {
     const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose; // eslint-disable-line no-underscore-dangle
     middleware = composeEnhancers(
         applyMiddleware(sagaMiddleware)
@@ -157,7 +157,7 @@ async function universalRender({location, initial_state, offchain, ErrorPage, ta
         };
     }
     // TODO: I am not aware of when or why this would evaluate to false.
-    if (config.BROWSER) {
+    if (process.env.BROWSER) {
         const store = createStore(rootReducer, initial_state, middleware);
         sagaMiddleware.run(PollDataSaga).done
             .then(() => console.log('PollDataSaga is finished'))
@@ -241,7 +241,7 @@ async function universalRender({location, initial_state, offchain, ErrorPage, ta
             }
         }
         // Calculate signup bonus
-        const fee = parseFloat($STM_Config.registrar_fee.split(' ')[0]),
+        const fee = parseFloat(config.registrar_fee.split(' ')[0]),
               {base, quote} = onchain.feed_price,
               feed = parseFloat(base.split(' ')[0]) / parseFloat(quote.split(' ')[0]);
         const sd = fee * feed;

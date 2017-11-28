@@ -1,6 +1,7 @@
 import extractContent from 'app/utils/ExtractContent';
 import {objAccessor} from 'app/utils/Accessors';
 import normalizeProfile from 'app/utils/NormalizeProfile';
+import config from 'config';
 
 const site_desc = 'Steemit is a social media platform where everyone gets paid for creating and curating content. It leverages a robust digital points system (Steem) for digital rewards.';
 
@@ -12,7 +13,7 @@ function addSiteMeta(metas) {
     metas.push({property: 'og:title', content: 'Steemit'});
     metas.push({property: 'og:description', content: site_desc});
     metas.push({property: 'og:image', content: 'https://steemit.com/images/steemit.png'});
-    metas.push({property: 'fb:app_id', content: $STM_Config.fb_app});
+    metas.push({property: 'fb:app_id', content: config.fb_app});
     metas.push({name: 'twitter:card', content: 'summary'});
     metas.push({name: 'twitter:site', content: '@steemit'});
     metas.push({name: 'twitter:title', content: '#Steemit'});
@@ -47,7 +48,7 @@ export default function extractMeta(chain_data, rp) {
             metas.push({property: 'og:image',        content: image || 'https://steemit.com/images/steemit.png'});
             metas.push({property: 'og:description',  content: desc});
             metas.push({property: 'og:site_name',    content: 'Steemit'});
-            metas.push({property: 'fb:app_id',       content: $STM_Config.fb_app});
+            metas.push({property: 'fb:app_id',       content: config.fb_app});
             metas.push({property: 'article:tag',     content: category});
             metas.push({property: 'article:published_time', content: created});
 

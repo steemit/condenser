@@ -1,3 +1,4 @@
+process.env.NODE_CONFIG_ENV = "server";
 import config from 'config';
 
 import * as steem from 'steem';
@@ -9,7 +10,6 @@ const ROOT = path.join(__dirname, '../..');
 // it will avoid `../../../../../` require strings
 
 // use Object.assign to bypass transform-inline-environment-variables-babel-plugin (process.env.NODE_PATH= will not work)
-// TODO: put whatever this is doing into config.
 Object.assign(process.env, {NODE_PATH: path.resolve(__dirname, '..')});
 
 require('module').Module._initPaths();
@@ -17,6 +17,12 @@ require('module').Module._initPaths();
 // Load Intl polyfill
 // require('utils/intl-polyfill')(require('./config/init').locales);
 
+var defaultServerConfig = {
+    BROWSER: "false",
+};
+
+// Consider adding browser here...
+/*
 global.$STM_Config = {
     fb_app: config.get('grant.facebook.key'),
     steemd_connection_client: config.get('steemd_connection_client'),
@@ -33,6 +39,7 @@ global.$STM_Config = {
     facebook_app_id: config.get('facebook_app_id'),
     google_analytics_id: config.get('google_analytics_id')
 };
+*/
 
 const WebpackIsomorphicTools = require('webpack-isomorphic-tools');
 const WebpackIsomorphicToolsConfig = require(
@@ -47,7 +54,6 @@ global.webpackIsomorphicTools.server(ROOT, () => {
         steem.api.setOptions({ url: config.steemd_connection_server });
         steem.config.set('address_prefix', config.get('address_prefix'));
         steem.config.set('chain_id', config.get('chain_id'));
-
         // const CliWalletClient = require('shared/api_client/CliWalletClient').default;
         // if (process.env.NODE_ENV === 'production') connect_promises.push(CliWalletClient.instance().connect_promise());
         try {

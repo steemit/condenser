@@ -1,8 +1,6 @@
 import cp from 'child_process';
 import path from 'path';
 import watch from 'node-watch';
-
-process.env.NODE_CONFIG_ENV = "server";
 import config from 'config';
 
 

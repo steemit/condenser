@@ -55,7 +55,7 @@ async function appRender(ctx) {
             flash: ctx.flash,
             new_visit: ctx.session.new_visit,
             account: ctx.session.a,
-            config: $STM_Config,
+            config: config,
             uid: ctx.session.uid,
             login_challenge
         };

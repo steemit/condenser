@@ -21,7 +21,7 @@ class Start extends React.Component {
                             </div>
                         </div>
                         <div className='column small-6 medium-6 large-6'>
-                            <p className='landing-start-block-text'>Пишите, фотографируйте, комментируйте и
+                            <p className='landing-start-block-title-text'>Пишите, фотографируйте, комментируйте и
                                 получайте вознаграждение за любое действие</p>
                             <a href="/create_account" className="button">Создать аккаунт</a>
                         </div>
@@ -40,7 +40,7 @@ class Start extends React.Component {
                                 </div>
                                 <div className='column large-12 medium-12 small-12'>
                                     <p className='landing-start-block-text'>
-                                        Golos.io — это блог-платформа на блокчейне*, где пользователи могут публиковать
+                                        <b>Golos.io</b> — это блог-платформа на блокчейне*, где пользователи могут публиковать
                                         записи и голосовать за понравившиеся статьи. Голосуя за понравившуюся статью,
                                         они вознаграждают ее своими «голосами», которые можно перевести в реальные
                                         деньги.

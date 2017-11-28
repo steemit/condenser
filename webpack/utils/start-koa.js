@@ -1,6 +1,8 @@
 import cp from 'child_process';
 import path from 'path';
 import watch from 'node-watch';
+
+process.env.NODE_CONFIG_ENV = "server";
 import config from 'config';
 
 
@@ -19,9 +21,9 @@ const startServer = () => {
         return startServer();
     };
 
-    // merge env for the new process
-    const env = {...process.env, NODE_ENV: config.NODE_ENV, BABEL_ENV: config.KOA_BABEL_ENV};
-    // start the server procress
+    const env = {...process.env, NODE_ENV: config.NODE_ENV, BABEL_ENV: config.KOA_BABEL_ENV, BROWSER: config.SERVER.BROWSER };
+
+    // start the server process
     server = cp.fork(KOA_PATH, {env});
     // when server is `online`
     server.once('message', (message) => {

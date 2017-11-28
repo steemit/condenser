@@ -115,8 +115,6 @@ const sagaMiddleware = createSagaMiddleware(
 
 let middleware;
 
-// TODO: AFAIK config.BROWSER is always true...
-/*
 if (config.BROWSER && config.NODE_ENV === 'development') {
     const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose; // eslint-disable-line no-underscore-dangle
     middleware = composeEnhancers(
@@ -125,7 +123,6 @@ if (config.BROWSER && config.NODE_ENV === 'development') {
 } else {
     middleware = applyMiddleware(sagaMiddleware);
 }
-*/
 middleware = applyMiddleware(sagaMiddleware);
 
 

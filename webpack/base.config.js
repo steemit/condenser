@@ -7,6 +7,7 @@ import fs from 'fs';
 
 
 // https://github.com/lorenwest/node-config/wiki/Webpack-Usage
+// TODO: move to tmp/client_config.json or similar.
 fs.writeFileSync(path.resolve(__dirname, '../config/client.json'), JSON.stringify(config))
 
 const Webpack_isomorphic_tools_plugin = require('webpack-isomorphic-tools/plugin');
@@ -39,9 +40,6 @@ const scss_loaders = [
 ]
 
 export default {
-    node: {
-        fs: 'empty'
-    },
     entry: {
         app: ['babel-polyfill', './src/app/Main.js'],
         vendor: [
@@ -110,7 +108,7 @@ export default {
         alias: {
             react: path.join(__dirname, '../node_modules', 'react'),
             assets: path.join(__dirname, '../src/app/assets'),
-            config: path.resolve(__dirname, '../config/client.json'),
+            config: path.resolve(__dirname, '../config/client.json')
         },
         extensions: ['.js', '.json', '.jsx'],
         modules: [

@@ -1,6 +1,7 @@
 {
   "NODE_ENV": "development",
   "BABEL_ENV": "browser",
-  "KOA_BABEL_ENV": "server"
+  "KOA_BABEL_ENV": "server",
+  "BROWSER": "FALSE",
   // VERSION: JSON.stringify(git.long())
 }

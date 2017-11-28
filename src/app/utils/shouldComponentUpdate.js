@@ -7,14 +7,14 @@ import {Iterable} from 'immutable'
 */
 export default function (instance, name) {
     const mixin = PureRenderMixin.shouldComponentUpdate.bind(instance)
-    if (process.env.BROWSER && window.steemDebug_shouldComponentUpdate === undefined) {
+    if (config.BROWSER && window.steemDebug_shouldComponentUpdate === undefined) {
         window.steemDebug_shouldComponentUpdate = false // console command line completion
     }
     return (nextProps, nextState) => {
         const upd = mixin(nextProps, nextState)
         // Usage: steemDebug_shouldComponentUpdate = true
         // Or: steemDebug_shouldComponentUpdate = /Comment/
-        if (upd && process.env.BROWSER && window.steemDebug_shouldComponentUpdate) {
+        if (upd && config.BROWSER && window.steemDebug_shouldComponentUpdate) {
             const filter = window.steemDebug_shouldComponentUpdate
             if(filter.test) {
                 if(!filter.test(name))

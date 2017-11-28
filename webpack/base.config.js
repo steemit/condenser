@@ -39,6 +39,9 @@ const scss_loaders = [
 ]
 
 export default {
+    node: {
+        fs: 'empty'
+    },
     entry: {
         app: ['babel-polyfill', './src/app/Main.js'],
         vendor: [
@@ -107,7 +110,7 @@ export default {
         alias: {
             react: path.join(__dirname, '../node_modules', 'react'),
             assets: path.join(__dirname, '../src/app/assets'),
-            config: path.resolve(__dirname, '../config/client.json')
+            config: path.resolve(__dirname, '../config/client.json'),
         },
         extensions: ['.js', '.json', '.jsx'],
         modules: [

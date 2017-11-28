@@ -46,7 +46,7 @@ class App extends React.Component {
     }
 
     componentWillMount() {
-        if (process.env.BROWSER) localStorage.removeItem('autopost') // July 14 '16 compromise, renamed to autopost2
+        if (config.BROWSER) localStorage.removeItem('autopost') // July 14 '16 compromise, renamed to autopost2
         this.props.loginUser();
     }
 

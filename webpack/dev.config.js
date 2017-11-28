@@ -19,6 +19,10 @@ export default {
             ...baseConfig.module.rules,
         ]
     },
+    // https://github.com/webpack-contrib/css-loader/issues/447
+    node: {
+        fs: 'empty'
+    },
     plugins: [
         new webpack.DefinePlugin({
             'process.env': {

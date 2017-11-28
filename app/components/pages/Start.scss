@@ -82,16 +82,20 @@
         border-radius: 1rem; 
         border: 2px solid #dcdcdc;
         h1{
-            font-size: 5rem;
+            font-family: 'Roboto Condensed', sans-serif;
+            font-weight: bold;
+            font-size: 85px;
             color: #8ba2be;
         }
         h3{
-            margin-top: 0.7rem;
+            font-size: 29px;
+            text-align: left;
         }
 }
 
  .landing-start-block hr{
-    max-width: 55rem;    
+    max-width: 70rem;
+    size: 2px;    
  }
   .landing-start-block .row{
       max-width: 70rem;

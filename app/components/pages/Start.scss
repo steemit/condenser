@@ -1,0 +1,109 @@
+  .landing-start{
+    font-family: 'Open Sans', sans-serif;
+    font-style: normal;
+    color: #272d2e;
+  }
+  .landing-start-block{
+    h1, h2, h3, h5 {
+        text-align: center;
+        font-family: 'Open Sans', sans-serif;
+        font-style: normal;
+    }
+    h1{
+        font-size: 75px;
+        line-height: 85px;    
+        font-weight: 400;
+    }
+    h2{
+        font-size: 40px;
+        line-height: 50px;
+        font-weight: 400;
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+    }
+    h3{
+        font-size: 30px;
+        line-height: 40px;
+        font-weight: 300;
+    }
+    h5{
+        font-size: 18px;
+        line-height: 20px;
+        font-weight: 400;
+        letter-spacing: -0.5px;
+        color: #347EC6;
+        word-wrap: normal;
+        text-align: left;
+        text-transform: uppercase;
+    }
+    margin-bottom: 3rem;
+  }
+
+.landing-start-block-title-text{
+    font-family: 'Open Sans', sans-serif;
+    color: #272d2e;
+      font-size: 25px;
+      font-style: normal;      
+      line-height: 30px;      
+      font-weight: 300;
+  }
+
+  .landing-start-block-text{
+    font-family: 'Open Sans', sans-serif;    
+    font-size: 22px;
+    line-height: 25px;      
+    font-weight: 300;
+}
+
+.landing-start-block-icon-text{
+    font-family: 'Open Sans', sans-serif;    
+    font-size: 16px;
+    line-height: 25px;      
+    font-weight: 300;
+    text-align: left;
+}
+
+  .landing-start-block-center{
+      margin-top: 1rem;
+      text-align: center;
+  }
+
+.landing-start-person{
+    .landing-start-round-img{
+        border-radius: 100px; 
+        border: 0px solid; 
+      }
+      p{
+          margin-bottom: 0;
+      } 
+}
+
+.landing-start-panel{ 
+        border-radius: 1rem; 
+        border: 2px solid #dcdcdc;
+        h1{
+            font-family: 'Roboto Condensed', sans-serif;
+            font-weight: bold;
+            font-size: 85px;
+            color: #8ba2be;
+        }
+        h3{
+            font-size: 29px;
+            text-align: left;
+        }
+}
+
+ .landing-start-block hr{
+    max-width: 70rem;
+    size: 2px;    
+ }
+  .landing-start-block .row{
+      max-width: 70rem;
+  }
+  
+  .landing-start-block:nth-child(2n+1) {
+    background-color: #ffffff;
+  }
+  .landing-start-block:nth-child(2n+2) {
+    background-color: #f6f7f7;
+  }

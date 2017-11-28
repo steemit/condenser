@@ -21,8 +21,8 @@ class Start extends React.Component {
                             </div>
                         </div>
                         <div className='column small-6 medium-6 large-6'>
-                            <p className='landing-start-block-title-text'>Пишите, фотографируйте, комментируйте и
-                                получайте вознаграждение за любое действие</p>
+                            <p className='landing-start-block-title-text'>Пишите, фотографируйте,
+                                комментируйте и получайте вознаграждение за любое действие</p>
                             <a href="/create_account" className="button">Создать аккаунт</a>
                         </div>
                     </div>
@@ -40,10 +40,10 @@ class Start extends React.Component {
                                 </div>
                                 <div className='column large-12 medium-12 small-12'>
                                     <p className='landing-start-block-text'>
-                                        <b>Golos.io</b> — это блог-платформа на блокчейне*, где пользователи могут публиковать
-                                        записи и голосовать за понравившиеся статьи. Голосуя за понравившуюся статью,
-                                        они вознаграждают ее своими «голосами», которые можно перевести в реальные
-                                        деньги.
+                                        <b>Golos.io</b>
+                                        — это блог-платформа на блокчейне*, где пользователи могут публиковать записи и
+                                        голосовать за понравившиеся статьи. Голосуя за понравившуюся статью, они
+                                        вознаграждают ее своими «голосами», которые можно перевести в реальные деньги.
                                     </p>
                                 </div>
                                 <div className='landing-start-block-center column large-12 medium-12 small-12'>
@@ -55,9 +55,32 @@ class Start extends React.Component {
                 </div>
                 <div className='landing-start-block'>
                     <div className='column large-12 medium-12 small-12'>
-                        <h2>Иконки</h2>
-                        <div className='landing-start-block-center column large-12 medium-12 small-12'>
-                            <a href="/create_account" className="button">Создать аккаунт</a>
+                        <div className='row'>
+
+                            <div className='column large-3 medium-3 small-3'>
+                                <img
+                                    className='landing-start-round-img'
+                                    src='/images/landing/start/icons_01.png'/>
+                            </div>
+                            <div className='column large-3 medium-3 small-3'>
+                                <img
+                                    className='landing-start-round-img'
+                                    src='/images/landing/start/icons_02.png'/>
+                            </div>
+                            <div className='column large-3 medium-3 small-3'>
+                                <img
+                                    className='landing-start-round-img'
+                                    src='/images/landing/start/icons_03.png'/>
+                            </div>
+                            <div className='column large-3 medium-3 small-3'>
+                                <img
+                                    className='landing-start-round-img'
+                                    src='/images/landing/start/icons_04.png'/>
+                            </div>
+
+                            <div className='landing-start-block-center column large-12 medium-12 small-12'>
+                                <a href="/create_account" className="button">Создать аккаунт</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -89,7 +112,6 @@ class Start extends React.Component {
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
                 <div className='landing-start-block'>

@@ -142,6 +142,16 @@ class App extends React.Component {
                 </div>
             </div>
         }
+        if ($STM_Config.read_only_mode && this.state.showCallout) {
+            callout = <div className="App__announcement row">
+                <div className="column">
+                    <div className="callout warning">
+                        <CloseButton onClick={() => this.setState({showCallout: false})} />
+                        <p>{tt('g.read_only_mode')}</p>
+                    </div>
+                </div>
+            </div>;
+}
 
         let welcome_screen = null;
         if (ip && new_visitor && this.state.showBanner) {

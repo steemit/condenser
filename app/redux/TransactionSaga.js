@@ -11,6 +11,7 @@ import {DEBT_TICKER} from 'app/client_config'
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient'
 import {PrivateKey, PublicKey} from 'golos-js/lib/auth/ecc'
 import {api, broadcast, auth, memo} from 'golos-js'
+import tt from 'counterpart';
 
 
 export const transactionWatches = [
@@ -161,6 +162,14 @@ function* broadcastOperation({payload:
 }
 
 function* broadcastPayload({payload: {operations, keys, username, successCallback, errorCallback}}) {
+    if ($STM_Config.read_only_mode) {
+        yield put({type: 'ADD_NOTIFICATION', payload: {
+            key: "trx_" + Date.now(),
+            message: tt('g.read_only_mode_notify'),
+            dismissAfter: 5000
+        }})
+        return;
+    }
 
     for (const [type] of operations) // see also transaction/ERROR
         yield put(tr.actions.remove({key: ['TransactionError', type]}))

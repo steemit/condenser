@@ -78,7 +78,7 @@ const scrollTop = (el, topOffset, prevDocumentInfo, triesRemaining) => {
             scrollTopTimeout = setTimeout(() => scrollTop(el, topOffset, documentInfo, (triesRemaining-1)), SCROLL_TOP_DELAY_MS);
         }
     }
-}
+};
 
 /**
  * raison d'être: on hash link navigation, calculate the appropriate y-scroll with a fixed position top menu

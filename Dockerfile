@@ -8,7 +8,7 @@ RUN npm install -g yarn
 WORKDIR /var/app
 RUN mkdir -p /var/app
 ADD package.json /var/app/package.json
-RUN yarn
+RUN yarn install --non-interactive --frozen-lockfile
 
 COPY . /var/app
 

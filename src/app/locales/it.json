@@ -43,6 +43,9 @@
     "logout": "Logout",
     "memo": "Memo",
     "mute": "Silenzia",
+    "myblog": "My blog",
+    "mycomments": "My comments",
+    "myreplies": "Replies to me",
     "new": "Nuovo",
     "newer": "Più recente",
     "next": "Prossimo",
@@ -99,6 +102,8 @@
     "submit_a_story": "Post",
     "tag": "Tag",
     "to": "a",
+    "topics": "Topics",
+    "toggle_nightmode": "Toggle Night Mode",
     "all_tags": "All tags",
     "transfer": "Trasferisci",
     "trending_topics": "Trending Topics",
@@ -206,9 +211,9 @@
       "other": "%(count)s Risposte"
     },
     "post_key_warning": {
-        "confirm": "You are about to publish a STEEM private key or master password. You will probably lose control of the associated account and all its funds.",
-        "warning": "Legitimate users, including employees of Steemit Inc., will never ask you for a private key or master password.",
-        "checkbox": "I understand"
+      "confirm": "You are about to publish a STEEM private key or master password. You will probably lose control of the associated account and all its funds.",
+      "warning": "Legitimate users, including employees of Steemit Inc., will never ask you for a private key or master password.",
+      "checkbox": "I understand"
     }
   },
   "navigation": {
@@ -552,9 +557,9 @@
     "keep_me_logged_in": "Voglio restare connesso",
     "amazing_community": "una comunità incredibile",
     "to_comment_and_reward_others": "per commentare e premiare gli altri. ",
-    "sign_up_get_steem": "Sign up. Get STEEM",
     "signup_button": "Sign up now to earn ",
     "signup_button_emphasis": "FREE STEEM!",
+    "sign_up_get_steem": "Sign up. Get STEEM",
     "returning_users": "Utenti di ritorno:",
     "join_our": "Unisciti al nostro"
   },

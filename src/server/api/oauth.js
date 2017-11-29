@@ -251,7 +251,8 @@ function* handleRedditCallback() {
         }
         this.session.user = user.id;
         if (waiting_list) {
-            this.redirect(pathTo.waitingList());
+            this.redirect('/');
+            // this.redirect(pathTo.waitingList()); - route is deprecated
             return null;
         }
     } catch (error) {

@@ -42,27 +42,24 @@ export function resolveRoute(path)
     if (path === '/s/tos') {
         return {page: 'Tos'};
     }
-    if (path === '/c/change_password') {
+    if (path === '/c/change-password') {
         return {page: 'ChangePassword'};
     }
-    if (path === '/c/create_account') {
+    if (path === '/c/create-account') {
         return {page: 'CreateAccount'};
     }
     if (path === '/c/approval') {
         return {page: 'Approval'};
     }
-    if (path === '/c/pick_account') {
+    if (path === '/c/pick-account') {
         return {page: 'PickAccount'};
     }
-    if (path === '/c/recover_account_step_1') {
+    if (path === '/c/recover-account-step-1') {
         return {page: 'RecoverAccountStep1'};
     }
-    if (path === '/c/recover_account_step_2') {
+    if (path === '/c/recover-account-step-2') {
         return {page: 'RecoverAccountStep2'};
     }
-    // if (path === '/c/waiting_list') {
-    //     return {page: 'WaitingList'};
-    // }
     if (path === '/c/market') {
         return {page: 'Market'};
     }
@@ -113,7 +110,7 @@ export const pathTo = {
     userAuthorRewards: name => `/${name}/author-rewards`,
     search: () => '/s/search',
     compose: () => '/c/submit',
-    signup: (params = '') => `/c/pick_account${params}`,
+    signup: (params = '') => `/c/pick-account${params}`,
     login: () => '/c/login',
     post: (author, permlink) => `/${author}/${permlink}`,
     comment: (post_author, post_permlink, comment_author, comment_permlink) => {
@@ -127,21 +124,20 @@ export const pathTo = {
     support: () => '/s/support',
     tags: () => '/c/tags',
     tos: () => '/s/tos',
-    changePassword: () => '/c/change_password',
-    createAccount: () => '/c/create_account',
+    changePassword: () => '/c/change-password',
+    createAccount: () => '/c/create-account',
     signUpApproval: (params = '') => `/c/approval${params}`,
-    recoverAccount: step => `/c/recover_account_step_${step}`,
-    waitingList: () => '/c/waiting_list',
+    recoverAccount: step => `/c/recover-account-step-${step}`,
     market: () => '/c/market',
     witnesses: () => '/c/witnesses',
-    enterEmail: (params = '') => `/c/enter_email${params}`,
-    submitEmail: (params = '') => `/c/submit_email${params}`,
-    confirmEmail: () => '/c/confirm_email',
-    confirmEmailGet: () => '/c/confirm_email/:code',
-    enterMobile: (params = '') => `/c/enter_mobile${params}`,
-    submitMobile: (params = '') => `/c/submit_mobile${params}`,
-    confirmMobile: (params = '') => `/c/confirm_mobile${params}`,
-    confirmMobileGet: () => '/c/confirm_mobile/:code',
+    enterEmail: (params = '') => `/c/enter-email${params}`,
+    submitEmail: (params = '') => `/c/submit-email${params}`,
+    confirmEmail: () => '/c/confirm-email',
+    confirmEmailGet: () => '/c/confirm-email/:code',
+    enterMobile: (params = '') => `/c/enter-mobile${params}`,
+    submitMobile: (params = '') => `/c/submit-mobile${params}`,
+    confirmMobile: (params = '') => `/c/confirm-mobile${params}`,
+    confirmMobileGet: () => '/c/confirm-mobile/:code',
 };
 
 export function routeToSteemdUrl(route) {

@@ -373,7 +373,7 @@ export default function useEnterAndConfirmEmailPages(app) {
 
     router.get(pathTo.confirmEmailGet(), confirmEmailHandler);
     router.post(pathTo.confirmEmail(), koaBody, confirmEmailHandler); // for re-submit email
-    router.get("/c/enter_email/submit_form.js", function*() {
+    router.get("/c/enter-email/submit_form.js", function*() {
         this.type = 'application/javascript';
         this.body = "function submit_email_form(){document.getElementById('submit_email').submit()}";
     });

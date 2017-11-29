@@ -16,5 +16,6 @@ script:
     fi
   - docker images
 
-
+notifications:
+    slack: goloschain:sLr7BW0VhNtuv1xrMKJ8MSQb
 

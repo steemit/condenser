@@ -10,8 +10,8 @@ import tt from 'counterpart'
 import getSlug from 'speakingurl'
 import {DEBT_TICKER} from 'app/client_config'
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient'
-import {PrivateKey, PublicKey} from 'steem/lib/auth/ecc';
-import {api, broadcast, auth, memo} from 'steem';
+import {PrivateKey, PublicKey} from '@steemit/steem-js/lib/auth/ecc';
+import {api, broadcast, auth, memo} from '@steemit/steem-js';
 
 export const transactionWatches = [
     watchForBroadcast,

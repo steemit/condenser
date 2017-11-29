@@ -3,8 +3,8 @@ import {call, put, select} from 'redux-saga/effects';
 import {Set, Map, fromJS, List} from 'immutable'
 import user from 'app/redux/User'
 import {getAccount} from 'app/redux/SagaShared'
-import {PrivateKey} from 'steem/lib/auth/ecc';
-import {api} from 'steem';
+import {PrivateKey} from '@steemit/steem-js/lib/auth/ecc';
+import {api} from '@steemit/steem-js';
 
 // operations that require only posting authority
 const postingOps = Set(`vote, comment, delete_comment, custom_json, claim_reward_balance`.trim().split(/,\s*/))

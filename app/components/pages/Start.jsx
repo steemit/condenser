@@ -1,4 +1,6 @@
 import React from 'react';
+import Icon from '../elements/Icon'
+
 
 class Start extends React.Component {
 
@@ -22,13 +24,13 @@ class Start extends React.Component {
         let {simple} = this.state
         let simpleAnswer = <p className='landing-start-block-text'>
             <b>Golos.io</b>
-            — это блог-платформа на блокчейне*, где пользователи могут публиковать записи и
+            — это блог-платформа на <span title='Блокчейн — распределенная база данных'>блокчейне</span>, где пользователи могут публиковать записи и
             голосовать за понравившиеся статьи. Голосуя за понравившуюся статью, они
             вознаграждают ее своими «голосами», которые можно перевести в реальные деньги.
         </p>
 
         let difAnswer = <p className='landing-start-block-text'>
-            Каждый день мы отдаем все намайненое** в пул вознаграждения авторов. Он
+            Каждый день мы отдаем все <span title='Майнинг — деятельность по поддержанию блокчейна'>намайненое</span> в пул вознаграждения авторов. Он
             распределяется в зависимости от количества «голосов» пользователей под каждой
             публикацией.
         </p>
@@ -44,8 +46,8 @@ class Start extends React.Component {
                         <div className='column small-6 medium-6 large-6'>
                             <div>
                                 <iframe
-                                    width="400"
-                                    height="220"
+                                    width="520"
+                                    height="280"
                                     src="https://www.youtube.com/embed/8a0TPACOu2k"
                                     frameBorder="0"
                                     allowFullScreen/>
@@ -53,7 +55,7 @@ class Start extends React.Component {
                         </div>
                         <div className='column small-6 medium-6 large-6'>
                             <p className='landing-start-block-title-text'>Пишите, фотографируйте,
-                                комментируйте и получайте вознаграждение за любое действие</p>
+                                комментируйте и получайте <span title='Токены, которыми вознаграждаются посты, можно перевести в любую мировую валюту.'>вознаграждение</span> за любое действие</p>
                             <a href="/create_account" className="button">Создать аккаунт</a>
                         </div>
                     </div>
@@ -91,14 +93,16 @@ class Start extends React.Component {
                                 <p className='landing-start-block-center'><img
                                     className='landing-start-round-img'
                                     src='/images/landing/start/icons_01.png'/></p>
+                                    {/* <Icon name='team' size='5x'/> */}
                                 <h5>Социальная значимость</h5>
                                 <p className='landing-start-block-icon-text'>Наше сообщество ценит мнения, истории и творческий контент.</p>
 
                             </div>
                             <div className='column large-3 medium-3 small-3'>
-                                <p className='landing-start-block-center'><img
+                            <p className='landing-start-block-center'><img
                                     className='landing-start-round-img'
                                     src='/images/landing/start/icons_02.png'/></p>
+                                    {/* <Icon name='money' size='5x'/> */}    
                                 <h5>Выгодно для блогинга</h5>
                                 <p className='landing-start-block-icon-text'>Мы вознаграждаем как авторов, так и
                                     читателей — тех, кто оценивает и комментирует публикации</p>
@@ -168,8 +172,8 @@ class Start extends React.Component {
                                     делиться своими историями, подписываться на интересных авторов, оценивать
                                     публикации, знакомиться и получать вознаграждения</p>
                             </div>
-                            <div className='column large-1 medium-1 small-1'></div>
-                            <div className='landing-start-panel column large-4 medium-4 small-4'>
+                            {/* <div className='column large-2 medium-2 small-2'></div> */}
+                            <div className='landing-start-panel left column large-4 medium-4 small-4'>
                                 <div className='row'>
                                     <div className='column large-2 medium-2 small-2'>
                                         <h1>1</h1>
@@ -181,8 +185,7 @@ class Start extends React.Component {
                                     </div>
                                 </div>
                             </div>
-                            <div className='column large-2 medium-2 small-2'></div>
-                            <div className='landing-start-panel column large-4 medium-4 small-4'>
+                            <div className='landing-start-panel right column large-4 medium-4 small-4'>
                                 <div className='row'>
                                     <div className='column large-2 medium-2 small-2'>
                                         <h1>2</h1>
@@ -194,6 +197,7 @@ class Start extends React.Component {
                                     </div>
                                 </div>
                             </div>
+                            {/* <div className='column large-2 medium-2 small-2'></div> */}
                         </div>
                     </div>
                     <div className='landing-start-block-center column large-12 medium-12 small-12'>

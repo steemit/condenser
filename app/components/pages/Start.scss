@@ -91,6 +91,14 @@
             font-size: 29px;
             text-align: left;
         }
+        
+        &.left{
+            margin-right: 1rem;
+            margin-left: 15.5%;
+        }
+        &.right{
+            margin-left: 1rem;
+        }
 }
 
  .landing-start-block hr{

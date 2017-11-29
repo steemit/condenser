@@ -23,8 +23,8 @@ class Start extends React.Component {
 
         let {simple} = this.state
         let simpleAnswer = <p className='landing-start-block-text'>
-            <b>Golos.io</b>
-            — это блог-платформа на <span title='Блокчейн — распределенная база данных'>блокчейне</span>, где пользователи могут публиковать записи и
+            <b>{'Golos.io '}</b>
+             — это блог-платформа на <span title='Блокчейн — распределенная база данных'>блокчейне</span>, где пользователи могут публиковать записи и
             голосовать за понравившиеся статьи. Голосуя за понравившуюся статью, они
             вознаграждают ее своими «голосами», которые можно перевести в реальные деньги.
         </p>
@@ -70,9 +70,9 @@ class Start extends React.Component {
                             <div className='row'>
                                 <div className='column large-12 medium-12 small-12'>
                                     <h3>
-                                        <a href='#' onClick={(e) => this.toggleAnswer(e, true)}>Простой ответ</a>
-                                        /
-                                        <a href='#' onClick={(e) => this.toggleAnswer(e, false)}>Сложный ответ</a>
+                                        <a className={simple ? 'active' : ''} href='#' onClick={(e) => this.toggleAnswer(e, true)}>Простой ответ</a>
+                                        {' / '}
+                                        <a className={simple ? '' : 'active'} href='#' onClick={(e) => this.toggleAnswer(e, false)}>Сложный ответ</a>
                                     </h3>
                                 </div>
                                 <div className='column large-12 medium-12 small-12'>
@@ -212,7 +212,7 @@ class Start extends React.Component {
                         </div>
                         <div className='row'>
                             <div className='column large-12 medium-12 small-12'>
-                                <p className='landing-start-block-text landing-start-block-center'>чтобы начать
+                                <p className='landing-start-block-text landing-start-block-center'>
                                     У нас есть собственная <a href='https://wiki.golos.io/'> Википедия</a>, со всей информацией про блог-платформу
                                     Golos.io. Кроме того, мы оперативно ответим на любой технический вопрос в нашей
                                     группе в <a href='https://t.me/golos_support'>Телеграме</a>.</p>

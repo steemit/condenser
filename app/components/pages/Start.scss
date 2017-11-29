@@ -25,6 +25,11 @@
         font-size: 30px;
         line-height: 40px;
         font-weight: 300;
+        a{
+            &.active{            
+                border-bottom: 2px dashed #164482;
+            }
+        }
     }
     h5{
         font-size: 18px;
@@ -46,6 +51,9 @@
       font-style: normal;      
       line-height: 30px;      
       font-weight: 300;
+      span{
+        border-bottom: 2px dashed #164482;
+    }
   }
 
   .landing-start-block-text{
@@ -53,6 +61,12 @@
     font-size: 22px;
     line-height: 25px;      
     font-weight: 300;
+    a{
+        text-decoration: underline;
+    }
+    span{
+        border-bottom: 2px dashed #164482;
+    }
 }
 
 .landing-start-block-icon-text{

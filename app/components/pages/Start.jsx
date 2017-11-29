@@ -70,9 +70,9 @@ class Start extends React.Component {
                             <div className='row'>
                                 <div className='column large-12 medium-12 small-12'>
                                     <h3>
-                                        <a className={simple ? 'active' : ''} href='#' onClick={(e) => this.toggleAnswer(e, true)}>Простой ответ</a>
+                                        <a className={simple ? '' : 'active'} href='#' onClick={(e) => this.toggleAnswer(e, true)}>Простой ответ</a>
                                         {' / '}
-                                        <a className={simple ? '' : 'active'} href='#' onClick={(e) => this.toggleAnswer(e, false)}>Сложный ответ</a>
+                                        <a className={simple ? 'active' : ''} href='#' onClick={(e) => this.toggleAnswer(e, false)}>Сложный ответ</a>
                                     </h3>
                                 </div>
                                 <div className='column large-12 medium-12 small-12'>

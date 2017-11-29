@@ -60,30 +60,33 @@ class Keys extends Component {
                 tt_auth_type = authType;
         }
         const auths = pubkeys.map(pubkey => (
-            <div key={idx++}>
-                <div className="row">
-                    <div className="column small-12">
-                        <span className={rowClass}>
-                            <ShowKey pubkey={pubkey}
-                                privateKey={privateKeys.get(authType + '_private')}
-                                cmpProps={{className: rowClass}} authType={authType} accountName={account.get('name')}
-                                onKey={onKey}>
-                                {/*<span onClick={() => this.showChangePassword(pubkey)}>&nbsp;{edit}</span>*/}
-                            </ShowKey>
-                        </span>
-                    </div>
-                </div>
+          <div key={idx++}>
+            <div className="row">
+              <div className="column small-12">
+                <span className={rowClass}>
+                  <ShowKey
+                      pubkey={pubkey}
+                      privateKey={privateKeys.get(authType + '_private')}
+                      cmpProps={{className: rowClass}}
+                      authType={authType}
+                      accountName={account.get('name')}
+                      onKey={onKey}>
+                    {/*<span onClick={() => this.showChangePassword(pubkey)}>&nbsp;{edit}</span>*/}
+                  </ShowKey>
+                </span>
+              </div>
             </div>
+          </div>
         ))
         return (
-            <span>
-                <div className="row">
-                    <div className="column small-12">
-                        <label>{tt_auth_type}</label>
-                        {auths}
-                    </div>
-                </div>
-            </span>
+          <span>
+            <div className="row">
+              <div className="column small-12">
+                <label>{tt_auth_type}</label>
+                {auths}
+              </div>
+            </div>
+          </span>
         )
     }
 }

@@ -31,7 +31,7 @@ class Memo extends React.Component {
         const isEncoded = /^#/.test(text);
 
         if(!isEncoded) return <span>{text}</span>
-        if(!myAccount) return <span></span>
+        if(!myAccount) return <span />
         if(memo_private) return <span>{decodeMemo(memo_private, text)}</span>
         return <span>{tt('g.login_to_see_memo')}</span>
     }

@@ -26,14 +26,14 @@ class KeyEdit extends Component {
     constructor() {
         super()
         this.state = {}
-        this.onCancel = e => {
+        this.onCancel = (e) => {
             e.preventDefault()
             if (this.props.onCancel)
                 this.props.onCancel()
         }
         this.onCancel = this.onCancel.bind(this)
 
-        this.onKeyChanged = data => {
+        this.onKeyChanged = (data) => {
             const {onKeyChanged, oldAuth} = this.props
             return onKeyChanged({...data, oldAuth})
         }
@@ -67,47 +67,56 @@ class KeyEdit extends Component {
             state: {isWif},
         } = this
         return (
-            <form onSubmit={handleSubmit(data => onKeyChanged(data))}>
-                <div className="row">
-                    <div className={'column small-12' + (password.touched && password.error ? ' error' : '')}>
-                        <label>Change “{authType}” Key (Password or WIF)</label>
-                        <input ref="key" type="password" {...cleanReduxInput(password)}
-                            placeholder="Password or WIF" autoComplete="off" />
-                        <span className="error">{password.touched && password.error && password.error}&nbsp;</span>
-                    </div>
-                    <div className={'column small-12' + (confirm.touched && confirm.error ? ' error' : '')}>
-                        <label>{tt('g.confirm_password')}</label>
-                        <input ref="keyConfirm" type="password" {...cleanReduxInput(confirm)} disabled={isWif}
-                            placeholder="Confirm Password" autoComplete="off" />
-                        <div className="error">{confirm.touched && confirm.error && confirm.error}&nbsp;</div>
-                    </div>
-                    <div className="column small-12">
-                        {error && <div className="error">{error}</div>}
-                        {submitting && <LoadingIndicator type="circle" />}
-                        {accountChanged && <span>
-                            <div className="success">{tt('g.account_updated')}</div>
-                            <br />
-                            <button className="button" type="button" onClick={onCancel}>
-                                {tt('g.close')}
-                            </button>
-                        </span>}
-                        {!accountChanged && <span>
-                            <button className="button" type="submit" disabled={submitting}>
-                                {tt('g.save')}
-                            </button>
-                            <button className="button" type="button" disabled={submitting} onClick={onCancel}>
-                                {tt('g.cancel')}
-                            </button>
-                        </span>}
-                    </div>
-                </div>
-            </form>
+          <form onSubmit={handleSubmit(data => onKeyChanged(data))}>
+            <div className="row">
+              <div className={'column small-12' + (password.touched && password.error ? ' error' : '')}>
+                <label>Change “{authType}” Key (Password or WIF)</label>
+                <input
+                    ref="key"
+                    type="password"
+                    {...cleanReduxInput(password)}
+                    placeholder="Password or WIF"
+                    autoComplete="off" />
+                <span className="error">{password.touched && password.error && password.error}&nbsp;</span>
+              </div>
+              <div className={'column small-12' + (confirm.touched && confirm.error ? ' error' : '')}>
+                <label>{tt('g.confirm_password')}</label>
+                <input
+                    ref="keyConfirm"
+                    type="password"
+                    {...cleanReduxInput(confirm)}
+                    disabled={isWif}
+                    placeholder="Confirm Password"
+                    autoComplete="off" />
+                <div className="error">{confirm.touched && confirm.error && confirm.error}&nbsp;</div>
+              </div>
+              <div className="column small-12">
+                {error && <div className="error">{error}</div>}
+                {submitting && <LoadingIndicator type="circle" />}
+                {accountChanged && <span>
+                  <div className="success">{tt('g.account_updated')}</div>
+                  <br />
+                  <button className="button" type="button" onClick={onCancel}>
+                    {tt('g.close')}
+                  </button>
+                </span>}
+                {!accountChanged && <span>
+                  <button className="button" type="submit" disabled={submitting}>
+                    {tt('g.save')}
+                  </button>
+                  <button className="button" type="button" disabled={submitting} onClick={onCancel}>
+                    {tt('g.cancel')}
+                  </button>
+                </span>}
+              </div>
+            </div>
+          </form>
         )
     }
 }
 
 const keyValidate = values => ({
-    password: ! values.password ? tt('g.required') :
+    password: !values.password ? tt('g.required') :
         values.password.length < 32 ? tt('g.password_must_be_characters_or_more', {amount: 32}) :
         PublicKey.fromString(values.password) ? tt('g.need_password_or_key') :
         null,

@@ -8,7 +8,6 @@ function allChecked(confirmCheckboxes) {
 }
 
 export default class GeneratedPasswordInput extends React.Component {
-
     static propTypes = {
         disabled: React.PropTypes.bool,
         onChange: React.PropTypes.func.isRequired,
@@ -61,31 +60,31 @@ export default class GeneratedPasswordInput extends React.Component {
         const {disabled, showPasswordString} = this.props;
         const {generatedPassword, confirmPassword, confirmPasswordError, confirmCheckboxes} = this.state;
         return (
-            <div className="GeneratedPasswordInput">
-                <div className="GeneratedPasswordInput__field">
-                    <label className="uppercase">{tt('g.generated_password')}<br />
-                        <code className="GeneratedPasswordInput__generated_password">{showPasswordString ? generatedPassword : '-'}</code>
-                        <div className="GeneratedPasswordInput__backup_text">
-                            {showPasswordString ? tt('g.backup_password_by_storing_it') : tt('g.enter_account_show_password')}
-                        </div>
-                    </label>
+          <div className="GeneratedPasswordInput">
+            <div className="GeneratedPasswordInput__field">
+              <label className="uppercase">{tt('g.generated_password')}<br />
+                <code className="GeneratedPasswordInput__generated_password">{showPasswordString ? generatedPassword : '-'}</code>
+                <div className="GeneratedPasswordInput__backup_text">
+                  {showPasswordString ? tt('g.backup_password_by_storing_it') : tt('g.enter_account_show_password')}
                 </div>
-                <div className="GeneratedPasswordInput__field">
-                    <label className="uppercase">
-                        {tt('g.re_enter_generate_password')}
-                        <input type="password" name="confirmPassword" autoComplete="off" onChange={this.confirmPasswordChange} value={confirmPassword} disabled={disabled} />
-                    </label>
-                    <div className="error">{confirmPasswordError}</div>
-                </div>
-                <div className="GeneratedPasswordInput__checkboxes">
-                    <label><input type="checkbox" name="box1" onChange={this.confirmCheckChange} checked={confirmCheckboxes.box1} />
-                        {tt('g.understand_that_APP_NAME_cannot_recover_password', {APP_NAME})}.
-                    </label>
-                    <label><input type="checkbox" name="box2" onChange={this.confirmCheckChange} checked={confirmCheckboxes.box2} />
-                        {tt('g.i_saved_password')}.
-                    </label>
-                </div>
+              </label>
             </div>
+            <div className="GeneratedPasswordInput__field">
+              <label className="uppercase">
+                {tt('g.re_enter_generate_password')}
+                <input type="password" name="confirmPassword" autoComplete="off" onChange={this.confirmPasswordChange} value={confirmPassword} disabled={disabled} />
+              </label>
+              <div className="error">{confirmPasswordError}</div>
+            </div>
+            <div className="GeneratedPasswordInput__checkboxes">
+              <label><input type="checkbox" name="box1" onChange={this.confirmCheckChange} checked={confirmCheckboxes.box1} />
+                {tt('g.understand_that_APP_NAME_cannot_recover_password', {APP_NAME})}.
+                    </label>
+              <label><input type="checkbox" name="box2" onChange={this.confirmCheckChange} checked={confirmCheckboxes.box2} />
+                {tt('g.i_saved_password')}.
+                    </label>
+            </div>
+          </div>
         );
     }
 }

@@ -7,7 +7,7 @@ import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import Icon from 'app/components/elements/Icon'
 import tt from 'counterpart';
 import { APP_NAME, APP_ICON } from 'app/client_config';
-import {key_utils} from 'steem/lib/auth/ecc';
+import {key_utils} from '@steemit/steem-js/lib/auth/ecc';
 
 
 const {bool} = React.PropTypes

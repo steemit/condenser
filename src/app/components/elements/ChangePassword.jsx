@@ -6,8 +6,8 @@ import {validate_account_name} from 'app/utils/ChainValidation'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
 import tt from 'counterpart';
 import { APP_NAME } from 'app/client_config';
-import {PrivateKey, PublicKey, key_utils} from 'steem/lib/auth/ecc';
-import {api} from 'steem';
+import {PrivateKey, PublicKey, key_utils} from '@steemit/steem-js/lib/auth/ecc';
+import {api} from '@steemit/steem-js';
 
 const {string, oneOf} = React.PropTypes
 

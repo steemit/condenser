@@ -3,7 +3,7 @@ import {call, put, select} from 'redux-saga/effects';
 import g from 'app/redux/GlobalReducer'
 import {takeEvery, takeLatest} from 'redux-saga';
 import tt from 'counterpart';
-import {api} from 'steem';
+import {api} from '@steemit/steem-js';
 import {setUserPreferences} from 'app/utils/ServerApiClient';
 
 const wait = ms => (

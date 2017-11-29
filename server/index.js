@@ -22,7 +22,7 @@ global.$STM_Config = {
     img_proxy_prefix: config.get('img_proxy_prefix'),
     ipfs_prefix: config.get('ipfs_prefix'),
     disable_signups: config.get('disable_signups'),
-    read_only_mode: true,//config.get('read_only_mode'),
+    read_only_mode: config.get('read_only_mode'),
     registrar_fee: config.get('registrar.fee'),
     upload_image: config.get('upload_image'),
     site_domain: config.get('site_domain'),

@@ -96,6 +96,7 @@ shapeshift
 randomwhale
 randowale
 randwhale
+bellyrub
 coinpayments
 minnowboost
 minnowboster

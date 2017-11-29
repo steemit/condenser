@@ -1,6 +1,6 @@
 require('babel-register')();
 
-process.env.NODE_PATH = require('path').resolve(__dirname, '.');
+process.env.NODE_PATH = require('path').resolve(__dirname, './src');
 require('module').Module._initPaths();
 
 const jsdom = require('jsdom').jsdom;

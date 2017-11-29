@@ -1,0 +1,25 @@
+.Author {
+  cursor: pointer;
+  display: inline-block;
+
+  .dropdown-arrow {
+  	position: relative;
+  	top: 3px;
+  	left: -2px;
+  }
+  .Icon.dropdown-arrow polygon {
+	transition: 0.3s all ease-in-out;
+  }
+  &:hover {
+	.Reputation, .dropdown-arrow {
+	    @include themify($themes) {
+	      color: themed('textColorAccent');
+	    } 		
+	}
+	.Icon.dropdown-arrow polygon {
+	    @include themify($themes) {
+	      fill: themed('textColorAccent');
+	    } 		
+	}
+  }
+}

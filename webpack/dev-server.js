@@ -1,5 +1,4 @@
 var fs = require('fs');
-
 if(!fs.existsSync('tmp'))
     fs.mkdirSync('tmp');
 
@@ -9,14 +8,30 @@ process.env.NODE_ENV = 'development';
 import Koa from 'koa';
 import webpack from 'webpack';
 
-import config from './dev.config';
+import webpackDevConfig from './dev.config';
 
 const app = new Koa();
-const compiler = webpack(config.webpack);
+const compiler = webpack(webpackDevConfig);
 
-app.use(require('koa-webpack-dev-middleware')(compiler, config.server.options));
+const PORT = process.env.PORT ? parseInt(process.env.PORT)+1 : 8081;
+
+const server_options = {
+    publicPath: '/assets/',
+    hot: true,
+    stats: {
+    assets: true,
+        colors: true,
+        version: false,
+        hash: false,
+        timings: true,
+        chunks: false,
+        chunkModules: false
+    }
+};
+
+app.use(require('koa-webpack-dev-middleware')(compiler, server_options));
 app.use(require('koa-webpack-hot-middleware')(compiler));
 
-app.listen(config.server.port, '0.0.0.0', () => {
-    console.log('`webpack-dev-server` listening on port %s', config.server.port);
+app.listen(PORT, '0.0.0.0', () => {
+    console.log('`webpack-dev-server` listening on port %s', PORT);
 });

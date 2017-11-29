@@ -1,0 +1,11 @@
+.Privacy {
+	max-width: 800px;
+	padding: 1.5em 0 3em;
+  .section {
+    font-size: 100%;
+    @include themify($themes) {
+      fill: themed('textColorPrimary');
+    }      
+    padding-right: 0.5rem;
+  }
+}

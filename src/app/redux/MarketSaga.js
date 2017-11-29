@@ -2,7 +2,7 @@ import {takeLatest} from 'redux-saga';
 import {call, put} from 'redux-saga/effects';
 import MarketReducer from './MarketReducer';
 import {getAccount} from './SagaShared';
-import {api} from 'steem';
+import {api} from '@steemit/steem-js';
 
 export const marketWatches = [watchLocationChange, watchUserLogin, watchMarketUpdate];
 

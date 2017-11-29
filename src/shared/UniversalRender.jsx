@@ -28,7 +28,7 @@ import {routeRegex} from "app/ResolveRoute";
 import {contentStats} from 'app/utils/StateFunctions';
 import ScrollBehavior from 'scroll-behavior';
 
-import {api} from 'steem';
+import {api} from '@steemit/steem-js';
 
 
 const calcOffsetRoot = (startEl) => {
@@ -42,9 +42,10 @@ const calcOffsetRoot = (startEl) => {
 };
 
 //BEGIN: SCROLL CODE
-const SCROLL_TOP_TRIES = 100;
-const SCROLL_TOP_DELAY_MS = 50;
+const SCROLL_TOP_TRIES = 50;
+const SCROLL_TOP_DELAY_MS = 100;
 const SCROLL_TOP_EXTRA_PIXEL_OFFSET = 3;
+const SCROLL_UP_FUDGE_PIXELS = 10;
 
 let scrollTopTimeout = null;
 
@@ -66,6 +67,9 @@ const scrollTop = (el, topOffset, prevDocumentInfo, triesRemaining) => {
         scrollTarget: calcOffsetRoot(el) + topOffset
     };
 
+    if(prevDocumentInfo.scrollTop > (documentInfo.scrollTop + SCROLL_UP_FUDGE_PIXELS)) { //detecting that the user has scrolled in an up direction
+        return;
+    }
     if(documentInfo.scrollTop < documentInfo.scrollTarget
         || prevDocumentInfo.scrollTarget < documentInfo.scrollTarget
         || prevDocumentInfo.scrollHeight < documentInfo.scrollHeight) {
@@ -74,7 +78,7 @@ const scrollTop = (el, topOffset, prevDocumentInfo, triesRemaining) => {
             scrollTopTimeout = setTimeout(() => scrollTop(el, topOffset, documentInfo, (triesRemaining-1)), SCROLL_TOP_DELAY_MS);
         }
     }
-}
+};
 
 /**
  * raison d'être: on hash link navigation, calculate the appropriate y-scroll with a fixed position top menu
@@ -128,7 +132,8 @@ const onRouterError = (error) => {
     console.error('onRouterError', error);
 };
 
-async function universalRender({ location, initial_state, offchain, ErrorPage, tarantool, userPreferences }) {
+async function universalRender({location, initial_state, offchain, ErrorPage, tarantool, userPreferences}) {
+
     let error, redirect, renderProps;
     try {
         [error, redirect, renderProps] = await runRouter(location, RootRoute);
@@ -247,7 +252,7 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
 
         offchain.signup_bonus = sdDisp;
         offchain.server_location = location;
-        server_store = createStore(rootReducer, { global: onchain, offchain});
+        server_store = createStore(rootReducer, { app: initial_state.app, global: onchain, offchain});
         server_store.dispatch({type: '@@router/LOCATION_CHANGE', payload: {pathname: location}});
         server_store.dispatch({type: 'SET_USER_PREFERENCES', payload: userPreferences});
         if (offchain.account) {

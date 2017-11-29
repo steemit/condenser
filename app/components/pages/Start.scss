@@ -32,10 +32,10 @@
         }
     }
     h5{
-        font-size: 18px;
+        font-size: 15px;
         line-height: 20px;
         font-weight: 400;
-        letter-spacing: -0.5px;
+        letter-spacing: -1.1px;
         color: #347EC6;
         word-wrap: normal;
         text-align: left;
@@ -58,21 +58,25 @@
 
   .landing-start-block-text{
     font-family: 'Open Sans', sans-serif;    
-    font-size: 22px;
-    line-height: 25px;      
+    font-size: 1.6rem;
+    line-height: 1.7rem;      
     font-weight: 300;
+    padding-top: 2rem;
     a{
         text-decoration: underline;
     }
     span{
         border-bottom: 2px dashed #164482;
     }
+    &.reg{
+        padding-top: 0rem;
+    }
 }
 
 .landing-start-block-icon-text{
     font-family: 'Open Sans', sans-serif;    
-    font-size: 16px;
-    line-height: 25px;      
+    font-size: 1rem;
+    line-height: 1.4rem;      
     font-weight: 300;
     text-align: left;
 }
@@ -83,6 +87,7 @@
   }
 
 .landing-start-person{
+    padding-top: 1rem;
     .landing-start-round-img{
         border-radius: 100px; 
         border: 0px solid; 
@@ -95,15 +100,19 @@
 .landing-start-panel{ 
         border-radius: 1rem; 
         border: 2px solid #dcdcdc;
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+    
         h1{
             font-family: 'Roboto Condensed', sans-serif;
             font-weight: bold;
-            font-size: 85px;
+            font-size: 4.9rem;
             color: #8ba2be;
         }
         h3{
-            font-size: 29px;
+            font-size: 1.3rem;
             text-align: left;
+            font-weight: 400;
         }
         
         &.left{
@@ -116,11 +125,11 @@
 }
 
  .landing-start-block hr{
-    max-width: 70rem;
+    max-width: 55rem;
     size: 2px;    
  }
   .landing-start-block .row{
-      max-width: 70rem;
+      max-width: 55rem;
   }
   
   .landing-start-block:nth-child(2n+1) {

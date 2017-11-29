@@ -46,8 +46,8 @@ class Start extends React.Component {
                         <div className='column small-6 medium-6 large-6'>
                             <div>
                                 <iframe
-                                    width="520"
-                                    height="280"
+                                    width="100%"
+                                    height="220"
                                     src="https://www.youtube.com/embed/8a0TPACOu2k"
                                     frameBorder="0"
                                     allowFullScreen/>
@@ -168,7 +168,7 @@ class Start extends React.Component {
                         <h2>Зарегистрируйтесь,</h2>
                         <div className='row'>
                             <div className='column large-12 medium-12 small-12'>
-                                <p className='landing-start-block-text landing-start-block-center'>чтобы начать
+                                <p className='landing-start-block-text reg landing-start-block-center'>чтобы начать
                                     делиться своими историями, подписываться на интересных авторов, оценивать
                                     публикации, знакомиться и получать вознаграждения</p>
                             </div>

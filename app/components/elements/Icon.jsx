@@ -73,7 +73,9 @@ const icons = [
     'arrow',
     'envelope',
     'male',
-    'female'
+    'female',
+    'money',
+    'team',
 ];
 const icons_map = {};
 for (const i of icons) icons_map[i] = require(`app/assets/icons/${i}.svg`);

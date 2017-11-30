@@ -140,7 +140,7 @@ class PostFull extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (!this.props.username && nextProps.username && process.env.BROWSER) {
+        if (nextProps.username && process.env.BROWSER) {
             this.setState({showReply: true});
         }
     }

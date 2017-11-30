@@ -47,13 +47,13 @@ mkdir tmp
 
 #### Install dependencies
 
-Install at least Node v7.5 if you don't already have it. We recommend using `nvm` to do this as it's both the simplest way to install and manage installed version(s) of node. If you need `nvm`, you can get it at [https://github.com/creationix/nvm](https://github.com/creationix/nvm).
+Install at least Node v8.7 if you don't already have it. We recommend using `nvm` to do this as it's both the simplest way to install and manage installed version(s) of node. If you need `nvm`, you can get it at [https://github.com/creationix/nvm](https://github.com/creationix/nvm).
 
-Condenser is known to successfully build using node 7.5, npm 4.1.2, and yarn 1.1.0.
+Condenser is known to successfully build using node 8.7, npm 4.1.2, and yarn 1.1.0.
 
 Using nvm, you would install like this:
 ```bash
-nvm install v7.5
+nvm install v8.7
 ```
 
 We use the yarn package manager instead of the default `npm`. There are multiple reasons for this, one being that we have `steem-js` built from source pulling the github repo as part of the build process and yarn supports this. This way the library that handles keys can be loaded by commit hash instead of a version name and cryptographically verified to be exactly what we expect it to be. Yarn can be installed with `npm`, but afterwards you will not need to use `npm` further.

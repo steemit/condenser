@@ -1,7 +1,6 @@
 import React from 'react';
 import Icon from '../elements/Icon'
 
-
 class Start extends React.Component {
 
     constructor() {
@@ -24,15 +23,18 @@ class Start extends React.Component {
         let {simple} = this.state
         let simpleAnswer = <p className='landing-start-block-text'>
             <b>{'Golos.io '}</b>
-             — это блог-платформа на <span title='Блокчейн — распределенная база данных'>блокчейне</span>, где пользователи могут публиковать записи и
-            голосовать за понравившиеся статьи. Голосуя за понравившуюся статью, они
-            вознаграждают ее своими «голосами», которые можно перевести в реальные деньги.
+            — это блог-платформа на
+            <span title='Блокчейн — распределенная база данных'> блокчейне</span>, где
+            пользователи могут публиковать записи и голосовать за понравившиеся статьи.
+            Голосуя за понравившуюся статью, они вознаграждают ее своими «голосами», которые
+            можно перевести в реальные деньги.
         </p>
 
         let difAnswer = <p className='landing-start-block-text'>
-            Каждый день мы отдаем все <span title='Майнинг — деятельность по поддержанию блокчейна'>намайненое</span> в пул вознаграждения авторов. Он
-            распределяется в зависимости от количества «голосов» пользователей под каждой
-            публикацией.
+            Каждый день мы отдаем все
+            <span title='Майнинг — деятельность по поддержанию блокчейна'>намайненое</span>
+            в пул вознаграждения авторов. Он распределяется в зависимости от количества
+            «голосов» пользователей под каждой публикацией.
         </p>
 
         return (
@@ -54,8 +56,9 @@ class Start extends React.Component {
                             </div>
                         </div>
                         <div className='column small-6 medium-6 large-6'>
-                            <p className='landing-start-block-title-text'>Пишите, фотографируйте,
-                                комментируйте и получайте <span title='Токены, которыми вознаграждаются посты, можно перевести в любую мировую валюту.'>вознаграждение</span> за любое действие</p>
+                            <p className='landing-start-block-title-text'>Пишите, фотографируйте, комментируйте и получайте
+                                <span
+                                    title='Токены, которыми вознаграждаются посты, можно перевести в любую мировую валюту.'> вознаграждение</span> за любое действие</p>
                             <a href="/create_account" className="button">Создать аккаунт</a>
                         </div>
                     </div>
@@ -70,13 +73,25 @@ class Start extends React.Component {
                             <div className='row'>
                                 <div className='column large-12 medium-12 small-12'>
                                     <h3>
-                                        <a className={simple ? '' : 'active'} href='#' onClick={(e) => this.toggleAnswer(e, true)}>Простой ответ</a>
+                                        <a
+                                            className={simple
+                                            ? ''
+                                            : 'active'}
+                                            href='#'
+                                            onClick={(e) => this.toggleAnswer(e, true)}>Простой ответ</a>
                                         {' / '}
-                                        <a className={simple ? 'active' : ''} href='#' onClick={(e) => this.toggleAnswer(e, false)}>Сложный ответ</a>
+                                        <a
+                                            className={simple
+                                            ? 'active'
+                                            : ''}
+                                            href='#'
+                                            onClick={(e) => this.toggleAnswer(e, false)}>Сложный ответ</a>
                                     </h3>
                                 </div>
                                 <div className='column large-12 medium-12 small-12'>
-                                {simple ? simpleAnswer : difAnswer}
+                                    {simple
+                                        ? simpleAnswer
+                                        : difAnswer}
                                 </div>
                                 <div className='landing-start-block-center column large-12 medium-12 small-12'>
                                     <a href="/create_account" className="button">Создать аккаунт</a>
@@ -90,37 +105,39 @@ class Start extends React.Component {
                         <div className='row'>
 
                             <div className='column large-3 medium-3 small-3'>
-                                <p className='landing-start-block-center'><img
+                                {/* <p className='landing-start-block-center'><img
                                     className='landing-start-round-img'
-                                    src='/images/landing/start/icons_01.png'/></p>
-                                    {/* <Icon name='team' size='5x'/> */}
+                                    src='/images/landing/start/icons_01.png'/></p> */}
+                                <Icon name='team' size='10x'/>
                                 <h5>Социальная значимость</h5>
                                 <p className='landing-start-block-icon-text'>Наше сообщество ценит мнения, истории и творческий контент.</p>
 
                             </div>
                             <div className='column large-3 medium-3 small-3'>
-                            <p className='landing-start-block-center'><img
+                                {/* <p className='landing-start-block-center'><img
                                     className='landing-start-round-img'
-                                    src='/images/landing/start/icons_02.png'/></p>
-                                    {/* <Icon name='money' size='5x'/> */}    
+                                    src='/images/landing/start/icons_02.png'/></p> */}
+                                <Icon name='money' size='10x'/>
                                 <h5>Выгодно для блогинга</h5>
                                 <p className='landing-start-block-icon-text'>Мы вознаграждаем как авторов, так и
                                     читателей — тех, кто оценивает и комментирует публикации</p>
 
                             </div>
                             <div className='column large-3 medium-3 small-3'>
-                                <p className='landing-start-block-center'><img
+                                {/* <p className='landing-start-block-center'><img
                                     className='landing-start-round-img'
-                                    src='/images/landing/start/icons_03.png'/></p>
+                                    src='/images/landing/start/icons_03.png'/></p> */}
+                                <Icon name='rocket' size='10x'/>
                                 <h5>В интересах каждого</h5>
                                 <p className='landing-start-block-icon-text'>Писать можно обо всем на свете —
                                     расскажите о ракетостроении или выложите фотографию любимого кота</p>
 
                             </div>
                             <div className='column large-3 medium-3 small-3'>
-                                <p className='landing-start-block-center'><img
+                                {/* <p className='landing-start-block-center'><img
                                     className='landing-start-round-img'
-                                    src='/images/landing/start/icons_04.png'/></p>
+                                    src='/images/landing/start/icons_04.png'/></p> */}
+                                    <Icon name='blockchain' size='10x'/>
                                 <h5>Инновационная модель</h5>
                                 <p className='landing-start-block-icon-text'>Golos.io работает на блокчейне, а
                                     значит информация пользователей принадлежит только им</p>
@@ -168,31 +185,33 @@ class Start extends React.Component {
                         <h2>Зарегистрируйтесь,</h2>
                         <div className='row'>
                             <div className='column large-12 medium-12 small-12'>
-                                <p className='landing-start-block-text reg landing-start-block-center'>чтобы начать
-                                    делиться своими историями, подписываться на интересных авторов, оценивать
+                                <p className='landing-start-block-text reg landing-start-block-center'>чтобы
+                                    начать делиться своими историями, подписываться на интересных авторов, оценивать
                                     публикации, знакомиться и получать вознаграждения</p>
                             </div>
                             {/* <div className='column large-2 medium-2 small-2'></div> */}
-                            <div className='landing-start-panel left column large-4 medium-4 small-4'>
+                            <div className='landing-start-panel left column large-5 medium-5 small-12'>
                                 <div className='row'>
                                     <div className='column large-2 medium-2 small-2'>
                                         <h1>1</h1>
                                     </div>
                                     <div className='column large-10 medium-10 small-10'>
                                         <h3 className=''>
-                                            Регистрация бесплатна
+                                            Регистрация<br/>
+                                            бесплатна
                                         </h3>
                                     </div>
                                 </div>
                             </div>
-                            <div className='landing-start-panel right column large-4 medium-4 small-4'>
+                            <div className='landing-start-panel right column large-5 medium-5 small-12'>
                                 <div className='row'>
                                     <div className='column large-2 medium-2 small-2'>
                                         <h1>2</h1>
                                     </div>
                                     <div className='column large-10 medium-10 small-10'>
                                         <h3 className=''>
-                                            Вознаграждаем с первой публикации
+                                            Вознаграждаем
+                                            <br/>с первой публикации
                                         </h3>
                                     </div>
                                 </div>
@@ -213,9 +232,11 @@ class Start extends React.Component {
                         <div className='row'>
                             <div className='column large-12 medium-12 small-12'>
                                 <p className='landing-start-block-text landing-start-block-center'>
-                                    У нас есть собственная <a href='https://wiki.golos.io/'> Википедия</a>, со всей информацией про блог-платформу
-                                    Golos.io. Кроме того, мы оперативно ответим на любой технический вопрос в нашей
-                                    группе в <a href='https://t.me/golos_support'>Телеграме</a>.</p>
+                                    У нас есть собственная 
+                                    <a href='https://wiki.golos.io/'>
+                                        Википедия</a>, со всей информацией про блог-платформу Golos.io. Кроме того, мы
+                                    оперативно ответим на любой технический вопрос в нашей группе в
+                                    <a href='https://t.me/golos_support'> Телеграме</a>.</p>
                             </div>
                         </div>
                     </div>

@@ -26,33 +26,48 @@
         line-height: 40px;
         font-weight: 300;
         a{
+            color: black;
             &.active{            
-                border-bottom: 2px dashed #164482;
+                border-bottom: 2px dashed #347EC6;
             }
         }
     }
     h5{
-        font-size: 15px;
+        font-size: 1.1rem;
         line-height: 20px;
         font-weight: 400;
         letter-spacing: -1.1px;
         color: #347EC6;
         word-wrap: normal;
         text-align: left;
-        text-transform: uppercase;
     }
     margin-bottom: 3rem;
+    a {
+        &.button{
+          background-color: #4696E5;
+        }
+    }
   }
 
 .landing-start-block-title-text{
     font-family: 'Open Sans', sans-serif;
     color: #272d2e;
-      font-size: 25px;
-      font-style: normal;      
-      line-height: 30px;      
-      font-weight: 300;
-      span{
-        border-bottom: 2px dashed #164482;
+    font-size: 25px;
+    font-style: normal;      
+    line-height: 30px;      
+    font-weight: 300;
+    margin-bottom: 3.6rem;
+    span{
+        position: relative;
+      border-bottom: 2px dashed #4696E5;
+    }
+    span:active:after {
+        content:attr(title);
+        padding:5px;
+        border-bottom: none;
+        top:5px;
+        right:10%;
+        font-size: 1rem;
     }
   }
 
@@ -66,10 +81,19 @@
         text-decoration: underline;
     }
     span{
-        border-bottom: 2px dashed #164482;
+        border-bottom: 2px dashed #4696E5;
+    }
+    span:active:after {
+        content:attr(title);
+        padding:5px;
+        border-bottom: none;
+        top:5px;
+        right:10%;
+        font-size: 1rem;
     }
     &.reg{
         padding-top: 0rem;
+        margin-top: 0rem;
     }
 }
 
@@ -84,6 +108,11 @@
   .landing-start-block-center{
       margin-top: 1rem;
       text-align: center;
+      a {
+          &.button{
+            background-color: #4696E5;
+      }
+    }
   }
 
 .landing-start-person{
@@ -105,7 +134,7 @@
     
         h1{
             font-family: 'Roboto Condensed', sans-serif;
-            font-weight: bold;
+            font-weight: normal;
             font-size: 4.9rem;
             color: #8ba2be;
         }
@@ -117,7 +146,7 @@
         
         &.left{
             margin-right: 1rem;
-            margin-left: 15.5%;
+            margin-left: 7%;
         }
         &.right{
             margin-left: 1rem;

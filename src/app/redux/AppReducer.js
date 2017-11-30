@@ -45,7 +45,11 @@ export default function reducer(state = defaultState, action) {
         case '@@router/LOCATION_CHANGE':
             return state.set('location', { pathname: action.payload.pathname });
         case STEEM_API_ERROR:
-            return  state.set('error', action.error).set('loading', false);
+            // Until we figure out how to better handle these errors, let em slide.
+            // This action is the only part of the app that marks an error in state.app.error,
+            // and the only part of the app which pays attn to this part of the state is in App.jsx.
+            //return  state.set('error', action.error).set('loading', false);
+            return state;
         case FETCH_DATA_BEGIN:
             return state.set('loading', true);
         case FETCH_DATA_END:

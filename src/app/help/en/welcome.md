@@ -8,7 +8,7 @@ Below that is a section of "Helpful Posts from Steemit Users", which contains a 
 
 Below that is a list of recommended users to follow, a collection of other resources including the <a href="/faq.html">FAQ Page</a>, and information on where to find live help. 
 
-## Table of Contents <a class="anchor" name="Table_of_Contents"></a>
+## Table of Contents <a class="anchor" id="Table_of_Contents"></a>
 
 ### Quick Start Guide
 
@@ -48,13 +48,13 @@ Below that is a list of recommended users to follow, a collection of other resou
 
 ## Quick Start Guide
 
-<a class="anchor" name="No_Cost_to_Participate"></a>
+<a class="anchor" id="No_Cost_to_Participate"></a>
 ### No Cost to Participate
 
 It is free to post, comment, or upvote all content on Steemit.com. You might even get paid for it!
 
 <a href="/welcome#Table_of_Contents">^</a>
-<a class="anchor" name="Upvotes"></a>
+<a class="anchor" id="Upvotes"></a>
 ### Upvotes
 
 Upvotes are Steemit's way of saying you like someone's post or comment.
@@ -62,7 +62,7 @@ Upvotes are Steemit's way of saying you like someone's post or comment.
 To upvote, click on the <Icon name="chevron-up-circle" /> *Upvote* icon at the bottom of the comment/post.
 
 <a href="/welcome#Table_of_Contents">^</a>
-<a class="anchor" name="Comments"></a>
+<a class="anchor" id="Comments"></a>
 ### Comments
 
 When you are first starting out, commenting on other people's posts can be a great way to get involved and connect with people!
@@ -70,7 +70,7 @@ When you are first starting out, commenting on other people's posts can be a gre
 To comment on a post, or reply to an existing comment, click on the "Reply" link at the bottom of the post/comment.
 
 <a href="/welcome#Table_of_Contents">^</a>
-<a class="anchor" name="Creating_Posts"></a>
+<a class="anchor" id="Creating_Posts"></a>
 ### Creating Posts
 
 To create a post, click on the "Post" link in the upper right corner.
@@ -84,7 +84,7 @@ To create your content, you can either use "Editor" or "Markdown" mode.
 There are several guides for creating posts in the "Helpful Posts from Steemit Users" section below.
 
 <a href="/welcome#Table_of_Contents">^</a>
-<a class="anchor" name="Tags"></a>
+<a class="anchor" id="Tags"></a>
 ### Tags
 
 Tags will help people find your posts.
@@ -98,7 +98,7 @@ The tags should all be relevant to the content in the post.
 You can browse content by tags, as well as see a list of popular tags that other users have used in their posts [here](https://steemit.com/tags).
 
 <a href="/welcome#Table_of_Contents">^</a>
-<a class="anchor" name="Followers_and_Feeds"></a>
+<a class="anchor" id="Followers_and_Feeds"></a>
 ### Followers and Feeds
 
 To follow an author, click on their username and click the "Follow" button.
@@ -110,13 +110,13 @@ As other Steemians come across your posts and comments, you will start to gain f
 You can see all of your followers and the people you are following in your profile page.
 
 <a href="/welcome#Table_of_Contents">^</a>
-<a class="anchor" name="Resteem"></a>
+<a class="anchor" id="Resteem"></a>
 ### Resteem
 
 If you want to share someone else's post with all of your followers, click on the <Icon name="reblog" /> *resteem* icon.
 
 <a href="/welcome#Table_of_Contents">^</a>
-<a class="anchor" name="Digital_Currencies"></a>
+<a class="anchor" id="Digital_Currencies"></a>
 ### Digital Currencies
 
 STEEM, Steem Power and Steem Dollars are the three forms of digital currency used by the Steem Blockchain.
@@ -124,7 +124,7 @@ STEEM, Steem Power and Steem Dollars are the three forms of digital currency use
 More information on the three types of tokens can be found in the [Steemit FAQ](https://steemit.com/faq.html).
 
 <a href="/welcome#Table_of_Contents">^</a>
-<a class="anchor" name="Curation"></a>
+<a class="anchor" id="Curation"></a>
 ### Curation
 
 Up to 25% of the reward for posts goes to the people who voted on it. These people are called curators.
@@ -132,7 +132,7 @@ Up to 25% of the reward for posts goes to the people who voted on it. These peop
 The more Steem Power you have in your account, the more your upvotes will be worth, and the more potential curation rewards you can earn!
 
 <a href="/welcome#Table_of_Contents">^</a>
-<a class="anchor" name="Payments"></a>
+<a class="anchor" id="Payments"></a>
 ### Payments
 
 Payouts are made 7 days after the post/comment is created. You can claim your rewards in your wallet after 7 days.
@@ -146,7 +146,7 @@ The author reward is paid 50% in Steem Power, and 50% in liquid STEEM/SBD.
 Authors also have the option to decline payout, or be paid in 100% Steem Power!
 
 <a href="/welcome#Table_of_Contents">^</a>
-<a class="anchor" name="Home,_New,_Hot,_Trending,_Promoted,_and_Active"></a>
+<a class="anchor" id="Home,_New,_Hot,_Trending,_Promoted,_and_Active"></a>
 ### Home, New, Hot, Trending, Promoted, and Active
 
 These are various ways to sort blog posts.
@@ -162,7 +162,7 @@ These are various ways to sort blog posts.
 **Promoted** - Listings that are boosted by Steem Dollar payments get "Promoted" for greater visibility.
 
 <a href="/welcome#Table_of_Contents">^</a>
-<a class="anchor" name="Profile"></a>
+<a class="anchor" id="Profile"></a>
 ### Profile
 
 <Icon name="user" />
@@ -184,7 +184,7 @@ These are various ways to sort blog posts.
 **Logout** - Here is where you go to logout.
 
 <a href="/welcome#Table_of_Contents">^</a>
-<a class="anchor" name="Reputation"></a>
+<a class="anchor" id="Reputation"></a>
 ### Reputation
 
 A reputation score is one way Steemit measures the amount of value you have brought to the community.
@@ -196,7 +196,7 @@ All new users start at 25.
 Your reputation will go up as you earn upvotes for your posts and comments, but it can come down if they are flagged.
 
 <a href="/welcome#Table_of_Contents">^</a>
-<a class="anchor" name="Cashing_out_or_Spending_SBD"></a>
+<a class="anchor" id="Cashing_out_or_Spending_SBD"></a>
 ### Cashing out or Spending SBD
 
 You can spend your SBD at the [Peerhub Store](https://www.peerhub.com/).
@@ -206,7 +206,7 @@ You can exchange your STEEM and SBD for bitcoin on an exchange such as [BlockTra
 You can also "Power Up" and use your STEEM/SBD to gain more Steem Power!
 
 <a href="/welcome#Table_of_Contents">^</a>
-<a class="anchor" name="Plagiarism"></a>
+<a class="anchor" id="Plagiarism"></a>
 ### Plagiarism
 
 The community is looking for you to add your own personal touch to your articles.
@@ -218,7 +218,7 @@ If you are using anyone else's material as part of your posts (including images)
 Also, make sure that you are not violating any copyright laws if you are using someone else's material/images. Limited, sourced material sharing is OK under fair use and fair dealing doctrines.
 
 <a href="/welcome#Table_of_Contents">^</a>
-<a class="anchor" name="Password_Security"></a>
+<a class="anchor" id="Password_Security"></a>
 ### Password Security
 
 Your Steemit account is worth real money. Treat your Steemit password like you would your bank password, and keep it secure!
@@ -226,7 +226,7 @@ Your Steemit account is worth real money. Treat your Steemit password like you w
 Unless your password was recently changed and you possess the old one, **there is no password recovery for Steem accounts**. You are 100% responsible for having it backed up. This means secure digital backups, as well as secured paper backups, off-site if possible.
 
 <a href="/welcome#Table_of_Contents">^</a>
-<a class="anchor" name="Earning_on_Steemit"></a>
+<a class="anchor" id="Earning_on_Steemit"></a>
 ### Earning on Steemit
 
 The best attitude to have is to expect to make nothing. Have fun. Get engaged. Make friends. If along the way you earn something - bonus!
@@ -239,7 +239,7 @@ It is possible to earn thousands of dollars, but most authors who are doing this
 
 ## To Do List
 
-<a class="anchor" name="Backup_your_password"></a>
+<a class="anchor" id="Backup_your_password"></a>
 ### 1. Backup your password
 
 Unlike centralized web services, **the Steem Blockchain has no account password recovery**.
@@ -253,7 +253,7 @@ It is strongly recommended that you store an offline copy of your password somew
 If your account is valuable, treat it like a valuable!
 
 <a href="/welcome#Table_of_Contents">^</a>
-<a class="anchor" name="Sign_Up_for_Steemit_Chat"></a>
+<a class="anchor" id="Sign_Up_for_Steemit_Chat"></a>
 ### 2. Sign Up for Steemit Chat
 
 A lot of users hang out and chat when they are not posting or browsing Steemit. It is a great place to meet people!
@@ -267,7 +267,7 @@ Some channels allow you to share links, but others don't. For instance, [general
 Each channel will have its rules posted in the "Info" section.
 
 <a href="/welcome#Table_of_Contents">^</a>
-<a class="anchor" name="Setup_your_Profile_Avatar_and_Cover_Image"></a>
+<a class="anchor" id="Setup_your_Profile_Avatar_and_Cover_Image"></a>
 ### 3. Setup your Profile, Avatar, and Cover Image
 
 Under your user settings, you can update your profile. This includes your display name, location, about info, and website.
@@ -279,7 +279,7 @@ To set your cover image, type or paste a link to the URL where the image is loca
 Once you have made all your changes, click the "Update" button to save your profile.
 
 <a href="/welcome#Table_of_Contents">^</a>
-<a class="anchor" name="Choose_your_NSFW_(Not_Safe_for_Work)_Display_Preference"></a>
+<a class="anchor" id="Choose_your_NSFW_(Not_Safe_for_Work)_Display_Preference"></a>
 ### 4. Choose your "NSFW" (Not Safe for Work) Display Preference
 
 By default, content that users have tagged as "NSFW" will be hidden, but a link will be shown to reveal the content.
@@ -287,7 +287,7 @@ By default, content that users have tagged as "NSFW" will be hidden, but a link 
 You can update your display preference so that NSFW content is always shown by default, or is completely hidden with no option to reveal.
 
 <a href="/welcome#Table_of_Contents">^</a>
-<a class="anchor" name="Create_your_introduceyourself_post"></a>
+<a class="anchor" id="Create_your_introduceyourself_post"></a>
 ### 5. Create your "introduceyourself" post
 
 While not required, the tradition for new users is to create an "introduceyourself" post, to let the community know who you are.
@@ -302,7 +302,7 @@ It is not required either, but if you have other social media accounts (Twitter,
 
 ***
 
-## Helpful Posts from Steemit Users <a class="anchor" name="Helpful_Posts_from_Steemit_Users"></a>
+## Helpful Posts from Steemit Users <a class="anchor" id="Helpful_Posts_from_Steemit_Users"></a>
 
 - [Posting and Markdown Basics](https://steemit.com/steemit/@thecryptofiend/markdown-basics-for-beginners)
 - [Tons of Ways to Spend Your Hard Earned STEEM/SBD](https://steemit.com/steem/@timcliff/the-steem-economy-tons-of-ways-to-spend-your-hard-earned-steem-sbd)
@@ -338,14 +338,14 @@ It is not required either, but if you have other social media accounts (Twitter,
 - [How to Create Different Types of Blog Content](https://steemit.com/writing/@jessicanicklos/how-to-create-different-types-of-blog-content-know-here-total-guide-line)
 
 <a href="/welcome#Table_of_Contents">^</a>
-<a class="anchor" name="Users_to_Follow"></a>
+<a class="anchor" id="Users_to_Follow"></a>
 ## Users to Follow
 
 - @steemitblog - Official Steemit Announcements
 - @ned - Ned Scott, CEO and Co-Founder of Steemit
 
 <a href="/welcome#Table_of_Contents">^</a>
-<a class="anchor" name="Other_Resources"></a>
+<a class="anchor" id="Other_Resources"></a>
 ## Other Resources
 
 - [FAQ](https://steemit.com/faq.html)
@@ -356,7 +356,7 @@ It is not required either, but if you have other social media accounts (Twitter,
 - [Steem Blockchain Explorer](https://steemdb.com/)
 
 <a href="/welcome#Table_of_Contents">^</a>
-<a class="anchor" name="Live_Help"></a>
+<a class="anchor" id="Live_Help"></a>
 ## Live Help
 
 Ask your general questions in the [help](https://steemit.chat/channel/help) channel of [steemit.chat](https://steemit.chat/home). Users in the channel will typically respond to questions within a few hours.
@@ -364,7 +364,7 @@ Ask your general questions in the [help](https://steemit.chat/channel/help) chan
 New Member Support Community is a group of people dedicated to helping new users find their way around Steemit. You can find them in the [New Member Support Community](https://discord.gg/HYj4yvw) channel of Discord Chat.
 
 <a href="/welcome#Table_of_Contents">^</a>
-<a class="anchor" name="Third_Party_References"></a>
+<a class="anchor" id="Third_Party_References"></a>
 ## Third Party References
 
 Peerhub, BlockTrades, Bittrex, Steemit Chat, Steemit Help, New Member Support Community, and Discord Chat, as well as the tools listed under "Other Resources" are third party applications/services, and are not owned or maintained by Steemit, Inc. Their listing here does not constitute and endorsement or recommendation on behalf of Steemit, Inc.

@@ -269,6 +269,11 @@ class App extends React.Component {
                         </a>
                     </li>
                     <li>
+                        <a href="https://smt.steem.io/" target="_blank" rel="noopener noreferrer">
+                            {tt('navigation.smt_whitepaper')}&nbsp;<Icon name="extlink" />
+                        </a>
+                    </li>
+                    <li>
                         <a href="https://steem.io/SteemWhitePaper.pdf" target="_blank" rel="noopener noreferrer">
                             {tt('navigation.whitepaper')}&nbsp;<Icon name="extlink" />
                         </a>

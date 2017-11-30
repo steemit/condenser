@@ -1,6 +1,7 @@
 import React from 'react';
 import LoginForm from 'app/components/modules/LoginForm';
 import tt from 'counterpart';
+import {pathTo} from 'app/Routes';
 
 class Login extends React.Component {
     render() {
@@ -22,6 +23,6 @@ class Login extends React.Component {
 }
 
 module.exports = {
-    path: '/c/login',
+    path: pathTo.login(),
     component: Login
 };

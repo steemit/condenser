@@ -1,6 +1,7 @@
 import React from 'react';
 import tt from 'counterpart';
 import { APP_NAME } from 'app/client_config';
+import {pathTo} from 'app/Routes';
 
 class Support extends React.Component {
     render() {
@@ -18,6 +19,6 @@ class Support extends React.Component {
 }
 
 module.exports = {
-    path: '/s/support',
+    path: pathTo.support(),
     component: Support
 };

@@ -37,7 +37,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
     const reset_password_link = pathTo.userPassword(username);
     const settings_link = pathTo.userSettings(username);
     const tt_search = tt('g.search');
-    const pathCheck = userPath === '/submit.html' ? true : null;
+    const pathCheck = userPath === pathTo.compose() ? true : null;
     if (loggedIn) { // change back to if(username) after bug fix:  Clicking on Login does not cause drop-down to close #TEMP!
         const user_menu = [
             {link: feed_link, icon: "home", value: tt('g.feed'), addon: <NotifiCounter fields="feed" />},

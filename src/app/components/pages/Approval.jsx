@@ -1,6 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {VIEW_MODE_WHISTLE, WHISTLE_SIGNUP_COMPLETE} from 'shared/constants';
+import {pathTo} from 'app/Routes';
 
 class Approval extends React.Component {
     constructor(props) {
@@ -48,14 +49,12 @@ class Approval extends React.Component {
 }
 
 module.exports = {
-    path: '/c/approval',
+    path: pathTo.signUpApproval(),
     component: connect(
         state => {
             return {
                 viewMode: state.app.get('viewMode')
             }
-        },
-        dispatch => ({
-        })
+        }
     )(Approval)
 };

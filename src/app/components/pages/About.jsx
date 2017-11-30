@@ -1,6 +1,7 @@
 import React from 'react';
 import { APP_NAME, APP_URL } from 'app/client_config';
 import tt from 'counterpart';
+import {pathTo} from 'app/Routes';
 
 class About extends React.Component {
     render() {
@@ -22,6 +23,6 @@ class About extends React.Component {
 }
 
 module.exports = {
-    path: '/s/about',
+    path: pathTo.about(),
     component: About
 };

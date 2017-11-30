@@ -34,7 +34,7 @@ if (process.env.NODE_ENV === "production") {
 const assets = Object.assign({}, require(assets_file), { script: [] });
 
 assets.script.push("https://www.google.com/recaptcha/api.js");
-assets.script.push("/c/enter_email/submit_form.js");
+assets.script.push(`${pathTo.enterEmail()}/submit_form.js`);
 
 function* confirmEmailHandler() {
     const confirmation_code = this.params && this.params.code
@@ -373,7 +373,7 @@ export default function useEnterAndConfirmEmailPages(app) {
 
     router.get(pathTo.confirmEmailGet(), confirmEmailHandler);
     router.post(pathTo.confirmEmail(), koaBody, confirmEmailHandler); // for re-submit email
-    router.get("/c/enter-email/submit_form.js", function*() {
+    router.get(`${pathTo.enterEmail()}/submit_form.js`, function*() {
         this.type = 'application/javascript';
         this.body = "function submit_email_form(){document.getElementById('submit_email').submit()}";
     });

@@ -1,6 +1,7 @@
 import React from 'react';
 import ChangePassword from 'app/components/elements/ChangePassword';
 import tt from 'counterpart';
+import {pathTo} from 'app/Routes';
 
 class ChangePasswordPage extends React.Component {
 
@@ -25,6 +26,6 @@ class ChangePasswordPage extends React.Component {
 }
 
 module.exports = {
-    path: '/c/change_password',
+    path: pathTo.changePassword(),
     component: ChangePasswordPage
 };

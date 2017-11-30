@@ -311,7 +311,7 @@ class CreateAccount extends React.Component {
 }
 
 module.exports = {
-    path: '/c/create_account',
+    path: pathTo.createAccount(),
     component: connect(
         state => {
             return {

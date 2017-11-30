@@ -113,6 +113,7 @@ export const pathTo = {
     signup: (params = '') => `/c/pick-account${params}`,
     login: () => '/c/login',
     post: (author, permlink) => `/${author}/${permlink}`,
+    postPage: () => '/:username/:slug',
     comment: (post_author, post_permlink, comment_author, comment_permlink) => {
         return `/${post_author}/${post_permlink}#${comment_author}/${comment_permlink}`;
     },
@@ -123,6 +124,7 @@ export const pathTo = {
     privacy: () => '/s/privacy',
     support: () => '/s/support',
     tags: () => '/c/tags',
+    tagsIndexPage: () => '/c/tags(/:order)',
     tos: () => '/s/tos',
     changePassword: () => '/c/change-password',
     createAccount: () => '/c/create-account',
@@ -138,6 +140,7 @@ export const pathTo = {
     submitMobile: (params = '') => `/c/submit-mobile${params}`,
     confirmMobile: (params = '') => `/c/confirm-mobile${params}`,
     confirmMobileGet: () => '/c/confirm-mobile/:code',
+    xssTest: () => '/c/xss/test',
 };
 
 export function routeToSteemdUrl(route) {

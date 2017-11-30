@@ -227,7 +227,7 @@ class PickAccount extends React.Component {
 }
 
 module.exports = {
-    path: '/c/pick_account',
+    path: pathTo.signup(),
     component: connect(
         state => {
             return {

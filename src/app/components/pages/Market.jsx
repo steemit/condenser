@@ -1,8 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {connect} from 'react-redux';
-//import Highcharts from 'highcharts';
-
 import transaction from 'app/redux/Transaction'
 import TransactionError from 'app/components/elements/TransactionError'
 import DepthChart from 'app/components/elements/DepthChart';
@@ -12,6 +10,7 @@ import {Order, TradeHistory} from "app/utils/MarketClasses";
 import {roundUp, roundDown} from "app/utils/MarketUtils";
 import tt from 'counterpart';
 import { LIQUID_TOKEN, LIQUID_TOKEN_UPPERCASE, DEBT_TOKEN_SHORT, CURRENCY_SIGN, LIQUID_TICKER, DEBT_TICKER } from 'app/client_config';
+import {pathTo} from 'app/Routes';
 
 class Market extends React.Component {
     static propTypes = {
@@ -531,7 +530,7 @@ class Market extends React.Component {
 }
 const DEFAULT_EXPIRE = 0xFFFFFFFF//Math.floor((Date.now() / 1000) + (60 * 60 * 24)) // 24 hours
 module.exports = {
-    path: '/c/market',
+    path: pathTo.market(),
     component: connect(state => {
         const username = state.user.get('current') ? state.user.get('current').get('username') : null;
         return {

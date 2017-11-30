@@ -1,4 +1,5 @@
 import React from 'react';
+import {pathTo} from 'app/Routes';
 
 class Privacy extends React.Component {
     render() {
@@ -348,6 +349,6 @@ class Privacy extends React.Component {
 }
 
 module.exports = {
-    path: '/s/privacy',
+    path: pathTo.privacy(),
     component: Privacy
 };

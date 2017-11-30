@@ -179,7 +179,7 @@ class RecoverAccountStep2 extends React.Component {
 }
 
 module.exports = {
-    path: '/c/recover_account_step_2',
+    path: pathTo.recoverAccount(2),
     component: connect(
         state => {
             return {

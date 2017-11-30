@@ -1221,7 +1221,7 @@ The Steemit brand and logo are protected by intellectual property laws, includin
 
 [Section 107 of the Copyright Act](http://www.copyright.gov/title17/92chap1.html#107) provides the statutory framework for determining whether something is a fair use and identifies certain types of uses—such as criticism, comment, news reporting, teaching, scholarship, and research—as examples of activities that may qualify as fair use. **Steemit considers artistic variations of the Steemit logo that are used for non-commercial purposes, and are not used to harm Steemit users (i.e. through attraction to phishing sites), an instance of fair use.** 
 
-The blue Steem logo is licensed under Creative Commons CC0, meaning you’re free to copy, modify, or distribute (even for commercial purposes) without needing to ask permission or give attribution.
+The blue Steem logo with the three S-shaped squiggles is licensed under Creative Commons CC0, meaning you’re free to copy, modify, or distribute (even for commercial purposes) without needing to ask permission or give attribution.
 
 <a href="/faq.html#Table_of_Contents_Steemit__Inc">^</a>
 <a class="anchor" name="Can_I_purchase_official_Steemit_merchandise"></a>

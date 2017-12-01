@@ -58,23 +58,14 @@
     font-weight: 300;
     margin-bottom: 3.6rem;
     span{
-        position: relative;
       border-bottom: 2px dashed #4696E5;
-    }
-    span:active:after {
-        content:attr(title);
-        padding:5px;
-        border-bottom: none;
-        top:5px;
-        right:10%;
-        font-size: 1rem;
     }
   }
 
   .landing-start-block-text{
     font-family: 'Open Sans', sans-serif;    
     font-size: 1.6rem;
-    line-height: 1.7rem;      
+    line-height: 2.3rem;      
     font-weight: 300;
     padding-top: 2rem;
     a{
@@ -82,14 +73,6 @@
     }
     span{
         border-bottom: 2px dashed #4696E5;
-    }
-    span:active:after {
-        content:attr(title);
-        padding:5px;
-        border-bottom: none;
-        top:5px;
-        right:10%;
-        font-size: 1rem;
     }
     &.reg{
         padding-top: 0rem;

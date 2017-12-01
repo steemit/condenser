@@ -1,8 +1,34 @@
 .ctablock{
-    text-align: center;
     position: fixed;
     bottom: 0;
     width: 100%;
     max-width: 100%;
     background-color: white;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    border-radius: 5px;
+    padding-top: 1rem;
+
+    .row{
+        max-width: 55rem;
+        .right{
+            text-align: right;
+        }
+        .left{
+            text-align: left;
+        }
+    }
+
+    .button{
+        background-color: #4696E5;
+        margin-top: 0.9rem;
+    }
+
+    .cta-block-text{
+        font-size: 1rem;
+        margin-top: 0.5rem;
+    }    
+}
+.urerpic{        
+    border-radius: 100px; 
+    border: 0px solid;        
 }

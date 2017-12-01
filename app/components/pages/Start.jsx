@@ -239,7 +239,7 @@ class Start extends React.Component {
                         </div>
                     </div>
                 </div>
-                {/* <CTABlock/> */}
+                <CTABlock/>
             </div>
         );
     }

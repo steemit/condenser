@@ -126,7 +126,8 @@
 
 <a class="anchor" name="Table_of_Contents_Plagiarism__Spam__and_Abuse"></a>
 ### Plagiarism, Spam, and Abuse
-- <a href="/faq.html#What_are_Steemit_s_policies_on_plagiarism_and_spam">What are Steemit’s policies on plagiarism and spam?</a>
+- <a href="/faq.html#What_is_considered_spam_or_abuse">What is considered spam or abuse?</a>
+- <a href="/faq.html#What_are_Steemit_s_policies_on_plagiarism">What are Steemit’s policies on plagiarism?</a>
 - <a href="/faq.html#Is_it_okay_to_use_random_pictures_from_the_internet">Is it okay to use random pictures from the internet?</a>
 - <a href="/faq.html#What_is_Steemcleaners">What is Steemcleaners?</a>
 - <a href="/faq.html#What_is__cheetah">What is @cheetah?</a>
@@ -1023,8 +1024,26 @@ With the current implementation, there is no difference between a downvote and a
 <a href="/faq.html#Table_of_Contents_Voting_and_Curating">^</a>
 # Plagiarism, Spam, and Abuse
 
-<a class="anchor" name="What_are_Steemit_s_policies_on_plagiarism_and_spam"></a>
-## What are Steemit’s policies on plagiarism and spam?
+<a class="anchor" name="What_is_considered_spam_or_abuse"></a>
+## What is considered spam or abuse?
+
+- Asking for money, views, upvotes, follows, or resteems.
+- Leaving nearly identical or materially similar comments on multiple posts.
+- Comments that are unrelated to the topic of discussion.
+- Sending unsolicited links or requests to users via wallet memos.
+- Posts that require upvotes to enter or play in a contest or game.
+- Sending users a link to your blog or a post if it is not relevant to the conversation.
+- Posts or comments that include little or nothing more than an offer to trade follows or upvotes.
+- Using tags that are unrelated to the post.
+- Threatening users with any type of physical violence.
+- Not citing sources when using someone else’s material.
+- Posting ‘not safe for work’ content without using the “nsfw” tag.
+- Selling or offering to buy votes/resteems/follows, or schemes that facilitate this.
+- Scams or Fraudulent offers.
+
+<a href="/faq.html#Table_of_Contents_Plagiarism__Spam__and_Abuse">^</a>
+<a class="anchor" name="What_are_Steemit_s_policies_on_plagiarism"></a>
+## What are Steemit’s policies on plagiarism?
 
 If you are posting plagiarized or copied content, you can get in legal trouble for violating copyright laws. Plagiarized posts and spam are seen as abuse and will be downvoted by community members. If you are posting or using someone else’s content, you must ensure that you have the rights to use the content, and properly reference the sources where you got the material from.
 

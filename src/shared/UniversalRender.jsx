@@ -27,8 +27,7 @@ import Translator from 'app/Translator';
 import {notificationsArrayToMap} from 'app/utils/Notifications';
 import {contentStats} from 'app/utils/StateFunctions';
 import ScrollBehavior from 'scroll-behavior';
-import {api} from 'steem';
-
+import {api} from '@steemit/steem-js';
 
 const calcOffsetRoot = (startEl) => {
     let offset = 0;
@@ -77,7 +76,7 @@ const scrollTop = (el, topOffset, prevDocumentInfo, triesRemaining) => {
             scrollTopTimeout = setTimeout(() => scrollTop(el, topOffset, documentInfo, (triesRemaining-1)), SCROLL_TOP_DELAY_MS);
         }
     }
-}
+};
 
 /**
  * raison d'être: on hash link navigation, calculate the appropriate y-scroll with a fixed position top menu

@@ -5,14 +5,14 @@ import {getContent} from 'app/redux/SagaShared';
 import GlobalReducer from './GlobalReducer';
 import constants from './constants';
 import {fromJS, Map} from 'immutable'
-import {api} from 'steem';
+import {api} from '@steemit/steem-js';
 import {resolveRoute, routeToSteemdUrl} from 'app/Routes';
 
 export const fetchDataWatches = [watchLocationChange, watchDataRequests, watchFetchJsonRequests, watchFetchState, watchGetContent];
 
 export function* watchDataRequests() {
     yield* takeLatest('REQUEST_DATA', fetchData);
-}
+}2
 
 export function* watchGetContent() {
     yield* takeEvery('GET_CONTENT', getContentCaller);

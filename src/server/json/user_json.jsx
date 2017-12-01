@@ -1,6 +1,7 @@
 import koa_router from 'koa-router';
-import {routeRegex} from "app/Routes";
-import {api} from 'steem'
+import React from 'react';
+import {routeRegex} from "app/ResolveRoute";
+import {api} from '@steemit/steem-js'
 
 export default function useUserJson(app) {
     const router = koa_router();

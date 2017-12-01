@@ -8,8 +8,8 @@ import {browserHistory} from 'react-router'
 import {serverApiLogin, serverApiLogout} from 'app/utils/ServerApiClient';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import {loadFollows} from 'app/redux/FollowSaga'
-import {PrivateKey, Signature, hash} from 'steem/lib/auth/ecc';
-import {api} from 'steem';
+import {PrivateKey, Signature, hash} from '@steemit/steem-js/lib/auth/ecc';
+import {api} from '@steemit/steem-js';
 import {translate} from 'app/Translator';
 import DMCAUserList from 'app/utils/DMCAUserList';
 import {pathTo} from "../Routes"

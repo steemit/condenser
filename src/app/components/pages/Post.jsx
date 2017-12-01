@@ -8,7 +8,6 @@ import {sortComments} from 'app/components/cards/Comment';
 import FoundationDropdownMenu from 'app/components/elements/FoundationDropdownMenu';
 import {Set} from 'immutable'
 import tt from 'counterpart';
-import { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import { INVEST_TOKEN_UPPERCASE } from 'app/client_config';
@@ -167,7 +166,7 @@ class Post extends React.Component {
                     <div className="column">
                         <div className="Post__promo">
                             {tt('g.next_7_strings_single_block.authors_get_paid_when_people_like_you_upvote_their_post')}.
-                            <br />{tt('g.next_7_strings_single_block.if_you_enjoyed_what_you_read_earn_amount', {amount: '$'+localizedCurrency(signup_bonus.substring(1)), INVEST_TOKEN_UPPERCASE})}
+                            <br />{tt('g.next_7_strings_single_block.if_you_enjoyed_what_you_read_earn_amount', {amount: '$'+signup_bonus.substring(1), INVEST_TOKEN_UPPERCASE})}
                             <br />
                             <button type="button" className="button e-btn" onClick={showSignUp}>{tt('loginform_jsx.sign_up_get_steem')}</button>
                         </div>

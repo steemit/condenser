@@ -105,13 +105,13 @@ const scrollTop = (el, topOffset, prevDocumentInfo, triesRemaining) => {
     //for both SCROLL_DIRECTION_DOWN, SCROLL_DIRECTION_UP
     //We scroll if the document has 1. not been deliberately scrolled, AND 2. we have not passed our target scroll,
     //NOR has the document changed in a meaningful way since we last looked at it
-    if(SCROLL_DIRECTION_DOWN === prevDocumentInfo.direction) {
-        doScroll = (!(prevDocumentInfo.scrollTop > (documentInfo.scrollTop + SCROLL_FUDGE_PIXELS))
+    if(prevDocumentInfo.direction === SCROLL_DIRECTION_DOWN) {
+        doScroll = ((prevDocumentInfo.scrollTop <= (documentInfo.scrollTop + SCROLL_FUDGE_PIXELS))
             && (documentInfo.scrollTop < documentInfo.scrollTarget
                 || prevDocumentInfo.scrollTarget < documentInfo.scrollTarget
                 || prevDocumentInfo.scrollHeight < documentInfo.scrollHeight));
-    } else if(SCROLL_DIRECTION_UP === prevDocumentInfo.direction) {
-        doScroll = (!(prevDocumentInfo.scrollTop < (documentInfo.scrollTop - SCROLL_FUDGE_PIXELS))
+    } else if(prevDocumentInfo.direction === SCROLL_DIRECTION_UP) {
+        doScroll = ((prevDocumentInfo.scrollTop >= (documentInfo.scrollTop - SCROLL_FUDGE_PIXELS))
             && (documentInfo.scrollTop > documentInfo.scrollTarget
                 || prevDocumentInfo.scrollTarget > documentInfo.scrollTarget
                 || prevDocumentInfo.scrollHeight > documentInfo.scrollHeight));
@@ -136,7 +136,10 @@ class OffsetScrollBehavior extends ScrollBehavior {
     scrollToTarget(element, target) {
         clearTimeout(scrollTopTimeout); //it's likely this will be called multiple times in succession, so clear and existing scrolling.
         const header = document.getElementsByTagName('header')[0]; //this dimension ideally would be pulled from a scss file.
-        const topOffset = (((header)? header.offsetHeight : 0) + SCROLL_TOP_EXTRA_PIXEL_OFFSET) * (-1);
+        let topOffset = SCROLL_TOP_EXTRA_PIXEL_OFFSET * (-1);
+        if(header) {
+            topOffset += header.offsetHeight;
+        }
         const newTarget = []; //x coordinate
         let el = false;
         if(typeof target === 'string' ) {

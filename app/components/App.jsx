@@ -135,9 +135,9 @@ class App extends React.Component {
         else if ($STM_Config.site_domain === 'golos.blog' && ip && this.state.showCallout) {
             callout = <div className="App__announcement row">
                 <div className="column">
-                    <div className="callout success">
+                    <div className="callout" style={{backgroundColor: '#1b519a', color: 'white'}}>
                         <CloseButton onClick={() => this.setState({showCallout: false})} />
-                        <Link to="/golosio/@golosio/roskomnadzor-razblokiroval-golos-io" ><Icon className="logo-icon" name={APP_ICON} />&nbsp;{tt('g.announcement_text')}</Link>
+                        <Link className="link" to="/golosio/@golosio/golos-io-plan-razvitiya-infografika" ><Icon className="logo-icon" name={APP_ICON} />&nbsp;{tt('g.announcement_text')}</Link>
                     </div>
                 </div>
             </div>
@@ -152,7 +152,7 @@ class App extends React.Component {
                 </div>
             </div>;
 }
-
+        
         let welcome_screen = null;
         if (ip && new_visitor && this.state.showBanner) {
             welcome_screen = (

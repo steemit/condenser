@@ -45,7 +45,12 @@ const calcOffsetRoot = (startEl) => {
 const SCROLL_TOP_TRIES = 50;
 const SCROLL_TOP_DELAY_MS = 100;
 const SCROLL_TOP_EXTRA_PIXEL_OFFSET = 3;
-const SCROLL_UP_FUDGE_PIXELS = 10;
+const SCROLL_FUDGE_PIXELS = 10;
+const SCROLL_DIRECTION_UP = 'up';
+const SCROLL_DIRECTION_DOWN = 'down';
+
+//If an element with this id is present, the page does not want us to detect whether we're navigating forward or not
+const DISABLE_ROUTER_HISTORY_NAV_DIRECTION_EL_ID = 'disable_router_nav_history_direction_check';
 
 let scrollTopTimeout = null;
 
@@ -64,15 +69,23 @@ const scrollTop = (el, topOffset, prevDocumentInfo, triesRemaining) => {
     const documentInfo = {
         scrollHeight: document.body.scrollHeight,
         scrollTop: Math.ceil(document.scrollingElement.scrollTop),
-        scrollTarget: calcOffsetRoot(el) + topOffset
+        scrollTarget: calcOffsetRoot(el) + topOffset,
+        direction: prevDocumentInfo.direction,
     };
-
-    if(prevDocumentInfo.scrollTop > (documentInfo.scrollTop + SCROLL_UP_FUDGE_PIXELS)) { //detecting that the user has scrolled in an up direction
-        return;
+    let doScroll = false;
+    if(SCROLL_DIRECTION_DOWN === prevDocumentInfo.direction) {
+        doScroll = (!(prevDocumentInfo.scrollTop > (documentInfo.scrollTop + SCROLL_FUDGE_PIXELS))
+            && (documentInfo.scrollTop < documentInfo.scrollTarget
+                || prevDocumentInfo.scrollTarget < documentInfo.scrollTarget
+                || prevDocumentInfo.scrollHeight < documentInfo.scrollHeight));
+    } else if(SCROLL_DIRECTION_UP === prevDocumentInfo.direction) {
+        doScroll = (!(prevDocumentInfo.scrollTop < (documentInfo.scrollTop - SCROLL_FUDGE_PIXELS))
+            && (documentInfo.scrollTop > documentInfo.scrollTarget
+                || prevDocumentInfo.scrollTarget > documentInfo.scrollTarget
+                || prevDocumentInfo.scrollHeight > documentInfo.scrollHeight));
     }
-    if(documentInfo.scrollTop < documentInfo.scrollTarget
-        || prevDocumentInfo.scrollTarget < documentInfo.scrollTarget
-        || prevDocumentInfo.scrollHeight < documentInfo.scrollHeight) {
+
+    if(doScroll) {
         window.scrollTo(0, documentInfo.scrollTarget);
         if(triesRemaining > 0) {
             scrollTopTimeout = setTimeout(() => scrollTop(el, topOffset, documentInfo, (triesRemaining-1)), SCROLL_TOP_DELAY_MS);
@@ -86,18 +99,34 @@ const scrollTop = (el, topOffset, prevDocumentInfo, triesRemaining) => {
 class OffsetScrollBehavior extends ScrollBehavior {
     scrollToTarget(element, target) {
         clearTimeout(scrollTopTimeout);
-        const el = (typeof target === 'string') ? document.getElementById(target) : false;
+        const header = document.getElementsByTagName('header')[0]; //this dimension ideally would be pulled from a scss file.
+        const topOffset = (((header)? header.offsetHeight : 0) + SCROLL_TOP_EXTRA_PIXEL_OFFSET) * (-1);
+        const newTarget = []; //x coordinate
+        let el = false;
+        if(typeof target === 'string' ) {
+            el = document.getElementById(target.substr(1));
+            if(!el) {
+                el = document.getElementById(target);
+            }
+        } else {
+            newTarget.push(target[0]);
+            if((target[1] + topOffset) > 0) {
+                newTarget.push(target[1] + topOffset);
+            } else {
+                newTarget.push(0);
+            }
+        }
+
         if(el) {
-            const header = document.getElementsByTagName('header')[0]; //this dimension ideally would be pulled from a scss file.
-            const topOffset = (((header)? header.offsetHeight : 0) + SCROLL_TOP_EXTRA_PIXEL_OFFSET) * (-1);
             const documentInfo = {
                 scrollHeight: document.body.scrollHeight,
                 scrollTop: Math.ceil(document.scrollingElement.scrollTop),
-                scrollTarget: 0
+                scrollTarget: calcOffsetRoot(el) + topOffset,
             };
+            documentInfo.direction = documentInfo.scrollTop < documentInfo.scrollTarget ? SCROLL_DIRECTION_DOWN : SCROLL_DIRECTION_UP;
             scrollTop(el, topOffset, documentInfo, SCROLL_TOP_TRIES);
         } else {
-            super.scrollToTarget(element, target);
+            super.scrollToTarget(element, newTarget);
         }
     }
 }
@@ -167,7 +196,8 @@ async function universalRender({location, initial_state, offchain, ErrorPage, ta
             shouldUpdateScroll: (prevLocation, {location}) => { // eslint-disable-line no-shadow
                 //we want to navigate to the corresponding id=<hash> element on 'PUSH' navigation (prev null + POP is a new window url nav ~= 'PUSH')
                 if(location.hash) {
-                    if((prevLocation === null && location.action === 'POP')
+                    const disableNavDirectionCheck = document.getElementById(DISABLE_ROUTER_HISTORY_NAV_DIRECTION_EL_ID);
+                    if(disableNavDirectionCheck || (prevLocation === null && location.action === 'POP')
                         || (location.action === 'PUSH')
                     ) {
                         return location.hash;

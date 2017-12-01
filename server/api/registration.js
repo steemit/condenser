@@ -131,7 +131,7 @@ export default function useRegistrationApi(app) {
   });
 
   router.post("/send_code", koaBody, function*() {
-    if (rateLimitReq(this, this.req, 5)) return;
+    if (rateLimitReq(this, this.req)) return;
     const body = this.request.body;
     let params = {};
     if (typeof(body) === 'string') {
@@ -231,6 +231,7 @@ export default function useRegistrationApi(app) {
         confirmation_code
       });
     }
+    if (rateLimitReq(this, this.req, 300, 'send_code')) return;
     const twilioResult = yield sendVerifySMS('+' + phone, confirmation_code);
     if (twilioResult && twilioResult.error) {
         this.body = JSON.stringify({ status: "error", error: twilioResult.error });

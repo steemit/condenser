@@ -9,11 +9,12 @@ function getRemoteIp(req) {
 }
 
 var ip_last_hit = new Map();
-function rateLimitReq(ctx, req, limit) {
-    limit = limit ? limit : 1
-    const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+function rateLimitReq(ctx, req, limit, suffix) {
+    limit = limit !== undefined ? limit : 1;
+    let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     const now = Date.now()
 
+    if (suffix !== undefined) ip += suffix;
     // purge hits older than minutes_max
     ip_last_hit.forEach((v, k) => {
         const seconds = (now - v) / 1000;

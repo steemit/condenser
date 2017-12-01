@@ -10,7 +10,7 @@ import reactForm from 'app/utils/ReactForm'
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import tt from 'counterpart';
 import { APP_URL } from 'app/client_config';
-import {PrivateKey, PublicKey} from 'steem/lib/auth/ecc';
+import {PrivateKey, PublicKey} from '@steemit/steem-js/lib/auth/ecc';
 
 class LoginForm extends Component {
 

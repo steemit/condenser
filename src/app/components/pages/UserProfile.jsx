@@ -474,7 +474,7 @@ export default class UserProfile extends React.Component {
                             </div>
                             <p className="UserProfile__info">
                                 {location && <span><Icon name="location" /> {location}</span>}
-                                {website && <span><Icon name="link" /> <a href={website}>{website_label}</a></span>}
+                                {website && <span><Icon name="link" /> <a href={website} target="_blank" rel="noopener noreferrer">{website_label}</a></span>}
                                 <Icon name="calendar" /> <DateJoinWrapper date={accountjoin} />
                             </p>
                         </div>

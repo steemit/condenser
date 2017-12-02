@@ -1,5 +1,7 @@
 import React from 'react';
 import Icon from '../elements/Icon'
+import ReactTooltip from 'react-tooltip'
+import CTABlock from '../elements/CTA/ctaBlock'
 
 class Start extends React.Component {
 
@@ -24,16 +26,14 @@ class Start extends React.Component {
         let simpleAnswer = <p className='landing-start-block-text'>
             <b>{'Golos.io '}</b>
             — это блог-платформа на
-            <span title='Блокчейн — распределенная база данных'> блокчейне</span>, где
+            <span data-tip='Блокчейн — распределенная база данных'> блокчейне</span><ReactTooltip type='light' effect="solid"/>, где
             пользователи могут публиковать записи и голосовать за понравившиеся статьи.
             Голосуя за понравившуюся статью, они вознаграждают ее своими «голосами», которые
             можно перевести в реальные деньги.
         </p>
 
         let difAnswer = <p className='landing-start-block-text'>
-            Каждый день мы отдаем все
-            <span title='Майнинг — деятельность по поддержанию блокчейна'>намайненое</span>
-            в пул вознаграждения авторов. Он распределяется в зависимости от количества
+            Каждый день мы отдаем все <span data-tip='Майнинг — деятельность по поддержанию блокчейна'>намайненое</span><ReactTooltip type='light' effect="solid"/> в пул вознаграждения авторов. Он распределяется в зависимости от количества
             «голосов» пользователей под каждой публикацией.
         </p>
 
@@ -58,7 +58,7 @@ class Start extends React.Component {
                         <div className='column small-6 medium-6 large-6'>
                             <p className='landing-start-block-title-text'>Пишите, фотографируйте, комментируйте и получайте
                                 <span
-                                    title='Токены, которыми вознаграждаются посты, можно перевести в любую мировую валюту.'> вознаграждение</span> за любое действие</p>
+                                    data-tip='Токены, которыми вознаграждаются посты, можно перевести в любую мировую валюту.'> вознаграждение</span><ReactTooltip type='light' effect="solid"/> за любое действие</p>
                             <a href="/create_account" className="button">Создать аккаунт</a>
                         </div>
                     </div>
@@ -232,15 +232,14 @@ class Start extends React.Component {
                         <div className='row'>
                             <div className='column large-12 medium-12 small-12'>
                                 <p className='landing-start-block-text landing-start-block-center'>
-                                    У нас есть собственная 
-                                    <a href='https://wiki.golos.io/'>
-                                        Википедия</a>, со всей информацией про блог-платформу Golos.io. Кроме того, мы
-                                    оперативно ответим на любой технический вопрос в нашей группе в
-                                    <a href='https://t.me/golos_support'> Телеграме</a>.</p>
+                                    У нас есть собственная <a href='https://wiki.golos.io/'>Википедия</a>,
+                                    со всей информацией про блог-платформу Golos.io. Кроме того, мы
+                                    оперативно ответим на любой технический вопрос в нашей группе в <a href='https://t.me/golos_support'>Телеграме</a>.</p>
                             </div>
                         </div>
                     </div>
                 </div>
+                {/* <CTABlock/> */}
             </div>
         );
     }

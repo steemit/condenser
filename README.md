@@ -49,7 +49,7 @@ mkdir tmp
 
 Install at least Node v8.7 if you don't already have it. We recommend using `nvm` to do this as it's both the simplest way to install and manage installed version(s) of node. If you need `nvm`, you can get it at [https://github.com/creationix/nvm](https://github.com/creationix/nvm).
 
-Condenser is known to successfully build using node 8.7, npm 4.1.2, and yarn 1.1.0.
+Condenser is known to successfully build using node 8.7, npm 4.1.2, and yarn 1.3.2.
 
 Using nvm, you would install like this:
 ```bash

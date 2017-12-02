@@ -249,7 +249,6 @@ export default function useGeneralApi(app) {
                         verify('posting', signatures.posting, posting_pubkey, weight, weight_threshold)
                         if (auth.posting) {
                           this.session.a = account;
-                          this.session.uid = db_account.uid;
                         }
                     }
                 }

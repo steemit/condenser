@@ -24,6 +24,7 @@ bitrrex
 bttrex
 btrex
 bttrex
+bitttex
 ittrex
 bittrex-deposit
 blockrades
@@ -96,6 +97,7 @@ shapeshift
 randomwhale
 randowale
 randwhale
+bellyrub
 coinpayments
 minnowboost
 minnowboster

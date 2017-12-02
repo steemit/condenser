@@ -92,6 +92,7 @@ a, path, circle {
 
 .ptc,
 a.ptc {
+    cursor:pointer;
   text-decoration: none;
   transition: 0.2s all ease-in-out;
   @include themify($themes) {
@@ -173,6 +174,7 @@ a.ptc {
   margin-top: -68px;
   position: relative;
   display: block;
+  cursor: default;
 }
 
 h1, h2, h3, h4, h5, h6 {

@@ -1,7 +1,7 @@
 import assert from 'assert'
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient'
-import {PrivateKey, PublicKey} from 'steem/lib/auth/ecc'
-import {config} from 'steem';
+import {PrivateKey, PublicKey} from '@steemit/steem-js/lib/auth/ecc'
+import {config} from '@steemit/steem-js';
 
 export const browserTests = {}
 

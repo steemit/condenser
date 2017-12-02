@@ -8,13 +8,16 @@
   width: 300px;
   border: 1px solid #cacaca;
   border-radius: 3px;
-  background-color: #fefefe;
   font-size: 1rem;
-  color: #333333;
+    @include themify($themes) {
+        background-color: themed('backgroundColorEmphasis');
+        color: themed('textColorPrimary');
+    }
 
   .Author__dropdown {
     width: 290px;
     min-height: 108px;
+
 
     .Userpic {
         margin-right: 1rem;
@@ -27,7 +30,9 @@
       text-decoration: none;
       display: block;
       font-size: 110%;
-      color: #444;
+        @include themify($themes) {
+            color: themed('textColorPrimary');
+        }
       font-weight: 600;
       line-height: 1;
     }
@@ -36,7 +41,9 @@
       text-decoration: none;
       font-size: 90%;
       font-weight: 400;
-      color: #666;
+        @include themify($themes) {
+            color: themed('textColorSecondary');
+        }
     }
 
     .Author__bio {

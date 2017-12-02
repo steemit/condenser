@@ -138,7 +138,7 @@ class OffsetScrollBehavior extends ScrollBehavior {
         const header = document.getElementsByTagName('header')[0]; //this dimension ideally would be pulled from a scss file.
         let topOffset = SCROLL_TOP_EXTRA_PIXEL_OFFSET * (-1);
         if(header) {
-            topOffset += header.offsetHeight;
+            topOffset += header.offsetHeight * (-1);
         }
         const newTarget = []; //x coordinate
         let el = false;

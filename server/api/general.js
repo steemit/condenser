@@ -217,7 +217,7 @@ export default function useGeneralApi(app) {
         console.log('-- /login_account -->', this.session.uid, account);
         try {
             const db_account = yield models.Account.findOne(
-                {attributes: ['user_id', 'uid'], where: {name: esc(account)}, logging: false}
+                {attributes: ['user_id'], where: {name: esc(account)}, logging: false}
             );
             if (db_account) this.session.user = db_account.user_id;
 

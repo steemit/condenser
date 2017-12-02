@@ -22,8 +22,7 @@ export default function useNotificationsApi(app) {
     // get all notifications for account
     router.get('/notifications/:account', function *() {
         const account = this.params.account;
-        console.log('-- GET /notifications/:account -->', this.session.uid, account, status(this, account));
-
+ 
         if (!account || account !== this.session.a) {
             this.body = []; return;
         }
@@ -31,7 +30,7 @@ export default function useNotificationsApi(app) {
             const res = yield Tarantool.instance('tarantool').select('notifications', 0, 1, 0, 'eq', account);
             this.body = toResArray(res);
         } catch (error) {
-            console.error('-- /notifications/:account error -->', this.session.uid, error.message);
+            console.error(`[reqid ${this.request.header['x-request-id']}] ${this.session.uid} ${this.method} ERRORLOG notifications @${account} ${error.message}`);
             this.body = [];
         }
         return;
@@ -40,8 +39,7 @@ export default function useNotificationsApi(app) {
     // mark account's notification as read
     router.put('/notifications/:account/:ids', function *() {
         const {account, ids} = this.params;
-        console.log('-- PUT /notifications/:account/:id -->', this.session.uid, account, status(this, account));
-
+     
         if (!ids || !account || account !== this.session.a) {
             this.body = []; return;
         }
@@ -53,7 +51,7 @@ export default function useNotificationsApi(app) {
             }
             this.body = toResArray(res);
         } catch (error) {
-            console.error('-- /notifications/:account/:id error -->', this.session.uid, error.message);
+            console.error(`[reqid ${this.request.header['x-request-id']}] ${this.session.uid} ERRORLOG notifications @${account} ${error.message}`);
             this.body = [];
         }
         return;
@@ -65,13 +63,13 @@ export default function useNotificationsApi(app) {
             const params = this.request.body;
             const {csrf, account, webpush_params} = typeof(params) === 'string' ? JSON.parse(params) : params;
             if (!checkCSRF(this, csrf)) return;
-            console.log('-- POST /notifications/register -->', this.session.uid, account, webpush_params);
+            // console.log('-- POST /notifications/register -->', this.session.uid, account, webpush_params);
             if (!account || account !== this.session.a) return;
             if (!webpush_params || !webpush_params.endpoint || !webpush_params.endpoint.match(/^https:\/\/android\.googleapis\.com/)) return;
             if (!webpush_params.keys || !webpush_params.keys.auth) return;
             yield Tarantool.instance('tarantool').call('webpush_subscribe', account, webpush_params);
         } catch (error) {
-            console.error('-- POST /notifications/register error -->', this.session.uid, error.message);
+            console.error(`[reqid ${this.request.header['x-request-id']}] ${this.session.uid} ERRORLOG notifications @${account} ${error.message}`);
         }
     });
 }

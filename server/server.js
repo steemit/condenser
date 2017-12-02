@@ -138,7 +138,7 @@ if (env === 'production') {
 if (env === 'production') {
     app.use(prod_logger());
 } else {
-    app.use(koa_logger());
+     app.use(koa_logger());
 }
 
 app.use(helmet());
@@ -241,9 +241,7 @@ if (env !== 'test') {
         // if (app_router.dbStatus.ok) recordWebEvent(this, 'page_load');
         const bot = this.state.isBot;
         if (bot) {
-            console.log(
-                `  --> ${this.method} ${this.originalUrl} ${this.status} (BOT '${bot}')`
-            );
+            console.log(`[reqid ${this.request.header['x-request-id']}] ${this.method} ${this.originalUrl} ${this.status} (BOT '${bot}')`);
         }
     });
 

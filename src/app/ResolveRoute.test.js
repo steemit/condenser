@@ -7,7 +7,7 @@ describe ( 'routeRegex', () => {
             ['PostsIndex', /^\/(@[\w\d.-]+)\/feed\/?$/ ],
             ['UserProfile1', /^\/(@[\w\d.-]+)\/?$/],
             ['UserProfile2', /^\/(@[\w\d.-]+)\/(blog|posts|comments|recommended|transfers|curation-rewards|author-rewards|permissions|created|recent-replies|feed|password|followed|followers|settings)\/?$/],
-            ['UserProfile3', /^\/(@[\w\d.-]+)\/[\w\d.-]+/],
+            ['UserProfile3', /^\/(@[\w\d.-]+)\/([\w\d-]+)/],
             ['CategoryFilters', /^\/(hot|votes|responses|trending|trending30|promoted|cashout|payout|payout_comments|created|active)\/?$/ig],
             ['PostNoCategory', /^\/(@[\w\d.-]+)\/([\w\d-]+)/],
             ['Post',     /^\/([\u4E00-\u9FA5\u0400-\u044F\w\d-]+)\/(@[\w\d.-]+)\/([\w\d-]+)\/?$/],

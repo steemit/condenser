@@ -1,17 +1,57 @@
+const userEndpoints = [
+    'blog',
+    'posts',
+    'comments',
+    'recommended',
+    'transfers',
+    'curation-rewards',
+    'author-rewards',
+    'permissions',
+    'created',
+    'recent-replies',
+    'feed',
+    'password',
+    'followed',
+    'followers',
+    'settings',
+];
+
+const categoryFilters = [
+    'hot',
+    'votes',
+    'responses',
+    'trending',
+    'trending30',
+    'promoted',
+    'cashout',
+    'payout',
+    'payout_comments',
+    'created',
+    'active',
+];
+
+const
+    userName = '(@[\\w\\d.-]+)',
+    title = '([\\w\\d-]+)',
+    category = '(' + '[\\u4E00-\\u9FA5\\u0400-\\u044F\\w\\d-]+' + ')',
+    endpoints = '(' + userEndpoints.join('|') + ')',
+    filters = '(' + categoryFilters.join('|') + ')',
+    json = '[.json]'
 
 export const routeRegex = {
-    PostsIndex: /^\/(@[\w\d.-]+)\/feed\/?$/,
-    UserProfile1: /^\/(@[\w\d.-]+)\/?$/,
-    UserProfile2: /^\/(@[\w\d.-]+)\/(blog|posts|comments|recommended|transfers|curation-rewards|author-rewards|permissions|created|recent-replies|feed|password|followed|followers|settings)\/?$/,
-    UserProfile3: /^\/(@[\w\d.-]+)\/[\w\d.-]+/,
-    UserEndPoints: /^(blog|posts|comments|recommended|transfers|curation-rewards|author-rewards|permissions|created|recent-replies|feed|password|followed|followers|settings)$/,
-    CategoryFilters: /^\/(hot|votes|responses|trending|trending30|promoted|cashout|payout|payout_comments|created|active)\/?$/ig,
-    PostNoCategory: /^\/(@[\w\d.-]+)\/([\w\d-]+)/,
-    Post: /^\/([\u4E00-\u9FA5\u0400-\u044F\w\d-]+)\/(@[\w\d.-]+)\/([\w\d-]+)\/?$/,
-    PostJson: /^\/([\u4E00-\u9FA5\u0400-\u044F\w\d-]+)\/(@[\w\d.-]+)\/([\w\d-]+)[.json]$/,
-    UserJson: /^\/(@[\w\d.-]+)[.json]$/,
-    UserNameJson: /^.*(?=(\.json))/,
+    PostsIndex:         new RegExp('^\/' + userName + '\/' + 'feed' + '\/?' + '$'),
+    UserProfile1:       new RegExp('^\/' + userName + '\/?' + '$'),
+    UserProfile2:       new RegExp('^\/' + userName + '\/' + endpoints + '\/?' + '$'),
+    UserProfile3:       new RegExp('^\/' + userName + '\/' + title),
+    UserEndPoints:      new RegExp('^\/' + endpoints + '$'),
+    CategoryFilters:    new RegExp('^\/' + filters + '\/?' + '$', 'ig'),
+    PostNoCategory:     new RegExp('^\/' + userName + '\/' + title ),
+    Post:               new RegExp('^\/' + category + '\/' + userName + '\/' + title + '\/?' + '$'),
+    PostJson:           new RegExp('^\/' + category + '\/' + userName + '\/' + title + json + '$'),
+    UserJson:           new RegExp('^\/' + userName + json + '$'),
+    UserNameJson:       /^.*(?=(\.json))/,
 };
+
 
 export default function resolveRoute(path)
 {

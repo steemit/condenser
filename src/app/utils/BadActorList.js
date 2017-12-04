@@ -27,6 +27,7 @@ bttrex
 bitttex
 ittrex
 bittrex-deposit
+openledgerdex
 blockrades
 blocktraades
 blocktradse

@@ -1,10 +1,11 @@
 import {takeEvery} from 'redux-saga';
 import {call, put, select} from 'redux-saga/effects';
 import {Set, Map, fromJS, List} from 'immutable'
-import user from 'app/redux/User'
-import {getAccount} from 'app/redux/SagaShared'
-import {PrivateKey} from '@steemit/steem-js/lib/auth/ecc';
 import {api} from '@steemit/steem-js';
+import {PrivateKey} from '@steemit/steem-js/lib/auth/ecc';
+
+import {getAccount} from 'app/redux/SagaShared';
+import * as userActions from 'app/redux/UserReducer';
 
 // operations that require only posting authority
 const postingOps = Set(`vote, comment, delete_comment, custom_json, claim_reward_balance`.trim().split(/,\s*/))
@@ -43,7 +44,7 @@ export function* accountAuthLookup({payload: {account, private_keys, login_owner
     }
     const accountName = account.get('name')
     const pub_keys_used = {posting: toPub(posting), active: toPub(active), owner: login_owner_pubkey};
-    yield put(user.actions.setAuthority({accountName, auth, pub_keys_used}))
+    yield put(userActions.setAuthority({ accountName, auth, pub_keys_used }));
 }
 
 /**

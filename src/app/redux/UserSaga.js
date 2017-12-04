@@ -1,15 +1,19 @@
 import {fromJS, Set, List} from 'immutable'
 import {takeLatest} from 'redux-saga';
 import {call, put, select, fork} from 'redux-saga/effects';
-import {accountAuthLookup} from 'app/redux/AuthSaga'
-import user from 'app/redux/User'
-import {getAccount} from 'app/redux/SagaShared'
-import {browserHistory} from 'react-router'
-import {serverApiLogin, serverApiLogout} from 'app/utils/ServerApiClient';
-import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
-import {loadFollows} from 'app/redux/FollowSaga'
-import {PrivateKey, Signature, hash} from '@steemit/steem-js/lib/auth/ecc';
 import {api} from '@steemit/steem-js';
+import {PrivateKey, Signature, hash} from '@steemit/steem-js/lib/auth/ecc';
+
+import {accountAuthLookup} from 'app/redux/AuthSaga'
+import {getAccount} from 'app/redux/SagaShared'
+import * as userActions from 'app/redux/UserReducer';
+import {browserHistory} from 'react-router'
+import {
+    serverApiLogin,
+    serverApiLogout,
+    serverApiRecordEvent,
+} from 'app/utils/ServerApiClient';
+import {loadFollows} from 'app/redux/FollowSaga'
 import {translate} from 'app/Translator';
 import DMCAUserList from 'app/utils/DMCAUserList';
 
@@ -26,27 +30,27 @@ export const userWatches = [
     uploadImageWatch,
 ]
 
-const highSecurityPages = Array(/\/market/, /\/@.+\/(transfers|permissions|password)/, /\/~witnesses/)
+const highSecurityPages = [/\/market/, /\/@.+\/(transfers|permissions|password)/, /\/~witnesses/]
 
 function* lookupPreviousOwnerAuthorityWatch() {
     yield* takeLatest('user/lookupPreviousOwnerAuthority', lookupPreviousOwnerAuthority);
 }
 function* loginWatch() {
-    yield* takeLatest('user/USERNAME_PASSWORD_LOGIN', usernamePasswordLogin);
+    yield* takeLatest(userActions.USERNAME_PASSWORD_LOGIN, usernamePasswordLogin);
 }
 function* saveLoginWatch() {
-    yield* takeLatest('user/SAVE_LOGIN', saveLogin_localStorage);
+    yield* takeLatest(userActions.SAVE_LOGIN, saveLogin_localStorage);
 }
 function* logoutWatch() {
-    yield* takeLatest('user/LOGOUT', logout);
+    yield* takeLatest(userActions.LOGOUT, logout);
 }
 
 function* loginErrorWatch() {
-    yield* takeLatest('user/LOGIN_ERROR', loginError);
+    yield* takeLatest(userActions.LOGIN_ERROR, loginError);
 }
 
 function* watchLoadSavingsWithdraw() {
-    yield* takeLatest('user/LOAD_SAVINGS_WITHDRAW', loadSavingsWithdraw);
+    yield* takeLatest(userActions.LOAD_SAVINGS_WITHDRAW, loadSavingsWithdraw);
 }
 
 export function* watchRemoveHighSecurityKeys() {
@@ -65,10 +69,10 @@ function* loadSavingsWithdraw() {
     const withdraws = List(fromJS(m).values())
         .sort((a, b) => strCmp(a.get('complete'), b.get('complete')))
 
-    yield put(user.actions.set({
+    yield put(userActions.set({
         key: 'savings_withdraws',
         value: withdraws,
-    }))
+    }));
 }
 
 const strCmp = (a, b) => a > b ? 1 : a < b ? -1 : 0
@@ -84,7 +88,7 @@ function* removeHighSecurityKeys({payload: {pathname}}) {
     // from getting logged out when they click on Permissions (which is really bad because that tab
     // disappears again).
     if(!highSecurityPage)
-        yield put(user.actions.removeHighSecurityKeys())
+        yield put(userActions.removeHighSecurityKeys());
 }
 
 /**
@@ -94,7 +98,7 @@ function* removeHighSecurityKeys({payload: {pathname}}) {
 */
 function* usernamePasswordLogin(action) {
     // Sets 'loading' while the login is taking place.  The key generation can take a while on slow computers.
-    yield call(usernamePasswordLogin2, action)
+    yield call(usernamePasswordLogin2, action.payload)
     const current = yield select(state => state.user.get('current'))
     if(current) {
         const username = current.get('username')
@@ -109,9 +113,9 @@ function* usernamePasswordLogin(action) {
 
 const clean = (value) => value == null || value === '' || /null|undefined/.test(value) ? undefined : value
 
-function* usernamePasswordLogin2({payload: {username, password, saveLogin,
+function* usernamePasswordLogin2({username, password, saveLogin,
         operationType /*high security*/, afterLoginRedirectToWelcome
-}}) {
+}) {
     // login, using saved password
     let feedURL = false;
     let autopost, memoWif, login_owner_pubkey, login_wif_owner_pubkey
@@ -148,12 +152,12 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
 
     const account = yield call(getAccount, username)
     if (!account) {
-        yield put(user.actions.loginError({ error: 'Username does not exist' }))
+        yield put(userActions.loginError({ error: 'Username does not exist' }));
         return
     }
     //dmca user block
     if (username && DMCAUserList.includes(username)) {
-        yield put(user.actions.loginError({ error: translate('terms_violation') }))
+        yield put(userActions.loginError({ error: translate('terms_violation') }));
         return
     }
 
@@ -184,29 +188,20 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
     if(!highSecurityLogin) {
         const accountName = account.get('name')
         authority = authority.set('active', 'none')
-        yield put(user.actions.setAuthority({accountName, auth: authority}))
+        yield put(userActions.setAuthority({ accountName, auth: authority }));
     }
     const fullAuths = authority.reduce((r, auth, type) => (auth === 'full' ? r.add(type) : r), Set())
     if (!fullAuths.size) {
         localStorage.removeItem('autopost2')
         const owner_pub_key = account.getIn(['owner', 'key_auths', 0, 0]);
-        // const pub_keys = yield select(state => state.user.get('pub_keys_used'))
-        // serverApiRecordEvent('login_attempt', JSON.stringify({name: username, ...pub_keys, cur_owner: owner_pub_key}))
-        // FIXME pls parameterize opaque things like this into a constants file
-        // code like this requires way too much historical knowledge to
-        // understand.
-        if (owner_pub_key === 'STM7sw22HqsXbz7D2CmJfmMwt9rimtk518dRzsR1f8Cgw52dQR1pR') {
-            yield put(user.actions.loginError({ error: 'Hello. Your account may have been compromised. We are working on restoring an access to your account. Please send an email to support@steemit.com.' }))
-            return
-        }
         if(login_owner_pubkey === owner_pub_key || login_wif_owner_pubkey === owner_pub_key) {
-            yield put(user.actions.loginError({ error: 'owner_login_blocked' }))
+            yield put(userActions.loginError({ error: 'owner_login_blocked' }));
         } else if(!highSecurityLogin && hasActiveAuth) {
-            yield put(user.actions.loginError({ error: 'active_login_blocked' }))
+            yield put(userActions.loginError({ error: 'active_login_blocked' }));
         } else {
             const generated_type = password[0] === 'P' && password.length > 40;
             serverApiRecordEvent('login_attempt', JSON.stringify({name: username, login_owner_pubkey, owner_pub_key, generated_type}))
-            yield put(user.actions.loginError({ error: 'Incorrect Password' }))
+            yield put(userActions.loginError({ error: 'Incorrect Password' }));
         }
         return
     }
@@ -231,7 +226,7 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
             posting_pubkey === owner_pubkey ||
             posting_pubkey === active_pubkey
         ) {
-            yield put(user.actions.loginError({ error: 'This login gives owner or active permissions and should not be used here.  Please provide a posting only login.' }))
+            yield put(userActions.loginError({ error: 'This login gives owner or active permissions and should not be used here.  Please provide a posting only login.' }));
             localStorage.removeItem('autopost2')
             return
         }
@@ -251,18 +246,26 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
         if(username) feedURL = '/@' + username + '/feed';
         // Keep the posting key in RAM but only when not signing an operation.
         // No operation or the user has checked: Keep me logged in...
-        yield put(user.actions.setUser({username, private_keys, login_owner_pubkey, vesting_shares: account.get('vesting_shares'),
-         received_vesting_shares: account.get('received_vesting_shares'),
-         delegated_vesting_shares: account.get('delegated_vesting_shares')}))
+        yield put(userActions.setUser({
+            username,
+            private_keys,
+            login_owner_pubkey,
+            vesting_shares: account.get('vesting_shares'),
+            received_vesting_shares: account.get('received_vesting_shares'),
+            delegated_vesting_shares: account.get('delegated_vesting_shares'),
+        }));
     } else {
         if(username) feedURL = '/@' + username + '/feed';
-        yield put(user.actions.setUser({username, vesting_shares: account.get('vesting_shares'),
+        yield put(userActions.setUser({
+            username,
+            vesting_shares: account.get('vesting_shares'),
             received_vesting_shares: account.get('received_vesting_shares'),
-            delegated_vesting_shares: account.get('delegated_vesting_shares')}))
+            delegated_vesting_shares: account.get('delegated_vesting_shares'),
+        }));
     }
 
     if (!autopost && saveLogin)
-        yield put(user.actions.saveLogin());
+        yield put(userActions.saveLogin());
 
     try {
         // const challengeString = yield serverApiLoginChallenge()
@@ -341,7 +344,7 @@ function* saveLogin_localStorage() {
 }
 
 function* logout() {
-    yield put(user.actions.saveLoginConfirm(false)) // Just incase it is still showing
+    yield put(userActions.saveLoginConfirm(false)); // Just incase it is still showing
     if (process.env.BROWSER)
         localStorage.removeItem('autopost2')
     serverApiLogout();
@@ -355,7 +358,7 @@ function* loginError({payload: {/*error*/}}) {
     If the owner key was changed after the login owner key, this function will find the next owner key history record after the change and store it under user.previous_owner_authority.
 */
 function* lookupPreviousOwnerAuthority({payload: {}}) {
-    const current = yield select(state => state.user.get('current'))
+    const current = yield select(state => state.user.getIn(['current']))
     if(!current) return
 
     const login_owner_pubkey = current.get('login_owner_pubkey')
@@ -387,11 +390,11 @@ function* lookupPreviousOwnerAuthority({payload: {}}) {
         return
     }
     // console.log('UserSage ---> previous_owner_authority', previous_owner_authority.toJS())
-    yield put(user.actions.setUser({previous_owner_authority}))
+    yield put(userActions.setUser({previous_owner_authority}));
 }
 
 function* uploadImageWatch() {
-    yield* takeLatest('user/UPLOAD_IMAGE', uploadImage);
+    yield* takeLatest(userActions.UPLOAD_IMAGE, uploadImage);
 }
 
 function* uploadImage({payload: {file, dataUrl, filename = 'image.txt', progress}}) {

@@ -2,10 +2,10 @@ import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
-import transaction from 'app/redux/Transaction';
+import * as transactionActions from 'app/redux/TransactionReducer';
+import * as userActions from 'app/redux/UserReducer';
 import {Set, Map} from 'immutable'
 import tt from 'counterpart';
-import user from 'app/redux/User';
 
 const {string, bool, any} = PropTypes;
 
@@ -135,7 +135,7 @@ module.exports = connect(
         updateFollow: (follower, following, action, done) => {
             const what = action ? [action] : [];
             const json = ['follow', {follower, following, what}];
-            dispatch(transaction.actions.broadcastOperation({
+            dispatch(transactionActions.broadcastOperation({
                 type: 'custom_json',
                 operation: {
                     id: 'follow',
@@ -148,7 +148,7 @@ module.exports = connect(
         },
         showLogin: e => {
             if (e) e.preventDefault();
-            dispatch(user.actions.showLogin())
+            dispatch(userActions.showLogin())
         },
     })
 )(Follow);

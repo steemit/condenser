@@ -202,6 +202,8 @@ user@example:~$ tarantool
 We are using _[Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript)_ with some modifications (see .eslintrc).
 Please run _eslint_ in the working directory before committing your changes and make sure you didn't introduce any new styling issues.
 
+We use prettier to autofromat the code. Run `yarn run fmt` to format everything in `src/`, or `yarn exec -- prettier --config .prettierrc --write src/whatever/file.js` for a specific file.
+
 ##### CSS & SCSS
 If a component requires a css rule, please use its uppercase name for the class, e.g. "Header" class for the header's root div.
 We adhere to BEM methodology with exception for Foundation classes, here is an example for the Header component:

@@ -2,19 +2,24 @@ import {takeLatest, takeEvery} from 'redux-saga';
 import {call, put, select, fork} from 'redux-saga/effects';
 import {loadFollows, fetchFollowCount} from 'app/redux/FollowSaga';
 import {getContent} from 'app/redux/SagaShared';
-import GlobalReducer from './GlobalReducer';
+import * as globalActions from './GlobalReducer';
+import * as appActions from './AppReducer';
 import constants from './constants';
 import {fromJS, Map} from 'immutable'
-import {api} from 'steem';
+import {api} from '@steemit/steem-js';
+
+const REQUEST_DATA = 'fetchDataSaga/REQUEST_DATA';
+const GET_CONTENT = 'fetchDataSaga/GET_CONTENT';
+const FETCH_STATE = 'fetchDataSaga/FETCH_STATE';
 
 export const fetchDataWatches = [watchLocationChange, watchDataRequests, watchFetchJsonRequests, watchFetchState, watchGetContent];
 
 export function* watchDataRequests() {
-    yield* takeLatest('REQUEST_DATA', fetchData);
+    yield* takeLatest(REQUEST_DATA, fetchData);
 }
 
 export function* watchGetContent() {
-    yield* takeEvery('GET_CONTENT', getContentCaller);
+    yield* takeEvery(GET_CONTENT, getContentCaller);
 }
 
 export function* getContentCaller(action) {
@@ -46,15 +51,15 @@ export function* fetchState(location_change_action) {
     if (url.indexOf("/curation-rewards") !== -1) url = url.replace("/curation-rewards", "/transfers");
     if (url.indexOf("/author-rewards") !== -1) url = url.replace("/author-rewards", "/transfers");
 
-    yield put({type: 'FETCH_DATA_BEGIN'});
+    yield put(appActions.fetchDataBegin());
     try {
         const state = yield call([api, api.getStateAsync], url)
-        yield put(GlobalReducer.actions.receiveState(state));
+        yield put(globalActions.receiveState(state));
     } catch (error) {
         console.error('~~ Saga fetchState error ~~>', url, error);
-        yield put({type: 'global/STEEM_API_ERROR', error: error.message});
+        yield put(appActions.steemApiError(error.message));
     }
-    yield put({type: 'FETCH_DATA_END'});
+    yield put(appActions.fetchDataEnd());
 }
 
 export function* watchLocationChange() {
@@ -62,7 +67,7 @@ export function* watchLocationChange() {
 }
 
 export function* watchFetchState() {
-    yield* takeLatest('FETCH_STATE', fetchState);
+    yield* takeLatest(FETCH_STATE, fetchState);
 }
 
 export function* fetchData(action) {
@@ -71,7 +76,7 @@ export function* fetchData(action) {
     if( !category ) category = "";
     category = category.toLowerCase();
 
-    yield put({type: 'global/FETCHING_DATA', payload: {order, category}});
+    yield put(globalActions.fetchingData({order, category}));
     let call_name, args;
     if (order === 'trending') {
         call_name = 'getDiscussionsByTrendingAsync';
@@ -188,15 +193,15 @@ export function* fetchData(action) {
             start_author: author,
             start_permlink: permlink}];
     }
-    yield put({type: 'FETCH_DATA_BEGIN'});
+    yield put(appActions.fetchDataBegin());
     try {
         const data = yield call([api, api[call_name]], ...args);
-        yield put(GlobalReducer.actions.receiveData({data, order, category, author, permlink, accountname}));
+        yield put(globalActions.receiveData({data, order, category, author, permlink, accountname}));
     } catch (error) {
         console.error('~~ Saga fetchData error ~~>', call_name, args, error);
-        yield put({type: 'global/STEEM_API_ERROR', error: error.message});
+        yield put(appActions.steemApiError(error.message));
     }
-    yield put({type: 'FETCH_DATA_END'});
+    yield put(appActions.fetchDataEnd());
 }
 
 // export function* watchMetaRequests() {
@@ -237,9 +242,9 @@ export function* fetchMeta({payload: {id, link}}) {
         if(!meta.image) {
             meta.image = meta['twitter:image:src']
         }
-        yield put(GlobalReducer.actions.receiveMeta({id, meta}))
+        yield put(globalActions.receiveMeta({id, meta}))
     } catch(error) {
-        yield put(GlobalReducer.actions.receiveMeta({id, meta: {error}}))
+        yield put(globalActions.receiveMeta({id, meta: {error}}))
     }
 }
 
@@ -265,9 +270,27 @@ function* fetchJson({payload: {id, url, body, successCallback, skipLoading = fal
         let result = yield skipLoading ? fetch(url, payload) : call(fetch, url, payload)
         result = yield result.json()
         if(successCallback) result = successCallback(result)
-        yield put(GlobalReducer.actions.fetchJsonResult({id, result}))
+        yield put(globalActions.fetchJsonResult({id, result}))
     } catch(error) {
         console.error('fetchJson', error)
-        yield put(GlobalReducer.actions.fetchJsonResult({id, error}))
+        yield put(globalActions.fetchJsonResult({id, error}))
     }
 }
+
+// Action creators
+export const actions = {
+    requestData: (payload) => ({
+        type: REQUEST_DATA,
+        payload,
+    }),
+
+    getContent: (payload) => ({
+        type: GET_CONTENT,
+        payload,
+    }),
+
+    fetchState: (payload) => ({
+        type: FETCH_STATE,
+        payload,
+    }),
+};

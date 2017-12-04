@@ -5,6 +5,7 @@ $themes: (
     colorAccentReverse: $color-blue-original-light,
     colorWhite: $color-white,
     backgroundColor: $color-background-off-white,
+      backgroundColorEmphasis: $color-background-almost-white,
     backgroundColorOpaque: $color-background-off-white,
     backgroundTransparent: transparent,
     moduleBackgroundColor: $color-white,
@@ -30,7 +31,7 @@ $themes: (
     buttonText: $color-text-white,
     buttonTextShadow: 0 1px 0 rgba(0,0,0,0.20),
     buttonTextHover: $color-text-white,
-    buttonBoxShadow: $color-transparent,        
+    buttonBoxShadow: $color-transparent,
   ),
   light: (
     colorAccent: $color-teal,
@@ -38,7 +39,8 @@ $themes: (
     colorAccentReverse: $color-blue-black,
     colorWhite: $color-white,
     backgroundColor: $color-background-off-white,
-    backgroundColorOpaque: $color-background-off-white,    
+      backgroundColorEmphasis: $color-background-almost-white,
+    backgroundColorOpaque: $color-background-off-white,
     backgroundTransparent: transparent,
     moduleBackgroundColor: $color-white,
     menuBackgroundColor: $color-background-dark,
@@ -54,8 +56,8 @@ $themes: (
     iconColorSecondary: #cacaca,
     textColorPrimary: $color-text-dark,
     textColorSecondary: $color-text-gray,
-    textColorAccent: $color-text-teal,   
-    textColorAccentHover: $color-teal, 
+    textColorAccent: $color-text-teal,
+    textColorAccentHover: $color-teal,
     textColorError: $color-text-red,
     contentBorderAccent: $color-teal,
     buttonBackground: $color-blue-black,
@@ -64,7 +66,7 @@ $themes: (
     buttonTextShadow: 0 1px 0 rgba(0,0,0,0.20),
     buttonTextHover: $color-white,
     buttonBoxShadow: $color-teal,
-    buttonBoxShadowHover: $color-blue-black,    
+    buttonBoxShadowHover: $color-blue-black,
   ),
   dark: (
     colorAccent: $color-teal,
@@ -72,6 +74,7 @@ $themes: (
     colorAccentReverse: $color-white,
     colorWhite: $color-white,
     backgroundColor: $color-background-dark,
+      backgroundColorEmphasis: $color-background-super-dark,
     backgroundColorOpaque: $color-blue-dark,
     moduleBackgroundColor: $color-background-dark,
     backgroundTransparent: transparent,
@@ -126,74 +129,74 @@ $themes: (
 
 
   .theme-original {
-    background-color: $white; 
+    background-color: $white;
     color: $color-text-dark;
     @include MQ(M) {
-      background-color: $color-background-off-white; 
+      background-color: $color-background-off-white;
     }
   }
   .theme-light {
-    background-color: $white; 
+    background-color: $white;
     color: $color-text-dark;
     @include MQ(M) {
-      background-color: $color-background-off-white; 
-    }    
+      background-color: $color-background-off-white;
+    }
   }
   .theme-dark {
-    background-color: $color-background-dark; 
+    background-color: $color-background-dark;
     color: $color-text-white;
   }
 
 
-// Utility classes to be used with @extend 
+// Utility classes to be used with @extend
 
 .link {
   text-decoration: none;
   transition: 0.2s all ease-in-out;
   &--primary {
     @include themify($themes) {
-        color: themed('textColorPrimary');  
+        color: themed('textColorPrimary');
     }
     &:visited, &:active {
       @include themify($themes) {
-          color: themed('textColorPrimary');  
-      } 
-    }     
+          color: themed('textColorPrimary');
+      }
+    }
     &:hover, &:focus {
       @include themify($themes) {
-          color: themed('textColorAccent');  
-      } 
+          color: themed('textColorAccent');
+      }
     }
   }
   &--secondary {
     @include themify($themes) {
-        color: themed('textColorSecondary');  
+        color: themed('textColorSecondary');
     }
     &:visited, &:active {
       @include themify($themes) {
-          color: themed('textColorSecondary');  
-      } 
-    }    
+          color: themed('textColorSecondary');
+      }
+    }
     &:hover, &:focus {
       @include themify($themes) {
-          color: themed('textColorAccent');  
-      } 
-    }        
+          color: themed('textColorAccent');
+      }
+    }
   }
   &--accent {
     @include themify($themes) {
-        color: themed('textColorAccent');  
+        color: themed('textColorAccent');
     }
     &:visited, &:active {
       @include themify($themes) {
-          color: themed('textColorAccent');  
-      } 
-    }    
+          color: themed('textColorAccent');
+      }
+    }
     &:hover, &:focus {
       @include themify($themes) {
-          color: themed('textColorAccentHover');  
-      } 
-    }            
+          color: themed('textColorAccentHover');
+      }
+    }
   }
 }
 
@@ -202,15 +205,15 @@ $themes: (
   transition: 0.2s all ease-in-out;
   box-shadow: 0px 0px 0px 0 rgba(0,0,0,0);
   @include themify($themes) {
-    border: themed('borderAccent');  
-    color: themed('textColorAccent');  
-  } 
+    border: themed('borderAccent');
+    color: themed('textColorAccent');
+  }
   &:hover {
     @include themify($themes) {
-      border: themed('borderDark');  
-      color: themed('textColorPrimary');  
-    }       
-  }     
+      border: themed('borderDark');
+      color: themed('textColorPrimary');
+    }
+  }
 }
 
 .e-btn {
@@ -221,30 +224,30 @@ $themes: (
   border-radius: 0;
   text-decoration: none;
   text-transform: capitalize;
-  @include font-size(18px);       
+  @include font-size(18px);
   @include themify($themes) {
-    background-color: themed('buttonBackground');  
-    box-shadow: 0px 0px 0px 0 rgba(0,0,0,0), 5px 5px 0 0 themed('buttonBoxShadow');   
+    background-color: themed('buttonBackground');
+    box-shadow: 0px 0px 0px 0 rgba(0,0,0,0), 5px 5px 0 0 themed('buttonBoxShadow');
     color: themed('buttonText');
   }
   &:hover, &:focus {
     @include themify($themes) {
-      background-color: themed('buttonBackgroundHover');  
-      box-shadow: 2px 2px 2px 0 rgba(0,0,0,0.1), 7px 7px 0 0 themed('buttonBoxShadowHover');   
+      background-color: themed('buttonBackgroundHover');
+      box-shadow: 2px 2px 2px 0 rgba(0,0,0,0.1), 7px 7px 0 0 themed('buttonBoxShadowHover');
       color: themed('buttonTextHover');
       text-shadow: themed('buttonTextShadow');
     }
   }
   &:visited, &:active {
     @include themify($themes) {
-      color: themed('buttonText');  
+      color: themed('buttonText');
     }
     &:hover, &:focus {
       @include themify($themes) {
-        color: themed('buttonTextHover');  
+        color: themed('buttonTextHover');
       }
-    } 
-  } 
+    }
+  }
 }
 
 .button.disabled, .button[disabled] {
@@ -252,37 +255,37 @@ $themes: (
   cursor: not-allowed;
   box-shadow: 0px 0px 0px 0 rgba(0,0,0,0);
     @include themify($themes) {
-      background-color: themed('buttonBackground');  
+      background-color: themed('buttonBackground');
       box-shadow: 0px 0px 0px 0 rgba(0,0,0,0);
       color: themed('buttonText');
-    }    
+    }
   &:hover {
     @include themify($themes) {
-      background-color: themed('buttonBackground');  
+      background-color: themed('buttonBackground');
       box-shadow: 0px 0px 0px 0 rgba(0,0,0,0);
       color: themed('buttonText');
-    }       
+    }
   }
 }
 
 // This button class doesn't applying theming (just straight styles). To be used when there are no theming classes available (e.g. in modals and static server pages in signup)
 
-.e-btn {  
+.e-btn {
   &--black {
     background-color: $color-blue-black;
-    box-shadow: 0px 0px 0px 0 rgba(0,0,0,0), 5px 5px 0 0 $color-teal;   
+    box-shadow: 0px 0px 0px 0 rgba(0,0,0,0), 5px 5px 0 0 $color-teal;
     color: $color-white;
     &:hover, &:focus {
       background-color: $color-teal;
-      box-shadow: 2px 2px 2px 0 rgba(0,0,0,0.1), 7px 7px 0 0 $color-blue-black;   
+      box-shadow: 2px 2px 2px 0 rgba(0,0,0,0.1), 7px 7px 0 0 $color-blue-black;
       color: $color-white;
       text-shadow: 0 1px 0 rgba(0,0,0,0.20);
     }
     &:visited, &:active {
       background-color: $color-blue-black;
-      box-shadow: 0px 0px 0px 0 rgba(0,0,0,0), 5px 5px 0 0 $color-teal;   
+      box-shadow: 0px 0px 0px 0 rgba(0,0,0,0), 5px 5px 0 0 $color-teal;
       color: $color-white;
-    } 
+    }
     &.disabled, &[disabled] {
       opacity: 0.25;
       cursor: not-allowed;
@@ -290,7 +293,7 @@ $themes: (
       &:hover, &:focus {
         box-shadow: 0px 0px 0px 0 rgba(0,0,0,0);
         background-color: $color-blue-black;
-        color: $color-white;      
+        color: $color-white;
       }
     }
     &.hollow {
@@ -304,7 +307,7 @@ $themes: (
         background-color: transparent;
         box-shadow: 0px 0px 0px 0 rgba(0,0,0,0);
         color: $color-blue-dark;
-        font-weight: normal;        
+        font-weight: normal;
         text-shadow: 0 1px 0 rgba(0,0,0,0.0);
       }
       &:visited, &:active {
@@ -312,7 +315,7 @@ $themes: (
         box-shadow: 0px 0px 0px 0 rgba(0,0,0,0);
         color: $color-text-gray;
         font-weight: normal;
-      }       
+      }
     }
   }
 }

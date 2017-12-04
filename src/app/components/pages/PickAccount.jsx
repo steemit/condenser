@@ -5,17 +5,21 @@ import {connect} from 'react-redux';
 import Progress from 'react-foundation-components/lib/global/progress-bar';
 import { Link } from 'react-router';
 import classNames from 'classnames';
-import {api} from 'steem';
-import user from 'app/redux/User';
+import {api} from '@steemit/steem-js';
+
+import * as userActions from 'app/redux/UserReducer';
 import {validate_account_name} from 'app/utils/ChainValidation';
 import runTests from 'app/utils/BrowserTests';
+import {PARAM_VIEW_MODE} from 'shared/constants';
+import {makeParams} from 'app/utils/Links';
+
 
 class PickAccount extends React.Component {
-
     static propTypes = {
         loginUser: React.PropTypes.func.isRequired,
         serverBusy: React.PropTypes.bool
     };
+
 
     constructor(props) {
         super(props);
@@ -48,8 +52,11 @@ class PickAccount extends React.Component {
         this.setState({server_error: '', loading: true});
         const {name} = this.state;
         if (!name) return;
-
-        window.location = "/enter_email?account=" + name;
+        const params = {account: name};
+        if(this.props.viewMode) {
+            params[PARAM_VIEW_MODE] = this.props.viewMode;
+        }
+        window.location = "/enter_email" + makeParams(params);
     }
 
     onPasswordChange(password, password_valid) {
@@ -213,7 +220,7 @@ class PickAccount extends React.Component {
                             <input disabled={submit_btn_disabled} type="submit" className={submit_btn_class} value="Continue" />
                         </form>
                         <br />
-                        <p className="secondary">Got an account? <Link to="/login.html">Login</Link></p>
+                        <p className="secondary whistle-hidden">Got an account? <Link to="/login.html">Login</Link></p>
                     </div>
                 </div>
             </div>
@@ -226,16 +233,17 @@ module.exports = {
     component: connect(
         state => {
             return {
+                viewMode: state.app.get('viewMode'),
                 loggedIn: !!state.user.get('current'),
                 offchainUser: state.offchain.get('user'),
                 serverBusy: state.offchain.get('serverBusy')
             }
         },
         dispatch => ({
-            loginUser: (username, password) => dispatch(user.actions.usernamePasswordLogin({username, password, saveLogin: true})),
+            loginUser: (username, password) => dispatch(userActions.usernamePasswordLogin({username, password, saveLogin: true})),
             logout: e => {
                 if (e) e.preventDefault();
-                dispatch(user.actions.logout())
+                dispatch(userActions.logout())
             }
         })
     )(PickAccount)

@@ -1,11 +1,14 @@
 /* eslint react/prop-types: 0 */
-import React from 'react'
-import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
-import LoadingIndicator from 'app/components/elements/LoadingIndicator'
-import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper'
-import transaction from 'app/redux/Transaction'
-import Memo from 'app/components/elements/Memo'
-import tt from 'counterpart'
+import React from 'react';
+import tt from 'counterpart';
+
+import * as transactionActions from 'app/redux/TransactionReducer';
+import * as globalActions from 'app/redux/GlobalReducer';
+import * as userActions from 'app/redux/UserReducer';
+import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
+import LoadingIndicator from 'app/components/elements/LoadingIndicator';
+import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
+import Memo from 'app/components/elements/Memo';
 
 class SavingsWithdrawHistory extends React.Component {
 
@@ -99,20 +102,15 @@ export default connect(
         }
     },
     dispatch => ({
-        loadHistory: () => {
-            dispatch({
-                type: 'user/LOAD_SAVINGS_WITHDRAW',
-                payload: {},
-            })
-        },
+        loadHistory: () => dispatch(userActions.loadSavingsWithdraw({})),
         cancelWithdraw: (fro, request_id, success, errorCallback) => {
             const confirm = tt('savingswithdrawhistory_jsx.cancel_this_withdraw_request')
             const successCallback = () => {
                 // refresh transfer history
-                dispatch({type: 'global/GET_STATE', payload: {url: `@${fro}/transfers`}})
+                dispatch(globalActions.getState({ url: `@${fro}/transfers` }));
                 success()
             }
-            dispatch(transaction.actions.broadcastOperation({
+            dispatch(transactionActions.broadcastOperation({
                 type: 'cancel_transfer_from_savings',
                 operation: {from: fro, request_id},
                 confirm,

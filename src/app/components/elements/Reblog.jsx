@@ -2,7 +2,7 @@ import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
 // import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
-import transaction from 'app/redux/Transaction';
+import * as transactionActions from 'app/redux/TransactionReducer';
 import Icon from 'app/components/elements/Icon';
 import tt from 'counterpart';
 
@@ -81,7 +81,7 @@ module.exports = connect(
     dispatch => ({
         reblog: (account, author, permlink, successCallback, errorCallback) => {
             const json = ['reblog', {account, author, permlink}]
-            dispatch(transaction.actions.broadcastOperation({
+            dispatch(transactionActions.broadcastOperation({
                 type: 'custom_json',
                 confirm: tt('g.are_you_sure'),
                 operation: {

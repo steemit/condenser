@@ -1,15 +1,18 @@
 .ctablock{
     position: fixed;
     bottom: 0;
+    left: 0;
     width: 100%;
     max-width: 100%;
     background-color: white;
     box-shadow: 0 0 10px rgba(0,0,0,0.5);
     border-radius: 5px;
     padding-top: 1rem;
+    z-index: 99;
 
     .row{
         max-width: 55rem;
+        margin: auto;
         .right{
             text-align: right;
         }
@@ -20,11 +23,12 @@
 
     .button{
         background-color: #4696E5;
-        margin-top: 0.9rem;
+        margin-top: 0.5rem;
+        border-radius: 8px;
     }
 
     .cta-block-text{
-        font-size: 1rem;
+        font-size: 0.8rem;
         margin-top: 0.5rem;
     }    
 }

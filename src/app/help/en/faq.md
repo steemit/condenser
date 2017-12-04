@@ -1268,7 +1268,7 @@ You can also create a post on Steemit.com with the tag #help, and someone in the
 
 <a href="#Table_of_Contents_Miscellaneous">^</a>
 
-# <span class="anchor" id="Disclaimer">Disclaimer</span>
+# <span id="Disclaimer">Disclaimer</span>
 
 ## <span id="Third_Party_References_and_User_Links">Third Party References and User Links</span>
 

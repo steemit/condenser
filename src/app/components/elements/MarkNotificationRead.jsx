@@ -1,6 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {markNotificationRead} from 'app/utils/ServerApiClient';
+import * as appActions from 'app/redux/AppReducer';
 
 class MarkNotificationRead extends React.Component {
 
@@ -27,5 +28,5 @@ class MarkNotificationRead extends React.Component {
 }
 
 export default connect(null, dispatch => ({
-    update: (payload) => { dispatch({type: 'UPDATE_NOTIFICOUNTERS', payload})},
+    update: (payload) => { dispatch(appActions.updateNotificounters(payload)) },
 }))(MarkNotificationRead);

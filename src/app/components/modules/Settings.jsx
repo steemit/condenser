@@ -1,8 +1,9 @@
 import React from 'react';
 import {connect} from 'react-redux'
-import user from 'app/redux/User';
 import tt from 'counterpart';
-import transaction from 'app/redux/Transaction'
+import * as userActions from 'app/redux/UserReducer';
+import * as transactionActions from 'app/redux/TransactionReducer';
+import * as appActions from 'app/redux/AppReducer';
 import o2j from 'shared/clash/object2json'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
 import reactForm from 'app/utils/ReactForm'
@@ -251,14 +252,14 @@ export default connect(
     // mapDispatchToProps
     dispatch => ({
         changeLanguage: (language) => {
-            dispatch(user.actions.changeLanguage(language))
+            dispatch(userActions.changeLanguage(language))
         },
         updateAccount: ({successCallback, errorCallback, ...operation}) => {
             const options = {type: 'account_update', operation, successCallback, errorCallback}
-            dispatch(transaction.actions.broadcastOperation(options))
+            dispatch(transactionActions.broadcastOperation(options))
         },
         setUserPreferences: (payload) => {
-            dispatch({type: 'SET_USER_PREFERENCES', payload})
+            dispatch(appActions.setUserPreferences(payload));
         }
     })
 )(Settings)

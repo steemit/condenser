@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Icon from 'app/components/elements/Icon';
 import { connect } from 'react-redux';
-import user from 'app/redux/User';
+import * as userActions from 'app/redux/UserReducer';
 import Reblog from 'app/components/elements/Reblog';
 import Voting from 'app/components/elements/Voting';
 import {immutableAccessor} from 'app/utils/Accessors';
@@ -271,7 +271,7 @@ export default connect(
     },
 
     (dispatch) => ({
-        dispatchSubmit: data => { dispatch(user.actions.usernamePasswordLogin({...data})) },
-        clearError: () => { dispatch(user.actions.loginError({error: null})) }
+        dispatchSubmit: data => { dispatch(userActions.usernamePasswordLogin({...data})) },
+        clearError: () => { dispatch(userActions.loginError({error: null})) }
     })
 )(PostSummary)

@@ -20,6 +20,16 @@ describe('htmlready', () => {
         expect(res).to.equal(dirty);
     });
 
+    it('should allow in-page links ', () => {
+        const dirty = '<xml xmlns="http://www.w3.org/1999/xhtml"><a href="#some-link" xmlns="http://www.w3.org/1999/xhtml">a link location</a></xml>';
+        const res = HtmlReady(dirty).html;
+        expect(res).to.equal(dirty);
+
+        const externalDomainDirty = '<xml xmlns="http://www.w3.org/1999/xhtml"><a href="https://anotherwebsite.com/apples#some-link" xmlns="http://www.w3.org/1999/xhtml">Another website\'s apple section</a></xml>';
+        const externalDomainResult = HtmlReady(externalDomainDirty).html;
+        expect(externalDomainResult).to.equal(externalDomainDirty);
+    });
+
     it('should not allow links where the text portion contains steemit.com but the link does not', () => {
         // There isn't an easy way to mock counterpart, even with proxyquire, so we just test for the missing translation message -- ugly but ok
 
@@ -37,6 +47,19 @@ describe('htmlready', () => {
         const cleansednoendingslash = '<xml xmlns="http://www.w3.org/1999/xhtml"><div title="missing translation: en.g.phishy_message" class="phishy">https://steemit.com / https://steamit.com</div></xml>';
         const resnoendingslash = HtmlReady(noendingslash).html;
         expect(resnoendingslash).to.equal(cleansednoendingslash);
+
+        //make sure extra-domain in-page links are also caught by our phishy link scan.
+        const domainInpage = '<xml xmlns="http://www.w3.org/1999/xhtml"><a href="https://steamit.com#really-evil-inpage-component" xmlns="http://www.w3.org/1999/xhtml">https://steemit.com</a></xml>';
+        const cleanDomainInpage = '<xml xmlns="http://www.w3.org/1999/xhtml"><div title="missing translation: en.g.phishy_message" class="phishy">https://steemit.com / https://steamit.com#really-evil-inpage-component</div></xml>';
+        const resDomainInpage = HtmlReady(domainInpage).html;
+        expect(resDomainInpage).to.equal(cleanDomainInpage);
+
+        //misleading in-page links should also be caught
+        const inpage = '<xml xmlns="http://www.w3.org/1999/xhtml"><a href="#https://steamit.com/unlikelyinpagelink" xmlns="http://www.w3.org/1999/xhtml">Go down lower for https://steemit.com info!</a></xml>';
+        const cleanInpage = '<xml xmlns="http://www.w3.org/1999/xhtml"><div title="missing translation: en.g.phishy_message" class="phishy">Go down lower for https://steemit.com info! / #https://steamit.com/unlikelyinpagelink</div></xml>';
+        const resinpage = HtmlReady(inpage).html;
+        expect(resinpage).to.equal(cleanInpage);
+
     });
 
     it('should allow more than one link per post', () => {

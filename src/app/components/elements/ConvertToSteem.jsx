@@ -2,7 +2,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom';
 import {reduxForm} from 'redux-form'; // @deprecated, instead use: app/utils/ReactForm.js
-import transaction from 'app/redux/Transaction'
+import * as transactionActions from 'app/redux/TransactionReducer';
+import * as appActions from 'app/redux/AppReducer';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import TransactionError from 'app/components/elements/TransactionError'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
@@ -103,17 +104,17 @@ export default reduxForm(
             const amount = [parseFloat(amt).toFixed(3), DEBT_TICKER].join(" ")
             const requestid = Math.floor(Date.now() / 1000)
             const conf = tt('postfull_jsx.in_week_convert_DEBT_TOKEN_to_LIQUID_TOKEN', { amount: amount.split(' ')[0], DEBT_TOKEN, LIQUID_TOKEN})
-            dispatch(transaction.actions.broadcastOperation({
+            dispatch(transactionActions.broadcastOperation({
                 type: 'convert',
                 operation: {owner, requestid, amount},
                 confirm: conf + '?',
                 successCallback: () => {
-                    success()
-                    dispatch({type: 'ADD_NOTIFICATION', payload:
-                        {key: "convert_sd_to_steem_" + Date.now(),
-                         message: tt('g.order_placed') + ': ' + conf,
-                         dismissAfter: 5000}
-                    })
+                    success();
+                    dispatch(appActions.addNotification({
+                        key: "convert_sd_to_steem_" + Date.now(),
+                        message: tt('g.order_placed') + ': ' + conf,
+                        dismissAfter: 5000,
+                    }));
                 },
                 errorCallback: () => {error()}
             }))

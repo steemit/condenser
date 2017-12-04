@@ -1,9 +1,12 @@
 import {fromJS} from 'immutable'
 import {call, put, select} from 'redux-saga/effects';
-import g from 'app/redux/GlobalReducer'
 import {takeEvery, takeLatest} from 'redux-saga';
 import tt from 'counterpart';
 import {api} from '@steemit/steem-js';
+
+import * as globalActions from './GlobalReducer'
+import * as appActions from './AppReducer';
+import * as transactionActions from './TransactionReducer';
 import {setUserPreferences} from 'app/utils/ServerApiClient';
 
 const wait = ms => (
@@ -20,23 +23,23 @@ export function* getAccount(username, force = false) {
         [account] = yield call([api, api.getAccountsAsync], [username])
         if(account) {
             account = fromJS(account)
-            yield put(g.actions.receiveAccount({account}))
+            yield put(globalActions.receiveAccount({account}))
         }
     }
     return account
 }
 
 export function* watchGetState() {
-    yield* takeEvery('global/GET_STATE', getState);
+    yield* takeEvery(globalActions.GET_STATE, getState);
 }
 /** Manual refreshes.  The router is in FetchDataSaga. */
 export function* getState({payload: {url}}) {
     try {
         const state = yield call([api, api.getStateAsync], url)
-        yield put(g.actions.receiveState(state));
+        yield put(globalActions.receiveState(state));
     } catch (error) {
         console.error('~~ Saga getState error ~~>', url, error);
-        yield put({type: 'global/STEEM_API_ERROR', error: error.message});
+        yield put(appActions.steemApiError(error.message));
     }
 }
 
@@ -47,8 +50,8 @@ export function* watchTransactionErrors() {
 function* showTransactionErrorNotification() {
     const errors = yield select(state => state.transaction.get('errors'));
     for (const [key, message] of errors) {
-        yield put({type: 'ADD_NOTIFICATION', payload: {key, message}});
-        yield put({type: 'transaction/DELETE_ERROR', payload: {key}});
+        yield put(appActions.addNotification({key, message}));
+        yield put(transactionActions.deleteError({ key }));
     }
 }
 
@@ -62,7 +65,7 @@ export function* getContent({author, permlink, resolve, reject}) {
         }
     }
 
-    yield put(g.actions.receiveContent({content}))
+    yield put(globalActions.receiveContent({content}))
     if (resolve && content) {
         resolve(content);
     } else if (reject && !content) {
@@ -85,5 +88,5 @@ function* saveUserPreferences({payload}) {
 }
 
 function* watchUserSettingsUpdates() {
-    yield* takeLatest(['SET_USER_PREFERENCES', 'TOGGLE_NIGHTMODE', 'TOGGLE_BLOGMODE'], saveUserPreferences);
+    yield* takeLatest([appActions.SET_USER_PREFERENCES, appActions.TOGGLE_NIGHTMODE, appActions.TOGGLE_BLOGMODE], saveUserPreferences);
 }

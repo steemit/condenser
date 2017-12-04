@@ -2,6 +2,8 @@ import {fromJS, Map, Set} from 'immutable'
 import {call, put, select} from 'redux-saga/effects';
 import {api} from '@steemit/steem-js';
 
+import * as globalActions from 'app/redux/GlobalReducer';
+
 /**
     This loadFollows both 'blog' and 'ignore'
 */
@@ -9,14 +11,12 @@ import {api} from '@steemit/steem-js';
 //fetch for follow/following count
 export function* fetchFollowCount(account) {
     const counts = yield call([api, api.getFollowCountAsync], account)
-    yield put({
-        type: 'global/UPDATE',
-        payload: {
-            key: ['follow_count', account],
-            updater: m => m.mergeDeep({
-                follower_count: counts.follower_count,
-                following_count: counts.following_count})
-    }})
+    yield put(globalActions.update({
+        key: ['follow_count', account],
+        updater: m => m.mergeDeep({
+            follower_count: counts.follower_count,
+            following_count: counts.following_count})
+    }));
 }
 
 // Test limit with 2 (not 1, infinate looping)
@@ -34,13 +34,11 @@ export function* loadFollows(method, account, type, force = false) {
         }
     }
 
-    yield put({
-        type: 'global/UPDATE',
-        payload: {
-            key: ['follow', method, account],
-            notSet: Map(),
-            updater: m => m.set(type + '_loading', true),
-    }})
+    yield put(globalActions.update({
+        key: ['follow', method, account],
+        notSet: Map(),
+        updater: m => m.set(type + '_loading', true),
+    }));
 
     yield loadFollowsLoop(method, account, type)
 }
@@ -53,7 +51,7 @@ function* loadFollowsLoop(method, account, type, start = '', limit = 100) {
     let cnt = 0
     let lastAccountName = null
 
-    yield put({type: 'global/UPDATE', payload: {
+    yield put(globalActions.update({
         key: ['follow_inprogress', method, account],
         notSet: Map(),
         updater: (m) => {
@@ -71,7 +69,7 @@ function* loadFollowsLoop(method, account, type, start = '', limit = 100) {
             })
             return m.asImmutable()
         }
-    }})
+    }))
 
     if(cnt === limit) {
         // This is paging each block of up to limit results
@@ -79,7 +77,7 @@ function* loadFollowsLoop(method, account, type, start = '', limit = 100) {
     } else {
         // This condition happens only once at the very end of the list.
         // Every account has a different followers and following list for: blog, ignore
-        yield put({type: 'global/UPDATE', payload: {
+        yield put(globalActions.update({
             key: [],
             updater: (m) => {
                 m = m.asMutable()
@@ -94,6 +92,6 @@ function* loadFollowsLoop(method, account, type, start = '', limit = 100) {
                 }))
                 return m.asImmutable()
             }
-        }})
+        }));
     }
 }

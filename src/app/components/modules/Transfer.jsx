@@ -2,8 +2,9 @@ import React, { PropTypes, Component } from 'react';
 import ReactDOM from 'react-dom';
 import reactForm from 'app/utils/ReactForm';
 import {Map} from 'immutable';
-import transaction from 'app/redux/Transaction';
-import user from 'app/redux/User';
+import * as transactionActions from 'app/redux/TransactionReducer';
+import * as userActions from 'app/redux/UserReducer';
+import * as globalActions from 'app/redux/GlobalReducer';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import runTests, {browserTests} from 'app/utils/BrowserTests'
 import {validate_account_name, validate_memo_field} from 'app/utils/ChainValidation';
@@ -293,11 +294,11 @@ export default connect(
             const username = currentUser.get('username');
             const successCallback = () => {
                 // refresh transfer history
-                dispatch({type: 'global/GET_STATE', payload: {url: `@${username}/transfers`}});
+                dispatch(globalActions.getState({ url: `@${username}/transfers` }));
                 if(/Savings Withdraw/.test(transferType)) {
-                    dispatch({type: 'user/LOAD_SAVINGS_WITHDRAW', payload: {}})
+                    dispatch(userActions.loadSavingsWithdraw({}));
                 }
-                dispatch(user.actions.hideTransfer())
+                dispatch(userActions.hideTransfer())
             };
             const asset2 = toVesting ? 'STEEM' : asset;
             const operation = {
@@ -309,7 +310,7 @@ export default connect(
             if(transferType === 'Savings Withdraw')
                 operation.request_id = Math.floor((Date.now() / 1000) % 4294967295);
 
-            dispatch(transaction.actions.broadcastOperation({
+            dispatch(transactionActions.broadcastOperation({
                 type: toVesting ? 'transfer_to_vesting' : (
                     transferType === 'Transfer to Account' ? 'transfer' :
                     transferType === 'Transfer to Savings' ? 'transfer_to_savings' :

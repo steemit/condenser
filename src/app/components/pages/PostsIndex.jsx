@@ -1,20 +1,21 @@
 /* eslint react/prop-types: 0 */
 import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
+import {Link} from 'react-router';
+import tt from 'counterpart';
+import { List } from 'immutable';
+import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
 import constants from 'app/redux/constants';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import PostsList from 'app/components/cards/PostsList';
 import {isFetchingOrRecentlyUpdated} from 'app/utils/StateFunctions';
-import {Link} from 'react-router';
 import MarkNotificationRead from 'app/components/elements/MarkNotificationRead';
-import tt from 'counterpart';
-import Immutable from "immutable";
 import Callout from 'app/components/elements/Callout';
 // import SidebarStats from 'app/components/elements/SidebarStats';
 import SidebarLinks from 'app/components/elements/SidebarLinks';
 import SidebarNewUsers from 'app/components/elements/SidebarNewUsers';
-import Topics from './Topics';
 import ArticleLayoutSelector from 'app/components/modules/ArticleLayoutSelector';
+import Topics from './Topics';
 
 class PostsIndex extends React.Component {
 
@@ -155,7 +156,7 @@ class PostsIndex extends React.Component {
                     {(!fetching && (posts && !posts.size)) ? <Callout>{emptyText}</Callout> :
                         <PostsList
                             ref="list"
-                            posts={posts ? posts : Immutable.List()}
+                            posts={posts ? posts : List()}
                             loading={fetching}
                             category={category}
                             loadMore={this.loadMore}
@@ -197,7 +198,7 @@ module.exports = {
         },
         (dispatch) => {
             return {
-                requestData: (args) => dispatch({type: 'REQUEST_DATA', payload: args}),
+                requestData: args => dispatch(fetchDataSagaActions.requestData(args)),
             }
         }
     )(PostsIndex)

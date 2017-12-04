@@ -2,7 +2,7 @@ import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import tt from 'counterpart';
-import {memo} from 'steem';
+import {memo} from '@steemit/steem-js';
 
 class Memo extends React.Component {
     static propTypes = {

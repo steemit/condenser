@@ -76,8 +76,7 @@ class TransferHistoryRow extends React.Component {
             // other_account = ``;
             description_end = '';
         } else if (type === 'claim_reward_balance') {
-
-            let rewards = [];
+            const rewards = [];
             if(parseFloat(data.reward_steem.split(' ')[0]) > 0) rewards.push(data.reward_steem);
             if(parseFloat(data.reward_sbd.split(' ')[0]) > 0) rewards.push(data.reward_sbd);
             if(parseFloat(data.reward_vests.split(' ')[0]) > 0) rewards.push(`${reward_vests} STEEM POWER`);
@@ -119,19 +118,19 @@ class TransferHistoryRow extends React.Component {
         }
         // <Icon name="clock" className="space-right" />
         return(
-            <tr key={op[0]} className="Trans">
-                <td>
-                    <TimeAgoWrapper date={op[1].timestamp} />
-                </td>
-                <td className="TransferHistoryRow__text" style={{maxWidth: "40rem"}}>
-                    {description_start}
-                    {other_account && <Link to={`/@${other_account}`}>{other_account}</Link>}
-                    {description_end}
-                </td>
-                <td className="show-for-medium" style={{maxWidth: "40rem", wordWrap: "break-word"}}>
-                    <Memo text={data.memo} username={context} />
-                </td>
-            </tr>
+          <tr key={op[0]} className="Trans">
+            <td>
+              <TimeAgoWrapper date={op[1].timestamp} />
+            </td>
+            <td className="TransferHistoryRow__text" style={{maxWidth: "40rem"}}>
+              {description_start}
+              {other_account && <Link to={`/@${other_account}`}>{other_account}</Link>}
+              {description_end}
+            </td>
+            <td className="show-for-medium" style={{maxWidth: "40rem", wordWrap: "break-word"}}>
+              <Memo text={data.memo} username={context} />
+            </td>
+          </tr>
         );
     }
 }

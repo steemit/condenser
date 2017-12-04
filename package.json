@@ -14,6 +14,7 @@
     "test:watch:all": "npm test -- --watch --watch-extensions jsx",
     "test:watch": "npm run mocha -- --watch --watch-extensions jsx",
     "eslint": "LIST=`git diff-index --name-only HEAD | grep .*\\.js | grep -v json`; if [ \"$LIST\" ]; then eslint $LIST; fi",
+    "fmt": "prettier --config .prettierrc --write src",
     "production": "NODE_ENV=production node lib/server/index.js",
     "start": "NODE_ENV=development ./node_modules/babel-cli/bin/babel-node.js ./webpack/dev-server.js",
     "webpush": "./node_modules/babel-cli/bin/babel-node.js ./scripts/webpush_notify.js",
@@ -23,6 +24,7 @@
   "license": "MIT",
   "dependencies": {
     "@steem/crypto-session": "git+https://github.com/steemit/crypto-session.git#83a90b319ce5bc6a70362d52a15a815de7e729bb",
+    "@steemit/steem-js": "0.6.7",
     "assert": "^1.3.0",
     "autoprefixer-loader": "^3.2.0",
     "babel-cli": "^6.22.2",
@@ -112,12 +114,11 @@
     "react-redux": "^5.0.6",
     "react-router": "^3.0.5",
     "react-router-redux": "^4.0.0",
-    "react-router-scroll": "^0.4.2",
+    "react-router-scroll": "^0.4.4",
     "react-rte-image": "^0.3.1",
     "react-timeago": "^3.1.2",
     "redux": "^3.3.1",
     "redux-form": "5.3.4",
-    "redux-modules": "0.0.5",
     "redux-saga": "^0.9.5",
     "remarkable": "^1.7.1",
     "sanitize-html": "^1.11.4",
@@ -128,7 +129,6 @@
     "sequelize-cli": "^2.3.1",
     "speakingurl": "^9.0.0",
     "sqlite3": "^3.1.8",
-    "steem": "github:steemit/steem-js#72a36c835a74f446da47e36feea5d5f1f4dde55b",
     "store": "^1.3.20",
     "style-loader": "^0.18.2",
     "svg-inline-loader": "^0.8.0",
@@ -170,6 +170,7 @@
     "mocha": "^2.4.5",
     "node-watch": "^0.5.5",
     "pre-commit": "^1.2.2",
+    "prettier": "1.8.2",
     "react-addons-perf": "15.4.2",
     "react-addons-test-utils": "15.4.2",
     "react-transform-catch-errors": "^1.0.1",
@@ -183,11 +184,7 @@
     "fsevents": "*"
   },
   "engines": {
-    "node": ">=7.0.0",
+    "node": ">=8.7.0",
     "npm": ">=5.4.2"
-  },
-  "pre-commit": [
-    "eslint",
-    "checktranslations"
-  ]
+  }
 }

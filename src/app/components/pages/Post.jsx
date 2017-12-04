@@ -9,10 +9,11 @@ import {sortComments} from 'app/components/cards/Comment';
 import FoundationDropdownMenu from 'app/components/elements/FoundationDropdownMenu';
 import {Set} from 'immutable'
 import tt from 'counterpart';
-import { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import { INVEST_TOKEN_UPPERCASE } from 'app/client_config';
+
+import { isLoggedIn } from 'app/utils/UserUtil';
 
 class Post extends React.Component {
 
@@ -21,8 +22,7 @@ class Post extends React.Component {
         post: React.PropTypes.string,
         routeParams: React.PropTypes.object,
         location: React.PropTypes.object,
-        signup_bonus: React.PropTypes.string,
-        current_user: React.PropTypes.object,
+        signup_bonus: React.PropTypes.string
     };
     constructor() {
         super();
@@ -34,13 +34,6 @@ class Post extends React.Component {
             window.location = '/pick_account';
         };
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'Post')
-    }
-
-    componentDidMount() {
-        if (window.location.hash.indexOf('comments') !== -1) {
-            const comments_el = document.getElementById('comments');
-            if (comments_el) comments_el.scrollIntoView();
-        }
     }
 
     toggleNegativeReplies = (e) => {
@@ -60,7 +53,7 @@ class Post extends React.Component {
 
     render() {
         const {showSignUp} = this
-        const {current_user, signup_bonus, content} = this.props
+        const {signup_bonus, content} = this.props
         const {showNegativeComments, commentHidden, showAnyway} = this.state
         let post = this.props.post;
         if (!post) {
@@ -169,17 +162,17 @@ class Post extends React.Component {
                         <PostFull post={post} cont={content} />
                     </div>
                 </div>
-                {!current_user && <div className="row">
+                {!isLoggedIn() && <div className="row">
                     <div className="column">
                         <div className="Post__promo">
                             {tt('g.next_7_strings_single_block.authors_get_paid_when_people_like_you_upvote_their_post')}.
-                            <br />{tt('g.next_7_strings_single_block.if_you_enjoyed_what_you_read_earn_amount', {amount: '$'+localizedCurrency(signup_bonus.substring(1)), INVEST_TOKEN_UPPERCASE})}
+                            <br />{tt('g.next_7_strings_single_block.if_you_enjoyed_what_you_read_earn_amount', {amount: '$'+signup_bonus.substring(1), INVEST_TOKEN_UPPERCASE})}
                             <br />
                             <button type="button" className="button e-btn" onClick={showSignUp}>{tt('loginform_jsx.sign_up_get_steem')}</button>
                         </div>
                     </div>
                 </div>}
-                <div id="comments" className="Post_comments row hfeed">
+                <div id="#comments" className="Post_comments row hfeed">
                     <div className="column large-12">
                         <div className="Post_comments__content">
                             {positiveComments.length ?
@@ -209,8 +202,7 @@ export default connect(state => {
     return {
         content: state.global.get('content'),
         signup_bonus: state.offchain.get('signup_bonus'),
-        current_user,
-        ignoring,
+        ignoring
     }
 }
 )(Post);

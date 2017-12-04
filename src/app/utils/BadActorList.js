@@ -24,9 +24,13 @@ bitrrex
 bttrex
 btrex
 bttrex
+bitttex
 ittrex
 bittrex-deposit
 openledgerdex
+blockrades
+blocktraades
+blocktradse
 poloiex
 poloinex
 polomiex
@@ -79,8 +83,13 @@ polnoiex
 polonyex
 polonied
 polonixe
+blockrade
 blocktardes
 blocktrade
+blocktradees
+blocktraded
+blocktrader
+blocktrads
 bocktrades
 changelly.com
 changely
@@ -88,15 +97,21 @@ shapeshif
 shapeshift
 randomwhale
 randowale
+randwhale
+bellyrub
 coinpayments
 minnowboost
 minnowboster
 minowbooster
+minnowbooste
+minnowboooster
+minnnowbooster
 blocktades
 bloocktrades
 bloctrades
 blocktradess
 blocktrade
+blocktraders
 `.trim().split('\n');
 
 export default list;

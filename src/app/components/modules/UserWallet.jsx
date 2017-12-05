@@ -2,7 +2,8 @@
 import React from 'react';
 import {connect} from 'react-redux'
 import {Link} from 'react-router'
-import g from 'app/redux/GlobalReducer'
+import tt from 'counterpart';
+import {List} from 'immutable';
 import SavingsWithdrawHistory from 'app/components/elements/SavingsWithdrawHistory';
 import TransferHistoryRow from 'app/components/cards/TransferHistoryRow';
 import TransactionError from 'app/components/elements/TransactionError';
@@ -13,10 +14,9 @@ import WalletSubMenu from 'app/components/elements/WalletSubMenu'
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import Tooltip from 'app/components/elements/Tooltip'
 import {FormattedHTMLMessage} from 'app/Translator';
-import tt from 'counterpart';
-import {List} from 'immutable'
 import { LIQUID_TOKEN, LIQUID_TICKER, DEBT_TOKENS, VESTING_TOKEN } from 'app/client_config';
-import transaction from 'app/redux/Transaction';
+import * as transactionActions from 'app/redux/TransactionReducer';
+import * as globalActions from 'app/redux/GlobalReducer';
 
 const assetPrecision = 1000;
 
@@ -422,7 +422,7 @@ export default connect(
         claimRewards: (account) => {
             const username = account.get('name')
             const successCallback = () => {
-                dispatch({type: 'global/GET_STATE', payload: {url: `@${username}/transfers`}})
+                dispatch(globalActions.getState({ url: `@${username}/transfers` }));
             };
 
             const operation = {
@@ -432,7 +432,7 @@ export default connect(
                 reward_vests: account.get('reward_vesting_balance')
             };
 
-            dispatch(transaction.actions.broadcastOperation({
+            dispatch(transactionActions.broadcastOperation({
                 type: 'claim_reward_balance',
                 operation,
                 successCallback,
@@ -441,12 +441,12 @@ export default connect(
         convertToSteem: (e) => {
             e.preventDefault()
             const name = 'convertToSteem';
-            dispatch(g.actions.showDialog({name}))
+            dispatch(globalActions.showDialog({name}))
         },
         showChangePassword: (username) => {
             const name = 'changePassword';
-            dispatch(g.actions.remove({key: name}));
-            dispatch(g.actions.showDialog({name, params: {username}}))
+            dispatch(globalActions.remove({key: name}));
+            dispatch(globalActions.showDialog({name, params: {username}}))
         },
     })
 )(UserWallet)

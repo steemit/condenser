@@ -1,7 +1,8 @@
 import React, { PropTypes, Component } from 'react';
 import {connect} from 'react-redux';
 import ReactDOM from 'react-dom';
-import transaction from 'app/redux/Transaction';
+import * as transactionActions from 'app/redux/TransactionReducer';
+import * as globalActions from 'app/redux/GlobalReducer';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import { DEBT_TOKEN, DEBT_TOKEN_SHORT, CURRENCY_SIGN, DEBT_TICKER} from 'app/client_config';
 import tt from 'counterpart';
@@ -113,7 +114,7 @@ export default connect(
         dispatchSubmit: ({amount, asset, author, permlink, currentUser, onClose, errorCallback}) => {
             const username = currentUser.get('username');
             const successCallback = () => {
-                dispatch({type: 'global/GET_STATE', payload: {url: `@${username}/transfers`}}); // refresh transfer history
+                dispatch(globalActions.getState({ url: `@${username}/transfers` })); // refresh transfer history
                 onClose()
             }
             const operation = {
@@ -122,7 +123,7 @@ export default connect(
                 memo: `@${author}/${permlink}`,
                 __config: {successMessage: tt('promote_post_jsx.you_successfully_promoted_this_post') + '.'}
             }
-            dispatch(transaction.actions.broadcastOperation({
+            dispatch(transactionActions.broadcastOperation({
                 type: 'transfer',
                 operation,
                 successCallback,

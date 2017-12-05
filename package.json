@@ -14,7 +14,7 @@
     "test:watch:all": "npm test -- --watch --watch-extensions jsx",
     "test:watch": "npm run mocha -- --watch --watch-extensions jsx",
     "eslint": "LIST=`git diff-index --name-only HEAD | grep .*\\.js | grep -v json`; if [ \"$LIST\" ]; then eslint $LIST; fi",
-    "fmt": "prettier --config .prettierrc --write src",
+    "fmt": "prettier --config .prettierrc --write 'src/**/*.js*'",
     "production": "NODE_ENV=production node lib/server/index.js",
     "start": "NODE_ENV=development ./node_modules/babel-cli/bin/babel-node.js ./webpack/dev-server.js",
     "webpush": "./node_modules/babel-cli/bin/babel-node.js ./scripts/webpush_notify.js",

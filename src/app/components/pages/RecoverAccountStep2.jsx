@@ -1,12 +1,15 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import GeneratedPasswordInput from 'app/components/elements/GeneratedPasswordInput';
-import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import tt from 'counterpart';
-import Callout from 'app/components/elements/Callout';
 import {PrivateKey} from '@steemit/steem-js/lib/auth/ecc';
 import {api} from '@steemit/steem-js';
 import {pathTo} from 'app/Routes';
+
+import * as userActions from 'app/redux/UserReducer';
+import * as transactionActions from 'app/redux/TransactionReducer';
+import GeneratedPasswordInput from 'app/components/elements/GeneratedPasswordInput';
+import LoadingIndicator from 'app/components/elements/LoadingIndicator';
+import Callout from 'app/components/elements/Callout';
 
 function passwordToOwnerPubKey(account_name, password) {
     let pub_key;
@@ -190,10 +193,8 @@ module.exports = {
             recoverAccount: (
                 account_to_recover, old_password, new_password, onError, onSuccess
             ) => {
-                dispatch({type: 'transaction/RECOVER_ACCOUNT',
-                    payload: {account_to_recover, old_password, new_password, onError, onSuccess}
-                })
-                dispatch({type: 'user/LOGOUT'})
+                dispatch(transactionActions.recoverAccount({ account_to_recover, old_password, new_password, onError, onSuccess }));
+                dispatch(userActions.logout());
             },
         })
     )(RecoverAccountStep2)

@@ -3,8 +3,9 @@ import { Link } from 'react-router';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Icon from 'app/components/elements/Icon';
 import { connect } from 'react-redux';
-import user from 'app/redux/User';
-import transaction from 'app/redux/Transaction'
+import * as userActions from 'app/redux/UserReducer';
+import * as transactionActions from 'app/redux/TransactionReducer';
+import * as globalActions from 'app/redux/GlobalReducer';
 import Voting from 'app/components/elements/Voting';
 import Reblog from 'app/components/elements/Reblog';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer';
@@ -373,21 +374,21 @@ export default connect(
 
     // mapDispatchToProps
     dispatch => ({
-        dispatchSubmit: (data) => { dispatch(user.actions.usernamePasswordLogin({...data})) },
-        clearError: () => { dispatch(user.actions.loginError({error: null})) },
-        unlock: () => { dispatch(user.actions.showLogin()) },
+        dispatchSubmit: (data) => { dispatch(userActions.usernamePasswordLogin({...data})) },
+        clearError: () => { dispatch(userActions.loginError({error: null})) },
+        unlock: () => { dispatch(userActions.showLogin()) },
         deletePost: (author, permlink) => {
-            dispatch(transaction.actions.broadcastOperation({
+            dispatch(transactionActions.broadcastOperation({
                 type: 'delete_comment',
                 operation: {author, permlink},
                 confirm: tt('g.are_you_sure')
             }));
         },
         showPromotePost: (author, permlink) => {
-            dispatch({type: 'global/SHOW_DIALOG', payload: {name: 'promotePost', params: {author, permlink}}});
+            dispatch(globalActions.showDialog({ name: 'promotePost', params: { author, permlink } }));
         },
         showExplorePost: (permlink) => {
-            dispatch({type: 'global/SHOW_DIALOG', payload: {name: 'explorePost', params: {permlink}}});
+            dispatch(globalActions.showDialog({ name: 'explorePost', params: { permlink } }));
         },
     })
 )(PostFull)

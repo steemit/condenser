@@ -1,8 +1,8 @@
 import { call, put, select } from 'redux-saga/effects';
-import GlobalReducer from './GlobalReducer';
+import {api} from '@steemit/steem-js';
+import * as appActions from 'app/redux/AppReducer';
 import {getNotifications, webPushRegister} from 'app/utils/ServerApiClient';
 import registerServiceWorker from 'app/utils/RegisterServiceWorker';
-import {api} from '@steemit/steem-js';
 
 const wait = ms => (
     new Promise(resolve => {
@@ -28,14 +28,11 @@ function* pollData() {
                 }
             }
             const nc = yield call(getNotifications, username, webpush_params);
-            yield put({type: 'UPDATE_NOTIFICOUNTERS', payload: nc});
+            yield put(appActions.updateNotificounters(nc));
         }
 
         try {
-            const data = yield call([api, api.getDynamicGlobalPropertiesAsync]);
-            // console.log('-- pollData.pollData -->', data);
-            // const data = yield call([api, api.getDiscussionsByCreatedAsync], {limit: 10});
-            // yield put(GlobalReducer.actions.receiveRecentPosts({data}));
+            yield call([api, api.getDynamicGlobalPropertiesAsync]);
         } catch (error) {
             console.error('~~ pollData saga error ~~>', error);
         }

@@ -1,17 +1,21 @@
 import {takeEvery} from 'redux-saga';
 import {call, put, select} from 'redux-saga/effects';
 import {fromJS, Set, Map} from 'immutable'
-import {getAccount, getContent} from 'app/redux/SagaShared'
-import {findSigningKey} from 'app/redux/AuthSaga'
-import g from 'app/redux/GlobalReducer'
-import user from 'app/redux/User'
-import tr from 'app/redux/Transaction'
-import tt from 'counterpart'
-import getSlug from 'speakingurl'
-import {DEBT_TICKER} from 'app/client_config'
-import {serverApiRecordEvent} from 'app/utils/ServerApiClient'
+import tt from 'counterpart';
+import getSlug from 'speakingurl';
+import base58 from 'bs58';
+import secureRandom from 'secure-random';
 import {PrivateKey, PublicKey} from '@steemit/steem-js/lib/auth/ecc';
 import {api, broadcast, auth, memo} from '@steemit/steem-js';
+
+import {getAccount, getContent} from 'app/redux/SagaShared';
+import {findSigningKey} from 'app/redux/AuthSaga'
+import * as appActions from 'app/redux/AppReducer';
+import * as globalActions from 'app/redux/GlobalReducer';
+import * as transactionActions from 'app/redux/TransactionReducer';
+import * as userActions from 'app/redux/UserReducer';
+import {DEBT_TICKER} from 'app/client_config';
+import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 
 export const transactionWatches = [
     watchForBroadcast,
@@ -21,16 +25,16 @@ export const transactionWatches = [
 ]
 
 export function* watchForBroadcast() {
-    yield* takeEvery('transaction/BROADCAST_OPERATION', broadcastOperation);
+    yield* takeEvery(transactionActions.BROADCAST_OPERATION, broadcastOperation);
 }
 export function* watchForUpdateAuthorities() {
-    yield* takeEvery('transaction/UPDATE_AUTHORITIES', updateAuthorities);
+    yield* takeEvery(transactionActions.UPDATE_AUTHORITIES, updateAuthorities);
 }
 export function* watchForUpdateMeta() {
-    yield* takeEvery('transaction/UPDATE_META', updateMeta);
+    yield* takeEvery(transactionActions.UPDATE_META, updateMeta);
 }
 export function* watchForRecoverAccount() {
-    yield* takeEvery('transaction/RECOVER_ACCOUNT', recoverAccount);
+    yield* takeEvery(transactionActions.RECOVER_ACCOUNT, recoverAccount);
 }
 
 const hook = {
@@ -75,14 +79,14 @@ function* preBroadcast_vote({operation, username}) {
     if (!operation.voter) operation.voter = username
     const {voter, author, permlink, weight} = operation
     // give immediate feedback
-    yield put(g.actions.set({key: `transaction_vote_active_${author}_${permlink}`, value: true}))
-    yield put(g.actions.voted({username: voter, author, permlink, weight}))
+    yield put(globalActions.set({key: `transaction_vote_active_${author}_${permlink}`, value: true}));
+    yield put(globalActions.voted({username: voter, author, permlink, weight}));
     return operation
 }
 function* preBroadcast_account_witness_vote({operation, username}) {
     if (!operation.account) operation.account = username
     const {account, witness, approve} = operation
-    yield put(g.actions.updateAccountWitnessVote({account, witness, approve}))
+    yield put(globalActions.updateAccountWitnessVote({account, witness, approve}));
     return operation
 }
 
@@ -92,7 +96,7 @@ function* preBroadcast_custom_json({operation}) {
         try {
             if(json[0] === 'follow') {
                 const {follower, following, what: [action]} = json[1]
-                yield put(g.actions.update({
+                yield put(globalActions.update({
                     key: ['follow', 'getFollowingAsync', follower],
                     notSet: Map(),
                     updater: m => {
@@ -111,7 +115,7 @@ function* preBroadcast_custom_json({operation}) {
                         m = m.set('ignore_count', m.get('ignore_result', Set()).size)
                         return m//.asImmutable()
                     }
-                }))
+                }));
             }
         } catch(e) {
             console.error('TransactionSaga unrecognized follow custom_json format', operation.json);
@@ -121,7 +125,7 @@ function* preBroadcast_custom_json({operation}) {
 }
 
 function* error_account_witness_vote({operation: {account, witness, approve}}) {
-    yield put(g.actions.updateAccountWitnessVote({account, witness, approve: !approve}))
+    yield put(globalActions.updateAccountWitnessVote({account, witness, approve: !approve}));
 }
 
 /** Keys, username, and password are not needed for the initial call.  This will check the login and may trigger an action to prompt for the password / key. */
@@ -132,7 +136,7 @@ function* broadcastOperation({payload:
 
     const conf = typeof confirm === 'function' ? confirm() : confirm
     if(conf) {
-        yield put(tr.actions.confirmOperation({confirm, warning, operation: operationParam, errorCallback}))
+        yield put(transactionActions.confirmOperation({ confirm, warning, operation: operationParam, errorCallback }));
         return
     }
     const payload = {operations: [[type, operation]], keys, username, successCallback, errorCallback}
@@ -141,7 +145,7 @@ function* broadcastOperation({payload:
         const warning = tt('g.post_key_warning.warning')
         const checkbox = tt('g.post_key_warning.checkbox')
         operationParam.allowPostUnsafe = true
-        yield put(tr.actions.confirmOperation({confirm, warning, checkbox, operation: operationParam, errorCallback}))
+        yield put(transactionActions.confirmOperation({ confirm, warning, checkbox, operation: operationParam, errorCallback }));
         return
     }
     try {
@@ -153,7 +157,7 @@ function* broadcastOperation({payload:
                 payload.keys.push(signingKey)
             else {
                 if (!password) {
-                    yield put(user.actions.showLogin({operation: {type, operation, username, successCallback, errorCallback, saveLogin: true}}))
+                    yield put(userActions.showLogin({ operation: { type, operation, username, successCallback, errorCallback, saveLogin: true } }));
                     return
                 }
             }
@@ -190,7 +194,7 @@ function* broadcastPayload({payload: {operations, keys, username, successCallbac
     // console.log('broadcastPayload')
     if ($STM_Config.read_only_mode) return;
     for (const [type] of operations) // see also transaction/ERROR
-        yield put(tr.actions.remove({key: ['TransactionError', type]}))
+        yield put(transactionActions.remove({ key: ['TransactionError', type] }));
 
     {
         const newOps = []
@@ -257,18 +261,18 @@ function* broadcastPayload({payload: {operations, keys, username, successCallbac
             }
             const config = operation.__config
             if (config && config.successMessage) {
-                yield put({type: 'ADD_NOTIFICATION', payload: {
+                yield put(appActions.addNotification({
                     key: "trx_" + Date.now(),
                     message: config.successMessage,
-                    dismissAfter: 5000
-                }})
+                    dismissAfter: 5000,
+                }));
             }
         }
         if (successCallback) try { successCallback() } catch (error) { console.error(error) }
     } catch (error) {
         console.error('TransactionSaga\tbroadcastPayload', error);
         // status: error
-        yield put(tr.actions.error({operations, error, errorCallback}));
+        yield put(transactionActions.error({ operations, error, errorCallback }));
         for (const [type, operation] of operations) {
             if (hook['error_' + type]) {
                 try {
@@ -286,31 +290,31 @@ function* accepted_comment({operation}) {
     // update again with new $$ amount from the steemd node
     yield call(getContent, {author, permlink})
     // receiveComment did the linking already (but that is commented out)
-    yield put(g.actions.linkReply(operation))
+    yield put(globalActions.linkReply(operation));
     // mark the time (can only post 1 per min)
     // yield put(user.actions.acceptedComment())
 }
 function* accepted_delete_comment({operation}) {
-    yield put(g.actions.deleteContent(operation))
+    yield put(globalActions.deleteContent(operation));
 }
 
 function* accepted_vote({operation: {author, permlink, weight}}) {
     console.log('Vote accepted, weight', weight, 'on', author + '/' + permlink, 'weight');
     // update again with new $$ amount from the steemd node
-    yield put(g.actions.remove({key: `transaction_vote_active_${author}_${permlink}`}))
+    yield put(globalActions.remove({ key: `transaction_vote_active_${author}_${permlink}` }));
     yield call(getContent, {author, permlink})
 }
 
 function* accepted_withdraw_vesting({operation}) {
     let [account] = yield call([api, api.getAccountsAsync], [operation.account])
     account = fromJS(account)
-    yield put(g.actions.receiveAccount({account}))
+    yield put(globalActions.receiveAccount({ account }));
 }
 
 function* accepted_account_update({operation}) {
     let [account] = yield call([api, api.getAccountsAsync], [operation.account])
     account = fromJS(account)
-    yield put(g.actions.receiveAccount({account}))
+    yield put(globalActions.receiveAccount({ account }));
 
     // bug, fork, etc.. the folowing would be mis-leading
     // const {account} = operation
@@ -338,9 +342,6 @@ function* accepted_account_update({operation}) {
 //         }
 //     }
 // }
-
-import base58 from 'bs58'
-import secureRandom from 'secure-random'
 
 // function* preBroadcast_account_witness_vote({operation, username}) {
 // }
@@ -454,14 +455,14 @@ function createPatch(text1, text2) {
 function* error_custom_json({operation: {id, required_posting_auths}}) {
     if(id === 'follow') {
         const follower = required_posting_auths[0]
-        yield put(g.actions.update({
+        yield put(globalActions.update({
             key: ['follow', 'getFollowingAsync', follower, 'loading'],
             updater: () => null
-        }))
+        }));
     }
 }
 function* error_vote({operation: {author, permlink}}) {
-    yield put(g.actions.remove({key: `transaction_vote_active_${author}_${permlink}`}));
+    yield put(globalActions.remove({ key: `transaction_vote_active_${author}_${permlink}` }));
     yield call(getContent, {author, permlink}); // unvote
 }
 

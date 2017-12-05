@@ -1,7 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import transaction from 'app/redux/Transaction';
 import Slider from 'react-rangeslider';
+import tt from 'counterpart';
+import CloseButton from 'react-foundation-components/lib/global/close-button';
+import * as transactionActions from 'app/redux/TransactionReducer';
 import Icon from 'app/components/elements/Icon';
 import FormattedAsset from 'app/components/elements/FormattedAsset';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
@@ -9,9 +11,7 @@ import {formatDecimal, parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import FoundationDropdown from 'app/components/elements/FoundationDropdown';
-import CloseButton from 'react-foundation-components/lib/global/close-button';
-import tt from 'counterpart';
-import {pathTo} from "../../Routes"
+import {pathTo} from 'app/Routes';
 
 const ABOUT_FLAG = <div>
     <p>{tt('voting_jsx.flagging_post_can_remove_rewards_the_flag_should_be_used_for_the_following')}</p>
@@ -300,7 +300,7 @@ export default connect(
                 if(weight < 0) return tt('voting_jsx.changing_to_a_downvote') + t
                 return null
             }
-            dispatch(transaction.actions.broadcastOperation({
+            dispatch(transactionActions.broadcastOperation({
                 type: 'vote',
                 operation: {voter: username, author, permlink, weight,
                     __config: {title: weight < 0 ? tt('voting_jsx.confirm_flag') : null},

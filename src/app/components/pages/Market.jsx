@@ -1,8 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {connect} from 'react-redux';
-import transaction from 'app/redux/Transaction'
-import TransactionError from 'app/components/elements/TransactionError'
+import * as transactionActions from 'app/redux/TransactionReducer';
+import * as appActions from 'app/redux/AppReducer';
+import * as marketActions from 'app/redux/MarketReducer';
+import TransactionError from 'app/components/elements/TransactionError';
 import DepthChart from 'app/components/elements/DepthChart';
 import Orderbook from "app/components/elements/Orderbook";
 import OrderHistory from "app/components/elements/OrderHistory";
@@ -545,20 +547,20 @@ module.exports = {
     },
     dispatch => ({
         notify: (message) => {
-            dispatch({type: 'ADD_NOTIFICATION', payload:
-                {key: "mkt_" + Date.now(),
-                 message: message,
-                 dismissAfter: 5000}
-            });
+            dispatch(appActions.addNotification({
+                key: "mkt_" + Date.now(),
+                message,
+                dismissAfter: 5000,
+            }));
         },
         reload: (username) => {
           console.log("Reload market state...")
-          dispatch({type: 'market/UPDATE_MARKET', payload: {username: username}})
+          dispatch(marketActions.updateMarket({ username }));
         },
         cancelOrder: (owner, orderid, successCallback) => {
             const confirm = tt('market_jsx.order_cancel_confirm', {order_id: orderid, user: owner})
             const successMessage = tt('market_jsx.order_cancelled', {order_id: orderid})
-            dispatch(transaction.actions.broadcastOperation({
+            dispatch(transactionActions.broadcastOperation({
                 type: 'limit_order_cancel',
                 operation: {owner, orderid/*, __config: {successMessage}*/},
                 confirm,
@@ -587,7 +589,7 @@ module.exports = {
                 warning = isSell ? tt('market_jsx.price_warning_below', warning_args) : tt('market_jsx.price_warning_above', warning_args);
             }
             const orderid = Math.floor(Date.now() / 1000)
-            dispatch(transaction.actions.broadcastOperation({
+            dispatch(transactionActions.broadcastOperation({
                 type: 'limit_order_create',
                 operation: {owner, amount_to_sell, min_to_receive, fill_or_kill, expiration, orderid}, //,
                     //__config: {successMessage}},

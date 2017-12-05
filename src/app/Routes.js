@@ -167,3 +167,15 @@ export function routeToSteemdUrl(route) {
     // if (url.indexOf("/author-rewards") !== -1) url = url.replace("/author-rewards", "/transfers");
     return url;
 }
+
+export function convertPostPath(path) {
+    const pmatch = path.match(/^\/([\w\d\-]+)\/\@([\w\d\.-]+)\/([\w\d-]+)\/?($|\?)/);
+    if (pmatch) {
+        return '/' + pmatch[2] + '/' + pmatch[3];
+    }
+    const cmatch = path.match(/^\/([\w\d\-]+)\/\@([\w\d\.-]+)\/([\w\d-]+)\#\@([\w\d-]+)\/([\w\d-]+)$/);
+    if (cmatch) {
+        return '/' + cmatch[2] + '/' + cmatch[3] + '#' + cmatch[4] + '/' + cmatch[5];
+    }
+    return path;
+}

@@ -16,7 +16,7 @@ import UserNames from 'app/components/elements/UserNames';
 import tt from 'counterpart';
 import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 import proxifyImageUrl from 'app/utils/ProxifyUrl';
-import {pathTo} from 'app/Routes';
+import {pathTo, convertPostPath} from 'app/Routes';
 import Userpic, { avatarSize } from 'app/components/elements/Userpic';
 
 class PostSummary extends React.Component {
@@ -94,7 +94,7 @@ class PostSummary extends React.Component {
 
         if( content.get( 'parent_author') !== "" ) {
            title_text = tt('g.re_to', {topic: content.get('root_title')});
-           title_link_url = content.get( 'url' );
+           title_link_url = convertPostPath(content.get( 'url' ));
            comments_link = title_link_url;
         } else {
             title_link_url = p.link;

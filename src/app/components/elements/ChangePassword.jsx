@@ -1,13 +1,15 @@
 /* eslint react/prop-types: 0 */
 import React from 'react'
-import transaction from 'app/redux/Transaction'
-import LoadingIndicator from 'app/components/elements/LoadingIndicator'
-import {validate_account_name} from 'app/utils/ChainValidation'
-import {cleanReduxInput} from 'app/utils/ReduxForms'
 import tt from 'counterpart';
+import {PrivateKey, PublicKey, key_utils} from '@steemit/steem-js/lib/auth/ecc';
+import {api} from '@steemit/steem-js';
+
+import * as transactionActions from 'app/redux/TransactionReducer';
+import * as appActions from 'app/redux/AppReducer';
+import LoadingIndicator from 'app/components/elements/LoadingIndicator';
+import {validate_account_name} from 'app/utils/ChainValidation';
+import {cleanReduxInput} from 'app/utils/ReduxForms';
 import { APP_NAME } from 'app/client_config';
-import {PrivateKey, PublicKey, key_utils} from 'steem/lib/auth/ecc';
-import {api} from 'steem';
 
 const {string, oneOf} = React.PropTypes
 
@@ -164,7 +166,7 @@ class ChangePassword extends React.Component {
                             </label>
                         </span>
                         ||
-                        <center><button type="button" className="button hollow" onClick={this.generateWif}>{tt('g.click_to_generate_password')}</button></center>
+                        <button type="button" className="button hollow" onClick={this.generateWif}>{tt('g.click_to_generate_password')}</button>
                     }
 
                     <br></br>
@@ -185,7 +187,7 @@ class ChangePassword extends React.Component {
                     {confirmSaved.touched && confirmSaved.error && <div className="error">{confirmSaved.error}</div>}
                     <br />
                     {loading && <div><LoadingIndicator type="circle" /></div>}
-                    {!loading && <div>
+                    {!loading && <div className="ChangePassword__btn-container">
                         <div className="error">{error2}</div>
                         <button type="submit" className="button" disabled={loading}>
                             {tt('g.update_password')}
@@ -252,7 +254,7 @@ export default reduxForm(
                     {authType: 'posting', oldAuth: password, newAuth: ph('posting', newWif)},
                     {authType: 'memo', oldAuth: password, newAuth: ph('memo', newWif)},
                 ]
-            dispatch(transaction.actions.updateAuthorities({
+            dispatch(transactionActions.updateAuthorities({
                 twofa,
                 // signingKey provides the password if it was not provided in auths
                 signingKey: authType ? password : null,
@@ -262,11 +264,11 @@ export default reduxForm(
             }))
         },
         notify: (message) => {
-            dispatch({type: 'ADD_NOTIFICATION', payload: {
+            dispatch(appActions.addNotification({
                 key: "chpwd_" + Date.now(),
                 message,
-                dismissAfter: 5000}
-            });
+                dismissAfter: 5000,
+            }));
         },
     })
 )(ChangePassword)

@@ -1,14 +1,16 @@
 import 'babel-core/register';
 import 'babel-polyfill';
 import 'whatwg-fetch';
-import 'app/assets/stylesheets/app.scss';
+import {VIEW_MODE_WHISTLE, PARAM_VIEW_MODE} from 'shared/constants';
+import './assets/stylesheets/app.scss';
 import plugins from 'app/utils/JsPlugins';
 import { setStore } from 'app/utils/User';
 import Iso from 'iso';
 import universalRender from 'shared/UniversalRender';
-import ConsoleExports from 'app/utils/ConsoleExports';
+import ConsoleExports from './utils/ConsoleExports';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
-import * as steem from 'steem';
+import * as steem from '@steemit/steem-js';
+import {determineViewMode} from "app/utils/Links";
 
 console.log("Search for " + "%c//Todo: for dev only! Do not merge if present!","background:red; color:yellow", "in src and remove before merging")
 window.onerror = error => {
@@ -98,6 +100,8 @@ function runApp(initial_state) {
         delete initial_state.offchain.csrf;
     }
 
+    initial_state.app.viewMode = determineViewMode(window.location.search);
+
     const location = `${window.location.pathname}${window.location.search}${window.location.hash}`;
     universalRender({history, location, initial_state, setStore})
     .catch(error => {
@@ -114,6 +118,7 @@ if (!window.Intl) {
         require('intl/locale-data/jsonp/ru.js');
         require('intl/locale-data/jsonp/fr.js');
         require('intl/locale-data/jsonp/it.js');
+        require('intl/locale-data/jsonp/ko.js');
         Iso.bootstrap(runApp);
     }, "IntlBundle");
 }

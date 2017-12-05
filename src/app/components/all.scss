@@ -26,11 +26,11 @@
 @import "./elements/Reputation";
 @import "./elements/Reblog";
 @import "./elements/YoutubePreview";
-@import "./elements/SignupProgressBar";
 @import "./elements/ShareMenu";
 @import "./elements/Author";
 @import "./elements/AuthorDropdown";
 @import "./elements/UserNames";
+@import "./elements/UserKeys";
 @import "./elements/QrKeyView";
 @import "./elements/IOSToggle";
 
@@ -41,14 +41,17 @@
 @import "./modules/lp/LpFooter";
 @import "./modules/SignUp";
 @import "./modules/LoginForm";
+@import "./modules/MiniHeader";
 @import "modules/YotificationList";
 @import "./modules/Settings";
 @import "./modules/SidePanel";
+@import "./modules/Settings";
 @import "./modules/BottomPanel";
 @import "./modules/UserWallet";
 @import "./modules/Powerdown";
 @import "./modules/TopRightMenu";
 @import "./modules/YotificationSettingsPanel";
+@import "./modules/ConfirmTransactionForm";
 
 // pages
 @import "./pages/PostsIndex";
@@ -61,3 +64,5 @@
 @import "./pages/Market";
 @import "./pages/TagsIndex";
 @import "./pages/Welcome";
+@import "./pages/RecoverAccountStep1";
+@import "./pages/Witnesses";

@@ -62,39 +62,48 @@ a, path, circle {
   text-transform: uppercase;
 }
 
+.whistle-view {
+    .whistle-hidden {
+        display:none !important;
+    }
+}
+
+
+
 .secondary {
   @include themify($themes) {
-    color: themed('textColorSecondary');  
-  } 
+    color: themed('textColorSecondary');
+  }
   font-size: 90%;
   a {
     transition: 0.2s all ease-in-out;
     color: $dark-gray;
     @include themify($themes) {
-      color: themed('textColorSecondary');  
-    } 
+      color: themed('textColorSecondary');
+    }
     :hover {
       @include themify($themes) {
-        color: themed('textColorAccent');  
-      } 
-    } 
+        color: themed('textColorAccent');
+      }
+    }
 
   }
 }
 
 a.ptc {
+    cursor:pointer;
   text-decoration: none;
   transition: 0.2s all ease-in-out;
   @include themify($themes) {
-    color: themed('textColorPrimary');  
-  }  
+    color: themed('textColorPrimary');
+  }
 
   &:hover, &:focus {
     color: $dark-gray;
     text-decoration: none;
     @include themify($themes) {
-        color: themed('textColorAccent');  
-    }  
+        color: themed('textColorAccent');
+    }
   }
 }
 
@@ -173,7 +182,13 @@ button.ptc {
   }
 }
 
-.anchor { padding-top: 90px; }
+.anchor {
+  padding-top: 68px;
+  margin-top: -68px;
+  position: relative;
+  display: block;
+  cursor: default;
+}
 
 h1, h2, h3, h4, h5, h6 {
   line-height: 1.2 !important;
@@ -186,9 +201,9 @@ h1, h2, h3, h4, h5, h6 {
   &__module {
       padding: 1.5em 2em;
     @include themify($themes) {
-        background-color: themed('moduleBackgroundColor');  
-        border: themed('border'); 
-    }  
+        background-color: themed('moduleBackgroundColor');
+        border: themed('border');
+    }
   }
 }
 
@@ -196,3 +211,5 @@ h1, h2, h3, h4, h5, h6 {
   display: inline;
   color: red;
 }
+
+

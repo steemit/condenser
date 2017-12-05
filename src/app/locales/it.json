@@ -233,6 +233,7 @@
     "app_center": "Steemit App Center",
     "api_docs": "Steemit API Docs",
     "bluepaper": "Steem Bluepaper",
+    "smt_whitepaper": "SMT Whitepaper",
     "whitepaper": "Steem Whitepaper",
     "intro_tagline": "Il denaro parla",
     "intro_paragraph": "La tua voce vale qualcosa. Entra nella comunità che ti pagare per pubblicare e curare contenuti di alta qualità."
@@ -476,7 +477,7 @@
     "images_were_hidden_due_to_low_ratings": "Le immagini sono state nascoste a causa della bassa reputazione."
   },
   "postsummary_jsx": {
-    "resteemed": "Condiviso",
+    "resteemed": "condiviso",
     "resteemed_by": "Condiviso da",
     "reveal_it": "mostra",
     "adjust_your": "sistema il tuo",
@@ -552,6 +553,7 @@
     "keep_me_logged_in": "Voglio restare connesso",
     "amazing_community": "una comunità incredibile",
     "to_comment_and_reward_others": "per commentare e premiare gli altri. ",
+    "sign_up_get_steem": "Sign up. Get STEEM",
     "signup_button": "Sign up now to earn ",
     "signup_button_emphasis": "FREE STEEM!",
     "returning_users": "Utenti di ritorno:",

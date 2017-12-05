@@ -2,8 +2,8 @@ import React from 'react';
 import {connect} from 'react-redux';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import Reveal from 'react-foundation-components/lib/global/reveal';
-import g from 'app/redux/GlobalReducer'
 import {Map, List} from 'immutable'
+import * as globalActions from 'app/redux/GlobalReducer';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import QrReader from 'app/components/elements/QrReader'
 import ConvertToSteem from 'app/components/elements/ConvertToSteem'
@@ -99,7 +99,7 @@ export default connect(
     },
     dispatch => ({
         hide: name => {
-            dispatch(g.actions.hideDialog({name}))
+            dispatch(globalActions.hideDialog({name}))
         },
     })
 )(Dialogs)

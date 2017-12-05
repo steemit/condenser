@@ -233,6 +233,7 @@
     "app_center": "Centro de Aplicaciones Steemit",
     "api_docs": "Documentos API de Steemit",
     "bluepaper": "Steem Bluepaper",
+    "smt_whitepaper": "Libro blanco de SMT",
     "whitepaper": "Libro blanco de Steem",
     "intro_tagline": "El dinero habla.",
     "intro_paragraph": "Tu voz tiene valor. Únete a la comunidad que te paga por publicar y votar contenido de alta calidad"
@@ -476,7 +477,7 @@
     "images_were_hidden_due_to_low_ratings": "Las imágenes fueron ocultadas por bajas calificaciones."
   },
   "postsummary_jsx": {
-    "resteemed": "Reesteemeado",
+    "resteemed": "reesteemeado",
     "resteemed_by": "Resteemeado por",
     "reveal_it": "revelarlo",
     "adjust_your": "ajustar tu",
@@ -552,6 +553,7 @@
     "keep_me_logged_in": "Manténme logeado",
     "amazing_community": "comunidad increíble",
     "to_comment_and_reward_others": "para comentar y recompensar a otros",
+    "sign_up_get_steem": "Sign up. Get STEEM",
     "signup_button": "Sign up now to earn ",
     "signup_button_emphasis": "FREE STEEM!",
     "returning_users": "Usuarios que vuelven",

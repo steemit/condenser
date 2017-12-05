@@ -1,9 +1,9 @@
 import React from 'react';
-import { Link, browserHistory } from 'react-router';
+import { Link } from 'react-router';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Icon from 'app/components/elements/Icon';
 import { connect } from 'react-redux';
-import user from 'app/redux/User';
+import * as userActions from 'app/redux/UserReducer';
 import Reblog from 'app/components/elements/Reblog';
 import Voting from 'app/components/elements/Voting';
 import {immutableAccessor} from 'app/utils/Accessors';
@@ -16,22 +16,7 @@ import UserNames from 'app/components/elements/UserNames';
 import tt from 'counterpart';
 import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 import proxifyImageUrl from 'app/utils/ProxifyUrl';
-import Userpic from 'app/components/elements/Userpic';
-
-function isLeftClickEvent(event) {
-    return event.button === 0
-}
-
-function isModifiedEvent(event) {
-    return !!(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey)
-}
-
-function navigate(e, onClick, post, url) {
-    if (isModifiedEvent(e) || !isLeftClickEvent(e)) return;
-    e.preventDefault();
-    if (onClick) onClick(post, url);
-    else browserHistory.push(url);
-}
+import Userpic, { avatarSize } from 'app/components/elements/Userpic';
 
 class PostSummary extends React.Component {
     static propTypes = {
@@ -41,7 +26,6 @@ class PostSummary extends React.Component {
         content: React.PropTypes.object.isRequired,
         thumbSize: React.PropTypes.string,
         nsfwPref: React.PropTypes.string,
-        onClick: React.PropTypes.func
     };
 
     constructor() {
@@ -56,7 +40,7 @@ class PostSummary extends React.Component {
             props.total_payout !== this.props.total_payout ||
             props.username !== this.props.username ||
             props.nsfwPref !== this.props.nsfwPref ||
-            props.layoutStyle !== this.props.layoutStyle ||
+            props.blogmode !== this.props.blogmode ||
             state.revealNsfw !== this.state.revealNsfw;
     }
 
@@ -66,7 +50,7 @@ class PostSummary extends React.Component {
     }
 
     render() {
-        const {thumbSize, ignore, onClick} = this.props;
+        const {thumbSize, ignore} = this.props;
         const {post, content} = this.props;
         const {account} = this.props;
         if (!content) return null;
@@ -81,16 +65,19 @@ class PostSummary extends React.Component {
                 <div className="articles__resteem">
                     <p className="articles__resteem-text">
                         <span className="articles__resteem-icon"><Icon name="reblog" /></span>
-                        {tt('postsummary_jsx.resteemed_by')} <UserNames names={reblogged_by} />
+                        <UserNames names={reblogged_by} /> {tt('postsummary_jsx.resteemed')}
                     </p>
                 </div>)
         }
 
         // 'account' is the current blog being viewed, if applicable.
         if(account && account != content.get('author')) {
-            reblogged_by = (<div className="PostSummary__reblogged_by">
-                               <Icon name="reblog" /> {tt('postsummary_jsx.resteemed')}
-                           </div>)
+            reblogged_by = (<div className="articles__resteem">
+                                <p className="articles__resteem-text">
+                                    <span className="articles__resteem-icon"><Icon name="reblog" /></span>
+                                    {tt('postsummary_jsx.resteemed')}
+                                </p>
+                            </div>)
         }
 
         const {gray, authorRepLog10, flagWeight, isNsfw} = content.get('stats', Map()).toJS()
@@ -114,15 +101,13 @@ class PostSummary extends React.Component {
         }
 
         const content_body = (<div className="PostSummary__body entry-content">
-            <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}>{desc}</a>
+            <Link to={title_link_url} >{desc}</Link>
         </div>);
         const content_title = (<h2 className="articles__h2 entry-title">
-            <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}>
+            <Link to={title_link_url}>
                 {isNsfw && <span className="nsfw-flag">nsfw</span>}
-
                 {title_text}
-                
-            </a>
+            </Link>
         </h2>);
 
         // author and category
@@ -130,9 +115,9 @@ class PostSummary extends React.Component {
             <Userpic account={p.author} />
             <Author author={p.author} authorRepLog10={authorRepLog10} follow={false} mute={false} />
             {} {tt('g.in')} <TagList post={p} single />&nbsp;•&nbsp;
-            <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}><TimeAgoWrapper date={p.created} className="updated" /></a>
+            <Link to={title_link_url}><TimeAgoWrapper date={p.created} className="updated" /></Link>
         </span>);
-      
+
         // New Post Summary heading
         const summary_header = (
             <div className="articles__summary-header">
@@ -140,26 +125,26 @@ class PostSummary extends React.Component {
               { !isNsfw
                     ?  <div className="user__col user__col--left">
                             <a className="user__link" href={'/@' + p.author}>
-                                <Userpic account={p.author} />
+                                <Userpic account={p.author} size={avatarSize.small} />
                             </a>
-                        </div>                       
+                        </div>
                     : null
                 }
                 <div className="user__col user__col--right">
-                    
+
                     <span className="user__name"><Author author={p.author} authorRepLog10={authorRepLog10} follow={false} mute={false} /></span>
-                    
+
                     <span className="articles__tag-link">{tt('g.in')}&nbsp;<TagList post={p} single />&nbsp;•&nbsp;</span>
-                    <a className="timestamp__link" href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}>
+                    <Link className="timestamp__link" to={title_link_url} >
                         <span className="timestamp__time"><TimeAgoWrapper date={p.created} className="updated" /></span>
 
-                        {full_power && <span className="articles__icon-100" title={tt('g.powered_up_100')}><Icon name="steem" /></span>}
+                        {full_power && <span className="articles__icon-100" title={tt('g.powered_up_100')}><Icon name="steempower" /></span>}
 
-                    </a>
+                    </Link>
                 </div>
             </div>
-            <div className="articles__flag">
-              <Voting post={post} flag />  
+            <div className="articles__flag clearfix">
+              <Voting post={post} flag />
             </div>
           </div>
         );
@@ -183,7 +168,7 @@ class PostSummary extends React.Component {
                     {!archived && <Reblog author={p.author} permlink={p.permlink} parent_author={p.parent_author} />}
                 </span>
             </div>
-        )        
+        )
 
         const {nsfwPref, username} = this.props
         const {revealNsfw} = this.state
@@ -198,10 +183,10 @@ class PostSummary extends React.Component {
                     <article className={'PostSummary hentry'} itemScope itemType ="http://schema.org/blogPost">
                         <div className="PostSummary__nsfw-warning">
                             {summary_header}
-                            <span className="nsfw-flag">nsfw</span>&nbsp;&nbsp;<a href="#" onClick={this.onRevealNsfw}>{tt('postsummary_jsx.reveal_it')}</a> {tt('g.or') + ' '}                            
+                            <span className="nsfw-flag">nsfw</span>&nbsp;&nbsp;<span className="ptc" role="button" onClick={this.onRevealNsfw}>{tt('postsummary_jsx.reveal_it')}</span> {tt('g.or') + ' '}
                             {username ? <span>{tt('postsummary_jsx.adjust_your')} <Link to={`/@${username}/settings`}>{tt('postsummary_jsx.display_preferences')}</Link>.</span>
                                 : <span><Link to="/pick_account">{tt('postsummary_jsx.create_an_account')}</Link> {tt('postsummary_jsx.to_save_your_preferences')}.</span>}
-                            
+
                             {summary_footer}
                         </div>
                     </article>
@@ -215,15 +200,15 @@ class PostSummary extends React.Component {
         if(!gray && p.image_link && !userBlacklisted) {
             // on mobile, we always use blog layout style -- there's no toggler
             // on desktop, we offer a choice of either blog or list
-            // if the layoutStyle is list, output an image with a srcset
+            // if blogmode is false, output an image with a srcset
             // which has the 256x512 for whatever the large breakpoint is where the list layout is used
             // and the 640 for lower than that
 
             const blogSize = proxifyImageUrl(p.image_link, '640x480').replace(/ /g, '%20');
 
-            if (this.props.layoutStyle === 'blog') {
+            if (this.props.blogmode) {
                 thumb = (
-                    <span onClick={e => navigate(e, onClick, post, p.link)} className="articles__feature-img-container">
+                    <span className="articles__feature-img-container">
                         <img className="articles__feature-img" src={blogSize} />
                     </span>
                 );
@@ -231,7 +216,7 @@ class PostSummary extends React.Component {
                 const listSize = proxifyImageUrl(p.image_link, '256x512').replace(/ /g, '%20');
 
                 thumb = (
-                    <span onClick={e => navigate(e, onClick, post, p.link)} className="articles__feature-img-container">
+                    <span  className="articles__feature-img-container">
                         <picture className="articles__feature-img">
                             <source srcSet={listSize} media="(min-width: 1000px)" />
                             <img srcSet={blogSize} />
@@ -244,24 +229,24 @@ class PostSummary extends React.Component {
         if(gray || ignore) commentClasses.push('downvoted') // rephide
 
         return (
-            <div className="articles__summary">            
+            <div className="articles__summary">
                 {reblogged_by}
                 {summary_header}
                 <div className={'articles__content hentry' + (thumb ? ' with-image ' : ' ') + commentClasses.join(' ')} itemScope itemType ="http://schema.org/blogPost">
                   { thumb
                         ? <div className="articles__content-block articles__content-block--img">
-                            <a className="articles__link" href="#">
+                            <Link className="articles__link" to={title_link_url}>
                                 {thumb}
-                            </a>
-                        </div>                            
+                            </Link>
+                        </div>
                         : null
                     }
-                    <div className="articles__content-block articles__content-block--text">                    
+                    <div className="articles__content-block articles__content-block--text">
                         {content_title}
                         {content_body}
-                        {this.props.layoutStyle === 'list' ? summary_footer : null}
+                        {this.props.blogmode ? null : summary_footer}
                     </div>
-                    {this.props.layoutStyle === 'blog' ? summary_footer : null}
+                    {this.props.blogmode ? summary_footer : null}
                 </div>
             </div>
         )
@@ -281,12 +266,12 @@ export default connect(
         return {
             post, content, pending_payout, total_payout,
             username: state.user.getIn(['current', 'username']) || state.offchain.get('account'),
-            layoutStyle: state.user.get('layout_style'),
+            blogmode: state.app.getIn(['user_preferences', 'blogmode']),
         };
     },
 
     (dispatch) => ({
-        dispatchSubmit: data => { dispatch(user.actions.usernamePasswordLogin({...data})) },
-        clearError: () => { dispatch(user.actions.loginError({error: null})) }
+        dispatchSubmit: data => { dispatch(userActions.usernamePasswordLogin({...data})) },
+        clearError: () => { dispatch(userActions.loginError({error: null})) }
     })
 )(PostSummary)

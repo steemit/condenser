@@ -1,8 +1,8 @@
 /* eslint react/prop-types: 0 */
 import React, { PropTypes, Component } from 'react';
-import transaction from 'app/redux/Transaction'
-import g from 'app/redux/GlobalReducer'
-import user from 'app/redux/User'
+import * as transactionActions from 'app/redux/TransactionReducer';
+import * as globalActions from 'app/redux/GlobalReducer';
+import * as userActions from 'app/redux/UserReducer';
 import {validate_account_name} from 'app/utils/ChainValidation';
 import runTests from 'app/utils/BrowserTests';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
@@ -10,7 +10,7 @@ import reactForm from 'app/utils/ReactForm'
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import tt from 'counterpart';
 import { APP_URL } from 'app/client_config';
-import {PrivateKey, PublicKey} from 'steem/lib/auth/ecc';
+import {PrivateKey, PublicKey} from '@steemit/steem-js/lib/auth/ecc';
 
 class LoginForm extends Component {
 
@@ -199,10 +199,10 @@ class LoginForm extends Component {
                 </div>}
                 <div>
                     <label className="LoginForm__save-login" htmlFor="saveLogin">
-                        {tt('loginform_jsx.keep_me_logged_in')} &nbsp;
-                        <input id="saveLogin" type="checkbox" ref="pw" {...saveLogin.props} onChange={this.saveLoginToggle} disabled={submitting} /></label>
+                        
+                        <input id="saveLogin" type="checkbox" ref="pw" {...saveLogin.props} onChange={this.saveLoginToggle} disabled={submitting} />&nbsp;{tt('loginform_jsx.keep_me_logged_in')}</label>
                 </div>
-                <div>
+                <div className="login-modal-buttons">
                     <br />
                     <button type="submit" disabled={submitting || disabled} className="button" onClick={this.SignIn}>
                         {submitLabel}
@@ -214,7 +214,7 @@ class LoginForm extends Component {
                 <div className="sign-up">
                     <hr />
                     <p>{tt('loginform_jsx.join_our')} <em>{tt('loginform_jsx.amazing_community')}</em>{tt('loginform_jsx.to_comment_and_reward_others')}</p>
-                    <button type="button" className="button" onClick={this.SignUp}>{tt('loginform_jsx.signup_button')}<em>{tt('loginform_jsx.signup_button_emphasis')}</em></button>
+                    <button type="button" className="button hollow" onClick={this.SignUp}>{tt('loginform_jsx.sign_up_get_steem')}</button>
                 </div>
             </form>
         );
@@ -305,21 +305,21 @@ export default connect(
             const username = data.username.trim().toLowerCase()
             if (loginBroadcastOperation) {
                 const {type, operation, successCallback, errorCallback} = loginBroadcastOperation.toJS()
-                dispatch(transaction.actions.broadcastOperation({type, operation, username, password, successCallback, errorCallback}))
-                dispatch(user.actions.usernamePasswordLogin({username, password, saveLogin, afterLoginRedirectToWelcome, operationType: type}))
-                dispatch(user.actions.closeLogin())
+                dispatch(transactionActions.broadcastOperation({type, operation, username, password, successCallback, errorCallback}))
+                dispatch(userActions.usernamePasswordLogin({username, password, saveLogin, afterLoginRedirectToWelcome, operationType: type}))
+                dispatch(userActions.closeLogin())
             } else {
-                dispatch(user.actions.usernamePasswordLogin({username, password, saveLogin, afterLoginRedirectToWelcome}))
+                dispatch(userActions.usernamePasswordLogin({username, password, saveLogin, afterLoginRedirectToWelcome}))
             }
         },
-        clearError: () => { if (hasError) dispatch(user.actions.loginError({error: null})) },
+        clearError: () => { if (hasError) dispatch(userActions.loginError({error: null})) },
         qrReader: (dataCallback) => {
-            dispatch(g.actions.showDialog({name: 'qr_reader', params: {handleScan: dataCallback}}));
+            dispatch(globalActions.showDialog({name: 'qr_reader', params: {handleScan: dataCallback}}));
         },
         showChangePassword: (username, defaultPassword) => {
-            dispatch(user.actions.closeLogin())
-            dispatch(g.actions.remove({key: 'changePassword'}))
-            dispatch(g.actions.showDialog({name: 'changePassword', params: {username, defaultPassword}}))
+            dispatch(userActions.closeLogin())
+            dispatch(globalActions.remove({key: 'changePassword'}))
+            dispatch(globalActions.showDialog({name: 'changePassword', params: {username, defaultPassword}}))
         },
     })
 )(LoginForm)

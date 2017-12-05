@@ -1,15 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router';
 import {connect} from 'react-redux';
-import Icon from 'app/components/elements/Icon';
-import user from 'app/redux/User';
-import Userpic from 'app/components/elements/Userpic';
 import { browserHistory } from 'react-router';
+import tt from 'counterpart';
 import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdown';
+import Icon from 'app/components/elements/Icon';
+import * as userActions from 'app/redux/UserReducer';
+import * as appActions from 'app/redux/AppReducer';
+import Userpic from 'app/components/elements/Userpic';
 import VerticalMenu from 'app/components/elements/VerticalMenu';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import NotifiCounter from 'app/components/elements/NotifiCounter';
-import tt from 'counterpart';
 
 const defaultNavigate = (e) => {
     if (e.metaKey || e.ctrlKey) {
@@ -138,15 +139,15 @@ export default connect(
     dispatch => ({
         showLogin: e => {
             if (e) e.preventDefault();
-            dispatch(user.actions.showLogin())
+            dispatch(userActions.showLogin())
         },
         logout: e => {
             if (e) e.preventDefault();
-            dispatch(user.actions.logout())
+            dispatch(userActions.logout())
         },
         toggleNightmode: e => {
             if (e) e.preventDefault();
-            dispatch({ type: 'TOGGLE_NIGHTMODE' });
+            dispatch(appActions.toggleNightmode());
         },
     })
 )(TopRightMenu);

@@ -8,6 +8,7 @@ import { renderToString } from 'react-dom/server';
 import { Router, RouterContext, match, applyRouterMiddleware, browserHistory } from 'react-router';
 import { Provider } from 'react-redux';
 import RootRoute from 'app/RootRoute';
+import * as appActions from 'app/redux/AppReducer';
 import {createStore, applyMiddleware, compose} from 'redux';
 import { useScroll } from 'react-router-scroll';
 import createSagaMiddleware from 'redux-saga';
@@ -28,7 +29,7 @@ import {routeRegex} from "app/ResolveRoute";
 import {contentStats} from 'app/utils/StateFunctions';
 import ScrollBehavior from 'scroll-behavior';
 
-import {api} from 'steem';
+import {api} from '@steemit/steem-js';
 
 
 const calcOffsetRoot = (startEl) => {
@@ -42,10 +43,44 @@ const calcOffsetRoot = (startEl) => {
 };
 
 //BEGIN: SCROLL CODE
+/**
+ * The maximum number of times to attempt scrolling to the target element/y position
+ * (total seconds of attempted scrolling is given by (SCROLL_TOP_TRIES * SCROLL_TOP_DELAY_MS)/1000 )
+ * @type {number}
+ */
 const SCROLL_TOP_TRIES = 50;
+/**
+ * The number of milliseconds to delay between scroll attempts
+ * (total seconds of attempted scrolling is given by (SCROLL_TOP_TRIES * SCROLL_TOP_DELAY_MS)/1000 )
+ * @type {number}
+ */
 const SCROLL_TOP_DELAY_MS = 100;
+/**
+ * The size of the vertical gap between the bottom of the fixed header and the top of the scrolled-to element.
+ * @type {number}
+ */
 const SCROLL_TOP_EXTRA_PIXEL_OFFSET = 3;
-const SCROLL_UP_FUDGE_PIXELS = 10;
+/**
+ * number of pixels the document can move in the 'wrong' direction (opposite of intended scroll) this covers accidental scroll movements by users.
+ * @type {number}
+ */
+const SCROLL_FUDGE_PIXELS = 10;
+/**
+ * if document is being scrolled up this is set for prevDocumentInfo && documentInfo
+ * @type {string}
+ */
+const SCROLL_DIRECTION_UP = 'up';
+/**
+ * if document is being scrolled down this is set for prevDocumentInfo && documentInfo
+ * @type {string}
+ */
+const SCROLL_DIRECTION_DOWN = 'down';
+
+/**
+ * If an element with this id is present, the page does not want us to detect navigation history direction (clicking links/forward button or back button)
+ * @type {string}
+ */
+const DISABLE_ROUTER_HISTORY_NAV_DIRECTION_EL_ID = 'disable_router_nav_history_direction_check';
 
 let scrollTopTimeout = null;
 
@@ -64,40 +99,74 @@ const scrollTop = (el, topOffset, prevDocumentInfo, triesRemaining) => {
     const documentInfo = {
         scrollHeight: document.body.scrollHeight,
         scrollTop: Math.ceil(document.scrollingElement.scrollTop),
-        scrollTarget: calcOffsetRoot(el) + topOffset
+        scrollTarget: calcOffsetRoot(el) + topOffset,
+        direction: prevDocumentInfo.direction,
     };
-
-    if(prevDocumentInfo.scrollTop > (documentInfo.scrollTop + SCROLL_UP_FUDGE_PIXELS)) { //detecting that the user has scrolled in an up direction
-        return;
+    let doScroll = false;
+    //for both SCROLL_DIRECTION_DOWN, SCROLL_DIRECTION_UP
+    //We scroll if the document has 1. not been deliberately scrolled, AND 2. we have not passed our target scroll,
+    //NOR has the document changed in a meaningful way since we last looked at it
+    if(prevDocumentInfo.direction === SCROLL_DIRECTION_DOWN) {
+        doScroll = ((prevDocumentInfo.scrollTop <= (documentInfo.scrollTop + SCROLL_FUDGE_PIXELS))
+            && (documentInfo.scrollTop < documentInfo.scrollTarget
+                || prevDocumentInfo.scrollTarget < documentInfo.scrollTarget
+                || prevDocumentInfo.scrollHeight < documentInfo.scrollHeight));
+    } else if(prevDocumentInfo.direction === SCROLL_DIRECTION_UP) {
+        doScroll = ((prevDocumentInfo.scrollTop >= (documentInfo.scrollTop - SCROLL_FUDGE_PIXELS))
+            && (documentInfo.scrollTop > documentInfo.scrollTarget
+                || prevDocumentInfo.scrollTarget > documentInfo.scrollTarget
+                || prevDocumentInfo.scrollHeight > documentInfo.scrollHeight));
     }
-    if(documentInfo.scrollTop < documentInfo.scrollTarget
-        || prevDocumentInfo.scrollTarget < documentInfo.scrollTarget
-        || prevDocumentInfo.scrollHeight < documentInfo.scrollHeight) {
+
+    if(doScroll) {
         window.scrollTo(0, documentInfo.scrollTarget);
         if(triesRemaining > 0) {
             scrollTopTimeout = setTimeout(() => scrollTop(el, topOffset, documentInfo, (triesRemaining-1)), SCROLL_TOP_DELAY_MS);
         }
     }
-}
+};
 
 /**
- * raison d'être: on hash link navigation, calculate the appropriate y-scroll with a fixed position top menu
+ * Custom scrolling behavior needed because we have chunky page loads and a fixed header.
  */
 class OffsetScrollBehavior extends ScrollBehavior {
+    /**
+     * Raison d'être: on hash link navigation, assemble the needed info and pass it to scrollTop()
+     * In cases where we're scrolling to a pixel offset, adjust the offset for the current header, and punt to default behavior.
+     */
     scrollToTarget(element, target) {
-        clearTimeout(scrollTopTimeout);
-        const el = (typeof target === 'string') ? document.getElementById(target) : false;
+        clearTimeout(scrollTopTimeout); //it's likely this will be called multiple times in succession, so clear and existing scrolling.
+        const header = document.getElementsByTagName('header')[0]; //this dimension ideally would be pulled from a scss file.
+        let topOffset = SCROLL_TOP_EXTRA_PIXEL_OFFSET * (-1);
+        if(header) {
+            topOffset += header.offsetHeight * (-1);
+        }
+        const newTarget = []; //x coordinate
+        let el = false;
+        if(typeof target === 'string' ) {
+            el = document.getElementById(target.substr(1));
+            if(!el) {
+                el = document.getElementById(target);
+            }
+        } else {
+            newTarget.push(target[0]);
+            if((target[1] + topOffset) > 0) {
+                newTarget.push(target[1] + topOffset);
+            } else {
+                newTarget.push(0);
+            }
+        }
+
         if(el) {
-            const header = document.getElementsByTagName('header')[0]; //this dimension ideally would be pulled from a scss file.
-            const topOffset = (((header)? header.offsetHeight : 0) + SCROLL_TOP_EXTRA_PIXEL_OFFSET) * (-1);
             const documentInfo = {
                 scrollHeight: document.body.scrollHeight,
                 scrollTop: Math.ceil(document.scrollingElement.scrollTop),
-                scrollTarget: 0
+                scrollTarget: calcOffsetRoot(el) + topOffset,
             };
-            scrollTop(el, topOffset, documentInfo, SCROLL_TOP_TRIES);
+            documentInfo.direction = documentInfo.scrollTop < documentInfo.scrollTarget ? SCROLL_DIRECTION_DOWN : SCROLL_DIRECTION_UP;
+            scrollTop(el, topOffset, documentInfo, SCROLL_TOP_TRIES); //this function does the actual work of scrolling.
         } else {
-            super.scrollToTarget(element, target);
+            super.scrollToTarget(element, newTarget);
         }
     }
 }
@@ -132,7 +201,8 @@ const onRouterError = (error) => {
     console.error('onRouterError', error);
 };
 
-async function universalRender({ location, initial_state, offchain, ErrorPage, tarantool, userPreferences }) {
+async function universalRender({location, initial_state, offchain, ErrorPage, tarantool, userPreferences}) {
+
     let error, redirect, renderProps;
     try {
         [error, redirect, renderProps] = await runRouter(location, RootRoute);
@@ -161,12 +231,18 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
 
         const history = syncHistoryWithStore(browserHistory, store);
 
+        /**
+         * When to scroll - on hash link navigation determine if the page should scroll to that element (forward nav, or ignore nav direction)
+         */
         const scroll = useScroll({
-            createScrollBehavior: config => new OffsetScrollBehavior(config),
+            createScrollBehavior: config => new OffsetScrollBehavior(config), //information assembler for has scrolling.
             shouldUpdateScroll: (prevLocation, {location}) => { // eslint-disable-line no-shadow
-                //we want to navigate to the corresponding id=<hash> element on 'PUSH' navigation (prev null + POP is a new window url nav ~= 'PUSH')
+                //if there is a hash, we may want to scroll to it
                 if(location.hash) {
-                    if((prevLocation === null && location.action === 'POP')
+                    //if disableNavDirectionCheck exists, we want to always navigate to the hash (the page is telling us that's desired behavior based on the element's existence
+                    const disableNavDirectionCheck = document.getElementById(DISABLE_ROUTER_HISTORY_NAV_DIRECTION_EL_ID);
+                    //we want to navigate to the corresponding id=<hash> element on 'PUSH' navigation (prev null + POP is a new window url nav ~= 'PUSH')
+                    if(disableNavDirectionCheck || (prevLocation === null && location.action === 'POP')
                         || (location.action === 'PUSH')
                     ) {
                         return location.hash;
@@ -251,13 +327,13 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
 
         offchain.signup_bonus = sdDisp;
         offchain.server_location = location;
-        server_store = createStore(rootReducer, { global: onchain, offchain});
+        server_store = createStore(rootReducer, { app: initial_state.app, global: onchain, offchain});
         server_store.dispatch({type: '@@router/LOCATION_CHANGE', payload: {pathname: location}});
-        server_store.dispatch({type: 'SET_USER_PREFERENCES', payload: userPreferences});
+        server_store.dispatch(appActions.setUserPreferences(userPreferences));
         if (offchain.account) {
             try {
                 const notifications = await tarantool.select('notifications', 0, 1, 0, 'eq', offchain.account);
-                server_store.dispatch({type: 'UPDATE_NOTIFICOUNTERS', payload: notificationsArrayToMap(notifications)});
+                server_store.dispatch(appActions.updateNotificounters(notificationsArrayToMap(notifications)));
             } catch(e) {
                 console.warn('WARNING! cannot retrieve notifications from tarantool in universalRender:', e.message);
             }

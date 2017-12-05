@@ -39,7 +39,7 @@ export default {
             'react',
             'react-dom',
             'react-router',
-            'steem',
+            '@steemit/steem-js',
             'bytebuffer',
             'immutable',
             'autolinker',

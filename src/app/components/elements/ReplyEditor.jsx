@@ -1,6 +1,7 @@
 import React from 'react';
 import reactForm from 'app/utils/ReactForm'
 import * as transactionActions from 'app/redux/TransactionReducer';
+import * as userActions from 'app/redux/UserReducer';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer'
 import CategorySelector from 'app/components/cards/CategorySelector'
 import {validateCategory} from 'app/components/cards/CategorySelector'

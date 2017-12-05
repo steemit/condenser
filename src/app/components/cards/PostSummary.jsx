@@ -1,9 +1,9 @@
 import React from 'react';
-import { Link, browserHistory } from 'react-router';
+import { Link } from 'react-router';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Icon from 'app/components/elements/Icon';
 import { connect } from 'react-redux';
-import user from 'app/redux/User';
+import * as userActions from 'app/redux/UserReducer';
 import Reblog from 'app/components/elements/Reblog';
 import Voting from 'app/components/elements/Voting';
 import {immutableAccessor} from 'app/utils/Accessors';
@@ -18,21 +18,6 @@ import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 import proxifyImageUrl from 'app/utils/ProxifyUrl';
 import Userpic, { avatarSize } from 'app/components/elements/Userpic';
 
-function isLeftClickEvent(event) {
-    return event.button === 0
-}
-
-function isModifiedEvent(event) {
-    return !!(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey)
-}
-
-function navigate(e, onClick, post, url) {
-    if (isModifiedEvent(e) || !isLeftClickEvent(e)) return;
-    e.preventDefault();
-    if (onClick) onClick(post, url);
-    else browserHistory.push(url);
-}
-
 class PostSummary extends React.Component {
     static propTypes = {
         post: React.PropTypes.string.isRequired,
@@ -41,7 +26,6 @@ class PostSummary extends React.Component {
         content: React.PropTypes.object.isRequired,
         thumbSize: React.PropTypes.string,
         nsfwPref: React.PropTypes.string,
-        onClick: React.PropTypes.func
     };
 
     constructor() {
@@ -66,7 +50,7 @@ class PostSummary extends React.Component {
     }
 
     render() {
-        const {thumbSize, ignore, onClick} = this.props;
+        const {thumbSize, ignore} = this.props;
         const {post, content} = this.props;
         const {account} = this.props;
         if (!content) return null;
@@ -81,7 +65,7 @@ class PostSummary extends React.Component {
                 <div className="articles__resteem">
                     <p className="articles__resteem-text">
                         <span className="articles__resteem-icon"><Icon name="reblog" /></span>
-                        <UserNames names={reblogged_by} /> {tt('postsummary_jsx.resteemed')} 
+                        <UserNames names={reblogged_by} /> {tt('postsummary_jsx.resteemed')}
                     </p>
                 </div>)
         }
@@ -91,7 +75,7 @@ class PostSummary extends React.Component {
             reblogged_by = (<div className="articles__resteem">
                                 <p className="articles__resteem-text">
                                     <span className="articles__resteem-icon"><Icon name="reblog" /></span>
-                                    {tt('postsummary_jsx.resteemed')} 
+                                    {tt('postsummary_jsx.resteemed')}
                                 </p>
                             </div>)
         }
@@ -199,7 +183,7 @@ class PostSummary extends React.Component {
                     <article className={'PostSummary hentry'} itemScope itemType ="http://schema.org/blogPost">
                         <div className="PostSummary__nsfw-warning">
                             {summary_header}
-                            <span className="nsfw-flag">nsfw</span>&nbsp;&nbsp;<a href="#" onClick={this.onRevealNsfw}>{tt('postsummary_jsx.reveal_it')}</a> {tt('g.or') + ' '}
+                            <span className="nsfw-flag">nsfw</span>&nbsp;&nbsp;<span className="ptc" role="button" onClick={this.onRevealNsfw}>{tt('postsummary_jsx.reveal_it')}</span> {tt('g.or') + ' '}
                             {username ? <span>{tt('postsummary_jsx.adjust_your')} <Link to={`/@${username}/settings`}>{tt('postsummary_jsx.display_preferences')}</Link>.</span>
                                 : <span><Link to="/pick_account">{tt('postsummary_jsx.create_an_account')}</Link> {tt('postsummary_jsx.to_save_your_preferences')}.</span>}
 
@@ -224,7 +208,7 @@ class PostSummary extends React.Component {
 
             if (this.props.blogmode) {
                 thumb = (
-                    <span onClick={e => navigate(e, onClick, post, p.link)} className="articles__feature-img-container">
+                    <span className="articles__feature-img-container">
                         <img className="articles__feature-img" src={blogSize} />
                     </span>
                 );
@@ -232,7 +216,7 @@ class PostSummary extends React.Component {
                 const listSize = proxifyImageUrl(p.image_link, '256x512').replace(/ /g, '%20');
 
                 thumb = (
-                    <span onClick={e => navigate(e, onClick, post, p.link)} className="articles__feature-img-container">
+                    <span  className="articles__feature-img-container">
                         <picture className="articles__feature-img">
                             <source srcSet={listSize} media="(min-width: 1000px)" />
                             <img srcSet={blogSize} />
@@ -287,7 +271,7 @@ export default connect(
     },
 
     (dispatch) => ({
-        dispatchSubmit: data => { dispatch(user.actions.usernamePasswordLogin({...data})) },
-        clearError: () => { dispatch(user.actions.loginError({error: null})) }
+        dispatchSubmit: data => { dispatch(userActions.usernamePasswordLogin({...data})) },
+        clearError: () => { dispatch(userActions.loginError({error: null})) }
     })
 )(PostSummary)

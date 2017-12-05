@@ -1,8 +1,9 @@
 import React from 'react';
+import { browserHistory } from 'react-router';
+import { connect } from 'react-redux';
+import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import SvgImage from 'app/components/elements/SvgImage';
-import { browserHistory } from 'react-router';
-import {connect} from 'react-redux';
 
 class PostWrapper extends React.Component {
 
@@ -61,7 +62,7 @@ const StoreWrapped = connect(
     },
     dispatch => ({
         getContent: (payload) => (new Promise((resolve, reject) => {
-            dispatch({type: 'GET_CONTENT', payload: {...payload, resolve, reject}})
+            dispatch(fetchDataSagaActions.getContent({ ...payload, resolve, reject }));
         }))
     })
 )(PostWrapper);

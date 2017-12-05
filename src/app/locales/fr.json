@@ -234,6 +234,7 @@
     "api_docs": "Documentation API sur Steemit",
     "whitepaper": "Livre blanc sur le Steem",
     "bluepaper": "Steem Bluepaper",
+    "smt_whitepaper": "Livre blanc sur le SMT",
     "intro_tagline": "Présentations sur la monnaie",
     "intro_paragraph": "Votre voix vaut quelque chose. Rejoignez la communauté qui vous rémunère pour vos articles et participez à la curation du contenu de qualité."
   },
@@ -476,7 +477,7 @@
     "images_were_hidden_due_to_low_ratings": "Les images sont masqués en raison d'une faible évaluation."
   },
   "postsummary_jsx": {
-    "resteemed": "Resteemé",
+    "resteemed": "resteemé",
     "resteemed_by": "Resteemé par",
     "reveal_it": "Révélez-le",
     "adjust_your": "Ajustez vos",

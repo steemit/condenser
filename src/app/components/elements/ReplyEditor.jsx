@@ -1,6 +1,7 @@
 import React from 'react';
 import reactForm from 'app/utils/ReactForm'
-import transaction from 'app/redux/Transaction';
+import * as transactionActions from 'app/redux/TransactionReducer';
+import * as userActions from 'app/redux/UserReducer';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer'
 import CategorySelector from 'app/components/cards/CategorySelector'
 import {validateCategory} from 'app/components/cards/CategorySelector'
@@ -10,7 +11,7 @@ import Tooltip from 'app/components/elements/Tooltip'
 import sanitizeConfig, {allowedTags} from 'app/utils/SanitizeConfig'
 import sanitize from 'sanitize-html'
 import HtmlReady from 'shared/HtmlReady'
-import g from 'app/redux/GlobalReducer'
+import * as globalActions from 'app/redux/GlobalReducer';
 import {Set} from 'immutable'
 import Remarkable from 'remarkable'
 import Dropzone from 'react-dropzone'
@@ -527,17 +528,12 @@ export default (formId) => connect(
     // mapDispatchToProps
     dispatch => ({
         clearMetaData: (id) => {
-            dispatch(g.actions.clearMeta({id}))
+            dispatch(globalActions.clearMeta({id}))
         },
         setMetaData: (id, jsonMetadata) => {
-            dispatch(g.actions.setMetaData({id, meta: jsonMetadata ? jsonMetadata.steem : null}))
+            dispatch(globalActions.setMetaData({id, meta: jsonMetadata ? jsonMetadata.steem : null}))
         },
-        uploadImage: (file, progress) => {
-            dispatch({
-                type: 'user/UPLOAD_IMAGE',
-                payload: {file, progress},
-            })
-        },
+        uploadImage: (file, progress) => dispatch(userActions.uploadImage({ file, progress })),
         reply: ({category, title, body, author, permlink, parent_author, parent_permlink, isHtml, isStory,
             type, originalPost, autoVote = false, payoutType = '50%',
             state, jsonMetadata,
@@ -647,7 +643,7 @@ export default (formId) => connect(
                 json_metadata: meta,
                 __config
             }
-            dispatch(transaction.actions.broadcastOperation({
+            dispatch(transactionActions.broadcastOperation({
                 type: 'comment',
                 operation,
                 errorCallback,

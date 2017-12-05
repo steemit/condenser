@@ -1,8 +1,8 @@
 /* eslint react/prop-types: 0 */
 import React, { PropTypes, Component } from 'react';
-import transaction from 'app/redux/Transaction'
-import g from 'app/redux/GlobalReducer'
-import user from 'app/redux/User'
+import * as transactionActions from 'app/redux/TransactionReducer';
+import * as globalActions from 'app/redux/GlobalReducer';
+import * as userActions from 'app/redux/UserReducer';
 import {validate_account_name} from 'app/utils/ChainValidation';
 import runTests from 'app/utils/BrowserTests';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
@@ -10,7 +10,7 @@ import reactForm from 'app/utils/ReactForm'
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import tt from 'counterpart';
 import { APP_URL } from 'app/client_config';
-import {PrivateKey, PublicKey} from 'steem/lib/auth/ecc';
+import {PrivateKey, PublicKey} from '@steemit/steem-js/lib/auth/ecc';
 
 class LoginForm extends Component {
 
@@ -305,21 +305,21 @@ export default connect(
             const username = data.username.trim().toLowerCase()
             if (loginBroadcastOperation) {
                 const {type, operation, successCallback, errorCallback} = loginBroadcastOperation.toJS()
-                dispatch(transaction.actions.broadcastOperation({type, operation, username, password, successCallback, errorCallback}))
-                dispatch(user.actions.usernamePasswordLogin({username, password, saveLogin, afterLoginRedirectToWelcome, operationType: type}))
-                dispatch(user.actions.closeLogin())
+                dispatch(transactionActions.broadcastOperation({type, operation, username, password, successCallback, errorCallback}))
+                dispatch(userActions.usernamePasswordLogin({username, password, saveLogin, afterLoginRedirectToWelcome, operationType: type}))
+                dispatch(userActions.closeLogin())
             } else {
-                dispatch(user.actions.usernamePasswordLogin({username, password, saveLogin, afterLoginRedirectToWelcome}))
+                dispatch(userActions.usernamePasswordLogin({username, password, saveLogin, afterLoginRedirectToWelcome}))
             }
         },
-        clearError: () => { if (hasError) dispatch(user.actions.loginError({error: null})) },
+        clearError: () => { if (hasError) dispatch(userActions.loginError({error: null})) },
         qrReader: (dataCallback) => {
-            dispatch(g.actions.showDialog({name: 'qr_reader', params: {handleScan: dataCallback}}));
+            dispatch(globalActions.showDialog({name: 'qr_reader', params: {handleScan: dataCallback}}));
         },
         showChangePassword: (username, defaultPassword) => {
-            dispatch(user.actions.closeLogin())
-            dispatch(g.actions.remove({key: 'changePassword'}))
-            dispatch(g.actions.showDialog({name: 'changePassword', params: {username, defaultPassword}}))
+            dispatch(userActions.closeLogin())
+            dispatch(globalActions.remove({key: 'changePassword'}))
+            dispatch(globalActions.showDialog({name: 'changePassword', params: {username, defaultPassword}}))
         },
     })
 )(LoginForm)

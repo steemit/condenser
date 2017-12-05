@@ -393,7 +393,7 @@ const Comment = connect(
 
         return {
             ...ownProps,
-            anchor_link: '#@' + content, // Using a hash here is not standard but intentional; see issue #124 for details
+            anchor_link: '#' + content, // Using a hash here is not standard but intentional; see issue #124 for details
             username,
             ignore_list
         }

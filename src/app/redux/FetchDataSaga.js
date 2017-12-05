@@ -46,12 +46,10 @@ export function* fetchState(location_change_action) {
         const route = resolveRoute(pathname);
         if (route.page === 'Post') {
             const content = yield call([api, api.getContentAsync], route.params[0], route.params[1]);
-            console.log('-- fetchState content -->', content);
             url = `${content.category}/@${content.author}/${content.permlink}`;
         } else {
             url = routeToSteemdUrl(route);
         }
-        console.log('-- fetchState url -->', url);
         const state = yield call([api, api.getStateAsync], url)
         yield put(GlobalReducer.actions.receiveState(state));
     } catch (error) {

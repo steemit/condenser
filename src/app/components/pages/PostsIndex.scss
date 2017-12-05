@@ -180,9 +180,6 @@
   }
 }
 
-
-
-
 .PostsIndex.row.layout-list {
   max-width: none;
   @include MQ(L) {
@@ -190,10 +187,9 @@
   }
 }
 
-
 .articles {
     font-family: helvetica, sans-serif;
-    padding: 1em;
+    padding: 4px 1em 1em 1em;
     transition: all 0.2s ease-out;
     border: transparent;
     min-width: 300px;
@@ -279,7 +275,11 @@
         }
       }   
   }
-
+  &__resteem-icon {
+    position: relative;
+    top: -1px;
+    padding-right: 2px;
+  }
   &__summary-header {
     display: flex;
     align-items: center;
@@ -323,12 +323,13 @@
   }
   &__header {
     padding-top:5px;
-    padding-bottom: 1em;
+    padding-bottom: 10px;
     position: relative;
     display: flex;
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
+    line-height: 1;
     @include MQ(M) {
       padding-top: 0;
     }
@@ -356,11 +357,15 @@
       }
   }
   &__resteem-text {
-    @include font-size(14px);     
-    margin-bottom: 4px;
+    @include font-size(13px);     
+    margin-bottom: 0px;
     @include themify($themes) {
         color: themed('textColorSecondary');  
-    }   
+    }  
+    @include MQ(M) {
+      margin-bottom: 2px;
+      @include font-size(14px);
+    } 
   }
   &__resteem-username {
     @extend .link--secondary;
@@ -370,16 +375,19 @@
     padding-left: 8px;
     display: inline-block;
     position: relative;
-    top: 0px;
+    top: -1px;
+    transform: scale(0.9);
+    transform-origin: center;
+
   }
   &__h1 {
     font-family: $font-primary;
     font-weight: bold;
-    @include font-size(20px);     
+    @include font-size(18px);     
     margin: 0;
     text-transform: capitalize;
     @include MQ(M) {
-      @include font-size(22px);       
+      @include font-size(18px);       
     }
   }
   &__h2 {
@@ -421,7 +429,7 @@
       top: -4px; 
       margin-top: 12px; 
       @include themify($themes) {
-          color: themed('textColorPrimary');  
+          color: themed('textColorSecondary');  
       }       
       @media only screen and (min-width: 370px) {
         margin-top: 0; 
@@ -526,8 +534,13 @@
 .user {
   display: flex;
   align-items: center;
+  margin-right: 8px;
   &__col {
     line-height: 1;
+    &--right {
+      position: relative;
+      top: -2px;
+    }
   }
   &__link {
     @extend .link;
@@ -559,9 +572,13 @@
     line-height: 1.2;
 
     a {
+      @extend .link;
       @extend .link--primary;
       font-weight: bold;
-      @include font-size(16px);        
+      @include font-size(14px); 
+      @include MQ(M) {
+        @include font-size(16px); 
+      }       
     }
   }
   &__username, &__reputation {
@@ -629,16 +646,14 @@
   } 
 }
 
-
-
 // Compressed list view CSS
 
 a#changeLayout:focus {
   outline: none;
 }
 
-@include MQ(M) {
-  .layout-list {
+.layout-list {
+  @include MQ(M) {
     transition: 0.3s all ease-in-out;
 
     .icon-svg {
@@ -769,10 +784,6 @@ a#changeLayout:focus {
         padding-bottom: 0;
         border-bottom: transparent;
       }
-      &__resteem-icon {
-        position: relative;
-        top: -2px;
-      }
       &__resteem, &__content-block--text, &__metadata {
         @include MQ(M) {
           padding-left: 0;
@@ -785,42 +796,97 @@ a#changeLayout:focus {
       &__name {
         @include font-size(15px);               
         font-weight: normal;
+        a {
+          @include font-size(14px);               
+        }
       }
     }
   }
 }
 
-@include MQ(L) {
-  .layout-list {
+
+.layout-list {
+  @include MQ(L) {
     .articles {
       padding: 1.5em 3em; 
     }
   }
-}
-
-@include MQ(XL) {
-  .layout-list {
+  @include MQ(XL) {
     .articles {
       padding: 1.5em 4em; 
     }
-  }
+  }  
 }
-
 
 .layout-list .user .Userpic {
   width: 24px !important;
   height: 24px !important;
-  margin-right: 7px;
+  margin-right: 8px;
 }
 
 .layout-block .Userpic {
   margin-right: 8px;
+  @include MQ(M) {
+    margin-right: 12px;
+  }
 }
 
-// .Comment__Userpic .Userpic {
-//   width: 48px !important;
-//   height: 48px !important;
-// }
+.layout-compressed {
+  @extend .layout-list;
+
+  @include MQ(M) {
+    .Userpic {
+      display: none;
+    }
+    .articles {
+      &__summary {
+        margin: 0 0 10px;
+        padding-bottom: 0;
+        @include themify($themes) {
+          border-bottom: themed('borderTransparent'); 
+        }       
+      }
+      &__summary-header {
+        padding: 2px 0;
+      }
+      &__summary-footer {
+        padding: 0;
+      }
+      &__h2 {
+        @include font-size(14px);
+        padding-bottom: 2px;
+      }
+      .PostSummary__body {
+        padding: 0;
+        @include font-size(14px);
+      }
+      &__content-block {
+        &--img {
+          margin-right: 12px;
+        }
+      }
+      &__feature-img-container {
+        width: 90px;
+        height: 56px;
+      }
+      &__hr {
+        margin-bottom: 12px;
+      }
+    }
+    .c-sidebar {
+      &__content {
+        @include font-size(14px);
+      }
+    }
+    .user {
+      &__name {
+        a {
+          font-weight: normal;
+        }
+      }
+    }  
+  }
+}
 
 
 .icon-svg {
@@ -849,9 +915,13 @@ a#changeLayout:focus {
   }
 }
 
+.PostsIndex .Voting {
+  float: right;
+}
 
 
 .articles__resteem .username {
+    @extend .link;
     @extend .link--secondary;
     text-decoration: none;
 }

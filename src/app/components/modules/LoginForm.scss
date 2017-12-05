@@ -7,76 +7,31 @@
   form {
     margin-top: 1.5rem;
   }
-  .login-modal-buttons {
-    .button {
-      text-decoration: none;
-      font-weight: bold;
-      transition: 0.2s all ease-in-out;
-      text-transform: capitalize;
-      border-radius: 0;
-      @include font-size(18px);       
-      background-color: $color-blue-black;  
-      box-shadow: 0px 0px 0px 0 rgba(0,0,0,0), 5px 5px 0 0 $color-teal;
-      color: $color-white;
-      &:hover, &:focus {
-        background-color: $color-teal;
-        box-shadow: 2px 2px 2px 0 rgba(0,0,0,0.1), 7px 7px 0 0 $color-black;   
-        color: $color-white;
-        text-shadow: 0 1px 0 rgba(0,0,0,0.20);
-        }
-      &:visited, &:active {
-          color: $color-white;
-        }         
-      }
-      .button.disabled, .button[disabled] {
-        opacity: 0.25;
-        cursor: not-allowed;
-        box-shadow: 0px 0px 0px 0 rgba(0,0,0,0);
-        &:hover, &:focus {
-          background-color: $color-blue-black;    
-        } 
-      }
-    }
-    .button.hollow {
-      background-color: transparent;
-      color: $color-text-gray;
-      font-weight: normal;
-      box-shadow: 2px 2px 2px 0 rgba(0,0,0,0);
-      border: none;
-      text-shadow: 0px 0px 0px rgba(0,0,0,0);
-      &:hover, &:focus {
-        background-color: transparent;
-        color: $color-text-dark;
-        box-shadow: 2px 2px 2px 0 rgba(0,0,0,0);
-        border: none;
-        text-shadow: 0 0px 0 rgba(0,0,0,0);
-      }
+}
+.sign-up {
+  .button {
+    background-color: transparent;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    font-size: 1.2rem;
+    text-transform: none;       
+  }
+  .button.hollow {
+    border: 1px solid #ddd;
+    color: $color-blue-black;
+    transition: 0.2s all ease-in-out;
+    @include font-size(16px);
+    
+    &:hover {
+      border: 1px solid $color-teal-dark;
+      color: $color-teal-dark;
+      box-shadow: 0 2px 4px 0 rgba(0,0,0,0.05);
     }
   }
-  .sign-up {
-    .button {
-      background-color: transparent;
-      padding-top: 1rem;
-      padding-bottom: 1rem;
-      font-size: 1.2rem;
-      text-transform: none;       
-    }
-    .button.hollow {
-      border: 1px solid #ddd;
-      color: $color-blue-black;
-      transition: 0.2s all ease-in-out;
-      @include font-size(16px);
-      
-      &:hover {
-        border: 1px solid $color-teal-dark;
-        color: $color-teal-dark;
-        box-shadow: 0 2px 4px 0 rgba(0,0,0,0.05);
-      }
-    }
-    em {
-      font-weight: bold;
-      font-style: normal;
-    }
+  em {
+    font-weight: bold;
+    font-style: normal;
+  }
   hr {
       margin: 1.75rem auto 2rem auto;
   }

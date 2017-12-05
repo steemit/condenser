@@ -168,6 +168,7 @@ ul.pager {
 
   .button.hollow {
     transition: 0.2s all ease-in-out;
+    background-color: transparent;
     @include themify($themes) {
       border: themed('borderAccent');  
       color: themed('textColorAccent');  

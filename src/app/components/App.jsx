@@ -3,8 +3,7 @@ import {connect} from 'react-redux';
 import AppPropTypes from 'app/utils/AppPropTypes';
 import Header from 'app/components/modules/Header';
 import LpFooter from 'app/components/modules/lp/LpFooter';
-import user from 'app/redux/User';
-import g from 'app/redux/GlobalReducer';
+import * as userActions from 'app/redux/UserReducer';
 import TopRightMenu from 'app/components/modules/TopRightMenu';
 import { browserHistory } from 'react-router';
 import classNames from 'classnames';
@@ -18,8 +17,9 @@ import tt from 'counterpart';
 import PageViewsCounter from 'app/components/elements/PageViewsCounter';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import { APP_NAME, VESTING_TOKEN, LIQUID_TOKEN } from 'app/client_config';
-import {key_utils} from 'steem/lib/auth/ecc';
+import {key_utils} from '@steemit/steem-js/lib/auth/ecc';
 import resolveRoute from 'app/ResolveRoute';
+import {VIEW_MODE_WHISTLE} from 'shared/constants';
 
 const pageRequiresEntropy = (path) => {
     const {page} = resolveRoute(path);
@@ -125,10 +125,11 @@ class App extends React.Component {
 
     render() {
         const {location, params, children, flash, new_visitor,
-            depositSteem, signup_bonus, username, nightmodeEnabled} = this.props;
+            depositSteem, signup_bonus, username, nightmodeEnabled, viewMode} = this.props;
         const lp = false; //location.pathname === '/';
         const miniHeader = location.pathname === '/create_account' || location.pathname === '/pick_account';
-        const headerHidden = miniHeader && location.search === '?whistle_signup'
+        const whistleView = (viewMode === VIEW_MODE_WHISTLE);
+        const headerHidden = whistleView;
         const params_keys = Object.keys(params);
         const ip = location.pathname === '/' || (params_keys.length === 2 && params_keys[0] === 'order' && params_keys[1] === 'category');
         const alert = this.props.error || flash.get('alert') || flash.get('error');
@@ -193,9 +194,7 @@ class App extends React.Component {
 
         const themeClass = nightmodeEnabled ? ' theme-dark' : ' theme-light';
 
-        return <div className={'App' + themeClass + (lp ? ' LP' : '') + (ip ? ' index-page' : '') + (miniHeader ? ' mini-header' : '')}
-                    ref="App_root"
-                >
+        return <div className={classNames('App',  themeClass, { 'LP': lp, 'index-page': ip, 'mini-header': miniHeader, 'whistle-view': whistleView})} ref="App_root">
             <SidePanel ref="side_panel" alignment="right">
                 <TopRightMenu vertical navigate={this.navigate} />
                 <ul className="vertical menu">
@@ -257,7 +256,7 @@ class App extends React.Component {
                         </a>
                     </li>
                     <li className="last">
-                        <a href="https://steemit.github.io/steemit-docs/" target="_blank" rel="noopener noreferrer">
+                        <a href="https://developers.steem.io/" target="_blank" rel="noopener noreferrer">
                             {tt('navigation.api_docs')}&nbsp;<Icon name="extlink" />
                         </a>
                     </li>
@@ -266,6 +265,11 @@ class App extends React.Component {
                     <li>
                         <a href="https://steem.io/steem-bluepaper.pdf" target="_blank" rel="noopener noreferrer">
                             {tt('navigation.bluepaper')}&nbsp;<Icon name="extlink" />
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://smt.steem.io/" target="_blank" rel="noopener noreferrer">
+                            {tt('navigation.smt_whitepaper')}&nbsp;<Icon name="extlink" />
                         </a>
                     </li>
                     <li>
@@ -290,7 +294,7 @@ class App extends React.Component {
                     </li>
                 </ul>
             </SidePanel>
-            {miniHeader ? headerHidden ? null : <MiniHeader /> : <Header toggleOffCanvasMenu={this.toggleOffCanvasMenu} menuOpen={this.state.open} />}
+            {headerHidden ? null : miniHeader ? <MiniHeader /> : <Header toggleOffCanvasMenu={this.toggleOffCanvasMenu} menuOpen={this.state.open} />}
             <div className="App__content">
                 {welcome_screen}
                 {callout}
@@ -317,6 +321,7 @@ App.propTypes = {
 export default connect(
     state => {
         return {
+            viewMode: state.app.get('viewMode'),
             error: state.app.get('error'),
             flash: state.offchain.get('flash'),
             signup_bonus: state.offchain.get('signup_bonus'),
@@ -330,12 +335,11 @@ export default connect(
     },
     dispatch => ({
         loginUser: () =>
-            dispatch(user.actions.usernamePasswordLogin()),
+            dispatch(userActions.usernamePasswordLogin({})),
         depositSteem: (username) => {
             const new_window = window.open();
             new_window.opener = null;
             new_window.location = 'https://blocktrades.us/?input_coin_type=btc&output_coin_type=steem&receive_address=' + username;
-            //dispatch(g.actions.showDialog({name: 'blocktrades_deposit', params: {outputCoinType: 'VESTS'}}));
         },
     })
 )(App);

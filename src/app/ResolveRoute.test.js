@@ -10,6 +10,7 @@ describe ( 'routeRegex', () => {
             ['UserProfile3', /^\/(@[\w\d.-]+)\/([\w\d-]+)/],
             ['CategoryFilters', /^\/(hot|votes|responses|trending|trending30|promoted|cashout|payout|payout_comments|created|active)\/?$/ig],
             ['PostNoCategory', /^\/(@[\w\d.-]+)\/([\w\d-]+)/],
+            ['FilterOrCategory', /^\/(hot|votes|responses|trending|trending30|promoted|cashout|payout|payout_comments|created|active)\/([\u4E00-\u9FA5\u0400-\u044F\w\d-]+)*\/?$/],
             ['Post',     /^\/([\u4E00-\u9FA5\u0400-\u044F\w\d-]+)\/(@[\w\d.-]+)\/([\w\d-]+)\/?$/],
             ['PostJson', /^\/([\u4E00-\u9FA5\u0400-\u044F\w\d-]+)\/(@[\w\d.-]+)\/([\w\d-]+)[.json]$/],
             ['UserJson', /^\/(@[\w\d.-]+)[.json]$/],
@@ -54,9 +55,9 @@ describe('resolveRoute', () => {
     });
     it('should resolve xss test route in development environment', () => {
         expect(resolveRoute('/xss/test')).to.deep.equal({page:'NotFound'});
-        process.env.NODE_ENV = 'development';
+        process.env['NODE_ENV'] = 'development';
         expect(resolveRoute('/xss/test')).to.deep.equal({page:'XSSTest'});
-        delete process.env.NODE_ENV;
+        delete process.env['NODE_ENV'];
     });
     it('should resolve an unknown route to NotFound', () => {
         expect(resolveRoute('/randomness')).to.deep.equal({page:'NotFound'});

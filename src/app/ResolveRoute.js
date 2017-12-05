@@ -36,7 +36,7 @@ const
     category = '(' + '[\\u4E00-\\u9FA5\\u0400-\\u044F\\w\\d-]+' + ')',
     endpoints = '(' + userEndpoints.join('|') + ')',
     filters = '(' + categoryFilters.join('|') + ')',
-    json = '[.json]'
+    json = '[.json]';
 
 export const routeRegex = {
     PostsIndex:         new RegExp('^\/' + userName + '\/' + 'feed' + '\/?' + '$'),
@@ -45,13 +45,13 @@ export const routeRegex = {
     UserProfile3:       new RegExp('^\/' + userName + '\/' + title),
     UserEndPoints:      new RegExp('^\/' + endpoints + '$'),
     CategoryFilters:    new RegExp('^\/' + filters + '\/?' + '$', 'ig'),
+    FilterOrCategory:   new RegExp('^\/' + filters + '\/' + category + '*' + '\/?' + '$'),
     PostNoCategory:     new RegExp('^\/' + userName + '\/' + title ),
     Post:               new RegExp('^\/' + category + '\/' + userName + '\/' + title + '\/?' + '$'),
     PostJson:           new RegExp('^\/' + category + '\/' + userName + '\/' + title + json + '$'),
     UserJson:           new RegExp('^\/' + userName + json + '$'),
     UserNameJson:       /^.*(?=(\.json))/,
 };
-
 
 export default function resolveRoute(path)
 {
@@ -132,8 +132,7 @@ export default function resolveRoute(path)
     if (match) {
         return {page: 'Post', params: match.slice(1)};
     }
-    match = path.match(/^\/(hot|votes|responses|trending|trending30|promoted|cashout|payout|payout_comments|created|active)\/?$/)
-        || path.match(/^\/(hot|votes|responses|trending|trending30|promoted|cashout|payout|payout_comments|created|active)\/([\u4E00-\u9FA5\u0400-\u044F\w\d-]+)\/?$/);
+    match = path.match(routeRegex.FilterOrCategory);
     if (match) {
         return {page: 'PostsIndex', params: match.slice(1)};
     }

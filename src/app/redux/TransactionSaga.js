@@ -344,7 +344,7 @@ import secureRandom from 'secure-random'
 
 // function* preBroadcast_account_witness_vote({operation, username}) {
 // }
-function* preBroadcast_comment({operation, username}) {
+export function* preBroadcast_comment({operation, username}) {
     if (!operation.author) operation.author = username
     let permlink = operation.permlink
     const {author, __config: {originalBody, autoVote, comment_options}} = operation
@@ -410,7 +410,7 @@ function* preBroadcast_comment({operation, username}) {
     return comment_op
 }
 
-function* createPermlink(title, author, parent_author, parent_permlink) {
+export function* createPermlink(title, author, parent_author, parent_permlink) {
     let permlink
     if (title && title.trim() !== '') {
         let s = slug(title)
@@ -429,8 +429,8 @@ function* createPermlink(title, author, parent_author, parent_permlink) {
         permlink = prefix + s
     } else {
         // comments: re-parentauthor-parentpermlink-time
-        const timeStr = new Date().toISOString().replace(/[^a-zA-Z0-9]+/g, '')
-        parent_permlink = parent_permlink.replace(/(-\d{8}t\d{9}z)/g, '')
+        const timeStr = new Date().toISOString().replace(/[^a-zA-Z0-9]+/g, '') // TODO: Make the timestamp generator its own testable function.
+        parent_permlink = parent_permlink.replace(/(-\d{8}t\d{9}z)/g, '') // TODO: sometimes the parent_permlink is undefined and this breaks.
         permlink = `re-${parent_author}-${parent_permlink}-${timeStr}`
     }
     if(permlink.length > 255) {

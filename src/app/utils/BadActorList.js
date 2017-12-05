@@ -27,6 +27,7 @@ bttrex
 bitttex
 ittrex
 bittrex-deposit
+openledgerdex
 blockrades
 blocktraades
 blocktradse
@@ -110,6 +111,7 @@ bloocktrades
 bloctrades
 blocktradess
 blocktrade
+blocktraders
 `.trim().split('\n');
 
 export default list;

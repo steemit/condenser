@@ -1,5 +1,5 @@
 import {NTYPES, notificationsArrayToMap} from 'app/utils/Notifications';
-import {api} from 'steem';
+import {api} from '@steemit/steem-js';
 
 const request_base = {
     method: 'post',

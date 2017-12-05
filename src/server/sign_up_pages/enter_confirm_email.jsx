@@ -4,6 +4,8 @@ import request from "co-request";
 import React from "react";
 import { renderToString } from "react-dom/server";
 import models from "db/models";
+import {PARAM_VIEW_MODE, VIEW_MODE_WHISTLE} from "shared/constants";
+import {addToParams, makeParams} from 'app/utils/Links';
 import ServerHTML from "../server-html";
 import sendEmail from "../sendEmail";
 import { getRemoteIp, checkCSRF } from "server/utils/misc";
@@ -12,7 +14,7 @@ import MiniHeader from "app/components/modules/MiniHeader";
 import secureRandom from "secure-random";
 import Mixpanel from "mixpanel";
 import Progress from "react-foundation-components/lib/global/progress-bar";
-import {api} from 'steem';
+import {api} from '@steemit/steem-js';
 
 const path = require('path');
 const ROOT = path.join(__dirname, '../../..');
@@ -177,17 +179,19 @@ export default function useEnterAndConfirmEmailPages(app) {
 
     router.get("/enter_email", function*() {
         console.log("-- /enter_email -->", this.session.uid, this.session.user, this.request.query.account);
+        const params = addToParams({}, this.request.query, PARAM_VIEW_MODE, [VIEW_MODE_WHISTLE]);
+        const viewMode = (params[PARAM_VIEW_MODE]) ? params[PARAM_VIEW_MODE] : '';
         const picked_account_name = this.session.picked_account_name = this.request.query.account;
         if (!picked_account_name) {
             this.flash = { error: "Please select your account name" };
-            this.redirect('/pick_account');
+            this.redirect('/pick_account' + makeParams(params));
             return;
         }
         // check for existing account
         const check_account_res = yield api.getAccountsAsync([picked_account_name]);
         if (check_account_res && check_account_res.length > 0) {
             this.flash = { error: `${picked_account_name} is already taken, please try another name` };
-            this.redirect('/pick_account');
+            this.redirect('/pick_account' + makeParams(params));
             return;
         }
         let default_email = "";
@@ -195,12 +199,12 @@ export default function useEnterAndConfirmEmailPages(app) {
             default_email = this.request.query.email;
         const body = renderToString(
             <div className="App CreateAccount">
-                <MiniHeader />
+                {(viewMode !== VIEW_MODE_WHISTLE)? <MiniHeader /> : null}
                 <br />
                 <div className="row CreateAccount__step" style={{ maxWidth: "32rem" }}>
                     <div className="column">
                         <Progress tabIndex="0" value={50} max={100} />
-                        <form id="submit_email" action="/submit_email" method="POST">
+                        <form id="submit_email" action={'/submit_email' + makeParams(params)} method="POST">
                             <h4 className="CreateAccount__title">
                                 Your email address, please
                             </h4>
@@ -254,16 +258,17 @@ export default function useEnterAndConfirmEmailPages(app) {
 
     router.post("/submit_email", koaBody, function*() {
         if (!checkCSRF(this, this.request.body.csrf)) return;
-
+        const params = addToParams({}, this.request.query, PARAM_VIEW_MODE, [VIEW_MODE_WHISTLE]);
         let {email, account} = this.request.body;
-        console.log('-- /submit_email -->', this.session.uid, email, account);
+        console.log('-- /submit_email -->', this.session.uid, email, account, this.request.query[PARAM_VIEW_MODE]);
+
         if (!email) {
             this.flash = { error: "Please provide an email address" };
-            this.redirect(`/enter_email?account=${account}`);
+            this.redirect(`/enter_email?account=${account}` + makeParams(params, '&'));
             return;
         }
-        email = email.trim().toLowerCase();
-        account = account.trim().toLowerCase();
+        email = params.email = email.trim().toLowerCase();
+        account = params.account = account.trim().toLowerCase();
 
         //recaptcha
         if (config.get('recaptcha.site_key')) {
@@ -277,7 +282,7 @@ export default function useEnterAndConfirmEmailPages(app) {
                 this.flash = {
                     error: "Failed captcha verification, please try again"
                 };
-                this.redirect(`/enter_email?email=${email}&account=${account}`);
+                this.redirect(`/enter_email` + makeParams(params));
                 return;
             }
         }
@@ -291,7 +296,7 @@ export default function useEnterAndConfirmEmailPages(app) {
                 email
             );
             this.flash = { error: "Not valid email address" };
-            this.redirect(`/enter_email?email=${email}&account=${account}`);
+            this.redirect(`/enter_email` + makeParams(params));
             return;
         }
 
@@ -350,12 +355,12 @@ export default function useEnterAndConfirmEmailPages(app) {
             }
         } catch (error) {
             this.flash = {error: 'Internal Server Error'};
-            this.redirect(`/enter_email?email=${email}&account=${account}`);
+            this.redirect('/enter_email' +  + makeParams(params));
             console.error('Error in /submit_email :', this.session.uid, error.toString());
         }
 
         // redirect to phone verification
-        this.redirect("/enter_mobile");
+        this.redirect("/enter_mobile" + makeParams(params));
     });
 
     router.get("/confirm_email/:code", confirmEmailHandler);

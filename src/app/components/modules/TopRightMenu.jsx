@@ -1,10 +1,9 @@
 import React from 'react';
 import { browserHistory, Link } from 'react-router';
 import {connect} from 'react-redux';
+import tt from 'counterpart';
 import Icon from 'app/components/elements/Icon';
-import user from 'app/redux/User';
 import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdown';
-import Icon from 'app/components/elements/Icon';
 import * as userActions from 'app/redux/UserReducer';
 import * as appActions from 'app/redux/AppReducer';
 import Userpic from 'app/components/elements/Userpic';

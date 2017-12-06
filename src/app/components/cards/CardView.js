@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux'
 import Link from 'app/components/elements/Link'
-import g from 'app/redux/GlobalReducer'
+import * as globalActions from 'app/redux/GlobalReducer';
 import links from 'app/utils/Links'
 import tt from 'counterpart';
 
@@ -67,7 +67,7 @@ export default connect(
     },
     dispatch => ({
         clearMetaElement: (formId, element) => {
-            dispatch(g.actions.clearMetaElement({formId, element}))
+            dispatch(globalActions.clearMetaElement({formId, element}))
         }
     })
 )(CardView)

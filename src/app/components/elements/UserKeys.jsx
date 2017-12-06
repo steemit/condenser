@@ -1,10 +1,10 @@
 import React, {PropTypes, Component} from 'react'
-import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
-import Keys from 'app/components/elements/Keys'
-import g from 'app/redux/GlobalReducer'
 import {connect} from 'react-redux';
 import QRCode from 'react-qr'
 import tt from 'counterpart';
+import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
+import Keys from 'app/components/elements/Keys'
+import * as globalActions from 'app/redux/GlobalReducer';
 
 const keyTypes = ['Posting', 'Active', 'Owner', 'Memo']
 
@@ -76,7 +76,7 @@ class UserKeys extends Component {
                 </div>
             </span>
         })
-        return (<div className="row">
+        return (<div className="UserKeys row">
             <div style={{paddingBottom: 10}} className="column small-12">
                 <Keys account={account} authType="posting" onKey={onKey.Posting} />
                 <span className="secondary">{tt('userkeys_jsx.posting_key_is_required_it_should_be_different')}</span>
@@ -114,12 +114,12 @@ export default connect(
     },
     dispatch => ({
         setWifShown: (shown) => {
-            dispatch(g.actions.receiveState({UserKeys_wifShown: shown}))
+            dispatch(globalActions.receiveState({UserKeys_wifShown: shown}))
         },
         showChangePassword: (username) => {
             const name = 'changePassword'
-            dispatch(g.actions.remove({key: name}))
-            dispatch(g.actions.showDialog({name, params: {username}}))
+            dispatch(globalActions.remove({key: name}))
+            dispatch(globalActions.showDialog({name, params: {username}}))
         },
     })
 )(UserKeys)

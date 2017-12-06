@@ -1,7 +1,7 @@
-import path from 'path';
-import webpack from 'webpack';
-import ExtractTextPlugin from 'extract-text-webpack-plugin';
-import writeStats from './utils/write-stats';
+const path = require('path');
+const webpack = require('webpack');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const writeStats = require('./utils/write-stats');
 
 const Webpack_isomorphic_tools_plugin = require('webpack-isomorphic-tools/plugin');
 const webpack_isomorphic_tools_plugin =
@@ -32,19 +32,20 @@ const scss_loaders = [
     }
 ]
 
-export default {
+module.exports = {
     entry: {
         app: ['babel-polyfill', './src/app/Main.js'],
         vendor: [
             'react',
             'react-dom',
             'react-router',
-            'steem',
+            '@steemit/steem-js',
             'bytebuffer',
             'immutable',
             'autolinker',
             'pako',
-            'remarkable'
+            'remarkable',
+            'picturefill'
         ]
     },
     output: {

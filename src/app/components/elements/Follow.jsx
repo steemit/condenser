@@ -2,10 +2,10 @@ import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
-import transaction from 'app/redux/Transaction';
+import * as transactionActions from 'app/redux/TransactionReducer';
+import * as userActions from 'app/redux/UserReducer';
 import {Set, Map} from 'immutable'
 import tt from 'counterpart';
-import user from 'app/redux/User';
 
 const {string, bool, any} = PropTypes;
 
@@ -114,7 +114,11 @@ module.exports = connect(
 
         const {following} = ownProps
         const f = state.global.getIn(['follow', 'getFollowingAsync', follower], emptyMap)
-        const loading = f.get('blog_loading', false) || f.get('ignore_loading', false)
+
+        // the line below was commented out by val - I think it's broken so sometimes the loading indicator is shown forever
+        // const loading = f.get('blog_loading', false) || f.get('ignore_loading', false)
+        const loading = false;
+
         const followingWhat =
             f.get('blog_result', emptySet).contains(following) ? 'blog' :
             f.get('ignore_result', emptySet).contains(following) ? 'ignore' :
@@ -131,7 +135,7 @@ module.exports = connect(
         updateFollow: (follower, following, action, done) => {
             const what = action ? [action] : [];
             const json = ['follow', {follower, following, what}];
-            dispatch(transaction.actions.broadcastOperation({
+            dispatch(transactionActions.broadcastOperation({
                 type: 'custom_json',
                 operation: {
                     id: 'follow',
@@ -144,7 +148,7 @@ module.exports = connect(
         },
         showLogin: e => {
             if (e) e.preventDefault();
-            dispatch(user.actions.showLogin())
+            dispatch(userActions.showLogin())
         },
     })
 )(Follow);

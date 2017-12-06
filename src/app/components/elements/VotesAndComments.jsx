@@ -13,8 +13,8 @@ class VotesAndComments extends React.Component {
         commentsLink: React.PropTypes.string.isRequired,
 
         // Redux connect properties
-        votes: React.PropTypes.number,
         comments: React.PropTypes.number,
+        totalVotes: React.PropTypes.number,
     };
 
     constructor(props) {
@@ -23,14 +23,14 @@ class VotesAndComments extends React.Component {
     }
 
     render() {
-        const {votes, comments, commentsLink} = this.props;
+        const {comments, commentsLink, totalVotes} = this.props;
         let comments_tooltip = tt('votesandcomments_jsx.no_responses_yet_click_to_respond');
         if (comments > 0) comments_tooltip = tt('votesandcomments_jsx.response_count_tooltip', {count: comments});
 
         return (
             <span className="VotesAndComments">
-                <span className="VotesAndComments__votes" title={tt('votesandcomments_jsx.vote_count', {count: votes})}>
-                    <Icon size="1x" name="chevron-up-circle" />&nbsp;{votes}
+                <span className="VotesAndComments__votes" title={tt('votesandcomments_jsx.vote_count', {count: totalVotes})}>
+                    <Icon size="1x" name="chevron-up-circle" />&nbsp;{totalVotes}
                 </span>
                 <span className={'VotesAndComments__comments' + (comments === 0 ? ' no-comments' : '')}>
                      <Link to={commentsLink} title={comments_tooltip}>
@@ -48,7 +48,7 @@ export default connect(
         if (!post) return props;
         return {
             ...props,
-            votes: post.get('net_votes'),
+            totalVotes: post.getIn(['stats', 'total_votes']),
             comments: post.get('children')
         };
     }

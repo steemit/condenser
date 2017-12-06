@@ -53,11 +53,8 @@ describe('resolveRoute', () => {
             expect(resolveRoute(r[0])).to.deep.equal(r[1]);
         });
     });
-    it('should resolve xss test route in development environment', () => {
+    it('should not resolve xss test route in production environment', () => {
         expect(resolveRoute('/xss/test')).to.deep.equal({page:'NotFound'});
-        process.env['NODE_ENV'] = 'development';
-        expect(resolveRoute('/xss/test')).to.deep.equal({page:'XSSTest'});
-        delete process.env['NODE_ENV'];
     });
     it('should resolve an unknown route to NotFound', () => {
         expect(resolveRoute('/randomness')).to.deep.equal({page:'NotFound'});

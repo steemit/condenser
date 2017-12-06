@@ -445,7 +445,7 @@ export function* createPermlink(title, author, parent_author, parent_permlink) {
 import diff_match_patch from 'diff-match-patch'
 const dmp = new diff_match_patch()
 
-function createPatch(text1, text2) {
+export function createPatch(text1, text2) {
     if (!text1 && text1 === '') return undefined
     const patches = dmp.patch_make(text1, text2)
     const patch = dmp.patch_toText(patches)

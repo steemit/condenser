@@ -169,7 +169,6 @@
     "koa-webpack-hot-middleware": "^1.0.3",
     "mocha": "^2.4.5",
     "node-watch": "^0.5.5",
-    "pre-commit": "^1.2.2",
     "prettier": "1.8.2",
     "react-addons-perf": "15.4.2",
     "react-addons-test-utils": "15.4.2",

@@ -3,10 +3,10 @@ import {connect} from 'react-redux';
 import { Link } from 'react-router';
 import links from 'app/utils/Links'
 import Icon from 'app/components/elements/Icon';
-import transaction from 'app/redux/Transaction'
+import * as transactionActions from 'app/redux/TransactionReducer';
 import ByteBuffer from 'bytebuffer'
 import {is} from 'immutable'
-import g from 'app/redux/GlobalReducer';
+import * as globalActions from 'app/redux/GlobalReducer';
 import tt from 'counterpart';
 
 const Long = ByteBuffer.Long
@@ -122,7 +122,7 @@ class Witnesses extends React.Component {
 
 
         return (
-            <div>
+            <div className="Witnesses">
                 <div className="row">
                     <div className="column">
                         <h2>{tt('witnesses_jsx.top_witnesses')}</h2>
@@ -224,18 +224,18 @@ module.exports = {
         (dispatch) => {
             return {
                 accountWitnessVote: (username, witness, approve) => {
-                    dispatch(transaction.actions.broadcastOperation({
+                    dispatch(transactionActions.broadcastOperation({
                         type: 'account_witness_vote',
                         operation: {account: username, witness, approve},
                     }))
                 },
                 accountWitnessProxy: (account, proxy, stateCallback) => {
-                    dispatch(transaction.actions.broadcastOperation({
+                    dispatch(transactionActions.broadcastOperation({
                         type: 'account_witness_proxy',
                         operation: {account, proxy},
                         confirm: proxy.length ? "Set proxy to: " + proxy : "You are about to remove your proxy.",
                         successCallback: () => {
-                            dispatch(g.actions.updateAccountWitnessProxy({account, proxy}));
+                            dispatch(globalActions.updateAccountWitnessProxy({account, proxy}));
                             stateCallback({proxyFailed: false, proxy: ""});
                         },
                         errorCallback: (e) => {

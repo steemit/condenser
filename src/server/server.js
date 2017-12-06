@@ -30,6 +30,7 @@ import config from 'config';
 import { routeRegex } from 'app/ResolveRoute';
 import secureRandom from 'secure-random';
 import userIllegalContent from 'app/utils/userIllegalContent';
+import koaLocale from 'koa-locale';
 
 if(cluster.isMaster)
     console.log('application server starting, please wait.');
@@ -70,6 +71,7 @@ csrf(app);
 
 app.use(mount(grant));
 app.use(flash({ key: 'flash' }));
+koaLocale(app);
 
 function convertEntriesToArrays(obj) {
     return Object.keys(obj).reduce((result, key) => {
@@ -168,7 +170,9 @@ if (env === 'production') {
     app.use(koa_logger());
 }
 
-app.use(helmet());
+app.use(helmet({
+    hsts: false
+}));
 
 app.use(
     mount(

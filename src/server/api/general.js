@@ -10,9 +10,9 @@ import {emailRegex, getRemoteIp, rateLimitReq, checkCSRF} from 'server/utils/mis
 import coBody from 'co-body';
 import Mixpanel from 'mixpanel';
 import Tarantool from 'db/tarantool';
-import {PublicKey, Signature, hash} from 'steem/lib/auth/ecc';
-import {api, broadcast} from 'steem';
 import secureRandom from 'secure-random';
+import {PublicKey, Signature, hash} from '@steemit/steem-js/lib/auth/ecc';
+import {api, broadcast} from '@steemit/steem-js';
 
 const mixpanel = config.get('mixpanel') ? Mixpanel.init(config.get('mixpanel')) : null;
 
@@ -265,7 +265,7 @@ export default function useGeneralApi(app) {
     });
 
     router.post('/login_account', koaBody, function *() {
-        if (rateLimitReq(this, this.req)) return;
+        // if (rateLimitReq(this, this.req)) return;
         const params = this.request.body;
         const {csrf, account, signatures} = typeof(params) === 'string' ? JSON.parse(params) : params;
         if (!checkCSRF(this, csrf)) return;
@@ -464,6 +464,28 @@ export default function useGeneralApi(app) {
             }
         }
         this.body = JSON.stringify({status: 'ok'});
+    });
+
+    router.post('/setUserPreferences', koaBody, function *() {
+        const params = this.request.body;
+        const {csrf, payload} = typeof(params) === 'string' ? JSON.parse(params) : params;
+        if (!checkCSRF(this, csrf)) return;
+        console.log('-- /setUserPreferences -->', this.session.user, this.session.uid, payload);
+        if (!this.session.a) {
+            this.body = 'missing logged in account';
+            this.status = 500;
+            return;
+        }
+        try {
+            const json = JSON.stringify(payload);
+            if (json.length > 1024) throw new Error('the data is too long');
+            this.session.user_prefs = json;
+            this.body = JSON.stringify({status: 'ok'});
+        } catch (error) {
+            console.error('Error in /setUserPreferences api call', this.session.uid, error);
+            this.body = JSON.stringify({error: error.message});
+            this.status = 500;
+        }
     });
 }
 

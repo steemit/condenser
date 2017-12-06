@@ -2,15 +2,16 @@
 /*global $STM_csrf, $STM_Config */
 import React from 'react';
 import {connect} from 'react-redux';
+import { Link } from 'react-router';
+import {api} from '@steemit/steem-js';
+
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
-import user from 'app/redux/User';
-import {PrivateKey} from 'steem/lib/auth/ecc';
+import {PrivateKey} from '@steemit/steem-js/lib/auth/ecc';
+import * as userActions from 'app/redux/UserReducer';
 import {validate_account_name} from 'app/utils/ChainValidation';
 import runTests from 'app/utils/BrowserTests';
 import GeneratedPasswordInput from 'app/components/elements/GeneratedPasswordInput';
 import {saveCords} from 'app/utils/ServerApiClient';
-import {api} from 'steem';
-import { Link } from 'react-router';
 
 class CreateAccount extends React.Component {
 
@@ -321,14 +322,14 @@ module.exports = {
             }
         },
         dispatch => ({
-            loginUser: (username, password) => dispatch(user.actions.usernamePasswordLogin({username, password, saveLogin: true})),
+            loginUser: (username, password) => dispatch(userActions.usernamePasswordLogin({username, password, saveLogin: true})),
             logout: e => {
                 if (e) e.preventDefault();
-                dispatch(user.actions.logout())
+                dispatch(userActions.logout())
             },
             showTerms: e => {
                 if (e) e.preventDefault();
-                dispatch(user.actions.showTerms())
+                dispatch(userActions.showTerms())
             }
         })
     )(CreateAccount)

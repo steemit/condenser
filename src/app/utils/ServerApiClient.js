@@ -1,5 +1,5 @@
 import {NTYPES, notificationsArrayToMap} from 'app/utils/Notifications';
-import {api} from 'steem';
+import {api} from '@steemit/steem-js';
 
 const request_base = {
     method: 'post',
@@ -87,6 +87,12 @@ export function sendConfirmEmail(account) {
 export function saveCords(x, y) {
     const request = Object.assign({}, request_base, {body: JSON.stringify({csrf: $STM_csrf, x: x, y: y})});
     fetch('/api/v1/save_cords', request);
+}
+
+export function setUserPreferences(payload) {
+    if (!process.env.BROWSER || window.$STM_ServerBusy) return Promise.resolve();
+    const request = Object.assign({}, request_base, {body: JSON.stringify({csrf: window.$STM_csrf, payload})});
+    return fetch('/api/v1/setUserPreferences', request);
 }
 
 if (process.env.BROWSER) {

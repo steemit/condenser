@@ -1,6 +1,7 @@
 import React from 'react';
 import reactForm from 'app/utils/ReactForm'
-import transaction from 'app/redux/Transaction';
+import * as transactionActions from 'app/redux/TransactionReducer';
+import * as userActions from 'app/redux/UserReducer';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer'
 import CategorySelector from 'app/components/cards/CategorySelector'
 import {validateCategory} from 'app/components/cards/CategorySelector'
@@ -10,7 +11,7 @@ import Tooltip from 'app/components/elements/Tooltip'
 import sanitizeConfig, {allowedTags} from 'app/utils/SanitizeConfig'
 import sanitize from 'sanitize-html'
 import HtmlReady from 'shared/HtmlReady'
-import g from 'app/redux/GlobalReducer'
+import * as globalActions from 'app/redux/GlobalReducer';
 import {Set} from 'immutable'
 import Remarkable from 'remarkable'
 import Dropzone from 'react-dropzone'
@@ -143,7 +144,7 @@ class ReplyEditor extends React.Component {
     initForm(props) {
         const {isStory, type, fields} = props
         const isEdit = type === 'edit'
-        const maxKb = isStory ? 100 : 16
+        const maxKb = isStory ? 65 : 16
         reactForm({
             fields,
             instance: this,
@@ -157,7 +158,7 @@ class ReplyEditor extends React.Component {
                 ),
                 category: isStory && validateCategory(values.category, !isEdit),
                 body: !values.body ? tt('g.required') :
-                    values.body.length > maxKb * 1024 ? tt('reply_editor.exceeds_maximum_length', maxKb) :
+                    values.body.length > maxKb * 1024 ? tt('reply_editor.exceeds_maximum_length', {maxKb}) :
                         null
             })
         })
@@ -390,7 +391,7 @@ class ReplyEditor extends React.Component {
                                                   tabIndex={2} />
                                     </Dropzone>
                                 {type === 'submit_story' &&
-                                <p className="drag-and-drop">
+                                <p className="drag-and-drop notranslate">
                                     {tt('reply_editor.insert_images_by_dragging_dropping')}
                                     {noClipboardData ? '' : tt('reply_editor.pasting_from_the_clipboard')}
                                     {tt('reply_editor.or_by')} <a onClick={this.onOpenClick}>{tt('reply_editor.selecting_them')}</a>.
@@ -427,7 +428,7 @@ class ReplyEditor extends React.Component {
                             {isStory && !isEdit && <div className="ReplyEditor__options float-right text-right">
 
                                 {tt('g.rewards')} &nbsp;
-                                <select value={this.state.payoutType} onChange={this.onPayoutTypeChange} style={{color: this.state.payoutType == '0%' ? 'orange' : 'inherit'}}>
+                                <select value={this.state.payoutType} onChange={this.onPayoutTypeChange} style={{color: this.state.payoutType == '0%' ? 'orange' : ''}}>
                                     <option value="100%">{tt('reply_editor.power_up_100')}</option>
                                     <option value="50%">{tt('reply_editor.default_50_50')}</option>
                                     <option value="0%">{tt('reply_editor.decline_payout')}</option>
@@ -527,17 +528,12 @@ export default (formId) => connect(
     // mapDispatchToProps
     dispatch => ({
         clearMetaData: (id) => {
-            dispatch(g.actions.clearMeta({id}))
+            dispatch(globalActions.clearMeta({id}))
         },
         setMetaData: (id, jsonMetadata) => {
-            dispatch(g.actions.setMetaData({id, meta: jsonMetadata ? jsonMetadata.steem : null}))
+            dispatch(globalActions.setMetaData({id, meta: jsonMetadata ? jsonMetadata.steem : null}))
         },
-        uploadImage: (file, progress) => {
-            dispatch({
-                type: 'user/UPLOAD_IMAGE',
-                payload: {file, progress},
-            })
-        },
+        uploadImage: (file, progress) => dispatch(userActions.uploadImage({ file, progress })),
         reply: ({category, title, body, author, permlink, parent_author, parent_permlink, isHtml, isStory,
             type, originalPost, autoVote = false, payoutType = '50%',
             state, jsonMetadata,
@@ -647,7 +643,7 @@ export default (formId) => connect(
                 json_metadata: meta,
                 __config
             }
-            dispatch(transaction.actions.broadcastOperation({
+            dispatch(transactionActions.broadcastOperation({
                 type: 'comment',
                 operation,
                 errorCallback,

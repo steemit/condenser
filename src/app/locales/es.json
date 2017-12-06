@@ -54,7 +54,7 @@
     "password": "Contraseña",
     "payouts": "Pagos",
     "permissions": "Permisos",
-    "phishy_message": "Link expanded to plain text; beware of a potential phishing attempt",
+    "phishy_message": "Enlace expuesto a texto sin formato; cuidado con un posible intento de phishing",
     "post": "Publicación",
     "post_as": "Publicar como",
     "posts": "Publicaciones",
@@ -206,9 +206,9 @@
       "other": "%(count)s Respuestas"
     },
     "post_key_warning": {
-        "confirm": "You are about to publish a STEEM private key or master password. You will probably lose control of the associated account and all its funds.",
-        "warning": "Legitimate users, including employees of Steemit Inc., will never ask you for a private key or master password.",
-        "checkbox": "I understand"
+        "confirm": "Está a punto de publicar una clave privada STEEM o una contraseña maestra. Probablemente perderá el control de la cuenta asociada y todos sus fondos.",
+        "warning": "Los usuarios legítimos, incluidos los empleados de Steemit Inc., nunca le pedirán una clave privada o contraseña maestra.",
+        "checkbox": "Entiendo"
     }
   },
   "navigation": {
@@ -553,10 +553,10 @@
     "keep_me_logged_in": "Manténme logeado",
     "amazing_community": "comunidad increíble",
     "to_comment_and_reward_others": "para comentar y recompensar a otros",
-    "sign_up_get_steem": "Sign up. Get STEEM",
-    "signup_button": "Sign up now to earn ",
+    "sign_up_get_steem": "Crea una cuenta. Comienza en STEEM",
+    "signup_button": "Crea una cuenta, comienza a ganar ",
     "signup_button_emphasis": "FREE STEEM!",
-    "returning_users": "Usuarios que vuelven",
+    "returning_users": "Inicia sesion",
     "join_our": "Únete a nuestro"
   },
   "chainvalidation_js": {
@@ -609,7 +609,7 @@
     "from": "De",
     "to": "Para",
     "asset_currently_collecting": "%(asset)s recolectando actualmente %(interest)s%% APR.",
-    "beware_of_spam_and_phishing_links": "Beware of spam and phishing links in transfer memos. Do not open links from users you do not trust. Do not provide your private keys to any third party websites."
+    "beware_of_spam_and_phishing_links": "Tenga cuidado con los enlaces de spam y phishing en los memos de transferencia. No abra enlaces de usuarios en los que no confíe. No proporcione sus claves privadas a sitios web de terceros."
   },
   "userwallet_jsx": {
     "conversion_complete_tip": "Se completará el",

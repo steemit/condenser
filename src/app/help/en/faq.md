@@ -151,7 +151,7 @@
 - <a href="#Who_is_the_CEO_of_Steemit">Who is the CEO of Steemit?</a>
 - <a href="#Can_I_invest_in_Steemit">Can I invest in Steemit?</a>
 - <a href="#What_does_Steemit_s_development_roadmap_look_like">What does Steemit’s development roadmap look like?</a>
-- <a href="#Am_I_allowed_to_use_the_Steemit_logo">Am I allowed to use the Steemit logo?</a>
+- <a href="#Am_I_allowed_to_use_the_Steem_and_Steemit_logos">Am I allowed to use the Steem and Steemit logos?</a>
 - <a href="#Can_I_purchase_official_Steemit_merchandise">Can I purchase official Steemit merchandise?</a>
 - <a href="#Did_Steemit__pre_mine__tokens">Did Steemit "pre-mine" tokens?</a>
 - <a href="#What_is_the_Steemit_Privacy_Policy">What is the Steemit Privacy Policy?</a>
@@ -1094,9 +1094,13 @@ You can view the 2017 Roadmap here:
 https://steemit.com/steemit/@steemitblog/steemit-2017-roadmap
 
 <a href="#Table_of_Contents_Steemit__Inc">^</a>
-## <span id="Am_I_allowed_to_use_the_Steemit_logo">Am I allowed to use the Steemit logo?</span>
+## <span id="Am_I_allowed_to_use_the_Steem_and_Steemit_logos">Am I allowed to use the Steem and Steemit logos?</span>
 
-Currently, the Steem and Steemit logos are the same and is free to use. In the future, Steemit, Inc. will have its own logo so that it can be distinguished from Steem. The Steemit logo will be proprietary while Steem and its three S-shaped squiggles will remain open for public use.
+The Steemit brand and logo are protected by intellectual property laws, including copyright and other proprietary rights of the United States and other countries. The purpose is to allow Steemit to protect the brand and logo in ways that extend user safety. One may not make unauthorized commercial use of, reproduce, prepare derivative works, distribute copies, perform, or publicly display the Steemit logo or brand, except as permitted by the doctrine of fair use, or as authorized in writing by us.
+
+[Section 107 of the Copyright Act](http://www.copyright.gov/title17/92chap1.html#107) provides the statutory framework for determining whether something is a fair use and identifies certain types of uses—such as criticism, comment, news reporting, teaching, scholarship, and research—as examples of activities that may qualify as fair use. **Steemit considers artistic variations of the Steemit logo that are used for non-commercial purposes, and are not used to harm Steemit users (i.e. through attraction to phishing sites), an instance of fair use.** 
+
+The blue Steem logo with the three S-shaped squiggles is licensed under Creative Commons CC0, meaning you’re free to copy, modify, or distribute (even for commercial purposes) without needing to ask permission or give attribution.
 
 <a href="#Table_of_Contents_Steemit__Inc">^</a>
 ## <span id="Can_I_purchase_official_Steemit_merchandise">Can I purchase official Steemit merchandise?</span>
@@ -1268,7 +1272,7 @@ You can also create a post on Steemit.com with the tag #help, and someone in the
 
 <a href="#Table_of_Contents_Miscellaneous">^</a>
 
-# <span class="anchor" id="Disclaimer">Disclaimer</span>
+# <span id="Disclaimer">Disclaimer</span>
 
 ## <span id="Third_Party_References_and_User_Links">Third Party References and User Links</span>
 

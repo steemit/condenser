@@ -9,22 +9,22 @@ module.exports = {
 
         formats: {
             date: {
-                'default':  '%a, %e %b %Y',
-                long:       '%A, %B %o, %Y',
-                short:      '%b %e'
+                default: '%a, %e %b %Y',
+                long: '%A, %B %o, %Y',
+                short: '%b %e',
             },
 
             time: {
-                'default':  '%H:%M',
-                long:       '%H:%M:%S %z',
-                short:      '%H:%M'
+                default: '%H:%M',
+                long: '%H:%M:%S %z',
+                short: '%H:%M',
             },
 
             datetime: {
-                'default':  '%a, %e %b %Y %H:%M',
-                long:       '%A, %B %o, %Y %H:%M:%S %z',
-                short:      '%e %b %H:%M'
-            }
-        }
-    }
+                default: '%a, %e %b %Y %H:%M',
+                long: '%A, %B %o, %Y %H:%M:%S %z',
+                short: '%e %b %H:%M',
+            },
+        },
+    },
 };

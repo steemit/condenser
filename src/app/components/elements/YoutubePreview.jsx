@@ -1,8 +1,8 @@
 /* eslint react/prop-types: 0 */
-import React from 'react'
-import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
+import React from 'react';
+import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 
-const {string, number} = React.PropTypes
+const { string, number } = React.PropTypes;
 
 /** Lots of iframes in a post can be very slow.  This component only inserts the iframe when it is actually needed. */
 export default class YoutubePreview extends React.Component {
@@ -11,43 +11,62 @@ export default class YoutubePreview extends React.Component {
         width: number,
         height: number,
         dataParams: string,
-    }
+    };
 
     static defaultProps = {
         width: 640,
         height: 360,
-        dataParams: 'enablejsapi=0&rel=0&origin=https://steemit.com'
-    }
+        dataParams: 'enablejsapi=0&rel=0&origin=https://steemit.com',
+    };
 
     constructor() {
-        super()
-        this.state = {}
+        super();
+        this.state = {};
     }
 
-    shouldComponentUpdate = shouldComponentUpdate(this, 'YoutubePreview')
+    shouldComponentUpdate = shouldComponentUpdate(this, 'YoutubePreview');
 
     onPlay = () => {
-        this.setState({play: true})
-    }
+        this.setState({ play: true });
+    };
 
     render() {
-        const {youTubeId, width, height, dataParams} = this.props
-        const {play} = this.state
-        if(!play) {
+        const { youTubeId, width, height, dataParams } = this.props;
+        const { play } = this.state;
+        if (!play) {
             // mqdefault.jpg (medium quality version, 320px × 180px)
             // hqdefault.jpg (high quality version, 480px × 360px
             // sddefault.jpg (standard definition version, 640px × 480px)
-            const thumbnail = width <= 320 ? 'mqdefault.jpg' : width <= 480 ? 'hqdefault.jpg' : '0.jpg'
-            const previewLink = `https://img.youtube.com/vi/${youTubeId}/${thumbnail}`
+            const thumbnail =
+                width <= 320
+                    ? 'mqdefault.jpg'
+                    : width <= 480 ? 'hqdefault.jpg' : '0.jpg';
+            const previewLink = `https://img.youtube.com/vi/${youTubeId}/${
+                thumbnail
+            }`;
             return (
-                <div className="videoWrapper youtube" onClick={this.onPlay} style={{backgroundImage: 'url(' + previewLink + ')'}}>
-                    <div className="play"></div>
+                <div
+                    className="videoWrapper youtube"
+                    onClick={this.onPlay}
+                    style={{ backgroundImage: 'url(' + previewLink + ')' }}
+                >
+                    <div className="play" />
                 </div>
-            )
+            );
         }
-        const autoPlaySrc = `https://www.youtube.com/embed/${youTubeId}?autoplay=1&autohide=1&${dataParams}`
-        return <div className="videoWrapper">
-                <iframe width={width} height={height} src={autoPlaySrc} frameBorder="0" allowFullScreen="true"></iframe>
+        const autoPlaySrc = `https://www.youtube.com/embed/${
+            youTubeId
+        }?autoplay=1&autohide=1&${dataParams}`;
+        return (
+            <div className="videoWrapper">
+                <iframe
+                    width={width}
+                    height={height}
+                    src={autoPlaySrc}
+                    frameBorder="0"
+                    allowFullScreen="true"
+                />
             </div>
+        );
     }
 }

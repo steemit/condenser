@@ -1,9 +1,9 @@
 import React from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 
 class NotifiCounter extends React.Component {
     static propTypes = {
-        value: React.PropTypes.number
+        value: React.PropTypes.number,
     };
 
     render() {
@@ -13,11 +13,11 @@ class NotifiCounter extends React.Component {
     }
 }
 
-export default connect(
-    (state, props) => {
-        const counters = state.app.get('notificounters');
-        const fields = props.fields.replace(/\s/g,'').split(',');
-        const value = counters ? fields.reduce((res, field) => res + counters.get(field), 0) : null;
-        return {value};
-    }
-)(NotifiCounter);
+export default connect((state, props) => {
+    const counters = state.app.get('notificounters');
+    const fields = props.fields.replace(/\s/g, '').split(',');
+    const value = counters
+        ? fields.reduce((res, field) => res + counters.get(field), 0)
+        : null;
+    return { value };
+})(NotifiCounter);

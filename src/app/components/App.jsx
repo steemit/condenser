@@ -228,9 +228,14 @@ class App extends React.Component {
                             {tt('navigation.change_account_password')}
                         </a>
                     </li>
-                    <li className="last">
+                    <li>
                         <a href="/~witnesses" onClick={this.navigate}>
                             {tt('navigation.vote_for_witnesses')}
+                        </a>
+                    </li>
+                    <li className="last">
+                        <a href="#" onClick={this.props.toggleNightmode}>
+                            {tt('g.toggle_nightmode')}
                         </a>
                     </li>
                 </ul>
@@ -316,6 +321,8 @@ App.propTypes = {
     loginUser: React.PropTypes.func.isRequired,
     depositSteem: React.PropTypes.func.isRequired,
     username:  React.PropTypes.string,
+    nightmodeEnabled: React.PropTypes.bool,
+    toggleNightmode: React.PropTypes.func
 };
 
 export default connect(
@@ -330,7 +337,7 @@ export default connect(
                 !state.offchain.get('account') &&
                 state.offchain.get('new_visit'),
             username: state.user.getIn(['current', 'username']) || state.offchain.get('account') || '',
-            nightmodeEnabled: state.app.getIn(['user_preferences', 'nightmode']),
+            nightmodeEnabled: state.user.getIn(['user_preferences', 'nightmode']) || state.app.getIn(['user_preferences', 'nightmode'])
         };
     },
     dispatch => ({
@@ -341,5 +348,9 @@ export default connect(
             new_window.opener = null;
             new_window.location = 'https://blocktrades.us/?input_coin_type=btc&output_coin_type=steem&receive_address=' + username;
         },
+        toggleNightmode: e => {
+            if (e) e.preventDefault();
+            dispatch({ type: 'TOGGLE_NIGHTMODE' });
+        }
     })
 )(App);

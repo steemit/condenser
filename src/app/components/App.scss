@@ -28,18 +28,30 @@
   margin-top: 0;
 }
 
+@keyframes bannerIn {
+  0% {
+    margin-bottom: -28.35em;
+    transform: translateY(-28.35em);
+  }
+  100% {
+    margin-bottom: 0em;
+    transform: translateY(0em);
+  }
+}
+
 .welcomeWrapper {
   margin-top: -1rem;
   padding-bottom: 1rem;
 }
 .welcomeBanner {
-  padding: 4em 0 4em;
-  background-color: $color-blue-black;
-  color: $color-white;
-  // background-image: url(../images/lp-bottom.jpg);
-  // background-repeat: repeat-x;
-  // background-position:bottom;
+  padding: 2.35em 0 4em;
+  background-color: #fafbfd;
+  background-image: url(../images/lp-bottom.jpg);
+  background-repeat: repeat-x;
+  background-position:bottom;
   //background-attachment:fixed;
+  animation: 1s cubic-bezier(.8, .5, .2, 1.4) bannerIn;
+  z-index: 10;
 }
 
 .RightMenu {

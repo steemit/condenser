@@ -5,8 +5,9 @@ import {connect} from 'react-redux';
 import Progress from 'react-foundation-components/lib/global/progress-bar';
 import { Link } from 'react-router';
 import classNames from 'classnames';
-import {api} from 'steem';
-import user from 'app/redux/User';
+import {api} from '@steemit/steem-js';
+
+import * as userActions from 'app/redux/UserReducer';
 import {validate_account_name} from 'app/utils/ChainValidation';
 import runTests from 'app/utils/BrowserTests';
 import {PARAM_VIEW_MODE} from 'shared/constants';
@@ -239,10 +240,10 @@ module.exports = {
             }
         },
         dispatch => ({
-            loginUser: (username, password) => dispatch(user.actions.usernamePasswordLogin({username, password, saveLogin: true})),
+            loginUser: (username, password) => dispatch(userActions.usernamePasswordLogin({username, password, saveLogin: true})),
             logout: e => {
                 if (e) e.preventDefault();
-                dispatch(user.actions.logout())
+                dispatch(userActions.logout())
             }
         })
     )(PickAccount)

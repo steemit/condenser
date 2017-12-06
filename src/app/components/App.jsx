@@ -3,8 +3,7 @@ import {connect} from 'react-redux';
 import AppPropTypes from 'app/utils/AppPropTypes';
 import Header from 'app/components/modules/Header';
 import LpFooter from 'app/components/modules/lp/LpFooter';
-import user from 'app/redux/User';
-import g from 'app/redux/GlobalReducer';
+import * as userActions from 'app/redux/UserReducer';
 import TopRightMenu from 'app/components/modules/TopRightMenu';
 import { browserHistory } from 'react-router';
 import classNames from 'classnames';
@@ -18,7 +17,7 @@ import tt from 'counterpart';
 import PageViewsCounter from 'app/components/elements/PageViewsCounter';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import { APP_NAME, VESTING_TOKEN, LIQUID_TOKEN } from 'app/client_config';
-import {key_utils} from 'steem/lib/auth/ecc';
+import {key_utils} from '@steemit/steem-js/lib/auth/ecc';
 import resolveRoute from 'app/ResolveRoute';
 import {VIEW_MODE_WHISTLE} from 'shared/constants';
 
@@ -269,6 +268,11 @@ class App extends React.Component {
                         </a>
                     </li>
                     <li>
+                        <a href="https://smt.steem.io/" target="_blank" rel="noopener noreferrer">
+                            {tt('navigation.smt_whitepaper')}&nbsp;<Icon name="extlink" />
+                        </a>
+                    </li>
+                    <li>
                         <a href="https://steem.io/SteemWhitePaper.pdf" target="_blank" rel="noopener noreferrer">
                             {tt('navigation.whitepaper')}&nbsp;<Icon name="extlink" />
                         </a>
@@ -331,12 +335,11 @@ export default connect(
     },
     dispatch => ({
         loginUser: () =>
-            dispatch(user.actions.usernamePasswordLogin()),
+            dispatch(userActions.usernamePasswordLogin({})),
         depositSteem: (username) => {
             const new_window = window.open();
             new_window.opener = null;
             new_window.location = 'https://blocktrades.us/?input_coin_type=btc&output_coin_type=steem&receive_address=' + username;
-            //dispatch(g.actions.showDialog({name: 'blocktrades_deposit', params: {outputCoinType: 'VESTS'}}));
         },
     })
 )(App);

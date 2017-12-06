@@ -8,9 +8,8 @@ import Iso from 'iso';
 import universalRender from 'shared/UniversalRender';
 import ConsoleExports from './utils/ConsoleExports';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
-import * as steem from 'steem';
+import * as steem from '@steemit/steem-js';
 import {determineViewMode} from "app/utils/Links";
-
 
 window.onerror = error => {
     if (window.$STM_csrf) serverApiRecordEvent('client_error', error);
@@ -109,6 +108,7 @@ if (!window.Intl) {
         require('intl/locale-data/jsonp/ru.js');
         require('intl/locale-data/jsonp/fr.js');
         require('intl/locale-data/jsonp/it.js');
+        require('intl/locale-data/jsonp/ko.js');
         Iso.bootstrap(runApp);
     }, "IntlBundle");
 }

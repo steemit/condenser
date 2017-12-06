@@ -4,8 +4,9 @@ import { Link } from 'react-router';
 import {connect} from 'react-redux';
 import { browserHistory } from 'react-router';
 import classnames from 'classnames';
-import transaction from 'app/redux/Transaction';
-import user from 'app/redux/User';
+import * as transactionActions from 'app/redux/TransactionReducer';
+import * as userActions from 'app/redux/UserReducer';
+import { actions  as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
 import Icon from 'app/components/elements/Icon'
 import UserKeys from 'app/components/elements/UserKeys';
 import PasswordReset from 'app/components/elements/PasswordReset';
@@ -474,7 +475,7 @@ export default class UserProfile extends React.Component {
                             </div>
                             <p className="UserProfile__info">
                                 {location && <span><Icon name="location" /> {location}</span>}
-                                {website && <span><Icon name="link" /> <a href={website}>{website_label}</a></span>}
+                                {website && <span><Icon name="link" /> <a href={website} target="_blank" rel="noopener noreferrer">{website_label}</a></span>}
                                 <Icon name="calendar" /> <DateJoinWrapper date={accountjoin} />
                             </p>
                         </div>
@@ -519,31 +520,31 @@ module.exports = {
             };
         },
         dispatch => ({
-            login: () => {dispatch(user.actions.showLogin())},
-            clearTransferDefaults: () => {dispatch(user.actions.clearTransferDefaults())},
+            login: () => {dispatch(userActions.showLogin())},
+            clearTransferDefaults: () => {dispatch(userActions.clearTransferDefaults())},
             showTransfer: (transferDefaults) => {
-                dispatch(user.actions.setTransferDefaults(transferDefaults))
-                dispatch(user.actions.showTransfer())
+                dispatch(userActions.setTransferDefaults(transferDefaults))
+                dispatch(userActions.showTransfer())
             },
-            clearPowerdownDefaults: () => {dispatch(user.actions.clearPowerdownDefaults())},
+            clearPowerdownDefaults: () => {dispatch(userActions.clearPowerdownDefaults())},
             showPowerdown: (powerdownDefaults) => {
                 console.log('power down defaults:', powerdownDefaults)
-                dispatch(user.actions.setPowerdownDefaults(powerdownDefaults))
-                dispatch(user.actions.showPowerdown())
+                dispatch(userActions.setPowerdownDefaults(powerdownDefaults))
+                dispatch(userActions.showPowerdown())
             },
             withdrawVesting: ({account, vesting_shares, errorCallback, successCallback}) => {
                 const successCallbackWrapper = (...args) => {
-                    dispatch({type: 'global/GET_STATE', payload: {url: `@${account}/transfers`}})
+                    dispatch(globalActions.getState({ url: `@${account}/transfers` }));
                     return successCallback(...args)
                 }
-                dispatch(transaction.actions.broadcastOperation({
+                dispatch(transactionActions.broadcastOperation({
                     type: 'withdraw_vesting',
                     operation: {account, vesting_shares},
                     errorCallback,
                     successCallback: successCallbackWrapper,
                 }))
             },
-            requestData: (args) => dispatch({type: 'REQUEST_DATA', payload: args}),
+            requestData: args => dispatch(fetchDataSagaActions.requestData(args)),
         })
     )(UserProfile)
 };

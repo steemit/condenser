@@ -1,7 +1,7 @@
 import Immutable from 'immutable';
-import {PropTypes} from 'react';
+import { PropTypes } from 'react';
 
-const defaultState = Immutable.fromJS({user: {}});
+const defaultState = Immutable.fromJS({ user: {} });
 
 export default function reducer(state = defaultState, action) {
     if (action.type === 'user/SAVE_LOGIN_CONFIRM') {

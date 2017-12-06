@@ -2,7 +2,7 @@
 import React from 'react';
 import { expect } from 'chai';
 import { shallow } from 'enzyme';
-import {_Header_} from './Header';
+import { _Header_ } from './Header';
 
 describe('Header', () => {
     it('contains class .header', () => {

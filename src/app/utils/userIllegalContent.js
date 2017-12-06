@@ -1,5 +1,7 @@
 const list = `
 aplomb
-`.trim().split('\n');
+`
+    .trim()
+    .split('\n');
 
 export default list;

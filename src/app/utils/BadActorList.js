@@ -112,6 +112,8 @@ bloctrades
 blocktradess
 blocktrade
 blocktraders
-`.trim().split('\n');
+`
+    .trim()
+    .split('\n');
 
 export default list;

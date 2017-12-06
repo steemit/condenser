@@ -1,11 +1,11 @@
 import React from 'react';
 import {connect} from 'react-redux'
-import g from 'app/redux/GlobalReducer'
-import reactForm from 'app/utils/ReactForm'
 import Slider from 'react-rangeslider';
-import transaction from 'app/redux/Transaction';
-import user from 'app/redux/User';
 import tt from 'counterpart'
+import reactForm from 'app/utils/ReactForm'
+import * as globalActions from 'app/redux/GlobalReducer'
+import * as transactionActions from 'app/redux/TransactionReducer';
+import * as userActions from 'app/redux/UserReducer';
 import {VEST_TICKER, LIQUID_TICKER, VESTING_TOKEN} from 'app/client_config'
 import {numberWithCommas, spToVestsf, vestsToSpf, vestsToSp, assetFloat} from 'app/utils/StateFunctions'
 
@@ -157,19 +157,19 @@ export default connect(
     // mapDispatchToProps
     dispatch => ({
         successCallback: () => {
-            dispatch(user.actions.hidePowerdown())
+            dispatch(userActions.hidePowerdown())
         },
         powerDown: (e) => {
             e.preventDefault()
             const name = 'powerDown';
-            dispatch(g.actions.showDialog({name}))
+            dispatch(globalActions.showDialog({name}))
         },
         withdrawVesting: ({account, vesting_shares, errorCallback, successCallback}) => {
             const successCallbackWrapper = (...args) => {
-                dispatch({type: 'global/GET_STATE', payload: {url: `@${account}/transfers`}})
+                dispatch(globalActions.getState({ url: `@${account}/transfers` }));
                 return successCallback(...args)
             }
-            dispatch(transaction.actions.broadcastOperation({
+            dispatch(transactionActions.broadcastOperation({
                 type: 'withdraw_vesting',
                 operation: {account, vesting_shares},
                 errorCallback,

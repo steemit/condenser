@@ -2,12 +2,12 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {renderToString} from 'react-dom/server'
-import g from 'app/redux/GlobalReducer'
+import * as globalActions from 'app/redux/GlobalReducer'
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import Icon from 'app/components/elements/Icon'
 import tt from 'counterpart';
 import { APP_NAME, APP_ICON } from 'app/client_config';
-import {key_utils} from 'steem/lib/auth/ecc';
+import {key_utils} from '@steemit/steem-js/lib/auth/ecc';
 
 
 const {bool} = React.PropTypes
@@ -99,7 +99,7 @@ export default connect(
             const PASSWORD_LENGTH = 32
             const private_key = key_utils.get_random_key()
             const suggestedPassword = private_key.toWif().substring(3, 3 + PASSWORD_LENGTH)
-            dispatch(g.actions.set({key: 'suggestedPassword', value: suggestedPassword}))
+            dispatch(globalActions.set({key: 'suggestedPassword', value: suggestedPassword}))
         },
     })
 )(SuggestPassword)

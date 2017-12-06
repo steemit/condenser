@@ -28,7 +28,30 @@ try {
     console.error(e)
 }
 
-function runApp(initial_state) {
+let offchain // loaded by main()
+
+// iso default selector that injects offchain state
+const isoSelector = () => {
+  const all = document.querySelectorAll('[data-iso-key]')
+  return Array.prototype.reduce.call(all, (cache, node) => {
+    const key = node.getAttribute('data-iso-key')
+    if (!cache[key]) cache[key] = {}
+    if (node.nodeName === 'SCRIPT') {
+      try {
+        const state = JSON.parse(node.innerHTML)
+        state.offchain = offchain
+        cache[key].state = state
+      } catch (e) {
+        cache[key].state = {}
+      }
+    } else {
+      cache[key].node = node
+    }
+    return cache
+  }, {})
+}
+
+async function runApp(initial_state) {
     console.log('Initial state', initial_state);
     const konami = {
         code: 'xyzzy',
@@ -100,18 +123,33 @@ function runApp(initial_state) {
     });
 }
 
-if (!window.Intl) {
-    require.ensure(['intl/dist/Intl'], (require) => {
-        window.IntlPolyfill = window.Intl = require('intl/dist/Intl');
-        require('intl/locale-data/jsonp/en-US.js');
-        require('intl/locale-data/jsonp/es.js');
-        require('intl/locale-data/jsonp/ru.js');
-        require('intl/locale-data/jsonp/fr.js');
-        require('intl/locale-data/jsonp/it.js');
-        require('intl/locale-data/jsonp/ko.js');
-        Iso.bootstrap(runApp);
-    }, "IntlBundle");
+async function getOffchainState() {
+    const state = await (await fetch('/api/v1/state', {credentials: 'same-origin'})).json()
+    const now = Date.now() / 1000
+    const lastVisit = localStorage.getItem('lastVisit') || -Infinity
+    const loginData = localStorage.getItem('autopost2')
+    state.new_visit = (loginData == null && now - lastVisit > 1800)
+    return state
 }
-else {
-    Iso.bootstrap(runApp);
+
+async function main() {
+    offchain = await getOffchainState()
+    localStorage.setItem('lastVisit', Date.now() / 1000)
+    if (!window.Intl) {
+        require.ensure(['intl/dist/Intl'], (require) => {
+            window.IntlPolyfill = window.Intl = require('intl/dist/Intl')
+            require('intl/locale-data/jsonp/en-US.js')
+            require('intl/locale-data/jsonp/ru.js');
+            require('intl/locale-data/jsonp/fr.js');
+            require('intl/locale-data/jsonp/it.js');
+            require('intl/locale-data/jsonp/ko.js');
+            require('intl/locale-data/jsonp/es.js')
+            Iso.bootstrap(runApp, isoSelector);
+        }, "IntlBundle");
+    }
+    else {
+        Iso.bootstrap(runApp, isoSelector);
+    }
 }
+
+main()

@@ -1,4 +1,4 @@
-import {fromJS} from 'immutable';
+import { fromJS } from 'immutable';
 import { DEFAULT_LANGUAGE } from 'app/client_config';
 import store from 'store';
 
@@ -43,7 +43,7 @@ const defaultState = fromJS({
     show_promote_post_modal: false,
     show_signup_modal: false,
     pub_keys_used: null,
-    locale: DEFAULT_LANGUAGE
+    locale: DEFAULT_LANGUAGE,
 });
 
 if (process.env.BROWSER) {
@@ -61,7 +61,11 @@ export default function reducer(state = defaultState, action) {
                 operation = fromJS(payload.operation);
                 loginDefault = fromJS(payload.loginDefault);
             }
-            return state.merge({show_login_modal: true, loginBroadcastOperation: operation, loginDefault});
+            return state.merge({
+                show_login_modal: true,
+                loginBroadcastOperation: operation,
+                loginDefault,
+            });
         }
 
         case SHOW_TERMS: {
@@ -70,11 +74,19 @@ export default function reducer(state = defaultState, action) {
                 operation = fromJS(payload.operation);
                 termsDefault = fromJS(payload.termsDefault);
             }
-            return state.merge({show_terms_modal: true, loginBroadcastOperation: operation, termsDefault});
+            return state.merge({
+                show_terms_modal: true,
+                loginBroadcastOperation: operation,
+                termsDefault,
+            });
         }
 
         case HIDE_LOGIN:
-            return state.merge({show_login_modal: false, loginBroadcastOperation: undefined, loginDefault: undefined});
+            return state.merge({
+                show_login_modal: false,
+                loginBroadcastOperation: undefined,
+                loginDefault: undefined,
+            });
 
         case SAVE_LOGIN_CONFIRM:
             return state.set('saveLoginConfirm', payload);
@@ -86,17 +98,21 @@ export default function reducer(state = defaultState, action) {
         case REMOVE_HIGH_SECURITY_KEYS: {
             if (!state.hasIn(['current', 'private_keys'])) return state;
             let empty = false;
-            state = state.updateIn(['current', 'private_keys'], private_keys => {
-                if (!private_keys) return null;
-                if (private_keys.has('active_private')) console.log('removeHighSecurityKeys');
-                private_keys = private_keys.delete('active_private');
-                empty = private_keys.size === 0;
-                return private_keys;
-            })
+            state = state.updateIn(
+                ['current', 'private_keys'],
+                private_keys => {
+                    if (!private_keys) return null;
+                    if (private_keys.has('active_private'))
+                        console.log('removeHighSecurityKeys');
+                    private_keys = private_keys.delete('active_private');
+                    empty = private_keys.size === 0;
+                    return private_keys;
+                }
+            );
             if (empty) {
                 // User logged in with Active key then navigates away from the page
                 // LOGOUT
-                return defaultState.merge({logged_out: true});
+                return defaultState.merge({ logged_out: true });
             }
             const username = state.getIn(['current', 'username']);
             state = state.setIn(['authority', username, 'active'], 'none');
@@ -142,19 +158,40 @@ export default function reducer(state = defaultState, action) {
             return state; // saga
 
         case SET_USER:
-            if (payload.vesting_shares) payload.vesting_shares = parseFloat(payload.vesting_shares);
-            if (payload.delegated_vesting_shares) payload.delegated_vesting_shares = parseFloat(payload.delegated_vesting_shares);
-            if (payload.received_vesting_shares) payload.received_vesting_shares = parseFloat(payload.received_vesting_shares);
-            return state.mergeDeep({ current: payload, show_login_modal: false, loginBroadcastOperation: undefined, loginDefault: undefined, logged_out: undefined });
+            if (payload.vesting_shares)
+                payload.vesting_shares = parseFloat(payload.vesting_shares);
+            if (payload.delegated_vesting_shares)
+                payload.delegated_vesting_shares = parseFloat(
+                    payload.delegated_vesting_shares
+                );
+            if (payload.received_vesting_shares)
+                payload.received_vesting_shares = parseFloat(
+                    payload.received_vesting_shares
+                );
+            return state.mergeDeep({
+                current: payload,
+                show_login_modal: false,
+                loginBroadcastOperation: undefined,
+                loginDefault: undefined,
+                logged_out: undefined,
+            });
 
         case CLOSE_LOGIN:
-            return state.merge({ login_error: undefined, show_login_modal: false, loginBroadcastOperation: undefined, loginDefault: undefined });
+            return state.merge({
+                login_error: undefined,
+                show_login_modal: false,
+                loginBroadcastOperation: undefined,
+                loginDefault: undefined,
+            });
 
         case LOGIN_ERROR:
-            return state.merge({ login_error: payload.error, logged_out: undefined });
+            return state.merge({
+                login_error: payload.error,
+                logged_out: undefined,
+            });
 
         case LOGOUT:
-            return defaultState.merge({logged_out: true});
+            return defaultState.merge({ logged_out: true });
 
         case SHOW_SIGN_UP:
             return state.set('show_signup_modal', true);
@@ -163,7 +200,7 @@ export default function reducer(state = defaultState, action) {
             return state.set('show_signup_modal', false);
 
         case KEYS_ERROR:
-            return state.merge({ keys_error: payload.error })
+            return state.merge({ keys_error: payload.error });
 
         case ACCOUNT_AUTH_LOOKUP:
             // AuthSaga
@@ -171,9 +208,10 @@ export default function reducer(state = defaultState, action) {
 
         case SET_AUTHORITY: {
             // AuthSaga
-            const {accountName, auth, pub_keys_used} = payload;
+            const { accountName, auth, pub_keys_used } = payload;
             state = state.setIn(['authority', accountName], fromJS(auth));
-            if (pub_keys_used) state = state.set('pub_keys_used', pub_keys_used);
+            if (pub_keys_used)
+                state = state.set('pub_keys_used', pub_keys_used);
             return state;
         }
 
@@ -181,7 +219,10 @@ export default function reducer(state = defaultState, action) {
             return state.set('hide_connection_error_modal', true);
 
         case SET:
-            return state.setIn(Array.isArray(payload.key) ? payload.key : [payload.key], fromJS(payload.value));
+            return state.setIn(
+                Array.isArray(payload.key) ? payload.key : [payload.key],
+                fromJS(payload.value)
+            );
 
         default:
             return state;
@@ -189,157 +230,157 @@ export default function reducer(state = defaultState, action) {
 }
 
 // Action creators
-export const showLogin = (payload) => ({
+export const showLogin = payload => ({
     type: SHOW_LOGIN,
     payload,
 });
 
-export const showTerms = (payload) => ({
+export const showTerms = payload => ({
     type: SHOW_TERMS,
     payload,
 });
 
-export const hideLogin = (payload) => ({
+export const hideLogin = payload => ({
     type: HIDE_LOGIN,
     payload,
 });
 
-export const saveLoginConfirm = (payload) => ({
+export const saveLoginConfirm = payload => ({
     type: SAVE_LOGIN_CONFIRM,
     payload,
 });
 
-export const saveLogin = (payload) => ({
+export const saveLogin = payload => ({
     type: SAVE_LOGIN,
     payload,
 });
 
-export const removeHighSecurityKeys = (payload) => ({
+export const removeHighSecurityKeys = payload => ({
     type: REMOVE_HIGH_SECURITY_KEYS,
     payload,
 });
 
-export const changeLanguage = (payload) => ({
+export const changeLanguage = payload => ({
     type: CHANGE_LANGUAGE,
     payload,
 });
 
-export const showTransfer = (payload) => ({
+export const showTransfer = payload => ({
     type: SHOW_TRANSFER,
     payload,
 });
 
-export const hideTransfer = (payload) => ({
+export const hideTransfer = payload => ({
     type: HIDE_TRANSFER,
     payload,
 });
 
-export const showPowerdown = (payload) => ({
+export const showPowerdown = payload => ({
     type: SHOW_POWERDOWN,
     payload,
 });
 
-export const hidePowerdown = (payload) => ({
+export const hidePowerdown = payload => ({
     type: HIDE_POWERDOWN,
     payload,
 });
 
-export const showPromotePost = (payload) => ({
+export const showPromotePost = payload => ({
     type: SHOW_PROMOTE_POST,
     payload,
 });
 
-export const hidePromotePost = (payload) => ({
+export const hidePromotePost = payload => ({
     type: HIDE_PROMOTE_POST,
     payload,
 });
 
-export const setTransferDefaults = (payload) => ({
+export const setTransferDefaults = payload => ({
     type: SET_TRANSFER_DEFAULTS,
     payload,
 });
 
-export const clearTransferDefaults = (payload) => ({
+export const clearTransferDefaults = payload => ({
     type: CLEAR_TRANSFER_DEFAULTS,
     payload,
 });
 
-export const setPowerdownDefaults = (payload) => ({
+export const setPowerdownDefaults = payload => ({
     type: SET_POWERDOWN_DEFAULTS,
     payload,
 });
 
-export const clearPowerdownDefaults = (payload) => ({
+export const clearPowerdownDefaults = payload => ({
     type: CLEAR_POWERDOWN_DEFAULTS,
     payload,
 });
 
-export const usernamePasswordLogin = (payload) => ({
+export const usernamePasswordLogin = payload => ({
     type: USERNAME_PASSWORD_LOGIN,
     payload,
 });
 
-export const setUser = (payload) => ({
+export const setUser = payload => ({
     type: SET_USER,
     payload,
 });
 
-export const closeLogin = (payload) => ({
+export const closeLogin = payload => ({
     type: CLOSE_LOGIN,
     payload,
 });
 
-export const loginError = (payload) => ({
+export const loginError = payload => ({
     type: LOGIN_ERROR,
     payload,
 });
 
-export const logout = (payload) => ({
+export const logout = payload => ({
     type: LOGOUT,
     payload,
 });
 
-export const showSignUp = (payload) => ({
+export const showSignUp = payload => ({
     type: SHOW_SIGN_UP,
     payload,
 });
 
-export const hideSignUp = (payload) => ({
+export const hideSignUp = payload => ({
     type: HIDE_SIGN_UP,
     payload,
 });
 
-export const keysError = (payload) => ({
+export const keysError = payload => ({
     type: KEYS_ERROR,
     payload,
 });
 
-export const accountAuthLookup = (payload) => ({
+export const accountAuthLookup = payload => ({
     type: ACCOUNT_AUTH_LOOKUP,
     payload,
 });
 
-export const setAuthority = (payload) => ({
+export const setAuthority = payload => ({
     type: SET_AUTHORITY,
     payload,
 });
 
-export const hideConnectionErrorModal = (payload) => ({
+export const hideConnectionErrorModal = payload => ({
     type: HIDE_CONNECTION_ERROR_MODAL,
     payload,
 });
 
-export const set = (payload) => ({
+export const set = payload => ({
     type: SET,
     payload,
 });
 
-export const loadSavingsWithdraw = (payload) => ({
+export const loadSavingsWithdraw = payload => ({
     type: LOAD_SAVINGS_WITHDRAW,
     payload,
 });
 
-export const uploadImage = (payload) => ({
+export const uploadImage = payload => ({
     type: UPLOAD_IMAGE,
     payload,
 });

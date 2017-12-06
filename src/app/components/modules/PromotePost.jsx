@@ -1,14 +1,18 @@
 import React, { PropTypes, Component } from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import ReactDOM from 'react-dom';
 import * as transactionActions from 'app/redux/TransactionReducer';
 import * as globalActions from 'app/redux/GlobalReducer';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
-import { DEBT_TOKEN, DEBT_TOKEN_SHORT, CURRENCY_SIGN, DEBT_TICKER} from 'app/client_config';
+import {
+    DEBT_TOKEN,
+    DEBT_TOKEN_SHORT,
+    CURRENCY_SIGN,
+    DEBT_TICKER,
+} from 'app/client_config';
 import tt from 'counterpart';
 
 class PromotePost extends Component {
-
     static propTypes = {
         author: PropTypes.string.isRequired,
         permlink: PropTypes.string.isRequired,
@@ -21,7 +25,7 @@ class PromotePost extends Component {
             asset: '',
             loading: false,
             amountError: '',
-            trxError: ''
+            trxError: '',
         };
         this.onSubmit = this.onSubmit.bind(this);
         this.errorCallback = this.errorCallback.bind(this);
@@ -31,8 +35,8 @@ class PromotePost extends Component {
 
     componentDidMount() {
         setTimeout(() => {
-            ReactDOM.findDOMNode(this.refs.amount).focus()
-        }, 300)
+            ReactDOM.findDOMNode(this.refs.amount).focus();
+        }, 300);
     }
 
     errorCallback(estr) {
@@ -41,18 +45,25 @@ class PromotePost extends Component {
 
     onSubmit(e) {
         e.preventDefault();
-        const {author, permlink, onClose} = this.props;
-        const {amount} = this.state;
-        this.setState({loading: true});
+        const { author, permlink, onClose } = this.props;
+        const { amount } = this.state;
+        this.setState({ loading: true });
         console.log('-- PromotePost.onSubmit -->');
-        this.props.dispatchSubmit({amount, asset: DEBT_TICKER, author, permlink, onClose,
-            currentUser: this.props.currentUser, errorCallback: this.errorCallback});
+        this.props.dispatchSubmit({
+            amount,
+            asset: DEBT_TICKER,
+            author,
+            permlink,
+            onClose,
+            currentUser: this.props.currentUser,
+            errorCallback: this.errorCallback,
+        });
     }
 
     amountChange(e) {
         const amount = e.target.value;
         // console.log('-- PromotePost.amountChange -->', amount);
-        this.setState({amount});
+        this.setState({ amount });
     }
 
     // assetChange(e) {
@@ -62,40 +73,78 @@ class PromotePost extends Component {
     // }
 
     render() {
-        const {amount, loading, amountError, trxError} = this.state;
-        const {currentAccount} = this.props;
+        const { amount, loading, amountError, trxError } = this.state;
+        const { currentAccount } = this.props;
         const balanceValue = currentAccount.get('sbd_balance');
         const balance = balanceValue ? balanceValue.split(' ')[0] : 0.0;
         const submitDisabled = !amount;
 
         return (
-           <div className="PromotePost row">
-               <div className="column small-12">
-                   <form onSubmit={this.onSubmit} onChange={() => this.setState({trxError: ''})}>
-                       <h4>{tt('promote_post_jsx.promote_post')}</h4>
-                       <p>{tt('promote_post_jsx.spend_your_DEBT_TOKEN_to_advertise_this_post', {DEBT_TOKEN})}.</p>
-                       <hr />
-                       <div className="row">
-                           <div className="column small-5">
-                               <label>{tt('g.amount')}</label>
-                               <div className="input-group">
-                                   <input className="input-group-field" type="text" placeholder={tt('g.amount')} value={amount} ref="amount" autoComplete="off" disabled={loading} onChange={this.amountChange} />
-                                   <span className="input-group-label">{DEBT_TOKEN_SHORT + ' '} ({CURRENCY_SIGN})</span>
-                                   <div className="error">{amountError}</div>
-                               </div>
-                           </div>
-                       </div>
-                       <div>{`${tt('g.balance')}: ${balance} ${DEBT_TOKEN_SHORT} (${CURRENCY_SIGN})`}</div>
-                       <br />
-                       {loading && <span><LoadingIndicator type="circle" /><br /></span>}
-                       {!loading && <span>
-                           {trxError && <div className="error">{trxError}</div>}
-                           <button type="submit" className="button" disabled={submitDisabled}>{tt('g.promote')}</button>
-                        </span>}
-                   </form>
-               </div>
-           </div>
-       )
+            <div className="PromotePost row">
+                <div className="column small-12">
+                    <form
+                        onSubmit={this.onSubmit}
+                        onChange={() => this.setState({ trxError: '' })}
+                    >
+                        <h4>{tt('promote_post_jsx.promote_post')}</h4>
+                        <p>
+                            {tt(
+                                'promote_post_jsx.spend_your_DEBT_TOKEN_to_advertise_this_post',
+                                { DEBT_TOKEN }
+                            )}.
+                        </p>
+                        <hr />
+                        <div className="row">
+                            <div className="column small-5">
+                                <label>{tt('g.amount')}</label>
+                                <div className="input-group">
+                                    <input
+                                        className="input-group-field"
+                                        type="text"
+                                        placeholder={tt('g.amount')}
+                                        value={amount}
+                                        ref="amount"
+                                        autoComplete="off"
+                                        disabled={loading}
+                                        onChange={this.amountChange}
+                                    />
+                                    <span className="input-group-label">
+                                        {DEBT_TOKEN_SHORT + ' '} ({
+                                            CURRENCY_SIGN
+                                        })
+                                    </span>
+                                    <div className="error">{amountError}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>{`${tt('g.balance')}: ${balance} ${
+                            DEBT_TOKEN_SHORT
+                        } (${CURRENCY_SIGN})`}</div>
+                        <br />
+                        {loading && (
+                            <span>
+                                <LoadingIndicator type="circle" />
+                                <br />
+                            </span>
+                        )}
+                        {!loading && (
+                            <span>
+                                {trxError && (
+                                    <div className="error">{trxError}</div>
+                                )}
+                                <button
+                                    type="submit"
+                                    className="button"
+                                    disabled={submitDisabled}
+                                >
+                                    {tt('g.promote')}
+                                </button>
+                            </span>
+                        )}
+                    </form>
+                </div>
+            </div>
+        );
     }
 }
 
@@ -105,30 +154,51 @@ class PromotePost extends Component {
 export default connect(
     (state, ownProps) => {
         const currentUser = state.user.getIn(['current']);
-        const currentAccount = state.global.getIn(['accounts', currentUser.get('username')]);
-        return {...ownProps, currentAccount, currentUser}
+        const currentAccount = state.global.getIn([
+            'accounts',
+            currentUser.get('username'),
+        ]);
+        return { ...ownProps, currentAccount, currentUser };
     },
 
     // mapDispatchToProps
     dispatch => ({
-        dispatchSubmit: ({amount, asset, author, permlink, currentUser, onClose, errorCallback}) => {
+        dispatchSubmit: ({
+            amount,
+            asset,
+            author,
+            permlink,
+            currentUser,
+            onClose,
+            errorCallback,
+        }) => {
             const username = currentUser.get('username');
             const successCallback = () => {
-                dispatch(globalActions.getState({ url: `@${username}/transfers` })); // refresh transfer history
-                onClose()
-            }
+                dispatch(
+                    globalActions.getState({ url: `@${username}/transfers` })
+                ); // refresh transfer history
+                onClose();
+            };
             const operation = {
                 from: username,
-                to: 'null', amount: parseFloat(amount, 10).toFixed(3) + ' ' + asset,
+                to: 'null',
+                amount: parseFloat(amount, 10).toFixed(3) + ' ' + asset,
                 memo: `@${author}/${permlink}`,
-                __config: {successMessage: tt('promote_post_jsx.you_successfully_promoted_this_post') + '.'}
-            }
-            dispatch(transactionActions.broadcastOperation({
-                type: 'transfer',
-                operation,
-                successCallback,
-                errorCallback
-            }))
-        }
+                __config: {
+                    successMessage:
+                        tt(
+                            'promote_post_jsx.you_successfully_promoted_this_post'
+                        ) + '.',
+                },
+            };
+            dispatch(
+                transactionActions.broadcastOperation({
+                    type: 'transfer',
+                    operation,
+                    successCallback,
+                    errorCallback,
+                })
+            );
+        },
     })
-)(PromotePost)
+)(PromotePost);

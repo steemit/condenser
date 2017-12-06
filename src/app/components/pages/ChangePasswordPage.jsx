@@ -3,14 +3,14 @@ import ChangePassword from 'app/components/elements/ChangePassword';
 import tt from 'counterpart';
 
 class ChangePasswordPage extends React.Component {
-
     render() {
-        if (!process.env.BROWSER) { // don't render this page on the server
-            return <div className="row">
-                <div className="column">
-                    {tt('g.loading')}..
+        if (!process.env.BROWSER) {
+            // don't render this page on the server
+            return (
+                <div className="row">
+                    <div className="column">{tt('g.loading')}..</div>
                 </div>
-            </div>;
+            );
         }
 
         return (
@@ -26,5 +26,5 @@ class ChangePasswordPage extends React.Component {
 
 module.exports = {
     path: 'change_password',
-    component: ChangePasswordPage
+    component: ChangePasswordPage,
 };

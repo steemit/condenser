@@ -144,7 +144,7 @@ class ReplyEditor extends React.Component {
     initForm(props) {
         const {isStory, type, fields} = props
         const isEdit = type === 'edit'
-        const maxKb = isStory ? 100 : 16
+        const maxKb = isStory ? 65 : 16
         reactForm({
             fields,
             instance: this,
@@ -158,7 +158,7 @@ class ReplyEditor extends React.Component {
                 ),
                 category: isStory && validateCategory(values.category, !isEdit),
                 body: !values.body ? tt('g.required') :
-                    values.body.length > maxKb * 1024 ? tt('reply_editor.exceeds_maximum_length', maxKb) :
+                    values.body.length > maxKb * 1024 ? tt('reply_editor.exceeds_maximum_length', {maxKb}) :
                         null
             })
         })
@@ -391,7 +391,7 @@ class ReplyEditor extends React.Component {
                                                   tabIndex={2} />
                                     </Dropzone>
                                 {type === 'submit_story' &&
-                                <p className="drag-and-drop">
+                                <p className="drag-and-drop notranslate">
                                     {tt('reply_editor.insert_images_by_dragging_dropping')}
                                     {noClipboardData ? '' : tt('reply_editor.pasting_from_the_clipboard')}
                                     {tt('reply_editor.or_by')} <a onClick={this.onOpenClick}>{tt('reply_editor.selecting_them')}</a>.

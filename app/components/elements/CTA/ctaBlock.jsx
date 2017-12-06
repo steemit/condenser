@@ -30,7 +30,7 @@ class CTABlock extends Component {
            </p>
         }  else{
             textBlock = <p className='left cta-block-text-regular'>
-            {ctainfo.regularStartText}<a href={'/@' + user}> {user} </a> заработал более <LocalizedCurrency amount={payout}/> рублей.<a href={'/start'}> {ctainfo.regularEndText}</a>
+            {ctainfo.regularStartText}<a href={'/@' + user}> {user} </a> заработал более <LocalizedCurrency amount={payout} fetching="RUB"/> рублей.<a href={'/start'}> {ctainfo.regularEndText}</a>
         </p>
         }
 

@@ -57,7 +57,7 @@ class Start extends React.Component {
                         <div className='column small-6 medium-6 large-6'>
                             <p className='landing-start-block-title-text'>Пишите, фотографируйте, комментируйте и получайте
                                 <span
-                                    data-tip='Токены, которыми вознаграждаются посты, можно перевести в любую мировую валюту.'> вознаграждение</span><ReactTooltip type='light' effect="solid" class='tooltip'/> за любое действие</p>
+                                    data-tip='Токены, которыми вознаграждаются посты, можно перевести в любую мировую валюту.'> вознаграждение</span><ReactTooltip type='light' effect="solid" /> за любое действие</p>
                             <a href="/create_account" className="button">Создать аккаунт</a>
                         </div>
                     </div>
@@ -176,7 +176,6 @@ class Start extends React.Component {
                                     начать делиться своими историями, подписываться на интересных авторов, оценивать
                                     публикации, знакомиться и получать вознаграждения</p>
                             </div>
-                            {/* <div className='column large-2 medium-2 small-2'></div> */}
                             <div className='landing-start-panel left column large-5 medium-5 small-12'>
                                 <div className='row'>
                                     <div className='column large-2 medium-2 small-2'>
@@ -203,7 +202,6 @@ class Start extends React.Component {
                                     </div>
                                 </div>
                             </div>
-                            {/* <div className='column large-2 medium-2 small-2'></div> */}
                         </div>
                     </div>
                     <div className='landing-start-block-center column large-12 medium-12 small-12'>

@@ -1,8 +1,47 @@
 .ctablock{
-    text-align: center;
     position: fixed;
     bottom: 0;
+    left: 0;
     width: 100%;
     max-width: 100%;
     background-color: white;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    border-radius: 5px;
+    padding-top: 1rem;
+    z-index: 99;
+
+    .row{
+        max-width: 50rem;
+        margin: auto;
+        .right{
+            text-align: right;
+        }
+        .left{
+            text-align: left;
+        }
+        .Userpic{
+            float: right;
+        }
+    }
+
+    .button{
+        background-color: #4696E5;
+        margin-top: 0.5rem;
+        border-radius: 8px;
+    }
+
+    .cta-block-text-special{
+        font-size: 1rem;
+    }   
+    .cta-block-text-regular{
+        font-size: 0.8rem;
+    } 
+}
+.urerpic{        
+    border-radius: 100px; 
+    border: 0px solid;        
+}
+
+.tooltip{
+    box-shadow: 0 0 10px rgb(0, 0, 0) !important;
 }

@@ -1,5 +1,5 @@
 .App {
-  // min-height: 100vh;
+  min-height: 100vh;
   padding-top: 50px;
 }
 
@@ -28,17 +28,30 @@
   margin-top: 0;
 }
 
+@keyframes bannerIn {
+  0% {
+    margin-bottom: -28.35em;
+    transform: translateY(-28.35em);
+  }
+  100% {
+    margin-bottom: 0em;
+    transform: translateY(0em);
+  }
+}
+
 .welcomeWrapper {
   margin-top: -1rem;
   padding-bottom: 1rem;
 }
 .welcomeBanner {
-  padding: 2.35rem 0 4em;
+  padding: 2.35em 0 4em;
   background-color: #fafbfd;
   background-image: url(../images/lp-bottom.jpg);
   background-repeat: repeat-x;
   background-position:bottom;
   //background-attachment:fixed;
+  animation: 1s cubic-bezier(.8, .5, .2, 1.4) bannerIn;
+  z-index: 10;
 }
 
 .RightMenu {
@@ -73,36 +86,69 @@
 
 .welcomeBanner {
   position: relative;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.05);
   h2 {
-    font-size: 3.8rem;
-    font-weight: 300;
+    font-weight: bold;
     margin-bottom: 16px;
+    @include font-size(48px);
+    font-family: helvetica, sans-serif;
   }
   h4 {
-    color: #999;
+    color: $color-white;
     font-weight: 500;
     margin-bottom: 1rem;
     width: 84%;
-    max-width: 600px;
-    margin: 0 auto;
+    max-width: 440px;
+    margin: 0 auto; 
+    font-family: helvetica, sans-serif;
+    @include font-size(18px);
   }
   .button {
-    min-width: 120px;
-  }
+
+    min-width: 240px;
+
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.2s all ease-in-out;
+    text-transform: capitalize;
+    border-radius: 0;
+    font-size: 18px;       
+    background-color: $color-white;
+    color: $color-blue-black;
+    border: none;
+    box-shadow: 0px 0px 0px 0 rgba(0,0,0,0), 5px 5px 0 0 $color-teal;
+    padding: 16px 22px;
+    @include font-size(22px);
+    cursor: pointer;
+    &:hover, &:focus {
+      background-color: $color-teal;
+      color: $color-white;
+      box-shadow: 0px 0px 0px 0 rgba(0,0,0,0.1), 7px 7px 0 0 $color-white;
+      text-shadow: 0 1px 0 rgba(0,0,0,0.20);
+    }
+  } 
   .close-button {
     top: 0.5rem;
+    right: 0;
   }
   .button.hollow {
     background-color: rgba(255,255,255,0.5);
   }
 }
 .downvoted {
-    color: #848282;
-    opacity: .3;
+    opacity: 0.5;
     -webkit-filter: grayscale(1); // image
     filter: gray; // image grayscale
+    transition: 0.2s all ease-in-out;
+    color: #848282;
+    @include themify($themes) {
+        color: themed('textColorPrimary');  
+    } 
     .Comment__header-user {
-        color: #848282;
+      color: #848282;
+      @include themify($themes) {
+          color: themed('textColorPrimary');  
+      } 
     }
 }
 .downvoted:hover {
@@ -113,4 +159,8 @@
 
 .App__announcement {
   padding-right: 40px;
+  padding-top: 40px; 
+  .close-button {
+    right: 0;
+  }
 }

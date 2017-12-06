@@ -1,4 +1,4 @@
-$buy-color: #009600;
+$buy-color: $color-teal-dark;
 .buy-color {
   color: $buy-color !important;
 }
@@ -12,7 +12,7 @@ input.buy-color:hover {
   background-color: smart-scale($buy-color, 90%) !important;
 }
 
-$sell-color: #960000;
+$sell-color: $color-red;
 .sell-color {
   color: $sell-color !important;
 }
@@ -98,8 +98,10 @@ input.sell-color:hover {
       padding: 0 0.5rem;
       margin-right: 0.5rem;
       display: inline-block;
-      border-right: 1px solid $light-gray;
-      background: #F8F8F8;
+      @include themify($themes) {
+        background-color: themed('backgroundColorOpaque');  
+        border-right: themed('borderDark');  
+      }   
     }
   }
 
@@ -148,23 +150,49 @@ tr {
 }
 
 ul.pager {
-    padding-left: 0;
-    margin: 20px 0;
-    text-align: center;
-    list-style: none;
+  padding-left: 0;
+  margin: 20px 0;
+  text-align: center;
+  list-style: none;
 
-    > li {
-        display: inline;
-        cursor: pointer;
-        -webkit-touch-callout: none; /* iOS Safari */
-        -webkit-user-select: none;   /* Chrome/Safari/Opera */
-        -khtml-user-select: none;    /* Konqueror */
-        -moz-user-select: none;      /* Firefox */
-        -ms-user-select: none;       /* Internet Explorer/Edge */
-        user-select: none;
-    }
+  > li {
+      display: inline;
+      cursor: pointer;
+      -webkit-touch-callout: none; /* iOS Safari */
+      -webkit-user-select: none;   /* Chrome/Safari/Opera */
+      -khtml-user-select: none;    /* Konqueror */
+      -moz-user-select: none;      /* Firefox */
+      -ms-user-select: none;       /* Internet Explorer/Edge */
+      user-select: none;
+  }
+
+  .button.hollow {
+    transition: 0.2s all ease-in-out;
+    background-color: transparent;
+    @include themify($themes) {
+      border: themed('borderAccent');  
+      color: themed('textColorAccent');  
+    } 
+    &:hover {
+      @include themify($themes) {
+        border: themed('borderDark');  
+        color: themed('textColorPrimary');  
+      }       
+    }     
+  }
 }
 
 .DepthChart > div {
   height: 250px;
+}
+
+
+
+.DepthChart {
+  rect.highcharts-background {
+    fill-opacity: 0;
+  } 
+  .highcharts-grid path {
+    stroke: #999;
+  }
 }

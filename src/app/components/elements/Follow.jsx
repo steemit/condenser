@@ -1,13 +1,13 @@
-import React, {PropTypes} from 'react';
-import {connect} from 'react-redux';
+import React, { PropTypes } from 'react';
+import { connect } from 'react-redux';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
-import transaction from 'app/redux/Transaction';
-import {Set, Map} from 'immutable'
+import * as transactionActions from 'app/redux/TransactionReducer';
+import * as userActions from 'app/redux/UserReducer';
+import { Set, Map } from 'immutable';
 import tt from 'counterpart';
-import user from 'app/redux/User';
 
-const {string, bool, any} = PropTypes;
+const { string, bool, any } = PropTypes;
 
 export default class Follow extends React.Component {
     static propTypes = {
@@ -35,69 +35,110 @@ export default class Follow extends React.Component {
     }
 
     componentWillUpdate(nextProps) {
-        this.initEvents(nextProps)
+        this.initEvents(nextProps);
     }
 
     initEvents(props) {
-        const {updateFollow, follower, following} = props;
+        const { updateFollow, follower, following } = props;
         const upd = type => {
-            if(this.state.busy) return;
-            this.setState({busy: true});
-            const done = () => {this.setState({busy: false})};
-            updateFollow(follower, following, type, done)
+            if (this.state.busy) return;
+            this.setState({ busy: true });
+            const done = () => {
+                this.setState({ busy: false });
+            };
+            updateFollow(follower, following, type, done);
         };
-        this.follow = () => {upd('blog')};
-        this.unfollow = () => {upd()};
-        this.ignore = () => {upd('ignore')};
-        this.unignore = () => {upd()};
+        this.follow = () => {
+            upd('blog');
+        };
+        this.unfollow = () => {
+            upd();
+        };
+        this.ignore = () => {
+            upd('ignore');
+        };
+        this.unignore = () => {
+            upd();
+        };
     }
 
     followLoggedOut(e) {
         // close author preview if present
         const author_preview = document.querySelector('.dropdown-pane.is-open');
-        if(author_preview) author_preview.remove();
+        if (author_preview) author_preview.remove();
         // resume authenticate modal
         this.props.showLogin(e);
     }
 
     render() {
-        const {loading} = this.props;
-        if(loading) return <span><LoadingIndicator /> {tt('g.loading')}&hellip;</span>;
-        if(loading !== false) {
+        const { loading } = this.props;
+        if (loading)
+            return (
+                <span>
+                    <LoadingIndicator /> {tt('g.loading')}&hellip;
+                </span>
+            );
+        if (loading !== false) {
             // must know what the user is already following before any update can happen
-            return <span></span>
+            return <span />;
         }
 
-        const {follower, following} = this.props; // html
+        const { follower, following } = this.props; // html
         // Show follow preview for new users
-        if(!follower || !following) return <span>
-             <label className="button slim hollow secondary" onClick={this.followLoggedOut}>{tt('g.follow')}</label>
-        </span>;
+        if (!follower || !following)
+            return (
+                <span>
+                    <label
+                        className="button slim hollow secondary"
+                        onClick={this.followLoggedOut}
+                    >
+                        {tt('g.follow')}
+                    </label>
+                </span>
+            );
         // Can't follow or ignore self
-        if(follower === following) return <span></span>
+        if (follower === following) return <span />;
 
-        const {followingWhat} = this.props; // redux
-        const {showFollow, showMute, fat, children} = this.props; // html
-        const {busy} = this.state;
+        const { followingWhat } = this.props; // redux
+        const { showFollow, showMute, fat, children } = this.props; // html
+        const { busy } = this.state;
 
         const cnBusy = busy ? 'disabled' : '';
         const cnActive = 'button' + (fat ? '' : ' slim');
         const cnInactive = cnActive + ' hollow secondary ' + cnBusy;
-        return <span>
-            {showFollow && followingWhat !== 'blog' &&
-                <label className={cnInactive} onClick={this.follow}>{tt('g.follow')}</label>}
+        return (
+            <span>
+                {showFollow &&
+                    followingWhat !== 'blog' && (
+                        <label className={cnInactive} onClick={this.follow}>
+                            {tt('g.follow')}
+                        </label>
+                    )}
 
-            {showFollow && followingWhat === 'blog' &&
-                <label className={cnInactive} onClick={this.unfollow}>{tt('g.unfollow')}</label>}
+                {showFollow &&
+                    followingWhat === 'blog' && (
+                        <label className={cnInactive} onClick={this.unfollow}>
+                            {tt('g.unfollow')}
+                        </label>
+                    )}
 
-            {showMute && followingWhat !== 'ignore' &&
-                <label className={cnInactive} onClick={this.ignore}>{tt('g.mute')}</label>}
+                {showMute &&
+                    followingWhat !== 'ignore' && (
+                        <label className={cnInactive} onClick={this.ignore}>
+                            {tt('g.mute')}
+                        </label>
+                    )}
 
-            {showMute && followingWhat === 'ignore' &&
-                <label className={cnInactive} onClick={this.unignore}>{tt('g.unmute')}</label>}
+                {showMute &&
+                    followingWhat === 'ignore' && (
+                        <label className={cnInactive} onClick={this.unignore}>
+                            {tt('g.unmute')}
+                        </label>
+                    )}
 
-            {children && <span>&nbsp;&nbsp;{children}</span>}
-        </span>
+                {children && <span>&nbsp;&nbsp;{children}</span>}
+            </span>
+        );
     }
 }
 
@@ -106,19 +147,27 @@ const emptySet = Set();
 
 module.exports = connect(
     (state, ownProps) => {
-        let {follower} = ownProps;
-        if(!follower) {
+        let { follower } = ownProps;
+        if (!follower) {
             const current_user = state.user.get('current');
-            follower = current_user ? current_user.get('username') : null
+            follower = current_user ? current_user.get('username') : null;
         }
 
-        const {following} = ownProps
-        const f = state.global.getIn(['follow', 'getFollowingAsync', follower], emptyMap)
-        const loading = f.get('blog_loading', false) || f.get('ignore_loading', false)
-        const followingWhat =
-            f.get('blog_result', emptySet).contains(following) ? 'blog' :
-            f.get('ignore_result', emptySet).contains(following) ? 'ignore' :
-            null;
+        const { following } = ownProps;
+        const f = state.global.getIn(
+            ['follow', 'getFollowingAsync', follower],
+            emptyMap
+        );
+
+        // the line below was commented out by val - I think it's broken so sometimes the loading indicator is shown forever
+        // const loading = f.get('blog_loading', false) || f.get('ignore_loading', false)
+        const loading = false;
+
+        const followingWhat = f.get('blog_result', emptySet).contains(following)
+            ? 'blog'
+            : f.get('ignore_result', emptySet).contains(following)
+              ? 'ignore'
+              : null;
 
         return {
             follower,
@@ -130,21 +179,23 @@ module.exports = connect(
     dispatch => ({
         updateFollow: (follower, following, action, done) => {
             const what = action ? [action] : [];
-            const json = ['follow', {follower, following, what}];
-            dispatch(transaction.actions.broadcastOperation({
-                type: 'custom_json',
-                operation: {
-                    id: 'follow',
-                    required_posting_auths: [follower],
-                    json: JSON.stringify(json),
-                },
-                successCallback: done,
-                errorCallback: done,
-            }))
+            const json = ['follow', { follower, following, what }];
+            dispatch(
+                transactionActions.broadcastOperation({
+                    type: 'custom_json',
+                    operation: {
+                        id: 'follow',
+                        required_posting_auths: [follower],
+                        json: JSON.stringify(json),
+                    },
+                    successCallback: done,
+                    errorCallback: done,
+                })
+            );
         },
         showLogin: e => {
             if (e) e.preventDefault();
-            dispatch(user.actions.showLogin())
+            dispatch(userActions.showLogin());
         },
     })
 )(Follow);

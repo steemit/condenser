@@ -1,6 +1,6 @@
 import config from 'config';
 
-import * as steem from 'steem';
+import * as steem from '@steemit/steem-js';
 
 const path = require('path');
 const ROOT = path.join(__dirname, '../..');
@@ -9,7 +9,7 @@ const ROOT = path.join(__dirname, '../..');
 // it will avoid `../../../../../` require strings
 
 // use Object.assign to bypass transform-inline-environment-variables-babel-plugin (process.env.NODE_PATH= will not work)
-Object.assign(process.env, {NODE_PATH: path.resolve(__dirname, '..')});
+Object.assign(process.env, { NODE_PATH: path.resolve(__dirname, '..') });
 
 require('module').Module._initPaths();
 
@@ -30,29 +30,27 @@ global.$STM_Config = {
     upload_image: config.get('upload_image'),
     site_domain: config.get('site_domain'),
     facebook_app_id: config.get('facebook_app_id'),
-    google_analytics_id: config.get('google_analytics_id')
+    google_analytics_id: config.get('google_analytics_id'),
 };
 
 const WebpackIsomorphicTools = require('webpack-isomorphic-tools');
-const WebpackIsomorphicToolsConfig = require(
-    '../../webpack/webpack-isotools-config'
-);
+const WebpackIsomorphicToolsConfig = require('../../webpack/webpack-isotools-config');
 
 global.webpackIsomorphicTools = new WebpackIsomorphicTools(
     WebpackIsomorphicToolsConfig
 );
 
 global.webpackIsomorphicTools.server(ROOT, () => {
-        steem.api.setOptions({ url: config.steemd_connection_server });
-        steem.config.set('address_prefix', config.get('address_prefix'));
-        steem.config.set('chain_id', config.get('chain_id'));
+    steem.api.setOptions({ url: config.steemd_connection_server });
+    steem.config.set('address_prefix', config.get('address_prefix'));
+    steem.config.set('chain_id', config.get('chain_id'));
 
-        // const CliWalletClient = require('shared/api_client/CliWalletClient').default;
-        // if (process.env.NODE_ENV === 'production') connect_promises.push(CliWalletClient.instance().connect_promise());
-        try {
-            require('./server');
-        } catch (error) {
-            console.error(error);
-            process.exit(1);
-        }
+    // const CliWalletClient = require('shared/api_client/CliWalletClient').default;
+    // if (process.env.NODE_ENV === 'production') connect_promises.push(CliWalletClient.instance().connect_promise());
+    try {
+        require('./server');
+    } catch (error) {
+        console.error(error);
+        process.exit(1);
+    }
 });

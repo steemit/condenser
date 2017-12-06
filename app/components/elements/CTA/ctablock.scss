@@ -11,13 +11,16 @@
     z-index: 99;
 
     .row{
-        max-width: 55rem;
+        max-width: 50rem;
         margin: auto;
         .right{
             text-align: right;
         }
         .left{
             text-align: left;
+        }
+        .Userpic{
+            float: right;
         }
     }
 
@@ -27,10 +30,12 @@
         border-radius: 8px;
     }
 
-    .cta-block-text{
+    .cta-block-text-special{
+        font-size: 1rem;
+    }   
+    .cta-block-text-regular{
         font-size: 0.8rem;
-        margin-top: 0.5rem;
-    }    
+    } 
 }
 .urerpic{        
     border-radius: 100px; 
@@ -38,5 +43,5 @@
 }
 
 .tooltip{
-    //box-shadow: 0 0 10px rgb(0, 0, 0) !important;
+    box-shadow: 0 0 10px rgb(0, 0, 0) !important;
 }

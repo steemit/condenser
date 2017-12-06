@@ -25,8 +25,7 @@ class Start extends React.Component {
         let {simple} = this.state
         let simpleAnswer = <p className='landing-start-block-text'>
             <b>{'Golos.io '}</b>
-            — это блог-платформа на
-            <span data-tip='Блокчейн — распределенная база данных'> блокчейне</span>, где
+            — это блог-платформа на <span data-tip='Блокчейн — распределенная база данных'>блокчейне</span>, где
             пользователи могут публиковать записи и голосовать за понравившиеся статьи.
             Голосуя за понравившуюся статью, они вознаграждают ее своими «голосами», которые
             можно перевести в реальные деньги.
@@ -58,8 +57,7 @@ class Start extends React.Component {
                         <div className='column small-6 medium-6 large-6'>
                             <p className='landing-start-block-title-text'>Пишите, фотографируйте, комментируйте и получайте
                                 <span
-                                    data-tip='Токены, которыми вознаграждаются посты, можно перевести в любую мировую валюту.'> вознаграждение</span><ReactTooltip type='light' effect="solid" class='tooltip'/>
-                                    за любое действие</p>
+                                    data-tip='Токены, которыми вознаграждаются посты, можно перевести в любую мировую валюту.'> вознаграждение</span><ReactTooltip type='light' effect="solid" class='tooltip'/> за любое действие</p>
                             <a href="/create_account" className="button">Создать аккаунт</a>
                         </div>
                     </div>

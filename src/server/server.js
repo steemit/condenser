@@ -50,6 +50,15 @@ const numProcesses = process.env.NUM_PROCESSES || os.cpus().length;
 
 app.use(requestTime(numProcesses));
 
+// only use set-cookie headers for specific apis
+// (they bust the cache)
+app.use(function*(next) {
+    yield* next;
+    if (this.setCookies !== true) {
+        delete this.response.remove('set-cookie');
+    }
+});
+
 app.keys = [config.get('session_key')];
 
 const crypto_key = config.get('server_session_secret');
@@ -201,10 +210,8 @@ app.use(function*(next) {
     const from_link = this.request.headers.referer;
     if (!this.session.uid) {
         this.session.uid = secureRandom.randomBuffer(13).toString('hex');
-        this.session.new_visit = true;
         if (from_link) this.session.r = from_link;
     } else {
-        this.session.new_visit = this.session.last_visit - last_visit > 1800;
         if (!this.session.r && from_link) {
             this.session.r = from_link;
         }

@@ -70,7 +70,7 @@ class PostsIndex extends React.Component {
         this.setState({showSpam: !this.state.showSpam})
     }
     render() {
-        let {user_or_t, category, order} = this.props.routeParams;
+        let {user_or_t, category, order = constants.DEFAULT_SORT_ORDER} = this.props.routeParams;
         let topics_order = order;
         let posts = [];
         let emptyText = '';

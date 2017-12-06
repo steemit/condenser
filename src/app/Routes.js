@@ -13,7 +13,7 @@ export const routeRegex = {
 export function resolveRoute(path)
 {
     if (path === '/') {
-        return {page: 'PostsIndex', params: ['trending']};
+        return {page: 'PostsIndex', params: ['all', 'trending']};
     }
     if (path === '/s/about') {
         return {page: 'About'};

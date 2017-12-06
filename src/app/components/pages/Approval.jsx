@@ -1,5 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import {VIEW_MODE_WHISTLE, WHISTLE_SIGNUP_COMPLETE} from 'shared/constants';
 
 class Approval extends React.Component {
     constructor(props) {
@@ -16,6 +17,9 @@ class Approval extends React.Component {
     }
 
     render() {
+        if(process.env.BROWSER && this.props.viewMode === VIEW_MODE_WHISTLE) {
+            window.postMessage(WHISTLE_SIGNUP_COMPLETE);
+        }
         let body = '';
         if (this.state.confirm_email) {
             body = <div>
@@ -48,7 +52,7 @@ module.exports = {
     component: connect(
         state => {
             return {
-
+                viewMode: state.app.get('viewMode')
             }
         },
         dispatch => ({

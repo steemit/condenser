@@ -41,6 +41,7 @@ function retrieveFacebookUserData(access_token) {
 }
 
 function* handleFacebookCallback() {
+    this.setCookies = true;
     console.log('-- /handle_facebook_callback -->', this.session.uid, this.query);
     let email = null;
     try {
@@ -179,6 +180,7 @@ function retrieveRedditUserData(access_token) {
 }
 
 function* handleRedditCallback() {
+    this.setCookies = true;
     try {
         const u = yield retrieveRedditUserData(this.query.access_token);
         console.log('-- /handle_reddit_callback  -->', this.session.uid, u);

@@ -4,7 +4,7 @@ import models from 'db/models';
 import config from 'config';
 import {esc, escAttrs} from 'db/models';
 import {getRemoteIp, rateLimitReq, checkCSRF} from 'server/utils/misc';
-import {broadcast} from 'steem';
+import {broadcast} from '@steemit/steem-js';
 
 export default function useAccountRecoveryApi(app) {
     const router = koa_router();
@@ -32,6 +32,7 @@ export default function useAccountRecoveryApi(app) {
     });
 
     router.get('/account_recovery_confirmation/:code', function *() {
+        this.setCookies = true;
         if (rateLimitReq(this, this.req)) return;
         const code = this.params.code;
         if (!code) return this.throw('no confirmation code', 404);

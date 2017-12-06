@@ -6,11 +6,10 @@ import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import Voting from 'app/components/elements/Voting';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import user from 'app/redux/User';
+import * as userActions from 'app/redux/UserReducer';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Userpic from 'app/components/elements/Userpic';
-import transaction from 'app/redux/Transaction'
-import {List} from 'immutable'
+import * as transactionActions from 'app/redux/TransactionReducer';
 import tt from 'counterpart';
 import {parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
 import {Long} from 'bytebuffer';
@@ -156,21 +155,10 @@ class CommentImpl extends React.Component {
     }
 
     componentDidMount() {
-        // Jump to comment via hash (note: comment element's id has a hash(#) in it)
         if (window.location.hash == this.props.anchor_link) {
-            const comment_el = document.getElementById(this.props.anchor_link)
-            if (comment_el) {
-                comment_el.scrollIntoView(true)
-                const scrollingEl = document.scrollingElement || document.documentElement;
-                scrollingEl.scrollTop -= 100;
-                this.setState({highlight: true});
-            }
+            this.setState({highlight: true}); // eslint-disable-line react/no-did-mount-set-state
         }
     }
-
-    //componentWillReceiveProps(np) {
-    //    this._checkHide(np);
-    //}
 
     /**
      * - `hide` is based on author reputation, and will hide the entire post on initial render.
@@ -355,7 +343,7 @@ class CommentImpl extends React.Component {
             <div className={innerCommentClass}>
                 <div className="Comment__Userpic show-for-medium">
                   <Userpic account={comment.author} />
-                </div>            
+                </div>
               <div className="Comment__header">
                 <div className="Comment__header_collapse">
                   <Voting post={post} flag />
@@ -412,9 +400,9 @@ const Comment = connect(
 
     // mapDispatchToProps
     dispatch => ({
-        unlock: () => { dispatch(user.actions.showLogin()) },
+        unlock: () => { dispatch(userActions.showLogin()) },
         deletePost: (author, permlink) => {
-            dispatch(transaction.actions.broadcastOperation({
+            dispatch(transactionActions.broadcastOperation({
                 type: 'delete_comment',
                 operation: {author, permlink},
                 confirm: tt('g.are_you_sure'),

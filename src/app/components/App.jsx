@@ -125,7 +125,7 @@ class App extends React.Component {
 
     render() {
         const {location, params, children, flash, new_visitor,
-            depositSteem, signup_bonus, username, nightmodeEnabled, viewMode} = this.props;
+            depositSteem, username, nightmodeEnabled, viewMode} = this.props;
         const lp = false; //location.pathname === '/';
         const miniHeader = location.pathname === '/create_account' || location.pathname === '/pick_account';
         const whistleView = (viewMode === VIEW_MODE_WHISTLE);
@@ -312,7 +312,6 @@ App.propTypes = {
     error: React.PropTypes.string,
     children: AppPropTypes.Children,
     location: React.PropTypes.object,
-    signup_bonus: React.PropTypes.string,
     loginUser: React.PropTypes.func.isRequired,
     depositSteem: React.PropTypes.func.isRequired,
     username:  React.PropTypes.string,
@@ -324,7 +323,6 @@ export default connect(
             viewMode: state.app.get('viewMode'),
             error: state.app.get('error'),
             flash: state.offchain.get('flash'),
-            signup_bonus: state.offchain.get('signup_bonus'),
             new_visitor: !state.user.get('current') &&
                 !state.offchain.get('user') &&
                 !state.offchain.get('account') &&

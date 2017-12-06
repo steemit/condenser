@@ -1,5 +1,5 @@
-import config from 'config';
-import TarantoolDriver from 'tarantool-driver';
+const config = require('config');
+const TarantoolDriver = require('tarantool-driver');
 
 let instance = null;
 
@@ -67,4 +67,4 @@ Tarantool.instance = function () {
     return instance;
 };
 
-export default Tarantool;
+module.exports = Tarantool;

@@ -64,6 +64,8 @@
     border: none;
     background-color: #F4F4F4;
     font-weight: inherit;
+
+    @import "node_modules/highlight.js/styles/github"
   }
 
   pre > code {

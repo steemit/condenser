@@ -2,6 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux'
 import {Component} from 'react'
 import Remarkable from 'remarkable'
+import hljs from 'highlight.js'
 import YoutubePreview from 'app/components/elements/YoutubePreview'
 import sanitizeConfig, {noImageText} from 'app/utils/SanitizeConfig'
 import sanitize from 'sanitize-html'
@@ -13,7 +14,14 @@ const remarkable = new Remarkable({
     breaks: true,
     linkify: false, // linkify is done locally
     typographer: false, // https://github.com/jonschlinkert/remarkable/issues/142#issuecomment-221546793
-    quotes: '“”‘’'
+    quotes: '“”‘’',
+    highlight: (src, lang) => {
+        if (lang && hljs.getLanguage(lang)) {
+            try {
+                return hljs.highlight(lang, src).value
+            } catch (e) {}
+        }
+    }
 })
 
 class MarkdownViewer extends Component {

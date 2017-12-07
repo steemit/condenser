@@ -189,23 +189,6 @@ class OffsetScrollBehavior extends ScrollBehavior {
 }
 //END: SCROLL CODE
 
-// iso renderer, same as defaultRenderer except we drop the offchain data
-const isoRenderer = {
-    markup(html, key) {
-        if (!html) return '';
-        return `<div data-iso-key="${key}">${html}</div>`;
-    },
-    data(state, key) {
-        if (!state) return '';
-        const s = JSON.parse(state);
-        delete s.offchain;
-        state = JSON.stringify(s);
-        return `<script type="application/json" data-iso-key="${key}">${
-            state
-        }</script>`;
-    },
-};
-
 const sagaMiddleware = createSagaMiddleware(
     ...userWatches, // keep first to remove keys early when a page change happens
     ...fetchDataWatches,
@@ -389,7 +372,23 @@ async function universalRender({
                 };
             }
         }
+        // Calculate signup bonus
+        const fee = parseFloat($STM_Config.registrar_fee.split(' ')[0]),
+            { base, quote } = onchain.feed_price,
+            feed =
+                parseFloat(base.split(' ')[0]) /
+                parseFloat(quote.split(' ')[0]);
+        const sd = fee * feed;
+        let sdDisp;
+        if (sd < 1.0) {
+            sdDisp = '¢' + parseInt(sd * 100);
+        } else {
+            const sdInt = parseInt(sd),
+                sdDec = sd - sdInt;
+            sdDisp = '$' + sdInt + (sdInt < 5 && sdDec >= 0.5 ? '.50' : '');
+        }
 
+        offchain.signup_bonus = sdDisp;
         offchain.server_location = location;
         server_store = createStore(rootReducer, {
             app: initial_state.app,
@@ -467,7 +466,7 @@ async function universalRender({
         titleBase: 'Steemit - ',
         meta,
         statusCode: status,
-        body: Iso.render(app, server_store.getState(), '', isoRenderer),
+        body: Iso.render(app, server_store.getState()),
     };
 }
 

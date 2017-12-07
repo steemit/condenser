@@ -13,7 +13,6 @@ class CTABlock extends Component {
         payout: React.PropTypes.number,
         visible: React.PropTypes.bool,
         isSpecial: React.PropTypes.object,
-        payvalue: React.PropTypes.object
     };
 
     constructor(props) {
@@ -31,7 +30,7 @@ class CTABlock extends Component {
            </p>
         }  else{
             textBlock = <p className='left cta-block-text-regular'>
-            {ctainfo.regularStartText} <b>{user}</b>  заработал более {payvalue}.<a href={'/start'}> {ctainfo.regularEndText}</a>
+            Сообщество <b>Golos.io</b> {ctainfo.regularStartText} <b>{user}</b>  заработал более <LocalizedCurrency amount={payout} rounding={true}/>.<a href={'/start'}> {ctainfo.regularEndText}</a>
         </p>
         }            
 
@@ -90,11 +89,12 @@ export default connect((state, ownProps) => {
     let total_curator_payout = parsePayoutAmount(post.get('curator_payout_value'))
 
     let payout = (pending_payout + total_author_payout + total_curator_payout)
-    let payvalue = <LocalizedCurrency amount={payout} rounding={true}/>
 
-    console.log(localizedCurrency(payout))
+    let some = localizedCurrency(payout, {noSymbol: true, rounding: true})
 
-    let visible = (current_account == null) && ((localizedCurrency(payout) >= 50) || isSpecial != null)
+    console.log(some)
 
-    return {post: ownProps.post, user, payout, visible, isSpecial, payvalue}
+    let visible = (current_account == null) && (some >= 50 || isSpecial != null)
+
+    return {post: ownProps.post, user, payout, visible, isSpecial}
 })(CTABlock)

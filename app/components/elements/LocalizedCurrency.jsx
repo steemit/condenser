@@ -20,7 +20,8 @@ class LocalizedCurrency extends React.Component {
     fractionDigits: React.PropTypes.number,
     amount: React.PropTypes.number.isRequired,
     currency: React.PropTypes.string,
-
+    rounding: React.PropTypes.bool,
+    minimumAmountToShow: React.PropTypes.number,
   }
 
   static defaultProps = {
@@ -63,6 +64,8 @@ class LocalizedCurrency extends React.Component {
       amount,
       noSymbol,
       fractionDigits,
+      rounding,
+      minimumAmountToShow
     } = this.props
 
     if (! process.env.BROWSER
@@ -90,27 +93,37 @@ class LocalizedCurrency extends React.Component {
       // : number,
       // options
       // )
-      const currencyAmount =  Number(
+      let currencyAmount =  Number(
         symbol.localeCompare(DEBT_TOKEN_SHORT) != 0
         ? number * (xchangeGold / 31103.4768) * xchangePair
         : number
       )
-      .toLocaleString('en', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-      })
+
+      if(rounding){     
+        let divider = Math.pow(10, (parseInt(Math.ceil(currencyAmount).toString().length) - 1))
+        currencyAmount = (currencyAmount / divider | 0) * divider
+      } else {
+        currencyAmount.toLocaleString('en', {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        })
+      }
+      
       // if noSymbol is specified return only amount of digits
       return  noSymbol
         ? currencyAmount
         : symbol + ' ' + currencyAmount
     }
 
-    return  <span>
-      {localizedCurrency(amount, {maximumFractionDigits: fractionDigits})}
-    </span>
+    let localizedCurrencyValue = localizedCurrency(amount, {maximumFractionDigits: fractionDigits})
+
+    if(localizedCurrencyValue == null)
+      return null
+    else 
+      return <span>{localizedCurrencyValue}</span>
+    
   }
 }
-
 
 export default connect(
   (state, ownProps) => {

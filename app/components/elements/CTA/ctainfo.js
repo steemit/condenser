@@ -2,8 +2,8 @@ export default {
     specialStartText : "Присоединитесь, чтобы не пропускать истории",
     specialEndText :"Узнать больше",
 
-    regularStartText : "Сообщество Golos.io высоко оценило этот пост!",
-    regularEndText : "Делитесь своими мыслями и получайте вознаграждение.",
+    regularStartText : "Сообщество Golos.io высоко оценило этот пост.",
+    regularEndText : "Делитесь своими мыслями и получайте вознаграждение!",
 
     specialLinks : [
         {

@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from "react";
 import {connect} from 'react-redux';
 import Userpic from 'app/components/elements/Userpic';
 import {parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
-import LocalizedCurrency from 'app/components/elements/LocalizedCurrency';
+import LocalizedCurrency, {localizedCurrency} from 'app/components/elements/LocalizedCurrency';
 import ctainfo from './ctainfo'
 
 class CTABlock extends Component {
@@ -12,7 +12,8 @@ class CTABlock extends Component {
         post: React.PropTypes.string.isRequired,
         payout: React.PropTypes.number,
         visible: React.PropTypes.bool,
-        isSpecial: React.PropTypes.object
+        isSpecial: React.PropTypes.object,
+        payvalue: React.PropTypes.object
     };
 
     constructor(props) {
@@ -20,7 +21,7 @@ class CTABlock extends Component {
     }
 
     render() {
-        let {user, post, payout, visible, isSpecial} = this.props
+        let {user, post, payout, visible, isSpecial, payvalue} = this.props
         let textBlock;
 
         if(isSpecial){
@@ -30,13 +31,9 @@ class CTABlock extends Component {
            </p>
         }  else{
             textBlock = <p className='left cta-block-text-regular'>
-            {ctainfo.regularStartText}<a href={'/@' + user}> {user} </a> заработал более <LocalizedCurrency amount={payout} currency="RUB" noSymbol={true}/> рублей.<a href={'/start'}> {ctainfo.regularEndText}</a>
+            {ctainfo.regularStartText} <b>{user}</b>  заработал более {payvalue}.<a href={'/start'}> {ctainfo.regularEndText}</a>
         </p>
-        }
-
-        
-
-        
+        }            
 
         let ctablock = <div className='ctablock'>
             <div className='row'>
@@ -77,10 +74,10 @@ export default connect((state, ownProps) => {
     }
 
     function isSpecialPost(array, link) {
-        for (let index = 0; index < array.length; index++) {
-            const element = array[index];
-            if (compareLinks(array[index].link, link)) {
-                return array[index]
+        for (let i = 0; i < array.length; i++) {
+            const element = array[i];
+            if (compareLinks(array[i].link, link)) {
+                return array[i]
                 break;
             } else 
                 return null
@@ -92,9 +89,12 @@ export default connect((state, ownProps) => {
     let total_author_payout = parsePayoutAmount(post.get('total_payout_value'))
     let total_curator_payout = parsePayoutAmount(post.get('curator_payout_value'))
 
-    //let payout = ((pending_payout + total_author_payout + total_curator_payout) / 1000 | 0) * 1000
     let payout = (pending_payout + total_author_payout + total_curator_payout)
-    let visible = (current_account == null) && ((payout >= 2000) || isSpecial != null)
+    let payvalue = <LocalizedCurrency amount={payout} rounding={true}/>
 
-    return {post: ownProps.post, user, payout, visible, isSpecial}
+    console.log(localizedCurrency(payout))
+
+    let visible = (current_account == null) && ((localizedCurrency(payout) >= 50) || isSpecial != null)
+
+    return {post: ownProps.post, user, payout, visible, isSpecial, payvalue}
 })(CTABlock)

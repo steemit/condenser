@@ -1,8 +1,8 @@
-import webpack from 'webpack';
-import git from 'git-rev-sync';
-import baseConfig from './base.config';
+const webpack = require('webpack');
+const git = require('git-rev-sync');
+const baseConfig = require('./base.config');
 
-export default {
+module.exports = {
     ...baseConfig,
     plugins: [
         new webpack.DefinePlugin({

@@ -10,89 +10,94 @@ export const routeRegex = {
     UserNameJson: /^.*(?=(\.json))/,
 };
 
-export function resolveRoute(path)
-{
+export function resolveRoute(path) {
     if (path === '/') {
-        return {page: 'PostsIndex', params: ['all', 'trending']};
+        return { page: 'PostsIndex', params: ['all', 'trending'] };
     }
     if (path === '/s/about') {
-        return {page: 'About'};
+        return { page: 'About' };
     }
     if (path === '/s/welcome') {
-        return {page: 'Welcome'};
+        return { page: 'Welcome' };
     }
     if (path === '/s/faq') {
-        return {page: 'Faq'};
+        return { page: 'Faq' };
     }
     if (path === '/c/login') {
-        return {page: 'Login'};
+        return { page: 'Login' };
     }
     if (path === '/s/privacy') {
-        return {page: 'Privacy'};
+        return { page: 'Privacy' };
     }
     if (path === '/s/support') {
-        return {page: 'Support'};
+        return { page: 'Support' };
     }
     if (path === '/c/xss/test' && process.env.NODE_ENV === 'development') {
-        return {page: 'XSSTest'};
+        return { page: 'XSSTest' };
     }
     if (path.match(/^\/c\/tags\/?/)) {
-        return {page: 'Tags'};
+        return { page: 'Tags' };
     }
     if (path === '/s/tos') {
-        return {page: 'Tos'};
+        return { page: 'Tos' };
     }
     if (path === '/c/change-password') {
-        return {page: 'ChangePassword'};
+        return { page: 'ChangePassword' };
     }
     if (path === '/c/create-account') {
-        return {page: 'CreateAccount'};
+        return { page: 'CreateAccount' };
     }
     if (path === '/c/approval') {
-        return {page: 'Approval'};
+        return { page: 'Approval' };
     }
     if (path === '/c/pick-account') {
-        return {page: 'PickAccount'};
+        return { page: 'PickAccount' };
     }
     if (path === '/c/recover-account-step-1') {
-        return {page: 'RecoverAccountStep1'};
+        return { page: 'RecoverAccountStep1' };
     }
     if (path === '/c/recover-account-step-2') {
-        return {page: 'RecoverAccountStep2'};
+        return { page: 'RecoverAccountStep2' };
     }
     if (path === '/c/market') {
-        return {page: 'Market'};
+        return { page: 'Market' };
     }
     if (path === '/c/witnesses') {
-        return {page: 'Witnesses'};
+        return { page: 'Witnesses' };
     }
     if (path === '/c/submit') {
-        return {page: 'SubmitPost'};
+        return { page: 'SubmitPost' };
     }
     let match = path.match(routeRegex.PostsIndex);
     if (match) {
-        return {page: 'PostsIndex', params: match.slice(1)};
+        return { page: 'PostsIndex', params: match.slice(1) };
     }
     match = path.match(routeRegex.PostsIndexUserFeed);
     if (match) {
-        return {page: 'PostsIndex', params: ['home', match[1]]};
+        return { page: 'PostsIndex', params: ['home', match[1]] };
     }
-    match = path.match(routeRegex.UserProfile1) ||
+    match =
+        path.match(routeRegex.UserProfile1) ||
         // @user/"posts" is deprecated in favor of "comments" as of oct-2016 (#443)
         path.match(routeRegex.UserProfile2);
     if (match) {
-        return {page: 'UserProfile', params: match.slice(1)};
+        return { page: 'UserProfile', params: match.slice(1) };
     }
     match = path.match(routeRegex.Post);
     if (match) {
-        return {page: 'Post', params: match.slice(1)};
+        return { page: 'Post', params: match.slice(1) };
     }
-    match = path.match(/^\/(hot|votes|responses|trending|trending30|promoted|cashout|payout|payout_comments|created|active)\/?$/)
-        || path.match(/^\/(hot|votes|responses|trending|trending30|promoted|cashout|payout|payout_comments|created|active)\/([\w\d-]+)\/?$/);
+    match =
+        path.match(
+            /^\/(hot|votes|responses|trending|trending30|promoted|cashout|payout|payout_comments|created|active)\/?$/
+        ) ||
+        path.match(
+            /^\/(hot|votes|responses|trending|trending30|promoted|cashout|payout|payout_comments|created|active)\/([\w\d-]+)\/?$/
+        );
     if (match) {
-        return {page: 'PostsIndex', params: match.slice(1)};
+        return { page: 'PostsIndex', params: match.slice(1) };
     }
-    return {page: 'NotFound'};
+    return { page: 'NotFound' };
 }
 
 export const pathTo = {
@@ -115,7 +120,9 @@ export const pathTo = {
     post: (author, permlink) => `/${author}/${permlink}`,
     postPage: () => '/:username/:slug',
     comment: (post_author, post_permlink, comment_author, comment_permlink) => {
-        return `/${post_author}/${post_permlink}#${comment_author}/${comment_permlink}`;
+        return `/${post_author}/${post_permlink}#${comment_author}/${
+            comment_permlink
+        }`;
     },
     indexPage: (category, order) => `/t/${category}/${order || 'trending'}`,
     about: () => '/s/about',
@@ -169,13 +176,26 @@ export function routeToSteemdUrl(route) {
 }
 
 export function convertPostPath(path) {
-    const pmatch = path.match(/^\/([\w\d\-]+)\/\@([\w\d\.-]+)\/([\w\d-]+)\/?($|\?)/);
+    const pmatch = path.match(
+        /^\/([\w\d\-]+)\/\@([\w\d\.-]+)\/([\w\d-]+)\/?($|\?)/
+    );
     if (pmatch) {
         return '/' + pmatch[2] + '/' + pmatch[3];
     }
-    const cmatch = path.match(/^\/([\w\d\-]+)\/\@([\w\d\.-]+)\/([\w\d-]+)\#\@([\w\d-]+)\/([\w\d-]+)$/);
+    const cmatch = path.match(
+        /^\/([\w\d\-]+)\/\@([\w\d\.-]+)\/([\w\d-]+)\#\@([\w\d-]+)\/([\w\d-]+)$/
+    );
     if (cmatch) {
-        return '/' + cmatch[2] + '/' + cmatch[3] + '#' + cmatch[4] + '/' + cmatch[5];
+        return (
+            '/' +
+            cmatch[2] +
+            '/' +
+            cmatch[3] +
+            '#' +
+            cmatch[4] +
+            '/' +
+            cmatch[5]
+        );
     }
     return path;
 }

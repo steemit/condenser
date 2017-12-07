@@ -2,10 +2,9 @@ import React from 'react';
 import SvgImage from 'app/components/elements/SvgImage';
 import { Link } from 'react-router';
 import Icon from 'app/components/elements/Icon';
-import {pathTo} from "app/Routes";
+import { pathTo } from 'app/Routes';
 
 class NotFound extends React.Component {
-
     render() {
         return (
             <div>
@@ -14,11 +13,17 @@ class NotFound extends React.Component {
                         <div className="top-bar-left">
                             <ul className="menu">
                                 <li className="Header__top-logo">
-                                    <Link to='/'>
+                                    <Link to="/">
                                         <Icon name="steem" size="2x" />
                                     </Link>
                                 </li>
-                                <li className="Header__top-steemit show-for-medium noPrint"><a href="/">steemit<span className="beta">beta</span></a></li>
+                                <li className="Header__top-steemit show-for-medium noPrint">
+                                    <a href="/">
+                                        steemit<span className="beta">
+                                            beta
+                                        </span>
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -26,16 +31,41 @@ class NotFound extends React.Component {
                 <div className="NotFound float-center">
                     <div>
                         <Icon name="steem" size="4x" />
-                        <h4 className="NotFound__header">Sorry! This page doesn't exist.</h4>
-                        <p>Not to worry. You can head back to <a style={{fontWeight: 800}} href="/">our homepage</a>,
-                           or check out some great posts.
+                        <h4 className="NotFound__header">
+                            Sorry! This page doesn't exist.
+                        </h4>
+                        <p>
+                            Not to worry. You can head back to{' '}
+                            <a style={{ fontWeight: 800 }} href="/">
+                                our homepage
+                            </a>, or check out some great posts.
                         </p>
                         <ul className="NotFound__menu">
-                          <li><a href={pathTo.indexPage('all', 'created')}>new posts</a></li>
-                          <li><a href={pathTo.indexPage('all', 'hot')}>hot posts</a></li>
-                          <li><a href={pathTo.indexPage('all', 'trending')}>trending posts</a></li>
-                          <li><a href={pathTo.indexPage('all', 'promoted')}>promoted posts</a></li>
-                          <li><a href={pathTo.indexPage('all', 'active')}>active posts</a></li>
+                            <li>
+                                <a href={pathTo.indexPage('all', 'created')}>
+                                    new posts
+                                </a>
+                            </li>
+                            <li>
+                                <a href={pathTo.indexPage('all', 'hot')}>
+                                    hot posts
+                                </a>
+                            </li>
+                            <li>
+                                <a href={pathTo.indexPage('all', 'trending')}>
+                                    trending posts
+                                </a>
+                            </li>
+                            <li>
+                                <a href={pathTo.indexPage('all', 'promoted')}>
+                                    promoted posts
+                                </a>
+                            </li>
+                            <li>
+                                <a href={pathTo.indexPage('all', 'active')}>
+                                    active posts
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -46,5 +76,5 @@ class NotFound extends React.Component {
 
 module.exports = {
     path: '*',
-    component: NotFound
+    component: NotFound,
 };

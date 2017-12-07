@@ -1,51 +1,61 @@
-import {takeLatest} from 'redux-saga';
-import {call, put} from 'redux-saga/effects';
-import {api} from '@steemit/steem-js';
-import {pathTo} from 'app/Routes';
+import { takeLatest } from 'redux-saga';
+import { call, put } from 'redux-saga/effects';
+import { api } from '@steemit/steem-js';
+import { pathTo } from 'app/Routes';
 import * as marketActions from './MarketReducer';
 import * as appActions from './AppReducer';
 import * as userActions from './UserReducer';
-import {getAccount} from './SagaShared';
+import { getAccount } from './SagaShared';
 
-export const marketWatches = [watchLocationChange, watchUserLogin, watchMarketUpdate];
+export const marketWatches = [
+    watchLocationChange,
+    watchUserLogin,
+    watchMarketUpdate,
+];
 
-const wait = ms => (
+const wait = ms =>
     new Promise(resolve => {
-        setTimeout(() => resolve(), ms)
-    }))
+        setTimeout(() => resolve(), ms);
+    });
 
-let polling = false
-let active_user = null
-let last_trade = null
+let polling = false;
+let active_user = null;
+let last_trade = null;
 
 export function* fetchMarket(location_change_action) {
-    const {pathname} = location_change_action.payload;
+    const { pathname } = location_change_action.payload;
     if (pathname && pathname != pathTo.market()) {
-        polling = false
-        return
+        polling = false;
+        return;
     }
 
-    if(polling == true) return
-    polling = true
+    if (polling == true) return;
+    polling = true;
 
-    while(polling) {
-
+    while (polling) {
         try {
             const state = yield call([api, api.getOrderBookAsync], 500);
             yield put(marketActions.receiveOrderbook(state));
 
             let trades;
-            if(last_trade == null ) {
+            if (last_trade == null) {
                 trades = yield call([api, api.getRecentTradesAsync], 25);
                 yield put(marketActions.receiveTradeHistory(trades));
             } else {
-                let start = last_trade.toISOString().slice(0, -5)
-                trades = yield call([api, api.getTradeHistoryAsync], start, "1969-12-31T23:59:59", 1000);
-                trades = trades.reverse()
+                let start = last_trade.toISOString().slice(0, -5);
+                trades = yield call(
+                    [api, api.getTradeHistoryAsync],
+                    start,
+                    '1969-12-31T23:59:59',
+                    1000
+                );
+                trades = trades.reverse();
                 yield put(marketActions.appendTradeHistory(trades));
             }
-            if(trades.length > 0) {
-              last_trade = new Date((new Date(Date.parse(trades[0]['date']))).getTime() + 1000)
+            if (trades.length > 0) {
+                last_trade = new Date(
+                    new Date(Date.parse(trades[0]['date'])).getTime() + 1000
+                );
             }
 
             const state3 = yield call([api, api.getTickerAsync]);
@@ -60,7 +70,7 @@ export function* fetchMarket(location_change_action) {
 }
 
 export function* fetchOpenOrders(set_user_action) {
-    const {username} = set_user_action.payload
+    const { username } = set_user_action.payload;
 
     try {
         const state = yield call([api, api.getOpenOrdersAsync], username);

@@ -5,35 +5,41 @@ import Iso from 'iso';
 import React from 'react';
 import { render } from 'react-dom';
 import { renderToString } from 'react-dom/server';
-import { Router, RouterContext, match, applyRouterMiddleware, browserHistory } from 'react-router';
+import {
+    Router,
+    RouterContext,
+    match,
+    applyRouterMiddleware,
+    browserHistory,
+} from 'react-router';
 import { Provider } from 'react-redux';
 import RootRoute from 'app/RootRoute';
-import {resolveRoute, routeRegex, routeToSteemdUrl} from 'app/Routes';
+import { resolveRoute, routeRegex, routeToSteemdUrl } from 'app/Routes';
 import * as appActions from 'app/redux/AppReducer';
-import {createStore, applyMiddleware, compose} from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import { useScroll } from 'react-router-scroll';
 import createSagaMiddleware from 'redux-saga';
 import { syncHistoryWithStore } from 'react-router-redux';
 import rootReducer from 'app/redux/RootReducer';
-import {fetchDataWatches} from 'app/redux/FetchDataSaga';
-import {marketWatches} from 'app/redux/MarketSaga';
-import {sharedWatches} from 'app/redux/SagaShared';
-import {userWatches} from 'app/redux/UserSaga';
-import {authWatches} from 'app/redux/AuthSaga';
-import {transactionWatches} from 'app/redux/TransactionSaga';
+import { fetchDataWatches } from 'app/redux/FetchDataSaga';
+import { marketWatches } from 'app/redux/MarketSaga';
+import { sharedWatches } from 'app/redux/SagaShared';
+import { userWatches } from 'app/redux/UserSaga';
+import { authWatches } from 'app/redux/AuthSaga';
+import { transactionWatches } from 'app/redux/TransactionSaga';
 import PollDataSaga from 'app/redux/PollDataSaga';
-import {component as NotFound} from 'app/components/pages/NotFound';
+import { component as NotFound } from 'app/components/pages/NotFound';
 import extractMeta from 'app/utils/ExtractMeta';
 import Translator from 'app/Translator';
-import {notificationsArrayToMap} from 'app/utils/Notifications';
-import {contentStats} from 'app/utils/StateFunctions';
+import { notificationsArrayToMap } from 'app/utils/Notifications';
+import { contentStats } from 'app/utils/StateFunctions';
 import ScrollBehavior from 'scroll-behavior';
-import {api} from '@steemit/steem-js';
+import { api } from '@steemit/steem-js';
 
-const calcOffsetRoot = (startEl) => {
+const calcOffsetRoot = startEl => {
     let offset = 0;
     let el = startEl;
-    while(el) {
+    while (el) {
         offset += el.offsetTop;
         el = el.offsetParent;
     }
@@ -78,7 +84,8 @@ const SCROLL_DIRECTION_DOWN = 'down';
  * If an element with this id is present, the page does not want us to detect navigation history direction (clicking links/forward button or back button)
  * @type {string}
  */
-const DISABLE_ROUTER_HISTORY_NAV_DIRECTION_EL_ID = 'disable_router_nav_history_direction_check';
+const DISABLE_ROUTER_HISTORY_NAV_DIRECTION_EL_ID =
+    'disable_router_nav_history_direction_check';
 
 let scrollTopTimeout = null;
 
@@ -104,22 +111,30 @@ const scrollTop = (el, topOffset, prevDocumentInfo, triesRemaining) => {
     //for both SCROLL_DIRECTION_DOWN, SCROLL_DIRECTION_UP
     //We scroll if the document has 1. not been deliberately scrolled, AND 2. we have not passed our target scroll,
     //NOR has the document changed in a meaningful way since we last looked at it
-    if(prevDocumentInfo.direction === SCROLL_DIRECTION_DOWN) {
-        doScroll = ((prevDocumentInfo.scrollTop <= (documentInfo.scrollTop + SCROLL_FUDGE_PIXELS))
-            && (documentInfo.scrollTop < documentInfo.scrollTarget
-                || prevDocumentInfo.scrollTarget < documentInfo.scrollTarget
-                || prevDocumentInfo.scrollHeight < documentInfo.scrollHeight));
-    } else if(prevDocumentInfo.direction === SCROLL_DIRECTION_UP) {
-        doScroll = ((prevDocumentInfo.scrollTop >= (documentInfo.scrollTop - SCROLL_FUDGE_PIXELS))
-            && (documentInfo.scrollTop > documentInfo.scrollTarget
-                || prevDocumentInfo.scrollTarget > documentInfo.scrollTarget
-                || prevDocumentInfo.scrollHeight > documentInfo.scrollHeight));
+    if (prevDocumentInfo.direction === SCROLL_DIRECTION_DOWN) {
+        doScroll =
+            prevDocumentInfo.scrollTop <=
+                documentInfo.scrollTop + SCROLL_FUDGE_PIXELS &&
+            (documentInfo.scrollTop < documentInfo.scrollTarget ||
+                prevDocumentInfo.scrollTarget < documentInfo.scrollTarget ||
+                prevDocumentInfo.scrollHeight < documentInfo.scrollHeight);
+    } else if (prevDocumentInfo.direction === SCROLL_DIRECTION_UP) {
+        doScroll =
+            prevDocumentInfo.scrollTop >=
+                documentInfo.scrollTop - SCROLL_FUDGE_PIXELS &&
+            (documentInfo.scrollTop > documentInfo.scrollTarget ||
+                prevDocumentInfo.scrollTarget > documentInfo.scrollTarget ||
+                prevDocumentInfo.scrollHeight > documentInfo.scrollHeight);
     }
 
-    if(doScroll) {
+    if (doScroll) {
         window.scrollTo(0, documentInfo.scrollTarget);
-        if(triesRemaining > 0) {
-            scrollTopTimeout = setTimeout(() => scrollTop(el, topOffset, documentInfo, (triesRemaining-1)), SCROLL_TOP_DELAY_MS);
+        if (triesRemaining > 0) {
+            scrollTopTimeout = setTimeout(
+                () =>
+                    scrollTop(el, topOffset, documentInfo, triesRemaining - 1),
+                SCROLL_TOP_DELAY_MS
+            );
         }
     }
 };
@@ -135,33 +150,36 @@ class OffsetScrollBehavior extends ScrollBehavior {
     scrollToTarget(element, target) {
         clearTimeout(scrollTopTimeout); //it's likely this will be called multiple times in succession, so clear and existing scrolling.
         const header = document.getElementsByTagName('header')[0]; //this dimension ideally would be pulled from a scss file.
-        let topOffset = SCROLL_TOP_EXTRA_PIXEL_OFFSET * (-1);
-        if(header) {
-            topOffset += header.offsetHeight * (-1);
+        let topOffset = SCROLL_TOP_EXTRA_PIXEL_OFFSET * -1;
+        if (header) {
+            topOffset += header.offsetHeight * -1;
         }
         const newTarget = []; //x coordinate
         let el = false;
-        if(typeof target === 'string' ) {
+        if (typeof target === 'string') {
             el = document.getElementById(target.substr(1));
-            if(!el) {
+            if (!el) {
                 el = document.getElementById(target);
             }
         } else {
             newTarget.push(target[0]);
-            if((target[1] + topOffset) > 0) {
+            if (target[1] + topOffset > 0) {
                 newTarget.push(target[1] + topOffset);
             } else {
                 newTarget.push(0);
             }
         }
 
-        if(el) {
+        if (el) {
             const documentInfo = {
                 scrollHeight: document.body.scrollHeight,
                 scrollTop: Math.ceil(document.scrollingElement.scrollTop),
                 scrollTarget: calcOffsetRoot(el) + topOffset,
             };
-            documentInfo.direction = documentInfo.scrollTop < documentInfo.scrollTarget ? SCROLL_DIRECTION_DOWN : SCROLL_DIRECTION_UP;
+            documentInfo.direction =
+                documentInfo.scrollTop < documentInfo.scrollTarget
+                    ? SCROLL_DIRECTION_DOWN
+                    : SCROLL_DIRECTION_UP;
             scrollTop(el, topOffset, documentInfo, SCROLL_TOP_TRIES); //this function does the actual work of scrolling.
         } else {
             super.scrollToTarget(element, newTarget);
@@ -172,18 +190,20 @@ class OffsetScrollBehavior extends ScrollBehavior {
 
 // iso renderer, same as defaultRenderer except we drop the offchain data
 const isoRenderer = {
-  markup(html, key) {
-    if (!html) return ''
-    return `<div data-iso-key="${key}">${html}</div>`
-  },
-  data(state, key) {
-    if (!state) return ''
-    const s = JSON.parse(state)
-    delete s.offchain
-    state = JSON.stringify(s)
-    return `<script type="application/json" data-iso-key="${key}">${state}</script>`
-  },
-}
+    markup(html, key) {
+        if (!html) return '';
+        return `<div data-iso-key="${key}">${html}</div>`;
+    },
+    data(state, key) {
+        if (!state) return '';
+        const s = JSON.parse(state);
+        delete s.offchain;
+        state = JSON.stringify(s);
+        return `<script type="application/json" data-iso-key="${key}">${
+            state
+        }</script>`;
+    },
+};
 
 const sagaMiddleware = createSagaMiddleware(
     ...userWatches, // keep first to remove keys early when a page change happens
@@ -197,24 +217,31 @@ const sagaMiddleware = createSagaMiddleware(
 let middleware;
 
 if (process.env.BROWSER && process.env.NODE_ENV === 'development') {
-    const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose; // eslint-disable-line no-underscore-dangle
-    middleware = composeEnhancers(
-        applyMiddleware(sagaMiddleware)
-    );
+    const composeEnhancers =
+        window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose; // eslint-disable-line no-underscore-dangle
+    middleware = composeEnhancers(applyMiddleware(sagaMiddleware));
 } else {
     middleware = applyMiddleware(sagaMiddleware);
 }
 
 const runRouter = (location, routes) => {
-    return new Promise((resolve) =>
-        match({routes, location}, (...args) => resolve(args)));
+    return new Promise(resolve =>
+        match({ routes, location }, (...args) => resolve(args))
+    );
 };
 
-const onRouterError = (error) => {
+const onRouterError = error => {
     console.error('onRouterError', error);
 };
 
-async function universalRender({location, initial_state, offchain, ErrorPage, tarantool, userPreferences}) {
+async function universalRender({
+    location,
+    initial_state,
+    offchain,
+    ErrorPage,
+    tarantool,
+    userPreferences,
+}) {
     let error, redirect, renderProps;
     try {
         [error, redirect, renderProps] = await runRouter(location, RootRoute);
@@ -223,7 +250,9 @@ async function universalRender({location, initial_state, offchain, ErrorPage, ta
         return {
             title: 'Routing error - Steemit',
             statusCode: 500,
-            body: renderToString(ErrorPage ? <ErrorPage /> : <span>Routing error</span>)
+            body: renderToString(
+                ErrorPage ? <ErrorPage /> : <span>Routing error</span>
+            ),
         };
     }
     if (error || !renderProps) {
@@ -231,16 +260,19 @@ async function universalRender({location, initial_state, offchain, ErrorPage, ta
         return {
             title: 'Page Not Found - Steemit',
             statusCode: 404,
-            body: renderToString(<NotFound />)
+            body: renderToString(<NotFound />),
         };
     }
 
     if (process.env.BROWSER) {
         const store = createStore(rootReducer, initial_state, middleware);
         // setStore(store);
-        sagaMiddleware.run(PollDataSaga).done
-            .then(() => console.log('PollDataSaga is finished'))
-            .catch(err => console.log('PollDataSaga is finished with error', err));
+        sagaMiddleware
+            .run(PollDataSaga)
+            .done.then(() => console.log('PollDataSaga is finished'))
+            .catch(err =>
+                console.log('PollDataSaga is finished with error', err)
+            );
 
         const history = syncHistoryWithStore(browserHistory, store);
 
@@ -249,35 +281,49 @@ async function universalRender({location, initial_state, offchain, ErrorPage, ta
          */
         const scroll = useScroll({
             createScrollBehavior: config => new OffsetScrollBehavior(config), //information assembler for has scrolling.
-            shouldUpdateScroll: (prevLocation, {location}) => { // eslint-disable-line no-shadow
+            shouldUpdateScroll: (prevLocation, { location }) => {
+                // eslint-disable-line no-shadow
                 //if there is a hash, we may want to scroll to it
-                if(location.hash) {
+                if (location.hash) {
                     //if disableNavDirectionCheck exists, we want to always navigate to the hash (the page is telling us that's desired behavior based on the element's existence
-                    const disableNavDirectionCheck = document.getElementById(DISABLE_ROUTER_HISTORY_NAV_DIRECTION_EL_ID);
+                    const disableNavDirectionCheck = document.getElementById(
+                        DISABLE_ROUTER_HISTORY_NAV_DIRECTION_EL_ID
+                    );
                     //we want to navigate to the corresponding id=<hash> element on 'PUSH' navigation (prev null + POP is a new window url nav ~= 'PUSH')
-                    if(disableNavDirectionCheck || (prevLocation === null && location.action === 'POP')
-                        || (location.action === 'PUSH')
+                    if (
+                        disableNavDirectionCheck ||
+                        (prevLocation === null && location.action === 'POP') ||
+                        location.action === 'PUSH'
                     ) {
                         return location.hash;
                     }
                 }
                 return true;
-            }
+            },
         });
 
         if (process.env.NODE_ENV === 'production') {
-            console.log('%c%s', 'color: red; background: yellow; font-size: 24px;', 'WARNING!');
-            console.log('%c%s', 'color: black; font-size: 16px;', 'This is a developer console, you must read and understand anything you paste or type here or you could compromise your account and your private keys.');
+            console.log(
+                '%c%s',
+                'color: red; background: yellow; font-size: 24px;',
+                'WARNING!'
+            );
+            console.log(
+                '%c%s',
+                'color: black; font-size: 16px;',
+                'This is a developer console, you must read and understand anything you paste or type here or you could compromise your account and your private keys.'
+            );
         }
         return render(
             <Provider store={store}>
-                    <Translator>
-                <Router
-                    routes={RootRoute}
-                    history={history}
-                    onError={onRouterError}
-                    render={applyRouterMiddleware(scroll)} />
-                    </Translator>
+                <Translator>
+                    <Router
+                        routes={RootRoute}
+                        history={history}
+                        onError={onRouterError}
+                        render={applyRouterMiddleware(scroll)}
+                    />
+                </Translator>
             </Provider>,
             document.getElementById('content')
         );
@@ -286,23 +332,27 @@ async function universalRender({location, initial_state, offchain, ErrorPage, ta
     // below is only executed on the server
     let server_store, onchain;
     try {
-
         const route = resolveRoute(location);
         console.log('-- universalRender route -->', route);
 
         let url = location === '/' ? 'trending' : location;
         // Replace /curation-rewards and /author-rewards with /transfers for UserProfile
         // to resolve data correctly
-        if (url.indexOf('/curation-rewards') !== -1) url = url.replace(/\/curation-rewards$/, '/transfers');
-        if (url.indexOf('/author-rewards') !== -1) url = url.replace(/\/author-rewards$/, '/transfers');
+        if (url.indexOf('/curation-rewards') !== -1)
+            url = url.replace(/\/curation-rewards$/, '/transfers');
+        if (url.indexOf('/author-rewards') !== -1)
+            url = url.replace(/\/author-rewards$/, '/transfers');
 
         if (route.page === 'Post') {
-            const content = await api.getContentAsync(route.params[0], route.params[1]);
+            const content = await api.getContentAsync(
+                route.params[0],
+                route.params[1]
+            );
             if (!content || !content.author) {
                 return {
                     title: 'Page Not Found - Steemit',
                     statusCode: 404,
-                    body: renderToString(<NotFound />)
+                    body: renderToString(<NotFound />),
                 };
             }
             url = `${content.category}/@${content.author}/${content.permlink}`;
@@ -312,11 +362,15 @@ async function universalRender({location, initial_state, offchain, ErrorPage, ta
 
         onchain = await api.getStateAsync(url);
 
-        if (Object.getOwnPropertyNames(onchain.accounts).length === 0 && route.page === 'UserProfile') { // protect for invalid account
+        if (
+            Object.getOwnPropertyNames(onchain.accounts).length === 0 &&
+            route.page === 'UserProfile'
+        ) {
+            // protect for invalid account
             return {
                 title: 'User Not Found - Steemit',
                 statusCode: 404,
-                body: renderToString(<NotFound />)
+                body: renderToString(<NotFound />),
             };
         }
 
@@ -325,21 +379,46 @@ async function universalRender({location, initial_state, offchain, ErrorPage, ta
             for (var key in onchain.content) {
                 //onchain.content[key]['body'] = onchain.content[key]['body'].substring(0, 1024) // TODO: can be removed. will be handled by steemd
                 // Count some stats then remove voting data. But keep current user's votes. (#1040)
-                onchain.content[key]['stats'] = contentStats(onchain.content[key])
-                onchain.content[key]['active_votes'] = onchain.content[key]['active_votes'].filter(vote => vote.voter === offchain.account)
+                onchain.content[key]['stats'] = contentStats(
+                    onchain.content[key]
+                );
+                onchain.content[key]['active_votes'] = onchain.content[key][
+                    'active_votes'
+                ].filter(vote => vote.voter === offchain.account);
             }
         }
 
         offchain.server_location = location;
-        server_store = createStore(rootReducer, { app: initial_state.app, global: onchain, offchain});
-        server_store.dispatch({type: '@@router/LOCATION_CHANGE', payload: {pathname: location}});
+        server_store = createStore(rootReducer, {
+            app: initial_state.app,
+            global: onchain,
+            offchain,
+        });
+        server_store.dispatch({
+            type: '@@router/LOCATION_CHANGE',
+            payload: { pathname: location },
+        });
         server_store.dispatch(appActions.setUserPreferences(userPreferences));
         if (offchain.account) {
             try {
-                const notifications = await tarantool.select('notifications', 0, 1, 0, 'eq', offchain.account);
-                server_store.dispatch(appActions.updateNotificounters(notificationsArrayToMap(notifications)));
-            } catch(e) {
-                console.warn('WARNING! cannot retrieve notifications from tarantool in universalRender:', e.message);
+                const notifications = await tarantool.select(
+                    'notifications',
+                    0,
+                    1,
+                    0,
+                    'eq',
+                    offchain.account
+                );
+                server_store.dispatch(
+                    appActions.updateNotificounters(
+                        notificationsArrayToMap(notifications)
+                    )
+                );
+            } catch (e) {
+                console.warn(
+                    'WARNING! cannot retrieve notifications from tarantool in universalRender:',
+                    e.message
+                );
             }
         }
     } catch (e) {
@@ -349,9 +428,9 @@ async function universalRender({location, initial_state, offchain, ErrorPage, ta
             return {
                 title: 'Page Not Found - Steemit',
                 statusCode: 404,
-                body: renderToString(<NotFound />)
+                body: renderToString(<NotFound />),
             };
-        // Ensure error page on state exception
+            // Ensure error page on state exception
         } else {
             const msg = (e.toString && e.toString()) || e.message || e;
             const stack_trace = e.stack || '[no stack]';
@@ -359,7 +438,7 @@ async function universalRender({location, initial_state, offchain, ErrorPage, ta
             return {
                 title: 'Server error - Steemit',
                 statusCode: 500,
-                body: renderToString(<ErrorPage />)
+                body: renderToString(<ErrorPage />),
             };
         }
     }
@@ -369,7 +448,7 @@ async function universalRender({location, initial_state, offchain, ErrorPage, ta
         app = renderToString(
             <Provider store={server_store}>
                 <Translator>
-                <RouterContext { ...renderProps } />
+                    <RouterContext {...renderProps} />
                 </Translator>
             </Provider>
         );
@@ -386,7 +465,7 @@ async function universalRender({location, initial_state, offchain, ErrorPage, ta
         titleBase: 'Steemit - ',
         meta,
         statusCode: status,
-        body: Iso.render(app, server_store.getState(), '', isoRenderer)
+        body: Iso.render(app, server_store.getState(), '', isoRenderer),
     };
 }
 

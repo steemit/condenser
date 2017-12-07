@@ -1,5 +1,5 @@
 import React from 'react';
-import {pathTo} from 'app/Routes';
+import { pathTo } from 'app/Routes';
 
 const SidebarLinks = ({ username }) => (
     <div className="c-sidebar__module">
@@ -7,12 +7,26 @@ const SidebarLinks = ({ username }) => (
             <h3 className="c-sidebar__h3">Links</h3>
         </div>
         <div className="c-sidebar__content">
-          <ul className="c-sidebar__list">
-            <li className="c-sidebar__list-item"><a className="c-sidebar__link" href={pathTo.userProfile(username)}>My blog</a></li>
-            <li className="c-sidebar__list-item"><a className="c-sidebar__link" href={pathTo.userWallet(username)}>My wallet</a></li>
-           {/*   <li className="c-sidebar__list-item"><a className="c-sidebar__link" href={username + ''}>Pay someone</a></li> */}
-            {/* <li className="c-sidebar__list-item"><a className="c-sidebar__link" href="/market">Token market</a></li>  */}
-          </ul>
+            <ul className="c-sidebar__list">
+                <li className="c-sidebar__list-item">
+                    <a
+                        className="c-sidebar__link"
+                        href={pathTo.userProfile(username)}
+                    >
+                        My blog
+                    </a>
+                </li>
+                <li className="c-sidebar__list-item">
+                    <a
+                        className="c-sidebar__link"
+                        href={pathTo.userWallet(username)}
+                    >
+                        My wallet
+                    </a>
+                </li>
+                {/*   <li className="c-sidebar__list-item"><a className="c-sidebar__link" href={username + ''}>Pay someone</a></li> */}
+                {/* <li className="c-sidebar__list-item"><a className="c-sidebar__link" href="/market">Token market</a></li>  */}
+            </ul>
         </div>
     </div>
 );

@@ -1,7 +1,7 @@
 import React from 'react';
 import { browserHistory } from 'react-router';
-import ReplyEditor from 'app/components/elements/ReplyEditor'
-import {pathTo} from 'app/Routes';
+import ReplyEditor from 'app/components/elements/ReplyEditor';
+import { pathTo } from 'app/Routes';
 
 const formId = 'submitStory';
 // const richTextEditor = process.env.BROWSER ? require('react-rte-image').default : null;
@@ -13,18 +13,21 @@ class SubmitPost extends React.Component {
     //     routeParams: React.PropTypes.object.isRequired,
     // }
     constructor() {
-        super()
+        super();
         this.success = (/*operation*/) => {
             // const { category } = operation
-            localStorage.removeItem('replyEditorData-' + formId)
-            browserHistory.push(pathTo.indexPage('all', 'created'))
-        }
+            localStorage.removeItem('replyEditorData-' + formId);
+            browserHistory.push(pathTo.indexPage('all', 'created'));
+        };
     }
     render() {
-        const {success} = this
+        const { success } = this;
         return (
             <div className="SubmitPost">
-               <SubmitReplyEditor type="submit_story" successCallback={success} />
+                <SubmitReplyEditor
+                    type="submit_story"
+                    successCallback={success}
+                />
             </div>
         );
     }
@@ -32,5 +35,5 @@ class SubmitPost extends React.Component {
 
 module.exports = {
     path: pathTo.compose(),
-    component: SubmitPost // connect(state => ({ global: state.global }))(SubmitPost)
+    component: SubmitPost, // connect(state => ({ global: state.global }))(SubmitPost)
 };

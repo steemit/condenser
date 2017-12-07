@@ -1,12 +1,12 @@
 let store = false;
 
-export const setStore = (theStore) => {
-    if(!store) {
+export const setStore = theStore => {
+    if (!store) {
         store = theStore;
     } else {
-        throw Error("Routes.setStore - store has already been set.");
+        throw Error('Routes.setStore - store has already been set.');
     }
-}
+};
 
 /**
  * returns the current user's username *if* there is one.
@@ -16,14 +16,14 @@ export const setStore = (theStore) => {
  */
 export const currentUser = () => {
     const state = store.getState();
-    if(state.user) {
+    if (state.user) {
         const current = state.user.getIn(['current']);
-        if(current) {
+        if (current) {
             return current;
         }
     }
     return false;
-}
+};
 /**
  * returns the current user's username *if* there is one.
  *
@@ -32,19 +32,19 @@ export const currentUser = () => {
  */
 export const currentUsername = () => {
     const state = store.getState();
-    if(state.user) {
+    if (state.user) {
         const uName = state.user.getIn(['current', 'username']);
-        if(uName) {
+        if (uName) {
             return uName;
         }
     }
     return false;
-}
+};
 
-export const isOwnAccount = (username) => {
-    return (username === currentUsername());
-}
+export const isOwnAccount = username => {
+    return username === currentUsername();
+};
 
 export default {
-    currentUser
-}
+    currentUser,
+};

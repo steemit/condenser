@@ -18,7 +18,9 @@ class LocalizedCurrency extends React.Component {
     reloadExchangeRates: React.PropTypes.func.isRequired,
     noSymbol: React.PropTypes.bool,
     fractionDigits: React.PropTypes.number,
-    amount: React.PropTypes.number.isRequired
+    amount: React.PropTypes.number.isRequired,
+    currency: React.PropTypes.string,
+
   }
 
   static defaultProps = {
@@ -34,7 +36,7 @@ class LocalizedCurrency extends React.Component {
 
   componentDidMount() {
     this.setState({
-      xchangePicked: localStorage.getItem('xchange.picked') || DEBT_TOKEN_SHORT,
+      xchangePicked: this.props.currency ? this.props.currency : localStorage.getItem('xchange.picked') || DEBT_TOKEN_SHORT,
       xchangeGold: localStorage.getItem('xchange.gold') || 0,
       xchangePair: localStorage.getItem('xchange.pair') || 0
     })
@@ -43,7 +45,7 @@ class LocalizedCurrency extends React.Component {
   componentWillReceiveProps(nextProps) {
     const {fetching} = this.props;
     if (fetching !== nextProps.fetching) {
-      const xchangePicked = localStorage.getItem('xchange.picked') || DEBT_TOKEN_SHORT;
+      const xchangePicked = this.props.currency ? this.props.currency : localStorage.getItem('xchange.picked') || DEBT_TOKEN_SHORT;
       const xchangeGold = localStorage.getItem('xchange.gold') || 0;
       const xchangePair = localStorage.getItem('xchange.pair') || 0;
       this.setState({

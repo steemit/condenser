@@ -30,7 +30,7 @@ class CTABlock extends Component {
            </p>
         }  else{
             textBlock = <p className='left cta-block-text-regular'>
-            {ctainfo.regularStartText}<a href={'/@' + user}> {user} </a> заработал более <LocalizedCurrency amount={payout} fetching="RUB"/> рублей.<a href={'/start'}> {ctainfo.regularEndText}</a>
+            {ctainfo.regularStartText}<a href={'/@' + user}> {user} </a> заработал более <LocalizedCurrency amount={payout} currency="RUB" noSymbol={true}/> рублей.<a href={'/start'}> {ctainfo.regularEndText}</a>
         </p>
         }
 
@@ -92,7 +92,8 @@ export default connect((state, ownProps) => {
     let total_author_payout = parsePayoutAmount(post.get('total_payout_value'))
     let total_curator_payout = parsePayoutAmount(post.get('curator_payout_value'))
 
-    let payout = ((pending_payout + total_author_payout + total_curator_payout) / 1000 | 0) * 1000
+    //let payout = ((pending_payout + total_author_payout + total_curator_payout) / 1000 | 0) * 1000
+    let payout = (pending_payout + total_author_payout + total_curator_payout)
     let visible = (current_account == null) && ((payout >= 2000) || isSpecial != null)
 
     return {post: ownProps.post, user, payout, visible, isSpecial}

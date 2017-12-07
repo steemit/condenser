@@ -47,8 +47,8 @@ class LoginForm extends Component {
             if (onCancel) onCancel()
         };
         this.qrReader = () => {
-            const {qrReader} = props
-            const {password} = this.state
+            const {qrReader} = props;
+            const {password} = this.state;
             qrReader(data => {password.props.onChange(data)})
         };
         this.initForm(props)
@@ -141,7 +141,7 @@ class LoginForm extends Component {
             postType = 'Login to Follow Users'
         } else if (loginBroadcastOperation) {
             // check for post or comment in operation
-            postType = loginBroadcastOperation.getIn(['operation', 'title']) ? tt('loginform_jsx.login_to_post') : tt('loginform_jsx.login_to_comment');
+            postType = loginBroadcastOperation.getIn(['operation', 'title']) ? tt('loginform_jsx.login_to_post') : tt('g.confirm_password');
         }
         const title = postType ? postType : tt('g.login');
         const authType = /^vote|comment/.test(opType) ? tt('loginform_jsx.posting') : tt('loginform_jsx.active_or_owner');
@@ -200,7 +200,7 @@ class LoginForm extends Component {
                 </div>}
                 <div>
                     <label className="LoginForm__save-login" htmlFor="saveLogin">
-                        
+
                         <input id="saveLogin" type="checkbox" ref="pw" {...saveLogin.props} onChange={this.saveLoginToggle} disabled={submitting} />&nbsp;{tt('loginform_jsx.keep_me_logged_in')}</label>
                 </div>
                 <div className="login-modal-buttons">
@@ -249,7 +249,7 @@ function urlAccountName() {
 function checkPasswordChecksum(password) {
     // A Steemit generated password is a WIF prefixed with a P ..
     // It is possible to login directly with a WIF
-    const wif = /^P/.test(password) ? password.substring(1) : password
+    const wif = /^P/.test(password) ? password.substring(1) : password;
 
     if(!/^5[HJK].{45,}/i.test(wif)) {// 51 is the wif length
         // not even close
@@ -264,19 +264,19 @@ export default connect(
 
     // mapStateToProps
     (state) => {
-        const login_error = state.user.get('login_error')
-        const currentUser = state.user.get('current')
-        const loginBroadcastOperation = state.user.get('loginBroadcastOperation')
+        const login_error = state.user.get('login_error');
+        const currentUser = state.user.get('current');
+        const loginBroadcastOperation = state.user.get('loginBroadcastOperation');
 
         const initialValues = {
             saveLogin: saveLoginDefault,
         }
 
         // The username input has a value prop, so it should not use initialValues
-        const initialUsername = currentUser && currentUser.has('username') ? currentUser.get('username') : urlAccountName()
-        const loginDefault = state.user.get('loginDefault')
+        const initialUsername = currentUser && currentUser.has('username') ? currentUser.get('username') : urlAccountName();
+        const loginDefault = state.user.get('loginDefault');
         if(loginDefault) {
-            const {username, authType} = loginDefault.toJS()
+            const {username, authType} = loginDefault.toJS();
             if(username && authType) initialValues.username = username + '/' + authType
         } else if (initialUsername) {
             initialValues.username = initialUsername;

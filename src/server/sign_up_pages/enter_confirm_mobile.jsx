@@ -42,6 +42,7 @@ const assets = Object.assign({}, require(assets_file), { script: [] });
 // }
 
 function* confirmMobileHandler(e) {
+    this.setCookies = true;
     if (!checkCSRF(this, this.request.body.csrf)) return;
     const params = addToParams({}, this.request.query, PARAM_VIEW_MODE, [VIEW_MODE_WHISTLE]);
     const enterMobileUrl = pathTo.enterMobile(makeParams(params));
@@ -114,6 +115,7 @@ export default function useEnterAndConfirmMobilePages(app) {
     const koaBody = koa_body();
 
     router.get(pathTo.enterMobile(), function*() {
+        this.setCookies = true;
         console.log(
             "-- /enter_mobile -->",
             this.session.uid,

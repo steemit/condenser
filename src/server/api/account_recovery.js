@@ -32,6 +32,7 @@ export default function useAccountRecoveryApi(app) {
     });
 
     router.get('/account_recovery_confirmation/:code', function *() {
+        this.setCookies = true;
         if (rateLimitReq(this, this.req)) return;
         const code = this.params.code;
         if (!code) return this.throw('no confirmation code', 404);

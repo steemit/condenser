@@ -318,3 +318,14 @@ $themes: (
     }
   }
 }
+
+
+.theme-dark {
+  .button.hollow {
+    &:hover, &:focus {
+      border-color: $color-teal;
+      color: $color-teal;
+      outline-color: $color-teal;
+    }
+  }
+}

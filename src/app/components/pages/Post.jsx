@@ -11,7 +11,7 @@ import {Set} from 'immutable'
 import tt from 'counterpart';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
-import { INVEST_TOKEN_UPPERCASE } from 'app/client_config';
+import { INVEST_TOKEN_UPPERCASE } from 'clientConfig';
 
 import { isLoggedIn } from 'app/utils/UserUtil';
 

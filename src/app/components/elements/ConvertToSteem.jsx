@@ -9,7 +9,7 @@ import TransactionError from 'app/components/elements/TransactionError'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
 import tt from 'counterpart';
-import { DEBT_TOKEN, DEBT_TICKER, LIQUID_TOKEN } from 'app/client_config';
+import { DEBT_TOKEN, DEBT_TICKER, LIQUID_TOKEN } from 'clientConfig';
 
 class ConvertToSteem extends React.Component {
     constructor() {

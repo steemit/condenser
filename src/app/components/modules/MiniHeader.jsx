@@ -1,6 +1,6 @@
 import React from 'react';
 import Icon from 'app/components/elements/Icon';
-import { APP_NAME } from 'app/client_config';
+import { APP_NAME } from 'clientConfig';
 
 export default function MiniHeader() {
     return <header className="Header">

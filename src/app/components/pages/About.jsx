@@ -1,5 +1,5 @@
 import React from 'react';
-import { APP_NAME, APP_URL } from 'app/client_config';
+import { APP_NAME, APP_URL } from 'clientConfig';
 import tt from 'counterpart';
 
 class About extends React.Component {

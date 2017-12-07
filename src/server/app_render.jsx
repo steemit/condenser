@@ -9,11 +9,10 @@ import secureRandom from 'secure-random';
 import ErrorPage from 'server/server-error';
 import fs from 'fs';
 import {determineViewMode} from "../app/utils/Links";
+import { DB_RECONNECT_TIMEOUT } from 'config';
 
 const path = require('path');
 const ROOT = path.join(__dirname, '../..');
-
-const DB_RECONNECT_TIMEOUT = process.env.NODE_ENV !== 'production' ? 1000 * 60 * 60 : 1000 * 60 * 10;
 
 function getSupportedLocales() {
     const locales = [];

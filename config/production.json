@@ -1,1 +1,4 @@
-{}
+{
+    "NODE_ENV": "production",
+    "DB_RECONNECT_TIMEOUT": 600000
+}

@@ -6,7 +6,7 @@ import reactForm from 'app/utils/ReactForm'
 import * as globalActions from 'app/redux/GlobalReducer'
 import * as transactionActions from 'app/redux/TransactionReducer';
 import * as userActions from 'app/redux/UserReducer';
-import {VEST_TICKER, LIQUID_TICKER, VESTING_TOKEN} from 'app/client_config'
+import {VEST_TICKER, LIQUID_TICKER, VESTING_TOKEN} from 'clientConfig'
 import {numberWithCommas, spToVestsf, vestsToSpf, vestsToSp, assetFloat} from 'app/utils/StateFunctions'
 
 class Powerdown extends React.Component {

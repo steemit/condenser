@@ -9,7 +9,7 @@ import * as appActions from 'app/redux/AppReducer';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import {validate_account_name} from 'app/utils/ChainValidation';
 import {cleanReduxInput} from 'app/utils/ReduxForms';
-import { APP_NAME } from 'app/client_config';
+import { APP_NAME } from 'clientConfig';
 
 const {string, oneOf} = React.PropTypes
 

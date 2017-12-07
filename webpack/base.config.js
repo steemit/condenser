@@ -99,8 +99,8 @@ module.exports = {
     ],
     resolve: {
         alias: {
-            react: path.join(__dirname, '../node_modules', 'react'),
-            assets: path.join(__dirname, '../src/app/assets')
+            assets: path.join(__dirname, '../src/app/assets'),
+            clientConfig: path.join(__dirname, '../config/client.json'),
         },
         extensions: ['.js', '.json', '.jsx'],
         modules: [

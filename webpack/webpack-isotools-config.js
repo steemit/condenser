@@ -6,7 +6,8 @@ module.exports = {
     webpack_assets_file_path: ROOT + (process.env.NODE_ENV === 'production' ? '/tmp/webpack-isotools-assets-prod.json' : '/tmp/webpack-isotools-assets-dev.json'),
     webpack_stats_file_path: './tmp/webpack-stats.json',
     alias: {
-        assets: path.join(__dirname, '../src/app/assets')
+        assets: path.join(__dirname, '../src/app/assets'),
+        clientConfig: path.join(__dirname, '../config/client.json')
     },
     assets: {
         images:

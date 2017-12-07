@@ -2,6 +2,7 @@ const webpack = require('webpack');
 const git = require('git-rev-sync');
 const baseConfig = require('./base.config');
 const startKoa = require('./utils/start-koa');
+const config = require('config');
 
 // var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 // baseConfig.plugins.push(new BundleAnalyzerPlugin());
@@ -22,8 +23,8 @@ module.exports = {
     plugins: [
         new webpack.DefinePlugin({
             'process.env': {
-                BROWSER: JSON.stringify(true),
-                NODE_ENV: JSON.stringify('development'),
+                BROWSER: JSON.stringify(config.get('BROWSER')),
+                NODE_ENV: JSON.stringify(config.util.getEnv('NODE_ENV')),
                 VERSION: JSON.stringify(git.long())
             },
             global: {

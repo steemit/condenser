@@ -1,0 +1,3 @@
+{
+    "DB_RECONNECT_TIMEOUT": 3600000
+}

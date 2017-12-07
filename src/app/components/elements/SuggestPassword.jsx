@@ -6,7 +6,7 @@ import * as globalActions from 'app/redux/GlobalReducer'
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import Icon from 'app/components/elements/Icon'
 import tt from 'counterpart';
-import { APP_NAME, APP_ICON } from 'app/client_config';
+import { APP_NAME, APP_ICON } from 'clientConfig';
 import {key_utils} from '@steemit/steem-js/lib/auth/ecc';
 
 

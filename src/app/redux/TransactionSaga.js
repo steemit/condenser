@@ -14,7 +14,7 @@ import * as appActions from 'app/redux/AppReducer';
 import * as globalActions from 'app/redux/GlobalReducer';
 import * as transactionActions from 'app/redux/TransactionReducer';
 import * as userActions from 'app/redux/UserReducer';
-import {DEBT_TICKER} from 'app/client_config';
+import { DEBT_TICKER } from 'clientConfig';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 
 export const transactionWatches = [

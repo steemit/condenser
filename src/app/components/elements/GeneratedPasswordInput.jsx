@@ -1,6 +1,6 @@
 import React from 'react';
 import tt from 'counterpart';
-import { APP_NAME } from 'app/client_config';
+import { APP_NAME } from 'clientConfig';
 import {key_utils} from '@steemit/steem-js/lib/auth/ecc';
 
 function allChecked(confirmCheckboxes) {

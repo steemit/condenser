@@ -7,7 +7,7 @@ import ru from 'react-intl/locale-data/ru';
 import fr from 'react-intl/locale-data/fr';
 import it from 'react-intl/locale-data/it';
 import ko from 'react-intl/locale-data/ko';
-import {DEFAULT_LANGUAGE} from 'app/client_config';
+import {DEFAULT_LANGUAGE} from 'clientConfig';
 import tt from 'counterpart';
 
 addLocaleData([...en, ...es, ...ru, ...fr, ...it, ...ko]);

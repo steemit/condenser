@@ -8,16 +8,21 @@ var db = {};
 
 var sequelize = new Sequelize(config.get('database_url'));
 
-fs.readdirSync(__dirname)
-    .filter(function (file) {
-        return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
+fs
+    .readdirSync(__dirname)
+    .filter(function(file) {
+        return (
+            file.indexOf('.') !== 0 &&
+            file !== basename &&
+            file.slice(-3) === '.js'
+        );
     })
-    .forEach(function (file) {
+    .forEach(function(file) {
         var model = sequelize['import'](path.join(__dirname, file));
         db[model.name] = model;
     });
 
-Object.keys(db).forEach(function (modelName) {
+Object.keys(db).forEach(function(modelName) {
     if (db[modelName].associate) {
         db[modelName].associate(db);
     }
@@ -26,47 +31,49 @@ Object.keys(db).forEach(function (modelName) {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
-if(env === 'development') {
+if (env === 'development') {
     // in dev, sync all table schema automatically for convenience
     sequelize.sync();
 }
-
 
 function esc(value, max_length = 256) {
     if (!value) return '';
     if (typeof value === 'number') return value;
     if (typeof value === 'boolean') return value;
     if (typeof value !== 'string') return '(object)';
-    let res = value.substring(0, max_length - max_length * 0.2).replace(/[\0\x08\x09\x1a\n\r"'\\\%]/g, function (char) {
-        switch (char) {
-            case '\0':
-                return '\\0';
-            case '\x08':
-                return '\\b';
-            case '\x09':
-                return '\\t';
-            case '\x1a': return '\\z';
-            case '\n':
-                return '\\n';
-            case '\r':
-                return '\\r';
-            // case '\'':
-            // case "'":
-            // case '"':
-            // case '\\':
-            // case '%':
-            //     return '\\' + char; // prepends a backslash to backslash, percent, and double/single quotes
-        }
-        return '-';
-    });
+    let res = value
+        .substring(0, max_length - max_length * 0.2)
+        .replace(/[\0\x08\x09\x1a\n\r"'\\\%]/g, function(char) {
+            switch (char) {
+                case '\0':
+                    return '\\0';
+                case '\x08':
+                    return '\\b';
+                case '\x09':
+                    return '\\t';
+                case '\x1a':
+                    return '\\z';
+                case '\n':
+                    return '\\n';
+                case '\r':
+                    return '\\r';
+                // case '\'':
+                // case "'":
+                // case '"':
+                // case '\\':
+                // case '%':
+                //     return '\\' + char; // prepends a backslash to backslash, percent, and double/single quotes
+            }
+            return '-';
+        });
     return res.length < max_length ? res : '-';
 }
 
 db.esc = esc;
 
-db.escAttrs = function (attrs) {
+db.escAttrs = function(attrs) {
     const res = {};
-    Object.keys(attrs).forEach(key => res[key] = esc(attrs[key]));
+    Object.keys(attrs).forEach(key => (res[key] = esc(attrs[key])));
     return res;
 };
 

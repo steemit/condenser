@@ -38,13 +38,12 @@ export const FRACTION_DIGITS_MARKET = 3; // accurate amount of deciaml digits (e
 
 // meta info
 export const TWITTER_HANDLE = '@steemit';
-export const SHARE_IMAGE = 'https://' +
-    APP_DOMAIN +
-    '/images/steemit-share.png';
-export const TWITTER_SHARE_IMAGE = 'https://' +
-    APP_DOMAIN +
-    '/images/steemit-twshare.png';
-export const SITE_DESCRIPTION = 'Steemit is a social media platform where everyone gets paid for ' +
+export const SHARE_IMAGE =
+    'https://' + APP_DOMAIN + '/images/steemit-share.png';
+export const TWITTER_SHARE_IMAGE =
+    'https://' + APP_DOMAIN + '/images/steemit-twshare.png';
+export const SITE_DESCRIPTION =
+    'Steemit is a social media platform where everyone gets paid for ' +
     'creating and curating content. It leverages a robust digital points system, called Steem, that ' +
     'supports real value for digital rewards through market price discovery and liquidity';
 

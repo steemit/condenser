@@ -51,7 +51,7 @@ console.log('renderedText', renderedText)
 //     text: (tokens, i, options, env, renderer) => {
 //         if(tagRules.youtubeId)
 //             return `youtube:${tagRules.youtubeId}${tagRules.youtubeTime ? ',' + tagRules.youtubeTime : ''}`
-// 
+//
 //         if(tagLinkOpen)
 //             return renderer.rules.text(tokens, i, options, env, renderer)
 //         let content = tokens[i].content
@@ -77,7 +77,7 @@ console.log('renderedText', renderedText)
 //         // unescapted ipfs links (temp, until the reply editor categorizes the image)
 //         //if(config.ipfs_prefix)
 //         //    content = content.replace(linksRe.ipfsPrefix, config.ipfs_prefix)
-// 
+//
 //         return content
 //     },
 //     link_close: (tokens, i, options, env, renderer) => {
@@ -93,7 +93,7 @@ console.log('renderedText', renderedText)
 // let hashtags = new Set()
 // let usertags = new Set()
 // let tagLinkOpen
-// 
+//
 // export const imageLinks = {
 //     done: () => {
 //         if(image.length > 1) links.delete(image[1])

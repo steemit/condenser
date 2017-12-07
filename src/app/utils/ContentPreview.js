@@ -10,7 +10,7 @@ export default function contentPreview(content, length) {
             words++;
             if (words > max_words) break;
             if (i > length) break;
-        };
+        }
         res += ch;
     }
     return res;

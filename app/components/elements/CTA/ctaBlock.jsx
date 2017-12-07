@@ -69,32 +69,27 @@ export default connect((state, ownProps) => {
     let link = post.get('category') + '/@' + user + '/' + post.get('permlink')
 
     function compareLinks(specialLink, incomingLink) {
-        return specialLink == incomingLink;
+        return specialLink === incomingLink;
     }
 
     function isSpecialPost(array, link) {
         for (let i = 0; i < array.length; i++) {
-            const element = array[i];
             if (compareLinks(array[i].link, link)) {
                 return array[i]
-                break;
-            } else 
-                return null
+            }
         }
     }
 
     let isSpecial = isSpecialPost(ctainfo.specialLinks, link)
+
     let pending_payout = parsePayoutAmount(post.get('pending_payout_value'))
     let total_author_payout = parsePayoutAmount(post.get('total_payout_value'))
     let total_curator_payout = parsePayoutAmount(post.get('curator_payout_value'))
 
     let payout = (pending_payout + total_author_payout + total_curator_payout)
+    let localizedPayoutValue = localizedCurrency(payout, {noSymbol: true, rounding: true})
 
-    let some = localizedCurrency(payout, {noSymbol: true, rounding: true})
-
-    console.log(some)
-
-    let visible = (current_account == null) && (some >= 50 || isSpecial != null)
+    let visible = (current_account == null) && (localizedPayoutValue >= ctainfo.minUsdValueToShow || isSpecial != null)
 
     return {post: ownProps.post, user, payout, visible, isSpecial}
 })(CTABlock)

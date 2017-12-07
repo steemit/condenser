@@ -1,4 +1,5 @@
 export default {
+    minUsdValueToShow: 50,
     specialStartText : "Присоединитесь, чтобы не пропускать истории",
     specialEndText :"Узнать больше",
 

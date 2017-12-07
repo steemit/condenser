@@ -99,7 +99,7 @@ class LocalizedCurrency extends React.Component {
         : number
       )
 
-      if(rounding || options.rounding){     
+      if(options ? (options.rounding ? options.rounding : rounding ) : rounding) {     
         let divider = Math.pow(10, (parseInt(Math.ceil(currencyAmount).toString().length) - 1))
         currencyAmount = (currencyAmount / divider | 0) * divider
       } else {
@@ -110,7 +110,8 @@ class LocalizedCurrency extends React.Component {
       }
       
       // if noSymbol is specified return only amount of digits
-      return  (noSymbol || options.noSymbol)
+       
+      return  (options ? (options.noSymbol ? options.noSymbol : noSymbol) : noSymbol)
         ? currencyAmount
         : symbol + ' ' + currencyAmount
     }

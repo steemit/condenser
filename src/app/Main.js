@@ -40,8 +40,16 @@ const isoSelector = () => {
             if (!cache[key]) cache[key] = {};
             if (node.nodeName === 'SCRIPT') {
                 try {
-                    const state = JSON.parse(node.innerHTML);
+                    const rDec = /&lt;|&gt;/;
+                    const rLte = /&lt;/g;
+                    const rGte = /&gt;/g;
+                    let innerHTML = node.innerHTML;
+                    if (rDec.test(innerHTML)) {
+                        innerHTML = innerHTML.replace(rLte, '<').replace(rGte, '>');
+                    }
+                    const state = JSON.parse(innerHTML);
                     state.offchain = offchain;
+
                     cache[key].state = state;
                 } catch (e) {
                     cache[key].state = {};

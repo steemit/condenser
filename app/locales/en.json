@@ -893,7 +893,7 @@
     "have_only_digits": "have only digits",
     "you_can_change_your_number": "You can select another one phone number.",
     "select_another_number": "Select another phone",
-    "waiting_from_you": "Waiting SMS message with confirmation code from your number."
+    "waiting_from_you": "Waiting SMS message with confirmation code %(code)s from your number to our verification number %(phone)s."
   },
   "chainvalidation_js": {
     "account_name_should": "Account name should ",

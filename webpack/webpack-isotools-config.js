@@ -7,7 +7,7 @@ module.exports = {
     webpack_stats_file_path: './tmp/webpack-stats.json',
     alias: {
         assets: path.join(__dirname, '../src/app/assets'),
-        clientConfig: path.join(__dirname, '../config/client.json')
+        clientConfig: path.join(__dirname, '../src/app/client.json'),
     },
     assets: {
         images:

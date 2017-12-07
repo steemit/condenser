@@ -16,7 +16,12 @@ const use_case_code = 'BACS'; // Use Case: avoid bulk attack and spammers
 // Testing, always blocked: 1-310-555-0100
 
 /** @return {object} - {reference_id} or {error} */
-export default function* verify({ mobile, confirmation_code, ip, ignore_score }) {
+export default function* verify({
+    mobile,
+    confirmation_code,
+    ip,
+    ignore_score,
+}) {
     try {
         const result = yield getScore(mobile);
         const { recommendation, score } = result.risk;
@@ -24,21 +29,28 @@ export default function* verify({ mobile, confirmation_code, ip, ignore_score })
         // if (!ignore_score && recommendation !== 'allow') {
         if (!ignore_score && (!score || score > 600)) {
             console.log(
-                `TeleSign did not allow phone ${mobile} ip ${ip}. TeleSign responded: ${recommendation}`
+                `TeleSign did not allow phone ${mobile} ip ${
+                    ip
+                }. TeleSign responded: ${recommendation}`
             );
             return {
-                error: 'Unable to verify your phone number. Please try a different phone number.',
-                score
+                error:
+                    'Unable to verify your phone number. Please try a different phone number.',
+                score,
             };
         }
-        if (result.numbering && result.numbering.cleansing && result.numbering.cleansing.sms) {
+        if (
+            result.numbering &&
+            result.numbering.cleansing &&
+            result.numbering.cleansing.sms
+        ) {
             const sms = result.numbering.cleansing.sms;
             phone = sms.country_code + sms.phone_number;
         }
         const { reference_id } = yield verifySms({
             mobile,
             confirmation_code,
-            ip
+            ip,
         });
         return { reference_id, score, phone };
     } catch (error) {
@@ -49,13 +61,13 @@ export default function* verify({ mobile, confirmation_code, ip, ignore_score })
 
 function getScore(mobile) {
     const fields = urlencode({
-        ucid: use_case_code
+        ucid: use_case_code,
     });
     const resource = '/v1/phoneid/score/' + mobile.match(/\d+/g).join('');
     const method = 'GET';
     return fetch(`https://rest-ww.telesign.com${resource}?${fields}`, {
         method,
-        headers: authHeaders({ resource, method })
+        headers: authHeaders({ resource, method }),
     })
         .then(r => r.json())
         .catch(error => {
@@ -90,7 +102,7 @@ function verifySms({ mobile, confirmation_code, ip }) {
         language: 'en-US',
         ucid: use_case_code,
         verify_code: confirmation_code,
-        template: '$$CODE$$ is your Steemit confirmation code'
+        template: '$$CODE$$ is your Steemit confirmation code',
     };
     if (ip) f.originating_ip = ip;
     const fields = urlencode(f);
@@ -101,12 +113,14 @@ function verifySms({ mobile, confirmation_code, ip }) {
     return fetch('https://rest.telesign.com' + resource, {
         method,
         body: fields,
-        headers: authHeaders({ resource, method, fields })
+        headers: authHeaders({ resource, method, fields }),
     })
         .then(r => r.json())
         .catch(error => {
             console.error(
-                `ERROR: SMS failed to ${mobile} code ${confirmation_code} req ip ${ip} exception`,
+                `ERROR: SMS failed to ${mobile} code ${
+                    confirmation_code
+                } req ip ${ip} exception`,
                 JSON.stringify(error, null, 0)
             );
             return Promise.reject(error);
@@ -134,13 +148,7 @@ function verifySms({ mobile, confirmation_code, ip }) {
     @arg {string} method [GET|POST|PUT]
     @arg {string} fields url query string
 */
-function authHeaders(
-    {
-        resource,
-        fields,
-        method = 'GET'
-    }
-) {
+function authHeaders({ resource, fields, method = 'GET' }) {
     const auth_method = 'HMAC-SHA256';
     const currDate = new Date().toUTCString();
     const nonce = parseInt(
@@ -152,7 +160,9 @@ function authHeaders(
     if (/POST|PUT/.test(method))
         content_type = 'application/x-www-form-urlencoded';
 
-    let strToSign = `${method}\n${content_type}\n\nx-ts-auth-method:${auth_method}\nx-ts-date:${currDate}\nx-ts-nonce:${nonce}`;
+    let strToSign = `${method}\n${content_type}\n\nx-ts-auth-method:${
+        auth_method
+    }\nx-ts-date:${currDate}\nx-ts-nonce:${nonce}`;
 
     if (fields) {
         strToSign += '\n' + fields;
@@ -170,7 +180,7 @@ function authHeaders(
         'Content-Type': content_type,
         'x-ts-date': currDate,
         'x-ts-auth-method': auth_method,
-        'x-ts-nonce': nonce
+        'x-ts-nonce': nonce,
     };
     return headers;
 }

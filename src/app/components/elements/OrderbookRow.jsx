@@ -1,13 +1,12 @@
-import React from "react";
+import React from 'react';
 
 export default class OrderRow extends React.Component {
-
     static propTypes = {
         order: React.PropTypes.object,
         side: React.PropTypes.string,
         index: React.PropTypes.number,
         total: React.PropTypes.number,
-        animate: React.PropTypes.bool
+        animate: React.PropTypes.bool,
     };
 
     constructor(props) {
@@ -15,7 +14,7 @@ export default class OrderRow extends React.Component {
 
         this.state = {
             animate: props.animate && props.index !== 9,
-            rowIndex: props.index
+            rowIndex: props.index,
         };
 
         this.timeout = null;
@@ -30,12 +29,12 @@ export default class OrderRow extends React.Component {
     componentWillReceiveProps(nextProps) {
         if (this.state.rowIndex !== nextProps.index) {
             return this.setState({
-                rowIndex: nextProps.index
+                rowIndex: nextProps.index,
             });
         }
 
         if (!this.props.order.equals(nextProps.order)) {
-            return this.setState({animate: true}, this._clearAnimate);
+            return this.setState({ animate: true }, this._clearAnimate);
         }
     }
 
@@ -54,30 +53,34 @@ export default class OrderRow extends React.Component {
     _clearAnimate() {
         setTimeout(() => {
             this.setState({
-                animate: false
+                animate: false,
             });
         }, 1000);
     }
 
     render() {
-        const {order, side, total} = this.props;
-        const bid = side === "bids";
+        const { order, side, total } = this.props;
+        const bid = side === 'bids';
 
         const totalTD = <td>{total.toFixed(3)}</td>;
         const sbd = <td>{order.getStringSBD()}</td>;
         const steem = <td>{order.getStringSteem()}</td>;
-        const price = <td><strong>{order.getStringPrice()}</strong></td>;
+        const price = (
+            <td>
+                <strong>{order.getStringPrice()}</strong>
+            </td>
+        );
 
         return (
             <tr
                 onClick={this.props.onClick.bind(this, order.price)}
-                className={this.state.animate ? "animate" : ""}
+                className={this.state.animate ? 'animate' : ''}
             >
-              {bid ? totalTD : price}
-              {bid ? sbd : steem}
-              {bid ? steem : sbd}
-              {bid ? price : totalTD}
+                {bid ? totalTD : price}
+                {bid ? sbd : steem}
+                {bid ? steem : sbd}
+                {bid ? price : totalTD}
             </tr>
-        )
+        );
     }
 }

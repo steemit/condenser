@@ -1,15 +1,15 @@
 import 'babel-core/register';
 import 'babel-polyfill';
 import 'whatwg-fetch';
-import {VIEW_MODE_WHISTLE, PARAM_VIEW_MODE} from 'shared/constants';
+import { VIEW_MODE_WHISTLE, PARAM_VIEW_MODE } from 'shared/constants';
 import './assets/stylesheets/app.scss';
 import plugins from 'app/utils/JsPlugins';
 import Iso from 'iso';
 import universalRender from 'shared/UniversalRender';
 import ConsoleExports from './utils/ConsoleExports';
-import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
+import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 import * as steem from '@steemit/steem-js';
-import {determineViewMode} from "app/utils/Links";
+import { determineViewMode } from 'app/utils/Links';
 
 window.onerror = error => {
     if (window.$STM_csrf) serverApiRecordEvent('client_error', error);
@@ -20,86 +20,92 @@ const CMD_LOG_TOGGLE = 'log-toggle';
 const CMD_LOG_O = 'log-on';
 
 try {
-    if(process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV === 'development') {
         // Adds some object refs to the global window object
-        ConsoleExports.init(window)
+        ConsoleExports.init(window);
     }
 } catch (e) {
-    console.error(e)
+    console.error(e);
 }
 
-let offchain // loaded by main()
+let offchain; // loaded by main()
 
 // iso default selector that injects offchain state
 const isoSelector = () => {
-  const all = document.querySelectorAll('[data-iso-key]')
-  return Array.prototype.reduce.call(all, (cache, node) => {
-    const key = node.getAttribute('data-iso-key')
-    if (!cache[key]) cache[key] = {}
-    if (node.nodeName === 'SCRIPT') {
-      try {
-        const state = JSON.parse(node.innerHTML)
-        state.offchain = offchain
-        cache[key].state = state
-      } catch (e) {
-        cache[key].state = {}
-      }
-    } else {
-      cache[key].node = node
-    }
-    return cache
-  }, {})
-}
+    const all = document.querySelectorAll('[data-iso-key]');
+    return Array.prototype.reduce.call(
+        all,
+        (cache, node) => {
+            const key = node.getAttribute('data-iso-key');
+            if (!cache[key]) cache[key] = {};
+            if (node.nodeName === 'SCRIPT') {
+                try {
+                    const state = JSON.parse(node.innerHTML);
+                    state.offchain = offchain;
+                    cache[key].state = state;
+                } catch (e) {
+                    cache[key].state = {};
+                }
+            } else {
+                cache[key].node = node;
+            }
+            return cache;
+        },
+        {}
+    );
+};
 
 async function runApp(initial_state) {
     console.log('Initial state', initial_state);
     const konami = {
         code: 'xyzzy',
-        enabled: false
+        enabled: false,
     };
     const buff = konami.code.split('');
-    const cmd = (command) => {
+    const cmd = command => {
         console.log('got command:' + command);
         switch (command) {
-            case CMD_LOG_O :
+            case CMD_LOG_O:
                 konami.enabled = false;
-            case CMD_LOG_TOGGLE :
-            case CMD_LOG_T :
+            case CMD_LOG_TOGGLE:
+            case CMD_LOG_T:
                 konami.enabled = !konami.enabled;
-                if(konami.enabled) {
-                    steem.api.setOptions({logger: console});
+                if (konami.enabled) {
+                    steem.api.setOptions({ logger: console });
                 } else {
-                    steem.api.setOptions({logger: false});
+                    steem.api.setOptions({ logger: false });
                 }
                 return 'api logging ' + konami.enabled;
-            default :
+            default:
                 return 'That command is not supported.';
         }
         //return 'done';
-    }
+    };
 
     const enableKonami = () => {
-        if(!window.s) {
+        if (!window.s) {
             console.log('The cupie doll is yours.');
-            window.s = (command) => { return cmd.call(this, command) };
-        }
-    }
-
-    window.document.body.onkeypress = (e) => {
-        buff.shift()
-        buff.push(e.key)
-        if(buff.join('') === konami.code) {
-            enableKonami();
-            cmd(CMD_LOG_T)
+            window.s = command => {
+                return cmd.call(this, command);
+            };
         }
     };
 
-    if(window.location.hash.indexOf('#'+konami.code) === 0) {
-        enableKonami()
-        cmd(CMD_LOG_O)
+    window.document.body.onkeypress = e => {
+        buff.shift();
+        buff.push(e.key);
+        if (buff.join('') === konami.code) {
+            enableKonami();
+            cmd(CMD_LOG_T);
+        }
+    };
+
+    if (window.location.hash.indexOf('#' + konami.code) === 0) {
+        enableKonami();
+        cmd(CMD_LOG_O);
     }
 
-    const config = initial_state.offchain.config
+    const config = initial_state.offchain.config;
     steem.api.setOptions({ url: config.steemd_connection_client });
     steem.config.set('address_prefix', config.address_prefix);
     steem.config.set('chain_id', config.chain_id);
@@ -115,41 +121,47 @@ async function runApp(initial_state) {
 
     initial_state.app.viewMode = determineViewMode(window.location.search);
 
-    const location = `${window.location.pathname}${window.location.search}${window.location.hash}`;
-    universalRender({history, location, initial_state})
-    .catch(error => {
+    const location = `${window.location.pathname}${window.location.search}${
+        window.location.hash
+    }`;
+    universalRender({ history, location, initial_state }).catch(error => {
         console.error(error);
         serverApiRecordEvent('client_error', error);
     });
 }
 
 async function getOffchainState() {
-    const state = await (await fetch('/api/v1/state', {credentials: 'same-origin'})).json()
-    const now = Date.now() / 1000
-    const lastVisit = localStorage.getItem('lastVisit') || -Infinity
-    const loginData = localStorage.getItem('autopost2')
-    state.new_visit = (loginData == null && now - lastVisit > 1800)
-    return state
+    const state = await (await fetch('/api/v1/state', {
+        credentials: 'same-origin',
+    })).json();
+    const now = Date.now() / 1000;
+    const lastVisit = localStorage.getItem('lastVisit') || -Infinity;
+    const loginData = localStorage.getItem('autopost2');
+    state.new_visit = loginData == null && now - lastVisit > 1800;
+    return state;
 }
 
 async function main() {
-    offchain = await getOffchainState()
-    localStorage.setItem('lastVisit', Date.now() / 1000)
+    offchain = await getOffchainState();
+    localStorage.setItem('lastVisit', Date.now() / 1000);
     if (!window.Intl) {
-        require.ensure(['intl/dist/Intl'], (require) => {
-            window.IntlPolyfill = window.Intl = require('intl/dist/Intl')
-            require('intl/locale-data/jsonp/en-US.js')
-            require('intl/locale-data/jsonp/ru.js');
-            require('intl/locale-data/jsonp/fr.js');
-            require('intl/locale-data/jsonp/it.js');
-            require('intl/locale-data/jsonp/ko.js');
-            require('intl/locale-data/jsonp/es.js')
-            Iso.bootstrap(runApp, isoSelector);
-        }, "IntlBundle");
-    }
-    else {
+        require.ensure(
+            ['intl/dist/Intl'],
+            require => {
+                window.IntlPolyfill = window.Intl = require('intl/dist/Intl');
+                require('intl/locale-data/jsonp/en-US.js');
+                require('intl/locale-data/jsonp/ru.js');
+                require('intl/locale-data/jsonp/fr.js');
+                require('intl/locale-data/jsonp/it.js');
+                require('intl/locale-data/jsonp/ko.js');
+                require('intl/locale-data/jsonp/es.js');
+                Iso.bootstrap(runApp, isoSelector);
+            },
+            'IntlBundle'
+        );
+    } else {
         Iso.bootstrap(runApp, isoSelector);
     }
 }
 
-main()
+main();

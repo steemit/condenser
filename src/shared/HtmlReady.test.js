@@ -89,4 +89,11 @@ describe('htmlready', () => {
         const res = HtmlReady(textwithmentions).html;
         expect(res).to.equal(htmlified);
     });
+
+    it('should detect only valid mentions', () => {
+        const textwithmentions = '@abc @xx (@aaa1) @_x @eee, @fff!';
+        const res = HtmlReady(textwithmentions, {mutate: false});
+        const usertags = Array.from(res.usertags).join(',');
+        expect(usertags).to.equal('abc,aaa1,eee,fff');
+    });
 });

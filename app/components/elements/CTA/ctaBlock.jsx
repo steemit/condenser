@@ -27,7 +27,7 @@ class CTABlock extends Component {
     componentDidMount() {
         var self = this;
         setTimeout(() => {
-          self.setState({loading: false}); }, 100);
+          self.setState({loading: false}); }, 1000);
       }
 
     render() {

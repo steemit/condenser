@@ -53,37 +53,6 @@ export default function useGeneralApi(app) {
     app.use(router.routes());
     const koaBody = koa_body();
 
-    router.get('/state', function*() {
-        this.setCookies = true;
-        const ctx = this;
-        let login_challenge = ctx.session.login_challenge;
-        if (!login_challenge) {
-            login_challenge = secureRandom.randomBuffer(16).toString('hex');
-            ctx.session.login_challenge = login_challenge;
-        }
-        const offchain = {
-            csrf: ctx.csrf,
-            flash: ctx.flash,
-            account: ctx.session.a,
-            config: $STM_Config,
-            uid: ctx.session.uid,
-            serverBusy: false,
-            login_challenge,
-        };
-        if (ctx.session.arec) {
-            const account_recovery_record = yield models.AccountRecoveryRequest.findOne(
-                {
-                    attributes: ['id', 'account_name', 'status', 'provider'],
-                    where: { id: ctx.session.arec, status: 'confirmed' },
-                }
-            );
-            if (account_recovery_record) {
-                offchain.recover_account = account_recovery_record.account_name;
-            }
-        }
-        this.body = JSON.stringify(offchain);
-    });
-
     router.post('/accounts_wait', koaBody, function*() {
         if (rateLimitReq(this, this.req)) return;
         const params = this.request.body;

@@ -76,8 +76,10 @@ class Approval extends React.Component {
 module.exports = {
     path: pathTo.signUpApproval(),
     component: connect(state => {
-        return {
-            viewMode: state.app.get('viewMode'),
-        };
-    })(Approval),
+            return {
+                viewMode: state.app.get('viewMode'),
+            };
+        },
+        dispatch => ({})
+    )(Approval),
 };

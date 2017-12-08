@@ -42,7 +42,6 @@ const assets = Object.assign({}, require(assets_file), { script: [] });
 // }
 
 function* confirmMobileHandler(e) {
-    this.setCookies = true;
     if (!checkCSRF(this, this.request.body.csrf)) return;
     const params = addToParams({}, this.request.query, PARAM_VIEW_MODE, [
         VIEW_MODE_WHISTLE,
@@ -385,7 +384,7 @@ export default function useEnterAndConfirmMobilePages(app) {
                         </label>
                         <br />
                         <div className="secondary">
-                            Didn&rsquo;t receive the verification code?{' '}
+                            Didn't receive the verification code?{' '}
                             <a href={enterMobileUrl}>Re-send</a>
                         </div>
                         <br />

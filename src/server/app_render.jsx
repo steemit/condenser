@@ -57,6 +57,8 @@ async function appRender(ctx) {
         const offchain = {
             csrf: ctx.csrf,
             flash: ctx.flash,
+            new_visit: ctx.session.new_visit,
+            account: ctx.session.a,
             config: $STM_Config,
             uid: ctx.session.uid,
             login_challenge,

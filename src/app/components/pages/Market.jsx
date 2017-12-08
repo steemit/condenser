@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
+//import Highcharts from 'highcharts';
+
 import * as transactionActions from 'app/redux/TransactionReducer';
 import * as appActions from 'app/redux/AppReducer';
 import * as marketActions from 'app/redux/MarketReducer';

@@ -101,6 +101,7 @@ class Header extends React.Component {
                 )
                     home_account = true;
             } else {
+                // topic = route.params.length > 1 ? route.params[1] : '';
                 const type =
                     route.params[1] === 'payout_comments'
                         ? 'comments'

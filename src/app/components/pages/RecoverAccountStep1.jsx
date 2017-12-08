@@ -4,6 +4,7 @@ import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import PasswordInput from 'app/components/elements/PasswordInput';
 import constants from 'app/redux/constants';
 import tt from 'counterpart';
+import { FormattedHTMLMessage } from 'app/Translator';
 import { APP_DOMAIN, APP_NAME, SUPPORT_EMAIL } from 'app/client_config';
 import { PrivateKey } from '@steemit/steem-js/lib/auth/ecc';
 import { api } from '@steemit/steem-js';

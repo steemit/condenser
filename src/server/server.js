@@ -96,6 +96,31 @@ app.use(function*(next) {
         this.redirect(pathTo.userFeed(this.session.a));
         return;
     }
+    // // normalize user name url from cased params
+    // if (
+    //     this.method === 'GET' &&
+    //     (routeRegex.UserProfile1.test(this.url) ||
+    //         routeRegex.PostNoCategory.test(this.url) ||
+    //         routeRegex.Post.test(this.url))
+    // ) {
+    //     const p = this.originalUrl.toLowerCase();
+    //     let userCheck = '';
+    //     if (routeRegex.Post.test(this.url)) {
+    //         userCheck = p.split('/')[2].slice(1);
+    //     } else {
+    //         userCheck = p.split('/')[1].slice(1);
+    //     }
+    //     if (userIllegalContent.includes(userCheck)) {
+    //         console.log('Illegal content user found blocked', userCheck);
+    //         this.status = 451;
+    //         return;
+    //     }
+    //     if (p !== this.originalUrl) {
+    //         this.status = 301;
+    //         this.redirect(p);
+    //         return;
+    //     }
+    // }
 
     // remember ch, cn, r url params in the session and remove them from url
     // ch/cn/r parameters below are currently not in use, uncomment when needed
@@ -172,8 +197,10 @@ app.use(function*(next) {
     const from_link = this.request.headers.referer;
     if (!this.session.uid) {
         this.session.uid = secureRandom.randomBuffer(13).toString('hex');
+        this.session.new_visit = true;
         if (from_link) this.session.r = from_link;
     } else {
+        this.session.new_visit = this.session.last_visit - last_visit > 1800;
         if (!this.session.r && from_link) {
             this.session.r = from_link;
         }
@@ -262,6 +289,8 @@ if (env !== 'test') {
             );
         }
     });
+
+    const argv = minimist(process.argv.slice(2));
 
     const port = process.env.PORT ? parseInt(process.env.PORT) : 8080;
 

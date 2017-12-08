@@ -25,15 +25,14 @@ class Start extends React.Component {
         let {simple} = this.state
         let simpleAnswer = <p className='landing-start-block-text'>
             <b>{'Golos.io '}</b>
-            — это блог-платформа на
-            <span data-tip='Блокчейн — распределенная база данных'> блокчейне</span><ReactTooltip type='light' effect="solid"/>, где
+            — это блог-платформа на <span data-tip='Блокчейн — распределенная база данных'>блокчейне <ReactTooltip type='light' effect="solid" /></span>, где
             пользователи могут публиковать записи и голосовать за понравившиеся статьи.
             Голосуя за понравившуюся статью, они вознаграждают ее своими «голосами», которые
             можно перевести в реальные деньги.
         </p>
 
         let difAnswer = <p className='landing-start-block-text'>
-            Каждый день мы отдаем все <span data-tip='Майнинг — деятельность по поддержанию блокчейна'>намайненое</span><ReactTooltip type='light' effect="solid"/> в пул вознаграждения авторов. Он распределяется в зависимости от количества
+            Каждый день мы отдаем все <span data-tip='Майнинг — деятельность по поддержанию блокчейна'>намайненое <ReactTooltip type='light' effect="solid" /> </span> в пул вознаграждения авторов. Он распределяется в зависимости от количества
             «голосов» пользователей под каждой публикацией.
         </p>
 
@@ -58,7 +57,7 @@ class Start extends React.Component {
                         <div className='column small-6 medium-6 large-6'>
                             <p className='landing-start-block-title-text'>Пишите, фотографируйте, комментируйте и получайте
                                 <span
-                                    data-tip='Токены, которыми вознаграждаются посты, можно перевести в любую мировую валюту.'> вознаграждение</span><ReactTooltip type='light' effect="solid"/> за любое действие</p>
+                                    data-tip='Токены, которыми вознаграждаются посты, можно перевести в любую мировую валюту.'> вознаграждение</span><ReactTooltip type='light' effect="solid" /> за любое действие</p>
                             <a href="/create_account" className="button">Создать аккаунт</a>
                         </div>
                     </div>
@@ -105,18 +104,12 @@ class Start extends React.Component {
                         <div className='row'>
 
                             <div className='column large-3 medium-3 small-3'>
-                                {/* <p className='landing-start-block-center'><img
-                                    className='landing-start-round-img'
-                                    src='/images/landing/start/icons_01.png'/></p> */}
                                 <Icon name='team' size='10x'/>
                                 <h5>Социальная значимость</h5>
                                 <p className='landing-start-block-icon-text'>Наше сообщество ценит мнения, истории и творческий контент.</p>
 
                             </div>
                             <div className='column large-3 medium-3 small-3'>
-                                {/* <p className='landing-start-block-center'><img
-                                    className='landing-start-round-img'
-                                    src='/images/landing/start/icons_02.png'/></p> */}
                                 <Icon name='money' size='10x'/>
                                 <h5>Выгодно для блогинга</h5>
                                 <p className='landing-start-block-icon-text'>Мы вознаграждаем как авторов, так и
@@ -124,9 +117,6 @@ class Start extends React.Component {
 
                             </div>
                             <div className='column large-3 medium-3 small-3'>
-                                {/* <p className='landing-start-block-center'><img
-                                    className='landing-start-round-img'
-                                    src='/images/landing/start/icons_03.png'/></p> */}
                                 <Icon name='rocket' size='10x'/>
                                 <h5>В интересах каждого</h5>
                                 <p className='landing-start-block-icon-text'>Писать можно обо всем на свете —
@@ -134,9 +124,6 @@ class Start extends React.Component {
 
                             </div>
                             <div className='column large-3 medium-3 small-3'>
-                                {/* <p className='landing-start-block-center'><img
-                                    className='landing-start-round-img'
-                                    src='/images/landing/start/icons_04.png'/></p> */}
                                     <Icon name='blockchain' size='10x'/>
                                 <h5>Инновационная модель</h5>
                                 <p className='landing-start-block-icon-text'>Golos.io работает на блокчейне, а
@@ -189,7 +176,6 @@ class Start extends React.Component {
                                     начать делиться своими историями, подписываться на интересных авторов, оценивать
                                     публикации, знакомиться и получать вознаграждения</p>
                             </div>
-                            {/* <div className='column large-2 medium-2 small-2'></div> */}
                             <div className='landing-start-panel left column large-5 medium-5 small-12'>
                                 <div className='row'>
                                     <div className='column large-2 medium-2 small-2'>
@@ -216,7 +202,6 @@ class Start extends React.Component {
                                     </div>
                                 </div>
                             </div>
-                            {/* <div className='column large-2 medium-2 small-2'></div> */}
                         </div>
                     </div>
                     <div className='landing-start-block-center column large-12 medium-12 small-12'>
@@ -239,7 +224,6 @@ class Start extends React.Component {
                         </div>
                     </div>
                 </div>
-                {/* <CTABlock/> */}
             </div>
         );
     }

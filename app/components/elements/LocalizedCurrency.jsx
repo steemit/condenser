@@ -18,7 +18,10 @@ class LocalizedCurrency extends React.Component {
     reloadExchangeRates: React.PropTypes.func.isRequired,
     noSymbol: React.PropTypes.bool,
     fractionDigits: React.PropTypes.number,
-    amount: React.PropTypes.number.isRequired
+    amount: React.PropTypes.number.isRequired,
+    currency: React.PropTypes.string,
+    rounding: React.PropTypes.bool,
+    minimumAmountToShow: React.PropTypes.number,
   }
 
   static defaultProps = {
@@ -34,7 +37,7 @@ class LocalizedCurrency extends React.Component {
 
   componentDidMount() {
     this.setState({
-      xchangePicked: localStorage.getItem('xchange.picked') || DEBT_TOKEN_SHORT,
+      xchangePicked: this.props.currency ? this.props.currency : localStorage.getItem('xchange.picked') || DEBT_TOKEN_SHORT,
       xchangeGold: localStorage.getItem('xchange.gold') || 0,
       xchangePair: localStorage.getItem('xchange.pair') || 0
     })
@@ -43,7 +46,7 @@ class LocalizedCurrency extends React.Component {
   componentWillReceiveProps(nextProps) {
     const {fetching} = this.props;
     if (fetching !== nextProps.fetching) {
-      const xchangePicked = localStorage.getItem('xchange.picked') || DEBT_TOKEN_SHORT;
+      const xchangePicked = this.props.currency ? this.props.currency : localStorage.getItem('xchange.picked') || DEBT_TOKEN_SHORT;
       const xchangeGold = localStorage.getItem('xchange.gold') || 0;
       const xchangePair = localStorage.getItem('xchange.pair') || 0;
       this.setState({
@@ -61,6 +64,8 @@ class LocalizedCurrency extends React.Component {
       amount,
       noSymbol,
       fractionDigits,
+      rounding,
+      minimumAmountToShow
     } = this.props
 
     if (! process.env.BROWSER
@@ -88,27 +93,33 @@ class LocalizedCurrency extends React.Component {
       // : number,
       // options
       // )
-      const currencyAmount =  Number(
+      let currencyAmount =  Number(
         symbol.localeCompare(DEBT_TOKEN_SHORT) != 0
         ? number * (xchangeGold / 31103.4768) * xchangePair
         : number
       )
-      .toLocaleString('en', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-      })
+
+      if(options ? (options.rounding ? options.rounding : rounding ) : rounding) {     
+        let divider = Math.pow(10, (parseInt(Math.ceil(currencyAmount).toString().length) - 1))
+        currencyAmount = (currencyAmount / divider | 0) * divider
+      } else {
+        currencyAmount = currencyAmount.toLocaleString('en', {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        })
+      }
+      
       // if noSymbol is specified return only amount of digits
-      return  noSymbol
+       
+      return  (options ? (options.noSymbol ? options.noSymbol : noSymbol) : noSymbol)
         ? currencyAmount
         : symbol + ' ' + currencyAmount
     }
 
-    return  <span>
-      {localizedCurrency(amount, {maximumFractionDigits: fractionDigits})}
-    </span>
+    return <span>{localizedCurrency(amount, {maximumFractionDigits: fractionDigits})}</span>
+    
   }
 }
-
 
 export default connect(
   (state, ownProps) => {

@@ -3,7 +3,6 @@ import koa_body from 'koa-body';
 import config from 'config';
 import models from 'db/models';
 import {checkCSRF, getRemoteIp, rateLimitReq} from 'server/utils/misc';
-import sendVerifySMS from 'server/utils/twilio';
 import {hash} from 'golos-js/lib/auth/ecc';
 import secureRandom from "secure-random";
 import tt from 'counterpart';
@@ -120,7 +119,7 @@ export default function useRegistrationApi(app) {
         this.body = JSON.stringify({ status: "done" });
         return;
       }
-      this.body = JSON.stringify({ status: "waiting" });
+      this.body = JSON.stringify({ status: "waiting", code: mid.confirmation_code });
       const seconds_ago = (Date.now() - mid.updated_at) / 1000.0;
       const timeAgo = 10;
       if (seconds_ago < timeAgo) {
@@ -231,19 +230,6 @@ export default function useRegistrationApi(app) {
         confirmation_code
       });
     }
-    if (rateLimitReq(this, this.req, 300, 'send_code')) return;
-    const twilioResult = yield sendVerifySMS('+' + phone, confirmation_code);
-    if (twilioResult && twilioResult.error) {
-        this.body = JSON.stringify({ status: "error", error: twilioResult.error });
-        return;
-    }
-    console.log(
-      '-- /send_code -->',
-      this.session.uid,
-      this.session.user,
-      phoneHash,
-      mid.id
-    );
-    this.body = JSON.stringify({ status: "waiting" });
+    this.body = JSON.stringify({ status: "waiting", code: confirmation_code });
   });
 }

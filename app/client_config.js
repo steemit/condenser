@@ -106,4 +106,4 @@ export const DEFAULT_THEME = THEMES[0]
 
 export const USER_GENDER = ['undefined', 'male', 'female']
 
-export const PHONE_SERVICE = '+46769438807'
+export const PHONE_SERVICE = '+46 (769) 43-88-07'

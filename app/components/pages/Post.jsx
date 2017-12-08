@@ -11,6 +11,8 @@ import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import { blockedUsers } from 'app/utils/IllegalContent';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 
+import CTABlock from '../elements/CTA/ctaBlock'
+
 class Post extends React.Component {
 
     static propTypes = {
@@ -80,6 +82,7 @@ class Post extends React.Component {
                                 </div>
                             </div>
                         </div>
+                        
                     </div>
                 )
             }
@@ -163,7 +166,7 @@ class Post extends React.Component {
           if(blockedUsers.includes(post.split("/")[0])) {
             return (<IllegalContentMessage />)
           }
-
+          
         return (
             <div className="Post">
                 <div className="row">
@@ -172,6 +175,8 @@ class Post extends React.Component {
                     </div>
                 </div>
                 {!current_user && <div className="row">
+                <CTABlock post={post}/>
+
                     <div className="column">
                         <div className="Post__promo">
                             {tt('g.next_7_strings_sinngle_block.authors_get_paid_when_people_like_you_upvote_their_post')}.
@@ -193,7 +198,7 @@ class Post extends React.Component {
                             {negativeGroup}
                         </div>
                     </div>
-                </div>
+                </div>                
             </div>
         );
     }

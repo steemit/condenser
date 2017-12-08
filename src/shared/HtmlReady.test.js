@@ -82,4 +82,20 @@ describe('htmlready', () => {
         const res = HtmlReady(somanylinks).html;
         expect(res).to.equal(htmlified);
     });
+
+    it('should link usernames', () => {
+        const textwithmentions =
+            '<xml xmlns="http://www.w3.org/1999/xhtml">@username (@a1b2, whatever</xml>';
+        const htmlified =
+            '<xml xmlns="http://www.w3.org/1999/xhtml"><span><a href="/@username">@username</a> (<a href="/@a1b2">@a1b2</a>, whatever</span></xml>';
+        const res = HtmlReady(textwithmentions).html;
+        expect(res).to.equal(htmlified);
+    });
+
+    it('should detect only valid mentions', () => {
+        const textwithmentions = '@abc @xx (@aaa1) @_x @eee, @fff!';
+        const res = HtmlReady(textwithmentions, { mutate: false });
+        const usertags = Array.from(res.usertags).join(',');
+        expect(usertags).to.equal('abc,aaa1,eee,fff');
+    });
 });

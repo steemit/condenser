@@ -12,7 +12,7 @@ class CTABlock extends Component {
         post: React.PropTypes.string.isRequired,
         payout: React.PropTypes.number,
         visible: React.PropTypes.bool,
-        isSpecial: React.PropTypes.object,
+        special: React.PropTypes.object,
         currency: React.PropTypes.string
     };
 
@@ -27,17 +27,17 @@ class CTABlock extends Component {
     componentDidMount() {
         var self = this;
         setTimeout(() => {
-          self.setState({loading: false}); }, 500);
+          self.setState({loading: false}); }, 100);
       }
 
     render() {
-        let {user, post, payout, visible, isSpecial, currency} = this.props
+        let {user, post, payout, visible, special, currency} = this.props
         let textBlock;
 
-        if(isSpecial){
+        if(special){
             textBlock = <p className='left cta-block-text-special'>
-            {ctainfo.specialStartText} <b>{user}</b> {isSpecial.text}
-           <a href={'/start'}> {isSpecial.specialEndText}</a>
+            {ctainfo.specialStartText} <b>{user}</b> {special.text}
+           <a href={'/start'}> {special.specialEndText}</a>
            </p>
         }  else{
             textBlock = <p className='left cta-block-text-regular'>
@@ -69,6 +69,7 @@ class CTABlock extends Component {
 }
 
 export default connect((state, ownProps) => {
+
     const post = state
         .global
         .getIn(['content', ownProps.post])
@@ -93,9 +94,13 @@ export default connect((state, ownProps) => {
             }
         }
     }
+    
+    let showMinCurrency, currency, currentCurrency;
+    
 
-    let currentCurrency = localStorage.getItem('xchange.picked')
-    let showMinCurrency, currency;
+    if(process.env.BROWSER)
+        currentCurrency = localStorage.getItem('xchange.picked')
+
     
     if (currentCurrency && currentCurrency == 'RUB'){
         showMinCurrency = ctainfo.minRubValueToShow
@@ -104,9 +109,9 @@ export default connect((state, ownProps) => {
     else {
         showMinCurrency = ctainfo.minUsdValueToShow 
         currency = ctainfo.usd
-    } 
+    }
         
-    let isSpecial = isSpecialPost(ctainfo.specialLinks, link)
+    let special = isSpecialPost(ctainfo.specialLinks, link)
 
     let pending_payout = parsePayoutAmount(post.get('pending_payout_value'))
     let total_author_payout = parsePayoutAmount(post.get('total_payout_value'))
@@ -115,7 +120,7 @@ export default connect((state, ownProps) => {
     let payout = (pending_payout + total_author_payout + total_curator_payout)
     let localizedPayoutValue = localizedCurrency(payout, {noSymbol: true, rounding: true})
 
-    let visible = (current_account == null) && (localizedPayoutValue >= showMinCurrency || isSpecial != null)
+    let visible = (current_account == null) && (localizedPayoutValue >= showMinCurrency || special != null)
 
-    return {post: ownProps.post, user, payout, visible, isSpecial, currency}
+    return {post: ownProps.post, user, payout, visible, special, currency}
 })(CTABlock)

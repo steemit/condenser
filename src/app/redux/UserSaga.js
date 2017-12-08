@@ -314,7 +314,7 @@ function* usernamePasswordLogin2({
               .toString()
         : null;
 
-    if (memo_pubkey === owner_pubkey || memo_pubkey === active_pubkey)
+    if (memo_pubkey === owner_pubkey || memo_pubkey === active_pubkey) {
         // Memo key could be saved in local storage.. In RAM it is not purged upon LOCATION_CHANGE
         private_keys = private_keys.remove('memo_private');
     }

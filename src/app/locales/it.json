@@ -175,7 +175,7 @@
         "account_name_should_be_longer":
             "Il nome dell'account deve essere più lungo.",
         "account_name_should_have_only_letters_digits_or_dashes":
-            "Il nome account deve essere composto solo da lettere, cifre e trattini.",
+            "Il nome account deve essere composto solo da lettere, cifre, punti o trattini.",
         "cannot_increase_reward_of_post_within_the_last_minute_before_payout":
             "Non è possibile aumentare le ricompense del post durante l'ultimo minuto prima del pagamento",
         "vote_currently_exists_user_must_be_indicate_a_to_reject_witness":

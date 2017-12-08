@@ -648,7 +648,7 @@ class ReplyEditor extends React.Component {
                             {isStory &&
                                 !isEdit && (
                                     <div className="ReplyEditor__options float-right text-right">
-                                        {tt('g.rewards')} &nbsp;
+                                        {tt('g.rewards')}
                                         <select
                                             value={this.state.payoutType}
                                             onChange={this.onPayoutTypeChange}
@@ -667,7 +667,7 @@ class ReplyEditor extends React.Component {
                                             </option>
                                             <option value="75%">
                                                 {tt(
-                                                    'reply_editor.default_75_25'
+                                                    'reply_editor.split_75_25'
                                                 )}
                                             </option>
                                             <option value="50%">

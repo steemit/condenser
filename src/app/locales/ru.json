@@ -290,9 +290,9 @@
         "pasting_from_the_clipboard": "или вставив из буфера обмена, ",
         "selecting_them": "выбрав их",
         "image_upload": "Загрузка изображения",
-        "power_up_100": "Сила Голоса 100%%",
-        "default_50_50": "По умолчанию (50%% / 50%%)",
-        "default_75_25": "(75 %%/ 25%%)",
+        "power_up_100": "100%% STEEM Сила (SP)",
+        "split_75_25": "75%% SP / 25%% STEEM",
+        "default_50_50": "50%% SP / 50%% STEEM",
         "decline_payout": "Отказаться от выплаты",
         "check_this_to_auto_upvote_your_post":
             "Отметьте, чтобы проголосовать за свой пост",

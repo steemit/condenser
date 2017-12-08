@@ -289,9 +289,9 @@
         "pasting_from_the_clipboard": "pegando desde el portapapeles,",
         "selecting_them": "Seleccionándolos",
         "image_upload": "Subir imagen",
-        "power_up_100": "Power Up 100%%",
-        "default_50_50": "Por defecto (50 1%% / 50 1%%)",
-        "default_75_25": "(75 1%% / 25 1%%)",
+        "power_up_100": "100%% STEEM Power (SP)",
+        "split_75_25": "75%% SP / 25%% STEEM",
+        "default_50_50": "50%% SP / 50%% STEEM",
         "decline_payout": "Rechazar Pago",
         "check_this_to_auto_upvote_your_post":
             "Seleciona para autovotarte el post",

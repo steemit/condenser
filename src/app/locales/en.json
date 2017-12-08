@@ -290,9 +290,9 @@
         "pasting_from_the_clipboard": "pasting from the clipboard, ",
         "selecting_them": "selecting them",
         "image_upload": "Image upload",
-        "power_up_100": "Power Up 100%%",
-        "default_50_50": "Default (50%% / 50%%)",
-        "default_75_25": "(75%% / 25%%)",
+        "power_up_100": "100%% STEEM Power (SP)",
+        "split_75_25": "75%% SP / 25%% STEEM Dollars",
+        "default_50_50": "50%% SP / 50%% STEEM Dollars",
         "decline_payout": "Decline Payout",
         "check_this_to_auto_upvote_your_post":
             "Check this to auto-upvote your post",

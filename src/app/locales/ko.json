@@ -289,8 +289,9 @@
         "pasting_from_the_clipboard": "클립보드에서 분여넣기, ",
         "selecting_them": "혹은 직접 업로드 하세요.",
         "image_upload": "사진 업로드",
-        "power_up_100": "100%% 스팀파워로 받음",
-        "default_50_50": "스팀파워 50%% + 스팀달러 50%%)",
+        "power_up_100": "100%% 스팀파워로 받음 (SP)",
+        "split_75_25": "75%% SP / 25%% STEEM",
+        "default_50_50": "50%% SP / 50%% STEEM",
         "decline_payout": "수익을 스팀 커뮤니티에 기부",
         "check_this_to_auto_upvote_your_post":
             "Check this to auto-upvote your post",

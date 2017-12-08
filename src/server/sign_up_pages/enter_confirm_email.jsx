@@ -152,7 +152,6 @@ export default function useEnterAndConfirmEmailPages(app) {
     const rc_site_key = config.get('recaptcha.site_key');
 
     router.get('/start/:code', function*() {
-        this.setCookies = true;
         const code = this.params.code;
         const eid = yield models.Identity.findOne({
             attributes: ['id', 'user_id', 'verified'],
@@ -246,7 +245,6 @@ export default function useEnterAndConfirmEmailPages(app) {
     });
 
     router.get('/enter_email', function*() {
-        this.setCookies = true;
         console.log(
             '-- /enter_email -->',
             this.session.uid,
@@ -483,7 +481,6 @@ export default function useEnterAndConfirmEmailPages(app) {
     router.get('/confirm_email/:code', confirmEmailHandler);
     router.post('/confirm_email', koaBody, confirmEmailHandler);
     router.get('/enter_email/submit_form.js', function*() {
-        this.setCookies = true;
         this.type = 'application/javascript';
         this.body =
             "function submit_email_form(){document.getElementById('submit_email').submit()}";

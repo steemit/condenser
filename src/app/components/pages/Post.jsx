@@ -21,6 +21,7 @@ class Post extends React.Component {
         post: React.PropTypes.string,
         routeParams: React.PropTypes.object,
         location: React.PropTypes.object,
+        signup_bonus: React.PropTypes.string,
     };
     constructor() {
         super();
@@ -51,7 +52,7 @@ class Post extends React.Component {
 
     render() {
         const { showSignUp } = this;
-        const { content } = this.props;
+        const { signup_bonus, content } = this.props;
         const { showNegativeComments, commentHidden, showAnyway } = this.state;
         let post = this.props.post;
         if (!post) {
@@ -211,7 +212,10 @@ class Post extends React.Component {
                                 <br />
                                 {tt(
                                     'g.next_7_strings_single_block.if_you_enjoyed_what_you_read_earn_amount',
-                                    { INVEST_TOKEN_UPPERCASE }
+                                    {
+                                        amount: '$' + signup_bonus.substring(1),
+                                        INVEST_TOKEN_UPPERCASE,
+                                    }
                                 )}
                                 <br />
                                 <button
@@ -265,6 +269,7 @@ export default connect(state => {
     }
     return {
         content: state.global.get('content'),
+        signup_bonus: state.offchain.get('signup_bonus'),
         ignoring,
     };
 })(Post);

@@ -321,7 +321,7 @@ export default function useGeneralApi(app) {
             this.body = JSON.stringify({views: 0});
             return;
         }
-        console.log('-- /page_view -->', this.session.uid, page);
+        
         recordWebEvent(this, 'PageView', JSON.stringify(posts));
         const remote_ip = getRemoteIp(this.req);
         try {

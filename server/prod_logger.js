@@ -11,8 +11,10 @@ function prod_logger() {
         var asset = this.originalUrl.indexOf('/assets/') === 0
             || this.originalUrl.indexOf('/images/') === 0
             || this.originalUrl.indexOf('/favicon.ico') === 0;
-        if (!asset)
-            console.log(`[reqid ${this.request.header['x-request-id']}] ${(this.session.uid || '')} ${this.method} ${this.originalUrl}`);
+        if (!asset) {
+            var uid = this.session.uid ? this.session.uid + ' ' : '' 
+            console.log(`[reqid ${this.request.header['x-request-id']}] ${uid}${this.method} ${this.originalUrl}`);
+        }
         try {
             yield next;
         } catch (err) {
@@ -48,8 +50,8 @@ function log(ctx, start, len, err, asset) {
 
 function time(start) {
     var delta = new Date - start;
-    delta = delta < 10000
-        ? delta + 'ms'
-        : Math.round(delta / 1000) + 's';
-    return delta;
+    // delta = delta < 10000
+    //     ? delta + 'ms'
+    //     : Math.round(delta / 1000) + 's';
+    return delta + 'ms';
 }

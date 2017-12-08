@@ -25,7 +25,12 @@ import { getURL } from 'app/utils/URLConstants'
 class App extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {open: null, showCallout: true, showBanner: true, expandCallout: false};
+        this.state = {
+            open: null,
+            showCallout: true,
+            showBanner: true,
+            expandCallout: false
+        };
         this.toggleOffCanvasMenu = this.toggleOffCanvasMenu.bind(this);
         this.checkLogin = this.checkLogin.bind(this);
         // this.shouldComponentUpdate = shouldComponentUpdate(this, 'App')
@@ -104,6 +109,29 @@ class App extends React.Component {
         serverApiRecordEvent('Learn more', 'Hero banner');
     }
 
+    isShowInfoBox() {
+        if (process.env.BROWSER) {
+            if (!localStorage.getItem('infobox')) {
+                const init = {
+                    id: 1512732747890, //initial value
+                    show: true
+                }
+                localStorage.setItem('infobox', JSON.stringify(init))
+                return true
+            } else {
+                const value = JSON.parse(localStorage.getItem('infobox'))
+                return value.show                
+            }
+        } 
+        return false
+    }
+
+    closeBox() {
+        const infoBox = JSON.parse(localStorage.getItem('infobox'))
+        infoBox.show = false
+        localStorage.setItem('infobox', JSON.stringify(infoBox))
+    }
+
     render() {
         const VESTING_TOKENS = tt('token_names.VESTING_TOKENS');
         const APP_NAME = tt('g.APP_NAME');
@@ -122,6 +150,8 @@ class App extends React.Component {
         const warning = flash.get('warning');
         const success = flash.get('success');
         let callout = null;
+        const showInfoBox = this.isShowInfoBox()
+
         if (this.state.showCallout && (alert || warning || success)) {
             callout = <div className="App__announcement row">
                 <div className="column">
@@ -132,12 +162,16 @@ class App extends React.Component {
                 </div>
             </div>;
         }
-        else if ($STM_Config.site_domain === 'golos.blog' && ip && this.state.showCallout) {
+        else if (this.state.showCallout && showInfoBox) {
             callout = <div className="App__announcement row">
                 <div className="column">
                     <div className="callout" style={{backgroundColor: '#1b519a', color: 'white'}}>
-                        <CloseButton onClick={() => this.setState({showCallout: false})} />
-                        <Link className="link" to="/golosio/@golosio/golos-io-plan-razvitiya-infografika" ><Icon className="logo-icon" name={APP_ICON} />&nbsp;{tt('g.announcement_text')}</Link>
+                        <CloseButton onClick={() => {
+                                this.setState({showCallout: false})
+                                this.closeBox()
+                            }
+                        } />
+                        <Link className="link" to="golosio/@golosio/golos-io-grantovaya-programma-podderzhki-molodykh-avtorov-i-unikalnogo-kontenta" ><Icon className="logo-icon" name={APP_ICON} />&nbsp;{tt('g.announcement_text')}</Link>
                     </div>
                 </div>
             </div>
@@ -163,7 +197,7 @@ class App extends React.Component {
                             <h2>{tt('submit_a_story.welcome_to_the_blockchain')}</h2>
                             <h4>{tt('submit_a_story.your_voice_is_worth_something')}</h4>
                             <br />
-                            <a className="button" href="/create_account"> <b>{tt('navigation.sign_up')}</b> </a>
+                            <a className="button" href="/create_account"> <b>{tt('submit_a_story.sign_up')}</b> </a>
                             &nbsp; &nbsp; &nbsp;
                             <a className="button hollow uppercase" href="/welcome" target="_blank" onClick={this.learnMore}> <b>{tt('submit_a_story.learn_more')}</b> </a>
                             <br />

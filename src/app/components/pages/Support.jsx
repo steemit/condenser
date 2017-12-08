@@ -7,9 +7,12 @@ class Support extends React.Component {
         return (
             <div className="row">
                 <div>
-                    <h2>{tt('g.APP_NAME_support', {APP_NAME})}</h2>
+                    <h2>{tt('g.APP_NAME_support', { APP_NAME })}</h2>
                     <p>
-                        {tt('g.please_email_questions_to')} <a href="mailto:contact@steemit.com">contact@steemit.com</a>.
+                        {tt('g.please_email_questions_to')}{' '}
+                        <a href="mailto:contact@steemit.com">
+                            contact@steemit.com
+                        </a>.
                     </p>
                 </div>
             </div>
@@ -19,5 +22,5 @@ class Support extends React.Component {
 
 module.exports = {
     path: 'support.html',
-    component: Support
+    component: Support,
 };

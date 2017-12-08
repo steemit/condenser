@@ -44,4 +44,6 @@ export default `
 /photography/@elvinanurhaliza/photohraphy-dewy-flowers
 /photography/@elvinanurhaliza/spider-finepix-s4800-reptiles-etc
 /entertainment/@seanfrederic/feature-film-loco-i-m-a-producer-on-starts-filming-soon
-`.trim().split('\n');
+`
+    .trim()
+    .split('\n');

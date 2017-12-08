@@ -263,21 +263,23 @@ function linkify(content, mutate, hashtags, usertags, images, links) {
 
     // usertag (mention)
     // Cribbed from https://github.com/twitter/twitter-text/blob/master/js/twitter-text.js#L90
-    content = content.replace(/(^|[^a-zA-Z0-9_!#$%&*@＠]|(^|[^a-zA-Z0-9_+~.-]))[@＠]([a-z][-\.a-z\d]+[a-z\d])/ig, (match, preceeding1, preceeding2, user) => {
-        const userLower = user.toLowerCase();
-        const valid = validate_account_name(userLower) == null;
+    content = content.replace(
+        /(^|[^a-zA-Z0-9_!#$%&*@＠]|(^|[^a-zA-Z0-9_+~.-]))[@＠]([a-z][-\.a-z\d]+[a-z\d])/gi,
+        (match, preceeding1, preceeding2, user) => {
+            const userLower = user.toLowerCase();
+            const valid = validate_account_name(userLower) == null;
 
-        if (valid && usertags) usertags.add(userLower);
+            if (valid && usertags) usertags.add(userLower);
 
-        const preceedings = (preceeding1 || '') + (preceeding2 || ''); // include the preceeding matches if they exist
+            const preceedings = (preceeding1 || '') + (preceeding2 || ''); // include the preceeding matches if they exist
 
-        if (!mutate) return `${preceedings}${user}`;
+            if (!mutate) return `${preceedings}${user}`;
 
-        return (valid ?
-            `${preceedings}<a href="/@${userLower}">@${user}</a>` :
-            '@' + user
-        );
-    })
+            return valid
+                ? `${preceedings}<a href="/@${userLower}">@${user}</a>`
+                : '@' + user;
+        }
+    );
 
     content = content.replace(linksAny('gi'), ln => {
         if (linksRe.image.test(ln)) {

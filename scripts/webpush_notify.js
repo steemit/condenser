@@ -1,6 +1,6 @@
-import config from 'config';
-import webPush from 'web-push';
-import Tarantool from '../src/db/tarantool';
+const config = require('config');
+const webPush = require('web-push');
+const Tarantool = require('../src/db/tarantool');
 
 webPush.setGCMAPIKey(config.get('notify.gcm_key'));
 

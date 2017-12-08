@@ -7,11 +7,11 @@ const email_regex = /^([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d
 export default class AddToWaitingList extends React.Component {
     constructor() {
         super();
-        this.state = {email: '', submitted: false, email_error: ''};
+        this.state = { email: '', submitted: false, email_error: '' };
         this.onEmailChange = this.onEmailChange.bind(this);
     }
 
-    onSubmit = (e) => {
+    onSubmit = e => {
         e.preventDefault();
         const email = this.state.email;
         if (!email) return;
@@ -21,45 +21,67 @@ export default class AddToWaitingList extends React.Component {
             credentials: 'same-origin',
             headers: {
                 Accept: 'application/json',
-                'Content-type': 'application/json'
+                'Content-type': 'application/json',
             },
-            body: JSON.stringify({csrf: $STM_csrf, email})
-        }).then(r => r.json()).then(res => {
-            if (res.error || res.status !== 'ok') {
-                console.error('CreateAccount server error', res.error);
-            } else {
-                // TODO: process errors
-            }
-            this.setState({submitted: true});
-        }).catch(error => {
-            console.error('Caught CreateAccount server error', error);
-            this.setState({submitted: true});
-        });
+            body: JSON.stringify({ csrf: $STM_csrf, email }),
+        })
+            .then(r => r.json())
+            .then(res => {
+                if (res.error || res.status !== 'ok') {
+                    console.error('CreateAccount server error', res.error);
+                } else {
+                    // TODO: process errors
+                }
+                this.setState({ submitted: true });
+            })
+            .catch(error => {
+                console.error('Caught CreateAccount server error', error);
+                this.setState({ submitted: true });
+            });
     };
 
     onEmailChange(e) {
         const email = e.target.value.trim().toLowerCase();
         let email_error = '';
-        if (!email_regex.test(email.toLowerCase())) email_error = tt('g.not_valid_email');
-        this.setState({email, email_error});
+        if (!email_regex.test(email.toLowerCase()))
+            email_error = tt('g.not_valid_email');
+        this.setState({ email, email_error });
     }
 
     render() {
-        const {email, email_error, submitted} = this.state;
+        const { email, email_error, submitted } = this.state;
         if (submitted) {
-            return <div className="callout success">
-                {tt('g.thank_you_for_being_an_early_visitor_to_APP_NAME', {APP_NAME})}
-            </div>
+            return (
+                <div className="callout success">
+                    {tt('g.thank_you_for_being_an_early_visitor_to_APP_NAME', {
+                        APP_NAME,
+                    })}
+                </div>
+            );
         }
-        return <form onSubmit={this.onSubmit}>
-            <div>
-                <label>{tt('g.email')}
-                    <input ref="email" type="text" name="name" autoComplete="off" value={email} onChange={this.onEmailChange} />
-                </label>
-                <p className="error">{email_error}</p>
-            </div>
-            <br />
-            <input type="submit" className="button secondary" value={tt('g.submit')} />
-        </form>;
+        return (
+            <form onSubmit={this.onSubmit}>
+                <div>
+                    <label>
+                        {tt('g.email')}
+                        <input
+                            ref="email"
+                            type="text"
+                            name="name"
+                            autoComplete="off"
+                            value={email}
+                            onChange={this.onEmailChange}
+                        />
+                    </label>
+                    <p className="error">{email_error}</p>
+                </div>
+                <br />
+                <input
+                    type="submit"
+                    className="button secondary"
+                    value={tt('g.submit')}
+                />
+            </form>
+        );
     }
 }

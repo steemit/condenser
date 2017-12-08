@@ -1,6 +1,7 @@
 const list = `
 poloniex
 bittrex
+changelly
 `
     .trim()
     .split('\n');

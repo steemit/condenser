@@ -13,6 +13,7 @@ class CTABlock extends Component {
         payout: React.PropTypes.number,
         visible: React.PropTypes.bool,
         isSpecial: React.PropTypes.object,
+        currency: React.PropTypes.string
     };
 
     constructor(props) {
@@ -20,7 +21,7 @@ class CTABlock extends Component {
     }
 
     render() {
-        let {user, post, payout, visible, isSpecial, payvalue} = this.props
+        let {user, post, payout, visible, isSpecial, currency} = this.props
         let textBlock;
 
         if(isSpecial){
@@ -30,7 +31,7 @@ class CTABlock extends Component {
            </p>
         }  else{
             textBlock = <p className='left cta-block-text-regular'>
-            Сообщество <b>Golos.io</b> {ctainfo.regularStartText} <b>{user}</b>  заработал более <LocalizedCurrency amount={payout} rounding={true}/>.<a href={'/start'}> {ctainfo.regularEndText}</a>
+            Сообщество <b>Golos.io</b> {ctainfo.regularStartText} <b>{user}</b>  заработал более <LocalizedCurrency amount={payout} rounding={true} noSymbol={true}/> {currency}.<a href={'/start'}> {ctainfo.regularEndText}</a>
         </p>
         }            
 
@@ -80,6 +81,17 @@ export default connect((state, ownProps) => {
         }
     }
 
+    let currentCurrency = localStorage.getItem('xchange.picked')
+    let showMinCurrency, currency;
+    if (currentCurrency && currentCurrency == 'RUB'){
+        showMinCurrency = ctainfo.minRubValueToShow
+        currency = ctainfo.rub
+    }
+    else {
+        showMinCurrency = ctainfo.minUsdValueToShow 
+        currency = ctainfo.usd
+    } 
+        
     let isSpecial = isSpecialPost(ctainfo.specialLinks, link)
 
     let pending_payout = parsePayoutAmount(post.get('pending_payout_value'))
@@ -89,7 +101,7 @@ export default connect((state, ownProps) => {
     let payout = (pending_payout + total_author_payout + total_curator_payout)
     let localizedPayoutValue = localizedCurrency(payout, {noSymbol: true, rounding: true})
 
-    let visible = (current_account == null) && (localizedPayoutValue >= ctainfo.minUsdValueToShow || isSpecial != null)
+    let visible = (current_account == null) && (localizedPayoutValue >= showMinCurrency || isSpecial != null)
 
-    return {post: ownProps.post, user, payout, visible, isSpecial}
+    return {post: ownProps.post, user, payout, visible, isSpecial, currency}
 })(CTABlock)

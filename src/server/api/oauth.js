@@ -256,7 +256,6 @@ function retrieveRedditUserData(access_token) {
 }
 
 function* handleRedditCallback() {
-    this.setCookies = true;
     try {
         const u = yield retrieveRedditUserData(this.query.access_token);
         console.log('-- /handle_reddit_callback  -->', this.session.uid, u);

@@ -323,7 +323,7 @@ class CreateAccount extends React.Component {
                 next_step = (
                     <div className="callout alert">
                         <h5>
-                            Couldn&rsquo;t create account. Server returned the
+                            Couldn't create account. Server returned the
                             following error:
                         </h5>
                         <p>{server_error}</p>
@@ -362,7 +362,7 @@ class CreateAccount extends React.Component {
                                     entirely unable to gain access to an account
                                     without knowing the password. Steemit is a
                                     new model, entirely unlike other sites on
-                                    the Internet. It&rsquo;s not simply policy:{' '}
+                                    the Internet. It's not simply policy:{' '}
                                     <strong>
                                         We cannot recover your account or
                                         password if you lose it.

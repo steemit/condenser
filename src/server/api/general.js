@@ -15,7 +15,6 @@ import {
 import coBody from 'co-body';
 import Mixpanel from 'mixpanel';
 import Tarantool from 'db/tarantool';
-import secureRandom from 'secure-random';
 import { PublicKey, Signature, hash } from '@steemit/steem-js/lib/auth/ecc';
 import { api, broadcast } from '@steemit/steem-js';
 

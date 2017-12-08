@@ -4,7 +4,6 @@ import 'whatwg-fetch';
 import { VIEW_MODE_WHISTLE, PARAM_VIEW_MODE } from 'shared/constants';
 import './assets/stylesheets/app.scss';
 import plugins from 'app/utils/JsPlugins';
-import { setStore } from 'app/utils/User';
 import Iso from 'iso';
 import universalRender from 'shared/UniversalRender';
 import ConsoleExports from './utils/ConsoleExports';
@@ -125,8 +124,7 @@ async function runApp(initial_state) {
     const location = `${window.location.pathname}${window.location.search}${
         window.location.hash
     }`;
-    universalRender({ history, location, initial_state, setStore }).catch(
-        error => {
+    universalRender({ history, location, initial_state }).catch(error => {
             console.error(error);
             serverApiRecordEvent('client_error', error);
         }
@@ -153,6 +151,7 @@ async function main() {
             require => {
                 window.IntlPolyfill = window.Intl = require('intl/dist/Intl');
                 require('intl/locale-data/jsonp/en-US.js');
+                require('intl/locale-data/jsonp/es.js');
                 require('intl/locale-data/jsonp/ru.js');
                 require('intl/locale-data/jsonp/fr.js');
                 require('intl/locale-data/jsonp/it.js');

@@ -20,6 +20,16 @@ class CTABlock extends Component {
         super(props);
     }
 
+    componentWillMount(){
+        this.setState({loading: true} )
+    }
+
+    componentDidMount() {
+        var self = this;
+        setTimeout(() => {
+          self.setState({loading: false}); }, 500);
+      }
+
     render() {
         let {user, post, payout, visible, isSpecial, currency} = this.props
         let textBlock;
@@ -49,9 +59,12 @@ class CTABlock extends Component {
             </div>
         </div>
 
-        return (visible
-            ? ctablock
-            : null)
+        if (this.state.loading)
+            return null
+        else
+            return (visible
+                ? ctablock
+                : null)
     }
 }
 
@@ -83,6 +96,7 @@ export default connect((state, ownProps) => {
 
     let currentCurrency = localStorage.getItem('xchange.picked')
     let showMinCurrency, currency;
+    
     if (currentCurrency && currentCurrency == 'RUB'){
         showMinCurrency = ctainfo.minRubValueToShow
         currency = ctainfo.rub

@@ -445,7 +445,7 @@ class PostFull extends React.Component {
             <article
                 className="PostFull hentry"
                 itemScope
-                itemType="http://schema.org/blogPost"
+                itemType="http://schema.org/Blog"
             >
                 {showEdit ? (
                     renderedEditor

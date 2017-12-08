@@ -292,20 +292,52 @@ class Header extends React.Component {
                                         </svg>
                                     </Link>
                                 </li>
-                                <li className="Header__top-steemit show-for-medium noPrint"><Link to={logo_link}><span className="beta fade-in--10">beta</span></Link></li>
-                                {selected_sort_order && <DropdownMenu className="Header__sort-order-menu menu-hide-for-large" items={sort_order_menu} selected={selected_sort_order[1]} el="li" />}
-                                <HorizontalMenu className="show-for-medium" items={sort_order_menu_horizontal} />
-                                <li className={"hide-for-small-only Header__search-input"}>
-                                    <form className="column"
+                                <li className="Header__top-steemit show-for-medium noPrint">
+                                    <Link to={logo_link}>
+                                        <span className="beta fade-in--10">
+                                            beta
+                                        </span>
+                                    </Link>
+                                </li>
+                                {selected_sort_order && (
+                                    <DropdownMenu
+                                        className="Header__sort-order-menu menu-hide-for-large"
+                                        items={sort_order_menu}
+                                        selected={selected_sort_order[1]}
+                                        el="li"
+                                    />
+                                )}
+                                <HorizontalMenu
+                                    className="show-for-medium"
+                                    items={sort_order_menu_horizontal}
+                                />
+                                <li
+                                    className={
+                                        'hide-for-small-only Header__search-input'
+                                    }
+                                >
+                                    <form
+                                        className="column"
                                         action="/static/search.html"
-                                        method="GET">
+                                        method="GET"
+                                    >
                                         <div className="input-group">
                                             <div className="input-group-button">
-                                                <button href="/static/search.html" type="submit" title={tt('g.search')}>
+                                                <button
+                                                    href="/static/search.html"
+                                                    type="submit"
+                                                    title={tt('g.search')}
+                                                >
                                                     <Icon name="search" />
                                                 </button>
                                             </div>
-                                            <input type="text" placeholder="search" className="input-group-field" name="q" autoComplete="off"></input>
+                                            <input
+                                                type="text"
+                                                placeholder="search"
+                                                className="input-group-field"
+                                                name="q"
+                                                autoComplete="off"
+                                            />
                                         </div>
                                     </form>
                                 </li>

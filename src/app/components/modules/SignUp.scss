@@ -1,0 +1,31 @@
+.SignUp {
+  padding: 1rem 1rem 2rem 1rem;
+  a.button {
+    margin-top: 0.5rem;
+  }
+  .button {
+    width: 16rem;
+  }
+}
+
+.SignUp--reddit-button {
+  background-color: #ef4623;
+  &:hover {
+    background-color: scale-color(#ef4623, -6%);
+  }
+}
+
+.SignUp--fb-button {
+  background-color: #3b5998;
+  &:hover {
+    background-color: scale-color(#3b5998, -6%);
+  }
+}
+
+.TermsAgree {
+  height: 10em;
+  resize: none;
+  display: block;
+  overflow: auto;
+  border: 1px solid #cacaca;
+}

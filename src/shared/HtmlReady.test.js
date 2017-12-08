@@ -93,7 +93,7 @@ describe('htmlready', () => {
     });
 
     it('should detect only valid mentions', () => {
-        const textwithmentions = '@abc @xx (@aaa1) @_x @eee, @fff!';
+        const textwithmentions = '@abc @xx (@aaa1) @_x @eee, @fff! https://x.com/@zzz/test';
         const res = HtmlReady(textwithmentions, { mutate: false });
         const usertags = Array.from(res.usertags).join(',');
         expect(usertags).to.equal('abc,aaa1,eee,fff');

@@ -160,10 +160,10 @@ class PostsIndex extends React.Component {
         // plus the tag string, f.ex "trending: blog"
         //
         // Logged-in:
-        // At homepage (@user/feed) say "People I follow"
+        // At homepage (@user/feed) say "My feed"
         let page_title = 'Posts'; // sensible default here?
         if (typeof this.props.username !== 'undefined' && category === 'feed') {
-            page_title = 'People I follow'; // todo: localization
+            page_title = 'My feed'; // todo: localization
         } else {
             switch (topics_order) {
                 case 'trending': // cribbed from Header.jsx where it's repeated 2x already :P

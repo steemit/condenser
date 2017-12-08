@@ -199,7 +199,7 @@ class App extends React.Component {
                             <br />
                             <a className="button" href="/create_account"> <b>{tt('navigation.sign_up')}</b> </a>
                             &nbsp; &nbsp; &nbsp;
-                            <a className="button hollow uppercase" href="/welcome" target="_blank" onClick={this.learnMore}> <b>{tt('submit_a_story.learn_more')}</b> </a>
+                            <a className="button hollow uppercase" href="/start" target="_blank" onClick={this.learnMore}> <b>{tt('submit_a_story.learn_more')}</b> </a>
                             <br />
                             <br />
                             <div className="tag3">

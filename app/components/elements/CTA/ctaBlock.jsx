@@ -37,12 +37,19 @@ class CTABlock extends Component {
         if(special){
             textBlock = <p className='left cta-block-text-special'>
             {ctainfo.specialStartText} <b>{user}</b> {special.text}
-           <a href={'/start'}> {special.specialEndText}</a>
+           <a href={'/start'}> {ctainfo.specialEndText}</a>
            </p>
         }  else{
-            textBlock = <p className='left cta-block-text-regular'>
-            Сообщество <b>Golos.io</b> {ctainfo.regularStartText} <b>{user}</b>  заработал более <LocalizedCurrency amount={payout} rounding={true} noSymbol={true}/> {currency}.<a href={'/start'}> {ctainfo.regularEndText}</a>
-        </p>
+            textBlock = 
+            <div>
+            <p className='left cta-block-text-regular'> Сообщество <b>Golos.io</b> {ctainfo.regularStartText} <b>{user}</b> заработал более &nbsp; </p> 
+                <div className='cta-block-text-regular'>
+                    <LocalizedCurrency amount={payout} rounding={true} noSymbol={true}/>
+                </div> 
+            <p className='left cta-block-text-regular'>
+                {currency}.<a href={'/start'}> {ctainfo.regularEndText}</a>
+            </p>
+            </div>
         }            
 
         let ctablock = <div className='ctablock'>
@@ -102,14 +109,15 @@ export default connect((state, ownProps) => {
         currentCurrency = localStorage.getItem('xchange.picked')
 
     
-    if (currentCurrency && currentCurrency == 'RUB'){
-        showMinCurrency = ctainfo.minRubValueToShow
-        currency = ctainfo.rub
-    }
-    else {
-        showMinCurrency = ctainfo.minUsdValueToShow 
-        currency = ctainfo.usd
-    }
+    if (currentCurrency)
+        if(currentCurrency == 'RUB'){
+            showMinCurrency = ctainfo.minRubValueToShow
+            currency = ctainfo.rub
+        }
+        else {
+            showMinCurrency = ctainfo.minUsdValueToShow 
+            currency = ctainfo.usd
+        }
         
     let special = isSpecialPost(ctainfo.specialLinks, link)
 

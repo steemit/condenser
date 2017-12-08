@@ -1,5 +1,5 @@
 export default {
-    minUsdValueToShow: 50,
+    minUsdValueToShow: 30,
     minRubValueToShow: 2000,
     usd: 'долларов',
     rub: 'рублей',

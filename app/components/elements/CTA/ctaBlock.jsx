@@ -47,7 +47,7 @@ class CTABlock extends Component {
                     <LocalizedCurrency amount={payout} rounding={true} noSymbol={true}/>
                 </div> 
             <p className='left cta-block-text-regular'>
-                {currency}.<a href={'/start'}> {ctainfo.regularEndText}</a>
+                &nbsp;{currency}.<a href={'/start'}> {ctainfo.regularEndText}</a>
             </p>
             </div>
         }            
@@ -113,11 +113,14 @@ export default connect((state, ownProps) => {
         if(currentCurrency == 'RUB'){
             showMinCurrency = ctainfo.minRubValueToShow
             currency = ctainfo.rub
-        }
-        else {
+        }else if(currentCurrency == 'USD'){
             showMinCurrency = ctainfo.minUsdValueToShow 
             currency = ctainfo.usd
+        }else {
+            showMinCurrency = ctainfo.minRubValueToShow 
+            currency = currentCurrency
         }
+
         
     let special = isSpecialPost(ctainfo.specialLinks, link)
 

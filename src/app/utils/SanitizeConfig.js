@@ -77,6 +77,7 @@ export default ({
         img: ['src', 'alt'],
         a: ['href', 'rel'],
     },
+    allowedSchemes: ['http', 'https', 'steem'],
     transformTags: {
         iframe: (tagName, attribs) => {
             const srcAtty = attribs.src;

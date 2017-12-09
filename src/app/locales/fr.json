@@ -177,7 +177,7 @@
         "account_name_should_be_shorter": "L'identifiant doit être plus court.",
         "account_name_should_be_longer": "L'identifiant doit être plus long.",
         "account_name_should_have_only_letters_digits_or_dashes":
-            "L'identifiant ne peut comporter que des lettres, des chiffres ou des traits d'union.",
+            "L'identifiant ne peut comporter que des lettres, des chiffres, des points ou des traits d'union.",
         "cannot_increase_reward_of_post_within_the_last_minute_before_payout":
             "Les gains d'un article ne peuvent être accrus durant la dernière minute avant rétribution.",
         "vote_currently_exists_user_must_be_indicate_a_to_reject_witness":

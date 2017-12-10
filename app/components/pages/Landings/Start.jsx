@@ -44,7 +44,7 @@ class Start extends React.Component {
                         <h2>Блог-платформа следующего поколения</h2>
                     </div>
                     <div className='row'>
-                        <div className='column small-6 medium-6 large-6'>
+                        <div className='column small-12 medium-6 large-6'>
                             <div>
                                 <iframe
                                     width="100%"
@@ -54,7 +54,7 @@ class Start extends React.Component {
                                     allowFullScreen/>
                             </div>
                         </div>
-                        <div className='column small-6 medium-6 large-6'>
+                        <div className='column small-12 medium-6 large-6'>
                             <p className='landing-start-block-title-text'>Пишите, фотографируйте, комментируйте и получайте
                                 <span
                                     data-tip='Токены, которыми вознаграждаются посты, можно перевести в любую мировую валюту.'> вознаграждение</span><ReactTooltip type='light' effect="solid" /> за любое действие</p>

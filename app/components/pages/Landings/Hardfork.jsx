@@ -189,7 +189,7 @@ class Hardfork extends React.Component {
                             <h2>Когда произойдет хардфорк?</h2>
                             <hr/>
                         </div>
-                        <div className="column large-12 medium-12 small-1">
+                        <div className="column large-12 medium-12 small-12">
                             <p className='text-block-left'><Link className="link" to="/golosio/@golosio/otvety-golos-io-kak-stat-delegatom">Принятие хардфорка произойдет после согласования 17 из 21 делегата</Link> всех нововведений. Сам программный код хардфорка полностью готов к запуску.</p>
                         </div>
                     </div>

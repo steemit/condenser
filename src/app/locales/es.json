@@ -535,13 +535,13 @@
             "Después de imprimir, escribe tu nombre de usuario"
     },
     "converttosteem_jsx": {
+        "convert_to_LIQUID_TOKEN": "Convertir a %(LIQUID_TOKEN_UPPERCASE)s",
+        "convert_warning":
+            "Advertencia: la herramienta de conversión %(DEBT_TOKEN)s a %(LIQUID_TOKEN_UPPERCASE)s es una función avanzada para el usuario. Para utilizarlo correctamente, debe comprender los mercados, la volatilidad y el riesgo, así como el efecto de los precios de los testigos en el cálculo",
         "your_existing_DEBT_TOKEN_are_liquid_and_transferable":
-            "La cantidad de %(DEBT_TOKEN)s son líquidos y transferibles. Si lo deseas también puedes comprar o vender %(DEBT_TOKEN)s directamente en esta página en el %(link)s o transferir a un mercado externo",
-        "this_is_a_price_feed_conversion":
-            "Esto es la conversión de precio. Los 3.5 días de retraso son necesarios para prevenir el abuso con las medias del precio",
-        "convert_to_LIQUID_TOKEN": "Convertir a %(LIQUID_TOKEN)s",
+            "Sus tokens %(DEBT_TOKEN)s existentes son líquidos y transferibles. En lugar de utilizar la herramienta de conversión, los tokens %(DEBT_TOKEN)s se pueden intercambiar por %(LIQUID_TOKEN_UPPERCASE)s directamente en este sitio bajo %(link)s. También se pueden comercializar utilizando los enlaces %(link2)s, así como a través de un intercambio externo",
         "DEBT_TOKEN_will_be_unavailable":
-            "Esta acción tardará 3.5 días en procesarse y no puede ser cancelada. Estos %(DEBT_TOKEN)s dejarán inmediatamente de estar disponibles"
+            "Si hace clic en %(button_name)s, esta acción tendrá lugar dentro de 3,5 días y no se puede cancelar. Estos tokens %(DEBT_TOKEN)s dejarán de estar disponibles inmediatamente. La demora de 3.5 días es necesaria para evitar el uso indebido del promedio de feed de precios"
     },
     "tips_js": {
         "liquid_token":

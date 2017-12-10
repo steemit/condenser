@@ -31,6 +31,9 @@ export default function resolveRoute(path)
     if (path === '/start'){
         return {page: 'Start'}
     }
+    if (path === '/hardfork'){
+        return {page: 'Hardfork'}
+    }
     if (path === '/about') {
         return {page: 'Landing'};
     }

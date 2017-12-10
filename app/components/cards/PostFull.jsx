@@ -21,6 +21,7 @@ import ShareMenu from 'app/components/elements/ShareMenu';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import Userpic from 'app/components/elements/Userpic';
 import { APP_NAME, APP_ICON, APP_NAME_LATIN, SEO_TITLE } from 'app/client_config';
+import { LIQUID_TICKER } from 'app/client_config';
 import { isPostVisited, visitPost } from 'app/utils/helpers';
 import tt from 'counterpart';
 
@@ -200,7 +201,21 @@ class PostFull extends React.Component {
         this.props.showExplorePost(permlink)
     };
 
-    render() {
+    showTransfer = () => {
+      const post_content = this.props.cont.get(this.props.post);
+      const content = post_content.toJS();
+      const {author} = content;
+      const asset = LIQUID_TICKER;
+      const transferType = 'Transfer to Account';
+
+      this.props.showTransfer({
+        to: author,
+        asset,
+        transferType
+      });
+    };
+
+  render() {
         const {props: {username, post, aiPosts}, state: {PostFullReplyEditor, PostFullEditEditor, formId, showReply, showEdit},
             onShowReply, onShowEdit, onDeletePost} = this
         const post_content = this.props.cont.get(this.props.post);
@@ -302,6 +317,7 @@ class PostFull extends React.Component {
         const showPromote = username && post_content.get('last_payout') === '1970-01-01T00:00:00' && post_content.get('depth') == 0 // TODO: audit after HF17. #1259
         const showReplyOption = post_content.get('depth') < 6
         const showEditOption = username === author
+        const showDonate = Boolean(username && (username !== author))
         const showDeleteOption = username === author && post_content.get('children') === 0 && content.stats.netVoteSign <= 0
 
         const authorRepLog10 = repLog10(content.author_reputation)
@@ -330,6 +346,7 @@ class PostFull extends React.Component {
                 }
 
                 {showPromote && <button className="Promote__button float-right button hollow tiny" onClick={this.showPromotePost}>{tt('g.promote')}</button>}
+                {showDonate && <button className="Donate__button float-right button hollow tiny" onClick={this.showTransfer}>Donate</button>}
                 <TagList post={content} horizontal />
                 <div className="PostFull__footer row">
                     <div className="column">
@@ -393,6 +410,10 @@ export default connect(
         showExplorePost: (permlink) => {
             dispatch({type: 'global/SHOW_DIALOG', payload: {name: 'explorePost', params: {permlink}}});
         },
+        showTransfer: (transferDefaults) => {
+           dispatch(user.actions.setTransferDefaults(transferDefaults))
+           dispatch(user.actions.showTransfer())
+      },
     })
 )(PostFull)
 

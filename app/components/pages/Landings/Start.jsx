@@ -1,7 +1,7 @@
 import React from 'react';
-import Icon from '../elements/Icon'
+import Icon from '../../elements/Icon'
 import ReactTooltip from 'react-tooltip'
-import CTABlock from '../elements/CTA/ctaBlock'
+import CTABlock from '../../elements/CTA/ctaBlock'
 
 class Start extends React.Component {
 
@@ -107,7 +107,6 @@ class Start extends React.Component {
                                 <Icon name='team' size='10x'/>
                                 <h5>Социальная значимость</h5>
                                 <p className='landing-start-block-icon-text'>Наше сообщество ценит мнения, истории и творческий контент.</p>
-
                             </div>
                             <div className='column large-3 medium-3 small-3'>
                                 <Icon name='money' size='10x'/>

@@ -95,7 +95,7 @@ class PromotePost extends Component {
                         </p>
                         <hr />
                         <div className="row">
-                            <div className="column small-5">
+                            <div className="column small-7 medium-5 large-4">
                                 <label>{tt('g.amount')}</label>
                                 <div className="input-group">
                                     <input

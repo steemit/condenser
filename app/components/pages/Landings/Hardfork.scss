@@ -59,11 +59,12 @@
         height:100%;
         width:100%;
         p{
-            width: 80%;
+            width: 75%;
             margin-top: 0rem;
             font-size: 1rem;
             padding-top: 25%;
             padding-left: 18%;
+            line-height: 1.3;
         }
     }
     .paragraph-block{
@@ -122,6 +123,17 @@
     }
 }
 
+@media only screen and (max-width: 1200px) {
+    .landing-block{
+        .figure {
+            p{
+                font-size: 0.8rem;
+                padding-top: 30%;
+                padding-left: 18%;
+            }
+        }
+    }
+}
 
 @media only screen and (max-width: 768px) {
     .landing-hardfork{
@@ -187,7 +199,7 @@
             width:100%;
             p{
                 font-size: 1rem;
-                padding-top: 20%;
+                padding-top: 30%;
                 padding-left: 18%;
             }
         }

@@ -180,7 +180,7 @@ class Hardfork extends React.Component {
                     </div>
                     <div className="row">
                             <div className='column large-12 medium-12 small-12'>
-                                <p className='text-block-bottom'><b>Таблицу с голосованием делегатов по каждому нововведению можно увидеть <a href='https://docs.google.com/spreadsheets/d/1wNUfdGRCtnosNamtD159Qwsik3_DZ8fv8jbguu1zSg4/edit'>здесь</a></b></p>
+                                <p className='text-block-bottom'><b>Таблицу с голосованием делегатов по каждому нововведению можно увидеть <a href='https://docs.google.com/spreadsheets/d/1BF5XiPG-PDemntuyVVAbfbaoEfa9N0IXFl6z0HjrsOY/edit#gid=0'>здесь</a></b></p>
                             </div>
                         </div>
                 </div>
@@ -191,7 +191,7 @@ class Hardfork extends React.Component {
                             <hr/>
                         </div>
                         <div className="column large-12 medium-12 small-12">
-                            <p className='text-block-left'><a href="https://docs.google.com/spreadsheets/d/1BF5XiPG-PDemntuyVVAbfbaoEfa9N0IXFl6z0HjrsOY/edit#gid=0">Принятие хардфорка произойдет после согласования 17 из 21 делегата</a> всех нововведений. Сам программный код хардфорка полностью готов к запуску.</p>
+                            <p className='text-block-left'>Принятие хардфорка произойдет после согласования 17 из 21 <a href="/golosio/@golosio/otvety-golos-io-kak-stat-delegatom">делегата</a> всех нововведений. Сам программный код хардфорка полностью готов к запуску.</p>
                         </div>
                     </div>
                 </div>

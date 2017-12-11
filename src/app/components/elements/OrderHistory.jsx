@@ -1,23 +1,26 @@
-import React from "react";
-import HistoryRow from "./OrderhistoryRow";
+import React from 'react';
+import HistoryRow from './OrderhistoryRow';
 import tt from 'counterpart';
-import { DEBT_TOKEN_SHORT, LIQUID_TOKEN, CURRENCY_SIGN } from 'app/client_config';
+import {
+    DEBT_TOKEN_SHORT,
+    LIQUID_TOKEN,
+    CURRENCY_SIGN,
+} from 'app/client_config';
 
 export default class OrderHistory extends React.Component {
-
     constructor() {
         super();
 
         this.state = {
             historyIndex: 0,
-            animate: false
-        }
+            animate: false,
+        };
     }
 
     componentDidMount() {
         setTimeout(() => {
             this.setState({
-            animate: true
+                animate: true,
             });
         }, 2000);
     }
@@ -27,28 +30,37 @@ export default class OrderHistory extends React.Component {
             return null;
         }
 
-        let {historyIndex} = this.state;
+        let { historyIndex } = this.state;
 
-        return history.map((order, index) => {
-            if (index >= historyIndex && index < (historyIndex + 10)) {
-                return (
-                    <HistoryRow
-                        key={order.date.getTime() + order.getStringPrice() + order.getStringSBD()}
-                        index={index}
-                        order={order}
-                        animate={this.state.animate}
-                    />
-                );
-            }
-        }).filter(a => {
-            return !!a;
-        });
+        return history
+            .map((order, index) => {
+                if (index >= historyIndex && index < historyIndex + 10) {
+                    return (
+                        <HistoryRow
+                            key={
+                                order.date.getTime() +
+                                order.getStringPrice() +
+                                order.getStringSBD()
+                            }
+                            index={index}
+                            order={order}
+                            animate={this.state.animate}
+                        />
+                    );
+                }
+            })
+            .filter(a => {
+                return !!a;
+            });
     }
 
     _setHistoryPage(back) {
         let newState = {};
         const newIndex = this.state.historyIndex + (back ? 10 : -10);
-        newState.historyIndex = Math.min(Math.max(0, newIndex), this.props.history.length - 10);
+        newState.historyIndex = Math.min(
+            Math.max(0, newIndex),
+            this.props.history.length - 10
+        );
 
         // Disable animations while paging
         if (newIndex !== this.state.historyIndex) {
@@ -56,13 +68,13 @@ export default class OrderHistory extends React.Component {
         }
         // Reenable animatons after paging complete
         this.setState(newState, () => {
-            this.setState({animate: true})
+            this.setState({ animate: true });
         });
     }
 
     render() {
-        const {history} = this.props;
-        const {historyIndex} = this.state;
+        const { history } = this.props;
+        const { historyIndex } = this.state;
 
         return (
             <section>
@@ -75,28 +87,44 @@ export default class OrderHistory extends React.Component {
                             <th>{`${DEBT_TOKEN_SHORT} (${CURRENCY_SIGN})`}</th>
                         </tr>
                     </thead>
-                    <tbody>
-                            {this.renderHistoryRows(history)}
-                    </tbody>
+                    <tbody>{this.renderHistoryRows(history)}</tbody>
                 </table>
 
                 <nav>
-                  <ul className="pager">
-                    <li>
-                        <div className={"button tiny hollow float-left " + (historyIndex === 0 ? " disabled" : "")}  onClick={this._setHistoryPage.bind(this, false)} aria-label="Previous">
-                            <span aria-hidden="true">&larr; {tt('g.newer')}</span>
-                        </div>
-                    </li>
-                    <li>
-                        <div className={"button tiny hollow float-right " + (historyIndex >= (history.length - 10) ? " disabled" : "")}  onClick={this._setHistoryPage.bind(this, true)} aria-label="Next">
-                            <span aria-hidden="true">{tt('g.older')} &rarr;</span>
-                        </div>
-                    </li>
-                  </ul>
+                    <ul className="pager">
+                        <li>
+                            <div
+                                className={
+                                    'button tiny hollow float-left ' +
+                                    (historyIndex === 0 ? ' disabled' : '')
+                                }
+                                onClick={this._setHistoryPage.bind(this, false)}
+                                aria-label="Previous"
+                            >
+                                <span aria-hidden="true">
+                                    &larr; {tt('g.newer')}
+                                </span>
+                            </div>
+                        </li>
+                        <li>
+                            <div
+                                className={
+                                    'button tiny hollow float-right ' +
+                                    (historyIndex >= history.length - 10
+                                        ? ' disabled'
+                                        : '')
+                                }
+                                onClick={this._setHistoryPage.bind(this, true)}
+                                aria-label="Next"
+                            >
+                                <span aria-hidden="true">
+                                    {tt('g.older')} &rarr;
+                                </span>
+                            </div>
+                        </li>
+                    </ul>
                 </nav>
             </section>
-
-        )
+        );
     }
-
 }

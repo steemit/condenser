@@ -1,9 +1,9 @@
 import React from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import Reveal from 'react-foundation-components/lib/global/reveal';
-import {NotificationStack} from 'react-notification';
-import {OrderedSet} from 'immutable';
+import { NotificationStack } from 'react-notification';
+import { OrderedSet } from 'immutable';
 
 import * as userActions from 'app/redux/UserReducer';
 import * as appActions from 'app/redux/AppReducer';
@@ -42,40 +42,66 @@ class Modals extends React.Component {
 
     render() {
         const {
-            show_login_modal, show_confirm_modal, show_transfer_modal, show_powerdown_modal, show_signup_modal,
-            hideLogin, hideTransfer, hidePowerdown, hideConfirm, hideSignUp, show_terms_modal,
-            notifications, removeNotification, hidePromotePost, show_promote_post_modal
+            show_login_modal,
+            show_confirm_modal,
+            show_transfer_modal,
+            show_powerdown_modal,
+            show_signup_modal,
+            hideLogin,
+            hideTransfer,
+            hidePowerdown,
+            hideConfirm,
+            hideSignUp,
+            show_terms_modal,
+            notifications,
+            removeNotification,
+            hidePromotePost,
+            show_promote_post_modal,
         } = this.props;
 
-        const notifications_array = notifications ? notifications.toArray().map(n => {
-            n.onClick = () => removeNotification(n.key);
-            return n;
-        }) : [];
+        const notifications_array = notifications
+            ? notifications.toArray().map(n => {
+                  n.onClick = () => removeNotification(n.key);
+                  return n;
+              })
+            : [];
 
         return (
             <div>
-                {show_login_modal && <Reveal onHide={hideLogin} show={show_login_modal}>
-                    <LoginForm onCancel={hideLogin} />
-                </Reveal>}
-                {show_confirm_modal && <Reveal onHide={hideConfirm} show={show_confirm_modal}>
-                    <CloseButton onClick={hideConfirm} />
-                    <ConfirmTransactionForm onCancel={hideConfirm} />
-                </Reveal>}
-                {show_transfer_modal && <Reveal onHide={hideTransfer} show={show_transfer_modal}>
-                    <CloseButton onClick={hideTransfer} />
-                    <Transfer />
-                </Reveal>}
-                {show_powerdown_modal && <Reveal onHide={hidePowerdown} show={show_powerdown_modal}>
-                    <CloseButton onClick={hidePowerdown} />
-                    <Powerdown />
-                </Reveal>}
-                {show_signup_modal && <Reveal onHide={hideSignUp} show={show_signup_modal}>
-                    <CloseButton onClick={hideSignUp} />
-                    <SignUp />
-                </Reveal>}
-                {show_terms_modal && <Reveal show={show_terms_modal}>
-                    <TermsAgree onCancel={hideLogin} />
-                </Reveal>}
+                {show_login_modal && (
+                    <Reveal onHide={hideLogin} show={show_login_modal}>
+                        <LoginForm onCancel={hideLogin} />
+                    </Reveal>
+                )}
+                {show_confirm_modal && (
+                    <Reveal onHide={hideConfirm} show={show_confirm_modal}>
+                        <CloseButton onClick={hideConfirm} />
+                        <ConfirmTransactionForm onCancel={hideConfirm} />
+                    </Reveal>
+                )}
+                {show_transfer_modal && (
+                    <Reveal onHide={hideTransfer} show={show_transfer_modal}>
+                        <CloseButton onClick={hideTransfer} />
+                        <Transfer />
+                    </Reveal>
+                )}
+                {show_powerdown_modal && (
+                    <Reveal onHide={hidePowerdown} show={show_powerdown_modal}>
+                        <CloseButton onClick={hidePowerdown} />
+                        <Powerdown />
+                    </Reveal>
+                )}
+                {show_signup_modal && (
+                    <Reveal onHide={hideSignUp} show={show_signup_modal}>
+                        <CloseButton onClick={hideSignUp} />
+                        <SignUp />
+                    </Reveal>
+                )}
+                {show_terms_modal && (
+                    <Reveal show={show_terms_modal}>
+                        <TermsAgree onCancel={hideLogin} />
+                    </Reveal>
+                )}
                 <NotificationStack
                     style={false}
                     notifications={notifications_array}
@@ -96,35 +122,36 @@ export default connect(
             show_promote_post_modal: state.user.get('show_promote_post_modal'),
             show_signup_modal: state.user.get('show_signup_modal'),
             notifications: state.app.get('notifications'),
-            show_terms_modal: state.user.get('show_terms_modal')
-        }
+            show_terms_modal: state.user.get('show_terms_modal'),
+        };
     },
     dispatch => ({
         hideLogin: e => {
             if (e) e.preventDefault();
-            dispatch(userActions.hideLogin())
+            dispatch(userActions.hideLogin());
         },
         hideConfirm: e => {
             if (e) e.preventDefault();
-            dispatch(transactionActions.hideConfirm())
+            dispatch(transactionActions.hideConfirm());
         },
         hideTransfer: e => {
             if (e) e.preventDefault();
-            dispatch(userActions.hideTransfer())
+            dispatch(userActions.hideTransfer());
         },
         hidePowerdown: e => {
             if (e) e.preventDefault();
-            dispatch(userActions.hidePowerdown())
+            dispatch(userActions.hidePowerdown());
         },
         hidePromotePost: e => {
             if (e) e.preventDefault();
-            dispatch(userActions.hidePromotePost())
+            dispatch(userActions.hidePromotePost());
         },
         hideSignUp: e => {
             if (e) e.preventDefault();
-            dispatch(userActions.hideSignUp())
+            dispatch(userActions.hideSignUp());
         },
         // example: addNotification: ({key, message}) => dispatch({type: 'ADD_NOTIFICATION', payload: {key, message}}),
-        removeNotification: (key) => dispatch(appActions.removeNotification({key}))
+        removeNotification: key =>
+            dispatch(appActions.removeNotification({ key })),
     })
-)(Modals)
+)(Modals);

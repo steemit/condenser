@@ -1,8 +1,8 @@
 /*global describe, it, before, beforeEach, after, afterEach */
-import chai, {expect} from 'chai';
+import chai, { expect } from 'chai';
 import dirtyChai from 'dirty-chai';
 import chaiImmutable from 'chai-immutable';
-import {Map} from 'immutable';
+import { Map } from 'immutable';
 import reducer from '../AppReducer';
 chai.use(dirtyChai);
 chai.use(chaiImmutable);
@@ -10,28 +10,25 @@ chai.use(chaiImmutable);
 const defaultState = Map({
     effects: Map({}),
     loading: false,
-    error: ''
+    error: '',
 });
 
 const effectTriggered = {
     type: 'EFFECT_TRIGGERED',
     effectId: 1,
     effect: {
-        CALL: true
-    }
+        CALL: true,
+    },
 };
 
 const effectResolved = {
     type: 'EFFECT_RESOLVED',
-    effectId: '1'
+    effectId: '1',
 };
-
 
 describe('AppReducer', () => {
     it('should return default state', () => {
-        expect(
-            reducer(undefined, {})
-        ).to.equal(defaultState);
+        expect(reducer(undefined, {})).to.equal(defaultState);
     });
 
     it('triggered effect should be added to effects and turn on loading', () => {
@@ -42,9 +39,9 @@ describe('AppReducer', () => {
 
     it('resolved effect should be added to effects and turn on loading', () => {
         const triggeredState = Map({
-            effects: Map({['1']: Date.now()}),
+            effects: Map({ ['1']: Date.now() }),
             loading: true,
-            error: ''
+            error: '',
         });
         const state = reducer(triggeredState, effectResolved);
         expect(state.get('effects').size).to.equal(0);

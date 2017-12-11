@@ -4,12 +4,13 @@ import tt from 'counterpart';
 
 class Login extends React.Component {
     render() {
-        if (!process.env.BROWSER) { // don't render this page on the server
-            return <div className="row">
-                <div className="column">
-                    {tt('g.loading')}..
+        if (!process.env.BROWSER) {
+            // don't render this page on the server
+            return (
+                <div className="row">
+                    <div className="column">{tt('g.loading')}..</div>
                 </div>
-            </div>;
+            );
         }
         return (
             <div className="Login row">
@@ -23,5 +24,5 @@ class Login extends React.Component {
 
 module.exports = {
     path: 'login.html',
-    component: Login
+    component: Login,
 };

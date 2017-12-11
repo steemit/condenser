@@ -22,7 +22,7 @@
     }
     p{
         margin-top: 4rem;
-        font-size: 25pt;
+        font-size: 2.1rem;
         line-height: 1.1;
         font-weight: 300;
     }
@@ -37,7 +37,7 @@
     .icon-block-text{
         margin-top: 2rem;
         text-align: left;
-        font-size: 18pt;
+        font-size: 1.2rem;
     }
     .text-block-main{
         font-size: 24pt;
@@ -51,16 +51,19 @@
         text-align: left;
         margin-top: 3rem;
     }
-    
+    .text-block-info{
+        margin-top: 2rem;
+    }
     .figure {
         background: url('data:image/svg+xml;utf8, <svg id="Слой_1" data-name="Слой 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340.88 305.21"><defs><style>.cls-1{fill:none;stroke:#0092e1;stroke-miterlimit:10;}.cls-2{fill:#fff;}.cls-3{fill:#0092e1;}.cls-4{fill:red;}</style></defs><title>figure</title><path class="cls-1" d="M376.28,342.05H123.72c-12,0-21.72-7.49-21.72-16.74L76.5,72,376.28,91.6c12,0,21.72,7.49,21.72,16.74v217C398,334.56,388.27,342.05,376.28,342.05Z" transform="translate(-57.62 -37.34)"/><path class="cls-2" d="M88.07,86.23c12.38-10.61,19.46-1.77,19.46-1.77,3.54-15.92-14.15-10.61-14.15-10.61,7.07-17.7-.89-31-.89-31C87.18,80,58.87,62.35,58.87,62.35c-2.65,8,16.81,13.27,16.81,13.27C70.37,96.85,59.76,89.77,59.76,89.77,76,102.5,88.07,86.23,88.07,86.23Z" transform="translate(-57.62 -37.34)"/><path class="cls-2" d="M88.07,50.84A11.5,11.5,0,1,0,72,61.38a15.75,15.75,0,0,1-4.25,2.73s4.32,1.36,11-2h0A11.51,11.51,0,0,0,88.07,50.84Z" transform="translate(-57.62 -37.34)"/><path class="cls-3" d="M87.07,84.23c12.38-10.61,19.46-1.77,19.46-1.77,3.54-15.92-14.15-10.61-14.15-10.61,7.07-17.7-.89-31-.89-31C86.18,78,57.87,60.35,57.87,60.35c-2.65,8,16.81,13.27,16.81,13.27C69.37,94.85,58.76,87.77,58.76,87.77,75,100.5,87.07,84.23,87.07,84.23Z" transform="translate(-57.62 -37.34)"/><path class="cls-4" d="M87.07,48.84A11.5,11.5,0,1,0,71,59.38a15.75,15.75,0,0,1-4.25,2.73s4.32,1.36,11-2h0A11.51,11.51,0,0,0,87.07,48.84Z" transform="translate(-57.62 -37.34)"/></svg>') no-repeat;    
         height:100%;
         width:100%;
-        margin-top: 2rem;
         p{
-            font-size: 18pt;
-            padding-top: 20%;
-            padding-left: 15%;
+            width: 80%;
+            margin-top: 0rem;
+            font-size: 1rem;
+            padding-top: 25%;
+            padding-left: 18%;
         }
     }
     .paragraph-block{
@@ -118,6 +121,7 @@
         color: #0097e8;
     }
 }
+
 
 @media only screen and (max-width: 768px) {
     .landing-hardfork{
@@ -181,11 +185,10 @@
             background: url('data:image/svg+xml;utf8, <svg id="Слой_1" data-name="Слой 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340.88 305.21"><defs><style>.cls-1{fill:none;stroke:#0092e1;stroke-miterlimit:10;}.cls-2{fill:#fff;}.cls-3{fill:#0092e1;}.cls-4{fill:red;}</style></defs><title>figure</title><path class="cls-1" d="M376.28,342.05H123.72c-12,0-21.72-7.49-21.72-16.74L76.5,72,376.28,91.6c12,0,21.72,7.49,21.72,16.74v217C398,334.56,388.27,342.05,376.28,342.05Z" transform="translate(-57.62 -37.34)"/><path class="cls-2" d="M88.07,86.23c12.38-10.61,19.46-1.77,19.46-1.77,3.54-15.92-14.15-10.61-14.15-10.61,7.07-17.7-.89-31-.89-31C87.18,80,58.87,62.35,58.87,62.35c-2.65,8,16.81,13.27,16.81,13.27C70.37,96.85,59.76,89.77,59.76,89.77,76,102.5,88.07,86.23,88.07,86.23Z" transform="translate(-57.62 -37.34)"/><path class="cls-2" d="M88.07,50.84A11.5,11.5,0,1,0,72,61.38a15.75,15.75,0,0,1-4.25,2.73s4.32,1.36,11-2h0A11.51,11.51,0,0,0,88.07,50.84Z" transform="translate(-57.62 -37.34)"/><path class="cls-3" d="M87.07,84.23c12.38-10.61,19.46-1.77,19.46-1.77,3.54-15.92-14.15-10.61-14.15-10.61,7.07-17.7-.89-31-.89-31C86.18,78,57.87,60.35,57.87,60.35c-2.65,8,16.81,13.27,16.81,13.27C69.37,94.85,58.76,87.77,58.76,87.77,75,100.5,87.07,84.23,87.07,84.23Z" transform="translate(-57.62 -37.34)"/><path class="cls-4" d="M87.07,48.84A11.5,11.5,0,1,0,71,59.38a15.75,15.75,0,0,1-4.25,2.73s4.32,1.36,11-2h0A11.51,11.51,0,0,0,87.07,48.84Z" transform="translate(-57.62 -37.34)"/></svg>') no-repeat;    
             height:100%;
             width:100%;
-            margin-top: 2rem;
             p{
-                font-size: 18pt;
+                font-size: 1rem;
                 padding-top: 20%;
-                padding-left: 15%;
+                padding-left: 18%;
             }
         }
         .paragraph-block{

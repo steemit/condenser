@@ -72,7 +72,7 @@ class Hardfork extends React.Component {
                         <div className='icon-block column large-3 medium-6 small-12'>
                             <Icon name='hf/hf5' size='5x'/>
                             <p className='icon-block-text'>
-                                Отключение майнинга, который утратил свою актуальность
+                                Разделение пользовательского контента по естественным языкам
                             </p>
                         </div>
                         <div className='icon-block column large-3 medium-6 small-12'>
@@ -168,13 +168,13 @@ class Hardfork extends React.Component {
                         <div className='icon-block column large-3 medium-6 small-12'>
                             <Icon name='hf/hf19' size='5x'/>
                             <p className='icon-block-text'>
-                                Изменение лицензии на MIT
+                                Удалена возможность изменения ключей через механизм хардфорка
                             </p>
                         </div>
                         <div className='icon-block column large-3 medium-6 small-12'>
                             <Icon name='hf/hf20' size='5x'/>
                             <p className='icon-block-text'>
-                                Увеличен лимит на количество постов с четырех до восьми в сутки
+                                Увеличен лимит на количество постов
                             </p>
                         </div>
                     </div>
@@ -250,7 +250,7 @@ class Hardfork extends React.Component {
                     </div>
                     <div className='row'>
                         <div>
-                            <p>Подробно узнать о составе хардфорка можно <Link className="link" to="/ru--golos/@goloscore/podrobnyi-otchet-o-sostave-khf-0-2-i-vazhnye-obyavleniya">здесь</Link>.</p>
+                            <p>Подробно узнать о составе хардфорка можно <Link className="link" to="/ru--golos/@goloscore/finalnoe-soglasovanie-funkcionala-khf-0-2-11-12-2017">здесь</Link>.</p>
                             <p>Разобраться с ролью делегата и тем, как им стать, можно прочитав <Link className="link" to="/golosio/@golosio/otvety-golos-io-kak-stat-delegatom">этот текст</Link>.</p>
                             <p>Понять, почему мы так ждем хардфорк можно <Link className="link" to=" /golosio/@golosio/chto-takoe-khardfork-golosa-i-pochemu-eto-vazhno">тут</Link>.</p>
                         </div>

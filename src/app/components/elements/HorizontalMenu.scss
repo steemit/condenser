@@ -17,6 +17,11 @@
   > li:last-child > a {
     padding-right: 0;
   }
+  .input-group-button {
+    z-index: 1;
+    transform: scaleX(-1);
+    padding-left: 10px;
+  }
 }
 
 

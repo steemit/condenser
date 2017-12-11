@@ -308,8 +308,39 @@ class Header extends React.Component {
                                     />
                                 )}
                                 <HorizontalMenu
+                                    className="show-for-medium"
                                     items={sort_order_menu_horizontal}
                                 />
+                                <li
+                                    className={
+                                        'hide-for-small-only Header__search-input'
+                                    }
+                                >
+                                    <form
+                                        className="column"
+                                        action="/static/search.html"
+                                        method="GET"
+                                    >
+                                        <div className="input-group">
+                                            <div className="input-group-button">
+                                                <button
+                                                    href="/static/search.html"
+                                                    type="submit"
+                                                    title={tt('g.search')}
+                                                >
+                                                    <Icon name="search" />
+                                                </button>
+                                            </div>
+                                            <input
+                                                type="text"
+                                                placeholder="search"
+                                                className="input-group-field"
+                                                name="q"
+                                                autoComplete="off"
+                                            />
+                                        </div>
+                                    </form>
+                                </li>
                             </ul>
                         </div>
                         <div className="columns shrink">

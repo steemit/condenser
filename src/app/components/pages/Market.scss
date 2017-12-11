@@ -77,6 +77,9 @@ input.sell-color:hover {
 
   input.price_warning {
     background: rgba(255, 153, 0, 0.13);
+    @include themify($themes) {
+      background: themed('inputPriceWarning');
+    }
   }
 }
 

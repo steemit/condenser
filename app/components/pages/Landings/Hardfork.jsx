@@ -59,7 +59,7 @@ class Hardfork extends React.Component {
                             <Icon name='hf/hf3' size='5x'/>
                             <p className='icon-block-text'>
                                 Владельцы веб-приложений могут устанавливать процент, который они будут получать
-                                от каждого вознаграждения, пользователей
+                                от каждого вознаграждения пользователей
                             </p>
                         </div>
                         <div className='icon-block column large-3 medium-6 small-12'>
@@ -107,7 +107,7 @@ class Hardfork extends React.Component {
                         <div className='icon-block column large-3 medium-6 small-12'>
                             <Icon name='hf/hf10' size='5x'/>
                             <p className='icon-block-text'>
-                                Улучшен плагин статистики, теперь любой желающий, может получать развернутую
+                                Улучшен плагин статистики, теперь любой желающий может получать развернутую
                                 информацию по транзакциям в блокчейне
                             </p>
                         </div>

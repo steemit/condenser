@@ -24,10 +24,12 @@ class Hardfork extends React.Component {
                             <b>к существенному улучшению блог-платформы</b><br></br>
                                 благодаря новому функционалу «Голоса».</p>
                         </div>
-                        <div className="figure column large-4 medium-4 small-12">
-                            <p className=''><b>Хардфорк</b> — это изменение программного кода блокчейна (изменение поведения
+                        <div className="text-block-info column large-4 medium-4 small-12">
+                            <div className='figure figure-small'>
+                            <p ><b>Хардфорк</b> — это изменение программного кода блокчейна (изменение поведения
                                 бизнес-логики). Подготовка хардфорка заняла почти полгода, ей занималась команда <Link className="link" to="/@goloscore" ><b>Golos•Core</b></Link>
                             </p>
+                            </div>
                         </div>
                     </div>
                 </div>

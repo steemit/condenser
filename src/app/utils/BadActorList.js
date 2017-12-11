@@ -11,6 +11,7 @@ bittre
 bittrec
 bittres
 bittrex.com
+bittreex
 bittrexe
 bittrexx
 bittrez
@@ -27,6 +28,7 @@ bttrex
 bitttex
 ittrex
 bittrex-deposit
+openledgerdex
 blockrades
 blocktraades
 blocktradse
@@ -110,6 +112,9 @@ bloocktrades
 bloctrades
 blocktradess
 blocktrade
-`.trim().split('\n');
+blocktraders
+`
+    .trim()
+    .split('\n');
 
 export default list;

@@ -1,4 +1,4 @@
-import {Map, OrderedMap} from 'immutable';
+import { Map, OrderedMap } from 'immutable';
 import tt from 'counterpart';
 
 // Action constants
@@ -29,14 +29,14 @@ const defaultState = Map({
         reply: 0,
         account_update: 0,
         message: 0,
-        receive: 0
+        receive: 0,
     }),
     user_preferences: Map({
         locale: null,
         nsfwPref: 'warn',
         nightmode: false,
         blogmode: false,
-        currency: 'USD'
+        currency: 'USD',
     }),
 });
 
@@ -58,14 +58,16 @@ export default function reducer(state = defaultState, action) {
             const n = {
                 action: tt('g.dismiss'),
                 dismissAfter: 10000,
-                ...action.payload
+                ...action.payload,
             };
-            return state.update('notifications', (s) => {
-                return s ? s.set(n.key, n) : OrderedMap({[n.key]: n});
+            return state.update('notifications', s => {
+                return s ? s.set(n.key, n) : OrderedMap({ [n.key]: n });
             });
         }
         case REMOVE_NOTIFICATION:
-            return state.update('notifications', s => s.delete(action.payload.key));
+            return state.update('notifications', s =>
+                s.delete(action.payload.key)
+            );
         case UPDATE_NOTIFICOUNTERS: {
             if (action.payload) {
                 const nc = action.payload;
@@ -80,15 +82,21 @@ export default function reducer(state = defaultState, action) {
         case SET_USER_PREFERENCES:
             return state.set('user_preferences', Map(action.payload));
         case TOGGLE_NIGHTMODE:
-            return state.setIn(['user_preferences', 'nightmode'], !state.getIn(['user_preferences', 'nightmode']));
+            return state.setIn(
+                ['user_preferences', 'nightmode'],
+                !state.getIn(['user_preferences', 'nightmode'])
+            );
         case TOGGLE_BLOGMODE:
-            return state.setIn(['user_preferences', 'blogmode'], !state.getIn(['user_preferences', 'blogmode']));
+            return state.setIn(
+                ['user_preferences', 'blogmode'],
+                !state.getIn(['user_preferences', 'blogmode'])
+            );
         default:
             return state;
     }
 }
 
-export const steemApiError = (error) => ({
+export const steemApiError = error => ({
     type: STEEM_API_ERROR,
     error,
 });
@@ -101,22 +109,22 @@ export const fetchDataEnd = () => ({
     type: FETCH_DATA_END,
 });
 
-export const addNotification = (payload) => ({
+export const addNotification = payload => ({
     type: ADD_NOTIFICATION,
     payload,
 });
 
-export const removeNotification = (payload) => ({
+export const removeNotification = payload => ({
     type: REMOVE_NOTIFICATION,
     payload,
 });
 
-export const updateNotificounters = (payload) => ({
+export const updateNotificounters = payload => ({
     type: UPDATE_NOTIFICOUNTERS,
     payload,
 });
 
-export const setUserPreferences = (payload) => ({
+export const setUserPreferences = payload => ({
     type: SET_USER_PREFERENCES,
     payload,
 });

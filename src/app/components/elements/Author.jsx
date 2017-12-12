@@ -10,6 +10,7 @@ import Reputation from 'app/components/elements/Reputation';
 import normalizeProfile from 'app/utils/NormalizeProfile';
 import Overlay from 'react-overlays/lib/Overlay';
 import { findDOMNode } from 'react-dom';
+import { imageProxy } from 'app/utils/ProxifyUrl';
 
 const { string, bool, number } = React.PropTypes;
 
@@ -92,17 +93,22 @@ class Author extends React.Component {
             ? normalizeProfile(this.props.account.toJS())
             : {};
 
+        const jsonld = {
+            "@context": "http://schema.org",
+            "@type": "Person",
+            "@id": "https://steemit.com/@" + author,
+            "image": imageProxy() + "u/" + author + "/avatar",
+            "name": author,
+            "url": "https://steemit.com/@" + author
+        };
+
         if (!(follow || mute) || username === author) {
             return (
-                <span
-                    className="author"
-                    itemProp="author"
-                    itemScope
-                    itemType="http://schema.org/Person"
-                >
+                <span>
+                    <script type="application/ld+json">{JSON.stringify(jsonld)}</script>
                     <strong>
                         <Link to={'/@' + author}>{author}</Link>
-                    </strong>{' '}
+                    </strong>
                     <Reputation value={authorRepLog10} />
                 </span>
             );
@@ -110,11 +116,8 @@ class Author extends React.Component {
 
         return (
             <span className="Author">
-                <span
-                    itemProp="author"
-                    itemScope
-                    itemType="http://schema.org/Person"
-                >
+                <span>
+                    <script type="application/ld+json">{JSON.stringify(jsonld)}</script>
                     <strong>
                         <Link
                             className="ptc"

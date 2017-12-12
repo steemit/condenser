@@ -1,7 +1,7 @@
 import React from 'react';
-import Icon from '../elements/Icon'
+import Icon from '../../elements/Icon'
 import ReactTooltip from 'react-tooltip'
-import CTABlock from '../elements/CTA/ctaBlock'
+import CTABlock from '../../elements/CTA/ctaBlock'
 
 class Start extends React.Component {
 
@@ -44,7 +44,7 @@ class Start extends React.Component {
                         <h2>Блог-платформа следующего поколения</h2>
                     </div>
                     <div className='row'>
-                        <div className='column small-6 medium-6 large-6'>
+                        <div className='column small-12 medium-6 large-6'>
                             <div>
                                 <iframe
                                     width="100%"
@@ -54,7 +54,7 @@ class Start extends React.Component {
                                     allowFullScreen/>
                             </div>
                         </div>
-                        <div className='column small-6 medium-6 large-6'>
+                        <div className='column small-12 medium-6 large-6'>
                             <p className='landing-start-block-title-text'>Пишите, фотографируйте, комментируйте и получайте
                                 <span
                                     data-tip='Токены, которыми вознаграждаются посты, можно перевести в любую мировую валюту.'> вознаграждение</span><ReactTooltip type='light' effect="solid" /> за любое действие</p>
@@ -103,27 +103,26 @@ class Start extends React.Component {
                     <div className='column large-12 medium-12 small-12'>
                         <div className='row'>
 
-                            <div className='column large-3 medium-3 small-3'>
+                            <div className='column large-3 medium-3 small-6'>
                                 <Icon name='team' size='10x'/>
                                 <h5>Социальная значимость</h5>
                                 <p className='landing-start-block-icon-text'>Наше сообщество ценит мнения, истории и творческий контент.</p>
-
                             </div>
-                            <div className='column large-3 medium-3 small-3'>
+                            <div className='column large-3 medium-3 small-6'>
                                 <Icon name='money' size='10x'/>
                                 <h5>Выгодно для блогинга</h5>
                                 <p className='landing-start-block-icon-text'>Мы вознаграждаем как авторов, так и
                                     читателей — тех, кто оценивает и комментирует публикации</p>
 
                             </div>
-                            <div className='column large-3 medium-3 small-3'>
+                            <div className='column large-3 medium-3 small-6'>
                                 <Icon name='rocket' size='10x'/>
                                 <h5>В интересах каждого</h5>
                                 <p className='landing-start-block-icon-text'>Писать можно обо всем на свете —
                                     расскажите о ракетостроении или выложите фотографию любимого кота</p>
 
                             </div>
-                            <div className='column large-3 medium-3 small-3'>
+                            <div className='column large-3 medium-3 small-6'>
                                     <Icon name='blockchain' size='10x'/>
                                 <h5>Инновационная модель</h5>
                                 <p className='landing-start-block-icon-text'>Golos.io работает на блокчейне, а

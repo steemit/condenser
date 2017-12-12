@@ -77,7 +77,27 @@ const icons = [
     'money',
     'team',
     'rocket',
-    'blockchain'
+    'blockchain',
+    'hf/hf1',
+    'hf/hf2',
+    'hf/hf3',
+    'hf/hf4',
+    'hf/hf5',
+    'hf/hf6',
+    'hf/hf7',
+    'hf/hf8',
+    'hf/hf9',
+    'hf/hf10',
+    'hf/hf11',
+    'hf/hf12',
+    'hf/hf13',
+    'hf/hf14',
+    'hf/hf15',
+    'hf/hf16',
+    'hf/hf17',
+    'hf/hf18',
+    'hf/hf19',
+    'hf/hf20',    
 ];
 const icons_map = {};
 for (const i of icons) icons_map[i] = require(`app/assets/icons/${i}.svg`);

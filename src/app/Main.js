@@ -12,11 +12,6 @@ import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 import * as steem from '@steemit/steem-js';
 import { determineViewMode } from 'app/utils/Links';
 
-console.log(
-    'Search for ' + '%c//Todo: for dev only! Do not merge if present!',
-    'background:red; color:yellow',
-    'in src and remove before merging'
-);
 window.onerror = error => {
     if (window.$STM_csrf) serverApiRecordEvent('client_error', error);
 };

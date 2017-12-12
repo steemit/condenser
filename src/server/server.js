@@ -270,18 +270,6 @@ if (env === 'development') {
         map: filePath => 'assets/' + filePath,
     });
     app.use(mount('/assets', proxy));
-
-    //Todo: for dev only! Do not merge if present - do we need this for prod?
-    // yo proxy
-    // run yo on port 9080
-    // like
-    // docker run -ti -p 9080:8080 steemit/yo:latest
-    const yohost = 'http://0.0.0.0:9080';
-    console.log('proxying to yo dev server at ' + yohost);
-    const yoproxy = require('koa-proxy')({
-        host: yohost,
-    });
-    app.use(mount('/yo', yoproxy));
 } else {
     app.use(
         mount(

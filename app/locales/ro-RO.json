@@ -537,7 +537,8 @@
     "feedback":"Feedback-ul",
     "wiki":"WIKI",
     "faq":"FAQ",
-    "sale_agreement": "Sale Agreement"
+    "sale_agreement": "Sale Agreement",
+    "telegram_support": "%(APP_NAME_UP)s Support"
   },
   "oauth":{
     "we_couldnt_verify_your_account_contact_us_at_SUPPORT_EMAIL":"Nu am putut verifica contul. Scrie pe e-mailul: %(SUPPORT_EMAIL)s pentru a primi mai multe informații.",

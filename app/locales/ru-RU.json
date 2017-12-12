@@ -552,7 +552,8 @@
     "feedback": "Обратная связь",
     "wiki": "Вики",
     "faq": "FAQ",
-    "sale_agreement": "Договор купли-продажи"
+    "sale_agreement": "Договор купли-продажи",
+    "telegram_support": "%(APP_NAME_UP)s Техподдержка"
   },
   "oauth": {
     "we_couldnt_verify_your_account_contact_us_at_SUPPORT_EMAIL": "Мы не смогли верифицировать учётную запись. Напишите на почту %(SUPPORT_EMAIL)s для получения дополнительной информации.",

@@ -10,7 +10,7 @@ import VerticalMenu from 'app/components/elements/VerticalMenu';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import NotifiCounter from 'app/components/elements/NotifiCounter';
 import tt from 'counterpart';
-import { DEFAULT_LANGUAGE, LANGUAGES, LOCALE_COOKIE_KEY, LIQUID_TICKER, DEBT_TICKER } from 'app/client_config';
+import { DEFAULT_LANGUAGE, LANGUAGES, LOCALE_COOKIE_KEY, LIQUID_TICKER, DEBT_TICKER, APP_NAME_UP } from 'app/client_config';
 import LocalizedCurrency from 'app/components/elements/LocalizedCurrency';
 import {vestingSteem} from 'app/utils/StateFunctions';
 import cookie from "react-cookie";
@@ -143,7 +143,7 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
       : null
     ;
     const telegramItem = !vertical ? <li className={lcn + ' wrap-telegram'}>
-    <a href="https://t.me/golos_support" target="_blank">
+    <a href="https://t.me/golos_support" title={tt("navigation.telegram_support", {APP_NAME_UP})} target="_blank">
       <Icon name="telegram" />
     </a>
   </li>

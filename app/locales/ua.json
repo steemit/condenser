@@ -537,7 +537,8 @@
     "feedback": "Зворотній зв'язок",
     "wiki": "Вікі",
     "faq": "FAQ",
-    "sale_agreement": "Договор купли-продажи"
+    "sale_agreement": "Договор купли-продажи",
+    "telegram_support": "%(APP_NAME_UP)s Техпідтримка"
   },
   "oauth": {
     "we_couldnt_verify_your_account_contact_us_at_SUPPORT_EMAIL": "Ми не змогли верифікувати обліковий запис. Напишіть на пошту %(SUPPORT_EMAIL)s для отримання додаткової інформації.",

@@ -305,7 +305,8 @@
     "feedback": "Feedback",
     "wiki": "Wiki",
     "faq": "FAQ",
-    "sale_agreement": "Sale Agreement"
+    "sale_agreement": "Sale Agreement",
+    "telegram_support": "%(APP_NAME_UP)s Support"
   },
   "main_menu": {
     "hot": "hot",

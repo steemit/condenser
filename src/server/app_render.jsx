@@ -1,24 +1,25 @@
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import Tarantool from 'db/tarantool';
-import {VIEW_MODE_WHISTLE, PARAM_VIEW_MODE} from '../shared/constants';
+import { VIEW_MODE_WHISTLE, PARAM_VIEW_MODE } from '../shared/constants';
 import ServerHTML from './server-html';
 import universalRender from '../shared/UniversalRender';
 import models from 'db/models';
 import secureRandom from 'secure-random';
 import ErrorPage from 'server/server-error';
 import fs from 'fs';
-import {determineViewMode} from "../app/utils/Links";
+import { determineViewMode } from '../app/utils/Links';
 
 const path = require('path');
 const ROOT = path.join(__dirname, '../..');
-const DB_RECONNECT_TIMEOUT = process.env.NODE_ENV === 'development' ? 1000 * 60 * 60 : 1000 * 60 * 10;
+const DB_RECONNECT_TIMEOUT =
+    process.env.NODE_ENV === 'development' ? 1000 * 60 * 60 : 1000 * 60 * 10;
 
 function getSupportedLocales() {
     const locales = [];
     const files = fs.readdirSync(path.join(ROOT, 'src/app/locales'));
     for (const filename of files) {
-        const match_res = filename.match(/(\w+)\.json?$/)
+        const match_res = filename.match(/(\w+)\.json?$/);
         if (match_res) locales.push(match_res[1]);
     }
     return locales;
@@ -34,7 +35,11 @@ async function appRender(ctx) {
             try {
                 userPreferences = JSON.parse(ctx.session.user_prefs);
             } catch (err) {
-                console.error('cannot parse user preferences:', ctx.session.uid, err);
+                console.error(
+                    'cannot parse user preferences:',
+                    ctx.session.uid,
+                    err
+                );
             }
         }
         if (!userPreferences.locale) {
@@ -56,24 +61,46 @@ async function appRender(ctx) {
             account: ctx.session.a,
             config: $STM_Config,
             uid: ctx.session.uid,
-            login_challenge
+            login_challenge,
         };
         const user_id = ctx.session.user;
         if (user_id) {
             let user = null;
-            if (appRender.dbStatus.ok || (new Date() - appRender.dbStatus.lastAttempt) > DB_RECONNECT_TIMEOUT) {
+            if (
+                appRender.dbStatus.ok ||
+                new Date() - appRender.dbStatus.lastAttempt >
+                    DB_RECONNECT_TIMEOUT
+            ) {
                 try {
                     user = await models.User.findOne({
-                        attributes: ['name', 'email', 'picture_small', 'account_status'],
-                        where: {id: user_id},
-                        include: [{model: models.Account, attributes: ['name', 'ignored', 'created', 'owner_key']}],
+                        attributes: [
+                            'name',
+                            'email',
+                            'picture_small',
+                            'account_status',
+                        ],
+                        where: { id: user_id },
+                        include: [
+                            {
+                                model: models.Account,
+                                attributes: [
+                                    'name',
+                                    'ignored',
+                                    'created',
+                                    'owner_key',
+                                ],
+                            },
+                        ],
                         order: 'Accounts.id desc',
-                        logging: false
+                        logging: false,
                     });
-                    appRender.dbStatus = {ok: true};
+                    appRender.dbStatus = { ok: true };
                 } catch (e) {
-                    appRender.dbStatus = {ok: false, lastAttempt: new Date()};
-                    console.error('WARNING! mysql query failed: ', e.toString());
+                    appRender.dbStatus = { ok: false, lastAttempt: new Date() };
+                    console.error(
+                        'WARNING! mysql query failed: ',
+                        e.toString()
+                    );
                     offchain.serverBusy = true;
                 }
             } else {
@@ -99,29 +126,43 @@ async function appRender(ctx) {
                     prv: ctx.session.prv,
                     account_status: user.account_status,
                     account,
-                    account_has_keys
-                }
+                    account_has_keys,
+                };
             }
         }
         if (ctx.session.arec) {
-            const account_recovery_record = await models.AccountRecoveryRequest.findOne({
-                attributes: ['id', 'account_name', 'status', 'provider'],
-                where: {id: ctx.session.arec, status: 'confirmed'}
-            });
+            const account_recovery_record = await models.AccountRecoveryRequest.findOne(
+                {
+                    attributes: ['id', 'account_name', 'status', 'provider'],
+                    where: { id: ctx.session.arec, status: 'confirmed' },
+                }
+            );
             if (account_recovery_record) {
                 offchain.recover_account = account_recovery_record.account_name;
             }
         }
         const initial_state = {
             app: {
-                viewMode: determineViewMode(ctx.request.search)
-            }
-        }
+                viewMode: determineViewMode(ctx.request.search),
+            },
+        };
 
-        const { body, title, statusCode, meta } = await universalRender({initial_state, location: ctx.request.url, store, offchain, ErrorPage, tarantool: Tarantool.instance(), userPreferences});
+        const { body, title, statusCode, meta } = await universalRender({
+            initial_state,
+            location: ctx.request.url,
+            store,
+            offchain,
+            ErrorPage,
+            tarantool: Tarantool.instance(),
+            userPreferences,
+        });
 
         // Assets name are found in `webpack-stats` file
-        const assets_filename = ROOT + (process.env.NODE_ENV === 'production' ? '/tmp/webpack-stats-prod.json' : '/tmp/webpack-stats-dev.json');
+        const assets_filename =
+            ROOT +
+            (process.env.NODE_ENV === 'production'
+                ? '/tmp/webpack-stats-prod.json'
+                : '/tmp/webpack-stats-dev.json');
         const assets = require(assets_filename);
 
         // Don't cache assets name on dev
@@ -129,9 +170,10 @@ async function appRender(ctx) {
             delete require.cache[require.resolve(assets_filename)];
         }
 
-        const props = {body, assets, title, meta};
+        const props = { body, assets, title, meta };
         ctx.status = statusCode;
-        ctx.body = '<!DOCTYPE html>' + renderToString(<ServerHTML { ...props } />);
+        ctx.body =
+            '<!DOCTYPE html>' + renderToString(<ServerHTML {...props} />);
     } catch (err) {
         // Render 500 error page from server
         const { error, redirect } = err;
@@ -147,5 +189,5 @@ async function appRender(ctx) {
     }
 }
 
-appRender.dbStatus = {ok: true};
+appRender.dbStatus = { ok: true };
 module.exports = appRender;

@@ -13,23 +13,25 @@ const YO = 'https://api.steemitdev.com';
  *
  * @return {Array}
  */
-export const normalize = (res) => res.map(fromApi => {
-    const normalized = {
-        ...fromApi,
-        id: fromApi.notify_id.toString(),
-        notificationType: fromApi.notify_type,
-    };
+export const normalize = res =>
+    res.map(fromApi => {
+        const normalized = {
+            ...fromApi,
+            id: fromApi.notify_id.toString(),
+            notificationType: fromApi.notify_type,
+        };
 
-    delete normalized.notify_id;
-    delete normalized.notify_type;
+        delete normalized.notify_id;
+        delete normalized.notify_type;
 
-    if (fromApi.data.item && fromApi.data.item.parent_summary) {
-        normalized.data.item.parentSummary = fromApi.data.item.parent_summary;
-        delete normalized.data.item.parent_summary;
-    }
+        if (fromApi.data.item && fromApi.data.item.parent_summary) {
+            normalized.data.item.parentSummary =
+                fromApi.data.item.parent_summary;
+            delete normalized.data.item.parent_summary;
+        }
 
-    return normalized;
-});
+        return normalized;
+    });
 
 /**
  * Cleans up settings from Yo.
@@ -46,32 +48,51 @@ export function normalizeSettingsFromApi(transportsFromApi) {
     // And assign it to our output Map.
     // If incoming settings is null, assign default types.
     return Object.keys(transportsFromApi).reduce((transports, transport) => {
-        const typesFromApi = (transportsFromApi[transport].notification_types !== null)
-            ? transportsFromApi[transport].notification_types
-            : types.filter(t => { return settingsInitFalse.indexOf(t) === -1 });
+        const typesFromApi =
+            transportsFromApi[transport].notification_types !== null
+                ? transportsFromApi[transport].notification_types
+                : types.filter(t => {
+                      return settingsInitFalse.indexOf(t) === -1;
+                  });
 
         const groups = toggleNotificationGroups;
 
         return transports
-            .setIn([transport, 'notification_types'], Object.keys(groups).reduce((acc, k) => {
-                return acc.set(k, (typesFromApi.indexOf(groups[k][0]) > -1));
-            }, Map()))
-            .setIn([transport, 'sub_data'], transportsFromApi[transport].sub_data);
+            .setIn(
+                [transport, 'notification_types'],
+                Object.keys(groups).reduce((acc, k) => {
+                    return acc.set(k, typesFromApi.indexOf(groups[k][0]) > -1);
+                }, Map())
+            )
+            .setIn(
+                [transport, 'sub_data'],
+                transportsFromApi[transport].sub_data
+            );
     }, Map());
 }
 
 export function denormalizeSettingsToApi(settings) {
-    return settings.entrySeq().toJS().reduce((transports, transport) => {
-        return {
-            ...transports,
-            [transport[0]]: {
-                notification_types: transport[1].get('notification_types').reduce((transportTypes, enabled, type) => {
-                    return enabled ? [...transportTypes, ...toggleNotificationGroups[type]] : transportTypes;
-                }, []),
-                sub_data: transport[1].get('sub_data'),
-            },
-        };
-    }, {});
+    return settings
+        .entrySeq()
+        .toJS()
+        .reduce((transports, transport) => {
+            return {
+                ...transports,
+                [transport[0]]: {
+                    notification_types: transport[1]
+                        .get('notification_types')
+                        .reduce((transportTypes, enabled, type) => {
+                            return enabled
+                                ? [
+                                      ...transportTypes,
+                                      ...toggleNotificationGroups[type],
+                                  ]
+                                : transportTypes;
+                        }, []),
+                    sub_data: transport[1].get('sub_data'),
+                },
+            };
+        }, {});
 }
 
 /**
@@ -85,7 +106,7 @@ const buildJussiRequest = (method, params) => ({
     credentials: 'same-origin',
     headers: {
         Accept: 'application/json',
-        'Content-type': 'application/json'
+        'Content-type': 'application/json',
     },
     body: JSON.stringify({
         jsonrpc: '2.0',
@@ -111,11 +132,15 @@ export function fetchNotifications({ username, before, after, types }) {
     if (before) optionalParams.created_before = before;
     if (types) optionalParams.notify_types = types;
 
-    return fetch(YO, buildJussiRequest('yo.get_notifications', {
+    return fetch(
+        YO,
+        buildJussiRequest('yo.get_notifications', {
             username,
             ...optionalParams,
-        }))
-        .then(r => r.json()).then(res => {
+        })
+    )
+        .then(r => r.json())
+        .then(res => {
             if (res.result && res.result.length > 0) {
                 return normalize(res.result);
             }
@@ -126,13 +151,15 @@ export function fetchNotifications({ username, before, after, types }) {
         });
 }
 
-const markIds = (ids, op) => fetch(YO, buildJussiRequest(op, { ids }))
-    .then(r => r.json()).then(res => {
-        return res; // will either be { success: something } or { error: something }
-    })
-    .catch(error => {
-        return { error };
-    });
+const markIds = (ids, op) =>
+    fetch(YO, buildJussiRequest(op, { ids }))
+        .then(r => r.json())
+        .then(res => {
+            return res; // will either be { success: something } or { error: something }
+        })
+        .catch(error => {
+            return { error };
+        });
 
 export const markAsRead = ids => markIds(ids, 'yo.mark_read');
 
@@ -147,7 +174,8 @@ export const markAsShown = ids => markids(ids, 'yo.mark_shown');
  */
 export function getNotificationSettings(username) {
     return fetch(YO, buildJussiRequest('yo.get_transports', { username }))
-        .then(r => r.json()).then(res => {
+        .then(r => r.json())
+        .then(res => {
             return normalizeSettingsFromApi(res.result);
         })
         .catch(error => {
@@ -162,11 +190,15 @@ export function getNotificationSettings(username) {
  * @return {Map|Object} if error, object w/ error prop
  */
 export function saveNotificationSettings(username, settings) {
-    return fetch(YO, buildJussiRequest('yo.set_transports', {
+    return fetch(
+        YO,
+        buildJussiRequest('yo.set_transports', {
             username,
             transports: denormalizeSettingsToApi(settings),
-        }))
-        .then(r => r.json()).then(res => {
+        })
+    )
+        .then(r => r.json())
+        .then(res => {
             return normalizeSettingsFromApi(res.result);
         })
         .catch(error => {

@@ -1,6 +1,9 @@
 import { takeLatest } from 'redux-saga';
 import { call, put, select } from 'redux-saga/effects';
-import { getNotificationSettings, saveNotificationSettings } from 'app/utils/YoApiClient';
+import {
+    getNotificationSettings,
+    saveNotificationSettings,
+} from 'app/utils/YoApiClient';
 
 export function getUsernameFromState(state) {
     return state.user.getIn(['current', 'username']);
@@ -59,6 +62,9 @@ export function* updateNotificationSettings() {
 export function* NotificationSettingsSaga() {
     yield [
         takeLatest('notificationsettings/FETCH', fetchNotificationSettings),
-        takeLatest('notificationsettings/TOGGLE_GROUP', updateNotificationSettings),
+        takeLatest(
+            'notificationsettings/TOGGLE_GROUP',
+            updateNotificationSettings
+        ),
     ];
 }

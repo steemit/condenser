@@ -1,18 +1,18 @@
 /*global describe, it, before, beforeEach, after, afterEach */
 
-import chai, {expect} from 'chai';
+import chai, { expect } from 'chai';
 import dirtyChai from 'dirty-chai';
 import sinon from 'sinon';
-import {call, put} from 'redux-saga/effects';
-import {fetchState} from './FetchDataSaga';
+import { call, put } from 'redux-saga/effects';
+import { fetchState } from './FetchDataSaga';
 chai.use(dirtyChai);
 
 const action = {
     payload: {
         pathname: '/recent',
         search: '',
-        action: 'PUSH'
-    }
+        action: 'PUSH',
+    },
 };
 
 describe('sagas', () => {

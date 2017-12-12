@@ -29,7 +29,8 @@ const errorMsg = (state = '', action = { type: null }) => {
             return '';
         case 'notificationsettings/RECEIVE_ERROR':
             return 'oops problem'; // todo: error msg
-        default: return state;
+        default:
+            return state;
     }
 };
 
@@ -38,7 +39,11 @@ const groups = (state = Map(), action = { type: null }) => {
         case 'notificationsettings/TOGGLE_GROUP':
             return state.setIn(
                 [action.transport, 'notification_types', action.group],
-                !state.getIn([action.transport, 'notification_types', action.group])
+                !state.getIn([
+                    action.transport,
+                    'notification_types',
+                    action.group,
+                ])
             );
         case 'notificationsettings/RECEIVE':
             return action.payload;

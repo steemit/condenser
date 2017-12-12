@@ -1,5 +1,5 @@
-import React from 'react'
-import Notification from './Notification'
+import React from 'react';
+import Notification from './Notification';
 /*
 export const makeNotificationList = (notifications = []) => {
     const notificationList = []
@@ -12,4 +12,4 @@ export const makeNotificationList = (notifications = []) => {
     return notificationList
 }
 */
-export default Notification
+export default Notification;

@@ -30,29 +30,37 @@ class Memo extends React.Component {
     }
 
     linkify(text) {
-    	const sections = []
-		let idx = 0
-		if (!text) return
-		for (let section of text.split(' ')) {
-    		if (section.trim().length === 0) continue
-    		const matchUserName = section.match(/(^|\s)(@[a-z][-\.a-z\d]+[a-z\d])/i)
-    		const matchLink = section.match(links.local)
-			if (matchUserName) {
-				const user2 = matchUserName[0].trim().substring(1)
-				const userLower = user2.toLowerCase()
-				const valid = validate_account_name(userLower) == null
-				valid
-					? sections.push(<Link key={idx++} to={`/@${userLower}`}>{`@${user2}`}&nbsp;</Link>)
-					: sections.push(<span key={idx++}>{`@${user2}`}</span>)
+        const sections = []
+        let idx = 0
+        if (!text) return
+        for (let section of text.split(' ')) {
+            if (section.trim().length === 0) continue
+            const matchUserName = section.match(/(^|\s)(@[a-z][-\.a-z\d]+[a-z\d])/i)
+            const matchLink = section.match(links.local)
+            const matchPostLink = (section.includes(`pst/@`)) && (section.split(`/`).length === 4);
 
-			} else if (matchLink) {
-				sections.push(<Link key={idx++} to={section}>{section}&nbsp;</Link>)
-			} else {
-				sections.push(<span key={idx++}>{section}&nbsp;</span>)
-			}
-		}
-		return sections
-	}
+            if (matchUserName) {
+                const user2 = matchUserName[0].trim().substring(1)
+                const userLower = user2.toLowerCase()
+                const valid = validate_account_name(userLower) == null
+                valid
+                    ? sections.push(<Link key={idx++} to={`/@${userLower}`}>{`@${user2}`}&nbsp;</Link>)
+                    : sections.push(<span key={idx++}>{`@${user2}`}</span>)
+            }
+            else if (matchLink) {
+                sections.push(<Link key={idx++} to={section}>{section}&nbsp;</Link>)
+            }
+            else if (matchPostLink) {
+              const pLink = section;
+              const permLink = section.split(`/`)[3]
+              sections.push(<Link key={idx++} to={pLink}>{permLink}&nbsp;</Link>)
+            }
+            else {
+                sections.push(<span key={idx++}>{section}&nbsp;</span>)
+            }
+      }
+        return sections
+    }
 
     render() {
         const {decodeMemo, linkify} = this

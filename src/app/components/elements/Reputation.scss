@@ -1,16 +1,14 @@
 .Reputation {
-  display: inline-block;
-  font-size: 12px;
-  line-height: 18px;
-  padding: 0 3px;
-  margin-left: 2px;
-  margin-right: 2px;
-  background-color: transparent;
-  border-radius: 50%;
-  position: relative;
-  top: -1px;
+  @include font-size(13px);
+  line-height: 1;
+  padding: 0;
+  margin-left: -1px;
+  font-weight: normal;
+  transition: 0.3s all ease-in-out;
   @include themify($themes) {
     color: themed('textColorPrimary');
-    border: themed('borderDark');
   }  
+  @include MQ(M) {
+    @include font-size(14px);
+  }
 }

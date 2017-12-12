@@ -2,16 +2,17 @@ import React from 'react';
 import {connect} from 'react-redux';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import Reveal from 'react-foundation-components/lib/global/reveal';
+import {NotificationStack} from 'react-notification';
+import {OrderedSet} from 'immutable';
+
+import * as userActions from 'app/redux/UserReducer';
+import * as appActions from 'app/redux/AppReducer';
+import * as transactionActions from 'app/redux/TransactionReducer';
 import LoginForm from 'app/components/modules/LoginForm';
 import ConfirmTransactionForm from 'app/components/modules/ConfirmTransactionForm';
 import Transfer from 'app/components/modules/Transfer';
-import SignUp from 'app/components/modules/SignUp';
-import user from 'app/redux/User';
 import Powerdown from 'app/components/modules/Powerdown';
-import tr from 'app/redux/Transaction';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
-import {NotificationStack} from 'react-notification';
-import {OrderedSet} from 'immutable';
 import TermsAgree from 'app/components/modules/TermsAgree';
 
 class Modals extends React.Component {
@@ -20,11 +21,9 @@ class Modals extends React.Component {
         show_confirm_modal: React.PropTypes.bool,
         show_transfer_modal: React.PropTypes.bool,
         show_powerdown_modal: React.PropTypes.bool,
-        show_signup_modal: React.PropTypes.bool,
         show_promote_post_modal: React.PropTypes.bool,
         hideLogin: React.PropTypes.func.isRequired,
         hideConfirm: React.PropTypes.func.isRequired,
-        hideSignUp: React.PropTypes.func.isRequired,
         hideTransfer: React.PropTypes.func.isRequired,
         hidePowerdown: React.PropTypes.func.isRequired,
         hidePromotePost: React.PropTypes.func.isRequired,
@@ -40,8 +39,8 @@ class Modals extends React.Component {
 
     render() {
         const {
-            show_login_modal, show_confirm_modal, show_transfer_modal, show_powerdown_modal, show_signup_modal,
-            hideLogin, hideTransfer, hidePowerdown, hideConfirm, hideSignUp, show_terms_modal,
+            show_login_modal, show_confirm_modal, show_transfer_modal, show_powerdown_modal,
+            hideLogin, hideTransfer, hidePowerdown, hideConfirm, show_terms_modal,
             notifications, removeNotification, hidePromotePost, show_promote_post_modal
         } = this.props;
 
@@ -67,10 +66,6 @@ class Modals extends React.Component {
                     <CloseButton onClick={hidePowerdown} />
                     <Powerdown />
                 </Reveal>}
-                {show_signup_modal && <Reveal onHide={hideSignUp} show={show_signup_modal}>
-                    <CloseButton onClick={hideSignUp} />
-                    <SignUp />
-                </Reveal>}
                 {show_terms_modal && <Reveal show={show_terms_modal}>
                     <TermsAgree onCancel={hideLogin} />
                 </Reveal>}
@@ -92,7 +87,6 @@ export default connect(
             show_transfer_modal: state.user.get('show_transfer_modal'),
             show_powerdown_modal: state.user.get('show_powerdown_modal'),
             show_promote_post_modal: state.user.get('show_promote_post_modal'),
-            show_signup_modal: state.user.get('show_signup_modal'),
             notifications: state.app.get('notifications'),
             show_terms_modal: state.user.get('show_terms_modal')
         }
@@ -100,29 +94,25 @@ export default connect(
     dispatch => ({
         hideLogin: e => {
             if (e) e.preventDefault();
-            dispatch(user.actions.hideLogin())
+            dispatch(userActions.hideLogin())
         },
         hideConfirm: e => {
             if (e) e.preventDefault();
-            dispatch(tr.actions.hideConfirm())
+            dispatch(transactionActions.hideConfirm())
         },
         hideTransfer: e => {
             if (e) e.preventDefault();
-            dispatch(user.actions.hideTransfer())
+            dispatch(userActions.hideTransfer())
         },
         hidePowerdown: e => {
             if (e) e.preventDefault();
-            dispatch(user.actions.hidePowerdown())
+            dispatch(userActions.hidePowerdown())
         },
         hidePromotePost: e => {
             if (e) e.preventDefault();
-            dispatch(user.actions.hidePromotePost())
-        },
-        hideSignUp: e => {
-            if (e) e.preventDefault();
-            dispatch(user.actions.hideSignUp())
+            dispatch(userActions.hidePromotePost())
         },
         // example: addNotification: ({key, message}) => dispatch({type: 'ADD_NOTIFICATION', payload: {key, message}}),
-        removeNotification: (key) => dispatch({type: 'REMOVE_NOTIFICATION', payload: {key}})
+        removeNotification: (key) => dispatch(appActions.removeNotification({key}))
     })
 )(Modals)

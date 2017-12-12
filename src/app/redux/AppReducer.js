@@ -43,29 +43,6 @@ export default function reducer(state = defaultState, action) {
     if (action.type === 'FETCH_DATA_END') {
         res = state.set('loading', false);
     }
-
-    //Todo: for dev only! Do not merge if present - probably belongs in a different place
-    if (action.type === 'yotification_markRead') {
-        const yotifications = state.getIn(['yotifications']);
-        const notifications = (yotifications && yotifications.size > 0)? yotifications.toJS() : [];
-        notifications.forEach((n) => {
-            if(n.id === action.id) {
-                n.read = true;
-            }
-        })
-        return state.set('yotifications', List(notifications));
-    }
-    //Todo: for dev only! Do not merge if present - probably belongs in a different place
-    if (action.type === 'yotification_markAllRead') {
-        const yotifications = state.getIn(['yotifications']);
-        const notifications = (yotifications && yotifications.size > 0)? yotifications.toJS() : [];
-        notifications.forEach((n) => {
-            n.read = true;
-        })
-        return state.set('yotifications', List(notifications));
-    }
-
-    //Original verions of notifications code
     if (action.type === 'ADD_NOTIFICATION') {
         const n = {
             action: tt('g.dismiss'),

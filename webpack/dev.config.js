@@ -1,12 +1,12 @@
-import webpack from 'webpack';
-import git from 'git-rev-sync';
-import baseConfig from './base.config';
-import startKoa from './utils/start-koa';
+const webpack = require('webpack');
+const git = require('git-rev-sync');
+const baseConfig = require('./base.config');
+const startKoa = require('./utils/start-koa');
 
 // var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 // baseConfig.plugins.push(new BundleAnalyzerPlugin());
 
-export default {
+module.exports = {
     ...baseConfig,
     devtool: 'cheap-module-eval-source-map',
     output: {

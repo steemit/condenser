@@ -5,10 +5,10 @@ if(!fs.existsSync('tmp'))
 process.env.BABEL_ENV = 'browser';
 process.env.NODE_ENV = 'development';
 
-import Koa from 'koa';
-import webpack from 'webpack';
+const Koa = require('koa');
+const webpack = require('webpack');
 
-import webpackDevConfig from './dev.config';
+const webpackDevConfig = require('./dev.config');
 
 const app = new Koa();
 const compiler = webpack(webpackDevConfig);

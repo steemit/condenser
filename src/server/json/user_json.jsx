@@ -1,18 +1,20 @@
 import koa_router from 'koa-router';
 import React from 'react';
-import {routeRegex} from "app/ResolveRoute";
-import {api} from '@steemit/steem-js'
+import { routeRegex } from 'app/ResolveRoute';
+import { api } from '@steemit/steem-js';
 
 export default function useUserJson(app) {
     const router = koa_router();
     app.use(router.routes());
 
-    router.get(routeRegex.UserJson, function *() {
+    router.get(routeRegex.UserJson, function*() {
         // validate and build user details in JSON
         const segments = this.url.split('/');
-        const user_name = segments[1].match(routeRegex.UserNameJson)[0].replace('@', '');
-        let user = "";
-        let status = "";
+        const user_name = segments[1]
+            .match(routeRegex.UserNameJson)[0]
+            .replace('@', '');
+        let user = '';
+        let status = '';
 
         const [chainAccount] = yield api.getAccountsAsync([user_name]);
 
@@ -21,14 +23,14 @@ export default function useUserJson(app) {
             try {
                 user.json_metadata = JSON.parse(user.json_metadata);
             } catch (e) {
-                user.json_metadata = "";
+                user.json_metadata = '';
             }
-            status = "200";
+            status = '200';
         } else {
-            user = "No account found";
-            status = "404";
+            user = 'No account found';
+            status = '404';
         }
         // return response and status code
-        this.body = {user, status};
+        this.body = { user, status };
     });
 }

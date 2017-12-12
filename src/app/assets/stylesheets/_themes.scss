@@ -102,6 +102,7 @@ $themes: (
     buttonTextHover: $color-white,
     buttonBoxShadow: $color-teal,
     buttonBoxShadowHover: $color-white,
+    inputPriceWarning: rgba(255, 153, 0, 0.83),
   ),
 );
 
@@ -315,6 +316,17 @@ $themes: (
         color: $color-text-gray;
         font-weight: normal;
       }
+    }
+  }
+}
+
+
+.theme-dark {
+  .button.hollow {
+    &:hover, &:focus {
+      border-color: $color-teal;
+      color: $color-teal;
+      outline-color: $color-teal;
     }
   }
 }

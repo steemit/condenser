@@ -9,9 +9,9 @@ module.exports = {
                     server_response: null,
                     error: null,
                     confirmed: {
-                        blocknum: 1234
-                    }
-                }
+                        blocknum: 1234,
+                    },
+                },
             },
             wallet: {
                 locked: false,
@@ -20,12 +20,12 @@ module.exports = {
                     $pubkey: 'privkey',
                     $pubkey1: 'privkey1',
                     $pubkey2: 'privkey2',
-                    $pubkey3: 'privkey3'
+                    $pubkey3: 'privkey3',
                 },
                 encrypted_keys: {
-                    $pubkey: 'encryptedprivkey'
-                }
-            }
+                    $pubkey: 'encryptedprivkey',
+                },
+            },
         },
         users: {
             alice: {
@@ -36,90 +36,63 @@ module.exports = {
                     transfer: [],
                     vote: [],
                     post: [],
-                    reward: []
+                    reward: [],
                 },
                 posts: {
                     recent: ['slug', 'slug1'],
                     expiring: ['slug', 'slug'],
-                    best: ['slug', 'slug']
+                    best: ['slug', 'slug'],
                 },
                 proxy: null,
-                witness_votes: []
-            }
-        }
+                witness_votes: [],
+            },
+        },
     },
     discussions: {
-        update_status: { /// used to track async state of fetching
+        update_status: {
+            /// used to track async state of fetching
             trending: {
                 last_update: new Date(),
                 fetching: false,
                 timeout: new Date(),
-                fetch_cursor: null /// fetching from start, else author/slug
+                fetch_cursor: null, /// fetching from start, else author/slug
             },
             recent: {},
             expiring: {},
             best: {},
             active: {},
             category: {
-                general: { /// the category name
-                    trending: {  /// ~trending within category
+                general: {
+                    /// the category name
+                    trending: {
+                        /// ~trending within category
                         last_update: new Date(),
                         fetching: false,
                         timeout: new Date(),
-                        fetch_cursor: null /// fetching from start, else author/slug
+                        fetch_cursor: null, /// fetching from start, else author/slug
                     },
                     recent: {},
                     expiring: {},
-                    best: {}
-                }
-            }
+                    best: {},
+                },
+            },
         },
-        trending: [
-            'author/slug',
-            'author3/slug'
-        ],
-        recent: [
-            'author3/slug',
-            'author/slug'
-        ],
-        expiring: [
-            'author3/slug',
-            'author/slug'
-        ],
-        best: [
-            'author2/slug',
-            'author/slug'
-        ],
-        active: [
-            'author1/slug',
-            'author/slug'
-        ],
+        trending: ['author/slug', 'author3/slug'],
+        recent: ['author3/slug', 'author/slug'],
+        expiring: ['author3/slug', 'author/slug'],
+        best: ['author2/slug', 'author/slug'],
+        active: ['author1/slug', 'author/slug'],
         category: {
             '~trending': ['cat1', 'cat2'], /// used to track trending categories
             '~best': ['bestcat1', 'bestcat2'], /// used to track all time best categories
             '~active': [],
             general: {
-                trending: [
-                    'author/slug',
-                    'author3/slug'
-                ],
-                recent: [
-                    'author2/slug',
-                    'author3/slug'
-                ],
-                expiring: [
-                    'author1/slug',
-                    'author/slug'
-                ],
-                best: [
-                    'author2/slug',
-                    'author3/slug'
-                ],
-                active: [
-                    'author2/slug',
-                    'author3/slug'
-                ]
-            }
+                trending: ['author/slug', 'author3/slug'],
+                recent: ['author2/slug', 'author3/slug'],
+                expiring: ['author1/slug', 'author/slug'],
+                best: ['author2/slug', 'author3/slug'],
+                active: ['author2/slug', 'author3/slug'],
+            },
         },
         'author/slug': {
             fetched: new Date(), /// the date at which this data was requested from the server
@@ -146,49 +119,50 @@ module.exports = {
             total_pending_payout_value: '0.000 CLOUT',
             replies: [], /// there is data to be fetched if 'children' is not 0
             fetched_replies: new Date(),
-            fetching_replies: false
-        }
+            fetching_replies: false,
+        },
     },
     market: {
-        current_feed: 1.00,
+        current_feed: 1.0,
         feed_history: [
             /// last week of feed data with 1 hr sampling of median feed
         ],
         order_history: [
-            ['time', 'buy', 1000, 1.000], /// time, type, quantity, price
-            ['time', 'sell', 100, 0.99]
+            ['time', 'buy', 1000, 1.0], /// time, type, quantity, price
+            ['time', 'sell', 100, 0.99],
         ],
         available_candlesticks: [5, 15, 30, 120, 240, 1440],
-        available_zoom: [6, 24, 48, 96, 168/* 1 week*/, 540, 1000000/*all*/], /// hours
+        available_zoom: [6, 24, 48, 96, 168 /* 1 week*/, 540, 1000000 /*all*/], /// hours
         current_candlestick: 5, /// min
         current_zoom: 24, /// hours
         price_history: [
             {
                 time: '2016-02-29T22:08:00',
-                open: 1.000,
-                close: 1.000,
-                high: 1.000,
-                low: 1.000,
-                volume: 10
+                open: 1.0,
+                close: 1.0,
+                high: 1.0,
+                low: 1.0,
+                volume: 10,
             },
             {
                 time: '2016-02-29T22:09:00',
-                open: 1.000,
-                close: 1.000,
-                high: 1.000,
-                low: 1.000,
-                volume: 10
-            }
-        ]
+                open: 1.0,
+                close: 1.0,
+                high: 1.0,
+                low: 1.0,
+                volume: 10,
+            },
+        ],
     },
-    bids: [ /// sorted by price from highest to lowest
+    bids: [
+        /// sorted by price from highest to lowest
         {
             id: '...',
             owner: 'alice',
             price: 1.0,
             quantity: 100,
             cum_quantity: 100,
-            expiration: null
+            expiration: null,
         },
         {
             id: '...',
@@ -196,17 +170,18 @@ module.exports = {
             price: 0.9,
             quantity: 100,
             cum_quantity: 200,
-            expiration: null
-        }
+            expiration: null,
+        },
     ],
-    asks: [ /// sorted by price from lowest to highest
+    asks: [
+        /// sorted by price from lowest to highest
         {
             id: '...',
             owner: 'alice',
             price: 1.1,
             bid_quantity: 100,
             cum_quantity: 100,
-            expiration: null
+            expiration: null,
         },
         {
             id: '...',
@@ -214,7 +189,7 @@ module.exports = {
             price: 1.2,
             bid_quantity: 100,
             cum_quantity: 200,
-            expiration: null
-        }
-    ]
+            expiration: null,
+        },
+    ],
 };

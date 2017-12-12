@@ -9,7 +9,9 @@ class Welcome extends React.Component {
                     <div className="Welcome__banner">
                         <div className="Welcome__welcome">Welcome to</div>
                         <img src={require('app/assets/images/welcome.jpg')} />
-                        <div className="Welcome__caption">Come for the rewards. Stay for the community.</div>
+                        <div className="Welcome__caption">
+                            Come for the rewards. Stay for the community.
+                        </div>
                     </div>
                     <hr />
                     <HelpContent path="welcome" />
@@ -21,5 +23,5 @@ class Welcome extends React.Component {
 
 module.exports = {
     path: 'welcome',
-    component: Welcome
+    component: Welcome,
 };

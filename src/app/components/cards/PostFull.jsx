@@ -441,16 +441,49 @@ class PostFull extends React.Component {
             );
         }
 
+        const jsonld = {
+            '@context': 'http://schema.org',
+            '@type': 'Blog',
+            '@id': `https://${APP_DOMAIN}/@${author}/blog`,
+            blogPost: {
+                '@context': 'http://schema.org',
+                '@type': 'BlogPosting',
+                '@id': `https://${APP_DOMAIN}${content.url}`,
+                headline: content.title,
+                text: content.body,
+                url: `https://${APP_DOMAIN}${content.url}`,
+                keywords: content.category,
+                datePublished: content.created,
+                dateModified: content.created,
+                mainEntityOfPage: `https://${APP_DOMAIN}${content.url}`,
+                image: jsonMetadata.image,
+                publisher: {
+                    '@context': 'http://schema.org',
+                    '@type': 'Organization',
+                    name: 'Steemit',
+                    url: `https://${APP_DOMAIN}`,
+                    logo: {
+                        '@context': 'http://schema.org',
+                        '@type': 'ImageObject',
+                        url: `https://${APP_DOMAIN}/images/favicons/mstile-310x310.png`,
+                    },
+                },
+                author: {
+                    '@id': `https://${APP_DOMAIN}/@${author}`,
+                },
+            },
+        };
+
         return (
-            <article
-                className="PostFull hentry"
-                itemScope
-                itemType="http://schema.org/Blog"
-            >
+            <article className="PostFull hentry">
                 {showEdit ? (
                     renderedEditor
                 ) : (
                     <span>
+                        <script type="application/ld+json">
+                            {JSON.stringify(jsonld)}
+                        </script>
+
                         <div className="float-right">
                             <Voting post={post} flag />
                         </div>

@@ -14,6 +14,7 @@ import tt from 'counterpart';
 import { parsePayoutAmount } from 'app/utils/ParsersAndFormatters';
 import { Long } from 'bytebuffer';
 import ImageUserBlockList from 'app/utils/ImageUserBlockList';
+import { APP_DOMAIN } from 'app/client_config';
 
 // returns true if the comment has a 'hide' flag AND has no descendants w/ positive payout
 function hideSubtree(cont, c) {
@@ -395,13 +396,30 @@ class CommentImpl extends React.Component {
             }
         }
 
+        const jsonld = {
+            '@context': 'http://schema.org',
+            '@type': 'Comment',
+            '@id': comment_link,
+            datePublished: comment.created,
+            text: comment.body,
+            keywords: comment.category,
+            /*
+            // Comment's parent item must be of schema.org/Question type ... O_o
+            "parentItem": {
+                "@id": comment.parent_permlink
+            },
+            */
+            author: {
+                '@id': `https://${APP_DOMAIN}/@${comment.author}`,
+            },
+        };
+
         return (
-            <div
-                className={commentClasses.join(' ')}
-                id={anchor_link}
-                itemScope
-                itemType="http://schema.org/comment"
-            >
+            <div className={commentClasses.join(' ')} id={anchor_link}>
+                <script type="application/ld+json">
+                    {JSON.stringify(jsonld)}
+                </script>
+
                 {depth_indicator}
                 <div className={innerCommentClass}>
                     <div className="Comment__Userpic show-for-medium">

@@ -1,18 +1,24 @@
-import {takeLatest, takeEvery} from 'redux-saga';
-import {call, put, select, fork} from 'redux-saga/effects';
-import {loadFollows, fetchFollowCount} from 'app/redux/FollowSaga';
-import {getContent} from 'app/redux/SagaShared';
+import { takeLatest, takeEvery } from 'redux-saga';
+import { call, put, select, fork } from 'redux-saga/effects';
+import { loadFollows, fetchFollowCount } from 'app/redux/FollowSaga';
+import { getContent } from 'app/redux/SagaShared';
 import * as globalActions from './GlobalReducer';
 import * as appActions from './AppReducer';
 import constants from './constants';
-import {fromJS, Map} from 'immutable'
-import {api} from '@steemit/steem-js';
+import { fromJS, Map } from 'immutable';
+import { api } from '@steemit/steem-js';
 
 const REQUEST_DATA = 'fetchDataSaga/REQUEST_DATA';
 const GET_CONTENT = 'fetchDataSaga/GET_CONTENT';
 const FETCH_STATE = 'fetchDataSaga/FETCH_STATE';
 
-export const fetchDataWatches = [watchLocationChange, watchDataRequests, watchFetchJsonRequests, watchFetchState, watchGetContent];
+export const fetchDataWatches = [
+    watchLocationChange,
+    watchDataRequests,
+    watchFetchJsonRequests,
+    watchFetchState,
+    watchGetContent,
+];
 
 export function* watchDataRequests() {
     yield* takeLatest(REQUEST_DATA, fetchData);
@@ -28,32 +34,36 @@ export function* getContentCaller(action) {
 
 let is_initial_state = true;
 export function* fetchState(location_change_action) {
-    const {pathname} = location_change_action.payload;
-    const m = pathname.match(/^\/@([a-z0-9\.-]+)/)
-    if(m && m.length === 2) {
-        const username = m[1]
-        yield fork(fetchFollowCount, username)
-        yield fork(loadFollows, "getFollowersAsync", username, 'blog')
-        yield fork(loadFollows, "getFollowingAsync", username, 'blog')
+    const { pathname } = location_change_action.payload;
+    const m = pathname.match(/^\/@([a-z0-9\.-]+)/);
+    if (m && m.length === 2) {
+        const username = m[1];
+        yield fork(fetchFollowCount, username);
+        yield fork(loadFollows, 'getFollowersAsync', username, 'blog');
+        yield fork(loadFollows, 'getFollowingAsync', username, 'blog');
     }
 
     // `ignore_fetch` case should only trigger on initial page load. No need to call
     // fetchState immediately after loading fresh state from the server. Details: #593
-    const server_location = yield select(state => state.offchain.get('server_location'));
-    const ignore_fetch = (pathname === server_location && is_initial_state)
+    const server_location = yield select(state =>
+        state.offchain.get('server_location')
+    );
+    const ignore_fetch = pathname === server_location && is_initial_state;
     is_initial_state = false;
-    if(ignore_fetch) return;
+    if (ignore_fetch) return;
 
     let url = `${pathname}`;
     if (url === '/') url = 'trending';
     // Replace /curation-rewards and /author-rewards with /transfers for UserProfile
     // to resolve data correctly
-    if (url.indexOf("/curation-rewards") !== -1) url = url.replace("/curation-rewards", "/transfers");
-    if (url.indexOf("/author-rewards") !== -1) url = url.replace("/author-rewards", "/transfers");
+    if (url.indexOf('/curation-rewards') !== -1)
+        url = url.replace('/curation-rewards', '/transfers');
+    if (url.indexOf('/author-rewards') !== -1)
+        url = url.replace('/author-rewards', '/transfers');
 
     yield put(appActions.fetchDataBegin());
     try {
-        const state = yield call([api, api.getStateAsync], url)
+        const state = yield call([api, api.getStateAsync], url);
         yield put(globalActions.receiveState(state));
     } catch (error) {
         console.error('~~ Saga fetchState error ~~>', url, error);
@@ -71,132 +81,190 @@ export function* watchFetchState() {
 }
 
 export function* fetchData(action) {
-    const {order, author, permlink, accountname} = action.payload;
-    let {category} = action.payload;
-    if( !category ) category = "";
+    const { order, author, permlink, accountname } = action.payload;
+    let { category } = action.payload;
+    if (!category) category = '';
     category = category.toLowerCase();
 
-    yield put(globalActions.fetchingData({order, category}));
+    yield put(globalActions.fetchingData({ order, category }));
     let call_name, args;
     if (order === 'trending') {
         call_name = 'getDiscussionsByTrendingAsync';
         args = [
-        { tag: category,
-          limit: constants.FETCH_DATA_BATCH_SIZE,
-          start_author: author,
-          start_permlink: permlink}];
+            {
+                tag: category,
+                limit: constants.FETCH_DATA_BATCH_SIZE,
+                start_author: author,
+                start_permlink: permlink,
+            },
+        ];
     } else if (order === 'trending30') {
         call_name = 'getDiscussionsByTrending30Async';
         args = [
-        { tag: category,
-          limit: constants.FETCH_DATA_BATCH_SIZE,
-          start_author: author,
-          start_permlink: permlink}];
+            {
+                tag: category,
+                limit: constants.FETCH_DATA_BATCH_SIZE,
+                start_author: author,
+                start_permlink: permlink,
+            },
+        ];
     } else if (order === 'promoted') {
         call_name = 'getDiscussionsByPromotedAsync';
         args = [
-        { tag: category,
-          limit: constants.FETCH_DATA_BATCH_SIZE,
-          start_author: author,
-          start_permlink: permlink}];
-    } else if( order === 'active' ) {
+            {
+                tag: category,
+                limit: constants.FETCH_DATA_BATCH_SIZE,
+                start_author: author,
+                start_permlink: permlink,
+            },
+        ];
+    } else if (order === 'active') {
         call_name = 'getDiscussionsByActiveAsync';
         args = [
-        { tag: category,
-          limit: constants.FETCH_DATA_BATCH_SIZE,
-          start_author: author,
-          start_permlink: permlink}];
-    } else if( order === 'cashout' ) {
+            {
+                tag: category,
+                limit: constants.FETCH_DATA_BATCH_SIZE,
+                start_author: author,
+                start_permlink: permlink,
+            },
+        ];
+    } else if (order === 'cashout') {
         call_name = 'getDiscussionsByCashoutAsync';
         args = [
-        { tag: category,
-          limit: constants.FETCH_DATA_BATCH_SIZE,
-          start_author: author,
-          start_permlink: permlink}];
-    } else if( order === 'payout' ) {
+            {
+                tag: category,
+                limit: constants.FETCH_DATA_BATCH_SIZE,
+                start_author: author,
+                start_permlink: permlink,
+            },
+        ];
+    } else if (order === 'payout') {
         call_name = 'getPostDiscussionsByPayout';
         args = [
-        { tag: category,
-          limit: constants.FETCH_DATA_BATCH_SIZE,
-          start_author: author,
-          start_permlink: permlink}];
-    } else if( order === 'payout_comments' ) {
+            {
+                tag: category,
+                limit: constants.FETCH_DATA_BATCH_SIZE,
+                start_author: author,
+                start_permlink: permlink,
+            },
+        ];
+    } else if (order === 'payout_comments') {
         call_name = 'getCommentDiscussionsByPayout';
         args = [
-        { tag: category,
-          limit: constants.FETCH_DATA_BATCH_SIZE,
-          start_author: author,
-          start_permlink: permlink}];
-    } else if( order === 'updated' ) {
+            {
+                tag: category,
+                limit: constants.FETCH_DATA_BATCH_SIZE,
+                start_author: author,
+                start_permlink: permlink,
+            },
+        ];
+    } else if (order === 'updated') {
         call_name = 'getDiscussionsByActiveAsync';
         args = [
-        { tag: category,
-          limit: constants.FETCH_DATA_BATCH_SIZE,
-          start_author: author,
-          start_permlink: permlink}];
-    } else if( order === 'created' || order === 'recent' ) {
+            {
+                tag: category,
+                limit: constants.FETCH_DATA_BATCH_SIZE,
+                start_author: author,
+                start_permlink: permlink,
+            },
+        ];
+    } else if (order === 'created' || order === 'recent') {
         call_name = 'getDiscussionsByCreatedAsync';
         args = [
-        { tag: category,
-          limit: constants.FETCH_DATA_BATCH_SIZE,
-          start_author: author,
-          start_permlink: permlink}];
-    } else if( order === 'by_replies' ) {
+            {
+                tag: category,
+                limit: constants.FETCH_DATA_BATCH_SIZE,
+                start_author: author,
+                start_permlink: permlink,
+            },
+        ];
+    } else if (order === 'by_replies') {
         call_name = 'getRepliesByLastUpdateAsync';
         args = [author, permlink, constants.FETCH_DATA_BATCH_SIZE];
-    } else if( order === 'responses' ) {
+    } else if (order === 'responses') {
         call_name = 'getDiscussionsByChildrenAsync';
         args = [
-        { tag: category,
-          limit: constants.FETCH_DATA_BATCH_SIZE,
-          start_author: author,
-          start_permlink: permlink}];
-    } else if( order === 'votes' ) {
+            {
+                tag: category,
+                limit: constants.FETCH_DATA_BATCH_SIZE,
+                start_author: author,
+                start_permlink: permlink,
+            },
+        ];
+    } else if (order === 'votes') {
         call_name = 'getDiscussionsByVotesAsync';
         args = [
-        { tag: category,
-          limit: constants.FETCH_DATA_BATCH_SIZE,
-          start_author: author,
-          start_permlink: permlink}];
-    } else if( order === 'hot' ) {
+            {
+                tag: category,
+                limit: constants.FETCH_DATA_BATCH_SIZE,
+                start_author: author,
+                start_permlink: permlink,
+            },
+        ];
+    } else if (order === 'hot') {
         call_name = 'getDiscussionsByHotAsync';
         args = [
-        { tag: category,
-          limit: constants.FETCH_DATA_BATCH_SIZE,
-          start_author: author,
-          start_permlink: permlink}];
-    } else if( order === 'by_feed' ) { // https://github.com/steemit/steem/issues/249
+            {
+                tag: category,
+                limit: constants.FETCH_DATA_BATCH_SIZE,
+                start_author: author,
+                start_permlink: permlink,
+            },
+        ];
+    } else if (order === 'by_feed') {
+        // https://github.com/steemit/steem/issues/249
         call_name = 'getDiscussionsByFeedAsync';
         args = [
-        { tag: accountname,
-          limit: constants.FETCH_DATA_BATCH_SIZE,
-          start_author: author,
-          start_permlink: permlink}];
-    } else if( order === 'by_author' ) {
+            {
+                tag: accountname,
+                limit: constants.FETCH_DATA_BATCH_SIZE,
+                start_author: author,
+                start_permlink: permlink,
+            },
+        ];
+    } else if (order === 'by_author') {
         call_name = 'getDiscussionsByBlogAsync';
         args = [
-        { tag: accountname,
-          limit: constants.FETCH_DATA_BATCH_SIZE,
-          start_author: author,
-          start_permlink: permlink}];
-    } else if( order === 'by_comments' ) {
+            {
+                tag: accountname,
+                limit: constants.FETCH_DATA_BATCH_SIZE,
+                start_author: author,
+                start_permlink: permlink,
+            },
+        ];
+    } else if (order === 'by_comments') {
         call_name = 'getDiscussionsByCommentsAsync';
         args = [
-        { limit: constants.FETCH_DATA_BATCH_SIZE,
-          start_author: author,
-          start_permlink: permlink}];
+            {
+                limit: constants.FETCH_DATA_BATCH_SIZE,
+                start_author: author,
+                start_permlink: permlink,
+            },
+        ];
     } else {
         call_name = 'getDiscussionsByActiveAsync';
-        args = [{
-            tag: category,
-            limit: constants.FETCH_DATA_BATCH_SIZE,
-            start_author: author,
-            start_permlink: permlink}];
+        args = [
+            {
+                tag: category,
+                limit: constants.FETCH_DATA_BATCH_SIZE,
+                start_author: author,
+                start_permlink: permlink,
+            },
+        ];
     }
     yield put(appActions.fetchDataBegin());
     try {
         const data = yield call([api, api[call_name]], ...args);
-        yield put(globalActions.receiveData({data, order, category, author, permlink, accountname}));
+        yield put(
+            globalActions.receiveData({
+                data,
+                order,
+                category,
+                author,
+                permlink,
+                accountname,
+            })
+        );
     } catch (error) {
         console.error('~~ Saga fetchData error ~~>', call_name, args, error);
         yield put(appActions.steemApiError(error.message));
@@ -207,27 +275,30 @@ export function* fetchData(action) {
 // export function* watchMetaRequests() {
 //     yield* takeLatest('global/REQUEST_META', fetchMeta);
 // }
-export function* fetchMeta({payload: {id, link}}) {
+export function* fetchMeta({ payload: { id, link } }) {
     try {
-        const metaArray = yield call(() => new Promise((resolve, reject) => {
-            function reqListener() {
-                const resp = JSON.parse(this.responseText)
-                if (resp.error) {
-                    reject(resp.error)
-                    return
-                }
-                resolve(resp)
-            }
-            const oReq = new XMLHttpRequest()
-            oReq.addEventListener('load', reqListener)
-            oReq.open('GET', '/http_metadata/' + link)
-            oReq.send()
-        }))
-        const {title, metaTags} = metaArray
-        let meta = {title}
+        const metaArray = yield call(
+            () =>
+                new Promise((resolve, reject) => {
+                    function reqListener() {
+                        const resp = JSON.parse(this.responseText);
+                        if (resp.error) {
+                            reject(resp.error);
+                            return;
+                        }
+                        resolve(resp);
+                    }
+                    const oReq = new XMLHttpRequest();
+                    oReq.addEventListener('load', reqListener);
+                    oReq.open('GET', '/http_metadata/' + link);
+                    oReq.send();
+                })
+        );
+        const { title, metaTags } = metaArray;
+        let meta = { title };
         for (let i = 0; i < metaTags.length; i++) {
-            const [name, content] = metaTags[i]
-            meta[name] = content
+            const [name, content] = metaTags[i];
+            meta[name] = content;
         }
         // http://postimg.org/image/kbefrpbe9/
         meta = {
@@ -238,13 +309,13 @@ export function* fetchMeta({payload: {id, link}}) {
             description: meta['twitter:description'],
             image: meta['twitter:image'],
             alt: meta['twitter:alt'],
+        };
+        if (!meta.image) {
+            meta.image = meta['twitter:image:src'];
         }
-        if(!meta.image) {
-            meta.image = meta['twitter:image:src']
-        }
-        yield put(globalActions.receiveMeta({id, meta}))
-    } catch(error) {
-        yield put(globalActions.receiveMeta({id, meta: {error}}))
+        yield put(globalActions.receiveMeta({ id, meta }));
+    } catch (error) {
+        yield put(globalActions.receiveMeta({ id, meta: { error } }));
     }
 }
 
@@ -257,39 +328,43 @@ export function* watchFetchJsonRequests() {
     @arg {string} url
     @arg {object} body (for JSON.stringify)
 */
-function* fetchJson({payload: {id, url, body, successCallback, skipLoading = false}}) {
+function* fetchJson({
+    payload: { id, url, body, successCallback, skipLoading = false },
+}) {
     try {
         const payload = {
             method: body ? 'POST' : 'GET',
             headers: {
                 Accept: 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
             },
-            body: body ? JSON.stringify(body) : undefined
-        }
-        let result = yield skipLoading ? fetch(url, payload) : call(fetch, url, payload)
-        result = yield result.json()
-        if(successCallback) result = successCallback(result)
-        yield put(globalActions.fetchJsonResult({id, result}))
-    } catch(error) {
-        console.error('fetchJson', error)
-        yield put(globalActions.fetchJsonResult({id, error}))
+            body: body ? JSON.stringify(body) : undefined,
+        };
+        let result = yield skipLoading
+            ? fetch(url, payload)
+            : call(fetch, url, payload);
+        result = yield result.json();
+        if (successCallback) result = successCallback(result);
+        yield put(globalActions.fetchJsonResult({ id, result }));
+    } catch (error) {
+        console.error('fetchJson', error);
+        yield put(globalActions.fetchJsonResult({ id, error }));
     }
 }
 
 // Action creators
 export const actions = {
-    requestData: (payload) => ({
+    requestData: payload => ({
         type: REQUEST_DATA,
         payload,
     }),
 
-    getContent: (payload) => ({
+    getContent: payload => ({
         type: GET_CONTENT,
         payload,
     }),
 
-    fetchState: (payload) => ({
+    fetchState: payload => ({
         type: FETCH_STATE,
         payload,
     }),

@@ -39,7 +39,9 @@ export function getIdsShownPending(state) {
 export function getTimestamp(direction, filteredNotifs) {
     if (filteredNotifs.count() < 1) return false;
 
-    return (direction === 'before') ? filteredNotifs.last().created : filteredNotifs.sortBy(n => n.updated).last().updated;
+    return direction === 'before'
+        ? filteredNotifs.last().created
+        : filteredNotifs.sortBy(n => n.updated).last().updated;
 }
 
 function delay(millis) {
@@ -96,7 +98,10 @@ function* watchPollData() {
         }
 
         if (idsUnreadPending.count() > 0) {
-            const payload = yield call(markAsUnread, idsUnreadPending.toArray());
+            const payload = yield call(
+                markAsUnread,
+                idsUnreadPending.toArray()
+            );
 
             if (payload.error) {
                 yield put({
@@ -174,7 +179,9 @@ export function* fetchSome({ types = null, direction = 'after' }) {
 
         // If direction is specified, find the latest or earliest notification's timestamp.
         // If types are specified, only search within those types.
-        const filteredNotifs = types ? allNotifs.filter(n => types.indexOf(n.notify_type) > -1) : allNotifs;
+        const filteredNotifs = types
+            ? allNotifs.filter(n => types.indexOf(n.notify_type) > -1)
+            : allNotifs;
 
         // Notifications are already reverse-sorted by `created` so we can just pull the last one.
         // Otherwise, sort by updated and pull the most recent (last) one.

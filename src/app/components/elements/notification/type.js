@@ -35,26 +35,40 @@ export const SECURITY_WITHDRAWAL = 'security_withdrawal';
 export const SECURITY_NEW_MOBILE = 'security_new_mobile_device';
 
 export const filters = {
-    security: [ACCOUNT_UPDATE, POWER_DOWN, SECURITY_NEW_MOBILE, SECURITY_WITHDRAWAL, SECURITY_PWD_CHANGE],
+    security: [
+        ACCOUNT_UPDATE,
+        POWER_DOWN,
+        SECURITY_NEW_MOBILE,
+        SECURITY_WITHDRAWAL,
+        SECURITY_PWD_CHANGE,
+    ],
     posts: [COMMENT_REPLY, POST_REPLY, VOTE, RESTEEM],
     wallet: [RECEIVE_STEEM, REWARD, SEND_STEEM],
     mentions: [MENTION],
     followers: [FOLLOW],
-    newPosts: [FEED]
+    newPosts: [FEED],
 };
 
 //this drives the Notification Settings UI
 export const toggleNotificationGroups = {
-    security: [ACCOUNT_UPDATE, POWER_DOWN, SECURITY_NEW_MOBILE, SECURITY_WITHDRAWAL, SECURITY_PWD_CHANGE],
+    security: [
+        ACCOUNT_UPDATE,
+        POWER_DOWN,
+        SECURITY_NEW_MOBILE,
+        SECURITY_WITHDRAWAL,
+        SECURITY_PWD_CHANGE,
+    ],
     wallet: [RECEIVE_STEEM, REWARD, SEND_STEEM],
     postReplies: [POST_REPLY],
     commentReplies: [COMMENT_REPLY],
     mentions: [MENTION],
     resteems: [RESTEEM],
-    newPosts: [FEED]
+    newPosts: [FEED],
 };
 
-export const toggleNotificationGroupNames = Object.entries(toggleNotificationGroups).reduce( (list, entry) => {
+export const toggleNotificationGroupNames = Object.entries(
+    toggleNotificationGroups
+).reduce((list, entry) => {
     list.push(entry[0]);
     return list;
 }, []);
@@ -76,9 +90,8 @@ export default [
     RECEIVE_STEEM,
     RESTEEM,
     REWARD,
-    VOTE
+    VOTE,
 ];
-
 
 /** 0
  from: https://github.com/steemit/yo/blob/mock_api/docs/API

@@ -1,4 +1,4 @@
-import {Map} from 'immutable';
+import { Map } from 'immutable';
 
 // Action constants
 const RECEIVE_ORDERBOOK = 'market/RECEIVE_ORDERBOOK';
@@ -9,7 +9,7 @@ const APPEND_TRADE_HISTORY = 'market/APPEND_TRADE_HISTORY';
 // Saga-related
 export const UPDATE_MARKET = 'market/UPDATE_MARKET';
 
-const defaultState = Map({status: {}});
+const defaultState = Map({ status: {} });
 
 export default function reducer(state = defaultState, action) {
     const payload = action.payload;
@@ -36,32 +36,32 @@ export default function reducer(state = defaultState, action) {
 }
 
 // Action creators
-export const receiveOrderbook = (payload) => ({
+export const receiveOrderbook = payload => ({
     type: RECEIVE_ORDERBOOK,
     payload,
 });
 
-export const receiveTicker = (payload) => ({
+export const receiveTicker = payload => ({
     type: RECEIVE_TICKER,
     payload,
 });
 
-export const receiveOpenOrders = (payload) => ({
+export const receiveOpenOrders = payload => ({
     type: RECEIVE_OPEN_ORDERS,
     payload,
 });
 
-export const receiveTradeHistory = (payload) => ({
+export const receiveTradeHistory = payload => ({
     type: RECEIVE_TRADE_HISTORY,
     payload,
 });
 
-export const appendTradeHistory = (payload) => ({
+export const appendTradeHistory = payload => ({
     type: APPEND_TRADE_HISTORY,
     payload,
 });
 
-export const updateMarket = (payload) => ({
+export const updateMarket = payload => ({
     type: UPDATE_MARKET,
     payload,
 });

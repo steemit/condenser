@@ -18,7 +18,7 @@ const SidebarStats = ({ steemPower, followers, reputation }) => (
                 <li className="c-sidebar__list-item">
                     <span className="c-sidebar__label">Reputation</span>
                     <span className="c-sidebar__score">{reputation}</span>
-                </li>                
+                </li>
             </ul>
         </div>
     </div>

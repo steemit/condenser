@@ -28,14 +28,14 @@ const apiMockData = {
                     'receive',
                     'reward',
                     'send',
-                    'post_reply'
+                    'post_reply',
                 ],
-                sub_data: 'test@example.com'
+                sub_data: 'test@example.com',
             },
             wwwpoll: {
                 notification_types: null,
                 sub_data: '',
-            }
+            },
         },
     },
     saved_transports: {
@@ -52,9 +52,9 @@ const apiMockData = {
                     'receive',
                     'reward',
                     'send',
-                    'post_reply'
+                    'post_reply',
                 ],
-                sub_data: 'test@example.com'
+                sub_data: 'test@example.com',
             },
             wwwpoll: {
                 notification_types: [
@@ -70,8 +70,8 @@ const apiMockData = {
                     'feed',
                     'resteem',
                 ],
-                sub_data: ''
-            }
+                sub_data: '',
+            },
         },
     },
     get_notifications: {
@@ -88,8 +88,8 @@ const apiMockData = {
                 username: 'test_user',
                 data: {
                     author: 'roadscape',
-                    amount: 10000.2
-                }
+                    amount: 10000.2,
+                },
             },
             {
                 notify_id: 55,
@@ -105,9 +105,9 @@ const apiMockData = {
                     item: {
                         parent_summary: 'whatever',
                     },
-                }
-            }
-        ]
+                },
+            },
+        ],
     },
 };
 
@@ -121,7 +121,7 @@ const desired = {
                 commentReplies: false,
                 mentions: false,
                 newPosts: false,
-                resteems: false
+                resteems: false,
             },
             sub_data: 'test@example.com',
         },
@@ -159,7 +159,7 @@ const desired = {
                 author: 'roadscape',
                 item: {
                     parentSummary: 'whatever',
-                }
+                },
             },
             id: '55',
             notificationType: 'power_down',
@@ -173,7 +173,9 @@ const desired = {
 
 describe('normalizeSettingsFromApi', () => {
     it('should take api output & turn it into something useful in the frontend', () => {
-        const normalized = normalizeSettingsFromApi(apiMockData.get_transports.result);
+        const normalized = normalizeSettingsFromApi(
+            apiMockData.get_transports.result
+        );
         expect(normalized.toJS()).to.deep.equal(desired.settings);
     });
 });

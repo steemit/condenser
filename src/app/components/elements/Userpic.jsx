@@ -7,30 +7,29 @@ export const SIZE_SMALL = 'small';
 export const SIZE_MED = 'medium';
 export const SIZE_LARGE = 'large';
 
-const sizeList = [SIZE_SMALL, SIZE_MED, SIZE_LARGE]
+const sizeList = [SIZE_SMALL, SIZE_MED, SIZE_LARGE];
 
 export const avatarSize = {
     small: SIZE_SMALL,
     medium: SIZE_MED,
-    large: SIZE_LARGE
+    large: SIZE_LARGE,
 };
 
 class Userpic extends Component {
     static propTypes = {
         account: PropTypes.string,
-        badge: PropTypes.string
-    }
+        badge: PropTypes.string,
+    };
 
-    shouldComponentUpdate = shouldComponentUpdate(this, 'Userpic')
+    shouldComponentUpdate = shouldComponentUpdate(this, 'Userpic');
 
     render() {
-        const {account, json_metadata, size} = this.props
-        const hideIfDefault = this.props.hideIfDefault || false
-        const avSize = (size && sizeList.indexOf(size) > -1)? '/' + size : '';
-
+        const { account, json_metadata, size } = this.props;
+        const hideIfDefault = this.props.hideIfDefault || false;
+        const avSize = size && sizeList.indexOf(size) > -1 ? '/' + size : '';
 
         // try to extract image url from users metaData
-        if(hideIfDefault) {
+        if (hideIfDefault) {
             try {
                 const md = JSON.parse(json_metadata);
                 if (!/^(https?:)\/\//.test(md.profile.profile_image)) {
@@ -41,25 +40,43 @@ class Userpic extends Component {
             }
         }
 
-        const badge = (this.props.badge)? <span className="badge" dangerouslySetInnerHTML={ {__html: this.props.badge} } /> : null
+        const badge = this.props.badge ? (
+            <span
+                className="badge"
+                dangerouslySetInnerHTML={{ __html: this.props.badge }}
+            />
+        ) : null;
 
-        const style = {backgroundImage: 'url(' + imageProxy() + `u/${account}/avatar${avSize})` };
+        const style = {
+            backgroundImage:
+                'url(' + imageProxy() + `u/${account}/avatar${avSize})`,
+        };
 
-        return (<div className="Userpic" title={"Picture for " + this.props.account} style={style} >{ badge }</div>)
+        return (
+            <div
+                className="Userpic"
+                title={'Picture for ' + this.props.account}
+                style={style}
+            >
+                {badge}
+            </div>
+        );
     }
 }
 
 Userpic.propTypes = {
-    account: PropTypes.string.isRequired
-}
+    account: PropTypes.string.isRequired,
+};
 
-export default connect(
-    (state, ownProps) => {
-        const {account, hideIfDefault} = ownProps
-        return {
+export default connect((state, ownProps) => {
+    const { account, hideIfDefault } = ownProps;
+    return {
+        account,
+        json_metadata: state.global.getIn([
+            'accounts',
             account,
-            json_metadata: state.global.getIn(['accounts', account, 'json_metadata']),
-            hideIfDefault,
-        }
-    }
-)(Userpic)
+            'json_metadata',
+        ]),
+        hideIfDefault,
+    };
+})(Userpic);

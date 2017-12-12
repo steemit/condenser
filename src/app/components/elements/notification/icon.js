@@ -1,20 +1,26 @@
-import * as type from './type'
+import * as type from './type';
 
-const icon = {}
+const icon = {};
 //notify even types
-icon[type.ANNOUNCEMENT] = require('assets/icons/notifications/mention.svg')
-icon[type.ANNOUNCEMENT_IMPORTANT] = require('assets/icons/notifications/mention.svg')
-icon[type.COMMENT_REPLY] = require('assets/icons/notifications/comment.svg')
-icon[type.FOLLOW_AUTHOR_POST] = require('assets/icons/notifications/new-post.svg')
-icon[type.FOLLOW_COMMENT_REPLY] = require('assets/icons/notifications/new-post.svg')
-icon[type.POST_REPLY] = require('assets/icons/notifications/comment.svg')
-icon[type.RECEIVE_STEEM] = require('assets/icons/notifications/currency.svg')
-icon[type.RESTEEM] = require('assets/icons/notifications/resteem.svg')
-icon[type.POWER_DOWN] = require('assets/icons/notifications/currency.svg')
-icon[type.MENTION] = require('assets/icons/notifications/mention.svg')
-icon.visibilityOn = require('assets/icons/visibility_on.svg')
-icon.visibilityOff = require('assets/icons/visibility_off.svg')
-icon.important = require('assets/icons/notifications/important.svg')
+icon[type.ANNOUNCEMENT] = require('assets/icons/notifications/mention.svg');
+icon[
+    type.ANNOUNCEMENT_IMPORTANT
+] = require('assets/icons/notifications/mention.svg');
+icon[type.COMMENT_REPLY] = require('assets/icons/notifications/comment.svg');
+icon[
+    type.FOLLOW_AUTHOR_POST
+] = require('assets/icons/notifications/new-post.svg');
+icon[
+    type.FOLLOW_COMMENT_REPLY
+] = require('assets/icons/notifications/new-post.svg');
+icon[type.POST_REPLY] = require('assets/icons/notifications/comment.svg');
+icon[type.RECEIVE_STEEM] = require('assets/icons/notifications/currency.svg');
+icon[type.RESTEEM] = require('assets/icons/notifications/resteem.svg');
+icon[type.POWER_DOWN] = require('assets/icons/notifications/currency.svg');
+icon[type.MENTION] = require('assets/icons/notifications/mention.svg');
+icon.visibilityOn = require('assets/icons/visibility_on.svg');
+icon.visibilityOff = require('assets/icons/visibility_off.svg');
+icon.important = require('assets/icons/notifications/important.svg');
 
 //icon[type.SECURITY_PWD_CHANGE] = require('assets/icons/notifications/?')
 //icon[type.SECURITY_WITHDRAWAL] = require('assets/icons/notifications/?')
@@ -22,4 +28,4 @@ icon.important = require('assets/icons/notifications/important.svg')
 //icon[type.SECURITY_POWER_DOWN] = require('assets/icons/notifications/?')
 //icon[type.VOTE] = require('assets/icons/notifications/vote')
 
-export default icon
+export default icon;

@@ -24,9 +24,14 @@ function apiToMap(payload) {
 export const byId = (state = OrderedMap(), action = { type: null }) => {
     switch (action.type) {
         case 'notification/RECEIVE_ALL':
-            return apiToMap(action.payload).sortBy(n => n.created).reverse();
+            return apiToMap(action.payload)
+                .sortBy(n => n.created)
+                .reverse();
         case 'notification/APPEND_SOME':
-            return state.merge(apiToMap(action.payload)).sortBy(n => n.created).reverse();
+            return state
+                .merge(apiToMap(action.payload))
+                .sortBy(n => n.created)
+                .reverse();
         case 'notification/UPDATE_ONE':
             return state.set(action.id, {
                 ...state.get(action.id),
@@ -51,16 +56,22 @@ const createUpdatedList = ({ prop, val }) => {
     return (state = Set(), action = { type: null }) => {
         switch (action.type) {
             case 'notification/UPDATE_ONE':
-                return updateMatchesList(action.updates, prop, val) ? state.add(action.id) : state;
+                return updateMatchesList(action.updates, prop, val)
+                    ? state.add(action.id)
+                    : state;
             case 'notification/UPDATE_SOME':
-                return updateMatchesList(action.updates, prop, val) ? state.union(Set(action.ids)) : state;
+                return updateMatchesList(action.updates, prop, val)
+                    ? state.union(Set(action.ids))
+                    : state;
             case 'notification/SENT_UPDATES':
-                return updateMatchesList(action.updates, prop, val) ? Set() : state;
+                return updateMatchesList(action.updates, prop, val)
+                    ? Set()
+                    : state;
             default:
                 return state;
         }
     };
-}
+};
 
 /**
  * Is an incoming update event relevant to our list?
@@ -77,12 +88,21 @@ function updateMatchesList(actionUpdates, prop, val) {
  * @param {?} ceiterium.val ... should match exactly this value
  * @return {Function} reducer
  */
-export const createList = ({ prop, val }) => (state = Set(), action = { type: null }) => {
+export const createList = ({ prop, val }) => (
+    state = Set(),
+    action = { type: null }
+) => {
     switch (action.type) {
         case 'notification/RECEIVE_ALL':
-            return Set.fromKeys(apiToMap(action.payload).filter(n => (n[prop] === val)));
+            return Set.fromKeys(
+                apiToMap(action.payload).filter(n => n[prop] === val)
+            );
         case 'notification/APPEND_SOME':
-            return state.union(Set.fromKeys(apiToMap(action.payload).filter(n => (n[prop] === val))));
+            return state.union(
+                Set.fromKeys(
+                    apiToMap(action.payload).filter(n => n[prop] === val)
+                )
+            );
         case 'notification/UPDATE_ONE':
             if (!updateMatchesList(action.updates, prop, val)) {
                 return state.delete(action.id);
@@ -112,21 +132,38 @@ export const createList = ({ prop, val }) => (state = Set(), action = { type: nu
  * @param {String[]} filtertypes only include notif ids with these types
  * @return {Function} reducer
  */
-export const createMultiTypeList = (filtertypes) => (state = Set(), action = { type: null }) => {
+export const createMultiTypeList = filtertypes => (
+    state = Set(),
+    action = { type: null }
+) => {
     switch (action.type) {
         case 'notification/RECEIVE_ALL':
-            return Set.fromKeys(apiToMap(action.payload).filter(n => (filtertypes.indexOf(n.notificationType) > -1)));
+            return Set.fromKeys(
+                apiToMap(action.payload).filter(
+                    n => filtertypes.indexOf(n.notificationType) > -1
+                )
+            );
         case 'notification/APPEND_SOME':
-            return state.union(Set.fromKeys(apiToMap(action.payload).filter(n => filtertypes.indexOf(n.notificationType) > -1)));
+            return state.union(
+                Set.fromKeys(
+                    apiToMap(action.payload).filter(
+                        n => filtertypes.indexOf(n.notificationType) > -1
+                    )
+                )
+            );
         default:
             return state;
     }
 };
 
-const generateUserfacingTypesReducers = (filtermap, listCreator) => Object.keys(filtermap).reduce((acc, cur) => ({
-    ...acc,
-    [cur]: listCreator(filtermap[cur]),
-}), {});
+const generateUserfacingTypesReducers = (filtermap, listCreator) =>
+    Object.keys(filtermap).reduce(
+        (acc, cur) => ({
+            ...acc,
+            [cur]: listCreator(filtermap[cur]),
+        }),
+        {}
+    );
 
 const isFetching = (state = false, action = { type: null }) => {
     switch (action.type) {
@@ -144,8 +181,7 @@ const isFetching = (state = false, action = { type: null }) => {
 const isFetchingBefore = (state = false, action = { type: null }) => {
     switch (action.type) {
         case 'notification/FETCH_SOME':
-            if (action.direction === 'before')
-                return true;
+            if (action.direction === 'before') return true;
             return state;
         case 'notification/APPEND_SOME':
             return false;
@@ -176,7 +212,7 @@ export const allIds = (state = Set(), action = { type: null }) => {
         default:
             return state;
     }
-}
+};
 
 const notificationReducer = combineReducers({
     byId,
@@ -186,7 +222,9 @@ const notificationReducer = combineReducers({
     idsShownPending: createUpdatedList({ prop: 'shown', val: true }),
     unread: createList({ prop: 'read', val: false }),
     unshown: createList({ prop: 'shown', val: false }),
-    byUserFacingType: combineReducers(generateUserfacingTypesReducers(filters, createMultiTypeList)),
+    byUserFacingType: combineReducers(
+        generateUserfacingTypesReducers(filters, createMultiTypeList)
+    ),
     isFetching,
     isFetchingBefore,
     errorMsg,

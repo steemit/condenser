@@ -3,6 +3,8 @@ spaces
 the-gaming-llama
 cmgsteems
 iamgod
-`.trim().split('\n');
+`
+    .trim()
+    .split('\n');
 
 export default list;

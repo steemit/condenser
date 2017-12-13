@@ -10,10 +10,9 @@ import ConsoleExports from './utils/ConsoleExports';
 import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 import * as steem from '@steemit/steem-js';
 import { determineViewMode } from 'app/utils/Links';
+import frontendLogger from 'app/utils/FrontendLogger';
 
-window.onerror = error => {
-    if (window.$STM_csrf) serverApiRecordEvent('client_error', error);
-};
+window.addEventListener('error', frontendLogger);
 
 const CMD_LOG_T = 'log-t';
 const CMD_LOG_TOGGLE = 'log-toggle';

@@ -1,7 +1,6 @@
 import React from 'react';
 import { browserHistory, Link } from 'react-router';
 import { connect } from 'react-redux';
-import { browserHistory } from 'react-router';
 import tt from 'counterpart';
 import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdown';
 import Icon from 'app/components/elements/Icon';
@@ -123,7 +122,7 @@ function TopRightMenu({
         ];
         return (
             <ul className={mcn + mcl}>
-                <li className={lcn + ' Header__search'}>
+                <li className={'show-for-small-only Header__search'}>
                     <a href="/static/search.html" title={tt_search}>
                         {vertical ? (
                             <span>{tt_search}</span>
@@ -188,7 +187,6 @@ function TopRightMenu({
                         </li>
                     )}
                 </LinkWithDropdown>
-
                 {toggleOffCanvasMenu && (
                     <li className="toggle-menu Header__hamburger">
                         <a href="#" onClick={toggleOffCanvasMenu}>
@@ -203,9 +201,13 @@ function TopRightMenu({
         return (
             <ul className={mcn + mcl}>
                 {!vertical && (
-                    <li className="Header__search">
+                    <li className={'show-for-small-only Header__search'}>
                         <a href="/static/search.html" title={tt_search}>
-                            <Icon name="search" />
+                            {vertical ? (
+                                <span>{tt_search}</span>
+                            ) : (
+                                <Icon name="search" />
+                            )}
                         </a>
                     </li>
                 )}
@@ -225,7 +227,7 @@ function TopRightMenu({
     return (
         <ul className={mcn + mcl}>
             {!vertical && (
-                <li className="Header__search">
+                <li className={'show-for-small-only Header__search'}>
                     <a href="/static/search.html" title={tt_search}>
                         <Icon name="search" />
                     </a>

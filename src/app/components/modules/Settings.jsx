@@ -210,7 +210,7 @@ class Settings extends React.Component {
                 <div className="row">
                     <form
                         onSubmit={this.handleSubmitForm}
-                        className="settings-group small-12 medium-6 columns"
+                        className="settings-group small-12 medium-6 large-4 columns"
                     >
                         <h4>{tt('settings_jsx.public_profile_settings')}</h4>
                         <label>
@@ -313,6 +313,7 @@ class Settings extends React.Component {
                         ) : null}
                     </form>
                 </div>
+
                 {isOwnAccount && (
                     <div className="row">
                         <YotificationSettingsPanel className="settings-group small-12 medium-6 columns" />
@@ -320,7 +321,9 @@ class Settings extends React.Component {
                 )}
                 {isOwnAccount && (
                     <div className="row">
-                        <div className="settings-group small-12 medium-6 columns">
+                        <div className="small-12 medium-6 large-4 columns">
+                            <br />
+                            <br />
                             <h4>
                                 {tt(
                                     'settings_jsx.private_post_display_settings'

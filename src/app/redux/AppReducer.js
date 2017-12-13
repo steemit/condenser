@@ -1,4 +1,4 @@
-import { List, Map, OrderedMap } from 'immutable';
+import { Map, OrderedMap } from 'immutable';
 import tt from 'counterpart';
 
 // Action constants

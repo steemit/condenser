@@ -11,6 +11,7 @@ bittre
 bittrec
 bittres
 bittrex.com
+bittreex
 bittrexe
 bittrexx
 bittrez

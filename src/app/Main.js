@@ -12,7 +12,9 @@ import * as steem from '@steemit/steem-js';
 import { determineViewMode } from 'app/utils/Links';
 
 window.addEventListener('error', error => {
-    if (window.$STM_csrf) serverApiRecordEvent('client_error', error);
+    const loggable =
+        typeof error.error !== 'undefined' ? error.error : error.message;
+    if (window.$STM_csrf) serverApiRecordEvent('client_error', loggable);
 });
 
 const CMD_LOG_T = 'log-t';
@@ -29,6 +31,7 @@ try {
 }
 
 function runApp(initial_state) {
+    if (typeof window !== 'undefined') throw new Error('yipes');
     console.log('Initial state', initial_state);
     const konami = {
         code: 'xyzzy',

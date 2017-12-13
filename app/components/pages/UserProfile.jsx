@@ -158,9 +158,14 @@ export default class UserProfile extends React.Component {
 
         let rewardsClass = "", walletClass = "";
         if( section === 'transfers' ) {
+            // transfers, check if url has query params
+            const { location: { query } } = this.props;
+            const {to, amount, token, memo} = query;
+            const hasAllParams = (!!to && !!amount && !!token && !!memo);
             walletClass = 'active'
             tab_content = <div>
                 <UserWallet
+                    transferDetails={{immediate: hasAllParams, ...query}}
                     account={accountImm}
                     showTransfer={this.props.showTransfer}
                     current_user={current_user}
@@ -396,11 +401,11 @@ export default class UserProfile extends React.Component {
             const cover_image_url = $STM_Config.img_proxy_prefix ? $STM_Config.img_proxy_prefix + '0x0' + '/' + cover_image : null
             cover_image_style = {backgroundImage: "url(" + cover_image_url + ")"}
         }
-        
-        let genderIcon;    
+
+        let genderIcon;
         if (gender && gender != "undefined")
             genderIcon = <span><Icon name={gender} /></span>
-        
+
 
         return (
             <div className="UserProfile">

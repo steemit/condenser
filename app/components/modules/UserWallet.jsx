@@ -328,6 +328,27 @@ class UserWallet extends React.Component {
             {depositReveal}
         </div>);
     }
+    componentDidMount() {
+      //todo make transfer call a member? since code is repeated in some places
+      const callTransfer = ({ to, amount, token, memo}) => {
+      // immediate transfer processing (e.g. from foreign link)
+      const transferType = 'Transfer to Account';
+      this.props.showTransfer({
+        to,
+        asset: token.toUpperCase(), //since it's lowercased by koa
+        transferType,
+        memo,
+        amount,
+        disableMemo: true,
+        disableTo: true,
+        disableAmount: true
+      });
+    }
+      const { transferDetails: { immediate, to, amount, token, memo } } = this.props;
+      console.log(`###########################`)
+      console.log(immediate)
+      if (immediate) callTransfer({ to, amount, token, memo})
+    }
 }
 
 export default connect(

@@ -29,6 +29,9 @@ class TransferForm extends Component {
     }
 
     componentDidMount() {
+        const { props: {onChange}, value} = this.state.amount;
+        //force validation todo as ReactForm does not validate initial values for some reason
+        onChange(value)
         setTimeout(() => {
             const {advanced} = this.state
             if (advanced)
@@ -141,7 +144,11 @@ class TransferForm extends Component {
         const {to, amount, asset, memo} = this.state
         const {loading, trxError, advanced} = this.state
         const {currentUser, toVesting, transferToSelf, dispatchSubmit} = this.props
-        const {transferType} = this.props.initialValues
+        const { transferType,
+                disableMemo = false,
+                disableTo = false,
+                disableAmount = false} = this.props.initialValues
+        console.log({disableMemo, disableTo, disableAmount})
         const {submitting, valid, handleSubmit} = this.state.transfer
         const isMemoPrivate = memo && /^#/.test(memo.value)
         const form = (
@@ -197,7 +204,7 @@ class TransferForm extends Component {
                                 autoCorrect="off"
                                 autoCapitalize="off"
                                 spellCheck="false"
-                                disabled={loading}
+                                disabled={disableTo || loading}
                                 {...to.props}
                             />
                         </div>
@@ -212,9 +219,9 @@ class TransferForm extends Component {
                     <div className="column small-2" style={{paddingTop: 5}}>{tt('g.amount')}</div>
                     <div className="column small-10">
                         <div className="input-group" style={{marginBottom: 5}}>
-                            <input type="text" placeholder={tt('g.amount')} {...amount.props} ref="amount" autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck="false" disabled={loading} onChange={(e) => this.onChangeAmount(e)}/>
+                            <input type="text" placeholder={tt('g.amount')} {...amount.props} ref="amount" autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck="false" disabled={disableAmount || loading} onChange={(e) => this.onChangeAmount(e)}/>
                             {asset && <span className="input-group-label" style={{paddingLeft: 0, paddingRight: 0}}>
-                                <select {...asset.props} placeholder={tt('transfer_jsx.asset')} disabled={loading} style={{minWidth: "5rem", height: "inherit", backgroundColor: "transparent", border: "none"}}>
+                                <select {...asset.props} placeholder={tt('transfer_jsx.asset')} disabled={disableAmount || loading} style={{minWidth: "5rem", height: "inherit", backgroundColor: "transparent", border: "none"}}>
                                     <option value={LIQUID_TICKER}>{LIQUID_TOKEN}</option>
                                     <option value={DEBT_TICKER}>{DEBT_TICKER}</option>
                                 </select>
@@ -236,7 +243,7 @@ class TransferForm extends Component {
                     <div className="column small-10">
                         <small>{tt('transfer_jsx.this_memo_is') + isMemoPrivate ? tt('transfer_jsx.public') : tt('transfer_jsx.private')}</small>
                         <input type="text" placeholder={tt('transfer_jsx.memo')} {...memo.props}
-                            ref="memo" autoComplete="on" autoCorrect="off" autoCapitalize="off" spellCheck="false" disabled={loading} />
+                            ref="memo" autoComplete="on" autoCorrect="off" autoCapitalize="off" spellCheck="false" disabled={disableMemo || loading} />
                         <div className="error">{memo.touched && memo.error && memo.error}&nbsp;</div>
                     </div>
                 </div>}

@@ -7056,9 +7056,9 @@ redux-form@5.3.4:
     is-promise "^2.1.0"
     react-lazy-cache "^3.0.1"
 
-redux-saga@^0.9.5:
-  version "0.9.5"
-  resolved "https://registry.yarnpkg.com/redux-saga/-/redux-saga-0.9.5.tgz#f4bde5896e466932f758f86247b2fa6a4694ec2a"
+redux-saga@^0.16.0:
+  version "0.16.0"
+  resolved "https://registry.yarnpkg.com/redux-saga/-/redux-saga-0.16.0.tgz#0a231db0a1489301dd980f6f2f88d8ced418f724"
 
 redux@^3.3.1:
   version "3.7.2"

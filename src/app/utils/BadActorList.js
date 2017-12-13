@@ -110,9 +110,12 @@ minnnowbooster
 blocktades
 bloocktrades
 bloctrades
+blocktraders
 blocktradess
 blocktrade
-blocktraders
+steempay
+steempays
+steemitpay
 `
     .trim()
     .split('\n');

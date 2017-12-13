@@ -11,6 +11,7 @@ bittre
 bittrec
 bittres
 bittrex.com
+bittreex
 bittrexe
 bittrexx
 bittrez
@@ -115,6 +116,8 @@ blocktrade
 steempay
 steempays
 steemitpay
-`.trim().split('\n');
+`
+    .trim()
+    .split('\n');
 
 export default list;

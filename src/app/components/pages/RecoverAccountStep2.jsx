@@ -1,8 +1,8 @@
 import React from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import tt from 'counterpart';
-import {PrivateKey} from '@steemit/steem-js/lib/auth/ecc';
-import {api} from '@steemit/steem-js';
+import { PrivateKey } from '@steemit/steem-js/lib/auth/ecc';
+import { api } from '@steemit/steem-js';
 
 import * as userActions from 'app/redux/UserReducer';
 import * as transactionActions from 'app/redux/TransactionReducer';
@@ -14,17 +14,16 @@ function passwordToOwnerPubKey(account_name, password) {
     let pub_key;
     try {
         pub_key = PrivateKey.fromWif(password);
-    } catch(e) {
+    } catch (e) {
         pub_key = PrivateKey.fromSeed(account_name + 'owner' + password);
     }
     return pub_key.toPublicKey().toString();
 }
 
 class RecoverAccountStep2 extends React.Component {
-
     static propTypes = {
         account_to_recover: React.PropTypes.string,
-        recoverAccount: React.PropTypes.func.isRequired
+        recoverAccount: React.PropTypes.func.isRequired,
     };
 
     constructor(props) {
@@ -47,19 +46,22 @@ class RecoverAccountStep2 extends React.Component {
 
     oldPasswordChange(e) {
         const oldPassword = e.target.value.trim();
-        this.setState({oldPassword});
+        this.setState({ oldPassword });
     }
 
     onPasswordChange(newPassword, valid) {
-        this.setState({newPassword, valid});
+        this.setState({ newPassword, valid });
     }
 
     onRecoverFailed(error) {
-        this.setState({error: error.msg || error.toString(), progress_status: ''});
+        this.setState({
+            error: error.msg || error.toString(),
+            progress_status: '',
+        });
     }
 
     onRecoverSuccess() {
-        this.setState({success: true, progress_status: ''});
+        this.setState({ success: true, progress_status: '' });
     }
 
     checkOldOwner(name, oldOwner) {
@@ -75,72 +77,148 @@ class RecoverAccountStep2 extends React.Component {
     requestAccountRecovery(name, oldPassword, newPassword) {
         const old_owner_key = passwordToOwnerPubKey(name, oldPassword);
         const new_owner_key = passwordToOwnerPubKey(name, newPassword);
-        const new_owner_authority = {weight_threshold: 1, account_auths: [], key_auths: [[new_owner_key, 1]]}
+        const new_owner_authority = {
+            weight_threshold: 1,
+            account_auths: [],
+            key_auths: [[new_owner_key, 1]],
+        };
         fetch('/api/v1/request_account_recovery', {
             method: 'post',
             mode: 'no-cors',
             credentials: 'same-origin',
             headers: {
                 Accept: 'application/json',
-                'Content-type': 'application/json'
+                'Content-type': 'application/json',
             },
-            body: JSON.stringify({csrf: $STM_csrf, name, old_owner_key, new_owner_key, new_owner_authority})
-        }).then(r => r.json()).then(res => {
-            if (res.error) {
-                console.error('request_account_recovery server error (1)', res.error);
-                this.setState({error: res.error || tt('g.unknown'), progress_status: ''});
-            } else {
-                this.setState({error: '', progress_status: tt('recoveraccountstep1_jsx.recovering_account') + '..'});
-                this.props.recoverAccount(name, oldPassword, newPassword, this.onRecoverFailed, this.onRecoverSuccess);
-            }
-        }).catch(error => {
-            console.error('request_account_recovery server error (2)', error);
-            this.setState({error: (error.message ? error.message : error), progress_status: ''});
-        });
+            body: JSON.stringify({
+                csrf: $STM_csrf,
+                name,
+                old_owner_key,
+                new_owner_key,
+                new_owner_authority,
+            }),
+        })
+            .then(r => r.json())
+            .then(res => {
+                if (res.error) {
+                    console.error(
+                        'request_account_recovery server error (1)',
+                        res.error
+                    );
+                    this.setState({
+                        error: res.error || tt('g.unknown'),
+                        progress_status: '',
+                    });
+                } else {
+                    this.setState({
+                        error: '',
+                        progress_status:
+                            tt('recoveraccountstep1_jsx.recovering_account') +
+                            '..',
+                    });
+                    this.props.recoverAccount(
+                        name,
+                        oldPassword,
+                        newPassword,
+                        this.onRecoverFailed,
+                        this.onRecoverSuccess
+                    );
+                }
+            })
+            .catch(error => {
+                console.error(
+                    'request_account_recovery server error (2)',
+                    error
+                );
+                this.setState({
+                    error: error.message ? error.message : error,
+                    progress_status: '',
+                });
+            });
     }
 
     onSubmit(e) {
         e.preventDefault();
-        const {oldPassword, newPassword} = this.state;
+        const { oldPassword, newPassword } = this.state;
         const name = this.props.account_to_recover;
         const oldOwner = passwordToOwnerPubKey(name, oldPassword);
-        this.setState({progress_status: tt('recoveraccountstep1_jsx.checking_account_owner') + '..'});
+        this.setState({
+            progress_status:
+                tt('recoveraccountstep1_jsx.checking_account_owner') + '..',
+        });
         this.checkOldOwner(name, oldOwner).then(res => {
             if (res) {
-                this.setState({progress_status: tt('recoveraccountstep1_jsx.sending_recovery_request') + '..'});
+                this.setState({
+                    progress_status:
+                        tt('recoveraccountstep1_jsx.sending_recovery_request') +
+                        '..',
+                });
                 this.requestAccountRecovery(name, oldPassword, newPassword);
             } else {
-                this.setState({error: tt('recoveraccountstep1_jsx.cant_confirm_account_ownership'), progress_status: ''});
+                this.setState({
+                    error: tt(
+                        'recoveraccountstep1_jsx.cant_confirm_account_ownership'
+                    ),
+                    progress_status: '',
+                });
             }
         });
     }
 
     render() {
-        if (!process.env.BROWSER) { // don't render this page on the server
-            return <div className="row">
-                <div className="column">
-                    {tt('g.loading')}..
+        if (!process.env.BROWSER) {
+            // don't render this page on the server
+            return (
+                <div className="row">
+                    <div className="column">{tt('g.loading')}..</div>
                 </div>
-            </div>;
+            );
         }
-        const {account_to_recover} = this.props;
+        const { account_to_recover } = this.props;
         if (!account_to_recover) {
-            return <Callout type="error">
-                <span>{tt('recoveraccountstep1_jsx.account_recovery_request_not_confirmed')}</span>
-            </Callout>;
+            return (
+                <Callout type="error">
+                    <span>
+                        {tt(
+                            'recoveraccountstep1_jsx.account_recovery_request_not_confirmed'
+                        )}
+                    </span>
+                </Callout>
+            );
         }
-        const {oldPassword, valid, error, progress_status, name_error, success} = this.state;
-        const submit_btn_class = 'button action' + (!valid || !oldPassword ? ' disabled' : '');
+        const {
+            oldPassword,
+            valid,
+            error,
+            progress_status,
+            name_error,
+            success,
+        } = this.state;
+        const submit_btn_class =
+            'button action' + (!valid || !oldPassword ? ' disabled' : '');
 
         let submit = null;
         if (progress_status) {
-            submit = <span><LoadingIndicator type="circle" inline /> {progress_status}</span>;
+            submit = (
+                <span>
+                    <LoadingIndicator type="circle" inline /> {progress_status}
+                </span>
+            );
         } else {
             if (success) {
                 // submit = <h4>Congratulations! Your account has been recovered. Please login using your new password.</h4>;
-                window.location = `/login.html#account=${account_to_recover}&msg=accountrecovered`;
+                window.location = `/login.html#account=${
+                    account_to_recover
+                }&msg=accountrecovered`;
             } else {
-                submit = <input disabled={!valid} type="submit" className={submit_btn_class} value="Submit" />;
+                submit = (
+                    <input
+                        disabled={!valid}
+                        type="submit"
+                        className={submit_btn_class}
+                        value="Submit"
+                    />
+                );
             }
         }
         const disable_password_input = success || progress_status !== '';
@@ -150,25 +228,42 @@ class RecoverAccountStep2 extends React.Component {
                 <div className="row">
                     <div className="column large-6">
                         <h2>{tt('recoveraccountstep1_jsx.recover_account')}</h2>
-                        <form onSubmit={this.onSubmit} autoComplete="off" noValidate>
+                        <form
+                            onSubmit={this.onSubmit}
+                            autoComplete="off"
+                            noValidate
+                        >
                             <div className={name_error ? 'error' : ''}>
-                                <label>{tt('g.account_name')}
-                                    <input type="text" disabled="true" autoComplete="off" value={account_to_recover} />
+                                <label>
+                                    {tt('g.account_name')}
+                                    <input
+                                        type="text"
+                                        disabled="true"
+                                        autoComplete="off"
+                                        value={account_to_recover}
+                                    />
                                 </label>
                                 <p className="help-text">{name_error}</p>
                             </div>
                             <br />
                             <div>
-                                <label>{tt('postfull_jsx.recent_password')}
-                                    <input type="password"
-                                           disabled={disable_password_input}
-                                           autoComplete="off"
-                                           value={oldPassword}
-                                           onChange={this.oldPasswordChange} />
+                                <label>
+                                    {tt('postfull_jsx.recent_password')}
+                                    <input
+                                        type="password"
+                                        disabled={disable_password_input}
+                                        autoComplete="off"
+                                        value={oldPassword}
+                                        onChange={this.oldPasswordChange}
+                                    />
                                 </label>
                             </div>
                             <br />
-                            <GeneratedPasswordInput onChange={this.onPasswordChange} disabled={disable_password_input} showPasswordString={oldPassword.length > 0} />
+                            <GeneratedPasswordInput
+                                onChange={this.onPasswordChange}
+                                disabled={disable_password_input}
+                                showPasswordString={oldPassword.length > 0}
+                            />
                             <div className="error">{error}</div>
                             <br />
                             {submit}
@@ -190,11 +285,23 @@ module.exports = {
         },
         dispatch => ({
             recoverAccount: (
-                account_to_recover, old_password, new_password, onError, onSuccess
+                account_to_recover,
+                old_password,
+                new_password,
+                onError,
+                onSuccess
             ) => {
-                dispatch(transactionActions.recoverAccount({ account_to_recover, old_password, new_password, onError, onSuccess }));
+                dispatch(
+                    transactionActions.recoverAccount({
+                        account_to_recover,
+                        old_password,
+                        new_password,
+                        onError,
+                        onSuccess,
+                    })
+                );
                 dispatch(userActions.logout());
             },
         })
-    )(RecoverAccountStep2)
+    )(RecoverAccountStep2),
 };

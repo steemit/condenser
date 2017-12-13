@@ -1,6 +1,9 @@
 const list = `
 poloniex
 bittrex
-`.trim().split('\n');
+changelly
+`
+    .trim()
+    .split('\n');
 
 export default list;

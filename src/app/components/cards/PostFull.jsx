@@ -441,16 +441,41 @@ class PostFull extends React.Component {
             );
         }
 
+        const jsonld = {
+            "@context": "http://schema.org",
+            "@type": "Blog",
+            "@id": `https://${APP_DOMAIN}/@${author}/blog`,
+            "blogPost": {
+                "@context": "http://schema.org",
+                "@type": "BlogPosting",
+                "@id": content.url,
+                "headline": content.title,
+                "text": content.body,
+                "url": content.url,
+                "keywords": content.category,
+                "datePublished": content.created,
+                "dateModified": content.created,
+                "mainEntityOfPage": content.url,
+                "image": jsonMetadata.image,
+                "publisher": {
+                    "@id": `https://${APP_DOMAIN}/@${author}`                    
+                },
+                "author": {
+                    "@id": `https://${APP_DOMAIN}/@${author}`
+                }
+            }
+        };
+        
         return (
             <article
                 className="PostFull hentry"
-                itemScope
-                itemType="http://schema.org/Blog"
             >
                 {showEdit ? (
                     renderedEditor
                 ) : (
                     <span>
+                        <script type="application/ld+json">{JSON.stringify(jsonld)}</script>
+                        
                         <div className="float-right">
                             <Voting post={post} flag />
                         </div>

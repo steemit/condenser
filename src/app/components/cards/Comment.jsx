@@ -14,6 +14,7 @@ import tt from 'counterpart';
 import { parsePayoutAmount } from 'app/utils/ParsersAndFormatters';
 import { Long } from 'bytebuffer';
 import ImageUserBlockList from 'app/utils/ImageUserBlockList';
+import { APP_DOMAIN } from 'app/client_config';
 
 // returns true if the comment has a 'hide' flag AND has no descendants w/ positive payout
 function hideSubtree(cont, c) {
@@ -402,8 +403,14 @@ class CommentImpl extends React.Component {
             "datePublished": comment.created,
             "text": comment.body,
             "keywords": comment.category,
+            /*
+            // Comment's parent item must be of schema.org/Question type ... O_o
+            "parentItem": {
+                "@id": comment.parent_permlink
+            },
+            */
             "author": {
-                "@id": "https://steemit.com/@" + comment.author
+                "@id": `https://${APP_DOMAIN}/@${comment.author}`
             }
         };
         

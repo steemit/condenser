@@ -11,6 +11,7 @@ import normalizeProfile from 'app/utils/NormalizeProfile';
 import Overlay from 'react-overlays/lib/Overlay';
 import { findDOMNode } from 'react-dom';
 import { imageProxy } from 'app/utils/ProxifyUrl';
+import { APP_DOMAIN } from 'app/client_config';
 
 const { string, bool, number } = React.PropTypes;
 
@@ -96,10 +97,10 @@ class Author extends React.Component {
         const jsonld = {
             "@context": "http://schema.org",
             "@type": "Person",
-            "@id": "https://steemit.com/@" + author,
+            "@id": `https://${APP_DOMAIN}/@${author}`,
             "image": imageProxy() + "u/" + author + "/avatar",
             "name": author,
-            "url": "https://steemit.com/@" + author
+            "url": `https://${APP_DOMAIN}/@${author}`
         };
 
         if (!(follow || mute) || username === author) {

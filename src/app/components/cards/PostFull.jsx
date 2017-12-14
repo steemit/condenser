@@ -458,7 +458,15 @@ class PostFull extends React.Component {
                 "mainEntityOfPage": content.url,
                 "image": jsonMetadata.image,
                 "publisher": {
-                    "@id": `https://${APP_DOMAIN}/@${author}`                    
+                    "@context": "http://schema.org",
+                    "@type": "Organization",
+                    "name": "Steemit",
+                    "url": `https://${APP_DOMAIN}`,
+                    "logo": {
+                        "@context": "http://schema.org",
+                        "@type": "ImageObject",
+                        "url": `https://${APP_DOMAIN}/images/favicons/mstile-310x310.png`
+                      }
                 },
                 "author": {
                     "@id": `https://${APP_DOMAIN}/@${author}`

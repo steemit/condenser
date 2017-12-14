@@ -81,7 +81,7 @@ function runApp(initial_state) {
     const config = initial_state.offchain.config
     steem.api.setOptions({
         url: config.steemd_connection_client,
-        useAppbaseApi: true,
+        useAppbaseApi: config.steemd_use_appbase,
     });
     steem.config.set('address_prefix', config.address_prefix);
     steem.config.set('chain_id', config.chain_id);

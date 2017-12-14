@@ -57,7 +57,7 @@ global.webpackIsomorphicTools.server(ROOT, () => {
 =======
         steem.api.setOptions({
             url: config.steemd_connection_client,
-            useAppbaseApi: true,
+            useAppbaseApi: config.steemd_use_appbase,
         });
         steem.config.set('address_prefix', config.get('address_prefix'));
         steem.config.set('chain_id', config.get('chain_id'));

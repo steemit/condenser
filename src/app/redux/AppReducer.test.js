@@ -3,7 +3,7 @@ import chaiImmutable from 'chai-immutable';
 
 import { Map, OrderedMap, getIn } from 'immutable';
 
-import reducer, { defaultState, appActionConstants } from './AppReducer';
+import reducer, { defaultState, appActions } from './AppReducer';
 
 chai.use(chaiImmutable);
 
@@ -14,50 +14,50 @@ const mockActions = {
             pathname: 'testPath',
         },
     },
-    [appActionConstants.STEEM_API_ERROR]: {
-        type: appActionConstants.STEEM_API_ERROR,
+    [appActions.STEEM_API_ERROR]: {
+        type: appActions.STEEM_API_ERROR,
     },
-    [appActionConstants.FETCH_DATA_BEGIN]: {
-        type: appActionConstants.FETCH_DATA_BEGIN,
+    [appActions.FETCH_DATA_BEGIN]: {
+        type: appActions.FETCH_DATA_BEGIN,
     },
-    [appActionConstants.FETCH_DATA_END]: {
-        type: appActionConstants.FETCH_DATA_END,
+    [appActions.FETCH_DATA_END]: {
+        type: appActions.FETCH_DATA_END,
     },
-    [appActionConstants.ADD_NOTIFICATION]: {
-        type: appActionConstants.ADD_NOTIFICATION,
+    [appActions.ADD_NOTIFICATION]: {
+        type: appActions.ADD_NOTIFICATION,
         payload: {
             key: 'testKey',
         },
     },
-    [appActionConstants.REMOVE_NOTIFICATION]: {
-        type: appActionConstants.REMOVE_NOTIFICATION,
+    [appActions.REMOVE_NOTIFICATION]: {
+        type: appActions.REMOVE_NOTIFICATION,
         payload: {
             key: 'testKey',
         },
     },
-    [appActionConstants.UPDATE_NOTIFICOUNTERS]: {
-        type: appActionConstants.UPDATE_NOTIFICOUNTERS,
+    [appActions.UPDATE_NOTIFICOUNTERS]: {
+        type: appActions.UPDATE_NOTIFICOUNTERS,
         payload: {
             follow: 1,
             total: 2,
         },
     },
-    [appActionConstants.SET_USER_PREFERENCES]: {
-        type: appActionConstants.SET_USER_PREFERENCES,
+    [appActions.SET_USER_PREFERENCES]: {
+        type: appActions.SET_USER_PREFERENCES,
         payload: {
             cat: 'mymy',
             dog: 'polly',
         },
     },
-    [appActionConstants.TOGGLE_NIGHTMODE]: {
-        type: appActionConstants.TOGGLE_NIGHTMODE,
+    [appActions.TOGGLE_NIGHTMODE]: {
+        type: appActions.TOGGLE_NIGHTMODE,
     },
-    [appActionConstants.TOGGLE_BLOGMODE]: {
-        type: appActionConstants.TOGGLE_BLOGMODE,
+    [appActions.TOGGLE_BLOGMODE]: {
+        type: appActions.TOGGLE_BLOGMODE,
     },
 };
 
-const key = mockActions[appActionConstants.ADD_NOTIFICATION].payload.key;
+const key = mockActions[appActions.ADD_NOTIFICATION].payload.key;
 const mockNotification = OrderedMap({
     [key]: {
         action: 'missing translation: en.g.dismiss',
@@ -81,21 +81,21 @@ describe('App reducer', () => {
     });
     it('should return correct state for a STEEM_API_ERROR action', () => {
         const initial = reducer();
-        const out = reducer(initial, mockActions[appActionConstants.STEEM_API_ERROR]);
+        const out = reducer(initial, mockActions[appActions.STEEM_API_ERROR]);
         expect(out).to.eql(initial);
     });
     it('should return correct state for a FETCH_DATA_BEGIN action', () => {
         const initial = reducer();
         const actual = reducer(
             initial,
-            mockActions[appActionConstants.FETCH_DATA_BEGIN]
+            mockActions[appActions.FETCH_DATA_BEGIN]
         );
         const out = actual.get('loading');
         expect(out).to.eql(true);
     });
     it('should return correct state for a FETCH_DATA_END action', () => {
         const initial = reducer();
-        const actual = reducer(initial, mockActions[appActionConstants.FETCH_DATA_END]);
+        const actual = reducer(initial, mockActions[appActions.FETCH_DATA_END]);
         const out = actual.get('loading');
         expect(out).to.eql(false);
     });
@@ -103,7 +103,7 @@ describe('App reducer', () => {
         const initial = reducer();
         const actual = reducer(
             initial,
-            mockActions[appActionConstants.ADD_NOTIFICATION]
+            mockActions[appActions.ADD_NOTIFICATION]
         );
         const out = actual.getIn(['notifications', key]);
         expect(out).to.eql(mockNotification.get(key));
@@ -116,7 +116,7 @@ describe('App reducer', () => {
         );
         const actual = reducer(
             initialWithNotification,
-            mockActions[appActionConstants.REMOVE_NOTIFICATION]
+            mockActions[appActions.REMOVE_NOTIFICATION]
         );
         const out = actual.get('notifications');
         const expected = OrderedMap({});
@@ -126,7 +126,7 @@ describe('App reducer', () => {
         const initial = reducer();
         let actual = reducer(
             initial,
-            mockActions[appActionConstants.UPDATE_NOTIFICOUNTERS]
+            mockActions[appActions.UPDATE_NOTIFICOUNTERS]
         );
         let out = actual.get('notificounters');
         let expected = Map({ follow: 0, total: 1 });
@@ -134,13 +134,13 @@ describe('App reducer', () => {
     });
     it('should return correct state for a UPDATE_NOTIFICOUNTERS action with no follow in payload', () => {
         const initial = reducer();
-        mockActions[appActionConstants.UPDATE_NOTIFICOUNTERS].payload = {
+        mockActions[appActions.UPDATE_NOTIFICOUNTERS].payload = {
             follow: 0,
             total: 2,
         };
         const actual = reducer(
             initial,
-            mockActions[appActionConstants.UPDATE_NOTIFICOUNTERS]
+            mockActions[appActions.UPDATE_NOTIFICOUNTERS]
         );
         const out = actual.get('notificounters');
         const expected = Map({ follow: 0, total: 2 });
@@ -150,7 +150,7 @@ describe('App reducer', () => {
         const initial = reducer();
         let actual = reducer(
             initial,
-            mockActions[appActionConstants.SET_USER_PREFERENCES]
+            mockActions[appActions.SET_USER_PREFERENCES]
         );
         let out = actual.get('user_preferences');
         let expected = Map({ cat: 'mymy', dog: 'polly' });
@@ -159,14 +159,14 @@ describe('App reducer', () => {
     it('should return correct state for a TOGGLE_NIGHTMODE action', () => {
         const initial = reducer();
         const before = initial.getIn(['user_preferences', 'nightmode']);
-        let actual = reducer(initial, mockActions[appActionConstants.TOGGLE_NIGHTMODE]);
+        let actual = reducer(initial, mockActions[appActions.TOGGLE_NIGHTMODE]);
         const after = actual.getIn(['user_preferences', 'nightmode']);
         expect(after).to.eql(!before);
     });
     it('should return correct state for a TOGGLE_BLOGMODE action', () => {
         const initial = reducer();
         const before = initial.getIn(['user_preferences', 'blogmode']);
-        let actual = reducer(initial, mockActions[appActionConstants.TOGGLE_BLOGMODE]);
+        let actual = reducer(initial, mockActions[appActions.TOGGLE_BLOGMODE]);
         const after = actual.getIn(['user_preferences', 'blogmode']);
         expect(after).to.eql(!before);
     });

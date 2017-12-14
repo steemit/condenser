@@ -96,9 +96,9 @@ function* saveUserPreferences({ payload }) {
 function* watchUserSettingsUpdates() {
     yield* takeLatest(
         [
-            appActions.SET_USER_PREFERENCES,
-            appActions.TOGGLE_NIGHTMODE,
-            appActions.TOGGLE_BLOGMODE,
+            appActions.appActionConstants.SET_USER_PREFERENCES,
+            appActions.appActionConstants.TOGGLE_NIGHTMODE,
+            appActions.appActionConstants.TOGGLE_BLOGMODE,
         ],
         saveUserPreferences
     );

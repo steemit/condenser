@@ -2,7 +2,7 @@ import { Map, OrderedMap } from 'immutable';
 import tt from 'counterpart';
 
 // Action constants
-export const appActions = {
+export const appActionConstants = {
     STEEM_API_ERROR: 'app/STEEM_API_ERROR',
     FETCH_DATA_BEGIN: 'app/FETCH_DATA_BEGIN',
     FETCH_DATA_END: 'app/FETCH_DATA_END',
@@ -45,17 +45,17 @@ export default function reducer(state = defaultState, action = {}) {
     switch (action.type) {
         case '@@router/LOCATION_CHANGE':
             return state.set('location', { pathname: action.payload.pathname });
-        case appActions.STEEM_API_ERROR:
+        case appActionConstants.STEEM_API_ERROR:
             // Until we figure out how to better handle these errors, let em slide.
             // This action is the only part of the app that marks an error in state.app.error,
             // and the only part of the app which pays attn to this part of the state is in App.jsx.
             //return  state.set('error', action.error).set('loading', false);
             return state;
-        case appActions.FETCH_DATA_BEGIN:
+        case appActionConstants.FETCH_DATA_BEGIN:
             return state.set('loading', true);
-        case appActions.FETCH_DATA_END:
+        case appActionConstants.FETCH_DATA_END:
             return state.set('loading', false);
-        case appActions.ADD_NOTIFICATION: {
+        case appActionConstants.ADD_NOTIFICATION: {
             const n = {
                 action: tt('g.dismiss'),
                 dismissAfter: 10000,
@@ -65,11 +65,11 @@ export default function reducer(state = defaultState, action = {}) {
                 return s ? s.set(n.key, n) : OrderedMap({ [n.key]: n });
             });
         }
-        case appActions.REMOVE_NOTIFICATION:
+        case appActionConstants.REMOVE_NOTIFICATION:
             return state.update('notifications', s =>
                 s.delete(action.payload.key)
             );
-        case appActions.UPDATE_NOTIFICOUNTERS: {
+        case appActionConstants.UPDATE_NOTIFICOUNTERS: {
             if (action.payload) {
                 const nc = action.payload;
                 if (nc.follow > 0) {
@@ -80,14 +80,14 @@ export default function reducer(state = defaultState, action = {}) {
             }
             return state;
         }
-        case appActions.SET_USER_PREFERENCES:
+        case appActionConstants.SET_USER_PREFERENCES:
             return state.set('user_preferences', Map(action.payload));
-        case appActions.TOGGLE_NIGHTMODE:
+        case appActionConstants.TOGGLE_NIGHTMODE:
             return state.setIn(
                 ['user_preferences', 'nightmode'],
                 !state.getIn(['user_preferences', 'nightmode'])
             );
-        case appActions.TOGGLE_BLOGMODE:
+        case appActionConstants.TOGGLE_BLOGMODE:
             return state.setIn(
                 ['user_preferences', 'blogmode'],
                 !state.getIn(['user_preferences', 'blogmode'])
@@ -98,42 +98,42 @@ export default function reducer(state = defaultState, action = {}) {
 }
 
 export const steemApiError = error => ({
-    type: appActions.STEEM_API_ERROR,
+    type: appActionConstants.STEEM_API_ERROR,
     error,
 });
 
 export const fetchDataBegin = () => ({
-    type: appActions.FETCH_DATA_BEGIN,
+    type: appActionConstants.FETCH_DATA_BEGIN,
 });
 
 export const fetchDataEnd = () => ({
-    type: appActions.FETCH_DATA_END,
+    type: appActionConstants.FETCH_DATA_END,
 });
 
 export const addNotification = payload => ({
-    type: appActions.ADD_NOTIFICATION,
+    type: appActionConstants.ADD_NOTIFICATION,
     payload,
 });
 
 export const removeNotification = payload => ({
-    type: appActions.REMOVE_NOTIFICATION,
+    type: appActionConstants.REMOVE_NOTIFICATION,
     payload,
 });
 
 export const updateNotificounters = payload => ({
-    type: appActions.UPDATE_NOTIFICOUNTERS,
+    type: appActionConstants.UPDATE_NOTIFICOUNTERS,
     payload,
 });
 
 export const setUserPreferences = payload => ({
-    type: appActions.SET_USER_PREFERENCES,
+    type: appActionConstants.SET_USER_PREFERENCES,
     payload,
 });
 
 export const toggleNightmode = () => ({
-    type: appActions.TOGGLE_NIGHTMODE,
+    type: appActionConstants.TOGGLE_NIGHTMODE,
 });
 
 export const toggleBlogmode = () => ({
-    type: appActions.TOGGLE_BLOGMODE,
+    type: appActionConstants.TOGGLE_BLOGMODE,
 });

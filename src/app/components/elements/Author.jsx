@@ -109,7 +109,7 @@ class Author extends React.Component {
                     <script type="application/ld+json">{JSON.stringify(jsonld)}</script>
                     <strong>
                         <Link to={'/@' + author}>{author}</Link>
-                    </strong>
+                    </strong>{' '}
                     <Reputation value={authorRepLog10} />
                 </span>
             );

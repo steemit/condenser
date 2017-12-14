@@ -341,7 +341,7 @@ class UserWallet extends React.Component {
         amount,
         disableMemo: true,
         disableTo: true,
-        disableAmount: true
+        disableAmount: false
       });
     }
       const { transferDetails: { immediate, to, amount, token, memo } } = this.props;

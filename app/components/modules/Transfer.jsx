@@ -278,17 +278,20 @@ export default connect(
     (state, ownProps) => {
         const initialValues = state.user.get('transfer_defaults', Map()).toJS()
         const toVesting = initialValues.asset === 'GESTS'
-        const currentUser = state.user.getIn(['current'])
-        const currentAccount = state.global.getIn(['accounts', currentUser.get('username')])
+        const {locationBeforeTransitions: {pathname}} = state.routing;
+        const currentUserNameFromRoute = pathname.split(`/`)[1].substring(1);
+        const currentUserFromRoute = Map({username: currentUserNameFromRoute});
+        const currentUser = state.user.getIn(['current']) || currentUserFromRoute;
+        const currentAccount = currentUser && state.global.getIn(['accounts', currentUser.get('username')])
 
         if(!toVesting && !initialValues.transferType)
             initialValues.transferType = 'Transfer to Account'
 
         let transferToSelf = toVesting || /Transfer to Savings|Savings Withdraw/.test(initialValues.transferType)
-        if (transferToSelf && !initialValues.to)
+        if (currentUser && transferToSelf && !initialValues.to)
             initialValues.to = currentUser.get('username')
 
-        if(initialValues.to !== currentUser.get('username'))
+        if(currentUser && initialValues.to !== currentUser.get('username'))
             transferToSelf = false // don't hide the to field
 
         return {...ownProps, currentUser, currentAccount, toVesting, transferToSelf, initialValues}

@@ -341,12 +341,10 @@ class UserWallet extends React.Component {
         amount,
         disableMemo: true,
         disableTo: true,
-        disableAmount: false
+        disableAmount: true
       });
     }
       const { transferDetails: { immediate, to, amount, token, memo } } = this.props;
-      console.log(`###########################`)
-      console.log(immediate)
       if (immediate) callTransfer({ to, amount, token, memo})
     }
 }

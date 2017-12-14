@@ -30,8 +30,9 @@ class TransferForm extends Component {
 
     componentDidMount() {
         const { props: {onChange}, value} = this.state.amount;
-        //force validation todo as ReactForm does not validate initial values for some reason
-        onChange(value)
+        //force validation programmatically
+        //done by the second argument - not working otherwise for now
+        onChange(value, true)
         setTimeout(() => {
             const {advanced} = this.state
             if (advanced)

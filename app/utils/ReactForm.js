@@ -96,20 +96,20 @@ export default function reactForm({name, instance, fields, initialValues, valida
             }
         }
 
-        fs.props.onChange = e => {
+        fs.props.onChange = (e, forceTouch = false) => {
             const value = e && e.target ? e.target.value : e // API may pass value directly
             const v = {...(instance.state[fieldName] || {})}
             const initialValue = initialValues[fieldName]
 
             if(fieldType === 'checked') {
-                v.touched = toString(value) !== toString(initialValue)
+                v.touched = forceTouch || toString(value) !== toString(initialValue)
                 v.value = v.props.checked = toBoolean(value)
                 v.value = value
             } else if(fieldType === 'selected') {
-                v.touched = toString(value) !== toString(initialValue)
+                v.touched = forceTouch || toString(value) !== toString(initialValue)
                 v.value = v.props.selected = toString(value)
             } else {
-                v.touched = toString(value) !== toString(initialValue)
+                v.touched = forceTouch || toString(value) !== toString(initialValue)
                 v.value = v.props.value = toString(value)
             }
 

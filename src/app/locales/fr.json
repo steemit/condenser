@@ -539,13 +539,13 @@
             "Après impression, veuillez indiquer votre identifiant"
     },
     "converttosteem_jsx": {
+        "convert_to_LIQUID_TOKEN": "Convertir en %(LIQUID_TOKEN_UPPERCASE)s",
+        "convert_warning":
+            "Avertissement - L'outil de conversion %(DEBT_TOKEN)s à %(LIQUID_TOKEN_UPPERCASE)s est une fonction utilisateur avancée. Pour l'utiliser correctement, vous devez avoir une compréhension des marchés, de la volatilité et du risque, ainsi que de l'effet des prix témoins sur le calcul",
         "your_existing_DEBT_TOKEN_are_liquid_and_transferable":
-            "Vos %(DEBT_TOKEN)s existants sont en liquide et donc transférable. Vous pouvez par exemple ėchanger %(DEBT_TOKEN)s directement sur ce site via le lien %(link)s, ou les transférer vers un marché externe.",
-        "this_is_a_price_feed_conversion":
-            "Il s'agit d'une conversion au taux du marché. Le délais de 3.5 jours est nécessaire afin d'éviter les abus de ceux qui tenterait de parier sur les modifications à court terme du taux du marché moyen.",
-        "convert_to_LIQUID_TOKEN": "Convertir en %(LIQUID_TOKEN)s",
+            "Vos jetons %(DEBT_TOKEN)s existants sont liquides et transférables. Au lieu d'utiliser l'outil de conversion, les jetons %(DEBT_TOKEN)s peuvent être échangés contre %(LIQUID_TOKEN_UPPERCASE)s directement sur ce site sous %(link)s. Ils peuvent également être échangés en utilisant les liens %(link2)s, ainsi que via un échange externe",
         "DEBT_TOKEN_will_be_unavailable":
-            "Cette action aura lieu dans 3.5 jours et ne peut être annulée. Ces %(DEBT_TOKEN)s deviendront immédiatement non disponibles."
+            "Si vous cliquez sur %(button_name)s, cette action aura lieu dans un délai de trois jours et ne pourra pas être annulée. Ces jetons %(DEBT_TOKEN)s seront immédiatement indisponibles. Le délai de 3,5 jours est nécessaire pour empêcher les abus de jouer la moyenne des tarifs"
     },
     "tips_js": {
         "liquid_token":

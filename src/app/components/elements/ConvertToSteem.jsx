@@ -9,7 +9,11 @@ import TransactionError from 'app/components/elements/TransactionError';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import { cleanReduxInput } from 'app/utils/ReduxForms';
 import tt from 'counterpart';
-import { DEBT_TOKEN, DEBT_TICKER, LIQUID_TOKEN } from 'app/client_config';
+import {
+    DEBT_TOKEN,
+    DEBT_TICKER,
+    LIQUID_TOKEN_UPPERCASE,
+} from 'app/client_config';
 
 class ConvertToSteem extends React.Component {
     constructor() {
@@ -48,24 +52,31 @@ class ConvertToSteem extends React.Component {
                     <div className="small-12 columns">
                         <h1>
                             {tt('converttosteem_jsx.convert_to_LIQUID_TOKEN', {
-                                LIQUID_TOKEN,
+                                LIQUID_TOKEN_UPPERCASE,
                             })}
                         </h1>
                         <p>
-                            {tt(
-                                'converttosteem_jsx.DEBT_TOKEN_will_be_unavailable',
-                                { DEBT_TOKEN }
-                            )}.
+                            {tt('converttosteem_jsx.convert_warning', {
+                                DEBT_TOKEN,
+                                LIQUID_TOKEN_UPPERCASE,
+                            })}.
                         </p>
                         <p>
                             {tt(
                                 'converttosteem_jsx.your_existing_DEBT_TOKEN_are_liquid_and_transferable',
-                                { link: tt('g.buy_or_sell'), DEBT_TOKEN }
-                            )}
+                                {
+                                    DEBT_TOKEN,
+                                    DEBT_TOKEN,
+                                    LIQUID_TOKEN_UPPERCASE,
+                                    link: tt('userwallet_jsx.market'),
+                                    link2: tt('g.buy_or_sell'),
+                                }
+                            )}.
                         </p>
                         <p>
                             {tt(
-                                'converttosteem_jsx.this_is_a_price_feed_conversion'
+                                'converttosteem_jsx.DEBT_TOKEN_will_be_unavailable',
+                                { button_name: tt('g.convert'), DEBT_TOKEN }
                             )}.
                         </p>
                     </div>
@@ -152,7 +163,11 @@ export default reduxForm(
             const requestid = Math.floor(Date.now() / 1000);
             const conf = tt(
                 'postfull_jsx.in_week_convert_DEBT_TOKEN_to_LIQUID_TOKEN',
-                { amount: amount.split(' ')[0], DEBT_TOKEN, LIQUID_TOKEN }
+                {
+                    amount: amount.split(' ')[0],
+                    DEBT_TOKEN,
+                    LIQUID_TOKEN_UPPERCASE,
+                }
             );
             dispatch(
                 transactionActions.broadcastOperation({

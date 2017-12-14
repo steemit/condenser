@@ -131,6 +131,7 @@ class ConvertToSteem extends React.Component {
         );
     }
 }
+
 export default reduxForm(
     { form: 'convertToSteem', fields: ['amount'] },
     // mapStateToProps

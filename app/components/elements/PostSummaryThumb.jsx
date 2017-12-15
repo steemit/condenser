@@ -46,7 +46,6 @@ export default class PostSummaryThumb extends React.Component {
             this.img = img;
           }}>
         </img>
-        // fallback image if canvas operations failed
         <img
           ref={(img) => {
             this.defaultImage = img;

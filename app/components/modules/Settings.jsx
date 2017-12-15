@@ -36,7 +36,7 @@ class Settings extends React.Component {
                 profile_image: values.profile_image && !/^https?:\/\//.test(values.profile_image) ? tt('settings_jsx.invalid_url') : null,
                 cover_image: values.cover_image && !/^https?:\/\//.test(values.cover_image) ? tt('settings_jsx.invalid_url') : null,
                 name: values.name && values.name.length > 20 ? tt('settings_jsx.name_is_too_long') : values.name && /^\s*@/.test(values.name) ? tt('settings_jsx.name_must_not_begin_with') : null,
-                gender: values.gender && values.gender.length > 20 ? tt('settings_jsx.name_is_too_long') : values.gender && /^\s*@/.test(values.gender) ? tt('settings_jsx.name_must_not_begin_with') : null,                
+                gender: values.gender && values.gender.length > 20 ? tt('settings_jsx.name_is_too_long') : values.gender && /^\s*@/.test(values.gender) ? tt('settings_jsx.name_must_not_begin_with') : null,
                 about: values.about && values.about.length > 160 ? tt('settings_jsx.about_is_too_long') : null,
                 location: values.location && values.location.length > 30 ? tt('settings_jsx.location_is_too_long') : null,
                 website: values.website && values.website.length > 100 ? tt('settings_jsx.website_url_is_too_long') : values.website && !/^https?:\/\//.test(values.website) ? tt('settings_jsx.invalid_url') : null,
@@ -109,7 +109,7 @@ class Settings extends React.Component {
         metaData.profile.profile_image = profile_image.value
         metaData.profile.cover_image = cover_image.value
         metaData.profile.name = name.value
-        metaData.profile.gender = gender.value        
+        metaData.profile.gender = gender.value
         metaData.profile.about = about.value
         metaData.profile.location = location.value
         metaData.profile.website = website.value
@@ -118,7 +118,7 @@ class Settings extends React.Component {
         if(!metaData.profile.profile_image) delete metaData.profile.profile_image;
         if(!metaData.profile.cover_image) delete metaData.profile.cover_image;
         if(!metaData.profile.name) delete metaData.profile.name;
-        if(!metaData.profile.gender) delete metaData.profile.gender;        
+        if(!metaData.profile.gender) delete metaData.profile.gender;
         if(!metaData.profile.about) delete metaData.profile.about;
         if(!metaData.profile.location) delete metaData.profile.location;
         if(!metaData.profile.website) delete metaData.profile.website;
@@ -187,13 +187,13 @@ class Settings extends React.Component {
             <div className="row">
                 <form onSubmit={this.handleSubmitForm} className="small-12 medium-6 large-4 columns">
                     <h3>{tt('settings_jsx.public_profile_settings')}</h3>
-                    
+
                     <label>
                         {tt('settings_jsx.choose_language')}
                         {languageSelectBox}
                     </label>
                     <div className="error"></div>
-                    
+
                     <label>{tt('settings_jsx.choose_currency')}
                         <select defaultValue={process.env.BROWSER ? localStorage.getItem('xchange.picked') : DEFAULT_CURRENCY} onChange={this.onCurrencyChange}>
                             {
@@ -203,7 +203,7 @@ class Settings extends React.Component {
                             }
                         </select>
                     </label>
-                    
+
                     <label>
                         {tt('settings_jsx.choose_theme')}
                         {themeSelectBox}
@@ -227,7 +227,7 @@ class Settings extends React.Component {
                         <input type="text" {...name.props} maxLength="20" autoComplete="off" />
                     </label>
                     <div className="error">{name.touched && name.error}</div>
-                    
+
                     <label>
                         {tt('settings_jsx.profile_gender.title')}
                         <select {...gender.props}>
@@ -238,7 +238,7 @@ class Settings extends React.Component {
                         </select>
                     </label>
                     <div className="error">{gender.touched && gender.error}</div>
-                    
+
                     <label>
                         {tt('settings_jsx.profile_about')}
                         <input type="text" {...about.props} maxLength="160" autoComplete="off" />
@@ -279,12 +279,12 @@ class Settings extends React.Component {
                             {tt('settings_jsx.not_safe_for_work_nsfw_content')}
                         </div>
                         <select value={this.state.nsfwPref} onChange={this.onNsfwPrefChange}>
-                            <option value="hide">{tt('settings_jsx.always_hide')}</option>
+                            {/*<option value="hide">{tt('settings_jsx.always_hide')}</option>*/}
                             <option value="warn">{tt('settings_jsx.always_warn')}</option>
                             <option value="show">{tt('settings_jsx.always_show')}</option>
                         </select>
                         <br /><br />
-                        <input 
+                        <input
                             type="submit"
                             onClick={this.onNsfwPrefSubmit}
                             className="button"

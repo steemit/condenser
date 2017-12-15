@@ -40,11 +40,10 @@ ul.PostsList__summaries {
   float: left;
   width: 130px;
   height: 4.5rem;
-  background-color: #EEE;
-  background-size: 110%;
-  background-repeat: no-repeat;
-  background-position: 50% 20%;
-  border: 1px solid #EEE;
+  }
+
+.PostSummary__image_nsfw {
+  filter: blur(5px);
 }
 
 .PostSummary__post-visited {

@@ -8,6 +8,7 @@ import universalRender from 'shared/UniversalRender';
 import ConsoleExports from './utils/ConsoleExports';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import * as golos from 'golos-js';
+import * as pixelate from './utils/effects/close-pixelate'
 
 window.onerror = error => {
     if (window.$STM_csrf) serverApiRecordEvent('client_error', error);

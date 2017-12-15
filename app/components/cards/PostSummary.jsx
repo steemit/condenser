@@ -20,7 +20,7 @@ import tt from 'counterpart';
 import { APP_ICON, TERMS_OF_SERVICE_URL } from 'app/client_config';
 import { detransliterate } from 'app/utils/ParsersAndFormatters';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
-
+import PostSummaryThumb from 'app/components/elements/PostSummaryThumb'
 
 function isLeftClickEvent(event) {
     return event.button === 0
@@ -75,8 +75,9 @@ class PostSummary extends React.Component {
         const {currentCategory, thumbSize, ignore, onClick} = this.props;
         const {post, content, pending_payout, total_payout, cashout_time} = this.props;
         const {account} = this.props;
+        const {nsfwPref, username} = this.props
         if (!content) return null;
-        
+
         if(blockedUsers.includes(content.get('author'))) {
             serverApiRecordEvent('illegal content', `${content.get('author')} /${content.get('permlink')}`)
 			return null
@@ -136,9 +137,12 @@ class PostSummary extends React.Component {
         let content_body = <div className="PostSummary__body entry-content">
             <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}>{desc}</a>
         </div>;
+
+        const warn = (isNsfw && nsfwPref === 'warn');
+
         let content_title = <h3 className="entry-title">
             <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}>
-                {isNsfw && <span className="nsfw-flag">{detransliterate(nsfwTitle)}</span>}
+                {warn && <span className="nsfw-flag">{detransliterate(nsfwTitle)}</span>}
                 {title_text}
                 {full_power && <span title={tt('g.powered_up_100')}><Icon name={APP_ICON} /></span>}
             </a>
@@ -162,43 +166,19 @@ class PostSummary extends React.Component {
             </span>
         </div>
 
-        const {nsfwPref, username} = this.props
-        const {revealNsfw} = this.state
-
-        if(isNsfw) {
-            if(nsfwPref === 'hide') {
-                // user wishes to hide these posts entirely
-                return null;
-            } else if(nsfwPref === 'warn' && !revealNsfw) {
-                // user wishes to be warned, and has not revealed this post
-                return (
-                    <article className={'PostSummary hentry'} itemScope itemType ="http://schema.org/blogPost">
-                        <div className="PostSummary__nsfw-warning">
-                            <div className="PostSummary__time_author_category_small show-for-small-only">
-                                {author_category}
-                            </div>
-                            {tt('postsummary_jsx.this_post_is')} <span className="nsfw-flag">{detransliterate(nsfwTitle)}</span>.
-                            {tt('postsummary_jsx.you_can')} <a href="#" onClick={this.onRevealNsfw}>{tt('postsummary_jsx.reveal_it')}</a> {tt('g.or') + ' '}
-                            {username ? <span>{tt('postsummary_jsx.adjust_your')} <Link to={`/@${username}/settings`}>{tt('postsummary_jsx.display_preferences')}</Link>.</span>
-                                      : <span><Link to="/enter_email">{tt('postsummary_jsx.create_an_account')}</Link> {tt('postsummary_jsx.to_save_your_preferences')}.</span>}
-                            {content_footer}
-                        </div>
-                    </article>
-                )
-            }
-        }
-
         const visitedClassName = this.props.visited ? 'PostSummary__post-visited ' : '';
         let thumb = null;
         if(pictures && p.image_link) {
           const prox = $STM_Config.img_proxy_prefix
           const size = (thumbSize == 'mobile') ? '800x600' : '256x128'
           const url = (prox ? prox + size + '/' : '') + p.image_link
-          if(thumbSize == 'mobile') {
-            thumb = <a href={p.link} onClick={e => navigate(e, onClick, post, p.link)} className={'PostSummary__image-mobile '}><img src={url} /></a>
-          } else {
-            thumb = <a href={p.link} onClick={e => navigate(e, onClick, post, p.link)} className={'PostSummary__image ' + visitedClassName} style={{backgroundImage: 'url(' + url + ')'}}></a>
-          }
+          thumb = <PostSummaryThumb
+              visitedClassName={visitedClassName}
+              mobile={thumbSize == 'mobile'}
+              isNsfw={warn}
+              src={url}
+              href={p.link}
+              onClick={e => navigate(e, onClick, post, p.link)} />
         }
         const commentClasses = []
         if(gray || ignore) commentClasses.push('downvoted') // rephide

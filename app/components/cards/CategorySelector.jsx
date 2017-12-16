@@ -56,7 +56,17 @@ class CategorySelector extends React.Component {
 
         const impProps = {...this.props}
         const categoryInput =
-            <input type="text" {...cleanReduxInput(impProps)} ref="categoryRef" tabIndex={tabIndex} disabled={disabled} />
+          <div style={{display: `flex`, alignItems: `center`}}>
+            <p style={{margin: `0 4px`}}>
+              nsfw
+            </p>
+            <input type="checkbox" style={{margin: `0 4px`}} name="nsfw" id="nsfw"  />
+            <input type="text"
+                   style={{marginLeft: `4px`}}
+              {...cleanReduxInput(impProps)}
+              ref="categoryRef"
+              tabIndex={tabIndex} disabled={disabled} />
+          </div>
 
         const categorySelect = (
             <select {...cleanReduxInput(this.props)} onChange={this.categorySelectOnChange} ref="categoryRef" tabIndex={tabIndex} disabled={disabled}>

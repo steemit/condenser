@@ -92,6 +92,9 @@ blocktraded
 blocktrader
 blocktrads
 bocktrades
+block-trades
+blocktrads
+blocktrdes
 changelly.com
 changely
 shapeshif

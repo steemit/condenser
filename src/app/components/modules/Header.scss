@@ -8,9 +8,9 @@
   background-color: $white;
   box-shadow: 0 2px 4px 0 rgba(0,0,0,0.05);
   @include themify($themes) {
-    background-color: themed('navBackgroundColor');  
-    border-bottom: themed('border');  
-  }   
+    background-color: themed('navBackgroundColor');
+    border-bottom: themed('border');
+  }
   h3 {
     padding-left: 1rem;
     margin-bottom: 0;
@@ -25,18 +25,18 @@
       &::after {
         transition: 0.2s all ease-in-out;
         @include themify($themes) {
-          background: themed('textColorPrimary');  
-          box-shadow: 0 7px 0 themed('textColorPrimary'), 0 14px 0 themed('textColorPrimary');  
-        } 
+          background: themed('textColorPrimary');
+          box-shadow: 0 7px 0 themed('textColorPrimary'), 0 14px 0 themed('textColorPrimary');
+        }
       }
       &:hover {
         &::after {
           @include themify($themes) {
-            background: themed('textColorAccent');  
-            box-shadow: 0 7px 0 themed('textColorAccent'), 0 14px 0 themed('textColorAccent');  
-          } 
-        }        
-      }         
+            background: themed('textColorAccent');
+            box-shadow: 0 7px 0 themed('textColorAccent'), 0 14px 0 themed('textColorAccent');
+          }
+        }
+      }
     }
   }
   ul.menu > li.toggle-menu > a {
@@ -47,8 +47,8 @@
   }
   svg > path {
     @include themify($themes) {
-      fill: themed('textColorPrimary');  
-    } 
+      fill: themed('textColorPrimary');
+    }
   }
   li.submit-story > a {
     @extend .e-btn;
@@ -64,7 +64,7 @@
 
 .Header__top {
   // background-color: $white;
-  
+
   padding: 0.25rem 0;
   transition: all 0.3s ease-out;
   @media print, screen and (min-width: 52.5em) {
@@ -110,14 +110,15 @@
             border: 0px transparent;
             transition: 0.3s ease-in;
             position: relative;
+            background: transparent;
             &:hover, &:focus {
                 box-shadow: 2px 2px 0 0 $color-teal;
                 border: 0px transparent;
                 border-radius: 0;
             }
             @include themify($themes) {
-                color: themed('textColorPrimary');  
-                caret-color: themed('textColorAccent');  
+                color: themed('textColorPrimary');
+                caret-color: themed('textColorAccent');
             }
         }
     }
@@ -244,13 +245,13 @@ ul > li.Header__logo > a {
     height: auto;
     @media only screen and (min-width: 400px) {
       display: block;
-    }     
+    }
     @include MQ(M) {
       width: 144px;
       height: auto;
-    }    
+    }
   }
-  
+
   .icon-svg {
     fill: $color-teal;
     @include themify($themes) {
@@ -273,11 +274,11 @@ ul > li.Header__logo > a {
 .Header__top-logo a {
   &:visited, &:active {
     .logo-new {
-      .icon-svg {      
+      .icon-svg {
         @include themify($themes) {
-            fill: themed('ColorAccent');  
+            fill: themed('ColorAccent');
         }
       }
-    } 
-  }        
+    }
+  }
 }

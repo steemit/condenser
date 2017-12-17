@@ -809,7 +809,8 @@ export default connect(
                 })
             );
         },
-        convertToSteem: e => { //post 2018-01-31 if no calls to this function exist may be safe to remove. Investigate use of ConvertToSteem.jsx
+        convertToSteem: e => {
+            //post 2018-01-31 if no calls to this function exist may be safe to remove. Investigate use of ConvertToSteem.jsx
             e.preventDefault();
             const name = 'convertToSteem';
             dispatch(globalActions.showDialog({ name }));

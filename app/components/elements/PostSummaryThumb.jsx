@@ -1,4 +1,8 @@
 import React from 'react';
+// keep this in memory, no requests
+import nsfwBanner from 'app/assets/images/18_plus.png'
+
+
 //todo render fallback image by react, not by canvas depending on state?
 
 export default class PostSummaryThumb extends React.Component {
@@ -62,7 +66,8 @@ export default class PostSummaryThumb extends React.Component {
             this.defaultImage = img;
           }}
           style={{display: "none"}}
-          src={`/images/18_plus.png`}
+          // src={`/images/18_plus.png`}
+          src={nsfwBanner}
           className={'PostSummary__image '} //+ visitedClassName}*!/*/}
         >
         </img>

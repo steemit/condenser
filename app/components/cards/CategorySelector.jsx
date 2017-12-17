@@ -67,7 +67,7 @@ class CategorySelector extends React.Component {
               borderWidth: `1px`,
               borderRadius: `3`}}>
               <p style={{margin: `0 4px`, color: `red`}}>
-                nsfw
+                {tt('g.nsfw')}
               </p>
               <input type="checkbox" style={{margin: `0 4px`}} />
             </div>

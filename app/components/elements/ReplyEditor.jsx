@@ -293,6 +293,9 @@ class ReplyEditor extends React.Component {
     upload = (file, name = '') => {
         const {uploadImage} = this.props
         this.setState({progress: {message: tt('reply_editor.uploading') + '...'}})
+      console.log(this.state)
+
+
         uploadImage(file, progress => {
             if(progress.url) {
                 this.setState({ progress: {} })
@@ -313,7 +316,11 @@ class ReplyEditor extends React.Component {
     }
 
     render() {
-        const originalPost = {
+
+      console.log(this.state)
+
+
+      const originalPost = {
             category: this.props.category,
             body: this.props.body,
         }
@@ -577,6 +584,11 @@ export default formId => connect(
             const detags = jsonMetadata.tags.map(tag => detransliterate(tag))
             category = Set([detransliterate(category), ...detags]).join(' ')
         }
+
+        console.log(`######################`)
+      console.log(category)
+      console.log(typeof category)
+
         const ret = {
             ...ownProps,
             fields, isStory, username,

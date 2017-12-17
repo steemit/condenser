@@ -47,6 +47,8 @@ class CategorySelector extends React.Component {
         }
     }
     render() {
+
+
         const {trending, tabIndex, disabled} = this.props
         const categories = trending.slice(0, 11).filterNot(c => validateCategory(c))
         const {createCategory} = this.state
@@ -57,12 +59,21 @@ class CategorySelector extends React.Component {
         const impProps = {...this.props}
         const categoryInput =
           <div style={{display: `flex`, alignItems: `center`}}>
-            <p style={{margin: `0 4px`}}>
-              nsfw
-            </p>
-            <input type="checkbox" style={{margin: `0 4px`}} name="nsfw" id="nsfw"  />
-            <input type="text"
-                   style={{marginLeft: `4px`}}
+            <div style={{
+              display: `flex`,
+              alignItems: `center`,
+              borderStyle: `solid`,
+              borderColor: `#CACACA`,
+              borderWidth: `1px`,
+              borderRadius: `3`}}>
+              <p style={{margin: `0 4px`, color: `red`}}>
+                nsfw
+              </p>
+              <input type="checkbox" style={{margin: `0 4px`}} />
+            </div>
+            <input
+              type="text"
+              style={{marginLeft: `4px`}}
               {...cleanReduxInput(impProps)}
               ref="categoryRef"
               tabIndex={tabIndex} disabled={disabled} />

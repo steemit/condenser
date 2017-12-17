@@ -1,21 +1,34 @@
 import React from 'react';
+//todo render fallback image by react, not by canvas depending on state?
 
 export default class PostSummaryThumb extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {}
+  }
+
   handleImageLoaded() {
     if (this.props.isNsfw) {
       this.cp = new window.ClosePixelation(this.img, this.canvas)
       try {
         this.cp.render([
           {
+            // todo fix author's algorithm
+            // either loses color channels or disappears completely )
+            // only these options render well
             resolution: 10,
             alpha: 1,
             size: 10,
           }
         ])
       }
-      catch(e) {
-        // draw fallback image on canvas
-        this.cp.ctx.drawImage( this.defaultImage, 0, 0 )
+      catch (e) {
+        // clear canvas before the fallback image drawing!
+        this.cp.ctx.clearRect(0, 0, this.cp.width, this.cp.height);
+        this.cp.ctx.drawImage(this.defaultImage,
+          this.cp.width / 2 - this.defaultImage.width / 2,
+          this.cp.height / 2 - this.defaultImage.height / 2,
+        )
       }
     }
   }
@@ -35,8 +48,6 @@ export default class PostSummaryThumb extends React.Component {
                 }}>
         </canvas>
         <img
-          // fixme uncomment this for production, since images should come from the same domain
-          // fixme to use canvas or server should provide cors headers
           src={this.props.src}
           style={this.props.isNsfw ? {display: "none"} : {}}
           className={this.props.mobile ? ('PostSummary__image-mobile ' + visitedClassName) : 'PostSummary__image '}

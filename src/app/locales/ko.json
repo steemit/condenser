@@ -206,7 +206,7 @@
             "authors_get_paid_when_people_like_you_upvote_their_post":
                 "보팅을 통해 작가들에게 금전적인 지원을 하실 수 있습니다.",
             "if_you_enjoyed_what_you_read_earn_amount":
-                "즐겁게 읽으셨다면 여러분도 지금 바로 가입하셔서 STEEM 채굴을 시작하세요!",
+                "즐겁게 읽으셨다면 여러분도 지금 바로 가입하셔서 가상화폐 STEEM 을 보상으로 받으세요!",
             "free_steem": "FREE STEEM!",
             "sign_up_earn_steem": "Sign up now to earn "
         },
@@ -662,7 +662,8 @@
         "to_comment_and_reward_others": " to comment and reward others.",
         "signup_button": "Sign up now to earn ",
         "signup_button_emphasis": "FREE STEEM!",
-        "sign_up_get_steem": "계정을 만들고 스팀을 채굴하세요.",
+        "sign_up_get_steem":
+            "계정을 만들고 가상화폐 STEEM 을 보상으로 받으세요.",
         "returning_users": "Returning Users: ",
         "join_our": "Join our"
     },

@@ -294,6 +294,10 @@ class ReplyEditor extends React.Component {
         const {uploadImage} = this.props
         this.setState({progress: {message: tt('reply_editor.uploading') + '...'}})
         uploadImage(file, progress => {
+
+          console.log(`--------------------------------`)
+          console.log(file)
+
             if(progress.url) {
                 this.setState({ progress: {} })
                 const {url} = progress
@@ -308,7 +312,7 @@ class ReplyEditor extends React.Component {
             } else {
                 this.setState({ progress })
             }
-            setTimeout(() => { this.setState({ progress: {} }) }, 4000) // clear message
+            setTimeout(() => { this.setState({ progress: {} }) }, 10000) // clear message
         })
     }
 

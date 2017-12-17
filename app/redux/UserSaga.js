@@ -10,6 +10,7 @@ import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import {loadFollows} from 'app/redux/FollowSaga'
 import {PrivateKey, Signature, hash} from 'golos-js/lib/auth/ecc'
 import {api} from 'golos-js'
+import tt from 'counterpart';
 
 export const userWatches = [
     watchRemoveHighSecurityKeys, // keep first to remove keys early when a page change happens
@@ -386,11 +387,13 @@ function* uploadImage({payload: {file, dataUrl, filename = 'image.txt', progress
     const username = stateUser.getIn(['current', 'username'])
     const d = stateUser.getIn(['current', 'private_keys', 'posting_private'])
     if(!username) {
-        progress({error: 'Please logged in first.'})
+        // progress({error: 'Please logged in first.'})
+        progress({error: tt('user_saga_js.imageUpload.error_login_first')})
         return
     }
     if(!d) {
-        progress({error: 'Login with your posting key'})
+        // progress({error: 'Login with your posting key'})
+        progress({error: tt('user_saga_js.imageUpload.error_login_with_posting_key')})
         return
     }
 
@@ -435,6 +438,9 @@ function* uploadImage({payload: {file, dataUrl, filename = 'image.txt', progress
     const postUrl = `${$STM_Config.upload_image}/${username}/${sig.toHex()}`
 
     const xhr = new XMLHttpRequest()
+    console.log(`!!!!!!!!!!!!!!!!!!!!!`)
+    console.log(postUrl)
+
     xhr.open('POST', postUrl)
     xhr.onload = function () {
         console.log(xhr.status, xhr.responseText)
@@ -448,13 +454,19 @@ function* uploadImage({payload: {file, dataUrl, filename = 'image.txt', progress
         progress({url})
     }
     xhr.onerror = function (error) {
-        console.error(filename, error)
-        progress({error: 'Unable to contact the server.'})
+
+      //   console.error(filename, error)
+      console.log(this)
+      //   console.error(filename, error)
+
+        // progress({error: 'Unable to contact the server.'})
+        progress({error: tt(`user_saga_js.imageUpload.error_server_unavailable`)})
     }
     xhr.upload.onprogress = function (event) {
         if (event.lengthComputable) {
             const percent = Math.round((event.loaded / event.total) * 100)
-            progress({message: `Uploading ${percent}%`})
+            // progress({message: `Uploading ${percent}%`})
+            progress({message: `${tt('user_saga_js.imageUpload.uploading')} ${percent}%`})
             // console.log('Upload', percent)
         }
     }

@@ -114,7 +114,8 @@ export function contentStats(content) {
     let neg_rshares = Long.ZERO;
     let total_votes = 0;
     let up_votes = 0;
-
+    
+    // TODO: breaks if content has no active_votes attribute.
     content.get('active_votes').forEach(v => {
         const sign = Math.sign(v.get('percent'));
         if (sign === 0) return;

@@ -3,13 +3,40 @@ import { emptyContent } from 'app/redux/EmptyState';
 import { contentStats } from 'app/utils/StateFunctions';
 import constants from './constants';
 
-const emptyContentMap = Map(emptyContent);
+export const emptyContentMap = Map(emptyContent);
 
-const defaultState = Map({ status: {} });
+export const defaultState = Map({ status: {} });
 
+export const globalActionConstants = {
+    RECEIVE_STATE: 'global/RECEIVE_STATE',
+    SET_COLLAPSED: 'global/SET_COLLAPSED',
+    RECEIVE_ACCOUNT: 'global/RECEIVE_ACCOUNT',
+    RECEIVE_COMMENT: 'global/RECEIVE_COMMENT',
+    RECEIVE_CONTENT: 'global/RECEIVE_CONTENT',
+    LINK_REPLY: 'global/LINK_REPLY',
+    UPDATE_ACCOUNT_WITNESS_VOTE: 'global/UPDATE_ACCOUNT_WITNESS_VOTE',
+    UPDATE_ACCOUNT_WITNESS_PROXY: 'global/UPDATE_ACCOUNT_WITNESS_PROXY',
+    DELETE_CONTENT: 'global/DELETE_CONTENT',
+    VOTED: 'global/VOTED',
+    FETCHING_DATA: 'global/FETCHING_DATA',
+    RECEIVE_DATA: 'global/RECEIVE_DATA',
+    RECEIVE_RECENT_POSTS: 'global/RECEIVE_RECENT_POSTS',
+    REQUEST_META: 'global/REQUEST_META',
+    RECEIVE_META: 'global/RECEIVE_META',
+    SET: 'global/SET',
+    REMOVE: 'global/REMOVE',
+    UPDATE: 'global/UPDATE',
+    SET_META_DATA: 'global/SET_META_DATA',
+    CLEAR_META: 'global/CLEAR_META',
+    CLEAR_META_ELEMENT: 'global/CLEAR_META_ELEMENT',
+    FETCH_JSON: 'global/FETCH_JSON',
+    FETCH_JSON_RESULT: 'global/FETCH_JSON_RESULT',
+    SHOW_DIALOG: 'global/SHOW_DIALOG',
+    HIDE_DIALOG: 'global/HIDE_DIALOG',
+    GET_STATE: 'global/GET_STATE',
+};
 // Action constants
 const RECEIVE_STATE = 'global/RECEIVE_STATE';
-const SET_COLLAPSED = 'global/SET_COLLAPSED';
 const RECEIVE_ACCOUNT = 'global/RECEIVE_ACCOUNT';
 const RECEIVE_COMMENT = 'global/RECEIVE_COMMENT';
 const RECEIVE_CONTENT = 'global/RECEIVE_CONTENT';
@@ -36,19 +63,19 @@ const HIDE_DIALOG = 'global/HIDE_DIALOG';
 // Saga-related:
 export const GET_STATE = 'global/GET_STATE';
 
-export default function reducer(state = defaultState, action) {
+export default function reducer(state = defaultState, action = {}) {
     const payload = action.payload;
 
     switch (action.type) {
-        case SET_COLLAPSED: {
+        case globalActionConstants.SET_COLLAPSED: {
             return state.withMutations(map => {
-                map.updateIn(['content', payload.post], value => {
-                    value.merge(Map({ collapsed: payload.collapsed }));
-                });
+                map.updateIn(['content', payload.post], value =>
+                    value.merge(Map({ collapsed: payload.collapsed }))
+                );
             });
         }
 
-        case RECEIVE_STATE: {
+        case globalActionConstants.RECEIVE_STATE: {
             let new_state = fromJS(payload);
             if (new_state.has('content')) {
                 const content = new_state.get('content').withMutations(c => {
@@ -63,7 +90,7 @@ export default function reducer(state = defaultState, action) {
             return state.mergeDeep(new_state);
         }
 
-        case RECEIVE_ACCOUNT: {
+        case globalActionConstants.RECEIVE_ACCOUNT: {
             const account = fromJS(payload.account, (key, value) => {
                 if (key === 'witness_votes') return value.toSet();
                 const isIndexed = Iterable.isIndexed(value);
@@ -75,7 +102,7 @@ export default function reducer(state = defaultState, action) {
             );
         }
 
-        case RECEIVE_COMMENT: {
+        case globalActionConstants.RECEIVE_COMMENT: {
             const {
                 author,
                 permlink,
@@ -118,7 +145,7 @@ export default function reducer(state = defaultState, action) {
             return updatedState;
         }
 
-        case RECEIVE_CONTENT: {
+        case globalActionConstants.RECEIVE_CONTENT: {
             const content = fromJS(payload.content);
             const key = content.get('author') + '/' + content.get('permlink');
             return state.updateIn(['content', key], Map(), c => {

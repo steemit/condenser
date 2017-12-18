@@ -3,7 +3,6 @@ import { call, put, select } from 'redux-saga/effects';
 import { takeEvery, takeLatest } from 'redux-saga';
 import tt from 'counterpart';
 import { api } from '@steemit/steem-js';
-
 import * as globalActions from './GlobalReducer';
 import appActions from './AppReducer';
 import * as transactionActions from './TransactionReducer';
@@ -35,7 +34,7 @@ export function* getAccount(username, force = false) {
 }
 
 export function* watchGetState() {
-    yield* takeEvery(globalActions.GET_STATE, getState);
+    yield* takeEvery(globalActionConstants.GET_STATE, getState);
 }
 /** Manual refreshes.  The router is in FetchDataSaga. */
 export function* getState({ payload: { url } }) {

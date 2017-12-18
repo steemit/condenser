@@ -397,31 +397,29 @@ class CommentImpl extends React.Component {
         }
 
         const jsonld = {
-            "@context": "http://schema.org",
-            "@type": "Comment",
-            "@id": comment_link,
-            "datePublished": comment.created,
-            "text": comment.body,
-            "keywords": comment.category,
+            '@context': 'http://schema.org',
+            '@type': 'Comment',
+            '@id': comment_link,
+            datePublished: comment.created,
+            text: comment.body,
+            keywords: comment.category,
             /*
             // Comment's parent item must be of schema.org/Question type ... O_o
             "parentItem": {
                 "@id": comment.parent_permlink
             },
             */
-            "author": {
-                "@id": `https://${APP_DOMAIN}/@${comment.author}`
-            }
+            author: {
+                '@id': `https://${APP_DOMAIN}/@${comment.author}`,
+            },
         };
-        
-        return (
-            <div
-                className={commentClasses.join(' ')}
-                id={anchor_link}
-            >
 
-                <script type="application/ld+json">{JSON.stringify(jsonld)}</script>
-                
+        return (
+            <div className={commentClasses.join(' ')} id={anchor_link}>
+                <script type="application/ld+json">
+                    {JSON.stringify(jsonld)}
+                </script>
+
                 {depth_indicator}
                 <div className={innerCommentClass}>
                     <div className="Comment__Userpic show-for-medium">

@@ -525,7 +525,8 @@ export default connect(
                 if (myVote == null) return null;
                 const t = isFlag
                     ? ''
-                    : tt(
+                    : ' ' +
+                      tt(
                           'voting_jsx.we_will_reset_curation_rewards_for_this_post'
                       );
                 if (weight === 0)

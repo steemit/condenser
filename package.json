@@ -120,7 +120,7 @@
     "react-timeago": "^3.1.2",
     "redux": "^3.3.1",
     "redux-form": "5.3.4",
-    "redux-saga": "^0.9.5",
+    "redux-saga": "^0.16.0",
     "remarkable": "^1.7.1",
     "sanitize-html": "^1.11.4",
     "sass-loader": "^6.0.6",

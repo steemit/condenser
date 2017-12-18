@@ -77,6 +77,9 @@ input.sell-color:hover {
 
   input.price_warning {
     background: rgba(255, 153, 0, 0.13);
+    @include themify($themes) {
+      background: themed('inputPriceWarning');
+    }
   }
 }
 
@@ -124,6 +127,34 @@ table.Market__open-orders {
     :nth-child(6) {
       text-align: right;
     }
+  }
+
+  thead th.sortable {
+    cursor: pointer;
+  }
+
+  th.activesort--asc::after {
+    content: ' ';
+    float: right;
+    margin-top: 10px;
+    margin-left: 10px;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 5px solid black;
+  }
+
+  th.activesort--desc::after {
+    content: ' ';
+    float: right;
+    margin-top: 10px;
+    margin-left: 10px;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid black;
   }
 }
 

@@ -231,8 +231,8 @@ class Header extends React.Component {
                 <div className="Header__top header">
                     <div className="expanded row">
                         <div className="columns">
-                            <ul className="menu">
-                                <li className="Header__top-logo">
+                            <ul className="menu Header__menu">
+                                <li className="Header__logo">
                                     <Link to={logo_link}>
                                         {/*
                                         <Icon name="logo" className="logo-for-mobile" />
@@ -260,7 +260,6 @@ class Header extends React.Component {
                                                 </g>
                                             </g>
                                         </svg>
-
                                         <svg
                                             className="logo-new logo-new--desktop"
                                             width="148px"
@@ -308,8 +307,40 @@ class Header extends React.Component {
                                     />
                                 )}
                                 <HorizontalMenu
+                                    className="show-for-medium Header__sort"
                                     items={sort_order_menu_horizontal}
                                 />
+                                <li className={'hide-for-large Header__search'}>
+                                    <a
+                                        href="/static/search.html"
+                                        title={tt('g.search')}
+                                    >
+                                        <Icon name="search" size="1x" />
+                                    </a>
+                                </li>
+                                <li className={'show-for-large Header__search'}>
+                                    <form
+                                        className="input-group"
+                                        action="/static/search.html"
+                                        method="GET"
+                                    >
+                                        <button
+                                            className="input-group-button"
+                                            href="/static/search.html"
+                                            type="submit"
+                                            title={tt('g.search')}
+                                        >
+                                            <Icon name="search" size="1_5x" />
+                                        </button>
+                                        <input
+                                            className="input-group-field"
+                                            type="text"
+                                            placeholder="search"
+                                            name="q"
+                                            autoComplete="off"
+                                        />
+                                    </form>
+                                </li>
                             </ul>
                         </div>
                         <div className="columns shrink">

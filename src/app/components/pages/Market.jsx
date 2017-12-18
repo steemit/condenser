@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 //import Highcharts from 'highcharts';
+import classNames from 'classnames';
+import { Map } from 'immutable';
 
 import * as transactionActions from 'app/redux/TransactionReducer';
 import * as appActions from 'app/redux/AppReducer';
@@ -26,10 +28,12 @@ class Market extends React.Component {
     static propTypes = {
         orderbook: React.PropTypes.object,
         open_orders: React.PropTypes.array,
+        open_orders_sort: React.PropTypes.instanceOf(Map),
         ticker: React.PropTypes.object,
         // redux PropTypes
         placeOrder: React.PropTypes.func.isRequired,
         user: React.PropTypes.string,
+        feed: React.PropTypes.instanceOf(Map),
     };
 
     constructor(props) {
@@ -72,6 +76,10 @@ class Market extends React.Component {
             nextState.buy_price_warning != this.state.buy_price_warning ||
             nextState.sell_price_warning != this.state.sell_price_warning
         ) {
+            return true;
+        }
+
+        if (nextState.open_orders_sort !== this.props.open_orders_sort) {
             return true;
         }
 
@@ -207,6 +215,10 @@ class Market extends React.Component {
         });
     };
 
+    handleToggleOpenOrdersSort = (column, dataType = 'float') => {
+        this.props.toggleOpenOrdersSort(column, dataType);
+    };
+
     render() {
         const {
             sellSteem,
@@ -215,6 +227,7 @@ class Market extends React.Component {
             setFormPrice,
             validateBuySteem,
             validateSellSteem,
+            handleToggleOpenOrdersSort,
         } = this;
         const {
             buy_disabled,
@@ -233,14 +246,15 @@ class Market extends React.Component {
         };
 
         if (typeof this.props.ticker != 'undefined') {
-            let {
+            const {
                 latest,
                 lowest_ask,
                 highest_bid,
                 percent_change,
                 sbd_volume,
             } = this.props.ticker;
-            let { base, quote } = this.props.feed;
+            const base = this.props.feed.get('base');
+            const quote = this.props.feed.get('quote');
             ticker = {
                 latest: parseFloat(latest),
                 lowest_ask: roundUp(parseFloat(lowest_ask), 6),
@@ -293,9 +307,9 @@ class Market extends React.Component {
             }, {});
         }
 
-        let account = this.props.account ? this.props.account.toJS() : null;
-        let open_orders = this.props.open_orders;
-        let orderbook = aggOrders(normalizeOrders(this.props.orderbook));
+        const account = this.props.account ? this.props.account.toJS() : null;
+        const orderbook = aggOrders(normalizeOrders(this.props.orderbook));
+        const { open_orders, open_orders_sort } = this.props;
 
         // ORDERBOOK TABLE GENERATOR
         // function table(orderbook, side = 'bids', callback = ((price,steem,sbd) => {})) {
@@ -329,10 +343,10 @@ class Market extends React.Component {
         }
 
         // Logged-in user's open orders
-        function open_orders_table(open_orders) {
+        function open_orders_table(open_orders, open_orders_sort) {
             const rows =
                 open_orders &&
-                normalizeOpenOrders(open_orders).map(o => (
+                open_orders.map(o => (
                     <tr key={o.orderid}>
                         <td>{o.created.replace('T', ' ')}</td>
                         <td>{o.type == 'ask' ? tt('g.sell') : tt('g.buy')}</td>
@@ -353,15 +367,76 @@ class Market extends React.Component {
                     </tr>
                 ));
 
+            const activeClass = column => {
+                if (column === open_orders_sort.get('column')) {
+                    const dir =
+                        open_orders_sort.get('dir') === -1 ? 'desc' : 'asc';
+                    return ['activesort', `activesort--${dir}`];
+                }
+                return null;
+            };
+
             return (
                 <table className="Market__open-orders">
                     <thead>
                         <tr>
-                            <th>{tt('market_jsx.date_created')}</th>
-                            <th>{tt('g.type')}</th>
-                            <th>{tt('g.price')}</th>
-                            <th className="uppercase">{LIQUID_TOKEN}</th>
-                            <th>{`${DEBT_TOKEN_SHORT} (${CURRENCY_SIGN})`}</th>
+                            <th
+                                className={classNames(
+                                    activeClass('created'),
+                                    'sortable'
+                                )}
+                                onClick={e =>
+                                    handleToggleOpenOrdersSort(
+                                        'created',
+                                        'string'
+                                    )
+                                }
+                            >
+                                {tt('market_jsx.date_created')}
+                            </th>
+                            <th
+                                className={classNames(
+                                    activeClass('type'),
+                                    'sortable'
+                                )}
+                                onClick={e =>
+                                    handleToggleOpenOrdersSort('type', 'string')
+                                }
+                            >
+                                {tt('g.type')}
+                            </th>
+                            <th
+                                className={classNames(
+                                    activeClass('real_price'),
+                                    'sortable'
+                                )}
+                                onClick={e =>
+                                    handleToggleOpenOrdersSort('real_price')
+                                }
+                            >
+                                {tt('g.price')}
+                            </th>
+                            <th
+                                className={classNames(
+                                    activeClass('for_sale'),
+                                    'sortable',
+                                    'uppercase'
+                                )}
+                                onClick={e =>
+                                    handleToggleOpenOrdersSort('for_sale')
+                                }
+                            >
+                                {LIQUID_TOKEN}
+                            </th>
+                            <th
+                                className={classNames(
+                                    activeClass('sbd'),
+                                    'sortable'
+                                )}
+                                onClick={e => handleToggleOpenOrdersSort('sbd')}
+                            >
+                                {`${DEBT_TOKEN_SHORT} (${CURRENCY_SIGN})`}
+                            </th>
                             <th>{tt('market_jsx.action')}</th>
                         </tr>
                     </thead>
@@ -886,7 +961,7 @@ class Market extends React.Component {
                     <div className="row">
                         <div className="column">
                             <h4>{tt('market_jsx.open_orders')}</h4>
-                            {open_orders_table(open_orders)}
+                            {open_orders_table(open_orders, open_orders_sort)}
                         </div>
                     </div>
                 )}
@@ -911,7 +986,8 @@ module.exports = {
                 account: state.global.getIn(['accounts', username]),
                 history: state.market.get('history'),
                 user: username,
-                feed: state.global.get('feed_price').toJS(),
+                feed: state.global.get('feed_price'),
+                open_orders_sort: state.market.get('open_orders_sort'),
             };
         },
         dispatch => ({
@@ -1020,6 +1096,11 @@ module.exports = {
                             successCallback(successMessage);
                         },
                     })
+                );
+            },
+            toggleOpenOrdersSort: (column, dataType) => {
+                dispatch(
+                    marketActions.toggleOpenOrdersSort({ column, dataType })
                 );
             },
         })

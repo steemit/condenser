@@ -17,6 +17,7 @@ import {
 import { countDecimals } from 'app/utils/ParsersAndFormatters';
 import { APP_NAME, LIQUID_TOKEN, VESTING_TOKEN } from 'app/client_config';
 
+//const TX_SUGGESTION_MAX_LENGTH = 10;
 /** Warning .. This is used for Power UP too. */
 class TransferForm extends Component {
     static propTypes = {
@@ -79,7 +80,7 @@ class TransferForm extends Component {
             .slice(0, 20);
 
         // Build a combined list of users you follow & have previously transferred to,
-        // and sort it by the number of previous transfers.
+        // and sort it by 1. desc the number of previous transfers 2. username asc.
         this.setState({
             autocompleteUsers: this.props.following
                 .toOrderedMap()
@@ -88,11 +89,26 @@ class TransferForm extends Component {
                     label: labelFollowingUser,
                     numTransfers: 0,
                 }))
-                // Limit following list to 20
-                .slice(0, 20)
                 .merge(transferToLog)
-                .sortBy(u => u.numTransfers)
-                .reverse()
+                .sortBy(null, (a, b) => {
+                    console.log(a, b);
+                    //prioritize sorting by number of transfers
+                    if (a.numTransfers > b.numTransfers) {
+                        return -1;
+                    }
+                    if (b.numTransfers > a.numTransfers) {
+                        return 1;
+                    }
+                    //if transfer number is the same, sort by username
+                    if (a.username > b.username) {
+                        return 1;
+                    }
+                    if (b.username > a.username) {
+                        return -1;
+                    }
+                    return 0;
+                })
+                //.slice(0, TX_SUGGESTION_MAX_LENGTH)
                 .toArray(),
         });
     }

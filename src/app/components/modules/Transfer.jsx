@@ -91,7 +91,6 @@ class TransferForm extends Component {
                 }))
                 .merge(transferToLog)
                 .sortBy(null, (a, b) => {
-                    console.log(a, b);
                     //prioritize sorting by number of transfers
                     if (a.numTransfers > b.numTransfers) {
                         return -1;

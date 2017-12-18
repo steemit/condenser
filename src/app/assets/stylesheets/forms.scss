@@ -19,7 +19,7 @@ button {
     margin-right: 15px !important;
 }
 input, textarea, select {
-    // Overwrite 16px margin-bottom, it was pusing error messages down away from the form element
+    // Overwrite 16px margin-bottom, it was pushing error messages down away from the form element
     margin-bottom: 0px !important;
 }
 .error {
@@ -73,3 +73,6 @@ label {
     color: themed('textColorPrimary');  
   }    
 }
+
+$input-font-family: helvetica, sans-serif;
+$input-font-size: 16px;

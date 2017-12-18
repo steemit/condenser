@@ -92,6 +92,9 @@ blocktraded
 blocktrader
 blocktrads
 bocktrades
+block-trades
+blocktrads
+blocktrdes
 changelly.com
 changely
 shapeshif
@@ -135,6 +138,9 @@ youbit
 bitthai
 kucoin
 gopax
+steempay
+steempays
+steemitpay
 `
     .trim()
     .split('\n');

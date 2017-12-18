@@ -63,7 +63,6 @@ function TopRightMenu({
     const comments_link = `/@${username}/comments`;
     const reset_password_link = `/@${username}/password`;
     const settings_link = `/@${username}/settings`;
-    const tt_search = tt('g.search');
     const pathCheck = userPath === '/submit.html' ? true : null;
     if (loggedIn) {
         // change back to if(username) after bug fix:  Clicking on Login does not cause drop-down to close #TEMP!
@@ -113,15 +112,6 @@ function TopRightMenu({
         ];
         return (
             <ul className={mcn + mcl}>
-                <li className={lcn + ' Header__search'}>
-                    <a href="/static/search.html" title={tt_search}>
-                        {vertical ? (
-                            <span>{tt_search}</span>
-                        ) : (
-                            <Icon name="search" />
-                        )}
-                    </a>
-                </li>
                 {!pathCheck ? submit_story : null}
                 {!vertical && submit_icon}
                 <LinkWithDropdown
@@ -160,13 +150,6 @@ function TopRightMenu({
     if (probablyLoggedIn) {
         return (
             <ul className={mcn + mcl}>
-                {!vertical && (
-                    <li className="Header__search">
-                        <a href="/static/search.html" title={tt_search}>
-                            <Icon name="search" />
-                        </a>
-                    </li>
-                )}
                 <li className={lcn} style={{ paddingTop: 0, paddingBottom: 0 }}>
                     <LoadingIndicator type="circle" inline />
                 </li>
@@ -182,13 +165,6 @@ function TopRightMenu({
     }
     return (
         <ul className={mcn + mcl}>
-            {!vertical && (
-                <li className="Header__search">
-                    <a href="/static/search.html" title={tt_search}>
-                        <Icon name="search" />
-                    </a>
-                </li>
-            )}
             <li className={lcn}>
                 <a href="/pick_account">{tt('g.sign_up')}</a>
             </li>

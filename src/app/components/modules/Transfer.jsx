@@ -17,7 +17,6 @@ import {
 import { countDecimals } from 'app/utils/ParsersAndFormatters';
 import { APP_NAME, LIQUID_TOKEN, VESTING_TOKEN } from 'app/client_config';
 
-//const TX_SUGGESTION_MAX_LENGTH = 10;
 /** Warning .. This is used for Power UP too. */
 class TransferForm extends Component {
     static propTypes = {
@@ -75,9 +74,7 @@ class TransferForm extends Component {
                     });
                 }
                 return acc;
-            }, Map())
-            // Limit transfer log to 20
-            .slice(0, 20);
+            }, Map());
 
         // Build a combined list of users you follow & have previously transferred to,
         // and sort it by 1. desc the number of previous transfers 2. username asc.
@@ -107,7 +104,6 @@ class TransferForm extends Component {
                     }
                     return 0;
                 })
-                //.slice(0, TX_SUGGESTION_MAX_LENGTH)
                 .toArray(),
         });
     }

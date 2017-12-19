@@ -30,14 +30,6 @@
   margin: 0.5rem 0 1rem;
 }
 
-  .left-column {
-    padding-right: 0;
-  }
-
-  .right-column {
-    padding-left: 0;
-  }
-
 // protect for foundation bug for collapsed state drop-downs
 @media only screen and (max-width: 40em) {
     .Wallet_dropdown {

@@ -38,7 +38,6 @@
     "babel-preset-react": "^6.16.0",
     "babel-preset-stage-0": "^6.16.0",
     "bigi": "^1.4.1",
-    "bignumber.js": "^4.0.0",
     "blocked": "^1.1.0",
     "bs58": "^3.0.0",
     "bytebuffer": "^5.0.0",

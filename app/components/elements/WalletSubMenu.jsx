@@ -25,12 +25,5 @@ export default ({account_name}) => {
                 </li>
             </ul>
         </div>
-        <div className="columns shrink right-column">
-            <ul className="WalletSubMenu menu">
-                <li>
-                    {/*<Link to={`/@${account_name}/assets`} activeClassName="active">{tt('g.advanced')}</Link>*/}
-                </li>
-            </ul>
-        </div>
     </div>
 }

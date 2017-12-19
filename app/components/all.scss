@@ -12,7 +12,6 @@
 @import "./elements/LoadingIndicator";
 @import "./elements/Userpic";
 @import "./elements/Voting";
-@import "./elements/FormattedAsset";
 @import "./elements/ReplyEditor";
 @import "./elements/NotifiCounter";
 @import "./elements/DropdownMenu";
@@ -33,7 +32,6 @@
 @import "./elements/TickerPriceStat";
 @import "./elements/ScrollButton";
 @import "./elements/QrKeyView";
-@import "./elements/AssetName";
 @import "./elements/CTA/ctablock";
 
 // modules
@@ -49,7 +47,6 @@
 @import "./modules/BlocktradesDeposit";
 @import "./modules/TopRightMenu";
 @import "./modules/RocketChat";
-@import "modules/AssetCreate";
 
 // pages
 @import "./pages/PostsIndex";
@@ -64,7 +61,6 @@
 @import "./pages/Landing";
 @import "./pages/Landings/Start";
 @import "./pages/Landings/Hardfork";
-@import "./pages/Asset";
 
 // themes
 @import "./themes/green/all";

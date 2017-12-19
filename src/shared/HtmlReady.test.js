@@ -100,12 +100,21 @@ describe('htmlready', () => {
         expect(usertags).to.equal('abc,aaa1,eee,fff');
     });
 
-    it('should not link usernames inside links', () => {
-        const nameinsidelink =
+    it('should not link usernames at the front of linked text', () => {
+        const nameinsidelinkfirst =
             '<xml xmlns="http://www.w3.org/1999/xhtml"><a href="https://steemit.com/signup">@hihi</a></xml>';
         const htmlified =
             '<xml xmlns="http://www.w3.org/1999/xhtml"><a href="https://steemit.com/signup">@hihi</a></xml>';
-        const res = HtmlReady(nameinsidelink).html;
+        const res = HtmlReady(nameinsidelinkfirst).html;
+        expect(res).to.equal(htmlified);
+    });
+
+    it('should not link usernames in the middle of linked text', () => {
+        const nameinsidelinkmiddle =
+            '<xml xmlns="http://www.w3.org/1999/xhtml"><a href="https://steemit.com/signup">hi @hihi</a></xml>';
+        const htmlified =
+            '<xml xmlns="http://www.w3.org/1999/xhtml"><a href="https://steemit.com/signup">hi @hihi</a></xml>';
+        const res = HtmlReady(nameinsidelinkmiddle).html;
         expect(res).to.equal(htmlified);
     });
 });

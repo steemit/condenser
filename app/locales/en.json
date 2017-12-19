@@ -38,6 +38,7 @@
     "balances": "Balances",
     "bid": "Bid",
     "blog": "Blog",
+    "blocked_user_content": "Контент удален по жалобе заинтересованного лица",
     "browse": "Browse",
     "buy": "Buy",
     "buy_VESTING_TOKEN": "Buy %(VESTING_TOKEN)s",

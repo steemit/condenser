@@ -34,7 +34,7 @@ export function* getAccount(username, force = false) {
 }
 
 export function* watchGetState() {
-    yield* takeEvery(globalActionConstants.GET_STATE, getState);
+    yield* takeEvery(globalActions.GET_STATE, getState);
 }
 /** Manual refreshes.  The router is in FetchDataSaga. */
 export function* getState({ payload: { url } }) {

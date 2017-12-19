@@ -728,7 +728,9 @@
         "asset_currently_collecting":
             "%(asset)s currently collecting %(interest)s%% APR.",
         "beware_of_spam_and_phishing_links":
-            "Beware of spam and phishing links in transfer memos. Do not open links from users you do not trust. Do not provide your private keys to any third party websites."
+            "Beware of spam and phishing links in transfer memos. Do not open links from users you do not trust. Do not provide your private keys to any third party websites.",
+        "autocomplete_previous_transfers": "previous transfers",
+        "autocomplete_user_following": "following"
     },
     "userwallet_jsx": {
         "conversion_complete_tip": "Will complete on",

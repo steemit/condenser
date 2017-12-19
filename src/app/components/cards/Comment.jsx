@@ -14,6 +14,7 @@ import tt from 'counterpart';
 import { parsePayoutAmount } from 'app/utils/ParsersAndFormatters';
 import { Long } from 'bytebuffer';
 import ImageUserBlockList from 'app/utils/ImageUserBlockList';
+import { APP_DOMAIN } from 'app/client_config';
 
 // returns true if the comment has a 'hide' flag AND has no descendants w/ positive payout
 function hideSubtree(cont, c) {
@@ -396,12 +397,7 @@ class CommentImpl extends React.Component {
         }
 
         return (
-            <div
-                className={commentClasses.join(' ')}
-                id={anchor_link}
-                itemScope
-                itemType="http://schema.org/comment"
-            >
+            <div className={commentClasses.join(' ')} id={anchor_link}>
                 {depth_indicator}
                 <div className={innerCommentClass}>
                     <div className="Comment__Userpic show-for-medium">

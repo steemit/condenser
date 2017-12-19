@@ -7,35 +7,8 @@ export const emptyContentMap = Map(emptyContent);
 
 export const defaultState = Map({ status: {} });
 
-export const globalActionConstants = {
-    RECEIVE_STATE: 'global/RECEIVE_STATE',
-    SET_COLLAPSED: 'global/SET_COLLAPSED',
-    RECEIVE_ACCOUNT: 'global/RECEIVE_ACCOUNT',
-    RECEIVE_COMMENT: 'global/RECEIVE_COMMENT',
-    RECEIVE_CONTENT: 'global/RECEIVE_CONTENT',
-    LINK_REPLY: 'global/LINK_REPLY',
-    UPDATE_ACCOUNT_WITNESS_VOTE: 'global/UPDATE_ACCOUNT_WITNESS_VOTE',
-    UPDATE_ACCOUNT_WITNESS_PROXY: 'global/UPDATE_ACCOUNT_WITNESS_PROXY',
-    DELETE_CONTENT: 'global/DELETE_CONTENT',
-    VOTED: 'global/VOTED',
-    FETCHING_DATA: 'global/FETCHING_DATA',
-    RECEIVE_DATA: 'global/RECEIVE_DATA',
-    RECEIVE_RECENT_POSTS: 'global/RECEIVE_RECENT_POSTS',
-    REQUEST_META: 'global/REQUEST_META',
-    RECEIVE_META: 'global/RECEIVE_META',
-    SET: 'global/SET',
-    REMOVE: 'global/REMOVE',
-    UPDATE: 'global/UPDATE',
-    SET_META_DATA: 'global/SET_META_DATA',
-    CLEAR_META: 'global/CLEAR_META',
-    CLEAR_META_ELEMENT: 'global/CLEAR_META_ELEMENT',
-    FETCH_JSON: 'global/FETCH_JSON',
-    FETCH_JSON_RESULT: 'global/FETCH_JSON_RESULT',
-    SHOW_DIALOG: 'global/SHOW_DIALOG',
-    HIDE_DIALOG: 'global/HIDE_DIALOG',
-    GET_STATE: 'global/GET_STATE',
-};
 // Action constants
+const SET_COLLAPSED = 'global/SET_COLLAPSED';
 const RECEIVE_STATE = 'global/RECEIVE_STATE';
 const RECEIVE_ACCOUNT = 'global/RECEIVE_ACCOUNT';
 const RECEIVE_COMMENT = 'global/RECEIVE_COMMENT';
@@ -67,7 +40,7 @@ export default function reducer(state = defaultState, action = {}) {
     const payload = action.payload;
 
     switch (action.type) {
-        case globalActionConstants.SET_COLLAPSED: {
+        case SET_COLLAPSED: {
             return state.withMutations(map => {
                 map.updateIn(['content', payload.post], value =>
                     value.merge(Map({ collapsed: payload.collapsed }))
@@ -75,7 +48,7 @@ export default function reducer(state = defaultState, action = {}) {
             });
         }
 
-        case globalActionConstants.RECEIVE_STATE: {
+        case RECEIVE_STATE: {
             let new_state = fromJS(payload);
             if (new_state.has('content')) {
                 const content = new_state.get('content').withMutations(c => {
@@ -90,7 +63,7 @@ export default function reducer(state = defaultState, action = {}) {
             return state.mergeDeep(new_state);
         }
 
-        case globalActionConstants.RECEIVE_ACCOUNT: {
+        case RECEIVE_ACCOUNT: {
             const account = fromJS(payload.account, (key, value) => {
                 if (key === 'witness_votes') return value.toSet();
                 const isIndexed = Iterable.isIndexed(value);
@@ -102,7 +75,7 @@ export default function reducer(state = defaultState, action = {}) {
             );
         }
 
-        case globalActionConstants.RECEIVE_COMMENT: {
+        case RECEIVE_COMMENT: {
             const {
                 author,
                 permlink,
@@ -145,7 +118,7 @@ export default function reducer(state = defaultState, action = {}) {
             return updatedState;
         }
 
-        case globalActionConstants.RECEIVE_CONTENT: {
+        case RECEIVE_CONTENT: {
             const content = fromJS(payload.content);
             const key = content.get('author') + '/' + content.get('permlink');
             return state.updateIn(['content', key], Map(), c => {
@@ -308,7 +281,6 @@ export default function reducer(state = defaultState, action = {}) {
             );
             return new_state;
         }
-
         case RECEIVE_RECENT_POSTS: {
             const { data } = payload;
             let new_state = state.updateIn(
@@ -333,6 +305,7 @@ export default function reducer(state = defaultState, action = {}) {
                                 'stats',
                                 fromJS(contentStats(value))
                             );
+
                             map.set(key, value);
                         }
                     });
@@ -379,18 +352,16 @@ export default function reducer(state = defaultState, action = {}) {
         case CLEAR_META: {
             return state.deleteIn(['metaLinkData', payload.id]);
         }
-
+        // does not have an action creator...
         case CLEAR_META_ELEMENT: {
             const { formId, element } = payload;
             return state.updateIn(['metaLinkData', formId], data =>
                 data.remove(element)
             );
         }
-
         case FETCH_JSON: {
             return state;
         }
-
         case FETCH_JSON_RESULT: {
             const { id, result, error } = payload;
             return state.set(id, fromJS({ result, error }));
@@ -489,6 +460,7 @@ export const receiveMeta = payload => ({
     payload,
 });
 
+// TODO: Find a better name for this
 export const set = payload => ({
     type: SET,
     payload,

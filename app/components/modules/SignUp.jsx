@@ -1,7 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import SvgImage from 'app/components/elements/SvgImage';
-import AddToWaitingList from 'app/components/modules/AddToWaitingList';
 import tt from 'counterpart';
 import { formatCoins } from 'app/utils/FormatCoins';
 import { APP_DOMAIN, PRIVACY_POLICY_URL, TERMS_OF_SERVICE_URL } from 'app/client_config';
@@ -14,18 +13,6 @@ class SignUp extends React.Component {
     }
     render() {
         const APP_NAME = tt('g.APP_NAME');
-
-        if (this.props.serverBusy || $STM_Config.disable_signups) {
-            return <div className="row">
-                <div className="column callout" style={{margin: '20px', padding: '40px'}}>
-                    <p>
-                        {tt("g.membership_invitation_only") + ' ' + tt("g.submit_email_to_get_on_waiting_list")}
-                    </p>
-                    <AddToWaitingList />
-                </div>
-            </div>;
-        }
-
         const VESTING_TOKEN =  tt('token_names.VESTING_TOKEN')
 
         return <div className="SignUp">
@@ -45,38 +32,6 @@ class SignUp extends React.Component {
                     </p>
                 </div>
             </div>
-            {/* <div className="row">
-                <div className="column large-4 shrink">
-                    <SvgImage name="vk" width="64px" height="64px" />
-                </div>
-                <div className="column large-8">
-                    <a href="/connect/vk" className="button SignUp--vk-button">
-                        {tt("g.continue_with_vk")}
-                    </a>
-                </div>
-                &nbsp;
-            </div>
-            <div className="row">
-            </div>
-            <div className="row">
-                <div className="column large-4 shrink">
-                      <SvgImage name="facebook" width="64px" height="64px" />
-                </div>
-                <div className="column large-8">
-                      <a href="/connect/facebook" className="button SignUp--fb-button">{tt("g.continue_with_facebook")}</a>
-                </div>
-            </div> */}
-
-            {/* <div className="row">
-                <div className="column">
-                    <br />
-                    {tt("g.dont_have_facebook")}
-                    <br />
-                    {this.state.waiting_list ? <AddToWaitingList /> : <a href="#" onClick={() => this.setState({waiting_list: true})}>
-                        <strong> {tt("g.subscribe_to_get_sms_confirm")}.</strong>
-                    </a>}
-                </div>
-            </div>*/}
             <div className="row">
                 <div className="column large-4 shrink">
                     <SvgImage name="golos" width="64px" height="64px" />

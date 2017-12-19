@@ -15,7 +15,6 @@ export const fetchDataWatches = [
     watchFetchJsonRequests,
     watchFetchState,
     watchGetContent,
-    watchPayoutWindowRequests,
     watchFetchExchangeRates
 ];
 
@@ -332,28 +331,6 @@ function* fetchJson({payload: {id, url, body, successCallback, skipLoading = fal
         yield put({type: 'global/FETCHING_JSON', payload: false});
         yield put(GlobalReducer.actions.fetchJsonResult({id, error}))
     }
-}
-
-export function* watchPayoutWindowRequests() {
-    yield* takeEvery('PAYOUT_WINDOW_REQUEST', fetchPayoutWindow);
-}
-
-export function* fetchPayoutWindow({payload: {type, author, permlink, cost, time, onSuccess, onError}}) {
-  let callName = type === "getcost" ? 'get_payout_extension_cost' : 'get_payout_extension_time';
-  try {
-    const data = yield call(
-      [api, api[callName]],
-      author,
-      permlink,
-      type === "getcost" ? time : cost
-    );
-    yield put(GlobalReducer.actions.receivePayoutWindow({payoutWindow: data, author, permlink, cost, time}));
-    if (onSuccess) onSuccess(data);
-  } catch (error) {
-    console.error('~~ Saga fetchPayoutWindow error ~~>', callName, error);
-    // yield put({type: 'global/CHAIN_API_ERROR', error: error.message});
-    if (onError) onError(error.message);
-  }
 }
 
 export function* watchFetchExchangeRates() {

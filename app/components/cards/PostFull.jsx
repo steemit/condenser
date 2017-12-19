@@ -82,7 +82,6 @@ class PostFull extends React.Component {
         unlock: React.PropTypes.func.isRequired,
         deletePost: React.PropTypes.func.isRequired,
         showPromotePost: React.PropTypes.func.isRequired,
-        showProlongPost: React.PropTypes.func.isRequired,
         showExplorePost: React.PropTypes.func.isRequired,
     };
 
@@ -194,14 +193,6 @@ class PostFull extends React.Component {
         const author = post_content.get('author')
         const permlink = post_content.get('permlink')
         this.props.showPromotePost(author, permlink)
-    };
-
-    showProlongPost = () => {
-        const post_content = this.props.cont.get(this.props.post);
-        if (!post_content) return
-        const author = post_content.get('author')
-        const permlink = post_content.get('permlink')
-        this.props.showProlongPost(author, permlink)
     };
 
     showExplorePost = () => {
@@ -339,7 +330,6 @@ class PostFull extends React.Component {
                     </span>
                 }
 
-                {showProlong && <button className="Promote__button float-right button hollow tiny" disabled={true} onClick={this.showProlongPost}>{tt('g.prolong')}</button>}
                 {showPromote && <button className="Promote__button float-right button hollow tiny" onClick={this.showPromotePost}>{tt('g.promote')}</button>}
                 <TagList post={content} horizontal />
                 <div className="PostFull__footer row">
@@ -400,9 +390,6 @@ export default connect(
         },
         showPromotePost: (author, permlink) => {
             dispatch({type: 'global/SHOW_DIALOG', payload: {name: 'promotePost', params: {author, permlink}}});
-        },
-        showProlongPost: (author, permlink) => {
-            dispatch({type: 'global/SHOW_DIALOG', payload: {name: 'prolongPost', params: {author, permlink}}});
         },
         showExplorePost: (permlink) => {
             dispatch({type: 'global/SHOW_DIALOG', payload: {name: 'explorePost', params: {permlink}}});

@@ -207,7 +207,8 @@ class PostFull extends React.Component {
       const {author, url} = content;
       const asset = LIQUID_TICKER;
       const transferType = 'Transfer to Account';
-      const memo = url;
+      // const memo = url;
+      const memo = window.JSON.stringify({donate: {post: url}});
       this.props.showTransfer({
         to: author,
         asset,

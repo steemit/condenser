@@ -37,7 +37,20 @@ class Memo extends React.Component {
             if (section.trim().length === 0) continue
             const matchUserName = section.match(/(^|\s)(@[a-z][-\.a-z\d]+[a-z\d])/i)
             const matchLink = section.match(links.local)
-            const matchPostLink = (section.includes(`pst/@`)) && (section.split(`/`).length === 4);
+            const getDonateLink = () => {
+              let result = false;
+              try {
+                const obj = JSON.parse(section)
+                const {donate: {post}} = obj;
+                result = post
+              }
+              catch(e) {
+                return result
+              }
+              return result
+            }
+
+            const dLink = getDonateLink()
 
             if (matchUserName) {
                 const user2 = matchUserName[0].trim().substring(1)
@@ -50,10 +63,17 @@ class Memo extends React.Component {
             else if (matchLink) {
                 sections.push(<Link key={idx++} to={section}>{section}&nbsp;</Link>)
             }
-            else if (matchPostLink) {
-              const pLink = section;
-              const permLink = section.split(`/`)[3]
-              sections.push(<Link key={idx++} to={pLink}>{permLink}&nbsp;</Link>)
+            else if (dLink) {
+              // donate for post
+              const pLink = dLink;
+              const txt = `${pLink.split(`/`)[3]}`
+              sections.push(
+                // todo use locale constant for Donate for
+                //<span>Donate for &nbsp;
+                  <Link key={idx++} to={pLink}>{txt}&nbsp;
+                  </Link>
+                // </span>
+            )
             }
             else {
                 sections.push(<span key={idx++}>{section}&nbsp;</span>)

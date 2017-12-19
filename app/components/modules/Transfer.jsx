@@ -231,7 +231,7 @@ class TransferForm extends Component {
                     </div>
                 </div>
 
-                {memo && <div className="row">
+                {(memo && !disableMemo) && <div className="row">
                     <div className="column small-2" style={{paddingTop: 33}}>{tt('transfer_jsx.memo')}</div>
                     <div className="column small-10">
                         <small>{tt('transfer_jsx.this_memo_is') + isMemoPrivate ? tt('transfer_jsx.public') : tt('transfer_jsx.private')}</small>

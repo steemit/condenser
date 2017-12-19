@@ -83,6 +83,7 @@ class PostFull extends React.Component {
         unlock: React.PropTypes.func.isRequired,
         deletePost: React.PropTypes.func.isRequired,
         showPromotePost: React.PropTypes.func.isRequired,
+        showProlongPost: React.PropTypes.func.isRequired,
         showExplorePost: React.PropTypes.func.isRequired,
     };
 
@@ -196,6 +197,14 @@ class PostFull extends React.Component {
         this.props.showPromotePost(author, permlink)
     };
 
+    showProlongPost = () => {
+        const post_content = this.props.cont.get(this.props.post);
+        if (!post_content) return
+        const author = post_content.get('author')
+        const permlink = post_content.get('permlink')
+        this.props.showProlongPost(author, permlink)
+    };
+
     showExplorePost = () => {
         const permlink = this.share_params.link;
         this.props.showExplorePost(permlink)
@@ -204,7 +213,7 @@ class PostFull extends React.Component {
     showTransfer = () => {
       const post_content = this.props.cont.get(this.props.post);
       const content = post_content.toJS();
-      const {author, url} = content;
+      const { author, url } = content;
       const asset = LIQUID_TICKER;
       const transferType = 'Transfer to Account';
       // const memo = url;
@@ -213,7 +222,9 @@ class PostFull extends React.Component {
         to: author,
         asset,
         transferType,
-        memo
+        memo,
+        disableMemo: true,
+        disableTo: true
       });
     };
 
@@ -317,6 +328,7 @@ class PostFull extends React.Component {
         const archived = post_content.get('cashout_time') === '1969-12-31T23:59:59' // TODO: audit after HF17. #1259
         const readonly = archived || $STM_Config.read_only_mode
         const showPromote = username && post_content.get('last_payout') === '1970-01-01T00:00:00' && post_content.get('depth') == 0 // TODO: audit after HF17. #1259
+        const showProlong = showPromote
         const showReplyOption = post_content.get('depth') < 6
         const showEditOption = username === author
         const showDonate = Boolean(username && (username !== author))
@@ -347,6 +359,7 @@ class PostFull extends React.Component {
                     </span>
                 }
 
+                {showProlong && <button className="Promote__button float-right button hollow tiny" disabled={true} onClick={this.showProlongPost}>{tt('g.prolong')}</button>}
                 {showPromote && <button className="Promote__button float-right button hollow tiny" onClick={this.showPromotePost}>{tt('g.promote')}</button>}
                 {showDonate && <button className="Donate__button float-right button hollow tiny" onClick={this.showTransfer}>{tt('g.donate')}</button>}
                 <TagList post={content} horizontal />
@@ -408,6 +421,9 @@ export default connect(
         },
         showPromotePost: (author, permlink) => {
             dispatch({type: 'global/SHOW_DIALOG', payload: {name: 'promotePost', params: {author, permlink}}});
+        },
+        showProlongPost: (author, permlink) => {
+            dispatch({type: 'global/SHOW_DIALOG', payload: {name: 'prolongPost', params: {author, permlink}}});
         },
         showExplorePost: (permlink) => {
             dispatch({type: 'global/SHOW_DIALOG', payload: {name: 'explorePost', params: {permlink}}});

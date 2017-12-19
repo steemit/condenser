@@ -438,8 +438,6 @@ function* uploadImage({payload: {file, dataUrl, filename = 'image.txt', progress
     const postUrl = `${$STM_Config.upload_image}/${username}/${sig.toHex()}`
 
     const xhr = new XMLHttpRequest()
-    console.log(`!!!!!!!!!!!!!!!!!!!!!`)
-    console.log(postUrl)
 
     xhr.open('POST', postUrl)
     xhr.onload = function () {
@@ -455,9 +453,7 @@ function* uploadImage({payload: {file, dataUrl, filename = 'image.txt', progress
     }
     xhr.onerror = function (error) {
 
-      //   console.error(filename, error)
-      console.log(this)
-      //   console.error(filename, error)
+        console.error(filename, error)
 
         // progress({error: 'Unable to contact the server.'})
         progress({error: tt(`user_saga_js.imageUpload.error_server_unavailable`)})

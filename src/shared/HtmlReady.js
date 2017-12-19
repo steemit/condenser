@@ -262,7 +262,7 @@ function linkify(content, mutate, hashtags, usertags, images, links) {
     });
 
     // usertag (mention)
-    // Cribbed from https://github.com/twitter/twitter-text/blob/master/js/twitter-text.js#L90
+    // Cribbed from https://github.com/twitter/twitter-text/blob/v1.14.7/js/twitter-text.js#L90
     content = content.replace(
         /(^|[^a-zA-Z0-9_!#$%&*@＠\/]|(^|[^a-zA-Z0-9_+~.-\/]))[@＠]([a-z][-\.a-z\d]+[a-z\d])/gi,
         (match, preceeding1, preceeding2, user) => {

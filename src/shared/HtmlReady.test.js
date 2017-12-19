@@ -93,9 +93,19 @@ describe('htmlready', () => {
     });
 
     it('should detect only valid mentions', () => {
-        const textwithmentions = '@abc @xx (@aaa1) @_x @eee, @fff! https://x.com/@zzz/test';
+        const textwithmentions =
+            '@abc @xx (@aaa1) @_x @eee, @fff! https://x.com/@zzz/test';
         const res = HtmlReady(textwithmentions, { mutate: false });
         const usertags = Array.from(res.usertags).join(',');
         expect(usertags).to.equal('abc,aaa1,eee,fff');
+    });
+
+    it('should not link usernames inside links', () => {
+        const nameinsidelink =
+            '<xml xmlns="http://www.w3.org/1999/xhtml"><a href="https://steemit.com/signup">@hihi</a></xml>';
+        const htmlified =
+            '<xml xmlns="http://www.w3.org/1999/xhtml"><a href="https://steemit.com/signup">@hihi</a></xml>';
+        const res = HtmlReady(nameinsidelink).html;
+        expect(res).to.equal(htmlified);
     });
 });

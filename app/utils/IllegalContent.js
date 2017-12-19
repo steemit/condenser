@@ -7,3 +7,7 @@ export const blockedContent = `
 
 
 `.trim().split("\n")
+
+export const blockedUsersContent = `
+bm-marrivas
+`.trim().split("\n")

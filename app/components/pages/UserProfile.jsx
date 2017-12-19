@@ -18,7 +18,7 @@ import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import PostsList from 'app/components/cards/PostsList';
 import {isFetchingOrRecentlyUpdated} from 'app/utils/StateFunctions';
 import {repLog10} from 'app/utils/ParsersAndFormatters';
-import { blockedUsers } from 'app/utils/IllegalContent';
+import { blockedUsers, blockedUsersContent } from 'app/utils/IllegalContent';
 import IllegalContentMessage from 'app/components/elements/IllegalContentMessage';
 import Tooltip from 'app/components/elements/Tooltip';
 import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdown';
@@ -325,6 +325,10 @@ export default class UserProfile extends React.Component {
 
 		if (blockedUsers.includes(accountname)) {
 			tab_content = <IllegalContentMessage />;
+        }
+        
+        if (blockedUsersContent.includes(accountname)) {
+			tab_content = <div>{tt('g.blocked_user_content')}</div>;
 		}
 
         if (!(section === 'transfers' ||

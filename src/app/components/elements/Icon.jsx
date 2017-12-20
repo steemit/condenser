@@ -1,6 +1,6 @@
 import React from 'react';
 
-const icons = [
+export const icons = [
     'user',
     'share',
     'chevron-up-circle',

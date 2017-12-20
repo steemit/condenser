@@ -364,6 +364,7 @@ class TransferForm extends Component {
                                         this.setState({
                                             to: {
                                                 ...this.state.to,
+                                                touched: true,
                                                 value: e.target.value,
                                             },
                                         });
@@ -378,7 +379,7 @@ class TransferForm extends Component {
                                     }
                                 />
                             </div>
-                            {to.touched && to.blur && to.error ? (
+                            {to.touched && to.error ? (
                                 <div className="error">{to.error}&nbsp;</div>
                             ) : (
                                 <p>{toVesting && powerTip3}</p>

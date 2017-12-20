@@ -1,6 +1,6 @@
 # Please Read
 
-Please read these instructions before submitting issues to the Steemit.com GitHub repository. The issue tracker is for bugs and specific implementation discussion **only**. It should not be used for other purposes, as described below.
+Please read these instructions before submitting issues or pull requests to the Steemit.com (**condenser**) GitHub repository. The issue tracker is the place to start for all for bugs and well vetted enhancements.
 
 ## Bug Reports
 
@@ -12,15 +12,20 @@ If you are having trouble using the website but it is not an error with the webs
 
 ## Enhancement Suggestions
 
-Do **not** use the issue tracker to suggest enhancements or improvements to the platform. The best place for these discussions is on Steemit.com. If there is a well vetted idea that has the support of the community that you feel should be considered by the development team, please email it to [sneak@steemit.com](mailto:sneak@steemit.com) for review.
+If you have an enhancement you would like to see in condenser we suggest you first discuss it with other members of the 
+community on Steemit.com, or in the steemit discord channel. If there is a well vetted idea that has the support of the 
+community create an issue with a link to the discussion, a detailed description, and tag it with the label `new_grass` 
+(for 'grass roots', and 'the grass is greener'). New enhancement issues that do not follow this format will be closed.
+
+**Bumps for working code:** Community contributions are still tops. If there's a `new_grass` labeled issue you like or 
+want to promote, fork the repo and code away! (leave a comment saying as much with a link to your repo/branch) When 
+you've got it ready post another comment and tag `@sneak` in it. If it passes muster you'll be invited to create a Pull Request.
 
 ## Implementation Discussion
 
 The developers frequently open issues to discuss changes that are being worked on. This is to inform the community of the changes being worked on, and to get input from the community and other developers on the implementation.
 
-Issues opened that devolve into lengthy discussion of minor site features will be closed or locked.  The issue tracker is not a general purpose discussion forum.
-
-This is not the place to make suggestions for product improvement (please see the Enhancement Suggestions section above for this). If you are not planning to work on the change yourself - do not open an issue for it.
+Issues opened that devolve into lengthy discussion of minor site features will be closed or locked.  The issue tracker is not a general purpose discussion forum. (That's what steemit.com is for!)
 
 ## Duplicate Issues
 
@@ -28,10 +33,11 @@ Please do a keyword search to see if there is already an existing issue before o
 
 ## Steemit.com vs. Steem Blockchain
 
-This issue tracker is only intended to track issues for the Steemit.com website. If the issue is with the Steem blockchain, please open an issue in the [Steem Repository](https://github.com/steemit/steem).
+This issue tracker is only intended to track issues for the Steemit.com website. If the issue is with the 
+Steem blockchain, please open an issue in the [Steem Repository](https://github.com/steemit/steem).
 
 ## Pull Requests
 
-Anybody in the community is welcome and encouraged to submit pull requests with any desired changes to the platform!
+We love working code, but please do not open a Pull Request unless all the conditions in the **Bumps for working code:**
+section have been met.
 
-Requests to make changes to steemit.com that include working, tested pull requests jump to the top of the queue. There is not a guarantee that all functionality submitted as a PR will be accepted and merged, however.

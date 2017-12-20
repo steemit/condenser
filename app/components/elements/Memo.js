@@ -37,21 +37,6 @@ class Memo extends React.Component {
             if (section.trim().length === 0) continue
             const matchUserName = section.match(/(^|\s)(@[a-z][-\.a-z\d]+[a-z\d])/i)
             const matchLink = section.match(links.local)
-            const getDonateLink = () => {
-              let result = false;
-              try {
-                const obj = JSON.parse(section)
-                const {donate: {post}} = obj;
-                result = post
-              }
-              catch(e) {
-                return result
-              }
-              return result
-            }
-
-            const dLink = getDonateLink()
-
             if (matchUserName) {
                 const user2 = matchUserName[0].trim().substring(1)
                 const userLower = user2.toLowerCase()
@@ -63,18 +48,6 @@ class Memo extends React.Component {
             else if (matchLink) {
                 sections.push(<Link key={idx++} to={section}>{section}&nbsp;</Link>)
             }
-            else if (dLink) {
-              // donate for post
-              const pLink = dLink;
-              const txt = `${pLink.split(`/`)[3]}`
-              sections.push(
-                // todo use locale constant for Donate for
-                //<span>Donate for &nbsp;
-                  <Link key={idx++} to={pLink}>{txt}&nbsp;
-                  </Link>
-                // </span>
-            )
-            }
             else {
                 sections.push(<span key={idx++}>{section}&nbsp;</span>)
             }
@@ -82,16 +55,57 @@ class Memo extends React.Component {
         return sections
     }
 
+    renderDonate = (text) => {
+      const {data: {from, to}, username} = this.props
+      try {
+        const obj = JSON.parse(text)
+        const {donate: {post}} = obj;
+        if (!post) {return false}
+        let el;
+        if (from === username) {
+          // txt = `Вы отблагодарили @${to} за пост ${post}`
+          el = <span>
+            {`Вы отблагодарили`}&nbsp;
+            <Link to={`/@${to}`}>
+              {`@${to}`}&nbsp;
+            </Link>
+            {` за пост `}
+            <Link to={post}>
+              {`${post}`}
+            </Link>
+          </span>
+        }
+        else if (to === username) {
+          // txt = `@${from} отблагодарил вас за пост ${post}`
+          el = <span>
+            <Link to={`/@${from}`}>
+              {`@${from}`}&nbsp;
+            </Link>
+            {`отблагодарил вас за пост `}
+            <Link to={post}>
+              {`${post}`}&nbsp;
+            </Link>
+            </span>
+        }
+        return el
+      }
+      catch(e) {
+        return text
+      }
+    }
+
     render() {
         const {decodeMemo, linkify} = this
         const {memo_private, text, myAccount} = this.props;
         const isEncoded = /^#/.test(text);
+        // fixme: ugly and temporary
+        const donate = this.renderDonate(text);
 
-		if(!isEncoded) return <span>{linkify(text)}</span>
-        if(!myAccount) return <span></span>
-        if(memo_private) return <span>{decodeMemo(memo_private, text)}</span>
-        return <span>{tt('g.login_to_see_memo')}</span>
-    }
+        if(!isEncoded) return <span>{donate || linkify(text)}</span>
+            if(!myAccount) return <span></span>
+            if(memo_private) return <span>{decodeMemo(memo_private, text)}</span>
+            return <span>{tt('g.login_to_see_memo')}</span>
+        }
 }
 
 export default connect(

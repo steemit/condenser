@@ -45,18 +45,18 @@ export default class PostSummaryThumb extends React.Component {
     const {visitedClassName} = this.props;
     return (
       <a href={this.props.href} onClick={this.props.onClick}>
-        <canvas className={'PostSummary__image '} //+ visitedClassName}
-                style={!this.props.isNsfw ? {display: "none"} : {}}
-                ref={(c) => {
-                  this.canvas = c;
-                }}>
-        </canvas>
+        {/*<canvas className={'PostSummary__image '} //+ visitedClassName}*/}
+                {/*style={!this.props.isNsfw ? {display: "none"} : {}}*/}
+                {/*ref={(c) => {*/}
+                  {/*this.canvas = c;*/}
+                {/*}}>*/}
+        {/*</canvas>*/}
         <img
           src={this.props.src}
           style={this.props.isNsfw ? {display: "none"} : {}}
           className={this.props.mobile ? ('PostSummary__image-mobile ' + visitedClassName) : 'PostSummary__image '}
-          onLoad={this.handleImageLoaded.bind(this)}
-          onError={this.handleImageErrored.bind(this)}
+          // onLoad={this.handleImageLoaded.bind(this)}
+          // onError={this.handleImageErrored.bind(this)}
           ref={(img) => {
             this.img = img;
           }}>
@@ -65,7 +65,7 @@ export default class PostSummaryThumb extends React.Component {
           ref={(img) => {
             this.defaultImage = img;
           }}
-          style={{display: "none"}}
+          style={!this.props.isNsfw ? {display: "none"} : {}}
           // src={`/images/18_plus.png`}
           src={nsfwBanner}
           className={'PostSummary__image '} //+ visitedClassName}*!/*/}

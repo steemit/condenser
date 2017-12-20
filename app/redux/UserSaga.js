@@ -445,7 +445,28 @@ function* uploadImage({payload: {file, dataUrl, filename = 'image.txt', progress
         const res = JSON.parse(xhr.responseText)
         const {error} = res
         if(error) {
-            progress({error: 'Error: ' + error})
+          let tError;
+            if (typeof error === `string`) {
+              if (error.includes(`is not found on the blockchain`)) {
+                tError = `Пользователь не найден в сети блокчейн.`
+              }
+              if (error.includes(`unsupported posting key configuration`)) {
+                tError = `Ошибка постинг-ключа.`
+              }
+              if (error.includes(`Upload failed`)) {
+                tError = `Ошибка загрузки изображения.`
+              }
+              if (error.includes(`upload only images`)) {
+                tError = `Вы можете загружать только изображения.`
+              }
+              if (error.includes(`Signature did not verify`)) {
+                tError = `Ошибка цифровой подписи`
+              }
+              if (error.includes(`Error uploading`)) {
+                tError = `Ошибка загрузки`
+              }
+            }
+            progress({error: tError || error})
             return
         }
         const {url} = res

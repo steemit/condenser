@@ -1,11 +1,13 @@
 import { takeLatest } from 'redux-saga';
 import { call, put, take, fork, race, select } from 'redux-saga/effects';
+
 import {
     fetchNotifications,
     markAsRead,
     markAsUnread,
     markAsShown,
 } from 'app/utils/YoApiClient';
+import * as notificationActions from 'app/redux/NotificationReducer';
 
 const POLL_WAIT_MS = 5000;
 
@@ -54,15 +56,9 @@ function delay(millis) {
 function* pollNotifications() {
     try {
         yield call(delay, POLL_WAIT_MS);
-        yield put({
-            type: 'notification/FETCH_SOME',
-            direction: 'after',
-        });
+        yield put(notificationActions.fetchSome('after'));
     } catch (error) {
-        yield put({
-            type: 'notification/APPEND_SOME_ERROR', // maybe another type here?
-            msg: 'poll cancelled',
-        });
+        yield put(notificationActions.appendSomeError('poll cancelled')); // maybe another type here?
     }
 }
 
@@ -73,8 +69,8 @@ function* pollNotifications() {
 function* watchPollData() {
     while (true) {
         yield take([
-            'notification/RECEIVE_ALL', // hang out til we get our first batch of notifs...
-            'notification/APPEND_SOME', // or after one of the polls are done
+            notificationActions.RECEIVE_ALL, // hang out til we get our first batch of notifs...
+            notificationActions.APPEND_SOME, // or after one of the polls are done
         ]);
 
         const idsReadPending = yield select(getIdsReadPending);
@@ -85,15 +81,9 @@ function* watchPollData() {
             const payload = yield call(markAsRead, idsReadPending.toArray());
 
             if (payload.error) {
-                yield put({
-                    type: 'notification/SENT_UPDATES_ERROR',
-                    msg: payload.error,
-                });
+                yield put(notificationActions.sentUpdatesError(payload.error));
             } else {
-                yield put({
-                    type: 'notification/SENT_UPDATES',
-                    updates: { read: true },
-                });
+                yield put(notificationActions.sentUpdates({ read: true }));
             }
         }
 
@@ -104,15 +94,9 @@ function* watchPollData() {
             );
 
             if (payload.error) {
-                yield put({
-                    type: 'notification/SENT_UPDATES_ERROR',
-                    msg: payload.error,
-                });
+                yield put(notificationActions.sentUpdatesError(payload.error));
             } else {
-                yield put({
-                    type: 'notification/SENT_UPDATES',
-                    updates: { read: false },
-                });
+                yield put(notificationActions.sentUpdates({ read: false }));
             }
         }
 
@@ -120,15 +104,9 @@ function* watchPollData() {
             const payload = yield call(markAsShown, idsShownPending.toArray());
 
             if (payload.error) {
-                yield put({
-                    type: 'notification/SENT_UPDATES_ERROR',
-                    msg: payload.error,
-                });
+                yield put(notificationActions.sentUpdatesError(payload.error));
             } else {
-                yield put({
-                    type: 'notification/SENT_UPDATES',
-                    updates: { shown: true },
-                });
+                yield put(notificationActions.sentUpdates({ shown: true }));
             }
         }
 
@@ -149,15 +127,9 @@ export function* fetchAll() {
     const payload = yield call(fetchNotifications, username);
 
     if (payload.error) {
-        yield put({
-            type: 'notification/RECEIVE_ALL_ERROR',
-            msg: payload.error,
-        });
+        yield put(notificationActions.receiveAllError(payload.error));
     } else {
-        yield put({
-            type: 'notification/RECEIVE_ALL',
-            payload,
-        });
+        yield put(notificationActions.receiveAll(payload));
     }
 }
 
@@ -198,29 +170,20 @@ export function* fetchSome({ types = null, direction = 'after' }) {
         });
 
         if (payload.error) {
-            yield put({
-                type: 'notification/APPEND_SOME_ERROR',
-                msg: payload.error,
-            });
+            yield put(notificationActions.appendSomeError(payload.error));
         } else {
-            yield put({
-                type: 'notification/APPEND_SOME',
-                payload,
-            });
+            yield put(notificationActions.appendSome(payload));
             if (direction === 'before') {
-                yield put({
-                    type: 'notification/SET_LAST_FETCH_BEFORE_COUNT',
-                    count: payload.length,
-                    types: types ? types.toString() : 'all',
-                });
+                yield put(
+                    notificationActions.setLastFetchBeforeCount(
+                        payload.length,
+                        types ? types.toString() : 'all'
+                    )
+                );
             }
         }
     } catch (err) {
-        console.warn('FETCH_SOME poll cancelled');
-        yield put({
-            type: 'notification/FETCH_SOME_ERROR', // maybe another type here?
-            msg: 'poll cancelled',
-        });
+        yield put(fetchSomeError('poll cancelled'));
     }
 }
 
@@ -236,10 +199,7 @@ export function* updateOne({ id, updates }) {
     if (updates.read === true) {
         const payload = yield call(markAsRead, [id]);
 
-        yield put({
-            type: 'notification/APPEND_SOME',
-            payload,
-        });
+        yield put(notificationActions.appendSome(payload));
     }
 }
 
@@ -247,10 +207,7 @@ export function* updateSome({ ids, updates }) {
     if (updates.read === true) {
         const payload = yield call(markAsRead, ids);
 
-        yield put({
-            type: 'notification/APPEND_SOME',
-            payload,
-        });
+        yield put(notificationActions.appendSome(payload));
     }
 }
 
@@ -260,7 +217,7 @@ export function* NotificationPollSaga() {
 
 export function* NotificationFetchSaga() {
     yield [
-        takeLatest('notification/FETCH_ALL', fetchAll),
-        takeLatest('notification/FETCH_SOME', fetchSome),
+        takeLatest(notificationActions.FETCH_ALL, fetchAll),
+        takeLatest(notificationActions.FETCH_SOME, fetchSome),
     ];
 }

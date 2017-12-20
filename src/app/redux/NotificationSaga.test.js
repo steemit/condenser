@@ -11,6 +11,7 @@ import {
     getUsernameFromState,
     getNotificationsById,
 } from './NotificationSaga';
+import { receiveAll } from './NotificationReducer';
 
 describe('fetchAll', () => {
     it('should get the username from state', () => {
@@ -25,12 +26,7 @@ describe('fetchAll', () => {
         );
 
         const fetch = gen.next({ data: 'from online' }).value;
-        expect(fetch).to.deep.equal(
-            put({
-                type: 'notification/RECEIVE_ALL',
-                payload: { data: 'from online' },
-            })
-        );
+        expect(fetch).to.deep.equal(put(receiveAll({ data: 'from online' })));
 
         const done = gen.next();
         expect(done).to.deep.equal({ done: true, value: undefined });

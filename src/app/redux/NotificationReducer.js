@@ -2,6 +2,20 @@ import { Map, OrderedMap, Set } from 'immutable';
 import { combineReducers } from 'redux';
 import { filters } from 'app/components/elements/notification/type';
 
+// Action constants
+export const RECEIVE_ALL = 'notification/RECEIVE_ALL'; // watched by saga also
+const RECEIVE_ALL_ERROR = 'notification/RECEIVE_ALL_ERROR';
+export const APPEND_SOME = 'notification/APPEND_SOME'; // watched by saga also
+const APPEND_SOME_ERROR = 'notification/APPEND_SOME_ERROR';
+const UPDATE_ONE = 'notification/UPDATE_ONE';
+const UPDATE_SOME = 'notification/UPDATE_SOME';
+const SENT_UPDATES = 'notification/SENT_UPDATES';
+const SENT_UPDATES_ERROR = 'notification/SENT_UPDATES_ERROR';
+const SET_LAST_FETCH_BEFORE_COUNT = 'notification/SET_LAST_FETCH_BEFORE_COUNT';
+// Saga-related
+export const FETCH_SOME = 'notification/FETCH_SOME';
+export const FETCH_ALL = 'notification/FETCH_ALL';
+
 /**
  * Normalizes API payload.
  *
@@ -23,21 +37,21 @@ function apiToMap(payload) {
  */
 export const byId = (state = OrderedMap(), action = { type: null }) => {
     switch (action.type) {
-        case 'notification/RECEIVE_ALL':
+        case RECEIVE_ALL:
             return apiToMap(action.payload)
                 .sortBy(n => n.created)
                 .reverse();
-        case 'notification/APPEND_SOME':
+        case APPEND_SOME:
             return state
                 .merge(apiToMap(action.payload))
                 .sortBy(n => n.created)
                 .reverse();
-        case 'notification/UPDATE_ONE':
+        case UPDATE_ONE:
             return state.set(action.id, {
                 ...state.get(action.id),
                 ...action.updates,
             });
-        case 'notification/UPDATE_SOME':
+        case UPDATE_SOME:
             return state.map((n, id) => {
                 if (action.ids.indexOf(id) >= 0) {
                     return {
@@ -55,15 +69,15 @@ export const byId = (state = OrderedMap(), action = { type: null }) => {
 const createUpdatedList = ({ prop, val }) => {
     return (state = Set(), action = { type: null }) => {
         switch (action.type) {
-            case 'notification/UPDATE_ONE':
+            case UPDATE_ONE:
                 return updateMatchesList(action.updates, prop, val)
                     ? state.add(action.id)
                     : state;
-            case 'notification/UPDATE_SOME':
+            case UPDATE_SOME:
                 return updateMatchesList(action.updates, prop, val)
                     ? state.union(Set(action.ids))
                     : state;
-            case 'notification/SENT_UPDATES':
+            case SENT_UPDATES:
                 return updateMatchesList(action.updates, prop, val)
                     ? Set()
                     : state;
@@ -93,17 +107,17 @@ export const createList = ({ prop, val }) => (
     action = { type: null }
 ) => {
     switch (action.type) {
-        case 'notification/RECEIVE_ALL':
+        case RECEIVE_ALL:
             return Set.fromKeys(
                 apiToMap(action.payload).filter(n => n[prop] === val)
             );
-        case 'notification/APPEND_SOME':
+        case APPEND_SOME:
             return state.union(
                 Set.fromKeys(
                     apiToMap(action.payload).filter(n => n[prop] === val)
                 )
             );
-        case 'notification/UPDATE_ONE':
+        case UPDATE_ONE:
             if (!updateMatchesList(action.updates, prop, val)) {
                 return state.delete(action.id);
             }
@@ -111,7 +125,7 @@ export const createList = ({ prop, val }) => (
                 return state.add(action.id);
             }
             return state;
-        case 'notification/UPDATE_SOME':
+        case UPDATE_SOME:
             return action.ids.reduce((acc, updatedId) => {
                 if (!updateMatchesList(action.updates, prop, val)) {
                     return acc.delete(updatedId);
@@ -137,13 +151,13 @@ export const createMultiTypeList = filtertypes => (
     action = { type: null }
 ) => {
     switch (action.type) {
-        case 'notification/RECEIVE_ALL':
+        case RECEIVE_ALL:
             return Set.fromKeys(
                 apiToMap(action.payload).filter(
                     n => filtertypes.indexOf(n.notificationType) > -1
                 )
             );
-        case 'notification/APPEND_SOME':
+        case APPEND_SOME:
             return state.union(
                 Set.fromKeys(
                     apiToMap(action.payload).filter(
@@ -167,11 +181,11 @@ const generateUserfacingTypesReducers = (filtermap, listCreator) =>
 
 const isFetching = (state = false, action = { type: null }) => {
     switch (action.type) {
-        case 'notification/FETCH_SOME':
-        case 'notification/FETCH_ALL':
+        case FETCH_SOME:
+        case FETCH_ALL:
             return true;
-        case 'notification/APPEND_SOME':
-        case 'notification/RECEIVE_ALL':
+        case APPEND_SOME:
+        case RECEIVE_ALL:
             return false;
         default:
             return state;
@@ -180,10 +194,10 @@ const isFetching = (state = false, action = { type: null }) => {
 
 const isFetchingBefore = (state = false, action = { type: null }) => {
     switch (action.type) {
-        case 'notification/FETCH_SOME':
+        case FETCH_SOME:
             if (action.direction === 'before') return true;
             return state;
-        case 'notification/APPEND_SOME':
+        case APPEND_SOME:
             return false;
         default:
             return state;
@@ -192,11 +206,12 @@ const isFetchingBefore = (state = false, action = { type: null }) => {
 
 const errorMsg = (state = null, action = { type: null }) => {
     switch (action.type) {
-        case 'notification/APPEND_SOME':
-        case 'notification/RECEIVE_ALL':
+        case APPEND_SOME:
+        case RECEIVE_ALL:
             return null;
-        case 'notification/APPEND_SOME_ERROR':
-        case 'notification/RECEIVE_ALL_ERROR':
+        case APPEND_SOME_ERROR:
+        case RECEIVE_ALL_ERROR:
+        case SENT_UPDATES_ERROR:
             return action.msg;
         default:
             return state;
@@ -205,16 +220,16 @@ const errorMsg = (state = null, action = { type: null }) => {
 
 export const allIds = (state = Set(), action = { type: null }) => {
     switch (action.type) {
-        case 'notification/RECEIVE_ALL':
+        case RECEIVE_ALL:
             return Set.fromKeys(apiToMap(action.payload));
-        case 'notification/APPEND_SOME':
+        case APPEND_SOME:
             return state.union(Set.fromKeys(apiToMap(action.payload)));
         default:
             return state;
     }
 };
 
-const notificationReducer = combineReducers({
+export default combineReducers({
     byId,
     allIds,
     idsReadPending: createUpdatedList({ prop: 'read', val: true }),
@@ -230,7 +245,7 @@ const notificationReducer = combineReducers({
     errorMsg,
     lastFetchBeforeCount: (state = Map(), action = { type: null }) => {
         switch (action.type) {
-            case 'notification/SET_LAST_FETCH_BEFORE_COUNT':
+            case SET_LAST_FETCH_BEFORE_COUNT:
                 return state.set(action.types, action.count);
             default:
                 return state;
@@ -238,4 +253,60 @@ const notificationReducer = combineReducers({
     },
 });
 
-export default notificationReducer;
+// Action creators
+export const receiveAll = payload => ({
+    type: RECEIVE_ALL,
+    payload,
+});
+
+export const appendSome = payload => ({
+    type: APPEND_SOME,
+    payload,
+});
+
+export const updateOne = (id, updates) => ({
+    type: UPDATE_ONE,
+    id,
+    updates,
+});
+
+export const updateSome = (ids, updates) => ({
+    type: UPDATE_SOME,
+    ids,
+    updates,
+});
+
+export const sentUpdates = updates => ({
+    type: SENT_UPDATES,
+    updates,
+});
+
+export const sentUpdatesError = msg => ({
+    type: SENT_UPDATES_ERROR,
+    msg,
+});
+
+export const fetchSome = direction => ({
+    type: FETCH_SOME,
+    direction,
+});
+
+export const fetchAll = () => ({
+    type: FETCH_ALL,
+});
+
+export const appendSomeError = msg => ({
+    type: APPEND_SOME_ERROR,
+    msg,
+});
+
+export const receiveAllError = msg => ({
+    type: RECEIVE_ALL_ERROR,
+    msg,
+});
+
+export const setLastFetchBeforeCount = (types, count) => ({
+    type: SET_LAST_FETCH_BEFORE_COUNT,
+    types,
+    count,
+});

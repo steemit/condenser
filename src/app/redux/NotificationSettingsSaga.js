@@ -1,9 +1,11 @@
 import { takeLatest } from 'redux-saga';
 import { call, put, select } from 'redux-saga/effects';
+
 import {
     getNotificationSettings,
     saveNotificationSettings,
 } from 'app/utils/YoApiClient';
+import * as notificationsettingsActions from './NotificationSettingsReducer';
 
 export function getUsernameFromState(state) {
     return state.user.getIn(['current', 'username']);
@@ -23,15 +25,9 @@ export function* fetchNotificationSettings() {
     const payload = yield call(getNotificationSettings, username);
 
     if (payload.error) {
-        yield put({
-            type: 'notificationsettings/RECEIVE_ERROR',
-            msg: payload.error,
-        });
+        yield put(notificationsettingsActions.receiveError(payload.error));
     } else {
-        yield put({
-            type: 'notificationsettings/RECEIVE',
-            payload,
-        });
+        yield put(notificationsettingsActions.receive(payload));
     }
 }
 
@@ -47,23 +43,20 @@ export function* updateNotificationSettings() {
     const payload = yield call(saveNotificationSettings, username, settings);
 
     if (payload.error) {
-        yield put({
-            type: 'notificationsettings/RECEIVE_ERROR',
-            msg: payload.error,
-        });
+        yield put(notificationsettingsActions.receiveError(payload.error));
     } else {
-        yield put({
-            type: 'notificationsettings/RECEIVE',
-            payload,
-        });
+        yield put(notificationsettingsActions.receive(payload));
     }
 }
 
 export function* NotificationSettingsSaga() {
     yield [
-        takeLatest('notificationsettings/FETCH', fetchNotificationSettings),
         takeLatest(
-            'notificationsettings/TOGGLE_GROUP',
+            notificationsettingsActions.FETCH,
+            fetchNotificationSettings
+        ),
+        takeLatest(
+            notificationsettingsActions.TOGGLE_GROUP,
             updateNotificationSettings
         ),
     ];

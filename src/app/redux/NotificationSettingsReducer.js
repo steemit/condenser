@@ -1,11 +1,17 @@
 import { Map } from 'immutable';
 import { combineReducers } from 'redux';
 
+// Action constants
+export const FETCH = 'notificationsettings/FETCH'; // watched by saga
+const RECEIVE = 'notificationsettings/RECEIVE';
+const RECEIVE_ERROR = 'notificationsettings/RECEIVE_ERROR';
+export const TOGGLE_GROUP = 'notificationsettings/TOGGLE_GROUP'; // watched by saga
+
 const isFetching = (state = false, action = { type: null }) => {
     switch (action.type) {
-        case 'notificationsettings/FETCH':
+        case FETCH:
             return true;
-        case 'notificationsettings/RECEIVE':
+        case RECEIVE:
             return false;
         default:
             return state;
@@ -14,9 +20,9 @@ const isFetching = (state = false, action = { type: null }) => {
 
 const isSaving = (state = false, action = { type: null }) => {
     switch (action.type) {
-        case 'notificationsettings/TOGGLE_GROUP':
+        case TOGGLE_GROUP:
             return true;
-        case 'notificationsettings/RECEIVE':
+        case RECEIVE:
             return false;
         default:
             return state;
@@ -25,10 +31,10 @@ const isSaving = (state = false, action = { type: null }) => {
 
 const errorMsg = (state = '', action = { type: null }) => {
     switch (action.type) {
-        case 'notificationsettings/RECEIVE':
+        case RECEIVE:
             return '';
-        case 'notificationsettings/RECEIVE_ERROR':
-            return 'oops problem'; // todo: error msg
+        case RECEIVE_ERROR:
+            return 'oops problem'; // TODO: error msg
         default:
             return state;
     }
@@ -36,7 +42,7 @@ const errorMsg = (state = '', action = { type: null }) => {
 
 const groups = (state = Map(), action = { type: null }) => {
     switch (action.type) {
-        case 'notificationsettings/TOGGLE_GROUP':
+        case TOGGLE_GROUP:
             return state.setIn(
                 [action.transport, 'notification_types', action.group],
                 !state.getIn([
@@ -45,7 +51,7 @@ const groups = (state = Map(), action = { type: null }) => {
                     action.group,
                 ])
             );
-        case 'notificationsettings/RECEIVE':
+        case RECEIVE:
             return action.payload;
         default:
             return state;
@@ -57,4 +63,25 @@ export default combineReducers({
     isSaving,
     errorMsg,
     groups,
+});
+
+// Action creators
+export const fetch = () => ({
+    type: FETCH,
+});
+
+export const receive = payload => ({
+    type: RECEIVE,
+    payload,
+});
+
+export const receiveError = () => ({
+    type: RECEIVE_ERROR,
+    // TODO: error msg
+});
+
+export const toggleGroup = (transport, group) => ({
+    type: TOGGLE_GROUP,
+    transport,
+    group,
 });

@@ -150,7 +150,6 @@ class TransferForm extends Component {
                 disableMemo = false,
                 disableTo = false,
                 disableAmount = false} = this.props.initialValues
-        console.log({disableMemo, disableTo, disableAmount})
         const {submitting, valid, handleSubmit} = this.state.transfer
         const isMemoPrivate = memo && /^#/.test(memo.value)
         const form = (

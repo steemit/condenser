@@ -20,6 +20,7 @@ global.$STM_Config = {
     fb_app: config.get('grant.facebook.key'),
     steemd_connection_client: config.get('steemd_connection_client'),
     steemd_connection_server: config.get('steemd_connection_server'),
+    steemd_use_appbase: config.get('steemd_use_appbase'),
     chain_id: config.get('chain_id'),
     address_prefix: config.get('address_prefix'),
     img_proxy_prefix: config.get('img_proxy_prefix'),

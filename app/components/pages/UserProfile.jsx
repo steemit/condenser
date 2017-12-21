@@ -34,11 +34,35 @@ import normalizeProfile from 'app/utils/NormalizeProfile';
 import UserInvites from 'app/components/elements/UserInvites';
 
 export default class UserProfile extends React.Component {
-    constructor() {
-        super()
+    constructor(props) {
+        super(props)
         this.state = {}
         this.onPrint = () => {window.print()}
         this.loadMore = this.loadMore.bind(this);
+    }
+
+    componentWillReceiveProps(next) {
+      // if (!this.externalTransferRequest) {
+      //   return
+      // }
+      // // we've got an external transfer request shaped properly
+      // // start login track ...
+      // console.log(`^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ will receive props`)
+      // const { accountname, section } = next.routeParams;
+      // console.log(`Acc from route from NEXT : ${accountname}`)
+      // // track logged in person
+      // const loginBefore = this.props.current_user;
+      // const loginNow = next.current_user;
+      // const loginNowName = loginNow && loginNow.get('username')
+      // console.log(`Acc LOGGED IN : ${loginNowName}`)
+      // const loginMismatch = Boolean(((loginNowName && accountname)) && (loginNowName !== accountname))
+      // console.log(`MISMATCH : ${loginMismatch}`)
+      //
+      //
+      // // console.log(`was : ${String(loginBefore)} is : ${String(loginNow)}`)
+      //
+      //
+      // // console.log(next)
     }
 
     shouldComponentUpdate(np) {
@@ -312,7 +336,7 @@ export default class UserProfile extends React.Component {
 		if (blockedUsers.includes(accountname)) {
 			tab_content = <IllegalContentMessage />;
         }
-        
+
         if (blockedUsersContent.includes(accountname)) {
 			tab_content = <div>{tt('g.blocked_user_content')}</div>;
 		}

@@ -90,7 +90,31 @@ function* removeHighSecurityKeys({payload: {pathname}}) {
         key_types: active, owner, posting keys.
 */
 function* usernamePasswordLogin(action) {
-    // Sets 'loading' while the login is taking place.  The key generation can take a while on slow computers.
+  // todo transform this into middleware?
+  // consider the special situation (external transfer)
+  // get current path from router
+  // const pathname = yield select(state => state.global.get('pathname'))
+  const currentLocation = yield select(state => state.routing)//.get(`locationBeforeTransitions`));
+  const { locationBeforeTransitions: { pathname,  query } } = currentLocation;
+  const sender = pathname.split(`/`)[1].substring(1);
+  const {to, amount, token, memo} = query;
+  const externalTransferRequested = (!!to && !!amount && !!token && !!memo);
+  const offchain_account = yield select(state => state.offchain.get('account'))
+  let preventLogin = false;
+  if (externalTransferRequested) {
+    if (offchain_account) {
+      if (offchain_account !== sender)
+        preventLogin = true
+    }
+  }
+
+  if (preventLogin) {
+    console.log(`SSSSSSSSSSSSSSSSSSSSSSSSSS prevent Login :`)
+    console.log(preventLogin)
+    return
+  }
+
+  // Sets 'loading' while the login is taking place.  The key generation can take a while on slow computers.
     yield call(usernamePasswordLogin2, action)
     const current = yield select(state => state.user.get('current'))
     if(current) {

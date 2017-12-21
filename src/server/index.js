@@ -41,8 +41,10 @@ global.webpackIsomorphicTools = new WebpackIsomorphicTools(
 );
 
 global.webpackIsomorphicTools.server(ROOT, () => {
-<<<<<<< HEAD
-    steem.api.setOptions({ url: config.steemd_connection_server });
+    steem.api.setOptions({
+        url: config.steemd_connection_client,
+        useAppbaseApi: config.steemd_use_appbase,
+    });
     steem.config.set('address_prefix', config.get('address_prefix'));
     steem.config.set('chain_id', config.get('chain_id'));
 
@@ -54,21 +56,19 @@ global.webpackIsomorphicTools.server(ROOT, () => {
         console.error(error);
         process.exit(1);
     }
-=======
-        steem.api.setOptions({
-            url: config.steemd_connection_client,
-            useAppbaseApi: config.steemd_use_appbase,
-        });
-        steem.config.set('address_prefix', config.get('address_prefix'));
-        steem.config.set('chain_id', config.get('chain_id'));
+    steem.api.setOptions({
+        url: config.steemd_connection_client,
+        useAppbaseApi: config.steemd_use_appbase,
+    });
+    steem.config.set('address_prefix', config.get('address_prefix'));
+    steem.config.set('chain_id', config.get('chain_id'));
 
-        // const CliWalletClient = require('shared/api_client/CliWalletClient').default;
-        // if (process.env.NODE_ENV === 'production') connect_promises.push(CliWalletClient.instance().connect_promise());
-        try {
-            require('./server');
-        } catch (error) {
-            console.error(error);
-            process.exit(1);
-        }
->>>>>>> Enable useAppbaseApi when initialising steem-js
+    // const CliWalletClient = require('shared/api_client/CliWalletClient').default;
+    // if (process.env.NODE_ENV === 'production') connect_promises.push(CliWalletClient.instance().connect_promise());
+    try {
+        require('./server');
+    } catch (error) {
+        console.error(error);
+        process.exit(1);
+    }
 });

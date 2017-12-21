@@ -12,7 +12,7 @@ export function getUsernameFromState(state) {
 }
 
 export function getNotificationSettingsFromState(state) {
-    return state.notificationsettings.groups;
+    return state.notificationsettings.get('groups');
 }
 
 /**

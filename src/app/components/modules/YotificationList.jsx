@@ -295,7 +295,7 @@ export default connect(
                 : FILTER_ALL;
         let allRead = true;
 
-        state.notification.byId.forEach(n => {
+        state.notification.get('byId').forEach(n => {
             if (n.read === false) {
                 allRead = false;
                 return false;
@@ -306,17 +306,20 @@ export default connect(
         const filterToken =
             filter === FILTER_ALL ? FILTER_ALL : filters[filter].toString();
         const noMoreToFetch =
-            state.notification.lastFetchBeforeCount.get(filterToken) === 0;
+            state.notification.getIn([
+                'lastFetchBeforeCount',
+                'filterToken',
+            ]) === 0;
 
         return {
             ...ownProps,
-            notifications: state.notification.byId,
+            notifications: state.notification.get('byId'),
             filterIds:
                 filter === FILTER_ALL
-                    ? state.notification.allIds
-                    : state.notification.byUserFacingType[filter],
+                    ? state.notification.get('allIds')
+                    : state.notification.getIn(['byUserFacingType', 'filter']),
             noMoreToFetch,
-            isFetchingBefore: state.notification.isFetchingBefore,
+            isFetchingBefore: state.notification.get('isFetchingBefore'),
             showClearAll: allRead,
         };
     },

@@ -154,9 +154,9 @@ export default connect(
         // todo: handle all channels, not just TRANSPORT_WEBSITE
         return {
             ...ownProps,
-            isFetching: state.notificationsettings.isFetching,
-            isSaving: state.notificationsettings.isSaving,
-            groups: state.notificationsettings.groups,
+            isFetching: state.notificationsettings.get('isFetching'),
+            isSaving: state.notificationsettings.get('isSaving'),
+            groups: state.notificationsettings.get('groups'),
         };
     },
     dispatch => ({

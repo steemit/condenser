@@ -78,7 +78,7 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
     const submitStoryPencil = <li className="show-for-small-only">
       <Link to="/submit.html"><Icon name="pencil" /></Link>
     </li>;
-    const golosFest = <li className={lcn + ' buttons'}><Link to="/hardfork" className="button alert fest">{tt('g.golos_fest')}</Link></li>;
+    const golosFest = <li className={lcn + ' buttons'}><Link to="/@golosio" className="button alert fest">{tt('g.golos_fest')}</Link></li>;
     const feedLink = `/@${username}/feed`;
     const repliesLink = `/@${username}/recent-replies`;
     const walletLink = `/@${username}/transfers`;

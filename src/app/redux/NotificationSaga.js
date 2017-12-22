@@ -183,7 +183,7 @@ export function* fetchSome({ types = null, direction = 'after' }) {
             }
         }
     } catch (err) {
-        yield put(fetchSomeError('poll cancelled'));
+        yield put(notificationActions.fetchSomeError('poll cancelled'));
     }
 }
 

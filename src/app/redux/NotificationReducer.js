@@ -286,9 +286,10 @@ export const sentUpdatesError = msg => ({
     msg,
 });
 
-export const fetchSome = direction => ({
+export const fetchSome = (direction, types) => ({
     type: FETCH_SOME,
     direction,
+    types,
 });
 
 export const fetchAll = () => ({

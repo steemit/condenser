@@ -2,7 +2,6 @@
  * @locale {skip-validation}
  *
  */
-/* eslint-disable */
 import React from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
@@ -12,6 +11,7 @@ import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Url from 'app/utils/Url';
 import * as type from './type';
 import badges from './icon';
+import * as notificationActions from 'app/redux/NotificationReducer';
 
 const TIMEOUT_MARK_SHOWN_MILLIS = 3000;
 
@@ -43,7 +43,6 @@ class NotificationLink extends React.Component {
     };
 
     cueMarkShown = () => {
-        //eslint-disable-line no-undef
         const self = this;
         clearTimeout(this.markShownTimeout);
         this.markShownTimeout = setTimeout(() => {
@@ -237,31 +236,9 @@ class NotificationLink extends React.Component {
 }
 
 export default connect(null, dispatch => ({
-    markRead: e => {
-        dispatch({
-            type: 'notification/UPDATE_ONE',
-            id: e,
-            updates: {
-                read: true,
-            },
-        });
-    },
-    markUnread: e => {
-        dispatch({
-            type: 'notification/UPDATE_ONE',
-            id: e,
-            updates: {
-                read: false,
-            },
-        });
-    },
-    markShown: e => {
-        dispatch({
-            type: 'notification/UPDATE_ONE',
-            id: e,
-            updates: {
-                shown: true,
-            },
-        });
-    },
+    markRead: id => dispatch(notificationActions.updateOne(id, { read: true })),
+    markUnread: id =>
+        dispatch(notificationActions.updateOne(id, { read: false })),
+    markShown: id =>
+        dispatch(notificationActions.updateOne(id, { shown: true })),
 }))(NotificationLink);

@@ -10,6 +10,8 @@ import debounce from 'lodash.debounce';
 import Immutable from 'immutable';
 import React from 'react';
 import Url from 'app/utils/Url';
+import * as notificationActions from 'app/redux/NotificationReducer';
+import { selectors as userSelectors } from 'app/redux/UserReducer';
 
 export const LAYOUT_PAGE = 'Page';
 export const LAYOUT_DROPDOWN = 'Dropdown';
@@ -27,35 +29,33 @@ function topPosition(domElt) {
     return domElt.offsetTop + topPosition(domElt.offsetParent);
 }
 
-const renderNotificationList = (notifications, filterIds, onViewAll) => {
-    const notificationList = [];
-    const ids = filterIds;
-    ids.forEach(id => {
-        const notification = notifications.get(id);
-        if (!notification.hide) {
-            notificationList.push(
-                <li
-                    className={classNames('item', {
-                        unread: !notification.read,
-                    })}
-                    key={notification.id}
-                >
-                    <Notification {...notification} onClick={onViewAll} />
-                </li>
-            );
-        }
-    });
-    return <ul className="Notifications">{notificationList}</ul>;
-};
+const renderNotificationList = (notifications, filterIds, onViewAll) => (
+    <ul className="Notifications">
+        {filterIds.map(id => {
+            const notification = notifications.get(id);
+            if (!notification.hide) {
+                return (
+                    <li
+                        className={classNames('item', {
+                            unread: !notification.read,
+                        })}
+                        key={notification.id}
+                    >
+                        <Notification {...notification} onClick={onViewAll} />
+                    </li>
+                );
+            }
+        })}
+    </ul>
+);
 
-const renderFilterList = props => {
-    const locales = tt; // HACK: this works around the notification pre-commit checker for runtime-modified translated strings
-    let className = props.filter === FILTER_ALL ? 'selected' : '';
+const renderFilterList = (username, filter) => {
+    let className = filter === FILTER_ALL ? 'selected' : '';
     const filterLIs = Object.keys(filters).reduce(
         (list, filter) => {
-            className = filter === props.filter ? 'selected' : '';
-            const dest = Url.notifications(filter);
-            const text = locales(`notifications.filters.${filter}`);
+            className = filter === filter ? 'selected' : '';
+            const dest = Url.notifications(username, filter);
+            const text = tt(`notifications.filters.${filter}`);
             list.push(
                 <li key={filter} className={className}>
                     <Link to={dest}>{text}</Link>
@@ -206,7 +206,7 @@ class YotificationList extends React.Component {
                             {tt('notifications.controls.mark_all_read')}
                         </button>
                     )}
-                    <Link to={Url.profileSettings()}>
+                    <Link to={Url.profileSettings(this.props.username)}>
                         <Icon name="cog" />
                     </Link>
                 </span>
@@ -215,6 +215,7 @@ class YotificationList extends React.Component {
     }
 
     render() {
+        if (typeof this.props.username === 'undefined') return <div />;
         return (
             <div
                 id={this.htmlId}
@@ -228,7 +229,9 @@ class YotificationList extends React.Component {
                 }}
             >
                 {this.renderTitle()}
-                {this.state.showFilters ? renderFilterList(this.props) : null}
+                {this.state.showFilters
+                    ? renderFilterList(this.props.username, this.props.filter)
+                    : null}
                 {renderNotificationList(
                     this.props.notifications,
                     this.props.filterIds,
@@ -273,7 +276,10 @@ YotificationList.propTypes = {
     updateSome: React.PropTypes.func.isRequired,
     appendSome: React.PropTypes.func.isRequired,
     notifications: React.PropTypes.instanceOf(Immutable.Map).isRequired,
-    filterIds: React.PropTypes.instanceOf(Immutable.Set).isRequired,
+    filterIds: React.PropTypes.oneOfType([
+        React.PropTypes.instanceOf(Immutable.Set),
+        React.PropTypes.instanceOf(Immutable.List), // initial state is fromJS'ed as a List
+    ]).isRequired,
     layout: React.PropTypes.oneOf([LAYOUT_PAGE, LAYOUT_DROPDOWN]),
     showClearAll: React.PropTypes.bool.isRequired,
     noMoreToFetch: React.PropTypes.bool.isRequired,
@@ -313,31 +319,21 @@ export default connect(
 
         return {
             ...ownProps,
+            username: userSelectors.getUsername(state.user),
             notifications: state.notification.get('byId'),
             filterIds:
                 filter === FILTER_ALL
                     ? state.notification.get('allIds')
-                    : state.notification.getIn(['byUserFacingType', 'filter']),
+                    : state.notification.getIn(['byUserFacingType', filter]),
             noMoreToFetch,
             isFetchingBefore: state.notification.get('isFetchingBefore'),
             showClearAll: allRead,
         };
     },
     dispatch => ({
-        updateSome: (ids, changes) => {
-            dispatch({
-                type: 'notification/UPDATE_SOME',
-                ids,
-                updates: changes,
-            });
-        },
-        appendSome: notificationTypes => {
-            const action = {
-                type: 'notification/FETCH_SOME',
-                types: notificationTypes,
-                direction: 'before',
-            };
-            dispatch(action);
-        },
+        updateSome: (ids, changes) =>
+            dispatch(notificationActions.updateSome(ids, changes)),
+        appendSome: types =>
+            dispatch(notificationActions.fetchSome('before', types)),
     })
 )(YotificationList);

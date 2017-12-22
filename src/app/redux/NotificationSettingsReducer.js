@@ -3,6 +3,7 @@ import { combineReducers } from 'redux-immutable';
 
 // Action constants
 export const FETCH = 'notificationsettings/FETCH'; // watched by saga
+export const UPDATE = 'notificationsettings/UPDATE'; // watched by saga
 const RECEIVE = 'notificationsettings/RECEIVE';
 const RECEIVE_ERROR = 'notificationsettings/RECEIVE_ERROR';
 export const TOGGLE_GROUP = 'notificationsettings/TOGGLE_GROUP'; // watched by saga
@@ -68,6 +69,10 @@ export default combineReducers({
 // Action creators
 export const fetch = () => ({
     type: FETCH,
+});
+
+export const update = () => ({
+    type: UPDATE,
 });
 
 export const receive = payload => ({

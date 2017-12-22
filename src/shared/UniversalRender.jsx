@@ -230,7 +230,6 @@ async function universalRender({
     ErrorPage,
     tarantool,
     userPreferences,
-    setStore,
 }) {
     let error, redirect, renderProps;
     try {
@@ -256,7 +255,6 @@ async function universalRender({
 
     if (process.env.BROWSER) {
         const store = createStore(rootReducer, initial_state, middleware);
-        setStore(store);
         sagaMiddleware
             .run(PollDataSaga)
             .done.then(() => console.log('PollDataSaga is finished'))

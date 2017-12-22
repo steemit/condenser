@@ -1,30 +1,10 @@
 import { currentUsername } from './User';
 import proxifyUrl from './ProxifyUrl'; //we want to move proxify into this file.
 
-let store = false;
-
-export const setStore = theStore => {
-    if (!store) {
-        store = theStore;
-    } else {
-        throw Error('Routes.setStore - store has already been set.');
-    }
-};
-
 export const urlProxify = proxifyUrl;
 
-export const urlNotifications = filter => {
-    try {
-        return (
-            '/@' +
-            currentUsername() +
-            '/notifications' +
-            (filter ? '/' + filter : '')
-        );
-    } catch (e) {
-        //eslint-disable-line
-    }
-    return '';
+export const urlNotifications = (username, filter) => {
+    return '/@' + username + '/notifications' + (filter ? '/' + filter : '');
 };
 
 export const urlComment = (comment, childComment) => {
@@ -45,20 +25,11 @@ export const urlComment = (comment, childComment) => {
 };
 
 export const urlProfile = userName => {
-    if (userName) {
-        return '/@' + userName;
-    }
-
-    const uName = currentUsername();
-
-    if (uName) {
-        return '/@' + uName;
-    }
-    return null;
+    return '/@' + userName;
 };
 
-export const urlProfileSettings = userName => {
-    return '/@' + (userName ? userName : currentUsername()) + '/settings';
+export const urlProfileSettings = username => {
+    return `/@${username}/settings`;
 };
 
 const Url = {

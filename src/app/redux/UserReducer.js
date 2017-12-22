@@ -384,3 +384,9 @@ export const uploadImage = payload => ({
     type: UPLOAD_IMAGE,
     payload,
 });
+
+// Selectors
+export const selectors = {
+    getUsername: state =>
+        state.get('current') ? state.getIn(['current', 'username']) : '',
+};

@@ -249,7 +249,7 @@ export default connect(
             };
         }
         const userPath = state.routing.locationBeforeTransitions.pathname;
-        const username = state.user.getIn(['current', 'username']);
+        const username = userActions.selectors.getUsername(state.user);
         const loggedIn = !!username;
         return {
             username,

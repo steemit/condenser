@@ -9,6 +9,7 @@ import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import reactForm from 'app/utils/ReactForm';
 import UserList from 'app/components/elements/UserList';
 import YotificationSettingsPanel from './YotificationSettingsPanel';
+import * as notificationActions from 'app/redux/NotificationReducer';
 
 class Settings extends React.Component {
     constructor(props) {
@@ -377,8 +378,7 @@ export default connect(
     (state, ownProps) => {
         const { accountname } = ownProps.routeParams;
         const account = state.global.getIn(['accounts', accountname]).toJS();
-        const current_user = state.user.get('current');
-        const username = current_user ? current_user.get('username') : '';
+        const username = userActions.selectors.getUsername(state.user);
         let metaData = account
             ? o2j.ifStringParseJSON(account.json_metadata)
             : {};
@@ -402,14 +402,8 @@ export default connect(
     },
     // mapDispatchToProps
     dispatch => ({
-        saveNotificationSettings: settings => {
-            dispatch({
-                type: 'notificationsettings/UPDATE',
-                payload: {
-                    settings: 'here',
-                },
-            });
-        },
+        saveNotificationSettings: () =>
+            dispatch(notificationsettingsActions.update()),
         changeLanguage: language => {
             dispatch(userActions.changeLanguage(language));
         },

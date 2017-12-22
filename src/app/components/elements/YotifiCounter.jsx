@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import * as notificationActions from 'app/redux/NotificationReducer';
+
 class YotifiCounter extends React.Component {
     componentWillMount() {
         if (!!this.props.username) {
@@ -30,11 +32,6 @@ export default connect(
             '', // to see if we're logged in
     }),
     dispatch => ({
-        fetchNotifications: username => {
-            dispatch({
-                type: 'notification/FETCH_ALL',
-                username,
-            });
-        },
+        fetchNotifications: () => dispatch(notificationActions.fetchAll()),
     })
 )(YotifiCounter);

@@ -10,6 +10,7 @@ import { toggleNotificationGroupNames } from 'app/components/elements/notificati
 import Icon from 'app/components/elements/Icon';
 import IOSToggle from 'app/components/elements/IOSToggle';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
+import * as notificationsettingsActions from 'app/redux/NotificationSettingsReducer';
 
 const TRANSPORT_WEBSITE = 'wwwpoll';
 const TRANSPORT_SMS = 'sms';
@@ -43,11 +44,10 @@ class YotificatonSettingsPanel extends React.Component {
                     ) : (
                         <IOSToggle
                             className="yotification-toggle"
-                            onClick={checked =>
+                            onClick={() =>
                                 this.onToggleGroup(
                                     this.props.transportName,
-                                    groupName,
-                                    checked
+                                    groupName
                                 )
                             }
                             checked={groups.getIn([
@@ -160,18 +160,8 @@ export default connect(
         };
     },
     dispatch => ({
-        loadGroups: () => {
-            dispatch({
-                type: 'notificationsettings/FETCH',
-            });
-        },
-        toggleGroup: (transport, group, checked) => {
-            //eslint-disable-line no-unused-vars
-            dispatch({
-                type: 'notificationsettings/TOGGLE_GROUP',
-                transport,
-                group,
-            });
-        },
+        loadGroups: () => dispatch(notificationsettingsActions.fetch()),
+        toggleGroup: (transport, group) =>
+            dispatch(notificationsettingsActions.toggleGroup(transport, group)),
     })
 )(YotificatonSettingsRootPanel);

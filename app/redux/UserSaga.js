@@ -109,8 +109,6 @@ function* usernamePasswordLogin(action) {
   }
 
   if (preventLogin) {
-    console.log(`SSSSSSSSSSSSSSSSSSSSSSSSSS prevent Login :`)
-    console.log(preventLogin)
     return
   }
 

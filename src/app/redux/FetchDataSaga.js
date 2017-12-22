@@ -53,7 +53,7 @@ export function* fetchState(location_change_action) {
     if (ignore_fetch) return;
 
     let url = `${pathname}`;
-    if (url === '/') url = 'trending';
+    if (url === '/') url = constants.DEFAULT_SORT_ORDER;
     // Replace /curation-rewards and /author-rewards with /transfers for UserProfile
     // to resolve data correctly
     if (url.indexOf('/curation-rewards') !== -1)

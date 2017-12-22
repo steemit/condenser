@@ -319,7 +319,7 @@ export default class UserProfile extends React.Component {
                             {tt('user_profile.create_a_post')}
                         </Link>
                         <br />
-                        <Link to="/trending">
+                        <Link to="/hot">
                             {tt('user_profile.explore_trending_articles')}
                         </Link>
                         <br />

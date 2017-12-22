@@ -34,6 +34,7 @@ import { notificationsArrayToMap } from 'app/utils/Notifications';
 import { routeRegex } from 'app/ResolveRoute';
 import { contentStats } from 'app/utils/StateFunctions';
 import ScrollBehavior from 'scroll-behavior';
+import constants from 'app/redux/constants';
 
 import { api } from '@steemit/steem-js';
 
@@ -315,7 +316,7 @@ async function universalRender({
     // below is only executed on the server
     let server_store, onchain;
     try {
-        let url = location === '/' ? 'trending' : location;
+        let url = location === '/' ? constants.DEFAULT_SORT_ORDER : location;
         // Replace /curation-rewards and /author-rewards with /transfers for UserProfile
         // to resolve data correctly
         if (url.indexOf('/curation-rewards') !== -1)

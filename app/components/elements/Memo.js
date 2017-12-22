@@ -69,7 +69,7 @@ class Memo extends React.Component {
             <Link to={`/@${to}`}>
               {`@${to}`}&nbsp;
             </Link>
-            {` за пост `}
+            {`за пост `}
             <Link to={post}>
               {`${post}`}
             </Link>

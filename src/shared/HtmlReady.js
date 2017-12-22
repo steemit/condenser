@@ -109,8 +109,6 @@ export default function(html, { mutate = true, hideImages = false } = {}) {
             ...state,
         };
     } catch (error) {
-        // Not Used, parseFromString might throw an error in the future
-        console.error(error.toString());
         return { html };
     }
 }

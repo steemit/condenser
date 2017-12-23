@@ -9,9 +9,11 @@ describe('htmlready', () => {
         global.$STM_Config = {};
     });
 
-    it('should return plain text without html unmolested', () => {
-        const teststring = 'teststring lol';
-        expect(HtmlReady(teststring).html).to.equal(teststring);
+    it('should throw an error if the input cannot be parsed', () => {
+        const teststring = 'teststring lol'; // this string causes the xmldom parser to fail & error out
+        expect(() => HtmlReady(teststring).html).to.throw(
+            'HtmlReady: xmldom error'
+        );
     });
 
     it('should allow links where the text portion and href contains steemit.com', () => {

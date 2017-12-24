@@ -77,7 +77,7 @@ export function validateCategory(category, required = true) {
     const cats = category.trim().split(' ')
     return (
         // !category || category.trim() === '' ? 'Required' :
-        cats.length > 5 ? tt('use_limitied_amount_of_categories', {amount: 5}) :
+        cats.length > 5 ? tt('category_selector_jsx.use_limitied_amount_of_categories', {amount: 5}) :
         cats.find(c => c.length > 24)           ? tt('category_selector_jsx.maximum_tag_length_is_24_characters') :
         cats.find(c => c.split('-').length > 2) ? tt('category_selector_jsx.use_one_dash') :
         cats.find(c => c.indexOf(',') >= 0)     ? tt('category_selector_jsx.use_spaces_to_separate_tags') :

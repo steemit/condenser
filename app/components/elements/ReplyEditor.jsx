@@ -312,6 +312,22 @@ class ReplyEditor extends React.Component {
         })
     }
 
+    onTextAreaKeyDown = (e) => {
+      const { keyCode } = e;
+      if (keyCode === 13) {
+        if (e.ctrlKey && e.metaKey) return
+        const submitRequested = e.ctrlKey || e.metaKey;
+        if (submitRequested) {
+          e.stopPropagation()
+          const { submitting, valid } = this.state.replyForm;
+          const canSubmit = !(submitting || !valid);
+          if (canSubmit) {
+            this.refs.SubmitButton.click()
+          }
+        }
+      }
+    }
+
     render() {
         const originalPost = {
             category: this.props.category,

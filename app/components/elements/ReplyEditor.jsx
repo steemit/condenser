@@ -294,10 +294,6 @@ class ReplyEditor extends React.Component {
         const {uploadImage} = this.props
         this.setState({progress: {message: tt('reply_editor.uploading') + '...'}})
         uploadImage(file, progress => {
-
-          console.log(`--------------------------------`)
-          console.log(file)
-
             if(progress.url) {
                 this.setState({ progress: {} })
                 const {url} = progress

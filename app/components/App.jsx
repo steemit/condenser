@@ -150,7 +150,7 @@ class App extends React.Component {
         const warning = flash.get('warning');
         const success = flash.get('success');
         let callout = null;
-        const showInfoBox = this.isShowInfoBox()
+        const showInfoBox = false && this.isShowInfoBox()
 
         if (this.state.showCallout && (alert || warning || success)) {
             callout = <div className="App__announcement row">

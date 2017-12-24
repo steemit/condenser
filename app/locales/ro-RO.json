@@ -454,6 +454,10 @@
   "markdownviewer_jsx":{
     "images_were_hidden_due_to_low_ratings":"Imaginile au aascunse din cauza ratingului mic."
   },
+  "comment_jsx": {
+    "collapse_or_expand":"Strânge/Deschide",
+    "reveal_comment":"Afișează comentariul"
+  },
   "market_jsx":{
     "action":"Acțiune",
     "date_created":"Data creării",

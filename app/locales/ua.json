@@ -454,6 +454,10 @@
   "markdownviewer_jsx": {
     "images_were_hidden_due_to_low_ratings": "Зображення були приховані через низький рейтинг."
   },
+  "comment_jsx": {
+    "collapse_or_expand": "Згорнути/Розгорнути",
+    "reveal_comment": "Показати коментар"
+  },
   "market_jsx": {
     "action": "Дія",
     "date_created": "Дата створення",

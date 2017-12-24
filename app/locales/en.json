@@ -747,6 +747,10 @@
   "markdownviewer_jsx": {
     "images_were_hidden_due_to_low_ratings": "Images were hidden due to low ratings."
   },
+  "comment_jsx": {
+    "collapse_or_expand": "Collapse/Expand",
+    "reveal_comment": "Reveal comment"
+  },
   "postsummary_jsx": {
     "resteemed": "Reposted",
     "resteemed_by": "Reposted by",

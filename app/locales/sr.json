@@ -455,6 +455,10 @@
   "markdownviewer_jsx":{
     "images_were_hidden_due_to_low_ratings":"Slika nije skrivena zbog niskog rejtinga."
   },
+  "comment_jsx": {
+    "collapse_or_expand":"Suizi/Proširi",
+    "reveal_comment":"Otkrij komentar"
+  },
   "market_jsx":{
     "action":"Akcija",
     "date_created":"Datum Kreiranja",

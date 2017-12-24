@@ -124,7 +124,11 @@ class Topics extends React.Component {
             </select>;
         }
 
-        if (IGNORE_TAGS) categories = categories.filter(val => IGNORE_TAGS.indexOf(val) === -1);
+        if (IGNORE_TAGS) {
+            const ignoreTags = [...IGNORE_TAGS, 'lesnik-случайнаявст'];
+            categories = categories.filter(val => ignoreTags.indexOf(val) === -1).filter(val => !val.endsWith('камынежде'));
+        }
+        
         categories = categories.map(cat => {
             const translitCat = /[а-яёґєії]/.test(cat) ? 'ru--' + detransliterate(cat.toLowerCase(), true) : cat
             const link = order ? `/${order}/${translitCat}` : `/${translitCat}`;

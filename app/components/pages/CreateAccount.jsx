@@ -35,6 +35,7 @@ class CreateAccount extends React.Component {
             phone: '',
             country: 7,
             name: '',
+            email: '',
             password: '',
             password_valid: '',
             name_error: '',
@@ -50,6 +51,7 @@ class CreateAccount extends React.Component {
         this.onSubmit = this.onSubmit.bind(this);
         this.onCountryChange = this.onCountryChange.bind(this);
         this.onMobileChange = this.onMobileChange.bind(this);
+        this.onEmailChange = this.onEmailChange.bind(this);
         this.onNameChange = this.onNameChange.bind(this);
         this.onPasswordChange = this.onPasswordChange.bind(this);
         this.onClickSendCode = this.onClickSendCode.bind(this);
@@ -82,7 +84,7 @@ class CreateAccount extends React.Component {
     onSubmit(e) {
         e.preventDefault();
         this.setState({server_error: '', loading: true});
-        const {name, password, password_valid} = this.state;
+        const {email, name, password, password_valid} = this.state;
         if (!name || !password || !password_valid) return;
 
         let public_keys;
@@ -107,6 +109,7 @@ class CreateAccount extends React.Component {
             },
             body: JSON.stringify({
                 csrf: $STM_csrf,
+                email,
                 name,
                 owner_key: public_keys[0],
                 active_key: public_keys[1],
@@ -326,6 +329,11 @@ class CreateAccount extends React.Component {
         }
     }
 
+    onEmailChange(e) {
+      const email = e.target.value.trim().toLowerCase();
+      this.setState({email});
+  }
+
     render() {
         if (!process.env.BROWSER) { // don't render this page on the server
             return <div className="row">
@@ -338,7 +346,7 @@ class CreateAccount extends React.Component {
         const APP_NAME = tt('g.APP_NAME');
 
         const {
-            fetch_state, phone, country, name, password_valid, showPasswordString,
+            fetch_state, phone, country, email, name, password_valid, showPasswordString,
             name_error, phone_hint, phone_error, server_error, loading, cryptographyFailure, showRules, showMobileRules, allBoxChecked
         } = this.state;
 
@@ -518,6 +526,10 @@ class CreateAccount extends React.Component {
                             }
 
                             {passwordRules}
+                            <div className="success">
+                                <label>Email <input type="email" name="email" autoComplete="off" disabled={! (fetch_state.checking && fetch_state.success)} onChange={this.onEmailChange} value={email} /></label>
+                                <p>{tt('g.email_recovery_hint')}</p>
+                            </div>
                             <div className={name_error ? 'error' : ''}>
                                 <label className="uppercase">{tt('g.username')}
                                     <input type="text" name="name" autoComplete="off" disabled={! (fetch_state.checking && fetch_state.success)} onChange={this.onNameChange} value={name} />

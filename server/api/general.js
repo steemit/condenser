@@ -125,6 +125,19 @@ export default function useGeneralApi(app) {
               console.log(`api /accounts: is confirmed sms for user ${this.session.uid} #${user_id}`)
             }
 
+            // store email
+            let email = account.email || '';
+            const parsed_email = email.match(/^.+\@.*?([\w\d-]+\.\w+)$/);
+            if (!parsed_email || parsed_email.length < 2) email = null;
+
+            yield models.Identity.create({
+                provider: "email",
+                user_id,
+                uid: this.session.uid,
+                email,
+                verified: false
+            });
+
             const [fee_value, fee_currency] = config.get('registrar.fee').split(' ');
             let fee = parseFloat(fee_value);
             try {
@@ -321,7 +334,7 @@ export default function useGeneralApi(app) {
             this.body = JSON.stringify({views: 0});
             return;
         }
-        
+
         recordWebEvent(this, 'PageView', JSON.stringify(posts));
         const remote_ip = getRemoteIp(this.req);
         try {

@@ -187,6 +187,7 @@
     "documentation":"Documentație",
     "edit":"Redactează",
     "email":"E-mailul",
+    "email_recovery_hint": "Used to recover a hijacked or stolen GOLOS account",
     "expand":"Desfă",
     "feed":"Banda",
     "feeds":"Benzi",

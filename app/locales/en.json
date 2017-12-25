@@ -61,6 +61,7 @@
     "documentation": "Documentation",
     "edit": "Edit",
     "email": "Email",
+    "email_recovery_hint": "Used to recover a hijacked or stolen GOLOS account",
     "expand": "Expand",
     "feed": "Feed",
     "feeds": "Feeds",

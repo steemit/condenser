@@ -4,7 +4,7 @@ import links, * as linksRe from 'app/utils/Links';
 import { PARAM_VIEW_MODE, VIEW_MODE_WHISTLE } from '../../shared/constants';
 
 describe('Links', () => {
-    it('all', () => {
+    test('all', () => {
         match(
             linksRe.any(),
             "https://example.com/wiki/Poe's_law",
@@ -32,14 +32,14 @@ describe('Links', () => {
             'https://example.com/page'
         );
     });
-    it('multiple matches', () => {
+    test('multiple matches', () => {
         const all = linksRe.any('ig');
         let match = all.exec('\nhttps://example.com/1\nhttps://example.com/2');
         assert.equal(match[0], 'https://example.com/1');
         match = all.exec('https://example.com/1 https://example.com/2');
         assert.equal(match[0], 'https://example.com/2');
     });
-    it('by domain', () => {
+    test('by domain', () => {
         const locals = [
             'https://localhost/',
             'http://steemit.com',
@@ -53,7 +53,7 @@ describe('Links', () => {
         matchNot(linksRe.local(), remotes);
         // match(linksRe({external: false}), largeData + 'https://steemit.com2/next', 'https://steemit.com2/next')
     });
-    it('by image', () => {
+    test('by image', () => {
         match(linksRe.image(), 'https://example.com/a.jpeg');
         match(linksRe.image(), 'https://example.com/a/b.jpeg');
         match(
@@ -84,7 +84,7 @@ describe('Links', () => {
 });
 
 describe('makeParams', () => {
-    it('creates an empty string when there are no params', () => {
+    test('creates an empty string when there are no params', () => {
         assert(linksRe.makeParams([]) === '', 'not empty on array');
         assert(linksRe.makeParams({}) === '', 'not empty on object');
         assert(
@@ -104,7 +104,7 @@ describe('makeParams', () => {
             'not empty on object  with prefix string'
         );
     });
-    it('creates the correct string when passed an array', () => {
+    test('creates the correct string when passed an array', () => {
         assert(
             linksRe.makeParams(['bop=boop', 'troll=bridge']) ===
                 '?bop=boop&troll=bridge',
@@ -121,7 +121,7 @@ describe('makeParams', () => {
             'incorrect string with prefix &'
         );
     });
-    it('creates the correct string when passed an object', () => {
+    test('creates the correct string when passed an object', () => {
         assert(
             linksRe.makeParams({ bop: 'boop', troll: 'bridge' }) ===
                 '?bop=boop&troll=bridge',
@@ -141,7 +141,7 @@ describe('makeParams', () => {
 });
 
 describe('determineViewMode', () => {
-    it('returns empty string when no parameter in search', () => {
+    test('returns empty string when no parameter in search', () => {
         assert(
             linksRe.determineViewMode('') === '',
             linksRe.determineViewMode('') + 'not empty on empty string'
@@ -156,7 +156,7 @@ describe('determineViewMode', () => {
         );
     });
 
-    it('returns empty string when unrecognized value for parameter in search', () => {
+    test('returns empty string when unrecognized value for parameter in search', () => {
         assert(
             linksRe.determineViewMode(`?${PARAM_VIEW_MODE}=asd`) === '',
             'not empty on incorrect parameter value'
@@ -180,7 +180,7 @@ describe('determineViewMode', () => {
             'not empty on incorrect parameter value'
         );
     });
-    it('returns correct value when recognized value for parameter in search', () => {
+    test('returns correct value when recognized value for parameter in search', () => {
         assert(
             linksRe.determineViewMode(
                 `?${PARAM_VIEW_MODE}=${VIEW_MODE_WHISTLE}`
@@ -205,7 +205,7 @@ describe('determineViewMode', () => {
 // 1st in the browser it is very expensive to re-create a regular expression many times, however, in nodejs is is very in-expensive (it is as if it is caching it).
 describe('Performance', () => {
     const largeData = secureRandom.randomBuffer(1024 * 10).toString('hex');
-    it('any, ' + largeData.length + ' bytes x 10,000', () => {
+    test('any, ' + largeData.length + ' bytes x 10,000', () => {
         for (let i = 0; i < 10000; i++) {
             const match = (largeData + 'https://example.com').match(
                 linksRe.any()
@@ -214,7 +214,7 @@ describe('Performance', () => {
             assert(match[0] === 'https://example.com', 'no match');
         }
     });
-    it('image (large), ' + largeData.length + ' bytes x 10,000', () => {
+    test('image (large), ' + largeData.length + ' bytes x 10,000', () => {
         for (let i = 0; i < 10000; i++) {
             matchNot(
                 linksRe.image(),
@@ -222,7 +222,7 @@ describe('Performance', () => {
             );
         }
     });
-    it('image, ' + largeData.length + ' bytes x 10,000', () => {
+    test('image, ' + largeData.length + ' bytes x 10,000', () => {
         for (let i = 0; i < 10000; i++) {
             const match = (largeData + 'https://example.com/img.jpeg').match(
                 linksRe.image()
@@ -231,7 +231,7 @@ describe('Performance', () => {
             assert(match[0] === 'https://example.com/img.jpeg', 'no match');
         }
     });
-    it('remote, ' + largeData.length + ' bytes x 10,000', () => {
+    test('remote, ' + largeData.length + ' bytes x 10,000', () => {
         for (let i = 0; i < 10000; i++) {
             const match = (largeData + 'https://example.com').match(
                 linksRe.remote()
@@ -240,7 +240,7 @@ describe('Performance', () => {
             assert(match[0] === 'https://example.com', 'no match');
         }
     });
-    it('youTube', () => {
+    test('youTube', () => {
         match(linksRe.youTube(), 'https://youtu.be/xG7ajrbj4zs?t=7s');
         match(
             linksRe.youTube(),
@@ -251,7 +251,7 @@ describe('Performance', () => {
             'https://www.youtube.com/watch?v=xG7ajrbj4zs&feature=youtu.be&t=14s'
         );
     });
-    it('youTubeId', () => {
+    test('youTubeId', () => {
         match(
             links.youTubeId,
             'https://youtu.be/xG7ajrbj4zs?t=7s',

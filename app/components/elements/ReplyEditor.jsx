@@ -312,6 +312,22 @@ class ReplyEditor extends React.Component {
         })
     }
 
+    onTextAreaKeyDown = (e) => {
+      const { keyCode } = e;
+      if (keyCode === 13) {
+        if (e.ctrlKey && e.metaKey) return
+        const submitRequested = e.ctrlKey || e.metaKey;
+        if (submitRequested) {
+          e.stopPropagation()
+          const { submitting, valid } = this.state.replyForm;
+          const canSubmit = !(submitting || !valid);
+          if (canSubmit) {
+            this.refs.SubmitButton.click()
+          }
+        }
+      }
+    }
+
     render() {
       const originalPost = {
             category: this.props.category,
@@ -435,6 +451,7 @@ class ReplyEditor extends React.Component {
                                         <textarea {...body.props}
                                             ref="postRef"
                                             onPasteCapture={this.onPasteCapture}
+                                            onKeyDown={this.onTextAreaKeyDown}
                                             className={type === 'submit_story' ? 'upload-enabled' : ''}
                                             disabled={loading} rows={isStory ? 10 : 3}
                                             placeholder={isFeedback ? tt('reply_editor.feedback_placeholder') : isStory ? tt('g.write_your_story') + '...' : tt('g.reply')}
@@ -475,7 +492,7 @@ class ReplyEditor extends React.Component {
 
                         <div className={vframe_section_shrink_class}>
                             {!loading &&
-                                <button type="submit" className="button" disabled={disabled} tabIndex={4}>{isEdit ? tt('reply_editor.update_post') : postLabel}</button>
+                                <button ref="SubmitButton" type="submit" className="button" disabled={disabled} tabIndex={4}>{isEdit ? tt('reply_editor.update_post') : postLabel}</button>
                             }
                             {loading && <span><br /><LoadingIndicator type="circle" /></span>}
                             &nbsp; {!loading && this.props.onCancel &&

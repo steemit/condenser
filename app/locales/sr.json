@@ -188,6 +188,7 @@
     "documentation":"Dokumentacija",
     "edit":"Izmeni",
     "email":"Email",
+    "email_recovery_hint": "Used to recover a hijacked or stolen GOLOS account",
     "expand":"Развернуть",
     "feed":"Feed",
     "feeds":"Feeds",

@@ -308,7 +308,7 @@ class ReplyEditor extends React.Component {
             } else {
                 this.setState({ progress })
             }
-            setTimeout(() => { this.setState({ progress: {} }) }, 4000) // clear message
+            setTimeout(() => { this.setState({ progress: {} }) }, 10000) // clear message
         })
     }
 

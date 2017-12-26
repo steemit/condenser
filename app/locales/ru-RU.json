@@ -941,5 +941,13 @@
   "generated_password_input": {
     "i_have_read_and_agree_to_the": "Я прочитал и согласен с",
     "terms_of_service": "Условиями пользования"
+  },
+  "user_saga_js": {
+    "imageUpload" : {
+      "error_login_first": "Пожалуйста, выполните вход в систему ...",
+      "error_login_with_posting_key": "Недоступен постинг ключ.",
+      "error_server_unavailable": "Ошибка доступа к серверу.",
+      "uploading": "Загрузка"
+    }
   }
 }

@@ -9,10 +9,7 @@
   "main": "index.js",
   "scripts": {
     "build": "NODE_ENV=production webpack --config ./webpack/prod.config.js; rm -rf ./lib; babel src --out-dir lib -Dq",
-    "mocha": "NODE_ENV=test mocha ./mocha.setup.js",
-    "test": "npm run mocha -- src/app/**/*.test.js src/shared/**/*.test.js",
-    "test:watch:all": "npm test -- --watch --watch-extensions jsx",
-    "test:watch": "npm run mocha -- --watch --watch-extensions jsx",
+    "test": "jest",
     "eslint": "LIST=`git diff-index --name-only HEAD | grep .*\\.js | grep -v json`; if [ \"$LIST\" ]; then eslint $LIST; fi",
     "fmt": "prettier --config .prettierrc --write 'src/**/*.js*'",
     "precommit": "lint-staged",
@@ -21,7 +18,7 @@
     "webpush": "node ./scripts/webpush_notify.js",
     "checktranslations": "node scripts/check_translations.js",
     "storybook": "start-storybook -p 9001 -c .storybook",
-    "storybook-build": "build-storybook -c .storybook -o docs" 
+    "storybook-build": "build-storybook -c .storybook -o docs"
   },
   "author": "Steemit, Inc.",
   "license": "MIT",
@@ -31,7 +28,7 @@
     "assert": "^1.3.0",
     "autoprefixer-loader": "^3.2.0",
     "babel-cli": "^6.22.2",
-    "babel-core": "^6.20.0",
+    "babel-core": "^6.26.0",
     "babel-eslint": "^6.0.4",
     "babel-loader": "^7.1.2",
     "babel-plugin-react-intl": "^2.2.0",
@@ -98,12 +95,12 @@
     "picturefill": "^3.0.2",
     "purest": "^2.0.1",
     "raw-loader": "^0.5.1",
-    "react": "15.4.2",
+    "react": "^15.6.2",
     "react-ab-test": "^1.7.0",
     "react-addons-pure-render-mixin": "15.4.2",
     "react-autocomplete": "^1.7.2",
     "react-copy-to-clipboard": "^4.2.3",
-    "react-dom": "15.4.2",
+    "react-dom": "^15.6.2",
     "react-dropzone": "^3.7.3",
     "react-foundation-components": "git+https://github.com/valzav/react-foundation-components.git#d14362c7c8eee946a4acc3b18d70271d5a82813e",
     "react-highcharts": "^8.3.3",
@@ -154,14 +151,12 @@
   "devDependencies": {
     "@storybook/addon-knobs": "^3.2.17",
     "@storybook/react": "^3.2.16",
+    "babel-jest": "^22.0.4",
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
-    "chai": "^3.5.0",
-    "chai-immutable": "^1.5.3",
-    "co-mocha": "^1.1.2",
     "co-supertest": "0.0.10",
     "dev-ip": "^1.0.1",
-    "dirty-chai": "^1.2.2",
-    "enzyme": "^2.1.0",
+    "enzyme": "^3.2.0",
+    "enzyme-adapter-react-15": "^1.0.5",
     "escope": "^3.6.0",
     "eslint": "^4.7.0",
     "eslint-config-airbnb": "^15.1.0",
@@ -171,19 +166,20 @@
     "eslint-plugin-react": "^7.4.0",
     "extract-text-webpack-plugin": "^3.0.0",
     "husky": "^0.14.3",
+    "jest": "^22.0.4",
     "jsdom": "^9.8.0",
     "koa-webpack-dev-middleware": "^1.1.0",
     "koa-webpack-hot-middleware": "^1.0.3",
     "lint-staged": "^6.0.0",
-    "mocha": "^2.4.5",
     "node-watch": "^0.5.5",
     "prettier": "1.8.2",
     "react-addons-perf": "15.4.2",
     "react-addons-test-utils": "15.4.2",
+    "react-test-renderer": "15",
     "react-transform-catch-errors": "^1.0.1",
     "react-transform-hmr": "^1.0.4",
+    "regenerator-runtime": "^0.11.1",
     "sinon": "^1.17.3",
-    "sinon-chai": "^2.8.0",
     "supertest": "^1.2.0",
     "webpack-bundle-analyzer": "^2.9.0"
   },
@@ -199,5 +195,13 @@
       "prettier --write",
       "git add"
     ]
+  },
+  "jest": {
+    "modulePaths": [
+      "<rootDir>/src/"
+    ],
+    "moduleNameMapper": {
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/src/__mocks__/fileMock.js"
+    }
   }
 }

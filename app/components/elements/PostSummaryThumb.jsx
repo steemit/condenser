@@ -1,6 +1,6 @@
 import React from 'react';
 // keep this in memory, no requests
-import nsfwBanner from 'app/assets/images/18_plus.png'
+import nsfwBanner from 'app/assets/images/nsfw/light.png'
 
 
 //todo render fallback image by react, not by canvas depending on state?

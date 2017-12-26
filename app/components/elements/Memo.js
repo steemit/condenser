@@ -30,40 +30,82 @@ class Memo extends React.Component {
     }
 
     linkify(text) {
-    	const sections = []
-		let idx = 0
-		if (!text) return
-		for (let section of text.split(' ')) {
-    		if (section.trim().length === 0) continue
-    		const matchUserName = section.match(/(^|\s)(@[a-z][-\.a-z\d]+[a-z\d])/i)
-    		const matchLink = section.match(links.local)
-			if (matchUserName) {
-				const user2 = matchUserName[0].trim().substring(1)
-				const userLower = user2.toLowerCase()
-				const valid = validate_account_name(userLower) == null
-				valid
-					? sections.push(<Link key={idx++} to={`/@${userLower}`}>{`@${user2}`}&nbsp;</Link>)
-					: sections.push(<span key={idx++}>{`@${user2}`}</span>)
+        const sections = []
+        let idx = 0
+        if (!text) return
+        for (let section of text.split(' ')) {
+            if (section.trim().length === 0) continue
+            const matchUserName = section.match(/(^|\s)(@[a-z][-\.a-z\d]+[a-z\d])/i)
+            const matchLink = section.match(links.local)
+            if (matchUserName) {
+                const user2 = matchUserName[0].trim().substring(1)
+                const userLower = user2.toLowerCase()
+                const valid = validate_account_name(userLower) == null
+                valid
+                    ? sections.push(<Link key={idx++} to={`/@${userLower}`}>{`@${user2}`}&nbsp;</Link>)
+                    : sections.push(<span key={idx++}>{`@${user2}`}</span>)
+            }
+            else if (matchLink) {
+                sections.push(<Link key={idx++} to={section}>{section}&nbsp;</Link>)
+            }
+            else {
+                sections.push(<span key={idx++}>{section}&nbsp;</span>)
+            }
+      }
+        return sections
+    }
 
-			} else if (matchLink) {
-				sections.push(<Link key={idx++} to={section}>{section}&nbsp;</Link>)
-			} else {
-				sections.push(<span key={idx++}>{section}&nbsp;</span>)
-			}
-		}
-		return sections
-	}
+    renderDonate = (text) => {
+      const {data: {from, to}, username} = this.props
+      try {
+        const obj = JSON.parse(text)
+        const {donate: {post}} = obj;
+        if (!post) {return false}
+        let el;
+        if (from === username) {
+          // txt = `Вы отблагодарили @${to} за пост ${post}`
+          el = <span>
+            {`Вы отблагодарили`}&nbsp;
+            <Link to={`/@${to}`}>
+              {`@${to}`}&nbsp;
+            </Link>
+            {`за пост `}
+            <Link to={post}>
+              {`${post}`}
+            </Link>
+          </span>
+        }
+        else if (to === username) {
+          // txt = `@${from} отблагодарил вас за пост ${post}`
+          el = <span>
+            <Link to={`/@${from}`}>
+              {`@${from}`}&nbsp;
+            </Link>
+            {`отблагодарил вас за пост `}
+            <Link to={post}>
+              {`${post}`}&nbsp;
+            </Link>
+            </span>
+        }
+        return el
+      }
+      catch(e) {
+        return text
+      }
+    }
 
     render() {
         const {decodeMemo, linkify} = this
         const {memo_private, text, myAccount} = this.props;
         const isEncoded = /^#/.test(text);
+        // fixme: ugly and temporary
+        const donate = this.renderDonate(text);
 
-		if(!isEncoded) return <span>{linkify(text)}</span>
-        if(!myAccount) return <span></span>
-        if(memo_private) return <span>{decodeMemo(memo_private, text)}</span>
-        return <span>{tt('g.login_to_see_memo')}</span>
-    }
+        if(!isEncoded) return <span>{donate || linkify(text)}</span>
+            if(!myAccount) return <span></span>
+            if(memo_private) return <span>{decodeMemo(memo_private, text)}</span>
+            return <span>{tt('g.login_to_see_memo')}</span>
+        }
 }
 
 export default connect(

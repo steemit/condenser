@@ -129,7 +129,7 @@ class TransferHistoryRow extends React.Component {
                         {description_end}
                     </td>
                     <td className="show-for-medium" style={{maxWidth: "40rem", wordWrap: "break-word"}}>
-                        <Memo text={data.memo} username={context} />
+                        <Memo text={data.memo} data={data} username={context} />
                     </td>
                 </tr>
         );

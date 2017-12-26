@@ -21,6 +21,7 @@ import ShareMenu from 'app/components/elements/ShareMenu';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import Userpic from 'app/components/elements/Userpic';
 import { APP_NAME, APP_ICON, APP_NAME_LATIN, SEO_TITLE } from 'app/client_config';
+import { LIQUID_TICKER } from 'app/client_config';
 import { isPostVisited, visitPost } from 'app/utils/helpers';
 import tt from 'counterpart';
 
@@ -82,6 +83,7 @@ class PostFull extends React.Component {
         unlock: React.PropTypes.func.isRequired,
         deletePost: React.PropTypes.func.isRequired,
         showPromotePost: React.PropTypes.func.isRequired,
+        showProlongPost: React.PropTypes.func.isRequired,
         showExplorePost: React.PropTypes.func.isRequired,
     };
 
@@ -195,12 +197,38 @@ class PostFull extends React.Component {
         this.props.showPromotePost(author, permlink)
     };
 
+    showProlongPost = () => {
+        const post_content = this.props.cont.get(this.props.post);
+        if (!post_content) return
+        const author = post_content.get('author')
+        const permlink = post_content.get('permlink')
+        this.props.showProlongPost(author, permlink)
+    };
+
     showExplorePost = () => {
         const permlink = this.share_params.link;
         this.props.showExplorePost(permlink)
     };
 
-    render() {
+    showTransfer = () => {
+      const post_content = this.props.cont.get(this.props.post);
+      const content = post_content.toJS();
+      const { author, url } = content;
+      const asset = LIQUID_TICKER;
+      const transferType = 'Transfer to Account';
+      // const memo = url;
+      const memo = window.JSON.stringify({donate: {post: url}});
+      this.props.showTransfer({
+        to: author,
+        asset,
+        transferType,
+        memo,
+        disableMemo: true,
+        disableTo: true
+      });
+    };
+
+  render() {
         const {props: {username, post, aiPosts}, state: {PostFullReplyEditor, PostFullEditEditor, formId, showReply, showEdit},
             onShowReply, onShowEdit, onDeletePost} = this
         const post_content = this.props.cont.get(this.props.post);
@@ -300,8 +328,10 @@ class PostFull extends React.Component {
         const archived = post_content.get('cashout_time') === '1969-12-31T23:59:59' // TODO: audit after HF17. #1259
         const readonly = archived || $STM_Config.read_only_mode
         const showPromote = username && post_content.get('last_payout') === '1970-01-01T00:00:00' && post_content.get('depth') == 0 // TODO: audit after HF17. #1259
+        const showProlong = showPromote
         const showReplyOption = post_content.get('depth') < 6
         const showEditOption = username === author
+        const showDonate = Boolean(username && (username !== author))
         const showDeleteOption = username === author && post_content.get('children') === 0 && content.stats.netVoteSign <= 0
 
         const authorRepLog10 = repLog10(content.author_reputation)
@@ -329,7 +359,9 @@ class PostFull extends React.Component {
                     </span>
                 }
 
+                {showProlong && <button className="Promote__button float-right button hollow tiny" disabled={true} onClick={this.showProlongPost}>{tt('g.prolong')}</button>}
                 {showPromote && <button className="Promote__button float-right button hollow tiny" onClick={this.showPromotePost}>{tt('g.promote')}</button>}
+                {showDonate && <button className="Donate__button float-right button hollow tiny" onClick={this.showTransfer}>{tt('g.donate')}</button>}
                 <TagList post={content} horizontal />
                 <div className="PostFull__footer row">
                     <div className="column">
@@ -390,9 +422,16 @@ export default connect(
         showPromotePost: (author, permlink) => {
             dispatch({type: 'global/SHOW_DIALOG', payload: {name: 'promotePost', params: {author, permlink}}});
         },
+        showProlongPost: (author, permlink) => {
+            dispatch({type: 'global/SHOW_DIALOG', payload: {name: 'prolongPost', params: {author, permlink}}});
+        },
         showExplorePost: (permlink) => {
             dispatch({type: 'global/SHOW_DIALOG', payload: {name: 'explorePost', params: {permlink}}});
         },
+        showTransfer: (transferDefaults) => {
+           dispatch(user.actions.setTransferDefaults(transferDefaults))
+           dispatch(user.actions.showTransfer())
+      },
     })
 )(PostFull)
 

@@ -65,7 +65,7 @@ const calculateEstimateOutput = ({a, p, sw, g}) => {
   return Number( ( (total_steem * p) + total_sbd).toFixed(2) );
 }
 
-function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops, username, showLogin, logout, loggedIn, vertical, navigate, toggleOffCanvasMenu, probablyLoggedIn, location, changeLanguage}) {
+function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops, username, showLogin, logout, loggedIn, vertical, navigate, toggleOffCanvasMenu, probablyLoggedIn, location, locationQueryParams, changeLanguage}) {
     const APP_NAME = tt('g.APP_NAME');
 
     const mcn = 'menu' + (vertical ? ' vertical show-for-small-only' : '');
@@ -195,6 +195,22 @@ const estimateOutput = <LocalizedCurrency amount={calculateEstimateOutput({a:acc
             </ul>
         );
     }
+
+    //fixme - redesign (code duplication with USaga, UProfile)
+    let externalTransfer = false;
+    if (location) {
+      const {pathname} = location;
+      const query = locationQueryParams;
+      const section = pathname.split(`/`)[2];
+      const sender = (section === `transfers`) ?
+      pathname.split(`/`)[1].substring(1) : undefined;
+      // /transfers. Check query string
+      if (sender) {
+        const {to, amount, token, memo} = query;
+        externalTransfer = (!!to && !!amount && !!token && !!memo);
+    }
+  }
+
     return (
         <ul className={mcn + mcl}>
             {!inIco && golosFest}
@@ -211,7 +227,7 @@ const estimateOutput = <LocalizedCurrency amount={calculateEstimateOutput({a:acc
             {!inIco && !probablyLoggedIn && <li className={lcn}>
               <a href="/create_account">{tt('g.sign_up')}</a>
             </li>}
-            {!inIco && !probablyLoggedIn && <li className={lcn}>
+            {!inIco && !probablyLoggedIn && !externalTransfer && <li className={lcn}>
               <a href="/login.html" onClick={showLogin}>{tt('g.login')}</a>
             </li>}
             {!inIco && !probablyLoggedIn && !vertical && submitStoryPencil}

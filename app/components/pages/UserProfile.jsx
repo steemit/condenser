@@ -34,11 +34,35 @@ import normalizeProfile from 'app/utils/NormalizeProfile';
 import UserInvites from 'app/components/elements/UserInvites';
 
 export default class UserProfile extends React.Component {
-    constructor() {
-        super()
+    constructor(props) {
+        super(props)
         this.state = {}
         this.onPrint = () => {window.print()}
         this.loadMore = this.loadMore.bind(this);
+    }
+
+    componentWillReceiveProps(next) {
+      // if (!this.externalTransferRequest) {
+      //   return
+      // }
+      // // we've got an external transfer request shaped properly
+      // // start login track ...
+      // console.log(`^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ will receive props`)
+      // const { accountname, section } = next.routeParams;
+      // console.log(`Acc from route from NEXT : ${accountname}`)
+      // // track logged in person
+      // const loginBefore = this.props.current_user;
+      // const loginNow = next.current_user;
+      // const loginNowName = loginNow && loginNow.get('username')
+      // console.log(`Acc LOGGED IN : ${loginNowName}`)
+      // const loginMismatch = Boolean(((loginNowName && accountname)) && (loginNowName !== accountname))
+      // console.log(`MISMATCH : ${loginMismatch}`)
+      //
+      //
+      // // console.log(`was : ${String(loginBefore)} is : ${String(loginNow)}`)
+      //
+      //
+      // // console.log(next)
     }
 
     shouldComponentUpdate(np) {
@@ -158,9 +182,14 @@ export default class UserProfile extends React.Component {
 
         let rewardsClass = "", walletClass = "";
         if( section === 'transfers' ) {
+            // transfers, check if url has query params
+            const { location: { query } } = this.props;
+            const {to, amount, token, memo} = query;
+            const hasAllParams = (!!to && !!amount && !!token && !!memo);
             walletClass = 'active'
             tab_content = <div>
                 <UserWallet
+                    transferDetails={{immediate: hasAllParams, ...query}}
                     account={accountImm}
                     showTransfer={this.props.showTransfer}
                     current_user={current_user}
@@ -307,7 +336,7 @@ export default class UserProfile extends React.Component {
 		if (blockedUsers.includes(accountname)) {
 			tab_content = <IllegalContentMessage />;
         }
-        
+
         if (blockedUsersContent.includes(accountname)) {
 			tab_content = <div>{tt('g.blocked_user_content')}</div>;
 		}
@@ -396,11 +425,11 @@ export default class UserProfile extends React.Component {
             const cover_image_url = $STM_Config.img_proxy_prefix ? $STM_Config.img_proxy_prefix + '0x0' + '/' + cover_image : null
             cover_image_style = {backgroundImage: "url(" + cover_image_url + ")"}
         }
-        
-        let genderIcon;    
+
+        let genderIcon;
         if (gender && gender != "undefined")
             genderIcon = <span><Icon name={gender} /></span>
-        
+
 
         return (
             <div className="UserProfile">

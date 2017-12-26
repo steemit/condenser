@@ -259,8 +259,10 @@ export default connect(
         const current_user = state.user.get('current');
         const account_user = state.global.get('accounts');
         const current_account_name = current_user ? current_user.get('username') : state.offchain.get('account');
+        const { routing: {locationBeforeTransitions: { query }}} = state;
         return {
             location: state.app.get('location'),
+            locationQueryParams: query,
             current_account_name,
             account_meta: account_user,
             current_domestic: current_domestic || DEFAULT_DOMESTIC

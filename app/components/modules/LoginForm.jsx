@@ -120,7 +120,8 @@ class LoginForm extends Component {
             </div>;
         }
 
-        const {loginBroadcastOperation, dispatchSubmit, afterLoginRedirectToWelcome, msg} = this.props;
+        const { externalTransfer } = this.props;
+        const { loginBroadcastOperation, dispatchSubmit, afterLoginRedirectToWelcome, msg} = this.props;
         const {username, password, saveLogin} = this.state;
         const {submitting, valid, handleSubmit} = this.state.login;
         const {usernameOnChange, onCancel, /*qrReader*/} = this;
@@ -186,7 +187,7 @@ class LoginForm extends Component {
                 <div className="input-group">
                     <span className="input-group-label">@</span>
                     <input className="input-group-field" type="text" required placeholder={tt('loginform_jsx.enter_your_username')} ref="username"
-                        {...username.props} onChange={usernameOnChange} autoComplete="on" disabled={submitting}
+                        {...username.props} onChange={usernameOnChange} autoComplete="on" disabled={submitting} readOnly={externalTransfer}
                     />
                 </div>
                 {username.touched && username.blur && username.error ? <div className="error">{translateError(username.error)}&nbsp;</div> : null}
@@ -277,7 +278,22 @@ export default connect(
         }
 
         // The username input has a value prop, so it should not use initialValues
-        const initialUsername = currentUser && currentUser.has('username') ? currentUser.get('username') : urlAccountName()
+        let initialUsername = currentUser && currentUser.has('username') ? currentUser.get('username') : urlAccountName()
+        //fixme - redesign (code duplication with USaga, UProfile)
+
+        let externalTransfer = false;
+        const { routing: {locationBeforeTransitions: { pathname, query }}} = state;
+        const section = pathname.split(`/`)[2];
+        const sender = (section === `transfers`) ?
+        pathname.split(`/`)[1].substring(1) : undefined;
+        // /transfers. Check query string
+        if (sender) {
+          const {to, amount, token, memo} = query;
+          externalTransfer = (!!to && !!amount && !!token && !!memo);
+          // explicitly set user name in this case
+          initialUsername = externalTransfer ? sender : initialUsername
+          console.log(initialUsername)
+        }
         const loginDefault = state.user.get('loginDefault')
         if(loginDefault) {
             const {username, authType} = loginDefault.toJS()
@@ -290,6 +306,7 @@ export default connect(
         if (msg_match && msg_match.length > 1) msg = msg_match[1];
         hasError = !!login_error
         return {
+            externalTransfer,
             login_error,
             loginBroadcastOperation,
             initialValues,

@@ -81,8 +81,6 @@
         "reply_count": {
             "zero": "brak odpowiedzi",
             "one": "1 odpowiedź",
-			"few": "%(count)s odpowiedzi",
-			"many": "%(count)s odpowiedzi",
             "other": "%(count)s odpowiedzi"
         },
         "reputation": "Reputacja",
@@ -228,15 +226,12 @@
         "views": {
             "zero": "Brak odwiedzin",
             "one": "%(count)s odwiedziny",
-			"few": "%(count)s odwiedzin",
-			"many": "%(count)s odwiedzin",
             "other": "%(count)s odwiedzin"
         },
         "responses": {
             "zero": "Brak odpowiedzi",
             "one": "%(count)s odpowiedź",
             "few": "%(count)s odpowiedzi",
-			"many": "%(count)s odpowiedzi",
             "other": "%(count)s odpowiedzi"
         },
         "post_key_warning": {
@@ -417,8 +412,6 @@
         "follower_count": {
             "zero": "Brak obserwujących",
             "one": "1 obserwujący",
-			"few": "%(count)s obserwujących",
-			"many": "%(count)s obserwujących",
             "other": "%(count)s obserwujących"
         },
         "followed_count": {
@@ -511,8 +504,6 @@
         "response_count_tooltip": {
             "zero": "Brak odpowiedzi. Kliknij aby odpowiedzieć.",
             "one": "1 odpowiedź. Kliknij aby odpowiedzieć.",
-			"few": "%(count)s odpowiedzi. Kliknij aby odpowiedzieć."
-			"many": "%(count)s odpowiedzi. Kliknij aby odpowiedzieć."
             "other": "%(count)s odpowiedzi. Kliknij aby odpowiedzieć."
         },
         "vote_count": {

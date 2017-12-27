@@ -5,7 +5,7 @@ import tt from 'counterpart';
 import { api } from '@steemit/steem-js';
 
 import * as globalActions from './GlobalReducer';
-import appActions from './AppReducer';
+import * as appActions from './AppReducer';
 import * as transactionActions from './TransactionReducer';
 import { setUserPreferences } from 'app/utils/ServerApiClient';
 
@@ -96,9 +96,9 @@ function* saveUserPreferences({ payload }) {
 function* watchUserSettingsUpdates() {
     yield* takeLatest(
         [
-            appActions.appActionConstants.SET_USER_PREFERENCES,
-            appActions.appActionConstants.TOGGLE_NIGHTMODE,
-            appActions.appActionConstants.TOGGLE_BLOGMODE,
+            appActions.SET_USER_PREFERENCES,
+            appActions.TOGGLE_NIGHTMODE,
+            appActions.TOGGLE_BLOGMODE,
         ],
         saveUserPreferences
     );

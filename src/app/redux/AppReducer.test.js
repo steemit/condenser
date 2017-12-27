@@ -5,7 +5,6 @@ import { Map, OrderedMap, getIn } from 'immutable';
 
 import reducer, {
     defaultState,
-    appActionConstants,
     steemApiError,
     fetchDataBegin,
     fetchDataEnd,

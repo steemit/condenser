@@ -423,6 +423,7 @@
             "zero": "Brak postów",
             "one": "1 post",
             "few": "%(count)s posty",
+            "many": "%(count)s postów",
             "other": "%(count)s postów"
         }
     },
@@ -468,6 +469,7 @@
         "votes_plural": {
             "one": "%(count)s głos",
             "few": "%(count)s głosy",
+            "many": "%(count)s głosów",
             "other": "%(count)s głosów"
         }
     },
@@ -478,6 +480,7 @@
             "zero": "Nie masz już więcej głosów",
             "one": "Został ci 1 głos",
             "few": "Zostały ci %(count)s głosy",
+            "many": "Zostało ci %(count)s głosów",   
             "other": "Zostało ci %(count)s głosów"
         },
         "you_can_vote_for_maximum_of_witnesses":
@@ -506,7 +509,8 @@
         "vote_count": {
             "zero": "Brak głosów",
             "one": "1 głos",
-            "few": "%(count)s głosy", 
+            "few": "%(count)s głosy",
+            "many": "%(count)s głosów", 
             "other": "%(count)s głosów"
         }
     },

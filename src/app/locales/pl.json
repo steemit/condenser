@@ -226,7 +226,6 @@
         "views": {
             "zero": "Brak odwiedzin",
             "one": "%(count)s odwiedziny",
-            "few": "%(count)s odwiedziny",
             "other": "%(count)s odwiedzin"
         },
         "responses": {
@@ -422,7 +421,6 @@
         "post_count": {
             "zero": "Brak postów",
             "one": "1 post",
-            "few": "%(count)s posty",
             "other": "%(count)s postów"
         }
     },
@@ -476,7 +474,6 @@
         "you_have_votes_remaining": {
             "zero": "Nie masz już więcej głosów",
             "one": "Został ci 1 głos",
-            "few": "Zostały ci %(count)s głosy"
             "other": "Zostało ci %(count)s głosów"
         },
         "you_can_vote_for_maximum_of_witnesses":
@@ -505,7 +502,6 @@
         "vote_count": {
             "zero": "Brak głosów",
             "one": "1 głos",
-            "few": "%(count)s głosy"  
             "other": "%(count)s głosów"
         }
     },
@@ -720,7 +716,7 @@
         "this_memo_is_public": "To memo jest publiczne",
         "convert_to_VESTING_TOKEN": "Zamień na %(VESTING_TOKEN)s",
         "balance_subject_to_3_day_withdraw_waiting_period":
-            "Saldo zależy od 3-dniowego okresu karencji wymaganego do wycofania środków, ",
+            "Saldo zależy od 3-dniowego okresu karencji wymaganego do wycofania środków,",
         "move_funds_to_another_account":
             "Przenieś fundusze na inne konto %(APP_NAME)s.",
         "protect_funds_by_requiring_a_3_day_withdraw_waiting_period":

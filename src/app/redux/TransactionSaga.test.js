@@ -13,10 +13,9 @@ import {
     watchForRecoverAccount,
     preBroadcast_transfer,
 } from './TransactionSaga';
-import * as transactionActions from 'app/redux/TransactionReducer';
 import { DEBT_TICKER } from 'app/client_config';
 
-let operation = {
+const operation = {
     type: 'comment',
     author: 'Alice',
     body:
@@ -35,21 +34,6 @@ let operation = {
     successCallback: () => '',
     memo: '#testing',
 };
-
-const {
-    author,
-    category,
-    errorCallback,
-    successCallback,
-    parent_author,
-    parent_permlink,
-    type,
-    __config,
-    json_metadata,
-    title,
-    body,
-    memo,
-} = operation;
 
 const username = 'Beatrice';
 
@@ -128,17 +112,17 @@ describe('TransactionSaga', () => {
 
     describe('createPermlink', () => {
         const gen = createPermlink(
-            title,
-            author,
-            parent_author,
-            parent_permlink
+            operation.title,
+            operation.author,
+            operation.parent_author,
+            operation.parent_permlink
         );
         it('should call the api to get a permlink if the title is valid', () => {
             const actual = gen.next().value;
             const mockCall = call(
                 [api, api.getContentAsync],
-                author,
-                title
+                operation.author,
+                operation.title
             );
             expect(actual).to.eql(mockCall);
         });
@@ -149,13 +133,13 @@ describe('TransactionSaga', () => {
         it('should generate own permlink, independent of api if title is empty', () => {
             const gen2 = createPermlink(
                 '',
-                author,
-                parent_author,
-                parent_permlink
+                operation.author,
+                operation.parent_author,
+                operation.parent_permlink
             );
             const actual = gen2.next().value;
             expect(actual).to.contain(
-                `re-${parent_author}-${parent_permlink}-`
+                `re-${operation.parent_author}-${operation.parent_permlink}-`
             ); // TODO: cannot deep equal due to random hash at runtime.
         });
     });
@@ -165,13 +149,13 @@ describe('TransactionSaga', () => {
 
         it('should call createPermlink', () => {
             const permlink = gen.next(
-                title,
-                author,
-                parent_author,
-                parent_permlink
+                operation.title,
+                operation.author,
+                operation.parent_author,
+                operation.parent_permlink
             ).value;
             const actual = permlink.next().value;
-            const expected = call([api, api.getContentAsync], author, title);
+            const expected = call([api, api.getContentAsync], operation.author, operation.title);
             expect(expected).to.eql(actual);
         });
         it('should return the comment options array.', () => {
@@ -180,32 +164,32 @@ describe('TransactionSaga', () => {
                 [
                     'comment',
                     {
-                        author,
-                        category,
-                        errorCallback,
-                        successCallback,
-                        parent_author,
-                        parent_permlink,
-                        type,
-                        __config,
-                        memo,
+                        author: operation.author,
+                        category: operation.category,
+                        errorCallback: operation.errorCallback,
+                        successCallback: operation.successCallback,
+                        parent_author: operation.parent_author,
+                        parent_permlink: operation.parent_permlink,
+                        type: operation.type,
+                        __config: operation.__config,
+                        memo: operation.memo,
                         permlink: 'mock-permlink-123',
-                        json_metadata: JSON.stringify(json_metadata),
-                        title: new Buffer((title || '').trim(), 'utf-8'),
-                        body: new Buffer(body, 'utf-8'), // TODO: new Buffer is deprecated, prefer Buffer.from()
+                        json_metadata: JSON.stringify(operation.json_metadata),
+                        title: new Buffer((operation.title || '').trim(), 'utf-8'),
+                        body: new Buffer(operation.body, 'utf-8'), // TODO: new Buffer is deprecated, prefer Buffer.from()
                     },
                 ],
             ];
             expect(actual).to.eql(expected);
         });
         it('should return a patch as body value if patch is smaller than body.', () => {
-            const originalBod = body + 'minor difference';
+            const originalBod = operation.body + 'minor difference';
             operation.__config.originalBody = originalBod;
             gen = preBroadcast_comment({ operation, username });
-            gen.next(title, author, parent_author, parent_permlink);
+            gen.next(operation.title, operation.author, operation.parent_author, operation.parent_permlink);
             const actual = gen.next('mock-permlink-123').value;
             const expected = Buffer.from(
-                createPatch(originalBod, body),
+                createPatch(originalBod, operation.body),
                 'utf-8'
             );
             expect(actual[0][1].body).to.eql(expected);
@@ -214,21 +198,21 @@ describe('TransactionSaga', () => {
             const originalBod = 'major difference';
             operation.__config.originalBody = originalBod;
             gen = preBroadcast_comment({ operation, username });
-            gen.next(title, author, parent_author, parent_permlink);
+            gen.next(operation.title, operation.author, operation.parent_author, operation.parent_permlink);
             const actual = gen.next('mock-permlink-123').value;
-            const expected = Buffer.from(body, 'utf-8');
+            const expected = Buffer.from(operation.body, 'utf-8');
             expect(actual[0][1].body).to.eql(expected, 'utf-8');
         });
         it('should include comment_options and autoVote if specified.', () => {
             operation.__config.comment_options = true;
             operation.__config.autoVote = true;
             gen = preBroadcast_comment({ operation, username });
-            gen.next(title, author, parent_author, parent_permlink);
+            gen.next(operation.title, operation.author, operation.parent_author, operation.parent_permlink);
             const actual = gen.next('mock-permlink-123').value;
             const expectedCommentOptions = [
                 'comment_options',
                 {
-                    author,
+                    author: operation.author,
                     permlink: 'mock-permlink-123',
                     max_accepted_payout: ['1000000.000', DEBT_TICKER].join(' '),
                     percent_steem_dollars: 10000,
@@ -240,8 +224,8 @@ describe('TransactionSaga', () => {
             const expectedAutoVoteOptions = [
                 'vote',
                 {
-                    voter: author,
-                    author,
+                    voter: operation.author,
+                    author: operation.author,
                     permlink: 'mock-permlink-123',
                     weight: 10000,
                 },

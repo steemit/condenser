@@ -231,6 +231,7 @@
         "responses": {
             "zero": "Brak odpowiedzi",
             "one": "%(count)s odpowiedź",
+            "few": "%(count)s odpowiedzi",
             "other": "%(count)s odpowiedzi"
         },
         "post_key_warning": {
@@ -421,6 +422,7 @@
         "post_count": {
             "zero": "Brak postów",
             "one": "1 post",
+            "few": "%(count)s posty",
             "other": "%(count)s postów"
         }
     },
@@ -474,6 +476,7 @@
         "you_have_votes_remaining": {
             "zero": "Nie masz już więcej głosów",
             "one": "Został ci 1 głos",
+            "few": "Zostały ci %(count)s głosy",
             "other": "Zostało ci %(count)s głosów"
         },
         "you_can_vote_for_maximum_of_witnesses":
@@ -502,6 +505,7 @@
         "vote_count": {
             "zero": "Brak głosów",
             "one": "1 głos",
+            "few": "%(count)s głosy", 
             "other": "%(count)s głosów"
         }
     },

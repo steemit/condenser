@@ -83,7 +83,6 @@ class PostFull extends React.Component {
         unlock: React.PropTypes.func.isRequired,
         deletePost: React.PropTypes.func.isRequired,
         showPromotePost: React.PropTypes.func.isRequired,
-        showProlongPost: React.PropTypes.func.isRequired,
         showExplorePost: React.PropTypes.func.isRequired,
     };
 

@@ -11,6 +11,7 @@ import Userpic from 'app/components/elements/Userpic';
 import reactForm from 'app/utils/ReactForm'
 import UserList from 'app/components/elements/UserList';
 import cookie from "react-cookie";
+import Dropzone from 'react-dropzone'
 
 class Settings extends React.Component {
 
@@ -50,6 +51,59 @@ class Settings extends React.Component {
         const {accountname} = this.props
         const nsfwPref = (process.env.BROWSER ? localStorage.getItem('nsfwPref-' + accountname) : null) || 'warn'
         this.setState({nsfwPref, oldNsfwPref: nsfwPref})
+    }
+
+    selectProfileImage = () => {
+      this.pImageDropZone.open();
+    }
+
+    pImageOnDrop = (acceptedFiles, rejectedFiles) => {
+      if(!acceptedFiles.length) {
+        if(rejectedFiles.length) {
+          this.setState({progress: {error: tt('reply_editor.please_insert_only_image_files')}})
+          console.log('onDrop Rejected files: ', rejectedFiles);
+        }
+        return
+      }
+      const file = acceptedFiles[0]
+      this.uploadImage(file, file.name)
+    }
+
+    uploadImage = (file, name = '') => {
+      // fixme code duplication with ReplyEditor image uploading
+      const {uploadImage} = this.props
+      this.setState({progress: {message: tt('reply_editor.uploading') + '...'}})
+      uploadImage(file, progress => {
+      if(progress.url) {
+        console.log(`$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ image loaded`)
+        console.log(progress.url)
+        // this.pImageUrlInput.value = progress.url
+        this.state.profile_image.props.onChange(progress.url)
+
+        // const sCopy = Object.assign({}, this.state)
+        // if (sCopy) {
+        //   sCopy.profile_image.value = progress.url
+        //   this.setState({profile_image: {value: progress.url}}, () => {
+        //   })
+        // }
+        // console.log(`----------------------------- state`)
+        // console.log(sCopy)
+        // this.setState({ progress: {} })
+        // const {url} = progress
+        // const image_md = `![${name}](${url})`
+        // const {body} = this.state
+        // const {selectionStart, selectionEnd} = this.refs.postRef
+        // body.props.onChange(
+        //   body.value.substring(0, selectionStart) +
+        //   image_md +
+        //   body.value.substring(selectionEnd, body.value.length)
+        // )
+      } else {
+        console.log(progress)
+        this.setState({ profile_image: { error: progress} })
+      }
+      setTimeout(() => { this.setState({ progress: {} }) }, 10000) // clear message
+    })
     }
 
     onNsfwPrefChange(e) {
@@ -161,7 +215,12 @@ class Settings extends React.Component {
     render() {
         const {state, props} = this
 
-        const {submitting, valid, touched} = this.state.accountSettings
+
+      console.log(`----------------------------- state`)
+      console.log(state)
+
+
+      const {submitting, valid, touched} = this.state.accountSettings
         const disabled = !props.isOwnAccount || state.loading || submitting || !valid || !touched
 
         const {profile_image, cover_image, name, about, gender, location, website} = this.state
@@ -212,7 +271,20 @@ class Settings extends React.Component {
 
                     <label>
                         {tt('settings_jsx.profile_image_url')}
-                        <input type="url" {...profile_image.props} autoComplete="off" />
+                        <div style={{display: `flex`, alignItems: `stretch`, alignContent: `stretch`}}>
+                          <Dropzone style={{width: `100%`}}
+                                    onDrop={this.pImageOnDrop}
+                                    className={'none'}
+                                    disableClick multiple={false} accept="image/*"
+                                    ref={(node) => { this.pImageDropZone = node; }}>
+                              <input ref={(r) => this.pImageUrlInput = r}
+                                     type="url" {...profile_image.props} autoComplete="off" />
+                          </Dropzone>
+                          <a onClick={this.selectProfileImage}
+                             style={{display: `flex`, alignItems: `center`, padding: `0 6px`}}>
+                              Выбрать
+                          </a>
+                        </div>
                     </label>
                     <div className="error">{profile_image.blur && profile_image.touched && profile_image.error}</div>
 
@@ -327,6 +399,12 @@ export default connect(
     },
     // mapDispatchToProps
     dispatch => ({
+        uploadImage: (file, progress) => {
+        dispatch({
+          type: 'user/UPLOAD_IMAGE',
+          payload: {file, progress},
+        })
+      },
         changeLanguage: (language) => {
             dispatch(user.actions.changeLanguage(language))
         },

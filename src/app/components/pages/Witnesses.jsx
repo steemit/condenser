@@ -34,6 +34,8 @@ class Witnesses extends React.Component {
         this.onWitnessChange = e => {
             const customUsername = e.target.value;
             this.setState({ customUsername });
+            // Force update to ensure witness vote appears
+            this.forceUpdate();
         };
         this.accountWitnessProxy = e => {
             e.preventDefault();
@@ -76,6 +78,10 @@ class Witnesses extends React.Component {
             const owner = item.get('owner');
             const thread = item.get('url');
             const myVote = witness_votes ? witness_votes.has(owner) : null;
+            const signingKey = item.get('signing_key');
+            const witnessIsDisabled = /STM1111111111111111111111111111111114T1Anm/.test(signingKey);
+            const priceFeed = item.get('sbd_exchange_rate');
+            const noPriceFeed = /0.000 STEEM/.test(priceFeed.get('base'));
             const classUp =
                 'Voting__button Voting__button-up' +
                 (myVote === true ? ' Voting__button--upvoted' : '');
@@ -96,7 +102,9 @@ class Witnesses extends React.Component {
                 }
             }
             return (
-                <tr key={owner}>
+                <tr
+                    key={owner}
+                    style = { witnessIsDisabled || noPriceFeed ? { opacity: '0.4' } : null }>
                     <td width="75">
                         {rank < 10 && '0'}
                         {rank++}
@@ -115,7 +123,7 @@ class Witnesses extends React.Component {
                             </a>
                         </span>
                     </td>
-                    <td>
+                    <td style = { witnessIsDisabled || noPriceFeed ? { textDecoration: 'line-through' } : null }>
                         <Link to={'/@' + owner}>{owner}</Link>
                     </td>
                     <td>{witness_thread}</td>

@@ -1,7 +1,7 @@
 {
     "g": {
         "age": "wiek",
-        "amount": "Suma",
+        "amount": "Ilość",
         "and": "i",
         "are_you_sure": "Jesteś pewien?",
         "ask": "Sprzedaż",
@@ -45,7 +45,7 @@
         "mute": "Ignoruj",
         "myblog": "Mój blog",
         "mycomments": "Moje komentarze",
-        "myreplies": "Odpowiedzi dla mnie",
+        "myreplies": "Odpowiedzi do mnie",
         "new": "nowe",
         "newer": "Nowszy",
         "next": "Następny",
@@ -125,7 +125,7 @@
         "owner": "Właściciel",
         "active": "Aktywne",
         "account_not_found": "Konto nie istnieje",
-        "this_is_wrong_password": "Te hasło jest błędne",
+        "this_is_wrong_password": "To hasło jest błędne",
         "do_you_need_to": "Czy potrzebujesz",
         "account_name": "Nazwa konta",
         "recover_your_account": "odzyskaj konto",
@@ -371,7 +371,7 @@
         "request_already_submitted_contact_support":
             "Twoje zapytanie zostało już wysłane i pracujemy nad nim. Napisz na %(SUPPORT_EMAIL)s z pytaniem o jego status.",
         "recover_account_intro":
-            "Od czasu do czasu, klucz właściciela może zostać zagrożony. Odzyskiwanie konta Account Recovery gives the rightful account owner 30 days to recover their account from the moment the thief changed their owner key. Stolen Account Recovery can only be used on %(APP_URL)s if the account owner had previously listed '%(APP_NAME)s' as their account trustee and complied with %(APP_NAME)s's Terms of Service.",
+            "Od czasu do czasu, klucz właściciela może zostać zagrożony. Odzyskiwanie konta pozwala prawowitemu właścicielowi na odzyskanie konta w ciągu 30 dni, liczone od momentu zmiany klucza właściciela przez złodzieja. Odzyskiwanie konta można zrobić na %(APP_URL)s o ile właściciel konta uprzednio wyszczególnił '%(APP_NAME)s jako powiernika konta i spełnił warunki użytkowania %(APP_NAME)s.",
         "login_with_facebook_or_reddit_media_to_verify_identity":
             "Zaloguj się przez Facebook lub Reddit aby potwierdzić tożsamość",
         "login_with_social_media_to_verify_identity":
@@ -380,7 +380,7 @@
             "Musimy potwierdzić twoją tożsamość. Podaj swój adres email aby rozpocząć weryfikację.",
         "continue_with_email": "Kontynuuj przy użyciu emaila",
         "thanks_for_submitting_request_for_account_recovery":
-            "Thanks for submitting your request for Account Recovery using %(APP_NAME)s's blockchain-based multi factor authentication. We will respond to you as quickly as possible, however, please expect there may be some delay in response due to high volume of emails. Please be prepared to verify your identity.",
+            "Dziękujemy za wysłanie zgłoszenia dotyczącego odzyskiwania konta używając wieloskładnikowej, opartej o blockchain autentykacji %(APP_NAME)s. Odpowiemy najszybciej jak to możliwe, jednakże, możliwe są opóżnienia z powodu dużej ilości zgłoszeń. Proszę być przygotwanym do potwierdzenia tożsamości.",
         "recovering_account": "Odzyskiwanie konta",
         "recover_account": "Odzyskaj konto",
         "checking_account_owner": "Sprawdzanie właściciela konta",
@@ -388,7 +388,7 @@
         "cant_confirm_account_ownership":
             "Nie możemy potwierdzić właściciela konta. Sprawdź swoje hasło",
         "account_recovery_request_not_confirmed":
-            "Account recovery request is not confirmed yet, please get back later, thank you for your patience."
+            "Odzyskiwanie konta nie potwierdzone, prosimy wrócić później. Dziękujemy za cierpliwość."
     },
     "user_profile": {
         "unknown_account": "Konto nieznane",
@@ -403,11 +403,11 @@
             "Wygląda na to, że jeszcze nic nie opublikowałeś.",
         "create_a_post": "Utwórz post",
         "explore_trending_articles": "Przeglądaj aktywne artykuły",
-        "read_the_quick_start_guide": "Read The Quick Start Guide",
+        "read_the_quick_start_guide": "Przewodnik",
         "browse_the_faq": "Przeglądaj FAQ",
         "followers": "Obserwujący",
         "this_is_users_reputations_score_it_is_based_on_history_of_votes":
-            "This is %(name)s's reputation score.\n\nThe reputation score is based on the history of votes received by the account, and is used to hide low quality content.",
+            "To jest reputacja użytkownika %(name)s.\n\nReputacja oparta jest o głosy otrzymane przez użytkownika i służy do ukrywania postów niskiej jakości.",
         "follower_count": {
             "zero": "Brak obserwujących",
             "one": "1 obserwujący",
@@ -443,22 +443,22 @@
     },
     "voting_jsx": {
         "flagging_post_can_remove_rewards_the_flag_should_be_used_for_the_following":
-            "Flagging a post can remove rewards and make this material less visible. Some common reasons to flag",
-        "disagreement_on_rewards": "Disagreement on rewards",
-        "fraud_or_plagiarism": "Fraud or Plagiarism",
+            "Flagowanie postów może usunąć nagrody i sprawić, że post będzie mniej widoczny. Kilka typowych powodów do wystawienia flagi",
+        "disagreement_on_rewards": "Spór dotyczący nagród",
+        "fraud_or_plagiarism": "Oszustwo lub plagiat",
         "hate_speech_or_internet_trolling": "Mowa nienawiści albo trolling internetowy",
         "intentional_miss_categorized_content_or_spam":
-            "Intentional miss-categorized content or Spam",
+            "Celowe dodawanie nieprawidłowych kategorii lub spam",
         "pending_payout": "Wypłata $%(value)s w trakcie",
         "payout_declined": "Wypłata odrzucona",
-        "max_accepted_payout": "Max Accepted Payout $%(value)s",
+        "max_accepted_payout": "Maksymalna akceptowana wypłata $%(value)s",
         "promotion_cost": "Koszt promocji $%(value)s",
         "past_payouts": "Poprzednie wypłaty $%(value)s",
         "past_payouts_author": " - Autor $%(value)s",
         "past_payouts_curators": " - Kurator $%(value)s",
         "we_will_reset_curation_rewards_for_this_post":
             "zresetujemy twoje nagrody kuratora za ten post",
-        "removing_your_vote": "Removing your vote",
+        "removing_your_vote": "Usuwanie twojego głosu",
         "changing_to_an_upvote": "Zmień na głos za",
         "changing_to_a_downvote": "Zmień na głos przeciw",
         "confirm_flag": "Potwierdź flagę",
@@ -469,8 +469,8 @@
         }
     },
     "witnesses_jsx": {
-        "witness_thread": "witness thread",
-        "top_witnesses": "Witness Voting",
+        "witness_thread": "o świadku",
+        "top_witnesses": "Głosowanie na świadka",
         "you_have_votes_remaining": {
             "zero": "Nie masz już więcej głosów",
             "one": "Został ci 1 głos",
@@ -483,9 +483,9 @@
         "if_you_want_to_vote_outside_of_top_enter_account_name":
             "Jeżeli chcesz zagłosować na świadka spoza top 50, wpisz nazwę konta i zagłosuj",
         "set_witness_proxy":
-            "You can also choose a proxy that will vote for witnesses for you. This will reset your current witness selection.",
+            "Możesz też wybrać proxy, które będzie głosować za ciebie. Ta opcja zresetuje wszystkich dotychczasowo wybranych świadków.",
         "witness_set":
-            "You have set a voting proxy. If you would like to re-enable manual voting, please clear your proxy.",
+            "Ustawiłeś proxy. Wyczyść proxy, jeśli chcesz głosować samemu.",
         "witness_proxy_current": "Twoje aktualne proxy to",
         "witness_proxy_set": "Ustaw proxy",
         "witness_proxy_clear": "Wyczyść proxy",
@@ -523,16 +523,16 @@
     },
     "suggestpassword_jsx": {
         "APP_NAME_cannot_recover_passwords_keep_this_page_in_a_secure_location":
-            "%(APP_NAME)s cannot recover passwords. Keep this page in a secure location, such as a fireproof safe or safety deposit box.",
-        "APP_NAME_password_backup": "%(APP_NAME)s Password Backup",
+            "%(APP_NAME)s nie może odzyskać haseł. Zachowaj tą stronę w bezpiecznej lokalizacji, np w ognioodpornym sejfie.",
+        "APP_NAME_password_backup": "%(APP_NAME)s kopia zapasowa hasła",
         "APP_NAME_password_backup_required":
-            "%(APP_NAME)s Password Backup (required)",
+            "%(APP_NAME)s Kopia zapasowa hasła (wymagane)",
         "after_printing_write_down_your_user_name":
-            "After printing, write down your user name"
+            "Po wydrukowaniu, zapisz swoją nazwę użytkownika"
     },
     "converttosteem_jsx": {
         "your_existing_DEBT_TOKEN_are_liquid_and_transferable":
-            "Your existing %(DEBT_TOKEN)s are liquid and transferable. Instead you may wish to trade %(DEBT_TOKEN)s directly in this site under %(link)s or transfer to an external market.",
+            "Twoje %(DEBT_TOKEN)s są płynne i mogą być przetransferowane. Możesz to zrobić pod tym linkiem %(link)s lub przetransferować na zewnętrzną giełdę.",
         "this_is_a_price_feed_conversion":
             "This is a price feed conversion. The 3.5 day delay is necessary to prevent abuse from gaming the price feed average",
         "convert_to_LIQUID_TOKEN": "Convert to %(LIQUID_TOKEN)s",
@@ -577,24 +577,24 @@
         "resteemed": "resteemowane",
         "resteemed_by": "Resteemowane przez",
         "reveal_it": "Pokaż ten post",
-        "adjust_your": "adjust your",
-        "display_preferences": "display preferences",
+        "adjust_your": "dostosuj",
+        "display_preferences": "preferencje wyświetlania",
         "create_an_account": "załóż konto",
         "to_save_your_preferences": "aby zapamiętać ustawienia"
     },
     "posts_index": {
-        "empty_feed_1": "Looks like you haven't followed anything yet",
+        "empty_feed_1": "Nikogo jeszcze nie obserwujesz",
         "empty_feed_2":
             "If you recently added new users to follow, your personalized feed will populate once new content is available",
-        "empty_feed_3": "Explore Trending Articles",
-        "empty_feed_4": "Read The Quick Start Guide",
-        "empty_feed_5": "Browse The FAQ"
+        "empty_feed_3": "Przeglądaj aktywne posty",
+        "empty_feed_4": "Przewodnik",
+        "empty_feed_5": "Przeglądaj FAQ"
     },
     "transferhistoryrow_jsx": {
-        "to_savings": "to savings",
-        "from_savings": "from savings",
-        "cancel_transfer_from_savings": "Cancel transfer from savings",
-        "stop_power_down": "Stop power down",
+        "to_savings": "do oszczędności",
+        "from_savings": "z oszczędności",
+        "cancel_transfer_from_savings": "Anuluj transfer z oszczędności",
+        "stop_power_down": "Zatrzymaj zmniejszanie mocy",
         "start_power_down_of": "Start power down of",
         "receive_interest_of": "Receive interest of"
     },
@@ -667,7 +667,7 @@
         "signup_button": "Sign up now to earn ",
         "signup_button_emphasis": "FREE STEEM!",
         "sign_up_get_steem": "Sign up. Get STEEM",
-        "returning_users": "Returning Users: ",
+        "returning_users": "Powracający użytkownicy: ",
         "join_our": "Join our"
     },
     "chainvalidation_js": {
@@ -755,7 +755,7 @@
     },
     "powerdown_jsx": {
         "power_down": "Zmniejsz moc",
-        "amount": "Suma",
+        "amount": "Ilość",
         "already_power_down":
             "You are already powering down %(AMOUNT)s %(LIQUID_TICKER)s (%(WITHDRAWN)s %(LIQUID_TICKER)s paid out so far). Note that if you change the power down amount the payout schedule will reset.",
         "delegating":

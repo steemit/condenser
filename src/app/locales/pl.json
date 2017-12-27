@@ -534,10 +534,10 @@
         "your_existing_DEBT_TOKEN_are_liquid_and_transferable":
             "Twoje %(DEBT_TOKEN)s są płynne i mogą być przetransferowane. Możesz to zrobić pod tym linkiem %(link)s lub przetransferować na zewnętrzną giełdę.",
         "this_is_a_price_feed_conversion":
-            "This is a price feed conversion. The 3.5 day delay is necessary to prevent abuse from gaming the price feed average",
+            "Przeliczenie po kursie rynkowym. Okres 3,5 dnia jest niezbędny, aby zapobiedz nadużyciom związanym z krótkoterminowymi zmianami średniej ceny rynkowej",
         "convert_to_LIQUID_TOKEN": "Convert to %(LIQUID_TOKEN)s",
         "DEBT_TOKEN_will_be_unavailable":
-            "This action will take place 3.5 days from now and can not be canceled. These %(DEBT_TOKEN)s will immediately become unavailable"
+            "Ta potrwa 3,5 dnia liczone od teraz i nie może być anulowane. %(DEBT_TOKEN)s staną się natychmiastowo niedostępne"
     },
     "tips_js": {
         "liquid_token":
@@ -549,9 +549,9 @@
         "non_transferable":
             "%(VESTING_TOKEN)s nie można transferować i potrzeba 3 miesięcy (13 wypłat), aby zamienić spowrotem na %(LIQUID_TOKEN)s.",
         "converted_VESTING_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again":
-            "Converted %(VESTING_TOKEN)s can be sent to yourself or someone else but can not transfer again without converting back to %(LIQUID_TOKEN)s.",
+            "Zamienione %(VESTING_TOKEN)s mogą być wysłane do kogokolwiek, ale nie mogą być transferowane, bez ponownej zamiany na %(LIQUID_TOKEN)s.",
         "part_of_your_steem_power_is_currently_delegated":
-            "Part of %(user_name)s's STEEM POWER is currently delegated. Delegation is donated for influence or to help new users perform actions on steemit. Your delegation amount can fluctuate."
+            "Część STEEM POWER należąca do %(user_name)s jest aktualnie zdelegowana. Jest to forma dotacji, pomagająca nowym użytkownikom przeprowadzać różne akcje na steemit. Ilość twojej delegacji może się wahać."
     },
     "promote_post_jsx": {
         "promote_post": "Promuj post",
@@ -565,13 +565,13 @@
     "about_jsx": {
         "about_app": "O %(APP_NAME)s",
         "about_app_details":
-            "%(APP_NAME)s is a social media platform where everyone gets paid for creating and curating content. It leverages a robust digital points system, called Steem, that supports real value for digital rewards through market price discovery and liquidity.",
+            "%(APP_NAME)s to platforma social media, gdzie każdy dostaje pieniądze za tworzenie i wspieranie treści. Oparta na systemie punktów cyfrowych nazywanych Steem, które mają realną wartość opartą na cenach rynkowych i dostępnej płynności.",
         "learn_more_at_app_url": "Dowiedz się więcej na %(APP_URL)s",
-        "resources": "Resources"
+        "resources": "Zasoby"
     },
     "markdownviewer_jsx": {
         "images_were_hidden_due_to_low_ratings":
-            "Images were hidden due to low ratings."
+            "Obrazki zostały ukryte ze względu na niskie oceny."
     },
     "postsummary_jsx": {
         "resteemed": "resteemowane",
@@ -585,7 +585,7 @@
     "posts_index": {
         "empty_feed_1": "Nikogo jeszcze nie obserwujesz",
         "empty_feed_2":
-            "If you recently added new users to follow, your personalized feed will populate once new content is available",
+            "Jeżeli dopiero zacząłeś kogoś obserwować, twój strumień zaktualizuje się, gdy pojawią się nowe treści",
         "empty_feed_3": "Przeglądaj aktywne posty",
         "empty_feed_4": "Przewodnik",
         "empty_feed_5": "Przeglądaj FAQ"
@@ -595,91 +595,91 @@
         "from_savings": "z oszczędności",
         "cancel_transfer_from_savings": "Anuluj transfer z oszczędności",
         "stop_power_down": "Zatrzymaj zmniejszanie mocy",
-        "start_power_down_of": "Start power down of",
-        "receive_interest_of": "Receive interest of"
+        "start_power_down_of": "Zacznij zmniejszanie mocy",
+        "receive_interest_of": "Odbierz odsetki od"
     },
     "savingswithdrawhistory_jsx": {
-        "cancel_this_withdraw_request": "Cancel this withdraw request?",
-        "pending_savings_withdrawals": "PENDING SAVINGS WITHDRAWS",
-        "withdraw": "Withdraw %(amount)s",
-        "to": "to %(to)s",
-        "from_to": "from %(from)s to %(to)s"
+        "cancel_this_withdraw_request": "Anulować zlecenie wypłaty?",
+        "pending_savings_withdrawals": "WYPŁATY OSZCZĘDNOŚCI W TOKU",
+        "withdraw": "Wypłać %(amount)s",
+        "to": "do %(to)s",
+        "from_to": "od %(from)s do %(to)s"
     },
     "explorepost_jsx": {
-        "copied": "Copied!",
-        "copy": "COPY",
-        "alternative_sources": "Alternative Sources"
+        "copied": "Skopiowano!",
+        "copy": "KOPIUJ",
+        "alternative_sources": "Alternatywne źródła"
     },
     "header_jsx": {
-        "home": "home",
-        "create_a_post": "Create a post",
-        "change_account_password": "Change Account Password",
-        "create_account": "Create Account",
-        "stolen_account_recovery": "Stolen Account Recovery",
-        "people_following": "People following",
-        "people_followed_by": "People followed by",
-        "curation_rewards_by": "Curation rewards by",
-        "author_rewards_by": "Author rewards by",
-        "replies_to": "Replies to",
-        "comments_by": "Comments by"
+        "home": "początek",
+        "create_a_post": "Napisz post",
+        "change_account_password": "Zmień hasło do konta",
+        "create_account": "Stwórz konto",
+        "stolen_account_recovery": "Odzyskiwanie skradzionego konta",
+        "people_following": "Obserwowani ludzie",
+        "people_followed_by": "Obserwowani ludzie przez",
+        "curation_rewards_by": "Nagrody kuratora",
+        "author_rewards_by": "Nagrody autora",
+        "replies_to": "Odpowiedzi do",
+        "comments_by": "Komentarze"
     },
     "loginform_jsx": {
         "you_need_a_private_password_or_key":
-            "You need a private password or key (not a public key)",
-        "cryptography_test_failed": "Cryptography test failed",
+            "Potrzebujesz prywatnego hasła lub klucza (nie klucz publiczny)",
+        "cryptography_test_failed": "Test kryptograficzny nieudany",
         "unable_to_log_you_in":
-            "We will be unable to log you in with this browser.",
-        "the_latest_versions_of": "The latest versions of ",
+            "Nie będziemy mogli zalogować cię w tej przeglądarce.",
+        "the_latest_versions_of": "Ostatnie wersje ",
         "are_well_tested_and_known_to_work_with":
-            "are well tested and known to work with %(APP_URL)s.",
+            "zostały przetestowane i pracują z %(APP_URL)s.",
         "due_to_server_maintenance":
-            "Due to server maintenance we are running in read only mode. We are sorry for the inconvenience.",
+            "Z powodu prac na serwerach, aktualnie można tylko przeglądać treści. Przepraszamy za niedogodności.",
         "login_to_vote": "Zaloguj się aby zagłosować",
         "login_to_post": "Zaloguj się aby napisać",
         "login_to_comment": "Zaloguj się aby skomentować",
-        "posting": "Posting",
-        "active_or_owner": "Active or Owner",
+        "posting": "Postowanie",
+        "active_or_owner": "Aktywny lub właściciela",
         "this_password_is_bound_to_your_account_owner_key":
-            "This password is bound to your account's owner key and can not be used to login to this site.",
-        "however_you_can_use_it_to": "However, you can use it to ",
-        "update_your_password": "update your password",
+            "To hasło jest przypisane do klucza właściciela, i nie może być użyte do logowania na tej stronie.",
+        "however_you_can_use_it_to": "Jednakże, możesz użyć go do ",
+        "update_your_password": "aktualizacji swojego hasła",
         "to_obtain_a_more_secure_set_of_keys":
-            "to obtain a more secure set of keys.",
+            "otrzymania bardziej bezpiecznego zestawu kluczy.",
         "this_password_is_bound_to_your_account_active_key":
-            "This password is bound to your account's active key and can not be used to login to this page.",
+            "To hasło jest przypisane do klucza aktywnego, i nie może być użyte do logowania na tej stronie.",
         "you_may_use_this_active_key_on_other_more":
-            "You may use this active key on other more secure pages like the Wallet or Market pages.",
+            "Możesz używać klucza aktywnego na stronach takich jak Portfel czy Giełda.",
         "you_account_has_been_successfully_created":
-            "You account has been successfully created!",
+            "Twoje konto zostało utworzone!",
         "you_account_has_been_successfully_recovered":
-            "You account has been successfully recovered!",
+            "Twoje konto zostało odzyskane!",
         "password_update_succes":
-            "The password for %(accountName)s was successfully updated",
+            "Hasło %(accountName)s zostało zaktualizowane",
         "password_info":
-            "This password or private key was entered incorrectly.  There is probably a handwriting or data-entry error.  Hint: A password or private key generated by Steemit will never contain 0 (zero), O (capital o), I (capital i) and l (lower case L) characters.",
+            "To hasło lub klucz prywatny zostało wprowadzone błędnie. Sprawdź poprawność zapisu. Wskazówka: Hasło lub klucz prywatny wygenerowany przez Steemit, nigdy nie będzie zawierał znaków: 0 (zero), O (duża litera o), I (duża litera i) i l (mała litera L).",
         "enter_your_username": "Podaj nazwę użytkownika",
-        "password_or_wif": "Password or WIF",
+        "password_or_wif": "Hasło lub WIF",
         "this_operation_requires_your_key_or_master_password":
-            "This operation requires your %(authType)s key or Master password.",
-        "keep_me_logged_in": "Keep me logged in",
-        "amazing_community": "amazing community",
-        "to_comment_and_reward_others": " to comment and reward others.",
-        "signup_button": "Sign up now to earn ",
-        "signup_button_emphasis": "FREE STEEM!",
-        "sign_up_get_steem": "Sign up. Get STEEM",
+            "Ta operacja wymaga twojego klucza %(authType)s lub hasła głównego.",
+        "keep_me_logged_in": "Nie wylogowuj mnie",
+        "amazing_community": "niesamowitej społeczności",
+        "to_comment_and_reward_others": " aby komentować i nagradzać innych.",
+        "signup_button": "Zarejestruj się aby zarabiać ",
+        "signup_button_emphasis": "DARMOWY STEEM!",
+        "sign_up_get_steem": "Zarejestruj się. Zdobądź STEEM",
         "returning_users": "Powracający użytkownicy: ",
-        "join_our": "Join our"
+        "join_our": "Dołącz do"
     },
     "chainvalidation_js": {
         "account_name_should": "Nazwa konta powinna ",
         "not_be_empty": "nie być pusta.",
         "be_longer": "być dłuższa.",
         "be_shorter": "być krótsza.",
-        "each_account_segment_should": "Each account segment should ",
-        "start_with_a_letter": "start with a letter.",
+        "each_account_segment_should": "Każda część nazwy powinna ",
+        "start_with_a_letter": "zaczynać się literą.",
         "have_only_letters_digits_or_dashes":
-            "have only letters, digits, or dashes.",
-        "have_only_one_dash_in_a_row": "have only one dash in a row.",
+            "posiadać tylko litery, cyfry lub myślniki.",
+        "have_only_one_dash_in_a_row": "posiadać tylko jeden myślnik pod rząd.",
         "end_with_a_letter_or_digit": "kończyć się literą lub cyfrą.",
         "verified_exchange_no_memo":
             "Musisz dodać memo w swoim transferze."
@@ -692,49 +692,49 @@
         "location_is_too_long": "Lokalizacja jest za długa",
         "website_url_is_too_long": "Strona www jest za długa",
         "public_profile_settings": "Ustawienia profilu publicznego",
-        "private_post_display_settings": "Private Post Display Settings",
-        "not_safe_for_work_nsfw_content": "Not safe for work (NSFW) content",
+        "private_post_display_settings": "Prywatne ustawienia wyświetlania postów",
+        "not_safe_for_work_nsfw_content": "Treści niestosowne w pracy (NSFW)",
         "always_hide": "Zawsze ukrywaj",
         "always_warn": "Zawsze ostrzegaj",
         "always_show": "Zawsze pokazuj",
         "muted_users": "Ignorowani użytkownicy",
         "update": "Aktualizuj",
-        "profile_image_url": "Profile picture url",
-        "cover_image_url": "Cover image url",
+        "profile_image_url": "URL zdjęcia profilowego",
+        "cover_image_url": "URL tła profilowego",
         "profile_name": "Nazwa",
         "profile_about": "O mnie",
         "profile_location": "Lokalizacja",
         "profile_website": "Strona www"
     },
     "transfer_jsx": {
-        "amount_is_in_form": "Amount is in the form 99999.999",
+        "amount_is_in_form": "Ilość podawana jest w formacie 99999.999",
         "insufficient_funds": "Niewystarczające fundusze",
-        "use_only_3_digits_of_precison": "Use only 3 digits of precison",
-        "send_to_account": "Send to account",
-        "asset": "Asset",
+        "use_only_3_digits_of_precison": "Używaj tylko 3 cyfr po przecinku",
+        "send_to_account": "Wyślij na konto",
+        "asset": "Aktywa",
         "this_memo_is_private": "To memo jest prywatne",
         "this_memo_is_public": "To memo jest publiczne",
         "convert_to_VESTING_TOKEN": "Zamień na %(VESTING_TOKEN)s",
         "balance_subject_to_3_day_withdraw_waiting_period":
-            "Balance subject to 3 day withdraw waiting period,",
+            "Saldo zależy od 3-dniowego okresu karencji wymaganego do wycofania środków,",
         "move_funds_to_another_account":
-            "Move funds to another %(APP_NAME)s account.",
+            "Przenieś fundusze na inne konto %(APP_NAME)s.",
         "protect_funds_by_requiring_a_3_day_withdraw_waiting_period":
-            "Protect funds by requiring a 3 day withdraw waiting period.",
+            "Chroni fundusze poprzez 3-dniowy okres karencji.",
         "withdraw_funds_after_the_required_3_day_waiting_period":
-            "Withdraw funds after the required 3 day waiting period.",
+            "Wypłata funduszy po 3-dniowym okresie karencji.",
         "from": "Od",
         "to": "Do",
         "asset_currently_collecting":
-            "%(asset)s currently collecting %(interest)s%% APR.",
+            "%(asset)s aktualnie zbierający %(interest)s%% APR.",
         "beware_of_spam_and_phishing_links":
             "Uważaj na spam i próby phisingu w memo transferowych. Nie otwieraj linków od użytkowników, którym nie ufasz. Nie udostępniaj kluczy prywatnych podmiotom trzecim.",
         "autocomplete_previous_transfers": "poprzednie transfery",
         "autocomplete_user_following": "following"
     },
     "userwallet_jsx": {
-        "conversion_complete_tip": "Will complete on",
-        "in_conversion": "%(amount)s in conversion",
+        "conversion_complete_tip": "Zakończy się",
+        "in_conversion": "%(amount)s po zamianie",
         "transfer_to_savings": "Transfer do oszczędności",
         "power_up": "Zwiększ moc",
         "power_down": "Zmniejsz moc",
@@ -743,13 +743,13 @@
         "withdraw_LIQUID_TOKEN": "Wypłać %(LIQUID_TOKEN)s",
         "withdraw_DEBT_TOKENS": "Wypłać %(DEBT_TOKENS)s",
         "tokens_worth_about_1_of_LIQUID_TICKER":
-            "Tokens worth about $1.00 of %(LIQUID_TICKER)s, currently collecting %(sbdInterest)s%% APR.",
+            "Tokeny warte około $1.00 z %(LIQUID_TICKER)s, aktualnie zbierają %(sbdInterest)s%% APR.",
         "savings": "OSZCZĘÐNOŚCI",
         "estimated_account_value": "Szacowana wartość konta",
         "next_power_down_is_scheduled_to_happen":
-            "The next power down is scheduled to happen",
+            "Nastąpi następne zaplanowane zmniejszenie mocy",
         "transfers_are_temporary_disabled": "Transfery tymczasowo wyłączone.",
-        "history": "HISTORY",
+        "history": "HISTORIA",
         "redeem_rewards": "Odbierz nagrody (transfer do salda)",
         "buy_steem_or_steem_power": "Kup STEEM lub STEEM POWER"
     },
@@ -757,21 +757,21 @@
         "power_down": "Zmniejsz moc",
         "amount": "Ilość",
         "already_power_down":
-            "You are already powering down %(AMOUNT)s %(LIQUID_TICKER)s (%(WITHDRAWN)s %(LIQUID_TICKER)s paid out so far). Note that if you change the power down amount the payout schedule will reset.",
-        "delegating":
+            "Aktualnie zmniejszasz moc %(AMOUNT)s %(LIQUID_TICKER)s (%(WITHDRAWN)s %(LIQUID_TICKER)s już wypłacono). Pamiętaj, że jeśli zmienisz ilość zmniejszanej mocy, to licznik dla następnej wypłaty zostanie wyzerowany.",
+        "delegowane":
             "Delegujesz %(AMOUNT)s %(LIQUID_TICKER)s. Ta kwota jest zablokowana i nie można jej użyć do zmniejszenia mocy, dopóki trwa delegacja i nie minął pełen cykl wypłacania nagród.",
         "per_week": "To jest ~%(AMOUNT)s %(LIQUID_TICKER)s na tydzień.",
-        "warning":
-            "Leaving less than %(AMOUNT)s %(VESTING_TOKEN)s in your account is not recommended and can leave your account in a unusable state.",
+        "ostrzeżenie":
+            "Zostawianie mniej niż %(AMOUNT)s %(VESTING_TOKEN)s na koncie, nie jest zalecane i może sprawić, że konto będzie bezużyteczne.",
         "error": "Nie można zmniejszyć mocy (ERROR: %(MESSAGE)s)"
     },
     "checkloginowner_jsx": {
         "your_password_permissions_were_reduced":
-            "Your password permissions were reduced",
+            "Twoje uprawnienia zostały zmniejszone",
         "if_you_did_not_make_this_change":
-            "If you did not make this change please",
-        "ownership_changed_on": "Ownership Changed On ",
-        "deadline_for_recovery_is": "Deadline for recovery is",
+            "Jeżeli to  nie ty wykonałeś tą zmianę",
+        "ownership_changed_on": "Zmiana właściciela nastąpiła ",
+        "deadline_for_recovery_is": "Ostateczny czas na odzyskanie",
         "i_understand_dont_show_again": "Rozumiem, nie pokazuj mi tego ponownie"
     }
 }

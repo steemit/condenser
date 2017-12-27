@@ -74,6 +74,13 @@ describe('htmlready', () => {
             '<xml xmlns="http://www.w3.org/1999/xhtml"><div title="missing translation: en.g.phishy_message" class="phishy">Go down lower for https://steemit.com info! / #https://steamit.com/unlikelyinpagelink</div></xml>';
         const resinpage = HtmlReady(inpage).html;
         expect(resinpage).to.equal(cleanInpage);
+
+        const noprotocol =
+            '<xml xmlns="http://www.w3.org/1999/xhtml"><a href="https://steamit.com/" xmlns="http://www.w3.org/1999/xhtml">for a good time, visit steemit.com today</a></xml>';
+        const cleansednoprotocol =
+            '<xml xmlns="http://www.w3.org/1999/xhtml"><div title="missing translation: en.g.phishy_message" class="phishy">for a good time, visit steemit.com today / https://steamit.com/</div></xml>';
+        const resnoprotocol = HtmlReady(noprotocol).html;
+        expect(resnoprotocol).to.equal(cleansednoprotocol);
     });
 
     it('should allow more than one link per post', () => {

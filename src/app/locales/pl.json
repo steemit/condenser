@@ -371,7 +371,7 @@
         "request_already_submitted_contact_support":
             "Twoje zapytanie zostało już wysłane i pracujemy nad nim. Napisz na %(SUPPORT_EMAIL)s z pytaniem o jego status.",
         "recover_account_intro":
-            "Od czasu do czasu, klucz właściciela może zostać zagrożony. Odzyskiwanie konta pozwala prawowitemu właścicielowi na odzyskanie konta w ciągu 30 dni, liczone od momentu zmiany klucza właściciela przez złodzieja. Odzyskiwanie konta można zrobić na %(APP_URL)s o ile właściciel konta uprzednio wyszczególnił '%(APP_NAME)s jako powiernika konta i spełnił warunki użytkowania %(APP_NAME)s.",
+            "Od czasu do czasu, klucz właściciela może zostać zagrożony. Odzyskiwanie konta pozwala prawowitemu właścicielowi na odzyskanie konta w ciągu 30 dni, liczone od momentu zmiany klucza właściciela przez złodzieja. Odzyskiwanie konta można zrobić na %(APP_URL)s o ile właściciel konta uprzednio wyszczególnił %(APP_NAME)s jako powiernika konta i spełnił warunki użytkowania %(APP_NAME)s.",
         "login_with_facebook_or_reddit_media_to_verify_identity":
             "Zaloguj się przez Facebook lub Reddit aby potwierdzić tożsamość",
         "login_with_social_media_to_verify_identity":
@@ -716,7 +716,7 @@
         "this_memo_is_public": "To memo jest publiczne",
         "convert_to_VESTING_TOKEN": "Zamień na %(VESTING_TOKEN)s",
         "balance_subject_to_3_day_withdraw_waiting_period":
-            "Saldo zależy od 3-dniowego okresu karencji wymaganego do wycofania środków,",
+            "Saldo zależy od 3-dniowego okresu karencji wymaganego do wycofania środków, ",
         "move_funds_to_another_account":
             "Przenieś fundusze na inne konto %(APP_NAME)s.",
         "protect_funds_by_requiring_a_3_day_withdraw_waiting_period":

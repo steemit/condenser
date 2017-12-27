@@ -467,7 +467,7 @@
         "and_more": "i %(count)s więcej",
         "votes_plural": {
             "one": "%(count)s głos",
-            "few": "%(count)s głosów",
+            "few": "%(count)s głosy",
             "other": "%(count)s głosów"
         }
     },

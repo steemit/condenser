@@ -81,6 +81,8 @@
         "reply_count": {
             "zero": "brak odpowiedzi",
             "one": "1 odpowiedź",
+			"few": "%(count)s odpowiedzi",
+			"many": "%(count)s odpowiedzi",
             "other": "%(count)s odpowiedzi"
         },
         "reputation": "Reputacja",
@@ -226,12 +228,15 @@
         "views": {
             "zero": "Brak odwiedzin",
             "one": "%(count)s odwiedziny",
+			"few": "%(count)s odwiedziny",
+			"many": "%(count)s odwiedzin",
             "other": "%(count)s odwiedzin"
         },
         "responses": {
             "zero": "Brak odpowiedzi",
             "one": "%(count)s odpowiedź",
             "few": "%(count)s odpowiedzi",
+			"many": "%(count)s odpowiedzi",
             "other": "%(count)s odpowiedzi"
         },
         "post_key_warning": {
@@ -412,18 +417,22 @@
         "follower_count": {
             "zero": "Brak obserwujących",
             "one": "1 obserwujący",
+			"few": "%(count)s obserwujących",
+			"many": "%(count)s obserwujących",
             "other": "%(count)s obserwujących"
         },
         "followed_count": {
             "zero": "Brak obserwowanych",
             "one": "1 obserwowany",
+			"few": "%(count)s obserwowanych",
+			"many": "%(count)s obserwowanych",
             "other": "%(count)s obserwowanych"
         },
         "post_count": {
             "zero": "Brak postów",
             "one": "1 post",
-            "few": "%(count)s posty",
-            "many": "%(count)s postów",
+			"few": "%(count)s posty",
+			"many": "%(count)s postów",
             "other": "%(count)s postów"
         }
     },
@@ -452,11 +461,11 @@
         "hate_speech_or_internet_trolling": "Mowa nienawiści albo trolling internetowy",
         "intentional_miss_categorized_content_or_spam":
             "Celowe dodawanie nieprawidłowych kategorii lub spam",
-        "pending_payout": "Wypłata $%(value)s w trakcie",
+        "pending_payout": "Wypłata $%(value)s nastąpi",
         "payout_declined": "Wypłata odrzucona",
         "max_accepted_payout": "Maksymalna akceptowana wypłata $%(value)s",
         "promotion_cost": "Koszt promocji $%(value)s",
-        "past_payouts": "Poprzednie wypłaty $%(value)s",
+        "past_payouts": "Wypłacono $%(value)s",
         "past_payouts_author": " - Autor $%(value)s",
         "past_payouts_curators": " - Kurator $%(value)s",
         "we_will_reset_curation_rewards_for_this_post":
@@ -502,9 +511,11 @@
         "no_responses_yet_click_to_respond":
             "Brak odpowiedzi. Kliknij aby odpowiedzieć.",
         "response_count_tooltip": {
-            "zero": "Brak odpowiedzi. Kliknij aby odpowiedzieć.",
-            "one": "1 odpowiedź. Kliknij aby odpowiedzieć.",
-            "other": "%(count)s odpowiedzi. Kliknij aby odpowiedzieć."
+            "zero": "Brak odpowiedzi. Kliknij aby odpowiedzieć",
+            "one": "1 oodpowiedź. Kliknij aby odpowiedzieć",
+			"few": "%(count)s odpowiedzi. Kliknij aby odpowiedzieć",
+			"many": "%(count)s odpowiedzi. Kliknij aby odpowiedzieć",
+            "other": "%(count)s odpowiedzi. Kliknij aby odpowiedzieć"
         },
         "vote_count": {
             "zero": "Brak głosów",

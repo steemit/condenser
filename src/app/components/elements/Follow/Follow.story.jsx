@@ -4,12 +4,10 @@ import { withKnobs, boolean } from '@storybook/addon-knobs';
 import rootReducer from 'app/redux/RootReducer';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
-import Follow from './Follow';
-import { Center } from './Tooltip.story';
+import Follow from './index';
+import { Center } from '../Tooltip.story';
 
 const store = createStore(rootReducer);
-
-
 
 storiesOf('Elements', module)
     .addDecorator(withKnobs)

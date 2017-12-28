@@ -197,6 +197,7 @@
     ]
   },
   "jest": {
+    "setupFiles": ["./jestsetup.js"],
     "modulePaths": [
       "<rootDir>/src/"
     ],

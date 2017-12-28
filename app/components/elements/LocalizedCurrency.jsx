@@ -104,8 +104,8 @@ class LocalizedCurrency extends React.Component {
         currencyAmount = (currencyAmount / divider | 0) * divider
       } else {
         currencyAmount = currencyAmount.toLocaleString('en', {
-          minimumFractionDigits: 3,
-          maximumFractionDigits: 3
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
         })
       }
       

@@ -4,8 +4,8 @@
 
 module.exports = {
     counterpart: {
-        names: require('date-names/en'),
-        pluralize: require('pluralizers/en'),
+        names: require('date-names/pl'),
+        pluralize: require('pluralizers/pl'),
 
         formats: {
             date: {

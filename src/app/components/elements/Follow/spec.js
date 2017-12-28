@@ -1,14 +1,15 @@
 import React from "react";
+import { mount, shallow } from "enzyme";
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
-import Author from "./index";
+import Follow from "./index";
 import rootReducer from 'app/redux/RootReducer';
 
 const store = createStore(rootReducer);
 
-describe("<Author />", () => {
+describe("<Follow />", () => {
 
-  const wrapper = shallow(<Provider store={store}><Author /></Provider>);
+  const wrapper = shallow(<Provider store={store}><Follow /></Provider>);
   const container = wrapper.instance();
 
   it("renders without crashing", () => {

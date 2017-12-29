@@ -103,6 +103,10 @@ class ChangePassword extends React.Component {
         );
     };
     render() {
+        console.log(
+            'YYYYYYYYYYYYY',
+            !process.env.BROWSER
+        )
         if (!process.env.BROWSER) {
             // don't render this page on the server
             return (

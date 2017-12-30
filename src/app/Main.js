@@ -79,6 +79,7 @@ function runApp(initial_state) {
     }
 
     const config = initial_state.offchain.config;
+
     steem.api.setOptions({
         url: config.steemd_connection_client,
         useAppbaseApi: !!config.steemd_use_appbase,

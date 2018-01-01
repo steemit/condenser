@@ -352,16 +352,18 @@ export default function reducer(state = defaultState, action = {}) {
         case CLEAR_META: {
             return state.deleteIn(['metaLinkData', payload.id]);
         }
-        // does not have an action creator...
+
         case CLEAR_META_ELEMENT: {
             const { formId, element } = payload;
             return state.updateIn(['metaLinkData', formId], data =>
                 data.remove(element)
             );
         }
+
         case FETCH_JSON: {
             return state;
         }
+
         case FETCH_JSON_RESULT: {
             const { id, result, error } = payload;
             return state.set(id, fromJS({ result, error }));
@@ -483,6 +485,11 @@ export const setMetaData = payload => ({
 
 export const clearMeta = payload => ({
     type: CLEAR_META,
+    payload,
+});
+
+export const clearMetaElement = payload => ({
+    type: CLEAR_META_ELEMENT,
     payload,
 });
 

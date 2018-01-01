@@ -131,7 +131,7 @@ const mockPayloads = {
         meta: { flip: 'flop' },
     },
     clearMetaElement: {
-        formId: 'quince',
+        formId: 'pear',
         element: 'flip',
     },
     fetchJsonResult: {
@@ -660,14 +660,19 @@ describe('Global reducer', () => {
 
     it('should return correct state for a CLEAR_META_ELEMENT action', () => {
         // Arrange
-        const initial = reducer().setIn(
-            ['metaLinkData', mockPayloads.clearMetaElement.formId],
-            { data: { [mockPayloads.clearMetaElement.element]: 'flop' } }
+        const initial = reducer(
+            initial,
+            globalActions.setMetaData(mockPayloads.setMetaData)
         );
         // Act
-        // no such action creator for the CLEAR_META_ELEMENT
-        // const actual = reducer(initial, globalActions.clearMetaElement(mockPayloads.clearMetaElement))
-        // expect(actual.get('metaLinkData')).to.not.have.property(mockPayloads.clearMetaElement.element)
+        const actual = reducer(
+            initial,
+            globalActions.clearMetaElement(mockPayloads.clearMetaElement)
+        );
+        // Assert
+        expect(actual.get('metaLinkData')).to.not.have.property(
+            mockPayloads.clearMetaElement.element
+        );
     });
 
     it('should return correct state for a FETCH_JSON action', () => {

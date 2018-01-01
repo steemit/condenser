@@ -3,7 +3,7 @@
 
 This page is full of information to help you learn about the platform and become a successful Steemian. You can return to this page at any time by clicking on the "Welcome" link in the main menu. There is a table of contents below to help you navigate the page.
 
-Included on the page is a "Quick Start Guide" with information on how the platform works, and a "To Do List" with recommended steps to get started with your account. 
+Included on the page is a "To Do List" with recommended steps to get started with your account, and a "Quick Start Guide" with information on how the platform works. 
 
 Below that is a section of "Helpful Posts from Steemit Users", which contains a collection of posts from users in the community that are helpful for new users getting started. 
 
@@ -14,10 +14,13 @@ Below that is a list of recommended users to follow, a collection of other resou
 ### To Do List
 
 1. <a href="#Backup_your_password">Backup your password</a>
-2. <a href="#Sign_Up_for_Steemit_Chat">Sign Up for Steemit Chat</a>
-3. <a href="#Setup_your_Profile_Avatar_and_Cover_Image">Setup your Profile, Avatar, and Cover Image</a>
-4. <a href="#Choose_your_NSFW_(Not_Safe_for_Work)_Display_Preference">Choose your "NSFW" (Not Safe for Work) Display Preference</a>
-5. <a href="#Create_your_introduceyourself_post">Create your "introduceyourself" post</a>
+2. <a href="#Review_the_Quick_Start_Guide">Review the Quick Start Guide</a>
+3. <a href="#Read_the_Helpful_Posts_from_Steemit_Users">Read the Helpful Posts from Steemit Users</a>
+4. <a href="#Setup_your_Profile_Avatar_and_Cover_Image">Setup your Profile, Avatar, and Cover Image</a>
+5. <a href="#Choose_your_NSFW_(Not_Safe_for_Work)_Display_Preference">Choose your "NSFW" (Not Safe for Work) Display Preference</a>
+6. <a href="#Sign_Up_for_Steemit_Chat">Sign Up for Steemit Chat</a>
+7. <a href="#Create_your_introduceyourself_post">Create your "introduceyourself" post</a>
+8. <a href="#Learn_more">Learn more</a>
 
 ### Quick Start Guide
 
@@ -62,7 +65,35 @@ It is strongly recommended that you store an offline copy of your password somew
 If your account is valuable, treat it like a valuable!
 
 <a href="#Table_of_Contents">^</a>
-### <span id="Sign_Up_for_Steemit_Chat">2. Sign Up for Steemit Chat</span>
+### <span id="Review_the_Quick_Start_Guide">2. Review the Quick Start Guide</span>
+
+The <a href="#No_Cost_to_Participate">Quick Start Guide</a> section of this Welcome page contains basic information to help get you started.
+
+<a href="#Table_of_Contents">^</a>
+### <span id="Read_the_Helpful_Posts_from_Steemit_Users">3. Read the Helpful Posts from Steemit Users</span>
+
+The <a href="#Helpful_Posts_from_Steemit_Users">Helpful Posts from Steemit Users</a> section of this Welcome page contains many well written articles from members of the community with tips on how to succeed.
+
+<a href="#Table_of_Contents">^</a>
+### <span id="Setup_your_Profile_Avatar_and_Cover_Image">4. Setup your Profile, Avatar, and Cover Image</span>
+
+Under your user settings, you can update your profile. This includes your display name, location, about info, and website.
+
+To set your avatar image, type or paste a link to the URL where the image is located into the "Profile Picture URL" field.
+
+To set your cover image, type or paste a link to the URL where the image is located into the "Cover Image URL" field.
+
+Once you have made all your changes, click the "Update" button to save your profile.
+
+<a href="#Table_of_Contents">^</a>
+### <span id="Choose_your_NSFW_(Not_Safe_for_Work)_Display_Preference">5. Choose your "NSFW" (Not Safe for Work) Display Preference</span>
+
+By default, content that users have tagged as "NSFW" will be hidden, but a link will be shown to reveal the content.
+
+You can update your display preference so that NSFW content is always shown by default, or is completely hidden with no option to reveal.
+
+<a href="#Table_of_Contents">^</a>
+### <span id="Sign_Up_for_Steemit_Chat">6. Sign Up for Steemit Chat</span>
 
 A lot of users hang out and chat when they are not posting or browsing Steemit. It is a great place to meet people!
 
@@ -75,25 +106,7 @@ Some channels allow you to share links, but others don't. For instance, [general
 Each channel will have its rules posted in the "Info" section.
 
 <a href="#Table_of_Contents">^</a>
-### <span id="Setup_your_Profile_Avatar_and_Cover_Image">3. Setup your Profile, Avatar, and Cover Image</span>
-
-Under your user settings, you can update your profile. This includes your display name, location, about info, and website.
-
-To set your avatar image, type or paste a link to the URL where the image is located into the "Profile Picture URL" field.
-
-To set your cover image, type or paste a link to the URL where the image is located into the "Cover Image URL" field.
-
-Once you have made all your changes, click the "Update" button to save your profile.
-
-<a href="#Table_of_Contents">^</a>
-### <span id="Choose_your_NSFW_(Not_Safe_for_Work)_Display_Preference">4. Choose your "NSFW" (Not Safe for Work) Display Preference</span>
-
-By default, content that users have tagged as "NSFW" will be hidden, but a link will be shown to reveal the content.
-
-You can update your display preference so that NSFW content is always shown by default, or is completely hidden with no option to reveal.
-
-<a href="#Table_of_Contents">^</a>
-### <span id="Create_your_introduceyourself_post">5. Create your "introduceyourself" post</span>
+### <span id="Create_your_introduceyourself_post">7. Create your "introduceyourself" post</span>
 
 While not required, the tradition for new users is to create an "introduceyourself" post, to let the community know who you are.
 
@@ -102,6 +115,11 @@ You can see some examples of what other people have done [here](https://steemit.
 It is not required, but a lot of users will take a picture of themselves holding up a piece of paper that says "Steemit" with the current date, so we know you are a real person.
 
 It is not required either, but if you have other social media accounts (Twitter, Facebook, etc.) you can help the community verify that you are who you say you are, by sharing the link to your Steemit introduceyourself post with those accounts. If you are claiming to be someone famous, this is pretty much expected.
+
+<a href="#Table_of_Contents">^</a>
+### <span id="Learn_more">8. Learn more</span>
+
+The <a href="#Other_Resources">Other Resources</a> section of this Welcome page contains additional resouces to learn more about the platform. The FAQ page contains answers to the most commonly asked questions, and the bluepaper explains how the platform works.
 
 <a href="#Table_of_Contents">^</a>
 

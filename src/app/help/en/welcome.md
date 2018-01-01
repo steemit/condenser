@@ -291,12 +291,13 @@ It is possible to earn thousands of dollars, but most authors who are doing this
 <a href="#Table_of_Contents">^</a>
 ## <span id="Other_Resources">Other Resources</span>
 
-- [FAQ](https://steemit.com/faq.html)
-- [Steemit Help](https://www.steemithelp.net/)
-- [The Steem Whitepaper](https://steem.io/SteemWhitePaper.pdf)
-- [Steem App Center](http://steemtools.com/)
-- [Steem Block Explorer](https://steemd.com/)
-- [Steem Blockchain Explorer](https://steemdb.com/)
+- [FAQ](https://steemit.com/faq.html) - Answers to commonly asked questions
+- [Bluepaper](https://steem.io/steem-bluepaper.pdf) - Explanation of how the platform works
+- [Steemit Help](https://www.steemithelp.net/) - Community maintained help pages
+- [The Steem Whitepaper](https://steem.io/SteemWhitePaper.pdf) - Technical details of the Steem blockchain
+- [Steem App Center](http://steemtools.com/) - Community developed tools for the Steem blockchain
+- [Steem Block Explorer](https://steemd.com/) - Shows the raw Steem blockchain data 
+- [Steem Blockchain Explorer](https://steemdb.com/) - Analysis pages for the Steem blockchain data
 
 <a href="#Table_of_Contents">^</a>
 ## <span id="Live_Help">Live Help</span>

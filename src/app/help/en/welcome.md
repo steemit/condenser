@@ -7,7 +7,7 @@ Included on the page is a "To Do List" with recommended steps to get started wit
 
 Below that is a section of "Helpful Posts from Steemit Users", which contains a collection of posts from users in the community that are helpful for new users getting started. 
 
-Below that is a list of recommended users to follow, a collection of other resources including the <a href="/faq.html">FAQ Page</a>, and information on where to find live help. 
+Below that is a list of recommended users to follow, a collection of other resources including the <a href="/faq.html">FAQ Page</a> and [Steem bluepaper](https://steem.io/steem-bluepaper.pdf), as well as information on where to find live help. 
 
 ## <span id="Table_of_Contents">Table of Contents</span>
 

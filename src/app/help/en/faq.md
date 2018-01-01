@@ -287,7 +287,9 @@ There is a third-party tool called <a href="https://www.SteemCreate.com">SteemCr
 
 There is a third-party tool called <a href="https://steemit.com/steemit/@someguy123/anonsteem-create-anonymous-steem-accounts-without-social-media">AnonSteem</a> that accepts bitcoin, Litecoin, STEEM, or SBD to anonymously create a Steem account. You do not need to have an existing Steem blockchain account to use the service, but there is a charge on top of the blockchain account creation fee for using the service.
 
-There is also a third-party tool called <a href="https://steemit.com/news/@timcliff/new-tool-from-busy-org-create-new-steem-blockchain-accounts-with-steemconnect">SteemConnect</a> that allows you to create accounts by paying or delegating the account creation fee. There is no additional fee to use the service, but does require an existing Steem blockchain account to pay the account creation fee to create the account.
+There is a third-party tool called <a href="https://steemit.com/news/@timcliff/new-tool-from-busy-org-create-new-steem-blockchain-accounts-with-steemconnect">SteemConnect</a> that allows you to create accounts by paying or delegating the account creation fee. There is no additional fee to use the service, but does require an existing Steem blockchain account to pay the account creation fee to create the account.
+
+There is a third-party tool called <a href="https://steemit.com/blocktrades/@blocktrades/buy-steem-accounts-with-pre-loaded-steem-from-blocktrades">BlockTrades</a> that accepts bitcoin, Litecoin, STEEM, SBD, BitShares, Dash, Dogecoin, Ethereum, and more to create a Steem account. You can also send extra tokens to pre-load the account with additional Steem Power. You do not need to have an existing Steem blockchain account to use the service, but there is a charge on top of the blockchain account creation fee for using the service.
 
 <a href="#Table_of_Contents_Accounts">^</a>
 ## <span id="It_is_not_letting_me_create_an_account_with_my_phone_number__What_should_I_do">It is not letting me create an account with my phone number. What should I do?</span>

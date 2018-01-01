@@ -28,14 +28,11 @@ Below that is a list of recommended users to follow, a collection of other resou
 - <a href="#Upvotes">Upvotes</a>
 - <a href="#Comments">Comments</a>
 - <a href="#Creating_Posts">Creating Posts</a>
-- <a href="#Tags">Tags</a>
 - <a href="#Followers_and_Feeds">Followers and Feeds</a>
 - <a href="#Resteem">Resteem</a>
 - <a href="#Digital_Currencies">Digital Currencies</a>
 - <a href="#Curation">Curation</a>
 - <a href="#Payments">Payments</a>
-- <a href="#Home,_New,_Hot,_Trending,_Promoted,_and_Active">Home, New, Hot, Trending, Promoted, and Active</a>
-- <a href="#Profile">Profile</a>
 - <a href="#Reputation">Reputation</a>
 - <a href="#Cashing_out_or_Spending_SBD">Cashing out or Spending SBD</a>
 - <a href="#Plagiarism">Plagiarism</a>
@@ -67,7 +64,7 @@ If your account is valuable, treat it like a valuable!
 <a href="#Table_of_Contents">^</a>
 ### <span id="Review_the_Quick_Start_Guide">2. Review the Quick Start Guide</span>
 
-The <a href="#No_Cost_to_Participate">Quick Start Guide</a> section of this Welcome page contains basic information to help get you started.
+The <a href="#Quick_Start_Guide">Quick Start Guide</a> section of this Welcome page contains basic information to help get you started.
 
 <a href="#Table_of_Contents">^</a>
 ### <span id="Read_the_Helpful_Posts_from_Steemit_Users">3. Read the Helpful Posts from Steemit Users</span>
@@ -125,8 +122,7 @@ The <a href="#Other_Resources">Other Resources</a> section of this Welcome page 
 
 ***
 
-
-## Quick Start Guide
+## <span id="Quick_Start_Guide">Quick Start Guide</span>
 
 ### <span id="No_Cost_to_Participate">No Cost to Participate</span>
 
@@ -153,24 +149,11 @@ To create a post, click on the "Post" link in the upper right corner.
 
 Posts have three main parts: Title, Content, Tags.
 
-You will want to make your title attention grabbing, and relevant to your content.
+You will want to make your title attention grabbing, and relevant to your content. The first image that you use will be the thumbnail image.
 
-To create your content, you can either use "Editor" or "Markdown" mode.
+Tags will help people find your posts. Each post can have up to five tags, separated by spaces. The tags should all be relevant to the content in the post. You can browse content by tags, as well as see a list of popular tags that other users have used in their posts [here](https://steemit.com/tags).
 
 There are several guides for creating posts in the "Helpful Posts from Steemit Users" section below.
-
-<a href="#Table_of_Contents">^</a>
-### <span id="Tags">Tags</span>
-
-Tags will help people find your posts.
-
-Each post can have up to five tags, separated by spaces.
-
-The first tag in the list will be the main category that the post is in.
-
-The tags should all be relevant to the content in the post.
-
-You can browse content by tags, as well as see a list of popular tags that other users have used in their posts [here](https://steemit.com/tags).
 
 <a href="#Table_of_Contents">^</a>
 ### <span id="Followers_and_Feeds">Followers and Feeds</span>
@@ -193,7 +176,7 @@ If you want to share someone else's post with all of your followers, click on th
 
 STEEM, Steem Power and Steem Dollars are the three forms of digital currency used by the Steem Blockchain.
 
-More information on the three types of tokens can be found in the [Steemit FAQ](https://steemit.com/faq.html).
+More information on the three types of tokens can be found in the [Steemit FAQ](https://steemit.com/faq.html#What_is_the_difference_between_STEEM__STEEM_Power__and_Steem_Dollars).
 
 <a href="#Table_of_Contents">^</a>
 ### <span id="Curation">Curation</span>
@@ -216,42 +199,6 @@ The author reward is paid 50% in Steem Power, and 50% in liquid STEEM/SBD.
 Authors also have the option to decline payout, or be paid in 100% Steem Power!
 
 <a href="#Table_of_Contents">^</a>
-### <span id="Home,_New,_Hot,_Trending,_Promoted,_and_Active">Home, New, Hot, Trending, Promoted, and Active</span>
-
-These are various ways to sort blog posts.
-
-**Home** - Most recent posts of the people you follow (your feed).
-
-**New** - Posts are sorted by the time posted, newest first.
-
-**Hot** - Popular posts at the moment.
-
-**Trending** - Posts with the highest pending rewards currently.
-
-**Promoted** - Listings that are boosted by Steem Dollar payments get "Promoted" for greater visibility.
-
-<a href="#Table_of_Contents">^</a>
-### <span id="Profile">Profile</span>
-
-<Icon name="user" />
-
-**Feed** - Here is where you go to see the most recent posts from the people you follow.
-
-**Blog** - Here is where you go to see all of your posts and resteems.
-
-**Comments** - Here is where you go to see all of the comments you have made to other's posts and comments.
-
-**Replies** - Here is where you go to see all replies other users have made to your posts and comments.
-
-**Wallet** - Here is where you go to see your wallet balances, make transfers, exchange STEEM/SBD, and Power Up.
-
-**Change Password** - Here is where you go to change your password.
-
-**Settings** - Here is where you go to update your settings.
-
-**Logout** - Here is where you go to logout.
-
-<a href="#Table_of_Contents">^</a>
 ### <span id="Reputation">Reputation</span>
 
 A reputation score is one way Steemit measures the amount of value you have brought to the community.
@@ -265,11 +212,11 @@ Your reputation will go up as you earn upvotes for your posts and comments, but 
 <a href="#Table_of_Contents">^</a>
 ### <span id="Cashing_out_or_Spending_SBD">Cashing out or Spending SBD</span>
 
+You can exchange SBD for STEEM in the [Currency Market](https://steemit.com/market). Once you have STEEM, you can "Power Up" in your wallet to gain additional Steem Power.
+
 You can spend your SBD at the [Peerhub Store](https://www.peerhub.com/).
 
-You can exchange your STEEM and SBD for bitcoin on an exchange such as [BlockTrades](https://blocktrades.us/) or [Bittrex](https://bittrex.com/).
-
-You can also "Power Up" and use your STEEM/SBD to gain more Steem Power!
+You can also exchange your STEEM and SBD for bitcoin on an exchange such as [BlockTrades](https://blocktrades.us/) or [Bittrex](https://bittrex.com/).
 
 <a href="#Table_of_Contents">^</a>
 ### <span id="Plagiarism">Plagiarism</span>
@@ -285,9 +232,9 @@ Also, make sure that you are not violating any copyright laws if you are using s
 <a href="#Table_of_Contents">^</a>
 ### <span id="Password_Security">Password Security</span>
 
-Your Steemit account is worth real money. Treat your Steemit password like you would your bank password, and keep it secure!
+**There is no lost password recovery for Steem accounts**. You are 100% responsible for having it backed up. This means secure digital backups, as well as secured paper backups, off-site if possible.
 
-Unless your password was recently changed and you possess the old one, **there is no password recovery for Steem accounts**. You are 100% responsible for having it backed up. This means secure digital backups, as well as secured paper backups, off-site if possible.
+Your Steemit account is worth real money. Treat your Steemit password like you would your bank password, and keep it secure!
 
 <a href="#Table_of_Contents">^</a>
 ### <span id="Earning_on_Steemit">Earning on Steemit</span>

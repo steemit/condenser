@@ -312,6 +312,7 @@ export default function useGeneralApi(app) {
                 const account = yield models.Account.create({
                     user_id: user.id,
                     name: esc(name),
+                    owner_key: esc(owner_key),
                 });
                 const identity = yield models.Identity.create({
                     user_id: user.id,

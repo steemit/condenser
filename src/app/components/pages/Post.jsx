@@ -235,10 +235,10 @@ class Post extends React.Component {
                                 <div className="Post__comments_sort_order float-right">
                                     {tt('post_jsx.sort_order')}: &nbsp;
                                     <DropdownMenu
-                                        className="default"
                                         items={sort_menu}
                                         el="li"
                                         selected={sort_label}
+                                        position="left"
                                     />
                                 </div>
                             ) : null}

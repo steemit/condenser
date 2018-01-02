@@ -48,6 +48,14 @@
     }
   }
 
+  &.left > .VerticalMenu {
+    position: absolute;
+    right: 0%;
+  }
+  &.right > .VerticalMenu {
+    position: absolute;
+    left: 0%;
+  }
   .DropdownMenu.move-left {
     .VerticalMenu {
       left: -50%;

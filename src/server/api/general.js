@@ -282,7 +282,6 @@ export default function useGeneralApi(app) {
         try {
             if (secret !== process.env.CREATE_USER_SECRET)
                 throw new Error('invalid secret');
-
             if (!emailRegex.test(email.toLowerCase()))
                 throw new Error('not valid email: ' + email);
             const existingUser = yield findUser({
@@ -300,9 +299,22 @@ export default function useGeneralApi(app) {
                     name: esc(name),
                     email: esc(email),
                 });
+                const account = yield models.Account.create({
+                    user_id: user.id,
+                    name: esc(name),
+                });
+                const identity = yield models.Identity.create({
+                    user_id: user.id,
+                    name: esc(name),
+                    provider: 'email',
+                    verified: true,
+                    email: user.email,
+                });
                 this.body = JSON.stringify({
                     success: true,
                     user,
+                    account,
+                    identity,
                 });
             }
         } catch (error) {

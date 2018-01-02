@@ -1,12 +1,7 @@
-/*global describe, it, before, beforeEach, after, afterEach */
-
-import chai, { expect } from 'chai';
-import dirtyChai from 'dirty-chai';
 import { formatDecimal } from './ParsersAndFormatters';
-chai.use(dirtyChai);
 
 describe('formatDecimal', () => {
-    it('should format decimals', () => {
+    test('should format decimals', () => {
         const test_cases = [
             [100.0, '100.00'],
             [101, '101.00'],
@@ -17,7 +12,7 @@ describe('formatDecimal', () => {
             [-1000, '-1,000.00'],
         ];
         test_cases.forEach(v => {
-            expect(formatDecimal(v[0]).join('')).to.equal(v[1]);
+            expect(formatDecimal(v[0]).join('')).toBe(v[1]);
         });
     });
 });

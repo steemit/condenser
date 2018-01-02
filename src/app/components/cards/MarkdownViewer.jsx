@@ -87,9 +87,9 @@ class MarkdownViewer extends Component {
 
         let renderedText = html ? text : remarkable.render(text);
 
-        // If content contains an iframe, wrap it in html tags
-        if (renderedText.match(/<iframe/)) {
-            renderedText = '<div>' + renderedText + '</div>';
+        // If content isn't wrapped with an html element at this point, add it.
+        if (!renderedText.indexOf('<html>') !== 0) {
+            renderedText = '<html>' + renderedText + '</html>';
         }
 
         // Embed videos, link mentions and hashtags, etc...

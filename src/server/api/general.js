@@ -269,15 +269,25 @@ export default function useGeneralApi(app) {
         recordWebEvent(this, 'api/accounts', account ? account.name : 'n/a');
     });
 
+    /**
+     * Provides an endpoint to create user, account, and identity records.
+     * Used by faucet.
+     *
+     * HTTP params:
+     *   name
+     *   email
+     *   owner_key
+     *   secret
+     */
     router.post('/create_user', koaBody, function*() {
         if (rateLimitReq(this, this.req)) return;
 
-        const { name, email, secret } =
+        const { name, email, owner_key, secret } =
             typeof this.request.body === 'string'
                 ? JSON.parse(this.request.body)
                 : this.request.body;
 
-        logRequest('create_user', this, { name, email });
+        logRequest('create_user', this, { name, email, owner_key });
 
         try {
             if (secret !== process.env.CREATE_USER_SECRET)
@@ -309,6 +319,7 @@ export default function useGeneralApi(app) {
                     provider: 'email',
                     verified: true,
                     email: user.email,
+                    owner_key: esc(owner_key),
                 });
                 this.body = JSON.stringify({
                     success: true,

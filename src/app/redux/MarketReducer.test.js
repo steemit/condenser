@@ -1,14 +1,9 @@
-import chai, { expect } from 'chai';
-import chaiImmutable from 'chai-immutable';
-
 import { Map } from 'immutable';
 
 import reducer, {
     receiveOpenOrders,
     toggleOpenOrdersSort,
 } from './MarketReducer';
-
-chai.use(chaiImmutable);
 
 const someOpenOrders = [
     {
@@ -89,10 +84,10 @@ const toggleSortByPrice = {
 };
 
 describe('market reducer', () => {
-    it('should provide a nice initial state', () => {
+    test('should provide a nice initial state', () => {
         const initial = reducer();
 
-        expect(initial.get('open_orders_sort')).to.equal(
+        expect(initial.get('open_orders_sort')).toEqual(
             Map({
                 column: 'created',
                 dataType: 'string',
@@ -100,26 +95,26 @@ describe('market reducer', () => {
             })
         );
 
-        expect(initial.get('status')).to.deep.equal({});
+        expect(initial.get('status')).toEqual({});
     });
 
-    it('should receive open orders', () => {
+    test('should receive open orders', () => {
         const initial = reducer();
 
         const withOrders = reducer(initial, receiveOpenOrders(someOpenOrders));
 
         const orders = withOrders.get('open_orders');
 
-        expect(orders[0].price).to.equal(0.666);
-        expect(orders[0].sbd).to.equal('1.998 SBD');
-        expect(orders[1].type).to.equal('ask');
-        expect(orders[2].price).to.equal(0.651);
-        expect(orders[2].sbd).to.equal('1.953 SBD');
-        expect(orders[3].type).to.equal('bid');
-        expect(orders[3].type).to.equal('bid');
+        expect(orders[0].price).toBe(0.666);
+        expect(orders[0].sbd).toBe('1.998 SBD');
+        expect(orders[1].type).toBe('ask');
+        expect(orders[2].price).toBe(0.651);
+        expect(orders[2].sbd).toBe('1.953 SBD');
+        expect(orders[3].type).toBe('bid');
+        expect(orders[3].type).toBe('bid');
     });
 
-    it('should sort open orders', () => {
+    test('should sort open orders', () => {
         const withOrders = reducer(
             undefined,
             receiveOpenOrders(someOpenOrders)
@@ -136,7 +131,7 @@ describe('market reducer', () => {
 
         const orders = byPriceAsc.get('open_orders');
 
-        expect(orders[0].price).to.equal(0.507);
-        expect(orders[4].price).to.equal(0.666);
+        expect(orders[0].price).toBe(0.507);
+        expect(orders[4].price).toBe(0.666);
     });
 });

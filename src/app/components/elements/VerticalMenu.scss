@@ -25,7 +25,7 @@
     text-decoration: none;
     @include themify($themes) {
       background-color: themed('backgroundColorOpaque');
-    }      
+    }
   }
 
   > li.title {
@@ -34,7 +34,7 @@
     text-align:left;
     padding-left: 16px;
     @include themify($themes) {
-      border-bottom: themed('border');        
+      border-bottom: themed('border');
     }    
   }
 }

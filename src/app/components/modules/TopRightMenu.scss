@@ -1,12 +1,8 @@
 .sub-menu {
     li {
-        padding: .7rem 0.5rem;
         a {
-            padding: 0px;
+            padding: 0.7rem 0.5rem;
         }
-    }
-    li:last-child {
-        padding: 0 0 0 1rem;
     }
 }
 
@@ -19,6 +15,7 @@ li.Header__userpic {
   .Userpic {
     width: 36px !important;
     height: 36px !important;
+    vertical-align: middle;
   }
 }
 

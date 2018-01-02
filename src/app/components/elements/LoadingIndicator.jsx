@@ -3,7 +3,7 @@ import React from 'react';
 class LoadingIndicator extends React.Component {
     static propTypes = {
         // html component attributes
-        type: React.PropTypes.oneOf(['dots', 'circle']),
+        type: React.PropTypes.oneOf(['dots', 'circle', 'circle-strong']),
         inline: React.PropTypes.bool,
         style: React.PropTypes.object,
     };

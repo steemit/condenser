@@ -1,0 +1,359 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LinkWithDropdown renders without crashing 1`] = `
+ShallowWrapper {
+  "length": 1,
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <LinkWithDropdown />,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "host",
+    "props": Object {
+      "children": Array [
+        <span>
+           Hello Iain 
+        </span>,
+        <ul
+          class="onclick-menu-content"
+        >
+          <li>
+            <button
+              onclick="alert('click 1')"
+            >
+              Look, mom
+            </button>
+          </li>
+          <li>
+            <button
+              onclick="alert('click 2')"
+            >
+              no JavaScript!
+            </button>
+          </li>
+          <li>
+            <button
+              onclick="alert('click 3')"
+            >
+              Pretty nice, right?
+            </button>
+          </li>
+        </ul>,
+      ],
+      "class": "onclick-menu",
+      "tabindex": "0",
+    },
+    "ref": null,
+    "rendered": Array [
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "host",
+        "props": Object {
+          "children": " Hello Iain ",
+        },
+        "ref": null,
+        "rendered": " Hello Iain ",
+        "type": "span",
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "host",
+        "props": Object {
+          "children": Array [
+            <li>
+              <button
+                onclick="alert('click 1')"
+              >
+                Look, mom
+              </button>
+            </li>,
+            <li>
+              <button
+                onclick="alert('click 2')"
+              >
+                no JavaScript!
+              </button>
+            </li>,
+            <li>
+              <button
+                onclick="alert('click 3')"
+              >
+                Pretty nice, right?
+              </button>
+            </li>,
+          ],
+          "class": "onclick-menu-content",
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": <button
+                onclick="alert('click 1')"
+              >
+                Look, mom
+              </button>,
+            },
+            "ref": null,
+            "rendered": Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": "Look, mom",
+                "onclick": "alert('click 1')",
+              },
+              "ref": null,
+              "rendered": "Look, mom",
+              "type": "button",
+            },
+            "type": "li",
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": <button
+                onclick="alert('click 2')"
+              >
+                no JavaScript!
+              </button>,
+            },
+            "ref": null,
+            "rendered": Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": "no JavaScript!",
+                "onclick": "alert('click 2')",
+              },
+              "ref": null,
+              "rendered": "no JavaScript!",
+              "type": "button",
+            },
+            "type": "li",
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": <button
+                onclick="alert('click 3')"
+              >
+                Pretty nice, right?
+              </button>,
+            },
+            "ref": null,
+            "rendered": Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": "Pretty nice, right?",
+                "onclick": "alert('click 3')",
+              },
+              "ref": null,
+              "rendered": "Pretty nice, right?",
+              "type": "button",
+            },
+            "type": "li",
+          },
+        ],
+        "type": "ul",
+      },
+    ],
+    "type": "div",
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "host",
+      "props": Object {
+        "children": Array [
+          <span>
+             Hello Iain 
+          </span>,
+          <ul
+            class="onclick-menu-content"
+          >
+            <li>
+              <button
+                onclick="alert('click 1')"
+              >
+                Look, mom
+              </button>
+            </li>
+            <li>
+              <button
+                onclick="alert('click 2')"
+              >
+                no JavaScript!
+              </button>
+            </li>
+            <li>
+              <button
+                onclick="alert('click 3')"
+              >
+                Pretty nice, right?
+              </button>
+            </li>
+          </ul>,
+        ],
+        "class": "onclick-menu",
+        "tabindex": "0",
+      },
+      "ref": null,
+      "rendered": Array [
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "children": " Hello Iain ",
+          },
+          "ref": null,
+          "rendered": " Hello Iain ",
+          "type": "span",
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "children": Array [
+              <li>
+                <button
+                  onclick="alert('click 1')"
+                >
+                  Look, mom
+                </button>
+              </li>,
+              <li>
+                <button
+                  onclick="alert('click 2')"
+                >
+                  no JavaScript!
+                </button>
+              </li>,
+              <li>
+                <button
+                  onclick="alert('click 3')"
+                >
+                  Pretty nice, right?
+                </button>
+              </li>,
+            ],
+            "class": "onclick-menu-content",
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": <button
+                  onclick="alert('click 1')"
+                >
+                  Look, mom
+                </button>,
+              },
+              "ref": null,
+              "rendered": Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": "Look, mom",
+                  "onclick": "alert('click 1')",
+                },
+                "ref": null,
+                "rendered": "Look, mom",
+                "type": "button",
+              },
+              "type": "li",
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": <button
+                  onclick="alert('click 2')"
+                >
+                  no JavaScript!
+                </button>,
+              },
+              "ref": null,
+              "rendered": Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": "no JavaScript!",
+                  "onclick": "alert('click 2')",
+                },
+                "ref": null,
+                "rendered": "no JavaScript!",
+                "type": "button",
+              },
+              "type": "li",
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": <button
+                  onclick="alert('click 3')"
+                >
+                  Pretty nice, right?
+                </button>,
+              },
+              "ref": null,
+              "rendered": Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": "Pretty nice, right?",
+                  "onclick": "alert('click 3')",
+                },
+                "ref": null,
+                "rendered": "Pretty nice, right?",
+                "type": "button",
+              },
+              "type": "li",
+            },
+          ],
+          "type": "ul",
+        },
+      ],
+      "type": "div",
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+      },
+    },
+  },
+}
+`;

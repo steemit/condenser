@@ -83,7 +83,19 @@ function runApp(initial_state) {
     steem.api.setOptions({
         url: config.steemd_connection_client,
         useAppbaseApi: !!config.steemd_use_appbase,
+        customApis: [
+            {
+                prefix: 'condenser_api', //
+                methods: ['get_follow_count', 'get_followers', 'get_following'],
+            },
+            {
+                uri: 'http://localhost:8082/legacy',
+                useSteemdCallStructure: true,
+                methods: ['get_open_orders', 'get_dynamic_global_properties'],
+            },
+        ],
     });
+
     steem.config.set('address_prefix', config.address_prefix);
     steem.config.set('chain_id', config.chain_id);
     window.$STM_Config = config;

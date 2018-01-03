@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 import tt from 'counterpart';
 import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdown';
+import DropdownMenu from 'app/components/elements/DropdownMenu';
 import Icon from 'app/components/elements/Icon';
 import * as userActions from 'app/redux/UserReducer';
 import * as appActions from 'app/redux/AppReducer';
@@ -114,6 +115,8 @@ function TopRightMenu({
             <ul className={mcn + mcl}>
                 {!pathCheck ? submit_story : null}
                 {!vertical && submit_icon}
+
+                {/*
                 <LinkWithDropdown
                     closeOnClickOutside
                     dropdownPosition="bottom"
@@ -121,6 +124,17 @@ function TopRightMenu({
                     dropdownContent={
                         <VerticalMenu items={user_menu} title={username} />
                     }
+                >
+                </LinkWithDropdown>
+                */}
+
+                <DropdownMenu
+                    className={'Header__usermenu'}
+                    items={user_menu}
+                    title={username}
+                    el="li"
+                    selected={tt('g.rewards')}
+                    position="left"
                 >
                     {!vertical && (
                         <li className={'Header__userpic '}>
@@ -136,7 +150,8 @@ function TopRightMenu({
                             </div>
                         </li>
                     )}
-                </LinkWithDropdown>
+                </DropdownMenu>
+
                 {toggleOffCanvasMenu && (
                     <li className="toggle-menu Header__hamburger">
                         <a href="#" onClick={toggleOffCanvasMenu}>

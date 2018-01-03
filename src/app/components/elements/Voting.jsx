@@ -14,6 +14,8 @@ import {
 import DropdownMenu from 'app/components/elements/DropdownMenu';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import FoundationDropdown from 'app/components/elements/FoundationDropdown';
+import Dropdown from 'app/components/elements/Dropdown';
+
 
 const ABOUT_FLAG = (
     <div>
@@ -33,8 +35,8 @@ const ABOUT_FLAG = (
     </div>
 );
 
-const MAX_VOTES_DISPLAY = 20;
-const VOTE_WEIGHT_DROPDOWN_THRESHOLD = 1.0 * 1000.0 * 1000.0;
+const MAX_VOTES_DISPLAY = 3;
+const VOTE_WEIGHT_DROPDOWN_THRESHOLD = 1;
 
 class Voting extends React.Component {
     static propTypes = {
@@ -199,6 +201,7 @@ class Voting extends React.Component {
 
             // myVote === current vote
             const dropdown = (
+                /*
                 <FoundationDropdown
                     show={showWeight}
                     onHide={() => this.setState({ showWeight: false })}
@@ -234,6 +237,44 @@ class Voting extends React.Component {
                         </a>
                     </div>
                 </FoundationDropdown>
+                */
+
+                <Dropdown
+                    className={'COOL'}
+                    selected={tt('g.rewards')}
+                    position="right"
+                    title="Flag"
+                >
+                                        {(myVote == null || myVote === 0) &&
+                        net_vesting_shares > VOTE_WEIGHT_DROPDOWN_THRESHOLD && (
+                            <div className="weight-container">
+                                <div className="weight-display">
+                                    - {weight / 100}%
+                                </div>
+                                <Slider
+                                    min={100}
+                                    max={10000}
+                                    step={100}
+                                    value={weight}
+                                    onChange={this.handleWeightChange}
+                                />
+                            </div>
+                        )}
+                    <CloseButton
+                        onClick={() => this.setState({ showWeight: false })}
+                    />
+                    <div className="clear Voting__about-flag">
+                        <p>{ABOUT_FLAG}</p>
+                        <a
+                            href="#"
+                            onClick={this.voteDown}
+                            className="button outline"
+                            title="Flag"
+                        >
+                            Flag
+                        </a>
+                    </div>
+                </Dropdown>
             );
 
             const flagClickAction =
@@ -415,6 +456,7 @@ class Voting extends React.Component {
         ) {
             voteUpClick = this.toggleWeightUp;
             dropdown = (
+                /*
                 <FoundationDropdown
                     show={showWeight}
                     onHide={() => this.setState({ showWeight: false })}
@@ -442,6 +484,37 @@ class Voting extends React.Component {
                         />
                     </div>
                 </FoundationDropdown>
+                */
+                <Dropdown
+                className={'COOL'}
+                selected={tt('g.rewards')}
+                position="right"
+                title="Flag"
+            >
+                                <div className="Voting__adjust_weight">
+                        <a
+                            href="#"
+                            onClick={this.voteUp}
+                            className="confirm_weight"
+                            title={tt('g.upvote')}
+                        >
+                            <Icon size="2x" name="chevron-up-circle" />
+                        </a>
+                        <div className="weight-display">{weight / 100}%</div>
+                        <Slider
+                            min={100}
+                            max={10000}
+                            step={100}
+                            value={weight}
+                            onChange={this.handleWeightChange}
+                        />
+                        <CloseButton
+                            className="Voting__adjust_weight_close"
+                            onClick={() => this.setState({ showWeight: false })}
+                        />
+                    </div>
+            </Dropdown>
+                
             );
         }
         return (

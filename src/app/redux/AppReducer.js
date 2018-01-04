@@ -12,6 +12,7 @@ export const appActions = {
     SET_USER_PREFERENCES: 'app/SET_USER_PREFERENCES',
     TOGGLE_NIGHTMODE: 'app/TOGGLE_NIGHTMODE',
     TOGGLE_BLOGMODE: 'app/TOGGLE_BLOGMODE',
+    RECEIVE_FEATURE_FLAGS: 'app/RECEIVE_FEATURE_FLAGS',
 };
 
 export const defaultState = Map({
@@ -38,6 +39,7 @@ export const defaultState = Map({
         nightmode: false,
         blogmode: false,
         currency: 'USD',
+        featureFlags: Map({}),
     }),
 });
 
@@ -92,6 +94,8 @@ export default function reducer(state = defaultState, action = {}) {
                 ['user_preferences', 'blogmode'],
                 !state.getIn(['user_preferences', 'blogmode'])
             );
+        case appActions.RECEIVE_FEATURE_FLAGS:
+            return state.set('featureFlags', action.flags);
         default:
             return state;
     }
@@ -137,3 +141,12 @@ export const toggleNightmode = () => ({
 export const toggleBlogmode = () => ({
     type: appActions.TOGGLE_BLOGMODE,
 });
+
+export const receiveFeatureFlags = flags => ({
+    type: appActions.RECEIVE_FEATURE_FLAGS,
+    flags,
+});
+
+export const selectors = {
+    getFeatureFlags: state => state.get('featureFlags'),
+};

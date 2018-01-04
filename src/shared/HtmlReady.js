@@ -110,7 +110,10 @@ export default function(html, { mutate = true, hideImages = false } = {}) {
         };
     } catch (error) {
         // xmldom error is bad
-        console.log('rendering error', { error: error.message, html });
+        console.log(
+            'rendering error',
+            JSON.stringify({ error: error.message, html })
+        );
         return { html: '' };
     }
 }

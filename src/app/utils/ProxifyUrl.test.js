@@ -3,10 +3,10 @@ import assert from 'assert';
 import proxifyImageUrl from './ProxifyUrl';
 
 describe('ProxifyUrl', () => {
-    beforeAll(() => {
+    before(() => {
         global.$STM_Config = { img_proxy_prefix: 'https://steemitimages.com/' };
     });
-    test('naked URL', () => {
+    it('naked URL', () => {
         testCase(
             'https://example.com/img.png',
             '100x200',
@@ -28,7 +28,7 @@ describe('ProxifyUrl', () => {
             'https://example.com/img.png'
         );
     });
-    test('naked steemit hosted URL', () => {
+    it('naked steemit hosted URL', () => {
         testCase(
             'https://steemitimages.com/DQmaJe2Tt5kmVUaFhse1KTEr4N1g9piMgD3YjPEQhkZi3HR/30day-positivity-challenge.jpg',
             '256x512',
@@ -40,7 +40,7 @@ describe('ProxifyUrl', () => {
             'https://steemitimages.com/DQmaJe2Tt5kmVUaFhse1KTEr4N1g9piMgD3YjPEQhkZi3HR/30day-positivity-challenge.jpg'
         );
     });
-    test('proxied steemit hosted URL', () => {
+    it('proxied steemit hosted URL', () => {
         testCase(
             'https://steemitimages.com/0x0/https://steemitimages.com/DQmaJe2Tt5kmVUaFhse1KTEr4N1g9piMgD3YjPEQhkZi3HR/30day-positivity-challenge.jpg',
             '256x512',
@@ -52,7 +52,7 @@ describe('ProxifyUrl', () => {
             'https://steemitimages.com/DQmaJe2Tt5kmVUaFhse1KTEr4N1g9piMgD3YjPEQhkZi3HR/30day-positivity-challenge.jpg'
         );
     });
-    test('proxied URL', () => {
+    it('proxied URL', () => {
         testCase(
             'https://steemitimages.com/0x0/https://example.com/img.png',
             '100x200',
@@ -69,7 +69,7 @@ describe('ProxifyUrl', () => {
             'https://example.com/img.png'
         );
     });
-    test('double-proxied URL', () => {
+    it('double-proxied URL', () => {
         testCase(
             'https://steemitimages.com/0x0/https://steemitimages.com/0x0/https://example.com/img.png',
             '100x200',
@@ -81,7 +81,7 @@ describe('ProxifyUrl', () => {
             'https://steemitimages.com/DQmaJe2Tt5kmVUaFhse1KTEr4N1g9piMgD3YjPEQhkZi3HR/30day-positivity-challenge.jpg'
         );
     });
-    test('preserve dimensions - single-proxied URL', () => {
+    it('preserve dimensions - single-proxied URL', () => {
         //simple preservation
         testCase(
             'https://steemitdevimages.com/100x200/https://example.com/img.png',
@@ -94,7 +94,7 @@ describe('ProxifyUrl', () => {
             'https://steemitimages.com/1001x2001/https://example.com/img.png'
         );
     });
-    test('preserve dimensions - double-proxied URL', () => {
+    it('preserve dimensions - double-proxied URL', () => {
         //simple preservation at a 2 nesting level
         //foreign domain
         testCase(
@@ -114,7 +114,7 @@ describe('ProxifyUrl', () => {
             'https://steemitimages.com/1001x2001/https://steemitimages.com/DQmaJe2Tt5kmVUaFhse1KTEr4N1g9piMgD3YjPEQhkZi3HR/30day-positivity-challenge.jpg'
         );
     });
-    test('preserve dimensions - strip proxies & dimensions when appropriate', () => {
+    it('preserve dimensions - strip proxies & dimensions when appropriate', () => {
         //simple preservation at a 2 nesting level
         //steemit domain
         testCase(

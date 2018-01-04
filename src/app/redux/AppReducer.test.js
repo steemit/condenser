@@ -170,7 +170,7 @@ describe('App reducer', () => {
         const after = actual.getIn(['user_preferences', 'blogmode']);
         expect(after).toEqual(!before);
     });
-    test('should receive feature flags', () => {
+    test('should merge in received feature flags', () => {
         // Arrange
         const initial = reducer();
 
@@ -181,8 +181,19 @@ describe('App reducer', () => {
                 flying: true,
             })
         );
+        const withMoreFlags = reducer(
+            withFlags,
+            receiveFeatureFlags({
+                swimming: false,
+            })
+        );
 
         // Assert
-        expect(selectors.getFeatureFlags(withFlags)).toEqual({ flying: true });
+        expect(selectors.getFeatureFlags(withMoreFlags)).toEqual(
+            Map({
+                flying: true,
+                swimming: false,
+            })
+        );
     });
 });

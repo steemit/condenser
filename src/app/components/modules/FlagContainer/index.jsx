@@ -10,12 +10,9 @@ export const mapStateToProps = state => ({
 
 const connectFlag = (flagName, component) => {
     const FlagComponent = Flag(component);
-    // If flags is a Map
-    const wrapped = flags => (
-        <FlagComponent flag={flags.find(flag => flag.get(flagName) === true)} />
-    );
-    // If flags is an object
-    //const wrapped = flags => <FlagComponent flag={Object.keys(flags).find(flag => flags[flag] === true)}
+
+    const wrapped = flags => <FlagComponent flag={flags[flagName] === true} />;
+
     return connect(mapStateToProps, null)(wrapped);
 };
 

@@ -6,14 +6,12 @@ import {
 
 import Flag from 'app/components/modules/Flag';
 
-export const mapStateToProps = state => ({
-    flags: selectors.getFeatureFlags(state)
-});
-
 const connectFlag = (flagName, component) => {
-
     const FlagComponent = Flag(component);
-    const wrapped = flags => <FlagComponent flag={Object.keys(flags).find(name => flags[name] === true)} />
+    // If flags is a Map
+    const wrapped = flags => <FlagComponent flag={flags.find(flag => flag.get(flagName) === true )} />
+    // If flags is an object
+    //const wrapped = flags => <FlagComponent flag={Object.keys(flags).find(flag => flags[flag] === true)}
     return connect(mapStateToProps, null)(wrapped);
 }
 

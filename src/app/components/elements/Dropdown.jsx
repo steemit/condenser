@@ -10,7 +10,7 @@ export default class Dropdown extends React.Component {
         className: React.PropTypes.string,
         title: React.PropTypes.string,
         href: React.PropTypes.string,
-        el: React.PropTypes.string.isRequired,
+        onHide: React.PropTypes.func.isRequired,
     };
 
     constructor(props) {
@@ -27,8 +27,9 @@ export default class Dropdown extends React.Component {
 
     toggle = e => {
         const { shown } = this.state;
-        if (shown) this.hide(e);
-        else this.show(e);
+        if (shown) {
+            this.hide(e);
+        } else this.show(e);
     };
 
     show = e => {
@@ -41,40 +42,14 @@ export default class Dropdown extends React.Component {
         // Do not hide the dropdown if there was a click within it.
         const inside_dropdown = !!findParent(e.target, 'dropdown__content');
         if (inside_dropdown) return;
-
         e.preventDefault();
         this.setState({ shown: false });
+        this.props.onHide();
         document.removeEventListener('click', this.hide);
     };
 
-    navigate = e => {
-        const a =
-            e.target.nodeName.toLowerCase() === 'a'
-                ? e.target
-                : e.target.parentNode;
-        this.setState({ show: false });
-        if (a.host !== window.location.host) return;
-        e.preventDefault();
-        browserHistory.push(a.pathname + a.search);
-    };
-
-    getSelectedLabel = (items, selected) => {
-        const selectedEntry = items.find(i => i.value === selected);
-        const selectedLabel =
-            selectedEntry && selectedEntry.label
-                ? selectedEntry.label
-                : selected;
-        return selectedLabel;
-    };
-
     render() {
-        const {
-            children,
-            className,
-            title,
-            href,
-            position,
-        } = this.props;
+        const { children, className, title, href, position } = this.props;
 
         let entry = (
             <a key="entry" href={href || '#'} onClick={this.toggle}>
@@ -82,11 +57,7 @@ export default class Dropdown extends React.Component {
             </a>
         );
 
-        const menu = (
-            <div className={'dropdown__content'}>   
-              {children}
-            </div>
-        );
+        const menu = <div className={'dropdown__content'}>{children}</div>;
         const cls =
             'dropdown' +
             (this.state.shown ? ' show' : '') +

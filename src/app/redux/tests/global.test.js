@@ -1,18 +1,21 @@
 /*global describe, it, before, beforeEach, after, afterEach */
-import Immutable from 'immutable';
+
+import chai, { expect } from 'chai';
+import chaiImmutable from 'chai-immutable';
+import Immutable, { Map } from 'immutable';
 import reducer, * as globalActions from '../GlobalReducer';
+chai.use(chaiImmutable);
 
 describe('global reducer', () => {
-    test('should return empty state', () => {
-        const reduced = reducer(undefined, {});
-
-        expect(reduced.toJS()).toEqual({ status: {} });
+    it('should return empty state', () => {
+        expect(reducer(undefined, {})).to.equal(Map({}));
     });
 
-    test('should apply new global state', () => {
+    it('should apply new global state', () => {
         const state = Immutable.fromJS(require('./global.json'));
-        const reduced = reducer(undefined, globalActions.receiveState(state));
         //const action = {type: 'global/RECEIVE_STATE', payload: state};
-        expect(reduced.toJS()).toEqual(state.toJS());
+        expect(reducer(undefined, globalActions.receiveState(state))).to.equal(
+            state
+        );
     });
 });

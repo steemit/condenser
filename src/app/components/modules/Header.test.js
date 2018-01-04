@@ -1,18 +1,11 @@
 /*global describe, it, before, beforeEach, after, afterEach */
 import React from 'react';
-import { configure, shallow } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-15';
-
+import { expect } from 'chai';
+import { shallow } from 'enzyme';
 import { _Header_ } from './Header';
 
-configure({ adapter: new Adapter() });
-
 describe('Header', () => {
-    test('contains class .header', () => {
-        expect(
-            shallow(<_Header_ location={{ pathname: 'whatever' }} />).is(
-                '.Header'
-            )
-        ).toBe(true);
+    it('contains class .header', () => {
+        expect(shallow(<_Header_ />).is('.Header')).to.equal(true);
     });
 });

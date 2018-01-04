@@ -1,5 +1,9 @@
+import chai, { expect } from 'chai';
+import chaiImmutable from 'chai-immutable';
 import { Map } from 'immutable';
 import reducer from './OffchainReducer';
+
+chai.use(chaiImmutable);
 
 const mockAction = {
     type: 'user/SAVE_LOGIN_CONFIRM',
@@ -8,16 +12,16 @@ const mockAction = {
 const mockActionWithPayload = { ...mockAction, payload: 'Foo Barman' };
 
 describe('offchain reducer', () => {
-    test('should provide a nice initial state, with any payload', () => {
+    it('should provide a nice initial state, with any payload', () => {
         const initial = reducer();
         const expected = Map({ user: Map({}) });
-        expect(initial).toEqual(expected);
+        expect(initial).to.eql(expected);
         const withPayload = reducer(initial, mockActionWithPayload);
-        expect(withPayload).toEqual(expected);
+        expect(withPayload).to.eql(expected);
     });
-    test('should return an account of null when action has no payload', () => {
+    it('should return an account of null when action has no payload', () => {
         const initial = reducer();
         const account = reducer(initial, mockAction);
-        expect(account).toEqual(Map({ user: Map({}), account: null }));
+        expect(account).to.eql(Map({ user: Map({}), account: null }));
     });
 });

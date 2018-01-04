@@ -1,6 +1,11 @@
+import chai, { expect } from 'chai';
+import chaiImmutable from 'chai-immutable';
+
 import { Map, OrderedMap, getIn } from 'immutable';
 
 import reducer, { defaultState, appActions } from './AppReducer';
+
+chai.use(chaiImmutable);
 
 const mockActions = {
     LOCATION_CHANGE: {
@@ -62,48 +67,48 @@ const mockNotification = OrderedMap({
 });
 
 describe('App reducer', () => {
-    test('should provide a nice initial state', () => {
+    it('should provide a nice initial state', () => {
         const initial = reducer();
-        expect(initial).toBe(defaultState);
+        expect(initial).to.equal(defaultState);
     });
-    test('should return correct state for a LOCATION_CHANGE action', () => {
+    it('should return correct state for a LOCATION_CHANGE action', () => {
         const initial = reducer();
         const actual = reducer(initial, mockActions['LOCATION_CHANGE']);
         const out = actual.get('location');
-        expect(out.pathname).toEqual(
+        expect(out.pathname).to.eql(
             mockActions['LOCATION_CHANGE'].payload.pathname
         );
     });
-    test('should return correct state for a STEEM_API_ERROR action', () => {
+    it('should return correct state for a STEEM_API_ERROR action', () => {
         const initial = reducer();
         const out = reducer(initial, mockActions[appActions.STEEM_API_ERROR]);
-        expect(out).toEqual(initial);
+        expect(out).to.eql(initial);
     });
-    test('should return correct state for a FETCH_DATA_BEGIN action', () => {
+    it('should return correct state for a FETCH_DATA_BEGIN action', () => {
         const initial = reducer();
         const actual = reducer(
             initial,
             mockActions[appActions.FETCH_DATA_BEGIN]
         );
         const out = actual.get('loading');
-        expect(out).toEqual(true);
+        expect(out).to.eql(true);
     });
-    test('should return correct state for a FETCH_DATA_END action', () => {
+    it('should return correct state for a FETCH_DATA_END action', () => {
         const initial = reducer();
         const actual = reducer(initial, mockActions[appActions.FETCH_DATA_END]);
         const out = actual.get('loading');
-        expect(out).toEqual(false);
+        expect(out).to.eql(false);
     });
-    test('should return correct state for a ADD_NOTIFICATION action', () => {
+    it('should return correct state for a ADD_NOTIFICATION action', () => {
         const initial = reducer();
         const actual = reducer(
             initial,
             mockActions[appActions.ADD_NOTIFICATION]
         );
         const out = actual.getIn(['notifications', key]);
-        expect(out).toEqual(mockNotification.get(key));
+        expect(out).to.eql(mockNotification.get(key));
     });
-    test('should return correct state for a REMOVE_NOTIFICATION action', () => {
+    it('should return correct state for a REMOVE_NOTIFICATION action', () => {
         const initial = reducer();
         const initialWithNotification = initial.set(
             'notifications',
@@ -115,9 +120,9 @@ describe('App reducer', () => {
         );
         const out = actual.get('notifications');
         const expected = OrderedMap({});
-        expect(out).toEqual(expected);
+        expect(out).to.eql(expected);
     });
-    test('should return correct state for a UPDATE_NOTIFICOUNTERS action with a follow in payload', () => {
+    it('should return correct state for a UPDATE_NOTIFICOUNTERS action with a follow in payload', () => {
         const initial = reducer();
         let actual = reducer(
             initial,
@@ -125,9 +130,9 @@ describe('App reducer', () => {
         );
         let out = actual.get('notificounters');
         let expected = Map({ follow: 0, total: 1 });
-        expect(out).toEqual(expected);
+        expect(out).to.eql(expected);
     });
-    test('should return correct state for a UPDATE_NOTIFICOUNTERS action with no follow in payload', () => {
+    it('should return correct state for a UPDATE_NOTIFICOUNTERS action with no follow in payload', () => {
         const initial = reducer();
         mockActions[appActions.UPDATE_NOTIFICOUNTERS].payload = {
             follow: 0,
@@ -139,9 +144,9 @@ describe('App reducer', () => {
         );
         const out = actual.get('notificounters');
         const expected = Map({ follow: 0, total: 2 });
-        expect(out).toEqual(expected);
+        expect(out).to.eql(expected);
     });
-    test('should return correct state for a SET_USER_PREFERENCES action', () => {
+    it('should return correct state for a SET_USER_PREFERENCES action', () => {
         const initial = reducer();
         let actual = reducer(
             initial,
@@ -149,20 +154,20 @@ describe('App reducer', () => {
         );
         let out = actual.get('user_preferences');
         let expected = Map({ cat: 'mymy', dog: 'polly' });
-        expect(out).toEqual(expected);
+        expect(out).to.eql(expected);
     });
-    test('should return correct state for a TOGGLE_NIGHTMODE action', () => {
+    it('should return correct state for a TOGGLE_NIGHTMODE action', () => {
         const initial = reducer();
         const before = initial.getIn(['user_preferences', 'nightmode']);
         let actual = reducer(initial, mockActions[appActions.TOGGLE_NIGHTMODE]);
         const after = actual.getIn(['user_preferences', 'nightmode']);
-        expect(after).toEqual(!before);
+        expect(after).to.eql(!before);
     });
-    test('should return correct state for a TOGGLE_BLOGMODE action', () => {
+    it('should return correct state for a TOGGLE_BLOGMODE action', () => {
         const initial = reducer();
         const before = initial.getIn(['user_preferences', 'blogmode']);
         let actual = reducer(initial, mockActions[appActions.TOGGLE_BLOGMODE]);
         const after = actual.getIn(['user_preferences', 'blogmode']);
-        expect(after).toEqual(!before);
+        expect(after).to.eql(!before);
     });
 });

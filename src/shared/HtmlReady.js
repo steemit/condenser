@@ -110,7 +110,7 @@ export default function(html, { mutate = true, hideImages = false } = {}) {
         };
     } catch (error) {
         // xmldom error is bad
-        throw new Error('HtmlReady: xmldom error');
+        return { html: 'rendering error' };
     }
 }
 

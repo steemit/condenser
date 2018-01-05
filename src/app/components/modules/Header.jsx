@@ -82,12 +82,12 @@ class Header extends React.Component {
         const current_account_name = this.props.current_account_name;
         let home_account = false;
         let page_title = route.page;
-
         let sort_order = '';
         let topic = '';
         let user_name = null;
         let page_name = null;
         this.state.subheader_hidden = false;
+        this.context.intl = this.context.intl || { locale: 'en' };
         if (route.page === 'PostsIndex') {
             sort_order = route.params[0];
             if (sort_order === 'home') {

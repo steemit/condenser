@@ -278,6 +278,7 @@ class Voting extends React.Component {
                 myVote === null || myVote === 0
                     ? this.toggleWeightDown
                     : this.voteDown;
+
             return (
                 <span className="Voting">
                     <span className={classDown}>
@@ -287,13 +288,15 @@ class Voting extends React.Component {
                             </span>
                         )}
                         {votingDownActive ? (
-                            down
+                            <a href="#" onClick={this.voteDown}> 
+                                {down} <span>A</span>
+                            </a>
                         ) : (
-                            <a href="#" onClick={flagClickAction} title="Flag">
-                                {down}
+                            <a href="#" onClick={this.voteDown} title="Flag">
+                                {down} <span>B</span>
                             </a>
                         )}
-                        { dropdown }
+
                     </span>
                 </span>
             );

@@ -200,6 +200,7 @@ class Voting extends React.Component {
 
             // myVote === current vote
             const dropdown = (
+                /*
                 <FoundationDropdown
                     show={showWeight}
                     onHide={() => this.setState({ showWeight: false })}
@@ -235,6 +236,42 @@ class Voting extends React.Component {
                         </a>
                     </div>
                 </FoundationDropdown>
+                */
+                <Dropdown
+                position="left"
+                title={down}
+                onHide={() => this.setState({ showWeight: false })}
+            >
+                {(myVote == null || myVote === 0) &&
+                    net_vesting_shares > VOTE_WEIGHT_DROPDOWN_THRESHOLD && (
+                        <div className="weight-container">
+                            <div className="weight-display">
+                                - {weight / 100}%
+                            </div>
+                            <Slider
+                                min={100}
+                                max={10000}
+                                step={100}
+                                value={weight}
+                                onChange={this.handleWeightChange}
+                            />
+                        </div>
+                    )}
+                <CloseButton
+                    onClick={() => this.setState({ showWeight: false })}
+                />
+                <div className="clear Voting__about-flag">
+                    <p>{ABOUT_FLAG}</p>
+                    <a
+                        href="#"
+                        onClick={this.voteDown}
+                        className="button outline"
+                        title="Flag"
+                    >
+                        Flag
+                    </a>
+                </div>
+            </Dropdown>
             );
 
             const flagClickAction =
@@ -256,7 +293,7 @@ class Voting extends React.Component {
                                 {down}
                             </a>
                         )}
-                        {dropdown}
+                        { dropdown }
                     </span>
                 </span>
             );

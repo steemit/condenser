@@ -47,7 +47,7 @@ describe('resolveRoute', () => {
         ['/ceasar/@salad/circa90', {page: 'Post', params: ['ceasar', '@salad', 'circa90', '']}],
     ];
     test_cases.forEach(r => {
-        it(`should resolve the ${r[0]} route`, () => {
+        it(`should resolve the route for the ${r[1].page} page`, () => {
             expect(resolveRoute(r[0])).to.deep.equal(r[1]);
         });
     });

@@ -80,20 +80,41 @@ function runApp(initial_state) {
 
     const config = initial_state.offchain.config;
 
+    const customApis = [];
+    if (!!config.steemd_use_appbase) {
+        customApis.push({
+            uri: config.hive_connection_server
+                ? config.hive_connection_server
+                : false, //'http://localhost:8082',
+            prefix: 'hive_api.condenser_api',
+            methods: [
+                'get_follow_count',
+                'get_followers',
+                'get_following',
+                'get_open_orders',
+                'get_dynamic_global_properties',
+            ],
+        });
+    } else {
+        customApis.push({
+            uri: config.hive_connection_server_nonappb
+                ? config.hive_connection_server_nonappb
+                : false, //'http://localhost:8082/legacy',
+            prefix: 'hive_api.condenser_api.non_appb',
+            useNonAppbCallStructure: true,
+            methods: [
+                'get_follow_count',
+                'get_followers',
+                'get_following',
+                'get_open_orders',
+                'get_dynamic_global_properties',
+            ],
+        });
+    }
     steem.api.setOptions({
         url: config.steemd_connection_client,
         useAppbaseApi: !!config.steemd_use_appbase,
-        customApis: [
-            {
-                prefix: 'condenser_api', //
-                methods: ['get_follow_count', 'get_followers', 'get_following'],
-            },
-            {
-                uri: 'http://localhost:8082/legacy',
-                useSteemdCallStructure: true,
-                methods: ['get_open_orders', 'get_dynamic_global_properties'],
-            },
-        ],
+        customApis,
     });
 
     steem.config.set('address_prefix', config.address_prefix);

@@ -287,10 +287,11 @@ class CommentImpl extends React.Component {
         let controls = null;
 
         if (!this.state.collapsed && !hide_body) {
+            var sanitizedBody = comment.body.replace(/(\<\?{0,}php)/, 'php');
             body = (
                 <MarkdownViewer
                     formId={post + '-viewer'}
-                    text={comment.body}
+                    text={sanitizedBody}
                     noImage={noImage || gray}
                     hideImages={hideImages}
                     jsonMetadata={jsonMetadata}

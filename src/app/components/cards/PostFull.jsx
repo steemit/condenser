@@ -428,10 +428,11 @@ class PostFull extends React.Component {
         if (bShowLoading) {
             contentBody = <LoadingIndicator type="circle-strong" />;
         } else {
+            var sanitizedBody = content_body.replace(/(\<\?{0,}php)/, 'php');
             contentBody = (
                 <MarkdownViewer
                     formId={formId + '-viewer'}
-                    text={content_body}
+                    text={sanitizedBody}
                     jsonMetadata={jsonMetadata}
                     large
                     highQualityPost={high_quality_post}
@@ -451,9 +452,6 @@ class PostFull extends React.Component {
                     renderedEditor
                 ) : (
                     <span>
-                        <div className="float-right">
-                            <Voting post={post} flag />
-                        </div>
                         <div className="PostFull__header">
                             {post_header}
                             <TimeAuthorCategoryLarge

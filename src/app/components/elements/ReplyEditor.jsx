@@ -413,6 +413,7 @@ class ReplyEditor extends React.Component {
             ? 'vframe__section--shrink'
             : '';
         const RichTextEditor = this.props.richTextEditor;
+        var sanitizedBody = body.value.replace(/(\<\?{0,}php)/, 'php');
 
         return (
             <div className="ReplyEditor row">
@@ -716,7 +717,7 @@ class ReplyEditor extends React.Component {
                                     <h6>{tt('g.preview')}</h6>
                                     <MarkdownViewer
                                         formId={formId}
-                                        text={body.value}
+                                        text={sanitizedBody}
                                         canEdit
                                         jsonMetadata={jsonMetadata}
                                         large={isStory}

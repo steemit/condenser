@@ -78,6 +78,16 @@ class Voting extends React.Component {
             e.preventDefault();
             this.voteUpOrDown(false);
         };
+        // IAIN RESUME HERE
+        this.voteDown2 = e => {
+            this.props.vote(weight, {
+                author,
+                permlink,
+                username,
+                myVote,
+                isFlag,
+            });
+        }
         this.voteUpOrDown = up => {
             if (this.props.voting) return;
             this.setState({ votingUp: up, votingDown: !up });
@@ -288,7 +298,7 @@ class Voting extends React.Component {
                             </span>
                         )}
                         {votingDownActive ? (
-                            <a href="#" onClick={this.voteDown}> 
+                            <a href="#" onClick={this.voteDown2}> 
                                 {down} <span>A</span>
                             </a>
                         ) : (

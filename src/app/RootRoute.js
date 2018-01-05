@@ -1,5 +1,5 @@
 import App from 'app/components/App';
-import Benchmark from 'app/components/pages/Benchmark'
+import Benchmark from 'app/components/pages/Benchmark';
 import PostsIndex from 'app/components/pages/PostsIndex';
 import resolveRoute from './ResolveRoute';
 

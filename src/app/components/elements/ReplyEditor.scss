@@ -111,6 +111,14 @@
   }
 }
 
+html[dir="rtl"] .ReplyEditor__options {
+  float: left!important;
+  select {
+    margin-right: 0.25rem;
+    margin-left: 0;
+  }
+}
+
 .RichTextEditor__root___33zoV button {
   margin-right: 0 !important;
 }

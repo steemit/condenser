@@ -23,6 +23,12 @@
   }
 }
 
+html[dir="rtl"] .Comment__Userpic {
+  float: right;
+  padding-right: 0;
+  padding-left: 0.6rem;
+}
+
 .Comment__Userpic-small {
   @include hide-for(medium);
   .Userpic {
@@ -91,6 +97,10 @@
   .Icon {
     top: 5px;
   }
+}
+
+html[dir="rtl"] .Comment__header_collapse {
+  float: left;
 }
 
 .Comment__body {

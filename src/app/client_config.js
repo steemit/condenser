@@ -30,7 +30,7 @@ export const DEBT_TICKER = 'SBD';
 export const DEBT_TOKEN_SHORT = 'SBD';
 
 // application settings
-export const DEFAULT_LANGUAGE = 'en'; // used on application internationalization bootstrap
+export const DEFAULT_LANGUAGE = 'he'; // used on application internationalization bootstrap
 export const DEFAULT_CURRENCY = 'USD';
 export const ALLOWED_CURRENCIES = ['USD'];
 export const FRACTION_DIGITS = 2; // default amount of decimal digits

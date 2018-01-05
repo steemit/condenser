@@ -39,3 +39,10 @@
   }
 }
 
+html[dir="rtl"] .VerticalMenu {
+  .Icon {
+    padding-right: 0.1rem;
+    margin-left: 14px;
+  }
+}
+

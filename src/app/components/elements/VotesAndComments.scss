@@ -21,6 +21,11 @@
   }   
 }
 
+html[dir="rtl"] .VotesAndComments__votes {
+  padding-right: 0;
+  padding-left: 1rem;
+}
+
 .VotesAndComments__comments {
   padding: 0 1rem;
 }

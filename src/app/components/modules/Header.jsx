@@ -344,7 +344,14 @@ class Header extends React.Component {
                             </ul>
                         </div>
                         <div className="columns shrink">
-                            <TopRightMenu {...this.props} />
+                            <TopRightMenu
+                                {...this.props}
+                                alignment={
+                                    this.context.intl.locale === 'he'
+                                        ? 'left'
+                                        : 'right'
+                                }
+                            />
                         </div>
                     </div>
                 </div>
@@ -352,6 +359,10 @@ class Header extends React.Component {
         );
     }
 }
+
+Header.contextTypes = {
+    intl: React.PropTypes.object,
+};
 
 export { Header as _Header_ };
 

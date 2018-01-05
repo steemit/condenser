@@ -112,6 +112,10 @@
   }
 }
 
+html[dir="rtl"] .PostFull__body {
+  direction: ltr;
+}
+
 .PostFull__footer {
   clear: right;
   line-height: 2rem;

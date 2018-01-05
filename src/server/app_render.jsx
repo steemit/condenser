@@ -46,8 +46,8 @@ async function appRender(ctx) {
             let locale = ctx.getLocaleFromHeader();
             if (locale) locale = locale.substring(0, 2);
             const localeIsSupported = supportedLocales.find(l => l === locale);
-            if (!localeIsSupported) locale = 'en';
-            userPreferences.locale = locale;
+            if (!localeIsSupported) locale = 'he';
+            userPreferences.locale = 'he'; // TODO: Change this back
         }
         let login_challenge = ctx.session.login_challenge;
         if (!login_challenge) {
@@ -170,7 +170,13 @@ async function appRender(ctx) {
             delete require.cache[require.resolve(assets_filename)];
         }
 
-        const props = { body, assets, title, meta };
+        const props = {
+            body,
+            assets,
+            locale: userPreferences.locale,
+            title,
+            meta,
+        };
         ctx.status = statusCode;
         ctx.body =
             '<!DOCTYPE html>' + renderToString(<ServerHTML {...props} />);

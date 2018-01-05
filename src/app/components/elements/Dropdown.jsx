@@ -14,6 +14,7 @@ export default class Dropdown extends React.Component {
         ]),
         href: React.PropTypes.string,
         onHide: React.PropTypes.func.isRequired,
+        show: React.PropTypes.bool,
     };
 
     constructor(props) {

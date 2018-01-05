@@ -118,7 +118,7 @@ function TopRightMenu({
                 <LinkWithDropdown
                     closeOnClickOutside
                     dropdownPosition="bottom"
-                    dropdownAlignment={alignment || 'right'} ///////////////////////////////////////////////
+                    dropdownAlignment={alignment || 'right'}
                     dropdownContent={
                         <VerticalMenu items={user_menu} title={username} />
                     }

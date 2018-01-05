@@ -2,7 +2,6 @@ import React from 'react';
 
 export default function ServerHTML({ body, assets, locale, title, meta }) {
     let page_title = title;
-    console.log(locale);
     return (
         <html lang={locale} dir={locale == 'he' ? 'rtl' : 'ltr'}>
             <head>

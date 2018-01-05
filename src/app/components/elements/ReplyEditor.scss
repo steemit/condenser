@@ -91,6 +91,10 @@
   padding: 0.5rem 1rem;
 }
 
+html[dir="rtl"] .ReplyEditor .Preview .Markdown {
+  direction: ltr;
+}
+
 .ReplyEditor__body {
   margin-top: 1rem;
   clear: both;

@@ -35,13 +35,13 @@ tt.registerTranslations('he', require('app/locales/counterpart/he'));
 tt.registerTranslations('he', require('app/locales/he.json'));
 
 if (process.env.NODE_ENV === 'production') {
-    tt.setFallbackLocale('he'); // CHANGE THIS BEFORE PULL REQUEST
+    tt.setFallbackLocale('en');
 }
 
 class Translator extends React.Component {
     render() {
         const language = this.props.locale;
-        tt.setLocale('he');
+        tt.setLocale(language);
         return (
             <IntlProvider
                 // to ensure dynamic language change, "key" property with same "locale" info must be added

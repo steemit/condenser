@@ -823,11 +823,6 @@ a#changeLayout:focus {
       }       
     }
 
-    html[dir="rtl"] .articles__content-block, .articles__content-block--img{
-          margin-right: 0;
-          margin-left: 14px!important;
-    }
-
     // ,user layout-list
     .user {
       &__name {
@@ -841,6 +836,11 @@ a#changeLayout:focus {
   }
 }
 
+
+html[dir='rtl'] .articles__content-block, html[dir='rtl'] .articles__content-block--img{
+  margin-right: 0;
+  margin-left: 14px!important;
+}
 
 .layout-list {
   @include MQ(L) {

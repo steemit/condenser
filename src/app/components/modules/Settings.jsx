@@ -157,6 +157,12 @@ class Settings extends React.Component {
         const locale = event.target.value;
         const userPreferences = { ...this.props.user_preferences, locale };
         this.props.setUserPreferences(userPreferences);
+
+        if (locale === 'he') {
+            document.getElementsByTagName('html')[0].dir = 'rtl';
+        } else {
+            document.getElementsByTagName('html')[0].dir = 'ltr';
+        }
     };
 
     render() {

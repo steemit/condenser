@@ -20,6 +20,7 @@ bittrx
 bitttrex
 bitrex
 bitrexx
+bittrexxx
 bitrix
 bitrrex
 bttrex

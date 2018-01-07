@@ -85,7 +85,7 @@ export default function reducer(state = defaultState, action) {
                             )
                         )
                             errorKey =
-                                'Account requires 10x the account creation fee in Steem Power (approximately 300 SP) before it can power down.';
+                                'Account requires 10x the account creation fee in Steem Power (approximately 30 SP) before it can power down.';
                         break;
                     default:
                         break;

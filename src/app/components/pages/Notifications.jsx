@@ -8,6 +8,9 @@ export const SUBSECTION_DEFAULT = FILTER_ALL;
 
 class NotificationPage extends React.Component {
     render() {
+        console.log(
+            'This should render an error message if the url does not match the current user.'
+        );
         return (
             <YotificationList
                 layout={LAYOUT_PAGE}

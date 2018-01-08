@@ -195,5 +195,9 @@ describe('App reducer', () => {
                 swimming: false,
             })
         );
+        expect(selectors.getFeatureFlag(withMoreFlags, 'flying')).toEqual(true);
+        expect(selectors.getFeatureFlag(withMoreFlags, 'dancing')).toEqual(
+            false
+        );
     });
 });

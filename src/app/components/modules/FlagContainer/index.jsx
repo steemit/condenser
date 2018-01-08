@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { selectors } from 'app/redux/AppReducer';
+import { selectors as appSelectors } from 'app/redux/AppReducer';
 import Flag from 'app/components/modules/Flag';
 
 const FlagContainer = (flagName, component, fallback = null) => {
@@ -12,7 +12,7 @@ const FlagContainer = (flagName, component, fallback = null) => {
     }
 
     function mapStateToProps(state) {
-        return { flagged: state.app.getIn(['featureFlags', flagName], false) };
+        return { flagged: appSelectors.getFeatureFlag(state.app, flagName) };
     }
 
     return connect(mapStateToProps)(FlaggedComponent);

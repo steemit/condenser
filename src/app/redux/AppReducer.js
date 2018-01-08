@@ -41,6 +41,7 @@ export const defaultState = Map({
         currency: 'USD',
         featureFlags: Map({}),
     }),
+    featureFlags: Map({}),
 });
 
 export default function reducer(state = defaultState, action = {}) {
@@ -95,7 +96,10 @@ export default function reducer(state = defaultState, action = {}) {
                 !state.getIn(['user_preferences', 'blogmode'])
             );
         case appActions.RECEIVE_FEATURE_FLAGS:
-            return state.set('featureFlags', action.flags);
+            const newFlags = state.get('featureFlags')
+                ? state.get('featureFlags').merge(action.flags)
+                : Map(action.flags);
+            return state.set('featureFlags', newFlags);
         default:
             return state;
     }

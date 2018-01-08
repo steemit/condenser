@@ -1,19 +1,21 @@
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import React from 'react';
 import { selectors } from 'app/redux/AppReducer';
-
 import Flag from 'app/components/modules/Flag';
 
-export const mapStateToProps = state => ({
-    flags: selectors.getFeatureFlags(state),
-});
+const FlagContainer = (flagName, component, fallback = null) => {
+    class FlaggedComponent extends Component {
+        render() {
+            const FlagComponent = Flag(component, fallback);
+            return <FlagComponent flag={this.props.flagged} />;
+        }
+    }
 
-const connectFlag = (flagName, component, fallback = null) => {
-    const FlagComponent = Flag(component, fallback);
+    function mapStateToProps(state) {
+        return { flagged: state.app.getIn(['featureFlags', flagName], false) };
+    }
 
-    const wrapped = flags => <FlagComponent flag={flags.has(flagName) && flags.get(flagName) === true} />;
-
-    return connect(mapStateToProps, null)(wrapped);
+    return connect(mapStateToProps)(FlaggedComponent);
 };
 
-export default connectFlag;
+export default FlagContainer;

@@ -58,7 +58,9 @@
     > .footer {
         border-bottom: 1px solid $medium-gray;
         padding: 0.6rem 1rem;
-        color: $notif_dd_black;
+        @include themify($themes) {
+            color: themed('textColorPrimary');
+        }
         font-weight: bold;
         line-height: 1.5rem;
 

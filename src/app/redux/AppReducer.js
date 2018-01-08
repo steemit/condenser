@@ -152,4 +152,6 @@ export const receiveFeatureFlags = flags => ({
 
 export const selectors = {
     getFeatureFlags: state => state.get('featureFlags'),
+    getFeatureFlag: (state, flagName) =>
+        state.getIn(['featureFlags', flagName], false),
 };

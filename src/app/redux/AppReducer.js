@@ -39,7 +39,6 @@ export const defaultState = Map({
         nightmode: false,
         blogmode: false,
         currency: 'USD',
-        featureFlags: Map({}),
     }),
     featureFlags: Map({}),
 });

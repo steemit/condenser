@@ -3,7 +3,12 @@ import chaiImmutable from 'chai-immutable';
 
 import { Map, OrderedMap, getIn } from 'immutable';
 
-import reducer, { defaultState, appActions } from './AppReducer';
+import reducer, {
+    defaultState,
+    appActions,
+    receiveFeatureFlags,
+    selectors,
+} from './AppReducer';
 
 chai.use(chaiImmutable);
 
@@ -169,5 +174,31 @@ describe('App reducer', () => {
         let actual = reducer(initial, mockActions[appActions.TOGGLE_BLOGMODE]);
         const after = actual.getIn(['user_preferences', 'blogmode']);
         expect(after).to.eql(!before);
+    });
+    test('should merge in received feature flags', () => {
+        // Arrange
+        const initial = reducer();
+
+        // Act
+        const withFlags = reducer(
+            initial,
+            receiveFeatureFlags({
+                flying: true,
+            })
+        );
+        const withMoreFlags = reducer(
+            withFlags,
+            receiveFeatureFlags({
+                swimming: false,
+            })
+        );
+
+        // Assert
+        expect(selectors.getFeatureFlags(withMoreFlags)).toEqual(
+            Map({
+                flying: true,
+                swimming: false,
+            })
+        );
     });
 });

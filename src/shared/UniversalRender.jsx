@@ -26,7 +26,6 @@ import { sharedWatches } from 'app/redux/SagaShared';
 import { userWatches } from 'app/redux/UserSaga';
 import { authWatches } from 'app/redux/AuthSaga';
 import { transactionWatches } from 'app/redux/TransactionSaga';
-import PollDataSaga from 'app/redux/PollDataSaga';
 import { component as NotFound } from 'app/components/pages/NotFound';
 import extractMeta from 'app/utils/ExtractMeta';
 import Translator from 'app/Translator';
@@ -249,12 +248,6 @@ async function universalRender({
 
     if (process.env.BROWSER) {
         const store = createStore(rootReducer, initial_state, middleware);
-        sagaMiddleware
-            .run(PollDataSaga)
-            .done.then(() => console.log('PollDataSaga is finished'))
-            .catch(err =>
-                console.log('PollDataSaga is finished with error', err)
-            );
 
         const history = syncHistoryWithStore(browserHistory, store);
 

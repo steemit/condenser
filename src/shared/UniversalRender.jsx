@@ -40,7 +40,7 @@ import { api } from '@steemit/steem-js';
 import get_state_perf from './test/mockdata/api_calls/get_state';
 import get_content_perf from './test/mockdata/api_calls/get_content';
 
-const PERFORMANCE_TEST = process.env.PERFORMANCE_TEST;
+const PERFORMANCE_TEST = !!process.env.PERFORMANCE_TEST;
 console.log('PERFORMANCE_TEST', PERFORMANCE_TEST);
 
 const calcOffsetRoot = startEl => {
@@ -329,7 +329,7 @@ async function universalRender({
         if (url.indexOf('/author-rewards') !== -1)
             url = url.replace(/\/author-rewards$/, '/transfers');
 
-        if (PERFORMANCE_TEST === true) {
+        if (g === true) {
             console.log('get state perf');
             onchain = get_state_perf;
         } else {

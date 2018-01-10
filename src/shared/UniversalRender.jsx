@@ -41,7 +41,6 @@ import get_state_perf from './test/mockdata/api_calls/get_state';
 import get_content_perf from './test/mockdata/api_calls/get_content';
 
 const PERFORMANCE_TEST = !!process.env.PERFORMANCE_TEST;
-console.log('PERFORMANCE_TEST', PERFORMANCE_TEST);
 
 const calcOffsetRoot = startEl => {
     let offset = 0;
@@ -329,8 +328,7 @@ async function universalRender({
         if (url.indexOf('/author-rewards') !== -1)
             url = url.replace(/\/author-rewards$/, '/transfers');
 
-        if (g === true) {
-            console.log('get state perf');
+        if (PERFORMANCE_TEST === true) {
             onchain = get_state_perf;
         } else {
             onchain = await api.getStateAsync(url);
@@ -372,7 +370,6 @@ async function universalRender({
             const params = url.substr(2, url.length - 1).split('/');
             let content;
             if (PERFORMANCE_TEST === true) {
-                console.log('get content perf');
                 content = get_content_perf;
             } else {
                 content = await api.getContentAsync(params[0], params[1]);

@@ -338,11 +338,6 @@ async function universalRender({
             url = url.replace(/\/author-rewards$/, '/transfers');
 
         if (PERFORMANCE_TEST) {
-            console.log(
-                'performance test! onchain',
-                typeof get_state_perf,
-                null === get_state_perf
-            );
             onchain = get_state_perf;
         } else {
             onchain = await api.getStateAsync(url);
@@ -384,7 +379,6 @@ async function universalRender({
             const params = url.substr(2, url.length - 1).split('/');
             let content;
             if (PERFORMANCE_TEST) {
-                console.log('performance test! content');
                 content = get_content_perf;
             } else {
                 content = await api.getContentAsync(params[0], params[1]);

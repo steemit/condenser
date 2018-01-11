@@ -114,6 +114,7 @@ coin-room
 coinpayments
 coinpia
 coinspot
+coinzest
 exrates
 fyrstiken
 gatehub
@@ -236,7 +237,10 @@ steempay
 steempays
 sweetssj
 tdax
+thebiton
 topbtc
+viabtc
+vittrex
 www.aex.com
 www.binance.com
 www.bit-z.com
@@ -259,8 +263,8 @@ www.poloniex.com
 www.qryptos.com
 www.quebex.comw
 www.xbtce.com
-vittrex
 youbit
+zeniex
 `
     .trim()
     .split('\n');

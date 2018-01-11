@@ -142,7 +142,7 @@ export default function useGeneralApi(app) {
             // If not, set this user's creation_hash.
             // We'll check this later on, just before we create the account on chain.
             const creationHash = hash
-                .sha256(crypto.randomBytes(512))
+                .sha256(crypto.randomBytes(32))
                 .toString('hex');
             yield user.update({ creation_hash: creationHash });
 

@@ -1,6 +1,7 @@
 /*global $STM_Config */
 import koa_router from 'koa-router';
 import koa_body from 'koa-body';
+import crypto from 'crypto';
 import models from 'db/models';
 import findUser from 'db/utils/find_user';
 import config from 'config';
@@ -124,7 +125,7 @@ export default function useGeneralApi(app) {
 
         try {
             const user = yield models.User.findOne({
-                attributes: ['id'],
+                attributes: ['id', 'creation_hash'],
                 where: { id: user_id, account_status: 'approved' },
             });
             if (!user) {
@@ -132,6 +133,18 @@ export default function useGeneralApi(app) {
                     "We can't find your sign up request. You either haven't started your sign up application or weren't approved yet."
                 );
             }
+
+            // Is an account creation already happening for this user, maybe on another request?
+            // If so, throw an error.
+            if (user.creation_hash !== null) {
+                throw new Error('An account creation is in progress');
+            }
+            // If not, set this user's creation_hash.
+            // We'll check this later on, just before we create the account on chain.
+            const creationHash = hash
+                .sha256(crypto.randomBytes(512))
+                .toString('hex');
+            yield user.update({ creation_hash: creationHash });
 
             // disable session/multi account for now
 
@@ -166,17 +179,38 @@ export default function useGeneralApi(app) {
                 }
             }
 
-            yield createAccount({
-                signingKey: config.get('registrar.signing_key'),
-                fee: config.get('registrar.fee'),
-                creator: config.get('registrar.account'),
-                new_account_name: account.name,
-                delegation: config.get('registrar.delegation'),
-                owner: account.owner_key,
-                active: account.active_key,
-                posting: account.posting_key,
-                memo: account.memo_key,
-            });
+            // Ensure another registration is not in progress.
+            // Raw query with SQL_NO_CACHE avoids the MySQL query cache.
+            const newCreationHash = yield models.sequelize.query(
+                'SELECT SQL_NO_CACHE creation_hash FROM users WHERE id = ?',
+                {
+                    replacements: [user.id],
+                    type: models.sequelize.QueryTypes.SELECT,
+                }
+            );
+
+            if (newCreationHash[0].creation_hash !== creationHash) {
+                console.log({ newCreationHash, creationHash });
+                throw new Error('Creation hash mismatch');
+            }
+
+            try {
+                yield createAccount({
+                    signingKey: config.get('registrar.signing_key'),
+                    fee: config.get('registrar.fee'),
+                    creator: config.get('registrar.account'),
+                    new_account_name: account.name,
+                    delegation: config.get('registrar.delegation'),
+                    owner: account.owner_key,
+                    active: account.active_key,
+                    posting: account.posting_key,
+                    memo: account.memo_key,
+                });
+            } catch (e) {
+                yield user.update({ creation_hash: null });
+                throw new Error('Account creation error, try again.');
+            }
+
             console.log(
                 '-- create_account_with_keys created -->',
                 this.session.uid,

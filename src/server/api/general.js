@@ -122,13 +122,6 @@ export default function useGeneralApi(app) {
             return;
         }
 
-        // acquire global lock so only one account can be created at a time
-        const rnd_wait_time = Math.random() * 10000;
-        console.log('-- /accounts rnd_wait_time -->', rnd_wait_time);
-        yield new Promise(resolve =>
-            setTimeout(() => resolve(), rnd_wait_time)
-        );
-
         try {
             const user = yield models.User.findOne({
                 attributes: ['id'],

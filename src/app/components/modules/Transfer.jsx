@@ -214,7 +214,6 @@ class TransferForm extends Component {
     };
 
     onChangeTo = value => {
-        const { value } = e.target;
         this.state.to.props.onChange(value.toLowerCase().trim());
         this.setState({
             to: { ...this.state.to, value: value.toLowerCase().trim() },

@@ -340,7 +340,6 @@ async function universalRender({
         if (
             Object.getOwnPropertyNames(onchain.accounts).length === 0 &&
             route.page === 'UserProfile'
-                url.match(routeRegex.UserProfile3))
         ) {
             // protect for invalid account
             return {
@@ -364,26 +363,6 @@ async function universalRender({
             }
         }
 
-        if (
-            !url.match(routeRegex.PostsIndex) &&
-            !url.match(routeRegex.UserProfile1) &&
-            !url.match(routeRegex.UserProfile2) &&
-            url.match(routeRegex.PostNoCategory)
-        ) {
-            const params = url.substr(2, url.length - 1).split('/');
-            const content = await api.getContentAsync(params[0], params[1]);
-            if (content.author && content.permlink) {
-                // valid short post url
-                onchain.content[url.substr(2, url.length - 1)] = content;
-            } else {
-                // protect on invalid user pages (i.e /user/transferss)
-                return {
-                    title: 'Page Not Found - Steemit',
-                    statusCode: 404,
-                    body: renderToString(<NotFound />),
-                };
-            }
-        }
         // Calculate signup bonus
         const fee = parseFloat($STM_Config.registrar_fee.split(' ')[0]),
             { base, quote } = onchain.feed_price,

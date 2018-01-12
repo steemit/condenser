@@ -53,15 +53,6 @@ export function* fetchState(location_change_action) {
     is_initial_state = false;
     if (ignore_fetch) return;
 
-    let url = `${pathname}`;
-    if (url === '/') url = 'trending';
-    // Replace /curation-rewards and /author-rewards with /transfers for UserProfile
-    // to resolve data correctly
-    if (url.indexOf('/curation-rewards') !== -1)
-        url = url.replace('/curation-rewards', '/transfers');
-    if (url.indexOf('/author-rewards') !== -1)
-        url = url.replace('/author-rewards', '/transfers');
-
     yield put(appActions.fetchDataBegin());
     let url = pathname;
     try {

@@ -369,7 +369,6 @@ export default function useEnterAndConfirmEmailPages(app) {
             this.flash = { error: 'Please provide an email address' };
             params.account = account;
             this.redirect(pathTo.enterEmail(makeParams(params)));
-            );
             return;
         }
         email = params.email = email.trim().toLowerCase();

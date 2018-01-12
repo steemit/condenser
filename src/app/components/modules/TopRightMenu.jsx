@@ -64,6 +64,7 @@ function TopRightMenu({
     const comments_link = pathTo.userComments(username);
     const reset_password_link = pathTo.userPassword(username);
     const settings_link = pathTo.userSettings(username);
+    const tt_search = tt('g.search');
     const pathCheck = userPath === pathTo.compose() ? true : null;
     if (loggedIn) {
         // change back to if(username) after bug fix:  Clicking on Login does not cause drop-down to close #TEMP!

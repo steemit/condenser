@@ -8,7 +8,9 @@ import { pathTo } from 'app/Routes';
 export default class PostHistoryRow extends React.Component {
     render() {
         const op = this.props.op;
+        console.log('op: ', op);
         const context = this.props.context; /// account perspective
+
         const parent_author = op[1].op[1].parent_author;
         const author = op[1].op[1].author;
         const parent_link = '/@' + parent_author;

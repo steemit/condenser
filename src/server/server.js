@@ -15,7 +15,6 @@ import useRedirects from './redirects';
 import useOauthLogin from './api/oauth';
 import useGeneralApi from './api/general';
 import useAccountRecoveryApi from './api/account_recovery';
-import useNotificationsApi from './api/notifications';
 import useEnterAndConfirmEmailPages from './sign_up_pages/enter_confirm_email';
 import useEnterAndConfirmMobilePages from './sign_up_pages/enter_confirm_mobile';
 import useUserJson from './json/user_json';
@@ -48,15 +47,6 @@ const numProcesses = process.env.NUM_PROCESSES || os.cpus().length;
 
 app.use(requestTime(numProcesses));
 
-// only use set-cookie headers for specific apis
-// (they bust the cache)
-app.use(function*(next) {
-    yield* next;
-    if (this.setCookies !== true) {
-        delete this.response.remove('set-cookie');
-    }
-});
-
 app.keys = [config.get('session_key')];
 
 const crypto_key = config.get('server_session_secret');
@@ -78,10 +68,6 @@ function convertEntriesToArrays(obj) {
     }, {});
 }
 
-const service_worker_js_content = fs
-    .readFileSync(path.join(__dirname, './service-worker.js'))
-    .toString();
-
 // some redirects and health status
 app.use(function*(next) {
     if (this.method === 'GET' && this.url === '/.well-known/healthcheck.json') {
@@ -94,6 +80,39 @@ app.use(function*(next) {
     if (this.method === 'GET' && this.url === '/' && this.session.a) {
         this.status = 302;
         this.redirect(pathTo.userFeed(this.session.a));
+        return;
+    }
+    // normalize user name url from cased params
+    if (
+        this.method === 'GET' &&
+        (routeRegex.UserProfile1.test(this.url) ||
+            routeRegex.PostNoCategory.test(this.url) ||
+            routeRegex.Post.test(this.url))
+    ) {
+        const p = this.originalUrl.toLowerCase();
+        let userCheck = '';
+        if (routeRegex.Post.test(this.url)) {
+            userCheck = p.split('/')[2].slice(1);
+        } else {
+            userCheck = p.split('/')[1].slice(1);
+        }
+        if (userIllegalContent.includes(userCheck)) {
+            console.log('Illegal content user found blocked', userCheck);
+            this.status = 451;
+            return;
+        }
+        if (p !== this.originalUrl) {
+            this.status = 301;
+            this.redirect(p);
+            return;
+        }
+    }
+    // normalize top category filtering from cased params
+    if (this.method === 'GET' && routeRegex.CategoryFilters.test(this.url)) {
+        const p = this.originalUrl.toLowerCase();
+        if (p !== this.originalUrl) {
+            this.status = 301;
+            this.redirect(p);
         return;
     }
     // // normalize user name url from cased params
@@ -176,19 +195,6 @@ app.use(
     })
 );
 
-app.use(
-    mount('/service-worker.js', function*() {
-        this.set('Cache-Control', 'public, max-age=7200000');
-        this.type = 'application/javascript';
-        // TODO: use APP_URL from client_config.js
-        // actually use a config value for it
-        this.body = service_worker_js_content.replace(
-            /\{DEFAULT_URL\}/i,
-            'https://' + this.request.header.host
-        );
-    })
-);
-
 // set user's uid - used to identify users in logs and some other places
 // FIXME SECURITY PRIVACY cycle this uid after a period of time
 app.use(function*(next) {
@@ -217,7 +223,6 @@ usePostJson(app);
 useAccountRecoveryApi(app);
 useOauthLogin(app);
 useGeneralApi(app);
-useNotificationsApi(app);
 
 // helmet wants some things as bools and some as lists, makes config difficult.
 // our config uses strings, this splits them to lists on whitespace.
@@ -289,6 +294,8 @@ if (env !== 'test') {
             );
         }
     });
+
+    const argv = minimist(process.argv.slice(2));
 
     const port = process.env.PORT ? parseInt(process.env.PORT) : 8080;
 

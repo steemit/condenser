@@ -122,7 +122,7 @@ class TransferHistoryRow extends React.Component {
             description_start += `${data.sbd_payout}${steem_payout}, ${tt(
                 'g.and'
             )} ${author_reward} STEEM POWER ${tt('g.for')}`;
-            other_account = data.author + "/" + data.permlink;
+            other_account = data.author + '/' + data.permlink;
             description_end = '';
         } else if (type === 'claim_reward_balance') {
             const rewards = [];

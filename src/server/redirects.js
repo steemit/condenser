@@ -18,7 +18,7 @@ export default function useRedirects(app) {
             console.log(
                 `server redirect: [${r[0]}] ${this.request.url} -> ${dest}`
             );
-            this.status = r[2] || 302;
+            this.status = r[2] || 301;
             this.redirect(dest);
         });
     });

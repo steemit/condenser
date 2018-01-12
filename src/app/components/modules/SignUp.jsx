@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import SvgImage from 'app/components/elements/SvgImage';
 import AddToWaitingList from 'app/components/modules/AddToWaitingList';
-import { pathTo } from 'app/Routes';
 
 class SignUp extends React.Component {
     constructor() {

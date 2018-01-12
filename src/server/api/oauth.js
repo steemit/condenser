@@ -54,7 +54,6 @@ function retrieveFacebookUserData(access_token) {
 }
 
 function* handleFacebookCallback() {
-    this.setCookies = true;
     console.log(
         '-- /handle_facebook_callback -->',
         this.session.uid,

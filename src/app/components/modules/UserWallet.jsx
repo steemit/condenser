@@ -591,7 +591,8 @@ class UserWallet extends React.Component {
                         {delegated_steem != 0 ? (
                             <span className="secondary">
                                 {tt(
-                                    'tips_js.part_of_your_steem_power_is_currently_delegated'
+                                    'tips_js.part_of_your_steem_power_is_currently_delegated',
+                                    { user_name: account.get('name') }
                                 )}
                             </span>
                         ) : null}
@@ -616,7 +617,7 @@ class UserWallet extends React.Component {
                                         : null,
                                 }}
                             >
-                                <Tooltip t="STEEM POWER delegated to this account">
+                                <Tooltip t="STEEM POWER delegated to/from this account">
                                     ({received_power_balance_str} STEEM)
                                 </Tooltip>
                             </div>
@@ -818,6 +819,7 @@ export default connect(
             );
         },
         convertToSteem: e => {
+            //post 2018-01-31 if no calls to this function exist may be safe to remove. Investigate use of ConvertToSteem.jsx
             e.preventDefault();
             const name = 'convertToSteem';
             dispatch(globalActions.showDialog({ name }));

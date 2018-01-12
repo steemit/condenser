@@ -266,6 +266,7 @@ class PostFull extends React.Component {
             document.title = title + ' — ' + APP_NAME;
 
         let content_body = content.body;
+        const url = `/${category}/@${author}/${permlink}`;
         const bDMCAStop = DMCAList.includes(link);
         const bIllegalContentUser = userIllegalContent.includes(content.author);
         if (bDMCAStop) {

@@ -1,6 +1,7 @@
 /*global $STM_Config */
 import koa_router from 'koa-router';
 import koa_body from 'koa-body';
+import crypto from 'crypto';
 import models from 'db/models';
 import findUser from 'db/utils/find_user';
 import config from 'config';
@@ -14,7 +15,6 @@ import {
 } from 'server/utils/misc';
 import coBody from 'co-body';
 import Mixpanel from 'mixpanel';
-import Tarantool from 'db/tarantool';
 import { PublicKey, Signature, hash } from '@steemit/steem-js/lib/auth/ecc';
 import { api, broadcast } from '@steemit/steem-js';
 
@@ -123,7 +123,6 @@ export default function useGeneralApi(app) {
             return;
         }
 
-        // acquire global lock so only one account can be created at a time
         try {
             const lock_entity_res = yield Tarantool.instance().call(
                 'lock_entity',
@@ -153,7 +152,7 @@ export default function useGeneralApi(app) {
 
         try {
             const user = yield models.User.findOne({
-                attributes: ['id'],
+                attributes: ['id', 'creation_hash'],
                 where: { id: user_id, account_status: 'approved' },
             });
             if (!user) {
@@ -161,6 +160,18 @@ export default function useGeneralApi(app) {
                     "We can't find your sign up request. You either haven't started your sign up application or weren't approved yet."
                 );
             }
+
+            // Is an account creation already happening for this user, maybe on another request?
+            // If so, throw an error.
+            if (user.creation_hash !== null) {
+                throw new Error('An account creation is in progress');
+            }
+            // If not, set this user's creation_hash.
+            // We'll check this later on, just before we create the account on chain.
+            const creationHash = hash
+                .sha256(crypto.randomBytes(32))
+                .toString('hex');
+            yield user.update({ creation_hash: creationHash });
 
             // disable session/multi account for now
 
@@ -195,6 +206,22 @@ export default function useGeneralApi(app) {
                 }
             }
 
+            // Ensure another registration is not in progress.
+            // Raw query with SQL_NO_CACHE avoids the MySQL query cache.
+            const newCreationHash = yield models.sequelize.query(
+                'SELECT SQL_NO_CACHE creation_hash FROM users WHERE id = ?',
+                {
+                    replacements: [user.id],
+                    type: models.sequelize.QueryTypes.SELECT,
+                }
+            );
+
+            if (newCreationHash[0].creation_hash !== creationHash) {
+                console.log({ newCreationHash, creationHash });
+                throw new Error('Creation hash mismatch');
+            }
+
+            try {
             yield createAccount({
                 signingKey: config.get('registrar.signing_key'),
                 fee: config.get('registrar.fee'),
@@ -206,6 +233,11 @@ export default function useGeneralApi(app) {
                 posting: account.posting_key,
                 memo: account.memo_key,
             });
+            } catch (e) {
+                yield user.update({ creation_hash: null });
+                throw new Error('Account creation error, try again.');
+            }
+
             console.log(
                 '-- create_account_with_keys created -->',
                 this.session.uid,
@@ -257,15 +289,7 @@ export default function useGeneralApi(app) {
             );
             this.body = JSON.stringify({ error: error.message });
             this.status = 500;
-        } finally {
-            // console.log('-- /accounts unlock_entity -->', user_id);
-            // release global lock
-            try {
-                yield Tarantool.instance().call('unlock_entity', user_id + '');
-            } catch (e) {
-                /* ram lock */
             }
-        }
         recordWebEvent(this, 'api/accounts', account ? account.name : 'n/a');
     });
 

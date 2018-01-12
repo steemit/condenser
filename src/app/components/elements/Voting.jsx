@@ -100,7 +100,14 @@ class Voting extends React.Component {
                 ? myVote > 0 ? 0 : this.state.weight
                 : myVote < 0 ? 0 : -1 * this.state.weight;
             if (this.state.showWeight) this.setState({ showWeight: false });
-            this.props.vote(weight, { author, permlink, username, myVote });
+            const isFlag = this.props.flag ? true : null;
+            this.props.vote(weight, {
+                author,
+                permlink,
+                username,
+                myVote,
+                isFlag,
+            });
         };
 
         this.handleWeightChange = weight => {
@@ -514,10 +521,13 @@ export default connect(
 
     // mapDispatchToProps
     dispatch => ({
-        vote: (weight, { author, permlink, username, myVote }) => {
+        vote: (weight, { author, permlink, username, myVote, isFlag }) => {
             const confirm = () => {
                 if (myVote == null) return null;
-                const t = tt(
+                const t = isFlag
+                    ? ''
+                    : ' ' +
+                      tt(
                     'voting_jsx.we_will_reset_curation_rewards_for_this_post'
                 );
                 if (weight === 0)

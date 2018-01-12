@@ -9,9 +9,9 @@ describe('htmlready', () => {
         global.$STM_Config = {};
     });
 
-    it('should return plain text without html unmolested', () => {
-        const teststring = 'teststring lol';
-        expect(HtmlReady(teststring).html).to.equal(teststring);
+    it('should return an empty string if input cannot be parsed', () => {
+        const teststring = 'teststring lol'; // this string causes the xmldom parser to fail & error out
+        expect(HtmlReady(teststring).html).to.equal('');
     });
 
     it('should allow links where the text portion and href contains steemit.com', () => {
@@ -72,6 +72,13 @@ describe('htmlready', () => {
             '<xml xmlns="http://www.w3.org/1999/xhtml"><div title="missing translation: en.g.phishy_message" class="phishy">Go down lower for https://steemit.com info! / #https://steamit.com/unlikelyinpagelink</div></xml>';
         const resinpage = HtmlReady(inpage).html;
         expect(resinpage).to.equal(cleanInpage);
+
+        const noprotocol =
+            '<xml xmlns="http://www.w3.org/1999/xhtml"><a href="https://steamit.com/" xmlns="http://www.w3.org/1999/xhtml">for a good time, visit steemit.com today</a></xml>';
+        const cleansednoprotocol =
+            '<xml xmlns="http://www.w3.org/1999/xhtml"><div title="missing translation: en.g.phishy_message" class="phishy">for a good time, visit steemit.com today / https://steamit.com/</div></xml>';
+        const resnoprotocol = HtmlReady(noprotocol).html;
+        expect(resnoprotocol).to.equal(cleansednoprotocol);
     });
 
     it('should allow more than one link per post', () => {
@@ -80,6 +87,41 @@ describe('htmlready', () => {
         const htmlified =
             '<xml xmlns="http://www.w3.org/1999/xhtml"><span><a href="https://foo.com">https://foo.com</a> and <a href="https://blah.com">https://blah.com</a></span></xml>';
         const res = HtmlReady(somanylinks).html;
+        expect(res).to.equal(htmlified);
+    });
+
+    it('should link usernames', () => {
+        const textwithmentions =
+            '<xml xmlns="http://www.w3.org/1999/xhtml">@username (@a1b2, whatever</xml>';
+        const htmlified =
+            '<xml xmlns="http://www.w3.org/1999/xhtml"><span><a href="/@username">@username</a> (<a href="/@a1b2">@a1b2</a>, whatever</span></xml>';
+        const res = HtmlReady(textwithmentions).html;
+        expect(res).to.equal(htmlified);
+    });
+
+    it('should detect only valid mentions', () => {
+        const textwithmentions =
+            '@abc @xx (@aaa1) @_x @eee, @fff! https://x.com/@zzz/test';
+        const res = HtmlReady(textwithmentions, { mutate: false });
+        const usertags = Array.from(res.usertags).join(',');
+        expect(usertags).to.equal('abc,aaa1,eee,fff');
+    });
+
+    it('should not link usernames at the front of linked text', () => {
+        const nameinsidelinkfirst =
+            '<xml xmlns="http://www.w3.org/1999/xhtml"><a href="https://steemit.com/signup">@hihi</a></xml>';
+        const htmlified =
+            '<xml xmlns="http://www.w3.org/1999/xhtml"><a href="https://steemit.com/signup">@hihi</a></xml>';
+        const res = HtmlReady(nameinsidelinkfirst).html;
+        expect(res).to.equal(htmlified);
+    });
+
+    it('should not link usernames in the middle of linked text', () => {
+        const nameinsidelinkmiddle =
+            '<xml xmlns="http://www.w3.org/1999/xhtml"><a href="https://steemit.com/signup">hi @hihi</a></xml>';
+        const htmlified =
+            '<xml xmlns="http://www.w3.org/1999/xhtml"><a href="https://steemit.com/signup">hi @hihi</a></xml>';
+        const res = HtmlReady(nameinsidelinkmiddle).html;
         expect(res).to.equal(htmlified);
     });
 });

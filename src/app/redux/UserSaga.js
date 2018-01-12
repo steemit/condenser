@@ -138,7 +138,7 @@ function* usernamePasswordLogin2({
     afterLoginRedirectToWelcome,
 }) {
     // login, using saved password
-    let feedURL;
+    let feedURL = false;
     let autopost, memoWif, login_owner_pubkey, login_wif_owner_pubkey;
     if (!username && !password) {
         const data = localStorage.getItem('autopost2');
@@ -314,10 +314,10 @@ function* usernamePasswordLogin2({
               .toString()
         : null;
 
-    if (memo_pubkey === owner_pubkey || memo_pubkey === active_pubkey) {
+    if (memo_pubkey === owner_pubkey || memo_pubkey === active_pubkey)
         // Memo key could be saved in local storage.. In RAM it is not purged upon LOCATION_CHANGE
         private_keys = private_keys.remove('memo_private');
-    }
+
     if (username) feedURL = pathTo.userFeed(username);
     // If user is signing operation by operaion and has no saved login, don't save to RAM
     if (!operationType || saveLogin) {

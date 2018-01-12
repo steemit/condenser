@@ -9,7 +9,6 @@ import constants from 'app/redux/constants';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import PostsList from 'app/components/cards/PostsList';
 import { isFetchingOrRecentlyUpdated } from 'app/utils/StateFunctions';
-import MarkNotificationRead from 'app/components/elements/MarkNotificationRead';
 import Callout from 'app/components/elements/Callout';
 // import SidebarStats from 'app/components/elements/SidebarStats';
 import SidebarLinks from 'app/components/elements/SidebarLinks';
@@ -94,7 +93,6 @@ class PostsIndex extends React.Component {
         let topics_order = order;
         let posts = [];
         let emptyText = '';
-        let markNotificationRead = null;
         if (category === 'feed') {
             const account_name = user_or_t;
             order = 'by_feed';
@@ -121,12 +119,6 @@ class PostsIndex extends React.Component {
                         </Link>
                         <br />
                     </div>
-                );
-                markNotificationRead = (
-                    <MarkNotificationRead
-                        fields="feed"
-                        account={account_name}
-                    />
                 );
             } else {
                 emptyText = (
@@ -165,10 +157,10 @@ class PostsIndex extends React.Component {
         // plus the tag string, f.ex "trending: blog"
         //
         // Logged-in:
-        // At homepage (@user/feed) say "People I follow"
+        // At homepage (@user/feed) say "My feed"
         let page_title = 'Posts'; // sensible default here?
         if (typeof this.props.username !== 'undefined' && category === 'feed') {
-            page_title = 'People I follow'; // todo: localization
+            page_title = 'My feed'; // todo: localization
         } else {
             switch (topics_order) {
                 case 'trending': // cribbed from Header.jsx where it's repeated 2x already :P
@@ -218,7 +210,6 @@ class PostsIndex extends React.Component {
                         </div>
                     </div>
                     <hr className="articles__hr" />
-                    {markNotificationRead}
                     {!fetching && (posts && !posts.size) ? (
                         <Callout>{emptyText}</Callout>
                     ) : (

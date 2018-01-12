@@ -64,7 +64,6 @@ function TopRightMenu({
     const comments_link = pathTo.userComments(username);
     const reset_password_link = pathTo.userPassword(username);
     const settings_link = pathTo.userSettings(username);
-    const tt_search = tt('g.search');
     const pathCheck = userPath === pathTo.compose() ? true : null;
     if (loggedIn) {
         // change back to if(username) after bug fix:  Clicking on Login does not cause drop-down to close #TEMP!
@@ -114,15 +113,6 @@ function TopRightMenu({
         ];
         return (
             <ul className={mcn + mcl}>
-                <li className={lcn + ' Header__search'}>
-                    <a href={pathTo.search()} title={tt_search}>
-                        {vertical ? (
-                            <span>{tt_search}</span>
-                        ) : (
-                            <Icon name="search" />
-                        )}
-                    </a>
-                </li>
                 {!pathCheck ? submit_story : null}
                 {!vertical && submit_icon}
                 <LinkWithDropdown

@@ -127,7 +127,6 @@ export default function useEnterAndConfirmMobilePages(app) {
     const koaBody = koa_body();
 
     router.get(pathTo.enterMobile(), function*() {
-        this.setCookies = true;
         console.log(
             '-- /enter_mobile -->',
             this.session.uid,

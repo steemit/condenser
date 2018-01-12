@@ -3,6 +3,7 @@ import React from 'react';
 import Comment from 'app/components/cards/Comment';
 import PostFull from 'app/components/cards/PostFull';
 import { connect } from 'react-redux';
+
 import { sortComments } from 'app/components/cards/Comment';
 // import { Link } from 'react-router';
 import FoundationDropdownMenu from 'app/components/elements/FoundationDropdownMenu';

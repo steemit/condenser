@@ -153,7 +153,6 @@ export default function useEnterAndConfirmEmailPages(app) {
     const rc_site_key = config.get('recaptcha.site_key');
 
     router.get('/start/:code', function*() {
-        this.setCookies = true;
         const code = this.params.code;
         const eid = yield models.Identity.findOne({
             attributes: ['id', 'user_id', 'verified'],
@@ -247,7 +246,6 @@ export default function useEnterAndConfirmEmailPages(app) {
     });
 
     router.get(pathTo.enterEmail(), function*() {
-        this.setCookies = true;
         console.log(
             '-- /enter_email -->',
             this.session.uid,
@@ -295,8 +293,8 @@ export default function useEnterAndConfirmEmailPages(app) {
                             action={pathTo.submitEmail(makeParams(params))}
                             method="POST"
                         >
-                            <h4 style={{ color: '#4078c0' }}>
-                                Please provide your email address to continue
+                            <h4 className="CreateAccount__title">
+                                Your email address, please
                             </h4>
                             <p>
                                 We use this to contact you and verify account
@@ -371,6 +369,7 @@ export default function useEnterAndConfirmEmailPages(app) {
             this.flash = { error: 'Please provide an email address' };
             params.account = account;
             this.redirect(pathTo.enterEmail(makeParams(params)));
+            );
             return;
         }
         email = params.email = email.trim().toLowerCase();

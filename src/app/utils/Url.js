@@ -32,6 +32,10 @@ export const urlProfileSettings = username => {
     return `/@${username}/settings`;
 };
 
+export const urlSignup = () => {
+    return '/pick_account';
+};
+
 const Url = {
     comment: urlComment,
     notifications: urlNotifications,

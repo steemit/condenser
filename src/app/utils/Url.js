@@ -36,6 +36,10 @@ export const urlSignup = () => {
     return '/pick_account';
 };
 
+export const urlLogin = () => {
+    return '/login.html';
+};
+
 const Url = {
     comment: urlComment,
     notifications: urlNotifications,

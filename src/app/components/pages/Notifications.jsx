@@ -1,10 +1,12 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { Link } from 'react-router';
 import YotificationList, {
     LAYOUT_PAGE,
     FILTER_ALL,
 } from 'app/components/modules/YotificationList';
-import { urlNotifications, urlSignup } from 'app/utils/Url';
-import { Link } from 'react-router';
+import { showLogin } from 'app/redux/UserReducer';
+import { urlLogin, urlNotifications, urlSignup } from 'app/utils/Url';
 
 export const SUBSECTION_DEFAULT = FILTER_ALL;
 
@@ -21,9 +23,18 @@ class NotificationPage extends React.Component {
                             View my own notifications
                         </Link>
                     ) : (
-                        <Link to={urlSignup()}>
-                            Create an account to get notifications
-                        </Link>
+                        <span>
+                            <Link
+                                to={urlLogin()}
+                                onClick={this.props.showLogin}
+                            >
+                                Log in
+                            </Link>
+                            {' or '}
+                            <Link to={urlSignup()}>
+                                sign up to get notifications
+                            </Link>
+                        </span>
                     )}
                 </div>
             );
@@ -37,4 +48,16 @@ class NotificationPage extends React.Component {
     }
 }
 
-export default NotificationPage;
+export default connect(
+    (state, ownProps) => {
+        return {
+            ...ownProps,
+        };
+    },
+    dispatch => ({
+        showLogin: e => {
+            if (e) e.preventDefault();
+            dispatch(showLogin());
+        },
+    })
+)(NotificationPage);

@@ -208,6 +208,7 @@ export default function useGeneralApi(app) {
                 });
             } catch (e) {
                 yield user.update({ creation_hash: null });
+                console.error({ accountCreationError: e });
                 throw new Error('Account creation error, try again.');
             }
 

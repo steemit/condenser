@@ -78,6 +78,8 @@ class PostSummary extends React.Component {
         const {nsfwPref, username} = this.props
         if (!content) return null;
 
+        const myPost = username === content.get('author')
+
         if(blockedUsers.includes(content.get('author'))) {
             serverApiRecordEvent('illegal content', `${content.get('author')} /${content.get('permlink')}`)
 			return null
@@ -138,7 +140,7 @@ class PostSummary extends React.Component {
             <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}>{desc}</a>
         </div>;
 
-        const warn = (isNsfw && nsfwPref === 'warn');
+        const warn = (isNsfw && nsfwPref === 'warn' && !myPost);
 
         let content_title = <h3 className="entry-title">
             <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}>
@@ -165,6 +167,13 @@ class PostSummary extends React.Component {
                 </span>
             </span>
         </div>
+
+        if(isNsfw) {
+            if(nsfwPref === 'hide' && !myPost) {
+                // user wishes to hide these posts entirely
+                return null;
+            }
+        }
 
         const visitedClassName = this.props.visited ? 'PostSummary__post-visited ' : '';
         let thumb = null;

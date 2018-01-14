@@ -279,7 +279,7 @@ class Settings extends React.Component {
                             {tt('settings_jsx.not_safe_for_work_nsfw_content')}
                         </div>
                         <select value={this.state.nsfwPref} onChange={this.onNsfwPrefChange}>
-                            {/*<option value="hide">{tt('settings_jsx.always_hide')}</option>*/}
+                            <option value="hide">{tt('settings_jsx.always_hide')}</option>
                             <option value="warn">{tt('settings_jsx.always_warn')}</option>
                             <option value="show">{tt('settings_jsx.always_show')}</option>
                         </select>

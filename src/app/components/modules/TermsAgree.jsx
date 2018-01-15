@@ -3,6 +3,8 @@ import React, { PropTypes, Component } from 'react';
 import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 import { translate } from 'app/Translator';
 import { Tos } from 'app/components/pages/Tos';
+import { connect } from 'react-redux';
+import * as userActions from 'app/redux/UserReducer';
 
 class TermsAgree extends Component {
     constructor() {
@@ -14,7 +16,7 @@ class TermsAgree extends Component {
     termsAgree(e) {
         // let user proceed
         serverApiRecordEvent('AgreeTerms', true);
-        document.querySelectorAll('[role=dialog]')[0].remove();
+        this.props.hideTerms(e);
     }
 
     termsCancel() {
@@ -1392,6 +1394,13 @@ class TermsAgree extends Component {
     }
 }
 
-import { connect } from 'react-redux';
-export default connect()(TermsAgree);
+export default connect(
+    state => ({}),
+    dispatch => ({
+            hideTerms: e => {
+                if (e) e.preventDefault();
+                dispatch(userActions.hideTerms());
+            }
+        })
+)(TermsAgree);
 // mapStateToProps

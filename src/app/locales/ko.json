@@ -548,7 +548,7 @@
         "converted_VESTING_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again":
             "Converted %(VESTING_TOKEN)s can be sent to yourself or someone else but can not transfer again without converting back to %(LIQUID_TOKEN)s.",
         "part_of_your_steem_power_is_currently_delegated":
-            "STEEM POWER 를 임대 받고 있습니다. 임대 받는 양은 가입 시기에 따라 가변적입니다."
+            "%(user_name)s 님은 STEEM POWER 를 임대 받고 있습니다. 임대 받는 양은 가입 시기에 따라 가변적입니다."
     },
     "promote_post_jsx": {
         "promote_post": "Promote Post",
@@ -737,7 +737,7 @@
         "withdraw_LIQUID_TOKEN": "%(LIQUID_TOKEN)s 출금",
         "withdraw_DEBT_TOKENS": "%(DEBT_TOKENS)s 출금",
         "tokens_worth_about_1_of_LIQUID_TICKER":
-            "%(LIQUID_TICKER)의 1달러 가치가 있는 토큰입니다. 현재 연이율은 %(sbdInterest)s%% 입니다.",
+            "%(LIQUID_TICKER)s의 1달러 가치가 있는 토큰입니다. 현재 연이율은 %(sbdInterest)s%% 입니다.",
         "savings": "예금",
         "estimated_account_value": "추정 자산가치",
         "next_power_down_is_scheduled_to_happen": "다음 파워다운 예정:",

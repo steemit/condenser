@@ -211,7 +211,7 @@ export default class UserProfile extends React.Component {
 
         let rewardsClass = '',
             walletClass = '';
-        if (section === 'transfers') {
+        if (section === 'wallet') {
             walletClass = 'active';
             tab_content = (
                 <div>
@@ -464,7 +464,7 @@ export default class UserProfile extends React.Component {
 
         if (
             !(
-                section === 'transfers' ||
+                section === 'wallet' ||
                 section === 'permissions' ||
                 section === 'password'
             )

@@ -32,7 +32,7 @@ export const userWatches = [
 
 const highSecurityPages = [
     /\/c\/market/,
-    /\/.+\/(transfers|permissions|password)/,
+    /\/.+\/(wallet|permissions|password)/,
     /\/c\/witnesses/,
 ];
 

@@ -1,7 +1,7 @@
 export const routeRegex = {
     UserProfile1: /^\/([\w.\d-]+)\/?$/,
-    UserProfile2: /^\/([\w.\d-]+)\/(blog|posts|comments|recommended|transfers|curation-rewards|author-rewards|permissions|created|recent-replies|feed|password|followed|followers|settings)\/?$/,
-    UserEndPoints: /^(blog|posts|comments|recommended|transfers|curation-rewards|author-rewards|permissions|created|recent-replies|feed|password|followed|followers|settings)$/,
+    UserProfile2: /^\/([\w.\d-]+)\/(blog|posts|comments|recommended|wallet|curation-rewards|author-rewards|permissions|created|recent-replies|feed|password|followed|followers|settings)\/?$/,
+    UserEndPoints: /^(blog|posts|comments|recommended|wallet|curation-rewards|author-rewards|permissions|created|recent-replies|feed|password|followed|followers|settings)$/,
     PostsIndex: /^\/t\/([\w\d-]+)\/(hot|votes|responses|trending|trending30|promoted|cashout|payout|payout_comments|created|active)\/?$/,
     PostsIndexUserFeed: /^\/([\w.\d-]+)\/feed\/?$/,
     Post: /^\/([\w\d.-]+)\/([\w\d-]+)\/?($|\?)/,
@@ -104,7 +104,7 @@ export const pathTo = {
     userProfile: name => `/${name}`,
     userFeed: name => `/${name}/feed`,
     userReplies: name => `/${name}/recent-replies`,
-    userWallet: name => `/${name}/transfers`,
+    userWallet: name => `/${name}/wallet`,
     userComments: name => `/${name}/comments`,
     userPassword: name => `/${name}/password`,
     userSettings: name => `/${name}/settings`,
@@ -152,7 +152,12 @@ export const pathTo = {
 export function routeToSteemdUrl(route) {
     let url = 'trending';
     if (route.page === 'UserProfile') {
-        url = `/@${route.params.join('/')}`;
+        if (route.params[1] === 'wallet') {
+            url = `/@${route.params[0]}/transfers`;
+        }
+        else {
+            url = `/@${route.params.join('/')}`;
+        }
     } else if (route.page === 'PostsIndex') {
         if (route.params[0] === 'home') {
             url = `/@${route.params[1]}/feed`;

@@ -83,7 +83,7 @@ class RecoverAccountStep2 extends React.Component {
             account_auths: [],
             key_auths: [[new_owner_key, 1]],
         };
-        fetch('/api/v1/request_account_recovery', {
+        fetch('/c/api/request_account_recovery', {
             method: 'post',
             mode: 'no-cors',
             credentials: 'same-origin',

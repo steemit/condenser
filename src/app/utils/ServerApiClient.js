@@ -15,7 +15,7 @@ export function serverApiLogin(account, signatures) {
     const request = Object.assign({}, request_base, {
         body: JSON.stringify({ account, signatures, csrf: $STM_csrf }),
     });
-    fetch('/api/v1/login_account', request);
+    fetch('/c/api/login_account', request);
 }
 
 export function serverApiLogout() {
@@ -23,7 +23,7 @@ export function serverApiLogout() {
     const request = Object.assign({}, request_base, {
         body: JSON.stringify({ csrf: $STM_csrf }),
     });
-    fetch('/api/v1/logout_account', request);
+    fetch('/c/api/logout_account', request);
 }
 
 let last_call;
@@ -35,7 +35,7 @@ export function serverApiRecordEvent(type, val, rate_limit_ms = 5000) {
     const request = Object.assign({}, request_base, {
         body: JSON.stringify({ csrf: $STM_csrf, type, value }),
     });
-    fetch('/api/v1/record_event', request);
+    fetch('/c/api/record_event', request);
     api.call(
         'overseer.collect',
         { collection: 'event', metadata: { type, value } },
@@ -61,7 +61,7 @@ export function recordPageView(page, ref, account) {
     const request = Object.assign({}, request_base, {
         body: JSON.stringify({ csrf: $STM_csrf, page, ref }),
     });
-    last_page_promise = fetch(`/api/v1/page_view`, request)
+    last_page_promise = fetch(`/c/api/page_view`, request)
         .then(r => r.json())
         .then(res => {
             last_views = res.views;
@@ -75,7 +75,7 @@ export function saveCords(x, y) {
     const request = Object.assign({}, request_base, {
         body: JSON.stringify({ csrf: $STM_csrf, x: x, y: y }),
     });
-    fetch('/api/v1/save_cords', request);
+    fetch('/c/api/save_cords', request);
 }
 
 export function setUserPreferences(payload) {
@@ -84,5 +84,5 @@ export function setUserPreferences(payload) {
     const request = Object.assign({}, request_base, {
         body: JSON.stringify({ csrf: window.$STM_csrf, payload }),
     });
-    return fetch('/api/v1/setUserPreferences', request);
+    return fetch('/c/api/setUserPreferences', request);
 }

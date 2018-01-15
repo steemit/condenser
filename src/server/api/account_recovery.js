@@ -11,7 +11,7 @@ export default function useAccountRecoveryApi(app) {
     app.use(router.routes());
     const koaBody = koa_body();
 
-    router.post('/initiate_account_recovery', koaBody, function*() {
+    router.post('/c/initiate_account_recovery', koaBody, function*() {
         if (rateLimitReq(this, this.req)) return;
         let params = this.request.body;
         params = typeof params === 'string' ? JSON.parse(params) : params;
@@ -72,7 +72,7 @@ export default function useAccountRecoveryApi(app) {
         this.body = code;
     });
 
-    router.post('/api/v1/request_account_recovery', koaBody, function*() {
+    router.post('/c/api/request_account_recovery', koaBody, function*() {
         if (rateLimitReq(this, this.req)) return;
         let params = this.request.body;
         params = typeof params === 'string' ? JSON.parse(params) : params;
@@ -164,7 +164,7 @@ export default function useAccountRecoveryApi(app) {
         }
     });
 
-    router.post('/api/v1/account_identity_providers', koaBody, function*() {
+    router.post('/c/api/account_identity_providers', koaBody, function*() {
         if (rateLimitReq(this, this.req)) return;
         try {
             const params = this.request.body;
@@ -221,7 +221,7 @@ export default function useAccountRecoveryApi(app) {
     });
 
     router.post(
-        '/api/v1/initiate_account_recovery_with_email',
+        '/c/api/initiate_account_recovery_with_email',
         koaBody,
         function*() {
             const params = this.request.body;

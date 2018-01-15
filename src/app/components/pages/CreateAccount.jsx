@@ -95,7 +95,7 @@ class CreateAccount extends React.Component {
         }
 
         // createAccount
-        fetch('/api/v1/accounts', {
+        fetch('/c/api/accounts', {
             method: 'post',
             mode: 'no-cors',
             credentials: 'same-origin',

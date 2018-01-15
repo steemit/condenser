@@ -49,7 +49,7 @@ function logRequest(path, ctx, extra) {
 }
 
 export default function useGeneralApi(app) {
-    const router = koa_router({ prefix: '/api/v1' });
+    const router = koa_router({ prefix: '/c/api' });
     app.use(router.routes());
     const koaBody = koa_body();
 

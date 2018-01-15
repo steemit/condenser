@@ -16,7 +16,7 @@ function toResArray(result) {
 }
 
 export default function useNotificationsApi(app) {
-    const router = koa_router({ prefix: '/api/v1' });
+    const router = koa_router({ prefix: '/c/api' });
     app.use(router.routes());
     const koaBody = koa_body();
 

@@ -105,7 +105,7 @@ class RecoverAccountStep1 extends React.Component {
     }
 
     getAccountIdentityProviders(name, owner_key) {
-        return fetch('/api/v1/account_identity_providers', {
+        return fetch('/c/api/account_identity_providers', {
             method: 'post',
             mode: 'no-cors',
             credentials: 'same-origin',
@@ -153,7 +153,7 @@ class RecoverAccountStep1 extends React.Component {
         e.preventDefault();
         const { name, password } = this.state;
         const owner_key = passwordToOwnerPubKey(name, password.value);
-        fetch('/api/v1/initiate_account_recovery_with_email', {
+        fetch('/c/api/initiate_account_recovery_with_email', {
             method: 'post',
             mode: 'no-cors',
             credentials: 'same-origin',
@@ -271,7 +271,7 @@ class RecoverAccountStep1 extends React.Component {
 
                 {show_social_login &&
                     show_social_login !== 'email' && (
-                        <form action="/initiate_account_recovery" method="post">
+                        <form action="/c/initiate_account_recovery" method="post">
                             <input
                                 type="hidden"
                                 name="csrf"

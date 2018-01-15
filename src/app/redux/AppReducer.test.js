@@ -3,9 +3,44 @@ import chaiImmutable from 'chai-immutable';
 
 import { Map, OrderedMap, getIn } from 'immutable';
 
-import reducer, { defaultState, appActions } from './AppReducer';
+import reducer, {
+    defaultState,
+    steemApiError,
+    fetchDataBegin,
+    fetchDataEnd,
+    addNotification,
+    removeNotification,
+    updateNotificounters,
+    setUserPreferences,
+    toggleNightmode,
+    toggleBlogmode,
+} from './AppReducer';
 
 chai.use(chaiImmutable);
+
+const mockPayloads = {
+    addNotification: {
+        key: 'testKey',
+    },
+    removeNotification: {
+        pathname: 'testPath',
+    },
+    updateNotificounters: {
+        follow: 1,
+        total: 2,
+    },
+    updateNotificountersNoFollow: {
+        follow: 0,
+        total: 2,
+    },
+    removeNotification: {
+        key: 'testKey',
+    },
+    setUserPreferences: {
+        cat: 'mymy',
+        dog: 'polly',
+    },
+};
 
 const mockActions = {
     LOCATION_CHANGE: {
@@ -14,50 +49,9 @@ const mockActions = {
             pathname: 'testPath',
         },
     },
-    [appActions.STEEM_API_ERROR]: {
-        type: appActions.STEEM_API_ERROR,
-    },
-    [appActions.FETCH_DATA_BEGIN]: {
-        type: appActions.FETCH_DATA_BEGIN,
-    },
-    [appActions.FETCH_DATA_END]: {
-        type: appActions.FETCH_DATA_END,
-    },
-    [appActions.ADD_NOTIFICATION]: {
-        type: appActions.ADD_NOTIFICATION,
-        payload: {
-            key: 'testKey',
-        },
-    },
-    [appActions.REMOVE_NOTIFICATION]: {
-        type: appActions.REMOVE_NOTIFICATION,
-        payload: {
-            key: 'testKey',
-        },
-    },
-    [appActions.UPDATE_NOTIFICOUNTERS]: {
-        type: appActions.UPDATE_NOTIFICOUNTERS,
-        payload: {
-            follow: 1,
-            total: 2,
-        },
-    },
-    [appActions.SET_USER_PREFERENCES]: {
-        type: appActions.SET_USER_PREFERENCES,
-        payload: {
-            cat: 'mymy',
-            dog: 'polly',
-        },
-    },
-    [appActions.TOGGLE_NIGHTMODE]: {
-        type: appActions.TOGGLE_NIGHTMODE,
-    },
-    [appActions.TOGGLE_BLOGMODE]: {
-        type: appActions.TOGGLE_BLOGMODE,
-    },
 };
 
-const key = mockActions[appActions.ADD_NOTIFICATION].payload.key;
+const key = mockPayloads.addNotification.key;
 const mockNotification = OrderedMap({
     [key]: {
         action: 'missing translation: en.g.dismiss',
@@ -81,21 +75,18 @@ describe('App reducer', () => {
     });
     it('should return correct state for a STEEM_API_ERROR action', () => {
         const initial = reducer();
-        const out = reducer(initial, mockActions[appActions.STEEM_API_ERROR]);
+        const out = reducer(initial, steemApiError());
         expect(out).to.eql(initial);
     });
     it('should return correct state for a FETCH_DATA_BEGIN action', () => {
         const initial = reducer();
-        const actual = reducer(
-            initial,
-            mockActions[appActions.FETCH_DATA_BEGIN]
-        );
+        const actual = reducer(initial, fetchDataBegin());
         const out = actual.get('loading');
         expect(out).to.eql(true);
     });
     it('should return correct state for a FETCH_DATA_END action', () => {
         const initial = reducer();
-        const actual = reducer(initial, mockActions[appActions.FETCH_DATA_END]);
+        const actual = reducer(initial, fetchDataEnd());
         const out = actual.get('loading');
         expect(out).to.eql(false);
     });
@@ -103,7 +94,7 @@ describe('App reducer', () => {
         const initial = reducer();
         const actual = reducer(
             initial,
-            mockActions[appActions.ADD_NOTIFICATION]
+            addNotification(mockPayloads.addNotification)
         );
         const out = actual.getIn(['notifications', key]);
         expect(out).to.eql(mockNotification.get(key));
@@ -116,17 +107,17 @@ describe('App reducer', () => {
         );
         const actual = reducer(
             initialWithNotification,
-            mockActions[appActions.REMOVE_NOTIFICATION]
+            removeNotification(mockPayloads.removeNotification)
         );
         const out = actual.get('notifications');
-        const expected = OrderedMap({});
+        const expected = OrderedMap();
         expect(out).to.eql(expected);
     });
     it('should return correct state for a UPDATE_NOTIFICOUNTERS action with a follow in payload', () => {
         const initial = reducer();
         let actual = reducer(
             initial,
-            mockActions[appActions.UPDATE_NOTIFICOUNTERS]
+            updateNotificounters(mockPayloads.updateNotificounters)
         );
         let out = actual.get('notificounters');
         let expected = Map({ follow: 0, total: 1 });
@@ -134,13 +125,9 @@ describe('App reducer', () => {
     });
     it('should return correct state for a UPDATE_NOTIFICOUNTERS action with no follow in payload', () => {
         const initial = reducer();
-        mockActions[appActions.UPDATE_NOTIFICOUNTERS].payload = {
-            follow: 0,
-            total: 2,
-        };
         const actual = reducer(
             initial,
-            mockActions[appActions.UPDATE_NOTIFICOUNTERS]
+            updateNotificounters(mockPayloads.updateNotificountersNoFollow)
         );
         const out = actual.get('notificounters');
         const expected = Map({ follow: 0, total: 2 });
@@ -150,7 +137,7 @@ describe('App reducer', () => {
         const initial = reducer();
         let actual = reducer(
             initial,
-            mockActions[appActions.SET_USER_PREFERENCES]
+            setUserPreferences(mockPayloads.setUserPreferences)
         );
         let out = actual.get('user_preferences');
         let expected = Map({ cat: 'mymy', dog: 'polly' });
@@ -159,14 +146,14 @@ describe('App reducer', () => {
     it('should return correct state for a TOGGLE_NIGHTMODE action', () => {
         const initial = reducer();
         const before = initial.getIn(['user_preferences', 'nightmode']);
-        let actual = reducer(initial, mockActions[appActions.TOGGLE_NIGHTMODE]);
+        let actual = reducer(initial, toggleNightmode());
         const after = actual.getIn(['user_preferences', 'nightmode']);
         expect(after).to.eql(!before);
     });
     it('should return correct state for a TOGGLE_BLOGMODE action', () => {
         const initial = reducer();
         const before = initial.getIn(['user_preferences', 'blogmode']);
-        let actual = reducer(initial, mockActions[appActions.TOGGLE_BLOGMODE]);
+        let actual = reducer(initial, toggleBlogmode());
         const after = actual.getIn(['user_preferences', 'blogmode']);
         expect(after).to.eql(!before);
     });

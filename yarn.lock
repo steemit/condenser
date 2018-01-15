@@ -10,9 +10,9 @@
     libsodium "^0.4.8"
     libsodium-wrappers "^0.4.8"
 
-"@steemit/steem-js@0.6.7":
-  version "0.6.7"
-  resolved "https://registry.yarnpkg.com/@steemit/steem-js/-/steem-js-0.6.7.tgz#ac78153bb92bc6c652898aabf2c4a0de220b6c00"
+"@steemit/steem-js@0.6.8":
+  version "0.6.8"
+  resolved "https://registry.yarnpkg.com/@steemit/steem-js/-/steem-js-0.6.8.tgz#1f551f55ba8a28c82161d534fcb3ef4fbf9bb5e3"
   dependencies:
     bigi "^1.4.2"
     bluebird "^3.4.6"

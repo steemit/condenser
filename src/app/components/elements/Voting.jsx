@@ -381,7 +381,7 @@ class Voting extends React.Component {
                 if (sign === 0) continue;
                 voters.push({
                     value: (sign > 0 ? '+ ' : '- ') + voter,
-                    link: pathTo.post(voter),
+                    link: pathTo.userProfile(voter),
                 });
             }
             if (total_votes > voters.length) {

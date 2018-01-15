@@ -1,6 +1,5 @@
 /* global describe, it, before, beforeEach, after, afterEach */
 
-import chai, { expect } from 'chai';
 import { call, select } from 'redux-saga/effects';
 import { api } from '@steemit/steem-js';
 import {
@@ -41,13 +40,13 @@ describe('TransactionSaga', () => {
     describe('createPatch', () => {
         it('should return undefined if empty arguments are passed', () => {
             const actual = createPatch('', '');
-            expect(actual).to.eql(undefined);
+            expect(actual).toEqual(undefined);
         });
         it('should return the patch that reconciles two different strings', () => {
             const testString =
                 'there is something interesting going on here that I do not fully understand it is seemingly complex but it is actually quite simple';
             const actual = createPatch(testString, testString + 'ILU');
-            expect(actual).to.eql(
+            expect(actual).toEqual(
                 '@@ -120,12 +120,15 @@\n quite simple\n+ILU\n'
             );
         });
@@ -61,7 +60,7 @@ describe('TransactionSaga', () => {
                 '@@redux-saga/IO': true,
                 TAKE: 'transaction/BROADCAST_OPERATION',
             };
-            expect(actual).to.eql(expected);
+            expect(actual).toEqual(expected);
         });
     });
 
@@ -73,7 +72,7 @@ describe('TransactionSaga', () => {
                 '@@redux-saga/IO': true,
                 TAKE: 'transaction/UPDATE_AUTHORITIES',
             };
-            expect(actual).to.eql(expected);
+            expect(actual).toEqual(expected);
         });
     });
 
@@ -85,7 +84,7 @@ describe('TransactionSaga', () => {
                 '@@redux-saga/IO': true,
                 TAKE: 'transaction/UPDATE_META',
             };
-            expect(actual).to.eql(expected);
+            expect(actual).toEqual(expected);
         });
     });
 
@@ -101,12 +100,12 @@ describe('TransactionSaga', () => {
             const expected = select(state =>
                 state.user.getIn(['current', 'private_keys', 'memo_private'])
             );
-            expect(actual).to.have.all.keys('@@redux-saga/IO', 'SELECT');
+            expect(Object.keys(actual)).toEqual(['@@redux-saga/IO', 'SELECT']);
         });
         it('should return the operation unchanged if it has no memo attribute', () => {
             let gen = preBroadcast_transfer(arg);
             const actual = gen.next().value;
-            expect(actual).to.eql(operationSansMemo);
+            expect(actual).toEqual(operationSansMemo);
         });
     });
 
@@ -124,11 +123,11 @@ describe('TransactionSaga', () => {
                 operation.author,
                 operation.title
             );
-            expect(actual).to.eql(mockCall);
+            expect(actual).toEqual(mockCall);
         });
         it('should return a string containing the transformed data from the api', () => {
             const permlink = gen.next({ body: 'test' }).value;
-            expect(permlink).to.contain('test'); // TODO: cannot deep equal due to date stamp at runtime.
+            expect(permlink.indexOf('test')).toEqual(7); // TODO: cannot deep equal due to date stamp at runtime.
         });
         it('should generate own permlink, independent of api if title is empty', () => {
             const gen2 = createPermlink(
@@ -138,9 +137,13 @@ describe('TransactionSaga', () => {
                 operation.parent_permlink
             );
             const actual = gen2.next().value;
-            expect(actual).to.contain(
-                `re-${operation.parent_author}-${operation.parent_permlink}-`
-            ); // TODO: cannot deep equal due to random hash at runtime.
+            expect(
+                actual.indexOf(
+                    `re-${operation.parent_author}-${
+                        operation.parent_permlink
+                    }-`
+                )
+            ).toEqual(0); // TODO: cannot deep equal due to random hash at runtime.
         });
     });
 
@@ -155,8 +158,12 @@ describe('TransactionSaga', () => {
                 operation.parent_permlink
             ).value;
             const actual = permlink.next().value;
-            const expected = call([api, api.getContentAsync], operation.author, operation.title);
-            expect(expected).to.eql(actual);
+            const expected = call(
+                [api, api.getContentAsync],
+                operation.author,
+                operation.title
+            );
+            expect(expected).toEqual(actual);
         });
         it('should return the comment options array.', () => {
             let actual = gen.next('mock-permlink-123').value;
@@ -175,39 +182,57 @@ describe('TransactionSaga', () => {
                         memo: operation.memo,
                         permlink: 'mock-permlink-123',
                         json_metadata: JSON.stringify(operation.json_metadata),
-                        title: new Buffer((operation.title || '').trim(), 'utf-8'),
+                        title: new Buffer(
+                            (operation.title || '').trim(),
+                            'utf-8'
+                        ),
                         body: new Buffer(operation.body, 'utf-8'), // TODO: new Buffer is deprecated, prefer Buffer.from()
                     },
                 ],
             ];
-            expect(actual).to.eql(expected);
+            expect(actual).toEqual(expected);
         });
         it('should return a patch as body value if patch is smaller than body.', () => {
             const originalBod = operation.body + 'minor difference';
             operation.__config.originalBody = originalBod;
             gen = preBroadcast_comment({ operation, username });
-            gen.next(operation.title, operation.author, operation.parent_author, operation.parent_permlink);
+            gen.next(
+                operation.title,
+                operation.author,
+                operation.parent_author,
+                operation.parent_permlink
+            );
             const actual = gen.next('mock-permlink-123').value;
             const expected = Buffer.from(
                 createPatch(originalBod, operation.body),
                 'utf-8'
             );
-            expect(actual[0][1].body).to.eql(expected);
+            expect(actual[0][1].body).toEqual(expected);
         });
         it('should return body as body value if patch is larger than body.', () => {
             const originalBod = 'major difference';
             operation.__config.originalBody = originalBod;
             gen = preBroadcast_comment({ operation, username });
-            gen.next(operation.title, operation.author, operation.parent_author, operation.parent_permlink);
+            gen.next(
+                operation.title,
+                operation.author,
+                operation.parent_author,
+                operation.parent_permlink
+            );
             const actual = gen.next('mock-permlink-123').value;
             const expected = Buffer.from(operation.body, 'utf-8');
-            expect(actual[0][1].body).to.eql(expected, 'utf-8');
+            expect(actual[0][1].body).toEqual(expected, 'utf-8');
         });
         it('should include comment_options and autoVote if specified.', () => {
             operation.__config.comment_options = true;
             operation.__config.autoVote = true;
             gen = preBroadcast_comment({ operation, username });
-            gen.next(operation.title, operation.author, operation.parent_author, operation.parent_permlink);
+            gen.next(
+                operation.title,
+                operation.author,
+                operation.parent_author,
+                operation.parent_permlink
+            );
             const actual = gen.next('mock-permlink-123').value;
             const expectedCommentOptions = [
                 'comment_options',
@@ -230,8 +255,8 @@ describe('TransactionSaga', () => {
                     weight: 10000,
                 },
             ];
-            expect(actual[1]).to.eql(expectedCommentOptions);
-            expect(actual[2]).to.eql(expectedAutoVoteOptions);
+            expect(actual[1]).toEqual(expectedCommentOptions);
+            expect(actual[2]).toEqual(expectedAutoVoteOptions);
         });
     });
 });

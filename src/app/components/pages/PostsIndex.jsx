@@ -9,7 +9,6 @@ import constants from 'app/redux/constants';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import PostsList from 'app/components/cards/PostsList';
 import { isFetchingOrRecentlyUpdated } from 'app/utils/StateFunctions';
-import MarkNotificationRead from 'app/components/elements/MarkNotificationRead';
 import Callout from 'app/components/elements/Callout';
 // import SidebarStats from 'app/components/elements/SidebarStats';
 import SidebarLinks from 'app/components/elements/SidebarLinks';
@@ -89,7 +88,6 @@ class PostsIndex extends React.Component {
         let topics_order = order;
         let posts = [];
         let emptyText = '';
-        let markNotificationRead = null;
         if (category === 'feed') {
             const account_name = order.slice(1);
             order = 'by_feed';
@@ -116,12 +114,6 @@ class PostsIndex extends React.Component {
                         </Link>
                         <br />
                     </div>
-                );
-                markNotificationRead = (
-                    <MarkNotificationRead
-                        fields="feed"
-                        account={account_name}
-                    />
                 );
             } else {
                 emptyText = (
@@ -213,7 +205,6 @@ class PostsIndex extends React.Component {
                         </div>
                     </div>
                     <hr className="articles__hr" />
-                    {markNotificationRead}
                     {!fetching && (posts && !posts.size) ? (
                         <Callout>{emptyText}</Callout>
                     ) : (

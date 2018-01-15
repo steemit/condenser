@@ -154,7 +154,7 @@ function TopRightMenu({
             <ul className={mcn + mcl}>
                 {!vertical && (
                     <li className="Header__search">
-                        <a href={pathTo.search()} title={tt_search}>
+                        <a href="/static/search.html" title={tt_search}>
                             <Icon name="search" />
                         </a>
                     </li>
@@ -176,7 +176,7 @@ function TopRightMenu({
         <ul className={mcn + mcl}>
             {!vertical && (
                 <li className="Header__search">
-                    <a href={pathTo.search()} title={tt_search}>
+                    <a href="/static/search.html" title={tt_search}>
                         <Icon name="search" />
                     </a>
                 </li>

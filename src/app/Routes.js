@@ -113,7 +113,6 @@ export const pathTo = {
     userPermissions: name => `/${name}/permissions`,
     userCurationRewards: name => `/${name}/curation-rewards`,
     userAuthorRewards: name => `/${name}/author-rewards`,
-    search: () => '/s/search',
     compose: () => '/c/submit',
     signup: (params = '') => `/c/pick-account${params}`,
     login: () => '/c/login',

@@ -4,8 +4,9 @@ import store from 'store';
 
 // Action constants
 const SHOW_LOGIN = 'user/SHOW_LOGIN';
-const SHOW_TERMS = 'user/SHOW_TERMS';
 const HIDE_LOGIN = 'user/HIDE_LOGIN';
+const SHOW_TERMS = 'user/SHOW_TERMS';
+const HIDE_TERMS = 'user/HIDE_TERMS';
 export const SAVE_LOGIN_CONFIRM = 'user/SAVE_LOGIN_CONFIRM';
 export const SAVE_LOGIN = 'user/SAVE_LOGIN';
 const REMOVE_HIGH_SECURITY_KEYS = 'user/REMOVE_HIGH_SECURITY_KEYS';
@@ -68,24 +69,28 @@ export default function reducer(state = defaultState, action) {
             });
         }
 
-        case SHOW_TERMS: {
-            let operation, termsDefault;
-            if (payload) {
-                operation = fromJS(payload.operation);
-                termsDefault = fromJS(payload.termsDefault);
-            }
-            return state.merge({
-                show_terms_modal: true,
-                loginBroadcastOperation: operation,
-                termsDefault,
-            });
-        }
-
         case HIDE_LOGIN:
             return state.merge({
                 show_login_modal: false,
                 loginBroadcastOperation: undefined,
                 loginDefault: undefined,
+            });
+
+        case SHOW_TERMS: {
+            let termsDefault;
+            if (payload) {
+                termsDefault = fromJS(payload.termsDefault);
+            }
+            return state.merge({
+                show_terms_modal: true,
+                termsDefault,
+            });
+        }
+
+        case HIDE_TERMS:
+            return state.merge({
+                show_terms_modal: false,
+                termsDefault: undefined,
             });
 
         case SAVE_LOGIN_CONFIRM:
@@ -235,13 +240,18 @@ export const showLogin = payload => ({
     payload,
 });
 
+export const hideLogin = payload => ({
+    type: HIDE_LOGIN,
+    payload,
+});
+
 export const showTerms = payload => ({
     type: SHOW_TERMS,
     payload,
 });
 
-export const hideLogin = payload => ({
-    type: HIDE_LOGIN,
+export const hideTerms = payload => ({
+    type: HIDE_TERMS,
     payload,
 });
 

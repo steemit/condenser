@@ -298,7 +298,10 @@ thebiton
 therocktrading
 tidex.com
 topbtc
+upbbit
+upbit
 upbit.com
+upbitt
 viabtc
 vittrex
 wallet.bitshares

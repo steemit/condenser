@@ -1,4 +1,3 @@
-import { expect } from 'chai';
 import resolveRoute, { routeRegex } from "./ResolveRoute";
 
 describe ( 'routeRegex', () => {
@@ -17,7 +16,7 @@ describe ( 'routeRegex', () => {
         ];
 
         test_cases.forEach(r => {
-            expect(routeRegex[r[0]]).to.deep.equal(r[1]);
+            expect(routeRegex[r[0]]).toEqual(r[1]);
         });
     });
 });
@@ -48,23 +47,23 @@ describe('resolveRoute', () => {
     ];
     test_cases.forEach(r => {
         it(`should resolve the route for the ${r[1].page} page`, () => {
-            expect(resolveRoute(r[0])).to.deep.equal(r[1]);
+            expect(resolveRoute(r[0])).toEqual(r[1]);
         });
     });
 
     it('should resolve xss test route in development environment', () => {
-        expect(resolveRoute('/xss/test')).to.deep.equal({page:'NotFound'});
+        expect(resolveRoute('/xss/test')).toEqual({page:'NotFound'});
         process.env.NODE_ENV = 'development';
-        expect(resolveRoute('/xss/test')).to.deep.equal({page:'XSSTest'});
+        expect(resolveRoute('/xss/test')).toEqual({page:'XSSTest'});
         delete process.env.NODE_ENV;
     });
     it('should resolve benchmark route in development environment', () => {
-        expect(resolveRoute('/benchmark')).to.deep.equal({page:'NotFound'});
+        expect(resolveRoute('/benchmark')).toEqual({page:'NotFound'});
         process.env.NODE_ENV = 'development';
-        expect(resolveRoute('/benchmark')).to.deep.equal({page:'Benchmark'});
+        expect(resolveRoute('/benchmark')).toEqual({page:'Benchmark'});
         delete process.env.NODE_ENV;
     });
     it('should resolve an unknown route to NotFound', () => {
-        expect(resolveRoute('/randomness')).to.deep.equal({page:'NotFound'});
+        expect(resolveRoute('/randomness')).toEqual({page:'NotFound'});
     });
 });

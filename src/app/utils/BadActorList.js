@@ -142,6 +142,7 @@ gopax
 steempay
 steempays
 steemitpay
+buildwhale
 `
     .trim()
     .split('\n');

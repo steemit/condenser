@@ -57,7 +57,7 @@ const hook = {
     accepted_withdraw_vesting,
 };
 
-function* preBroadcast_transfer({ operation }) {
+export function* preBroadcast_transfer({ operation }) {
     let memoStr = operation.memo;
     if (memoStr) {
         memoStr = toStringUtf8(memoStr);
@@ -498,7 +498,7 @@ function* accepted_account_update({ operation }) {
 
 // function* preBroadcast_account_witness_vote({operation, username}) {
 // }
-function* preBroadcast_comment({ operation, username }) {
+export function* preBroadcast_comment({ operation, username }) {
     if (!operation.author) operation.author = username;
     let permlink = operation.permlink;
     const {
@@ -583,7 +583,7 @@ function* preBroadcast_comment({ operation, username }) {
     return comment_op;
 }
 
-function* createPermlink(title, author, parent_author, parent_permlink) {
+export function* createPermlink(title, author, parent_author, parent_permlink) {
     let permlink;
     if (title && title.trim() !== '') {
         let s = slug(title);
@@ -618,7 +618,7 @@ function* createPermlink(title, author, parent_author, parent_permlink) {
 import diff_match_patch from 'diff-match-patch';
 const dmp = new diff_match_patch();
 
-function createPatch(text1, text2) {
+export function createPatch(text1, text2) {
     if (!text1 && text1 === '') return undefined;
     const patches = dmp.patch_make(text1, text2);
     const patch = dmp.patch_toText(patches);

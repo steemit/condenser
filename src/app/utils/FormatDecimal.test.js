@@ -1,7 +1,7 @@
 import { formatDecimal } from './ParsersAndFormatters';
 
 describe('formatDecimal', () => {
-    test('should format decimals', () => {
+    it('should format decimals', () => {
         const test_cases = [
             [100.0, '100.00'],
             [101, '101.00'],

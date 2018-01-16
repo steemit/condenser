@@ -6,11 +6,9 @@ beforeEach(() => {
 });
 
 describe('htmlready', () => {
-    it('should throw an error if the input cannot be parsed', () => {
+    it('should return an empty string if input cannot be parsed', () => {
         const teststring = 'teststring lol'; // this string causes the xmldom parser to fail & error out
-        expect(() => HtmlReady(teststring).html).toThrow(
-            'HtmlReady: xmldom error'
-        );
+        expect(HtmlReady(teststring).html).toEqual('');
     });
 
     it('should allow links where the text portion and href contains steemit.com', () => {

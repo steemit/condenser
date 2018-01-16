@@ -8,7 +8,7 @@ import { _Header_ } from './Header';
 configure({ adapter: new Adapter() });
 
 describe('Header', () => {
-    test('contains class .header', () => {
+    it('contains class .header', () => {
         expect(
             shallow(<_Header_ location={{ pathname: 'whatever' }} />).is(
                 '.Header'

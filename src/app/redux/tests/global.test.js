@@ -3,13 +3,13 @@ import Immutable from 'immutable';
 import reducer, * as globalActions from '../GlobalReducer';
 
 describe('global reducer', () => {
-    test('should return empty state', () => {
+    it('should return empty state', () => {
         const reduced = reducer(undefined, {});
 
         expect(reduced.toJS()).toEqual({ status: {} });
     });
 
-    test('should apply new global state', () => {
+    it('should apply new global state', () => {
         const state = Immutable.fromJS(require('./global.json'));
         const reduced = reducer(undefined, globalActions.receiveState(state));
         //const action = {type: 'global/RECEIVE_STATE', payload: state};

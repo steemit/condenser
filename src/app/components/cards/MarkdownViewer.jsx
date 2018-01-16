@@ -87,6 +87,11 @@ class MarkdownViewer extends Component {
 
         let renderedText = html ? text : remarkable.render(text);
 
+        // If content isn't wrapped with an html element at this point, add it.
+        if (!renderedText.indexOf('<html>') !== 0) {
+            renderedText = '<html>' + renderedText + '</html>';
+        }
+
         // Embed videos, link mentions and hashtags, etc...
         if (renderedText)
             renderedText = HtmlReady(renderedText, { hideImages }).html;

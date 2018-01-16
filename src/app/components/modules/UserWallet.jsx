@@ -572,7 +572,7 @@ class UserWallet extends React.Component {
                                         : null,
                                 }}
                             >
-                                <Link to="/market">
+                                <Link to={pathTo.market()}>
                                     <Tooltip t={tt('market_jsx.open_orders')}>
                                         (+{steem_orders_balance_str} STEEM)
                                     </Tooltip>

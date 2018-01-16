@@ -153,7 +153,7 @@ class PostSummary extends React.Component {
                 <div className="user">
                     {!isNsfw ? (
                         <div className="user__col user__col--left">
-                            <a className="user__link" href={'/@' + p.author}>
+                            <a className="user__link" href={pathTo.userProfile(p.author)}>
                                 <Userpic
                                     account={p.author}
                                     size={avatarSize.small}

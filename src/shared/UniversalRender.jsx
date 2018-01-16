@@ -35,10 +35,19 @@ import ScrollBehavior from 'scroll-behavior';
 
 import { api } from '@steemit/steem-js';
 
-import get_state_perf from './test/mockdata/api_calls/get_state';
-import get_content_perf from './test/mockdata/api_calls/get_content';
-
-const PERFORMANCE_TEST = !!process.env.PERFORMANCE_TEST;
+const PERFORMANCE_TEST = process.env.PERFORMANCE_TEST;
+let get_state_perf,
+    get_content_perf = false;
+if (PERFORMANCE_TEST) {
+    let uri = __dirname.replace('src/shared', '');
+    //.default because require
+    get_state_perf = require(uri +
+        PERFORMANCE_TEST +
+        '/mockdata/api_calls/get_state').default;
+    get_content_perf = require(uri +
+        PERFORMANCE_TEST +
+        '/mockdata/api_calls/get_content').default;
+}
 
 const calcOffsetRoot = startEl => {
     let offset = 0;
@@ -320,7 +329,7 @@ async function universalRender({
         if (url.indexOf('/author-rewards') !== -1)
             url = url.replace(/\/author-rewards$/, '/transfers');
 
-        if (PERFORMANCE_TEST === true) {
+        if (PERFORMANCE_TEST) {
             onchain = get_state_perf;
         } else {
             onchain = await api.getStateAsync(url);
@@ -361,7 +370,7 @@ async function universalRender({
         ) {
             const params = url.substr(2, url.length - 1).split('/');
             let content;
-            if (PERFORMANCE_TEST === true) {
+            if (PERFORMANCE_TEST) {
                 content = get_content_perf;
             } else {
                 content = await api.getContentAsync(params[0], params[1]);

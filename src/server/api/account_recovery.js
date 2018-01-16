@@ -41,7 +41,7 @@ export default function useAccountRecoveryApi(app) {
         this.redirect('/connect/' + params.provider);
     });
 
-    router.get('/account_recovery_confirmation/:code', function*() {
+    router.get('/c/account_recovery_confirmation/:code', function*() {
         if (rateLimitReq(this, this.req)) return;
         const code = this.params.code;
         if (!code) return this.throw('no confirmation code', 404);

@@ -152,7 +152,7 @@ export default function useEnterAndConfirmEmailPages(app) {
     const koaBody = koa_body();
     const rc_site_key = config.get('recaptcha.site_key');
 
-    router.get('/start/:code', function*() {
+    router.get('/c/start/:code', function*() {
         const code = this.params.code;
         const eid = yield models.Identity.findOne({
             attributes: ['id', 'user_id', 'verified'],

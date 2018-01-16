@@ -91,7 +91,7 @@ describe('htmlready', () => {
         const textwithmentions =
             '<xml xmlns="http://www.w3.org/1999/xhtml">@username (@a1b2, whatever</xml>';
         const htmlified =
-            '<xml xmlns="http://www.w3.org/1999/xhtml"><span><a href="/@username">@username</a> (<a href="/@a1b2">@a1b2</a>, whatever</span></xml>';
+            '<xml xmlns="http://www.w3.org/1999/xhtml"><span><a href="/username">@username</a> (<a href="/a1b2">@a1b2</a>, whatever</span></xml>';
         const res = HtmlReady(textwithmentions).html;
         expect(res).toEqual(htmlified);
     });

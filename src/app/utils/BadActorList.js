@@ -10,6 +10,7 @@ biitrex
 biittrex
 bit-z
 bitex
+bitfinex
 bitfinex.com
 bitfinix
 bitflip
@@ -28,6 +29,7 @@ bitrtex
 bitrx
 bitsane
 bitsane.com
+bitstamp
 bitstamp.net
 bitt
 bitteex
@@ -117,6 +119,7 @@ boostter
 boster
 btc-alpha
 btc-alpha.com
+btc38
 btcalpha
 btcmarkets
 btcmarkets.net
@@ -127,6 +130,7 @@ bttrx
 buildawale
 buildawhile
 buildwhale
+c-cex
 c-cex.com
 ccex
 cexio
@@ -134,6 +138,7 @@ changellly
 changelly.com
 changely
 coin-room
+coinbase
 coinbase.com
 coinegg
 coinegg.com
@@ -167,6 +172,7 @@ ittrexx
 kcx
 kocostock
 koinex
+kraken
 kraken.com
 kucoin
 linkcoin
@@ -332,6 +338,7 @@ xbtce.com
 yobit
 yobit.net
 youbit
+yunbi
 zeniex
 `
     .trim()

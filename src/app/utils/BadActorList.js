@@ -196,7 +196,6 @@ minnowboostre
 minnowbootser
 minnowboster
 minnowhelp
-minnowpond
 minnowpooster
 minnowsuport
 minnowsupports

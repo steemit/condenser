@@ -166,6 +166,9 @@ export function contentStats(content) {
         if (typeof tags == 'string') {
             tags = [tags];
         }
+        if (Array.isArray(tags)) {
+            tags = [].concat.apply([], tags);
+        }
         if (!Array.isArray(tags)) {
             tags = [];
         }

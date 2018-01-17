@@ -1,4 +1,4 @@
-export default {
+module.exports = {
     accounts: {},
     content: {},
     discussion_idx: { '': {} },

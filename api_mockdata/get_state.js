@@ -1,4 +1,4 @@
-export default {
+module.exports = {
     current_route: '/@test-safari/feed',
     props: {
         id: 0,

@@ -37,7 +37,7 @@ export default function resolveRoute(path) {
     if (path === '/xss/test' && process.env.NODE_ENV === 'development') {
         return { page: 'XSSTest' };
     }
-    if (path === '/benchmark' && process.env.NODE_ENV === 'development') {
+    if (path === '/benchmark' && process.env.OFFLINE_SSR_TEST) {
         return { page: 'Benchmark' };
     }
     if (path.match(/^\/tags\/?/)) {

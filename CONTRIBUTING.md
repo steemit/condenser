@@ -30,14 +30,14 @@ Please note that this contributing guide only applies to our development presenc
 6. **Enhancement Suggestions** If you have an enhancement you would like to see in condenser 
     we suggest you first discuss it with other members of the community on Steemit.com, or 
     in the steemit discord channel. If there is a well vetted idea that has the support of 
-    the community create an issue with a link to the discussion, a detailed description, and 
-    tag it with the label `community-src`
+    the community create an issue with a link to the discussion. The issue's title should
+     start with `community -` and have a detailed description.
 7. **Development Discussions** The developers frequently open issues to discuss changes that 
     are being worked on. This is to inform the community of the changes being worked on, and 
     to get input from the community and other developers on the implementation.    
 8. **Pull Requests** We love community contributions. If you've done some work on an issue
      and want to see it in the condenser codebase, please submit a Pull Request, reference
-     the issue in the description *and tag the it with `community-src`* we're working very
+     the issue in the description *start the title with `community -`. We're working very
      hard to keep our development practices as open as possible, and this helps us a lot. 
 
 ## Code of Conduct

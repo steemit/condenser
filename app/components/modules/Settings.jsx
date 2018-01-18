@@ -25,6 +25,7 @@ class Settings extends React.Component {
     state = {
         errorMessage: '',
         successMessage: '',
+        pImageUploading: false,
     }
 
     initForm(props) {
@@ -53,57 +54,40 @@ class Settings extends React.Component {
         this.setState({nsfwPref, oldNsfwPref: nsfwPref})
     }
 
-    selectProfileImage = () => {
-      this.pImageDropZone.open();
-    }
-
-    pImageOnDrop = (acceptedFiles, rejectedFiles) => {
+    onDrop = (acceptedFiles, rejectedFiles) => {
       if(!acceptedFiles.length) {
         if(rejectedFiles.length) {
-          this.setState({progress: {error: tt('reply_editor.please_insert_only_image_files')}})
-          console.log('onDrop Rejected files: ', rejectedFiles);
-        }
-        return
+        this.setState({progress: {error: tt('reply_editor.please_insert_only_image_files')}})
+        console.log('onDrop Rejected files: ', rejectedFiles);
+      }
+      return
       }
       const file = acceptedFiles[0]
-      this.uploadImage(file, file.name)
+      this.upload(file, file.name)
     }
 
-    uploadImage = (file, name = '') => {
-      // fixme code duplication with ReplyEditor image uploading
-      const {uploadImage} = this.props
-      this.setState({progress: {message: tt('reply_editor.uploading') + '...'}})
-      uploadImage(file, progress => {
-      if(progress.url) {
-        console.log(`$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ image loaded`)
-        console.log(progress.url)
-        // this.pImageUrlInput.value = progress.url
-        this.state.profile_image.props.onChange(progress.url)
+    onOpenClick = () => {
+      this.dropzone.open();
+    }
 
-        // const sCopy = Object.assign({}, this.state)
-        // if (sCopy) {
-        //   sCopy.profile_image.value = progress.url
-        //   this.setState({profile_image: {value: progress.url}}, () => {
-        //   })
-        // }
-        // console.log(`----------------------------- state`)
-        // console.log(sCopy)
-        // this.setState({ progress: {} })
-        // const {url} = progress
-        // const image_md = `![${name}](${url})`
-        // const {body} = this.state
-        // const {selectionStart, selectionEnd} = this.refs.postRef
-        // body.props.onChange(
-        //   body.value.substring(0, selectionStart) +
-        //   image_md +
-        //   body.value.substring(selectionEnd, body.value.length)
-        // )
-      } else {
-        console.log(progress)
-        this.setState({ profile_image: { error: progress} })
-      }
-      setTimeout(() => { this.setState({ progress: {} }) }, 10000) // clear message
-    })
+    upload = (file, name = '') => {
+      const {notify} = this.props;
+      const {uploadImage} = this.props
+      this.setState({pImageUploading: true})
+      uploadImage(file, progress => {
+        if(progress.url) {
+          const {profile_image: {props: {onChange}}} = this.state;
+          // ok. change input url
+          onChange(progress.url)
+        }
+        if(progress.error) {
+          // error
+          const { error } = progress;
+          // show error notification
+          notify(error, 10000)
+        }
+        this.setState({pImageUploading: false})
+      })
     }
 
     onNsfwPrefChange(e) {
@@ -215,12 +199,7 @@ class Settings extends React.Component {
     render() {
         const {state, props} = this
 
-
-      console.log(`----------------------------- state`)
-      console.log(state)
-
-
-      const {submitting, valid, touched} = this.state.accountSettings
+        const {submitting, valid, touched} = this.state.accountSettings
         const disabled = !props.isOwnAccount || state.loading || submitting || !valid || !touched
 
         const {profile_image, cover_image, name, about, gender, location, website} = this.state
@@ -228,6 +207,9 @@ class Settings extends React.Component {
         const {follow, account, isOwnAccount} = this.props
         const following = follow && follow.getIn(['getFollowingAsync', account.name]);
         const ignores = isOwnAccount && following && following.get('ignore_result')
+
+        const {pImageUploading} = this.state;
+
 
         const languageSelectBox = <select defaultValue={process.env.BROWSER ? cookie.load(LOCALE_COOKIE_KEY) : DEFAULT_LANGUAGE} onChange={this.onLanguageChange}>
           {Object.keys(LANGUAGES).map(key => {
@@ -240,6 +222,22 @@ class Settings extends React.Component {
                 return <option key={i} value={i}>{i}</option>
             })}
         </select>;
+
+        const selectorStyle = pImageUploading ?
+          {
+            whiteSpace: `nowrap`,
+            display: `flex`,
+            alignItems: `center`,
+            padding: `0 6px`,
+            pointerEvents: `none`,
+            cursor: `default`,
+            opacity: `0.6`
+          } :
+          {
+            display: `flex`,
+            alignItems: `center`,
+            padding: `0 6px`
+          };
 
         return <div className="Settings">
 
@@ -273,16 +271,19 @@ class Settings extends React.Component {
                         {tt('settings_jsx.profile_image_url')}
                         <div style={{display: `flex`, alignItems: `stretch`, alignContent: `stretch`}}>
                           <Dropzone style={{width: `100%`}}
-                                    onDrop={this.pImageOnDrop}
+                                    onDrop={this.onDrop}
                                     className={'none'}
                                     disableClick multiple={false} accept="image/*"
-                                    ref={(node) => { this.pImageDropZone = node; }}>
+                                    ref={(node) => { this.dropzone = node; }}>
                               <input ref={(r) => this.pImageUrlInput = r}
-                                     type="url" {...profile_image.props} autoComplete="off" />
+                                     type="url" {...profile_image.props}
+                                     autoComplete="off"
+                                     disabled={pImageUploading}
+                              />
                           </Dropzone>
-                          <a onClick={this.selectProfileImage}
-                             style={{display: `flex`, alignItems: `center`, padding: `0 6px`}}>
-                              Выбрать
+                          <a onClick={this.onOpenClick}
+                             style={selectorStyle}>
+                                {pImageUploading ? `${tt(`user_saga_js.imageUpload.uploading`)} ...` : tt(`g.select`)}
                           </a>
                         </div>
                     </label>
@@ -418,11 +419,11 @@ export default connect(
             const options = {type: 'account_update', operation, successCallback, errorCallback}
             dispatch(transaction.actions.broadcastOperation(options))
         },
-        notify: (message) => {
+        notify: (message, dismiss = 3000) => {
             dispatch({type: 'ADD_NOTIFICATION', payload: {
                 key: "settings_" + Date.now(),
                 message,
-                dismissAfter: 3000}
+                dismissAfter: dismiss}
             });
         }
     })

@@ -28,6 +28,7 @@ class Settings extends React.Component {
         errorMessage: '',
         successMessage: '',
         pImageUploading: false,
+        cImageUploading: false,
     }
 
     initForm(props) {
@@ -68,8 +69,29 @@ class Settings extends React.Component {
       this.upload(file, file.name)
     }
 
+
+    // fixme remove all the code duplication below
+
+    onDropCover = (acceptedFiles, rejectedFiles) => {
+    if(!acceptedFiles.length) {
+      if(rejectedFiles.length) {
+        this.setState({progress: {error: tt('reply_editor.please_insert_only_image_files')}})
+        console.log('onDrop Rejected files: ', rejectedFiles);
+      }
+      return
+    }
+    const file = acceptedFiles[0]
+    this.uploadCover(file, file.name)
+  }
+
+
+
     onOpenClick = () => {
       this.dropzone.open();
+    }
+
+    onOpenCoverClick = () => {
+      this.dropzoneCover.open();
     }
 
     upload = (file, name = '') => {
@@ -89,6 +111,26 @@ class Settings extends React.Component {
           notify(error, 10000)
         }
         this.setState({pImageUploading: false})
+      })
+    }
+
+    uploadCover = (file, name = '') => {
+      const {notify} = this.props;
+      const {uploadImage} = this.props
+      this.setState({cImageUploading: true})
+      uploadImage(file, progress => {
+        if(progress.url) {
+          const {cover_image: {props: {onChange}}} = this.state;
+          // ok. change input url
+          onChange(progress.url)
+        }
+        if(progress.error) {
+          // error
+          const { error } = progress;
+          // show error notification
+          notify(error, 10000)
+        }
+      this.setState({cImageUploading: false})
       })
     }
 
@@ -210,7 +252,7 @@ class Settings extends React.Component {
         const following = follow && follow.getIn(['getFollowingAsync', account.name]);
         const ignores = isOwnAccount && following && following.get('ignore_result')
 
-        const {pImageUploading} = this.state;
+        const {pImageUploading, cImageUploading} = this.state;
 
 
         const languageSelectBox = <select defaultValue={process.env.BROWSER ? cookie.load(LOCALE_COOKIE_KEY) : DEFAULT_LANGUAGE} onChange={this.onLanguageChange}>
@@ -240,6 +282,22 @@ class Settings extends React.Component {
             alignItems: `center`,
             padding: `0 6px`
           };
+
+          const selectorStyleCover = cImageUploading ?
+            {
+              whiteSpace: `nowrap`,
+              display: `flex`,
+              alignItems: `center`,
+              padding: `0 6px`,
+              pointerEvents: `none`,
+              cursor: `default`,
+              opacity: `0.6`
+            } :
+            {
+              display: `flex`,
+              alignItems: `center`,
+              padding: `0 6px`
+            };
 
         return <div className="Settings">
 
@@ -295,19 +353,19 @@ class Settings extends React.Component {
                     {tt('settings_jsx.cover_image_url')}
                     <div style={{display: `flex`, alignItems: `stretch`, alignContent: `stretch`}}>
                       <Dropzone style={{width: `100%`}}
-                                onDrop={this.onDrop}
+                                onDrop={this.onDropCover}
                                 className={'none'}
                                 disableClick multiple={false} accept="image/*"
-                                ref={(node) => { this.dropzone = node; }}>
+                                ref={(node) => { this.dropzoneCover = node; }}>
                         <input ref={(r) => this.pCoverImageUrlInput = r}
                                type="url" {...cover_image.props}
                                autoComplete="off"
-                               disabled={pImageUploading}
+                               disabled={cImageUploading}
                         />
                       </Dropzone>
-                      <a onClick={this.onOpenClick}
-                         style={selectorStyle}>
-                        {pImageUploading ? `${tt(`user_saga_js.imageUpload.uploading`)} ...` : tt(`g.upload`)}
+                      <a onClick={this.onOpenCoverClick}
+                         style={selectorStyleCover}>
+                        {cImageUploading ? `${tt(`user_saga_js.imageUpload.uploading`)} ...` : tt(`g.upload`)}
                       </a>
                     </div>
                   </label>

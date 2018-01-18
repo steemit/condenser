@@ -308,7 +308,7 @@ class ReplyEditor extends React.Component {
             } else {
                 this.setState({ progress })
             }
-            setTimeout(() => { this.setState({ progress: {} }) }, 10000) // clear message
+            setTimeout(() => { this.setState({ progress: {} }) }, 20000) // clear message
         })
     }
 
@@ -466,7 +466,10 @@ class ReplyEditor extends React.Component {
                                         </p>
                                     }
                                     {progress.message && <div className="info">{progress.message.replace('Uploading', tt('reply_editor.uploading'))}</div>}
-                                    {progress.error && <div className="error">{tt('reply_editor.image_upload')} : {progress.error}</div>}
+                                    {progress.error &&
+                                    <div className="error">
+                                      {progress.error}
+                                      </div>}
                                 </span>
                             }
                         </div>

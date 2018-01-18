@@ -262,6 +262,7 @@
     "save": "Сохранить",
     "saved": "Сохранено",
     "search": "Поиск",
+    "select": "Выбрать",
     "sell": "Продать",
     "settings": "Настройки",
     "share_this_post": "Поделиться этим постом",
@@ -948,7 +949,8 @@
     "imageUpload" : {
       "error_login_first": "Пожалуйста, выполните вход в систему ...",
       "error_login_with_posting_key": "Недоступен постинг ключ.",
-      "error_server_unavailable": "Ошибка доступа к серверу.",
+      "error_server_unavailable": "Произошла ошибка. Для решения проблемы укажите больше информации об ошибке",
+      "error_file_or_data_url_required": "Ошибка в имени файла или URL",
       "uploading": "Загрузка"
     }
   }

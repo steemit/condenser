@@ -11,6 +11,7 @@ import {loadFollows} from 'app/redux/FollowSaga'
 import {PrivateKey, Signature, hash} from 'golos-js/lib/auth/ecc'
 import {api} from 'golos-js'
 import tt from 'counterpart';
+import React from 'react';
 
 export const userWatches = [
     watchRemoveHighSecurityKeys, // keep first to remove keys early when a page change happens
@@ -420,7 +421,8 @@ function* uploadImage({payload: {file, dataUrl, filename = 'image.txt', progress
     }
 
     if(!file && !dataUrl) {
-        console.error('uploadImage required: file or dataUrl')
+        console.error(tt('user_saga_js.error_file_or_data_url_required'))
+        // console.error('uploadImage required: file or dataUrl')
         return
     }
 
@@ -499,7 +501,15 @@ function* uploadImage({payload: {file, dataUrl, filename = 'image.txt', progress
         console.error(filename, error)
 
         // progress({error: 'Unable to contact the server.'})
-        progress({error: tt(`user_saga_js.imageUpload.error_server_unavailable`)})
+        // fixme this is temporary and to be changed
+        const e = <span>
+            <span>
+              {tt(`user_saga_js.imageUpload.error_server_unavailable`)}
+            </span>
+            <a href="https://github.com/GolosChain/tolstoy/issues/577"> здесь</a>.
+          </span>
+
+        progress({error: e})
     }
     xhr.upload.onprogress = function (event) {
         if (event.lengthComputable) {

@@ -13,6 +13,8 @@ import UserList from 'app/components/elements/UserList';
 import cookie from "react-cookie";
 import Dropzone from 'react-dropzone'
 
+import "./Settings.scss"
+
 class Settings extends React.Component {
 
     constructor(props) {
@@ -242,7 +244,7 @@ class Settings extends React.Component {
         return <div className="Settings">
 
             <div className="row">
-                <form onSubmit={this.handleSubmitForm} className="small-12 medium-6 large-4 columns">
+                <form onSubmit={this.handleSubmitForm} className="small-12 medium-8 large-6 columns">
                     <h3>{tt('settings_jsx.public_profile_settings')}</h3>
 
                     <label>
@@ -283,16 +285,38 @@ class Settings extends React.Component {
                           </Dropzone>
                           <a onClick={this.onOpenClick}
                              style={selectorStyle}>
-                                {pImageUploading ? `${tt(`user_saga_js.imageUpload.uploading`)} ...` : tt(`g.select`)}
+                                {pImageUploading ? `${tt(`user_saga_js.imageUpload.uploading`)} ...` : tt(`g.upload`)}
                           </a>
                         </div>
                     </label>
                     <div className="error">{profile_image.blur && profile_image.touched && profile_image.error}</div>
 
                     <label>
-                        {tt('settings_jsx.cover_image_url')}
-                        <input type="url" {...cover_image.props} autoComplete="off" />
-                    </label>
+                    {tt('settings_jsx.cover_image_url')}
+                    <div style={{display: `flex`, alignItems: `stretch`, alignContent: `stretch`}}>
+                      <Dropzone style={{width: `100%`}}
+                                onDrop={this.onDrop}
+                                className={'none'}
+                                disableClick multiple={false} accept="image/*"
+                                ref={(node) => { this.dropzone = node; }}>
+                        <input ref={(r) => this.pCoverImageUrlInput = r}
+                               type="url" {...cover_image.props}
+                               autoComplete="off"
+                               disabled={pImageUploading}
+                        />
+                      </Dropzone>
+                      <a onClick={this.onOpenClick}
+                         style={selectorStyle}>
+                        {pImageUploading ? `${tt(`user_saga_js.imageUpload.uploading`)} ...` : tt(`g.upload`)}
+                      </a>
+                    </div>
+                  </label>
+
+                    {/*<label>*/}
+                        {/*{tt('settings_jsx.cover_image_url')}*/}
+                        {/*<input type="url" {...cover_image.props} autoComplete="off" />*/}
+                    {/*</label>*/}
+
                     <div className="error">{cover_image.blur && cover_image.touched && cover_image.error}</div>
 
                     <label>

@@ -23,3 +23,7 @@
 	}
   }
 }
+
+html[dir="rtl"] .Author {
+	direction: ltr;
+}

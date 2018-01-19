@@ -170,7 +170,13 @@ async function appRender(ctx) {
             delete require.cache[require.resolve(assets_filename)];
         }
 
-        const props = { body, assets, title, meta };
+        const props = {
+            body,
+            assets,
+            locale: userPreferences.locale,
+            title,
+            meta,
+        };
         ctx.status = statusCode;
         ctx.body =
             '<!DOCTYPE html>' + renderToString(<ServerHTML {...props} />);

@@ -91,6 +91,10 @@
   padding: 0.5rem 1rem;
 }
 
+html[dir="rtl"] .ReplyEditor .Preview .Markdown {
+  direction: ltr;
+}
+
 .ReplyEditor__body {
   margin-top: 1rem;
   clear: both;
@@ -108,6 +112,14 @@
   label {
     font-size: 100%;
     text-transform: none;
+  }
+}
+
+html[dir="rtl"] .ReplyEditor__options {
+  float: left!important;
+  select {
+    margin-right: 0.25rem;
+    margin-left: 0;
   }
 }
 

@@ -82,12 +82,12 @@ class Header extends React.Component {
         const current_account_name = this.props.current_account_name;
         let home_account = false;
         let page_title = route.page;
-
         let sort_order = '';
         let topic = '';
         let user_name = null;
         let page_name = null;
         this.state.subheader_hidden = false;
+        this.context.intl = this.context.intl || { locale: 'en' };
         if (route.page === 'PostsIndex') {
             sort_order = route.params[0];
             if (sort_order === 'home') {
@@ -344,7 +344,14 @@ class Header extends React.Component {
                             </ul>
                         </div>
                         <div className="columns shrink">
-                            <TopRightMenu {...this.props} />
+                            <TopRightMenu
+                                {...this.props}
+                                alignment={
+                                    this.context.intl.locale === 'he'
+                                        ? 'left'
+                                        : 'right'
+                                }
+                            />
                         </div>
                     </div>
                 </div>
@@ -352,6 +359,10 @@ class Header extends React.Component {
         );
     }
 }
+
+Header.contextTypes = {
+    intl: React.PropTypes.object,
+};
 
 export { Header as _Header_ };
 

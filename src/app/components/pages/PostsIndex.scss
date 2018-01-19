@@ -529,8 +529,35 @@
   } 
 }
 
-// ,user layout-block             
+html[dir="rtl"] .articles {
+  &__resteem-icon {
+    padding-right: 0px;
+    padding-left: 2px;
+  }
 
+  &__flag {
+    position: initial;
+    left: -4px;
+    right: 0;
+    top: 0px;
+    padding: 2px;
+    @include MQ(M) {
+      right: 0px;
+      left: 10px;
+      top: 12px;
+    }
+  }
+
+  &__layout-selector {
+    @include MQ(M) {
+      padding-left: 0;
+      padding-right: 14px;
+    }
+  }
+
+}
+
+// user layout-block             
 .user {
   display: flex;
   align-items: center;
@@ -588,6 +615,10 @@
   }
 }
 
+html[dir="rtl"] .user {
+  margin-right: 0px;
+  margin-left: 8px;
+}
 
 
 .timestamp {
@@ -791,6 +822,7 @@ a#changeLayout:focus {
         }
       }       
     }
+
     // ,user layout-list
     .user {
       &__name {
@@ -804,6 +836,11 @@ a#changeLayout:focus {
   }
 }
 
+
+html[dir='rtl'] .articles__content-block, html[dir='rtl'] .articles__content-block--img{
+  margin-right: 0;
+  margin-left: 14px!important;
+}
 
 .layout-list {
   @include MQ(L) {
@@ -824,10 +861,24 @@ a#changeLayout:focus {
   margin-right: 8px;
 }
 
+html[dir="rtl"] .layout-list .user .Userpic {
+  margin-left: 8px;
+  margin-right: 0px;
+}
+ 
 .layout-block .Userpic {
   margin-right: 8px;
   @include MQ(M) {
     margin-right: 12px;
+  }
+}
+
+html[dir="rtl"] .layout-list .user .Userpic {
+  margin-left: 8px;
+  margin-right: 0px;
+  @include MQ(M) {
+    margin-left: 12px;
+    margin-right: 0px;
   }
 }
 
@@ -919,6 +970,9 @@ a#changeLayout:focus {
   float: right;
 }
 
+html[dir="rtl"] .PostsIndex .Voting {
+  float: left;
+}
 
 .articles__resteem .username {
     @extend .link;

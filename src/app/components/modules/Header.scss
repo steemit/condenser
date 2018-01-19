@@ -93,6 +93,11 @@
   }
 }
 
+html[dir='rtl'] .Header__top {
+  padding-right: 0.25rem;
+  padding-left: 0;
+}
+
 .Header__sort {
     width: auto;
 }
@@ -199,6 +204,10 @@ ul > li.Header__logo > a {
       display: block;
     }
   }
+}
+
+html[dir="rtl"] .beta {
+  right: 140px;
 }
 
 .Header__sort-order-menu {

@@ -288,7 +288,12 @@ class App extends React.Component {
                 })}
                 ref="App_root"
             >
-                <SidePanel ref="side_panel" alignment="right">
+                <SidePanel
+                    ref="side_panel"
+                    alignment={
+                        this.context.intl.locale === 'he' ? 'left' : 'right'
+                    }
+                >
                     <TopRightMenu vertical navigate={this.navigate} />
                     <ul className="vertical menu">
                         <li>
@@ -450,6 +455,10 @@ class App extends React.Component {
         );
     }
 }
+
+App.contextTypes = {
+    intl: React.PropTypes.object,
+};
 
 App.propTypes = {
     error: React.PropTypes.string,

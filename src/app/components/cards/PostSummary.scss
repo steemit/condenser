@@ -149,6 +149,15 @@ ul.PostsList__summaries {
   }
 }
 
+html[dir="rtl"] .PostSummary__time_author_category {
+  .Reblog__button {
+    margin-right: 0;
+    padding-right: 0;
+    margin-left: 1rem;
+    padding-left: 1rem;
+  }
+}
+
 .PostSummary__time_author_category_small a {
   color: $dark-gray;
 }

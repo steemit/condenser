@@ -1,0 +1,759 @@
+{
+    "g": {
+        "age": "גיל",
+        "amount": "כמות",
+        "and": "ו",
+        "are_you_sure": "האם אתה בטוח?",
+        "ask": "שאל",
+        "balance": "יתרה",
+        "balances": "יתרות",
+        "bid": "הצע",
+        "blog": "בלוג",
+        "browse": "עיין",
+        "buy": "קנה",
+        "buy_or_sell": "קנה או מכור",
+        "by": "על ידי",
+        "cancel": "ביטול",
+        "change_password": "שנה סיסמה",
+        "choose_language": "בחר שפה",
+        "clear": "נקה",
+        "close": "סגור",
+        "collapse_or_expand": "צמצם/הרחב",
+        "comments": "תגובות",
+        "confirm": "אשר",
+        "convert": "המר",
+        "date": "תאריך",
+        "delete": "מחק",
+        "dismiss": "נקה",
+        "edit": "ערוך",
+        "email": "אימייל",
+        "feed": "פיד",
+        "follow": "עקוב",
+        "for": " עבור ",
+        "from": "מ ",
+        "go_back": "חזור",
+        "hide": "הסתר",
+        "in": "in",
+        "in_reply_to": "בתגובה ל",
+        "insufficient_balance": "יתרה נמוכה מדי",
+        "invalid_amount": "סכום שגוי",
+        "joined": "הצטרף",
+        "loading": "טוען",
+        "login": "התחבר",
+        "logout": "התנתק",
+        "memo": "תזכיר",
+        "mute": "השתק",
+        "myblog": "הבלוג שלי",
+        "mycomments": "התגובות שלי",
+        "myreplies": "תגובות שכתבו לי",
+        "new": "חדש",
+        "newer": "חדש יותר",
+        "next": "הבא",
+        "no": "לא",
+        "ok": "אוקיי",
+        "older": "ישן יותר",
+        "or": "או",
+        "order_placed": "הזמנה נוצרה",
+        "password": "סיסמה",
+        "payouts": "תשלומים",
+        "permissions": "הרשאות",
+        "phishy_message": "הלינק הפך לטסקסט; זהירות מנסיונות פישינג",
+        "post": "פוסט",
+        "post_as": "פרסם כ",
+        "posts": "פוסטים",
+        "powered_up_100": "Powered Up 100%%",
+        "preview": "תצוגה מקדימה",
+        "previous": "הקודם",
+        "price": "מחיר",
+        "print": "הדפס",
+        "promote": "קדם",
+        "promoted": "תוכן מקודם",
+        "re": "RE",
+        "re_to": "RE: %(topic)s",
+        "recent_password": "סיסמה אחרונה",
+        "receive": "קבל ",
+        "remove": "הסר",
+        "remove_vote": "הסר הצבעה",
+        "replied_to": "הגיב ל%(account)s",
+        "replies": "מענה על תגובות",
+        "reply": "השב",
+        "reply_count": {
+            "zero": "אין תגובות",
+            "one": "תגובה אחת",
+            "other": "%(count) תגובות"
+        },
+        "reputation": "מוניטין",
+        "reveal_comment": "חשוף תגובה",
+        "request": "בקש",
+        "required": "נחוץ",
+        "rewards": "פרסים",
+        "save": "שמור",
+        "saved": "נשמחר",
+        "search": "חפש",
+        "sell": "מכור",
+        "settings": "הגדרות",
+        "share_this_post": "שתף את הפוסט",
+        "show": "הראה",
+        "sign_in": "התחבר",
+        "sign_up": "הרשם",
+        "since": "מאז",
+        "submit": "שלח",
+        "power_up": "Power Up",
+        "submit_a_story": "פרסם",
+        "tag": "תגית",
+        "to": " ל",
+        "topics": "נושאים",
+        "toggle_nightmode": "הדלק/כבה מצב לילה",
+        "all_tags": "כל התגיות",
+        "transfer": "העברה ",
+        "trending_topics": "נושאים במגמת עליה",
+        "type": "סוג",
+        "unfollow": "הפסק מעקב",
+        "unmute": "הפסק השתקה",
+        "unknown": "לא ידוע",
+        "upvote": "הצבע",
+        "upvote_post": "הצבע לפוסט",
+        "username": "שם משתמש",
+        "version": "גרסה",
+        "vote": "הצבעה",
+        "votes": "הצבעות",
+        "wallet": "ארנק",
+        "warning": "אזהרה",
+        "yes": "כן",
+        "posting": "מפרסם",
+        "owner": "בעלים",
+        "active": "פעיל",
+        "account_not_found": "משתמש לא נמצא",
+        "this_is_wrong_password": "זו הסיסמה הלא נכונה",
+        "do_you_need_to": "האם אתה צריך ל",
+        "account_name": "שם חשבון",
+        "recover_your_account": "שחזר את חשבונך",
+        "reset_usernames_password": "אפס את הסיסמה של %(username)s ",
+        "this_will_update_usernames_authtype_key":
+            "%(username)s של %(authType)sזה יעדכן את ה",
+        "passwords_do_not_match": "הסיסמאות לא תואמות",
+        "you_need_private_password_or_key_not_a_public_key":
+            "צריך את הסיסמה או המפתח הפרטי שלך (לא הפומבי)",
+        "the_rules_of_APP_NAME": {
+            "one": "החוק הראשון של %(APP_NAME)s הוא: אל תאבד את הסיסמה שלך.",
+            "second": "החוק השני של %(APP_NAME)s הוא: אל תאבד את הסיסמה שלך.",
+            "third": "החוק השלישי של %(APP_NAME)s הוא: אל תאבד את הסיסמה שלך.",
+            "fourth":
+                "החוק הרביעי: אם אתה יכול לזכור את הסיסמה שלך, היא לא מאובטחת.",
+            "fifth": "החוק החמישי: השתמש רק בסיסמאות מחוללות אוטומטית.",
+            "sixth": "החוק השישי: אל תתן לאף אחד את הסיסמה שלך.",
+            "seventh": "החוק השביעי: גבה את הסיסמה שלך תמיד."
+        },
+        "recover_password": "שחזור חשבון",
+        "current_password": "סיסמה נוכחית",
+        "generated_password": "סיסמה מחוללת",
+        "backup_password_by_storing_it":
+            "גבה את זה על ידי שמירה במנהל סיסמאות או בקובץ טקסט",
+        "enter_account_show_password":
+            "הכנס שם חשבון תקין על מנת לראות את הסיסמה",
+        "click_to_generate_password": "לחץ על מנת לחולל סיסמה",
+        "re_enter_generate_password": "הכנס מחדש את הסיסמה המחוללת",
+        "understand_that_APP_NAME_cannot_recover_password":
+            "אני מבין ש%(APP_NAME)s לא יכולה לשחזר את הסיסמה שלי",
+        "i_saved_password": "שמרתי את הסיסמה שלי בבטחה",
+        "update_password": "עדכן סיסמה",
+        "confirm_password": "אשר סיסמה",
+        "account_updated": "החשבון התעדכן",
+        "password_must_be_characters_or_more":
+            "הסיסמה חייבת להיות באורך של %(amount)s תווים לפחות",
+        "need_password_or_key": "צריך את הסיסמה או המפתח הפרטי שלך (לא הפומבי)",
+        "login_to_see_memo": "התחבר על מנת לראות את התזכיר",
+        "new_password": "סיסמה חדשה",
+        "incorrect_password": "סיסמה שגויה",
+        "username_does_not_exist": "שם המשתמש לא קיים",
+        "account_name_should_start_with_a_letter":
+            "שם החשבון צריך להתחיל באות.",
+        "account_name_should_be_shorter": "שם החשבון צריך להיות קצר יותר.",
+        "account_name_should_be_longer": "שם החשבון צריך להיות ארוך יותר.",
+        "account_name_should_have_only_letters_digits_or_dashes":
+            "שם החשבון יכול להכיל רק אותיות, מספרים, נקודות ומקפים.",
+        "cannot_increase_reward_of_post_within_the_last_minute_before_payout":
+            "לא ניתן להגדיל את הפרס בדקה האחרונה לפני התשלום.",
+        "vote_currently_exists_user_must_be_indicate_a_to_reject_witness":
+            "הצבעה כבר קיימת. המשתמש צריך להראות רצון לדחות עד",
+        "only_one_APP_NAME_account_allowed_per_ip_address_every_10_minutes":
+            "מותר לפתוח חשבון Steem אחד עבור כתובת IP כל 10 דקות.",
+        "resteem_this_post": "Resteem לפוסט",
+        "reblog": "Resteem",
+        "write_your_story": "כתוב את הסיפור שלך",
+        "remember_voting_and_posting_key": "זכור את מפתח ההצבעות והפרסום",
+        "auto_login_question_mark": "התחברות אוטומטית?",
+        "hide_private_key": "הסתר מפתח פרטי",
+        "show_private_key": "הצג מפתח פרטי",
+        "login_to_show": "התחבר כדי לראות",
+        "not_valid_email": "מייל לא תקין",
+        "thank_you_for_being_an_early_visitor_to_APP_NAME":
+            "תודה שאתה מבין המבקרים הראשונים של %(APP_NAME)s. נחזור אליך בהזדמנות הראשונה האפשרית.",
+        "author_rewards": "תגמולי כתיבה",
+        "curation_rewards": "תגמולי קיורציה",
+        "sorry_your_reddit_account_doesnt_have_enough_karma":
+            "מצטערים, לחשבון הReddit שלך אין מספיק Reddit Karma על מנת שיהיה זכאי להרשמה בחינם. בבקשה הוסף את המייל שלך כדי לתפוס מקום ברשימת ההמתנה",
+        "register_with_facebook": "הרשם עם פייסבוק",
+        "or_click_the_button_below_to_register_with_facebook":
+            "או לחץ על הכפתור למטה כדי להרשם עם פייסבוק",
+        "server_returned_error": "השרת החזיר שגי",
+        "APP_NAME_support": "תמיכה ב%(APP_NAME)s",
+        "please_email_questions_to": "שלח במייל את שאלותיך בבקשה, אל",
+        "next_7_strings_single_block": {
+            "authors_get_paid_when_people_like_you_upvote_their_post":
+                "יוצרים מקבלים תשלים כשאנשים כמוך מצביעים להם על הפוסט",
+            "if_you_enjoyed_what_you_read_earn_amount":
+                "אם נהנית לקרוא את מה שכתוב פה, הצטרף כדי להרוויח STEEM בחינם!",
+            "free_steem": "STEEM בחינם!",
+            "sign_up_earn_steem": "הרשם עכשיו כדי להרוויח "
+        },
+        "next_3_strings_together": {
+            "show_more": "הראה יותר",
+            "show_less": "הראה פחות",
+            "value_posts": "פוסטים עם ערך נמוך"
+        },
+        "read_only_mode":
+            "עקב עבודות תחזוקה אנחנו רצים במצב קריאה בלבד. אנחנו מתנצלים על אי הנוחות.",
+        "tags_and_topics": "תגיות",
+        "show_more_topics": "ראה את כל התגיות",
+        "basic": "בסיסי",
+        "advanced": "מתקדם",
+        "views": {
+            "zero": "אין צפיות",
+            "one": "צפיה אחת",
+            "other": "%(count)s צפיות"
+        },
+        "responses": {
+            "zero": "אין תגובות",
+            "one": "תגובה אחת",
+            "other": "%(count)s תגובות"
+        },
+        "post_key_warning": {
+            "confirm":
+                "אתה הולך לפרסים את המפתח הפרטי או הסיסמה שלך לSTEEM. סביר להניח שתאבד שליטה על החשבון וכל ההון שנמצא בו.",
+            "warning":
+                "משתמשים לגיטימים, כולל עובדי Steemit Inc., אף פעם לא ידרשו מכם את הסיסמה או המפתח הפרטי שלכם.",
+            "checkbox": "אני מבין"
+        }
+    },
+    "navigation": {
+        "about": "אודות",
+        "explore": "חקור",
+        "APP_NAME_whitepaper": "%(APP_NAME)s Whitepaper",
+        "buy_LIQUID_TOKEN": "קנה %(LIQUID_TOKEN)s",
+        "sell_LIQUID_TOKEN": "מכור %(LIQUID_TOKEN)s",
+        "currency_market": "זירת המסחר",
+        "stolen_account_recovery": "שחזור משתמשים גנובים",
+        "change_account_password": "שינוי סיסמה",
+        "witnesses": "עדים",
+        "vote_for_witnesses": "הצבעה לעדים",
+        "privacy_policy": "מדיניות פרטיות",
+        "terms_of_service": "תנאי שימוש",
+        "sign_up": "הצטרף",
+        "learn_more": "למד עוד",
+        "welcome": "ברוך הבא",
+        "faq": "FAQ",
+        "shop": "חנות Steemit",
+        "chat": "צ׳אט Steemit",
+        "app_center": "מרכז האפליקציות של Steemit",
+        "api_docs": "תיעוד API של Steemit",
+        "bluepaper": "Steem Bluepaper",
+        "smt_whitepaper": "SMT Whitepaper",
+        "whitepaper": "Steem Whitepaper",
+        "intro_tagline": "כסף מדבר",
+        "intro_paragraph":
+            "הקול שלכם שווה משהו. הצטרפו לקהילה שמשלמת לכם כדי לפרסם ויוצרת תוכן ברמה גבוהה."
+    },
+    "main_menu": {
+        "hot": "חם",
+        "trending": "במגמת עליה"
+    },
+    "reply_editor": {
+        "shorten_title": "יש לקצר את הכותרת",
+        "exceeds_maximum_length": "עובר את הגודל המקסימלי (%(maxKb)sKB)",
+        "including_the_category": " (כולל הקטגוריה '%(rootCategory)s')",
+        "use_limited_amount_of_tags":
+            "יש לך %(tagsLength)s תגים סה\"כ%(includingCategory)s. השתמש רק בחמישה בפוסט שלך בבקשה.",
+        "are_you_sure_you_want_to_clear_this_form":
+            "האם אתה רוצה לנקות את הטופס הזה?",
+        "uploading": "מעלה",
+        "draft_saved": "טיוטה נשמרה.",
+        "editor": "עורך",
+        "insert_images_by_dragging_dropping": "הכנס תמונות על ידי גרירתן, ",
+        "pasting_from_the_clipboard": "הדבקתן מהמקלדת, ",
+        "selecting_them": "בחירתן",
+        "image_upload": "העלאת תמונה",
+        "power_up_100": "Power Up 100%%",
+        "default_50_50": "ברירת מחדל (50%% / 50%%)",
+        "decline_payout": "סרב לתשלום",
+        "check_this_to_auto_upvote_your_post":
+            "סמן על מנת להצביע לפוסט שלך באופן אוטומטי",
+        "markdown_styling_guide": "מדריך עיצוב בMarkdown",
+        "or_by": "או על ידי",
+        "title": "כותרת",
+        "update_post": "עדכן פוסט",
+        "markdown_not_supported": "Markdown לא נתמך כאן"
+    },
+    "category_selector_jsx": {
+        "tag_your_story":
+            "תגיות (עד 5 תגיות). התגית הראשונה תהיה הקטגוריה הראשית לפוסט.",
+        "select_a_tag": "בחר תגית",
+        "maximum_tag_length_is_24_characters":
+            "אורך התגית המקסימלי הוא 24 אותיות",
+        "use_limited_amount_of_categories":
+            "השתמש בבקשה רק ב%(amount)s קטגוריות",
+        "use_only_lowercase_letters": "השתמש רק באותיות קטנות",
+        "use_one_dash": "השתמש רק במקף אחד",
+        "use_spaces_to_separate_tags": "השתמש ברווחים על מנת להפריד בין תגיות",
+        "use_only_allowed_characters": "השתמש רק באותיות קטנות, ספרות ומקף",
+        "must_start_with_a_letter": "חייב להתחיל באות",
+        "must_end_with_a_letter_or_number": "חייב להסתיים באות או מספר"
+    },
+    "postfull_jsx": {
+        "this_post_is_not_available_due_to_a_copyright_claim":
+            "הפוסט הזה לא זמין עקב תביעת זכויות יוצרים.",
+        "share_on_facebook": "שתף בפייסבוק",
+        "share_on_twitter": "שתף בטוויטר",
+        "share_on_linkedin": "שתף בLinkedin",
+        "recent_password": "סיסמה אחרונה",
+        "in_week_convert_DEBT_TOKEN_to_LIQUID_TOKEN":
+            "בעוד 3.5 ימים, המר %(amount)s %(DEBT_TOKEN)s אל %(LIQUID_TOKEN)s",
+        "view_the_full_context": "הראה את הקונטקסט המלא",
+        "view_the_direct_parent": "הראה את ההורה הישיר",
+        "you_are_viewing_a_single_comments_thread_from":
+            "אתה צופה באשכול של תגובה אחת מתוך"
+    },
+    "market_jsx": {
+        "action": "פעולה",
+        "date_created": "נוצר ב",
+        "last_price": "המחיר האחרון",
+        "24h_volume": "נפח ב24 שעות",
+        "spread": "פיזור",
+        "total": "סך הכל",
+        "available": "זמין",
+        "lowest_ask": "הדרישה הכי נמוכה",
+        "highest_bid": "ההצעה הכי גבוהה",
+        "buy_orders": "פקודות קניה",
+        "sell_orders": "פקודות מכירה",
+        "trade_history": "הסטוריית מסחר",
+        "open_orders": "פקודות פתוחות",
+        "sell_amount_for_atleast":
+            "מכור %(amount_to_sell)s עבור לפחות %(min_to_receive)s (%(effectivePrice)s)",
+        "buy_atleast_amount_for":
+            "קנה לפחות %(min_to_receive)s עבור %(amount_to_sell)s (%(effectivePrice)s)",
+        "price_warning_above":
+            "המחיר הזה גבוה בהרבה ממחיר השוק של %(marketPrice)s, האתם אתה בטוח?",
+        "price_warning_below":
+            "המחיר הזה נמוך בהרבה ממחיר השוק של %(marketPrice)s, האתם אתה בטוח?",
+        "order_cancel_confirm": "בטל פקודה %(order_id)s מ%(user)s?",
+        "order_cancelled": "פקודה %(order_id)s בוטלה.",
+        "higher": "גבוה יותר",
+        "lower": "נמוך יותר",
+        "total_DEBT_TOKEN_SHORT_CURRENCY_SIGN":
+            "סך הכל %(DEBT_TOKEN_SHORT)s (%(CURRENCY_SIGN)s)"
+    },
+    "recoveraccountstep1_jsx": {
+        "begin_recovery": "התחל בשחזור",
+        "not_valid": "לא תקין",
+        "account_name_is_not_found": "שם החשבון לא נמצא",
+        "unable_to_recover_account_not_change_ownership_recently":
+            "אנחנו לא יכולים לשחזר את החשבון. לא שותנה בו בעלות לאחרונה.",
+        "password_not_used_in_last_days":
+            "הסיסמה הזו לא שומשה בחשבון הזה בחודש האחרון.",
+        "request_already_submitted_contact_support":
+            "הבקשה שלך נשלחה ואנחנו עובדים על זה. צור קשר עם %(SUPPORT_EMAIL)s על מנת להתעדכן בסטטוס הבקשה.",
+        "recover_account_intro":
+            "לפעמים, המפתח הראשי של משתמשי סטים בסכנה. שחזור משתמשים גנובים נותנת את לבעל החשבון הישר 30 ימים כדי לשחזר את חשבונם מהרגע שהגנב שינה את הסיסמה הראשית. שחזור משתמשים גנובים יכול להיות בשימוש רק ב%(APP_URL)s אם בעל החשבון שם את '%(APP_NAME)s' כנאמן החשבון שלהם וענה על תנאי השימוש של %(APP_NAME)s.",
+        "login_with_facebook_or_reddit_media_to_verify_identity":
+            "אנא התחבר עם פייסבוק או Reddit כדי לאמת את זהותך",
+        "login_with_social_media_to_verify_identity":
+            "אנא התחבר עם %(provider)s כדי לאמת את זהותך",
+        "enter_email_toverify_identity":
+            "אנחנו צריכים לאמת את זהותך. הכנס את כתובת האימייל שלך כדי להתחיל בתהליך.",
+        "continue_with_email": "המשך עם אימייל",
+        "thanks_for_submitting_request_for_account_recovery":
+            "תודה ששלחת את בקשת השחזור שלך דרך שירות ההזדהות מבוסס בלוקצ׳יין של %(APP_NAME)s. אנחנו נחזור אליך במהירות האפשריך, אך צפה לעיקובים עקב כמות המיילים הגדולה שאנו מקבלים. היה מוכן לאמת את זהותך.",
+        "recovering_account": "משחזר חשבון",
+        "recover_account": "שחזור חשבון",
+        "checking_account_owner": "בודק בעל חשבון",
+        "sending_recovery_request": "שולח בקשת שחזור",
+        "cant_confirm_account_ownership":
+            "איננו יכולים לאמת את בעלות החשבון. בדוק את סיסמתך.",
+        "account_recovery_request_not_confirmed":
+            "בקשת שחזור החשבון עוד לא אושרה, בדוק שנית מאוחר יותר, תודה על הסבלנות."
+    },
+    "user_profile": {
+        "unknown_account": "משתמש לא ידוע",
+        "user_hasnt_made_any_posts_yet":
+            "נראה כאילו %(name)s עוד לא התחיל לפרסם!",
+        "user_hasnt_started_bloggin_yet":
+            "נראה כאילו %(name)s עוד לא התחיל לפרסם בבלוג!",
+        "user_hasnt_followed_anything_yet":
+            "נראה כאילו %(name)s לא עוקב אחרי אף אחד עדיין! אם %(name)s לאחרונה עקב אחרי משתמשים, הפיד שלו יתמלא כשיווצר תוכן חדש.",
+        "user_hasnt_had_any_replies_yet": "%(name)s עוד לא הגיב עדיין.",
+        "looks_like_you_havent_posted_anything_yet":
+            "נראה כאילו לא פרסמת כלום עדיין.",
+        "create_a_post": "צור פוסט",
+        "explore_trending_articles": "עיין בכתבות במגמת עליה",
+        "read_the_quick_start_guide": "קרא את מדריך ההתחלה המהירה",
+        "browse_the_faq": "עיין בFAQ",
+        "followers": "עוקבים",
+        "this_is_users_reputations_score_it_is_based_on_history_of_votes":
+            "זהו המוניטין של%(name)s.\n\n דירוג המוניטין נקבע על סמך היסטוריה של הצבעות שהתקבלו על ידי החשבון ומשתמשים בו על מנת להסתיר תוכן באיכות נמוכה.",
+        "follower_count": {
+            "zero": "אין עוקבים",
+            "one": "עוקב אחד",
+            "other": "%(count)s עוקבים"
+        },
+        "followed_count": {
+            "zero": "לא עוקב אחר אף אחד",
+            "one": "עוקב אחר אחד",
+            "other": "עוקב אחר %(count)s"
+        },
+        "post_count": {
+            "zero": "אין פוסטים",
+            "one": "פוסט אחד",
+            "other": "%(count)s פוסטים"
+        }
+    },
+    "authorrewards_jsx": {
+        "estimated_author_rewards_last_week":
+            "שווי תגמולי הכתיבה המוערך בשבוע האחרון",
+        "author_rewards_history": "הסטוריית תגמולי הכתיבה"
+    },
+    "curationrewards_jsx": {
+        "estimated_curation_rewards_last_week":
+            "שווי תגמולי הקיורציה המוערך בשבוע האחרון",
+        "curation_rewards_history": "הסטוריית תגמולי קיורציה"
+    },
+    "post_jsx": {
+        "now_showing_comments_with_low_ratings":
+            "מציג עכשיו תגובות עם דירוג נמוך",
+        "sort_order": "מיין סדר",
+        "comments_were_hidden_due_to_low_ratings":
+            "תגובות הוסתרו עקב דירוגים נמוכים"
+    },
+    "voting_jsx": {
+        "flagging_post_can_remove_rewards_the_flag_should_be_used_for_the_following":
+            "דיגול פוסט יכול להוריד את שווי התגמולים המתקבלים מהפוסט. כמה סיבות נפוצות לסמן בדגל",
+        "disagreement_on_rewards": "אי הסכמה על התגמולים",
+        "fraud_or_plagiarism": "גניבה ספרותית או הונאה",
+        "hate_speech_or_internet_trolling": "שנאה או טרולינג אינטרנטי",
+        "intentional_miss_categorized_content_or_spam":
+            "ספאם או פרסום בקטגוריה לא מתאימה בכוונה",
+        "pending_payout": "תשלום צפוי $%(value)s",
+        "payout_declined": "תשלום סורב",
+        "max_accepted_payout": "תשלום מקסימלי מקובל $%(value)s",
+        "promotion_cost": "עלות קידום $%(value)s",
+        "past_payouts": "תשלומי עבר $%(value)s",
+        "past_payouts_author": " - יוצר $%(value)s",
+        "past_payouts_curators": " - קיורציה $%(value)s",
+        "we_will_reset_curation_rewards_for_this_post":
+            "זה יאפס את תגמולי הקיורציה עבור הפוסט הזה.",
+        "removing_your_vote": "מסיר את הצבעתך",
+        "changing_to_an_upvote": "משנה להצבעה חיובית",
+        "changing_to_a_downvote": "משנה להצבעה שלילית",
+        "confirm_flag": "אשר דיגול",
+        "and_more": "ועוד %(count)s",
+        "votes_plural": {
+            "one": "קול אחד",
+            "other": "%(count)s קולות"
+        }
+    },
+    "witnesses_jsx": {
+        "witness_thread": "אשכול העד",
+        "top_witnesses": "הצבעה לעדים",
+        "you_have_votes_remaining": {
+            "zero": "לא נשארו לך קולות",
+            "one": "נשאר לך קול אחרון",
+            "other": "יש לך עוד %(count)s קולות"
+        },
+        "you_can_vote_for_maximum_of_witnesses":
+            "אתה יכול להצביע למקסימום 30 עדים",
+        "witness": "עד",
+        "information": "מידע",
+        "if_you_want_to_vote_outside_of_top_enter_account_name":
+            "אם תרצה להצביע לעד שלא נמצא ברשימת 50 הראשונים, הכנס את שם המשתמש שלו על מנת להצביע",
+        "set_witness_proxy":
+            "אתה יכול לבחור מיופה כוח אשר יבחר בעדים בשבילך. זה יאפס את הצבעותיך לעדים עד כה.",
+        "witness_set":
+            "הגדרת מיופה כוח להצבעה. אם תרצה להצביע בעצמך ידנית, מחק את מיופה הכוח",
+        "witness_proxy_current": "מיופה הכוח שלך הוא",
+        "witness_proxy_set": "הגדר מיופה כוח",
+        "witness_proxy_clear": "הסר מיופה כוח",
+        "proxy_update_error": "מיופה הכוח שלך לא עודכן"
+    },
+    "votesandcomments_jsx": {
+        "no_responses_yet_click_to_respond":
+            "אין תגובות עדיין. לחץ על מנת להגיב.",
+        "response_count_tooltip": {
+            "zero": "אין תגובות. לחץ על מנת להשיב.",
+            "one": "תגובה אחת. לחץ על מנת להשיב.",
+            "other": "%(count)s תגובות. לחץ על מנת להשיב."
+        },
+        "vote_count": {
+            "zero": "אין הצבעות",
+            "one": "הצבעה אחת",
+            "other": "%(count)s הצבעות"
+        }
+    },
+    "userkeys_jsx": {
+        "public": "פומבי",
+        "private": "פרטי",
+        "public_something_key": "מפתח %(key)s פומבי",
+        "private_something_key": "מפתח %(key)s פרטי",
+        "posting_key_is_required_it_should_be_different":
+            "בעזרת מפתח הפרסום ניתן להצביע ולפרסם. הוא צריך להיות שונה ממפתח הבעלות ומפתח הפעילות.",
+        "the_active_key_is_used_to_make_transfers_and_place_orders":
+            "בעזרת מפתח הפעילות ניתן להעביר כספים וליצור פקודות מכירה בזירת המסחר הפנימית.",
+        "the_owner_key_is_required_to_change_other_keys":
+            "מפתח הבעות הוא המפתח הראשי לחשבון ודרוש על מנת לשנות את שאר המפתחות.",
+        "the_private_key_or_password_should_be_kept_offline":
+            "המפתח הפרטי או הסיסמה למפתח הבעלות צריכים להיות שמורים מחוץ לאינטרנט ככל שניתן.",
+        "the_memo_key_is_used_to_create_and_read_memos":
+            "בעזרת מפתח התזכירים ניתן ליצור ולקרוא תזכירים."
+    },
+    "suggestpassword_jsx": {
+        "APP_NAME_cannot_recover_passwords_keep_this_page_in_a_secure_location":
+            "%(APP_NAME)s לא יכולה לשחזר סיסמאות. שמור את הדף הזה במקום מאובטח כמו כספת חסינת אש.",
+        "APP_NAME_password_backup": "%(APP_NAME)s גיבוי סיסמה",
+        "APP_NAME_password_backup_required": "%(APP_NAME)s גיבוי סיסמה (דרוש)",
+        "after_printing_write_down_your_user_name":
+            "לאחר ההדפסה, כתוב את שם המשתמש שלך"
+    },
+    "converttosteem_jsx": {
+        "your_existing_DEBT_TOKEN_are_liquid_and_transferable":
+            "מטבעות ה%(DEBT_TOKEN)s הקיימים שלך הם נזילים וברי העברה. אולי תרצה לסחור ב%(DEBT_TOKEN)s ישירות באתר הזה תחת %(link)s או להעביר אותם לזירת מסחר חיצונית.",
+        "this_is_a_price_feed_conversion":
+            "זוהי המרת מחיר. עיכוב של 3.5 ימים הכרחי על מנת למנוע שימוש לרעה ממשחוק המחיר.",
+        "convert_to_LIQUID_TOKEN": "המר ל%(LIQUID_TOKEN)s",
+        "DEBT_TOKEN_will_be_unavailable":
+            "הפעולה תקח 3.5 ימים מעכשיו ולא ברת ביטול. ה%(DEBT_TOKEN)s יהפכו מיידית ללא זמינים"
+    },
+    "tips_js": {
+        "liquid_token":
+            "אסימונים סחירים שיכולים להיות מועברים לכל מקום ובכל זמן.<br/>%(LIQUID_TOKEN)s יכול להיות מומר ל%(VESTING_TOKEN)s בתהליך שנקרא powering up.",
+        "influence_token":
+            "אסימוני השפעה שנותנים לך יותר שליטה על תשלומי פוסטים ומאפשרים לך להרוויח יותר תגמולי קיורציה",
+        "estimated_value":
+            "השוי המוערך של החשבון שלך בהתבסס על הערך הממוצע של %(LIQUID_TOKEN)s בדולר אמריקאי.",
+        "non_transferable":
+            "%(VESTING_TOKEN)s הוא אסימון שאיננו בר העברה ודרושים שלושה חודשים (13 תשלומים) על מנת להמיר אותו בחזרה ל%(LIQUID_TOKEN)s.",
+        "converted_VESTING_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again":
+            "%(VESTING_TOKEN)s מומרים יכולים להשלח לעצמך או למישהו אחר אך לא יכולים להיות מועברים שוב ללא המרה ל%(LIQUID_TOKEN)s.",
+        "part_of_your_steem_power_is_currently_delegated":
+            "חלק מהSTEEM POWER של %(user_name)s כרגע מושאל. השאלה נתרמת עבור כוח השפעה או כדי לעזור למשתמשים חדשים לבצע פעולות בsteemit. הכמות המושאלת יכולה להשתנות."
+    },
+    "promote_post_jsx": {
+        "promote_post": "קדם פוסט",
+        "spend_your_DEBT_TOKEN_to_advertise_this_post":
+            "השתמש ב%(DEBT_TOKEN)s שלך על מנת לקדם את הפוסט שלך בקטגורית התכנים המקודמים",
+        "you_successfully_promoted_this_post": "קידמת את הפוסט בהצלחה",
+        "this_post_was_hidden_due_to_low_ratings":
+            "הפוסט הזה הוסתר עקב דירוגים נמוכים"
+    },
+    "about_jsx": {
+        "about_app": "אודות %(APP_NAME)s",
+        "about_app_details":
+            "%(APP_NAME)s היא פלטפורמה חברתית בה כולם מקבלים תשלים עבור יצירה ואסיפת תוכן. הפלטפורמה משתמשת במערכת ניקוד דיגיטלי הנקראת Steem, התומכת בערך האמיתי עבור תגמולים דיגיטלים דרך גילוי מחיר שוק ונזילות",
+        "learn_more_at_app_url": "למד עוד ב%(APP_URL)s",
+        "resources": "משאבים"
+    },
+    "markdownviewer_jsx": {
+        "images_were_hidden_due_to_low_ratings":
+            "תמונות הוסתרו עקב דירוגים נמוכים."
+    },
+    "postsummary_jsx": {
+        "resteemed": "resteemed",
+        "resteemed_by": "Resteemed על ידי",
+        "reveal_it": "חשוף את הפוסט",
+        "adjust_your": "התאם את",
+        "display_preferences": "הגדרות תצוגה",
+        "create_an_account": "צור חשבון",
+        "to_save_your_preferences": "על מנת לשמור את ההגדרות"
+    },
+    "posts_index": {
+        "empty_feed_1": "נראה כאילו לא התחלת לעקוב אחרי אף אחד.",
+        "empty_feed_2":
+            "אם התחלת לעקוב אחרי משתמשים חדשים, הפיד שלך יתמלא כשיווצר תוכן חדש",
+        "empty_feed_3": "עיין בכתבות במגמת עליה",
+        "empty_feed_4": "קרא את מדריך ההתחלה המהירה",
+        "empty_feed_5": "עיין בFAQ"
+    },
+    "transferhistoryrow_jsx": {
+        "to_savings": "לחסכונות",
+        "from_savings": "מהחסכונות",
+        "cancel_transfer_from_savings": "בטל העברה מהחסכונות",
+        "stop_power_down": "עצור power down",
+        "start_power_down_of": "התחל power down של",
+        "receive_interest_of": "קבל ריבית של"
+    },
+    "savingswithdrawhistory_jsx": {
+        "cancel_this_withdraw_request": "לבטל את בקשת המשיכה הזו?",
+        "pending_savings_withdrawals": "משיכות ממתינות מחסכונות",
+        "withdraw": "משוך %(amount)s",
+        "to": "אל %(to)s",
+        "from_to": "מ%(from)s אל %(to)s"
+    },
+    "explorepost_jsx": {
+        "copied": "הועתק!",
+        "copy": "העתק",
+        "alternative_sources": "מקורות חלופיים"
+    },
+    "header_jsx": {
+        "home": "בית",
+        "create_a_post": "צור פוסט",
+        "change_account_password": "שנה סיסמה",
+        "create_account": "צור חשבון",
+        "stolen_account_recovery": "שחזור חשבונות גנובים",
+        "people_following": "אנשים עוקבים",
+        "people_followed_by": "אנשים נעקבים",
+        "curation_rewards_by": "תגמולי קיורציה על ידי",
+        "author_rewards_by": "תגמולי כתיבה על ידי",
+        "replies_to": "תגובות ל",
+        "comments_by": "תגובות על ידי"
+    },
+    "loginform_jsx": {
+        "you_need_a_private_password_or_key":
+            "אתה צריך את המפתח הפרטי או הסיסמה (לא המפתח הפומבי)",
+        "cryptography_test_failed": "מבחן קריפטוגרפי נכשל",
+        "unable_to_log_you_in": "אנחנו לא יכולים לאפשר לך להתחבר מהדפדפן הזה.",
+        "the_latest_versions_of": "הגרסאות החדשות של ",
+        "are_well_tested_and_known_to_work_with":
+            "נבדקו היטב ועובדות עם %(APP_URL)s.",
+        "due_to_server_maintenance":
+            "עקב עבודות תחזוקה אנחנו רצים במצב קריאה בלבד. אנחנו מתנצלים על אי הנוחות.",
+        "login_to_vote": "התחבר כדי להצביע",
+        "login_to_post": "התחבר כדי לפרסם",
+        "login_to_comment": "התחבר כדי להגיב",
+        "posting": "מפרסים",
+        "active_or_owner": "פעילות או בעות",
+        "this_password_is_bound_to_your_account_owner_key":
+            "הסיסמה הזו מקושרת למפתח הבעלות על החשבון שלך ולא ניתן להתחבר איתה לאתר.",
+        "however_you_can_use_it_to": "אך אתה יכול להשתמש בה על מנת ",
+        "update_your_password": "לעדכן את סיסמתך",
+        "to_obtain_a_more_secure_set_of_keys": "כדי לקבל סט מפתחות בטוח יותר.",
+        "this_password_is_bound_to_your_account_active_key":
+            "הסיסמה הזו מקושרת למפתח הפעילות על החשבון שלך ולא ניתן להתחבר איתה לאתר.",
+        "you_may_use_this_active_key_on_other_more":
+            "אתה יכול להשתמש במפתח הפעילות במקומות מאובטחים יותר באתר, כמו זירת המסחר או הארנק.",
+        "you_account_has_been_successfully_created": "החשבון שלך נוצר בהצלחה!",
+        "you_account_has_been_successfully_recovered":
+            "החשבון שלך שוחזר בהצלחה!",
+        "password_update_succes": "הסיסמה לחשבון %(accountName)s עודכנה בהצלחה",
+        "password_info":
+            "הסיסמה או המפתח הפרטי הוכנס בצורה שגויה. כנראה שיש טעות בכתיבה או בהכנסת המידע. רמז: סיסמה או מפתח פרטי שחולל על ידי Steemit לעולם לא תכיל 0, O, I, או l (אפס, או גדולה, איי גדולה או אל קטנה).",
+        "enter_your_username": "הכנס את שם המשתמש שלך",
+        "password_or_wif": "סיסמה או WIF",
+        "this_operation_requires_your_key_or_master_password":
+            "הפעולה דורשת את המפתח ה%(authType)s שלך או הסיסמה הראשית.",
+        "keep_me_logged_in": "השאר אותי מחובר",
+        "amazing_community": "קהילה מדהימה",
+        "to_comment_and_reward_others": " כדי להגיב ולתגמל אחרים.",
+        "signup_button": "הרשם עכשיו כדי להרוויח ",
+        "signup_button_emphasis": "STEEM בחינם!",
+        "sign_up_get_steem": "הרשם. קבל STEEM",
+        "returning_users": "משתמשים חוזרים: ",
+        "join_our": "הצטרף ל"
+    },
+    "chainvalidation_js": {
+        "account_name_should": "שם המשתמש צריך ",
+        "not_be_empty": "לא להיות ריק.",
+        "be_longer": "להיות ארוך יותר.",
+        "be_shorter": "להיות קצר יותר.",
+        "each_account_segment_should": "כל חלק משתמש צריך ",
+        "start_with_a_letter": "להתחיל עם אות.",
+        "have_only_letters_digits_or_dashes":
+            "להכיל רק אותיות, ספרות או מקפים.",
+        "have_only_one_dash_in_a_row": "להכיל רק מקף אחד ברצף.",
+        "end_with_a_letter_or_digit": "להסתיים באות או ספרה.",
+        "verified_exchange_no_memo": "אתה חייב לצרף תזכיר בהעברת המרה."
+    },
+    "settings_jsx": {
+        "invalid_url": "URL לא חוקי",
+        "name_is_too_long": "שם ארוך מדי",
+        "name_must_not_begin_with": "שם לא יכול להתחיל עם @",
+        "about_is_too_long": "אודות ארוכות מדי",
+        "location_is_too_long": "מיקום ארוך מדי",
+        "website_url_is_too_long": "כתובת אתר ארוכה מדי",
+        "public_profile_settings": "הגדרות פרופיל פומבי",
+        "private_post_display_settings": "הגדרות תצוגת פוסטים פרטיות",
+        "not_safe_for_work_nsfw_content": "תוכן לא בטוח לעבודה (NSFW)",
+        "always_hide": "הסתר תמיד",
+        "always_warn": "הזהר תמיד",
+        "always_show": "הצג תמיד",
+        "muted_users": "משתמשים מושתקים",
+        "update": "עדכן",
+        "profile_image_url": "כתובת תמונת פרופיל",
+        "cover_image_url": "כתובת תמונת נושא",
+        "profile_name": "שם תצוגה",
+        "profile_about": "אודות",
+        "profile_location": "מיקום",
+        "profile_website": "אתר"
+    },
+    "transfer_jsx": {
+        "amount_is_in_form": "הכמות בטופס 99999.999",
+        "insufficient_funds": "יתרה נמוכה מדי",
+        "use_only_3_digits_of_precison": "השתמש רק ב3 ספרות לאחר הנקודה",
+        "send_to_account": "שלח לחשבון",
+        "asset": "נכס",
+        "this_memo_is_private": "התזכיר הזה פרטי",
+        "this_memo_is_public": "התזכיר הזה פומבי",
+        "convert_to_VESTING_TOKEN": "המר ל%(VESTING_TOKEN)s",
+        "balance_subject_to_3_day_withdraw_waiting_period":
+            "היתרה כפופה לשלושה ימי המתנה במשיכה,",
+        "move_funds_to_another_account": "העבר כספים לחשבון %(APP_NAME)s אחר.",
+        "protect_funds_by_requiring_a_3_day_withdraw_waiting_period":
+            "הגן על כספים על ידי דרישת תקופת המתנה של שלושה ימים במשיכה.",
+        "withdraw_funds_after_the_required_3_day_waiting_period":
+            "משוך כספים אחרי שלושת ימי ההמתנה.",
+        "from": "מ",
+        "to": "אל",
+        "asset_currently_collecting":
+            "%(asset)s כרגע מקבל %(interest)s%% ריבית שנתית.",
+        "beware_of_spam_and_phishing_links":
+            "הזהר מהונאות בתזכירי ההעברה. אל תפתח לינקים ממשתמשים שאתה לא סומך עליהם. אל תתן מפתחות פרטיים לאף גורם צד שלישי.",
+        "autocomplete_previous_transfers": "העברות קודמות",
+        "autocomplete_user_following": "עוקב"
+    },
+    "userwallet_jsx": {
+        "conversion_complete_tip": "יתסיים ב",
+        "in_conversion": "%(amount)s בהמרה",
+        "transfer_to_savings": "העבר לחסכונות",
+        "power_up": "Power Up",
+        "power_down": "Power Down",
+        "market": "זירת מסחר",
+        "convert_to_LIQUID_TOKEN": "המר ל %(LIQUID_TOKEN)s",
+        "withdraw_LIQUID_TOKEN": "משוך %(LIQUID_TOKEN)s",
+        "withdraw_DEBT_TOKENS": "משוך %(DEBT_TOKENS)s",
+        "tokens_worth_about_1_of_LIQUID_TICKER":
+            "אסימונים שווים בערך $1.00 של %(LIQUID_TICKER)s, כרגע מקבלים %(sbdInterest)s%%  ריבית שנתית.",
+        "savings": "חסכונות",
+        "estimated_account_value": "שווי חשבון מוערך",
+        "next_power_down_is_scheduled_to_happen":
+            "הpower down הבא מתוכנן להיות ב",
+        "transfers_are_temporary_disabled": "העברות מבוטלות זמנית.",
+        "history": "היסטוריה",
+        "redeem_rewards": "ממש תגמולים (העבר ליתרה)",
+        "buy_steem_or_steem_power": "קנה STEEM או STEEM POWER"
+    },
+    "powerdown_jsx": {
+        "power_down": "Power Down",
+        "amount": "כמות",
+        "already_power_down":
+            "אתה כבר powering down %(AMOUNT)s %(LIQUID_TICKER)s (%(WITHDRAWN)s %(LIQUID_TICKER)s שולמו עד כה). שים לב שאם תשנה את כמות הpower down לוח זמני התשלומים יתאתחל.",
+        "delegating":
+            "אתה משאיל %(AMOUNT)s %(LIQUID_TICKER)s. הכמות נעולה ולא אפשרית לpower down עד לביטול ההשאלה ותקופת תגמולים עברה.",
+        "per_week": "זה ~%(AMOUNT)s %(LIQUID_TICKER)s לשבוע.",
+        "warning":
+            "להשאיר בחשבון פחות מ%(AMOUNT)s %(VESTING_TOKEN)s זה לא מומלץ ויכול להשאיר את החשבון במצב לא שמיש.",
+        "error": "לא יכול לעשות power down (שגיאה: %(MESSAGE)s)"
+    },
+    "checkloginowner_jsx": {
+        "your_password_permissions_were_reduced": "הרשאות הסיסמה שלך הורדו",
+        "if_you_did_not_make_this_change": "אם לא ביצעת את השינוי הזה",
+        "ownership_changed_on": "בעלות שונתה ב ",
+        "deadline_for_recovery_is": "תאריך אחרון לשחזור ב",
+        "i_understand_dont_show_again": "אני מבין, אל תראו לי שוב"
+    }
+}

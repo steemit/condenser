@@ -42,6 +42,11 @@ a, path, circle {
   margin-right: 0.4rem;
 }
 
+html[dir="rtl"] .space-right {
+  margin-left: 0.4rem;
+  margin-right: 0;
+}
+
 .clear-right {
   clear: right;
 }

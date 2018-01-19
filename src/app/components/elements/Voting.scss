@@ -83,6 +83,13 @@
   }
 }
 
+html[dir="rtl"] .Voting__button {
+  > a {
+    padding-left: 0.5rem;
+    padding-right: 0;
+  }
+}
+
 .Voting__button-up > a:hover, a.confirm_weight:hover {
     path {
         fill: #fff;
@@ -213,6 +220,17 @@
     border-radius: 50%;
     border: 1px solid #dadada;
     color: #8a8a8a;
+  }
+}
+
+html[dir="rtl"] .Voting__inner {
+  padding-right: .8rem;
+  margin-right: 0.6rem;
+  padding-left: .8rem;
+  margin-left: .6rem;
+  .DropdownMenu .Icon.dropdown-arrow {
+    margin-left: -0.5rem;
+    margin-right: 0;
   }
 }
 

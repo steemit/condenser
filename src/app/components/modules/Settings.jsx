@@ -157,6 +157,12 @@ class Settings extends React.Component {
         const locale = event.target.value;
         const userPreferences = { ...this.props.user_preferences, locale };
         this.props.setUserPreferences(userPreferences);
+
+        if (locale === 'he') {
+            document.getElementsByTagName('html')[0].dir = 'rtl';
+        } else {
+            document.getElementsByTagName('html')[0].dir = 'ltr';
+        }
     };
 
     render() {
@@ -201,6 +207,7 @@ class Settings extends React.Component {
                                 <option value="fr">French</option>
                                 <option value="it">Italian</option>
                                 <option value="ko">Korean</option>
+                                <option value="he">Hebrew</option>
                             </select>
                         </label>
                     </div>

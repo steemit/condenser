@@ -37,6 +37,7 @@ function TopRightMenu({
     nightmodeEnabled,
     toggleNightmode,
     userPath,
+    alignment,
 }) {
     const mcn = 'menu' + (vertical ? ' vertical show-for-small-only' : '');
     const mcl = vertical ? '' : ' sub-menu';
@@ -117,7 +118,7 @@ function TopRightMenu({
                 <LinkWithDropdown
                     closeOnClickOutside
                     dropdownPosition="bottom"
-                    dropdownAlignment="right"
+                    dropdownAlignment={alignment || 'right'}
                     dropdownContent={
                         <VerticalMenu items={user_menu} title={username} />
                     }
@@ -197,6 +198,7 @@ TopRightMenu.propTypes = {
     toggleOffCanvasMenu: React.PropTypes.func,
     nightmodeEnabled: React.PropTypes.bool,
     toggleNightmode: React.PropTypes.func,
+    alignment: React.PropTypes.string,
 };
 
 export default connect(

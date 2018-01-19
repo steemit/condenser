@@ -1,4 +1,5 @@
 const list = `
+abits
 acx
 aex.com
 allcoin.com
@@ -190,6 +191,7 @@ livecoinnet
 livingroomofsato
 localtrade
 localtrade.pro
+locktrades
 mercatox.com
 minnnowbooster
 minnobooster
@@ -311,6 +313,7 @@ sweetssj
 sweetssssj
 tdax
 tdax.com
+teamsteam
 thebiton
 therocktrading
 tidex.com

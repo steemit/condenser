@@ -3,6 +3,7 @@ acx
 aex.com
 allcoin.com
 appreciater
+apreciator
 bbittrex
 bcex
 bellyrub
@@ -109,6 +110,7 @@ bloktrades
 bloocktrades
 bocktrades
 bolcktrades
+bomerang
 boooster
 boostar
 booste
@@ -184,6 +186,8 @@ localtrade
 localtrade.pro
 mercatox.com
 minnnowbooster
+minnobooster
+minnooboster
 minnoowbooster
 minnowboooster
 minnowboost
@@ -282,12 +286,14 @@ poolniex
 pooloniex
 pooniex
 poooniex
+postpromote
 qryptos
 qryptos.com
 randomwhale
 randowale
 randowhal
 randwhale
+rendowhale
 scoin
 shapeshif
 shapeshift
@@ -307,9 +313,13 @@ upbbit
 upbit
 upbit.com
 upbitt
+upmee
+uppme
+uppmee
 viabtc
 vittrex
 wallet.bitshares
+whaleshare
 www.aex.com
 www.binance.com
 www.bit-z.com

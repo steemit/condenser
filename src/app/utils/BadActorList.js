@@ -134,6 +134,7 @@ buildawhile
 buildwhale
 c-cex
 c-cex.com
+canadiancoconut
 ccex
 cexio
 changellly
@@ -156,6 +157,10 @@ etherdelta
 etherdelta.com
 exrates
 exx.com
+freeewallet
+freewalet.org
+freewaller
+frewallet
 fyrstiken
 gatecoin.com
 gatehub
@@ -179,6 +184,7 @@ kraken.com
 kucoin
 linkcoin
 litebit
+little-pepper
 livecoin.com
 livecoinnet
 livingroomofsato

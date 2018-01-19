@@ -319,6 +319,7 @@ upbbit
 upbit
 upbit.com
 upbitt
+upm
 upmee
 uppme
 uppmee

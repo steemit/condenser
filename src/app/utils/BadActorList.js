@@ -5,6 +5,7 @@ aex.com
 allcoin.com
 appreciater
 apreciator
+ausbitban
 bbittrex
 bcex
 bellyrub
@@ -169,10 +170,8 @@ gatehub.net
 gdax.com
 gemini.com
 gopax
-gtapps
 hitbtc.com
 hitbtcexchange
-hotstuff
 huobi.pro
 idex.market
 ittrex
@@ -216,9 +215,9 @@ minobooster
 minowbooster
 minowboster
 minowhelper
-nanabaakan
 neraex
 neraex.com
+nextgencryptos
 okex.com
 olonie
 oloniex
@@ -350,8 +349,6 @@ www.livecoin.net
 www.okex.com
 www.poloniex.com
 www.qryptos.com
-www.quebex.comw
-www.wavesplatfor
 www.xbtce.com
 xbtce.com
 yobit

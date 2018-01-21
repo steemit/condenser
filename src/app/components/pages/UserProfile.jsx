@@ -23,7 +23,6 @@ import { repLog10 } from 'app/utils/ParsersAndFormatters.js';
 import Tooltip from 'app/components/elements/Tooltip';
 import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdown';
 import VerticalMenu from 'app/components/elements/VerticalMenu';
-import MarkNotificationRead from 'app/components/elements/MarkNotificationRead';
 import NotifiCounter from 'app/components/elements/NotifiCounter';
 import DateJoinWrapper from 'app/components/elements/DateJoinWrapper';
 import tt from 'counterpart';
@@ -222,14 +221,6 @@ export default class UserProfile extends React.Component {
                         current_user={current_user}
                         withdrawVesting={this.props.withdrawVesting}
                     />
-                    {isMyAccount && (
-                        <div>
-                            <MarkNotificationRead
-                                fields="send,receive"
-                                account={account.name}
-                            />
-                        </div>
-                    )}
                 </div>
             );
         } else if (section === 'curation-rewards') {
@@ -254,12 +245,6 @@ export default class UserProfile extends React.Component {
                             account={account}
                             users={followers.get('blog_result')}
                         />
-                        {isMyAccount && (
-                            <MarkNotificationRead
-                                fields="follow"
-                                account={account.name}
-                            />
-                        )}
                     </div>
                 );
             }
@@ -380,12 +365,6 @@ export default class UserProfile extends React.Component {
                                 loadMore={this.loadMore}
                                 showSpam={false}
                             />
-                            {isMyAccount && (
-                                <MarkNotificationRead
-                                    fields="comment_reply"
-                                    account={account.name}
-                                />
-                            )}
                         </div>
                     );
                 }
@@ -407,12 +386,6 @@ export default class UserProfile extends React.Component {
                     </div>
                     <br />
                     <UserKeys account={accountImm} />
-                    {isMyAccount && (
-                        <MarkNotificationRead
-                            fields="account_update"
-                            account={account.name}
-                        />
-                    )}
                 </div>
             );
         } else if (section === 'password') {

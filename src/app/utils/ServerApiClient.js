@@ -1,4 +1,3 @@
-import { NTYPES, notificationsArrayToMap } from 'app/utils/Notifications';
 import { api } from '@steemit/steem-js';
 
 const request_base = {
@@ -46,32 +45,6 @@ export function serverApiRecordEvent(type, val, rate_limit_ms = 5000) {
     );
 }
 
-export function getNotifications(account) {
-    if (!process.env.BROWSER || window.$STM_ServerBusy)
-        return Promise.resolve(null);
-    const request = Object.assign({}, request_base, { method: 'get' });
-    return fetch(`/api/v1/notifications/${account}`, request)
-        .then(r => r.json())
-        .then(res => {
-            return notificationsArrayToMap(res);
-        });
-}
-
-export function markNotificationRead(account, fields) {
-    if (!process.env.BROWSER || window.$STM_ServerBusy)
-        return Promise.resolve(null);
-    const request = Object.assign({}, request_base, {
-        method: 'put',
-        mode: 'cors',
-    });
-    const field_nums_str = fields.map(f => NTYPES.indexOf(f)).join('-');
-    return fetch(`/api/v1/notifications/${account}/${field_nums_str}`, request)
-        .then(r => r.json())
-        .then(res => {
-            return notificationsArrayToMap(res);
-        });
-}
-
 let last_page, last_views, last_page_promise;
 export function recordPageView(page, ref, account) {
     if (last_page_promise && page === last_page) return last_page_promise;
@@ -98,21 +71,6 @@ export function recordPageView(page, ref, account) {
     return last_page_promise;
 }
 
-export function webPushRegister(account, webpush_params) {
-    if (!process.env.BROWSER || window.$STM_ServerBusy) return;
-    const request = Object.assign({}, request_base, {
-        body: JSON.stringify({ csrf: $STM_csrf, account, webpush_params }),
-    });
-    fetch('/api/v1/notifications/register', request);
-}
-
-export function sendConfirmEmail(account) {
-    const request = Object.assign({}, request_base, {
-        body: JSON.stringify({ csrf: $STM_csrf, account }),
-    });
-    fetch('/api/v1/notifications/send_confirm', request);
-}
-
 export function saveCords(x, y) {
     const request = Object.assign({}, request_base, {
         body: JSON.stringify({ csrf: $STM_csrf, x: x, y: y }),
@@ -127,9 +85,4 @@ export function setUserPreferences(payload) {
         body: JSON.stringify({ csrf: window.$STM_csrf, payload }),
     });
     return fetch('/api/v1/setUserPreferences', request);
-}
-
-if (process.env.BROWSER) {
-    window.getNotifications = getNotifications;
-    window.markNotificationRead = markNotificationRead;
 }

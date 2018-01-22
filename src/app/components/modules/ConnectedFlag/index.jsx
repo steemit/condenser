@@ -5,9 +5,7 @@ import Flag from 'app/components/modules/Flag';
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        // Still not there on intialize...
-        //flagged: appSelectors.getFeatureFlag(state.app, ownProps.flag),
-        flagged: true,
+        flagged: appSelectors.getFeatureFlag(state.app, ownProps.flag),
         ...ownProps,
     };
 };

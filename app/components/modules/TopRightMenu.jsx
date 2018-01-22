@@ -202,10 +202,9 @@ const estimateOutput = <LocalizedCurrency amount={calculateEstimateOutput({a:acc
       const {pathname} = location;
       const query = locationQueryParams;
       const section = pathname.split(`/`)[2];
-      const sender = (section === `transfers`) ?
-      pathname.split(`/`)[1].substring(1) : undefined;
+      const sender = (section === `transfers`) ? pathname.split(`/`)[1].substring(1) : undefined;
       // /transfers. Check query string
-      if (sender) {
+      if (sender && query) {
         const {to, amount, token, memo} = query;
         externalTransfer = (!!to && !!amount && !!token && !!memo);
     }

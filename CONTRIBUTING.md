@@ -1,43 +1,95 @@
-# Please Read
 
-Please read these instructions before submitting issues or pull requests to the Steemit.com (**condenser**) GitHub repository. The issue tracker is the place to start for all for bugs and well vetted enhancements.
+# Contributing to Condenser
 
-## Bug Reports
+Everyone is welcome to contribute code to Steemit, Inc. projects. We have a Code of Conduct;
+we ask that you please follow it in all your interactions with our team and your fellow
+contributors.
 
-If there is an existing feature that is not working correctly, or a glitch in the website that is impacting user behaviour - please open an issue to report variance. Include as much relevant information as you can, including screen shots and steps to reproduce the issue.
+Please note that this contributing guide only applies to our development presence.
 
-## Technical Support and Signup/Login Issues
+## How to contribute
 
-If you are having trouble using the website but it is not an error with the website (this includes signup/login issues), do **not** open a GitHub issue. Please request help from the users in the [steemit.chat help](https://steemit.chat/channel/help) channel.
+1. File an issue describing the problem you would like to
+   solve or the feature you would like to add. It saves unnecessary work on your part, 
+   in case there's a nontechnical reason we can't accept a particular change.
+   Please note that we can and will _automatically close all pull requests that do not refer to
+   an issue_.
+2. Learn the conventions of the project you are submitting code to, even implicit ones,
+   and follow them. In case you have a question about a project's conventions, please
+   ask on the issue you filed. This includes writing tests, formatting code, and documentation.
+3. File a pull request against your Github issue and fill out the pull request template.
+   Remember, you are agreeing to license your code and any intellectual property associated
+   with your code under the same terms as the repository you are contributing to.
+4. If one of our teammates asks you to make changes, please make them. Our rule is that all
+   requests for changes in code review are resolved in favor of the reviewer. Our teammates
+   follow this rule too!   
+5. **Reporting Bugs** If there is an existing feature that is not working correctly, or a 
+    glitch in the website that is impacting user behaviour - please open an issue to report 
+    variance. Include as much relevant information as you can, including screen shots and 
+    steps to reproduce the issue.
+6. **Enhancement Suggestions** If you have an enhancement you would like to see in condenser 
+    we suggest you first discuss it with other members of the community on Steemit.com, or 
+    in the steemit discord channel. If there is a well vetted idea that has the support of 
+    the community create an issue with a link to the discussion. The issue's title should
+    start with `community -` and have a detailed description.
+7. **Development Discussions** The developers frequently open issues to discuss changes that 
+    are being worked on. This is to inform the community of the changes being worked on, and 
+    to get input from the community and other developers on the implementation.    
+8. **Pull Requests** We love community contributions. If you've done some work on an issue
+     and want to see it in the condenser codebase, please submit a Pull Request, reference
+     the issue in the description start the title with `community -`. We're working very
+     hard to keep our development practices as open as possible, and this helps us a lot. 
 
-## Enhancement Suggestions
+## Code of Conduct
 
-If you have an enhancement you would like to see in condenser we suggest you first discuss it with other members of the 
-community on Steemit.com, or in the steemit discord channel. If there is a well vetted idea that has the support of the 
-community create an issue with a link to the discussion, a detailed description, and tag it with the label `new_grass` 
-(for 'grass roots', and 'the grass is greener'). New enhancement issues that do not follow this format will be closed.
+Again, please note that this Code of Conduct _only applies to our development presence_.
 
-**Bumps for working code:** Community contributions are still tops. If there's a `new_grass` labeled issue you like or 
-want to promote, fork the repo and code away! (leave a comment saying as much with a link to your repo/branch) When 
-you've got it ready post another comment and tag `@sneak` in it. If it passes muster you'll be invited to create a Pull Request.
+### Our Pledge
 
-## Implementation Discussion
+We welcome your membership in our project and community under the rules that we have set below. 
 
-The developers frequently open issues to discuss changes that are being worked on. This is to inform the community of the changes being worked on, and to get input from the community and other developers on the implementation.
+In the interest of fostering an open and welcoming environment, we as
+contributors and maintainers will work to make your participation in
+our project and community as fulfilling as possible.
 
-Issues opened that devolve into lengthy discussion of minor site features will be closed or locked.  The issue tracker is not a general purpose discussion forum. (That's what steemit.com is for!)
+### Our Rules
 
-## Duplicate Issues
+All members of our project and community must:
 
-Please do a keyword search to see if there is already an existing issue before opening a new one.
+1.  Show empathy toward other project and community members
+2.  Use welcoming and inclusive language
+3.  Respect differing viewpoints and experiences
+4.  Gracefully accept constructive criticism
 
-## Steemit.com vs. Steem Blockchain
+All members of our project and community must not:
 
-This issue tracker is only intended to track issues for the Steemit.com website. If the issue is with the 
-Steem blockchain, please open an issue in the [Steem Repository](https://github.com/steemit/steem).
+1.  Harm our project and community, or advocate harm to our project and community
+2.  Insult or make derogatory comments about others
+3.  Interact with others after they have withdrawn permission to do so
 
-## Pull Requests
+### Our Responsibilities
 
-We love working code, but please do not open a Pull Request unless all the conditions in the **Bumps for working code:**
-section have been met.
+We will use any and all lawful means at our disposal to enforce our rules. This includes
+but is not limited to:
 
+1.  Rejecting contributions
+2.  Removing comments, commits, code, wiki edits, and issues
+3.  Banning abusers
+ 
+We will clarify standards of acceptable behavior and we will take appropriate
+and fair corrective action in response to any instances of unacceptable behavior.
+
+Instances of abusive, harassing, or otherwise unacceptable behavior may be
+reported by contacting us at github.abuse@steemit.com. All
+complaints will be reviewed and investigated and will result in a response that
+is deemed necessary and appropriate to the circumstances. We
+maintain strict confidentiality with regard to the reporter of an incident.
+Further details of specific enforcement policies may be posted separately.
+
+### Attribution
+
+This Code of Conduct is adapted from the [Contributor Covenant][homepage], version 1.4,
+available at [http://contributor-covenant.org/version/1/4][version]
+
+[homepage]: http://contributor-covenant.org
+[version]: http://contributor-covenant.org/version/1/4/gg

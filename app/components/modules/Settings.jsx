@@ -11,6 +11,9 @@ import Userpic from 'app/components/elements/Userpic';
 import reactForm from 'app/utils/ReactForm'
 import UserList from 'app/components/elements/UserList';
 import cookie from "react-cookie";
+import Dropzone from 'react-dropzone'
+
+import "./Settings.scss"
 
 class Settings extends React.Component {
 
@@ -24,6 +27,8 @@ class Settings extends React.Component {
     state = {
         errorMessage: '',
         successMessage: '',
+        pImageUploading: false,
+        cImageUploading: false,
     }
 
     initForm(props) {
@@ -50,6 +55,83 @@ class Settings extends React.Component {
         const {accountname} = this.props
         const nsfwPref = (process.env.BROWSER ? localStorage.getItem('nsfwPref-' + accountname) : null) || 'warn'
         this.setState({nsfwPref, oldNsfwPref: nsfwPref})
+    }
+
+    onDrop = (acceptedFiles, rejectedFiles) => {
+      if(!acceptedFiles.length) {
+        if(rejectedFiles.length) {
+        this.setState({progress: {error: tt('reply_editor.please_insert_only_image_files')}})
+        console.log('onDrop Rejected files: ', rejectedFiles);
+      }
+      return
+      }
+      const file = acceptedFiles[0]
+      this.upload(file, file.name)
+    }
+
+
+    // fixme remove all the code duplication below
+
+    onDropCover = (acceptedFiles, rejectedFiles) => {
+    if(!acceptedFiles.length) {
+      if(rejectedFiles.length) {
+        this.setState({progress: {error: tt('reply_editor.please_insert_only_image_files')}})
+        console.log('onDrop Rejected files: ', rejectedFiles);
+      }
+      return
+    }
+    const file = acceptedFiles[0]
+    this.uploadCover(file, file.name)
+  }
+
+
+
+    onOpenClick = () => {
+      this.dropzone.open();
+    }
+
+    onOpenCoverClick = () => {
+      this.dropzoneCover.open();
+    }
+
+    upload = (file, name = '') => {
+      const {notify} = this.props;
+      const {uploadImage} = this.props
+      this.setState({pImageUploading: true})
+      uploadImage(file, progress => {
+        if(progress.url) {
+          const {profile_image: {props: {onChange}}} = this.state;
+          // ok. change input url
+          onChange(progress.url)
+        }
+        if(progress.error) {
+          // error
+          const { error } = progress;
+          // show error notification
+          notify(error, 10000)
+        }
+        this.setState({pImageUploading: false})
+      })
+    }
+
+    uploadCover = (file, name = '') => {
+      const {notify} = this.props;
+      const {uploadImage} = this.props
+      this.setState({cImageUploading: true})
+      uploadImage(file, progress => {
+        if(progress.url) {
+          const {cover_image: {props: {onChange}}} = this.state;
+          // ok. change input url
+          onChange(progress.url)
+        }
+        if(progress.error) {
+          // error
+          const { error } = progress;
+          // show error notification
+          notify(error, 10000)
+        }
+      this.setState({cImageUploading: false})
+      })
     }
 
     onNsfwPrefChange(e) {
@@ -170,6 +252,9 @@ class Settings extends React.Component {
         const following = follow && follow.getIn(['getFollowingAsync', account.name]);
         const ignores = isOwnAccount && following && following.get('ignore_result')
 
+        const {pImageUploading, cImageUploading} = this.state;
+
+
         const languageSelectBox = <select defaultValue={process.env.BROWSER ? cookie.load(LOCALE_COOKIE_KEY) : DEFAULT_LANGUAGE} onChange={this.onLanguageChange}>
           {Object.keys(LANGUAGES).map(key => {
             return <option key={key} value={key}>{LANGUAGES[key]}</option>
@@ -182,10 +267,42 @@ class Settings extends React.Component {
             })}
         </select>;
 
+        const selectorStyle = pImageUploading ?
+          {
+            whiteSpace: `nowrap`,
+            display: `flex`,
+            alignItems: `center`,
+            padding: `0 6px`,
+            pointerEvents: `none`,
+            cursor: `default`,
+            opacity: `0.6`
+          } :
+          {
+            display: `flex`,
+            alignItems: `center`,
+            padding: `0 6px`
+          };
+
+          const selectorStyleCover = cImageUploading ?
+            {
+              whiteSpace: `nowrap`,
+              display: `flex`,
+              alignItems: `center`,
+              padding: `0 6px`,
+              pointerEvents: `none`,
+              cursor: `default`,
+              opacity: `0.6`
+            } :
+            {
+              display: `flex`,
+              alignItems: `center`,
+              padding: `0 6px`
+            };
+
         return <div className="Settings">
 
             <div className="row">
-                <form onSubmit={this.handleSubmitForm} className="small-12 medium-6 large-4 columns">
+                <form onSubmit={this.handleSubmitForm} className="small-12 medium-8 large-6 columns">
                     <h3>{tt('settings_jsx.public_profile_settings')}</h3>
 
                     <label>
@@ -212,14 +329,52 @@ class Settings extends React.Component {
 
                     <label>
                         {tt('settings_jsx.profile_image_url')}
-                        <input type="url" {...profile_image.props} autoComplete="off" />
+                        <div style={{display: `flex`, alignItems: `stretch`, alignContent: `stretch`}}>
+                          <Dropzone style={{width: `100%`}}
+                                    onDrop={this.onDrop}
+                                    className={'none'}
+                                    disableClick multiple={false} accept="image/*"
+                                    ref={(node) => { this.dropzone = node; }}>
+                              <input ref={(r) => this.pImageUrlInput = r}
+                                     type="url" {...profile_image.props}
+                                     autoComplete="off"
+                                     disabled={pImageUploading}
+                              />
+                          </Dropzone>
+                          <a onClick={this.onOpenClick}
+                             style={selectorStyle}>
+                                {pImageUploading ? `${tt(`user_saga_js.imageUpload.uploading`)} ...` : tt(`g.upload`)}
+                          </a>
+                        </div>
                     </label>
                     <div className="error">{profile_image.blur && profile_image.touched && profile_image.error}</div>
 
                     <label>
-                        {tt('settings_jsx.cover_image_url')}
-                        <input type="url" {...cover_image.props} autoComplete="off" />
-                    </label>
+                    {tt('settings_jsx.cover_image_url')}
+                    <div style={{display: `flex`, alignItems: `stretch`, alignContent: `stretch`}}>
+                      <Dropzone style={{width: `100%`}}
+                                onDrop={this.onDropCover}
+                                className={'none'}
+                                disableClick multiple={false} accept="image/*"
+                                ref={(node) => { this.dropzoneCover = node; }}>
+                        <input ref={(r) => this.pCoverImageUrlInput = r}
+                               type="url" {...cover_image.props}
+                               autoComplete="off"
+                               disabled={cImageUploading}
+                        />
+                      </Dropzone>
+                      <a onClick={this.onOpenCoverClick}
+                         style={selectorStyleCover}>
+                        {cImageUploading ? `${tt(`user_saga_js.imageUpload.uploading`)} ...` : tt(`g.upload`)}
+                      </a>
+                    </div>
+                  </label>
+
+                    {/*<label>*/}
+                        {/*{tt('settings_jsx.cover_image_url')}*/}
+                        {/*<input type="url" {...cover_image.props} autoComplete="off" />*/}
+                    {/*</label>*/}
+
                     <div className="error">{cover_image.blur && cover_image.touched && cover_image.error}</div>
 
                     <label>
@@ -279,7 +434,7 @@ class Settings extends React.Component {
                             {tt('settings_jsx.not_safe_for_work_nsfw_content')}
                         </div>
                         <select value={this.state.nsfwPref} onChange={this.onNsfwPrefChange}>
-                            {/*<option value="hide">{tt('settings_jsx.always_hide')}</option>*/}
+                            <option value="hide">{tt('settings_jsx.always_hide')}</option>
                             <option value="warn">{tt('settings_jsx.always_warn')}</option>
                             <option value="show">{tt('settings_jsx.always_show')}</option>
                         </select>
@@ -327,6 +482,12 @@ export default connect(
     },
     // mapDispatchToProps
     dispatch => ({
+        uploadImage: (file, progress) => {
+        dispatch({
+          type: 'user/UPLOAD_IMAGE',
+          payload: {file, progress},
+        })
+      },
         changeLanguage: (language) => {
             dispatch(user.actions.changeLanguage(language))
         },
@@ -340,11 +501,11 @@ export default connect(
             const options = {type: 'account_update', operation, successCallback, errorCallback}
             dispatch(transaction.actions.broadcastOperation(options))
         },
-        notify: (message) => {
+        notify: (message, dismiss = 3000) => {
             dispatch({type: 'ADD_NOTIFICATION', payload: {
                 key: "settings_" + Date.now(),
                 message,
-                dismissAfter: 3000}
+                dismissAfter: dismiss}
             });
         }
     })

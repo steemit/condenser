@@ -11,6 +11,7 @@ import {loadFollows} from 'app/redux/FollowSaga'
 import {PrivateKey, Signature, hash} from 'golos-js/lib/auth/ecc'
 import {api} from 'golos-js'
 import tt from 'counterpart';
+import React from 'react';
 
 const MAX_UPLOAD_IMAGE_SIZE = 1024 * 1024
 
@@ -419,7 +420,8 @@ function* uploadImage({payload: {file, dataUrl, filename = 'image.txt', progress
     }
 
     if(!file && !dataUrl) {
-        console.error('uploadImage required: file or dataUrl')
+        console.error(tt('user_saga_js.error_file_or_data_url_required'))
+        // console.error('uploadImage required: file or dataUrl')
         return
     }
 
@@ -491,7 +493,6 @@ function* uploadImage({payload: {file, dataUrl, filename = 'image.txt', progress
               }
               if (error.includes(`Error uploading`)) {
                 tError = tt('user_saga_js.image_upload.error.err_uploading')
-                tError = `Ошибка загрузки`
               }
             }
             progress({error: tError || error})

@@ -114,27 +114,25 @@ function TopRightMenu({
             <ul className={mcn + mcl}>
                 {!pathCheck ? submit_story : null}
                 {!vertical && submit_icon}
-                {!vertical && 
-                
-                <DropdownMenu
-                    className={'Header__usermenu'}
-                    items={user_menu}
-                    title={username}
-                    el="span"
-                    selected={tt('g.rewards')}
-                    position="left"
-                >
+                {!vertical && (
+                    <DropdownMenu
+                        className={'Header__usermenu'}
+                        items={user_menu}
+                        title={username}
+                        el="span"
+                        selected={tt('g.rewards')}
+                        position="left"
+                    >
                         <li className={'Header__userpic '}>
-                            <span
-                                title={username}
-                            >
+                            <span title={username}>
                                 <Userpic account={username} />
                             </span>
                             <div className="TopRightMenu__notificounter">
                                 <NotifiCounter fields="total" />
                             </div>
                         </li>
-                </DropdownMenu>}
+                    </DropdownMenu>
+                )}
 
                 {toggleOffCanvasMenu && (
                     <li className="toggle-menu Header__hamburger">

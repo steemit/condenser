@@ -61,12 +61,19 @@ export default class Dropdown extends React.Component {
             </a>
         );
 
-        const content = <div key='dropdown-content' className={'dropdown__content'}>{children}</div>;
+        const content = (
+            <div key="dropdown-content" className={'dropdown__content'}>
+                {children}
+            </div>
+        );
         const cls =
             'dropdown' +
             (this.state.shown ? ' show' : '') +
             (className ? ` ${className}` : '') +
             (position ? ` ${position}` : '');
-        return React.createElement('div', { className: cls, key: 'dropdown' }, [entry, content]);
+        return React.createElement('div', { className: cls, key: 'dropdown' }, [
+            entry,
+            content,
+        ]);
     }
 }

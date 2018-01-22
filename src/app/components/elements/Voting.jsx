@@ -87,7 +87,7 @@ class Voting extends React.Component {
                 myVote,
                 isFlag,
             });
-        }
+        };
         this.voteUpOrDown = up => {
             if (this.props.voting) return;
             this.setState({ votingUp: up, votingDown: !up });
@@ -248,40 +248,40 @@ class Voting extends React.Component {
                 </FoundationDropdown>
                 */
                 <Dropdown
-                position="left"
-                title={down}
-                onHide={() => this.setState({ showWeight: false })}
-            >
-                {(myVote == null || myVote === 0) &&
-                    net_vesting_shares > VOTE_WEIGHT_DROPDOWN_THRESHOLD && (
-                        <div className="weight-container">
-                            <div className="weight-display">
-                                - {weight / 100}%
+                    position="left"
+                    title={down}
+                    onHide={() => this.setState({ showWeight: false })}
+                >
+                    {(myVote == null || myVote === 0) &&
+                        net_vesting_shares > VOTE_WEIGHT_DROPDOWN_THRESHOLD && (
+                            <div className="weight-container">
+                                <div className="weight-display">
+                                    - {weight / 100}%
+                                </div>
+                                <Slider
+                                    min={100}
+                                    max={10000}
+                                    step={100}
+                                    value={weight}
+                                    onChange={this.handleWeightChange}
+                                />
                             </div>
-                            <Slider
-                                min={100}
-                                max={10000}
-                                step={100}
-                                value={weight}
-                                onChange={this.handleWeightChange}
-                            />
-                        </div>
-                    )}
-                <CloseButton
-                    onClick={() => this.setState({ showWeight: false })}
-                />
-                <div className="clear Voting__about-flag">
-                    <p>{ABOUT_FLAG}</p>
-                    <a
-                        href="#"
-                        onClick={this.voteDown}
-                        className="button outline"
-                        title="Flag"
-                    >
-                        Flag
-                    </a>
-                </div>
-            </Dropdown>
+                        )}
+                    <CloseButton
+                        onClick={() => this.setState({ showWeight: false })}
+                    />
+                    <div className="clear Voting__about-flag">
+                        <p>{ABOUT_FLAG}</p>
+                        <a
+                            href="#"
+                            onClick={this.voteDown}
+                            className="button outline"
+                            title="Flag"
+                        >
+                            Flag
+                        </a>
+                    </div>
+                </Dropdown>
             );
 
             const flagClickAction =
@@ -298,7 +298,7 @@ class Voting extends React.Component {
                             </span>
                         )}
                         {votingDownActive ? (
-                            <a href="#" onClick={this.voteDown2}> 
+                            <a href="#" onClick={this.voteDown2}>
                                 {down} <span>A</span>
                             </a>
                         ) : (
@@ -306,7 +306,6 @@ class Voting extends React.Component {
                                 {down} <span>B</span>
                             </a>
                         )}
-
                     </span>
                 </span>
             );
@@ -466,21 +465,17 @@ class Voting extends React.Component {
             <a
                 href="#"
                 onClick={voteUpClick}
-                title={
-                    myVote > 0
-                        ? tt('g.remove_vote')
-                        : tt('g.upvote')
-                }
+                title={myVote > 0 ? tt('g.remove_vote') : tt('g.upvote')}
             >
                 {up}
             </a>
-        )
+        );
         if (
             myVote <= 0 &&
             net_vesting_shares > VOTE_WEIGHT_DROPDOWN_THRESHOLD
         ) {
             voteUpClick = this.toggleWeightUp;
-            voteChevron = null
+            voteChevron = null;
             dropdown = (
                 <Dropdown
                     selected={tt('g.rewards')}

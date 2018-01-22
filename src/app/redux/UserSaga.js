@@ -389,8 +389,18 @@ function* usernamePasswordLogin2({
 }
 
 function* getFeatureFlags(username, posting_private) {
-    //const flags = yield call([api, api.signedCallAsync], 'conveyor.get_feature_flags', { username }, username, posting_private);
-    yield put(receiveFeatureFlags({ yup: true }));
+    try {
+        const flags = yield call(
+            [api, api.signedCallAsync],
+            'conveyor.get_feature_flags',
+            { username },
+            username,
+            posting_private
+        );
+        yield put(receiveFeatureFlags(flags));
+    } catch (error) {
+        // Do nothing; feature flags are not ready yet.
+    }
 }
 
 function* saveLogin_localStorage() {

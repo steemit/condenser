@@ -12,6 +12,8 @@ import {PrivateKey, Signature, hash} from 'golos-js/lib/auth/ecc'
 import {api} from 'golos-js'
 import tt from 'counterpart';
 
+const MAX_UPLOAD_IMAGE_SIZE = 1024 * 1024
+
 export const userWatches = [
     watchRemoveHighSecurityKeys, // keep first to remove keys early when a page change happens
     loginWatch,
@@ -401,7 +403,6 @@ function* uploadImageWatch() {
 function* uploadImage({payload: {file, dataUrl, filename = 'image.txt', progress}}) {
     const _progress = progress
     progress = msg => {
-        // console.log('Upload image progress', msg)
         _progress(msg)
     }
 
@@ -409,13 +410,11 @@ function* uploadImage({payload: {file, dataUrl, filename = 'image.txt', progress
     const username = stateUser.getIn(['current', 'username'])
     const d = stateUser.getIn(['current', 'private_keys', 'posting_private'])
     if(!username) {
-        // progress({error: 'Please logged in first.'})
-        progress({error: tt('user_saga_js.imageUpload.error_login_first')})
+        progress({error: tt('user_saga_js.image_upload.error.login_first')})
         return
     }
     if(!d) {
-        // progress({error: 'Login with your posting key'})
-        progress({error: tt('user_saga_js.imageUpload.error_login_with_posting_key')})
+        progress({error: tt('user_saga_js.image_upload.error.login_with_posting_key')})
         return
     }
 
@@ -441,11 +440,16 @@ function* uploadImage({payload: {file, dataUrl, filename = 'image.txt', progress
         dataBs64 = dataUrl.substring(commaIdx + 1)
         data = new Buffer(dataBs64, 'base64')
     }
+    
+    if (file && file.size > MAX_UPLOAD_IMAGE_SIZE) {
+        progress({error: tt('user_saga_js.image_upload.error.image_size_is_too_large')})
+        return
+    }
 
     // The challenge needs to be prefixed with a constant (both on the server and checked on the client) to make sure the server can't easily make the client sign a transaction doing something else.
     const prefix = new Buffer('ImageSigningChallenge')
     const bufSha = hash.sha256(Buffer.concat([prefix, data]))
-
+    
     const formData = new FormData()
     if(file) {
         formData.append('file', file)
@@ -455,36 +459,38 @@ function* uploadImage({payload: {file, dataUrl, filename = 'image.txt', progress
         formData.append('filename', filename)
         formData.append('filebase64', dataBs64)
     }
-
+    
     const sig = Signature.signBufferSha256(bufSha, d)
     const postUrl = `${$STM_Config.upload_image}/${username}/${sig.toHex()}`
 
     const xhr = new XMLHttpRequest()
 
     xhr.open('POST', postUrl)
+
     xhr.onload = function () {
-        console.log(xhr.status, xhr.responseText)
+        // console.log(xhr.status, xhr.responseText)
         const res = JSON.parse(xhr.responseText)
         const {error} = res
         if(error) {
           let tError;
             if (typeof error === `string`) {
               if (error.includes(`is not found on the blockchain`)) {
-                tError = `Пользователь не найден в сети блокчейн.`
+                tError = tt('user_saga_js.image_upload.error.account_is_not_found')
               }
               if (error.includes(`unsupported posting key configuration`)) {
-                tError = `Ошибка постинг-ключа.`
+                tError = tt('user_saga_js.image_upload.error.unsupported_posting_key')
               }
               if (error.includes(`Upload failed`)) {
-                tError = `Ошибка загрузки изображения.`
+                tError = tt('user_saga_js.image_upload.error.upload_failed')
               }
               if (error.includes(`upload only images`)) {
-                tError = `Вы можете загружать только изображения.`
+                tError = tt('user_saga_js.image_upload.error.upload_only_images')
               }
               if (error.includes(`Signature did not verify`)) {
-                tError = `Ошибка цифровой подписи`
+                tError = tt('user_saga_js.image_upload.error.signature_did_not_verify')
               }
               if (error.includes(`Error uploading`)) {
+                tError = tt('user_saga_js.image_upload.error.err_uploading')
                 tError = `Ошибка загрузки`
               }
             }
@@ -494,21 +500,19 @@ function* uploadImage({payload: {file, dataUrl, filename = 'image.txt', progress
         const {url} = res
         progress({url})
     }
+
     xhr.onerror = function (error) {
-
         console.error(filename, error)
-
-        // progress({error: 'Unable to contact the server.'})
-        progress({error: tt(`user_saga_js.imageUpload.error_server_unavailable`)})
+        progress({error: tt(`user_saga_js.image_upload.error.server_unavailable`)})
     }
+
     xhr.upload.onprogress = function (event) {
         if (event.lengthComputable) {
             const percent = Math.round((event.loaded / event.total) * 100)
-            // progress({message: `Uploading ${percent}%`})
-            progress({message: `${tt('user_saga_js.imageUpload.uploading')} ${percent}%`})
-            // console.log('Upload', percent)
+            progress({message: `${tt('user_saga_js.image_upload.uploading')} ${percent}%`})
         }
     }
+
     xhr.send(formData)
 }
 

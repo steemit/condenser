@@ -939,5 +939,22 @@
   "generated_password_input": {
     "i_have_read_and_agree_to_the": "I have read and agree to the",
     "terms_of_service": "Terms of service"
+  },
+  "user_saga_js": {
+    "image_upload" : {
+      "uploading": "Uploading",
+      "error": {
+        "account_is_not_found": "Account is not found",
+        "unsupported_posting_key": "Unsupported posting key configuration",
+        "upload_failed": "Upload failed",
+        "upload_only_images": "Upload only images",
+        "signature_did_not_verify": "Signature did not verify",
+        "err_uploading": "Error uploading",
+        "login_first": "Please logged in first ...",
+        "login_with_posting_key": "Login with your posting key",
+        "server_unavailable": "The server is unavailable",
+        "image_size_is_too_large": "Image size is too large"
+      }
+    }
   }
 }

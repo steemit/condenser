@@ -929,5 +929,22 @@
   "generated_password_input": {
     "i_have_read_and_agree_to_the": "Я прочитал и согласен с",
     "terms_of_service": "Условиями пользования"
+  },
+  "user_saga_js": {
+    "image_upload" : {
+      "uploading": "Загрузка",
+      "error": {
+        "account_is_not_found": "Пользователь не найден",
+        "unsupported_posting_key": "Ошибка постинг-ключа",
+        "upload_failed": "Ошибка загрузки изображения",
+        "upload_only_images": "Вы можете загружать только изображения",
+        "signature_did_not_verify": "Ошибка цифровой подписи",
+        "err_uploading": "Ошибка загрузки",
+        "login_first": "Пожалуйста, выполните вход в систему ...",
+        "login_with_posting_key": "Недоступен постинг ключ",
+        "server_unavailable": "Ошибка доступа к серверу",
+        "image_size_is_too_large": "Изображение слишком большое"
+      }
+    }
   }
 }

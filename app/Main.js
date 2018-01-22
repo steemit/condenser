@@ -24,7 +24,6 @@ try {
 }
 
 function runApp(initial_state) {
-    console.log('Initial state', initial_state);
     const config = initial_state.offchain.config
     golos.config.set('websocket', config.ws_connection_client);
     golos.config.set('chain_id', config.chain_id);

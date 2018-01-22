@@ -21,7 +21,11 @@ export default function init(config) {
             'https://www.google-analytics.com/analytics.js',
             'ga'
         );
-        ga('create', config.google_analytics_id, 'auto');
+        ga('create', {
+            trackingId:  config.google_analytics_id,
+            cookieDomain: 'auto',
+            sampleRate: 5
+        });
     }
 
     if (config.facebook_app_id) {

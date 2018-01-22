@@ -13,8 +13,6 @@ import UserList from 'app/components/elements/UserList';
 import cookie from "react-cookie";
 import Dropzone from 'react-dropzone'
 
-import "./Settings.scss"
-
 class Settings extends React.Component {
 
     constructor(props) {

@@ -173,11 +173,8 @@ describe('App reducer', () => {
         );
 
         // Assert
-        expect(selectors.getFeatureFlags(withMoreFlags)).toEqual(
-            Map({
-                flying: true,
-                swimming: false,
-            })
+        expect(selectors.getFeatureFlag(withMoreFlags, 'swimming')).toEqual(
+            false
         );
         expect(selectors.getFeatureFlag(withMoreFlags, 'flying')).toEqual(true);
         expect(selectors.getFeatureFlag(withMoreFlags, 'dancing')).toEqual(

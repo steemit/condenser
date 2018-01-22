@@ -9,6 +9,8 @@ import reducer, {
     removeNotification,
     updateNotificounters,
     setUserPreferences,
+    receiveFeatureFlags,
+    selectors,
     toggleNightmode,
     toggleBlogmode,
 } from './AppReducer';

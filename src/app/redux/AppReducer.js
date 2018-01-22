@@ -10,6 +10,7 @@ const UPDATE_NOTIFICOUNTERS = 'app/UPDATE_NOTIFICOUNTERS';
 export const SET_USER_PREFERENCES = 'app/SET_USER_PREFERENCES';
 export const TOGGLE_NIGHTMODE = 'app/TOGGLE_NIGHTMODE';
 export const TOGGLE_BLOGMODE = 'app/TOGGLE_BLOGMODE';
+export const RECEIVE_FEATURE_FLAGS = 'app/RECEIVE_FEATURE_FLAGS';
 
 export const defaultState = Map({
     loading: false,
@@ -90,7 +91,7 @@ export default function reducer(state = defaultState, action = {}) {
                 ['user_preferences', 'blogmode'],
                 !state.getIn(['user_preferences', 'blogmode'])
             );
-        case appActions.RECEIVE_FEATURE_FLAGS:
+        case RECEIVE_FEATURE_FLAGS:
             const newFlags = state.get('featureFlags')
                 ? state.get('featureFlags').merge(action.flags)
                 : Map(action.flags);
@@ -142,7 +143,7 @@ export const toggleBlogmode = () => ({
 });
 
 export const receiveFeatureFlags = flags => ({
-    type: appActions.RECEIVE_FEATURE_FLAGS,
+    type: RECEIVE_FEATURE_FLAGS,
     flags,
 });
 

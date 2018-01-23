@@ -13,7 +13,6 @@ import {
 } from 'app/utils/ParsersAndFormatters';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
-import FoundationDropdown from 'app/components/elements/FoundationDropdown';
 import Dropdown from 'app/components/elements/Dropdown';
 
 const ABOUT_FLAG = (
@@ -33,11 +32,6 @@ const ABOUT_FLAG = (
         </ul>
     </div>
 );
-
-/*
-const MAX_VOTES_DISPLAY = 3;
-const VOTE_WEIGHT_DROPDOWN_THRESHOLD = 1;
-*/
 
 const MAX_VOTES_DISPLAY = 20;
 const VOTE_WEIGHT_DROPDOWN_THRESHOLD = 1.0 * 1000.0 * 1000.0;
@@ -83,21 +77,10 @@ class Voting extends React.Component {
             e.preventDefault();
             this.voteUpOrDown(false);
         };
-        // IAIN RESUME HERE
-        this.voteDown2 = e => {
-            this.props.vote(weight, {
-                author,
-                permlink,
-                username,
-                myVote,
-                isFlag,
-            });
-        };
         this.voteUpOrDown = up => {
             if (this.props.voting) return;
             this.setState({ votingUp: up, votingDown: !up });
             const { myVote } = this.state;
-            console.log('MY VOTE:', myVote);
             const { author, permlink, username, is_comment } = this.props;
             if (
                 this.props.net_vesting_shares > VOTE_WEIGHT_DROPDOWN_THRESHOLD
@@ -215,51 +198,6 @@ class Voting extends React.Component {
                 (myVote < 0 ? ' Voting__button--downvoted' : '') +
                 (votingDownActive ? ' votingDown' : '');
             const flagWeight = post_obj.getIn(['stats', 'flagWeight']);
-
-            // myVote === current vote
-            const dropdown = (
-                <Dropdown
-                    position="left"
-                    title={down}
-                    onHide={() => this.setState({ showWeight: false })}
-                >
-                    {(myVote == null || myVote === 0) &&
-                        net_vesting_shares > VOTE_WEIGHT_DROPDOWN_THRESHOLD && (
-                            <div className="weight-container">
-                                <div className="weight-display">
-                                    - {weight / 100}%
-                                </div>
-                                <Slider
-                                    min={100}
-                                    max={10000}
-                                    step={100}
-                                    value={weight}
-                                    onChange={this.handleWeightChange}
-                                />
-                            </div>
-                        )}
-                    <CloseButton
-                        onClick={() => this.setState({ showWeight: false })}
-                    />
-                    <div className="clear Voting__about-flag">
-                        <p>{ABOUT_FLAG}</p>
-                        <a
-                            href="#"
-                            onClick={this.voteDown}
-                            className="button outline"
-                            title="Flag"
-                        >
-                            Flag
-                        </a>
-                    </div>
-                </Dropdown>
-            );
-
-            const flagClickAction =
-                myVote === null || myVote === 0
-                    ? this.toggleWeightDown
-                    : this.voteDown;
-
             return (
                 <span className="Voting">
                     <span className={classDown}>
@@ -269,12 +207,10 @@ class Voting extends React.Component {
                             </span>
                         )}
                         {votingDownActive ? (
-                            <a href="#" onClick={this.voteDown2}>
-                                {down} <span>A</span>
-                            </a>
+                            down
                         ) : (
                             <a href="#" onClick={this.voteDown} title="Flag">
-                                {down} <span>B</span>
+                                {down}
                             </a>
                         )}
                     </span>

@@ -201,6 +201,7 @@ class Settings extends React.Component {
                                 <option value="fr">French</option>
                                 <option value="it">Italian</option>
                                 <option value="ko">Korean</option>
+                                <option value="zh">Chinese 简体中文</option>
                             </select>
                         </label>
                     </div>

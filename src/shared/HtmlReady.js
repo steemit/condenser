@@ -110,7 +110,11 @@ export default function(html, { mutate = true, hideImages = false } = {}) {
         };
     } catch (error) {
         // xmldom error is bad
-        throw new Error('HtmlReady: xmldom error');
+        console.log(
+            'rendering error',
+            JSON.stringify({ error: error.message, html })
+        );
+        return { html: '' };
     }
 }
 
@@ -142,9 +146,7 @@ function link(state, child) {
 
             // Unlink potential phishing attempts
             if (
-                child.textContent.match(
-                    /https?:\/\/(.*@)?(www\.)?steemit\.com/
-                ) &&
+                child.textContent.match(/(www\.)?steemit\.com/) &&
                 !url.match(/https?:\/\/(.*@)?(www\.)?steemit\.com/)
             ) {
                 const phishyDiv = child.ownerDocument.createElement('div');

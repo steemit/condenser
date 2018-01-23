@@ -3,7 +3,7 @@ import assert from 'assert';
 import proxifyImageUrl from './ProxifyUrl';
 
 describe('ProxifyUrl', () => {
-    before(() => {
+    beforeAll(() => {
         global.$STM_Config = { img_proxy_prefix: 'https://steemitimages.com/' };
     });
     it('naked URL', () => {

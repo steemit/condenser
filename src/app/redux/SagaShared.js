@@ -4,7 +4,7 @@ import { takeEvery, takeLatest } from 'redux-saga';
 import tt from 'counterpart';
 import { api } from '@steemit/steem-js';
 import * as globalActions from './GlobalReducer';
-import appActions from './AppReducer';
+import * as appActions from './AppReducer';
 import * as transactionActions from './TransactionReducer';
 import { setUserPreferences } from 'app/utils/ServerApiClient';
 

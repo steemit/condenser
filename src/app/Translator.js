@@ -8,7 +8,7 @@ import fr from 'react-intl/locale-data/fr';
 import it from 'react-intl/locale-data/it';
 import ko from 'react-intl/locale-data/ko';
 import zh from 'react-intl/locale-data/zh';
-import ko from 'react-intl/locale-data/pt';
+import pt from 'react-intl/locale-data/pt';
 import { DEFAULT_LANGUAGE } from 'app/client_config';
 import tt from 'counterpart';
 
@@ -35,8 +35,8 @@ tt.registerTranslations('ko', require('app/locales/ko.json'));
 tt.registerTranslations('zh', require('app/locales/counterpart/zh'));
 tt.registerTranslations('zh', require('app/locales/zh.json'));
 
-tt.registerTranslations('br', require('app/locales/counterpart/pt'));
-tt.registerTranslations('br', require('app/locales/pt.json'));
+tt.registerTranslations('pt', require('app/locales/counterpart/pt'));
+tt.registerTranslations('pt', require('app/locales/pt.json'));
 
 if (process.env.NODE_ENV === 'production') {
     tt.setFallbackLocale('en');

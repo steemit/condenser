@@ -34,8 +34,13 @@ const ABOUT_FLAG = (
     </div>
 );
 
+/*
 const MAX_VOTES_DISPLAY = 3;
 const VOTE_WEIGHT_DROPDOWN_THRESHOLD = 1;
+*/
+
+const MAX_VOTES_DISPLAY = 20;
+const VOTE_WEIGHT_DROPDOWN_THRESHOLD = 1.0 * 1000.0 * 1000.0;
 
 class Voting extends React.Component {
     static propTypes = {
@@ -92,6 +97,7 @@ class Voting extends React.Component {
             if (this.props.voting) return;
             this.setState({ votingUp: up, votingDown: !up });
             const { myVote } = this.state;
+            console.log('MY VOTE:', myVote);
             const { author, permlink, username, is_comment } = this.props;
             if (
                 this.props.net_vesting_shares > VOTE_WEIGHT_DROPDOWN_THRESHOLD
@@ -111,6 +117,7 @@ class Voting extends React.Component {
                 : myVote < 0 ? 0 : -1 * this.state.weight;
             if (this.state.showWeight) this.setState({ showWeight: false });
             const isFlag = this.props.flag ? true : null;
+
             this.props.vote(weight, {
                 author,
                 permlink,
@@ -118,6 +125,7 @@ class Voting extends React.Component {
                 myVote,
                 isFlag,
             });
+
         };
 
         this.handleWeightChange = weight => {
@@ -210,43 +218,6 @@ class Voting extends React.Component {
 
             // myVote === current vote
             const dropdown = (
-                /*
-                <FoundationDropdown
-                    show={showWeight}
-                    onHide={() => this.setState({ showWeight: false })}
-                    className="Voting__adjust_weight_down"
-                >
-                    {(myVote == null || myVote === 0) &&
-                        net_vesting_shares > VOTE_WEIGHT_DROPDOWN_THRESHOLD && (
-                            <div className="weight-container">
-                                <div className="weight-display">
-                                    - {weight / 100}%
-                                </div>
-                                <Slider
-                                    min={100}
-                                    max={10000}
-                                    step={100}
-                                    value={weight}
-                                    onChange={this.handleWeightChange}
-                                />
-                            </div>
-                        )}
-                    <CloseButton
-                        onClick={() => this.setState({ showWeight: false })}
-                    />
-                    <div className="clear Voting__about-flag">
-                        <p>{ABOUT_FLAG}</p>
-                        <a
-                            href="#"
-                            onClick={this.voteDown}
-                            className="button outline"
-                            title="Flag"
-                        >
-                            Flag
-                        </a>
-                    </div>
-                </FoundationDropdown>
-                */
                 <Dropdown
                     position="left"
                     title={down}
@@ -568,7 +539,6 @@ export default connect(
     dispatch => ({
         vote: (weight, { author, permlink, username, myVote, isFlag }) => {
             const confirm = () => {
-                if (myVote == null) return null;
                 const t = isFlag
                     ? ''
                     : ' ' +

@@ -393,7 +393,7 @@ function* getFeatureFlags(username, posting_private) {
         const flags = yield call(
             [api, api.signedCallAsync],
             'conveyor.get_feature_flags',
-            { username },
+            { account: username },
             username,
             posting_private
         );

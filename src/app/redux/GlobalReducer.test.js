@@ -3,7 +3,6 @@ import { emptyContent } from 'app/redux/EmptyState';
 import * as globalActions from './GlobalReducer';
 import reducer, { defaultState } from './GlobalReducer';
 
-
 const expectedStats = Map({
     isNsfw: false,
     hide: false,
@@ -34,18 +33,11 @@ describe('Global reducer', () => {
             })
         );
         // Act
-        const actual = reducer(
-            initial,
-            globalActions.setCollapsed(payload)
-        );
+        const actual = reducer(initial, globalActions.setCollapsed(payload));
         // Assert
-        expect(
-            actual.getIn([
-                'content',
-                payload.post,
-                'collapsed',
-            ])
-        ).toEqual(payload.collapsed);
+        expect(actual.getIn(['content', payload.post, 'collapsed'])).toEqual(
+            payload.collapsed
+        );
     });
     it('should return correct state for a RECEIVE_STATE action', () => {
         // Arrange
@@ -54,10 +46,7 @@ describe('Global reducer', () => {
         };
         const initial = reducer();
         // Act
-        const actual = reducer(
-            initial,
-            globalActions.receiveState(payload)
-        );
+        const actual = reducer(initial, globalActions.receiveState(payload));
         // Assert
         expect(actual.getIn(['content', 'barman', 'foo'])).toEqual('choo');
         expect(actual.getIn(['content', 'barman', 'stats'])).toEqual(
@@ -90,9 +79,9 @@ describe('Global reducer', () => {
         // Act
         const actual = reducer(initial, globalActions.receiveAccount(payload));
         // Assert
-        expect(actual.getIn(['accounts', payload.account.name, 'name'])).toEqual(
-            payload.account.name
-        );
+        expect(
+            actual.getIn(['accounts', payload.account.name, 'name'])
+        ).toEqual(payload.account.name);
         expect(
             actual.getIn(['accounts', payload.account.name, 'beList'])
         ).toEqual(List(payload.account.beList));
@@ -128,14 +117,16 @@ describe('Global reducer', () => {
         );
         //  Assert
         expect(
-            actual.getIn(['content', `${author}/${permlink}`])
-        ).to.include.all.keys(
-            ...Object.keys(emptyContent),
-            ...Object.keys(payload.op)
-        );
+            actual.getIn(['content', `${author}/${permlink}`, 'author'])
+        ).toEqual(author);
+        expect(
+            actual.getIn(['content', `${author}/${permlink}`, 'title'])
+        ).toEqual(title);
         expect(
             actual.getIn(['content', `${parent_author}/${parent_permlink}`])
-        ).to.include.all.keys('replies', 'children');
+        ).toEqual(
+            Map({ replies: List(['critic/critical-comment']), children: 1 })
+        );
         // Arrange
         payload.op.parent_author = '';
         // Act
@@ -165,11 +156,11 @@ describe('Global reducer', () => {
         );
         // Assert
         expect(
-            actual.getIn(['content', `${author}/${permlink}`])
-        ).to.include.all.keys(
-            ...Object.keys(emptyContent),
-            ...Object.keys(payload.content)
-        );
+            actual.getIn(['content', `${author}/${permlink}`, 'author'])
+        ).toEqual(payload.content.author);
+        expect(
+            actual.getIn(['content', `${author}/${permlink}`, 'permlink'])
+        ).toEqual(payload.content.permlink);
         expect(
             actual.getIn(['content', `${author}/${permlink}`, 'active_votes'])
         ).toEqual(fromJS(active_votes));
@@ -304,9 +295,13 @@ describe('Global reducer', () => {
             globalActions.deleteContent(payload)
         );
         // Assert
-        expect(actual.getIn(['content', 'alice/bob', 'replies']))
-            .to.have.length(2)
-            .and.to.not.include(`${payload.author}/${payload.permlink}`);
+        expect(actual.getIn(['content', 'alice/bob', 'replies'])).toHaveLength(
+            2
+        );
+        expect(actual.getIn(['content', 'alice/bob', 'replies'])).toEqual([
+            'dorothy-hughes/in-a-lonely-place',
+            'artichoke/hearts',
+        ]);
     });
     it('should return correct state for a FETCHING_DATA action', () => {
         // Arrange
@@ -339,7 +334,10 @@ describe('Global reducer', () => {
                 {
                     author: 'smudge',
                     permlink: 'klop',
-                    active_votes: { one: { percent: 30 }, two: { percent: 70 } },
+                    active_votes: {
+                        one: { percent: 30 },
+                        two: { percent: 70 },
+                    },
                 },
             ],
             order: 'by_author',
@@ -380,7 +378,9 @@ describe('Global reducer', () => {
 
         //Assert
         expect(actual1.getIn(['content', 'author'])).toEqual(payload.author);
-        expect(actual1.getIn(['content', 'permlink'])).toEqual(payload.permlink);
+        expect(actual1.getIn(['content', 'permlink'])).toEqual(
+            payload.permlink
+        );
         expect(actual1.getIn(['content', 'active_vites'])).toEqual(
             payload.active_votes
         );
@@ -396,8 +396,11 @@ describe('Global reducer', () => {
         // Push new key to posts list, If order meets the condition.
         expect(
             actual1.getIn(['accounts', payload.accountname, payload.category])
-        ).to.deep.include(
-            `${payload.data[0].author}/${payload.data[0].permlink}`
+        ).toEqual(
+            List([
+                { data: { author: 'farm', permlink: 'barn' } },
+                'smudge/klop',
+            ])
         );
 
         // Arrange
@@ -412,8 +415,11 @@ describe('Global reducer', () => {
         // Assert
         expect(
             actual2.getIn(['discussion_idx', payload.category, payload.order])
-        ).to.deep.include(
-            `${payload.data[0].author}/${payload.data[0].permlink}`
+        ).toEqual(
+            List([
+                { data: { author: 'ship', permlink: 'bridge' } },
+                'smudge/klop',
+            ])
         );
         // Arrange
         // handle falsey payload category by setting empty string at keypath location typically occupied by category.
@@ -425,10 +431,8 @@ describe('Global reducer', () => {
             globalActions.receiveData(payload)
         );
         // Assert.
-        expect(
-            actual3.getIn(['discussion_idx', '', payload.order])
-        ).to.deep.include(
-            `${payload.data[0].author}/${payload.data[0].permlink}`
+        expect(actual3.getIn(['discussion_idx', '', payload.order])).toEqual(
+            List(['smudge/klop'])
         );
     });
     it('should return correct state for a RECEIVE_RECENT_POSTS action', () => {
@@ -438,13 +442,19 @@ describe('Global reducer', () => {
                 {
                     author: 'pidge',
                     permlink: 'wolf',
-                    active_votes: { one: { percent: 60 }, two: { percent: 30 } },
+                    active_votes: {
+                        one: { percent: 60 },
+                        two: { percent: 30 },
+                    },
                     stats: {},
                 },
                 {
                     author: 'ding',
                     permlink: 'bat',
-                    active_votes: { one: { percent: 60 }, two: { percent: 30 } },
+                    active_votes: {
+                        one: { percent: 60 },
+                        two: { percent: 30 },
+                    },
                     stats: {},
                 },
             ],
@@ -462,22 +472,37 @@ describe('Global reducer', () => {
         // It adds recent posts to discussion_idx
         expect(actual.getIn(['discussion_idx', '', 'created'])).toEqual(
             List([
-                `${payload.data[1].author}/${
-                    payload.data[1].permlink
-                }`,
-                `${payload.data[0].author}/${
-                    payload.data[0].permlink
-                }`,
+                `${payload.data[1].author}/${payload.data[1].permlink}`,
+                `${payload.data[0].author}/${payload.data[0].permlink}`,
             ])
         );
         // It adds recent posts to content
-        expect(actual.get('content'))
-            .to.have.property(
-                `${payload.data[0].author}/${
-                    payload.data[0].permlink
-                }`
-            )
-            .to.have.property('stats');
+        expect(
+            actual.getIn([
+                'content',
+                `${payload.data[0].author}/${payload.data[0].permlink}`,
+                'author',
+            ])
+        ).toEqual(payload.data[0].author);
+        expect(
+            actual.getIn([
+                'content',
+                `${payload.data[0].author}/${payload.data[0].permlink}`,
+                'stats',
+            ])
+        ).toEqual(
+            Map({
+                isNsfw: false,
+                hide: false,
+                hasPendingPayout: false,
+                gray: false,
+                flagWeight: 0,
+                up_votes: 2,
+                total_votes: 2,
+                authorRepLog10: undefined,
+                allowDelete: false,
+            })
+        );
 
         // Act
         // If the recent post is already in the list do not add it again.
@@ -486,16 +511,9 @@ describe('Global reducer', () => {
             globalActions.receiveRecentPosts(payload)
         );
         // Assert
-        expect(actual.getIn(['discussion_idx', '', 'created'])).to.have.sizeOf(
-            2
+        expect(actual.getIn(['discussion_idx', '', 'created'])).toEqual(
+            List(['ding/bat', 'pidge/wolf'])
         );
-        expect(actual.get('content'))
-            .to.have.sizeOf(2)
-            .and.to.have.property(
-                `${payload.data[0].author}/${
-                    payload.data[0].permlink
-                }`
-            );
     });
     it('should return correct state for a REQUEST_META action', () => {
         // Arrange
@@ -504,14 +522,11 @@ describe('Global reducer', () => {
             link: 'World',
         };
         // Act
-        const actual = reducer(
-            reducer(),
-            globalActions.requestMeta(payload)
-        );
+        const actual = reducer(reducer(), globalActions.requestMeta(payload));
         // Assert
-        expect(actual.getIn(['metaLinkData', `${payload.id}`]))
-            .to.have.property('link')
-            .toEqual(payload.link);
+        expect(actual.getIn(['metaLinkData', `${payload.id}`])).toEqual(
+            Map({ link: 'World' })
+        );
     });
     it('should return correct state for a RECEIVE_META action', () => {
         // Arrange
@@ -530,9 +545,9 @@ describe('Global reducer', () => {
             globalActions.receiveMeta(payload)
         );
         // Assert
-        expect(actual.getIn(['metaLinkData', payload.id]))
-            .to.have.property('link')
-            .toEqual(payload.meta.link);
+        expect(actual.getIn(['metaLinkData', payload.id])).toEqual(
+            Map({ link: 'spalunking' })
+        );
     });
 
     it('should return correct state for a SET action', () => {
@@ -545,9 +560,7 @@ describe('Global reducer', () => {
         // Act
         const actual = reducer(initial, globalActions.set(payload));
         // Assert
-        expect(actual.getIn(payload.key)).toEqual(
-            payload.value
-        );
+        expect(actual.getIn(payload.key)).toEqual(payload.value);
         // Arrange
         // Make the key a non-array.
         payload = {
@@ -556,9 +569,7 @@ describe('Global reducer', () => {
         };
         // Assert
         const actual2 = reducer(initial, globalActions.set(payload));
-        expect(actual2.getIn([payload.key])).toEqual(
-            payload.value
-        );
+        expect(actual2.getIn([payload.key])).toEqual(payload.value);
     });
     it('should return correct state for a REMOVE action', () => {
         // Arrange
@@ -568,12 +579,9 @@ describe('Global reducer', () => {
         const initial = reducer();
         initial.setIn(payload.key, 'potato');
         // Act
-        const actual = reducer(
-            initial,
-            globalActions.remove(payload)
-        );
+        const actual = reducer(initial, globalActions.remove(payload));
         // Assert
-        expect(actual.getIn(payload.key)).to.not.eql('potato');
+        expect(actual.getIn(payload.key)).toEqual(undefined);
     });
 
     it('should return correct state for a UPDATE action', () => {
@@ -585,14 +593,9 @@ describe('Global reducer', () => {
         const initial = reducer();
         initial.setIn(payload.key, 'acorn');
         // Act
-        const actual = reducer(
-            initial,
-            globalActions.update(payload)
-        );
+        const actual = reducer(initial, globalActions.update(payload));
         // Assert
-        expect(actual.getIn(payload.key)).toEqual(
-            payload.updater()
-        );
+        expect(actual.getIn(payload.key)).toEqual(payload.updater());
     });
 
     it('should return correct state for a SET_META_DATA action', () => {
@@ -603,14 +606,11 @@ describe('Global reducer', () => {
         };
         const initial = reducer();
         // Act
-        const actual = reducer(
-            initial,
-            globalActions.setMetaData(payload)
-        );
+        const actual = reducer(initial, globalActions.setMetaData(payload));
         // Assert
-        expect(
-            actual.getIn(['metaLinkData', payload.id])
-        ).toEqual(fromJS(payload.meta));
+        expect(actual.getIn(['metaLinkData', payload.id])).toEqual(
+            fromJS(payload.meta)
+        );
     });
 
     it('should return correct state for a CLEAR_META action', () => {
@@ -625,27 +625,28 @@ describe('Global reducer', () => {
             globalActions.clearMeta({ id: 'deleteMe' })
         );
         // Assert
-        expect(actual.get('metaLinkData')).to.not.have.property('deleteMe');
+        expect(actual.get('metaLinkData')).toEqual(Map({}));
     });
 
     it('should return correct state for a CLEAR_META_ELEMENT action', () => {
         // Arrange
-        const initial = reducer(
-            initial,
-        );
-        const payload =  {
+        const payload = {
+            id: 'pear',
+            meta: { flip: 'flop' },
+        };
+
+        const clearPayload = {
             formId: 'pear',
             element: 'flip',
         };
+        const initial = reducer(initial, globalActions.setMetaData(payload));
         // Act
         const actual = reducer(
             initial,
-            globalActions.clearMetaElement(payload)
+            globalActions.clearMetaElement(clearPayload)
         );
         // Assert
-        expect(actual.get('metaLinkData')).to.not.have.property(
-            payload.element
-        );
+        expect(actual.get('metaLinkData')).toEqual(Map({ pear: Map({}) }));
     });
 
     it('should return correct state for a FETCH_JSON action', () => {
@@ -662,18 +663,16 @@ describe('Global reducer', () => {
         };
         const initial = reducer();
         const actual = reducer(initial, globalActions.fetchJsonResult(payload));
-        expect(actual)
-            .to.have.property(payload.id)
-            .toEqual(
-                Map({
-                    result: payload.result,
-                    error: payload.error,
-                })
-            );
+        expect(actual).toEqual(
+            Map({
+                status: {},
+                seagull: Map({ result: 'fulmar', error: 'stuka' }),
+            })
+        );
     });
 
     it('should return correct state for a SHOW_DIALOG action', () => {
-        const payload =  {
+        const payload = {
             name: 'Iris',
             params: { cheap: 'seats' },
         };
@@ -682,9 +681,12 @@ describe('Global reducer', () => {
             Map({ chimney: 'smoke' })
         );
         const actual = reducer(initial, globalActions.showDialog(payload));
-        expect(actual.get('active_dialogs'))
-            .to.have.property(payload.name)
-            .toEqual(Map({ params: Map({ ...payload.params }) }));
+        expect(actual.get('active_dialogs')).toEqual(
+            Map({
+                chimney: 'smoke',
+                Iris: Map({ params: Map({ cheap: 'seats' }) }),
+            })
+        );
     });
 
     it('should return correct state for a HIDE_DIALOG action', () => {
@@ -694,6 +696,6 @@ describe('Global reducer', () => {
             Map({ [payload.name]: 'flipper' })
         );
         const actual = reducer(initial, globalActions.hideDialog(payload));
-        expect(actual.get('active_dialogs')).to.not.have.property(payload.name);
+        expect(actual.get('active_dialogs')).toEqual(Map({}));
     });
 });

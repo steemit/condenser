@@ -35,18 +35,14 @@ import ScrollBehavior from 'scroll-behavior';
 
 import { api } from '@steemit/steem-js';
 
-const PERFORMANCE_TEST = process.env.PERFORMANCE_TEST;
 let get_state_perf,
     get_content_perf = false;
-if (PERFORMANCE_TEST) {
-    let uri = __dirname.replace('src/shared', '');
+if (process.env.OFFLINE_SSR_TEST) {
+    const testDataDir = process.env.OFFLINE_SSR_TEST_DATA_DIR || 'api_mockdata';
+    let uri = `${__dirname}/../../`;
     //.default because require
-    get_state_perf = require(uri +
-        PERFORMANCE_TEST +
-        '/mockdata/api_calls/get_state').default;
-    get_content_perf = require(uri +
-        PERFORMANCE_TEST +
-        '/mockdata/api_calls/get_content').default;
+    get_state_perf = require(uri + testDataDir + '/get_state');
+    get_content_perf = require(uri + testDataDir + '/get_content');
 }
 
 const calcOffsetRoot = startEl => {
@@ -329,7 +325,7 @@ async function universalRender({
         if (url.indexOf('/author-rewards') !== -1)
             url = url.replace(/\/author-rewards$/, '/transfers');
 
-        if (PERFORMANCE_TEST) {
+        if (process.env.OFFLINE_SSR_TEST) {
             onchain = get_state_perf;
         } else {
             onchain = await api.getStateAsync(url);
@@ -370,7 +366,7 @@ async function universalRender({
         ) {
             const params = url.substr(2, url.length - 1).split('/');
             let content;
-            if (PERFORMANCE_TEST) {
+            if (process.env.OFFLINE_SSR_TEST) {
                 content = get_content_perf;
             } else {
                 content = await api.getContentAsync(params[0], params[1]);

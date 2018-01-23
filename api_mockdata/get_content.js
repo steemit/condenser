@@ -1,4 +1,4 @@
-export default {
+module.exports = {
     id: 24398348,
     author: 'joeparys',
     permlink: 'zm1p9aij',

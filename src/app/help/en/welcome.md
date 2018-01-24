@@ -216,7 +216,7 @@ You can exchange SBD for STEEM in the [Currency Market](https://steemit.com/mark
 
 You can spend your SBD at the [Peerhub Store](https://www.peerhub.com/).
 
-You can also exchange your STEEM and SBD for bitcoin on an exchange such as [BlockTrades](https://blocktrades.us/) or [Bittrex](https://bittrex.com/).
+You can also exchange your STEEM and SBD for bitcoin on a third-party exchange such as [BlockTrades](https://blocktrades.us/) or [Bittrex](https://bittrex.com/).
 
 <a href="#Table_of_Contents">^</a>
 ### <span id="Plagiarism">Plagiarism</span>

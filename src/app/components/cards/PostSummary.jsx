@@ -296,10 +296,9 @@ class PostSummary extends React.Component {
             // which has the 256x512 for whatever the large breakpoint is where the list layout is used
             // and the 640 for lower than that
 
-            const blogSize = proxifyImageUrl(p.image_link, '640x480').replace(
-                / /g,
-                '%20'
-            );
+            const blogSize = proxifyImageUrl(p.image_link, '640x480')
+                .replace(/ /g, '%20')
+                .replace(/&amp;/g, '&');
 
             if (this.props.blogmode) {
                 thumb = (

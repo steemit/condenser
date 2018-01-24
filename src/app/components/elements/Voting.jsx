@@ -73,10 +73,12 @@ class Voting extends React.Component {
             e.preventDefault();
             this.voteUpOrDown(true);
         };
+
         this.voteDown = e => {
             e.preventDefault();
             this.voteUpOrDown(false);
         };
+
         this.voteUpOrDown = up => {
             if (this.props.voting) return;
             this.setState({ votingUp: up, votingDown: !up });

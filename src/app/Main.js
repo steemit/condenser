@@ -20,7 +20,7 @@ const CMD_LOG_TOGGLE = 'log-toggle';
 const CMD_LOG_O = 'log-on';
 
 try {
-    if (process.env.NODE_ENV === 'development') {
+    if(process.env.NODE_ENV !== 'production') {
         // Adds some object refs to the global window object
         ConsoleExports.init(window);
     }

@@ -21,7 +21,7 @@ function logErrorAndRedirect(ctx, where, error) {
             ctx.req.headers['user-agent']
         }: ${msg}`
     );
-    if (process.env.NODE_ENV === 'development') console.log(error.stack);
+    if (process.env.NODE_ENV !== 'production') console.log(error.stack);
     ctx.flash = { alert: `${where} error: ${msg}` };
     ctx.redirect('/');
     return null;

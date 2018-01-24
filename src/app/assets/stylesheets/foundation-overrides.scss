@@ -62,7 +62,12 @@ button, .button {
 }
 
 .close-button {
+  position: absolute;
+  cursor: pointer;
   transition: color 0.2s ease-in-out;
+  top: 0.5rem;
+  font-size: 2em;
+  line-height: 1;
   @include themify($themes) {
     color: themed('textColorSecondary');  
   } 

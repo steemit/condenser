@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import CloseButton from 'react-foundation-components/lib/global/close-button';
+import CloseButton from 'app/components/elements/CloseButton';
 import Reveal from 'react-foundation-components/lib/global/reveal';
 import { Map, List } from 'immutable';
 import * as globalActions from 'app/redux/GlobalReducer';

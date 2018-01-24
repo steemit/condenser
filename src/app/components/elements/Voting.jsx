@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Slider from 'react-rangeslider';
 import tt from 'counterpart';
-import CloseButton from 'react-foundation-components/lib/global/close-button';
 import * as transactionActions from 'app/redux/TransactionReducer';
 import Icon from 'app/components/elements/Icon';
 import FormattedAsset from 'app/components/elements/FormattedAsset';
@@ -109,6 +108,7 @@ class Voting extends React.Component {
                 username,
                 myVote,
                 isFlag,
+                up
             });
 
         };
@@ -475,8 +475,9 @@ export default connect(
 
     // mapDispatchToProps
     dispatch => ({
-        vote: (weight, { author, permlink, username, myVote, isFlag }) => {
+        vote: (weight, { author, permlink, username, myVote, isFlag, up }) => {
             const confirm = () => {
+                if (up === true && weight !== 0) return null; 
                 const t = isFlag
                     ? ''
                     : ' ' +

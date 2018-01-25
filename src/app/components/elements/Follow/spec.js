@@ -1,11 +1,14 @@
 import React from "react";
-import { mount, shallow } from "enzyme";
+import { mount, configure, shallow } from "enzyme";
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import Follow from "./index";
 import rootReducer from 'app/redux/RootReducer';
+import Adapter from 'enzyme-adapter-react-15';
 
 const store = createStore(rootReducer);
+
+configure({ adapter: new Adapter() });
 
 describe("<Follow />", () => {
 

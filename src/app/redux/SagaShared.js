@@ -3,7 +3,6 @@ import { call, put, select } from 'redux-saga/effects';
 import { takeEvery, takeLatest } from 'redux-saga';
 import tt from 'counterpart';
 import { api } from '@steemit/steem-js';
-
 import * as globalActions from './GlobalReducer';
 import * as appActions from './AppReducer';
 import * as transactionActions from './TransactionReducer';
@@ -96,9 +95,9 @@ function* saveUserPreferences({ payload }) {
 function* watchUserSettingsUpdates() {
     yield* takeLatest(
         [
-            appActions.SET_USER_PREFERENCES,
-            appActions.TOGGLE_NIGHTMODE,
-            appActions.TOGGLE_BLOGMODE,
+            appActions.appActionConstants.SET_USER_PREFERENCES,
+            appActions.appActionConstants.TOGGLE_NIGHTMODE,
+            appActions.appActionConstants.TOGGLE_BLOGMODE,
         ],
         saveUserPreferences
     );

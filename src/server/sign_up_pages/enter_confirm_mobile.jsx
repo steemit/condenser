@@ -14,7 +14,6 @@ import MiniHeader from 'app/components/modules/MiniHeader';
 import secureRandom from 'secure-random';
 import config from 'config';
 import Mixpanel from 'mixpanel';
-import Progress from 'react-foundation-components/lib/global/progress-bar';
 
 const path = require('path');
 const ROOT = path.join(__dirname, '../../..');
@@ -148,7 +147,11 @@ export default function useEnterAndConfirmMobilePages(app) {
                     style={{ maxWidth: '32rem' }}
                 >
                     <div className="column">
-                        <Progress tabIndex="0" value={90} max={100} />
+                        <progress max="100" value="90">
+                            <div className="progress">
+                                <span style={{width: '90%'}}>Progress: 90%</span>
+                            </div>
+                        </progress>
                         <form
                             className="column"
                             action={'/submit_mobile' + makeParams(params)}
@@ -360,7 +363,11 @@ export default function useEnterAndConfirmMobilePages(app) {
                 <br />
                 <div className="row" style={{ maxWidth: '32rem' }}>
                     <div className="column">
-                        <Progress tabIndex="0" value={90} max={100} />
+                        <progress max="100" value="90">
+                            <div className="progress">
+                                <span style={{width: '90%'}}>Progress: 90%</span>
+                            </div>
+                        </progress>
                         Thank you for providing your phone number (
                         {phone}
                         ).

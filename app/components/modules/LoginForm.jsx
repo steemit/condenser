@@ -292,7 +292,7 @@ export default connect(
           externalTransfer = (!!to && !!amount && !!token && !!memo);
           // explicitly set user name in this case
           initialUsername = externalTransfer ? sender : initialUsername
-          console.log(initialUsername)
+          // console.log(initialUsername)
         }
         const loginDefault = state.user.get('loginDefault')
         if(loginDefault) {

@@ -22,6 +22,7 @@ module.exports = function(sequelize, DataTypes) {
             sign_up_meta: DataTypes.TEXT,
             account_status: DataTypes.STRING,
             settings: DataTypes.TEXT,
+            creation_hash: DataTypes.STRING,
         },
         {
             tableName: 'users',

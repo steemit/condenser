@@ -6,11 +6,17 @@ beforeEach(() => {
 });
 
 describe('htmlready', () => {
+<<<<<<< HEAD
     it('should throw an error if the input cannot be parsed', () => {
         const teststring = 'teststring lol'; // this string causes the xmldom parser to fail & error out
         expect(() => HtmlReady(teststring).html).toThrow(
             'HtmlReady: xmldom error'
         );
+=======
+    it('should return an empty string if input cannot be parsed', () => {
+        const teststring = 'teststring lol'; // this string causes the xmldom parser to fail & error out
+        expect(HtmlReady(teststring).html).toEqual('');
+>>>>>>> 08185985ce6ff3a5f7394df7c1148745e995820b
     });
 
     it('should allow links where the text portion and href contains steemit.com', () => {

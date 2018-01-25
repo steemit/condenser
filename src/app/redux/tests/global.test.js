@@ -3,7 +3,7 @@ import Immutable from 'immutable';
 import reducer, * as globalActions from '../GlobalReducer';
 
 describe('global reducer', () => {
-    test('should return empty state', () => {
+    it('should return empty state', () => {
         const reduced = reducer(undefined, {});
 
         expect(reduced.toJS()).toEqual({ status: {} });

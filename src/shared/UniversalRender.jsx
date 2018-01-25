@@ -26,11 +26,9 @@ import { sharedWatches } from 'app/redux/SagaShared';
 import { userWatches } from 'app/redux/UserSaga';
 import { authWatches } from 'app/redux/AuthSaga';
 import { transactionWatches } from 'app/redux/TransactionSaga';
-import PollDataSaga from 'app/redux/PollDataSaga';
 import { component as NotFound } from 'app/components/pages/NotFound';
 import extractMeta from 'app/utils/ExtractMeta';
 import Translator from 'app/Translator';
-import { notificationsArrayToMap } from 'app/utils/Notifications';
 import { routeRegex } from 'app/ResolveRoute';
 import { contentStats } from 'app/utils/StateFunctions';
 import ScrollBehavior from 'scroll-behavior';
@@ -250,12 +248,6 @@ async function universalRender({
 
     if (process.env.BROWSER) {
         const store = createStore(rootReducer, initial_state, middleware);
-        sagaMiddleware
-            .run(PollDataSaga)
-            .done.then(() => console.log('PollDataSaga is finished'))
-            .catch(err =>
-                console.log('PollDataSaga is finished with error', err)
-            );
 
         const history = syncHistoryWithStore(browserHistory, store);
 
@@ -400,28 +392,6 @@ async function universalRender({
             payload: { pathname: location },
         });
         server_store.dispatch(appActions.setUserPreferences(userPreferences));
-        if (offchain.account) {
-            try {
-                const notifications = await tarantool.select(
-                    'notifications',
-                    0,
-                    1,
-                    0,
-                    'eq',
-                    offchain.account
-                );
-                server_store.dispatch(
-                    appActions.updateNotificounters(
-                        notificationsArrayToMap(notifications)
-                    )
-                );
-            } catch (e) {
-                console.warn(
-                    'WARNING! cannot retrieve notifications from tarantool in universalRender:',
-                    e.message
-                );
-            }
-        }
     } catch (e) {
         // Ensure 404 page when username not found
         if (location.match(routeRegex.UserProfile1)) {

@@ -10,6 +10,7 @@
   > .VerticalMenu {
     visibility: hidden;
     min-width: 145px;
+    width: max-content;
     z-index: 1000;
     display: block;
     border-radius: $global-radius;

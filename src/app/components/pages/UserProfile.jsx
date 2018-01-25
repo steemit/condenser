@@ -625,7 +625,6 @@ export default class UserProfile extends React.Component {
                                 />
                             </div>
                         </div>
-
                         <h1>
                             <Userpic account={account.name} hideIfDefault />
                             {name || account.name}{' '}

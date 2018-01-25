@@ -17,8 +17,7 @@
     "start": "NODE_ENV=development babel-node ./webpack/dev-server.js",
     "checktranslations": "node scripts/check_translations.js",
     "storybook": "start-storybook -p 9001 -c .storybook",
-    "storybook-build": "build-storybook -c .storybook -o docs",
-    "performance-test": "npm run start PERFORMANCE_TEST=true"
+    "storybook-build": "build-storybook -c .storybook -o docs"
   },
   "author": "Steemit, Inc.",
   "license": "MIT",

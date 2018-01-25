@@ -9,7 +9,7 @@ describe('global reducer', () => {
         expect(reduced.toJS()).toEqual({ status: {} });
     });
 
-    it('should apply new global state', () => {
+    test('should apply new global state', () => {
         const state = Immutable.fromJS(require('./global.json'));
         const reduced = reducer(undefined, globalActions.receiveState(state));
         //const action = {type: 'global/RECEIVE_STATE', payload: state};

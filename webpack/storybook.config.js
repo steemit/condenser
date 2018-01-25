@@ -1,6 +1,8 @@
 import path from 'path';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import genDefaultConfig from '@storybook/react/dist/server/config/defaults/webpack.config.js';
+import webpack from 'webpack';
+
 
 const css_loaders = [
     {
@@ -48,6 +50,11 @@ module.exports = (baseConfig, env) => {
         ]
     };
     config.plugins.push( new ExtractTextPlugin('[name]-[chunkhash].css'));
+    config.plugins.push(new webpack.DefinePlugin({
+        'process.env': {
+            BROWSER: JSON.stringify(true),
+        }
+    }));
     config.module = {
         rules: [
             {test: /\.(jpe?g|png)/, use: 'url-loader?limit=4096'},

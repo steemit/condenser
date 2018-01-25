@@ -84,7 +84,7 @@ const toggleSortByPrice = {
 };
 
 describe('market reducer', () => {
-    it('should provide a nice initial state', () => {
+    test('should provide a nice initial state', () => {
         const initial = reducer();
 
         expect(initial.get('open_orders_sort')).toEqual(
@@ -98,7 +98,7 @@ describe('market reducer', () => {
         expect(initial.get('status')).toEqual({});
     });
 
-    it('should receive open orders', () => {
+    test('should receive open orders', () => {
         const initial = reducer();
 
         const withOrders = reducer(initial, receiveOpenOrders(someOpenOrders));
@@ -114,7 +114,7 @@ describe('market reducer', () => {
         expect(orders[3].type).toBe('bid');
     });
 
-    it('should sort open orders', () => {
+    test('should sort open orders', () => {
         const withOrders = reducer(
             undefined,
             receiveOpenOrders(someOpenOrders)

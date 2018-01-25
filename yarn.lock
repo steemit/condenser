@@ -22,10 +22,21 @@
     libsodium "^0.4.8"
     libsodium-wrappers "^0.4.8"
 
-"@steemit/steem-js@0.6.8":
-  version "0.6.8"
-  resolved "https://registry.yarnpkg.com/@steemit/steem-js/-/steem-js-0.6.8.tgz#1f551f55ba8a28c82161d534fcb3ef4fbf9bb5e3"
+"@steemit/libcrypto@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@steemit/libcrypto/-/libcrypto-1.0.1.tgz#c31ab3e5deb667628169b3d54d746b015de31a79"
+
+"@steemit/rpc-auth@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@steemit/rpc-auth/-/rpc-auth-1.1.0.tgz#4170c04d928ef37af5bdbde3f517ef74909480bd"
   dependencies:
+    "@steemit/libcrypto" "^1.0.1"
+
+"@steemit/steem-js@0.6.10":
+  version "0.6.10"
+  resolved "https://registry.yarnpkg.com/@steemit/steem-js/-/steem-js-0.6.10.tgz#cfc66bbabd391c8d91234785367ccf1a329236ca"
+  dependencies:
+    "@steemit/rpc-auth" "^1.1.0"
     bigi "^1.4.2"
     bluebird "^3.4.6"
     browserify-aes "^1.0.6"
@@ -40,9 +51,8 @@
     detect-node "^2.0.3"
     ecurve "^1.0.5"
     lodash "^4.16.4"
-    postinstall-build "^5.0.1"
     secure-random "^1.1.1"
-    ws "^3.0.0"
+    ws "^3.3.2"
 
 "@storybook/addon-actions@^3.2.19":
   version "3.2.19"
@@ -7761,10 +7771,6 @@ postcss@^6.0.1:
     source-map "^0.6.1"
     supports-color "^4.4.0"
 
-postinstall-build@^5.0.1:
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/postinstall-build/-/postinstall-build-5.0.1.tgz#b917a9079b26178d9a24af5a5cd8cb4a991d11b9"
-
 prelude-ls@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/prelude-ls/-/prelude-ls-1.1.2.tgz#21932a549f5e52ffd9a827f570e04be62a97da54"
@@ -10417,9 +10423,9 @@ ws@^2.3.1:
     safe-buffer "~5.0.1"
     ultron "~1.1.0"
 
-ws@^3.0.0:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/ws/-/ws-3.2.0.tgz#d5d3d6b11aff71e73f808f40cc69d52bb6d4a185"
+ws@^3.3.2:
+  version "3.3.3"
+  resolved "https://registry.yarnpkg.com/ws/-/ws-3.3.3.tgz#f1cf84fe2d5e901ebce94efaece785f187a228f2"
   dependencies:
     async-limiter "~1.0.0"
     safe-buffer "~5.1.0"

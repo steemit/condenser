@@ -15,7 +15,6 @@
     "precommit": "lint-staged",
     "production": "NODE_ENV=production node lib/server/index.js",
     "start": "NODE_ENV=development babel-node ./webpack/dev-server.js",
-    "webpush": "node ./scripts/webpush_notify.js",
     "checktranslations": "node scripts/check_translations.js",
     "storybook": "start-storybook -p 9001 -c .storybook",
     "storybook-build": "build-storybook -c .storybook -o docs"

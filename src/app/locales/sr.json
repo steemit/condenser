@@ -1,0 +1,751 @@
+{
+    "g": {
+        "age": "godište",
+        "amount": "Iznos",
+        "and": "i",
+        "are_you_sure": "Dali ste sigurni?",
+        "ask": "Pitaj",
+        "balance": "Stanje",
+        "balances": "Stanja",
+        "bid": "Ponudi",
+        "blog": "Blog",
+        "browse": "Pretraži",
+        "buy": "Kupi",
+        "buy_or_sell": "Kupi ili prodaj",
+        "by": "od",
+        "cancel": "Otkaži",
+        "change_password": "Promeni lozinku",
+        "choose_language": "Odaberi jezik",
+        "clear": "Očisti",
+        "close": "Zatvori",
+        "collapse_or_expand": "Skupi/Proširi",
+        "comments": "Komentari",
+        "confirm": "Potvrdi",
+        "convert": "Konvertuj",
+        "date": "Datum",
+        "delete": "Izbriši",
+        "dismiss": "Odbaci",
+        "edit": "Izmeni",
+        "email": "Email",
+        "feed": "Novosti",
+        "follow": "Prati",
+        "for": "za",
+        "from": "od",
+        "go_back": "Nazad",
+        "hide": "Sakrij",
+        "in": "u",
+        "in_reply_to": "u odgovoru na",
+        "insufficient_balance": "Nedovoljdno sredstava",
+        "invalid_amount": "Neispravan iznos",
+        "joined": "Priključen",
+        "loading": "Učitavanje",
+        "login": "Prijava",
+        "logout": "Odjava",
+        "memo": "Beleška",
+        "mute": "Utišaj",
+        "new": "novo",
+        "newer": "Novije",
+        "next": "Sledeće",
+        "no": "Ne",
+        "ok": "Ok",
+        "older": "Starije",
+        "or": "ili",
+        "order_placed": "Naručeno",
+        "password": "Lozinka",
+        "payouts": "Isplate",
+        "permissions": "Dozvole",
+        "post": "Objavi",
+        "post_as": "Objavi kao",
+        "posts": "Objave",
+        "powered_up_100": "Powered Up 100%%",
+        "preview": "Pregled",
+        "previous": "Prethodno",
+        "price": "Cena",
+        "print": "Odštampaj",
+        "promote": "Promoviši",
+        "promoted": "promovisano",
+        "re": "ODG",
+        "re_to": "ODG: %(topic)s",
+        "recent_password": "Skore lozinke",
+        "receive": "Primi",
+        "remove": "Ukloni",
+        "remove_vote": "Ukloni glas",
+        "replied_to": "odgovorio na %(account)s",
+        "replies": "Odgovori",
+        "reply": "Odgovor",
+        "reply_count": {
+            "zero": "bez odgovora",
+            "one": "1 odgovor",
+            "other": "%(count)s odgovora"
+        },
+        "reputation": "Reputacija",
+        "reveal_comment": "Otkrij komentare",
+        "request": "zahtev",
+        "required": "Potrebno",
+        "rewards": "Nagrade",
+        "save": "Snimi",
+        "saved": "Snimljeno",
+        "search": "Pretraži",
+        "sell": "Prodaj",
+        "settings": "Podešavanja",
+        "share_this_post": "Podeli ovu objavu",
+        "show": "Prikaži",
+        "sign_in": "Prijavi se",
+        "sign_up": "Registruj se",
+        "since": "od",
+        "submit": "Pošalji",
+        "power_up": "Povećaj moć",
+        "submit_a_story": "Objava",
+        "tag": "Oznaka",
+        "to": "za",
+        "topics": "Tema",
+        "transfer": "Prenos",
+        "trending_topics": "Popularne teme",
+        "type": "Tip",
+        "unfollow": "Odprati",
+        "unmute": "Odtišaj",
+        "unknown": "Nepoznato",
+        "upvote": "Glasaj",
+        "upvote_post": "Glasaj za objavu",
+        "username": "Korisničko ime",
+        "version": "Verzija",
+        "vote": "Glas",
+        "votes": "glasovi",
+        "wallet": "Novčanik",
+        "warning": "upozorenje",
+        "yes": "Da",
+        "posting": "Objavljivanje",
+        "owner": "Vlasnik",
+        "active": "Aktivno",
+        "account_not_found": "Nalog nije pronađen",
+        "this_is_wrong_password": "Ovo je pogrešna lozinka",
+        "do_you_need_to": "Dali trebate da",
+        "account_name": "Ime naloga",
+        "recover_your_account": "povratak vašeg naloga",
+        "reset_usernames_password": "Reset %(username)s-ove lozinke",
+        "this_will_update_usernames_authtype_key":
+            "Ovo će ažurirati %(username)s %(authType)s ključ",
+        "passwords_do_not_match": "Lozinke se ne poklapaju",
+        "you_need_private_password_or_key_not_a_public_key":
+            "Potrebna je privatna lozinka ili ključ (ne javni ključ)",
+        "the_rules_of_APP_NAME": {
+            "one": "Prvo pravilo %(APP_NAME)s je: Ne gubite svoju lozinku.",
+            "second": "Drugo pravilo %(APP_NAME)s je: Ne gubite svoju lozinku.",
+            "third":
+                "Treće pravilo %(APP_NAME)s je: Mi nemožemo da povratimo Vašu lozinku.",
+            "fourth":
+                "Četvrto pravilo je: Ako možete da zapamtite lozinku, nije sigurna.",
+            "fifth":
+                "Peto pravilo je: Koristite samo nasumično generisane lozinke.",
+            "sixth": "Šesto pravilo je: Nemojte nikome reći svoju lozinku.",
+            "seventh":
+                "Sedmo pravilo je: Uvek napravite rezervnu kopiju lozinke."
+        },
+        "recover_password": "Povratak naloga",
+        "current_password": "Trenutna lozinka",
+        "generated_password": "Generisana lozinka",
+        "backup_password_by_storing_it":
+            "Napravite kopiju smeštanjem u menadžer lozinki ili tekstualni fajl",
+        "enter_account_show_password":
+            "Unesite ispravan nalog za prikaz lozinke",
+        "click_to_generate_password": "Kliknite za generisanje lozinke",
+        "re_enter_generate_password": "Ponovo unesite generisanu lozinku",
+        "understand_that_APP_NAME_cannot_recover_password":
+            "Razumem da %(APP_NAME)sne može da povrati izgubljenu lozinku",
+        "i_saved_password": "Bezbedno sam sačuvao generisanu lozinku",
+        "update_password": "Osveži lozinku",
+        "confirm_password": "Potvrdi lozinku",
+        "account_updated": "Nalog osvežen",
+        "password_must_be_characters_or_more":
+            "Lozinka mora biti %(amount)s karaktera ili više",
+        "need_password_or_key":
+            "Potrebna je privatna lozinke ili ključ (ne javni ključ)",
+        "login_to_see_memo": "ulogujte se da bi videli belešku",
+        "new_password": "Nova lozinka",
+        "incorrect_password": "Pogrešna lozinka",
+        "username_does_not_exist": "Korisničko ime ne postoji",
+        "account_name_should_start_with_a_letter":
+            "Korisničko ime mora početi slovom.",
+        "account_name_should_be_shorter": "Korisničko ime mora biti kraće.",
+        "account_name_should_be_longer": "Korisničko ime mora biti duže.",
+        "account_name_should_have_only_letters_digits_or_dashes":
+            "Korisničko ime mora sadržati samo slova, brojeve i crtice.",
+        "cannot_increase_reward_of_post_within_the_last_minute_before_payout":
+            "Nije moguće povećati nagradu objave u zadnjem minutu pre isplate.",
+        "vote_currently_exists_user_must_be_indicate_a_to_reject_witness":
+            "glas već postoji, korisnik mora da naglasi da želi da odbije svedoka.",
+        "only_one_APP_NAME_account_allowed_per_ip_address_every_10_minutes":
+            "Samo jedan Steem nalog je dozvoljen po IP adresi svakih 10 minuta.",
+        "resteem_this_post": "Resteem-ujte ovu objavu",
+        "reblog": "Resteem",
+        "write_your_story": "Napišite vašu priču",
+        "remember_voting_and_posting_key": "Zapamti ključ za glasanje i objave",
+        "auto_login_question_mark": "Automatska prijava?",
+        "hide_private_key": "Sakrij privatni ključ",
+        "show_private_key": "Prikaži privatni ključ",
+        "login_to_show": "Ulogujte se da bi prikazali",
+        "not_valid_email": "Nije ispravan email",
+        "thank_you_for_being_an_early_visitor_to_APP_NAME":
+            "Hvala Vam što se rani posetioc %(APP_NAME)s. Stupi ćemo u kontakt sa vama prvom prilikom.",
+        "author_rewards": "Nagrade autora",
+        "curation_rewards": "Nagrade kustosa",
+        "sorry_your_reddit_account_doesnt_have_enough_karma":
+            "Izvinjavamo se, Vaš Reddit nalog nema dovoljno Reddit karme da bi se kvalifikovao za besplatnu registraciju. Molimo Vas da dodate Vaš email za mesto na listi čekanja.",
+        "register_with_facebook": "Registruj se sa Facebook-om",
+        "or_click_the_button_below_to_register_with_facebook":
+            "Ili koliknite na dugme ispod da bi se registrovali sa Facebook-om",
+        "server_returned_error": "server je vratio grešku",
+        "APP_NAME_support": "%(APP_NAME)s Podrška",
+        "please_email_questions_to":
+            "Molimo Vas pošaljite email sa pitanjima na ",
+        "next_7_strings_single_block": {
+            "authors_get_paid_when_people_like_you_upvote_their_post":
+                "Autori su plaćeni kada ljudi glasaju za njihovu objavu",
+            "if_you_enjoyed_what_you_read_earn_amount":
+                "Ako Vam se dopalo ono što ste pročitali ovde registrujte se danas i počnite da zarađujete BESPLATAN STEEM!",
+            "free_steem": "BESPLATAN STEEM!",
+            "sign_up_earn_steem": "Registrujte se da bi zaradili"
+        },
+        "next_3_strings_together": {
+            "show_more": "Prikaži više",
+            "show_less": "Prikaži manje",
+            "value_posts": "objave sa malom vrednošču"
+        },
+        "read_only_mode":
+            "Zbog održavanja servera u modu čitanja smo. Izvinjavamo se zbog neugodnosti.",
+        "tags_and_topics": "Oznake i teme",
+        "show_more_topics": "Prikaži više tema",
+        "basic": "Osnovno",
+        "advanced": "Napredno",
+        "views": {
+            "zero": "Bez pregleda",
+            "one": "%(count)s pregled",
+            "other": "%(count)s prikaza"
+        },
+        "responses": {
+            "zero": "Bez odgovora",
+            "one": "%(count)s odgovor",
+            "other": "%(count)s odgovora"
+        }
+    },
+    "navigation": {
+        "about": "O",
+        "explore": "Istraži",
+        "APP_NAME_whitepaper": "Nacrt",
+        "buy_LIQUID_TOKEN": "Kupi %(LIQUID_TOKEN)s",
+        "sell_LIQUID_TOKEN": "Prodaj %(LIQUID_TOKEN)s",
+        "currency_market": "Tržište valuta",
+        "stolen_account_recovery": "Povratak ukradenog naloga",
+        "change_account_password": "Promena lozinke naloga",
+        "witnesses": "Svedoci",
+        "vote_for_witnesses": "Glasaj za svedoka",
+        "privacy_policy": "Polisa privatnosti",
+        "terms_of_service": "Uslovi usluge",
+        "sign_up": "Priključi se",
+        "learn_more": "Nauči više",
+        "welcome": "Dobro došli",
+        "faq": "Najčešća pitanja",
+        "chat": "Steemit ćaskanje",
+        "app_center": "Steemit centar aplikacija",
+        "api_docs": "Steemit API dokumentacija",
+        "whitepaper": "Steemit nacrt",
+        "intro_tagline": "Govor novca.",
+        "intro_paragraph":
+            "Vaš glas je bitan. Pridružite se zajednici koja Vas plaća da objavljujete i nagrađuje kvalitetan sadržaj."
+    },
+    "main_menu": {
+        "hot": "vruće",
+        "trending": "popularno"
+    },
+    "reply_editor": {
+        "shorten_title": "Skrati naslov",
+        "exceeds_maximum_length":
+            "Prekoračuje maksimalnu veličinu od (%(maxKb)sKB)",
+        "including_the_category": "(uključujući kategoriju '%(rootCategory)s')",
+        "use_limited_amount_of_tags":
+            "Imate %(tagsLength)s oznaka ukupno %(includingCategory)s. Molimo Vas da koristie 5 u vašim objavam i kategorijama.",
+        "are_you_sure_you_want_to_clear_this_form":
+            "Dali ste sigurni da želite da očistite ovu formu?",
+        "uploading": "Šalje se",
+        "draft_saved": "Nacrt sačuvan.",
+        "editor": "Uređivač",
+        "insert_images_by_dragging_dropping":
+            "Dodajte slike prevlačenjem na željeno mesto,",
+        "pasting_from_the_clipboard": "nalepljivanjem iz klipbord-a",
+        "selecting_them": "odabirom",
+        "image_upload": "Slanje slika",
+        "power_up_100": "Povećaj moć 100 %%",
+        "default_50_50": "Podrazumevano (50%% / 50%%)",
+        "decline_payout": "Odbijena isplata",
+        "check_this_to_auto_upvote_your_post":
+            "Označite kako bi automatski glasali za svoju objavu",
+        "markdown_styling_guide": "Uputsto za uređivanje",
+        "or_by": "ili po",
+        "title": "Naslov",
+        "update_post": "Ažuriraj objavu",
+        "markdown_not_supported": "Uređivanje nije dozvoljeno ovde"
+    },
+    "category_selector_jsx": {
+        "tag_your_story":
+            "Oznaka (do 5 oznaka), prva oznaka je glavna kategorija",
+        "select_a_tag": "Odaberite oznaku",
+        "maximum_tag_length_is_24_characters":
+            "Maksimalna dužina oznake je 24 karaktera",
+        "use_limited_amount_of_categories":
+            "Molimo Vas koristite samo %(amount)s kategorija",
+        "use_only_lowercase_letters": "Koristite samo mala slova",
+        "use_one_dash": "Koristite samo crticu",
+        "use_spaces_to_separate_tags": "Koristite razmak da bi odvojili oznake",
+        "use_only_allowed_characters":
+            "Koristite samo mala slova, brojeve i jednu crticu",
+        "must_start_with_a_letter": "Mora početi slovom",
+        "must_end_with_a_letter_or_number": "Mora se završiti slovom ili brojem"
+    },
+    "postfull_jsx": {
+        "this_post_is_not_available_due_to_a_copyright_claim":
+            "Ova objava nije dostupna zbog zahteva za zaštitu autorskih prava.",
+        "share_on_facebook": "Podeli na Facebook-u",
+        "share_on_twitter": "Podeli na Twitter-u",
+        "share_on_linkedin": "Podeli na Linkedin-u",
+        "recent_password": "Skore lozinke",
+        "in_week_convert_DEBT_TOKEN_to_LIQUID_TOKEN":
+            "Za 3.5 dana, konvertuj %(amount)s %(DEBT_TOKEN)s u %(LIQUID_TOKEN)s",
+        "view_the_full_context": "Prikaži ceo sadržaj",
+        "view_the_direct_parent": "Prikaži direktni izvor",
+        "you_are_viewing_a_single_comments_thread_from":
+            "Gledate prikaz niti jednog komentara od"
+    },
+    "market_jsx": {
+        "action": "Akcija",
+        "date_created": "Datum kreiranja",
+        "last_price": "Poslednja cena",
+        "24h_volume": "Količina u 24h",
+        "spread": "Širenje",
+        "total": "Ukupno",
+        "available": "Dostupno",
+        "lowest_ask": "Najniže traženo",
+        "highest_bid": "Najveća ponuda",
+        "buy_orders": "Narudžbine kupovine",
+        "sell_orders": "Narudžbine prodaje",
+        "trade_history": "Istorija trgovine",
+        "open_orders": "Otvorene narudžbine",
+        "sell_amount_for_atleast":
+            "Prodaj %(amount_to_sell)s za najmanje %(min_to_receive)s (%(effectivePrice)s)",
+        "buy_atleast_amount_for":
+            "Kupi najmanje %(min_to_receive)s za %(amount_to_sell)s (%(effectivePrice)s)",
+        "price_warning_above":
+            "Ova cena je dosta iznad trenutne tržišne cene od %(marketPrice)s, dali ste sigurni?",
+        "price_warning_below":
+            "Ova cena je dosta ispod tržišne vrednosti od %(marketPrice)s, dali ste sigurni?",
+        "order_cancel_confirm": "Otkaži narudžbinu %(order_id)s od %(user)s?",
+        "order_cancelled": "Narudžbina %(order_id)s otkazana.",
+        "higher": "Više",
+        "lower": "Niže",
+        "total_DEBT_TOKEN_SHORT_CURRENCY_SIGN":
+            "Ukupno %(DEBT_TOKEN_SHORT)s (%(CURRENCY_SIGN)s)"
+    },
+    "recoveraccountstep1_jsx": {
+        "begin_recovery": "Započni oporavak",
+        "not_valid": "Nije ispravno",
+        "account_name_is_not_found": "Naziv naloga nije pronađen",
+        "unable_to_recover_account_not_change_ownership_recently":
+            "Nismo u mogućnosti da povratimo ovaj nalog, nije bilo skorije promene vlasništva.",
+        "password_not_used_in_last_days":
+            "This password was not used on this account in the last 30 days.",
+        "request_already_submitted_contact_support":
+            "Vaš zahtev je već podnesen i radimo na njemu. Molimo Vas da kontaktirate %(SUPPORT_EMAIL)s za status vašeg zahteva.",
+        "recover_account_intro":
+            "Sa vremena na vreme. Steemian korisnički ključ može biti kompromitovan. Povratak ukradenog naloga daje vlasniku 30 dana da povrati nalog od momenta kada je kradljivac promenio njihov korisnički ključ. Povratak korisničkog naloga može biti korišćen na %(APP_URL)s ako je vlasnik naloga prethodno dodao '%(APP_NAME)s' kao njihovo poverioca i saglasio se sa %(APP_NAME)s uslovima usluge.",
+        "login_with_facebook_or_reddit_media_to_verify_identity":
+            "Molimo Vas da se ulogujete sa Facebook ili Reddit nalogom da bi potvrdili identitet.",
+        "login_with_social_media_to_verify_identity":
+            "Molimo vas ulogujte se sa %(provider)s kako bi verifikovali identitet",
+        "enter_email_toverify_identity":
+            "Moramo da verifikujemo Vaš identitet. Molimo Vas da unesete email adresu kako bi započeli verifikaciju.",
+        "continue_with_email": "Nastavi sa email-om",
+        "thanks_for_submitting_request_for_account_recovery":
+            "Hvala Vam za podnošenje zahteva za povratak naloga koristeći %(APP_NAME)s blokčein baziranu autentifikaciju sa više faktora. Odgovorićemo u najbržem mogućem roku, ipak, molimo Vas da očekujete malo zakašnjenje zbog količine email-ova. Budite spremni da potvrdite Vaš identitet.",
+        "recovering_account": "Povratak naloga",
+        "recover_account": "Povrati nalog",
+        "checking_account_owner": "Prover vlasnika naloga",
+        "sending_recovery_request": "Slanje zahteva za povratak",
+        "cant_confirm_account_ownership":
+            "Ne možemo da potvrdimo vlasništvo naloga. Proverite lozinku",
+        "account_recovery_request_not_confirmed":
+            "Zahtev za povratak naloga nije još uvek potvrđen, molimo vratite se kasnije, Hvala na strpljenju."
+    },
+    "user_profile": {
+        "unknown_account": "Nepoznati nalog",
+        "user_hasnt_made_any_posts_yet":
+            "Izgleda da %(name)s nije napravio ni jednu objavu još uvek!",
+        "user_hasnt_started_bloggin_yet":
+            "Izgleda da %(name)s nije još uvek počeo da bloguje!",
+        "user_hasnt_followed_anything_yet":
+            "Izgleda da %(name)s još uvek ne prati nikoga! Ako je %(name)s skoro dodao korisnike koje prati, njihove personalizovane vesti će se popuniti kada novi sadržaj bude dostupan.",
+        "user_hasnt_had_any_replies_yet": "%(name)s još uvek nema odgovora",
+        "followers": "Pratioci",
+        "this_is_users_reputations_score_it_is_based_on_history_of_votes":
+            "Ovo je %(name)s ocena reputacije.\n\nOcena reputacije je bazirana na istoriji glasova koje su dobijene i koristi se kako bi se sakrio ne kvalitetan sadržaj.",
+        "follower_count": {
+            "zero": "Bez pratioca",
+            "one": "1 pratioc",
+            "other": "%(count)s pratioca"
+        },
+        "followed_count": {
+            "zero": "Ne prati nikoga",
+            "one": "1 praćen",
+            "other": "%(count)s praćenih"
+        },
+        "post_count": {
+            "zero": "Bez objava",
+            "one": "1 objava",
+            "other": "%(count)s objava"
+        }
+    },
+    "authorrewards_jsx": {
+        "estimated_author_rewards_last_week":
+            "Procenjene nagrade autora u poslednjih nedelju dana",
+        "author_rewards_history": "Istorija nagrada autora"
+    },
+    "curationrewards_jsx": {
+        "estimated_curation_rewards_last_week":
+            "Procenjena nagrada kustosa za zadnjih nedelju dana",
+        "curation_rewards_history": "Istorija nagrada kustosa"
+    },
+    "post_jsx": {
+        "now_showing_comments_with_low_ratings":
+            "Sada se prikazuju komentari sa niskim ocenama.",
+        "sort_order": "Sled sortiranja",
+        "comments_were_hidden_due_to_low_ratings":
+            "Komentari su bili sakriveni zbog niskih ocena"
+    },
+    "voting_jsx": {
+        "flagging_post_can_remove_rewards_the_flag_should_be_used_for_the_following":
+            "Označavanje objave može ukloniti nagrade i učiniti materijal manje vidljivim. Česti razlozi za označavanje ",
+        "disagreement_on_rewards": "Neslaganje sa nagradama",
+        "fraud_or_plagiarism": "Prevara ili plagijat",
+        "hate_speech_or_internet_trolling":
+            "Govor mržnje ili Internet trolovanje",
+        "intentional_miss_categorized_content_or_spam":
+            "Namerno pogrešno kategorizovan sadržaj ili spam",
+        "pending_payout": "Isplata na čejanju $%(value)s",
+        "payout_declined": "Isplata odbijena",
+        "max_accepted_payout": "Maksimalno prihvaćena isplata $%(value)s",
+        "promotion_cost": "Cena promocije $%(value)s",
+        "past_payouts": "Prethodne isplate $%(value)s",
+        "past_payouts_author": "Autor $%(value)s",
+        "past_payouts_curators": "Kustosi $%(value)s",
+        "we_will_reset_curation_rewards_for_this_post":
+            "resetovaće vaše kustos nagrade za ovu objavu",
+        "removing_your_vote": "Uklanja se Vaš glas",
+        "changing_to_an_upvote": "Promena u glasanje za",
+        "changing_to_a_downvote": "Promena u glasanje protiv",
+        "confirm_flag": "Potvrda označavanja",
+        "and_more": "i %(count)s više",
+        "votes_plural": {
+            "one": "%(count)s glas",
+            "other": "%(count)s glasova"
+        }
+    },
+    "witnesses_jsx": {
+        "witness_thread": "Niz svedoka",
+        "top_witnesses": "Glasanje svedoka",
+        "you_have_votes_remaining": {
+            "zero": "Nemate preostalih glasova",
+            "one": "Imate 1 preostao glas",
+            "other": "Imate %(count)s preostalih glasova"
+        },
+        "you_can_vote_for_maximum_of_witnesses":
+            "Možete glasati za maksimalno 30 svedoka",
+        "witness": "Svedok",
+        "information": "Informacija",
+        "if_you_want_to_vote_outside_of_top_enter_account_name":
+            "Ako želite da glasate za svedoka koji nije u prvih 50 unesite ime naloga.",
+        "set_witness_proxy":
+            "Možete izabrati posrednika koji će glasati za svedoka umesto Vas. Ova akcija će poništiti Vaš trenutni odabir svedoka.",
+        "witness_set":
+            "Odabrali ste glasačkog posrednika. Ako želite da ponovo omogućite ručno glasanje uklonite posrednika.",
+        "witness_proxy_current": "Vaš trenutni posrednik je",
+        "witness_proxy_set": "Postavi posrednika",
+        "witness_proxy_clear": "Otkaži posrednika",
+        "proxy_update_error": "Vaš posrednik nije ažuriran"
+    },
+    "votesandcomments_jsx": {
+        "no_responses_yet_click_to_respond":
+            "Bez odgovora. Kliknite kako bi odgovorili.",
+        "response_count_tooltip": {
+            "zero": "bez odgovora. Kliknite kako bi odgovorili.",
+            "one": "1 odgovor. Kliknite da bi odgovorili.",
+            "other": "%(count)s odgovora. Kliknite da bi odgovorili."
+        },
+        "vote_count": {
+            "zero": "bez glasova",
+            "one": "1 glas",
+            "other": "%(count)s glasova"
+        }
+    },
+    "userkeys_jsx": {
+        "public": "Javni",
+        "private": "Privatni",
+        "public_something_key": "Javni %(key)s ključ",
+        "private_something_key": "Privatni %(key)s ključ",
+        "posting_key_is_required_it_should_be_different":
+            "Ključ za objave se koristi za objave i glasanje. Trebao bi biti različit od aktivnog i vlasničkog ključa.",
+        "the_active_key_is_used_to_make_transfers_and_place_orders":
+            "Aktivni ključ se koristi za transfere i narudžbine na internom marketu.",
+        "the_owner_key_is_required_to_change_other_keys":
+            "Vlasnički ključ je glavni ključ za nalog i potreban je za promenu ostalih ključeva.",
+        "the_private_key_or_password_should_be_kept_offline":
+            "Privatni ključ ili lozinka za vlasnički ključ bi trebalo da budu van mreže koliko je to moguće.",
+        "the_memo_key_is_used_to_create_and_read_memos":
+            "Ključ beležnice se koristi da bi se kreirale i čitale beleške."
+    },
+    "suggestpassword_jsx": {
+        "APP_NAME_cannot_recover_passwords_keep_this_page_in_a_secure_location":
+            "%(APP_NAME)s nije u mogućnosti da povrati lozinke. Čuvajte ovu stranu na sigurnoj lokaciji kao što je sef otporan na požare ili depozit kutija.",
+        "APP_NAME_password_backup": "%(APP_NAME)s Kopija lozinke",
+        "APP_NAME_password_backup_required":
+            "%(APP_NAME)s Kopija lozinke (neophodna)",
+        "after_printing_write_down_your_user_name":
+            "Nakon štampanja, zapišite vaše korisničko ime"
+    },
+    "converttosteem_jsx": {
+        "your_existing_DEBT_TOKEN_are_liquid_and_transferable":
+            "Vaši postojeći %(DEBT_TOKEN)s su likvidni i moguće ih je transferovati. Umesto toga možete razmeniti %(DEBT_TOKEN)s direktno na ovoj stranici pod %(link)s ili prebaciti na spoljnu berzu.",
+        "this_is_a_price_feed_conversion":
+            "Ovo je cena konverzije. 3.5 dana odlaganje je neophodno da bi se sprečile malverzacije sa srednjom cenom.",
+        "convert_to_LIQUID_TOKEN": "Konvertuj %(LIQUID_TOKEN)s",
+        "DEBT_TOKEN_will_be_unavailable":
+            "Ova akcija traje 3.5 dana od ovog trenutka i nije je moguće otkazati. Ovih %(DEBT_TOKEN)s će odmah biti nedostupni."
+    },
+    "tips_js": {
+        "liquid_token":
+            "Zamenjivi tokeni koji mogu da se prenesu bilo gde u bilo kom trenutku. <br/>%(LIQUID_TOKEN)s se mogu konvertovati u %(VESTING_TOKEN)s procesom koji se zove povećanje moći.",
+        "influence_token":
+            "Tokeni uticaja koji vam daju više kontrole nad isplatama objave Vam omogućavaju da zaradite na nagradama kustosa.",
+        "estimated_value":
+            "Procenjena vrednost na osnovu prosečne vrednosti od %(LIQUID_TOKEN)s u US dolarima.",
+        "non_transferable":
+            "%(VESTING_TOKEN)s je neprenosiv i zahteva 3 meseca (13 isplata) da bi se konvertovao u %(LIQUID_TOKEN)s.",
+        "converted_VESTING_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again":
+            "Konvertovani %(VESTING_TOKEN)s je moguće poslati sebi ili nekome drugom ali se ne može ponovo prenet bez konvertovanja u %(LIQUID_TOKEN)s.",
+        "part_of_your_steem_power_is_currently_delegated":
+            "Deo Vaše STEEM SNAGE je trenutno delegiran Vama. Delegacija je donirana za uticaj ili da bi pomogla novim korisnicima platforme da izvrše akcije na steemit-u. Vaš iznos delegacije može da varira."
+    },
+    "promote_post_jsx": {
+        "promote_post": "Promoviši objavu",
+        "spend_your_DEBT_TOKEN_to_advertise_this_post":
+            "Iskoristite vaših %(DEBT_TOKEN)s da bi reklamirali objavu i našli se u listi promovisanih objava",
+        "you_successfully_promoted_this_post": "Uspešno ste promovisali objavu",
+        "this_post_was_hidden_due_to_low_ratings":
+            "Ova objava je sakrivena zbog niske ocene"
+    },
+    "about_jsx": {
+        "about_app": "O %(APP_NAME)s",
+        "about_app_details":
+            "%(APP_NAME)s je socijalna medijska platforma gde je svako plaćen za kreiranje i glasanje za sadržaj. Koristi robustan sistem digitalnih poena zvanih STEEM, koji podržavaju pravu vrednost za digitalne nagrade kroz otkriće tržišne cene i likvidnost.",
+        "learn_more_at_app_url": "Saznajte više na %(APP_URL)s",
+        "resources": "Resursi"
+    },
+    "markdownviewer_jsx": {
+        "images_were_hidden_due_to_low_ratings":
+            "Slike su sakrivene zbog niskih ocena."
+    },
+    "postsummary_jsx": {
+        "resteemed": "Resteem-ovano",
+        "resteemed_by": "Resteem-ovano od",
+        "this_post_is": "Ova objava je",
+        "you_can": "Možete",
+        "reveal_it": "Otkrij",
+        "adjust_your": "Podesite Vaš",
+        "display_preferences": "Podešavanja prikaza",
+        "create_an_account": "napravi nalog",
+        "to_save_your_preferences": "da bi sačuvali Vaša podešavanja"
+    },
+    "posts_index": {
+        "empty_feed_1": "Izgleda da još uvek ne pratite nikoga",
+        "empty_feed_2":
+            "Ako ste skoro dodali nove korisnike koje pratite, Vaše personalne novosti će se popunti kada nov sadržaj postane dostupan",
+        "empty_feed_3": "Istražite popularne članke",
+        "empty_feed_4": "Pročitaj uputstvo za brzi početak",
+        "empty_feed_5": "Pregledaj najčešča pitanja i odgovore"
+    },
+    "transferhistoryrow_jsx": {
+        "to_savings": "u štednju",
+        "from_savings": "iz štednje",
+        "cancel_transfer_from_savings": "Otkaži prenos iz štednje",
+        "stop_power_down": "Zaustavi smanjenje moći",
+        "start_power_down_of": "Započni smanjenje moći",
+        "receive_interest_of": "Preuzmi kamatu od"
+    },
+    "savingswithdrawhistory_jsx": {
+        "cancel_this_withdraw_request": "Otkazivanje zahteva za povlačenje?",
+        "pending_savings_withdrawals": "PODIZANJE UŠTEĐEVINE NA ČEKANJU",
+        "withdraw": "Podigni %(amount)s",
+        "to": "za %(to)s",
+        "from_to": "od %(from)s za %(to)s"
+    },
+    "explorepost_jsx": {
+        "copied": "Kopirano!",
+        "copy": "KOPIRAJ",
+        "alternative_sources": "Alternativni izvori"
+    },
+    "header_jsx": {
+        "home": "početak",
+        "create_a_post": "Kreiraj objavu",
+        "change_account_password": "Promeni lozinku naloga",
+        "create_account": "Kreiraj nalog",
+        "stolen_account_recovery": "Povratak ukradenog naloga",
+        "people_following": "Ljudi prate",
+        "people_followed_by": "Praćeni ljudi od",
+        "curation_rewards_by": "Nagrade kustosa od",
+        "author_rewards_by": "Nagrade autora od",
+        "replies_to": "Odgovori za",
+        "comments_by": "Komentari od"
+    },
+    "loginform_jsx": {
+        "you_need_a_private_password_or_key":
+            "Potrebna Vam je privatna lozinka ili ključ (ne javni ključ)",
+        "cryptography_test_failed": "Test kriptografije neuspešan",
+        "unable_to_log_you_in":
+            "Nismo u mogućnosti da Vas povežemo na ovom pretraživaču",
+        "the_latest_versions_of": "Poslednje verzije od",
+        "are_well_tested_and_known_to_work_with":
+            "su istestirane i poznato je da rade sa %(APP_URL)s.",
+        "due_to_server_maintenance":
+            "Zbog održavanja servera smo u modu čitanja. Izvinjavamo se zbog neugodnosti.",
+        "login_to_vote": "Prijavite se da bi glasali",
+        "login_to_post": "Prijavite se da bi objavili",
+        "login_to_comment": "Prijavite se da bi komentarisali",
+        "posting": "Objavljuje se",
+        "active_or_owner": "Aktivni ili vlasnik",
+        "this_password_is_bound_to_your_account_owner_key":
+            "Ova lozinka je vezana vlasnički ključ naloga i nije je moguće iskoristit za prijavu na ovaj sajt.",
+        "however_you_can_use_it_to": "Ipak, možete je koristit za",
+        "update_your_password": "osvežite Vašu lozinku",
+        "to_obtain_a_more_secure_set_of_keys": "da bi dobili skup ključeva.",
+        "this_password_is_bound_to_your_account_active_key":
+            "Ova lozinka je povezana za aktivni ključ naloga i ne može se koristit za prijavu na ovu stranicu.",
+        "you_may_use_this_active_key_on_other_more":
+            "Možete koristi aktivni ključ za prijavu na sigurnije stranice poput novčanika ili stranica berze.",
+        "you_account_has_been_successfully_created":
+            "Vaš nalog je uspešno kreiran!",
+        "you_account_has_been_successfully_recovered":
+            "Povratak Vašeg naloga je uspešan!",
+        "password_update_succes":
+            "Lozinka za %(accountName)s je uspešno promenjena",
+        "password_info":
+            "This password or private key was entered incorrectly.  There is probably a handwriting or data-entry error.  Hint: A password or private key generated by Steemit will never contain 0 (zero), O (capital o), I (capital i) and l (lower case L) characters.",
+        "enter_your_username": "Unesite korisničko ime",
+        "password_or_wif": "Lozinka ili WIF",
+        "this_operation_requires_your_key_or_master_password":
+            "This operation requires your %(authType)s key or Master password.",
+        "keep_me_logged_in": "Keep me logged in",
+        "amazing_community": "amazing community",
+        "to_comment_and_reward_others": " to comment and reward others.",
+        "sign_up_now_to_earn": "Sign up now to earn ",
+        "free_money": "FREE MONEY!",
+        "returning_users": "Returning Users: ",
+        "join_our": "Join our"
+    },
+    "chainvalidation_js": {
+        "account_name_should": "Account name should ",
+        "not_be_empty": "not be empty.",
+        "be_longer": "be longer.",
+        "be_shorter": "be shorter.",
+        "each_account_segment_should": "Each account segment should ",
+        "start_with_a_letter": "start with a letter.",
+        "have_only_letters_digits_or_dashes":
+            "have only letters, digits, or dashes.",
+        "have_only_one_dash_in_a_row": "have only one dash in a row.",
+        "end_with_a_letter_or_digit": "end with a letter or digit.",
+        "verified_exchange_no_memo":
+            "You must include a memo for your exchange transfer."
+    },
+    "settings_jsx": {
+        "invalid_url": "Invalid URL",
+        "name_is_too_long": "Name is too long",
+        "name_must_not_begin_with": "Name must not begin with @",
+        "about_is_too_long": "About is too long",
+        "location_is_too_long": "Location is too long",
+        "website_url_is_too_long": "Website URL is too long",
+        "public_profile_settings": "Public Profile Settings",
+        "private_post_display_settings": "Private Post Display Settings",
+        "not_safe_for_work_nsfw_content": "Not safe for work (NSFW) content",
+        "always_hide": "Always hide",
+        "always_warn": "Always warn",
+        "always_show": "Always show",
+        "muted_users": "Muted Users",
+        "update": "Update",
+        "profile_image_url": "Profile picture url",
+        "cover_image_url": "Cover image url",
+        "profile_name": "Display Name",
+        "profile_about": "About",
+        "profile_location": "Location",
+        "profile_website": "Website"
+    },
+    "transfer_jsx": {
+        "amount_is_in_form": "Amount is in the form 99999.999",
+        "insufficient_funds": "Insufficient funds",
+        "use_only_3_digits_of_precison": "Use only 3 digits of precison",
+        "send_to_account": "Send to account",
+        "asset": "Asset",
+        "this_memo_is_private": "This memo is private",
+        "this_memo_is_public": "This memo is public",
+        "convert_to_VESTING_TOKEN": "Convert to %(VESTING_TOKEN)s",
+        "balance_subject_to_3_day_withdraw_waiting_period":
+            "Balance subject to 3 day withdraw waiting period,",
+        "move_funds_to_another_account":
+            "Move funds to another %(APP_NAME)s account.",
+        "protect_funds_by_requiring_a_3_day_withdraw_waiting_period":
+            "Protect funds by requiring a 3 day withdraw waiting period.",
+        "withdraw_funds_after_the_required_3_day_waiting_period":
+            "Withdraw funds after the required 3 day waiting period.",
+        "from": "From",
+        "to": "To",
+        "asset_currently_collecting":
+            "%(asset)s currently collecting %(interest)s%% APR."
+    },
+    "userwallet_jsx": {
+        "conversion_complete_tip": "Will complete on",
+        "in_conversion": "%(amount)s in conversion",
+        "transfer_to_savings": "Transfer to Savings",
+        "power_up": "Power Up",
+        "power_down": "Power Down",
+        "market": "Market",
+        "convert_to_LIQUID_TOKEN": "Convert to %(LIQUID_TOKEN)s",
+        "withdraw_LIQUID_TOKEN": "Withdraw %(LIQUID_TOKEN)s",
+        "withdraw_DEBT_TOKENS": "Withdraw %(DEBT_TOKENS)s",
+        "tokens_worth_about_1_of_LIQUID_TICKER":
+            "Tokens worth about $1.00 of %(LIQUID_TICKER)s, currently collecting %(sbdInterest)s%% APR.",
+        "savings": "SAVINGS",
+        "estimated_account_value": "Estimated Account Value",
+        "next_power_down_is_scheduled_to_happen":
+            "The next power down is scheduled to happen",
+        "transfers_are_temporary_disabled": "Transfers are temporary disabled.",
+        "history": "HISTORY",
+        "redeem_rewards": "Redeem Rewards (Transfer to Balance)",
+        "buy_steem_or_steem_power": "Buy STEEM or STEEM POWER"
+    },
+    "powerdown_jsx": {
+        "power_down": "Power Down",
+        "amount": "Amount",
+        "already_power_down":
+            "You are already powering down %(AMOUNT)s %(LIQUID_TICKER)s (%(WITHDRAWN)s %(LIQUID_TICKER)s paid out so far). Note that if you change the power down amount the payout schedule will reset.",
+        "delegating":
+            "You are delegating %(AMOUNT)s %(LIQUID_TICKER)s. That amount is locked up and not available to power down until the delgation is removed and a full reward period has passed.",
+        "per_week": "That's ~%(AMOUNT)s %(LIQUID_TICKER)s per week.",
+        "warning":
+            "Leaving less than %(AMOUNT)s %(VESTING_TOKEN)s in your account is not recommended and can leave your account in a unusable state.",
+        "error": "Unable to power down (ERROR: %(MESSAGE)s)"
+    },
+    "checkloginowner_jsx": {
+        "your_password_permissions_were_reduced":
+            "Your password permissions were reduced",
+        "if_you_did_not_make_this_change":
+            "If you did not make this change please",
+        "ownership_changed_on": "Ownership Changed On ",
+        "deadline_for_recovery_is": "Deadline for recovery is",
+        "i_understand_dont_show_again": "I understand, don't show me again"
+    }
+}

@@ -246,7 +246,7 @@ export default class LandingTeam extends React.Component {
 
             <div data-wow-delay="1s" className="wow fadeIn small-12 medium-12 large-3 columns small-centered Team__member ">
                 <div className="Team__members__image-wrapper">
-                    <img className="Team__member__img" src="http://s015.radikal.ru/i331/1708/50/b8ea656185f6.jpg" />
+                    <img className="Team__member__img" src="" />
                 </div>
                 <strong>Игорь Ягубков</strong>
                 <p>Посол Голоса, г.Пермь</p>

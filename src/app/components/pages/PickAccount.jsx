@@ -284,9 +284,9 @@ class PickAccount extends React.Component {
                         style={{ maxWidth: '36rem', margin: '0 auto' }}
                     >
                         <br />
-                            <div className="progress">
-                                <div style={{width: '10%'}}></div>
-                            </div>
+                        <div className="progress">
+                            <div style={{ width: '10%' }} />
+                        </div>
 
                         <br />
                         <h4 className="CreateAccount__title">

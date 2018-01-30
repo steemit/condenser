@@ -286,7 +286,7 @@ export default function useEnterAndConfirmEmailPages(app) {
                 >
                     <div className="column">
                         <div className="progress">
-                            <span style={{width: '50%'}}>Progress: 50%</span>
+                            <span style={{ width: '50%' }}>Progress: 50%</span>
                         </div>
                         <form
                             id="submit_email"

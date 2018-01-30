@@ -148,7 +148,7 @@ export default function useEnterAndConfirmMobilePages(app) {
                 >
                     <div className="column">
                         <div className="progress">
-                            <div style={{width: '90%'}}></div>
+                            <div style={{ width: '90%' }} />
                         </div>
                         <form
                             className="column"
@@ -363,7 +363,7 @@ export default function useEnterAndConfirmMobilePages(app) {
                     <div className="column">
                         <progress max="100" value="90">
                             <div className="progress">
-                                <div style={{width: '90%'}}></div>
+                                <div style={{ width: '90%' }} />
                             </div>
                         </progress>
                         Thank you for providing your phone number (

@@ -108,9 +108,8 @@ class Voting extends React.Component {
                 username,
                 myVote,
                 isFlag,
-                up
+                up,
             });
-
         };
 
         this.handleWeightChange = weight => {
@@ -477,7 +476,7 @@ export default connect(
     dispatch => ({
         vote: (weight, { author, permlink, username, myVote, isFlag, up }) => {
             const confirm = () => {
-                if (up === true && weight !== 0) return null; 
+                if (up === true && weight !== 0) return null;
                 const t = isFlag
                     ? ''
                     : ' ' +

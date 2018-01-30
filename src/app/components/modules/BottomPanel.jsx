@@ -1,7 +1,6 @@
 import React from 'react';
 import CloseButton from 'app/components/elements/CloseButton';
 
-
 export default class BottomPanel extends React.Component {
     static propTypes = {
         children: React.PropTypes.object,

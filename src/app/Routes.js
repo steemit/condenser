@@ -68,6 +68,9 @@ export function resolveRoute(path) {
     if (path === '/c/submit') {
         return { page: 'SubmitPost' };
     }
+    if (path === '/c/benchmark' && process.env.OFFLINE_SSR_TEST) {
+        return { page: 'Benchmark' };
+    }
     let match = path.match(routeRegex.PostsIndex);
     if (match) {
         return { page: 'PostsIndex', params: match.slice(1) };

@@ -35,6 +35,15 @@ import ScrollBehavior from 'scroll-behavior';
 
 import { api } from '@steemit/steem-js';
 
+let get_state_perf,
+    get_content_perf = false;
+if (process.env.OFFLINE_SSR_TEST) {
+    const testDataDir = process.env.OFFLINE_SSR_TEST_DATA_DIR || 'api_mockdata';
+    let uri = `${__dirname}/../../`;
+    get_state_perf = require(uri + testDataDir + '/get_state');
+    get_content_perf = require(uri + testDataDir + '/get_content');
+}
+
 const calcOffsetRoot = startEl => {
     let offset = 0;
     let el = startEl;
@@ -335,7 +344,11 @@ async function universalRender({
             url = routeToSteemdUrl(route);
         }
 
-        onchain = await api.getStateAsync(url);
+        if (process.env.OFFLINE_SSR_TEST) {
+            onchain = get_state_perf;
+        } else {
+            onchain = await api.getStateAsync(url);
+        }
 
         if (
             Object.getOwnPropertyNames(onchain.accounts).length === 0 &&

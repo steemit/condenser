@@ -254,8 +254,8 @@
         "vote_for_witnesses": "Vote for Witnesses",
         "privacy_policy": "Privacy Policy",
         "terms_of_service": "Terms of Service",
-        "sign_up": "Join",
-        "learn_more": "Learn More",
+        "sign_up": "Sign up",
+        "learn_more": "Learn more",
         "welcome": "Welcome",
         "faq": "FAQ",
         "shop": "The Steemit Shop",
@@ -265,9 +265,9 @@
         "bluepaper": "Steem Bluepaper",
         "smt_whitepaper": "SMT Whitepaper",
         "whitepaper": "Steem Whitepaper",
-        "intro_tagline": "Money talks",
+        "intro_tagline": "Your voice is worth something",
         "intro_paragraph":
-            "Your voice is worth something. Join the community that pays you to post and curate high quality content."
+            "Get paid for good content. Post and upvote articles on Steemit to get your share of the daily rewards pool."
     },
     "main_menu": {
         "hot": "hot",

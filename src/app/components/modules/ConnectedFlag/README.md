@@ -1,6 +1,8 @@
 This HOC can be used to conditionally render a component based on a flag being present in the redux store.
 If the flag is not present or if it is false a fallback component is rendered.
 
+If you provide both children and a FlagComponent the children will be rendered.
+
 Example Usage:
 
 ```

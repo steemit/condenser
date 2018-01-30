@@ -1,15 +1,15 @@
-progress {
-  appearance: none;
+.progress {
   border: none;
   width: 100%;
   height: 8px;
-}
-progress::-webkit-progress-bar {
-  background-color: #eee;
-  width: 100%;
-}
-progress::-webkit-progress-value {
-  background-color: $color-teal;
+  border-radius: 3px;
+  background-color:$color-text-gray;
+  div {
+    background-color: $color-teal;
+    border-radius: 3px;
+    border: none;
+    height: 8px;
+  }
 }
 
 .CreateAccount {

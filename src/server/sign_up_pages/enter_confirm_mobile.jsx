@@ -147,11 +147,9 @@ export default function useEnterAndConfirmMobilePages(app) {
                     style={{ maxWidth: '32rem' }}
                 >
                     <div className="column">
-                        <progress max="100" value="90">
-                            <div className="progress">
-                                <span style={{width: '90%'}}>Progress: 90%</span>
-                            </div>
-                        </progress>
+                        <div className="progress">
+                            <div style={{width: '90%'}}></div>
+                        </div>
                         <form
                             className="column"
                             action={'/submit_mobile' + makeParams(params)}
@@ -365,7 +363,7 @@ export default function useEnterAndConfirmMobilePages(app) {
                     <div className="column">
                         <progress max="100" value="90">
                             <div className="progress">
-                                <span style={{width: '90%'}}>Progress: 90%</span>
+                                <div style={{width: '90%'}}></div>
                             </div>
                         </progress>
                         Thank you for providing your phone number (

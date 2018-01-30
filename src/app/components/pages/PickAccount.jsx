@@ -284,11 +284,10 @@ class PickAccount extends React.Component {
                         style={{ maxWidth: '36rem', margin: '0 auto' }}
                     >
                         <br />
-                        <progress max="100" value="10">
                             <div className="progress">
-                                <span style={{width: '10%'}}>Progress: 10%</span>
+                                <div style={{width: '10%'}}></div>
                             </div>
-                        </progress>
+
                         <br />
                         <h4 className="CreateAccount__title">
                             Welcome to Steemit

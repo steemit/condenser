@@ -116,6 +116,7 @@ describe('App reducer', () => {
             initial,
             updateNotificounters(mockPayloads.updateNotificounters)
         );
+
         let out = actual.get('notificounters');
         let expected = Map({ follow: 0, total: 1 });
         expect(out).toEqual(expected);

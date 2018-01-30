@@ -907,6 +907,7 @@
     "submit": "Submit",
     "basic" : "Basic",
     "memo" : "Memo",
+    "memo_placeholder" : "You may comment your transfer here",
     "advanced": "Advanced",
     "convert_to_VESTING_TOKEN": "Convert to %(VESTING_TOKEN)s",
     "balance_subject_to_3_day_withdraw_waiting_period": "Balance subject to 3 day withdraw waiting period,",

@@ -16,13 +16,7 @@ describe('Flag', () => {
     let child2 = '';
 
     it('should render the children  when the flag prop is true', () => {
-        const Flagged = Flag({
-            flagged: true,
-            FlagComponent: component,
-            Fallback: fallback,
-            children: child,
-        });
-        let wrapper = shallow(
+        const wrapper = shallow(
             <Flag
                 flagged={true}
                 FlagComponent={component}
@@ -33,7 +27,7 @@ describe('Flag', () => {
         expect(wrapper.text()).toEqual(' HELLO WORLD ');
     });
     it('should render the FlagComponent  when the flag prop is true and there are no children', () => {
-        let wrapper = shallow(
+        const wrapper = shallow(
             <Flag
                 flagged={true}
                 FlagComponent={component}
@@ -44,15 +38,14 @@ describe('Flag', () => {
     });
 
     it('should render null when the flag condition fails and no fallback is provided', () => {
-        let wrapper = shallow(
+        const wrapper = shallow(
             <Flag flagged={false} FlagComponent={component} />
         );
         expect(wrapper.html()).toBe(null);
     });
 
     it('should render the fallback component if the flag condition is false', () => {
-        const FlagComponent = Flag(component, fallback);
-        let wrapper = shallow(
+        const wrapper = shallow(
             <Flag
                 flagged={false}
                 FlagComponent={component}
@@ -61,5 +54,19 @@ describe('Flag', () => {
         );
         expect(wrapper.html()).not.toBe(null);
         expect(wrapper.text()).toEqual('<Icon />');
+    });
+
+    it('should render children but not FlagComponent if both are provided', () => {
+        const wrapper = shallow(
+            <Flag
+                flagged={true}
+                FlagComponent={component}
+                Fallback={fallback}
+                children={child}
+            />
+        );
+        // There isn't a good way to check for proptypes errors
+        // see https://stackoverflow.com/questions/26124914/how-to-test-react-proptypes-through-jest
+        expect(wrapper.text()).toEqual(' HELLO WORLD ');
     });
 });

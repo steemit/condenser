@@ -1,18 +1,12 @@
 .sub-menu {
     li {
         a {
-            padding: 0px;
+            padding: 0.7rem 1rem;
+//            padding: 0px;
         }
     }
     li:last-child {
-    }
-}
-
-.Header__usermenu {
-    li {
-        a {
-            padding: 0.7rem 1rem;
-        }
+        padding: 0px;
     }
 }
 

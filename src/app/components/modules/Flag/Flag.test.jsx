@@ -13,7 +13,6 @@ describe('Flag', () => {
     let component = <LoadingIndicator />;
     let fallback = <Icon name="user" />;
     let child = <div> HELLO WORLD </div>;
-    let child2 = '';
 
     it('should render the children  when the flag prop is true', () => {
         const wrapper = shallow(

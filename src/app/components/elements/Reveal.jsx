@@ -32,5 +32,9 @@ const Reveal = ({children, onHide, show}) => {
     );
 }
 
+Reveal.propTypes = {
+    show: React.PropTypes.bool.isRequired,
+    onHide: React.PropTypes.func.isRequired,
+};
 
 export default Reveal;

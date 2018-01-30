@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Modal from 'react-overlays/lib/Modal';
 import Transition from 'react-overlays/lib/Transition';
 
@@ -33,8 +34,8 @@ const Reveal = ({children, onHide, show}) => {
 }
 
 Reveal.propTypes = {
-    show: React.PropTypes.bool.isRequired,
-    onHide: React.PropTypes.func.isRequired,
+    show: PropTypes.bool.isRequired,
+    onHide: PropTypes.func.isRequired,
 };
 
 export default Reveal;

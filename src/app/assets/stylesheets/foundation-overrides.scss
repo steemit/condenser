@@ -124,3 +124,17 @@ tbody tr:nth-child(even) {
     min-width: 100px;
   }
 }
+
+.progress {
+  border: none;
+  width: 100%;
+  height: 8px;
+  border-radius: 3px;
+  background-color:$color-text-gray;
+  div {
+    background-color: $color-teal;
+    border-radius: 3px;
+    border: none;
+    height: 8px;
+  }
+}

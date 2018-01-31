@@ -32,9 +32,9 @@
   dependencies:
     "@steemit/libcrypto" "^1.0.1"
 
-"@steemit/steem-js@0.6.10":
-  version "0.6.10"
-  resolved "https://registry.yarnpkg.com/@steemit/steem-js/-/steem-js-0.6.10.tgz#cfc66bbabd391c8d91234785367ccf1a329236ca"
+"@steemit/steem-js@0.7.1":
+  version "0.7.1"
+  resolved "https://registry.yarnpkg.com/@steemit/steem-js/-/steem-js-0.7.1.tgz#9e9ead34ce9438513ad49e8f7d4d48d32d9c3c39"
   dependencies:
     "@steemit/rpc-auth" "^1.1.0"
     bigi "^1.4.2"

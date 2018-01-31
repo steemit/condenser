@@ -22,9 +22,9 @@ export default function init(config) {
             'ga'
         );
         ga('create', {
-            trackingId:  config.google_analytics_id,
+            trackingId: config.google_analytics_id,
             cookieDomain: 'auto',
-            sampleRate: 5
+            sampleRate: 5,
         });
     }
 }

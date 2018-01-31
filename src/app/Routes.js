@@ -1,12 +1,12 @@
 export const routeRegex = {
-    UserProfile1: /^\/([\w.\d-]+)\/?$/,
-    UserProfile2: /^\/([\w.\d-]+)\/(blog|posts|comments|recommended|wallet|curation-rewards|author-rewards|permissions|created|recent-replies|feed|password|followed|followers|settings)\/?$/,
+    UserProfile1: /^\/([\w.\d-]{3,})\/?$/,
+    UserProfile2: /^\/([\w.\d-]{3,})\/(blog|posts|comments|recommended|wallet|curation-rewards|author-rewards|permissions|created|recent-replies|feed|password|followed|followers|settings)\/?$/,
     UserEndPoints: /^(blog|posts|comments|recommended|wallet|curation-rewards|author-rewards|permissions|created|recent-replies|feed|password|followed|followers|settings)$/,
     PostsIndex: /^\/t\/([\w\d-]+)\/(hot|votes|responses|trending|trending30|promoted|cashout|payout|payout_comments|created|active)\/?$/,
-    PostsIndexUserFeed: /^\/([\w.\d-]+)\/feed\/?$/,
-    Post: /^\/([\w\d.-]+)\/([\w\d-]+)\/?($|\?)/,
-    PostJson: /^\/([\w\d.-]+)\/([\w\d-]+)(\.json)$/,
-    UserJson: /^\/([\w.\d-]+)(\.json)$/,
+    PostsIndexUserFeed: /^\/([\w.\d-]{3,})\/feed\/?$/,
+    Post: /^\/([\w\d.-]{3,})\/([\w\d-]+)\/?($|\?)/,
+    PostJson: /^\/([\w\d.-]{3,})\/([\w\d-]+)(\.json)$/,
+    UserJson: /^\/([\w.\d-]{3,})(\.json)$/,
     UserNameJson: /^.*(?=(\.json))/,
 };
 

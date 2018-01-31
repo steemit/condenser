@@ -15,7 +15,9 @@
     "about_app_details":"%(APP_NAME)s - e o platformă socială în care fiecare câștigă prin crearea și întreținerea conținutului. În ea se folosește un sistem de încredere de puncte numerice ce este denumit Golos, care susține o valore reală la câștigurile digitale, prin prețul de pe piață al lichidităților.",
     "learn_more_at_app_url":"Află mai mult %(APP_URL)s",
     "resources":"Resurse",
-    "join_our_slack":"Alatură-te pe Slack"
+    "join_our_slack":"Alatură-te pe Slack",
+    "mobileBannerAlt": "Get it on Google Play"
+
   },
   "authorrewards_jsx":{
     "estimated_author_rewards_last_week":"Drepturi de autor estimate pe parcursul săptămânii anterioare",

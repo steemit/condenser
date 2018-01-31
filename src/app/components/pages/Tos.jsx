@@ -8,7 +8,7 @@ class Tos extends React.Component {
                     <h1>Steemit Terms of Service</h1>
                     <p className="c0">
                         <span className="c1 c2">
-                            Last Updated April 28, 2016
+                            Last Updated January 5, 2018
                         </span>
                     </p>
                     <p className="c0">
@@ -35,7 +35,7 @@ class Tos extends React.Component {
                             &rdquo;). By accessing or using Steemit, you agree
                             to be bound by these Terms. If you do not agree to
                             these Terms, including the mandatory arbitration
-                            provision and class action waiver in Section 14, do
+                            provision and class action waiver in Section 23, do
                             not access or use Steemit. If we make changes to
                             these Terms, we will provide notice of those changes
                             by updating the &ldquo;
@@ -52,8 +52,9 @@ class Tos extends React.Component {
                             You understand and agree that these Terms apply
                             solely to your access to, and use of, Steemit and
                             that, when you use other Steemit services such as
-                            Steemit.com or Steemitgifts.com, the terms and
-                            policies particular to those services apply.
+                            Steemit.com, thesteemitshop.com, steemit.chat, or
+                            steemtools.com, the terms and policies particular to
+                            those services apply.
                         </span>
                     </p>
                     <p className="c0">
@@ -157,7 +158,8 @@ class Tos extends React.Component {
                     </p>
                     <p className="c0">
                         <span className="c1">
-                            &ldquo;Steem,&rdquo; &ldquo; Steemit,&rdquo; the
+                            &ldquo;Steem&rdquo;, &ldquo; Steemit&rdquo;,
+                            &ldquo;Whistle&rdquo;, &ldquo; SMTs&rdquo;, the
                             Steemit logo and any other product or service names,
                             logos or slogans that may appear on Steemit are
                             trademarks of Steemit and may not be copied,
@@ -262,7 +264,7 @@ class Tos extends React.Component {
                             6.5. &nbsp;Subject to 7.1 below, any and all
                             indemnities, warranties, terms and conditions
                             (whether express or implied) are hereby excluded to
-                            the fullest extent permitted under Luxembourg law.
+                            the fullest extent permitted under New York law.
                         </span>
                     </p>
                     <p className="c0">
@@ -421,7 +423,7 @@ class Tos extends React.Component {
                             create an Account, the Services generate and store a
                             cryptographic private and public key pair that you
                             may use to send and receive STEEM and Steem Dollars
-                            via the Steem network.. The Private Key uniquely
+                            via the Steem Network.. The Private Key uniquely
                             matches the Account Name and must be used in
                             connection with the Account Name to authorize the
                             transfer of STEEM and Steem Dollars from that
@@ -467,11 +469,11 @@ class Tos extends React.Component {
                             parties. Blockchain has no control over the Steem
                             network and therefore cannot and does not ensure
                             that any transaction details you submit via the
-                            Services will be confirmed via the Steem network.
+                            Services will be confirmed via the Steem Network.
                             You acknowledge and agree that the transaction
                             details you submit via the Services may not be
                             completed, or may be substantially delayed, by the
-                            Steem network. You may use the Services to submit
+                            Steem Network. You may use the Services to submit
                             these details to the
                             network.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -487,9 +489,9 @@ class Tos extends React.Component {
                             network. The Service does not store, send or receive
                             Steem. Any transfer of title that might occur in any
                             STEEM, Steem Dollars or Steem Power occurs on the
-                            decentralized ledger within the Steem network and
+                            decentralized ledger within the Steem Network and
                             not within the Services. We do not guarantee that
-                            the Service can effect the transfer of title or
+                            the Service can affect the transfer of title or
                             right in any Steem, Steem Dollars or Steem Power.
                         </span>
                     </p>
@@ -767,41 +769,164 @@ class Tos extends React.Component {
                         </span>
                     </p>
                     <p className="c0">
-                        <span className="c1 h">20. Copyright Complaints</span>
-                    </p>
-                    <p className="c0">
-                        <span className="c1">
-                            Steemit respects the intellectual property of others
-                            by not reading infringed content from the Steem
-                            blockchain. If you believe that your work has been
-                            copied in a way that constitutes copyright
-                            infringement, you may notify Steemit&rsquo; s
-                            Designated Agent by contacting:
+                        <span className="c1 h">
+                            20. Copyright Complaints, the
                         </span>
                     </p>
                     <p className="c0">
-                        <span className="c1">contact@steemit.com</span>
+                        <span className="c1">DMCA, and Takedowns</span>
                     </p>
                     <p className="c0">
-                        <span className="c1">Please see </span>
-                        <span className="c4">
-                            <a
-                                className="c3"
-                                href="https://www.google.com/url?q=http://www.copyright.gov/title17/92chap5.html%23512&amp;sa=D&amp;ust=1461884744550000&amp;usg=AFQjCNE4ly_OjjjUlafeWFDM_cOnARywLA"
-                            >
-                                17 U.S.C. &sect;512(c)(3)
-                            </a>
-                        </span>
                         <span className="c1">
-                            &nbsp;for the requirements of a proper notification.
-                            You should note that if you knowingly misrepresent
-                            in your notification that the material or activity
-                            is infringing, you may be liable for any damages,
-                            including costs and attorneys&rsquo; fees, incurred
-                            by Steemit or the alleged infringer, as the result
-                            of Steemit&rsquo;s relying upon such
-                            misrepresentation in removing or disabling access to
-                            the material or activity claimed to be infringing.
+                            20.1 &nbsp; We will respond to legitimate requests
+                            under the Digital Millennium Copyright Act ("DMCA"),
+                            and we retain the right to remove user content on
+                            Steemit that we deem to be infringing the copyright
+                            of others. If you become aware of user content on
+                            Steemit that infringes your copyright rights, you
+                            may submit a properly formatted DMCA request
+                            <span className="c1"> (see </span>
+                            <span className="c4">
+                                <a
+                                    className="c3"
+                                    href="https://www.google.com/url?q=http://www.copyright.gov/title17/92chap5.html%23512&amp;sa=D&amp;ust=1461884744550000&amp;usg=AFQjCNE4ly_OjjjUlafeWFDM_cOnARywLA"
+                                >
+                                    17 U.S.C. &sect; 512)
+                                </a>
+                            </span>{' '}
+                            to Steemit.
+                        </span>
+                    </p>
+                    <p className="c0">
+                        <span className="c1">
+                            Misrepresentations of infringement can result in
+                            liability for monetary damages. You may want to
+                            consult an attorney before taking any action
+                            pursuant to the DMCA. A DMCA request can be sent to
+                            us via the contact information below:
+                        </span>
+                    </p>
+                    <p className="c0">
+                        <span className="c1">
+                            Copyright Agent<br />
+                            Steemit, Inc.<br />
+                            815-A Brazos Street<br />
+                            Austin, TX 78701<br />
+                            copyright@steemit.com
+                        </span>
+                    </p>
+                    <p className="c0">
+                        <span className="c1">
+                            Please send our Copyright Agent the following
+                            information:<br />
+                            <ol>
+                                <li>
+                                    The electronic or physical signature of the
+                                    owner of the copyright or the person
+                                    authorized to act on the owner's behalf;
+                                </li>
+                                <li>
+                                    Identification of the copyrighted work
+                                    claimed to have been infringed, or a
+                                    representative list of such works;
+                                </li>
+                                <li>
+                                    The URL or Internet location of the
+                                    materials claimed to be infringing or to be
+                                    the subject of infringing activity, or
+                                    information reasonably sufficient to permit
+                                    us to locate the material;
+                                </li>
+                                <li>
+                                    Your name, address, telephone number and
+                                    email address;
+                                </li>
+                                <li>
+                                    A statement by you that you have a good
+                                    faith belief that the disputed use of the
+                                    material is not authorized by the copyright
+                                    owner, its agent or the law; and
+                                </li>
+                                <li>
+                                    A statement by you, made under penalty of
+                                    perjury, that the above information in your
+                                    notice is accurate and that you are the
+                                    copyright owner or are authorized to act on
+                                    the copyright owner's behalf.
+                                </li>
+                            </ol>
+                        </span>
+                    </p>
+                    <p className="c0">
+                        <span className="c1">
+                            20.2 &nbsp;Your right to file a counter-notice.
+                            &nbsp;
+                            <p>
+                                <p>
+                                    If we remove your user content in response
+                                    to a copyright or trademark notice, we will
+                                    notify you via Steemit’s private messaging
+                                    system. If you believe your user content was
+                                    wrongly removed due to a mistake or
+                                    misidentification of the material, you can
+                                    send a counter-notice to our Copyright Agent
+                                    (contact information provided above) that
+                                    includes the following:
+                                </p>
+                            </p>
+                            <ol>
+                                <li>Your physical or electronic signature;</li>
+                                <li>
+                                    Identification of the material that has been
+                                    removed or to which access has been disabled
+                                    and where the material was located online
+                                    before it was removed or access to it was
+                                    disabled;
+                                </li>
+                                <li>
+                                    A statement by you, under penalty of
+                                    perjury, that you have a good faith belief
+                                    that the material was removed or disabled as
+                                    a result of mistake or misidentification of
+                                    the material to be removed or disabled; and
+                                </li>
+                                <li>
+                                    Your name, address, and telephone number,
+                                    and a statement that you consent to the
+                                    jurisdiction of federal district court for
+                                    the judicial district in which the address
+                                    is located, or if your address is outside of
+                                    the United States, for any judicial district
+                                    in which the service provider may be found,
+                                    and that you will accept service of process
+                                    from the person who provided notification
+                                    under DMCA 512 subsection (c)(1)(c) or an
+                                    agent of such person.
+                                </li>
+                            </ol>
+                            <p>
+                                <p>
+                                    Upon receiving a counter-notice we will
+                                    forward it to the complaining party and tell
+                                    them we will restore your content within 10
+                                    business days. If that party does not notify
+                                    us that they have filed an action to enjoin
+                                    your use of that content on Steemit before
+                                    that period passes, we will consider
+                                    restoring your user content to the site.
+                                </p>
+                            </p>
+                            <p>
+                                <p>
+                                    It is Steemit's policy to close the accounts
+                                    of users we identify as repeat infringers.
+                                    We apply this policy at our discretion and
+                                    in appropriate circumstances, such as when a
+                                    user has repeatedly been charged with
+                                    infringing the copyrights or other
+                                    intellectual property rights of others.
+                                </p>
+                            </p>
                         </span>
                     </p>
                     <p className="c0">
@@ -990,16 +1115,16 @@ class Tos extends React.Component {
                             the claim is permanently barred (which means that
                             you will no longer have the right to assert a claim
                             regarding the Dispute). You and Steemit agree that:
-                            (a) any arbitration will occur in San Francisco
-                            County, California; (b) arbitration will be
-                            conducted confidentially by a single arbitrator in
-                            accordance with the rules of JAMS; and (c) the state
-                            or federal courts in California will have exclusive
-                            jurisdiction over the enforcement of an arbitration
-                            award and over any Dispute between the parties that
-                            is not subject to arbitration. You may also litigate
-                            a Dispute in small claims court located in the
-                            county where you reside if the Dispute meets the
+                            (a) any arbitration will occur in New York County,
+                            New York; (b) arbitration will be conducted
+                            confidentially by a single arbitrator in accordance
+                            with the rules of JAMS; and (c) the state or federal
+                            courts in New York will have exclusive jurisdiction
+                            over the enforcement of an arbitration award and
+                            over any Dispute between the parties that is not
+                            subject to arbitration. You may also litigate a
+                            Dispute in small claims court located in the county
+                            where you reside if the Dispute meets the
                             requirements to be heard in small claims court.
                         </span>
                     </p>
@@ -1112,8 +1237,25 @@ class Tos extends React.Component {
                         </span>
                     </p>
                     <p className="c0">
+                        <span className="c1 h">28. Changes</span>
+                    </p>
+                    <p className="c0">
+                        <span className="c1">
+                            This Agreement is the entire agreement between you
+                            and us concerning Steemit. It supersedes all prior
+                            or contemporaneous agreements between you and us. We
+                            may modify this user agreement at any time. If we
+                            make changes to this agreement that materially
+                            affect your rights, we will provide advance notice
+                            and keep this edition available as an archive on the
+                            Steemit website. By continuing to use Steemit after
+                            a change to this agreement, you agree to those
+                            changes.
+                        </span>
+                    </p>
+                    <p className="c0">
                         <span className="c1 h">
-                            28. Questions &amp; Contact Information
+                            29. Questions &amp; Contact Information
                         </span>
                     </p>
                     <p className="c0">

@@ -42,7 +42,7 @@ class UserWallet extends React.Component {
             const new_window = window.open();
             new_window.opener = null;
             new_window.location =
-                'https://blocktrades.us/?input_coin_type=btc&output_coin_type=steem&receive_address=' +
+                'https://blocktrades.us/?input_coin_type=eth&output_coin_type=steem&receive_address=' +
                 name;
         };
         this.onShowWithdrawSteem = e => {
@@ -50,14 +50,14 @@ class UserWallet extends React.Component {
             const new_window = window.open();
             new_window.opener = null;
             new_window.location =
-                'https://blocktrades.us/unregistered_trade/steem/btc';
+                'https://blocktrades.us/unregistered_trade/steem/eth';
         };
         this.onShowDepositPower = (current_user_name, e) => {
             e.preventDefault();
             const new_window = window.open();
             new_window.opener = null;
             new_window.location =
-                'https://blocktrades.us/?input_coin_type=btc&output_coin_type=steem_power&receive_address=' +
+                'https://blocktrades.us/?input_coin_type=eth&output_coin_type=steem_power&receive_address=' +
                 current_user_name;
         };
         this.onShowDepositSBD = (current_user_name, e) => {
@@ -65,7 +65,7 @@ class UserWallet extends React.Component {
             const new_window = window.open();
             new_window.opener = null;
             new_window.location =
-                'https://blocktrades.us/?input_coin_type=btc&output_coin_type=sbd&receive_address=' +
+                'https://blocktrades.us/?input_coin_type=eth&output_coin_type=sbd&receive_address=' +
                 current_user_name;
         };
         this.onShowWithdrawSBD = e => {
@@ -73,7 +73,7 @@ class UserWallet extends React.Component {
             const new_window = window.open();
             new_window.opener = null;
             new_window.location =
-                'https://blocktrades.us/unregistered_trade/sbd/btc';
+                'https://blocktrades.us/unregistered_trade/sbd/eth';
         };
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'UserWallet');
     }

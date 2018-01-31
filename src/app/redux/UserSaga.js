@@ -7,6 +7,7 @@ import { PrivateKey, Signature, hash } from '@steemit/steem-js/lib/auth/ecc';
 import { accountAuthLookup } from 'app/redux/AuthSaga';
 import { getAccount } from 'app/redux/SagaShared';
 import * as userActions from 'app/redux/UserReducer';
+import { receiveFeatureFlags } from 'app/redux/AppReducer';
 import { browserHistory } from 'react-router';
 import {
     serverApiLogin,
@@ -373,10 +374,33 @@ function* usernamePasswordLogin2({
         // Does not need to be fatal
         console.error('Server Login Error', error);
     }
+
+    // Feature flags
+    yield fork(
+        getFeatureFlags,
+        username,
+        private_keys.get('posting_private').toString()
+    );
+
     if (afterLoginRedirectToWelcome) {
         browserHistory.push(pathTo.welcome());
     } else if (feedURL) {
         if (document.location.pathname === '/') browserHistory.push(feedURL);
+    }
+}
+
+function* getFeatureFlags(username, posting_private) {
+    try {
+        const flags = yield call(
+            [api, api.signedCallAsync],
+            'conveyor.get_feature_flags',
+            { account: username },
+            username,
+            posting_private
+        );
+        yield put(receiveFeatureFlags(flags));
+    } catch (error) {
+        // Do nothing; feature flags are not ready yet.
     }
 }
 

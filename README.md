@@ -167,28 +167,6 @@ cd src/db
 yarn exec sequelize db:migrate
 ```
 
-#### Install Tarantool - Production Only
-
-Tarantool similarly to mysql is not required for development but if you're running a full-fledged site with condenser you will want to run one.
-
-OS X:
-
-```bash
-brew install tarantool
-```
-
-Debian based Linux:
-
-```bash
-sudo apt-get install tarantool
-```
-
-Test the interactive console:
-
-```bash
-user@example:~$ tarantool
-```
-
 #### Style Guides For Submitting Pull Requests
 
 ##### File naming and location
@@ -199,10 +177,8 @@ user@example:~$ tarantool
 - Component's stylesheet file name should match component name
 
 ##### Js & Jsx
-We are using _[Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript)_ with some modifications (see .eslintrc).
-Please run _eslint_ in the working directory before committing your changes and make sure you didn't introduce any new styling issues.
 
-We use prettier to autofromat the code. Run `yarn run fmt` to format everything in `src/`, or `yarn exec -- prettier --config .prettierrc --write src/whatever/file.js` for a specific file.
+We use [prettier](https://github.com/prettier/prettier) to autofromat the code, with [this configuration](.prettierrc). Run `yarn run fmt` to format everything in `src/`, or `yarn exec -- prettier --config .prettierrc --write src/whatever/file.js` for a specific file.
 
 ##### CSS & SCSS
 If a component requires a css rule, please use its uppercase name for the class, e.g. "Header" class for the header's root div.
@@ -218,6 +194,25 @@ We adhere to BEM methodology with exception for Foundation classes, here is an e
   <li class="Header__menu-item--selected">Element with modifier</li>
 </ul>
 ```
+
+## Testing
+
+### Run test suite
+
+`yarn test`
+
+will run `jest`
+
+### Test endpoints offline
+
+If you want to test a server-side rendered page without using the network, do this:
+
+```
+yarn build
+OFFLINE_SSR_TEST=true SDC_DATABASE_URL="mysql://root@127.0.0.1/steemit_dev" NODE_ENV=production node --prof lib/server/index.js
+```
+
+This will read data from the blobs in `api_mockdata` directory. If you want to use another set of mock data, create a similar directory to that one and add an argument `OFFLINE_SSR_TEST_DATA_DIR` pointing to your new directory.
 
 ## Issues
 

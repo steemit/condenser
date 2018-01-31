@@ -15,7 +15,6 @@
     "precommit": "lint-staged",
     "production": "NODE_ENV=production node lib/server/index.js",
     "start": "NODE_ENV=development babel-node ./webpack/dev-server.js",
-    "webpush": "node ./scripts/webpush_notify.js",
     "checktranslations": "node scripts/check_translations.js",
     "storybook": "start-storybook -p 9001 -c .storybook",
     "storybook-build": "build-storybook -c .storybook -o docs"
@@ -24,7 +23,7 @@
   "license": "MIT",
   "dependencies": {
     "@steem/crypto-session": "git+https://github.com/steemit/crypto-session.git#83a90b319ce5bc6a70362d52a15a815de7e729bb",
-    "@steemit/steem-js": "0.6.10",
+    "@steemit/steem-js": "0.7.1",
     "assert": "^1.3.0",
     "autoprefixer-loader": "^3.2.0",
     "babel-cli": "^6.22.2",

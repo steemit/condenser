@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import AppPropTypes from 'app/utils/AppPropTypes';
 import Header from 'app/components/modules/Header';
-import LpFooter from 'app/components/modules/lp/LpFooter';
 import * as userActions from 'app/redux/UserReducer';
 import TopRightMenu from 'app/components/modules/TopRightMenu';
 import { browserHistory } from 'react-router';
@@ -157,7 +156,6 @@ class App extends React.Component {
             nightmodeEnabled,
             viewMode,
         } = this.props;
-        const lp = false; //location.pathname === '/';
         const miniHeader =
             location.pathname === '/create_account' ||
             location.pathname === '/pick_account';
@@ -281,7 +279,6 @@ class App extends React.Component {
         return (
             <div
                 className={classNames('App', themeClass, {
-                    LP: lp,
                     'index-page': ip,
                     'mini-header': miniHeader,
                     'whistle-view': whistleView,
@@ -441,7 +438,6 @@ class App extends React.Component {
                     {welcome_screen}
                     {callout}
                     {children}
-                    {lp ? <LpFooter /> : null}
                 </div>
                 <Dialogs />
                 <Modals />

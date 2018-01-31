@@ -485,7 +485,7 @@ export default connect(
             const new_window = window.open();
             new_window.opener = null;
             new_window.location =
-                'https://blocktrades.us/?input_coin_type=btc&output_coin_type=steem&receive_address=' +
+                'https://blocktrades.us/?input_coin_type=eth&output_coin_type=steem&receive_address=' +
                 username;
         },
     })

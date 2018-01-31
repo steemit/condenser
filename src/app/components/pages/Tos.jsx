@@ -819,17 +819,20 @@ class Tos extends React.Component {
                         <span className="c1">
                             Please send our Copyright Agent the following
                             information:<br />
+                            <br />
                             <ol>
                                 <li>
                                     The electronic or physical signature of the
                                     owner of the copyright or the person
                                     authorized to act on the owner's behalf;
                                 </li>
+                                <br />
                                 <li>
                                     Identification of the copyrighted work
                                     claimed to have been infringed, or a
                                     representative list of such works;
                                 </li>
+                                <br />
                                 <li>
                                     The URL or Internet location of the
                                     materials claimed to be infringing or to be
@@ -837,16 +840,19 @@ class Tos extends React.Component {
                                     information reasonably sufficient to permit
                                     us to locate the material;
                                 </li>
+                                <br />
                                 <li>
                                     Your name, address, telephone number and
                                     email address;
                                 </li>
+                                <br />
                                 <li>
                                     A statement by you that you have a good
                                     faith belief that the disputed use of the
                                     material is not authorized by the copyright
                                     owner, its agent or the law; and
                                 </li>
+                                <br />
                                 <li>
                                     A statement by you, made under penalty of
                                     perjury, that the above information in your
@@ -859,7 +865,8 @@ class Tos extends React.Component {
                     </p>
                     <p className="c0">
                         <span className="c1">
-                            20.2 &nbsp;Your right to file a counter-notice.
+                            20.2 &nbsp;Your right to file a counter-notice.<br
+                            />
                             &nbsp;
                             <p>
                                 <p>
@@ -876,6 +883,7 @@ class Tos extends React.Component {
                             </p>
                             <ol>
                                 <li>Your physical or electronic signature;</li>
+                                <br />
                                 <li>
                                     Identification of the material that has been
                                     removed or to which access has been disabled
@@ -883,6 +891,7 @@ class Tos extends React.Component {
                                     before it was removed or access to it was
                                     disabled;
                                 </li>
+                                <br />
                                 <li>
                                     A statement by you, under penalty of
                                     perjury, that you have a good faith belief
@@ -890,6 +899,7 @@ class Tos extends React.Component {
                                     a result of mistake or misidentification of
                                     the material to be removed or disabled; and
                                 </li>
+                                <br />
                                 <li>
                                     Your name, address, and telephone number,
                                     and a statement that you consent to the

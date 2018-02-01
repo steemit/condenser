@@ -15,7 +15,6 @@ import useRedirects from './redirects';
 import useOauthLogin from './api/oauth';
 import useGeneralApi from './api/general';
 import useAccountRecoveryApi from './api/account_recovery';
-import useNotificationsApi from './api/notifications';
 import useEnterAndConfirmEmailPages from './sign_up_pages/enter_confirm_email';
 import useEnterAndConfirmMobilePages from './sign_up_pages/enter_confirm_mobile';
 import useUserJson from './json/user_json';
@@ -69,10 +68,6 @@ function convertEntriesToArrays(obj) {
         return result;
     }, {});
 }
-
-const service_worker_js_content = fs
-    .readFileSync(path.join(__dirname, './service-worker.js'))
-    .toString();
 
 // some redirects and health status
 app.use(function*(next) {
@@ -180,19 +175,6 @@ app.use(
     })
 );
 
-app.use(
-    mount('/service-worker.js', function*() {
-        this.set('Cache-Control', 'public, max-age=7200000');
-        this.type = 'application/javascript';
-        // TODO: use APP_URL from client_config.js
-        // actually use a config value for it
-        this.body = service_worker_js_content.replace(
-            /\{DEFAULT_URL\}/i,
-            'https://' + this.request.header.host
-        );
-    })
-);
-
 // set user's uid - used to identify users in logs and some other places
 // FIXME SECURITY PRIVACY cycle this uid after a period of time
 app.use(function*(next) {
@@ -221,7 +203,6 @@ usePostJson(app);
 useAccountRecoveryApi(app);
 useOauthLogin(app);
 useGeneralApi(app);
-useNotificationsApi(app);
 
 // helmet wants some things as bools and some as lists, makes config difficult.
 // our config uses strings, this splits them to lists on whitespace.

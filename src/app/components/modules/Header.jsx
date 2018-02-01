@@ -344,7 +344,7 @@ class Header extends React.Component {
                                             placeholder="search"
                                             name="q"
                                             autoComplete="off"
-                                />
+                                        />
                                     </form>
                                 </li>
                             </ul>

@@ -269,9 +269,9 @@ function linkify(content, mutate, hashtags, usertags, images, links) {
         /(^|[^a-zA-Z0-9_!#$%&*@＠\/]|(^|[^a-zA-Z0-9_+~.-\/]))[@＠]([a-z][-\.a-z\d]+[a-z\d])/gi,
         (match, preceeding1, preceeding2, user) => {
             const userLower = user.toLowerCase();
-        const valid = validate_account_name(userLower) == null;
+            const valid = validate_account_name(userLower) == null;
 
-        if (valid && usertags) usertags.add(userLower);
+            if (valid && usertags) usertags.add(userLower);
 
             const preceedings = (preceeding1 || '') + (preceeding2 || ''); // include the preceeding matches if they exist
 
@@ -281,7 +281,7 @@ function linkify(content, mutate, hashtags, usertags, images, links) {
                 ? `${preceedings}<a href="/${userLower}">@${user}</a>`
                 : '@' + user;
         }
-        );
+    );
 
     content = content.replace(linksAny('gi'), ln => {
         if (linksRe.image.test(ln)) {

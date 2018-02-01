@@ -157,8 +157,7 @@ export function routeToSteemdUrl(route) {
     if (route.page === 'UserProfile') {
         if (route.params[1] === 'wallet') {
             url = `/@${route.params[0]}/transfers`;
-        }
-        else {
+        } else {
             url = `/@${route.params.join('/')}`;
         }
     } else if (route.page === 'PostsIndex') {

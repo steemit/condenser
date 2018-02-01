@@ -101,26 +101,26 @@ function runApp(initial_state) {
         window.location.hash
     }`;
     universalRender({ history, location, initial_state }).catch(error => {
-            console.error(error);
-            serverApiRecordEvent('client_error', error);
+        console.error(error);
+        serverApiRecordEvent('client_error', error);
     });
 }
 
-    if (!window.Intl) {
-        require.ensure(
-            ['intl/dist/Intl'],
-            require => {
-                window.IntlPolyfill = window.Intl = require('intl/dist/Intl');
-                require('intl/locale-data/jsonp/en-US.js');
-                require('intl/locale-data/jsonp/es.js');
-                require('intl/locale-data/jsonp/ru.js');
-                require('intl/locale-data/jsonp/fr.js');
-                require('intl/locale-data/jsonp/it.js');
-                require('intl/locale-data/jsonp/ko.js');
+if (!window.Intl) {
+    require.ensure(
+        ['intl/dist/Intl'],
+        require => {
+            window.IntlPolyfill = window.Intl = require('intl/dist/Intl');
+            require('intl/locale-data/jsonp/en-US.js');
+            require('intl/locale-data/jsonp/es.js');
+            require('intl/locale-data/jsonp/ru.js');
+            require('intl/locale-data/jsonp/fr.js');
+            require('intl/locale-data/jsonp/it.js');
+            require('intl/locale-data/jsonp/ko.js');
             Iso.bootstrap(runApp);
-            },
-            'IntlBundle'
-        );
-    } else {
+        },
+        'IntlBundle'
+    );
+} else {
     Iso.bootstrap(runApp);
 }

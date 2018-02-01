@@ -528,8 +528,8 @@ export default connect(
                     ? ''
                     : ' ' +
                       tt(
-                    'voting_jsx.we_will_reset_curation_rewards_for_this_post'
-                );
+                          'voting_jsx.we_will_reset_curation_rewards_for_this_post'
+                      );
                 if (weight === 0)
                     return tt('voting_jsx.removing_your_vote') + t;
                 if (weight > 0)

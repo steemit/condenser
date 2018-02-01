@@ -222,17 +222,17 @@ export default function useGeneralApi(app) {
             }
 
             try {
-            yield createAccount({
-                signingKey: config.get('registrar.signing_key'),
-                fee: config.get('registrar.fee'),
-                creator: config.get('registrar.account'),
-                new_account_name: account.name,
-                delegation: config.get('registrar.delegation'),
-                owner: account.owner_key,
-                active: account.active_key,
-                posting: account.posting_key,
-                memo: account.memo_key,
-            });
+                yield createAccount({
+                    signingKey: config.get('registrar.signing_key'),
+                    fee: config.get('registrar.fee'),
+                    creator: config.get('registrar.account'),
+                    new_account_name: account.name,
+                    delegation: config.get('registrar.delegation'),
+                    owner: account.owner_key,
+                    active: account.active_key,
+                    posting: account.posting_key,
+                    memo: account.memo_key,
+                });
             } catch (e) {
                 yield user.update({ creation_hash: null });
                 throw new Error('Account creation error, try again.');
@@ -289,7 +289,7 @@ export default function useGeneralApi(app) {
             );
             this.body = JSON.stringify({ error: error.message });
             this.status = 500;
-            }
+        }
         recordWebEvent(this, 'api/accounts', account ? account.name : 'n/a');
     });
 

@@ -1,4 +1,4 @@
-import {resolveRoute, routeRegex } from './Routes';
+import { resolveRoute, routeRegex } from './Routes';
 
 describe('routeRegex', () => {
     it('should produce the desired regex patterns', () => {
@@ -10,10 +10,7 @@ describe('routeRegex', () => {
                 /^\/([\w.\d-]{3,})\/(blog|posts|comments|recommended|wallet|curation-rewards|author-rewards|permissions|created|recent-replies|feed|password|followed|followers|settings)\/?$/,
             ],
             ['Post', /^\/([\w\d.-]{3,})\/([\w\d-]+)\/?($|\?)/],
-            [
-                'PostJson',
-                /^\/([\w\d.-]{3,})\/([\w\d-]+)(\.json)$/,
-            ],
+            ['PostJson', /^\/([\w\d.-]{3,})\/([\w\d-]+)(\.json)$/],
             ['UserJson', /^\/([\w.\d-]{3,})(\.json)$/],
             ['UserNameJson', /^.*(?=(\.json))/],
         ];
@@ -51,10 +48,7 @@ describe('resolveRoute', () => {
             '/maitland/blog',
             { page: 'UserProfile', params: ['maitland', 'blog'] },
         ],
-        [
-            '/salad/circa90',
-            { page: 'Post', params: ['salad', 'circa90', ''] },
-        ],
+        ['/salad/circa90', { page: 'Post', params: ['salad', 'circa90', ''] }],
     ];
     test_cases.forEach(r => {
         it(`should resolve the route for the ${r[1].page} page`, () => {
@@ -75,6 +69,8 @@ describe('resolveRoute', () => {
         delete process.env.OFFLINE_SSR_TEST;
     });
     it('should resolve an unknown route to NotFound', () => {
-        expect(resolveRoute('/randomness/123/34')).toEqual({ page: 'NotFound' });
+        expect(resolveRoute('/randomness/123/34')).toEqual({
+            page: 'NotFound',
+        });
     });
 });

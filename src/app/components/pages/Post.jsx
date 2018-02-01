@@ -23,10 +23,12 @@ class Post extends React.Component {
         location: React.PropTypes.object,
         signup_bonus: React.PropTypes.string,
     };
+
     constructor() {
         super();
         this.state = {
             showNegativeComments: false,
+            commentLimit: process.env.BROWSER ? 500 : 5,
         };
         this.showSignUp = () => {
             serverApiRecordEvent('SignUp', 'Post Promo');
@@ -50,10 +52,14 @@ class Post extends React.Component {
         this.setState({ showAnyway: true });
     };
 
+    showMoreComments = () => {
+        this.setState({ commentLimit: this.state.commentLimit + 100 });
+    }
+
     render() {
         const { showSignUp } = this;
         const { signup_bonus, content } = this.props;
-        const { showNegativeComments, commentHidden, showAnyway } = this.state;
+        const { showNegativeComments, commentHidden, showAnyway, commentLimit } = this.state;
         let post = this.props.post;
         if (!post) {
             const route_params = this.props.routeParams;
@@ -91,20 +97,19 @@ class Post extends React.Component {
             }
         }
 
-        let replies = dis.get('replies').toJS();
-
         let sort_order = 'trending';
-        if (this.props.location && this.props.location.query.sort)
+        if (this.props.location && this.props.location.query.sort) {
             sort_order = this.props.location.query.sort;
+        }
+
+        let replies = dis.get('replies').toJS();
 
         sortComments(content, replies, sort_order);
 
-        // Don't render too many comments on server-side
-        const commentLimit = 100;
-        if (global['process'] !== undefined && replies.length > commentLimit) {
-            console.log(
-                `Too many comments, ${replies.length - commentLimit} omitted.`
-            );
+        // Don't render too many comments
+        let unloadedCommentCount = 0;
+        if (replies.length > commentLimit) {
+            unloadedCommentCount = replies.length - commentLimit;
             replies = replies.slice(0, commentLimit);
         }
 
@@ -245,6 +250,9 @@ class Post extends React.Component {
                             ) : null}
                             {positiveComments}
                             {negativeGroup}
+                            {unloadedCommentCount > 0
+                                ? <p><button className="button" onClick={this.showMoreComments}>load more comments ({unloadedCommentCount} more)</button></p>
+                                : ''}
                         </div>
                     </div>
                 </div>

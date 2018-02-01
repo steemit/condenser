@@ -118,8 +118,6 @@ class App extends React.Component {
         this.refs.side_panel.show();
     }
 
-    handleClose = () => this.setState({ open: null });
-
     navigate = e => {
         const a =
             e.target.nodeName.toLowerCase() === 'a'

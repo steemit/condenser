@@ -833,7 +833,7 @@ Your account's bandwidth is measured in bytes, kilobytes, megabytes or gigabytes
 
 ### What happens when I run out of bandwidth?
 
-Normally, most active accounts will have enough bandwidth to perform the usual actions on Steemit, but when there are a lot of people using the platform at a certain time, bandwidth allocations decrease as the bandwidth is spread amongst all active accounts. This leads to a decrease in the amount of bandwidth available. Accounts with very low amounts of Steem Power are more susceptible to bandwidth problems.
+Normally, most active accounts will have enough bandwidth to perform the usual actions on Steemit, but when there are a lot of people using the platform at a certain time, bandwidth allocations decrease as the bandwidth is spread amongst all active accounts. Most accounts will still have more than enough bandwidth to use Steemit, but exceptions exist. Accounts with very low amounts of Steem Power are more susceptible to bandwidth problems.
 
 If your account runs out of bandwidth, you will not be able to perform actions on Steemit. To increase your bandwidth allocation, you can:
 

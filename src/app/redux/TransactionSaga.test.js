@@ -14,6 +14,11 @@ import {
 } from './TransactionSaga';
 import { DEBT_TICKER } from 'app/client_config';
 
+import { configure, shallow } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-15';
+
+configure({ adapter: new Adapter() });
+
 const operation = {
     type: 'comment',
     author: 'Alice',

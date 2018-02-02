@@ -100,6 +100,7 @@
 - <a href="#How_much_are_the_transaction_fees_for_sending_tokens_to_other_users">How much are the transaction fees for sending tokens to other users?</a>
 - <a href="#Are_there_fees_for_Powering_Up__Powering_Down__trading_on_the_internal_market__or_converting_SBD_to_STEEM">Are there fees for Powering Up, Powering Down, trading on the internal market, or converting SBD to STEEM?</a>
 - <a href="#How_long_does_it_take_to_transfer_STEEM_or_SBD_tokens_between_users">How long does it take to transfer STEEM or SBD tokens between users?</a>
+- <a href="#How_does_bandwidth_work">How does bandwidth work?</a>
 
 ### <span id="Table_of_Contents_Voting_and_Curating">Voting and Curating</span>
 - <a href="#What_is_my_voting_power">What is my voting power?</a>
@@ -816,6 +817,30 @@ No. None of these actions incur any fees.
 ## <span id="How_long_does_it_take_to_transfer_STEEM_or_SBD_tokens_between_users">How long does it take to transfer STEEM or SBD tokens between users?</span>
 
 A transfer of tokens between accounts typically takes 3 seconds. This is far faster than most blockchain tokens.
+
+<a href="#Table_of_Contents_Economics">^</a>
+## <span id="How_does_bandwidth_work">How does bandwidth work?</span>
+
+Bandwidth represents a share in the resources of the Steem blockchain's network and it is what enables users to perform actions like posting, voting, commenting and making token transfers. Every action a user takes on Steemit, with the exception of viewing content, consumes part of his/her account's bandwidth allocation. All accounts are allocated bandwidth according to how much Steem Power the account holds. The more the Steem Power, the more bandwidth is allocated.
+
+This bandwidth rate-limiting is employed to safeguard the blockchain from spam attacks.
+
+To see how much bandwidth your account has at any time, visit [https://steemd.com/](https://steemd.com)@your_username and look for the section shown in the screenshot below.
+
+![Screenshot (3).png](https://steemitimages.com/DQmYwLpTW1RVY1jUKwLwEW9QSbEnP9DRW9h2BCerk3PfEDj/Screenshot%20(3).png)
+
+Your account's bandwidth is measured in bytes, kilobytes, megabytes or gigabytes, and it recharges gradually over time. The progress bar labelled "bandwidth remaining" shows how much bandwidth you have left as a percentage.
+
+### What happens when I run out of bandwidth?
+
+Normally, most active accounts will have enough bandwidth to perform the usual actions on Steemit, but when there are a lot of people using the platform at a certain time, bandwidth allocations decrease as the bandwidth is spread amongst all active accounts. This leads to a decrease in the amount of bandwidth available. Accounts with very low amounts of Steem Power are more susceptible to bandwidth problems.
+
+If your account runs out of bandwidth, you will not be able to perform actions on Steemit. To increase your bandwidth allocation, you can:
+
+- Increase your Steem Power **(best option)**
+- Wait until your bandwidth recharges
+
+*To increase your Steem Power, you can buy more STEEM and power up, receive STEEM or Steem Power from someone else or have someone delegate some Steem Power to your account.*
 
 <a href="#Table_of_Contents_Economics">^</a>
 # Voting and Curating

@@ -27,7 +27,7 @@
 @import "./elements/Reblog";
 @import "./elements/YoutubePreview";
 @import "./elements/ShareMenu";
-@import "./elements/Author";
+@import "./elements/Author/styles";
 @import "./elements/AuthorDropdown";
 @import "./elements/UserNames";
 @import "./elements/UserKeys";
@@ -35,9 +35,6 @@
 
 // modules
 @import "./modules/Header";
-@import "./modules/Footer";
-@import "./modules/lp/LpHeader";
-@import "./modules/lp/LpFooter";
 @import "./modules/SignUp";
 @import "./modules/LoginForm";
 @import "./modules/MiniHeader";

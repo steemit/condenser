@@ -22,3 +22,15 @@ $fade-in-animation-delay: 0.03s;
 		@include opacity(1);
 	}
 }
+
+
+@keyframes fade-in-up {
+  0% {
+    @include opacity(0);
+    transform: translate(-24px, 24px);
+  }
+  100% {
+    @include opacity(1);
+    transform: translate(0px, 0px);
+  }
+}

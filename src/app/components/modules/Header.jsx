@@ -4,18 +4,10 @@ import { connect } from 'react-redux';
 import TopRightMenu from 'app/components/modules/TopRightMenu';
 import Icon from 'app/components/elements/Icon';
 import resolveRoute from 'app/ResolveRoute';
-import DropdownMenu from 'app/components/elements/DropdownMenu';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
-import HorizontalMenu from 'app/components/elements/HorizontalMenu';
 import normalizeProfile from 'app/utils/NormalizeProfile';
 import tt from 'counterpart';
 import { APP_NAME } from 'app/client_config';
-
-function sortOrderToLink(so, topic, account) {
-    if (so === 'home') return '/@' + account + '/feed';
-    if (topic) return `/${so}/${topic}`;
-    return `/${so}`;
-}
 
 class Header extends React.Component {
     static propTypes = {
@@ -190,42 +182,6 @@ class Header extends React.Component {
             </Link>
         ) : null;
 
-        const sort_orders = [
-            ['trending', tt('main_menu.trending')],
-            ['created', tt('g.new')],
-            ['hot', tt('main_menu.hot')],
-            ['promoted', tt('g.promoted')],
-        ];
-        if (current_account_name)
-            sort_orders.unshift(['home', tt('header_jsx.home')]);
-        const sort_order_menu = sort_orders
-            .filter(so => so[0] !== sort_order)
-            .map(so => ({
-                link: sortOrderToLink(so[0], topic, current_account_name),
-                value: so[1],
-            }));
-        const selected_sort_order = sort_orders.find(
-            so => so[0] === sort_order
-        );
-
-        const sort_orders_horizontal = [
-            ['trending', tt('main_menu.trending')],
-            ['created', tt('g.new')],
-            ['hot', tt('main_menu.hot')],
-            ['promoted', tt('g.promoted')],
-        ];
-        // if (current_account_name) sort_orders_horizontal.unshift(['home', tt('header_jsx.home')]);
-        const sort_order_menu_horizontal = sort_orders_horizontal.map(so => {
-            let active = so[0] === sort_order;
-            if (so[0] === 'home' && sort_order === 'home' && !home_account)
-                active = false;
-            return {
-                link: sortOrderToLink(so[0], topic, current_account_name),
-                value: so[1],
-                active,
-            };
-        });
-
         return (
             <header className="Header noPrint">
                 <div className="Header__top header">
@@ -237,33 +193,10 @@ class Header extends React.Component {
                                         {/*
                                         <Icon name="logo" className="logo-for-mobile" />
                                         <Icon name="logotype" className="logo-for-large" />  */}
-
                                         <svg
-                                            className="logo-new logo-new--mobile"
-                                            viewBox="0 0 38 38"
-                                            version="1.1"
-                                        >
-                                            <title>Steemit Logo</title>
-                                            <g
-                                                stroke="none"
-                                                fill="none"
-                                                fillRule="evenodd"
-                                            >
-                                                <g
-                                                    className="icon-svg"
-                                                    fillRule="nonzero"
-                                                >
-                                                    <path
-                                                        d="M32.7004951,11.3807248 C31.1310771,9.81140963 29.3043776,8.66313021 27.3619013,7.92312792 C28.4939405,4.59311764 32.5075339,3.38104493 32.5075339,3.38104493 C32.5075339,3.38104493 23.1424826,-1.48000457 12.7997611,0.459311764 C9.35218721,1.00793415 6.0461183,3.12587173 3.62767097,5.92001831 C-1.62087426,11.9803819 -0.926213868,21.1028239 5.18422484,26.3083572 C6.1233028,27.1121528 8.22014805,28.3625014 8.2587403,28.4262947 C6.8822836,31.9221676 2.48276772,32.8790671 2.48276772,32.8790671 C2.48276772,32.8790671 8.29733255,36.5152853 16.10583,37.4594261 C18.1769471,37.7145993 20.3767051,37.7783926 22.6536475,37.5359781 C26.2684544,37.2425289 29.8703972,35.3287299 32.6104465,32.6366526 C38.5407881,26.7931863 38.5922444,17.2752258 32.7004951,11.3807248 Z M30.0247661,30.3145765 C27.8121441,32.4835487 24.5060752,33.861484 21.9589871,34.0528639 C20.1580157,34.2314851 18.2284034,34.2570024 16.3759757,34.0273465 C13.6487905,33.6956214 11.680586,32.9428604 9.75097374,32.2156168 C10.7286439,31.271476 11.7063141,29.9700926 12.1051006,28.8473305 C12.3623823,28.1838802 12.3366541,27.4438779 12.0279162,26.7931863 C9.95679906,22.5317938 10.8572848,17.4283297 14.2662664,14.1110781 C16.73617,11.6996913 20.1322875,10.5641706 23.5798614,10.9852064 C26.1140854,11.2914142 28.416756,12.4014176 30.2177274,14.2003887 C34.5915151,18.5893678 34.4371461,26.014908 30.0247661,30.3145765 Z"
-                                                        className="icon-svg__shape"
-                                                    />
-                                                </g>
-                                            </g>
-                                        </svg>
-                                        <svg
-                                            className="logo-new logo-new--desktop"
+                                            className="Header__logotype"
                                             width="148px"
-                                            height="38px"
+                                            height="30px"
                                             viewBox="0 0 148 38"
                                             version="1.1"
                                         >
@@ -298,18 +231,6 @@ class Header extends React.Component {
                                         </span>
                                     </Link>
                                 </li>
-                                {selected_sort_order && (
-                                    <DropdownMenu
-                                        className="Header__sort-order-menu menu-hide-for-large"
-                                        items={sort_order_menu}
-                                        selected={selected_sort_order[1]}
-                                        el="li"
-                                    />
-                                )}
-                                <HorizontalMenu
-                                    className="show-for-medium Header__sort"
-                                    items={sort_order_menu_horizontal}
-                                />
                                 <li className={'hide-for-large Header__search'}>
                                     <a
                                         href="/static/search.html"

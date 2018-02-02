@@ -15,6 +15,7 @@ import SidebarLinks from 'app/components/elements/SidebarLinks';
 import SidebarNewUsers from 'app/components/elements/SidebarNewUsers';
 import ArticleLayoutSelector from 'app/components/modules/ArticleLayoutSelector';
 import Topics from './Topics';
+import SortOrder from 'app/components/elements/SortOrder';
 
 class PostsIndex extends React.Component {
     static propTypes = {
@@ -125,7 +126,7 @@ class PostsIndex extends React.Component {
                 );
             }
         } else {
-            posts = this.getPosts(order, category);
+            posts = this.getPosts(this.props.sortOrder, this.props.topic);
             if (posts && posts.size === 0) {
                 emptyText = (
                     <div>
@@ -191,7 +192,14 @@ class PostsIndex extends React.Component {
                 <article className="articles">
                     <div className="articles__header">
                         <div className="articles__header-col">
-                            <h1 className="articles__h1">{page_title}</h1>
+                            {category && (
+                                <h1 className="articles__h1">{category}</h1>
+                            )}
+                            <SortOrder
+                                username={this.props.username}
+                                sortOrder={this.props.sortOrder}
+                                topic={this.props.topic}
+                            />
                         </div>
                         <div className="articles__header-col articles__header-col--right">
                             <div className="articles__tag-selector">
@@ -254,7 +262,7 @@ class PostsIndex extends React.Component {
 module.exports = {
     path: ':order(/:category)',
     component: connect(
-        state => {
+        (state, ownProps) => {
             return {
                 discussions: state.global.get('discussion_idx'),
                 status: state.global.get('status'),
@@ -264,6 +272,8 @@ module.exports = {
                     state.user.getIn(['current', 'username']) ||
                     state.offchain.get('account'),
                 blogmode: state.app.getIn(['user_preferences', 'blogmode']),
+                sortOrder: ownProps.params.order,
+                topic: ownProps.params.category,
             };
         },
         dispatch => {

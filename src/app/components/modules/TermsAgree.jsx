@@ -1397,10 +1397,10 @@ class TermsAgree extends Component {
 export default connect(
     state => ({}),
     dispatch => ({
-            hideTerms: e => {
-                if (e) e.preventDefault();
-                dispatch(userActions.hideTerms());
-            }
-        })
+        hideTerms: e => {
+            if (e) e.preventDefault();
+            dispatch(userActions.hideTerms());
+        },
+    })
 )(TermsAgree);
 // mapStateToProps

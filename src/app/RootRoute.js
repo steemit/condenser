@@ -1,4 +1,5 @@
 import App from 'app/components/App';
+import Benchmark from 'app/components/pages/Benchmark';
 import PostsIndex from 'app/components/pages/PostsIndex';
 import resolveRoute from './ResolveRoute';
 
@@ -40,6 +41,10 @@ export default {
         ) {
             //require.ensure([], (require) => {
             cb(null, [require('app/components/pages/XSS')]);
+            //});
+        } else if (route.page === 'Benchmark') {
+            //require.ensure([], (require) => {
+            cb(null, [require('app/components/pages/Benchmark')]);
             //});
         } else if (route.page === 'Tags') {
             //require.ensure([], (require) => {

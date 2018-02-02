@@ -18,13 +18,27 @@ function findByProvider(provider_user_id, resolve) {
     });
 }
 
-export default function findUser({ user_id, email, uid, provider_user_id }) {
-    console.log('-- findUser  -->', user_id, email, uid, provider_user_id);
+export default function findUser({
+    user_id,
+    email,
+    uid,
+    provider_user_id,
+    name,
+}) {
+    console.log(
+        '-- findUser  -->',
+        user_id,
+        email,
+        uid,
+        provider_user_id,
+        name
+    );
     return new Promise(resolve => {
         let query;
         const where_or = [];
         if (user_id) where_or.push({ id: user_id });
         if (email) where_or.push({ email });
+        if (name) where_or.push({ name });
         if (uid) where_or.push({ uid });
         if (where_or.length > 0) {
             query = {

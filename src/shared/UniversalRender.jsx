@@ -35,6 +35,15 @@ import ScrollBehavior from 'scroll-behavior';
 
 import { api } from '@steemit/steem-js';
 
+let get_state_perf,
+    get_content_perf = false;
+if (process.env.OFFLINE_SSR_TEST) {
+    const testDataDir = process.env.OFFLINE_SSR_TEST_DATA_DIR || 'api_mockdata';
+    let uri = `${__dirname}/../../`;
+    get_state_perf = require(uri + testDataDir + '/get_state');
+    get_content_perf = require(uri + testDataDir + '/get_content');
+}
+
 const calcOffsetRoot = startEl => {
     let offset = 0;
     let el = startEl;
@@ -315,7 +324,11 @@ async function universalRender({
         if (url.indexOf('/author-rewards') !== -1)
             url = url.replace(/\/author-rewards$/, '/transfers');
 
-        onchain = await api.getStateAsync(url);
+        if (process.env.OFFLINE_SSR_TEST) {
+            onchain = get_state_perf;
+        } else {
+            onchain = await api.getStateAsync(url);
+        }
 
         if (
             Object.getOwnPropertyNames(onchain.accounts).length === 0 &&
@@ -351,7 +364,12 @@ async function universalRender({
             url.match(routeRegex.PostNoCategory)
         ) {
             const params = url.substr(2, url.length - 1).split('/');
-            const content = await api.getContentAsync(params[0], params[1]);
+            let content;
+            if (process.env.OFFLINE_SSR_TEST) {
+                content = get_content_perf;
+            } else {
+                content = await api.getContentAsync(params[0], params[1]);
+            }
             if (content.author && content.permlink) {
                 // valid short post url
                 onchain.content[url.substr(2, url.length - 1)] = content;

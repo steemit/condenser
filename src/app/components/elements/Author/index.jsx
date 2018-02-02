@@ -5,7 +5,7 @@ import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import Icon from 'app/components/elements/Icon';
 import { Link } from 'react-router';
 import { authorNameAndRep } from 'app/utils/ComponentFormatters';
-import AuthorDropdown from './AuthorDropdown';
+import AuthorDropdown from '../AuthorDropdown';
 import Reputation from 'app/components/elements/Reputation';
 import normalizeProfile from 'app/utils/NormalizeProfile';
 import Overlay from 'react-overlays/lib/Overlay';

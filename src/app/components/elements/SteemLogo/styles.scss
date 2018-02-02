@@ -1,0 +1,33 @@
+.logo__steemit {
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    .logo__hover-group {
+        .logo__hover-box{
+            fill: transparent;
+        }
+        .logo__beta{
+            fill: $color-text-gray;
+            transition: 0.25s all ease-in-out;
+        }
+        .logo__steemit{
+            fill: $color-teal;
+            
+            transition: 0.25s all ease-in-out;
+        }
+        :hover {
+            .logo__hover-box{
+                fill: transparent;
+            }
+            .logo__beta{
+                @include themify($themes) {
+                    fill: themed('colorAccentReverse');
+                }
+            }
+            .logo__steemit{
+                @include themify($themes) {
+                    fill: themed('colorAccentReverse');
+                }
+            }
+        }
+    }
+}

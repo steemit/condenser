@@ -164,62 +164,6 @@ export default function useAccountRecoveryApi(app) {
         }
     });
 
-    router.post('/api/v1/account_identity_providers', koaBody, function*() {
-        if (rateLimitReq(this, this.req)) return;
-        try {
-            const params = this.request.body;
-            const { csrf, name, owner_key } =
-                typeof params === 'string' ? JSON.parse(params) : params;
-            if (!checkCSRF(this, csrf)) return;
-            console.log(
-                '-- /account_identity_providers -->',
-                this.session.uid,
-                name,
-                owner_key
-            );
-            const existing_account = yield models.Account.findOne({
-                attributes: ['id', 'user_id', 'owner_key'],
-                where: { name: esc(name) },
-                order: 'id DESC',
-            });
-            if (existing_account) {
-                if (existing_account.owner_key === owner_key) {
-                    const identity = yield models.Identity.findOne({
-                        attributes: ['provider'],
-                        where: { user_id: existing_account.user_id },
-                        order: 'id DESC',
-                    });
-                    this.body = JSON.stringify({
-                        status: 'found',
-                        provider: identity
-                            ? identity.provider === 'phone'
-                              ? 'email'
-                              : identity.provider
-                            : null,
-                    });
-                } else {
-                    this.body = JSON.stringify({
-                        status: 'found',
-                        provider: 'email',
-                    });
-                }
-            } else {
-                this.body = JSON.stringify({
-                    status: 'not found found',
-                    provider: 'email',
-                });
-            }
-        } catch (error) {
-            console.error(
-                'Error in /account_identity_providers api call',
-                this.session.uid,
-                error
-            );
-            this.body = JSON.stringify({ error: error.message });
-            this.status = 500;
-        }
-    });
-
     router.post(
         '/api/v1/initiate_account_recovery_with_email',
         koaBody,

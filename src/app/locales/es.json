@@ -511,8 +511,8 @@
     "userkeys_jsx": {
         "public": "Público",
         "private": "Privado",
-        "public_something_key": "Contraseña %(count)s pública",
-        "private_something_key": "Contraseña %(count)s privada",
+        "public_something_key": "Contraseña %(key)s pública",
+        "private_something_key": "Contraseña %(key)s privada",
         "posting_key_is_required_it_should_be_different":
             "La contraseña de posteado se usa para postear y para votar. Debería ser diferente a la contraseña activa y a la contraseña de propietario.",
         "the_active_key_is_used_to_make_transfers_and_place_orders":

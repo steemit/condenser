@@ -187,8 +187,8 @@ ul > li.Header__logo > a {
   margin-right: -22px;
   .beta {
     position: absolute;
-    top: 43px;
-    left: 140px;
+    top: 37px;
+    left: 133px;
     font-size: 0.7rem;
     @include opacity(0);
     display: none;
@@ -230,11 +230,9 @@ ul > li.Header__logo > a {
 .Header__logotype {
     display: block;
     transition: 0.2s all ease-in-out;
-    height: 37px;
-    @include MQ(M) {
-        width: 144px;
-        height: auto;
-    }
+    height: auto;
+    width: 138px;
+    height: 38px;
   .icon-svg {
     fill: $color-teal;
     @include themify($themes) {

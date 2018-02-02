@@ -8,6 +8,7 @@ import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import normalizeProfile from 'app/utils/NormalizeProfile';
 import tt from 'counterpart';
 import { APP_NAME } from 'app/client_config';
+import HorizontalMenu from 'app/components/elements/HorizontalMenu';
 
 class Header extends React.Component {
     static propTypes = {
@@ -194,7 +195,7 @@ class Header extends React.Component {
                                         <Icon name="logo" className="logo-for-mobile" />
                                         <Icon name="logotype" className="logo-for-large" />  */}
                                         <svg
-                                            className="logo-new logo-new--desktop"
+                                            className="Header__logotype"
                                             width="148"
                                             height="38"
                                             viewBox="0 0 148 38"
@@ -231,6 +232,10 @@ class Header extends React.Component {
                                         </span>
                                     </Link>
                                 </li>
+                                <HorizontalMenu
+                                    className="show-for-large Header__sort"
+                                    items={sort_order_menu_horizontal}
+                                />
                                 <li className={'hide-for-large Header__search'}>
                                     <a
                                         href="/static/search.html"

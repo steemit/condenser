@@ -174,6 +174,8 @@ class PostsIndex extends React.Component {
             }
             if (typeof category !== 'undefined') {
                 page_title = `${page_title}: ${category}`; // maybe todo: localize the colon?
+            } else {
+                page_title = `${page_title}: ${tt('g.all_tags')}`;
             }
         }
         const layoutClass = this.props.blogmode
@@ -190,9 +192,9 @@ class PostsIndex extends React.Component {
                 <article className="articles">
                     <div className="articles__header">
                         <div className="articles__header-col">
-                            {category && (
-                                <h1 className="articles__h1 show-for-large-only">{category}</h1>
-                            )}
+                            <h1 className="articles__h1 show-for-large">
+                                {page_title}
+                            </h1>
                             <div className="articles__tag-selector">
                                 <Topics
                                     username={this.props.username}
@@ -202,16 +204,13 @@ class PostsIndex extends React.Component {
                                 />
                             </div>
                         </div>
-                        <div className="articles__header-col articles__header-col--right">
+                        <div className="articles__header-col articles__header-col--right hide-for-large ">
                             {category !== 'feed' && (
                                 <SortOrder
                                     sortOrder={this.props.sortOrder}
                                     topic={this.props.topic}
                                 />
                             )}
-                        </div>
-                        <div className="articles__header-col articles__header-col--right">
-                        
                             <ArticleLayoutSelector />
                         </div>
                     </div>

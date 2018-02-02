@@ -3,26 +3,23 @@ import { connect } from 'react-redux';
 import AppPropTypes from 'app/utils/AppPropTypes';
 import Header from 'app/components/modules/Header';
 import * as userActions from 'app/redux/UserReducer';
-import TopRightMenu from 'app/components/modules/TopRightMenu';
-import { browserHistory } from 'react-router';
 import classNames from 'classnames';
-import SidePanel from 'app/components/modules/SidePanel';
+import ConnectedSidePanel from 'app/components/modules/ConnectedSidePanel';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import Dialogs from 'app/components/modules/Dialogs';
 import Modals from 'app/components/modules/Modals';
-import Icon from 'app/components/elements/Icon';
 import WelcomePanel from 'app/components/elements/WelcomePanel';
 import MiniHeader from 'app/components/modules/MiniHeader';
 import tt from 'counterpart';
 import PageViewsCounter from 'app/components/elements/PageViewsCounter';
 import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
-import { APP_NAME, VESTING_TOKEN, LIQUID_TOKEN } from 'app/client_config';
 import { key_utils } from '@steemit/steem-js/lib/auth/ecc';
 import resolveRoute from 'app/ResolveRoute';
 import { VIEW_MODE_WHISTLE } from 'shared/constants';
 
 const pageRequiresEntropy = path => {
     const { page } = resolveRoute(path);
+
     const entropyPages = [
         'ChangePassword',
         'RecoverAccountStep1',
@@ -37,19 +34,12 @@ const pageRequiresEntropy = path => {
 class App extends React.Component {
     constructor(props) {
         super(props);
+        // TODO: put both of these and associated toggles into Redux Store.
         this.state = {
-            open: null,
             showCallout: true,
             showBanner: true,
-            expandCallout: false,
         };
-        this.toggleOffCanvasMenu = this.toggleOffCanvasMenu.bind(this);
-        this.signUp = this.signUp.bind(this);
-        this.learnMore = this.learnMore.bind(this);
-        this.setShowBannerFalse = this.setShowBannerFalse.bind(this);
         this.listenerActive = null;
-        this.onEntropyEvent = this.onEntropyEvent.bind(this);
-        // this.shouldComponentUpdate = shouldComponentUpdate(this, 'App')
     }
 
     componentWillMount() {
@@ -58,20 +48,19 @@ class App extends React.Component {
     }
 
     componentDidMount() {
-        // setTimeout(() => this.setState({showCallout: false}), 15000);
-        if (pageRequiresEntropy(this.props.location.pathname)) {
+        if (pageRequiresEntropy(this.props.pathname)) {
             this._addEntropyCollector();
         }
     }
 
     componentWillReceiveProps(np) {
-        /* Add listener if the next page requires entropy and the current page didn't */
+        // Add listener if the next page requires entropy and the current page didn't
         if (
-            pageRequiresEntropy(np.location.pathname) &&
-            !pageRequiresEntropy(this.props.location.pathname)
+            pageRequiresEntropy(np.pathname) &&
+            !pageRequiresEntropy(this.props.pathname)
         ) {
             this._addEntropyCollector();
-        } else if (!pageRequiresEntropy(np.location.pathname)) {
+        } else if (!pageRequiresEntropy(np.pathname)) {
             // Remove if next page does not require entropy
             this._removeEntropyCollector();
         }
@@ -99,76 +88,57 @@ class App extends React.Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        const p = this.props;
+        const { pathname, new_visitor, flash, nightmodeEnabled } = this.props;
         const n = nextProps;
         return (
-            p.location.pathname !== n.location.pathname ||
-            p.new_visitor !== n.new_visitor ||
-            p.flash !== n.flash ||
-            this.state.open !== nextState.open ||
+            pathname !== n.pathname ||
+            new_visitor !== n.new_visitor ||
+            flash !== n.flash ||
             this.state.showBanner !== nextState.showBanner ||
             this.state.showCallout !== nextState.showCallout ||
-            p.nightmodeEnabled !== n.nightmodeEnabled
+            nightmodeEnabled !== n.nightmodeEnabled
         );
     }
 
-    toggleOffCanvasMenu(e) {
-        e.preventDefault();
-        // this.setState({open: this.state.open ? null : 'left'});
-        this.refs.side_panel.show();
-    }
-
-    navigate = e => {
-        const a =
-            e.target.nodeName.toLowerCase() === 'a'
-                ? e.target
-                : e.target.parentNode;
-        // this.setState({open: null});
-        if (a.host !== window.location.host) return;
-        e.preventDefault();
-        browserHistory.push(a.pathname + a.search + a.hash);
+    setShowBannerFalse = () => {
+        this.setState({ showBanner: false });
     };
 
-    setShowBannerFalse() {
-        this.setState({ showBanner: false });
-    }
-
-    onEntropyEvent(e) {
+    onEntropyEvent = e => {
         if (e.type === 'mousemove')
             key_utils.addEntropy(e.pageX, e.pageY, e.screenX, e.screenY);
         else console.log('onEntropyEvent Unknown', e.type, e);
-    }
+    };
 
-    signUp() {
+    signUp = () => {
         serverApiRecordEvent('Sign up', 'Hero banner');
-    }
+    };
 
-    learnMore() {
+    learnMore = () => {
         serverApiRecordEvent('Learn more', 'Hero banner');
-    }
+    };
 
     render() {
         const {
-            location,
             params,
             children,
             flash,
             new_visitor,
-            openBlocktrades,
-            openGopax,
-            signup_bonus,
-            username,
             nightmodeEnabled,
             viewMode,
+            pathname,
+            category,
+            order,
         } = this.props;
+
         const miniHeader =
-            location.pathname === '/create_account' ||
-            location.pathname === '/pick_account';
+            pathname === '/create_account' || pathname === '/pick_account';
+
         const whistleView = viewMode === VIEW_MODE_WHISTLE;
         const headerHidden = whistleView;
         const params_keys = Object.keys(params);
         const ip =
-            location.pathname === '/' ||
+            pathname === '/' ||
             (params_keys.length === 2 &&
                 params_keys[0] === 'order' &&
                 params_keys[1] === 'category');
@@ -263,165 +233,18 @@ class App extends React.Component {
                 })}
                 ref="App_root"
             >
-                <SidePanel ref="side_panel" alignment="right">
-                    <TopRightMenu vertical navigate={this.navigate} />
-                    <ul className="vertical menu">
-                        <li>
-                            <a href="/welcome" onClick={this.navigate}>
-                                {tt('navigation.welcome')}
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/faq.html" onClick={this.navigate}>
-                                {tt('navigation.faq')}
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/tags" onClick={this.navigate}>
-                                {tt('navigation.explore')}
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/market" onClick={this.navigate}>
-                                {tt('navigation.currency_market')}
-                            </a>
-                        </li>
-                        <li>
-                            <a
-                                href="/recover_account_step_1"
-                                onClick={this.navigate}
-                            >
-                                {tt('navigation.stolen_account_recovery')}
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/change_password" onClick={this.navigate}>
-                                {tt('navigation.change_account_password')}
-                            </a>
-                        </li>
-                        <li className="last">
-                            <a href="/~witnesses" onClick={this.navigate}>
-                                {tt('navigation.vote_for_witnesses')}
-                            </a>
-                        </li>
-                    </ul>
-                    <ul className="vertical menu">
-                        <li>
-                            <a className="menu-section">
-                                {tt('navigation.third_party_exchanges')}
-                            </a>
-                        </li>
-                        <li>
-                            <a onClick={() => openBlocktrades(username)}>
-                                Blocktrades <Icon name="extlink" />
-                            </a>
-                        </li>
-                        <li className="last">
-                            <a onClick={() => openGopax()}>
-                                GOPAX <Icon name="extlink" />
-                            </a>
-                        </li>
-                    </ul>
-                    <ul className="vertical menu">
-                        <li>
-                            <a
-                                href="https://thesteemitshop.com/"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                {tt('navigation.shop')}&nbsp;<Icon name="extlink" />
-                            </a>
-                        </li>
-                        <li>
-                            <a
-                                href="https://steemit.chat/home"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                {tt('navigation.chat')}&nbsp;<Icon name="extlink" />
-                            </a>
-                        </li>
-                        <li>
-                            <a
-                                href="http://steemtools.com/"
-                                onClick={this.navigate}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                {tt('navigation.app_center')}&nbsp;<Icon name="extlink" />
-                            </a>
-                        </li>
-                        <li className="last">
-                            <a
-                                href="https://developers.steem.io/"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                {tt('navigation.api_docs')}&nbsp;<Icon name="extlink" />
-                            </a>
-                        </li>
-                    </ul>
-                    <ul className="vertical menu">
-                        <li>
-                            <a
-                                href="https://steem.io/steem-bluepaper.pdf"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                {tt('navigation.bluepaper')}&nbsp;<Icon name="extlink" />
-                            </a>
-                        </li>
-                        <li>
-                            <a
-                                href="https://smt.steem.io/"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                {tt('navigation.smt_whitepaper')}&nbsp;<Icon name="extlink" />
-                            </a>
-                        </li>
-                        <li>
-                            <a
-                                href="https://steem.io/SteemWhitePaper.pdf"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                {tt('navigation.whitepaper')}&nbsp;<Icon name="extlink" />
-                            </a>
-                        </li>
-                        <li>
-                            <a href="https://steem.io" onClick={this.navigate}>
-                                {tt('navigation.about')}&nbsp;<Icon name="extlink" />
-                            </a>
-                        </li>
-                        <li>
-                            <a
-                                href="/privacy.html"
-                                onClick={this.navigate}
-                                rel="nofollow"
-                            >
-                                {tt('navigation.privacy_policy')}
-                            </a>
-                        </li>
-                        <li className="last">
-                            <a
-                                href="/tos.html"
-                                onClick={this.navigate}
-                                rel="nofollow"
-                            >
-                                {tt('navigation.terms_of_service')}
-                            </a>
-                        </li>
-                    </ul>
-                </SidePanel>
+                <ConnectedSidePanel alignment="right" />
+
                 {headerHidden ? null : miniHeader ? (
                     <MiniHeader />
                 ) : (
                     <Header
-                        toggleOffCanvasMenu={this.toggleOffCanvasMenu}
-                        menuOpen={this.state.open}
+                        pathname={pathname}
+                        category={category}
+                        order={order}
                     />
                 )}
+
                 <div className="App__content">
                     {process.env.BROWSER &&
                     ip &&
@@ -445,49 +268,40 @@ class App extends React.Component {
 App.propTypes = {
     error: React.PropTypes.string,
     children: AppPropTypes.Children,
-    location: React.PropTypes.object,
-    signup_bonus: React.PropTypes.string,
+    pathname: React.PropTypes.string,
+    category: React.PropTypes.string,
+    order: React.PropTypes.string,
     loginUser: React.PropTypes.func.isRequired,
-    depositSteem: React.PropTypes.func.isRequired,
-    username: React.PropTypes.string,
 };
 
 export default connect(
-    state => {
+    (state, ownProps) => {
+        const current_user = state.user.get('current');
+        const account_user = state.global.get('accounts');
+        const current_account_name = current_user
+            ? current_user.get('username')
+            : state.offchain.get('account');
+
         return {
             viewMode: state.app.get('viewMode'),
             error: state.app.get('error'),
             flash: state.offchain.get('flash'),
-            signup_bonus: state.offchain.get('signup_bonus'),
             new_visitor:
                 !state.user.get('current') &&
                 !state.offchain.get('user') &&
                 !state.offchain.get('account') &&
                 state.offchain.get('new_visit'),
-            username:
-                state.user.getIn(['current', 'username']) ||
-                state.offchain.get('account') ||
-                '',
+
             nightmodeEnabled: state.app.getIn([
                 'user_preferences',
                 'nightmode',
             ]),
+            pathname: ownProps.location.pathname,
+            order: ownProps.params.order,
+            category: ownProps.params.category,
         };
     },
     dispatch => ({
         loginUser: () => dispatch(userActions.usernamePasswordLogin({})),
-        openBlocktrades: username => {
-            const new_window = window.open();
-            new_window.opener = null;
-            new_window.location =
-                'https://blocktrades.us/?input_coin_type=eth&output_coin_type=steem&receive_address=' +
-                username;
-        },
-        openGopax: () => {
-            const new_window = window.open();
-            new_window.opener = null;
-            new_window.location =
-                'https://www.gopax.co.kr/exchange?market=STEEM/KRW';
-        },
     })
 )(App);

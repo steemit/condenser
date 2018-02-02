@@ -26,27 +26,6 @@ import userIllegalContent from 'app/utils/userIllegalContent';
 import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 
-// function loadFbSdk(d, s, id) {
-//     return new Promise(resolve => {
-//         window.fbAsyncInit = function () {
-//             window.FB.init({
-//                 appId: $STM_Config.fb_app,
-//                 xfbml: false,
-//                 version: 'v2.6',
-//                 status: true
-//             });
-//             resolve(window.FB);
-//         };
-//
-//         var js, fjs = d.getElementsByTagName(s)[0];
-//         if (d.getElementById(id)) {return;}
-//         js = d.createElement(s);
-//         js.id = id;
-//         js.src = "//connect.facebook.net/en_US/sdk.js";
-//         fjs.parentNode.insertBefore(js, fjs);
-//     });
-// }
-
 function TimeAuthorCategory({ content, authorRepLog10, showTags }) {
     return (
         <span className="PostFull__time_author_category vcard">
@@ -156,18 +135,12 @@ class PostFull extends React.Component {
     fbShare(e) {
         const href = this.share_params.url;
         e.preventDefault();
-        // loadFbSdk(document, 'script', 'facebook-jssdk').then(fb => {
-        window.FB.ui(
-            {
-                method: 'share',
-                href,
-            },
-            response => {
-                if (response && !response.error_message)
-                    serverApiRecordEvent('FbShare', this.share_params.link);
-            }
+        window.open(
+            `https://www.facebook.com/sharer/sharer.php?u=${href}`,
+            'fbshare',
+            'width=600, height=400, scrollbars=no'
         );
-        // });
+        serverApiRecordEvent('FbShare', this.share_params.link);
     }
 
     twitterShare(e) {

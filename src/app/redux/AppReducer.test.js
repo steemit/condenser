@@ -9,6 +9,8 @@ import reducer, {
     removeNotification,
     updateNotificounters,
     setUserPreferences,
+    receiveFeatureFlags,
+    selectors,
     toggleNightmode,
     toggleBlogmode,
 } from './AppReducer';
@@ -114,6 +116,7 @@ describe('App reducer', () => {
             initial,
             updateNotificounters(mockPayloads.updateNotificounters)
         );
+
         let out = actual.get('notificounters');
         let expected = Map({ follow: 0, total: 1 });
         expect(out).toEqual(expected);
@@ -151,5 +154,32 @@ describe('App reducer', () => {
         let actual = reducer(initial, toggleBlogmode());
         const after = actual.getIn(['user_preferences', 'blogmode']);
         expect(after).toEqual(!before);
+    });
+    test('should merge in received feature flags', () => {
+        // Arrange
+        const initial = reducer();
+
+        // Act
+        const withFlags = reducer(
+            initial,
+            receiveFeatureFlags({
+                flying: true,
+            })
+        );
+        const withMoreFlags = reducer(
+            withFlags,
+            receiveFeatureFlags({
+                swimming: false,
+            })
+        );
+
+        // Assert
+        expect(selectors.getFeatureFlag(withMoreFlags, 'swimming')).toEqual(
+            false
+        );
+        expect(selectors.getFeatureFlag(withMoreFlags, 'flying')).toEqual(true);
+        expect(selectors.getFeatureFlag(withMoreFlags, 'dancing')).toEqual(
+            false
+        );
     });
 });

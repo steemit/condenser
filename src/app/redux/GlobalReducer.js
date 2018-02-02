@@ -3,13 +3,13 @@ import { emptyContent } from 'app/redux/EmptyState';
 import { contentStats } from 'app/utils/StateFunctions';
 import constants from './constants';
 
-const emptyContentMap = Map(emptyContent);
+export const emptyContentMap = Map(emptyContent);
 
-const defaultState = Map({ status: {} });
+export const defaultState = Map({ status: {} });
 
 // Action constants
-const RECEIVE_STATE = 'global/RECEIVE_STATE';
 const SET_COLLAPSED = 'global/SET_COLLAPSED';
+const RECEIVE_STATE = 'global/RECEIVE_STATE';
 const RECEIVE_ACCOUNT = 'global/RECEIVE_ACCOUNT';
 const RECEIVE_COMMENT = 'global/RECEIVE_COMMENT';
 const RECEIVE_CONTENT = 'global/RECEIVE_CONTENT';
@@ -36,15 +36,15 @@ const HIDE_DIALOG = 'global/HIDE_DIALOG';
 // Saga-related:
 export const GET_STATE = 'global/GET_STATE';
 
-export default function reducer(state = defaultState, action) {
+export default function reducer(state = defaultState, action = {}) {
     const payload = action.payload;
 
     switch (action.type) {
         case SET_COLLAPSED: {
             return state.withMutations(map => {
-                map.updateIn(['content', payload.post], value => {
-                    value.merge(Map({ collapsed: payload.collapsed }));
-                });
+                map.updateIn(['content', payload.post], value =>
+                    value.merge(Map({ collapsed: payload.collapsed }))
+                );
             });
         }
 
@@ -281,7 +281,6 @@ export default function reducer(state = defaultState, action) {
             );
             return new_state;
         }
-
         case RECEIVE_RECENT_POSTS: {
             const { data } = payload;
             let new_state = state.updateIn(
@@ -306,6 +305,7 @@ export default function reducer(state = defaultState, action) {
                                 'stats',
                                 fromJS(contentStats(value))
                             );
+
                             map.set(key, value);
                         }
                     });
@@ -462,6 +462,7 @@ export const receiveMeta = payload => ({
     payload,
 });
 
+// TODO: Find a better name for this
 export const set = payload => ({
     type: SET,
     payload,
@@ -484,6 +485,11 @@ export const setMetaData = payload => ({
 
 export const clearMeta = payload => ({
     type: CLEAR_META,
+    payload,
+});
+
+export const clearMetaElement = payload => ({
+    type: CLEAR_META_ELEMENT,
     payload,
 });
 

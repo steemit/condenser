@@ -266,6 +266,74 @@ export default function useGeneralApi(app) {
         recordWebEvent(this, 'api/accounts', account ? account.name : 'n/a');
     });
 
+    /**
+     * Provides an endpoint to create user, account, and identity records.
+     * Used by faucet.
+     *
+     * HTTP params:
+     *   name
+     *   email
+     *   owner_key
+     *   secret
+     */
+    router.post('/create_user', koaBody, function*() {
+        if (rateLimitReq(this, this.req)) return;
+
+        const { name, email, owner_key, secret } =
+            typeof this.request.body === 'string'
+                ? JSON.parse(this.request.body)
+                : this.request.body;
+
+        logRequest('create_user', this, { name, email, owner_key });
+
+        try {
+            if (secret !== process.env.CREATE_USER_SECRET)
+                throw new Error('invalid secret');
+            if (!emailRegex.test(email.toLowerCase()))
+                throw new Error('not valid email: ' + email);
+            const existingUser = yield findUser({
+                email: esc(email),
+                name: esc(name),
+            });
+            if (existingUser) {
+                this.body = JSON.stringify({
+                    success: false,
+                    error: 'user with this email or name already exists',
+                });
+                this.status = 400;
+            } else {
+                const user = yield models.User.create({
+                    name: esc(name),
+                    email: esc(email),
+                });
+                const account = yield models.Account.create({
+                    user_id: user.id,
+                    name: esc(name),
+                    owner_key: esc(owner_key),
+                });
+                const identity = yield models.Identity.create({
+                    user_id: user.id,
+                    name: esc(name),
+                    provider: 'email',
+                    verified: true,
+                    email: user.email,
+                    owner_key: esc(owner_key),
+                });
+                this.body = JSON.stringify({
+                    success: true,
+                    user,
+                    account,
+                    identity,
+                });
+            }
+        } catch (error) {
+            console.error('Error in /create_user api call', error);
+            this.body = JSON.stringify({ error: error.message });
+            this.status = 500;
+        }
+        recordWebEvent(this, 'api/create_user', { name, email });
+    });
+
     router.post('/update_email', koaBody, function*() {
         if (rateLimitReq(this, this.req)) return;
         const params = this.request.body;

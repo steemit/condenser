@@ -823,7 +823,7 @@ A transfer of tokens between accounts typically takes 3 seconds. This is far fas
 
 Bandwidth represents a share in the resources of the Steem blockchain's network and it is what enables users to perform actions like posting, voting, commenting and making token transfers. Every action a user takes on Steemit, with the exception of viewing content, consumes part of his/her account's bandwidth allocation. All accounts are allocated bandwidth according to how much Steem Power the account holds. The more the Steem Power, the more bandwidth is allocated.
 
-This bandwidth rate-limiting is employed to safeguard the blockchain from spam attacks.
+Since transacting on the Steem blockchain has zero fees, bandwidth rate-limiting is employed to safeguard the blockchain from spam attacks.
 
 To see how much bandwidth your account has at any time, visit [https://steemd.com/](https://steemd.com)@your_username and look for the section shown in the screenshot below.
 
@@ -840,7 +840,7 @@ If your account runs out of bandwidth, you will not be able to perform actions o
 - Increase your Steem Power **(best option)**
 - Wait until your bandwidth recharges
 
-*To increase your Steem Power, you can buy more STEEM and power up, receive STEEM or Steem Power from someone else or have someone delegate some Steem Power to your account.*
+*To increase your Steem Power, you can buy more Steem Power through a third-party exchange called [BlockTrades](https://blocktrades.us/?input_coin_type=eth&output_coin_type=steem_power&receive_address=), receive Steem Power from someone else or have someone delegate Steem Power to your account.*
 
 <a href="#Table_of_Contents_Economics">^</a>
 # Voting and Curating

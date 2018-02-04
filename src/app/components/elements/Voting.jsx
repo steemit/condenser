@@ -5,6 +5,10 @@ import tt from 'counterpart';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import * as transactionActions from 'app/redux/TransactionReducer';
 import Icon from 'app/components/elements/Icon';
+import {
+    DEBT_TOKEN_SHORT,
+    INVEST_TOKEN_SHORT,
+} from 'app/client_config';
 import FormattedAsset from 'app/components/elements/FormattedAsset';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import {
@@ -54,6 +58,7 @@ class Voting extends React.Component {
         post_obj: React.PropTypes.object,
         net_vesting_shares: React.PropTypes.number,
         voting: React.PropTypes.bool,
+        price_per_steem: React.PropTypes.number,
     };
 
     static defaultProps = {
@@ -172,6 +177,7 @@ class Voting extends React.Component {
             net_vesting_shares,
             is_comment,
             post_obj,
+            price_per_steem
         } = this.props;
         const { username } = this.props;
         const { votingUp, votingDown, showWeight, weight, myVote } = this.state;
@@ -270,10 +276,15 @@ class Voting extends React.Component {
         const pending_payout = parsePayoutAmount(
             post_obj.get('pending_payout_value')
         );
+        const percent_steem_dollars = post_obj.get('percent_steem_dollars') / 20000;
+        const pending_payout_sbd = pending_payout * percent_steem_dollars;
+        const pending_payout_sp = (pending_payout - pending_payout_sbd) / price_per_steem;
         const promoted = parsePayoutAmount(post_obj.get('promoted'));
         const total_author_payout = parsePayoutAmount(
             post_obj.get('total_payout_value')
         );
+        const author_payout_sbd = total_author_payout * percent_steem_dollars;
+        const author_payout_sp = (total_author_payout - author_payout_sbd) / price_per_steem;
         const total_curator_payout = parsePayoutAmount(
             post_obj.get('curator_payout_value')
         );
@@ -306,8 +317,13 @@ class Voting extends React.Component {
                     value: formatDecimal(pending_payout).join(''),
                 }),
             });
-        }
-        if (cashout_active) {
+            if (max_payout > 0) {
+              payoutItems.push({
+                  value : '(' + formatDecimal(pending_payout_sbd).join('') + ' ' +
+                      DEBT_TOKEN_SHORT + ', ' + formatDecimal(pending_payout_sp).join('') + ' ' +
+                    INVEST_TOKEN_SHORT + ')'
+              });
+            }
             payoutItems.push({ value: <TimeAgoWrapper date={cashout_time} /> });
         }
 
@@ -339,6 +355,11 @@ class Voting extends React.Component {
                 value: tt('voting_jsx.past_payouts_author', {
                     value: formatDecimal(total_author_payout).join(''),
                 }),
+            });
+            payoutItems.push({
+                value : '(' + formatDecimal(author_payout_sbd).join('') + ' ' +
+                    DEBT_TOKEN_SHORT + ', ' + formatDecimal(author_payout_sp).join('') + ' ' +
+                    INVEST_TOKEN_SHORT + ')'
             });
             payoutItems.push({
                 value: tt('voting_jsx.past_payouts_curators', {
@@ -501,6 +522,13 @@ export default connect(
         const voting = state.global.get(
             `transaction_vote_active_${author}_${permlink}`
         );
+        let price_per_steem = undefined;
+        const feed_price = state.global.get('feed_price');
+        if (feed_price && feed_price.has('base') && feed_price.has('quote')) {
+            const { base, quote } = feed_price.toJS();
+            if (/ SBD$/.test(base) && / STEEM$/.test(quote))
+                price_per_steem = parseFloat(base.split(' ')[0]);
+        }
 
         return {
             post: ownProps.post,
@@ -515,6 +543,7 @@ export default connect(
             post_obj: post,
             loggedin: username != null,
             voting,
+            price_per_steem,
         };
     },
 

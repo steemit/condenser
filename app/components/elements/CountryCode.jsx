@@ -4,6 +4,7 @@ export default props => {
     return <select {...props}>
         {/* Top countries (duplicated from below) */}
         <option value="7">Russia +(7)</option>
+        <option value="77">Kazakhstan +(77)</option>
         <option value="380">Ukraine +(380)</option>
         <option value="40">Romania +(40)</option>
         <option value="381">Serbia +(381)</option>
@@ -125,7 +126,7 @@ export default props => {
         <option value="1">Jamaica +(1)</option>
         <option value="81">Japan +(81)</option>
         <option value="962">Jordan +(962)</option>
-        <option value="77">Kazakhstan +(7)</option>
+        <option value="77">Kazakhstan +(77)</option>
         <option value="254">Kenya +(254)</option>
         <option value="686">Kiribati +(686)</option>
         <option value="965">Kuwait +(965)</option>

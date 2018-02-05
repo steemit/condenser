@@ -66,7 +66,7 @@
   },
   "createaccount_jsx": {
     "get_code": "Получить код",
-    "will_be_send_to_phone_number": "Сообщение будет отправлено на номер: +",
+    "will_be_send_to_phone_number": "Номер: +",
     "our_records_indicate_you_already_have_account": "Наши записи показывают, что у Вас уже есть %(APP_NAME)s аккаунт",
     "in_order_to_prevent_abuse_APP_NAME_can_only_register_one_account_per_user": "Чтобы предотвратить злоупотребление %(APP_NAME)s может зарегистрировать только один аккаунт для каждого подтвержденного пользователя.",
     "next_3_blocks": {

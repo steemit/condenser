@@ -65,7 +65,7 @@
   },
   "createaccount_jsx":{
     "get_code": "Get confirmation code",
-    "will_be_send_to_phone_number": "Message will be send to: +",
+    "will_be_send_to_phone_number": "Number: +",
     "our_records_indicate_you_already_have_account":"Naši podaci pokazuju da već imate %(APP_NAME)s nalog",
     "in_order_to_prevent_abuse_APP_NAME_can_only_register_one_account_per_user":"Чтобы предотвратить злоупотребление %(APP_NAME)s может зарегистрировать только один аккаунт для каждого подтвержденного пользователя.",
     "next_3_blocks":{

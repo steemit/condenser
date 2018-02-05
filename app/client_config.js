@@ -107,4 +107,9 @@ export const DEFAULT_THEME = THEMES[0]
 
 export const USER_GENDER = ['undefined', 'male', 'female']
 
-export const PHONE_SERVICE = '+46 (769) 43-88-07'
+export const SMS_SERVICES = {
+  default: '+46769438807',
+  '7':     '+79169306359',
+  '77':    '+77770076977',
+  '380':   '+380931777772'
+}

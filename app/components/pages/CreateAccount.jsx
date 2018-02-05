@@ -10,7 +10,7 @@ import runTests from 'app/utils/BrowserTests';
 import g from 'app/redux/GlobalReducer';
 import GeneratedPasswordInput from 'app/components/elements/GeneratedPasswordInput';
 import CountryCode from "app/components/elements/CountryCode";
-import { APP_DOMAIN, SUPPORT_EMAIL, PHONE_SERVICE } from 'app/client_config';
+import { APP_DOMAIN, SUPPORT_EMAIL, SMS_SERVICES } from 'app/client_config';
 import tt from 'counterpart';
 import {api} from 'golos-js';
 import SignupProgressBar from 'app/components/elements/SignupProgressBar';
@@ -197,8 +197,9 @@ class CreateAccount extends React.Component {
           break;
 
         case "waiting":
+          const smsService = SMS_SERVICES[this.state.country] ? SMS_SERVICES[this.state.country] : SMS_SERVICES['default'];
           fetch_state.checking = true;
-          fetch_state.message = tt('mobilevalidation_js.waiting_from_you', {code: o.code, phone: PHONE_SERVICE});
+          fetch_state.message = tt('mobilevalidation_js.waiting_from_you', {code: o.code, phone: smsService});
           this.timer();
           break;
 

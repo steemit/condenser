@@ -24,7 +24,6 @@ describe('routeRegex', () => {
 describe('resolveRoute', () => {
     const test_cases = [
         ['/', { page: 'PostsIndex', params: ['all', 'trending'] }],
-        ['/s/about', { page: 'About' }],
         ['/s/welcome', { page: 'Welcome' }],
         ['/s/faq', { page: 'Faq' }],
         ['/c/login', { page: 'Login' }],

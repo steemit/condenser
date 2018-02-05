@@ -12,11 +12,7 @@ export default {
     component: App,
     getChildRoutes(nextState, cb) {
         const route = resolveRoute(nextState.location.pathname);
-        if (route.page === 'About') {
-            //require.ensure([], (require) => {
-            cb(null, [require('app/components/pages/About')]);
-            //});
-        } else if (route.page === 'Welcome') {
+        if (route.page === 'Welcome') {
             //require.ensure([], (require) => {
             cb(null, [require('app/components/pages/Welcome')]);
             //});

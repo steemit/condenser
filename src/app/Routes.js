@@ -22,7 +22,6 @@ export const pathTo = {
             }`;
     },
     indexPage: (category, order) => category ? `/t/${category}/${order || 'trending'}` : '/',
-    about: () => '/s/about',
     welcome: () => '/s/welcome',
     faq: () => '/s/faq',
     privacy: () => '/s/privacy',
@@ -62,9 +61,6 @@ export const routeRegex = {
 export function resolveRoute(path) {
     if (path === pathTo.indexPage()) {
         return { page: 'PostsIndex', params: ['all', 'trending'] };
-    }
-    if (path === pathTo.about()) {
-        return { page: 'About' };
     }
     if (path === pathTo.welcome()) {
         return { page: 'Welcome' };

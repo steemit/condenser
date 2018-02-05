@@ -1134,6 +1134,6 @@ class Tos extends React.Component {
 }
 
 module.exports = {
-    path: pathTo.about(),
+    path: pathTo.tos(),
     component: Tos,
 };

@@ -1,3 +1,5 @@
+import constants from 'app/redux/constants';
+
 export const routeRegex = {
     PostsIndex: /^\/(@[\w\.\d-]+)\/feed\/?$/,
     UserProfile1: /^\/(@[\w\.\d-]+)\/?$/,
@@ -14,7 +16,7 @@ export const routeRegex = {
 
 export default function resolveRoute(path) {
     if (path === '/') {
-        return { page: 'PostsIndex', params: ['trending'] };
+        return { page: 'PostsIndex', params: [constants.DEFAULT_SORT_ORDER] };
     }
     if (path === '/about.html') {
         return { page: 'About' };

@@ -11,12 +11,12 @@ those changes by updating the “Last Updated” date above or posting notice on
 Steemit. Your continued use of Steemit will confirm your acceptance of the
 changes.
 
-1. Privacy Policy
+## 1. Privacy Policy
 
-Please refer to our Privacy Policy for information about how we collect, use,
-and disclose information about you.
+Please refer to our [Privacy Policy](/privacy.html) for
+information about how we collect, use, and disclose information about you.
 
-2. Eligibility
+## 2. Eligibility
 
 Steemit is not targeted toward, nor intended for use by, anyone under the age
 of 13. You must be at least 13 years of age to access or use Steemit. If you
@@ -24,7 +24,7 @@ are between 13 and 18 years of age (or the age of legal majority where you
 reside), you may only access or use Steemit under the supervision of a parent
 or legal guardian who agrees to be bound by these Terms.
 
-3. Copyright and Limited License
+## 3. Copyright and Limited License
 
 We may retain data, text, photographs, images, video, audio, graphics,
 articles, comments, software, code, scripts and other content supplied by us,
@@ -43,7 +43,7 @@ any Content you post; that you will only submit Content that you have the right
 to post; and that you will fully comply with any third party licenses relating
 to Content you post.
 
-4. Adult-Oriented Content
+## 4. Adult-Oriented Content
 
 Steemit is intended for a general audience and, as a result, some Steemit
 Content may discuss or depict adult-oriented topics. We realize that this
@@ -55,7 +55,7 @@ Marking Steemit Content as NSFW does not prevent you from being able to access
 this content but, instead, helps you make informed decisions about the type of
 content you view on Steemit.
 
-5. Trademarks
+## 5. Trademarks
 
 "Steem", "Steemit", "SMTs", the Steemit logo and any other product or service
 names, logos or slogans that may appear on Steemit are trademarks of the
@@ -74,7 +74,7 @@ trademark holder. Reference to any products, services, processes or other
 information by name, trademark, manufacturer, supplier or otherwise does not
 constitute or imply endorsement, sponsorship, or recommendation by the Company.
 
-6. Assumption of Risk, Limitations on Liability.
+## 6. Assumption of Risk, Limitations on Liability.
 
 6.1.   You accept and acknowledge that there are risks associated with
 utilizing an Internet-based STEEM account service including, but not limited
@@ -121,7 +121,7 @@ injury caused by negligence, fraudulent misrepresentation, or any other
 liability which may not otherwise be limited or excluded under United States
 law.
 
-7. Agreement to Hold Steemit Harmless
+## 7. Agreement to Hold Steemit Harmless
 
 7.1. You agree to hold harmless Steemit (and each of our officers, directors,
 members, employees, agents and affiliates) from any claim, demand, action,
@@ -140,7 +140,7 @@ fees, arising out or relating to:
 discretion, to control any action or proceeding (at our expense) and determine
 whether we will pursue a settlement of any action or proceeding.
 
-8. No Liability For Third-Party Services And Content
+## 8. No Liability For Third-Party Services And Content
 
 8.1. In using our Services, you may view content or utilize services provided
 by third parties, including links to web pages and services of such parties
@@ -154,7 +154,7 @@ loss or damage of any sort incurred as a result of any such dealings and you
 understand that your use of Third-Party Content, and your interactions with
 third parties, is at your own risk.
 
-9. Account Registration
+## 9. Account Registration
 
 9.1. You need not use a Steemit Account. If you wish to use an Account, you
 must create a Steem Blockchain account to access the Services (“Account”). When
@@ -171,7 +171,7 @@ discover or otherwise suspect any security breaches related to your Account.
 activities that occur under your Account and accept all risks of any authorized
 or unauthorized access to your Account, to the maximum extent permitted by law.
 
-10. The Steemit Services
+## 10. The Steemit Services
 
 10.1. As described in more detail below, the Services, among other things,
 provide in software that facilitates the submission of STEEM transaction data
@@ -247,20 +247,20 @@ for determining whether taxes apply to your Steem transactions or for
 collecting, reporting, withholding or remitting any taxes arising from any
 Steem transactions.
 
-11. Fees for Using the Steemit Services
+## 11. Fees for Using the Steemit Services
 
 11.1. Company Fees Creating an Account. The Company does not currently charge
 fees for any Services, however we reserve the right to do so in future, and in
 such case any applicable fees will be displayed prior to you using any Service
 to which a fee applies.
 
-12. No Right To Cancel And/Or Reverse Steem Transactions
+## 12. No Right To Cancel And/Or Reverse Steem Transactions
 
 12.1. If you use a Service to which Steem, Steem Dollars or Steem Power is
 transacted, you will not be able to change your mind once you have confirmed
 that you wish to proceed with the Service or transaction.
 
-13. Discontinuation of Services.
+## 13. Discontinuation of Services.
 
 13.1. We may, in our sole discretion and without cost to you, with or without
 prior notice and at any time, modify or discontinue, temporarily or
@@ -273,7 +273,7 @@ Services, you will be may not be able to access Steem, Steem Dollars and Steem
 Power associated with any Account Name maintained in your Account in the event
 that we discontinue or deprecate the Services.
 
-14. Suspension or Termination of Service.
+## 14. Suspension or Termination of Service.
 
 14.1. We may suspend or terminate your access to the Services in our sole
 discretion, immediately and without prior notice, and delete or deactivate your
@@ -282,7 +282,7 @@ including, for instance, in the event that you breach any term of these Terms.
 In the event of termination, your access to funds will depend on your access to
 your backup of your Account data including your Account Name and Private Keys.
 
-15. User Conduct
+## 15. User Conduct
 
 15.1. When accessing or using the Services, you agree that you will not commit
 any unlawful act, and that you are solely responsible for your conduct while
@@ -310,7 +310,7 @@ other harmful material;
 15.1.6. Encourage or induce any third party to engage in any of the activities
 prohibited under this Section.
 
-16. Third-Party Content and Sites
+## 16. Third-Party Content and Sites
 
 The Company may include links and other content owned or operated by third
 parties, including advertisements and social “widgets” (we call these
@@ -321,7 +321,7 @@ the third party providing the content. When you leave Steemit, you should
 understand that these Terms no longer govern and that the terms and policies of
 those third-party sites or services will then apply.
 
-17. Feedback
+## 17. Feedback
 
 You may submit questions, comments, feedback, suggestions, and other
 information regarding Steemit (we call this “Feedback”). You acknowledge and
@@ -333,7 +333,7 @@ purpose, without acknowledgment or compensation to you. You agree to execute
 any documentation required by the Company to confirm such assignment to the
 Company.
 
-18. Copyright Complaints, the DMCA, and Takedowns
+## 18. Copyright Complaints, the DMCA, and Takedowns
 
 18.1 We will respond to legitimate requests under the Digital Millennium
 Copyright Act ("DMCA"), and we retain the right to remove access to user
@@ -414,7 +414,7 @@ repeat infringers. We apply this policy at our discretion and in appropriate
 circumstances, such as when a user has repeatedly been charged with infringing
 the copyrights or other intellectual property rights of others.
 
-19. Indemnity
+## 19. Indemnity
 
 All the things you do and all the information you submit or post to Steemit
 remain your responsibility. Indemnity is basically a way of saying that you
@@ -428,7 +428,7 @@ liabilities, including attorneys’ fees and costs, arising out of or related to
 your access to or use of Steemit, your violation of this user agreement, and/or
 your violation of the rights of any third party or person.
 
-20. Disclaimers
+## 20. Disclaimers
 
 To the fullest extent permitted by applicable law, Steemit and the Steemit
 content are provided on an “as is” and “as available” basis, without warranties
@@ -444,7 +444,7 @@ your own risk. Some jurisdictions do not allow the disclaimer of implied terms
 in contracts with consumers, so some or all of the disclaimers in this section
 may not apply to you.
 
-21. Limitation of liability
+## 21. Limitation of liability
 
 To the fullest extent permitted by applicable law, in no event shall the
 company or the any related party to the company, that includes but is not
@@ -466,14 +466,14 @@ Some jurisdictions do not allow the exclusion or limitation of certain damages,
 so some or all of the exclusions and limitations in this section may not apply
 to you.
 
-22. Modifications to Steemit
+## 22. Modifications to Steemit
 
 The Company reserves the right to modify or discontinue, temporarily or
 permanently, Steemit, or any features or portions of Steemit, without prior
 notice. You agree that the Company will not be liable for any modification,
 suspension or discontinuance of Steemit, or any part of Steemit.
 
-23. Arbitration
+## 23. Arbitration
 
 Please read the following section carefully because it requires you to
 arbitrate certain disputes with Steemit and limits the manner in which you can
@@ -564,7 +564,7 @@ Further, the waivers set forth in Section 24.2 are severable from the other
 provisions of these Terms and will remain valid and enforceable, except as
 prohibited by applicable law.
 
-24. Applicable Law and Venue
+## 24. Applicable Law and Venue
 
 These Terms and your access to and use of Steemit and the Steemit Content
 will be governed by, and construed in accordance with, the laws of New
@@ -577,20 +577,20 @@ hereby irrevocably and unconditionally consent and submit to the exclusive
 jurisdiction of such courts over any suit, action or proceeding arising out
 of these Terms.
 
-25. Termination
+## 25. Termination
 
 The Company reserves the right, without notice and in our sole discretion,
 to terminate your license to access and use Steemit and to block or prevent
 your future access to, and use of, Steemit.
 
-26. Severability
+## 26. Severability
 
 If any term, clause or provision of these Terms is deemed to be unlawful,
 void or for any reason unenforceable, then that term, clause or provision
 shall be deemed severable from these Terms and shall not affect the
 validity and enforceability of any remaining provisions.
 
-27. Changes
+## 27. Changes
 
 This Agreement is the entire agreement between you and us concerning
 Steemit. It supersedes all prior or contemporaneous agreements between you
@@ -600,7 +600,7 @@ advance notice and keep this edition available as an archive on the Steemit
 website. By continuing to use Steemit after a change to this agreement, you
 agree to those changes.
 
-28. Contact Information
+## 28. Contact Information
 
 DMCA requests to Steemit, Inc should be directed to copyright@steemit.com.
 

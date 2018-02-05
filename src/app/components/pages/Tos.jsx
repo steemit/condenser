@@ -6,7 +6,7 @@ class Tos extends React.Component {
         return (
             <div className="row">
                 <div className="column large-8 medium-10 small-12">
-                    <HelpContent path="tos" />
+                    <HelpContent path="tos" title="Terms of Service" />
                 </div>
             </div>
         );
@@ -14,7 +14,6 @@ class Tos extends React.Component {
 }
 
 module.exports = {
+    component: Tos,
     path: 'tos.html',
-    component: tos,
 };
-

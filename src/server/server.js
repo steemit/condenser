@@ -12,7 +12,6 @@ import prod_logger from './prod_logger';
 import favicon from 'koa-favicon';
 import staticCache from 'koa-static-cache';
 import useRedirects from './redirects';
-import useOauthLogin from './api/oauth';
 import useGeneralApi from './api/general';
 import useAccountRecoveryApi from './api/account_recovery';
 import useEnterAndConfirmEmailPages from './sign_up_pages/enter_confirm_email';
@@ -23,7 +22,7 @@ import isBot from 'koa-isbot';
 import session from '@steem/crypto-session';
 import csrf from 'koa-csrf';
 import flash from 'koa-flash';
-import Grant from 'grant-koa';
+import minimist from 'minimist';
 import config from 'config';
 import secureRandom from 'secure-random';
 import { pathTo } from 'app/Routes';
@@ -32,7 +31,6 @@ import koaLocale from 'koa-locale';
 
 if (cluster.isMaster) console.log('application server starting, please wait.');
 
-const grant = new Grant(config.grant);
 // import uploadImage from 'server/upload-image' //medium-editor
 
 const app = new Koa();
@@ -57,7 +55,6 @@ session(app, {
 });
 csrf(app);
 
-app.use(mount(grant));
 app.use(flash({ key: 'flash' }));
 koaLocale(app);
 
@@ -189,7 +186,6 @@ useUserJson(app);
 usePostJson(app);
 
 useAccountRecoveryApi(app);
-useOauthLogin(app);
 useGeneralApi(app);
 
 // helmet wants some things as bools and some as lists, makes config difficult.

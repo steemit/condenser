@@ -30,13 +30,21 @@ export default function useRegistrationApi(app) {
   const koaBody = koa_body();
 
   router.post("/verify_code", koaBody, function*() {
-    if (! this.request.body) return;
+    if (! this.request.body) {
+      this.status = 400;
+      this.body = "Bad Request";
+      return;
+    }
 
     const accountSid = this.request.body.AccountSid
       ? this.request.body.AccountSid
       : ''
     ;
-    if (accountSid.localeCompare(config.get('twilio.account_sid')) != 0) return;
+    if (accountSid.localeCompare(config.get('twilio.account_sid')) != 0) {
+      this.status = 401;
+      this.body = "Unauthorized";
+      return;
+    }
 
     let phone;
     if (this.request.body.From) {
@@ -45,7 +53,11 @@ export default function useRegistrationApi(app) {
     else if (this.request.body.phone) {
       phone = this.request.body.phone;
     }
-    if (!phone || digits(phone).length === 0) return;
+    if (!phone || digits(phone).length === 0) {
+      this.status = 401;
+      this.body = "Bad Request Data from";
+      return;
+    }
 
     let confirmation_code;
     if (this.request.body.Body) {
@@ -54,7 +66,11 @@ export default function useRegistrationApi(app) {
     else if (this.request.body.mes) {
       confirmation_code = this.request.body.mes.substr(0,4);
     }
-    if (!confirmation_code || digits(confirmation_code).length !== 4) return;
+    if (!confirmation_code || digits(confirmation_code).length !== 4) {
+      this.status = 400;
+      this.body = "Bad Request Data body";
+      return;
+    }
 
     console.log(
       "-- /api/v1/confirm_provider -->",

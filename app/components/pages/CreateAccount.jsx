@@ -197,9 +197,8 @@ class CreateAccount extends React.Component {
           break;
 
         case "waiting":
-          const smsService = SMS_SERVICES[this.state.country] ? SMS_SERVICES[this.state.country] : SMS_SERVICES['default'];
           fetch_state.checking = true;
-          fetch_state.message = tt('mobilevalidation_js.waiting_from_you', {code: o.code, phone: smsService});
+          fetch_state.message = tt('mobilevalidation_js.waiting_from_you', {code: o.code, phone: SMS_SERVICES[this.state.country] || SMS_SERVICES['default']});
           this.timer();
           break;
 

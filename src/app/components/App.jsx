@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import AppPropTypes from 'app/utils/AppPropTypes';
 import Header from 'app/components/modules/Header';
-import LpFooter from 'app/components/modules/lp/LpFooter';
 import * as userActions from 'app/redux/UserReducer';
 import TopRightMenu from 'app/components/modules/TopRightMenu';
 import { browserHistory } from 'react-router';
@@ -12,6 +11,7 @@ import CloseButton from 'react-foundation-components/lib/global/close-button';
 import Dialogs from 'app/components/modules/Dialogs';
 import Modals from 'app/components/modules/Modals';
 import Icon from 'app/components/elements/Icon';
+import WelcomePanel from 'app/components/elements/WelcomePanel';
 import MiniHeader from 'app/components/modules/MiniHeader';
 import tt from 'counterpart';
 import PageViewsCounter from 'app/components/elements/PageViewsCounter';
@@ -46,6 +46,7 @@ class App extends React.Component {
         this.toggleOffCanvasMenu = this.toggleOffCanvasMenu.bind(this);
         this.signUp = this.signUp.bind(this);
         this.learnMore = this.learnMore.bind(this);
+        this.setShowBannerFalse = this.setShowBannerFalse.bind(this);
         this.listenerActive = null;
         this.onEntropyEvent = this.onEntropyEvent.bind(this);
         // this.shouldComponentUpdate = shouldComponentUpdate(this, 'App')
@@ -117,8 +118,6 @@ class App extends React.Component {
         this.refs.side_panel.show();
     }
 
-    handleClose = () => this.setState({ open: null });
-
     navigate = e => {
         const a =
             e.target.nodeName.toLowerCase() === 'a'
@@ -129,6 +128,10 @@ class App extends React.Component {
         e.preventDefault();
         browserHistory.push(a.pathname + a.search + a.hash);
     };
+
+    setShowBannerFalse() {
+        this.setState({ showBanner: false });
+    }
 
     onEntropyEvent(e) {
         if (e.type === 'mousemove')
@@ -157,7 +160,6 @@ class App extends React.Component {
             nightmodeEnabled,
             viewMode,
         } = this.props;
-        const lp = false; //location.pathname === '/';
         const miniHeader =
             location.pathname === '/create_account' ||
             location.pathname === '/pick_account';
@@ -249,39 +251,11 @@ class App extends React.Component {
             );
         }
 
-        let welcome_screen = null;
-        if (ip && new_visitor && this.state.showBanner) {
-            welcome_screen = (
-                <div className="welcomeWrapper">
-                    <div className="welcomeBanner">
-                        <CloseButton
-                            onClick={() => this.setState({ showBanner: false })}
-                        />
-                        <div className="text-center">
-                            <h2>{tt('navigation.intro_tagline')}</h2>
-                            <h4>{tt('navigation.intro_paragraph')}</h4>
-                            <br />
-                            <a
-                                className="button button--primary"
-                                href="/pick_account"
-                            >
-                                {' '}
-                                <b>{tt('navigation.sign_up')}</b>{' '}
-                            </a>
-                            {/* JSX Comment  &nbsp; &nbsp; &nbsp;
-                            <a className="button hollow uppercase" href="https://steem.io" target="_blank" rel="noopener noreferrer" onClick={this.learnMore}> <b>{tt('navigation.learn_more')}</b> </a> */}
-                        </div>
-                    </div>
-                </div>
-            );
-        }
-
         const themeClass = nightmodeEnabled ? ' theme-dark' : ' theme-light';
 
         return (
             <div
                 className={classNames('App', themeClass, {
-                    LP: lp,
                     'index-page': ip,
                     'mini-header': miniHeader,
                     'whistle-view': whistleView,
@@ -438,10 +412,16 @@ class App extends React.Component {
                     />
                 )}
                 <div className="App__content">
-                    {welcome_screen}
+                    {process.env.BROWSER &&
+                    ip &&
+                    new_visitor &&
+                    this.state.showBanner ? (
+                        <WelcomePanel
+                            setShowBannerFalse={this.setShowBannerFalse}
+                        />
+                    ) : null}
                     {callout}
                     {children}
-                    {lp ? <LpFooter /> : null}
                 </div>
                 <Dialogs />
                 <Modals />
@@ -489,7 +469,7 @@ export default connect(
             const new_window = window.open();
             new_window.opener = null;
             new_window.location =
-                'https://blocktrades.us/?input_coin_type=btc&output_coin_type=steem&receive_address=' +
+                'https://blocktrades.us/?input_coin_type=eth&output_coin_type=steem&receive_address=' +
                 username;
         },
     })

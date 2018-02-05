@@ -9,6 +9,7 @@ ausbitban
 bbittrex
 bcex
 bellyrub
+bettrex
 biitrex
 biittrex
 bit-z
@@ -97,6 +98,7 @@ blocktrades.us
 blocktradess
 blocktradesss
 blocktradez
+blocktrading
 blocktrads
 blocktradse
 blocktraeds
@@ -155,6 +157,7 @@ coinsmarkets.com
 coinspot
 coinzest
 coolcoin.com
+d-tube
 etherdelta
 etherdelta.com
 exrates
@@ -206,6 +209,7 @@ minnowboostr
 minnowboostre
 minnowbootser
 minnowboster
+minnowbuster
 minnowhelp
 minnowpooster
 minnowsuport
@@ -215,6 +219,8 @@ minobooster
 minowbooster
 minowboster
 minowhelper
+minnows
+minowsupport
 neraex
 neraex.com
 nextgencryptos
@@ -222,6 +228,7 @@ okex.com
 olonie
 oloniex
 openledgerdex
+p-funk
 pextokens
 plolniex
 ploniex
@@ -294,6 +301,7 @@ pooloniex
 pooniex
 poooniex
 postpromote
+pse
 qryptos
 qryptos.com
 randomwhale
@@ -304,6 +312,7 @@ rendowhale
 scoin
 shapeshif
 shapeshift
+steampunks
 steemitpay
 steempay
 steempays
@@ -317,6 +326,7 @@ thebiton
 therocktrading
 tidex.com
 topbtc
+ttrex
 upbbit
 upbit
 upbit.com

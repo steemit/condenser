@@ -1,5 +1,6 @@
 import React from 'react';
 import Icon, { icons } from 'app/components/elements/Icon';
+import { pathTo } from 'app/Routes';
 
 const styles = {
     textAlign: 'center',
@@ -26,6 +27,6 @@ class Benchmark extends React.Component {
 }
 
 module.exports = {
-    path: '/benchmark',
+    path: pathTo.benchmark(),
     component: Benchmark,
 };

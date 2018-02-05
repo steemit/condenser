@@ -2,12 +2,13 @@ import App from 'app/components/App';
 import Benchmark from 'app/components/pages/Benchmark';
 import PostsIndex from 'app/components/pages/PostsIndex';
 import { resolveRoute } from './Routes';
+import { pathTo } from 'app/Routes';
 
 // polyfill webpack require.ensure
 if (typeof require.ensure !== 'function') require.ensure = (d, c) => c(require);
 
 export default {
-    path: '/',
+    path: pathTo.indexPage(),
     component: App,
     getChildRoutes(nextState, cb) {
         const route = resolveRoute(nextState.location.pathname);

@@ -1,3 +1,52 @@
+export const pathTo = {
+    userProfile: name => `/${name}`,
+    userFeed: name => `/${name}/feed`,
+    userReplies: name => `/${name}/recent-replies`,
+    userWallet: name => `/${name}/wallet`,
+    userComments: name => `/${name}/comments`,
+    userPassword: name => `/${name}/password`,
+    userSettings: name => `/${name}/settings`,
+    userFollowers: name => `/${name}/followers`,
+    userFollowed: name => `/${name}/followed`,
+    userPermissions: name => `/${name}/permissions`,
+    userCurationRewards: name => `/${name}/curation-rewards`,
+    userAuthorRewards: name => `/${name}/author-rewards`,
+    compose: () => '/c/submit',
+    signup: (params = '') => `/c/pick-account${params}`,
+    login: () => '/c/login',
+    post: (author, permlink) => `/${author}/${permlink}`,
+    postPage: () => '/:username/:slug',
+    comment: (post_author, post_permlink, comment_author, comment_permlink) => {
+        return `/${post_author}/${post_permlink}#${comment_author}/${
+            comment_permlink
+            }`;
+    },
+    indexPage: (category, order) => category ? `/t/${category}/${order || 'trending'}` : '/',
+    about: () => '/s/about',
+    welcome: () => '/s/welcome',
+    faq: () => '/s/faq',
+    privacy: () => '/s/privacy',
+    support: () => '/s/support',
+    tags: () => '/c/tags',
+    tos: () => '/s/tos',
+    changePassword: () => '/c/change-password',
+    createAccount: () => '/c/create-account',
+    signUpApproval: (params = '') => `/c/approval${params}`,
+    recoverAccount: step => `/c/recover-account-step-${step}`,
+    market: () => '/c/market',
+    witnesses: () => '/c/witnesses',
+    enterEmail: (params = '') => `/c/enter-email${params}`,
+    submitEmail: (params = '') => `/c/submit-email${params}`,
+    confirmEmail: () => '/c/confirm-email',
+    confirmEmailGet: () => '/c/confirm-email/:code',
+    enterMobile: (params = '') => `/c/enter-mobile${params}`,
+    submitMobile: (params = '') => `/c/submit-mobile${params}`,
+    confirmMobile: (params = '') => `/c/confirm-mobile${params}`,
+    confirmMobileGet: () => '/c/confirm-mobile/:code',
+    xssTest: () => '/c/xss/test',
+    benchmark: () => '/c/benchmark',
+};
+
 export const routeRegex = {
     UserProfile1: /^\/([\w.\d-]{3,})\/?$/,
     UserProfile2: /^\/([\w.\d-]{3,})\/(blog|posts|comments|recommended|wallet|curation-rewards|author-rewards|permissions|created|recent-replies|feed|password|followed|followers|settings)\/?$/,
@@ -11,64 +60,64 @@ export const routeRegex = {
 };
 
 export function resolveRoute(path) {
-    if (path === '/') {
+    if (path === pathTo.indexPage()) {
         return { page: 'PostsIndex', params: ['all', 'trending'] };
     }
-    if (path === '/s/about') {
+    if (path === pathTo.about()) {
         return { page: 'About' };
     }
-    if (path === '/s/welcome') {
+    if (path === pathTo.welcome()) {
         return { page: 'Welcome' };
     }
-    if (path === '/s/faq') {
+    if (path === pathTo.faq()) {
         return { page: 'Faq' };
     }
-    if (path === '/c/login') {
+    if (path === pathTo.login()) {
         return { page: 'Login' };
     }
-    if (path === '/s/privacy') {
+    if (path === pathTo.privacy()) {
         return { page: 'Privacy' };
     }
-    if (path === '/s/support') {
+    if (path === pathTo.support()) {
         return { page: 'Support' };
     }
-    if (path === '/c/xss/test' && process.env.NODE_ENV === 'development') {
+    if (path === pathTo.xssTest() && process.env.NODE_ENV === 'development') {
         return { page: 'XSSTest' };
     }
-    if (path.match(/^\/c\/tags\/?/)) {
+    if (path === pathTo.tags()) {
         return { page: 'Tags' };
     }
-    if (path === '/s/tos') {
+    if (path === pathTo.tos()) {
         return { page: 'Tos' };
     }
-    if (path === '/c/change-password') {
+    if (path === pathTo.changePassword()) {
         return { page: 'ChangePassword' };
     }
-    if (path === '/c/create-account') {
+    if (path === pathTo.createAccount()) {
         return { page: 'CreateAccount' };
     }
-    if (path === '/c/approval') {
+    if (path === pathTo.signUpApproval()) {
         return { page: 'Approval' };
     }
-    if (path === '/c/pick-account') {
+    if (path === pathTo.signup()) {
         return { page: 'PickAccount' };
     }
-    if (path === '/c/recover-account-step-1') {
+    if (path === pathTo.recoverAccount(1)) {
         return { page: 'RecoverAccountStep1' };
     }
-    if (path === '/c/recover-account-step-2') {
+    if (path === pathTo.recoverAccount(2)) {
         return { page: 'RecoverAccountStep2' };
     }
-    if (path === '/c/market') {
+    if (path === pathTo.market()) {
         return { page: 'Market' };
     }
-    if (path === '/c/witnesses') {
+    if (path === pathTo.witnesses()) {
         return { page: 'Witnesses' };
     }
-    if (path === '/c/submit') {
+    if (path === pathTo.compose()) {
         return { page: 'SubmitPost' };
     }
-    if (path === '/c/benchmark' && process.env.OFFLINE_SSR_TEST) {
+    if (path === pathTo.benchmark() && process.env.OFFLINE_SSR_TEST) {
         return { page: 'Benchmark' };
     }
     let match = path.match(routeRegex.PostsIndex);
@@ -102,55 +151,6 @@ export function resolveRoute(path) {
     }
     return { page: 'NotFound' };
 }
-
-export const pathTo = {
-    userProfile: name => `/${name}`,
-    userFeed: name => `/${name}/feed`,
-    userReplies: name => `/${name}/recent-replies`,
-    userWallet: name => `/${name}/wallet`,
-    userComments: name => `/${name}/comments`,
-    userPassword: name => `/${name}/password`,
-    userSettings: name => `/${name}/settings`,
-    userFollowers: name => `/${name}/followers`,
-    userFollowed: name => `/${name}/followed`,
-    userPermissions: name => `/${name}/permissions`,
-    userCurationRewards: name => `/${name}/curation-rewards`,
-    userAuthorRewards: name => `/${name}/author-rewards`,
-    compose: () => '/c/submit',
-    signup: (params = '') => `/c/pick-account${params}`,
-    login: () => '/c/login',
-    post: (author, permlink) => `/${author}/${permlink}`,
-    postPage: () => '/:username/:slug',
-    comment: (post_author, post_permlink, comment_author, comment_permlink) => {
-        return `/${post_author}/${post_permlink}#${comment_author}/${
-            comment_permlink
-        }`;
-    },
-    indexPage: (category, order) => `/t/${category}/${order || 'trending'}`,
-    about: () => '/s/about',
-    welcome: () => '/s/welcome',
-    faq: () => '/s/faq',
-    privacy: () => '/s/privacy',
-    support: () => '/s/support',
-    tags: () => '/c/tags',
-    tagsIndexPage: () => '/c/tags(/:order)',
-    tos: () => '/s/tos',
-    changePassword: () => '/c/change-password',
-    createAccount: () => '/c/create-account',
-    signUpApproval: (params = '') => `/c/approval${params}`,
-    recoverAccount: step => `/c/recover-account-step-${step}`,
-    market: () => '/c/market',
-    witnesses: () => '/c/witnesses',
-    enterEmail: (params = '') => `/c/enter-email${params}`,
-    submitEmail: (params = '') => `/c/submit-email${params}`,
-    confirmEmail: () => '/c/confirm-email',
-    confirmEmailGet: () => '/c/confirm-email/:code',
-    enterMobile: (params = '') => `/c/enter-mobile${params}`,
-    submitMobile: (params = '') => `/c/submit-mobile${params}`,
-    confirmMobile: (params = '') => `/c/confirm-mobile${params}`,
-    confirmMobileGet: () => '/c/confirm-mobile/:code',
-    xssTest: () => '/c/xss/test',
-};
 
 export function routeToSteemdUrl(route) {
     let url = 'trending';

@@ -174,6 +174,7 @@ coinsmarkets
 coinsmarkets.com
 coinspot
 coinzest
+community-coin
 coolcoin.com
 curi
 curied

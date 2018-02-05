@@ -829,18 +829,13 @@ To see how much bandwidth your account has at any time, visit [https://steemd.co
 
 ![Screenshot (3).png](https://steemitimages.com/DQmYwLpTW1RVY1jUKwLwEW9QSbEnP9DRW9h2BCerk3PfEDj/Screenshot%20(3).png)
 
-Your account's bandwidth is measured in bytes, kilobytes, megabytes or gigabytes, and it recharges gradually over time. The progress bar labelled "bandwidth remaining" shows how much bandwidth you have left as a percentage.
+Your account's bandwidth is measured in bytes, kilobytes, megabytes or gigabytes, and it recharges over time. The progress bar labelled "bandwidth remaining" shows how much bandwidth you have left as a percentage.
 
 ### What happens when I run out of bandwidth?
 
 Normally, most active accounts will have enough bandwidth to perform the usual actions on Steemit, but when there are a lot of people using the platform at a certain time, bandwidth allocations decrease as the bandwidth is spread amongst all active accounts. Most accounts will still have more than enough bandwidth to use Steemit, but exceptions exist. Accounts with very low amounts of Steem Power are more susceptible to bandwidth problems.
 
-If your account runs out of bandwidth, you will not be able to perform actions on Steemit. To increase your bandwidth allocation, you can:
-
-- Increase your Steem Power **(best option)**
-- Wait until your bandwidth recharges
-
-*To increase your Steem Power, you can buy more Steem Power through a third-party exchange called [BlockTrades](https://blocktrades.us/?input_coin_type=eth&output_coin_type=steem_power&receive_address=), receive Steem Power from someone else or have someone delegate Steem Power to your account.*
+If your account runs out of bandwidth, you will not be able to perform actions on Steemit, temporarily until your bandwidth recharges or until you increase your account's Steem Power. To increase the amount of Steem Power in your account, you can buy more Steem Power through a third-party exchange called [BlockTrades](https://blocktrades.us/?input_coin_type=eth&output_coin_type=steem_power&receive_address=), receive Steem Power from someone else or have someone delegate Steem Power to your account.*
 
 <a href="#Table_of_Contents_Economics">^</a>
 # Voting and Curating

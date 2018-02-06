@@ -61,7 +61,7 @@ export default function init(config) {
     /* Facebook Pixel Code */
     /* NOTE dont't forget to remove <img /> tag of facebook pixel (down below) */
     fbq('init', config.facebook_app_id); // Insert your pixel ID here.
-
+    fbq('track', 'PageView');
 
     /* Yandex.Metrika counter */
     /* NOTE dont't forget to remove <img /> tag of yandex metrika (down below) */

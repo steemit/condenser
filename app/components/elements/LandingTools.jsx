@@ -14,7 +14,7 @@ export default class LandingJoinUs extends React.Component {
 		]
 		const secondaryTexts = [
 			'Это место, где Вы сможете получить награды за свои достижения на Голосе. Здесь Вы также сможете увидеть награды других пользователей.',
-			'Полноценное мобильное приложение для публикации, голосований, настройки профиля и другие не менее важные функциональные возможности',
+			'Мобильное приложение для Андройд для чтения, публикации, голосований, коментирования.',
 			'Получайте уведомления обо всех действиях с Вашими постами и комментариями на golos.io. GolosNotify позволяет Вам получать оповещения о различных действиях с Вашими постами.',
 			'Аналитический инструмент с помошью которого можно осуществлять различные выборки из базы данных Голоса',
 			'Приложение создано для того, чтобы следить за активностью Вашего пользователя в Голосе',
@@ -23,7 +23,7 @@ export default class LandingJoinUs extends React.Component {
 		]
 		const urls = [
 			'http://golosboard.com/',
-			'http://esteem.ws/',
+			'https://play.google.com/store/apps/details?id=io.golos.golos',
 			'https://chrome.google.com/webstore/detail/golosnotify-%D1%83%D0%B2%D0%B5%D0%B4%D0%BE%D0%BC%D0%BB%D0%B5%D0%BD%D0%B8%D1%8F-%D0%B4/abfmjjkkpeokoijnlnhmjobjhjkmaijg',
 			'https://golosdb.com/',
 			'http://golos.steemstats.com/',

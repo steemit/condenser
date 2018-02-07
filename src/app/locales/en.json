@@ -596,7 +596,11 @@
         "cancel_transfer_from_savings": "Cancel transfer from savings",
         "stop_power_down": "Stop power down",
         "start_power_down_of": "Start power down of",
-        "receive_interest_of": "Receive interest of"
+        "receive_interest_of": "Receive interest of",
+        "badactor": "Bad actor",
+        "bad_actor_link_hover":
+            "This memo is related to a transaction sent by a known bad actor, and may contain misleading information.",
+        "reveal_bad_actor_memo": "Reveal memo"
     },
     "savingswithdrawhistory_jsx": {
         "cancel_this_withdraw_request": "Cancel this withdraw request?",

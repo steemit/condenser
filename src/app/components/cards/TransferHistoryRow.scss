@@ -1,0 +1,18 @@
+.Memo--badActor {
+    opacity: .5;
+    .bad-actor-memo-flag {
+        color: $color-red;
+        border: 1px solid $color-red;
+        font-size: 75%;
+        border-radius: 3px;
+        font-weight: normal;
+        font-family: Arial;
+        margin: 0 .5rem 0 0;
+        padding: 2px 5px;
+        text-transform: uppercase;
+    }
+    .bad-actor-memo-reveal {
+        text-transform: lowercase;
+        font-size: 75%;
+    }
+}

@@ -61,7 +61,7 @@ We use the yarn package manager instead of the default `npm`. There are multiple
 ```bash
 npm install -g yarn
 yarn global add babel-cli
-yarn install
+yarn install --frozen-lockfile
 yarn run build
 ```
 To run condenser in production mode, run:

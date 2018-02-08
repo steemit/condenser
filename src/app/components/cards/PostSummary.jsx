@@ -315,13 +315,12 @@ class PostSummary extends React.Component {
 
                 thumb = (
                     <span className="articles__feature-img-container">
-                        <picture className="articles__feature-img articles__feature-img--placeholder ">
+                        <picture className="articles__feature-img">
                             <source
-                                className="articles__feature-img--desktop"
                                 srcSet={listSize}
                                 media="(min-width: 1000px)"
                             />
-                            <img className="articles__feature-img articles__feature-img--placeholder-item" srcSet={blogSize} />
+                            <img srcSet={blogSize} />
                         </picture>
                     </span>
                 );

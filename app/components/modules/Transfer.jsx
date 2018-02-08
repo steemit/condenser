@@ -23,6 +23,11 @@ class TransferForm extends Component {
 
     constructor(props) {
         super()
+        // only `donate` flag defined for now
+        const flag = props.initialValues && props.initialValues.flag;
+        if (flag) {
+          this.flag = flag
+        }
         const {transferToSelf} = props
         this.state = {advanced: !transferToSelf}
         this.initForm(props)
@@ -155,7 +160,7 @@ class TransferForm extends Component {
         const form = (
             <form onSubmit={handleSubmit(({data}) => {
                 this.setState({loading: true})
-                dispatchSubmit({...data, errorCallback: this.errorCallback, currentUser, toVesting, transferType})
+                dispatchSubmit({...data, flag: this.flag, errorCallback: this.errorCallback, currentUser, toVesting, transferType})
             })}
                 onChange={this.clearError}
             >
@@ -243,7 +248,7 @@ class TransferForm extends Component {
                     <div className="column small-2" style={{paddingTop: 33}}>{tt('transfer_jsx.memo')}</div>
                     <div className="column small-10">
                         <small>{tt('transfer_jsx.this_memo_is') + isMemoPrivate ? tt('transfer_jsx.public') : tt('transfer_jsx.private')}</small>
-                        <input type="text" placeholder={tt('transfer_jsx.memo')} {...memo.props}
+                        <input type="text" placeholder={tt('transfer_jsx.memo_placeholder')} {...memo.props}
                             ref="memo" autoComplete="on" autoCorrect="off" autoCapitalize="off" spellCheck="false" disabled={disableMemo || loading} />
                         <div className="error">{memo.touched && memo.error && memo.error}&nbsp;</div>
                     </div>
@@ -301,6 +306,7 @@ export default connect(
     // mapDispatchToProps
     dispatch => ({
         dispatchSubmit: ({
+            flag,
             to, amount, asset, memo, transferType,
             toVesting, currentUser, errorCallback
         }) => {
@@ -325,6 +331,24 @@ export default connect(
 
             if(transferType === 'Savings Withdraw')
                 operation.request_id = Math.floor((Date.now() / 1000) % 4294967295)
+
+
+            // handle donate
+            // todo redesign transfer types globally
+            if (flag) {
+              // get transfer type and default memo composer
+              // now 'donate' only
+              const { fMemo } = flag;
+              if (typeof operation.memo === `string`) {
+                // donation with an empty memo
+                // compose memo default for this case
+                if (operation.memo.trim().length === 0) {
+                  operation.memo = typeof fMemo === `function` ? fMemo() : operation.memo;
+                }
+              }
+            }
+
+
 
             dispatch(transaction.actions.broadcastOperation({
                 type: toVesting ? 'transfer_to_vesting' : (

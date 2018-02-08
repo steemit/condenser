@@ -179,6 +179,7 @@
     "react-transform-hmr": "1.0.4",
     "regenerator-runtime": "0.11.1",
     "sinon": "1.17.7",
+    "storybook-addon-intl": "^2.3.0",
     "supertest": "1.2.0",
     "webpack-bundle-analyzer": "2.9.0"
   },

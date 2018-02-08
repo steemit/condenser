@@ -930,3 +930,21 @@ a#changeLayout:focus {
 .articles__resteem-icon path {
     fill: #cacaca;
 }
+
+.articles__feature-img {
+  &--placeholder {
+    display: block;
+    position: relative;
+    height: 0;
+    width: 100%;
+    padding-top: 60%;
+    background: $color-border-light;
+  }
+  &--placeholder-item {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+}

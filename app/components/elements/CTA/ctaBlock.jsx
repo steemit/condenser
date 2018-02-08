@@ -4,6 +4,7 @@ import Userpic from 'app/components/elements/Userpic';
 import {parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
 import LocalizedCurrency, {localizedCurrency} from 'app/components/elements/LocalizedCurrency';
 import ctainfo from './ctainfo'
+import { popupClickUrl, popupClickButton } from 'app/utils/Analytics';
 
 class CTABlock extends Component {
 
@@ -37,7 +38,7 @@ class CTABlock extends Component {
         if(special){
             textBlock = <p className='left cta-block-text-special'>
             {ctainfo.specialStartText} <b>{user}</b> {special.text}
-           <a href={'/start'}> {ctainfo.specialEndText}</a>
+           <a href={'/start'} onClick={ () => popupClickUrl()}> {ctainfo.specialEndText}</a>
            </p>
         }  else{
             textBlock = 
@@ -47,7 +48,7 @@ class CTABlock extends Component {
                     <LocalizedCurrency amount={payout} rounding={true} noSymbol={true}/>
                 </div> 
             <p className='left cta-block-text-regular'>
-                &nbsp;{currency}.<a href={'/start'}> {ctainfo.regularEndText}</a>
+                &nbsp;{currency}.<a href={'/start'} onClick={ () => popupClickUrl()}> {ctainfo.regularEndText}</a>
             </p>
             </div>
         }            
@@ -61,7 +62,7 @@ class CTABlock extends Component {
                         {textBlock}
                 </div>
                 <div className='column large-3 medium-3 small-3'>
-                    <a href="/create_account" className="button">Создать аккаунт</a>
+                    <a href="/create_account" onClick={ () => popupClickButton()} className="button">Создать аккаунт</a>
                 </div>
             </div>
         </div>

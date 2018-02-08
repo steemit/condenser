@@ -55,6 +55,7 @@ export function recordPageView(page, ref, posts) {
     if (window.ga) { // virtual pageview
         window.ga('set', 'page', page);
         window.ga('send', 'pageview');
+        window.fbq('track', 'ViewContent');
     }
     if (!process.env.BROWSER || window.$STM_ServerBusy) return Promise.resolve(0);
     const request = Object.assign({}, request_base, {body: JSON.stringify({csrf: $STM_csrf, page, ref, posts})});

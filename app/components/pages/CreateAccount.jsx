@@ -14,6 +14,7 @@ import { APP_DOMAIN, SUPPORT_EMAIL, PHONE_SERVICE } from 'app/client_config';
 import tt from 'counterpart';
 import {api} from 'golos-js';
 import SignupProgressBar from 'app/components/elements/SignupProgressBar';
+import { successReg } from 'app/utils/Analytics';
 
 class CreateAccount extends React.Component {
 
@@ -124,6 +125,7 @@ class CreateAccount extends React.Component {
                 }
                 this.setState({server_error: res.error || tt('g.unknown'), loading: false});
             } else {
+                successReg()
                 window.location = `/login.html#account=${name}&msg=accountcreated`;
             }
         }).catch(error => {

@@ -194,9 +194,9 @@ class Header extends React.Component {
                                         <Icon name="logo" className="logo-for-mobile" />
                                         <Icon name="logotype" className="logo-for-large" />  */}
                                         <svg
-                                            className="Header__logotype"
-                                            width="148px"
-                                            height="30px"
+                                            className="logo-new logo-new--desktop"
+                                            width="148"
+                                            height="38"
                                             viewBox="0 0 148 38"
                                             version="1.1"
                                         >

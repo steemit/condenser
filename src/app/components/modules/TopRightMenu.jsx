@@ -11,6 +11,7 @@ import Userpic from 'app/components/elements/Userpic';
 import VerticalMenu from 'app/components/elements/VerticalMenu';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import NotifiCounter from 'app/components/elements/NotifiCounter';
+import { SIGNUP_URL } from 'shared/constants';
 
 const defaultNavigate = e => {
     if (e.metaKey || e.ctrlKey) {
@@ -166,7 +167,7 @@ function TopRightMenu({
     return (
         <ul className={mcn + mcl}>
             <li className={lcn}>
-                <a href="/pick_account">{tt('g.sign_up')}</a>
+                <a href={SIGNUP_URL}>{tt('g.sign_up')}</a>
             </li>
             <li className={lcn}>
                 <a href="/login.html" onClick={showLogin}>

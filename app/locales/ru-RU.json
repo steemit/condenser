@@ -39,9 +39,9 @@
     "not_be_empty": "не может быть пустым",
     "be_longer": "должен быть длиннее",
     "have_only_digits": "должен состоять только из цифр",
-    "you_can_change_your_number": "Вы можете указать другой номер телефона.",
+    "you_can_change_your_number": "Если вы ошиблись во время ввода своего номера телефона, вы можете ввести его заново.",
     "select_another_number": "Указать другой номер",
-    "waiting_from_you": "Отправьте код %(code)s на номер %(phone)s для подтверждения вашего номера телефона. Если вы ошиблись во время ввода своего номера телефона, вы можете ввести его заново."
+    "waiting_from_you": "Отправьте код %(code)s на номер %(phone)s для подтверждения вашего номера телефона."
   },
   "chainvalidation_js": {
     "account_name_should": "Имя аккаунта должно ",
@@ -68,7 +68,7 @@
   },
   "createaccount_jsx": {
     "get_code": "Получить код",
-    "will_be_send_to_phone_number": "Сообщение будет отправлено на номер: +",
+    "will_be_send_to_phone_number": "Номер: +",
     "our_records_indicate_you_already_have_account": "Наши записи показывают, что у Вас уже есть %(APP_NAME)s аккаунт",
     "in_order_to_prevent_abuse_APP_NAME_can_only_register_one_account_per_user": "Чтобы предотвратить злоупотребление %(APP_NAME)s может зарегистрировать только один аккаунт для каждого подтвержденного пользователя.",
     "next_3_blocks": {

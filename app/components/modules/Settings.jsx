@@ -311,11 +311,19 @@ class Settings extends React.Component {
 
                     <label>{tt('settings_jsx.choose_currency')}
                         <select defaultValue={process.env.BROWSER ? localStorage.getItem('xchange.picked') : DEFAULT_CURRENCY} onChange={this.onCurrencyChange}>
-                            {
-                                CURRENCIES.map(i => {
+                            {CURRENCIES.map(i => {
                                     return <option key={i} value={i}>{i}</option>
                                 })
                             }
+                        </select>
+                    </label>
+
+                    <label>{tt('settings_jsx.rounding_numbers.info_message')}
+                        <select value={this.state.roundingNumbers} onChange={this.onRoundingNumbersChange}>
+                            <option value="integer">{tt('settings_jsx.rounding_numbers.integer')}</option>
+                            <option value="one">{tt('settings_jsx.rounding_numbers.one_decimal')}</option>
+                            <option value="two">{tt('settings_jsx.rounding_numbers.two_decimal')}</option>
+                            <option value="three">{tt('settings_jsx.rounding_numbers.three_decimal')}</option>
                         </select>
                     </label>
 
@@ -425,7 +433,7 @@ class Settings extends React.Component {
 
             {isOwnAccount &&
                 <div className="row">
-                    <div className="small-12 columns">
+                    <div className="small-12 medium-8 large-6 columns">
                         <br /><br />
                         <h3>{tt('settings_jsx.private_post_display_settings')}</h3>
                         <div>

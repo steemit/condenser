@@ -1,19 +1,25 @@
-'use strict';
-
-var config = require('config');
-var metrics = null;
+const config = require('config');
+let metrics = null;
 
 if (config.metrics) {
-  var StatsD = require('node-statsd');
-  metrics = new StatsD({
-    host: config.get('metrics.host'),
-    prefix: config.get('metrics.name') + '_' + (process.env.METRICS_NODE ? process.env.METRICS_NODE : '')
-  });
-}
+  const StatsD = require('node-statsd');
+  metrics = new StatsD({ host: config.get('metrics.host'), prefix: 'tolstoy_' });
+  metrics.track = track
+} 
 
-module.exports = {
-  metrics,
-  responseTime
+function track(context, method, args) {
+  const start = new Date()
+  const promise = context[method].apply(context, args)
+
+  promise.then(() => {
+      const end = new Date()
+      const delta = end - start
+
+      this.timing(`api.${method}.time`, delta)
+
+  }).catch(console.log)
+
+  return promise
 }
 
 /**
@@ -27,4 +33,9 @@ function responseTime() {
     const elapsed = process.hrtime(start);
     if (metrics) metrics.timing('_response_time', + (elapsed[0] * 1e3 + elapsed[1] / 1e6).toFixed(3)); //  in ms
   };
+}
+
+module.exports = {
+  metrics,
+  responseTime
 }

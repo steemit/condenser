@@ -57,20 +57,23 @@ export function validate_memo_field(value, username, memokey) {
     let suffix;
     value = value.split(' ').filter(v => v != '');
     for (var w in value) {
-        if (PrivateKey.isWif(value[w])) {
-            return (suffix = 'Do not use private keys in memos. ');
-        }
-        if (
-            memokey ===
-            PrivateKey.fromSeed(username + 'memo' + value[w])
-                .toPublicKey()
-                .toString()
-        ) {
-            return (suffix = 'Do not use passwords in memos. ');
-        }
-        if (/5[HJK]\w{40,45}/i.test(value[w])) {
-            return (suffix =
-                'Please do not include what appears to be a private key or password. ');
+        // Only perform key tests if it might be a key, i.e. it is a long string.
+        if (value[w].length >= 39) {
+            if (/5[HJK]\w{40,45}/i.test(value[w])) {
+                return (suffix =
+                    'Please do not include what appears to be a private key or password. ');
+            }
+            if (PrivateKey.isWif(value[w])) {
+                return (suffix = 'Do not use private keys in memos. ');
+            }
+            if (
+                memokey ===
+                PrivateKey.fromSeed(username + 'memo' + value[w])
+                    .toPublicKey()
+                    .toString()
+            ) {
+                return (suffix = 'Do not use passwords in memos. ');
+            }
         }
     }
     return null;

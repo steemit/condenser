@@ -5,8 +5,6 @@
     @arg {object} initialValues required for checkboxes {save: false, ...}
     @arg {function} validation - values => ({ username: ! values.username ? 'Required' : null, ... })
 */
-const USER_INPUT_DEBOUNCE_MS = 400;
-
 export default function reactForm({
     name,
     instance,
@@ -14,7 +12,6 @@ export default function reactForm({
     initialValues,
     validation = () => {},
 }) {
-    let debounce = { timeout: null };
     if (typeof instance !== 'object')
         throw new TypeError('instance is a required object');
     if (!Array.isArray(fields))
@@ -124,13 +121,7 @@ export default function reactForm({
             }
 
             instance.setState({ [fieldName]: v }, () => {
-                setFormStateDebounce(
-                    name,
-                    instance,
-                    fields,
-                    validation,
-                    debounce
-                );
+                setFormState(name, instance, fields, validation);
             });
         };
 
@@ -141,13 +132,6 @@ export default function reactForm({
             instance.setState({ [fieldName]: v });
         };
     }
-}
-
-function setFormStateDebounce(name, instance, fields, validation, debounce) {
-    clearTimeout(debounce.timeout);
-    debounce.timeout = setTimeout(function() {
-        setFormState(name, instance, fields, validation);
-    }, USER_INPUT_DEBOUNCE_MS);
 }
 
 function setFormState(name, instance, fields, validation) {

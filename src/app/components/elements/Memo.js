@@ -60,20 +60,20 @@ class Memo extends React.Component {
 
         if (isFromBadActor && !this.state.revealBadActorMemo) {
             renderText = (
-                <div className="bad-actor-memo-warning">
-                    <span className="bad-actor-memo-flag">
-                        {tt('transferhistoryrow_jsx.badactor')}
-                    </span>
-                    <span
-                        className="ptc bad-actor-memo-reveal"
+                <div className="bad-actor-warning">
+                    <div className="bad-actor-caution">
+                        {tt('transferhistoryrow_jsx.bad_actor_caution')}
+                    </div>
+                    <div className="bad-actor-explained">
+                        {tt('transferhistoryrow_jsx.bad_actor_explained')}
+                    </div>
+                    <div
+                        className="ptc bad-actor-reveal-memo"
                         role="button"
                         onClick={this.onRevealBadActorMemo}
-                        title={tt(
-                            'transferhistoryrow_jsx.bad_actor_link_hover'
-                        )}
                     >
-                        {tt('transferhistoryrow_jsx.reveal_bad_actor_memo')}
-                    </span>
+                        {tt('transferhistoryrow_jsx.bad_actor_reveal_memo')}
+                    </div>
                 </div>
             );
         }

@@ -99,7 +99,7 @@ async function appRender(ctx) {
           offchain,
           ErrorPage,
           tarantool: Tarantool.instance('tarantool'),
-        //   chainproxy: Tarantool.instance('chainproxy'),
+          chainproxy: Tarantool.instance('chainproxy'),
           metrics
         });
 

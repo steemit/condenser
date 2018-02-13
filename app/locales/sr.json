@@ -15,7 +15,9 @@
     "about_app_details":"%(APP_NAME)s is a social media platform where everyone gets paid for creating and curating content. It leverages a robust digital points system, called Steem, that supports real value for digital rewards through market price discovery and liquidity.",
     "learn_more_at_app_url":"Saznaj više na %(APP_URL)s",
     "resources":"Resursi",
-    "join_our_slack":"Pridružite nam se na Slack-u"
+    "join_our_slack":"Pridružite nam se na Slack-u",
+    "mobileBannerAlt": "Get it on Google Play"
+
   },
   "authorrewards_jsx":{
     "estimated_author_rewards_last_week":"Estimated author rewards last week",
@@ -65,7 +67,7 @@
   },
   "createaccount_jsx":{
     "get_code": "Get confirmation code",
-    "will_be_send_to_phone_number": "Message will be send to: +",
+    "will_be_send_to_phone_number": "Number: +",
     "our_records_indicate_you_already_have_account":"Naši podaci pokazuju da već imate %(APP_NAME)s nalog",
     "in_order_to_prevent_abuse_APP_NAME_can_only_register_one_account_per_user":"Чтобы предотвратить злоупотребление %(APP_NAME)s может зарегистрировать только один аккаунт для каждого подтвержденного пользователя.",
     "next_3_blocks":{

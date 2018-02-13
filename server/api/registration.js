@@ -30,27 +30,47 @@ export default function useRegistrationApi(app) {
   const koaBody = koa_body();
 
   router.post("/verify_code", koaBody, function*() {
-    if (! this.request.body) return;
+    if (! this.request.body) {
+      this.status = 400;
+      this.body = "Bad Request";
+      return;
+    }
 
-    const accountSid = this.request.body && this.request.body.AccountSid
+    const accountSid = this.request.body.AccountSid
       ? this.request.body.AccountSid
       : ''
     ;
-    if (accountSid.localeCompare(config.get('twilio.account_sid')) != 0) return;
+    if (accountSid.localeCompare(config.get('twilio.account_sid')) != 0) {
+      this.status = 401;
+      this.body = "Unauthorized";
+      return;
+    }
 
-    const phone = this.request.body && this.request.body.From
-      ? this.request.body.From.substr(1)
-      : ''
-    ;
-    if (!phone || digits(phone).length === 0) return;
+    let phone;
+    if (this.request.body.From) {
+      phone = this.request.body.From.substr(1)
+    }
+    else if (this.request.body.phone) {
+      phone = this.request.body.phone;
+    }
+    if (!phone || digits(phone).length === 0) {
+      this.status = 401;
+      this.body = "Bad Request Data from";
+      return;
+    }
 
-    const confirmation_code = this.request.body.Body
-      ? this.request.body.Body.substr(0,4)
-      : ''
-    ;
-    if (!confirmation_code || digits(confirmation_code).length !== 4) return;
-
-    const phoneHash = hash.sha256(phone, 'hex');
+    let confirmation_code;
+    if (this.request.body.Body) {
+      confirmation_code = this.request.body.Body.substr(0,4);
+    }
+    else if (this.request.body.mes) {
+      confirmation_code = this.request.body.mes.substr(0,4);
+    }
+    if (!confirmation_code || digits(confirmation_code).length !== 4) {
+      this.status = 400;
+      this.body = "Bad Request Data body";
+      return;
+    }
 
     console.log(
       "-- /api/v1/confirm_provider -->",
@@ -61,7 +81,7 @@ export default function useRegistrationApi(app) {
     let mid = yield models.Identity.findOne({
       attributes: ["id", "user_id", "verified", "updated_at", "phone"],
       where: {
-        phone: phoneHash,
+        phone: hash.sha256(phone, 'hex'),
         confirmation_code,
         provider: "phone"
       },

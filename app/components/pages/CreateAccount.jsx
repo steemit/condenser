@@ -10,7 +10,7 @@ import runTests from 'app/utils/BrowserTests';
 import g from 'app/redux/GlobalReducer';
 import GeneratedPasswordInput from 'app/components/elements/GeneratedPasswordInput';
 import CountryCode from "app/components/elements/CountryCode";
-import { APP_DOMAIN, SUPPORT_EMAIL, PHONE_SERVICE } from 'app/client_config';
+import { APP_DOMAIN, SUPPORT_EMAIL, SMS_SERVICES } from 'app/client_config';
 import tt from 'counterpart';
 import {api} from 'golos-js';
 import SignupProgressBar from 'app/components/elements/SignupProgressBar';
@@ -198,7 +198,7 @@ class CreateAccount extends React.Component {
 
         case "waiting":
           fetch_state.checking = true;
-          fetch_state.message = tt('mobilevalidation_js.waiting_from_you', {code: o.code, phone: PHONE_SERVICE});
+          fetch_state.message = tt('mobilevalidation_js.waiting_from_you', {code: o.code, phone: SMS_SERVICES[this.state.country] || SMS_SERVICES['default']});
           this.timer();
           break;
 
@@ -435,8 +435,8 @@ class CreateAccount extends React.Component {
           if (fetch_state.status === "waiting") {
             calloutClass = '';
             phone_step = <div className={"callout" + calloutClass}>
-              <LoadingIndicator type="circle" />&nbsp;{fetch_state.message + " "}
-              {tt('mobilevalidation_js.you_can_change_your_number') + " "}<a onClick={this.onClickSelectAnotherPhone}>{tt('mobilevalidation_js.select_another_number')}</a>.
+              {fetch_state.message + " "}
+              <p><small>{tt('mobilevalidation_js.you_can_change_your_number') + " "}<a onClick={this.onClickSelectAnotherPhone}>{tt('mobilevalidation_js.select_another_number')}</a>.</small></p>
             </div>;
           }
           else {
@@ -509,13 +509,13 @@ class CreateAccount extends React.Component {
                             {mobileRules}
                             {showMobileForm && <div>
                               <div>
-                                <label className="uppercase">
+                                <label>
                                   <span style={{color: 'red'}}>*</span> {tt('createaccount_jsx.country_code')}
                                   <CountryCode onChange={this.onCountryChange} disabled={fetch_state.checking} name="country" value={country} />
                                 </label><p></p>
                               </div>
                               <div className={(phone_error ? 'error' : '') + (phone_hint ? 'success' : '')}>
-                                <label className="uppercase">
+                                <label>
                                   <span style={{color: 'red'}}>*</span> {tt('createaccount_jsx.phone_number')} <span style={{color: 'red'}}>{tt('createaccount_jsx.without_country_code')}</span>
                                   <input type="text" name="phone" autoComplete="off" disabled={fetch_state.checking} onChange={this.onMobileChange} value={phone} />
                                 </label>
@@ -524,16 +524,16 @@ class CreateAccount extends React.Component {
                             </div>}
                             {phone_step}
                             {showMobileForm &&
-                              <p><a className={'button holow uppercase ' + ( (fetch_state.checking && fetch_state.success) || !phone_hint ? 'disabled' : '')} onClick={!(fetch_state.checking && fetch_state.success) && phone_hint && this.onClickSendCode}>{tt('createaccount_jsx.get_code')}</a></p>
+                              <p><a className={'button holow ' + ( (fetch_state.checking && fetch_state.success) || !phone_hint ? 'disabled' : '')} onClick={!(fetch_state.checking && fetch_state.success) && phone_hint && this.onClickSendCode}>{tt('createaccount_jsx.get_code')}</a></p>
                             }
 
                             {passwordRules}
                             <div className="success">
                                 <label>Email <input type="email" name="email" autoComplete="off" disabled={! (fetch_state.checking && fetch_state.success)} onChange={this.onEmailChange} value={email} /></label>
-                                <p>{tt('g.email_recovery_hint')}</p>
+                                <p></p>
                             </div>
                             <div className={name_error ? 'error' : ''}>
-                                <label className="uppercase">{tt('g.username')}
+                                <label>{tt('g.username')}
                                     <input type="text" name="name" autoComplete="off" disabled={! (fetch_state.checking && fetch_state.success)} onChange={this.onNameChange} value={name} />
                                 </label>
                                 <p>{name_error}</p>

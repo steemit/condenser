@@ -14,6 +14,8 @@ import VerticalMenu from 'app/components/elements/VerticalMenu';
 import tt from 'counterpart';
 import { APP_NAME, APP_ICON, DEFAULT_DOMESTIC, DOMESTIC, SEO_TITLE } from 'app/client_config';
 import {detransliterate, capitalizeFirstLetter} from 'app/utils/ParsersAndFormatters';
+import MobileBanners from 'app/components/elements/MobileBanners/MobileBanners'
+
 
 function sortOrderToLink(so, topic, account) {
     // to prevent probmes check if topic is not the same as account name
@@ -215,6 +217,9 @@ class Header extends React.Component {
                                 </li>
                                 <li className="Header__top-steemit show-for-medium noPrint">
                                     <Link to={logo_link}>{APP_NAME}<span className="beta">beta</span></Link>
+                                </li>
+                                <li>
+                                    <MobileBanners showAndroid={true} />
                                 </li>
                                 {(topic_link || user_name || page_name) && <li className="delim show-for-medium">|</li>}
                                 {topic_link && <li className="Header__top-topic">{topic_link}</li>}

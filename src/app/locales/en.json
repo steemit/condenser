@@ -5,7 +5,7 @@
         "and": "and",
         "are_you_sure": "Are you sure?",
         "ask": "Ask",
-        "balance": "Balance",
+        "balance": "Balance: %(balanceValue)s",
         "balances": "Balances",
         "bid": "Bid",
         "blog": "Blog",
@@ -53,14 +53,14 @@
         "ok": "Ok",
         "older": "Older",
         "or": "or",
-        "order_placed": "Order placed",
+        "order_placed": "Order placed: %(order)s",
         "password": "Password",
         "payouts": "Payouts",
         "permissions": "Permissions",
         "phishy_message":
             "Link expanded to plain text; beware of a potential phishing attempt",
         "post": "Post",
-        "post_as": "Post as",
+        "post_as_user": "Post as %(username)s",
         "posts": "Posts",
         "powered_up_100": "Powered Up 100%%",
         "preview": "Preview",
@@ -97,7 +97,7 @@
         "show": "Show",
         "sign_in": "Sign in",
         "sign_up": "Sign up",
-        "since": "since",
+        "since": "since %(date)s",
         "submit": "Submit",
         "power_up": "Power Up",
         "submit_a_story": "Post",
@@ -185,7 +185,7 @@
             "Only one Steem account allowed per IP address every 10 minutes",
         "resteem_this_post": "Resteem This Post",
         "reblog": "Resteem",
-        "write_your_story": "Write your story",
+        "write_your_story": "Write your story...",
         "remember_voting_and_posting_key": "Remember voting & posting key",
         "auto_login_question_mark": "Auto login?",
         "hide_private_key": "Hide private key",
@@ -283,7 +283,7 @@
             "You have %(tagsLength)s tags total%(includingCategory)s. Please use only 5 in your post and category line.",
         "are_you_sure_you_want_to_clear_this_form":
             "Are you sure you want to clear this form?",
-        "uploading": "Uploading",
+        "uploading": "Uploading...",
         "draft_saved": "Draft saved.",
         "editor": "Editor",
         "insert_images_by_dragging_dropping":
@@ -359,7 +359,8 @@
         "higher": "Higher",
         "lower": "Lower",
         "total_DEBT_TOKEN_SHORT_CURRENCY_SIGN":
-            "Total %(DEBT_TOKEN_SHORT)s (%(CURRENCY_SIGN)s)"
+            "Total %(DEBT_TOKEN_SHORT)s (%(CURRENCY_SIGN)s)",
+        "order_placed": "Order placed: %(order)s"
     },
     "recoveraccountstep1_jsx": {
         "begin_recovery": "Begin Recovery",
@@ -457,11 +458,15 @@
         "past_payouts": "Past Payouts $%(value)s",
         "past_payouts_author": " - Author $%(value)s",
         "past_payouts_curators": " - Curators $%(value)s",
-        "we_will_reset_curation_rewards_for_this_post":
-            "will reset your curation rewards for this post",
         "removing_your_vote": "Removing your vote",
+        "removing_your_vote_will_reset_curation_rewards_for_this_post":
+            "Removing your vote will reset your curation rewards for this post",
         "changing_to_an_upvote": "Changing to an Up-Vote",
+        "changing_to_an_upvote_will_reset_curation_rewards_for_this_post":
+            "Changing to an Up-Vote will reset your curation rewards for this post",
         "changing_to_a_downvote": "Changing to a Down-Vote",
+        "changing_to_a_downvote_will_reset_curation_rewards_for_this_post":
+            "Changing to a Down-Vote will reset your curation rewards for this post",
         "confirm_flag": "Confirm Flag",
         "and_more": "and %(count)s more",
         "votes_plural": {
@@ -535,10 +540,10 @@
         "your_existing_DEBT_TOKEN_are_liquid_and_transferable":
             "Your existing %(DEBT_TOKEN)s are liquid and transferable. Instead you may wish to trade %(DEBT_TOKEN)s directly in this site under %(link)s or transfer to an external market.",
         "this_is_a_price_feed_conversion":
-            "This is a price feed conversion. The 3.5 day delay is necessary to prevent abuse from gaming the price feed average",
+            "This is a price feed conversion. The 3.5 day delay is necessary to prevent abuse from gaming the price feed average.",
         "convert_to_LIQUID_TOKEN": "Convert to %(LIQUID_TOKEN)s",
         "DEBT_TOKEN_will_be_unavailable":
-            "This action will take place 3.5 days from now and can not be canceled. These %(DEBT_TOKEN)s will immediately become unavailable"
+            "This action will take place 3.5 days from now and can not be canceled. These %(DEBT_TOKEN)s will immediately become unavailable."
     },
     "tips_js": {
         "liquid_token":
@@ -594,8 +599,10 @@
     "transferhistoryrow_jsx": {
         "to_savings": "to savings",
         "from_savings": "from savings",
-        "cancel_transfer_from_savings": "Cancel transfer from savings",
+        "cancel_transfer_from_savings":
+            "Cancel transfer from savings (request %(request_id)s)",
         "stop_power_down": "Stop power down",
+        "withdraw_vesting": "Start power down of %(powerdown_vests)s STEEM",
         "start_power_down_of": "Start power down of",
         "receive_interest_of": "Receive interest of",
         "bad_actor_caution": "Caution",
@@ -606,7 +613,57 @@
         "from_negative_rep_user_explained":
             "This is from an account with a bad reputation. If you wish, you may temporarily reveal this memo which may contain dangerous links.",
         "from_negative_rep_user_reveal_memo":
-            "I understand the risk; show anyway."
+            "I understand the risk; show anyway.",
+        "curation_reward": "%(curation_reward)s STEEM POWER for ",
+        "author_reward":
+            "%(sbd_payout)s%(steem_payout)s and %(author_reward)s STEEM POWER for ",
+        "claim_reward_balance": {
+            "three_rewards":
+                "Claim rewards: %(first_reward)s, %(second_reward)s and %(third_reward)s",
+            "two_rewards":
+                "Claim rewards: %(first_reward)s and %(second_reward)s",
+            "one_reward": "Claim rewards: %(reward)s"
+        },
+        "interest": "Receive interest of %(interest)s",
+        "fill_convert_request":
+            "Fill convert request: %(amount_in)s for %(amount_out)s",
+        "fill_order": {
+            "filled_by_current_owner":
+                "Paid %(open_pays)s for %(current_pays)s",
+            "open_owner_filled_my_order":
+                "Paid %(current_pays)s for %(open_pays)s"
+        },
+        "comment_benefactor_reward":
+            "%(benefactor_reward)s STEEM POWER for %(author)s/%(permlink)s",
+        "transfer_to_vesting": {
+            "from_self": {
+                "no_to": "Transfer %(amount)s to STEEM POWER",
+                "to_someone": "Transfer %(amount)s STEEM POWER to "
+            },
+            "to_self": "Receive %(amount)s STEEM POWER from ",
+            "from_user_to_user":
+                " Transfer %(amount)s STEEM POWER from %(from) to "
+        },
+        "transfer": {
+            "from_self": {
+                "to_savings": "Transfer to savings %(amount)s to",
+                "from_savings": "Transfer from savings %(amount)s to",
+                "not_savings": "Transfer %(amount)s to"
+            },
+            "to_self": {
+                "to_savings": "Receive from savings %(amount)s from",
+                "from_savings": "Transfer from savings %(amount)s from",
+                "not_savings": "Transfer %(amount)s "
+            },
+            "to_someone_from_someone": {
+                "to_savings":
+                    "Transfer to savings %(amount)s from %(from)s to %(to)s",
+                "from_savings":
+                    "Transfer from savings %(amount)s from %(from)s to %(to)s",
+                "not_savings": "Transfer %(amount)s from %(from)s to %(to)s"
+            }
+        },
+        "request_id": "Request ID: %(request_id)s"
     },
     "savingswithdrawhistory_jsx": {
         "cancel_this_withdraw_request": "Cancel this withdraw request?",
@@ -626,12 +683,12 @@
         "change_account_password": "Change Account Password",
         "create_account": "Create Account",
         "stolen_account_recovery": "Stolen Account Recovery",
-        "people_following": "People following",
-        "people_followed_by": "People followed by",
-        "curation_rewards_by": "Curation rewards by",
-        "author_rewards_by": "Author rewards by",
-        "replies_to": "Replies to",
-        "comments_by": "Comments by"
+        "people_following": "People following %(username)s",
+        "people_followed_by": "People followed by %(username)s",
+        "curation_rewards_by": "Curation rewards by %(username)s",
+        "author_rewards_by": "Author rewards by %(username)s",
+        "replies_to": "Replies to %(username)s",
+        "comments_by": "Comments by %(username)s"
     },
     "loginform_jsx": {
         "you_need_a_private_password_or_key":
@@ -681,18 +738,27 @@
         "join_our": "Join our"
     },
     "chainvalidation_js": {
-        "account_name_should": "Account name should ",
-        "not_be_empty": "not be empty.",
-        "be_longer": "be longer.",
-        "be_shorter": "be shorter.",
-        "each_account_segment_should": "Each account segment should ",
-        "start_with_a_letter": "start with a letter.",
-        "have_only_letters_digits_or_dashes":
-            "have only letters, digits, or dashes.",
-        "have_only_one_dash_in_a_row": "have only one dash in a row.",
-        "end_with_a_letter_or_digit": "end with a letter or digit.",
+        "account_name_should_not_be_empty": "Account name should not be empty.",
+        "account_name_should_be_longer": "Account name should be longer.",
+        "account_name_should_be_shorter": "Account name should be shorter.",
+        "each_account_segment_should_start_with_a_letter":
+            "Each account segment should start with a letter.",
+        "each_account_segment_should_have_only_letters_digits_or_dashes":
+            "Each account segment should have only letters, digits, or dashes.",
+        "each_account_segment_should_have_only_one_dash_in_a_row":
+            "Each account segment should have only one dash in a row.",
+        "each_account_segment_should_end_with_a_letter_or_digit":
+            "Each account segment should end with a letter or digit.",
+        "each_account_segment_should_be_longer":
+            "Each account segment should be longer.",
         "verified_exchange_no_memo":
-            "You must include a memo for your exchange transfer."
+            "You must include a memo for your exchange transfer.",
+        "badactor":
+            "Use caution sending to this account. Please double check your spelling for possible phishing.",
+        "memo_has_privatekey":
+            "Please do not include what appears to be a private key or password.",
+        "memo_is_privatekey": "Do not use private keys in memos.",
+        "memo_is_password": "Do not use passwords in memos."
     },
     "settings_jsx": {
         "invalid_url": "Invalid URL",
@@ -714,7 +780,8 @@
         "profile_name": "Display Name",
         "profile_about": "About",
         "profile_location": "Location",
-        "profile_website": "Website"
+        "profile_website": "Website",
+        "saved": "Saved!"
     },
     "transfer_jsx": {
         "amount_is_in_form": "Amount is in the form 99999.999",
@@ -743,7 +810,8 @@
         "autocomplete_user_following": "following"
     },
     "userwallet_jsx": {
-        "conversion_complete_tip": "Will complete on",
+        "transfer": "Transfer",
+        "conversion_complete_tip": "Will complete on %(date)s",
         "in_conversion": "%(amount)s in conversion",
         "transfer_to_savings": "Transfer to Savings",
         "power_up": "Power Up",
@@ -787,5 +855,8 @@
     "termsagree_jsx": {
         "i_agree_to_these_terms": "I agree to these terms",
         "cancel": "Cancel"
+    },
+    "confirmtransactionform_jsx": {
+        "confirm": "Confirm %(transactionType)s"
     }
 }

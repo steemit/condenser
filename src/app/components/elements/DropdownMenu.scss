@@ -10,6 +10,7 @@
   > .VerticalMenu {
     visibility: hidden;
     min-width: 145px;
+    width: max-content;
     z-index: 1000;
     display: block;
     border-radius: $global-radius;
@@ -27,6 +28,7 @@
     transform: translateY(10%);
     transition: all 0.3s ease 0s, visibility 0s linear 0.3s;
     box-shadow: 1px 1px 5px 0px rgba(50, 50, 50, 0.75);
+
   }
 
   &.show > .VerticalMenu {
@@ -48,6 +50,14 @@
     }
   }
 
+  &.left > .VerticalMenu {
+    position: absolute;
+    right: 0%;
+  }
+  &.right > .VerticalMenu {
+    position: absolute;
+    left: 0%;
+  }
   .DropdownMenu.move-left {
     .VerticalMenu {
       left: -50%;

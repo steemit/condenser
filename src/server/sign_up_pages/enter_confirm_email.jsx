@@ -13,6 +13,7 @@ import config from 'config';
 import MiniHeader from 'app/components/modules/MiniHeader';
 import secureRandom from 'secure-random';
 import Mixpanel from 'mixpanel';
+import Progress from 'react-foundation-components/lib/global/progress-bar';
 import { api } from '@steemit/steem-js';
 
 const path = require('path');
@@ -285,9 +286,7 @@ export default function useEnterAndConfirmEmailPages(app) {
                     style={{ maxWidth: '32rem' }}
                 >
                     <div className="column">
-                        <div className="progress">
-                            <span style={{ width: '50%' }}>Progress: 50%</span>
-                        </div>
+                        <Progress tabIndex="0" value={50} max={100} />
                         <form
                             id="submit_email"
                             action={'/submit_email' + makeParams(params)}

@@ -67,6 +67,7 @@ button, .button {
     color: themed('textColorSecondary');  
   } 
   &:hover, &:focus {
+    outline: none;
     @include themify($themes) {
       color: themed('textColorAccent');  
     } 

@@ -250,6 +250,12 @@
   width: 350px;
   min-width: 320px;
   overflow: hidden;
+
+  .close-button {
+    line-height: 4.5rem;
+    width: 5px;
+  }
+
   .Icon:hover {
     animation: none !important;
   }

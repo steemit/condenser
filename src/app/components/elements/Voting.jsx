@@ -14,7 +14,8 @@ import {
 } from 'app/utils/ParsersAndFormatters';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
-import FoundationDropdown from 'app/components/elements/FoundationDropdown';
+import Dropdown from 'app/components/elements/Dropdown';
+import CloseButton from 'app/components/elements/CloseButton';
 
 const ABOUT_FLAG = (
     <div>
@@ -474,6 +475,8 @@ class Voting extends React.Component {
                         <CloseButton
                             className="Voting__adjust_weight_close"
                             onClick={() => this.setState({ showWeight: false })}
+                        />
+                        <CloseButton
                         />
                     </div>
                 </FoundationDropdown>

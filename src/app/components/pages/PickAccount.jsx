@@ -2,6 +2,7 @@
 /*global $STM_csrf, $STM_Config */
 import React from 'react';
 import { connect } from 'react-redux';
+import Progress from 'react-foundation-components/lib/global/progress-bar';
 import { Link } from 'react-router';
 import classNames from 'classnames';
 import { api } from '@steemit/steem-js';
@@ -284,10 +285,7 @@ class PickAccount extends React.Component {
                         style={{ maxWidth: '36rem', margin: '0 auto' }}
                     >
                         <br />
-                        <div className="progress">
-                            <div style={{ width: '10%' }} />
-                        </div>
-
+                        <Progress tabIndex="0" value={10} max={100} />
                         <br />
                         <h4 className="CreateAccount__title">
                             Welcome to Steemit

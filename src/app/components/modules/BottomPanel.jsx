@@ -1,5 +1,5 @@
 import React from 'react';
-import CloseButton from 'app/components/elements/CloseButton';
+import CloseButton from 'react-foundation-components/lib/global/close-button';
 
 export default class BottomPanel extends React.Component {
     static propTypes = {

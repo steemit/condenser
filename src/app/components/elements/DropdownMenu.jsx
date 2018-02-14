@@ -78,7 +78,6 @@ export default class DropdownMenu extends React.Component {
             className,
             title,
             href,
-            position,
         } = this.props;
         const hasDropdown = items.length > 0;
 
@@ -108,8 +107,7 @@ export default class DropdownMenu extends React.Component {
         const cls =
             'DropdownMenu' +
             (this.state.shown ? ' show' : '') +
-            (className ? ` ${className}` : '') +
-            (position ? ` ${position}` : '');
+            (className ? ` ${className}` : '');
         return React.createElement(el, { className: cls }, [entry, menu]);
     }
 }

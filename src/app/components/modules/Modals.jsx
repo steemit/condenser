@@ -1,10 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import CloseButton from 'react-foundation-components/lib/global/close-button';
-import Reveal from 'react-foundation-components/lib/global/reveal';
+import CloseButton from 'app/components/elements/CloseButton';
+import Reveal from 'app/components/elements/Reveal';
 import { NotificationStack } from 'react-notification';
 import { OrderedSet } from 'immutable';
-
 import * as userActions from 'app/redux/UserReducer';
 import * as appActions from 'app/redux/AppReducer';
 import * as transactionActions from 'app/redux/TransactionReducer';

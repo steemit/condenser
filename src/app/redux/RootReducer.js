@@ -2,13 +2,13 @@ import { Map, fromJS } from 'immutable';
 import { routerReducer } from 'react-router-redux';
 import { combineReducers } from 'redux';
 import { reducer as formReducer } from 'redux-form'; // @deprecated, instead use: app/utils/ReactForm.js
-
 import appReducer from './AppReducer';
 import globalReducer from './GlobalReducer';
 import marketReducer from './MarketReducer';
 import userReducer from './UserReducer';
 import transactionReducer from './TransactionReducer';
 import offchainReducer from './OffchainReducer';
+import voteReducer from './VoteReducer';
 import { contentStats } from 'app/utils/StateFunctions';
 
 function initReducer(reducer, type) {
@@ -54,5 +54,6 @@ export default combineReducers({
     discussion: initReducer((state = {}) => state),
     routing: initReducer(routerReducer),
     app: initReducer(appReducer),
+    vote: initReducer(voteReducer),
     form: formReducer,
 });

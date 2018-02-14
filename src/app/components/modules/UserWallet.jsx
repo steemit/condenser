@@ -625,10 +625,10 @@ class UserWallet extends React.Component {
                         {isMyAccount ? (
                             <FoundationDropdownMenu
                                 className="Wallet_dropdown"
-                                dropdownPosition="bottom"
-                                dropdownAlignment="right"
-                                label={sbd_balance_str}
-                                menu={dollar_menu}
+                                items={dollar_menu}
+                                el="li"
+                                selected={sbd_balance_str}
+                                position="left"
                             />
                         ) : (
                             sbd_balance_str

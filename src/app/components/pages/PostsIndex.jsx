@@ -51,6 +51,8 @@ class PostsIndex extends React.Component {
     }
 
     getPosts(order, category) {
+        console.log('CATEGORY:',category)
+        
         const topic_discussions = this.props.discussions.get(category || '');
         if (!topic_discussions) return null;
         return topic_discussions.get(order);
@@ -126,7 +128,9 @@ class PostsIndex extends React.Component {
                 );
             }
         } else {
-            posts = this.getPosts(this.props.sortOrder, this.props.topic);
+            // posts = this.getPosts(this.props.sortOrder, this.props.topic);
+            posts = this.getPosts(order, category);
+            console.log('Posts1', posts)
             if (posts && posts.size === 0) {
                 emptyText = (
                     <div>
@@ -195,20 +199,20 @@ class PostsIndex extends React.Component {
                             {category && (
                                 <h1 className="articles__h1">{category}</h1>
                             )}
-                            <SortOrder
-                                username={this.props.username}
-                                sortOrder={this.props.sortOrder}
-                                topic={this.props.topic}
-                            />
-                        </div>
-                        <div className="articles__header-col articles__header-col--right">
                             <div className="articles__tag-selector">
                                 <Topics
+                                    username={this.props.username}
                                     order={topics_order}
                                     current={category}
                                     compact
                                 />
                             </div>
+                        </div>
+                        <div className="articles__header-col articles__header-col--right">
+                            <SortOrder
+                                sortOrder={this.props.sortOrder}
+                                topic={this.props.topic}
+                            />
                             <ArticleLayoutSelector />
                         </div>
                     </div>

@@ -28,14 +28,22 @@ class Topics extends React.Component {
     }
 
     render() {
-        // console.log('Topics');
-        const { props: { order, current, compact, className } } = this;
+        const {
+            props: { order, current, compact, className, username },
+        } = this;
         let categories = this.props.categories.get('trending');
         categories = categories.take(50);
-
         const cn = 'Topics' + (className ? ` ${className}` : '');
         const currentValue = `/${order}/${current}`;
 
+        console.log('COMPACT:', compact);
+        console.log('USERNAME:', username);
+
+        const myFeed = username && (
+            <option key={'feed'} value={`/@${username}/feed`}>
+                {tt('g.my_feed')}
+            </option>
+        );
         if (compact) {
             return (
                 <select
@@ -46,6 +54,7 @@ class Topics extends React.Component {
                     <option key={'*'} value={'/' + order}>
                         {tt('g.all_tags')}
                     </option>
+                    {myFeed}
                     {categories.map(cat => {
                         const link = order ? `/${order}/${cat}` : `/${cat}`;
                         return (

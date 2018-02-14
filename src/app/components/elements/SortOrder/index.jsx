@@ -4,10 +4,10 @@ import tt from 'counterpart';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
 import HorizontalMenu from 'app/components/elements/HorizontalMenu';
 
-const SortOrder = ({ username, sortOrder, topic }) => {
-    const sortOrderToLink = (so, topic = 'feed', account) => {
+const SortOrder = ({ sortOrder, topic }) => {
+    const sortOrderToLink = (so, topic = 'feed') => {
         const routes = {
-            home: `/@${account}/feed`,
+            // home: `/@${account}/feed`,
             trending: '/trending',
             created: '/created',
             hot: '/hot',
@@ -26,28 +26,27 @@ const SortOrder = ({ username, sortOrder, topic }) => {
         ['promoted', tt('g.promoted')],
     ];
 
-    if (username) sort_orders.unshift(['home', tt('header_jsx.home')]);
+    //if (username) sort_orders.unshift(['home', tt('header_jsx.home')]);
 
     const sort_order_menu = sort_orders
         .filter(so => so[0] !== sortOrder)
         .map(so => ({
-            link: sortOrderToLink(so[0], topic, username),
+            link: sortOrderToLink(so[0], topic),
             value: so[1],
         }));
 
     const selected_sort_order = sort_orders.find(so => so[0] === sortOrder);
 
-    const actuallySelected =
-        !selected_sort_order && username
-            ? ['home', tt('header_jsx.home')]
-            : selected_sort_order;
+    const actuallySelected = !selected_sort_order
+        ? ['trending', tt('main_menu.trending')] // This will have to default to trending.
+        : selected_sort_order;
 
     const sort_order_menu_horizontal = sort_orders.map(so => {
         let active = so[0] === sortOrder;
         if (so[0] === 'home' && sortOrder === 'home' && !home_account)
             active = false;
         return {
-            link: sortOrderToLink(so[0], topic, username),
+            link: sortOrderToLink(so[0], topic),
             value: so[1],
             active,
         };
@@ -70,13 +69,11 @@ const SortOrder = ({ username, sortOrder, topic }) => {
 };
 
 SortOrder.propTypes = {
-    username: React.PropTypes.string,
     sortOrder: PropTypes.string,
     topic: React.PropTypes.string,
 };
 
 SortOrder.defaultProps = {
-    username: undefined,
     sortOrder: 'trending',
     topic: undefined,
 };

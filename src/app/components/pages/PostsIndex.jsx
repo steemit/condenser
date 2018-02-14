@@ -51,8 +51,6 @@ class PostsIndex extends React.Component {
     }
 
     getPosts(order, category) {
-        console.log('CATEGORY:',category)
-        
         const topic_discussions = this.props.discussions.get(category || '');
         if (!topic_discussions) return null;
         return topic_discussions.get(order);
@@ -128,9 +126,7 @@ class PostsIndex extends React.Component {
                 );
             }
         } else {
-            // posts = this.getPosts(this.props.sortOrder, this.props.topic);
             posts = this.getPosts(order, category);
-            console.log('Posts1', posts)
             if (posts && posts.size === 0) {
                 emptyText = (
                     <div>
@@ -185,6 +181,8 @@ class PostsIndex extends React.Component {
             ? ' layout-block'
             : ' layout-list';
 
+        //console.log('CURRENT CATEGORY:', category);
+        debugger;
         return (
             <div
                 className={

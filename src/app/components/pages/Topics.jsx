@@ -35,20 +35,29 @@ class Topics extends React.Component {
         categories = categories.take(50);
         const cn = 'Topics' + (className ? ` ${className}` : '');
         const currentValue = `/${order}/${current}`;
-
-        console.log('COMPACT:', compact);
-        console.log('USERNAME:', username);
-
+        // order is 'trending'
+        //current is 'feed'
+        //currentValue is '/trending/feed'
+        debugger
         const myFeed = username && (
             <option key={'feed'} value={`/@${username}/feed`}>
-                {tt('g.my_feed')}
+                {
+                    //tt('g.my_feed')
+                    'feed'
+                }
             </option>
         );
         if (compact) {
             return (
                 <select
                     className={cn}
-                    onChange={e => browserHistory.push(e.target.value)}
+                    onChange={
+                        (e) => 
+                        {
+                            debugger
+                            browserHistory.push(e.target.value)
+                        }
+                    }
                     value={currentValue}
                 >
                     <option key={'*'} value={'/' + order}>

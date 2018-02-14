@@ -304,18 +304,17 @@ export default function useGeneralApi(app) {
      *   secret
      */
     router.post('/create_user', koaBody, function*() {
-        if (rateLimitReq(this, this.req)) return;
-
         const { name, email, owner_key, secret } =
             typeof this.request.body === 'string'
                 ? JSON.parse(this.request.body)
                 : this.request.body;
 
+        if (secret !== process.env.CREATE_USER_SECRET)
+            throw new Error('invalid secret');
+
         logRequest('create_user', this, { name, email, owner_key });
 
         try {
-            if (secret !== process.env.CREATE_USER_SECRET)
-                throw new Error('invalid secret');
             if (!emailRegex.test(email.toLowerCase()))
                 throw new Error('not valid email: ' + email);
             const existingUser = yield findUser({

@@ -18,6 +18,7 @@ import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 import proxifyImageUrl from 'app/utils/ProxifyUrl';
 import { pathTo, convertPostPath } from 'app/Routes';
 import Userpic, { avatarSize } from 'app/components/elements/Userpic';
+import { SIGNUP_URL } from 'shared/constants';
 
 class PostSummary extends React.Component {
     static propTypes = {
@@ -273,11 +274,11 @@ class PostSummary extends React.Component {
                                 </span>
                             ) : (
                                 <span>
-                                    <Link to={pathTo.signup()}>
+                                    <a href={SIGNUP_URL}>
                                         {tt(
                                             'postsummary_jsx.create_an_account'
                                         )}
-                                    </Link>{' '}
+                                    </a>{' '}
                                     {tt(
                                         'postsummary_jsx.to_save_your_preferences'
                                     )}.

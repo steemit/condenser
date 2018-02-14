@@ -12,6 +12,7 @@ import VerticalMenu from 'app/components/elements/VerticalMenu';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import NotifiCounter from 'app/components/elements/NotifiCounter';
 import { pathTo } from 'app/Routes';
+import { SIGNUP_URL } from 'shared/constants';
 
 const defaultNavigate = e => {
     if (e.metaKey || e.ctrlKey) {
@@ -152,13 +153,6 @@ function TopRightMenu({
     if (probablyLoggedIn) {
         return (
             <ul className={mcn + mcl}>
-                {!vertical && (
-                    <li className="Header__search">
-                        <a href="/static/search.html" title={tt_search}>
-                            <Icon name="search" />
-                        </a>
-                    </li>
-                )}
                 <li className={lcn} style={{ paddingTop: 0, paddingBottom: 0 }}>
                     <LoadingIndicator type="circle" inline />
                 </li>
@@ -182,7 +176,7 @@ function TopRightMenu({
                 </li>
             )}
             <li className={lcn}>
-                <a href={pathTo.signup()}>{tt('g.sign_up')}</a>
+                <a href={SIGNUP_URL}>{tt('g.sign_up')}</a>
             </li>
             <li className={lcn}>
                 <a href={pathTo.login()} onClick={showLogin}>

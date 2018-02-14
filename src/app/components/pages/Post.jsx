@@ -13,6 +13,7 @@ import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 import { INVEST_TOKEN_UPPERCASE } from 'app/client_config';
 import { pathTo } from 'app/Routes';
+import { SIGNUP_URL } from 'shared/constants';
 
 import { isLoggedIn } from 'app/utils/UserUtil';
 
@@ -31,7 +32,7 @@ class Post extends React.Component {
         };
         this.showSignUp = () => {
             serverApiRecordEvent('SignUp', 'Post Promo');
-            window.location = pathTo.signup();
+            window.location = SIGNUP_URL;
         };
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'Post');
     }

@@ -78,9 +78,10 @@
   margin: 0.5rem 0 1rem;
 }
 
-// protect for foundation bug for collapsed state drop-downs
 @media only screen and (max-width: 40em) {
-    .Wallet_dropdown {
-        left: 10px!important;
+    .Wallet_dropdown.left > .VerticalMenu {
+        @media only screen and (max-width: 40em) {
+            right: auto;
+        }
     }
 }

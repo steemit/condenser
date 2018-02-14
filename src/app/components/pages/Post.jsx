@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 
 import { sortComments } from 'app/components/cards/Comment';
 // import { Link } from 'react-router';
-import DropdownMenu from 'app/components/elements/DropdownMenu';
+import FoundationDropdownMenu from 'app/components/elements/FoundationDropdownMenu';
 import { Set } from 'immutable';
 import tt from 'counterpart';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
@@ -147,6 +147,7 @@ class Post extends React.Component {
         ];
         let sort_menu = [];
         let sort_label;
+
         let selflink = `/${dis.get('category')}/@${post}`;
         for (let o = 0; o < sort_orders.length; ++o) {
             if (sort_orders[o] == sort_order) sort_label = sort_labels[o];
@@ -235,11 +236,11 @@ class Post extends React.Component {
                             {positiveComments.length ? (
                                 <div className="Post__comments_sort_order float-right">
                                     {tt('post_jsx.sort_order')}: &nbsp;
-                                    <DropdownMenu
-                                        items={sort_menu}
-                                        el="li"
-                                        selected={sort_label}
-                                        position="left"
+                                    <FoundationDropdownMenu
+                                        menu={sort_menu}
+                                        label={sort_label}
+                                        dropdownPosition="bottom"
+                                        dropdownAlignment="right"
                                     />
                                 </div>
                             ) : null}

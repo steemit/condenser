@@ -21,6 +21,7 @@ import PostsList from 'app/components/cards/PostsList';
 import { isFetchingOrRecentlyUpdated } from 'app/utils/StateFunctions';
 import { repLog10 } from 'app/utils/ParsersAndFormatters.js';
 import Tooltip from 'app/components/elements/Tooltip';
+import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdown';
 import VerticalMenu from 'app/components/elements/VerticalMenu';
 import NotifiCounter from 'app/components/elements/NotifiCounter';
 import DateJoinWrapper from 'app/components/elements/DateJoinWrapper';
@@ -32,7 +33,6 @@ import normalizeProfile from 'app/utils/NormalizeProfile';
 import userIllegalContent from 'app/utils/userIllegalContent';
 import proxifyImageUrl from 'app/utils/ProxifyUrl';
 import ArticleLayoutSelector from 'app/components/modules/ArticleLayoutSelector';
-import DropdownMenu from 'app/components/elements/DropdownMenu';
 
 export default class UserProfile extends React.Component {
     constructor() {
@@ -552,13 +552,21 @@ export default class UserProfile extends React.Component {
                             </Link>
                         </li>
                         {/*<li><Link to={`/@${accountname}/feed`} activeClassName="active">Feed</Link></li>*/}
-                        <DropdownMenu
-                            className={rewardsClass}
-                            items={rewardsMenu}
-                            el="li"
-                            selected={tt('g.rewards')}
-                            position="right"
-                        />
+                        <li>
+                            <LinkWithDropdown
+                                closeOnClickOutside
+                                dropdownPosition="bottom"
+                                dropdownAlignment="right"
+                                dropdownContent={
+                                    <VerticalMenu items={rewardsMenu} />
+                                }
+                            >
+                                <a className={rewardsClass}>
+                                    {tt('g.rewards')}
+                                    <Icon name="dropdown-arrow" />
+                                </a>
+                            </LinkWithDropdown>
+                        </li>
                     </ul>
                 </div>
                 <div className="columns shrink">
@@ -625,6 +633,7 @@ export default class UserProfile extends React.Component {
                                 />
                             </div>
                         </div>
+
                         <h1>
                             <Userpic account={account.name} hideIfDefault />
                             {name || account.name}{' '}

@@ -16,17 +16,22 @@
     opacity: 0;
     position: absolute;
     top: 100%;
-    padding: 2px;
-
-    @include themify($themes) {
-      background-color: themed('backgroundColor');
-      border: themed('borderDark');    
-    }     
-
-    // width: auto;
     transform: translateY(10%);
     transition: all 0.3s ease 0s, visibility 0s linear 0.3s;
     box-shadow: 1px 1px 5px 0px rgba(50, 50, 50, 0.75);
+    @include themify($themes) {
+      background-color: themed('backgroundColor');
+      border: themed('borderDark');
+    }
+    > a {
+        padding: 0.7rem 1rem;
+    }
+    > li > a {
+        font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        font-size: inherit;
+        padding: 0.7rem 2.2rem 0.7rem 0.7rem;
+    }
   }
 
   &.show > .VerticalMenu {
@@ -34,15 +39,15 @@
     opacity: 1;
     transform: translateX(0%);
     transition-delay: 0s;
-
     a {
       transition: 0.2s all ease-in-out;
       @include themify($themes) {
         color: themed('textColorPrimary');  
-      }       
+      }
       &:hover {
         @include themify($themes) {
-          color: themed('textColorAccent');  
+          color: themed('textColorAccent');
+          background-color: themed('buttonText')
         } 
       }
     }

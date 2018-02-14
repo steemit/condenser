@@ -65,10 +65,6 @@ module.exports = {
                 use: "imports?define=>false"
             },
             {
-                test: require.resolve("medium-editor-insert-plugin"),
-                use: "imports?define=>false"
-            },
-            {
                 test: /\.css$/,
                 use: css_loaders
             },

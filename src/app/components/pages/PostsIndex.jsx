@@ -191,7 +191,9 @@ class PostsIndex extends React.Component {
                     <div className="articles__header">
                         <div className="articles__header-col">
                             {category && (
-                                <h1 className="articles__h1 show-for-large-only">{category}</h1>
+                                <h1 className="articles__h1 show-for-large-only">
+                                    {category}
+                                </h1>
                             )}
                             <div className="articles__tag-selector">
                                 <Topics
@@ -211,7 +213,6 @@ class PostsIndex extends React.Component {
                             )}
                         </div>
                         <div className="articles__header-col articles__header-col--right">
-                        
                             <ArticleLayoutSelector />
                         </div>
                     </div>

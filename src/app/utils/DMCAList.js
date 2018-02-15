@@ -44,6 +44,9 @@ export default `
 /photography/@elvinanurhaliza/photohraphy-dewy-flowers
 /photography/@elvinanurhaliza/spider-finepix-s4800-reptiles-etc
 /entertainment/@seanfrederic/feature-film-loco-i-m-a-producer-on-starts-filming-soon
+/cryptocurrency/@kriptonoob/palm-beach-confidential-report-cindicator-125
+/crypto/@medicbtom/palm-beach-confidential-released-their-monthly-pick
+/news/@vaerospace/fire-and-fury-pdf-direct-download-from-ipfs-a-great-giggle
 `
     .trim()
     .split('\n');

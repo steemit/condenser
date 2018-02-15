@@ -11,6 +11,7 @@ import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 import tt from 'counterpart';
 import { APP_URL } from 'app/client_config';
 import { PrivateKey, PublicKey } from '@steemit/steem-js/lib/auth/ecc';
+import { SIGNUP_URL } from 'shared/constants';
 
 class LoginForm extends Component {
     static propTypes = {
@@ -91,7 +92,7 @@ class LoginForm extends Component {
         const onType = document.getElementsByClassName('OpAction')[0]
             .textContent;
         serverApiRecordEvent('FreeMoneySignUp', onType);
-        window.location.href = '/pick_account';
+        window.location.href = SIGNUP_URL;
     }
 
     SignIn() {

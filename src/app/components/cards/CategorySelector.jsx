@@ -72,7 +72,7 @@ class CategorySelector extends React.Component {
                 ref="categoryRef"
                 tabIndex={tabIndex}
                 disabled={disabled}
-                autocapitalize="none"
+                autoCapitalize="none"
             />
         );
 

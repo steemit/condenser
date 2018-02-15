@@ -19,6 +19,12 @@ export default function useGeneralApi(app) {
     app.use(router.routes());
     const koaBody = koa_body();
 
+    router.get('/healthcheck', function *() {
+        this.status = 200;
+        this.statusText = 'OK';
+        this.body = {status: 200, statusText: 'OK'};
+    })
+
     router.post('/accounts', koaBody, function *() {
         if (rateLimitReq(this, this.req)) return;
         const params = this.request.body;

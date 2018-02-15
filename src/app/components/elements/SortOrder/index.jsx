@@ -2,12 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import tt from 'counterpart';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
-import HorizontalMenu from 'app/components/elements/HorizontalMenu';
 
 const SortOrder = ({ sortOrder, topic }) => {
     const sortOrderToLink = (so, topic = 'feed') => {
         const routes = {
-            // home: `/@${account}/feed`,
             trending: '/trending',
             created: '/created',
             hot: '/hot',
@@ -25,8 +23,6 @@ const SortOrder = ({ sortOrder, topic }) => {
         ['hot', tt('main_menu.hot')],
         ['promoted', tt('g.promoted')],
     ];
-
-    //if (username) sort_orders.unshift(['home', tt('header_jsx.home')]);
 
     const sort_order_menu = sort_orders
         .filter(so => so[0] !== sortOrder)
@@ -55,14 +51,10 @@ const SortOrder = ({ sortOrder, topic }) => {
     return (
         <span>
             <DropdownMenu
-                className="Header__sort-order-menu menu-hide-for-large"
+                className="Header__sort-order-menu"
                 items={sort_order_menu}
                 selected={actuallySelected[1]}
                 el="li"
-            />
-            <HorizontalMenu
-                className="show-for-medium Header__sort"
-                items={sort_order_menu_horizontal}
             />
         </span>
     );

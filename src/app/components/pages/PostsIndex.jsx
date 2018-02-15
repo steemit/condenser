@@ -176,13 +176,9 @@ class PostsIndex extends React.Component {
                 page_title = `${page_title}: ${category}`; // maybe todo: localize the colon?
             }
         }
-
         const layoutClass = this.props.blogmode
             ? ' layout-block'
             : ' layout-list';
-
-        //console.log('CURRENT CATEGORY:', category);
-        debugger;
         return (
             <div
                 className={
@@ -207,10 +203,12 @@ class PostsIndex extends React.Component {
                             </div>
                         </div>
                         <div className="articles__header-col articles__header-col--right">
-                            <SortOrder
-                                sortOrder={this.props.sortOrder}
-                                topic={this.props.topic}
-                            />
+                            {category !== 'feed' && (
+                                <SortOrder
+                                    sortOrder={this.props.sortOrder}
+                                    topic={this.props.topic}
+                                />
+                            )}
                             <ArticleLayoutSelector />
                         </div>
                     </div>
@@ -243,6 +241,7 @@ class PostsIndex extends React.Component {
                         order={topics_order}
                         current={category}
                         compact={false}
+                        username={this.props.username}
                     />
                     <small>
                         <a

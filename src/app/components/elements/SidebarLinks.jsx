@@ -1,4 +1,5 @@
 import React from 'react';
+import tt from 'counterpart';
 
 const SidebarLinks = ({ username }) => (
     <div className="c-sidebar__module">
@@ -7,6 +8,12 @@ const SidebarLinks = ({ username }) => (
         </div>
         <div className="c-sidebar__content">
             <ul className="c-sidebar__list">
+                <li className="c-sidebar__list-item" key="feed">
+                    <a className="c-sidebar__link" href={`/@${username}/feed`}>
+                        {tt('g.my_feed')}
+                    </a>
+                </li>
+
                 <li className="c-sidebar__list-item">
                     <a className="c-sidebar__link" href={'/@' + username}>
                         My blog

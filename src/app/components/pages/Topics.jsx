@@ -35,30 +35,19 @@ class Topics extends React.Component {
         categories = categories.take(50);
         const cn = 'Topics' + (className ? ` ${className}` : '');
         const currentValue = `/${order}/${current}`;
-        // order is 'trending'
-        //current is 'feed'
-        //currentValue is '/trending/feed'
-        debugger
+        const selected =
+            current === 'feed' ? `/@${username}/feed` : currentValue;
         const myFeed = username && (
             <option key={'feed'} value={`/@${username}/feed`}>
-                {
-                    //tt('g.my_feed')
-                    'feed'
-                }
+                {tt('g.my_feed')}
             </option>
         );
         if (compact) {
             return (
                 <select
                     className={cn}
-                    onChange={
-                        (e) => 
-                        {
-                            debugger
-                            browserHistory.push(e.target.value)
-                        }
-                    }
-                    value={currentValue}
+                    onChange={e => browserHistory.push(e.target.value)}
+                    value={selected}
                 >
                     <option key={'*'} value={'/' + order}>
                         {tt('g.all_tags')}

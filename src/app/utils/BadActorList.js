@@ -7,6 +7,7 @@ appreciater
 apreciator
 ausbitban
 ausbltbank
+battrex
 bbittrex
 bcex
 bellyrub
@@ -55,6 +56,7 @@ bitterex
 bitterx
 bittex
 bitthai
+bittr
 bittrax
 bittre
 bittrec
@@ -281,12 +283,15 @@ olonie
 oloniex
 openledgerdex
 p-funk
+paloniex
 paypals
 pextokens
 pfuck
+piloniex
 plolniex
 ploniex
 plooniex
+pokoniex
 polaniex
 poleniex
 poliniex
@@ -354,9 +359,11 @@ poolniex
 pooloniex
 pooniex
 poooniex
+poponiex
 postpromote
 pse
 ptunk
+puloniex
 qryptos
 qryptos.com
 randomwhale

@@ -5,12 +5,13 @@ if (config.metrics) {
   const StatsD = require('node-statsd');
   metrics = new StatsD({ host: config.get('metrics.host'), prefix: 'tolstoy_' });
   metrics.track = track
+  metrics.cache = cache
 } 
 
 function track(context, method, args) {
   const start = new Date()
   const promise = context[method].apply(context, args)
-
+  
   promise.then(() => {
       const end = new Date()
       const delta = end - start
@@ -20,6 +21,10 @@ function track(context, method, args) {
   }).catch(console.log)
 
   return promise
+}
+
+function cache(method, type) {
+  this.increment(`cache.${method}.${type}.count`)
 }
 
 /**

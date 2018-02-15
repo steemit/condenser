@@ -209,6 +209,9 @@ class PostsIndex extends React.Component {
                                     topic={this.props.topic}
                                 />
                             )}
+                        </div>
+                        <div className="articles__header-col articles__header-col--right">
+                        
                             <ArticleLayoutSelector />
                         </div>
                     </div>

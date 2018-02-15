@@ -2,6 +2,7 @@ import React from 'react';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import { Link } from 'react-router';
 import tt from 'counterpart';
+import { SIGNUP_URL } from 'shared/constants';
 
 export default class WelcomePanel extends React.Component {
     constructor(props) {
@@ -32,13 +33,13 @@ export default class WelcomePanel extends React.Component {
                                 {tt('navigation.intro_paragraph')}
                             </h4>
                             <div className="row buttonWrapper">
-                                <Link
+                                <a
                                     className="button button--primary fade-in--5"
-                                    to="/pick_account"
+                                    href={SIGNUP_URL}
                                 >
                                     {' '}
                                     <b>{tt('navigation.sign_up')}</b>{' '}
-                                </Link>
+                                </a>
 
                                 <Link
                                     href="/faq.html"

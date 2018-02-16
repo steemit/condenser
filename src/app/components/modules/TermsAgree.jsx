@@ -2,7 +2,7 @@
 import React, { PropTypes, Component } from 'react';
 import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 import { translate } from 'app/Translator';
-import { Tos } from 'app/components/pages/Tos';
+import HelpContent from 'app/components/elements/HelpContent';
 import { connect } from 'react-redux';
 import * as userActions from 'app/redux/UserReducer';
 
@@ -36,7 +36,7 @@ class TermsAgree extends Component {
                 <div>
                     <hr />
 
-                    <Tos />
+                    <HelpContent path="tos" title="Terms of Service" />
 
                     <br />
                     <button

@@ -28,24 +28,31 @@ class Topics extends React.Component {
     }
 
     render() {
-        // console.log('Topics');
-        const { props: { order, current, compact, className } } = this;
+        const {
+            props: { order, current, compact, className, username },
+        } = this;
         let categories = this.props.categories.get('trending');
         categories = categories.take(50);
-
         const cn = 'Topics' + (className ? ` ${className}` : '');
         const currentValue = `/${order}/${current}`;
-
+        const selected =
+            current === 'feed' ? `/@${username}/feed` : currentValue;
+        const myFeed = username && (
+            <option key={'feed'} value={`/@${username}/feed`}>
+                {tt('g.my_feed')}
+            </option>
+        );
         if (compact) {
             return (
                 <select
                     className={cn}
                     onChange={e => browserHistory.push(e.target.value)}
-                    value={currentValue}
+                    value={selected}
                 >
                     <option key={'*'} value={'/' + order}>
                         {tt('g.all_tags')}
                     </option>
+                    {myFeed}
                     {categories.map(cat => {
                         const link = order ? `/${order}/${cat}` : `/${cat}`;
                         return (
@@ -72,12 +79,17 @@ class Topics extends React.Component {
                 </li>
             );
         });
+
         return (
             <div className="c-sidebar__module">
                 <div className="c-sidebar__header">
-                    <h3 className="c-sidebar__h3" key={'*'}>
-                        {tt('g.tags_and_topics')}
-                    </h3>
+                <Link
+                    to={'/' + order}
+                    className="c-sidebar__h3"
+                    activeClassName="active"
+                >
+                    {tt('g.all_tags')}
+                </Link>
                 </div>
                 <div className="c-sidebar__content">
                     <ul className="c-sidebar__list">

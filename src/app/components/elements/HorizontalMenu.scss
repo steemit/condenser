@@ -2,7 +2,7 @@
   display: none;
   .active > a {
     background: none;
-    font-weight: 600;
+    font-weight: bold;
     @include themify($themes) {
       color: themed('textColorAccent');  
     }  
@@ -28,16 +28,15 @@
 @media screen and (min-width: 52.5em) { 
   ul.HorizontalMenu.menu {
     display: flex;
-    padding-left: 0.5em;
-
     li > a {
-      padding-left: 0.5em;
-      padding-right: 0.5em;  
+      padding-right: 0.5em;
+      text-transform: capitalize;
+    }
+    .active {
+        font-weight: bold;
     }
   }
 }
-
-
 
 @media print, screen and (min-width: 52.5em) {  
   .menu-hide-for-large {

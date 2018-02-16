@@ -227,36 +227,22 @@ ul > li.Header__logo > a {
   color: #ec5840;
 }
 
-.logo-new {
-  transition: 0.2s ease-in-out;
-  display: none;
-  transition: 0.2s all ease-in-out;
-  &--mobile {
+.Header__logotype {
     display: block;
-    width: 30px;
-    height: 30px;
-    @media only screen and (min-width: 400px) {
-      display: none;
-    }
-  }
-  &--desktop {
-    display: none;
-    width: 120px;
-    height: auto;
-    @media only screen and (min-width: 400px) {
-      display: block;
-    }
+    transition: 0.2s all ease-in-out;
+    height: 37px;
     @include MQ(M) {
-      width: 144px;
-      height: auto;
+        width: 144px;
+        height: auto;
     }
-  }
-
   .icon-svg {
     fill: $color-teal;
     @include themify($themes) {
       fill: themed('colorAccent');
     }
+  }
+  @media only screen and (min-width: 400px) {
+    height: 37px;
   }
 }
 

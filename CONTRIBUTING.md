@@ -39,6 +39,11 @@ Please note that this contributing guide only applies to our development presenc
      and want to see it in the condenser codebase, please submit a Pull Request, reference
      the issue in the description start the title with `community -`. We're working very
      hard to keep our development practices as open as possible, and this helps us a lot. 
+9. **Translations** Becoming a translator for your native language is easy and a great help to
+     users around the world. To add your native language contributions for an existing or new language,
+     please email translate@steemit.com to receive your email invite. Translators are able to join existing
+     translated languages or submit a new language. Please do not submit Pull Requests with your updates,
+     all key string updates should always be added first in our translations platform. 
 
 ## Code of Conduct
 

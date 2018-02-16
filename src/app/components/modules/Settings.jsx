@@ -196,11 +196,11 @@ class Settings extends React.Component {
                                 onChange={this.handleLanguageChange}
                             >
                                 <option value="en">English</option>
-                                <option value="es">Spanish</option>
-                                <option value="ru">Russian</option>
-                                <option value="fr">French</option>
-                                <option value="it">Italian</option>
-                                <option value="ko">Korean</option>
+                                <option value="es">Spanish Español</option>
+                                <option value="ru">Russian русский</option>
+                                <option value="fr">French français</option>
+                                <option value="it">Italian italiano</option>
+                                <option value="ko">Korean 한국어</option>
                                 <option value="pl">Polish</option>
                                 <option value="zh">Chinese 简体中文</option>
                             </select>

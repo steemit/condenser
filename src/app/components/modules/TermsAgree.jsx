@@ -1,9 +1,11 @@
 /* eslint react/prop-types: 0 */
 import React, { PropTypes, Component } from 'react';
+import { connect } from 'react-redux';
+import tt from 'counterpart';
+
 import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 import { translate } from 'app/Translator';
 import HelpContent from 'app/components/elements/HelpContent';
-import { connect } from 'react-redux';
 import * as userActions from 'app/redux/UserReducer';
 
 class TermsAgree extends Component {
@@ -44,14 +46,14 @@ class TermsAgree extends Component {
                         className="button"
                         onClick={this.termsAgree}
                     >
-                        I Agree To These Terms // FIXME i18n
+                        {tt('termsagree_jsx.i_agree_to_these_terms')}
                     </button>
                     <button
                         type="button float-right"
                         className="button hollow"
                         onClick={this.termsCancel}
                     >
-                        Cancel // FIXME i18n
+                        {tt('termsagree_jsx.cancel')}
                     </button>
                 </div>
             </div>

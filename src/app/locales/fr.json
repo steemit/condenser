@@ -451,6 +451,7 @@
     "voting_jsx": {
         "flagging_post_can_remove_rewards_the_flag_should_be_used_for_the_following":
             "Signaler un article peut diminuer ses gains potentiels et rendre son contenu moins visible. Quelques raisons usuelles pour signaler un article :",
+        "aggrandizement": "Agrandissement",
         "disagreement_on_rewards": "Désaccord sur les gains",
         "fraud_or_plagiarism": "Fraude ou plagiarisme",
         "hate_speech_or_internet_trolling": "Discours haineux ou troll",

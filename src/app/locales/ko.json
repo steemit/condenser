@@ -439,6 +439,7 @@
     "voting_jsx": {
         "flagging_post_can_remove_rewards_the_flag_should_be_used_for_the_following":
             "다운 보팅을 하시면 보상액을 없애고, 해당 게시물을 눈에 덜 띄게 만들 수 있습니다. 다운 보팅 사유는 다음과 같습니다.",
+        "aggrandizement": "증대",
         "disagreement_on_rewards": "동의할 수 없을 정도로 지나치게 많은 보상액",
         "fraud_or_plagiarism": "사기 혹은 표절",
         "hate_speech_or_internet_trolling":

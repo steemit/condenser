@@ -454,6 +454,7 @@
     "voting_jsx": {
         "flagging_post_can_remove_rewards_the_flag_should_be_used_for_the_following":
             "Голосование против уменьшает вознаграждение и снижает позицию в рейтинге.",
+        "aggrandizement": "возвеличивание",
         "disagreement_on_rewards": "Несогласие с вознаграждением",
         "fraud_or_plagiarism": "Мошенничество или плагиат",
         "hate_speech_or_internet_trolling":

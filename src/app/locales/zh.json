@@ -401,6 +401,7 @@
     "voting_jsx": {
         "flagging_post_can_remove_rewards_the_flag_should_be_used_for_the_following":
             "举报帖子可撤销奖励且使其不可见。常见举报原因",
+        "aggrandizement": "强化",
         "disagreement_on_rewards": "奖励不一致",
         "fraud_or_plagiarism": "欺诈或剽窃",
         "hate_speech_or_internet_trolling": "仇恨言论或互联网钓鱼",

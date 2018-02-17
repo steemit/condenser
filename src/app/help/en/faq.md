@@ -193,7 +193,7 @@
 
 ## <span id="What_is_Steemit_com">What is Steemit.com?</span>
 
-Steemit is a social network and content rewards platform that makes the crowd the beneficiaries of the attention economy. It does this be rewarding users with STEEM.
+Steemit is a social network and content rewards platform that makes the crowd the beneficiaries of the attention economy. It does this by rewarding users with STEEM.
 
 Steemit has redefined social media by building a living, breathing, and growing social economy; a community where users are getting rewarded for sharing their voice.
 

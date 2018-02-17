@@ -49,7 +49,7 @@ function logRequest(path, ctx, extra) {
 }
 
 export default function useGeneralApi(app) {
-    const router = koa_router({ prefix: '/api/v1' });
+    const router = koa_router({ prefix: '/c/api' });
     app.use(router.routes());
     const koaBody = koa_body();
 
@@ -121,6 +121,33 @@ export default function useGeneralApi(app) {
             this.body = JSON.stringify({ error: 'Unauthorized' });
             this.status = 401;
             return;
+        }
+
+        try {
+            const lock_entity_res = yield Tarantool.instance().call(
+                'lock_entity',
+                user_id + ''
+            );
+            if (!lock_entity_res[0][0]) {
+                console.log(
+                    '-- /accounts lock_entity -->',
+                    user_id,
+                    lock_entity_res[0][0]
+                );
+                this.body = JSON.stringify({ error: 'Conflict' });
+                this.status = 409;
+                return;
+            }
+        } catch (e) {
+            console.error(
+                '-- /accounts tarantool is not available, fallback to another method',
+                e
+            );
+            const rnd_wait_time = Math.random() * 10000;
+            console.log('-- /accounts rnd_wait_time -->', rnd_wait_time);
+            yield new Promise(resolve =>
+                setTimeout(() => resolve(), rnd_wait_time)
+            );
         }
 
         try {
@@ -578,6 +605,18 @@ export default function useGeneralApi(app) {
         try {
             let views = 1,
                 unique = true;
+            if (config.has('tarantool') && config.has('tarantool.host')) {
+                try {
+                    const res = yield Tarantool.instance().call(
+                        'page_view',
+                        page,
+                        remote_ip,
+                        this.session.uid,
+                        ref
+                    );
+                    unique = res[0][0];
+                } catch (e) {}
+            }
             const page_model = yield models.Page.findOne({
                 attributes: ['id', 'views'],
                 where: { permlink: esc(page) },

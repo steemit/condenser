@@ -1,5 +1,6 @@
 import React from 'react';
 import HelpContent from 'app/components/elements/HelpContent';
+import { pathTo } from 'app/Routes';
 
 class Welcome extends React.Component {
     render() {
@@ -22,6 +23,6 @@ class Welcome extends React.Component {
 }
 
 module.exports = {
-    path: 'welcome',
+    path: pathTo.welcome(),
     component: Welcome,
 };

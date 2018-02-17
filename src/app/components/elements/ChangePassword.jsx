@@ -7,6 +7,7 @@ import {
     key_utils,
 } from '@steemit/steem-js/lib/auth/ecc';
 import { api } from '@steemit/steem-js';
+import { pathTo } from 'app/Routes';
 
 import * as transactionActions from 'app/redux/TransactionReducer';
 import * as appActions from 'app/redux/AppReducer';
@@ -84,9 +85,8 @@ class ChangePassword extends React.Component {
             if (onClose) onClose();
             if (resetForm) resetForm();
             notify('Password Updated');
-            window.location = `/login.html#account=${
-                accountName
-            }&msg=passwordupdated`;
+            window.location =
+                pathTo.login() + `#account=${accountName}&msg=passwordupdated`;
         };
         const error = e => {
             this.setState({ loading: false, error: e });
@@ -126,7 +126,7 @@ class ChangePassword extends React.Component {
         const error2 = /Missing Owner Authority/.test(error) ? (
             <span>
                 {tt('g.this_is_wrong_password')}. {tt('g.do_you_need_to') + ' '}
-                <a href="/recover_account_step_1">
+                <a href={pathTo.recoverAccount(1)}>
                     {tt('g.recover_your_account')}
                 </a>?
             </span>
@@ -200,7 +200,7 @@ class ChangePassword extends React.Component {
                     <br />
                     <label>
                         <div className="float-right">
-                            <a href="/recover_account_step_1">
+                            <a href={pathTo.recoverAccount(1)}>
                                 {tt('g.recover_password')}
                             </a>
                         </div>

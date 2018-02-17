@@ -14,6 +14,7 @@ import {
 } from 'react-router';
 import { Provider } from 'react-redux';
 import RootRoute from 'app/RootRoute';
+import { resolveRoute, routeRegex, routeToSteemdUrl } from 'app/Routes';
 import * as appActions from 'app/redux/AppReducer';
 import { createStore, applyMiddleware, compose } from 'redux';
 import { useScroll } from 'react-router-scroll';
@@ -29,7 +30,6 @@ import { transactionWatches } from 'app/redux/TransactionSaga';
 import { component as NotFound } from 'app/components/pages/NotFound';
 import extractMeta from 'app/utils/ExtractMeta';
 import Translator from 'app/Translator';
-import { routeRegex } from 'app/ResolveRoute';
 import { contentStats } from 'app/utils/StateFunctions';
 import ScrollBehavior from 'scroll-behavior';
 
@@ -316,6 +316,9 @@ async function universalRender({
     // below is only executed on the server
     let server_store, onchain;
     try {
+        const route = resolveRoute(location);
+        console.log('-- universalRender route -->', route);
+
         let url = location === '/' ? 'trending' : location;
         // Replace /curation-rewards and /author-rewards with /transfers for UserProfile
         // to resolve data correctly
@@ -323,6 +326,23 @@ async function universalRender({
             url = url.replace(/\/curation-rewards$/, '/transfers');
         if (url.indexOf('/author-rewards') !== -1)
             url = url.replace(/\/author-rewards$/, '/transfers');
+
+        if (route.page === 'Post') {
+            const content = await api.getContentAsync(
+                route.params[0],
+                route.params[1]
+            );
+            if (!content || !content.author) {
+                return {
+                    title: 'Page Not Found - Steemit',
+                    statusCode: 404,
+                    body: renderToString(<NotFound />),
+                };
+            }
+            url = `${content.category}/@${content.author}/${content.permlink}`;
+        } else {
+            url = routeToSteemdUrl(route);
+        }
 
         if (process.env.OFFLINE_SSR_TEST) {
             onchain = get_state_perf;
@@ -332,8 +352,7 @@ async function universalRender({
 
         if (
             Object.getOwnPropertyNames(onchain.accounts).length === 0 &&
-            (url.match(routeRegex.UserProfile1) ||
-                url.match(routeRegex.UserProfile3))
+            route.page === 'UserProfile'
         ) {
             // protect for invalid account
             return {
@@ -344,7 +363,7 @@ async function universalRender({
         }
 
         // If we are not loading a post, truncate state data to bring response size down.
-        if (!url.match(routeRegex.Post)) {
+        if (route.page !== 'Post') {
             for (var key in onchain.content) {
                 //onchain.content[key]['body'] = onchain.content[key]['body'].substring(0, 1024) // TODO: can be removed. will be handled by steemd
                 // Count some stats then remove voting data. But keep current user's votes. (#1040)
@@ -357,31 +376,6 @@ async function universalRender({
             }
         }
 
-        if (
-            !url.match(routeRegex.PostsIndex) &&
-            !url.match(routeRegex.UserProfile1) &&
-            !url.match(routeRegex.UserProfile2) &&
-            url.match(routeRegex.PostNoCategory)
-        ) {
-            const params = url.substr(2, url.length - 1).split('/');
-            let content;
-            if (process.env.OFFLINE_SSR_TEST) {
-                content = get_content_perf;
-            } else {
-                content = await api.getContentAsync(params[0], params[1]);
-            }
-            if (content.author && content.permlink) {
-                // valid short post url
-                onchain.content[url.substr(2, url.length - 1)] = content;
-            } else {
-                // protect on invalid user pages (i.e /user/transferss)
-                return {
-                    title: 'Page Not Found - Steemit',
-                    statusCode: 404,
-                    body: renderToString(<NotFound />),
-                };
-            }
-        }
         // Calculate signup bonus
         const fee = parseFloat($STM_Config.registrar_fee.split(' ')[0]),
             { base, quote } = onchain.feed_price,

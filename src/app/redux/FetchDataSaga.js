@@ -7,6 +7,7 @@ import * as appActions from './AppReducer';
 import constants from './constants';
 import { fromJS, Map } from 'immutable';
 import { api } from '@steemit/steem-js';
+import { resolveRoute, routeToSteemdUrl } from 'app/Routes';
 
 const REQUEST_DATA = 'fetchDataSaga/REQUEST_DATA';
 const GET_CONTENT = 'fetchDataSaga/GET_CONTENT';
@@ -52,17 +53,20 @@ export function* fetchState(location_change_action) {
     is_initial_state = false;
     if (ignore_fetch) return;
 
-    let url = `${pathname}`;
-    if (url === '/') url = 'trending';
-    // Replace /curation-rewards and /author-rewards with /transfers for UserProfile
-    // to resolve data correctly
-    if (url.indexOf('/curation-rewards') !== -1)
-        url = url.replace('/curation-rewards', '/transfers');
-    if (url.indexOf('/author-rewards') !== -1)
-        url = url.replace('/author-rewards', '/transfers');
-
     yield put(appActions.fetchDataBegin());
+    let url = pathname;
     try {
+        const route = resolveRoute(pathname);
+        if (route.page === 'Post') {
+            const content = yield call(
+                [api, api.getContentAsync],
+                route.params[0],
+                route.params[1]
+            );
+            url = `${content.category}/@${content.author}/${content.permlink}`;
+        } else {
+            url = routeToSteemdUrl(route);
+        }
         const state = yield call([api, api.getStateAsync], url);
         yield put(globalActions.receiveState(state));
     } catch (error) {
@@ -83,7 +87,7 @@ export function* watchFetchState() {
 export function* fetchData(action) {
     const { order, author, permlink, accountname } = action.payload;
     let { category } = action.payload;
-    if (!category) category = '';
+    if (!category || category === 'all') category = '';
     category = category.toLowerCase();
 
     yield put(globalActions.fetchingData({ order, category }));

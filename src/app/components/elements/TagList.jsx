@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
+import { pathTo } from 'app/Routes';
 
 export default ({ post, horizontal, single }) => {
     let sort_order = 'trending';
@@ -9,7 +10,9 @@ export default ({ post, horizontal, single }) => {
 
     if (single)
         return (
-            <Link to={`/${sort_order}/${post.category}`}>{post.category}</Link>
+            <Link to={pathTo.indexPage(post.category, sort_order)}>
+                {post.category}
+            </Link>
         );
 
     const json = post.json_metadata;
@@ -40,7 +43,7 @@ export default ({ post, horizontal, single }) => {
     if (horizontal) {
         // show it as a dropdown in Preview
         const list = tags.map((tag, idx) => (
-            <Link to={`/${sort_order}/${tag}`} key={idx}>
+            <Link to={pathTo.indexPage(tag, sort_order)} key={idx}>
                 {' '}
                 {tag}{' '}
             </Link>
@@ -48,10 +51,12 @@ export default ({ post, horizontal, single }) => {
         return <div className="TagList__horizontal">{list}</div>;
     }
     if (tags.length == 1) {
-        return <Link to={`/${sort_order}/${tags[0]}`}>{tags[0]}</Link>;
+        return (
+            <Link to={pathTo.indexPage(tags[0], sort_order)}>{tags[0]}</Link>
+        );
     }
     const list = tags.map(tag => {
-        return { value: tag, link: `/${sort_order}/${tag}` };
+        return { value: tag, link: pathTo.indexPage(tag, sort_order) };
     });
     return (
         <DropdownMenu

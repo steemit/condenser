@@ -17,11 +17,6 @@ export const INVEST_TOKEN_SHORT = 'SP';
 export const DEBT_TOKEN = 'STEEM DOLLAR';
 export const DEBT_TOKENS = 'STEEM DOLLARS';
 export const CURRENCY_SIGN = '$';
-export const WIKI_URL = ''; // https://wiki.golos.io/
-export const LANDING_PAGE_URL = 'https://steem.io/';
-export const TERMS_OF_SERVICE_URL = 'https://' + APP_DOMAIN + '/tos.html';
-export const PRIVACY_POLICY_URL = 'https://' + APP_DOMAIN + '/privacy.html';
-export const WHITEPAPER_URL = 'https://steem.io/SteemWhitePaper.pdf';
 
 // these are dealing with asset types, not displaying to client, rather sending data over websocket
 export const LIQUID_TICKER = 'STEEM';

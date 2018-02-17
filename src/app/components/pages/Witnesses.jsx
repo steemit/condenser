@@ -8,6 +8,7 @@ import ByteBuffer from 'bytebuffer';
 import { is } from 'immutable';
 import * as globalActions from 'app/redux/GlobalReducer';
 import tt from 'counterpart';
+import { pathTo } from 'app/Routes';
 
 const Long = ByteBuffer.Long;
 const { string, func, object } = PropTypes;
@@ -116,7 +117,7 @@ class Witnesses extends React.Component {
                         </span>
                     </td>
                     <td>
-                        <Link to={'/@' + owner}>{owner}</Link>
+                        <Link to={pathTo.userProfile(owner)}>{owner}</Link>
                     </td>
                     <td>{witness_thread}</td>
                 </tr>
@@ -151,7 +152,9 @@ class Witnesses extends React.Component {
                                         &nbsp;
                                     </span>
                                 </span>
-                                <Link to={'/@' + item}>{item}</Link>
+                                <Link to={pathTo.userProfile(item)}>
+                                    {item}
+                                </Link>
                             </div>
                         </div>
                     );
@@ -334,7 +337,7 @@ class Witnesses extends React.Component {
 }
 
 module.exports = {
-    path: '/~witnesses(/:witness)',
+    path: pathTo.witnesses(),
     component: connect(
         state => {
             const current_user = state.user.get('current');

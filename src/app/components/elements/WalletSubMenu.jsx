@@ -2,13 +2,14 @@ import React from 'react';
 import { Link } from 'react-router';
 import NotifiCounter from 'app/components/elements/NotifiCounter';
 import tt from 'counterpart';
+import { pathTo } from 'app/Routes';
 
 export default ({ account_name }) => {
     return (
         <ul className="WalletSubMenu menu">
             <li>
                 <Link
-                    to={`/@${account_name}/transfers`}
+                    to={pathTo.userWallet(account_name)}
                     activeClassName="active"
                 >
                     {tt('g.balances')} <NotifiCounter fields="send,receive" />
@@ -16,7 +17,7 @@ export default ({ account_name }) => {
             </li>
             <li>
                 <Link
-                    to={`/@${account_name}/permissions`}
+                    to={pathTo.userPermissions(account_name)}
                     activeClassName="active"
                 >
                     {tt('g.permissions')}{' '}
@@ -25,7 +26,7 @@ export default ({ account_name }) => {
             </li>
             <li>
                 <Link
-                    to={`/@${account_name}/password`}
+                    to={pathTo.userPassword(account_name)}
                     activeClassName="active"
                 >
                     {tt('g.password')}

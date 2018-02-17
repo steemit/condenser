@@ -18,7 +18,7 @@ import PageViewsCounter from 'app/components/elements/PageViewsCounter';
 import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 import { APP_NAME, VESTING_TOKEN, LIQUID_TOKEN } from 'app/client_config';
 import { key_utils } from '@steemit/steem-js/lib/auth/ecc';
-import resolveRoute from 'app/ResolveRoute';
+import { resolveRoute, pathTo } from 'app/Routes';
 import { VIEW_MODE_WHISTLE } from 'shared/constants';
 
 const pageRequiresEntropy = path => {
@@ -161,8 +161,8 @@ class App extends React.Component {
             viewMode,
         } = this.props;
         const miniHeader =
-            location.pathname === '/create_account' ||
-            location.pathname === '/pick_account';
+            location.pathname === '/c/create_account' ||
+            location.pathname === '/c/pick_account';
         const whistleView = viewMode === VIEW_MODE_WHISTLE;
         const headerHidden = whistleView;
         const params_keys = Object.keys(params);
@@ -266,40 +266,46 @@ class App extends React.Component {
                     <TopRightMenu vertical navigate={this.navigate} />
                     <ul className="vertical menu">
                         <li>
-                            <a href="/welcome" onClick={this.navigate}>
+                            <a href={pathTo.welcome()} onClick={this.navigate}>
                                 {tt('navigation.welcome')}
                             </a>
                         </li>
                         <li>
-                            <a href="/faq.html" onClick={this.navigate}>
+                            <a href={pathTo.faq()} onClick={this.navigate}>
                                 {tt('navigation.faq')}
                             </a>
                         </li>
                         <li>
-                            <a href="/tags" onClick={this.navigate}>
+                            <a href={pathTo.tags()} onClick={this.navigate}>
                                 {tt('navigation.explore')}
                             </a>
                         </li>
                         <li>
-                            <a href="/market" onClick={this.navigate}>
+                            <a href={pathTo.market()} onClick={this.navigate}>
                                 {tt('navigation.currency_market')}
                             </a>
                         </li>
                         <li>
                             <a
-                                href="/recover_account_step_1"
+                                href={pathTo.recoverAccount(1)}
                                 onClick={this.navigate}
                             >
                                 {tt('navigation.stolen_account_recovery')}
                             </a>
                         </li>
                         <li>
-                            <a href="/change_password" onClick={this.navigate}>
+                            <a
+                                href={pathTo.changePassword()}
+                                onClick={this.navigate}
+                            >
                                 {tt('navigation.change_account_password')}
                             </a>
                         </li>
                         <li className="last">
-                            <a href="/~witnesses" onClick={this.navigate}>
+                            <a
+                                href={pathTo.witnesses()}
+                                onClick={this.navigate}
+                            >
                                 {tt('navigation.vote_for_witnesses')}
                             </a>
                         </li>
@@ -385,7 +391,7 @@ class App extends React.Component {
                         </li>
                         <li>
                             <a
-                                href="/privacy.html"
+                                href={pathTo.privacy()}
                                 onClick={this.navigate}
                                 rel="nofollow"
                             >
@@ -394,7 +400,7 @@ class App extends React.Component {
                         </li>
                         <li className="last">
                             <a
-                                href="/tos.html"
+                                href={pathTo.tos()}
                                 onClick={this.navigate}
                                 rel="nofollow"
                             >

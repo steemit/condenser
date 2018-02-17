@@ -17,6 +17,7 @@ import {
 import { loadFollows } from 'app/redux/FollowSaga';
 import { translate } from 'app/Translator';
 import DMCAUserList from 'app/utils/DMCAUserList';
+import { pathTo } from '../Routes';
 
 export const userWatches = [
     watchRemoveHighSecurityKeys, // keep first to remove keys early when a page change happens
@@ -31,9 +32,9 @@ export const userWatches = [
 ];
 
 const highSecurityPages = [
-    /\/market/,
-    /\/@.+\/(transfers|permissions|password)/,
-    /\/~witnesses/,
+    /\/c\/market/,
+    /\/.+\/(wallet|permissions|password)/,
+    /\/c\/witnesses/,
 ];
 
 function* lookupPreviousOwnerAuthorityWatch() {
@@ -318,9 +319,9 @@ function* usernamePasswordLogin2({
         // Memo key could be saved in local storage.. In RAM it is not purged upon LOCATION_CHANGE
         private_keys = private_keys.remove('memo_private');
 
+    if (username) feedURL = pathTo.userFeed(username);
     // If user is signing operation by operaion and has no saved login, don't save to RAM
     if (!operationType || saveLogin) {
-        if (username) feedURL = '/@' + username + '/feed';
         // Keep the posting key in RAM but only when not signing an operation.
         // No operation or the user has checked: Keep me logged in...
         yield put(
@@ -336,7 +337,7 @@ function* usernamePasswordLogin2({
             })
         );
     } else {
-        if (username) feedURL = '/@' + username + '/feed';
+        // if (username) feedURL = '/@' + username + '/feed';
         yield put(
             userActions.setUser({
                 username,
@@ -382,7 +383,7 @@ function* usernamePasswordLogin2({
     );
 
     if (afterLoginRedirectToWelcome) {
-        browserHistory.push('/welcome');
+        browserHistory.push(pathTo.welcome());
     } else if (feedURL) {
         if (document.location.pathname === '/') browserHistory.push(feedURL);
     }

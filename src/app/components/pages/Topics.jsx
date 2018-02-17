@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 import tt from 'counterpart';
+import { pathTo } from 'app/Routes';
 
 class Topics extends React.Component {
     static propTypes = {
@@ -34,7 +35,7 @@ class Topics extends React.Component {
         categories = categories.take(50);
 
         const cn = 'Topics' + (className ? ` ${className}` : '');
-        const currentValue = `/${order}/${current}`;
+        const currentValue = pathTo.indexPage(current, order);
 
         if (compact) {
             return (
@@ -43,11 +44,11 @@ class Topics extends React.Component {
                     onChange={e => browserHistory.push(e.target.value)}
                     value={currentValue}
                 >
-                    <option key={'*'} value={'/' + order}>
+                    <option key={'*'} value={pathTo.indexPage('all', order)}>
                         {tt('g.all_tags')}
                     </option>
                     {categories.map(cat => {
-                        const link = order ? `/${order}/${cat}` : `/${cat}`;
+                        const link = pathTo.indexPage(cat, order);
                         return (
                             <option key={cat} value={link}>
                                 {cat}
@@ -59,7 +60,7 @@ class Topics extends React.Component {
         }
 
         categories = categories.map(cat => {
-            const link = order ? `/${order}/${cat}` : `/hot/${cat}`;
+            const link = pathTo.indexPage(cat, order);
             return (
                 <li className="c-sidebar__list-item" key={cat}>
                     <Link
@@ -85,7 +86,7 @@ class Topics extends React.Component {
                         <li className="c-sidebar__link">
                             <Link
                                 className="c-sidebar__link c-sidebar__link--emphasis"
-                                to={`/tags`}
+                                to={pathTo.tags()}
                             >
                                 {tt('g.show_more_topics')}..
                             </Link>

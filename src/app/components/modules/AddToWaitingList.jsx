@@ -15,7 +15,7 @@ export default class AddToWaitingList extends React.Component {
         e.preventDefault();
         const email = this.state.email;
         if (!email) return;
-        fetch('/api/v1/update_email', {
+        fetch('/c/api/update_email', {
             method: 'post',
             mode: 'no-cors',
             credentials: 'same-origin',

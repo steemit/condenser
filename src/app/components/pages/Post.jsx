@@ -12,6 +12,7 @@ import tt from 'counterpart';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 import { INVEST_TOKEN_UPPERCASE } from 'app/client_config';
+import { pathTo } from 'app/Routes';
 import { SIGNUP_URL } from 'shared/constants';
 
 import { isLoggedIn } from 'app/utils/UserUtil';
@@ -148,7 +149,7 @@ class Post extends React.Component {
         let sort_menu = [];
         let sort_label;
 
-        let selflink = `/${dis.get('category')}/@${post}`;
+        let selflink = `/${post}`;
         for (let o = 0; o < sort_orders.length; ++o) {
             if (sort_orders[o] == sort_order) sort_label = sort_labels[o];
             sort_menu.push({
@@ -176,19 +177,44 @@ class Post extends React.Component {
                             </p>
                             <ul className="NotFound__menu">
                                 <li>
-                                    <a href="/created">new posts</a>
+                                    <a
+                                        href={pathTo.indexPage(
+                                            'all',
+                                            'created'
+                                        )}
+                                    >
+                                        new posts
+                                    </a>
                                 </li>
                                 <li>
-                                    <a href="/hot">hot posts</a>
+                                    <a href={pathTo.indexPage('all', 'hot')}>
+                                        hot posts
+                                    </a>
                                 </li>
                                 <li>
-                                    <a href="/trending">trending posts</a>
+                                    <a
+                                        href={pathTo.indexPage(
+                                            'all',
+                                            'trending'
+                                        )}
+                                    >
+                                        trending posts
+                                    </a>
                                 </li>
                                 <li>
-                                    <a href="/promoted">promoted posts</a>
+                                    <a
+                                        href={pathTo.indexPage(
+                                            'all',
+                                            'promoted'
+                                        )}
+                                    >
+                                        promoted posts
+                                    </a>
                                 </li>
                                 <li>
-                                    <a href="/active">active posts</a>
+                                    <a href={pathTo.indexPage('all', 'active')}>
+                                        active posts
+                                    </a>
                                 </li>
                             </ul>
                         </div>

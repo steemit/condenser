@@ -10,6 +10,7 @@ import Reputation from 'app/components/elements/Reputation';
 import normalizeProfile from 'app/utils/NormalizeProfile';
 import Overlay from 'react-overlays/lib/Overlay';
 import { findDOMNode } from 'react-dom';
+import { pathTo } from 'app/Routes';
 
 const { string, bool, number } = React.PropTypes;
 
@@ -101,7 +102,7 @@ class Author extends React.Component {
                     itemType="http://schema.org/Person"
                 >
                     <strong>
-                        <Link to={'/@' + author}>{author}</Link>
+                        <Link to={pathTo.userProfile(author)}>{author}</Link>
                     </strong>{' '}
                     <Reputation value={authorRepLog10} />
                 </span>
@@ -121,7 +122,7 @@ class Author extends React.Component {
                             ref={link => {
                                 this.authorProfileLink = link;
                             }}
-                            to={'/@' + author}
+                            to={pathTo.userProfile(author)}
                         >
                             {author} <Reputation value={authorRepLog10} />
                             <Icon name="dropdown-arrow" />

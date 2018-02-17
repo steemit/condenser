@@ -1,5 +1,6 @@
 import React from 'react';
 import tt from 'counterpart';
+import { pathTo } from 'app/Routes';
 
 class SubmitPostServerRender extends React.Component {
     render() {
@@ -8,6 +9,6 @@ class SubmitPostServerRender extends React.Component {
 }
 
 module.exports = {
-    path: 'submit.html',
+    path: pathTo.compose(),
     component: SubmitPostServerRender,
 };

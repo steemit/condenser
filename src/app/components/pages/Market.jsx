@@ -23,6 +23,7 @@ import {
     LIQUID_TICKER,
     DEBT_TICKER,
 } from 'app/client_config';
+import { pathTo } from 'app/Routes';
 
 class Market extends React.Component {
     static propTypes = {
@@ -971,7 +972,7 @@ class Market extends React.Component {
 }
 const DEFAULT_EXPIRE = 0xffffffff; //Math.floor((Date.now() / 1000) + (60 * 60 * 24)) // 24 hours
 module.exports = {
-    path: 'market',
+    path: pathTo.market(),
     component: connect(
         state => {
             const username = state.user.get('current')

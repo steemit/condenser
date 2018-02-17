@@ -14,6 +14,7 @@ import tt from 'counterpart';
 import { parsePayoutAmount } from 'app/utils/ParsersAndFormatters';
 import { Long } from 'bytebuffer';
 import ImageUserBlockList from 'app/utils/ImageUserBlockList';
+import { pathTo } from 'app/Routes';
 
 // returns true if the comment has a 'hide' flag AND has no descendants w/ positive payout
 function hideSubtree(cont, c) {
@@ -256,9 +257,12 @@ class CommentImpl extends React.Component {
         if (!rootComment && depth === 1) {
             rootComment = comment.parent_author + '/' + comment.parent_permlink;
         }
-        const comment_link = `/${comment.category}/@${rootComment}#@${
-            comment.author
-        }/${comment.permlink}`;
+        const comment_link = pathTo.comment(
+            comment.parent_author,
+            comment.parent_permlink,
+            comment.author,
+            comment.permlink
+        );
         const ignore = ignore_list && ignore_list.has(comment.author);
 
         if (!showNegativeComments && (hide || ignore)) {
@@ -319,9 +323,10 @@ class CommentImpl extends React.Component {
         let replies = null;
         if (!this.state.collapsed && comment.children > 0) {
             if (depth > 7) {
-                const comment_permlink = `/${comment.category}/@${
-                    comment.author
-                }/${comment.permlink}`;
+                const comment_permlink = pathTo.post(
+                    comment.author,
+                    comment.permlink
+                );
                 replies = (
                     <Link to={comment_permlink}>
                         Show {comment.children} more{' '}
@@ -485,7 +490,7 @@ const Comment = connect(
 
         return {
             ...ownProps,
-            anchor_link: '#@' + content, // Using a hash here is not standard but intentional; see issue #124 for details
+            anchor_link: '#' + content, // Using a hash here is not standard but intentional; see issue #124 for details
             username,
             ignore_list,
         };

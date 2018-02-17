@@ -2,10 +2,11 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
 import { Link } from 'react-router';
+import { pathTo } from 'app/Routes';
 
 function userLink(name) {
     return (
-        <Link className="username" key={name} to={'/@' + name}>
+        <Link className="username" key={name} to={pathTo.userProfile(name)}>
             {name}
         </Link>
     );
@@ -57,7 +58,10 @@ class UserNames extends Component {
                         key="_others"
                         selected={and_names.length + ' others'}
                         items={and_names.map(name => {
-                            return { value: name, link: '/@' + name };
+                            return {
+                                value: name,
+                                link: pathTo.userProfile(name),
+                            };
                         })}
                         el="div"
                     />

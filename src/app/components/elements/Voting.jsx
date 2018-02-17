@@ -15,6 +15,7 @@ import {
 import DropdownMenu from 'app/components/elements/DropdownMenu';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import FoundationDropdown from 'app/components/elements/FoundationDropdown';
+import { pathTo } from 'app/Routes';
 
 const ABOUT_FLAG = (
     <div>
@@ -415,7 +416,7 @@ class Voting extends React.Component {
                 if (sign === 0) continue;
                 voters.push({
                     value: (sign > 0 ? '+ ' : '- ') + voter,
-                    link: '/@' + voter,
+                    link: pathTo.userProfile(voter),
                 });
             }
             if (total_votes > voters.length) {

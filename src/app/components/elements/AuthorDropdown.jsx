@@ -4,6 +4,7 @@ import { Link } from 'react-router';
 import Userpic from 'app/components/elements/Userpic';
 import Follow from 'app/components/elements/Follow';
 import Reputation from 'app/components/elements/Reputation';
+import { pathTo } from 'app/Routes';
 
 const AuthorDropdown = props => {
     const author_link = (
@@ -13,7 +14,7 @@ const AuthorDropdown = props => {
             itemScope
             itemType="http://schema.org/Person"
         >
-            <Link to={'/@' + props.author}>
+            <Link to={pathTo.userProfile(props.author)}>
                 <strong>{props.author}</strong>
             </Link>{' '}
             <Reputation value={props.authorRepLog10} />
@@ -25,13 +26,19 @@ const AuthorDropdown = props => {
         return (
             <div className="Author__container">
                 <div className="Author__dropdown">
-                    <Link to={'/@' + props.author}>
+                    <Link to={pathTo.userProfile(props.author)}>
                         <Userpic account={props.author} />
                     </Link>
-                    <Link to={'/@' + props.author} className="Author__name">
+                    <Link
+                        to={pathTo.userProfile(props.author)}
+                        className="Author__name"
+                    >
                         {props.name}
                     </Link>
-                    <Link to={'/@' + props.author} className="Author__username">
+                    <Link
+                        to={pathTo.userProfile(props.author)}
+                        className="Author__username"
+                    >
                         @{props.author}
                     </Link>
                     <div>

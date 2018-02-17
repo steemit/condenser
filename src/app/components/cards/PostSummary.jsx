@@ -16,6 +16,7 @@ import UserNames from 'app/components/elements/UserNames';
 import tt from 'counterpart';
 import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 import proxifyImageUrl from 'app/utils/ProxifyUrl';
+import { pathTo, convertPostPath } from 'app/Routes';
 import Userpic, { avatarSize } from 'app/components/elements/Userpic';
 import { SIGNUP_URL } from 'shared/constants';
 
@@ -109,7 +110,7 @@ class PostSummary extends React.Component {
 
         if (content.get('parent_author') !== '') {
             title_text = tt('g.re_to', { topic: content.get('root_title') });
-            title_link_url = content.get('url');
+            title_link_url = convertPostPath(content.get('url'));
             comments_link = title_link_url;
         } else {
             title_link_url = p.link;
@@ -153,7 +154,10 @@ class PostSummary extends React.Component {
                 <div className="user">
                     {!isNsfw ? (
                         <div className="user__col user__col--left">
-                            <a className="user__link" href={'/@' + p.author}>
+                            <a
+                                className="user__link"
+                                href={pathTo.userProfile(p.author)}
+                            >
                                 <Userpic
                                     account={p.author}
                                     size={avatarSize.small}
@@ -262,7 +266,7 @@ class PostSummary extends React.Component {
                             {username ? (
                                 <span>
                                     {tt('postsummary_jsx.adjust_your')}{' '}
-                                    <Link to={`/@${username}/settings`}>
+                                    <Link to={pathTo.userSettings(username)}>
                                         {tt(
                                             'postsummary_jsx.display_preferences'
                                         )}

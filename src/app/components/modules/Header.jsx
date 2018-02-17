@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import TopRightMenu from 'app/components/modules/TopRightMenu';
 import Icon from 'app/components/elements/Icon';
-import resolveRoute from 'app/ResolveRoute';
+import { resolveRoute, pathTo } from 'app/Routes';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import HorizontalMenu from 'app/components/elements/HorizontalMenu';
@@ -12,9 +12,9 @@ import tt from 'counterpart';
 import { APP_NAME } from 'app/client_config';
 
 function sortOrderToLink(so, topic, account) {
-    if (so === 'home') return '/@' + account + '/feed';
-    if (topic) return `/${so}/${topic}`;
-    return `/${so}`;
+    return so === 'home'
+        ? pathTo.userFeed(account)
+        : pathTo.indexPage(topic || 'all', so);
 }
 
 class Header extends React.Component {
@@ -48,7 +48,7 @@ class Header extends React.Component {
                 route.params.length > 0
             ) {
                 const sort_order =
-                    route.params[0] !== 'home' ? route.params[0] : null;
+                    route.params[1] !== 'home' ? route.params[1] : null;
                 if (sort_order)
                     window.last_sort_order = this.last_sort_order = sort_order;
             }
@@ -89,8 +89,10 @@ class Header extends React.Component {
         let page_name = null;
         this.state.subheader_hidden = false;
         if (route.page === 'PostsIndex') {
-            sort_order = route.params[0];
-            if (sort_order === 'home') {
+            sort_order = route.params[1];
+            topic = route.params[0];
+            if (topic === 'home') {
+                topic = 'all';
                 page_title = tt('header_jsx.home');
                 const account_name = route.params[1];
                 if (
@@ -99,38 +101,40 @@ class Header extends React.Component {
                 )
                     home_account = true;
             } else {
-                topic = route.params.length > 1 ? route.params[1] : '';
+                // topic = route.params.length > 1 ? route.params[1] : '';
                 const type =
-                    route.params[0] == 'payout_comments' ? 'comments' : 'posts';
-                let prefix = route.params[0];
-                if (prefix == 'created') prefix = 'New';
-                if (prefix == 'payout') prefix = 'Pending payout';
-                if (prefix == 'payout_comments') prefix = 'Pending payout';
+                    route.params[1] === 'payout_comments'
+                        ? 'comments'
+                        : 'posts';
+                let prefix = route.params[1];
+                if (prefix === 'created') prefix = 'New';
+                if (prefix === 'payout') prefix = 'Pending payout';
+                if (prefix === 'payout_comments') prefix = 'Pending payout';
                 if (topic !== '') prefix += ` ${topic}`;
                 page_title = `${prefix} ${type}`;
             }
         } else if (route.page === 'Post') {
             sort_order = '';
-            topic = route.params[0];
-        } else if (route.page == 'SubmitPost') {
+            // topic = route.params[0];
+        } else if (route.page === 'SubmitPost') {
             page_title = tt('header_jsx.create_a_post');
-        } else if (route.page == 'Privacy') {
+        } else if (route.page === 'Privacy') {
             page_title = tt('navigation.privacy_policy');
-        } else if (route.page == 'Tos') {
+        } else if (route.page === 'Tos') {
             page_title = tt('navigation.terms_of_service');
-        } else if (route.page == 'ChangePassword') {
+        } else if (route.page === 'ChangePassword') {
             page_title = tt('header_jsx.change_account_password');
-        } else if (route.page == 'CreateAccount') {
+        } else if (route.page === 'CreateAccount') {
             page_title = tt('header_jsx.create_account');
-        } else if (route.page == 'PickAccount') {
+        } else if (route.page === 'PickAccount') {
             page_title = `Pick Your New Steemit Account`;
             this.state.subheader_hidden = true;
-        } else if (route.page == 'Approval') {
+        } else if (route.page === 'Approval') {
             page_title = `Account Confirmation`;
             this.state.subheader_hidden = true;
         } else if (
-            route.page == 'RecoverAccountStep1' ||
-            route.page == 'RecoverAccountStep2'
+            route.page === 'RecoverAccountStep1' ||
+            route.page === 'RecoverAccountStep2'
         ) {
             page_title = tt('header_jsx.stolen_account_recovery');
         } else if (route.page === 'UserProfile') {
@@ -181,11 +185,13 @@ class Header extends React.Component {
             document.title = page_title + ' — ' + APP_NAME;
 
         const logo_link =
-            route.params && route.params.length > 1 && this.last_sort_order
-                ? '/' + this.last_sort_order
-                : current_account_name ? `/@${current_account_name}/feed` : '/';
+            topic === '' || topic === 'all'
+                ? current_account_name
+                  ? pathTo.userFeed(current_account_name)
+                  : '/'
+                : pathTo.indexPage('all', this.last_sort_order);
         const topic_link = topic ? (
-            <Link to={`/${this.last_sort_order || 'trending'}/${topic}`}>
+            <Link to={pathTo.indexPage('all', topic, this.last_sort_order)}>
                 {topic}
             </Link>
         ) : null;

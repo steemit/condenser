@@ -1,4 +1,5 @@
 import React from 'react';
+import { pathTo } from 'app/Routes';
 
 const SidebarLinks = ({ username }) => (
     <div className="c-sidebar__module">
@@ -8,14 +9,17 @@ const SidebarLinks = ({ username }) => (
         <div className="c-sidebar__content">
             <ul className="c-sidebar__list">
                 <li className="c-sidebar__list-item">
-                    <a className="c-sidebar__link" href={'/@' + username}>
+                    <a
+                        className="c-sidebar__link"
+                        href={pathTo.userProfile(username)}
+                    >
                         My blog
                     </a>
                 </li>
                 <li className="c-sidebar__list-item">
                     <a
                         className="c-sidebar__link"
-                        href={'/@' + username + '/transfers'}
+                        href={pathTo.userWallet(username)}
                     >
                         My wallet
                     </a>

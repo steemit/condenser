@@ -1,4 +1,5 @@
 import React from 'react';
+import { pathTo } from 'app/Routes';
 
 class Tos extends React.Component {
     render() {
@@ -1133,6 +1134,6 @@ class Tos extends React.Component {
 }
 
 module.exports = {
-    path: 'tos.html',
+    path: pathTo.tos(),
     component: Tos,
 };

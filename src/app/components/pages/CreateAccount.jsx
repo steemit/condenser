@@ -4,7 +4,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { api } from '@steemit/steem-js';
-
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import { PrivateKey } from '@steemit/steem-js/lib/auth/ecc';
 import * as userActions from 'app/redux/UserReducer';
@@ -12,6 +11,7 @@ import { validate_account_name } from 'app/utils/ChainValidation';
 import runTests from 'app/utils/BrowserTests';
 import GeneratedPasswordInput from 'app/components/elements/GeneratedPasswordInput';
 import { saveCords } from 'app/utils/ServerApiClient';
+import { pathTo } from 'app/Routes';
 
 class CreateAccount extends React.Component {
     static propTypes = {
@@ -95,7 +95,7 @@ class CreateAccount extends React.Component {
         }
 
         // createAccount
-        fetch('/api/v1/accounts', {
+        fetch('/c/api/accounts', {
             method: 'post',
             mode: 'no-cors',
             credentials: 'same-origin',
@@ -121,9 +121,8 @@ class CreateAccount extends React.Component {
                         loading: false,
                     });
                 } else {
-                    window.location = `/login.html#account=${
-                        name
-                    }&msg=accountcreated`;
+                    window.location =
+                        pathTo.login() + `#account=${name}&msg=accountcreated`;
                 }
             })
             .catch(error => {
@@ -292,7 +291,9 @@ class CreateAccount extends React.Component {
                                 </a>{' '}
                                 for the status of your request.<br />
                                 If you didn't submit your sign up application
-                                yet, <Link to="/pick_account">apply now</Link>!
+                                yet, <Link to={pathTo.signup()}>
+                                    apply now
+                                </Link>!
                             </p>
                         </div>
                     </div>
@@ -305,7 +306,7 @@ class CreateAccount extends React.Component {
             if (server_error === 'Email address is not confirmed') {
                 next_step = (
                     <div className="callout alert">
-                        <a href="/enter_email">
+                        <a href={pathTo.enterEmail()}>
                             Please verify your email address
                         </a>
                     </div>
@@ -313,7 +314,7 @@ class CreateAccount extends React.Component {
             } else if (server_error === 'Phone number is not confirmed') {
                 next_step = (
                     <div className="callout alert">
-                        <a href="/enter_mobile">
+                        <a href={pathTo.enterMobile()}>
                             Please verify your phone number
                         </a>
                     </div>
@@ -470,7 +471,7 @@ class CreateAccount extends React.Component {
 }
 
 module.exports = {
-    path: 'create_account',
+    path: pathTo.createAccount(),
     component: connect(
         state => {
             return {

@@ -15,6 +15,7 @@ import secureRandom from 'secure-random';
 import config from 'config';
 import Mixpanel from 'mixpanel';
 import Progress from 'react-foundation-components/lib/global/progress-bar';
+import { pathTo } from '../../app/Routes';
 
 const path = require('path');
 const ROOT = path.join(__dirname, '../../..');
@@ -45,7 +46,7 @@ function* confirmMobileHandler(e) {
     const params = addToParams({}, this.request.query, PARAM_VIEW_MODE, [
         VIEW_MODE_WHISTLE,
     ]);
-    const enterMobileUrl = `/enter_mobile` + makeParams(params);
+    const enterMobileUrl = pathTo.enterMobile(makeParams(params));
 
     const confirmation_code =
         this.params && this.params.code
@@ -117,7 +118,7 @@ function* confirmMobileHandler(e) {
         mixpanel.track('SignupStepPhone', { distinct_id: this.session.uid });
 
     console.log('--/Success phone redirecting user', this.session.user);
-    this.redirect('/approval' + makeParams(params));
+    this.redirect(pathTo.signUpApproval(makeParams(params)));
 }
 
 export default function useEnterAndConfirmMobilePages(app) {
@@ -125,7 +126,7 @@ export default function useEnterAndConfirmMobilePages(app) {
     app.use(router.routes());
     const koaBody = koa_body();
 
-    router.get('/enter_mobile', function*() {
+    router.get(pathTo.enterMobile(), function*() {
         console.log(
             '-- /enter_mobile -->',
             this.session.uid,
@@ -151,7 +152,7 @@ export default function useEnterAndConfirmMobilePages(app) {
                         <Progress tabIndex="0" value={90} max={100} />
                         <form
                             className="column"
-                            action={'/submit_mobile' + makeParams(params)}
+                            action={pathTo.submitMobile(makeParams(params))}
                             method="POST"
                         >
                             <h4 className="CreateAccount__title">
@@ -218,7 +219,7 @@ export default function useEnterAndConfirmMobilePages(app) {
             mixpanel.track('SignupStep2', { distinct_id: this.session.uid });
     });
 
-    router.post('/submit_mobile', koaBody, function*() {
+    router.post(pathTo.submitMobile(), koaBody, function*() {
         if (!checkCSRF(this, this.request.body.csrf)) return;
         const user_id = this.session.user;
         const country = this.request.body.country;
@@ -232,13 +233,13 @@ export default function useEnterAndConfirmMobilePages(app) {
             this.flash = {
                 error: 'Your session has been interrupted, please start over',
             };
-            this.redirect('/pick_account' + makeParams(params));
+            this.redirect(pathTo.signup(makeParams(params)));
             return;
         }
         params.country = country;
         params.phone = localPhone;
 
-        const enterMobileUrl = `/enter_mobile` + makeParams(params);
+        const enterMobileUrl = pathTo.enterMobile(makeParams(params));
 
         if (!country || country === '') {
             this.flash = { error: 'Please select a country code' };
@@ -287,7 +288,7 @@ export default function useEnterAndConfirmMobilePages(app) {
                         mixpanel.track('SignupStep3', {
                             distinct_id: this.session.uid,
                         });
-                    this.redirect('/approval' + makeParams(params));
+                    this.redirect(pathTo.signUpApproval(makeParams(params)));
                     return;
                 }
                 yield mid.update({ verified: false, phone });
@@ -372,7 +373,7 @@ export default function useEnterAndConfirmMobilePages(app) {
                 <div className="row" style={{ maxWidth: '32rem' }}>
                     <form
                         className="column"
-                        action={'/confirm_mobile' + makeParams(params)}
+                        action={pathTo.confirmMobile(makeParams(params))}
                         method="POST"
                     >
                         <input type="hidden" name="csrf" value={this.csrf} />
@@ -400,8 +401,8 @@ export default function useEnterAndConfirmMobilePages(app) {
             '<!DOCTYPE html>' + renderToString(<ServerHTML {...props} />);
     });
 
-    router.get('/confirm_mobile/:code', confirmMobileHandler);
-    router.post('/confirm_mobile', koaBody, confirmMobileHandler);
+    router.get(pathTo.confirmMobileGet(), confirmMobileHandler);
+    router.post(pathTo.confirmMobile(), koaBody, confirmMobileHandler);
 }
 
 function digits(text) {

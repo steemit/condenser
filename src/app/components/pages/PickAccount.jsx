@@ -10,6 +10,7 @@ import { api } from '@steemit/steem-js';
 import * as userActions from 'app/redux/UserReducer';
 import { validate_account_name } from 'app/utils/ChainValidation';
 import runTests from 'app/utils/BrowserTests';
+import { pathTo } from 'app/Routes';
 import { PARAM_VIEW_MODE } from 'shared/constants';
 import { makeParams } from 'app/utils/Links';
 
@@ -57,7 +58,7 @@ class PickAccount extends React.Component {
         if (this.props.viewMode) {
             params[PARAM_VIEW_MODE] = this.props.viewMode;
         }
-        window.location = '/enter_email' + makeParams(params);
+        window.location = pathTo.enterEmail(makeParams(params));
     }
 
     onPasswordChange(password, password_valid) {
@@ -222,7 +223,7 @@ class PickAccount extends React.Component {
                                 approved.
                             </p>
                             <p>
-                                <Link to="/create_account">
+                                <Link to={pathTo.createAccount()}>
                                     Let's get your account created!
                                 </Link>
                             </p>
@@ -251,7 +252,7 @@ class PickAccount extends React.Component {
             if (server_error === 'Email address is not confirmed') {
                 next_step = (
                     <div className="callout alert">
-                        <a href="/enter_email">
+                        <a href={pathTo.enterEmail()}>
                             Please verify your email address
                         </a>
                     </div>
@@ -259,7 +260,7 @@ class PickAccount extends React.Component {
             } else if (server_error === 'Phone number is not confirmed') {
                 next_step = (
                     <div className="callout alert">
-                        <a href="/enter_mobile">
+                        <a href={pathTo.enterMobile()}>
                             Please verify your phone number
                         </a>
                     </div>
@@ -324,7 +325,8 @@ class PickAccount extends React.Component {
                         </form>
                         <br />
                         <p className="secondary whistle-hidden">
-                            Got an account? <Link to="/login.html">Login</Link>
+                            Got an account?{' '}
+                            <Link to={pathTo.login()}>Login</Link>
                         </p>
                     </div>
                 </div>
@@ -334,7 +336,7 @@ class PickAccount extends React.Component {
 }
 
 module.exports = {
-    path: 'pick_account',
+    path: pathTo.signup(),
     component: connect(
         state => {
             return {

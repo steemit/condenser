@@ -9,10 +9,10 @@
 * You will want to rate limit certain paths, likely to ~1r/s in your proxy
 
 ```
-/api/v1/initiate_account_recovery
-/api/v1/account_recovery_confirmation/:code
-/api/v1/request_account_recovery
-/api/v1/accounts
-/api/v1/update_email
-/api/v1/login_account
+/c/api/initiate_account_recovery
+/c/api/account_recovery_confirmation/:code
+/c/api/request_account_recovery
+/c/api/accounts
+/c/api/update_email
+/c/api/login_account
 ```

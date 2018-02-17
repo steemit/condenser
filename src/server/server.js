@@ -24,8 +24,8 @@ import csrf from 'koa-csrf';
 import flash from 'koa-flash';
 import minimist from 'minimist';
 import config from 'config';
-import { routeRegex } from 'app/ResolveRoute';
 import secureRandom from 'secure-random';
+import { pathTo } from 'app/Routes';
 import userIllegalContent from 'app/utils/userIllegalContent';
 import koaLocale from 'koa-locale';
 
@@ -76,64 +76,53 @@ app.use(function*(next) {
     // redirect to home page/feed if known account
     if (this.method === 'GET' && this.url === '/' && this.session.a) {
         this.status = 302;
-        this.redirect(`/@${this.session.a}/feed`);
+        this.redirect(pathTo.userFeed(this.session.a));
         return;
     }
-    // normalize user name url from cased params
-    if (
-        this.method === 'GET' &&
-        (routeRegex.UserProfile1.test(this.url) ||
-            routeRegex.PostNoCategory.test(this.url) ||
-            routeRegex.Post.test(this.url))
-    ) {
-        const p = this.originalUrl.toLowerCase();
-        let userCheck = '';
-        if (routeRegex.Post.test(this.url)) {
-            userCheck = p.split('/')[2].slice(1);
-        } else {
-            userCheck = p.split('/')[1].slice(1);
-        }
-        if (userIllegalContent.includes(userCheck)) {
-            console.log('Illegal content user found blocked', userCheck);
-            this.status = 451;
-            return;
-        }
-        if (p !== this.originalUrl) {
-            this.status = 301;
-            this.redirect(p);
-            return;
-        }
-    }
-    // normalize top category filtering from cased params
-    if (this.method === 'GET' && routeRegex.CategoryFilters.test(this.url)) {
-        const p = this.originalUrl.toLowerCase();
-        if (p !== this.originalUrl) {
-            this.status = 301;
-            this.redirect(p);
-            return;
-        }
-    }
-    // // do not enter unless session uid & verified phone
-    // if (this.url === '/create_account' && !this.session.uid) {
-    //     this.status = 302;
-    //     this.redirect('/enter_email');
-    //     return;
+
+    // // normalize user name url from cased params
+    // if (
+    //     this.method === 'GET' &&
+    //     (routeRegex.UserProfile1.test(this.url) ||
+    //         routeRegex.PostNoCategory.test(this.url) ||
+    //         routeRegex.Post.test(this.url))
+    // ) {
+    //     const p = this.originalUrl.toLowerCase();
+    //     let userCheck = '';
+    //     if (routeRegex.Post.test(this.url)) {
+    //         userCheck = p.split('/')[2].slice(1);
+    //     } else {
+    //         userCheck = p.split('/')[1].slice(1);
+    //     }
+    //     if (userIllegalContent.includes(userCheck)) {
+    //         console.log('Illegal content user found blocked', userCheck);
+    //         this.status = 451;
+    //         return;
+    //     }
+    //     if (p !== this.originalUrl) {
+    //         this.status = 301;
+    //         this.redirect(p);
+    //         return;
+    //     }
     // }
+
     // remember ch, cn, r url params in the session and remove them from url
-    if (this.method === 'GET' && /\?[^\w]*(ch=|cn=|r=)/.test(this.url)) {
-        let redir = this.url.replace(/((ch|cn|r)=[^&]+)/gi, r => {
-            const p = r.split('=');
-            if (p.length === 2) this.session[p[0]] = p[1];
-            return '';
-        });
-        redir = redir.replace(/&&&?/, '');
-        redir = redir.replace(/\?&?$/, '');
-        console.log(`server redirect ${this.url} -> ${redir}`);
-        this.status = 302;
-        this.redirect(redir);
-    } else {
-        yield next;
-    }
+    // ch/cn/r parameters below are currently not in use, uncomment when needed
+    // if (this.method === 'GET' && /\?[^\w]*(ch=|cn=|r=)/.test(this.url)) {
+    //     let redir = this.url.replace(/((ch|cn|r)=[^&]+)/gi, r => {
+    //             const p = r.split('=');
+    //     if (p.length === 2) this.session[p[0]] = p[1];
+    //     return '';
+    // });
+    //     redir = redir.replace(/&&&?/, '');
+    //     redir = redir.replace(/\?&?$/, '');
+    //     console.log(`server redirect ${this.url} -> ${redir}`);
+    //     this.status = 302;
+    //     this.redirect(redir);
+    // } else {
+    //     yield next;
+    // }
+    yield next;
 });
 
 // load production middleware
@@ -269,8 +258,6 @@ if (env !== 'test') {
             );
         }
     });
-
-    const argv = minimist(process.argv.slice(2));
 
     const port = process.env.PORT ? parseInt(process.env.PORT) : 8080;
 

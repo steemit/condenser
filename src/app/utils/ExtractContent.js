@@ -4,6 +4,7 @@ import sanitize from 'sanitize-html';
 import { htmlDecode } from 'app/utils/Html';
 import HtmlReady from 'shared/HtmlReady';
 import Remarkable from 'remarkable';
+import { pathTo } from 'app/Routes';
 
 const remarkable = new Remarkable({ html: true, linkify: false });
 
@@ -32,9 +33,8 @@ export default function extractContent(get, content) {
         'net_rshares',
         'children'
     );
-    const author_link = '/@' + get(content, 'author');
-    let link = `/@${author}/${permlink}`;
-    if (category) link = `/${category}${link}`;
+    const author_link = pathTo.userProfile(get(content, 'author'));
+    const link = pathTo.post(author, permlink);
     const body = get(content, 'body');
     let jsonMetadata = {};
     let image_link;

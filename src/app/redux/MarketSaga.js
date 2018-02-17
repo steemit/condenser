@@ -1,7 +1,7 @@
 import { takeLatest } from 'redux-saga';
 import { call, put } from 'redux-saga/effects';
 import { api } from '@steemit/steem-js';
-
+import { pathTo } from 'app/Routes';
 import * as marketActions from './MarketReducer';
 import * as appActions from './AppReducer';
 import * as userActions from './UserReducer';
@@ -24,7 +24,7 @@ let last_trade = null;
 
 export function* fetchMarket(location_change_action) {
     const { pathname } = location_change_action.payload;
-    if (pathname && pathname != '/market') {
+    if (pathname && pathname != pathTo.market()) {
         polling = false;
         return;
     }

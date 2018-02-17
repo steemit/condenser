@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import Follow from 'app/components/elements/Follow';
+import { pathTo } from 'app/Routes';
 
 class UserListRow extends React.Component {
     render() {
@@ -13,7 +14,7 @@ class UserListRow extends React.Component {
                     </td>
                 )}
                 <td>
-                    <Link to={'/@' + user}>
+                    <Link to={pathTo.userProfile(user)}>
                         <strong>{user}</strong>
                     </Link>
                 </td>

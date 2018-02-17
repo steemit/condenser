@@ -32,6 +32,7 @@ import Callout from 'app/components/elements/Callout';
 import normalizeProfile from 'app/utils/NormalizeProfile';
 import userIllegalContent from 'app/utils/userIllegalContent';
 import proxifyImageUrl from 'app/utils/ProxifyUrl';
+import { pathTo } from 'app/Routes';
 import ArticleLayoutSelector from 'app/components/modules/ArticleLayoutSelector';
 
 export default class UserProfile extends React.Component {
@@ -210,7 +211,7 @@ export default class UserProfile extends React.Component {
 
         let rewardsClass = '',
             walletClass = '';
-        if (section === 'transfers') {
+        if (section === 'wallet') {
             walletClass = 'active';
             tab_content = (
                 <div>
@@ -300,19 +301,19 @@ export default class UserProfile extends React.Component {
                         )}
                         <br />
                         <br />
-                        <Link to="/submit.html">
+                        <Link to={pathTo.compose()}>
                             {tt('user_profile.create_a_post')}
                         </Link>
                         <br />
-                        <Link to="/trending">
+                        <Link to={pathTo.indexPage('all', 'trending')}>
                             {tt('user_profile.explore_trending_articles')}
                         </Link>
                         <br />
-                        <Link to="/welcome">
+                        <Link to={pathTo.welcome()}>
                             {tt('user_profile.read_the_quick_start_guide')}
                         </Link>
                         <br />
-                        <Link to="/faq.html">
+                        <Link to={pathTo.faq()}>
                             {tt('user_profile.browse_the_faq')}
                         </Link>
                         <br />
@@ -463,7 +464,7 @@ export default class UserProfile extends React.Component {
 
         if (
             !(
-                section === 'transfers' ||
+                section === 'wallet' ||
                 section === 'permissions' ||
                 section === 'password'
             )
@@ -506,12 +507,12 @@ export default class UserProfile extends React.Component {
 
         let rewardsMenu = [
             {
-                link: `/@${accountname}/curation-rewards`,
+                link: pathTo.userCurationRewards(accountname),
                 label: tt('g.curation_rewards'),
                 value: tt('g.curation_rewards'),
             },
             {
-                link: `/@${accountname}/author-rewards`,
+                link: pathTo.userAuthorRewards(accountname),
                 label: tt('g.author_rewards'),
                 value: tt('g.author_rewards'),
             },
@@ -526,7 +527,7 @@ export default class UserProfile extends React.Component {
                     <ul className="menu" style={{ flexWrap: 'wrap' }}>
                         <li>
                             <Link
-                                to={`/@${accountname}`}
+                                to={pathTo.userProfile(accountname)}
                                 activeClassName="active"
                             >
                                 {tt('g.blog')}
@@ -534,7 +535,7 @@ export default class UserProfile extends React.Component {
                         </li>
                         <li>
                             <Link
-                                to={`/@${accountname}/comments`}
+                                to={pathTo.userComments(accountname)}
                                 activeClassName="active"
                             >
                                 {tt('g.comments')}
@@ -542,7 +543,7 @@ export default class UserProfile extends React.Component {
                         </li>
                         <li>
                             <Link
-                                to={`/@${accountname}/recent-replies`}
+                                to={pathTo.userReplies(accountname)}
                                 activeClassName="active"
                             >
                                 {tt('g.replies')}{' '}
@@ -551,7 +552,7 @@ export default class UserProfile extends React.Component {
                                 )}
                             </Link>
                         </li>
-                        {/*<li><Link to={`/@${accountname}/feed`} activeClassName="active">Feed</Link></li>*/}
+                        {/*<li><Link to={pathTo.userFeed(accountname)} activeClassName="active">Feed</Link></li>*/}
                         <li>
                             <LinkWithDropdown
                                 closeOnClickOutside
@@ -573,7 +574,7 @@ export default class UserProfile extends React.Component {
                     <ul className="menu" style={{ flexWrap: 'wrap' }}>
                         <li>
                             <a
-                                href={`/@${accountname}/transfers`}
+                                href={pathTo.userWallet(accountname)}
                                 className={walletClass}
                                 onClick={e => {
                                     e.preventDefault();
@@ -590,7 +591,7 @@ export default class UserProfile extends React.Component {
                         {isMyAccount && (
                             <li>
                                 <Link
-                                    to={`/@${accountname}/settings`}
+                                    to={pathTo.userSettings(accountname)}
                                     activeClassName="active"
                                 >
                                     {tt('g.settings')}
@@ -655,7 +656,9 @@ export default class UserProfile extends React.Component {
                             )}
                             <div className="UserProfile__stats">
                                 <span>
-                                    <Link to={`/@${accountname}/followers`}>
+                                    <Link
+                                        to={pathTo.userFollowers(accountname)}
+                                    >
                                         {tt('user_profile.follower_count', {
                                             count: followerCount,
                                         })}
@@ -665,14 +668,14 @@ export default class UserProfile extends React.Component {
                                     )}
                                 </span>
                                 <span>
-                                    <Link to={`/@${accountname}`}>
+                                    <Link to={pathTo.userProfile(accountname)}>
                                         {tt('user_profile.post_count', {
                                             count: account.post_count || 0,
                                         })}
                                     </Link>
                                 </span>
                                 <span>
-                                    <Link to={`/@${accountname}/followed`}>
+                                    <Link to={pathTo.userFollowed(accountname)}>
                                         {tt('user_profile.followed_count', {
                                             count: followingCount,
                                         })}
@@ -721,7 +724,7 @@ export default class UserProfile extends React.Component {
 }
 
 module.exports = {
-    path: '@:accountname(/:section)',
+    path: ':accountname(/:section)',
     component: connect(
         state => {
             const wifShown = state.global.get('UserKeys_wifShown');

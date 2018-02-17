@@ -3,6 +3,7 @@ import tt from 'counterpart';
 import linksRe, { any as linksAny } from 'app/utils/Links';
 import { validate_account_name } from 'app/utils/ChainValidation';
 import proxifyImageUrl from 'app/utils/ProxifyUrl';
+import { pathTo } from 'app/Routes';
 
 export const getPhishingWarningMessage = () => tt('g.phishy_message');
 
@@ -277,7 +278,7 @@ function linkify(content, mutate, hashtags, usertags, images, links) {
             if (!mutate) return `${preceedings}${user}`;
 
             return valid
-                ? `${preceedings}<a href="/@${userLower}">@${user}</a>`
+                ? `${preceedings}<a href="/${userLower}">@${user}</a>`
                 : '@' + user;
         }
     );

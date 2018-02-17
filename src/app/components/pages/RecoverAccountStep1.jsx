@@ -8,6 +8,7 @@ import { FormattedHTMLMessage } from 'app/Translator';
 import { APP_DOMAIN, APP_NAME, SUPPORT_EMAIL } from 'app/client_config';
 import { PrivateKey } from '@steemit/steem-js/lib/auth/ecc';
 import { api } from '@steemit/steem-js';
+import { pathTo } from 'app/Routes';
 
 const email_regex = /^([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22))*\x40([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d))*$/;
 
@@ -125,7 +126,7 @@ class RecoverAccountStep1 extends React.Component {
         e.preventDefault();
         const { name, password } = this.state;
         const owner_key = passwordToOwnerPubKey(name, password.value);
-        fetch('/api/v1/initiate_account_recovery_with_email', {
+        fetch('/c/api/initiate_account_recovery_with_email', {
             method: 'post',
             mode: 'no-cors',
             credentials: 'same-origin',
@@ -301,6 +302,6 @@ class RecoverAccountStep1 extends React.Component {
 }
 
 module.exports = {
-    path: 'recover_account_step_1',
+    path: pathTo.recoverAccount(1),
     component: RecoverAccountStep1,
 };

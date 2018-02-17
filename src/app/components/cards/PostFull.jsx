@@ -25,6 +25,7 @@ import tt from 'counterpart';
 import userIllegalContent from 'app/utils/userIllegalContent';
 import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
+import { pathTo } from 'app/Routes';
 
 function TimeAuthorCategory({ content, authorRepLog10, showTags }) {
     return (
@@ -231,17 +232,14 @@ class PostFull extends React.Component {
         const content = post_content.toJS();
         const { author, permlink, parent_author, parent_permlink } = content;
         const jsonMetadata = this.state.showReply ? null : p.json_metadata;
-        // let author_link = '/@' + content.author;
-        let link = `/@${content.author}/${content.permlink}`;
-        if (content.category) link = `/${content.category}${link}`;
+        const link = pathTo.post(content.author, content.permlink);
 
         const { category, title, body } = content;
         if (process.env.BROWSER && title)
             document.title = title + ' — ' + APP_NAME;
 
         let content_body = content.body;
-        const url = `/${category}/@${author}/${permlink}`;
-        const bDMCAStop = DMCAList.includes(url);
+        const bDMCAStop = DMCAList.includes(link);
         const bIllegalContentUser = userIllegalContent.includes(content.author);
         if (bDMCAStop) {
             content_body = tt(
@@ -347,9 +345,10 @@ class PostFull extends React.Component {
             </h1>
         );
         if (content.depth > 0) {
-            const parent_link = `/${content.category}/@${
-                content.parent_author
-            }/${content.parent_permlink}`;
+            const parent_link = pathTo.post(
+                content.parent_author,
+                content.parent_permlink
+            );
             let direct_parent_link;
             if (content.depth > 1) {
                 direct_parent_link = (

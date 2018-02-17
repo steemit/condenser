@@ -53,7 +53,7 @@ class SignUp extends React.Component {
                             prevent abuse, we require new users to login via
                             social media.<br />
                             Your personal information will be kept{' '}
-                            <a href="/privacy.html" target="_blank">
+                            <a href={pathTo.privacy()} target="_blank">
                                 private
                             </a>.
                         </p>
@@ -117,7 +117,7 @@ class SignUp extends React.Component {
                         <br />
                         <p className="secondary">
                             By verifying your account you agree to the Steemit{' '}
-                            <a href="/tos.html" target="_blank">
+                            <a href={pathTo.tos()} target="_blank">
                                 terms and conditions
                             </a>.
                         </p>

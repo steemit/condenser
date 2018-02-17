@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 import { numberWithCommas } from 'app/utils/StateFunctions';
 import tt from 'counterpart';
+import { pathTo } from 'app/Routes';
 
 export default class TagsIndex extends React.Component {
     static propTypes = {
@@ -66,7 +67,7 @@ export default class TagsIndex extends React.Component {
             })
             .map(tag => {
                 const name = tag.get('name');
-                const link = `/trending/${name}`;
+                const link = pathTo.indexPage(name, 'trending');
                 return (
                     <tr key={name}>
                         <td>
@@ -126,7 +127,7 @@ export default class TagsIndex extends React.Component {
 }
 
 module.exports = {
-    path: 'tags(/:order)',
+    path: pathTo.tags(),
     component: connect(state => ({
         tagsAll: state.global.get('tags'),
     }))(TagsIndex),

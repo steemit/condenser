@@ -26,6 +26,7 @@ import {
 } from 'app/client_config';
 import * as transactionActions from 'app/redux/TransactionReducer';
 import * as globalActions from 'app/redux/GlobalReducer';
+import { pathTo } from 'app/Routes';
 
 const assetPrecision = 1000;
 
@@ -348,7 +349,14 @@ class UserWallet extends React.Component {
                 link: '#',
                 onClick: showTransfer.bind(this, 'SBD', 'Transfer to Savings'),
             },
-            { value: tt('userwallet_jsx.market'), link: '/market' },
+            { value: tt('userwallet_jsx.market'), link: pathTo.market() },
+            {
+                value: tt('userwallet_jsx.convert_to_LIQUID_TOKEN', {
+                    LIQUID_TOKEN,
+                }),
+                link: '#',
+                onClick: convertToSteem,
+            },
         ];
         if (isMyAccount) {
             steem_menu.push({
@@ -366,7 +374,7 @@ class UserWallet extends React.Component {
             });
             steem_menu.push({
                 value: tt('userwallet_jsx.market'),
-                link: '/market',
+                link: pathTo.market(),
             });
             power_menu.push({
                 value: tt('g.buy'),
@@ -564,7 +572,7 @@ class UserWallet extends React.Component {
                                         : null,
                                 }}
                             >
-                                <Link to="/market">
+                                <Link to={pathTo.market()}>
                                     <Tooltip t={tt('market_jsx.open_orders')}>
                                         (+{steem_orders_balance_str} STEEM)
                                     </Tooltip>

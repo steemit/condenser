@@ -15,6 +15,7 @@ import SidebarLinks from 'app/components/elements/SidebarLinks';
 import SidebarNewUsers from 'app/components/elements/SidebarNewUsers';
 import ArticleLayoutSelector from 'app/components/modules/ArticleLayoutSelector';
 import Topics from './Topics';
+import { pathTo } from 'app/Routes';
 
 class PostsIndex extends React.Component {
     static propTypes = {
@@ -50,7 +51,9 @@ class PostsIndex extends React.Component {
     }
 
     getPosts(order, category) {
-        const topic_discussions = this.props.discussions.get(category || '');
+        const topic_discussions = this.props.discussions.get(
+            !category || category === 'all' ? '' : category
+        );
         if (!topic_discussions) return null;
         return topic_discussions.get(order);
     }
@@ -59,11 +62,12 @@ class PostsIndex extends React.Component {
         if (!last_post) return;
         let { accountname } = this.props.routeParams;
         let {
+            user_or_t,
             category,
             order = constants.DEFAULT_SORT_ORDER,
         } = this.props.routeParams;
         if (category === 'feed') {
-            accountname = order.slice(1);
+            accountname = user_or_t;
             order = 'by_feed';
         }
         if (isFetchingOrRecentlyUpdated(this.props.status, order, category))
@@ -82,6 +86,7 @@ class PostsIndex extends React.Component {
     };
     render() {
         let {
+            user_or_t,
             category,
             order = constants.DEFAULT_SORT_ORDER,
         } = this.props.routeParams;
@@ -89,7 +94,7 @@ class PostsIndex extends React.Component {
         let posts = [];
         let emptyText = '';
         if (category === 'feed') {
-            const account_name = order.slice(1);
+            const account_name = user_or_t;
             order = 'by_feed';
             topics_order = 'trending';
             posts = this.props.accounts.getIn([account_name, 'feed']);
@@ -101,15 +106,15 @@ class PostsIndex extends React.Component {
                         <br />
                         {tt('posts_index.empty_feed_2')}.<br />
                         <br />
-                        <Link to="/trending">
+                        <Link to={pathTo.indexPage('all', 'trending')}>
                             {tt('posts_index.empty_feed_3')}
                         </Link>
                         <br />
-                        <Link to="/welcome">
+                        <Link to={pathTo.welcome()}>
                             {tt('posts_index.empty_feed_4')}
                         </Link>
                         <br />
-                        <Link to="/faq.html">
+                        <Link to={pathTo.faq()}>
                             {tt('posts_index.empty_feed_5')}
                         </Link>
                         <br />
@@ -252,7 +257,7 @@ class PostsIndex extends React.Component {
 }
 
 module.exports = {
-    path: ':order(/:category)',
+    path: '/:user_or_t/:category(/:order)',
     component: connect(
         state => {
             return {

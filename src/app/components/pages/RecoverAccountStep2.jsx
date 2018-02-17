@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import tt from 'counterpart';
 import { PrivateKey } from '@steemit/steem-js/lib/auth/ecc';
 import { api } from '@steemit/steem-js';
+import { pathTo } from 'app/Routes';
 
 import * as userActions from 'app/redux/UserReducer';
 import * as transactionActions from 'app/redux/TransactionReducer';
@@ -82,7 +83,7 @@ class RecoverAccountStep2 extends React.Component {
             account_auths: [],
             key_auths: [[new_owner_key, 1]],
         };
-        fetch('/api/v1/request_account_recovery', {
+        fetch('/c/api/request_account_recovery', {
             method: 'post',
             mode: 'no-cors',
             credentials: 'same-origin',
@@ -207,9 +208,9 @@ class RecoverAccountStep2 extends React.Component {
         } else {
             if (success) {
                 // submit = <h4>Congratulations! Your account has been recovered. Please login using your new password.</h4>;
-                window.location = `/login.html#account=${
-                    account_to_recover
-                }&msg=accountrecovered`;
+                window.location =
+                    pathTo.login() +
+                    `#account=${account_to_recover}&msg=accountrecovered`;
             } else {
                 submit = (
                     <input
@@ -276,7 +277,7 @@ class RecoverAccountStep2 extends React.Component {
 }
 
 module.exports = {
-    path: 'recover_account_step_2',
+    path: pathTo.recoverAccount(2),
     component: connect(
         state => {
             return {

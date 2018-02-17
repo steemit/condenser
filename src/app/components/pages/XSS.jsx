@@ -1,5 +1,6 @@
 import React from 'react';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer';
+import { pathTo } from 'app/Routes';
 
 class XSS extends React.Component {
     render() {
@@ -21,7 +22,7 @@ class XSS extends React.Component {
 }
 
 module.exports = {
-    path: '/xss/test',
+    path: pathTo.xssTest(),
     component: XSS,
 };
 

@@ -1,4 +1,5 @@
 import React from 'react';
+import { pathTo } from 'app/Routes';
 import { SIGNUP_URL } from 'shared/constants';
 
 const SidebarNewUsers = () => (
@@ -9,7 +10,7 @@ const SidebarNewUsers = () => (
         <div className="c-sidebar__content">
             <ul className="c-sidebar__list">
                 <li className="c-sidebar__list-item">
-                    <a className="c-sidebar__link" href="/welcome">
+                    <a className="c-sidebar__link" href={pathTo.welcome()}>
                         Quick start guide
                     </a>
                 </li>
@@ -19,7 +20,7 @@ const SidebarNewUsers = () => (
                     </a>
                 </li>
                 <li className="c-sidebar__list-item">
-                    <a className="c-sidebar__link" href="/faq.html">
+                    <a className="c-sidebar__link" href={pathTo.faq()}>
                         FAQs
                     </a>
                 </li>

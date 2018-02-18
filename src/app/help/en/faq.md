@@ -143,6 +143,7 @@
 ### <span id="Table_of_Contents_Blockchain">Blockchain</span>
 - <a href="#What_is_a_blockchain">What is a blockchain?</a>
 - <a href="#What_is_the_Steem_blockchain">What is the Steem blockchain?</a>
+- <a href="#How_does_bandwidth_work_on_the_Steem_blockchain">How does bandwidth work on the Steem blockchain?</a>
 - <a href="#What_is_the_difference_between_Steem_and_Steemit">What is the difference between Steem and Steemit?</a>
 - <a href="#How_is_Steem_different_from_Bitcoin">How is Steem different from Bitcoin?</a>
 - <a href="#What_is_the_difference_between_Proof_of_Work__Proof_of_Stake__and_Delegated_Proof_of_Stake">What is the difference between Proof of Work, Proof of Stake, and Delegated Proof of Stake?</a>
@@ -1075,6 +1076,24 @@ A blockchain is a public ledger of all transactions ever executed. All of the tr
 ## <span id="What_is_the_Steem_blockchain">What is the Steem blockchain?</span>
 
 The Steem blockchain is the publicly accessible distributed database, which records all posts and votes, and distributes the rewards across the network. It is where all of the text content and voting data is stored, and it is where all of the reward calculations and payouts are performed.
+
+<a href="#Table_of_Contents_Blockchain">^</a>
+## <span id="How_does_bandwidth_work_on_the_Steem_blockchain">How does bandwidth work on the Steem blockchain?</span>
+
+Since transacting on the Steem blockchain has zero fees, bandwidth rate-limiting is employed to safeguard the blockchain from spam attacks. Everything action that you take on the blockchain will consume a small amount of bandwidth. This includes posting, commenting, voting, transferring tokens, etc. Viewing content does not consume bandwidth.
+
+Every user has a limited amount of bandwidth to use each week. The more transactions a user does, the less bandwidth they will have left (until it recharges). Users with more Steem Power will have a higher bandwidth allowance.
+
+Normally everyone's bandwidth allowance is quite high, and users are able to use the network freely without any interruptions. Sometimes when the blockchain becomes busy however (due to heavy use), everyone's individual allowances may go down until the network becomes less busy.
+
+You can check how much bandwidth you currently have based on the current limit at:
+https://steemd.com/@youraccount
+
+If users are below their bandwidth limit, they will be unable to transact with the blockchain until their bandwidth recharges or their limit is raised.
+
+If you get an error that you have exceeded your bandwidth allowance, it is normally best to just wait and try again later (when it is less busy). Usually if you wait and try again later, the transaction will likley go through.
+
+If you are unable to transact for extended periods of time, or you are frequently running into bandwidth limits, then you will either need to reduce your usage to stay within your limit, or purchase more Steem Power for your account through a third-party exchange such as [BlockTrades](https://blocktrades.us/?input_coin_type=eth&output_coin_type=steem_power&receive_address=).
 
 <a href="#Table_of_Contents_Blockchain">^</a>
 ## <span id="What_is_the_difference_between_Steem_and_Steemit">What is the difference between Steem and Steemit?</span>

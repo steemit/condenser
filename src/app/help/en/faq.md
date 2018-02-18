@@ -193,20 +193,20 @@
 
 ## <span id="What_is_Steemit_com">What is Steemit.com?</span>
 
-Steemit is a social network and content rewards platform that makes the crowd the beneficiaries of the attention economy. It does this be rewarding users with STEEM.
-
-Steemit has redefined social media by building a living, breathing, and growing social economy; a community where users are getting rewarded for sharing their voice.
+Steemit has redefined social media by building a living, breathing, and growing social economy - a community where users are rewarded for sharing their voice. It's a new kind of attention economy.
 
 <a href="#Table_of_Contents_General">^</a>
 ## <span id="How_does_Steemit_work">How does Steemit work?</span>
 
-Steemit is a social media platform that works by having the crowd reward the crowd for their content. It does this thanks to the Steem blockchain and cryptocurrency; Steem is 'minted' daily and distributed to content producers according to the votes they get.
+Steemit.com is one of many websites (including [Busy.org](https://busy.org/), [DTube](https://d.tube/), and [Utopian.io](https://utopian.io/)) that are powered by the Steem blockchain and STEEM cryptocurrency. All of these websites read and write content to the Steem blockchain, which stores the content in an immutable blockchain ledger, and then rewards users for their contributions with digital tokens called STEEM.
+
+Every day, the Steem blockchain creates new STEEM tokens and adds them to a community's "rewards pool". These tokens are then awarded to users for their contributions, based on the votes that their content receives. Users who hold more tokens in their account as "Steem Power" will get to decide where a larger share of the rewards pool is sent.
 
 <a href="#Table_of_Contents_General">^</a>
 
 ## How does Steemit differ from other social media websites? <a id="How_does_Steemit_differ_from_other_social_media_websites"></a>
 
-Most social media sites extract value from their userbase for the benefit of shareholders alone. Steemit is different, it's a new kind of attention economy. By connecting with the Steem blockchain (which is decentralized and controlled by the crowd), Steemit users receive all the benefits and rewards for their attention.
+While most social media sites extract this value for the benefit of their shareholders, Steemit believes that the users of the platform should receive the benefits and rewards for their attention and the contributions they make to the platform.
 
 <a href="#Table_of_Contents_General">^</a>
 ## <span id="Does_it_cost_anything_to_post__comment__or_vote">Does it cost anything to post, comment, or vote?</span>
@@ -1280,7 +1280,7 @@ You can also create a post on Steemit.com with the tag #help, and someone in the
 
 ## <span id="Third_Party_References_and_User_Links">Third Party References and User Links</span>
 
-BlockTrades, Poloniex, Bittrex, Changelly, Shapeshift.io, Coinbase, Localbitcoins, SteemDB, PeerHub, Steemit.chat, SteemTools, SteemCreate, AnonSteem, SteemConnect, Streemian, SteemStats, Pixabay, Steemcleaners, Pexels, Postimage, Markdown Cheatsheet, @cheetah, Bitcointalk, bitcoinfees, blockchain.info, and steemd are third party applications/services, and are not owned or maintained by Steemit, Inc. Their listing here, as well as any other third party applications or websites that are listed, does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
+BlockTrades, Poloniex, Bittrex, Changelly, Shapeshift.io, Coinbase, Localbitcoins, SteemDB, PeerHub, Steemit.chat, SteemTools, SteemCreate, AnonSteem, SteemConnect, Streemian, SteemStats, Pixabay, Steemcleaners, Pexels, Postimage, Markdown Cheatsheet, @cheetah, Bitcointalk, bitcoinfees, blockchain.info, Busy.org, DTube, Utopian.io, and steemd are third party applications/services, and are not owned or maintained by Steemit, Inc. Their listing here, as well as any other third party applications or websites that are listed, does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
 
 All links to user posts were created by our users and do not necessarily represent the views of Steemit, Inc. or its management. Their listing here does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
 

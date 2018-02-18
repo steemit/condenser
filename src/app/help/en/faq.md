@@ -23,7 +23,8 @@
 - <a href="#What_are_other_ways_to_create_an_account_on_the_blockchain_besides_using_Steemit_com">What are other ways to create an account on the blockchain besides using steemit.com?</a>
 - <a href="#It_is_not_letting_me_create_an_account_with_my_phone_number__What_should_I_do">It is not letting me create an account with my phone number. What should I do?</a>
 - <a href="#What_happens_if_my_email_or_phone_number_changes">What happens if my email or phone number changes?</a>
-- <a href="#Am_I_allowed_to_create_more_than_one_account">Am I allowed to create more than one account</a>
+- <a href="#Am_I_allowed_to_create_more_than_one_account">Am I allowed to create more than one account?</a>
+- <a href="#Can_I_change_my_username">Can I change my username?</a>
 - <a href="#Can_I_delete_or_deactivate_my_account">Can I delete or deactivate my account?</a>
 
 ### <span id="Table_of_Contents_Community">Community</span>
@@ -319,6 +320,13 @@ Currently there is no way to change the email or phone number that is linked to 
 ## <span id="Am_I_allowed_to_create_more_than_one_account">Am I allowed to create more than one account?</span>
 
 Each user is allowed only one paid-for account created via steemit.com, however users are allowed to create as many accounts as they want on the blockchain. Creating additional accounts on the blockchain requires users to pay their own account creation fee using one of the third-party services listed above.
+
+<a href="#Table_of_Contents_Accounts">^</a>
+## <span id="Can_I_change_my_username">Can I change my username?</span>
+
+Account names can not be changed. If you would like a new account name, you must pay to create a new account using a third-party account creation service.
+
+<a href="#Table_of_Contents_Accounts">^</a>
 
 <a href="#Table_of_Contents_Accounts">^</a>
 ## <span id="Can_I_delete_or_deactivate_my_account">Can I delete or deactivate my account?</span>

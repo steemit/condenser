@@ -18,6 +18,7 @@
 - <a href="#How_do_I_create_an_account">How do I create an account?</a>
 - <a href="#What_information_do_I_need_to_provide_in_order_to_create_an_account">What information do I need to provide in order to create an account?</a>
 - <a href="#How_long_does_the_account_approval_process_take">How long does the account approval process take?</a>
+- <a href="#Can_I_speed_up_the_account_approval_process">Can I speed up the account approval process?</a>
 - <a href="#Why_do_I_need_to_provide_my_email_and_phone_number">Why do I need to provide my email and phone number?</a>
 - <a href="#Can_I_create_a_Steem_account_without_an_email_and_phone_number">Can I create a Steem account without an email and phone number?</a>
 - <a href="#What_are_other_ways_to_create_an_account_on_the_blockchain_besides_using_Steemit_com">What are other ways to create an account on the blockchain besides using steemit.com?</a>
@@ -282,6 +283,11 @@ You will need to provide your email address and phone number.
 Some accounts are approved faster than others. Most accounts are approved within 24 hours. Some may take a week or more to review.
 
 If your account has not been approved after more than a week, you can ask for help in the <a href="https://steemit.chat/channel/help">#help</a> channel on <a href="https://steemit.chat/home">steemit.chat</a>.
+
+<a href="#Table_of_Contents_Accounts">^</a>
+## <span id="Can_I_speed_up_the_account_approval_process">Can I speed up the account approval process?</span>
+
+There is currently no way to speed up the account approval process. If you are unable to wait, there are third-party websites listed below that allow you to bypass the approval process and pay to open an account.
 
 <a href="#Table_of_Contents_Accounts">^</a>
 ## <span id="Why_do_I_need_to_provide_my_email_and_phone_number">Why do I need to provide my email and phone number?</span>

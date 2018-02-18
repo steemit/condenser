@@ -257,7 +257,7 @@ They're like Ethereum's ERC-20 tokens, but with certain built-in ‘Proof-of-Bra
 
 SMTs are planned to be launched in 2018!
 
-More information can be found on the SMTs website: [https://smt.steem.io/](smt.steem.io).
+More information can be found on the SMTs website: [smt.steem.io](https://smt.steem.io/).
 
 <a href="#Table_of_Contents_General">^</a>
 # Accounts

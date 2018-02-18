@@ -198,9 +198,9 @@ Steemit has redefined social media by building a living, breathing, and growing 
 <a href="#Table_of_Contents_General">^</a>
 ## <span id="How_does_Steemit_work">How does Steemit work?</span>
 
-Steemit.com is one of many websites (including [Busy.org](https://busy.org/), [DTube](https://d.tube/), and [Utopian.io](https://utopian.io/)) that are powered by the Steem blockchain and STEEM cryptocurrency. All of these websites read and write content to the Steem blockchain, which stores the content in an immutable blockchain ledger, and then rewards users for their contributions with digital tokens called STEEM.
+Steemit.com is one of the many websites (including [Busy.org](https://busy.org/), [DTube](https://d.tube/), and [Utopian.io](https://utopian.io/)) that are powered by the Steem blockchain and STEEM cryptocurrency. All of these websites read and write content to the Steem blockchain, which stores the content in an immutable blockchain ledger, and rewards users for their contributions with digital tokens called STEEM.
 
-Every day, the Steem blockchain creates new STEEM tokens and adds them to a community's "rewards pool". These tokens are then awarded to users for their contributions, based on the votes that their content receives. Users who hold more tokens in their account as "Steem Power" will get to decide where a larger share of the rewards pool is sent.
+Every day, the Steem blockchain mints new STEEM tokens and adds them to a community's "rewards pool". These tokens are then awarded to users for their contributions, based on the votes that their content receives. Users who hold more tokens in their account as "Steem Power" will get to decide where a larger portion of the rewards pool is distributed.
 
 <a href="#Table_of_Contents_General">^</a>
 

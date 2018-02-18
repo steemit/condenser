@@ -327,8 +327,6 @@ Each user is allowed only one paid-for account created via steemit.com, however 
 Account names can not be changed. If you would like a new account name, you must pay to create a new account using a third-party account creation service.
 
 <a href="#Table_of_Contents_Accounts">^</a>
-
-<a href="#Table_of_Contents_Accounts">^</a>
 ## <span id="Can_I_delete_or_deactivate_my_account">Can I delete or deactivate my account?</span>
 
 Accounts can not be deactivated or deleted. The account along with all of its activity is permanently stored in the blockchain.

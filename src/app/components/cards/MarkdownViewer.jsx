@@ -28,6 +28,7 @@ class MarkdownViewer extends Component {
         highQualityPost: React.PropTypes.bool,
         noImage: React.PropTypes.bool,
         allowDangerousHTML: React.PropTypes.bool,
+        bypassHtmlReady: React.PropTypes.bool,
         hideImages: React.PropTypes.bool, // whether to replace images with just a span containing the src url
         // used for the ImageUserBlockList
     };
@@ -36,6 +37,7 @@ class MarkdownViewer extends Component {
         className: '',
         large: false,
         allowDangerousHTML: false,
+        bypassHtmlReady: false,
         hideImages: false,
     };
 
@@ -59,7 +61,12 @@ class MarkdownViewer extends Component {
     };
 
     render() {
-        const { noImage, hideImages } = this.props;
+        const {
+            noImage,
+            hideImages,
+            allowDangerousHTML,
+            bypassHtmlReady,
+        } = this.props;
         const { allowNoImage } = this.state;
         let { text } = this.props;
         if (!text) text = ''; // text can be empty, still view the link meta data
@@ -93,13 +100,13 @@ class MarkdownViewer extends Component {
         }
 
         // Embed videos, link mentions and hashtags, etc...
-        if (renderedText)
+        if (renderedText && !bypassHtmlReady)
             renderedText = HtmlReady(renderedText, { hideImages }).html;
 
         // Complete removal of javascript and other dangerous tags..
         // The must remain as close as possible to dangerouslySetInnerHTML
         let cleanText = renderedText;
-        if (this.props.allowDangerousHTML === true) {
+        if (allowDangerousHTML === true) {
             console.log('WARN\tMarkdownViewer rendering unsanitized content');
         } else {
             cleanText = sanitize(

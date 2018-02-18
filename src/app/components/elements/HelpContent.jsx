@@ -145,6 +145,7 @@ export default class HelpContent extends React.Component {
                 className="HelpContent"
                 text={value}
                 allowDangerousHTML
+                bypassHtmlReady={true}
             />
         );
     }

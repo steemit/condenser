@@ -4,7 +4,7 @@
 ## <span id="Table_of_Contents">Table of Contents</span>
 
 ### <span id="Table_of_Contents_General">General</span>
-- <a href="#What_is_Steemit_com">What is steemit.com?</a>
+- <a href="#What_is_Steemit_com">What is Steemit.com?</a>
 - <a href="#How_does_Steemit_work">How does Steemit work?</a>
 - <a href="#How_does_Steemit_differ_from_other_social_media_websites">How does Steemit differ from other social media websites?</a>
 - <a href="#What_do_I_need_to_do_in_order_to_secure_my_account">What do I need to do in order to secure my account?</a>
@@ -22,7 +22,7 @@
 - <a href="#Can_I_speed_up_the_account_approval_process">Can I speed up the account approval process?</a>
 - <a href="#Why_do_I_need_to_provide_my_email_and_phone_number">Why do I need to provide my email and phone number?</a>
 - <a href="#Can_I_create_a_Steem_account_without_an_email_and_phone_number">Can I create a Steem account without an email and phone number?</a>
-- <a href="#What_are_other_ways_to_create_an_account_on_the_blockchain_besides_using_Steemit_com">What are other ways to create an account on the blockchain besides using steemit.com?</a>
+- <a href="#What_are_other_ways_to_create_an_account_on_the_blockchain_besides_using_Steemit_com">What are other ways to create an account on the blockchain besides using Steemit.com?</a>
 - <a href="#It_is_not_letting_me_create_an_account_with_my_phone_number__What_should_I_do">It is not letting me create an account with my phone number. What should I do?</a>
 - <a href="#What_happens_if_my_email_or_phone_number_changes">What happens if my email or phone number changes?</a>
 - <a href="#Am_I_allowed_to_create_more_than_one_account">Am I allowed to create more than one account?</a>
@@ -174,8 +174,8 @@
 - <a href="#How_do_I_report_a_security_vulnerability">How do I report a security vulnerability?</a>
 
 ### <span id="Table_of_Contents_Developers">Developers</span>
-- <a href="#Are_the_Steem_blockchain_and_Steemit_com_code_open_source">Are the Steem blockchain and steemit.com code open-source?</a>
-- <a href="#Is_there_a_Github_page_for_Steemit_com">Is there a Github page for steemit.com?</a>
+- <a href="#Are_the_Steem_blockchain_and_Steemit_com_code_open_source">Are the Steem blockchain and Steemit.com code open-source?</a>
+- <a href="#Is_there_a_Github_page_for_Steemit_com">Is there a Github page for Steemit.com?</a>
 - <a href="#Is_there_a_Github_page_for_the_Steem_blockchain">Is there a Github page for the Steem blockchain?</a>
 - <a href="#What_is_available_for_developers_interested_in_Steem_and_Steemit">What is available for developers interested in Steem and Steemit?</a>
 - <a href="#How_do_I_use_cli_wallet">How do I use cli_wallet?</a>

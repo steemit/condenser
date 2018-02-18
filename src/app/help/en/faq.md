@@ -211,23 +211,25 @@ While most social media sites extract this value for the benefit of their shareh
 <a href="#Table_of_Contents_General">^</a>
 ## <span id="Does_it_cost_anything_to_post__comment__or_vote">Does it cost anything to post, comment, or vote?</span>
 
-No. It is free to post, comment, and vote on content on Steemit.com. You might even get paid for it!
+No. It is free to post, comment, and vote on content on steemit.com. You might even get paid for it!
 
 <a href="#Table_of_Contents_General">^</a>
 ## <span id="Can_I_earn_digital_tokens_on_Steemit_How">Can I earn digital tokens on Steemit? How?</span>
 
 You can earn digital tokens on Steemit by:
 
-**Posting** - By sharing your posts, you can earn upvotes from community members. Depending on the upvotes you receive, you will get a portion of the ongoing Steem reward pool.
+**Posting** - By sharing your posts, you can earn upvotes from community members. Depending on the upvotes you receive, you may get a portion of the "rewards pool".
 
-**Voting and curating** - If you discover a post and upvote it before it becomes popular, you can earn a curation reward. The reward amount will depend on the amount of STEEM Power you have.
+**Voting and curating** - If you discover a post and upvote it before it becomes popular, you can earn a curation reward. The reward amount will depend on the amount of Steem Power you have.
 
-**Purchasing** - Users can purchase STEEM or Steem Dollar tokens directly through the Steemit wallet using bitcoin, Ether, or BitShares tokens. They are also available from other markets and exchanges including BlockTrades, Poloniex, Bittrex, Shapeshift.io, and Changelly. STEEM tokens that are powered up to STEEM Power earn a small amount of interest for holding.
+**Purchasing** - Users can purchase STEEM or Steem Dollar tokens directly through their Steemit wallet using bitcoin, Ether, or BitShares tokens. They are also available from other markets and exchanges including [Binance](https://www.binance.com/), [BitShares](https://openledger.info/), [Bittrex](https://bittrex.com), [BlockTrades](https://blocktrades.us), [Changelly](https://changelly.com), [HitBTC](https://hitbtc.com/), [Poloniex](https://poloniex.com), [Shapeshift.io](https://shapeshift.io), and [UpBit](https://upbit.com/).
+
+**Interest** - STEEM tokens that are powered up to Steem Power will earn a small amount of interest for holding.
 
 <a href="#Table_of_Contents_General">^</a>
 ## <span id="Where_do_the_tokens_come_from">Where do the tokens come from?</span>
 
-The Steem network continually creates digital tokens to reward content creators and curators. Some of the newly-created tokens are transferred to users who add value to Steemit by posting, commenting, and voting on other people's posts. The remainder is distributed to holders of STEEM Power and the witnesses that power the blockchain.
+The Steem network continually creates new digital tokens to reward content creators and curators. Some of the newly-created tokens are transferred to users who add value to Steem by posting, commenting, and voting on other people's posts. The remainder is distributed to holders of Steem Power and the witnesses that power the blockchain.
 
 <a href="#Table_of_Contents_General">^</a>
 ## <span id="Where_does_the_value_come_from">Where does the value come from?</span>
@@ -252,9 +254,9 @@ It is best to have realistic expectations, without focusing on rewards when you 
 
 Click on the "Sign Up" link at the top of Steemit.com to get started.
 
-You will be asked to verify your email address and phone number. After your email address and phone number have been verified, you will be added to the waiting list. You will be notified via email once your account is approved.
+You will be asked to enter your email address and verify your phone number. After your information has been verified, you will be added to the waiting list to receive an account. You will be notified via email once your account is approved.
 
-After you receive notification that your account is approved, click on the link in the email to finish the account creation process. Be sure to save and backup your username and password. It is very important that you do not lose your password. There is no way to recover your password or access your account if it is lost. Once your password is saved and backed up, click on the "Create Account" button to create the account.
+After you receive notification that your account is approved, click on the link in the email to finish the account creation process. **Be sure to save and backup your username and password.** It is very important that you do not lose your password. There is no way to recover your password or access your account if it is lost. Once your password is saved and backed up, click on the "Create Account" button to create the account.
 
 <a href="#Table_of_Contents_Accounts">^</a>
 ## <span id="What_information_do_I_need_to_provide_in_order_to_create_an_account">What information do I need to provide in order to create an account?</span>
@@ -264,19 +266,19 @@ You will need to provide your email address and phone number.
 <a href="#Table_of_Contents_Accounts">^</a>
 ## <span id="How_long_does_the_account_approval_process_take">How long does the account approval process take?</span>
 
-Most accounts are approved within 24 hours. Some may take up to a week.
+Some accounts are approved faster than others. Most accounts are approved within 24 hours. Some may take a week or more to review.
 
-If your account has not been approved after one week, please ask for help in the <a href="https://steemit.chat/channel/help">#help</a> channel on <a href="https://steemit.chat/home">steemit.chat</a>.
+If your account has not been approved after more than a week, you can ask for help in the <a href="https://steemit.chat/channel/help">#help</a> channel on <a href="https://steemit.chat/home">steemit.chat</a>.
 
 <a href="#Table_of_Contents_Accounts">^</a>
 ## <span id="Why_do_I_need_to_provide_my_email_and_phone_number">Why do I need to provide my email and phone number?</span>
 
-To create an account on the blockchain, it costs STEEM tokens. When you create an account through Steemit.com, Steemit Inc. is supplying the tokens to pay the account creation fee. In order to prevent users from abusing the paid-for signup and creating multiple accounts, we need to be able to verify that each user is only signing up for one account.
+To create an account on the blockchain, it costs STEEM tokens. When you create an account through steemit.com, Steemit Inc. is supplying the tokens to pay the account creation fee. In order to prevent users from abusing the paid-for signup and creating multiple accounts, we need to be able to verify that each user is only signing up for one account.
 
 <a href="#Table_of_Contents_Accounts">^</a>
 ## <span id="Can_I_create_a_Steem_account_without_an_email_and_phone_number">Can I create a Steem account without an email and phone number?</span>
 
-The only way to have an account created via Steemit.com is to supply your email and phone number. Because Steem is an open and permissionless network, there are other ways to create a Steem account. Any Steem blockchain account can be used on Steemit.com
+The only way to have an account created via steemit.com is to supply your email and phone number. Because Steem is an open and permissionless network, there are other ways to create an account. Any Steem blockchain account can be used on Steemit.com.
 
 <a href="#Table_of_Contents_Accounts">^</a>
 ## <span id="What_are_other_ways_to_create_an_account_on_the_blockchain_besides_using_Steemit_com">What are other ways to create an account on the blockchain besides using Steemit.com?</span>
@@ -285,11 +287,11 @@ If you are willing to pay your own signup fee, then there are other ways to crea
 
 There is a third-party tool called <a href="https://www.SteemCreate.com">SteemCreate</a> that accepts credit cards, or BTC to create a Steem account. You do not need to have an existing Steem blockchain account to use the service, but there is a charge on top of the blockchain account creation fee for using the service.
 
-There is a third-party tool called <a href="https://steemit.com/steemit/@someguy123/anonsteem-create-anonymous-steem-accounts-without-social-media">AnonSteem</a> that accepts bitcoin, Litecoin, STEEM, or SBD to anonymously create a Steem account. You do not need to have an existing Steem blockchain account to use the service, but there is a charge on top of the blockchain account creation fee for using the service.
+There is a third-party tool called <a href="https://blocktrades.us/create-steem-account">BlockTrades</a> that accepts bitcoin, Litecoin, STEEM, SBD, BitShares, Dash, Dogecoin, Ethereum, and more to create a Steem account. You can also send extra tokens to pre-load the account with additional Steem Power. You do not need to have an existing Steem blockchain account to use the service, but there is a charge on top of the blockchain account creation fee for using the service.
+
+There is a third-party tool called <a href="https://anon.steem.network/">AnonSteem</a> that accepts bitcoin, Litecoin, STEEM, or SBD to anonymously create a Steem account. You do not need to have an existing Steem blockchain account to use the service, but there is a charge on top of the blockchain account creation fee for using the service.
 
 There is a third-party tool called <a href="https://steemit.com/news/@timcliff/new-tool-from-busy-org-create-new-steem-blockchain-accounts-with-steemconnect">SteemConnect</a> that allows you to create accounts by paying or delegating the account creation fee. There is no additional fee to use the service, but does require an existing Steem blockchain account to pay the account creation fee to create the account.
-
-There is a third-party tool called <a href="https://steemit.com/blocktrades/@blocktrades/buy-steem-accounts-with-pre-loaded-steem-from-blocktrades">BlockTrades</a> that accepts bitcoin, Litecoin, STEEM, SBD, BitShares, Dash, Dogecoin, Ethereum, and more to create a Steem account. You can also send extra tokens to pre-load the account with additional Steem Power. You do not need to have an existing Steem blockchain account to use the service, but there is a charge on top of the blockchain account creation fee for using the service.
 
 <a href="#Table_of_Contents_Accounts">^</a>
 ## <span id="It_is_not_letting_me_create_an_account_with_my_phone_number__What_should_I_do">It is not letting me create an account with my phone number. What should I do?</span>
@@ -304,7 +306,7 @@ Currently there is no way to change the email or phone number that is linked to 
 <a href="#Table_of_Contents_Accounts">^</a>
 ## <span id="Am_I_allowed_to_create_more_than_one_account">Am I allowed to create more than one account?</span>
 
-Each user is allowed only one paid-for account created via Steemit.com, however users are allowed to create multiple accounts on the blockchain. Creating additional accounts on the blockchain requires users to pay their own account creation fee for any additional accounts.
+Each user is allowed only one paid-for account created via steemit.com, however users are allowed to create as many accounts as they want on the blockchain. Creating additional accounts on the blockchain requires users to pay their own account creation fee using one of the third-party services listed above.
 
 <a href="#Table_of_Contents_Accounts">^</a>
 ## <span id="Can_I_delete_or_deactivate_my_account">Can I delete or deactivate my account?</span>
@@ -384,7 +386,7 @@ You can also view the same information for other users by visiting their profile
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 ## <span id="What_information_is_shown_in_my_wallet">What information is shown in my wallet?</span>
 
-Your wallet shows how many STEEM and Steem Dollar tokens you have in your account. It shows how much STEEM Power it has, and how much SP is delegated. It also shows how many of your STEEM and Steem Dollar tokens are being held in the savings account, which is a balance that is subject to 3 day withdraw waiting period. The wallet page shows any the progress of any Steem Dollar to STEEM conversions as well as the status of a power down. It also shows an estimated value of all the tokens in your account, based on the recent market prices of STEEM and SBD.
+Your wallet shows how many STEEM and Steem Dollar tokens you have in your account. It shows how much Steem Power it has, and how much SP is delegated. It also shows how many of your STEEM and Steem Dollar tokens are being held in the savings account, which is a balance that is subject to 3 day withdraw waiting period. The wallet page shows any the progress of any Steem Dollar to STEEM conversions as well as the status of a power down. It also shows an estimated value of all the tokens in your account, based on the recent market price of STEEM.
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 ## <span id="How_do_I_transfer_my_STEEM_or_Steem_Dollars_into_savings">How do I transfer my STEEM or Steem Dollars into savings?</span>
@@ -396,7 +398,7 @@ Your savings balance is STEEM and SBD tokens that are subject to 3 day withdraw 
 
 - From your wallet page, click the STEEM or Steem Dollar balances with the down arrow next to them.
 - In the drop-down menu, click 'Transfer'. 
-- Type the username of the account you want to send the STEEM or Steem Dollars to. Double and triple check spelling.
+- Type the username of the account you want to send the STEEM or Steem Dollars to. Double and triple check the spelling.
 - Enter the amount of STEEM or Steem Dollars to send.
 - Enter a memo to go along with the transaction (optional).
 - Click Submit.
@@ -423,7 +425,7 @@ You can view your own profile by clicking on the link to your Blog in your accou
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 ## <span id="How_do_I_change_my_avatar_image_and_other_profile_information">How do I change my avatar image and other profile information?</span>
 
-Your profile info, avatar image, and cover image are set in your Settings page. In order to update your avatar picture and cover image, you will need to host the images somewhere. This can be done by uploading it to a Steemit comment or post, or using a third-party image host such as <a href="http://postimage.io/">Postimage</a>.  Once your image is uploaded, copy its URL and paste it into the "Profile Picture URL" box for the avatar, or the "Cover Image URL" box for the cover image. Then click the Update button and enter your password or active key.
+Your profile info, avatar image, and cover image are set in your Settings page. In order to update your avatar picture and cover image, you will need to host the images somewhere. This can be done by uploading it to a Steemit comment or post, or using a third-party image hosting site such as <a href="http://postimage.io/">Postimage</a>.  Once your image is uploaded, copy its URL and paste it into the "Profile Picture URL" box for the avatar, or the "Cover Image URL" box for the cover image. Then click the Update button and enter your password or active key.
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 ## <span id="What_is_the_recommend_size_for_the_cover_image">What is the recommend size for the cover image?</span>
@@ -452,7 +454,7 @@ Yes. This can be seen under the Settings page.
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 ## <span id="Can_I_see_which_users_have_muted_me">Can I see which users have muted me?</span>
 
-No. This information is not presented on Steemit.com.
+No. This information is not presented on steemit.com.
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 ## <span id="Can_I_see_the_list_of_users_I_am_following__and_who_is_following_me">Can I see the list of users I am following, and who is following me?</span>
@@ -462,7 +464,7 @@ Yes. You can see the list of followers or people you are following by clicking o
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 ## <span id="What_languages_are_supported">What languages are supported?</span>
 
-English is the most-used language used on the Steemit platform, but communities are forming that speak other languages.
+Currently steemit.com supports English, Spanish, Russian, French, Italian, Korean, Polish, and Chinese. There are also many communities using the platform that speak other languages. If you are interested in joining our translation team to add additional languages or help support the ones we have, please [email us](mailto:translate@steemit.com).
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 # Posting
@@ -474,9 +476,9 @@ Steem is an open platform meant to host and welcome any legal content. Users can
 <a href="#Table_of_Contents_Posting">^</a>
 ## <span id="What_are_the_different_choices_for_post_rewards__50__50___Power_Up_100___Decline_Payout">What are the different choices for post rewards (50%/50%, Power Up 100%, Decline Payout)?</span>
 
-- **50%/50%** - This rewards in half STEEM Power, and half liquid STEEM / Steem Dollars. The ratio of liquid STEEM to Steem Dollars rewarded is based on network conditions at the time of payout. This is the default payout option.
+- **50%/50%** - This rewards in half Steem Power, and half liquid STEEM / Steem Dollars. The ratio of liquid STEEM to Steem Dollars rewarded is based on network conditions at the time of payout. This is the default payout option.
 
-- **Power Up 100%** - This option rewards the post in 100% STEEM Power.
+- **Power Up 100%** - This option rewards the post in 100% Steem Power.
 
 - **Decline Payout** - Use this option to receive no post rewards. Votes will affect the post's position on the trending ranking but no rewards are paid from Steem's reward pool. Replies made to the post are still eligible for rewards.
 
@@ -502,14 +504,12 @@ The recommend aspect ratio for thumbnail images is 16x9.
 <a href="#Table_of_Contents_Posting">^</a>
 ## <span id="How_do_I_add_videos_to_my_posts">How do I add videos to my posts?</span>
 
-To add a YouTube or Vimeo video to your blog post, simply paste the link to the video into the post. 
-
-You can also read <a href="https://steemit.com/steemitguide/@algimantas/detailed-guide-how-to-add-videos-in-steemit">this guide</a> from @algimantas, which has more detailed instructions:
+To add a DTube, YouTube, or Vimeo video to your blog post, simply paste the URL link to the video into the post. 
 
 <a href="#Table_of_Contents_Posting">^</a>
 ## <span id="Is_there_a_way_I_can_make_my_images_smaller">Is there a way I can make my images smaller?</span>
 
-Yes, but the picture must be resized before it is uploaded into the Steemit.com editor. This can be done in your favorite photo editing software, or online by uploading to a third-party website that features editing such as imgur.com.
+Yes, but the picture must be resized before it is uploaded into the steemit.com editor. This can be done in your favorite photo editing software, or online by uploading to a third-party website that features editing such as imgur.com.
 
 <a href="#Table_of_Contents_Posting">^</a>
 ## <span id="What_are_tags">What are tags?</span>
@@ -557,7 +557,9 @@ Text can be sized using headers:
 ### H3
 #### H4
 
-For more advanced formatting, a guide describing the common markdown formatting syntax can be found here: <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet">Markdown Cheatsheet</a>
+Instructions on how to justify text, as well as wrap text around images pulled to the left or right can be found in [this guide](https://steemit.com/steemit/@steemitblog/new-advanced-formatting-features).
+
+For more advanced formatting, a guide describing the common markdown formatting syntax can be found here: <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet">Markdown Cheatsheet</a>. 
 
 <a href="#Table_of_Contents_Posting">^</a>
 ## <span id="How_often_can_I_post">How often can I post?</span>
@@ -586,7 +588,7 @@ Language-specific groups include:
 <a href="#Table_of_Contents_Posting">^</a>
 ## <span id="Can_I_delete_something_I_posted">Can I delete something I posted?</span>
 
-The blockchain will always contain the full edit history of posts and comments, so it can never be completely deleted. If you would like to update a post so that users cannot see the content via Steemit.com, you can edit the post and replace it with blank content for as long as the post is active. After seven days, the post can no longer be edited.
+The blockchain will always contain the full edit history of posts and comments, so it can never be completely deleted. If you would like to update a post so that users cannot see the content via steemit.com, you can edit the post and replace it with blank content for as long as the post is active. After seven days, the post can no longer be edited.
 
 <a href="#Table_of_Contents_Posting">^</a>
 ## <span id="What_does__Promoting__a_post_do">What does "Promoting" a post do?</span>
@@ -619,7 +621,7 @@ There is a 20 second wait time in between comments to limit spam.
 
 ## <span id="Where_do_the_new_STEEM_tokens_come_from">Where do the new STEEM tokens come from?</span>
 
-Blockchains like Steem and Bitcoin produce new tokens each time a block is produced. Unlike Bitcoin, where all of the new coins go to the block producers (called miners), the Steem blockchain allocates a majority of the new tokens to a reward fund. The reward fund gives users tokens for participating in the platform.
+Blockchains like Steem and Bitcoin produce new tokens each time a block is produced. Unlike Bitcoin, where all of the new coins go to the block producers (called miners), the Steem blockchain allocates a majority of the new tokens to a reward fund called the "rewards pool". The rewards pool gives users tokens for participating in the platform based on the value they add.
 
 <a href="#Table_of_Contents_Economics">^</a>
 ## <span id="How_many_new_tokens_are_generated_by_the_blockchain">How many new tokens are generated by the blockchain?</span>
@@ -631,7 +633,7 @@ Starting with the network's 16th hard fork in December 2016, Steem began creatin
 
 Out of the new tokens that are generated:
 - 75% go to the reward pool, which is split between authors and curators. 
-- 15% of the new tokens are awarded to holders of STEEM Power. 
+- 15% of the new tokens are awarded to holders of Steem Power. 
 - The remaining 10% pays for the witnesses to power the blockchain.
 
 <a href="#Table_of_Contents_Economics">^</a>
@@ -642,14 +644,16 @@ Every day, a fixed amount of STEEM tokens are allocated to the network reward fu
 <a href="#Table_of_Contents_Economics">^</a>
 ## <span id="How_is_the_reward_pool_split_between_authors_and_curators">How is the reward pool split between authors and curators?</span>
 
-Up to 25% of a post's payout is awarded to curators (the people who upvoted the post) as a reward for discovering the content. The other 75% is awarded to the author. If curators vote for a post within the first 30 minutes of it being created, a portion of their curation reward is added to the author payout. This portion is linear to the age of the post between 0 and 30 minutes. Therefore upvoting at 15 minutes old will donate half of your potential curation reward to the author.
+Up to 25% of a post's payout is awarded to curators (the people who upvoted the post) as a reward for discovering the content. The other 75% is awarded to the author.
+
+If curators vote for a post within the first 30 minutes of it being created, a portion of their curation reward is added to the author payout. This portion is linear to the age of the post between 0 and 30 minutes. As an example: upvoting at 15 minutes will donate half of your potential curation reward to the author.
 
 <a href="#Table_of_Contents_Economics">^</a>
 ## <span id="Will_the_reward_pool_pay_out_more_or_less_depending_on_who_votes">Will the reward pool pay out more or less depending on who votes?</span>
 
 There is a fixed amount of STEEM coins that gets added to the rewards pool each day. In the short term, the amount of coins that get paid out may be higher or lower depending on the amount of voting activity, but over time it will pay out the full amount of rewards regardless of who votes.
 
-Votes in Steem are stake-weighted. Therefore voters with more STEEM Power have a greater influence over the allocation than voters with less SP, but their votes do not increase the amount of rewards.
+Votes in Steem are stake-weighted. Therefore voters with more Steem Power have a greater influence over the allocation than voters with less SP, but their votes do not increase the amount of rewards in the rewards pool.
 
 <a href="#Table_of_Contents_Economics">^</a>
 ## <span id="Why_do_the_earnings_for_my_post_go_up_or_down">Why do the earnings for my post go up or down?</span>
@@ -671,90 +675,88 @@ The amount that is shown next to a post is a "**Potential Payout**". This is an 
 Posts and comments remain active for 7 days. When the period is over, you are able to claim their earned rewards. In your Wallet, click the Claim Rewards button to add the tokens to your account.
 
 <a href="#Table_of_Contents_Economics">^</a>
-## <span id="What_is_the_difference_between_STEEM__STEEM_Power__and_Steem_Dollars">What is the difference between STEEM, STEEM Power, and Steem Dollars?</span>
+## <span id="What_is_the_difference_between_STEEM__STEEM_Power__and_Steem_Dollars">What is the difference between STEEM, Steem Power, and Steem Dollars?</span>
 
-**STEEM** - STEEM is the base liquid currency token in the platform. STEEM can be powered up into STEEM Power, traded for Steem Dollars, and transferred to other accounts. It is a cryptocurrency token, similar to bitcoin.
+**STEEM** - STEEM is the base liquid currency token in the platform. STEEM can be powered up into Steem Power, traded for Steem Dollars, or transferred to other accounts. It is a cryptocurrency token, similar to bitcoin.
 
-**STEEM Power** - STEEM Power (abbreviated SP) is a measurement of how much influence a user has in the Steem network. The more STEEM Power a user holds, the more they can influence the value of posts and comments. STEEM Power is less liquid. If a user wishes to “Power Down” SP, they will receive equal distributions of the STEEM weekly, over a 13 week period.
+**Steem Power** - Steem Power (abbreviated SP) is a measurement of how much influence a user has in the Steem network. The more Steem Power a user holds, the more they can influence the value of posts and comments. Steem Power is less liquid. If a user wishes to “Power Down” SP, they will receive equal distributions of the STEEM weekly, over a 13 week period.
 
-**Steem Dollars** - Steem Dollars (commonly abbreviated SBD) are liquid stable-value currency tokens designed to be pegged to $1 USD. Steem Dollars can be traded with STEEM, and transferred to other accounts for commerce or exchange.  Steem Dollars may also be converted into STEEM in a process that takes 3.5 days. Steem Dollars can be used to buy things in marketplaces, such as PeerHub.com.
+**Steem Dollars** - Steem Dollars (commonly abbreviated SBD) are liquid stable-value currency tokens designed to be pegged to $1 USD. Steem Dollars can be traded with STEEM, and transferred to other accounts for commerce or exchange.  Steem Dollars may also be converted into STEEM via a process that takes 3.5 days. Steem Dollars can be used to buy things in marketplaces, such as [The Steemit Shop](https://thesteemitshop.com/).
 
 <a href="#Table_of_Contents_Economics">^</a>
-## <span id="What_is_delegated_STEEM_Power">What is delegated STEEM Power?</span>
+## <span id="What_is_delegated_STEEM_Power">What is delegated Steem Power?</span>
 
-Users have the option to delegate STEEM Power to other users. When a user is delegated STEEM Power, their content votes and curation rewards are calculated as if it were their own STEEM Power. Users are not able to power down or cash out delegated STEEM Power, as it still belongs to the original owner.
+Users have the option to delegate Steem Power to other users. When a user is delegated Steem Power - their bandwidth, content votes, and curation rewards are calculated as if it were their own Steem Power. Users are not able to power down or cash out delegated Steem Power however, as it still belongs to the original owner.
 
-Most users will have a small amount of STEEM Power delegated to them by the Steemit account after creating an account via Steemit.com.
+Most users will have a small amount of Steem Power delegated to them by the Steemit account after creating an account via steemit.com.
 
-Delegated STEEM Power shows up in a user's wallet below their actual STEEM Power balance in parentheses.
+Delegated Steem Power shows up in a user's wallet below their actual Steem Power balance in parentheses.
 
 <a href="#Table_of_Contents_Economics">^</a>
 ## <span id="What_determines_the_price_of_STEEM">What determines the price of STEEM?</span>
 
-The price of STEEM is based on the supply and demand of the token, determined by buyers and sellers on the exchanges. It is similar to how the price of a commodity like gold is determined.
+The price of STEEM is based on the supply and demand of the token, as determined by buyers and sellers on the exchanges. It is similar to how the price of a commodity like gold is determined.
 
 <a href="#Table_of_Contents_Economics">^</a>
-## <span id="How_do_I_get_more_STEEM_Power">How do I get more STEEM Power?</span>
+## <span id="How_do_I_get_more_STEEM_Power">How do I get more Steem Power?</span>
 
-With STEEM tokens in your wallet, click "Power Up" to turn them into STEEM Power. If you have Steem Dollars, you can convert them to STEEM from your wallet, and then power up the STEEM.
+With STEEM tokens in your wallet, click "Power Up" to turn them into Steem Power. If you have Steem Dollars, you can convert them to STEEM from your wallet, and then power up the STEEM.
 
-If you don’t already have STEEM or Steem Dollars in your wallet, you can purchase them using bitcoin (BTC), ether (ETH), or BitShares (BTS) tokens. You may purchase BTC on various exchanges, such as Coinbase.com or Localbitcoins.com. 
+If you don’t already have STEEM or Steem Dollars in your wallet, you can purchase them using bitcoin (BTC), Ether (ETH), Litecoin (LTC), or BitShares (BTS) tokens. You may purchase BTC on various exchanges, such as Coinbase.com or Localbitcoins.com. 
 
 To buy:
-- Click "Buy Steem" from the main menu in the top right corner of Steemit.com, or from your wallet.
+- Click "Buy Steem" from the main menu in the top right corner of steemit.com, or from your wallet.
 - Select the currency to deposit, and enter the amount of that currency you wish to use.
 - Enter your Steemit account name (without the @) for "Your receive address".
 - Click the "Get Deposit Address" button.
 - Send the currency to the provided address.
 
-STEEM purchases made via Steemit.com are facilitated by <a href="https://blocktrades.us">BlockTrades</a>.
+STEEM purchases made via steemit.com are facilitated by <a href="https://blocktrades.us">BlockTrades</a>.
 
-bitcoin can also be exchanged for STEEM on external markets such as <a href="https://poloniex.com">Poloniex</a>, <a href="https://bittrex.com">Bittrex</a>, <a href="https://shapeshift.io">ShapeShift.io</a>, and <a href="https://changelly.com">Changelly</a>.
+bitcoin can also be exchanged for STEEM on external markets such as [Binance](https://www.binance.com/), [BitShares](https://openledger.info/), [Bittrex](https://bittrex.com), [Changelly](https://changelly.com), [HitBTC](https://hitbtc.com/), [Poloniex](https://poloniex.com), [Shapeshift.io](https://shapeshift.io), and [UpBit](https://upbit.com/).
 
 <a href="#Table_of_Contents_Economics">^</a>
-## <span id="How_long_does_it_take_STEEM_or_STEEM_Power_that_I_purchased_to_show_up_in_my_account">How long does it take STEEM or STEEM Power that I purchased to show up in my account?</span>
+## <span id="How_long_does_it_take_STEEM_or_STEEM_Power_that_I_purchased_to_show_up_in_my_account">How long does it take STEEM or Steem Power that I purchased to show up in my account?</span>
 
-Transactions on the Steem blockchain typically only take about three seconds to process, but when you are purchasing the STEEM tokens using bitcoin or some other token, then the transaction must wait for the transaction to be confirmed on the other network. This can often take several hours, and sometimes even days.    
+Transactions on the Steem blockchain typically only take about three seconds to process, but when you are purchasing the STEEM tokens using bitcoin or some other token, then the transaction must wait for the transaction to be confirmed on the other network. This can take several hours, and sometimes even days.    
 
 If you paid using bitcoin, the third party website <a href="https://bitcoinfees.21.co/">bitcoinfees.21.co</a> can estimate the approximate wait time of the transaction based on the fees that were paid. The third party website <a href="https://blockchain.info/">blockchain.info</a> will lookup the fees that were paid on a specific blockchain transaction.
 
 <a href="#Table_of_Contents_Economics">^</a>
 ## <span id="What_is_powering_up_and_down">What is powering up and down?</span>
 
-**Powering up** - If you have STEEM tokens, you can Power Up to STEEM Power to get more voting influence on posts and comments. Having more STEEM Power also increases the amount of curation rewards and interest that you can earn. More SP also grants more influence on approving Steem witnesses.
+**Powering up** - If you have STEEM tokens, you can Power Up to Steem Power to get more voting influence on posts and comments. Having more Steem Power also increases the amount of curation rewards and interest that you can earn. More SP also grants more influence on approving Steem witnesses.
 
-**Powering down** - If you have STEEM Power, you can power down to turn it into liquid STEEM over a period of time. The system will transfer 1/13 of your STEEM Power to STEEM each week for about three months (13 weeks), starting 1 week from the time it is started. However, you will lose your influence in the network proportionally to how much is powered down, so think about it carefully. Power downs can be stopped at any time.
+**Powering down** - If you have Steem Power, you can power down to turn it into liquid STEEM over a period of time. The system will transfer 1/13 of your Steem Power to STEEM each week for about three months (13 weeks), starting 1 week from the time it is started. However, you will lose your influence in the network proportionally to how much is powered down, so think about it carefully. Power downs can be stopped at any time.
 
 <a href="#Table_of_Contents_Economics">^</a>
 ## <span id="What_do_the_dollar_amounts_for_pending_payouts_represent">What do the dollar amounts for pending payouts represent?</span>
 
 The dollar amounts next to posts and comments are estimates of the potential payout that will occur when the payout period ends, based on the current voting activity and price of STEEM. These potential payout amounts may fluctuate up or down until the payout period ends.
 
-Payouts occur as a combination of STEEM Power and Steem Dollars. Sometimes the blockchain may substitute STEEM in place of the Steem Dollars based on market conditions.
+Payouts occur as a combination of Steem Power and Steem Dollars. Sometimes the blockchain may substitute STEEM in place of the Steem Dollars based on market conditions.
 
-The blockchain estimates the dollar value of STEEM and STEEM Power based on the 3.5 day average price of STEEM reported by the witnesses. The blockchain assumes Steem Dollars are worth approximately one USD.
+The blockchain estimates the dollar value of STEEM and Steem Power based on the 3.5 day average price of STEEM reported by the witnesses. The blockchain assumes Steem Dollars are worth approximately one USD.
 
 <a href="#Table_of_Contents_Economics">^</a>
 ## <span id="Will_1_Steem_Dollar_always_be_worth__1_00_USD">Will 1 Steem Dollar always be worth $1.00 USD?</span>
 
-The market value of a Steem Dollar is dictated by the supply and demand of the token. Therefore it is possible for 1 SBD to be worth more or less than 1 USD depending on market conditions. However, the network's SBD conversion feature serves as a mechanism to hold Steem Dollars within a small margin of the value of USD.
+The market value of a Steem Dollar is dictated by the supply and demand of the token. Therefore it is possible for 1 SBD to be worth more or less than 1 USD depending on market conditions.
 
 <a href="#Table_of_Contents_Economics">^</a>
 ## <span id="How_do_Steem_Dollar_to_STEEM_conversions_work">How do Steem Dollar to STEEM conversions work?</span>
 
-If you convert Steem Dollars to STEEM on the Wallet page, the blockchain will process the transaction over a period of 3.5 days. At the end of the 3.5 days, the SBD will be gone and replaced by approximately $1 USD worth of STEEM tokens. The "approximately 1 USD worth of STEEM tokens" is based on the median STEEM price over the 3.5 days, using the price feeds from the Steem witnesses. Depending on price fluctuations during the 3.5 days it is possible to end up with more or less than $1 USD worth of STEEM per SBD at the end of the conversion.
+If you convert Steem Dollars to STEEM, the blockchain will process the transaction over a period of 3.5 days. At the end of the 3.5 days, the SBD will be gone and replaced by approximately $1 USD worth of STEEM tokens. The "approximately 1 USD worth of STEEM tokens" is based on the median STEEM price over the 3.5 days, using the price feeds from the Steem witnesses. Depending on price fluctuations during the 3.5 days it is possible to end up with more or less than $1 USD worth of STEEM per SBD at the end of the conversion. This is an advanced user feature, and is currently only available to users using external wallets.
 
 <a href="#Table_of_Contents_Economics">^</a>
 ## <span id="Is_there_a_way_for_me_to_convert_my_Steem_Dollars_to_STEEM_without_waiting_3_5_days">Is there a way for me to convert my Steem Dollars to STEEM without waiting 3.5 days?</span>
 
 You can exchange them. Visit the internal Market, found in the main menu. There you can exchange your SBD for STEEM in real-time at whatever the current market price is.
 
-Depending on market conditions, users may get more STEEM for their SBD by trading them for STEEM on the internal market, rather than using the conversion.
-
 <a href="#Table_of_Contents_Economics">^</a>
 ## <span id="What_can_I_do_with_my_STEEM_tokens">What can I do with my STEEM tokens?</span>
 
-- "Power Up" to STEEM Power
+- "Power Up" to Steem Power
 - Exchange for SBD in the internal market
 - Withdraw to an exchange, and trade for BTC or other digital tokens
 - Purchase items through third-party stores that accept STEEM tokens
@@ -762,7 +764,6 @@ Depending on market conditions, users may get more STEEM for their SBD by tradin
 <a href="#Table_of_Contents_Economics">^</a>
 ## <span id="What_can_I_do_with_my_SBD_tokens">What can I do with my SBD tokens?</span>
 
-- Hold them as a stable-value token
 - Convert to STEEM via your wallet (takes 3.5 days)
 - Exchange for STEEM in the internal market
 - Withdraw to an exchange, and trade for BTC or other digital tokens
@@ -771,17 +772,17 @@ Depending on market conditions, users may get more STEEM for their SBD by tradin
 <a href="#Table_of_Contents_Economics">^</a>
 ## <span id="What_is_a_MVEST">What is a MVEST?</span>
 
-A VEST is a unit of measurement for STEEM Power. A MVEST is one million VESTS. The amount of STEEM Power in one MVEST can be found on <a href="https://steemd.com/">steemd.com</a> as `steem_per_mvests`.
+A VEST is a unit of measurement for Steem Power. A MVEST is one million VESTS. The amount of Steem Power in one MVEST can be found on <a href="https://steemd.com/">steemd.com</a> as `steem_per_mvests`.
 
 <a href="#Table_of_Contents_Economics">^</a>
 ## <span id="Can_I_sell_goods_and_services_on_Steemit">Can I sell goods and services on Steemit?</span>
 
-Other than making a post and making sales manually, there is no interface for selling items directly on Steemit.com. You can list goods on the third-party website <a href="https://www.peerhub.com">PeerHub.com</a>. Through PeerHub, you can accept payment in Steem Dollars or STEEM, and you have the option to advertise your items through Steemit posts.
+Other than making a post and making sales manually, there is no interface for selling items directly on steemit.com. You can list goods and services on the third-party websites and accept payment in Steem Dollars or STEEM. You also have the option to advertise your items through Steemit posts.
 
 <a href="#Table_of_Contents_Economics">^</a>
 ## <span id="How_can_I_withdraw_my_STEEM_or_SBD_coins">How can I withdraw my STEEM or SBD coins?</span>
 
-STEEM and SBD tokens are readily tradable to bitcoin, which is readily tradable to the local currency of your choice. There is a link to "Sell" your STEEM and SBD tokens in your wallet, which uses the <a href="https://blocktrades.us/">BlockTrades</a> interface.
+STEEM and SBD tokens are readily tradable to bitcoin, which can be traded for the local currency of your choice. There is a link to "Sell" your STEEM and SBD tokens in your wallet, which uses the <a href="https://blocktrades.us/">BlockTrades</a> interface.
 
 There are several guides that have been posted by users in the community for using various external exchanges to withdraw STEEM and SBD tokens. Please read the <a href="#Disclaimer">disclaimer</a> before using any of these guides to withdraw your coins. The users, guides, and exchanges listed in the guides are not endorsed by Steemit, Inc. Use the guides below at your own risk. 
 
@@ -802,12 +803,12 @@ https://steemit.com/steemit/@shapeshiftio/official-announcement-shapeshift-has-a
 <a href="#Table_of_Contents_Economics">^</a>
 ## <span id="Will_I_get_a_1099_from_Steemit">Will I get a 1099 from Steemit?</span>
 
-No, you are not being paid by Steemit. The Steem network rewards you. It is your responsibility to determine what, if any, taxes apply to the transactions you make. Further, it is your responsibility to report and remit the correct tax to the appropriate tax authority. By creating an account, you agree that Steemit Inc is not responsible for determining whether taxes apply to your Steem transactions or for collecting, reporting, withholding, or remitting any taxes arising from any Steem transactions.
+No, you are not being paid by Steemit. The Steem network rewards you. It is your responsibility to determine what, if any, taxes apply to the transactions you make. Further, it is your responsibility to report and remit the correct tax to the appropriate tax authority. By creating an account, you agree that Steemit, Inc. is not responsible for determining whether taxes apply to your Steem transactions, or for collecting, reporting, withholding, or remitting any taxes arising from any Steem transactions.
 
 <a href="#Table_of_Contents_Economics">^</a>
 ## <span id="How_much_are_the_transaction_fees_for_sending_tokens_to_other_users">How much are the transaction fees for sending tokens to other users?</span>
 
-There are never any fees for transfers within the Steem network. However, if you transfer Steem to an exchange and convert it to another currency, you will incur a small fee from the exchange.
+There are never any fees for transfers within the Steem network. However, if you transfer Steem to an exchange and convert it to another currency, you may incur a small fee from the exchange.
 
 <a href="#Table_of_Contents_Economics">^</a>
 ## <span id="Are_there_fees_for_Powering_Up__Powering_Down__trading_on_the_internal_market__or_converting_SBD_to_STEEM">Are there fees for Powering Up, Powering Down, trading on the internal market, or converting SBD to STEEM?</span>
@@ -838,7 +839,7 @@ Every 100% vote you cast will use 2% of your remaining voting power. Your voting
 
 New users can only upvote and downvote with 100% voting strength. 
 
-Once you reach about 500 STEEM Power, you will see a vote slider appear when you vote. You can use the slider to adjust the weight of your vote, between 1% and 100% voting strength. Voting with less than 100% voting weight will use up less voting power, but it will also have less of an influence on the post or comment's rewards.
+Once you reach about 500 Steem Power, you will see a vote slider appear when you vote. You can use the slider to adjust the weight of your vote, between 1% and 100% voting strength. Voting with less than 100% voting weight will use up less voting power, but it will also have less of an influence on the post or comment's rewards.
 
 <img src="https://steemitimages.com/DQmV6c21tzSrgXwPHx4tvuc1UiCXBEvzkLBH9QCZHtVN6Ma/image.png">
 
@@ -847,7 +848,7 @@ Upvotes and downvotes use the same amount of voting power.
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
 ## <span id="Where_can_I_check_my_voting_power">Where can I check my voting power?</span>
 
-You can view your current voting power using third party tools such as https://steemd.com/@youraccount or https://steemstats.com.
+You can view your current voting power using third party tools such as https://steemd.com/@youraccount.
 
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
 ## <span id="What_determines_how_much_of_the_curation_reward_goes_to_the_author_versus_curators">What determines how much of the curation reward goes to the author versus curators?</span>
@@ -887,9 +888,9 @@ Even though your vote may not have an immediate effect, when it gets added in al
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
 ## <span id="Is_there_a_way_to_make_my_votes_count_for_more">Is there a way to make my votes count for more?</span>
 
-Yes. The more STEEM Power you have, the more influence your votes will have.
+Yes. The more Steem Power you have, the more influence your votes will have.
 
-The platform does not require that anybody purchase SP in order to participate, and there are many users who have earned a lot of STEEM Power without spending any of their own money. You have the option of purchasing more STEEM Power through your Steemit wallet.
+The platform does not require that anybody purchase SP in order to participate, and there are many users who have earned a lot of Steem Power without spending any of their own money. You have the option of purchasing more Steem Power through your Steemit wallet.
 
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
 ## <span id="What_are_the_valid_reasons_for_downvoting">What are the valid reasons for downvoting?</span>
@@ -990,7 +991,7 @@ https://steemit.com/steemit/@digitalnotvir/how-reputation-scores-are-calculated-
 <a href="#Table_of_Contents_Reputation">^</a>
 ## <span id="How_do_I_improve_my_reputation_score">How do I improve my reputation score?</span>
 
-Every time another user upvotes one of your posts or comments, it increases your reputation score. Users with a higher reputation than you will have more of a positive effect. The more STEEM Power that the voter has, the larger the effect is as well. The best way to earn upvotes is by adding value to the Steemit community.
+Every time another user upvotes one of your posts or comments, it increases your reputation score. Users with a higher reputation than you will have more of a positive effect. The more Steem Power that the voter has, the larger the effect is as well. The best way to earn upvotes is by adding value to the Steemit community.
 
 <a href="#Table_of_Contents_Reputation">^</a>
 ## <span id="What_causes_my_reputation_score_to_go_down">What causes my reputation score to go down?</span>
@@ -1038,7 +1039,7 @@ The Steem blockchain is the publicly accessible distributed database, which reco
 
 Steem is the name of the blockchain that stores all of the data and transactions, and processes all of the events that take place. STEEM is also a name for the system’s value token (currency).
 
-Steemit is a front end web interface to interact with the blockchain, and view the blockchain data.
+Steemit is a front end web interface to interact with the blockchain, and view the blockchain data. Steemit, Inc. is also the name of the company that owns and operates the website steemit.com.
 
 <a href="#Table_of_Contents_Blockchain">^</a>
 ## <span id="How_is_Steem_different_from_Bitcoin">How is Steem different from Bitcoin?</span>
@@ -1089,7 +1090,7 @@ https://www.linkedin.com/in/nedscott
 
 Steemit, Inc. is a privately held company and is not available for public investment.
 
-Though not considered an investment, you can purchase STEEM tokens which can go up or down in value. You can power up these tokens into STEEM Power, which grants more influence in the Steem platform.
+Though not considered an investment, you can purchase STEEM tokens which can go up or down in value. You can power up these tokens into Steem Power, which grants more influence in the Steem platform.
 
 <a href="#Table_of_Contents_Steemit__Inc">^</a>
 ## <span id="What_does_Steemit_s_development_roadmap_look_like">What does Steemit’s development roadmap look like?</span>
@@ -1140,7 +1141,7 @@ It is not recommended to share your password or keys with any third party site. 
 <a href="#Table_of_Contents_Security">^</a>
 ## <span id="Why_should_I_be_careful_with_my_master_password">Why should I be careful with my master password?</span>
 
-The master password is used to derive all keys for your account, including the owner key.
+The master password is used to derive all keys for your account, including the owner key. If someone has access to your master password, they can steal your account and all of the tokens in it.
 
 <a href="#Table_of_Contents_Security">^</a>
 ## <span id="Why_is_the_master_password_a_long_string_of_gibberish">Why is the master password a long string of gibberish?</span>
@@ -1168,7 +1169,7 @@ It is strongly recommended that you store an offline copy of your password somew
 <a href="#Table_of_Contents_Security">^</a>
 ## <span id="Are_my_STEEM_and_Steem_Dollar_tokens_insured_in_the_event_of_a_hack_or_if_someone_takes_over_my_account">Are my STEEM and Steem Dollar tokens insured in the event of a hack or if someone takes over my account?</span>
 
-No, liquid tokens can not be taken back if stolen or sent to the wrong account. If your tokens are in STEEM Power, it is impossible for a hacker to take out more than 1/13 per week. If your tokens are in savings, there is a three-day wait period for them to become transferable.
+No, liquid tokens can not be taken back if stolen or sent to the wrong account. If your tokens are in Steem Power, it is impossible for a hacker to take out more than 1/13 per week. If your tokens are in savings, there is a three-day wait period for them to become transferable.
 
 <a href="#Table_of_Contents_Security">^</a>
 ## <span id="What_should_I_do_if_I_discover_that_someone_hacked_my_account">What should I do if I discover that someone hacked my account?</span>
@@ -1180,7 +1181,7 @@ If you made your account through Steemit and it is compromised, immediately visi
 
 If your password has been changed without your consent, then the account designated as your recovery account can generate a new owner key for the account. The account recovery must be completed within 30 days of the password being changed, and you must supply a recent owner key that was valid within the last 30 days.
 
-Steemit Inc. owns the default recovery account (@steem) for all users who sign up using Steemit.com. Steemit can identify users by their original email, Facebook, or Reddit logins that were used to signup via Steemit.com.
+Steemit Inc. owns the default recovery account (@steem) for all users who sign up using steemit.com. Steemit can only identify users by their original email, Facebook, or Reddit logins that were used to signup via steemit.com.
 
 If you don't have the master password or owner key that was valid the past 30 days, or are unable to prove that you are the original owner of the account, then your account will be unrecoverable.
 
@@ -1192,14 +1193,14 @@ If you find a security issue please report the details to security@steemit.com.
 <a href="#Table_of_Contents_Security">^</a>
 # Developers
 
-## <span id="Are_the_Steem_blockchain_and_Steemit_com_code_open_source">Are the Steem blockchain and Steemit.com code open-source?</span>
+## <span id="Are_the_Steem_blockchain_and_Steemit_com_code_open_source">Are the Steem blockchain and steemit.com code open-source?</span>
 
-Yes. Both the Steem blockchain and Steemit.com are open-source projects.
+Yes. Both the Steem blockchain and steemit.com are open-source projects.
 
-Developers should however avoid the use of the term "Steemit" in their own products, and instead refer to the Steem Blockchain or Steem Platform. Steemit refers to Steemit.com, which is owned by Steemit, Inc.
+Developers should however avoid the use of the term "Steemit" in their own products, and instead refer to the Steem Blockchain or Steem Platform. Steemit refers to steemit.com, which is owned by Steemit, Inc.
 
 <a href="#Table_of_Contents_Developers">^</a>
-## <span id="Is_there_a_Github_page_for_Steemit_com">Is there a Github page for Steemit.com?</span>
+## <span id="Is_there_a_Github_page_for_Steemit_com">Is there a Github page for steemit.com?</span>
 
 https://github.com/steemit/condenser
 
@@ -1216,6 +1217,8 @@ Many software engineers are currently leveraging the open-source code to build t
 This post from the user @fabien has more information about the Steem API:
 https://steemit.com/steemjs/@fabien/steem-api-now-released
 
+The [Steem Developer Portal](https://developers.steem.io/) also contains documents and resources for developing tools and applications for the Steem blockchain.
+
 <a href="#Table_of_Contents_Developers">^</a>
 ## <span id="How_do_I_use_cli_wallet">How do I use cli_wallet?</span>
 
@@ -1227,14 +1230,12 @@ https://steemit.com/steemhelp/@pfunk/a-learner-s-guide-to-using-steem-s-cliwalle
 
 ## <span id="What_are_Steem_witnesses">What are Steem witnesses?</span>
 
-The Steem blockchain requires a set of people to create blocks and uses a consensus mechanism called delegated proof of stake, or DPOS. The community elects 'witnesses' to act as the network's block producers and governance body. There are 20 full-time witnesses, producing a block every 63-second round. A 21st position is shared by backup witnesses, who are scheduled proportionally to the amount of stake-weighted community approval they have. Witnesses are compensated with STEEM Power for each block they create.
-
-Steemit leverages Steem because the founders of Steemit believe Steem’s decentralized text content storage and governance model makes Steem an excellent platform for supporting the long term success of its social network and digital currency tokens.
+The Steem blockchain requires a set of people to create blocks and uses a consensus mechanism called delegated proof of stake, or DPOS. The community elects 'witnesses' to act as the network's block producers and governance body. There are 20 full-time witnesses, producing a block every 63-second round. A 21st position is shared by the backup witnesses, who are scheduled proportionally to the amount of stake-weighted community approval they have. Witnesses are compensated with Steem Power for each block they create.
 
 <a href="#Table_of_Contents_Witnesses">^</a>
 ## <span id="How_can_I_vote_for_witnesses">How can I vote for witnesses?</span>
 
-Visit https://steemit.com/~witnesses
+Visit https://steemit.com/~witnesses.
 
 <a href="#Table_of_Contents_Witnesses">^</a>
 ## <span id="How_many_witnesses_can_I_vote_for">How many witnesses can I vote for?</span>
@@ -1263,8 +1264,6 @@ https://twitter.com/steemit
 
 The Steem Whitepaper was written to describe the mechanics of the token system that makes decentralized content incentives and distribution possible in a way that can improve web technologies across the board. It is also applicable to Steemit, the first website to plug into the Steem blockchain. Users who have read the Steem Whitepaper will better understand how their interactions with Steemit are interactions with Steem, the decentralized network.
 
-It is worth noting that the Whitepaper hasn’t been updated almost since Steem came into existence. Many changes have been made since then, so much of the Whitepaper is now out of date. It is in the process of being rewritten.
-
 https://steem.io/SteemWhitePaper.pdf
 
 <a href="#Table_of_Contents_Miscellaneous">^</a>
@@ -1280,7 +1279,7 @@ You can also create a post on Steemit.com with the tag #help, and someone in the
 
 ## <span id="Third_Party_References_and_User_Links">Third Party References and User Links</span>
 
-BlockTrades, Poloniex, Bittrex, Changelly, Shapeshift.io, Coinbase, Localbitcoins, SteemDB, PeerHub, Steemit.chat, SteemTools, SteemCreate, AnonSteem, SteemConnect, Streemian, SteemStats, Pixabay, Steemcleaners, Pexels, Postimage, Markdown Cheatsheet, @cheetah, Bitcointalk, bitcoinfees, blockchain.info, Busy.org, DTube, Utopian.io, and steemd are third party applications/services, and are not owned or maintained by Steemit, Inc. Their listing here, as well as any other third party applications or websites that are listed, does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
+AnonSteem, Binance, bitcoinfees, Bitcointalk, BitShares, Bittrex, blockchain.info, BlockTrades, Busy.org, Changelly, @cheetah, Coinbase, DTube, HitBTC, Localbitcoins, Markdown Cheatsheet, Pexels, Pixabay, Poloniex, Postimage, Shapeshift.io, Steemcleaners, SteemConnect, SteemCreate, steemd, SteemDB, Steemit.chat, SteemStats, SteemTools, Streemian, The Steemit Shop, UpBit, and Utopian.io are third party applications/services, and are not owned or maintained by Steemit, Inc. Their listing here, as well as any other third party applications or websites that are listed, does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
 
 All links to user posts were created by our users and do not necessarily represent the views of Steemit, Inc. or its management. Their listing here does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
 

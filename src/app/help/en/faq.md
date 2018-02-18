@@ -12,6 +12,7 @@
 - <a href="#Where_do_the_tokens_come_from">Where do the tokens come from?</a>
 - <a href="#Where_does_the_value_come_from">Where does the value come from?</a>
 - <a href="#Why_are_people_getting_vastly_different_rewards">Why are people getting vastly different rewards?</a>
+- <a href="#What_are_Smart_Media_Tokens_SMTs">What are Smart Media Tokens (SMTs)?</a>
 
 ### <span id="Table_of_Contents_Accounts">Accounts</span>
 - <a href="#How_do_I_create_an_account">How do I create an account?</a>
@@ -246,6 +247,15 @@ Steemit is not a "get rich quick" scheme. While it is possible to post content t
 Most of the authors that you see earning high rewards are users that have spent a lot of time in the network building followings, making connections with others, and developing a reputation for bringing high quality content.
 
 It is best to have realistic expectations, without focusing on rewards when you are first starting out. Work on building a following, making connections, and developing a good reputation. Consistency will pay off in the long run.
+
+<a href="#Table_of_Contents_General">^</a>
+## <span id="What_are_Smart_Media_Tokens_SMTs">What are Smart Media Tokens (SMTs)?</span>
+
+A Smart Media Token (SMT) is a native digital asset on the Steem blockchain that can be quickly launched by anyone to help monetize online content and create incentives to encourage desired user behavior.
+
+They're like Ethereum's ERC-20 tokens, but with certain built-in ‘Proof-of-Brain’ properties and a token distribution reward system designed specifically for digital content businesses.
+
+More information can be found on the SMTs website: [https://smt.steem.io/](smt.steem.io).
 
 <a href="#Table_of_Contents_General">^</a>
 # Accounts

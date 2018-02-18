@@ -7,6 +7,7 @@
 - <a href="#What_is_Steemit_com">What is steemit.com?</a>
 - <a href="#How_does_Steemit_work">How does Steemit work?</a>
 - <a href="#How_does_Steemit_differ_from_other_social_media_websites">How does Steemit differ from other social media websites?</a>
+- <a href="#What_do_I_need_to_do_in_order_to_secure_my_account">What do I need to do in order to secure my account?</a>
 - <a href="#Does_it_cost_anything_to_post__comment__or_vote">Does it cost anything to post, comment, or vote?</a>
 - <a href="#Can_I_earn_digital_tokens_on_Steemit_How">Can I earn digital tokens on Steemit? How?</a>
 - <a href="#Where_do_the_tokens_come_from">Where do the tokens come from?</a>
@@ -208,10 +209,18 @@ Steemit.com is one of the many websites (including [Busy.org](https://busy.org/)
 Every day, the Steem blockchain mints new STEEM tokens and adds them to a community's "rewards pool". These tokens are then awarded to users for their contributions, based on the votes that their content receives. Users who hold more tokens in their account as "Steem Power" will get to decide where a larger portion of the rewards pool is distributed.
 
 <a href="#Table_of_Contents_General">^</a>
-
-## How does Steemit differ from other social media websites? <a id="How_does_Steemit_differ_from_other_social_media_websites"></a>
+## <span id="How_does_Steemit_differ_from_other_social_media_websites">How does Steemit differ from other social media websites?</span>
 
 While most social media sites extract this value for the benefit of their shareholders, Steemit believes that the users of the platform should receive the benefits and rewards for their attention and the contributions they make to the platform.
+
+<a href="#Table_of_Contents_General">^</a>
+## <span id="What_do_I_need_to_do_in_order_to_secure_my_account">What do I need to do in order to secure my account?</span>
+
+Unlike most social media websites, **there is no way to recover your account if you lose your password / owner key!** This is why it is extremely important that you save and backup your password somewhere safe. It is strongly recommended that you store an offline copy in case of a hard drive failure or other calamity. Consider digital offline storage, such as an external disk or flash drive, as well as printed paper stored in a fireproof safe. Use a safe deposit box for best redundancy.
+
+If you leak your private key to another user or a third-party website, that user or website will have full access to your account. This means they can steal it, as well as the funds inside of it. It is therefore not recommended to enter your private key information with any other user or third-party website. If you believe your account has been compromised, you should change your password/keys right away.
+
+Each account has multiple keys, which each have different levels of authority: owner, active, posting, and memo. The information on the different types of keys and their purposes, as well as more information on password and key security, can be found in the section on <a href="#Table_of_Contents_Security">Security</a>.
 
 <a href="#Table_of_Contents_General">^</a>
 ## <span id="Does_it_cost_anything_to_post__comment__or_vote">Does it cost anything to post, comment, or vote?</span>

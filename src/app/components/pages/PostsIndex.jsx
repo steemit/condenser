@@ -195,6 +195,7 @@ class PostsIndex extends React.Component {
                             <h1 className="articles__h1 show-for-large">
                                 {page_title}
                             </h1>
+
                             <div className="articles__tag-selector">
                                 <Topics
                                     username={this.props.username}

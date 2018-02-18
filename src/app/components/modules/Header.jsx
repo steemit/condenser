@@ -232,10 +232,12 @@ class Header extends React.Component {
                                         </span>
                                     </Link>
                                 </li>
+                                {/*
                                 <HorizontalMenu
                                     className="show-for-large Header__sort"
                                     items={sort_order_menu_horizontal}
                                 />
+                                */}
                                 <li className={'hide-for-large Header__search'}>
                                     <a
                                         href="/static/search.html"

@@ -3,6 +3,8 @@ import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 import tt from 'counterpart';
+import Select from 'react-select';
+import 'react-select/dist/react-select.css';
 
 class Topics extends React.Component {
     static propTypes = {
@@ -27,6 +29,10 @@ class Topics extends React.Component {
         return res;
     }
 
+    handleChange = (selectedOption) => {
+        browserHistory.push(selectedOption.value)
+    }
+
     render() {
         const {
             props: { order, current, compact, className, username },
@@ -42,26 +48,42 @@ class Topics extends React.Component {
                 {tt('g.my_feed')}
             </option>
         );
+
+        const opts = categories.map(cat => {
+            const link = order ? `/${order}/${cat}` : `/${cat}`;
+            return (
+                {value: link, label: cat}
+            );
+        }).toJS();
+        debugger
         if (compact) {
             return (
-                <select
-                    className={cn}
-                    onChange={e => browserHistory.push(e.target.value)}
-                    value={selected}
-                >
-                    <option key={'*'} value={'/' + order}>
-                        {tt('g.all_tags')}
-                    </option>
-                    {myFeed}
-                    {categories.map(cat => {
-                        const link = order ? `/${order}/${cat}` : `/${cat}`;
-                        return (
-                            <option key={cat} value={link}>
-                                {cat}
-                            </option>
-                        );
-                    })}
-                </select>
+                <span>
+                    <Select
+                        name="form-field-name"
+                        value={selected}
+                        onChange={this.handleChange}
+                        options={opts}
+                    />
+                    <select
+                        className={cn}
+                        onChange={e => browserHistory.push(e.target.value)}
+                        value={selected}
+                    >
+                        <option key={'*'} value={'/' + order}>
+                            {tt('g.all_tags')}
+                        </option>
+                        {myFeed}
+                        {categories.map(cat => {
+                            const link = order ? `/${order}/${cat}` : `/${cat}`;
+                            return (
+                                <option key={cat} value={link}>
+                                    {cat}
+                                </option>
+                            );
+                        })}
+                    </select>
+                </span>
             );
         }
 

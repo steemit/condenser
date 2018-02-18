@@ -255,6 +255,8 @@ A Smart Media Token (SMT) is a native digital asset on the Steem blockchain that
 
 They're like Ethereum's ERC-20 tokens, but with certain built-in ‘Proof-of-Brain’ properties and a token distribution reward system designed specifically for digital content businesses.
 
+SMTs are planned to be launched in 2018!
+
 More information can be found on the SMTs website: [https://smt.steem.io/](smt.steem.io).
 
 <a href="#Table_of_Contents_General">^</a>

@@ -4,7 +4,7 @@
 ## <span id="Table_of_Contents">Table of Contents</span>
 
 ### <span id="Table_of_Contents_General">General</span>
-- <a href="#What_is_Steemit_com">What is Steemit.com?</a>
+- <a href="#What_is_Steemit_com">What is steemit.com?</a>
 - <a href="#How_does_Steemit_work">How does Steemit work?</a>
 - <a href="#How_does_Steemit_differ_from_other_social_media_websites">How does Steemit differ from other social media websites?</a>
 - <a href="#Does_it_cost_anything_to_post__comment__or_vote">Does it cost anything to post, comment, or vote?</a>
@@ -19,7 +19,7 @@
 - <a href="#How_long_does_the_account_approval_process_take">How long does the account approval process take?</a>
 - <a href="#Why_do_I_need_to_provide_my_email_and_phone_number">Why do I need to provide my email and phone number?</a>
 - <a href="#Can_I_create_a_Steem_account_without_an_email_and_phone_number">Can I create a Steem account without an email and phone number?</a>
-- <a href="#What_are_other_ways_to_create_an_account_on_the_blockchain_besides_using_Steemit_com">What are other ways to create an account on the blockchain besides using Steemit.com?</a>
+- <a href="#What_are_other_ways_to_create_an_account_on_the_blockchain_besides_using_Steemit_com">What are other ways to create an account on the blockchain besides using steemit.com?</a>
 - <a href="#It_is_not_letting_me_create_an_account_with_my_phone_number__What_should_I_do">It is not letting me create an account with my phone number. What should I do?</a>
 - <a href="#What_happens_if_my_email_or_phone_number_changes">What happens if my email or phone number changes?</a>
 - <a href="#Am_I_allowed_to_create_more_than_one_account">Am I allowed to create more than one account</a>
@@ -168,8 +168,8 @@
 - <a href="#How_do_I_report_a_security_vulnerability">How do I report a security vulnerability?</a>
 
 ### <span id="Table_of_Contents_Developers">Developers</span>
-- <a href="#Are_the_Steem_blockchain_and_Steemit_com_code_open_source">Are the Steem blockchain and Steemit.com code open-source?</a>
-- <a href="#Is_there_a_Github_page_for_Steemit_com">Is there a Github page for Steemit.com?</a>
+- <a href="#Are_the_Steem_blockchain_and_Steemit_com_code_open_source">Are the Steem blockchain and steemit.com code open-source?</a>
+- <a href="#Is_there_a_Github_page_for_Steemit_com">Is there a Github page for steemit.com?</a>
 - <a href="#Is_there_a_Github_page_for_the_Steem_blockchain">Is there a Github page for the Steem blockchain?</a>
 - <a href="#What_is_available_for_developers_interested_in_Steem_and_Steemit">What is available for developers interested in Steem and Steemit?</a>
 - <a href="#How_do_I_use_cli_wallet">How do I use cli_wallet?</a>
@@ -191,7 +191,7 @@
 
 # General
 
-## <span id="What_is_Steemit_com">What is Steemit.com?</span>
+## <span id="What_is_Steemit_com">What is steemit.com?</span>
 
 Steemit has redefined social media by building a living, breathing, and growing social economy - a community where users are rewarded for sharing their voice. It's a new kind of attention economy.
 
@@ -252,7 +252,7 @@ It is best to have realistic expectations, without focusing on rewards when you 
 
 ## <span id="How_do_I_create_an_account">How do I create an account?</span>
 
-Click on the "Sign Up" link at the top of Steemit.com to get started.
+Click on the "Sign Up" link at the top of steemit.com to get started.
 
 You will be asked to enter your email address and verify your phone number. After your information has been verified, you will be added to the waiting list to receive an account. You will be notified via email once your account is approved.
 
@@ -278,10 +278,10 @@ To create an account on the blockchain, it costs STEEM tokens. When you create a
 <a href="#Table_of_Contents_Accounts">^</a>
 ## <span id="Can_I_create_a_Steem_account_without_an_email_and_phone_number">Can I create a Steem account without an email and phone number?</span>
 
-The only way to have an account created via steemit.com is to supply your email and phone number. Because Steem is an open and permissionless network, there are other ways to create an account. Any Steem blockchain account can be used on Steemit.com.
+The only way to have an account created via steemit.com is to supply your email and phone number. Because Steem is an open and permissionless network, there are other ways to create an account. Any Steem blockchain account can be used on steemit.com.
 
 <a href="#Table_of_Contents_Accounts">^</a>
-## <span id="What_are_other_ways_to_create_an_account_on_the_blockchain_besides_using_Steemit_com">What are other ways to create an account on the blockchain besides using Steemit.com?</span>
+## <span id="What_are_other_ways_to_create_an_account_on_the_blockchain_besides_using_Steemit_com">What are other ways to create an account on the blockchain besides using steemit.com?</span>
 
 If you are willing to pay your own signup fee, then there are other ways to create a new account on the blockchain.
 
@@ -318,7 +318,7 @@ Accounts can not be deactivated or deleted. The account along with all of its ac
 
 ## <span id="Is_there_an_Etiquette_Guide_for_Steemit">Is there an Etiquette Guide for Steemit?</span>
 
-There are no official rules for participating on Steemit.com, but one of the users @thecryptofiend has created an <a href="https://steemit.com/steemit/@thecryptofiend/the-complete-steemit-etiquette-guide-revision-2-0">Etiquette Guide</a> for the community. While it is not required to follow the suggestions in the guide, they are standards that many users in the community choose to follow.
+There are no official rules for participating on steemit.com, but one of the users @thecryptofiend has created an <a href="https://steemit.com/steemit/@thecryptofiend/the-complete-steemit-etiquette-guide-revision-2-0">Etiquette Guide</a> for the community. While it is not required to follow the suggestions in the guide, they are standards that many users in the community choose to follow.
 
 <a href="#Table_of_Contents_Community">^</a>
 ## <span id="Am_I_required_to_verify_my_identity">Am I required to verify my identity?</span>
@@ -354,7 +354,7 @@ These are various ways to sort Steem posts.
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 ## <span id="What_information_is_available_in_my_account_menu">What information is available in my account menu?</span>
 
-You can get to your account menu by clicking on the avatar icon in the top-right corner of a Steemit.com page. 
+You can get to your account menu by clicking on the avatar icon in the top-right corner of a steemit.com page. 
 
 **Feed** - Here is where you go to see the most recent posts from the people you follow.
 
@@ -411,7 +411,7 @@ When there is new activity in your feed, you receive a reply from another user, 
 
 Steemit also allows you to subscribe to receive additional notifications when users mention you in a comment or post.
 
-Currently, there are no options to receive notifications for votes directly on Steemit.com. But, there is a third-party application https://steemstats.com/, developed by @jesta, which has an option to set up additional notifications on your computer.
+Currently, there are no options to receive notifications for votes directly on steemit.com. But, there is a third-party application https://steemstats.com/, developed by @jesta, which has an option to set up additional notifications on your computer.
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 ## <span id="What_is_shown_in_my_profile">What is shown in my profile?</span>
@@ -1046,7 +1046,7 @@ Steemit is a front end web interface to interact with the blockchain, and view t
 
 On a technical level, the two networks rely on the same model of a blockchain, but are built upon different technologies and codebase. Steem is based on a new state-of-the-art blockchain technology called Graphene, which uses "witnesses" instead of "miners" to produce blocks. 
 
-The "delegated proof of stake" model of using witnesses instead of miners allows for greater efficiency in block production. With BTC, 100% of the new coins that are created are allocated to block producers (miners). With the Steem blockchain, only 10% of the new coins are paid to block producers (witnesses). The other 90% of new STEEM coins are awarded to content producers, curators, and STEEM Power holders.
+The "delegated proof of stake" model of using witnesses instead of miners allows for greater efficiency in block production. With BTC, 100% of the new coins that are created are allocated to block producers (miners). With the Steem blockchain, only 10% of the new coins are paid to block producers (witnesses). The other 90% of new STEEM coins are awarded to content producers, curators, and Steem Power holders.
 
 <a href="#Table_of_Contents_Blockchain">^</a>
 ## <span id="What_is_the_difference_between_Proof_of_Work__Proof_of_Stake__and_Delegated_Proof_of_Stake">What is the difference between Proof of Work, Proof of Stake, and Delegated Proof of Stake?</span>
@@ -1271,7 +1271,7 @@ https://steem.io/SteemWhitePaper.pdf
 
 If you post your question in the <a href="https://steemit.chat/channel/help">#help</a> channel on <a href="https://steemit.chat/home">steemit.chat</a>, the users there may be able to help.
 
-You can also create a post on Steemit.com with the tag #help, and someone in the community may be able to answer it.
+You can also create a post on steemit.com with the tag #help, and someone in the community may be able to answer it.
 
 <a href="#Table_of_Contents_Miscellaneous">^</a>
 

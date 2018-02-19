@@ -446,6 +446,7 @@
     "voting_jsx": {
         "flagging_post_can_remove_rewards_the_flag_should_be_used_for_the_following":
             "Flagear un posts puede hacer desaparecer las recompensas y hacer el contenido menos visible. Usar el sentido común para flagear",
+        "aggrandizement": "Engrandecimiento",
         "disagreement_on_rewards": "Desacuerdo en las recompensas",
         "fraud_or_plagiarism": "Fraude o Plagio",
         "hate_speech_or_internet_trolling":

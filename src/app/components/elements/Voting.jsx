@@ -24,6 +24,7 @@ const ABOUT_FLAG = (
             )}
         </p>
         <ul>
+            <li>{tt('voting_jsx.aggrandizement')}</li>
             <li>{tt('voting_jsx.disagreement_on_rewards')}</li>
             <li>{tt('voting_jsx.fraud_or_plagiarism')}</li>
             <li>{tt('voting_jsx.hate_speech_or_internet_trolling')}</li>

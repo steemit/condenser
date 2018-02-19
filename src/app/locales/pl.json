@@ -426,6 +426,7 @@
     "voting_jsx": {
         "flagging_post_can_remove_rewards_the_flag_should_be_used_for_the_following":
             "Nadanie flagi może obniżać wynagrodzenia i spowodować mniejszą widoczność tej treści. Niektóre z powodów do oznaczania wpisów flagami",
+        "aggrandizement": "Koloryzowanie",
         "disagreement_on_rewards": "Niezgoda co do wysokości wynagrodzenia",
         "fraud_or_plagiarism": "Oszustwo lub plagiat",
         "hate_speech_or_internet_trolling": "Mowa nienawiści lub trolowanie",

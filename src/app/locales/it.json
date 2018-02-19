@@ -446,6 +446,7 @@
     "voting_jsx": {
         "flagging_post_can_remove_rewards_the_flag_should_be_used_for_the_following":
             "Flaggare un post può rimuovere le ricompense e rendere questo materiale meno visibile. Alcune ragioni comuni per effettuare un flag sono",
+        "aggrandizement": "Ingrandimento",
         "disagreement_on_rewards": "Disaccordo sulle ricompense",
         "fraud_or_plagiarism": "Frode o Plagio",
         "hate_speech_or_internet_trolling": "Incitamento all'odio o Trolling",

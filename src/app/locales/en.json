@@ -444,6 +444,7 @@
     "voting_jsx": {
         "flagging_post_can_remove_rewards_the_flag_should_be_used_for_the_following":
             "Flagging a post can remove rewards and make this material less visible. Some common reasons to flag",
+        "aggrandizement": "Aggrandizement",
         "disagreement_on_rewards": "Disagreement on rewards",
         "fraud_or_plagiarism": "Fraud or Plagiarism",
         "hate_speech_or_internet_trolling": "Hate Speech or Internet Trolling",

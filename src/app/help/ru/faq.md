@@ -17,21 +17,21 @@
 
 ### <span id="Table_of_Contents_Accounts">Аккаунты</span>
 
-- [How do I create an account?](#How_do_I_create_an_account)
-- [What information do I need to provide in order to create an account?](#What_information_do_I_need_to_provide_in_order_to_create_an_account)
-- [How long does the account approval process take?](#How_long_does_the_account_approval_process_take)
-- [Why do I need to provide my email and phone number?](#Why_do_I_need_to_provide_my_email_and_phone_number)
-- [Can I create a Steem account without an email and phone number?](#Can_I_create_a_Steem_account_without_an_email_and_phone_number)
-- [What are other ways to create an account on the blockchain besides using Steemit.com?](#What_are_other_ways_to_create_an_account_on_the_blockchain_besides_using_Steemit_com)
-- [It is not letting me create an account with my phone number. What should I do?](#It_is_not_letting_me_create_an_account_with_my_phone_number__What_should_I_do)
-- [What happens if my email or phone number changes?](#What_happens_if_my_email_or_phone_number_changes)
-- [Am I allowed to create more than one account](#Am_I_allowed_to_create_more_than_one_account)
-- [Can I delete or deactivate my account?](#Can_I_delete_or_deactivate_my_account)
+- [Как создать аккаунт?](#How_do_I_create_an_account)
+- [Какую информацию нужно предоставить для того, чтобы создать аккаунт?](#What_information_do_I_need_to_provide_in_order_to_create_an_account)
+- [Сколько времени занимает процесс утверждения аккаунта?](#How_long_does_the_account_approval_process_take)
+- [Зачем нужно указывать мой адрес электронной почты и номер телефона?](#Why_do_I_need_to_provide_my_email_and_phone_number)
+- [Могу ли я создать аккаунт на Steem без указания электронной почты и номера телефона?](#Can_I_create_a_Steem_account_without_an_email_and_phone_number)
+- [Каковы другие способы для создания аккаунта на блокчейне кроме Steemit.com?](#What_are_other_ways_to_create_an_account_on_the_blockchain_besides_using_Steemit_com)
+- [Не получается создать аккаунт, используя мой номер телефона. Что мне делать?](#It_is_not_letting_me_create_an_account_with_my_phone_number__What_should_I_do)
+- [Что произойдет, если изменится мой адрес электронной почты или номер телефона?](#What_happens_if_my_email_or_phone_number_changes)
+- [Разрешено ли создавать больше одного аккаунта?](#Am_I_allowed_to_create_more_than_one_account)
+- [Могу ли я удалить или отключить мой аккаунт?](#Can_I_delete_or_deactivate_my_account)
 
 ### <span id="Table_of_Contents_Community">Сообщество</span>
 
-- [Is there an Etiquette Guide for Steemit?](#Is_there_an_Etiquette_Guide_for_Steemit)
-- [Am I required to verify my identity?](#Am_I_required_to_verify_my_identity)
+- [Есть ли руководство по этикету для Steemit?](#Is_there_an_Etiquette_Guide_for_Steemit)
+- [Должен ли я удостоверить мою личность?](#Am_I_required_to_verify_my_identity)
 
 ### <span id="Table_of_Contents_Site_Navigation">Навигация по сайту</span>
 

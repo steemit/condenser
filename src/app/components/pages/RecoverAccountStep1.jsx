@@ -242,59 +242,52 @@ class RecoverAccountStep1 extends React.Component {
                 )}
 
                 {show_social_login && (
-                        <div className="row">
-                            <div className="column large-4">
-                                {email_submitted ? (
-                                    tt(
-                                        'recoveraccountstep1_jsx.thanks_for_submitting_request_for_account_recovery',
-                                        { APP_NAME }
-                                    )
-                                ) : (
-                                    <form
-                                        onSubmit={this.onSubmitEmail}
-                                        noValidate
+                    <div className="row">
+                        <div className="column large-4">
+                            {email_submitted ? (
+                                tt(
+                                    'recoveraccountstep1_jsx.thanks_for_submitting_request_for_account_recovery',
+                                    { APP_NAME }
+                                )
+                            ) : (
+                                <form onSubmit={this.onSubmitEmail} noValidate>
+                                    <p>
+                                        {tt(
+                                            'recoveraccountstep1_jsx.enter_email_toverify_identity'
+                                        )}
+                                    </p>
+                                    <div
+                                        className={
+                                            email_error
+                                                ? 'column large-4 shrink error'
+                                                : 'column large-4 shrink'
+                                        }
                                     >
-                                        <p>
-                                            {tt(
-                                                'recoveraccountstep1_jsx.enter_email_toverify_identity'
-                                            )}
-                                        </p>
-                                        <div
-                                            className={
-                                                email_error
-                                                    ? 'column large-4 shrink error'
-                                                    : 'column large-4 shrink'
-                                            }
-                                        >
-                                            <label>
-                                                {tt('g.email')}
-                                                <input
-                                                    type="text"
-                                                    name="email"
-                                                    autoComplete="off"
-                                                    onChange={
-                                                        this.onEmailChange
-                                                    }
-                                                    value={email}
-                                                />
-                                            </label>
-                                            <p className="error">
-                                                {email_error}
-                                            </p>
+                                        <label>
+                                            {tt('g.email')}
                                             <input
-                                                type="submit"
-                                                disabled={email_error || !email}
-                                                className="button hollow"
-                                                value={tt(
-                                                    'recoveraccountstep1_jsx.continue_with_email'
-                                                )}
+                                                type="text"
+                                                name="email"
+                                                autoComplete="off"
+                                                onChange={this.onEmailChange}
+                                                value={email}
                                             />
-                                        </div>
-                                    </form>
-                                )}
-                            </div>
+                                        </label>
+                                        <p className="error">{email_error}</p>
+                                        <input
+                                            type="submit"
+                                            disabled={email_error || !email}
+                                            className="button hollow"
+                                            value={tt(
+                                                'recoveraccountstep1_jsx.continue_with_email'
+                                            )}
+                                        />
+                                    </div>
+                                </form>
+                            )}
                         </div>
-                    )}
+                    </div>
+                )}
             </div>
         );
     }

@@ -35,7 +35,7 @@
 
 ### <span id="Table_of_Contents_Site_Navigation">Навигация по сайту</span>
 
-- [How do I upvote a post or comment?](#How_do_I_upvote_a_post_or_comment)
+- [Как проголосовать за пост или комментарий?](#How_do_I_upvote_a_post_or_comment)
 - [What do the Home, New, Hot, Trending, and Promoted links show?](#What_do_the_Home__New__Hot__Trending__and_Promoted_links_show)
 - [What information is available in my account menu?](#What_information_is_available_in_my_account_menu)
 - [How do I see my recent rewards?](#How_do_I_see_my_recent_rewards)

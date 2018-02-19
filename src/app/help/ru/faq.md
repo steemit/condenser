@@ -9,7 +9,7 @@
 - [Что такое Steemit.com?](#What_is_Steemit_com)
 - [Как работает Steemit?](#How_does_Steemit_work)
 - [Чем отличается Steemit от других социальных медиа сайтов?](#How_does_Steemit_differ_from_other_social_media_websites)
-- [Сколько стоит разместить пост, оставить комментарий, проголосовать?](#Does_it_cost_anything_to_post__comment__or_vote)
+- [Нужно ли платить, чтобы опубликовать пост, оставить комментарий, проголосовать?](#Does_it_cost_anything_to_post__comment__or_vote)
 - [Могу ли я заработать цифровые токены на Steemit? Как?](#Can_I_earn_digital_tokens_on_Steemit_How)
 - [Откуда берутся токены?](#Where_do_the_tokens_come_from)
 - [Откуда берется стоимость токенов?](#Where_does_the_value_come_from)
@@ -40,18 +40,18 @@
 - [Какая информация доступна в меню моего аккаунта?](#What_information_is_available_in_my_account_menu)
 - [Как увидеть мои последние вознагражденя?](#How_do_I_see_my_recent_rewards)
 - [Какая информация отображается в моем кошельке?](#What_information_is_shown_in_my_wallet)
-- [How do I transfer my STEEM or Steem Dollars into savings?](#How_do_I_transfer_my_STEEM_or_Steem_Dollars_into_savings)
-- [How do I send money to another user?](#How_do_I_send_money_to_another_user)
-- [Will I receive notifications when there is activity with my account?](#Will_I_receive_notifications_when_there_is_activity_with_my_account)
-- [What is shown in my profile?](#What_is_shown_in_my_profile)
-- [How do I change my avatar image and other profile information?](#How_do_I_change_my_avatar_image_and_other_profile_information)
-- [What is the recommend size for the cover image?](#What_is_the_recommend_size_for_the_cover_image)
-- [How can I control whether I see "Not Safe For Work" (NSFW) content?](#How_can_I_control_whether_I_see__Not_Safe_For_Work___NSFW__content)
-- [How do I search for content?](#How_do_I_search_for_content)
-- [Can I see which users I have muted?](#Can_I_see_which_users_I_have_muted)
-- [Can I see which users have muted me?](#Can_I_see_which_users_have_muted_me)
-- [Can I see the list of users I am following, and who is following me?](#Can_I_see_the_list_of_users_I_am_following__and_who_is_following_me)
-- [What languages are supported?](#What_languages_are_supported)
+- [Как мне перевести свои STEEM или Steem Dollars на сберегательный счет?](#How_do_I_transfer_my_STEEM_or_Steem_Dollars_into_savings)
+- [Как отправить деньги другому пользователю?](#How_do_I_send_money_to_another_user)
+- [Могу ли я получать уведомления об активности в моем аккаунте?](#Will_I_receive_notifications_when_there_is_activity_with_my_account)
+- [Что показывается в моем профиле?](#What_is_shown_in_my_profile)
+- [Как я могу изменить свой аватар и другую информацию профиля?](#How_do_I_change_my_avatar_image_and_other_profile_information)
+- [Каков рекомендованный размер для изображения обложки?](#What_is_the_recommend_size_for_the_cover_image)
+- [Как я могу контролировать показ контента с пометкой «Не безопасно для работы» (NSFW)?](#How_can_I_control_whether_I_see__Not_Safe_For_Work___NSFW__content)
+- [Как мне найти определенный контент?](#How_do_I_search_for_content)
+- [Как мне увидеть, каких пользователей я отключил?](#Can_I_see_which_users_I_have_muted)
+- [Как мне увидеть, кто отключил меня?](#Can_I_see_which_users_have_muted_me)
+- [Как мне увидеть список своих подписчиков и подписок?](#Can_I_see_the_list_of_users_I_am_following__and_who_is_following_me)
+- [Какие языки поддерживаются?](#What_languages_are_supported)
 
 ### <span id="Table_of_Contents_Posting">Размещение постов</span>
 
@@ -230,7 +230,7 @@ Most social media sites extract value from their userbase for the benefit of sha
 
 <a href="#Table_of_Contents_General">^</a>
 
-## <span id="Does_it_cost_anything_to_post__comment__or_vote">Сколько стоит разместить пост, оставить комментарий, проголосовать?</span>
+## <span id="Does_it_cost_anything_to_post__comment__or_vote">Нужно ли платить, чтобы опубликовать пост, оставить комментарий, проголосовать?</span>
 
 No. It is free to post, comment, and vote on content on Steemit.com. You might even get paid for it!
 

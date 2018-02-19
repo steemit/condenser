@@ -1,0 +1,3 @@
+files:
+  - source: /src/app/help/en/faq.md
+    translation: /src/app/help/%two_letters_code%/faq.md

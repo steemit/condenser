@@ -1,21 +1,21 @@
 <span id="disable_router_nav_history_direction_check"></span>
 
-# Steemit FAQ
+# Частые вопросы про Steem
 
-## <span id="Table_of_Contents">Table of Contents</span>
+## <span id="Table_of_Contents">Оглавление</span>
 
-### <span id="Table_of_Contents_General">General</span>
+### <span id="Table_of_Contents_General">Общие</span>
 
-- [What is Steemit.com?](#What_is_Steemit_com)
-- [How does Steemit work?](#How_does_Steemit_work)
-- [How does Steemit differ from other social media websites?](#How_does_Steemit_differ_from_other_social_media_websites)
-- [Does it cost anything to post, comment, or vote?](#Does_it_cost_anything_to_post__comment__or_vote)
-- [Can I earn digital tokens on Steemit? How?](#Can_I_earn_digital_tokens_on_Steemit_How)
-- [Where do the tokens come from?](#Where_do_the_tokens_come_from)
-- [Where does the value come from?](#Where_does_the_value_come_from)
+- [Что такое Steemit.com?](#What_is_Steemit_com)
+- [Как работает Steemit?](#How_does_Steemit_work)
+- [Чем отличается Steemit от других социальных медиа сайтов?](#How_does_Steemit_differ_from_other_social_media_websites)
+- [Сколько стоит разместить пост, оставить комментарий, проголосовать?](#Does_it_cost_anything_to_post__comment__or_vote)
+- [Can I earn digital tokens on Steemit? Как?](#Can_I_earn_digital_tokens_on_Steemit_How)
+- [Откуда берутся токены?](#Where_do_the_tokens_come_from)
+- [Откуда берется стоимость токенов?](#Where_does_the_value_come_from)
 - [Why are people getting vastly different rewards?](#Why_are_people_getting_vastly_different_rewards)
 
-### <span id="Table_of_Contents_Accounts">Accounts</span>
+### <span id="Table_of_Contents_Accounts">Аккаунты</span>
 
 - [How do I create an account?](#How_do_I_create_an_account)
 - [What information do I need to provide in order to create an account?](#What_information_do_I_need_to_provide_in_order_to_create_an_account)
@@ -208,9 +208,9 @@
 
 - [Third Party References and User Links](#Third_Party_References_and_User_Links)
 
-# General
+# Общие
 
-## <span id="What_is_Steemit_com">What is Steemit.com?</span>
+## <span id="What_is_Steemit_com">Что такое Steemit.com?</span>
 
 Steemit is a social network and content rewards platform that makes the crowd the beneficiaries of the attention economy. It does this be rewarding users with STEEM.
 
@@ -218,19 +218,19 @@ Steemit has redefined social media by building a living, breathing, and growing 
 
 <a href="#Table_of_Contents_General">^</a>
 
-## <span id="How_does_Steemit_work">How does Steemit work?</span>
+## <span id="How_does_Steemit_work">Как работает Steemit?</span>
 
 Steemit is a social media platform that works by having the crowd reward the crowd for their content. It does this thanks to the Steem blockchain and cryptocurrency; Steem is 'minted' daily and distributed to content producers according to the votes they get.
 
 <a href="#Table_of_Contents_General">^</a>
 
-## How does Steemit differ from other social media websites? <a id="How_does_Steemit_differ_from_other_social_media_websites"></a>
+## Чем отличается Steemit от других социальных медиа сайтов? <a id="How_does_Steemit_differ_from_other_social_media_websites"></a>
 
 Most social media sites extract value from their userbase for the benefit of shareholders alone. Steemit is different, it's a new kind of attention economy. By connecting with the Steem blockchain (which is decentralized and controlled by the crowd), Steemit users receive all the benefits and rewards for their attention.
 
 <a href="#Table_of_Contents_General">^</a>
 
-## <span id="Does_it_cost_anything_to_post__comment__or_vote">Does it cost anything to post, comment, or vote?</span>
+## <span id="Does_it_cost_anything_to_post__comment__or_vote">Сколько стоит разместить пост, оставить комментарий, проголосовать?</span>
 
 No. It is free to post, comment, and vote on content on Steemit.com. You might even get paid for it!
 

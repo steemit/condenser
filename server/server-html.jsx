@@ -1,6 +1,5 @@
 import React from 'react';
 import { LIQUID_TOKEN } from 'app/client_config';
-import config from 'config';
 
 export default function ServerHTML({ body, assets, locale, title, meta }) {
     let page_title = title;
@@ -54,7 +53,7 @@ export default function ServerHTML({ body, assets, locale, title, meta }) {
         <body>
         <div id="content" dangerouslySetInnerHTML={ { __html: body } }></div>
         { assets.script.map((href, idx) => <script key={ idx } src={ href }></script>) }
-        { config.get('vk_pixel_id') && <script dangerouslySetInnerHTML={ { __html: `(window.Image ? (new Image()) : document.createElement('img')).src = 'https://vk.com/rtrg?p=${config.get('vk_pixel_id')}';` } }></script> }
+        <script dangerouslySetInnerHTML={ { __html: `(window.Image ? (new Image()) : document.createElement('img')).src = 'https://vk.com/rtrg?p=VK-RTRG-213301-fzRWU';` } }></script>
         </body>
         </html>
     );

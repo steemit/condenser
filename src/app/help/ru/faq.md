@@ -36,10 +36,10 @@
 ### <span id="Table_of_Contents_Site_Navigation">Навигация по сайту</span>
 
 - [Как проголосовать за пост или комментарий?](#How_do_I_upvote_a_post_or_comment)
-- [What do the Home, New, Hot, Trending, and Promoted links show?](#What_do_the_Home__New__Hot__Trending__and_Promoted_links_show)
-- [What information is available in my account menu?](#What_information_is_available_in_my_account_menu)
-- [How do I see my recent rewards?](#How_do_I_see_my_recent_rewards)
-- [What information is shown in my wallet?](#What_information_is_shown_in_my_wallet)
+- [Куда ведут ссылки "популярное", "новое", "актуальное", "продвигаемое"?](#What_do_the_Home__New__Hot__Trending__and_Promoted_links_show)
+- [Какая информация доступна в меню моего аккаунта?](#What_information_is_available_in_my_account_menu)
+- [Как увидеть мои последние вознагражденя?](#How_do_I_see_my_recent_rewards)
+- [Какая информация отображается в моем кошельке?](#What_information_is_shown_in_my_wallet)
 - [How do I transfer my STEEM or Steem Dollars into savings?](#How_do_I_transfer_my_STEEM_or_Steem_Dollars_into_savings)
 - [How do I send money to another user?](#How_do_I_send_money_to_another_user)
 - [Will I receive notifications when there is activity with my account?](#Will_I_receive_notifications_when_there_is_activity_with_my_account)

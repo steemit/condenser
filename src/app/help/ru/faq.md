@@ -65,14 +65,14 @@
 - [Что такое теги?](#What_are_tags)
 - [Какие теги я могу использовать?](#What_tags_should_I_use)
 - [Сколько тегов я могу использовать?](#How_many_tags_can_I_use)
-- [Why is the "Post" button grayed out?](#Why_is_the_Post_button_grayed_out)
-- [How do I format text in Markdown?](#How_do_I_format_text_in_Markdown)
-- [How often can I post?](#How_often_can_I_post)
-- [How long can my post be?](#How_long_can_my_post_be)
-- [If posting in a language other than English, how will I get recognized?](#If_posting_in_a_language_other_than_English__how_will_I_get_recognized)
-- [Can I delete something I posted?](#Can_I_delete_something_I_posted)
-- [What does "Promoting" a post do?](#What_does__Promoting__a_post_do)
-- [How do I promote a post?](#How_do_I_promote_a_post)
+- [Почему кнопка "Пост" остается серой?](#Why_is_the_Post_button_grayed_out)
+- [Как форматировать текст, используя Markdown?](#How_do_I_format_text_in_Markdown)
+- [Как часто я могу публиковать посты?](#How_often_can_I_post)
+- [Какой длины может быть мой пост?](#How_long_can_my_post_be)
+- [Если пост не на английском языке, как я узнаю?](#If_posting_in_a_language_other_than_English__how_will_I_get_recognized)
+- [Можно ли удалить то, что я написал?](#Can_I_delete_something_I_posted)
+- [Что означает "Продвинуть" пост?](#What_does__Promoting__a_post_do)
+- [Как продвинуть пост?](#How_do_I_promote_a_post)
 
 ### <span id="Table_of_Contents_Comments">Размещение комментариев</span>
 

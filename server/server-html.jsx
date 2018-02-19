@@ -53,7 +53,6 @@ export default function ServerHTML({ body, assets, locale, title, meta }) {
         <body>
         <div id="content" dangerouslySetInnerHTML={ { __html: body } }></div>
         { assets.script.map((href, idx) => <script key={ idx } src={ href }></script>) }
-        <script dangerouslySetInnerHTML={ { __html: `(window.Image ? (new Image()) : document.createElement('img')).src = 'https://vk.com/rtrg?p=VK-RTRG-213301-fzRWU';` } }></script>
         </body>
         </html>
     );

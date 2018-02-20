@@ -121,16 +121,16 @@
 - [Что такое кураторские "паровозы"?](#What_are_curation_trails)
 - [Почему мои голоса не влияют на выплаты за пост?](#Why_don_t_my_upvotes_have_an_effect_on_a_post_s_rewards)
 - [Есть ли способ сделать мои голоса весомее?](#Is_there_a_way_to_make_my_votes_count_for_more)
-- [What are the valid reasons for downvoting?](#What_are_the_valid_reasons_for_downvoting)
-- [Does a downvote mean that I did something wrong?](#Does_a_downvote_mean_that_I_did_something_wrong)
-- [Will a downvote hurt my reputation?](#Will_a_downvote_hurt_my_reputation)
-- [What is the difference between a downvote and a flag?](#What_is_the_difference_between_a_downvote_and_a_flag)
+- [Какие есть причины для тог, чтобы поставить флаг?](#What_are_the_valid_reasons_for_downvoting)
+- [Означает ли флаг, что я делаю что-то неправильное?](#Does_a_downvote_mean_that_I_did_something_wrong)
+- [Как флаг влияет на мою репутацию?](#Will_a_downvote_hurt_my_reputation)
+- [Какая разница между голосом против и флагом?](#What_is_the_difference_between_a_downvote_and_a_flag)
 
 ### <span id="Table_of_Contents_Plagiarism__Spam__and_Abuse">Плагиат, спам и злоупотребление</span>
 
 - [Что считается спамом или злоупотреблением?](#What_is_considered_spam_or_abuse)
-- [What are Steemit’s policies on plagiarism?](#What_are_Steemit_s_policies_on_plagiarism)
-- [Is it okay to use random pictures from the internet?](#Is_it_okay_to_use_random_pictures_from_the_internet)
+- [Каковы правила Steemit в отношении плагиата?](#What_are_Steemit_s_policies_on_plagiarism)
+- [Будет ли правильно использовать случайные картинки из интернета?](#Is_it_okay_to_use_random_pictures_from_the_internet)
 - [What is Steemcleaners?](#What_is_Steemcleaners)
 - [What is @cheetah?](#What_is__cheetah)
 - [Where do I report a post or comment that contains plagiarism, spam, or abuse?](#Where_do_I_report_a_post_or_comment_that_contains_plagiarism__spam__or_abuse)

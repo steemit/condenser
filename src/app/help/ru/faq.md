@@ -111,8 +111,8 @@
 
 ### <span id="Table_of_Contents_Voting_and_Curating">Голосование и курирование</span>
 
-- [What is my voting power?](#What_is_my_voting_power)
-- [How many times can I vote without depleting my voting power?](#How_many_times_can_I_vote_without_depleting_my_voting_power)
+- [Что такое моя сила голоса?](#What_is_my_voting_power)
+- [Сколько я могу голосовать до полного расхода моей силы голоса?](#How_many_times_can_I_vote_without_depleting_my_voting_power)
 - [Can I vote with less than 100% of my voting strength?](#Can_I_vote_with_less_than_100__of_my_voting_strength)
 - [Where can I check my voting power?](#Where_can_I_check_my_voting_power)
 - [What determines how much of the curation reward goes to the author versus curators?](#What_determines_how_much_of_the_curation_reward_goes_to_the_author_versus_curators)
@@ -150,7 +150,7 @@
 
 ### <span id="Table_of_Contents_Blockchain">Блокчейн</span>
 
-- [What is a blockchain?](#What_is_a_blockchain)
+- [Что такое блокчейн?](#What_is_a_blockchain)
 - [What is the Steem blockchain?](#What_is_the_Steem_blockchain)
 - [What is the difference between Steem and Steemit?](#What_is_the_difference_between_Steem_and_Steemit)
 - [How is Steem different from Bitcoin?](#How_is_Steem_different_from_Bitcoin)
@@ -436,7 +436,7 @@ Your savings balance is STEEM and SBD tokens that are subject to 3 day withdraw 
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 
-## <span id="How_do_I_send_money_to_another_user">How do I send money to another user?</span>
+## <span id="How_do_I_send_money_to_another_user">Как отправить деньги другому пользователю?</span>
 
 - From your wallet page, click the STEEM or Steem Dollar balances with the down arrow next to them.
 - In the drop-down menu, click 'Transfer'. 
@@ -448,7 +448,7 @@ Your savings balance is STEEM and SBD tokens that are subject to 3 day withdraw 
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 
-## <span id="Will_I_receive_notifications_when_there_is_activity_with_my_account">Will I receive notifications when there is activity with my account?</span>
+## <span id="Will_I_receive_notifications_when_there_is_activity_with_my_account">Могу ли я получать уведомления об активности в моем аккаунте?</span>
 
 When there is new activity in your feed, you receive a reply from another user, or there is a new transfer in your wallet, you will receive a notification in your account menu. It will show a little red number showing the number of new notifications.
 
@@ -458,7 +458,7 @@ Currently, there are no options to receive notifications for votes directly on S
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 
-## <span id="What_is_shown_in_my_profile">What is shown in my profile?</span>
+## <span id="What_is_shown_in_my_profile">Что показывается в моем профиле?</span>
 
 At the top of your profile is your display name and reputation score. Below your display name is the number of followers you have, the number of posts and comments you have written, and the number of people you are following. It also shows the month and year when your account was created.
 
@@ -468,19 +468,19 @@ You can view your own profile by clicking on the link to your Blog in your accou
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 
-## <span id="How_do_I_change_my_avatar_image_and_other_profile_information">How do I change my avatar image and other profile information?</span>
+## <span id="How_do_I_change_my_avatar_image_and_other_profile_information">Как я могу изменить свой аватар и другую информацию профиля?</span>
 
 Your profile info, avatar image, and cover image are set in your Settings page. In order to update your avatar picture and cover image, you will need to host the images somewhere. This can be done by uploading it to a Steemit comment or post, or using a third-party image host such as [Postimage](http://postimage.io/). Once your image is uploaded, copy its URL and paste it into the "Profile Picture URL" box for the avatar, or the "Cover Image URL" box for the cover image. Then click the Update button and enter your password or active key.
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 
-## <span id="What_is_the_recommend_size_for_the_cover_image">What is the recommend size for the cover image?</span>
+## <span id="What_is_the_recommend_size_for_the_cover_image">Каков рекомендованный размер для изображения обложки?</span>
 
 The cover image will be resized/scaled depending on the device being used. Therefore it is recommend to use an image that will still look good when cropped or resized. A 2048x512 image is the optimal size to work for most devices.
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 
-## <span id="How_can_I_control_whether_I_see__Not_Safe_For_Work___NSFW__content">How can I control whether I see "Not Safe For Work" (NSFW) content?</span>
+## <span id="How_can_I_control_whether_I_see__Not_Safe_For_Work___NSFW__content">Как я могу управлять показом контента с пометкой «Не безопасно для работы» (NSFW)?</span>
 
 By default, content that users have tagged as "NSFW" will be hidden, but a link will be shown to reveal the content.
 
@@ -488,7 +488,7 @@ You can update your display preference with the Settings page so that NSFW conte
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 
-## <span id="How_do_I_search_for_content">How do I search for content?</span>
+## <span id="How_do_I_search_for_content">Как мне найти определенный контент?</span>
 
 In the upper right corner of Steemit, there is a magnifying glass search link where you can find posts using a keyword search.
 
@@ -496,25 +496,25 @@ There is also an **Explore** link in the main menu, where you can browse through
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 
-## <span id="Can_I_see_which_users_I_have_muted">Can I see which users I have muted?</span>
+## <span id="Can_I_see_which_users_I_have_muted">Могу ли я увидеть, каких пользователей я отключил?</span>
 
 Yes. This can be seen under the Settings page.
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 
-## <span id="Can_I_see_which_users_have_muted_me">Can I see which users have muted me?</span>
+## <span id="Can_I_see_which_users_have_muted_me">Могу ли я увидеть, какие пользователи отключили меня?</span>
 
 No. This information is not presented on Steemit.com.
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 
-## <span id="Can_I_see_the_list_of_users_I_am_following__and_who_is_following_me">Can I see the list of users I am following, and who is following me?</span>
+## <span id="Can_I_see_the_list_of_users_I_am_following__and_who_is_following_me">Как мне увидеть список своих подписчиков и подписок?</span>
 
 Yes. You can see the list of followers or people you are following by clicking on the links on your profile page.
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 
-## <span id="What_languages_are_supported">What languages are supported?</span>
+## <span id="What_languages_are_supported">Какие языки поддерживаются?</span>
 
 English is the most-used language used on the Steemit platform, but communities are forming that speak other languages.
 
@@ -522,13 +522,13 @@ English is the most-used language used on the Steemit platform, but communities 
 
 # Размещение постов
 
-## <span id="What_can_users_post_to_Steemit">What can users post to Steemit?</span>
+## <span id="What_can_users_post_to_Steemit">Что пользователи могут размещать в Steemit?</span>
 
 Steem is an open platform meant to host and welcome any legal content. Users can post anything they want, whether it be phrases, quotes, blogs, anecdotes, photos, videos, memes, songs, and more. Be creative!
 
 <a href="#Table_of_Contents_Posting">^</a>
 
-## <span id="What_are_the_different_choices_for_post_rewards__50__50___Power_Up_100___Decline_Payout">What are the different choices for post rewards (50%/50%, Power Up 100%, Decline Payout)?</span>
+## <span id="What_are_the_different_choices_for_post_rewards__50__50___Power_Up_100___Decline_Payout">Каковы различные варианты вознаграждения за пост (50%/50%, поднять мощность до 100%, снижение выплат)?</span>
 
 - **50%/50%** - This rewards in half STEEM Power, and half liquid STEEM / Steem Dollars. The ratio of liquid STEEM to Steem Dollars rewarded is based on network conditions at the time of payout. This is the default payout option.
 
@@ -538,7 +538,7 @@ Steem is an open platform meant to host and welcome any legal content. Users can
 
 <a href="#Table_of_Contents_Posting">^</a>
 
-## <span id="How_do_I_add_images_and_photos_to_my_posts">How do I add images and photos to my posts?</span>
+## <span id="How_do_I_add_images_and_photos_to_my_posts">Как добавить изображения и фотографии в мои посты?</span>
 
 You can browse your hard drive to add an image by clicking on the "selecting them" link from within the editor.
 
@@ -548,19 +548,19 @@ Pictures can also be hosted on an external site. Paste the image's web address (
 
 <a href="#Table_of_Contents_Posting">^</a>
 
-## <span id="How_do_I_set_the_thumbnail_image_for_my_post">How do I set the thumbnail image for my post?</span>
+## <span id="How_do_I_set_the_thumbnail_image_for_my_post">Как задать превью изображения для моего поста?</span>
 
 The first image in the post will automatically be set as the thumbnail image.
 
 <a href="#Table_of_Contents_Posting">^</a>
 
-## <span id="What_is_the_recommend_aspect_ratio_for_thumbnail_images">What is the recommend aspect ratio for thumbnail images?</span>
+## <span id="What_is_the_recommend_aspect_ratio_for_thumbnail_images">Что такое соотношение сторон рекомендуется для превью изображений?</span>
 
 The recommend aspect ratio for thumbnail images is 16x9.
 
 <a href="#Table_of_Contents_Posting">^</a>
 
-## <span id="How_do_I_add_videos_to_my_posts">How do I add videos to my posts?</span>
+## <span id="How_do_I_add_videos_to_my_posts">Как добавить видео в мой пост?</span>
 
 To add a YouTube or Vimeo video to your blog post, simply paste the link to the video into the post.
 
@@ -568,19 +568,19 @@ You can also read [this guide](https://steemit.com/steemitguide/@algimantas/deta
 
 <a href="#Table_of_Contents_Posting">^</a>
 
-## <span id="Is_there_a_way_I_can_make_my_images_smaller">Is there a way I can make my images smaller?</span>
+## <span id="Is_there_a_way_I_can_make_my_images_smaller">Есть ли возможность сделать изображения меньше?</span>
 
 Yes, but the picture must be resized before it is uploaded into the Steemit.com editor. This can be done in your favorite photo editing software, or online by uploading to a third-party website that features editing such as imgur.com.
 
 <a href="#Table_of_Contents_Posting">^</a>
 
-## <span id="What_are_tags">What are tags?</span>
+## <span id="What_are_tags">Что такое теги?</span>
 
 Tags are a way to categorize your content, so that others can find it. The more relevant the tags are to the post, the more like-minded people will come across it.
 
 <a href="#Table_of_Contents_Posting">^</a>
 
-## <span id="What_tags_should_I_use">What tags should I use?</span>
+## <span id="What_tags_should_I_use">Какие теги я могу использовать?</span>
 
 Try to use tags that are relevant to your post, and that will be popular for other people to browse. For example, "mytriptoalaska" may be relevant to your post, but readers are probably not going to go searching for that. Using "travel" would be a better choice for a tag in this case.
 
@@ -592,19 +592,19 @@ All tags must be lowercase letters. Spaces aren't allowed, but hyphenated words 
 
 <a href="#Table_of_Contents_Posting">^</a>
 
-## <span id="How_many_tags_can_I_use">How many tags can I use?</span>
+## <span id="How_many_tags_can_I_use">Сколько тегов я могу использовать?</span>
 
 You can use up to 5 tags per post.
 
 <a href="#Table_of_Contents_Posting">^</a>
 
-## <span id="Why_is_the_Post_button_grayed_out">Why is the "Post" button grayed out?</span>
+## <span id="Why_is_the_Post_button_grayed_out">Почему кнопка "Пост" остается серой?</span>
 
 A post must have a title, body, and at least one valid tag. If any of these are missing, then the "Post" button will be disabled.
 
 <a href="#Table_of_Contents_Posting">^</a>
 
-## <span id="How_do_I_format_text_in_Markdown">How do I format text in Markdown?</span>
+## <span id="How_do_I_format_text_in_Markdown">Как форматировать текст, используя Markdown?</span>
 
 Some common markdown syntax is:
 
@@ -632,19 +632,19 @@ For more advanced formatting, a guide describing the common markdown formatting 
 
 <a href="#Table_of_Contents_Posting">^</a>
 
-## <span id="How_often_can_I_post">How often can I post?</span>
+## <span id="How_often_can_I_post">Как часто я могу публиковать посты?</span>
 
 You are allowed to post almost as often as you like. Currently, posts must be spaced 5 minutes apart. However, the community may not find value in users that are posting too frequently. Keep in mind what your audience will be interested in viewing, so that you do not overwhelm your followers with too much content.
 
 <a href="#Table_of_Contents_Posting">^</a>
 
-## <span id="How_long_can_my_post_be">How long can my post be?</span>
+## <span id="How_long_can_my_post_be">Какой длины может быть мой пост?</span>
 
 Post sizes are limited to about 64,000 characters including formatting. This is ample for most posts. If writing blogs, consider how much people are willing to read at one time. If you make your posts too long, readers may lose interest which may affect the amount of upvotes and rewards you receive.
 
 <a href="#Table_of_Contents_Posting">^</a>
 
-## <span id="If_posting_in_a_language_other_than_English__how_will_I_get_recognized">If posting in a language other than English, how will I get recognized?</span>
+## <span id="If_posting_in_a_language_other_than_English__how_will_I_get_recognized">Если пост не на английском языке, как я узнаю?</span>
 
 You can use language-specific tags to help you to reach the audience that speaks your language.
 
@@ -660,13 +660,13 @@ Language-specific groups include:
 
 <a href="#Table_of_Contents_Posting">^</a>
 
-## <span id="Can_I_delete_something_I_posted">Can I delete something I posted?</span>
+## <span id="Can_I_delete_something_I_posted">Можно ли удалить то, что я написал?</span>
 
 The blockchain will always contain the full edit history of posts and comments, so it can never be completely deleted. If you would like to update a post so that users cannot see the content via Steemit.com, you can edit the post and replace it with blank content for as long as the post is active. After seven days, the post can no longer be edited.
 
 <a href="#Table_of_Contents_Posting">^</a>
 
-## <span id="What_does__Promoting__a_post_do">What does "Promoting" a post do?</span>
+## <span id="What_does__Promoting__a_post_do">Что означает "Продвинуть" пост?</span>
 
 When you make a post, there is the option to promote it with Steem Dollars. It will then show up in the “Promoted” tab. The order that it appears in the list depends on how much the post was promoted for. Posts with a higher promoted amount will be higher than posts with less.
 
@@ -676,7 +676,7 @@ You can promote your own posts, or posts that you like from other users.
 
 <a href="#Table_of_Contents_Posting">^</a>
 
-## <span id="How_do_I_promote_a_post">How do I promote a post?</span>
+## <span id="How_do_I_promote_a_post">Как продвинуть пост?</span>
 
 At the bottom of each post is a button to "Promote". After clicking the button, type the number of Steem Dollars that you want to spend and click “PROMOTE”. The operation will require your master password or active key.
 
@@ -684,13 +684,13 @@ At the bottom of each post is a button to "Promote". After clicking the button, 
 
 # Размещение комментариев
 
-## <span id="Can_I_earn_digital_tokens_for_commenting">Can I earn digital tokens for commenting?</span>
+## <span id="Can_I_earn_digital_tokens_for_commenting">Могу ли я заработать цифровые токены за комментирование?</span>
 
 Yes, comments that are upvoted can earn rewards just like posts!
 
 <a href="#Table_of_Contents_Comments">^</a>
 
-## <span id="How_often_can_I_comment">How often can I comment?</span>
+## <span id="How_often_can_I_comment">Как часто я могу комментировать?</span>
 
 There is a 20 second wait time in between comments to limit spam.
 
@@ -698,19 +698,19 @@ There is a 20 second wait time in between comments to limit spam.
 
 # Экономика
 
-## <span id="Where_do_the_new_STEEM_tokens_come_from">Where do the new STEEM tokens come from?</span>
+## <span id="Where_do_the_new_STEEM_tokens_come_from">Откуда берутся новые токены Steem?</span>
 
 Blockchains like Steem and Bitcoin produce new tokens each time a block is produced. Unlike Bitcoin, where all of the new coins go to the block producers (called miners), the Steem blockchain allocates a majority of the new tokens to a reward fund. The reward fund gives users tokens for participating in the platform.
 
 <a href="#Table_of_Contents_Economics">^</a>
 
-## <span id="How_many_new_tokens_are_generated_by_the_blockchain">How many new tokens are generated by the blockchain?</span>
+## <span id="How_many_new_tokens_are_generated_by_the_blockchain">Сколько новых токенов генерируются блокчейном?</span>
 
 Starting with the network's 16th hard fork in December 2016, Steem began creating new tokens at a yearly inflation rate of 9.5%. The inflation rate decreases at a rate of 0.01% every 250,000 blocks, or about 0.5% per year. The inflation will continue decreasing at this pace until the overall inflation rate reaches 0.95%. This will take about 20.5 years from the time hard fork 16 went into effect.
 
 <a href="#Table_of_Contents_Economics">^</a>
 
-## <span id="How_are_the_new_tokens_distributed">How are the new tokens distributed?</span>
+## <span id="How_are_the_new_tokens_distributed">Как распределяются новые токены?</span>
 
 Out of the new tokens that are generated:
 
@@ -720,19 +720,19 @@ Out of the new tokens that are generated:
 
 <a href="#Table_of_Contents_Economics">^</a>
 
-## <span id="What_is_the_reward_pool">What is the reward pool?</span>
+## <span id="What_is_the_reward_pool">Что такое пул вознаграждений?</span>
 
 Every day, a fixed amount of STEEM tokens are allocated to the network reward fund, commonly called the "reward pool." These get distributed to authors and curators for posting and voting on content.
 
 <a href="#Table_of_Contents_Economics">^</a>
 
-## <span id="How_is_the_reward_pool_split_between_authors_and_curators">How is the reward pool split between authors and curators?</span>
+## <span id="How_is_the_reward_pool_split_between_authors_and_curators">Как пул делится между авторами и комментаторами?</span>
 
 Up to 25% of a post's payout is awarded to curators (the people who upvoted the post) as a reward for discovering the content. The other 75% is awarded to the author. If curators vote for a post within the first 30 minutes of it being created, a portion of their curation reward is added to the author payout. This portion is linear to the age of the post between 0 and 30 minutes. Therefore upvoting at 15 minutes old will donate half of your potential curation reward to the author.
 
 <a href="#Table_of_Contents_Economics">^</a>
 
-## <span id="Will_the_reward_pool_pay_out_more_or_less_depending_on_who_votes">Will the reward pool pay out more or less depending on who votes?</span>
+## <span id="Will_the_reward_pool_pay_out_more_or_less_depending_on_who_votes">Зависит ли размер вознаграждений от того, кто голосует?</span>
 
 There is a fixed amount of STEEM coins that gets added to the rewards pool each day. In the short term, the amount of coins that get paid out may be higher or lower depending on the amount of voting activity, but over time it will pay out the full amount of rewards regardless of who votes.
 
@@ -740,7 +740,7 @@ Votes in Steem are stake-weighted. Therefore voters with more STEEM Power have a
 
 <a href="#Table_of_Contents_Economics">^</a>
 
-## <span id="Why_do_the_earnings_for_my_post_go_up_or_down">Why do the earnings for my post go up or down?</span>
+## <span id="Why_do_the_earnings_for_my_post_go_up_or_down">Почему доходы от моего поста увеличиваются или снижаются?</span>
 
 The amount that is shown next to a post is a "**Potential Payout**". This is an estimated value of how much money the post will make based on the votes that have occurred so far. Depending on various factors, this value can go up or down until the payout window closes:
 
@@ -755,13 +755,13 @@ The amount that is shown next to a post is a "**Potential Payout**". This is an 
 
 <a href="#Table_of_Contents_Economics">^</a>
 
-## <span id="When_can_I_claim_my_rewards">When can I claim my rewards?</span>
+## <span id="When_can_I_claim_my_rewards">Как мне затребовать свои вознаграждения?</span>
 
 Posts and comments remain active for 7 days. When the period is over, you are able to claim their earned rewards. In your Wallet, click the Claim Rewards button to add the tokens to your account.
 
 <a href="#Table_of_Contents_Economics">^</a>
 
-## <span id="What_is_the_difference_between_STEEM__STEEM_Power__and_Steem_Dollars">What is the difference between STEEM, STEEM Power, and Steem Dollars?</span>
+## <span id="What_is_the_difference_between_STEEM__STEEM_Power__and_Steem_Dollars">В чем разница между STEEM, Силой Голоса и STEEM Долларом?</span>
 
 **STEEM** - STEEM is the base liquid currency token in the platform. STEEM can be powered up into STEEM Power, traded for Steem Dollars, and transferred to other accounts. It is a cryptocurrency token, similar to bitcoin.
 
@@ -771,7 +771,7 @@ Posts and comments remain active for 7 days. When the period is over, you are ab
 
 <a href="#Table_of_Contents_Economics">^</a>
 
-## <span id="What_is_delegated_STEEM_Power">What is delegated STEEM Power?</span>
+## <span id="What_is_delegated_STEEM_Power">Что такое делегирование Силы Голоса?</span>
 
 Users have the option to delegate STEEM Power to other users. When a user is delegated STEEM Power, their content votes and curation rewards are calculated as if it were their own STEEM Power. Users are not able to power down or cash out delegated STEEM Power, as it still belongs to the original owner.
 
@@ -781,13 +781,13 @@ Delegated STEEM Power shows up in a user's wallet below their actual STEEM Power
 
 <a href="#Table_of_Contents_Economics">^</a>
 
-## <span id="What_determines_the_price_of_STEEM">What determines the price of STEEM?</span>
+## <span id="What_determines_the_price_of_STEEM">Что определяет цену STEEM?</span>
 
 The price of STEEM is based on the supply and demand of the token, determined by buyers and sellers on the exchanges. It is similar to how the price of a commodity like gold is determined.
 
 <a href="#Table_of_Contents_Economics">^</a>
 
-## <span id="How_do_I_get_more_STEEM_Power">How do I get more STEEM Power?</span>
+## <span id="How_do_I_get_more_STEEM_Power">Как получить больше Силы Голоса?</span>
 
 With STEEM tokens in your wallet, click "Power Up" to turn them into STEEM Power. If you have Steem Dollars, you can convert them to STEEM from your wallet, and then power up the STEEM.
 
@@ -807,7 +807,7 @@ bitcoin can also be exchanged for STEEM on external markets such as [Poloniex](h
 
 <a href="#Table_of_Contents_Economics">^</a>
 
-## <span id="How_long_does_it_take_STEEM_or_STEEM_Power_that_I_purchased_to_show_up_in_my_account">How long does it take STEEM or STEEM Power that I purchased to show up in my account?</span>
+## <span id="How_long_does_it_take_STEEM_or_STEEM_Power_that_I_purchased_to_show_up_in_my_account">Как скоро появятся на моем счете STEEM или Сила Голоса, которые я купил?</span>
 
 Transactions on the Steem blockchain typically only take about three seconds to process, but when you are purchasing the STEEM tokens using bitcoin or some other token, then the transaction must wait for the transaction to be confirmed on the other network. This can often take several hours, and sometimes even days.
 
@@ -815,7 +815,7 @@ If you paid using bitcoin, the third party website [bitcoinfees.21.co](https://b
 
 <a href="#Table_of_Contents_Economics">^</a>
 
-## <span id="What_is_powering_up_and_down">What is powering up and down?</span>
+## <span id="What_is_powering_up_and_down">Что такое увеличение или снижение Силы Голоса?</span>
 
 **Powering up** - If you have STEEM tokens, you can Power Up to STEEM Power to get more voting influence on posts and comments. Having more STEEM Power also increases the amount of curation rewards and interest that you can earn. More SP also grants more influence on approving Steem witnesses.
 
@@ -823,7 +823,7 @@ If you paid using bitcoin, the third party website [bitcoinfees.21.co](https://b
 
 <a href="#Table_of_Contents_Economics">^</a>
 
-## <span id="What_do_the_dollar_amounts_for_pending_payouts_represent">What do the dollar amounts for pending payouts represent?</span>
+## <span id="What_do_the_dollar_amounts_for_pending_payouts_represent">Что означают суммы в долларах для предстоящих выплат?</span>
 
 The dollar amounts next to posts and comments are estimates of the potential payout that will occur when the payout period ends, based on the current voting activity and price of STEEM. These potential payout amounts may fluctuate up or down until the payout period ends.
 
@@ -833,19 +833,19 @@ The blockchain estimates the dollar value of STEEM and STEEM Power based on the 
 
 <a href="#Table_of_Contents_Economics">^</a>
 
-## <span id="Will_1_Steem_Dollar_always_be_worth__1_00_USD">Will 1 Steem Dollar always be worth $1.00 USD?</span>
+## <span id="Will_1_Steem_Dollar_always_be_worth__1_00_USD">1 STEEM Доллар всегда будет равен $1 США?</span>
 
 The market value of a Steem Dollar is dictated by the supply and demand of the token. Therefore it is possible for 1 SBD to be worth more or less than 1 USD depending on market conditions. However, the network's SBD conversion feature serves as a mechanism to hold Steem Dollars within a small margin of the value of USD.
 
 <a href="#Table_of_Contents_Economics">^</a>
 
-## <span id="How_do_Steem_Dollar_to_STEEM_conversions_work">How do Steem Dollar to STEEM conversions work?</span>
+## <span id="How_do_Steem_Dollar_to_STEEM_conversions_work">Как происходит конверсия STEEM Доллара в STEEM?</span>
 
 If you convert Steem Dollars to STEEM on the Wallet page, the blockchain will process the transaction over a period of 3.5 days. At the end of the 3.5 days, the SBD will be gone and replaced by approximately $1 USD worth of STEEM tokens. The "approximately 1 USD worth of STEEM tokens" is based on the median STEEM price over the 3.5 days, using the price feeds from the Steem witnesses. Depending on price fluctuations during the 3.5 days it is possible to end up with more or less than $1 USD worth of STEEM per SBD at the end of the conversion.
 
 <a href="#Table_of_Contents_Economics">^</a>
 
-## <span id="Is_there_a_way_for_me_to_convert_my_Steem_Dollars_to_STEEM_without_waiting_3_5_days">Is there a way for me to convert my Steem Dollars to STEEM without waiting 3.5 days?</span>
+## <span id="Is_there_a_way_for_me_to_convert_my_Steem_Dollars_to_STEEM_without_waiting_3_5_days">Есть ли возможность не ждать 3,5 дня, чтобы конвертировать мои STEEM Доллары в STEEM?</span>
 
 You can exchange them. Visit the internal Market, found in the main menu. There you can exchange your SBD for STEEM in real-time at whatever the current market price is.
 
@@ -853,7 +853,7 @@ Depending on market conditions, users may get more STEEM for their SBD by tradin
 
 <a href="#Table_of_Contents_Economics">^</a>
 
-## <span id="What_can_I_do_with_my_STEEM_tokens">What can I do with my STEEM tokens?</span>
+## <span id="What_can_I_do_with_my_STEEM_tokens">Что я могу сделать со своими токенами STEEM?</span>
 
 - "Power Up" to STEEM Power
 - Exchange for SBD in the internal market
@@ -862,7 +862,7 @@ Depending on market conditions, users may get more STEEM for their SBD by tradin
 
 <a href="#Table_of_Contents_Economics">^</a>
 
-## <span id="What_can_I_do_with_my_SBD_tokens">What can I do with my SBD tokens?</span>
+## <span id="What_can_I_do_with_my_SBD_tokens">Что я могу сделать со своими токенами SBD?</span>
 
 - Hold them as a stable-value token
 - Convert to STEEM via your wallet (takes 3.5 days)
@@ -872,19 +872,19 @@ Depending on market conditions, users may get more STEEM for their SBD by tradin
 
 <a href="#Table_of_Contents_Economics">^</a>
 
-## <span id="What_is_a_MVEST">What is a MVEST?</span>
+## <span id="What_is_a_MVEST">Что такое MVEST?</span>
 
 A VEST is a unit of measurement for STEEM Power. A MVEST is one million VESTS. The amount of STEEM Power in one MVEST can be found on [steemd.com](https://steemd.com/) as `steem_per_mvests`.
 
 <a href="#Table_of_Contents_Economics">^</a>
 
-## <span id="Can_I_sell_goods_and_services_on_Steemit">Can I sell goods and services on Steemit?</span>
+## <span id="Can_I_sell_goods_and_services_on_Steemit">Можно ли продавать товары и услуги на Steemit?</span>
 
 Other than making a post and making sales manually, there is no interface for selling items directly on Steemit.com. You can list goods on the third-party website [PeerHub.com](https://www.peerhub.com). Through PeerHub, you can accept payment in Steem Dollars or STEEM, and you have the option to advertise your items through Steemit posts.
 
 <a href="#Table_of_Contents_Economics">^</a>
 
-## <span id="How_can_I_withdraw_my_STEEM_or_SBD_coins">How can I withdraw my STEEM or SBD coins?</span>
+## <span id="How_can_I_withdraw_my_STEEM_or_SBD_coins">Как я могу вывести свои монеты STEEEM или SBD?</span>
 
 STEEM and SBD tokens are readily tradable to bitcoin, which is readily tradable to the local currency of your choice. There is a link to "Sell" your STEEM and SBD tokens in your wallet, which uses the [BlockTrades](https://blocktrades.us/) interface.
 
@@ -910,25 +910,25 @@ https://steemit.com/steemit/@shapeshiftio/official-announcement-shapeshift-has-a
 
 <a href="#Table_of_Contents_Economics">^</a>
 
-## <span id="Will_I_get_a_1099_from_Steemit">Will I get a 1099 from Steemit?</span>
+## <span id="Will_I_get_a_1099_from_Steemit">Можно ли получить 1099 от Steemit?</span>
 
 No, you are not being paid by Steemit. The Steem network rewards you. It is your responsibility to determine what, if any, taxes apply to the transactions you make. Further, it is your responsibility to report and remit the correct tax to the appropriate tax authority. By creating an account, you agree that Steemit Inc is not responsible for determining whether taxes apply to your Steem transactions or for collecting, reporting, withholding, or remitting any taxes arising from any Steem transactions.
 
 <a href="#Table_of_Contents_Economics">^</a>
 
-## <span id="How_much_are_the_transaction_fees_for_sending_tokens_to_other_users">How much are the transaction fees for sending tokens to other users?</span>
+## <span id="How_much_are_the_transaction_fees_for_sending_tokens_to_other_users">Каков размер комиссионных за отправку токенов другим пользователям?</span>
 
 There are never any fees for transfers within the Steem network. However, if you transfer Steem to an exchange and convert it to another currency, you will incur a small fee from the exchange.
 
 <a href="#Table_of_Contents_Economics">^</a>
 
-## <span id="Are_there_fees_for_Powering_Up__Powering_Down__trading_on_the_internal_market__or_converting_SBD_to_STEEM">Are there fees for Powering Up, Powering Down, trading on the internal market, or converting SBD to STEEM?</span>
+## <span id="Are_there_fees_for_Powering_Up__Powering_Down__trading_on_the_internal_market__or_converting_SBD_to_STEEM">Есть ли комиссионные за увеличение или снижение Силы Голоса, за торговлю на внутреннем рынке или за конвертацию SBD в STEEM?</span>
 
 No. None of these actions incur any fees.
 
 <a href="#Table_of_Contents_Economics">^</a>
 
-## <span id="How_long_does_it_take_to_transfer_STEEM_or_SBD_tokens_between_users">How long does it take to transfer STEEM or SBD tokens between users?</span>
+## <span id="How_long_does_it_take_to_transfer_STEEM_or_SBD_tokens_between_users">Сколько времени потребуется для передачи токенов STEEM или SBD между пользователями?</span>
 
 A transfer of tokens between accounts typically takes 3 seconds. This is far faster than most blockchain tokens.
 

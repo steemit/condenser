@@ -113,7 +113,7 @@
 
 - [Что такое моя сила голоса?](#What_is_my_voting_power)
 - [Сколько я могу голосовать до полного расхода моей силы голоса?](#How_many_times_can_I_vote_without_depleting_my_voting_power)
-- [Can I vote with less than 100% of my voting strength?](#Can_I_vote_with_less_than_100__of_my_voting_strength)
+- [Могу ли я голосовать с силой голоса меньше 100%?](#Can_I_vote_with_less_than_100__of_my_voting_strength)
 - [Where can I check my voting power?](#Where_can_I_check_my_voting_power)
 - [What determines how much of the curation reward goes to the author versus curators?](#What_determines_how_much_of_the_curation_reward_goes_to_the_author_versus_curators)
 - [Can I get curation rewards for upvoting comments?](#Can_I_get_curation_rewards_for_upvoting_comments)

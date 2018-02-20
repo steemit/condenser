@@ -103,11 +103,11 @@
 - [Что я могу сделать со своими токенами SBD?](#What_can_I_do_with_my_SBD_tokens)
 - [Что такое MVEST?](#What_is_a_MVEST)
 - [Можно ли продавать товары и услуги на Steemit?](#Can_I_sell_goods_and_services_on_Steemit)
-- [How can I withdraw my STEEM or SBD coins?](#How_can_I_withdraw_my_STEEM_or_SBD_coins)
-- [Will I get a 1099 from Steemit?](#Will_I_get_a_1099_from_Steemit)
-- [How much are the transaction fees for sending tokens to other users?](#How_much_are_the_transaction_fees_for_sending_tokens_to_other_users)
-- [Are there fees for Powering Up, Powering Down, trading on the internal market, or converting SBD to STEEM?](#Are_there_fees_for_Powering_Up__Powering_Down__trading_on_the_internal_market__or_converting_SBD_to_STEEM)
-- [How long does it take to transfer STEEM or SBD tokens between users?](#How_long_does_it_take_to_transfer_STEEM_or_SBD_tokens_between_users)
+- [Как я могу вывести свои монеты STEEEM или SBD?](#How_can_I_withdraw_my_STEEM_or_SBD_coins)
+- [Можно ли получить 1099 от Steemit?](#Will_I_get_a_1099_from_Steemit)
+- [Каков размер комиссионных за отправку токенов другим пользователям?](#How_much_are_the_transaction_fees_for_sending_tokens_to_other_users)
+- [Есть ли комиссионные за увеличение или снижение Силы Голоса, за торговлю на внутреннем рынке или за конвертацию SBD в STEEM?](#Are_there_fees_for_Powering_Up__Powering_Down__trading_on_the_internal_market__or_converting_SBD_to_STEEM)
+- [Сколько времени потребуется для передачи токенов STEEM или SBD между пользователями?](#How_long_does_it_take_to_transfer_STEEM_or_SBD_tokens_between_users)
 
 ### <span id="Table_of_Contents_Voting_and_Curating">Голосование и курирование</span>
 
@@ -274,7 +274,7 @@ It is best to have realistic expectations, without focusing on rewards when you 
 
 # Аккаунты
 
-## <span id="How_do_I_create_an_account">How do I create an account?</span>
+## <span id="How_do_I_create_an_account">Как создать аккаунт?</span>
 
 Click on the "Sign Up" link at the top of Steemit.com to get started.
 
@@ -284,13 +284,13 @@ After you receive notification that your account is approved, click on the link 
 
 <a href="#Table_of_Contents_Accounts">^</a>
 
-## <span id="What_information_do_I_need_to_provide_in_order_to_create_an_account">What information do I need to provide in order to create an account?</span>
+## <span id="What_information_do_I_need_to_provide_in_order_to_create_an_account">Какую информацию нужно предоставить для того, чтобы создать аккаунт?</span>
 
 You will need to provide your email address and phone number.
 
 <a href="#Table_of_Contents_Accounts">^</a>
 
-## <span id="How_long_does_the_account_approval_process_take">How long does the account approval process take?</span>
+## <span id="How_long_does_the_account_approval_process_take">Сколько времени занимает процесс утверждения аккаунта?</span>
 
 Most accounts are approved within 24 hours. Some may take up to a week.
 
@@ -298,19 +298,19 @@ If your account has not been approved after one week, please ask for help in the
 
 <a href="#Table_of_Contents_Accounts">^</a>
 
-## <span id="Why_do_I_need_to_provide_my_email_and_phone_number">Why do I need to provide my email and phone number?</span>
+## <span id="Why_do_I_need_to_provide_my_email_and_phone_number">Зачем нужно указывать мой адрес электронной почты и номер телефона?</span>
 
 To create an account on the blockchain, it costs STEEM tokens. When you create an account through Steemit.com, Steemit Inc. is supplying the tokens to pay the account creation fee. In order to prevent users from abusing the paid-for signup and creating multiple accounts, we need to be able to verify that each user is only signing up for one account.
 
 <a href="#Table_of_Contents_Accounts">^</a>
 
-## <span id="Can_I_create_a_Steem_account_without_an_email_and_phone_number">Can I create a Steem account without an email and phone number?</span>
+## <span id="Can_I_create_a_Steem_account_without_an_email_and_phone_number">Могу ли я создать аккаунт на Steem без указания электронной почты и номера телефона?</span>
 
 The only way to have an account created via Steemit.com is to supply your email and phone number. Because Steem is an open and permissionless network, there are other ways to create a Steem account. Any Steem blockchain account can be used on Steemit.com
 
 <a href="#Table_of_Contents_Accounts">^</a>
 
-## <span id="What_are_other_ways_to_create_an_account_on_the_blockchain_besides_using_Steemit_com">What are other ways to create an account on the blockchain besides using Steemit.com?</span>
+## <span id="What_are_other_ways_to_create_an_account_on_the_blockchain_besides_using_Steemit_com">Каковы другие способы для создания аккаунта на блокчейне кроме Steemit.com?</span>
 
 If you are willing to pay your own signup fee, then there are other ways to create a new account on the blockchain.
 
@@ -324,25 +324,25 @@ There is a third-party tool called [BlockTrades](https://steemit.com/blocktrades
 
 <a href="#Table_of_Contents_Accounts">^</a>
 
-## <span id="It_is_not_letting_me_create_an_account_with_my_phone_number__What_should_I_do">It is not letting me create an account with my phone number. What should I do?</span>
+## <span id="It_is_not_letting_me_create_an_account_with_my_phone_number__What_should_I_do">It is not letting me create an account with my phone number. Что мне делать?</span>
 
 Ask for help in the [#help](https://steemit.chat/channel/help) channel on [steemit.chat](https://steemit.chat/home).
 
 <a href="#Table_of_Contents_Accounts">^</a>
 
-## <span id="What_happens_if_my_email_or_phone_number_changes">What happens if my email or phone number changes?</span>
+## <span id="What_happens_if_my_email_or_phone_number_changes">Что произойдет, если изменится мой адрес электронной почты или номер телефона?</span>
 
 Currently there is no way to change the email or phone number that is linked to your account. Though once your account is created, you can continue to use it even if the email or phone number that is linked to the account has changed.
 
 <a href="#Table_of_Contents_Accounts">^</a>
 
-## <span id="Am_I_allowed_to_create_more_than_one_account">Am I allowed to create more than one account?</span>
+## <span id="Am_I_allowed_to_create_more_than_one_account">Разрешено ли создавать больше одного аккаунта?</span>
 
 Each user is allowed only one paid-for account created via Steemit.com, however users are allowed to create multiple accounts on the blockchain. Creating additional accounts on the blockchain requires users to pay their own account creation fee for any additional accounts.
 
 <a href="#Table_of_Contents_Accounts">^</a>
 
-## <span id="Can_I_delete_or_deactivate_my_account">Can I delete or deactivate my account?</span>
+## <span id="Can_I_delete_or_deactivate_my_account">Могу ли я удалить или отключить мой аккаунт?</span>
 
 Accounts can not be deactivated or deleted. The account along with all of its activity is permanently stored in the blockchain.
 
@@ -350,13 +350,13 @@ Accounts can not be deactivated or deleted. The account along with all of its ac
 
 # Сообщество
 
-## <span id="Is_there_an_Etiquette_Guide_for_Steemit">Is there an Etiquette Guide for Steemit?</span>
+## <span id="Is_there_an_Etiquette_Guide_for_Steemit">Есть ли руководство по этикету для Steemit?</span>
 
 There are no official rules for participating on Steemit.com, but one of the users @thecryptofiend has created an [Etiquette Guide](https://steemit.com/steemit/@thecryptofiend/the-complete-steemit-etiquette-guide-revision-2-0) for the community. While it is not required to follow the suggestions in the guide, they are standards that many users in the community choose to follow.
 
 <a href="#Table_of_Contents_Community">^</a>
 
-## <span id="Am_I_required_to_verify_my_identity">Am I required to verify my identity?</span>
+## <span id="Am_I_required_to_verify_my_identity">Должен ли я удостоверить мою личность?</span>
 
 Verification is a process where users give evidence to show that they are the person that they claim to be. This is to reduce fraud and people impersonating known figures. If you would like to remain anonymous, that is perfectly fine. However if you claim to be someone specific, the community may expect that you verify you are who you say you are.
 
@@ -368,13 +368,13 @@ Many users also like to post a photo or a video which shows them holding up a sh
 
 # Навигация по сайту
 
-## <span id="How_do_I_upvote_a_post_or_comment">How do I upvote a post or comment?</span>
+## <span id="How_do_I_upvote_a_post_or_comment">Как проголосовать за пост или комментарий?</span>
 
 To upvote a post or comment, click on the "upvote" icon at the bottom of the post/comment. <icon name="chevron-up-circle" />
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 
-## <span id="What_do_the_Home__New__Hot__Trending__and_Promoted_links_show">What do the Home, New, Hot, Trending, and Promoted links show?</span>
+## <span id="What_do_the_Home__New__Hot__Trending__and_Promoted_links_show">Куда ведут ссылки «популярное», «новое», «актуальное», «продвигаемое»?</span>
 
 These are various ways to sort Steem posts.
 
@@ -390,7 +390,7 @@ These are various ways to sort Steem posts.
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 
-## <span id="What_information_is_available_in_my_account_menu">What information is available in my account menu?</span>
+## <span id="What_information_is_available_in_my_account_menu">Какая информация доступна в меню моего аккаунта?</span>
 
 You can get to your account menu by clicking on the avatar icon in the top-right corner of a Steemit.com page.
 
@@ -412,7 +412,7 @@ You can get to your account menu by clicking on the avatar icon in the top-right
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 
-## <span id="How_do_I_see_my_recent_rewards">How do I see my recent rewards?</span>
+## <span id="How_do_I_see_my_recent_rewards">Как увидеть мои последние вознагражденя?</span>
 
 The Rewards drop-down menu is available on your profile/blog page. Click it and there are two links:
 
@@ -424,13 +424,13 @@ You can also view the same information for other users by visiting their profile
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 
-## <span id="What_information_is_shown_in_my_wallet">What information is shown in my wallet?</span>
+## <span id="What_information_is_shown_in_my_wallet">Какая информация отображается в моем кошельке?</span>
 
 Your wallet shows how many STEEM and Steem Dollar tokens you have in your account. It shows how much STEEM Power it has, and how much SP is delegated. It also shows how many of your STEEM and Steem Dollar tokens are being held in the savings account, which is a balance that is subject to 3 day withdraw waiting period. The wallet page shows any the progress of any Steem Dollar to STEEM conversions as well as the status of a power down. It also shows an estimated value of all the tokens in your account, based on the recent market prices of STEEM and SBD.
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 
-## <span id="How_do_I_transfer_my_STEEM_or_Steem_Dollars_into_savings">How do I transfer my STEEM or Steem Dollars into savings?</span>
+## <span id="How_do_I_transfer_my_STEEM_or_Steem_Dollars_into_savings">Как мне перевести свои STEEM или Steem Dollars на сберегательный счет?</span>
 
 Your savings balance is STEEM and SBD tokens that are subject to 3 day withdraw waiting period. This is an extra security measure in case your account credentials are compromised. To transfer STEEM or SBD tokens into savings, click on the drop-down arrow next to STEEM or STEEM DOLLARS in your wallet, and select "Transfer to Savings".
 

@@ -1,6 +1,6 @@
 .Memo--badActor {
   .bad-actor-caution {
-    color: $color-red;
+    color: darken($color-red, 20%);
     font-size: 75%;
     font-weight: bold;
     text-transform: uppercase;

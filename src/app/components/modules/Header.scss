@@ -241,14 +241,14 @@ ul > li.Header__logo > a {
   }
   &--desktop {
     display: none;
-    width: 120px;
-    height: auto;
+    width: 144px;
+    height: 38px;
     @media only screen and (min-width: 400px) {
       display: block;
     }
     @include MQ(M) {
       width: 144px;
-      height: auto;
+      height: 38px;
     }
   }
 

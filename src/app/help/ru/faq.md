@@ -119,8 +119,8 @@
 - [Могу ли я получать кураторские вознаграждения, голосуя за комментарии?](#Can_I_get_curation_rewards_for_upvoting_comments)
 - [Получу ли я кураторские вознаграждения, выставляя флаги постам или комментариям?](#Do_I_get_curation_rewards_for_downvoting_posts_or_comments)
 - [Что такое кураторские "паровозы"?](#What_are_curation_trails)
-- [Why don't my upvotes have an effect on a post's rewards?](#Why_don_t_my_upvotes_have_an_effect_on_a_post_s_rewards)
-- [Is there a way to make my votes count for more?](#Is_there_a_way_to_make_my_votes_count_for_more)
+- [Почему мои голоса не влияют на выплаты за пост?](#Why_don_t_my_upvotes_have_an_effect_on_a_post_s_rewards)
+- [Есть ли способ сделать мои голоса весомее?](#Is_there_a_way_to_make_my_votes_count_for_more)
 - [What are the valid reasons for downvoting?](#What_are_the_valid_reasons_for_downvoting)
 - [Does a downvote mean that I did something wrong?](#Does_a_downvote_mean_that_I_did_something_wrong)
 - [Will a downvote hurt my reputation?](#Will_a_downvote_hurt_my_reputation)
@@ -833,7 +833,7 @@ The blockchain estimates the dollar value of STEEM and STEEM Power based on the 
 
 <a href="#Table_of_Contents_Economics">^</a>
 
-## <span id="Will_1_Steem_Dollar_always_be_worth__1_00_USD">1 STEEM Доллар всегда будет равен $1 США?</span>
+## <span id="Will_1_Steem_Dollar_always_be_worth__1_00_USD">Будет ли 1 STEEM Доллар всегда равен $1 США?</span>
 
 The market value of a Steem Dollar is dictated by the supply and demand of the token. Therefore it is possible for 1 SBD to be worth more or less than 1 USD depending on market conditions. However, the network's SBD conversion feature serves as a mechanism to hold Steem Dollars within a small margin of the value of USD.
 
@@ -936,7 +936,7 @@ A transfer of tokens between accounts typically takes 3 seconds. This is far fas
 
 # Голосование и курирование
 
-## <span id="What_is_my_voting_power">What is my voting power?</span>
+## <span id="What_is_my_voting_power">Что такое моя сила голоса?</span>
 
 Voting power is like an "energy bar" in a computer game that goes down a little bit every time you vote. You start out with 100% voting power. Every time you vote, you will use a small amount of your voting power.
 
@@ -944,13 +944,13 @@ As you use more of your voting power, your votes will carry less influence. A vo
 
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
 
-## <span id="How_many_times_can_I_vote_without_depleting_my_voting_power">How many times can I vote without depleting my voting power?</span>
+## <span id="How_many_times_can_I_vote_without_depleting_my_voting_power">Сколько я могу голосовать до полного расхода моей силы голоса?</span>
 
 Every 100% vote you cast will use 2% of your remaining voting power. Your voting power will recharge by 20% each day. You can vote more than 10 times per day, but each vote will be worth less, and it will take longer to reach full voting power again.
 
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
 
-## <span id="Can_I_vote_with_less_than_100__of_my_voting_strength">Can I vote with less than 100% of my voting strength?</span>
+## <span id="Can_I_vote_with_less_than_100__of_my_voting_strength">Могу ли я голосовать с силой голоса меньше 100%?</span>
 
 New users can only upvote and downvote with 100% voting strength.
 
@@ -962,13 +962,13 @@ Upvotes and downvotes use the same amount of voting power.
 
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
 
-## <span id="Where_can_I_check_my_voting_power">Where can I check my voting power?</span>
+## <span id="Where_can_I_check_my_voting_power">Где можно проверить мою силу голоса?</span>
 
 You can view your current voting power using third party tools such as https://steemd.com/@youraccount or https://steemstats.com.
 
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
 
-## <span id="What_determines_how_much_of_the_curation_reward_goes_to_the_author_versus_curators">What determines how much of the curation reward goes to the author versus curators?</span>
+## <span id="What_determines_how_much_of_the_curation_reward_goes_to_the_author_versus_curators">Что определяет, какая часть кураторского вознаграждения идет автору, а какая - куратору?</span>
 
 The rewards are allocated so that 75% of the payout goes to the author of the post/comment, and 25% goes to the curator.
 
@@ -982,25 +982,25 @@ Of the 25% that goes to the curator, that portion will be split between the auth
 
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
 
-## <span id="Can_I_get_curation_rewards_for_upvoting_comments">Can I get curation rewards for upvoting comments?</span>
+## <span id="Can_I_get_curation_rewards_for_upvoting_comments">Могу ли я получать кураторские вознаграждения, голосуя за комментарии?</span>
 
 Yes. You can earn curation rewards from upvoting both posts and comments!
 
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
 
-## <span id="Do_I_get_curation_rewards_for_downvoting_posts_or_comments">Do I get curation rewards for downvoting posts or comments?</span>
+## <span id="Do_I_get_curation_rewards_for_downvoting_posts_or_comments">Получу ли я кураторские вознаграждения, выставляя флаги постам или комментариям?</span>
 
 No. Since downvoting reduces the rewards on a post/comment, it does not earn curation rewards.
 
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
 
-## <span id="What_are_curation_trails">What are curation trails?</span>
+## <span id="What_are_curation_trails">Что такое кураторские "паровозы"?</span>
 
 Some users decide to use third party applications such as [Streemian](https://streemian.com/) to automatically cast votes. Users can automatically vote for the same posts and comments that other users does. Typically they will set this up to follow the votes of users who are good at curating. When a user has other users automatically voting for the same content that they do, the people that automatically vote after them are called their "curation trail".
 
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
 
-## <span id="Why_don_t_my_upvotes_have_an_effect_on_a_post_s_rewards">Why don't my upvotes have an effect on a post's rewards?</span>
+## <span id="Why_don_t_my_upvotes_have_an_effect_on_a_post_s_rewards">Почему мои голоса не влияют на выплаты за пост?</span>
 
 A user with more SP is going to have a larger influence on the rewards than users with less SP. One vote from a user with a lot of SP can often have more of an effect than 100 votes from users with a small amount of SP.
 

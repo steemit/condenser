@@ -121,9 +121,9 @@
 - [Что такое кураторские "паровозы"?](#What_are_curation_trails)
 - [Почему мои голоса не влияют на выплаты за пост?](#Why_don_t_my_upvotes_have_an_effect_on_a_post_s_rewards)
 - [Есть ли способ сделать мои голоса весомее?](#Is_there_a_way_to_make_my_votes_count_for_more)
-- [Какие есть причины для тог, чтобы поставить флаг?](#What_are_the_valid_reasons_for_downvoting)
-- [Означает ли флаг, что я делаю что-то неправильное?](#Does_a_downvote_mean_that_I_did_something_wrong)
-- [Как флаг влияет на мою репутацию?](#Will_a_downvote_hurt_my_reputation)
+- [Какие есть причины для того, чтобы проголосовать против?](#What_are_the_valid_reasons_for_downvoting)
+- [Означает ли голос против, что я делаю что-то неправильное?](#Does_a_downvote_mean_that_I_did_something_wrong)
+- [Как голосование против влияет на мою репутацию?](#Will_a_downvote_hurt_my_reputation)
 - [Какая разница между голосом против и флагом?](#What_is_the_difference_between_a_downvote_and_a_flag)
 
 ### <span id="Table_of_Contents_Plagiarism__Spam__and_Abuse">Плагиат, спам и злоупотребление</span>
@@ -131,9 +131,9 @@
 - [Что считается спамом или злоупотреблением?](#What_is_considered_spam_or_abuse)
 - [Каковы правила Steemit в отношении плагиата?](#What_are_Steemit_s_policies_on_plagiarism)
 - [Будет ли правильно использовать случайные картинки из интернета?](#Is_it_okay_to_use_random_pictures_from_the_internet)
-- [What is Steemcleaners?](#What_is_Steemcleaners)
-- [What is @cheetah?](#What_is__cheetah)
-- [Where do I report a post or comment that contains plagiarism, spam, or abuse?](#Where_do_I_report_a_post_or_comment_that_contains_plagiarism__spam__or_abuse)
+- [Что такое Steemcleaners?](#What_is_Steemcleaners)
+- [Что такое @cheetah?](#What_is__cheetah)
+- [Где можно сообщить о том, что пост или комментарий содержит плагиат, спам или злоупотребление?](#Where_do_I_report_a_post_or_comment_that_contains_plagiarism__spam__or_abuse)
 
 ### <span id="Table_of_Contents_Reputation">Репутация</span>
 
@@ -1008,7 +1008,7 @@ Even though your vote may not have an immediate effect, when it gets added in al
 
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
 
-## <span id="Is_there_a_way_to_make_my_votes_count_for_more">Is there a way to make my votes count for more?</span>
+## <span id="Is_there_a_way_to_make_my_votes_count_for_more">Есть ли способ сделать мои голоса весомее?</span>
 
 Yes. The more STEEM Power you have, the more influence your votes will have.
 
@@ -1016,25 +1016,25 @@ The platform does not require that anybody purchase SP in order to participate, 
 
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
 
-## <span id="What_are_the_valid_reasons_for_downvoting">What are the valid reasons for downvoting?</span>
+## <span id="What_are_the_valid_reasons_for_downvoting">Какие есть причины для того, чтобы проголосовать против?</span>
 
 Users are allowed to downvote for any reason that they want. There are many users in the community who recommend only using the downvote on posts that are abusive. It is up to you if you want to follow this etiquette.
 
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
 
-## <span id="Does_a_downvote_mean_that_I_did_something_wrong">Does a downvote mean that I did something wrong?</span>
+## <span id="Does_a_downvote_mean_that_I_did_something_wrong">Означает ли голос против, что я делаю что-то неправильное?</span>
 
 Just because you received a downvote does not mean that you did something wrong. The downvoting person may have just been voting to reallocate the rewards in a way that they felt was more beneficial to the other active posts in the platform. Often users will leave a comment explaining why they downvoted, but sometimes they might not. If they left a reason, it is up to you to determine if you did anything wrong, and if there is anything you want to change.
 
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
 
-## <span id="Will_a_downvote_hurt_my_reputation">Will a downvote hurt my reputation?</span>
+## <span id="Will_a_downvote_hurt_my_reputation">Как голосование против влияет на мою репутацию?</span>
 
 Not necessarily. See: [What causes my reputation score to go down?](#What_causes_my_reputation_score_to_go_down)
 
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
 
-## <span id="What_is_the_difference_between_a_downvote_and_a_flag">What is the difference between a downvote and a flag?</span>
+## <span id="What_is_the_difference_between_a_downvote_and_a_flag">Какая разница между голосом против и флагом?</span>
 
 With the current implementation, there is no difference between a downvote and a flag. They are treated the same at the blockchain level.
 
@@ -1060,13 +1060,13 @@ With the current implementation, there is no difference between a downvote and a
 
 <a href="#Table_of_Contents_Plagiarism__Spam__and_Abuse">^</a>
 
-## <span id="What_are_Steemit_s_policies_on_plagiarism">What are Steemit’s policies on plagiarism?</span>
+## <span id="What_are_Steemit_s_policies_on_plagiarism">Каковы правила Steemit в отношении плагиата?</span>
 
 If you are posting plagiarized or copied content, you can get in legal trouble for violating copyright laws. Plagiarized posts and spam are seen as abuse and will be downvoted by community members. If you are posting or using someone else’s content, you must ensure that you have the rights to use the content, and properly reference the sources where you got the material from.
 
 <a href="#Table_of_Contents_Plagiarism__Spam__and_Abuse">^</a>
 
-## <span id="Is_it_okay_to_use_random_pictures_from_the_internet">Is it okay to use random pictures from the internet?</span>
+## <span id="Is_it_okay_to_use_random_pictures_from_the_internet">Будет ли правильно использовать случайные картинки из интернета?</span>
 
 If you are using an image that is not your own, make sure you are allowed to use the image, and cite the source of the image.
 
@@ -1076,13 +1076,13 @@ Here is a post from @mindover that has links to many websites that have images y
 
 <a href="#Table_of_Contents_Plagiarism__Spam__and_Abuse">^</a>
 
-## <span id="What_is_Steemcleaners">What is Steemcleaners?</span>
+## <span id="What_is_Steemcleaners">Что такое Steemcleaners?</span>
 
 Steemcleaners are a group of Steemians concerned with plagiarism, copy/paste, spam, scams and other forms of abuse on Steemit. https://steemit.com/steemcleaners/@steemcleaners/announcing-steemcleaners-the-steemit-abuse-fighting-team
 
 <a href="#Table_of_Contents_Plagiarism__Spam__and_Abuse">^</a>
 
-## <span id="What_is__cheetah">What is @cheetah?</span>
+## <span id="What_is__cheetah">Что такое @cheetah?</span>
 
 @cheetah is a bot developed by @anyx that scours Steemit for copy/pasted content. Cheetah will not downvote copied content, but it alerts other users to look into it further.
 
@@ -1092,7 +1092,7 @@ More information on the @cheetah bot can be found in this post: https://steemit.
 
 <a href="#Table_of_Contents_Plagiarism__Spam__and_Abuse">^</a>
 
-## <span id="Where_do_I_report_a_post_or_comment_that_contains_plagiarism__spam__or_abuse">Where do I report a post or comment that contains plagiarism, spam, or abuse?</span>
+## <span id="Where_do_I_report_a_post_or_comment_that_contains_plagiarism__spam__or_abuse">Где можно сообщить о том, что пост или комментарий содержит плагиат, спам или злоупотребление?</span>
 
 You can report any abusive content to the [#steemitabuse](https://steemit.chat/channel/steemitabuse) channel on [steemit.chat](https://steemit.chat/home).
 
@@ -1100,7 +1100,7 @@ You can report any abusive content to the [#steemitabuse](https://steemit.chat/c
 
 # Репутация
 
-## <span id="What_is_Reputation">What is Reputation?</span>
+## <span id="What_is_Reputation">Что такое репутация?</span>
 
 Every user has a reputation score next to their name. The reputation score is one way Steemit measures the amount of value you have brought to the community. It is also a mechanism that is designed to help reduce abuse of the Steemit platform.
 

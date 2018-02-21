@@ -21,8 +21,8 @@
         &:hover, &:focus {
             @include themify($themes) {
                 color: themed('textColorAccentHover');  
-            } 
             }
+        }
         transition: all 0.3s ease-in-out;
         }
     }
@@ -50,12 +50,33 @@ li.Header__userpic {
 
 div.Header__top
 {
-    li.Header__hamburger.toggle-menu {
+    li.TopRightMenu__hamburger.toggle-menu {
         &.toggle-menu {
             padding-left: 0.25rem;
         }
         > a {
             padding: 14px 0 14px 14px;
         }
+    }
+}
+
+
+.TopRightMenu__hamburger {
+    @include hamburger();
+    position: relative;
+    &::after {
+      transition: 0.2s all ease-in-out;
+      @include themify($themes) {
+        background: themed('textColorPrimary');
+        box-shadow: 0 7px 0 themed('textColorPrimary'), 0 14px 0 themed('textColorPrimary');
+      }
+    }
+    &:hover {
+      &::after {
+        @include themify($themes) {
+          background: themed('textColorAccent');
+          box-shadow: 0 7px 0 themed('textColorAccent'), 0 14px 0 themed('textColorAccent');
+        }
+      }
     }
 }

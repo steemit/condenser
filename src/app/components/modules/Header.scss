@@ -16,26 +16,7 @@
     li > a {
         padding: 0
     }
-    .hamburger {
-      @include hamburger();
-      position: relative;
-      top: 2px;
-      &::after {
-        transition: 0.2s all ease-in-out;
-        @include themify($themes) {
-          background: themed('textColorPrimary');
-          box-shadow: 0 7px 0 themed('textColorPrimary'), 0 14px 0 themed('textColorPrimary');
-        }
-      }
-      &:hover {
-        &::after {
-          @include themify($themes) {
-            background: themed('textColorAccent');
-            box-shadow: 0 7px 0 themed('textColorAccent'), 0 14px 0 themed('textColorAccent');
-          }
-        }
-      }
-    }
+
   }
 
   li
@@ -46,6 +27,7 @@
   }
 }
 
+/*
 .Header__top {
   // background-color: $white;
   padding: 0.25rem 0;
@@ -62,6 +44,7 @@
       }
   }
 }
+*/
 
 .Header__search {
     .input-group {

@@ -139,7 +139,7 @@ function TopRightMenu({
                     )}
                 </LinkWithDropdown>
                 {toggleOffCanvasMenu && (
-                    <li className="toggle-menu Header__hamburger">
+                    <li className="toggle-menu TopRightMenu__hamburger">
                         <a href="#" onClick={toggleOffCanvasMenu}>
                             <span className="hamburger" />
                         </a>

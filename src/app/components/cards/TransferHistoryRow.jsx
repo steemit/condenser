@@ -1,11 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
+import tt from 'counterpart';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 // import Icon from 'app/components/elements/Icon';
 import Memo from 'app/components/elements/Memo';
 import { numberWithCommas, vestsToSp } from 'app/utils/StateFunctions';
-import tt from 'counterpart';
+import BadActorList from 'app/utils/BadActorList';
 
 class TransferHistoryRow extends React.Component {
     render() {
@@ -200,7 +201,13 @@ class TransferHistoryRow extends React.Component {
                     className="show-for-medium"
                     style={{ maxWidth: '40rem', wordWrap: 'break-word' }}
                 >
-                    <Memo text={data.memo} username={context} />
+                    <Memo
+                        text={data.memo}
+                        username={context}
+                        isFromBadActor={
+                            BadActorList.indexOf(other_account) > -1
+                        }
+                    />
                 </td>
             </tr>
         );

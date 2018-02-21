@@ -183,6 +183,29 @@ class Header extends React.Component {
             </Link>
         ) : null;
 
+        const sortOrderToLink = (so, topic, account) => {
+            if (so === 'home') return '/@' + account + '/feed';
+            if (topic) return `/${so}/${topic}`;
+            return `/${so}`;
+        };
+        const sort_orders_horizontal = [
+            ['trending', tt('main_menu.trending')],
+            ['created', tt('g.new')],
+            ['hot', tt('main_menu.hot')],
+            ['promoted', tt('g.promoted')],
+        ];
+        // if (current_account_name) sort_orders_horizontal.unshift(['home', tt('header_jsx.home')]);
+        const sort_order_menu_horizontal = sort_orders_horizontal.map(so => {
+            let active = so[0] === sort_order;
+            if (so[0] === 'home' && sort_order === 'home' && !home_account)
+                active = false;
+            return {
+                link: sortOrderToLink(so[0], topic, current_account_name),
+                value: so[1],
+                active,
+            };
+        });
+
         return (
             <header className="Header noPrint">
                 <div className="Header__top header">
@@ -232,12 +255,10 @@ class Header extends React.Component {
                                         </span>
                                     </Link>
                                 </li>
-                                {/*
                                 <HorizontalMenu
                                     className="show-for-large Header__sort"
                                     items={sort_order_menu_horizontal}
                                 />
-                                */}
                                 <li className={'hide-for-large Header__search'}>
                                     <a
                                         href="/static/search.html"

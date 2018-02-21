@@ -14,8 +14,12 @@ ul.Topics {
   }
 }
 
-select.Topics {
-  margin-bottom: 1rem !important;
+.react-select {
+    border-bottom: 1px solid #999;
+    min-width: 150px;
+    .Select-control {
+        border: none;
+    }
 }
 
 .Topics__title {

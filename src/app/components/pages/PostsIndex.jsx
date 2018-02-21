@@ -210,10 +210,11 @@ class PostsIndex extends React.Component {
                                 <SortOrder
                                     sortOrder={this.props.sortOrder}
                                     topic={this.props.topic}
+                                    current={category}
                                 />
                             )}
-                            <ArticleLayoutSelector />
                         </div>
+                        <ArticleLayoutSelector />
                     </div>
                     <hr className="articles__hr" />
                     {!fetching && (posts && !posts.size) ? (

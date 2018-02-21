@@ -5,7 +5,7 @@ import {connect} from 'react-redux'
 // import { injectIntl } from 'react-intl';
 import g from 'app/redux/GlobalReducer';
 import { getSymbolFromCurrency } from 'currency-symbol-map';
-import { FRACTION_DIGITS, DEFAULT_CURRENCY, DEBT_TOKEN_SHORT } from 'app/client_config';
+import { FRACTION_DIGITS, DEFAULT_CURRENCY, DEBT_TOKEN_SHORT, FRACTION_DIGITS_MARKET } from 'app/client_config';
 import cookie from "react-cookie";
 import {Map} from 'immutable';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
@@ -65,7 +65,8 @@ class LocalizedCurrency extends React.Component {
       noSymbol,
       fractionDigits,
       rounding,
-      minimumAmountToShow
+      minimumAmountToShow, 
+      vesting_shares
     } = this.props
 
     if (! process.env.BROWSER
@@ -99,13 +100,28 @@ class LocalizedCurrency extends React.Component {
         : number
       )
 
+      let lang, nRounding
+      if(process.env.BROWSER){
+        lang = localStorage.getItem('language')
+        if (!lang){
+          lang = ((navigator.languages && navigator.languages[0]) || navigator.language || navigator.userLanguage)
+        }
+        nRounding = localStorage.getItem('xchange.rounding')
+        if(!nRounding){
+          if(vesting_shares > 10000000) //FIXME this is vesting_shares param. Move to config file needed 
+              nRounding = FRACTION_DIGITS
+          else 
+              nRounding = FRACTION_DIGITS_MARKET
+        }
+      }
+
       if(options ? (options.rounding ? options.rounding : rounding ) : rounding) {     
         let divider = Math.pow(10, (parseInt(Math.ceil(currencyAmount).toString().length) - 1))
         currencyAmount = (currencyAmount / divider | 0) * divider
       } else {
-        currencyAmount = currencyAmount.toLocaleString('en', {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2
+        currencyAmount = currencyAmount.toLocaleString(lang, {
+          minimumFractionDigits: nRounding,
+          maximumFractionDigits: nRounding
         })
       }
       
@@ -113,7 +129,7 @@ class LocalizedCurrency extends React.Component {
        
       return  (options ? (options.noSymbol ? options.noSymbol : noSymbol) : noSymbol)
         ? currencyAmount
-        : symbol + ' ' + currencyAmount
+        : (lang == 'en') ? (symbol + ' ' + currencyAmount) : (currencyAmount + ' ' + symbol)
     }
 
     return <span>{localizedCurrency(amount, {maximumFractionDigits: fractionDigits})}</span>
@@ -123,10 +139,13 @@ class LocalizedCurrency extends React.Component {
 
 export default connect(
   (state, ownProps) => {
+    const current_account = state.user.get('current')
+    const vesting_shares = current_account ? current_account.get('vesting_shares') : 0.0;
     const fetching = state.global.get('fetchingXchange');
     return {
       ...ownProps,
-      fetching
+      fetching,
+      vesting_shares
     };
   },
   dispatch => ({

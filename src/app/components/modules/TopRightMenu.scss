@@ -8,19 +8,24 @@
     li:last-child {
         padding: 0 0 0 1rem;
     }
-    li.show-for-medium.submit-story {
+    li.show-for-medium.submit-story > a {
         @extend .e-btn;
         margin-right: 22px;
         margin-left: 16px;
-        > a {
+        padding: 8px 24px;
+        margin: 0 6px;
+        @include themify($themes) {
+            color: themed('buttonText');
+            background: themed('colorAccentReverse');  
+        }
+        &:hover, &:focus {
             @include themify($themes) {
-                background: themed('textColorAccent');  
-              }         
-            //text-color: white;
-            transition: all 0.3s ease-in-out;
+                color: themed('textColorAccentHover');  
+            } 
+            }
+        transition: all 0.3s ease-in-out;
         }
     }
-}
 
 li.Header__userpic {
   padding: 0;

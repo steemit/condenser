@@ -4,8 +4,8 @@ $menu-width: 250px;
   display: block;
 
   .menu > li.last {
-    border-bottom: 1px solid $color-border-dark;   
-    color: $color-text-gray-light;  
+    border-bottom: 1px solid $color-border-dark;
+    color: $color-text-gray-light;
   }
 
   > div {
@@ -27,11 +27,19 @@ $menu-width: 250px;
         border-bottom: 1px solid $color-teal;
 
         path {
-          fill: $color-teal;     
+          fill: $color-teal;
         }
       }
       path {
         fill: $color-text-gray-light;
+      }
+      a.menu-section {
+        color: $color-text-gray-light;
+      }
+      a.menu-section:hover, a.menu-section:focus {
+        cursor: default;
+        background-color: inherit;
+        border-bottom: 1px solid $color-blue-black-darkest;
       }
     }
     ul:nth-of-type(n+3) {

@@ -219,7 +219,6 @@ gatehub
 gatehub.net
 gdax.com
 gemini.com
-gopax
 hitbtc.com
 hitbtcexchange
 huobi.pro
@@ -274,6 +273,7 @@ minowbooster
 minowboster
 minowhelper
 minowsupport
+myupblt
 neraex
 neraex.com
 nextgencrypted
@@ -378,6 +378,7 @@ steampunks
 steemitpay
 steempay
 steempays
+steemupbit
 sweetsj
 sweetssj
 sweetsss
@@ -401,6 +402,7 @@ upbit
 upbit.com
 upbits
 upbitt
+upblt
 upm
 upmee
 uppme

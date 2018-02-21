@@ -6,7 +6,6 @@
     @include themify($themes) {
       color: themed('textColorAccent');  
     }  
-
   }
   li > a:hover {
     // color: $black;
@@ -30,7 +29,11 @@
     display: flex;
     li > a {
       padding-right: 0.5em;
-      text-transform: capitalize;
+      line-height: 1.5rem;
+      display: flex;
+      text-transform: lowercase;
+      padding-left: 0.5em;
+      padding-right: 0.5em;
     }
     .active {
         font-weight: bold;

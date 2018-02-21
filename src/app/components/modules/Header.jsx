@@ -212,7 +212,7 @@ class Header extends React.Component {
                     <div className="expanded row">
                         <div className="columns">
                             <ul className="menu Header__menu">
-                                <li className="Header__logo">
+                                <li>
                                     <Link to={logo_link}>
                                         {/*
                                         <Icon name="logo" className="logo-for-mobile" />
@@ -256,7 +256,7 @@ class Header extends React.Component {
                                     </Link>
                                 </li>
                                 <HorizontalMenu
-                                    className="show-for-large Header__sort"
+                                    className="show-for-large"
                                     items={sort_order_menu_horizontal}
                                 />
                                 <li className={'hide-for-large Header__search'}>

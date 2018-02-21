@@ -2,7 +2,14 @@
 function send(target) {
     if (process.env.BROWSER) {
         if (window.ga) {
-            window.ga('send', 'pageview', `/${target}`)
+            if (target === 'SUCCESS_REG') {
+                window.ga('send', 'pageview', `/SUCCESS_REG1`)
+                window.ga('send', 'pageview', `/SUCCESS_REG2`)
+                window.ga('send', 'pageview', `/SUCCESS_REG3`)
+                window.ga('send', 'pageview', `/SUCCESS_REG4`)
+            } else {
+                window.ga('send', 'pageview', `/${target}`)
+            }
         }
         if (window.yaCounter41829924) {
             window.yaCounter41829924.reachGoal(target)

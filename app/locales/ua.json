@@ -15,7 +15,8 @@
     "about_app_details": "%(APP_NAME)s - це соціальна медіа платформа в якій кожен заробляє за створення і курирування контенту. Він використовує надійну систему цифрових очок під назвою Голос, який підтримує реальну цінність для цифрових нагород через виявлення ринкової ціни і ліквідності.",
     "learn_more_at_app_url": "Дізнатись більше в %(APP_URL)s",
     "resources": "Ресурси",
-    "join_our_slack": "Приєднуйтесь до нашого Slack"
+    "join_our_slack": "Приєднуйтесь до нашого Slack",
+    "mobileBannerAlt": "Доступно в Google Play"
   },
   "authorrewards_jsx": {
     "estimated_author_rewards_last_week": "Оціночні авторські винагороди за минулий тиждень",
@@ -65,7 +66,7 @@
   },
   "createaccount_jsx": {
     "get_code": "Get confirmation code",
-    "will_be_send_to_phone_number": "Message will be send to: +",
+    "will_be_send_to_phone_number": "Number: +",
     "our_records_indicate_you_already_have_account": "Наші записи показують, що у Вас вже є  %(APP_NAME)s акаунт",
     "in_order_to_prevent_abuse_APP_NAME_can_only_register_one_account_per_user": "Щоб запобігти зловживанню %(APP_NAME)s може зареєструвати тільки один акаунт для кожного підтвердженого користувача.",
     "next_3_blocks": {

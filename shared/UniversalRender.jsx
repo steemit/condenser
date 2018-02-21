@@ -62,8 +62,14 @@ const onRouterError = (error) => {
     console.error('onRouterError', error);
 };
 
-async function universalRender({ location, initial_state, offchain, ErrorPage, tarantool, /* chainproxy, */ metrics }) {
+async function universalRender({ location, initial_state, offchain, ErrorPage, tarantool, chainproxy,  metrics }) {
     let error, redirect, renderProps;
+    
+    const ctx = {
+        chainproxy,
+        metrics
+    }
+
     try {
         [error, redirect, renderProps] = await runRouter(location, RootRoute);
     } catch (e) {
@@ -139,36 +145,34 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
 
         // TODO fix bread ration IMPORTANT
         if (parts[0][0] === '@' || typeof parts[1] === 'string' && parts[1][0] === '@') {
-          onchain = await proxify(metrics, api, 'getStateAsync', url);
+          onchain = await proxify(ctx, api, 'getStateAsync', url);
         }
         else {
           const _state = {};
-          const feed_history = await proxify(metrics, api, 'getFeedHistoryAsync');
 
           _state.current_route = url;
-          _state.props = await proxify(metrics, api, 'getDynamicGlobalPropertiesAsync');
+          _state.props = await proxify(ctx, api, 'getDynamicGlobalPropertiesAsync');
           _state.categories = {};
           _state.tags = {};
           _state.content = {};
           _state.accounts = {};
           _state.witnesses = {};
           _state.discussion_idx = {};
-          _state.feed_price = feed_history.current_median_history; // { "base":"1.000 GBG", "quote":"1.895 GOLOS" },
-
+          _state.feed_price = await proxify(ctx, api, 'getCurrentMedianHistoryPriceAsync');
           _state.select_tags = [];
 
           // by default trending tags limit=50, but if we in '/tags/' path then limit = 250
-          const trending_tags = await proxify(metrics, api, 'getTrendingTagsAsync', '', parts[0] == "tags" ? '250' : '50');
+          const trending_tags = await proxify(ctx, api, 'getTrendingTagsAsync', '', parts[0] == "tags" ? '250' : '50');
 
           if (parts[0][0] === '@') {
             const uname = parts[0].substr(1)
-            _state.accounts[uname] = await proxify(metrics, api,'getAccountsAsync', [uname]);
-            _state.accounts[uname].tags_usage = await proxify(metrics, api, 'getTagsUsedByAuthorAsync', [uname]);
+            _state.accounts[uname] = await proxify(ctx, api,'getAccountsAsync', [uname]);
+            _state.accounts[uname].tags_usage = await proxify(ctx, api, 'getTagsUsedByAuthorAsync', [uname]);
 
             // FETSH part 2
             switch (parts[1]) {
               case 'transfers':
-                const history = await proxify(metrics, api, 'getAccountHistoryAsync', uname, -1, 1000);
+                const history = await proxify(ctx, api, 'getAccountHistoryAsync', uname, -1, 1000);
                 for (let key in history) {
                   switch (history[key][1].op) {
                     case 'transfer_to_vesting':
@@ -217,7 +221,7 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
                 break;
 
               case 'recent-replies':
-                const replies = await proxify(metrics, api, 'getRepliesByLastUpdateAsync', uname, '', 50);
+                const replies = await proxify(ctx, api, 'getRepliesByLastUpdateAsync', uname, '', 50);
                 _state.accounts[uname].recent_replies = []
                 for (let key in replies) {
                   const reply_ref = replies[key].author + "/" + replies[key].permlink;
@@ -274,7 +278,7 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
                 args.filter_tags = _state.filter_tags = IGNORE_TAGS
               }
             }
-            const discussions = await proxify(metrics, api, PUBLIC_API[parts[0]][0], args);
+            const discussions = await proxify(ctx, api, PUBLIC_API[parts[0]][0], args);
             let accounts = []
             let discussion_idxes = {}
             discussion_idxes[ PUBLIC_API[parts[0]][1] ] = []
@@ -287,10 +291,10 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
             }
             const discussions_key = typeof tag === 'string' && tag.length ? tag : _state.select_tags.sort().join('/')
             _state.discussion_idx[discussions_key] = discussion_idxes;
-            accounts = await proxify(metrics, api, 'getAccountsAsync', accounts);
-            for (let i in accounts) {
-              _state.accounts[ accounts[i].name ] = accounts[i]
-            }
+            // accounts = await proxify(ctx, api, 'getAccountsAsync', accounts);
+            // for (let i in accounts) {
+            //   _state.accounts[ accounts[i].name ] = accounts[i]
+            // }
           }
           else if (parts[0] == "tags") {
             for (let i in trending_tags) {

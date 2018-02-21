@@ -267,7 +267,8 @@
     "enter_username": "Enter your username",
     "password_or_wif": "Password or WIF",
     "requires_auth_key": "This operation requires your %(authType)s key (or use your master password)",
-    "keep_me_logged_in": "Keep me logged in"
+    "keep_me_logged_in": "Keep me logged in",
+    "donate": "Donate"
   },
   "navigation": {
     "about": "About",
@@ -512,7 +513,7 @@
   },
   "createaccount_jsx": {
     "get_code": "Get confirmation code",
-    "will_be_send_to_phone_number": "Message will be send to: +",
+    "will_be_send_to_phone_number": "Number: +",
     "our_records_indicate_you_already_have_account": "Our records indicate that you already have %(APP_NAME)s account",
     "in_order_to_prevent_abuse_APP_NAME_can_only_register_one_account_per_user": "In order to prevent abuse %(APP_NAME)s can only register one account per verified user.",
     "next_3_blocks": {
@@ -743,7 +744,9 @@
     "about_app_details": "%(APP_NAME)s is a social media platform where everyone gets paid for creating and curating content. It leverages a robust digital points system, called Steem, that supports real value for digital rewards through market price discovery and liquidity.",
     "learn_more_at_app_url": "Learn more at %(APP_DOMAIN)s",
     "resources": "Resources",
-    "join_our_slack": "Join our Slack"
+    "join_our_slack": "Join our Slack",
+    "mobileBannerAlt": "Get it on Google Play"
+
   },
   "markdownviewer_jsx": {
     "images_were_hidden_due_to_low_ratings": "Images were hidden due to low ratings."
@@ -907,6 +910,7 @@
     "submit": "Submit",
     "basic" : "Basic",
     "memo" : "Memo",
+    "memo_placeholder" : "You may comment your transfer here",
     "advanced": "Advanced",
     "convert_to_VESTING_TOKEN": "Convert to %(VESTING_TOKEN)s",
     "balance_subject_to_3_day_withdraw_waiting_period": "Balance subject to 3 day withdraw waiting period,",

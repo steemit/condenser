@@ -1,5 +1,6 @@
 import React from 'react';
 import { LIQUID_TOKEN } from 'app/client_config';
+import config from 'config';
 
 export default function ServerHTML({ body, assets, locale, title, meta }) {
     let page_title = title;
@@ -47,13 +48,13 @@ export default function ServerHTML({ body, assets, locale, title, meta }) {
             <meta name="msapplication-square150x150logo" content="/images/favicons/ms-icon-150x150.png" />
             <meta name="msapplication-wide310x150logo" content="/images/favicons/ms-icon-310x150.png" />
             <meta name="msapplication-square310x310logo" content="/images/favicons/ms-icon-310x310.png" />
-            { assets.style.map((href, idx) =>
-                <link href={href} key={idx} rel="stylesheet" type="text/css" />) }
+            { assets.style.map((href, idx) => <link href={href} key={idx} rel="stylesheet" type="text/css" />) }
             <title>{page_title}</title>
         </head>
         <body>
         <div id="content" dangerouslySetInnerHTML={ { __html: body } }></div>
-        {assets.script.map((href, idx) => <script key={ idx } src={ href }></script>) }
+        { assets.script.map((href, idx) => <script key={ idx } src={ href }></script>) }
+        { config.get('vk_pixel_id') && <script dangerouslySetInnerHTML={ { __html: `(window.Image ? (new Image()) : document.createElement('img')).src = 'https://vk.com/rtrg?p=${config.get('vk_pixel_id')}';` } }></script> }
         </body>
         </html>
     );

@@ -219,7 +219,6 @@ gatehub
 gatehub.net
 gdax.com
 gemini.com
-gopax
 hitbtc.com
 hitbtcexchange
 huobi.pro

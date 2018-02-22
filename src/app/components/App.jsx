@@ -4,25 +4,24 @@ import AppPropTypes from 'app/utils/AppPropTypes';
 import Header from 'app/components/modules/Header';
 import * as userActions from 'app/redux/UserReducer';
 import TopRightMenu from 'app/components/modules/TopRightMenu';
-import { browserHistory } from 'react-router';
 import classNames from 'classnames';
 import ConnectedSidePanel from 'app/components/modules/ConnectedSidePanel';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import Dialogs from 'app/components/modules/Dialogs';
 import Modals from 'app/components/modules/Modals';
-import Icon from 'app/components/elements/Icon';
 import WelcomePanel from 'app/components/elements/WelcomePanel';
 import MiniHeader from 'app/components/modules/MiniHeader';
 import tt from 'counterpart';
 import PageViewsCounter from 'app/components/elements/PageViewsCounter';
 import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
-import { APP_NAME, VESTING_TOKEN, LIQUID_TOKEN } from 'app/client_config';
 import { key_utils } from '@steemit/steem-js/lib/auth/ecc';
 import resolveRoute from 'app/ResolveRoute';
 import { VIEW_MODE_WHISTLE } from 'shared/constants';
 
 const pageRequiresEntropy = path => {
+
     const { page } = resolveRoute(path);
+
     const entropyPages = [
         'ChangePassword',
         'RecoverAccountStep1',
@@ -41,10 +40,8 @@ class App extends React.Component {
             open: null,
             showCallout: true,
             showBanner: true,
-            expandCallout: false,
         };
         this.listenerActive = null;
-        // this.shouldComponentUpdate = shouldComponentUpdate(this, 'App')
     }
 
     componentWillMount() {
@@ -53,7 +50,6 @@ class App extends React.Component {
     }
 
     componentDidMount() {
-        // setTimeout(() => this.setState({showCallout: false}), 15000);
         if (pageRequiresEntropy(this.props.location.pathname)) {
             this._addEntropyCollector();
         }
@@ -107,25 +103,6 @@ class App extends React.Component {
         );
     }
 
-    /*
-    toggleOffCanvasMenu = e => {
-        e.preventDefault();
-        // this.setState({open: this.state.open ? null : 'left'});
-        this.refs.side_panel.show();
-    };
-    */
-
-    navigate = e => {
-        const a =
-            e.target.nodeName.toLowerCase() === 'a'
-                ? e.target
-                : e.target.parentNode;
-        // this.setState({open: null});
-        if (a.host !== window.location.host) return;
-        e.preventDefault();
-        browserHistory.push(a.pathname + a.search + a.hash);
-    };
-
     setShowBannerFalse = () => {
         this.setState({ showBanner: false });
     };
@@ -151,9 +128,6 @@ class App extends React.Component {
             children,
             flash,
             new_visitor,
-            depositSteem,
-            signup_bonus,
-            username,
             nightmodeEnabled,
             viewMode,
         } = this.props;
@@ -259,17 +233,11 @@ class App extends React.Component {
                 })}
                 ref="App_root"
             >
-                {/*Create a new SidePanel component with optional values, signup, login, and post for mobile display*/}
-                <ConnectedSidePanel ref="side_panel" alignment="right">
-                    {/*<TopRightMenu vertical navigate={this.navigate} />*/}
-                </ConnectedSidePanel>
+                <ConnectedSidePanel alignment="right"/>
                 {headerHidden ? null : miniHeader ? (
                     <MiniHeader />
                 ) : (
-                    <Header
-                    //toggleOffCanvasMenu={this.toggleOffCanvasMenu}
-                    //menuOpen={this.state.open}
-                    />
+                    <Header />
                 )}
                 <div className="App__content">
                     {process.env.BROWSER &&
@@ -295,10 +263,7 @@ App.propTypes = {
     error: React.PropTypes.string,
     children: AppPropTypes.Children,
     location: React.PropTypes.object,
-    signup_bonus: React.PropTypes.string,
     loginUser: React.PropTypes.func.isRequired,
-    depositSteem: React.PropTypes.func.isRequired,
-    username: React.PropTypes.string,
 };
 
 export default connect(
@@ -307,16 +272,11 @@ export default connect(
             viewMode: state.app.get('viewMode'),
             error: state.app.get('error'),
             flash: state.offchain.get('flash'),
-            signup_bonus: state.offchain.get('signup_bonus'),
             new_visitor:
                 !state.user.get('current') &&
                 !state.offchain.get('user') &&
                 !state.offchain.get('account') &&
                 state.offchain.get('new_visit'),
-            username:
-                state.user.getIn(['current', 'username']) ||
-                state.offchain.get('account') ||
-                '',
             nightmodeEnabled: state.app.getIn([
                 'user_preferences',
                 'nightmode',
@@ -325,12 +285,5 @@ export default connect(
     },
     dispatch => ({
         loginUser: () => dispatch(userActions.usernamePasswordLogin({})),
-        depositSteem: username => {
-            const new_window = window.open();
-            new_window.opener = null;
-            new_window.location =
-                'https://blocktrades.us/?input_coin_type=eth&output_coin_type=steem&receive_address=' +
-                username;
-        },
     })
 )(App);

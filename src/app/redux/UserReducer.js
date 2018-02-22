@@ -231,7 +231,7 @@ export default function reducer(state = defaultState, action) {
                 fromJS(payload.value)
             );
 
-        case SET_SORT_ORDER: 
+        case SET_SORT_ORDER:
             return state.set('sort_order', payload);
 
         default:
@@ -400,8 +400,7 @@ export const uploadImage = payload => ({
     payload,
 });
 
-export const setSortOrder = payload =>({
+export const setSortOrder = payload => ({
     type: SET_SORT_ORDER,
     payload,
 });
-

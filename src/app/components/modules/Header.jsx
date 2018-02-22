@@ -9,6 +9,7 @@ import normalizeProfile from 'app/utils/NormalizeProfile';
 import tt from 'counterpart';
 import { APP_NAME } from 'app/client_config';
 import HorizontalMenu from 'app/components/elements/HorizontalMenu';
+import ConnectedSortOrder from 'app/components/elements/ConnectedSortOrder';
 
 class Header extends React.Component {
     static propTypes = {
@@ -71,6 +72,7 @@ class Header extends React.Component {
     }
 
     render() {
+        // Kill Me
         const route = resolveRoute(this.props.location.pathname);
         const current_account_name = this.props.current_account_name;
         let home_account = false;
@@ -161,6 +163,8 @@ class Header extends React.Component {
             page_name = ''; //page_title = route.page.replace( /([a-z])([A-Z])/g, '$1 $2' ).toLowerCase();
         }
 
+        // ^ TOUGH.
+
         // Format first letter of all titles and lowercase user name
         if (route.page !== 'UserProfile') {
             page_title =
@@ -214,9 +218,6 @@ class Header extends React.Component {
                             <ul className="menu Header__menu">
                                 <li>
                                     <Link to={logo_link}>
-                                        {/*
-                                        <Icon name="logo" className="logo-for-mobile" />
-                                        <Icon name="logotype" className="logo-for-large" />  */}
                                         <svg
                                             className="Header__logotype"
                                             width="148"
@@ -255,9 +256,17 @@ class Header extends React.Component {
                                         </span>
                                     </Link>
                                 </li>
-                                <HorizontalMenu
-                                    className="show-for-large"
-                                    items={sort_order_menu_horizontal}
+                                {/*
+                                    <HorizontalMenu
+                                        className="show-for-large"
+                                        items={sort_order_menu_horizontal}
+                                    />
+                                */}
+                                {/*TODO: HIDE FOR USER FEED*/}
+                                <ConnectedSortOrder
+                                    sortOrder={sort_order}
+                                    topic={topic}
+                                    horizontal={true}
                                 />
                                 <li className={'hide-for-large Header__search'}>
                                     <a

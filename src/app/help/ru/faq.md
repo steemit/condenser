@@ -137,9 +137,9 @@
 
 ### <span id="Table_of_Contents_Reputation">Репутация</span>
 
-- [What is Reputation?](#What_is_Reputation)
-- [How is the Reputation score measured?](#How_is_the_Reputation_score_measured)
-- [How do I improve my reputation score?](#How_do_I_improve_my_reputation_score)
+- [Что такое репутация?](#What_is_Reputation)
+- [Как измеряется репутация?](#How_is_the_Reputation_score_measured)
+- [Как мне увеличить баллы репутации?](#How_do_I_improve_my_reputation_score)
 - [What causes my reputation score to go down?](#What_causes_my_reputation_score_to_go_down)
 - [Why does my reputation score matter?](#Why_does_my_reputation_score_matter)
 

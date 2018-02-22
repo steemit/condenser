@@ -184,11 +184,11 @@
 
 ### <span id="Table_of_Contents_Developers">Разработчики</span>
 
-- [Are the Steem blockchain and Steemit.com code open-source?](#Are_the_Steem_blockchain_and_Steemit_com_code_open_source)
-- [Is there a Github page for Steemit.com?](#Is_there_a_Github_page_for_Steemit_com)
-- [Is there a Github page for the Steem blockchain?](#Is_there_a_Github_page_for_the_Steem_blockchain)
-- [What is available for developers interested in Steem and Steemit?](#What_is_available_for_developers_interested_in_Steem_and_Steemit)
-- [How do I use cli_wallet?](#How_do_I_use_cli_wallet)
+- [Является ли код блокчейна Steem и Steemit.com общедоступным (open source)?](#Are_the_Steem_blockchain_and_Steemit_com_code_open_source)
+- [Есть ли Github страница для Steemit.com?](#Is_there_a_Github_page_for_Steemit_com)
+- [Есть ли Github страница для блокчейна Steem?](#Is_there_a_Github_page_for_the_Steem_blockchain)
+- [Что доступно для разработчиков, интересующихся Steem и Steemit?](#What_is_available_for_developers_interested_in_Steem_and_Steemit)
+- [Как использовать cli_wallet?](#How_do_I_use_cli_wallet)
 
 ### <span id="Table_of_Contents_Witnesses">Делегаты</span>
 
@@ -198,11 +198,11 @@
 
 ### <span id="Table_of_Contents_Miscellaneous">Разное</span>
 
-- [What third-party tools are there for Steemit?](#What_third_party_tools_are_there_for_Steemit)
-- [Is there an official Steemit Facebook page?](#Is_there_an_official_Steemit_Facebook_page)
-- [Is there an official Steemit Twitter account?](#Is_there_an_official_Steemit_Twitter_account)
-- [What is the Steem Whitepaper and what is its purpose?](#What_is_the_Steem_Whitepaper_and_what_is_its_purpose)
-- [Where can I ask for help if my question was not answered here?](#Where_can_I_ask_for_help_if_my_question_was_not_answered_here)
+- [Какой сторонний софт есть для Steem?](#What_third_party_tools_are_there_for_Steemit)
+- [Есть ли официальная страница Steemit в Facebook?](#Is_there_an_official_Steemit_Facebook_page)
+- [Есть ли официальный аккаунт Steemit в Twitter?](#Is_there_an_official_Steemit_Twitter_account)
+- [Что такое Белые страницы Steem и какова их цель?](#What_is_the_Steem_Whitepaper_and_what_is_its_purpose)
+- [Где найти ответы, которые я не получил здесь?](#Where_can_I_ask_for_help_if_my_question_was_not_answered_here)
 
 ### <span id="Table_of_Contents_Disclaimer">Отказ от ответственности</span>
 
@@ -232,7 +232,7 @@ Most social media sites extract value from their userbase for the benefit of sha
 
 ## <span id="Does_it_cost_anything_to_post__comment__or_vote">Нужно ли платить, чтобы опубликовать пост, оставить комментарий, проголосовать?</span>
 
-No. It is free to post, comment, and vote on content on Steemit.com. You might even get paid for it!
+Нет. It is free to post, comment, and vote on content on Steemit.com. Вы могли бы даже получать за это деньги!
 
 <a href="#Table_of_Contents_General">^</a>
 
@@ -1411,25 +1411,25 @@ Each account can vote for up to 30 witnesses.
 
 # Разное
 
-## <span id="What_third_party_tools_are_there_for_Steemit">What third-party tools are there for Steemit?</span>
+## <span id="What_third_party_tools_are_there_for_Steemit">Какой сторонний софт есть для Steem?</span>
 
 http://steemtools.com/
 
 <a href="#Table_of_Contents_Miscellaneous">^</a>
 
-## <span id="Is_there_an_official_Steemit_Facebook_page">Is there an official Steemit Facebook page?</span>
+## <span id="Is_there_an_official_Steemit_Facebook_page">Есть ли официальная страница Steemit в Facebook?</span>
 
 https://www.facebook.com/steemit/
 
 <a href="#Table_of_Contents_Miscellaneous">^</a>
 
-## <span id="Is_there_an_official_Steemit_Twitter_account">Is there an official Steemit Twitter account?</span>
+## <span id="Is_there_an_official_Steemit_Twitter_account">Есть ли официальный аккаунт Steemit в Twitter?</span>
 
 https://twitter.com/steemit
 
 <a href="#Table_of_Contents_Miscellaneous">^</a>
 
-## <span id="What_is_the_Steem_Whitepaper_and_what_is_its_purpose">What is the Steem Whitepaper and what is its purpose?</span>
+## <span id="What_is_the_Steem_Whitepaper_and_what_is_its_purpose">Что такое Белые страницы Steem и какова их цель?</span>
 
 The Steem Whitepaper was written to describe the mechanics of the token system that makes decentralized content incentives and distribution possible in a way that can improve web technologies across the board. It is also applicable to Steemit, the first website to plug into the Steem blockchain. Users who have read the Steem Whitepaper will better understand how their interactions with Steemit are interactions with Steem, the decentralized network.
 
@@ -1439,7 +1439,7 @@ https://steem.io/SteemWhitePaper.pdf
 
 <a href="#Table_of_Contents_Miscellaneous">^</a>
 
-## <span id="Where_can_I_ask_for_help_if_my_question_was_not_answered_here">Where can I ask for help if my question was not answered here?</span>
+## <span id="Where_can_I_ask_for_help_if_my_question_was_not_answered_here">Где найти ответы, которые я не получил здесь?</span>
 
 If you post your question in the [#help](https://steemit.chat/channel/help) channel on [steemit.chat](https://steemit.chat/home), the users there may be able to help.
 
@@ -1455,6 +1455,6 @@ BlockTrades, Poloniex, Bittrex, Changelly, Shapeshift.io, Coinbase, Localbitcoin
 
 All links to user posts were created by our users and do not necessarily represent the views of Steemit, Inc. or its management. Their listing here does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
 
-Please use the third party tools and content at your own risk.
+Пожалуйста, используйте сторонние инструменты и контент на свой собственный риск.
 
 <a href="#Table_of_Contents_Disclaimer">^</a>

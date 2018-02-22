@@ -10,6 +10,7 @@ import { APP_NAME } from 'app/client_config';
 import SortOrder from 'app/components/elements/SortOrder';
 
 class Header extends React.Component {
+
     static propTypes = {
         location: React.PropTypes.object.isRequired,
         current_account_name: React.PropTypes.string,
@@ -40,23 +41,17 @@ class Header extends React.Component {
     render() {
         const route = resolveRoute(this.props.location.pathname);
         const current_account_name = this.props.current_account_name;
-        let home_account = false;
-        let page_title = route.page;
 
+        let page_title = route.page;
         let sort_order = '';
         let topic = '';
         let user_name = null;
-        let page_name = null;
+
         if (route.page === 'PostsIndex') {
             sort_order = route.params[0];
             if (sort_order === 'home') {
                 page_title = tt('header_jsx.home');
                 const account_name = route.params[1];
-                if (
-                    current_account_name &&
-                    account_name.indexOf(current_account_name) === 1
-                )
-                    home_account = true;
             } else {
                 topic = route.params.length > 1 ? route.params[1] : '';
                 const type =
@@ -115,21 +110,23 @@ class Header extends React.Component {
             if (route.params[1] === 'posts' || route.params[1] === 'comments') {
                 page_title = tt('header_jsx.comments_by') + ' ' + user_title;
             }
-        } else {
-            page_name = ''; //page_title = route.page.replace( /([a-z])([A-Z])/g, '$1 $2' ).toLowerCase();
         }
-
         // Format first letter of all titles and lowercase user name
         if (route.page !== 'UserProfile') {
             page_title =
                 page_title.charAt(0).toUpperCase() + page_title.slice(1);
         }
-
         if (
             process.env.BROWSER &&
             (route.page !== 'Post' && route.page !== 'PostNoCategory')
         )
             document.title = page_title + ' — ' + APP_NAME;
+
+
+
+
+
+
 
         // This is confusing to a user - the ground is moving beneath them.
         // Suggest if logged in goes to feed or blog page. If not goes to
@@ -192,37 +189,7 @@ class Header extends React.Component {
                                         horizontal={true}
                                     />
                                 </span>
-                                <li className={'hide-for-large Header__search'}>
-                                    <a
-                                        href="/static/search.html"
-                                        title={tt('g.search')}
-                                    >
-                                        <Icon name="search" size="1x" />
-                                    </a>
-                                </li>
-                                <li className={'show-for-large Header__search'}>
-                                    <form
-                                        className="input-group"
-                                        action="/static/search.html"
-                                        method="GET"
-                                    >
-                                        <button
-                                            className="input-group-button"
-                                            href="/static/search.html"
-                                            type="submit"
-                                            title={tt('g.search')}
-                                        >
-                                            <Icon name="search" size="1_5x" />
-                                        </button>
-                                        <input
-                                            className="input-group-field"
-                                            type="text"
-                                            placeholder="search"
-                                            name="q"
-                                            autoComplete="off"
-                                        />
-                                    </form>
-                                </li>
+                                <SearchInput />
                             </ul>
                         </div>
                         <div className="columns shrink">

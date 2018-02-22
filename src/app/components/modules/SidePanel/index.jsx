@@ -34,183 +34,151 @@ export default class SidePanel extends React.Component {
         const { visible } = this.state;
         const { children, alignment, navigate } = this.props;
 
-        const buySteemLink = 
-        <li>
-            {/*TODO: pass this as dispatch via connected*/}
-            <a onClick={() => depositSteem(username)}>
-                {tt('navigation.buy_LIQUID_TOKEN', {
-                    LIQUID_TOKEN,
-                })}&nbsp;<Icon name="extlink" />
-            </a>
-        </li>
+        const buySteemLink = (
+            <li>
+                {/*TODO: pass this as dispatch via connected*/}
+                <a onClick={() => depositSteem(username)}>
+                    {tt('navigation.buy_LIQUID_TOKEN', {
+                        LIQUID_TOKEN,
+                    })}&nbsp;<Icon name="extlink" />
+                </a>
+            </li>
+        );
 
-        const internalLinks = [
-            {
-                value: 'welcome',
-                label: tt('navigation.welcome'),
-                link: `/welcome`,
-            },
-            {
-                value: 'faq',
-                label: tt('navigation.faq'),
-                link: `/faq`,
-            },
-            {
-                value: 'tags',
-                label: tt('navigation.explore'),
-                link: `/tags`,
-            },
-            {
-                value: 'market',
-                label: tt('navigation.currency_market'),
-                link: `/market`,
-            },
-            {
-                value: 'recover_account_step_1',
-                label: tt('navigation.stolen_account_recovery'),
-                link: `/recover_account_step_1`,
-            },
-            {
-                value: 'change_password',
-                label: tt('navigation.change_account_password'),
-                link: `/change_password`,
-            },
-            {
-                value: 'vote_for_witnesses',
-                label: tt('navigation.vote_for_witnesses'),
-                link: `/~witnesses`,
-            },
-        ];
+        const makeExternalLink = (i, ix, arr) => {
+            const cn = ix === arr.length - 1 ? 'last' : null;
+            return (
+                <li key={i.value} className={cn}>
+                    <a href={i.link} target="_blank" rel="noopener noreferrer">
+                        {i.label}&nbsp;<Icon name="extlink" />
+                    </a>
+                </li>
+            );
+        };
 
-        const externalLinks = [
-            {
-                value:'shop',
-                label:tt('navigation.shop'),
-                link:'https://thesteemitshop.com/',
-            },
-            {
-                value:'chat',
-                label:tt('navigation.chat'),
-                link:'https://steemit.chat/home',
-            },
-            {
-                value:'tools',
-                label:tt('navigation.app_center'),
-                link:'http://steemtools.com/',
-            },
-            {
-                value:'api_docs',
-                label:tt('navigation.api_docs'),
-                link:'https://developers.steem.io/',
-            },
-        ];
+        const makeInternalLink = (i, ix, arr) => {
+            const cn = ix === arr.length - 1 ? 'last' : null;
+            return (
+                <li key={i.value} className={cn}>
+                    <Link to={i.link}>{i.label}</Link>
+                </li>
+            );
+        };
 
-        const orgLinks = [
-            {
-                value:'bluepaper',
-                label:tt('navigation.bluepaper'),
-                link:'https://steem.io/steem-bluepaper.pdf',
-            },
-            {
-                value:'smt_whitepaper',
-                label:tt('navigation.smt_whitepaper'),
-                link:'https://smt.steem.io/',
-            },
-            {
-                value:'whitepaper',
-                label:tt('navigation.whitepaper'),
-                link:'https://steem.io/SteemWhitePaper.pdf',
-            },
-            {
-                value:'about',
-                label:tt('navigation.about'),
-                link:'https://steem.io',
-            },
-        ]
+        const sidePanelLinks = {
+            internal: [
+                {
+                    value: 'welcome',
+                    label: tt('navigation.welcome'),
+                    link: `/welcome`,
+                },
+                {
+                    value: 'faq',
+                    label: tt('navigation.faq'),
+                    link: `/faq`,
+                },
+                {
+                    value: 'tags',
+                    label: tt('navigation.explore'),
+                    link: `/tags`,
+                },
+                {
+                    value: 'market',
+                    label: tt('navigation.currency_market'),
+                    link: `/market`,
+                },
+                {
+                    value: 'recover_account_step_1',
+                    label: tt('navigation.stolen_account_recovery'),
+                    link: `/recover_account_step_1`,
+                },
+                {
+                    value: 'change_password',
+                    label: tt('navigation.change_account_password'),
+                    link: `/change_password`,
+                },
+                {
+                    value: 'vote_for_witnesses',
+                    label: tt('navigation.vote_for_witnesses'),
+                    link: `/~witnesses`,
+                },
+            ],
+            external: [
+                {
+                    value: 'shop',
+                    label: tt('navigation.shop'),
+                    link: 'https://thesteemitshop.com/',
+                },
+                {
+                    value: 'chat',
+                    label: tt('navigation.chat'),
+                    link: 'https://steemit.chat/home',
+                },
+                {
+                    value: 'tools',
+                    label: tt('navigation.app_center'),
+                    link: 'http://steemtools.com/',
+                },
+                {
+                    value: 'api_docs',
+                    label: tt('navigation.api_docs'),
+                    link: 'https://developers.steem.io/',
+                },
+            ],
+            organizational: [
+                {
+                    value: 'bluepaper',
+                    label: tt('navigation.bluepaper'),
+                    link: 'https://steem.io/steem-bluepaper.pdf',
+                },
+                {
+                    value: 'smt_whitepaper',
+                    label: tt('navigation.smt_whitepaper'),
+                    link: 'https://smt.steem.io/',
+                },
+                {
+                    value: 'whitepaper',
+                    label: tt('navigation.whitepaper'),
+                    link: 'https://steem.io/SteemWhitePaper.pdf',
+                },
+                {
+                    value: 'about',
+                    label: tt('navigation.about'),
+                    link: 'https://steem.io',
+                },
+            ],
+            legal: [
+                {
+                    value: 'privacy',
+                    label: tt('navigation.privacy_policy'),
+                    link: '/privacy.html',
+                },
+                {
+                    value: 'tos',
+                    label: tt('navigation.terms_of_service'),
+                    link: '/tos.html',
+                },
+            ],
+        };
 
         return (
             <div className="SidePanel">
                 <div className={(visible ? 'visible ' : '') + alignment}>
                     <CloseButton onClick={this.hide} />
                     <ul className="vertical menu">
-                        {internalLinks.map((i, ix, arr) => {
-                            const cn = ix === arr.length - 1 ? 'last' : null
-                            return (
-                                <li key={i.value} className={cn}>
-                                    <Link to={i.link}>{i.label}</Link>
-                                </li>
-                            )
-                        })}
+                        {sidePanelLinks['internal'].map(makeInternalLink)}
                     </ul>
                     <ul className="vertical menu">
                         {buySteemLink}
-                        {external.map((i, ix, arr) => {
-                            const cn = ix === arr.length - 1 ? 'last' : null
-                            return (
-                                <li key={i.value} className={cn}>
-                                    <a
-                                        href={i.link}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                    >
-                                        {i.label}&nbsp;<Icon name="extlink" />
-                                    </a>
-                                </li>
-                            )
-                        })}
+                        {sidePanelLinks['external'].map(makeExternalLink)}
                     </ul>
-
                     <ul className="vertical menu">
-                        <li>
-                            <a
-                                href="https://steem.io/steem-bluepaper.pdf"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                {tt('navigation.bluepaper')}&nbsp;<Icon name="extlink" />
-                            </a>
-                        </li>
-                        <li>
-                            <a
-                                href="https://smt.steem.io/"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                {tt('navigation.smt_whitepaper')}&nbsp;<Icon name="extlink" />
-                            </a>
-                        </li>
-                        <li>
-                            <a
-                                href="https://steem.io/SteemWhitePaper.pdf"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                {tt('navigation.whitepaper')}&nbsp;<Icon name="extlink" />
-                            </a>
-                        </li>
-                        <li>
-                            <a href="https://steem.io" onClick={navigate}>
-                                {tt('navigation.about')}&nbsp;<Icon name="extlink" />
-                            </a>
-                        </li>
-                        <li>
-                            <a
-                                href="/privacy.html"
-                                onClick={navigate}
-                                rel="nofollow"
-                            >
-                                {tt('navigation.privacy_policy')}
-                            </a>
-                        </li>
-                        <li className="last">
-                            <a
-                                href="/tos.html"
-                                onClick={navigate}
-                                rel="nofollow"
-                            >
-                                {tt('navigation.terms_of_service')}
-                            </a>
-                        </li>
+                        {buySteemLink}
+                        {sidePanelLinks['organizational'].map(makeExternalLink)}
+                    </ul>
+                    <ul className="vertical menu">
+                        {buySteemLink}
+                        {sidePanelLinks['legal'].map(makeInternalLink)}
                     </ul>
                 </div>
             </div>

@@ -7,7 +7,7 @@ import resolveRoute from 'app/ResolveRoute';
 import normalizeProfile from 'app/utils/NormalizeProfile';
 import tt from 'counterpart';
 import { APP_NAME } from 'app/client_config';
-import ConnectedSortOrder from 'app/components/elements/ConnectedSortOrder';
+import SortOrder from 'app/components/elements/SortOrder';
 
 class Header extends React.Component {
     static propTypes = {
@@ -186,7 +186,7 @@ class Header extends React.Component {
                                     </Link>
                                 </li>
                                 <span className="show-for-large">
-                                    <ConnectedSortOrder
+                                    <SortOrder
                                         sortOrder={sort_order}
                                         topic={topic}
                                         horizontal={true}

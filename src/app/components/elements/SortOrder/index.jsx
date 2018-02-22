@@ -5,9 +5,11 @@ import Select from 'react-select';
 import { Link } from 'react-router';
 import { browserHistory } from 'react-router';
 
-const SortOrder = ({ topic, currentSort, setSortOrder, horizontal }) => {
-    const handleChange = currentTopic => selectedOption => {
-        setSortOrder(selectedOption.value, currentTopic);
+const SortOrder = ({ topic, sortOrder, setSortOrder, horizontal }) => {
+
+    const handleChange = topic => sort => {
+        const route = topic ? `/${sort.value}/${topic}` : `/${sort}`;
+        browserHistory.replace(route);
     };
 
     const sorts = topic => [
@@ -39,7 +41,7 @@ const SortOrder = ({ topic, currentSort, setSortOrder, horizontal }) => {
                 return (
                     <li
                         key={i.value}
-                        className={i.value === currentSort ? 'active' : ''}
+                        className={i.value === sortOrder ? 'active' : ''}
                     >
                         <Link to={i.link}>{i.label}</Link>
                     </li>
@@ -50,7 +52,7 @@ const SortOrder = ({ topic, currentSort, setSortOrder, horizontal }) => {
         <Select
             name="select-topic"
             className="react-select"
-            value={currentSort}
+            value={sortOrder}
             onChange={handleChange(topic)}
             options={sorts(topic)}
             clearable={false}

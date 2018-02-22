@@ -33,7 +33,6 @@ const ACCOUNT_AUTH_LOOKUP = 'user/ACCOUNT_AUTH_LOOKUP';
 const SET_AUTHORITY = 'user/SET_AUTHORITY';
 const HIDE_CONNECTION_ERROR_MODAL = 'user/HIDE_CONNECTION_ERROR_MODAL';
 const SET = 'user/SET';
-const SET_SORT_ORDER = 'user/SET_SORT_ORDER';
 const SHOW_SIDE_PANEL = 'user/SHOW_SIDE_PANEL';
 const HIDE_SIDE_PANEL = 'user/HIDE_SIDE_PANEL';
 
@@ -49,7 +48,6 @@ const defaultState = fromJS({
     show_signup_modal: false,
     pub_keys_used: null,
     locale: DEFAULT_LANGUAGE,
-    sort_order: 'trending',
     show_side_panel: false,
 });
 
@@ -235,9 +233,6 @@ export default function reducer(state = defaultState, action) {
                 fromJS(payload.value)
             );
 
-        case SET_SORT_ORDER:
-            return state.set('sort_order', payload);
-
         case SHOW_SIDE_PANEL:
             return state.set('show_side_panel', true);
 
@@ -410,17 +405,11 @@ export const uploadImage = payload => ({
     payload,
 });
 
-export const setSortOrder = payload => ({
-    type: SET_SORT_ORDER,
-    payload,
-});
-
 export const showSidePanel = () => ({
     type: SHOW_SIDE_PANEL,
 });
 
 export const hideSidePanel = () => {
-    console.log('HIDE IN RED');
     return {
         type: HIDE_SIDE_PANEL,
     };

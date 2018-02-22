@@ -43,12 +43,7 @@ class App extends React.Component {
             showBanner: true,
             expandCallout: false,
         };
-        this.toggleOffCanvasMenu = this.toggleOffCanvasMenu.bind(this);
-        this.signUp = this.signUp.bind(this);
-        this.learnMore = this.learnMore.bind(this);
-        this.setShowBannerFalse = this.setShowBannerFalse.bind(this);
         this.listenerActive = null;
-        this.onEntropyEvent = this.onEntropyEvent.bind(this);
         // this.shouldComponentUpdate = shouldComponentUpdate(this, 'App')
     }
 
@@ -112,7 +107,7 @@ class App extends React.Component {
         );
     }
 
-    toggleOffCanvasMenu(e) {
+    toggleOffCanvasMenu = (e) => {
         e.preventDefault();
         // this.setState({open: this.state.open ? null : 'left'});
         this.refs.side_panel.show();
@@ -129,21 +124,21 @@ class App extends React.Component {
         browserHistory.push(a.pathname + a.search + a.hash);
     };
 
-    setShowBannerFalse() {
+    setShowBannerFalse = () => {
         this.setState({ showBanner: false });
     }
 
-    onEntropyEvent(e) {
+    onEntropyEvent = (e) => {
         if (e.type === 'mousemove')
             key_utils.addEntropy(e.pageX, e.pageY, e.screenX, e.screenY);
         else console.log('onEntropyEvent Unknown', e.type, e);
     }
 
-    signUp() {
+    signUp = () => {
         serverApiRecordEvent('Sign up', 'Hero banner');
     }
 
-    learnMore() {
+    learnMore = () => {
         serverApiRecordEvent('Learn more', 'Hero banner');
     }
 

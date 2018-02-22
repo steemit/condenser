@@ -107,11 +107,11 @@ class App extends React.Component {
         );
     }
 
-    toggleOffCanvasMenu = (e) => {
+    toggleOffCanvasMenu = e => {
         e.preventDefault();
         // this.setState({open: this.state.open ? null : 'left'});
         this.refs.side_panel.show();
-    }
+    };
 
     navigate = e => {
         const a =
@@ -126,21 +126,21 @@ class App extends React.Component {
 
     setShowBannerFalse = () => {
         this.setState({ showBanner: false });
-    }
+    };
 
-    onEntropyEvent = (e) => {
+    onEntropyEvent = e => {
         if (e.type === 'mousemove')
             key_utils.addEntropy(e.pageX, e.pageY, e.screenX, e.screenY);
         else console.log('onEntropyEvent Unknown', e.type, e);
-    }
+    };
 
     signUp = () => {
         serverApiRecordEvent('Sign up', 'Hero banner');
-    }
+    };
 
     learnMore = () => {
         serverApiRecordEvent('Learn more', 'Hero banner');
-    }
+    };
 
     render() {
         const {

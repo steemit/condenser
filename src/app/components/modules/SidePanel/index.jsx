@@ -3,6 +3,7 @@ import tt from 'counterpart';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import { LIQUID_TOKEN } from 'app/client_config';
 import Icon from 'app/components/elements/Icon';
+import { Link } from 'react-router';
 
 export default class SidePanel extends React.Component {
     static propTypes = {
@@ -13,7 +14,6 @@ export default class SidePanel extends React.Component {
     constructor(props) {
         super(props);
         this.state = { visible: false };
-        this.hide = this.hide.bind(this);
     }
 
     componentWillUnmount() {
@@ -33,96 +33,133 @@ export default class SidePanel extends React.Component {
     render() {
         const { visible } = this.state;
         const { children, alignment, navigate } = this.props;
+
+        const buySteemLink = 
+        <li>
+            {/*TODO: pass this as dispatch via connected*/}
+            <a onClick={() => depositSteem(username)}>
+                {tt('navigation.buy_LIQUID_TOKEN', {
+                    LIQUID_TOKEN,
+                })}&nbsp;<Icon name="extlink" />
+            </a>
+        </li>
+
+        const internalLinks = [
+            {
+                value: 'welcome',
+                label: tt('navigation.welcome'),
+                link: `/welcome`,
+            },
+            {
+                value: 'faq',
+                label: tt('navigation.faq'),
+                link: `/faq`,
+            },
+            {
+                value: 'tags',
+                label: tt('navigation.explore'),
+                link: `/tags`,
+            },
+            {
+                value: 'market',
+                label: tt('navigation.currency_market'),
+                link: `/market`,
+            },
+            {
+                value: 'recover_account_step_1',
+                label: tt('navigation.stolen_account_recovery'),
+                link: `/recover_account_step_1`,
+            },
+            {
+                value: 'change_password',
+                label: tt('navigation.change_account_password'),
+                link: `/change_password`,
+            },
+            {
+                value: 'vote_for_witnesses',
+                label: tt('navigation.vote_for_witnesses'),
+                link: `/~witnesses`,
+            },
+        ];
+
+        const externalLinks = [
+            {
+                value:'shop',
+                label:tt('navigation.shop'),
+                link:'https://thesteemitshop.com/',
+            },
+            {
+                value:'chat',
+                label:tt('navigation.chat'),
+                link:'https://steemit.chat/home',
+            },
+            {
+                value:'tools',
+                label:tt('navigation.app_center'),
+                link:'http://steemtools.com/',
+            },
+            {
+                value:'api_docs',
+                label:tt('navigation.api_docs'),
+                link:'https://developers.steem.io/',
+            },
+        ];
+
+        const orgLinks = [
+            {
+                value:'bluepaper',
+                label:tt('navigation.bluepaper'),
+                link:'https://steem.io/steem-bluepaper.pdf',
+            },
+            {
+                value:'smt_whitepaper',
+                label:tt('navigation.smt_whitepaper'),
+                link:'https://smt.steem.io/',
+            },
+            {
+                value:'whitepaper',
+                label:tt('navigation.whitepaper'),
+                link:'https://steem.io/SteemWhitePaper.pdf',
+            },
+            {
+                value:'about',
+                label:tt('navigation.about'),
+                link:'https://steem.io',
+            },
+        ]
+
         return (
             <div className="SidePanel">
                 <div className={(visible ? 'visible ' : '') + alignment}>
                     <CloseButton onClick={this.hide} />
                     <ul className="vertical menu">
-                        <li>
-                            <a href="/welcome" onClick={this.navigate}>
-                                {tt('navigation.welcome')}
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/faq.html" onClick={this.navigate}>
-                                {tt('navigation.faq')}
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/tags" onClick={this.navigate}>
-                                {tt('navigation.explore')}
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/market" onClick={this.navigate}>
-                                {tt('navigation.currency_market')}
-                            </a>
-                        </li>
-                        <li>
-                            <a
-                                href="/recover_account_step_1"
-                                onClick={this.navigate}
-                            >
-                                {tt('navigation.stolen_account_recovery')}
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/change_password" onClick={this.navigate}>
-                                {tt('navigation.change_account_password')}
-                            </a>
-                        </li>
-                        <li className="last">
-                            <a href="/~witnesses" onClick={this.navigate}>
-                                {tt('navigation.vote_for_witnesses')}
-                            </a>
-                        </li>
+                        {internalLinks.map((i, ix, arr) => {
+                            const cn = ix === arr.length - 1 ? 'last' : null
+                            return (
+                                <li key={i.value} className={cn}>
+                                    <Link to={i.link}>{i.label}</Link>
+                                </li>
+                            )
+                        })}
                     </ul>
                     <ul className="vertical menu">
-                        <li>
-                            <a onClick={() => depositSteem(username)}>
-                                {tt('navigation.buy_LIQUID_TOKEN', {
-                                    LIQUID_TOKEN,
-                                })}&nbsp;<Icon name="extlink" />
-                            </a>
-                        </li>
-                        <li>
-                            <a
-                                href="https://thesteemitshop.com/"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                {tt('navigation.shop')}&nbsp;<Icon name="extlink" />
-                            </a>
-                        </li>
-                        <li>
-                            <a
-                                href="https://steemit.chat/home"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                {tt('navigation.chat')}&nbsp;<Icon name="extlink" />
-                            </a>
-                        </li>
-                        <li>
-                            <a
-                                href="http://steemtools.com/"
-                                onClick={this.navigate}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                {tt('navigation.app_center')}&nbsp;<Icon name="extlink" />
-                            </a>
-                        </li>
-                        <li className="last">
-                            <a
-                                href="https://developers.steem.io/"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                {tt('navigation.api_docs')}&nbsp;<Icon name="extlink" />
-                            </a>
-                        </li>
+                        {buySteemLink}
+                        {external.map((i, ix, arr) => {
+                            const cn = ix === arr.length - 1 ? 'last' : null
+                            return (
+                                <li key={i.value} className={cn}>
+                                    <a
+                                        href={i.link}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        {i.label}&nbsp;<Icon name="extlink" />
+                                    </a>
+                                </li>
+                            )
+                        })}
                     </ul>
+
                     <ul className="vertical menu">
                         <li>
                             <a
@@ -152,14 +189,14 @@ export default class SidePanel extends React.Component {
                             </a>
                         </li>
                         <li>
-                            <a href="https://steem.io" onClick={this.navigate}>
+                            <a href="https://steem.io" onClick={navigate}>
                                 {tt('navigation.about')}&nbsp;<Icon name="extlink" />
                             </a>
                         </li>
                         <li>
                             <a
                                 href="/privacy.html"
-                                onClick={this.navigate}
+                                onClick={navigate}
                                 rel="nofollow"
                             >
                                 {tt('navigation.privacy_policy')}
@@ -168,7 +205,7 @@ export default class SidePanel extends React.Component {
                         <li className="last">
                             <a
                                 href="/tos.html"
-                                onClick={this.navigate}
+                                onClick={navigate}
                                 rel="nofollow"
                             >
                                 {tt('navigation.terms_of_service')}

@@ -18,7 +18,6 @@ import Topics from './Topics';
 import SortOrder from 'app/components/elements/SortOrder';
 import ConnectedSortOrder from 'app/components/elements/ConnectedSortOrder';
 
-
 class PostsIndex extends React.Component {
     static propTypes = {
         discussions: PropTypes.object,

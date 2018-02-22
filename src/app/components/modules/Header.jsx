@@ -10,7 +10,6 @@ import { APP_NAME } from 'app/client_config';
 import ConnectedSortOrder from 'app/components/elements/ConnectedSortOrder';
 
 class Header extends React.Component {
-
     static propTypes = {
         location: React.PropTypes.object.isRequired,
         current_account_name: React.PropTypes.string,
@@ -132,6 +131,9 @@ class Header extends React.Component {
         )
             document.title = page_title + ' — ' + APP_NAME;
 
+        // This is confusing to a user - the ground is moving beneath them.
+        // Suggest if logged in goes to feed or blog page. If not goes to
+        // Front page.
         const logo_link =
             route.params && route.params.length > 1 && this.last_sort_order
                 ? '/' + this.last_sort_order

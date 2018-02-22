@@ -172,15 +172,15 @@
 
 ### <span id="Table_of_Contents_Security">Безопасность</span>
 
-- [How can I keep my Steem account secure?](#How_can_I_keep_my_Steem_account_secure)
-- [Why should I be careful with my master password?](#Why_should_I_be_careful_with_my_master_password)
-- [Why is the master password a long string of gibberish?](#Why_is_the_master_password_a_long_string_of_gibberish)
-- [What are my different keys for?](#What_are_my_different_keys_for)
-- [What do I do if I lost my password/keys?](#What_do_I_do_if_I_lost_my_password_keys)
+- [Как мне обеспечить безопасность моего аккаунта Steem?](#How_can_I_keep_my_Steem_account_secure)
+- [Почему мне нужно быть осторожным с моим мастер-паролем?](#Why_should_I_be_careful_with_my_master_password)
+- [Почему мастер-пароль выглядит длинной тарабарщиной?](#Why_is_the_master_password_a_long_string_of_gibberish)
+- [Какие у меня есть разные ключи?](#What_are_my_different_keys_for)
+- [Что мне делать, если я потерял свой пароль или ключи?](#What_do_I_do_if_I_lost_my_password_keys)
 - [Are my STEEM and Steem Dollar tokens insured in the event of a hack or if someone takes over my account?](#Are_my_STEEM_and_Steem_Dollar_tokens_insured_in_the_event_of_a_hack_or_if_someone_takes_over_my_account)
-- [What should I do if I discover that someone hacked my account?](#What_should_I_do_if_I_discover_that_someone_hacked_my_account)
+- [Что делать, если я узнаю, что кто-то взломал мой аккаунт?](#What_should_I_do_if_I_discover_that_someone_hacked_my_account)
 - [How does the stolen account recovery process work?](#How_does_the_stolen_account_recovery_process_work)
-- [How do I report a security vulnerability?](#How_do_I_report_a_security_vulnerability)
+- [Как мне сообщить об уязвимости в безопасности?](#How_do_I_report_a_security_vulnerability)
 
 ### <span id="Table_of_Contents_Developers">Разработчики</span>
 
@@ -192,9 +192,9 @@
 
 ### <span id="Table_of_Contents_Witnesses">Делегаты</span>
 
-- [What are Steem witnesses?](#What_are_Steem_witnesses)
-- [How can I vote for witnesses?](#How_can_I_vote_for_witnesses)
-- [How many witnesses can I vote for?](#How_many_witnesses_can_I_vote_for)
+- [Кто такие делегаты Steem?](#What_are_Steem_witnesses)
+- [Как мне проголосовать за делегатов?](#How_can_I_vote_for_witnesses)
+- [За скольких делегатов я могу проголосовать?](#How_many_witnesses_can_I_vote_for)
 
 ### <span id="Table_of_Contents_Miscellaneous">Разное</span>
 

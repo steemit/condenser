@@ -140,33 +140,33 @@
 - [Что такое репутация?](#What_is_Reputation)
 - [Как измеряется репутация?](#How_is_the_Reputation_score_measured)
 - [Как мне увеличить баллы репутации?](#How_do_I_improve_my_reputation_score)
-- [What causes my reputation score to go down?](#What_causes_my_reputation_score_to_go_down)
-- [Why does my reputation score matter?](#Why_does_my_reputation_score_matter)
+- [Что снижает оценку моей репутации?](#What_causes_my_reputation_score_to_go_down)
+- [Что придает значение моей репутации?](#Why_does_my_reputation_score_matter)
 
 ### <span id="Table_of_Contents_Followers__Feeds_and_Resteem">Последователи, ленты и репосты</span>
 
-- [What is Resteeming?](#What_is_Resteeming)
-- [Can I share on other social media?](#Can_I_share_on_other_social_media)
+- [Что такое репост?](#What_is_Resteeming)
+- [Могу я поделиться постом в других социальных медиа?](#Can_I_share_on_other_social_media)
 
 ### <span id="Table_of_Contents_Blockchain">Блокчейн</span>
 
 - [Что такое блокчейн?](#What_is_a_blockchain)
-- [What is the Steem blockchain?](#What_is_the_Steem_blockchain)
-- [What is the difference between Steem and Steemit?](#What_is_the_difference_between_Steem_and_Steemit)
-- [How is Steem different from Bitcoin?](#How_is_Steem_different_from_Bitcoin)
-- [What is the difference between Proof of Work, Proof of Stake, and Delegated Proof of Stake?](#What_is_the_difference_between_Proof_of_Work__Proof_of_Stake__and_Delegated_Proof_of_Stake)
-- [How often does the Steem blockchain produce a new block?](#How_often_does_the_Steem_blockchain_produce_a_new_block)
-- [Is there a way to see the raw data that is stored in the blockchain?](#Is_there_a_way_to_see_the_raw_data_that_is_stored_in_the_blockchain)
-- [Where can I find the information for the official launch of the blockchain?](#Where_can_I_find_the_information_for_the_official_launch_of_the_blockchain)
-- [Can I mine STEEM?](#Can_I_mine_STEEM)
+- [Что такое блокчейн Steem?](#What_is_the_Steem_blockchain)
+- [В чем разница между Steem и Steemit?](#What_is_the_difference_between_Steem_and_Steemit)
+- [Чем Steem отличается от биткоина?](#How_is_Steem_different_from_Bitcoin)
+- [В чем различие между Proof of Work, Proof of Stake и Delegated Proof of Stake?](#What_is_the_difference_between_Proof_of_Work__Proof_of_Stake__and_Delegated_Proof_of_Stake)
+- [Как часто блокчейн Steem генерирует новый блок?](#How_often_does_the_Steem_blockchain_produce_a_new_block)
+- [Есть ли способ увидеть сырые данные, которые хранятся в блокчейне?](#Is_there_a_way_to_see_the_raw_data_that_is_stored_in_the_blockchain)
+- [Где мне найти информацию об официальном запуске блокчейна?](#Where_can_I_find_the_information_for_the_official_launch_of_the_blockchain)
+- [Могу ли я намайнить Steem?](#Can_I_mine_STEEM)
 
 ### <span id="Table_of_Contents_Steemit__Inc">Корпорация Steemit</span>
 
-- [Who is the CEO of Steemit?](#Who_is_the_CEO_of_Steemit)
-- [Can I invest in Steemit?](#Can_I_invest_in_Steemit)
-- [What does Steemit’s development roadmap look like?](#What_does_Steemit_s_development_roadmap_look_like)
-- [Am I allowed to use the Steem and Steemit logos?](#Am_I_allowed_to_use_the_Steem_and_Steemit_logos)
-- [Can I purchase official Steemit merchandise?](#Can_I_purchase_official_Steemit_merchandise)
+- [Кто является CEO в Steemit?](#Who_is_the_CEO_of_Steemit)
+- [Могу ли я инвестировать в Steemit?](#Can_I_invest_in_Steemit)
+- [Как выглядит дорожная карта разработки Steemit?](#What_does_Steemit_s_development_roadmap_look_like)
+- [Разрешено ли использовать логотипы Steem и Steemit?](#Am_I_allowed_to_use_the_Steem_and_Steemit_logos)
+- [Можно ли купить официальный товар Steemit?](#Can_I_purchase_official_Steemit_merchandise)
 - [Did Steemit "pre-mine" tokens?](#Did_Steemit__pre_mine__tokens)
 - [What is the Steemit Privacy Policy?](#What_is_the_Steemit_Privacy_Policy)
 

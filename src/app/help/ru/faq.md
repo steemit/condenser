@@ -167,8 +167,8 @@
 - [Как выглядит дорожная карта разработки Steemit?](#What_does_Steemit_s_development_roadmap_look_like)
 - [Разрешено ли использовать логотипы Steem и Steemit?](#Am_I_allowed_to_use_the_Steem_and_Steemit_logos)
 - [Можно ли купить официальный товар Steemit?](#Can_I_purchase_official_Steemit_merchandise)
-- [Did Steemit "pre-mine" tokens?](#Did_Steemit__pre_mine__tokens)
-- [What is the Steemit Privacy Policy?](#What_is_the_Steemit_Privacy_Policy)
+- [Может ли Steemit "заранее намайнить" токены?](#Did_Steemit__pre_mine__tokens)
+- [Какова Политика конфиденциальности Steemit?](#What_is_the_Steemit_Privacy_Policy)
 
 ### <span id="Table_of_Contents_Security">Безопасность</span>
 

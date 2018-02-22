@@ -3,8 +3,8 @@ import * as userActions from 'app/redux/UserReducer';
 import SortOrder from 'app/components/elements/SortOrder';
 import { browserHistory } from 'react-router';
 
+// This should be set whereever ownProps.sortOrder is set.
 const mapStateToProps = (state, ownProps) => {
-    // HACK: initState interferes with default state from reducer so use props when sort_order is not in state.
     const currentSort =
         state.user.get('sort_order') === undefined
             ? ownProps.sortOrder
@@ -15,6 +15,7 @@ const mapStateToProps = (state, ownProps) => {
     };
 };
 
+//TODO: if no sort, then default to trending.
 const mapDispatchToProps = dispatch => ({
     setSortOrder: (sort, topic) => {
         const route = topic ? `/${sort}/${topic}` : `/${sort}`;

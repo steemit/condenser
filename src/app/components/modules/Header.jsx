@@ -4,14 +4,13 @@ import { connect } from 'react-redux';
 import TopRightMenu from 'app/components/modules/TopRightMenu';
 import Icon from 'app/components/elements/Icon';
 import resolveRoute from 'app/ResolveRoute';
-import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import normalizeProfile from 'app/utils/NormalizeProfile';
 import tt from 'counterpart';
 import { APP_NAME } from 'app/client_config';
-import HorizontalMenu from 'app/components/elements/HorizontalMenu';
 import ConnectedSortOrder from 'app/components/elements/ConnectedSortOrder';
 
 class Header extends React.Component {
+
     static propTypes = {
         location: React.PropTypes.object.isRequired,
         current_account_name: React.PropTypes.string,
@@ -20,16 +19,6 @@ class Header extends React.Component {
 
     constructor() {
         super();
-        this.state = { subheader_hidden: false };
-        this.shouldComponentUpdate = shouldComponentUpdate(this, 'Header');
-        this.hideSubheader = this.hideSubheader.bind(this);
-    }
-
-    componentDidMount() {
-        window.addEventListener('scroll', this.hideSubheader, {
-            capture: false,
-            passive: true,
-        });
     }
 
     componentWillReceiveProps(nextProps) {
@@ -49,30 +38,7 @@ class Header extends React.Component {
         }
     }
 
-    componentWillUnmount() {
-        window.removeEventListener('scroll', this.hideSubheader);
-    }
-
-    hideSubheader() {
-        const subheader_hidden = this.state.subheader_hidden;
-        const y =
-            window.scrollY >= 0
-                ? window.scrollY
-                : document.documentElement.scrollTop;
-        if (y === this.prevScrollY) return;
-
-        if (y < 5) {
-            this.setState({ subheader_hidden: false });
-        } else if (y > this.prevScrollY) {
-            if (!subheader_hidden) this.setState({ subheader_hidden: true });
-        } else {
-            if (subheader_hidden) this.setState({ subheader_hidden: false });
-        }
-        this.prevScrollY = y;
-    }
-
     render() {
-        // Kill Me
         const route = resolveRoute(this.props.location.pathname);
         const current_account_name = this.props.current_account_name;
         let home_account = false;
@@ -82,7 +48,6 @@ class Header extends React.Component {
         let topic = '';
         let user_name = null;
         let page_name = null;
-        this.state.subheader_hidden = false;
         if (route.page === 'PostsIndex') {
             sort_order = route.params[0];
             if (sort_order === 'home') {
@@ -115,14 +80,6 @@ class Header extends React.Component {
             page_title = tt('navigation.terms_of_service');
         } else if (route.page == 'ChangePassword') {
             page_title = tt('header_jsx.change_account_password');
-        } else if (route.page == 'CreateAccount') {
-            page_title = tt('header_jsx.create_account');
-        } else if (route.page == 'PickAccount') {
-            page_title = `Pick Your New Steemit Account`;
-            this.state.subheader_hidden = true;
-        } else if (route.page == 'Approval') {
-            page_title = `Account Confirmation`;
-            this.state.subheader_hidden = true;
         } else if (
             route.page == 'RecoverAccountStep1' ||
             route.page == 'RecoverAccountStep2'
@@ -163,8 +120,6 @@ class Header extends React.Component {
             page_name = ''; //page_title = route.page.replace( /([a-z])([A-Z])/g, '$1 $2' ).toLowerCase();
         }
 
-        // ^ TOUGH.
-
         // Format first letter of all titles and lowercase user name
         if (route.page !== 'UserProfile') {
             page_title =
@@ -181,34 +136,6 @@ class Header extends React.Component {
             route.params && route.params.length > 1 && this.last_sort_order
                 ? '/' + this.last_sort_order
                 : current_account_name ? `/@${current_account_name}/feed` : '/';
-        const topic_link = topic ? (
-            <Link to={`/${this.last_sort_order || 'trending'}/${topic}`}>
-                {topic}
-            </Link>
-        ) : null;
-
-        const sortOrderToLink = (so, topic, account) => {
-            if (so === 'home') return '/@' + account + '/feed';
-            if (topic) return `/${so}/${topic}`;
-            return `/${so}`;
-        };
-        const sort_orders_horizontal = [
-            ['trending', tt('main_menu.trending')],
-            ['created', tt('g.new')],
-            ['hot', tt('main_menu.hot')],
-            ['promoted', tt('g.promoted')],
-        ];
-        // if (current_account_name) sort_orders_horizontal.unshift(['home', tt('header_jsx.home')]);
-        const sort_order_menu_horizontal = sort_orders_horizontal.map(so => {
-            let active = so[0] === sort_order;
-            if (so[0] === 'home' && sort_order === 'home' && !home_account)
-                active = false;
-            return {
-                link: sortOrderToLink(so[0], topic, current_account_name),
-                value: so[1],
-                active,
-            };
-        });
 
         return (
             <header className="Header noPrint">
@@ -256,18 +183,13 @@ class Header extends React.Component {
                                         </span>
                                     </Link>
                                 </li>
-                                {/*
-                                    <HorizontalMenu
-                                        className="show-for-large"
-                                        items={sort_order_menu_horizontal}
+                                <span className="show-for-large">
+                                    <ConnectedSortOrder
+                                        sortOrder={sort_order}
+                                        topic={topic}
+                                        horizontal={true}
                                     />
-                                */}
-                                {/*TODO: HIDE FOR USER FEED*/}
-                                <ConnectedSortOrder
-                                    sortOrder={sort_order}
-                                    topic={topic}
-                                    horizontal={true}
-                                />
+                                </span>
                                 <li className={'hide-for-large Header__search'}>
                                     <a
                                         href="/static/search.html"

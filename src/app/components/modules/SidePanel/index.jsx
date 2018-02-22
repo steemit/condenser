@@ -13,7 +13,6 @@ export default class SidePanel extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { visible: false };
     }
 
     componentWillUnmount() {
@@ -31,8 +30,7 @@ export default class SidePanel extends React.Component {
     };
 
     render() {
-        const { visible } = this.state;
-        const { children, alignment, navigate } = this.props;
+        const { children, alignment, navigate, visible } = this.props;
 
         const buySteemLink = (
             <li>

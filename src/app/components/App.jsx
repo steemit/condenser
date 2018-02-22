@@ -6,7 +6,7 @@ import * as userActions from 'app/redux/UserReducer';
 import TopRightMenu from 'app/components/modules/TopRightMenu';
 import { browserHistory } from 'react-router';
 import classNames from 'classnames';
-import SidePanel from 'app/components/modules/SidePanel';
+import ConnectedSidePanel from 'app/components/modules/ConnectedSidePanel';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import Dialogs from 'app/components/modules/Dialogs';
 import Modals from 'app/components/modules/Modals';
@@ -107,11 +107,13 @@ class App extends React.Component {
         );
     }
 
+    /*
     toggleOffCanvasMenu = e => {
         e.preventDefault();
         // this.setState({open: this.state.open ? null : 'left'});
         this.refs.side_panel.show();
     };
+    */
 
     navigate = e => {
         const a =
@@ -258,15 +260,15 @@ class App extends React.Component {
                 ref="App_root"
             >
                 {/*Create a new SidePanel component with optional values, signup, login, and post for mobile display*/}
-                <SidePanel ref="side_panel" alignment="right">
+                <ConnectedSidePanel ref="side_panel" alignment="right">
                     {/*<TopRightMenu vertical navigate={this.navigate} />*/}
-                </SidePanel>
+                </ConnectedSidePanel>
                 {headerHidden ? null : miniHeader ? (
                     <MiniHeader />
                 ) : (
                     <Header
-                        toggleOffCanvasMenu={this.toggleOffCanvasMenu}
-                        menuOpen={this.state.open}
+                        //toggleOffCanvasMenu={this.toggleOffCanvasMenu}
+                        //menuOpen={this.state.open}
                     />
                 )}
                 <div className="App__content">

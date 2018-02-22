@@ -4,14 +4,15 @@ import SidePanel from 'app/components/modules/SidePanel';
 
 const mapStateToProps = (state, ownProps) => {
     return {
+        visible: state.user.get('show_side_panel'),
         ...ownProps,
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        showSideBar: () => dispatch(showSideBar),
-        hideSideBar: () => dispatch(hideSideBar),
+        showSideBar: () => dispatch(userActions.showSidePanel()),
+        hideSideBar: () => dispatch(userActions.hideSidePanel()),
     };
 };
 

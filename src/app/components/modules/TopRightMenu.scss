@@ -1,13 +1,4 @@
 .sub-menu {
-    li {
-        padding: .7rem 0.5rem;
-        a {
-            padding: 0px;
-        }
-    }
-    li:last-child {
-        padding: 0 0 0 1rem;
-    }
     li.show-for-medium.submit-story > a {
         @extend .e-btn;
         margin-right: 22px;
@@ -27,7 +18,7 @@
         }
     }
 
-li.Header__userpic {
+.TopRightMenu__userpic {
   padding: 0;
   position: relative;
   a {
@@ -48,22 +39,15 @@ li.Header__userpic {
     }
 }
 
-div.Header__top
-{
-    li.TopRightMenu__hamburger.toggle-menu {
-        &.toggle-menu {
-            padding-left: 0.25rem;
-        }
-        > a {
-            padding: 14px 0 14px 14px;
-        }
-    }
-}
-
-
-.TopRightMenu__hamburger {
+li.TopRightMenu__hamburger.toggle-menu {
     @include hamburger();
     position: relative;
+    > li {
+        padding-left: 0.25rem;
+    }
+    > a {
+        padding: 14px 0 14px 14px;
+    }
     &::after {
       transition: 0.2s all ease-in-out;
       @include themify($themes) {

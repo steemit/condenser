@@ -124,7 +124,7 @@ function TopRightMenu({
                     }
                 >
                     {!vertical && (
-                        <li className={'Header__userpic '}>
+                        <li className={'TopRightMenu__userpic '}>
                             <a
                                 href={account_link}
                                 title={username}
@@ -155,7 +155,7 @@ function TopRightMenu({
                     <LoadingIndicator type="circle" inline />
                 </li>
                 {toggleOffCanvasMenu && (
-                    <li className="toggle-menu Header__hamburger">
+                    <li className="toggle-menu TopRightMenu__hamburger">
                         <a href="#" onClick={toggleOffCanvasMenu}>
                             <span className="hamburger" />
                         </a>
@@ -177,7 +177,7 @@ function TopRightMenu({
             {submit_story}
             {!vertical && submit_icon}
             {toggleOffCanvasMenu && (
-                <li className="toggle-menu Header__hamburger">
+                <li className="toggle-menu TopRightMenu__hamburger">
                     <a href="#" onClick={toggleOffCanvasMenu}>
                         <span className="hamburger" />
                     </a>

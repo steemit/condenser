@@ -16,6 +16,8 @@ import SidebarNewUsers from 'app/components/elements/SidebarNewUsers';
 import ArticleLayoutSelector from 'app/components/modules/ArticleLayoutSelector';
 import Topics from './Topics';
 import SortOrder from 'app/components/elements/SortOrder';
+import ConnectedSortOrder from 'app/components/elements/ConnectedSortOrder';
+
 
 class PostsIndex extends React.Component {
     static propTypes = {
@@ -207,7 +209,7 @@ class PostsIndex extends React.Component {
                         </div>
                         <div className="articles__header-col articles__header-col--right hide-for-large ">
                             {category !== 'feed' && (
-                                <SortOrder
+                                <ConnectedSortOrder
                                     sortOrder={this.props.sortOrder}
                                     topic={this.props.topic}
                                     current={category}

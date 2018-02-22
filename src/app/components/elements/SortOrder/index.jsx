@@ -4,28 +4,27 @@ import tt from 'counterpart';
 import Select from 'react-select';
 import { browserHistory } from 'react-router';
 
-const SortOrder = ({ current }) => {
-    const handleChange = currentTopic => selectedOption => {
-        browserHistory.push(`${selectedOption.value}/${currentTopic}`);
-    };
+const SortOrder = ({ topic, currentSort, setSortOrder }) => {
 
-    console.log(current);
+    const handleChange = currentTopic => selectedOption => {
+        setSortOrder(selectedOption.value, currentTopic)
+    };
 
     const selectItems = [
         {
-            value: '/trending',
+            value: 'trending',
             label: tt('main_menu.trending'),
         },
         {
-            value: '/created',
+            value: 'created',
             label: tt('g.new'),
         },
         {
-            value: '/hot',
+            value: 'hot',
             label: tt('main_menu.hot'),
         },
         {
-            value: '/promoted',
+            value: 'promoted',
             label: tt('g.promoted'),
         },
     ];
@@ -34,8 +33,9 @@ const SortOrder = ({ current }) => {
         <Select
             name="select-topic"
             className="react-select"
-            value={`/${current}`}
-            onChange={handleChange(current)}
+            value={currentSort}
+            onChange={handleChange(topic)}
+            //onChange={setSortOrder}
             options={selectItems}
             clearable={false}
         />
@@ -43,11 +43,9 @@ const SortOrder = ({ current }) => {
 };
 
 SortOrder.propTypes = {
-    current: PropTypes.string,
 };
 
 SortOrder.defaultProps = {
-    current: 'trending',
 };
 
 export default SortOrder;

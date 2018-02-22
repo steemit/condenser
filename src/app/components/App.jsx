@@ -267,8 +267,8 @@ class App extends React.Component {
                     <MiniHeader />
                 ) : (
                     <Header
-                        //toggleOffCanvasMenu={this.toggleOffCanvasMenu}
-                        //menuOpen={this.state.open}
+                    //toggleOffCanvasMenu={this.toggleOffCanvasMenu}
+                    //menuOpen={this.state.open}
                     />
                 )}
                 <div className="App__content">

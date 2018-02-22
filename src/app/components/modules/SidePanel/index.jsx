@@ -5,6 +5,7 @@ import { LIQUID_TOKEN } from 'app/client_config';
 import Icon from 'app/components/elements/Icon';
 import { Link } from 'react-router';
 
+//TODO: MAKE STATELESS AND PURE.
 export default class SidePanel extends React.Component {
     static propTypes = {
         children: React.PropTypes.array,
@@ -15,23 +16,15 @@ export default class SidePanel extends React.Component {
         super(props);
     }
 
-    componentWillUnmount() {
-        document.removeEventListener('click', this.hide);
-    }
-
-    show = () => {
-        this.setState({ visible: true });
-        document.addEventListener('click', this.hide);
-    };
-
-    hide = () => {
-        this.setState({ visible: false });
-        document.removeEventListener('click', this.hide);
-    };
-
     render() {
-        const { children, alignment, navigate, visible } = this.props;
-
+        const {
+            children,
+            alignment,
+            navigate,
+            visible,
+            showSidePanel,
+            hideSidePanel,
+        } = this.props;
         const buySteemLink = (
             <li>
                 {/*TODO: pass this as dispatch via connected*/}
@@ -162,7 +155,7 @@ export default class SidePanel extends React.Component {
         return (
             <div className="SidePanel">
                 <div className={(visible ? 'visible ' : '') + alignment}>
-                    <CloseButton onClick={this.hide} />
+                    <CloseButton onClick={hideSidePanel} />
                     <ul className="vertical menu">
                         {sidePanelLinks['internal'].map(makeInternalLink)}
                     </ul>

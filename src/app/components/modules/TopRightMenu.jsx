@@ -38,6 +38,7 @@ function TopRightMenu({
     nightmodeEnabled,
     toggleNightmode,
     userPath,
+    showSidePanel,
 }) {
     const mcn = 'menu' + (vertical ? ' vertical show-for-small-only' : '');
     const mcl = vertical ? '' : ' sub-menu';
@@ -138,13 +139,11 @@ function TopRightMenu({
                         </li>
                     )}
                 </LinkWithDropdown>
-                {toggleOffCanvasMenu && (
-                    <li className="toggle-menu TopRightMenu__hamburger">
-                        <a href="#" onClick={toggleOffCanvasMenu}>
-                            <span className="hamburger" />
-                        </a>
-                    </li>
-                )}
+                <li className="toggle-menu TopRightMenu__hamburger">
+                    <a href="#" onClick={showSidePanel}>
+                        <span className="hamburger" />
+                    </a>
+                </li>
             </ul>
         );
     }
@@ -154,13 +153,11 @@ function TopRightMenu({
                 <li className={lcn} style={{ paddingTop: 0, paddingBottom: 0 }}>
                     <LoadingIndicator type="circle" inline />
                 </li>
-                {toggleOffCanvasMenu && (
-                    <li className="toggle-menu TopRightMenu__hamburger">
-                        <a href="#" onClick={toggleOffCanvasMenu}>
-                            <span className="hamburger" />
-                        </a>
-                    </li>
-                )}
+                <li className="toggle-menu TopRightMenu__hamburger">
+                    <a href="#" onClick={showSidePanel}>
+                        <span className="hamburger" />
+                    </a>
+                </li>
             </ul>
         );
     }
@@ -176,13 +173,11 @@ function TopRightMenu({
             </li>
             {submit_story}
             {!vertical && submit_icon}
-            {toggleOffCanvasMenu && (
-                <li className="toggle-menu TopRightMenu__hamburger">
-                    <a href="#" onClick={toggleOffCanvasMenu}>
-                        <span className="hamburger" />
-                    </a>
-                </li>
-            )}
+            <li className="toggle-menu TopRightMenu__hamburger">
+                <a href="#" onClick={showSidePanel}>
+                    <span className="hamburger" />
+                </a>
+            </li>
         </ul>
     );
 }
@@ -235,6 +230,12 @@ export default connect(
         toggleNightmode: e => {
             if (e) e.preventDefault();
             dispatch(appActions.toggleNightmode());
+        },
+        showSidePanel: () => {
+            dispatch(userActions.showSidePanel());
+        },
+        hideSidePanel: () => {
+            dispatch(userActions.hideSidePanel());
         },
     })
 )(TopRightMenu);

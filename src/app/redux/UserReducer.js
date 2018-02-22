@@ -35,7 +35,7 @@ const HIDE_CONNECTION_ERROR_MODAL = 'user/HIDE_CONNECTION_ERROR_MODAL';
 const SET = 'user/SET';
 const SET_SORT_ORDER = 'user/SET_SORT_ORDER';
 const SHOW_SIDE_PANEL = 'user/SHOW_SIDE_PANEL';
-const HIDE_SIDE_PANEL = 'user/SHOW_SIDE_PANEL';
+const HIDE_SIDE_PANEL = 'user/HIDE_SIDE_PANEL';
 
 // Saga-related
 export const LOAD_SAVINGS_WITHDRAW = 'user/LOAD_SAVINGS_WITHDRAW';
@@ -238,10 +238,10 @@ export default function reducer(state = defaultState, action) {
         case SET_SORT_ORDER:
             return state.set('sort_order', payload);
 
-        case SHOW_SIDE_PANEL: 
-            return state.set('show_side_panel', true)
+        case SHOW_SIDE_PANEL:
+            return state.set('show_side_panel', true);
 
-        case HIDE_SIDE_PANEL: 
+        case HIDE_SIDE_PANEL:
             return state.set('show_side_panel', false);
 
         default:
@@ -419,7 +419,9 @@ export const showSidePanel = () => ({
     type: SHOW_SIDE_PANEL,
 });
 
-
-export const hideSidePanel = () => ({
-    type: HIDE_SIDE_PANEL,
-});
+export const hideSidePanel = () => {
+    console.log('HIDE IN RED');
+    return {
+        type: HIDE_SIDE_PANEL,
+    };
+};

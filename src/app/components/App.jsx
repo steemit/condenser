@@ -19,7 +19,6 @@ import resolveRoute from 'app/ResolveRoute';
 import { VIEW_MODE_WHISTLE } from 'shared/constants';
 
 const pageRequiresEntropy = path => {
-
     const { page } = resolveRoute(path);
 
     const entropyPages = [
@@ -90,7 +89,7 @@ class App extends React.Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        const { pathname, new_visitor, flash, nightmodeEnabled } = this.props
+        const { pathname, new_visitor, flash, nightmodeEnabled } = this.props;
         const n = nextProps;
         return (
             pathname !== n.pathname ||
@@ -130,12 +129,11 @@ class App extends React.Component {
             viewMode,
             pathname,
             category,
-            order
+            order,
         } = this.props;
 
         const miniHeader =
-            pathname === '/create_account' ||
-            pathname === '/pick_account';
+            pathname === '/create_account' || pathname === '/pick_account';
 
         const whistleView = viewMode === VIEW_MODE_WHISTLE;
         const headerHidden = whistleView;
@@ -236,7 +234,7 @@ class App extends React.Component {
                 })}
                 ref="App_root"
             >
-                <ConnectedSidePanel alignment="right"/>
+                <ConnectedSidePanel alignment="right" />
 
                 {headerHidden ? null : miniHeader ? (
                     <MiniHeader />
@@ -279,7 +277,6 @@ App.propTypes = {
 
 export default connect(
     (state, ownProps) => {
-
         const current_user = state.user.get('current');
         const account_user = state.global.get('accounts');
         const current_account_name = current_user
@@ -296,11 +293,6 @@ export default connect(
                 !state.offchain.get('account') &&
                 state.offchain.get('new_visit'),
 
-
-
-
-
-                
             nightmodeEnabled: state.app.getIn([
                 'user_preferences',
                 'nightmode',

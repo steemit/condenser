@@ -6,7 +6,6 @@ import { Link } from 'react-router';
 import { browserHistory } from 'react-router';
 
 const SortOrder = ({ topic, sortOrder, setSortOrder, horizontal }) => {
-    
     const handleChange = topic => sort => {
         const route = topic ? `/${sort.value}/${topic}` : `/${sort.value}`;
         browserHistory.replace(route);
@@ -63,7 +62,7 @@ const SortOrder = ({ topic, sortOrder, setSortOrder, horizontal }) => {
 SortOrder.propTypes = {};
 
 SortOrder.defaultProps = {
-    sortOrder: 'trending'
+    sortOrder: 'trending',
 };
 
 export default SortOrder;

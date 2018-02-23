@@ -1,5 +1,7 @@
-const getPageTitle = (route, account_meta) => {
+import tt from 'counterpart';
+import normalizeProfile from 'app/utils/NormalizeProfile';
 
+const getPageTitle = (route, account_meta) => {
     let page_title = route.page;
     let sort_order = '';
     let topic = '';
@@ -38,27 +40,22 @@ const getPageTitle = (route, account_meta) => {
         page_title = tt('header_jsx.stolen_account_recovery');
     } else if (route.page === 'UserProfile') {
         user_name = route.params[0].slice(1);
-        const acct_meta = this.props.account_meta.getIn([user_name]);
-        const name = acct_meta
-            ? normalizeProfile(acct_meta.toJS()).name
-            : null;
+        const acct_meta = account_meta.getIn([user_name]);
+        const name = acct_meta ? normalizeProfile(acct_meta.toJS()).name : null;
         const user_title = name ? `${name} (@${user_name})` : user_name;
         page_title = user_title;
         if (route.params[1] === 'followers') {
-            page_title =
-                tt('header_jsx.people_following') + ' ' + user_title;
+            page_title = tt('header_jsx.people_following') + ' ' + user_title;
         }
         if (route.params[1] === 'followed') {
-            page_title =
-                tt('header_jsx.people_followed_by') + ' ' + user_title;
+            page_title = tt('header_jsx.people_followed_by') + ' ' + user_title;
         }
         if (route.params[1] === 'curation-rewards') {
             page_title =
                 tt('header_jsx.curation_rewards_by') + ' ' + user_title;
         }
         if (route.params[1] === 'author-rewards') {
-            page_title =
-                tt('header_jsx.author_rewards_by') + ' ' + user_title;
+            page_title = tt('header_jsx.author_rewards_by') + ' ' + user_title;
         }
         if (route.params[1] === 'recent-replies') {
             page_title = tt('header_jsx.replies_to') + ' ' + user_title;
@@ -70,14 +67,13 @@ const getPageTitle = (route, account_meta) => {
     }
     // Format first letter of all titles and lowercase user name
     if (route.page !== 'UserProfile') {
-        page_title =
-            page_title.charAt(0).toUpperCase() + page_title.slice(1);
+        page_title = page_title.charAt(0).toUpperCase() + page_title.slice(1);
     }
     if (
         process.env.BROWSER &&
         (route.page !== 'Post' && route.page !== 'PostNoCategory')
     )
         return page_title;
-}
+};
 
-export default getPageTitle
+export default getPageTitle;

@@ -5,14 +5,20 @@ import { LIQUID_TOKEN } from 'app/client_config';
 import Icon from 'app/components/elements/Icon';
 import { Link } from 'react-router';
 
-const SidePanel = ({ alignment, visible, hideSidePanel, username, depositSteem }) => {
-
-    {/*
+const SidePanel = ({
+    alignment,
+    visible,
+    hideSidePanel,
+    username,
+    depositSteem,
+}) => {
     visible && document.addEventListener('click', hideSidePanel);
     !visible && document.removeEventListener('click', hideSidePanel);
-    */}
-    
-    const loggedIn = username === undefined ? 'show-for-small-only': 'hide-for-small hide-for-medium hide-for-large';
+
+    const loggedIn =
+        username === undefined
+            ? 'show-for-small-only'
+            : 'hide-for-small hide-for-medium hide-for-large';
     const buySteemLink = (
         <li>
             <a onClick={() => depositSteem(username)}>

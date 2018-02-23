@@ -32,8 +32,6 @@ function TopRightMenu({
     logout,
     loggedIn,
     vertical,
-    navigate,
-    toggleOffCanvasMenu,
     probablyLoggedIn,
     nightmodeEnabled,
     toggleNightmode,
@@ -44,6 +42,7 @@ function TopRightMenu({
     const mcl = vertical ? '' : ' sub-menu';
     const lcn = vertical ? '' : 'show-for-medium';
     const nav = navigate || defaultNavigate;
+
     const submit_story = $STM_Config.read_only_mode ? null : (
         <li className={lcn + ' submit-story' + (vertical ? ' last' : '')}>
             <a href="/submit.html" onClick={nav}>
@@ -51,6 +50,7 @@ function TopRightMenu({
             </a>
         </li>
     );
+
     const submit_icon = $STM_Config.read_only_mode ? null : (
         <li className="show-for-small-only">
             <Link to="/submit.html">
@@ -58,6 +58,7 @@ function TopRightMenu({
             </Link>
         </li>
     );
+
     const feed_link = `/@${username}/feed`;
     const replies_link = `/@${username}/recent-replies`;
     const wallet_link = `/@${username}/transfers`;
@@ -66,6 +67,7 @@ function TopRightMenu({
     const reset_password_link = `/@${username}/password`;
     const settings_link = `/@${username}/settings`;
     const pathCheck = userPath === '/submit.html' ? true : null;
+
     if (loggedIn) {
         // change back to if(username) after bug fix:  Clicking on Login does not cause drop-down to close #TEMP!
         const user_menu = [
@@ -189,8 +191,6 @@ TopRightMenu.propTypes = {
     showLogin: React.PropTypes.func.isRequired,
     logout: React.PropTypes.func.isRequired,
     vertical: React.PropTypes.bool,
-    navigate: React.PropTypes.func,
-    toggleOffCanvasMenu: React.PropTypes.func,
     nightmodeEnabled: React.PropTypes.bool,
     toggleNightmode: React.PropTypes.func,
 };

@@ -36,8 +36,8 @@ const pageRequiresEntropy = path => {
 class App extends React.Component {
     constructor(props) {
         super(props);
+        // TODO: put both of these and associated toggles into Redux Store.
         this.state = {
-            open: null,
             showCallout: true,
             showBanner: true,
         };
@@ -50,19 +50,19 @@ class App extends React.Component {
     }
 
     componentDidMount() {
-        if (pageRequiresEntropy(this.props.location.pathname)) {
+        if (pageRequiresEntropy(this.props.pathname)) {
             this._addEntropyCollector();
         }
     }
 
     componentWillReceiveProps(np) {
-        /* Add listener if the next page requires entropy and the current page didn't */
+        // Add listener if the next page requires entropy and the current page didn't
         if (
-            pageRequiresEntropy(np.location.pathname) &&
-            !pageRequiresEntropy(this.props.location.pathname)
+            pageRequiresEntropy(np.pathname) &&
+            !pageRequiresEntropy(this.props.pathname)
         ) {
             this._addEntropyCollector();
-        } else if (!pageRequiresEntropy(np.location.pathname)) {
+        } else if (!pageRequiresEntropy(np.pathname)) {
             // Remove if next page does not require entropy
             this._removeEntropyCollector();
         }
@@ -90,16 +90,15 @@ class App extends React.Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        const p = this.props;
+        const { pathname, new_visitor, flash, nightmodeEnabled } = this.props
         const n = nextProps;
         return (
-            p.location.pathname !== n.location.pathname ||
-            p.new_visitor !== n.new_visitor ||
-            p.flash !== n.flash ||
-            this.state.open !== nextState.open ||
+            pathname !== n.pathname ||
+            new_visitor !== n.new_visitor ||
+            flash !== n.flash ||
             this.state.showBanner !== nextState.showBanner ||
             this.state.showCallout !== nextState.showCallout ||
-            p.nightmodeEnabled !== n.nightmodeEnabled
+            nightmodeEnabled !== n.nightmodeEnabled
         );
     }
 
@@ -123,22 +122,26 @@ class App extends React.Component {
 
     render() {
         const {
-            location,
             params,
             children,
             flash,
             new_visitor,
             nightmodeEnabled,
             viewMode,
+            pathname,
+            category,
+            order
         } = this.props;
+
         const miniHeader =
-            location.pathname === '/create_account' ||
-            location.pathname === '/pick_account';
+            pathname === '/create_account' ||
+            pathname === '/pick_account';
+
         const whistleView = viewMode === VIEW_MODE_WHISTLE;
         const headerHidden = whistleView;
         const params_keys = Object.keys(params);
         const ip =
-            location.pathname === '/' ||
+            pathname === '/' ||
             (params_keys.length === 2 &&
                 params_keys[0] === 'order' &&
                 params_keys[1] === 'category');
@@ -234,11 +237,17 @@ class App extends React.Component {
                 ref="App_root"
             >
                 <ConnectedSidePanel alignment="right"/>
+
                 {headerHidden ? null : miniHeader ? (
                     <MiniHeader />
                 ) : (
-                    <Header />
+                    <Header
+                        pathname={pathname}
+                        category={category}
+                        order={order}
+                    />
                 )}
+
                 <div className="App__content">
                     {process.env.BROWSER &&
                     ip &&
@@ -262,12 +271,21 @@ class App extends React.Component {
 App.propTypes = {
     error: React.PropTypes.string,
     children: AppPropTypes.Children,
-    location: React.PropTypes.object,
+    pathname: React.PropTypes.string,
+    category: React.PropTypes.string,
+    order: React.PropTypes.string,
     loginUser: React.PropTypes.func.isRequired,
 };
 
 export default connect(
-    state => {
+    (state, ownProps) => {
+
+        const current_user = state.user.get('current');
+        const account_user = state.global.get('accounts');
+        const current_account_name = current_user
+            ? current_user.get('username')
+            : state.offchain.get('account');
+
         return {
             viewMode: state.app.get('viewMode'),
             error: state.app.get('error'),
@@ -277,10 +295,19 @@ export default connect(
                 !state.offchain.get('user') &&
                 !state.offchain.get('account') &&
                 state.offchain.get('new_visit'),
+
+
+
+
+
+                
             nightmodeEnabled: state.app.getIn([
                 'user_preferences',
                 'nightmode',
             ]),
+            pathname: ownProps.location.pathname,
+            order: ownProps.params.order,
+            category: ownProps.params.category,
         };
     },
     dispatch => ({

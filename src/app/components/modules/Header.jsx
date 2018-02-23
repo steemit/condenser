@@ -14,25 +14,40 @@ import getPageTitle from 'app/utils/getPageTitle'
 class Header extends React.Component {
 
     static propTypes = {
-        location: React.PropTypes.object.isRequired,
         current_account_name: React.PropTypes.string,
         account_meta: React.PropTypes.object,
+        category: React.PropTypes.string,
+        order: React.PropTypes.string,
+        pathname: React.PropTypes.string,
     };
 
     constructor() {
         super();
     }
 
-    componentDidMount() {
-        const route = resolveRoute(this.props.location.pathname);
+    // TODO: This should happen at a higher level as the header component is not ubiquitous.
+    setPageTitle = () => {
+        const route = resolveRoute(this.props.pathname);
+        // HACK: We ought to have a better way of doing this rather than accessing global document.
+        // Also this only happens where the Header Component is present...
+        // e.g. https://github.com/gaearon/react-document-title
         const page_title = getPageTitle(route, this.props.account_meta );
-        //HACK: We ought to have a better way of doing this.
         document.title = page_title + ' — ' + APP_NAME;
     }
 
+    componentDidMount() {
+        this.setPageTitle();
+    }
+
+    componentDidUpdate() {
+        this.setPageTitle();
+    }
+
+    // I think 'last sort order' is something available through react-router-redux history.
+    // Therefore no need to store it in the window global like this.
     componentWillReceiveProps(nextProps) {
-        if (nextProps.location.pathname !== this.props.location.pathname) {
-            const route = resolveRoute(nextProps.location.pathname);
+        if (nextProps.pathname !== this.props.pathname) {
+            const route = resolveRoute(nextProps.pathname);
             if (
                 route &&
                 route.page === 'PostsIndex' &&
@@ -44,30 +59,20 @@ class Header extends React.Component {
                 if (sort_order)
                     window.last_sort_order = this.last_sort_order = sort_order;
             }
-            const page_title = getPageTitle(route, this.props.account_meta );
-            document.title = page_title + ' — ' + APP_NAME;
         }
     }
 
     render() {
-        // Don't do this. Use the route params available in the store.
-        const route = resolveRoute(this.props.location.pathname);
+        const {
+            category,
+            order,
+            pathname,
+            current_account_name,
+        } = this.props
 
-        const current_account_name = this.props.current_account_name;
-
-        let sort_order = '';
-        let topic = '';
-
-        if (route.page === 'PostsIndex') {
-            const sort_order = route.params[0];
-            const topic = route.params.length > 1 ? route.params[1] : '';
-        } else if (route.page === 'Post') {
-            const sort_order = '';
-            const topic = route.params[0];
-        }
-
+        // Logo should really always go to the same place.
         const logo_link =
-            route.params && route.params.length > 1 && this.last_sort_order
+        resolveRoute(pathname).params && resolveRoute(pathname).params.length > 1 && this.last_sort_order
                 ? '/' + this.last_sort_order
                 : current_account_name ? `/@${current_account_name}/feed` : '/';
 
@@ -119,8 +124,8 @@ class Header extends React.Component {
                                 </li>
                                 <span className="show-for-large">
                                     <SortOrder
-                                        sortOrder={sort_order}
-                                        topic={topic}
+                                        sortOrder={order}
+                                        topic={category}
                                         horizontal={true}
                                     />
                                 </span>
@@ -128,6 +133,7 @@ class Header extends React.Component {
                             </ul>
                         </div>
                         <div className="columns shrink">
+                            {/*IAIN KILL THIS*/}
                             <TopRightMenu {...this.props} />
                         </div>
                     </div>
@@ -146,35 +152,9 @@ export default connect((state, ownProps) => {
         ? current_user.get('username')
         : state.offchain.get('account');
     return {
-        location: state.app.get('location'),
         current_account_name,
         account_meta: account_user,
+        ...ownProps
     };
+
 })(Header);
-
-
-module.exports = {
-    path: ':order(/:category)',
-    component: connect(
-        (state, ownProps) => {
-            return {
-                discussions: state.global.get('discussion_idx'),
-                status: state.global.get('status'),
-                loading: state.app.get('loading'),
-                accounts: state.global.get('accounts'),
-                username:
-                    state.user.getIn(['current', 'username']) ||
-                    state.offchain.get('account'),
-                blogmode: state.app.getIn(['user_preferences', 'blogmode']),
-                sortOrder: ownProps.params.order,
-                topic: ownProps.params.category,
-            };
-        },
-        dispatch => {
-            return {
-                requestData: args =>
-                    dispatch(fetchDataSagaActions.requestData(args)),
-            };
-        }
-    )(PostsIndex),
-};

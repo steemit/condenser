@@ -324,7 +324,7 @@ There is a third-party tool called [BlockTrades](https://steemit.com/blocktrades
 
 <a href="#Table_of_Contents_Accounts">^</a>
 
-## <span id="It_is_not_letting_me_create_an_account_with_my_phone_number__What_should_I_do">It is not letting me create an account with my phone number. Что мне делать?</span>
+## <span id="It_is_not_letting_me_create_an_account_with_my_phone_number__What_should_I_do">Не получается создать аккаунт, используя мой номер телефона. Что мне делать?</span>
 
 Ask for help in the [#help](https://steemit.chat/channel/help) channel on [steemit.chat](https://steemit.chat/home).
 
@@ -430,7 +430,7 @@ Your wallet shows how many STEEM and Steem Dollar tokens you have in your accoun
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 
-## <span id="How_do_I_transfer_my_STEEM_or_Steem_Dollars_into_savings">Как мне перевести свои STEEM или Steem Dollars на сберегательный счет?</span>
+## <span id="How_do_I_transfer_my_STEEM_or_Steem_Dollars_into_savings">Как мне перевести свои STEEM или Steem Доллары на сберегательный счет?</span>
 
 Your savings balance is STEEM and SBD tokens that are subject to 3 day withdraw waiting period. This is an extra security measure in case your account credentials are compromised. To transfer STEEM or SBD tokens into savings, click on the drop-down arrow next to STEEM or STEEM DOLLARS in your wallet, and select "Transfer to Savings".
 

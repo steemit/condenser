@@ -226,13 +226,13 @@ Steemit это социальная медиаплатформа, работаю
 
 ## Чем отличается Steemit от других социальных медиа сайтов? <a id="How_does_Steemit_differ_from_other_social_media_websites"></a>
 
-Большинство социальных медиа сайтов извлекают выгоду от своих пользователей на благо одного из акционеров. Steemit is different, it's a new kind of attention economy. By connecting with the Steem blockchain (which is decentralized and controlled by the crowd), Steemit users receive all the benefits and rewards for their attention.
+Большинство социальных медиа сайтов извлекают выгоду от своих пользователей на благо одного из акционеров. Steemit отличается от этого, это новый вид экономики внимания. Подключаясь к блокчейну Steem (децентрализованному и управляемому всем сообществом), пользователи Steemit получают все выгоды и вознаграждения за свое внимание.
 
 <a href="#Table_of_Contents_General">^</a>
 
 ## <span id="Does_it_cost_anything_to_post__comment__or_vote">Нужно ли платить, чтобы опубликовать пост, оставить комментарий, проголосовать?</span>
 
-Нет. It is free to post, comment, and vote on content on Steemit.com. Вы могли бы даже получать за это деньги!
+Нет. Публикации, комментирование и голосование за контент на Steemit.com бесплатны. Вы можете даже получать за это деньги!
 
 <a href="#Table_of_Contents_General">^</a>
 

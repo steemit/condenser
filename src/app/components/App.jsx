@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import AppPropTypes from 'app/utils/AppPropTypes';
 import Header from 'app/components/modules/Header';
 import * as userActions from 'app/redux/UserReducer';
-import TopRightMenu from 'app/components/modules/TopRightMenu';
 import classNames from 'classnames';
 import ConnectedSidePanel from 'app/components/modules/ConnectedSidePanel';
 import CloseButton from 'react-foundation-components/lib/global/close-button';

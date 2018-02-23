@@ -1,4 +1,4 @@
-import react from 'React';
+import React from 'react';
 import tt from 'counterpart';
 import Icon from 'app/components/elements/Icon';
 

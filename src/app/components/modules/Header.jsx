@@ -115,6 +115,7 @@ class Header extends React.Component {
         const mcn = 'menu' + (vertical ? ' vertical show-for-small-only' : '');
         const mcl = vertical ? '' : ' sub-menu';
         const lcn = vertical ? '' : 'show-for-medium';
+        // Since navigate isn't set, defaultNavigate will always be used.
         const nav = navigate || defaultNavigate;
 
         const submit_story = $STM_Config.read_only_mode ? null : (

@@ -58,8 +58,8 @@ class PostsIndex extends React.Component {
 
     loadMore(last_post) {
         if (!last_post) return;
-        let { accountname } = this.props.routeParams;
         let {
+            accountname,
             category,
             order = constants.DEFAULT_SORT_ORDER,
         } = this.props.routeParams;

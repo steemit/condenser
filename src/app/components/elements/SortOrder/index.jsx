@@ -11,8 +11,7 @@ const SortOrder = ({ topic, sortOrder, setSortOrder, horizontal }) => {
         const route = topic ? `/${sort.value}/${topic}` : `/${sort.value}`;
         browserHistory.replace(route);
     };
-    // Want to set a sane default value
-    debugger
+
     const sorts = topic => [
         {
             value: 'trending',

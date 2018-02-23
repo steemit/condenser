@@ -50,7 +50,9 @@ class Header extends React.Component {
     }
 
     render() {
+        // Don't do this. Use the route params available in the store.
         const route = resolveRoute(this.props.location.pathname);
+
         const current_account_name = this.props.current_account_name;
 
         let sort_order = '';
@@ -137,7 +139,7 @@ class Header extends React.Component {
 
 export { Header as _Header_ };
 
-export default connect(state => {
+export default connect((state, ownProps) => {
     const current_user = state.user.get('current');
     const account_user = state.global.get('accounts');
     const current_account_name = current_user
@@ -149,3 +151,30 @@ export default connect(state => {
         account_meta: account_user,
     };
 })(Header);
+
+
+module.exports = {
+    path: ':order(/:category)',
+    component: connect(
+        (state, ownProps) => {
+            return {
+                discussions: state.global.get('discussion_idx'),
+                status: state.global.get('status'),
+                loading: state.app.get('loading'),
+                accounts: state.global.get('accounts'),
+                username:
+                    state.user.getIn(['current', 'username']) ||
+                    state.offchain.get('account'),
+                blogmode: state.app.getIn(['user_preferences', 'blogmode']),
+                sortOrder: ownProps.params.order,
+                topic: ownProps.params.category,
+            };
+        },
+        dispatch => {
+            return {
+                requestData: args =>
+                    dispatch(fetchDataSagaActions.requestData(args)),
+            };
+        }
+    )(PostsIndex),
+};

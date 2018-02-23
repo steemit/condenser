@@ -244,13 +244,13 @@ Steemit это социальная медиаплатформа, работаю
 
 **Голосование и курирование** - если вы обнаружите пост и проголосуете за него прежде чем он станет популярным, вы можете заработать награду за курирование. Сумма вознаграждения будет зависеть от количества Силы Голоса, которая у вас есть.
 
-**Покупка** - пользователи могут приобрести токены STEEM или STEEM Доллар напрямую через Steemit кошелек за токены Bitcoin, Ether или BitShares. Они также доступны на других рынках и биржах, включая BlockTrades, Poloniex, Bittrex, Shapeshift.io и Changelly. STEEM tokens that are powered up to STEEM Power earn a small amount of interest for holding.
+**Покупка** - пользователи могут приобрести токены STEEM или STEEM Доллар напрямую через Steemit кошелек за токены Bitcoin, Ether или BitShares. Они также доступны на других рынках и биржах, включая BlockTrades, Poloniex, Bittrex, Shapeshift.io и Changelly. Токены STEEM, будучи вложенными в Силу Голоса, приносят небольшой процент.
 
 <a href="#Table_of_Contents_General">^</a>
 
 ## <span id="Where_do_the_tokens_come_from">Откуда берутся токены?</span>
 
-The Steem network continually creates digital tokens to reward content creators and curators. Some of the newly-created tokens are transferred to users who add value to Steemit by posting, commenting, and voting on other people's posts. The remainder is distributed to holders of STEEM Power and the witnesses that power the blockchain.
+Steem сеть постоянно создает цифровые токены для вознаграждения создателей контента и кураторов. Some of the newly-created tokens are transferred to users who add value to Steemit by posting, commenting, and voting on other people's posts. The remainder is distributed to holders of STEEM Power and the witnesses that power the blockchain.
 
 <a href="#Table_of_Contents_General">^</a>
 

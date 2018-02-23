@@ -238,11 +238,11 @@ Steemit это социальная медиаплатформа, работаю
 
 ## <span id="Can_I_earn_digital_tokens_on_Steemit_How">Могу ли я заработать цифровые токены на Steemit? Как?</span>
 
-You can earn digital tokens on Steemit by:
+Вы можете заработать цифровые токены на Steemit следующими путями:
 
-**Posting** - By sharing your posts, you can earn upvotes from community members. Depending on the upvotes you receive, you will get a portion of the ongoing Steem reward pool.
+**Публикация** - размещая ваши сообщения, вы можете заработать голоса (лайки, апвоты) от членов сообщества. В зависимости от числа голосов, которые вы получили, вам достанется часть текущего Steem пула.
 
-**Voting and curating** - If you discover a post and upvote it before it becomes popular, you can earn a curation reward. The reward amount will depend on the amount of STEEM Power you have.
+**Голосование и курирование** - если вы обнаружите пост и проголосуете за него прежде чем он станет популярным, вы можете заработать награду за курирование. Сумма вознаграждения будет зависеть от количества Силы Голоса, которая у вас есть.
 
 **Purchasing** - Users can purchase STEEM or Steem Dollar tokens directly through the Steemit wallet using bitcoin, Ether, or BitShares tokens. They are also available from other markets and exchanges including BlockTrades, Poloniex, Bittrex, Shapeshift.io, and Changelly. STEEM tokens that are powered up to STEEM Power earn a small amount of interest for holding.
 

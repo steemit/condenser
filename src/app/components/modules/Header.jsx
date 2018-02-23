@@ -43,6 +43,7 @@ class Header extends React.Component {
         this.setPageTitle();
     }
 
+    // Conside refactor.
     // I think 'last sort order' is something available through react-router-redux history.
     // Therefore no need to store it in the window global like this.
     componentWillReceiveProps(nextProps) {
@@ -135,6 +136,7 @@ class Header extends React.Component {
                         <div className="columns shrink">
                             {/*IAIN KILL THIS*/}
                             <TopRightMenu {...this.props} />
+
                         </div>
                     </div>
                 </div>
@@ -145,16 +147,59 @@ class Header extends React.Component {
 
 export { Header as _Header_ };
 
-export default connect((state, ownProps) => {
-    const current_user = state.user.get('current');
-    const account_user = state.global.get('accounts');
-    const current_account_name = current_user
-        ? current_user.get('username')
-        : state.offchain.get('account');
-    return {
-        current_account_name,
-        account_meta: account_user,
-        ...ownProps
-    };
+const mapStateToProps = (state, ownProps) => {
+    // SSR code split.
+    if (!process.env.BROWSER) {
+        return ({
+            username: null,
+            loggedIn: false,
+            probablyLoggedIn: !!state.offchain.get('account'),
+        });
+    }
 
-})(Header);
+    const userPath = state.routing.locationBeforeTransitions.pathname;
+    const username = state.user.getIn(['current', 'username']);
+    const loggedIn = !!username;
+    const account_user = state.global.get('accounts');
+    const current_account_name = username
+    ? username
+    : state.offchain.get('account');
+    
+    return ({
+        username,
+        loggedIn,
+        userPath,
+        probablyLoggedIn: false,
+        nightmodeEnabled: state.user.getIn([
+            'user_preferences',
+            'nightmode',
+        ]),
+        account_meta: account_user,
+        current_account_name,
+        ...ownProps
+    });
+}
+
+
+const mapDispatchToProps = dispatch => ({
+    showLogin: e => {
+        if (e) e.preventDefault();
+        dispatch(userActions.showLogin());
+    },
+    logout: e => {
+        if (e) e.preventDefault();
+        dispatch(userActions.logout());
+    },
+    toggleNightmode: e => {
+        if (e) e.preventDefault();
+        dispatch(appActions.toggleNightmode());
+    },
+    showSidePanel: () => {
+        dispatch(userActions.showSidePanel());
+    },
+    hideSidePanel: () => {
+        dispatch(userActions.hideSidePanel());
+    },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

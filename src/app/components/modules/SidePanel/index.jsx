@@ -7,9 +7,11 @@ import { Link } from 'react-router';
 
 const SidePanel = ({ alignment, visible, hideSidePanel, username, depositSteem }) => {
 
+    {/*
     visible && document.addEventListener('click', hideSidePanel);
     !visible && document.removeEventListener('click', hideSidePanel);
-
+    */}
+    
     const loggedIn = username === undefined ? 'show-for-small-only': 'hide-for-small hide-for-medium hide-for-large';
     const buySteemLink = (
         <li>

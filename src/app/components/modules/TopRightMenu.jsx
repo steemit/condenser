@@ -204,6 +204,7 @@ export default connect(
                 probablyLoggedIn: !!state.offchain.get('account'),
             };
         }
+        // Used to decide whether or not to hide the 'submit' button.
         const userPath = state.routing.locationBeforeTransitions.pathname;
         const username = state.user.getIn(['current', 'username']);
         const loggedIn = !!username;

@@ -250,13 +250,13 @@ Steemit это социальная медиаплатформа, работаю
 
 ## <span id="Where_do_the_tokens_come_from">Откуда берутся токены?</span>
 
-Steem сеть постоянно создает цифровые токены для вознаграждения создателей контента и кураторов. Some of the newly-created tokens are transferred to users who add value to Steemit by posting, commenting, and voting on other people's posts. The remainder is distributed to holders of STEEM Power and the witnesses that power the blockchain.
+Steem сеть постоянно создает цифровые токены для вознаграждения создателей контента и кураторов. Некоторые из вновь созданных токенов передаются пользователям, которые увеличивают ценность Steemit, публикуя, комментируя и голосуя за публикации других людей. Остаток распределяется между держателями Силы Голоса и делегатами, которые поддерживают работу блокчейна.
 
 <a href="#Table_of_Contents_General">^</a>
 
 ## <span id="Where_does_the_value_come_from">Откуда берется стоимость токенов?</span>
 
-At its root, Steem is simply a points system. However, because this points system is blockchain-based, the points can be traded on markets as tokens. People buy and sell these tokens, and many hold in anticipation of increased purchasing power for various Steem-related services.
+В своей основе Steem это просто система баллов. However, because this points system is blockchain-based, the points can be traded on markets as tokens. People buy and sell these tokens, and many hold in anticipation of increased purchasing power for various Steem-related services.
 
 By analogy, Steem is a game system where users compete for attention and rewards by bringing content and adding value to the platform. The rewards people earn are tokens that have market value and are readily tradable. It is similar to how someone playing a video game could obtain a limited item or currency by playing the game. If the currency or items are transferable between users, then they can sell or buy them on game item markets.
 

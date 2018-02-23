@@ -220,13 +220,13 @@ Steemit переопределяет социальные сети путем с
 
 ## <span id="How_does_Steemit_work">Как работает Steemit?</span>
 
-Steemit is a social media platform that works by having the crowd reward the crowd for their content. It does this thanks to the Steem blockchain and cryptocurrency; Steem is 'minted' daily and distributed to content producers according to the votes they get.
+Steemit это социальная медиаплатформа, работающая за счет того, что множество людей награждают друг друга за контент. Это происходит благодаря блокчейну Steem и криптовалюте. Steem ежедневно 'чеканит монеты' и распределяет их между производителями контента в соответствии с голосами, которые они получили.
 
 <a href="#Table_of_Contents_General">^</a>
 
 ## Чем отличается Steemit от других социальных медиа сайтов? <a id="How_does_Steemit_differ_from_other_social_media_websites"></a>
 
-Most social media sites extract value from their userbase for the benefit of shareholders alone. Steemit is different, it's a new kind of attention economy. By connecting with the Steem blockchain (which is decentralized and controlled by the crowd), Steemit users receive all the benefits and rewards for their attention.
+Большинство социальных медиа сайтов извлекают выгоду от своих пользователей на благо одного из акционеров. Steemit is different, it's a new kind of attention economy. By connecting with the Steem blockchain (which is decentralized and controlled by the crowd), Steemit users receive all the benefits and rewards for their attention.
 
 <a href="#Table_of_Contents_General">^</a>
 

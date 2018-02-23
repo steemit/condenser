@@ -244,7 +244,7 @@ Steemit это социальная медиаплатформа, работаю
 
 **Голосование и курирование** - если вы обнаружите пост и проголосуете за него прежде чем он станет популярным, вы можете заработать награду за курирование. Сумма вознаграждения будет зависеть от количества Силы Голоса, которая у вас есть.
 
-**Purchasing** - Users can purchase STEEM or Steem Dollar tokens directly through the Steemit wallet using bitcoin, Ether, or BitShares tokens. They are also available from other markets and exchanges including BlockTrades, Poloniex, Bittrex, Shapeshift.io, and Changelly. STEEM tokens that are powered up to STEEM Power earn a small amount of interest for holding.
+**Покупка** - пользователи могут приобрести токены STEEM или STEEM Доллар напрямую через Steemit кошелек за токены Bitcoin, Ether или BitShares. Они также доступны на других рынках и биржах, включая BlockTrades, Poloniex, Bittrex, Shapeshift.io и Changelly. STEEM tokens that are powered up to STEEM Power earn a small amount of interest for holding.
 
 <a href="#Table_of_Contents_General">^</a>
 

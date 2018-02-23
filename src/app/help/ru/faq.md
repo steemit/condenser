@@ -256,9 +256,9 @@ Steemit это социальная медиаплатформа, работаю
 
 ## <span id="Where_does_the_value_come_from">Откуда берется стоимость токенов?</span>
 
-В своей основе Steem это просто система баллов. Однако, поскольку эта балльная система основана на блокчейне, баллы могут торговаться на рынках как токены. Люди покупают и продают эти токены, а многие держат их в ожидании повышения покупательной способности для различных услуг, связанных со Steem.
+В своей основе Steem это просто система баллов. Однако, поскольку эта балльная система основана на блокчейне, такие баллы могут торговаться на рынках как токены. Люди покупают и продают эти токены, а многие держат их в ожидании повышения покупательной способности для различных услуг, связанных со Steem.
 
-По аналогии с играми Steem является системой, где пользователи конкурируют за внимание и награды, принося содержание и добавляя ценность для платформы. The rewards people earn are tokens that have market value and are readily tradable. It is similar to how someone playing a video game could obtain a limited item or currency by playing the game. If the currency or items are transferable between users, then they can sell or buy them on game item markets.
+По аналогии с играми Steem является системой, где пользователи конкурируют за внимание и награды, принося контент и добавляя ценность для платформы. The rewards people earn are tokens that have market value and are readily tradable. It is similar to how someone playing a video game could obtain a limited item or currency by playing the game. If the currency or items are transferable between users, then they can sell or buy them on game item markets.
 
 <a href="#Table_of_Contents_General">^</a>
 
@@ -276,7 +276,7 @@ It is best to have realistic expectations, without focusing on rewards when you 
 
 ## <span id="How_do_I_create_an_account">Как создать аккаунт?</span>
 
-Click on the "Sign Up" link at the top of Steemit.com to get started.
+Для начала нажмите на ссылку «Зарегистрироваться» в верхней части Steemit.com.
 
 You will be asked to verify your email address and phone number. After your email address and phone number have been verified, you will be added to the waiting list. You will be notified via email once your account is approved.
 
@@ -286,13 +286,13 @@ After you receive notification that your account is approved, click on the link 
 
 ## <span id="What_information_do_I_need_to_provide_in_order_to_create_an_account">Какую информацию нужно предоставить для того, чтобы создать аккаунт?</span>
 
-You will need to provide your email address and phone number.
+Вам нужно будет предоставить свой электронный адрес и номер телефона.
 
 <a href="#Table_of_Contents_Accounts">^</a>
 
 ## <span id="How_long_does_the_account_approval_process_take">Сколько времени занимает процесс утверждения аккаунта?</span>
 
-Most accounts are approved within 24 hours. Some may take up to a week.
+Большинство аккаунтов утверждаются в течение 24 часов. Для некоторых это может занять до недели.
 
 If your account has not been approved after one week, please ask for help in the [#help](https://steemit.chat/channel/help) channel on [steemit.chat](https://steemit.chat/home).
 

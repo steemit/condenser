@@ -256,9 +256,9 @@ Steem сеть постоянно создает цифровые токены �
 
 ## <span id="Where_does_the_value_come_from">Откуда берется стоимость токенов?</span>
 
-В своей основе Steem это просто система баллов. However, because this points system is blockchain-based, the points can be traded on markets as tokens. People buy and sell these tokens, and many hold in anticipation of increased purchasing power for various Steem-related services.
+В своей основе Steem это просто система баллов. Однако, поскольку эта балльная система основана на блокчейне, баллы могут торговаться на рынках как токены. Люди покупают и продают эти токены, а многие держат их в ожидании повышения покупательной способности для различных услуг, связанных со Steem.
 
-By analogy, Steem is a game system where users compete for attention and rewards by bringing content and adding value to the platform. The rewards people earn are tokens that have market value and are readily tradable. It is similar to how someone playing a video game could obtain a limited item or currency by playing the game. If the currency or items are transferable between users, then they can sell or buy them on game item markets.
+По аналогии Steem является игровой системой, где пользователи конкурируют за внимание и награды, принося содержание и добавляя ценность для платформы. The rewards people earn are tokens that have market value and are readily tradable. It is similar to how someone playing a video game could obtain a limited item or currency by playing the game. If the currency or items are transferable between users, then they can sell or buy them on game item markets.
 
 <a href="#Table_of_Contents_General">^</a>
 

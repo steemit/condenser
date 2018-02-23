@@ -26,6 +26,7 @@ class Header extends React.Component {
     componentDidMount() {
         const route = resolveRoute(this.props.location.pathname);
         const page_title = getPageTitle(route, this.props.account_meta );
+        //HACK: We ought to have a better way of doing this.
         document.title = page_title + ' — ' + APP_NAME;
     }
 

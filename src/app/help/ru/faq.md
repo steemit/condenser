@@ -692,7 +692,7 @@ At the bottom of each post is a button to "Promote". After clicking the button, 
 
 ## <span id="How_often_can_I_comment">Как часто я могу комментировать?</span>
 
-There is a 20 second wait time in between comments to limit spam.
+Для предотвращения спама есть 20 секундная пауза между комментариями.
 
 <a href="#Table_of_Contents_Comments">^</a>
 
@@ -833,13 +833,13 @@ The blockchain estimates the dollar value of STEEM and STEEM Power based on the 
 
 <a href="#Table_of_Contents_Economics">^</a>
 
-## <span id="Will_1_Steem_Dollar_always_be_worth__1_00_USD">Будет ли 1 STEEM Доллар всегда равен $1 США?</span>
+## <span id="Will_1_Steem_Dollar_always_be_worth__1_00_USD">Будет ли 1 STEEM Доллар всегда равен 1 доллару США?</span>
 
 The market value of a Steem Dollar is dictated by the supply and demand of the token. Therefore it is possible for 1 SBD to be worth more or less than 1 USD depending on market conditions. However, the network's SBD conversion feature serves as a mechanism to hold Steem Dollars within a small margin of the value of USD.
 
 <a href="#Table_of_Contents_Economics">^</a>
 
-## <span id="How_do_Steem_Dollar_to_STEEM_conversions_work">Как происходит конверсия STEEM Доллара в STEEM?</span>
+## <span id="How_do_Steem_Dollar_to_STEEM_conversions_work">Как происходит конвертация STEEM Доллара в STEEM?</span>
 
 If you convert Steem Dollars to STEEM on the Wallet page, the blockchain will process the transaction over a period of 3.5 days. At the end of the 3.5 days, the SBD will be gone and replaced by approximately $1 USD worth of STEEM tokens. The "approximately 1 USD worth of STEEM tokens" is based on the median STEEM price over the 3.5 days, using the price feeds from the Steem witnesses. Depending on price fluctuations during the 3.5 days it is possible to end up with more or less than $1 USD worth of STEEM per SBD at the end of the conversion.
 

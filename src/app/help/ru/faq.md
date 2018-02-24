@@ -137,72 +137,72 @@
 
 ### <span id="Table_of_Contents_Reputation">Репутация</span>
 
-- [What is Reputation?](#What_is_Reputation)
-- [How is the Reputation score measured?](#How_is_the_Reputation_score_measured)
-- [How do I improve my reputation score?](#How_do_I_improve_my_reputation_score)
-- [What causes my reputation score to go down?](#What_causes_my_reputation_score_to_go_down)
-- [Why does my reputation score matter?](#Why_does_my_reputation_score_matter)
+- [Что такое репутация?](#What_is_Reputation)
+- [Как измеряется репутация?](#How_is_the_Reputation_score_measured)
+- [Как мне увеличить баллы репутации?](#How_do_I_improve_my_reputation_score)
+- [Что снижает оценку моей репутации?](#What_causes_my_reputation_score_to_go_down)
+- [Что придает значение моей репутации?](#Why_does_my_reputation_score_matter)
 
 ### <span id="Table_of_Contents_Followers__Feeds_and_Resteem">Последователи, ленты и репосты</span>
 
-- [What is Resteeming?](#What_is_Resteeming)
-- [Can I share on other social media?](#Can_I_share_on_other_social_media)
+- [Что такое репост?](#What_is_Resteeming)
+- [Могу я поделиться постом в других социальных медиа?](#Can_I_share_on_other_social_media)
 
 ### <span id="Table_of_Contents_Blockchain">Блокчейн</span>
 
 - [Что такое блокчейн?](#What_is_a_blockchain)
-- [What is the Steem blockchain?](#What_is_the_Steem_blockchain)
-- [What is the difference between Steem and Steemit?](#What_is_the_difference_between_Steem_and_Steemit)
-- [How is Steem different from Bitcoin?](#How_is_Steem_different_from_Bitcoin)
-- [What is the difference between Proof of Work, Proof of Stake, and Delegated Proof of Stake?](#What_is_the_difference_between_Proof_of_Work__Proof_of_Stake__and_Delegated_Proof_of_Stake)
-- [How often does the Steem blockchain produce a new block?](#How_often_does_the_Steem_blockchain_produce_a_new_block)
-- [Is there a way to see the raw data that is stored in the blockchain?](#Is_there_a_way_to_see_the_raw_data_that_is_stored_in_the_blockchain)
-- [Where can I find the information for the official launch of the blockchain?](#Where_can_I_find_the_information_for_the_official_launch_of_the_blockchain)
-- [Can I mine STEEM?](#Can_I_mine_STEEM)
+- [Что такое блокчейн Steem?](#What_is_the_Steem_blockchain)
+- [В чем разница между Steem и Steemit?](#What_is_the_difference_between_Steem_and_Steemit)
+- [Чем Steem отличается от биткоина?](#How_is_Steem_different_from_Bitcoin)
+- [В чем различие между Proof of Work, Proof of Stake и Delegated Proof of Stake?](#What_is_the_difference_between_Proof_of_Work__Proof_of_Stake__and_Delegated_Proof_of_Stake)
+- [Как часто блокчейн Steem генерирует новый блок?](#How_often_does_the_Steem_blockchain_produce_a_new_block)
+- [Есть ли способ увидеть сырые данные, которые хранятся в блокчейне?](#Is_there_a_way_to_see_the_raw_data_that_is_stored_in_the_blockchain)
+- [Где мне найти информацию об официальном запуске блокчейна?](#Where_can_I_find_the_information_for_the_official_launch_of_the_blockchain)
+- [Могу ли я намайнить Steem?](#Can_I_mine_STEEM)
 
 ### <span id="Table_of_Contents_Steemit__Inc">Корпорация Steemit</span>
 
-- [Who is the CEO of Steemit?](#Who_is_the_CEO_of_Steemit)
-- [Can I invest in Steemit?](#Can_I_invest_in_Steemit)
-- [What does Steemit’s development roadmap look like?](#What_does_Steemit_s_development_roadmap_look_like)
-- [Am I allowed to use the Steem and Steemit logos?](#Am_I_allowed_to_use_the_Steem_and_Steemit_logos)
-- [Can I purchase official Steemit merchandise?](#Can_I_purchase_official_Steemit_merchandise)
-- [Did Steemit "pre-mine" tokens?](#Did_Steemit__pre_mine__tokens)
-- [What is the Steemit Privacy Policy?](#What_is_the_Steemit_Privacy_Policy)
+- [Кто является CEO в Steemit?](#Who_is_the_CEO_of_Steemit)
+- [Могу ли я инвестировать в Steemit?](#Can_I_invest_in_Steemit)
+- [Как выглядит дорожная карта разработки Steemit?](#What_does_Steemit_s_development_roadmap_look_like)
+- [Разрешено ли использовать логотипы Steem и Steemit?](#Am_I_allowed_to_use_the_Steem_and_Steemit_logos)
+- [Можно ли купить официальный товар Steemit?](#Can_I_purchase_official_Steemit_merchandise)
+- [Может ли Steemit "заранее намайнить" токены?](#Did_Steemit__pre_mine__tokens)
+- [Какова Политика конфиденциальности Steemit?](#What_is_the_Steemit_Privacy_Policy)
 
 ### <span id="Table_of_Contents_Security">Безопасность</span>
 
-- [How can I keep my Steem account secure?](#How_can_I_keep_my_Steem_account_secure)
-- [Why should I be careful with my master password?](#Why_should_I_be_careful_with_my_master_password)
-- [Why is the master password a long string of gibberish?](#Why_is_the_master_password_a_long_string_of_gibberish)
-- [What are my different keys for?](#What_are_my_different_keys_for)
-- [What do I do if I lost my password/keys?](#What_do_I_do_if_I_lost_my_password_keys)
-- [Are my STEEM and Steem Dollar tokens insured in the event of a hack or if someone takes over my account?](#Are_my_STEEM_and_Steem_Dollar_tokens_insured_in_the_event_of_a_hack_or_if_someone_takes_over_my_account)
-- [What should I do if I discover that someone hacked my account?](#What_should_I_do_if_I_discover_that_someone_hacked_my_account)
-- [How does the stolen account recovery process work?](#How_does_the_stolen_account_recovery_process_work)
-- [How do I report a security vulnerability?](#How_do_I_report_a_security_vulnerability)
+- [Как мне обеспечить безопасность моего аккаунта Steem?](#How_can_I_keep_my_Steem_account_secure)
+- [Почему мне нужно быть осторожным с моим мастер-паролем?](#Why_should_I_be_careful_with_my_master_password)
+- [Почему мастер-пароль выглядит длинной тарабарщиной?](#Why_is_the_master_password_a_long_string_of_gibberish)
+- [Какие у меня есть разные ключи?](#What_are_my_different_keys_for)
+- [Что мне делать, если я потерял свой пароль или ключи?](#What_do_I_do_if_I_lost_my_password_keys)
+- [Как защищены мои STEEM и Steem Доллары на случай взлома или если кто-то воспользуется моим аккаунтом?](#Are_my_STEEM_and_Steem_Dollar_tokens_insured_in_the_event_of_a_hack_or_if_someone_takes_over_my_account)
+- [Что делать, если я узнаю, что кто-то взломал мой аккаунт?](#What_should_I_do_if_I_discover_that_someone_hacked_my_account)
+- [Как происходит восстановление украденного аккаунта?](#How_does_the_stolen_account_recovery_process_work)
+- [Как мне сообщить об уязвимости в безопасности?](#How_do_I_report_a_security_vulnerability)
 
 ### <span id="Table_of_Contents_Developers">Разработчики</span>
 
-- [Are the Steem blockchain and Steemit.com code open-source?](#Are_the_Steem_blockchain_and_Steemit_com_code_open_source)
-- [Is there a Github page for Steemit.com?](#Is_there_a_Github_page_for_Steemit_com)
-- [Is there a Github page for the Steem blockchain?](#Is_there_a_Github_page_for_the_Steem_blockchain)
-- [What is available for developers interested in Steem and Steemit?](#What_is_available_for_developers_interested_in_Steem_and_Steemit)
-- [How do I use cli_wallet?](#How_do_I_use_cli_wallet)
+- [Является ли код блокчейна Steem и Steemit.com общедоступным (open source)?](#Are_the_Steem_blockchain_and_Steemit_com_code_open_source)
+- [Есть ли Github страница для Steemit.com?](#Is_there_a_Github_page_for_Steemit_com)
+- [Есть ли Github страница для блокчейна Steem?](#Is_there_a_Github_page_for_the_Steem_blockchain)
+- [Что доступно для разработчиков, интересующихся Steem и Steemit?](#What_is_available_for_developers_interested_in_Steem_and_Steemit)
+- [Как использовать cli_wallet?](#How_do_I_use_cli_wallet)
 
 ### <span id="Table_of_Contents_Witnesses">Делегаты</span>
 
-- [What are Steem witnesses?](#What_are_Steem_witnesses)
-- [How can I vote for witnesses?](#How_can_I_vote_for_witnesses)
-- [How many witnesses can I vote for?](#How_many_witnesses_can_I_vote_for)
+- [Кто такие делегаты Steem?](#What_are_Steem_witnesses)
+- [Как мне проголосовать за делегатов?](#How_can_I_vote_for_witnesses)
+- [За скольких делегатов я могу проголосовать?](#How_many_witnesses_can_I_vote_for)
 
 ### <span id="Table_of_Contents_Miscellaneous">Разное</span>
 
-- [What third-party tools are there for Steemit?](#What_third_party_tools_are_there_for_Steemit)
-- [Is there an official Steemit Facebook page?](#Is_there_an_official_Steemit_Facebook_page)
-- [Is there an official Steemit Twitter account?](#Is_there_an_official_Steemit_Twitter_account)
-- [What is the Steem Whitepaper and what is its purpose?](#What_is_the_Steem_Whitepaper_and_what_is_its_purpose)
-- [Where can I ask for help if my question was not answered here?](#Where_can_I_ask_for_help_if_my_question_was_not_answered_here)
+- [Какой сторонний софт есть для Steem?](#What_third_party_tools_are_there_for_Steemit)
+- [Есть ли официальная страница Steemit в Facebook?](#Is_there_an_official_Steemit_Facebook_page)
+- [Есть ли официальный аккаунт Steemit в Twitter?](#Is_there_an_official_Steemit_Twitter_account)
+- [Что такое Белые страницы Steem и какова их цель?](#What_is_the_Steem_Whitepaper_and_what_is_its_purpose)
+- [Где найти ответы, которые я не получил здесь?](#Where_can_I_ask_for_help_if_my_question_was_not_answered_here)
 
 ### <span id="Table_of_Contents_Disclaimer">Отказ от ответственности</span>
 
@@ -212,53 +212,53 @@
 
 ## <span id="What_is_Steemit_com">Что такое Steemit.com?</span>
 
-Steemit is a social network and content rewards platform that makes the crowd the beneficiaries of the attention economy. It does this be rewarding users with STEEM.
+Steemit - это социальная сеть и вознаграждающая за контент платформа, которую создают множество людей, получающих выгоду от экономики внимания. Она делает это, вознаграждая пользователей токенами STEEM.
 
-Steemit has redefined social media by building a living, breathing, and growing social economy; a community where users are getting rewarded for sharing their voice.
+Steemit переопределяет социальные сети путем создания живой, дышащей и растущей социальной экономики. И сообщества, где пользователи вознаграждаются в обмен на свой голос.
 
 <a href="#Table_of_Contents_General">^</a>
 
 ## <span id="How_does_Steemit_work">Как работает Steemit?</span>
 
-Steemit is a social media platform that works by having the crowd reward the crowd for their content. It does this thanks to the Steem blockchain and cryptocurrency; Steem is 'minted' daily and distributed to content producers according to the votes they get.
+Steemit это социальная медиаплатформа, работающая за счет того, что множество людей награждают друг друга за контент. Это происходит благодаря блокчейну Steem и криптовалюте. Steem ежедневно 'чеканит монеты' и распределяет их между производителями контента в соответствии с голосами, которые они получили.
 
 <a href="#Table_of_Contents_General">^</a>
 
 ## Чем отличается Steemit от других социальных медиа сайтов? <a id="How_does_Steemit_differ_from_other_social_media_websites"></a>
 
-Most social media sites extract value from their userbase for the benefit of shareholders alone. Steemit is different, it's a new kind of attention economy. By connecting with the Steem blockchain (which is decentralized and controlled by the crowd), Steemit users receive all the benefits and rewards for their attention.
+Большинство социальных медиа сайтов извлекают выгоду от своих пользователей на благо одного из акционеров. Steemit отличается от этого, это новый вид экономики внимания. Подключаясь к блокчейну Steem (децентрализованному и управляемому всем сообществом), пользователи Steemit получают все выгоды и вознаграждения за свое внимание.
 
 <a href="#Table_of_Contents_General">^</a>
 
 ## <span id="Does_it_cost_anything_to_post__comment__or_vote">Нужно ли платить, чтобы опубликовать пост, оставить комментарий, проголосовать?</span>
 
-No. It is free to post, comment, and vote on content on Steemit.com. You might even get paid for it!
+Нет. Публикации, комментирование и голосование за контент на Steemit.com бесплатны. Вы можете даже получать за это деньги!
 
 <a href="#Table_of_Contents_General">^</a>
 
 ## <span id="Can_I_earn_digital_tokens_on_Steemit_How">Могу ли я заработать цифровые токены на Steemit? Как?</span>
 
-You can earn digital tokens on Steemit by:
+Вы можете заработать цифровые токены на Steemit следующими путями:
 
-**Posting** - By sharing your posts, you can earn upvotes from community members. Depending on the upvotes you receive, you will get a portion of the ongoing Steem reward pool.
+**Публикация** - размещая ваши сообщения, вы можете заработать голоса (лайки, апвоты) от членов сообщества. В зависимости от числа голосов, которые вы получили, вам достанется часть текущего Steem пула.
 
-**Voting and curating** - If you discover a post and upvote it before it becomes popular, you can earn a curation reward. The reward amount will depend on the amount of STEEM Power you have.
+**Голосование и курирование** - если вы обнаружите пост и проголосуете за него прежде чем он станет популярным, вы можете заработать награду за курирование. Сумма вознаграждения будет зависеть от количества Силы Голоса, которая у вас есть.
 
-**Purchasing** - Users can purchase STEEM or Steem Dollar tokens directly through the Steemit wallet using bitcoin, Ether, or BitShares tokens. They are also available from other markets and exchanges including BlockTrades, Poloniex, Bittrex, Shapeshift.io, and Changelly. STEEM tokens that are powered up to STEEM Power earn a small amount of interest for holding.
+**Покупка** - пользователи могут приобрести токены STEEM или STEEM Доллар напрямую через Steemit кошелек за токены Bitcoin, Ether или BitShares. Они также доступны на других рынках и биржах, включая BlockTrades, Poloniex, Bittrex, Shapeshift.io и Changelly. Токены STEEM, будучи вложенными в Силу Голоса, приносят небольшой процент.
 
 <a href="#Table_of_Contents_General">^</a>
 
 ## <span id="Where_do_the_tokens_come_from">Откуда берутся токены?</span>
 
-The Steem network continually creates digital tokens to reward content creators and curators. Some of the newly-created tokens are transferred to users who add value to Steemit by posting, commenting, and voting on other people's posts. The remainder is distributed to holders of STEEM Power and the witnesses that power the blockchain.
+Сеть Steem постоянно создает цифровые токены для вознаграждения создателей контента и кураторов. Некоторые из вновь созданных токенов передаются пользователям, которые увеличивают ценность Steemit, публикуя, комментируя и голосуя за публикации других людей. Остаток распределяется между держателями Силы Голоса и делегатами, которые поддерживают работу блокчейна.
 
 <a href="#Table_of_Contents_General">^</a>
 
 ## <span id="Where_does_the_value_come_from">Откуда берется стоимость токенов?</span>
 
-At its root, Steem is simply a points system. However, because this points system is blockchain-based, the points can be traded on markets as tokens. People buy and sell these tokens, and many hold in anticipation of increased purchasing power for various Steem-related services.
+В своей основе Steem это просто система баллов. Однако, поскольку эта балльная система основана на блокчейне, такие баллы могут торговаться на рынках как токены. Люди покупают и продают эти токены, а многие держат их в ожидании повышения покупательной способности для различных услуг, связанных со Steem.
 
-By analogy, Steem is a game system where users compete for attention and rewards by bringing content and adding value to the platform. The rewards people earn are tokens that have market value and are readily tradable. It is similar to how someone playing a video game could obtain a limited item or currency by playing the game. If the currency or items are transferable between users, then they can sell or buy them on game item markets.
+По аналогии с играми Steem является системой, где пользователи конкурируют за внимание и награды, принося контент и добавляя ценность для платформы. The rewards people earn are tokens that have market value and are readily tradable. It is similar to how someone playing a video game could obtain a limited item or currency by playing the game. If the currency or items are transferable between users, then they can sell or buy them on game item markets.
 
 <a href="#Table_of_Contents_General">^</a>
 
@@ -276,7 +276,7 @@ It is best to have realistic expectations, without focusing on rewards when you 
 
 ## <span id="How_do_I_create_an_account">Как создать аккаунт?</span>
 
-Click on the "Sign Up" link at the top of Steemit.com to get started.
+Для начала нажмите на ссылку «Зарегистрироваться» в верхней части Steemit.com.
 
 You will be asked to verify your email address and phone number. After your email address and phone number have been verified, you will be added to the waiting list. You will be notified via email once your account is approved.
 
@@ -286,13 +286,13 @@ After you receive notification that your account is approved, click on the link 
 
 ## <span id="What_information_do_I_need_to_provide_in_order_to_create_an_account">Какую информацию нужно предоставить для того, чтобы создать аккаунт?</span>
 
-You will need to provide your email address and phone number.
+Вам нужно будет предоставить свой электронный адрес и номер телефона.
 
 <a href="#Table_of_Contents_Accounts">^</a>
 
 ## <span id="How_long_does_the_account_approval_process_take">Сколько времени занимает процесс утверждения аккаунта?</span>
 
-Most accounts are approved within 24 hours. Some may take up to a week.
+Большинство аккаунтов утверждаются в течение 24 часов. Для некоторых это может занять до недели.
 
 If your account has not been approved after one week, please ask for help in the [#help](https://steemit.chat/channel/help) channel on [steemit.chat](https://steemit.chat/home).
 
@@ -324,7 +324,7 @@ There is a third-party tool called [BlockTrades](https://steemit.com/blocktrades
 
 <a href="#Table_of_Contents_Accounts">^</a>
 
-## <span id="It_is_not_letting_me_create_an_account_with_my_phone_number__What_should_I_do">It is not letting me create an account with my phone number. Что мне делать?</span>
+## <span id="It_is_not_letting_me_create_an_account_with_my_phone_number__What_should_I_do">Не получается создать аккаунт, используя мой номер телефона. Что мне делать?</span>
 
 Ask for help in the [#help](https://steemit.chat/channel/help) channel on [steemit.chat](https://steemit.chat/home).
 
@@ -344,7 +344,7 @@ Each user is allowed only one paid-for account created via Steemit.com, however 
 
 ## <span id="Can_I_delete_or_deactivate_my_account">Могу ли я удалить или отключить мой аккаунт?</span>
 
-Accounts can not be deactivated or deleted. The account along with all of its activity is permanently stored in the blockchain.
+Аккаунты не могут быть отключены или удалены. Аккаунт вместе со всей своей деятельностью постоянно хранится в блокчейне.
 
 <a href="#Table_of_Contents_Accounts">^</a>
 
@@ -370,13 +370,13 @@ Many users also like to post a photo or a video which shows them holding up a sh
 
 ## <span id="How_do_I_upvote_a_post_or_comment">Как проголосовать за пост или комментарий?</span>
 
-To upvote a post or comment, click on the "upvote" icon at the bottom of the post/comment. <icon name="chevron-up-circle" />
+Чтобы проголосовать за пост или комментарий, нажмите на значок "голосовать за" внизу поста/комментария. <icon name="chevron-up-circle" />
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 
 ## <span id="What_do_the_Home__New__Hot__Trending__and_Promoted_links_show">Куда ведут ссылки «популярное», «новое», «актуальное», «продвигаемое»?</span>
 
-These are various ways to sort Steem posts.
+Есть различные способы сортировки постов в Steem.
 
 **Home** - The most recent posts of the accounts you follow (your feed).
 
@@ -412,7 +412,7 @@ You can get to your account menu by clicking on the avatar icon in the top-right
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 
-## <span id="How_do_I_see_my_recent_rewards">Как увидеть мои последние вознагражденя?</span>
+## <span id="How_do_I_see_my_recent_rewards">Как увидеть мои последние вознаграждения?</span>
 
 The Rewards drop-down menu is available on your profile/blog page. Click it and there are two links:
 
@@ -430,7 +430,7 @@ Your wallet shows how many STEEM and Steem Dollar tokens you have in your accoun
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 
-## <span id="How_do_I_transfer_my_STEEM_or_Steem_Dollars_into_savings">Как мне перевести свои STEEM или Steem Dollars на сберегательный счет?</span>
+## <span id="How_do_I_transfer_my_STEEM_or_Steem_Dollars_into_savings">Как мне перевести свои STEEM или Steem Доллары на сберегательный счет?</span>
 
 Your savings balance is STEEM and SBD tokens that are subject to 3 day withdraw waiting period. This is an extra security measure in case your account credentials are compromised. To transfer STEEM or SBD tokens into savings, click on the drop-down arrow next to STEEM or STEEM DOLLARS in your wallet, and select "Transfer to Savings".
 
@@ -498,25 +498,25 @@ There is also an **Explore** link in the main menu, where you can browse through
 
 ## <span id="Can_I_see_which_users_I_have_muted">Могу ли я увидеть, каких пользователей я отключил?</span>
 
-Yes. This can be seen under the Settings page.
+Да. Это можно увидеть на странице настроек.
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 
 ## <span id="Can_I_see_which_users_have_muted_me">Могу ли я увидеть, какие пользователи отключили меня?</span>
 
-No. This information is not presented on Steemit.com.
+Нет. Данная информация не представлена на Steemit.com.
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 
 ## <span id="Can_I_see_the_list_of_users_I_am_following__and_who_is_following_me">Как мне увидеть список своих подписчиков и подписок?</span>
 
-Yes. You can see the list of followers or people you are following by clicking on the links on your profile page.
+Да. Вы можете увидеть список подписчиков или ваших подписок, перейдя по ссылкам на странице вашего профиля.
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 
 ## <span id="What_languages_are_supported">Какие языки поддерживаются?</span>
 
-English is the most-used language used on the Steemit platform, but communities are forming that speak other languages.
+Английский язык является наиболее используемым языком на платформе Steemit, но есть сообщества, которые говорят на других языках.
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 
@@ -550,21 +550,21 @@ Pictures can also be hosted on an external site. Paste the image's web address (
 
 ## <span id="How_do_I_set_the_thumbnail_image_for_my_post">Как задать превью изображения для моего поста?</span>
 
-The first image in the post will automatically be set as the thumbnail image.
+Первое изображение в сообщении автоматически устанавливается как изображение превью.
 
 <a href="#Table_of_Contents_Posting">^</a>
 
 ## <span id="What_is_the_recommend_aspect_ratio_for_thumbnail_images">Что такое соотношение сторон рекомендуется для превью изображений?</span>
 
-The recommend aspect ratio for thumbnail images is 16x9.
+Рекомендуемое соотношение сторон для превью изображений - 16х9.
 
 <a href="#Table_of_Contents_Posting">^</a>
 
 ## <span id="How_do_I_add_videos_to_my_posts">Как добавить видео в мой пост?</span>
 
-To add a YouTube or Vimeo video to your blog post, simply paste the link to the video into the post.
+Чтобы добавить YouTube или Vimeo видео для вашего блога, просто вставьте ссылку на видео в пост.
 
-You can also read [this guide](https://steemit.com/steemitguide/@algimantas/detailed-guide-how-to-add-videos-in-steemit) from @algimantas, which has more detailed instructions:
+Вы также можете прочитать [это руководство](https://steemit.com/steemitguide/@algimantas/detailed-guide-how-to-add-videos-in-steemit) от @algimantas, в котором есть более подробные инструкции:
 
 <a href="#Table_of_Contents_Posting">^</a>
 
@@ -594,7 +594,7 @@ All tags must be lowercase letters. Spaces aren't allowed, but hyphenated words 
 
 ## <span id="How_many_tags_can_I_use">Сколько тегов я могу использовать?</span>
 
-You can use up to 5 tags per post.
+Вы можете использовать до 5 тегов в посте.
 
 <a href="#Table_of_Contents_Posting">^</a>
 
@@ -606,13 +606,13 @@ A post must have a title, body, and at least one valid tag. If any of these are 
 
 ## <span id="How_do_I_format_text_in_Markdown">Как форматировать текст, используя Markdown?</span>
 
-Some common markdown syntax is:
+Часто используемый синтаксис markdown:
 
 - `**bold**` **bold**
 - `_italics_` *italics*
 - `~~cross out~~` ~~cross out~~
 
-Text can be sized using headers:
+Размер текста можно изменять, используя заголовки:
 
     # H1
     ## H2
@@ -628,7 +628,7 @@ Text can be sized using headers:
 
 #### H4
 
-For more advanced formatting, a guide describing the common markdown formatting syntax can be found here: [Markdown Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
+Для более продвинутого форматирования используйте руководство, описывающее возможности синтаксиса markdown: [Памятка по Markdown](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
 
 <a href="#Table_of_Contents_Posting">^</a>
 
@@ -686,7 +686,7 @@ At the bottom of each post is a button to "Promote". After clicking the button, 
 
 ## <span id="Can_I_earn_digital_tokens_for_commenting">Могу ли я заработать цифровые токены за комментирование?</span>
 
-Yes, comments that are upvoted can earn rewards just like posts!
+Да. Комментарии, за которые проголосовали, приносят вознаграждение так же, как и посты!
 
 <a href="#Table_of_Contents_Comments">^</a>
 
@@ -1110,7 +1110,7 @@ Users with a lower reputation score are unable to affect your reputation.
 
 <a href="#Table_of_Contents_Reputation">^</a>
 
-## <span id="How_is_the_Reputation_score_measured">How is the Reputation score measured?</span>
+## <span id="How_is_the_Reputation_score_measured">Как измеряется репутация?</span>
 
 Every new user starts off with a reputation score of 25.
 
@@ -1120,13 +1120,13 @@ More information about the calculation of the reputation score can be found in t
 
 <a href="#Table_of_Contents_Reputation">^</a>
 
-## <span id="How_do_I_improve_my_reputation_score">How do I improve my reputation score?</span>
+## <span id="How_do_I_improve_my_reputation_score">Как мне увеличить баллы репутации?</span>
 
 Every time another user upvotes one of your posts or comments, it increases your reputation score. Users with a higher reputation than you will have more of a positive effect. The more STEEM Power that the voter has, the larger the effect is as well. The best way to earn upvotes is by adding value to the Steemit community.
 
 <a href="#Table_of_Contents_Reputation">^</a>
 
-## <span id="What_causes_my_reputation_score_to_go_down">What causes my reputation score to go down?</span>
+## <span id="What_causes_my_reputation_score_to_go_down">Что снижает оценку моей репутации?</span>
 
 The only way for your reputation score to go down is to be downvoted by another user. Not all downvotes will cause a reputation loss though.
 
@@ -1135,7 +1135,7 @@ The only way for your reputation score to go down is to be downvoted by another 
 
 <a href="#Table_of_Contents_Reputation">^</a>
 
-## <span id="Why_does_my_reputation_score_matter">Why does my reputation score matter?</span>
+## <span id="Why_does_my_reputation_score_matter">Что придает значение моей репутации?</span>
 
 A reputation score is one way Steemit measures the amount of value you have brought to the community. In real estate, they say there are three variables of the utmost importance: location, location, location. On Steemit, those things are: reputation, reputation, reputation. It’s not to say other variables aren’t important, but reputation will be an enormous factor in your level of success.
 
@@ -1147,13 +1147,13 @@ It is worth noting that if your reputation score goes below 0, Steemit will hide
 
 # Последователи, ленты и репосты
 
-## <span id="What_is_Resteeming">What is Resteeming?</span>
+## <span id="What_is_Resteeming">Что такое репост?</span>
 
 This is like reblogging or sharing posts on other platforms. Once you resteem a post it will appear in your feed and in your followers' feeds as if you had posted it yourself. Use it conservatively and with caution. It is great to want to share content you like and appreciate with people you follow, but you don't want to overwhelm your followers either.
 
 <a href="#Table_of_Contents_Followers__Feeds_and_Resteem">^</a>
 
-## <span id="Can_I_share_on_other_social_media">Can I share on other social media?</span>
+## <span id="Can_I_share_on_other_social_media">Могу я поделиться постом в других социальных медиа?</span>
 
 Yes you can use the share button to share on Facebook, Twitter or LinkedIn. You are welcome to post your Steemit links on other websites and social media sites.
 
@@ -1167,13 +1167,13 @@ A blockchain is a public ledger of all transactions ever executed. All of the tr
 
 <a href="#Table_of_Contents_Blockchain">^</a>
 
-## <span id="What_is_the_Steem_blockchain">What is the Steem blockchain?</span>
+## <span id="What_is_the_Steem_blockchain">Что такое блокчейн Steem?</span>
 
 The Steem blockchain is the publicly accessible distributed database, which records all posts and votes, and distributes the rewards across the network. It is where all of the text content and voting data is stored, and it is where all of the reward calculations and payouts are performed.
 
 <a href="#Table_of_Contents_Blockchain">^</a>
 
-## <span id="What_is_the_difference_between_Steem_and_Steemit">What is the difference between Steem and Steemit?</span>
+## <span id="What_is_the_difference_between_Steem_and_Steemit">В чем разница между Steem и Steemit?</span>
 
 Steem is the name of the blockchain that stores all of the data and transactions, and processes all of the events that take place. STEEM is also a name for the system’s value token (currency).
 
@@ -1181,7 +1181,7 @@ Steemit is a front end web interface to interact with the blockchain, and view t
 
 <a href="#Table_of_Contents_Blockchain">^</a>
 
-## <span id="How_is_Steem_different_from_Bitcoin">How is Steem different from Bitcoin?</span>
+## <span id="How_is_Steem_different_from_Bitcoin">Чем Steem отличается от биткоина?</span>
 
 On a technical level, the two networks rely on the same model of a blockchain, but are built upon different technologies and codebase. Steem is based on a new state-of-the-art blockchain technology called Graphene, which uses "witnesses" instead of "miners" to produce blocks.
 
@@ -1189,7 +1189,7 @@ The "delegated proof of stake" model of using witnesses instead of miners allows
 
 <a href="#Table_of_Contents_Blockchain">^</a>
 
-## <span id="What_is_the_difference_between_Proof_of_Work__Proof_of_Stake__and_Delegated_Proof_of_Stake">What is the difference between Proof of Work, Proof of Stake, and Delegated Proof of Stake?</span>
+## <span id="What_is_the_difference_between_Proof_of_Work__Proof_of_Stake__and_Delegated_Proof_of_Stake">В чем различие между Proof of Work, Proof of Stake и Delegated Proof of Stake?</span>
 
 **Proof of work** - Miners solve a complex mathematical problem. The miner that solves the problem first adds the block to the blockchain. The network rewards the miner for doing so.
 
@@ -1199,25 +1199,25 @@ The "delegated proof of stake" model of using witnesses instead of miners allows
 
 <a href="#Table_of_Contents_Blockchain">^</a>
 
-## <span id="How_often_does_the_Steem_blockchain_produce_a_new_block">How often does the Steem blockchain produce a new block?</span>
+## <span id="How_often_does_the_Steem_blockchain_produce_a_new_block">Как часто блокчейн Steem генерирует новый блок?</span>
 
 The Steem blockchain schedules witnesses to produce a new block every 3 seconds. 21 witness nodes produce 21 blocks in each 63-second round.
 
 <a href="#Table_of_Contents_Blockchain">^</a>
 
-## <span id="Is_there_a_way_to_see_the_raw_data_that_is_stored_in_the_blockchain">Is there a way to see the raw data that is stored in the blockchain?</span>
+## <span id="Is_there_a_way_to_see_the_raw_data_that_is_stored_in_the_blockchain">Есть ли способ увидеть сырые данные, которые хранятся в блокчейне?</span>
 
 Yes. The blockchain data can be viewed in different ways with third-party tools such as [steemd.com](https://steemd.com) and [steemdb.com](https://steemdb.com).
 
 <a href="#Table_of_Contents_Blockchain">^</a>
 
-## <span id="Where_can_I_find_the_information_for_the_official_launch_of_the_blockchain">Where can I find the information for the official launch of the blockchain?</span>
+## <span id="Where_can_I_find_the_information_for_the_official_launch_of_the_blockchain">Где мне найти информацию об официальном запуске блокчейна?</span>
 
 The original launch of Steem was on March 23, 2016, announced on [Bitcointalk.org](https://bitcointalk.org/index.php?topic=1408726.0). There was a bug found in the original code though, and a majority of the stakeholders agreed that it would be easier to fix via a re-launch than a hardfork. The blockchain was reset and officially re-launched on March 24, 2016, via [Bitcointalk.org](https://bitcointalk.org/index.php?topic=1410943.0).
 
 <a href="#Table_of_Contents_Blockchain">^</a>
 
-## <span id="Can_I_mine_STEEM">Can I mine STEEM?</span>
+## <span id="Can_I_mine_STEEM">Могу ли я намайнить Steem?</span>
 
 No. Proof of work mining has been removed from Steem.
 
@@ -1225,13 +1225,13 @@ No. Proof of work mining has been removed from Steem.
 
 # Корпорация Steemit
 
-## <span id="Who_is_the_CEO_of_Steemit">Who is the CEO of Steemit?</span>
+## <span id="Who_is_the_CEO_of_Steemit">Кто является CEO в Steemit?</span>
 
 Ned Scott (Нэд Скотт), @ned https://www.linkedin.com/in/nedscott
 
 <a href="#Table_of_Contents_Steemit__Inc">^</a>
 
-## <span id="Can_I_invest_in_Steemit">Can I invest in Steemit?</span>
+## <span id="Can_I_invest_in_Steemit">Могу ли я инвестировать в Steemit?</span>
 
 Steemit, Inc. is a privately held company and is not available for public investment.
 
@@ -1239,13 +1239,13 @@ Though not considered an investment, you can purchase STEEM tokens which can go 
 
 <a href="#Table_of_Contents_Steemit__Inc">^</a>
 
-## <span id="What_does_Steemit_s_development_roadmap_look_like">What does Steemit’s development roadmap look like?</span>
+## <span id="What_does_Steemit_s_development_roadmap_look_like">Как выглядит дорожная карта разработки Steemit?</span>
 
 You can view the 2017 Roadmap here: https://steemit.com/steemit/@steemitblog/steemit-2017-roadmap
 
 <a href="#Table_of_Contents_Steemit__Inc">^</a>
 
-## <span id="Am_I_allowed_to_use_the_Steem_and_Steemit_logos">Am I allowed to use the Steem and Steemit logos?</span>
+## <span id="Am_I_allowed_to_use_the_Steem_and_Steemit_logos">Разрешено ли использовать логотипы Steem и Steemit?</span>
 
 The Steemit brand and logo are protected by intellectual property laws, including copyright and other proprietary rights of the United States and other countries. The purpose is to allow Steemit to protect the brand and logo in ways that extend user safety. One may not make unauthorized commercial use of, reproduce, prepare derivative works, distribute copies, perform, or publicly display the Steemit logo or brand, except as permitted by the doctrine of fair use, or as authorized in writing by us.
 
@@ -1255,19 +1255,19 @@ The blue Steem logo with the three S-shaped squiggles is licensed under Creative
 
 <a href="#Table_of_Contents_Steemit__Inc">^</a>
 
-## <span id="Can_I_purchase_official_Steemit_merchandise">Can I purchase official Steemit merchandise?</span>
+## <span id="Can_I_purchase_official_Steemit_merchandise">Можно ли купить официальный товар Steemit?</span>
 
 Yes. Official Steemit merchandise can be purchased from [The Steemit Shop](https://thesteemitshop.com/).
 
 <a href="#Table_of_Contents_Steemit__Inc">^</a>
 
-## <span id="Did_Steemit__pre_mine__tokens">Did Steemit "pre-mine" tokens?</span>
+## <span id="Did_Steemit__pre_mine__tokens">Намайнил ли Steem токены заранее?</span>
 
 The STEEM tokens mined by Steemit, Inc. were not "pre-mined". All mining took place after the coin was officially and publicly announced on [Bitcointalk.org](https://bitcointalk.org/index.php?topic=1410943.0).
 
 <a href="#Table_of_Contents_Steemit__Inc">^</a>
 
-## <span id="What_is_the_Steemit_Privacy_Policy">What is the Steemit Privacy Policy?</span>
+## <span id="What_is_the_Steemit_Privacy_Policy">Какова Политика конфиденциальности Steemit?</span>
 
 https://steemit.com/privacy.html
 
@@ -1275,7 +1275,7 @@ https://steemit.com/privacy.html
 
 # Безопасность
 
-## <span id="How_can_I_keep_my_Steem_account_secure">How can I keep my Steem account secure?</span>
+## <span id="How_can_I_keep_my_Steem_account_secure">Как мне обеспечить безопасность моего аккаунта Steem?</span>
 
 <b>Save your master password and keep it somewhere safe.</b>
 
@@ -1291,19 +1291,19 @@ It is not recommended to share your password or keys with any third party site. 
 
 <a href="#Table_of_Contents_Security">^</a>
 
-## <span id="Why_should_I_be_careful_with_my_master_password">Why should I be careful with my master password?</span>
+## <span id="Why_should_I_be_careful_with_my_master_password">Почему мне нужно быть осторожным с моим мастер-паролем?</span>
 
 The master password is used to derive all keys for your account, including the owner key.
 
 <a href="#Table_of_Contents_Security">^</a>
 
-## <span id="Why_is_the_master_password_a_long_string_of_gibberish">Why is the master password a long string of gibberish?</span>
+## <span id="Why_is_the_master_password_a_long_string_of_gibberish">Почему мастер-пароль выглядит длинной тарабарщиной?</span>
 
 The password has to be long and random for maximum account security.
 
 <a href="#Table_of_Contents_Security">^</a>
 
-## <span id="What_are_my_different_keys_for">What are my different keys for?</span>
+## <span id="What_are_my_different_keys_for">Какие у меня есть разные ключи?</span>
 
 **Posting key** - The posting key allows accounts to post, comment, edit, vote, resteem, and follow or mute other accounts. Most users should be logging into Steemit every day with the posting key. You are more likely to have your password or key compromised the more you use it so a limited posting key exists to restrict the damage that a compromised account key would cause.
 
@@ -1315,7 +1315,7 @@ The password has to be long and random for maximum account security.
 
 <a href="#Table_of_Contents_Security">^</a>
 
-## <span id="What_do_I_do_if_I_lost_my_password_keys">What do I do if I lost my password/keys?</span>
+## <span id="What_do_I_do_if_I_lost_my_password_keys">Что мне делать, если я потерял свой пароль или ключи?</span>
 
 There is no way to recover your account if you lose your password or owner key! Because your account has real value, it is **very important** that you save your master password somewhere safe where you will not lose it.
 
@@ -1329,13 +1329,13 @@ No, liquid tokens can not be taken back if stolen or sent to the wrong account. 
 
 <a href="#Table_of_Contents_Security">^</a>
 
-## <span id="What_should_I_do_if_I_discover_that_someone_hacked_my_account">What should I do if I discover that someone hacked my account?</span>
+## <span id="What_should_I_do_if_I_discover_that_someone_hacked_my_account">Что делать, если я узнаю, что кто-то взломал мой аккаунт?</span>
 
 If you made your account through Steemit and it is compromised, immediately visit the [Stolen Account Recovery](https://steemit.com/recover_account_step_1) page. This link is also available in the main site menu. You will need to provide the email address that you used when you signed up, your account name, and a master password that was used in the last 30 days.
 
 <a href="#Table_of_Contents_Security">^</a>
 
-## <span id="How_does_the_stolen_account_recovery_process_work">How does the stolen account recovery process work?</span>
+## <span id="How_does_the_stolen_account_recovery_process_work">Как происходит восстановление украденного аккаунта?</span>
 
 If your password has been changed without your consent, then the account designated as your recovery account can generate a new owner key for the account. The account recovery must be completed within 30 days of the password being changed, and you must supply a recent owner key that was valid within the last 30 days.
 
@@ -1345,7 +1345,7 @@ If you don't have the master password or owner key that was valid the past 30 da
 
 <a href="#Table_of_Contents_Security">^</a>
 
-## <span id="How_do_I_report_a_security_vulnerability">How do I report a security vulnerability?</span>
+## <span id="How_do_I_report_a_security_vulnerability">Как мне сообщить об уязвимости в безопасности?</span>
 
 If you find a security issue please report the details to security@steemit.com.
 
@@ -1353,7 +1353,7 @@ If you find a security issue please report the details to security@steemit.com.
 
 # Разработчики
 
-## <span id="Are_the_Steem_blockchain_and_Steemit_com_code_open_source">Are the Steem blockchain and Steemit.com code open-source?</span>
+## <span id="Are_the_Steem_blockchain_and_Steemit_com_code_open_source">Является ли код блокчейна Steem и Steemit.com общедоступным (open source)?</span>
 
 Yes. Both the Steem blockchain and Steemit.com are open-source projects.
 
@@ -1361,19 +1361,19 @@ Developers should however avoid the use of the term "Steemit" in their own produ
 
 <a href="#Table_of_Contents_Developers">^</a>
 
-## <span id="Is_there_a_Github_page_for_Steemit_com">Is there a Github page for Steemit.com?</span>
+## <span id="Is_there_a_Github_page_for_Steemit_com">Есть ли Github страница для Steemit.com?</span>
 
 https://github.com/steemit/condenser
 
 <a href="#Table_of_Contents_Developers">^</a>
 
-## <span id="Is_there_a_Github_page_for_the_Steem_blockchain">Is there a Github page for the Steem blockchain?</span>
+## <span id="Is_there_a_Github_page_for_the_Steem_blockchain">Есть ли Github страница для блокчейна Steem?</span>
 
 https://github.com/steemit/steem
 
 <a href="#Table_of_Contents_Developers">^</a>
 
-## <span id="What_is_available_for_developers_interested_in_Steem_and_Steemit">What is available for developers interested in Steem and Steemit?</span>
+## <span id="What_is_available_for_developers_interested_in_Steem_and_Steemit">Что доступно для разработчиков, интересующихся Steem и Steemit?</span>
 
 Many software engineers are currently leveraging the open-source code to build their applications on Steem. There are more than sixty so far.
 
@@ -1381,7 +1381,7 @@ This post from the user @fabien has more information about the Steem API: https:
 
 <a href="#Table_of_Contents_Developers">^</a>
 
-## <span id="How_do_I_use_cli_wallet">How do I use cli_wallet?</span>
+## <span id="How_do_I_use_cli_wallet">Как использовать cli_wallet?</span>
 
 Here is a guide from the user @pfunk explaining how to use the cli_wallet: https://steemit.com/steemhelp/@pfunk/a-learner-s-guide-to-using-steem-s-cliwallet-part-1
 
@@ -1389,7 +1389,7 @@ Here is a guide from the user @pfunk explaining how to use the cli_wallet: https
 
 # Делегаты
 
-## <span id="What_are_Steem_witnesses">What are Steem witnesses?</span>
+## <span id="What_are_Steem_witnesses">Кто такие делегаты Steem?</span>
 
 The Steem blockchain requires a set of people to create blocks and uses a consensus mechanism called delegated proof of stake, or DPOS. The community elects 'witnesses' to act as the network's block producers and governance body. There are 20 full-time witnesses, producing a block every 63-second round. A 21st position is shared by backup witnesses, who are scheduled proportionally to the amount of stake-weighted community approval they have. Witnesses are compensated with STEEM Power for each block they create.
 
@@ -1397,13 +1397,13 @@ Steemit leverages Steem because the founders of Steemit believe Steem’s decent
 
 <a href="#Table_of_Contents_Witnesses">^</a>
 
-## <span id="How_can_I_vote_for_witnesses">How can I vote for witnesses?</span>
+## <span id="How_can_I_vote_for_witnesses">Как мне проголосовать за делегатов?</span>
 
 Visit https://steemit.com/~witnesses
 
 <a href="#Table_of_Contents_Witnesses">^</a>
 
-## <span id="How_many_witnesses_can_I_vote_for">How many witnesses can I vote for?</span>
+## <span id="How_many_witnesses_can_I_vote_for">За скольких делегатов я могу проголосовать?</span>
 
 Each account can vote for up to 30 witnesses.
 
@@ -1411,25 +1411,25 @@ Each account can vote for up to 30 witnesses.
 
 # Разное
 
-## <span id="What_third_party_tools_are_there_for_Steemit">What third-party tools are there for Steemit?</span>
+## <span id="What_third_party_tools_are_there_for_Steemit">Какой сторонний софт есть для Steem?</span>
 
 http://steemtools.com/
 
 <a href="#Table_of_Contents_Miscellaneous">^</a>
 
-## <span id="Is_there_an_official_Steemit_Facebook_page">Is there an official Steemit Facebook page?</span>
+## <span id="Is_there_an_official_Steemit_Facebook_page">Есть ли официальная страница Steemit в Facebook?</span>
 
 https://www.facebook.com/steemit/
 
 <a href="#Table_of_Contents_Miscellaneous">^</a>
 
-## <span id="Is_there_an_official_Steemit_Twitter_account">Is there an official Steemit Twitter account?</span>
+## <span id="Is_there_an_official_Steemit_Twitter_account">Есть ли официальный аккаунт Steemit в Twitter?</span>
 
 https://twitter.com/steemit
 
 <a href="#Table_of_Contents_Miscellaneous">^</a>
 
-## <span id="What_is_the_Steem_Whitepaper_and_what_is_its_purpose">What is the Steem Whitepaper and what is its purpose?</span>
+## <span id="What_is_the_Steem_Whitepaper_and_what_is_its_purpose">Что такое Белые страницы Steem и какова их цель?</span>
 
 The Steem Whitepaper was written to describe the mechanics of the token system that makes decentralized content incentives and distribution possible in a way that can improve web technologies across the board. It is also applicable to Steemit, the first website to plug into the Steem blockchain. Users who have read the Steem Whitepaper will better understand how their interactions with Steemit are interactions with Steem, the decentralized network.
 
@@ -1439,7 +1439,7 @@ https://steem.io/SteemWhitePaper.pdf
 
 <a href="#Table_of_Contents_Miscellaneous">^</a>
 
-## <span id="Where_can_I_ask_for_help_if_my_question_was_not_answered_here">Where can I ask for help if my question was not answered here?</span>
+## <span id="Where_can_I_ask_for_help_if_my_question_was_not_answered_here">Где найти ответы, которые я не получил здесь?</span>
 
 If you post your question in the [#help](https://steemit.chat/channel/help) channel on [steemit.chat](https://steemit.chat/home), the users there may be able to help.
 
@@ -1455,6 +1455,6 @@ BlockTrades, Poloniex, Bittrex, Changelly, Shapeshift.io, Coinbase, Localbitcoin
 
 All links to user posts were created by our users and do not necessarily represent the views of Steemit, Inc. or its management. Their listing here does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
 
-Please use the third party tools and content at your own risk.
+Пожалуйста, используйте сторонние инструменты и контент на свой собственный риск.
 
 <a href="#Table_of_Contents_Disclaimer">^</a>

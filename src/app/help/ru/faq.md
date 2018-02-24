@@ -326,7 +326,7 @@ There is a third-party tool called [BlockTrades](https://steemit.com/blocktrades
 
 ## <span id="It_is_not_letting_me_create_an_account_with_my_phone_number__What_should_I_do">Не получается создать аккаунт, используя мой номер телефона. Что мне делать?</span>
 
-Ask for help in the [#help](https://steemit.chat/channel/help) channel on [steemit.chat](https://steemit.chat/home).
+Попросите помощи в канале [#help](https://steemit.chat/channel/help) в чате [steemit.chat](https://steemit.chat/home).
 
 <a href="#Table_of_Contents_Accounts">^</a>
 
@@ -600,7 +600,7 @@ All tags must be lowercase letters. Spaces aren't allowed, but hyphenated words 
 
 ## <span id="Why_is_the_Post_button_grayed_out">Почему кнопка "Пост" остается серой?</span>
 
-A post must have a title, body, and at least one valid tag. If any of these are missing, then the "Post" button will be disabled.
+Пост должен иметь заголовок, текст и как минимум один правильный тег. Если хотя бы одно из условий не выполнено, кнопка "Пост" останется неактивной.
 
 <a href="#Table_of_Contents_Posting">^</a>
 
@@ -644,19 +644,19 @@ Post sizes are limited to about 64,000 characters including formatting. This is 
 
 <a href="#Table_of_Contents_Posting">^</a>
 
-## <span id="If_posting_in_a_language_other_than_English__how_will_I_get_recognized">Если пост не на английском языке, как я узнаю?</span>
+## <span id="If_posting_in_a_language_other_than_English__how_will_I_get_recognized">Если пост не на английском языке, как это обозначить?</span>
 
-You can use language-specific tags to help you to reach the audience that speaks your language.
+Вы можете использовать языковые теги, чтобы помочь вам достичь аудитории, которая говорит на вашем языке.
 
-Language-specific groups include:
+Языковые группы включают:
 
-- Chinese = cn
-- German = deutsch
-- Spanish = spanish
-- Korean = kr
-- Russian = ru
-- French = fr
-- Portuguese = pt
+- Китайский = cn
+- Немецкий = deutsch
+- Испанский = spanish
+- Корейский = kr
+- Русский = ru
+- Французский = fr
+- Португальский = pt
 
 <a href="#Table_of_Contents_Posting">^</a>
 
@@ -692,7 +692,7 @@ At the bottom of each post is a button to "Promote". After clicking the button, 
 
 ## <span id="How_often_can_I_comment">Как часто я могу комментировать?</span>
 
-There is a 20 second wait time in between comments to limit spam.
+Для предотвращения спама есть 20 секундная пауза между комментариями.
 
 <a href="#Table_of_Contents_Comments">^</a>
 
@@ -712,7 +712,7 @@ Starting with the network's 16th hard fork in December 2016, Steem began creatin
 
 ## <span id="How_are_the_new_tokens_distributed">Как распределяются новые токены?</span>
 
-Out of the new tokens that are generated:
+Из новых токенов, которые были сгенерированы:
 
 - 75% go to the reward pool, which is split between authors and curators. 
 - 15% of the new tokens are awarded to holders of STEEM Power. 
@@ -833,13 +833,13 @@ The blockchain estimates the dollar value of STEEM and STEEM Power based on the 
 
 <a href="#Table_of_Contents_Economics">^</a>
 
-## <span id="Will_1_Steem_Dollar_always_be_worth__1_00_USD">Будет ли 1 STEEM Доллар всегда равен $1 США?</span>
+## <span id="Will_1_Steem_Dollar_always_be_worth__1_00_USD">Будет ли 1 STEEM Доллар всегда равен 1 доллару США?</span>
 
 The market value of a Steem Dollar is dictated by the supply and demand of the token. Therefore it is possible for 1 SBD to be worth more or less than 1 USD depending on market conditions. However, the network's SBD conversion feature serves as a mechanism to hold Steem Dollars within a small margin of the value of USD.
 
 <a href="#Table_of_Contents_Economics">^</a>
 
-## <span id="How_do_Steem_Dollar_to_STEEM_conversions_work">Как происходит конверсия STEEM Доллара в STEEM?</span>
+## <span id="How_do_Steem_Dollar_to_STEEM_conversions_work">Как происходит конвертация STEEM Доллара в STEEM?</span>
 
 If you convert Steem Dollars to STEEM on the Wallet page, the blockchain will process the transaction over a period of 3.5 days. At the end of the 3.5 days, the SBD will be gone and replaced by approximately $1 USD worth of STEEM tokens. The "approximately 1 USD worth of STEEM tokens" is based on the median STEEM price over the 3.5 days, using the price feeds from the Steem witnesses. Depending on price fluctuations during the 3.5 days it is possible to end up with more or less than $1 USD worth of STEEM per SBD at the end of the conversion.
 
@@ -884,7 +884,7 @@ Other than making a post and making sales manually, there is no interface for se
 
 <a href="#Table_of_Contents_Economics">^</a>
 
-## <span id="How_can_I_withdraw_my_STEEM_or_SBD_coins">Как я могу вывести свои монеты STEEEM или SBD?</span>
+## <span id="How_can_I_withdraw_my_STEEM_or_SBD_coins">Как я могу вывести свои токены STEEM или SBD?</span>
 
 STEEM and SBD tokens are readily tradable to bitcoin, which is readily tradable to the local currency of your choice. There is a link to "Sell" your STEEM and SBD tokens in your wallet, which uses the [BlockTrades](https://blocktrades.us/) interface.
 
@@ -892,19 +892,19 @@ There are several guides that have been posted by users in the community for usi
 
 It is recommended that you withdraw a small amount first, to verify it works before withdrawing a larger amount.
 
-#### Sell Steem Dollars via Poloniex
+#### Продать Steem Доллары на бирже Poloniex
 
 https://steemit.com/steemit/@ash/steemit-how-to-sell-steem-dollars-via-poloniex-newbie-friendly
 
-#### Withdraw Steem Dollars to a Bitcoin address
+#### Вывести Steem Доллары на биткоин-адрес
 
 https://steemit.com/steem-help/@piedpiper/how-to-withdraw-your-steem-dollars-in-less-that-a-minute
 
-#### Convert Steem Dollars to a country’s currency and withdraw to a bank account
+#### Конвертировать Steem Доллары в национальную валюту и вывести на банковский счет
 
 https://steemit.com/tutorial/@beanz/how-to-get-my-usdteemit-money-into-my-bank-account
 
-#### Convert STEEM to many other cryptocurrencies via ShapeShift
+#### Конвертировать STEEM во множество других криптовалют, используя ShapeShift
 
 https://steemit.com/steemit/@shapeshiftio/official-announcement-shapeshift-has-added-steem-to-the-exchange
 
@@ -924,7 +924,7 @@ There are never any fees for transfers within the Steem network. However, if you
 
 ## <span id="Are_there_fees_for_Powering_Up__Powering_Down__trading_on_the_internal_market__or_converting_SBD_to_STEEM">Есть ли комиссионные за увеличение или снижение Силы Голоса, за торговлю на внутреннем рынке или за конвертацию SBD в STEEM?</span>
 
-No. None of these actions incur any fees.
+Нет. Никакое из этих действий не требует дополнительных платежей.
 
 <a href="#Table_of_Contents_Economics">^</a>
 
@@ -952,19 +952,19 @@ Every 100% vote you cast will use 2% of your remaining voting power. Your voting
 
 ## <span id="Can_I_vote_with_less_than_100__of_my_voting_strength">Могу ли я голосовать с силой голоса меньше 100%?</span>
 
-New users can only upvote and downvote with 100% voting strength.
+Новые пользователи могут голосовать за или против только с 100% силой голоса.
 
 Once you reach about 500 STEEM Power, you will see a vote slider appear when you vote. You can use the slider to adjust the weight of your vote, between 1% and 100% voting strength. Voting with less than 100% voting weight will use up less voting power, but it will also have less of an influence on the post or comment's rewards.
 
 <img src="https://steemitimages.com/DQmV6c21tzSrgXwPHx4tvuc1UiCXBEvzkLBH9QCZHtVN6Ma/image.png" />
 
-Upvotes and downvotes use the same amount of voting power.
+Голоса за или против используют одинаковую силу голоса.
 
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
 
 ## <span id="Where_can_I_check_my_voting_power">Где можно проверить мою силу голоса?</span>
 
-You can view your current voting power using third party tools such as https://steemd.com/@youraccount or https://steemstats.com.
+Вы можете посмотреть свою силу голоса, используя сторонние сервисы. Например, https://steemd.com/@youraccount или https://steemstats.com.
 
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
 
@@ -984,13 +984,13 @@ Of the 25% that goes to the curator, that portion will be split between the auth
 
 ## <span id="Can_I_get_curation_rewards_for_upvoting_comments">Могу ли я получать кураторские вознаграждения, голосуя за комментарии?</span>
 
-Yes. You can earn curation rewards from upvoting both posts and comments!
+Да. Вы можете зарабатывать кураторские вознаграждения, голосуя и за посты, и за комментарии!
 
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
 
 ## <span id="Do_I_get_curation_rewards_for_downvoting_posts_or_comments">Получу ли я кураторские вознаграждения, выставляя флаги постам или комментариям?</span>
 
-No. Since downvoting reduces the rewards on a post/comment, it does not earn curation rewards.
+Нет. Поскольку голосование против уменьшает вознаграждения за посты/комментарии, это не приносит кураторских вознаграждений.
 
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
 
@@ -1010,7 +1010,7 @@ Even though your vote may not have an immediate effect, when it gets added in al
 
 ## <span id="Is_there_a_way_to_make_my_votes_count_for_more">Есть ли способ сделать мои голоса весомее?</span>
 
-Yes. The more STEEM Power you have, the more influence your votes will have.
+Да. The more STEEM Power you have, the more influence your votes will have.
 
 The platform does not require that anybody purchase SP in order to participate, and there are many users who have earned a lot of STEEM Power without spending any of their own money. You have the option of purchasing more STEEM Power through your Steemit wallet.
 
@@ -1028,9 +1028,9 @@ Just because you received a downvote does not mean that you did something wrong.
 
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
 
-## <span id="Will_a_downvote_hurt_my_reputation">Как голосование против влияет на мою репутацию?</span>
+## <span id="Will_a_downvote_hurt_my_reputation">Снижает ли мою репутацию голосование против?</span>
 
-Not necessarily. See: [What causes my reputation score to go down?](#What_causes_my_reputation_score_to_go_down)
+Не обязательно. См.: [Что снижает мою репутацию?](#What_causes_my_reputation_score_to_go_down)
 
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
 
@@ -1094,7 +1094,7 @@ More information on the @cheetah bot can be found in this post: https://steemit.
 
 ## <span id="Where_do_I_report_a_post_or_comment_that_contains_plagiarism__spam__or_abuse">Где можно сообщить о том, что пост или комментарий содержит плагиат, спам или злоупотребление?</span>
 
-You can report any abusive content to the [#steemitabuse](https://steemit.chat/channel/steemitabuse) channel on [steemit.chat](https://steemit.chat/home).
+Вы можете сообщать о злостном контенте в канал [#steemitabuse](https://steemit.chat/channel/steemitabuse) в чате [steemit.chat](https://steemit.chat/home).
 
 <a href="#Table_of_Contents_Plagiarism__Spam__and_Abuse">^</a>
 
@@ -1135,7 +1135,7 @@ The only way for your reputation score to go down is to be downvoted by another 
 
 <a href="#Table_of_Contents_Reputation">^</a>
 
-## <span id="Why_does_my_reputation_score_matter">Что придает значение моей репутации?</span>
+## <span id="Why_does_my_reputation_score_matter">Что придает вес моей репутации?</span>
 
 A reputation score is one way Steemit measures the amount of value you have brought to the community. In real estate, they say there are three variables of the utmost importance: location, location, location. On Steemit, those things are: reputation, reputation, reputation. It’s not to say other variables aren’t important, but reputation will be an enormous factor in your level of success.
 
@@ -1201,13 +1201,13 @@ The "delegated proof of stake" model of using witnesses instead of miners allows
 
 ## <span id="How_often_does_the_Steem_blockchain_produce_a_new_block">Как часто блокчейн Steem генерирует новый блок?</span>
 
-The Steem blockchain schedules witnesses to produce a new block every 3 seconds. 21 witness nodes produce 21 blocks in each 63-second round.
+Блокчейн Steem настроен так, чтобы делегаты производили новый блок раз в 3 секунды. 21 делегатская нода производит 21 блок в каждом 63 секундном раунде.
 
 <a href="#Table_of_Contents_Blockchain">^</a>
 
 ## <span id="Is_there_a_way_to_see_the_raw_data_that_is_stored_in_the_blockchain">Есть ли способ увидеть сырые данные, которые хранятся в блокчейне?</span>
 
-Yes. The blockchain data can be viewed in different ways with third-party tools such as [steemd.com](https://steemd.com) and [steemdb.com](https://steemdb.com).
+Да. The blockchain data can be viewed in different ways with third-party tools such as [steemd.com](https://steemd.com) and [steemdb.com](https://steemdb.com).
 
 <a href="#Table_of_Contents_Blockchain">^</a>
 
@@ -1219,7 +1219,7 @@ The original launch of Steem was on March 23, 2016, announced on [Bitcointalk.or
 
 ## <span id="Can_I_mine_STEEM">Могу ли я намайнить Steem?</span>
 
-No. Proof of work mining has been removed from Steem.
+Нет. Майнинг по протоколу Proof of work удален из Steem.
 
 <a href="#Table_of_Contents_Blockchain">^</a>
 
@@ -1241,7 +1241,7 @@ Though not considered an investment, you can purchase STEEM tokens which can go 
 
 ## <span id="What_does_Steemit_s_development_roadmap_look_like">Как выглядит дорожная карта разработки Steemit?</span>
 
-You can view the 2017 Roadmap here: https://steemit.com/steemit/@steemitblog/steemit-2017-roadmap
+Дорожную карту на 2017 год можно посмотреть здесь: https://steemit.com/steemit/@steemitblog/steemit-2017-roadmap
 
 <a href="#Table_of_Contents_Steemit__Inc">^</a>
 
@@ -1257,7 +1257,7 @@ The blue Steem logo with the three S-shaped squiggles is licensed under Creative
 
 ## <span id="Can_I_purchase_official_Steemit_merchandise">Можно ли купить официальный товар Steemit?</span>
 
-Yes. Official Steemit merchandise can be purchased from [The Steemit Shop](https://thesteemitshop.com/).
+Да. Официальные товары Steemit можно приобрести в [Steemit магазине](https://thesteemitshop.com/).
 
 <a href="#Table_of_Contents_Steemit__Inc">^</a>
 
@@ -1323,7 +1323,7 @@ It is strongly recommended that you store an offline copy of your password somew
 
 <a href="#Table_of_Contents_Security">^</a>
 
-## <span id="Are_my_STEEM_and_Steem_Dollar_tokens_insured_in_the_event_of_a_hack_or_if_someone_takes_over_my_account">Are my STEEM and Steem Dollar tokens insured in the event of a hack or if someone takes over my account?</span>
+## <span id="Are_my_STEEM_and_Steem_Dollar_tokens_insured_in_the_event_of_a_hack_or_if_someone_takes_over_my_account">Как защищены мои STEEM и Steem Доллары на случай взлома или если кто-то воспользуется моим аккаунтом?</span>
 
 No, liquid tokens can not be taken back if stolen or sent to the wrong account. If your tokens are in STEEM Power, it is impossible for a hacker to take out more than 1/13 per week. If your tokens are in savings, there is a three-day wait period for them to become transferable.
 
@@ -1347,7 +1347,7 @@ If you don't have the master password or owner key that was valid the past 30 da
 
 ## <span id="How_do_I_report_a_security_vulnerability">Как мне сообщить об уязвимости в безопасности?</span>
 
-If you find a security issue please report the details to security@steemit.com.
+Если вы обнаружите проблему с безопасностью, пожалуйста, сообщите подробности на почту security@steemit.com.
 
 <a href="#Table_of_Contents_Security">^</a>
 
@@ -1355,7 +1355,7 @@ If you find a security issue please report the details to security@steemit.com.
 
 ## <span id="Are_the_Steem_blockchain_and_Steemit_com_code_open_source">Является ли код блокчейна Steem и Steemit.com общедоступным (open source)?</span>
 
-Yes. Both the Steem blockchain and Steemit.com are open-source projects.
+Да. И блокчейн Steem, и Steemit.com это опенсорс проекты.
 
 Developers should however avoid the use of the term "Steemit" in their own products, and instead refer to the Steem Blockchain or Steem Platform. Steemit refers to Steemit.com, which is owned by Steemit, Inc.
 
@@ -1399,13 +1399,13 @@ Steemit leverages Steem because the founders of Steemit believe Steem’s decent
 
 ## <span id="How_can_I_vote_for_witnesses">Как мне проголосовать за делегатов?</span>
 
-Visit https://steemit.com/~witnesses
+Зайдите на страницу https://steemit.com/~witnesses
 
 <a href="#Table_of_Contents_Witnesses">^</a>
 
 ## <span id="How_many_witnesses_can_I_vote_for">За скольких делегатов я могу проголосовать?</span>
 
-Each account can vote for up to 30 witnesses.
+Каждый аккаунт может проголосовать максимум за 30 делегатов.
 
 <a href="#Table_of_Contents_Witnesses">^</a>
 
@@ -1451,7 +1451,7 @@ You can also create a post on Steemit.com with the tag #help, and someone in the
 
 ## <span id="Third_Party_References_and_User_Links">Упоминания третьих лиц и ссылки пользователей</span>
 
-BlockTrades, Poloniex, Bittrex, Changelly, Shapeshift.io, Coinbase, Localbitcoins, SteemDB, PeerHub, Steemit.chat, SteemTools, SteemCreate, AnonSteem, SteemConnect, Streemian, SteemStats, Pixabay, Steemcleaners, Pexels, Postimage, Markdown Cheatsheet, @cheetah, Bitcointalk, bitcoinfees, blockchain.info, and steemd are third party applications/services, and are not owned or maintained by Steemit, Inc. Their listing here, as well as any other third party applications or websites that are listed, does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
+BlockTrades, Poloniex, Bittrex, Changelly, Shapeshift.io, Coinbase, Localbitcoins, SteemDB, PeerHub, Steemit.chat, SteemTools, SteemCreate, AnonSteem, SteemConnect, Streemian, SteemStats, Pixabay, Steemcleaners, Pexels, Postimage, Markdown Cheatsheet, @cheetah, Bitcointalk, bitcoinfees, blockchain.info и steemd это сторонние приложения/сервисы и они не принадлежат и не поддерживаются Steemit, Inc. Their listing here, as well as any other third party applications or websites that are listed, does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
 
 All links to user posts were created by our users and do not necessarily represent the views of Steemit, Inc. or its management. Their listing here does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
 

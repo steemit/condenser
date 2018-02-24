@@ -154,7 +154,8 @@ class App extends React.Component {
             children,
             flash,
             new_visitor,
-            depositSteem,
+            openBlocktrades,
+            openGopax,
             signup_bonus,
             username,
             nightmodeEnabled,
@@ -306,12 +307,22 @@ class App extends React.Component {
                     </ul>
                     <ul className="vertical menu">
                         <li>
-                            <a onClick={() => depositSteem(username)}>
-                                {tt('navigation.buy_LIQUID_TOKEN', {
-                                    LIQUID_TOKEN,
-                                })}&nbsp;<Icon name="extlink" />
+                            <a className="menu-section">
+                                {tt('navigation.third_party_exchanges')}
                             </a>
                         </li>
+                        <li>
+                            <a onClick={() => openBlocktrades(username)}>
+                                Blocktrades <Icon name="extlink" />
+                            </a>
+                        </li>
+                        <li className="last">
+                            <a onClick={() => openGopax()}>
+                                GOPAX <Icon name="extlink" />
+                            </a>
+                        </li>
+                    </ul>
+                    <ul className="vertical menu">
                         <li>
                             <a
                                 href="https://thesteemitshop.com/"
@@ -465,12 +476,18 @@ export default connect(
     },
     dispatch => ({
         loginUser: () => dispatch(userActions.usernamePasswordLogin({})),
-        depositSteem: username => {
+        openBlocktrades: username => {
             const new_window = window.open();
             new_window.opener = null;
             new_window.location =
                 'https://blocktrades.us/?input_coin_type=eth&output_coin_type=steem&receive_address=' +
                 username;
+        },
+        openGopax: () => {
+            const new_window = window.open();
+            new_window.opener = null;
+            new_window.location =
+                'https://www.gopax.co.kr/exchange?market=STEEM/KRW';
         },
     })
 )(App);

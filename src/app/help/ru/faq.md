@@ -884,7 +884,7 @@ Other than making a post and making sales manually, there is no interface for se
 
 <a href="#Table_of_Contents_Economics">^</a>
 
-## <span id="How_can_I_withdraw_my_STEEM_or_SBD_coins">Как я могу вывести свои монеты STEEEM или SBD?</span>
+## <span id="How_can_I_withdraw_my_STEEM_or_SBD_coins">Как я могу вывести свои токены STEEM или SBD?</span>
 
 STEEM and SBD tokens are readily tradable to bitcoin, which is readily tradable to the local currency of your choice. There is a link to "Sell" your STEEM and SBD tokens in your wallet, which uses the [BlockTrades](https://blocktrades.us/) interface.
 
@@ -1135,7 +1135,7 @@ The only way for your reputation score to go down is to be downvoted by another 
 
 <a href="#Table_of_Contents_Reputation">^</a>
 
-## <span id="Why_does_my_reputation_score_matter">Что придает значение моей репутации?</span>
+## <span id="Why_does_my_reputation_score_matter">Что придает вес моей репутации?</span>
 
 A reputation score is one way Steemit measures the amount of value you have brought to the community. In real estate, they say there are three variables of the utmost importance: location, location, location. On Steemit, those things are: reputation, reputation, reputation. It’s not to say other variables aren’t important, but reputation will be an enormous factor in your level of success.
 
@@ -1323,7 +1323,7 @@ It is strongly recommended that you store an offline copy of your password somew
 
 <a href="#Table_of_Contents_Security">^</a>
 
-## <span id="Are_my_STEEM_and_Steem_Dollar_tokens_insured_in_the_event_of_a_hack_or_if_someone_takes_over_my_account">Are my STEEM and Steem Dollar tokens insured in the event of a hack or if someone takes over my account?</span>
+## <span id="Are_my_STEEM_and_Steem_Dollar_tokens_insured_in_the_event_of_a_hack_or_if_someone_takes_over_my_account">Как защищены мои STEEM и Steem Доллары на случай взлома или если кто-то воспользуется моим аккаунтом?</span>
 
 No, liquid tokens can not be taken back if stolen or sent to the wrong account. If your tokens are in STEEM Power, it is impossible for a hacker to take out more than 1/13 per week. If your tokens are in savings, there is a three-day wait period for them to become transferable.
 
@@ -1347,7 +1347,7 @@ If you don't have the master password or owner key that was valid the past 30 da
 
 ## <span id="How_do_I_report_a_security_vulnerability">Как мне сообщить об уязвимости в безопасности?</span>
 
-If you find a security issue please report the details to security@steemit.com.
+Если вы обнаружите проблему с безопасностью, пожалуйста, сообщите подробности на почту security@steemit.com.
 
 <a href="#Table_of_Contents_Security">^</a>
 
@@ -1355,7 +1355,7 @@ If you find a security issue please report the details to security@steemit.com.
 
 ## <span id="Are_the_Steem_blockchain_and_Steemit_com_code_open_source">Является ли код блокчейна Steem и Steemit.com общедоступным (open source)?</span>
 
-Yes. Both the Steem blockchain and Steemit.com are open-source projects.
+Да. И блокчейн Steem, и Steemit.com это опенсорс проекты.
 
 Developers should however avoid the use of the term "Steemit" in their own products, and instead refer to the Steem Blockchain or Steem Platform. Steemit refers to Steemit.com, which is owned by Steemit, Inc.
 
@@ -1399,13 +1399,13 @@ Steemit leverages Steem because the founders of Steemit believe Steem’s decent
 
 ## <span id="How_can_I_vote_for_witnesses">Как мне проголосовать за делегатов?</span>
 
-Visit https://steemit.com/~witnesses
+Зайдите на страницу https://steemit.com/~witnesses
 
 <a href="#Table_of_Contents_Witnesses">^</a>
 
 ## <span id="How_many_witnesses_can_I_vote_for">За скольких делегатов я могу проголосовать?</span>
 
-Each account can vote for up to 30 witnesses.
+Каждый аккаунт может проголосовать максимум за 30 делегатов.
 
 <a href="#Table_of_Contents_Witnesses">^</a>
 

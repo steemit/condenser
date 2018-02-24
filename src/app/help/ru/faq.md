@@ -177,7 +177,7 @@
 - [Почему мастер-пароль выглядит длинной тарабарщиной?](#Why_is_the_master_password_a_long_string_of_gibberish)
 - [Какие у меня есть разные ключи?](#What_are_my_different_keys_for)
 - [Что мне делать, если я потерял свой пароль или ключи?](#What_do_I_do_if_I_lost_my_password_keys)
-- [Are my STEEM and Steem Dollar tokens insured in the event of a hack or if someone takes over my account?](#Are_my_STEEM_and_Steem_Dollar_tokens_insured_in_the_event_of_a_hack_or_if_someone_takes_over_my_account)
+- [Как защищены мои STEEM и Steem Доллары на случай взлома или если кто-то воспользуется моим аккаунтом?](#Are_my_STEEM_and_Steem_Dollar_tokens_insured_in_the_event_of_a_hack_or_if_someone_takes_over_my_account)
 - [Что делать, если я узнаю, что кто-то взломал мой аккаунт?](#What_should_I_do_if_I_discover_that_someone_hacked_my_account)
 - [Как происходит восстановление украденного аккаунта?](#How_does_the_stolen_account_recovery_process_work)
 - [Как мне сообщить об уязвимости в безопасности?](#How_do_I_report_a_security_vulnerability)

@@ -326,7 +326,7 @@ There is a third-party tool called [BlockTrades](https://steemit.com/blocktrades
 
 ## <span id="It_is_not_letting_me_create_an_account_with_my_phone_number__What_should_I_do">Не получается создать аккаунт, используя мой номер телефона. Что мне делать?</span>
 
-Ask for help in the [#help](https://steemit.chat/channel/help) channel on [steemit.chat](https://steemit.chat/home).
+Попросите помощи в канале [#help](https://steemit.chat/channel/help) в чате [steemit.chat](https://steemit.chat/home).
 
 <a href="#Table_of_Contents_Accounts">^</a>
 
@@ -600,7 +600,7 @@ All tags must be lowercase letters. Spaces aren't allowed, but hyphenated words 
 
 ## <span id="Why_is_the_Post_button_grayed_out">Почему кнопка "Пост" остается серой?</span>
 
-A post must have a title, body, and at least one valid tag. If any of these are missing, then the "Post" button will be disabled.
+Пост должен иметь заголовок, текст и как минимум один правильный тег. Если хотя бы одно из условий не выполнено, кнопка "Пост" останется неактивной.
 
 <a href="#Table_of_Contents_Posting">^</a>
 
@@ -644,19 +644,19 @@ Post sizes are limited to about 64,000 characters including formatting. This is 
 
 <a href="#Table_of_Contents_Posting">^</a>
 
-## <span id="If_posting_in_a_language_other_than_English__how_will_I_get_recognized">Если пост не на английском языке, как я узнаю?</span>
+## <span id="If_posting_in_a_language_other_than_English__how_will_I_get_recognized">Если пост не на английском языке, как это обозначить?</span>
 
-You can use language-specific tags to help you to reach the audience that speaks your language.
+Вы можете использовать языковые теги, чтобы помочь вам достичь аудитории, которая говорит на вашем языке.
 
-Language-specific groups include:
+Языковые группы включают:
 
-- Chinese = cn
-- German = deutsch
-- Spanish = spanish
-- Korean = kr
-- Russian = ru
-- French = fr
-- Portuguese = pt
+- Китайский = cn
+- Немецкий = deutsch
+- Испанский = spanish
+- Корейский = kr
+- Русский = ru
+- Французский = fr
+- Португальский = pt
 
 <a href="#Table_of_Contents_Posting">^</a>
 
@@ -712,7 +712,7 @@ Starting with the network's 16th hard fork in December 2016, Steem began creatin
 
 ## <span id="How_are_the_new_tokens_distributed">Как распределяются новые токены?</span>
 
-Out of the new tokens that are generated:
+Из новых токенов, которые были сгенерированы:
 
 - 75% go to the reward pool, which is split between authors and curators. 
 - 15% of the new tokens are awarded to holders of STEEM Power. 

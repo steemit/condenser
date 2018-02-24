@@ -370,13 +370,13 @@ Many users also like to post a photo or a video which shows them holding up a sh
 
 ## <span id="How_do_I_upvote_a_post_or_comment">Как проголосовать за пост или комментарий?</span>
 
-To upvote a post or comment, click on the "upvote" icon at the bottom of the post/comment. <icon name="chevron-up-circle" />
+Чтобы проголосовать за пост или комментарий, нажмите на значок "голосовать за" внизу поста/комментария. <icon name="chevron-up-circle" />
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 
 ## <span id="What_do_the_Home__New__Hot__Trending__and_Promoted_links_show">Куда ведут ссылки «популярное», «новое», «актуальное», «продвигаемое»?</span>
 
-These are various ways to sort Steem posts.
+Есть различные способы сортировки постов в Steem.
 
 **Home** - The most recent posts of the accounts you follow (your feed).
 
@@ -412,7 +412,7 @@ You can get to your account menu by clicking on the avatar icon in the top-right
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 
-## <span id="How_do_I_see_my_recent_rewards">Как увидеть мои последние вознагражденя?</span>
+## <span id="How_do_I_see_my_recent_rewards">Как увидеть мои последние вознаграждения?</span>
 
 The Rewards drop-down menu is available on your profile/blog page. Click it and there are two links:
 
@@ -498,25 +498,25 @@ There is also an **Explore** link in the main menu, where you can browse through
 
 ## <span id="Can_I_see_which_users_I_have_muted">Могу ли я увидеть, каких пользователей я отключил?</span>
 
-Yes. This can be seen under the Settings page.
+Да. Это можно увидеть на странице настроек.
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 
 ## <span id="Can_I_see_which_users_have_muted_me">Могу ли я увидеть, какие пользователи отключили меня?</span>
 
-No. This information is not presented on Steemit.com.
+Нет. Данная информация не представлена на Steemit.com.
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 
 ## <span id="Can_I_see_the_list_of_users_I_am_following__and_who_is_following_me">Как мне увидеть список своих подписчиков и подписок?</span>
 
-Yes. You can see the list of followers or people you are following by clicking on the links on your profile page.
+Да. Вы можете увидеть список подписчиков или ваших подписок, перейдя по ссылкам на странице вашего профиля.
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 
 ## <span id="What_languages_are_supported">Какие языки поддерживаются?</span>
 
-English is the most-used language used on the Steemit platform, but communities are forming that speak other languages.
+Английский язык является наиболее используемым языком на платформе Steemit, но есть сообщества, которые говорят на других языках.
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 
@@ -550,21 +550,21 @@ Pictures can also be hosted on an external site. Paste the image's web address (
 
 ## <span id="How_do_I_set_the_thumbnail_image_for_my_post">Как задать превью изображения для моего поста?</span>
 
-The first image in the post will automatically be set as the thumbnail image.
+Первое изображение в сообщении автоматически устанавливается как изображение превью.
 
 <a href="#Table_of_Contents_Posting">^</a>
 
 ## <span id="What_is_the_recommend_aspect_ratio_for_thumbnail_images">Что такое соотношение сторон рекомендуется для превью изображений?</span>
 
-The recommend aspect ratio for thumbnail images is 16x9.
+Рекомендуемое соотношение сторон для превью изображений - 16х9.
 
 <a href="#Table_of_Contents_Posting">^</a>
 
 ## <span id="How_do_I_add_videos_to_my_posts">Как добавить видео в мой пост?</span>
 
-To add a YouTube or Vimeo video to your blog post, simply paste the link to the video into the post.
+Чтобы добавить YouTube или Vimeo видео для вашего блога, просто вставьте ссылку на видео в пост.
 
-You can also read [this guide](https://steemit.com/steemitguide/@algimantas/detailed-guide-how-to-add-videos-in-steemit) from @algimantas, which has more detailed instructions:
+Вы также можете прочитать [это руководство](https://steemit.com/steemitguide/@algimantas/detailed-guide-how-to-add-videos-in-steemit) от @algimantas, в котором есть более подробные инструкции:
 
 <a href="#Table_of_Contents_Posting">^</a>
 
@@ -594,7 +594,7 @@ All tags must be lowercase letters. Spaces aren't allowed, but hyphenated words 
 
 ## <span id="How_many_tags_can_I_use">Сколько тегов я могу использовать?</span>
 
-You can use up to 5 tags per post.
+Вы можете использовать до 5 тегов в посте.
 
 <a href="#Table_of_Contents_Posting">^</a>
 

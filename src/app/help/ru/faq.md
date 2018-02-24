@@ -606,13 +606,13 @@ A post must have a title, body, and at least one valid tag. If any of these are 
 
 ## <span id="How_do_I_format_text_in_Markdown">Как форматировать текст, используя Markdown?</span>
 
-Some common markdown syntax is:
+Часто используемый синтаксис markdown:
 
 - `**bold**` **bold**
 - `_italics_` *italics*
 - `~~cross out~~` ~~cross out~~
 
-Text can be sized using headers:
+Размер текста можно изменять, используя заголовки:
 
     # H1
     ## H2
@@ -628,7 +628,7 @@ Text can be sized using headers:
 
 #### H4
 
-For more advanced formatting, a guide describing the common markdown formatting syntax can be found here: [Markdown Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
+Для более продвинутого форматирования используйте руководство, описывающее возможности синтаксиса markdown: [Памятка по Markdown](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
 
 <a href="#Table_of_Contents_Posting">^</a>
 
@@ -686,7 +686,7 @@ At the bottom of each post is a button to "Promote". After clicking the button, 
 
 ## <span id="Can_I_earn_digital_tokens_for_commenting">Могу ли я заработать цифровые токены за комментирование?</span>
 
-Yes, comments that are upvoted can earn rewards just like posts!
+Да. Комментарии, за которые проголосовали, приносят вознаграждение так же, как и посты!
 
 <a href="#Table_of_Contents_Comments">^</a>
 

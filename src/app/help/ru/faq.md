@@ -117,13 +117,13 @@
 - [Где можно проверить мою силу голоса?](#Where_can_I_check_my_voting_power)
 - [Что определяет, какая часть кураторского вознаграждения идет автору, а какая - куратору?](#What_determines_how_much_of_the_curation_reward_goes_to_the_author_versus_curators)
 - [Могу ли я получать кураторские вознаграждения, голосуя за комментарии?](#Can_I_get_curation_rewards_for_upvoting_comments)
-- [Получу ли я кураторские вознаграждения, выставляя флаги постам или комментариям?](#Do_I_get_curation_rewards_for_downvoting_posts_or_comments)
+- [Получу ли я кураторские вознаграждения, голосуя против постов или комментариев?](#Do_I_get_curation_rewards_for_downvoting_posts_or_comments)
 - [Что такое кураторские "паровозы"?](#What_are_curation_trails)
 - [Почему мои голоса не влияют на выплаты за пост?](#Why_don_t_my_upvotes_have_an_effect_on_a_post_s_rewards)
 - [Есть ли способ сделать мои голоса весомее?](#Is_there_a_way_to_make_my_votes_count_for_more)
 - [Какие есть причины для того, чтобы проголосовать против?](#What_are_the_valid_reasons_for_downvoting)
 - [Означает ли голос против, что я делаю что-то неправильное?](#Does_a_downvote_mean_that_I_did_something_wrong)
-- [Как голосование против влияет на мою репутацию?](#Will_a_downvote_hurt_my_reputation)
+- [Снижает ли мою репутацию голосование против?](#Will_a_downvote_hurt_my_reputation)
 - [Какая разница между голосом против и флагом?](#What_is_the_difference_between_a_downvote_and_a_flag)
 
 ### <span id="Table_of_Contents_Plagiarism__Spam__and_Abuse">Плагиат, спам и злоупотребление</span>
@@ -141,7 +141,7 @@
 - [Как измеряется репутация?](#How_is_the_Reputation_score_measured)
 - [Как мне увеличить баллы репутации?](#How_do_I_improve_my_reputation_score)
 - [Что снижает оценку моей репутации?](#What_causes_my_reputation_score_to_go_down)
-- [Что придает значение моей репутации?](#Why_does_my_reputation_score_matter)
+- [Что придает вес моей репутации?](#Why_does_my_reputation_score_matter)
 
 ### <span id="Table_of_Contents_Followers__Feeds_and_Resteem">Последователи, ленты и репосты</span>
 
@@ -167,7 +167,7 @@
 - [Как выглядит дорожная карта разработки Steemit?](#What_does_Steemit_s_development_roadmap_look_like)
 - [Разрешено ли использовать логотипы Steem и Steemit?](#Am_I_allowed_to_use_the_Steem_and_Steemit_logos)
 - [Можно ли купить официальный товар Steemit?](#Can_I_purchase_official_Steemit_merchandise)
-- [Может ли Steemit "заранее намайнить" токены?](#Did_Steemit__pre_mine__tokens)
+- [Намайнил ли Steem токены заранее?](#Did_Steemit__pre_mine__tokens)
 - [Какова Политика конфиденциальности Steemit?](#What_is_the_Steemit_Privacy_Policy)
 
 ### <span id="Table_of_Contents_Security">Безопасность</span>
@@ -988,7 +988,7 @@ Of the 25% that goes to the curator, that portion will be split between the auth
 
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
 
-## <span id="Do_I_get_curation_rewards_for_downvoting_posts_or_comments">Получу ли я кураторские вознаграждения, выставляя флаги постам или комментариям?</span>
+## <span id="Do_I_get_curation_rewards_for_downvoting_posts_or_comments">Получу ли я кураторские вознаграждения, голосуя против постов или комментариев?</span>
 
 Нет. Поскольку голосование против уменьшает вознаграждения за посты/комментарии, это не приносит кураторских вознаграждений.
 

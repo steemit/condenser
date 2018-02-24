@@ -984,13 +984,13 @@ Of the 25% that goes to the curator, that portion will be split between the auth
 
 ## <span id="Can_I_get_curation_rewards_for_upvoting_comments">Могу ли я получать кураторские вознаграждения, голосуя за комментарии?</span>
 
-Yes. You can earn curation rewards from upvoting both posts and comments!
+Да. You can earn curation rewards from upvoting both posts and comments!
 
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
 
 ## <span id="Do_I_get_curation_rewards_for_downvoting_posts_or_comments">Получу ли я кураторские вознаграждения, выставляя флаги постам или комментариям?</span>
 
-No. Since downvoting reduces the rewards on a post/comment, it does not earn curation rewards.
+Нет. Since downvoting reduces the rewards on a post/comment, it does not earn curation rewards.
 
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
 
@@ -1010,7 +1010,7 @@ Even though your vote may not have an immediate effect, when it gets added in al
 
 ## <span id="Is_there_a_way_to_make_my_votes_count_for_more">Есть ли способ сделать мои голоса весомее?</span>
 
-Yes. The more STEEM Power you have, the more influence your votes will have.
+Да. The more STEEM Power you have, the more influence your votes will have.
 
 The platform does not require that anybody purchase SP in order to participate, and there are many users who have earned a lot of STEEM Power without spending any of their own money. You have the option of purchasing more STEEM Power through your Steemit wallet.
 
@@ -1028,9 +1028,9 @@ Just because you received a downvote does not mean that you did something wrong.
 
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
 
-## <span id="Will_a_downvote_hurt_my_reputation">Как голосование против влияет на мою репутацию?</span>
+## <span id="Will_a_downvote_hurt_my_reputation">Снижает ли мою репутацию голосование против?</span>
 
-Not necessarily. See: [What causes my reputation score to go down?](#What_causes_my_reputation_score_to_go_down)
+Не обязательно. См.: [Что снижает мою репутацию?](#What_causes_my_reputation_score_to_go_down)
 
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
 
@@ -1094,7 +1094,7 @@ More information on the @cheetah bot can be found in this post: https://steemit.
 
 ## <span id="Where_do_I_report_a_post_or_comment_that_contains_plagiarism__spam__or_abuse">Где можно сообщить о том, что пост или комментарий содержит плагиат, спам или злоупотребление?</span>
 
-You can report any abusive content to the [#steemitabuse](https://steemit.chat/channel/steemitabuse) channel on [steemit.chat](https://steemit.chat/home).
+Вы можете сообщать о злостном контенте в канал [#steemitabuse](https://steemit.chat/channel/steemitabuse) в чате [steemit.chat](https://steemit.chat/home).
 
 <a href="#Table_of_Contents_Plagiarism__Spam__and_Abuse">^</a>
 
@@ -1201,7 +1201,7 @@ The "delegated proof of stake" model of using witnesses instead of miners allows
 
 ## <span id="How_often_does_the_Steem_blockchain_produce_a_new_block">Как часто блокчейн Steem генерирует новый блок?</span>
 
-The Steem blockchain schedules witnesses to produce a new block every 3 seconds. 21 witness nodes produce 21 blocks in each 63-second round.
+Блокчейн Steem настроен так, чтобы делегаты производили новый блок раз в 3 секунды. 21 делегатская нода производит 21 блок в каждом 63 секундном раунде.
 
 <a href="#Table_of_Contents_Blockchain">^</a>
 

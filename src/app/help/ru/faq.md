@@ -892,19 +892,19 @@ There are several guides that have been posted by users in the community for usi
 
 It is recommended that you withdraw a small amount first, to verify it works before withdrawing a larger amount.
 
-#### Sell Steem Dollars via Poloniex
+#### Продать Steem Доллары на бирже Poloniex
 
 https://steemit.com/steemit/@ash/steemit-how-to-sell-steem-dollars-via-poloniex-newbie-friendly
 
-#### Withdraw Steem Dollars to a Bitcoin address
+#### Вывести Steem Доллары на биткоин-адрес
 
 https://steemit.com/steem-help/@piedpiper/how-to-withdraw-your-steem-dollars-in-less-that-a-minute
 
-#### Convert Steem Dollars to a country’s currency and withdraw to a bank account
+#### Конвертировать Steem Доллары в национальную валюту и вывести на банковский счет
 
 https://steemit.com/tutorial/@beanz/how-to-get-my-usdteemit-money-into-my-bank-account
 
-#### Convert STEEM to many other cryptocurrencies via ShapeShift
+#### Конвертировать STEEM во множество других криптовалют, используя ShapeShift
 
 https://steemit.com/steemit/@shapeshiftio/official-announcement-shapeshift-has-added-steem-to-the-exchange
 
@@ -924,7 +924,7 @@ There are never any fees for transfers within the Steem network. However, if you
 
 ## <span id="Are_there_fees_for_Powering_Up__Powering_Down__trading_on_the_internal_market__or_converting_SBD_to_STEEM">Есть ли комиссионные за увеличение или снижение Силы Голоса, за торговлю на внутреннем рынке или за конвертацию SBD в STEEM?</span>
 
-No. None of these actions incur any fees.
+Нет. Никакое из этих действий не требует дополнительных платежей.
 
 <a href="#Table_of_Contents_Economics">^</a>
 
@@ -952,19 +952,19 @@ Every 100% vote you cast will use 2% of your remaining voting power. Your voting
 
 ## <span id="Can_I_vote_with_less_than_100__of_my_voting_strength">Могу ли я голосовать с силой голоса меньше 100%?</span>
 
-New users can only upvote and downvote with 100% voting strength.
+Новые пользователи могут голосовать за или против только с 100% силой голоса.
 
 Once you reach about 500 STEEM Power, you will see a vote slider appear when you vote. You can use the slider to adjust the weight of your vote, between 1% and 100% voting strength. Voting with less than 100% voting weight will use up less voting power, but it will also have less of an influence on the post or comment's rewards.
 
 <img src="https://steemitimages.com/DQmV6c21tzSrgXwPHx4tvuc1UiCXBEvzkLBH9QCZHtVN6Ma/image.png" />
 
-Upvotes and downvotes use the same amount of voting power.
+Голоса за или против используют одинаковую силу голоса.
 
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
 
 ## <span id="Where_can_I_check_my_voting_power">Где можно проверить мою силу голоса?</span>
 
-You can view your current voting power using third party tools such as https://steemd.com/@youraccount or https://steemstats.com.
+Вы можете посмотреть свою силу голоса, используя сторонние сервисы. Например, https://steemd.com/@youraccount или https://steemstats.com.
 
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
 
@@ -984,13 +984,13 @@ Of the 25% that goes to the curator, that portion will be split between the auth
 
 ## <span id="Can_I_get_curation_rewards_for_upvoting_comments">Могу ли я получать кураторские вознаграждения, голосуя за комментарии?</span>
 
-Да. You can earn curation rewards from upvoting both posts and comments!
+Да. Вы можете зарабатывать кураторские вознаграждения, голосуя и за посты, и за комментарии!
 
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
 
 ## <span id="Do_I_get_curation_rewards_for_downvoting_posts_or_comments">Получу ли я кураторские вознаграждения, выставляя флаги постам или комментариям?</span>
 
-Нет. Since downvoting reduces the rewards on a post/comment, it does not earn curation rewards.
+Нет. Поскольку голосование против уменьшает вознаграждения за посты/комментарии, это не приносит кураторских вознаграждений.
 
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
 

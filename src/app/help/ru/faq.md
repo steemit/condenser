@@ -344,7 +344,7 @@ Each user is allowed only one paid-for account created via Steemit.com, however 
 
 ## <span id="Can_I_delete_or_deactivate_my_account">Могу ли я удалить или отключить мой аккаунт?</span>
 
-Accounts can not be deactivated or deleted. The account along with all of its activity is permanently stored in the blockchain.
+Аккаунты не могут быть отключены или удалены. Аккаунт вместе со всей своей деятельностью постоянно хранится в блокчейне.
 
 <a href="#Table_of_Contents_Accounts">^</a>
 

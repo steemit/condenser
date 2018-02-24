@@ -1207,7 +1207,7 @@ The Steem blockchain schedules witnesses to produce a new block every 3 seconds.
 
 ## <span id="Is_there_a_way_to_see_the_raw_data_that_is_stored_in_the_blockchain">Есть ли способ увидеть сырые данные, которые хранятся в блокчейне?</span>
 
-Yes. The blockchain data can be viewed in different ways with third-party tools such as [steemd.com](https://steemd.com) and [steemdb.com](https://steemdb.com).
+Да. The blockchain data can be viewed in different ways with third-party tools such as [steemd.com](https://steemd.com) and [steemdb.com](https://steemdb.com).
 
 <a href="#Table_of_Contents_Blockchain">^</a>
 
@@ -1219,7 +1219,7 @@ The original launch of Steem was on March 23, 2016, announced on [Bitcointalk.or
 
 ## <span id="Can_I_mine_STEEM">Могу ли я намайнить Steem?</span>
 
-No. Proof of work mining has been removed from Steem.
+Нет. Майнинг по протоколу Proof of work удален из Steem.
 
 <a href="#Table_of_Contents_Blockchain">^</a>
 
@@ -1241,7 +1241,7 @@ Though not considered an investment, you can purchase STEEM tokens which can go 
 
 ## <span id="What_does_Steemit_s_development_roadmap_look_like">Как выглядит дорожная карта разработки Steemit?</span>
 
-You can view the 2017 Roadmap here: https://steemit.com/steemit/@steemitblog/steemit-2017-roadmap
+Дорожную карту на 2017 год можно посмотреть здесь: https://steemit.com/steemit/@steemitblog/steemit-2017-roadmap
 
 <a href="#Table_of_Contents_Steemit__Inc">^</a>
 
@@ -1257,7 +1257,7 @@ The blue Steem logo with the three S-shaped squiggles is licensed under Creative
 
 ## <span id="Can_I_purchase_official_Steemit_merchandise">Можно ли купить официальный товар Steemit?</span>
 
-Yes. Official Steemit merchandise can be purchased from [The Steemit Shop](https://thesteemitshop.com/).
+Да. Официальные товары Steemit можно приобрести в [Steemit магазине](https://thesteemitshop.com/).
 
 <a href="#Table_of_Contents_Steemit__Inc">^</a>
 
@@ -1451,7 +1451,7 @@ You can also create a post on Steemit.com with the tag #help, and someone in the
 
 ## <span id="Third_Party_References_and_User_Links">Упоминания третьих лиц и ссылки пользователей</span>
 
-BlockTrades, Poloniex, Bittrex, Changelly, Shapeshift.io, Coinbase, Localbitcoins, SteemDB, PeerHub, Steemit.chat, SteemTools, SteemCreate, AnonSteem, SteemConnect, Streemian, SteemStats, Pixabay, Steemcleaners, Pexels, Postimage, Markdown Cheatsheet, @cheetah, Bitcointalk, bitcoinfees, blockchain.info, and steemd are third party applications/services, and are not owned or maintained by Steemit, Inc. Their listing here, as well as any other third party applications or websites that are listed, does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
+BlockTrades, Poloniex, Bittrex, Changelly, Shapeshift.io, Coinbase, Localbitcoins, SteemDB, PeerHub, Steemit.chat, SteemTools, SteemCreate, AnonSteem, SteemConnect, Streemian, SteemStats, Pixabay, Steemcleaners, Pexels, Postimage, Markdown Cheatsheet, @cheetah, Bitcointalk, bitcoinfees, blockchain.info и steemd это сторонние приложения/сервисы и они не принадлежат и не поддерживаются Steemit, Inc. Their listing here, as well as any other third party applications or websites that are listed, does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
 
 All links to user posts were created by our users and do not necessarily represent the views of Steemit, Inc. or its management. Their listing here does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
 

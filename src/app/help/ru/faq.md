@@ -258,17 +258,17 @@ Steemit это социальная медиаплатформа, работаю
 
 В своей основе Steem это просто система баллов. Однако, поскольку эта балльная система основана на блокчейне, такие баллы могут торговаться на рынках как токены. Люди покупают и продают эти токены, а многие держат их в ожидании повышения покупательной способности для различных услуг, связанных со Steem.
 
-По аналогии с играми Steem является системой, где пользователи конкурируют за внимание и награды, принося контент и добавляя ценность для платформы. The rewards people earn are tokens that have market value and are readily tradable. It is similar to how someone playing a video game could obtain a limited item or currency by playing the game. If the currency or items are transferable between users, then they can sell or buy them on game item markets.
+По аналогии с играми, Steem является системой, где пользователи конкурируют за внимание и награды, принося контент и добавляя ценность для платформы. Вознаграждаемые люди зарабатывают токены, у которых есть рыночная стоимость и которые свободно обращаются на рынке. Это похоже на то, как кто-то играет в видеоигру и может получить ограниченный товар или валюту в процессе игры. Если валюта или товары могут передаваться между пользователями, то они могут продавать или покупать их на рынках игровых товаров.
 
 <a href="#Table_of_Contents_General">^</a>
 
 ## <span id="Why_are_people_getting_vastly_different_rewards">Почему люди получают очень разное вознаграждение?</span>
 
-Steemit is not a "get rich quick" scheme. While it is possible to post content that goes viral quickly and earn a lot of rewards on a single post, this is not typical for most users.
+Steemit это не способ "быстрого обогащения". Хотя вполне возможно разместить пост, который быстро наберет популярность, и заработать на этой одиночной публикации, но такое не типично для большинства пользователей.
 
-Most of the authors that you see earning high rewards are users that have spent a lot of time in the network building followings, making connections with others, and developing a reputation for bringing high quality content.
+Большинство авторов, зарабатывающих высокие награды - это пользователи, которые потратили много времени для создания сети подписчиков, установления связей с другими, а также построения собственной репутации путем размещения качественного контента.
 
-It is best to have realistic expectations, without focusing on rewards when you are first starting out. Work on building a following, making connections, and developing a good reputation. Consistency will pay off in the long run.
+Если вы только начинаете, то лучше иметь реалистичные ожидания, не акцентируя свое внимание на наградах. Работайте над подписками, созданием связей и построением своей хорошей репутации. Последовательность окупится в долгосрочной перспективе.
 
 <a href="#Table_of_Contents_General">^</a>
 
@@ -278,9 +278,9 @@ It is best to have realistic expectations, without focusing on rewards when you 
 
 Для начала нажмите на ссылку «Зарегистрироваться» в верхней части Steemit.com.
 
-You will be asked to verify your email address and phone number. After your email address and phone number have been verified, you will be added to the waiting list. You will be notified via email once your account is approved.
+Вам будет предложено подтвердить адрес электронной почты и номер телефона. После того, как ваш адрес электронной почты и номер телефона будут проверены, вы будете добавлены в список ожидания. Вы будете уведомлены по электронной почте после утверждения аккаунта.
 
-After you receive notification that your account is approved, click on the link in the email to finish the account creation process. Be sure to save and backup your username and password. It is very important that you do not lose your password. There is no way to recover your password or access your account if it is lost. Once your password is saved and backed up, click on the "Create Account" button to create the account.
+После того как вы получите уведомление, что ваш аккаунт одобрен, перейдите по ссылке в письме, чтобы завершить процесс создания аккаунта. Удостоверьтесь, что вы сохранили ваш логин и пароль. Сделайте запасную копию. Очень важно, чтобы вы не потеряли свой пароль. Нет никакого способа, чтобы восстановить пароль или получить доступ к вашему аккаунту в случае его утери. Как только ваш пароль сохранен и резервное копирование, нажмите на кнопку "Создать аккаунт" кнопку, чтобы создать учетную запись.
 
 <a href="#Table_of_Contents_Accounts">^</a>
 
@@ -294,33 +294,33 @@ After you receive notification that your account is approved, click on the link 
 
 Большинство аккаунтов утверждаются в течение 24 часов. Для некоторых это может занять до недели.
 
-If your account has not been approved after one week, please ask for help in the [#help](https://steemit.chat/channel/help) channel on [steemit.chat](https://steemit.chat/home).
+Если в течение недели ваш запрос не был подтвержден, обратитесь за помощью на канал [#help](https://steemit.chat/channel/help) в чате [steemit.chat](https://steemit.chat/home).
 
 <a href="#Table_of_Contents_Accounts">^</a>
 
 ## <span id="Why_do_I_need_to_provide_my_email_and_phone_number">Зачем нужно указывать мой адрес электронной почты и номер телефона?</span>
 
-To create an account on the blockchain, it costs STEEM tokens. When you create an account through Steemit.com, Steemit Inc. is supplying the tokens to pay the account creation fee. In order to prevent users from abusing the paid-for signup and creating multiple accounts, we need to be able to verify that each user is only signing up for one account.
+Создание аккаунта на блокчейне стоит несколько токенов STEEM. Когда вы создаете аккаунт на Steemit.com, то Steemit inc. предоставляет токены для оплаты стоимости создания аккаунта. Для того, чтобы пользователи не злоупотребляли платной регистрацией и созданием нескольких аккаунтов, мы должны быть в состоянии убедиться, что каждый пользователь зарегистрировал только один аккаунт.
 
 <a href="#Table_of_Contents_Accounts">^</a>
 
 ## <span id="Can_I_create_a_Steem_account_without_an_email_and_phone_number">Могу ли я создать аккаунт на Steem без указания электронной почты и номера телефона?</span>
 
-The only way to have an account created via Steemit.com is to supply your email and phone number. Because Steem is an open and permissionless network, there are other ways to create a Steem account. Any Steem blockchain account can be used on Steemit.com
+Единственный способ иметь аккаунт, созданный через Steemit.com, это предоставить свою электронную почту и телефон. Поскольку Steem является открытой сетью без ограничения прав, то есть и другие способы создать аккаунт в Steem. Любой аккаунт для блокчейна Steem может использоваться на Steem.com
 
 <a href="#Table_of_Contents_Accounts">^</a>
 
 ## <span id="What_are_other_ways_to_create_an_account_on_the_blockchain_besides_using_Steemit_com">Каковы другие способы для создания аккаунта на блокчейне кроме Steemit.com?</span>
 
-If you are willing to pay your own signup fee, then there are other ways to create a new account on the blockchain.
+Если вы готовы оплатить регистрационный сбор, то есть и другие способы для создания нового аккаунта в блокчейне.
 
-There is a third-party tool called [SteemCreate](https://www.SteemCreate.com) that accepts credit cards, or BTC to create a Steem account. You do not need to have an existing Steem blockchain account to use the service, but there is a charge on top of the blockchain account creation fee for using the service.
+Есть сторонний инструмент под названием [SteemCreate](https://www.SteemCreate.com), где принимают кредитные карты или биткоины для создания аккаунта в Steem. Вам не нужно иметь аккаунт в блокчейне Steem, чтобы воспользоваться услугой, но помимо оплаты создания аккаунта в блокчейне здесь есть еще плата за использование сервиса.
 
-There is a third-party tool called [AnonSteem](https://steemit.com/steemit/@someguy123/anonsteem-create-anonymous-steem-accounts-without-social-media) that accepts bitcoin, Litecoin, STEEM, or SBD to anonymously create a Steem account. You do not need to have an existing Steem blockchain account to use the service, but there is a charge on top of the blockchain account creation fee for using the service.
+Другой сторонний инструмент называется [AnonSteem](https://steemit.com/steemit/@someguy123/anonsteem-create-anonymous-steem-accounts-without-social-media), где принимаются биткоины, Litecoin, STEEM и SBD для анонимного создания аккаунта в Steem. Вам не нужно иметь аккаунт в блокчейне Steem, чтобы воспользоваться услугой, но помимо оплаты создания аккаунта в блокчейне здесь есть еще плата за использование сервиса.
 
-There is a third-party tool called [SteemConnect](https://steemit.com/news/@timcliff/new-tool-from-busy-org-create-new-steem-blockchain-accounts-with-steemconnect) that allows you to create accounts by paying or delegating the account creation fee. There is no additional fee to use the service, but does require an existing Steem blockchain account to pay the account creation fee to create the account.
+Еще один сторонний инструмент называется [SteemConnect](https://steemit.com/news/@timcliff/new-tool-from-busy-org-create-new-steem-blockchain-accounts-with-steemconnect) и позволяет создавать аккаунты с оплатой или делегированием стоимости создания аккаунта. Тут нет дополнительной платы за использование сервиса, но требуется существующий аккаунт в блокчейне Steem для оплаты стоимости создания аккаунта.
 
-There is a third-party tool called [BlockTrades](https://steemit.com/blocktrades/@blocktrades/buy-steem-accounts-with-pre-loaded-steem-from-blocktrades) that accepts bitcoin, Litecoin, STEEM, SBD, BitShares, Dash, Dogecoin, Ethereum, and more to create a Steem account. You can also send extra tokens to pre-load the account with additional Steem Power. You do not need to have an existing Steem blockchain account to use the service, but there is a charge on top of the blockchain account creation fee for using the service.
+Другой сторонний инструмент называется [BlockTrades](https://steemit.com/blocktrades/@blocktrades/buy-steem-accounts-with-pre-loaded-steem-from-blocktrades), где принимаются биткоины, Litecoin, STEEM, SBD, BitShares, Dash, Dogecoin, Ethereum и другие токены для создания аккаунта в Steem. Вы также можете отправить добавочные токены для получения аккаунта с большей Силой Голоса. Вам не нужно иметь аккаунт в блокчейне Steem, чтобы воспользоваться услугой, но помимо оплаты создания аккаунта в блокчейне здесь есть еще плата за использование сервиса.
 
 <a href="#Table_of_Contents_Accounts">^</a>
 
@@ -332,13 +332,13 @@ There is a third-party tool called [BlockTrades](https://steemit.com/blocktrades
 
 ## <span id="What_happens_if_my_email_or_phone_number_changes">Что произойдет, если изменится мой адрес электронной почты или номер телефона?</span>
 
-Currently there is no way to change the email or phone number that is linked to your account. Though once your account is created, you can continue to use it even if the email or phone number that is linked to the account has changed.
+В настоящее время нет никакого способа, чтобы изменить адрес электронной почты или номер телефона, которые привязаны к вашему аккаунту. Но когда ваш аккаунт создан, вы можете продолжать использовать его, даже если адрес электронной почты или номер телефона, которые привязаны к аккаунту, были изменены.
 
 <a href="#Table_of_Contents_Accounts">^</a>
 
 ## <span id="Am_I_allowed_to_create_more_than_one_account">Разрешено ли создавать больше одного аккаунта?</span>
 
-Each user is allowed only one paid-for account created via Steemit.com, however users are allowed to create multiple accounts on the blockchain. Creating additional accounts on the blockchain requires users to pay their own account creation fee for any additional accounts.
+Каждому пользователю разрешается иметь только один оплаченный аккаунт, созданный через Steemit.com, однако пользователи могут создать несколько учетных записей в блокчейне. Создание дополнительных аккаунтов в блокчейне требует от пользователей оплаты за создание каждого дополнительного аккаунта.
 
 <a href="#Table_of_Contents_Accounts">^</a>
 
@@ -352,17 +352,17 @@ Each user is allowed only one paid-for account created via Steemit.com, however 
 
 ## <span id="Is_there_an_Etiquette_Guide_for_Steemit">Есть ли руководство по этикету для Steemit?</span>
 
-There are no official rules for participating on Steemit.com, but one of the users @thecryptofiend has created an [Etiquette Guide](https://steemit.com/steemit/@thecryptofiend/the-complete-steemit-etiquette-guide-revision-2-0) for the community. While it is not required to follow the suggestions in the guide, they are standards that many users in the community choose to follow.
+Нет никаких официальных правил для участников Steemit.com, но один из пользователей @thecryptofiend создал [Руководство по этике](https://steemit.com/steemit/@thecryptofiend/the-complete-steemit-etiquette-guide-revision-2-0) для сообщества. Хотя никто не обязан выполнять рекомендации, приведенные в руководстве, они являются стандартами, которым решили следовать многие пользователи в сообществе.
 
 <a href="#Table_of_Contents_Community">^</a>
 
 ## <span id="Am_I_required_to_verify_my_identity">Должен ли я удостоверить мою личность?</span>
 
-Verification is a process where users give evidence to show that they are the person that they claim to be. This is to reduce fraud and people impersonating known figures. If you would like to remain anonymous, that is perfectly fine. However if you claim to be someone specific, the community may expect that you verify you are who you say you are.
+Верификация - это процесс, где пользователи предоставляют доказательства, что они именно те личности, которыми называются. Это делается для предотвращения мошенничества и изображения известных деятелей. Если вы хотите остаться анонимным, это совершенно нормально. Однако, если вы утверждаете, что вы кто-то конкретный, то сообщество может ожидать, что вы докажете, что вы тот, кем называетесь.
 
-There are a number of ways to do this. The most common way to verify your identity is by posting a link to your Steemit profile on a website or social media account which you are already known for having such as Twitter, Facebook, LinkedIn, a blog, or photography site.
+Есть несколько путей для этого. Самый распространенный способ для проверки вашей личности, это размещение ссылки на свой профиль Steemit на веб-сайте или в социальных медиа, в которых вы уже известны. Например, таких как Twitter, Facebook, Linkedin, в блоге, или на фотографическом сайте.
 
-Many users also like to post a photo or a video which shows them holding up a sheet of paper with the current date and their Steem account name handwritten on it. This is a great way to add a personal touch to verifying.
+Многим пользователям также нравится публиковать фото или видео, где они держат в руках лист бумаги с написанными от руки сегодняшней датой и названием их аккаунта Steem. Это отличный способ, чтобы добавить личный контакт для верификации.
 
 <a href="#Table_of_Contents_Community">^</a>
 
@@ -378,37 +378,37 @@ Many users also like to post a photo or a video which shows them holding up a sh
 
 Есть различные способы сортировки постов в Steem.
 
-**Home** - The most recent posts of the accounts you follow (your feed).
+**Главная** - Последние сообщения от вас (ваш канал).
 
-**New** - Posts are sorted by the time posted, with newest first.
+**Новое** - Посты, отсортированные по времени размещения, новые в начале.
 
-**Hot** - Popular posts at the moment.
+**Актуальное** - Популярные на данный момент посты.
 
-**Trending** - Posts with the most amount of votes, stake-weighted, recently.
+**Популярное** - Недавние посты с наибольшим количеством голосов, отсортированные во весу.
 
-**Promoted** - Listings that are boosted by Steem Dollar payments get promoted for greater visibility.
+**Продвигаемое** - Список постов, за которые заплатили Steem Долларами для продвижения и получения большего количества просмотров.
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 
 ## <span id="What_information_is_available_in_my_account_menu">Какая информация доступна в меню моего аккаунта?</span>
 
-You can get to your account menu by clicking on the avatar icon in the top-right corner of a Steemit.com page.
+Вы можете попасть в меню своего аккаунта, нажав на аватарку в правом верхнем углу страницы Steemit.com.
 
-**Feed** - Here is where you go to see the most recent posts from the people you follow.
+**Лента** - Сюда вы идете, чтобы увидеть самые последние сообщения от людей, на которых подписаны.
 
-**Blog** - Here is where you go to see all of your posts and resteems. It is also where you go to see your profile page that is viewable by other users.
+**Блог** - Здесь можно увидеть все ваши сообщения и перепосты. Кроме того, тут ваша страница профиля, которая видна другим пользователям.
 
-**Comments** - Here is where you go to see all of the comments and replies you have made.
+**Комментарии** - Все комментарии и ответы, которые вы сделали.
 
-**Replies** - Here is where you go to see all replies other users have made to your posts and comments.
+**Ответы** - Тут ответы других пользователей на ваши посты и комментарии.
 
-**Wallet** - Here is where you go to see your wallet balances, make transfers, exchange STEEM or Steem Dollars, and Power Up.
+**Кошелек** - Здесь можно увидеть ваш баланс кошелька, осуществлять переводы, обмен STEEM или Steem долларов, а также повышение Силы Голоса.
 
-**Change Password** - Here is where you go to change your password.
+**Сменить пароль** - Здесь можно изменить свой пароль.
 
-**Settings** - Here is where you go to update your settings.
+**Настройки** - Тут можно обновить настройки.
 
-**Logout** - If you'd like to logout.
+**Выход** - Если вы хотите выйти.
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 

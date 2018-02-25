@@ -396,19 +396,19 @@ Steemit это не способ "быстрого обогащения". Хот
 
 **Лента** - Сюда вы идете, чтобы увидеть самые последние сообщения от людей, на которых подписаны.
 
-**Блог** - Здесь можно увидеть все ваши сообщения и перепосты. It is also where you go to see your profile page that is viewable by other users.
+**Блог** - Здесь можно увидеть все ваши сообщения и перепосты. Кроме того, тут ваша страница профиля, которая видна другим пользователям.
 
-**Comments** - Here is where you go to see all of the comments and replies you have made.
+**Комментарии** - Все комментарии и ответы, которые вы сделали.
 
-**Replies** - Here is where you go to see all replies other users have made to your posts and comments.
+**Ответы** - Тут ответы других пользователей на ваши посты и комментарии.
 
-**Wallet** - Here is where you go to see your wallet balances, make transfers, exchange STEEM or Steem Dollars, and Power Up.
+**Кошелек** - Здесь можно увидеть ваш баланс кошелька, осуществлять переводы, обмен STEEM или Steem долларов, а также повышение Силы Голоса.
 
-**Change Password** - Here is where you go to change your password.
+**Сменить пароль** - Здесь можно изменить свой пароль.
 
-**Settings** - Here is where you go to update your settings.
+**Настройки** - Тут можно обновить настройки.
 
-**Logout** - If you'd like to logout.
+**Выход** - Если вы хотите выйти.
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 

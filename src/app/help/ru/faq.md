@@ -360,9 +360,9 @@ Steemit это не способ "быстрого обогащения". Хот
 
 Верификация - это процесс, где пользователи предоставляют доказательства, что они именно те личности, которыми называются. Это делается для предотвращения мошенничества и изображения известных деятелей. Если вы хотите остаться анонимным, это совершенно нормально. Однако, если вы утверждаете, что вы кто-то конкретный, то сообщество может ожидать, что вы докажете, что вы тот, кем называетесь.
 
-Есть несколько путей для этого. The most common way to verify your identity is by posting a link to your Steemit profile on a website or social media account which you are already known for having such as Twitter, Facebook, LinkedIn, a blog, or photography site.
+Есть несколько путей для этого. Самый распространенный способ для проверки вашей личности, это размещение ссылки на свой профиль Steemit на веб-сайте или в социальных медиа, в которых вы уже известны. Например, таких как Twitter, Facebook, Linkedin, в блоге, или на фотографическом сайте.
 
-Many users also like to post a photo or a video which shows them holding up a sheet of paper with the current date and their Steem account name handwritten on it. This is a great way to add a personal touch to verifying.
+Многим пользователям также нравится публиковать фото или видео, где они держат в руках лист бумаги с написанными от руки сегодняшней датой и названием их аккаунта Steem. Это отличный способ, чтобы добавить личный контакт для верификации.
 
 <a href="#Table_of_Contents_Community">^</a>
 
@@ -378,11 +378,11 @@ Many users also like to post a photo or a video which shows them holding up a sh
 
 Есть различные способы сортировки постов в Steem.
 
-**Home** - The most recent posts of the accounts you follow (your feed).
+**Главная** - Последние сообщения от вас (ваш канал).
 
-**New** - Posts are sorted by the time posted, with newest first.
+**Новое** - Посты, отсортированные по времени размещения, новые в начале.
 
-**Hot** - Popular posts at the moment.
+**Популярное** - Популярные на данный момент посты.
 
 **Trending** - Posts with the most amount of votes, stake-weighted, recently.
 

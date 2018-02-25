@@ -294,19 +294,19 @@ Steemit это не способ "быстрого обогащения". Хот
 
 Большинство аккаунтов утверждаются в течение 24 часов. Для некоторых это может занять до недели.
 
-If your account has not been approved after one week, please ask for help in the [#help](https://steemit.chat/channel/help) channel on [steemit.chat](https://steemit.chat/home).
+Если в течение недели ваш запрос не был подтвержден, обратитесь за помощью на канал [#help](https://steemit.chat/channel/help) в чате [steemit.chat](https://steemit.chat/home).
 
 <a href="#Table_of_Contents_Accounts">^</a>
 
 ## <span id="Why_do_I_need_to_provide_my_email_and_phone_number">Зачем нужно указывать мой адрес электронной почты и номер телефона?</span>
 
-To create an account on the blockchain, it costs STEEM tokens. When you create an account through Steemit.com, Steemit Inc. is supplying the tokens to pay the account creation fee. In order to prevent users from abusing the paid-for signup and creating multiple accounts, we need to be able to verify that each user is only signing up for one account.
+Создание аккаунта на блокчейне стоит несколько токенов STEEM. Когда вы создаете аккаунт на Steemit.com, то Steemit inc. предоставляет токены для оплаты стоимости создания аккаунта. Для того, чтобы пользователи не злоупотребляли платной регистрацией и созданием нескольких аккаунтов, мы должны быть в состоянии убедиться, что каждый пользователь зарегистрировал только один аккаунт.
 
 <a href="#Table_of_Contents_Accounts">^</a>
 
 ## <span id="Can_I_create_a_Steem_account_without_an_email_and_phone_number">Могу ли я создать аккаунт на Steem без указания электронной почты и номера телефона?</span>
 
-The only way to have an account created via Steemit.com is to supply your email and phone number. Because Steem is an open and permissionless network, there are other ways to create a Steem account. Any Steem blockchain account can be used on Steemit.com
+Единственный способ иметь аккаунт, созданный через Steemit.com, это предоставить свою электронную почту и телефон. Because Steem is an open and permissionless network, there are other ways to create a Steem account. Any Steem blockchain account can be used on Steemit.com
 
 <a href="#Table_of_Contents_Accounts">^</a>
 

@@ -382,21 +382,21 @@ Steemit это не способ "быстрого обогащения". Хот
 
 **Новое** - Посты, отсортированные по времени размещения, новые в начале.
 
-**Популярное** - Популярные на данный момент посты.
+**Актуальное** - Популярные на данный момент посты.
 
-**Trending** - Posts with the most amount of votes, stake-weighted, recently.
+**Популярное** - Недавние посты с наибольшим количеством голосов, отсортированные во весу.
 
-**Promoted** - Listings that are boosted by Steem Dollar payments get promoted for greater visibility.
+**Продвигаемое** - Список постов, за которые заплатили Steem Долларами для продвижения и получения большего количества просмотров.
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 
 ## <span id="What_information_is_available_in_my_account_menu">Какая информация доступна в меню моего аккаунта?</span>
 
-You can get to your account menu by clicking on the avatar icon in the top-right corner of a Steemit.com page.
+Вы можете попасть в меню своего аккаунта, нажав на аватарку в правом верхнем углу страницы Steemit.com.
 
-**Feed** - Here is where you go to see the most recent posts from the people you follow.
+**Лента** - Сюда вы идете, чтобы увидеть самые последние сообщения от людей, на которых подписаны.
 
-**Blog** - Here is where you go to see all of your posts and resteems. It is also where you go to see your profile page that is viewable by other users.
+**Блог** - Здесь можно увидеть все ваши сообщения и перепосты. It is also where you go to see your profile page that is viewable by other users.
 
 **Comments** - Here is where you go to see all of the comments and replies you have made.
 

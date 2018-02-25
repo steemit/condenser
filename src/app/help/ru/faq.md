@@ -268,7 +268,7 @@ Steemit это не способ "быстрого обогащения". Хот
 
 Большинство авторов, зарабатывающих высокие награды - это пользователи, которые потратили много времени для создания сети подписчиков, установления связей с другими, а также построения собственной репутации путем размещения качественного контента.
 
-Если вы только начинаете, то лучше иметь реалистичные ожидания, не акцентируя свое внимание на наградах. Работайте над подписками, созданием связей и построением своей хорошей репутации. Consistency will pay off in the long run.
+Если вы только начинаете, то лучше иметь реалистичные ожидания, не акцентируя свое внимание на наградах. Работайте над подписками, созданием связей и построением своей хорошей репутации. Последовательность окупится в долгосрочной перспективе.
 
 <a href="#Table_of_Contents_General">^</a>
 
@@ -278,9 +278,9 @@ Steemit это не способ "быстрого обогащения". Хот
 
 Для начала нажмите на ссылку «Зарегистрироваться» в верхней части Steemit.com.
 
-You will be asked to verify your email address and phone number. After your email address and phone number have been verified, you will be added to the waiting list. You will be notified via email once your account is approved.
+Вам будет предложено подтвердить адрес электронной почты и номер телефона. После того, как ваш адрес электронной почты и номер телефона будут проверены, вы будете добавлены в список ожидания. Вы будете уведомлены по электронной почте после утверждения аккаунта.
 
-After you receive notification that your account is approved, click on the link in the email to finish the account creation process. Be sure to save and backup your username and password. It is very important that you do not lose your password. There is no way to recover your password or access your account if it is lost. Once your password is saved and backed up, click on the "Create Account" button to create the account.
+После того как вы получите уведомление, что ваш аккаунт одобрен, перейдите по ссылке в письме, чтобы завершить процесс создания аккаунта. Удостоверьтесь, что вы сохранили ваш логин и пароль. Сделайте запасную копию. Очень важно, чтобы вы не потеряли свой пароль. Нет никакого способа, чтобы восстановить пароль или получить доступ к вашему аккаунту в случае его утери. Как только ваш пароль сохранен и резервное копирование, нажмите на кнопку "Создать аккаунт" кнопку, чтобы создать учетную запись.
 
 <a href="#Table_of_Contents_Accounts">^</a>
 

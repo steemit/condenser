@@ -320,7 +320,7 @@ Steemit это не способ "быстрого обогащения". Хот
 
 Еще один сторонний инструмент называется [SteemConnect](https://steemit.com/news/@timcliff/new-tool-from-busy-org-create-new-steem-blockchain-accounts-with-steemconnect) и позволяет создавать аккаунты с оплатой или делегированием стоимости создания аккаунта. Тут нет дополнительной платы за использование сервиса, но требуется существующий аккаунт в блокчейне Steem для оплаты стоимости создания аккаунта.
 
-Другой сторонний инструмент называется [BlockTrades](https://steemit.com/blocktrades/@blocktrades/buy-steem-accounts-with-pre-loaded-steem-from-blocktrades), где принимаются биткоины, Litecoin, STEEM, SBD, BitShares, Dash, Dogecoin, Ethereum и другие токены для создания аккаунта в Steem. You can also send extra tokens to pre-load the account with additional Steem Power. You do not need to have an existing Steem blockchain account to use the service, but there is a charge on top of the blockchain account creation fee for using the service.
+Другой сторонний инструмент называется [BlockTrades](https://steemit.com/blocktrades/@blocktrades/buy-steem-accounts-with-pre-loaded-steem-from-blocktrades), где принимаются биткоины, Litecoin, STEEM, SBD, BitShares, Dash, Dogecoin, Ethereum и другие токены для создания аккаунта в Steem. Вы также можете отправить добавочные токены для получения аккаунта с большей Силой Голоса. Вам не нужно иметь аккаунт в блокчейне Steem, чтобы воспользоваться услугой, но помимо оплаты создания аккаунта в блокчейне здесь есть еще плата за использование сервиса.
 
 <a href="#Table_of_Contents_Accounts">^</a>
 
@@ -332,13 +332,13 @@ Steemit это не способ "быстрого обогащения". Хот
 
 ## <span id="What_happens_if_my_email_or_phone_number_changes">Что произойдет, если изменится мой адрес электронной почты или номер телефона?</span>
 
-Currently there is no way to change the email or phone number that is linked to your account. Though once your account is created, you can continue to use it even if the email or phone number that is linked to the account has changed.
+В настоящее время нет никакого способа, чтобы изменить адрес электронной почты или номер телефона, которые привязаны к вашему аккаунту. Но когда ваш аккаунт создан, вы можете продолжать использовать его, даже если адрес электронной почты или номер телефона, которые привязаны к аккаунту, были изменены.
 
 <a href="#Table_of_Contents_Accounts">^</a>
 
 ## <span id="Am_I_allowed_to_create_more_than_one_account">Разрешено ли создавать больше одного аккаунта?</span>
 
-Each user is allowed only one paid-for account created via Steemit.com, however users are allowed to create multiple accounts on the blockchain. Creating additional accounts on the blockchain requires users to pay their own account creation fee for any additional accounts.
+Каждому пользователю разрешается иметь только один оплаченный аккаунт, созданный через Steemit.com, однако пользователи могут создать несколько учетных записей в блокчейне. Creating additional accounts on the blockchain requires users to pay their own account creation fee for any additional accounts.
 
 <a href="#Table_of_Contents_Accounts">^</a>
 

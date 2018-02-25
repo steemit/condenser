@@ -69,7 +69,7 @@
 - [Как форматировать текст, используя Markdown?](#How_do_I_format_text_in_Markdown)
 - [Как часто я могу публиковать посты?](#How_often_can_I_post)
 - [Какой длины может быть мой пост?](#How_long_can_my_post_be)
-- [Если пост не на английском языке, как я узнаю?](#If_posting_in_a_language_other_than_English__how_will_I_get_recognized)
+- [Если пост не на английском языке, как это обозначить?](#If_posting_in_a_language_other_than_English__how_will_I_get_recognized)
 - [Можно ли удалить то, что я написал?](#Can_I_delete_something_I_posted)
 - [Что означает "Продвинуть" пост?](#What_does__Promoting__a_post_do)
 - [Как продвинуть пост?](#How_do_I_promote_a_post)
@@ -118,7 +118,7 @@
 - [Что определяет, какая часть кураторского вознаграждения идет автору, а какая - куратору?](#What_determines_how_much_of_the_curation_reward_goes_to_the_author_versus_curators)
 - [Могу ли я получать кураторские вознаграждения, голосуя за комментарии?](#Can_I_get_curation_rewards_for_upvoting_comments)
 - [Получу ли я кураторские вознаграждения, голосуя против постов или комментариев?](#Do_I_get_curation_rewards_for_downvoting_posts_or_comments)
-- [Что такое кураторские "паровозы"?](#What_are_curation_trails)
+- [Что такое кураторские "паровозики"?](#What_are_curation_trails)
 - [Почему мои голоса не влияют на выплаты за пост?](#Why_don_t_my_upvotes_have_an_effect_on_a_post_s_rewards)
 - [Есть ли способ сделать мои голоса весомее?](#Is_there_a_way_to_make_my_votes_count_for_more)
 - [Какие есть причины для того, чтобы проголосовать против?](#What_are_the_valid_reasons_for_downvoting)
@@ -994,7 +994,7 @@ Of the 25% that goes to the curator, that portion will be split between the auth
 
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
 
-## <span id="What_are_curation_trails">Что такое кураторские "паровозы"?</span>
+## <span id="What_are_curation_trails">Что такое кураторские "паровозики"?</span>
 
 Some users decide to use third party applications such as [Streemian](https://streemian.com/) to automatically cast votes. Users can automatically vote for the same posts and comments that other users does. Typically they will set this up to follow the votes of users who are good at curating. When a user has other users automatically voting for the same content that they do, the people that automatically vote after them are called their "curation trail".
 

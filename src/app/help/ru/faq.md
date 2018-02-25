@@ -338,7 +338,7 @@ Steemit это не способ "быстрого обогащения". Хот
 
 ## <span id="Am_I_allowed_to_create_more_than_one_account">Разрешено ли создавать больше одного аккаунта?</span>
 
-Каждому пользователю разрешается иметь только один оплаченный аккаунт, созданный через Steemit.com, однако пользователи могут создать несколько учетных записей в блокчейне. Creating additional accounts on the blockchain requires users to pay their own account creation fee for any additional accounts.
+Каждому пользователю разрешается иметь только один оплаченный аккаунт, созданный через Steemit.com, однако пользователи могут создать несколько учетных записей в блокчейне. Создание дополнительных аккаунтов в блокчейне требует от пользователей оплаты за создание каждого дополнительного аккаунта.
 
 <a href="#Table_of_Contents_Accounts">^</a>
 
@@ -352,15 +352,15 @@ Steemit это не способ "быстрого обогащения". Хот
 
 ## <span id="Is_there_an_Etiquette_Guide_for_Steemit">Есть ли руководство по этикету для Steemit?</span>
 
-There are no official rules for participating on Steemit.com, but one of the users @thecryptofiend has created an [Etiquette Guide](https://steemit.com/steemit/@thecryptofiend/the-complete-steemit-etiquette-guide-revision-2-0) for the community. While it is not required to follow the suggestions in the guide, they are standards that many users in the community choose to follow.
+Нет никаких официальных правил для участников Steemit.com, но один из пользователей @thecryptofiend создал [Руководство по этике](https://steemit.com/steemit/@thecryptofiend/the-complete-steemit-etiquette-guide-revision-2-0) для сообщества. Хотя никто не обязан выполнять рекомендации, приведенные в руководстве, они являются стандартами, которым решили следовать многие пользователи в сообществе.
 
 <a href="#Table_of_Contents_Community">^</a>
 
 ## <span id="Am_I_required_to_verify_my_identity">Должен ли я удостоверить мою личность?</span>
 
-Verification is a process where users give evidence to show that they are the person that they claim to be. This is to reduce fraud and people impersonating known figures. If you would like to remain anonymous, that is perfectly fine. However if you claim to be someone specific, the community may expect that you verify you are who you say you are.
+Верификация - это процесс, где пользователи предоставляют доказательства, что они именно те личности, которыми называются. Это делается для предотвращения мошенничества и изображения известных деятелей. Если вы хотите остаться анонимным, это совершенно нормально. Однако, если вы утверждаете, что вы кто-то конкретный, то сообщество может ожидать, что вы докажете, что вы тот, кем называетесь.
 
-There are a number of ways to do this. The most common way to verify your identity is by posting a link to your Steemit profile on a website or social media account which you are already known for having such as Twitter, Facebook, LinkedIn, a blog, or photography site.
+Есть несколько путей для этого. The most common way to verify your identity is by posting a link to your Steemit profile on a website or social media account which you are already known for having such as Twitter, Facebook, LinkedIn, a blog, or photography site.
 
 Many users also like to post a photo or a video which shows them holding up a sheet of paper with the current date and their Steem account name handwritten on it. This is a great way to add a personal touch to verifying.
 

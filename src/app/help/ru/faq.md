@@ -264,11 +264,11 @@ Steemit это социальная медиаплатформа, работаю
 
 ## <span id="Why_are_people_getting_vastly_different_rewards">Почему люди получают очень разное вознаграждение?</span>
 
-Steemit is not a "get rich quick" scheme. While it is possible to post content that goes viral quickly and earn a lot of rewards on a single post, this is not typical for most users.
+Steemit это не способ "быстрого обогащения". Хотя вполне возможно разместить пост, который быстро наберет популярность, и заработать на этой одиночной публикации, но такое не типично для большинства пользователей.
 
-Most of the authors that you see earning high rewards are users that have spent a lot of time in the network building followings, making connections with others, and developing a reputation for bringing high quality content.
+Большинство авторов, зарабатывающих высокие награды - это пользователи, которые потратили много времени для создания сети подписчиков, установления связей с другими, а также построения собственной репутации путем размещения качественного контента.
 
-It is best to have realistic expectations, without focusing on rewards when you are first starting out. Work on building a following, making connections, and developing a good reputation. Consistency will pay off in the long run.
+Если вы только начинаете, то лучше иметь реалистичные ожидания, не акцентируя свое внимание на наградах. Работайте над подписками, созданием связей и построением своей хорошей репутации. Consistency will pay off in the long run.
 
 <a href="#Table_of_Contents_General">^</a>
 

@@ -306,15 +306,15 @@ Steemit это не способ "быстрого обогащения". Хот
 
 ## <span id="Can_I_create_a_Steem_account_without_an_email_and_phone_number">Могу ли я создать аккаунт на Steem без указания электронной почты и номера телефона?</span>
 
-Единственный способ иметь аккаунт, созданный через Steemit.com, это предоставить свою электронную почту и телефон. Because Steem is an open and permissionless network, there are other ways to create a Steem account. Any Steem blockchain account can be used on Steemit.com
+Единственный способ иметь аккаунт, созданный через Steemit.com, это предоставить свою электронную почту и телефон. Поскольку Steem является открытой сетью без ограничения прав, то есть и другие способы создать аккаунт в Steem. Любой аккаунт для блокчейна Steem может использоваться на Steem.com
 
 <a href="#Table_of_Contents_Accounts">^</a>
 
 ## <span id="What_are_other_ways_to_create_an_account_on_the_blockchain_besides_using_Steemit_com">Каковы другие способы для создания аккаунта на блокчейне кроме Steemit.com?</span>
 
-If you are willing to pay your own signup fee, then there are other ways to create a new account on the blockchain.
+Если вы готовы оплатить регистрационный сбор, то есть и другие способы для создания нового аккаунта в блокчейне.
 
-There is a third-party tool called [SteemCreate](https://www.SteemCreate.com) that accepts credit cards, or BTC to create a Steem account. You do not need to have an existing Steem blockchain account to use the service, but there is a charge on top of the blockchain account creation fee for using the service.
+Есть сторонний инструмент под названием [SteemCreate](https://www.SteemCreate.com), где принимают кредитные карты или биткоины для создания аккаунта в Steem. Вам не нужно иметь аккаунт в блокчейне Steem, чтобы воспользоваться услугой, но помимо оплаты создания аккаунта в блокчейне здесь есть еще плата за использование сервиса.
 
 There is a third-party tool called [AnonSteem](https://steemit.com/steemit/@someguy123/anonsteem-create-anonymous-steem-accounts-without-social-media) that accepts bitcoin, Litecoin, STEEM, or SBD to anonymously create a Steem account. You do not need to have an existing Steem blockchain account to use the service, but there is a charge on top of the blockchain account creation fee for using the service.
 

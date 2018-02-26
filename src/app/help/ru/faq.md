@@ -426,7 +426,7 @@ Steemit это не способ "быстрого обогащения". Хот
 
 ## <span id="What_information_is_shown_in_my_wallet">Какая информация отображается в моем кошельке?</span>
 
-Ваш кошелек показывает, сколько токенов STEEM и STEEM Доллар есть у вас в вашем аккаунте. It shows how much STEEM Power it has, and how much SP is delegated. It also shows how many of your STEEM and Steem Dollar tokens are being held in the savings account, which is a balance that is subject to 3 day withdraw waiting period. The wallet page shows any the progress of any Steem Dollar to STEEM conversions as well as the status of a power down. It also shows an estimated value of all the tokens in your account, based on the recent market prices of STEEM and SBD.
+Ваш кошелек показывает, сколько токенов STEEM и STEEM Доллар есть у вас в вашем аккаунте. Он показывает, сколько Силы Голоса имеется и сколько Силы Голоса делегируется. Он также показывает, сколько STEEM и STEEM Долларов помещены на сберегательный счет (сейф). Он представляет собой баланс токенов, вывод которых на обычный счет занимает 3 дня. Страница кошелька показывает любую конверсию Steem Долларов и STEEM, а также статус понижения Силы Голоса. Он также показывает расчетное значение всех токенов в вашем аккаунте, основанный на последних рыночных ценах STEEM и SBD.
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 

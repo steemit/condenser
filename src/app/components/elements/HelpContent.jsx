@@ -70,6 +70,7 @@ export default class HelpContent extends React.Component {
     static propTypes = {
         path: React.PropTypes.string.isRequired,
         section: React.PropTypes.string,
+        title: React.PropTypes.string,
     };
 
     constructor(props) {
@@ -140,12 +141,21 @@ export default class HelpContent extends React.Component {
                 return renderToString(<Icon name={name} />);
             }
         );
+        let title = null;
+        if (this.props.title) {
+            title = <h1>{this.props.title}</h1>;
+        }
+
         return (
-            <MarkdownViewer
-                className="HelpContent"
-                text={value}
-                allowDangerousHTML
-            />
+            <div>
+                {title}
+                <MarkdownViewer
+                    className="HelpContent"
+                    text={value}
+                    allowDangerousHTML
+                    breaks={false}
+                />
+            </div>
         );
     }
 }

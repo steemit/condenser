@@ -63,7 +63,6 @@ class Header extends React.Component {
             logout,
             loggedIn,
             vertical,
-            probablyLoggedIn,
             nightmodeEnabled,
             toggleNightmode,
             userPath,
@@ -286,24 +285,23 @@ class Header extends React.Component {
                     </div>
                     <div className="small-7 large-4 columns Header__buttons">
                         {/*NOT LOGGED IN SIGN IN AND SIGN UP LINKS*/}
-                        {!loggedIn &&
-                            !probablyLoggedIn && (
-                                <span className="Header__user-signup show-for-medium">
-                                    <a
-                                        className="Header__login-link"
-                                        href="/login.html"
-                                        onClick={showLogin}
-                                    >
-                                        {tt('g.login')}
-                                    </a>
-                                    <a
-                                        className="Header__signup-link"
-                                        href={SIGNUP_URL}
-                                    >
-                                        {tt('g.sign_up')}
-                                    </a>
-                                </span>
-                            )}
+                        {!loggedIn && (
+                            <span className="Header__user-signup show-for-medium">
+                                <a
+                                    className="Header__login-link"
+                                    href="/login.html"
+                                    onClick={showLogin}
+                                >
+                                    {tt('g.login')}
+                                </a>
+                                <a
+                                    className="Header__signup-link"
+                                    href={SIGNUP_URL}
+                                >
+                                    {tt('g.sign_up')}
+                                </a>
+                            </span>
+                        )}
 
                         {/*CUSTOM SEARCH*/}
                         <span className="Header__search--desktop">
@@ -348,9 +346,6 @@ class Header extends React.Component {
                             </LinkWithDropdown>
                         )}
 
-                        {/*LOGGED IN LOADING INDICATOR*/}
-                        {probablyLoggedIn && <LoadingIndicator type="circle" />}
-
                         {/*HAMBURGER*/}
                         <span
                             onClick={showSidePanel}
@@ -373,7 +368,6 @@ const mapStateToProps = (state, ownProps) => {
         return {
             username: null,
             loggedIn: false,
-            probablyLoggedIn: !!state.offchain.get('account'),
         };
     }
 
@@ -389,7 +383,6 @@ const mapStateToProps = (state, ownProps) => {
         username,
         loggedIn,
         userPath,
-        probablyLoggedIn: false,
         nightmodeEnabled: state.user.getIn(['user_preferences', 'nightmode']),
         account_meta: account_user,
         current_account_name,

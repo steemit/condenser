@@ -414,19 +414,19 @@ Steemit это не способ "быстрого обогащения". Хот
 
 ## <span id="How_do_I_see_my_recent_rewards">Как увидеть мои последние вознаграждения?</span>
 
-The Rewards drop-down menu is available on your profile/blog page. Click it and there are two links:
+На вашей странице профиля / странице блога есть выпадающее меню "Вознаграждение". Нажмите его, там есть две ссылки:
 
-**Curation rewards** - Shows the rewards earned for upvoting posts and comments.
+**Кураторские вознаграждения** - показывает вознаграждения, заработанные голосованием за посты и комментарии.
 
-**Author rewards** - Shows the rewards earned by your own posts and comments.
+**Авторские вознаграждения** - показывает вознаграждения, заработанные за ваши собственные посты и комментарии.
 
-You can also view the same information for other users by visiting their profile.
+Вы также можете просмотреть ту же информацию для других пользователей, посетив их профиль.
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 
 ## <span id="What_information_is_shown_in_my_wallet">Какая информация отображается в моем кошельке?</span>
 
-Your wallet shows how many STEEM and Steem Dollar tokens you have in your account. It shows how much STEEM Power it has, and how much SP is delegated. It also shows how many of your STEEM and Steem Dollar tokens are being held in the savings account, which is a balance that is subject to 3 day withdraw waiting period. The wallet page shows any the progress of any Steem Dollar to STEEM conversions as well as the status of a power down. It also shows an estimated value of all the tokens in your account, based on the recent market prices of STEEM and SBD.
+Ваш кошелек показывает, сколько токенов STEEM и STEEM Доллар есть у вас в вашем аккаунте. It shows how much STEEM Power it has, and how much SP is delegated. It also shows how many of your STEEM and Steem Dollar tokens are being held in the savings account, which is a balance that is subject to 3 day withdraw waiting period. The wallet page shows any the progress of any Steem Dollar to STEEM conversions as well as the status of a power down. It also shows an estimated value of all the tokens in your account, based on the recent market prices of STEEM and SBD.
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 

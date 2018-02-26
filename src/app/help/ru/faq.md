@@ -439,20 +439,20 @@ Steemit это не способ "быстрого обогащения". Хот
 ## <span id="How_do_I_send_money_to_another_user">Как отправить деньги другому пользователю?</span>
 
 - На странице вашего кошелька нажмите на цифры баланса ваших STEEM или STEEM Долларов (рядом с ними изображена стрелка вниз).
-- In the drop-down menu, click 'Transfer'. 
-- Type the username of the account you want to send the STEEM or Steem Dollars to. Double and triple check spelling.
-- Enter the amount of STEEM or Steem Dollars to send.
-- Enter a memo to go along with the transaction (optional).
-- Click Submit.
-- You will be prompted for your password. You will need to enter your master password or active key.
+- В выпадающем меню выберите 'Перевод'. 
+- Напишите логин того аккаунта, которому вы хотите отправить STEEM или STEEM Доллары. Несколько раз проверьте правильность написания логина.
+- Укажите количество STEEM или STEEM Долларов для отправки.
+- Напишите примечание к транзакции (если требуется).
+- Нажмите "Отправить".
+- Вам будет предложено ввести ваш пароль. Вам потребуется ввести мастер-пароль или активный ключ.
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 
 ## <span id="Will_I_receive_notifications_when_there_is_activity_with_my_account">Могу ли я получать уведомления об активности в моем аккаунте?</span>
 
-When there is new activity in your feed, you receive a reply from another user, or there is a new transfer in your wallet, you will receive a notification in your account menu. It will show a little red number showing the number of new notifications.
+Когда появится новая активность в вашей ленте, ответ от другого пользователя, или есть перевод на ваш кошелек, вы получите уведомление в своем меню аккаунта. Там будет показано маленькое красное число, показывающее количество новых уведомлений.
 
-Steemit also allows you to subscribe to receive additional notifications when users mention you in a comment or post.
+Steemit также позволяет подписаться на получение дополнительного уведомления, когда пользователи упоминают вас в комментарии или посте.
 
 Currently, there are no options to receive notifications for votes directly on Steemit.com. But, there is a third-party application https://steemstats.com/, developed by @jesta, which has an option to set up additional notifications on your computer.
 

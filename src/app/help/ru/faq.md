@@ -432,13 +432,13 @@ Steemit это не способ "быстрого обогащения". Хот
 
 ## <span id="How_do_I_transfer_my_STEEM_or_Steem_Dollars_into_savings">Как мне перевести свои STEEM или Steem Доллары на сберегательный счет?</span>
 
-Your savings balance is STEEM and SBD tokens that are subject to 3 day withdraw waiting period. This is an extra security measure in case your account credentials are compromised. To transfer STEEM or SBD tokens into savings, click on the drop-down arrow next to STEEM or STEEM DOLLARS in your wallet, and select "Transfer to Savings".
+Ваш баланс сбережений в токенах STEEM и STEEM Доллар это токены, вывод которых на обычный счет занимает 3 дня. Это является дополнительной мерой безопасности в случае, если ваши учетные данные были скомпрометированы (украдены или стали доступны посторонним). Для передачи токенов STEEM или SBD в сейф, нажмите на стрелку раскрывающегося списка рядом со STEEM или STEEM Долларами в вашем кошельке и выберите «Отправить в сейф».
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 
 ## <span id="How_do_I_send_money_to_another_user">Как отправить деньги другому пользователю?</span>
 
-- From your wallet page, click the STEEM or Steem Dollar balances with the down arrow next to them.
+- На странице вашего кошелька нажмите на цифры баланса ваших STEEM или STEEM Долларов (рядом с ними изображена стрелка вниз).
 - In the drop-down menu, click 'Transfer'. 
 - Type the username of the account you want to send the STEEM or Steem Dollars to. Double and triple check spelling.
 - Enter the amount of STEEM or Steem Dollars to send.

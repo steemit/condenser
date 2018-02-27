@@ -146,8 +146,8 @@ function link(state, child) {
 
             // Unlink potential phishing attempts
             if (
-                child.textContent.match(/(www\.)?steemit\.com/) &&
-                !url.match(/https?:\/\/(.*@)?(www\.)?steemit\.com/)
+                child.textContent.match(/(www\.)?steemit\.com/i) &&
+                !url.match(/https?:\/\/(.*@)?(www\.)?steemit\.com/i)
             ) {
                 const phishyDiv = child.ownerDocument.createElement('div');
                 phishyDiv.textContent = `${child.textContent} / ${url}`;

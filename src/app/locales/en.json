@@ -245,6 +245,7 @@
         "about": "About",
         "explore": "Explore",
         "APP_NAME_whitepaper": "%(APP_NAME)s Whitepaper",
+        "third_party_exchanges": "Third-party exchanges:",
         "buy_LIQUID_TOKEN": "Buy %(LIQUID_TOKEN)s",
         "sell_LIQUID_TOKEN": "Sell %(LIQUID_TOKEN)s",
         "currency_market": "Currency Market",
@@ -596,7 +597,11 @@
         "cancel_transfer_from_savings": "Cancel transfer from savings",
         "stop_power_down": "Stop power down",
         "start_power_down_of": "Start power down of",
-        "receive_interest_of": "Receive interest of"
+        "receive_interest_of": "Receive interest of",
+        "bad_actor_caution": "Caution",
+        "bad_actor_explained":
+            "This is from an account that looks fraudulent. If you wish, you may temporarily reveal this memo which may contain dangerous links.",
+        "bad_actor_reveal_memo": "I understand the risk; show anyway."
     },
     "savingswithdrawhistory_jsx": {
         "cancel_this_withdraw_request": "Cancel this withdraw request?",
@@ -773,5 +778,9 @@
         "ownership_changed_on": "Ownership Changed On ",
         "deadline_for_recovery_is": "Deadline for recovery is",
         "i_understand_dont_show_again": "I understand, don't show me again"
+    },
+    "termsagree_jsx": {
+        "i_agree_to_these_terms": "I agree to these terms",
+        "cancel": "Cancel"
     }
 }

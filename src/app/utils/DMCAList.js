@@ -47,6 +47,7 @@ export default `
 /cryptocurrency/@kriptonoob/palm-beach-confidential-report-cindicator-125
 /crypto/@medicbtom/palm-beach-confidential-released-their-monthly-pick
 /news/@vaerospace/fire-and-fury-pdf-direct-download-from-ipfs-a-great-giggle
+/blog/@dreamya/korea-bucheon-cartoon-festival-cosplay-card-capture-sakura
 `
     .trim()
     .split('\n');

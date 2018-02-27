@@ -4,22 +4,26 @@ import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import tt from 'counterpart';
 import classnames from 'classnames';
 import { memo } from '@steemit/steem-js';
+import BadActorList from 'app/utils/BadActorList';
 
-class Memo extends React.Component {
+const MINIMUM_REPUTATION = 10;
+
+export class Memo extends React.Component {
     static propTypes = {
         text: PropTypes.string,
         username: PropTypes.string,
-        isFromBadActor: PropTypes.bool.isRequired,
+        fromAccount: PropTypes.string,
         // redux props
         myAccount: PropTypes.bool,
         memo_private: PropTypes.object,
+        fromNegativeRepUser: PropTypes.bool.isRequired,
     };
 
     constructor() {
         super();
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'Memo');
         this.state = {
-            revealBadActorMemo: false,
+            revealMemo: false,
         };
     }
 
@@ -32,19 +36,30 @@ class Memo extends React.Component {
         }
     }
 
-    onRevealBadActorMemo = e => {
+    onRevealMemo = e => {
         e.preventDefault();
-        this.setState({ revealBadActorMemo: true });
+        this.setState({ revealMemo: true });
     };
 
     render() {
         const { decodeMemo } = this;
-        const { memo_private, text, myAccount, isFromBadActor } = this.props;
+        const {
+            memo_private,
+            text,
+            myAccount,
+            fromAccount,
+            fromNegativeRepUser,
+        } = this.props;
         const isEncoded = /^#/.test(text);
+
+        const isFromBadActor = BadActorList.indexOf(fromAccount) > -1;
+
+        if (!text || text.length < 1) return <span />;
 
         const classes = classnames({
             Memo: true,
             'Memo--badActor': isFromBadActor,
+            'Memo--fromNegativeRepUser': fromNegativeRepUser,
             'Memo--private': memo_private,
         });
 
@@ -58,7 +73,7 @@ class Memo extends React.Component {
                 : tt('g.login_to_see_memo');
         }
 
-        if (isFromBadActor && !this.state.revealBadActorMemo) {
+        if (isFromBadActor && !this.state.revealMemo) {
             renderText = (
                 <div className="bad-actor-warning">
                     <div className="bad-actor-caution">
@@ -70,9 +85,33 @@ class Memo extends React.Component {
                     <div
                         className="ptc bad-actor-reveal-memo"
                         role="button"
-                        onClick={this.onRevealBadActorMemo}
+                        onClick={this.onRevealMemo}
                     >
                         {tt('transferhistoryrow_jsx.bad_actor_reveal_memo')}
+                    </div>
+                </div>
+            );
+        } else if (fromNegativeRepUser && !this.state.revealMemo) {
+            renderText = (
+                <div className="from-negative-rep-user-warning">
+                    <div className="from-negative-rep-user-caution">
+                        {tt(
+                            'transferhistoryrow_jsx.from_negative_rep_user_caution'
+                        )}
+                    </div>
+                    <div className="from-negative-rep-user-explained">
+                        {tt(
+                            'transferhistoryrow_jsx.from_negative_rep_user_explained'
+                        )}
+                    </div>
+                    <div
+                        className="ptc from-negative-rep-user-reveal-memo"
+                        role="button"
+                        onClick={this.onRevealMemo}
+                    >
+                        {tt(
+                            'transferhistoryrow_jsx.from_negative_rep_user_reveal_memo'
+                        )}
                     </div>
                 </div>
             );
@@ -90,5 +129,14 @@ export default connect((state, ownProps) => {
         myAccount && currentUser
             ? currentUser.getIn(['private_keys', 'memo_private'])
             : null;
-    return { ...ownProps, memo_private, myAccount };
+    const fromNegativeRepUser =
+        parseInt(
+            state.global.getIn([
+                'accounts',
+                ownProps.fromAccount,
+                'reputation',
+            ]),
+            10
+        ) < MINIMUM_REPUTATION;
+    return { ...ownProps, memo_private, myAccount, fromNegativeRepUser };
 })(Memo);

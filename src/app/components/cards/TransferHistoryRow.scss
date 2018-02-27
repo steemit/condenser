@@ -1,0 +1,19 @@
+.Memo--badActor {
+  .bad-actor-caution {
+    color: darken($color-red, 20%);
+    font-size: 75%;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .bad-actor-explained {
+    opacity: .5;
+    font-size: 75%;
+    max-width: 30em;
+  }
+  .bad-actor-reveal-memo {
+    opacity: .5;
+    font-size: 75%;
+    text-decoration: underline;
+  }
+}

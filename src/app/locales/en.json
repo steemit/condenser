@@ -778,5 +778,9 @@
         "ownership_changed_on": "Ownership Changed On ",
         "deadline_for_recovery_is": "Deadline for recovery is",
         "i_understand_dont_show_again": "I understand, don't show me again"
+    },
+    "termsagree_jsx": {
+        "i_agree_to_these_terms": "I agree to these terms",
+        "cancel": "Cancel"
     }
 }

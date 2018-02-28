@@ -146,8 +146,9 @@ function link(state, child) {
 
             // Unlink potential phishing attempts
             if (
-                child.textContent.match(/(www\.)?steemit\.com/i) &&
-                !url.match(/https?:\/\/(.*@)?(www\.)?steemit\.com/i)
+                url.indexOf('#') !== 0 && // Allow in-page links
+                (child.textContent.match(/(www\.)?steemit\.com/i) &&
+                    !url.match(/https?:\/\/(.*@)?(www\.)?steemit\.com/i))
             ) {
                 const phishyDiv = child.ownerDocument.createElement('div');
                 phishyDiv.textContent = `${child.textContent} / ${url}`;

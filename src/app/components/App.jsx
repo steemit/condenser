@@ -334,7 +334,7 @@ class App extends React.Component {
                         </li>
                         <li>
                             <a
-                                href="https://steemit.chat/home"
+                                href="https://steem.chat/home"
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >

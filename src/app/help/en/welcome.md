@@ -18,7 +18,7 @@ Below that is a list of recommended users to follow, a collection of other resou
 3. <a href="#Read_the_Helpful_Posts_from_Steemit_Users">Read the Helpful Posts from Steemit Users</a>
 4. <a href="#Setup_your_Profile_Avatar_and_Cover_Image">Setup your Profile, Avatar, and Cover Image</a>
 5. <a href="#Choose_your_NSFW_(Not_Safe_for_Work)_Display_Preference">Choose your "NSFW" (Not Safe for Work) Display Preference</a>
-6. <a href="#Sign_Up_for_Steemit_Chat">Sign Up for Steemit Chat</a>
+6. <a href="#Sign_Up_for_Steemit_Chat">Sign Up for Steem Chat</a>
 7. <a href="#Create_your_introduceyourself_post">Create your "introduceyourself" post</a>
 8. <a href="#Learn_more">Learn more</a>
 
@@ -90,15 +90,15 @@ By default, content that users have tagged as "NSFW" will be hidden, but a link 
 You can update your display preference so that NSFW content is always shown by default, or is completely hidden with no option to reveal.
 
 <a href="#Table_of_Contents">^</a>
-### <span id="Sign_Up_for_Steemit_Chat">6. Sign Up for Steemit Chat</span>
+### <span id="Sign_Up_for_Steemit_Chat">6. Sign Up for Steem Chat</span>
 
 A lot of users hang out and chat when they are not posting or browsing Steemit. It is a great place to meet people!
 
 There is a link to sign up in the main menu in the upper right corner.
 
-Your [steemit.chat](https://steemit.chat/home) account is a separate account from your Steem account.
+Your [steem.chat](https://steem.chat/home) account is a separate account from your Steem account.
 
-Some channels allow you to share links, but others don't. For instance, [general](https://steemit.chat/channel/general) is for discussion without link promotion, while [postpromotion](https://steemit.chat/channel/postpromotion) is for promoting your Steemit posts.
+Some channels allow you to share links, but others don't. For instance, [general](https://steem.chat/channel/general) is for discussion without link promotion, while [postpromotion](https://steem.chat/channel/postpromotion) is for promoting your Steemit posts.
 
 Each channel will have its rules posted in the "Info" section.
 
@@ -261,7 +261,7 @@ It is possible to earn thousands of dollars, but most authors who are doing this
 - [Understanding Your Wallet](https://steemit.com/steemit-help/@merej99/the-steemit-newbie-s-comprehensive-guide-to-understanding-your-wallet-by-merej99)
 - [Witness Voting Guide](https://steemit.com/witness-category/@timcliff/witness-voting-guide)
 - [Steemit for Artists](https://steemit.com/art/@voronoi/steemit-for-artists-a-new-stage-for-craft)
-- [Steemit Chat Guide](https://steemit.com/steemit/@firepower/dummies-guide-to-using-steemit-chat-effectively-everyday)
+- [Steem Chat Guide](https://steemit.com/steemit/@firepower/dummies-guide-to-using-steemit-chat-effectively-everyday)
 - [Video interview on how to be successful](https://steemit.com/blog/@terrybrock/steemit-success-series--timcliff-on-who-to-target-with-your-content-1512178826-124805)
 - [How to use Blocktrades to exchange STEEM/SBD for BTC](https://steemit.com/steem/@thecryptofiend/how-to-use-blocktrades-the-fastest-and-easiest-way-to-buy-and-sell-steem-sd-and-my-review-of-the-experience)
 - [SBD to bitcoin (BTC) using Blocktrades, then BTC to Euro or USD Using CEX.io](https://steemit.com/howto/@future24/blocktrades-tutorial-part-2-how-to-exchange-sbd-to-btc-and-sell-them-for-euro-or-usd-english-german)
@@ -303,14 +303,14 @@ It is possible to earn thousands of dollars, but most authors who are doing this
 <a href="#Table_of_Contents">^</a>
 ## <span id="Live_Help">Live Help</span>
 
-Ask your general questions in the [help](https://steemit.chat/channel/help) channel of [steemit.chat](https://steemit.chat/home). Users in the channel will typically respond to questions within a few hours.
+Ask your general questions in the [help](https://steem.chat/channel/help) channel of [steem.chat](https://steem.chat/home). Users in the channel will typically respond to questions within a few hours.
 
 New Member Support Community is a group of people dedicated to helping new users find their way around Steemit. You can find them in the [New Member Support Community](https://discord.gg/HYj4yvw) channel of Discord Chat.
 
 <a href="#Table_of_Contents">^</a>
 ## <span id="Third_Party_References">Third Party References</span>
 
-Peerhub, BlockTrades, Bittrex, Steemit Chat, Steemit Help, New Member Support Community, and Discord Chat, as well as the tools listed under "Other Resources" are third party applications/services, and are not owned or maintained by Steemit, Inc. Their listing here does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
+Peerhub, BlockTrades, Bittrex, Steem Chat, Steemit Help, New Member Support Community, and Discord Chat, as well as the tools listed under "Other Resources" are third party applications/services, and are not owned or maintained by Steemit, Inc. Their listing here does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
 
 All of the links in the "Helpful Posts from Steemit Users" section were created by our users and do not necessarily represent the views of Steemit, Inc. or its management.
 

@@ -11,4 +11,5 @@ export const blockedContent = `
 
 export const blockedUsersContent = `
 bm-marrivas
+bm-eash
 `.trim().split("\n")

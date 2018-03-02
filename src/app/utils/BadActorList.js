@@ -26,6 +26,7 @@ binanced
 binancee
 binances
 binanse
+binnance
 bit-z
 bitex
 bitfinex

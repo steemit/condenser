@@ -5,8 +5,9 @@ import tt from 'counterpart';
 import classnames from 'classnames';
 import { memo } from '@steemit/steem-js';
 import BadActorList from 'app/utils/BadActorList';
+import { repLog10 } from 'app/utils/ParsersAndFormatters';
 
-const MINIMUM_REPUTATION = 10;
+const MINIMUM_REPUTATION = 15;
 
 export class Memo extends React.Component {
     static propTypes = {
@@ -130,13 +131,8 @@ export default connect((state, ownProps) => {
             ? currentUser.getIn(['private_keys', 'memo_private'])
             : null;
     const fromNegativeRepUser =
-        parseInt(
-            state.global.getIn([
-                'accounts',
-                ownProps.fromAccount,
-                'reputation',
-            ]),
-            10
+        repLog10(
+            state.global.getIn(['accounts', ownProps.fromAccount, 'reputation'])
         ) < MINIMUM_REPUTATION;
     return { ...ownProps, memo_private, myAccount, fromNegativeRepUser };
 })(Memo);

@@ -6,7 +6,6 @@ import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 // import Icon from 'app/components/elements/Icon';
 import Memo from 'app/components/elements/Memo';
 import { numberWithCommas, vestsToSp } from 'app/utils/StateFunctions';
-import BadActorList from 'app/utils/BadActorList';
 
 class TransferHistoryRow extends React.Component {
     render() {
@@ -27,9 +26,11 @@ class TransferHistoryRow extends React.Component {
         /*  all transfers involve up to 2 accounts, context and 1 other. */
         let description_start = '';
         let other_account = null;
+        let from_account = null;
         let description_end = '';
 
         if (type === 'transfer_to_vesting') {
+            from_account = data.from;
             if (data.from === context) {
                 if (data.to === '') {
                     description_start +=
@@ -67,6 +68,7 @@ class TransferHistoryRow extends React.Component {
                 type
             )
         ) {
+            from_account = data.from;
             // transfer_to_savings
             const fromWhere =
                 type === 'transfer_to_savings'
@@ -204,9 +206,7 @@ class TransferHistoryRow extends React.Component {
                     <Memo
                         text={data.memo}
                         username={context}
-                        isFromBadActor={
-                            BadActorList.indexOf(other_account) > -1
-                        }
+                        fromAccount={from_account}
                     />
                 </td>
             </tr>

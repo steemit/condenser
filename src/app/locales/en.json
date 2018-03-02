@@ -604,7 +604,7 @@
         "bad_actor_reveal_memo": "I understand the risk; show anyway.",
         "from_negative_rep_user_caution": "Caution",
         "from_negative_rep_user_explained":
-            "This memo is from an account that has a bad reputation. If you wish, you may temporarily reveal this memo which may contain dangerous links.",
+            "This is from an account with a bad reputation. If you wish, you may temporarily reveal this memo which may contain dangerous links.",
         "from_negative_rep_user_reveal_memo":
             "I understand the risk; show anyway."
     },

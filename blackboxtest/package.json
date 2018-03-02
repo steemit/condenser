@@ -1,0 +1,10 @@
+{
+  "name": "condenser-blackboxtest",
+  "version": "1.0.0",
+  "main": "false",
+  "license": "MIT",
+  "dependencies": {
+    "nightwatch": "0.9.19",
+    "phantomjs-prebuilt": "2.1.16"
+  }
+}

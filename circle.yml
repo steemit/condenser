@@ -1,11 +1,15 @@
-machine:
-    services:
-        - docker
-
-dependencies:
-    override:
-        - echo "Ignore CircleCI detected dependencies"
-
-test:
-    override:
-        - docker build -t steemit/steemit.com .
+version: 2
+jobs:
+    build:
+        docker:
+            - image: circleci/openjdk:jdk-node-browsers
+        steps:
+            - checkout
+            - setup_remote_docker:
+                docker_layer_caching: true
+            - run: docker build -t steemit/condenser:$CIRCLE_BRANCH .
+            - run: docker build -t steemit/condenser-blackboxtest:$CIRCLE_BRANCH blackboxtest/
+            - run: |
+                docker run -ditp 8080:8080 --name condenser steemit/condenser:$CIRCLE_BRANCH
+                sleep 10 # let condenser start
+                docker run --network container:condenser steemit/condenser-blackboxtest:$CIRCLE_BRANCH

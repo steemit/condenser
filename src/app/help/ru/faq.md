@@ -414,47 +414,47 @@ Steemit это не способ "быстрого обогащения". Хот
 
 ## <span id="How_do_I_see_my_recent_rewards">Как увидеть мои последние вознаграждения?</span>
 
-The Rewards drop-down menu is available on your profile/blog page. Click it and there are two links:
+На вашей странице профиля / странице блога есть выпадающее меню "Вознаграждение". Нажмите его, там есть две ссылки:
 
-**Curation rewards** - Shows the rewards earned for upvoting posts and comments.
+**Кураторские вознаграждения** - показывает вознаграждения, заработанные голосованием за посты и комментарии.
 
-**Author rewards** - Shows the rewards earned by your own posts and comments.
+**Авторские вознаграждения** - показывает вознаграждения, заработанные за ваши собственные посты и комментарии.
 
-You can also view the same information for other users by visiting their profile.
+Вы также можете просмотреть ту же информацию для других пользователей, посетив их профиль.
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 
 ## <span id="What_information_is_shown_in_my_wallet">Какая информация отображается в моем кошельке?</span>
 
-Your wallet shows how many STEEM and Steem Dollar tokens you have in your account. It shows how much STEEM Power it has, and how much SP is delegated. It also shows how many of your STEEM and Steem Dollar tokens are being held in the savings account, which is a balance that is subject to 3 day withdraw waiting period. The wallet page shows any the progress of any Steem Dollar to STEEM conversions as well as the status of a power down. It also shows an estimated value of all the tokens in your account, based on the recent market prices of STEEM and SBD.
+Ваш кошелек показывает, сколько токенов STEEM и STEEM Доллар есть у вас в вашем аккаунте. Он показывает, сколько Силы Голоса имеется и сколько Силы Голоса делегируется. Он также показывает, сколько STEEM и STEEM Долларов помещены на сберегательный счет (сейф). Он представляет собой баланс токенов, вывод которых на обычный счет занимает 3 дня. Страница кошелька показывает любую конверсию Steem Долларов и STEEM, а также статус понижения Силы Голоса. Он также показывает расчетное значение всех токенов в вашем аккаунте, основанный на последних рыночных ценах STEEM и SBD.
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 
 ## <span id="How_do_I_transfer_my_STEEM_or_Steem_Dollars_into_savings">Как мне перевести свои STEEM или Steem Доллары на сберегательный счет?</span>
 
-Your savings balance is STEEM and SBD tokens that are subject to 3 day withdraw waiting period. This is an extra security measure in case your account credentials are compromised. To transfer STEEM or SBD tokens into savings, click on the drop-down arrow next to STEEM or STEEM DOLLARS in your wallet, and select "Transfer to Savings".
+Ваш баланс сбережений в токенах STEEM и STEEM Доллар это токены, вывод которых на обычный счет занимает 3 дня. Это является дополнительной мерой безопасности в случае, если ваши учетные данные были скомпрометированы (украдены или стали доступны посторонним). Для передачи токенов STEEM или SBD в сейф, нажмите на стрелку раскрывающегося списка рядом со STEEM или STEEM Долларами в вашем кошельке и выберите «Отправить в сейф».
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 
 ## <span id="How_do_I_send_money_to_another_user">Как отправить деньги другому пользователю?</span>
 
-- From your wallet page, click the STEEM or Steem Dollar balances with the down arrow next to them.
-- In the drop-down menu, click 'Transfer'. 
-- Type the username of the account you want to send the STEEM or Steem Dollars to. Double and triple check spelling.
-- Enter the amount of STEEM or Steem Dollars to send.
-- Enter a memo to go along with the transaction (optional).
-- Click Submit.
-- You will be prompted for your password. You will need to enter your master password or active key.
+- На странице вашего кошелька нажмите на цифры баланса ваших STEEM или STEEM Долларов (рядом с ними изображена стрелка вниз).
+- В выпадающем меню выберите 'Перевод'. 
+- Напишите логин того аккаунта, которому вы хотите отправить STEEM или STEEM Доллары. Несколько раз проверьте правильность написания логина.
+- Укажите количество STEEM или STEEM Долларов для отправки.
+- Напишите примечание к транзакции (если требуется).
+- Нажмите "Отправить".
+- Вам будет предложено ввести ваш пароль. Вам потребуется ввести мастер-пароль или активный ключ.
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 
 ## <span id="Will_I_receive_notifications_when_there_is_activity_with_my_account">Могу ли я получать уведомления об активности в моем аккаунте?</span>
 
-When there is new activity in your feed, you receive a reply from another user, or there is a new transfer in your wallet, you will receive a notification in your account menu. It will show a little red number showing the number of new notifications.
+Когда появится новая активность в вашей ленте, ответ от другого пользователя, или есть перевод на ваш кошелек, вы получите уведомление в своем меню аккаунта. Там будет показано маленькое красное число, показывающее количество новых уведомлений.
 
-Steemit also allows you to subscribe to receive additional notifications when users mention you in a comment or post.
+Steemit также позволяет подписаться на получение дополнительного уведомления о том, что пользователи упомянули вас в комментарии или посте.
 
-Currently, there are no options to receive notifications for votes directly on Steemit.com. But, there is a third-party application https://steemstats.com/, developed by @jesta, which has an option to set up additional notifications on your computer.
+В настоящее время нет возможности непосредственно на Steemit.com получать уведомления о голосах за ваши посты и комментарии. Но есть стороннее приложение http://steemstats.com/, разработанное @jesta, где есть опция получения дополнительных извещений на ваш компьютер.
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 

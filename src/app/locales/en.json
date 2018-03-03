@@ -44,6 +44,7 @@
         "memo": "Memo",
         "mute": "Mute",
         "myblog": "My blog",
+        "mywallet": "My wallet",
         "mycomments": "My comments",
         "myreplies": "Replies to me",
         "new": "new",
@@ -300,7 +301,12 @@
         "or_by": "or by",
         "title": "Title",
         "update_post": "Update Post",
-        "markdown_not_supported": "Markdown is not supported here"
+        "markdown_not_supported": "Markdown is not supported here",
+        "please_insert_only_image_files": "Please insert only image files.",
+        "html_posts_must_begin_and_end_with_html_tags":
+            "HTML posts must begin with <html> and end with </html>",
+        "please_remove_following_html_elements":
+            "Please remove the following HTML elements from your post: "
     },
     "category_selector_jsx": {
         "tag_your_story":
@@ -321,6 +327,7 @@
     "postfull_jsx": {
         "this_post_is_not_available_due_to_a_copyright_claim":
             "This post is not available due to a copyright claim.",
+        "not_available_for_legal_reasons": "Not available for legal reasons.",
         "share_on_facebook": "Share on Facebook",
         "share_on_twitter": "Share on Twitter",
         "share_on_linkedin": "Share on Linkedin",
@@ -467,7 +474,8 @@
         "votes_plural": {
             "one": "%(count)s vote",
             "other": "%(count)s votes"
-        }
+        },
+        "flag": "Flag"
     },
     "witnesses_jsx": {
         "witness_thread": "witness thread",
@@ -535,10 +543,10 @@
         "your_existing_DEBT_TOKEN_are_liquid_and_transferable":
             "Your existing %(DEBT_TOKEN)s are liquid and transferable. Instead you may wish to trade %(DEBT_TOKEN)s directly in this site under %(link)s or transfer to an external market.",
         "this_is_a_price_feed_conversion":
-            "This is a price feed conversion. The 3.5 day delay is necessary to prevent abuse from gaming the price feed average",
+            "This is a price feed conversion. The 3.5 day delay is necessary to prevent abuse from gaming the price feed average.",
         "convert_to_LIQUID_TOKEN": "Convert to %(LIQUID_TOKEN)s",
         "DEBT_TOKEN_will_be_unavailable":
-            "This action will take place 3.5 days from now and can not be canceled. These %(DEBT_TOKEN)s will immediately become unavailable"
+            "This action will take place 3.5 days from now and can not be canceled. These %(DEBT_TOKEN)s will immediately become unavailable."
     },
     "tips_js": {
         "liquid_token":
@@ -557,7 +565,7 @@
     "promote_post_jsx": {
         "promote_post": "Promote Post",
         "spend_your_DEBT_TOKEN_to_advertise_this_post":
-            "Spend your %(DEBT_TOKEN)s's to advertise this post in the promoted content section",
+            "Spend your %(DEBT_TOKEN)s's to advertise this post in the promoted content section.",
         "you_successfully_promoted_this_post":
             "You successfully promoted this post",
         "this_post_was_hidden_due_to_low_ratings":
@@ -606,7 +614,11 @@
         "from_negative_rep_user_explained":
             "This is from an account with a bad reputation. If you wish, you may temporarily reveal this memo which may contain dangerous links.",
         "from_negative_rep_user_reveal_memo":
-            "I understand the risk; show anyway."
+            "I understand the risk; show anyway.",
+        "claim_rewards": "Claim rewards:",
+        "fill_convert_request":
+            "Fill convert request: %(amount_in)s for %(amount_out)s",
+        "fill_order_paid": "Paid %(amount_in)s for %(amount_out)s"
     },
     "savingswithdrawhistory_jsx": {
         "cancel_this_withdraw_request": "Cancel this withdraw request?",
@@ -719,7 +731,7 @@
     "transfer_jsx": {
         "amount_is_in_form": "Amount is in the form 99999.999",
         "insufficient_funds": "Insufficient funds",
-        "use_only_3_digits_of_precison": "Use only 3 digits of precison",
+        "use_only_3_digits_of_precison": "Use only 3 digits of precision",
         "send_to_account": "Send to account",
         "asset": "Asset",
         "this_memo_is_private": "This memo is private",
@@ -761,7 +773,8 @@
         "transfers_are_temporary_disabled": "Transfers are temporary disabled.",
         "history": "HISTORY",
         "redeem_rewards": "Redeem Rewards (Transfer to Balance)",
-        "buy_steem_or_steem_power": "Buy STEEM or STEEM POWER"
+        "buy_steem_or_steem_power": "Buy STEEM or STEEM POWER",
+        "your_current_rewards": "Your current rewards:"
     },
     "powerdown_jsx": {
         "power_down": "Power Down",
@@ -787,5 +800,26 @@
     "termsagree_jsx": {
         "i_agree_to_these_terms": "I agree to these terms",
         "cancel": "Cancel"
+    },
+    "changepassword_jsx": {
+        "account_name_cant_be_verified_server_failure":
+            "Account name can't be verified right now due to server failure. Please try again later."
+    },
+    "sidebarnewusers_jsx": {
+        "new_to_steemit": "New to Steemit?",
+        "quick_start_guide": "Quick start guide",
+        "the_blockchain": "The blockchain",
+        "faqs": "FAQs"
+    },
+    "approval_jsx": {
+        "thanks_for_confirming_your_email": "Thanks for confirming your email!",
+        "after_validating_signup_look_for_approval":
+            "After validating your sign up request with us we'll look it over for approval. As soon as your turn is up and you're approved, you'll be sent a link to finalize your account!",
+        "youll_be_among_the_earliest_members":
+            "You'll be among the earliest members of the Steemit community!",
+        "thanks_for_confirming_your_phone_number":
+            "Thanks for confirming your phone number!",
+        "your_a_few_steps_away":
+            "You're a few steps away from getting to the top of the list. Check your email and click the email validation link."
     }
 }

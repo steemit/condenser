@@ -270,7 +270,11 @@ class ReplyEditor extends React.Component {
         if (!acceptedFiles.length) {
             if (rejectedFiles.length) {
                 this.setState({
-                    progress: { error: 'Please insert only image files.' },
+                    progress: {
+                        error: tt(
+                            'reply_editor.please_insert_only_image_files'
+                        ),
+                    },
                 });
                 console.log('onDrop Rejected files: ', rejectedFiles);
             }
@@ -863,7 +867,9 @@ export default formId =>
                 // If this is an HTML post, it MUST begin and end with the tag
                 if (isHtml && !body.match(/^<html>[\s\S]*<\/html>$/)) {
                     errorCallback(
-                        'HTML posts must begin with <html> and end with </html>'
+                        tt(
+                            'reply_editor.html_posts_must_begin_and_end_with_html_tags'
+                        )
                     );
                     return;
                 }
@@ -880,7 +886,9 @@ export default formId =>
                 if (isHtml) rtags.htmltags.delete('html'); // html tag allowed only in HTML mode
                 if (rtags.htmltags.size) {
                     errorCallback(
-                        'Please remove the following HTML elements from your post: ' +
+                        tt(
+                            'reply_editor.please_remove_following_html_elements'
+                        ) +
                             Array(...rtags.htmltags)
                                 .map(tag => `<${tag}>`)
                                 .join(', ')

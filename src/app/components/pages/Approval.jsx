@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { VIEW_MODE_WHISTLE, WHISTLE_SIGNUP_COMPLETE } from 'shared/constants';
+import tt from 'counterpart';
 
 class Approval extends React.Component {
     constructor(props) {
@@ -21,40 +22,38 @@ class Approval extends React.Component {
             window.postMessage(WHISTLE_SIGNUP_COMPLETE);
         }
         let body = '';
-        if (this.state.confirm_email) {
+        if (this.state.confirm_email && false) {
             body = (
                 <div>
-                    <h4>Thanks for confirming your email!</h4>
+                    <h4>
+                        {tt('approval_jsx.thanks_for_confirming_your_email')}
+                    </h4>
                     <p>
-                        After validating your sign up request with us we'll look
-                        it over for approval. As soon as your turn is up and
-                        you're approved, you'll be sent a link to finalize your
-                        account!
+                        {tt(
+                            'approval_jsx.after_validating_signup_look_for_approval'
+                        )}
                     </p>
                     <p>
-                        You'll be among the earliest members of the Steemit
-                        community!
+                        {tt('approval_jsx.youll_be_among_the_earliest_members')}
                     </p>
                 </div>
             );
         } else {
             body = (
                 <div>
-                    <h4>Thanks for confirming your phone number!</h4>
+                    <h4>
+                        {tt(
+                            'approval_jsx.thanks_for_confirming_your_phone_number'
+                        )}
+                    </h4>
+                    <p>{tt('approval_jsx.your_a_few_steps_away')}</p>
                     <p>
-                        You're a few steps away from getting to the top of the
-                        list. Check your email and click the email validation
-                        link.
+                        {tt(
+                            'approval_jsx.after_validating_signup_look_for_approval'
+                        )}
                     </p>
                     <p>
-                        After validating your sign up request with us we'll look
-                        it over for approval. As soon as your turn is up and
-                        you're approved, you'll be sent a link to finalize your
-                        account!
-                    </p>
-                    <p>
-                        You'll be among the earliest members of the Steemit
-                        community!
+                        {tt('approval_jsx.youll_be_among_the_earliest_members')}
                     </p>
                 </div>
             );

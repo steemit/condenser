@@ -1,4 +1,5 @@
 import React from 'react';
+import tt from 'counterpart';
 
 const SidebarLinks = ({ username }) => (
     <div className="c-sidebar__module">
@@ -9,7 +10,7 @@ const SidebarLinks = ({ username }) => (
             <ul className="c-sidebar__list">
                 <li className="c-sidebar__list-item">
                     <a className="c-sidebar__link" href={'/@' + username}>
-                        My blog
+                        {tt('g.myblog')}
                     </a>
                 </li>
                 <li className="c-sidebar__list-item">
@@ -17,7 +18,7 @@ const SidebarLinks = ({ username }) => (
                         className="c-sidebar__link"
                         href={'/@' + username + '/transfers'}
                     >
-                        My wallet
+                        {tt('g.mywallet')}
                     </a>
                 </li>
                 {/*   <li className="c-sidebar__list-item"><a className="c-sidebar__link" href={username + ''}>Pay someone</a></li> */}

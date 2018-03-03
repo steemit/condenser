@@ -138,52 +138,62 @@ class TransferHistoryRow extends React.Component {
             let rewards_str;
             switch (rewards.length) {
                 case 3:
-                    rewards_str = `${rewards[0]}, ${rewards[1]} and ${
-                        rewards[2]
-                    }`;
+                    rewards_str = `${rewards[0]}, ${rewards[1]} ${tt(
+                        'g.and'
+                    )} ${rewards[2]}`;
                     break;
                 case 2:
-                    rewards_str = `${rewards[0]} and ${rewards[1]}`;
+                    rewards_str = `${rewards[0]} ${tt('g.and')} ${rewards[1]}`;
                     break;
                 case 1:
                     rewards_str = `${rewards[0]}`;
                     break;
             }
 
-            description_start += `Claim rewards: ${rewards_str}`;
+            description_start += `${tt(
+                'transferhistoryrow_jsx.claim_rewards'
+            )} ${rewards_str}`;
             description_end = '';
         } else if (type === 'interest') {
             description_start += `${tt(
                 'transferhistoryrow_jsx.receive_interest_of'
             )} ${data.interest}`;
         } else if (type === 'fill_convert_request') {
-            description_start += `Fill convert request: ${data.amount_in} for ${
-                data.amount_out
-            }`;
+            description_start += tt(
+                'transferhistoryrow_jsx.fill_convert_request',
+                {
+                    amount_in: data.amount_in,
+                    amount_out: data.amount_out,
+                }
+            );
         } else if (type === 'fill_order') {
             if (data.open_owner == context) {
                 // my order was filled by data.current_owner
-                description_start += `Paid ${data.open_pays} for ${
-                    data.current_pays
-                }`;
+                description_start += tt(
+                    'transferhistoryrow_jsx.fill_order_paid',
+                    {
+                        amount_in: data.open_pays,
+                        amount_out: data.current_pays,
+                    }
+                );
             } else {
                 // data.open_owner filled my order
-                description_start += `Paid ${data.current_pays} for ${
-                    data.open_pays
-                }`;
+                description_start += tt(
+                    'transferhistoryrow_jsx.fill_order_paid',
+                    {
+                        amount_in: data.current_pays,
+                        amount_out: data.open_pays,
+                    }
+                );
             }
         } else if (type === 'comment_benefactor_reward') {
-            let steem_payout = '';
-            if (data.steem_payout !== '0.000 STEEM')
-                steem_payout = ', ' + data.steem_payout;
-            description_start += `${benefactor_reward} STEEM POWER for ${
-                data.author
-            }/${data.permlink}`;
+            description_start += `${benefactor_reward} STEEM POWER ${tt(
+                'g.for'
+            )} ${data.author}/${data.permlink}`;
             description_end = '';
         } else {
             description_start += JSON.stringify({ type, ...data }, null, 2);
         }
-        // <Icon name="clock" className="space-right" />
         return (
             <tr key={op[0]} className="Trans">
                 <td>

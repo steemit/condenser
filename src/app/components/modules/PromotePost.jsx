@@ -91,7 +91,7 @@ class PromotePost extends Component {
                             {tt(
                                 'promote_post_jsx.spend_your_DEBT_TOKEN_to_advertise_this_post',
                                 { DEBT_TOKEN }
-                            )}.
+                            )}
                         </p>
                         <hr />
                         <div className="row">

@@ -233,7 +233,7 @@ class Voting extends React.Component {
                             className="button outline"
                             title="Flag"
                         >
-                            Flag
+                            {tt('voting_jsx.flag')}
                         </a>
                     </div>
                 </FoundationDropdown>

@@ -250,7 +250,7 @@ class PostFull extends React.Component {
         }
         // detect illegal users
         if (bIllegalContentUser) {
-            content_body = 'Not available for legal reasons.';
+            content_body = tt('postfull_jsx.not_available_for_legal_reasons');
         }
 
         const bShowLoading =

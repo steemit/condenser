@@ -90,6 +90,71 @@ describe('Global reducer', () => {
         ).toEqual(OrderedMap(payload.account.beOrderedMap));
     });
 
+    it('should return correct state for a RECEIVE_ACCOUNTS action', () => {
+        // Arrange
+        const payload = {
+            accounts: [
+                {
+                    name: 'foo',
+                    witness_votes: 99,
+                    beList: ['alice', 'bob', 'claire'],
+                    beorderedMap: { foo: 'barman' },
+                },
+                {
+                    name: 'bar',
+                    witness_votes: 12,
+                    beList: ['james', 'billy', 'samantha'],
+                    beOrderedMap: { kewl: 'snoop' },
+                },
+            ],
+        };
+
+        const initState = Map({
+            status: {},
+            seagull: Map({ result: 'fulmar', error: 'stuka' }),
+            accounts: Map({
+                sergei: Map({
+                    name: 'sergei',
+                    witness_votes: 666,
+                    beList: List(['foo', 'carl', 'hanna']),
+                    beorderedMap: OrderedMap({ foo: 'cramps' }),
+                }),
+            }),
+        });
+
+        const initial = reducer(initState);
+
+        const expected = Map({
+            status: {},
+            accounts: Map({
+                sergei: Map({
+                    name: 'sergei',
+                    witness_votes: 666,
+                    beList: List(['foo', 'carl', 'hanna']),
+                    beorderedMap: OrderedMap({
+                        foo: 'cramps',
+                    }),
+                }),
+                foo: Map({
+                    name: 'foo',
+                    witness_votes: 99,
+                    beList: List(['alice', 'bob', 'claire']),
+                    beorderedMap: OrderedMap({ foo: 'barman' }),
+                }),
+                bar: Map({
+                    name: 'bar',
+                    witness_votes: 12,
+                    beList: List(['james', 'billy', 'samantha']),
+                    beOrderedMap: OrderedMap({ kewl: 'snoop' }),
+                }),
+            }),
+        });
+        // Act
+        const actual = reducer(initial, globalActions.receiveAccounts(payload));
+        // Assert
+        expect(actual.get('accounts')).toEqual(expected.get('accounts'));
+    });
+
     it('should return correct state for a RECEIVE_COMMENT action', () => {
         // Arrange
         const payload = {

@@ -193,18 +193,8 @@ class Settings extends React.Component {
                         className="small-12 medium-6 large-4 columns"
                     >
                         <h4>{tt('settings_jsx.public_profile_settings')}</h4>
-                        {progress.message && (
-                            <div className="info">{progress.message}</div>
-                        )}
-                        {progress.error && (
-                            <div className="error">
-                                {tt('reply_editor.image_upload')} :{' '}
-                                {progress.error}
-                            </div>
-                        )}
                         <label>
                             {tt('settings_jsx.profile_image_url')}
-
                             <input
                                 type="url"
                                 {...profile_image.props}
@@ -421,8 +411,6 @@ export default connect(
         changeLanguage: language => {
             dispatch(userActions.changeLanguage(language));
         },
-        uploadImage: (file, progress) =>
-            dispatch(userActions.uploadImage({ file, progress })),
         updateAccount: ({ successCallback, errorCallback, ...operation }) => {
             const options = {
                 type: 'account_update',

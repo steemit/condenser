@@ -2,7 +2,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { withKnobs, number } from '@storybook/addon-knobs';
 import NotifiCounter from './NotifiCounter';
-import { Center } from './Tooltip.story';
+import { Center } from '../../../../.storybook/decorators';
 
 const options = {
     range: true,
@@ -28,9 +28,10 @@ const mockStore = {
 
 storiesOf('Elements', module)
     .addDecorator(withKnobs)
+    .addDecorator(Center)
     .add('NotifCounter', () => (
-        <Center>
+        <div>
             <NotifiCounter store={mockStore} fields={'not relevant'} />
             <span> Notifications</span>
-        </Center>
+        </div>
     ));

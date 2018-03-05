@@ -5,19 +5,18 @@ import rootReducer from 'app/redux/RootReducer';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import Reblog from './Reblog';
-import { Center } from './Tooltip.story';
+import { Center } from '../../../../.storybook/decorators';
 
 const store = createStore(rootReducer);
 
 storiesOf('Elements', module)
     .addDecorator(withKnobs)
+    .addDecorator(Center)
     .addDecorator(getStory => <Provider store={store}>{getStory()}</Provider>)
     .add('Reblog', () => (
-        <Center>
-            <Reblog
-                permlink={'foo/bar'}
-                author={'maitland'}
-                reblog={() => alert('STEEM WAZ HERE')}
-            />
-        </Center>
+        <Reblog
+            permlink={'foo/bar'}
+            author={'maitland'}
+            reblog={() => alert('STEEM WAZ HERE')}
+        />
     ));

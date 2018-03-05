@@ -5,12 +5,15 @@ import constants from './constants';
 
 export const emptyContentMap = Map(emptyContent);
 
-export const defaultState = Map({ status: {} });
+export const defaultState = Map({
+    status: {},
+});
 
 // Action constants
 const SET_COLLAPSED = 'global/SET_COLLAPSED';
 const RECEIVE_STATE = 'global/RECEIVE_STATE';
 const RECEIVE_ACCOUNT = 'global/RECEIVE_ACCOUNT';
+const RECEIVE_ACCOUNTS = 'global/RECEIVE_ACCOUNTS';
 const RECEIVE_COMMENT = 'global/RECEIVE_COMMENT';
 const RECEIVE_CONTENT = 'global/RECEIVE_CONTENT';
 const LINK_REPLY = 'global/LINK_REPLY';
@@ -35,6 +38,33 @@ const SHOW_DIALOG = 'global/SHOW_DIALOG';
 const HIDE_DIALOG = 'global/HIDE_DIALOG';
 // Saga-related:
 export const GET_STATE = 'global/GET_STATE';
+
+/**
+ * Transfrom nested JS object to appropriate immutable collection.
+ *
+ * @param {Object} account
+ */
+
+const transformAccount = account =>
+    fromJS(account, (key, value) => {
+        if (key === 'witness_votes') return value.toSet();
+        const isIndexed = Iterable.isIndexed(value);
+        return isIndexed ? value.toList() : value.toOrderedMap();
+    });
+
+/**
+ * Merging accounts: A get_state will provide a very full account but a get_accounts will provide a smaller version this makes sure we don't overwrite
+ *
+ * @param {Immutable.Map} state
+ * @param {Immutable.Map} account
+ *
+ */
+
+const mergeAccounts = (state, account) => {
+    return state.updateIn(['accounts', account.get('name')], Map(), a =>
+        a.mergeDeep(account)
+    );
+};
 
 export default function reducer(state = defaultState, action = {}) {
     const payload = action.payload;
@@ -64,15 +94,15 @@ export default function reducer(state = defaultState, action = {}) {
         }
 
         case RECEIVE_ACCOUNT: {
-            const account = fromJS(payload.account, (key, value) => {
-                if (key === 'witness_votes') return value.toSet();
-                const isIndexed = Iterable.isIndexed(value);
-                return isIndexed ? value.toList() : value.toOrderedMap();
-            });
-            // Merging accounts: A get_state will provide a very full account but a get_accounts will provide a smaller version
-            return state.updateIn(['accounts', account.get('name')], Map(), a =>
-                a.mergeDeep(account)
-            );
+            const account = transformAccount(payload.account);
+            return mergeAccounts(state, account);
+        }
+
+        case RECEIVE_ACCOUNTS: {
+            return payload.accounts.reduce((acc, curr) => {
+                const transformed = transformAccount(curr);
+                return mergeAccounts(acc, transformed);
+            }, state);
         }
 
         case RECEIVE_COMMENT: {
@@ -399,6 +429,11 @@ export const receiveState = payload => ({
 
 export const receiveAccount = payload => ({
     type: RECEIVE_ACCOUNT,
+    payload,
+});
+
+export const receiveAccounts = payload => ({
+    type: RECEIVE_ACCOUNTS,
     payload,
 });
 

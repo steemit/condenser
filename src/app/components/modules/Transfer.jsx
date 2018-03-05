@@ -543,7 +543,7 @@ const AssetBalance = ({ onClick, balanceValue }) => (
         onClick={onClick}
         style={{ borderBottom: '#A09F9F 1px dotted', cursor: 'pointer' }}
     >
-        {tt('g.balance') + ': ' + balanceValue}
+        {tt('g.balance', { balanceValue })}
     </a>
 );
 

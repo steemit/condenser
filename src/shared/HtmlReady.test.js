@@ -69,11 +69,11 @@ describe('htmlready', () => {
         const resDomainInpage = HtmlReady(domainInpage).html;
         expect(resDomainInpage).toEqual(cleanDomainInpage);
 
-        //misleading in-page links should also be caught
+        // anchor links including steemit.com should be allowed
         const inpage =
             '<xml xmlns="http://www.w3.org/1999/xhtml"><a href="#https://steamit.com/unlikelyinpagelink" xmlns="http://www.w3.org/1999/xhtml">Go down lower for https://steemit.com info!</a></xml>';
         const cleanInpage =
-            '<xml xmlns="http://www.w3.org/1999/xhtml"><div title="missing translation: en.g.phishy_message" class="phishy">Go down lower for https://steemit.com info! / #https://steamit.com/unlikelyinpagelink</div></xml>';
+            '<xml xmlns="http://www.w3.org/1999/xhtml"><a href="#https://steamit.com/unlikelyinpagelink" xmlns="http://www.w3.org/1999/xhtml">Go down lower for https://steemit.com info!</a></xml>';
         const resinpage = HtmlReady(inpage).html;
         expect(resinpage).toEqual(cleanInpage);
 

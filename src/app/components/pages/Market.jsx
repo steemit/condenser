@@ -1062,7 +1062,9 @@ module.exports = {
                           min_to_receive,
                           effectivePrice,
                       });
-                const successMessage = tt('g.order_placed') + ': ' + confirmStr;
+                const successMessage = tt('market_jsx.order_placed', {
+                    order: confirmStr,
+                });
                 const confirm = confirmStr + '?';
                 let warning = null;
                 if (priceWarning) {

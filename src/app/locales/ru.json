@@ -714,8 +714,7 @@
         "location_is_too_long": "Местоположение слишком длинное",
         "website_url_is_too_long": "URL-адрес веб-сайта слишком длинный",
         "public_profile_settings": "Настройки Публичного Профиля",
-        "private_post_display_settings":
-            "Настройки отображения приватных постов",
+        "preferences": "Настройки отображения приватных постов",
         "not_safe_for_work_nsfw_content":
             "Небезопасный для работы (NSFW) контент",
         "always_hide": "Всегда скрывать",

@@ -695,8 +695,7 @@
         "location_is_too_long": "Localización es demasiado largo",
         "website_url_is_too_long": "La URL de la página web es muy larga",
         "public_profile_settings": "Herramientas para el perfil público",
-        "private_post_display_settings":
-            "Herramientas privadas para la visualización del post",
+        "preferences": "Herramientas privadas para la visualización del post",
         "not_safe_for_work_nsfw_content": "(NSFW) contenido para adultos",
         "always_hide": "Ocultar siempre",
         "always_warn": "Advertir siempre",

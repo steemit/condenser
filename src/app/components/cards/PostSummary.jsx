@@ -256,7 +256,7 @@ class PostSummary extends React.Component {
                                 role="button"
                                 onClick={this.onRevealNsfw}
                             >
-                                {tt('postsummary_jsx.reveal_it')}
+                                <a>{tt('postsummary_jsx.reveal_it')}</a>
                             </span>{' '}
                             {tt('g.or') + ' '}
                             {username ? (

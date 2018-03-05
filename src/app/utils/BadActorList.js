@@ -220,6 +220,7 @@ gatehub
 gatehub.net
 gdax.com
 gemini.com
+gtg.witnesses
 hitbtc.com
 hitbtcexchange
 huobi.pro

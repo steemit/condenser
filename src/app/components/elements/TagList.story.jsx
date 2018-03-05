@@ -1,7 +1,7 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import TagList from './TagList';
-import { Center } from '../../../../.storybook/decorators';
+import { Center } from 'decorators';
 
 const mockPost = {
     json_metadata: {

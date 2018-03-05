@@ -2,7 +2,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { withKnobs, select } from '@storybook/addon-knobs';
 import DropdownMenu from './DropdownMenu';
-import { Center } from '../../../../.storybook/decorators';
+import { Center } from 'decorators';
 
 const selectOptions = ['transfer', 'transfer to savings', 'power up'];
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { withKnobs, text } from '@storybook/addon-knobs';
 import TransactionError from './TransactionError';
-import { Center } from '../../../../.storybook/decorators';
+import { Center } from 'decorators';
 import rootReducer from 'app/redux/RootReducer';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';

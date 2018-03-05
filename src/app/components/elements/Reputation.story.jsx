@@ -1,7 +1,7 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import Reputation from './Reputation';
-import { Center } from '../../../../.storybook/decorators';
+import { Center } from 'decorators';
 
 storiesOf('Elements', module)
     .addDecorator(Center)

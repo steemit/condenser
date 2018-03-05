@@ -5,7 +5,7 @@ import rootReducer from 'app/redux/RootReducer';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import Userpic from './Userpic';
-import { Center } from '../../../../.storybook/decorators';
+import { Center } from 'decorators';
 
 const store = createStore(rootReducer);
 global.$STM_Config = { img_proxy_prefix: 'https://steemitimages.com/' };

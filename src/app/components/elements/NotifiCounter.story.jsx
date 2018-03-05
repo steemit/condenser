@@ -2,7 +2,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { withKnobs, number } from '@storybook/addon-knobs';
 import NotifiCounter from './NotifiCounter';
-import { Center } from '../../../../.storybook/decorators';
+import { Center } from 'decorators';
 
 const options = {
     range: true,

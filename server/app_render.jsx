@@ -114,7 +114,12 @@ async function appRender(ctx) {
             delete require.cache[require.resolve(assets_filename)];
         }
 
-        const props = {body, assets, title, meta};
+        const analytics = {
+            google_analytics_id: $STM_Config.google_analytics_id,
+            facebook_app_id: $STM_Config.facebook_app_id
+        };
+
+        const props = { body, assets, title, meta, analytics};
         ctx.status = statusCode;
         ctx.body = '<!DOCTYPE html>' + renderToString(<ServerHTML { ...props } />);
     } catch (err) {

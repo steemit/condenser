@@ -1,8 +1,9 @@
 import React from 'react';
 import { LIQUID_TOKEN } from 'app/client_config';
 import config from 'config';
+import AnalyticsScripts from 'app/components/elements/AnalyticsScripts';
 
-export default function ServerHTML({ body, assets, locale, title, meta }) {
+export default function ServerHTML({ body, assets, locale, title, meta, analytics }) {
     let page_title = title;
     return (
         <html lang="en">
@@ -52,6 +53,7 @@ export default function ServerHTML({ body, assets, locale, title, meta }) {
             <title>{page_title}</title>
         </head>
         <body>
+        <AnalyticsScripts { ...analytics }/>            
         <div id="content" dangerouslySetInnerHTML={ { __html: body } }></div>
         { assets.script.map((href, idx) => <script key={ idx } src={ href }></script>) }
         { config.get('vk_pixel_id') && <script dangerouslySetInnerHTML={ { __html: `(window.Image ? (new Image()) : document.createElement('img')).src = 'https://vk.com/rtrg?p=${config.get('vk_pixel_id')}';` } }></script> }

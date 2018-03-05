@@ -2,12 +2,13 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { withKnobs, boolean } from '@storybook/addon-knobs';
 import FoundationDropdown from './FoundationDropdown';
-import { Center } from './Tooltip.story';
+import { Center } from '../../../../.storybook/decorators';
 
 storiesOf('Elements', module)
     .addDecorator(withKnobs)
+    .addDecorator(Center)
     .add('FoundationDropdown', () => (
-        <Center>
+        <div>
             <h3> Use the Knob to toggle the Foundation Dropdown </h3>
             <FoundationDropdown
                 show={boolean('Is Open?', false)}
@@ -22,5 +23,5 @@ storiesOf('Elements', module)
                     <p> Has a handler to detect outside clicks...</p>
                 </div>
             </FoundationDropdown>
-        </Center>
+        </div>
     ));

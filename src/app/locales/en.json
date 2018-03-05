@@ -702,7 +702,7 @@
         "location_is_too_long": "Location is too long",
         "website_url_is_too_long": "Website URL is too long",
         "public_profile_settings": "Public Profile Settings",
-        "private_post_display_settings": "Private Post Display Settings",
+        "preferences": "Preferences",
         "not_safe_for_work_nsfw_content": "Not safe for work (NSFW) content",
         "always_hide": "Always hide",
         "always_warn": "Always warn",

@@ -566,18 +566,24 @@ export default connect(
         vote: (weight, { author, permlink, username, myVote, isFlag }) => {
             const confirm = () => {
                 if (myVote == null) return null;
-                const t = isFlag
-                    ? ''
-                    : ' ' +
-                      tt(
-                          'voting_jsx.we_will_reset_curation_rewards_for_this_post'
-                      );
                 if (weight === 0)
-                    return tt('voting_jsx.removing_your_vote') + t;
+                    return isFlag
+                        ? tt('voting_jsx.removing_your_vote')
+                        : tt(
+                              'voting_jsx.removing_your_vote_will_reset_curation_rewards_for_this_post'
+                          );
                 if (weight > 0)
-                    return tt('voting_jsx.changing_to_an_upvote') + t;
+                    return isFlag
+                        ? tt('voting_jsx.changing_to_an_upvote')
+                        : tt(
+                              'voting_jsx.changing_to_an_upvote_will_reset_curation_rewards_for_this_post'
+                          );
                 if (weight < 0)
-                    return tt('voting_jsx.changing_to_a_downvote') + t;
+                    return isFlag
+                        ? tt('voting_jsx.changing_to_a_downvote')
+                        : tt(
+                              'voting_jsx.changing_to_a_downvote_will_reset_curation_rewards_for_this_post'
+                          );
                 return null;
             };
             dispatch(

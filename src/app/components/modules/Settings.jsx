@@ -144,7 +144,7 @@ class Settings extends React.Component {
                     loading: false,
                     changed: false,
                     errorMessage: '',
-                    successMessage: tt('g.saved') + '!',
+                    successMessage: tt('settings_jsx.saved'),
                 });
                 // remove successMessage after a while
                 setTimeout(() => this.setState({ successMessage: '' }), 4000);

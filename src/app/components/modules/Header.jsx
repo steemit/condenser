@@ -142,27 +142,35 @@ class Header extends React.Component {
             const user_title = name ? `${name} (@${user_name})` : user_name;
             page_title = user_title;
             if (route.params[1] === 'followers') {
-                page_title =
-                    tt('header_jsx.people_following') + ' ' + user_title;
+                page_title = tt('header_jsx.people_following', {
+                    username: user_title,
+                });
             }
             if (route.params[1] === 'followed') {
-                page_title =
-                    tt('header_jsx.people_followed_by') + ' ' + user_title;
+                page_title = tt('header_jsx.people_followed_by', {
+                    username: user_title,
+                });
             }
             if (route.params[1] === 'curation-rewards') {
-                page_title =
-                    tt('header_jsx.curation_rewards_by') + ' ' + user_title;
+                page_title = tt('header_jsx.curation_rewards_by', {
+                    username: user_title,
+                });
             }
             if (route.params[1] === 'author-rewards') {
-                page_title =
-                    tt('header_jsx.author_rewards_by') + ' ' + user_title;
+                page_title = tt('header_jsx.author_rewards_by', {
+                    username: user_title,
+                });
             }
             if (route.params[1] === 'recent-replies') {
-                page_title = tt('header_jsx.replies_to') + ' ' + user_title;
+                page_title = tt('header_jsx.replies_to', {
+                    username: user_title,
+                });
             }
             // @user/"posts" is deprecated in favor of "comments" as of oct-2016 (#443)
             if (route.params[1] === 'posts' || route.params[1] === 'comments') {
-                page_title = tt('header_jsx.comments_by') + ' ' + user_title;
+                page_title = tt('header_jsx.comments_by', {
+                    username: user_title,
+                });
             }
         } else {
             page_name = ''; //page_title = route.page.replace( /([a-z])([A-Z])/g, '$1 $2' ).toLowerCase();

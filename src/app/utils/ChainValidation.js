@@ -4,24 +4,20 @@ import VerifiedExchangeList from 'app/utils/VerifiedExchangeList';
 import { PrivateKey, PublicKey } from '@steemit/steem-js/lib/auth/ecc';
 
 export function validate_account_name(value, memo) {
-    let i, label, len, length, ref, suffix;
+    let i, label, len, length, ref;
 
-    suffix = tt('chainvalidation_js.account_name_should');
     if (!value) {
-        return suffix + tt('chainvalidation_js.not_be_empty');
+        return tt('chainvalidation_js.account_name_should_not_be_empty');
     }
     length = value.length;
     if (length < 3) {
-        return suffix + tt('chainvalidation_js.be_longer');
+        return tt('chainvalidation_js.account_name_shouldbe_longer');
     }
     if (length > 16) {
-        return suffix + tt('chainvalidation_js.be_shorter');
-    }
-    if (/\./.test(value)) {
-        suffix = tt('chainvalidation_js.each_account_segment_should');
+        return tt('chainvalidation_js.account_name_shouldbe_shorter');
     }
     if (BadActorList.includes(value)) {
-        return 'Use caution sending to this account. Please double check your spelling for possible phishing. ';
+        return tt('chainvalidation_js.badactor');
     }
     if (VerifiedExchangeList.includes(value) && !memo) {
         return tt('chainvalidation_js.verified_exchange_no_memo');
@@ -30,41 +26,44 @@ export function validate_account_name(value, memo) {
     for (i = 0, len = ref.length; i < len; i++) {
         label = ref[i];
         if (!/^[a-z]/.test(label)) {
-            return suffix + tt('chainvalidation_js.start_with_a_letter');
+            return tt(
+                'chainvalidation_js.each_account_segment_should_start_with_a_letter'
+            );
         }
         if (!/^[a-z0-9-]*$/.test(label)) {
-            return (
-                suffix +
-                tt('chainvalidation_js.have_only_letters_digits_or_dashes')
+            return tt(
+                'chainvalidation_js.each_account_segment_should_have_only_letters_digits_or_dashes'
             );
         }
         if (/--/.test(label)) {
-            return (
-                suffix + tt('chainvalidation_js.have_only_one_dash_in_a_row')
+            return tt(
+                'chainvalidation_js.each_account_segment_should_have_only_one_dash_in_a_row'
             );
         }
         if (!/[a-z0-9]$/.test(label)) {
-            return suffix + tt('chainvalidation_js.end_with_a_letter_or_digit');
+            return tt(
+                'chainvalidation_js.each_account_segment_should_end_with_a_letter_or_digit'
+            );
         }
         if (!(label.length >= 3)) {
-            return suffix + tt('chainvalidation_js.be_longer');
+            return tt(
+                'chainvalidation_js.each_account_segment_should_be_longer'
+            );
         }
     }
     return null;
 }
 
 export function validate_memo_field(value, username, memokey) {
-    let suffix;
     value = value.split(' ').filter(v => v != '');
     for (var w in value) {
         // Only perform key tests if it might be a key, i.e. it is a long string.
         if (value[w].length >= 39) {
             if (/5[HJK]\w{40,45}/i.test(value[w])) {
-                return (suffix =
-                    'Please do not include what appears to be a private key or password. ');
+                return tt('chainvalidation_js.memo_has_privatekey');
             }
             if (PrivateKey.isWif(value[w])) {
-                return (suffix = 'Do not use private keys in memos. ');
+                return tt('chainvalidation_js.memo_is_privatekey');
             }
             if (
                 memokey ===
@@ -72,7 +71,7 @@ export function validate_memo_field(value, username, memokey) {
                     .toPublicKey()
                     .toString()
             ) {
-                return (suffix = 'Do not use passwords in memos. ');
+                return tt('chainvalidation_js.memo_is_password');
             }
         }
     }

@@ -635,7 +635,7 @@
         "location_is_too_long": "位置字段的字符过多",
         "website_url_is_too_long": "网站URL太长",
         "public_profile_settings": "公开主页设置",
-        "private_post_display_settings": "显示私人文章设置",
+        "preferences": "显示私人文章设置",
         "not_safe_for_work_nsfw_content": "不适合在工作时显示的(NSFW)内容",
         "always_hide": "总是隐藏",
         "always_warn": "总是警告",

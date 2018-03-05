@@ -5,7 +5,7 @@ import rootReducer from 'app/redux/RootReducer';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import Author from './index';
-import { Center } from '../../../../../.storybook/decorators';
+import { Center } from 'decorators';
 import { IntlProvider } from 'react-intl';
 
 const store = createStore(rootReducer);

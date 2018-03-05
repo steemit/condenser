@@ -1,7 +1,7 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { withKnobs, date } from '@storybook/addon-knobs';
-import { Center } from '../../../../../.storybook/decorators';
+import { Center } from 'decorators';
 
 import { IntlProvider } from 'react-intl';
 

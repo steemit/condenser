@@ -5,7 +5,7 @@ import { Map, List } from 'immutable';
 import rootReducer from 'app/redux/RootReducer';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
-import { Center } from '../../../../.storybook/decorators';
+import { Center } from 'decorators';
 import UserList from './UserList';
 
 const store = createStore(rootReducer);

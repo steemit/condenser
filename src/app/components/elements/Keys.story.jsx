@@ -6,7 +6,7 @@ import { Map, List } from 'immutable';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import Keys from './Keys';
-import { Center } from '../../../../.storybook/decorators';
+import { Center } from 'decorators';
 
 const store = createStore(rootReducer);
 

@@ -106,14 +106,12 @@ const typeName = confirmBroadcastOperation => {
     ]);
     if (title) return title;
     const type = confirmBroadcastOperation.get('type');
-    return (
-        tt('g.confirm') +
-        ' ' +
-        type
+    return tt('confirmtransactionform_jsx.confirm', {
+        transactionType: type
             .split('_')
             .map(n => n.charAt(0).toUpperCase() + n.substring(1))
-            .join(' ')
-    );
+            .join(' '), // @todo we should translate each potential transaction type!
+    });
 };
 
 export default connect(

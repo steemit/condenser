@@ -87,9 +87,10 @@ class PostsIndex extends React.Component {
         } = this.props.routeParams;
         let topics_order = order;
         let posts = [];
+        let account_name = '';
         let emptyText = '';
         if (category === 'feed') {
-            const account_name = order.slice(1);
+            account_name = order.slice(1);
             order = 'by_feed';
             topics_order = 'trending';
             posts = this.props.accounts.getIn([account_name, 'feed']);
@@ -154,8 +155,10 @@ class PostsIndex extends React.Component {
         // Logged-in:
         // At homepage (@user/feed) say "My feed"
         let page_title = 'Posts'; // sensible default here?
-        if (typeof this.props.username !== 'undefined' && category === 'feed') {
-            page_title = 'My feed'; // todo: localization
+        if (category === 'feed') {
+            if (account_name === this.props.username)
+                page_title = 'My feed'; // todo: localization
+            else page_title = account_name + "'s Feed";
         } else {
             switch (topics_order) {
                 case 'trending': // cribbed from Header.jsx where it's repeated 2x already :P

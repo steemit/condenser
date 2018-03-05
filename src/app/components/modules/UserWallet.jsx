@@ -196,11 +196,9 @@ class UserWallet extends React.Component {
                 return out.concat([
                     <div key={item.get(0)}>
                         <Tooltip
-                            t={
-                                tt('userwallet_jsx.conversion_complete_tip') +
-                                ': ' +
-                                new Date(finishTime).toLocaleString()
-                            }
+                            t={tt('userwallet_jsx.conversion_complete_tip', {
+                                date: new Date(finishTime).toLocaleString(),
+                            })}
                         >
                             <span>
                                 (+{tt('userwallet_jsx.in_conversion', {
@@ -303,7 +301,7 @@ class UserWallet extends React.Component {
 
         let steem_menu = [
             {
-                value: tt('g.transfer'),
+                value: tt('userwallet_jsx.transfer'),
                 link: '#',
                 onClick: showTransfer.bind(
                     this,

@@ -705,8 +705,7 @@
         "location_is_too_long": "Le lieu est trop long",
         "website_url_is_too_long": "L'URL du site web est trop longue",
         "public_profile_settings": "Paramètres du profil public",
-        "private_post_display_settings":
-            "Paramètres de l'affichage des messages privés",
+        "preferences": "Paramètres de l'affichage des messages privés",
         "not_safe_for_work_nsfw_content":
             "Peu approprié pour le travail (NSFW)",
         "always_hide": "Toujours masquer",

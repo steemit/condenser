@@ -117,9 +117,13 @@ class PromotePost extends Component {
                                 </div>
                             </div>
                         </div>
-                        <div>{`${tt('g.balance')}: ${balance} ${
-                            DEBT_TOKEN_SHORT
-                        } (${CURRENCY_SIGN})`}</div>
+                        <div>
+                            {tt('g.balance', {
+                                balanceValue: `${balance} ${DEBT_TOKEN_SHOR} (${
+                                    CURRENCY_SIGN
+                                })`,
+                            })}
+                        </div>
                         <br />
                         {loading && (
                             <span>

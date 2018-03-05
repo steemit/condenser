@@ -12,6 +12,7 @@ import { validate_account_name } from 'app/utils/ChainValidation';
 import runTests from 'app/utils/BrowserTests';
 import GeneratedPasswordInput from 'app/components/elements/GeneratedPasswordInput';
 import { saveCords } from 'app/utils/ServerApiClient';
+import { SIGNUP_URL } from 'shared/constants';
 
 class CreateAccount extends React.Component {
     static propTypes = {
@@ -292,7 +293,7 @@ class CreateAccount extends React.Component {
                                 </a>{' '}
                                 for the status of your request.<br />
                                 If you didn't submit your sign up application
-                                yet, <Link to="/pick_account">apply now</Link>!
+                                yet, <a href={SIGNUP_URL}>apply now</a>!
                             </p>
                         </div>
                     </div>

@@ -689,7 +689,7 @@
         "location_is_too_long": "너무 긴 지역명입니다",
         "website_url_is_too_long": "너무 긴 웹사이트 URL입니다",
         "public_profile_settings": "공개 프로파일 설정",
-        "private_post_display_settings": "컨텐츠 표시 설정",
+        "preferences": "컨텐츠 표시 설정",
         "not_safe_for_work_nsfw_content": "선정적이거나 폭력적인 컨텐츠",
         "always_hide": "항상 숨기기",
         "always_warn": "항상 경고하기",

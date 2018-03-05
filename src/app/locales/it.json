@@ -697,8 +697,7 @@
         "location_is_too_long": "Luogo è troppo lungo",
         "website_url_is_too_long": "L'url del sito è troppo lunga ",
         "public_profile_settings": "Impostazioni profilo pubblico",
-        "private_post_display_settings":
-            "Impostazioni di Visualizzazione del Post Privato",
+        "preferences": "Impostazioni di Visualizzazione del Post Privato",
         "not_safe_for_work_nsfw_content":
             "Contenuto inappropriato da visualizzare da un luogo di lavoro (NSFW)",
         "always_hide": "Nascondi sempre",

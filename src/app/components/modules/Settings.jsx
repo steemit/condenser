@@ -8,7 +8,6 @@ import o2j from 'shared/clash/object2json';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import reactForm from 'app/utils/ReactForm';
 import UserList from 'app/components/elements/UserList';
-import Dropzone from 'react-dropzone';
 
 class Settings extends React.Component {
     constructor(props) {
@@ -16,7 +15,6 @@ class Settings extends React.Component {
         this.state = {
             errorMessage: '',
             successMessage: '',
-            progress: {},
         };
         this.initForm(props);
         this.onNsfwPrefChange = this.onNsfwPrefChange.bind(this);
@@ -81,55 +79,6 @@ class Settings extends React.Component {
                 : null) || 'warn';
         this.setState({ nsfwPref, oldNsfwPref: nsfwPref });
     }
-
-    onDrop = (acceptedFiles, rejectedFiles) => {
-        if (!acceptedFiles.length) {
-            if (rejectedFiles.length) {
-                this.setState({
-                    progress: { error: 'Please insert only image files.' },
-                });
-                console.log('onDrop Rejected files: ', rejectedFiles);
-            }
-            return;
-        }
-        const file = acceptedFiles[0];
-        this.upload(file, file.name);
-    };
-
-    onOpenClick = imageName => {
-        this.setState({
-            imageInProgress: imageName,
-        });
-        this.dropzone.open();
-    };
-
-    upload = (file, name = '') => {
-        const { uploadImage } = this.props;
-        this.setState({
-            progress: { message: tt('settings_jsx.uploading_image') + '...' },
-        });
-        uploadImage(file, progress => {
-            if (progress.url) {
-                this.setState({ progress: {} });
-                const { url } = progress;
-                const image_md = `${url}`;
-                let field;
-                if (this.state.imageInProgress === 'profile_image') {
-                    field = this.state.profile_image;
-                } else if (this.state.imageInProgress === 'cover_image') {
-                    field = this.state.cover_image;
-                } else {
-                    return;
-                }
-                field.props.onChange(image_md);
-            } else {
-                this.setState({ progress });
-            }
-            setTimeout(() => {
-                this.setState({ progress: {} });
-            }, 4000); // clear message
-        });
-    };
 
     onNsfwPrefChange(e) {
         const nsfwPref = e.currentTarget.value;
@@ -228,7 +177,6 @@ class Settings extends React.Component {
             about,
             location,
             website,
-            progress,
         } = this.state;
 
         const { follow, account, isOwnAccount, user_preferences } = this.props;
@@ -277,29 +225,12 @@ class Settings extends React.Component {
                         )}
                         <label>
                             {tt('settings_jsx.profile_image_url')}
-                            <Dropzone
-                                onDrop={this.onDrop}
-                                className={'none'}
-                                disableClick
-                                multiple={false}
-                                accept="image/*"
-                                ref={node => {
-                                    this.dropzone = node;
-                                }}
-                            >
-                                <input
-                                    type="url"
-                                    {...profile_image.props}
-                                    autoComplete="off"
-                                />
-                            </Dropzone>
-                            <a
-                                onClick={() =>
-                                    this.onOpenClick('profile_image')
-                                }
-                            >
-                                {tt('settings_jsx.upload_image')}
-                            </a>
+
+                            <input
+                                type="url"
+                                {...profile_image.props}
+                                autoComplete="off"
+                            />
                         </label>
                         <div className="error">
                             {profile_image.blur &&
@@ -313,9 +244,6 @@ class Settings extends React.Component {
                                 {...cover_image.props}
                                 autoComplete="off"
                             />
-                            <a onClick={() => this.onOpenClick('cover_image')}>
-                                {tt('settings_jsx.upload_image')}
-                            </a>
                         </label>
                         <div className="error">
                             {cover_image.blur &&

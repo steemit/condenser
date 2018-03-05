@@ -40,6 +40,13 @@ describe('htmlready', () => {
         const res = HtmlReady(dirty).html;
         expect(res).toEqual(cleansed);
 
+        const cased =
+            '<xml xmlns="http://www.w3.org/1999/xhtml"><a href="https://steamit.com/signup" xmlns="http://www.w3.org/1999/xhtml">https://Steemit.com/signup</a></xml>';
+        const cleansedcased =
+            '<xml xmlns="http://www.w3.org/1999/xhtml"><div title="missing translation: en.g.phishy_message" class="phishy">https://Steemit.com/signup / https://steamit.com/signup</div></xml>';
+        const rescased = HtmlReady(cased).html;
+        expect(rescased).toEqual(cleansedcased);
+
         const withuser =
             '<xml xmlns="http://www.w3.org/1999/xhtml"><a href="https://steamit.com/signup" xmlns="http://www.w3.org/1999/xhtml">https://official@steemit.com/signup</a></xml>';
         const cleansedwithuser =
@@ -62,11 +69,11 @@ describe('htmlready', () => {
         const resDomainInpage = HtmlReady(domainInpage).html;
         expect(resDomainInpage).toEqual(cleanDomainInpage);
 
-        //misleading in-page links should also be caught
+        // anchor links including steemit.com should be allowed
         const inpage =
             '<xml xmlns="http://www.w3.org/1999/xhtml"><a href="#https://steamit.com/unlikelyinpagelink" xmlns="http://www.w3.org/1999/xhtml">Go down lower for https://steemit.com info!</a></xml>';
         const cleanInpage =
-            '<xml xmlns="http://www.w3.org/1999/xhtml"><div title="missing translation: en.g.phishy_message" class="phishy">Go down lower for https://steemit.com info! / #https://steamit.com/unlikelyinpagelink</div></xml>';
+            '<xml xmlns="http://www.w3.org/1999/xhtml"><a href="#https://steamit.com/unlikelyinpagelink" xmlns="http://www.w3.org/1999/xhtml">Go down lower for https://steemit.com info!</a></xml>';
         const resinpage = HtmlReady(inpage).html;
         expect(resinpage).toEqual(cleanInpage);
 

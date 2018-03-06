@@ -648,7 +648,7 @@
             "from_self": {
                 "to_savings": "Transfer to savings %(amount)s to ",
                 "from_savings": "Transfer from savings %(amount)s to ",
-                "not_savings": "Transfer %(amount)s to"
+                "not_savings": "Transfer %(amount)s to "
             },
             "to_self": {
                 "to_savings": "Receive from savings %(amount)s from ",

@@ -103,6 +103,7 @@ class App extends React.Component {
         const n = nextProps;
         return (
             p.location.pathname !== n.location.pathname ||
+            p.location.query !== n.location.query ||
             p.new_visitor !== n.new_visitor ||
             p.flash !== n.flash ||
             this.state.open !== nextState.open ||

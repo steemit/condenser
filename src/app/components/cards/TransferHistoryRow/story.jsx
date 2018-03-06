@@ -40,6 +40,7 @@ storiesOf('Cards', module)
                                     select(
                                         'transaction type',
                                         [
+                                            'transfer',
                                             'transfer_to_vesting',
                                             'transfer_to_savings',
                                             'transfer_from_savings',

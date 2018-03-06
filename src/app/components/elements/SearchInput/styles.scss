@@ -1,0 +1,68 @@
+form.search-input {
+
+    height: 42px;
+
+    svg.search-input__icon {
+        position: absolute;
+        pointer-events: none;
+        @include themify($themes) {
+            stroke: themed('colorAccentReverse');
+        }
+        stroke-width: 1.2;
+        fill: none;
+        
+    }
+
+    input.search-input__inner {
+        outline: none;
+        padding: 9px 10px 9px 32px;
+        width: 55px;
+        border-radius: 25pc;
+        transition: all 0.3s ease-in-out;
+        font-size: 16px;
+        background: transparent;
+        box-shadow: none;
+        width: 42px;
+        height: 42px;
+        color: transparent;
+        cursor: pointer;
+        transition: all 0.3s ease-in-out;
+        font-family: $font-primary;
+        @include themify($themes) {
+            border: 1px solid rgba(202, 202, 202, 0.6);
+        }
+        &::placeholder {
+            color: transparent
+        }
+        &:hover {
+            background-color: $color-teal;
+        }
+        &:focus {
+            width: 180px;
+            background-color: $color-white;
+            @include themify($themes) {
+                border: themed('moduleBackgroundColor');
+            }
+            border-color: $color-teal;
+            box-shadow: 0 0 5px rgba(109,207,246,.5);
+            width: 180px;
+            padding-left: 2.5rem;
+            @include themify($themes) {
+                color: themed('textColorPrimary');
+            }
+            background-color: transparent;
+            cursor: auto;
+            &::placeholder {
+                color: $color-blue-dark;
+                @include themify($themes) {
+                    color: themed('textColorSecondary');
+                }
+            }
+        }
+    }
+
+    /* small */
+    input.search-input__inner.search-input__inner--small {
+
+    }
+}

@@ -1,0 +1,61 @@
+.icon-button__svg {
+    display: block;
+    fill: transparent;
+    transition: all 0.3s ease-in-out;
+    width: 36px;
+    height: 36px;
+    @include MQ(M) {
+        width: 42px;
+        height: 42px;
+    }
+    .icon-button{
+        transition: all 0.3s ease-in-out;
+        &.icon-button__border {
+            stroke-width: 0.5;
+            @include themify($themes) {
+                stroke: themed('iconColorSecondary');
+            }
+        }
+        &.icon-button__pencil {
+            fill-rule: evenodd;
+            @include themify($themes) {
+                fill: themed('colorAccentReverse');
+            }
+        }
+        &.icon-button__magnifyingGlass {
+            transition: all 0.3s ease-in-out;
+            stroke-width: 1;
+            @include themify($themes) {
+                stroke: themed('colorAccentReverse');
+            }
+        }
+    }
+
+    :hover {
+        stroke: $color-border-light;
+        stroke-width: 0.5;
+        @include themify($themes) {
+            fill: themed('buttonBackground');
+        }
+        cursor: pointer;
+        .icon-button {
+            &.icon-button__border {
+                stroke-width: 2;
+                @include themify($themes) {
+                    stroke: themed('buttonBackground');
+                }
+            }
+            &.icon-button__pencil {
+                fill-rule: evenodd;
+                @include themify($themes) {
+                    fill: themed('buttonText');
+                }
+            }
+            &.icon-button__magnifyingGlass {
+                @include themify($themes) {
+                    stroke: themed('buttonText');
+                }
+            }
+        }
+    }
+}

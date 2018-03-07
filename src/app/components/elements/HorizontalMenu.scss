@@ -2,10 +2,11 @@
   display: none;
   .active > a {
     background: none;
-    font-weight: bold;
+    font-weight: 600;
     @include themify($themes) {
       color: themed('textColorAccent');  
     }  
+
   }
   li > a:hover {
     // color: $black;
@@ -27,19 +28,16 @@
 @media screen and (min-width: 52.5em) { 
   ul.HorizontalMenu.menu {
     display: flex;
+    padding-left: 0.5em;
+
     li > a {
-      padding-right: 0.5em;
-      line-height: 1.5rem;
-      display: flex;
-      text-transform: lowercase;
       padding-left: 0.5em;
-      padding-right: 0.5em;
-    }
-    .active {
-        font-weight: bold;
+      padding-right: 0.5em;  
     }
   }
 }
+
+
 
 @media print, screen and (min-width: 52.5em) {  
   .menu-hide-for-large {

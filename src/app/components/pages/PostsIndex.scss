@@ -1,3 +1,4 @@
+
 .PostsList {
   clear: right;
 }
@@ -5,12 +6,6 @@
 .PostsList__summaries {
   list-style-type: none;
   margin-left: 0;
-}
-
-.PostsIndex {
-    .articles__h1--no-wrap {
-        white-space: nowrap;
-    }
 }
 
 .PostsIndex__topics {
@@ -105,7 +100,7 @@
     }   
     &--tags {
       display: none;
-      @include MQ(FL) {
+      @include MQ(M) {
         display: block;
       }
       @include MQ(L) {
@@ -152,8 +147,8 @@
     }
   }
   &__link {
-    @extend .link;
-    @extend .link--primary;
+    @extend .link;  
+    @extend .link--primary; 
     font-family: $font-primary;
     &--emphasis {
       font-weight: bold;
@@ -198,7 +193,7 @@
     transition: all 0.2s ease-out;
     border: transparent;
     min-width: 300px;
-    width: 100%;
+    max-width: 540px;
     margin: auto;
     background-color: transparent;
   
@@ -246,23 +241,20 @@
   &__layout-selector {
     display: none;
     cursor: pointer;
-    @include MQ(FL) {
-      display: flex;
-      float: right;
-    }
-    @include MQ(FM) {
-        display: flex;
-        justify-content: flex-end;
+    @include MQ(M) {
+      display: inline-block;
+      padding-left: 14px;
     }
   }
   &__icon--layout {
     width: 24px;
     height: 24px;
     position: relative;
+    top: 5px;
   }
   &__summary {
       margin: 0em 0 1em;
-      transition: 0.2s all ease-in-out;
+      transition: 0.2s all ease-in-out;     
       border: transparent;
       padding-bottom: 10px;
       @include themify($themes) {
@@ -340,11 +332,6 @@
     line-height: 1;
     @include MQ(M) {
       padding-top: 0;
-    }
-    &-select {
-        select {
-            max-width: 300px;
-        }
     }
   }
   &__header-col {
@@ -430,7 +417,6 @@
   &__h3 {
     display: inline;
   }
-
   &__tag-selector {
     display: inline-block;
     select.Topics {
@@ -644,15 +630,12 @@
 }
 
 
-.articles__layout-selector {
-    display: inline-block;
-        .icon-svg {
-            &--accent {
-                @include themify($themes) {
-                    fill: themed('textColorSecondary'); 
-                }
-            }
-    }
+.articles__layout-selector .icon-svg {
+  &--accent {
+    @include themify($themes) {
+        fill: themed('textColorSecondary'); 
+      } 
+  } 
 }
 
 .articles__layout-selector:hover .icon-svg {

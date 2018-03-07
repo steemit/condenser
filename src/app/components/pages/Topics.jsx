@@ -3,59 +3,62 @@ import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 import tt from 'counterpart';
-import PropTypes from 'prop-types';
-import NativeSelect from 'app/components/elements/NativeSelect';
 
-const Topics = ({
-    order,
-    current,
-    compact,
-    className,
-    username,
-    categories,
-}) => {
-    const handleChange = selectedOption => {
-        browserHistory.push(selectedOption.value);
+class Topics extends React.Component {
+    static propTypes = {
+        categories: React.PropTypes.object.isRequired,
+        order: React.PropTypes.string,
+        current: React.PropTypes.string,
+        className: React.PropTypes.string,
+        compact: React.PropTypes.bool,
     };
 
-    const currentValue = current ? `/${order}/${current}` : `/${order}`;
-    let selected = current === 'feed' ? `/@${username}/feed` : currentValue;
+    constructor(props) {
+        super(props);
+        this.state = {};
+    }
 
-    if (compact) {
-        const extras = username => {
-            const ex = {
-                allTags: order => ({
-                    value: `/${order}`,
-                    label: `${tt('g.all_tags')}`,
-                }),
-                myFeed: name => ({
-                    value: `/@${name}/feed`,
-                    label: `${tt('g.my_feed')}`,
-                }),
-            };
-            return username
-                ? [ex.allTags(order), ex.myFeed(username)]
-                : [ex.allTags(order)];
-        };
+    shouldComponentUpdate(nextProps, nextState) {
+        const res =
+            this.props.categories !== nextProps.categories ||
+            this.props.current !== nextProps.current ||
+            this.props.order !== nextProps.order ||
+            this.state !== nextState;
+        return res;
+    }
 
-        const opts = extras(username).concat(
-            categories
-                .map(cat => {
-                    const link = order ? `/${order}/${cat}` : `/${cat}`;
-                    return { value: link, label: cat };
-                })
-                .toJS()
-        );
+    render() {
+        // console.log('Topics');
+        const { props: { order, current, compact, className } } = this;
+        let categories = this.props.categories.get('trending');
+        categories = categories.take(50);
 
-        return (
-            <NativeSelect
-                currentlySelected={currentValue}
-                options={opts}
-                onChange={handleChange}
-            />
-        );
-    } else {
-        const categoriesLinks = categories.map(cat => {
+        const cn = 'Topics' + (className ? ` ${className}` : '');
+        const currentValue = `/${order}/${current}`;
+
+        if (compact) {
+            return (
+                <select
+                    className={cn}
+                    onChange={e => browserHistory.push(e.target.value)}
+                    value={currentValue}
+                >
+                    <option key={'*'} value={'/' + order}>
+                        {tt('g.all_tags')}
+                    </option>
+                    {categories.map(cat => {
+                        const link = order ? `/${order}/${cat}` : `/${cat}`;
+                        return (
+                            <option key={cat} value={link}>
+                                {cat}
+                            </option>
+                        );
+                    })}
+                </select>
+            );
+        }
+
+        categories = categories.map(cat => {
             const link = order ? `/${order}/${cat}` : `/hot/${cat}`;
             return (
                 <li className="c-sidebar__list-item" key={cat}>
@@ -71,20 +74,14 @@ const Topics = ({
         });
         return (
             <div className="c-sidebar__module">
+                <div className="c-sidebar__header">
+                    <h3 className="c-sidebar__h3" key={'*'}>
+                        {tt('g.tags_and_topics')}
+                    </h3>
+                </div>
                 <div className="c-sidebar__content">
                     <ul className="c-sidebar__list">
-                        <li className="c-sidebar__list-item">
-                            <div className="c-sidebar__header">
-                                <Link
-                                    to={'/' + order}
-                                    className="c-sidebar__link"
-                                    activeClassName="active"
-                                >
-                                    {tt('g.all_tags')}
-                                </Link>
-                            </div>
-                        </li>
-                        {categoriesLinks}
+                        {categories}
                         <li className="c-sidebar__link">
                             <Link
                                 className="c-sidebar__link c-sidebar__link--emphasis"
@@ -98,17 +95,8 @@ const Topics = ({
             </div>
         );
     }
-};
+}
 
-Topics.propTypes = {
-    categories: React.PropTypes.object.isRequired,
-    order: React.PropTypes.string.isRequired,
-    current: React.PropTypes.string,
-    compact: React.PropTypes.bool.isRequired,
-};
-
-Topics.defaultProps = {
-    current: '',
-};
-
-export default Topics;
+export default connect(state => ({
+    categories: state.global.get('tag_idx'),
+}))(Topics);

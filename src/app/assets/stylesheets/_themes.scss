@@ -5,7 +5,7 @@ $themes: (
     colorAccentReverse: $color-blue-original-light,
     colorWhite: $color-white,
     backgroundColor: $color-background-off-white,
-    backgroundColorEmphasis: $color-background-almost-white,
+      backgroundColorEmphasis: $color-background-almost-white,
     backgroundColorOpaque: $color-background-off-white,
     backgroundTransparent: transparent,
     moduleBackgroundColor: $color-white,
@@ -223,6 +223,7 @@ $themes: (
   text-transform: capitalize;
   border-radius: 0;
   text-decoration: none;
+  text-transform: capitalize;
   @include font-size(18px);
   @include themify($themes) {
     background-color: themed('buttonBackground');

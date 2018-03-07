@@ -46,7 +46,7 @@
         "myblog": "My blog",
         "mycomments": "My comments",
         "myreplies": "Replies to me",
-        "new": "New",
+        "new": "new",
         "newer": "Newer",
         "next": "Next",
         "no": "No",
@@ -68,7 +68,7 @@
         "price": "Price",
         "print": "Print",
         "promote": "Promote",
-        "promoted": "Promoted",
+        "promoted": "promoted",
         "re": "RE",
         "re_to": "RE: %(topic)s",
         "recent_password": "Recent Password",
@@ -106,7 +106,6 @@
         "topics": "Topics",
         "toggle_nightmode": "Toggle Night Mode",
         "all_tags": "All tags",
-        "my_feed": "My feed",
         "transfer": "Transfer ",
         "trending_topics": "Trending Topics",
         "type": "Type",
@@ -272,8 +271,8 @@
             "Get paid for good content. Post and upvote articles on Steemit to get your share of the daily rewards pool."
     },
     "main_menu": {
-        "hot": "Hot",
-        "trending": "Trending"
+        "hot": "hot",
+        "trending": "trending"
     },
     "reply_editor": {
         "shorten_title": "Shorten title",

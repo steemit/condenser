@@ -139,11 +139,12 @@ class Post extends React.Component {
             </div>
         );
 
-        let sort_orders = ['trending', 'votes', 'new'];
+        let sort_orders = ['trending', 'votes', 'new', 'author_reputation'];
         let sort_labels = [
             tt('main_menu.trending'),
             tt('g.votes'),
             tt('g.age'),
+            tt('g.reputation'),
         ];
         let sort_menu = [];
         let sort_label;

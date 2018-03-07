@@ -46,7 +46,7 @@
         "myblog": "My blog",
         "mycomments": "My comments",
         "myreplies": "Replies to me",
-        "new": "new",
+        "new": "New",
         "newer": "Newer",
         "next": "Next",
         "no": "No",
@@ -68,7 +68,7 @@
         "price": "Price",
         "print": "Print",
         "promote": "Promote",
-        "promoted": "promoted",
+        "promoted": "Promoted",
         "re": "RE",
         "re_to": "RE: %(topic)s",
         "recent_password": "Recent Password",
@@ -106,6 +106,7 @@
         "topics": "Topics",
         "toggle_nightmode": "Toggle Night Mode",
         "all_tags": "All tags",
+        "my_feed": "My feed",
         "transfer": "Transfer ",
         "trending_topics": "Trending Topics",
         "type": "Type",
@@ -271,8 +272,8 @@
             "Get paid for good content. Post and upvote articles on Steemit to get your share of the daily rewards pool."
     },
     "main_menu": {
-        "hot": "hot",
-        "trending": "trending"
+        "hot": "Hot",
+        "trending": "Trending"
     },
     "reply_editor": {
         "shorten_title": "Shorten title",
@@ -646,14 +647,14 @@
         },
         "transfer": {
             "from_self": {
-                "to_savings": "Transfer to savings %(amount)s to",
-                "from_savings": "Transfer from savings %(amount)s to",
-                "not_savings": "Transfer %(amount)s to"
+                "to_savings": "Transfer to savings %(amount)s to ",
+                "from_savings": "Transfer from savings %(amount)s to ",
+                "not_savings": "Transfer %(amount)s to "
             },
             "to_self": {
-                "to_savings": "Receive from savings %(amount)s from",
-                "from_savings": "Transfer from savings %(amount)s from",
-                "not_savings": "Transfer %(amount)s "
+                "to_savings": "Receive from savings %(amount)s from ",
+                "from_savings": "Transfer from savings %(amount)s from ",
+                "not_savings": "Transfer %(amount)s from "
             },
             "to_someone_from_someone": {
                 "to_savings":

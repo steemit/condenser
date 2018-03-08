@@ -7,7 +7,6 @@ import tt from 'counterpart';
 import { APP_NAME } from 'app/client_config';
 import SortOrder from 'app/components/elements/SortOrder';
 import SearchInput from 'app/components/elements/SearchInput';
-import getPageTitle from 'app/utils/getPageTitle';
 import IconButton from 'app/components/elements/IconButton';
 import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdown';
 import * as userActions from 'app/redux/UserReducer';
@@ -18,6 +17,7 @@ import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import NotifiCounter from 'app/components/elements/NotifiCounter';
 import { SIGNUP_URL } from 'shared/constants';
 import SteemLogo from 'app/components/elements/SteemLogo';
+import normalizeProfile from 'app/utils/NormalizeProfile';
 
 class Header extends React.Component {
     static propTypes = {
@@ -30,23 +30,6 @@ class Header extends React.Component {
 
     constructor() {
         super();
-    }
-
-    // TODO: This should happen at a higher level as the header component is not ubiquitous.
-    setPageTitle = () => {
-        const route = resolveRoute(this.props.pathname);
-        // HACK: We ought to have a better way of doing this rather than accessing global document.
-        // e.g. https://github.com/gaearon/react-document-title
-        const page_title = getPageTitle(route, this.props.account_meta);
-        document.title = page_title + ' — ' + APP_NAME;
-    };
-
-    componentDidMount() {
-        this.setPageTitle();
-    }
-
-    componentDidUpdate() {
-        this.setPageTitle();
     }
 
     // Conside refactor.
@@ -86,7 +69,118 @@ class Header extends React.Component {
             userPath,
             showSidePanel,
             navigate,
+            account_meta,
         } = this.props;
+
+        /*Set the document.title on each header render.*/
+        const route = resolveRoute(pathname);
+        let home_account = false;
+        let page_title = route.page;
+
+        let sort_order = '';
+        let topic = '';
+        let user_name = null;
+        let page_name = null;
+        if (route.page === 'PostsIndex') {
+            sort_order = route.params[0];
+            if (sort_order === 'home') {
+                page_title = tt('header_jsx.home');
+                const account_name = route.params[1];
+                if (
+                    current_account_name &&
+                    account_name.indexOf(current_account_name) === 1
+                )
+                    home_account = true;
+            } else {
+                topic = route.params.length > 1 ? route.params[1] : '';
+                const type =
+                    route.params[0] == 'payout_comments' ? 'comments' : 'posts';
+                let prefix = route.params[0];
+                if (prefix == 'created') prefix = 'New';
+                if (prefix == 'payout') prefix = 'Pending payout';
+                if (prefix == 'payout_comments') prefix = 'Pending payout';
+                if (topic !== '') prefix += ` ${topic}`;
+                page_title = `${prefix} ${type}`;
+            }
+        } else if (route.page === 'Post') {
+            sort_order = '';
+            topic = route.params[0];
+        } else if (route.page == 'SubmitPost') {
+            page_title = tt('header_jsx.create_a_post');
+        } else if (route.page == 'Privacy') {
+            page_title = tt('navigation.privacy_policy');
+        } else if (route.page == 'Tos') {
+            page_title = tt('navigation.terms_of_service');
+        } else if (route.page == 'ChangePassword') {
+            page_title = tt('header_jsx.change_account_password');
+        } else if (route.page == 'CreateAccount') {
+            page_title = tt('header_jsx.create_account');
+        } else if (route.page == 'PickAccount') {
+            page_title = `Pick Your New Steemit Account`;
+        } else if (route.page == 'Approval') {
+            page_title = `Account Confirmation`;
+        } else if (
+            route.page == 'RecoverAccountStep1' ||
+            route.page == 'RecoverAccountStep2'
+        ) {
+            page_title = tt('header_jsx.stolen_account_recovery');
+        } else if (route.page === 'UserProfile') {
+            user_name = route.params[0].slice(1);
+            // Only access account meta if it is available in state - basically do not do this server-side!
+            const acct_meta = account_meta
+                ? account_meta.getIn([user_name])
+                : false;
+            const name = acct_meta
+                ? normalizeProfile(acct_meta.toJS()).name
+                : null;
+            const user_title = name ? `${name} (@${user_name})` : user_name;
+            page_title = user_title;
+            if (route.params[1] === 'followers') {
+                page_title = tt('header_jsx.people_following', {
+                    username: user_title,
+                });
+            }
+            if (route.params[1] === 'followed') {
+                page_title = tt('header_jsx.people_followed_by', {
+                    username: user_title,
+                });
+            }
+            if (route.params[1] === 'curation-rewards') {
+                page_title = tt('header_jsx.curation_rewards_by', {
+                    username: user_title,
+                });
+            }
+            if (route.params[1] === 'author-rewards') {
+                page_title = tt('header_jsx.author_rewards_by', {
+                    username: user_title,
+                });
+            }
+            if (route.params[1] === 'recent-replies') {
+                page_title = tt('header_jsx.replies_to', {
+                    username: user_title,
+                });
+            }
+            // @user/"posts" is deprecated in favor of "comments" as of oct-2016 (#443)
+            if (route.params[1] === 'posts' || route.params[1] === 'comments') {
+                page_title = tt('header_jsx.comments_by', {
+                    username: user_title,
+                });
+            }
+        } else {
+            page_name = ''; //page_title = route.page.replace( /([a-z])([A-Z])/g, '$1 $2' ).toLowerCase();
+        }
+
+        // Format first letter of all titles and lowercase user name
+        if (route.page !== 'UserProfile') {
+            page_title =
+                page_title.charAt(0).toUpperCase() + page_title.slice(1);
+        }
+
+        if (
+            process.env.BROWSER &&
+            (route.page !== 'Post' && route.page !== 'PostNoCategory')
+        )
+            document.title = page_title + ' — ' + APP_NAME;
 
         const logo_link =
             resolveRoute(pathname).params &&

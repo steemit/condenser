@@ -8,8 +8,23 @@ jobs:
             - setup_remote_docker:
                 docker_layer_caching: true
             - run: docker build -t steemit/condenser:$CIRCLE_BRANCH .
+    blackboxtest:
+        docker:
+            - image: docker:17
+        steps:
+            - checkout
+            - setup_remote_docker:
+                docker_layer_caching: true
             - run: docker build -t steemit/condenser-blackboxtest:$CIRCLE_BRANCH blackboxtest/
             - run: |
                 docker run -ditp 8080:8080 --name condenser steemit/condenser:$CIRCLE_BRANCH
                 sleep 10 # let condenser start
                 docker run --network container:condenser steemit/condenser-blackboxtest:$CIRCLE_BRANCH
+workflows:
+    version: 2
+    build-and-blackboxtest:
+        jobs:
+            - build
+            - blackboxtest:
+                requires:
+                    - build

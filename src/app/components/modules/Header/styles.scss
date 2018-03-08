@@ -97,25 +97,30 @@
                 background-color: themed('colorAccentReverse');
                 color: themed('buttonText');
               }                
-              &:hover, &:focus {
-                @include themify($themes) {
-                  background-color: themed('colorAccent');
-                  transform: scale(1.075);
-                }
-              }
               &:visited, &:active {
                 @include themify($themes) {
                   background-color: themed('colorAccentReverse');
                   color: themed('buttonText');
                 }                
               }
-            }
-            &.Header__login-link {
+              &:hover, &:focus {
+                transform: scale(1.075);
+                @include themify($themes) {
+                  background-color: themed('colorAccent');
+                }
+              }
+            }            
+              &.Header__login-link {
                 @extend .link;
                 @extend .link--primary;
                 font-size: 1rem;
                 padding: 10px 5px;
-            }
+                &:hover, &:focus {
+                  background-color: transparent;
+                }
+              }
+            
+
         }
     }
     > a {

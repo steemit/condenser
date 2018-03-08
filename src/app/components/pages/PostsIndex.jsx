@@ -213,13 +213,11 @@ class PostsIndex extends React.Component {
                             </span>
                         </div>
                         <div className="small-6 medium-5 large-5 column hide-for-large articles__header-select">
-                            {category !== 'feed' && (
-                                <SortOrder
-                                    sortOrder={this.props.sortOrder}
-                                    topic={this.props.topic}
-                                    horizontal={false}
-                                />
-                            )}
+                            <SortOrder
+                                sortOrder={this.props.sortOrder}
+                                topic={this.props.topic}
+                                horizontal={false}
+                            />
                         </div>
                         <div className="medium-1 show-for-mq-medium column">
                             <ArticleLayoutSelector />

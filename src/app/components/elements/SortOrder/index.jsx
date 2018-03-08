@@ -6,35 +6,43 @@ import { browserHistory } from 'react-router';
 import NativeSelect from 'app/components/elements/NativeSelect';
 
 const SortOrder = ({ topic, sortOrder, horizontal }) => {
-    const makeRoute = (topic, sort) =>
-        topic ? `/${sort.value}/${topic}` : `/${sort.value}`;
+    /*
+     * We do not sort the user feed so don't make links to it from the SortOrder component.
+     * Instead fall back to the 'all tags' route when a user attempts to sort from a feed page.
+     */
+    const tag = topic === 'feed' ? '' : topic;
 
-    const handleChange = topic => sort => {
-        browserHistory.replace(makeRoute(topic, sort));
+    const makeRoute = (tag, sort) =>
+        tag ? `/${sort.value}/${tag}` : `/${sort.value}`;
+
+    const handleChange = tag => sort => {
+        browserHistory.replace(makeRoute(tag, sort));
     };
 
-    const sorts = topic => [
-        {
-            value: 'trending',
-            label: tt('main_menu.trending'),
-            link: `/trending/${topic}`,
-        },
-        {
-            value: 'created',
-            label: tt('g.new'),
-            link: `/created/${topic}`,
-        },
-        {
-            value: 'hot',
-            label: tt('main_menu.hot'),
-            link: `/hot/${topic}`,
-        },
-        {
-            value: 'promoted',
-            label: tt('g.promoted'),
-            link: `/promoted/${topic}`,
-        },
-    ];
+    const sorts = tag => {
+        return [
+            {
+                value: 'trending',
+                label: tt('main_menu.trending'),
+                link: `/trending/${tag}`,
+            },
+            {
+                value: 'created',
+                label: tt('g.new'),
+                link: `/created/${tag}`,
+            },
+            {
+                value: 'hot',
+                label: tt('main_menu.hot'),
+                link: `/hot/${tag}`,
+            },
+            {
+                value: 'promoted',
+                label: tt('g.promoted'),
+                link: `/promoted/${tag}`,
+            },
+        ];
+    };
 
     return horizontal ? (
         <ul className="nav__block-list">
@@ -56,8 +64,8 @@ const SortOrder = ({ topic, sortOrder, horizontal }) => {
     ) : (
         <NativeSelect
             currentlySelected={sortOrder}
-            options={sorts(topic)}
-            onChange={handleChange(topic)}
+            options={sorts(tag)}
+            onChange={handleChange(tag)}
         />
     );
 };

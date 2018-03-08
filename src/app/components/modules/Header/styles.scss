@@ -83,15 +83,38 @@
             padding-right: 0.25rem;
             font-size: 1.125rem;
             font-family: $font-primary;
-            &.Header__signup-link {
-                @extend .e-btn;
-                padding: 0.6rem;
-                text-transform: none;
-                margin: 0 0.75rem 0 .5rem;
+            &.Header__signup-link {  
+              text-transform: none;
+              margin: 0 8px;
+              border-radius: 42px;
+              font-size: 1rem;
+              font-weight: bold;
+              padding: 12px 16px;
+              box-shadow: 2px 2px 2px 0 rgba(0,0,0,0), 2px 2px 0 0 rgba(0,0,0,0);
+              transition: 0.2s all ease-in-out;
+              text-shadow: 0 1px 0 rgba(0,0,0,0.2);
+              @include themify($themes) {
+                background-color: themed('colorAccentReverse');
+                color: themed('buttonText');
+              }                
+              &:hover, &:focus {
+                @include themify($themes) {
+                  background-color: themed('colorAccent');
+                  transform: scale(1.075);
+                }
+              }
+              &:visited, &:active {
+                @include themify($themes) {
+                  background-color: themed('colorAccentReverse');
+                  color: themed('buttonText');
+                }                
+              }
             }
             &.Header__login-link {
                 @extend .link;
                 @extend .link--primary;
+                font-size: 1rem;
+                padding: 10px 5px;
             }
         }
     }

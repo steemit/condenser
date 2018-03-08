@@ -7,15 +7,15 @@ jobs:
       - checkout
       - setup_remote_docker
       - run:
-        name: Build docker image
-        command: docker build -t condenser .
+          name: Build docker image
+          command: docker build -t condenser .
       - run:
-        name: Save docker image
-        command: docker save -o condenser.tar condenser
+          name: Save docker image
+          command: docker save -o condenser.tar condenser
       - persist_to_workspace:
-        root: .
-        paths:
-          - condenser.tar
+          root: .
+          paths:
+            - condenser.tar
   build-blackboxtest:
     docker:
       - image: docker:17
@@ -23,15 +23,15 @@ jobs:
       - checkout
       - setup_remote_docker
       - run:
-        name: Build docker image
-        command: docker build -t condenser-blackboxtest blackboxtest/
+          name: Build docker image
+          command: docker build -t condenser-blackboxtest blackboxtest/
       - run:
-        name: Save docker image
-        command: docker save -o condenser-blackboxtest.tar condenser-blackboxtest
+          name: Save docker image
+          command: docker save -o condenser-blackboxtest.tar condenser-blackboxtest
       - persist_to_workspace:
-        root: .
-        paths:
-          - condenser-blackboxtest.tar
+          root: .
+          paths:
+            - condenser-blackboxtest.tar
   run-blackboxtest:
     docker:
       - image: docker:17
@@ -39,18 +39,18 @@ jobs:
       - checkout
       - setup_remote_docker
       - attach_workspace:
-        at: /tmp/workspace
+          at: /tmp/workspace
       - run:
-        name: Load condenser docker image
-        command: docker load -i /tmp/workspace/image.tar
+          name: Load condenser docker image
+          command: docker load -i /tmp/workspace/image.tar
       - run:
-        name: Start condenser
-        command: |
-          docker run -ditp 8080:8080 --name condenser condenser
-          sleep 10 # let condenser start
+          name: Start condenser
+          command: |
+            docker run -ditp 8080:8080 --name condenser condenser
+            sleep 10 # let condenser start
       - run:
-        name: Run tests
-        command: docker run --network container:condenser condenser-blackboxtest
+          name: Run tests
+          command: docker run --network container:condenser condenser-blackboxtest
 workflows:
   version: 2
   condenser:
@@ -58,6 +58,6 @@ workflows:
       - build
       - build-blackboxtest
       - run-blackboxtest:
-        requires:
-          - build
-          - build-blackboxtest
+          requires:
+            - build
+            - build-blackboxtest

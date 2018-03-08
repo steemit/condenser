@@ -41,10 +41,9 @@ form.search-input {
             width: 180px;
             background-color: $color-white;
             @include themify($themes) {
-                border: themed('moduleBackgroundColor');
+                border: themed('borderAccent');
             }
             border-color: $color-teal;
-            box-shadow: 0 0 5px rgba(109,207,246,.5);
             width: 180px;
             padding-left: 2.5rem;
             @include themify($themes) {

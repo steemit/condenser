@@ -86,8 +86,12 @@
         padding-left: 0.25rem;
         padding-right: 0.25rem;
         @include MQ(S) {
-            padding-left: 0.5rem;
-            padding-right: 0.5rem;
+            padding-left: 0.375rem;
+            padding-right: 0.375rem;
+        }
+        @include MQ(M) {
+            padding-left: 0.625rem;
+            padding-right: 0.625rem; 
         }
     }
     div.LoadingIndicator {
@@ -97,14 +101,14 @@
 
 .Header__userpic {
     display: block;
-    width: 36px;
-    height: 36px;
+    width: 32px;
+    height: 32px;
   .Userpic {
-    width: 36px !important;
-    height: 36px !important;
+    width: 32px !important;
+    height: 32px !important;
     @include MQ(M) {
-        width: 40px!important;
-        height: 40px !important;
+        width: 38px !important;
+        height: 38px !important;
         position: relative;
         top: -2px;
     }
@@ -118,10 +122,10 @@ span.Header__hamburger.toggle-menu {
     // This margin is to prevent user avatar overlapping the hamburger in the header.
     margin-left: 0.25rem;
     @include MQ(S) {
-        margin-left: 0.5rem;
+        margin-left: 0.65rem;
     }
     @include MQ(M) {
-        margin-left: 0.75rem;
+        margin-left: 1.25rem;
     }
     cursor: pointer;
     &::after {

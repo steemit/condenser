@@ -38,7 +38,7 @@ const Topics = ({
             const ex = {
                 allTags: order => ({
                     value: `/${order}`,
-                    label: `${tt('g.all_tags')}`,
+                    label: `${tt('g.all_tags_mobile')}`,
                 }),
                 myFeed: name => ({
                     value: `/@${name}/feed`,

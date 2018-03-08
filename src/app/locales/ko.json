@@ -164,7 +164,7 @@
         "password_must_be_characters_or_more":
             "패스워드는 %(amount)s 글자 이상 이어야 합니다.",
         "need_password_or_key":
-            "You need a private password or key (not a public key)",
+            "개인 암호 또는 키 (공개 키 아님)가 필요합니다.",
         "login_to_see_memo": "login to see memo",
         "new_password": "새 비밀번호",
         "incorrect_password": "잘못된 비밀번호",
@@ -176,11 +176,11 @@
         "account_name_should_have_only_letters_digits_or_dashes":
             "계정명에는 알파벳과 숫자, 마침표, 대쉬만 사용 가능합니다.",
         "cannot_increase_reward_of_post_within_the_last_minute_before_payout":
-            "Cannot increase reward of post within the last minute before payout",
+            "Payout 전 마지막 순간에 게시물에 대한 보상을 늘릴 수 없습니다.",
         "vote_currently_exists_user_must_be_indicate_a_to_reject_witness":
             "vote currently exists, user must be indicate a desire to reject witness",
         "only_one_APP_NAME_account_allowed_per_ip_address_every_10_minutes":
-            "Only one Steem account allowed per IP address every 10 minutes",
+            "매 10 분마다 IP 주소 당 단 하나의 Steem 계정만 허용됩니다.",
         "resteem_this_post": "Resteem This Post",
         "reblog": "리스팀",
         "write_your_story": "내용을 입력하세요",
@@ -233,10 +233,10 @@
         },
         "post_key_warning": {
             "confirm":
-                "You are about to publish a STEEM private key or master password. You will probably lose control of the associated account and all its funds.",
+                "STEEM 개인 키 또는 마스터 비밀번호를 게시하려고 합니다. 관련된 계정과 모든 자산에 대한 제어권을 상실하게 될 것입니다.",
             "warning":
-                "Legitimate users, including employees of Steemit Inc., will never ask you for a private key or master password.",
-            "checkbox": "I understand"
+                "Steemit Inc.의 직원을 포함한 합법적 인 사용자는 어떠한 경우에도 개인 키 또는 마스터 비밀번호를 요구하지 않습니다.",
+            "checkbox": "네 이해합니다."
         }
     },
     "navigation": {

@@ -163,8 +163,6 @@ const SidePanel = ({ alignment, visible, hideSidePanel, username }) => {
         ],
     };
 
-    //Signin, signup, post.
-    debugger;
     return (
         <div className="SidePanel">
             <div className={(visible ? 'visible ' : '') + alignment}>

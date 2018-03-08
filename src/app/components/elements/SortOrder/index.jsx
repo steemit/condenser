@@ -7,10 +7,20 @@ import NativeSelect from 'app/components/elements/NativeSelect';
 
 const SortOrder = ({ topic, sortOrder, horizontal }) => {
     /*
-     * We do not sort the user feed so don't make links to it from the SortOrder component.
+     * We do not sort the user feed by anything other than 'new'.
+     * So don't make links to it from the SortOrder component.
      * Instead fall back to the 'all tags' route when a user attempts to sort from a feed page.
+     * If a user lands on the 'feed' page and the sort order is displayed (e.g. a mobile user) 
+     * display the active sort as 'new'.
      */
-    const tag = topic === 'feed' ? '' : topic;
+
+    let tag = topic;
+    let sort = sortOrder;
+
+    if (topic === 'feed') {
+        tag = '';
+        sort = 'created';
+    }
 
     const makeRoute = (tag, sort) =>
         tag ? `/${sort.value}/${tag}` : `/${sort.value}`;
@@ -46,12 +56,12 @@ const SortOrder = ({ topic, sortOrder, horizontal }) => {
 
     return horizontal ? (
         <ul className="nav__block-list">
-            {sorts(topic).map(i => {
+            {sorts(tag).map(i => {
                 return (
                     <li
                         key={i.value}
                         className={`nav__block-list-item ${
-                            i.value === sortOrder
+                            i.value === sort
                                 ? 'nav__block-list-item--active'
                                 : ''
                         }`}
@@ -63,7 +73,7 @@ const SortOrder = ({ topic, sortOrder, horizontal }) => {
         </ul>
     ) : (
         <NativeSelect
-            currentlySelected={sortOrder}
+            currentlySelected={sort}
             options={sorts(tag)}
             onChange={handleChange(tag)}
         />

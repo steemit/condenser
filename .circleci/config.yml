@@ -1,30 +1,63 @@
 version: 2
 jobs:
-    build:
-        docker:
-            - image: docker:17
-        steps:
-            - checkout
-            - setup_remote_docker:
-                docker_layer_caching: true
-            - run: docker build -t steemit/condenser:$CIRCLE_BRANCH-$CIRCLE_BUILD_NUM .
-    blackboxtest:
-        docker:
-            - image: docker:17
-        steps:
-            - checkout
-            - setup_remote_docker:
-                docker_layer_caching: true
-            - run: docker build -t steemit/condenser-blackboxtest:$CIRCLE_BRANCH-$CIRCLE_BUILD_NUM blackboxtest/
-            - run: |
-                docker run -ditp 8080:8080 --name condenser steemit/condenser:$CIRCLE_BRANCH-$CIRCLE_BUILD_NUM
-                sleep 10 # let condenser start
-                docker run --network container:condenser steemit/condenser-blackboxtest:$CIRCLE_BRANCH-$CIRCLE_BUILD_NUM
+  build:
+    docker:
+      - image: docker:17
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+        name: Build docker image
+        command: docker build -t condenser .
+      - run:
+        name: Save docker image
+        command: docker save -o condenser.tar condenser
+      - persist_to_workspace:
+        root: .
+        paths:
+          - condenser.tar
+  build-blackboxtest:
+    docker:
+      - image: docker:17
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+        name: Build docker image
+        command: docker build -t condenser-blackboxtest blackboxtest/
+      - run:
+        name: Save docker image
+        command: docker save -o condenser-blackboxtest.tar condenser-blackboxtest
+      - persist_to_workspace:
+        root: .
+        paths:
+          - condenser-blackboxtest.tar
+  run-blackboxtest:
+    docker:
+      - image: docker:17
+    steps:
+      - checkout
+      - setup_remote_docker
+      - attach_workspace:
+        at: /tmp/workspace
+      - run:
+        name: Load condenser docker image
+        command: docker load -i /tmp/workspace/image.tar
+      - run:
+        name: Start condenser
+        command: |
+          docker run -ditp 8080:8080 --name condenser condenser
+          sleep 10 # let condenser start
+      - run:
+        name: Run tests
+        command: docker run --network container:condenser condenser-blackboxtest
 workflows:
-    version: 2
-    build-and-blackboxtest:
-        jobs:
-            - build
-            - blackboxtest:
-                requires:
-                    - build
+  version: 2
+  condenser:
+    jobs:
+      - build
+      - build-blackboxtest
+      - run-blackboxtest:
+        requires:
+          - build
+          - build-blackboxtest

@@ -442,7 +442,13 @@
             "Now showing comments with low ratings",
         "sort_order": "Sort Order",
         "comments_were_hidden_due_to_low_ratings":
-            "Comments were hidden due to low ratings"
+            "Comments were hidden due to low ratings",
+        "comment_sort_order": {
+            "trending": "Trending",
+            "votes": "Votes",
+            "age": "Age",
+            "reputation": "Reputation"
+        }
     },
     "voting_jsx": {
         "flagging_post_can_remove_rewards_the_flag_should_be_used_for_the_following":

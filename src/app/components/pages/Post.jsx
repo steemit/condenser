@@ -141,10 +141,10 @@ class Post extends React.Component {
 
         let sort_orders = ['trending', 'votes', 'new', 'author_reputation'];
         let sort_labels = [
-            tt('main_menu.trending'),
-            tt('g.votes'),
-            tt('g.age'),
-            tt('g.reputation'),
+            tt('post_jsx.comment_sort_order.trending'),
+            tt('post_jsx.comment_sort_order.votes'),
+            tt('post_jsx.comment_sort_order.age'),
+            tt('post_jsx.comment_sort_order.reputation'),
         ];
         let sort_menu = [];
         let sort_label;

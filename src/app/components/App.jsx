@@ -88,10 +88,11 @@ class App extends React.Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        const { pathname, new_visitor, flash, nightmodeEnabled } = this.props;
+        const { pathname, query, new_visitor, flash, nightmodeEnabled } = this.props;
         const n = nextProps;
         return (
             pathname !== n.pathname ||
+            query !== n.query ||
             new_visitor !== n.new_visitor ||
             flash !== n.flash ||
             this.state.showBanner !== nextState.showBanner ||
@@ -269,6 +270,7 @@ App.propTypes = {
     error: React.PropTypes.string,
     children: AppPropTypes.Children,
     pathname: React.PropTypes.string,
+    query: React.PropTypes.string,
     category: React.PropTypes.string,
     order: React.PropTypes.string,
     loginUser: React.PropTypes.func.isRequired,
@@ -297,6 +299,7 @@ export default connect(
                 'nightmode',
             ]),
             pathname: ownProps.location.pathname,
+            query: ownProps.location.query,
             order: ownProps.params.order,
             category: ownProps.params.category,
         };

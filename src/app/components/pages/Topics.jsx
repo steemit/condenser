@@ -18,8 +18,20 @@ const Topics = ({
         browserHistory.push(selectedOption.value);
     };
 
-    const currentValue = current ? `/${order}/${current}` : `/${order}`;
-    let selected = current === 'feed' ? `/@${username}/feed` : currentValue;
+    const currentlySelected = (currentTag, username, currentOrder = false) => {
+        const opts = {
+            feed: `/@${username}/feed`,
+            tagOnly: `/trending/${currentTag}`,
+            orderOnly: `/${currentOrder}`,
+            tagWithOrder: `/${currentOrder}/${currentTag}`,
+            default: `/trending`,
+        };
+        if (currentTag === 'feed') return opts['feed'];
+        if (currentTag && currentOrder) return opts['tagWithOrder'];
+        if (!currentTag && currentOrder) return opts['orderOnly'];
+        if (currentTag && !currentOrder) return opts['tagOnly'];
+        return opts['default'];
+    };
 
     if (compact) {
         const extras = username => {
@@ -49,7 +61,7 @@ const Topics = ({
 
         return (
             <NativeSelect
-                currentlySelected={currentValue}
+                currentlySelected={currentlySelected(current, username, order)}
                 options={opts}
                 onChange={handleChange}
             />

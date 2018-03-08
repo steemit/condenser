@@ -1,7 +1,10 @@
 {
   "name": "condenser-blackboxtest",
   "version": "1.0.0",
-  "main": "false",
+  "main": false,
+  "scripts": {
+    "start": "nightwatch --config nightwatch.json"
+  },
   "license": "MIT",
   "dependencies": {
     "nightwatch": "0.9.19",

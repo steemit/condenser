@@ -9,6 +9,6 @@ RUN curl -s https://chromedriver.storage.googleapis.com/2.36/chromedriver_linux6
 COPY . /home/circleci/
 
 
-CMD [ "/home/circleci/node_modules/nightwatch/bin/nightwatch", "--config", "/home/circleci/nightwatch.json" ]
+CMD [ "yarn", "start" ]
 
 

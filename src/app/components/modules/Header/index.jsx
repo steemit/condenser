@@ -305,7 +305,7 @@ class Header extends React.Component {
                             )}
 
                         {/*CUSTOM SEARCH*/}
-                        <span className="Header__search--desktop">
+                        <span className="Header__search Header__search--desktop">
                             <SearchInput />
                         </span>
                         <span className="Header__search">
@@ -351,12 +351,14 @@ class Header extends React.Component {
                         {probablyLoggedIn && <LoadingIndicator type="circle" />}
 
                         {/*HAMBURGER*/}
-                        <span
-                            onClick={showSidePanel}
-                            className="toggle-menu Header__hamburger"
-                        >
-                            <span className="hamburger" />
-                        </span>
+                        <div className="Header__hamburger-container">
+                            <span
+                                onClick={showSidePanel}
+                                className="toggle-menu Header__hamburger"
+                            >
+                                <span className="hamburger" />
+                            </span>
+                        </div>
                     </div>
                 </nav>
             </header>

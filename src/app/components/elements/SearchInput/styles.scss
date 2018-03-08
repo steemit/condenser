@@ -5,12 +5,12 @@ form.search-input {
     svg.search-input__icon {
         position: absolute;
         pointer-events: none;
+        z-index: 1;
         @include themify($themes) {
             stroke: themed('colorAccentReverse');
         }
         stroke-width: 1.2;
         fill: none;
-        
     }
 
     input.search-input__inner {
@@ -28,29 +28,34 @@ form.search-input {
         cursor: pointer;
         transition: all 0.3s ease-in-out;
         font-family: $font-primary;
+        transition: 0.2s all ease-in-out;
+        &:hover {
+            transform: scale(1.075);            
+            @include themify($themes) {
+                background-color: themed('colorAccent');
+            }            
+        }              
         @include themify($themes) {
-            border: 1px solid rgba(202, 202, 202, 0.6);
+            border: themed('borderMedium');
         }
         &::placeholder {
             color: transparent
         }
-        &:hover {
-            background-color: $color-teal;
-        }
-        &:focus {
-            width: 180px;
-            background-color: $color-white;
+        &:hover, &:focus {
             @include themify($themes) {
                 border: themed('borderAccent');
-            }
-            border-color: $color-teal;
-            width: 180px;
-            padding-left: 2.5rem;
+            }            
+        }  
+        &:focus {
+            width: 200px;
+            background-color: $color-white;
+            padding-left: 2.5rem;            
+            background-color: transparent;
+            cursor: auto;            
             @include themify($themes) {
+                border: themed('borderAccent');
                 color: themed('textColorPrimary');
             }
-            background-color: transparent;
-            cursor: auto;
             &::placeholder {
                 color: $color-blue-dark;
                 @include themify($themes) {
@@ -58,10 +63,24 @@ form.search-input {
                 }
             }
         }
+        &:focus:hover {
+            transform: scale(1);
+            background-color: transparent;
+        }
     }
 
     /* small */
     input.search-input__inner.search-input__inner--small {
 
+    }
+}
+
+form.search-input {
+    &:focus-within {
+        svg.search-input__icon {
+            @include themify($themes) {
+                stroke: themed('colorAccent');
+            }        
+        }
     }
 }

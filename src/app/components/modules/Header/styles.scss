@@ -6,10 +6,13 @@
   width: 100%;
   z-index: 100;
   box-shadow: 0 2px 4px 0 rgba(0,0,0,0.05);
-  padding-right: 0.25rem;
   @include themify($themes) {
     background-color: themed('navBackgroundColor');
     border-bottom: themed('border');
+  }
+  &__hamburger-container {
+    padding: 10px 0 10px 10px;
+    display: block;
   }
 }
 
@@ -49,15 +52,25 @@
 }
 
 .Header__search {
-    @include MQ(M) {
-        display: none;
-    }
-    &--desktop {
-        display: none;
-        @include MQ(M) {
-            display: block;
-        }
-    }
+  > a {
+      display: block;
+      padding: 0 0.1875rem;
+  }
+  > span {
+      @include MQ(M) {
+        display: block;
+        padding: 0 0.1875rem;
+      }
+  }
+  @include MQ(M) {
+      display: none;
+  }
+  &--desktop {
+      display: none;
+      @include MQ(M) {
+          display: block;
+      }
+  }
 }
 
 .Header__buttons {
@@ -85,13 +98,15 @@
     > a {
         padding-left: 0.25rem;
         padding-right: 0.25rem;
+        transition: 0.2s all ease-in-out;
+        &:hover, &:focus {
+          transform: scale(1.075);
+        }        
         @include MQ(S) {
-            padding-left: 0.375rem;
-            padding-right: 0.375rem;
+          padding: 0 0.1875rem;
         }
         @include MQ(M) {
-            padding-left: 0.625rem;
-            padding-right: 0.625rem; 
+          padding: 0 0.375rem;
         }
     }
     div.LoadingIndicator {
@@ -103,9 +118,17 @@
     display: block;
     width: 32px;
     height: 32px;
+    padding: 0 0.375rem 0 0.1875rem;
+    @include MQ(M) {
+      margin-right: 8px;
+    }
   .Userpic {
     width: 32px !important;
     height: 32px !important;
+    transition: 0.2s all ease-in-out;
+    &:hover, &:focus {
+      transform: scale(1.1);
+    }
     @include MQ(M) {
         width: 38px !important;
         height: 38px !important;
@@ -121,18 +144,18 @@ span.Header__hamburger.toggle-menu {
     @include hamburger();
     // This margin is to prevent user avatar overlapping the hamburger in the header.
     margin-left: 0.25rem;
-    @include MQ(S) {
-        margin-left: 0.65rem;
-    }
-    @include MQ(M) {
-        margin-left: 1.25rem;
-    }
     cursor: pointer;
     &::after {
-      transition: 0.2s all ease-in-out;
+      transition: 0.2s all ease-in-out;      
       @include themify($themes) {
-        background: themed('textColorPrimary');
-        box-shadow: 0 7px 0 themed('textColorPrimary'), 0 14px 0 themed('textColorPrimary');
+        background: themed('textColorSecondary');
+        box-shadow: 0 7px 0 themed('textColorSecondary'), 0 14px 0 themed('textColorSecondary');
+      }        
+      @include MQ(M) {
+        @include themify($themes) {
+          background: themed('textColorPrimary');
+          box-shadow: 0 7px 0 themed('textColorPrimary'), 0 14px 0 themed('textColorPrimary');
+        }
       }
     }
     &:hover {

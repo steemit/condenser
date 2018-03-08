@@ -11,9 +11,9 @@
     .icon-button{
         transition: all 0.3s ease-in-out;
         &.icon-button__border {
-            stroke-width: 0.5;
+            stroke-width: 1;
             @include themify($themes) {
-                stroke: themed('iconColorSecondary');
+                stroke: themed('stroke');
             }
         }
         &.icon-button__pencil {

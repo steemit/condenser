@@ -5,7 +5,7 @@ import { Link } from 'react-router';
 import { browserHistory } from 'react-router';
 import NativeSelect from 'app/components/elements/NativeSelect';
 
-const SortOrder = ({ topic, sortOrder, horizontal }) => {
+const SortOrder = ({ topic, sortOrder, horizontal, pathname }) => {
     /*
      * We do not sort the user feed by anything other than 'new'.
      * So don't make links to it from the SortOrder component.
@@ -19,6 +19,12 @@ const SortOrder = ({ topic, sortOrder, horizontal }) => {
     if (topic === 'feed') {
         tag = '';
         sort = 'created';
+    }
+
+    // If we are at the homepage, the sort order is 'trending'
+    if (pathname === '/') {
+        tag = '';
+        sort = 'trending';
     }
 
     const makeRoute = (tag, sort) =>
@@ -83,12 +89,14 @@ SortOrder.propTypes = {
     topic: PropTypes.string,
     sortOrder: PropTypes.string,
     horizontal: PropTypes.bool,
+    pathname: PropTypes.string,
 };
 
 SortOrder.defaultProps = {
     horizontal: false,
     topic: '',
     sortOrder: '',
+    pathname: '',
 };
 
 export default SortOrder;

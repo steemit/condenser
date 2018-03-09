@@ -97,7 +97,7 @@ const SidePanel = ({ alignment, visible, hideSidePanel, username }) => {
             {
                 value: 'chat',
                 label: tt('navigation.chat'),
-                link: 'https://steemit.chat/home',
+                link: 'https://steem.chat/home',
             },
             {
                 value: 'tools',

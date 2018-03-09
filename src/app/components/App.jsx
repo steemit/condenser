@@ -88,7 +88,13 @@ class App extends React.Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        const { pathname, query, new_visitor, flash, nightmodeEnabled } = this.props;
+        const {
+            pathname,
+            query,
+            new_visitor,
+            flash,
+            nightmodeEnabled,
+        } = this.props;
         const n = nextProps;
         return (
             pathname !== n.pathname ||

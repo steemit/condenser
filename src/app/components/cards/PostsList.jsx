@@ -116,7 +116,6 @@ class PostsList extends React.Component {
             if (loadMore && posts && posts.size)
                 loadMore(posts.last(), category);
         }
-
         // Detect if we're in mobile mode (renders larger preview imgs)
         const mq = window.matchMedia('screen and (max-width: 39.9375em)');
         if (mq.matches) {

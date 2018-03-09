@@ -45,7 +45,7 @@ export default class PageViewsCounter extends React.Component {
         const views = this.state.views;
         if (this.props.hidden || !views) return null;
         const suffix = this.props.sinceDate
-            ? tt('g.since') + this.props.sinceDate
+            ? tt('g.since', { date: this.props.sinceDate })
             : '';
         return (
             <span

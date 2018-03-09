@@ -3,6 +3,10 @@ $menu-width: 250px;
 .SidePanel {
   display: block;
 
+  &__hide-signup {
+      display: none;
+  }
+
   .menu > li.last {
     border-bottom: 1px solid $color-border-dark;
     color: $color-text-gray-light;

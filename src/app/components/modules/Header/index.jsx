@@ -281,6 +281,7 @@ class Header extends React.Component {
                             sortOrder={order}
                             topic={category === 'feed' ? '' : category}
                             horizontal={true}
+                            pathname={pathname}
                         />
                     </div>
                     <div className="small-7 large-4 columns Header__buttons">

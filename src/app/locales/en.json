@@ -27,6 +27,8 @@
         "dismiss": "Dismiss",
         "edit": "Edit",
         "email": "Email",
+        "external_link_message":
+            "This link will take you away from steemit.com",
         "feed": "Feed",
         "follow": "Follow",
         "for": " for ",
@@ -106,6 +108,7 @@
         "topics": "Topics",
         "toggle_nightmode": "Toggle Night Mode",
         "all_tags": "All tags",
+        "all_tags_mobile": "All content",
         "my_feed": "My feed",
         "transfer": "Transfer ",
         "trending_topics": "Trending Topics",

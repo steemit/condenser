@@ -2,7 +2,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { withKnobs, select } from '@storybook/addon-knobs';
 import DropdownMenu from './DropdownMenu';
-import { Center } from './Tooltip.story';
+import { Center } from 'decorators';
 
 const selectOptions = ['transfer', 'transfer to savings', 'power up'];
 
@@ -26,8 +26,9 @@ const mockMenu = [
 
 storiesOf('Elements', module)
     .addDecorator(withKnobs)
+    .addDecorator(Center)
     .add('DropdownMenu', () => (
-        <Center>
+        <div>
             <h3>Dropdown Menu</h3>
             <DropdownMenu
                 title={'Other actions'}
@@ -40,5 +41,5 @@ storiesOf('Elements', module)
                     'power up'
                 )}
             />
-        </Center>
+        </div>
     ));

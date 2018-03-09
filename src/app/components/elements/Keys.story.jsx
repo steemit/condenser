@@ -6,7 +6,7 @@ import { Map, List } from 'immutable';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import Keys from './Keys';
-import { Center } from './Tooltip.story';
+import { Center } from 'decorators';
 
 const store = createStore(rootReducer);
 
@@ -22,9 +22,8 @@ const mockAccount = Map({
 
 storiesOf('Elements', module)
     .addDecorator(withKnobs)
+    .addDecorator(Center)
     .addDecorator(getStory => <Provider store={store}>{getStory()}</Provider>)
     .add('Keys', () => (
-        <Center>
-            <Keys account={mockAccount} authType="posting" onKey={() => {}} />
-        </Center>
+        <Keys account={mockAccount} authType="posting" onKey={() => {}} />
     ));

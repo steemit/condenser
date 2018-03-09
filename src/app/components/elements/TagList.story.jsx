@@ -1,7 +1,7 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import TagList from './TagList';
-import { Center } from './Tooltip.story';
+import { Center } from 'decorators';
 
 const mockPost = {
     json_metadata: {
@@ -9,8 +9,6 @@ const mockPost = {
     },
 };
 
-storiesOf('Elements', module).add('TagList', () => (
-    <Center>
-        <TagList post={mockPost} />
-    </Center>
-));
+storiesOf('Elements', module)
+    .addDecorator(Center)
+    .add('TagList', () => <TagList post={mockPost} />);

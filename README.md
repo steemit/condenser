@@ -290,6 +290,16 @@ OFFLINE_SSR_TEST=true SDC_DATABASE_URL="mysql://root@127.0.0.1/steemit_dev" NODE
 
 This will read data from the blobs in `api_mockdata` directory. If you want to use another set of mock data, create a similar directory to that one and add an argument `OFFLINE_SSR_TEST_DATA_DIR` pointing to your new directory.
 
+### Run blackbox tests using nightwatch
+
+To run a Selenium test suite, start the condenser docker image with a name `condenser` (like `docker run --name condenser -itp 8080:8080 steemit/condenser:latest`) and then run the blackboxtest image attached to the condneser image's network:
+
+```
+docker build -t=steemit/condenser-blackboxtest blackboxtest/
+docker run --network container:condenser steemit/condenser-blackboxtest:latest
+
+```
+
 ## Issues
 
 To report a non-critical issue, please file an issue on this GitHub project.

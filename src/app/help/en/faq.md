@@ -1,5 +1,5 @@
 <span id="disable_router_nav_history_direction_check"></span>
-# Steemit FAQ 
+# Steemit FAQ
 
 ## <span id="Table_of_Contents">Table of Contents</span>
 
@@ -293,7 +293,7 @@ You will need to provide your email address and phone number.
 
 Some accounts are approved faster than others. Most accounts are approved within 24 hours. Some may take a week or more to review.
 
-If your account has not been approved after more than a week, you can ask for help in the <a href="https://steemit.chat/channel/help">#help</a> channel on <a href="https://steemit.chat/home">steemit.chat</a>.
+If your account has not been approved after more than a week, you can ask for help in the <a href="https://steem.chat/channel/help">#help</a> channel on <a href="https://steem.chat/home">steem.chat</a>.
 
 <a href="#Table_of_Contents_Accounts">^</a>
 ## <span id="Can_I_speed_up_the_account_approval_process">Can I speed up the account approval process?</span>
@@ -326,7 +326,7 @@ There is a third-party tool called <a href="https://steemit.com/news/@timcliff/n
 <a href="#Table_of_Contents_Accounts">^</a>
 ## <span id="It_is_not_letting_me_create_an_account_with_my_phone_number__What_should_I_do">It is not letting me create an account with my phone number. What should I do?</span>
 
-Ask for help in the <a href="https://steemit.chat/channel/help">#help</a> channel on <a href="https://steemit.chat/home">steemit.chat</a>.
+Ask for help in the <a href="https://steem.chat/channel/help">#help</a> channel on <a href="https://steem.chat/home">steem.chat</a>.
 
 <a href="#Table_of_Contents_Accounts">^</a>
 ## <span id="What_happens_if_my_email_or_phone_number_changes">What happens if my email or phone number changes?</span>
@@ -389,7 +389,7 @@ These are various ways to sort Steem posts.
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 ## <span id="What_information_is_available_in_my_account_menu">What information is available in my account menu?</span>
 
-You can get to your account menu by clicking on the avatar icon in the top-right corner of a steemit.com page. 
+You can get to your account menu by clicking on the avatar icon in the top-right corner of a steemit.com page.
 
 **Feed** - Here is where you go to see the most recent posts from the people you follow.
 
@@ -432,7 +432,7 @@ Your savings balance is STEEM and SBD tokens that are subject to 3 day withdraw 
 ## <span id="How_do_I_send_money_to_another_user">How do I send money to another user?</span>
 
 - From your wallet page, click the STEEM or Steem Dollar balances with the down arrow next to them.
-- In the drop-down menu, click 'Transfer'. 
+- In the drop-down menu, click 'Transfer'.
 - Type the username of the account you want to send the STEEM or Steem Dollars to. Double and triple check the spelling.
 - Enter the amount of STEEM or Steem Dollars to send.
 - Enter a memo to go along with the transaction (optional).
@@ -539,7 +539,7 @@ The recommend aspect ratio for thumbnail images is 16x9.
 <a href="#Table_of_Contents_Posting">^</a>
 ## <span id="How_do_I_add_videos_to_my_posts">How do I add videos to my posts?</span>
 
-To add a DTube, YouTube, or Vimeo video to your blog post, simply paste the URL link to the video into the post. 
+To add a DTube, YouTube, or Vimeo video to your blog post, simply paste the URL link to the video into the post.
 
 <a href="#Table_of_Contents_Posting">^</a>
 ## <span id="Is_there_a_way_I_can_make_my_images_smaller">Is there a way I can make my images smaller?</span>
@@ -565,7 +565,7 @@ All tags must be lowercase letters. Spaces aren't allowed, but hyphenated words 
 <a href="#Table_of_Contents_Posting">^</a>
 ## <span id="How_many_tags_can_I_use">How many tags can I use?</span>
 
-You can use up to 5 tags per post. 
+You can use up to 5 tags per post.
 
 <a href="#Table_of_Contents_Posting">^</a>
 ## <span id="Why_is_the_Post_button_grayed_out">Why is the "Post" button grayed out?</span>
@@ -594,7 +594,7 @@ Text can be sized using headers:
 
 Instructions on how to justify text, as well as wrap text around images pulled to the left or right can be found in [this guide](https://steemit.com/steemit/@steemitblog/new-advanced-formatting-features).
 
-For more advanced formatting, a guide describing the common markdown formatting syntax can be found here: <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet">Markdown Cheatsheet</a>. 
+For more advanced formatting, a guide describing the common markdown formatting syntax can be found here: <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet">Markdown Cheatsheet</a>.
 
 <a href="#Table_of_Contents_Posting">^</a>
 ## <span id="How_often_can_I_post">How often can I post?</span>
@@ -609,7 +609,7 @@ Post sizes are limited to about 64,000 characters including formatting. This is 
 <a href="#Table_of_Contents_Posting">^</a>
 ## <span id="If_posting_in_a_language_other_than_English__how_will_I_get_recognized">If posting in a language other than English, how will I get recognized?</span>
 
-You can use language-specific tags to help you to reach the audience that speaks your language. 
+You can use language-specific tags to help you to reach the audience that speaks your language.
 
 Language-specific groups include:
 - Chinese = cn
@@ -667,8 +667,8 @@ Starting with the network's 16th hard fork in December 2016, Steem began creatin
 ## <span id="How_are_the_new_tokens_distributed">How are the new tokens distributed?</span>
 
 Out of the new tokens that are generated:
-- 75% go to the reward pool, which is split between authors and curators. 
-- 15% of the new tokens are awarded to holders of Steem Power. 
+- 75% go to the reward pool, which is split between authors and curators.
+- 15% of the new tokens are awarded to holders of Steem Power.
 - The remaining 10% pays for the witnesses to power the blockchain.
 
 <a href="#Table_of_Contents_Economics">^</a>
@@ -754,7 +754,7 @@ The price of STEEM is based on the supply and demand of the token, as determined
 
 With STEEM tokens in your wallet, click "Power Up" to turn them into Steem Power. If you have Steem Dollars, you can convert them to STEEM from your wallet, and then power up the STEEM.
 
-If you don’t already have STEEM or Steem Dollars in your wallet, you can purchase them using bitcoin (BTC), Ether (ETH), Litecoin (LTC), or BitShares (BTS) tokens. You may purchase BTC on various exchanges, such as Coinbase.com or Localbitcoins.com. 
+If you don’t already have STEEM or Steem Dollars in your wallet, you can purchase them using bitcoin (BTC), Ether (ETH), Litecoin (LTC), or BitShares (BTS) tokens. You may purchase BTC on various exchanges, such as Coinbase.com or Localbitcoins.com.
 
 To buy:
 - Click "Buy Steem" from the main menu in the top right corner of steemit.com, or from your wallet.
@@ -836,7 +836,7 @@ Other than making a post and making sales manually, there is no interface for se
 
 STEEM and SBD tokens are readily tradable to bitcoin, which can be traded for the local currency of your choice. There is a link to "Sell" your STEEM and SBD tokens in your wallet, which uses the <a href="https://blocktrades.us/">BlockTrades</a> interface.
 
-There are several guides that have been posted by users in the community for using various external exchanges to withdraw STEEM and SBD tokens. Please read the <a href="#Disclaimer">disclaimer</a> before using any of these guides to withdraw your coins. The users, guides, and exchanges listed in the guides are not endorsed by Steemit, Inc. Use the guides below at your own risk. 
+There are several guides that have been posted by users in the community for using various external exchanges to withdraw STEEM and SBD tokens. Please read the <a href="#Disclaimer">disclaimer</a> before using any of these guides to withdraw your coins. The users, guides, and exchanges listed in the guides are not endorsed by Steemit, Inc. Use the guides below at your own risk.
 
 It is recommended that you withdraw a small amount first, to verify it works before withdrawing a larger amount.
 
@@ -889,7 +889,7 @@ Every 100% vote you cast will use 2% of your remaining voting power. Your voting
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
 ## <span id="Can_I_vote_with_less_than_100__of_my_voting_strength">Can I vote with less than 100% of my voting strength?</span>
 
-New users can only upvote and downvote with 100% voting strength. 
+New users can only upvote and downvote with 100% voting strength.
 
 Once you reach about 500 Steem Power, you will see a vote slider appear when you vote. You can use the slider to adjust the weight of your vote, between 1% and 100% voting strength. Voting with less than 100% voting weight will use up less voting power, but it will also have less of an influence on the post or comment's rewards.
 
@@ -905,7 +905,7 @@ You can view your current voting power using third party tools such as https://s
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
 ## <span id="What_determines_how_much_of_the_curation_reward_goes_to_the_author_versus_curators">What determines how much of the curation reward goes to the author versus curators?</span>
 
-The rewards are allocated so that 75% of the payout goes to the author of the post/comment, and 25% goes to the curator. 
+The rewards are allocated so that 75% of the payout goes to the author of the post/comment, and 25% goes to the curator.
 
 Of the 25% that goes to the curator, that portion will be split between the author and the curator if the curator votes within the first 30 minutes. The split of the 25% between the author and curator during the first 30 minutes is calculated linearly based on the time the vote is cast.
 
@@ -928,7 +928,7 @@ No. Since downvoting reduces the rewards on a post/comment, it does not earn cur
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
 ## <span id="What_are_curation_trails">What are curation trails?</span>
 
-Some users decide to use third party applications such as <a href="https://streemian.com/">Streemian</a> to automatically cast votes. Users can automatically vote for the same posts and comments that other users does. Typically they will set this up to follow the votes of users who are good at curating. When a user has other users automatically voting for the same content that they do, the people that automatically vote after them are called their "curation trail". 
+Some users decide to use third party applications such as <a href="https://streemian.com/">Streemian</a> to automatically cast votes. Users can automatically vote for the same posts and comments that other users does. Typically they will set this up to follow the votes of users who are good at curating. When a user has other users automatically voting for the same content that they do, the people that automatically vote after them are called their "curation trail".
 
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
 ## <span id="Why_don_t_my_upvotes_have_an_effect_on_a_post_s_rewards">Why don't my upvotes have an effect on a post's rewards?</span>
@@ -1001,7 +1001,7 @@ https://steemit.com/steem-help/@mindover/don-t-plagiarize-images-here-are-13-fre
 <a href="#Table_of_Contents_Plagiarism__Spam__and_Abuse">^</a>
 ## <span id="What_is_Steemcleaners">What is Steemcleaners?</span>
 
-Steemcleaners are a group of Steemians concerned with plagiarism, copy/paste, spam, scams and other forms of abuse on Steemit. 
+Steemcleaners are a group of Steemians concerned with plagiarism, copy/paste, spam, scams and other forms of abuse on Steemit.
 https://steemit.com/steemcleaners/@steemcleaners/announcing-steemcleaners-the-steemit-abuse-fighting-team
 
 <a href="#Table_of_Contents_Plagiarism__Spam__and_Abuse">^</a>
@@ -1017,14 +1017,14 @@ https://steemit.com/steemit/@cheetah/faq-about-cheetah
 <a href="#Table_of_Contents_Plagiarism__Spam__and_Abuse">^</a>
 ## <span id="Where_do_I_report_a_post_or_comment_that_contains_plagiarism__spam__or_abuse">Where do I report a post or comment that contains plagiarism, spam, or abuse?</span>
 
-You can report any abusive content to the <a href="https://steemit.chat/channel/steemitabuse">#steemitabuse</a> channel on <a href="https://steemit.chat/home">steemit.chat</a>.
+You can report any abusive content to the <a href="https://steem.chat/channel/steemitabuse">#steemitabuse</a> channel on <a href="https://steem.chat/home">steem.chat</a>.
 
 <a href="#Table_of_Contents_Plagiarism__Spam__and_Abuse">^</a>
 # Reputation
 
 ## <span id="What_is_Reputation">What is Reputation?</span>
 
-Every user has a reputation score next to their name. The reputation score is one way Steemit measures the amount of value you have brought to the community. It is also a mechanism that is designed to help reduce abuse of the Steemit platform. 
+Every user has a reputation score next to their name. The reputation score is one way Steemit measures the amount of value you have brought to the community. It is also a mechanism that is designed to help reduce abuse of the Steemit platform.
 
 Your reputation goes up when accounts vote on your content. Getting downvoted by someone with a higher reputation can push your reputation down and make your posts less visible.
 
@@ -1050,7 +1050,7 @@ Every time another user upvotes one of your posts or comments, it increases your
 
 The only way for your reputation score to go down is to be downvoted by another user. Not all downvotes will cause a reputation loss though.
 
-- Downvotes from users with a lower reputation score than you will not hurt your score. 
+- Downvotes from users with a lower reputation score than you will not hurt your score.
 - If your post or comment that was downvoted still received more upvotes than downvotes (weighted by SP), then the net effect on your reputation score will still be positive.
 
 <a href="#Table_of_Contents_Reputation">^</a>
@@ -1114,7 +1114,7 @@ Steemit is a front end web interface to interact with the blockchain, and view t
 <a href="#Table_of_Contents_Blockchain">^</a>
 ## <span id="How_is_Steem_different_from_Bitcoin">How is Steem different from Bitcoin?</span>
 
-On a technical level, the two networks rely on the same model of a blockchain, but are built upon different technologies and codebase. Steem is based on a new state-of-the-art blockchain technology called Graphene, which uses "witnesses" instead of "miners" to produce blocks. 
+On a technical level, the two networks rely on the same model of a blockchain, but are built upon different technologies and codebase. Steem is based on a new state-of-the-art blockchain technology called Graphene, which uses "witnesses" instead of "miners" to produce blocks.
 
 The "delegated proof of stake" model of using witnesses instead of miners allows for greater efficiency in block production. With BTC, 100% of the new coins that are created are allocated to block producers (miners). With the Steem blockchain, only 10% of the new coins are paid to block producers (witnesses). The other 90% of new STEEM coins are awarded to content producers, curators, and Steem Power holders.
 
@@ -1173,7 +1173,7 @@ https://steemit.com/steemit/@steemitblog/steemit-2017-roadmap
 
 The Steemit brand and logo are protected by intellectual property laws, including copyright and other proprietary rights of the United States and other countries. The purpose is to allow Steemit to protect the brand and logo in ways that extend user safety. One may not make unauthorized commercial use of, reproduce, prepare derivative works, distribute copies, perform, or publicly display the Steemit logo or brand, except as permitted by the doctrine of fair use, or as authorized in writing by us.
 
-[Section 107 of the Copyright Act](http://www.copyright.gov/title17/92chap1.html#107) provides the statutory framework for determining whether something is a fair use and identifies certain types of uses—such as criticism, comment, news reporting, teaching, scholarship, and research—as examples of activities that may qualify as fair use. **Steemit considers artistic variations of the Steemit logo that are used for non-commercial purposes, and are not used to harm Steemit users (i.e. through attraction to phishing sites), an instance of fair use.** 
+[Section 107 of the Copyright Act](http://www.copyright.gov/title17/92chap1.html#107) provides the statutory framework for determining whether something is a fair use and identifies certain types of uses—such as criticism, comment, news reporting, teaching, scholarship, and research—as examples of activities that may qualify as fair use. **Steemit considers artistic variations of the Steemit logo that are used for non-commercial purposes, and are not used to harm Steemit users (i.e. through attraction to phishing sites), an instance of fair use.**
 
 The blue Steem logo with the three S-shaped squiggles is licensed under Creative Commons CC0, meaning you’re free to copy, modify, or distribute (even for commercial purposes) without needing to ask permission or give attribution.
 
@@ -1223,7 +1223,7 @@ The password has to be long and random for maximum account security.
 
 **Posting key** - The posting key allows accounts to post, comment, edit, vote, resteem, and follow or mute other accounts. Most users should be logging into Steemit every day with the posting key. You are more likely to have your password or key compromised the more you use it so a limited posting key exists to restrict the damage that a compromised account key would cause.
 
-**Active key** - The active key is meant for more sensitive tasks such as transferring funds, power up/down transactions, converting Steem Dollars, voting for witnesses, updating profile details and avatar, and placing a market order. 
+**Active key** - The active key is meant for more sensitive tasks such as transferring funds, power up/down transactions, converting Steem Dollars, voting for witnesses, updating profile details and avatar, and placing a market order.
 
 **Memo key** - Currently the memo key is not used.
 
@@ -1339,7 +1339,7 @@ https://steem.io/SteemWhitePaper.pdf
 <a href="#Table_of_Contents_Miscellaneous">^</a>
 ## <span id="Where_can_I_ask_for_help_if_my_question_was_not_answered_here">Where can I ask for help if my question was not answered here?</span>
 
-If you post your question in the <a href="https://steemit.chat/channel/help">#help</a> channel on <a href="https://steemit.chat/home">steemit.chat</a>, the users there may be able to help.
+If you post your question in the <a href="https://steem.chat/channel/help">#help</a> channel on <a href="https://steem.chat/home">steem.chat</a>, the users there may be able to help.
 
 You can also create a post on steemit.com with the tag #help, and someone in the community may be able to answer it.
 
@@ -1349,7 +1349,7 @@ You can also create a post on steemit.com with the tag #help, and someone in the
 
 ## <span id="Third_Party_References_and_User_Links">Third Party References and User Links</span>
 
-AnonSteem, Binance, bitcoinfees, Bitcointalk, BitShares, Bittrex, blockchain.info, BlockTrades, Busy.org, Changelly, @cheetah, Coinbase, DTube, HitBTC, Localbitcoins, Markdown Cheatsheet, Pexels, Pixabay, Poloniex, Postimage, Shapeshift.io, Steemcleaners, SteemConnect, SteemCreate, steemd, SteemDB, Steemit.chat, SteemStats, SteemTools, Streemian, The Steemit Shop, UpBit, and Utopian.io are third party applications/services, and are not owned or maintained by Steemit, Inc. Their listing here, as well as any other third party applications or websites that are listed, does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
+AnonSteem, Binance, bitcoinfees, Bitcointalk, BitShares, Bittrex, blockchain.info, BlockTrades, Busy.org, Changelly, @cheetah, Coinbase, DTube, HitBTC, Localbitcoins, Markdown Cheatsheet, Pexels, Pixabay, Poloniex, Postimage, Shapeshift.io, Steemcleaners, SteemConnect, SteemCreate, steemd, SteemDB, steem.chat, SteemStats, SteemTools, Streemian, The Steemit Shop, UpBit, and Utopian.io are third party applications/services, and are not owned or maintained by Steemit, Inc. Their listing here, as well as any other third party applications or websites that are listed, does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
 
 All links to user posts were created by our users and do not necessarily represent the views of Steemit, Inc. or its management. Their listing here does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
 

@@ -38,8 +38,8 @@ const testHttpGet = (host, port, path, browser) => {
     }, function(res) {
         browser.assert.equal(res.statusCode, 200, `Response for ${path} is 200`);
     })
-    .setTimeout(5000, function() {
-        browser.assert.equal(true, false, `request for ${path} took more than 5 seconds`);
+    .setTimeout(30000, function() {
+        browser.assert.equal(true, false, `request for ${path} took more than 30 seconds`);
     })
     .on('error', function (err) {
         browser.assert.equal(true, false, err);

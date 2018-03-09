@@ -139,7 +139,8 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
 
         onchain = await getState(api, url, options, offchain)
 
-        if (Object.getOwnPropertyNames(onchain.accounts).length === 0 && (url.match(routeRegex.UserProfile1) || url.match(routeRegex.UserProfile3))) { // protect for invalid account
+         // protect for invalid account
+        if (Object.getOwnPropertyNames(onchain.accounts).length === 0 && (location.match(routeRegex.UserProfile1) || location.match(routeRegex.UserProfile3))) {
             return {
                 title: 'User Not Found - ' + APP_NAME,
                 statusCode: 404,

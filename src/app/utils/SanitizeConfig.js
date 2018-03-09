@@ -1,4 +1,7 @@
-import { getPhishingWarningMessage } from 'shared/HtmlReady'; // the only allowable title attribute for a div
+import {
+    getPhishingWarningMessage,
+    getExternalLinkWarningMessage,
+} from 'shared/HtmlReady'; // the only allowable title attributes for div and a tags
 
 const iframeWhitelist = [
     {
@@ -75,7 +78,9 @@ export default ({
         // style is subject to attack, filtering more below
         td: ['style'],
         img: ['src', 'alt'],
-        a: ['href', 'rel'],
+
+        // title is only set in the case of an external link warning
+        a: ['href', 'rel', 'title'],
     },
     transformTags: {
         iframe: (tagName, attribs) => {
@@ -172,6 +177,7 @@ export default ({
             if (!href.match(/^(\/(?!\/)|https:\/\/steemit.com)/)) {
                 // attys.target = '_blank' // pending iframe impl https://mathiasbynens.github.io/rel-noopener/
                 attys.rel = highQualityPost ? 'noopener' : 'nofollow noopener';
+                attys.title = getExternalLinkWarningMessage();
             }
             return {
                 tagName,

@@ -5,7 +5,7 @@ import { Map, List } from 'immutable';
 import rootReducer from 'app/redux/RootReducer';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
-import { Center } from './Tooltip.story';
+import { Center } from 'decorators';
 import UserList from './UserList';
 
 const store = createStore(rootReducer);
@@ -19,6 +19,7 @@ const options = {
 
 storiesOf('Elements', module)
     .addDecorator(withKnobs)
+    .addDecorator(Center)
     .addDecorator(getStory => <Provider store={store}>{getStory()}</Provider>)
     .add('UserList', () => {
         let mockUsers = List(

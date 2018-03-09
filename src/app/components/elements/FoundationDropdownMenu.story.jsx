@@ -2,7 +2,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { withKnobs, select } from '@storybook/addon-knobs';
 import FoundationDropdownMenu from './FoundationDropdownMenu';
-import { Center } from './Tooltip.story';
+import { Center } from 'decorators';
 
 const positionOptions = ['bottom', 'top'];
 
@@ -28,8 +28,9 @@ const mockMenu = [
 
 storiesOf('Elements', module)
     .addDecorator(withKnobs)
+    .addDecorator(Center)
     .add('FoundationDropdownMenu', () => (
-        <Center>
+        <div>
             <h3> Foundation Dropdown Menu</h3>
             <FoundationDropdownMenu
                 className="Wallet_dropdown"
@@ -42,5 +43,5 @@ storiesOf('Elements', module)
                 label={8 + ' Jahweh'}
                 menu={mockMenu}
             />
-        </Center>
+        </div>
     ));

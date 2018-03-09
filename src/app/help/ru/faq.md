@@ -460,23 +460,23 @@ Steemit также позволяет подписаться на получен
 
 ## <span id="What_is_shown_in_my_profile">Что показывается в моем профиле?</span>
 
-At the top of your profile is your display name and reputation score. Below your display name is the number of followers you have, the number of posts and comments you have written, and the number of people you are following. It also shows the month and year when your account was created.
+Вверху вашего профиля указано ваше имя и баллы репутации. Ниже вашего имени - число подписчиков, количество ваших постов и комментариев, а также число подписок. Далее показаны месяц и год, когда был создан ваш аккаунт.
 
-You have the option to change your avatar and display name on the Settings page. There, you can set additional information such as "about" information, your location, and add a link to a website of your choosing. You also have the option to set a cover image for your profile.
+На странице Настройки есть возможность изменить аватар и ваше имя. Там же вы можете указать дополнительную информацию о себе, ваше местоположение и дать ссылку на какой-либо сайт по вашему выбору. Там же можно установить фоновое изображение для вашего профиля.
 
-You can view your own profile by clicking on the link to your Blog in your account menu.
+Свой профиль вы можете посмотреть, кликнув по ссылке Блог в меню вашего аккаунта.
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 
 ## <span id="How_do_I_change_my_avatar_image_and_other_profile_information">Как я могу изменить свой аватар и другую информацию профиля?</span>
 
-Your profile info, avatar image, and cover image are set in your Settings page. In order to update your avatar picture and cover image, you will need to host the images somewhere. This can be done by uploading it to a Steemit comment or post, or using a third-party image host such as [Postimage](http://postimage.io/). Once your image is uploaded, copy its URL and paste it into the "Profile Picture URL" box for the avatar, or the "Cover Image URL" box for the cover image. Then click the Update button and enter your password or active key.
+Информация вашего профиля, изображение аватара и фоновая картинка установлены на странице Настройки. Чтобы обновить картинку аватара и фоновую картинку вам надо разместить где-либо эти файлы изображений. Можно загрузить их в пост или комментарий на Steemit, либо использовать сервисы для хостинга изображений. Например, [Postimage](http://postimage.io/). После того, как ваша картинка загружена, скопируйте ее URL и вставьте его в поле "Добавьте url вашего изображения" для аватара, либо в поле "URL-адрес изображения обложки" для фонового изображения. Затем нажмите кнопку Обновить и введите ваш пароль или активный ключ.
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 
 ## <span id="What_is_the_recommend_size_for_the_cover_image">Каков рекомендованный размер для изображения обложки?</span>
 
-The cover image will be resized/scaled depending on the device being used. Therefore it is recommend to use an image that will still look good when cropped or resized. A 2048x512 image is the optimal size to work for most devices.
+Фотновое изображение обложки может измять размер в зависимости от устройства, которое используется. Поэтому рекомендуется использовать изображение, которое будет хорошо смотреться при измененном размере или при обрезке. Оптимальный размер изображения 2048x512 подойдет для большинства устройств.
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 

@@ -27,6 +27,8 @@
         "dismiss": "Dismiss",
         "edit": "Edit",
         "email": "Email",
+        "external_link_message":
+            "This link will take you away from steemit.com",
         "feed": "Feed",
         "follow": "Follow",
         "for": " for ",

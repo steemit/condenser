@@ -6,7 +6,7 @@ import React from 'react';
 import { render } from 'react-dom';
 import { renderToString } from 'react-dom/server';
 import { Router, RouterContext, match, applyRouterMiddleware } from 'react-router';
-import { api } from 'golos-js';
+import * as api from 'app/utils/APIWrapper'
 import { Provider } from 'react-redux';
 import RootRoute from 'app/RootRoute';
 import {createStore, applyMiddleware, compose} from 'redux';
@@ -27,6 +27,7 @@ import extractMeta from 'app/utils/ExtractMeta';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import Translator from 'app/Translator';
 import {notificationsArrayToMap} from 'app/utils/Notifications';
+import getState from 'app/utils/StateBuilder';
 import {routeRegex} from "app/ResolveRoute";
 import {contentStats} from 'app/utils/StateFunctions'
 import {APP_NAME, IGNORE_TAGS, PUBLIC_API, SEO_TITLE} from 'app/client_config';
@@ -125,190 +126,18 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
             document.getElementById('content')
         );
     }
+
     // below is only executed on the server
     let server_store, onchain;
     try {
         let url = location === '/' ? 'trending' : location;
-        // Replace /curation-rewards and /author-rewards with /transfers for UserProfile
-        // to resolve data correctly
+        // Replace /curation-rewards and /author-rewards with /transfers for UserProfile to resolve data correctly
         if (url.indexOf('/curation-rewards') !== -1) url = url.replace(/\/curation-rewards$/, '/transfers');
         if (url.indexOf('/author-rewards') !== -1) url = url.replace(/\/author-rewards$/, '/transfers');
 
-        // if empty or equal '/''
-        if (!url || typeof url !== 'string' || !url.length || url === '/') url = 'trending';
-        // remove / from start
-        if (url[0] === '/') url = url.substr(1)
-        // get parts of current url
-        const parts = url.split('/')
-        // create tag
-        const tag = typeof parts[1] !== "undefined" ? parts[1] : ''
+        const options = { IGNORE_TAGS }
 
-        // TODO fix bread ration IMPORTANT
-        if (parts[0][0] === '@' || typeof parts[1] === 'string' && parts[1][0] === '@') {
-          onchain = await proxify(ctx, api, 'getStateAsync', url);
-        }
-        else {
-          const _state = {};
-
-          _state.current_route = url;
-          _state.props = await proxify(ctx, api, 'getDynamicGlobalPropertiesAsync');
-          _state.categories = {};
-          _state.tags = {};
-          _state.content = {};
-          _state.accounts = {};
-          _state.witnesses = {};
-          _state.discussion_idx = {};
-          _state.feed_price = await proxify(ctx, api, 'getCurrentMedianHistoryPriceAsync');
-          _state.select_tags = [];
-
-          // by default trending tags limit=50, but if we in '/tags/' path then limit = 250
-          const trending_tags = await proxify(ctx, api, 'getTrendingTagsAsync', '', parts[0] == "tags" ? '250' : '50');
-
-          if (parts[0][0] === '@') {
-            const uname = parts[0].substr(1)
-            _state.accounts[uname] = await proxify(ctx, api,'getAccountsAsync', [uname]);
-            _state.accounts[uname].tags_usage = await proxify(ctx, api, 'getTagsUsedByAuthorAsync', [uname]);
-
-            // FETSH part 2
-            switch (parts[1]) {
-              case 'transfers':
-                const history = await proxify(ctx, api, 'getAccountHistoryAsync', uname, -1, 1000);
-                for (let key in history) {
-                  switch (history[key][1].op) {
-                    case 'transfer_to_vesting':
-                    case 'withdraw_vesting':
-                    case 'interest':
-                    case 'transfer':
-                    case 'liquidity_reward':
-                    case 'author_reward':
-                    case 'curation_reward':
-                    case 'transfer_to_savings':
-                    case 'transfer_from_savings':
-                    case 'cancel_transfer_from_savings':
-                    case 'escrow_transfer':
-                    case 'escrow_approve':
-                    case 'escrow_dispute':
-                    case 'escrow_release':
-                      _state.accounts[uname].transfer_history[history[key][0]] = history[key][1];
-                    break;
-
-                    case 'comment':
-                      // eacnt.post_history[item.first] =  item.second;
-                    break;
-
-                    case 'limit_order_create':
-                    case 'limit_order_cancel':
-                    case 'fill_convert_request':
-                    case 'fill_order':
-                      // eacnt.market_history[item.first] =  item.second;
-                    break;
-
-                    case 'vote':
-                    case 'account_witness_vote':
-                    case 'account_witness_proxy':
-                      // eacnt.vote_history[item.first] =  item.second;
-                    break;
-
-                    case 'account_create':
-                    case 'account_update':
-                    case 'witness_update':
-                    case 'pow':
-                    case 'custom':
-                    default:
-                      _state.accounts[uname].other_history[history[key][0]] = history[key][1];
-                  }
-                }
-                break;
-
-              case 'recent-replies':
-                const replies = await proxify(ctx, api, 'getRepliesByLastUpdateAsync', uname, '', 50);
-                _state.accounts[uname].recent_replies = []
-                for (let key in replies) {
-                  const reply_ref = replies[key].author + "/" + replies[key].permlink;
-                  _state.content[reply_ref] = replies[key];
-                  _state.accounts[uname].recent_replies.push(reply_ref);
-                }
-                break;
-
-              case 'posts':
-              case 'comments':
-                break;
-
-              case 'blog':
-                break;
-
-              case 'feed':
-                break;
-
-              // default:
-            }
-          }
-          else if (parts[0] === 'witnesses' || parts[0] === '~witnesses') {
-            const wits = await api.getWitnessesByVoteAsync('', 100);
-            for (let key in wits) _state.witnesses[wits[key].owner] = wits[key];
-          }
-          else if ([
-              'trending',
-              'trending30',
-              'promoted',
-              'responses',
-              'hot',
-              'votes',
-              'cashout',
-              'payout',
-              'payout_comments',
-              'active',
-              'created',
-              'recent'
-          ].indexOf(parts[0]) >= 0) {
-            let args = {
-              limit: constants.FETCH_DATA_BATCH_SIZE,
-              truncate_body: constants.FETCH_DATA_TRUNCATE_BODY
-            }
-
-            if (typeof tag === 'string' && tag.length) {
-              // args[0].tag = tag
-              args.select_tags = [tag]
-            }
-            else {
-              if (typeof offchain.select_tags === "object" && offchain.select_tags.length) {
-                args.select_tags = _state.select_tags = offchain.select_tags;
-              }
-              else {
-                args.filter_tags = _state.filter_tags = IGNORE_TAGS
-              }
-            }
-            const discussions = await proxify(ctx, api, PUBLIC_API[parts[0]][0], args);
-            let accounts = []
-            let discussion_idxes = {}
-            discussion_idxes[ PUBLIC_API[parts[0]][1] ] = []
-            for (let i in discussions) {
-              const key = discussions[i].author + '/' + discussions[i].permlink;
-              discussion_idxes[ PUBLIC_API[parts[0]][1] ].push(key);
-              if (discussions[i].author && discussions[i].author.length)
-                accounts.push(discussions[i].author);
-              _state.content[key] = discussions[i];
-            }
-            const discussions_key = typeof tag === 'string' && tag.length ? tag : _state.select_tags.sort().join('/')
-            _state.discussion_idx[discussions_key] = discussion_idxes;
-            // accounts = await proxify(ctx, api, 'getAccountsAsync', accounts);
-            // for (let i in accounts) {
-            //   _state.accounts[ accounts[i].name ] = accounts[i]
-            // }
-          }
-          else if (parts[0] == "tags") {
-            for (let i in trending_tags) {
-              _state.tags[trending_tags[i].name] = trending_tags[i]
-            }
-          }
-
-          _state.tag_idx = { "trending": trending_tags.map(t => t.name) };
-
-          for (var key in _state.content)
-            _state.content[key].active_votes = []
-
-          onchain = _state
-        }
+        onchain = await getState(api, url, options, offchain)
 
         if (Object.getOwnPropertyNames(onchain.accounts).length === 0 && (url.match(routeRegex.UserProfile1) || url.match(routeRegex.UserProfile3))) { // protect for invalid account
             return {

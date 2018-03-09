@@ -7,6 +7,7 @@ export const APP_NAME_UPPERCASE = 'STEEMIT';
 export const APP_ICON = 'steem';
 // FIXME figure out best way to do this on both client and server from env
 // vars. client should read $STM_Config, server should read config package.
+export const APP_URL = 'https://steemit.com';
 export const APP_DOMAIN = 'steemit.com';
 export const LIQUID_TOKEN = 'Steem';
 // sometimes it's impossible to use html tags to style coin name, hence usage of _UPPERCASE modifier

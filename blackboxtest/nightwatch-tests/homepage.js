@@ -16,9 +16,6 @@ module.exports = {
 };
 
 function reasonableErrorLog(logs) {
-    return (
-        logs[0].message ===
-            'http://localhost:8080/api/v1/page_view - Failed to load resource: the server responded with a status of 500 (Internal Server Error)' &&
-        logs.length === 1
-    );
+    const logsMinusNetworkErrors = logs.filter(log => log.source !== 'network');
+    return logsMinusNetworkErrors.length === 0;
 }

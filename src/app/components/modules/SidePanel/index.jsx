@@ -14,7 +14,7 @@ const SidePanel = ({ alignment, visible, hideSidePanel, username }) => {
     const loggedIn =
         username === undefined
             ? 'show-for-small-only'
-            : 'hide-for-small hide-for-medium hide-for-large';
+            : 'SidePanel__hide-signup';
 
     const makeExternalLink = (i, ix, arr) => {
         const cn = ix === arr.length - 1 ? 'last' : null;
@@ -162,8 +162,6 @@ const SidePanel = ({ alignment, visible, hideSidePanel, username }) => {
             },
         ],
     };
-
-    //Signin, signup, post.
 
     return (
         <div className="SidePanel">

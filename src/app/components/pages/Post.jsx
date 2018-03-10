@@ -3,6 +3,7 @@ import React from 'react';
 import Comment from 'app/components/cards/Comment';
 import PostFull from 'app/components/cards/PostFull';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 
 import { sortComments } from 'app/components/cards/Comment';
 // import { Link } from 'react-router';
@@ -53,7 +54,7 @@ class Post extends React.Component {
 
     render() {
         const { showSignUp } = this;
-        const { signup_bonus, content } = this.props;
+        const { signup_bonus, content, location } = this.props;
         const { showNegativeComments, commentHidden, showAnyway } = this.state;
         let post = this.props.post;
         if (!post) {
@@ -95,8 +96,9 @@ class Post extends React.Component {
         let replies = dis.get('replies').toJS();
 
         let sort_order = 'trending';
-        if (this.props.location && this.props.location.query.sort)
-            sort_order = this.props.location.query.sort;
+        if (location.query && location.query.sort) {
+            sort_order = location.query.sort;
+        }
 
         sortComments(content, replies, sort_order);
 
@@ -257,21 +259,23 @@ class Post extends React.Component {
 
 const emptySet = Set();
 
-export default connect(state => {
-    const current_user = state.user.get('current');
-    let ignoring;
-    if (current_user) {
-        const key = [
-            'follow',
-            'getFollowingAsync',
-            current_user.get('username'),
-            'ignore_result',
-        ];
-        ignoring = state.global.getIn(key, emptySet);
-    }
-    return {
-        content: state.global.get('content'),
-        signup_bonus: state.offchain.get('signup_bonus'),
-        ignoring,
-    };
-})(Post);
+export default withRouter(
+    connect(state => {
+        const current_user = state.user.get('current');
+        let ignoring;
+        if (current_user) {
+            const key = [
+                'follow',
+                'getFollowingAsync',
+                current_user.get('username'),
+                'ignore_result',
+            ];
+            ignoring = state.global.getIn(key, emptySet);
+        }
+        return {
+            content: state.global.get('content'),
+            signup_bonus: state.offchain.get('signup_bonus'),
+            ignoring,
+        };
+    })(Post)
+);

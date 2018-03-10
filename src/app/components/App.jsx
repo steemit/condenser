@@ -16,7 +16,6 @@ import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 import { key_utils } from '@steemit/steem-js/lib/auth/ecc';
 import resolveRoute from 'app/ResolveRoute';
 import { VIEW_MODE_WHISTLE } from 'shared/constants';
-import isEqual from 'lodash/isEqual';
 
 const pageRequiresEntropy = path => {
     const { page } = resolveRoute(path);
@@ -89,17 +88,10 @@ class App extends React.Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        const {
-            pathname,
-            query,
-            new_visitor,
-            flash,
-            nightmodeEnabled,
-        } = this.props;
+        const { pathname, new_visitor, flash, nightmodeEnabled } = this.props;
         const n = nextProps;
         return (
             pathname !== n.pathname ||
-            !isEqual(query, n.query) ||
             new_visitor !== n.new_visitor ||
             flash !== n.flash ||
             this.state.showBanner !== nextState.showBanner ||
@@ -277,7 +269,6 @@ App.propTypes = {
     error: React.PropTypes.string,
     children: AppPropTypes.Children,
     pathname: React.PropTypes.string,
-    query: React.PropTypes.object,
     category: React.PropTypes.string,
     order: React.PropTypes.string,
     loginUser: React.PropTypes.func.isRequired,
@@ -306,7 +297,6 @@ export default connect(
                 'nightmode',
             ]),
             pathname: ownProps.location.pathname,
-            query: ownProps.location.query,
             order: ownProps.params.order,
             category: ownProps.params.category,
         };

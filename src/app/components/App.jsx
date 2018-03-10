@@ -16,6 +16,7 @@ import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 import { key_utils } from '@steemit/steem-js/lib/auth/ecc';
 import resolveRoute from 'app/ResolveRoute';
 import { VIEW_MODE_WHISTLE } from 'shared/constants';
+import isEqual from 'lodash/isEqual';
 
 const pageRequiresEntropy = path => {
     const { page } = resolveRoute(path);
@@ -98,7 +99,7 @@ class App extends React.Component {
         const n = nextProps;
         return (
             pathname !== n.pathname ||
-            query !== n.query ||
+            !isEqual(query, n.query) ||
             new_visitor !== n.new_visitor ||
             flash !== n.flash ||
             this.state.showBanner !== nextState.showBanner ||
@@ -276,7 +277,7 @@ App.propTypes = {
     error: React.PropTypes.string,
     children: AppPropTypes.Children,
     pathname: React.PropTypes.string,
-    query: React.PropTypes.string,
+    query: React.PropTypes.object,
     category: React.PropTypes.string,
     order: React.PropTypes.string,
     loginUser: React.PropTypes.func.isRequired,

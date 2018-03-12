@@ -117,6 +117,13 @@ full-fledged site relying on your own, we recommend looking into running a
 copy of `steemd` locally instead
 [https://github.com/steemit/steem](https://github.com/steemit/steem).
 
+#### Debugging SSR code
+
+`yarn debug` will build a development version of the codebase and then start the
+local server with `--inspect-brk` so that you can connect a debugging client.
+You can use Chromium to connect by finding the remote client at
+`chrome://inspect/#devices`.
+
 #### Configuration
 
 The intention is to configure condenser using environment variables. You
@@ -282,6 +289,16 @@ OFFLINE_SSR_TEST=true SDC_DATABASE_URL="mysql://root@127.0.0.1/steemit_dev" NODE
 ```
 
 This will read data from the blobs in `api_mockdata` directory. If you want to use another set of mock data, create a similar directory to that one and add an argument `OFFLINE_SSR_TEST_DATA_DIR` pointing to your new directory.
+
+### Run blackbox tests using nightwatch
+
+To run a Selenium test suite, start the condenser docker image with a name `condenser` (like `docker run --name condenser -itp 8080:8080 steemit/condenser:latest`) and then run the blackboxtest image attached to the condneser image's network:
+
+```
+docker build -t=steemit/condenser-blackboxtest blackboxtest/
+docker run --network container:condenser steemit/condenser-blackboxtest:latest
+
+```
 
 ## Issues
 

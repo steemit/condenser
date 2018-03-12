@@ -26,6 +26,7 @@ binanced
 binancee
 binances
 binanse
+binnance
 bit-z
 bitex
 bitfinex
@@ -219,6 +220,7 @@ gatehub
 gatehub.net
 gdax.com
 gemini.com
+gtg.witnesses
 hitbtc.com
 hitbtcexchange
 huobi.pro

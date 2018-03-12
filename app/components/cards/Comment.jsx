@@ -276,7 +276,7 @@ class CommentImpl extends React.Component {
 
         const showDeleteOption = username === author && !hasReplies && netVoteSign <= 0
         const showEditOption = username === author
-        const showReplyOption = comment.depth < 6
+        const showReplyOption = comment.depth < 255
         const archived = comment.cashout_time === '1969-12-31T23:59:59' // TODO: audit after HF17. #1259
         const readonly = archived || $STM_Config.read_only_mode
 
@@ -302,23 +302,28 @@ class CommentImpl extends React.Component {
 			}
 		}
 
-        if(!this.state.collapsed) {
-            replies = comment.replies;
-            sortComments( cont, replies, this.props.sort_order );
-            // When a comment has hidden replies and is collapsed, the reply count is off
-            //console.log("replies:", replies.length, "num_visible:", replies.filter( reply => !cont.get(reply).getIn(['stats', 'hide'])).length)
-            replies = replies.map((reply, idx) => (
-                <Comment
-                    key={idx}
-                    content={reply}
-                    cont={cont}
-                    sort_order={this.props.sort_order}
-                    depth={depth + 1}
-                    rootComment={rootComment}
-                    showNegativeComments={showNegativeComments}
-                    onHide={this.props.onHide}
-                />)
-            );
+        if(!this.state.collapsed && comment.children > 0) {
+            if(depth > 7) {
+                const comment_permlink = `/${comment.category}/@${comment.author}/${comment.permlink}`
+                replies = <Link to={comment_permlink}>Show {comment.children} more {comment.children == 1 ? 'reply' : 'replies'}</Link>
+            } else {
+                replies = comment.replies;
+                sortComments( cont, replies, this.props.sort_order );
+                // When a comment has hidden replies and is collapsed, the reply count is off
+                //console.log("replies:", replies.length, "num_visible:", replies.filter( reply => !cont.get(reply).getIn(['stats', 'hide'])).length)
+                replies = replies.map((reply, idx) => (
+                    <Comment
+                        key={idx}
+                        content={reply}
+                        cont={cont}
+                        sort_order={this.props.sort_order}
+                        depth={depth + 1}
+                        rootComment={rootComment}
+                        showNegativeComments={showNegativeComments}
+                        onHide={this.props.onHide}
+                    />)
+                );
+            }
         }
 
         const commentClasses = ['hentry']

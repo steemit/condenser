@@ -3,7 +3,6 @@ import React from 'react';
 import Comment from 'app/components/cards/Comment';
 import PostFull from 'app/components/cards/PostFull';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router';
 
 import { sortComments } from 'app/components/cards/Comment';
 // import { Link } from 'react-router';
@@ -34,7 +33,6 @@ class Post extends React.Component {
             serverApiRecordEvent('SignUp', 'Post Promo');
             window.location = SIGNUP_URL;
         };
-        this.shouldComponentUpdate = shouldComponentUpdate(this, 'Post');
     }
 
     toggleNegativeReplies = e => {
@@ -54,7 +52,7 @@ class Post extends React.Component {
 
     render() {
         const { showSignUp } = this;
-        const { signup_bonus, content, location } = this.props;
+        const { signup_bonus, content, sortOrder } = this.props;
         const { showNegativeComments, commentHidden, showAnyway } = this.state;
         let post = this.props.post;
         if (!post) {
@@ -95,12 +93,7 @@ class Post extends React.Component {
 
         let replies = dis.get('replies').toJS();
 
-        let sort_order = 'trending';
-        if (location.query && location.query.sort) {
-            sort_order = location.query.sort;
-        }
-
-        sortComments(content, replies, sort_order);
+        sortComments(content, replies, sortOrder);
 
         // Don't render too many comments on server-side
         const commentLimit = 100;
@@ -117,7 +110,7 @@ class Post extends React.Component {
                 key={post + reply}
                 content={reply}
                 cont={content}
-                sort_order={sort_order}
+                sort_order={sortOrder}
                 showNegativeComments={showNegativeComments}
                 onHide={this.onHideComment}
             />
@@ -153,7 +146,7 @@ class Post extends React.Component {
 
         let selflink = `/${dis.get('category')}/@${post}`;
         for (let o = 0; o < sort_orders.length; ++o) {
-            if (sort_orders[o] == sort_order) sort_label = sort_labels[o];
+            if (sort_orders[o] == sortOrder) sort_label = sort_labels[o];
             sort_menu.push({
                 value: sort_orders[o],
                 label: sort_labels[o],
@@ -259,23 +252,23 @@ class Post extends React.Component {
 
 const emptySet = Set();
 
-export default withRouter(
-    connect(state => {
-        const current_user = state.user.get('current');
-        let ignoring;
-        if (current_user) {
-            const key = [
-                'follow',
-                'getFollowingAsync',
-                current_user.get('username'),
-                'ignore_result',
-            ];
-            ignoring = state.global.getIn(key, emptySet);
-        }
-        return {
-            content: state.global.get('content'),
-            signup_bonus: state.offchain.get('signup_bonus'),
-            ignoring,
-        };
-    })(Post)
-);
+export default connect((state, ownProps) => {
+    const current_user = state.user.get('current');
+    let ignoring;
+    if (current_user) {
+        const key = [
+            'follow',
+            'getFollowingAsync',
+            current_user.get('username'),
+            'ignore_result',
+        ];
+        ignoring = state.global.getIn(key, emptySet);
+    }
+    return {
+        content: state.global.get('content'),
+        signup_bonus: state.offchain.get('signup_bonus'),
+        ignoring,
+        sortOrder:
+            ownProps.router.getCurrentLocation().query.sort || 'trending',
+    };
+})(Post);

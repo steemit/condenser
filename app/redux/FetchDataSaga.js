@@ -8,6 +8,7 @@ import {fromJS, Map} from 'immutable'
 import { DEBT_TOKEN_SHORT, DEFAULT_CURRENCY, IGNORE_TAGS, PUBLIC_API, SELECT_TAGS_KEY } from 'app/client_config';
 import cookie from "react-cookie";
 import {api} from 'golos-js';
+// import * as api from 'app/utils/APIWrapper'
 
 export const fetchDataWatches = [
     watchLocationChange,
@@ -73,17 +74,17 @@ export function* fetchState(location_change_action) {
 
         if (parts[0][0] === '@') {
             const uname = parts[0].substr(1)
-            const [ account ] = yield call([api, api.getAccounts], [uname])
+            const [ account ] = yield call([api, api.getAccountsAsync], [uname])
             state.accounts[uname] = account
             
             if (account) {
-                state.accounts[uname].tags_usage = yield call([api, api.getTagsUsedByAuthor], uname)
-                state.accounts[uname].guest_bloggers = yield call([api, api.getBlogAuthors], uname)
-                state.accounts[uname].reputation = yield call([api, api.getAccountReputations], uname, 1) //follow_api.get_account_reputations(acnt, 1)[0].reputation;
+                state.accounts[uname].tags_usage = yield call([api, api.getTagsUsedByAuthorAsync], uname)
+                state.accounts[uname].guest_bloggers = yield call([api, api.getBlogAuthorsAsync], uname)
+                state.accounts[uname].reputation = yield call([api, api.getAccountReputationsAsync], uname, 1) //follow_api.get_account_reputations(acnt, 1)[0].reputation;
 
                 switch (parts[1]) {
                     case 'transfers':
-                        const history = yield call([api, api.getAccountHistory], uname, -1, 1000)
+                        const history = yield call([api, api.getAccountHistoryAsync], uname, -1, 1000)
                         account.transfer_history = []
                         account.other_history = []
                         
@@ -113,7 +114,7 @@ export function* fetchState(location_change_action) {
                     break
 
                     case 'recent-replies':
-                        const replies = yield call([api, api.getRepliesByLastUpdate], uname, '', 50)
+                        const replies = yield call([api, api.getRepliesByLastUpdateAsync], uname, '', 50)
                         state.accounts[uname].recent_replies = []
 
                         replies.forEach(reply => {
@@ -125,7 +126,7 @@ export function* fetchState(location_change_action) {
 
                     case 'posts':
                     case 'comments':
-                        const comments = yield call([api, api.getDiscussionsByComments], { start_author: uname, limit: 20 })
+                        const comments = yield call([api, api.getDiscussionsByCommentsAsync], { start_author: uname, limit: 20 })
                         state.accounts[uname].comments = []
 
                         comments.forEach(comment => {
@@ -136,14 +137,14 @@ export function* fetchState(location_change_action) {
                     break
 
                     case 'feed':
-                        const feedEntries = yield call([api, api.getFeedEntries], uname, 0, 20)
+                        const feedEntries = yield call([api, api.getFeedEntriesAsync], uname, 0, 20)
                         state.accounts[uname].feed = []
 
                         for (let key in feedEntries) {
                             const { author, permlink } = feedEntries[key]
                             const link = `${author}/${permlink}`
                             state.accounts[uname].feed.push(link)
-                            state.content[link] = yield call([api, api.getContent], author, permlink)
+                            state.content[link] = yield call([api, api.getContentAsync], author, permlink)
                             
                             if (feedEntries[key].reblog_by.length > 0) {
                                 state.content[link].first_reblogged_by = feedEntries[key].reblog_by[0]
@@ -155,14 +156,14 @@ export function* fetchState(location_change_action) {
 
                     case 'blog':
                     default:
-                        const blogEntries = yield call([api, api.getBlogEntries], uname, 0, 20)
+                        const blogEntries = yield call([api, api.getBlogEntriesAsync], uname, 0, 20)
                         state.accounts[uname].blog = []
 
                         for (let key in blogEntries) {
                             const { author, permlink } = blogEntries[key]
                             const link = `${author}/${permlink}`
 
-                            state.content[link] = yield call([api, api.getContent], author, permlink)
+                            state.content[link] = yield call([api, api.getContentAsync], author, permlink)
                             state.accounts[uname].blog.push(link)
                         
                             if (blogEntries[key].reblog_on !== '1970-01-01T00:00:00') {

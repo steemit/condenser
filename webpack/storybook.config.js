@@ -39,7 +39,8 @@ module.exports = (baseConfig, env) => {
     config.resolve = {
         alias: {
             react: path.join(__dirname, '../node_modules', 'react'),
-            assets: path.join(__dirname, '../src/app/assets')
+            assets: path.join(__dirname, '../src/app/assets'),
+            decorators: path.join(__dirname, '../.storybook/decorators')
         },
         extensions: ['.js', '.json', '.jsx'],
         modules: [

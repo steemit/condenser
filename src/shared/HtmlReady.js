@@ -5,6 +5,8 @@ import { validate_account_name } from 'app/utils/ChainValidation';
 import proxifyImageUrl from 'app/utils/ProxifyUrl';
 
 export const getPhishingWarningMessage = () => tt('g.phishy_message');
+export const getExternalLinkWarningMessage = () =>
+    tt('g.external_link_message');
 
 const noop = () => {};
 const DOMParser = new xmldom.DOMParser({
@@ -146,8 +148,9 @@ function link(state, child) {
 
             // Unlink potential phishing attempts
             if (
-                child.textContent.match(/(www\.)?steemit\.com/i) &&
-                !url.match(/https?:\/\/(.*@)?(www\.)?steemit\.com/i)
+                url.indexOf('#') !== 0 && // Allow in-page links
+                (child.textContent.match(/(www\.)?steemit\.com/i) &&
+                    !url.match(/https?:\/\/(.*@)?(www\.)?steemit\.com/i))
             ) {
                 const phishyDiv = child.ownerDocument.createElement('div');
                 phishyDiv.textContent = `${child.textContent} / ${url}`;

@@ -306,7 +306,7 @@ class ReplyEditor extends React.Component {
     upload = (file, name = '') => {
         const { uploadImage } = this.props;
         this.setState({
-            progress: { message: tt('reply_editor.uploading') + '...' },
+            progress: { message: tt('reply_editor.uploading') },
         });
         uploadImage(file, progress => {
             if (progress.url) {
@@ -385,7 +385,7 @@ class ReplyEditor extends React.Component {
             errorCallback,
         };
         const postLabel = username ? (
-            <Tooltip t={tt('g.post_as') + ' “' + username + '”'}>
+            <Tooltip t={tt('g.post_as_user', { username })}>
                 {tt('g.post')}
             </Tooltip>
         ) : (
@@ -530,8 +530,7 @@ class ReplyEditor extends React.Component {
                                             rows={isStory ? 10 : 3}
                                             placeholder={
                                                 isStory
-                                                    ? tt('g.write_your_story') +
-                                                      '...'
+                                                    ? tt('g.write_your_story')
                                                     : tt('g.reply')
                                             }
                                             autoComplete="off"

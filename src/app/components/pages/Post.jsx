@@ -21,7 +21,7 @@ class Post extends React.Component {
         content: React.PropTypes.object.isRequired,
         post: React.PropTypes.string,
         routeParams: React.PropTypes.object,
-        location: React.PropTypes.object,
+        sortOrder: React.PropTypes.string,
         signup_bonus: React.PropTypes.string,
     };
     constructor() {

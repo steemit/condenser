@@ -12,6 +12,7 @@ import tt from 'counterpart';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 import { INVEST_TOKEN_UPPERCASE } from 'app/client_config';
+import { SIGNUP_URL } from 'shared/constants';
 
 import { isLoggedIn } from 'app/utils/UserUtil';
 
@@ -20,7 +21,7 @@ class Post extends React.Component {
         content: React.PropTypes.object.isRequired,
         post: React.PropTypes.string,
         routeParams: React.PropTypes.object,
-        location: React.PropTypes.object,
+        sortOrder: React.PropTypes.string,
         signup_bonus: React.PropTypes.string,
     };
     constructor() {
@@ -30,9 +31,8 @@ class Post extends React.Component {
         };
         this.showSignUp = () => {
             serverApiRecordEvent('SignUp', 'Post Promo');
-            window.location = '/pick_account';
+            window.location = SIGNUP_URL;
         };
-        this.shouldComponentUpdate = shouldComponentUpdate(this, 'Post');
     }
 
     toggleNegativeReplies = e => {
@@ -52,7 +52,7 @@ class Post extends React.Component {
 
     render() {
         const { showSignUp } = this;
-        const { signup_bonus, content } = this.props;
+        const { signup_bonus, content, sortOrder } = this.props;
         const { showNegativeComments, commentHidden, showAnyway } = this.state;
         let post = this.props.post;
         if (!post) {
@@ -93,11 +93,7 @@ class Post extends React.Component {
 
         let replies = dis.get('replies').toJS();
 
-        let sort_order = 'trending';
-        if (this.props.location && this.props.location.query.sort)
-            sort_order = this.props.location.query.sort;
-
-        sortComments(content, replies, sort_order);
+        sortComments(content, replies, sortOrder);
 
         // Don't render too many comments on server-side
         const commentLimit = 100;
@@ -114,7 +110,7 @@ class Post extends React.Component {
                 key={post + reply}
                 content={reply}
                 cont={content}
-                sort_order={sort_order}
+                sort_order={sortOrder}
                 showNegativeComments={showNegativeComments}
                 onHide={this.onHideComment}
             />
@@ -138,18 +134,19 @@ class Post extends React.Component {
             </div>
         );
 
-        let sort_orders = ['trending', 'votes', 'new'];
+        let sort_orders = ['trending', 'votes', 'new', 'author_reputation'];
         let sort_labels = [
-            tt('main_menu.trending'),
-            tt('g.votes'),
-            tt('g.age'),
+            tt('post_jsx.comment_sort_order.trending'),
+            tt('post_jsx.comment_sort_order.votes'),
+            tt('post_jsx.comment_sort_order.age'),
+            tt('post_jsx.comment_sort_order.reputation'),
         ];
         let sort_menu = [];
         let sort_label;
 
         let selflink = `/${dis.get('category')}/@${post}`;
         for (let o = 0; o < sort_orders.length; ++o) {
-            if (sort_orders[o] == sort_order) sort_label = sort_labels[o];
+            if (sort_orders[o] == sortOrder) sort_label = sort_labels[o];
             sort_menu.push({
                 value: sort_orders[o],
                 label: sort_labels[o],
@@ -255,7 +252,7 @@ class Post extends React.Component {
 
 const emptySet = Set();
 
-export default connect(state => {
+export default connect((state, ownProps) => {
     const current_user = state.user.get('current');
     let ignoring;
     if (current_user) {
@@ -271,5 +268,7 @@ export default connect(state => {
         content: state.global.get('content'),
         signup_bonus: state.offchain.get('signup_bonus'),
         ignoring,
+        sortOrder:
+            ownProps.router.getCurrentLocation().query.sort || 'trending',
     };
 })(Post);

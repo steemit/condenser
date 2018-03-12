@@ -10,9 +10,6 @@ module.exports = {
                 BROWSER: JSON.stringify(true),
                 NODE_ENV: JSON.stringify('production'),
                 VERSION: JSON.stringify(git.long())
-            },
-            global: {
-                TYPED_ARRAY_SUPPORT: JSON.stringify(false)
             }
         }),
         new webpack.optimize.UglifyJsPlugin({
@@ -37,6 +34,13 @@ module.exports = {
                 comments: false
             }
         }),
-        ...baseConfig.plugins
+        ...baseConfig.plugins,
+        // Fix window.onerror
+        // See https://github.com/webpack/webpack/issues/5681#issuecomment-345861733
+        new webpack.SourceMapDevToolPlugin({
+            module: true,
+            columns: false,
+            moduleFilenameTemplate: info => { return `${info.resourcePath}?${info.loaders}` }
+        })
     ]
 };

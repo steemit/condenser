@@ -16,6 +16,14 @@ const remarkable = new Remarkable({
     quotes: '“”‘’',
 });
 
+const remarkableToSpec = new Remarkable({
+    html: true,
+    breaks: false, // real markdown uses \n\n for paragraph breaks
+    linkify: false,
+    typographer: false,
+    quotes: '“”‘’',
+});
+
 class MarkdownViewer extends Component {
     static propTypes = {
         // HTML properties
@@ -29,14 +37,16 @@ class MarkdownViewer extends Component {
         noImage: React.PropTypes.bool,
         allowDangerousHTML: React.PropTypes.bool,
         hideImages: React.PropTypes.bool, // whether to replace images with just a span containing the src url
+        breaks: React.PropTypes.bool, // true to use bastardized markdown that cares about newlines
         // used for the ImageUserBlockList
     };
 
     static defaultProps = {
-        className: '',
-        large: false,
         allowDangerousHTML: false,
+        breaks: true,
+        className: '',
         hideImages: false,
+        large: false,
     };
 
     constructor() {
@@ -85,7 +95,17 @@ class MarkdownViewer extends Component {
             '(html comment removed: $1)'
         );
 
-        let renderedText = html ? text : remarkable.render(text);
+        let renderer = remarkableToSpec;
+        if (this.props.breaks === true) {
+            renderer = remarkable;
+        }
+
+        let renderedText = html ? text : renderer.render(text);
+
+        // If content isn't wrapped with an html element at this point, add it.
+        if (!renderedText.indexOf('<html>') !== 0) {
+            renderedText = '<html>' + renderedText + '</html>';
+        }
 
         // Embed videos, link mentions and hashtags, etc...
         if (renderedText)
@@ -118,7 +138,8 @@ class MarkdownViewer extends Component {
 
         const noImageActive = cleanText.indexOf(noImageText) !== -1;
 
-        // In addition to inserting the youtube compoennt, this allows react to compare separately preventing excessive re-rendering.
+        // In addition to inserting the youtube component, this allows
+        // react to compare separately preventing excessive re-rendering.
         let idx = 0;
         const sections = [];
 

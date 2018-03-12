@@ -5,6 +5,8 @@ import { validate_account_name } from 'app/utils/ChainValidation';
 import proxifyImageUrl from 'app/utils/ProxifyUrl';
 
 export const getPhishingWarningMessage = () => tt('g.phishy_message');
+export const getExternalLinkWarningMessage = () =>
+    tt('g.external_link_message');
 
 const noop = () => {};
 const DOMParser = new xmldom.DOMParser({
@@ -109,9 +111,12 @@ export default function(html, { mutate = true, hideImages = false } = {}) {
             ...state,
         };
     } catch (error) {
-        // Not Used, parseFromString might throw an error in the future
-        console.error(error.toString());
-        return { html };
+        // xmldom error is bad
+        console.log(
+            'rendering error',
+            JSON.stringify({ error: error.message, html })
+        );
+        return { html: '' };
     }
 }
 
@@ -143,10 +148,9 @@ function link(state, child) {
 
             // Unlink potential phishing attempts
             if (
-                child.textContent.match(
-                    /https?:\/\/(.*@)?(www\.)?steemit\.com/
-                ) &&
-                !url.match(/https?:\/\/(.*@)?(www\.)?steemit\.com/)
+                url.indexOf('#') !== 0 && // Allow in-page links
+                (child.textContent.match(/(www\.)?steemit\.com/i) &&
+                    !url.match(/https?:\/\/(.*@)?(www\.)?steemit\.com/i))
             ) {
                 const phishyDiv = child.ownerDocument.createElement('div');
                 phishyDiv.textContent = `${child.textContent} / ${url}`;
@@ -262,18 +266,24 @@ function linkify(content, mutate, hashtags, usertags, images, links) {
     });
 
     // usertag (mention)
-    content = content.replace(/(^|\s)(@[a-z][-\.a-z\d]+[a-z\d])/gi, user => {
-        const space = /^\s/.test(user) ? user[0] : '';
-        const user2 = user.trim().substring(1);
-        const userLower = user2.toLowerCase();
-        const valid = validate_account_name(userLower) == null;
-        if (valid && usertags) usertags.add(userLower);
-        if (!mutate) return user;
-        return (
-            space +
-            (valid ? `<a href="/@${userLower}">@${user2}</a>` : '@' + user2)
-        );
-    });
+    // Cribbed from https://github.com/twitter/twitter-text/blob/v1.14.7/js/twitter-text.js#L90
+    content = content.replace(
+        /(^|[^a-zA-Z0-9_!#$%&*@＠\/]|(^|[^a-zA-Z0-9_+~.-\/]))[@＠]([a-z][-\.a-z\d]+[a-z\d])/gi,
+        (match, preceeding1, preceeding2, user) => {
+            const userLower = user.toLowerCase();
+            const valid = validate_account_name(userLower) == null;
+
+            if (valid && usertags) usertags.add(userLower);
+
+            const preceedings = (preceeding1 || '') + (preceeding2 || ''); // include the preceeding matches if they exist
+
+            if (!mutate) return `${preceedings}${user}`;
+
+            return valid
+                ? `${preceedings}<a href="/@${userLower}">@${user}</a>`
+                : '@' + user;
+        }
+    );
 
     content = content.replace(linksAny('gi'), ln => {
         if (linksRe.image.test(ln)) {

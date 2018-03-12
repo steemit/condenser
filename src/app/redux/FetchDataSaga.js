@@ -5,7 +5,7 @@ import { getContent } from 'app/redux/SagaShared';
 import * as globalActions from './GlobalReducer';
 import * as appActions from './AppReducer';
 import constants from './constants';
-import { fromJS, Map } from 'immutable';
+import { fromJS, Map, Set } from 'immutable';
 import { api } from '@steemit/steem-js';
 
 const REQUEST_DATA = 'fetchDataSaga/REQUEST_DATA';
@@ -50,7 +50,12 @@ export function* fetchState(location_change_action) {
     );
     const ignore_fetch = pathname === server_location && is_initial_state;
     is_initial_state = false;
-    if (ignore_fetch) return;
+    if (ignore_fetch) {
+        // If a user's transfer page is being loaded, fetch related account data.
+        yield call(getTransferUsers, pathname);
+
+        return;
+    }
 
     let url = `${pathname}`;
     if (url === '/') url = 'trending';
@@ -65,11 +70,54 @@ export function* fetchState(location_change_action) {
     try {
         const state = yield call([api, api.getStateAsync], url);
         yield put(globalActions.receiveState(state));
+        // If a user's transfer page is being loaded, fetch related account data.
+        yield call(getTransferUsers, pathname);
     } catch (error) {
         console.error('~~ Saga fetchState error ~~>', url, error);
         yield put(appActions.steemApiError(error.message));
     }
+
     yield put(appActions.fetchDataEnd());
+}
+
+/**
+ * Get transfer-related usernames from history and fetch their account data.
+ *
+ * @param {String} pathname
+ */
+function* getTransferUsers(pathname) {
+    if (pathname.match(/^\/@([a-z0-9\.-]+)\/transfers/)) {
+        const username = pathname.match(/^\/@([a-z0-9\.-]+)/)[1];
+
+        const transferHistory = yield select(state =>
+            state.global.getIn(['accounts', username, 'transfer_history'])
+        );
+
+        // Find users in the transfer history to consider sending users' reputations.
+        const transferUsers = transferHistory.reduce((acc, cur) => {
+            if (cur.getIn([1, 'op', 0]) === 'transfer') {
+                const { from, to } = cur.getIn([1, 'op', 1]).toJS();
+                return acc.add(from);
+            }
+            return acc;
+            // Ensure current user is included in this list, even if they don't have transfer history.
+            // This ensures their reputation is updated - fixes #2306
+        }, new Set([username]));
+
+        yield call(getAccounts, transferUsers);
+    }
+}
+
+/**
+ * Request account data for a set of usernames.
+ *
+ * @todo batch the put()s
+ *
+ * @param {Iterable} usernames
+ */
+function* getAccounts(usernames) {
+    const accounts = yield call([api, api.getAccountsAsync], usernames);
+    yield put(globalActions.receiveAccounts({ accounts }));
 }
 
 export function* watchLocationChange() {

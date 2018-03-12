@@ -34,7 +34,7 @@ class RecoverAccountStep1 extends React.Component {
             error: '',
             progress_status: '',
             password: { value: '', valid: false },
-            show_social_login: '',
+            show_social_login: false,
             email_submitted: false,
         };
         this.onNameChange = this.onNameChange.bind(this);
@@ -103,42 +103,15 @@ class RecoverAccountStep1 extends React.Component {
         });
     }
 
-    getAccountIdentityProviders(name, owner_key) {
-        return fetch('/api/v1/account_identity_providers', {
-            method: 'post',
-            mode: 'no-cors',
-            credentials: 'same-origin',
-            headers: {
-                Accept: 'application/json',
-                'Content-type': 'application/json',
-            },
-            body: JSON.stringify({ csrf: $STM_csrf, name, owner_key }),
-        })
-            .then(r => r.json())
-            .then(res => {
-                console.log('-- validateOffchainAccount -->', res);
-                return res.error ? 'email' : res.provider;
-            });
-    }
-
     onPasswordsChange({ oldPassword, valid }) {
         this.setState({ password: { value: oldPassword, valid }, error: '' });
     }
 
     onSubmit(e) {
         e.preventDefault();
-        const owner_key = passwordToOwnerPubKey(
-            this.state.name,
-            this.state.password.value
-        );
         this.validateAccountOwner(this.state.name).then(result => {
             if (result) {
-                this.getAccountIdentityProviders(
-                    this.state.name,
-                    owner_key
-                ).then(provider => {
-                    this.setState({ show_social_login: provider });
-                });
+                this.setState({ show_social_login: true });
             } else
                 this.setState({
                     error: tt(
@@ -268,152 +241,53 @@ class RecoverAccountStep1 extends React.Component {
                     </div>
                 )}
 
-                {show_social_login &&
-                    show_social_login !== 'email' && (
-                        <form action="/initiate_account_recovery" method="post">
-                            <input
-                                type="hidden"
-                                name="csrf"
-                                value={$STM_csrf}
-                            />
-                            <input
-                                type="hidden"
-                                name="account_name"
-                                value={name}
-                            />
-                            <input
-                                type="hidden"
-                                name="owner_key"
-                                value={owner_key}
-                            />
-                            <div className="row">
-                                <div className="column large-4">
-                                    {show_social_login === 'both' ? (
-                                        <p>
-                                            {tt(
-                                                'recoveraccountstep1_jsx.login_with_facebook_or_reddit_media_to_verify_identity'
-                                            )}.
-                                        </p>
-                                    ) : (
-                                        <p>
-                                            {tt(
-                                                'recoveraccountstep1_jsx.login_with_social_media_to_verify_identity',
-                                                {
-                                                    provider:
-                                                        show_social_login
-                                                            .charAt(0)
-                                                            .toUpperCase() +
-                                                        show_social_login.slice(
-                                                            1
-                                                        ),
-                                                }
-                                            )}.
-                                        </p>
-                                    )}
-                                </div>
-                            </div>
-                            <div className="row">&nbsp;</div>
-                            {(show_social_login === 'both' ||
-                                show_social_login === 'facebook') && (
-                                <div className="row">
-                                    <div className="column large-4 shrink">
-                                        <SvgImage
-                                            name="facebook"
-                                            width="64px"
-                                            height="64px"
-                                        />
-                                    </div>
-                                    <div className="column large-8">
-                                        <input
-                                            type="submit"
-                                            name="provider"
-                                            value="facebook"
-                                            className="button SignUp--fb-button"
-                                        />
-                                    </div>
-                                </div>
-                            )}
-                            <div className="row">&nbsp;</div>
-                            {(show_social_login === 'both' ||
-                                show_social_login === 'reddit') && (
-                                <div className="row">
-                                    <div className="column large-4 shrink">
-                                        <SvgImage
-                                            name="reddit"
-                                            width="64px"
-                                            height="64px"
-                                        />
-                                    </div>
-                                    <div className="column large-8">
-                                        <input
-                                            type="submit"
-                                            name="provider"
-                                            value="reddit"
-                                            className="button SignUp--reddit-button"
-                                        />
-                                    </div>
-                                </div>
-                            )}
-                            <div className="row">
-                                <div className="column">&nbsp;</div>
-                            </div>
-                        </form>
-                    )}
-                {show_social_login &&
-                    show_social_login === 'email' && (
-                        <div className="row">
-                            <div className="column large-4">
-                                {email_submitted ? (
-                                    tt(
-                                        'recoveraccountstep1_jsx.thanks_for_submitting_request_for_account_recovery',
-                                        { APP_NAME }
-                                    )
-                                ) : (
-                                    <form
-                                        onSubmit={this.onSubmitEmail}
-                                        noValidate
+                {show_social_login && (
+                    <div className="row">
+                        <div className="column large-4">
+                            {email_submitted ? (
+                                tt(
+                                    'recoveraccountstep1_jsx.thanks_for_submitting_request_for_account_recovery',
+                                    { APP_NAME }
+                                )
+                            ) : (
+                                <form onSubmit={this.onSubmitEmail} noValidate>
+                                    <p>
+                                        {tt(
+                                            'recoveraccountstep1_jsx.enter_email_toverify_identity'
+                                        )}
+                                    </p>
+                                    <div
+                                        className={
+                                            email_error
+                                                ? 'column large-4 shrink error'
+                                                : 'column large-4 shrink'
+                                        }
                                     >
-                                        <p>
-                                            {tt(
-                                                'recoveraccountstep1_jsx.enter_email_toverify_identity'
-                                            )}
-                                        </p>
-                                        <div
-                                            className={
-                                                email_error
-                                                    ? 'column large-4 shrink error'
-                                                    : 'column large-4 shrink'
-                                            }
-                                        >
-                                            <label>
-                                                {tt('g.email')}
-                                                <input
-                                                    type="text"
-                                                    name="email"
-                                                    autoComplete="off"
-                                                    onChange={
-                                                        this.onEmailChange
-                                                    }
-                                                    value={email}
-                                                />
-                                            </label>
-                                            <p className="error">
-                                                {email_error}
-                                            </p>
+                                        <label>
+                                            {tt('g.email')}
                                             <input
-                                                type="submit"
-                                                disabled={email_error || !email}
-                                                className="button hollow"
-                                                value={tt(
-                                                    'recoveraccountstep1_jsx.continue_with_email'
-                                                )}
+                                                type="text"
+                                                name="email"
+                                                autoComplete="off"
+                                                onChange={this.onEmailChange}
+                                                value={email}
                                             />
-                                        </div>
-                                    </form>
-                                )}
-                            </div>
+                                        </label>
+                                        <p className="error">{email_error}</p>
+                                        <input
+                                            type="submit"
+                                            disabled={email_error || !email}
+                                            className="button hollow"
+                                            value={tt(
+                                                'recoveraccountstep1_jsx.continue_with_email'
+                                            )}
+                                        />
+                                    </div>
+                                </form>
+                            )}
                         </div>
-                    )}
+                    </div>
+                )}
             </div>
         );
     }

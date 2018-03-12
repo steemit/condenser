@@ -460,7 +460,7 @@
             "Разжигание ненависти или Интернет троллинг",
         "intentional_miss_categorized_content_or_spam":
             "Преднамеренная неправильная категоризация контента или спам",
-        "pending_payout": "Ожидаемая выплата",
+        "pending_payout": "Ожидаемая выплата $%(value)s",
         "payout_declined": "Автор отказался от вознаграждения",
         "max_accepted_payout":
             "Максимально допустимое вознаграждение: $%(value)s",
@@ -714,8 +714,7 @@
         "location_is_too_long": "Местоположение слишком длинное",
         "website_url_is_too_long": "URL-адрес веб-сайта слишком длинный",
         "public_profile_settings": "Настройки Публичного Профиля",
-        "private_post_display_settings":
-            "Настройки отображения приватных постов",
+        "preferences": "Настройки отображения приватных постов",
         "not_safe_for_work_nsfw_content":
             "Небезопасный для работы (NSFW) контент",
         "always_hide": "Всегда скрывать",

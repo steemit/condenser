@@ -511,8 +511,8 @@
     "userkeys_jsx": {
         "public": "Público",
         "private": "Privado",
-        "public_something_key": "Contraseña %(count)s pública",
-        "private_something_key": "Contraseña %(count)s privada",
+        "public_something_key": "Contraseña %(key)s pública",
+        "private_something_key": "Contraseña %(key)s privada",
         "posting_key_is_required_it_should_be_different":
             "La contraseña de posteado se usa para postear y para votar. Debería ser diferente a la contraseña activa y a la contraseña de propietario.",
         "the_active_key_is_used_to_make_transfers_and_place_orders":
@@ -555,7 +555,7 @@
         "converted_VESTING_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again":
             "Los %(VESTING_TOKEN)s convertidos pueden ser enviados a ti mismo o a otras personas pero no pueden ser transferidos de nuevo sin convertirlos de vuelta a %(LIQUID_TOKEN)s.",
         "part_of_your_steem_power_is_currently_delegated":
-            "Parte de tu STEEM POWER te ha sido delegado. La delegación es influencia donada que ayuda a los nuevos usuarios a interactuar en steemit. La cantidad de tu delegación puede fluctuar."
+            "Part of %(user_name)s's STEEM POWER is currently delegated. Delegation is donated for influence or to help new users perform actions on steemit. Your delegation amount can fluctuate."
     },
     "promote_post_jsx": {
         "promote_post": "Promociona el Post",
@@ -695,8 +695,7 @@
         "location_is_too_long": "Localización es demasiado largo",
         "website_url_is_too_long": "La URL de la página web es muy larga",
         "public_profile_settings": "Herramientas para el perfil público",
-        "private_post_display_settings":
-            "Herramientas privadas para la visualización del post",
+        "preferences": "Herramientas privadas para la visualización del post",
         "not_safe_for_work_nsfw_content": "(NSFW) contenido para adultos",
         "always_hide": "Ocultar siempre",
         "always_warn": "Advertir siempre",

@@ -2,38 +2,11 @@
   "database_url": "mysql://root:password@127.0.0.1/steemit_dev",
   "disable_signups": false,
   "facebook_app_id": false,
-  "grant": {
-    "facebook": {
-      "callback": "/handle_facebook_callback",
-      "key": "",
-      "scope": [
-        "email",
-        "user_location"
-      ],
-      "secret": ""
-    },
-    "reddit": {
-      "callback": "/handle_reddit_callback",
-      "custom_params": {
-        "duration": "temporary",
-        "state": "void"
-      },
-      "key": "",
-      "scope": [
-        "identity"
-      ],
-      "secret": ""
-    },
-    "server": {
-      "host": "localhost:3002",
-      "protocol": "http"
-    }
-  },
   "google_analytics_id": false,
   "helmet": {
     "directives": {
       "childSrc": "'self' www.youtube.com staticxx.facebook.com w.soundcloud.com player.vimeo.com",
-      "connectSrc": "'self' steemit.com wss://steemd.steemit.com api.blocktrades.us",
+      "connectSrc": "'self' steemit.com https://api.steemit.com api.blocktrades.us",
       "defaultSrc": "'self' www.youtube.com staticxx.facebook.com player.vimeo.com",
       "fontSrc": "data: fonts.gstatic.com",
       "frameAncestors": "'none'",
@@ -96,8 +69,9 @@
     "auth_token": false
   },
   "upload_image": false,
-  "steemd_connection_client": "wss://steemd.steemit.com",
-  "steemd_connection_server": "wss://steemd.steemit.com",
+  "steemd_connection_client": "https://api.steemit.com",
+  "steemd_connection_server": "https://api.steemit.com",
+  "steemd_use_appbase": false,
   "chain_id": "0000000000000000000000000000000000000000000000000000000000000000",
   "address_prefix": "STM"
 }

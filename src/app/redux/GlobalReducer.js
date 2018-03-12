@@ -3,14 +3,17 @@ import { emptyContent } from 'app/redux/EmptyState';
 import { contentStats } from 'app/utils/StateFunctions';
 import constants from './constants';
 
-const emptyContentMap = Map(emptyContent);
+export const emptyContentMap = Map(emptyContent);
 
-const defaultState = Map({ status: {} });
+export const defaultState = Map({
+    status: {},
+});
 
 // Action constants
-const RECEIVE_STATE = 'global/RECEIVE_STATE';
 const SET_COLLAPSED = 'global/SET_COLLAPSED';
+const RECEIVE_STATE = 'global/RECEIVE_STATE';
 const RECEIVE_ACCOUNT = 'global/RECEIVE_ACCOUNT';
+const RECEIVE_ACCOUNTS = 'global/RECEIVE_ACCOUNTS';
 const RECEIVE_COMMENT = 'global/RECEIVE_COMMENT';
 const RECEIVE_CONTENT = 'global/RECEIVE_CONTENT';
 const LINK_REPLY = 'global/LINK_REPLY';
@@ -36,15 +39,42 @@ const HIDE_DIALOG = 'global/HIDE_DIALOG';
 // Saga-related:
 export const GET_STATE = 'global/GET_STATE';
 
-export default function reducer(state = defaultState, action) {
+/**
+ * Transfrom nested JS object to appropriate immutable collection.
+ *
+ * @param {Object} account
+ */
+
+const transformAccount = account =>
+    fromJS(account, (key, value) => {
+        if (key === 'witness_votes') return value.toSet();
+        const isIndexed = Iterable.isIndexed(value);
+        return isIndexed ? value.toList() : value.toOrderedMap();
+    });
+
+/**
+ * Merging accounts: A get_state will provide a very full account but a get_accounts will provide a smaller version this makes sure we don't overwrite
+ *
+ * @param {Immutable.Map} state
+ * @param {Immutable.Map} account
+ *
+ */
+
+const mergeAccounts = (state, account) => {
+    return state.updateIn(['accounts', account.get('name')], Map(), a =>
+        a.mergeDeep(account)
+    );
+};
+
+export default function reducer(state = defaultState, action = {}) {
     const payload = action.payload;
 
     switch (action.type) {
         case SET_COLLAPSED: {
             return state.withMutations(map => {
-                map.updateIn(['content', payload.post], value => {
-                    value.merge(Map({ collapsed: payload.collapsed }));
-                });
+                map.updateIn(['content', payload.post], value =>
+                    value.merge(Map({ collapsed: payload.collapsed }))
+                );
             });
         }
 
@@ -64,15 +94,15 @@ export default function reducer(state = defaultState, action) {
         }
 
         case RECEIVE_ACCOUNT: {
-            const account = fromJS(payload.account, (key, value) => {
-                if (key === 'witness_votes') return value.toSet();
-                const isIndexed = Iterable.isIndexed(value);
-                return isIndexed ? value.toList() : value.toOrderedMap();
-            });
-            // Merging accounts: A get_state will provide a very full account but a get_accounts will provide a smaller version
-            return state.updateIn(['accounts', account.get('name')], Map(), a =>
-                a.mergeDeep(account)
-            );
+            const account = transformAccount(payload.account);
+            return mergeAccounts(state, account);
+        }
+
+        case RECEIVE_ACCOUNTS: {
+            return payload.accounts.reduce((acc, curr) => {
+                const transformed = transformAccount(curr);
+                return mergeAccounts(acc, transformed);
+            }, state);
         }
 
         case RECEIVE_COMMENT: {
@@ -281,7 +311,6 @@ export default function reducer(state = defaultState, action) {
             );
             return new_state;
         }
-
         case RECEIVE_RECENT_POSTS: {
             const { data } = payload;
             let new_state = state.updateIn(
@@ -306,6 +335,7 @@ export default function reducer(state = defaultState, action) {
                                 'stats',
                                 fromJS(contentStats(value))
                             );
+
                             map.set(key, value);
                         }
                     });
@@ -402,6 +432,11 @@ export const receiveAccount = payload => ({
     payload,
 });
 
+export const receiveAccounts = payload => ({
+    type: RECEIVE_ACCOUNTS,
+    payload,
+});
+
 export const receiveComment = payload => ({
     type: RECEIVE_COMMENT,
     payload,
@@ -462,6 +497,7 @@ export const receiveMeta = payload => ({
     payload,
 });
 
+// TODO: Find a better name for this
 export const set = payload => ({
     type: SET,
     payload,
@@ -484,6 +520,11 @@ export const setMetaData = payload => ({
 
 export const clearMeta = payload => ({
     type: CLEAR_META,
+    payload,
+});
+
+export const clearMetaElement = payload => ({
+    type: CLEAR_META_ELEMENT,
     payload,
 });
 

@@ -4,8 +4,9 @@ import store from 'store';
 
 // Action constants
 const SHOW_LOGIN = 'user/SHOW_LOGIN';
-const SHOW_TERMS = 'user/SHOW_TERMS';
 const HIDE_LOGIN = 'user/HIDE_LOGIN';
+const SHOW_TERMS = 'user/SHOW_TERMS';
+const HIDE_TERMS = 'user/HIDE_TERMS';
 export const SAVE_LOGIN_CONFIRM = 'user/SAVE_LOGIN_CONFIRM';
 export const SAVE_LOGIN = 'user/SAVE_LOGIN';
 const REMOVE_HIGH_SECURITY_KEYS = 'user/REMOVE_HIGH_SECURITY_KEYS';
@@ -32,6 +33,9 @@ const ACCOUNT_AUTH_LOOKUP = 'user/ACCOUNT_AUTH_LOOKUP';
 const SET_AUTHORITY = 'user/SET_AUTHORITY';
 const HIDE_CONNECTION_ERROR_MODAL = 'user/HIDE_CONNECTION_ERROR_MODAL';
 const SET = 'user/SET';
+const SHOW_SIDE_PANEL = 'user/SHOW_SIDE_PANEL';
+const HIDE_SIDE_PANEL = 'user/HIDE_SIDE_PANEL';
+
 // Saga-related
 export const LOAD_SAVINGS_WITHDRAW = 'user/LOAD_SAVINGS_WITHDRAW';
 export const UPLOAD_IMAGE = 'user/UPLOAD_IMAGE';
@@ -44,6 +48,7 @@ const defaultState = fromJS({
     show_signup_modal: false,
     pub_keys_used: null,
     locale: DEFAULT_LANGUAGE,
+    show_side_panel: false,
 });
 
 if (process.env.BROWSER) {
@@ -68,24 +73,28 @@ export default function reducer(state = defaultState, action) {
             });
         }
 
-        case SHOW_TERMS: {
-            let operation, termsDefault;
-            if (payload) {
-                operation = fromJS(payload.operation);
-                termsDefault = fromJS(payload.termsDefault);
-            }
-            return state.merge({
-                show_terms_modal: true,
-                loginBroadcastOperation: operation,
-                termsDefault,
-            });
-        }
-
         case HIDE_LOGIN:
             return state.merge({
                 show_login_modal: false,
                 loginBroadcastOperation: undefined,
                 loginDefault: undefined,
+            });
+
+        case SHOW_TERMS: {
+            let termsDefault;
+            if (payload) {
+                termsDefault = fromJS(payload.termsDefault);
+            }
+            return state.merge({
+                show_terms_modal: true,
+                termsDefault,
+            });
+        }
+
+        case HIDE_TERMS:
+            return state.merge({
+                show_terms_modal: false,
+                termsDefault: undefined,
             });
 
         case SAVE_LOGIN_CONFIRM:
@@ -224,6 +233,12 @@ export default function reducer(state = defaultState, action) {
                 fromJS(payload.value)
             );
 
+        case SHOW_SIDE_PANEL:
+            return state.set('show_side_panel', true);
+
+        case HIDE_SIDE_PANEL:
+            return state.set('show_side_panel', false);
+
         default:
             return state;
     }
@@ -235,13 +250,18 @@ export const showLogin = payload => ({
     payload,
 });
 
+export const hideLogin = payload => ({
+    type: HIDE_LOGIN,
+    payload,
+});
+
 export const showTerms = payload => ({
     type: SHOW_TERMS,
     payload,
 });
 
-export const hideLogin = payload => ({
-    type: HIDE_LOGIN,
+export const hideTerms = payload => ({
+    type: HIDE_TERMS,
     payload,
 });
 
@@ -384,3 +404,13 @@ export const uploadImage = payload => ({
     type: UPLOAD_IMAGE,
     payload,
 });
+
+export const showSidePanel = () => ({
+    type: SHOW_SIDE_PANEL,
+});
+
+export const hideSidePanel = () => {
+    return {
+        type: HIDE_SIDE_PANEL,
+    };
+};

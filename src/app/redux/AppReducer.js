@@ -1,8 +1,6 @@
 import { Map, OrderedMap } from 'immutable';
 import tt from 'counterpart';
 
-// Action constants
-
 const STEEM_API_ERROR = 'app/STEEM_API_ERROR';
 const FETCH_DATA_BEGIN = 'app/FETCH_DATA_BEGIN';
 const FETCH_DATA_END = 'app/FETCH_DATA_END';
@@ -12,8 +10,9 @@ const UPDATE_NOTIFICOUNTERS = 'app/UPDATE_NOTIFICOUNTERS';
 export const SET_USER_PREFERENCES = 'app/SET_USER_PREFERENCES';
 export const TOGGLE_NIGHTMODE = 'app/TOGGLE_NIGHTMODE';
 export const TOGGLE_BLOGMODE = 'app/TOGGLE_BLOGMODE';
+export const RECEIVE_FEATURE_FLAGS = 'app/RECEIVE_FEATURE_FLAGS';
 
-const defaultState = Map({
+export const defaultState = Map({
     loading: false,
     error: '',
     location: {},
@@ -38,9 +37,10 @@ const defaultState = Map({
         blogmode: false,
         currency: 'USD',
     }),
+    featureFlags: Map({}),
 });
 
-export default function reducer(state = defaultState, action) {
+export default function reducer(state = defaultState, action = {}) {
     switch (action.type) {
         case '@@router/LOCATION_CHANGE':
             return state.set('location', { pathname: action.payload.pathname });
@@ -91,6 +91,11 @@ export default function reducer(state = defaultState, action) {
                 ['user_preferences', 'blogmode'],
                 !state.getIn(['user_preferences', 'blogmode'])
             );
+        case RECEIVE_FEATURE_FLAGS:
+            const newFlags = state.get('featureFlags')
+                ? state.get('featureFlags').merge(action.flags)
+                : Map(action.flags);
+            return state.set('featureFlags', newFlags);
         default:
             return state;
     }
@@ -136,3 +141,13 @@ export const toggleNightmode = () => ({
 export const toggleBlogmode = () => ({
     type: TOGGLE_BLOGMODE,
 });
+
+export const receiveFeatureFlags = flags => ({
+    type: RECEIVE_FEATURE_FLAGS,
+    flags,
+});
+
+export const selectors = {
+    getFeatureFlag: (state, flagName) =>
+        state.getIn(['featureFlags', flagName], false),
+};

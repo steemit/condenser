@@ -306,7 +306,7 @@ class ReplyEditor extends React.Component {
     upload = (file, name = '') => {
         const { uploadImage } = this.props;
         this.setState({
-            progress: { message: tt('reply_editor.uploading') + '...' },
+            progress: { message: tt('reply_editor.uploading') },
         });
         uploadImage(file, progress => {
             if (progress.url) {
@@ -385,7 +385,7 @@ class ReplyEditor extends React.Component {
             errorCallback,
         };
         const postLabel = username ? (
-            <Tooltip t={tt('g.post_as') + ' “' + username + '”'}>
+            <Tooltip t={tt('g.post_as_user', { username })}>
                 {tt('g.post')}
             </Tooltip>
         ) : (
@@ -530,32 +530,27 @@ class ReplyEditor extends React.Component {
                                             rows={isStory ? 10 : 3}
                                             placeholder={
                                                 isStory
-                                                    ? tt('g.write_your_story') +
-                                                      '...'
+                                                    ? tt('g.write_your_story')
                                                     : tt('g.reply')
                                             }
                                             autoComplete="off"
                                             tabIndex={2}
                                         />
                                     </Dropzone>
-                                    {type === 'submit_story' && (
-                                        <p className="drag-and-drop notranslate">
-                                            {tt(
-                                                'reply_editor.insert_images_by_dragging_dropping'
-                                            )}
-                                            {noClipboardData
-                                                ? ''
-                                                : tt(
-                                                      'reply_editor.pasting_from_the_clipboard'
-                                                  )}
-                                            {tt('reply_editor.or_by')}{' '}
-                                            <a onClick={this.onOpenClick}>
-                                                {tt(
-                                                    'reply_editor.selecting_them'
-                                                )}
-                                            </a>.
-                                        </p>
-                                    )}
+                                    <p className="drag-and-drop">
+                                        {tt(
+                                            'reply_editor.insert_images_by_dragging_dropping'
+                                        )}
+                                        {noClipboardData
+                                            ? ''
+                                            : tt(
+                                                  'reply_editor.pasting_from_the_clipboard'
+                                              )}
+                                        {tt('reply_editor.or_by')}{' '}
+                                        <a onClick={this.onOpenClick}>
+                                            {tt('reply_editor.selecting_them')}
+                                        </a>.
+                                    </p>
                                     {progress.message && (
                                         <div className="info">
                                             {progress.message}
@@ -645,51 +640,52 @@ class ReplyEditor extends React.Component {
                                         {tt('g.clear')}
                                     </button>
                                 )}
-                            {!isEdit && (
-                                <div className="ReplyEditor__options float-right text-right">
-                                    {tt('g.rewards')} &nbsp;
-                                    <select
-                                        value={this.state.payoutType}
-                                        onChange={this.onPayoutTypeChange}
-                                        style={{
-                                            color:
-                                                this.state.payoutType ==
-                                                '0%'
-                                                    ? 'orange'
-                                                    : '',
-                                        }}
-                                    >
-                                        <option value="100%">
-                                            {tt(
-                                                'reply_editor.power_up_100'
+                            {isStory &&
+                                !isEdit && (
+                                    <div className="ReplyEditor__options float-right text-right">
+                                        {tt('g.rewards')} &nbsp;
+                                        <select
+                                            value={this.state.payoutType}
+                                            onChange={this.onPayoutTypeChange}
+                                            style={{
+                                                color:
+                                                    this.state.payoutType ==
+                                                    '0%'
+                                                        ? 'orange'
+                                                        : '',
+                                            }}
+                                        >
+                                            <option value="100%">
+                                                {tt(
+                                                    'reply_editor.power_up_100'
+                                                )}
+                                            </option>
+                                            <option value="50%">
+                                                {tt(
+                                                    'reply_editor.default_50_50'
+                                                )}
+                                            </option>
+                                            <option value="0%">
+                                                {tt(
+                                                    'reply_editor.decline_payout'
+                                                )}
+                                            </option>
+                                        </select>
+                                        <br />
+                                        <label
+                                            title={tt(
+                                                'reply_editor.check_this_to_auto_upvote_your_post'
                                             )}
-                                        </option>
-                                        <option value="50%">
-                                            {tt(
-                                                'reply_editor.default_50_50'
-                                            )}
-                                        </option>
-                                        <option value="0%">
-                                            {tt(
-                                                'reply_editor.decline_payout'
-                                            )}
-                                        </option>
-                                    </select>
-                                    <br />
-                                    <label
-                                        title={tt(
-                                            'reply_editor.check_this_to_auto_upvote_your_post'
-                                        )}
-                                    >
-                                        {tt('g.upvote_post')} &nbsp;
-                                        <input
-                                            type="checkbox"
-                                            checked={autoVote.value}
-                                            onChange={autoVoteOnChange}
-                                        />
-                                    </label>
-                                </div>
-                            )}
+                                        >
+                                            {tt('g.upvote_post')} &nbsp;
+                                            <input
+                                                type="checkbox"
+                                                checked={autoVote.value}
+                                                onChange={autoVoteOnChange}
+                                            />
+                                        </label>
+                                    </div>
+                                )}
                         </div>
                         {!loading &&
                             !rte &&

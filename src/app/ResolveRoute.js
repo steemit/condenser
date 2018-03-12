@@ -37,6 +37,9 @@ export default function resolveRoute(path) {
     if (path === '/xss/test' && process.env.NODE_ENV === 'development') {
         return { page: 'XSSTest' };
     }
+    if (path === '/benchmark' && process.env.OFFLINE_SSR_TEST) {
+        return { page: 'Benchmark' };
+    }
     if (path.match(/^\/tags\/?/)) {
         return { page: 'Tags' };
     }
@@ -51,9 +54,6 @@ export default function resolveRoute(path) {
     }
     if (path === '/approval') {
         return { page: 'Approval' };
-    }
-    if (path === '/pick_account') {
-        return { page: 'PickAccount' };
     }
     if (path === '/recover_account_step_1') {
         return { page: 'RecoverAccountStep1' };

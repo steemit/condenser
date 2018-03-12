@@ -10,10 +10,9 @@ import ConsoleExports from './utils/ConsoleExports';
 import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 import * as steem from '@steemit/steem-js';
 import { determineViewMode } from 'app/utils/Links';
+import frontendLogger from 'app/utils/FrontendLogger';
 
-window.onerror = error => {
-    if (window.$STM_csrf) serverApiRecordEvent('client_error', error);
-};
+window.addEventListener('error', frontendLogger);
 
 const CMD_LOG_T = 'log-t';
 const CMD_LOG_TOGGLE = 'log-toggle';
@@ -79,7 +78,10 @@ function runApp(initial_state) {
     }
 
     const config = initial_state.offchain.config;
-    steem.api.setOptions({ url: config.steemd_connection_client });
+    steem.api.setOptions({
+        url: config.steemd_connection_client,
+        useAppbaseApi: !!config.steemd_use_appbase,
+    });
     steem.config.set('address_prefix', config.address_prefix);
     steem.config.set('chain_id', config.chain_id);
     window.$STM_Config = config;

@@ -12,7 +12,6 @@
 /api/v1/initiate_account_recovery
 /api/v1/account_recovery_confirmation/:code
 /api/v1/request_account_recovery
-/api/v1/account_identity_providers
 /api/v1/accounts
 /api/v1/update_email
 /api/v1/login_account

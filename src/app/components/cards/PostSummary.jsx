@@ -17,6 +17,7 @@ import tt from 'counterpart';
 import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 import proxifyImageUrl from 'app/utils/ProxifyUrl';
 import Userpic, { avatarSize } from 'app/components/elements/Userpic';
+import { SIGNUP_URL } from 'shared/constants';
 
 class PostSummary extends React.Component {
     static propTypes = {
@@ -255,7 +256,7 @@ class PostSummary extends React.Component {
                                 role="button"
                                 onClick={this.onRevealNsfw}
                             >
-                                {tt('postsummary_jsx.reveal_it')}
+                                <a>{tt('postsummary_jsx.reveal_it')}</a>
                             </span>{' '}
                             {tt('g.or') + ' '}
                             {username ? (
@@ -269,11 +270,11 @@ class PostSummary extends React.Component {
                                 </span>
                             ) : (
                                 <span>
-                                    <Link to="/pick_account">
+                                    <a href={SIGNUP_URL}>
                                         {tt(
                                             'postsummary_jsx.create_an_account'
                                         )}
-                                    </Link>{' '}
+                                    </a>{' '}
                                     {tt(
                                         'postsummary_jsx.to_save_your_preferences'
                                     )}.

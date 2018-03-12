@@ -14,20 +14,8 @@ ul.Topics {
   }
 }
 
-select.Topics {
-  margin-bottom: 1rem !important;
-}
-
-.Topics__title {
+.c-sidebar__header {
   font-weight: bold;
-  color: $dark-gray;
-}
-
-.Topics__filter {
-  margin: 0.5rem 0;
-  input {
-    padding-top: 0.1rem;
-    padding-bottom: 0.1rem;
-    border-color: $light-gray;
-  }
+  font-size: 1.125rem;
+  margin: 0 0 1rem 0;
 }

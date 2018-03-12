@@ -12,10 +12,8 @@ import prod_logger from './prod_logger';
 import favicon from 'koa-favicon';
 import staticCache from 'koa-static-cache';
 import useRedirects from './redirects';
-import useOauthLogin from './api/oauth';
 import useGeneralApi from './api/general';
 import useAccountRecoveryApi from './api/account_recovery';
-import useNotificationsApi from './api/notifications';
 import useEnterAndConfirmEmailPages from './sign_up_pages/enter_confirm_email';
 import useEnterAndConfirmMobilePages from './sign_up_pages/enter_confirm_mobile';
 import useUserJson from './json/user_json';
@@ -25,7 +23,6 @@ import session from '@steem/crypto-session';
 import csrf from 'koa-csrf';
 import flash from 'koa-flash';
 import minimist from 'minimist';
-import Grant from 'grant-koa';
 import config from 'config';
 import { routeRegex } from 'app/ResolveRoute';
 import secureRandom from 'secure-random';
@@ -34,7 +31,6 @@ import koaLocale from 'koa-locale';
 
 if (cluster.isMaster) console.log('application server starting, please wait.');
 
-const grant = new Grant(config.grant);
 // import uploadImage from 'server/upload-image' //medium-editor
 
 const app = new Koa();
@@ -59,7 +55,6 @@ session(app, {
 });
 csrf(app);
 
-app.use(mount(grant));
 app.use(flash({ key: 'flash' }));
 koaLocale(app);
 
@@ -69,10 +64,6 @@ function convertEntriesToArrays(obj) {
         return result;
     }, {});
 }
-
-const service_worker_js_content = fs
-    .readFileSync(path.join(__dirname, './service-worker.js'))
-    .toString();
 
 // some redirects and health status
 app.use(function*(next) {
@@ -180,19 +171,6 @@ app.use(
     })
 );
 
-app.use(
-    mount('/service-worker.js', function*() {
-        this.set('Cache-Control', 'public, max-age=7200000');
-        this.type = 'application/javascript';
-        // TODO: use APP_URL from client_config.js
-        // actually use a config value for it
-        this.body = service_worker_js_content.replace(
-            /\{DEFAULT_URL\}/i,
-            'https://' + this.request.header.host
-        );
-    })
-);
-
 // set user's uid - used to identify users in logs and some other places
 // FIXME SECURITY PRIVACY cycle this uid after a period of time
 app.use(function*(next) {
@@ -219,9 +197,7 @@ useUserJson(app);
 usePostJson(app);
 
 useAccountRecoveryApi(app);
-useOauthLogin(app);
 useGeneralApi(app);
-useNotificationsApi(app);
 
 // helmet wants some things as bools and some as lists, makes config difficult.
 // our config uses strings, this splits them to lists on whitespace.

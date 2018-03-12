@@ -95,7 +95,7 @@ class PromotePost extends Component {
                         </p>
                         <hr />
                         <div className="row">
-                            <div className="column small-5">
+                            <div className="column small-7 medium-5 large-4">
                                 <label>{tt('g.amount')}</label>
                                 <div className="input-group">
                                     <input
@@ -117,9 +117,13 @@ class PromotePost extends Component {
                                 </div>
                             </div>
                         </div>
-                        <div>{`${tt('g.balance')}: ${balance} ${
-                            DEBT_TOKEN_SHORT
-                        } (${CURRENCY_SIGN})`}</div>
+                        <div>
+                            {tt('g.balance', {
+                                balanceValue: `${balance} ${
+                                    DEBT_TOKEN_SHORT
+                                } (${CURRENCY_SIGN})`,
+                            })}
+                        </div>
                         <br />
                         {loading && (
                             <span>

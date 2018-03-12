@@ -20,7 +20,7 @@ class About extends React.Component {
                     </div>
                     <h2>{tt('about_jsx.about_app', { APP_NAME })}</h2>
                     <p>
-                        {tt('about_jsx.about_app_details')}
+                        {tt('about_jsx.about_app_details', { APP_NAME })}
                         <a href="https://steem.io/">
                             {tt('about_jsx.learn_more_at_app_url', { APP_URL })}
                         </a>.

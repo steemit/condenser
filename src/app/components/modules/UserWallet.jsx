@@ -41,7 +41,7 @@ class UserWallet extends React.Component {
             const new_window = window.open();
             new_window.opener = null;
             new_window.location =
-                'https://blocktrades.us/?input_coin_type=btc&output_coin_type=steem&receive_address=' +
+                'https://blocktrades.us/?input_coin_type=eth&output_coin_type=steem&receive_address=' +
                 name;
         };
         this.onShowWithdrawSteem = e => {
@@ -49,14 +49,14 @@ class UserWallet extends React.Component {
             const new_window = window.open();
             new_window.opener = null;
             new_window.location =
-                'https://blocktrades.us/unregistered_trade/steem/btc';
+                'https://blocktrades.us/unregistered_trade/steem/eth';
         };
         this.onShowDepositPower = (current_user_name, e) => {
             e.preventDefault();
             const new_window = window.open();
             new_window.opener = null;
             new_window.location =
-                'https://blocktrades.us/?input_coin_type=btc&output_coin_type=steem_power&receive_address=' +
+                'https://blocktrades.us/?input_coin_type=eth&output_coin_type=steem_power&receive_address=' +
                 current_user_name;
         };
         this.onShowDepositSBD = (current_user_name, e) => {
@@ -64,7 +64,7 @@ class UserWallet extends React.Component {
             const new_window = window.open();
             new_window.opener = null;
             new_window.location =
-                'https://blocktrades.us/?input_coin_type=btc&output_coin_type=sbd&receive_address=' +
+                'https://blocktrades.us/?input_coin_type=eth&output_coin_type=sbd&receive_address=' +
                 current_user_name;
         };
         this.onShowWithdrawSBD = e => {
@@ -72,7 +72,7 @@ class UserWallet extends React.Component {
             const new_window = window.open();
             new_window.opener = null;
             new_window.location =
-                'https://blocktrades.us/unregistered_trade/sbd/btc';
+                'https://blocktrades.us/unregistered_trade/sbd/eth';
         };
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'UserWallet');
     }
@@ -196,11 +196,9 @@ class UserWallet extends React.Component {
                 return out.concat([
                     <div key={item.get(0)}>
                         <Tooltip
-                            t={
-                                tt('userwallet_jsx.conversion_complete_tip') +
-                                ': ' +
-                                new Date(finishTime).toLocaleString()
-                            }
+                            t={tt('userwallet_jsx.conversion_complete_tip', {
+                                date: new Date(finishTime).toLocaleString(),
+                            })}
                         >
                             <span>
                                 (+{tt('userwallet_jsx.in_conversion', {
@@ -303,7 +301,7 @@ class UserWallet extends React.Component {
 
         let steem_menu = [
             {
-                value: tt('g.transfer'),
+                value: tt('userwallet_jsx.transfer'),
                 link: '#',
                 onClick: showTransfer.bind(
                     this,
@@ -349,13 +347,6 @@ class UserWallet extends React.Component {
                 onClick: showTransfer.bind(this, 'SBD', 'Transfer to Savings'),
             },
             { value: tt('userwallet_jsx.market'), link: '/market' },
-            {
-                value: tt('userwallet_jsx.convert_to_LIQUID_TOKEN', {
-                    LIQUID_TOKEN,
-                }),
-                link: '#',
-                onClick: convertToSteem,
-            },
         ];
         if (isMyAccount) {
             steem_menu.push({
@@ -590,7 +581,8 @@ class UserWallet extends React.Component {
                         {delegated_steem != 0 ? (
                             <span className="secondary">
                                 {tt(
-                                    'tips_js.part_of_your_steem_power_is_currently_delegated'
+                                    'tips_js.part_of_your_steem_power_is_currently_delegated',
+                                    { user_name: account.get('name') }
                                 )}
                             </span>
                         ) : null}
@@ -615,7 +607,7 @@ class UserWallet extends React.Component {
                                         : null,
                                 }}
                             >
-                                <Tooltip t="STEEM POWER delegated to this account">
+                                <Tooltip t="STEEM POWER delegated to/from this account">
                                     ({received_power_balance_str} STEEM)
                                 </Tooltip>
                             </div>
@@ -817,6 +809,7 @@ export default connect(
             );
         },
         convertToSteem: e => {
+            //post 2018-01-31 if no calls to this function exist may be safe to remove. Investigate use of ConvertToSteem.jsx
             e.preventDefault();
             const name = 'convertToSteem';
             dispatch(globalActions.showDialog({ name }));

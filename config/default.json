@@ -133,5 +133,6 @@
     "log_level": "info"
   },
   "blockcypher_token": "blockcypher token",
+  "is_testnet": false,
   "openexchangerates_app_id": "app id"
 }

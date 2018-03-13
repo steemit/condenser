@@ -265,14 +265,15 @@
         "faq": "FAQ",
         "shop": "The Steemit Shop",
         "chat": "Steem Chat",
-        "app_center": "Steemit App Center",
+        "app_center": "Apps Built on Steem",
         "api_docs": "Steemit API Docs",
         "bluepaper": "Steem Bluepaper",
         "smt_whitepaper": "SMT Whitepaper",
         "whitepaper": "Steem Whitepaper",
         "intro_tagline": "Your voice is worth something",
         "intro_paragraph":
-            "Get paid for good content. Post and upvote articles on Steemit to get your share of the daily rewards pool."
+            "Get paid for good content. Post and upvote articles on Steemit to get your share of the daily rewards pool.",
+        "jobs": "Jobs at Steemit"
     },
     "main_menu": {
         "hot": "Hot",

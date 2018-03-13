@@ -100,9 +100,14 @@ const SidePanel = ({ alignment, visible, hideSidePanel, username }) => {
                 link: 'https://steem.chat/home',
             },
             {
+                value: 'jobs',
+                label: tt('navigation.jobs'),
+                link: 'https://jobs.lever.co/steemit',
+            },
+            {
                 value: 'tools',
                 label: tt('navigation.app_center'),
-                link: 'http://steemtools.com/',
+                link: 'https://steemprojects.com/',
             },
             {
                 value: 'api_docs',

@@ -82,6 +82,7 @@ export default ({
         // title is only set in the case of an external link warning
         a: ['href', 'rel', 'title'],
     },
+    allowedSchemes: ['http', 'https', 'steem'],
     transformTags: {
         iframe: (tagName, attribs) => {
             const srcAtty = attribs.src;

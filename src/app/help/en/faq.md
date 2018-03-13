@@ -766,7 +766,7 @@ To buy:
 
 STEEM purchases made via steemit.com are facilitated by <a href="https://blocktrades.us">BlockTrades</a>.
 
-bitcoin can also be exchanged for STEEM on external markets such as [Binance](https://www.binance.com/), [BitShares](https://openledger.info/), [Bittrex](https://bittrex.com), [Changelly](https://changelly.com), [GOPAX](https://www.gopax.co.kr) [HitBTC](https://hitbtc.com/), [Poloniex](https://poloniex.com), [Shapeshift.io](https://shapeshift.io), and [UpBit](https://upbit.com/).
+bitcoin can also be exchanged for STEEM on external markets such as [Binance](https://www.binance.com/), [BitShares](https://openledger.info/), [Bittrex](https://bittrex.com), [Changelly](https://changelly.com), [GOPAX](https://www.gopax.co.kr), [HitBTC](https://hitbtc.com/), [Poloniex](https://poloniex.com), [Shapeshift.io](https://shapeshift.io), and [UpBit](https://upbit.com/).
 
 <a href="#Table_of_Contents_Economics">^</a>
 ## <span id="How_long_does_it_take_STEEM_or_STEEM_Power_that_I_purchased_to_show_up_in_my_account">How long does it take STEEM or Steem Power that I purchased to show up in my account?</span>

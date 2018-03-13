@@ -36,7 +36,7 @@ global.webpackIsomorphicTools = new WebpackIsomorphicTools(
 );
 
 global.webpackIsomorphicTools.server(ROOT, () => {
-    golos.api.setWebSocket(config.get('ws_connection_server'))
+    golos.config.set('websocket', config.get('ws_connection_server'))
 
     try {
         require('./server');

@@ -229,8 +229,8 @@ function linkifyNode(child, state) {
 
         const { mutate } = state;
         if (!child.data) return;
-        if (embedYouTubeNode(child, state.links, state.images)) return;
-        if (embedVimeoNode(child, state.links, state.images)) return;
+        child = embedYouTubeNode(child, state.links, state.images);
+        child = embedVimeoNode(child, state.links, state.images);
 
         const data = XMLSerializer.serializeToString(child);
         const content = linkify(
@@ -302,20 +302,20 @@ function linkify(content, mutate, hashtags, usertags, images, links) {
 
 function embedYouTubeNode(child, links, images) {
     try {
-        if (!child.data) return false;
+        if (!child.data) return child;
         const data = child.data;
         const yt = youTubeId(data);
-        if (!yt) return false;
+        if (!yt) return child;
 
-        const v = DOMParser.parseFromString(`~~~ embed:${yt.id} youtube ~~~`);
-        child.parentNode.replaceChild(v, child);
+        child.data = data.replace(yt.url, `~~~ embed:${yt.id} youtube ~~~`);
+
         if (links) links.add(yt.url);
         if (images)
             images.add('https://img.youtube.com/vi/' + yt.id + '/0.jpg');
-        return true;
+        return child;
     } catch (error) {
         console.log(error);
-        return false;
+        return child;
     }
 }
 
@@ -336,28 +336,29 @@ function youTubeId(data) {
 
 function embedVimeoNode(child, links /*images*/) {
     try {
-        if (!child.data) return false;
+        if (!child.data) return child;
         const data = child.data;
 
-        let id;
+        let id, fullMatchUrl;
         {
-            const m = data.match(linksRe.vimeoId);
+            const m = data.match(linksRe.vimeo);
             id = m && m.length >= 2 ? m[1] : null;
+            fullMatchUrl = m && m.length >= 2 ? m[0] : null;
         }
-        if (!id) return false;
+        if (!id) return child;
+
+        child.data = data.replace(fullMatchUrl, `~~~ embed:${id} vimeo ~~~`);
 
         const url = `https://player.vimeo.com/video/${id}`;
-        const v = DOMParser.parseFromString(`~~~ embed:${id} vimeo ~~~`);
-        child.parentNode.replaceChild(v, child);
         if (links) links.add(url);
 
         // Preview image requires a callback.. http://stackoverflow.com/questions/1361149/get-img-thumbnails-from-vimeo
         // if(images) images.add('https://.../vi/' + id + '/0.jpg')
 
-        return true;
+        return child;
     } catch (error) {
         console.log(error);
-        return false;
+        return child;
     }
 }
 

@@ -61,6 +61,10 @@ export function getContentReplies(author, permlink) {
     return  api.getContentRepliesAsync(author, permlink)
 }
 
+export function getAllContentReplies(author, permlink) {
+    return  api.getAllContentRepliesAsync(author, permlink)
+}
+
 export function gedDiscussionsBy(type, args) {
     return api[PUBLIC_API[type][0]](args)
 }

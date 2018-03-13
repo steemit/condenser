@@ -133,13 +133,13 @@ describe('htmlready', () => {
         const noRelativeHttpHttpsOrSteem = '<xml xmlns="http://www.w3.org/1999/xhtml"><a href="land.com"> zippy </a> </xml>';
         const cleansedRelativeHttpHttpsOrSteem = '<xml xmlns="http://www.w3.org/1999/xhtml"><a href="https://land.com"> zippy </a> </xml>';
         const resNoRelativeHttpHttpsOrSteem = HtmlReady(noRelativeHttpHttpsOrSteem).html;
-        expect(resNoRelativeHttpHttpsOrSteem).to.equal(cleansedRelativeHttpHttpsOrSteem);
+        expect(resNoRelativeHttpHttpsOrSteem).toEqual(cleansedRelativeHttpHttpsOrSteem);
     });
 
     it('should allow the steem uri scheme for vessel links', () => {
         const noRelativeHttpHttpsOrSteem = '<xml xmlns="http://www.w3.org/1999/xhtml"><a href="steem://veins.com"> arteries </a> </xml>';
         const cleansedRelativeHttpHttpsOrSteem = '<xml xmlns="http://www.w3.org/1999/xhtml"><a href="steem://veins.com"> arteries </a> </xml>';
         const resNoRelativeHttpHttpsOrSteem = HtmlReady(noRelativeHttpHttpsOrSteem).html;
-        expect(resNoRelativeHttpHttpsOrSteem).to.equal(cleansedRelativeHttpHttpsOrSteem);
+        expect(resNoRelativeHttpHttpsOrSteem).toEqual(cleansedRelativeHttpHttpsOrSteem);
     });
 });

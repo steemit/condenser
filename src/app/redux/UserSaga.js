@@ -244,6 +244,13 @@ function* usernamePasswordLogin2({
         (r, auth, type) => (auth === 'full' ? r.add(type) : r),
         Set()
     );
+
+    // Block memo key logins
+    if (fullAuths.size === 1 && fullAuths.contains('memo')) {
+        yield put(userActions.loginError({ error: 'memo_login_blocked' }));
+        return;
+    }
+
     if (!fullAuths.size) {
         localStorage.removeItem('autopost2');
         const owner_pub_key = account.getIn(['owner', 'key_auths', 0, 0]);

@@ -228,6 +228,8 @@ class LoginForm extends Component {
                     )}
                 </span>
             );
+        } else if (error === 'memo_login_blocked') {
+            error = <span>{tt('loginform_jsx.memo_login_blocked')}</span>;
         }
         let message = null;
         if (msg) {

@@ -185,9 +185,11 @@ export function* fetchState(location_change_action) {
             const replies =  yield call([api, api.getAllContentRepliesAsync], account, permlink)
             replies.forEach( reply => {
                 const link = `${reply.author}/${reply.permlink}`
-                state.content[curl].replies.push(link)
                 state.content[link] = reply
                 accounts.push(reply.author)
+                if (reply.parent_permlink === permlink) {
+                    state.content[curl].replies.push(link)
+                }
             })
 
         } else if (parts[0] === 'witnesses' || parts[0] === '~witnesses') {

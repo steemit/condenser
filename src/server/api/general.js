@@ -290,16 +290,10 @@ export default function useGeneralApi(app) {
         try {
             if (!emailRegex.test(email.toLowerCase()))
                 throw new Error('not valid email: ' + email);
-            let user = yield findUser({
-                email: esc(email),
+            let user = yield models.User.create({
                 name: esc(name),
+                email: esc(email),
             });
-            if (!user) {
-                user = yield models.User.create({
-                    name: esc(name),
-                    email: esc(email),
-                });
-            }
             const account = yield models.Account.create({
                 user_id: user.id,
                 name: esc(name),

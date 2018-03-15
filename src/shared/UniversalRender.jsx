@@ -350,9 +350,7 @@ async function universalRender({
                 onchain.content[key]['stats'] = contentStats(
                     onchain.content[key]
                 );
-                //onchain.content[key]['active_votes'] = onchain.content[key][
-                //    'active_votes'
-                //].filter(vote => vote.voter === offchain.account);
+                onchain.content[key]['active_votes'] = null;
             }
         }
 

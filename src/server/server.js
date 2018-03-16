@@ -12,10 +12,8 @@ import prod_logger from './prod_logger';
 import favicon from 'koa-favicon';
 import staticCache from 'koa-static-cache';
 import useRedirects from './redirects';
-import useOauthLogin from './api/oauth';
 import useGeneralApi from './api/general';
 import useAccountRecoveryApi from './api/account_recovery';
-import useNotificationsApi from './api/notifications';
 import useEnterAndConfirmEmailPages from './sign_up_pages/enter_confirm_email';
 import useEnterAndConfirmMobilePages from './sign_up_pages/enter_confirm_mobile';
 import useUserJson from './json/user_json';
@@ -25,17 +23,14 @@ import session from '@steem/crypto-session';
 import csrf from 'koa-csrf';
 import flash from 'koa-flash';
 import minimist from 'minimist';
-import Grant from 'grant-koa';
 import config from 'config';
 import { routeRegex } from 'app/ResolveRoute';
 import secureRandom from 'secure-random';
 import userIllegalContent from 'app/utils/userIllegalContent';
 import koaLocale from 'koa-locale';
 
-if(cluster.isMaster)
-    console.log('application server starting, please wait.');
+if (cluster.isMaster) console.log('application server starting, please wait.');
 
-const grant = new Grant(config.grant);
 // import uploadImage from 'server/upload-image' //medium-editor
 
 const app = new Koa();
@@ -56,31 +51,25 @@ const crypto_key = config.get('server_session_secret');
 session(app, {
     maxAge: 1000 * 3600 * 24 * 60,
     crypto_key,
-    key: config.get('session_cookie_key')
+    key: config.get('session_cookie_key'),
 });
 csrf(app);
 
-app.use(mount(grant));
 app.use(flash({ key: 'flash' }));
 koaLocale(app);
 
 function convertEntriesToArrays(obj) {
     return Object.keys(obj).reduce((result, key) => {
-            result[key] = obj[key].split(/\s+/);
-    return result;
-}, {});
+        result[key] = obj[key].split(/\s+/);
+        return result;
+    }, {});
 }
 
-const service_worker_js_content = fs
-    .readFileSync(path.join(__dirname, './service-worker.js'))
-    .toString();
-
 // some redirects and health status
-app.use(function* (next) {
-
+app.use(function*(next) {
     if (this.method === 'GET' && this.url === '/.well-known/healthcheck.json') {
         this.status = 200;
-        this.body = {status: 'ok'};
+        this.body = { status: 'ok' };
         return;
     }
 
@@ -94,15 +83,15 @@ app.use(function* (next) {
     if (
         this.method === 'GET' &&
         (routeRegex.UserProfile1.test(this.url) ||
-        routeRegex.PostNoCategory.test(this.url) || routeRegex.Post.test(this.url)
-        )
+            routeRegex.PostNoCategory.test(this.url) ||
+            routeRegex.Post.test(this.url))
     ) {
         const p = this.originalUrl.toLowerCase();
-        let userCheck = "";
+        let userCheck = '';
         if (routeRegex.Post.test(this.url)) {
-            userCheck = p.split("/")[2].slice(1);
+            userCheck = p.split('/')[2].slice(1);
         } else {
-            userCheck = p.split("/")[1].slice(1);
+            userCheck = p.split('/')[1].slice(1);
         }
         if (userIllegalContent.includes(userCheck)) {
             console.log('Illegal content user found blocked', userCheck);
@@ -133,10 +122,10 @@ app.use(function* (next) {
     // remember ch, cn, r url params in the session and remove them from url
     if (this.method === 'GET' && /\?[^\w]*(ch=|cn=|r=)/.test(this.url)) {
         let redir = this.url.replace(/((ch|cn|r)=[^&]+)/gi, r => {
-                const p = r.split('=');
-        if (p.length === 2) this.session[p[0]] = p[1];
-        return '';
-    });
+            const p = r.split('=');
+            if (p.length === 2) this.session[p[0]] = p[1];
+            return '';
+        });
         redir = redir.replace(/&&&?/, '');
         redir = redir.replace(/\?&?$/, '');
         console.log(`server redirect ${this.url} -> ${redir}`);
@@ -161,7 +150,11 @@ if (env === 'production') {
     app.use(koa_logger());
 }
 
-app.use(helmet());
+app.use(
+    helmet({
+        hsts: false,
+    })
+);
 
 app.use(
     mount(
@@ -178,24 +171,11 @@ app.use(
     })
 );
 
-app.use(
-    mount('/service-worker.js', function*() {
-        this.set('Cache-Control', 'public, max-age=7200000');
-        this.type = 'application/javascript';
-        // TODO: use APP_URL from client_config.js
-        // actually use a config value for it
-        this.body = service_worker_js_content.replace(
-            /\{DEFAULT_URL\}/i,
-            'https://' + this.request.header.host
-        );
-    })
-);
-
 // set user's uid - used to identify users in logs and some other places
 // FIXME SECURITY PRIVACY cycle this uid after a period of time
 app.use(function*(next) {
     const last_visit = this.session.last_visit;
-    this.session.last_visit = new Date().getTime() / 1000 | 0;
+    this.session.last_visit = (new Date().getTime() / 1000) | 0;
     const from_link = this.request.headers.referer;
     if (!this.session.uid) {
         this.session.uid = secureRandom.randomBuffer(13).toString('hex');
@@ -217,9 +197,7 @@ useUserJson(app);
 usePostJson(app);
 
 useAccountRecoveryApi(app);
-useOauthLogin(app);
 useGeneralApi(app);
-useNotificationsApi(app);
 
 // helmet wants some things as bools and some as lists, makes config difficult.
 // our config uses strings, this splits them to lists on whitespace.
@@ -228,7 +206,7 @@ if (env === 'production') {
     const helmetConfig = {
         directives: convertEntriesToArrays(config.get('helmet.directives')),
         reportOnly: config.get('helmet.reportOnly'),
-        setAllHeaders: config.get('helmet.setAllHeaders')
+        setAllHeaders: config.get('helmet.setAllHeaders'),
     };
     helmetConfig.directives.reportUri = helmetConfig.directives.reportUri[0];
     if (helmetConfig.directives.reportUri === '-') {
@@ -264,9 +242,9 @@ if (env === 'development') {
     const proxyhost = 'http://0.0.0.0:' + webpack_dev_port;
     console.log('proxying to webpack dev server at ' + proxyhost);
     const proxy = require('koa-proxy')({
-            host: proxyhost,
-            map: filePath => 'assets/' + filePath
-});
+        host: proxyhost,
+        map: filePath => 'assets/' + filePath,
+    });
     app.use(mount('/assets', proxy));
 } else {
     app.use(
@@ -285,7 +263,9 @@ if (env !== 'test') {
         const bot = this.state.isBot;
         if (bot) {
             console.log(
-                `  --> ${this.method} ${this.originalUrl} ${this.status} (BOT '${bot}')`
+                `  --> ${this.method} ${this.originalUrl} ${
+                    this.status
+                } (BOT '${bot}')`
             );
         }
     });
@@ -294,24 +274,25 @@ if (env !== 'test') {
 
     const port = process.env.PORT ? parseInt(process.env.PORT) : 8080;
 
-    if(env === 'production') {
-        if(cluster.isMaster) {
-            for(var i = 0; i < numProcesses; i++) {
+    if (env === 'production') {
+        if (cluster.isMaster) {
+            for (var i = 0; i < numProcesses; i++) {
                 cluster.fork();
             }
             // if a worker dies replace it so application keeps running
-            cluster.on('exit', function (worker) {
-                console.log('error: worker %d died, starting a new one', worker.id);
+            cluster.on('exit', function(worker) {
+                console.log(
+                    'error: worker %d died, starting a new one',
+                    worker.id
+                );
                 cluster.fork();
             });
-        }
-        else {
+        } else {
             app.listen(port);
             if (process.send) process.send('online');
             console.log(`Worker process started for port ${port}`);
         }
-    }
-    else {
+    } else {
         // spawn a single thread if not running in production mode
         app.listen(port);
         if (process.send) process.send('online');
@@ -321,7 +302,7 @@ if (env !== 'test') {
 
 // set PERFORMANCE_TRACING to the number of seconds desired for
 // logging hardware stats to the console
-if(process.env.PERFORMANCE_TRACING)
-    setInterval(hardwareStats, (1000*process.env.PERFORMANCE_TRACING));
+if (process.env.PERFORMANCE_TRACING)
+    setInterval(hardwareStats, 1000 * process.env.PERFORMANCE_TRACING);
 
 module.exports = app;

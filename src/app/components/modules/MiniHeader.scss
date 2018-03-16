@@ -1,5 +1,3 @@
-
-
 .mini-header, .mini-header.theme-light, .mini-header.theme-dark {
 	.logo-new {
 	  	transition: 0.2s ease-in-out;
@@ -9,7 +7,7 @@
 	   	fill: $color-teal;
 	   	@include MQ(M) {
 	  		width: 144px;
-	   		height: auto;	   		
+	   		height: auto;
 	   	}
 	}
 	.icon-svg {

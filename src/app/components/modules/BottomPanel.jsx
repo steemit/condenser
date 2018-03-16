@@ -5,7 +5,7 @@ export default class BottomPanel extends React.Component {
     static propTypes = {
         children: React.PropTypes.object,
         visible: React.PropTypes.bool,
-        hide: React.PropTypes.func.isRequired
+        hide: React.PropTypes.func.isRequired,
     };
 
     componentWillReceiveProps(nextProps) {
@@ -21,12 +21,14 @@ export default class BottomPanel extends React.Component {
     }
 
     render() {
-        const {children, visible, hide} = this.props;
-        return <div className="BottomPanel">
-            <div className={visible ? 'visible ' : ''}>
-                <CloseButton onClick={hide} />
-                {children}
+        const { children, visible, hide } = this.props;
+        return (
+            <div className="BottomPanel">
+                <div className={visible ? 'visible ' : ''}>
+                    <CloseButton onClick={hide} />
+                    {children}
+                </div>
             </div>
-        </div>;
+        );
     }
 }

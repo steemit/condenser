@@ -1,8 +1,8 @@
-import webpack from 'webpack';
-import git from 'git-rev-sync';
-import baseConfig from './base.config';
+const webpack = require('webpack');
+const git = require('git-rev-sync');
+const baseConfig = require('./base.config');
 
-export default {
+module.exports = {
     ...baseConfig,
     plugins: [
         new webpack.DefinePlugin({
@@ -10,9 +10,6 @@ export default {
                 BROWSER: JSON.stringify(true),
                 NODE_ENV: JSON.stringify('production'),
                 VERSION: JSON.stringify(git.long())
-            },
-            global: {
-                TYPED_ARRAY_SUPPORT: JSON.stringify(false)
             }
         }),
         new webpack.optimize.UglifyJsPlugin({
@@ -37,6 +34,13 @@ export default {
                 comments: false
             }
         }),
-        ...baseConfig.plugins
+        ...baseConfig.plugins,
+        // Fix window.onerror
+        // See https://github.com/webpack/webpack/issues/5681#issuecomment-345861733
+        new webpack.SourceMapDevToolPlugin({
+            module: true,
+            columns: false,
+            moduleFilenameTemplate: info => { return `${info.resourcePath}?${info.loaders}` }
+        })
     ]
 };

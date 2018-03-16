@@ -1,0 +1,27 @@
+.logo {
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    .logo__beta{
+        fill: $color-text-gray;
+        transition: 0.25s all ease-in-out;
+    }
+    .logo__steemit{
+        fill: $color-teal;
+        transition: 0.25s all ease-in-out;
+    }
+    // Fixes #2639 - Don't apply hover styles on devices that do not support it.
+    @media (hover: hover) {
+        &:hover, &:active {
+            .logo__beta{
+                @include themify($themes) {
+                    fill: themed('colorAccentReverse');
+                }
+            }
+            .logo__steemit{
+                @include themify($themes) {
+                    fill: themed('colorAccentReverse');
+                }
+            }
+        }
+    }
+}

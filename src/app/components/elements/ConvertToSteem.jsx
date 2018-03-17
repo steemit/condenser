@@ -55,7 +55,7 @@ class ConvertToSteem extends React.Component {
                             {tt(
                                 'converttosteem_jsx.DEBT_TOKEN_will_be_unavailable',
                                 { DEBT_TOKEN }
-                            )}.
+                            )}
                         </p>
                         <p>
                             {tt(
@@ -66,7 +66,7 @@ class ConvertToSteem extends React.Component {
                         <p>
                             {tt(
                                 'converttosteem_jsx.this_is_a_price_feed_conversion'
-                            )}.
+                            )}
                         </p>
                     </div>
                 </div>
@@ -164,7 +164,7 @@ export default reduxForm(
                         dispatch(
                             appActions.addNotification({
                                 key: 'convert_sd_to_steem_' + Date.now(),
-                                message: tt('g.order_placed') + ': ' + conf,
+                                message: tt('g.order_placed', { order: conf }),
                                 dismissAfter: 5000,
                             })
                         );

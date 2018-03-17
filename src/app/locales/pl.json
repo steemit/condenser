@@ -248,7 +248,7 @@
         "learn_more": "Dowiedz się więcej",
         "welcome": "Witaj",
         "faq": "FAQ",
-        "chat": "Steemit Chat",
+        "chat": "Steem Chat",
         "app_center": "Steemit App Center",
         "api_docs": "Dokumentacja Steemit API",
         "whitepaper": "Steem Whitepaper",
@@ -676,8 +676,7 @@
         "location_is_too_long": "Lokalizacja jest za długa",
         "website_url_is_too_long": "Strona www jest za długa",
         "public_profile_settings": "Ustawienia profilu publicznego",
-        "private_post_display_settings":
-            "Prywatne ustawienia wyświetlania postów",
+        "preferences": "Prywatne ustawienia wyświetlania postów",
         "not_safe_for_work_nsfw_content": "Treści niestosowne w pracy (NSFW)",
         "always_hide": "Zawsze ukrywaj",
         "always_warn": "Zawsze ostrzegaj",

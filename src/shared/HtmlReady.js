@@ -5,6 +5,8 @@ import { validate_account_name } from 'app/utils/ChainValidation';
 import proxifyImageUrl from 'app/utils/ProxifyUrl';
 
 export const getPhishingWarningMessage = () => tt('g.phishy_message');
+export const getExternalLinkWarningMessage = () =>
+    tt('g.external_link_message');
 
 const noop = () => {};
 const DOMParser = new xmldom.DOMParser({
@@ -139,15 +141,16 @@ function link(state, child) {
     if (url) {
         state.links.add(url);
         if (state.mutate) {
-            // If this link is not relative, http, or https -- add https.
-            if (!/^((#)|(\/(?!\/))|((https?:)?\/\/))/.test(url)) {
+            // If this link is not relative, http, https, or steem -- add https.
+            if (!/^((#)|(\/(?!\/))|(((steem|https?):)?\/\/))/.test(url)) {
                 child.setAttribute('href', 'https://' + url);
             }
 
             // Unlink potential phishing attempts
             if (
-                child.textContent.match(/(www\.)?steemit\.com/) &&
-                !url.match(/https?:\/\/(.*@)?(www\.)?steemit\.com/)
+                url.indexOf('#') !== 0 && // Allow in-page links
+                (child.textContent.match(/(www\.)?steemit\.com/i) &&
+                    !url.match(/https?:\/\/(.*@)?(www\.)?steemit\.com/i))
             ) {
                 const phishyDiv = child.ownerDocument.createElement('div');
                 phishyDiv.textContent = `${child.textContent} / ${url}`;

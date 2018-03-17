@@ -33,6 +33,9 @@ const ACCOUNT_AUTH_LOOKUP = 'user/ACCOUNT_AUTH_LOOKUP';
 const SET_AUTHORITY = 'user/SET_AUTHORITY';
 const HIDE_CONNECTION_ERROR_MODAL = 'user/HIDE_CONNECTION_ERROR_MODAL';
 const SET = 'user/SET';
+const SHOW_SIDE_PANEL = 'user/SHOW_SIDE_PANEL';
+const HIDE_SIDE_PANEL = 'user/HIDE_SIDE_PANEL';
+
 // Saga-related
 export const LOAD_SAVINGS_WITHDRAW = 'user/LOAD_SAVINGS_WITHDRAW';
 export const UPLOAD_IMAGE = 'user/UPLOAD_IMAGE';
@@ -45,6 +48,7 @@ const defaultState = fromJS({
     show_signup_modal: false,
     pub_keys_used: null,
     locale: DEFAULT_LANGUAGE,
+    show_side_panel: false,
 });
 
 if (process.env.BROWSER) {
@@ -229,6 +233,12 @@ export default function reducer(state = defaultState, action) {
                 fromJS(payload.value)
             );
 
+        case SHOW_SIDE_PANEL:
+            return state.set('show_side_panel', true);
+
+        case HIDE_SIDE_PANEL:
+            return state.set('show_side_panel', false);
+
         default:
             return state;
     }
@@ -394,3 +404,13 @@ export const uploadImage = payload => ({
     type: UPLOAD_IMAGE,
     payload,
 });
+
+export const showSidePanel = () => ({
+    type: SHOW_SIDE_PANEL,
+});
+
+export const hideSidePanel = () => {
+    return {
+        type: HIDE_SIDE_PANEL,
+    };
+};

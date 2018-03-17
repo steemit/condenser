@@ -6,6 +6,7 @@
 @import "./cards/PostSummary";
 @import "./cards/PostFull";
 @import "./cards/PostsList";
+@import "./cards/TransferHistoryRow/style";
 
 // elements
 @import "./elements/Icon";
@@ -32,18 +33,22 @@
 @import "./elements/UserNames";
 @import "./elements/UserKeys";
 @import "./elements/QrKeyView";
+@import "./elements/SortOrder/styles";
+@import "./elements/SearchInput/styles";
+@import "./elements/IconButton/styles";
+@import "./elements/NativeSelect/styles";
+@import "./elements/SteemLogo/styles";
 
 // modules
-@import "./modules/Header";
+@import "./modules/Header/styles";
 @import "./modules/SignUp";
 @import "./modules/LoginForm";
 @import "./modules/MiniHeader";
-@import "./modules/SidePanel";
+@import "./modules/SidePanel/styles";
 @import "./modules/Settings";
 @import "./modules/BottomPanel";
 @import "./modules/UserWallet";
 @import "./modules/Powerdown";
-@import "./modules/TopRightMenu";
 @import "./modules/ConfirmTransactionForm";
 @import "./modules/Transfer";
 

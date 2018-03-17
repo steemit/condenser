@@ -3,6 +3,7 @@ import tt from 'counterpart';
 import linksRe, { any as linksAny } from 'app/utils/Links';
 import { validate_account_name } from 'app/utils/ChainValidation';
 import proxifyImageUrl from 'app/utils/ProxifyUrl';
+import * as Phishing from 'app/utils/Phishing';
 
 export const getPhishingWarningMessage = () => tt('g.phishy_message');
 export const getExternalLinkWarningMessage = () =>
@@ -148,9 +149,12 @@ function link(state, child) {
 
             // Unlink potential phishing attempts
             if (
-                url.indexOf('#') !== 0 && // Allow in-page links
-                (child.textContent.match(/(www\.)?steemit\.com/i) &&
-                    !url.match(/https?:\/\/(.*@)?(www\.)?steemit\.com/i))
+                (url.indexOf('#') !== 0 && // Allow in-page links
+                    (child.textContent.match(/(www\.)?steemit\.com/i) &&
+                        !url.match(
+                            /https?:\/\/(.*@)?(www\.)?steemit\.com/i
+                        ))) ||
+                Phishing.looksPhishy(url)
             ) {
                 const phishyDiv = child.ownerDocument.createElement('div');
                 phishyDiv.textContent = `${child.textContent} / ${url}`;
@@ -293,6 +297,12 @@ function linkify(content, mutate, hashtags, usertags, images, links) {
 
         // do not linkify .exe or .zip urls
         if (/\.(zip|exe)$/i.test(ln)) return ln;
+
+        // do not linkify phishy links
+        if (Phishing.looksPhishy(ln))
+            return `<div title='${getPhishingWarningMessage()}' class='phishy'>${
+                ln
+            }</div>`;
 
         if (links) links.add(ln);
         return `<a href="${ipfsPrefix(ln)}">${ln}</a>`;

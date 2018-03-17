@@ -1,6 +1,6 @@
 <span id="disable_router_nav_history_direction_check"></span>
 
-# Частые вопросы про Steem
+# Частые вопросы про Steemit
 
 ## <span id="Table_of_Contents">Оглавление</span>
 

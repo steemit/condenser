@@ -142,4 +142,14 @@ describe('htmlready', () => {
         const resNoRelativeHttpHttpsOrSteem = HtmlReady(noRelativeHttpHttpsOrSteem).html;
         expect(resNoRelativeHttpHttpsOrSteem).toEqual(cleansedRelativeHttpHttpsOrSteem);
     });
+
+    it('should not munge valid comment urls', () => {
+        const url = 'https://steemit.com/spam/@test-safari/34gfex-december-spam#@test-safari/re-test-safari-34gfex-december-spam-20180110t234627522z'
+        const prefix = '<xml xmlns="http://www.w3.org/1999/xhtml">'
+        const suffix = '</xml>'
+        const input = prefix + url + suffix;
+        const expected = prefix + '<a href="' + url + '">' + url + '</a>' + suffix;
+        const result = HtmlReady(input).html;
+        expect(result).toEqual(expected);
+    });
 });

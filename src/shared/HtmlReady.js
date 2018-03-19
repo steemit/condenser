@@ -281,7 +281,7 @@ function linkify(content, mutate, hashtags, usertags, images, links) {
 
             return valid
                 ? `${preceedings}<a href="/@${userLower}">@${user}</a>`
-                : '@' + user;
+                : `${preceedings}@${user}`;
         }
     );
 

@@ -158,8 +158,7 @@ describe('htmlready', () => {
         const prefix = '<xml xmlns="http://www.w3.org/1999/xhtml">'
         const suffix = '</xml>'
         const input = prefix + body + suffix;
-        const expected = prefix + '<span>' + body + '</span>' + suffix;
         const result = HtmlReady(input).html;
-        expect(result).toEqual(expected);
+        expect(result).toEqual(input);
     });
 });

@@ -53,7 +53,7 @@ export default function ServerHTML({ body, assets, locale, title, meta, analytic
             <title>{page_title}</title>
         </head>
         <body>
-        <AnalyticsScripts { ...analytics }/>            
+        {/* <AnalyticsScripts { ...analytics }/> */}
         <div id="content" dangerouslySetInnerHTML={ { __html: body } }></div>
         { assets.script.map((href, idx) => <script key={ idx } src={ href }></script>) }
         { config.get('vk_pixel_id') && <script dangerouslySetInnerHTML={ { __html: `(window.Image ? (new Image()) : document.createElement('img')).src = 'https://vk.com/rtrg?p=${config.get('vk_pixel_id')}';` } }></script> }

@@ -89,11 +89,17 @@ class Post extends React.Component {
             }
         }
 
-        const replies = dis.get('replies').toJS();
+        let replies = dis.get('replies').toJS();
 
         let sort_order = 'trending';
         if( this.props.location && this.props.location.query.sort )
            sort_order = this.props.location.query.sort;
+
+        const commentLimit = 100;
+        if (global['process'] !== undefined && replies.length > commentLimit) {
+            console.log(`Too many comments, ${replies.length - commentLimit} omitted.`);
+            replies = replies.slice(0, commentLimit);
+        }
 
         sortComments( content, replies, sort_order );
         const keep = a => {

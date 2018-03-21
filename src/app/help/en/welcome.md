@@ -296,7 +296,7 @@ It is possible to earn thousands of dollars, but most authors who are doing this
 - [Bluepaper](https://steem.io/steem-bluepaper.pdf) - Explanation of how the platform works
 - [Steemit Help](https://www.steemithelp.net/) - Community maintained help pages
 - [The Steem Whitepaper](https://steem.io/SteemWhitePaper.pdf) - Technical details of the Steem blockchain
-- [Apps Built on Steem](http://steemprojects.com/) - Directory of apps, sites and tools built by Steem community
+- [Apps Built on Steem](https://steemprojects.com/) - Directory of apps, sites and tools built by Steem community
 - [Steem Block Explorer](https://steemd.com/) - Shows the raw Steem blockchain data 
 - [Steem Blockchain Explorer](https://steemdb.com/) - Analysis pages for the Steem blockchain data
 

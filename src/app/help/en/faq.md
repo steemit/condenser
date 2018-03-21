@@ -1318,7 +1318,7 @@ Each account can vote for up to 30 witnesses.
 
 ## <span id="What_third_party_tools_are_there_for_Steemit">What third-party tools are there for Steemit?</span>
 
-http://steemprojects.com/
+https://steemprojects.com/
 
 <a href="#Table_of_Contents_Miscellaneous">^</a>
 ## <span id="Is_there_an_official_Steemit_Facebook_page">Is there an official Steemit Facebook page?</span>

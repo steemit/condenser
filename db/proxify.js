@@ -29,6 +29,7 @@ export default async function proxify(ctx, context, method, ...args) {
             }
         } catch (e) {
             metrics.cache(method, 'MISS')
+            console.log(new Date(), 'MISS', method, args)
             return await defaultCall(ctx, context, method, args)
         }
     } else {

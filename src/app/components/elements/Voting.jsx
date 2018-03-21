@@ -602,6 +602,9 @@ export default connect(
                         },
                     },
                     confirm,
+                    errorCallback: errorKey => {
+                        console.log('Transaction Error:' + errorKey);
+                    },
                 })
             );
         },

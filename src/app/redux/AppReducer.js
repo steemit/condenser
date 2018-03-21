@@ -48,7 +48,10 @@ export default function reducer(state = defaultState, action = {}) {
             // Until we figure out how to better handle these errors, let em slide.
             // This action is the only part of the app that marks an error in state.app.error,
             // and the only part of the app which pays attn to this part of the state is in App.jsx.
-            //return  state.set('error', action.error).set('loading', false);
+            // return  state.set('error', action.error).set('loading', false);
+            // It is also worth noting that showTransactionErrorNotification in SagaShared
+            // Will check state.transaction.errors and create a notification for whatever it finds there.
+            // While TransactionReducer will add items to state.transaction.errors.
             return state;
         case FETCH_DATA_BEGIN:
             return state.set('loading', true);

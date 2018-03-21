@@ -1,4 +1,14 @@
-const domains = ['steewit.com'];
+const domains = [
+    'steewit.com',
+    'śteemit.com',
+    'ŝteemit.com',
+    'şteemit.com',
+    'šteemit.com',
+    'sţeemit.com',
+    'sťeemit.com',
+    'șteemit.com',
+    'sleemit.com',
+];
 
 /**
  * Does this URL look like a phishing attempt?
@@ -8,7 +18,8 @@ const domains = ['steewit.com'];
  */
 export const looksPhishy = questionableUrl => {
     for (let domain of domains) {
-        if (questionableUrl.indexOf(domain) > -1) return true;
+        if (questionableUrl.toLocaleLowerCase().indexOf(domain) > -1)
+            return true;
     }
 
     return false;

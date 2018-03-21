@@ -31,7 +31,7 @@ import WalletSubMenu from 'app/components/elements/WalletSubMenu';
 import Userpic from 'app/components/elements/Userpic';
 import Callout from 'app/components/elements/Callout';
 import normalizeProfile from 'app/utils/NormalizeProfile';
-import UserInvites from 'app/components/elements/UserInvites';
+// import UserInvites from 'app/components/elements/UserInvites';
 
 export default class UserProfile extends React.Component {
     constructor(props) {
@@ -323,7 +323,7 @@ export default class UserProfile extends React.Component {
                     <br />
                     <PasswordReset account={accountImm} />
                 </div>
-        } else if( section === 'invites' ) {
+        } /*else if( section === 'invites' ) {
             walletClass = 'active'
             tab_content = <div>
                     <WalletSubMenu account_name={account.name} />
@@ -331,7 +331,7 @@ export default class UserProfile extends React.Component {
                     <br />
                     <UserInvites account={accountImm} />
                 </div>
-        }
+        }*/
 
 		if (blockedUsers.includes(accountname)) {
 			tab_content = <IllegalContentMessage />;
@@ -344,7 +344,7 @@ export default class UserProfile extends React.Component {
         if (!(section === 'transfers' ||
               section === 'permissions' ||
               section === 'password' ||
-              section === 'invites' ||
+            //   section === 'invites' ||
               section === 'assets'||
               section === 'create-asset')) {
             tab_content = <div className="row">

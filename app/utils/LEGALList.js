@@ -7,4 +7,5 @@ export default `
 /ico/@worldcorescam/ico-worldcore-pavla-krymova-skam
 /ico/@worldcorescam/5yuuyw-ico-shnye-provaly-pavla-krymova-solvena-worldcore-private-fx
 /ico/@worldcorescam/ico-shnye-provaly-pavla-krymova-solvena-worldcore-private-fx
+/ru--golos/@palapalaruxaker/kak-ne-platit-nalogi-i-spat-spokoino
 `.trim().split("\n")

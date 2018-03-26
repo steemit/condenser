@@ -42,13 +42,13 @@ export default class LandingTeam extends React.Component {
 
             <div data-wow-delay="1s" className="wow fadeIn small-12 medium-12 large-3 columns small-centered Team__member ">
                 <div className="Team__members__image-wrapper">
-                    <img className="Team__member__img" src="images/landing/maria-l.jpg" />
+                    <img className="Team__member__img" src="images/landing/rodnikova.jpg"/>
                 </div>
-                <strong>Мария Листван</strong>
+                <strong>Юлия Родникова</strong>
                 <p>Комьюнити-менеджер</p>
                 <ul>
-                    <li><a href="mailto:support@golos.io" title="mail to support@golos.io"><Icon name="envelope" size="2x" /></a></li>
-                    <li><a href="/@merrymary"><Icon name={APP_ICON} size="2x" /></a></li>
+                    <li><a href="mailto:community@golos.io" title="mail to community@golos.io"><Icon name="envelope" size="2x" /></a></li>
+                    <li><a href="/@yulia.rodnikova"><Icon name={APP_ICON} size="2x" /></a></li>
                 </ul>
             </div>
 

@@ -3,6 +3,8 @@ mommo
 mazda07
 compress
 horror
+felixjasper
+jekasds
 `.trim().split("\n")
 
 export const blockedContent = `

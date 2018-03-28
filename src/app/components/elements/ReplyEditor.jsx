@@ -764,7 +764,7 @@ class ReplyEditor extends React.Component {
                                                       />
                                                   )}
                                                   getItemValue={item => item}
-                                                  items={this.props.follow && this.props.follow.getIn(['getFollowingAsync', state.user.getIn(['current', 'username']), 'blog_result']) ? this.props.follow.getIn(['getFollowingAsync', state.user.getIn(['current', 'username']), 'blog_result']).sort() : []}
+                                                  items={this.props.following}
                                                   shouldItemRender={
                                                       this.matchAutocompleteUser
                                                   }
@@ -905,6 +905,12 @@ export default formId =>
             if (isStory && jsonMetadata && jsonMetadata.tags) {
                 category = Set([category, ...jsonMetadata.tags]).join(' ');
             }
+            var following = [];
+            const follow = state.global.get('follow');
+            if (follow) {
+              const followingData = follow.getIn(['getFollowingAsync', username, 'blog_result']);
+              if (followingData) following = followingData.sort();
+            }
             const ret = {
                 ...ownProps,
                 fields,
@@ -914,7 +920,7 @@ export default formId =>
                 state,
                 formId,
                 richTextEditor,
-                follow: state.global.get('follow'),
+                following,
             };
             return ret;
         },

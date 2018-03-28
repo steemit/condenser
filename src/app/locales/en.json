@@ -1,5 +1,6 @@
 {
     "g": {
+        "add": "Add",
         "age": "age",
         "amount": "Amount",
         "and": "and",
@@ -280,6 +281,7 @@
         "trending": "Trending"
     },
     "reply_editor": {
+        "beneficiaries": "Beneficiaries",
         "shorten_title": "Shorten title",
         "exceeds_maximum_length": "Exceeds maximum length (%(maxKb)sKB)",
         "including_the_category":

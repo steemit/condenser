@@ -5,6 +5,8 @@ compress
 horror
 felixjasper
 jekasds
+vood.one
+galinakim
 `.trim().split("\n")
 
 export const blockedContent = `

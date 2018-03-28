@@ -153,7 +153,7 @@
     "unavailable" : "Пользователь заблокирован",
     "due_to_illegal_content": "из-за нарушений",
     "terms_of_service": "Условий пользования",
-    "terms_of_service_section": ", пункт 5.5.7"
+    "terms_of_service_section": ""
   },
   "g": {
     "golos_fest" : "Новости Golos.io",

@@ -81,7 +81,6 @@ class ReplyEditor extends React.Component {
             // Check for draft data
             let draft = localStorage.getItem('replyEditorData-' + formId);
             if (draft) {
-                console.log(draft);
                 draft = JSON.parse(draft);
                 const { category, title } = this.state;
                 if (category) category.props.onChange(draft.category);
@@ -151,7 +150,6 @@ class ReplyEditor extends React.Component {
                     body: body.value,
                     beneficiaries,
                 };
-                console.log(data);
 
                 clearTimeout(saveEditorTimeout);
                 saveEditorTimeout = setTimeout(() => {
@@ -1072,10 +1070,8 @@ export default formId =>
                     return;
                 }
 
-                var beneficiaryError;
                 if (beneficiaries.length > 8) {
-                    beneficiaryError = 'Can have at most 8 beneficiaries';
-                    errorCallback(beneficiaryError);
+                    errorCallback(tt('reply_editor.exceeds_max_benficiaries'));
                     return;
                 }
                 var totalPercent = 0;
@@ -1085,32 +1081,27 @@ export default formId =>
                     const beneficiary = beneficiaries[i];
                     const accountError = validate_account_name(beneficiary.username, '');
                     if (accountError) {
-                        beneficiaryError = accountError;
-                        errorCallback(beneficiaryError);
+                        errorCallback(accountError);
                         return;
                     }
                     if (beneficiary.username === username) {
-                        beneficiaryError = 'Cannot Name self as beneficiary';
-                        errorCallback(beneficiaryError);
+                        errorCallback(tt('reply_editor.beneficiary_cannot_be_self'));
                         return;
                     }
                     if (beneficiaryNames.has(beneficiary.username)) {
-                        beneficiaryError = 'Duplicate Name';
-                        errorCallback(beneficiaryError);
+                        errorCallback(tt('reply_editor.beneficiary_cannot_be_duplicate'));
                         return;
                     } else {
-                        beneficiaryNames.add(beneficiary.username);
+                         beneficiaryNames = beneficiaryNames.add(beneficiary.username);
                     }
                     if (!/^[1-9]\d{0,2}$/.test(beneficiary.percent)) {
-                        beneficiaryError = 'Invalid percent';
-                        errorCallback(beneficiaryError);
+                        errorCallback(tt('reply_editor.beneficiary_percent_invalid'));
                         return;
                     }
-                    totalPercent += beneficiary.percent;
+                    totalPercent += parseInt(beneficiary.percent);
                 }
                 if (totalPercent > 100) {
-                    beneficiaryError = 'Total percentage must be < 100';
-                    errorCallback(beneficiaryError);
+                    errorCallback(tt('reply_editor.beneficiary_percent_total_invalid'));
                     return;
                 }
 
@@ -1134,7 +1125,7 @@ export default formId =>
                     if (beneficiaries) {
                         __config.comment_options.extensions = [
                             [0, {
-                              beneficiaries: beneficiaries.map(elt => ({ account: elt.username, weight: elt.percent * 100 })),
+                              beneficiaries: beneficiaries.map(elt => ({ account: elt.username, weight: parseInt(elt.percent) * 100 })),
                             }],
                         ];
                     }

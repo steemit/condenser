@@ -1242,10 +1242,19 @@ export default formId =>
                             [
                                 0,
                                 {
-                                    beneficiaries: beneficiaries.map(elt => ({
-                                        account: elt.username,
-                                        weight: parseInt(elt.percent) * 100,
-                                    })),
+                                    beneficiaries: beneficiaries
+                                        .sort(
+                                            (a, b) =>
+                                                a.username < b.username
+                                                    ? -1
+                                                    : a.username > b.username
+                                                        ? 1
+                                                        : 0
+                                        )
+                                        .map(elt => ({
+                                            account: elt.username,
+                                            weight: parseInt(elt.percent) * 100,
+                                        })),
                                 },
                             ],
                         ];

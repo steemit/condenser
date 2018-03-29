@@ -281,7 +281,6 @@
         "trending": "Trending"
     },
     "reply_editor": {
-        "beneficiaries": "Beneficiaries",
         "shorten_title": "Shorten title",
         "exceeds_maximum_length": "Exceeds maximum length (%(maxKb)sKB)",
         "including_the_category":
@@ -307,7 +306,13 @@
         "or_by": "or by",
         "title": "Title",
         "update_post": "Update Post",
-        "markdown_not_supported": "Markdown is not supported here"
+        "markdown_not_supported": "Markdown is not supported here",
+        "beneficiaries": "Beneficiaries",
+        "exceeds_max_beneficiaries": "Can have at most 8 beneficiaries",
+        "beneficiary_cannot_be_self": "Cannot specify self as beneficiary",
+        "beneficiary_cannot_be_duplicate": "Beneficiary cannot be duplicate",
+        "beneficiary_percent_invalid": "Beneficiary percentage must be from 1-100",
+        "beneficiary_percent_total_invalid": "Beneficiary total percentage must be less than 100"
     },
     "category_selector_jsx": {
         "tag_your_story":

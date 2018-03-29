@@ -7,6 +7,7 @@ felixjasper
 jekasds
 vood.one
 galinakim
+bot-reporter
 `.trim().split("\n")
 
 export const blockedContent = `

@@ -5,7 +5,11 @@ import tt from 'counterpart';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import * as transactionActions from 'app/redux/TransactionReducer';
 import Icon from 'app/components/elements/Icon';
-import { DEBT_TOKEN_SHORT, LIQUID_TOKEN_UPPERCASE, INVEST_TOKEN_SHORT } from 'app/client_config';
+import {
+    DEBT_TOKEN_SHORT,
+    LIQUID_TOKEN_UPPERCASE,
+    INVEST_TOKEN_SHORT,
+} from 'app/client_config';
 import FormattedAsset from 'app/components/elements/FormattedAsset';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import {
@@ -56,6 +60,7 @@ class Voting extends React.Component {
         net_vesting_shares: React.PropTypes.number,
         voting: React.PropTypes.bool,
         price_per_steem: React.PropTypes.number,
+        sbd_print_rate: React.PropTypes.number,
     };
 
     static defaultProps = {
@@ -175,7 +180,7 @@ class Voting extends React.Component {
             is_comment,
             post_obj,
             price_per_steem,
-            sbd_print_rate
+            sbd_print_rate,
         } = this.props;
         const { username } = this.props;
         const { votingUp, votingDown, showWeight, weight, myVote } = this.state;
@@ -279,8 +284,10 @@ class Voting extends React.Component {
         const pending_payout_sbd = pending_payout * percent_steem_dollars;
         const pending_payout_sp =
             (pending_payout - pending_payout_sbd) / price_per_steem;
-        const pending_payout_printed_sbd = pending_payout_sbd * sbd_print_rate / 10000;
-        const pending_payout_printed_steem = (pending_payout_sbd - pending_payout_printed_sbd) / price_per_steem;
+        const pending_payout_printed_sbd =
+            pending_payout_sbd * sbd_print_rate / 10000;
+        const pending_payout_printed_steem =
+            (pending_payout_sbd - pending_payout_printed_sbd) / price_per_steem;
 
         const promoted = parsePayoutAmount(post_obj.get('promoted'));
         const total_author_payout = parsePayoutAmount(
@@ -326,10 +333,14 @@ class Voting extends React.Component {
                         ' ' +
                         DEBT_TOKEN_SHORT +
                         ', ' +
-                        (pending_payout_printed_steem > 0 ? formatDecimal(pending_payout_printed_steem).join('') +
-                        ' ' +
-                        LIQUID_TOKEN_UPPERCASE + 
-                        ', ' : '') +
+                        (sbd_print_rate != 10000
+                            ? formatDecimal(pending_payout_printed_steem).join(
+                                  ''
+                              ) +
+                              ' ' +
+                              LIQUID_TOKEN_UPPERCASE +
+                              ', '
+                            : '') +
                         formatDecimal(pending_payout_sp).join('') +
                         ' ' +
                         INVEST_TOKEN_SHORT +
@@ -553,7 +564,7 @@ export default connect(
             loggedin: username != null,
             voting,
             price_per_steem,
-            sbd_print_rate
+            sbd_print_rate,
         };
     },
 

@@ -53,6 +53,10 @@ export default `
 /gaming/@braini/bayonetta-switch-review-play-like-a-madman
 /gaming/@braini/yakuza-6-the-song-of-life-review-on-fire
 /gaming/@braini/assassin-s-creed-origins-curse-of-the-pharaohs-review-a-wonderful-history-lesson
+/gaming/@braini/the-ultimate-cockpit-for-flight-simulation-games-all-requirements-for-choosing-the-virtual-airspace
+/gaming/@braini/game-of-thrones-cluedo-review-murder-and-mystery-and-westeros
+/gaming/@braini/sid-meier-s-civilization-6-rise-and-fall-review-more-dynamic
+/gaming/@braini/immortal-redneck-review-a-classic-roguelike-shooter-in-egypt
 `
     .trim()
     .split('\n');

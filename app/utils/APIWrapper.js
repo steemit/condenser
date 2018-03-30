@@ -1,7 +1,7 @@
 import { api } from 'golos-js'
 import { PUBLIC_API } from 'app/client_config'
 
-export function  getDynamicGlobalProperties() {
+export function getDynamicGlobalProperties() {
     return api.getDynamicGlobalPropertiesAsync()
 }
 
@@ -46,7 +46,7 @@ export function getFeedEntries(account, entryId, limit) {
 }
 
 export function getAccountReputations(lowerBoundName, limit) {
-    return {}//await api.
+    return {}
 }
 
 export function getWitnessesByVote(from, limit) {
@@ -58,13 +58,17 @@ export function getContent(author, permlink) {
 }
 
 export function getContentReplies(author, permlink) {
-    return  api.getContentRepliesAsync(author, permlink)
+    return api.getContentRepliesAsync(author, permlink)
 }
 
 export function getAllContentReplies(author, permlink) {
-    return  api.getAllContentRepliesAsync(author, permlink)
+    return api.getAllContentRepliesAsync(author, permlink)
 }
 
 export function gedDiscussionsBy(type, args) {
     return api[PUBLIC_API[type][0]](args)
+}
+
+export function getActiveVotesAsync(account, permlink) {
+    return api.getActiveVotesAsync(account, permlink)
 }

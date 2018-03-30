@@ -183,14 +183,22 @@ export function* fetchState(location_change_action) {
             state.content[curl] = yield call([api, api.getContentAsync], account, permlink)
     
             const replies =  yield call([api, api.getAllContentRepliesAsync], account, permlink)
-            replies.forEach( reply => {
+            
+            for (let key in replies) {
+                let reply = replies[key]
                 const link = `${reply.author}/${reply.permlink}`
+
+                if (reply.net_votes > 0) {
+                    const active_votes = yield call([api, api.getActiveVotesAsync], account, permlink)
+                    reply.active_votes = active_votes
+                }
+
                 state.content[link] = reply
                 accounts.push(reply.author)
                 if (reply.parent_permlink === permlink) {
                     state.content[curl].replies.push(link)
                 }
-            })
+            }
 
         } else if (parts[0] === 'witnesses' || parts[0] === '~witnesses') {
             state.witnesses = {};

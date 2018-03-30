@@ -136,14 +136,21 @@ export default async function getState(api, url, options, offchain = {}) {
 
         const replies = await api.getAllContentReplies(account, permlink)
 
-        replies.forEach( reply => {
+        for (let key in replies) {
+            let reply = replies[key]
             const link = `${reply.author}/${reply.permlink}`
+
+            if (reply.net_votes > 0) {
+                const active_votes = await api.getActiveVotesAsync(account, permlink)
+                reply.active_votes = active_votes
+            }
+
             state.content[link] = reply
             accounts.push(reply.author)
             if (reply.parent_permlink === permlink) {
                 state.content[curl].replies.push(link)
             }
-        })
+        }
 
     } else if (parts[0] === 'witnesses' || parts[0] === '~witnesses') {
         const witnesses = await api.getWitnessesByVote('', 100)

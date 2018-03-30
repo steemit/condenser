@@ -57,6 +57,7 @@ export default `
 /gaming/@braini/game-of-thrones-cluedo-review-murder-and-mystery-and-westeros
 /gaming/@braini/sid-meier-s-civilization-6-rise-and-fall-review-more-dynamic
 /gaming/@braini/immortal-redneck-review-a-classic-roguelike-shooter-in-egypt
+/forbes/@agcaapo/the-33-cheapest-places-to-travel-in-2018-forbes
 `
     .trim()
     .split('\n');

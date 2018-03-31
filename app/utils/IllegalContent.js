@@ -6,6 +6,7 @@ horror
 felixjasper
 jekasds
 bot-reporter
+filinlex
 `.trim().split("\n")
 
 export const blockedContent = `

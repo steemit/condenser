@@ -5,8 +5,6 @@ compress
 horror
 felixjasper
 jekasds
-vood.one
-galinakim
 bot-reporter
 `.trim().split("\n")
 

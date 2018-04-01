@@ -12,6 +12,8 @@ import {PrivateKey, Signature, hash} from 'golos-js/lib/auth/ecc'
 import {api} from 'golos-js'
 import tt from 'counterpart';
 import React from 'react';
+import serverEventChannel from 'app/redux/chain/EventSaga';
+
 
 const MAX_UPLOAD_IMAGE_SIZE = 1024 * 1024
 
@@ -123,6 +125,12 @@ function* usernamePasswordLogin(action) {
         const username = current.get('username')
         yield fork(loadFollows, "getFollowingAsync", username, 'blog')
         yield fork(loadFollows, "getFollowingAsync", username, 'ignore')
+        if(process.env.BROWSER) {
+          // clientside
+          // when logged in
+          // start listening to the personal server event channel
+          yield fork(serverEventChannel);
+        }
     }
 }
 
@@ -448,7 +456,7 @@ function* uploadImage({payload: {file, dataUrl, filename = 'image.txt', progress
         dataBs64 = dataUrl.substring(commaIdx + 1)
         data = new Buffer(dataBs64, 'base64')
     }
-    
+
     if (file && file.size > MAX_UPLOAD_IMAGE_SIZE) {
         progress({error: tt('user_saga_js.image_upload.error.image_size_is_too_large')})
         return
@@ -457,7 +465,7 @@ function* uploadImage({payload: {file, dataUrl, filename = 'image.txt', progress
     // The challenge needs to be prefixed with a constant (both on the server and checked on the client) to make sure the server can't easily make the client sign a transaction doing something else.
     const prefix = new Buffer('ImageSigningChallenge')
     const bufSha = hash.sha256(Buffer.concat([prefix, data]))
-    
+
     const formData = new FormData()
     if(file) {
         formData.append('file', file)
@@ -467,7 +475,7 @@ function* uploadImage({payload: {file, dataUrl, filename = 'image.txt', progress
         formData.append('filename', filename)
         formData.append('filebase64', dataBs64)
     }
-    
+
     const sig = Signature.signBufferSha256(bufSha, d)
     const postUrl = `${$STM_Config.upload_image}/${username}/${sig.toHex()}`
 

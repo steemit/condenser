@@ -1,5 +1,9 @@
 import {call, put, select} from 'redux-saga/effects';
 import client from 'socketcluster-client';
+// this should not exist after sagas restart fixing
+let started = false;
+//
+//
 //
 function socketEventIterator(channel) {
   let resolveNextValue, resolved;
@@ -10,10 +14,18 @@ function socketEventIterator(channel) {
   };
   const socket = client.create(options);
   const chan = socket.subscribe(channel);
-  chan.watch(event => {
-    resolveNextValue(event);
-    resolved = true;
-  });
+  // todo !!!!!!!! this is a motherfucking saga reloading on transfer for example
+  // this subscribes twice causing event doubling
+  if (!started) {
+    chan.watch(
+      event => {
+        console.log(`----------------------------------------- `, event)
+        resolveNextValue(event);
+        resolved = true;
+      })
+    started = true
+  }
+
   //
   return () => {
     if (!resolved) {
@@ -27,21 +39,25 @@ function socketEventIterator(channel) {
     });
   };
 }
+
 //
 export default function* channelListener() {
+  console.log(`++++++++++++++++++++++++++++++++++++++++++++++ ))))))))))))))))))))))))`)
   const current = yield select(state => state.user.get('current'));
   const channel = current.get('username');
   const next = yield call(socketEventIterator, channel)
   while (true) {
     const payload = yield call(next)
-    yield put({
-      type: 'ADD_NOTIFICATION',
-      payload: {
-        key: "chain_" + Date.now(),
-        message: `~~~~~~ ${payload.rand}`,
-        dismissAfter: 1000
-      }
-    })
+    console.log(`>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>`)
     console.log(payload)
+
+    // yield put({
+    //   type: 'ADD_NOTIFICATION',
+    //   payload: {
+    //     key: "chain_" + Date.now(),
+    //     message: `~~~~~~ ${payload.rand}`,
+    //     dismissAfter: 1000
+    //   }
+    // })
   }
 }

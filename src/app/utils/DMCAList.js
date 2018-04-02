@@ -58,6 +58,7 @@ export default `
 /gaming/@braini/sid-meier-s-civilization-6-rise-and-fall-review-more-dynamic
 /gaming/@braini/immortal-redneck-review-a-classic-roguelike-shooter-in-egypt
 /forbes/@agcaapo/the-33-cheapest-places-to-travel-in-2018-forbes
+/flstudio/@cracked-games/ltxziiz9
 `
     .trim()
     .split('\n');

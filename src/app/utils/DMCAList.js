@@ -53,6 +53,7 @@ export default `
 /gaming/@braini/bayonetta-switch-review-play-like-a-madman
 /gaming/@braini/yakuza-6-the-song-of-life-review-on-fire
 /gaming/@braini/assassin-s-creed-origins-curse-of-the-pharaohs-review-a-wonderful-history-lesson
+/flstudio/@cracked-games/ltxziiz9
 `
     .trim()
     .split('\n');

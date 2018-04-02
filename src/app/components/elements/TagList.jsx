@@ -14,6 +14,7 @@ export default ({ post, horizontal, single }) => {
 
     const json = post.json_metadata;
     let tags = [];
+    tags = tags.filter(tag => typeof tag === 'string');
 
     try {
         if (typeof json == 'object') {
@@ -32,10 +33,15 @@ export default ({ post, horizontal, single }) => {
     // Category should always be first.
     tags.unshift(post.category);
 
-    // Uniqueness filter.
-    tags = tags.filter(
-        (value, index, self) => value && self.indexOf(value) === index
-    );
+    tags = tags
+        .filter(
+            // Uniqueness filter.
+            (value, index, self) => value && self.indexOf(value) === index
+        )
+        .filter(
+            // Filter non-strings
+            tag => typeof tag === 'string'
+        );
 
     if (horizontal) {
         // show it as a dropdown in Preview

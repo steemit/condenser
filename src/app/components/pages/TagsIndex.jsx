@@ -55,6 +55,8 @@ export default class TagsIndex extends React.Component {
         //console.log('-- TagsIndex.render -->', tagsAll.toJS());
         const { order } = this.state;
         let tags = tagsAll;
+        //filter out non-strings
+        tags = tags.filter(tag => typeof tag === 'string');
 
         const rows = tags
             .filter(

@@ -201,9 +201,9 @@ useNotificationsApi(app);
 useProxyRoutes(app);
 useRatesRoutes(app);
 
-if (config.get('is_testnet')) {
-    useTestnetApi(app);
-}
+// if (config.get('is_testnet')) {
+//     useTestnetApi(app);
+// }
 
 // helmet wants some things as bools and some as lists, makes config difficult.
 // our config uses strings, this splits them to lists on whitespace.

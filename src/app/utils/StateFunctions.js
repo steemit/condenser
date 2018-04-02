@@ -163,7 +163,6 @@ export function contentStats(content) {
     // Combine tags+category to check nsfw status
     const json = content.get('json_metadata');
     let tags = [];
-    tags.push(content.get('category'));
     try {
         tags = (json && JSON.parse(json).tags) || [];
         if (typeof tags == 'string') {
@@ -175,6 +174,7 @@ export function contentStats(content) {
     } catch (e) {
         tags = [];
     }
+    tags.push(content.get('category'));
     tags = tags.filter(tag => typeof tag === 'string');
     const isNsfw = tags.filter(tag => tag && tag.match(/^nsfw$/i)).length > 0;
 

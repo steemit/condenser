@@ -398,7 +398,7 @@ export default function useGeneralApi(app) {
 /**
  @arg signingKey {string|PrivateKey} - WIF or PrivateKey object
  */
-function* createAccount({
+export function* createAccount({
     signingKey, fee, creator, new_account_name, json_metadata = '',
     owner, active, posting, memo
 }) {

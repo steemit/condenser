@@ -236,7 +236,7 @@ class Header extends React.Component {
                 </div>
                 <div className={'Header__sub-nav expanded show-for-medium row' + (this.state.subheader_hidden ? ' hidden' : '')}>
                     <div className="columns">
-                        <HorizontalMenu items={sort_order_menu_horizontal} isAnchor={true}>
+                        <HorizontalMenu items={sort_order_menu_horizontal} >
                           <LinkWithDropdown
                             closeOnClickOutside
                             dropdownPosition="bottom"

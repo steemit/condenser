@@ -134,7 +134,7 @@ export default async function getState(api, url, options, offchain = {}) {
         const curl = `${account}/${permlink}`
         state.content[curl] = await api.getContent(account, permlink)
 
-        const replies = await api.getAllContentReplies(account, permlink)
+        const replies = await api.getContentReplies(account, permlink)
 
         for (let key in replies) {
             let reply = replies[key]

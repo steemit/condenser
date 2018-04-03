@@ -182,7 +182,7 @@ export function* fetchState(location_change_action) {
             const curl = `${account}/${permlink}`
             state.content[curl] = yield call([api, api.getContentAsync], account, permlink)
     
-            const replies =  yield call([api, api.getAllContentRepliesAsync], account, permlink)
+            const replies =  yield call([api, api.getContentRepliesAsync], account, permlink)
             
             for (let key in replies) {
                 let reply = replies[key]

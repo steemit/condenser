@@ -19,7 +19,7 @@ export default async function getState(api, url, options, offchain = {}) {
     state.feed_price = await api.getCurrentMedianHistoryPrice()
     state.select_tags = []
     
-    const accounts = []
+    let accounts = new Set()
 
     // by default trending tags limit=50, but if we in '/tags/' path then limit = 250
     const trending_tags = await api.getTrendingTags('', parts[0] == 'tags' ? '250' : '50')
@@ -133,25 +133,8 @@ export default async function getState(api, url, options, offchain = {}) {
 
         const curl = `${account}/${permlink}`
         state.content[curl] = await api.getContent(account, permlink)
-
-        const replies = await api.getAllContentReplies(account, permlink)
-
-        for (let key in replies) {
-            let reply = replies[key]
-            const link = `${reply.author}/${reply.permlink}`
-
-            if (reply.net_votes > 0) {
-                const active_votes = await api.getActiveVotesAsync(account, permlink)
-                reply.active_votes = active_votes
-            }
-
-            state.content[link] = reply
-            accounts.push(reply.author)
-            if (reply.parent_permlink === permlink) {
-                state.content[curl].replies.push(link)
-            }
-        }
-
+        
+        accounts.add(account)
     } else if (parts[0] === 'witnesses' || parts[0] === '~witnesses') {
         const witnesses = await api.getWitnessesByVote('', 100)
         witnesses.forEach( witness => {
@@ -207,8 +190,8 @@ export default async function getState(api, url, options, offchain = {}) {
 
     state.tag_idx = { 'trending': trending_tags.map(t => t.name) }
 
-    if (accounts.length > 0) {
-        const acc = await api.getAccounts(accounts)
+    if (accounts.size > 0) {
+        const acc = await api.getAccounts(Array.from(accounts))
         acc.forEach(account =>  state.accounts[ account.name ] = account)
     }
 

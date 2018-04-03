@@ -3,6 +3,7 @@ import tt from 'counterpart';
 import linksRe, { any as linksAny } from 'app/utils/Links';
 import { validate_account_name } from 'app/utils/ChainValidation';
 import proxifyImageUrl from 'app/utils/ProxifyUrl';
+import * as Phishing from 'app/utils/Phishing';
 
 export const getPhishingWarningMessage = () => tt('g.phishy_message');
 export const getExternalLinkWarningMessage = () =>
@@ -148,9 +149,12 @@ function link(state, child) {
 
             // Unlink potential phishing attempts
             if (
-                url.indexOf('#') !== 0 && // Allow in-page links
-                (child.textContent.match(/(www\.)?steemit\.com/i) &&
-                    !url.match(/https?:\/\/(.*@)?(www\.)?steemit\.com/i))
+                (url.indexOf('#') !== 0 && // Allow in-page links
+                    (child.textContent.match(/(www\.)?steemit\.com/i) &&
+                        !url.match(
+                            /https?:\/\/(.*@)?(www\.)?steemit\.com/i
+                        ))) ||
+                Phishing.looksPhishy(url)
             ) {
                 const phishyDiv = child.ownerDocument.createElement('div');
                 phishyDiv.textContent = `${child.textContent} / ${url}`;
@@ -268,7 +272,7 @@ function linkify(content, mutate, hashtags, usertags, images, links) {
     // usertag (mention)
     // Cribbed from https://github.com/twitter/twitter-text/blob/v1.14.7/js/twitter-text.js#L90
     content = content.replace(
-        /(^|[^a-zA-Z0-9_!#$%&*@＠\/]|(^|[^a-zA-Z0-9_+~.-\/]))[@＠]([a-z][-\.a-z\d]+[a-z\d])/gi,
+        /(^|[^a-zA-Z0-9_!#$%&*@＠\/]|(^|[^a-zA-Z0-9_+~.-\/#]))[@＠]([a-z][-\.a-z\d]+[a-z\d])/gi,
         (match, preceeding1, preceeding2, user) => {
             const userLower = user.toLowerCase();
             const valid = validate_account_name(userLower) == null;
@@ -281,7 +285,7 @@ function linkify(content, mutate, hashtags, usertags, images, links) {
 
             return valid
                 ? `${preceedings}<a href="/@${userLower}">@${user}</a>`
-                : '@' + user;
+                : `${preceedings}@${user}`;
         }
     );
 
@@ -293,6 +297,12 @@ function linkify(content, mutate, hashtags, usertags, images, links) {
 
         // do not linkify .exe or .zip urls
         if (/\.(zip|exe)$/i.test(ln)) return ln;
+
+        // do not linkify phishy links
+        if (Phishing.looksPhishy(ln))
+            return `<div title='${getPhishingWarningMessage()}' class='phishy'>${
+                ln
+            }</div>`;
 
         if (links) links.add(ln);
         return `<a href="${ipfsPrefix(ln)}">${ln}</a>`;

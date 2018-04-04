@@ -160,7 +160,7 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
 
         if (!url.match(routeRegex.PostsIndex) && !url.match(routeRegex.UserProfile1) && !url.match(routeRegex.UserProfile2) && url.match(routeRegex.PostNoCategory)) {
             const params = url.substr(2, url.length - 1).split("/");
-            const content = await api.getContentAsync(params[0], params[1]);
+            const content = await api.getContent(params[0], params[1]);
             if (content.author && content.permlink) { // valid short post url
                 onchain.content[url.substr(2, url.length - 1)] = content;
             } else { // protect on invalid user pages (i.e /user/transferss)

@@ -132,8 +132,21 @@ export default async function getState(api, url, options, offchain = {}) {
 
         const curl = `${account}/${permlink}`
         state.content[curl] = await api.getContent(account, permlink)
-        
         accounts.add(account)
+
+        const replies = await api.getAllContentReplies(account, permlink)
+
+       for (let key in replies) {
+            let reply = replies[key]
+            const link = `${reply.author}/${reply.permlink}`
+
+            state.content[link] = reply
+            accounts.add(reply.author)
+            if (reply.parent_permlink === permlink) {
+                state.content[curl].replies.push(link)
+            }
+        }
+        
     } else if (parts[0] === 'witnesses' || parts[0] === '~witnesses') {
         const witnesses = await api.getWitnessesByVote('', 100)
         witnesses.forEach( witness => {

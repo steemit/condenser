@@ -35,24 +35,6 @@ export function* watchFetchState() {
     yield* takeLatest('FETCH_STATE', fetchState);
 }
 
-function* getAllContentReplies(root, state, accounts) {
-    let replies = yield call([api, api.getContentRepliesAsync], root.author, root.permlink)
-
-    for (let key in replies) {
-        let reply = replies[key]
-        if (reply.children > 0) {
-            yield call(getAllContentReplies, reply, state, accounts)
-        }
-        root.replies.push(`${reply.author}/${reply.permlink}`)
-
-        if (reply.net_votes > 0) {
-            reply.active_votes = yield call([api, api.getActiveVotesAsync], reply.author, reply.permlink)
-        }
-        accounts.add(reply.author)
-        state.content[`${reply.author}/${reply.permlink}`] = reply
-    }
-}
-
 let is_initial_state = true;
 export function* fetchState(location_change_action) {
     const {pathname} = location_change_action.payload;
@@ -64,13 +46,12 @@ export function* fetchState(location_change_action) {
         yield fork(loadFollows, "getFollowingAsync", username, 'blog')
     }
 
-    // FIXME
     // `ignore_fetch` case should only trigger on initial page load. No need to call
     // fetchState immediately after loading fresh state from the server. Details: #593
-    // const server_location = yield select(state => state.offchain.get('server_location'))
-    // const ignore_fetch = (pathname === server_location && is_initial_state)
-    // is_initial_state = false
-    // if(ignore_fetch) return
+    const server_location = yield select(state => state.offchain.get('server_location'))
+    const ignore_fetch = (pathname === server_location && is_initial_state)
+    is_initial_state = false
+    if(ignore_fetch) return
 
     let url = `${pathname}`
     if (url === '/') url = 'trending'
@@ -199,12 +180,21 @@ export function* fetchState(location_change_action) {
     
             const curl = `${account}/${permlink}`
             state.content[curl] = yield call([api, api.getContentAsync], account, permlink)
-    
-            let replies = yield call([api, api.getContentRepliesAsync], account, permlink)
-
             accounts.add(account)
 
-            yield call(getAllContentReplies, state.content[curl], state, accounts)
+            const replies =  yield call([api, api.getAllContentRepliesAsync], account, permlink)
+            
+            for (let key in replies) {
+                let reply = replies[key]
+                const link = `${reply.author}/${reply.permlink}`
+
+                accounts.add(reply.author)
+ 
+                state.content[link] = reply
+                if (reply.parent_permlink === permlink) {
+                    state.content[curl].replies.push(link)
+                }
+            }
 
         } else if (parts[0] === 'witnesses' || parts[0] === '~witnesses') {
             state.witnesses = {};

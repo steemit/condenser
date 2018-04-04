@@ -8,6 +8,7 @@ import {fromJS, Map} from 'immutable'
 import { DEBT_TOKEN_SHORT, DEFAULT_CURRENCY, IGNORE_TAGS, PUBLIC_API, SELECT_TAGS_KEY } from 'app/client_config';
 import cookie from "react-cookie";
 import {api} from 'golos-js';
+// import * as api from 'app/utils/APIWrapper'
 
 export const fetchDataWatches = [
     watchLocationChange,
@@ -47,128 +48,192 @@ export function* fetchState(location_change_action) {
 
     // `ignore_fetch` case should only trigger on initial page load. No need to call
     // fetchState immediately after loading fresh state from the server. Details: #593
-    const server_location = yield select(state => state.offchain.get('server_location'));
+    const server_location = yield select(state => state.offchain.get('server_location'))
     const ignore_fetch = (pathname === server_location && is_initial_state)
-    is_initial_state = false;
-    if(ignore_fetch) return;
+    is_initial_state = false
+    if(ignore_fetch) return
 
-    let url = `${pathname}`;
-    if (url === '/') url = 'trending';
+    let url = `${pathname}`
+    if (url === '/') url = 'trending'
     // Replace /curation-rewards and /author-rewards with /transfers for UserProfile to resolve data correctly
-    if (url.indexOf("/curation-rewards") !== -1) url = url.replace("/curation-rewards", "/transfers");
-    if (url.indexOf("/author-rewards") !== -1) url = url.replace("/author-rewards", "/transfers");
+    if (url.indexOf("/curation-rewards") !== -1) url = url.replace("/curation-rewards", "/transfers")
+    if (url.indexOf("/author-rewards") !== -1) url = url.replace("/author-rewards", "/transfers")
 
     try {
-        let state = {};
-
-        // if empty or equal '/''
-        if (!url || typeof url !== 'string' || !url.length || url === '/') url = 'trending';
-        // remove / from start
+        if (!url || typeof url !== 'string' || !url.length || url === '/') url = 'trending'
         if (url[0] === '/') url = url.substr(1)
-        // get parts of current url
         const parts = url.split('/')
-        // create tag
         const tag = typeof parts[1] !== "undefined" ? parts[1] : ''
 
-        // TODO fix bread ration
-        if (parts[0][0] === '@' || typeof parts[1] === 'string' && parts[1][0] === '@') {
-            state = yield call([api, api.getStateAsync], url)
-        }
-        else {
-          yield put({type: 'global/FETCHING_STATE', payload: true});
-          const dynamic_global_properties = yield call([api, api.getDynamicGlobalPropertiesAsync])
-          const feed_history              = yield call([api, api.getFeedHistoryAsync])
+        const state = {}
+        state.current_route = location
+        state.content = {}
+        state.accounts = {}
 
-          state.current_route = url;
-          state.props = dynamic_global_properties;
-          state.categories = {};
-          state.tags = {};
-          state.content = {};
-          state.accounts = {};
-          state.witnesses = {};
-          state.discussion_idx = {};
-          state.feed_price = feed_history.current_median_history; // { "base":"1.000 GBG", "quote":"1.895 GOLOS" },
+        let accounts = new Set()
 
-          state.select_tags = [];
-          state.filter_tags = [];
-
-          if (parts[0][0] === '@') {
+        if (parts[0][0] === '@') {
             const uname = parts[0].substr(1)
-            accounts[uname] = yield call([api, api.getAccountsAsync], [uname]);
+            const [ account ] = yield call([api, api.getAccountsAsync], [uname])
+            state.accounts[uname] = account
+            
+            if (account) {
+                state.accounts[uname].tags_usage = yield call([api, api.getTagsUsedByAuthorAsync], uname)
+                state.accounts[uname].guest_bloggers = yield call([api, api.getBlogAuthorsAsync], uname)
 
-            // FETCH part 2
-            switch (parts[1]) {
-              case 'transfers':
-                break;
+                switch (parts[1]) {
+                    case 'transfers':
+                        const history = yield call([api, api.getAccountHistoryAsync], uname, -1, 1000)
+                        account.transfer_history = []
+                        account.other_history = []
+                        
+                        history.forEach(operation => {
+                            switch (operation[1].op[0]) {
+                                case 'transfer_to_vesting':
+                                case 'withdraw_vesting':
+                                case 'interest':
+                                case 'transfer':
+                                case 'liquidity_reward':
+                                case 'author_reward':
+                                case 'curation_reward':
+                                case 'transfer_to_savings':
+                                case 'transfer_from_savings':
+                                case 'cancel_transfer_from_savings':
+                                case 'escrow_transfer':
+                                case 'escrow_approve':
+                                case 'escrow_dispute':
+                                case 'escrow_release':
+                                    state.accounts[uname].transfer_history.push(operation)
+                                break
 
-              case 'posts':
-              case 'comments':
-                break;
+                                default:
+                                    state.accounts[uname].other_history.push(operation)
+                            }
+                        })
+                    break
 
-              case 'blog':
-                break;
+                    case 'recent-replies':
+                        const replies = yield call([api, api.getRepliesByLastUpdateAsync], uname, '', 50)
+                        state.accounts[uname].recent_replies = []
 
-              case 'feed':
-                break;
+                        replies.forEach(reply => {
+                            const link = `${reply.author}/${reply.permlink}`
+                            state.content[link] = reply
+                            state.accounts[uname].recent_replies.push(link)
+                        })
+                    break
 
-              // default:
+                    case 'posts':
+                    case 'comments':
+                        const comments = yield call([api, api.getDiscussionsByCommentsAsync], { start_author: uname, limit: 20 })
+                        state.accounts[uname].comments = []
+
+                        comments.forEach(comment => {
+                            const link = `${comment.author}/${comment.permlink}`
+                            state.content[link] = comment
+                            state.accounts[uname].comments.push(link)
+                        })
+                    break
+
+                    case 'feed':
+                        const feedEntries = yield call([api, api.getFeedEntriesAsync], uname, 0, 20)
+                        state.accounts[uname].feed = []
+
+                        for (let key in feedEntries) {
+                            const { author, permlink } = feedEntries[key]
+                            const link = `${author}/${permlink}`
+                            state.accounts[uname].feed.push(link)
+                            state.content[link] = yield call([api, api.getContentAsync], author, permlink)
+                            
+                            if (feedEntries[key].reblog_by.length > 0) {
+                                state.content[link].first_reblogged_by = feedEntries[key].reblog_by[0]
+                                state.content[link].reblogged_by = feedEntries[key].reblog_by
+                                state.content[link].first_reblogged_on = feedEntries[key].reblog_on
+                            }
+                        }
+                    break
+
+                    case 'blog':
+                    default:
+                        const blogEntries = yield call([api, api.getBlogEntriesAsync], uname, 0, 20)
+                        state.accounts[uname].blog = []
+
+                        for (let key in blogEntries) {
+                            const { author, permlink } = blogEntries[key]
+                            const link = `${author}/${permlink}`
+
+                            state.content[link] = yield call([api, api.getContentAsync], author, permlink)
+                            state.accounts[uname].blog.push(link)
+                        
+                            if (blogEntries[key].reblog_on !== '1970-01-01T00:00:00') {
+                                state.content[link].first_reblogged_on = blogEntries[key].reblog_on
+                            }
+                        }
+                    break
+                }
             }
-          }
-          else if (parts[0] === 'witnesses' || parts[0] === '~witnesses') {
-            const wits = yield call([api, api.getWitnessesByVoteAsync], '', 100);
-            for (let key in wits) state.witnesses[wits[key].owner] = wits[key];
-          }
-          else if ([ 'trending', 'trending30', 'promoted', 'responses', 'hot', 'votes', 'cashout', 'active', 'created', 'recent' ].indexOf(parts[0]) >= 0) {
-            const args = [{
-              limit: constants.FETCH_DATA_BATCH_SIZE,
-              truncate_body: constants.FETCH_DATA_TRUNCATE_BODY
-            }]
-            if (typeof tag === 'string' && tag.length) {
-              args[0].select_tags = [tag];
 
-            }
-            else {
-              const select_tags = cookie.load(SELECT_TAGS_KEY);
-              if (!tag && select_tags && select_tags.length) {
-                args[0].select_tags = state.select_tags = select_tags
-              }
-              else {
-                args[0].filter_tags = state.filter_tags = IGNORE_TAGS
-              }
-            }
-            const discussions = yield call([api, api[PUBLIC_API[parts[0]][0]]], ...args);
-            let accounts = []
-            let discussion_idxes = {}
-            discussion_idxes[ PUBLIC_API[parts[0]][1] ] = []
-            for (let i in discussions) {
-              const key = discussions[i].author + '/' + discussions[i].permlink;
-              discussion_idxes[ PUBLIC_API[parts[0]][1] ].push(key);
-              if (discussions[i].author && discussions[i].author.length)
-                accounts.push(discussions[i].author);
-              state.content[key] = discussions[i];
-            }
-            const discussions_key = typeof tag === 'string' && tag.length ? tag : state.select_tags.sort().join('/')
-            state.discussion_idx[discussions_key] = discussion_idxes
-            accounts = yield call([api, api.getAccountsAsync], accounts);
-            for (let i in accounts) {
-              state.accounts[ accounts[i].name ] = accounts[i]
-            }
-          }
-          else if (parts[0] == "tags") {
-            // by default trending tags limit=50, but if we in '/tags/' path then limit = 250
-            const trending_tags = yield call([api, api.getTrendingTagsAsync], '', parts[0] == "tags" ? '250' : '50');
-            for (let i in trending_tags) {
-              state.tags[trending_tags[i].name] = trending_tags[i]
-            }
-          }
+        } else if (parts.length === 3 && parts[1].length > 0 && parts[1][0] == '@') {
+            const account = parts[1].substr(1)
+            const category = parts[0]
+            const permlink = parts[2]
+    
+            const curl = `${account}/${permlink}`
+            state.content[curl] = yield call([api, api.getContentAsync], account, permlink)
+            accounts.add(account)
 
-          for (var key in state.content)
-            state.content[key].active_votes = []
-         
-          yield put({type: 'global/FETCHING_STATE', payload: false});
+            const replies =  yield call([api, api.getAllContentRepliesAsync], account, permlink)
+            
+            for (let key in replies) {
+                let reply = replies[key]
+                const link = `${reply.author}/${reply.permlink}`
+
+                accounts.add(reply.author)
+ 
+                state.content[link] = reply
+                if (reply.parent_permlink === permlink) {
+                    state.content[curl].replies.push(link)
+                }
+            }
+
+        } else if (parts[0] === 'witnesses' || parts[0] === '~witnesses') {
+            state.witnesses = {};
+            const witnesses =  yield call([api, api.getWitnessesByVoteAsync], '', 100)
+
+            witnesses.forEach( witness => {
+                state.witnesses[witness.owner] = witness
+            })
+
+        } else if ([
+            'trending',
+            'promoted',
+            'responses',
+            'hot',
+            'votes',
+            'cashout',
+            'payout',
+            'payout_comments',
+            'active',
+            'created',
+            'recent'
+        ].includes(parts[0])) {
+
+            yield call(fetchData, {payload: { order: parts[0], category : tag }})
+
+        } else if (parts[0] == 'tags') {
+            const trending_tags = yield call([api, api.getTrendingTagsAsync], '', parts[0] == 'tags' ? '250' : '50')
+            trending_tags.forEach (tag => tags[tag.name] = tag)
+            state.tags = tags
         }
 
-        yield put(GlobalReducer.actions.receiveState(state));
+        if (accounts.size > 0) {
+            const acc = yield call([api, api.getAccountsAsync], Array.from(accounts))
+            for (let i in acc) {
+                state.accounts[ acc[i].name ] = acc[i]
+            }
+        }
+
+        yield put(GlobalReducer.actions.receiveState(state))
     } catch (error) {
         console.error('~~ Saga fetchState error ~~>', url, error);
         yield put({type: 'global/FETCHING_STATE', payload: false});
@@ -210,8 +275,6 @@ export function* fetchData(action) {
 
     if (order === 'trending') {
         call_name = 'getDiscussionsByTrendingAsync';
-    } else if (order === 'trending30') {
-        call_name = 'getDiscussionsByTrending30Async';
     } else if (order === 'promoted') {
         call_name = 'getDiscussionsByPromotedAsync';
     } else if( order === 'active' ) {

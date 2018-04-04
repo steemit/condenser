@@ -33,6 +33,8 @@ export default {
             cb(null, [require('app/components/pages/ChangePasswordPage')]);
         } else if (route.page === 'CreateAccount') {
             cb(null, [require('app/components/pages/CreateAccount')]);
+        } else if (route.page === 'CreateAccountTestnet') {
+            cb(null, [require('app/components/pages/CreateAccountTestnet')]);
         } else if (route.page === 'RecoverAccountStep1') {
             cb(null, [require('app/components/pages/RecoverAccountStep1')]);
         } else if (route.page === 'RecoverAccountStep2') {

@@ -28,7 +28,7 @@ export function* fetchMarket(location_change_action) {
     while(polling) {
 
         try {
-            const state = yield call([api, api.getOrderBookAsync], 500);
+            const state = yield call([api, api.getOrderBookExtendedAsync], 500);
             yield put(MarketReducer.actions.receiveOrderbook(state));
 
             let trades;

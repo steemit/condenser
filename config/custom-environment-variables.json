@@ -107,5 +107,6 @@
     "license_key": "SDC_NEWRELIC_KEY"
   },
   "blockcypher_token": "SDC_BLOCKCYPHER_TOKEN",
+  "is_testnet": "SDC_IS_TESTNET",
   "openexchangerates_app_id": "SDC_OPENEXCHANGERATES_APP_ID"
 }

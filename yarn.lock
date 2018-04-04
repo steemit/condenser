@@ -3177,9 +3177,9 @@ glogg@^1.0.0:
   dependencies:
     sparkles "^1.0.0"
 
-golos-js@0.5.21:
-  version "0.5.21"
-  resolved "https://registry.yarnpkg.com/golos-js/-/golos-js-0.5.21.tgz#1527996da1afba230d91093a09e1be791da61fe1"
+golos-js@0.6.3:
+  version "0.6.3"
+  resolved "https://registry.yarnpkg.com/golos-js/-/golos-js-0.6.3.tgz#28aef095e02f00ebc64d5c50400a3891f7c3b9a1"
   dependencies:
     bigi "^1.4.2"
     bluebird "^3.4.6"
@@ -7699,12 +7699,13 @@ write@^0.2.1:
   dependencies:
     mkdirp "^0.5.1"
 
-ws@^1.1.1:
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/ws/-/ws-1.1.4.tgz#57f40d036832e5f5055662a397c4de76ed66bf61"
+ws@^3.3.2:
+  version "3.3.3"
+  resolved "https://registry.yarnpkg.com/ws/-/ws-3.3.3.tgz#f1cf84fe2d5e901ebce94efaece785f187a228f2"
   dependencies:
-    options ">=0.0.5"
-    ultron "1.0.x"
+    async-limiter "~1.0.0"
+    safe-buffer "~5.1.0"
+    ultron "~1.1.0"
 
 ws@^2.3.1:
   version "2.3.1"

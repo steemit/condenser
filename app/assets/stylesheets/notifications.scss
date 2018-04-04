@@ -9,7 +9,7 @@
   background-color: #FFFFFF !important;
   border-radius: 4px !important;
   margin-bottom: 2rem !important;
-  color: gray !important;
+  color: #666666 !important;
   box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2) !important;
 }
 
@@ -25,3 +25,12 @@
   display: block;
 
 }
+
+.notification-close-cross-icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+//.mulburn svg path{
+//  fill: #666666;
+//}

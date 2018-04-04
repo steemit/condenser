@@ -32,7 +32,6 @@ export default async function getState(api, url, options, offchain = {}) {
         if (account) {
             state.accounts[uname].tags_usage = await api.getTagsUsedByAuthor(uname)
             state.accounts[uname].guest_bloggers = await api.getBlogAuthors(uname)
-            state.accounts[uname].reputation = await api.getAccountReputations(uname, 1) //follow_api.get_account_reputations(acnt, 1)[0].reputation;
 
             switch (parts[1]) {
                 case 'transfers':

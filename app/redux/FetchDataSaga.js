@@ -99,7 +99,6 @@ export function* fetchState(location_change_action) {
             if (account) {
                 state.accounts[uname].tags_usage = yield call([api, api.getTagsUsedByAuthorAsync], uname)
                 state.accounts[uname].guest_bloggers = yield call([api, api.getBlogAuthorsAsync], uname)
-                state.accounts[uname].reputation = yield call([api, api.getAccountReputationsAsync], uname, 1) //follow_api.get_account_reputations(acnt, 1)[0].reputation;
 
                 switch (parts[1]) {
                     case 'transfers':

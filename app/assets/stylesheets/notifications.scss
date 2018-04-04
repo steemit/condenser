@@ -9,7 +9,7 @@
   background-color: #FFFFFF !important;
   border-radius: 4px !important;
   margin-bottom: 2rem !important;
-  color: black !important;
+  color: gray !important;
   box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2) !important;
 }
 
@@ -17,8 +17,11 @@
 //  this is a span
 //  but should be a div:
   display: block;
+  //font: 0.95rem normal Roboto, sans-serif;
+
 }
 
 .notification-bar-action {
+  display: block;
 
 }

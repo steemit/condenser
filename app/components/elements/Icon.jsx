@@ -27,6 +27,7 @@ const icons = [
     'chevron-down-circle',
     'chevron-left',
     'chatboxes',
+    'cross',
     'chatbox',
     'facebook',
     'twitter',
@@ -97,7 +98,7 @@ const icons = [
     'hf/hf17',
     'hf/hf18',
     'hf/hf19',
-    'hf/hf20',    
+    'hf/hf20',
 ];
 const icons_map = {};
 for (const i of icons) icons_map[i] = require(`app/assets/icons/${i}.svg`);

@@ -74,7 +74,8 @@ class TransferForm extends Component {
                     });
                 }
                 return acc;
-            }, Map());
+            }, Map())
+            .remove(this.props.currentUser.get('username'));
 
         // Build a combined list of users you follow & have previously transferred to,
         // and sort it by 1. desc the number of previous transfers 2. username asc.

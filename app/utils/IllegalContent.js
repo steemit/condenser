@@ -17,4 +17,6 @@ export const blockedContent = `
 export const blockedUsersContent = `
 bm-marrivas
 bm-eash
+bm-twicy70
+creoboo
 `.trim().split("\n")

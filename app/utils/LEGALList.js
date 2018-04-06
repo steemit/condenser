@@ -8,4 +8,5 @@ export default `
 /ico/@worldcorescam/5yuuyw-ico-shnye-provaly-pavla-krymova-solvena-worldcore-private-fx
 /ico/@worldcorescam/ico-shnye-provaly-pavla-krymova-solvena-worldcore-private-fx
 /ru--golos/@palapalaruxaker/kak-ne-platit-nalogi-i-spat-spokoino
+/aleksandr1/4exgg6-ya-vam-govoryu-bez-paniki-vse-budet-khorosho-google-oficialno-zapretit-reklamu-kriptovalyut-i-ico-v-iyune
 `.trim().split("\n")

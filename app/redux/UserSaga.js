@@ -291,6 +291,10 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
             }
             sign('posting', private_keys.get('posting_private'))
             // sign('active', private_keys.get('active_private'))
+            const res = yield serverApiLogin(username, signatures)
+            if (res.guid) {
+                localStorage.setItem('guid', res.guid)
+            }
             serverApiLogin(username, signatures);
         }
     } catch(error) {
@@ -349,8 +353,10 @@ function* saveLogin_localStorage() {
 
 function* logout() {
     yield put(user.actions.saveLoginConfirm(false)) // Just incase it is still showing
-    if (process.env.BROWSER)
+    if (process.env.BROWSER) {
         localStorage.removeItem('autopost2')
+        localStorage.removeItem('guid')
+    }
     serverApiLogout();
 }
 

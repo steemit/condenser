@@ -13,7 +13,7 @@ const request_base = {
 export function serverApiLogin(account, signatures) {
     if (!process.env.BROWSER || window.$STM_ServerBusy) return;
     const request = Object.assign({}, request_base, {body: JSON.stringify({account, signatures, csrf: $STM_csrf})});
-    fetch('/api/v1/login_account', request);
+    return fetch('/api/v1/login_account', request).then(r => r.json());
 }
 
 export function serverApiLogout() {
@@ -53,6 +53,10 @@ let last_page, last_views, last_page_promise;
 export function recordPageView(page, ref, posts) {
     if (last_page_promise && page === last_page) return last_page_promise;
     if (window.ga) { // virtual pageview
+        let guid = localStorage.getItem('guid');
+        if (guid) {
+            window.ga('set', 'userId', guid);
+        }
         window.ga('set', 'page', page);
         window.ga('send', 'pageview');
         window.fbq('track', 'ViewContent');

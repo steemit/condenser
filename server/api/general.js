@@ -240,6 +240,7 @@ export default function useGeneralApi(app) {
             );
             if (db_account) this.session.user = db_account.user_id;
 
+            let body = { status: 'ok' }
             if(signatures) {
                 if(!this.session.login_challenge) {
                     console.error('/login_account missing this.session.login_challenge');
@@ -268,12 +269,19 @@ export default function useGeneralApi(app) {
                         verify('posting', signatures.posting, posting_pubkey, weight, weight_threshold)
                         if (auth.posting) {
                           this.session.a = account;
+                            if (config.has('tarantool') && config.has('tarantool.host')) {
+                                try {
+                                    const res = yield Tarantool.instance('tarantool').call('get_guid', account);
+                                    const [acc, guid] = res[0][0];
+                                    body = Object.assign(body, { guid })
+                                } catch (e) {}
+                            }
                         }
                     }
                 }
             }
 
-            this.body = JSON.stringify({status: 'ok'});
+            this.body = JSON.stringify(body);
             const remote_ip = getRemoteIp(this.req);
             // if (mixpanel) {
             //     mixpanel.people.set(this.session.uid, {ip: remote_ip, $ip: remote_ip});

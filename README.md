@@ -22,8 +22,8 @@ mkdir tmp
 # Install at least Node v6.3 if you don't already have it ([NVM](https://github.com/creationix/nvm) recommended)
 sudo nvm install v6
 
-npm install
-sudo npm install -g babel-cli
+yarn install
+yarn global add babel-cli
 ```
 
 #### Create config file
@@ -84,7 +84,7 @@ mysql -u root
 Install `sequelize-cli` globally:
 
 ```bash
-sudo npm install -g sequelize sequelize-cli mysql
+yarn global add sequelize sequelize-cli mysql
 ```
 
 Run `sequelize db:migrate` in `db/` directory.
@@ -112,7 +112,7 @@ user@example:~$ tarantool
 ### Development
 
 ```bash
-npm start
+yarn start
 ```
 
 You now have your development front end running at localhost:3002, connected to the main public golos blockchain. You don't need to run ```golos``` locally, by default you will connect to ```wss://ws.golos.io```.  Use your regular account name and credentials to login -- there is no separate dev login.
@@ -150,15 +150,15 @@ We adhere to BEM methodology with exception for Foundation classes, here is an e
 If you want to test it locally in production mode, just run the following commands:
 
 ```bash
-npm run build
-npm run prod
+yarn run build
+yarn run prod
 ```
 
 or via pm2:
 
 ```bash
-npm run build
-sudo npm install -g pm2 # one time
+yarn run build
+yarn global add pm2 # one time
 cp example/process-example.json process.json
 pm2 start config/process.json
 ```

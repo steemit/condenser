@@ -239,7 +239,7 @@ async function universalRender({
     } catch (e) {
         console.error('Routing error:', e.toString(), location);
         return {
-            title: 'Routing error - Steemit',
+            title: 'Routing error - vit.tube',
             statusCode: 500,
             body: renderToString(
                 ErrorPage ? <ErrorPage /> : <span>Routing error</span>
@@ -249,7 +249,7 @@ async function universalRender({
     if (error || !renderProps) {
         // debug('error')('Router error', error);
         return {
-            title: 'Page Not Found - Steemit',
+            title: 'Page Not Found - vit.tube',
             statusCode: 404,
             body: renderToString(<NotFound />),
         };
@@ -337,7 +337,7 @@ async function universalRender({
         ) {
             // protect for invalid account
             return {
-                title: 'User Not Found - Steemit',
+                title: 'User Not Found - vit.tube',
                 statusCode: 404,
                 body: renderToString(<NotFound />),
             };

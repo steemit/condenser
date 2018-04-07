@@ -158,7 +158,7 @@ const SidePanel = ({ alignment, visible, hideSidePanel, username }) => {
             {
                 value: 'signup',
                 label: tt('g.sign_up'),
-                link: 'https://signup.steemit.com',
+                link: 'https://signup.vit.tube',
             },
             {
                 value: 'post',

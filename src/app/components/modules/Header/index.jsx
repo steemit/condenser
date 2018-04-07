@@ -276,6 +276,16 @@ class Header extends React.Component {
                     </div>
 
                     <div className="large-4 columns show-for-large large-centered Header__sort">
+                        {/*CUSTOM SEARCH*/}
+                        <span className="Header__search--desktop">
+                            <SearchInput />
+                        </span>
+                        <span className="Header__search">
+                            <a href="/static/search.html">
+                                <IconButton icon="magnifyingGlass" />
+                            </a>
+                        </span>
+
                         {/*SORT*/}
                         <SortOrder
                             sortOrder={order}
@@ -304,16 +314,6 @@ class Header extends React.Component {
                                     </a>
                                 </span>
                             )}
-
-                        {/*CUSTOM SEARCH*/}
-                        <span className="Header__search--desktop">
-                            <SearchInput />
-                        </span>
-                        <span className="Header__search">
-                            <a href="/static/search.html">
-                                <IconButton icon="magnifyingGlass" />
-                            </a>
-                        </span>
 
                         {/*SUBMIT STORY*/}
                         {submit_story}
@@ -350,14 +350,6 @@ class Header extends React.Component {
 
                         {/*LOGGED IN LOADING INDICATOR*/}
                         {probablyLoggedIn && <LoadingIndicator type="circle" />}
-
-                        {/*HAMBURGER*/}
-                        <span
-                            onClick={showSidePanel}
-                            className="toggle-menu Header__hamburger"
-                        >
-                            <span className="hamburger" />
-                        </span>
                     </div>
                 </nav>
             </header>

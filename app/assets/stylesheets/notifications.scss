@@ -1,36 +1,20 @@
 .notification-bar {
   max-width: 40rem !important;
-  //background-color: rgba(70, 70, 70, .7) !important;
-  padding-top: 4px !important;
-  padding-bottom: 4px !important;
-  padding-left: 6px !important;
-  padding-right: 6px !important;
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
+  padding-left: 0px !important;
+  padding-right: 0px !important;
 
   background-color: #FFFFFF !important;
   border-radius: 4px !important;
   margin-bottom: 2rem !important;
   color: #666666 !important;
-  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2) !important;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.3) !important;
 }
-
+//
 .notification-bar-message {
 //  this is a span
 //  but should be a div:
   display: block;
   //font: 0.95rem normal Roboto, sans-serif;
-
 }
-
-.notification-bar-action {
-  display: block;
-
-}
-
-.notification-close-cross-icon {
-  width: 1rem;
-  height: 1rem;
-}
-
-//.mulburn svg path{
-//  fill: #666666;
-//}

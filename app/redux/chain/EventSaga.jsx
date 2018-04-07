@@ -4,6 +4,7 @@ import NotificationContent from 'app/components/elements/NotificationContent'
 
 // this should not exist after sagas restart fixing
 let started = false;
+let count = 0;
 //
 //
 //
@@ -52,21 +53,25 @@ function socketEventIterator(channel) {
     const next = yield call(socketEventIterator, channel)
     while (true) {
       const payload = yield call(next)
+      // yield count++;
+      // yield console.log(`@@@@@@@@@ `, count)
       //
       // console.log(`>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>`)
       // console.log(payload)
       //
-      yield put({
-        type: 'ADD_NOTIFICATION',
-        payload: {
-          action: ``,
-          dismissAfter: 5000,
-          key: "chain_" + Date.now(),
-          message: NotificationContent(payload),
-          activeBarStyle: {
-            // padding: '4px',
+      // if ((count / 10) % 1 === 0) {
+        yield put({
+          type: 'ADD_NOTIFICATION',
+          payload: {
+            action: ``,
+            dismissAfter: 300000,
+            key: "chain_" + Date.now(),
+            message: NotificationContent(payload),
+            activeBarStyle: {
+              // padding: '4px',
+            }
           }
-        }
-      })
-    }
+        })
+      }
+    // }
   }

@@ -119,16 +119,78 @@ const comment = data => {
   )
 }
 
+const vote = data => {
+  console.log('~~~~~~~~~~~~ ', data)
+  // console.log(data)
+  // todo use i18n const
+  const actionStr = `поддержал ваш`
+  const repr = str => `${str.slice(0, 25)} ...`
+  const {
+    voter: {
+      account,
+      profile_image
+    },
+    parent: {
+      type,
+      title,
+      body,
+      permlink
+    }
+  } = data;
+
+  return (
+    <div className="NotificationContent__container">
+      <div className="NotificationContent__container_left">
+        <Userpic imageUrl={profile_image} />
+      </div>
+      <div className="NotificationContent__container_center">
+        <div className="NotificationContent__container_center_top">
+          <div style={{display: 'flex'}}>
+            <Link to={'/@' + account}>
+              <strong>
+                {account}
+              </strong>
+            </Link>
+            <span>
+            &nbsp;
+              {actionStr}
+              <span>
+              {/*todo use i18n const*/}
+                &nbsp;
+                {type === 'post' ? 'пост' : 'комментарий'}
+            </span>
+          </span>
+          </div>
+        </div>
+        <div className="NotificationContent__container_center_bottom">
+          <span style={{
+            paddingTop: '2px',
+            paddingLeft: '4px',
+            // borderLeftStyle: 'solid',
+            // borderLeftWidth: '2px',
+            // borderLeftColor: '#d3d3d3',
+          }}>
+            {type === 'post' ? repr(title) : repr(body)}
+          </span>
+        </div>
+      </div>
+      <div className="NotificationContent__container_right">
+        <Icon name="cross" />
+      </div>
+    </div>
+
+  )
+}
+
 
 export default function render(what) {
   // console.log(`))))))) `, what)
   const {type, payload} = what;
-
-
   return (
     type === 'NOTIFY_COMMENT' ?
       comment(payload) :
       type === 'NOTIFY_TRANSFER' ?
-        transfer(payload): null
+        transfer(payload):
+        vote(payload)
   )
 }

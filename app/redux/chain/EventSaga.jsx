@@ -13,7 +13,8 @@ function socketEventIterator(channel) {
   resolved = true;
   //
   const options = {
-    port: 8000
+    host: '78.47.87.101:8000',
+    // port: 8000
   };
   const socket = client.create(options);
   const chan = socket.subscribe(channel);
@@ -55,10 +56,9 @@ function socketEventIterator(channel) {
       // yield count++;
       // yield console.log(`@@@@@@@@@ `, count)
       //
-      // console.log(`>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>`)
-      // console.log(payload)
+      console.log(`>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>`)
+      console.log(payload)
       //
-      // if ((count / 10) % 1 === 0) {
         yield put({
           type: 'ADD_NOTIFICATION',
           payload: {

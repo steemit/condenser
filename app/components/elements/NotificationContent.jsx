@@ -67,6 +67,7 @@ const comment = data => {
   const actionStr = `ответил на ваш`
   const repr = str => `${str.slice(0, 25)} ...`
   const {
+    comment_url,
     author: {
       account,
       profile_image
@@ -84,26 +85,26 @@ const comment = data => {
       <div className="NotificationContent__container_left">
         <Userpic imageUrl={profile_image} />
       </div>
-      <div className="NotificationContent__container_center">
-        <div className="NotificationContent__container_center_top">
-          <div style={{display: 'flex'}}>
-            <Link to={'/@' + account}>
+
+      <Link to={comment_url}>
+        <div className="NotificationContent__container_center">
+          <div className="NotificationContent__container_center_top">
+            <div style={{display: 'flex'}}>
               <strong>
                 {account}
               </strong>
-            </Link>
-            <span>
-            &nbsp;
-              {actionStr}
-              <span>
-              {/*todo use i18n const*/}
+              <span style={{color: '#666666'}}>
                 &nbsp;
-                {type === 'post' ? 'пост' : 'комментарий'}
-            </span>
-          </span>
-          </div>
+                {actionStr}
+                <span style={{color: '#666666'}}>
+                  {/*todo use i18n const*/}
+                  &nbsp;
+                  {type === 'post' ? 'пост' : 'комментарий'}
+                </span>
+              </span>
+            </div>
         </div>
-        <div className="NotificationContent__container_center_bottom">
+          <div className="NotificationContent__container_center_bottom">
           <span style={{
             paddingTop: '2px',
             paddingLeft: '4px',
@@ -114,7 +115,9 @@ const comment = data => {
             {type === 'post' ? repr(title) : repr(body)}
           </span>
         </div>
-      </div>
+        </div>
+      </Link>
+
       <div className="NotificationContent__container_right">
         <Icon name="cross" />
       </div>

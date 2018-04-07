@@ -60,7 +60,7 @@ function socketEventIterator(channel) {
         type: 'ADD_NOTIFICATION',
         payload: {
           action: ``,
-          dismissAfter: 300000,
+          dismissAfter: 5000,
           key: "chain_" + Date.now(),
           message: NotificationContent(payload),
           activeBarStyle: {

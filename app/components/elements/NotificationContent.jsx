@@ -2,8 +2,7 @@ import React from 'react'
 import Icon from 'app/components/elements/Icon';
 import { Link } from 'react-router';
 import Userpic from 'app/components/elements/Userpic';
-
-
+//
 const transfer = data => {
   console.log('~~~~~~~~~~~~ ', data)
   // todo use i18n const
@@ -14,6 +13,7 @@ const transfer = data => {
       account,
       profile_image
     },
+    to,
     amount,
     memo
   } = data;
@@ -23,39 +23,43 @@ const transfer = data => {
       <div className="NotificationContent__container_left">
         <Userpic imageUrl={profile_image} />
       </div>
-      <div className="NotificationContent__container_center">
-        <div className="NotificationContent__container_center_top">
-          <div style={{display: 'flex'}}>
-            <Link to={'/@' + account}>
-            <strong>
-              {account}
-            </strong>
-          </Link>
-            <span>
-              &nbsp;
-              {actionStr}
+
+      <Link to={`/@${to}/transfers`}>
+        <div className="NotificationContent__container_center">
+          <div className="NotificationContent__container_center_top">
+            <div style={{display: 'flex'}}>
+              {/*<Link to={'/@' + account}>*/}
+                <strong>
+                  {account}
+                </strong>
+              {/*</Link>*/}
+              <span style={{color: '#666666'}}>
+                &nbsp;
+                {actionStr}
+              </span>
+            </div>
+          </div>
+          <div className="NotificationContent__container_center_bottom">
+            <span style={{
+              paddingTop: '2px',
+              paddingLeft: '4px',
+              // borderLeftStyle: 'solid',
+              // borderLeftWidth: '2px',
+              // borderLeftColor: '#d3d3d3',
+            }}>
+              {amount}
             </span>
           </div>
         </div>
-        <div className="NotificationContent__container_center_bottom">
-          <span style={{
-            paddingTop: '2px',
-            paddingLeft: '4px',
-            // borderLeftStyle: 'solid',
-            // borderLeftWidth: '2px',
-            // borderLeftColor: '#d3d3d3',
-          }}>
-            {amount}
-          </span>
-        </div>
-      </div>
+      </Link>
+
       <div className="NotificationContent__container_right">
         <Icon name="cross" />
       </div>
     </div>
 )
 }
-
+//
 const comment = data => {
   console.log('~~~~~~~~~~~~ ', data)
   // console.log(data)
@@ -118,7 +122,7 @@ const comment = data => {
 
   )
 }
-
+//
 const vote = data => {
   console.log('~~~~~~~~~~~~ ', data)
   // console.log(data)
@@ -181,8 +185,7 @@ const vote = data => {
 
   )
 }
-
-
+//
 export default function render(what) {
   // console.log(`))))))) `, what)
   const {type, payload} = what;

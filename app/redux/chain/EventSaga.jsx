@@ -28,7 +28,6 @@ function socketEventIterator(channel) {
       })
       started = true
     }
-
     //
     return () => {
       if (!resolved) {

@@ -141,6 +141,7 @@ const vote = data => {
       type,
       title,
       body,
+      url,
       permlink
     }
   } = data;
@@ -150,18 +151,17 @@ const vote = data => {
       <div className="NotificationContent__container_left">
         <Userpic imageUrl={profile_image} />
       </div>
-      <div className="NotificationContent__container_center">
-        <div className="NotificationContent__container_center_top">
+      <Link to={url}>
+        <div className="NotificationContent__container_center">
+          <div className="NotificationContent__container_center_top">
           <div style={{display: 'flex'}}>
-            <Link to={'/@' + account}>
               <strong>
                 {account}
               </strong>
-            </Link>
-            <span>
+              <span style={{color: '#666666'}}>
             &nbsp;
               {actionStr}
-              <span>
+              <span style={{color: '#666666'}}>
               {/*todo use i18n const*/}
                 &nbsp;
                 {type === 'post' ? 'пост' : 'комментарий'}
@@ -169,7 +169,7 @@ const vote = data => {
           </span>
           </div>
         </div>
-        <div className="NotificationContent__container_center_bottom">
+          <div className="NotificationContent__container_center_bottom">
           <span style={{
             paddingTop: '2px',
             paddingLeft: '4px',
@@ -180,7 +180,8 @@ const vote = data => {
             {type === 'post' ? repr(title) : repr(body)}
           </span>
         </div>
-      </div>
+        </div>
+      </Link>
       <div className="NotificationContent__container_right">
         <Icon name="cross" />
       </div>

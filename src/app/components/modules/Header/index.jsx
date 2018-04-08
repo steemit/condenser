@@ -277,14 +277,14 @@ class Header extends React.Component {
 
                     <div className="large-4 columns show-for-large large-centered Header__sort">
                         {/*CUSTOM SEARCH*/}
-                        <span className="Header__search--desktop">
+                        {/*<span className="Header__search--desktop">
                             <SearchInput />
-                        </span>
-                        <span className="Header__search">
+                        </span>*/}
+                        {/*<span className="Header__search">
                             <a href="/static/search.html">
                                 <IconButton icon="magnifyingGlass" />
                             </a>
-                        </span>
+                        </span>*/}
 
                         {/*SORT*/}
                         <SortOrder
@@ -316,6 +316,13 @@ class Header extends React.Component {
                             )}
 
                         {/*SUBMIT STORY*/}
+
+                        <span className="Header__search--desktop">
+                            <a href="/static/search.html">
+                                <IconButton icon="magnifyingGlass" />
+                            </a>
+                        </span>
+
                         {submit_story}
 
                         {/*USER AVATAR*/}

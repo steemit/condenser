@@ -26,7 +26,6 @@
 }
 
 .Header__logotype {
-      max-width: 13%;
   transition: 0.2s all ease-in-out;
   height: 37px;
   display: flex;
@@ -46,9 +45,8 @@
 
 .Header__sort {
     display: flex;
-    justify-content: left;
-        align-items: center;
-    color: #000000 !important;
+    -webkit-box-pack: center;
+    justify-content: center;
 }
 
 .Header__search {
@@ -79,11 +77,12 @@
                 padding: 0.6rem;
                 text-transform: none;
                 margin: 0 0.75rem 0 .5rem;
-                    border-radius: 0.5em;
+                border-radius: 0.5em;
             }
             &.Header__login-link {
                 @extend .link;
                 @extend .link--primary;
+                color:#222 !important;
                                         border-radius: 0.5em;
                                             padding: 0.6rem;
 
@@ -102,6 +101,10 @@
     }
     div.LoadingIndicator {
         padding-right: 0.75rem;
+    }
+
+    .icon-button__svg .icon-button.icon-button__magnifyingGlass, .icon-button__svg .icon-button.icon-button__pencil {
+      stroke:#666;
     }
 }
 

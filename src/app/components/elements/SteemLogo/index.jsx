@@ -25,7 +25,7 @@ const SteemLogo = () => {
                     />
                 </g>
             </svg>
-            <span className="logo__steemit">VIT.TUBE</span>
+            <span className="logo__steemit" />
         </span>
     );
 };

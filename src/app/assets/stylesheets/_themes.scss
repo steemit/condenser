@@ -76,14 +76,14 @@ $themes: (
     backgroundColor: $color-background-dark,
       backgroundColorEmphasis: $color-background-super-dark,
     backgroundColorOpaque: $color-blue-dark,
-    moduleBackgroundColor: $color-background-dark,
+    moduleBackgroundColor: #272C2F,
     backgroundTransparent: transparent,
     menuBackgroundColor: $color-blue-dark,
     moduleMediumBackgroundColor: $color-background-dark,
     navBackgroundColor: $color-background-dark,
     highlightBackgroundColor: $color-blue-black-darkest,
     tableRowEvenBackgroundColor: #212C33,
-    border: 1px solid $color-border-dark,
+    border: 1px solid #000,
     borderLight: 1px solid $color-border-dark-lightest,
     borderDark: 1px solid $color-text-gray-light,
     borderAccent: 1px solid $color-red,
@@ -95,9 +95,9 @@ $themes: (
     textColorAccentHover: $color-red,
     textColorError: $color-text-red,
     contentBorderAccent: $color-red,
-    buttonBackground: $color-white,
+    buttonBackground: $color-red,
     buttonBackgroundHover: $color-red,
-    buttonText: $color-blue-dark,
+    buttonText: $color-text-white,
     buttonTextShadow: 0 1px 0 rgba(0,0,0,0),
     buttonTextHover: $color-white,
     buttonBoxShadow: $color-red,
@@ -226,13 +226,13 @@ $themes: (
   @include font-size(18px);
   @include themify($themes) {
     background-color: themed('buttonBackground');
-    box-shadow: 0px 0px 0px 0 rgba(0,0,0,0), 2px 2px 0px 0px themed('buttonBoxShadow');
+    //box-shadow: 0px 0px 0px 0 rgba(0,0,0,0), 2px 2px 0px 0px themed('buttonBoxShadow');
     color: themed('buttonText');
   }
   &:hover, &:focus {
     @include themify($themes) {
       background-color: themed('buttonBackgroundHover');
-      box-shadow: 2px 2px 2px 0 rgba(0,0,0,0.1), 4px 4px 0 0 themed('buttonBoxShadowHover');
+      //box-shadow: 2px 2px 2px 0 rgba(0,0,0,0.1), 4px 4px 0 0 themed('buttonBoxShadowHover');
       color: themed('buttonTextHover');
       text-shadow: themed('buttonTextShadow');
     }

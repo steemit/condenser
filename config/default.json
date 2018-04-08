@@ -69,9 +69,9 @@
     "auth_token": false
   },
   "upload_image": false,
-  "steemd_connection_client": "https://api.steemit.com",
-  "steemd_connection_server": "https://api.steemit.com",
+  "steemd_connection_client": "wss://testvit-04.vit.tube/ws",
+  "steemd_connection_server": "wss://testvit-04.vit.tube/ws",
   "steemd_use_appbase": false,
-  "chain_id": "0000000000000000000000000000000000000000000000000000000000000000",
-  "address_prefix": "STM"
+  "chain_id": "18dcf0a285365fc58b71f18b3d3fec954aa0c141c44e4e5cb4cf777b9eab274e",
+  "address_prefix": "TST"
 }

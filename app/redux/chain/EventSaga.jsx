@@ -13,8 +13,8 @@ function socketEventIterator(channel) {
   resolved = true;
   //
   const options = {
-    host: '78.47.87.101:8000',
-    // port: 8000
+    // host: '78.47.87.101:8000',
+    port: 8000
   };
   const socket = client.create(options);
   const chan = socket.subscribe(channel);
@@ -63,7 +63,7 @@ function socketEventIterator(channel) {
           type: 'ADD_NOTIFICATION',
           payload: {
             action: ``,
-            dismissAfter: 300000,
+            dismissAfter: 5000,
             key: "chain_" + Date.now(),
             message: NotificationContent(payload),
             activeBarStyle: {

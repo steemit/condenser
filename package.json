@@ -151,7 +151,6 @@
     "babel-plugin-react-transform": "^2.0.2",
     "chai": "^4.1.2",
     "chai-immutable": "^1.5.3",
-    "classnames": "^2.2.5",
     "co-mocha": "^1.1.2",
     "co-supertest": "0.0.10",
     "dev-ip": "^1.0.1",

@@ -1,6 +1,5 @@
 .Userpic {
   display: inline-block;
-  position: relative;
 
   background-size: cover;
   background-repeat: no-repeat;
@@ -9,25 +8,4 @@
 
   width: 48px;
   height: 48px;
-
-  overflow: hidden;
-}
-
-.progressbar {
-  position: relative;
-}
-
-.voting_power {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  opacity: 0;
-  z-index: 2;
-  transition: opacity .3s ease-in-out;
-}
-
-.voting_power.show {
-  opacity: 1;
 }

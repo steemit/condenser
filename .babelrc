@@ -3,16 +3,18 @@
   "plugins": ["transform-runtime", "transform-decorators-legacy"],
   "env": {
       "browser": {
-        "plugins": [["react-transform", {
-          "transforms": [
-          {
-            "transform": "react-transform-catch-errors",
-            "imports": [
-              "react",
-              "redbox-react"
-            ]
+        "plugins": [
+          ["react-transform", {
+            "transforms": [
+            {
+              "transform": "react-transform-catch-errors",
+              "imports": [
+                "react",
+                "redbox-react"
+              ]
+            }]
           }]
-        }]]
+        ]
       }
     }
 }

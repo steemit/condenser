@@ -51,7 +51,7 @@ export default function ServerHTML({ body, assets, locale, title, meta }) {
                         return null;
                     })}
                 <link rel="manifest" href="/static/manifest.json" />
-                <link rel="icon" type="image/x-icon" href="/favicon.ico?v=2" />
+                <link rel="icon" type="image/x-icon" href="/favicon.ico?v=3" />
                 <link
                     rel="apple-touch-icon-precomposed"
                     sizes="57x57"

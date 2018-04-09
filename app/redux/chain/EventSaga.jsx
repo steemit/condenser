@@ -13,8 +13,8 @@ function socketEventIterator(channel) {
   resolved = true;
   //
   const options = {
-    host: '78.47.87.101:8000',
-    // port: 8000
+    hostname: 'push.golos.io',
+    secure: true,
   };
   const socket = client.create(options);
   const chan = socket.subscribe(channel);
@@ -56,8 +56,8 @@ function socketEventIterator(channel) {
       // yield count++;
       // yield console.log(`@@@@@@@@@ `, count)
       //
-      console.log(`>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>`)
-      console.log(payload)
+      // console.log(`>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>`)
+      // console.log(payload)
       //
         yield put({
           type: 'ADD_NOTIFICATION',

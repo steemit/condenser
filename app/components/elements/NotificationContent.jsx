@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 import Userpic from 'app/components/elements/Userpic';
 //
 const transfer = data => {
-  console.log('~~~~~~~~~~~~ ', data)
+  // console.log('~~~~~~~~~~~~ ', data)
   // todo use i18n const
   const actionStr = `перевел вам`
   // const repr = str => `${str.slice(0, 25)} ...`
@@ -61,7 +61,7 @@ const transfer = data => {
 }
 //
 const comment = data => {
-  console.log('~~~~~~~~~~~~ ', data)
+  // console.log('~~~~~~~~~~~~ ', data)
   // console.log(data)
   // todo use i18n const
   const {
@@ -141,7 +141,7 @@ const comment = data => {
 }
 //
 const vote = data => {
-  console.log('~~~~~~~~~~~~ ', data)
+  // console.log('~~~~~~~~~~~~ ', data)
   // console.log(data)
   // todo use i18n const
   const {

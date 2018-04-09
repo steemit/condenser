@@ -32,7 +32,7 @@ class Approval extends React.Component {
                         account!
                     </p>
                     <p>
-                        You'll be among the earliest members of the Steemit
+                        You'll be among the earliest members of the vit.tube
                         community!
                     </p>
                 </div>
@@ -53,7 +53,7 @@ class Approval extends React.Component {
                         account!
                     </p>
                     <p>
-                        You'll be among the earliest members of the Steemit
+                        You'll be among the earliest members of the vit.tube
                         community!
                     </p>
                 </div>

@@ -34,8 +34,8 @@ $themes: (
     buttonBoxShadow: $color-transparent,
   ),
   light: (
-    colorAccent: $color-teal,
-    colorAccentHover: $color-teal-dark,
+    colorAccent: $color-red,
+    colorAccentHover: $color-red-dark,
     colorAccentReverse: $color-blue-black,
     colorWhite: $color-white,
     backgroundColor: $color-background-off-white,
@@ -51,56 +51,56 @@ $themes: (
     border: 1px solid $color-border-light,
     borderLight: 1px solid $color-border-light-lightest,
     borderDark: 1px solid $color-text-gray,
-    borderAccent: 1px solid $color-teal,
+    borderAccent: 1px solid $color-red,
     borderTransparent: transparent,
     iconColorSecondary: #cacaca,
     textColorPrimary: $color-text-dark,
     textColorSecondary: $color-text-gray,
-    textColorAccent: $color-text-teal,
-    textColorAccentHover: $color-teal,
+    textColorAccent: $color-text-red,
+    textColorAccentHover: $color-red,
     textColorError: $color-text-red,
-    contentBorderAccent: $color-teal,
-    buttonBackground: $color-blue-black,
-    buttonBackgroundHover: $color-teal,
+    contentBorderAccent: $color-red,
+    buttonBackground: $color-red,
+    buttonBackgroundHover: $color-red-dark,
     buttonText: $color-text-white,
     buttonTextShadow: 0 1px 0 rgba(0,0,0,0.20),
     buttonTextHover: $color-white,
-    buttonBoxShadow: $color-teal,
+    buttonBoxShadow: $color-red,
     buttonBoxShadowHover: $color-blue-black,
   ),
   dark: (
-    colorAccent: $color-teal,
-    colorAccentHover: $color-teal,
+    colorAccent: $color-red,
+    colorAccentHover: $color-red-dark,
     colorAccentReverse: $color-white,
     colorWhite: $color-white,
     backgroundColor: $color-background-dark,
       backgroundColorEmphasis: $color-background-super-dark,
     backgroundColorOpaque: $color-blue-dark,
-    moduleBackgroundColor: $color-background-dark,
+    moduleBackgroundColor: #272C2F,
     backgroundTransparent: transparent,
     menuBackgroundColor: $color-blue-dark,
     moduleMediumBackgroundColor: $color-background-dark,
     navBackgroundColor: $color-background-dark,
     highlightBackgroundColor: $color-blue-black-darkest,
     tableRowEvenBackgroundColor: #212C33,
-    border: 1px solid $color-border-dark,
+    border: 1px solid #000,
     borderLight: 1px solid $color-border-dark-lightest,
     borderDark: 1px solid $color-text-gray-light,
-    borderAccent: 1px solid $color-teal,
+    borderAccent: 1px solid $color-red,
     borderTransparent: transparent,
     iconColorSecondary: $color-text-gray-light,
     textColorPrimary: $color-text-white,
     textColorSecondary: $color-text-gray-light,
-    textColorAccent: $color-teal,
-    textColorAccentHover: $color-teal-light,
+    textColorAccent: $color-red,
+    textColorAccentHover: $color-red,
     textColorError: $color-text-red,
-    contentBorderAccent: $color-teal,
-    buttonBackground: $color-white,
-    buttonBackgroundHover: $color-teal,
-    buttonText: $color-blue-dark,
+    contentBorderAccent: $color-red,
+    buttonBackground: $color-red,
+    buttonBackgroundHover: $color-red,
+    buttonText: $color-text-white,
     buttonTextShadow: 0 1px 0 rgba(0,0,0,0),
     buttonTextHover: $color-white,
-    buttonBoxShadow: $color-teal,
+    buttonBoxShadow: $color-red,
     buttonBoxShadowHover: $color-white,
     inputPriceWarning: rgba(255, 153, 0, 0.83),
   ),
@@ -226,13 +226,13 @@ $themes: (
   @include font-size(18px);
   @include themify($themes) {
     background-color: themed('buttonBackground');
-    box-shadow: 0px 0px 0px 0 rgba(0,0,0,0), 2px 2px 0px 0px themed('buttonBoxShadow');
+    //box-shadow: 0px 0px 0px 0 rgba(0,0,0,0), 2px 2px 0px 0px themed('buttonBoxShadow');
     color: themed('buttonText');
   }
   &:hover, &:focus {
     @include themify($themes) {
       background-color: themed('buttonBackgroundHover');
-      box-shadow: 2px 2px 2px 0 rgba(0,0,0,0.1), 4px 4px 0 0 themed('buttonBoxShadowHover');
+      //box-shadow: 2px 2px 2px 0 rgba(0,0,0,0.1), 4px 4px 0 0 themed('buttonBoxShadowHover');
       color: themed('buttonTextHover');
       text-shadow: themed('buttonTextShadow');
     }
@@ -272,17 +272,17 @@ $themes: (
 .e-btn {
   &--black {
     background-color: $color-blue-black;
-    box-shadow: 0px 0px 0px 0 rgba(0,0,0,0), 5px 5px 0 0 $color-teal;
+    box-shadow: 0px 0px 0px 0 rgba(0,0,0,0), 5px 5px 0 0 $color-red;
     color: $color-white;
     &:hover, &:focus {
-      background-color: $color-teal;
+      background-color: $color-red;
       box-shadow: 2px 2px 2px 0 rgba(0,0,0,0.1), 7px 7px 0 0 $color-blue-black;
       color: $color-white;
       text-shadow: 0 1px 0 rgba(0,0,0,0.20);
     }
     &:visited, &:active {
       background-color: $color-blue-black;
-      box-shadow: 0px 0px 0px 0 rgba(0,0,0,0), 5px 5px 0 0 $color-teal;
+      box-shadow: 0px 0px 0px 0 rgba(0,0,0,0), 5px 5px 0 0 $color-red;
       color: $color-white;
     }
     &.disabled, &[disabled] {
@@ -323,9 +323,9 @@ $themes: (
 .theme-dark {
   .button.hollow {
     &:hover, &:focus {
-      border-color: $color-teal;
-      color: $color-teal;
-      outline-color: $color-teal;
+      border-color: $color-red;
+      color: $color-red;
+      outline-color: $color-red;
     }
   }
 }

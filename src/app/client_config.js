@@ -1,10 +1,10 @@
 // sometimes it's impossible to use html tags to style coin name, hence usage of _UPPERCASE modifier
-export const APP_NAME = 'Steemit';
+export const APP_NAME = 'vit.tube';
 // sometimes APP_NAME is written in non-latin characters, but they are needed for technical purposes
 // ie. "Голос" > "Golos"
-export const APP_NAME_LATIN = 'Steemit';
-export const APP_NAME_UPPERCASE = 'STEEMIT';
-export const APP_ICON = 'steem';
+export const APP_NAME_LATIN = 'vit.tube';
+export const APP_NAME_UPPERCASE = 'VIT.TUBE';
+export const APP_ICON = 'vit.tube';
 // FIXME figure out best way to do this on both client and server from env
 // vars. client should read $STM_Config, server should read config package.
 export const APP_URL = 'https://steemit.com';
@@ -22,7 +22,8 @@ export const WIKI_URL = ''; // https://wiki.golos.io/
 export const LANDING_PAGE_URL = 'https://steem.io/';
 export const TERMS_OF_SERVICE_URL = 'https://' + APP_DOMAIN + '/tos.html';
 export const PRIVACY_POLICY_URL = 'https://' + APP_DOMAIN + '/privacy.html';
-export const WHITEPAPER_URL = 'https://steem.io/SteemWhitePaper.pdf';
+export const WHITEPAPER_URL =
+    'https://vicetoken.com/static/Vice_Industry_Token_Whitepaper.pdf';
 
 // these are dealing with asset types, not displaying to client, rather sending data over websocket
 export const LIQUID_TICKER = 'STEEM';

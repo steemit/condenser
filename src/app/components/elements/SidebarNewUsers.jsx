@@ -4,7 +4,7 @@ import { SIGNUP_URL } from 'shared/constants';
 const SidebarNewUsers = () => (
     <div className="c-sidebar__module">
         <div className="c-sidebar__header">
-            <h3 className="c-sidebar__h3">New to Steemit?</h3>
+            <h3 className="c-sidebar__h3">New to vit.tube?</h3>
         </div>
         <div className="c-sidebar__content">
             <ul className="c-sidebar__list">
@@ -14,7 +14,10 @@ const SidebarNewUsers = () => (
                     </a>
                 </li>
                 <li className="c-sidebar__list-item">
-                    <a className="c-sidebar__link" href="https://steem.io">
+                    <a
+                        className="c-sidebar__link"
+                        href="https://vicetoken.com/"
+                    >
                         The blockchain
                     </a>
                 </li>

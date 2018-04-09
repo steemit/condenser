@@ -32,9 +32,9 @@ class SignUp extends React.Component {
                         style={{ margin: '20px', padding: '40px' }}
                     >
                         <p>
-                            Membership to Steemit.com is now under invitation
-                            only because of unexpectedly high sign up rate.
-                            Submit your email to get on the waiting list.
+                            Membership to vit.tube is now under invitation only
+                            because of unexpectedly high sign up rate. Submit
+                            your email to get on the waiting list.
                         </p>
                         <AddToWaitingList />
                     </div>
@@ -48,7 +48,7 @@ class SignUp extends React.Component {
                     <div className="column">
                         <h3>Sign Up</h3>
                         <p>
-                            Steemit funds each account with over{' '}
+                            vit.tube funds each account with over{' '}
                             {this.props.signup_bonus} worth of Steem Power; to
                             prevent abuse, we require new users to login via
                             social media.<br />

@@ -1,8 +1,8 @@
 {
-    "name": "Steemit",
-    "short_name": "Steemit",
+    "name": "Vit.Tube",
+    "short_name": "Vit.Tube",
     "theme_color": "#FFFFFF",
-    "background_color": "#FFFFFF",
+    "background_color": "#1C2023",
     "start_url": "/",
     "display": "standalone",
     "icons": [

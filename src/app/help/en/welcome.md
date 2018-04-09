@@ -1,13 +1,13 @@
 <span id="disable_router_nav_history_direction_check"></span>
-## Welcome to Steemit!
+## Welcome to Vit.Tube!
 
-This page is full of information to help you learn about the platform and become a successful Steemian. You can return to this page at any time by clicking on the "Welcome" link in the main menu. There is a table of contents below to help you navigate the page.
+This page is full of information to help you learn about the platform and become successful. You can return to this page at any time by clicking on the "Welcome" link in the main menu. There is a table of contents below to help you navigate the page.
 
-Included on the page is a "To Do List" with recommended steps to get started with your account, and a "Quick Start Guide" with information on how the platform works. 
+Included on the page is a "To Do List" with recommended steps to get started with your account, and a "Quick Start Guide" with information on how the platform works.
 
 Below that is a section of "Helpful Posts from Steemit Users", which contains a collection of posts from users in the community that are helpful for new users getting started. 
 
-Below that is a list of recommended users to follow, a collection of other resources including the <a href="/faq.html">FAQ Page</a> and [Steem bluepaper](https://steem.io/steem-bluepaper.pdf), as well as information on where to find live help. 
+Below that is a list of recommended users to follow, a collection of other resources including the <a href="/faq.html">FAQ Page</a> and [Steem bluepaper](https://steem.io/steem-bluepaper.pdf), as well as information on where to find live help.
 
 ## <span id="Table_of_Contents">Table of Contents</span>
 
@@ -57,7 +57,7 @@ You are entirely responsible for keeping your password, and keeping it secure.
 
 Save your master key and keep it somewhere safe.
 
-It is strongly recommended that you store an offline copy of your password somewhere safe in case of a hard drive failure or other calamity. Consider digital offline storage, such as a flash drive or burned CD, as well as printed paper. Use a safe deposit box for best redundancy. 
+It is strongly recommended that you store an offline copy of your password somewhere safe in case of a hard drive failure or other calamity. Consider digital offline storage, such as a flash drive or burned CD, as well as printed paper. Use a safe deposit box for best redundancy.
 
 If your account is valuable, treat it like a valuable!
 
@@ -297,7 +297,7 @@ It is possible to earn thousands of dollars, but most authors who are doing this
 - [Steemit Help](https://www.steemithelp.net/) - Community maintained help pages
 - [The Steem Whitepaper](https://steem.io/SteemWhitePaper.pdf) - Technical details of the Steem blockchain
 - [Steem App Center](http://steemtools.com/) - Community developed tools for the Steem blockchain
-- [Steem Block Explorer](https://steemd.com/) - Shows the raw Steem blockchain data 
+- [Steem Block Explorer](https://steemd.com/) - Shows the raw Steem blockchain data
 - [Steem Blockchain Explorer](https://steemdb.com/) - Analysis pages for the Steem blockchain data
 
 <a href="#Table_of_Contents">^</a>

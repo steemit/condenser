@@ -1,6 +1,7 @@
 .App {
   min-height: 100vh;
   padding-top: 50px;
+  background: #1C2023 !important;
 }
 
 .App__content {
@@ -46,12 +47,12 @@
 }
 
 .RightMenu {
-  background-color: #555;
+  background-color: #000;
   height: 100vh;
   color: #fff;
   padding-top: 3rem;
   .close-button {
-    color: #fff;
+    color: #f00;
   }
   .menu > li {
     > a {

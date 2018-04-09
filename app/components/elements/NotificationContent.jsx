@@ -168,7 +168,7 @@ const vote = data => {
     {singleVote ?
       <Userpic imageUrl={profile_image} /> :
       <div style={{opacity: '0.3'}}>
-        <Icon name="vote" size={'2x'} />
+        <Icon name="chevron-up-circle" size={'2x'} />
       </div>
     }
   </div>

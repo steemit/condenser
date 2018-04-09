@@ -376,7 +376,7 @@ async function universalRender({
             } else {
                 // protect on invalid user pages (i.e /user/transferss)
                 return {
-                    title: 'Page Not Found - Steemit',
+                    title: 'Page Not Found - vit.tube',
                     statusCode: 404,
                     body: renderToString(<NotFound />),
                 };
@@ -415,7 +415,7 @@ async function universalRender({
         if (location.match(routeRegex.UserProfile1)) {
             console.error('User/not found: ', location);
             return {
-                title: 'Page Not Found - Steemit',
+                title: 'Page Not Found - vit.tube',
                 statusCode: 404,
                 body: renderToString(<NotFound />),
             };
@@ -425,7 +425,7 @@ async function universalRender({
             const stack_trace = e.stack || '[no stack]';
             console.error('State/store error: ', msg, stack_trace);
             return {
-                title: 'Server error - Steemit',
+                title: 'Server error - vit.tube',
                 statusCode: 500,
                 body: renderToString(<ErrorPage />),
             };
@@ -450,8 +450,8 @@ async function universalRender({
     }
 
     return {
-        title: 'Steemit',
-        titleBase: 'Steemit - ',
+        title: 'vit.tube',
+        titleBase: 'vit.tube - ',
         meta,
         statusCode: status,
         body: Iso.render(app, server_store.getState()),

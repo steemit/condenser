@@ -1,7 +1,9 @@
 const webpack_isomorphic_tools_plugin = require('webpack-isomorphic-tools/plugin');
+const alias = require('./alias');
 
 module.exports = {
     webpack_assets_file_path: process.env.NODE_ENV === 'production' ? 'tmp/webpack-isotools-assets-prod.json' : 'tmp/webpack-isotools-assets-dev.json',
+    alias: alias,
     assets: {
         images:
         {

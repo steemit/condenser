@@ -54,6 +54,7 @@ export default `
 /gaming/@braini/yakuza-6-the-song-of-life-review-on-fire
 /gaming/@braini/assassin-s-creed-origins-curse-of-the-pharaohs-review-a-wonderful-history-lesson
 /flstudio/@cracked-games/ltxziiz9
+/music/@jneelocamacho/how-to-download-free-fl-studio-mobile
 `
     .trim()
     .split('\n');

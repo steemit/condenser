@@ -63,8 +63,10 @@ function socketEventIterator(channel) {
           type: 'ADD_NOTIFICATION',
           payload: {
             action: <span style={{
+              // fixme
+              paddingTop: '3px',
               paddingLeft: '11px',
-              paddingRight: '18px',
+              paddingRight: '14px',
               display: 'flex',
               height: '100%',
               alignItems: 'center',

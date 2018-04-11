@@ -7,7 +7,7 @@ const transfer = data => {
   // console.log('~~~~~~~~~~~~ ', data)
   // todo use i18n const
   const actionStr = `перевел вам`
-  // const repr = str => `${str.slice(0, 25)} ...`
+  //
   const {
     from: {
       account,
@@ -17,18 +17,15 @@ const transfer = data => {
     amount,
     memo
   } = data;
-
+  //
   return (
     <div className="NotificationContent__container">
       <div className="NotificationContent__container_left">
         <Userpic width="31" height="31" imageUrl={profile_image} />
       </div>
-      {/*<Link to={`/@${to}/transfers`}>*/}
+      <Link to={`/@${to}/transfers`}>
         <div className="NotificationContent__container_center">
-                {/*<div className="NotificationContent__container_center_top">*/}
-                {/*<div style={{display: 'flex', alignContent: 'center', height: '100%'}}>*/}
-                {/*<Link to={'/@' + account}>*/}
-                  <span style={{
+                <span style={{
                     // background: 'red',
                     color: 'black',
                     fontFamily: 'Roboto',
@@ -53,29 +50,8 @@ const transfer = data => {
                       {amount}
                     </span>
                 </span>
-              {/*</Link>*/}
-              {/*<span style={{color: '#666666', background: 'white'}}>*/}
-                {/*&nbsp;*/}
-                {/*{actionStr}*/}
-              {/*</span>*/}
-            {/*</div>*/}
-          {/*</div>*/}
-          {/*<div className="NotificationContent__container_center_bottom">*/}
-            {/*<span style={{*/}
-              {/*paddingTop: '2px',*/}
-              {/*paddingLeft: '4px',*/}
-              {/*// borderLeftStyle: 'solid',*/}
-              {/*// borderLeftWidth: '2px',*/}
-              {/*// borderLeftColor: '#d3d3d3',*/}
-            {/*}}>*/}
-              {/*{amount}*/}
-            {/*</span>*/}
-          {/*</div>*/}
         </div>
-      {/*</Link>*/}
-      {/*<div className="NotificationContent__container_right">*/}
-        {/*<Icon name="cross" />*/}
-      {/*</div>*/}
+      </Link>
     </div>
 )
 }
@@ -102,62 +78,114 @@ const comment = data => {
   } = data;
   //
   const singleComment = (count === 1);
-  const targetStr = `${singleComment ? `н` : `Н`}а ваш ${type === `post` ? `пост` : `комментарий`}`
-  const repr = str => `${str.slice(0, 25)} ...`
   //
-  const left = <div className="NotificationContent__container_left">
-    {singleComment ?
-      <Userpic imageUrl={profile_image} /> :
-      <div style={{opacity: '0.3'}}><Icon name="chatboxes" size={'2x'} /></div>
-    }
-    </div>
-  //
-  const top = <span style={{color: '#666666'}}>
-    {singleComment && <span /*style={{color: '#325C93'}}*/><strong>{account}</strong></span>}
-    {singleComment && <span style={{fontSize: '0.9rem'}}>&nbsp;ответил</span>}
-    <span style={singleComment ? {fontSize: '0.9rem'} : {}}>&nbsp;{targetStr}</span>
-    {!singleComment && <span style={{color: '#325C93', fontSize: '0.9rem'}}>
-        &nbsp;{type === 'post' ? repr(title) : repr(body)}
-      </span>}
-  </span>
-  //
-  const bottom = <span style={{paddingTop: '2px', paddingLeft: '4px'}}>
-      {singleComment && (type === 'post' ? repr(title) : repr(body))}
-      {!singleComment && <span style={{fontSize: '1rem', color: '#666666'}}>
-        <span>ответили</span>
-        <span >
-          &nbsp;
-          <span style={{color: '#325C93'}}>
-            {count}
-          </span>
-          &nbsp;
-          <span>
-            раз
-          </span>
-        </span>
-      </span>}
-  </span>
+  const message = count === 1 ?
+    (<span>
+      <span>
+        {account}
+      </span>
+      <span style={{fontWeight: '300', color: '#666666'}}>
+        <span>&nbsp;ответил на ваш</span>
+        {
+          type === `post` ?
+          <span>&nbsp;пост</span> :
+          <span>&nbsp;комментарий</span>
+        }
+      </span>
+    </span>) :
+    (<span style={{fontWeight: '300'/*color: '#666666', background: 'white'*/}}>
+      На ваш
+      {
+        type === `post` ?
+          <span>&nbsp;пост</span> :
+          <span>&nbsp;комментарий</span>
+      }
+      <span>&nbsp;ответили {count} раз.</span>
+    </span>)
   //
   return (
     <div className="NotificationContent__container">
-      {left}
-      <Link to={singleComment ? comment_url : parent_url}>
+      <div className="NotificationContent__container_left">
+        <Userpic width="31" height="31" imageUrl={profile_image} />
+      </div>
+      <Link to={comment_url}>
         <div className="NotificationContent__container_center">
-          <div className="NotificationContent__container_center_top">
-            <div style={{display: 'flex'}}>
-              {top}
-            </div>
-          </div>
-          <div className="NotificationContent__container_center_bottom">
-            {bottom}
-          </div>
+                <span style={{
+                  // background: 'red',
+                  color: 'black',
+                  fontFamily: 'Roboto',
+                  fontSize: '14px',
+                  fontWeight: '500',
+                  fontStyle: 'normal',
+                  fontStretch: 'normal',
+                  lineHeight: '1.14',
+                  letterSpacing: 'normal',
+                  textAlign: 'left',
+                  paddingLeft: '12px'
+                }}>
+                    <span>
+                      &nbsp;
+                      {message}
+                    </span>
+                </span>
         </div>
       </Link>
-      <div className="NotificationContent__container_right">
-        <Icon name="cross" />
-      </div>
     </div>
   )
+  //
+  // const left = <div className="NotificationContent__container_left">
+  //   {singleComment ?
+  //     <Userpic imageUrl={profile_image} /> :
+  //     <div style={{opacity: '0.3'}}><Icon name="chatboxes" size={'2x'} /></div>
+  //   }
+  //   </div>
+  // //
+  // const top = <span style={{color: '#666666'}}>
+  //   {singleComment && <span /*style={{color: '#325C93'}}*/><strong>{account}</strong></span>}
+  //   {singleComment && <span style={{fontSize: '0.9rem'}}>&nbsp;ответил</span>}
+  //   <span style={singleComment ? {fontSize: '0.9rem'} : {}}>&nbsp;{targetStr}</span>
+  //   {!singleComment && <span style={{color: '#325C93', fontSize: '0.9rem'}}>
+  //       &nbsp;{type === 'post' ? repr(title) : repr(body)}
+  //     </span>}
+  // </span>
+  // //
+  // const bottom = <span style={{paddingTop: '2px', paddingLeft: '4px'}}>
+  //     {singleComment && (type === 'post' ? repr(title) : repr(body))}
+  //     {!singleComment && <span style={{fontSize: '1rem', color: '#666666'}}>
+  //       <span>ответили</span>
+  //       <span >
+  //         &nbsp;
+  //         <span style={{color: '#325C93'}}>
+  //           {count}
+  //         </span>
+  //         &nbsp;
+  //         <span>
+  //           раз
+  //         </span>
+  //       </span>
+  //     </span>}
+  // </span>
+  // //
+  // return (
+  //   <div className="NotificationContent__container">
+  //     {left}
+  //     <Link to={singleComment ? comment_url : parent_url}>
+  //       <div className="NotificationContent__container_center">
+  //         <div className="NotificationContent__container_center_top">
+  //           <div style={{display: 'flex'}}>
+  //             {top}
+  //           </div>
+  //         </div>
+  //         <div className="NotificationContent__container_center_bottom">
+  //           {bottom}
+  //         </div>
+  //       </div>
+  //     </Link>
+  //     <div className="NotificationContent__container_right">
+  //       <Icon name="cross" />
+  //     </div>
+  //   </div>
+  // )
 }
 //
 const vote = data => {

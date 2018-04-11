@@ -192,5 +192,7 @@ export function contentStats(content) {
 }
 
 export function filterTags(tags) {
-    return tags.filter(tag => typeof tag === 'string');
+    return tags
+        .filter(tag => typeof tag === 'string')
+        .filter((value, index, self) => value && self.indexOf(value) === index);
 }

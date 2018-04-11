@@ -14,7 +14,6 @@ export default ({ post, horizontal, single }) => {
 
     const json = post.json_metadata;
     let tags = [];
-    tags = tags.filter(tag => typeof tag === 'string');
 
     try {
         if (typeof json == 'object') {

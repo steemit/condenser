@@ -175,7 +175,7 @@ export function contentStats(content) {
         tags = [];
     }
     tags.push(content.get('category'));
-    tags = tags.filter(tag => typeof tag === 'string');
+    tags = filterTags(tags);
     const isNsfw = tags.filter(tag => tag && tag.match(/^nsfw$/i)).length > 0;
 
     return {
@@ -189,4 +189,8 @@ export function contentStats(content) {
         up_votes,
         hasPendingPayout,
     };
+}
+
+export function filterTags(tags) {
+    return tags.filter(tag => typeof tag === 'string');
 }

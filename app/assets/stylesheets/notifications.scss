@@ -4,17 +4,22 @@
   padding-bottom: 0px !important;
   padding-left: 0px !important;
   padding-right: 0px !important;
-
   background-color: #FFFFFF !important;
-  border-radius: 4px !important;
-  margin-bottom: 2rem !important;
+  border-radius: 6px !important;
+  //margin-bottom: 2rem !important;
   color: #666666 !important;
-  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.3) !important;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.15) !important;
+  //bottom: 2rem !important;
+}
+//
+.notification-bar-wrapper {
+  display: flex;
 }
 //
 .notification-bar-message {
 //  this is a span
 //  but should be a div:
-  display: block;
+//  display: flex !important;
+//  align-items: center !important;
   //font: 0.95rem normal Roboto, sans-serif;
 }

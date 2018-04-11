@@ -1,30 +1,38 @@
 //
 .NotificationContent__container {
-  background: white;
-  width: 100%;
-  height: 100%;
+  //background: yellow;
+  border-radius: 6px !important;
+  //width: 100%;
+  //height: 100%;
   display: flex;
+  flex-direction: row;
+  //align-content: center;
+  padding-left: 18px;
+  padding-top: 8px;
+  padding-bottom: 8px;
 }
 //
 .NotificationContent__container_left {
   //background: red;
   display: flex;
-  align-items: center;
+  //align-items: center;
   align-content: center;
   //box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2) !important;
-  padding-left: 4px;
-  padding-top: 4px;
-  padding-bottom: 4px;
+  //padding-left: 4px;
+  //padding-top: 4px;
+  //padding-bottom: 4px;
 }
 //
 .NotificationContent__container_center {
-  //background: blue;
+  //background: green;
   display: flex;
   //padding-top: 2px;
-  padding-left: 6px;
-  padding-right: 6px;
-  flex-direction: column;
-  justify-content: space-around;
+  //padding-left: 6px;
+  //padding-right: 6px;
+  //flex-direction: column;
+  align-items: center;
+
+  //justify-content: space-around;
 }
 //
 .NotificationContent__container_center_top {
@@ -62,8 +70,18 @@
   border-left-color: #d3d3d3;
 }
 
+.NotificationContent__action {
+  display: flex;
+  align-items: center;
+  align-content: center;
 
+  > svg {
+    width: 10px;
+    height: 10px;
+    //vertical-align: top;
+  }
 
-.blaaaa {
-  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2) !important;
+  &:hover > svg > g > g {
+    fill: black !important;
+  }
 }

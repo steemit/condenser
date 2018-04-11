@@ -21,41 +21,61 @@ const transfer = data => {
   return (
     <div className="NotificationContent__container">
       <div className="NotificationContent__container_left">
-        <Userpic imageUrl={profile_image} />
+        <Userpic width="31" height="31" imageUrl={profile_image} />
       </div>
-
-      <Link to={`/@${to}/transfers`}>
+      {/*<Link to={`/@${to}/transfers`}>*/}
         <div className="NotificationContent__container_center">
-          <div className="NotificationContent__container_center_top">
-            <div style={{display: 'flex'}}>
-              {/*<Link to={'/@' + account}>*/}
-                <strong>
-                  {account}
-                </strong>
+                {/*<div className="NotificationContent__container_center_top">*/}
+                {/*<div style={{display: 'flex', alignContent: 'center', height: '100%'}}>*/}
+                {/*<Link to={'/@' + account}>*/}
+                  <span style={{
+                    // background: 'red',
+                    color: 'black',
+                    fontFamily: 'Roboto',
+                    fontSize: '14px',
+                  fontWeight: '500',
+                  fontStyle: 'normal',
+                  fontStretch: 'normal',
+                  lineHeight: '1.14',
+                  letterSpacing: 'normal',
+                  textAlign: 'left',
+                  paddingLeft: '14px'
+                }}>
+                    <span>
+                      {account}
+                    </span>
+                    <span style={{fontWeight: '300'/*color: '#666666', background: 'white'*/}}>
+                      &nbsp;
+                      {actionStr}
+                    </span>
+                    <span style={{fontWeight: '300'/*color: '#666666', background: 'white'*/}}>
+                      &nbsp;
+                      {amount}
+                    </span>
+                </span>
               {/*</Link>*/}
-              <span style={{color: '#666666'}}>
-                &nbsp;
-                {actionStr}
-              </span>
-            </div>
-          </div>
-          <div className="NotificationContent__container_center_bottom">
-            <span style={{
-              paddingTop: '2px',
-              paddingLeft: '4px',
-              // borderLeftStyle: 'solid',
-              // borderLeftWidth: '2px',
-              // borderLeftColor: '#d3d3d3',
-            }}>
-              {amount}
-            </span>
-          </div>
+              {/*<span style={{color: '#666666', background: 'white'}}>*/}
+                {/*&nbsp;*/}
+                {/*{actionStr}*/}
+              {/*</span>*/}
+            {/*</div>*/}
+          {/*</div>*/}
+          {/*<div className="NotificationContent__container_center_bottom">*/}
+            {/*<span style={{*/}
+              {/*paddingTop: '2px',*/}
+              {/*paddingLeft: '4px',*/}
+              {/*// borderLeftStyle: 'solid',*/}
+              {/*// borderLeftWidth: '2px',*/}
+              {/*// borderLeftColor: '#d3d3d3',*/}
+            {/*}}>*/}
+              {/*{amount}*/}
+            {/*</span>*/}
+          {/*</div>*/}
         </div>
-      </Link>
-
-      <div className="NotificationContent__container_right">
-        <Icon name="cross" />
-      </div>
+      {/*</Link>*/}
+      {/*<div className="NotificationContent__container_right">*/}
+        {/*<Icon name="cross" />*/}
+      {/*</div>*/}
     </div>
 )
 }

@@ -1,7 +1,20 @@
 import React from 'react'
 import Icon from 'app/components/elements/Icon';
-import { Link } from 'react-router';
+import {Link} from 'react-router';
 import Userpic from 'app/components/elements/Userpic';
+import iconCross from 'app/assets/icons/cross.svg'
+//
+const actionStyle = {
+  // fixme
+  paddingTop: '1px',
+  // paddingLeft: '11px',
+  // paddingRight: '0px',
+  display: 'flex',
+  height: '100%',
+  alignItems: 'center',
+}
+//
+const cross = () => <span className="NotificationContent__action" dangerouslySetInnerHTML={{__html: iconCross}} />
 //
 const transfer = data => {
   // console.log('~~~~~~~~~~~~ ', data)
@@ -21,15 +34,15 @@ const transfer = data => {
   return (
     <div className="NotificationContent__container">
       <div className="NotificationContent__container_left">
-        <Userpic width="37" height="37" imageUrl={profile_image} />
+        <Userpic width="37" height="37" imageUrl={profile_image}/>
       </div>
       <Link to={`/@${to}/transfers`}>
         <div className="NotificationContent__container_center">
                 <span style={{
-                    // background: 'white',
-                    color: 'black',
-                    fontFamily: 'Roboto',
-                    fontSize: '14px',
+                  // background: 'white',
+                  color: 'black',
+                  fontFamily: 'Roboto',
+                  fontSize: '14px',
                   fontWeight: '500',
                   fontStyle: 'normal',
                   fontStretch: 'normal',
@@ -50,7 +63,8 @@ const transfer = data => {
                       alignItems: 'center',
                       fontWeight: '300',
                       color: '#666666'
-                      /*color: '#666666', background: 'white'*/}}>
+                      /*color: '#666666', background: 'white'*/
+                    }}>
                       &nbsp;
                       {actionStr}
                     </span>
@@ -59,7 +73,8 @@ const transfer = data => {
                       alignItems: 'center',
                       fontWeight: '300',
                       color: '#666666'
-                      /*color: '#666666', background: 'white'*/}}>
+                      /*color: '#666666', background: 'white'*/
+                    }}>
                       &nbsp;
                       {amount}
                     </span>
@@ -67,7 +82,7 @@ const transfer = data => {
         </div>
       </Link>
     </div>
-)
+  )
 }
 //
 const comment = data => {
@@ -102,8 +117,8 @@ const comment = data => {
         <span>&nbsp;ответил на ваш</span>
         {
           type === `post` ?
-          <span>&nbsp;пост</span> :
-          <span>&nbsp;комментарий</span>
+            <span>&nbsp;пост</span> :
+            <span>&nbsp;комментарий</span>
         }
       </span>
     </span>) :
@@ -120,7 +135,7 @@ const comment = data => {
   return (
     <div className="NotificationContent__container">
       <div className="NotificationContent__container_left">
-        <Userpic width="31" height="31" imageUrl={profile_image} />
+        <Userpic width="31" height="31" imageUrl={profile_image}/>
       </div>
       <Link to={comment_url}>
         <div className="NotificationContent__container_center">
@@ -228,9 +243,9 @@ const vote = data => {
   //
   const left = <div className="NotificationContent__container_left">
     {singleVote ?
-      <Userpic imageUrl={profile_image} /> :
+      <Userpic imageUrl={profile_image}/> :
       <div style={{opacity: '0.3'}}>
-        <Icon name="chevron-up-circle" size={'2x'} />
+        <Icon name="chevron-up-circle" size={'2x'}/>
       </div>
     }
   </div>
@@ -246,9 +261,9 @@ const vote = data => {
   //
   const bottom = <span style={{paddingTop: '2px', paddingLeft: '4px'}}>
       {singleVote && (type === 'post' ? repr(title) : repr(body))}
-      {!singleVote && <span style={{fontSize: '1rem', color: '#666666'}}>
+    {!singleVote && <span style={{fontSize: '1rem', color: '#666666'}}>
         <span>поддержали</span>
-        <span >
+        <span>
           &nbsp;
           <span style={{color: '#325C93'}}>
             {count}
@@ -277,7 +292,7 @@ const vote = data => {
         </div>
       </Link>
       <div className="NotificationContent__container_right">
-        <Icon name="cross" />
+        <Icon name="cross"/>
       </div>
     </div>
   )
@@ -324,14 +339,60 @@ const vote = data => {
   // )
 }
 //
-export default function render(what) {
-  // console.log(`))))))) `, what)
+function render(what) {
+  console.log(`))))))) `, what)
   const {type, payload} = what;
   return (
     type === 'NOTIFY_COMMENT' ?
       comment(payload) :
       type === 'NOTIFY_TRANSFER' ?
-        transfer(payload):
+        transfer(payload) :
         vote(payload)
   )
 }
+//
+export const payload = {
+  key: "chain_" + Date.now(),
+  dismissAfter: 300000,
+}
+//
+export default action => ({
+  // the following two are merged by react-notification
+  // and overload .notification-bar css class
+  barStyle: {},
+  activeBarStyle: {
+    background: '#FFFFFF',
+    borderRadius: '6px',
+    paddingTop: '11px',
+    paddingBottom: '11px',
+    paddingLeft: '21px',
+    paddingRight: '14px'
+  },
+  // title can be inline-styled
+  title: render(action),
+  titleStyle: {
+    display: 'flex',
+    alignItems: 'center',
+    height: '100%',
+    // override react-notification
+    marginRight: '0px'
+  },
+  message: '',
+  action:
+    <span style={actionStyle}>
+      {cross()}
+    </span>,
+  actionStyle: {
+    padding: '0px 0px 0px 18px',
+    marginLeft: '0px',
+    color: 'blue',
+    font: '.75rem normal Roboto, sans-serif',
+    lineHeight: '1rem',
+    letterSpacing: '.125ex',
+    textTransform: 'uppercase',
+    borderRadius: '0px',
+    cursor: 'pointer'
+  },
+  key: "chain_" + Date.now(),
+  dismissAfter: 300000,
+})

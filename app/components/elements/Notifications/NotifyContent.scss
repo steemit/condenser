@@ -83,7 +83,7 @@
     //vertical-align: top;
   }
 
-  &:hover > svg > path {
+  & > svg:hover > path {
     fill: black !important;
   }
 }

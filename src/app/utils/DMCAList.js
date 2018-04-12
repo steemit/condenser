@@ -59,6 +59,7 @@ export default `
 /gaming/@braini/immortal-redneck-review-a-classic-roguelike-shooter-in-egypt
 /forbes/@agcaapo/the-33-cheapest-places-to-travel-in-2018-forbes
 /flstudio/@cracked-games/ltxziiz9
+/music/@jneelocamacho/how-to-download-free-fl-studio-mobile
 `
     .trim()
     .split('\n');

@@ -62,38 +62,88 @@ function socketEventIterator(channel) {
         yield put({
           type: 'ADD_NOTIFICATION',
           payload: {
-            action: <span style={{
-              // fixme
-              paddingTop: '3px',
-              paddingLeft: '11px',
-              paddingRight: '14px',
-              display: 'flex',
-              height: '100%',
-              alignItems: 'center',
-
-            }}>
-              {cross()}
-            </span>,
-            actionStyle: {
-              // display: 'table-cell',
-              // verticalAlign: 'middle',
-              padding: '0px',
-              marginLeft: '0px',
-              // color: 'blue',
-              font: '.75rem normal Roboto, sans-serif',
-              lineHeight: '1rem',
-              letterSpacing: '.125ex',
-              textTransform: 'uppercase',
-              borderRadius: '0px',
-              cursor: 'pointer'
-            },
-            dismissAfter: 300000,
-            key: "chain_" + Date.now(),
-            message: NotificationContent(payload),
+            // the following two are merged
+            barStyle: {},
             activeBarStyle: {
-              // padding: '4px',
-            }
+              background: '#FFFFFF',
+              borderRadius: '6px',
+              paddingTop: '11px',
+              paddingBottom: '11px',
+              paddingLeft: '21px',
+              paddingRight: '14px'
+            },
+            // use title since it can be inline-styled
+            title: NotificationContent(payload),
+            titleStyle: {
+              display: 'flex',
+              alignItems: 'center',
+              height: '100%',
+              // override
+              marginRight: '0px'
+            },
+            // message: 'message',
+            action:
+              <span style={{
+                // fixme
+                paddingTop: '1px',
+                paddingLeft: '11px',
+                paddingRight: '0px',
+                display: 'flex',
+                height: '100%',
+                alignItems: 'center',
+              }}>
+                {cross()}
+              </span>,
+              actionStyle: {
+                // display: 'table-cell',
+                // verticalAlign: 'middle',
+                padding: '0px',
+                marginLeft: '0px',
+                // color: 'blue',
+                // font: '.75rem normal Roboto, sans-serif',
+                // lineHeight: '1rem',
+                // letterSpacing: '.125ex',
+                // textTransform: 'uppercase',
+                borderRadius: '0px',
+                cursor: 'pointer'
+              },
+            key: "chain_" + Date.now(),
+            dismissAfter: 300000,
           }
+
+          // payload: {
+          //   action:
+          //     <span style={{
+          //     // fixme
+          //       paddingTop: '3px',
+          //       paddingLeft: '11px',
+          //       paddingRight: '14px',
+          //       display: 'flex',
+          //       height: '100%',
+          //       alignItems: 'center',
+          //     }}>
+          //     {cross()}
+          //   </span>,
+          //   actionStyle: {
+          //     // display: 'table-cell',
+          //     // verticalAlign: 'middle',
+          //     padding: '0px',
+          //     marginLeft: '0px',
+          //     // color: 'blue',
+          //     font: '.75rem normal Roboto, sans-serif',
+          //     lineHeight: '1rem',
+          //     letterSpacing: '.125ex',
+          //     textTransform: 'uppercase',
+          //     borderRadius: '0px',
+          //     cursor: 'pointer'
+          //   },
+          //   dismissAfter: 300000,
+          //   key: "chain_" + Date.now(),
+          //   message: NotificationContent(payload),
+          //   activeBarStyle: {
+          //     // padding: '4px',
+          //   }
+          // }
         })
       }
     // }

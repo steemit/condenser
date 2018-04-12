@@ -21,12 +21,12 @@ const transfer = data => {
   return (
     <div className="NotificationContent__container">
       <div className="NotificationContent__container_left">
-        <Userpic width="31" height="31" imageUrl={profile_image} />
+        <Userpic width="37" height="37" imageUrl={profile_image} />
       </div>
       <Link to={`/@${to}/transfers`}>
         <div className="NotificationContent__container_center">
                 <span style={{
-                    // background: 'red',
+                    // background: 'white',
                     color: 'black',
                     fontFamily: 'Roboto',
                     fontSize: '14px',
@@ -36,16 +36,30 @@ const transfer = data => {
                   lineHeight: '1.14',
                   letterSpacing: 'normal',
                   textAlign: 'left',
-                  paddingLeft: '14px'
+                  paddingLeft: '18px'
                 }}>
-                    <span>
+                    <span style={{
+                      // background: 'white',
+                      display: 'inline-flex',
+                      alignItems: 'center'
+                    }}>
                       {account}
                     </span>
-                    <span style={{fontWeight: '300'/*color: '#666666', background: 'white'*/}}>
+                    <span style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      fontWeight: '300',
+                      color: '#666666'
+                      /*color: '#666666', background: 'white'*/}}>
                       &nbsp;
                       {actionStr}
                     </span>
-                    <span style={{fontWeight: '300'/*color: '#666666', background: 'white'*/}}>
+                    <span style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      fontWeight: '300',
+                      color: '#666666'
+                      /*color: '#666666', background: 'white'*/}}>
                       &nbsp;
                       {amount}
                     </span>

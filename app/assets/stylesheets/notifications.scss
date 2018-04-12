@@ -1,10 +1,13 @@
 .notification-bar {
   max-width: 40rem !important;
-  padding-top: 0px !important;
-  padding-bottom: 0px !important;
-  padding-left: 0px !important;
-  padding-right: 0px !important;
-  background-color: #FFFFFF !important;
+  //padding-top: 0px !important;
+  //padding-bottom: 0px !important;
+  //padding-left: 0px !important;
+  //padding-right: 0px !important;
+
+  //background-color: #FFFFFF !important;
+  //background-color: yellow !important;
+
   border-radius: 6px !important;
   //margin-bottom: 2rem !important;
   color: #666666 !important;
@@ -13,13 +16,32 @@
 }
 //
 .notification-bar-wrapper {
+  //background: yellow;
   display: flex;
 }
 //
-.notification-bar-message {
-//  this is a span
-//  but should be a div:
-//  display: flex !important;
-//  align-items: center !important;
-  //font: 0.95rem normal Roboto, sans-serif;
+.notification-bar-title {
+  //background: lightgrey;
 }
+//
+.notification-bar-message {
+  //background: lightgrey;
+}
+//
+.notification-bar-action {
+  //border-radius: 0px !important;
+  //background: lightgrey;
+}
+//
+//.notification-bar-wrapper > span {
+//  display: inline-flex;
+//  align-items: center;
+//}
+////
+//.notification-bar-message {
+////  this is a span
+////  but should be a div:
+////  display: flex !important;
+////  align-items: center !important;
+//  //font: 0.95rem normal Roboto, sans-serif;
+//}

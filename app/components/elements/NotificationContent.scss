@@ -1,15 +1,15 @@
 //
 .NotificationContent__container {
-  //background: yellow;
+  //background: limegreen;
   border-radius: 6px !important;
   //width: 100%;
   //height: 100%;
   display: flex;
   flex-direction: row;
   //align-content: center;
-  padding-left: 18px;
-  padding-top: 8px;
-  padding-bottom: 8px;
+  //padding-left: 18px;
+  //padding-top: 8px;
+  //padding-bottom: 8px;
 }
 //
 .NotificationContent__container_left {
@@ -25,7 +25,7 @@
 //
 .NotificationContent__container_center {
 
-  //background: green;
+  //background: cornflowerblue;
   display: flex;
   height: 100%;
   //padding-top: 2px;
@@ -78,12 +78,12 @@
   align-content: center;
 
   > svg {
-    width: 10px;
-    height: 10px;
+    width: 12px;
+    height: 12px;
     //vertical-align: top;
   }
 
-  &:hover > svg > g > g {
+  &:hover > svg > path {
     fill: black !important;
   }
 }

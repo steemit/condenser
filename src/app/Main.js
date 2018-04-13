@@ -100,6 +100,14 @@ function runApp(initial_state) {
     const locale = store.get('language');
     if (locale) initial_state.user.locale = locale;
     initial_state.user.maybeLoggedIn = !!store.get('autopost2');
+    if (initial_state.user.maybeLoggedIn) {
+        const username = new Buffer(store.get('autopost2'), 'hex')
+            .toString()
+            .split('\t')[0];
+        initial_state.user.current = {
+            username,
+        };
+    }
 
     const location = `${window.location.pathname}${window.location.search}${
         window.location.hash

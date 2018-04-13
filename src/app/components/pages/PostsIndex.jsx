@@ -162,8 +162,11 @@ class PostsIndex extends React.Component {
         let page_title = 'Posts'; // sensible default here?
         if (category === 'feed') {
             if (account_name === this.props.username)
-                page_title = 'My feed'; // todo: localization
-            else page_title = account_name + "'s Feed";
+                page_title = tt('posts_index.my_feed');
+            else
+                page_title = tt('posts_index.accountnames_feed', {
+                    account_name,
+                });
         } else {
             switch (topics_order) {
                 case 'trending': // cribbed from Header.jsx where it's repeated 2x already :P

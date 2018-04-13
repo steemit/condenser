@@ -238,13 +238,17 @@ class PostsIndex extends React.Component {
                     )}
                 </article>
                 <aside className="c-sidebar c-sidebar--right">
-                    {!this.props.username ? (
+                    {this.props.isBrowser &&
+                    !this.props.maybeLoggedIn &&
+                    !this.props.username ? (
                         <SidebarNewUsers />
                     ) : (
-                        <div>
-                            {/* <SidebarStats steemPower={123} followers={23} reputation={62} />  */}
-                            <SidebarLinks username={this.props.username} />
-                        </div>
+                        this.props.isBrowser && (
+                            <div>
+                                {/* <SidebarStats steemPower={123} followers={23} reputation={62} />  */}
+                                <SidebarLinks username={this.props.username} />
+                            </div>
+                        )
                     )}
                 </aside>
                 <aside className="c-sidebar c-sidebar--left">
@@ -290,6 +294,8 @@ module.exports = {
                 categories: state.global
                     .getIn(['tag_idx', 'trending'])
                     .take(50),
+                maybeLoggedIn: state.user.get('maybeLoggedIn'),
+                isBrowser: process.env.BROWSER,
             };
         },
         dispatch => {

@@ -1,6 +1,7 @@
 import 'babel-core/register';
 import 'babel-polyfill';
 import 'whatwg-fetch';
+import store from 'store';
 import { VIEW_MODE_WHISTLE, PARAM_VIEW_MODE } from 'shared/constants';
 import './assets/stylesheets/app.scss';
 import plugins from 'app/utils/JsPlugins';
@@ -95,6 +96,10 @@ function runApp(initial_state) {
     }
 
     initial_state.app.viewMode = determineViewMode(window.location.search);
+
+    const locale = store.get('language');
+    if (locale) initial_state.user.locale = locale;
+    initial_state.user.maybeLoggedIn = !!store.get('autopost2');
 
     const location = `${window.location.pathname}${window.location.search}${
         window.location.hash

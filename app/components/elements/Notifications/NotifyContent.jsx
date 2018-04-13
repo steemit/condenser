@@ -49,7 +49,7 @@ const transfer = data => {
                   lineHeight: '1.14',
                   letterSpacing: 'normal',
                   textAlign: 'left',
-                  paddingLeft: '18px'
+                  marginLeft: '18px'
                 }}>
                     <span style={{
                       // background: 'white',
@@ -383,8 +383,9 @@ export default action => ({
       {cross()}
     </span>,
   actionStyle: {
-    padding: '0px 0px 0px 18px',
-    marginLeft: '0px',
+      background: 'red',
+    padding: '0px',
+    marginLeft: '18px',
     color: 'blue',
     font: '.75rem normal Roboto, sans-serif',
     lineHeight: '1rem',

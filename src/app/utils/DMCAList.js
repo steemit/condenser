@@ -65,6 +65,8 @@ export default `
 /watch/@mymunah21/watch-download-baaghi-2-baaghi-2-2018-full-movie-in-1080p-hd-dvdrip-bluerayrip
 /baaghi2ktorrent/@gautampartapsoni/baaghi-2-baaghi-2-full-movie-download-720p-hdtv-bluray-hindi-torrent
 /baaghi2torrent/@gautampartapsoni/baaghi-2-baaghi-2-hindi-full-movie-download-watch-online-720p-or-filmywap
+/music/@therealtblgk/fl-studio-12-4-2-for-1-sbd
+/music/@therealtblgk/fl-studio-12-4-2-digital-download-for-windows-first-3-to-comment-will-get-a-free-copy
 `
     .trim()
     .split('\n');

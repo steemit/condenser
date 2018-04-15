@@ -85,7 +85,7 @@ const SidePanel = ({ alignment, visible, hideSidePanel, username }) => {
             {
                 value: 'gopax',
                 label: 'GOPAX',
-                link: 'https://www.gopax.co.kr/exchange?market=STEEM/KRW',
+                link: 'https://www.gopax.co.kr/exchange/steem-krw/',
             },
         ],
         external: [

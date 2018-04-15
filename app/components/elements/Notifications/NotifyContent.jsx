@@ -18,9 +18,6 @@ const cross = () => <span className="NotificationContent__action" dangerouslySet
 //
 const transfer = data => {
   // console.log('~~~~~~~~~~~~ ', data)
-  // todo use i18n const
-  const actionStr = `перевел вам`
-  //
   const {
     from: {
       account,
@@ -30,55 +27,22 @@ const transfer = data => {
     amount,
     memo
   } = data;
+  // todo use i18n const
+  const message = ` перевел вам ${amount}.`
   //
   return (
     <div className="NotificationContent__container">
       <div className="NotificationContent__container_left">
-        <Userpic width="37" height="37" imageUrl={profile_image}/>
+        <Userpic width="37" height="37" imageUrl={profile_image} />
       </div>
       <Link to={`/@${to}/transfers`}>
         <div className="NotificationContent__container_center">
-                <span style={{
-                  // background: 'white',
-                  color: 'black',
-                  fontFamily: 'Roboto',
-                  fontSize: '14px',
-                  fontWeight: '500',
-                  fontStyle: 'normal',
-                  fontStretch: 'normal',
-                  lineHeight: '1.14',
-                  letterSpacing: 'normal',
-                  textAlign: 'left',
-                  marginLeft: '18px'
-                }}>
-                    <span style={{
-                      // background: 'white',
-                      display: 'inline-flex',
-                      alignItems: 'center'
-                    }}>
-                      {account}
-                    </span>
-                    <span style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      fontWeight: '300',
-                      color: '#666666'
-                      /*color: '#666666', background: 'white'*/
-                    }}>
-                      &nbsp;
-                      {actionStr}
-                    </span>
-                    <span style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      fontWeight: '300',
-                      color: '#666666'
-                      /*color: '#666666', background: 'white'*/
-                    }}>
-                      &nbsp;
-                      {amount}
-                    </span>
-                </span>
+          <span className="NotificationContent__action_source">
+            {account}
+            <span style={{color: '#919191', fontWeight: '450'}}>
+              {message}
+            </span>
+          </span>
         </div>
       </Link>
     </div>
@@ -106,115 +70,29 @@ const comment = data => {
     count
   } = data;
   //
-  const singleComment = (count === 1);
+  const oncePerBlock = (count === 1);
   //
-  const message = count === 1 ?
-    (<span>
-      <span>
-        {account}
-      </span>
-      <span style={{fontWeight: '300', color: '#666666'}}>
-        <span>&nbsp;ответил на ваш</span>
-        {
-          type === `post` ?
-            <span>&nbsp;пост</span> :
-            <span>&nbsp;комментарий</span>
-        }
-      </span>
-    </span>) :
-    (<span style={{fontWeight: '300'/*color: '#666666', background: 'white'*/}}>
-      На ваш
-      {
-        type === `post` ?
-          <span>&nbsp;пост</span> :
-          <span>&nbsp;комментарий</span>
-      }
-      <span>&nbsp;ответили {count} раз.</span>
-    </span>)
+  const message = oncePerBlock ?
+    ` ответил на ваш ${type === `post` ? 'пост' : 'комментарий'}` :
+    `На ваш ${type === `post` ? 'пост' : 'комментарий'} ответили ${count} раз.`;
   //
   return (
     <div className="NotificationContent__container">
       <div className="NotificationContent__container_left">
-        <Userpic width="31" height="31" imageUrl={profile_image}/>
+        <Userpic width="37" height="37" imageUrl={profile_image} />
       </div>
       <Link to={comment_url}>
         <div className="NotificationContent__container_center">
-                <span style={{
-                  // background: 'red',
-                  color: 'black',
-                  fontFamily: 'Roboto',
-                  fontSize: '14px',
-                  fontWeight: '500',
-                  fontStyle: 'normal',
-                  fontStretch: 'normal',
-                  lineHeight: '1.14',
-                  letterSpacing: 'normal',
-                  textAlign: 'left',
-                  paddingLeft: '12px'
-                }}>
-                    <span>
-                      &nbsp;
-                      {message}
-                    </span>
-                </span>
+          <span className="NotificationContent__action_source">
+            {oncePerBlock && account}
+            <span style={{color: '#919191', fontWeight: '450'}}>
+              {message}
+            </span>
+          </span>
         </div>
       </Link>
     </div>
   )
-  //
-  // const left = <div className="NotificationContent__container_left">
-  //   {singleComment ?
-  //     <Userpic imageUrl={profile_image} /> :
-  //     <div style={{opacity: '0.3'}}><Icon name="chatboxes" size={'2x'} /></div>
-  //   }
-  //   </div>
-  // //
-  // const top = <span style={{color: '#666666'}}>
-  //   {singleComment && <span /*style={{color: '#325C93'}}*/><strong>{account}</strong></span>}
-  //   {singleComment && <span style={{fontSize: '0.9rem'}}>&nbsp;ответил</span>}
-  //   <span style={singleComment ? {fontSize: '0.9rem'} : {}}>&nbsp;{targetStr}</span>
-  //   {!singleComment && <span style={{color: '#325C93', fontSize: '0.9rem'}}>
-  //       &nbsp;{type === 'post' ? repr(title) : repr(body)}
-  //     </span>}
-  // </span>
-  // //
-  // const bottom = <span style={{paddingTop: '2px', paddingLeft: '4px'}}>
-  //     {singleComment && (type === 'post' ? repr(title) : repr(body))}
-  //     {!singleComment && <span style={{fontSize: '1rem', color: '#666666'}}>
-  //       <span>ответили</span>
-  //       <span >
-  //         &nbsp;
-  //         <span style={{color: '#325C93'}}>
-  //           {count}
-  //         </span>
-  //         &nbsp;
-  //         <span>
-  //           раз
-  //         </span>
-  //       </span>
-  //     </span>}
-  // </span>
-  // //
-  // return (
-  //   <div className="NotificationContent__container">
-  //     {left}
-  //     <Link to={singleComment ? comment_url : parent_url}>
-  //       <div className="NotificationContent__container_center">
-  //         <div className="NotificationContent__container_center_top">
-  //           <div style={{display: 'flex'}}>
-  //             {top}
-  //           </div>
-  //         </div>
-  //         <div className="NotificationContent__container_center_bottom">
-  //           {bottom}
-  //         </div>
-  //       </div>
-  //     </Link>
-  //     <div className="NotificationContent__container_right">
-  //       <Icon name="cross" />
-  //     </div>
-  //   </div>
-  // )
 }
 //
 const vote = data => {
@@ -243,9 +121,9 @@ const vote = data => {
   //
   const left = <div className="NotificationContent__container_left">
     {singleVote ?
-      <Userpic imageUrl={profile_image}/> :
+      <Userpic imageUrl={profile_image} /> :
       <div style={{opacity: '0.3'}}>
-        <Icon name="chevron-up-circle" size={'2x'}/>
+        <Icon name="chevron-up-circle" size={'2x'} />
       </div>
     }
   </div>
@@ -292,7 +170,7 @@ const vote = data => {
         </div>
       </Link>
       <div className="NotificationContent__container_right">
-        <Icon name="cross"/>
+        <Icon name="cross" />
       </div>
     </div>
   )
@@ -343,17 +221,10 @@ function render(what) {
   console.log(`))))))) `, what)
   const {type, payload} = what;
   return (
-    type === 'NOTIFY_COMMENT' ?
-      comment(payload) :
-      type === 'NOTIFY_TRANSFER' ?
-        transfer(payload) :
+    type === 'NOTIFY_COMMENT' ? comment(payload) :
+      type === 'NOTIFY_TRANSFER' ? transfer(payload) :
         vote(payload)
   )
-}
-//
-export const payload = {
-  key: "chain_" + Date.now(),
-  dismissAfter: 300000,
 }
 //
 export default action => ({
@@ -383,7 +254,7 @@ export default action => ({
       {cross()}
     </span>,
   actionStyle: {
-      background: 'red',
+      // background: 'red',
     padding: '0px',
     marginLeft: '18px',
     color: 'blue',

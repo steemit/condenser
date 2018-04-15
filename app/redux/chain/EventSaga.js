@@ -40,7 +40,7 @@ function socketEventIterator(channel) {
 }
 //
 export default function* channelListener() {
-  console.log('<<<<<<<<< start listening to push.golos.io ...')
+  console.log('<<< listening to push.golos.io ...')
   const current = yield select(state => state.user.get('current'));
   const channel = current.get('username');
   const next = yield call(socketEventIterator, channel)

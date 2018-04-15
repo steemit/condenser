@@ -3,10 +3,12 @@ import Icon from 'app/components/elements/Icon';
 import {Link} from 'react-router';
 import Userpic from 'app/components/elements/Userpic';
 import iconCross from 'app/assets/icons/cross.svg'
+import commentMulti from 'app/assets/icons/notification/comment_multi.svg'
+
 //
 const actionStyle = {
   // fixme
-  paddingTop: '1px',
+  paddingTop: '2px',
   // paddingLeft: '11px',
   // paddingRight: '0px',
   display: 'flex',
@@ -35,16 +37,16 @@ const transfer = data => {
       <div className="NotificationContent__container_left">
         <Userpic width="37" height="37" imageUrl={profile_image} />
       </div>
-      <Link to={`/@${to}/transfers`}>
-        <div className="NotificationContent__container_center">
+      <div className="NotificationContent__container_center">
+        <Link to={`/@${to}/transfers`}>
           <span className="NotificationContent__action_source">
             {account}
             <span style={{color: '#919191', fontWeight: '450'}}>
               {message}
             </span>
           </span>
-        </div>
-      </Link>
+        </Link>
+      </div>
     </div>
   )
 }
@@ -73,24 +75,38 @@ const comment = data => {
   const oncePerBlock = (count === 1);
   //
   const message = oncePerBlock ?
-    ` ответил на ваш ${type === `post` ? 'пост' : 'комментарий'}` :
-    `На ваш ${type === `post` ? 'пост' : 'комментарий'} ответили ${count} раз.`;
+    <span>
+      {` ответил на ваш`}
+      &nbsp;
+      <Link to={parent_url}>
+        {type === 'post' ? `пост` : `комментарий`}
+      </Link>
+    </span> :
+    <span>
+      {`На ваш`}
+      &nbsp;
+      <Link to={parent_url}>
+        {type === 'post' ? `пост` : `комментарий`}
+      </Link>
+      {` ответили ${count} раз.`}
+    </span>
   //
   return (
     <div className="NotificationContent__container">
       <div className="NotificationContent__container_left">
-        <Userpic width="37" height="37" imageUrl={profile_image} />
+        {
+          oncePerBlock ? <Userpic width="37" height="37" imageUrl={profile_image} /> :
+            <span className="NotificationContent__icon" dangerouslySetInnerHTML={{__html: commentMulti}} />
+        }
       </div>
-      <Link to={comment_url}>
-        <div className="NotificationContent__container_center">
+      <div className="NotificationContent__container_center">
           <span className="NotificationContent__action_source">
             {oncePerBlock && account}
             <span style={{color: '#919191', fontWeight: '450'}}>
               {message}
             </span>
           </span>
-        </div>
-      </Link>
+      </div>
     </div>
   )
 }
@@ -216,6 +232,7 @@ const vote = data => {
   //   </div>
   // )
 }
+
 //
 function render(what) {
   console.log(`))))))) `, what)
@@ -226,12 +243,19 @@ function render(what) {
         vote(payload)
   )
 }
+
 //
 export default action => ({
   // the following two are merged by react-notification
   // and overload .notification-bar css class
   barStyle: {},
   activeBarStyle: {
+    // left: 'auto',
+    // right: '1rem',
+    // transition: '',
+    // transitionProperty: 'right',
+    // transitionDuration: '.5s',
+    // transitionTimingFunction: 'cubic-bezier(0.89, 0.01, 0.5, 1.1)',
     background: '#FFFFFF',
     borderRadius: '6px',
     paddingTop: '11px',
@@ -254,7 +278,7 @@ export default action => ({
       {cross()}
     </span>,
   actionStyle: {
-      // background: 'red',
+    // background: 'red',
     padding: '0px',
     marginLeft: '18px',
     color: 'blue',

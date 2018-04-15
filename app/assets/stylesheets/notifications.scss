@@ -5,24 +5,34 @@
   color: #666666 !important;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.15) !important;
 }
+
+.notification-bar a {
+  color: #71b4e1;
+  border-bottom: 1px dotted #71b4e1;
+}
+
 //
 .notification-bar-wrapper {
   //background: yellow;
   display: flex;
 }
+
 //
 .notification-bar-title {
   //background: lightgrey;
 }
+
 //
 .notification-bar-message {
   //background: lightgrey;
 }
+
 //
 .notification-bar-action {
   //border-radius: 0px !important;
   //background: lightgrey;
 }
+
 //
 //.notification-bar-wrapper > span {
 //  display: inline-flex;

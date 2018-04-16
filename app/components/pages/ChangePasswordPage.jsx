@@ -1,5 +1,5 @@
 import React from 'react';
-import ChangePassword from '@elements/ChangePassword';
+import ChangePassword from 'app/components/elements/ChangePassword';
 import tt from 'counterpart';
 
 class ChangePasswordPage extends React.Component {

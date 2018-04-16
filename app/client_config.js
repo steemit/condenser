@@ -114,5 +114,3 @@ export const SMS_SERVICES = {
   '375':   '+375292308770',
   '380':   '+380931777772'
 }
-
-export const ANDROID_APP_URL = 'https://play.google.com/store/apps/details?id=io.golos.golos'

@@ -1,7 +1,6 @@
 import path from 'path';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import writeStats from './utils/write-stats';
-import alias from './alias'
 
 const Webpack_isomorphic_tools_plugin = require('webpack-isomorphic-tools/plugin');
 const webpack_isomorphic_tools_plugin =
@@ -58,7 +57,9 @@ export default {
         root: [
             path.resolve(__dirname, '..')
         ],
-        alias,
+        alias: {
+            'react': path.join(__dirname, '../node_modules', 'react')
+        },
         extensions: ['', '.js', '.json', '.jsx'],
         modulesDirectories: ['node_modules']
     }

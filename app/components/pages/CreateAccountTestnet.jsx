@@ -1,9 +1,9 @@
 import React from 'react';
-import LoadingIndicator from '@elements/LoadingIndicator';
+import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import {PrivateKey} from 'golos-js/lib/auth/ecc';
 import {validate_account_name} from 'app/utils/ChainValidation';
 import runTests from 'app/utils/BrowserTests';
-import GeneratedPasswordInput from '@elements/GeneratedPasswordInput';
+import GeneratedPasswordInput from 'app/components/elements/GeneratedPasswordInput';
 import { APP_DOMAIN, SUPPORT_EMAIL } from 'app/client_config';
 import tt from 'counterpart';
 import {api, broadcast} from 'golos-js';
@@ -173,7 +173,7 @@ class CreateAccountTestnet extends React.Component {
                             </div>
                             <GeneratedPasswordInput onChange={this.onPasswordChange} disabled={loading} showPasswordString={name.length > 0 && !name_error} />
                             <br />
-
+                            
                             <noscript>
                                 <div className="callout alert">
                                     <p>{tt('createaccount_jsx.form_requires_javascript_to_be_enabled')}</p>

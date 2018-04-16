@@ -1,10 +1,9 @@
 import React, {Component} from 'react';
-import { ANDROID_APP_URL } from '@config';
 
 class MobileAppButton extends Component {
     onClick = () => {
         localStorage.setItem('golos_app_page_visited', true)
-        window.location.assign(ANDROID_APP_URL)
+        window.location.replace("https://play.google.com/store/apps/details?id=io.golos.golos")
     }
 
     render() {

@@ -74,9 +74,6 @@ export default function resolveRoute(path)
     if (path === '/submit.html') {
         return {page: 'SubmitPost'};
     }
-    if (path === '/leave_page') {
-        return {page: 'LeavePage'};
-    }
     let match = path.match(routeRegex.PostsIndex);
     if (match) {
         return {page: 'PostsIndex', params: ['home', match[1]]};

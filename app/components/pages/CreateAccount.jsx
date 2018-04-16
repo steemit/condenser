@@ -1,19 +1,19 @@
 /* eslint react/prop-types: 0 */
 import React from 'react';
 import { connect } from 'react-redux';
-import LoadingIndicator from '@elements/LoadingIndicator';
+import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import {PrivateKey} from 'golos-js/lib/auth/ecc';
 import user from 'app/redux/User';
 import {validate_account_name} from 'app/utils/ChainValidation';
-import SignUp from '@modules/SignUp';
+import SignUp from 'app/components/modules/SignUp';
 import runTests from 'app/utils/BrowserTests';
 import g from 'app/redux/GlobalReducer';
-import GeneratedPasswordInput from '@elements/GeneratedPasswordInput';
-import CountryCode from "@elements/CountryCode";
+import GeneratedPasswordInput from 'app/components/elements/GeneratedPasswordInput';
+import CountryCode from "app/components/elements/CountryCode";
 import { APP_DOMAIN, SUPPORT_EMAIL, SMS_SERVICES } from 'app/client_config';
 import tt from 'counterpart';
 import {api} from 'golos-js';
-import SignupProgressBar from '@elements/SignupProgressBar';
+import SignupProgressBar from 'app/components/elements/SignupProgressBar';
 import { successReg } from 'app/utils/Analytics';
 
 class CreateAccount extends React.Component {

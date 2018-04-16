@@ -1,5 +1,5 @@
 import React from 'react';
-import HelpContent from '@elements/HelpContent';
+import HelpContent from 'app/components/elements/HelpContent';
 
 class About extends React.Component {
     render() {

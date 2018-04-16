@@ -11,6 +11,7 @@ function socketEventIterator(channel) {
   const options = {
     hostname: 'push.golos.io',
     secure: true,
+    // port: 8000
   };
   const socket = client.create(options);
   const chan = socket.subscribe(channel);

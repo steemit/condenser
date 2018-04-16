@@ -3,7 +3,7 @@ import {connect} from 'react-redux'
 import user from 'app/redux/User';
 import g from 'app/redux/GlobalReducer';
 import tt from 'counterpart';
-import { CURRENCIES, DEFAULT_CURRENCY, CURRENCY_COOKIE_KEY, LANGUAGES, DEFAULT_LANGUAGE, LOCALE_COOKIE_KEY, THEMES, DEFAULT_THEME, USER_GENDER } from 'app/client_config'
+import { CURRENCIES, DEFAULT_CURRENCY, CURRENCY_COOKIE_KEY, LANGUAGES, DEFAULT_LANGUAGE, LOCALE_COOKIE_KEY, THEMES, DEFAULT_THEME, USER_GENDER, FRACTION_DIGITS, FRACTION_DIGITS_MARKET, MIN_VESTING_SHARES } from 'app/client_config'
 import transaction from 'app/redux/Transaction'
 import o2j from 'shared/clash/object2json'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
@@ -20,6 +20,7 @@ class Settings extends React.Component {
         this.initForm(props)
         this.onNsfwPrefChange = this.onNsfwPrefChange.bind(this)
         this.onNsfwPrefSubmit = this.onNsfwPrefSubmit.bind(this)
+        this.onRoundingNumbersChange = this.onRoundingNumbersChange.bind(this)
     }
 
     state = {
@@ -51,8 +52,23 @@ class Settings extends React.Component {
 
     componentWillMount() {
         const {accountname} = this.props
-        const nsfwPref = (process.env.BROWSER ? localStorage.getItem('nsfwPref-' + accountname) : null) || 'warn'
+        const {vesting_shares} = this.props.account
+        
+        let rounding, nsfwPref;
+
+        nsfwPref = (process.env.BROWSER ? localStorage.getItem('nsfwPref-' + accountname) : null) || 'warn'
         this.setState({nsfwPref, oldNsfwPref: nsfwPref})
+
+        if(process.env.BROWSER){
+            rounding = localStorage.getItem('xchange.rounding')
+            if(!rounding){
+                if(vesting_shares > MIN_VESTING_SHARES)
+                    rounding = FRACTION_DIGITS
+                else 
+                    rounding = FRACTION_DIGITS_MARKET
+              }
+            this.setState({rounding : rounding})
+        }
     }
 
     onDrop = (acceptedFiles, rejectedFiles) => {
@@ -81,8 +97,6 @@ class Settings extends React.Component {
     const file = acceptedFiles[0]
     this.uploadCover(file, file.name)
   }
-
-
 
     onOpenClick = () => {
       this.dropzone.open();
@@ -152,6 +166,12 @@ class Settings extends React.Component {
         localStorage.setItem('xchange.created', 0);
         localStorage.setItem('xchange.picked', event.target.value);
         this.props.reloadExchangeRates()
+        this.notify()
+    }
+
+    onRoundingNumbersChange = (event) => {
+        localStorage.setItem('xchange.rounding', event.target.value)
+        this.setState({rounding : event.target.value})
         this.notify()
     }
 
@@ -240,18 +260,17 @@ class Settings extends React.Component {
 
     render() {
         const {state, props} = this
-
+        
         const {submitting, valid, touched} = this.state.accountSettings
         const disabled = !props.isOwnAccount || state.loading || submitting || !valid || !touched
 
-        const {profile_image, cover_image, name, about, gender, location, website} = this.state
+        const {profile_image, cover_image, name, about, gender, location, website, rounding} = this.state
 
         const {follow, account, isOwnAccount} = this.props
         const following = follow && follow.getIn(['getFollowingAsync', account.name]);
         const ignores = isOwnAccount && following && following.get('ignore_result')
 
         const {pImageUploading, cImageUploading} = this.state;
-
 
         const languageSelectBox = <select defaultValue={process.env.BROWSER ? cookie.load(LOCALE_COOKIE_KEY) : DEFAULT_LANGUAGE} onChange={this.onLanguageChange}>
           {Object.keys(LANGUAGES).map(key => {
@@ -296,7 +315,7 @@ class Settings extends React.Component {
               alignItems: `center`,
               padding: `0 6px`
             };
-
+        
         return <div className="Settings">
 
             <div className="row">
@@ -311,11 +330,19 @@ class Settings extends React.Component {
 
                     <label>{tt('settings_jsx.choose_currency')}
                         <select defaultValue={process.env.BROWSER ? localStorage.getItem('xchange.picked') : DEFAULT_CURRENCY} onChange={this.onCurrencyChange}>
-                            {
-                                CURRENCIES.map(i => {
+                            {CURRENCIES.map(i => {
                                     return <option key={i} value={i}>{i}</option>
                                 })
                             }
+                        </select>
+                    </label>
+
+                    <label>{tt('settings_jsx.rounding_numbers.info_message')}
+                        <select defaultValue={process.env.BROWSER ? rounding : FRACTION_DIGITS} onChange={this.onRoundingNumbersChange}>
+                            <option value="0">{tt('settings_jsx.rounding_numbers.integer')}</option>
+                            <option value="1">{tt('settings_jsx.rounding_numbers.one_decimal')}</option>
+                            <option value="2">{tt('settings_jsx.rounding_numbers.two_decimal')}</option>
+                            <option value="3">{tt('settings_jsx.rounding_numbers.three_decimal')}</option>
                         </select>
                     </label>
 
@@ -425,7 +452,7 @@ class Settings extends React.Component {
 
             {isOwnAccount &&
                 <div className="row">
-                    <div className="small-12 columns">
+                    <div className="small-12 medium-8 large-6 columns">
                         <br /><br />
                         <h3>{tt('settings_jsx.private_post_display_settings')}</h3>
                         <div>

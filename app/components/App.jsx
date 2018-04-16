@@ -13,7 +13,6 @@ import Dialogs from 'app/components/modules/Dialogs';
 import Modals from 'app/components/modules/Modals';
 import Icon from 'app/components/elements/Icon';
 import ScrollButton from 'app/components/elements/ScrollButton';
-import MobileAppButton from 'app/components/elements/MobileAppButton';
 import {key_utils} from 'golos-js/lib/auth/ecc';
 import MiniHeader from 'app/components/modules/MiniHeader';
 import tt from 'counterpart';
@@ -121,9 +120,9 @@ class App extends React.Component {
                 return true
             } else {
                 const value = JSON.parse(localStorage.getItem('infobox'))
-                return value.show
+                return value.show                
             }
-        }
+        } 
         return false
     }
 
@@ -187,7 +186,7 @@ class App extends React.Component {
                 </div>
             </div>;
 }
-
+        
         let welcome_screen = null;
         if (ip && new_visitor && this.state.showBanner) {
             welcome_screen = (
@@ -302,7 +301,6 @@ class App extends React.Component {
                 {children}
                 {lp ? <LpFooter /> : null}
                 <ScrollButton />
-                <MobileAppButton />
             </div>
             <Dialogs />
             <Modals />

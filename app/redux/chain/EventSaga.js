@@ -15,7 +15,7 @@ function socketEventIterator(channel) {
   };
   const socket = client.create(options);
   const chan = socket.subscribe(channel);
-  // todo !!!!!!!! this is a motherfucking saga reloading on transfer for example
+  // fixme saga reloading on login
   // this subscribes twice causing event doubling
   if (!started) {
     chan.watch(
@@ -47,7 +47,7 @@ export default function* channelListener() {
   const next = yield call(socketEventIterator, channel)
   while (true) {
     const action = yield call(next);
-    console.log(action)
+    // console.log(action)
     yield put({
       type: 'ADD_NOTIFICATION',
       payload: NotifyContent(action)

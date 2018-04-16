@@ -21,7 +21,6 @@ import usePostJson from './json/post_json';
 import isBot from 'koa-isbot';
 import session from '@steem/crypto-session';
 import csrf from 'koa-csrf';
-import flash from 'koa-flash';
 import minimist from 'minimist';
 import config from 'config';
 import { routeRegex } from 'app/ResolveRoute';
@@ -55,7 +54,6 @@ session(app, {
 });
 csrf(app);
 
-app.use(flash({ key: 'flash' }));
 koaLocale(app);
 
 function convertEntriesToArrays(obj) {

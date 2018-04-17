@@ -3,12 +3,10 @@ spaces
 the-gaming-llama
 cmgsteems
 iamgod
-<<<<<<< 20180330-update-dmca
 bl-transporter
 braini
-=======
 cracked-games
->>>>>>> master
+gautampartapsoni
 `
     .trim()
     .split('\n');

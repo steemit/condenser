@@ -1,6 +1,5 @@
 import { fromJS } from 'immutable';
 import { DEFAULT_LANGUAGE } from 'app/client_config';
-import store from 'store';
 
 // Action constants
 const SHOW_LOGIN = 'user/SHOW_LOGIN';
@@ -49,12 +48,8 @@ const defaultState = fromJS({
     pub_keys_used: null,
     locale: DEFAULT_LANGUAGE,
     show_side_panel: false,
+    maybeLoggedIn: false,
 });
-
-if (process.env.BROWSER) {
-    const locale = store.get('language');
-    if (locale) defaultState.locale = locale;
-}
 
 export default function reducer(state = defaultState, action) {
     const payload = action.payload;

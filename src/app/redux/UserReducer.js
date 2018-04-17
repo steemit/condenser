@@ -25,6 +25,7 @@ export const SET_USER = 'user/SET_USER';
 const CLOSE_LOGIN = 'user/CLOSE_LOGIN';
 export const LOGIN_ERROR = 'user/LOGIN_ERROR';
 export const LOGOUT = 'user/LOGOUT';
+const SET_PRICE_FEED = 'user/SET_PRICE_FEED';
 const SHOW_SIGN_UP = 'user/SHOW_SIGN_UP';
 const HIDE_SIGN_UP = 'user/HIDE_SIGN_UP';
 const KEYS_ERROR = 'user/KEYS_ERROR';
@@ -67,6 +68,9 @@ export default function reducer(state = defaultState, action) {
                 loginDefault,
             });
         }
+
+        case SET_PRICE_FEED:
+            return state.set('steemApiPrice', payload);
 
         case HIDE_LOGIN:
             return state.merge({
@@ -374,6 +378,11 @@ export const accountAuthLookup = payload => ({
 
 export const setAuthority = payload => ({
     type: SET_AUTHORITY,
+    payload,
+});
+
+export const setPriceFeed = payload => ({
+    type: SET_PRICE_FEED,
     payload,
 });
 

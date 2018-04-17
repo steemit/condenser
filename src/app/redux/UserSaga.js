@@ -31,6 +31,7 @@ export const userWatches = [
     watchLoadSavingsWithdraw,
     uploadImageWatch,
     acceptTosWatch,
+    getRecentPrice,
 ];
 
 const highSecurityPages = [
@@ -68,6 +69,11 @@ function* watchLoadSavingsWithdraw() {
 
 export function* watchRemoveHighSecurityKeys() {
     yield* takeLatest('@@router/LOCATION_CHANGE', removeHighSecurityKeys);
+}
+
+function* getRecentPrice() {
+    const feed = yield call([api, api.getFeedHistoryAysnc]);
+    if (feed) yield put(userActions.setPriceFeed({price: feed[0]}));
 }
 
 function* loadSavingsWithdraw() {

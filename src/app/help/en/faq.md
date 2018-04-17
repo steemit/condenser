@@ -1044,7 +1044,7 @@ https://steemit.com/steemit/@digitalnotvir/how-reputation-scores-are-calculated-
 <a href="#Table_of_Contents_Reputation">^</a>
 ## <span id="How_do_I_improve_my_reputation_score">How do I improve my reputation score?</span>
 
-Every time another user upvotes one of your posts or comments, it increases your reputation score. Users with a higher reputation than you will have more of a positive effect. The more Steem Power that the voter has, the larger the effect is as well. The best way to earn upvotes is by adding value to the Steemit community.
+Every time another user upvotes one of your posts or comments, it increases your reputation score. The more Steem Power that the voter has, the larger the effect is. The best way to earn upvotes is by adding value to the Steemit community.
 
 <a href="#Table_of_Contents_Reputation">^</a>
 ## <span id="What_causes_my_reputation_score_to_go_down">What causes my reputation score to go down?</span>

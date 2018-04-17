@@ -132,6 +132,11 @@ export function* findSigningKey({ opType, username, password }) {
     username = username || currentUsername;
     if (!username) return null;
 
+    if (username.indexOf('/') > -1) {
+        // "alice/active" will login only with Alices active key
+        username = username.split('/')[0];
+    }
+
     const private_keys =
         currentUsername === username ? currentUser.get('private_keys') : Map();
 

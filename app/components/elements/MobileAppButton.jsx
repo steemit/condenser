@@ -8,7 +8,9 @@ class MobileAppButton extends Component {
     }
 
     render() {
-        const android = navigator && navigator.userAgent.match(/Android/i)
+        if (!process.env.BROWSER) return null
+
+        const android = navigator.userAgent.match(/Android/i)
         const visited = localStorage.getItem('golos_app_page_visited')
 
         return (android && !visited)

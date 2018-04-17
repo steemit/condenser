@@ -363,6 +363,7 @@ pooniex
 poooniex
 poponiex
 postpromote
+postpromotor
 pse
 ptunk
 puloniex

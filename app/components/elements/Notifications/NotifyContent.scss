@@ -69,7 +69,7 @@
     fill: black !important;
   }
 }
-
+//
 .NotificationContent__icon {
   //background: yellow;
   display: flex;
@@ -78,16 +78,18 @@
   > svg {
     width: 37px;
     height: 37px;
-    //vertical-align: top;
   }
 
   //& > svg:hover > path {
   //  fill: black !important;
   //}
 }
-
-
-
+//
+.NotificationContent__action_source > span > span > a {
+  color: #71b4e1;
+  border-bottom: 1px dotted #71b4e1;
+}
+//
 .NotificationContent__action_source {
   // background: 'white',
   color: #424242 !important;

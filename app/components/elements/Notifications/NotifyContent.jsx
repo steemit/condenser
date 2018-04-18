@@ -5,7 +5,7 @@ import Userpic from 'app/components/elements/Userpic';
 import iconCross from 'app/assets/icons/cross.svg'
 import commentMulti from 'app/assets/icons/notification/comment_multi.svg'
 import upVoteMulti from 'app/assets/icons/notification/up_vote_multi.svg'
-
+import downVoteMulti from 'app/assets/icons/notification/down_vote_multi.svg'
 //
 const actionStyle = {
   // fixme
@@ -112,8 +112,8 @@ const comment = data => {
   )
 }
 //
-const vote = data => {
-  // console.log('~~~~~~~~~~~~ ', data)
+const upvote = data => {
+  console.log('++++++++++++++++ ', data)
   // console.log(data)
   // todo use i18n const
   const {
@@ -171,13 +171,73 @@ const vote = data => {
   )
 }
 //
+const downvote = data => {
+  console.log('~~~~~~~~~~~~ ', data)
+  // console.log(data)
+  // todo use i18n const
+  const {
+    voter: {
+      account,
+      profile_image
+    },
+    parent: {
+      type,
+      permlink,
+      title,
+      body,
+      // todo refactor url const names
+      url: parent_url
+    },
+    count
+  } = data;
+  //
+  const oncePerBlock = (count === 1);
+  //
+  const message = oncePerBlock ?
+    <span>
+      {` поставил флаг на ваш`}
+      &nbsp;
+      <Link to={parent_url}>
+        {type === 'post' ? `пост` : `комментарий`}
+      </Link>
+    </span> :
+    <span>
+      {`Ваш`}
+      &nbsp;
+      <Link to={parent_url}>
+        {type === 'post' ? `пост` : `комментарий`}
+      </Link>
+      {` получил ${count} флага.`}
+    </span>
+  //
+  return (
+    <div className="NotificationContent__container">
+      <div className="NotificationContent__container_left">
+        {
+          oncePerBlock ? <Userpic width="37" height="37" imageUrl={profile_image} /> :
+            <span className="NotificationContent__icon" dangerouslySetInnerHTML={{__html: downVoteMulti}} />
+        }
+      </div>
+      <div className="NotificationContent__container_center">
+          <span className="NotificationContent__action_source">
+            {oncePerBlock && account}
+            <span style={{color: '#919191', fontWeight: '450'}}>
+              {message}
+            </span>
+          </span>
+      </div>
+    </div>
+  )
+}
+//
 function render(what) {
   console.log(`))))))) `, what)
   const {type, payload} = what;
   return (
     type === 'NOTIFY_COMMENT' ? comment(payload) :
       type === 'NOTIFY_TRANSFER' ? transfer(payload) :
-        vote(payload)
+        type === 'NOTIFY_VOTE_UP' ? upvote(payload) :
+          downvote(payload)
   )
 }
 //
@@ -226,5 +286,5 @@ export default action => ({
     cursor: 'pointer'
   },
   key: "chain_" + Date.now(),
-  dismissAfter: 300000,
+  dismissAfter: 10000,
 })

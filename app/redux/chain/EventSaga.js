@@ -9,9 +9,9 @@ function socketEventIterator(channel) {
   resolved = true;
   //
   const options = {
-    hostname: 'push.golos.io',
-    secure: true,
-    // port: 8000
+    // hostname: 'push.golos.io',
+    // secure: true,
+    port: 8000
   };
   const socket = client.create(options);
   const chan = socket.subscribe(channel);
@@ -41,7 +41,7 @@ function socketEventIterator(channel) {
 }
 //
 export default function* channelListener() {
-  console.log('<<< listening to push.golos.io ...')
+  console.log('<<<---------------------------------------------- listening to push.golos.io ...')
   const current = yield select(state => state.user.get('current'));
   const channel = current.get('username');
   const next = yield call(socketEventIterator, channel)

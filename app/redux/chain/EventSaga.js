@@ -9,9 +9,9 @@ function socketEventIterator(channel) {
   resolved = true;
   //
   const options = {
-    // hostname: 'push.golos.io',
-    // secure: true,
-    port: 8000
+    hostname: 'push.golos.io',
+    secure: true,
+    // port: 8000
   };
   const socket = client.create(options);
   const chan = socket.subscribe(channel);
@@ -47,7 +47,7 @@ export default function* channelListener() {
   const next = yield call(socketEventIterator, channel)
   while (true) {
     const action = yield call(next);
-    // console.log(action)
+    console.log(action)
     yield put({
       type: 'ADD_NOTIFICATION',
       payload: NotifyContent(action)

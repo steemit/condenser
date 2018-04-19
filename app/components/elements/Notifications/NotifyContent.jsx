@@ -1,5 +1,4 @@
 import React from 'react'
-import Icon from 'app/components/elements/Icon';
 import {Link} from 'react-router';
 import Userpic from 'app/components/elements/Userpic';
 import iconCross from 'app/assets/icons/cross.svg'

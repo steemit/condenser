@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
-import { filterTags, numberWithCommas } from 'app/utils/StateFunctions';
+import { numberWithCommas } from 'app/utils/StateFunctions';
 import tt from 'counterpart';
 
 export default class TagsIndex extends React.Component {
@@ -54,7 +54,7 @@ export default class TagsIndex extends React.Component {
         const { tagsAll } = this.props;
         //console.log('-- TagsIndex.render -->', tagsAll.toJS());
         const { order } = this.state;
-        let tags = filterTags(tagsAll);
+        let tags = tagsAll;
 
         const rows = tags
             .filter(

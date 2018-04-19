@@ -12,7 +12,7 @@ import {PrivateKey, Signature, hash} from 'golos-js/lib/auth/ecc'
 import {api} from 'golos-js'
 import tt from 'counterpart';
 import React from 'react';
-import serverEventChannel from 'app/redux/chain/EventSaga';
+import PushNotificationSaga from 'app/redux/services/PushNotificationSaga';
 
 
 const MAX_UPLOAD_IMAGE_SIZE = 1024 * 1024
@@ -126,10 +126,11 @@ function* usernamePasswordLogin(action) {
         yield fork(loadFollows, "getFollowingAsync", username, 'blog')
         yield fork(loadFollows, "getFollowingAsync", username, 'ignore')
         if(process.env.BROWSER) {
+          const {onUserLogin} = PushNotificationSaga;
           // clientside
           // when logged in
           // start listening to the personal server event channel
-          yield fork(serverEventChannel);
+          yield call(onUserLogin);
         }
     }
 }

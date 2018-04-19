@@ -11,10 +11,10 @@ export function validate_account_name(value, memo) {
     }
     length = value.length;
     if (length < 3) {
-        return tt('chainvalidation_js.account_name_shouldbe_longer');
+        return tt('chainvalidation_js.account_name_should_be_longer');
     }
     if (length > 16) {
-        return tt('chainvalidation_js.account_name_shouldbe_shorter');
+        return tt('chainvalidation_js.account_name_should_be_shorter');
     }
     if (BadActorList.includes(value)) {
         return tt('chainvalidation_js.badactor');

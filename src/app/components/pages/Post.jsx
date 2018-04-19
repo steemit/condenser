@@ -22,7 +22,6 @@ class Post extends React.Component {
         post: React.PropTypes.string,
         routeParams: React.PropTypes.object,
         sortOrder: React.PropTypes.string,
-        signup_bonus: React.PropTypes.string,
     };
     constructor() {
         super();
@@ -52,7 +51,7 @@ class Post extends React.Component {
 
     render() {
         const { showSignUp } = this;
-        const { signup_bonus, content, sortOrder } = this.props;
+        const { content, sortOrder } = this.props;
         const { showNegativeComments, commentHidden, showAnyway } = this.state;
         let post = this.props.post;
         if (!post) {
@@ -208,11 +207,7 @@ class Post extends React.Component {
                                 )}.
                                 <br />
                                 {tt(
-                                    'g.next_7_strings_single_block.if_you_enjoyed_what_you_read_earn_amount',
-                                    {
-                                        amount: '$' + signup_bonus.substring(1),
-                                        INVEST_TOKEN_UPPERCASE,
-                                    }
+                                    'g.next_7_strings_single_block.if_you_enjoyed_what_you_read_earn_amount'
                                 )}
                                 <br />
                                 <button
@@ -266,7 +261,6 @@ export default connect((state, ownProps) => {
     }
     return {
         content: state.global.get('content'),
-        signup_bonus: state.offchain.get('signup_bonus'),
         ignoring,
         sortOrder:
             ownProps.router.getCurrentLocation().query.sort || 'trending',

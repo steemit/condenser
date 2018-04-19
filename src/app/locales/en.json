@@ -11,6 +11,7 @@
         "blog": "Blog",
         "browse": "Browse",
         "buy": "Buy",
+        "buy_steem_power": "Buy Steem Power",
         "buy_or_sell": "Buy or Sell",
         "by": "by",
         "cancel": "Cancel",
@@ -871,5 +872,17 @@
     },
     "confirmtransactionform_jsx": {
         "confirm": "Confirm %(transactionType)s"
+    },
+    "modals_jsx": {
+        "your_transaction_failed": "Your transaction failed to process",
+        "out_of_bandwidth_title": "Why? You've run out of bandwidth",
+        "out_of_bandwidth_reason":
+            "Actions such as posting and voting use computing resources placing a real cost on the community members who run the Steem blockchain for everyone.",
+        "out_of_bandwidth_reason_2":
+            "To keep things free, Steem intelligently allocates bandwidth to each user based on their Steem Power holdings, their recent usage and overall network demand. This system prioritizes actions by good community members while limiting spam.",
+        "out_of_bandwidth_option_title": "To keep interacting on Steemit:",
+        "out_of_bandwidth_option_1": "Buy and hold more Steem Power",
+        "out_of_bandwidth_option_2": "Wait until your bandwidth recharges",
+        "out_of_bandwidth_option_3": "Wait until the network usage decreases"
     }
 }

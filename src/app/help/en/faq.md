@@ -1044,7 +1044,7 @@ https://steemit.com/steemit/@digitalnotvir/how-reputation-scores-are-calculated-
 <a href="#Table_of_Contents_Reputation">^</a>
 ## <span id="How_do_I_improve_my_reputation_score">How do I improve my reputation score?</span>
 
-Every time another user upvotes one of your posts or comments, it increases your reputation score. Users with a higher reputation than you will have more of a positive effect. The more Steem Power that the voter has, the larger the effect is as well. The best way to earn upvotes is by adding value to the Steemit community.
+Every time another user upvotes one of your posts or comments, it increases your reputation score. The more Steem Power that the voter has, the larger the effect is. The best way to earn upvotes is by adding value to the Steemit community.
 
 <a href="#Table_of_Contents_Reputation">^</a>
 ## <span id="What_causes_my_reputation_score_to_go_down">What causes my reputation score to go down?</span>
@@ -1318,7 +1318,7 @@ Each account can vote for up to 30 witnesses.
 
 ## <span id="What_third_party_tools_are_there_for_Steemit">What third-party tools are there for Steemit?</span>
 
-http://steemtools.com/
+https://steemprojects.com/
 
 <a href="#Table_of_Contents_Miscellaneous">^</a>
 ## <span id="Is_there_an_official_Steemit_Facebook_page">Is there an official Steemit Facebook page?</span>
@@ -1350,7 +1350,7 @@ You can also create a post on steemit.com with the tag #help, and someone in the
 
 ## <span id="Third_Party_References_and_User_Links">Third Party References and User Links</span>
 
-AnonSteem, Binance, bitcoinfees, Bitcointalk, BitShares, Bittrex, blockchain.info, BlockTrades, Busy.org, Changelly, @cheetah, Coinbase, DTube, GOPAX, HitBTC, Localbitcoins, Markdown Cheatsheet, Pexels, Pixabay, Poloniex, Postimage, Shapeshift.io, Steemcleaners, SteemConnect, SteemCreate, steemd, SteemDB, steem.chat, SteemStats, SteemTools, Streemian, The Steemit Shop, UpBit, and Utopian.io are third party applications/services, and are not owned or maintained by Steemit, Inc. Their listing here, as well as any other third party applications or websites that are listed, does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
+AnonSteem, Binance, bitcoinfees, Bitcointalk, BitShares, Bittrex, blockchain.info, BlockTrades, Busy.org, Changelly, @cheetah, Coinbase, DTube, GOPAX, HitBTC, Localbitcoins, Markdown Cheatsheet, Pexels, Pixabay, Poloniex, Postimage, Shapeshift.io, Steemcleaners, SteemConnect, SteemCreate, steemd, SteemDB, steem.chat, SteemStats, SteemProjects, Streemian, The Steemit Shop, UpBit, and Utopian.io are third party applications/services, and are not owned or maintained by Steemit, Inc. Their listing here, as well as any other third party applications or websites that are listed, does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
 
 All links to user posts were created by our users and do not necessarily represent the views of Steemit, Inc. or its management. Their listing here does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
 

@@ -40,6 +40,7 @@ const ABOUT_FLAG = (
 
 const MAX_VOTES_DISPLAY = 20;
 const VOTE_WEIGHT_DROPDOWN_THRESHOLD = 1.0 * 1000.0 * 1000.0;
+const SBD_PRINT_RATE_MAX = 10000;
 
 class Voting extends React.Component {
     static propTypes = {
@@ -285,7 +286,7 @@ class Voting extends React.Component {
         const pending_payout_sp =
             (pending_payout - pending_payout_sbd) / price_per_steem;
         const pending_payout_printed_sbd =
-            pending_payout_sbd * sbd_print_rate / 10000;
+            pending_payout_sbd * (sbd_print_rate / SBD_PRINT_RATE_MAX);
         const pending_payout_printed_steem =
             (pending_payout_sbd - pending_payout_printed_sbd) / price_per_steem;
 
@@ -333,7 +334,7 @@ class Voting extends React.Component {
                         ' ' +
                         DEBT_TOKEN_SHORT +
                         ', ' +
-                        (sbd_print_rate != 10000
+                        (sbd_print_rate != SBD_PRINT_RATE_MAX
                             ? formatDecimal(pending_payout_printed_steem).join(
                                   ''
                               ) +
@@ -548,7 +549,8 @@ export default connect(
                 price_per_steem = parseFloat(base.split(' ')[0]);
         }
 
-        const sbd_print_rate = state.global.getIn(['props', 'sbd_print_rate']);
+        const sbd_print_rate = 7500; // TODO: remove mock value
+        //const sbd_print_rate = state.global.getIn(['props', 'sbd_print_rate']);
 
         return {
             post: ownProps.post,

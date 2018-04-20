@@ -96,7 +96,6 @@ class ReplyEditor extends React.Component {
                     ? stateFromHtml(this.props.richTextEditor, raw)
                     : null,
             });
-            this.setAutoVote();
             this.setState({
                 payoutType: this.props.isStory
                     ? localStorage.getItem('defaultPayoutType') || '50%'
@@ -205,20 +204,12 @@ class ReplyEditor extends React.Component {
             confirm(tt('reply_editor.are_you_sure_you_want_to_clear_this_form'))
         ) {
             replyForm.resetForm();
-            this.setAutoVote();
             this.setState({
                 rte_value: stateFromHtml(this.props.richTextEditor),
             });
             this.setState({ progress: {} });
             if (onCancel) onCancel(e);
         }
-    };
-
-    autoVoteOnChange = () => {
-        const { autoVote } = this.state;
-        const key = 'replyEditorData-autoVote-story';
-        localStorage.setItem(key, !autoVote.value);
-        autoVote.props.onChange(!autoVote.value);
     };
 
     // As rte_editor is updated, keep the (invisible) 'body' field in sync.
@@ -229,17 +220,6 @@ class ReplyEditor extends React.Component {
         if (body.value !== html) body.props.onChange(html);
     };
 
-    setAutoVote() {
-        const { isStory } = this.props;
-        if (isStory) {
-            const { autoVote } = this.state;
-            const key = 'replyEditorData-autoVote-story';
-            const autoVoteDefault = JSON.parse(
-                localStorage.getItem(key) || false
-            );
-            autoVote.props.onChange(autoVoteDefault);
-        }
-    }
     toggleRte = e => {
         e.preventDefault();
         const state = { rte: !this.state.rte };
@@ -334,8 +314,8 @@ class ReplyEditor extends React.Component {
             category: this.props.category,
             body: this.props.body,
         };
-        const { onCancel, onTitleChange, autoVoteOnChange } = this;
-        const { title, category, body, autoVote } = this.state;
+        const { onCancel, onTitleChange } = this;
+        const { title, category, body } = this.state;
         const {
             reply,
             username,
@@ -366,8 +346,6 @@ class ReplyEditor extends React.Component {
         };
         const isEdit = type === 'edit';
         const isHtml = rte || isHtmlTest(body.value);
-        // Be careful, autoVote can reset curation rewards.  Never autoVote on edit..
-        const autoVoteValue = !isEdit && autoVote.value;
         const replyParams = {
             author,
             permlink,
@@ -379,7 +357,6 @@ class ReplyEditor extends React.Component {
             isHtml,
             isStory,
             jsonMetadata,
-            autoVote: autoVoteValue,
             payoutType,
             successCallback: successCallbackWrapper,
             errorCallback,
@@ -671,19 +648,6 @@ class ReplyEditor extends React.Component {
                                                 )}
                                             </option>
                                         </select>
-                                        <br />
-                                        <label
-                                            title={tt(
-                                                'reply_editor.check_this_to_auto_upvote_your_post'
-                                            )}
-                                        >
-                                            {tt('g.upvote_post')} &nbsp;
-                                            <input
-                                                type="checkbox"
-                                                checked={autoVote.value}
-                                                onChange={autoVoteOnChange}
-                                            />
-                                        </label>
                                     </div>
                                 )}
                         </div>
@@ -775,7 +739,7 @@ export default formId =>
         // mapStateToProps
         (state, ownProps) => {
             const username = state.user.getIn(['current', 'username']);
-            const fields = ['body', 'autoVote:checked'];
+            const fields = ['body'];
             const { type, parent_author, jsonMetadata } = ownProps;
             const isEdit = type === 'edit';
             const isStory =
@@ -828,7 +792,6 @@ export default formId =>
                 isStory,
                 type,
                 originalPost,
-                autoVote = false,
                 payoutType = '50%',
                 state,
                 jsonMetadata,
@@ -950,7 +913,7 @@ export default formId =>
                 startLoadingIndicator();
 
                 const originalBody = isEdit ? originalPost.body : null;
-                const __config = { originalBody, autoVote };
+                const __config = { originalBody };
 
                 // Avoid changing payout option during edits #735
                 if (!isEdit) {

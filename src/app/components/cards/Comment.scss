@@ -37,7 +37,6 @@
 
 .Comment .highlighted {
   padding: 14px;
-  overflow: auto;
   @include themify($themes) {
     border: themed('borderAccent');
     background-color: themed('highlightBackgroundColor');

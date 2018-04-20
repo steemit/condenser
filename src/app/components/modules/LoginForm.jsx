@@ -15,7 +15,7 @@ import { SIGNUP_URL } from 'shared/constants';
 
 class LoginForm extends Component {
     static propTypes = {
-        //Steemit
+        // Steemit.
         login_error: PropTypes.string,
         onCancel: PropTypes.func,
     };
@@ -268,6 +268,30 @@ class LoginForm extends Component {
                 ? tt('loginform_jsx.password_info')
                 : null;
 
+        const isTransfer =
+            loginBroadcastOperation
+                .get('type')
+                .toLowerCase()
+                .indexOf('transfer') >= 0;
+
+        const signupLink = (
+            <div className="sign-up">
+                <hr />
+                <p>
+                    {tt('loginform_jsx.join_our')}{' '}
+                    <em>{tt('loginform_jsx.amazing_community')}</em>
+                    {tt('loginform_jsx.to_comment_and_reward_others')}
+                </p>
+                <button
+                    type="button"
+                    className="button hollow"
+                    onClick={this.SignUp}
+                >
+                    {tt('loginform_jsx.sign_up_get_steem')}
+                </button>
+            </div>
+        );
+
         const form = (
             <form
                 onSubmit={handleSubmit(({ data }) => {
@@ -362,21 +386,7 @@ class LoginForm extends Component {
                         </button>
                     )}
                 </div>
-                <div className="sign-up">
-                    <hr />
-                    <p>
-                        {tt('loginform_jsx.join_our')}{' '}
-                        <em>{tt('loginform_jsx.amazing_community')}</em>
-                        {tt('loginform_jsx.to_comment_and_reward_others')}
-                    </p>
-                    <button
-                        type="button"
-                        className="button hollow"
-                        onClick={this.SignUp}
-                    >
-                        {tt('loginform_jsx.sign_up_get_steem')}
-                    </button>
-                </div>
+                {!isTransfer && signupLink}
             </form>
         );
 
@@ -433,7 +443,6 @@ export default connect(
         const loginBroadcastOperation = state.user.get(
             'loginBroadcastOperation'
         );
-
         const initialValues = {
             saveLogin: saveLoginDefault,
         };

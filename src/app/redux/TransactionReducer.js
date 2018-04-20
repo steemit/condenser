@@ -184,10 +184,12 @@ export default function reducer(state = defaultState, action) {
 }
 
 // Action creators
-export const confirmOperation = payload => ({
-    type: CONFIRM_OPERATION,
-    payload,
-});
+export const confirmOperation = payload => {
+    return {
+        type: CONFIRM_OPERATION,
+        payload,
+    };
+};
 
 export const hideConfirm = payload => ({
     type: HIDE_CONFIRM,

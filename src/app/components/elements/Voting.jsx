@@ -549,8 +549,7 @@ export default connect(
                 price_per_steem = parseFloat(base.split(' ')[0]);
         }
 
-        const sbd_print_rate = 7500; // TODO: remove mock value
-        //const sbd_print_rate = state.global.getIn(['props', 'sbd_print_rate']);
+        const sbd_print_rate = state.global.getIn(['props', 'sbd_print_rate']);
 
         return {
             post: ownProps.post,

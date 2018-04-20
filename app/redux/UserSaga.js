@@ -101,7 +101,7 @@ function* usernamePasswordLogin(action) {
   // get current path from router
   // const pathname = yield select(state => state.global.get('pathname'))
   const currentLocation = yield select(state => state.routing)//.get(`locationBeforeTransitions`));
-  const { locationBeforeTransitions: { pathname,  query } } = currentLocation;
+  const { locationBeforeTransitions: { pathname, query } } = currentLocation;
   const sender = pathname.split(`/`)[1].substring(1);
   const {to, amount, token, memo} = query;
   const externalTransferRequested = (!!to && !!amount && !!token && !!memo);
@@ -126,11 +126,15 @@ function* usernamePasswordLogin(action) {
         yield fork(loadFollows, "getFollowingAsync", username, 'blog')
         yield fork(loadFollows, "getFollowingAsync", username, 'ignore')
         if(process.env.BROWSER) {
-          const {onUserLogin} = PushNotificationSaga;
-          // clientside
-          // when logged in
-          // start listening to the personal server event channel
-          yield call(onUserLogin);
+          const notification_channel_created = yield select(state => state.user.get('notification_channel_created'))
+          if (!notification_channel_created) {
+            console.log(']]]]]]]]]]]]]]]]]]]]]]] ', notification_channel_created)
+            const {onUserLogin} = PushNotificationSaga;
+            // clientside
+            // when logged in
+            // start listening to the personal server event channel
+            yield call(onUserLogin);
+          }
         }
     }
 }

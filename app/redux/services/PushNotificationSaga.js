@@ -1,11 +1,8 @@
-import {call, put, select, fork} from 'redux-saga/effects';
-import {takeLatest} from 'redux-saga';
+import {take, call, put, select, fork, cancel} from 'redux-saga/effects';
+import {SagaCancellationException} from 'redux-saga';
+import user from 'app/redux/User'
 import client from 'socketcluster-client';
 import NotifyContent from 'app/components/elements/Notifications/NotifyContent'
-// import user from "../User";
-import {serverApiLogout} from "../../utils/ServerApiClient";
-// this should not exist after sagas restart fixing
-let started = false;
 //
 const scOptions = {
   hostname: 'push.golos.io',
@@ -14,31 +11,20 @@ const scOptions = {
 };
 //
 let socket;
-// const chan = socket.subscribe(channel);
-
 //
 function socketEventIterator(channel) {
   let resolveNextValue, resolved;
   resolved = true;
-  //
-  const options = {
-    hostname: 'push.golos.io',
-    secure: true,
-    // port: 8000
-  };
-  const socket = client.create(options);
+  // const socket = client.create(options);
   const chan = socket.subscribe(channel);
   // fixme saga reloading on login
   // this subscribes twice causing event doubling
-  if (!started) {
-    chan.watch(
-      event => {
-        // console.log(`----------------------------------------- `, event)
-        resolveNextValue(event);
-        resolved = true;
-      })
-    started = true
-  }
+  chan.watch(
+    event => {
+      // console.log(`----------------------------------------- `, event)
+      resolveNextValue(event);
+      resolved = true;
+    })
   //
   return () => {
     if (!resolved) {
@@ -53,19 +39,26 @@ function socketEventIterator(channel) {
   };
 }
 //
-function* userChannelListener() {
-  console.log('<<<---------------------------------------------- listening to push.golos.io ...')
-  const current = yield select(state => state.user.get('current'));
-  const channel = current.get('username');
-  const next = yield call(socketEventIterator, channel)
-  yield fork(logoutListener)
-  while (true) {
-    const action = yield call(next);
-    console.log(action)
-    yield put({
-      type: 'ADD_NOTIFICATION',
-      payload: NotifyContent(action)
-    })
+function* userChannelListener(channel) {
+  try {
+    const next = yield call(socketEventIterator, channel)
+    // yield fork(logoutListener)
+    while (true) {
+      const action = yield call(next);
+      console.log(action)
+      yield put({
+        type: 'ADD_NOTIFICATION',
+        payload: NotifyContent(action)
+      })
+    }
+  } catch (error) {
+    // the way redux-saga 0.9.5 catches an effect cancellation
+    // or simply using `isCancelError(error)`
+    if (error instanceof SagaCancellationException) {
+      // clear everything here!
+      socket.unsubscribe(channel)
+      socket.destroy()
+    }
   }
 }
 //
@@ -73,6 +66,31 @@ function initConnection(user) {
   console.log(`|||| channel requested for user `, user)
   console.log(`|||| initializing SCluster client ...`)
   socket = client.create(scOptions);
+  return new Promise((resolve, reject) => {
+    const onSocketConnect = e => {
+      socket.off('connect', onSocketConnect)
+      resolve(e)
+    }
+    const onSocketError = e => {
+      socket.off('error', onSocketConnect)
+      reject(e)
+      return
+    }
+    socket.on('connect', onSocketConnect)
+    socket.on('error', onSocketError)
+  })
+}
+//
+function* processLogout() {
+  yield console.log(`||||||||||||||||||||||||||||||||||| LOGOUT`)
+  yield socket.destroy();
+  yield put(user.actions.notificationChannelDestroyed())
+  yield console.log('|||| SCClient destroyed!')
+}
+// listen to logout only since login
+function* logoutListener(chl) {
+  yield take('user/LOGOUT'/*, processLogout*/);
+  yield cancel(chl)
 }
 //
 function* onUserLogin() {
@@ -80,16 +98,21 @@ function* onUserLogin() {
   const current = yield select(state => state.user.get('current'));
   const channelName = current.get('username');
   if (channelName) {
-    yield call(initConnection, channelName)
+    try {
+      // {socketid: ..., ...}
+      const response = yield call(initConnection, channelName)
+      // socket successfully created - notify
+      yield put(user.actions.notificationChannelCreated())
+      //
+      yield console.log('|||| socket connected! ', response)
+      // start tracking user logout
+      const chListener = yield fork(userChannelListener, channelName)
+      yield fork(logoutListener, chListener)
+      yield console.log('|||| channel listener started ...')
+    } catch (e) {
+      console.log('||||||||||| socket connection error! ', e)
+    }
   }
-}
-//
-function* processLogout() {
-  yield console.log(`||||||||||||||||||||||||||||||||||| LOGOUT`)
-}
-// listen to logout only since login
-function* logoutListener() {
-  yield* takeLatest('user/LOGOUT', processLogout);
 }
 //
 export default {

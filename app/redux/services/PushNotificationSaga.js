@@ -45,7 +45,7 @@ function* userChannelListener(channel) {
     // yield fork(logoutListener)
     while (true) {
       const action = yield call(next);
-      console.log(action)
+      // console.log(action)
       yield put({
         type: 'ADD_NOTIFICATION',
         payload: NotifyContent(action)
@@ -82,21 +82,22 @@ function initConnection(user) {
 }
 //
 function* processLogout() {
-  yield console.log(`||||||||||||||||||||||||||||||||||| LOGOUT`)
+  console.log(`||||||||||||||||||||||||||||||||||| LOGOUT`)
   yield socket.destroy();
   yield put(user.actions.notificationChannelDestroyed())
-  yield console.log('|||| SCClient destroyed!')
+  console.log('|||| SCClient destroyed!')
 }
-// listen to logout only since login
+
+// listen to logout only after successful login
 function* logoutListener(chl) {
   yield take('user/LOGOUT'/*, processLogout*/);
   yield cancel(chl)
 }
 //
 function* onUserLogin() {
-  yield console.log(`||||||||||||||||||||||||||||||||||| STARTING CHANNEL LISTENER `)
-  const current = yield select(state => state.user.get('current'));
-  const channelName = current.get('username');
+  console.log(`||||||||||||||||||||||||||||||||||| STARTING CHANNEL LISTENER `)
+  const currentUser = yield select(state => state.user.get('current'));
+  const channelName = currentUser.get('username');
   if (channelName) {
     try {
       // {socketid: ..., ...}
@@ -104,11 +105,12 @@ function* onUserLogin() {
       // socket successfully created - notify
       yield put(user.actions.notificationChannelCreated())
       //
-      yield console.log('|||| socket connected! ', response)
+      // console.log('|||| socket connected! ', response)
       // start tracking user logout
       const chListener = yield fork(userChannelListener, channelName)
+      // listen to logout only after successful login
       yield fork(logoutListener, chListener)
-      yield console.log('|||| channel listener started ...')
+      console.log('|||| channel listener started ...')
     } catch (e) {
       console.log('||||||||||| socket connection error! ', e)
     }

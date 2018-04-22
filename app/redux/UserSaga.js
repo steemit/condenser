@@ -128,7 +128,7 @@ function* usernamePasswordLogin(action) {
         if(process.env.BROWSER) {
           const notification_channel_created = yield select(state => state.user.get('notification_channel_created'))
           if (!notification_channel_created) {
-            console.log(']]]]]]]]]]]]]]]]]]]]]]] ', notification_channel_created)
+            // console.log(']]]]]]]]]]]]]]]]]]]]]]] ', notification_channel_created)
             const {onUserLogin} = PushNotificationSaga;
             // clientside
             // when logged in

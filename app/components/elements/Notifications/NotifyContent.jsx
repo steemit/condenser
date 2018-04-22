@@ -112,7 +112,7 @@ const comment = data => {
 }
 //
 const upvote = data => {
-  console.log('++++++++++++++++ ', data)
+  // console.log('++++++++++++++++ ', data)
   // console.log(data)
   // todo use i18n const
   const {
@@ -171,7 +171,7 @@ const upvote = data => {
 }
 //
 const downvote = data => {
-  console.log('~~~~~~~~~~~~ ', data)
+  // console.log('~~~~~~~~~~~~ ', data)
   // console.log(data)
   // todo use i18n const
   const {
@@ -230,7 +230,7 @@ const downvote = data => {
 }
 //
 function render(what) {
-  console.log(`))))))) `, what)
+  // console.log(`))))))) `, what)
   const {type, payload} = what;
   return (
     type === 'NOTIFY_COMMENT' ? comment(payload) :

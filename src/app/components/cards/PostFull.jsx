@@ -174,10 +174,6 @@ class PostFull extends React.Component {
     redditShare(e) {
         serverApiRecordEvent('RedditShare', this.share_params.link);
         e.preventDefault();
-        const winWidth = 640;
-        const winHeight = 320;
-        const winTop = screen.height / 2 - winWidth / 2;
-        const winLeft = screen.width / 2 - winHeight / 2;
         const s = this.share_params;
         const q =
             'title=' +

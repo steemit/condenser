@@ -285,5 +285,5 @@ export default action => ({
     cursor: 'pointer'
   },
   key: "chain_" + Date.now(),
-  dismissAfter: 10000,
+  dismissAfter: 15000,
 })

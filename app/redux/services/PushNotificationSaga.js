@@ -62,13 +62,25 @@ function* userChannelListener(channel) {
   }
 }
 //
+function onConnectedError(e) {
+  console.clear()
+  console.log(`<<< notification channel's down. Reconnecting ...`)
+}
+//
+function onConnectedClose(e) {
+  console.clear()
+  console.log(`<<< notification channel's down. Reconnecting ...`)
+}
+//
 function initConnection(user) {
-  console.log(`|||| channel requested for user `, user)
-  console.log(`|||| initializing SCluster client ...`)
+  // console.log(`|||| channel requested for user `, user)
+  // console.log(`|||| initializing SCluster client ...`)
   socket = client.create(scOptions);
   return new Promise((resolve, reject) => {
     const onSocketConnect = e => {
       socket.off('connect', onSocketConnect)
+      socket.on('error', onConnectedError)
+      socket.on('close', onConnectedClose)
       resolve(e)
     }
     const onSocketError = e => {
@@ -82,10 +94,10 @@ function initConnection(user) {
 }
 //
 function* processLogout() {
-  console.log(`||||||||||||||||||||||||||||||||||| LOGOUT`)
+  // console.log(`||||||||||||||||||||||||||||||||||| LOGOUT`)
   yield socket.destroy();
   yield put(user.actions.notificationChannelDestroyed())
-  console.log('|||| SCClient destroyed!')
+  // console.log('|||| SCClient destroyed!')
 }
 
 // listen to logout only after successful login
@@ -95,7 +107,7 @@ function* logoutListener(chl) {
 }
 //
 function* onUserLogin() {
-  console.log(`||||||||||||||||||||||||||||||||||| STARTING CHANNEL LISTENER `)
+  // console.log(`||||||||||||||||||||||||||||||||||| STARTING CHANNEL LISTENER `)
   const currentUser = yield select(state => state.user.get('current'));
   const channelName = currentUser.get('username');
   if (channelName) {
@@ -110,9 +122,9 @@ function* onUserLogin() {
       const chListener = yield fork(userChannelListener, channelName)
       // listen to logout only after successful login
       yield fork(logoutListener, chListener)
-      console.log('|||| channel listener started ...')
+      // console.log('|||| channel listener started ...')
     } catch (e) {
-      console.log('||||||||||| socket connection error! ', e)
+      // console.log('||||||||||| socket connection error! ', e)
     }
   }
 }

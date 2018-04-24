@@ -62,14 +62,14 @@ function convertEntriesToArrays(obj) {
 // some redirects
 app.use(function*(next) {
     // normalize url
-    // if (this.url.indexOf('%') !== -1) {
-    //     const transfer = this.url.split("?")[0].split(`/`).includes(`transfers`);
-    //   if (!transfer) {
-    //     //  fixme potential 500
-    //     this.redirect(decodeURIComponent(this.url));
-    //     return;
-    //   }
-    // }
+    if (this.url.indexOf('%') !== -1) {
+        const transfer = this.url.split("?")[0].split(`/`).includes(`transfers`);
+      if (!transfer) {
+        //  fixme potential 500
+        this.redirect(decodeURIComponent(this.url));
+        return;
+      }
+    }
     // redirect to home page/feed if known account
     if (this.method === 'GET' && this.url === '/' && this.session.a) {
         this.status = 302;

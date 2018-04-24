@@ -697,7 +697,14 @@
     },
     "profile_about": "О проекте",
     "profile_location": "Местоположение",
-    "profile_website": "Веб-сайт"
+    "profile_website": "Веб-сайт",
+    "rounding_numbers": {
+      "info_message": "Отображение наград",
+      "integer": "Округлять до целого числа",
+      "one_decimal": "Один знак после запятой",
+      "two_decimal": "Два знака после запятой",
+      "three_decimal": "Три знака после запятой"
+    }
   },
   "submit_a_story": {
     "title": "Заголовок",

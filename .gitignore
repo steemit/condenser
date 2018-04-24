@@ -19,7 +19,6 @@ config/golos-dev.json
 config/process.json
 config/process-dev.json
 config/process-prod.json
-config/client_config.js
 
 db/config/config.json
 

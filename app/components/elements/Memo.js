@@ -90,7 +90,7 @@ class Memo extends React.Component {
         return el
       }
       catch(e) {
-        return text
+        return false
       }
     }
 
@@ -99,9 +99,9 @@ class Memo extends React.Component {
         const {memo_private, text, myAccount} = this.props;
         const isEncoded = /^#/.test(text);
         // fixme: ugly and temporary
-        // const donate = this.renderDonate(text);
+        const donate = this.renderDonate(text);
 
-        if(!isEncoded) return <span>{linkify(text)}</span>
+        if(!isEncoded) return <span>{donate || linkify(text)}</span>
             if(!myAccount) return <span></span>
             if(memo_private) return <span>{decodeMemo(memo_private, text)}</span>
             return <span>{tt('g.login_to_see_memo')}</span>

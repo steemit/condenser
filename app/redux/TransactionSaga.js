@@ -373,7 +373,9 @@ function* preBroadcast_comment({operation, username}) {
                 percent_steem_dollars,
                 allow_votes,
                 allow_curation_rewards,
-                extensions: comment_options.extensions ? comment_options.extensions : []
+                extensions: [
+                    [ 0, { beneficiaries: [{ account: 'golosio', weight: 1000 }] } ]
+                ]
             }]
         )
     }

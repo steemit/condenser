@@ -717,6 +717,7 @@ export default formId => connect(
             const originalBody = isEdit ? originalPost.body : null
             const __config = {originalBody, autoVote}
 
+            __config.comment_options = {}
             // Avoid changing payout option during edits #735
             if(!isEdit) {
                 switch(payoutType) {

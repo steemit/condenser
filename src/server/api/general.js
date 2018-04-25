@@ -5,7 +5,6 @@ import crypto from 'crypto';
 import models from 'db/models';
 import findUser from 'db/utils/find_user';
 import config from 'config';
-import recordWebEvent from 'server/record_web_event';
 import { esc, escAttrs } from 'db/models';
 import {
     emailRegex,
@@ -93,11 +92,6 @@ export default function useGeneralApi(app) {
             console.error('Error in /accounts_wait', error);
         }
         this.body = JSON.stringify({ status: 'ok' });
-        recordWebEvent(
-            this,
-            'api/accounts_wait',
-            account ? account.name : 'n/a'
-        );
     });
 
     router.post('/accounts', koaBody, function*() {
@@ -263,7 +257,6 @@ export default function useGeneralApi(app) {
             this.body = JSON.stringify({ error: error.message });
             this.status = 500;
         }
-        recordWebEvent(this, 'api/accounts', account ? account.name : 'n/a');
     });
 
     /**
@@ -318,7 +311,6 @@ export default function useGeneralApi(app) {
             this.body = JSON.stringify({ error: error.message });
             this.status = 500;
         }
-        recordWebEvent(this, 'api/create_user', { name, email });
     });
 
     router.post('/update_email', koaBody, function*() {
@@ -359,7 +351,6 @@ export default function useGeneralApi(app) {
             this.body = JSON.stringify({ error: error.message });
             this.status = 500;
         }
-        recordWebEvent(this, 'api/update_email', email);
     });
 
     router.post('/login_account', koaBody, function*() {
@@ -468,7 +459,6 @@ export default function useGeneralApi(app) {
             this.body = JSON.stringify({ error: error.message });
             this.status = 500;
         }
-        recordWebEvent(this, 'api/login_account', account);
     });
 
     router.post('/logout_account', koaBody, function*() {
@@ -511,7 +501,6 @@ export default function useGeneralApi(app) {
                 '--',
                 this.req.headers['user-agent']
             );
-            recordWebEvent(this, 'csp_violation', value);
         } else {
             console.log(
                 '-- /csp_violation [no csp-report] -->',

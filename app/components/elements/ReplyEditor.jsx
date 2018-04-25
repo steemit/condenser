@@ -733,6 +733,8 @@ export default formId => connect(
                         break;
                     default: // 50% steem power, 50% sd+steem
                 }
+            } else {
+                delete __config.comment_options
             }
 
             const operation = {

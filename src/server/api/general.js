@@ -492,35 +492,6 @@ export default function useGeneralApi(app) {
         }
     });
 
-    router.post('/record_event', koaBody, function*() {
-        if (rateLimitReq(this, this.req)) return;
-        try {
-            const params = this.request.body;
-            const { csrf, type, value } =
-                typeof params === 'string' ? JSON.parse(params) : params;
-            if (!checkCSRF(this, csrf)) return;
-            logRequest('record_event', this, { type, value });
-            const str_value =
-                typeof value === 'string' ? value : JSON.stringify(value);
-            if (type.match(/^[A-Z]/)) {
-                if (mixpanel) {
-                    mixpanel.track(type, {
-                        distinct_id: this.session.uid,
-                        Page: str_value,
-                    });
-                    mixpanel.people.increment(this.session.uid, type, 1);
-                }
-            } else {
-                recordWebEvent(this, type, str_value);
-            }
-            this.body = JSON.stringify({ status: 'ok' });
-        } catch (error) {
-            console.error('Error in /record_event api call', error.message);
-            this.body = JSON.stringify({ error: error.message });
-            this.status = 500;
-        }
-    });
-
     router.post('/csp_violation', function*() {
         if (rateLimitReq(this, this.req)) return;
         let params;

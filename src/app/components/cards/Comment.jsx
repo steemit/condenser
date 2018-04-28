@@ -242,7 +242,7 @@ class CommentImpl extends React.Component {
         // Don't server-side render the comment if it has a certain number of newlines
         if (
             global['process'] !== undefined &&
-            (dis.get('body').match(/\r?\n/g) || '').length > 10
+            (dis.get('body').match(/\r?\n/g) || '').length > 25
         ) {
             return <div>{tt('g.loading')}...</div>;
         }

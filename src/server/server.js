@@ -38,6 +38,48 @@ const env = process.env.NODE_ENV || 'development';
 // cache of a thousand days
 const cacheOpts = { maxAge: 86400000, gzip: true };
 
+// Serve static assets without fanfare
+app.use(
+    favicon(path.join(__dirname, '../app/assets/images/favicons/favicon.ico'))
+);
+app.use(
+    mount(
+        '/favicons',
+        staticCache(
+            path.join(__dirname, '../app/assets/images/favicons'),
+            cacheOpts
+        )
+    )
+);
+app.use(
+    mount(
+        '/images',
+        staticCache(path.join(__dirname, '../app/assets/images'), cacheOpts)
+    )
+);
+// Proxy asset folder to webpack development server in development mode
+if (env === 'development') {
+    const webpack_dev_port = process.env.PORT
+        ? parseInt(process.env.PORT) + 1
+        : 8081;
+    const proxyhost = 'http://0.0.0.0:' + webpack_dev_port;
+    console.log('proxying to webpack dev server at ' + proxyhost);
+    const proxy = require('koa-proxy')({
+        host: proxyhost,
+        map: filePath => 'assets/' + filePath,
+    });
+    app.use(mount('/assets', proxy));
+} else {
+    app.use(
+        mount(
+            '/assets',
+            staticCache(path.join(__dirname, '../../dist'), cacheOpts)
+        )
+    );
+}
+
+app.use(isBot());
+
 // set number of processes equal to number of cores
 // (unless passed in as an env var)
 const numProcesses = process.env.NUM_PROCESSES || os.cpus().length;
@@ -211,46 +253,6 @@ if (env === 'production') {
         delete helmetConfig.directives.reportUri;
     }
     app.use(helmet.contentSecurityPolicy(helmetConfig));
-}
-
-app.use(
-    favicon(path.join(__dirname, '../app/assets/images/favicons/favicon.ico'))
-);
-app.use(isBot());
-app.use(
-    mount(
-        '/favicons',
-        staticCache(
-            path.join(__dirname, '../app/assets/images/favicons'),
-            cacheOpts
-        )
-    )
-);
-app.use(
-    mount(
-        '/images',
-        staticCache(path.join(__dirname, '../app/assets/images'), cacheOpts)
-    )
-);
-// Proxy asset folder to webpack development server in development mode
-if (env === 'development') {
-    const webpack_dev_port = process.env.PORT
-        ? parseInt(process.env.PORT) + 1
-        : 8081;
-    const proxyhost = 'http://0.0.0.0:' + webpack_dev_port;
-    console.log('proxying to webpack dev server at ' + proxyhost);
-    const proxy = require('koa-proxy')({
-        host: proxyhost,
-        map: filePath => 'assets/' + filePath,
-    });
-    app.use(mount('/assets', proxy));
-} else {
-    app.use(
-        mount(
-            '/assets',
-            staticCache(path.join(__dirname, '../../dist'), cacheOpts)
-        )
-    );
 }
 
 if (env !== 'test') {

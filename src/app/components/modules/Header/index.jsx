@@ -267,14 +267,14 @@ class Header extends React.Component {
         return (
             <header className="Header">
                 <nav className="row Header__nav">
-                    <div className="small-5 large-4 columns Header__logotype">
+                    <div className="small-5 large-5 columns Header__logotype">
                         {/*LOGO*/}
                         <Link to={logo_link}>
                             <SteemLogo />
                         </Link>
                     </div>
 
-                    <div className="large-4 columns show-for-large large-centered Header__sort">
+                    <div className="large-3 columns show-for-large large-centered Header__sort">
                         {/*SORT*/}
                         <SortOrder
                             sortOrder={order}
@@ -283,7 +283,7 @@ class Header extends React.Component {
                             pathname={pathname}
                         />
                     </div>
-                    <div className="small-7 large-4 columns Header__buttons">
+                    <div className="small-7 large-5 columns Header__buttons">
                         {/*NOT LOGGED IN SIGN IN AND SIGN UP LINKS*/}
                         {!loggedIn && (
                             <span className="Header__user-signup show-for-medium">

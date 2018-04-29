@@ -267,7 +267,7 @@ class Header extends React.Component {
         return (
             <header className="Header">
                 <nav className="row Header__nav">
-                    <div className="small-5 large-5 columns Header__logotype">
+                    <div className="small-5 large-4 columns Header__logotype">
                         {/*LOGO*/}
                         <Link to={logo_link}>
                             <SteemLogo />

@@ -38,6 +38,7 @@ class ReplyEditor extends React.Component {
         title: React.PropTypes.string, // initial value
         body: React.PropTypes.string, // initial value
         richTextEditor: React.PropTypes.func,
+        payoutType: React.PropTypes.string,
     };
 
     static defaultProps = {
@@ -95,11 +96,6 @@ class ReplyEditor extends React.Component {
                 rte_value: rte
                     ? stateFromHtml(this.props.richTextEditor, raw)
                     : null,
-            });
-            this.setState({
-                payoutType: this.props.isStory
-                    ? localStorage.getItem('defaultPayoutType') || '50%'
-                    : '50%',
             });
         }
     }
@@ -239,13 +235,6 @@ class ReplyEditor extends React.Component {
         draft.className = 'ReplyEditor__draft ReplyEditor__draft-saved';
     }
 
-    onPayoutTypeChange = e => {
-        const payoutType = e.currentTarget.value;
-        this.setState({ payoutType });
-        if (payoutType !== '0%')
-            localStorage.setItem('defaultPayoutType', payoutType);
-    };
-
     onDrop = (acceptedFiles, rejectedFiles) => {
         if (!acceptedFiles.length) {
             if (rejectedFiles.length) {
@@ -330,9 +319,10 @@ class ReplyEditor extends React.Component {
             jsonMetadata,
             state,
             successCallback,
+            payoutType,
         } = this.props;
         const { submitting, valid, handleSubmit } = this.state.replyForm;
-        const { postError, titleWarn, rte, payoutType } = this.state;
+        const { postError, titleWarn, rte } = this.state;
         const { progress, noClipboardData } = this.state;
         const disabled = submitting || !valid;
         const loading = submitting || this.state.loading;
@@ -617,37 +607,17 @@ class ReplyEditor extends React.Component {
                                         {tt('g.clear')}
                                     </button>
                                 )}
-                            {isStory &&
-                                !isEdit && (
+                            {!isEdit &&
+                                this.props.payoutType != '50%' && (
                                     <div className="ReplyEditor__options float-right text-right">
                                         {tt('g.rewards')} &nbsp;
-                                        <select
-                                            value={this.state.payoutType}
-                                            onChange={this.onPayoutTypeChange}
-                                            style={{
-                                                color:
-                                                    this.state.payoutType ==
-                                                    '0%'
-                                                        ? 'orange'
-                                                        : '',
-                                            }}
-                                        >
-                                            <option value="100%">
-                                                {tt(
-                                                    'reply_editor.power_up_100'
-                                                )}
-                                            </option>
-                                            <option value="50%">
-                                                {tt(
-                                                    'reply_editor.default_50_50'
-                                                )}
-                                            </option>
-                                            <option value="0%">
-                                                {tt(
-                                                    'reply_editor.decline_payout'
-                                                )}
-                                            </option>
-                                        </select>
+                                        {this.props.payoutType == '0%' &&
+                                            tt('reply_editor.decline_payout')}
+                                        {this.props.payoutType == '100%' &&
+                                            tt('reply_editor.power_up_100')}
+                                        <a href={'/@' + username + '/settings'}>
+                                            Adjust settings
+                                        </a>
                                     </div>
                                 )}
                         </div>
@@ -752,11 +722,21 @@ export default formId =>
             if (isStory && jsonMetadata && jsonMetadata.tags) {
                 category = Set([category, ...jsonMetadata.tags]).join(' ');
             }
+
+            const payoutType = state.app.getIn(
+                [
+                    'user_preferences',
+                    isStory ? 'default_blog_payout' : 'default_comment_payout',
+                ],
+                '50%'
+            );
+
             const ret = {
                 ...ownProps,
                 fields,
                 isStory,
                 username,
+                payoutType,
                 initialValues: { title, body, category },
                 state,
                 formId,

@@ -277,6 +277,19 @@ class LoginForm extends Component {
                 .toLowerCase()
                 .indexOf('transfer') >= 0;
 
+        const titleText = !isTransfer ? (
+            <h3>
+                {tt('loginform_jsx.returning_users')}
+                <span className="OpAction">{title}</span>
+            </h3>
+        ) : (
+            <h3>
+                <span className="OpAction">
+                    {tt('loginform_jsx.sign_transfer')}
+                </span>
+            </h3>
+        );
+
         const signupLink = (
             <div className="sign-up">
                 <hr />
@@ -320,7 +333,7 @@ class LoginForm extends Component {
                         {...username.props}
                         onChange={usernameOnChange}
                         autoComplete="on"
-                        disabled={submitting}
+                        disabled={submitting || isTransfer}
                     />
                 </div>
                 {username.touched && username.blur && username.error ? (
@@ -397,10 +410,7 @@ class LoginForm extends Component {
             <div className="LoginForm row">
                 <div className="column">
                     {message}
-                    <h3>
-                        {tt('loginform_jsx.returning_users')}
-                        <span className="OpAction">{title}</span>
-                    </h3>
+                    {titleText}
                     {form}
                 </div>
             </div>

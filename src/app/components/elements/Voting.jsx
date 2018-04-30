@@ -5,7 +5,11 @@ import tt from 'counterpart';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import * as transactionActions from 'app/redux/TransactionReducer';
 import Icon from 'app/components/elements/Icon';
-import { DEBT_TOKEN_SHORT, INVEST_TOKEN_SHORT } from 'app/client_config';
+import {
+    DEBT_TOKEN_SHORT,
+    LIQUID_TOKEN_UPPERCASE,
+    INVEST_TOKEN_SHORT,
+} from 'app/client_config';
 import FormattedAsset from 'app/components/elements/FormattedAsset';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import {
@@ -36,6 +40,7 @@ const ABOUT_FLAG = (
 
 const MAX_VOTES_DISPLAY = 20;
 const VOTE_WEIGHT_DROPDOWN_THRESHOLD = 1.0 * 1000.0 * 1000.0;
+const SBD_PRINT_RATE_MAX = 10000;
 
 class Voting extends React.Component {
     static propTypes = {
@@ -56,6 +61,7 @@ class Voting extends React.Component {
         net_vesting_shares: React.PropTypes.number,
         voting: React.PropTypes.bool,
         price_per_steem: React.PropTypes.number,
+        sbd_print_rate: React.PropTypes.number,
     };
 
     static defaultProps = {
@@ -175,6 +181,7 @@ class Voting extends React.Component {
             is_comment,
             post_obj,
             price_per_steem,
+            sbd_print_rate,
         } = this.props;
         const { username } = this.props;
         const { votingUp, votingDown, showWeight, weight, myVote } = this.state;
@@ -278,13 +285,15 @@ class Voting extends React.Component {
         const pending_payout_sbd = pending_payout * percent_steem_dollars;
         const pending_payout_sp =
             (pending_payout - pending_payout_sbd) / price_per_steem;
+        const pending_payout_printed_sbd =
+            pending_payout_sbd * (sbd_print_rate / SBD_PRINT_RATE_MAX);
+        const pending_payout_printed_steem =
+            (pending_payout_sbd - pending_payout_printed_sbd) / price_per_steem;
+
         const promoted = parsePayoutAmount(post_obj.get('promoted'));
         const total_author_payout = parsePayoutAmount(
             post_obj.get('total_payout_value')
         );
-        const author_payout_sbd = total_author_payout * percent_steem_dollars;
-        const author_payout_sp =
-            (total_author_payout - author_payout_sbd) / price_per_steem;
         const total_curator_payout = parsePayoutAmount(
             post_obj.get('curator_payout_value')
         );
@@ -321,10 +330,18 @@ class Voting extends React.Component {
                 payoutItems.push({
                     value:
                         '(' +
-                        formatDecimal(pending_payout_sbd).join('') +
+                        formatDecimal(pending_payout_printed_sbd).join('') +
                         ' ' +
                         DEBT_TOKEN_SHORT +
                         ', ' +
+                        (sbd_print_rate != SBD_PRINT_RATE_MAX
+                            ? formatDecimal(pending_payout_printed_steem).join(
+                                  ''
+                              ) +
+                              ' ' +
+                              LIQUID_TOKEN_UPPERCASE +
+                              ', '
+                            : '') +
                         formatDecimal(pending_payout_sp).join('') +
                         ' ' +
                         INVEST_TOKEN_SHORT +
@@ -362,18 +379,6 @@ class Voting extends React.Component {
                 value: tt('voting_jsx.past_payouts_author', {
                     value: formatDecimal(total_author_payout).join(''),
                 }),
-            });
-            payoutItems.push({
-                value:
-                    '(' +
-                    formatDecimal(author_payout_sbd).join('') +
-                    ' ' +
-                    DEBT_TOKEN_SHORT +
-                    ', ' +
-                    formatDecimal(author_payout_sp).join('') +
-                    ' ' +
-                    INVEST_TOKEN_SHORT +
-                    ')',
             });
             payoutItems.push({
                 value: tt('voting_jsx.past_payouts_curators', {
@@ -544,6 +549,8 @@ export default connect(
                 price_per_steem = parseFloat(base.split(' ')[0]);
         }
 
+        const sbd_print_rate = state.global.getIn(['props', 'sbd_print_rate']);
+
         return {
             post: ownProps.post,
             flag: ownProps.flag,
@@ -558,6 +565,7 @@ export default connect(
             loggedin: username != null,
             voting,
             price_per_steem,
+            sbd_print_rate,
         };
     },
 
@@ -602,6 +610,9 @@ export default connect(
                         },
                     },
                     confirm,
+                    errorCallback: errorKey => {
+                        console.log('Transaction Error:' + errorKey);
+                    },
                 })
             );
         },

@@ -230,7 +230,6 @@ async function universalRender({
     initial_state,
     offchain,
     ErrorPage,
-    tarantool,
     userPreferences,
 }) {
     let error, redirect, renderProps;
@@ -351,9 +350,7 @@ async function universalRender({
                 onchain.content[key]['stats'] = contentStats(
                     onchain.content[key]
                 );
-                onchain.content[key]['active_votes'] = onchain.content[key][
-                    'active_votes'
-                ].filter(vote => vote.voter === offchain.account);
+                onchain.content[key]['active_votes'] = null;
             }
         }
 
@@ -398,8 +395,6 @@ async function universalRender({
             sdDisp = '$' + sdInt + (sdInt < 5 && sdDec >= 0.5 ? '.50' : '');
         }
 
-        offchain.signup_bonus = sdDisp;
-        offchain.server_location = location;
         server_store = createStore(rootReducer, {
             app: initial_state.app,
             global: onchain,

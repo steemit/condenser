@@ -17,7 +17,7 @@ const someOpenOrders = [
             base: '3.000 STEEM',
             quote: '1.998 SBD',
         },
-        real_price: '0.66600000000000004',
+        real_price: '0',
         rewarded: false,
     },
     {
@@ -31,7 +31,7 @@ const someOpenOrders = [
             base: '7.000 STEEM',
             quote: '4.578 SBD',
         },
-        real_price: '0.65400000000000003',
+        real_price: '0',
         rewarded: false,
     },
     {
@@ -45,7 +45,7 @@ const someOpenOrders = [
             base: '3.000 STEEM',
             quote: '1.953 SBD',
         },
-        real_price: '0.65100000000000002',
+        real_price: '0',
         rewarded: false,
     },
     {
@@ -59,7 +59,7 @@ const someOpenOrders = [
             base: '0.507 SBD',
             quote: '1.000 STEEM',
         },
-        real_price: '0.50700000000000001',
+        real_price: '0',
         rewarded: false,
     },
     {
@@ -73,13 +73,13 @@ const someOpenOrders = [
             base: '0.507 SBD',
             quote: '1.000 STEEM',
         },
-        real_price: '0.50700000000000001',
+        real_price: '0',
         rewarded: false,
     },
 ];
 
 const toggleSortByPrice = {
-    column: 'real_price',
+    column: 'price',
     dataType: 'float',
 };
 

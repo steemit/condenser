@@ -1,5 +1,6 @@
 /* eslint react/prop-types: 0 */
 import React, { PropTypes, Component } from 'react';
+import { Map } from 'immutable';
 import * as transactionActions from 'app/redux/TransactionReducer';
 import * as globalActions from 'app/redux/GlobalReducer';
 import * as userActions from 'app/redux/UserReducer';
@@ -269,7 +270,8 @@ class LoginForm extends Component {
                 : null;
 
         const isTransfer =
-            loginBroadcastOperation &&
+            Map.isMap(loginBroadcastOperation) &&
+            loginBroadcastOperation.has('type') &&
             loginBroadcastOperation
                 .get('type')
                 .toLowerCase()

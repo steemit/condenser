@@ -311,37 +311,6 @@ class Market extends React.Component {
         const orderbook = aggOrders(normalizeOrders(this.props.orderbook));
         const { open_orders, open_orders_sort } = this.props;
 
-        // ORDERBOOK TABLE GENERATOR
-        // function table(orderbook, side = 'bids', callback = ((price,steem,sbd) => {})) {
-        //
-        //     let rows = orderbook[side].slice(0, 25).map( (o,i) =>
-        //         <OrderbookRow side={side} onClick={e => {callback( o.price, o.steem_depth, o.sbd_depth) }} />
-        //     );
-        //
-        //     return
-        // }
-
-        function normalizeOpenOrders(open_orders) {
-            return open_orders.map(o => {
-                const type =
-                    o.sell_price.base.indexOf(LIQUID_TICKER) > 0
-                        ? 'ask'
-                        : 'bid';
-                //{orderid: o.orderid,
-                // created: o.created,
-                return {
-                    ...o,
-                    type: type,
-                    price: parseFloat(
-                        type == 'ask' ? o.real_price : o.real_price
-                    ),
-                    steem:
-                        type == 'ask' ? o.sell_price.base : o.sell_price.quote,
-                    sbd: type == 'bid' ? o.sell_price.base : o.sell_price.quote,
-                };
-            });
-        }
-
         // Logged-in user's open orders
         function open_orders_table(open_orders, open_orders_sort) {
             const rows =
@@ -407,11 +376,11 @@ class Market extends React.Component {
                             </th>
                             <th
                                 className={classNames(
-                                    activeClass('real_price'),
+                                    activeClass('price'),
                                     'sortable'
                                 )}
                                 onClick={e =>
-                                    handleToggleOpenOrdersSort('real_price')
+                                    handleToggleOpenOrdersSort('price')
                                 }
                             >
                                 {tt('g.price')}

@@ -791,6 +791,8 @@
         "choose_default_comment_payout": "Comment post rewards",
         "muted_users": "Muted Users",
         "update": "Update",
+        "upload_image": "Upload an image",
+        "uploading_image": "Uploading image",
         "profile_image_url": "Profile picture url",
         "cover_image_url": "Cover image url",
         "profile_name": "Display Name",

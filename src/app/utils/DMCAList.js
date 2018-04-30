@@ -98,6 +98,7 @@ export default `
 /photography/@jimreitz/night-cave
 /nature/@jimreitz/lone-ranch-beach-near-brookings-oregon
 /colorchallenge/@jimreitz/hello-steemit-i-m-jim
+/dtube/@derrick829/1r3fevhu
 `
     .trim()
     .split('\n');

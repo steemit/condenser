@@ -269,6 +269,7 @@ class LoginForm extends Component {
                 : null;
 
         const isTransfer =
+            loginBroadcastOperation &&
             loginBroadcastOperation
                 .get('type')
                 .toLowerCase()

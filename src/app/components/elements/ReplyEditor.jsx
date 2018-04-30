@@ -726,7 +726,7 @@ export default formId =>
             const payoutType = state.app.getIn(
                 [
                     'user_preferences',
-                    isStory ? 'default_blog_payout' : 'default_comment_payout',
+                    isStory ? 'defaultBlogPayout' : 'defaultCommentPayout',
                 ],
                 '50%'
             );

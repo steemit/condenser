@@ -71,21 +71,6 @@ class Settings extends React.Component {
         );
     }
 
-    componentWillMount() {
-        const { accountname } = this.props;
-        const nsfwPref =
-            (process.env.BROWSER
-                ? localStorage.getItem('nsfwPref-' + accountname)
-                : null) || 'warn';
-        this.setState({ nsfwPref, oldNsfwPref: nsfwPref });
-    }
-
-    onNsfwPrefChange(e) {
-        const nsfwPref = e.currentTarget.value;
-        const userPreferences = { ...this.props.user_preferences, nsfwPref };
-        this.props.setUserPreferences(userPreferences);
-    }
-
     handleSubmit = ({ updateInitialValues }) => {
         let { metaData } = this.props;
         if (!metaData) metaData = {};
@@ -153,17 +138,24 @@ class Settings extends React.Component {
         });
     };
 
+    onNsfwPrefChange(e) {
+        this.props.setUserPreferences({
+            ...this.props.user_preferences,
+            nsfwPref: e.currentTarget.value,
+        });
+    }
+
     handleDefaultBlogPayoutChange = event => {
         this.props.setUserPreferences({
             ...this.props.user_preferences,
-            default_blog_payout: event.target.value,
+            defaultBlogPayout: event.target.value,
         });
     };
 
     handleDefaultCommentPayoutChange = event => {
         this.props.setUserPreferences({
             ...this.props.user_preferences,
-            default_comment_payout: event.target.value,
+            defaultCommentPayout: event.target.value,
         });
     };
 
@@ -321,7 +313,7 @@ class Settings extends React.Component {
                                         {tt('g.choose_default_blog_payout')}
                                         <select
                                             defaultValue={
-                                                user_preferences.default_blog_payout
+                                                user_preferences.defaultBlogPayout
                                             }
                                             onChange={
                                                 this
@@ -354,7 +346,7 @@ class Settings extends React.Component {
                                         {tt('g.choose_default_comment_payout')}
                                         <select
                                             defaultValue={
-                                                user_preferences.default_comment_payout
+                                                user_preferences.defaultCommentPayout
                                             }
                                             onChange={
                                                 this

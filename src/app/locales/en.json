@@ -749,7 +749,8 @@
         "signup_button_emphasis": "FREE STEEM!",
         "sign_up_get_steem": "Sign up. Get STEEM!",
         "returning_users": "Returning Users: ",
-        "join_our": "Join our"
+        "join_our": "Join our",
+        "sign_transfer": "Sign to complete transfer"
     },
     "chainvalidation_js": {
         "account_name_should_not_be_empty": "Account name should not be empty.",

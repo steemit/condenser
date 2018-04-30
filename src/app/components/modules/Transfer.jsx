@@ -504,7 +504,7 @@ class TransferForm extends Component {
                                 >
                                     {toVesting
                                         ? tt('g.power_up')
-                                        : tt('g.submit')}
+                                        : tt('g.next')}
                                 </button>
                                 {transferToSelf && (
                                     <button

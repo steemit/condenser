@@ -310,72 +310,6 @@ class Settings extends React.Component {
                             <div className="row">
                                 <div className="small-12 medium-6 large-12 columns">
                                     <label>
-                                        {tt('g.choose_default_blog_payout')}
-                                        <select
-                                            defaultValue={
-                                                user_preferences.defaultBlogPayout
-                                            }
-                                            onChange={
-                                                this
-                                                    .handleDefaultBlogPayoutChange
-                                            }
-                                        >
-                                            <option value="0%">
-                                                {tt(
-                                                    'reply_editor.decline_payout'
-                                                )}
-                                            </option>
-                                            <option value="50%">
-                                                {tt(
-                                                    'reply_editor.default_50_50'
-                                                )}
-                                            </option>
-                                            <option value="100%">
-                                                {tt(
-                                                    'reply_editor.power_up_100'
-                                                )}
-                                            </option>
-                                        </select>
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div className="row">
-                                <div className="small-12 medium-6 large-12 columns">
-                                    <label>
-                                        {tt('g.choose_default_comment_payout')}
-                                        <select
-                                            defaultValue={
-                                                user_preferences.defaultCommentPayout
-                                            }
-                                            onChange={
-                                                this
-                                                    .handleDefaultCommentPayoutChange
-                                            }
-                                        >
-                                            <option value="0%">
-                                                {tt(
-                                                    'reply_editor.decline_payout'
-                                                )}
-                                            </option>
-                                            <option value="50%">
-                                                {tt(
-                                                    'reply_editor.default_50_50'
-                                                )}
-                                            </option>
-                                            <option value="100%">
-                                                {tt(
-                                                    'reply_editor.power_up_100'
-                                                )}
-                                            </option>
-                                        </select>
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div className="row">
-                                <div className="small-12 medium-6 large-12 columns">
-                                    <label>
                                         {tt('g.choose_language')}
                                         <select
                                             defaultValue={
@@ -411,29 +345,105 @@ class Settings extends React.Component {
                                 </div>
                             </div>
                             <br />
-                            <div>
-                                <label>
-                                    {tt(
-                                        'settings_jsx.not_safe_for_work_nsfw_content'
-                                    )}
-                                </label>
+
+                            <div className="row">
+                                <div className="small-12 medium-6 large-12 columns">
+                                    <label>
+                                        {tt(
+                                            'settings_jsx.not_safe_for_work_nsfw_content'
+                                        )}
+                                    </label>
+                                    <select
+                                        value={user_preferences.nsfwPref}
+                                        onChange={this.onNsfwPrefChange}
+                                    >
+                                        <option value="hide">
+                                            {tt('settings_jsx.always_hide')}
+                                        </option>
+                                        <option value="warn">
+                                            {tt('settings_jsx.always_warn')}
+                                        </option>
+                                        <option value="show">
+                                            {tt('settings_jsx.always_show')}
+                                        </option>
+                                    </select>
+                                </div>
                             </div>
-                            <select
-                                value={user_preferences.nsfwPref}
-                                onChange={this.onNsfwPrefChange}
-                            >
-                                <option value="hide">
-                                    {tt('settings_jsx.always_hide')}
-                                </option>
-                                <option value="warn">
-                                    {tt('settings_jsx.always_warn')}
-                                </option>
-                                <option value="show">
-                                    {tt('settings_jsx.always_show')}
-                                </option>
-                            </select>
                             <br />
-                            <div>&nbsp;</div>
+
+                            <div className="row">
+                                <div className="small-12 medium-6 large-12 columns">
+                                    <label>
+                                        {tt(
+                                            'settings_jsx.choose_default_blog_payout'
+                                        )}
+                                        <select
+                                            defaultValue={
+                                                user_preferences.defaultBlogPayout ||
+                                                '50%'
+                                            }
+                                            onChange={
+                                                this
+                                                    .handleDefaultBlogPayoutChange
+                                            }
+                                        >
+                                            <option value="0%">
+                                                {tt(
+                                                    'reply_editor.decline_payout'
+                                                )}
+                                            </option>
+                                            <option value="50%">
+                                                {tt(
+                                                    'reply_editor.default_50_50'
+                                                )}
+                                            </option>
+                                            <option value="100%">
+                                                {tt(
+                                                    'reply_editor.power_up_100'
+                                                )}
+                                            </option>
+                                        </select>
+                                    </label>
+                                </div>
+                            </div>
+                            <br />
+
+                            <div className="row">
+                                <div className="small-12 medium-6 large-12 columns">
+                                    <label>
+                                        {tt(
+                                            'settings_jsx.choose_default_comment_payout'
+                                        )}
+                                        <select
+                                            defaultValue={
+                                                user_preferences.defaultCommentPayout ||
+                                                '50%'
+                                            }
+                                            onChange={
+                                                this
+                                                    .handleDefaultCommentPayoutChange
+                                            }
+                                        >
+                                            <option value="0%">
+                                                {tt(
+                                                    'reply_editor.decline_payout'
+                                                )}
+                                            </option>
+                                            <option value="50%">
+                                                {tt(
+                                                    'reply_editor.default_50_50'
+                                                )}
+                                            </option>
+                                            <option value="100%">
+                                                {tt(
+                                                    'reply_editor.power_up_100'
+                                                )}
+                                            </option>
+                                        </select>
+                                    </label>
+                                </div>
+                            </div>
+                            <br />
                         </div>
                     </div>
                 )}

@@ -610,13 +610,15 @@ class ReplyEditor extends React.Component {
                             {!isEdit &&
                                 this.props.payoutType != '50%' && (
                                     <div className="ReplyEditor__options float-right text-right">
-                                        {tt('g.rewards')} &nbsp;
+                                        {tt('g.rewards')}
+                                        {': '}
                                         {this.props.payoutType == '0%' &&
                                             tt('reply_editor.decline_payout')}
                                         {this.props.payoutType == '100%' &&
                                             tt('reply_editor.power_up_100')}
+                                        {'. '}
                                         <a href={'/@' + username + '/settings'}>
-                                            Adjust settings
+                                            Update settings
                                         </a>
                                     </div>
                                 )}

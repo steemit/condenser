@@ -749,7 +749,8 @@
         "signup_button_emphasis": "FREE STEEM!",
         "sign_up_get_steem": "Sign up. Get STEEM!",
         "returning_users": "Returning Users: ",
-        "join_our": "Join our"
+        "join_our": "Join our",
+        "sign_transfer": "Sign to complete transfer"
     },
     "chainvalidation_js": {
         "account_name_should_not_be_empty": "Account name should not be empty.",
@@ -823,7 +824,8 @@
         "beware_of_spam_and_phishing_links":
             "Beware of spam and phishing links in transfer memos. Do not open links from users you do not trust. Do not provide your private keys to any third party websites.",
         "autocomplete_previous_transfers": "previous transfers",
-        "autocomplete_user_following": "following"
+        "autocomplete_user_following": "following",
+        "confirm_transfer": "Transfer %(amount)s from %(from)s to %(to)s?"
     },
     "userwallet_jsx": {
         "transfer": "Transfer",

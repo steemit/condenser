@@ -36,6 +36,8 @@ export const defaultState = Map({
         nightmode: false,
         blogmode: false,
         currency: 'USD',
+        defaultBlogPayout: '50%',
+        defaultCommentPayout: '50%',
     }),
     featureFlags: Map({}),
 });

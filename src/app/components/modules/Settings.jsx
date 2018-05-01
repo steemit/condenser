@@ -73,15 +73,6 @@ class Settings extends React.Component {
         );
     }
 
-    componentWillMount() {
-        const { accountname } = this.props;
-        const nsfwPref =
-            (process.env.BROWSER
-                ? localStorage.getItem('nsfwPref-' + accountname)
-                : null) || 'warn';
-        this.setState({ nsfwPref, oldNsfwPref: nsfwPref });
-    }
-
     onDrop = (acceptedFiles, rejectedFiles) => {
         if (!acceptedFiles.length) {
             if (rejectedFiles.length) {
@@ -130,12 +121,6 @@ class Settings extends React.Component {
             }, 4000); // clear message
         });
     };
-
-    onNsfwPrefChange(e) {
-        const nsfwPref = e.currentTarget.value;
-        const userPreferences = { ...this.props.user_preferences, nsfwPref };
-        this.props.setUserPreferences(userPreferences);
-    }
 
     handleSubmit = ({ updateInitialValues }) => {
         let { metaData } = this.props;
@@ -204,6 +189,27 @@ class Settings extends React.Component {
         });
     };
 
+    onNsfwPrefChange(e) {
+        this.props.setUserPreferences({
+            ...this.props.user_preferences,
+            nsfwPref: e.currentTarget.value,
+        });
+    }
+
+    handleDefaultBlogPayoutChange = event => {
+        this.props.setUserPreferences({
+            ...this.props.user_preferences,
+            defaultBlogPayout: event.target.value,
+        });
+    };
+
+    handleDefaultCommentPayoutChange = event => {
+        this.props.setUserPreferences({
+            ...this.props.user_preferences,
+            defaultCommentPayout: event.target.value,
+        });
+    };
+
     handleLanguageChange = event => {
         const locale = event.target.value;
         const userPreferences = { ...this.props.user_preferences, locale };
@@ -250,7 +256,8 @@ class Settings extends React.Component {
                         )}
                         {progress.error && (
                             <div className="error">
-                                {tt('reply_editor.image_upload')}{': '}
+                                {tt('reply_editor.image_upload')}
+                                {': '}
                                 {progress.error}
                             </div>
                         )}
@@ -382,6 +389,7 @@ class Settings extends React.Component {
                             <br />
                             <br />
                             <h4>{tt('settings_jsx.preferences')}</h4>
+
                             <div className="row">
                                 <div className="small-12 medium-6 large-12 columns">
                                     <label>
@@ -420,29 +428,105 @@ class Settings extends React.Component {
                                 </div>
                             </div>
                             <br />
-                            <div>
-                                <label>
-                                    {tt(
-                                        'settings_jsx.not_safe_for_work_nsfw_content'
-                                    )}
-                                </label>
+
+                            <div className="row">
+                                <div className="small-12 medium-6 large-12 columns">
+                                    <label>
+                                        {tt(
+                                            'settings_jsx.not_safe_for_work_nsfw_content'
+                                        )}
+                                    </label>
+                                    <select
+                                        value={user_preferences.nsfwPref}
+                                        onChange={this.onNsfwPrefChange}
+                                    >
+                                        <option value="hide">
+                                            {tt('settings_jsx.always_hide')}
+                                        </option>
+                                        <option value="warn">
+                                            {tt('settings_jsx.always_warn')}
+                                        </option>
+                                        <option value="show">
+                                            {tt('settings_jsx.always_show')}
+                                        </option>
+                                    </select>
+                                </div>
                             </div>
-                            <select
-                                value={user_preferences.nsfwPref}
-                                onChange={this.onNsfwPrefChange}
-                            >
-                                <option value="hide">
-                                    {tt('settings_jsx.always_hide')}
-                                </option>
-                                <option value="warn">
-                                    {tt('settings_jsx.always_warn')}
-                                </option>
-                                <option value="show">
-                                    {tt('settings_jsx.always_show')}
-                                </option>
-                            </select>
                             <br />
-                            <div>&nbsp;</div>
+
+                            <div className="row">
+                                <div className="small-12 medium-6 large-12 columns">
+                                    <label>
+                                        {tt(
+                                            'settings_jsx.choose_default_blog_payout'
+                                        )}
+                                        <select
+                                            defaultValue={
+                                                user_preferences.defaultBlogPayout ||
+                                                '50%'
+                                            }
+                                            onChange={
+                                                this
+                                                    .handleDefaultBlogPayoutChange
+                                            }
+                                        >
+                                            <option value="0%">
+                                                {tt(
+                                                    'reply_editor.decline_payout'
+                                                )}
+                                            </option>
+                                            <option value="50%">
+                                                {tt(
+                                                    'reply_editor.default_50_50'
+                                                )}
+                                            </option>
+                                            <option value="100%">
+                                                {tt(
+                                                    'reply_editor.power_up_100'
+                                                )}
+                                            </option>
+                                        </select>
+                                    </label>
+                                </div>
+                            </div>
+                            <br />
+
+                            <div className="row">
+                                <div className="small-12 medium-6 large-12 columns">
+                                    <label>
+                                        {tt(
+                                            'settings_jsx.choose_default_comment_payout'
+                                        )}
+                                        <select
+                                            defaultValue={
+                                                user_preferences.defaultCommentPayout ||
+                                                '50%'
+                                            }
+                                            onChange={
+                                                this
+                                                    .handleDefaultCommentPayoutChange
+                                            }
+                                        >
+                                            <option value="0%">
+                                                {tt(
+                                                    'reply_editor.decline_payout'
+                                                )}
+                                            </option>
+                                            <option value="50%">
+                                                {tt(
+                                                    'reply_editor.default_50_50'
+                                                )}
+                                            </option>
+                                            <option value="100%">
+                                                {tt(
+                                                    'reply_editor.power_up_100'
+                                                )}
+                                            </option>
+                                        </select>
+                                    </label>
+                                </div>
+                            </div>
+                            <br />
                         </div>
                     </div>
                 )}

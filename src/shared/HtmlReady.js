@@ -233,8 +233,8 @@ function linkifyNode(child, state) {
 
         const { mutate } = state;
         if (!child.data) return;
-        if (embedYouTubeNode(child, state.links, state.images)) return;
-        if (embedVimeoNode(child, state.links, state.images)) return;
+        child = embedYouTubeNode(child, state.links, state.images);
+        child = embedVimeoNode(child, state.links, state.images);
 
         const data = XMLSerializer.serializeToString(child);
         const content = linkify(
@@ -312,21 +312,18 @@ function linkify(content, mutate, hashtags, usertags, images, links) {
 
 function embedYouTubeNode(child, links, images) {
     try {
-        if (!child.data) return false;
         const data = child.data;
         const yt = youTubeId(data);
-        if (!yt) return false;
+        if (!yt) return child;
 
-        const v = DOMParser.parseFromString(`~~~ embed:${yt.id} youtube ~~~`);
-        child.parentNode.replaceChild(v, child);
+        child.data = data.replace(yt.url, `~~~ embed:${yt.id} youtube ~~~`);
+
         if (links) links.add(yt.url);
-        if (images)
-            images.add('https://img.youtube.com/vi/' + yt.id + '/0.jpg');
-        return true;
+        if (images) images.add(yt.thumbnail);
     } catch (error) {
         console.log(error);
-        return false;
     }
+    return child;
 }
 
 /** @return {id, url} or <b>null</b> */
@@ -341,34 +338,40 @@ function youTubeId(data) {
     const id = m2 && m2.length >= 2 ? m2[1] : null;
     if (!id) return null;
 
-    return { id, url };
+    return {
+        id,
+        url,
+        thumbnail: 'https://img.youtube.com/vi/' + id + '/0.jpg',
+    };
 }
 
 function embedVimeoNode(child, links /*images*/) {
     try {
-        if (!child.data) return false;
         const data = child.data;
+        const vimeo = vimeoId(data);
+        if (!vimeo) return child;
 
-        let id;
-        {
-            const m = data.match(linksRe.vimeoId);
-            id = m && m.length >= 2 ? m[1] : null;
-        }
-        if (!id) return false;
+        child.data = data.replace(vimeo.url, `~~~ embed:${vimeo.id} vimeo ~~~`);
 
-        const url = `https://player.vimeo.com/video/${id}`;
-        const v = DOMParser.parseFromString(`~~~ embed:${id} vimeo ~~~`);
-        child.parentNode.replaceChild(v, child);
-        if (links) links.add(url);
-
-        // Preview image requires a callback.. http://stackoverflow.com/questions/1361149/get-img-thumbnails-from-vimeo
-        // if(images) images.add('https://.../vi/' + id + '/0.jpg')
-
-        return true;
+        if (links) links.add(vimeo.canonical);
+        // if(images) images.add(vimeo.thumbnail) // not available
     } catch (error) {
         console.log(error);
-        return false;
     }
+    return child;
+}
+
+function vimeoId(data) {
+    if (!data) return null;
+    const m = data.match(linksRe.vimeo);
+    if (!m || m.length < 2) return null;
+
+    return {
+        id: m[1],
+        url: m[0],
+        canonical: `https://player.vimeo.com/video/${m[1]}`,
+        // thumbnail: requires a callback - http://stackoverflow.com/questions/1361149/get-img-thumbnails-from-vimeo
+    };
 }
 
 function ipfsPrefix(url) {

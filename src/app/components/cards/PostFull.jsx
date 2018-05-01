@@ -83,6 +83,7 @@ class PostFull extends React.Component {
         this.state = {};
         this.fbShare = this.fbShare.bind(this);
         this.twitterShare = this.twitterShare.bind(this);
+        this.redditShare = this.redditShare.bind(this);
         this.linkedInShare = this.linkedInShare.bind(this);
         this.showExplorePost = this.showExplorePost.bind(this);
         this.onShowReply = () => {
@@ -168,6 +169,18 @@ class PostFull extends React.Component {
                 ',height=' +
                 winHeight
         );
+    }
+
+    redditShare(e) {
+        serverApiRecordEvent('RedditShare', this.share_params.link);
+        e.preventDefault();
+        const s = this.share_params;
+        const q =
+            'title=' +
+            encodeURIComponent(s.title) +
+            '&url=' +
+            encodeURIComponent(s.url);
+        window.open('https://www.reddit.com/submit?' + q, 'Share');
     }
 
     linkedInShare(e) {
@@ -292,6 +305,13 @@ class PostFull extends React.Component {
                 value: 'Twitter',
                 title: tt('postfull_jsx.share_on_twitter'),
                 icon: 'twitter',
+            },
+            {
+                link: '#',
+                onClick: this.redditShare,
+                value: 'Reddit',
+                title: tt('postfull_jsx.share_on_reddit'),
+                icon: 'reddit',
             },
             {
                 link: '#',

@@ -298,7 +298,7 @@
         "selecting_them": "selecting them",
         "image_upload": "Image upload",
         "power_up_100": "Power Up 100%%",
-        "default_50_50": "Default (50%% / 50%%)",
+        "default_50_50": "Default (50%% SBD / 50%% SP)",
         "decline_payout": "Decline Payout",
         "check_this_to_auto_upvote_your_post":
             "Check this to auto-upvote your post",
@@ -789,6 +789,8 @@
         "always_hide": "Always hide",
         "always_warn": "Always warn",
         "always_show": "Always show",
+        "choose_default_blog_payout": "Blog post rewards",
+        "choose_default_comment_payout": "Comment post rewards",
         "muted_users": "Muted Users",
         "update": "Update",
         "upload_image": "Upload an image",

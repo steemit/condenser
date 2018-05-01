@@ -322,11 +322,10 @@ function embedYouTubeNode(child, links, images) {
         if (links) links.add(yt.url);
         if (images)
             images.add('https://img.youtube.com/vi/' + yt.id + '/0.jpg');
-        return child;
     } catch (error) {
         console.log(error);
-        return child;
     }
+    return child;
 }
 
 /** @return {id, url} or <b>null</b> */
@@ -364,12 +363,10 @@ function embedVimeoNode(child, links /*images*/) {
 
         // Preview image requires a callback.. http://stackoverflow.com/questions/1361149/get-img-thumbnails-from-vimeo
         // if(images) images.add('https://.../vi/' + id + '/0.jpg')
-
-        return child;
     } catch (error) {
         console.log(error);
-        return child;
     }
+    return child;
 }
 
 function ipfsPrefix(url) {

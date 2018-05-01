@@ -312,7 +312,7 @@
     "markdown_not_supported": "Markdown is not supported here",
     "welcome_to_the_blockchain": "Welcome to the Blockchain!",
     "you_hasnt_started_bloggin_yet":  "Looks like you hasn't started blogging yet!",
-    "your_voice_is_worth_something": "Your voice is worth something",
+    "your_voice_is_worth_something": "Your golos is worth something",
     "learn_more": "Learn More",
     "get_sp_when_sign_up": "Get %(signupBonus)s of %(VESTING_TOKEN)s when you sign up today.",
     "get_sp_when_sign_up1": "Get ",
@@ -351,7 +351,7 @@
     "unable_to_contact_the_server" : "Unable to contact the server",
     "please_insert_only_image_files":"Please insert only image files",
     "questions_or_requests": "You can always send detailed questions or requests to us by e-mail:",
-    "support_by_telegram": "In addition, for operational technical assistance, we have introduced a Voice Support Service in Telegram"
+    "support_by_telegram": "In addition, for operational technical assistance, we have introduced a Golos Support Service in Telegram"
   },
   "category_selector_jsx": {
     "tag_your_story": "Tag (up to 5 tags), the first tag is your main category.",

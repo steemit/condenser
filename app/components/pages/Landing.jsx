@@ -58,10 +58,10 @@ class Landing extends React.Component {
 					button={buyGolosButton}
 				/>
 				<WhatIsGolos />
+				<Team />
+				<Tools />
 				<Faq />
 				<Distribution button={buyGolosButton} />
-				<Tools />
-				<Team />
 				<Partners />
 				<Footer />
 				{/*

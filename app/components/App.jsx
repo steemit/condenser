@@ -46,16 +46,16 @@ class App extends React.Component {
     }
 
     componentDidMount() {
+        window.addEventListener('storage', this.checkLogin);
         if (process.env.BROWSER) {
-            window.addEventListener('storage', this.checkLogin);
             window.addEventListener('click', this.checkLeaveGolos.bind(this))
         }
         // setTimeout(() => this.setState({showCallout: false}), 15000);
     }
 
     componentWillUnmount() {
+        window.removeEventListener('storage', this.checkLogin);
         if (process.env.BROWSER) {
-            window.removeEventListener('storage', this.checkLogin);
             window.removeEventListener('click', this.checkLeaveGolos)
         }
     }

@@ -717,6 +717,7 @@ export default formId => connect(
             const originalBody = isEdit ? originalPost.body : null
             const __config = {originalBody, autoVote}
 
+            __config.comment_options = {}
             // Avoid changing payout option during edits #735
             if(!isEdit) {
                 switch(payoutType) {
@@ -732,6 +733,8 @@ export default formId => connect(
                         break;
                     default: // 50% steem power, 50% sd+steem
                 }
+            } else {
+                delete __config.comment_options
             }
 
             const operation = {

@@ -10,6 +10,7 @@ export const icons = [
     'chatbox',
     'facebook',
     'twitter',
+    'reddit',
     'linkedin',
     'link',
     'logo',

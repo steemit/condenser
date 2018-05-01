@@ -312,7 +312,6 @@ function linkify(content, mutate, hashtags, usertags, images, links) {
 
 function embedYouTubeNode(child, links, images) {
     try {
-        if (!child.data) return child;
         const data = child.data;
         const yt = youTubeId(data);
         if (!yt) return child;
@@ -320,8 +319,7 @@ function embedYouTubeNode(child, links, images) {
         child.data = data.replace(yt.url, `~~~ embed:${yt.id} youtube ~~~`);
 
         if (links) links.add(yt.url);
-        if (images)
-            images.add('https://img.youtube.com/vi/' + yt.id + '/0.jpg');
+        if (images) images.add(yt.thumbnail);
     } catch (error) {
         console.log(error);
     }
@@ -340,7 +338,11 @@ function youTubeId(data) {
     const id = m2 && m2.length >= 2 ? m2[1] : null;
     if (!id) return null;
 
-    return { id, url };
+    return {
+        id,
+        url,
+        thumbnail: 'https://img.youtube.com/vi/' + id + '/0.jpg',
+    };
 }
 
 function embedVimeoNode(child, links /*images*/) {
@@ -352,9 +354,7 @@ function embedVimeoNode(child, links /*images*/) {
         child.data = data.replace(vimeo.url, `~~~ embed:${vimeo.id} vimeo ~~~`);
 
         if (links) links.add(vimeo.canonical);
-
-        // Preview image requires a callback.. http://stackoverflow.com/questions/1361149/get-img-thumbnails-from-vimeo
-        // if(images) images.add(vimeo.thumbnail)
+        // if(images) images.add(vimeo.thumbnail) // not available
     } catch (error) {
         console.log(error);
     }
@@ -370,6 +370,7 @@ function vimeoId(data) {
         id: m[1],
         url: m[0],
         canonical: `https://player.vimeo.com/video/${m[1]}`,
+        // thumbnail: requires a callback - http://stackoverflow.com/questions/1361149/get-img-thumbnails-from-vimeo
     };
 }
 

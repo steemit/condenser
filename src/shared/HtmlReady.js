@@ -345,28 +345,32 @@ function youTubeId(data) {
 
 function embedVimeoNode(child, links /*images*/) {
     try {
-        if (!child.data) return child;
         const data = child.data;
+        const vimeo = vimeoId(data);
+        if (!vimeo) return child;
 
-        let id, fullMatchUrl;
-        {
-            const m = data.match(linksRe.vimeo);
-            id = m && m.length >= 2 ? m[1] : null;
-            fullMatchUrl = m && m.length >= 2 ? m[0] : null;
-        }
-        if (!id) return child;
+        child.data = data.replace(vimeo.url, `~~~ embed:${vimeo.id} vimeo ~~~`);
 
-        child.data = data.replace(fullMatchUrl, `~~~ embed:${id} vimeo ~~~`);
-
-        const url = `https://player.vimeo.com/video/${id}`;
-        if (links) links.add(url);
+        if (links) links.add(vimeo.canonical);
 
         // Preview image requires a callback.. http://stackoverflow.com/questions/1361149/get-img-thumbnails-from-vimeo
-        // if(images) images.add('https://.../vi/' + id + '/0.jpg')
+        // if(images) images.add(vimeo.thumbnail)
     } catch (error) {
         console.log(error);
     }
     return child;
+}
+
+function vimeoId(data) {
+    if (!data) return null;
+    const m = data.match(linksRe.vimeo);
+    if (!m || m.length < 2) return null;
+
+    return {
+        id: m[1],
+        url: m[0],
+        canonical: `https://player.vimeo.com/video/${m[1]}`,
+    };
 }
 
 function ipfsPrefix(url) {

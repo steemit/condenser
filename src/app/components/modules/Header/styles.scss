@@ -49,12 +49,12 @@
 }
 
 .Header__search {
-    @include MQ(M) {
+    @include MQ(L) {
         display: none;
     }
     &--desktop {
         display: none;
-        @include MQ(M) {
+        @include MQ(L) {
             display: block;
         }
     }

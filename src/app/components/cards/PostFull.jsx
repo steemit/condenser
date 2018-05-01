@@ -180,7 +180,7 @@ class PostFull extends React.Component {
             encodeURIComponent(s.title) +
             '&url=' +
             encodeURIComponent(s.url);
-        window.location = '//www.reddit.com/submit?' + q;
+        window.open('https://www.reddit.com/submit?' + q, 'Share');
     }
 
     linkedInShare(e) {

@@ -4,12 +4,6 @@ import user from 'app/redux/User'
 import client from 'socketcluster-client';
 import NotifyContent from 'app/components/elements/Notifications/NotifyContent'
 //
-const scOptions = {
-  hostname: 'push.golos.io',
-  secure: true,
-  // port: 8000
-};
-//
 let socket;
 //
 function socketEventIterator(channel) {
@@ -72,7 +66,7 @@ function onConnectedClose(e) {
   console.log(`<<< notification channel's down. Reconnecting ...`)
 }
 //
-function initConnection(user) {
+function initConnection(user, scOptions) {
   // console.log(`|||| channel requested for user `, user)
   // console.log(`|||| initializing SCluster client ...`)
   socket = client.create(scOptions);
@@ -110,14 +104,22 @@ function* onUserLogin() {
   // console.log(`||||||||||||||||||||||||||||||||||| STARTING CHANNEL LISTENER `)
   const currentUser = yield select(state => state.user.get('current'));
   const channelName = currentUser.get('username');
-  if (channelName) {
+  const pushServiceUrl = yield select(state => state.offchain.get('config').get('push_server_url'));
+  console.log(`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ `, pushServiceUrl)
+  if (channelName ) {
     try {
+      //
+      const scOptions = {
+        hostname: pushServiceUrl,
+        secure: true,
+        // port: 8000
+      };
       // {socketid: ..., ...}
-      const response = yield call(initConnection, channelName)
+      const response = yield call(initConnection, channelName, scOptions)
       // socket successfully created - notify
       yield put(user.actions.notificationChannelCreated())
       //
-      // console.log('|||| socket connected! ', response)
+      console.log('|||| socket connected! ', response)
       // start tracking user logout
       const chListener = yield fork(userChannelListener, channelName)
       // listen to logout only after successful login

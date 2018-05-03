@@ -74,6 +74,11 @@ a, path, circle {
   margin: 5px;
 }
 
+.button.login {
+  border-color: #0B1B69;
+  color: #3F46AD;
+}
+
 @keyframes loading {
   0% {
     transform: rotate(0deg);

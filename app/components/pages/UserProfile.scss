@@ -10,29 +10,31 @@
   background-color: $black;
   padding: 0;
   .row {
-      .columns {
-          overflow-x: auto;
-      }
+    .columns {
+      overflow-x: auto;
+    }
   }
   .menu {
     background-color: transparent;
   }
   .menu > li > a {
-      transition: all 200ms ease-in;
-      transform: translate3d( 0, 0, 0);
-      padding-left: 0.7rem;
-      padding-right: 0.7rem;
-      color: $white;
-      background-color: transparent;
-      &:hover {
-          background-color: #555;
-      }
-      &.active {
-          background-color: $white;
-          z-index: 2;
-          color: $black;
-          font-weight: bold;
-        }
+    transition: all 200ms ease-in;
+    transform: translate3d( 0, 0, 0);
+    padding-left: 0.7rem;
+    padding-right: 0.7rem;
+    color: $white;
+    background-color: transparent;
+    line-height: 1.5rem;
+
+    &:hover {
+        background-color: #555;
+    }
+    &.active {
+        background-color: $white;
+        z-index: 2;
+        color: $black;
+        font-weight: bold;
+    }
   }
 
   div.UserProfile__top-menu {

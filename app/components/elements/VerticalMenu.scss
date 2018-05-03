@@ -4,18 +4,20 @@
 
   .Icon {
     padding-left: 0.1rem;
-    margin-right: 0.5rem;
+    margin-right: 1.3rem;
     top: 0;
-  }
-
-  svg path, svg polygon {
     fill: $dark-gray;
   }
 
   > li > a {
-    color: $black;
+    display: flex;
+    align-items: center;
     line-height: 1rem;
     position: relative;
+    padding: 0.7rem 1rem;
+    color: #333333;
+    font-size: 14px;
+    letter-spacing: 0.4px;
   }
 
   > li > a:hover {
@@ -23,17 +25,53 @@
   }
 
   > li.title {
-    padding: 0.4rem;
-    font-weight: bold;
+    padding: 0.56rem;
+    color: #333333;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.4px;
+    line-height: 16px;
     text-align: center;
-    border-bottom: 1px solid $medium-gray;
+    border-bottom: 1px solid $light-gray;
   }
 
   > li.description {
     padding: 0.1rem;
     font-size: 87.5%;
     text-align: center;
-    border-bottom: 1px solid $medium-gray;
+    border-bottom: 1px solid $light-gray;
   }
+
+  &_nav-profile {
+    width: 262px;
+    margin: 10px 0;
+
+    & > li > a {
+      padding: 0 1rem 0 3.8rem;
+      line-height: 50px;
+
+      .Icon {
+        fill: #333;
+      }
+
+      &:hover {
+        .Icon {
+          fill: #3F46AD;
+        }
+      }
+    }
+
+  }
+
+  &_nav-additional {
+    width: 242px;
+    margin: 10px 0;
+
+    & > li > a {
+      padding: 0 20px;
+      line-height: 50px;
+    }
+  }
+
 }
 

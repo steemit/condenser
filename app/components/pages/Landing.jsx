@@ -12,7 +12,7 @@ import WhyGolos from 'app/components/elements/LandingWhyGolos'
 import Team from 'app/components/elements/LandingTeam'
 import Press from 'app/components/elements/LandingPress'
 import Partners from 'app/components/elements/LandingPartners'
-import Footer from 'app/components/elements/LandingFooter'
+// import Footer from 'app/components/elements/LandingFooter'
 import { APP_NAME } from 'app/client_config';
 // let WOW
 // if (process.env.BROWSER) WOW = require('wowjs/dist/wow.js')
@@ -63,8 +63,8 @@ class Landing extends React.Component {
 				<Tools />
 				<Team />
 				<Partners />
-				<Footer />
 				{/*
+				<Footer />
 				<WhyGolos />
 				<JoinUs />
 				<BlockchainRevolution />

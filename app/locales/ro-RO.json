@@ -33,7 +33,8 @@
     "use_spaces_to_separate_tags":"Folosiți spații pentru a separa etichetele",
     "use_only_allowed_characters":"Utilizați doar litere mici, numere și o singură cratimă",
     "must_start_with_a_letter":"Trebuie să se înceapă cu o literă",
-    "must_end_with_a_letter_or_number":"Trebuie să se termine cu o literă sau un număr"
+    "must_end_with_a_letter_or_number":"Trebuie să se termine cu o literă sau un număr",
+    "denied_to_publish_the_posts_with_tag":"Запрещено публиковать посты с тегом 'stihi-io'"
   },
   "mobilevalidation_js": {
     "not_be_empty": "not be empty",

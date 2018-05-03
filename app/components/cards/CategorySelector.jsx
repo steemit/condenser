@@ -88,6 +88,7 @@ export function validateCategory(category, required = true) {
         cats.find(c => '18+' !== c && !/^[a-zа-яё0-9-ґєії]+$/.test(c)) ? tt('category_selector_jsx.use_only_allowed_characters') :
         cats.find(c => '18+' !== c && !/^[a-zа-яё-ґєії]/.test(c)) ? tt('category_selector_jsx.must_start_with_a_letter') :
         cats.find(c => '18+' !== c && !/[a-zа-яё0-9ґєії]$/.test(c)) ? tt('category_selector_jsx.must_end_with_a_letter_or_number') :
+        cats.find(c => [ 'stihi-io' ].includes(c)) ? tt('category_selector_jsx.denied_to_publish_the_posts_with_tag') :
         null
     )
 }

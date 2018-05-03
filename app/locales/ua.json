@@ -32,7 +32,8 @@
     "use_spaces_to_separate_tags": "Використовуйте пробіл, щоб розділити теги",
     "use_only_allowed_characters": "Використовуйте тільки малі літери, цифри і одне тире",
     "must_start_with_a_letter": "Має починатися з літери",
-    "must_end_with_a_letter_or_number": "Має закінчуватися буквою або цифрою"
+    "must_end_with_a_letter_or_number": "Має закінчуватися буквою або цифрою",
+    "denied_to_publish_the_posts_with_tag":"Заборонено публікувати пости з тегом 'stihi-io'"
   },
   "mobilevalidation_js": {
     "not_be_empty": "not be empty",

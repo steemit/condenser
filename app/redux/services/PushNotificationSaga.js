@@ -105,8 +105,8 @@ function* onUserLogin() {
   const currentUser = yield select(state => state.user.get('current'));
   const channelName = currentUser.get('username');
   const pushServiceUrl = yield select(state => state.offchain.get('config').get('push_server_url'));
-  console.log(`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ `, pushServiceUrl)
-  if (channelName ) {
+  // console.log(`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ `, pushServiceUrl)
+  if (channelName && pushServiceUrl) {
     try {
       //
       const scOptions = {

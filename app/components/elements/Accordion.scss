@@ -5,7 +5,7 @@
 		margin-left: 45px;
 		transform: translateY(-16%);
 	}
-	@media #{$small-only} {
+	@include breakpoint(small only) {
 		.Accordion__icon {
 			margin-left: 5px;
 		}
@@ -15,7 +15,7 @@
 		margin-top: 20px;
 		// margin-left: 84px;
 	}
-	@media #{$medium-up} {
+	@include breakpoint(medium up) {
 		.Accordion__icon { margin-left: 17px; }
 		.Accordion__content { margin-right: 20px; }
 	}

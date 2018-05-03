@@ -5,7 +5,10 @@ import Icon from 'app/components/elements/Icon.jsx';
 export default class VerticalMenu extends React.Component {
     static propTypes = {
         items: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
-        title: React.PropTypes.string,
+        title: React.PropTypes.oneOfType([
+            React.PropTypes.string,
+            React.PropTypes.object
+        ]),
         className: React.PropTypes.string,
         hideValue: React.PropTypes.oneOfType([
             React.PropTypes.string,
@@ -28,14 +31,15 @@ export default class VerticalMenu extends React.Component {
             {description && <li className="description">{description}</li>}
             {items.map(i => {
                 if(i.value === hideValue) return null
+                const iconSize = i.iconSize || '1x'
                 return <li key={i.value} onClick={this.closeMenu}>
                     {i.link ? <Link to={i.link} onClick={i.onClick}>
-                        {i.icon && <Icon name={i.icon} />}{i.label ? i.label : i.value}
+                        {i.icon && <Icon name={i.icon} size={iconSize} />}{i.label ? i.label : i.value}
                         {i.data && <span>{i.data}</span>}
                         &nbsp; {i.addon}
                     </Link> :
                     <span>
-                        {i.icon && <Icon name={i.icon} />}{i.label ? i.label : i.value}
+                        {i.icon && <Icon name={i.icon} size={iconSize} />}{i.label ? i.label : i.value}
                     </span>
                     }
                 </li>

@@ -10,7 +10,7 @@ class Userpic extends Component {
     shouldComponentUpdate = shouldComponentUpdate(this, 'Userpic')
 
     render() {
-        const {json_metadata, width, height} = this.props
+        const {json_metadata, width, height, imageUrl } = this.props
         const hideIfDefault = this.props.hideIfDefault || false
 
         let url = null;
@@ -20,6 +20,12 @@ class Userpic extends Component {
             const md = JSON.parse(json_metadata);
             if(md.profile) url = md.profile.profile_image;
         } catch (e) {}
+
+
+        if (imageUrl) {
+          url = imageUrl
+        }
+
 
         if (url && /^(https?:)\/\//.test(url)) {
             const size = width && width > 48 ? '320x320' : '120x120';

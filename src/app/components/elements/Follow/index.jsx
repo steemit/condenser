@@ -189,6 +189,7 @@ module.exports = connect(
                         json: JSON.stringify(json),
                     },
                     successCallback: done,
+                    // TODO: Why?
                     errorCallback: done,
                 })
             );

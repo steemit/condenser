@@ -109,7 +109,17 @@ class PostSummary extends React.Component {
 
         if (content.get('depth') > 0) {
             title_text = tt('g.re_to', { topic: content.get('root_title') });
-            post_url = '/' + content.get('category') + '/@' + content.get('parent_author') + '/' + content.get('parent_permlink') + '#@' + content.get('author') + '/' + content.get('permlink');
+            post_url =
+                '/' +
+                content.get('category') +
+                '/@' +
+                content.get('parent_author') +
+                '/' +
+                content.get('parent_permlink') +
+                '#@' +
+                content.get('author') +
+                '/' +
+                content.get('permlink');
             comments_url = p.link + '#comments';
         } else {
             title_text = p.title;
@@ -346,10 +356,7 @@ class PostSummary extends React.Component {
                 >
                     {thumb ? (
                         <div className="articles__content-block articles__content-block--img">
-                            <Link
-                                className="articles__link"
-                                to={post_url}
-                            >
+                            <Link className="articles__link" to={post_url}>
                                 {thumb}
                             </Link>
                         </div>

@@ -9,6 +9,7 @@ import * as transactionActions from 'app/redux/TransactionReducer';
 import * as userActions from 'app/redux/UserReducer';
 import * as globalActions from 'app/redux/GlobalReducer';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
+import ConfirmTransfer from 'app/components/elements/ConfirmTransfer';
 import runTests, { browserTests } from 'app/utils/BrowserTests';
 import {
     validate_account_name,
@@ -74,7 +75,8 @@ class TransferForm extends Component {
                     });
                 }
                 return acc;
-            }, Map());
+            }, Map())
+            .remove(this.props.currentUser.get('username'));
 
         // Build a combined list of users you follow & have previously transferred to,
         // and sort it by 1. desc the number of previous transfers 2. username asc.
@@ -502,7 +504,7 @@ class TransferForm extends Component {
                                 >
                                     {toVesting
                                         ? tt('g.power_up')
-                                        : tt('g.submit')}
+                                        : tt('g.next')}
                                 </button>
                                 {transferToSelf && (
                                     <button
@@ -632,12 +634,11 @@ export default connect(
                 amount: parseFloat(amount, 10).toFixed(3) + ' ' + asset2,
                 memo: toVesting ? undefined : memo ? memo : '',
             };
-
+            const confirm = () => <ConfirmTransfer operation={operation} />;
             if (transferType === 'Savings Withdraw')
                 operation.request_id = Math.floor(
                     (Date.now() / 1000) % 4294967295
                 );
-
             dispatch(
                 transactionActions.broadcastOperation({
                     type: toVesting
@@ -652,6 +653,7 @@ export default connect(
                     operation,
                     successCallback,
                     errorCallback,
+                    confirm,
                 })
             );
         },

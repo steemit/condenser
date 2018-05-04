@@ -12,6 +12,7 @@
         "blog": "Blog",
         "browse": "Browse",
         "buy": "Buy",
+        "buy_steem_power": "Buy Steem Power",
         "buy_or_sell": "Buy or Sell",
         "by": "by",
         "cancel": "Cancel",
@@ -298,7 +299,7 @@
         "selecting_them": "selecting them",
         "image_upload": "Image upload",
         "power_up_100": "Power Up 100%%",
-        "default_50_50": "Default (50%% / 50%%)",
+        "default_50_50": "Default (50%% SBD / 50%% SP)",
         "decline_payout": "Decline Payout",
         "check_this_to_auto_upvote_your_post":
             "Check this to auto-upvote your post",
@@ -311,8 +312,10 @@
         "exceeds_max_beneficiaries": "Can have at most 8 beneficiaries",
         "beneficiary_cannot_be_self": "Cannot specify self as beneficiary",
         "beneficiary_cannot_be_duplicate": "Beneficiary cannot be duplicate",
-        "beneficiary_percent_invalid": "Beneficiary percentage must be from 1-100",
-        "beneficiary_percent_total_invalid": "Beneficiary total percentage must be less than 100"
+        "beneficiary_percent_invalid":
+            "Beneficiary percentage must be from 1-100",
+        "beneficiary_percent_total_invalid":
+            "Beneficiary total percentage must be less than 100"
     },
     "category_selector_jsx": {
         "tag_your_story":
@@ -335,6 +338,7 @@
             "This post is not available due to a copyright claim.",
         "share_on_facebook": "Share on Facebook",
         "share_on_twitter": "Share on Twitter",
+        "share_on_reddit": "Share on Reddit",
         "share_on_linkedin": "Share on Linkedin",
         "recent_password": "Recent Password",
         "in_week_convert_DEBT_TOKEN_to_LIQUID_TOKEN":
@@ -753,9 +757,10 @@
         "to_comment_and_reward_others": " to comment and reward others.",
         "signup_button": "Sign up now to earn ",
         "signup_button_emphasis": "FREE STEEM!",
-        "sign_up_get_steem": "Sign up. Get STEEM",
+        "sign_up_get_steem": "Sign up. Get STEEM!",
         "returning_users": "Returning Users: ",
-        "join_our": "Join our"
+        "join_our": "Join our",
+        "sign_transfer": "Sign to complete transfer"
     },
     "chainvalidation_js": {
         "account_name_should_not_be_empty": "Account name should not be empty.",
@@ -793,8 +798,12 @@
         "always_hide": "Always hide",
         "always_warn": "Always warn",
         "always_show": "Always show",
+        "choose_default_blog_payout": "Blog post rewards",
+        "choose_default_comment_payout": "Comment post rewards",
         "muted_users": "Muted Users",
         "update": "Update",
+        "upload_image": "Upload an image",
+        "uploading_image": "Uploading image",
         "profile_image_url": "Profile picture url",
         "cover_image_url": "Cover image url",
         "profile_name": "Display Name",
@@ -827,7 +836,8 @@
         "beware_of_spam_and_phishing_links":
             "Beware of spam and phishing links in transfer memos. Do not open links from users you do not trust. Do not provide your private keys to any third party websites.",
         "autocomplete_previous_transfers": "previous transfers",
-        "autocomplete_user_following": "following"
+        "autocomplete_user_following": "following",
+        "confirm_transfer": "Transfer %(amount)s from %(from)s to %(to)s?"
     },
     "userwallet_jsx": {
         "transfer": "Transfer",
@@ -878,5 +888,17 @@
     },
     "confirmtransactionform_jsx": {
         "confirm": "Confirm %(transactionType)s"
+    },
+    "modals_jsx": {
+        "your_transaction_failed": "Your transaction failed to process",
+        "out_of_bandwidth_title": "Why? You've run out of bandwidth",
+        "out_of_bandwidth_reason":
+            "Actions such as posting and voting use computing resources placing a real cost on the community members who run the Steem blockchain for everyone.",
+        "out_of_bandwidth_reason_2":
+            "To keep things free, Steem intelligently allocates bandwidth to each user based on their Steem Power holdings, their recent usage and overall network demand. This system prioritizes actions by good community members while limiting spam.",
+        "out_of_bandwidth_option_title": "To keep interacting on Steemit:",
+        "out_of_bandwidth_option_1": "Buy and hold more Steem Power",
+        "out_of_bandwidth_option_2": "Wait until your bandwidth recharges",
+        "out_of_bandwidth_option_3": "Wait until the network usage decreases"
     }
 }

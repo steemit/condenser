@@ -6,17 +6,19 @@ const HIDE_CONFIRM = 'transaction/HIDE_CONFIRM';
 export const BROADCAST_OPERATION = 'transaction/BROADCAST_OPERATION';
 export const UPDATE_AUTHORITIES = 'transaction/UPDATE_AUTHORITIES';
 export const UPDATE_META = 'transaction/UPDATE_META';
-const ERROR = 'transaction/ERROR';
+const ERROR = 'transaction/ERROR'; // Has a watcher in SagaShared
 const DELETE_ERROR = 'transaction/DELETE_ERROR';
+const DISMISS_ERROR = 'transaction/DISMISS_ERROR';
 const SET = 'transaction/SET';
 const REMOVE = 'transaction/REMOVE';
 // Saga-related
 export const RECOVER_ACCOUNT = 'transaction/RECOVER_ACCOUNT';
-
 const defaultState = fromJS({
     operations: [],
     status: { key: '', error: false, busy: false },
-    errors: null,
+    errors: {
+        bandwidthError: false,
+    },
 });
 
 export default function reducer(state = defaultState, action) {
@@ -55,6 +57,7 @@ export default function reducer(state = defaultState, action) {
 
         case ERROR: {
             const { operations, error, errorCallback } = payload;
+
             let errorStr = error.toString();
             let errorKey = 'Transaction broadcast error.';
             for (const [type /*, operation*/] of operations) {
@@ -97,6 +100,7 @@ export default function reducer(state = defaultState, action) {
                     );
                 } else {
                     if (error.message) {
+                        // TODO: This reformatting could be better, in most cases, errorKey and errorString end up being similar if not identical.
                         // Depends on FC_ASSERT formatting
                         // https://github.com/steemit/steemit.com/issues/222
                         const err_lines = error.message.split('\n');
@@ -114,6 +118,8 @@ export default function reducer(state = defaultState, action) {
                                 }`;
                         }
                     }
+                    // TODO: This would perhaps be better expressed as a Case, Switch statement.
+                    // TODO: The precise reason for why this clipping needs to happen is unclear.
                     if (errorStr.length > 200)
                         errorStr = errorStr.substring(0, 200);
                     // Catch for unknown key better error handling
@@ -128,11 +134,19 @@ export default function reducer(state = defaultState, action) {
                         errorStr =
                             'Transaction failed: Not your valid active key.';
                     }
+                    // TODO: refactor this so that the keys are consistent and sane, i.e. do not include user name in error key.
                     state = state.update('errors', errors => {
                         return errors
                             ? errors.set(errorKey, errorStr)
                             : Map({ [errorKey]: errorStr });
                     });
+                    // Sane error key for the bandwidth error.
+                    if (
+                        errorKey.includes('bandwidth') ||
+                        errorStr.includes('bandwidth')
+                    ) {
+                        state = state.setIn(['errors', 'bandwidthError'], true);
+                    }
                 }
             }
 
@@ -149,6 +163,9 @@ export default function reducer(state = defaultState, action) {
 
         case DELETE_ERROR:
             return state.deleteIn(['errors', payload.key]);
+
+        case DISMISS_ERROR:
+            return state.setIn(['errors', payload.key], false);
 
         case SET:
             return state.setIn(
@@ -199,6 +216,11 @@ export const error = payload => ({
 
 export const deleteError = payload => ({
     type: DELETE_ERROR,
+    payload,
+});
+
+export const dismissError = payload => ({
+    type: DISMISS_ERROR,
     payload,
 });
 

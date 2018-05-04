@@ -54,8 +54,11 @@ export function* watchTransactionErrors() {
 function* showTransactionErrorNotification() {
     const errors = yield select(state => state.transaction.get('errors'));
     for (const [key, message] of errors) {
-        yield put(appActions.addNotification({ key, message }));
-        yield put(transactionActions.deleteError({ key }));
+        // Do not display a notification for the bandwidthError key.
+        if (key !== 'bandwidthError') {
+            yield put(appActions.addNotification({ key, message }));
+            yield put(transactionActions.deleteError({ key }));
+        }
     }
 }
 

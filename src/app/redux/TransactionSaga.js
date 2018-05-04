@@ -501,10 +501,7 @@ function* accepted_account_update({ operation }) {
 export function* preBroadcast_comment({ operation, username }) {
     if (!operation.author) operation.author = username;
     let permlink = operation.permlink;
-    const {
-        author,
-        __config: { originalBody, autoVote, comment_options },
-    } = operation;
+    const { author, __config: { originalBody, comment_options } } = operation;
     const {
         parent_author = '',
         parent_permlink = operation.category,
@@ -568,16 +565,6 @@ export function* preBroadcast_comment({ operation, username }) {
                     : [],
             },
         ]);
-    }
-
-    if (autoVote) {
-        const vote = {
-            voter: op.author,
-            author: op.author,
-            permlink: op.permlink,
-            weight: 10000,
-        };
-        comment_op.push(['vote', vote]);
     }
 
     return comment_op;

@@ -228,40 +228,5 @@ describe('TransactionSaga', () => {
             const expected = Buffer.from(operation.body, 'utf-8');
             expect(actual[0][1].body).toEqual(expected, 'utf-8');
         });
-        it('should include comment_options and autoVote if specified.', () => {
-            operation.__config.comment_options = true;
-            operation.__config.autoVote = true;
-            gen = preBroadcast_comment({ operation, username });
-            gen.next(
-                operation.title,
-                operation.author,
-                operation.parent_author,
-                operation.parent_permlink
-            );
-            const actual = gen.next('mock-permlink-123').value;
-            const expectedCommentOptions = [
-                'comment_options',
-                {
-                    author: operation.author,
-                    permlink: 'mock-permlink-123',
-                    max_accepted_payout: ['1000000.000', DEBT_TICKER].join(' '),
-                    percent_steem_dollars: 10000,
-                    allow_votes: true,
-                    allow_curation_rewards: true,
-                    extensions: [],
-                },
-            ];
-            const expectedAutoVoteOptions = [
-                'vote',
-                {
-                    voter: operation.author,
-                    author: operation.author,
-                    permlink: 'mock-permlink-123',
-                    weight: 10000,
-                },
-            ];
-            expect(actual[1]).toEqual(expectedCommentOptions);
-            expect(actual[2]).toEqual(expectedAutoVoteOptions);
-        });
     });
 });

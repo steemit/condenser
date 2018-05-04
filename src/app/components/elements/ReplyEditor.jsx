@@ -397,13 +397,7 @@ class ReplyEditor extends React.Component {
             payoutType,
         } = this.props;
         const { submitting, valid, handleSubmit } = this.state.replyForm;
-        const {
-            postError,
-            titleWarn,
-            rte,
-            payoutType,
-            beneficiaries,
-        } = this.state;
+        const { postError, titleWarn, rte, beneficiaries } = this.state;
         const { progress, noClipboardData } = this.state;
         const disabled = submitting || !valid;
         const loading = submitting || this.state.loading;

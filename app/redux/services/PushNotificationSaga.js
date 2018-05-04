@@ -119,7 +119,7 @@ function* onUserLogin() {
       // socket successfully created - notify
       yield put(user.actions.notificationChannelCreated())
       //
-      console.log('|||| socket connected! ', response)
+      // console.log('|||| socket connected! ', response)
       // start tracking user logout
       const chListener = yield fork(userChannelListener, channelName)
       // listen to logout only after successful login

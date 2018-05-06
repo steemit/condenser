@@ -129,6 +129,7 @@
     "sendgrid": "^4.0.1",
     "sequelize": "^3.21.0",
     "sequelize-cli": "^2.3.1",
+    "socketcluster-client": "^11.0.0",
     "speakingurl": "^9.0.0",
     "sqlite3": "^3.1.8",
     "style-loader": "^0.13.0",

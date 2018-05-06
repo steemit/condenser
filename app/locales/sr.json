@@ -33,7 +33,8 @@
     "use_spaces_to_separate_tags":"Koristite razmake za odvajanje tagova",
     "use_only_allowed_characters":"Koristite samo mala slova, brojeve i jednu tačku ili crtu",
     "must_start_with_a_letter":"Mora početi sa slovom",
-    "must_end_with_a_letter_or_number":"Mora da se završi sa slovom ili brojem"
+    "must_end_with_a_letter_or_number":"Mora da se završi sa slovom ili brojem",
+    "denied_to_publish_the_posts_with_tag":"Запрещено публиковать посты с тегом 'stihi-io'"
   },
   "mobilevalidation_js": {
     "not_be_empty": "not be empty",

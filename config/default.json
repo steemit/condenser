@@ -134,5 +134,6 @@
   },
   "blockcypher_token": "blockcypher token",
   "is_testnet": false,
-  "openexchangerates_app_id": "app id"
+  "openexchangerates_app_id": "app id",
+  "wss_push_service_url": "url"
 }

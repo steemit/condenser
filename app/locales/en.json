@@ -363,7 +363,8 @@
     "use_spaces_to_separate_tags": "Use spaces to separate tags",
     "use_only_allowed_characters": "Use only lowercase letters, digits and one dash",
     "must_start_with_a_letter": "Must start with a letter",
-    "must_end_with_a_letter_or_number": "Must end with a letter or number"
+    "must_end_with_a_letter_or_number": "Must end with a letter or number",
+    "denied_to_publish_the_posts_with_tag":"It is denied to publish the posts with tag 'stihi-io'"
   },
   "tags_page": {
     "replies": "Replies",

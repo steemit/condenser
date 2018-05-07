@@ -308,7 +308,12 @@
         "title": "Title",
         "update_post": "Update Post",
         "markdown_not_supported": "Markdown is not supported here",
-        "beneficiaries": "Beneficiaries",
+        "advanced_settings": "Advanced Settings",
+        "beneficiaries_set": "%(count)s beneficiary(ies) set"
+    },
+    "beneficiary_selector_jsx": {
+        "header": "Who should receive any rewards?",
+        "add": "Add account",
         "exceeds_max_beneficiaries": "Can have at most 8 beneficiaries",
         "beneficiary_cannot_be_self": "Cannot specify self as beneficiary",
         "beneficiary_cannot_be_duplicate": "Beneficiary cannot be duplicate",

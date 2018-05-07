@@ -1,6 +1,5 @@
 import React from 'react';
 import reactForm from 'app/utils/ReactForm';
-import Autocomplete from 'react-autocomplete';
 import * as transactionActions from 'app/redux/TransactionReducer';
 import * as userActions from 'app/redux/UserReducer';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer';
@@ -14,7 +13,7 @@ import sanitizeConfig, { allowedTags } from 'app/utils/SanitizeConfig';
 import sanitize from 'sanitize-html';
 import HtmlReady from 'shared/HtmlReady';
 import * as globalActions from 'app/redux/GlobalReducer';
-import { Set } from 'immutable';
+import { fromJS, Set } from 'immutable';
 import Remarkable from 'remarkable';
 import Dropzone from 'react-dropzone';
 import tt from 'counterpart';
@@ -78,7 +77,6 @@ class ReplyEditor extends React.Component {
                 raw = body.value;
             }
 
-            var beneficiaries = [];
             // Check for draft data
             let draft = localStorage.getItem('replyEditorData-' + formId);
             if (draft) {
@@ -86,11 +84,10 @@ class ReplyEditor extends React.Component {
                 const { category, title } = this.state;
                 if (category) category.props.onChange(draft.category);
                 if (title) title.props.onChange(draft.title);
-                if (draft.beneficiaries) beneficiaries = draft.beneficiaries;
+                if (draft.beneficiaries)
+                    this.props.setBeneficiaries(draft.beneficiaries);
                 raw = draft.body;
             }
-
-            this.setState({ beneficiaries });
 
             // If we have an initial body, check if it's html or markdown
             if (raw) {
@@ -114,10 +111,6 @@ class ReplyEditor extends React.Component {
             else if (this.refs.postRef) this.refs.postRef.focus();
             else if (this.refs.rte) this.refs.rte._focus();
         }, 300);
-    }
-
-    matchAutocompleteUser(item, value) {
-        return item.toLowerCase().indexOf(value.toLowerCase()) > -1;
     }
 
     shouldComponentUpdate = shouldComponentUpdate(this, 'ReplyEditor');
@@ -223,7 +216,7 @@ class ReplyEditor extends React.Component {
                 rte_value: stateFromHtml(this.props.richTextEditor),
             });
             this.setState({ progress: {} });
-            this.setState({ beneficiaries: [] });
+            this.props.setBeneficiaries([]);
             if (onCancel) onCancel(e);
         }
     };
@@ -255,52 +248,9 @@ class ReplyEditor extends React.Component {
         draft.className = 'ReplyEditor__draft ReplyEditor__draft-saved';
     }
 
-    handleAddBeneficiary = e => {
-        if (this.state.beneficiaries.length < 8) {
-            this.setState({
-                beneficiaries: this.state.beneficiaries.concat([
-                    { username: '', percent: '0' },
-                ]),
-            });
-        }
-    };
-
-    handleRemoveBeneficiary = idx => e => {
-        this.setState({
-            beneficiaries: this.state.beneficiaries.filter(
-                (s, bidx) => idx != bidx
-            ),
-        });
-    };
-
-    handleBeneficiaryUserChange = idx => e => {
-        const newBeneficiaries = this.state.beneficiaries.map(
-            (beneficiary, bidx) => {
-                if (idx != bidx) return beneficiary;
-                return { ...beneficiary, username: e.target.value };
-            }
-        );
-        this.setState({ beneficiaries: newBeneficiaries });
-    };
-
-    handleBeneficiaryUserSelect = idx => val => {
-        const newBeneficiaries = this.state.beneficiaries.map(
-            (beneficiary, bidx) => {
-                if (idx != bidx) return beneficiary;
-                return { ...beneficiary, username: val };
-            }
-        );
-        this.setState({ beneficiaries: newBeneficiaries });
-    };
-
-    handleBeneficiaryPercentChange = idx => e => {
-        const newBeneficiaries = this.state.beneficiaries.map(
-            (beneficiary, bidx) => {
-                if (idx != bidx) return beneficiary;
-                return { ...beneficiary, percent: e.target.value };
-            }
-        );
-        this.setState({ beneficiaries: newBeneficiaries });
+    showAdvancedSettings = e => {
+        e.preventDefault();
+        this.props.showAdvancedSettings();
     };
 
     onPayoutTypeChange = e => {
@@ -395,9 +345,10 @@ class ReplyEditor extends React.Component {
             state,
             successCallback,
             payoutType,
+            beneficiaries,
         } = this.props;
         const { submitting, valid, handleSubmit } = this.state.replyForm;
-        const { postError, titleWarn, rte, beneficiaries } = this.state;
+        const { postError, titleWarn, rte } = this.state;
         const { progress, noClipboardData } = this.state;
         const disabled = submitting || !valid;
         const loading = submitting || this.state.loading;
@@ -637,6 +588,31 @@ class ReplyEditor extends React.Component {
                             )}
                         </div>
                         <div className={vframe_section_shrink_class}>
+                            {isStory && (
+                                <span>
+                                    <a
+                                        href="#"
+                                        onClick={this.showAdvancedSettings}
+                                    >
+                                        {tt('reply_editor.advanced_settings')}
+                                    </a>{' '}
+                                    &nbsp;
+                                    {beneficiaries &&
+                                        beneficiaries.length > 0 && (
+                                            <span>
+                                                ({tt(
+                                                    'reply_editor.beneficiaries_set',
+                                                    {
+                                                        count:
+                                                            beneficiaries.length,
+                                                    }
+                                                )})
+                                            </span>
+                                        )}
+                                </span>
+                            )}
+                        </div>
+                        <div className={vframe_section_shrink_class}>
                             {postError && (
                                 <div className="error">{postError}</div>
                             )}
@@ -697,142 +673,6 @@ class ReplyEditor extends React.Component {
                                             Update settings
                                         </a>
                                         <br />
-                                        {tt('reply_editor.beneficiaries')}{' '}
-                                        &nbsp;
-                                        <a
-                                            href="#"
-                                            onClick={this.handleAddBeneficiary}
-                                            hidden={
-                                                this.state.beneficiaries
-                                                    .length >= 8
-                                            }
-                                        >
-                                            {tt('g.add')}
-                                        </a>
-                                        <br />
-                                        {this.state.beneficiaries.map(
-                                            (beneficiary, idx) => (
-                                                <div
-                                                    style={{ display: 'flex' }}
-                                                >
-                                                    <input
-                                                        type="text"
-                                                        pattern="[0-9]*"
-                                                        style={{
-                                                            'max-width':
-                                                                '2.2rem',
-                                                            'max-height':
-                                                                '1.5rem',
-                                                        }}
-                                                        value={
-                                                            beneficiary.percent
-                                                        }
-                                                        onChange={this.handleBeneficiaryPercentChange(
-                                                            idx
-                                                        )}
-                                                    />
-                                                    % &nbsp; {tt('g.to')} &nbsp;
-                                                    <div
-                                                        className="input-group"
-                                                        style={{
-                                                            'max-width':
-                                                                '11rem',
-                                                            'max-height':
-                                                                '1.5rem',
-                                                        }}
-                                                    >
-                                                        <span
-                                                            className="input-group-label"
-                                                            style={{
-                                                                'max-width':
-                                                                    '1.5rem',
-                                                                padding:
-                                                                    '0 0.2rem',
-                                                            }}
-                                                        >
-                                                            @
-                                                        </span>
-                                                        <Autocomplete
-                                                            wrapperStyle={{
-                                                                display:
-                                                                    'inline-block',
-                                                                'max-height':
-                                                                    '1.5rem',
-                                                            }}
-                                                            inputProps={{
-                                                                type: 'text',
-                                                                className:
-                                                                    'input-group-field',
-                                                                autoComplete:
-                                                                    'off',
-                                                                autoCorrect:
-                                                                    'off',
-                                                                autoCapitalize:
-                                                                    'off',
-                                                                spellCheck:
-                                                                    'false',
-                                                                disabled: loading,
-                                                                style: {
-                                                                    'max-height':
-                                                                        '1.5rem',
-                                                                },
-                                                            }}
-                                                            renderMenu={items => (
-                                                                <div
-                                                                    className="react-autocomplete-input"
-                                                                    children={
-                                                                        items
-                                                                    }
-                                                                />
-                                                            )}
-                                                            getItemValue={item =>
-                                                                item
-                                                            }
-                                                            items={
-                                                                this.props
-                                                                    .following
-                                                            }
-                                                            shouldItemRender={
-                                                                this
-                                                                    .matchAutocompleteUser
-                                                            }
-                                                            renderItem={(
-                                                                item,
-                                                                isHighlighted
-                                                            ) => (
-                                                                <div
-                                                                    className={
-                                                                        isHighlighted
-                                                                            ? 'active'
-                                                                            : ''
-                                                                    }
-                                                                >
-                                                                    {item}
-                                                                </div>
-                                                            )}
-                                                            value={
-                                                                beneficiary.username
-                                                            }
-                                                            onChange={this.handleBeneficiaryUserChange(
-                                                                idx
-                                                            )}
-                                                            onSelect={this.handleBeneficiaryUserSelect(
-                                                                idx
-                                                            )}
-                                                        />
-                                                        &nbsp;
-                                                        <a
-                                                            href="#"
-                                                            onClick={this.handleRemoveBeneficiary(
-                                                                idx
-                                                            )}
-                                                        >
-                                                            {tt('g.remove')}
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            )
-                                        )}
                                         <label
                                             title={tt(
                                                 'reply_editor.check_this_to_auto_upvote_your_post'
@@ -950,16 +790,6 @@ export default formId =>
             if (isStory && jsonMetadata && jsonMetadata.tags) {
                 category = Set([category, ...jsonMetadata.tags]).join(' ');
             }
-            var following = [];
-            const follow = state.global.get('follow');
-            if (follow) {
-                const followingData = follow.getIn([
-                    'getFollowingAsync',
-                    username,
-                    'blog_result',
-                ]);
-                if (followingData) following = followingData.sort();
-            }
 
             const payoutType = state.app.getIn(
                 [
@@ -968,6 +798,8 @@ export default formId =>
                 ],
                 '50%'
             );
+
+            const beneficiaries = state.user.get('post_beneficiaries').toJS();
 
             const ret = {
                 ...ownProps,
@@ -979,7 +811,7 @@ export default formId =>
                 state,
                 formId,
                 richTextEditor,
-                following,
+                beneficiaries,
             };
             return ret;
         },
@@ -999,6 +831,15 @@ export default formId =>
             },
             uploadImage: (file, progress) =>
                 dispatch(userActions.uploadImage({ file, progress })),
+            showAdvancedSettings: () =>
+                dispatch(userActions.showPostAdvancedSettings()),
+            setBeneficiaries: beneficiaries =>
+                dispatch(
+                    userActions.set({
+                        key: 'post_beneficiaries',
+                        value: fromJS(beneficiaries),
+                    })
+                ),
             reply: ({
                 category,
                 title,
@@ -1126,54 +967,6 @@ export default formId =>
                             tagsLength: meta.tags.length,
                             includingCategory,
                         })
-                    );
-                    return;
-                }
-
-                if (beneficiaries.length > 8) {
-                    errorCallback(tt('reply_editor.exceeds_max_benficiaries'));
-                    return;
-                }
-                var totalPercent = 0;
-
-                var beneficiaryNames = Set();
-                for (var i = 0; i < beneficiaries.length; i++) {
-                    const beneficiary = beneficiaries[i];
-                    const accountError = validate_account_name(
-                        beneficiary.username,
-                        ''
-                    );
-                    if (accountError) {
-                        errorCallback(accountError);
-                        return;
-                    }
-                    if (beneficiary.username === username) {
-                        errorCallback(
-                            tt('reply_editor.beneficiary_cannot_be_self')
-                        );
-                        return;
-                    }
-                    if (beneficiaryNames.has(beneficiary.username)) {
-                        errorCallback(
-                            tt('reply_editor.beneficiary_cannot_be_duplicate')
-                        );
-                        return;
-                    } else {
-                        beneficiaryNames = beneficiaryNames.add(
-                            beneficiary.username
-                        );
-                    }
-                    if (!/^[1-9]\d{0,2}$/.test(beneficiary.percent)) {
-                        errorCallback(
-                            tt('reply_editor.beneficiary_percent_invalid')
-                        );
-                        return;
-                    }
-                    totalPercent += parseInt(beneficiary.percent);
-                }
-                if (totalPercent > 100) {
-                    errorCallback(
-                        tt('reply_editor.beneficiary_percent_total_invalid')
                     );
                     return;
                 }

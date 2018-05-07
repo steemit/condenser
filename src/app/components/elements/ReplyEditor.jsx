@@ -588,29 +588,32 @@ class ReplyEditor extends React.Component {
                             )}
                         </div>
                         <div className={vframe_section_shrink_class}>
-                            {isStory && (
-                                <span>
-                                    <a
-                                        href="#"
-                                        onClick={this.showAdvancedSettings}
-                                    >
-                                        {tt('reply_editor.advanced_settings')}
-                                    </a>{' '}
-                                    &nbsp;
-                                    {beneficiaries &&
-                                        beneficiaries.length > 0 && (
-                                            <span>
-                                                ({tt(
-                                                    'reply_editor.beneficiaries_set',
-                                                    {
-                                                        count:
-                                                            beneficiaries.length,
-                                                    }
-                                                )})
-                                            </span>
-                                        )}
-                                </span>
-                            )}
+                            {isStory &&
+                                !isEdit && (
+                                    <span>
+                                        <a
+                                            href="#"
+                                            onClick={this.showAdvancedSettings}
+                                        >
+                                            {tt(
+                                                'reply_editor.advanced_settings'
+                                            )}
+                                        </a>{' '}
+                                        &nbsp;
+                                        {beneficiaries &&
+                                            beneficiaries.length > 0 && (
+                                                <span>
+                                                    ({tt(
+                                                        'reply_editor.beneficiaries_set',
+                                                        {
+                                                            count:
+                                                                beneficiaries.length,
+                                                        }
+                                                    )})
+                                                </span>
+                                            )}
+                                    </span>
+                                )}
                         </div>
                         <div className={vframe_section_shrink_class}>
                             {postError && (

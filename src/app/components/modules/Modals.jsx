@@ -15,6 +15,7 @@ import SignUp from 'app/components/modules/SignUp';
 import Powerdown from 'app/components/modules/Powerdown';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import TermsAgree from 'app/components/modules/TermsAgree';
+import PostAdvancedSettings from 'app/components/modules/PostAdvancedSettings';
 
 class Modals extends React.Component {
     static defaultProps = {
@@ -29,6 +30,7 @@ class Modals extends React.Component {
         show_transfer_modal: false,
         show_confirm_modal: false,
         show_login_modal: false,
+        show_post_advanced_settings_modal: false,
     };
     static propTypes = {
         show_login_modal: React.PropTypes.bool,
@@ -38,6 +40,7 @@ class Modals extends React.Component {
         show_bandwidth_error_modal: React.PropTypes.bool,
         show_signup_modal: React.PropTypes.bool,
         show_promote_post_modal: React.PropTypes.bool,
+        show_post_advanced_settings_modal: React.PropTypes.bool,
         hideLogin: React.PropTypes.func.isRequired,
         username: React.PropTypes.string,
         hideConfirm: React.PropTypes.func.isRequired,
@@ -46,6 +49,7 @@ class Modals extends React.Component {
         hidePowerdown: React.PropTypes.func.isRequired,
         hidePromotePost: React.PropTypes.func.isRequired,
         hideBandwidthError: React.PropTypes.func.isRequired,
+        hidePostAdvancedSettings: React.PropTypes.func.isRequired,
         notifications: React.PropTypes.object,
         show_terms_modal: React.PropTypes.bool,
         removeNotification: React.PropTypes.func,
@@ -64,6 +68,7 @@ class Modals extends React.Component {
             show_powerdown_modal,
             show_signup_modal,
             show_bandwidth_error_modal,
+            show_post_advanced_settings_modal,
             hideLogin,
             hideTransfer,
             hidePowerdown,
@@ -75,6 +80,7 @@ class Modals extends React.Component {
             hidePromotePost,
             show_promote_post_modal,
             hideBandwidthError,
+            hidePostAdvancedSettings,
             username,
         } = this.props;
 
@@ -162,6 +168,15 @@ class Modals extends React.Component {
                         </div>
                     </Reveal>
                 )}
+                {show_post_advanced_settings_modal && (
+                    <Reveal
+                        onHide={hidePostAdvancedSettings}
+                        show={show_post_advanced_settings_modal}
+                    >
+                        <CloseButton onClick={hidePostAdvancedSettings} />
+                        <PostAdvancedSettings />
+                    </Reveal>
+                )}
                 <NotificationStack
                     style={false}
                     notifications={notifications_array}
@@ -188,6 +203,9 @@ export default connect(
                 'errors',
                 'bandwidthError',
             ]),
+            show_post_advanced_settings_modal: state.user.get(
+                'show_post_advanced_settings_modal'
+            ),
         };
     },
     dispatch => ({
@@ -220,6 +238,10 @@ export default connect(
             dispatch(
                 transactionActions.dismissError({ key: 'bandwidthError' })
             );
+        },
+        hidePostAdvancedSettings: e => {
+            if (e) e.preventDefault();
+            dispatch(userActions.hidePostAdvancedSettings());
         },
         // example: addNotification: ({key, message}) => dispatch({type: 'ADD_NOTIFICATION', payload: {key, message}}),
         removeNotification: key =>

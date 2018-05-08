@@ -86,7 +86,7 @@ class App extends React.Component {
     }
 
     checkLeaveGolos = (e) => {
-      if (e.target.nodeName.toLowerCase() === 'a' && e.target.hostname !== window.location.hostname && e.target.hostname !== 'golos.blog') {
+      if (e.target.nodeName.toLowerCase() === 'a' && e.target.hostname && e.target.hostname !== window.location.hostname && e.target.hostname !== 'golos.blog') {
         e.stopPropagation();
         e.preventDefault();
         this.props.history.push(`/leave_page?${e.target.href}`)

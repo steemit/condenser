@@ -417,7 +417,7 @@
     "cryptography_test_failed":"Test criptografic eșuat",
     "unable_to_log_you_in":"Nu vom reuși să vă autentificăm în acest browser.",
     "the_latest_versions_of":"Ultimile versiuni ",
-    "are_well_tested_and_known_to_work_with":"bine testate și lucrează cu %(APP_URL)s.",
+    "are_well_tested_and_known_to_work_with":"bine testate și lucrează cu %(APP_DOMAIN)s.",
     "due_to_server_maintenance":"Din cauza lucrărilor de întreținere, serverul lucrează în mod de citire. Ne pare rău pentru neplăcerile create.",
     "login_to_vote":"Autentificați-vă pentru a vota",
     "login_to_post":"Autentificați-vă pentru a posta",

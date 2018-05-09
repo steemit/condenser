@@ -13,11 +13,11 @@
 
 **Написание постов**
 Для того чтобы создать пост нажмите на кнопку «Добавить пост» в верхнем правом углу экрана.
-Обратите внимание, что пост должен содержать: название, тэги (ключевые слова) и текст (более подробно о том, как вставить картинки / видео, см. раздел F.A.Q).
+Обратите внимание, что пост должен содержать: название, тэги (ключевые слова) и текст.
 
-**Тэги**
-Тэги это ключевые слова, по которым другие пользователи смогут найти Ваш пост.
-Вы можете добавить до 5 тэгов в один пост. Ставьте только те тэги, которые относятся к написанному Вами материалу. 
+**Теги**
+Теги это ключевые слова, по которым другие пользователи смогут найти Ваш пост.
+Вы можете добавить до 5 тегов в один пост. Ставьте только те теги, которые относятся к написанному Вами материалу. 
 
 **Подписки / лента**
 Для того чтобы подписаться на автора, нажмите на кнопку «подписаться». 
@@ -34,11 +34,10 @@
 Кураторы – это люди которые «голосуют» за контент других авторов. Курирование вознаграждается до 25% от общего вознаграждения за пост.
 
 **Выплаты**
-Существуют 2 окна выплат. Первое от 24 – 48 часов, второе 30 дней. 
-В первом окне автор делится с кураторами вознаграждением в соотношении примерно 75/25. Во втором окне автор получает все вознаграждение.
-Автору поста, вознаграждение выплачивается 50/50 в СГ (Силе Голоса) и Золотых. Куратору в СГ.
+Существует семидневное окно выплат. Автор делится с кураторами вознаграждением в соотношении примерно 75/25. 
+Автору поста, вознаграждение выплачивается 50/50 в СГ (Силе Голоса) и Золотых. Куратору — только в СГ.
 Автор также может отказаться от вознаграждения выбрав соответствующую опцию при написании поста.
-Также, автор может выбрать опцию получить вознаграждение 100% в СГ (по умолчанию выбор стоит 50/50). 
+Также, автор может выбрать опцию получить вознаграждение 100% в СГ (по умолчанию выбор стоит 50/50).
 
 **Верхнее меню «лента»**
 Лента – Материал тех авторов, на которых вы подписаны
@@ -61,9 +60,6 @@
 Флаг - это выражение отрицательного отзыва к опубликованному Вами материалу или комментарию другого пользователя. 
 Ставя флаг другому участнику платформы Вы можете повлиять на потенциальное вознаграждение автора материала. Флаг может уменьшить Вашу репутацию если он поставлен участником с более высокой репутацией. 
 
-**Вывод Золотых / Голоса**
-Более подробную информацию можно найти в разделе F.A.Q.
-
 **Плагиат**
 Плагиат - это воровство чужого контента, такого как текст, фото, видео, музыка, рисунки, стихи и т.д.
 Сообщество Голос высоко ценит оригинальный контент. Используя чужой материал, Вы рискуете получить от сообщества негативную реакцию (и флаги). 
@@ -82,11 +78,10 @@
     •   [Бумага о Голосе](https://golos.io/ru--golos/@golos/golos-russkoyazychnaya-socialno-mediinaya-blokchein-platforma)
     •   [Бумага про Стим](https://steemit.com/ru/@hipster/bumaga-pro-stim-chast-1)
     •   [Голос: общественное медиа как база для социальной активности](https://golos.io/ru--golos/@marina/golos-obshestvennoe-media-kak-baza-dlya-socialnoi-aktivnosti)
-    •   [План развития блокчейн Голос и клиента Golos.io](https://docs.google.com/document/d/1WQF1xxmCMxzEA95Gnxw4FHViX_6pjVoUlBnItCepOmE/edit)
     •   [Делегаты и их роль на платформе Голос](https://golos.io/ru--golos/@on0tole/delegaty-i-ikh-rol-na-platforme-golos)
     •   [Официальная Вики проекта Голос](https://wiki.golos.io/)
     •   [Официальный репозиторий на GitHub](https://github.com/GolosChain)
-    •   [Отчёты о проделанной работе команды Голоса](https://golos.io/@golos)
+    •   [Отчёты о проделанной работе команды Голоса](https://golos.io/@golosio)
 
 **Публикация и оформление постов в Голосе**
     •   [Как создать пост на платформе Голос?](https://golos.io/ru--knigagolos/@aleksandraz/kniga-pro-golos-kak-sozdat-post-na-platforme-golos)
@@ -100,7 +95,6 @@
 **Биржи для торговли токенами Голоса**
     •   Bittrex: [GOLOS](https://www.bittrex.com/Market/Index?MarketName=BTC-GOLOS)
     •   Livecoin: [GOLOS](https://www.livecoin.net/)
-    •   Liqui: [GOLOS](https://liqui.io/#/exchange/GOLOS_BTC) и [GBG](https://liqui.io/#/exchange/GBG_BTC)
     •   Kuna: [GOLOS](https://kuna.io/?market=golbtc)
     •   [Внутренний рынок](https://golos.io/market) - обмен GBG на GOLOS и наоборот
     •   [Как вывести из Голоса выплаты?](https://golos.io/ru--golos/@qqc/kak-vyvesti-iz-golosa-vyplaty-sovety-ot-qqc)
@@ -113,10 +107,6 @@
     •   [Кураторство на Голосе. Как это работает?](https://golos.io/ru--golos/@haster100/kuratorstvo-na-golose-kak-eto-rabotaet-sait-golos-steemstats-com)
     •   [Что такое репутация на Голосе и как она работает?](https://golos.io/ru--golos/@arcange/chto-takoe-reputaciya-na-golose-i-kak-ona-rabotaet)
 
-**Новая экономика Голоса после 16 хадфорка**
-    •   [Новая Экономическая Модель ГОЛОСа: перевод поста @hipster на язык простых смертных:)](https://golos.io/ru--golos/@natasha/novaya-ekonomicheskaya-model-golosa-perevod-posta-hipster-na-yazyk-prostykh-smertnykh)
-    •   [Новая экономика Голоса в простых цифрах: что ждёт авторов, инвесторов и делегатов?](https://golos.io/ru--golos/@primus/novaya-ekonomika-golosa-v-prostykh-cifrakh-chto-zhdyot-avtorov-investorov-i-delegatov)
-
 **Промо-материалы: баннеры, картинки, креатив про Голос**
     •   [Комплекты баннеров для рекламы Голоса на ваших сайтах и в социальных сетях](https://golos.io/ru--golos/@primus/komplekty-1-i-2-bannerov-dlya-reklamy-golosa-na-vashikh-saitakh-i-v-socialnykh-setyakh)
     •   Принты для футболок: [1](https://golos.io/ru--golos/@konti/printy-dlya-futbolok-or-golos) 
@@ -127,7 +117,6 @@
     •   Канал [Вечер с Голосом](https://www.youtube.com/channel/UCL_XlALJ-2cERfY8m6s8uEA) - регулярный прямой эфир с разработчиками, делегатами и пользователями Голоса. Вещаение с понедельника по четверг в 20:00 по Москве
     •   [Голос токены, Сила Голоса и Золотые Голоса - как с ними работать и как зарабатывать в Голосе](https://www.youtube.com/watch?v=PxpXHVA1OYA)
     •   [Интервью у Валерия Литвина, блокчейн-разработчика CyberFund и сооснователя соц.сети Golos](https://www.youtube.com/watch?v=oGXHAH68dXg)
-    •   [ICO/Краудсейл "Голоса": оценка стоимости, перспективы курса токенов и этапы инвестирования](https://www.youtube.com/watch?v=k1O-53a8VXA)
 
 **Полезные сайты**
     •   Блок эксплореры Голоса: [golosd.com](http://golosd.com/) и [golosdb.com](https://golosdb.com/)
@@ -146,12 +135,9 @@
 **Альтернативные web-клиенты блокчейна Голос**
     •   [Mapala.net](http://mapala.net/) - портал для самостоятельных путешественников
     •   [Steepshot](https://steepshot.io) - инстаграм на блокчейне Голос
-    •   [Анонс siski.io](https://golos.io/siski/@siski/10-faktov-o-siski-io-kotorye-vy-khoteli-znat-no-boyalis-sprosit)
 
 **Альтернативные каналы общения пользователей Голоса**
-    •   [Официальный чат](https://chat.golos.io/home)
-    •   [Канал Telegram(https://t.me/golos_io)
-    •   [Голосовой чат на Discord](https://discordapp.com/login)
+    •   [Канал Telegram](https://t.me/golos_support)
     •   [Голос во Вконтакте](https://vk.com/goloschain)
     •   [Голос в ФБ](https://www.facebook.com/www.golos.io)
     •   [Голос в Инстаграм](https://www.instagram.com/golos_io/)
@@ -160,14 +146,6 @@
     •   [Голос в Твитере](https://twitter.com/@goloschain)
     •   [Голос на форуме Bitcointalk.org](https://bitcointalk.org/index.php?topic=1624364.0)
     •   [Голос на форуме Bitcoinfo.ru](http://forum.bitcoinfo.ru/viewtopic.php?f=13&t=26742)
-
-**Полезная статистика**
-    •   [Результаты ICO: кто и сколько купил Голосов](http://www.steeme.ru/gf.html)
-    •   [Статистика эффективности работы кураторов в Голосе](https://golos.io/ru--statistika/@primus/2017-01-30-2017-02-05-statistika-kto-samyi-effektivnyi-kurator-v-golose)
-    •   [Ежедневная статистика по новым пользователям, постам и комментариям](https://golos.io/@arcange/)
-    •   [Распределение токенов GOLOS и объем торгов](https://golos.io/@ukrainian)
-    •   [Сравнительная статистика 100 первых дней Голоса и Steem](https://golos.io/ru--golos/@ontofractal/sravnitelnaya-statistika-100-pervykh-dnei-golosa-i-steem)
-    •   [Статистика активности делегатов за неделю](https://golos.io/@sancho.malyutin)
 
 **Майнерам и делегатам**
     •   [Настройка нод майнера и делегата для работы в Голосе: рабочие конфиги и пояснения по установке](https://golos.io/ru--golos/@primus/nastroika-nod-mainera-i-delegata-dlya-raboty-v-golose-rabochie-konfigi-i-poyasneniya-po-ustanovke)

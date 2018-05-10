@@ -10,5 +10,4 @@ export default `
 /ru--golos/@palapalaruxaker/kak-ne-platit-nalogi-i-spat-spokoino
 /aleksandr1/4exgg6-ya-vam-govoryu-bez-paniki-vse-budet-khorosho-google-oficialno-zapretit-reklamu-kriptovalyut-i-ico-v-iyune
 /ru--apvot50-50/@vp-cosmos/ochistka-veshestv-metodom-perekristallizacii-svoimi-rukami
-/forklog/@forklog/who-is-mr-bruman-kak-krendelnyi-bankrot-zapuskaet-ico-na-usd40-mln
 `.trim().split("\n")

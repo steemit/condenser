@@ -119,17 +119,19 @@ class ReplyEditor extends React.Component {
         if (process.env.BROWSER) {
             const ts = this.state;
             const ns = nextState;
+            const tp = this.props;
+            const np = nextProps;
 
             // Save curent draft to localStorage
             if (
                 ts.body.value !== ns.body.value ||
                 (ns.category && ts.category.value !== ns.category.value) ||
                 (ns.title && ts.title.value !== ns.title.value) ||
-                ns.beneficiaries !== ts.beneficiaries
+                np.beneficiaries !== tp.beneficiaries
             ) {
                 // also prevents saving after parent deletes this information
-                const { formId } = nextProps;
-                const { category, title, body, beneficiaries } = ns;
+                const { formId, beneficiaries } = nextProps;
+                const { category, title, body } = ns;
                 const data = {
                     formId,
                     title: title ? title.value : undefined,

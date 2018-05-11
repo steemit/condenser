@@ -685,6 +685,8 @@ export default formId => connect(
             let allCategories = Set([...formCategories.toJS(), ...rtags.hashtags])
             if(/^[-a-z\d]+$/.test(rootCategory)) allCategories = allCategories.add(rootCategory)
 
+            if (allCategories.has('stihi-io')) allCategories = allCategories.delete('stihi-io')
+
             // merge
             const meta = isEdit ? jsonMetadata : {}
             if(allCategories.size) meta.tags = allCategories.toJS(); else delete meta.tags
@@ -711,7 +713,7 @@ export default formId => connect(
                 errorCallback(`You have ${meta.tags.length} tags total${includingCategory}.  Please use only 5 in your post and category line.`)
                 return
             }
-
+            debugger
             startLoadingIndicator()
 
             const originalBody = isEdit ? originalPost.body : null
@@ -760,7 +762,7 @@ export default formId => connect(
                     if (res.iso6391code) {
                       data.operation.json_metadata.language = res.iso6391code
                     }
-                    dispatch(transaction.actions.broadcastOperation(data))
+                    //dispatch(transaction.actions.broadcastOperation(data))
                   }
               }).catch(error => {
                   console.error('Caught determine language code server error', error);

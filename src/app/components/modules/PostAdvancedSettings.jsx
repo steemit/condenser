@@ -9,6 +9,10 @@ import { validateBeneficiaries } from 'app/components/cards/BeneficiarySelector'
 import * as userActions from 'app/redux/UserReducer';
 
 class PostAdvancedSettings extends Component {
+    static propTypes = {
+        formId: React.PropTypes.string.isRequired,
+    };
+
     constructor(props) {
         super();
         this.state = {};
@@ -35,6 +39,7 @@ class PostAdvancedSettings extends Component {
     }
 
     render() {
+        const { formId } = this.props;
         const { beneficiaries } = this.state;
         const { submitting, valid, handleSubmit } = this.state.advancedSettings;
 
@@ -47,7 +52,7 @@ class PostAdvancedSettings extends Component {
                         true
                     );
                     if (!err) {
-                        this.props.setBeneficiaries(data.beneficiaries);
+                        this.props.setBeneficiaries(formId, data.beneficiaries);
                         this.props.hideAdvancedSettings();
                     } else {
                         const newBeneficiaries = {
@@ -103,9 +108,16 @@ import { connect } from 'react-redux';
 export default connect(
     // mapStateToProps
     (state, ownProps) => {
+        const formId = ownProps.formId;
         const fields = ['beneficiaries'];
         const username = state.user.getIn(['current', 'username']);
-        const beneficiaries = state.user.get('post_beneficiaries').toJS();
+        let beneficiaries = state.user.getIn([
+            'current',
+            'post',
+            formId,
+            'beneficiaries',
+        ]);
+        beneficiaries = beneficiaries ? beneficiaries.toJS() : [];
         return {
             ...ownProps,
             fields,
@@ -118,10 +130,10 @@ export default connect(
     dispatch => ({
         hideAdvancedSettings: () =>
             dispatch(userActions.hidePostAdvancedSettings()),
-        setBeneficiaries: beneficiaries =>
+        setBeneficiaries: (formId, beneficiaries) =>
             dispatch(
                 userActions.set({
-                    key: 'post_beneficiaries',
+                    key: ['current', 'post', formId, 'beneficiaries'],
                     value: fromJS(beneficiaries),
                 })
             ),

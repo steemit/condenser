@@ -30,7 +30,7 @@ class Modals extends React.Component {
         show_transfer_modal: false,
         show_confirm_modal: false,
         show_login_modal: false,
-        show_post_advanced_settings_modal: false,
+        show_post_advanced_settings_modal: '',
     };
     static propTypes = {
         show_login_modal: React.PropTypes.bool,
@@ -40,7 +40,7 @@ class Modals extends React.Component {
         show_bandwidth_error_modal: React.PropTypes.bool,
         show_signup_modal: React.PropTypes.bool,
         show_promote_post_modal: React.PropTypes.bool,
-        show_post_advanced_settings_modal: React.PropTypes.bool,
+        show_post_advanced_settings_modal: React.PropTypes.string,
         hideLogin: React.PropTypes.func.isRequired,
         username: React.PropTypes.string,
         hideConfirm: React.PropTypes.func.isRequired,
@@ -174,7 +174,9 @@ class Modals extends React.Component {
                         show={show_post_advanced_settings_modal}
                     >
                         <CloseButton onClick={hidePostAdvancedSettings} />
-                        <PostAdvancedSettings />
+                        <PostAdvancedSettings
+                            formId={show_post_advanced_settings_modal}
+                        />
                     </Reveal>
                 )}
                 <NotificationStack

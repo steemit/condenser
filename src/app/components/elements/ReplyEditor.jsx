@@ -85,7 +85,7 @@ class ReplyEditor extends React.Component {
                 if (category) category.props.onChange(draft.category);
                 if (title) title.props.onChange(draft.title);
                 if (draft.beneficiaries)
-                    this.props.setBeneficiaries(draft.beneficiaries);
+                    this.props.setBeneficiaries(formId, draft.beneficiaries);
                 raw = draft.body;
             }
 
@@ -205,7 +205,7 @@ class ReplyEditor extends React.Component {
 
     onCancel = e => {
         if (e) e.preventDefault();
-        const { onCancel } = this.props;
+        const { formId, onCancel } = this.props;
         const { replyForm, body } = this.state;
         if (
             !body.value ||
@@ -216,7 +216,7 @@ class ReplyEditor extends React.Component {
                 rte_value: stateFromHtml(this.props.richTextEditor),
             });
             this.setState({ progress: {} });
-            this.props.setBeneficiaries([]);
+            this.props.setBeneficiaries(formId, []);
             if (onCancel) onCancel(e);
         }
     };
@@ -250,7 +250,7 @@ class ReplyEditor extends React.Component {
 
     showAdvancedSettings = e => {
         e.preventDefault();
-        this.props.showAdvancedSettings();
+        this.props.showAdvancedSettings(this.props.formId);
     };
 
     onPayoutTypeChange = e => {
@@ -358,6 +358,7 @@ class ReplyEditor extends React.Component {
         };
         const successCallbackWrapper = (...args) => {
             this.setState({ loading: false });
+            this.props.setBeneficiaries(formId, []);
             if (successCallback) successCallback(args);
         };
         const isEdit = type === 'edit';
@@ -802,7 +803,13 @@ export default formId =>
                 '50%'
             );
 
-            const beneficiaries = state.user.get('post_beneficiaries').toJS();
+            let beneficiaries = state.user.getIn([
+                'current',
+                'post',
+                formId,
+                'beneficiaries',
+            ]);
+            beneficiaries = beneficiaries ? beneficiaries.toJS() : [];
 
             const ret = {
                 ...ownProps,
@@ -834,12 +841,12 @@ export default formId =>
             },
             uploadImage: (file, progress) =>
                 dispatch(userActions.uploadImage({ file, progress })),
-            showAdvancedSettings: () =>
-                dispatch(userActions.showPostAdvancedSettings()),
-            setBeneficiaries: beneficiaries =>
+            showAdvancedSettings: formId =>
+                dispatch(userActions.showPostAdvancedSettings({ formId })),
+            setBeneficiaries: (formId, beneficiaries) =>
                 dispatch(
                     userActions.set({
-                        key: 'post_beneficiaries',
+                        key: ['current', 'post', formId, 'beneficiaries'],
                         value: fromJS(beneficiaries),
                     })
                 ),

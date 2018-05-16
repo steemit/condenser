@@ -6,8 +6,9 @@ import {connect} from 'react-redux'
 import g from 'app/redux/GlobalReducer';
 import { getSymbolFromCurrency } from 'currency-symbol-map';
 import { FRACTION_DIGITS, DEFAULT_CURRENCY, DEBT_TOKEN_SHORT, FRACTION_DIGITS_MARKET } from 'app/client_config';
+// import { shortInt } from 'app/utils/FormatNumbers'
 import cookie from "react-cookie";
-import {Map} from 'immutable';
+import { Map } from 'immutable';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 
 
@@ -124,9 +125,8 @@ class LocalizedCurrency extends React.Component {
           maximumFractionDigits: nRounding
         })
       }
-      
+
       // if noSymbol is specified return only amount of digits
-       
       return  (options ? (options.noSymbol ? options.noSymbol : noSymbol) : noSymbol)
         ? currencyAmount
         : (lang == 'en') ? (symbol + ' ' + currencyAmount) : (currencyAmount + ' ' + symbol)

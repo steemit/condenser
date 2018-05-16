@@ -224,7 +224,7 @@ class Header extends React.Component {
                         </div>
                     </div>
                 </div>
-                <div className={'Header__sub-nav show-for-medium' + (this.state.subheader_hidden ? ' hidden' : '')}>
+                <div className={'Header__sub-nav show-for-medium hide-for-small ' + (this.state.subheader_hidden ? ' hidden' : '')}>
                     <div className="row">
                         <div className="columns">
                             <HorizontalMenu items={sort_order_menu_horizontal} >

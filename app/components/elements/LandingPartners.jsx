@@ -49,7 +49,6 @@ export default class LandingPress extends React.Component {
 						</a>
 					</div>
 				</div>
-				<hr />
 			</section>
 		)
 	}

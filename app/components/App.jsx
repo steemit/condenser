@@ -1,13 +1,12 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import AppPropTypes from '@utils/AppPropTypes';
-import Header from '@modules/Header';
-import LpFooter from '@modules/lp/LpFooter';
+import AppPropTypes from 'app/utils/AppPropTypes';
+import Header from 'app/components/modules/Header';
+import Footer from 'app/components/modules/Footer';
 import user from 'app/redux/User';
 import g from 'app/redux/GlobalReducer';
 import TopRightMenu from '@modules/TopRightMenu';
 import { browserHistory, Link } from 'react-router';
-import SidePanel from '@modules/SidePanel';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import Dialogs from '@modules/Dialogs';
 import Modals from '@modules/Modals';
@@ -27,12 +26,10 @@ class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            open: null,
             showCallout: true,
             showBanner: true,
             expandCallout: false
         };
-        this.toggleOffCanvasMenu = this.toggleOffCanvasMenu.bind(this);
         this.checkLogin = this.checkLogin.bind(this);
         // this.shouldComponentUpdate = shouldComponentUpdate(this, 'App')
     }
@@ -103,7 +100,6 @@ class App extends React.Component {
 
     navigate = (e) => {
         const a = e.target.nodeName.toLowerCase() === 'a' ? e.target : e.target.parentNode;
-        // this.setState({open: null});
         if (a.host !== window.location.host) return;
         e.preventDefault();
         browserHistory.push(a.pathname + a.search + a.hash);
@@ -230,98 +226,22 @@ class App extends React.Component {
             );
         }
 
-        return <div className={'App' + currentTheme + (lp ? ' LP' : '') + (ip ? ' index-page' : '') + (miniHeader ? ' mini-header' : '')}
-                    onMouseMove={this.onEntropyEvent}>
-            <SidePanel ref="side_panel" alignment="right">
-                <TopRightMenu vertical navigate={this.navigate} />
-                <ul className="vertical menu">
-                  <li>
-                      <a href="/submit.html?type=submit_feedback" target="blank" onClick={this.navigate}>
-                          {tt('navigation.feedback')}
-                      </a>
-                  </li>
-                  <li>
-                      <a href={getURL('WIKI_URL')} target="blank" onClick={this.navigate}>
-                            {tt('navigation.wiki')}
-                      </a>
-                  </li>
-                  <li>
-                      <a href="/welcome" onClick={this.navigate}>
-                          {tt("navigation.welcome")}
-                      </a>
-                  </li>
-                  <li>
-                      <a href="/tags/hot" onClick={this.navigate}>
-                          {tt("navigation.payouts_by_tag")}
-                      </a>
-                  </li>
-                  <li>
-                      <a href={getURL('WHITEPAPER_URL')} onClick={this.navigate}>
-                          {tt("navigation.APP_NAME_whitepaper", {APP_NAME})}
-                      </a>
-                  </li>
-                  <li>
-                      <a href="/market" onClick={this.navigate}>
-                          {tt("navigation.currency_market")}
-                      </a>
-                  </li>
-                  <li>
-                      <a href="/recover_account_step_1" onClick={this.navigate}>
-                          {tt("navigation.stolen_account_recovery")}
-                      </a>
-                  </li>
-                  <li>
-                      <a href="/change_password" onClick={this.navigate}>
-                          {tt("navigation.change_account_password")}
-                      </a>
-                  </li>
-                  <li>
-                      <a href="https://chat.golos.io" target="_blank">
-                          {tt("navigation.APP_NAME_chat", {APP_NAME})}&nbsp;<Icon name="extlink" />
-                      </a>
-                  </li>
-                  <li>
-                      <a href="http://golostools.com/" onClick={this.navigate} target="_blank" rel="noopener noreferrer">
-                          {tt('navigation.APP_NAME_app_center', {APP_NAME})}&nbsp;<Icon name="extlink" />
-                      </a>
-                  </li>
-                  <li className="last">
-                      <a href="/~witnesses" onClick={this.navigate}>
-                            {tt("navigation.witnesses")}
-                      </a>
-                  </li>
-                </ul>
-                <ul className="vertical menu">
-                    <li>
-                      <a href={getURL('SALE_AGREEMENT_URL')} onClick={this.navigate} rel="nofollow">
-                            {tt("navigation.sale_agreement")}
-                        </a>
-                    </li>
-                    <li>
-                      <a href={getURL('TERMS_OF_SERVICE_URL')} target="_blank" rel="nofollow">
-                            {tt("navigation.terms_of_service")}
-                        </a>
-                    </li>
-                    <li>
-                      <a href={getURL('PRIVACY_POLICY_URL')} target="_blank" rel="nofollow">
-                            {tt("navigation.privacy_policy")}
-                        </a>
-                    </li>
-                </ul>
-            </SidePanel>
-            {miniHeader ? <MiniHeader /> : <Header toggleOffCanvasMenu={this.toggleOffCanvasMenu} menuOpen={this.state.open} />}
-            <div className="App__content">
-                {welcome_screen}
-                {callout}
-                {children}
-                {lp ? <LpFooter /> : null}
-                <ScrollButton />
-                <MobileAppButton />
+        return (
+            <div className={'App' + currentTheme + (lp ? ' LP' : '') + (ip ? ' index-page' : '') + (miniHeader ? ' mini-' : '')}
+                onMouseMove={this.onEntropyEvent}>
+                {miniHeader ? <MiniHeader /> : <Header />}
+                <div className="App__content">
+                    {welcome_screen}
+                    {callout}
+                    {children}
+                    <Footer />
+                    <ScrollButton />
+                </div>
+                <Dialogs />
+                <Modals />
+                <PageViewsCounter />
             </div>
-            <Dialogs />
-            <Modals />
-            <PageViewsCounter />
-        </div>
+        )
     }
 }
 

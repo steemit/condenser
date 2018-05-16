@@ -1,7 +1,3 @@
-.menu > li > a {
-  line-height: 1.5rem;
-}
-
 .tooltip {
   margin-top: -1rem;
 }
@@ -9,9 +5,12 @@
 .dropdown-pane {
   width: auto;
   padding: 0;
-  box-shadow: 1px 1px 5px 0px rgba(50, 50, 50, 0.75);
   z-index: 1000;
   font-size: inherit;
+  border: none;
+  border-radius: 6px;
+  background-color: #FFFFFF;
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,0.15), 0 2px 12px 0 rgba(0,0,0,0.15);
 }
 
 
@@ -29,4 +28,9 @@ input[type=submit].disabled, input[type=submit].disabled:focus {
 
 button, .button {
   text-transform: uppercase;
+}
+
+.button {
+  text-align: center;
+  font-weight: bold;
 }

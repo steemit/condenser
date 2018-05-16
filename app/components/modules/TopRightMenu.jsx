@@ -66,14 +66,17 @@ const calculateEstimateOutput = ({a, p, sw, g}) => {
 }
 
 function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops, username, showLogin, logout, loggedIn, vertical, navigate, probablyLoggedIn, location, locationQueryParams}) {
+    const APP_NAME = tt('g.APP_NAME');
+    
     const mcn = 'menu' + (vertical ? ' vertical show-for-small-only' : '');
     const mcl = vertical ? '' : ' sub-menu';
     const lcn = vertical ? '' : 'show-for-medium';
+    const scn = vertical ? '' : 'show-for-medium';
     const nav = navigate || defaultNavigate;
     const submitStory = <li className={lcn + ' submit-story'}>
       <a href="/submit.html" onClick={nav} className={'button small alert'}>{tt('g.submit_a_story')}</a>
     </li>;
-    const submitStoryPencil = <li className="show-for-small-only">
+    const submitStoryPencil = <li className="hide-for-large">
       <Link to="/submit.html"><Icon name="pencil" /></Link>
     </li>;
     const feedLink = `/@${username}/feed`;
@@ -85,7 +88,7 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
     const reset_password_link = `/@${username}/password`;
 
     const inIco = location && location.pathname.indexOf("/about") == 0;
-    const searchItem = <li className={lcn}>
+    const searchItem = <li className={scn}>
         <a href="/static/search.html" title={tt('g.search')}>
           {vertical ? <span>{tt('g.search')}</span> : <Icon name="search" size="1_5x" />}
         </a>
@@ -107,11 +110,29 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
       </li>
     ;
 
+    const additional_menu = [
+        { link: '/welcome', value: tt("navigation.welcome") },
+        { link: getURL('WIKI_URL'), value: tt('navigation.wiki') },
+        { link: '/market', value: tt('userwallet_jsx.market') },
+        { link: '/~witnesses', value: tt("navigation.witnesses") },
+        { link: 'http://golostools.com/', value: tt('navigation.APP_NAME_app_center', { APP_NAME }) }
+    ];
+    const navAdditional = <LinkWithDropdown
+        closeOnClickOutside
+        dropdownPosition="bottom"
+        dropdownAlignment="right"
+        dropdownContent={<VerticalMenu className={'VerticalMenu_nav-additional'} items={additional_menu} />}
+    >
+        {!vertical && <li>
+            <a href="#" onClick={e => e.preventDefault()}>
+                <Icon name="new/more" />
+            </a>
+        </li>}
+    </LinkWithDropdown>;
+
     const estimateOutput = <LocalizedCurrency amount={calculateEstimateOutput({a:account, p: price_per_golos, sw: savings_withdraws, g: globalprops})} />;
 
     if (loggedIn) { // change back to if(username) after bug fix:  Clicking on Login does not cause drop-down to close #TEMP!
-        const APP_NAME = tt('g.APP_NAME');
-
         const user_menu = [
             {link: feedLink, icon: 'new/home', iconSize: '1_25x', value: tt('g.feed'), addon: <NotifiCounter fields="feed" />},
             {link: accountLink, icon: 'new/blogging', value: tt('g.blog')},
@@ -125,23 +146,15 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
                 {link: '#', onClick: showLogin, value: tt('g.login')}
         ];
 
-        const additional_menu = [
-            {link: '/welcome', value: tt("navigation.welcome")},
-            {link: getURL('WIKI_URL'), value: tt('navigation.wiki')},
-            {link: '/market', value: tt('userwallet_jsx.market')},
-            {link: '/~witnesses', value: tt("navigation.witnesses")},
-            {link: 'http://golostools.com/', value: tt('navigation.APP_NAME_app_center', {APP_NAME})}
-        ];
-
         const voting_power_percent = account.get('voting_power') / 100
 
         return (
             <ul className={mcn + mcl}>
                 {!inIco && searchItem}
-                {!inIco && <li className="delim show-for-medium" />}
+                {!inIco && <li className="delim show-for-large" />}
                 {!inIco && submitStory}
                 {!inIco && !vertical && submitStoryPencil}
-                {!inIco && <li className="delim show-for-medium" />}
+                {!inIco && <li className="delim show-for-large" />}
                 <LinkWithDropdown
                     closeOnClickOutside
                     dropdownPosition="bottom"
@@ -164,22 +177,11 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
                         <div className="TopRightMenu__notificounter"><NotifiCounter fields="total" /></div>
                     </li>}
                 </LinkWithDropdown>
-                {/* {!inIco && <li className="delim show-for-medium" />}
+                {!inIco && <li className="delim show-for-medium" />}
                 {!inIco && notificationItem}
                 {!inIco && <li className="delim show-for-medium" />}
-                {!inIco && messengerItem} */}
-                <LinkWithDropdown
-                    closeOnClickOutside
-                    dropdownPosition="bottom"
-                    dropdownAlignment="right"
-                    dropdownContent={<VerticalMenu className={'VerticalMenu_nav-additional'} items={additional_menu} />}
-                >
-                    {!vertical && <li>
-                        <a href="#" onClick={e => e.preventDefault()}>
-                            <Icon name="new/more" />
-                        </a>
-                    </li>}
-                </LinkWithDropdown>
+                {!inIco && messengerItem}
+                {!inIco && navAdditional}
             </ul>
         );
     }
@@ -203,7 +205,7 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
             {!inIco && searchItem}
             <li className="delim show-for-medium" />
             {!inIco && !probablyLoggedIn && !externalTransfer && <li className={lcn}>
-              <a href="/login.html" onClick={showLogin} className={!vertical && 'button small login hollow'}>{tt('g.login')}</a>
+              <a href="/login.html" onClick={showLogin} className={!vertical && 'button small violet hollow'}>{tt('g.login')}</a>
             </li>}
             {!inIco && !probablyLoggedIn && <li className={lcn}>
               <a href="/create_account" className={!vertical && 'button small alert'}>{tt('g.sign_up')}</a>
@@ -211,6 +213,7 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
             {probablyLoggedIn && <li className={lcn}>
               <LoadingIndicator type="circle" inline />
             </li>}
+            {!inIco && navAdditional}
         </ul>
     );
 }

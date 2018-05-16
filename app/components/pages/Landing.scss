@@ -17,6 +17,9 @@
 	h2 {
 		font-weight: bold;
 		margin-top: 3rem;
+		a {
+			color: inherit!important;
+		}
 	}
 	hr {
 		margin: 0;
@@ -28,10 +31,25 @@
 		text-transform: none;
 		font-weight: bold;
 	}
+	.btn_block {
+		.button {
+			margin-right: 30px;
+			&:last-child {
+				margin-right: 0;
+			}
+		}
+	}
 	.button-blue { background-color: $mainly-blue; }
 	.Landing__supporting-text { color: #a8a8a8; }
 	@media #{$small-only} {
 		h2 { font-size: 2.38095rem; }
+		.btn_block {
+			display: flex;
+			flex-direction: column;
+			.button {
+				margin-right: 0;
+			}
+		}
 	}
 }
 
@@ -396,10 +414,18 @@
 	.Team__member__anton .Team__member__img {
 		top: 67%;
 	}
+	h3 {
+		> a {
+			margin-left: 10px;
+		}
+	}
 	@media #{$small-only} {
 		.Team__members__image-wrapper {
 			width: 150px;
 			height: 150px;
+		}
+		h3 {
+			text-align: center;
 		}
 		// .Team__member__misha {
 		// 	flex: 100%;

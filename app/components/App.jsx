@@ -1,26 +1,27 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import AppPropTypes from 'app/utils/AppPropTypes';
-import Header from 'app/components/modules/Header';
-import LpFooter from 'app/components/modules/lp/LpFooter';
+import AppPropTypes from '@utils/AppPropTypes';
+import Header from '@modules/Header';
+import LpFooter from '@modules/lp/LpFooter';
 import user from 'app/redux/User';
 import g from 'app/redux/GlobalReducer';
-import TopRightMenu from 'app/components/modules/TopRightMenu';
+import TopRightMenu from '@modules/TopRightMenu';
 import { browserHistory, Link } from 'react-router';
-import SidePanel from 'app/components/modules/SidePanel';
+import SidePanel from '@modules/SidePanel';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
-import Dialogs from 'app/components/modules/Dialogs';
-import Modals from 'app/components/modules/Modals';
-import Icon from 'app/components/elements/Icon';
-import ScrollButton from 'app/components/elements/ScrollButton';
+import Dialogs from '@modules/Dialogs';
+import Modals from '@modules/Modals';
+import Icon from '@elements/Icon';
+import ScrollButton from '@elements/ScrollButton';
+import MobileAppButton from '@elements/MobileAppButton';
 import {key_utils} from 'golos-js/lib/auth/ecc';
-import MiniHeader from 'app/components/modules/MiniHeader';
+import MiniHeader from '@modules/MiniHeader';
 import tt from 'counterpart';
-import PageViewsCounter from 'app/components/elements/PageViewsCounter';
-import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
+import PageViewsCounter from '@elements/PageViewsCounter';
+import {serverApiRecordEvent} from '@utils/ServerApiClient';
 import {APP_ICON, VEST_TICKER, WIKI_URL, LANDING_PAGE_URL, ABOUT_PAGE_URL, WHITEPAPER_URL, TERMS_OF_SERVICE_URL, PRIVACY_POLICY_URL, THEMES, DEFAULT_THEME } from 'app/client_config';
-import LocalizedCurrency from 'app/components/elements/LocalizedCurrency';
-import { getURL } from 'app/utils/URLConstants'
+import LocalizedCurrency from '@elements/LocalizedCurrency';
+import { getURL } from '@utils/URLConstants'
 
 class App extends React.Component {
     constructor(props) {
@@ -46,11 +47,17 @@ class App extends React.Component {
 
     componentDidMount() {
         window.addEventListener('storage', this.checkLogin);
+        if (process.env.BROWSER) {
+            window.addEventListener('click', this.checkLeaveGolos.bind(this))
+        }
         // setTimeout(() => this.setState({showCallout: false}), 15000);
     }
 
     componentWillUnmount() {
         window.removeEventListener('storage', this.checkLogin);
+        if (process.env.BROWSER) {
+            window.removeEventListener('click', this.checkLeaveGolos)
+        }
     }
 
     componentDidUpdate(nextProps) {
@@ -75,6 +82,14 @@ class App extends React.Component {
           this.props.logoutUser();
         else if (! event.oldValue || event.oldValue !== event.newValue)
           this.props.loginUser();
+      }
+    }
+
+    checkLeaveGolos = (e) => {
+      if (e.target.nodeName.toLowerCase() === 'a' && e.target.hostname && e.target.hostname !== window.location.hostname && e.target.hostname !== 'golos.blog') {
+        e.stopPropagation();
+        e.preventDefault();
+        this.props.history.push(`/leave_page?${e.target.href}`)
       }
     }
 
@@ -120,9 +135,9 @@ class App extends React.Component {
                 return true
             } else {
                 const value = JSON.parse(localStorage.getItem('infobox'))
-                return value.show                
+                return value.show
             }
-        } 
+        }
         return false
     }
 
@@ -186,7 +201,7 @@ class App extends React.Component {
                 </div>
             </div>;
 }
-        
+
         let welcome_screen = null;
         if (ip && new_visitor && this.state.showBanner) {
             welcome_screen = (
@@ -301,6 +316,7 @@ class App extends React.Component {
                 {children}
                 {lp ? <LpFooter /> : null}
                 <ScrollButton />
+                <MobileAppButton />
             </div>
             <Dialogs />
             <Modals />

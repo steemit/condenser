@@ -70,13 +70,13 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
     
     const mcn = 'menu' + (vertical ? ' vertical show-for-small-only' : '');
     const mcl = vertical ? '' : ' sub-menu';
-    const lcn = vertical ? '' : 'show-for-medium';
+    const lcn = vertical ? '' : 'show-for-large';
     const scn = vertical ? '' : 'show-for-medium';
     const nav = navigate || defaultNavigate;
-    const submitStory = <li className={lcn + ' submit-story'}>
+    const submitStory = <li className={scn + ' submit-story'}>
       <a href="/submit.html" onClick={nav} className={'button small alert'}>{tt('g.submit_a_story')}</a>
     </li>;
-    const submitStoryPencil = <li className="hide-for-large">
+    const submitStoryPencil = <li className="hide-for-medium">
       <Link to="/submit.html"><Icon name="pencil" /></Link>
     </li>;
     const feedLink = `/@${username}/feed`;
@@ -95,14 +95,14 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
       </li>
     ;
 
-    const notificationItem = <li className={lcn}>
+    const notificationItem = <li className={scn}>
         <a href="/static/search.html" title={tt('g.search')} className="number">
           {vertical ? <span>{tt('g.search')}</span> : <Icon name="new/bell" size="1_5x" />}
           20
         </a>
       </li>
     ;
-    const messengerItem = <li className={lcn}>
+    const messengerItem = <li className={scn}>
         <a href="/static/search.html" title={tt('g.search')} className="number">
           {vertical ? <span>{tt('g.search')}</span> : <Icon name="new/messenger" size="1_5x" />}
           18
@@ -164,7 +164,7 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
                     {!vertical && <li className={'Header__profile'}>
                         <a href={accountLink} title={username} onClick={e => e.preventDefault()}>
                             <Userpic account={username} />
-                            <div className={'NavProfile show-for-medium'}>
+                            <div className={'NavProfile show-for-large'}>
                                 <div className={'NavProfile__name'}>{username}</div>
                                 <div className={'NavProfile__golos'}>
                                     {tt('g.voting_capacity')}: <span className={'NavProfile__golos-percent'}>{voting_power_percent}%</span>
@@ -177,9 +177,9 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
                         <div className="TopRightMenu__notificounter"><NotifiCounter fields="total" /></div>
                     </li>}
                 </LinkWithDropdown>
-                {!inIco && <li className="delim show-for-medium" />}
+                {!inIco && <li className={"delim " + scn} />}
                 {!inIco && notificationItem}
-                {!inIco && <li className="delim show-for-medium" />}
+                {!inIco && <li className={"delim " + scn} />}
                 {!inIco && messengerItem}
                 {!inIco && navAdditional}
             </ul>
@@ -203,7 +203,7 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
     return (
         <ul className={mcn + mcl}>
             {!inIco && searchItem}
-            <li className="delim show-for-medium" />
+            {!inIco && <li className="delim show-for-medium" />}
             {!inIco && !probablyLoggedIn && !externalTransfer && <li className={lcn}>
               <a href="/login.html" onClick={showLogin} className={!vertical && 'button small violet hollow'}>{tt('g.login')}</a>
             </li>}

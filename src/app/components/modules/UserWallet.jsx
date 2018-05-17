@@ -8,6 +8,8 @@ import SavingsWithdrawHistory from 'app/components/elements/SavingsWithdrawHisto
 import TransferHistoryRow from 'app/components/cards/TransferHistoryRow';
 import TransactionError from 'app/components/elements/TransactionError';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
+import HelpTip from 'app/components/elements/HelpTip';
+import IconButton from 'app/components/elements/IconButton';
 import {
     numberWithCommas,
     vestingSteem,
@@ -574,6 +576,18 @@ class UserWallet extends React.Component {
                 <div className="UserWallet__balance row zebra">
                     <div className="column small-12 medium-8">
                         STEEM POWER
+                        <HelpTip
+                            content={[
+                                <h4 key="sp-helptip">What is Steem Power?</h4>,
+                                <p key="sp-helptip-1">
+                                    'Steem Power - Steem Power (abbreviated SP)
+                                    is a measurement of how much influence a
+                                    user has in the Steem network.'
+                                </p>,
+                            ]}
+                        >
+                            <IconButton size="small" fill="green" />
+                        </HelpTip>
                         <FormattedHTMLMessage
                             className="secondary"
                             id="tips_js.influence_token"

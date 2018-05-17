@@ -29,6 +29,12 @@
                 stroke: themed('colorAccentReverse');
             }
         }
+        &.icon-button__questionMark {
+          transition: all 0.3s ease-in-out;
+          stroke-width: 1;
+          stroke: black;
+          fill-rule: evenodd;
+      }
     }
 
     :hover {

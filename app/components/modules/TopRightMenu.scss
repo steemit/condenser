@@ -30,12 +30,14 @@ li.Header__profile {
   .NavProfile__name {
     color: #333;
     font-size: 0.85rem;
+    line-height: 1rem;
   }
 
   .NavProfile__golos {
-    color: #14236C;
-    font-weight: bold;
-    font-size: 0.75rem;
+    color: #14236C; // #4a51b6
+    font-weight: 500;
+    font-size: 0.73rem;
+    line-height: 1.8rem;
   }
   .NavProfile__golos-percent {
     color: #fc544e;
@@ -43,7 +45,6 @@ li.Header__profile {
 
   .NavProfile__progress {
     height: 4px;
-    width: 135px;
     border-radius: 6px;
     background-color: #4a51b6;
   }

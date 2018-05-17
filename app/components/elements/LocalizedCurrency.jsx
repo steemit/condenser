@@ -133,7 +133,6 @@ class LocalizedCurrency extends React.Component {
     }
 
     return <span>{localizedCurrency(amount, {maximumFractionDigits: fractionDigits})}</span>
-    
   }
 }
 

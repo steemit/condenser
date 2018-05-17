@@ -3,7 +3,7 @@ import tt from 'counterpart'
 import Icon from 'app/components/elements/Icon'
 // import { getURL } from 'app/utils/URLConstants'
 import { api } from 'golos-js'
-import { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
+import LocalizedCurrency, { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
 
 export default class Footer extends React.Component {
 
@@ -18,6 +18,47 @@ export default class Footer extends React.Component {
         });
     }
 
+    renderMenus(menuItems) {
+        return menuItems.map((menu, index) => {
+            return <div key={index} className={`small-12 ${menu.width} columns text-${menu.columnAlign}`}>
+                <strong>{menu.name}</strong>
+                {this.renderItems(menu.items)}
+            </div>
+        })
+    }
+
+    renderItems(items) {
+        if (items[0].icon) {
+            return (
+                <ul>
+                    <li key="0" className="social-icons">
+                        {items.map((item, i) => (
+                            <a key={i} href={item.url} target="blank"><Icon name={item.icon} size={item.size} /></a>
+                        ))}
+                    </li>
+                </ul>
+            )
+        }
+
+        if (Array.isArray(items[0])) {
+            return (
+                <div className="row medium-up-1 large-up-2">
+                    {items.map((chunk, ic) => (
+                        <ul className="columns" key={ic}>
+                            {chunk.map((item, i) => <li key={i} className={item.className}><a href={item.url} target="blank">{item.name}</a></li>)}
+                        </ul>
+                    ))}
+                </div>
+            )
+        }
+
+        return (
+            <ul>
+                {items.map((item, i) => <li key={i} className={item.className}><a href={item.url} target="blank">{item.name}</a></li>)}
+            </ul>
+        )
+    }
+
     render() {
         const { virtual_supply } = this.state
 
@@ -29,7 +70,7 @@ export default class Footer extends React.Component {
                 columnAlign: 'left',
                 width: 'medium-3',
                 items: [
-                    { name: localizedCurrency(virtual_supply), className: 'big' }
+                    { name: <LocalizedCurrency amount={virtual_supply}/>, className: 'big' }
                 ],
             })
         }
@@ -72,52 +113,11 @@ export default class Footer extends React.Component {
             }
         )
 
-        function renderMenus(align) {
-            return menuItems.map((menu, index) => {
-                return <div key={index} className={`small-12 ${menu.width} columns text-${menu.columnAlign}`}>
-                    <strong>{menu.name}</strong>
-                    {renderItems(menu.items)}
-                </div>
-            })
-        }
-
-        function renderItems(items) {
-            if (items[0].icon) {
-                return (
-                    <ul>
-                        <li key="0" className="social-icons">
-                            {items.map((item, i) => (
-                                <a key={i} href={item.url} target="blank"><Icon name={item.icon} size={item.size} /></a>
-                            ))}
-                        </li>
-                    </ul>
-                )
-            }
-
-            if (Array.isArray(items[0])) {
-                return (
-                    <div className="row medium-up-1 large-up-2">
-                        {items.map((chunk, ic) => (
-                            <ul className="columns" key={ic}>
-                                {chunk.map((item, i) => <li key={i} className={item.className}><a href={item.url} target="blank">{item.name}</a></li>)}
-                            </ul>
-                        ))}
-                    </div>
-                )
-            }
-
-            return (
-                <ul>
-                    {items.map((item, i) => <li key={i} className={item.className}><a href={item.url} target="blank">{item.name}</a></li>)}
-                </ul>
-            )
-        }
-
         return (
             <section className="Footer">
                 <div className="Footer__menus">
                     <div className="row" id="footer">
-                        {renderMenus()}
+                        {this.renderMenus(menuItems)}
                     </div>
                 </div>
                 <div className="Footer__description">

@@ -70,7 +70,7 @@ export default class Footer extends React.Component {
                 columnAlign: 'left',
                 width: 'medium-3',
                 items: [
-                    { name: <LocalizedCurrency amount={virtual_supply}/>, className: 'big' }
+                    { name: <LocalizedCurrency amount={virtual_supply} currency="USD" short/>, className: 'big' }
                 ],
             })
         }

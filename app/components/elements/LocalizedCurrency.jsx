@@ -110,7 +110,6 @@ class LocalizedCurrency extends React.Component {
           lang = ((navigator.languages && navigator.languages[0]) || navigator.language || navigator.userLanguage)
         }
         nRounding = localStorage.getItem('xchange.rounding')
-        console.log("vesting_shares = ", vesting_shares)
         if(!nRounding){
           if(vesting_shares < 10000000 && vesting_shares != 0) //FIXME this is vesting_shares param. Move to config file needed 
               nRounding = FRACTION_DIGITS_MARKET

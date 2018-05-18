@@ -87,7 +87,6 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
     const commentsLink = `/@${username}/comments`;
     const reset_password_link = `/@${username}/password`;
 
-    const inIco = location && location.pathname.indexOf("/about") == 0;
     const searchItem = <li className={scn}>
         <a href="/static/search.html" title={tt('g.search')}>
           {vertical ? <span>{tt('g.search')}</span> : <Icon name="search" size="1_5x" />}
@@ -150,11 +149,11 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
 
         return (
             <ul className={mcn + mcl}>
-                {!inIco && searchItem}
-                {!inIco && <li className="delim show-for-large" />}
-                {!inIco && submitStory}
-                {!inIco && !vertical && submitStoryPencil}
-                {!inIco && <li className="delim show-for-large" />}
+                {searchItem}
+                <li className="delim show-for-large" />
+                {submitStory}
+                {!vertical && submitStoryPencil}
+                <li className="delim show-for-large" />
                 <LinkWithDropdown
                     closeOnClickOutside
                     dropdownPosition="bottom"
@@ -177,11 +176,11 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
                         <div className="TopRightMenu__notificounter"><NotifiCounter fields="total" /></div>
                     </li>}
                 </LinkWithDropdown>
-                {!inIco && <li className={"delim " + scn} />}
-                {!inIco && notificationItem}
-                {!inIco && <li className={"delim " + scn} />}
-                {!inIco && messengerItem}
-                {!inIco && navAdditional}
+                <li className={"delim " + scn} />
+                {notificationItem}
+                <li className={"delim " + scn} />
+                {messengerItem}
+                {navAdditional}
             </ul>
         );
     }
@@ -202,18 +201,18 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
 
     return (
         <ul className={mcn + mcl}>
-            {!inIco && searchItem}
-            {!inIco && <li className="delim show-for-medium" />}
-            {!inIco && !probablyLoggedIn && !externalTransfer && <li className={lcn}>
+            {searchItem}
+            <li className="delim show-for-medium" />
+            {!probablyLoggedIn && !externalTransfer && <li className={lcn}>
               <a href="/login.html" onClick={showLogin} className={!vertical && 'button small violet hollow'}>{tt('g.login')}</a>
             </li>}
-            {!inIco && !probablyLoggedIn && <li className={lcn}>
+            {!probablyLoggedIn && <li className={lcn}>
               <a href="/create_account" className={!vertical && 'button small alert'}>{tt('g.sign_up')}</a>
             </li>}
             {probablyLoggedIn && <li className={lcn}>
               <LoadingIndicator type="circle" inline />
             </li>}
-            {!inIco && navAdditional}
+            {navAdditional}
         </ul>
     );
 }

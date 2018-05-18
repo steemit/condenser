@@ -379,21 +379,6 @@ async function universalRender({
                 };
             }
         }
-        // Calculate signup bonus
-        const fee = parseFloat($STM_Config.registrar_fee.split(' ')[0]),
-            { base, quote } = onchain.feed_price,
-            feed =
-                parseFloat(base.split(' ')[0]) /
-                parseFloat(quote.split(' ')[0]);
-        const sd = fee * feed;
-        let sdDisp;
-        if (sd < 1.0) {
-            sdDisp = '¢' + parseInt(sd * 100);
-        } else {
-            const sdInt = parseInt(sd),
-                sdDec = sd - sdInt;
-            sdDisp = '$' + sdInt + (sdInt < 5 && sdDec >= 0.5 ? '.50' : '');
-        }
 
         server_store = createStore(rootReducer, {
             app: initial_state.app,
@@ -426,7 +411,7 @@ async function universalRender({
             };
         }
     }
-
+    // add pre-render hook to every component, check in-request timer and if time > timeout, return "too long" message
     let app, status, meta;
     try {
         app = renderToString(

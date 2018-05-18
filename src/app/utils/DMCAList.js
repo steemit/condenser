@@ -99,6 +99,7 @@ export default `
 /nature/@jimreitz/lone-ranch-beach-near-brookings-oregon
 /colorchallenge/@jimreitz/hello-steemit-i-m-jim
 /dtube/@derrick829/1r3fevhu
+/technology/@taslimabegum/can-t-crack-fl-studio-12-5-on-windows-10
 `
     .trim()
     .split('\n');

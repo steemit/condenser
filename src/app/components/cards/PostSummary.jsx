@@ -113,10 +113,6 @@ class PostSummary extends React.Component {
                 '/' +
                 content.get('category') +
                 '/@' +
-                content.get('parent_author') +
-                '/' +
-                content.get('parent_permlink') +
-                '#@' +
                 content.get('author') +
                 '/' +
                 content.get('permlink');

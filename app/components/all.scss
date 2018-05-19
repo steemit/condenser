@@ -1,3 +1,6 @@
+@import "~slick-carousel/slick/slick.css";
+@import "~slick-carousel/slick/slick-theme.css";
+
 @import "./App";
 
 // cards
@@ -37,7 +40,7 @@
 @import "./elements/VotesAndComments";
 @import "./elements/Voting";
 @import "./elements/YoutubePreview";
-
+@import "./elements/welcome/WelcomeSlider";
 
 // modules
 @import "./modules/BlocktradesDeposit";
@@ -71,6 +74,7 @@
 @import "./pages/Topics";
 @import "./pages/Tos";
 @import "./pages/UserProfile";
+@import "./pages/Welcome";
 
 // themes
 @import "./themes/green/all";

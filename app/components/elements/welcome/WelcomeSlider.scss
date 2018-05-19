@@ -1,0 +1,50 @@
+.welcome-slider {
+  display: flex;
+
+  .welcome-slider-dots {
+    position: relative;
+    list-style: none;
+  }
+
+  .welcome-slider-slide {
+    position: relative;
+    padding: 0 63px;
+
+    &:after,
+    &:before {
+      position: absolute;
+      content: ' ';
+      background-image: url('/images/new/welcome/slider-slide.svg');
+      background-size: 39px 26px;
+      height: 26px;
+      width: 39px;
+    } 
+
+    &:before {
+      left: 0px;
+      top: 3px;
+    }
+
+    &:after {
+      right: 0px;
+      bottom: 3px;
+    }
+  }
+
+  .welcome-slider-slide__quote {
+    .name {
+      font-size: 25px;
+      font-weight: bold;
+      line-height: 1.39;
+      color: #ffffff;
+      margin-bottom: 15px;
+    }
+
+    .description {
+      font-size: 17px;
+      font-weight: 300;
+      line-height: 1.95;
+      color: #ffffff;
+    }
+  }
+}

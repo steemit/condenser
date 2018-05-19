@@ -31,7 +31,17 @@ export default class WelcomeSlider extends Component {
       slidesToScroll: 1,
       className: 'welcome-slider',
       dotsClass: 'welcome-slider-dots',
-      customPaging: i => <Userpic imageUrl={slides[i].avatar} width={40} height={40} />
+      customPaging: i => (
+        <div
+          style={{
+            width: "30px",
+            color: "blue",
+            border: "1px blue solid"
+          }}
+        >
+          {i + 1}
+        </div>
+      )
     }
 
     return (

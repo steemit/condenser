@@ -11,7 +11,7 @@ export default class MobileBanners extends Component {
     render() {
         let {showAndroid, showiOS} = this.props
 
-        return <div className='mobile-banners-wrapper hide-for-small-only'>
+        return <div className='mobile-banners-wrapper'>
                 {showAndroid ? <AndroidMarket /> : null}
                 {showiOS ? <AndroidMarket /> : null}
             </div>        

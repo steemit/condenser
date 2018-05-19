@@ -1,3 +1,6 @@
+@import "~slick-carousel/slick/slick.css";
+@import "~slick-carousel/slick/slick-theme.css";
+
 @import "./App";
 
 // cards
@@ -35,6 +38,7 @@
 @import "./elements/CTA/ctablock";
 @import "./elements/MobileBanners/MobileBanners";
 @import "./elements/Notifications/NotifyContent";
+@import "./elements/welcome/WelcomeSlider";
 
 // modules
 @import "./modules/Header";
@@ -64,6 +68,7 @@
 @import "./pages/Landing";
 @import "./pages/Landings/Start";
 @import "./pages/Landings/Hardfork";
+@import "./pages/Welcome";
 
 // themes
 @import "./themes/green/all";

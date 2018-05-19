@@ -150,7 +150,7 @@ class Welcome extends Component {
                 <section className="Welcome__hero">
                     <div className="row align-middle">
                         <div className="column small-12 medium-7">
-                            <div className="Welcome__greeting">Добро пожаловать <br/> на Golos.io</div>
+                            <div className="Welcome__greeting">Добро пожаловать <br /> на Golos.io</div>
                             <div className="Welcome__congratulations">Поздравляем с регистрацией.</div>
                         </div>
                         <div className="column small-12 medium-5">
@@ -162,7 +162,7 @@ class Welcome extends Component {
                     <div className="row align-middle">
                         <div className="columns">
                             <div className="Welcome__about-header">Golos.io</div>
-                            <div className="Welcome__about-subheader">Это уникальные тексты и мысли, которых нет в других частях Интернета. <br/>
+                            <div className="Welcome__about-subheader">Это уникальные тексты и мысли, которых нет в других частях Интернета. <br />
 Это сила сообщества, генерирующая смыслы и действия.</div>
                             <div className="row small-up-1 medium-up-2 large-up-4">
                                 <div className="columns">
@@ -350,8 +350,8 @@ class Welcome extends Component {
                 <section className="Welcome__mobile">
                     <div className="row align-middle">
                         <div className="columns small-12 medium-6">
-                            <div className="Welcome__mobile-header">И да, вы можете пользоваться<br/> Golos.io через браузер или<br/> приложение для Android</div>
-                            <div className="Welcome__mobile-subheader">Мы уже работаем над приложением для<br/> iPhone, оно будет готово летом.</div>
+                            <div className="Welcome__mobile-header">И да, вы можете пользоваться<br /> Golos.io через браузер или<br /> приложение для Android</div>
+                            <div className="Welcome__mobile-subheader">Мы уже работаем над приложением для<br /> iPhone, оно будет готово летом.</div>
                             <div className="Welcome__mobile-links">
                                 <MobileBanners showAndroid />
                             </div>

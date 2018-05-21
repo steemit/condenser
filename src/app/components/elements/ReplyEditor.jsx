@@ -602,19 +602,21 @@ class ReplyEditor extends React.Component {
                                                 'reply_editor.advanced_settings'
                                             )}
                                         </a>{' '}
-                                        &nbsp;
-                                        {beneficiaries &&
-                                            beneficiaries.length > 0 && (
-                                                <span>
-                                                    ({tt(
-                                                        'reply_editor.beneficiaries_set',
-                                                        {
-                                                            count:
-                                                                beneficiaries.length,
-                                                        }
-                                                    )})
-                                                </span>
-                                            )}
+                                        <div>
+                                            {beneficiaries &&
+                                                beneficiaries.length > 0 && (
+                                                    <span>
+                                                        ({tt(
+                                                            'reply_editor.beneficiaries_set',
+                                                            {
+                                                                count:
+                                                                    beneficiaries.length,
+                                                            }
+                                                        )})
+                                                    </span>
+                                                )}
+                                            &nbsp;
+                                        </div>
                                     </span>
                                 )}
                         </div>

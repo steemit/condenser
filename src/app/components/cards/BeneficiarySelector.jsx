@@ -2,20 +2,21 @@ import React from 'react';
 import Autocomplete from 'react-autocomplete';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import { validate_account_name } from 'app/utils/ChainValidation';
-import { Set } from 'immutable';
+import reactForm from 'app/utils/ReactForm';
+import { List, Set } from 'immutable';
 import tt from 'counterpart';
 
-class BeneficiarySelector extends React.Component {
+export class BeneficiarySelector extends React.Component {
     static propTypes = {
         // HTML props
         id: React.PropTypes.string, // DOM id for active component (focusing, etc...)
         onChange: React.PropTypes.func.isRequired,
         onBlur: React.PropTypes.func.isRequired,
-        value: React.PropTypes.object, // ImmutableList
+        value: React.PropTypes.array,
         tabIndex: React.PropTypes.number,
 
         // redux connect
-        following: React.PropTypes.object.isRequired, // Immutable.List
+        following: React.PropTypes.array.isRequired,
     };
     static defaultProps = {
         id: 'BeneficiarySelectorId',
@@ -92,15 +93,16 @@ class BeneficiarySelector extends React.Component {
                     <div className="column small-2">
                         <div className="input-group">
                             <input
+                                id="remainingPercent"
                                 type="text"
                                 pattern="[0-9]*"
                                 value={remainingPercent}
                                 disabled
                                 style={{
-                                    'max-width': '2.6rem',
+                                    maxWidth: '2.6rem',
                                 }}
                             />
-                            <span style={{ 'padding-top': '5px' }}>%</span>
+                            <span style={{ paddingTop: '5px' }}>%</span>
                         </div>
                     </div>
                     <div className="column small-5">
@@ -119,10 +121,11 @@ class BeneficiarySelector extends React.Component {
                     </div>
                 </div>
                 {beneficiaries.map((beneficiary, idx) => (
-                    <div className="row">
+                    <div className="row" key={idx}>
                         <div className="column small-2">
                             <div className="input-group">
                                 <input
+                                    id="percent"
                                     type="text"
                                     pattern="[0-9]*"
                                     value={beneficiary.percent}
@@ -130,10 +133,10 @@ class BeneficiarySelector extends React.Component {
                                         idx
                                     )}
                                     style={{
-                                        'max-width': '2.6rem',
+                                        maxWidth: '2.6rem',
                                     }}
                                 />
-                                <span style={{ 'padding-top': '5px' }}>%</span>
+                                <span style={{ paddingTop: '5px' }}>%</span>
                             </div>
                         </div>
                         <div className="column small-5">
@@ -148,6 +151,7 @@ class BeneficiarySelector extends React.Component {
                                         width: '100%',
                                     }}
                                     inputProps={{
+                                        id: 'user',
                                         type: 'text',
                                         className: 'input-group-field',
                                         autoComplete: 'off',
@@ -187,9 +191,10 @@ class BeneficiarySelector extends React.Component {
                         </div>
                         <div
                             className="column small-5"
-                            style={{ 'padding-top': '5px' }}
+                            style={{ paddingTop: '5px' }}
                         >
                             <a
+                                id="remove"
                                 href="#"
                                 onClick={this.handleRemoveBeneficiary(idx)}
                             >
@@ -201,6 +206,7 @@ class BeneficiarySelector extends React.Component {
                 <div className="row">
                     <div className="column">
                         <a
+                            id="add"
                             href="#"
                             onClick={this.handleAddBeneficiary}
                             hidden={beneficiaries.length >= 8}
@@ -257,7 +263,7 @@ export function validateBeneficiaries(
 import { connect } from 'react-redux';
 
 export default connect((state, ownProps) => {
-    var following = [];
+    var following = List();
     const username = state.user.getIn(['current', 'username']);
     const follow = state.global.get('follow');
     if (follow) {

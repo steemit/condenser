@@ -255,79 +255,15 @@ async function universalRender({
     }
 
     if (process.env.BROWSER) {
-        const store = createStore(rootReducer, initial_state, middleware);
-
-        const history = syncHistoryWithStore(browserHistory, store);
-
-        /**
-         * When to scroll - on hash link navigation determine if the page should scroll to that element (forward nav, or ignore nav direction)
-         */
-        const scroll = useScroll({
-            createScrollBehavior: config => new OffsetScrollBehavior(config), //information assembler for has scrolling.
-            shouldUpdateScroll: (prevLocation, { location }) => {
-                // eslint-disable-line no-shadow
-                //if there is a hash, we may want to scroll to it
-                if (location.hash) {
-                    //if disableNavDirectionCheck exists, we want to always navigate to the hash (the page is telling us that's desired behavior based on the element's existence
-                    const disableNavDirectionCheck = document.getElementById(
-                        DISABLE_ROUTER_HISTORY_NAV_DIRECTION_EL_ID
-                    );
-                    //we want to navigate to the corresponding id=<hash> element on 'PUSH' navigation (prev null + POP is a new window url nav ~= 'PUSH')
-                    if (
-                        disableNavDirectionCheck ||
-                        (prevLocation === null && location.action === 'POP') ||
-                        location.action === 'PUSH'
-                    ) {
-                        return location.hash;
-                    }
-                }
-                return true;
-            },
-        });
-
-        if (process.env.NODE_ENV === 'production') {
-            console.log(
-                '%c%s',
-                'color: red; background: yellow; font-size: 24px;',
-                'WARNING!'
-            );
-            console.log(
-                '%c%s',
-                'color: black; font-size: 16px;',
-                'This is a developer console, you must read and understand anything you paste or type here or you could compromise your account and your private keys.'
-            );
-        }
-        return render(
-            <Provider store={store}>
-                <Translator>
-                    <Router
-                        routes={RootRoute}
-                        history={history}
-                        onError={onRouterError}
-                        render={applyRouterMiddleware(scroll)}
-                    />
-                </Translator>
-            </Provider>,
-            document.getElementById('content')
-        );
+        renderClientside(rootReducer, initial_state);
     }
 
     // below is only executed on the server
     let server_store, onchain;
     try {
-        let url = location === '/' ? 'trending' : location;
-        // Replace /curation-rewards and /author-rewards with /transfers for UserProfile
-        // to resolve data correctly
-        if (url.indexOf('/curation-rewards') !== -1)
-            url = url.replace(/\/curation-rewards$/, '/transfers');
-        if (url.indexOf('/author-rewards') !== -1)
-            url = url.replace(/\/author-rewards$/, '/transfers');
+        const url = getUrlFromLocation(location);
 
-        if (process.env.OFFLINE_SSR_TEST) {
-            onchain = get_state_perf;
-        } else {
-            onchain = await api.getStateAsync(url);
-        }
+        const onchain = await apiGetState(url);
 
         if (
             Object.getOwnPropertyNames(onchain.accounts).length === 0 &&
@@ -436,6 +372,105 @@ async function universalRender({
         statusCode: status,
         body: Iso.render(app, server_store.getState()),
     };
+}
+
+/**
+ * dependencies:
+ * middleware
+ * browserHistory
+ * useScroll
+ * OffsetScrollBehavior
+ * location
+ *
+ * @param {*} rootReducer
+ * @param {*} initialState
+ */
+function renderClientside(rootReducer, initialState) {
+    const store = createStore(rootReducer, initialState, middleware);
+
+    const history = syncHistoryWithStore(browserHistory, store);
+
+    /**
+     * When to scroll - on hash link navigation determine if the page should scroll to that element (forward nav, or ignore nav direction)
+     */
+    const scroll = useScroll({
+        createScrollBehavior: config => new OffsetScrollBehavior(config), //information assembler for has scrolling.
+        shouldUpdateScroll: (prevLocation, { location }) => {
+            // eslint-disable-line no-shadow
+            //if there is a hash, we may want to scroll to it
+            if (location.hash) {
+                //if disableNavDirectionCheck exists, we want to always navigate to the hash (the page is telling us that's desired behavior based on the element's existence
+                const disableNavDirectionCheck = document.getElementById(
+                    DISABLE_ROUTER_HISTORY_NAV_DIRECTION_EL_ID
+                );
+                //we want to navigate to the corresponding id=<hash> element on 'PUSH' navigation (prev null + POP is a new window url nav ~= 'PUSH')
+                if (
+                    disableNavDirectionCheck ||
+                    (prevLocation === null && location.action === 'POP') ||
+                    location.action === 'PUSH'
+                ) {
+                    return location.hash;
+                }
+            }
+            return true;
+        },
+    });
+
+    if (process.env.NODE_ENV === 'production') {
+        console.log(
+            '%c%s',
+            'color: red; background: yellow; font-size: 24px;',
+            'WARNING!'
+        );
+        console.log(
+            '%c%s',
+            'color: black; font-size: 16px;',
+            'This is a developer console, you must read and understand anything you paste or type here or you could compromise your account and your private keys.'
+        );
+    }
+    return render(
+        <Provider store={store}>
+            <Translator>
+                <Router
+                    routes={RootRoute}
+                    history={history}
+                    onError={onRouterError}
+                    render={applyRouterMiddleware(scroll)}
+                />
+            </Translator>
+        </Provider>,
+        document.getElementById('content')
+    );
+}
+
+/**
+ * Do some pre-state-fetch url rewriting.
+ *
+ * @param {string} location
+ * @returns {string}
+ */
+function getUrlFromLocation(location) {
+    let url = location === '/' ? 'trending' : location;
+    // Replace /curation-rewards and /author-rewards with /transfers for UserProfile
+    // to resolve data correctly
+    if (url.indexOf('/curation-rewards') !== -1)
+        url = url.replace(/\/curation-rewards$/, '/transfers');
+    if (url.indexOf('/author-rewards') !== -1)
+        url = url.replace(/\/author-rewards$/, '/transfers');
+
+    return url;
+}
+
+async function apiGetState(url) {
+    let offchain;
+
+    if (process.env.OFFLINE_SSR_TEST) {
+        offchain = get_state_perf;
+    }
+
+    offchain = await api.getStateAsync(url);
+
+    return offchain;
 }
 
 export default universalRender;

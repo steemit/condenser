@@ -225,14 +225,24 @@ const onRouterError = error => {
     console.error('onRouterError', error);
 };
 
-async function universalRender({
+/**
+ *
+ * @param {*} location
+ * @param {*} initialState
+ * @param {*} ErrorPage
+ * @param {*} userPreferences
+ * @param {*} offchain
+ * @returns promise
+ */
+export async function serverRender(
     location,
-    initial_state,
-    offchain,
+    initialState,
     ErrorPage,
     userPreferences,
-}) {
+    offchain
+) {
     let error, redirect, renderProps;
+
     try {
         [error, redirect, renderProps] = await runRouter(location, RootRoute);
     } catch (e) {
@@ -245,6 +255,7 @@ async function universalRender({
             ),
         };
     }
+
     if (error || !renderProps) {
         // debug('error')('Router error', error);
         return {
@@ -254,16 +265,42 @@ async function universalRender({
         };
     }
 
-    if (process.env.BROWSER) {
-        renderClientside(rootReducer, initial_state);
-    }
+    return await universalRender({
+        location,
+        initialState,
+        ErrorPage,
+        userPreferences,
+        offchain,
+        renderProps,
+    });
+}
 
+/**
+ *
+ * @param {object} args
+ * @param {string} args.location
+ * @param {object} args.initialState
+ * @param {object} args.offchain
+ * @param {React.Component} args.ErrorPage
+ * @param {object} args.userPreferences
+ * @param {object} args.renderProps
+ *
+ * @returns {object} for Iso render
+ */
+async function universalRender({
+    location,
+    initialState,
+    offchain,
+    ErrorPage,
+    userPreferences,
+    renderProps,
+}) {
     // below is only executed on the server
     let server_store, onchain;
     try {
         const url = getUrlFromLocation(location);
 
-        const onchain = await apiGetState(url);
+        onchain = await apiGetState(url);
 
         if (
             Object.getOwnPropertyNames(onchain.accounts).length === 0 &&
@@ -317,7 +354,7 @@ async function universalRender({
         }
 
         server_store = createStore(rootReducer, {
-            app: initial_state.app,
+            app: initialState.app,
             global: onchain,
             offchain,
         });
@@ -382,10 +419,9 @@ async function universalRender({
  * OffsetScrollBehavior
  * location
  *
- * @param {*} rootReducer
  * @param {*} initialState
  */
-function renderClientside(rootReducer, initialState) {
+export function clientRender(initialState) {
     const store = createStore(rootReducer, initialState, middleware);
 
     const history = syncHistoryWithStore(browserHistory, store);
@@ -472,5 +508,3 @@ async function apiGetState(url) {
 
     return offchain;
 }
-
-export default universalRender;

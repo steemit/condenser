@@ -2,7 +2,7 @@ import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { VIEW_MODE_WHISTLE, PARAM_VIEW_MODE } from '../shared/constants';
 import ServerHTML from './server-html';
-import universalRender from '../shared/UniversalRender';
+import { serverRender } from '../shared/UniversalRender';
 import models from 'db/models';
 import secureRandom from 'secure-random';
 import ErrorPage from 'server/server-error';
@@ -80,14 +80,13 @@ async function appRender(ctx) {
             },
         };
 
-        const { body, title, statusCode, meta } = await universalRender({
+        const { body, title, statusCode, meta } = await serverRender(
+            ctx.request.url,
             initial_state,
-            location: ctx.request.url,
-            store,
             ErrorPage,
             userPreferences,
-            offchain,
-        });
+            offchain
+        );
 
         // Assets name are found in `webpack-stats` file
         const assets_filename =

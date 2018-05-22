@@ -27,6 +27,8 @@ function getSupportedLocales() {
 const supportedLocales = getSupportedLocales();
 
 async function appRender(ctx) {
+    ctx.state.requestTimer.startTimer('request.appRender_ns');
+
     const store = {};
 
     // This is the part of SSR where we make session-specific changes:
@@ -85,7 +87,8 @@ async function appRender(ctx) {
             initial_state,
             ErrorPage,
             userPreferences,
-            offchain
+            offchain,
+            ctx.state.requestTimer
         );
 
         // Assets name are found in `webpack-stats` file
@@ -118,6 +121,8 @@ async function appRender(ctx) {
 
         throw err;
     }
+
+    ctx.state.requestTimer.stopTimer('request.appRender_ns');
 }
 
 appRender.dbStatus = { ok: true };

@@ -232,6 +232,7 @@ const onRouterError = error => {
  * @param {*} ErrorPage
  * @param {*} userPreferences
  * @param {*} offchain
+ * @param {RequestTimer} requestTimer
  * @returns promise
  */
 export async function serverRender(
@@ -239,7 +240,8 @@ export async function serverRender(
     initialState,
     ErrorPage,
     userPreferences,
-    offchain
+    offchain,
+    requestTimer
 ) {
     let error, redirect, renderProps;
 
@@ -265,43 +267,16 @@ export async function serverRender(
         };
     }
 
-    return await universalRender({
-        location,
-        initialState,
-        ErrorPage,
-        userPreferences,
-        offchain,
-        renderProps,
-    });
-}
-
-/**
- *
- * @param {object} args
- * @param {string} args.location
- * @param {object} args.initialState
- * @param {object} args.offchain
- * @param {React.Component} args.ErrorPage
- * @param {object} args.userPreferences
- * @param {object} args.renderProps
- *
- * @returns {object} for Iso render
- */
-async function universalRender({
-    location,
-    initialState,
-    offchain,
-    ErrorPage,
-    userPreferences,
-    renderProps,
-}) {
-    // below is only executed on the server
     let server_store, onchain;
     try {
         const url = getUrlFromLocation(location);
 
+        requestTimer.startTimer('request.apiGetState_ns');
         onchain = await apiGetState(url);
+        requestTimer.stopTimer('request.apiGetState_ns');
 
+        // If a user profile URL is requested but no profile information is
+        // included in the API response, return User Not Found.
         if (
             Object.getOwnPropertyNames(onchain.accounts).length === 0 &&
             (url.match(routeRegex.UserProfile1) ||
@@ -327,6 +302,7 @@ async function universalRender({
             }
         }
 
+        // Are we loading an un-category-aliased post?
         if (
             !url.match(routeRegex.PostsIndex) &&
             !url.match(routeRegex.UserProfile1) &&
@@ -387,6 +363,7 @@ async function universalRender({
     // add pre-render hook to every component, check in-request timer and if time > timeout, return "too long" message
     let app, status, meta;
     try {
+        requestTimer.startTimer('request.ssr_ns');
         app = renderToString(
             <Provider store={server_store}>
                 <Translator>
@@ -394,6 +371,7 @@ async function universalRender({
                 </Translator>
             </Provider>
         );
+        requestTimer.stopTimer('request.ssr_ns');
         meta = extractMeta(onchain, renderProps.params);
         status = 200;
     } catch (re) {
@@ -464,6 +442,7 @@ export function clientRender(initialState) {
             'This is a developer console, you must read and understand anything you paste or type here or you could compromise your account and your private keys.'
         );
     }
+
     return render(
         <Provider store={store}>
             <Translator>

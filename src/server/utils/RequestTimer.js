@@ -5,9 +5,10 @@
 const hrtimeToNanoseconds = hrtime => +hrtime[0] * 1e9 + +hrtime[1];
 
 export default class RequestTimer {
-    constructor(statsdClient) {
+    constructor(statsdClient, tags) {
         this.timers = [];
         this.inProgressTimers = {};
+        this.requestTags = tags;
         this.statsdClient = statsdClient;
     }
 
@@ -32,6 +33,6 @@ export default class RequestTimer {
     }
 
     sendToStatsd() {
-        this.statsdClient.logTimers(this.timers);
+        this.statsdClient.logTimers(this.timers, this.requestTags);
     }
 }

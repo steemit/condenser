@@ -30,6 +30,12 @@ export default function reducer(state = defaultState, action) {
     if (action.type === 'CHAIN_API_ERROR') {
         return state.set('error', action.error).set('loading', false);
     }
+    if (action.type === 'FETCH_DATA_BEGIN') {
+        return state.set('loading', true);
+    }
+    if (action.type === 'FETCH_DATA_END') {
+        return state.set('loading', false);
+    }
     let res = state;
     if (action.type === 'ADD_NOTIFICATION') {
         const n = {

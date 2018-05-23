@@ -1,3 +1,12 @@
+.UserProfile {
+    display: flex;
+    flex-direction: column;
+}
+
+.UserProfile__center {
+    margin: 60px auto;
+}
+
 .UserProfile__tab_content {
     margin-top: 1.5rem;
 }
@@ -5,6 +14,7 @@
 .UserProfile__top-nav {
   background-color: $black;
   padding: 0;
+  width: 100%;
   .row {
     .columns {
       overflow-x: auto;
@@ -56,6 +66,7 @@
 .UserProfile__banner {
     text-align: center;
     color: $white;
+    width: 100%;
     a {
         color: $white;
     }

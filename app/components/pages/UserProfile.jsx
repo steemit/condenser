@@ -144,9 +144,13 @@ export default class UserProfile extends React.Component {
         if( accountImm ) {
             account = accountImm.toJS();
         } else if (fetching) {
-            return <center><LoadingIndicator type="circle" /></center>;
+            return <div className="UserProfile loader">
+                <div className="UserProfile__center"><LoadingIndicator type="circle" width="40px" height="40px" /></div>
+            </div>;
         } else {
-            return <div><center>{tt('user_profile.unknown_account')}</center></div>
+            return <div className="UserProfile">
+                <div className="UserProfile__center">{tt('user_profile.unknown_account')}</div>
+            </div>
         }
         const followers = follow && follow.getIn(['getFollowersAsync', accountname]);
         const following = follow && follow.getIn(['getFollowingAsync', accountname]);

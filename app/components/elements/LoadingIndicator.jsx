@@ -5,7 +5,9 @@ class LoadingIndicator extends React.Component {
     static propTypes = {
         // html component attributes
         type: React.PropTypes.oneOf(['dots', 'circle', 'little']),
-        inline: React.PropTypes.bool
+        inline: React.PropTypes.bool,
+        width: React.PropTypes.string,
+        height: React.PropTypes.string,
     };
 
     constructor(props) {
@@ -14,7 +16,12 @@ class LoadingIndicator extends React.Component {
     }
 
     render() {
-        const {type, inline} = this.props;
+        const {type, inline, width, height} = this.props;
+        let style = {}
+
+        if (width) style.width = width
+        if (height) style.height = height
+
         switch (type) {
             case 'dots':
                 return (
@@ -27,13 +34,13 @@ class LoadingIndicator extends React.Component {
             case 'circle':
                 return  (
                     <div className={'LoadingIndicator circle' + (inline ? ' inline' : '')}>
-                        <div></div>
+                        <div style={style}></div>
                     </div>
                 );
             case 'little':
                 return  (
                     <div className={'LoadingIndicator circle little' + (inline ? ' inline' : '')}>
-                        <div></div>
+                        <div style={style}></div>
                     </div>
                 );
             default:

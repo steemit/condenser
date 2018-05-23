@@ -59,6 +59,8 @@ export function* fetchState(location_change_action) {
     if (url.indexOf("/curation-rewards") !== -1) url = url.replace("/curation-rewards", "/transfers")
     if (url.indexOf("/author-rewards") !== -1) url = url.replace("/author-rewards", "/transfers")
 
+
+    yield put({ type: 'FETCH_DATA_BEGIN'})
     try {
         if (!url || typeof url !== 'string' || !url.length || url === '/') url = 'trending'
         if (url[0] === '/') url = url.substr(1)
@@ -239,6 +241,7 @@ export function* fetchState(location_change_action) {
         yield put({type: 'global/FETCHING_STATE', payload: false});
         yield put({type: 'global/CHAIN_API_ERROR', error: error.message});
     }
+    yield put({ type: 'FETCH_DATA_END'})
 }
 
 export function* watchDataRequests() {

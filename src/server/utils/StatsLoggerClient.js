@@ -6,7 +6,7 @@ import net from 'net';
  */
 export default class StatsLoggerClient {
     constructor(GRAPHITE_HOST, GRAPHITE_PORT) {
-        if (GRAPHITE_HOST) {
+        if (GRAPHITE_HOST && GRAPHITE_PORT) {
             this.GRAPHITE_HOST = GRAPHITE_HOST;
             this.GRAPHITE_PORT = GRAPHITE_PORT;
             this.socket = null;
@@ -61,7 +61,7 @@ export default class StatsLoggerClient {
 
         const timestamp = +new Date();
         tuples.map(tuple => {
-            this.socket.write(`${tuple[0]} ${tuple[1]} ${timestamp}\n`); // ${tags}\n`);
+            this.socket.write(`${tuple[0]} ${tuple[1]} ${timestamp}`); // TODO: figure out tags: ${tags}\n`);
         });
     }
 }

@@ -27,7 +27,7 @@ function getSupportedLocales() {
 const supportedLocales = getSupportedLocales();
 
 async function appRender(ctx) {
-    ctx.state.requestTimer.startTimer('request.appRender_ns');
+    ctx.state.requestTimer.startTimer('appRender_ms');
 
     const store = {};
 
@@ -122,7 +122,7 @@ async function appRender(ctx) {
         throw err;
     }
 
-    ctx.state.requestTimer.stopTimer('request.appRender_ns');
+    ctx.state.requestTimer.stopTimer('appRender_ms');
 }
 
 appRender.dbStatus = { ok: true };

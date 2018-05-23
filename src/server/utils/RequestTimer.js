@@ -8,6 +8,12 @@ import StatsLoggerClient from './StatsLoggerClient';
 const hrtimeToNanoseconds = hrtime => +hrtime[0] * 1e9 + +hrtime[1];
 
 /**
+ * @param {array} hrtime process.hrtime() tuple
+ * @returns {number} milliseconds
+ */
+const hrtimeToMilliseconds = hrtime => +hrtime[0] * 1000 + +hrtime[1] / 1000000;
+
+/**
  * Logs total request time starting at instantiation and ending when finish() is called.
  * Additional timers can be managed with startTimer('name') and stopTimer('name')
  *
@@ -17,9 +23,10 @@ export default class RequestTimer {
     /**
      *
      * @param {StatsLoggerClient} statsdClient
-     * @param {object} tags a single-depth object where each property is a tag name and each value is a tag value
+     * @param {string} prefix namespace to tack on the front of each timer name
+     * @param {string} tags todo how to format tags?
      */
-    constructor(statsdClient, tags) {
+    constructor(statsdClient, prefix, tags) {
         assert(
             statsdClient instanceof StatsLoggerClient,
             'provide an instance of StatsLoggerClient'
@@ -28,16 +35,17 @@ export default class RequestTimer {
         this.start = process.hrtime();
         this.timers = [];
         this.inProgressTimers = {};
+        this.prefix = prefix;
         this.requestTags = tags;
         this.statsdClient = statsdClient;
     }
 
     /**
      * @param {string} name
-     * @param {number} duration nanoseconds
+     * @param {number} duration milliseconds
      */
     logSegment(name, duration) {
-        this.timers.push([name, duration]);
+        this.timers.push([`${this.prefix}.${name}`, duration]);
     }
 
     /**
@@ -67,15 +75,15 @@ export default class RequestTimer {
 
         this.logSegment(
             name,
-            hrtimeToNanoseconds(process.hrtime(this.inProgressTimers[name]))
+            hrtimeToMilliseconds(process.hrtime(this.inProgressTimers[name]))
         );
         delete this.inProgressTimers[name];
     }
 
     finish() {
         this.logSegment(
-            'total_ns',
-            hrtimeToNanoseconds(process.hrtime(this.start))
+            'total_ms',
+            hrtimeToMilliseconds(process.hrtime(this.start))
         );
         this.statsdClient.logTimers(this.timers, this.requestTags);
     }

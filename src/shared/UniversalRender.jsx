@@ -271,9 +271,9 @@ export async function serverRender(
     try {
         const url = getUrlFromLocation(location);
 
-        requestTimer.startTimer('request.apiGetState_ns');
+        requestTimer.startTimer('apiGetState_ms');
         onchain = await apiGetState(url);
-        requestTimer.stopTimer('request.apiGetState_ns');
+        requestTimer.stopTimer('apiGetState_ms');
 
         // If a user profile URL is requested but no profile information is
         // included in the API response, return User Not Found.
@@ -363,7 +363,7 @@ export async function serverRender(
     // add pre-render hook to every component, check in-request timer and if time > timeout, return "too long" message
     let app, status, meta;
     try {
-        requestTimer.startTimer('request.ssr_ns');
+        requestTimer.startTimer('ssr_ms');
         app = renderToString(
             <Provider store={server_store}>
                 <Translator>
@@ -371,7 +371,7 @@ export async function serverRender(
                 </Translator>
             </Provider>
         );
-        requestTimer.stopTimer('request.ssr_ns');
+        requestTimer.stopTimer('ssr_ms');
         meta = extractMeta(onchain, renderProps.params);
         status = 200;
     } catch (re) {

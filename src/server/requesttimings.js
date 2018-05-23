@@ -7,12 +7,9 @@ function requestTime(statsLoggerClient) {
             path: this.request.path,
         });
 
-        this.state.requestTimer.startTimer('request.total_ns');
-
         yield* next;
 
-        this.state.requestTimer.stopTimer('request.total_ns');
-        this.state.requestTimer.sendToStatsd();
+        this.state.requestTimer.finish();
     };
 }
 

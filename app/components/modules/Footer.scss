@@ -50,7 +50,16 @@
   }
 
   .Footer__menus {
-    padding: 50px 0;
+		padding: 50px 0;
+		
+		.space-between-columns {
+			ul {
+				display: flex;
+				flex-direction: column;
+				justify-content: space-between;
+			}
+		}
+
 	}
 	.Footer__description {
     color: #333333;

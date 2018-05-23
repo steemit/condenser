@@ -121,13 +121,13 @@ const icons = [
 const icons_map = {};
 for (const i of icons) icons_map[i] = require(`app/assets/icons/${i}.svg`);
 
-const rem_sizes = {'0_75x': '0.75', '1x': '1.12', '1_25x': '1.25', '1_5x': '1.5', '1_75x': '1.75', '2x': '2', '3x': '3.45', '4x': '4.60', '5x': '5.75', '10x': '10.0'};
+const rem_sizes = {'0_75x': '0.75', '0_95x': '0.95', '1x': '1.12', '1_25x': '1.25', '1_5x': '1.5', '1_75x': '1.75', '2x': '2', '3x': '3.45', '4x': '4.60', '5x': '5.75', '10x': '10.0'};
 
 export default class Icon extends React.Component {
 
     static propTypes = {
         name: React.PropTypes.string.isRequired,
-        size: React.PropTypes.oneOf(['0_75x', '1x', '1_25x', '1_5x', '2x', '3x', '4x', '5x', '10x']),
+        size: React.PropTypes.oneOf(['0_75x', '0_95x', '1x', '1_25x', '1_5x', '2x', '3x', '4x', '5x', '10x']),
         inverse: React.PropTypes.bool,
         className: React.PropTypes.string
     };

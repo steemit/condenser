@@ -180,8 +180,8 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
                         <div className="TopRightMenu__notificounter"><NotifiCounter fields="total" /></div>
                     </li>}
                 </LinkWithDropdown>
-                <li className={"delim " + scn} />
-                {notificationItem}
+                {/* <li className={"delim " + scn} /> */}
+                {/* {notificationItem} */}
                 {/* <li className={"delim " + scn} />
                 {messengerItem} */}
                 {navAdditional}

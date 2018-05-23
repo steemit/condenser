@@ -222,9 +222,15 @@ class Welcome extends Component {
                                         {this.tags.map((tag) => {
                                             const activeClass = tag.id == tagsActiveId ? ' active' : ''
                                             return (
+<<<<<<< HEAD
                                                 <div
                                                     key={tag.id}
                                                     className={'initial-tag'+activeClass}
+=======
+                                                <div 
+                                                    key={tag.id} 
+                                                    className={'initial-tag'+activeClass} 
+>>>>>>> tags posts and fixes #655
                                                     onClick={this.handleTagClick(tag)}
                                                 >{tag.name}</div>
                                             )

@@ -74,10 +74,14 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
     const scn = vertical ? '' : 'show-for-medium';
     const nav = navigate || defaultNavigate;
     const submitStory = <li className={scn + ' submit-story'}>
-      <a href="/submit.html" onClick={nav} className={'button small alert'}>{tt('g.submit_a_story')}</a>
+        <a href="/submit.html" onClick={nav} className={'button small alert'}>
+            <Icon name="new/add" size="0_95x" />{tt('g.submit_a_story')}
+        </a>
     </li>;
-    const submitStoryPencil = <li className="hide-for-medium">
-      <Link to="/submit.html"><Icon name="pencil" /></Link>
+    const submitStoryPencil = <li className="hide-for-medium submit-story-pencil">
+        <Link to="/submit.html" className="button small alert">
+            <Icon name="new/add" size="0_95x"/>
+        </Link>
     </li>;
     const feedLink = `/@${username}/feed`;
     const repliesLink = `/@${username}/recent-replies`;
@@ -89,25 +93,25 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
 
     const searchItem = <li className={scn}>
         <a href="/static/search.html" title={tt('g.search')}>
-          {vertical ? <span>{tt('g.search')}</span> : <Icon name="search" size="1_5x" />}
+          {vertical ? <span>{tt('g.search')}</span> : <Icon name="new/search" size="1_25x" />}
         </a>
       </li>
     ;
 
     const notificationItem = <li className={scn}>
-        <a href="/static/search.html" title={tt('g.search')} className="number">
-          {vertical ? <span>{tt('g.search')}</span> : <Icon name="new/bell" size="1_5x" />}
+        <a href="#" title={tt('g.search')} className="number">
+          <Icon name="new/bell" size="1_25x" />
           20
         </a>
       </li>
     ;
-    const messengerItem = <li className={scn}>
-        <a href="/static/search.html" title={tt('g.search')} className="number">
-          {vertical ? <span>{tt('g.search')}</span> : <Icon name="new/messenger" size="1_5x" />}
-          18
-        </a>
-      </li>
-    ;
+    // const messengerItem = <li className={scn}>
+    //     <a href="#" title={tt('g.search')} className="number">
+    //       <Icon name="new/messenger" size="1_5x" />
+    //       18
+    //     </a>
+    //   </li>
+    // ;
 
     const additional_menu = [
         { link: '/welcome', value: tt("navigation.welcome") },
@@ -150,10 +154,10 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
         return (
             <ul className={mcn + mcl}>
                 {searchItem}
-                <li className="delim show-for-large" />
+                <li className="delim show-for-medium" />
                 {submitStory}
                 {!vertical && submitStoryPencil}
-                <li className="delim show-for-large" />
+                <li className="delim show-for-medium" />
                 <LinkWithDropdown
                     closeOnClickOutside
                     dropdownPosition="bottom"
@@ -178,8 +182,8 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
                 </LinkWithDropdown>
                 <li className={"delim " + scn} />
                 {notificationItem}
-                <li className={"delim " + scn} />
-                {messengerItem}
+                {/* <li className={"delim " + scn} />
+                {messengerItem} */}
                 {navAdditional}
             </ul>
         );

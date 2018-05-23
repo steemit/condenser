@@ -305,7 +305,7 @@ export default connect(
                     __config: {title: weight < 0 ? tt('voting_jsx.confirm_flag') : null},
                 },
                 confirm,
-                successCallback: () => dispatch(user.actions.getCurrentAccount())                   
+                successCallback: () => dispatch(user.actions.getAccount())                   
             }))
         },
     })

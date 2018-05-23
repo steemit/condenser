@@ -3,7 +3,7 @@ import tt from 'counterpart'
 import Icon from 'app/components/elements/Icon'
 // import { getURL } from 'app/utils/URLConstants'
 import { api } from 'golos-js'
-import LocalizedCurrency, { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
+import LocalizedCurrency from 'app/components/elements/LocalizedCurrency';
 
 export default class Footer extends React.Component {
 
@@ -70,7 +70,7 @@ export default class Footer extends React.Component {
                 columnAlign: 'left',
                 width: 'medium-3',
                 items: [
-                    { name: <LocalizedCurrency amount={virtual_supply} currency="USD" short/>, className: 'big' }
+                    { name: <LocalizedCurrency amount={virtual_supply} currency="USD" short/>, url: 'https://explorer.golos.io', className: 'big' }
                 ],
             })
         }
@@ -79,7 +79,7 @@ export default class Footer extends React.Component {
             {
                 name: 'Golos.io',
                 columnAlign: 'left',
-                width: 'medium-4',
+                width: 'medium-4 space-between-columns',
                 items: [[
                     { name: tt("navigation.welcome"), url: '/welcome' },
                     { name: tt('g.golos_fest'), url: '/@golosio' },

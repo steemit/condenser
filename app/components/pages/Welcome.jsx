@@ -162,7 +162,7 @@ class Welcome extends Component {
                     <div className="row align-middle">
                         <div className="columns">
                             <div className="Welcome__about-header">Golos.io</div>
-                            <div className="Welcome__about-subheader">Это уникальные тексты и мысли, которых нет в других частях Интернета. <br/> 
+                            <div className="Welcome__about-subheader">Это уникальные тексты и мысли, которых нет в других частях Интернета. <br/>
 Это сила сообщества, генерирующая смыслы и действия.</div>
                             <div className="row small-up-1 medium-up-2 large-up-4">
                                 <div className="columns">
@@ -222,9 +222,9 @@ class Welcome extends Component {
                                         {this.tags.map((tag) => {
                                             const activeClass = tag.id == tagsActiveId ? ' active' : ''
                                             return (
-                                                <div 
-                                                    key={tag.id} 
-                                                    className={'initial-tag'+activeClass} 
+                                                <div
+                                                    key={tag.id}
+                                                    className={'initial-tag'+activeClass}
                                                     onClick={this.handleTagClick(tag)}
                                                 >{tag.name}</div>
                                             )

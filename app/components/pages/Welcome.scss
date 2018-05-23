@@ -198,7 +198,7 @@
       margin-right: 10px;
     }
 
-    @include breakpoint(small only) {
+    @include breakpoint(medium down) {
       flex-direction: row;
     }
   }

@@ -12,7 +12,10 @@ class Welcome extends Component {
     state = {
         tagsLoading: false,
         tagsActiveId: false,
+<<<<<<< HEAD
         tagsActive: false,
+=======
+>>>>>>> tags posts and fixes #655
         tagsCards: {},
     }
 

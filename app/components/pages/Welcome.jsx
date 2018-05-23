@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
+import user from 'app/redux/User';
 // import HelpContent from 'app/components/elements/HelpContent';
 import MobileBanners from 'app/components/elements/MobileBanners/MobileBanners';
 import WelcomeSlider from 'app/components/elements/welcome/WelcomeSlider';
+import WelcomeCardPost from 'app/components/cards/welcome/WelcomeCardPost';
+import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 
 class Welcome extends Component {
 
     state = {
         tagsLoading: false,
-        tagsActive: false,
+        tagsActiveId: false,
         tagsCards: {},
     }
 
@@ -69,7 +72,7 @@ class Welcome extends Component {
             id: 6,
             name: 'Фотография',
             items: [
-                { author: 'vp-photo.pro', permlink: 'kak-privezti-interesnye-kadry-iz-puteshestvii-v-lyubykh-usloviyakh ' },
+                { author: 'vp-photo.pro', permlink: 'kak-privezti-interesnye-kadry-iz-puteshestvii-v-lyubykh-usloviyakh' },
                 { author: 'genyakuc', permlink: '6geizx-raboty-ot-ostanovis-mgnovene' },
                 { author: 'ratel', permlink: 'ratel-foto-145-lesnye-pticy-96' }
             ]
@@ -81,26 +84,31 @@ class Welcome extends Component {
     }
 
     fetchTagContents = (tag) => {
-        console.log(1)
-        //this.setState({ tagsLoading: true })
+        this.setState({ tagsLoading: true, tagsActiveId: false })
         const promises = tag.items.map(item => (
             this.props.getContent({ author: item.author, permlink: item.permlink })
         ))
 
-        Promise.all(promises).then(values => {
-            this.setState({
-                tagsCards: { ...this.state.tagsCards, [tag.id]: values },
-                tagsLoading: false
+        Promise.all(promises).then(posts => {
+            const usernames = posts.map(post => post.author)
+            this.props.getAccount({ usernames }).then(() => {
+                this.setState({
+                    tagsLoading: false,
+                    tagsActiveId: tag.id,
+                    tagsCards: { ...this.state.tagsCards, [tag.id]: posts },
+                })
+            }).catch(() => {
+                this.setState({ tagsLoading: false, tagsActiveId: false })
             })
-            console.log(100500, values)
         }).catch(() => {
-            console.log(2)
-            //this.setState({ tagsLoading: false })
+            this.setState({ tagsLoading: false, tagsActiveId: false })
         })
     }
-    handleTagClick = (tag) => this.fetchTagContents(tag)
+    handleTagClick = (tag) => () => this.fetchTagContents(tag)
 
     render() {
+        const { tagsActiveId, tagsCards, tagsLoading } = this.state
+
         return (
             <div className="Welcome">
                 {/*
@@ -134,8 +142,8 @@ class Welcome extends Component {
                                         <img src="images/new/welcome/startup.svg" />
                                     </div>
                                     <div className="description">
-                                        Оригинальные идеи,
-                                        <div className="stroke">а не проплаченные статьи</div>
+                                        Оригинальные идеи,<br />
+                                        <span className="stroke">а не проплаченные статьи</span>
                                     </div>
 
                                 </div>
@@ -144,8 +152,8 @@ class Welcome extends Component {
                                         <img src="images/new/welcome/post.svg" />
                                     </div>
                                     <div className="description">
-                                        Посты и комментарии,
-                                        <div className="stroke">а не баннеры и реклама</div>
+                                        Посты и комментарии,<br />
+                                        <span className="stroke">а не баннеры и реклама</span>
                                     </div>
                                 </div>
                                 <div className="columns">
@@ -153,8 +161,8 @@ class Welcome extends Component {
                                         <img src="images/new/welcome/book.svg" />
                                     </div>
                                     <div className="description">
-                                        Удобство выдачи,
-                                        <div className="stroke">а не закрытые алгоритмы</div>
+                                        Удобство выдачи,<br />
+                                        <span className="stroke">а не закрытые алгоритмы</span>
                                     </div>
                                 </div>
                                 <div className="columns">
@@ -162,8 +170,8 @@ class Welcome extends Component {
                                         <img src="images/new/welcome/teamwork.svg" />
                                     </div>
                                     <div className="description">
-                                        Информация принадлежит вам
-                                        <div className="stroke">а не модерируется</div>
+                                        Информация принадлежит вам,<br />
+                                        <span className="stroke">а не модерируется</span>
                                     </div>
                                 </div>
                             </div>
@@ -176,24 +184,40 @@ class Welcome extends Component {
                         <div className="columns">
                             <div className="Welcome__initial-header">С чего начать и о чем писать?</div>
                             <div className="row align-middle Welcome__initial-top-row">
-                                <div className="columns small-3">
+                                <div className="columns small-12">
                                     <div className="Welcome__initial-subheader">Популярные темы:</div>
-                                </div>
-                                <div className="columns flex-container align-top">
-                                    <div className="initial-tag">История</div>
                                 </div>
                             </div>
                             <div className="row">
-                                <div className="columns small-3">
+                                <div className="columns small-12 medium-3 large-2">
                                     <div className="initial-tags">
-                                        {this.tags.map((tag) => (
-                                            <div key={tag.id} className="initial-tag" onClick={this.handleTagClick(tag)}>{tag.name}</div>)
-                                        )}
+                                        {this.tags.map((tag) => {
+                                            const activeClass = tag.id == tagsActiveId ? ' active' : ''
+                                            return (
+                                                <div 
+                                                    key={tag.id} 
+                                                    className={'initial-tag'+activeClass} 
+                                                    onClick={this.handleTagClick(tag)}
+                                                >{tag.name}</div>
+                                            )
+                                        })}
                                     </div>
                                 </div>
-                                <div className="columns">
-
-                                </div>
+                                {tagsLoading ?
+                                    <div className="columns align-self-middle">
+                                            <center><LoadingIndicator type="circle" /></center>
+                                    </div>
+                                    :
+                                    <div className="columns">
+                                        <div className="row small-up-1 medium-up-2 large-up-3">
+                                            {tagsCards[tagsActiveId] && tagsCards[tagsActiveId].map((post) => (
+                                                <div className="columns" key={post.id}>
+                                                    <WelcomeCardPost post={post} />
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                }
                             </div>
                         </div>
                     </div>
@@ -319,9 +343,13 @@ class Welcome extends Component {
 module.exports = {
     path: 'welcome',
     component: connect(
+        null,
         dispatch => ({
             getContent: (payload) => (new Promise((resolve, reject) => {
                 dispatch({ type: 'GET_CONTENT', payload: { ...payload, resolve, reject } })
+            })),
+            getAccount: (payload) => (new Promise((resolve, reject) => {
+                dispatch(user.actions.getAccount({ ...payload, resolve, reject }))
             }))
         })
     )(Welcome)

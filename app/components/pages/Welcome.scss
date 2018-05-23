@@ -122,6 +122,11 @@
     align-items: center;
     height: 100px;
     margin-bottom: 48px;
+
+    @include breakpoint(medium down) {
+      justify-content: center;
+    }
+
   }
 
   .description {
@@ -129,6 +134,13 @@
     font-size: 18px;
     line-height: 1.42;
     color: #212121;
+
+    @include breakpoint(medium down) {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 20px;
+    }
 
     .stroke{
       position: relative;
@@ -151,7 +163,7 @@
   background-color: #f8f8f8;
 
   & > .row {
-    height: 920px;
+    min-height: 600px;
   }
 
   .Welcome__initial-header {
@@ -179,9 +191,15 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    flex-wrap: wrap;
 
     .initial-tag {
       margin-bottom: 15px;
+      margin-right: 10px;
+    }
+
+    @include breakpoint(medium down) {
+      flex-direction: row;
     }
   }
 
@@ -196,8 +214,20 @@
     cursor: pointer;
     transition: all 0.5s;
 
-    &:hover {
+    &:hover,
+    &.active {
       background-color: #ffffff;
+    }
+  }
+
+  .LoadingIndicator.circle > div {
+    width: 90px;
+    height: 90px;
+  }
+
+  @include breakpoint(large down) {
+    .WelcomeCardPost {
+      margin-bottom: 10px;
     }
   }
 }
@@ -254,7 +284,7 @@
 
 
 .Welcome__reviews {
-  padding: 20px 0;
+  padding: 30px 0;
   background-color: #3f46ad;
 
   & > .row {

@@ -360,7 +360,7 @@ export async function serverRender(
             };
         }
     }
-    // add pre-render hook to every component, check in-request timer and if time > timeout, return "too long" message
+
     let app, status, meta;
     try {
         requestTimer.startTimer('ssr_ms');

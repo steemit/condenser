@@ -22,13 +22,13 @@ const hrtimeToMilliseconds = hrtime => +hrtime[0] * 1000 + +hrtime[1] / 1000000;
 export default class RequestTimer {
     /**
      *
-     * @param {StatsLoggerClient} statsdClient
+     * @param {StatsLoggerClient} statsLoggerClient
      * @param {string} prefix namespace to tack on the front of each timer name
-     * @param {string} tags todo how to format tags?
+     * @param {string} tags not yet supported by statsd / StatsLoggerClient
      */
-    constructor(statsdClient, prefix, tags) {
+    constructor(statsLoggerClient, prefix, tags) {
         assert(
-            statsdClient instanceof StatsLoggerClient,
+            statsLoggerClient instanceof StatsLoggerClient,
             'provide an instance of StatsLoggerClient'
         );
 
@@ -37,7 +37,7 @@ export default class RequestTimer {
         this.inProgressTimers = {};
         this.prefix = prefix;
         this.requestTags = tags;
-        this.statsdClient = statsdClient;
+        this.statsLoggerClient = statsLoggerClient;
     }
 
     /**
@@ -85,6 +85,6 @@ export default class RequestTimer {
             'total_ms',
             hrtimeToMilliseconds(process.hrtime(this.start))
         );
-        this.statsdClient.logTimers(this.timers, this.requestTags);
+        this.statsLoggerClient.logTimers(this.timers, this.requestTags);
     }
 }

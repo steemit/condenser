@@ -625,7 +625,7 @@ class UserWallet extends React.Component {
                                 className="Wallet_dropdown"
                                 items={dollar_menu}
                                 el="li"
-                                selected={sbd_balance_str + ' STEEM'}
+                                selected={sbd_balance_str}
                                 position="left"
                             />
                         ) : (

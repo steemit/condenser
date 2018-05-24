@@ -8,6 +8,7 @@
     box-shadow: 0 0 10px rgba(0,0,0,0.5);
     border-radius: 5px;
     padding-top: 1rem;
+    padding-bottom: 1rem;
     z-index: 99;
 
     .row{
@@ -32,16 +33,16 @@
 
     .cta-block-text-special{
         font-size: 1rem;
-    }   
+    }
     .cta-block-text-regular{
         font-size: 0.8rem;
         display: inline-block;
         margin-bottom: 0rem;
-    } 
+    }
 }
-.urerpic{        
-    border-radius: 100px; 
-    border: 0px solid;        
+.urerpic{
+    border-radius: 100px;
+    border: 0px solid;
 }
 
 .tooltip{

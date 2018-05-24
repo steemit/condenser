@@ -4,7 +4,7 @@ function requestTime(statsLoggerClient) {
     return function*(next) {
         this.state.requestTimer = new RequestTimer(
             statsLoggerClient,
-            'condenser.request',
+            'request',
             `method=${this.request.method} path=${this.request.path}`
         );
 

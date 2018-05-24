@@ -85,10 +85,7 @@ app.use(isBot());
 // (unless passed in as an env var)
 const numProcesses = process.env.NUM_PROCESSES || os.cpus().length;
 
-const statsLoggerClient = new StatsLoggerClient(
-    process.env.GRAPHITE_HOST,
-    process.env.GRAPHITE_PORT
-);
+const statsLoggerClient = new StatsLoggerClient(process.env.STATSD_IP);
 
 app.use(requestTime(statsLoggerClient));
 

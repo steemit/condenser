@@ -5,8 +5,6 @@ import Header from 'app/components/modules/Header';
 import * as userActions from 'app/redux/UserReducer';
 import classNames from 'classnames';
 import ConnectedSidePanel from 'app/components/modules/ConnectedSidePanel';
-// TODO: SidePanel might have to go into ConnectedSidePanel
-import SidePanel from 'app/components/modules/SidePanel';
 import CloseButton from 'app/components/elements/CloseButton';
 import Dialogs from 'app/components/modules/Dialogs';
 import Modals from 'app/components/modules/Modals';

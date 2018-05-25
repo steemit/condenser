@@ -961,5 +961,12 @@
         "image_size_is_too_large": "Image size is too large"
       }
     }
+  },
+  "chain_errors": {
+    "only_comment_once_every": "You may only comment once every 20 seconds",
+    "only_post_once_every": "You may only post once every 5 minutes",
+    "exceeded_maximum_allowed_bandwidth": "Account exceeded maximum allowed bandwidth per vesting share",
+    "already_voted": "You have already voted in a similar way",
+    "only_vote_once_every": "Can only vote once every 3 seconds"
   }
 }

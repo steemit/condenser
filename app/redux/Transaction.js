@@ -1,5 +1,6 @@
 import {fromJS, Map} from 'immutable';
 import createModule from 'redux-modules';
+import tt from 'counterpart';
 
 export default createModule({
     name: 'transaction',
@@ -93,6 +94,19 @@ export default createModule({
                             }
                         }
                         if (errorStr.length > 200) errorStr = errorStr.substring(0, 200);
+
+                        if (/You may only comment once every 20 seconds/.test(errorKey)) {
+                            errorKey = errorStr =  tt('chain_errors.only_comment_once_every');
+                        } else if (/You may only post once every 5 minutes/.test(errorKey)) {
+                            errorKey = errorStr =  tt('chain_errors.only_post_once_every');
+                        } else if (/Account exceeded maximum allowed bandwidth per vesting share/.test(errorKey)) {
+                            errorKey = errorStr =  tt('chain_errors.exceeded_maximum_allowed_bandwidth');
+                        } else if (/You have already voted in a similar way/.test(errorKey)) {
+                            errorKey = errorStr =  tt('chain_errors.already_voted');
+                        } else if (/Can only vote once every/.test(errorKey)) {
+                            errorKey = errorStr =  tt('chain_errors.only_vote_once_every');
+                        }
+
                         state = state.update('errors', errors => {
                             return errors ? errors.set(errorKey, errorStr) : Map({[errorKey]: errorStr});
                         });

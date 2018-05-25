@@ -74,6 +74,6 @@
   "steemd_use_appbase": false,
   "chain_id": "0000000000000000000000000000000000000000000000000000000000000000",
   "address_prefix": "STM",
-  "docker_tag": "Docker Tag",
-  "source_commit": "Source Commit"
+  "docker_tag": false,
+  "source_commit": false
 }

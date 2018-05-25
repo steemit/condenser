@@ -523,7 +523,7 @@ export default connect(
             dispatch(user.actions.changeTheme(theme))
         },
         updateAccount: ({successCallback, errorCallback, ...operation}) => {
-            const options = {type: 'account_update', operation, successCallback, errorCallback}
+            const options = {type: 'account_metadata', operation, successCallback, errorCallback}
             dispatch(transaction.actions.broadcastOperation(options))
         },
         notify: (message, dismiss = 3000) => {

@@ -111,8 +111,8 @@ app.use(function*(next) {
         this.status = 200;
         this.body = {
             status: 'ok',
-            docker_tag: config.docker_tag,
-            source_commit: config.source_commit,
+            docker_tag: config.get('docker_tag'),
+            source_commit: config.get('source_commit'),
         };
         return;
     }

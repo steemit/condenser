@@ -5,7 +5,7 @@ import { APP_NAME, APP_ICON } from 'app/client_config';
 export default function MiniHeader() {
     return <header className="Header">
         <div className="Header__top header">
-            <div className="expanded row">
+            <div className="expanded row align-middle">
                 <div className="columns">
                     <ul className="menu">
                         <li className="Header__top-logo">

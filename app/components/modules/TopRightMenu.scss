@@ -1,23 +1,56 @@
 .sub-menu {
     li {
-        padding: .7rem 1rem;
-        a {
-            padding: 0px;
-        }
+        margin: 0 15px;
     }
     li:last-child {
-        padding: 0 0 0 1rem;
+        margin: 0 0 0 1rem;
     }
 }
 
-li.Header__userpic {
+li.Header__profile {
   padding: 0;
   position: relative;
 
+  a {
+    display: flex;
+  }
+
   .Userpic {
-    width: 32px !important;
-    height: 32px !important;
-    border: 1px solid $gray88;
+    width: 51px !important;
+    height: 51px !important;
+  }
+
+  .NavProfile {
+    display: inline-block;
+    margin-left: 9px;
+    letter-spacing: 0.4px;
+    line-height: 23px;
+  }
+
+  .NavProfile__name {
+    color: #333;
+    font-size: 0.85rem;
+    line-height: 1rem;
+  }
+
+  .NavProfile__golos {
+    color: #14236C; // #4a51b6
+    font-weight: 500;
+    font-size: 0.73rem;
+    line-height: 1.8rem;
+  }
+  .NavProfile__golos-percent {
+    color: #fc544e;
+  }
+
+  .NavProfile__progress {
+    height: 4px;
+    border-radius: 6px;
+    background-color: #4a51b6;
+  }
+  .NavProfile__progress-percent {
+    height: 4px;
+    background-color: #fc544e;
   }
 }
 li.languages {
@@ -41,39 +74,9 @@ li.buttons {
 }
 
 li {
-    .button.alert, .button.success {
-      padding: 3px;
-      font-size: 100%;
-      line-height: 100%;
-      font-weight: 500;
-    }
     .button.fest {
       text-transform: inherit;
       background-color: #eb3010;
     }
-}
-li.wrap-rocket-chat {
-  > a > span.Icon {
-    width: 1.5rem !important;
-    height: 1.5rem !important;
-    svg {
-      width: 1.5rem !important;
-      height: 1.5rem !important;
-    }
-  }
-}
-
-li.wrap-telegram {
-  > a > span.Icon {
-    width: 1.5rem !important;
-    height: 1.5rem !important;
-    svg {
-      width: 1.5rem !important;
-      height: 1.5rem !important;
-      > path {
-        fill: #ffffff;
-      }
-    }
-  }
 }
 

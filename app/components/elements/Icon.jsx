@@ -60,7 +60,6 @@ const icons = [
     'location',
     'info_o',
     'feedback',
-    'rocket-chat',
     'telegram',
     'cog',
     'enter',
@@ -100,18 +99,34 @@ const icons = [
     'hf/hf19',
     'hf/hf20',
     'vote',
-    'flag'
+    'flag',
+    'new/vk',
+    'new/facebook',
+    'new/telegram',
+    'new/home',
+    'new/blogging',
+    'new/comment',
+    'new/answer',
+    'new/wallet',
+    'new/setting',
+    'new/logout',
+    'new/bell',
+    'new/messenger',
+    'new/more',
+    'new/like',
+    'new/add',
+    'new/search'
 ];
 const icons_map = {};
 for (const i of icons) icons_map[i] = require(`app/assets/icons/${i}.svg`);
 
-const rem_sizes = {'1x': '1.12', '1_5x': '1.5', '1_75x': '1.75', '2x': '2', '3x': '3.45', '4x': '4.60', '5x': '5.75', '10x': '10.0'};
+const rem_sizes = {'0_75x': '0.75', '0_95x': '0.95', '1x': '1.12', '1_25x': '1.25', '1_5x': '1.5', '1_75x': '1.75', '2x': '2', '3x': '3.45', '4x': '4.60', '5x': '5.75', '10x': '10.0'};
 
 export default class Icon extends React.Component {
 
     static propTypes = {
         name: React.PropTypes.string.isRequired,
-        size: React.PropTypes.oneOf(['1x', '1_5x', '2x', '3x', '4x', '5x', '10x']),
+        size: React.PropTypes.oneOf(['0_75x', '0_95x', '1x', '1_25x', '1_5x', '2x', '3x', '4x', '5x', '10x']),
         inverse: React.PropTypes.bool,
         className: React.PropTypes.string
     };
@@ -119,10 +134,10 @@ export default class Icon extends React.Component {
     render() {
         const {name, size, className} = this.props;
         let classes = 'Icon ' + name;
-        let style = {display: 'inline-block', width: `${rem_sizes['1x']}rem`, height: `${rem_sizes['1x']}rem`};
+        let style = {display: 'inline-block', width: `${rem_sizes['1x']}rem`};
         if (size) {
             classes += ' Icon_' + size;
-            style = {display: 'inline-block', width: `${rem_sizes[size]}rem`, height: `${rem_sizes[size]}rem`};
+            style = {display: 'inline-block', width: `${rem_sizes[size]}rem`};
         }
         if (className) {
             classes += ' ' + className;

@@ -13,8 +13,11 @@ export default class LandingWhatIsGolos extends React.Component {
 				</div>
 				<div className="row WhatIsGolos__action">
 					<div className="small-12 columns">
-						<a href="/create_account" className="button">Зарегистрируйся</a>
-						<p><small>Получи 5 ГОЛОСОВ бесплатно</small></p>
+						<div className="small-12 btn_block">
+							<a className="button" href="/create_account" className="button">Создать аккаунт</a>
+							<a className="button" href="/start" className="button">Узнать больше</a>
+						</div>
+						<p><small>Golos.io — блог-платформа следующего поколения. Зарегистрируйтесь, чтобы публиковать свои истории и комментарии и получать за это вознаграждения!</small></p>
 					</div>
 				</div>
 				<hr />

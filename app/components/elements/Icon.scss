@@ -1,7 +1,10 @@
 .Icon {
   vertical-align: middle;
 
-  > svg, span.icon {
+  width: 1.12rem;
+  height: 1.12rem;
+
+  > svg {
     width: 1.12rem;
     height: 1.12rem;
     vertical-align: top;
@@ -10,6 +13,21 @@
   &.fill-black > svg > path {
     fill:black;
   }
+}
+
+.Icon_0_75x > svg, span.Icon_0_75x {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.Icon_0_95x > svg, span.Icon_0_95x {
+  width: 0.95rem;
+  height: 0.95rem;
+}
+
+.Icon_1_25x > svg, span.Icon_1_25x {
+  width: 1.25rem;
+  height: 1.25rem;
 }
 
 .Icon_1_5x > svg, span.Icon_1_5x {

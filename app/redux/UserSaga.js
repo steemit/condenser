@@ -10,6 +10,7 @@ import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import {loadFollows} from 'app/redux/FollowSaga'
 import {PrivateKey, Signature, hash} from 'golos-js/lib/auth/ecc'
 import {api} from 'golos-js'
+import g from 'app/redux/GlobalReducer'
 import tt from 'counterpart';
 import React from 'react';
 import PushNotificationSaga from 'app/redux/services/PushNotificationSaga';
@@ -22,7 +23,7 @@ export const userWatches = [
     loginWatch,
     saveLoginWatch,
     logoutWatch,
-    // getCurrentAccountWatch,
+    getAccountWatch,
     loginErrorWatch,
     lookupPreviousOwnerAuthorityWatch,
     watchLoadSavingsWithdraw,
@@ -79,6 +80,9 @@ const strCmp = (a, b) => a > b ? 1 : a < b ? -1 : 0
 // function* getCurrentAccountWatch() {
 //     // yield* takeLatest('user/SHOW_TRANSFER', getCurrentAccount);
 // }
+function* getAccountWatch() {
+    yield* takeLatest('user/GET_ACCOUNT', getAccountHandler);
+}
 
 function* removeHighSecurityKeys({payload: {pathname}}) {
     const highSecurityPage = highSecurityPages.find(p => p.test(pathname)) != null
@@ -536,10 +540,18 @@ function* uploadImage({payload: {file, dataUrl, filename = 'image.txt', progress
     xhr.send(formData)
 }
 
+function* getAccountHandler({ payload: { usernames, resolve, reject }}) {
+    if (!usernames) {
+        const current = yield select(state => state.user.get('current'))
+        if (!current) return
+        usernames = [current.get('username')]
+    }
 
-// function* getCurrentAccount() {
-//     const current = yield select(state => state.user.get('current'))
-//     if (!current) return
-//     const [account] = yield call([api, api.getAccountsAsync], [current.get('username')])
-//     yield put(g.actions.receiveAccount({ account }))
-// }
+    const accounts = yield call([api, api.getAccountsAsync], usernames)
+    yield accounts.map((account) => put(g.actions.receiveAccount({ account })))
+    if (resolve && accounts[0]) {
+        resolve(accounts);
+    } else if (reject && !accounts[0]) {
+        reject();
+    }
+}

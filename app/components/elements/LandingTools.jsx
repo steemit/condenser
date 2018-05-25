@@ -5,21 +5,37 @@ export default class LandingJoinUs extends React.Component {
 	render() {
 		const mainTexts = [
 			'Доска Почёта Голоса',
-			'Мобильное приложение',
+			'Приложение Golos.io для Android',
 			'Расширение GolosNotify для браузера Google Chrome',
 			'База данных Голоса',
 			'Статистический инструмент',
-			'Аналитический инструмент',
-      		'Китовый сонар',
+      'Китовый сонар',
+			'Golos Explorer',
+			'SteepShot',
+			'MapalaNet',
+			'OnePlace',
+			'CPEDA.SPACE',
+			'База знаний Golos Wiki',
+			'Фотопремия Golos Photography Awards',
+			'Pokupo',
+			'Статистика аккаунта'
 		]
 		const secondaryTexts = [
 			'Это место, где Вы сможете получить награды за свои достижения на Голосе. Здесь Вы также сможете увидеть награды других пользователей.',
-			'Мобильное приложение для чтения, публикации, голосования, комментирования.',
+			'Мобильное приложение для Андройд для чтения, публикации, голосований, коментирования.',
 			'Получайте уведомления обо всех действиях с Вашими постами и комментариями на golos.io. GolosNotify позволяет Вам получать оповещения о различных действиях с Вашими постами.',
-			'Аналитический инструмент с помошью которого можно осуществлять различные выборки из базы данных Голоса',
 			'Приложение создано для того, чтобы следить за активностью Вашего пользователя в Голосе',
 			'С помошью данного ресурса можно увидеть в сыром виде структуры данных Голоса',
-      		'Приложение демонстрирует активность пользователей с различными настройками'
+      'Приложение демонстрирует активность пользователей с различными настройками',
+			'Сервис для просмотра транзакций в блокчейне Голос в реальном времени и поиска информации по ним',
+			'Социальная платформа, вознаграждающая пользователей за публикации фотографий о своей жизни и окружающем мире.',
+			'Cообщество самостоятельных путешественников',
+			'Веб-клиент для блокчейнов Golos и Steem',
+			'Cоциальная сеть на блокчейне Голос',
+			'Вики является результатом коллективного труда. Каждый может поучаствовать в ее развитии',
+			'Первая криптовалютная награда в области фотографии, созданная на базе медиа-блокчейна «Голос»',
+			'Платформа для создания интерент магазина за 10 минут и 0 рублей без абонентской платы',
+			'Сервис для просмотра статистики аккаунта'
 		]
 		const urls = [
 			'http://golosboard.com/',
@@ -27,8 +43,16 @@ export default class LandingJoinUs extends React.Component {
 			'https://chrome.google.com/webstore/detail/golosnotify-%D1%83%D0%B2%D0%B5%D0%B4%D0%BE%D0%BC%D0%BB%D0%B5%D0%BD%D0%B8%D1%8F-%D0%B4/abfmjjkkpeokoijnlnhmjobjhjkmaijg',
 			'https://golosdb.com/',
 			'http://golos.steemstats.com/',
-			'http://golosd.com/',
-      		'http://golos.loadsup.net/sonar/',
+      'http://golos.loadsup.net/sonar/',
+			'https://explorer.golos.io/',
+			'https://steepshot.io/',
+			'http://mapala.net',
+			'https://oneplace.media/g',
+			'https://cpeda.space/socnet/',
+			'https://wiki.golos.io/',
+			'http://golosphoto.ru/',
+			'https://pokupo.ru',
+			'http://golos.accusta.tk/'
 		]
 
 		function renderItems() {
@@ -59,6 +83,9 @@ export default class LandingJoinUs extends React.Component {
 				</div>
 				<div className="row text-left JoinUs__reasons">
 					{renderItems()}
+					<div className="small-12 text-center">
+						<a href="http://chainstore.io" target="_blank">Больше приложений для блокчейна Голос</a>
+					</div>
 				</div>
 				<hr />
 			</section>

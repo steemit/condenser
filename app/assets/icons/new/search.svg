@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <path d="M13.4625645,12.0501328 L19.2965638,17.9039125 C19.682631,18.2912887 19.6819997,18.9181566 19.295153,19.3047543 C18.9083401,19.6913183 18.2814978,19.6914526 17.8945194,19.3050542 L12.046238,13.4655392 C10.784921,14.4282365 9.20923178,15 7.5,15 C3.35786438,15 0,11.6421356 0,7.5 C0,3.35786438 3.35786438,0 7.5,0 C11.6421356,0 15,3.35786438 15,7.5 C15,9.21099153 14.4270586,10.7881654 13.4625645,12.0501328 Z M13,7.5 C13,10.5375661 10.5375661,13 7.5,13 C4.46243388,13 2,10.5375661 2,7.5 C2,4.46243388 4.46243388,2 7.5,2 C10.5375661,2 13,4.46243388 13,7.5 Z" id="path-1"></path>
+    </defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Header_Menu_login" transform="translate(-905.000000, -30.000000)">
+            <g id="ic_search_normal">
+                <g transform="translate(905.000000, 30.000000)">
+                    <mask id="mask-2" fill="white">
+                        <use xlink:href="#path-1"></use>
+                    </mask>
+                    <use id="search" fill="#393636" xlink:href="#path-1"></use>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

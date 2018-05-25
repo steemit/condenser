@@ -178,7 +178,7 @@ class PostsIndex extends React.Component {
         return (
             <div className={'PostsIndex row' + (fetching ? ' fetching' : '')}>
                 <div className="PostsIndex__left column small-collapse">
-                    <div className="PostsIndex__topics_compact show-for-small hide-for-large">
+                    <div className="PostsIndex__topics_compact show-for-small hide-for-medium">
                         <Topics order={topics_order} current={category} loading={fetching} loadSelected={this.loadSelected} compact />
                     </div>
                     {markNotificationRead}

@@ -6,8 +6,9 @@ import {connect} from 'react-redux'
 import g from 'app/redux/GlobalReducer';
 import { getSymbolFromCurrency } from 'currency-symbol-map';
 import { FRACTION_DIGITS, DEFAULT_CURRENCY, DEBT_TOKEN_SHORT, FRACTION_DIGITS_MARKET } from 'app/client_config';
+import { short as shortAmount } from 'app/utils/FormatNumbers'
 import cookie from "react-cookie";
-import {Map} from 'immutable';
+import { Map } from 'immutable';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 
 
@@ -21,6 +22,7 @@ class LocalizedCurrency extends React.Component {
     amount: React.PropTypes.number.isRequired,
     currency: React.PropTypes.string,
     rounding: React.PropTypes.bool,
+    short: React.PropTypes.bool,
     minimumAmountToShow: React.PropTypes.number,
   }
 
@@ -65,6 +67,7 @@ class LocalizedCurrency extends React.Component {
       noSymbol,
       fractionDigits,
       rounding,
+      short,
       minimumAmountToShow, 
       vesting_shares
     } = this.props
@@ -115,25 +118,27 @@ class LocalizedCurrency extends React.Component {
         }
       }
 
-      if(options ? (options.rounding ? options.rounding : rounding ) : rounding) {     
-        let divider = Math.pow(10, (parseInt(Math.ceil(currencyAmount).toString().length) - 1))
-        currencyAmount = (currencyAmount / divider | 0) * divider
+      if (options ? (options.short ? options.short : short) : short) {
+        currencyAmount = shortAmount(currencyAmount)
       } else {
-        currencyAmount = currencyAmount.toLocaleString(lang, {
-          minimumFractionDigits: nRounding,
-          maximumFractionDigits: nRounding
-        })
+        if(options ? (options.rounding ? options.rounding : rounding ) : rounding) {     
+          let divider = Math.pow(10, (parseInt(Math.ceil(currencyAmount).toString().length) - 1))
+          currencyAmount = (currencyAmount / divider | 0) * divider
+        } else {
+          currencyAmount = currencyAmount.toLocaleString(lang, {
+            minimumFractionDigits: nRounding,
+            maximumFractionDigits: nRounding
+          })
+        }
       }
-      
+
       // if noSymbol is specified return only amount of digits
-       
       return  (options ? (options.noSymbol ? options.noSymbol : noSymbol) : noSymbol)
         ? currencyAmount
         : (lang == 'en') ? (symbol + ' ' + currencyAmount) : (currencyAmount + ' ' + symbol)
     }
 
     return <span>{localizedCurrency(amount, {maximumFractionDigits: fractionDigits})}</span>
-    
   }
 }
 

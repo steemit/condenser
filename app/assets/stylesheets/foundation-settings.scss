@@ -1,3 +1,6 @@
+$global-flexbox: true !default;
+$xy-grid: false !default;
+
 /// Font size attribute applied to `<html>` and `<body>`. We use 100% by default so the value is inherited from the user's browser settings.
 /// @type Number
 $global-font-size: 100% !default;
@@ -9,11 +12,11 @@ $global-lineheight: 1.6 !default;
 /// Colors used for buttons, callouts, links, etc. There must always be a color called `primary`.
 /// @type Map
 $foundation-palette: (
-        primary: #1A5099,
+        primary: #0078C4,
         secondary: #777,
         success: #3adb76,
         warning: #ffae00,
-        alert: #ec5840,
+        alert: #FD3A28,
 ) !default;
 
 $mainly-blue: #1A5099;
@@ -24,7 +27,7 @@ $gray88: #e0e0e0;
 
 /// Color used for light gray UI items.
 /// @type Color
-$light-gray: #e6e6e6 !default;
+$light-gray: #e1e1e1 !default;
 
 /// Color used for medium gray UI items.
 /// @type Color
@@ -52,8 +55,18 @@ $body-font-color: $black !default;
 
 /// Font stack of the body.
 /// @type List
-$body-font-family: 'Helvetica Neue', Arial, 'Roboto', sans-serif !default;
+$body-font-family: 'Roboto', 'Helvetica Neue', Arial, sans-serif !default;
 
 /// Global value used for all elements that have a border radius.
 /// @type Number
 $global-radius: 3px !default;
+
+$button-palette: (
+        primary: #0078C4,
+        secondary: #777,
+        success: #3adb76,
+        warning: #ffae00,
+        alert: #fc544e,
+) !default;
+$button-font-family: 'Roboto' !default;
+$button-radius: 100px !default;

@@ -28,7 +28,14 @@ export default function reducer(state = defaultState, action) {
         return state.set('location', {pathname: action.payload.pathname});
     }
     if (action.type === 'CHAIN_API_ERROR') {
-        return state.set('error', action.error).set('loading', false);
+        //return state.set('error', action.error).set('loading', false);
+        return state.set('error', action.error);
+    }
+    if (action.type === 'FETCH_DATA_BEGIN') {
+        return state.set('loading', true);
+    }
+    if (action.type === 'FETCH_DATA_END') {
+        return state.set('loading', false);
     }
     let res = state;
     if (action.type === 'ADD_NOTIFICATION') {

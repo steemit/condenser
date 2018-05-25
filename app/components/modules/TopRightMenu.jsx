@@ -10,10 +10,10 @@ import VerticalMenu from 'app/components/elements/VerticalMenu';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import NotifiCounter from 'app/components/elements/NotifiCounter';
 import tt from 'counterpart';
-import { DEFAULT_LANGUAGE, LANGUAGES, LOCALE_COOKIE_KEY, LIQUID_TICKER, DEBT_TICKER, APP_NAME_UP } from 'app/client_config';
+import { LIQUID_TICKER, DEBT_TICKER } from 'app/client_config';
 import LocalizedCurrency from 'app/components/elements/LocalizedCurrency';
 import {vestingSteem} from 'app/utils/StateFunctions';
-import cookie from "react-cookie";
+import { getURL } from 'app/utils/URLConstants'
 
 const defaultNavigate = (e) => {
     if (e.metaKey || e.ctrlKey) {
@@ -65,180 +65,158 @@ const calculateEstimateOutput = ({a, p, sw, g}) => {
   return Number( ( (total_steem * p) + total_sbd).toFixed(2) );
 }
 
-function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops, username, showLogin, logout, loggedIn, vertical, navigate, toggleOffCanvasMenu, probablyLoggedIn, location, locationQueryParams, changeLanguage}) {
+function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops, username, showLogin, logout, loggedIn, vertical, navigate, probablyLoggedIn, location, locationQueryParams}) {
     const APP_NAME = tt('g.APP_NAME');
-
+    
     const mcn = 'menu' + (vertical ? ' vertical show-for-small-only' : '');
     const mcl = vertical ? '' : ' sub-menu';
-    const lcn = vertical ? '' : 'show-for-medium';
+    const lcn = vertical ? '' : 'show-for-large';
+    const scn = vertical ? '' : 'show-for-medium';
     const nav = navigate || defaultNavigate;
-    const submitStory = <li className={lcn + ' submit-story'}>
-      <a href="/submit.html" onClick={nav}>{tt('g.submit_a_story')}</a>
+    const submitStory = <li className={scn + ' submit-story'}>
+        <a href="/submit.html" onClick={nav} className={'button small alert'}>
+            <Icon name="new/add" size="0_95x" />{tt('g.submit_a_story')}
+        </a>
     </li>;
-    const submitStoryPencil = <li className="show-for-small-only">
-      <Link to="/submit.html"><Icon name="pencil" /></Link>
+    const submitStoryPencil = <li className="hide-for-medium submit-story-pencil">
+        <Link to="/submit.html" className="button small alert">
+            <Icon name="new/add" size="0_95x"/>
+        </Link>
     </li>;
-    const golosFest = <li className={lcn + ' buttons'}><Link to="/@golosio" className="button alert fest">{tt('g.golos_fest')}</Link></li>;
     const feedLink = `/@${username}/feed`;
     const repliesLink = `/@${username}/recent-replies`;
     const walletLink = `/@${username}/transfers`;
     const settingsLink = `/@${username}/settings`;
     const accountLink = `/@${username}`;
     const commentsLink = `/@${username}/comments`;
-    const postsLink = `/@${username}/posts`;
     const reset_password_link = `/@${username}/password`;
 
-    const inIco = location && location.pathname.indexOf("/about") == 0;
-    const ico_menu = [
-        {link: '#what-is-golos', value: tt('g.video')},
-        {link: 'https://developers.golos.io', value: tt('g.documentation')},
-        {link: '#faq', value: tt('navigation.faq')},
-        {link: '#team', value: tt('g.team')},
-    ];
-    let currentLang = LANGUAGES[DEFAULT_LANGUAGE].substr(0,3).toUpperCase();
-    const locale = process.env.BROWSER ? cookie.load(LOCALE_COOKIE_KEY) || DEFAULT_LANGUAGE : DEFAULT_LANGUAGE
-    const lang_menu = [];
-    for (var key in LANGUAGES) {
-      if (locale === key)
-        currentLang = LANGUAGES[key].substr(0,3).toUpperCase();
-      else
-        lang_menu.push({link: '#' + key, onClick: changeLanguage, value: LANGUAGES[key]})
-    }
-    const aboutItem = <li className={lcn}>
-        <Link to="/about" title={tt('g.about_project')}>
-          {vertical ? <span>{tt('g.about_project')}</span> : <Icon name="info_o" />}
-        </Link>
-      </li>
-    ;
-    const submitFeedback = <li className={lcn}>
-        <Link to="/submit.html?type=submit_feedback" title={tt('navigation.feedback')}>
-          <Icon name="feedback" />
-        </Link>
-      </li>
-    ;
-    const searchItem = <li className={lcn}>
+    const searchItem = <li className={scn}>
         <a href="/static/search.html" title={tt('g.search')}>
-          {vertical ? <span>{tt('g.search')}</span> : <Icon name="search" />}
+          {vertical ? <span>{tt('g.search')}</span> : <Icon name="new/search" size="1_25x" />}
         </a>
       </li>
     ;
-    const languageMenu = <LinkWithDropdown
+
+    const notificationItem = <li className={scn}>
+        <a href="#" title={tt('g.search')} className="number">
+          <Icon name="new/bell" size="1_25x" />
+          20
+        </a>
+      </li>
+    ;
+    // const messengerItem = <li className={scn}>
+    //     <a href="#" title={tt('g.search')} className="number">
+    //       <Icon name="new/messenger" size="1_5x" />
+    //       18
+    //     </a>
+    //   </li>
+    // ;
+
+    const additional_menu = [
+        { link: '/welcome', value: tt("navigation.welcome") },
+        { link: getURL('WIKI_URL'), value: tt('navigation.wiki') },
+        { link: '/market', value: tt('userwallet_jsx.market') },
+        { link: '/~witnesses', value: tt("navigation.witnesses") },
+        { link: 'http://golostools.com/', value: tt('navigation.APP_NAME_app_center', { APP_NAME }) }
+    ];
+    const navAdditional = <LinkWithDropdown
         closeOnClickOutside
         dropdownPosition="bottom"
         dropdownAlignment="right"
-        dropdownContent={<VerticalMenu items={lang_menu} title={tt('settings_jsx.choose_language')} />}
-        >
-            {!vertical && <li className={lcn + ' languages'}>
-                <a title={tt('settings_jsx.choose_language')} onClick={e => e.preventDefault()}>
-                    <small>{currentLang}</small>
-                </a>
-            </li>}
-        </LinkWithDropdown>
-    ;
-    const rocketchatItem = !vertical ? <li className={lcn + ' wrap-rocket-chat'}>
-        <a href="https://chat.golos.io/" title={tt("navigation.APP_NAME_chat", {APP_NAME})} target="_blank">
-          <Icon name="rocket-chat" />
-        </a>
-      </li>
-      : null
-    ;
-    const telegramItem = !vertical ? <li className={lcn + ' wrap-telegram'}>
-    <a href="https://t.me/golos_support" title={tt("navigation.telegram_support", {APP_NAME_UP})} target="_blank">
-      <Icon name="telegram" />
-    </a>
-  </li>
-  : null
-;
-const estimateOutput = <LocalizedCurrency amount={calculateEstimateOutput({a:account, p: price_per_golos, sw: savings_withdraws, g: globalprops})} />;
+        dropdownContent={<VerticalMenu className={'VerticalMenu_nav-additional'} items={additional_menu} />}
+    >
+        {!vertical && <li>
+            <a href="#" onClick={e => e.preventDefault()}>
+                <Icon name="new/more" />
+            </a>
+        </li>}
+    </LinkWithDropdown>;
+
+    const estimateOutput = <LocalizedCurrency amount={calculateEstimateOutput({a:account, p: price_per_golos, sw: savings_withdraws, g: globalprops})} />;
 
     if (loggedIn) { // change back to if(username) after bug fix:  Clicking on Login does not cause drop-down to close #TEMP!
         const user_menu = [
-            {link: feedLink, icon: 'home', value: tt('g.feed'), addon: <NotifiCounter fields="feed" />},
-            {link: accountLink, icon: 'profile', value: tt('g.blog')},
-            {link: commentsLink, icon: 'replies', value: tt('g.comments')},
-            {link: repliesLink, icon: 'reply', value: tt('g.replies'), addon: <NotifiCounter fields="comment_reply" />},
-            {link: walletLink, icon: 'wallet', value: tt('g.wallet'), addon: <NotifiCounter fields="follow,send,receive,account_update" />},
+            {link: feedLink, icon: 'new/home', iconSize: '1_25x', value: tt('g.feed'), addon: <NotifiCounter fields="feed" />},
+            {link: accountLink, icon: 'new/blogging', value: tt('g.blog')},
+            {link: commentsLink, icon: 'new/comment', value: tt('g.comments')},
+            {link: repliesLink, icon: 'new/answer', value: tt('g.replies'), addon: <NotifiCounter fields="comment_reply" />},
+            {link: walletLink, icon: 'new/wallet', value: tt('g.wallet'), addon: <NotifiCounter fields="follow,send,receive,account_update" />},
             {link: reset_password_link, icon: 'key', value: tt('g.change_password')},
-            {link: settingsLink, icon: 'cog', value: tt('g.settings')},
+            {link: settingsLink, icon: 'new/setting', value: tt('g.settings')},
             loggedIn ?
-                {link: '#', icon: 'enter', onClick: logout, value: tt('g.logout')} :
+                {link: '#', icon: 'new/logout', onClick: logout, value: tt('g.logout')} :
                 {link: '#', onClick: showLogin, value: tt('g.login')}
         ];
+
+        const voting_power_percent = account.get('voting_power') / 100
+
         return (
             <ul className={mcn + mcl}>
-                {!inIco && golosFest}
-                {inIco && ico_menu.map((o,i) => {return <li key={i} className={lcn}><a href={o.link}>{o.value}</a></li>})}
-                {!inIco && aboutItem}
-                {!inIco && !vertical && submitFeedback}
-                {!inIco && searchItem}
-                {!inIco && languageMenu}
-                {!inIco && telegramItem}
-                {!inIco && rocketchatItem}
-                {!inIco && submitStory}
-                {!inIco && !vertical && submitStoryPencil}
+                {searchItem}
+                <li className="delim show-for-medium" />
+                {submitStory}
+                {!vertical && submitStoryPencil}
+                <li className="delim show-for-medium" />
                 <LinkWithDropdown
                     closeOnClickOutside
                     dropdownPosition="bottom"
-                    dropdownAlignment="right"
-                    dropdownContent={<VerticalMenu items={user_menu} title={username} description={estimateOutput} />}
+                    dropdownAlignment="bottom"
+                    dropdownContent={<VerticalMenu className={'VerticalMenu_nav-profile'} items={user_menu} title={estimateOutput} />}
                 >
-                    {!vertical && <li className={'Header__userpic '}>
+                    {!vertical && <li className={'Header__profile'}>
                         <a href={accountLink} title={username} onClick={e => e.preventDefault()}>
                             <Userpic account={username} />
+                            <div className={'NavProfile show-for-large'}>
+                                <div className={'NavProfile__name'}>{username}</div>
+                                <div className={'NavProfile__golos'}>
+                                    {tt('g.voting_capacity')}: <span className={'NavProfile__golos-percent'}>{voting_power_percent}%</span>
+                                </div>
+                                <div className={'NavProfile__progress'} title={`${voting_power_percent}%`}>
+                                    <div className={'NavProfile__progress-percent'} style={{ width: `${voting_power_percent}%` }} />
+                                </div>
+                            </div>
                         </a>
                         <div className="TopRightMenu__notificounter"><NotifiCounter fields="total" /></div>
                     </li>}
                 </LinkWithDropdown>
-                {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>
-                    <span className="hamburger" />
-                </a></li>}
+                {/* <li className={"delim " + scn} /> */}
+                {/* {notificationItem} */}
+                {/* <li className={"delim " + scn} />
+                {messengerItem} */}
+                {navAdditional}
             </ul>
         );
     }
 
     //fixme - redesign (code duplication with USaga, UProfile)
     let externalTransfer = false;
-    if (location) {
-      const {pathname} = location;
-      const query = locationQueryParams;
-      const section = pathname.split(`/`)[2];
-      const sender = (section === `transfers`) ? pathname.split(`/`)[1].substring(1) : undefined;
-      // /transfers. Check query string
-      if (sender && query) {
-        const {to, amount, token, memo} = query;
-        externalTransfer = (!!to && !!amount && !!token && !!memo);
+        if (location) {
+        const {pathname} = location;
+        const query = locationQueryParams;
+        const section = pathname.split(`/`)[2];
+        const sender = (section === `transfers`) ? pathname.split(`/`)[1].substring(1) : undefined;
+        // /transfers. Check query string
+        if (sender && query) {
+            const {to, amount, token, memo} = query;
+            externalTransfer = (!!to && !!amount && !!token && !!memo);
+        }
     }
-  }
 
     return (
         <ul className={mcn + mcl}>
-            {!inIco && golosFest}
-            {inIco && ico_menu.map((o,i) => {return <li key={i} className={lcn}><a href={o.link}>{o.value}</a></li>})}
-            {!inIco && aboutItem}
-            {!inIco && !vertical && <li>
-              <a href="/submit.html?type=submit_feedback" title={tt('navigation.feedback')}>
-                <Icon name="feedback" />
-              </a>
+            {searchItem}
+            <li className="delim show-for-medium" />
+            {!probablyLoggedIn && !externalTransfer && <li className={lcn}>
+              <a href="/login.html" onClick={showLogin} className={!vertical && 'button small violet hollow'}>{tt('g.login')}</a>
             </li>}
-            {!inIco && !vertical && languageMenu}
-            {!inIco && telegramItem}
-            {!inIco && rocketchatItem}
-            {!inIco && !probablyLoggedIn && <li className={lcn}>
-              <a href="/create_account">{tt('g.sign_up')}</a>
+            {!probablyLoggedIn && <li className={lcn}>
+              <a href="/create_account" className={!vertical && 'button small alert'}>{tt('g.sign_up')}</a>
             </li>}
-            {!inIco && !probablyLoggedIn && !externalTransfer && <li className={lcn}>
-              <a href="/login.html" onClick={showLogin}>{tt('g.login')}</a>
-            </li>}
-            {!inIco && !probablyLoggedIn && !vertical && submitStoryPencil}
-            {!inIco && !probablyLoggedIn && submitStory}
             {probablyLoggedIn && <li className={lcn}>
               <LoadingIndicator type="circle" inline />
             </li>}
-            {toggleOffCanvasMenu && <li className="toggle-menu">
-              <a href="#" onClick={toggleOffCanvasMenu}>
-                <span className="hamburger" />
-              </a>
-            </li>}
+            {navAdditional}
         </ul>
     );
 }
@@ -251,7 +229,6 @@ TopRightMenu.propTypes = {
     logout: React.PropTypes.func.isRequired,
     vertical: React.PropTypes.bool,
     navigate: React.PropTypes.func,
-    toggleOffCanvasMenu: React.PropTypes.func
 };
 
 export default connect(
@@ -288,18 +265,6 @@ export default connect(
         }
     },
     dispatch => ({
-        changeLanguage: e => {
-            if (e) e.preventDefault();
-            const targetLanguage = e.target.text.trim();
-            let language = DEFAULT_LANGUAGE;
-            for (var key in LANGUAGES) {
-              if (targetLanguage.localeCompare(LANGUAGES[key]) == 0)
-                language = key
-            }
-            cookie.save(LOCALE_COOKIE_KEY, language, {path: "/", expires: new Date(Date.now() + 60 * 60 * 24 * 365 * 10 * 1000)});
-            localStorage.setItem('language', language)
-            dispatch(user.actions.changeLanguage(language))
-        },
         showLogin: e => {
             if (e) e.preventDefault();
             dispatch(user.actions.showLogin())

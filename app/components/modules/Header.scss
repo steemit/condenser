@@ -5,6 +5,7 @@
   width: 100%;
   z-index: 100;
   background-color: $white;
+
   h3 {
     padding-left: 1rem;
     margin-bottom: 0;
@@ -12,11 +13,20 @@
   .menu {
     background-color: $white;
     padding-left: 0;
-    .hamburger {
-      @include hamburger();
-      position: relative;
-      height: 20px;
-      top: 2px;
+    align-items: center;
+
+    a {
+      padding: 0;
+    }
+
+    .button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 170px;
+      padding: 0.7rem 1rem;
+      color: #fff;
+      letter-spacing: 1px;
     }
   }
   ul.menu > li.toggle-menu > a {
@@ -30,16 +40,83 @@
 .Header__top {
   background-color: $white;
   border-bottom: 1px solid $light-gray;
-  ul > li.Header__top-logo {
-    padding: .35rem 0 .35rem 0;
+
+  .row {
+    height: 5rem;
   }
+
   ul > li.delim {
-    color: $medium-gray;
+    height: 44px;
+    width: 1px;
+    border-left: 1px solid $light-gray;
   }
-  ul > li > a {
-    font-size: 1.1rem;
-    @media #{$small-only} {
-      font-size: 1em;
+  ul > li {
+    &.submit-story > a {
+      padding: 0.53rem 1rem !important;
+    }
+    &.submit-story-pencil > a {
+      height: 50px;
+      width: 50px;
+      min-width: 50px !important;
+
+      .Icon {
+        margin-right: 0 !important;
+      }
+    }
+
+    > a {
+      font-size: 1.1rem;
+
+      .Icon {
+        fill: #333;
+      }
+
+      &:hover {
+        color: #3F46AD;
+
+        .Icon {
+          fill: #3F46AD;
+
+          #search {
+            fill: #3F46AD;
+          }
+        }
+      }
+
+      &.button {
+        .Icon {
+          fill: #fff;
+          margin-right: 5px;
+        }
+
+        &:hover {
+          .Icon {
+            fill: #fff;
+          }
+        }
+      }
+
+      &.number {
+        display: flex;
+        align-items: center;
+        color: #757575;
+        font-size: 18px;
+        font-weight: 300;
+        letter-spacing: 1.8px;
+        line-height: 23px;
+
+        span {
+          margin-right: 13px;
+        }
+
+        &:hover {
+          color: #3F46AD;
+        }
+      }
+
+      @include breakpoint(small only) {
+        font-size: 1em;
+      }
     }
   }
   ul > li > span {
@@ -48,13 +125,9 @@
     padding: 0.7rem 0.7rem;
     display: flex;
     text-transform: lowercase;
-    @media #{$small-only} {
+    @include breakpoint(small only) {
       font-size: 1em;
     }
-  }
-
-  svg > path {
-    fill: $dark-gray;
   }
 
   @media screen and (max-width: 39.9375em) {
@@ -69,11 +142,6 @@ ul > li.Header__top-logo > a {
   transition: none;
 }
 
-ul > li > .button {
-  padding-top: 0.2rem;
-  padding-bottom: 0.2rem;
-}
-
 .Header__sub-nav {
   position: relative;
   padding: 0;
@@ -81,6 +149,8 @@ ul > li > .button {
   border-bottom: 1px solid $light-gray;
   transition: all .3s;
   z-index: -1;
+  height: 2.5rem;
+
   li {
     line-height: 1rem;
     padding: 1.2rem 0 1.2rem 0;
@@ -137,24 +207,32 @@ ul > li > .button {
 }
 
 .Header__top-steemit {
-  margin-right: -22px;
+  margin-left: 10px;
 
   a {
+    position: relative;
     text-transform: uppercase;
-    letter-spacing: 0.01rem;
+    color: #2572ba;
+    font-family: "Roboto Slab";
+    font-size: 36px !important;
+    font-weight: bold;
+
+    &:hover {
+      color: #2572ba !important;
+    }
   }
 
   .beta {
-    position: relative;
-    top: 14px;
-    right: 22px;
+    display: block;
     font-size: 0.7rem;
-    color: #4ba2f2;
+    color: #2578be;
     text-transform: none;
   }
 }
 
 .Header__sort-order-menu {
+  margin-left: 10px;
+
   .VerticalMenu {
     left: 0;
   }

@@ -1,0 +1,39 @@
+.leave-page {
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position-x: right;
+  background-position-y: bottom;
+  background-color: #fff;
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 99999999;
+  .leave-page_content {
+    margin-top: 40px;
+    font-family: Roboto;
+    font-size: 0.8rem;
+    font-weight: 300;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.5;
+    letter-spacing: 1px;
+    text-align: left;
+    h4 {
+      font-weight: bold;
+      font-size: 1.6rem;
+      letter-spacing: 1px;
+    }
+  }
+  .golos-btn {
+    margin-bottom: 1rem;
+  }
+}
+
+@media(max-width: 63.9375em) {
+  .leave-page {
+    background-size: cover;
+    background-position: center;
+  }
+}

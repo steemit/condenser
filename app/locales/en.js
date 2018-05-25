@@ -100,7 +100,7 @@ const en =  {
   preview: 'Preview',
   markdown_not_supported: 'Markdown is not supported here',
   welcome_to_the_blockchain: 'Welcome to the Blockchain!',
-  your_voice_is_worth_something: 'Your voice is worth something',
+  your_voice_is_worth_something: 'Your golos is worth something',
   learn_more: 'Learn More',
   get_sp_when_sign_up: 'Get {signupBonus} of ' + VESTING_TOKEN + ' when you sign up today.',
   all_accounts_refunded: 'All Recovered Accounts have been fully Refunded',

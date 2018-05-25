@@ -17,6 +17,9 @@
 	h2 {
 		font-weight: bold;
 		margin-top: 3rem;
+		a {
+			color: inherit!important;
+		}
 	}
 	hr {
 		margin: 0;
@@ -28,10 +31,25 @@
 		text-transform: none;
 		font-weight: bold;
 	}
+	.btn_block {
+		.button {
+			margin-right: 30px;
+			&:last-child {
+				margin-right: 0;
+			}
+		}
+	}
 	.button-blue { background-color: $mainly-blue; }
 	.Landing__supporting-text { color: #a8a8a8; }
-	@media #{$small-only} {
+	@include breakpoint(small only) {
 		h2 { font-size: 2.38095rem; }
+		.btn_block {
+			display: flex;
+			flex-direction: column;
+			.button {
+				margin-right: 0;
+			}
+		}
 	}
 }
 
@@ -93,6 +111,7 @@
 		}
 	}
 	.CountDowns__links {
+		text-align: center;
 		margin-bottom: 90px;
 		.CountDowns__button_small {
 			font-size: 15px;
@@ -120,7 +139,7 @@
 			margin-right: 30px;
 			color: $white;
 		}
-		@media #{$small-only} {
+		@include breakpoint(small only) {
 			.button {
 				margin-right: 0;
 				padding: 15px 0;
@@ -129,18 +148,18 @@
 		}
 	}
 
-	@media #{$small-up} {
+	@include breakpoint(small up) {
 		//.CountDowns__counter { margin-top: 60px; }
 	}
 
-	@media #{$small-only} {
+	@include breakpoint(small only) {
 		h1 { margin-bottom: 80px; }
 		.CountDowns__slogan { font-size: 17px; }
 		//.CountDowns__counter { margin-top: 30px; }
 		.CountDown .CountDown__single { margin-right: 10px; }
 	}
 
-	@media #{$medium-up} {
+	@include breakpoint(medium up) {
 		.CountDowns__slogan { font-size: 37px; }
 	}
 }
@@ -235,7 +254,7 @@
 		}
 	}
 	.JoinUs__action { margin-bottom: 100px; }
-	@media #{$small-only} {
+	@include breakpoint(small only) {
 		.JoinUs__item img { margin-bottom: 60px; }
 	}
 }
@@ -276,7 +295,7 @@
 			background-color: white;
 		}
 	}
-	@media #{$small-only} {
+	@include breakpoint(small only) {
 		.BlockchainRevolution__table {
 			width: 100%;
 			overflow-y: scroll;
@@ -286,7 +305,7 @@
 			th, strong { font-size: 13px; }
 		}
 	}
-	@media #{$medium-only} {
+	@include breakpoint(medium only) {
 		.BlockchainRevolution__table {
 			width: 100%;
 			overflow-y: scroll;
@@ -396,10 +415,19 @@
 	.Team__member__anton .Team__member__img {
 		top: 67%;
 	}
-	@media #{$small-only} {
+	h3 {
+		> a {
+			margin-left: 10px;
+		}
+	}
+
+	@include breakpoint(small only) {
 		.Team__members__image-wrapper {
 			width: 150px;
 			height: 150px;
+		}
+		h3 {
+			text-align: center;
 		}
 		// .Team__member__misha {
 		// 	flex: 100%;
@@ -412,7 +440,7 @@
 	// 		max-width: 100%;
 	// 	}
 	// }
-}
+
 
 .Documentation {
 	// .Landing__supporting-text {
@@ -426,7 +454,7 @@
 		margin-top: 50px;
 		margin-bottom: 120px;
 		.alert { margin-right: 30px; }
-		@media #{$small-only} {
+		@include breakpoint(small only) {
 			.alert { margin-right: 0; }
 		}
 	}
@@ -440,11 +468,11 @@
 		margin: 65px auto;
 		strong { display: block; }
 		p { font-size: 13px; }
-		@media #{$small-up} {
+		@include breakpoint(small up) {
 			.WhyGolos__reason { margin-bottom: 30px; }
 			strong { margin-bottom: 8px; }
 		}
-		@media #{$large-up} {
+		@include breakpoint(large up) {
 			strong { margin-bottom: 50px; }
 		}
 	}
@@ -505,10 +533,10 @@
 		transform: translateY(12%);
 		img { max-height: 65px; }
 	}
-	@media #{$small-up} {
+	@include breakpoint(small up) {
 		.Partners__coinessa-logo { transform: translateY(50%); }
 	}
-	// @media #{$medium-up} {
+	// @include breakpoint(medium up) {
 	// 	.Partners__liqui-logo { transform: translateY(50%); }
 	// 	.Partners__coinessa-logo { transform: translateY(86%); }
 	// }
@@ -537,50 +565,51 @@
 	}
 }
 
-.LandingFooter {
-	padding-top: 90px;
-	strong {
-		display: block;
-		margin-bottom: 25px;
-	}
-	ul { margin-left: 0; }
-	li {
-		color: black;
-		list-style-type: none;
-		a { color: black; }
-	}
-	.social-icons {
-		a {
-			img {
-				width: 32px;
-				margin-left: 10px;
-			}
-		}
-	}
-	.LandingFooter__description {
-		color: #a8a8a8;
-		margin: 30px auto;
-		word-break: break-all;
-	}
-	@media #{$small-only} {
-		.LandingFooter__menus {
-			strong { margin: 25px auto;}
-			strong, ul { text-align: center; }
-		}
-		.LandingFooter__description {
-			strong { text-align: center; }
-			li { text-align: center; }
-			span {
-				display: block;
-				text-align: center;
-			}
-		}
-	}
-	@media #{$medium-up} {
-		.LandingFooter__description {
-			span { display: inline; }
-			.left { text-align: left; }
-			.right { float: right; }
-		}
-	}
+// .LandingFooter {
+// 	padding-top: 90px;
+// 	strong {
+// 		display: block;
+// 		margin-bottom: 25px;
+// 	}
+// 	ul { margin-left: 0; }
+// 	li {
+// 		color: black;
+// 		list-style-type: none;
+// 		a { color: black; }
+// 	}
+// 	.social-icons {
+// 		a {
+// 			img {
+// 				width: 32px;
+// 				margin-left: 10px;
+// 			}
+// 		}
+// 	}
+// 	.LandingFooter__description {
+// 		color: #a8a8a8;
+// 		margin: 30px auto;
+// 		word-break: break-all;
+// 	}
+// 	@include breakpoint(small only) {
+// 		.LandingFooter__menus {
+// 			strong { margin: 25px auto;}
+// 			strong, ul { text-align: center; }
+// 		}
+// 		.LandingFooter__description {
+// 			strong { text-align: center; }
+// 			li { text-align: center; }
+// 			span {
+// 				display: block;
+// 				text-align: center;
+// 			}
+// 		}
+// 	}
+// 	@include breakpoint(medium up) {
+// 		.LandingFooter__description {
+// 			span { display: inline; }
+// 			.left { text-align: left; }
+// 			.right { float: right; }
+// 		}
+// 	}
+// }
 }

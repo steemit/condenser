@@ -74,6 +74,12 @@ a, path, circle {
   margin: 5px;
 }
 
+.button.violet {
+  border-color: #3F46AD;
+  color: #3F46AD !important;
+  border-width: 2px;
+}
+
 @keyframes loading {
   0% {
     transform: rotate(0deg);

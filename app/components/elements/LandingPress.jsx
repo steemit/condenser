@@ -18,15 +18,15 @@ export default class LandingPress extends React.Component {
 			},
 			{
 				url: 'https://www.cryptocoinsnews.com/new-blockchain-social-media-platform-speaks-with-a-russian-voice/',
-				title: 'CRYPTOCOINSNEWS: New Blockchain Social Media Platform Speaks with a Russian \'Voice\'',
+				title: 'CRYPTOCOINSNEWS: New Blockchain Social Media Platform Speaks with a Russian \'Golos\'',
 				image: 'https://www.cryptocoinsnews.com/wp-content/uploads/2016/01/Russian-flag-in-silk-768x506.jpg',
-				text: 'With cyber.Fund using Steemit as a template, Voice is intended to cater to the uniqueness of the Russian people, as contributions to the Steemit website are primarily in English, although there are posts in a few other languages.'
+				text: 'With cyber.Fund using Steemit as a template, Golos is intended to cater to the uniqueness of the Russian people, as contributions to the Steemit website are primarily in English, although there are posts in a few other languages.'
 			},
 			{
 				url: 'http://www.econotimes.com/CyberFund-launches-first-blockchain-based-Russian-social-network-Voice-332085',
-				title: 'ECONOTIMES: Cyber.Fund launches first blockchain-based Russian social network - Voice',
+				title: 'ECONOTIMES: Cyber.Fund launches first blockchain-based Russian social network - Golos',
 				image: 'https://www.econotimes.com/assets/images/econotimes/metaDefault.png',
-				text: 'Cyber.Fund, an investment platform for blockchain assets, has announced the launch of first Russian-language social network –Voice, based on blockchain technology that will be an analogue of Steemit international network.'
+				text: 'Cyber.Fund, an investment platform for blockchain assets, has announced the launch of first Russian-language social network – Golos, based on blockchain technology that will be an analogue of Steemit international network.'
 			}
 
 		]

@@ -1,4 +1,4 @@
-import {takeLatest, takeEvery} from 'redux-saga';
+import {takeLatest, takeEvery, SagaCancellationException} from 'redux-saga';
 import {call, put, select, fork} from 'redux-saga/effects';
 import {loadFollows, fetchFollowCount} from 'app/redux/FollowSaga';
 import {getContent} from 'app/redux/SagaShared';
@@ -59,6 +59,7 @@ export function* fetchState(location_change_action) {
     if (url.indexOf("/curation-rewards") !== -1) url = url.replace("/curation-rewards", "/transfers")
     if (url.indexOf("/author-rewards") !== -1) url = url.replace("/author-rewards", "/transfers")
 
+    yield put({type: 'FETCH_DATA_BEGIN'})
     try {
         if (!url || typeof url !== 'string' || !url.length || url === '/') url = 'trending'
         if (url[0] === '/') url = url.substr(1)
@@ -234,10 +235,15 @@ export function* fetchState(location_change_action) {
         }
 
         yield put(GlobalReducer.actions.receiveState(state))
+        yield put({type: 'FETCH_DATA_END'})
     } catch (error) {
         console.error('~~ Saga fetchState error ~~>', url, error);
         yield put({type: 'global/FETCHING_STATE', payload: false});
         yield put({type: 'global/CHAIN_API_ERROR', error: error.message});
+
+        if(!(error instanceof SagaCancellationException)) {
+            yield put({type: 'FETCH_DATA_END'})
+        }
     }
 }
 
@@ -311,12 +317,19 @@ export function* fetchData(action) {
     } else {
         call_name = 'getDiscussionsByActiveAsync';
     }
+
+    yield put({type: 'FETCH_DATA_BEGIN'})
     try {
         const data = yield call([api, api[call_name]], ...args);
         yield put(GlobalReducer.actions.receiveData({data, order, category, author, permlink, accountname, keys}));
+        yield put({type: 'FETCH_DATA_END'})
     } catch (error) {
         console.error('~~ Saga fetchData error ~~>', call_name, args, error);
         yield put({type: 'global/CHAIN_API_ERROR', error: error.message});
+
+        if(!(error instanceof SagaCancellationException)) {
+            yield put({type: 'FETCH_DATA_END'})
+        }
     }
 }
 

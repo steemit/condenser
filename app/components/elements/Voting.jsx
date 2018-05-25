@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import transaction from 'app/redux/Transaction';
+import user from 'app/redux/User';
 import Slider from 'react-rangeslider';
 import Icon from 'app/components/elements/Icon';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
@@ -304,6 +305,7 @@ export default connect(
                     __config: {title: weight < 0 ? tt('voting_jsx.confirm_flag') : null},
                 },
                 confirm,
+                successCallback: () => dispatch(user.actions.getAccount())                   
             }))
         },
     })

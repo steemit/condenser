@@ -417,7 +417,7 @@
     "cryptography_test_failed": "Криптографічний тест провалений",
     "unable_to_log_you_in": "У нас не вийде авторизувати вас в цьому браузері.",
     "the_latest_versions_of": "Останні версії ",
-    "are_well_tested_and_known_to_work_with": "добре тестовані і працюють з %(APP_URL)s.",
+    "are_well_tested_and_known_to_work_with": "добре тестовані і працюють з %(APP_DOMAIN)s.",
     "due_to_server_maintenance": "Через технічного обслуговування сервера ми працюємо в режимі читання. Вибачте за незручності.",
     "login_to_vote": "Авторизуйтесь, щоб проголосувати",
     "login_to_post": "Авторизуйтесь, щоб написати пост",
@@ -634,7 +634,7 @@
     "unable_to_contact_the_server" : "Не вдалося зв'язатися з сервером",
     "please_insert_only_image_files":"Вставляйте тільки файли зображень",
     "questions_or_requests": "You can always send detailed questions or requests to us by e-mail:",
-    "support_by_telegram": "In addition, for operational technical assistance, we have introduced a Voice Support Service in Telegram"
+    "support_by_telegram": "In addition, for operational technical assistance, we have introduced a Golos Support Service in Telegram"
   },
   "savingswithdrawhistory_jsx": {
     "cancel_this_withdraw_request": "Скасувати запит виведення коштів?",

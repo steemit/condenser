@@ -21,11 +21,6 @@ export default class LandingPress extends React.Component {
 							<img className="Partners__kuna-logo" src="images/landing/kuna.png" alt="логотип Bitup" />
 						</a>
 					</div>
-		          	<div className="small-6 medium-3">
-		            	<a className="Partners__mapala-logo" href="http://mapala.net/" target="blank">
-		              		<img width="96" src="https://s13.postimg.org/ror54hqyv/logo_small.png" alt="логотип mapala" />
-		            	</a>
-		          	</div>
 					<div className="small-6 medium-3 columns Partners__tolkachev-logo">
 						<a href="http://www.atplaw.ru/" target="blank">
 							<img className="Partners__tolkachev-logo" src="images/landing/tolkachev2.png" alt='логотип "Толкачев и партнеры"' />
@@ -54,7 +49,6 @@ export default class LandingPress extends React.Component {
 						</a>
 					</div>
 				</div>
-				<hr />
 			</section>
 		)
 	}

@@ -2,7 +2,7 @@ import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { VIEW_MODE_WHISTLE, PARAM_VIEW_MODE } from '../shared/constants';
 import ServerHTML from './server-html';
-import universalRender from '../shared/UniversalRender';
+import { serverRender } from '../shared/UniversalRender';
 import models from 'db/models';
 import secureRandom from 'secure-random';
 import ErrorPage from 'server/server-error';
@@ -27,6 +27,8 @@ function getSupportedLocales() {
 const supportedLocales = getSupportedLocales();
 
 async function appRender(ctx) {
+    ctx.state.requestTimer.startTimer('appRender_ms');
+
     const store = {};
 
     // This is the part of SSR where we make session-specific changes:
@@ -80,14 +82,14 @@ async function appRender(ctx) {
             },
         };
 
-        const { body, title, statusCode, meta } = await universalRender({
+        const { body, title, statusCode, meta } = await serverRender(
+            ctx.request.url,
             initial_state,
-            location: ctx.request.url,
-            store,
             ErrorPage,
             userPreferences,
             offchain,
-        });
+            ctx.state.requestTimer
+        );
 
         // Assets name are found in `webpack-stats` file
         const assets_filename =
@@ -119,6 +121,8 @@ async function appRender(ctx) {
 
         throw err;
     }
+
+    ctx.state.requestTimer.stopTimer('appRender_ms');
 }
 
 appRender.dbStatus = { ok: true };

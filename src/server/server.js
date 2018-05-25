@@ -5,6 +5,7 @@ import mount from 'koa-mount';
 import helmet from 'koa-helmet';
 import koa_logger from 'koa-logger';
 import requestTime from './requesttimings';
+import StatsLoggerClient from './utils/StatsLoggerClient';
 import hardwareStats from './hardwarestats';
 import cluster from 'cluster';
 import os from 'os';
@@ -84,7 +85,9 @@ app.use(isBot());
 // (unless passed in as an env var)
 const numProcesses = process.env.NUM_PROCESSES || os.cpus().length;
 
-app.use(requestTime(numProcesses));
+const statsLoggerClient = new StatsLoggerClient(process.env.STATSD_IP);
+
+app.use(requestTime(statsLoggerClient));
 
 app.keys = [config.get('session_key')];
 

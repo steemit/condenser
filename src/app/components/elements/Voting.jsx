@@ -211,10 +211,14 @@ class Voting extends React.Component {
             const flagWeight = post_obj.getIn(['stats', 'flagWeight']);
             // myVote === current vote
 
-            let voteDownFlag = votingDownActive ? (
-                down
-            ) : (
-                <a href="#" onClick={flagClickAction} title="Flag">
+            const invokeFlag = (
+                <a href="#" onClick={this.toggleWeightDown} title="Flag">
+                    {down}
+                </a>
+            );
+
+            const revokeFlag = (
+                <a href="#" onClick={this.voteDown} title="Flag">
                     {down}
                 </a>
             );
@@ -225,7 +229,7 @@ class Voting extends React.Component {
                     show={showWeight}
                     onHide={() => this.setState({ showWeight: false })}
                     onShow={() => this.setState({ showWeight: true })}
-                    title={voteDownFlag}
+                    title={invokeFlag}
                     position={'left'}
                 >
                     <div className="Voting__adjust_weight_down">
@@ -263,10 +267,8 @@ class Voting extends React.Component {
                     </div>
                 </Dropdown>
             );
-            const flagClickAction =
-                myVote === null || myVote === 0
-                    ? this.toggleWeightDown
-                    : this.voteDown;
+            const flag =
+                myVote === null || myVote === 0 ? dropdown : revokeFlag;
             return (
                 <span className="Voting">
                     <span className={classDown}>
@@ -275,7 +277,7 @@ class Voting extends React.Component {
                                 {'•'.repeat(flagWeight)}
                             </span>
                         )}
-                        {dropdown}
+                        {flag}
                     </span>
                 </span>
             );

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Slider from 'react-rangeslider';
 import tt from 'counterpart';
-import CloseButton from 'react-foundation-components/lib/global/close-button';
+import CloseButton from 'app/components/elements/CloseButton';
 import * as transactionActions from 'app/redux/TransactionReducer';
 import Icon from 'app/components/elements/Icon';
 import {
@@ -19,7 +19,7 @@ import {
 } from 'app/utils/ParsersAndFormatters';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
-import FoundationDropdown from 'app/components/elements/FoundationDropdown';
+import Dropdown from 'app/components/elements/Dropdown';
 
 const ABOUT_FLAG = (
     <div>
@@ -210,42 +210,58 @@ class Voting extends React.Component {
                 (votingDownActive ? ' votingDown' : '');
             const flagWeight = post_obj.getIn(['stats', 'flagWeight']);
             // myVote === current vote
+
+            let voteDownFlag = votingDownActive ? (
+                down
+            ) : (
+                <a href="#" onClick={flagClickAction} title="Flag">
+                    {down}
+                </a>
+            );
+
+            // Flag weight adjust.
             const dropdown = (
-                <FoundationDropdown
+                <Dropdown
                     show={showWeight}
                     onHide={() => this.setState({ showWeight: false })}
-                    className="Voting__adjust_weight_down"
+                    onShow={() => this.setState({ showWeight: true })}
+                    title={voteDownFlag}
+                    position={'left'}
                 >
-                    {(myVote == null || myVote === 0) &&
-                        net_vesting_shares > VOTE_WEIGHT_DROPDOWN_THRESHOLD && (
-                            <div className="weight-container">
-                                <div className="weight-display">
-                                    - {weight / 100}%
+                    <div className="Voting__adjust_weight_down">
+                        {(myVote == null || myVote === 0) &&
+                            net_vesting_shares >
+                                VOTE_WEIGHT_DROPDOWN_THRESHOLD && (
+                                <div className="weight-container">
+                                    <div className="weight-display">
+                                        - {weight / 100}%
+                                    </div>
+                                    <Slider
+                                        min={100}
+                                        max={10000}
+                                        step={100}
+                                        value={weight}
+                                        onChange={this.handleWeightChange}
+                                    />
                                 </div>
-                                <Slider
-                                    min={100}
-                                    max={10000}
-                                    step={100}
-                                    value={weight}
-                                    onChange={this.handleWeightChange}
-                                />
-                            </div>
-                        )}
-                    <CloseButton
-                        onClick={() => this.setState({ showWeight: false })}
-                    />
-                    <div className="clear Voting__about-flag">
-                        <p>{ABOUT_FLAG}</p>
-                        <a
-                            href="#"
-                            onClick={this.voteDown}
-                            className="button outline"
-                            title="Flag"
-                        >
-                            Flag
-                        </a>
+                            )}
+                        <CloseButton
+                            onClick={() => this.setState({ showWeight: false })}
+                        />
+                        <div className="clear Voting__about-flag">
+                            <p>{ABOUT_FLAG}</p>
+                            <a
+                                href="#"
+                                onClick={this.voteDown}
+                                className="button outline"
+                                title="Flag"
+                                id="downvote_button"
+                            >
+                                Flag
+                            </a>
+                        </div>
                     </div>
-                </FoundationDropdown>
+                </Dropdown>
             );
             const flagClickAction =
                 myVote === null || myVote === 0
@@ -258,18 +274,6 @@ class Voting extends React.Component {
                             <span className="Voting__button-downvotes">
                                 {'•'.repeat(flagWeight)}
                             </span>
-                        )}
-                        {votingDownActive ? (
-                            down
-                        ) : (
-                            <a
-                                href="#"
-                                onClick={flagClickAction}
-                                title="Flag"
-                                id="downvote_button"
-                            >
-                                {down}
-                            </a>
                         )}
                         {dropdown}
                     </span>
@@ -458,25 +462,52 @@ class Voting extends React.Component {
 
         let voteUpClick = this.voteUp;
         let dropdown = null;
+        let voteChevron = votingUpActive ? (
+            up
+        ) : (
+            <a
+                href="#"
+                onClick={voteUpClick}
+                title={myVote > 0 ? tt('g.remove_vote') : tt('g.upvote')}
+                id="upvote_button"
+            >
+                {up}
+            </a>
+        );
         if (
             myVote <= 0 &&
             net_vesting_shares > VOTE_WEIGHT_DROPDOWN_THRESHOLD
         ) {
             voteUpClick = this.toggleWeightUp;
+            voteChevron = null;
+            // Vote weight adjust
             dropdown = (
-                <FoundationDropdown
+                <Dropdown
                     show={showWeight}
                     onHide={() => this.setState({ showWeight: false })}
+                    onShow={() => this.setState({ showWeight: true })}
+                    title={up}
                 >
                     <div className="Voting__adjust_weight">
-                        <a
-                            href="#"
-                            onClick={this.voteUp}
-                            className="confirm_weight"
-                            title={tt('g.upvote')}
-                        >
-                            <Icon size="2x" name="chevron-up-circle" />
-                        </a>
+                        {votingUpActive ? (
+                            <a
+                                href="#"
+                                onClick={() => null}
+                                className="confirm_weight"
+                                title={tt('g.upvote')}
+                            >
+                                <Icon size="2x" name={'empty'} />
+                            </a>
+                        ) : (
+                            <a
+                                href="#"
+                                onClick={this.voteUp}
+                                className="confirm_weight"
+                                title={tt('g.upvote')}
+                            >
+                                <Icon size="2x" name="chevron-up-circle" />
+                            </a>
+                        )}
                         <div className="weight-display">{weight / 100}%</div>
                         <Slider
                             min={100}
@@ -490,29 +521,14 @@ class Voting extends React.Component {
                             onClick={() => this.setState({ showWeight: false })}
                         />
                     </div>
-                </FoundationDropdown>
+                </Dropdown>
             );
         }
         return (
             <span className="Voting">
                 <span className="Voting__inner">
                     <span className={classUp}>
-                        {votingUpActive ? (
-                            up
-                        ) : (
-                            <a
-                                href="#"
-                                onClick={voteUpClick}
-                                title={
-                                    myVote > 0
-                                        ? tt('g.remove_vote')
-                                        : tt('g.upvote')
-                                }
-                                id="upvote_button"
-                            >
-                                {up}
-                            </a>
-                        )}
+                        {voteChevron}
                         {dropdown}
                     </span>
                     {payoutEl}

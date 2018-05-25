@@ -68,5 +68,7 @@
   "steemd_connection_server": "SDC_SERVER_STEEMD_URL",
   "steemd_use_appbase": "SDC_USE_APPBASE",
   "chain_id": "SDC_CHAIN_ID",
-  "address_prefix": "SDC_ADDRESS_PREFIX"
+  "address_prefix": "SDC_ADDRESS_PREFIX",
+  "docker_tag": "DOCKER_TAG",
+  "source_commit": "SOURCE_COMMIT"
 }

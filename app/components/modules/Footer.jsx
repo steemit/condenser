@@ -70,7 +70,7 @@ export default class Footer extends React.Component {
                 columnAlign: 'left',
                 width: 'medium-3',
                 items: [
-                    { name: <LocalizedCurrency amount={virtual_supply} currency="USD" short/>, url: 'https://explorer.golos.io', className: 'big' }
+                    { name: <LocalizedCurrency amount={virtual_supply} short />, url: 'https://explorer.golos.io', className: 'big' }
                 ],
             })
         }
@@ -99,7 +99,7 @@ export default class Footer extends React.Component {
                 items: [
                     { name: 'Facebook', url: 'https://www.facebook.com/www.golos.io', icon: 'new/facebook', size: '1_5x' },
                     { name: 'VK', url: 'https://vk.com/goloschain', icon: 'new/vk', size: '2x' },
-                    { name: 'Telegram', url: 'https://t.me/goloschain', icon: 'new/telegram', size: '1_5x' }
+                    { name: 'Telegram', url: 'https://t.me/golos_support', icon: 'new/telegram', size: '1_5x' }
                 ],
             },
             {

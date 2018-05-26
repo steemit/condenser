@@ -514,7 +514,7 @@ class Privacy extends React.Component {
                         <span className="c1" />
                     </p>
                     <p className="c2">
-                        <span className="c6">Personal Information</span>
+                        <h4 className="c6">Personal Information</h4>
                     </p>
                     <p className="c0">
                         <span className="c1" />
@@ -535,9 +535,7 @@ class Privacy extends React.Component {
                         <span className="c1" />
                     </p>
                     <p className="c2">
-                        <span className="c20 c23">
-                            Legal Bases for Processing
-                        </span>
+                        <h4 className="c20 c23">Legal Bases for Processing</h4>
                     </p>
                     <p className="c0">
                         <span className="c1" />
@@ -557,7 +555,7 @@ class Privacy extends React.Component {
                         <span className="c1" />
                     </p>
                     <p className="c2">
-                        <span className="c6">Processing Purpose</span>
+                        <h4 className="c6">Processing Purpose</h4>
                     </p>
                     <p className="c0">
                         <span className="c1" />
@@ -598,7 +596,7 @@ class Privacy extends React.Component {
                         <span className="c1" />
                     </p>
                     <p className="c2">
-                        <span className="c8 c20">With your consent</span>
+                        <h4 className="c8 c20">With your consent</h4>
                     </p>
                     <p className="c0">
                         <span className="c1" />
@@ -615,10 +613,7 @@ class Privacy extends React.Component {
                         <span className="c1" />
                     </p>
                     <p className="c2">
-                        <span className="c6">Use for New Purposes</span>
-                    </p>
-                    <p className="c0">
-                        <span className="c1" />
+                        <h4 className="c6">Use for New Purposes</h4>
                     </p>
                     <p className="c0">
                         <span className="c1" />
@@ -641,7 +636,7 @@ class Privacy extends React.Component {
                         <span className="c1" />
                     </p>
                     <p className="c2">
-                        <span className="c6">Your Rights</span>
+                        <h4 className="c6">Your Rights</h4>
                     </p>
                     <p className="c0">
                         <span className="c1" />
@@ -760,7 +755,7 @@ class Privacy extends React.Component {
                         <span className="c1" />
                     </p>
                     <p className="c2">
-                        <span className="c6">Cross-Border Data Transfer</span>
+                        <h4 className="c6">Cross-Border Data Transfer</h4>
                     </p>
                     <p className="c0">
                         <span className="c1" />
@@ -805,7 +800,7 @@ class Privacy extends React.Component {
                         <span className="c1" />
                     </p>
                     <p className="c2">
-                        <span className="c6">Why do we use Cookies?</span>
+                        <h4 className="c6">Why do we use Cookies?</h4>
                     </p>
                     <p className="c0">
                         <span className="c1" />
@@ -891,10 +886,7 @@ class Privacy extends React.Component {
                         <span className="c1" />
                     </p>
                     <p className="c2">
-                        <span className="c6">How to disable Cookies. </span>
-                    </p>
-                    <p className="c0">
-                        <span className="c1">gitco</span>
+                        <h4 className="c6">How to disable Cookies. </h4>
                     </p>
                     <p className="c2">
                         <span>

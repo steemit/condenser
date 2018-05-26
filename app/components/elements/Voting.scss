@@ -195,28 +195,23 @@
 .Voting__adjust_weight {
   padding: 10px 20px;
   margin-right: 10px;
-  width: 350px;
   overflow: hidden;
+  .Icon {
+    top: auto;
+  }
   .Icon:hover {
     animation: none !important;
   }
   .weight-display {
     width: 3rem;
-    float: left;
-    margin-right: 0.5rem;
-    text-align: right;
+    text-align: left;
     color: $dark-gray;
-    line-height: 2.6rem;
   }
   a.confirm_weight {
-    float: left;
-    width: 2rem;
-    height: 2rem;
-    line-height: 2.6rem;
+    text-align: left;
   }
   .rangeslider {
     position: relative;
-    float: left;
     background: $light-gray;
     .rangeslider__fill, .rangeslider__handle {
       position: absolute;
@@ -239,10 +234,7 @@
   }
   .rangeslider-horizontal {
     height: 10px;
-    width: 200px;
     background: none;
-    float: left;
-    margin-top: 18px;
     .rangeslider__fill {
       height: 100%;
       background: #4ba2f2;
@@ -260,10 +252,14 @@
     }
   }
   .Voting__adjust_weight_close {
-    position: static;
-    line-height: 2.6rem;
+    position: relative;
+    cursor: pointer;
+    color: #8a8a8a;
     font-size: 2rem;
-    margin-left: 1rem;
+    top: auto;
+    right: auto;
+    text-align: right;
+    margin-right: 0 !important;
   }
 }
 
@@ -274,6 +270,7 @@
       margin-top: -36px;
       position: absolute;
       left: 1rem;
+      right: 1rem;
     }
   }
 }
@@ -286,6 +283,7 @@
     .dropdown-pane {
       top: -18px;
       left: -28px;
+      width: 350px;
     }
   }
 }

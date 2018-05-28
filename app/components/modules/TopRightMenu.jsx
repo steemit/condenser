@@ -113,13 +113,20 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
     //   </li>
     // ;
 
-    const additional_menu = [
+    const additional_menu = []
+    if (!loggedIn) {
+        additional_menu.push(
+            { link: '/login.html', onClick: showLogin, value: tt('g.login'), className: 'show-for-small-only' },
+            { link: '/create_account', value: tt('g.sign_up'), className: 'show-for-small-only' }
+        )
+    }
+    additional_menu.push(
         { link: '/welcome', value: tt("navigation.welcome") },
         { link: getURL('WIKI_URL'), value: tt('navigation.wiki') },
         { link: '/market', value: tt('userwallet_jsx.market') },
         { link: '/~witnesses', value: tt("navigation.witnesses") },
         { link: 'http://golostools.com/', value: tt('navigation.APP_NAME_app_center', { APP_NAME }) }
-    ];
+    );
     const navAdditional = <LinkWithDropdown
         closeOnClickOutside
         dropdownPosition="bottom"
@@ -207,10 +214,10 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
         <ul className={mcn + mcl}>
             {searchItem}
             <li className="delim show-for-medium" />
-            {!probablyLoggedIn && !externalTransfer && <li className={lcn}>
+            {!probablyLoggedIn && !externalTransfer && <li className={scn}>
               <a href="/login.html" onClick={showLogin} className={!vertical && 'button small violet hollow'}>{tt('g.login')}</a>
             </li>}
-            {!probablyLoggedIn && <li className={lcn}>
+            {!probablyLoggedIn && <li className={scn}>
               <a href="/create_account" className={!vertical && 'button small alert'}>{tt('g.sign_up')}</a>
             </li>}
             {probablyLoggedIn && <li className={lcn}>

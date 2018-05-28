@@ -29,10 +29,10 @@ export default class VerticalMenu extends React.Component {
         return <ul className={'VerticalMenu menu vertical' + (className ? ' ' + className : '')}>
             {title && <li className="title">{title}</li>}
             {description && <li className="description">{description}</li>}
-            {items.map(i => {
+            {items.map((i, k) => {
                 if(i.value === hideValue) return null
                 const iconSize = i.iconSize || '1x'
-                return <li key={i.value} onClick={this.closeMenu}>
+                return <li key={i.value + ' ' + k} onClick={this.closeMenu} className={i.className}>
                     {i.link ? <Link to={i.link} onClick={i.onClick}>
                         {i.icon && <Icon name={i.icon} size={iconSize} />}{i.label ? i.label : i.value}
                         {i.data && <span>{i.data}</span>}

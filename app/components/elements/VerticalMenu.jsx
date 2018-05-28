@@ -32,8 +32,9 @@ export default class VerticalMenu extends React.Component {
             {items.map(i => {
                 if(i.value === hideValue) return null
                 const iconSize = i.iconSize || '1x'
+                const target = i.target || '_self'
                 return <li key={i.value} onClick={this.closeMenu}>
-                    {i.link ? <Link to={i.link} onClick={i.onClick}>
+                    {i.link ? <Link to={i.link} target={target} onClick={i.onClick}>
                         {i.icon && <Icon name={i.icon} size={iconSize} />}{i.label ? i.label : i.value}
                         {i.data && <span>{i.data}</span>}
                         &nbsp; {i.addon}

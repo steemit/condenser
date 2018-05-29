@@ -70,7 +70,7 @@ export default function reducer(state = defaultState, action) {
         }
 
         case SET_PRICE_FEED:
-            return state.set('steemApiPrice', payload);
+            return state.set('steem_api_price', payload);
 
         case HIDE_LOGIN:
             return state.merge({

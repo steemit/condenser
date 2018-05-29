@@ -72,13 +72,11 @@ export function* watchRemoveHighSecurityKeys() {
 }
 
 function* getRecentPrice() {
-    const feed = yield call([api, api.getFeedHistoryAsync]);
-    if (feed)
-        yield put(
-            userActions.setPriceFeed({
-                price: feed['price_history'][feed.length - 1],
-            })
-        );
+    const history = yield call([api, api.getFeedHistoryAsync]);
+    if (history) {
+        const feed = history['price_history'];
+        yield put(userActions.setPriceFeed({ price: feed[feed.length - 1] }));
+    }
 }
 
 function* loadSavingsWithdraw() {

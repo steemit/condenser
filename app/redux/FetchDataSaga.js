@@ -291,7 +291,7 @@ export function* fetchData(action) {
         call_name = 'getDiscussionsByCreatedAsync';
     } else if( order === 'by_replies' ) {
         call_name = 'getRepliesByLastUpdateAsync';
-        args = [author, permlink, constants.FETCH_DATA_BATCH_SIZE];
+        args = [author, permlink, constants.FETCH_DATA_BATCH_SIZE, constants.DEFAULT_VOTE_LIMIT];
     } else if( order === 'responses' ) {
         call_name = 'getDiscussionsByChildrenAsync';
     } else if( order === 'votes' ) {

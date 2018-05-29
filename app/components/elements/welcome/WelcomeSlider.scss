@@ -1,9 +1,20 @@
 .welcome-slider {
   display: flex;
+  align-items: center;
 
   .welcome-slider-dots {
     position: relative;
     list-style: none;
+
+    li {
+      text-align: center;
+      margin: 5px 0;
+    }
+
+    .slick-active .Userpic {
+      width: 60px !important;
+      height: 60px !important;
+    }
   }
 
   .welcome-slider-slide {
@@ -33,17 +44,21 @@
 
   .welcome-slider-slide__quote {
     .name {
-      font-size: 25px;
+      font-size: 21px;
       font-weight: bold;
       line-height: 1.39;
       color: #ffffff;
       margin-bottom: 15px;
+
+      .position {
+        display: inline-block;
+      }
     }
 
     .description {
       font-size: 17px;
       font-weight: 300;
-      line-height: 1.95;
+      line-height: 1.5;
       color: #ffffff;
     }
   }

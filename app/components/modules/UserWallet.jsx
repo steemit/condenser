@@ -152,18 +152,18 @@ class UserWallet extends React.Component {
 
         /// transfer log
         let idx = 0
-        const transfer_log = account.get('transfer_history')
+        const transfer_log = account.get('transfer_history', [])
         .map(item => {
             const data = item.getIn([1, 'op', 1]);
             const type = item.getIn([1, 'op', 0]);
-
+            
             // Filter out rewards
             if (type === "curation_reward" || type === "author_reward") {
                 return null;
             }
-
+            
             if(data.sbd_payout === '0.000 GBG' && data.vesting_payout === '0.000000 GESTS')
-                return null
+            return null
             return <TransferHistoryRow key={idx++} op={item.toJS()} context={account.get('name')} />;
         }).filter(el => !!el).reverse();
 

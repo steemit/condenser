@@ -75,7 +75,8 @@ function* getRecentPrice() {
     const history = yield call([api, api.getFeedHistoryAsync]);
     if (history) {
         const feed = history['price_history'];
-        yield put(userActions.setPriceFeed({ price: feed[feed.length - 1] }));
+        const last = fromJS(feed[feed.length - 1]);
+        yield put(userActions.setPriceFeed(last));
     }
 }
 

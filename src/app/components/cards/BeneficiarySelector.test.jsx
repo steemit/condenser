@@ -1,5 +1,4 @@
 import React from 'react';
-import { translate } from 'app/Translator';
 import reactForm from 'app/utils/ReactForm';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-15';
@@ -8,6 +7,8 @@ import {
     BeneficiarySelector,
     validateBeneficiaries,
 } from './BeneficiarySelector';
+
+require('app/Translator');
 
 configure({ adapter: new Adapter() });
 

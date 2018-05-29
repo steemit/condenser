@@ -1,0 +1,128 @@
+  .WelcomeCardPost {
+    border-radius: 8.5px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+
+    .WelcomeCardPost__main {
+      display: block;
+      height: 342px;
+      overflow: hidden;
+
+      > img {
+        width: 100%;
+      }
+
+      .WelcomeCardPost__content {
+        display: block;
+        height: 100%;
+        padding: 26px 46px 26px 26px;
+
+        .title {
+          font-family: 'Roboto Slab';
+          font-size: 17px;
+          line-height: 1.2;
+          color: #212121;
+          margin-bottom: 15px;
+        }
+
+        .text {
+          font-family: 'Open Sans';
+          font-size: 14px;
+          line-height: 1.57;
+          color: #9fa3a7;
+        }
+      }
+    }
+
+    .WelcomeCardPost__footer {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 70px;
+      padding: 0 16px;
+      box-shadow: 0px -7px 20px #fff;
+
+      .WelcomeCardPost__footer-profile {
+        display: flex;
+        align-items: center;
+      }
+
+      .WelcomeCardPost__footer-info {
+        margin-left: 5px;
+
+        .name {
+          font-size: 14px;
+          font-weight: 500;
+          line-height: 1.29;
+          color: #333333;
+        }
+
+        .time {
+          font-size: 12px;
+          font-weight: 300;
+          line-height: 1.5;
+          color: #9fa3a7;
+        }
+      }
+
+      .WelcomeCardPost__footer-actions {
+        display: flex;
+
+        .votes {
+          display: flex;
+          align-items: center;
+          margin: 0 5px;
+          font-size: 12px;
+          font-weight: 300;
+          line-height: 1.28;
+          color: #757575;
+
+          .Icon {
+            fill: #333333;
+            margin-right: 5px;
+          }
+        }
+
+        .payout {
+          padding: 2px 7px;
+          border: 1px solid #e1e1e1;
+          border-radius: 100px;
+          font-size: 12px;
+          font-weight: 300;
+          line-height: 1.28;
+          text-align: center;
+          color: #757575;
+        }
+      }
+
+      // &.big {
+      //   height: 100px;
+      //   padding: 0 26px;
+
+      //   .WelcomeCardPost__footer-info {
+      //     margin-left: 9px;
+      //   }
+
+      //   .WelcomeCardPost__footer-actions {
+      //     .votes {
+      //       margin-left: 18px;
+      //       font-size: 18px;
+      //       letter-spacing: 1.8px;
+
+      //       .Icon {
+      //         margin-right: 10px;
+      //       }
+      //     }
+
+      //     .payout {
+      //       padding: 2px 7px;
+      //       font-size: 18px;
+      //     }
+      //   }
+      // }
+
+    }
+
+  }

@@ -1,19 +1,22 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import tt from 'counterpart'
 import Icon from 'app/components/elements/Icon'
 // import { getURL } from 'app/utils/URLConstants'
 import { api } from 'golos-js'
 import LocalizedCurrency from 'app/components/elements/LocalizedCurrency';
 
-export default class Footer extends React.Component {
+class Footer extends React.Component {
 
     state = {
         virtual_supply: 0,
     }
 
     componentDidMount() {
+        const { price_per_golos } = this.props
+
         api.getDynamicGlobalProperties().then(res => {
-            const virtual_supply = parseInt(res.virtual_supply)
+            const virtual_supply = parseInt(parseInt(res.virtual_supply) * price_per_golos)
             this.setState({ virtual_supply })
         });
     }
@@ -131,3 +134,20 @@ export default class Footer extends React.Component {
         )
     }
 }
+
+export default connect(
+    state => {
+        let price_per_golos = undefined;
+        const feed_price = state.global.get('feed_price');
+        if (feed_price && feed_price.has('base') && feed_price.has('quote')) {
+            const { base, quote } = feed_price.toJS()
+            if (/ GBG$/.test(base) && / GOLOS$/.test(quote))
+                price_per_golos = parseFloat(base.split(' ')[0]) / parseFloat(quote.split(' ')[0])
+        }
+
+        return {
+            price_per_golos,
+        }
+    },
+    null
+)(Footer);

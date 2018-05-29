@@ -134,11 +134,12 @@ class ReplyEditor extends React.Component {
                 }
 
                 clearTimeout(saveEditorTimeout)
+                clearTimeout(draftShowTimeout)
                 saveEditorTimeout = setTimeout(() => {
                     // console.log('save formId', formId, body.value)
                     localStorage.setItem('replyEditorData-' + formId, JSON.stringify(data, null, 0))
-                    this.showDraftSaved()
                 }, 500)
+                draftShowTimeout = setTimeout(() => this.showDraftSaved(), 3000)
             }
         }
     }
@@ -406,7 +407,6 @@ class ReplyEditor extends React.Component {
                         <p>{tt('reply_editor.feedback_welcome.message5')}</p>
                       </div>
                     }
-                    <div ref="draft" className="ReplyEditor__draft ReplyEditor__draft-hide">{tt('reply_editor.draft_saved')}</div>
                     <form className={vframe_class}
                         onSubmit={handleSubmit(({data}) => {
                             const startLoadingIndicator = () => this.setState({loading: true, postError: undefined})
@@ -437,6 +437,7 @@ class ReplyEditor extends React.Component {
                         </div>
 
                         <div className={'ReplyEditor__body ' + (rte ? `rte ${vframe_section_class}` : vframe_section_shrink_class)}>
+                            <div ref="draft" className="ReplyEditor__draft ReplyEditor__draft-hide">{tt('reply_editor.draft_saved')}</div>
                             {process.env.BROWSER && rte ?
                                 <RichTextEditor ref="rte"
                                     readOnly={loading}
@@ -537,6 +538,7 @@ class ReplyEditor extends React.Component {
 }
 
 let saveEditorTimeout
+let draftShowTimeout
 
 // removes <html></html> wrapper if exists
 function stripHtmlWrapper(text) {

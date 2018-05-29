@@ -3,6 +3,7 @@ import { call, put, select } from 'redux-saga/effects';
 import { takeEvery } from 'redux-saga';
 import g from 'app/redux/GlobalReducer'
 import tt from 'counterpart';
+import constants from './constants';
 import { api } from 'golos-js';
 
 export const sharedWatches = [
@@ -49,7 +50,7 @@ function* showTransactionErrorNotification() {
 }
 
 export function* getContent({author, permlink, resolve, reject}) {
-    const content = yield call([api, api.getContentAsync], author, permlink);
+    const content = yield call([api, api.getContentAsync], author, permlink, constants.DEFAULT_VOTE_LIMIT);
     yield put(g.actions.receiveContent({content}))
     if (resolve && content) {
         resolve(content);

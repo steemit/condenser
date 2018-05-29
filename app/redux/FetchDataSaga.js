@@ -113,7 +113,7 @@ export function* fetchState(location_change_action) {
                     break
 
                     case 'recent-replies':
-                        const replies = yield call([api, api.getRepliesByLastUpdateAsync], uname, '', 50)
+                        const replies = yield call([api, api.getRepliesByLastUpdateAsync], uname, '', 50, constants.DEFAULT_VOTE_LIMIT)
                         state.accounts[uname].recent_replies = []
 
                         replies.forEach(reply => {
@@ -143,7 +143,7 @@ export function* fetchState(location_change_action) {
                             const { author, permlink } = feedEntries[key]
                             const link = `${author}/${permlink}`
                             state.accounts[uname].feed.push(link)
-                            state.content[link] = yield call([api, api.getContentAsync], author, permlink)
+                            state.content[link] = yield call([api, api.getContentAsync], author, permlink, constants.DEFAULT_VOTE_LIMIT)
                             
                             if (feedEntries[key].reblog_by.length > 0) {
                                 state.content[link].first_reblogged_by = feedEntries[key].reblog_by[0]
@@ -162,7 +162,7 @@ export function* fetchState(location_change_action) {
                             const { author, permlink } = blogEntries[key]
                             const link = `${author}/${permlink}`
 
-                            state.content[link] = yield call([api, api.getContentAsync], author, permlink)
+                            state.content[link] = yield call([api, api.getContentAsync], author, permlink, constants.DEFAULT_VOTE_LIMIT)
                             state.accounts[uname].blog.push(link)
                         
                             if (blogEntries[key].reblog_on !== '1970-01-01T00:00:00') {
@@ -179,10 +179,10 @@ export function* fetchState(location_change_action) {
             const permlink = parts[2]
     
             const curl = `${account}/${permlink}`
-            state.content[curl] = yield call([api, api.getContentAsync], account, permlink)
+            state.content[curl] = yield call([api, api.getContentAsync], account, permlink, constants.DEFAULT_VOTE_LIMIT)
             accounts.add(account)
 
-            const replies =  yield call([api, api.getAllContentRepliesAsync], account, permlink)
+            const replies =  yield call([api, api.getAllContentRepliesAsync], account, permlink, constants.DEFAULT_VOTE_LIMIT)
             
             for (let key in replies) {
                 let reply = replies[key]

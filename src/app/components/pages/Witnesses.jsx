@@ -12,6 +12,8 @@ import tt from 'counterpart';
 const Long = ByteBuffer.Long;
 const { string, func, object } = PropTypes;
 
+const DISABLED_SIGNING_KEY = 'STM1111111111111111111111111111111114T1Anm';
+
 class Witnesses extends React.Component {
     static propTypes = {
         // HTML properties
@@ -74,23 +76,24 @@ class Witnesses extends React.Component {
         const up = <Icon name="chevron-up-circle" />;
         let witness_vote_count = 30;
         let rank = 1;
+
         const witnesses = sorted_witnesses.map(item => {
             const owner = item.get('owner');
             const thread = item.get('url');
             const myVote = witness_votes ? witness_votes.has(owner) : null;
             const signingKey = item.get('signing_key');
-            const witnessIsDisabled = /STM1111111111111111111111111111111114T1Anm/.test(signingKey);
+            const isDisabled = signingKey == DISABLED_SIGNING_KEY;
             const priceFeed = item.get('sbd_exchange_rate');
-            const noPriceFeed = /0.000 STEEM/.test(priceFeed.get('base'));
             const classUp =
                 'Voting__button Voting__button-up' +
                 (myVote === true ? ' Voting__button--upvoted' : '');
+
             let witness_thread = '';
             if (thread) {
                 if (links.remote.test(thread)) {
                     witness_thread = (
                         <a href={thread}>
-                            {tt('witnesses_jsx.witness_thread')}&nbsp;<Icon name="extlink" />
+                            {tt('witnesses_jsx.external_site')}&nbsp;<Icon name="extlink" />
                         </a>
                     );
                 } else {
@@ -101,10 +104,13 @@ class Witnesses extends React.Component {
                     );
                 }
             }
+
+            const ownerStyle = isDisabled
+                ? { textDecoration: 'line-through', color: '#AAA' }
+                : {};
+
             return (
-                <tr
-                    key={owner}
-                    style = { witnessIsDisabled || noPriceFeed ? { opacity: '0.4' } : null }>
+                <tr key={owner}>
                     <td width="75">
                         {rank < 10 && '0'}
                         {rank++}
@@ -123,8 +129,13 @@ class Witnesses extends React.Component {
                             </a>
                         </span>
                     </td>
-                    <td style = { witnessIsDisabled || noPriceFeed ? { textDecoration: 'line-through' } : null }>
-                        <Link to={'/@' + owner}>{owner}</Link>
+                    <td>
+                        <Link to={'/@' + owner} style={ownerStyle}>
+                            {owner}
+                        </Link>
+                        {isDisabled && (
+                            <small> ({tt('witnesses_jsx.disabled')})</small>
+                        )}
                     </td>
                     <td>{witness_thread}</td>
                 </tr>

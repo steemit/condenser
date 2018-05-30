@@ -16,16 +16,6 @@ window.localStorage = global.localStorage;
 
 configure({ adapter: new Adapter() });
 
-const voteTestObj = fromJS({
-    stats: {
-        total_votes: 1,
-    },
-    max_accepted_payout: '999999 SBD',
-    percent_steem_dollars: 0,
-    pending_payout_value: '10 SBD',
-    cashout_time: '2018-03-30T10:00:00Z',
-});
-
 const mockGlobal = Map({
     props: Map({ sbd_print_rate: 99 }),
     feed_price: Map({
@@ -51,8 +41,6 @@ const mockGlobal = Map({
 
 const mockUser = Map({ current: Map({ username: 'Janice' }) });
 
-<<<<<<< HEAD
-=======
 const voteTestObj = fromJS({
     stats: {
         total_votes: 1,
@@ -63,7 +51,6 @@ const voteTestObj = fromJS({
     cashout_time: '2018-03-30T10:00:00Z',
 });
 
->>>>>>> c3caf4e8... tidy voting test
 describe('Voting', () => {
     it('should render nothing if flag prop is true and user is not logged in.', () => {
         const mockStore = configureMockStore()({

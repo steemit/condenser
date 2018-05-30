@@ -761,7 +761,7 @@ export default connect(
     (state, ownProps) => {
         let price_per_steem = undefined;
         const feed_price = state.user.get(
-            'steem_api_price',
+            'latest_feed_price',
             state.global.get('feed_price')
         );
         if (feed_price && feed_price.has('base') && feed_price.has('quote')) {

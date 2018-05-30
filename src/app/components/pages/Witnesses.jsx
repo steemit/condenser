@@ -98,7 +98,6 @@ class Witnesses extends React.Component {
             const signingKey = item.get('signing_key');
             const isDisabled = signingKey == DISABLED_SIGNING_KEY;
             const lastBlock = item.get('last_confirmed_block_num');
-            const priceFeed = item.get('sbd_exchange_rate');
             const classUp =
                 'Voting__button Voting__button-up' +
                 (myVote === true ? ' Voting__button--upvoted' : '');

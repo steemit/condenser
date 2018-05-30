@@ -112,7 +112,11 @@ function convertEntriesToArrays(obj) {
 app.use(function*(next) {
     if (this.method === 'GET' && this.url === '/.well-known/healthcheck.json') {
         this.status = 200;
-        this.body = { status: 'ok' };
+        this.body = {
+            status: 'ok',
+            docker_tag: config.get('docker_tag'),
+            source_commit: config.get('source_commit'),
+        };
         return;
     }
 

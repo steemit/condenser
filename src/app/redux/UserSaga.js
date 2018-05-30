@@ -72,11 +72,15 @@ export function* watchRemoveHighSecurityKeys() {
 }
 
 function* getLatestFeedPrice() {
-    const history = yield call([api, api.getFeedHistoryAsync]);
-    if (history) {
-        const feed = history['price_history'];
-        const last = fromJS(feed[feed.length - 1]);
-        yield put(userActions.setLatestFeedPrice(last));
+    try {
+        const history = yield call([api, api.getFeedHistoryAsync]);
+        if (history) {
+            const feed = history['price_history'];
+            const last = fromJS(feed[feed.length - 1]);
+            yield put(userActions.setLatestFeedPrice(last));
+        }
+    } catch (error) {
+        // (exceedingly rare) ignore, UI will fall back to feed_price
     }
 }
 

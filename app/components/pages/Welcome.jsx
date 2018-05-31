@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import user from 'app/redux/User';
 // import HelpContent from 'app/components/elements/HelpContent';
+import Icon from 'app/components/elements/Icon';
 import MobileBanners from 'app/components/elements/MobileBanners/MobileBanners';
 import WelcomeSlider from 'app/components/elements/welcome/WelcomeSlider';
 import WelcomeCardPost from 'app/components/cards/welcome/WelcomeCardPost';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
+import { getURL } from 'app/utils/URLConstants'
 
 class Welcome extends Component {
 
@@ -13,6 +15,9 @@ class Welcome extends Component {
         tagsLoading: false,
         tagsActiveId: false,
         tagsCards: {},
+
+        questionsLoading: false,
+        questionsCards: [],
     }
 
     slides = [
@@ -107,17 +112,49 @@ class Welcome extends Component {
         }
     ]
 
+    questions = [
+        { author: 'sofya', permlink: 'moi-tri-mesyaca-na-golose-sovety-novichkam' },
+        { author: 'valkommen', permlink: 'iz-lichnogo-opyta-s-kakimi-podvodnymi-kamnyami-mogut-stolknutsya-novichki-na-golose' },
+        { author: 'vp-webdev', permlink: 'chto-nuzhno-znat-chtoby-ne-poteryat-klyuchi-ot-akkaunta' }
+    ]
+
     componentDidMount() {
         this.fetchTagContents(this.tags[3])
+
+        // questions posts
+        this.setState({ questionsLoading: true })
+        const promisesQuestions = this.questions.map(item => (
+            this.props.getContent({ author: item.author, permlink: item.permlink })
+        ))
+        Promise.all(promisesQuestions).then(posts => {
+            const usernames = posts.map(post => post.author)
+
+            this.props.getAccount({ usernames }).then(() => {
+                this.setState({
+                    questionsLoading: false,
+                    questionsCards: posts,
+                })
+            }).catch(() => {
+                this.setState({ questionsLoading: false })
+            })
+        }).catch(() => {
+            this.setState({ questionsLoading: false })
+        })
     }
 
     fetchTagContents = (tag) => {
+        // if tag's posts already cached
+        if (this.state.tagsCards[tag.id]) {
+            this.setState({ tagsActiveId: tag.id })
+            return;
+        }
+
         this.setState({ tagsLoading: true, tagsActiveId: false })
-        const promises = tag.items.map(item => (
+
+        const promisesTags = tag.items.map(item => (
             this.props.getContent({ author: item.author, permlink: item.permlink })
         ))
-
-        Promise.all(promises).then(posts => {
+        Promise.all(promisesTags).then(posts => {
             const usernames = posts.map(post => post.author)
             this.props.getAccount({ usernames }).then(() => {
                 this.setState({
@@ -135,7 +172,10 @@ class Welcome extends Component {
     handleTagClick = (tag) => () => this.fetchTagContents(tag)
 
     render() {
-        const { tagsActiveId, tagsCards, tagsLoading } = this.state
+        const { 
+            tagsLoading, tagsActiveId, tagsCards,
+            questionsLoading, questionsCards
+        } = this.state
 
         return (
             <div className="Welcome">
@@ -222,15 +262,9 @@ class Welcome extends Component {
                                         {this.tags.map((tag) => {
                                             const activeClass = tag.id == tagsActiveId ? ' active' : ''
                                             return (
-<<<<<<< HEAD
                                                 <div
                                                     key={tag.id}
                                                     className={'initial-tag'+activeClass}
-=======
-                                                <div 
-                                                    key={tag.id} 
-                                                    className={'initial-tag'+activeClass} 
->>>>>>> tags posts and fixes #655
                                                     onClick={this.handleTagClick(tag)}
                                                 >{tag.name}</div>
                                             )
@@ -339,8 +373,6 @@ class Welcome extends Component {
                     </div>
                 </section>
 
-                {/*  */}
-
                 <section className="Welcome__reviews">
                     <div className="row align-middle">
                         <div className="columns small-12 medium-6">
@@ -365,6 +397,48 @@ class Welcome extends Component {
                         </div>
                         <div className="columns small-12 medium-6">
                             <img src="images/new/welcome/welcome__about.svg" />
+                        </div>
+                    </div>
+                </section>
+
+                <section className="Welcome__questions">
+                    <div className="row align-middle">
+                        <div className="columns">
+                            <div className="Welcome__questions-header">Остались вопросы?</div>
+                            <div className="Welcome__questions-subheader">Посмотрите, что наше сообщество советует новичкам:</div>
+                            <div className="row">
+                                <div className="columns small-12 medium-12 large-2">
+                                    <div className="row small-up-2 medium-up-2 large-up-1 questions-links">
+                                        <div className="columns">
+                                            <a className="questions-link" href="https://t.me/golos_support"><Icon name="new/telegram" size="2x" />Спросите в телеграме</a>
+                                        </div>
+                                        <div className="columns">
+                                            <a className="questions-link" href={getURL('WIKI_URL')}><Icon name="new/wikipedia" size="2x" />Посмотрите нашу википедию</a>
+                                        </div>
+                                        <div className="columns">
+                                            <a className="questions-link" href="mailto:support@golos.io"><Icon name="new/envelope" size="2x" />Напишите на почту</a>
+                                        </div>
+                                        <div className="columns">
+                                            <a className="questions-link" href="/submit.html?type=submit_feedback"><Icon name="new/monitor" size="2x" />Или через сайт</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                {questionsLoading ?
+                                    <div className="columns align-self-middle">
+                                        <center><LoadingIndicator type="circle" /></center>
+                                    </div>
+                                    :
+                                    <div className="columns">
+                                        <div className="row small-up-1 medium-up-2 large-up-3">
+                                            {questionsCards.map((post) => (
+                                                <div className="columns" key={post.id}>
+                                                    <WelcomeCardPost post={post} />
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                }
+                            </div>
                         </div>
                     </div>
                 </section>

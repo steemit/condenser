@@ -86,12 +86,6 @@
       margin-top: 10px;
     }
   }
-  /* Medium only */
-  @media screen and (min-width: 40em) and (max-width: 63.9375em) {
-  }
-  /* Large and above */
-  @media screen and (min-width: 64.063em) {
-  }
 }
 
 .Welcome__about {
@@ -253,8 +247,16 @@
     background-color: #ffffff;
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.06);
     padding: 40px 60px;
-    min-height: 430px;
+    min-height: 460px;
     margin: 0.9375rem 0;
+
+    @include breakpoint(medium only) {
+      min-height: 500px;
+    }
+
+    @include breakpoint(small only) {
+      min-height: 400px;
+    }
 
     .image {
       height: 70px;
@@ -332,6 +334,77 @@
       img {
         max-height: 70px;
       }
+    }
+  }
+}
+
+.Welcome__questions {
+  padding: 20px 0;
+  background-color: #f8f8f8;
+
+  & > .row {
+    min-height: 600px;
+  }
+
+  .Welcome__questions-header {
+    font-family: 'Roboto Slab';
+    font-size: 36px;
+    line-height: 1.06;
+    letter-spacing: 0.6px;
+    color: #333333;
+    margin-bottom: 10px;
+  }
+
+  .Welcome__questions-subheader {
+    font-family: 'Open Sans';
+    font-size: 20px;
+    line-height: 1.5;
+    color: #9fa3a7;
+    margin-bottom: 48px;
+  }
+
+  .questions-links {
+
+    .questions-link {
+      font-family: 'Roboto';
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 1.4px;
+      color: #333333;
+      margin-bottom: 15px;
+      border-radius: 8.5px;
+      background-color: #ffffff;
+      box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.06);
+      text-transform: uppercase;
+      line-height: 1.2;
+      padding: 25px 5px 25px 20px;
+      align-items: center;
+      display: flex;
+      min-height: 92px;
+
+      @include breakpoint(small only) {
+        min-height: auto;
+      }
+
+      .Icon {
+        margin-right: 15px;
+        fill: #ffc80a;
+      }
+
+      &:hover {
+        box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.10);
+      }
+    }
+  }
+
+  .LoadingIndicator.circle > div {
+    width: 90px;
+    height: 90px;
+  }
+
+  @include breakpoint(large down) {
+    .WelcomeCardPost {
+      margin-bottom: 10px;
     }
   }
 }

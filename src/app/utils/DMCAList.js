@@ -100,6 +100,10 @@ export default `
 /colorchallenge/@jimreitz/hello-steemit-i-m-jim
 /dtube/@derrick829/1r3fevhu
 /technology/@taslimabegum/can-t-crack-fl-studio-12-5-on-windows-10
+/story/@zahidzzs/step-into-the-darkness
+/movie/@mariarose4568/pari-2018-full-movie-in-1080-hd-dvdrip-bluerayrip
+/j/@nandinirana9218/abhiyude-kadha-anuvinteyum-2018-full-movie-online-in-hd
+/telugumovie/@agroup85/rangasthalam-full-movie-download-720p-hd-telugu-yts-yify-filmywap
 `
     .trim()
     .split('\n');

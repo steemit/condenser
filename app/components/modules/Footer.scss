@@ -27,8 +27,12 @@
 		a {
       color: #333333;
       font-size: 56px;
-      line-height: 66px;
-      font-weight: 400;
+			line-height: 1;
+			font-weight: 400;
+
+			@include breakpoint(medium down) {
+				font-size: 32px;
+			}
     }
   }
 

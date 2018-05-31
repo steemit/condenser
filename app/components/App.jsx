@@ -20,13 +20,14 @@ import {APP_ICON, VEST_TICKER, WIKI_URL, LANDING_PAGE_URL, ABOUT_PAGE_URL, WHITE
 import LocalizedCurrency from '@elements/LocalizedCurrency';
 
 const availableLinks = [
-    'https://play.google.com/store/apps/details?id=io.golos.golos',
-    'http://golostools.com/'
+    'https://play.google.com/store/apps/details?id=io.golos.golos'
 ]
 
 const availableDomains = [
+    'golos.io',
     'golos.blog',
-    'sandbox.golos.io'
+    'golostools.com',
+    'github.com'
 ]
 class App extends React.Component {
 
@@ -88,9 +89,8 @@ class App extends React.Component {
         e.target.nodeName.toLowerCase() === 'a' &&
         e.target.hostname &&
         e.target.hostname !== window.location.hostname &&
-        !availableDomains.includes(e.target.hostname) &&
         !availableLinks.includes(e.target.href) &&
-        !/golos.io$/.test(e.target.hostname)
+        !availableDomains.some(domain => new RegExp(`${domain}$`).test(e.target.hostname))
       ) {
         e.stopPropagation();
         e.preventDefault();

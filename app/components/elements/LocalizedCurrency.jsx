@@ -28,7 +28,6 @@ class LocalizedCurrency extends React.Component {
 
   static defaultProps = {
     noSymbol: false,
-    fractionDigits: FRACTION_DIGITS
   }
 
   state = {
@@ -104,24 +103,28 @@ class LocalizedCurrency extends React.Component {
       )
 
       let lang, nRounding
-      if(process.env.BROWSER){
+      if(process.env.BROWSER) {
         lang = localStorage.getItem('language')
-        if (!lang){
+        if (!lang) {
           lang = ((navigator.languages && navigator.languages[0]) || navigator.language || navigator.userLanguage)
         }
-        nRounding = localStorage.getItem('xchange.rounding')
-        if(!nRounding){
-          if(vesting_shares < 10000000 && vesting_shares != 0) //FIXME this is vesting_shares param. Move to config file needed 
+        if (options && options.maximumFractionDigits) {
+          nRounding = options.maximumFractionDigits
+        } else {
+          nRounding = localStorage.getItem('xchange.rounding')
+          if(!nRounding) {
+            if(vesting_shares < 10000000 && vesting_shares != 0) //FIXME this is vesting_shares param. Move to config file needed
               nRounding = FRACTION_DIGITS_MARKET
-          else 
+            else
               nRounding = FRACTION_DIGITS
+          }
         }
       }
 
       if (options ? (options.short ? options.short : short) : short) {
         currencyAmount = shortAmount(currencyAmount)
       } else {
-        if(options ? (options.rounding ? options.rounding : rounding ) : rounding) {     
+        if (options ? (options.rounding ? options.rounding : rounding ) : rounding) {
           let divider = Math.pow(10, (parseInt(Math.ceil(currencyAmount).toString().length) - 1))
           currencyAmount = (currencyAmount / divider | 0) * divider
         } else {
@@ -138,7 +141,7 @@ class LocalizedCurrency extends React.Component {
         : (lang == 'en') ? (symbol + ' ' + currencyAmount) : (currencyAmount + ' ' + symbol)
     }
 
-    return <span>{localizedCurrency(amount, {maximumFractionDigits: fractionDigits})}</span>
+    return <span>{localizedCurrency(amount, { maximumFractionDigits: fractionDigits })}</span>
   }
 }
 

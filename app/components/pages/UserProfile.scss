@@ -1,6 +1,18 @@
 .UserProfile {
     display: flex;
     flex-direction: column;
+
+    &__menu {
+        display: flex;
+
+        & > * {
+            flex-shrink: 0;
+        }
+    }
+
+    &__filler {
+        flex-grow: 1;
+    }
 }
 
 .UserProfile__center {
@@ -23,8 +35,9 @@
   .menu {
     background-color: transparent;
   }
-  .menu > li > a {
-    transition: all 200ms ease-in;
+  .UserProfile__menu-item {
+    display: inline-block;
+    transition: background-color 200ms ease-in, color 200ms ease-in;
     transform: translate3d( 0, 0, 0);
     padding-left: 0.7rem;
     padding-right: 0.7rem;
@@ -160,7 +173,7 @@
 
 @media screen and (max-width: 39.9375em) {
 
-    div.UserProfile__top-nav .menu li>a {
+    .UserProfile__menu-item {
         padding: 8px;
     }
 
@@ -200,6 +213,14 @@
     .UserReward__row {
         > div:last-of-type {
             padding-left: 20px;
+        }
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .UserProfile {
+        &__filler {
+            display: none;
         }
     }
 }

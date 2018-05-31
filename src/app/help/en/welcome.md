@@ -5,8 +5,6 @@ This page is full of information to help you learn about the platform and become
 
 Included on the page is a "To Do List" with recommended steps to get started with your account, and a "Quick Start Guide" with information on how the platform works. 
 
-Below that is a section of "Helpful Posts from Steemit Users", which contains a collection of posts from users in the community that are helpful for new users getting started. 
-
 Below that is a list of recommended users to follow, a collection of other resources including the <a href="/faq.html">FAQ Page</a> and [Steem bluepaper](https://steem.io/steem-bluepaper.pdf), as well as information on where to find live help. 
 
 ## <span id="Table_of_Contents">Table of Contents</span>
@@ -15,12 +13,11 @@ Below that is a list of recommended users to follow, a collection of other resou
 
 1. <a href="#Backup_your_password">Backup your password</a>
 2. <a href="#Review_the_Quick_Start_Guide">Review the Quick Start Guide</a>
-3. <a href="#Read_the_Helpful_Posts_from_Steemit_Users">Read the Helpful Posts from Steemit Users</a>
-4. <a href="#Setup_your_Profile_Avatar_and_Cover_Image">Setup your Profile, Avatar, and Cover Image</a>
-5. <a href="#Choose_your_NSFW_(Not_Safe_for_Work)_Display_Preference">Choose your "NSFW" (Not Safe for Work) Display Preference</a>
-6. <a href="#Sign_Up_for_Steemit_Chat">Sign Up for Steem Chat</a>
-7. <a href="#Create_your_introduceyourself_post">Create your "introduceyourself" post</a>
-8. <a href="#Learn_more">Learn more</a>
+3. <a href="#Setup_your_Profile_Avatar_and_Cover_Image">Setup your Profile, Avatar, and Cover Image</a>
+4. <a href="#Choose_your_NSFW_(Not_Safe_for_Work)_Display_Preference">Choose your "NSFW" (Not Safe for Work) Display Preferences, Language, and Rewards</a>
+5. <a href="#Sign_Up_for_Steem_Chat">Sign Up for Steem Chat</a>
+6. <a href="#Create_your_introduceyourself_post">Create your "introduceyourself" post</a>
+7. <a href="#Learn_more">Learn more</a>
 
 ### Quick Start Guide
 
@@ -84,7 +81,7 @@ You can select the language you wish to display the website in. Currently, Engli
 You can also choose how you will receive your Blog post rewards and Comment post rewards. It is recommended that you read the <a href="#Digital_Currencies">Digital Currencies</a> section first. 
 
 <a href="#Table_of_Contents">^</a>
-### <span id="Sign_Up_for_Steemit_Chat">5. Sign Up for Steem Chat</span>
+### <span id="Sign_Up_for_Steem_Chat">5. Sign Up for Steem Chat</span>
 
 A lot of users mingle and chat when they are not posting or browsing Steemit. It is a great place to meet people!
 
@@ -92,7 +89,7 @@ There is a link to sign up in the main menu in the upper right corner.
 
 Your [steem.chat](https://steem.chat/home) account is a separate account from your Steem account.
 
-Some channels allow you to share links, but others don't. For instance, [general](https://steem.chat/channel/general) is for discussion without link promotion, while [postpromotion](https://steem.chat/channel/postpromotion) is for promoting your Steemit posts.
+Some channels allow you to share links, but others don't. For instance, [general](https://steem.chat/channel/general) is for discussion without link promotion, while [postpromotion](https://steem.chat/channel/postpromotion) is for promoting your posts.
 
 Each channel will have its rules posted in the "Room Info" section.
 
@@ -103,7 +100,7 @@ While not required, the tradition for new users is to create an "introduceyourse
 
 You can see some examples of what other people have done [here](https://steemit.com/trending/introduceyourself). Many users like to take a picture of themselves holding up a piece of paper that says "Steemit" with the current date.
 
-If you have other social media accounts (Twitter, Facebook, etc.) you can help the community verify that you are who you say you are, by sharing the link to your Steemit profile on them. If you are claiming to be someone famous, this is pretty much expected.
+If you have other social media accounts (Twitter, Facebook, etc.) you can help the community verify that you are who you say you are by sharing the link to your Steem profile on them. If you are claiming to be someone famous, this is pretty much expected.
 
 <a href="#Table_of_Contents">^</a>
 ### <span id="Learn_more">7. Learn more</span>
@@ -186,18 +183,18 @@ The more Steem Power you have in your account, the more your upvotes will be wor
 
 Payouts are made 7 days after the post/comment is created. You can claim your rewards in your wallet after 7 days.
 
-The payments may fluctuate (up and down) until the final payment is reached.
+The projected payments may fluctuate (up and down) until the final payment amount is reached.
 
 Payments for posts are split between the author (at least 75%) and the curators (up to 25%).
 
-The author reward is paid 50% in Steem Power, and 50% in liquid STEEM/SBD.
+The author reward is paid 50% in Steem Power and 50% in liquid STEEM/SBD by default.
 
 Authors also have the option to decline payout, or be paid in 100% Steem Power!
 
 <a href="#Table_of_Contents">^</a>
 ### <span id="Reputation">Reputation</span>
 
-A reputation score is one way Steemit measures the amount of value you have brought to the community.
+A reputation score is one way that Steemit measures the amount of value you have brought to the community.
 
 The higher the number, the more weighted votes an account has earned.
 
@@ -217,27 +214,29 @@ You can also exchange your STEEM and SBD for bitcoin on a third-party exchange s
 <a href="#Table_of_Contents">^</a>
 ### <span id="Plagiarism">Plagiarism</span>
 
-The community is looking for you to add your own personal touch to your articles.
+The community is looking for you to create engaging content. 
 
-Plagiarizing, that is posting someone else's work as if it were your own, is very frowned upon by the Steemit community.
+Plagiarising, which is posting someone else's material as if it were your own, is very frowned upon by the Steem community.
 
-If you are using anyone else's material as part of your posts (including images) - please cite your sources.
+If you are using anyone else's material as part of your posts (including images), even if it is free to use, please cite your sources. You should make sure that you are not violating any copyright laws if you are using someone else's material/images. 
 
-Also, make sure that you are not violating any copyright laws if you are using someone else's material/images. Limited, sourced material sharing is OK under fair use and fair dealing doctrines.
+Remember, your posts should have original content in them. Aiming for at least 50% your own words/images per post is a good starting point for quality content creation.
 
 <a href="#Table_of_Contents">^</a>
 ### <span id="Password_Security">Password Security</span>
 
-**There is no lost password recovery for Steem accounts**. You are 100% responsible for having it backed up. This means secure digital backups, as well as secured paper backups, off-site if possible.
+**There is no lost password recovery for Steem accounts**. You are 100% responsible for having it backed up. This means secure digital backups, as well as secured paper backups, stored in different places if possible.
 
-Your Steemit account is worth real money. Treat your Steemit password like you would your bank password, and keep it secure!
+Your Steem account is worth real money. Treat your Steem password like you would your bank password and keep it secure!
 
 <a href="#Table_of_Contents">^</a>
 ### <span id="Earning_on_Steemit">Earning on Steemit</span>
 
-The best attitude to have is to expect to make nothing. Have fun. Get engaged. Make friends. If along the way you earn something - bonus!
+Everyone's earnings are different. Have fun. Get engaged. Make friends. 
 
-It is possible to earn thousands of dollars, but most authors who are doing this have put in a lot of time and work to contribute to the community and build followings.
+The amount of money a user earns depends on their content, following, level of investment and many, many other factors. 
+
+Don't get discouraged if you don't earn much at first. Keep up the good work!
 
 <a href="#Table_of_Contents">^</a>
 
@@ -247,18 +246,18 @@ It is possible to earn thousands of dollars, but most authors who are doing this
 ## <span id="Users_to_Follow">Users to Follow</span>
 
 - @steemitblog - Official Steemit Announcements
-- @ned - Ned Scott, CEO and Co-Founder of Steemit
+- @ned - Ned Scott, CEO and Co-Founder of Steemit, Inc
 
 <a href="#Table_of_Contents">^</a>
 ## <span id="Other_Resources">Other Resources</span>
 
 - [FAQ](https://steemit.com/faq.html) - Answers to commonly asked questions
 - [Bluepaper](https://steem.io/steem-bluepaper.pdf) - Explanation of how the platform works
-- [Steemit Help](https://www.steemithelp.net/) - Community maintained help pages
 - [The Steem Whitepaper](https://steem.io/SteemWhitePaper.pdf) - Technical details of the Steem blockchain
 - [Apps Built on Steem](https://steemprojects.com/) - Directory of apps, sites and tools built by Steem community
 - [Steem Block Explorer](https://steemd.com/) - Shows the raw Steem blockchain data 
 - [Steem Blockchain Explorer](https://steemdb.com/) - Analysis pages for the Steem blockchain data
+- [Steem Markdown Course](https://steemskills.teachable.com/p/steemmarkdown) - A free online course in using markdown
 
 <a href="#Table_of_Contents">^</a>
 ## <span id="Live_Help">Live Help</span>
@@ -270,7 +269,7 @@ New Member Support Community is a group of people dedicated to helping new users
 <a href="#Table_of_Contents">^</a>
 ## <span id="Third_Party_References">Third Party References</span>
 
-Peerhub, BlockTrades, Bittrex, Steem Chat, Steemit Help, New Member Support Community, and Discord Chat, as well as the tools listed under "Other Resources" are third party applications/services, and are not owned or maintained by Steemit, Inc. Their listing here does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
+Peerhub, BlockTrades, Bittrex, Steem Chat, New Member Support Community, and Discord Chat, as well as the tools listed under "Other Resources" are third party applications/services, and are not owned or maintained by Steemit, Inc. Their listing here does not constitute an endorsement or recommendation on behalf of Steemit, Inc.
 
 Please use the third party tools and content at your own risk.
 

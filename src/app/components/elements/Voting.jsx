@@ -212,13 +212,25 @@ class Voting extends React.Component {
             // myVote === current vote
 
             const invokeFlag = (
-                <a href="#" onClick={this.toggleWeightDown} title="Flag">
+                <a
+                    href="#"
+                    onClick={this.toggleWeightDown}
+                    title="Flag"
+                    id="downvote_button"
+                    className="flag"
+                >
                     {down}
                 </a>
             );
 
             const revokeFlag = (
-                <a href="#" onClick={this.voteDown} title="Flag">
+                <a
+                    href="#"
+                    onClick={this.voteDown}
+                    title="Flag"
+                    className="flag"
+                    id="revoke_downvote_button"
+                >
                     {down}
                 </a>
             );
@@ -259,7 +271,6 @@ class Voting extends React.Component {
                                 onClick={this.voteDown}
                                 className="button outline"
                                 title="Flag"
-                                id="downvote_button"
                             >
                                 Flag
                             </a>

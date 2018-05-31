@@ -139,7 +139,11 @@ describe('Voting', () => {
             .dive()
             .find('#downvote_button')
             .simulate('click');
+<<<<<<< HEAD
         expect(wrapped.state().weight).toEqual(666);
+=======
+        expect(wrapped.state().weight).toEqual(10000);
+>>>>>>> update tests to target deeply nested onClick prop of dropdown component
         expect(wrapped.state().showWeight).toEqual(true);
     });
 

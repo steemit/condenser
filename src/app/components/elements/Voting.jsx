@@ -289,7 +289,7 @@ class Voting extends React.Component {
 
             const invokeFlag = (
                 <span
-                    href="#"
+                   href="#"
                     onClick={this.toggleWeightDown}
                     title="Flag"
                     id="downvote_button"

@@ -5,6 +5,7 @@ import mount from 'koa-mount';
 import helmet from 'koa-helmet';
 import koa_logger from 'koa-logger';
 import requestTime from './requesttimings';
+import StatsLoggerClient from './utils/StatsLoggerClient';
 import hardwareStats from './hardwarestats';
 import cluster from 'cluster';
 import os from 'os';
@@ -84,7 +85,9 @@ app.use(isBot());
 // (unless passed in as an env var)
 const numProcesses = process.env.NUM_PROCESSES || os.cpus().length;
 
-app.use(requestTime(numProcesses));
+const statsLoggerClient = new StatsLoggerClient(process.env.STATSD_IP);
+
+app.use(requestTime(statsLoggerClient));
 
 app.keys = [config.get('session_key')];
 
@@ -109,7 +112,11 @@ function convertEntriesToArrays(obj) {
 app.use(function*(next) {
     if (this.method === 'GET' && this.url === '/.well-known/healthcheck.json') {
         this.status = 200;
-        this.body = { status: 'ok' };
+        this.body = {
+            status: 'ok',
+            docker_tag: config.get('docker_tag'),
+            source_commit: config.get('source_commit'),
+        };
         return;
     }
 

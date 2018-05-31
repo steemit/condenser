@@ -489,6 +489,8 @@
     },
     "witnesses_jsx": {
         "witness_thread": "witness thread",
+        "external_site": "external site",
+        "disabled": "disabled",
         "top_witnesses": "Witness Voting",
         "you_have_votes_remaining": {
             "zero": "You have no votes remaining",

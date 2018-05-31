@@ -1,5 +1,5 @@
 import {fromJS, Set, List} from 'immutable'
-import {takeLatest} from 'redux-saga';
+import {takeLatest, takeEvery} from 'redux-saga';
 import {call, put, select, fork} from 'redux-saga/effects';
 import {accountAuthLookup} from 'app/redux/AuthSaga'
 import user from 'app/redux/User'
@@ -81,7 +81,7 @@ const strCmp = (a, b) => a > b ? 1 : a < b ? -1 : 0
 //     // yield* takeLatest('user/SHOW_TRANSFER', getCurrentAccount);
 // }
 function* getAccountWatch() {
-    yield* takeLatest('user/GET_ACCOUNT', getAccountHandler);
+    yield* takeEvery('user/GET_ACCOUNT', getAccountHandler);
 }
 
 function* removeHighSecurityKeys({payload: {pathname}}) {

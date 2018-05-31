@@ -14,10 +14,15 @@
   border: solid 1px #e1e1e1;
   opacity: 1;
   transition: all .3s;
+  cursor: pointer;
   &.btn-primary {
     background-color: #0078c4;
     border-color: #0078c4;
     color: $white;
+    &:hover {
+      background-color: #016aad;
+      opacity: 1;
+    }
   }
   &.btn-secondary {
     border-color: solid 1px #0078c4;
@@ -35,6 +40,6 @@
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.15);
   }
   &:hover {
-    opacity: .7;
+    opacity: .8;
   }
 }

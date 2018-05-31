@@ -305,7 +305,7 @@ class Welcome extends Component {
                                             <div className="header">Ключи</div>
                                             <div className="description">Виртуальный паспорт в мире блокчейна. Ключи подтверждают, что ваш аккаунт и токены принадлежит только вам. Распечатайте ключи. В отличие от настоящего паспорта, никто не сможет вам их восстановить. </div>
                                         </div>
-                                        <div className="button small violet hollow">Подробнее</div>
+                                        <a className="button small violet hollow" href="https://wiki.golos.io/1-introduction/koshelek-klyuchi-viplati.html">Подробнее</a>
                                     </div>
                                 </div>
                                 <div className="columns">
@@ -317,7 +317,7 @@ class Welcome extends Component {
                                             <div className="header">Голосование</div>
                                             <div className="description">Каждый день у вас есть 40 голосов чтобы оценить чужие посты. Не упустите их, когда вы нажимаете кнопку «Вверх» рядом с постом — топ Golos.io становится интереснее, а вы получить награду за курирование.</div>
                                         </div>
-                                        <div className="button small violet hollow">Подробнее</div>
+                                        <a className="button small violet hollow" href="https://wiki.golos.io/2-rewards/curation_rewards.html">Подробнее</a>
                                     </div>
                                 </div>
                                 <div className="columns">
@@ -329,7 +329,7 @@ class Welcome extends Component {
                                             <div className="header">Tеги</div>
                                             <div className="description">Это темы, по которым можно искать посты. Каждый пост должен иметь как минимум один тег. Вы можете подписаться не только на автора, но и на тег.</div>
                                         </div>
-                                        <div className="button small violet hollow">Подробнее</div>
+                                        <a className="button small violet hollow" href="https://wiki.golos.io/1-introduction/interfeis-lichnogo-bloga.html">Подробнее</a>
                                     </div>
                                 </div>
                                 <div className="columns">
@@ -341,7 +341,7 @@ class Welcome extends Component {
                                             <div className="header">Поста</div>
                                             <div className="description">В отличие от других соцсетей, у нас есть не одна, а несколько лент. Новое —  все, что только что опубликовали, актуальное —  посты с активным обсуждением и популярное — здесь посты с самым большим вознаграждением.</div>
                                         </div>
-                                        <div className="button small violet hollow">Подробнее</div>
+                                        <a className="button small violet hollow" href="https://wiki.golos.io/1-introduction/interfeis-lichnogo-bloga.html">Подробнее</a>
                                     </div>
                                 </div>
                                 <div className="columns">
@@ -353,7 +353,7 @@ class Welcome extends Component {
                                             <div className="header">Токены</div>
                                             <div className="description">Монеты блокчейна, на основе которого работает Golos.io. Все награды за посты, комментарии и курирование выплачиваются токенами. Их можно поменять на любые криптовалюты или привычные деньги на биржах.</div>
                                         </div>
-                                        <div className="button small violet hollow">Подробнее</div>
+                                        <a className="button small violet hollow" href="https://wiki.golos.io/1-introduction/koshelek-klyuchi-viplati.html">Подробнее</a>
                                     </div>
                                 </div>
                                 <div className="columns">
@@ -365,7 +365,6 @@ class Welcome extends Component {
                                             <div className="header">Посты не удаляются</div>
                                             <div className="description">Все, что написано на Golos.io, остается в блокчейне.</div>
                                         </div>
-                                        <div className="button small violet hollow">Подробнее</div>
                                     </div>
                                 </div>
                             </div>

@@ -25,14 +25,13 @@ const defaultNavigate = (e) => {
     browserHistory.push(a.pathname + a.search + a.hash);
 };
 
-const calculateEstimateOutput = ({a, p, sw, g}) => {
-  if (!a)
-    return 0;
+const calculateEstimateOutput = ({ account, price_per_golos, savings_withdraws, globalprops }) => {
+  if (!account) return 0;
 
   // Sum savings withrawals
   let savings_pending = 0, savings_sbd_pending = 0;
-  if (sw) {
-    sw.forEach(withdraw => {
+  if (savings_withdraws) {
+    savings_withdraws.forEach(withdraw => {
       const [amount, asset] = withdraw.get('amount').split(' ');
       if (asset === LIQUID_TICKER)
         savings_pending += parseFloat(amount);
@@ -45,24 +44,24 @@ const calculateEstimateOutput = ({a, p, sw, g}) => {
 
   const total_sbd = 0
     // sbd_balance
-    + parseFloat(a.get('sbd_balance'))
+    + parseFloat(account.get('sbd_balance'))
     // sbd_balance_savings
-    + parseFloat(a.get('savings_sbd_balance').split(' ')[0])
+    + parseFloat(account.get('savings_sbd_balance').split(' ')[0])
     + savings_sbd_pending
     // + conversionValue
     // + sbdOrders
   ;
   const total_steem = 0
     // balance_steem
-    + parseFloat(a.get('balance').split(' ')[0])
+    + parseFloat(account.get('balance').split(' ')[0])
     // saving_balance_steem
-    + parseFloat(a.get('savings_balance').split(' ')[0])
+    + parseFloat(account.get('savings_balance').split(' ')[0])
     // vesting_steem
-    + vestingSteem(a.toJS(), g.toJS())
+    + vestingSteem(account.toJS(), globalprops.toJS())
     + savings_pending
     // + steemOrders
   ;
-  return Number( ( (total_steem * p) + total_sbd).toFixed(2) );
+  return Number(((total_steem * price_per_golos) + total_sbd).toFixed(2) );
 }
 
 function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops, username, showLogin, logout, loggedIn, vertical, navigate, probablyLoggedIn, location, locationQueryParams}) {
@@ -105,6 +104,7 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
         </a>
       </li>
     ;
+
     // const messengerItem = <li className={scn}>
     //     <a href="#" title={tt('g.search')} className="number">
     //       <Icon name="new/messenger" size="1_5x" />
@@ -140,7 +140,8 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
         </li>}
     </LinkWithDropdown>;
 
-    const estimateOutput = <LocalizedCurrency amount={calculateEstimateOutput({a:account, p: price_per_golos, sw: savings_withdraws, g: globalprops})} />;
+    const estimateOutputAmount = calculateEstimateOutput({ account, price_per_golos, savings_withdraws, globalprops })
+    const estimateOutput = <LocalizedCurrency amount={estimateOutputAmount} />
 
     if (loggedIn) { // change back to if(username) after bug fix:  Clicking on Login does not cause drop-down to close #TEMP!
         const user_menu = [
@@ -173,7 +174,7 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
                 >
                     {!vertical && <li className={'Header__profile'}>
                         <a href={accountLink} title={username} onClick={e => e.preventDefault()}>
-                            <Userpic account={username} />
+                            <Userpic account={username} showProgress={true} votingPower={account.get('voting_power')} progressClass="hide-for-large" />
                             <div className={'NavProfile show-for-large'}>
                                 <div className={'NavProfile__name'}>{username}</div>
                                 <div className={'NavProfile__golos'}>

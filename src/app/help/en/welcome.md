@@ -227,7 +227,9 @@ Remember, your posts should have original content in them. Aiming for at least 5
 
 **There is no lost password recovery for Steem accounts**. You are 100% responsible for having it backed up. This means secure digital backups, as well as secured paper backups, stored in different places if possible.
 
-Your Steem account is worth real money. Treat your Steem password like you would your bank password and keep it secure!
+Never put your password into unverified third party websites as they may steal your account. 
+
+Your Steem account is worth real money. Treat your Steem password like you would your bank password and keep it secure! 
 
 <a href="#Table_of_Contents">^</a>
 ### <span id="Earning_on_Steemit">Earning on Steemit</span>
@@ -242,7 +244,6 @@ Don't get discouraged if you don't earn much at first. Keep up the good work!
 
 ***
 
-<a href="#Table_of_Contents">^</a>
 ## <span id="Users_to_Follow">Users to Follow</span>
 
 - @steemitblog - Official Steemit Announcements

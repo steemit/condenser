@@ -415,9 +415,10 @@ export default class UserProfile extends React.Component {
                         <a href={`/@${accountname}/transfers`} className={`${walletClass} UserProfile__menu-item`} onClick={e => { e.preventDefault(); browserHistory.push(e.target.pathname); return false; }}>
                             {tt('g.wallet')} {isMyAccount && <NotifiCounter fields="send,receive,account_update" />}
                         </a>
-                        {isMyAccount && <div>
+                        {isMyAccount ?
                             <Link className="UserProfile__menu-item" to={`/@${accountname}/settings`} activeClassName="active">{tt('g.settings')}</Link>
-                        </div>}
+                            : null
+                        }
                     </div>
                 </div>
             </div>
@@ -443,8 +444,8 @@ export default class UserProfile extends React.Component {
                 <div className="UserProfile__banner row expanded">
 
                     <div className="column" style={cover_image_style}>
-                        <div style={{position: "relative"}}>
-                            <div className="UserProfile__buttons hide-for-small-only">
+                        <div className="UserProfile__buttons-wrapper">
+                            <div className="UserProfile__buttons">
                                 <Follow follower={username} following={accountname} />
                             </div>
                         </div>
@@ -474,7 +475,7 @@ export default class UserProfile extends React.Component {
                                 <Icon name="calendar" /> <DateJoinWrapper date={accountjoin} />
                             </p>
                         </div>
-                        <div className="UserProfile__buttons_mobile show-for-small-only">
+                        <div className="UserProfile__buttons-mobile">
                             <Follow follower={username} following={accountname} what="blog" />
                         </div>
                     </div>
@@ -488,7 +489,6 @@ export default class UserProfile extends React.Component {
                 <div>
                   {tab_content}
                 </div>
-                <br/><br/>
             </div>
         );
     }

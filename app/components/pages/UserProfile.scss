@@ -1,18 +1,39 @@
 .UserProfile {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 3em;
+
+  &__menu {
     display: flex;
-    flex-direction: column;
 
-    &__menu {
-        display: flex;
-
-        & > * {
-            flex-shrink: 0;
-        }
+    & > * {
+      flex-shrink: 0;
     }
+  }
 
-    &__filler {
-        flex-grow: 1;
+  &__filler {
+    flex-grow: 1;
+  }
+
+  &__buttons-wrapper {
+    position: relative;
+  }
+
+  &__buttons {
+    position: absolute;
+    top: 15px;
+    right: 5px;
+
+    label.button {
+      color: black;
+      border-radius: 3px;
+      background-color: white;
     }
+  }
+
+  &__buttons-mobile {
+    display: none;
+  }
 }
 
 .UserProfile__center {
@@ -120,18 +141,6 @@
         font-weight: 200;
     }
 
-    .UserProfile__buttons {
-        position: absolute;
-        top: 15px;
-        right: 5px;
-
-        label.button {
-            color: black;
-            border-radius: 3px;
-            background-color: white;
-        }
-    }
-
     .UserProfile__bio {
         margin: -0.4rem auto 0.5rem;
         font-size: 95%;
@@ -187,23 +196,6 @@
         height: 36px !important;
     }
 
-    .UserProfile__banner .UserProfile__buttons {
-        text-align: right;
-
-        label.button {
-            display: block;
-        }
-    }
-
-    .UserProfile__banner .UserProfile__buttons_mobile {
-        position: inherit;
-        margin-bottom: .5rem;
-        .button {
-            background-color: $white;
-            color: $black;
-        }
-    }
-
     .UserWallet__balance {
         > div:last-of-type {
             text-align: left;
@@ -218,9 +210,27 @@
 }
 
 @media screen and (max-width: 400px) {
-    .UserProfile {
-        &__filler {
-            display: none;
-        }
+  .UserProfile {
+    &__filler {
+      display: none;
     }
+  }
+}
+
+@media screen and (max-width: 60em) {
+  .UserProfile {
+    &__buttons {
+      display: none;
+    }
+
+    &__buttons-mobile {
+      display: block;
+      margin-bottom: .5rem;
+
+      .button {
+        background-color: $white;
+        color: $black;
+      }
+    }
+  }
 }

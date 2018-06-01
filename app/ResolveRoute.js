@@ -96,7 +96,7 @@ export default function resolveRoute(path)
         return {page: 'Post', params: match.slice(1)};
     }
     match = path.match(/^\/(hot|votes|responses|trending|trending30|promoted|cashout|payout|payout_comments|created|active)\/?$/)
-         || path.match(/^\/(hot|votes|responses|trending|trending30|promoted|cashout|payout|payout_comments|created|active)\/([\w\d-]+)\/?$/);
+         || decodeURI(path).match(/^\/(hot|votes|responses|trending|trending30|promoted|cashout|payout|payout_comments|created|active)\/([\u0400-\u04FF-\w\d-]+)\/?$/)
     if (match) {
         return {page: 'PostsIndex', params: match.slice(1)};
     }

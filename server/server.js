@@ -61,9 +61,9 @@ function convertEntriesToArrays(obj) {
 
 // some redirects
 app.use(function*(next) {
-    // normalize url
-    if (this.url.indexOf('%') !== -1) {
-        const transfer = this.url.split("?")[0].split(`/`).includes(`transfers`);
+    // normalize url for %40 opportunity for @ in posts
+    if (this.url.indexOf('%40') !== -1) {
+      const transfer = this.url.split("?")[0].split(`/`).includes(`transfers`);
       if (!transfer) {
         //  fixme potential 500
         this.redirect(decodeURIComponent(this.url));

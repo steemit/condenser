@@ -733,7 +733,7 @@
         "balance_subject_to_3_day_withdraw_waiting_period":
             "Le solde dépend de la période de 3 jours d'attente requise pour les retraits",
         "move_funds_to_another_account":
-            "Transférer des fonds vers un autre compte %(APP_NAME)s ",
+            "Transférer des fonds vers un autre compte Steem ",
         "protect_funds_by_requiring_a_3_day_withdraw_waiting_period":
             "Protéger les fonds en imposant une période de latence de 3 jours pour les retraits.",
         "withdraw_funds_after_the_required_3_day_waiting_period":

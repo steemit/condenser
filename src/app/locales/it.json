@@ -724,7 +724,7 @@
         "balance_subject_to_3_day_withdraw_waiting_period":
             "Saldo soggetto a 3 giorni di attesa per il prelievo.",
         "move_funds_to_another_account":
-            "Sposta i fondi verso un altro account %(APP_NAME)s",
+            "Sposta i fondi verso un altro account Steem",
         "protect_funds_by_requiring_a_3_day_withdraw_waiting_period":
             "Proteggi i fondi richiedendo un periodo di attesa di 3 giorni.",
         "withdraw_funds_after_the_required_3_day_waiting_period":

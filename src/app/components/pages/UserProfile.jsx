@@ -416,11 +416,11 @@ export default class UserProfile extends React.Component {
 
         if (isMyAccount) {
             if (section === 'blog') {
-                page_title = tt('g.myblog');
+                page_title = tt('g.my_blog');
             } else if (section === 'comments') {
-                page_title = tt('g.mycomments');
+                page_title = tt('g.my_comments');
             } else if (section === 'recent-replies') {
-                page_title = tt('g.myreplies');
+                page_title = tt('g.my_replies');
             } else if (section === 'settings') {
                 page_title = tt('g.settings');
             } else if (section === 'curation-rewards') {

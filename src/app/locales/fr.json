@@ -602,7 +602,8 @@
             "Si vous vous êtes récemment abonné(e) au fil de nouveaux utilisateurs, votre flux personnel sera automatiquement rempli lorsque du nouveau contenu apparaîtra",
         "empty_feed_3": "Explorer les articles en vogue",
         "empty_feed_4": "Lire le guide de prise en main rapide",
-        "empty_feed_5": "Parcourir la FAQ"
+        "empty_feed_5": "Parcourir la FAQ",
+        "my_feed": "Mon Flux"
     },
     "transferhistoryrow_jsx": {
         "to_savings": "vers l'épargne",

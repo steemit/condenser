@@ -21,6 +21,14 @@ const IconButton = ({ icon, size, fill }) => {
                 id="icon-svg"
             />
         ),
+        question: (
+            <path
+                className={`icon-button icon-button__magnifyingGlass icon-button--${
+                    fill
+                }`}
+                d="M20.27,14.93c-1.46,1.23-2.67,1.82-2.67,3.93v1.78H14.12a27.22,27.22,0,0,1,.14-3.72c.53-2.47,2.16-3.2,3.48-4.41a2.77,2.77,0,0,0,1.1-2,2.45,2.45,0,0,0-2.73-2.36,2.67,2.67,0,0,0-3,2.81H9.51c0-3.94,3-6,6.74-6s6.24,2.42,6.24,5.51A5.67,5.67,0,0,1,20.27,14.93ZM13.89,27.05V23.11H17.8v3.94Z"
+            />
+        ),
     };
 
     let viewBox;
@@ -65,7 +73,7 @@ const IconButton = ({ icon, size, fill }) => {
 };
 
 IconButton.propTypes = {
-    icon: PropTypes.oneOf(['pencil', 'magnifyingGlass']),
+    icon: PropTypes.oneOf(['pencil', 'magnifyingGlass', 'question']),
     size: PropTypes.oneOf(['small', 'medium', 'large']),
     fill: PropTypes.oneOf(['transparent', 'green']),
 };

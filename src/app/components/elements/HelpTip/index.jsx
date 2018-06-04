@@ -20,11 +20,9 @@ export default class HelpTip extends React.Component {
     hide = () => this.setVisibility(false);
 
     setVisibility = visible => {
-        this.setState(
-            Object.assign({}, this.state, {
-                visible,
-            })
-        );
+        this.setState({
+            visible,
+        });
     };
 
     handleTouch = () => {

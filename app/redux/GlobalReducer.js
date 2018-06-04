@@ -38,30 +38,30 @@ export default createModule({
                 return state.mergeDeep({fetchingXchange: fetchingXchange});
             }
         },
-        {
-            action: 'RECEIVE_STATE',
-            reducer: (state, action) => {
-                let payload = fromJS(action.payload)
-                if(payload.has('content')) {
-                    const content = payload.get('content').withMutations(c => {
-                        c.forEach((cc, key) => {
-                            cc = emptyContentMap.mergeDeep(cc)
-                            const stats = fromJS(contentStats(cc))
-                            c.setIn([key, 'stats'], stats)
-                        })
-                    })
-                    payload = payload.set('content', content)
+        // {
+        //     action: 'RECEIVE_STATE',
+        //     reducer: (state, action) => {
+        //         let payload = fromJS(action.payload)
+        //         if(payload.has('content')) {
+        //             const content = payload.get('content').withMutations(c => {
+        //                 c.forEach((cc, key) => {
+        //                     cc = emptyContentMap.mergeDeep(cc)
+        //                     const stats = fromJS(contentStats(cc))
+        //                     c.setIn([key, 'stats'], stats)
+        //                 })
+        //             })
+        //             payload = payload.set('content', content)
 
-                    // TODO reserved words used in account names, find correct solution
-                    if (!Map.isMap(payload.get('accounts'))) {
-                      const accounts = payload.get('accounts')
-                      payload = payload.set('accounts', fromJSGreedy(accounts))
-                    }
-                  }
-                // console.log('state.mergeDeep(action.payload).toJS(), action.payload', state.mergeDeep(action.payload).toJS(), action.payload)
-                return state.mergeDeep(payload);
-            }
-        },
+        //             // TODO reserved words used in account names, find correct solution
+        //             if (!Map.isMap(payload.get('accounts'))) {
+        //               const accounts = payload.get('accounts')
+        //               payload = payload.set('accounts', fromJSGreedy(accounts))
+        //             }
+        //           }
+        //         // console.log('state.mergeDeep(action.payload).toJS(), action.payload', state.mergeDeep(action.payload).toJS(), action.payload)
+        //         return state.mergeDeep(payload);
+        //     }
+        // },
         {
             action: 'RECEIVE_ACCOUNT',
             reducer: (state, {payload: {account}}) => {

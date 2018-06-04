@@ -109,7 +109,7 @@ export default connect(
             const confirm = tt('savingswithdrawhistory_jsx.cancel_this_withdraw_request')
             const successCallback = () => {
                 // refresh transfer history
-                dispatch({type: 'global/GET_STATE', payload: {url: `@${fro}/transfers`}})
+                dispatch({type: 'FETCH_STATE', payload: {pathname: `@${fro}/transfers`}})
                 success()
             }
             dispatch(transaction.actions.broadcastOperation({

@@ -6,7 +6,6 @@ import tt from 'counterpart';
 import { api } from 'golos-js';
 
 export const sharedWatches = [
-    watchGetState,
     watchTransactionErrors
 ]
 
@@ -20,20 +19,6 @@ export function* getAccount(username, force = false) {
         }
     }
     return account
-}
-
-export function* watchGetState() {
-    yield* takeEvery('global/GET_STATE', getState);
-}
-/** Manual refreshes.  The router is in FetchDataSaga. */
-export function* getState({payload: {url}}) {
-    try {
-        const state = yield call([api, api.getStateAsync], url);
-        yield put(g.actions.receiveState(state));
-    } catch (error) {
-        console.error('~~ Saga getState error ~~>', url, error);
-        yield put({type: 'global/CHAIN_API_ERROR', error: error.message});
-    }
 }
 
 export function* watchTransactionErrors() {

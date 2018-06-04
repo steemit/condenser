@@ -115,7 +115,7 @@ export default connect(
         dispatchSubmit: ({amount, asset, author, permlink, currentUser, onClose, errorCallback}) => {
             const username = currentUser.get('username')
             const successCallback = () => {
-                dispatch({type: 'global/GET_STATE', payload: {url: `@${username}/transfers`}}) // refresh transfer history
+                dispatch({type: 'FETCH_STATE', payload: {pathname: `@${username}/transfers`}}) // refresh transfer history
                 onClose()
             }
             const operation = {

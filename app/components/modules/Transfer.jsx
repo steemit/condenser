@@ -316,7 +316,7 @@ export default connect(
             const username = currentUser.get('username')
             const successCallback = () => {
                 // refresh transfer history
-                dispatch({type: 'global/GET_STATE', payload: {url: `@${username}/transfers`}})
+                dispatch({type: 'FETCH_STATE', payload: {pathname: `@${username}/transfers`}})
                 if(/Savings Withdraw/.test(transferType)) {
                     dispatch({type: 'user/LOAD_SAVINGS_WITHDRAW', payload: {}})
                 }

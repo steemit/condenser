@@ -521,7 +521,7 @@ module.exports = {
             },
             withdrawVesting: ({account, vesting_shares, errorCallback, successCallback}) => {
                 const successCallbackWrapper = (...args) => {
-                    dispatch({type: 'global/GET_STATE', payload: {url: `@${account}/transfers`}})
+                    dispatch({type: 'FETCH_STATE', payload: {pathname: `@${account}/transfers`}})
                     return successCallback(...args)
                 }
                 dispatch(transaction.actions.broadcastOperation({

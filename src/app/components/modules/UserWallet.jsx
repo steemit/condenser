@@ -586,7 +586,11 @@ class UserWallet extends React.Component {
                                 </p>,
                             ]}
                         >
-                            <IconButton size="small" fill="green" />
+                            <IconButton
+                                icon="question"
+                                size="small"
+                                fill="green"
+                            />
                         </HelpTip>
                         <FormattedHTMLMessage
                             className="secondary"

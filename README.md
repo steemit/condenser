@@ -89,26 +89,6 @@ yarn global add sequelize sequelize-cli mysql
 
 Run `sequelize db:migrate` in `db/` directory.
 
-#### Install Tarantool
-
-OS X:
-
-```bash
-brew install tarantool
-```
-
-Debian based Linux:
-
-```bash
-sudo apt-get install tarantool
-```
-
-Test the interactive console:
-
-```bash
-user@example:~$ tarantool
-```
-
 ### Development
 
 ```bash

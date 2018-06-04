@@ -288,7 +288,7 @@
         "use_limited_amount_of_tags":
             "You have %(tagsLength)s tags total%(includingCategory)s. Please use only 5 in your post and category line.",
         "are_you_sure_you_want_to_clear_this_form":
-            "Are you sure you want to clear this form?",
+            "Are you sure you want to exit the comment editor?",
         "uploading": "Uploading...",
         "draft_saved": "Draft saved.",
         "editor": "Editor",
@@ -489,6 +489,8 @@
     },
     "witnesses_jsx": {
         "witness_thread": "witness thread",
+        "external_site": "external site",
+        "disabled": "disabled",
         "top_witnesses": "Witness Voting",
         "you_have_votes_remaining": {
             "zero": "You have no votes remaining",
@@ -891,5 +893,9 @@
         "out_of_bandwidth_option_1": "Buy and hold more Steem Power",
         "out_of_bandwidth_option_2": "Wait until your bandwidth recharges",
         "out_of_bandwidth_option_3": "Wait until the network usage decreases"
+    },
+    "sanitizedlink_jsx": {
+        "phishylink_caution": "Link hidden; phishing attempt",
+        "phishylink_reveal": "show link"
     }
 }

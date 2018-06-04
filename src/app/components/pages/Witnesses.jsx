@@ -12,6 +12,22 @@ import tt from 'counterpart';
 const Long = ByteBuffer.Long;
 const { string, func, object } = PropTypes;
 
+const DISABLED_SIGNING_KEY = 'STM1111111111111111111111111111111114T1Anm';
+
+function _blockGap(head_block, last_block) {
+    if (!last_block || last_block < 1) return 'forever';
+    const secs = (head_block - last_block) * 3;
+    if (secs < 120) return 'recently';
+    const mins = Math.floor(secs / 60);
+    if (mins < 120) return mins + ' mins ago';
+    const hrs = Math.floor(mins / 60);
+    if (hrs < 48) return hrs + ' hrs ago';
+    const days = Math.floor(hrs / 24);
+    if (days < 14) return days + ' days ago';
+    const weeks = Math.floor(days / 7);
+    if (weeks < 104) return weeks + ' weeks ago';
+}
+
 class Witnesses extends React.Component {
     static propTypes = {
         // HTML properties
@@ -34,6 +50,8 @@ class Witnesses extends React.Component {
         this.onWitnessChange = e => {
             const customUsername = e.target.value;
             this.setState({ customUsername });
+            // Force update to ensure witness vote appears
+            this.forceUpdate();
         };
         this.accountWitnessProxy = e => {
             e.preventDefault();
@@ -58,7 +76,7 @@ class Witnesses extends React.Component {
 
     render() {
         const {
-            props: { witness_votes, current_proxy },
+            props: { witness_votes, current_proxy, head_block },
             state: { customUsername, proxy },
             accountWitnessVote,
             accountWitnessProxy,
@@ -72,19 +90,24 @@ class Witnesses extends React.Component {
         const up = <Icon name="chevron-up-circle" />;
         let witness_vote_count = 30;
         let rank = 1;
+
         const witnesses = sorted_witnesses.map(item => {
             const owner = item.get('owner');
             const thread = item.get('url');
             const myVote = witness_votes ? witness_votes.has(owner) : null;
+            const signingKey = item.get('signing_key');
+            const isDisabled = signingKey == DISABLED_SIGNING_KEY;
+            const lastBlock = item.get('last_confirmed_block_num');
             const classUp =
                 'Voting__button Voting__button-up' +
                 (myVote === true ? ' Voting__button--upvoted' : '');
+
             let witness_thread = '';
             if (thread) {
                 if (links.remote.test(thread)) {
                     witness_thread = (
                         <a href={thread}>
-                            {tt('witnesses_jsx.witness_thread')}&nbsp;<Icon name="extlink" />
+                            {tt('witnesses_jsx.external_site')}&nbsp;<Icon name="extlink" />
                         </a>
                     );
                 } else {
@@ -95,6 +118,11 @@ class Witnesses extends React.Component {
                     );
                 }
             }
+
+            const ownerStyle = isDisabled
+                ? { textDecoration: 'line-through', color: '#AAA' }
+                : {};
+
             return (
                 <tr key={owner}>
                     <td width="75">
@@ -116,7 +144,16 @@ class Witnesses extends React.Component {
                         </span>
                     </td>
                     <td>
-                        <Link to={'/@' + owner}>{owner}</Link>
+                        <Link to={'/@' + owner} style={ownerStyle}>
+                            {owner}
+                        </Link>
+                        {isDisabled && (
+                            <small>
+                                {' '}
+                                ({tt('witnesses_jsx.disabled')}{' '}
+                                {_blockGap(head_block, lastBlock)})
+                            </small>
+                        )}
                     </td>
                     <td>{witness_thread}</td>
                 </tr>
@@ -346,6 +383,7 @@ module.exports = {
             const current_proxy =
                 current_account && current_account.get('proxy');
             return {
+                head_block: state.global.getIn(['props', 'head_block_number']),
                 witnesses: state.global.get('witnesses'),
                 username,
                 witness_votes,

@@ -33,6 +33,7 @@ import normalizeProfile from 'app/utils/NormalizeProfile';
 import userIllegalContent from 'app/utils/userIllegalContent';
 import proxifyImageUrl from 'app/utils/ProxifyUrl';
 import ArticleLayoutSelector from 'app/components/modules/ArticleLayoutSelector';
+import SanitizedLink from 'app/components/elements/SanitizedLink';
 
 export default class UserProfile extends React.Component {
     constructor() {
@@ -688,13 +689,10 @@ export default class UserProfile extends React.Component {
                                 {website && (
                                     <span>
                                         <Icon name="link" />{' '}
-                                        <a
-                                            href={website}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                        >
-                                            {website_label}
-                                        </a>
+                                        <SanitizedLink
+                                            url={website}
+                                            text={website_label}
+                                        />
                                     </span>
                                 )}
                                 <Icon name="calendar" />{' '}

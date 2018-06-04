@@ -85,7 +85,7 @@ class TransferForm extends Component {
                 to:
                     ! values.to ? tt('g.required') : validate_account_name(values.to),
                 amount:
-                    ! values.amount ? tt('g.required') :
+                    ! values.amount || /^0$/.test(values.amount) ? tt('g.required') :
                     insufficientFunds(values.asset, values.amount) ? tt('transfer_jsx.insufficient_funds') :
                     countDecimals(values.amount) > 3 ? tt('transfer_jsx.use_only_3_digits_of_precison') :
                     null,

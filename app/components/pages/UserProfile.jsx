@@ -36,9 +36,13 @@ import normalizeProfile from 'app/utils/NormalizeProfile';
 export default class UserProfile extends React.Component {
     constructor(props) {
         super(props)
-        this.state = {}
+        this.state = {
+            linksAlign: 'right',
+        };
         this.onPrint = () => {window.print()}
+
         this.loadMore = this.loadMore.bind(this);
+        this._onLinkRef = this._onLinkRef.bind(this);
     }
 
     componentWillReceiveProps(next) {
@@ -382,42 +386,41 @@ export default class UserProfile extends React.Component {
         }
 
         const top_menu = <div className="row UserProfile__top-menu">
-            <div className="columns small-10 medium-12 medium-expand">
-                <ul className="menu" style={{flexWrap: "wrap"}}>
-                    <li><Link to={`/@${accountname}`} activeClassName="active">{tt('g.blog')}</Link></li>
-                    <li><Link to={`/@${accountname}/comments`} activeClassName="active">{tt('g.comments')}</Link></li>
-                    <li><Link to={`/@${accountname}/recent-replies`} activeClassName="active">
+            <div className="columns">
+                <div className="UserProfile__menu menu" style={{flexWrap: "wrap"}}>
+                    <Link className="UserProfile__menu-item" to={`/@${accountname}`} activeClassName="active">{tt('g.blog')}</Link>
+                    <Link className="UserProfile__menu-item" to={`/@${accountname}/comments`} activeClassName="active">{tt('g.comments')}</Link>
+                    <Link className="UserProfile__menu-item" to={`/@${accountname}/recent-replies`} activeClassName="active">
                         {tt('g.replies')} {isMyAccount && <NotifiCounter fields="comment_reply" />}
-                    </Link></li>
+                    </Link>
                     {/*<li><Link to={`/@${accountname}/feed`} activeClassName="active">Feed</Link></li>*/}
-                    <li>
-                        <LinkWithDropdown
-                            closeOnClickOutside
-                            dropdownPosition="bottom"
-                            dropdownAlignment="right"
-                            dropdownContent={
-                                <VerticalMenu items={rewardsMenu} />
-                            }
+                    <LinkWithDropdown
+                        closeOnClickOutside
+                        dropdownPosition="bottom"
+                        dropdownAlignment={this.state.linksAlign}
+                        dropdownContent={
+                            <VerticalMenu items={rewardsMenu} />
+                        }
+                    >
+                        <a
+                            className={`${rewardsClass} UserProfile__menu-item`}
+                            ref={this._onLinkRef}
                         >
-                            <a className={rewardsClass}>
-                                {tt('g.rewards')}
-                                <Icon name="dropdown-arrow" />
-                            </a>
-                        </LinkWithDropdown>
-                    </li>
-                </ul>
-            </div>
-            <div className="columns shrink">
-                <ul className="menu" style={{flexWrap: "wrap"}}>
-                    <li>
-                        <a href={`/@${accountname}/transfers`} className={walletClass} onClick={e => { e.preventDefault(); browserHistory.push(e.target.pathname); return false; }}>
+                            {tt('g.rewards')}
+                            <Icon name="dropdown-arrow" />
+                        </a>
+                    </LinkWithDropdown>
+                    <div className="UserProfile__filler" />
+                    <div>
+                        <a href={`/@${accountname}/transfers`} className={`${walletClass} UserProfile__menu-item`} onClick={e => { e.preventDefault(); browserHistory.push(e.target.pathname); return false; }}>
                             {tt('g.wallet')} {isMyAccount && <NotifiCounter fields="send,receive,account_update" />}
                         </a>
-                    </li>
-                    {isMyAccount && <li>
-                        <Link to={`/@${accountname}/settings`} activeClassName="active">{tt('g.settings')}</Link>
-                    </li>}
-                </ul>
+                        {isMyAccount ?
+                            <Link className="UserProfile__menu-item" to={`/@${accountname}/settings`} activeClassName="active">{tt('g.settings')}</Link>
+                            : null
+                        }
+                    </div>
+                </div>
             </div>
          </div>;
 
@@ -441,8 +444,8 @@ export default class UserProfile extends React.Component {
                 <div className="UserProfile__banner row expanded">
 
                     <div className="column" style={cover_image_style}>
-                        <div style={{position: "relative"}}>
-                            <div className="UserProfile__buttons hide-for-small-only">
+                        <div className="UserProfile__buttons-wrapper">
+                            <div className="UserProfile__buttons">
                                 <Follow follower={username} following={accountname} />
                             </div>
                         </div>
@@ -472,7 +475,7 @@ export default class UserProfile extends React.Component {
                                 <Icon name="calendar" /> <DateJoinWrapper date={accountjoin} />
                             </p>
                         </div>
-                        <div className="UserProfile__buttons_mobile show-for-small-only">
+                        <div className="UserProfile__buttons-mobile">
                             <Follow follower={username} following={accountname} what="blog" />
                         </div>
                     </div>
@@ -486,9 +489,18 @@ export default class UserProfile extends React.Component {
                 <div>
                   {tab_content}
                 </div>
-                <br/><br/>
             </div>
         );
+    }
+
+    _onLinkRef(el) {
+        if (el) {
+            if (this.state.linksAlign !== 'left' && el.offsetLeft + (el.offsetWidth / 2) < (window.outerWidth / 2)) {
+                this.setState({
+                    linksAlign: 'left',
+                });
+            }
+        }
     }
 }
 

@@ -24,7 +24,6 @@ import {transactionWatches} from 'app/redux/TransactionSaga';
 import PollDataSaga from 'app/redux/PollDataSaga';
 import {component as NotFound} from 'app/components/pages/NotFound';
 import extractMeta from 'app/utils/ExtractMeta';
-import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import Translator from 'app/Translator';
 import {notificationsArrayToMap} from 'app/utils/Notifications';
 import getState from 'app/utils/StateBuilder';

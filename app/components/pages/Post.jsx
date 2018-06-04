@@ -9,7 +9,6 @@ import {Set} from 'immutable'
 import tt from 'counterpart';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import { blockedUsers } from 'app/utils/IllegalContent';
-import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import { buttonClick } from 'app/utils/Analytics';
 
 import CTABlock from '../elements/CTA/ctaBlock'

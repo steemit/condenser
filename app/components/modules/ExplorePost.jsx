@@ -1,5 +1,4 @@
 import React, {PropTypes, Component} from 'react';
-import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import Icon from 'app/components/elements/Icon';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import tt from 'counterpart';

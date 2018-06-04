@@ -42,6 +42,16 @@ const MAX_VOTES_DISPLAY = 20;
 const VOTE_WEIGHT_DROPDOWN_THRESHOLD = 1.0 * 1000.0 * 1000.0;
 const SBD_PRINT_RATE_MAX = 10000;
 
+function _netVestingShares(account) {
+    const precalc = account.get('net_vesting_shares');
+    if (precalc) return precalc; // if available, use pre-calc value (from hive)
+
+    const vesting_shares = account.get('vesting_shares');
+    const delegated_vesting_shares = account.get('delegated_vesting_shares');
+    const received_vesting_shares = account.get('received_vesting_shares');
+    return vesting_shares - delegated_vesting_shares + received_vesting_shares;
+}
+
 class Voting extends React.Component {
     static propTypes = {
         // HTML properties
@@ -523,21 +533,10 @@ export default connect(
         const active_votes = post.get('active_votes');
         const is_comment = post.get('parent_author') !== '';
 
-        const current_account = state.user.get('current');
-        const username = current_account
-            ? current_account.get('username')
-            : null;
-        const vesting_shares = current_account
-            ? current_account.get('vesting_shares')
-            : 0.0;
-        const delegated_vesting_shares = current_account
-            ? current_account.get('delegated_vesting_shares')
-            : 0.0;
-        const received_vesting_shares = current_account
-            ? current_account.get('received_vesting_shares')
-            : 0.0;
-        const net_vesting_shares =
-            vesting_shares - delegated_vesting_shares + received_vesting_shares;
+        const current = state.user.get('current');
+        const username = current ? current.get('username') : null;
+        const net_vesting_shares = current ? _netVestingShares(current) : 0;
+
         const voting = state.global.get(
             `transaction_vote_active_${author}_${permlink}`
         );

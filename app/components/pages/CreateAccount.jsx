@@ -456,11 +456,6 @@ class CreateAccount extends React.Component {
                 next_step = <div className="callout alert">
                     <a href="/enter_mobile">{tt('tips_js.confirm_phone')}</a>
                 </div>;
-            } else if(server_error === 'Confirmation was attempted a moment ago. You can try again only in 5 minutes'){
-                next_step = <div className="callout alert">
-                    <strong>{lalalalala}:</strong>
-                    <p>{server_error}</p>
-                </div>;
             } else {
                 next_step = <div className="callout alert">
                     <strong>{tt('createaccount_jsx.couldnt_create_account_server_returned_error')}:</strong>

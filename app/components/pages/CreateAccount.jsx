@@ -210,12 +210,12 @@ class CreateAccount extends React.Component {
 
         case "attempts_10":
           fetch_state.checking = true;
-          fetch_state.message = 'Confirmation was attempted a moment ago. You can try again only in 10 seconds';
+          fetch_state.message =  tt('mobilevalidation_js.attempts_10');
           break;
 
         case "attempts_300":
           fetch_state.checking = true;
-          fetch_state.message = 'Confirmation was attempted a moment ago. You can try again only in 5 minutes';
+          fetch_state.message = tt('mobilevalidation_js.attempts_300');
           break;
 
         case "error":
@@ -455,6 +455,11 @@ class CreateAccount extends React.Component {
             } else if (server_error === 'Phone number is not confirmed') {
                 next_step = <div className="callout alert">
                     <a href="/enter_mobile">{tt('tips_js.confirm_phone')}</a>
+                </div>;
+            } else if(server_error === 'Confirmation was attempted a moment ago. You can try again only in 5 minutes'){
+                next_step = <div className="callout alert">
+                    <strong>{lalalalala}:</strong>
+                    <p>{server_error}</p>
                 </div>;
             } else {
                 next_step = <div className="callout alert">

@@ -180,7 +180,7 @@ function* usernamePasswordLogin2({
     const isRole = (role, fn) =>
         !userProvidedRole || role === userProvidedRole ? fn() : undefined;
 
-    const account = yield call(getAccount, username);
+    const account = yield call(getAccount, username, true);
     if (!account) {
         yield put(userActions.loginError({ error: 'Username does not exist' }));
         return;

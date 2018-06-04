@@ -23,6 +23,12 @@ export function* getAccount(username, force = false) {
     let account = yield select(state =>
         state.global.get('accounts').get(username)
     );
+
+    // hive responds with 'lite' account objects which do not have transfers
+    // or keys data. to be on the safe side (until get_state split apart),
+    // we should force-refetch accounts which appear to have no keys in state.
+    if (!force && account && !account.get('memo_key')) force = true;
+
     if (force || !account) {
         [account] = yield call([api, api.getAccountsAsync], [username]);
         if (account) {

@@ -210,8 +210,7 @@ class Welcome extends Component {
                                         <img src="images/new/welcome/startup.svg" />
                                     </div>
                                     <div className="description">
-                                        Оригинальные идеи,<br />
-                                        <span className="stroke">а не проплаченные статьи</span>
+                                        Оригинальные идеи, <span className="stroke">а не проплаченные статьи</span>
                                     </div>
 
                                 </div>
@@ -220,8 +219,7 @@ class Welcome extends Component {
                                         <img src="images/new/welcome/post.svg" />
                                     </div>
                                     <div className="description">
-                                        Посты и комментарии,<br />
-                                        <span className="stroke">а не баннеры и реклама</span>
+                                        Посты и комментарии, <span className="stroke">а не баннеры и реклама</span>
                                     </div>
                                 </div>
                                 <div className="columns">
@@ -229,8 +227,7 @@ class Welcome extends Component {
                                         <img src="images/new/welcome/book.svg" />
                                     </div>
                                     <div className="description">
-                                        Удобство выдачи,<br />
-                                        <span className="stroke">а не закрытые алгоритмы</span>
+                                        Удобство выдачи, <span className="stroke">а не закрытые алгоритмы</span>
                                     </div>
                                 </div>
                                 <div className="columns">
@@ -238,8 +235,7 @@ class Welcome extends Component {
                                         <img src="images/new/welcome/teamwork.svg" />
                                     </div>
                                     <div className="description">
-                                        Информация принадлежит вам,<br />
-                                        <span className="stroke">а не модерируется</span>
+                                        Информация принадлежит вам, <span className="stroke">а не модерируется</span>
                                     </div>
                                 </div>
                             </div>
@@ -251,13 +247,9 @@ class Welcome extends Component {
                     <div className="row align-middle">
                         <div className="columns">
                             <div className="Welcome__initial-header">С чего начать и о чем писать?</div>
-                            <div className="row align-middle Welcome__initial-top-row">
-                                <div className="columns small-12">
-                                    <div className="Welcome__initial-subheader">Популярные темы:</div>
-                                </div>
-                            </div>
                             <div className="row">
                                 <div className="columns small-12 medium-3 large-2">
+                                    <div className="Welcome__initial-subheader">Популярные темы:</div>
                                     <div className="initial-tags">
                                         {this.tags.map((tag) => {
                                             const activeClass = tag.id == tagsActiveId ? ' active' : ''

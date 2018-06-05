@@ -9,7 +9,8 @@ class Userpic extends Component {
         account: PropTypes.string,
         votingPower: PropTypes.number,
         showProgress: PropTypes.bool,
-        progressClass: PropTypes.string
+        progressClass: PropTypes.string,
+        imageUrl: PropTypes.string
     }
 
     static defaultProps = {
@@ -27,7 +28,7 @@ class Userpic extends Component {
     shouldComponentUpdate = shouldComponentUpdate(this, 'Userpic')
 
     extractUrl = () => {
-        const { json_metadata, width, hideIfDefault } = this.props
+        const { json_metadata, width, hideIfDefault, imageUrl } = this.props
 
         let url = null;
 
@@ -39,6 +40,10 @@ class Userpic extends Component {
             if(md.profile) url = md.profile.profile_image;
         } catch (e) {
             console.warn('Try to extract image url from users metaData failed!')
+        }
+
+        if (imageUrl) {
+            url = imageUrl
         }
 
         if (url && /^(https?:)\/\//.test(url)) {

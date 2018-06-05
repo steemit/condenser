@@ -139,14 +139,15 @@
     .stroke{
       position: relative;
       display: inline-block;
+      white-space: nowrap;
 
       &:before {
         content: "";
         position: absolute;
         width: 100%;
-        top: 50%;
+        top: 55%;
         opacity: 0.75;
-        border: 1px solid  #fd3a28;
+        border-bottom: 2px solid  #fd3a28;
       }
     }
   }
@@ -170,14 +171,11 @@
   }
 
   .Welcome__initial-subheader {
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 500;
     letter-spacing: 1.4px;
     color: #333333;
     text-transform: uppercase;
-  }
-
-  .Welcome__initial-top-row {
     margin-bottom: 30px;
   }
 
@@ -279,6 +277,8 @@
 
     .button {
       margin: 30px 0 0;
+      padding: 0.85em 1.5em;
+      letter-spacing: 3px;
     }
   }
 }
@@ -340,7 +340,8 @@
 
 .Welcome__questions {
   padding: 20px 0;
-  background-color: #f8f8f8;
+  // background-color: #f8f8f8; commented until section with editor
+  background-color: #fff;
 
   & > .row {
     min-height: 600px;

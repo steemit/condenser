@@ -172,7 +172,7 @@ class Welcome extends Component {
     handleTagClick = (tag) => () => this.fetchTagContents(tag)
 
     render() {
-        const { 
+        const {
             tagsLoading, tagsActiveId, tagsCards,
             questionsLoading, questionsCards
         } = this.state

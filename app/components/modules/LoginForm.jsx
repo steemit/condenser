@@ -8,7 +8,6 @@ import {validate_account_name} from 'app/utils/ChainValidation';
 import runTests from 'app/utils/BrowserTests';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import reactForm from 'app/utils/ReactForm'
-import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import tt from 'counterpart';
 import { APP_DOMAIN } from 'app/client_config';
 import { translateError } from 'app/utils/ParsersAndFormatters';
@@ -79,13 +78,11 @@ class LoginForm extends Component {
 
     SignUp() {
         const onType = document.getElementsByClassName("OpAction")[0].textContent;
-        serverApiRecordEvent('FreeMoneySignUp', onType);
         window.location.href = "/enter_email";
     }
 
     SignIn() {
         const onType = document.getElementsByClassName("OpAction")[0].textContent;
-        serverApiRecordEvent('SignIn', onType);
     }
 
     saveLoginToggle = () => {

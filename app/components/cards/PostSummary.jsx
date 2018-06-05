@@ -19,7 +19,6 @@ import UserNames from 'app/components/elements/UserNames';
 import tt from 'counterpart';
 import { APP_ICON, TERMS_OF_SERVICE_URL } from 'app/client_config';
 import { detransliterate } from 'app/utils/ParsersAndFormatters';
-import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import PostSummaryThumb from 'app/components/elements/PostSummaryThumb'
 
 function isLeftClickEvent(event) {
@@ -81,7 +80,6 @@ class PostSummary extends React.Component {
         const myPost = username === content.get('author')
 
         if(blockedUsers.includes(content.get('author'))) {
-            serverApiRecordEvent('illegal content', `${content.get('author')} /${content.get('permlink')}`)
 			return null
 		}
 

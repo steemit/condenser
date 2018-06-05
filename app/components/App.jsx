@@ -15,7 +15,6 @@ import {key_utils} from 'golos-js/lib/auth/ecc';
 import MiniHeader from '@modules/MiniHeader';
 import tt from 'counterpart';
 import PageViewsCounter from '@elements/PageViewsCounter';
-import {serverApiRecordEvent} from '@utils/ServerApiClient';
 import {APP_ICON, VEST_TICKER, WIKI_URL, LANDING_PAGE_URL, ABOUT_PAGE_URL, WHITEPAPER_URL, TERMS_OF_SERVICE_URL, PRIVACY_POLICY_URL, THEMES, DEFAULT_THEME } from 'app/client_config';
 import LocalizedCurrency from '@elements/LocalizedCurrency';
 
@@ -121,11 +120,9 @@ class App extends React.Component {
     }
 
     signUp() {
-        serverApiRecordEvent('Sign up', 'Hero banner');
     }
 
     learnMore() {
-        serverApiRecordEvent('Learn more', 'Hero banner');
     }
 
     isShowInfoBox() {

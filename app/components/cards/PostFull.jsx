@@ -145,9 +145,7 @@ class PostFull extends React.Component {
 
     fbShare(e) {
         const href = this.share_params.url;
-        // serverApiRecordEvent('FbShare', this.share_params.link);
         e.preventDefault();
-        // loadFbSdk(document, 'script', 'facebook-jssdk').then(fb => {
             window.FB.ui({
                 method: 'share',
                 href
@@ -155,11 +153,9 @@ class PostFull extends React.Component {
                 if (response && !response.error_message)
                     serverApiRecordEvent('FbShare', this.share_params.link);
             });
-        // });
     }
 
     twitterShare(e) {
-        serverApiRecordEvent('TwitterShare', this.share_params.link);
         e.preventDefault();
         const winWidth = 640;
         const winHeight = 320;

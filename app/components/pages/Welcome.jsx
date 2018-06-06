@@ -364,18 +364,6 @@ class Welcome extends Component {
                     </div>
                 </section>
 
-                <section className="Welcome__reviews">
-                    <div className="row align-middle">
-                        <div className="columns small-12 medium-6">
-                            <img src="images/new/welcome/welcome__reviews.svg" />
-                        </div>
-                        <div className="columns small-12 medium-6">
-                            <div className="Welcome__reviews-header">Голоса сообщества</div>
-                            <WelcomeSlider slides={this.slides} />
-                        </div>
-                    </div>
-                </section>
-
                 <section className="Welcome__mobile">
                     <div className="row align-middle">
                         <div className="columns small-12 medium-6">
@@ -388,6 +376,18 @@ class Welcome extends Component {
                         </div>
                         <div className="columns small-12 medium-6">
                             <img src="images/new/welcome/welcome__about.svg" />
+                        </div>
+                    </div>
+                </section>
+
+                <section className="Welcome__reviews">
+                    <div className="row align-middle">
+                        <div className="columns small-12 medium-6">
+                            <img src="images/new/welcome/welcome__reviews.svg" />
+                        </div>
+                        <div className="columns small-12 medium-6">
+                            <div className="Welcome__reviews-header">Голоса сообщества</div>
+                            <WelcomeSlider slides={this.slides} />
                         </div>
                     </div>
                 </section>

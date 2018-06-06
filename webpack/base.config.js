@@ -1,4 +1,5 @@
 import path from 'path';
+import webpack from 'webpack';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import writeStats from './utils/write-stats';
 import alias from './alias'
@@ -20,11 +21,11 @@ export default {
         publicPath: '/assets/'
     },
     module: {
-        loaders: [
-            {test: /\.(jpe?g|png|gif)/, loader: 'url-loader?limit=4096'},
-            {test: /\.json$/, loader: 'json'},
-            {test: /\.js$|\.jsx$/, exclude: /node_modules/, loader: 'babel'},
-            {test: /\.svg$/, loader: 'svg-inline-loader'},
+        rules: [
+            {test: /\.(jpe?g|png|gif)/, use: 'url-loader?limit=4096'},
+            {test: /\.json$/, use: 'json-loader'},
+            {test: /\.js$|\.jsx$/, exclude: /node_modules/, use: 'babel-loader'},
+            {test: /\.svg$/, use: 'svg-inline-loader'},
             {
                 test: /\.(woff(2)?|ttf|eot)(\?v=\d+\.\d+\.\d+)?$/,
                 loader: 'file-loader',
@@ -35,23 +36,49 @@ export default {
             },
             {
                 test: require.resolve("blueimp-file-upload"),
-                loader: "imports?define=>false"
+                use: "imports?define=>false"
             },
             {
                 test: require.resolve("medium-editor-insert-plugin"),
-                loader: "imports?define=>false"
+                use: "imports?define=>false"
             },
             {
                 test: /\.css$/,
-                loader: 'style!css!autoprefixer'
+                use: [
+                    {
+                        loader: 'style-loader',
+                    },
+                    {
+                        loader: 'css-loader',
+                    },
+                    {
+                        loader: 'autoprefixer-loader'
+                    }
+                ]
             },
             {
                 test: /\.scss$/,
-                loader: ExtractTextPlugin.extract('style', 'css!autoprefixer!sass?outputStyle=expanded')
+                use: ExtractTextPlugin.extract({
+                    fallback: 'style-loader',
+                    use: [
+                        {
+                            loader: 'css-loader',
+                        },
+                        {
+                            loader: 'autoprefixer-loader'
+                        },
+                        {
+                            loader: 'sass-loader',
+                            options: {
+                                outputStyle: 'expanded'
+                            }
+                        }
+                    ]
+                })
             },
             {
                 test: /\.md/,
-                loader: 'raw'
+                use: 'raw-loader'
             }
         ]
     },
@@ -59,15 +86,20 @@ export default {
         function () {
             this.plugin('done', writeStats);
         },
+        new webpack.optimize.ModuleConcatenationPlugin(),
+        new webpack.optimize.CommonsChunkPlugin({
+            names: 'vendor',
+            minChunks: Infinity
+        }),
         webpack_isomorphic_tools_plugin,
         new ExtractTextPlugin('[name]-[chunkhash].css')
     ],
     resolve: {
-        root: [
-            path.resolve(__dirname, '..')
+        modules: [
+            path.resolve(__dirname, '../app'),
+            'node_modules'
         ],
+        extensions: ['.js', '.json', '.jsx'],
         alias,
-        extensions: ['', '.js', '.json', '.jsx'],
-        modulesDirectories: ['node_modules']
     }
 };

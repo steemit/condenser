@@ -20,8 +20,9 @@ export default function (stats) {
             .map(chunk => `${publicPath}${chunk}`); // add public path to it
     };
 
-    let script = getChunks('vendor', /js/);
-    script = [...script, ...getChunks('app', /js/)];
+    const vendor = getChunks('vendor', /js/);
+    const app = getChunks('app', /js/);
+    const script = [...vendor, ...app];
     const style = getChunks('app', /css/);
 
     // Find compiled images in modules
@@ -37,7 +38,7 @@ export default function (stats) {
             };
         });
 
-    const content = {script, style, images};
+    const content = { script, style, images };
 
     const filename = process.env.NODE_ENV === 'production' ? 'webpack-stats-prod.json' : 'webpack-stats-dev.json';
     const filepath = path.resolve(__dirname, '../../tmp/' + filename);

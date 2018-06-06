@@ -1,14 +1,12 @@
 import webpack from 'webpack';
 import git from 'git-rev-sync';
 import baseConfig from './base.config';
-// Analyse bundle library
-// import {BundleAnalyzerPlugin} from 'webpack-bundle-analyzer';
 
 export default {
     ...baseConfig,
     module: {
-        loaders: [
-            ...baseConfig.module.loaders
+        rules: [
+            ...baseConfig.module.rules
         ]
     },
     plugins: [
@@ -17,7 +15,7 @@ export default {
                 BROWSER: JSON.stringify(true),
                 NODE_ENV: JSON.stringify('production'),
                 // FIXME this requires we put .git into the docker image :(
-                VERSION: JSON.stringify(git.tag())
+                VERSION: JSON.stringify(git.log())
             },
             global: {
                 TYPED_ARRAY_SUPPORT: JSON.stringify(false)
@@ -25,8 +23,8 @@ export default {
         }),
 
         // optimizations
-        new webpack.optimize.DedupePlugin(),
-        new webpack.optimize.OccurenceOrderPlugin(),
+        // new webpack.optimize.DedupePlugin(),
+        // new webpack.optimize.OccurenceOrderPlugin(),
         new webpack.optimize.UglifyJsPlugin({
             compress: {
                 warnings: false,
@@ -50,10 +48,14 @@ export default {
                 comments: false
             }
         }),
-
-        // Analyse your bundle dependencies
-        // new BundleAnalyzerPlugin(),
-
         ...baseConfig.plugins
+
+        // Fix window.onerror
+        // See https://github.com/webpack/webpack/issues/5681#issuecomment-345861733
+        // new webpack.SourceMapDevToolPlugin({
+        //     module: true,
+        //     columns: false,
+        //     moduleFilenameTemplate: info => { return `${info.resourcePath}?${info.loaders}` }
+        // })
     ]
 };

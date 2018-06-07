@@ -1,4 +1,3 @@
-/* eslint react/prop-types: 0 */
 import React from 'react';
 import {connect} from 'react-redux';
 import {Link} from 'react-router';
@@ -7,7 +6,6 @@ import SavingsWithdrawHistory from 'app/components/elements/SavingsWithdrawHisto
 import TransferHistoryRow from 'app/components/cards/TransferHistoryRow';
 import TransactionError from 'app/components/elements/TransactionError';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
-import BlocktradesDeposit from 'app/components/modules/BlocktradesDeposit';
 import Reveal from 'react-foundation-components/lib/global/reveal';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import {numberWithCommas, vestingSteem} from 'app/utils/StateFunctions';
@@ -26,7 +24,6 @@ class UserWallet extends React.Component {
     constructor() {
         super();
         this.state = {};
-        this.onShowDeposit = () => {this.setState({showDeposit: !this.state.showDeposit})};
         this.onShowDepositSteem = (e) => {
             e.preventDefault()
             this.setState({showDeposit: !this.state.showDeposit, depositType: LIQUID_TICKER})
@@ -35,7 +32,6 @@ class UserWallet extends React.Component {
             e.preventDefault()
             this.setState({showDeposit: !this.state.showDeposit, depositType: VEST_TICKER})
         }
-        // this.onShowDeposit = this.onShowDeposit.bind(this)
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'UserWallet');
     }
     render() {
@@ -49,7 +45,7 @@ class UserWallet extends React.Component {
         const TOKEN_WORTH = tt('token_names.TOKEN_WORTH')
 
         const {state: {showDeposit, depositType, toggleDivestError},
-            onShowDeposit, onShowDepositSteem, onShowDepositPower} = this
+             onShowDepositSteem, onShowDepositPower} = this
         const {convertToSteem, price_per_golos, savings_withdraws, account,
             current_user, open_orders} = this.props
         const gprops = this.props.gprops.toJS();
@@ -175,19 +171,14 @@ class UserWallet extends React.Component {
         let power_menu = [
             { value: tt('userwallet_jsx.power_down'), link: '#', onClick: powerDown.bind(this, false) }
         ]
-        // if(isMyAccount) {
-        //     steem_menu.push({ value: tt('g.buy'), link: '#', onClick: onShowDepositSteem });
-        //     steem_menu.push({ value: tt('userwallet_jsx.market'), link: '/market' });
-        //     power_menu.push({ value: tt('g.buy'), link: '#', onClick: onShowDepositPower })
-        // }
+
         if( divesting ) {
             power_menu.pop()
             power_menu.push( { value: tt('userwallet_jsx.cancel_power_down'), link:'#', onClick: powerDown.bind(this,true) } );
         }
+
         if(isMyAccount) {
-            // steem_menu.push({ value: tt('g.deposit'), link: '#', onClick: onShowDepositSteem })
             steem_menu.push({ value: tt('g.buy_or_sell'), link: '/market' })
-            // power_menu.push({ value: tt('g.deposit'), link: '#', onClick: onShowDepositPower })
         }
 
         let dollar_menu = [
@@ -197,12 +188,6 @@ class UserWallet extends React.Component {
             { value: tt('userwallet_jsx.convert_to_LIQUID_TOKEN', {LIQUID_TOKEN}), link: '#', onClick: convertToSteem },
         ]
         const isWithdrawScheduled = new Date(account.get('next_vesting_withdrawal') + 'Z').getTime() > Date.now()
-        const depositReveal = showDeposit && <div>
-            <Reveal onHide={onShowDeposit} show={showDeposit}>
-                <CloseButton onClick={onShowDeposit} />
-                <BlocktradesDeposit onClose={onShowDeposit} outputCoinType={depositType} />
-            </Reveal>
-        </div>
 
         const steem_balance_str = numberWithCommas(balance_steem.toFixed(3)) + ' ' + LIQUID_TOKEN_UPPERCASE;
         const steem_orders_balance_str = numberWithCommas(steemOrders.toFixed(3)) + ' ' + LIQUID_TOKEN_UPPERCASE;
@@ -229,9 +214,6 @@ class UserWallet extends React.Component {
             <div className="row">
                 <div className="columns small-10 medium-12 medium-expand">
                     {isMyAccount ? <WalletSubMenu account_name={account.get('name')} /> : <div><br /><h4>{tt('g.balances')}</h4><br /></div>}
-                </div>
-                <div className="columns shrink">
-                    {/* isMyAccount && <button className="UserWallet__buysp button hollow" onClick={this.onShowDepositSteem}>{tt('userwallet_jsx.buy_LIQUID_TOKEN_or_VESTING_TOKEN')}</button> */}
                 </div>
             </div>
             <div className="UserWallet__balance row">
@@ -324,7 +306,6 @@ class UserWallet extends React.Component {
                      </table>
                 </div>
             </div>
-            {depositReveal}
         </div>);
     }
     componentDidMount() {

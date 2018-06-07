@@ -101,7 +101,7 @@
     "react-copy-to-clipboard": "^4.3.1",
     "react-dom": "^16.4.0",
     "react-dropzone": "^3.13.4",
-    "react-foundation-components": "^0.14.0",
+    "react-foundation-components": "git+https://github.com/beautyfree/react-foundation-components.git#e91f61a4312d7e67bed50b055ee3fb90d82645d6",
     "react-highcharts": "16.0.1",
     "react-intl": "^2.4.0",
     "react-medium-editor": "^1.8.1",

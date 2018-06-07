@@ -6271,6 +6271,12 @@ promise@^7.1.1:
   dependencies:
     asap "~2.0.3"
 
+prop-types-extra@1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/prop-types-extra/-/prop-types-extra-1.0.1.tgz#a57bd4810e82d27a3ff4317ecc1b4ad005f79a82"
+  dependencies:
+    warning "^3.0.0"
+
 prop-types-extra@^1.0.1:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/prop-types-extra/-/prop-types-extra-1.1.0.tgz#32609910ea2dcf190366bacd3490d5a6412a605f"
@@ -6501,9 +6507,9 @@ react-dropzone@^3.13.4:
     attr-accept "^1.0.3"
     prop-types "^15.5.7"
 
-react-foundation-components@^0.14.0:
+"react-foundation-components@git+https://github.com/beautyfree/react-foundation-components.git#e91f61a4312d7e67bed50b055ee3fb90d82645d6":
   version "0.14.0"
-  resolved "https://registry.yarnpkg.com/react-foundation-components/-/react-foundation-components-0.14.0.tgz#7b978862e88234f6d0d77cb9e045f6385fd7a75b"
+  resolved "git+https://github.com/beautyfree/react-foundation-components.git#e91f61a4312d7e67bed50b055ee3fb90d82645d6"
   dependencies:
     babel-runtime "^6.25.0"
     classnames "^2.2.5"
@@ -6511,8 +6517,8 @@ react-foundation-components@^0.14.0:
     foundation-sites "~6.2.4"
     lodash "^4.17.4"
     prop-types "^15.6.0"
+    prop-types-extra "1.0.1"
     react-overlays "^0.7.0"
-    react-prop-types "^0.4.0"
     uncontrollable "^5.1.0"
     underscore.string "^3.3.4"
 
@@ -6574,12 +6580,6 @@ react-prop-types@^0.3.2:
   resolved "https://registry.yarnpkg.com/react-prop-types/-/react-prop-types-0.3.2.tgz#e2763ac6f3a80199d8981c3647c44b0554c97b7f"
   dependencies:
     warning "^2.0.0"
-
-react-prop-types@^0.4.0:
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/react-prop-types/-/react-prop-types-0.4.0.tgz#f99b0bfb4006929c9af2051e7c1414a5c75b93d0"
-  dependencies:
-    warning "^3.0.0"
 
 react-proxy@^1.1.7:
   version "1.1.8"

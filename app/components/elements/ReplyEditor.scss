@@ -56,6 +56,18 @@
   z-index: 1;
   padding: 0.5rem 1rem;
 }
+
+/* Medium and down */
+@media screen and (max-width: 63.9375em) {
+  .ReplyEditor__draft {
+    position: absolute;
+    top: 1px;
+    right: 1px;
+    bottom: auto;
+    left: auto;
+  }
+}
+
 .ReplyEditor__draft-hide {
   opacity: 0;
 }
@@ -74,6 +86,7 @@
 }
 
 .ReplyEditor__body {
+  position: relative;
   margin-top: 1rem;
   clear: both;
 }

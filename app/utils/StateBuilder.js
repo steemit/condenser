@@ -5,7 +5,8 @@ export default async function getState(api, url, options, offchain = {}) {
     if (url[0] === '/') url = url.substr(1)
     
     const parts = url.split('/')
-    const tag = typeof parts[1] !== 'undefined' ? parts[1] : ''
+    // decode tag for cyrillic symbols
+    const tag = typeof parts[1] !== 'undefined' ? decodeURIComponent(parts[1]) : ''
 
     const state = {}
     state.current_route = `/${url}`

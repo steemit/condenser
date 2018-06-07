@@ -1,4 +1,3 @@
-var humanize = require('humanize-number');
 var bytes = require('bytes');
 var metrics = require('./metrics').metrics;
 

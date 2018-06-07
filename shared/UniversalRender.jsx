@@ -11,7 +11,7 @@ import { Provider } from 'react-redux';
 import RootRoute from 'app/RootRoute';
 import {createStore, applyMiddleware, compose} from 'redux';
 import { browserHistory } from 'react-router';
-import useScroll from 'react-router-scroll';
+import { useScroll } from 'react-router-scroll';
 import createSagaMiddleware from 'redux-saga';
 import { syncHistoryWithStore } from 'react-router-redux';
 import rootReducer from 'app/redux/RootReducer';
@@ -114,13 +114,13 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
         }
         return render(
             <Provider store={store}>
-                    <Translator>
-                <Router
-                    routes={RootRoute}
-                    history={history}
-                    onError={onRouterError}
-                    render={applyRouterMiddleware(scroll)} />
-                    </Translator>
+                <Translator>
+                    <Router
+                        routes={RootRoute}
+                        history={history}
+                        onError={onRouterError}
+                        render={applyRouterMiddleware(scroll)} />
+                </Translator>
             </Provider>,
             document.getElementById('content')
         );
@@ -218,7 +218,7 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
         app = renderToString(
             <Provider store={server_store}>
                 <Translator>
-                <RouterContext { ...renderProps } />
+                    <RouterContext { ...renderProps } />
                 </Translator>
             </Provider>
         );

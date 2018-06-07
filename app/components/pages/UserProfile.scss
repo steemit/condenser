@@ -1,6 +1,39 @@
 .UserProfile {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 3em;
+
+  &__menu {
     display: flex;
-    flex-direction: column;
+
+    & > * {
+      flex-shrink: 0;
+    }
+  }
+
+  &__filler {
+    flex-grow: 1;
+  }
+
+  &__buttons-wrapper {
+    position: relative;
+  }
+
+  &__buttons {
+    position: absolute;
+    top: 15px;
+    right: 5px;
+
+    label.button {
+      color: black;
+      border-radius: 3px;
+      background-color: white;
+    }
+  }
+
+  &__buttons-mobile {
+    display: none;
+  }
 }
 
 .UserProfile__center {
@@ -23,8 +56,9 @@
   .menu {
     background-color: transparent;
   }
-  .menu > li > a {
-    transition: all 200ms ease-in;
+  .UserProfile__menu-item {
+    display: inline-block;
+    transition: background-color 200ms ease-in, color 200ms ease-in;
     transform: translate3d( 0, 0, 0);
     padding-left: 0.7rem;
     padding-right: 0.7rem;
@@ -107,18 +141,6 @@
         font-weight: 200;
     }
 
-    .UserProfile__buttons {
-        position: absolute;
-        top: 15px;
-        right: 5px;
-
-        label.button {
-            color: black;
-            border-radius: 3px;
-            background-color: white;
-        }
-    }
-
     .UserProfile__bio {
         margin: -0.4rem auto 0.5rem;
         font-size: 95%;
@@ -160,7 +182,7 @@
 
 @media screen and (max-width: 39.9375em) {
 
-    div.UserProfile__top-nav .menu li>a {
+    .UserProfile__menu-item {
         padding: 8px;
     }
 
@@ -174,23 +196,6 @@
         height: 36px !important;
     }
 
-    .UserProfile__banner .UserProfile__buttons {
-        text-align: right;
-
-        label.button {
-            display: block;
-        }
-    }
-
-    .UserProfile__banner .UserProfile__buttons_mobile {
-        position: inherit;
-        margin-bottom: .5rem;
-        .button {
-            background-color: $white;
-            color: $black;
-        }
-    }
-
     .UserWallet__balance {
         > div:last-of-type {
             text-align: left;
@@ -202,4 +207,30 @@
             padding-left: 20px;
         }
     }
+}
+
+@media screen and (max-width: 400px) {
+  .UserProfile {
+    &__filler {
+      display: none;
+    }
+  }
+}
+
+@media screen and (max-width: 60em) {
+  .UserProfile {
+    &__buttons {
+      display: none;
+    }
+
+    &__buttons-mobile {
+      display: block;
+      margin-bottom: .5rem;
+
+      .button {
+        background-color: $white;
+        color: $black;
+      }
+    }
+  }
 }

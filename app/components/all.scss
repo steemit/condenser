@@ -1,3 +1,6 @@
+@import "~slick-carousel/slick/slick.css";
+@import "~slick-carousel/slick/slick-theme.css";
+
 @import "./App";
 
 // cards
@@ -6,6 +9,7 @@
 @import "./cards/PostFull";
 @import "./cards/PostsList";
 @import "./cards/PostSummary";
+@import "./cards/welcome/WelcomeCardPost";
 
 // elements
 @import "./elements/Author";
@@ -38,7 +42,7 @@
 @import "./elements/VotesAndComments";
 @import "./elements/Voting";
 @import "./elements/YoutubePreview";
-
+@import "./elements/welcome/WelcomeSlider";
 
 // modules
 @import "./modules/BlocktradesDeposit";
@@ -46,11 +50,6 @@
 @import "./modules/Footer";
 @import "./modules/Header";
 @import "./modules/LoginForm";
-@import "./modules/SidePanel";
-@import "./modules/BottomPanel";
-@import "./modules/UserWallet";
-@import "./modules/BlocktradesDeposit";
-@import "./modules/TopRightMenu";
 @import "./modules/Settings";
 @import "./modules/SidePanel";
 @import "./modules/SignUp";
@@ -72,6 +71,7 @@
 @import "./pages/Topics";
 @import "./pages/Tos";
 @import "./pages/UserProfile";
+@import "./pages/Welcome";
 
 // themes
 @import "./themes/green/all";

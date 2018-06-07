@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import { reduxForm } from 'redux-form'; // @deprecated, instead use: app/utils/ReactForm.js
 import { cleanReduxInput } from 'app/utils/ReduxForms';

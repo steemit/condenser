@@ -47,7 +47,7 @@ export default class WelcomeCardPost extends Component {
               {post.net_votes}
             </div>
             <div className="payout">
-              <LocalizedCurrency amount={payout} currency="USD" />
+              <LocalizedCurrency amount={payout} />
             </div>
           </div>
         </div>

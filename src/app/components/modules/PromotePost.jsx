@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import ReactDOM from 'react-dom';
 import * as transactionActions from 'app/redux/TransactionReducer';

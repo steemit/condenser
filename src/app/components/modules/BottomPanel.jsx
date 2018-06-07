@@ -1,11 +1,12 @@
 import React from 'react';
-import CloseButton from 'react-foundation-components/lib/global/close-button';
+import CloseButton from 'app/components/elements/CloseButton';
+import PropTypes from 'prop-types';
 
 export default class BottomPanel extends React.Component {
     static propTypes = {
-        children: React.PropTypes.object,
-        visible: React.PropTypes.bool,
-        hide: React.PropTypes.func.isRequired,
+        children: PropTypes.object,
+        visible: PropTypes.bool,
+        hide: PropTypes.func.isRequired,
     };
 
     componentWillReceiveProps(nextProps) {

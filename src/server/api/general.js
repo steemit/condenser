@@ -573,6 +573,67 @@ export default function useGeneralApi(app) {
             this.status = 500;
         }
     });
+
+    router.post('/isTosAccepted', koaBody, function*() {
+        const params = this.request.body;
+        const { csrf, username } =
+            typeof params === 'string' ? JSON.parse(params) : params;
+        if (!checkCSRF(this, csrf)) return;
+
+        if (!username) {
+            this.body = 'missing username';
+            this.status = 500;
+            return;
+        }
+
+        try {
+            const res = yield api.signedCallAsync(
+                'conveyor.get_tags_for_user',
+                [username],
+                config.get('conveyor_username'),
+                config.get('conveyor_posting_wif')
+            );
+
+            this.body = JSON.stringify(!!res.includes('accepted_tos'));
+        } catch (error) {
+            console.error('Error in /isTosAccepted api call', username, error);
+            this.body = JSON.stringify({ error: error.message });
+            this.status = 500;
+        }
+    });
+
+    router.post('/acceptTos', koaBody, function*() {
+        const params = this.request.body;
+        const { csrf } =
+            typeof params === 'string' ? JSON.parse(params) : params;
+        if (!checkCSRF(this, csrf)) return;
+
+        if (!this.session.a) {
+            this.body = 'missing logged in account';
+            this.status = 500;
+            return;
+        }
+        try {
+            yield api.signedCallAsync(
+                'conveyor.assign_tag',
+                {
+                    uid: this.session.a,
+                    tag: 'accepted_tos',
+                },
+                config.get('conveyor_username'),
+                config.get('conveyor_posting_wif')
+            );
+            this.body = JSON.stringify({ status: 'ok' });
+        } catch (error) {
+            console.error(
+                'Error in /acceptTos api call',
+                this.session.uid,
+                error
+            );
+            this.body = JSON.stringify({ error: error.message });
+            this.status = 500;
+        }
+    });
 }
 
 /**

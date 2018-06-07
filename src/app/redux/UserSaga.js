@@ -13,6 +13,8 @@ import {
     serverApiLogin,
     serverApiLogout,
     serverApiRecordEvent,
+    isTosAccepted,
+    acceptTos,
 } from 'app/utils/ServerApiClient';
 import { loadFollows } from 'app/redux/FollowSaga';
 import { translate } from 'app/Translator';
@@ -28,6 +30,7 @@ export const userWatches = [
     lookupPreviousOwnerAuthorityWatch,
     watchLoadSavingsWithdraw,
     uploadImageWatch,
+    acceptTosWatch,
 ];
 
 const highSecurityPages = [
@@ -381,11 +384,35 @@ function* usernamePasswordLogin2({
         private_keys.get('posting_private').toString()
     );
 
+    // TOS acceptance
+    yield fork(promptTosAcceptance, username);
+
     if (afterLoginRedirectToWelcome) {
         browserHistory.push('/welcome');
     } else if (feedURL) {
         if (document.location.pathname === '/') browserHistory.push(feedURL);
     }
+}
+
+function* promptTosAcceptance(username) {
+    try {
+        const accepted = yield call(isTosAccepted, username);
+        if (!accepted) {
+            yield put(userActions.showTerms());
+        }
+    } catch (e) {
+        // TODO: log error to server, conveyor is unavailable
+    }
+}
+
+function* acceptTosWatch() {
+    yield* takeLatest(userActions.ACCEPT_TERMS, function*() {
+        try {
+            yield call(acceptTos);
+        } catch (e) {
+            // TODO: log error to server, conveyor is unavailable
+        }
+    });
 }
 
 function* getFeatureFlags(username, posting_private) {

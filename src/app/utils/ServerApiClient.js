@@ -76,3 +76,17 @@ export function setUserPreferences(payload) {
     });
     return fetch('/api/v1/setUserPreferences', request);
 }
+
+export function isTosAccepted(username) {
+    const request = Object.assign({}, request_base, {
+        body: JSON.stringify({ csrf: window.$STM_csrf, username }),
+    });
+    return fetch('/api/v1/isTosAccepted', request).then(res => res.json());
+}
+
+export function acceptTos() {
+    const request = Object.assign({}, request_base, {
+        body: JSON.stringify({ csrf: window.$STM_csrf }),
+    });
+    return fetch('/api/v1/acceptTos', request);
+}

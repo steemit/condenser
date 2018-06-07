@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer';
 import Icon from 'app/components/elements/Icon';
 import { renderToString } from 'react-dom/server';
@@ -68,9 +69,9 @@ function split_into_sections(str) {
 
 export default class HelpContent extends React.Component {
     static propTypes = {
-        path: React.PropTypes.string.isRequired,
-        section: React.PropTypes.string,
-        title: React.PropTypes.string,
+        path: PropTypes.string.isRequired,
+        section: PropTypes.string,
+        title: PropTypes.string,
     };
 
     constructor(props) {

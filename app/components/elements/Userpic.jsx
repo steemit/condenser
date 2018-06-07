@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux';
 import cn from 'classnames';
 import CircularProgress from './CircularProgress'
@@ -100,7 +101,7 @@ class Userpic extends Component {
 
         if (votingPower) {
             const percentage = this.votingPowerToPercents(votingPower)
-            const toggle = showProgress ? false : this.toggleProgress
+            const toggle = showProgress ? () => {} : this.toggleProgress
 
             return (
                 <div className="Userpic" onClick={toggle} style={style}>

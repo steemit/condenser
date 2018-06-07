@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types'
 import {connect} from 'react-redux';
 import AppPropTypes from 'app/utils/AppPropTypes';
 import Header from 'app/components/modules/Header';
@@ -256,14 +257,14 @@ class App extends React.Component {
 }
 
 App.propTypes = {
-    theme: React.PropTypes.string,
-    error: React.PropTypes.string,
+    theme: PropTypes.string,
+    error: PropTypes.string,
     children: AppPropTypes.Children,
-    location: React.PropTypes.object,
-    signup_bonus: React.PropTypes.string,
-    loginUser: React.PropTypes.func.isRequired,
-    logoutUser: React.PropTypes.func.isRequired,
-    depositSteem: React.PropTypes.func.isRequired
+    location: PropTypes.object,
+    signup_bonus: PropTypes.string,
+    loginUser: PropTypes.func.isRequired,
+    logoutUser: PropTypes.func.isRequired,
+    depositSteem: PropTypes.func.isRequired
 };
 
 export default connect(

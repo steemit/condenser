@@ -1,13 +1,14 @@
 import React from 'react';
+import PropTypes from 'prop-types'
 
 class LoadingIndicator extends React.Component {
 
     static propTypes = {
         // html component attributes
-        type: React.PropTypes.oneOf(['dots', 'circle', 'little']),
-        inline: React.PropTypes.bool,
-        width: React.PropTypes.string,
-        height: React.PropTypes.string,
+        type: PropTypes.oneOf(['dots', 'circle', 'little']),
+        inline: PropTypes.bool,
+        width: PropTypes.string,
+        height: PropTypes.string,
     };
 
     constructor(props) {

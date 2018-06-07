@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types'
 import { Link } from 'react-router';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Icon from 'app/components/elements/Icon';
@@ -74,16 +75,16 @@ class PostFull extends React.Component {
     static propTypes = {
         // html props
         /* Show extra options (component is being viewed alone) */
-        cont: React.PropTypes.object.isRequired,
-        post: React.PropTypes.string.isRequired,
-        aiPosts: React.PropTypes.array,
+        cont: PropTypes.object.isRequired,
+        post: PropTypes.string.isRequired,
+        aiPosts: PropTypes.array,
 
         // connector props
-        username: React.PropTypes.string,
-        unlock: React.PropTypes.func.isRequired,
-        deletePost: React.PropTypes.func.isRequired,
-        showPromotePost: React.PropTypes.func.isRequired,
-        showExplorePost: React.PropTypes.func.isRequired,
+        username: PropTypes.string,
+        unlock: PropTypes.func.isRequired,
+        deletePost: PropTypes.func.isRequired,
+        showPromotePost: PropTypes.func.isRequired,
+        showExplorePost: PropTypes.func.isRequired,
     };
 
     constructor() {

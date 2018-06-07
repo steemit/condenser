@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import Remarkable from 'remarkable'
@@ -74,7 +75,7 @@ function VkContainer({content}) {
 
 export default class EmbedView extends Component {
     static propTypes = {
-        contentUrl : React.PropTypes.string.isRequired
+        contentUrl : PropTypes.string.isRequired
     };
 
     constructor() {

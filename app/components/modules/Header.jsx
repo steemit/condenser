@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types'
 import { Link } from 'react-router';
 import {connect} from 'react-redux';
 import TopRightMenu from 'app/components/modules/TopRightMenu';
@@ -25,9 +26,9 @@ function sortOrderToLink(so, topic, account) {
 
 class Header extends React.Component {
     static propTypes = {
-        location: React.PropTypes.object.isRequired,
-        current_account_name: React.PropTypes.string,
-        account_meta: React.PropTypes.object
+        location: PropTypes.object.isRequired,
+        current_account_name: PropTypes.string,
+        account_meta: PropTypes.object
     };
 
     constructor() {

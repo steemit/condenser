@@ -1,11 +1,12 @@
 import React from 'react';
+import PropTypes from 'prop-types'
 import {Map} from 'immutable'
 import {reduxForm} from 'redux-form' // @deprecated, instead use: app/utils/ReactForm.js
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper'
 import Icon from 'app/components/elements/Icon'
 import DropdownMenu from 'app/components/elements/DropdownMenu'
 import g from 'app/redux/GlobalReducer'
-import QRCode from 'react-qr'
+import QRCode from 'app/components/elements/QrCode'
 import {steemTip, powerTip, powerTip2} from 'app/utils/Tips'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
 import tt from 'counterpart';
@@ -31,26 +32,26 @@ const coinToTypes = [
 class BlocktradesDeposit extends React.Component {
     static propTypes = {
         // html
-        inputCoinType: React.PropTypes.string,
-        outputCoinType: React.PropTypes.string,
-        onClose: React.PropTypes.func,
+        inputCoinType: PropTypes.string,
+        outputCoinType: PropTypes.string,
+        onClose: PropTypes.func,
         // redux
-        fetchLimit: React.PropTypes.func.isRequired,
-        fetchInputAddress: React.PropTypes.func.isRequired,
-        fetchEstimate: React.PropTypes.func.isRequired,
-        fetchTransactions: React.PropTypes.func.isRequired,
-        depositLimit: React.PropTypes.string,
-        username: React.PropTypes.string,
-        inputAddress: React.PropTypes.string,
-        inputAddressMemo: React.PropTypes.string,
-        estimate: React.PropTypes.object,
-        userTradeError: React.PropTypes.object,
-        defaults: React.PropTypes.object, // static defaultProps work-around
-        transactions: React.PropTypes.object,
+        fetchLimit: PropTypes.func.isRequired,
+        fetchInputAddress: PropTypes.func.isRequired,
+        fetchEstimate: PropTypes.func.isRequired,
+        fetchTransactions: PropTypes.func.isRequired,
+        depositLimit: PropTypes.string,
+        username: PropTypes.string,
+        inputAddress: PropTypes.string,
+        inputAddressMemo: PropTypes.string,
+        estimate: PropTypes.object,
+        userTradeError: PropTypes.object,
+        defaults: PropTypes.object, // static defaultProps work-around
+        transactions: PropTypes.object,
         // redux form
-        fields: React.PropTypes.object.isRequired,
-        handleSubmit: React.PropTypes.func.isRequired,
-        submitting: React.PropTypes.bool.isRequired,
+        fields: PropTypes.object.isRequired,
+        handleSubmit: PropTypes.func.isRequired,
+        submitting: PropTypes.bool.isRequired,
     }
     constructor() {
         super()

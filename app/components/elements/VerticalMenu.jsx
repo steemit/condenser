@@ -1,18 +1,19 @@
 import React from 'react';
+import PropTypes from 'prop-types'
 import { Link } from 'react-router'
 import Icon from 'app/components/elements/Icon.jsx';
 
 export default class VerticalMenu extends React.Component {
     static propTypes = {
-        items: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
-        title: React.PropTypes.oneOfType([
-            React.PropTypes.string,
-            React.PropTypes.object
+        items: PropTypes.arrayOf(PropTypes.object).isRequired,
+        title: PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.object
         ]),
-        className: React.PropTypes.string,
-        hideValue: React.PropTypes.oneOfType([
-            React.PropTypes.string,
-            React.PropTypes.element
+        className: PropTypes.string,
+        hideValue: PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.element
         ]),
     };
 

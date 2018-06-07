@@ -1,5 +1,4 @@
 import Immutable from 'immutable';
-import {PropTypes} from 'react';
 
 const defaultState = Immutable.fromJS({user: {}});
 

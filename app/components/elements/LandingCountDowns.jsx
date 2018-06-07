@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 // import CountDown from 'app/components/elements/CountDown'
 import Icon from 'app/components/elements/Icon'
 import {APP_ICON} from 'app/client_config'

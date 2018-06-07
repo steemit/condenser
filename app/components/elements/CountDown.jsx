@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 // import { Circle } from 'rc-progress';
 import { FIRST_DATE as firstDate } from 'app/client_config'
 // TODO add comment

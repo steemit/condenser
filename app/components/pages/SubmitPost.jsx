@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types'
 // import {connect} from 'react-redux';
 import { browserHistory } from 'react-router';
 import ReplyEditor from 'app/components/elements/ReplyEditor'
@@ -8,7 +9,7 @@ const SubmitReplyEditor = ReplyEditor(formId)
 
 class SubmitPost extends React.Component {
     // static propTypes = {
-    //     routeParams: React.PropTypes.object.isRequired,
+    //     routeParams: PropTypes.object.isRequired,
     // }
     constructor() {
         super()

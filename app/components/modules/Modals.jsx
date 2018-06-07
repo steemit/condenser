@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types'
 import {connect} from 'react-redux';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import Reveal from 'react-foundation-components/lib/global/reveal';
@@ -14,18 +15,18 @@ import {OrderedSet} from 'immutable';
 
 class Modals extends React.Component {
     static propTypes = {
-        show_login_modal: React.PropTypes.bool,
-        show_confirm_modal: React.PropTypes.bool,
-        show_transfer_modal: React.PropTypes.bool,
-        show_signup_modal: React.PropTypes.bool,
-        show_promote_post_modal: React.PropTypes.bool,
-        hideLogin: React.PropTypes.func.isRequired,
-        hideConfirm: React.PropTypes.func.isRequired,
-        hideSignUp: React.PropTypes.func.isRequired,
-        hideTransfer: React.PropTypes.func.isRequired,
-        hidePromotePost: React.PropTypes.func.isRequired,
-        notifications: React.PropTypes.object,
-        removeNotification: React.PropTypes.func,
+        show_login_modal: PropTypes.bool,
+        show_confirm_modal: PropTypes.bool,
+        show_transfer_modal: PropTypes.bool,
+        show_signup_modal: PropTypes.bool,
+        show_promote_post_modal: PropTypes.bool,
+        hideLogin: PropTypes.func.isRequired,
+        hideConfirm: PropTypes.func.isRequired,
+        hideSignUp: PropTypes.func.isRequired,
+        hideTransfer: PropTypes.func.isRequired,
+        hidePromotePost: PropTypes.func.isRequired,
+        notifications: PropTypes.object,
+        removeNotification: PropTypes.func,
     };
 
     constructor() {

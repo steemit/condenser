@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types'
 
 const icons = [
     'flags/1x1/all',
@@ -128,10 +129,10 @@ const rem_sizes = {'0_75x': '0.75', '0_95x': '0.95', '1x': '1.12', '1_25x': '1.2
 export default class Icon extends React.Component {
 
     static propTypes = {
-        name: React.PropTypes.string.isRequired,
-        size: React.PropTypes.oneOf(['0_75x', '0_95x', '1x', '1_25x', '1_5x', '2x', '3x', '4x', '5x', '10x']),
-        inverse: React.PropTypes.bool,
-        className: React.PropTypes.string
+        name: PropTypes.string.isRequired,
+        size: PropTypes.oneOf(['0_75x', '0_95x', '1x', '1_25x', '1_5x', '2x', '3x', '4x', '5x', '10x']),
+        inverse: PropTypes.bool,
+        className: PropTypes.string
     };
 
     render() {

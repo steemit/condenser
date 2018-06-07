@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types'
 import { Link } from 'react-router';
 import {connect} from 'react-redux';
 import { browserHistory } from 'react-router';
@@ -9,16 +10,16 @@ import cookie from "react-cookie";
 
 class Topics extends React.Component {
     static propTypes = {
-        categories: React.PropTypes.object.isRequired,
-        user: React.PropTypes.string,
-        metaData: React.PropTypes.object,
-        loading: React.PropTypes.bool,
-        order: React.PropTypes.string,
-        current: React.PropTypes.string,
-        loadSelected: React.PropTypes.func,
-        updateSubscribe: React.PropTypes.func,
-        className: React.PropTypes.string,
-        compact: React.PropTypes.bool
+        categories: PropTypes.object.isRequired,
+        user: PropTypes.string,
+        metaData: PropTypes.object,
+        loading: PropTypes.bool,
+        order: PropTypes.string,
+        current: PropTypes.string,
+        loadSelected: PropTypes.func,
+        updateSubscribe: PropTypes.func,
+        className: PropTypes.string,
+        compact: PropTypes.bool
     };
 
     constructor(props) {

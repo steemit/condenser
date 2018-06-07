@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types'
 import SvgImage from 'app/components/elements/SvgImage';
 import PasswordInput from 'app/components/elements/PasswordInput';
 import constants from 'app/redux/constants';

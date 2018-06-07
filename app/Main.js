@@ -5,22 +5,12 @@ import './assets/stylesheets/app.scss';
 import plugins from 'app/utils/JsPlugins';
 import Iso from 'iso';
 import universalRender from 'shared/UniversalRender';
-import ConsoleExports from './utils/ConsoleExports';
 import * as golos from 'golos-js';
 import * as pixelate from './utils/effects/close-pixelate'
 
 // window.onerror = error => {
 //     if (window.$STM_csrf) serverApiRecordEvent('client_error', error);
 // };
-
-try {
-    if(process.env.NODE_ENV === 'development') {
-        // Adds some object refs to the global window object
-        ConsoleExports.init(window)
-    }
-} catch (e) {
-    console.error(e)
-}
 
 function runApp(initial_state) {
     const config = initial_state.offchain.config

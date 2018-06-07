@@ -1,4 +1,5 @@
-import React, {PropTypes, Component} from 'react'
+import React, {Component} from 'react'
+import PropTypes from 'prop-types'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
 import {reduxForm} from 'redux-form' // @deprecated, instead use: app/utils/ReactForm.js
 import {PrivateKey, PublicKey} from 'golos-js/lib/auth/ecc'

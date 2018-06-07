@@ -1,4 +1,5 @@
-import React, {PropTypes, Component} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types'
 import Icon from 'app/components/elements/Icon';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import tt from 'counterpart';

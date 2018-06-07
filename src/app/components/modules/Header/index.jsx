@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import Icon from 'app/components/elements/Icon';
@@ -21,11 +22,11 @@ import normalizeProfile from 'app/utils/NormalizeProfile';
 
 class Header extends React.Component {
     static propTypes = {
-        current_account_name: React.PropTypes.string,
-        account_meta: React.PropTypes.object,
-        category: React.PropTypes.string,
-        order: React.PropTypes.string,
-        pathname: React.PropTypes.string,
+        current_account_name: PropTypes.string,
+        account_meta: PropTypes.object,
+        category: PropTypes.string,
+        order: PropTypes.string,
+        pathname: PropTypes.string,
     };
 
     constructor() {

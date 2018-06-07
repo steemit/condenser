@@ -1,5 +1,6 @@
 /* eslint react/prop-types: 0 */
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import tt from 'counterpart';
 

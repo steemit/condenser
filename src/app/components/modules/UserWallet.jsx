@@ -549,7 +549,6 @@ class UserWallet extends React.Component {
                                 items={steem_menu}
                                 el="li"
                                 selected={steem_balance_str + ' STEEM'}
-                                position="left"
                             />
                         ) : (
                             steem_balance_str + ' STEEM'
@@ -594,7 +593,6 @@ class UserWallet extends React.Component {
                                 items={power_menu}
                                 el="li"
                                 selected={power_balance_str + ' STEEM'}
-                                position="left"
                             />
                         ) : (
                             power_balance_str + ' STEEM'
@@ -626,7 +624,6 @@ class UserWallet extends React.Component {
                                 items={dollar_menu}
                                 el="li"
                                 selected={sbd_balance_str}
-                                position="left"
                             />
                         ) : (
                             sbd_balance_str
@@ -673,7 +670,6 @@ class UserWallet extends React.Component {
                                 items={savings_menu}
                                 el="li"
                                 selected={savings_balance_str}
-                                position="left"
                             />
                         ) : (
                             savings_balance_str
@@ -685,7 +681,6 @@ class UserWallet extends React.Component {
                                 items={savings_sbd_menu}
                                 el="li"
                                 selected={savings_sbd_balance_str}
-                                position="left"
                             />
                         ) : (
                             savings_sbd_balance_str

@@ -246,7 +246,7 @@ class Welcome extends Component {
                 <section className="Welcome__initial">
                     <div className="row align-middle">
                         <div className="columns">
-                            <div className="Welcome__initial-header">С чего начать и о чем писать?</div>
+                            <div className="Welcome__initial-header">Что почитать?</div>
                             <div className="row">
                                 <div className="columns small-12 medium-3 large-2">
                                     <div className="Welcome__initial-subheader">Популярные темы:</div>
@@ -286,7 +286,7 @@ class Welcome extends Component {
                 <section className="Welcome__differences">
                     <div className="row align-middle">
                         <div className="columns">
-                            <div className="Welcome__differences-header">Маленькие отличия</div>
+                            <div className="Welcome__differences-header">Наши отличия</div>
                             <div className="row small-up-1 medium-up-2 large-up-3">
                                 <div className="columns">
                                     <div className="block align-top align-justify flex-dir-column flex-container">

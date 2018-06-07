@@ -19,7 +19,6 @@ import {APP_ICON, VEST_TICKER, WIKI_URL, LANDING_PAGE_URL, ABOUT_PAGE_URL, WHITE
 import LocalizedCurrency from '@elements/LocalizedCurrency';
 
 const availableLinks = [
-    'https://play.google.com/store/apps/details?id=io.golos.golos',
     'https://www.facebook.com/www.golos.io',
     'https://vk.com/goloschain',
     'https://t.me/golos_support'
@@ -29,7 +28,8 @@ const availableDomains = [
     'golos.io',
     'golos.blog',
     'golostools.com',
-    'github.com'
+    'github.com',
+    'play.google.com'
 ]
 class App extends React.Component {
 

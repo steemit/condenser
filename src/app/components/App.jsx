@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import AppPropTypes from 'app/utils/AppPropTypes';
 import Header from 'app/components/modules/Header';
@@ -254,12 +255,12 @@ class App extends React.Component {
 }
 
 App.propTypes = {
-    error: React.PropTypes.string,
+    error: PropTypes.string,
     children: AppPropTypes.Children,
-    pathname: React.PropTypes.string,
-    category: React.PropTypes.string,
-    order: React.PropTypes.string,
-    loginUser: React.PropTypes.func.isRequired,
+    pathname: PropTypes.string,
+    category: PropTypes.string,
+    order: PropTypes.string,
+    loginUser: PropTypes.func.isRequired,
 };
 
 export default connect(

@@ -1,5 +1,6 @@
 import React from 'react';
 // import ReactMarkdown from 'react-markdown';
+import PropTypes from 'prop-types';
 import Comment from 'app/components/cards/Comment';
 import PostFull from 'app/components/cards/PostFull';
 import { connect } from 'react-redux';
@@ -18,10 +19,10 @@ import { isLoggedIn } from 'app/utils/UserUtil';
 
 class Post extends React.Component {
     static propTypes = {
-        content: React.PropTypes.object.isRequired,
-        post: React.PropTypes.string,
-        routeParams: React.PropTypes.object,
-        sortOrder: React.PropTypes.string,
+        content: PropTypes.object.isRequired,
+        post: PropTypes.string,
+        routeParams: PropTypes.object,
+        sortOrder: PropTypes.string,
     };
     constructor() {
         super();

@@ -1,29 +1,15 @@
-FROM node:7.5
-
-# yarn > npm
-#RUN npm install --global yarn
-
+FROM node:8.7
 RUN npm install -g yarn
 
 WORKDIR /var/app
 RUN mkdir -p /var/app
-ADD package.json /var/app/package.json
+ADD package.json yarn.lock /var/app/
 RUN yarn
-
-# Update @steem/crypto-session package to prevent koa-session crash
-sed '65s/.*/            console\.error\("\@steem\/crypto-session: Discarding session", text, error2\)\; return \{\}\;/' node_modules/\@steem/crypto-session/index.js
 
 COPY . /var/app
 
-# FIXME TODO: fix eslint warnings
-
-#RUN mkdir tmp && \
-#  npm test && \
-#  ./node_modules/.bin/eslint . && \
-#  npm run build
-
 RUN mkdir tmp && \
-  npm test && \
+#  npm test && \
   npm run-script build
 
 ENV PORT 8080

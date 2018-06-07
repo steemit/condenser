@@ -21,19 +21,13 @@ import { LIQUID_TICKER, VEST_TICKER, DEBT_TICKER} from 'app/client_config';
 const assetPrecision = 1000;
 
 class UserWallet extends React.Component {
+    
     constructor() {
         super();
         this.state = {};
-        this.onShowDepositSteem = (e) => {
-            e.preventDefault()
-            this.setState({showDeposit: !this.state.showDeposit, depositType: LIQUID_TICKER})
-        }
-        this.onShowDepositPower = (e) => {
-            e.preventDefault()
-            this.setState({showDeposit: !this.state.showDeposit, depositType: VEST_TICKER})
-        }
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'UserWallet');
     }
+
     render() {
         const LIQUID_TOKEN = tt('token_names.LIQUID_TOKEN')
         const LIQUID_TOKEN_UPPERCASE = tt('token_names.LIQUID_TOKEN_UPPERCASE')
@@ -44,10 +38,8 @@ class UserWallet extends React.Component {
         const VESTING_TOKENS = tt('token_names.VESTING_TOKENS')
         const TOKEN_WORTH = tt('token_names.TOKEN_WORTH')
 
-        const {state: {showDeposit, depositType, toggleDivestError},
-             onShowDepositSteem, onShowDepositPower} = this
-        const {convertToSteem, price_per_golos, savings_withdraws, account,
-            current_user, open_orders} = this.props
+        const {showDeposit, depositType, toggleDivestError} = this.state
+        const {convertToSteem, price_per_golos, savings_withdraws, account, current_user, open_orders} = this.props
         const gprops = this.props.gprops.toJS();
 
         if (!account) return null;
@@ -154,12 +146,10 @@ class UserWallet extends React.Component {
             const type = item.getIn([1, 'op', 0]);
             
             // Filter out rewards
-            if (type === "curation_reward" || type === "author_reward") {
-                return null;
-            }
+            if (type === "curation_reward" || type === "author_reward") return null;
             
-            if(data.sbd_payout === '0.000 GBG' && data.vesting_payout === '0.000000 GESTS')
-            return null
+            if(data.sbd_payout === '0.000 GBG' && data.vesting_payout === '0.000000 GESTS') return null
+
             return <TransferHistoryRow key={idx++} op={item.toJS()} context={account.get('name')} />;
         }).filter(el => !!el).reverse();
 
@@ -213,61 +203,116 @@ class UserWallet extends React.Component {
         return (<div className="UserWallet">
             <div className="row">
                 <div className="columns small-10 medium-12 medium-expand">
-                    {isMyAccount ? <WalletSubMenu account_name={account.get('name')} /> : <div><br /><h4>{tt('g.balances')}</h4><br /></div>}
+                    {isMyAccount
+                        ? <WalletSubMenu account_name={account.get('name')} />
+                        : <div>
+                            <br />
+                            <h4>{tt('g.balances')}</h4><br />
+                          </div>
+                    }
                 </div>
             </div>
             <div className="UserWallet__balance row">
                 <div className="column small-12 medium-8">
-                    {LIQUID_TOKEN.toUpperCase()}<br /><span className="secondary">{steemTip.split(".").map((a, index) => {if (a) {return <div key={index}>{a}.</div>;} return null;})}</span>
+                    {LIQUID_TOKEN.toUpperCase()}<br />
+                    <span className="secondary">{steemTip.split(".").map((a, index) => {if (a) {return <div key={index}>{a}.</div>;} return null;})}</span>
                 </div>
                 <div className="column small-12 medium-4">
-                    {isMyAccount ?
-                    <FoundationDropdownMenu className="Wallet_dropdown" dropdownPosition="bottom" dropdownAlignment="right" label={steem_balance_str} menu={steem_menu} />
-                    : steem_balance_str}
-                    {steemOrders ? <div style={{paddingRight: isMyAccount ? "0.85rem" : null}}><Link to="/market"><Tooltip t={tt('market_jsx.open_orders')}>(+{steem_orders_balance_str})</Tooltip></Link></div> : null}
+                    {isMyAccount
+                        ? <FoundationDropdownMenu
+                            className="Wallet_dropdown"
+                            dropdownPosition="bottom"
+                            dropdownAlignment="right"
+                            label={steem_balance_str}
+                            menu={steem_menu}
+                        />
+                        : steem_balance_str
+                    }
+                    {steemOrders
+                        ? <div style={{paddingRight: isMyAccount ? "0.85rem" : null}}>
+                            <Link to="/market"><Tooltip t={tt('market_jsx.open_orders')}>(+{steem_orders_balance_str})</Tooltip></Link>
+                         </div>
+                        : null
+                    }
                 </div>
             </div>
             <div className="UserWallet__balance row zebra">
                 <div className="column small-12 medium-8">
-                    {VESTING_TOKEN.toUpperCase()}<br /><span className="secondary">{powerTip.split(".").map((a, index) => {if (a) {return <div key={index}>{a}.</div>;} return null;})}</span>
+                    {VESTING_TOKEN.toUpperCase()}<br />
+                    <span className="secondary">{powerTip.split(".").map((a, index) => {if (a) {return <div key={index}>{a}.</div>;} return null;})}</span>
                 </div>
                 <div className="column small-12 medium-4">
-                    {isMyAccount ?
-                    <FoundationDropdownMenu className="Wallet_dropdown" dropdownPosition="bottom" dropdownAlignment="right" label={power_balance_str} menu={power_menu} />
-                    : power_balance_str}
+                    {isMyAccount
+                        ? <FoundationDropdownMenu
+                            className="Wallet_dropdown"
+                            dropdownPosition="bottom"
+                            dropdownAlignment="right"
+                            label={power_balance_str}
+                            menu={power_menu}
+                          />
+                        : power_balance_str
+                    }
                 </div>
             </div>
 
-
             <div className="UserWallet__balance row">
                 <div className="column small-12 medium-8">
-                    {DEBT_TOKEN.toUpperCase()}<br /><span className="secondary">{sbdMessage}</span>
+                    {DEBT_TOKEN.toUpperCase()}<br />
+                    <span className="secondary">{sbdMessage}</span>
                 </div>
                 <div className="column small-12 medium-4">
-                    {isMyAccount ?
-                    <FoundationDropdownMenu className="Wallet_dropdown" dropdownPosition="bottom" dropdownAlignment="right" label={sbd_balance_str} menu={dollar_menu} />
-                    : sbd_balance_str}
-                    {sbdOrders ? <div style={{paddingRight: isMyAccount ? "0.85rem" : null}}><Link to="/market"><Tooltip t={tt('market_jsx.open_orders')}>(+{sbd_orders_balance_str})</Tooltip></Link></div> : null}
+                    {isMyAccount
+                        ? <FoundationDropdownMenu
+                            className="Wallet_dropdown"
+                            dropdownPosition="bottom"
+                            dropdownAlignment="right"
+                            label={sbd_balance_str}
+                            menu={dollar_menu}
+                          />
+                        : sbd_balance_str
+                    }
+                    {sbdOrders 
+                        ? <div style={{paddingRight: isMyAccount ? "0.85rem" : null}}>
+                            <Link to="/market"><Tooltip t={tt('market_jsx.open_orders')}>(+{sbd_orders_balance_str})</Tooltip></Link>
+                          </div>
+                        : null
+                    }
                     {conversions}
                 </div>
             </div>
             <div className="UserWallet__balance row zebra">
                 <div className="column small-12 medium-8">
-                    {tt('userwallet_jsx.savings')}<br /><span className="secondary">{tt('transfer_jsx.balance_subject_to_3_day_withdraw_waiting_period')}</span>
+                    {tt('userwallet_jsx.savings')}<br />
+                    <span className="secondary">{tt('transfer_jsx.balance_subject_to_3_day_withdraw_waiting_period')}</span>
                 </div>
                 <div className="column small-12 medium-4">
-                    {isMyAccount ?
-                    <FoundationDropdownMenu className="Wallet_dropdown" dropdownPosition="bottom" dropdownAlignment="right" label={savings_balance_str} menu={savings_menu} />
-                    : savings_balance_str}
+                    {isMyAccount
+                        ? <FoundationDropdownMenu
+                            className="Wallet_dropdown"
+                            dropdownPosition="bottom"
+                            dropdownAlignment="right"
+                            label={savings_balance_str}
+                            menu={savings_menu}
+                          />
+                        : savings_balance_str
+                    }
                     <br />
-                    {isMyAccount ?
-                    <FoundationDropdownMenu className="Wallet_dropdown" dropdownPosition="bottom" dropdownAlignment="right" label={savings_sbd_balance_str} menu={savings_sbd_menu} />
-                    : savings_sbd_balance_str}
+                    {isMyAccount
+                        ? <FoundationDropdownMenu
+                            className="Wallet_dropdown"
+                            dropdownPosition="bottom"
+                            dropdownAlignment="right"
+                            label={savings_sbd_balance_str}
+                            menu={savings_sbd_menu}
+                          />
+                        : savings_sbd_balance_str
+                    }
                 </div>
             </div>
             <div className="UserWallet__balance row">
                 <div className="column small-12 medium-8">
-                    {tt('userwallet_jsx.estimated_account_value')}<br /><span className="secondary">{tt('tips_js.the_estimated_value_is_based_on_an_average_value_of_steem_in_US_dollars', {LIQUID_TOKEN})}</span>
+                    {tt('userwallet_jsx.estimated_account_value')}<br />
+                    <span className="secondary">{tt('tips_js.the_estimated_value_is_based_on_an_average_value_of_steem_in_US_dollars', {LIQUID_TOKEN})}</span>
                 </div>
                 <div className="column small-12 medium-4">
                     {estimate_output}

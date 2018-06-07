@@ -37,9 +37,6 @@
       transition-delay: 0s;
       a {
         transition: 0.2s all ease-in-out;
-        @include themify($themes) {
-          color: themed('textColorPrimary');  
-        }
         &:hover {
           @include themify($themes) {
             color: themed('textColorAccent');  

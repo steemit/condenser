@@ -1,0 +1,76 @@
+.sub-menu {
+    li {
+        a {
+            padding: 0.7rem 0.5rem;
+        }
+    }
+}
+
+li.Header__userpic {
+  padding: 0;
+  position: relative;
+  a {
+      padding: 6px;
+  }
+  .Userpic {
+    width: 36px !important;
+    height: 36px !important;
+    vertical-align: middle;
+  }
+}
+
+.TopRightMenu__notificounter {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    > .NotifiCounter {
+        display: block;
+    }
+}
+
+div.Header__top
+{
+    li.Header__search {
+        padding: 0;
+        &:hover path, &:focus path {
+          @include themify($themes) {
+            fill: themed('textColorAccent');  
+          }             
+        }
+        &:visited path, &:active path {
+          @include themify($themes) {
+            fill: themed('textColorPrimary');  
+          }             
+        }          
+        > a {
+            padding: 14px;
+        }
+        > a path {
+            transition: 0.2s all ease-in-out;
+          @include themify($themes) {
+            fill: themed('textColorPrimary');  
+          }                 
+        }
+    }
+    li.Header__hamburger.toggle-menu {
+        &.toggle-menu {
+            padding-left: 0.25rem;
+        }
+        > a {
+            padding: 14px 0 14px 14px;
+        }
+    }
+}
+
+li.submit-story {
+    padding: 0;
+    > a {
+          @include themify($themes) {
+            background: themed('textColorAccent');  
+          }         
+        padding: 8px 24px;
+        margin: 0 6px;
+        color: white;
+        transition: all 0.3s ease-in-out;
+    }
+}

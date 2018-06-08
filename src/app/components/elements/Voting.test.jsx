@@ -3,7 +3,7 @@ import { IntlProvider } from 'react-intl';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import { configure, mount, shallow } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-15';
+import Adapter from 'enzyme-adapter-react-16';
 import { fromJS, Map } from 'immutable';
 import renderer from 'react-test-renderer';
 import rootReducer from 'app/redux/RootReducer';

@@ -8,7 +8,6 @@ import SavingsWithdrawHistory from 'app/components/elements/SavingsWithdrawHisto
 import TransferHistoryRow from 'app/components/cards/TransferHistoryRow';
 import TransactionError from 'app/components/elements/TransactionError';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
-import IconButton from 'app/components/elements/IconButton';
 import {
     numberWithCommas,
     vestingSteem,

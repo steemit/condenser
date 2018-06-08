@@ -1,5 +1,4 @@
 import path from 'path';
-import fs from 'fs';
 import Koa from 'koa';
 import mount from 'koa-mount';
 import helmet from 'koa-helmet';
@@ -28,6 +27,7 @@ import { routeRegex } from 'app/ResolveRoute';
 import secureRandom from 'secure-random';
 import userIllegalContent from 'app/utils/userIllegalContent';
 import koaLocale from 'koa-locale';
+import { getSupportedLocales } from './utils/misc';
 
 if (cluster.isMaster) console.log('application server starting, please wait.');
 
@@ -77,6 +77,18 @@ if (env === 'development') {
             staticCache(path.join(__dirname, '../../dist'), cacheOpts)
         )
     );
+}
+
+let resolvedAssets = false;
+let supportedLocales = false;
+
+if (process.env.NODE_ENV === 'production') {
+    resolvedAssets = require(path.join(
+        __dirname,
+        '../..',
+        '/tmp/webpack-stats-prod.json'
+    ));
+    supportedLocales = getSupportedLocales();
 }
 
 app.use(isBot());
@@ -265,7 +277,7 @@ if (env === 'production') {
 if (env !== 'test') {
     const appRender = require('./app_render');
     app.use(function*() {
-        yield appRender(this);
+        yield appRender(this, supportedLocales, resolvedAssets);
         // if (app_router.dbStatus.ok) recordWebEvent(this, 'page_load');
         const bot = this.state.isBot;
         if (bot) {

@@ -8,6 +8,7 @@ braini
 cracked-games
 gautampartapsoni
 jimreitz
+bitchminer
 `
     .trim()
     .split('\n');

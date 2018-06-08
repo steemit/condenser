@@ -4,7 +4,6 @@ import ReactDOM from 'react-dom';
 import { reduxForm } from 'redux-form'; // @deprecated, instead use: app/utils/ReactForm.js
 import * as transactionActions from 'app/redux/TransactionReducer';
 import * as appActions from 'app/redux/AppReducer';
-import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import TransactionError from 'app/components/elements/TransactionError';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import { cleanReduxInput } from 'app/utils/ReduxForms';
@@ -19,7 +18,6 @@ class ConvertToSteem extends React.Component {
     componentDidMount() {
         ReactDOM.findDOMNode(this.refs.amt).focus();
     }
-    shouldComponentUpdate = shouldComponentUpdate(this, 'ConvertToSteem');
     dispatchSubmit = () => {
         const { convert, owner, onClose } = this.props;
         const { amount } = this.props.fields;

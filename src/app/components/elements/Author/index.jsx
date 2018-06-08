@@ -2,7 +2,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
-import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import Icon from 'app/components/elements/Icon';
 import { Link } from 'react-router';
 import { authorNameAndRep } from 'app/utils/ComponentFormatters';
@@ -85,7 +84,6 @@ class Author extends React.Component {
         });
     };
 
-    shouldComponentUpdate = shouldComponentUpdate(this, 'Author');
     render() {
         const { author, follow, mute, authorRepLog10 } = this.props; // html
         const { username } = this.props; // redux

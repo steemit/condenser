@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import { imageProxy } from 'app/utils/ProxifyUrl';
 
 export const SIZE_SMALL = 'small';
@@ -17,8 +16,6 @@ export const avatarSize = {
 };
 
 class Userpic extends Component {
-    shouldComponentUpdate = shouldComponentUpdate(this, 'Userpic');
-
     render() {
         const { account, json_metadata, size } = this.props;
         const hideIfDefault = this.props.hideIfDefault || false;

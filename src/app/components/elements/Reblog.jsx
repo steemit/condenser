@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 // import LoadingIndicator from 'app/components/elements/LoadingIndicator';
-import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import * as transactionActions from 'app/redux/TransactionReducer';
 import Icon from 'app/components/elements/Icon';
 import tt from 'counterpart';
@@ -19,7 +18,6 @@ export default class Reblog extends React.Component {
     };
     constructor(props) {
         super(props);
-        this.shouldComponentUpdate = shouldComponentUpdate(this, 'Reblog');
         this.state = { active: false, loading: false };
     }
 

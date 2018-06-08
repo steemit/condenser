@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import g from 'app/redux/GlobalReducer';
 import { connect } from 'react-redux';
 import ChangePassword from 'app/components/elements/ChangePassword';
@@ -16,10 +15,6 @@ class PasswordReset extends Component {
 
     constructor() {
         super();
-        this.shouldComponentUpdate = shouldComponentUpdate(
-            this,
-            'PasswordReset'
-        );
     }
 
     render() {

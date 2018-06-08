@@ -14,7 +14,6 @@ import {
     delegatedSteem,
 } from 'app/utils/StateFunctions';
 import WalletSubMenu from 'app/components/elements/WalletSubMenu';
-import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import Tooltip from 'app/components/elements/Tooltip';
 import { FormattedHTMLMessage } from 'app/Translator';
 import {
@@ -74,7 +73,6 @@ class UserWallet extends React.Component {
             new_window.location =
                 'https://blocktrades.us/unregistered_trade/sbd/eth';
         };
-        this.shouldComponentUpdate = shouldComponentUpdate(this, 'UserWallet');
     }
 
     handleClaimRewards = account => {

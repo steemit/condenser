@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import tt from 'counterpart';
 import classnames from 'classnames';
-import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import { looksPhishy } from 'app/utils/Phishing';
 
 export default class SanitizedLink extends React.Component {
@@ -13,10 +12,6 @@ export default class SanitizedLink extends React.Component {
 
     constructor() {
         super();
-        this.shouldComponentUpdate = shouldComponentUpdate(
-            this,
-            'SanitizedLink'
-        );
         this.state = {
             revealPhishyLink: false,
         };

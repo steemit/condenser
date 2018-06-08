@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import links from 'app/utils/Links';
 import { browserHistory } from 'react-router';
-import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 
 export default class Link extends React.Component {
     static propTypes = {
@@ -12,7 +11,6 @@ export default class Link extends React.Component {
     constructor(props) {
         super();
         const { href } = props;
-        this.shouldComponentUpdate = shouldComponentUpdate(this, 'Link');
         this.localLink = href && links.local.test(href);
         this.onLocalClick = e => {
             e.preventDefault();

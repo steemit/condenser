@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import tt from 'counterpart';
 import classnames from 'classnames';
 import { memo } from '@steemit/steem-js';
@@ -23,7 +22,6 @@ export class Memo extends React.Component {
 
     constructor() {
         super();
-        this.shouldComponentUpdate = shouldComponentUpdate(this, 'Memo');
         this.state = {
             revealMemo: false,
         };

@@ -1,0 +1,29 @@
+.TagInput {
+  $input-height: 40px;
+
+  position: relative;
+  display: block;
+
+  &__input {
+    width: 240px;
+    height: $input-height;
+    padding: 0 20px 0 18px;
+    border: none !important;
+    border-radius: $input-height/2;
+    box-shadow: 0 2px 12px 0 rgba(0,0,0,0.18);
+    background-color: #FFF;
+
+    &::placeholder {
+      font-size: 15px;
+    }
+  }
+
+  &__input-plus {
+    position: absolute;
+    top: 0;
+    right: 13px;
+    height: $input-height;
+    line-height: $input-height - 2px;
+    cursor: pointer;
+  }
+}

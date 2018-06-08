@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import {recordPageView} from 'app/utils/ServerApiClient';
 import Icon from 'app/components/elements/Icon';
 import tt from 'counterpart';
@@ -6,12 +6,9 @@ import tt from 'counterpart';
 export default class PageViewsCounter extends React.Component {
 
     static propTypes = {
-      aiPosts: React.PropTypes.array,
-      hidden: React.PropTypes.bool
-    };
-
-    static defaultProps = {
-        hidden: true
+        hidden: PropTypes.bool,
+        aiPosts: PropTypes.array,
+        sinceDate: PropTypes.string,
     };
 
     constructor(props) {
@@ -40,9 +37,15 @@ export default class PageViewsCounter extends React.Component {
     }
 
     render() {
+        const { hidden } = this.props;
         const views = this.state.views;
-        if (this.props.hidden || !views) return null;
+
+        if (hidden || !views) {
+            return null;
+        }
+
         const suffix = this.props.sinceDate ? tt('g.since') + this.props.sinceDate : '';
+
         return <span className="PageViewsCounter" title={tt('plurals.view_count', {count: views}) + suffix}>
             <Icon name="eye" /> {views.toLocaleString()}
         </span>;

@@ -1,0 +1,33 @@
+
+.PostOptions {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  margin: 0 30px;
+
+  &__item-wrapper {
+    display: block;
+    position: relative;
+  }
+
+  &__item {
+    transition: color 0.1s;
+    margin: 0 9px;
+    padding: 4px;
+    cursor: pointer;
+
+    &_active, &:hover {
+      color: #0078C4;
+    }
+
+    &_warning, &_warning:hover {
+      color: #ef3434;
+    }
+  }
+
+  &__bubble-text {
+    margin-bottom: 6px;
+    font-size: 14px;
+    color: #757575;
+  }
+}

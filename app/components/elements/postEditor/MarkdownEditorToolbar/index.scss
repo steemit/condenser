@@ -1,0 +1,173 @@
+@import "../../../extends";
+
+.MET {
+  display: flex;
+  background: #f00;
+  $toolbar_height: 46px;
+
+  &__toolbar {
+    position: absolute;
+    display: flex;
+    height: $toolbar_height;
+    padding: 0 16px;
+    border-radius: $toolbar_height / 2;
+    align-items: center;
+    background: #fff;
+    box-shadow: -1px 1px 14px 0 rgba(0,0,0, 0.15);
+    transform: translate3d(-50%, -100%, 0);
+    opacity: 0;
+    transition: opacity 0.2s;
+    z-index: 2;
+    pointer-events: none;
+
+    &_raising {
+      opacity: 1;
+      pointer-events: initial;
+    }
+  }
+
+  &__toolbar-tip {
+    @extend %dialog-tip;
+  }
+
+  &__icon {
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+    padding-top: 2px;
+    text-align: center;
+    cursor: pointer;
+    color: #333;
+
+    &:hover {
+      color: #0062a0;
+    }
+
+    &_active,
+    &_active:hover {
+      color: #0078c4;
+    }
+
+    & > svg {
+      vertical-align: middle;
+      width: unset;
+      height: 18px;
+    }
+
+    &_small > svg {
+      height: 14px;
+    }
+  }
+
+  &__separator {
+    height: 30px;
+    margin: 0 8px;
+    border-right: 1px solid #d9d9d9;
+  }
+
+  &__new-line-helper {
+    position: absolute;
+    display: flex;
+    //align-items: center;
+    left: -43px;
+    height: 40px;
+    width: 40px;
+    margin-top: -20px;
+    border-radius: 20px;
+    background: #fff;
+    box-shadow: 0 0 9px 0 rgba(0,0,0, 0.25);
+    transition: width 0.3s;
+    overflow: hidden;
+    z-index: 10;
+    animation: fade-in 0.1s;
+
+    &_open {
+      width: 187px;
+    }
+
+    &_selected {
+      width: 400px;
+    }
+  }
+
+  &__plus-wrapper {
+    display: flex;
+    flex-shrink: 0;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+  }
+
+  &__plus {
+    transform-origin: center;
+    transition: transform 0.2s;
+    pointer-events: none;
+    color: #777;
+  }
+
+  &__new-line-helper_open &__plus {
+    transform: rotate(45deg);
+  }
+
+  &__new-line-actions {
+    position: absolute;
+    display: flex;
+    left: 40px;
+    height: 100%;
+    padding-top: 5px;
+    flex-shrink: 0;
+    overflow: hidden;
+    opacity: 1;
+    transition: opacity 0.5s;
+
+    &_selected {
+      opacity: 0;
+    }
+  }
+
+  &__new-line-item {
+    width: 30px;
+    height: 30px;
+    margin: 0 8px;
+    flex-shrink: 0;
+  }
+
+  &__new-line-icon {
+    width: 30px;
+    height: 30px;
+    padding-top: 4px;
+    text-align: center;
+    cursor: pointer;
+    transition: color 0.1s;
+
+    &:hover {
+      color: #0078c4;
+    }
+
+    & > SVG {
+      width: unset;
+      height: 22px;
+    }
+  }
+
+  &__new-line-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+    animation: fade-in 0.5s forwards;
+  }
+
+  &__new-line-input {
+    width: inherit;
+    height: 100%;
+    padding: 0;
+    flex-grow: 1;
+    margin-left: 6px;
+    border: none;
+    outline: none;
+    color: #333;
+  }
+}

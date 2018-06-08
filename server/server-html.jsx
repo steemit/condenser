@@ -1,7 +1,7 @@
 import React from 'react';
 import { LIQUID_TOKEN } from 'app/client_config';
 import config from 'config';
-import AnalyticsScripts from 'app/components/elements/AnalyticsScripts';
+//import AnalyticsScripts from 'app/components/elements/AnalyticsScripts';
 
 export default function ServerHTML({ body, assets, locale, title, meta, analytics }) {
     let page_title = title;

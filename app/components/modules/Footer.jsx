@@ -90,7 +90,7 @@ class Footer extends React.Component {
                     { name: tt('g.team'), url: '/about#team' },
                 ],
                 [
-                    { name: tt('navigation.feedback'), url: '/submit.html?type=submit_feedback' },
+                    { name: tt('navigation.feedback'), url: '/submit?type=submit_feedback' },
                     { name: tt("navigation.privacy_policy"), url: '/ru--konfidenczialxnostx/@golos/politika-konfidencialnosti' },
                     { name: tt("navigation.terms_of_service"), url: '/legal/terms_of_service.pdf' }
                 ]],

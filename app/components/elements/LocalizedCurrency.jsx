@@ -7,8 +7,6 @@ import g from 'app/redux/GlobalReducer';
 import { getSymbolFromCurrency } from 'currency-symbol-map';
 import { FRACTION_DIGITS, DEFAULT_CURRENCY, DEBT_TOKEN_SHORT, FRACTION_DIGITS_MARKET } from 'app/client_config';
 import { short as shortAmount } from 'app/utils/FormatNumbers'
-import cookie from "react-cookie";
-import { Map } from 'immutable';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 
 

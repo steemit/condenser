@@ -1,0 +1,15 @@
+
+.PostTitle {
+  position: relative;
+  margin-bottom: 18px;
+
+  &__input {
+    display: block;
+    width: 100%;
+    border: none;
+    background: none;
+    font-size: 32px;
+    color: #555;
+    outline: none !important;
+  }
+}

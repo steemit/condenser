@@ -1,0 +1,23 @@
+
+.Button {
+  height: 40px;
+  min-width: 160px;
+  border: 1px solid #e1e1e1;
+  border-radius: 80px;
+  color: #000;
+  background: #fff;
+  font-weight: 500;
+  cursor: pointer;
+  outline: none !important;
+  margin: 0 !important;
+
+  &_primary {
+    color: #fff;
+    border-color: #2879ff;
+    background-color: #2879ff;
+  }
+
+  &[disabled] {
+    cursor: not-allowed;
+  }
+}

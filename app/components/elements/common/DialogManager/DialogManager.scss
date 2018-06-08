@@ -1,0 +1,55 @@
+
+.DialogManager {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 500;
+
+  &__window {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    top: 0;
+    left: 0;
+    right: 0;
+    min-height: 100%;
+    padding: 40px 8px;
+    pointer-events: none;
+    animation: raise-down 0.15s;
+    z-index: 1;
+
+    &_active {
+      z-index: 3;
+    }
+  }
+
+  &__dialog {
+    max-width: 600px;
+    pointer-events: initial;
+  }
+
+  &__shade {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0, 0.65);
+    user-select: none;
+    z-index: 2;
+    animation: fade-in 0.2s;
+  }
+}
+
+@keyframes raise-down {
+  from {
+    transform: translate3d(0, -15px, 0);
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}

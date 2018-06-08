@@ -20,9 +20,6 @@ export default function resolveRoute(path)
     if (path.indexOf("@bm-chara728") !== -1) {
         return {page: 'NotFound'};
     }
-    if (path === '/about.html') {
-        return {page: 'About'};
-    }
     if (path === '/welcome') {
         return {page: 'Welcome'};
     }
@@ -71,8 +68,8 @@ export default function resolveRoute(path)
     if (path === '/~witnesses') {
         return {page: 'Witnesses'};
     }
-    if (path === '/submit.html') {
-        return {page: 'SubmitPost'};
+    if (path === '/submit') {
+        return {page: 'SubmitPost', hideSubMenu: true};
     }
     if (path === '/leave_page') {
         return {page: 'LeavePage'};
@@ -93,7 +90,7 @@ export default function resolveRoute(path)
     }
     match = path.match(routeRegex.Post);
     if (match) {
-        return {page: 'Post', params: match.slice(1)};
+        return {page: 'Post', params: match.slice(1) };
     }
     match = path.match(/^\/(hot|votes|responses|trending|trending30|promoted|cashout|payout|payout_comments|created|active)\/?$/)
          || decodeURI(path).match(/^\/(hot|votes|responses|trending|trending30|promoted|cashout|payout|payout_comments|created|active)\/([\u0400-\u04FF-\w\d-]+)\/?$/)

@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import AppPropTypes from 'app/utils/AppPropTypes';
 import Header from 'app/components/modules/Header';
 import Footer from 'app/components/modules/Footer';
+import TooltipManager from 'app/components/elements/common/TooltipManager';
 import user from 'app/redux/User';
 import g from 'app/redux/GlobalReducer';
 import { browserHistory, Link } from 'react-router';
@@ -17,6 +18,7 @@ import tt from 'counterpart';
 import PageViewsCounter from '@elements/PageViewsCounter';
 import {APP_ICON, VEST_TICKER, WIKI_URL, LANDING_PAGE_URL, ABOUT_PAGE_URL, WHITEPAPER_URL, TERMS_OF_SERVICE_URL, PRIVACY_POLICY_URL, THEMES, DEFAULT_THEME } from 'app/client_config';
 import LocalizedCurrency from '@elements/LocalizedCurrency';
+import DialogManager from 'app/components/elements/common/DialogManager';
 
 const availableLinks = [
     'https://www.facebook.com/www.golos.io',
@@ -40,7 +42,12 @@ class App extends React.Component {
     }
 
     componentWillMount() {
-        if (process.env.BROWSER) localStorage.removeItem('autopost') // July 14 '16 compromise, renamed to autopost2
+        if (process.env.BROWSER) {
+            localStorage.removeItem('autopost') // July 14 '16 compromise, renamed to autopost2
+
+            window.IS_MOBILE = /android|iphone/i.test(navigator.userAgent) || window.innerWidth < 450;
+        }
+
         this.props.loginUser();
         this.props.loadExchangeRates();
         // this.initVendorScripts()
@@ -154,8 +161,8 @@ class App extends React.Component {
     }
 
     render() {
-        const VESTING_TOKENS = tt('token_names.VESTING_TOKENS');
-        const APP_NAME = tt('g.APP_NAME');
+        //const VESTING_TOKENS = tt('token_names.VESTING_TOKENS');
+        //const APP_NAME = tt('g.APP_NAME');
 
         const {location, params, children, flash, new_visitor, depositSteem, signup_bonus} = this.props;
         const theme = process.env.BROWSER ? localStorage.getItem('theme') : DEFAULT_THEME
@@ -244,12 +251,14 @@ class App extends React.Component {
                     {welcome_screen}
                     {callout}
                     {children}
-                    <Footer />
+                    {location.pathname.startsWith('/submit') ? null : <Footer />}
                     <ScrollButton />
                 </div>
                 <Dialogs />
                 <Modals />
-                <PageViewsCounter />
+                <DialogManager />
+                {process.env.BROWSER ? <TooltipManager /> : null}
+                <PageViewsCounter hidden />
             </div>
         )
     }

@@ -14,10 +14,10 @@ const icons = [
     'flags/1x1/pt',
     'flags/1x1/fr',
     'flags/1x1/us',
-    "flags/1x1/rs",
-    "flags/1x1/ar",
-    "flags/1x1/cn",
-    "flags/1x1/ro",
+    'flags/1x1/rs',
+    'flags/1x1/ar',
+    'flags/1x1/cn',
+    'flags/1x1/ro',
     'user',
     'share',
     'calendar',
@@ -118,34 +118,88 @@ const icons = [
     'new/search',
     'new/wikipedia',
     'new/envelope',
-    'new/monitor'
+    'new/monitor',
+    'editor/plus-18',
+    'editor/coin',
+    'editor/share',
+    'editor/info',
+    'editor/plus',
+    'editor/cross',
+    'editor/eye',
+    'editor-toolbar/bold',
+    'editor-toolbar/italic',
+    'editor-toolbar/header',
+    'editor-toolbar/strike',
+    'editor-toolbar/link',
+    'editor-toolbar/quote',
+    'editor-toolbar/plus',
+    'editor-toolbar/copyright',
+    'editor-toolbar/bullet-list',
+    'editor-toolbar/number-list',
+    'editor-toolbar/picture',
+    'editor-toolbar/video',
+    'editor-toolbar/search',
 ];
 const icons_map = {};
 for (const i of icons) icons_map[i] = require(`app/assets/icons/${i}.svg`);
 
-const rem_sizes = {'0_75x': '0.75', '0_95x': '0.95', '1x': '1.12', '1_25x': '1.25', '1_5x': '1.5', '1_75x': '1.75', '2x': '2', '3x': '3.45', '4x': '4.60', '5x': '5.75', '10x': '10.0'};
+const rem_sizes = {
+    '0_75x': '0.75',
+    '0_95x': '0.95',
+    '1x': '1.12',
+    '1_25x': '1.25',
+    '1_5x': '1.5',
+    '1_75x': '1.75',
+    '2x': '2',
+    '3x': '3.45',
+    '4x': '4.60',
+    '5x': '5.75',
+    '10x': '10.0',
+};
 
-export default class Icon extends React.Component {
-
+export default class Icon extends React.PureComponent {
     static propTypes = {
         name: React.PropTypes.string.isRequired,
-        size: React.PropTypes.oneOf(['0_75x', '0_95x', '1x', '1_25x', '1_5x', '2x', '3x', '4x', '5x', '10x']),
-        inverse: React.PropTypes.bool,
-        className: React.PropTypes.string
+        size: React.PropTypes.oneOf([
+            '0_75x',
+            '0_95x',
+            '1x',
+            '1_25x',
+            '1_5x',
+            '2x',
+            '3x',
+            '4x',
+            '5x',
+            '10x',
+        ]),
     };
 
     render() {
-        const {name, size, className} = this.props;
+        const { name, size, className } = this.props;
         let classes = 'Icon ' + name;
-        let style = {display: 'inline-block', width: `${rem_sizes['1x']}rem`};
+        let style;
+
         if (size) {
             classes += ' Icon_' + size;
-            style = {display: 'inline-block', width: `${rem_sizes[size]}rem`};
+            style = { width: `${rem_sizes[size]}rem` };
         }
+
         if (className) {
             classes += ' ' + className;
         }
 
-        return <span className={classes} style={style} dangerouslySetInnerHTML={{__html: icons_map[name]}} />;
+        const passProps = { ...this.props };
+        delete passProps.name;
+        delete passProps.size;
+        delete passProps.className;
+
+        return (
+            <span
+                {...passProps}
+                className={classes}
+                style={style}
+                dangerouslySetInnerHTML={{ __html: icons_map[name] }}
+            />
+        );
     }
 }

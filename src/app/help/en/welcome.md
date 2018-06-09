@@ -11,14 +11,14 @@ Below that is a list of recommended users to follow, a collection of other resou
 
 ### To Do List
 
-1. <a href="#Backup_your_password">Backup your password</a>
+1. <a href="#Backup_your_password">Backup Your Password</a>
 2. <a href="#Review_the_Quick_Start_Guide">Review the Quick Start Guide</a>
 3. <a href="#Read_the_Helpful_Posts_from_Steemit_Users">Read the Helpful Posts from Steemit Users</a>
 4. <a href="#Setup_your_Profile_Avatar_and_Cover_Image">Setup your Profile, Avatar, and Cover Image</a>
 5. <a href="#Choose_your_NSFW_(Not_Safe_for_Work)_Display_Preference">Choose your "NSFW" (Not Safe for Work) Display Preferences, Language, and Rewards</a>
 6. <a href="#Sign_Up_for_Steem_Chat">Sign Up for Steem Chat</a>
-7. <a href="#Create_your_introduceyourself_post">Create your "introduceyourself" post</a>
-8. <a href="#Learn_more">Learn more</a>
+7. <a href="#Create_your_introduceyourself_post">Create your "Introduceyourself" Post</a>
+8. <a href="#Learn_more">Learn More</a>
 
 ### Quick Start Guide
 
@@ -39,14 +39,14 @@ Below that is a list of recommended users to follow, a collection of other resou
 
 ### <a href="#Users_to_Follow">Users to Follow</a>
 ### <a href="#Other_Resources">Other Resources</a>
-### <a href="#Live_Help">Live Help</a>
+### <a href="#Get_Help">Get Help</a>
 ### <a href="#Third_Party_References">Third Party References</a>
 
 ***
 
 ## To Do List
 <span></span>
-### <span id="Backup_your_password">1. Backup your password</span>
+### <span id="Backup_your_password">1. Backup Your Password</span>
 
 Unlike centralized web services, **it is not possible to recover lost passwords on the Steem blockchain**.
 
@@ -100,7 +100,7 @@ Some channels allow you to share links, but others don't. For instance, [general
 Each channel will have its rules posted in the "Room Info" section.
 
 <a href="#Table_of_Contents">^</a>
-### <span id="Create_your_introduceyourself_post">7. Create your "introduceyourself" post</span>
+### <span id="Create_your_introduceyourself_post">7. Create your "Introduceyourself" Post</span>
 
 While not required, the tradition for new users is to create an "introduceyourself" post in order to let the community get to know you.
 
@@ -109,7 +109,7 @@ You can see some examples of what other people have done [here](https://steemit.
 If you have other social media accounts (Twitter, Facebook, etc.) you can help the community verify that you are who you say you are by sharing the link to your Steem profile on them. If you are claiming to be someone famous, this is pretty much expected.
 
 <a href="#Table_of_Contents">^</a>
-### <span id="Learn_more">8. Learn more</span>
+### <span id="Learn_more">8. Learn More</span>
 
 The <a href="#Other_Resources">Other Resources</a> section of this Welcome page contains helpful links to learn more about the platform. The FAQ page contains answers to the most commonly asked questions and the Bluepaper explains how the platform works.
 
@@ -265,7 +265,6 @@ Don't get discouraged if you don't earn much at first. Keep up the good work!
 - [Steemit for Artists](https://steemit.com/art/@voronoi/steemit-for-artists-a-new-stage-for-craft)
 - [Video interview on how to be successful](https://steemit.com/blog/@terrybrock/steemit-success-series--timcliff-on-who-to-target-with-your-content-1512178826-124805)
 
-
 ### <span id="Curation">Curation</span>
 - [Curation Rewards Explained](https://steemit.com/curation/@liberosist/mind-your-votes-ii-a-guide-to-maximizing-your-curation-rewards)
 - [More Information on Curation Rewards](https://steemit.com/steemit/@calamus056/curation-rewards-explained-in-great-detail)
@@ -302,7 +301,7 @@ Don't get discouraged if you don't earn much at first. Keep up the good work!
 - [Steem 'Markdown' Course](https://steemskills.teachable.com/p/steemmarkdown) - A free online course in using 'markdown'
 
 <a href="#Table_of_Contents">^</a>
-## <span id="Live_Help">Live Help</span>
+## <span id="Get_Help">Get Help</span>
 
 Ask your general questions in the [help](https://steem.chat/channel/help) channel of [steem.chat](https://steem.chat/home). Users in the channel will typically respond to questions within a few hours.
 

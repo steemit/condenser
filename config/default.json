@@ -73,5 +73,7 @@
   "steemd_connection_server": "https://api.steemit.com",
   "steemd_use_appbase": false,
   "chain_id": "0000000000000000000000000000000000000000000000000000000000000000",
-  "address_prefix": "STM"
+  "address_prefix": "STM",
+  "docker_tag": false,
+  "source_commit": false
 }

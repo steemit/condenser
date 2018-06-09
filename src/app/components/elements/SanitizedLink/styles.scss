@@ -1,0 +1,13 @@
+.SanitizedLink--phishyLink {
+  color: darken($color-red, 10%);
+  font-size: 75%;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  .phishylink-reveal-link {
+    padding-left: .5em;
+    opacity: .5;
+    font-size: 75%;
+    text-decoration: underline;
+  }
+}

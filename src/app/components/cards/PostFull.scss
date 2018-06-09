@@ -121,12 +121,6 @@
         fill: themed('textColorSecondary');
     }
   }
-  a, .FoundationDropdownMenu__label {
-    font-size: 94%;
-    font-weight: 600;
-    @extend .link;
-    @extend .link--secondary;
-  }
   .Voting {
     //padding-right: 1rem;
     //margin-right: 1rem;

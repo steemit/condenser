@@ -278,7 +278,7 @@
         "use_limited_amount_of_tags":
             "You have %(tagsLength)s tags total%(includingCategory)s. Please use only 5 in your post and category line.",
         "are_you_sure_you_want_to_clear_this_form":
-            "Are you sure you want to clear this form?",
+            "Are you sure you want to exit the comment editor?",
         "uploading": "Uploading",
         "draft_saved": "임시 저장.",
         "editor": "에디터",

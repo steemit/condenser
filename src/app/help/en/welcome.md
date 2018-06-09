@@ -5,7 +5,7 @@ This page is full of information to help you learn about the platform and become
 
 Included on the page is a "To Do List" with recommended steps to get started with your account, and a "Quick Start Guide" with information on how the platform works. 
 
-Below that is a list of recommended users to follow, a collection of other resources including the <a href="/faq.html">FAQ Page</a> and [Steem 'Bluepaper'](https://steem.io/steem-bluepaper.pdf), as well as information on where to find live help. 
+Below that is a list of recommended users to follow, a collection of other resources including the <a href="/faq.html">FAQ Page</a> and [Steem 'Bluepaper'](https://steem.io/steem-bluepaper.pdf), as well as information on where to find help. 
 
 ## <span id="Table_of_Contents">Table of Contents</span>
 
@@ -48,7 +48,7 @@ Below that is a list of recommended users to follow, a collection of other resou
 <span></span>
 ### <span id="Backup_your_password">1. Backup your password</span>
 
-Unlike centralized web services, **the Steem Blockchain has no forgotten password recovery**.
+Unlike centralized web services, **it is not possible to recover lost passwords on the Steem blockchain**.
 
 You are entirely responsible for generating your password, saving it and keeping it secure.
 

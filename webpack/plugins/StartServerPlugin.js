@@ -1,6 +1,6 @@
-import cp from 'child_process';
-import path from 'path';
-import watch from 'node-watch';
+const cp = require('child_process');
+const path = require('path');
+const watch = require('node-watch');
 
 let server;
 let started;
@@ -50,4 +50,11 @@ const startServer = () => {
 
 // kill server on exit
 process.on('exit', () => server.kill('SIGTERM'));
-export default () => !server ? startServer() : () => ({});
+
+module.exports = class StartServerPlugin {
+    apply(compiler) {
+        console.log("Please wait for app server startup (~60s)" +
+            " after webpack server startup...")
+        compiler.hooks.done.tap('StartServerPlugin', () => !server ? startServer() : () => ({}))
+    }
+}

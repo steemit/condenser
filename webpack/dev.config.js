@@ -1,12 +1,18 @@
-import webpack from 'webpack';
-import git from 'git-rev-sync';
-import baseConfig from './base.config';
-import startKoa from './utils/start-koa';
+const webpack = require('webpack');
+const merge = require('webpack-merge');
+const git = require('git-rev-sync');
+const baseConfig = require('./base.config');
+const StartServerPlugin = require('./plugins/StartServerPlugin');
+
+const Webpack_isomorphic_tools_plugin = require('webpack-isomorphic-tools/plugin');
+const webpack_isomorphic_tools_plugin =
+    new Webpack_isomorphic_tools_plugin(require('./webpack-isotools-config'))
+        .development();
 
 const WEBPACK_PORT = process.env.PORT ? parseInt(process.env.PORT)+1 : 8081;
 const PUBLIC_PATH = '/assets/';
 
-export default {
+module.exports = {
     server: {
         port: WEBPACK_PORT,
         options: {
@@ -23,28 +29,14 @@ export default {
             }
         }
     },
-    webpack: {
-        ...baseConfig,
+    webpack: merge(baseConfig, {
+        mode: 'development',
         devtool: 'cheap-module-eval-source-map',
-        entry: {
-            app: [
-                './app/Main.js',
-            ]
-        },
         output: {
-            ...baseConfig.output,
             publicPath: PUBLIC_PATH
         },
-        module: {
-            ...baseConfig.module,
-            rules: [
-                ...baseConfig.module.rules,
-            ]
-        },
         plugins: [
-            // new webpack.optimize.OccurenceOrderPlugin(),
-            // new webpack.HotModuleReplacementPlugin(),
-            // new webpack.NoErrorsPlugin(),
+            new webpack.HotModuleReplacementPlugin(),
             new webpack.DefinePlugin({
                 'process.env': {
                     BROWSER: JSON.stringify(true),
@@ -55,14 +47,11 @@ export default {
                     TYPED_ARRAY_SUPPORT: JSON.stringify(false)
                 }
             }),
-            // new webpack.optimize.DedupePlugin(),
-            // new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.js'),
-            ...baseConfig.plugins,
-            function () {
-                console.log("Please wait for app server startup (~60s)" +
-                    " after webpack server startup...");
-                this.plugin('done', startKoa);
-            }
-        ]
-    }
+            webpack_isomorphic_tools_plugin,
+            new StartServerPlugin()
+        ],
+        optimization: {
+            noEmitOnErrors: true, // NoEmitOnErrorsPlugin
+        }
+    })
 };

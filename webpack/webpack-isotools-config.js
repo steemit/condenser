@@ -3,11 +3,11 @@ const alias = require('./alias');
 
 module.exports = {
     webpack_assets_file_path: (process.env.NODE_ENV === 'production' ? 'tmp/webpack-isotools-assets-prod.json' : 'tmp/webpack-isotools-assets-dev.json'),
-    // webpack_stats_file_path: 'tmp/webpack-stats.json',
+    webpack_stats_file_path: 'tmp/webpack-stats.json',
     alias: alias,
     assets: {
         images: {
-            extensions: ['png', 'jpg']
+            extensions: ['png', 'jpg', 'gif']
         },
         fonts: {
             extensions: ['woff', 'ttf']

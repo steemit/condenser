@@ -1,18 +1,16 @@
-import path from 'path';
-import webpack from 'webpack';
-import ExtractTextPlugin from 'extract-text-webpack-plugin';
-import writeStats from './utils/write-stats';
-import alias from './alias'
+const path = require('path');
+const webpack = require('webpack');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const ProgressBarPlugin = require('progress-bar-webpack-plugin');
+const WriteStatsPlugin = require('./plugins/WriteStatsPlugin');
+const alias = require('./alias')
 
-const Webpack_isomorphic_tools_plugin = require('webpack-isomorphic-tools/plugin');
-const webpack_isomorphic_tools_plugin =
-    new Webpack_isomorphic_tools_plugin(require('./webpack-isotools-config'))
-        .development();
+const devMode = process.env.NODE_ENV !== 'production'
 
-export default {
+module.exports = {
     entry: {
         app: ['babel-polyfill', './app/Main.js'],
-        vendor: ['react', 'react-dom', 'react-router']
+        // vendor: ['react', 'react-dom', 'react-router']
     },
     output: {
         path: path.resolve(__dirname, '../dist'),
@@ -22,10 +20,35 @@ export default {
     },
     module: {
         rules: [
-            {test: /\.(jpe?g|png|gif)/, use: 'url-loader?limit=4096'},
-            {test: /\.json$/, use: 'json-loader'},
-            {test: /\.js$|\.jsx$/, exclude: /node_modules/, use: 'babel-loader'},
-            {test: /\.svg$/, use: 'svg-inline-loader'},
+            { 
+                test: /\.js$|\.jsx$/, 
+                exclude: /node_modules/, 
+                use: 'babel-loader' 
+            },
+            {
+                test: /\.(sa|sc|c)ss$/,
+                use: [
+                    devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
+                    'css-loader',
+                    {
+                        loader: 'postcss-loader',
+                        options: {
+                            plugins: () => [require('autoprefixer')({
+                                'browsers': ['> 1%', 'last 2 versions']
+                            })],
+                        }
+                    },
+                    'sass-loader',
+                ],
+            },
+            {
+                test: /\.(jpe?g|png|gif)/,
+                loader: 'url-loader',
+                options: {
+                    limit: 4096
+                }
+            },
+            { test: /\.svg$/, use: 'svg-inline-loader' },
             {
                 test: /\.(woff(2)?|ttf|eot)(\?v=\d+\.\d+\.\d+)?$/,
                 loader: 'file-loader',
@@ -42,58 +65,38 @@ export default {
                 test: require.resolve("medium-editor-insert-plugin"),
                 use: "imports?define=>false"
             },
-            {
-                test: /\.css$/,
-                use: [
-                    {
-                        loader: 'style-loader',
-                    },
-                    {
-                        loader: 'css-loader',
-                    },
-                    {
-                        loader: 'autoprefixer-loader'
-                    }
-                ]
-            },
-            {
-                test: /\.scss$/,
-                use: ExtractTextPlugin.extract({
-                    fallback: 'style-loader',
-                    use: [
-                        {
-                            loader: 'css-loader',
-                        },
-                        {
-                            loader: 'autoprefixer-loader'
-                        },
-                        {
-                            loader: 'sass-loader',
-                            options: {
-                                outputStyle: 'expanded'
-                            }
-                        }
-                    ]
-                })
-            },
-            {
-                test: /\.md/,
-                use: 'raw-loader'
-            }
+            { test: /\.md/, use: 'raw-loader' }
         ]
     },
     plugins: [
-        function () {
-            this.plugin('done', writeStats);
-        },
-        new webpack.optimize.ModuleConcatenationPlugin(),
-        new webpack.optimize.CommonsChunkPlugin({
-            names: 'vendor',
-            minChunks: Infinity
+        new ProgressBarPlugin({
+            format: 'Build [:bar] :percent (:elapsed seconds)',
+            clear: false,
         }),
-        webpack_isomorphic_tools_plugin,
-        new ExtractTextPlugin('[name]-[chunkhash].css')
+        new WriteStatsPlugin(),
+        new MiniCssExtractPlugin({
+            filename: devMode ? '[name].css' : '[name].[hash].css',
+            chunkFilename: devMode ? '[id].css' : '[id].[hash].css',
+        })
     ],
+    optimization: {
+        splitChunks: {
+            cacheGroups: {
+                vendors: {
+                    name: 'vendors',
+                    chunks: 'all',
+                    // minChunks: Infinity,
+                    enforce: true
+                },
+                app: {
+                    name: 'app',
+                    chunks: 'all',
+                    test: /\.css$/,
+                    enforce: true
+                }
+            }
+        }
+    },
     resolve: {
         modules: [
             path.resolve(__dirname, '../app'),

@@ -1,4 +1,4 @@
-import path from 'path';
+const path = require('path');
 
 function resolvePath(...rest) {
   return path.join(__dirname, '..', 'app', ...rest);

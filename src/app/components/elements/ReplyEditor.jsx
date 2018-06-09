@@ -255,13 +255,6 @@ class ReplyEditor extends React.Component {
         this.props.showAdvancedSettings(this.props.formId);
     };
 
-    onPayoutTypeChange = e => {
-        const payoutType = e.currentTarget.value;
-        this.setState({ payoutType });
-        if (payoutType !== '0%')
-            localStorage.setItem('defaultPayoutType', payoutType);
-    };
-
     onDrop = (acceptedFiles, rejectedFiles) => {
         if (!acceptedFiles.length) {
             if (rejectedFiles.length) {
@@ -680,19 +673,6 @@ class ReplyEditor extends React.Component {
                                         <a href={'/@' + username + '/settings'}>
                                             Update settings
                                         </a>
-                                        <br />
-                                        <label
-                                            title={tt(
-                                                'reply_editor.check_this_to_auto_upvote_your_post'
-                                            )}
-                                        >
-                                            {tt('g.upvote_post')} &nbsp;
-                                            <input
-                                                type="checkbox"
-                                                checked={autoVote.value}
-                                                onChange={autoVoteOnChange}
-                                            />
-                                        </label>
                                     </div>
                                 )}
                         </div>
@@ -703,7 +683,6 @@ class ReplyEditor extends React.Component {
                                     className={
                                         'Preview ' + vframe_section_shrink_class
                                     }
-                                    style={{ clear: 'both' }}
                                 >
                                     {!isHtml && (
                                         <div className="float-right">
@@ -992,14 +971,16 @@ export default formId =>
 
                 // Avoid changing payout option during edits #735
                 if (!isEdit) {
-                    __config.comment_options = {};
                     switch (payoutType) {
                         case '0%': // decline payout
-                            __config.comment_options.max_accepted_payout =
-                                '0.000 SBD';
+                            __config.comment_options = {
+                                max_accepted_payout: '0.000 SBD',
+                            };
                             break;
                         case '100%': // 100% steem power payout
-                            __config.comment_options.percent_steem_dollars = 0; // 10000 === 100% (of 50%)
+                            __config.comment_options = {
+                                percent_steem_dollars: 0, // 10000 === 100% (of 50%)
+                            };
                             break;
                         default: // 50% steem power, 50% sd+steem
                     }

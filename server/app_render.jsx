@@ -106,7 +106,7 @@ async function appRender(ctx) {
         if (metrics) metrics.timing(`universalRender.time`, new Date() - start)
 
         // Assets name are found in `webpack-stats` file
-        const assets_filename = process.env.NODE_ENV === 'production' ? 'tmp/webpack-stats-prod.json' : 'tmp/webpack-stats-dev.json';
+        const assets_filename = process.env.NODE_ENV === 'production' ? 'tmp/webpack-isotools-assets-prod.json' : 'tmp/webpack-isotools-assets-dev.json';
         const assets = require(assets_filename);
 
         // Don't cache assets name on dev

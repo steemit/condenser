@@ -2,7 +2,6 @@ const path = require('path');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
-const WriteStatsPlugin = require('./plugins/WriteStatsPlugin');
 const alias = require('./alias')
 
 const devMode = process.env.NODE_ENV !== 'production'
@@ -73,7 +72,6 @@ module.exports = {
             format: 'Build [:bar] :percent (:elapsed seconds)',
             clear: false,
         }),
-        new WriteStatsPlugin(),
         new MiniCssExtractPlugin({
             filename: devMode ? '[name].css' : '[name].[hash].css',
             chunkFilename: devMode ? '[id].css' : '[id].[hash].css',
@@ -81,17 +79,16 @@ module.exports = {
     ],
     optimization: {
         splitChunks: {
+            chunks: 'all',
             cacheGroups: {
                 vendors: {
-                    name: 'vendors',
-                    chunks: 'all',
-                    // minChunks: Infinity,
+                    test: /node_modules/,
                     enforce: true
                 },
-                app: {
-                    name: 'app',
-                    chunks: 'all',
+                styles: {
+                    name: 'styles',
                     test: /\.css$/,
+                    chunks: 'all',
                     enforce: true
                 }
             }
@@ -102,7 +99,7 @@ module.exports = {
             path.resolve(__dirname, '../app'),
             'node_modules'
         ],
-        extensions: ['.js', '.json', '.jsx'],
+        extensions: ['.js', '.json', '.jsx', '.css', '.scss'],
         alias,
     }
 };

@@ -973,5 +973,9 @@
         "image_size_is_too_large": "Изображение слишком большое"
       }
     }
+  },
+  "delegatevestingshares_jsx" :{
+    "form_title" : "Делегировать %(VESTING_TOKEN2)s",
+    "button_title": "Делегировать"
   }
 }

@@ -961,5 +961,9 @@
         "image_size_is_too_large": "Image size is too large"
       }
     }
+  },
+  "delegatevestingshares_jsx" :{
+    "form_title" : "Delegate %(VESTING_TOKEN2)s",
+    "button_title": "Delegate"
   }
 }

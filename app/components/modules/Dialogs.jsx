@@ -13,6 +13,7 @@ import CheckLoginOwner from 'app/components/elements/CheckLoginOwner';
 import QrKeyView from 'app/components/elements/QrKeyView';
 import PromotePost from 'app/components/modules/PromotePost';
 import ExplorePost from 'app/components/modules/ExplorePost';
+import DelegateVestingShares from 'app/components/modules/DelegateVestingShares';
 
 class Dialogs extends React.Component {
     static propTypes = {
@@ -80,6 +81,12 @@ class Dialogs extends React.Component {
                 <Reveal onHide={this['hide_' + k]} show>
                     <CloseButton onClick={this['hide_' + k]} />
                     <QrKeyView onClose={this['hide_' + k]} {...v.get('params').toJS()} />
+                </Reveal>
+           </span>:
+           k === 'delegate_vesting' ? <span key={idx++} >
+                <Reveal onHide={this['hide_' + k]} show>
+                    <CloseButton onClick={this['hide_' + k]} />
+                    <DelegateVestingShares onClose={this['hide_' + k]} {...v.get('params').toJS()} />
                 </Reveal>
            </span>:
             null

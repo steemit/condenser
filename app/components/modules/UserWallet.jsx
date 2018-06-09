@@ -72,6 +72,12 @@ class UserWallet extends React.Component {
             this.props.withdrawVesting({account: name, vesting_shares, errorCallback, successCallback})
         }
 
+        const showDelegateVesting = (e) => {
+            e.preventDefault()
+            const name = account.get('name')
+            this.props.delegateVesting(name)
+        }
+
         // Sum savings withrawals
         let savings_pending = 0, savings_sbd_pending = 0;
         if(savings_withdraws) {
@@ -159,7 +165,8 @@ class UserWallet extends React.Component {
             { value: tt('userwallet_jsx.power_up'), link: '#', onClick: showTransfer.bind( this, VEST_TICKER, 'Transfer to Account' ) },
         ]
         let power_menu = [
-            { value: tt('userwallet_jsx.power_down'), link: '#', onClick: powerDown.bind(this, false) }
+            { value: tt('userwallet_jsx.power_down'), link: '#', onClick: powerDown.bind(this, false) },
+            { value: tt('delegatevestingshares_jsx.form_title', {VESTING_TOKEN2}), link:'#', onClick: showDelegateVesting.bind(this) }
         ]
 
         if( divesting ) {
@@ -408,5 +415,8 @@ export default connect(
             dispatch(g.actions.remove({key: name}))
             dispatch(g.actions.showDialog({name, params: {username}}))
         },
+        delegateVesting: (username) => {
+            dispatch(g.actions.showDialog({name: 'delegate_vesting', params: {username}}))
+        }
     })
 )(UserWallet)

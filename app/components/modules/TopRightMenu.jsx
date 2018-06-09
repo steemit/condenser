@@ -12,7 +12,7 @@ import NotifiCounter from 'app/components/elements/NotifiCounter';
 import tt from 'counterpart';
 import { DEFAULT_LANGUAGE, LANGUAGES, LOCALE_COOKIE_KEY, LIQUID_TICKER, DEBT_TICKER, APP_NAME_UP } from 'app/client_config';
 import LocalizedCurrency from 'app/components/elements/LocalizedCurrency';
-import {vestingSteem} from 'app/utils/StateFunctions';
+import {vestsToSteem} from 'app/utils/StateFunctions';
 import cookie from "react-cookie";
 
 const defaultNavigate = (e) => {
@@ -58,7 +58,7 @@ const calculateEstimateOutput = ({a, p, sw, g}) => {
     // saving_balance_steem
     + parseFloat(a.get('savings_balance').split(' ')[0])
     // vesting_steem
-    + vestingSteem(a.toJS(), g.toJS())
+    + vestsToSteem(a.get('vesting_shares'), g.toJS())
     + savings_pending
     // + steemOrders
   ;

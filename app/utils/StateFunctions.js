@@ -8,8 +8,8 @@ import {Map, Seq, fromJS} from 'immutable';
 export const numberWithCommas = (x) => x.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 
 export const toAsset = (value) => {
-    const [ amount, ticker ] = value.split(' ')
-    return { amount: parseFloat(amount), ticker }
+    const [ amount, symbol ] = value.split(' ')
+    return { amount: parseFloat(amount), symbol }
 }
 
 export function vestsToSp(state, vesting_shares) {
@@ -22,20 +22,11 @@ export function vestsToSp(state, vesting_shares) {
     return steem_power
 }
 
-export function vestingSteem(account, gprops) {
-    const { total_vesting_fund_steem, total_vesting_shares } = gprops
-    const vests = toAsset(account.vesting_shares).amount
-    const total_vests = toAsset(total_vesting_shares).amount
-    const total_vest_steem = toAsset(total_vesting_fund_steem).amount
-    return total_vest_steem * (vests / total_vests)
-}
-
 export function vestsToSteem (vestingShares, gprops) {
     const { total_vesting_fund_steem, total_vesting_shares } = gprops
     const totalVestingFundSteem = toAsset(total_vesting_fund_steem).amount
     const totalVestingShares = toAsset(total_vesting_shares).amount
     const vesting_shares = toAsset(vestingShares).amount
-  
     return (totalVestingFundSteem * (vesting_shares / totalVestingShares)).toFixed(3)
 }
 
@@ -43,7 +34,6 @@ export function steemToVests(steem, gprops) {
     const { total_vesting_fund_steem, total_vesting_shares } = gprops
     const totalVestingFundSteem =  toAsset(total_vesting_fund_steem).amount
     const totalVestingShares =  toAsset(total_vesting_shares).amount
-  
     const vests = steem / (totalVestingFundSteem / totalVestingShares)
     return vests.toFixed(6)
 }

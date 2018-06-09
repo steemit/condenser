@@ -8,7 +8,7 @@ import TransactionError from 'app/components/elements/TransactionError';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Reveal from 'react-foundation-components/lib/global/reveal';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
-import {numberWithCommas, vestingSteem} from 'app/utils/StateFunctions';
+import {numberWithCommas, vestsToSteem} from 'app/utils/StateFunctions';
 import FoundationDropdownMenu from 'app/components/elements/FoundationDropdownMenu';
 import WalletSubMenu from 'app/components/elements/WalletSubMenu';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
@@ -43,8 +43,7 @@ class UserWallet extends React.Component {
         const gprops = this.props.gprops.toJS();
 
         if (!account) return null;
-        let vesting_steemf = vestingSteem(account.toJS(), gprops);
-        let vesting_steem = vesting_steemf.toFixed(3);
+        let vesting_steem = vestsToSteem(account.get('vesting_shares'), gprops);
 
         let isMyAccount = current_user && current_user.get('username') === account.get('name');
 
@@ -136,7 +135,7 @@ class UserWallet extends React.Component {
 
         // set displayed estimated value
         const total_sbd = sbd_balance + sbd_balance_savings + savings_sbd_pending + sbdOrders + conversionValue;
-        const total_steem = vesting_steemf + balance_steem + saving_balance_steem + savings_pending + steemOrders;
+        const total_steem = vesting_steem + balance_steem + saving_balance_steem + savings_pending + steemOrders;
 
         // set displayed estimated value
         const total_value = Number(((total_steem * price_per_golos) + total_sbd).toFixed(2))

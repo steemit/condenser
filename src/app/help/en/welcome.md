@@ -71,9 +71,9 @@ The <a href="#Helpful_Posts_from_Steemit_Users">Helpful Posts from Steemit Users
 
 You can update your profile through the Settings page. This includes your display name, location, about information, and website.
 
-To set your avatar image, enter a link to the URL where the image is located into the "Profile Picture URL" field or use the "Upload an image" feature.
+To set your avatar image, enter a link to where the image is located into the "Profile Picture URL" field or use the "Upload an image" feature.
 
-To set your cover image, enter a link to the URL where the image is located into the "Cover Image URL" field or use the "Upload an image" feature.
+To set your cover image, enter a link to where the image is located into the "Cover Image URL" field or use the "Upload an image" feature.
 
 Once you have made all your changes, click the "Update" button to save your profile.
 
@@ -137,7 +137,7 @@ To downvote (flag), click on the <Icon name="flag" /> *Flag* icon at the top rig
 <a href="#Table_of_Contents">^</a>
 ### <span id="Comments">Comments</span>
 
-When you are first starting out, commenting on other people's posts can be a great way to get involved and connect with people!
+When you are new, commenting on other people's posts can be a great way to get involved and connect with people!
 
 To comment on a post, or reply to an existing comment, click on the "Reply" link at the bottom of the post/comment.
 
@@ -148,7 +148,7 @@ To create a post, click on the "Post" link in the upper right corner.
 
 Posts have three main parts: Title, Content, and Tags.
 
-You will want to make your title attention-grabbing and relevant to your content. The first image that you use will become the thumbnail image.
+You will want to make your title attractive and relevant to your content. The first image that you use will become the thumbnail image.
 
 You can insert images by dragging & dropping, pasting from the clipboard, or by selecting them.
 
@@ -193,7 +193,7 @@ The projected payments may fluctuate (up and down) until the final payment amoun
 
 Payments for posts are split between the author (at least 75%) and the curators (up to 25%).
 
-The author reward is paid 50% in Steem Power and 50% in liquid STEEM/SBD by default.
+The author reward is paid 50% in Steem Power and 50% in STEEM/SBD by default.
 
 Authors also have the option to decline payout, or be paid in 100% Steem Power!
 
@@ -226,7 +226,7 @@ Plagiarising, which is posting someone else's material as if it were your own, i
 
 If you are using anyone else's material as part of your posts (including images), even if it is free to use, please cite your sources. You should make sure that you are not violating any copyright laws if you are using someone else's material/images. 
 
-Remember, your posts should have original content in them. Aiming for at least 50% your own words/images per post is a good starting point for quality content creation.
+Remember, your posts should have original content in them. Quotes should not exceed more than half of a publication. Include your own thoughts, photographs, art, and ideas. 
 
 <a href="#Table_of_Contents">^</a>
 ### <span id="Password_Security">Password Security</span>

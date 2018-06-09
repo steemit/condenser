@@ -52,9 +52,7 @@ class ReplyEditor extends React.Component {
 
     constructor(props) {
         super();
-        this.state = {
-            progress: {},
-        };
+        this.state = { progress: {} };
         this.initForm(props);
     }
 
@@ -167,26 +165,21 @@ class ReplyEditor extends React.Component {
             instance: this,
             name: 'replyForm',
             initialValues: props.initialValues,
-            validation: values => {
-                return {
-                    title:
-                        isStory &&
-                        (!values.title || values.title.trim() === ''
-                            ? tt('g.required')
-                            : values.title.length > 255
-                              ? tt('reply_editor.shorten_title')
-                              : null),
-                    category:
-                        isStory && validateCategory(values.category, !isEdit),
-                    body: !values.body
+            validation: values => ({
+                title:
+                    isStory &&
+                    (!values.title || values.title.trim() === ''
                         ? tt('g.required')
-                        : values.body.length > maxKb * 1024
-                          ? tt('reply_editor.exceeds_maximum_length', {
-                                maxKb,
-                            })
-                          : null,
-                };
-            },
+                        : values.title.length > 255
+                          ? tt('reply_editor.shorten_title')
+                          : null),
+                category: isStory && validateCategory(values.category, !isEdit),
+                body: !values.body
+                    ? tt('g.required')
+                    : values.body.length > maxKb * 1024
+                      ? tt('reply_editor.exceeds_maximum_length', { maxKb })
+                      : null,
+            }),
         });
     }
 

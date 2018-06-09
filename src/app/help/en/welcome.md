@@ -5,7 +5,7 @@ This page is full of information to help you learn about the platform and become
 
 Included on the page is a "To Do List" with recommended steps to get started with your account, and a "Quick Start Guide" with information on how the platform works. 
 
-Below that is a list of recommended users to follow, a collection of other resources including the <a href="/faq.html">FAQ Page</a> and [Steem bluepaper](https://steem.io/steem-bluepaper.pdf), as well as information on where to find live help. 
+Below that is a list of recommended users to follow, a collection of other resources including the <a href="/faq.html">FAQ Page</a> and [Steem 'Bluepaper'](https://steem.io/steem-bluepaper.pdf), as well as information on where to find live help. 
 
 ## <span id="Table_of_Contents">Table of Contents</span>
 
@@ -22,7 +22,7 @@ Below that is a list of recommended users to follow, a collection of other resou
 
 ### Quick Start Guide
 
-- <a href="#No_Cost_to_Participate">No Cost to Participate</a>
+- <a href="#Free_to_Participate">Free to Participate</a>
 - <a href="#Upvotes">Upvotes</a>
 - <a href="#Comments">Comments</a>
 - <a href="#Creating_Posts">Creating Posts</a>
@@ -54,7 +54,7 @@ You are entirely responsible for generating your password, saving it and keeping
 
 It is strongly recommended that you store an offline copy of your password somewhere safe in case of a hard drive failure or other calamity. Consider digital offline storage, secure cloud-based storage, as well as printed paper. Use multiple methods of storage for best redundancy. 
 
-If your account is valuable, treat it like a valuable!
+If your account is valuable, value it!
 <a href="#Table_of_Contents">^</a>
 
 ### <span id="Review_the_Quick_Start_Guide">2. Review the Quick Start Guide</span>
@@ -73,7 +73,7 @@ You can update your profile through the Settings page. This includes your displa
 
 To set your avatar image, enter a link to the URL where the image is located into the "Profile Picture URL" field or use the "Upload an image" feature.
 
-To set your cover image, enter a link to the URL where the image is located into the "Cover Image URL" or use the "Upload an image" feature.
+To set your cover image, enter a link to the URL where the image is located into the "Cover Image URL" field or use the "Upload an image" feature.
 
 Once you have made all your changes, click the "Update" button to save your profile.
 
@@ -119,7 +119,7 @@ The <a href="#Other_Resources">Other Resources</a> section of this Welcome page 
 
 ## <span id="Quick_Start_Guide">Quick Start Guide</span>
 
-### <span id="No_Cost_to_Participate">No Cost to Participate</span>
+### <span id="Free_to_Participate">Free to Participate</span>
 
 It is free to post, comment, or vote on all content on Steemit.com. You might even get paid for it!
 
@@ -180,7 +180,7 @@ More information on the three types of tokens can be found in the [Steemit FAQ](
 <a href="#Table_of_Contents">^</a>
 ### <span id="Curation">Curation</span>
 
-Up to 25% of the reward for posts goes to the people who voted on it. These people are called Curators.
+Up to 25% of the reward for each publication goes to the people who voted on it. These people are called Curators.
 
 The more Steem Power you have in your account, the more your upvotes will be worth, and the more potential curation rewards you can earn!
 
@@ -202,7 +202,7 @@ Authors also have the option to decline payout, or be paid in 100% Steem Power!
 
 A reputation score is one way that Steemit measures the amount of value you have brought to the community.
 
-The higher the number, the more weighted votes an account has earned.
+The higher the reputation, the more upvotes the account received.
 
 All new users start at 25.
 
@@ -231,7 +231,7 @@ Remember, your posts should have original content in them. Aiming for at least 5
 <a href="#Table_of_Contents">^</a>
 ### <span id="Password_Security">Password Security</span>
 
-**There is no lost password recovery for Steem accounts**. You are 100% responsible for having it backed up. This means secure digital backups, as well as secured paper backups, stored in different places if possible.
+**It is not possible to recover lost passwords for Steem accounts**. You are 100% responsible for having it backed up. This means secure digital backups, as well as secured paper backups, stored in different places if possible.
 
 Never put your password into unverified third party websites as they may steal your account. 
 
@@ -240,7 +240,7 @@ Your Steem account is worth real money. Treat your Steem password like you would
 <a href="#Table_of_Contents">^</a>
 ### <span id="Earning_on_Steemit">Earning on Steemit</span>
 
-Everyone's earnings are different. Have fun. Get engaged. Make friends. 
+Everyone's earnings are different. Have fun. Get involved. Meet new friends. 
 
 The amount of money a user earns depends on their content, following, level of investment and many, many other factors. 
 
@@ -274,7 +274,7 @@ Don't get discouraged if you don't earn much at first. Keep up the good work!
 
 ### <span id="Formatting">Formatting</span>
 - [Emojis for Steemit](https://steemit.com/emojis/@blueorgy/steemit-emojis-master-list)
-- [5 Markdown Tips](https://steemit.com/steemit/@steemitguide/markdown-and-html-code-guide-for-beginners-that-includes-5-useful-tips-to-edit-posts-and-comments-using-the-raw-editor)
+- [5 'Markdown' Tips](https://steemit.com/steemit/@steemitguide/markdown-and-html-code-guide-for-beginners-that-includes-5-useful-tips-to-edit-posts-and-comments-using-the-raw-editor)
 
 ### <span id="Wallet_and_Keys">Wallet and Keys</span>
 - [Understanding Your Wallet](https://steemit.com/steemit-help/@merej99/the-steemit-newbie-s-comprehensive-guide-to-understanding-your-wallet-by-merej99)
@@ -299,7 +299,7 @@ Don't get discouraged if you don't earn much at first. Keep up the good work!
 - [Apps Built on Steem](https://steemprojects.com/) - Directory of apps, sites and tools built by Steem community
 - [Steem Block Explorer](https://steemd.com/) - Shows the raw Steem blockchain data 
 - [Steem Blockchain Explorer](https://steemdb.com/) - Analysis pages for the Steem blockchain data
-- [Steem Markdown Course](https://steemskills.teachable.com/p/steemmarkdown) - A free online course in using markdown
+- [Steem 'Markdown' Course](https://steemskills.teachable.com/p/steemmarkdown) - A free online course in using 'markdown'
 
 <a href="#Table_of_Contents">^</a>
 ## <span id="Live_Help">Live Help</span>
@@ -311,7 +311,7 @@ New Member Support Community is a group of people dedicated to helping new users
 <a href="#Table_of_Contents">^</a>
 ## <span id="Third_Party_References">Third Party References</span>
 
-Peerhub, BlockTrades, Bittrex, Steem Chat, New Member Support Community, and Discord Chat, as well as the tools listed under "Other Resources" are third party applications/services, and are not owned or maintained by Steemit, Inc. Their listing here does not constitute an endorsement or recommendation on behalf of Steemit, Inc.
+Peerhub, BlockTrades, Bittrex, Steem Chat, New Member Support Community, and Discord Chat, as well as the tools listed under "Other Resources", are third party applications/services and are not owned or maintained by Steemit, Inc. Their listing here does not constitute an endorsement or recommendation on behalf of Steemit, Inc.
 
 Please use the third party tools and content at your own risk.
 

@@ -127,10 +127,11 @@ class ReplyEditor extends React.Component {
                 ts.body.value !== ns.body.value ||
                 (ns.category && ts.category.value !== ns.category.value) ||
                 (ns.title && ts.title.value !== ns.title.value) ||
-                np.beneficiaries !== tp.beneficiaries
+                np.beneficiaries !== tp.beneficiaries ||
+                np.payout !== tp.payout
             ) {
                 // also prevents saving after parent deletes this information
-                const { formId, beneficiaries } = nextProps;
+                const { formId, beneficiaries, payout } = np;
                 const { category, title, body } = ns;
                 const data = {
                     formId,
@@ -138,6 +139,7 @@ class ReplyEditor extends React.Component {
                     category: category ? category.value : undefined,
                     body: body.value,
                     beneficiaries,
+                    payout,
                 };
 
                 clearTimeout(saveEditorTimeout);
@@ -219,6 +221,7 @@ class ReplyEditor extends React.Component {
             });
             this.setState({ progress: {} });
             this.props.setBeneficiaries(formId, []);
+            this.props.setPayout(formId, '');
             if (onCancel) onCancel(e);
         }
     };
@@ -799,13 +802,21 @@ export default formId =>
                 category = Set([category, ...jsonMetadata.tags]).join(' ');
             }
 
-            const payoutType = state.app.getIn(
-                [
-                    'user_preferences',
-                    isStory ? 'defaultBlogPayout' : 'defaultCommentPayout',
-                ],
-                '50%'
-            );
+            let payoutType = state.user.getIn([
+                'current',
+                'post',
+                formId,
+                'payoutType',
+            ]);
+            if (!payoutType) {
+                payoutType = state.app.getIn(
+                    [
+                        'user_preferences',
+                        isStory ? 'defaultBlogPayout' : 'defaultCommentPayout',
+                    ],
+                    '50%'
+                );
+            }
 
             let beneficiaries = state.user.getIn([
                 'current',
@@ -852,6 +863,13 @@ export default formId =>
                     userActions.set({
                         key: ['current', 'post', formId, 'beneficiaries'],
                         value: fromJS(beneficiaries),
+                    })
+                ),
+            setPayout: (formId, payout) =>
+                dispatch(
+                    userActions.set({
+                        key: ['current', 'post', formId, 'payout'],
+                        value: payout,
                     })
                 ),
             reply: ({

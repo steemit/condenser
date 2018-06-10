@@ -38,6 +38,7 @@ class ReplyEditor extends React.Component {
         title: React.PropTypes.string, // initial value
         body: React.PropTypes.string, // initial value
         richTextEditor: React.PropTypes.func,
+        defaultPayoutType: React.PropTypes.string,
         payoutType: React.PropTypes.string,
     };
 
@@ -83,6 +84,8 @@ class ReplyEditor extends React.Component {
                 if (title) title.props.onChange(draft.title);
                 if (draft.beneficiaries)
                     this.props.setBeneficiaries(formId, draft.beneficiaries);
+                if (draft.payoutType)
+                    this.props.setPayoutType(formId, draft.payoutType);
                 raw = draft.body;
             }
 
@@ -125,10 +128,10 @@ class ReplyEditor extends React.Component {
                 (ns.category && ts.category.value !== ns.category.value) ||
                 (ns.title && ts.title.value !== ns.title.value) ||
                 np.beneficiaries !== tp.beneficiaries ||
-                np.payout !== tp.payout
+                np.payoutType !== tp.payoutType
             ) {
                 // also prevents saving after parent deletes this information
-                const { formId, beneficiaries, payout } = np;
+                const { formId, beneficiaries, payoutType } = np;
                 const { category, title, body } = ns;
                 const data = {
                     formId,
@@ -136,7 +139,7 @@ class ReplyEditor extends React.Component {
                     category: category ? category.value : undefined,
                     body: body.value,
                     beneficiaries,
-                    payout,
+                    payoutType,
                 };
 
                 clearTimeout(saveEditorTimeout);
@@ -201,7 +204,7 @@ class ReplyEditor extends React.Component {
 
     onCancel = e => {
         if (e) e.preventDefault();
-        const { formId, onCancel } = this.props;
+        const { formId, onCancel, defaultPayoutType } = this.props;
         const { replyForm, body } = this.state;
         if (
             !body.value ||
@@ -213,7 +216,7 @@ class ReplyEditor extends React.Component {
             });
             this.setState({ progress: {} });
             this.props.setBeneficiaries(formId, []);
-            this.props.setPayout(formId, '');
+            this.props.setPayoutType(formId, defaultPayoutType);
             if (onCancel) onCancel(e);
         }
     };
@@ -247,6 +250,7 @@ class ReplyEditor extends React.Component {
 
     showAdvancedSettings = e => {
         e.preventDefault();
+        this.props.setPayoutType(this.props.formId, this.props.payoutType);
         this.props.showAdvancedSettings(this.props.formId);
     };
 
@@ -334,6 +338,7 @@ class ReplyEditor extends React.Component {
             jsonMetadata,
             state,
             successCallback,
+            defaultPayoutType,
             payoutType,
             beneficiaries,
         } = this.props;
@@ -349,6 +354,7 @@ class ReplyEditor extends React.Component {
         const successCallbackWrapper = (...args) => {
             this.setState({ loading: false });
             this.props.setBeneficiaries(formId, []);
+            this.props.setPayoutType(formId, defaultPayoutType);
             if (successCallback) successCallback(args);
         };
         const isEdit = type === 'edit';
@@ -579,34 +585,45 @@ class ReplyEditor extends React.Component {
                             )}
                         </div>
                         <div className={vframe_section_shrink_class}>
-                            {isStory &&
-                                !isEdit && (
-                                    <span>
-                                        <a
-                                            href="#"
-                                            onClick={this.showAdvancedSettings}
-                                        >
-                                            {tt(
-                                                'reply_editor.advanced_settings'
+                            {!isEdit && (
+                                <div className="ReplyEditor__options">
+                                    <a
+                                        href="#"
+                                        onClick={this.showAdvancedSettings}
+                                    >
+                                        {tt('reply_editor.advanced_settings')}
+                                    </a>{' '}
+                                    <div>
+                                        {beneficiaries &&
+                                            beneficiaries.length > 0 && (
+                                                <div>
+                                                    {tt('g.beneficiaries')}
+                                                    {': '}
+                                                    {beneficiaries.length}
+                                                    {'. '}
+                                                </div>
                                             )}
-                                        </a>{' '}
-                                        <div>
-                                            {beneficiaries &&
-                                                beneficiaries.length > 0 && (
-                                                    <span>
-                                                        ({tt(
-                                                            'reply_editor.beneficiaries_set',
-                                                            {
-                                                                count:
-                                                                    beneficiaries.length,
-                                                            }
-                                                        )})
-                                                    </span>
-                                                )}
-                                            &nbsp;
-                                        </div>
-                                    </span>
-                                )}
+                                        {this.props.payoutType != '50%' && (
+                                            <div>
+                                                {tt('g.rewards')}
+                                                {': '}
+                                                {this.props.payoutType ==
+                                                    '0%' &&
+                                                    tt(
+                                                        'reply_editor.decline_payout'
+                                                    )}
+                                                {this.props.payoutType ==
+                                                    '100%' &&
+                                                    tt(
+                                                        'reply_editor.power_up_100'
+                                                    )}
+                                                {'. '}
+                                            </div>
+                                        )}
+                                        &nbsp;
+                                    </div>
+                                </div>
+                            )}
                         </div>
                         <div className={vframe_section_shrink_class}>
                             {postError && (
@@ -654,21 +671,6 @@ class ReplyEditor extends React.Component {
                                     >
                                         {tt('g.clear')}
                                     </button>
-                                )}
-                            {!isEdit &&
-                                this.props.payoutType != '50%' && (
-                                    <div className="ReplyEditor__options float-right text-right">
-                                        {tt('g.rewards')}
-                                        {': '}
-                                        {this.props.payoutType == '0%' &&
-                                            tt('reply_editor.decline_payout')}
-                                        {this.props.payoutType == '100%' &&
-                                            tt('reply_editor.power_up_100')}
-                                        {'. '}
-                                        <a href={'/@' + username + '/settings'}>
-                                            Update settings
-                                        </a>
-                                    </div>
                                 )}
                         </div>
                         {!loading &&
@@ -773,6 +775,13 @@ export default formId =>
                 category = Set([category, ...jsonMetadata.tags]).join(' ');
             }
 
+            const defaultPayoutType = state.app.getIn(
+                [
+                    'user_preferences',
+                    isStory ? 'defaultBlogPayout' : 'defaultCommentPayout',
+                ],
+                '50%'
+            );
             let payoutType = state.user.getIn([
                 'current',
                 'post',
@@ -780,13 +789,7 @@ export default formId =>
                 'payoutType',
             ]);
             if (!payoutType) {
-                payoutType = state.app.getIn(
-                    [
-                        'user_preferences',
-                        isStory ? 'defaultBlogPayout' : 'defaultCommentPayout',
-                    ],
-                    '50%'
-                );
+                payoutType = defaultPayoutType;
             }
 
             let beneficiaries = state.user.getIn([
@@ -802,6 +805,7 @@ export default formId =>
                 fields,
                 isStory,
                 username,
+                defaultPayoutType,
                 payoutType,
                 initialValues: { title, body, category },
                 state,
@@ -836,11 +840,11 @@ export default formId =>
                         value: fromJS(beneficiaries),
                     })
                 ),
-            setPayout: (formId, payout) =>
+            setPayoutType: (formId, payoutType) =>
                 dispatch(
                     userActions.set({
-                        key: ['current', 'post', formId, 'payout'],
-                        value: payout,
+                        key: ['current', 'post', formId, 'payoutType'],
+                        value: payoutType,
                     })
                 ),
             reply: ({

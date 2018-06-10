@@ -9,6 +9,7 @@
         "balance": "Balance: %(balanceValue)s",
         "balances": "Balances",
         "bid": "Bid",
+        "beneficiaries": "Beneficiaries",
         "blog": "Blog",
         "browse": "Browse",
         "buy": "Buy",
@@ -337,6 +338,11 @@
             "Use only lowercase letters, digits and one dash",
         "must_start_with_a_letter": "Must start with a letter",
         "must_end_with_a_letter_or_number": "Must end with a letter or number"
+    },
+    "post_advanced_settings_jsx": {
+        "payout_option_header":
+            "What tokens do you want for any author rewards?",
+        "update_default_in_settings": "Update defaults in user settings."
     },
     "postfull_jsx": {
         "this_post_is_not_available_due_to_a_copyright_claim":

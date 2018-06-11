@@ -102,15 +102,12 @@ function* preBroadcast_account_witness_vote({ operation, username }) {
     if (!operation.account) operation.account = username;
     const { account, witness, approve } = operation;
     // give immediate feedback
-    console.log('adding vote active ' + witness);
     yield put(
         globalActions.addActiveWitnessVote({
             account,
             witness,
         })
     );
-    console.log('added vote active ' + witness);
-    console.log('broadcasting vote ' + witness);
     return operation;
 }
 
@@ -463,12 +460,9 @@ function* accepted_vote({ operation: { author, permlink, weight } }) {
 function* accepted_account_witness_vote({
     operation: { account, witness, approve },
 }) {
-    console.log('re-tallying status of vote');
     yield put(
         globalActions.updateAccountWitnessVote({ account, witness, approve })
     );
-
-    console.log('removing from vote active: ' + witness);
 
     yield put(
         globalActions.removeActiveWitnessVote({
@@ -476,7 +470,6 @@ function* accepted_account_witness_vote({
             witness,
         })
     );
-    console.log('removed vote active');
 }
 
 function* accepted_withdraw_vesting({ operation }) {

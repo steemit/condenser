@@ -1,5 +1,5 @@
 import React from 'react';
-import CloseButton from 'react-foundation-components/lib/global/close-button';
+import CloseButton from 'app/components/elements/CloseButton';
 import { Link } from 'react-router';
 import tt from 'counterpart';
 import { SIGNUP_URL } from 'shared/constants';

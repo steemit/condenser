@@ -594,7 +594,7 @@ export default function useGeneralApi(app) {
                 config.get('conveyor_posting_wif')
             );
 
-            this.body = JSON.stringify(!!res.includes('accepted_tos'));
+            this.body = JSON.stringify(res.includes('accepted_tos'));
         } catch (error) {
             console.error(
                 'Error in /isTosAccepted api call',

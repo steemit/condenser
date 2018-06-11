@@ -670,7 +670,7 @@
             "to_self": {
                 "to_savings": "Receive from savings %(amount)s from ",
                 "from_savings": "Transfer from savings %(amount)s from ",
-                "not_savings": "Transfer %(amount)s from "
+                "not_savings": "Received %(amount)s from "
             },
             "to_someone_from_someone": {
                 "to_savings":

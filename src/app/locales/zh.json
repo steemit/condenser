@@ -660,8 +660,7 @@
         "convert_to_VESTING_TOKEN": "转换成%(VESTING_TOKEN)s",
         "balance_subject_to_3_day_withdraw_waiting_period":
             "余额取决于3天的提款等待期，",
-        "move_funds_to_another_account":
-            "将资金转移给另一个%(APP_NAME)s的用户。",
+        "move_funds_to_another_account": "将资金转移给另一个Steem的用户。",
         "protect_funds_by_requiring_a_3_day_withdraw_waiting_period":
             "通过设置3天的提款等待期来保护资金。",
         "withdraw_funds_after_the_required_3_day_waiting_period":

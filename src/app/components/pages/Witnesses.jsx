@@ -418,14 +418,10 @@ module.exports = {
             const current_proxy =
                 current_account && current_account.get('proxy');
             const witnesses = state.global.get('witnesses');
-            var witnessVotesInProgress = state.global.get(
-                `transaction_witness_vote_active_${username}`
+            const witnessVotesInProgress = state.global.get(
+                `transaction_witness_vote_active_${username}`,
+                Set()
             );
-            if (!witnessVotesInProgress) {
-                witnessVotesInProgress = Set();
-            }
-            console.log(witnessVotesInProgress.toJS());
-            console.log(witness_votes ? witness_votes.toJS() : null);
             return {
                 head_block: state.global.getIn(['props', 'head_block_number']),
                 witnesses,

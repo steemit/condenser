@@ -63,8 +63,6 @@ const transformAccount = account =>
  */
 
 const mergeAccounts = (state, account) => {
-    console.log('merge');
-    console.log(account ? account.toJS() : account);
     return state.updateIn(['accounts', account.get('name')], Map(), a =>
         a.mergeDeep(account)
     );

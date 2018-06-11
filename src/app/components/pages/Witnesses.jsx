@@ -5,7 +5,7 @@ import links from 'app/utils/Links';
 import Icon from 'app/components/elements/Icon';
 import * as transactionActions from 'app/redux/TransactionReducer';
 import ByteBuffer from 'bytebuffer';
-import { is } from 'immutable';
+import { is, Set } from 'immutable';
 import * as globalActions from 'app/redux/GlobalReducer';
 import tt from 'counterpart';
 
@@ -38,6 +38,7 @@ class Witnesses extends React.Component {
         username: string,
         witness_votes: object,
     };
+
     constructor() {
         super();
         this.state = { customUsername: '', proxy: '', proxyFailed: false };
@@ -65,6 +66,7 @@ class Witnesses extends React.Component {
     shouldComponentUpdate(np, ns) {
         return (
             !is(np.witness_votes, this.props.witness_votes) ||
+            !is(np.witnessVotesInProgress, this.props.witnessVotesInProgress) ||
             np.witnesses !== this.props.witnesses ||
             np.current_proxy !== this.props.current_proxy ||
             np.username !== this.props.username ||
@@ -76,7 +78,12 @@ class Witnesses extends React.Component {
 
     render() {
         const {
-            props: { witness_votes, current_proxy, head_block },
+            props: {
+                witness_votes,
+                witnessVotesInProgress,
+                current_proxy,
+                head_block,
+            },
             state: { customUsername, proxy },
             accountWitnessVote,
             accountWitnessProxy,
@@ -87,7 +94,6 @@ class Witnesses extends React.Component {
                 Long.fromString(String(a.get('votes'))).toString()
             )
         );
-        const up = <Icon name="chevron-up-circle" />;
         let witness_vote_count = 30;
         let rank = 1;
 
@@ -98,9 +104,17 @@ class Witnesses extends React.Component {
             const signingKey = item.get('signing_key');
             const isDisabled = signingKey == DISABLED_SIGNING_KEY;
             const lastBlock = item.get('last_confirmed_block_num');
+            const votingActive = witnessVotesInProgress.has(owner);
             const classUp =
                 'Voting__button Voting__button-up' +
-                (myVote === true ? ' Voting__button--upvoted' : '');
+                (myVote === true ? ' Voting__button--upvoted' : '') +
+                (votingActive ? ' votingUp' : '');
+            const up = (
+                <Icon
+                    name={votingActive ? 'empty' : 'chevron-up-circle'}
+                    className="upvote"
+                />
+            );
 
             let witness_thread = '';
             if (thread) {
@@ -130,17 +144,21 @@ class Witnesses extends React.Component {
                         {rank++}
                         &nbsp;&nbsp;
                         <span className={classUp}>
-                            <a
-                                href="#"
-                                onClick={accountWitnessVote.bind(
-                                    this,
-                                    owner,
-                                    !myVote
-                                )}
-                                title={tt('g.vote')}
-                            >
-                                {up}
-                            </a>
+                            {votingActive ? (
+                                up
+                            ) : (
+                                <a
+                                    href="#"
+                                    onClick={accountWitnessVote.bind(
+                                        this,
+                                        owner,
+                                        !myVote
+                                    )}
+                                    title={tt('g.vote')}
+                                >
+                                    {up}
+                                </a>
+                            )}
                         </span>
                     </td>
                     <td>
@@ -164,27 +182,44 @@ class Witnesses extends React.Component {
         if (witness_votes) {
             witness_vote_count -= witness_votes.size;
             addl_witnesses = witness_votes
+                .union(witnessVotesInProgress)
                 .filter(item => {
                     return !sorted_witnesses.has(item);
                 })
                 .map(item => {
+                    const votingActive = witnessVotesInProgress.has(item);
+                    const classUp =
+                        'Voting__button Voting__button-up' +
+                        (votingActive
+                            ? ' votingUp'
+                            : ' Voting__button--upvoted');
+                    const up = (
+                        <Icon
+                            name={votingActive ? 'empty' : 'chevron-up-circle'}
+                            className="upvote"
+                        />
+                    );
                     return (
                         <div className="row" key={item}>
                             <div className="column small-12">
                                 <span>
                                     {/*className="Voting"*/}
-                                    <span className="Voting__button Voting__button-up space-right Voting__button--upvoted">
-                                        <a
-                                            href="#"
-                                            onClick={accountWitnessVote.bind(
-                                                this,
-                                                item,
-                                                false
-                                            )}
-                                            title={tt('g.vote')}
-                                        >
-                                            {up}
-                                        </a>
+                                    <span className={classUp}>
+                                        {votingActive ? (
+                                            up
+                                        ) : (
+                                            <a
+                                                href="#"
+                                                onClick={accountWitnessVote.bind(
+                                                    this,
+                                                    item,
+                                                    false
+                                                )}
+                                                title={tt('g.vote')}
+                                            >
+                                                {up}
+                                            </a>
+                                        )}
                                         &nbsp;
                                     </span>
                                 </span>
@@ -382,11 +417,17 @@ module.exports = {
                 current_account && current_account.get('witness_votes').toSet();
             const current_proxy =
                 current_account && current_account.get('proxy');
+            const witnesses = state.global.get('witnesses');
+            const witnessVotesInProgress = state.global.get(
+                `transaction_witness_vote_active_${username}`,
+                Set()
+            );
             return {
                 head_block: state.global.getIn(['props', 'head_block_number']),
-                witnesses: state.global.get('witnesses'),
+                witnesses,
                 username,
                 witness_votes,
+                witnessVotesInProgress,
                 current_proxy,
             };
         },

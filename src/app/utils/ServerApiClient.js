@@ -15,7 +15,7 @@ export function serverApiLogin(account, signatures) {
     const request = Object.assign({}, request_base, {
         body: JSON.stringify({ account, signatures, csrf: $STM_csrf }),
     });
-    fetch('/api/v1/login_account', request);
+    return fetch('/api/v1/login_account', request);
 }
 
 export function serverApiLogout() {
@@ -77,9 +77,9 @@ export function setUserPreferences(payload) {
     return fetch('/api/v1/setUserPreferences', request);
 }
 
-export function isTosAccepted(username) {
+export function isTosAccepted() {
     const request = Object.assign({}, request_base, {
-        body: JSON.stringify({ csrf: window.$STM_csrf, username }),
+        body: JSON.stringify({ csrf: window.$STM_csrf }),
     });
     return fetch('/api/v1/isTosAccepted', request).then(res => res.json());
 }

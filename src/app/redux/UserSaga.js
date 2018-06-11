@@ -370,7 +370,7 @@ function* usernamePasswordLogin2({
             };
             sign('posting', private_keys.get('posting_private'));
             // sign('active', private_keys.get('active_private'))
-            serverApiLogin(username, signatures);
+            yield serverApiLogin(username, signatures);
         }
     } catch (error) {
         // Does not need to be fatal

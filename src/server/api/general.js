@@ -576,11 +576,11 @@ export default function useGeneralApi(app) {
 
     router.post('/isTosAccepted', koaBody, function*() {
         const params = this.request.body;
-        const { csrf, username } =
+        const { csrf } =
             typeof params === 'string' ? JSON.parse(params) : params;
         if (!checkCSRF(this, csrf)) return;
 
-        if (!username) {
+        if (!this.session.a) {
             this.body = 'missing username';
             this.status = 500;
             return;
@@ -589,14 +589,18 @@ export default function useGeneralApi(app) {
         try {
             const res = yield api.signedCallAsync(
                 'conveyor.get_tags_for_user',
-                [username],
+                [this.session.a],
                 config.get('conveyor_username'),
                 config.get('conveyor_posting_wif')
             );
 
             this.body = JSON.stringify(!!res.includes('accepted_tos'));
         } catch (error) {
-            console.error('Error in /isTosAccepted api call', username, error);
+            console.error(
+                'Error in /isTosAccepted api call',
+                this.session.a,
+                error
+            );
             this.body = JSON.stringify({ error: error.message });
             this.status = 500;
         }

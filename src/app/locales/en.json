@@ -876,7 +876,14 @@
         "i_understand_dont_show_again": "I understand, don't show me again"
     },
     "termsagree_jsx": {
-        "i_agree_to_these_terms": "I agree to these terms",
+        "please_review": "Please review our terms to continue",
+        "hi_user": "Hi %(username)s,",
+        "blurb":
+            "Our Terms of Service set the rules and guidelines that you must accept and follow in order to use Steemit and our Privacy Policy explains the type of information we collect and what we do with it. Don't worry, we don't sell your data to anyone. We do use it to meet legal requirements and to learn how to make Steemit better.",
+        "i_agree_to_steemits": "I agree to Steemit's",
+        "terms_of_service": "Terms of Service",
+        "privacy_policy": "Privacy Policy",
+        "continue": "Continue",
         "cancel": "Cancel"
     },
     "confirmtransactionform_jsx": {

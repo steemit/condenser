@@ -238,7 +238,7 @@ You can earn digital tokens on Steemit by:
 
 **Purchasing** - Users can purchase STEEM or Steem Dollar tokens directly through their Steemit wallet using bitcoin, Ether, or BitShares tokens. They are also available from other markets and exchanges including [Binance](https://www.binance.com/), [BitShares](https://openledger.info/), [Bittrex](https://bittrex.com), [BlockTrades](https://blocktrades.us), [Changelly](https://changelly.com), [GOPAX](https://www.gopax.co.kr), [HitBTC](https://hitbtc.com/), [Poloniex](https://poloniex.com), [Shapeshift.io](https://shapeshift.io), and [UpBit](https://upbit.com/).
 
-**Interest** - STEEM tokens that are powered up to Steem Power will earn a small amount of interest for holding.
+**Vesting** - STEEM tokens that are powered up to Steem Power will earn a small amount of new tokens for holding.
 
 <a href="#Table_of_Contents_General">^</a>
 ## <span id="Where_do_the_tokens_come_from">Where do the tokens come from?</span>
@@ -778,7 +778,7 @@ If you paid using bitcoin, the third party website <a href="https://bitcoinfees.
 <a href="#Table_of_Contents_Economics">^</a>
 ## <span id="What_is_powering_up_and_down">What is powering up and down?</span>
 
-**Powering up** - If you have STEEM tokens, you can Power Up to Steem Power to get more voting influence on posts and comments. Having more Steem Power also increases the amount of curation rewards and interest that you can earn. More SP also grants more influence on approving Steem witnesses.
+**Powering up** - If you have STEEM tokens, you can Power Up to Steem Power to get more voting influence on posts and comments. Having more Steem Power also increases the amount of curation rewards and new vested tokens that you can earn. More SP also grants more influence on approving Steem witnesses.
 
 **Powering down** - If you have Steem Power, you can power down to turn it into liquid STEEM over a period of time. The system will transfer 1/13 of your Steem Power to STEEM each week for about three months (13 weeks), starting 1 week from the time it is started. However, you will lose your influence in the network proportionally to how much is powered down, so think about it carefully. Power downs can be stopped at any time.
 

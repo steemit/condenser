@@ -101,7 +101,7 @@ describe('Voting', () => {
         ).dive();
         expect(wrapped.find('.Voting').length).toEqual(1);
         expect(wrapped.find('Dropdown').html()).toContain(
-            '<a href="#" title="Flag" id="downvote_button" class="flag">'
+            '<span href="#" title="Flag" id="downvote_button" class="flag">'
         );
     });
 

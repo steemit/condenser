@@ -84,6 +84,15 @@
           animation: pulse 2s infinite;
       }
   }
+  .close-button {
+    position: relative;
+    margin-left: 1em;
+  }
+  > .dropdown-comp > .dropdown__content {
+    position: absolute;
+    top: -30px;
+    left: -26px;
+  }
 }
 
 .Voting__button-up > a:hover, a.confirm_weight:hover {

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import tt from 'counterpart';
-import CloseButton from 'react-foundation-components/lib/global/close-button';
+import CloseButton from 'app/components/elements/CloseButton';
 import Icon from 'app/components/elements/Icon';
 import { Link } from 'react-router';
 

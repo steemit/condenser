@@ -5,7 +5,7 @@ import { DEFAULT_LANGUAGE } from 'app/client_config';
 const SHOW_LOGIN = 'user/SHOW_LOGIN';
 const HIDE_LOGIN = 'user/HIDE_LOGIN';
 const SHOW_TERMS = 'user/SHOW_TERMS';
-export const ACCEPT_TERMS = 'user/ACCEPT_TERMS';
+const HIDE_TERMS = 'user/HIDE_TERMS';
 export const SAVE_LOGIN_CONFIRM = 'user/SAVE_LOGIN_CONFIRM';
 export const SAVE_LOGIN = 'user/SAVE_LOGIN';
 const REMOVE_HIGH_SECURITY_KEYS = 'user/REMOVE_HIGH_SECURITY_KEYS';
@@ -86,7 +86,7 @@ export default function reducer(state = defaultState, action) {
             });
         }
 
-        case ACCEPT_TERMS:
+        case HIDE_TERMS:
             return state.merge({
                 show_terms_modal: false,
                 termsDefault: undefined,
@@ -255,7 +255,10 @@ export const showTerms = payload => ({
     payload,
 });
 
-export const acceptTerms = () => ({ type: ACCEPT_TERMS });
+export const hideTerms = payload => ({
+    type: HIDE_TERMS,
+    payload,
+});
 
 export const saveLoginConfirm = payload => ({
     type: SAVE_LOGIN_CONFIRM,

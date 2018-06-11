@@ -70,5 +70,7 @@
   "chain_id": "SDC_CHAIN_ID",
   "address_prefix": "SDC_ADDRESS_PREFIX",
   "docker_tag": "DOCKER_TAG",
-  "source_commit": "SOURCE_COMMIT"
+  "source_commit": "SOURCE_COMMIT",
+  "conveyor_posting_wif": "CONVEYOR_POSTING_WIF",
+  "conveyor_username": "CONVEYOR_USERNAME"
 }

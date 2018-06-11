@@ -104,14 +104,14 @@ class Witnesses extends React.Component {
             const signingKey = item.get('signing_key');
             const isDisabled = signingKey == DISABLED_SIGNING_KEY;
             const lastBlock = item.get('last_confirmed_block_num');
-            const votingUpActive = witnessVotesInProgress.has(owner);
+            const votingActive = witnessVotesInProgress.has(owner);
             const classUp =
                 'Voting__button Voting__button-up' +
                 (myVote === true ? ' Voting__button--upvoted' : '') +
-                (votingUpActive ? ' votingUp' : '');
+                (votingActive ? ' votingUp' : '');
             const up = (
                 <Icon
-                    name={votingUpActive ? 'empty' : 'chevron-up-circle'}
+                    name={votingActive ? 'empty' : 'chevron-up-circle'}
                     className="upvote"
                 />
             );
@@ -144,7 +144,7 @@ class Witnesses extends React.Component {
                         {rank++}
                         &nbsp;&nbsp;
                         <span className={classUp}>
-                            {votingUpActive ? (
+                            {votingActive ? (
                                 up
                             ) : (
                                 <a
@@ -182,30 +182,44 @@ class Witnesses extends React.Component {
         if (witness_votes) {
             witness_vote_count -= witness_votes.size;
             addl_witnesses = witness_votes
+                .union(witnessVotesInProgress)
                 .filter(item => {
                     return !sorted_witnesses.has(item);
                 })
                 .map(item => {
+                    const votingActive = witnessVotesInProgress.has(item);
+                    const classUp =
+                        'Voting__button Voting__button-up' +
+                        (votingActive
+                            ? ' votingUp'
+                            : ' Voting__button--upvoted');
+                    const up = (
+                        <Icon
+                            name={votingActive ? 'empty' : 'chevron-up-circle'}
+                            className="upvote"
+                        />
+                    );
                     return (
                         <div className="row" key={item}>
                             <div className="column small-12">
                                 <span>
                                     {/*className="Voting"*/}
-                                    <span className="Voting__button Voting__button-up space-right Voting__button--upvoted">
-                                        <a
-                                            href="#"
-                                            onClick={accountWitnessVote.bind(
-                                                this,
-                                                item,
-                                                false
-                                            )}
-                                            title={tt('g.vote')}
-                                        >
-                                            <Icon
-                                                name="chevron-up-circle"
-                                                className="upvote"
-                                            />
-                                        </a>
+                                    <span className={classUp}>
+                                        {votingActive ? (
+                                            up
+                                        ) : (
+                                            <a
+                                                href="#"
+                                                onClick={accountWitnessVote.bind(
+                                                    this,
+                                                    item,
+                                                    false
+                                                )}
+                                                title={tt('g.vote')}
+                                            >
+                                                {up}
+                                            </a>
+                                        )}
                                         &nbsp;
                                     </span>
                                 </span>
@@ -404,20 +418,14 @@ module.exports = {
             const current_proxy =
                 current_account && current_account.get('proxy');
             const witnesses = state.global.get('witnesses');
-            var witnessVotesInProgress = Set();
-            if (witnesses) {
-                witnesses.forEach(item => {
-                    const witness = item.get('owner');
-                    const isVotingActive = state.global.get(
-                        `transaction_witness_vote_active_${username}_${witness}`
-                    );
-                    if (isVotingActive) {
-                        witnessVotesInProgress = witnessVotesInProgress.add(
-                            witness
-                        );
-                    }
-                });
+            var witnessVotesInProgress = state.global.get(
+                `transaction_witness_vote_active_${username}`
+            );
+            if (!witnessVotesInProgress) {
+                witnessVotesInProgress = Set();
             }
+            console.log(witnessVotesInProgress.toJS());
+            console.log(witness_votes ? witness_votes.toJS() : null);
             return {
                 head_block: state.global.getIn(['props', 'head_block_number']),
                 witnesses,

@@ -15,11 +15,6 @@
 .UserProfile__top-nav {
   background-color: $color-blue-dark;  
   padding: 0;
-  .row {
-      .columns {
-          overflow-x: auto;
-      }
-  }
   .menu {
     background-color: transparent;
   }

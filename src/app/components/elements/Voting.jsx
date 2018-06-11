@@ -212,7 +212,7 @@ class Voting extends React.Component {
             // myVote === current vote
 
             const invokeFlag = (
-                <a
+                <span
                     href="#"
                     onClick={this.toggleWeightDown}
                     title="Flag"
@@ -220,7 +220,7 @@ class Voting extends React.Component {
                     className="flag"
                 >
                     {down}
-                </a>
+                </span>
             );
 
             const revokeFlag = (
@@ -234,8 +234,6 @@ class Voting extends React.Component {
                     {down}
                 </a>
             );
-
-            // Flag weight adjust.
             const dropdown = (
                 <Dropdown
                     show={showWeight}
@@ -246,8 +244,7 @@ class Voting extends React.Component {
                 >
                     <div className="Voting__adjust_weight_down">
                         {(myVote == null || myVote === 0) &&
-                            net_vesting_shares >
-                                VOTE_WEIGHT_DROPDOWN_THRESHOLD && (
+                            VOTE_WEIGHT_DROPDOWN_THRESHOLD && (
                                 <div className="weight-container">
                                     <div className="weight-display">
                                         - {weight / 100}%
@@ -265,15 +262,15 @@ class Voting extends React.Component {
                             onClick={() => this.setState({ showWeight: false })}
                         />
                         <div className="clear Voting__about-flag">
-                            <p>{ABOUT_FLAG}</p>
-                            <a
+                            {ABOUT_FLAG}
+                            <span
                                 href="#"
                                 onClick={this.voteDown}
                                 className="button outline"
                                 title="Flag"
                             >
                                 Flag
-                            </a>
+                            </span>
                         </div>
                     </div>
                 </Dropdown>

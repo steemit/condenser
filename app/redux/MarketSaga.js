@@ -1,10 +1,13 @@
-import {takeLatest} from 'redux-saga';
-import {call, put} from 'redux-saga/effects';
+import { call, put, takeLatest } from 'redux-saga/effects';
 import MarketReducer from './MarketReducer';
 import {getAccount} from './SagaShared';
 import {api} from 'golos-js';
 
-export const marketWatches = [watchLocationChange, watchUserLogin, watchMarketUpdate];
+export const marketWatches = [
+    watchLocationChange(),
+    watchUserLogin(),
+    watchMarketUpdate()
+];
 
 const wait = ms => (
     new Promise(resolve => {
@@ -75,13 +78,13 @@ export function* reloadMarket(reload_action) {
 }
 
 export function* watchUserLogin() {
-    yield* takeLatest('user/SET_USER', fetchOpenOrders);
+    yield takeLatest('user/SET_USER', fetchOpenOrders);
 }
 
 export function* watchLocationChange() {
-    yield* takeLatest('@@router/LOCATION_CHANGE', fetchMarket);
+    yield takeLatest('@@router/LOCATION_CHANGE', fetchMarket);
 }
 
 export function* watchMarketUpdate() {
-    yield* takeLatest('market/UPDATE_MARKET', reloadMarket);
+    yield takeLatest('market/UPDATE_MARKET', reloadMarket);
 }

@@ -3,44 +3,50 @@ import 'babel-polyfill';
 import 'whatwg-fetch';
 import './assets/stylesheets/app.scss';
 import plugins from 'app/utils/JsPlugins';
+import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 import Iso from 'iso';
-import universalRender from 'shared/UniversalRender';
+import { clientRender } from 'shared/UniversalRender';
 import * as golos from 'golos-js';
-import * as pixelate from './utils/effects/close-pixelate'
 
 // window.onerror = error => {
 //     if (window.$STM_csrf) serverApiRecordEvent('client_error', error);
 // };
 
-function runApp(initial_state) {
-    const config = initial_state.offchain.config
+function runApp(initialState) {
+    const config = initialState.offchain.config
     golos.config.set('websocket', config.ws_connection_client)
     golos.config.set('chain_id', config.chain_id);
     window.$STM_Config = config;
     plugins(config);
-    if (initial_state.offchain.serverBusy) {
+
+    if (initialState.offchain.serverBusy) {
         window.$STM_ServerBusy = true;
     }
-    if (initial_state.offchain.csrf) {
-        window.$STM_csrf = initial_state.offchain.csrf;
-        delete initial_state.offchain.csrf;
+    if (initialState.offchain.csrf) {
+        window.$STM_csrf = initialState.offchain.csrf;
+        delete initialState.offchain.csrf;
     }
-    const location = `${window.location.pathname}${window.location.search}${window.location.hash}`;
-    universalRender({history, location, initial_state})
-    .catch(error => {
-        console.error(error);
-    });
+
+    try {
+        clientRender(initialState)
+    } catch (error) {
+        console.error(error)
+        serverApiRecordEvent('client_error', error)
+    }
 }
 
 if (!window.Intl) {
-    require.ensure(['intl/dist/Intl'], (require) => {
-        window.IntlPolyfill = window.Intl = require('intl/dist/Intl')
-        require('intl/locale-data/jsonp/en-US.js')
-        Iso.bootstrap(runApp);
-    }, "IntlBundle");
-}
-else {
-    Iso.bootstrap(runApp);
+    require.ensure(
+        ['intl/dist/Intl'],
+        (require) => {
+            window.IntlPolyfill = window.Intl = require('intl/dist/Intl')
+            require('intl/locale-data/jsonp/en-US.js')
+            Iso.bootstrap(runApp)
+        },
+        'IntlBundle'
+    )
+} else {
+    Iso.bootstrap(runApp)
 }
 
 

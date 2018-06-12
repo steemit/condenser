@@ -1,57 +1,71 @@
+const path = require('path');
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 const git = require('git-rev-sync');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const baseConfig = require('./base.config');
 const StartServerPlugin = require('./plugins/StartServerPlugin');
 
 const Webpack_isomorphic_tools_plugin = require('webpack-isomorphic-tools/plugin');
 const webpack_isomorphic_tools_plugin =
-    new Webpack_isomorphic_tools_plugin(require('./webpack-isotools-config'))
-        .development();
+    new Webpack_isomorphic_tools_plugin(require('./webpack-isotools-config'));
 
 const WEBPACK_PORT = process.env.PORT ? parseInt(process.env.PORT)+1 : 8081;
-const PUBLIC_PATH = '/assets/';
 
-module.exports = {
-    server: {
-        port: WEBPACK_PORT,
-        options: {
-            publicPath: PUBLIC_PATH,
-            hot: true,
-            stats: {
-                assets: true,
-                colors: true,
-                version: false,
-                hash: false,
-                timings: true,
-                chunks: false,
-                chunkModules: false
+module.exports = merge(baseConfig, {
+    mode: 'development',
+    devtool: 'cheap-module-eval-source-map',
+    output: {
+        publicPath: '/assets/'
+    },
+    plugins: [
+        // new NpmInstallPlugin(),
+        // new webpack.debug.ProfilingPlugin(),
+        // new webpack.HotModuleReplacementPlugin(),
+        new webpack.DefinePlugin({
+            'process.env': {
+                BROWSER: JSON.stringify(true),
+                NODE_ENV: JSON.stringify('development'),
+                VERSION: JSON.stringify(git.long())
+            },
+            global: {
+                TYPED_ARRAY_SUPPORT: JSON.stringify(false)
             }
+        }),
+        webpack_isomorphic_tools_plugin.development(),
+        new StartServerPlugin()
+    ],
+    module: {
+        rules: [
+            {
+                test: /\.(sa|sc|c)ss$/,
+                use: [
+                    'css-hot-loader',
+                    MiniCssExtractPlugin.loader,
+                    'css-loader',
+                    {
+                        loader: 'postcss-loader',
+                        options: {
+                            plugins: () => [require('autoprefixer')({
+                                'browsers': ['> 1%', 'last 2 versions']
+                            })],
+                        }
+                    },
+                    'sass-loader',
+                ],
+            },
+        ]
+    },
+    optimization: {
+        noEmitOnErrors: true, // NoEmitOnErrorsPlugin
+    },
+    serve: {
+        port: WEBPACK_PORT,
+        hot: {
+            port: 8090,
+        },
+        dev: {
+            publicPath: '/assets/'
         }
     },
-    webpack: merge(baseConfig, {
-        mode: 'development',
-        devtool: 'cheap-module-eval-source-map',
-        output: {
-            publicPath: PUBLIC_PATH
-        },
-        plugins: [
-            new webpack.HotModuleReplacementPlugin(),
-            new webpack.DefinePlugin({
-                'process.env': {
-                    BROWSER: JSON.stringify(true),
-                    NODE_ENV: JSON.stringify('development'),
-                    VERSION: JSON.stringify(git.long())
-                },
-                global: {
-                    TYPED_ARRAY_SUPPORT: JSON.stringify(false)
-                }
-            }),
-            webpack_isomorphic_tools_plugin,
-            new StartServerPlugin()
-        ],
-        optimization: {
-            noEmitOnErrors: true, // NoEmitOnErrorsPlugin
-        }
-    })
-};
+})

@@ -2,6 +2,7 @@ const webpack = require('webpack');
 const merge = require('webpack-merge');
 const git = require('git-rev-sync');
 const baseConfig = require('./base.config');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
@@ -28,6 +29,26 @@ module.exports = merge(baseConfig, {
         // new webpack.optimize.DedupePlugin(),
         webpack_isomorphic_tools_plugin
     ],
+    module: {
+        rules: [
+            {
+                test: /\.(sa|sc|c)ss$/,
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    'css-loader',
+                    {
+                        loader: 'postcss-loader',
+                        options: {
+                            plugins: () => [require('autoprefixer')({
+                                'browsers': ['> 1%', 'last 2 versions']
+                            })],
+                        }
+                    },
+                    'sass-loader',
+                ],
+            },
+        ]
+    },
     optimization: {
         concatenateModules: true, //ModuleConcatenationPlugin
         minimizer: [ // in production mode webpack 4 use own uglify

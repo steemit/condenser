@@ -2,7 +2,7 @@ import React from 'react';
 import { renderToString } from 'react-dom/server';
 import Tarantool from 'db/tarantool';
 import ServerHTML from './server-html';
-import universalRender from '../shared/UniversalRender';
+import { serverRender } from '../shared/UniversalRender';
 import models from 'db/models';
 import secureRandom from 'secure-random';
 import ErrorPage from 'server/server-error';
@@ -93,7 +93,7 @@ async function appRender(ctx) {
           title,
           statusCode,
           meta
-        } = await universalRender({
+        } = await serverRender({
           location: ctx.request.url,
           store,
           offchain,

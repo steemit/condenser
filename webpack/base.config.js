@@ -7,6 +7,7 @@ const alias = require('./alias')
 const devMode = process.env.NODE_ENV !== 'production'
 
 module.exports = {
+    context: path.resolve(__dirname, '..'),
     entry: {
         app: ['babel-polyfill', './app/Main.js'],
         // vendor: ['react', 'react-dom', 'react-router']
@@ -23,22 +24,6 @@ module.exports = {
                 test: /\.js$|\.jsx$/, 
                 exclude: /node_modules/, 
                 use: 'babel-loader' 
-            },
-            {
-                test: /\.(sa|sc|c)ss$/,
-                use: [
-                    devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
-                    'css-loader',
-                    {
-                        loader: 'postcss-loader',
-                        options: {
-                            plugins: () => [require('autoprefixer')({
-                                'browsers': ['> 1%', 'last 2 versions']
-                            })],
-                        }
-                    },
-                    'sass-loader',
-                ],
             },
             {
                 test: /\.(jpe?g|png|gif)/,

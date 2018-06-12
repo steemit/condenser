@@ -21,7 +21,7 @@ module.exports = {
                     // which outputs `module`s with `module.name == asset_path`,
                     // but those `module`s do not contain CSS text.
                     //
-                    // The `module`s containing CSS text are 
+                    // The `module`s containing CSS text are
                     // the ones loaded with Webpack "css-loader".
                     // (which have kinda weird `module.name`)
                     //
@@ -38,7 +38,7 @@ module.exports = {
             },
 
             // How to correctly transform kinda weird `module.name`
-            // of the `module` created by Webpack "css-loader" 
+            // of the `module` created by Webpack "css-loader"
             // into the correct asset path:
             path: webpack_isomorphic_tools_plugin.styleLoaderPathExtractor,
 

@@ -104,6 +104,16 @@ export default `
 /movie/@mariarose4568/pari-2018-full-movie-in-1080-hd-dvdrip-bluerayrip
 /j/@nandinirana9218/abhiyude-kadha-anuvinteyum-2018-full-movie-online-in-hd
 /telugumovie/@agroup85/rangasthalam-full-movie-download-720p-hd-telugu-yts-yify-filmywap
+/dbooks/@tracytegan/mr-washington-chapter-10-chapter-ten
+/dbooks/@tracytegan/mr-washington-chapter-9-chapter-nine
+/dbooks/@tracytegan/mr-washington-chapter-8-chapter-eight
+/dbooks/@tracytegan/mr-washington-chapter-7-chapter-seven
+/dbooks/@tracytegan/mr-washington-chapter-6-chapter-six
+/dbooks/@tracytegan/mr-washington-chapter-5-chapter-five
+/dbooks/@tracytegan/mr-washington-chapter-4-chapter-four
+/dbooks/@tracytegan/mr-washington-chapter-3-undefined
+/dbooks/@tracytegan/mr-washington-chapter-2-
+/dbooks/@tracytegan/mr-washington-chapter-1-chapter-one
 `
     .trim()
     .split('\n');

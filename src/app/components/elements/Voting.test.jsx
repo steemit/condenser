@@ -139,7 +139,7 @@ describe('Voting', () => {
             .dive()
             .find('#downvote_button')
             .simulate('click');
-        expect(wrapped.state().weight).toEqual(10000);
+        expect(wrapped.state().weight).toEqual(666);
         expect(wrapped.state().showWeight).toEqual(true);
     });
 

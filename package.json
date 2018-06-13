@@ -20,7 +20,9 @@
     "start": "./node_modules/babel-cli/bin/babel-node.js ./webpack/dev-server.js",
     "start:local": "./.env.start.local.sh",
     "start:win32": "cross-env ./node_modules/babel-cli/bin/babel-node.js ./webpack/dev-server.js",
-    "webpush": "./node_modules/babel-cli/bin/babel-node.js ./scripts/webpush_notify.js"
+    "webpush": "./node_modules/babel-cli/bin/babel-node.js ./scripts/webpush_notify.js",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "author": "Golos.io",
   "license": "MIT",
@@ -74,6 +76,7 @@
     "lodash.debounce": "^4.0.8",
     "medium-editor-insert-plugin": "^2.3.2",
     "minimist": "^1.2.0",
+    "multistream": "^2.1.1",
     "mysql": "^2.15.0",
     "net": "^1.0.2",
     "node-sass": "4.9.0",
@@ -124,7 +127,9 @@
     "socketcluster-client": "^11.0.0",
     "speakingurl": "^9.0.0",
     "sqlite3": "^3.1.13",
+    "string-to-stream": "^1.1.1",
     "style-loader": "0.18.2",
+    "styled-components": "^3.3.2",
     "svg-inline-loader": "0.8.0",
     "svg-inline-react": "^1.0.3",
     "svgo-loader": "^1.2.1",
@@ -141,6 +146,10 @@
     "xmldom": "^0.1.27"
   },
   "devDependencies": {
+    "@storybook/addon-actions": "^3.4.7",
+    "@storybook/addon-links": "^3.4.7",
+    "@storybook/addons": "^3.4.7",
+    "@storybook/react": "^3.4.7",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
     "babel-eslint": "^8.2.3",
@@ -151,6 +160,7 @@
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
+    "babel-runtime": "^6.26.0",
     "chai": "^4.1.2",
     "chai-immutable": "^1.5.3",
     "co-mocha": "^1.2.2",

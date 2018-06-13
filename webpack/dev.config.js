@@ -14,7 +14,7 @@ const WEBPACK_PORT = process.env.PORT ? parseInt(process.env.PORT)+1 : 8081;
 
 module.exports = merge(baseConfig, {
     mode: 'development',
-    devtool: 'cheap-module-eval-source-map',
+    devtool: 'source-map',
     output: {
         publicPath: '/assets/'
     },
@@ -42,16 +42,27 @@ module.exports = merge(baseConfig, {
                 use: [
                     'css-hot-loader',
                     MiniCssExtractPlugin.loader,
-                    'css-loader',
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            sourceMap: true
+                        }
+                    },
                     {
                         loader: 'postcss-loader',
                         options: {
                             plugins: () => [require('autoprefixer')({
                                 'browsers': ['> 1%', 'last 2 versions']
                             })],
+                            sourceMap: true
                         }
                     },
-                    'sass-loader',
+                    {
+                        loader: 'sass-loader',
+                        options: {
+                            sourceMap: true
+                        }
+                    }
                 ],
             },
         ]

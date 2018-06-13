@@ -1,10 +1,15 @@
 import React from 'react';
-import { renderToString } from 'react-dom/server';
+import { renderToNodeStream } from 'react-dom/server';
+import stringToStream from 'string-to-stream';
+import multiStream from 'multistream';
+
+import { ServerStyleSheet } from 'styled-components'
 import Tarantool from 'db/tarantool';
 import ServerHTML from './server-html';
 import { serverRender } from '../shared/UniversalRender';
 import models from 'db/models';
 import secureRandom from 'secure-random';
+
 import ErrorPage from 'server/server-error';
 import {
   DEFAULT_LANGUAGE, LANGUAGES, LOCALE_COOKIE_KEY,
@@ -120,8 +125,13 @@ async function appRender(ctx) {
         };
 
         const props = { body, assets, title, meta, analytics};
+        const sheet = new ServerStyleSheet()
+        const jsx = sheet.collectStyles(<ServerHTML {...props} />)
+        const stream = sheet.interleaveWithNodeStream(renderToNodeStream(jsx))
+
         ctx.status = statusCode;
-        ctx.body = '<!DOCTYPE html>' + renderToString(<ServerHTML { ...props } />);
+        ctx.type = 'text/html'
+        ctx.body = multiStream([stringToStream('<!DOCTYPE html>'), stream])
     } catch (err) {
         // Render 500 error page from server
         const { error, redirect } = err;

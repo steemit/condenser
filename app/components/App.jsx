@@ -5,34 +5,39 @@ import Header from 'app/components/modules/Header';
 import Footer from 'app/components/modules/Footer';
 import user from 'app/redux/User';
 import g from 'app/redux/GlobalReducer';
-import TopRightMenu from '@modules/TopRightMenu';
 import { browserHistory, Link } from 'react-router';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import Dialogs from '@modules/Dialogs';
 import Modals from '@modules/Modals';
 import Icon from '@elements/Icon';
 import ScrollButton from '@elements/ScrollButton';
-import MobileAppButton from '@elements/MobileAppButton';
 import {key_utils} from 'golos-js/lib/auth/ecc';
 import MiniHeader from '@modules/MiniHeader';
 import tt from 'counterpart';
 import PageViewsCounter from '@elements/PageViewsCounter';
 import {APP_ICON, VEST_TICKER, WIKI_URL, LANDING_PAGE_URL, ABOUT_PAGE_URL, WHITEPAPER_URL, TERMS_OF_SERVICE_URL, PRIVACY_POLICY_URL, THEMES, DEFAULT_THEME } from 'app/client_config';
 import LocalizedCurrency from '@elements/LocalizedCurrency';
-import { getURL } from '@utils/URLConstants'
 
+const availableLinks = [
+    'https://www.facebook.com/www.golos.io',
+    'https://vk.com/goloschain',
+    'https://t.me/golos_support'
+]
+
+const availableDomains = [
+    'golos.io',
+    'golos.blog',
+    'golostools.com',
+    'github.com',
+    'play.google.com'
+]
 class App extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            showCallout: true,
-            showBanner: true,
-            expandCallout: false
-        };
-        this.checkLogin = this.checkLogin.bind(this);
-        // this.shouldComponentUpdate = shouldComponentUpdate(this, 'App')
-    }
 
+    state = {
+        showCallout: true,
+        showBanner: true,
+        expandCallout: false,
+    }
 
     componentWillMount() {
         if (process.env.BROWSER) localStorage.removeItem('autopost') // July 14 '16 compromise, renamed to autopost2
@@ -44,7 +49,7 @@ class App extends React.Component {
     componentDidMount() {
         window.addEventListener('storage', this.checkLogin);
         if (process.env.BROWSER) {
-            window.addEventListener('click', this.checkLeaveGolos.bind(this))
+            window.addEventListener('click', this.checkLeaveGolos)
         }
         // setTimeout(() => this.setState({showCallout: false}), 15000);
     }
@@ -72,7 +77,7 @@ class App extends React.Component {
                   p.flash !== n.flash || this.state !== nextState;
     }
 
-    checkLogin(event) {
+    checkLogin = (event) => {
       if (event.key === 'autopost2') {
         if (! event.newValue)
           this.props.logoutUser();
@@ -82,10 +87,18 @@ class App extends React.Component {
     }
 
     checkLeaveGolos = (e) => {
-      if (e.target.nodeName.toLowerCase() === 'a' && e.target.hostname && e.target.hostname !== window.location.hostname && e.target.hostname !== 'golos.blog') {
+      const a = e.target.closest('a')
+      
+      if (
+        a &&
+        a.hostname &&
+        a.hostname !== window.location.hostname &&
+        !availableLinks.includes(a.href) &&
+        !availableDomains.some(domain => new RegExp(`${domain}$`).test(a.hostname))
+      ) {
         e.stopPropagation();
         e.preventDefault();
-        this.props.history.push(`/leave_page?${e.target.href}`)
+        this.props.router.push(`/leave_page?${a.href}`)
       }
     }
 
@@ -97,12 +110,12 @@ class App extends React.Component {
 
     handleClose = () => this.setState({open: null});
 
-    navigate = (e) => {
-        const a = e.target.nodeName.toLowerCase() === 'a' ? e.target : e.target.parentNode;
-        if (a.host !== window.location.host) return;
-        e.preventDefault();
-        browserHistory.push(a.pathname + a.search + a.hash);
-    };
+    // navigate = (e) => {
+    //     const a = e.target.nodeName.toLowerCase() === 'a' ? e.target : e.target.parentNode;
+    //     if (a.host !== window.location.host) return;
+    //     e.preventDefault();
+    //     browserHistory.push(a.pathname + a.search + a.hash);
+    // };
 
     onEntropyEvent(e) {
         if(e.type === 'mousemove')

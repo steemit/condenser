@@ -26,6 +26,14 @@ export default {
             {test: /\.js$|\.jsx$/, exclude: /node_modules/, loader: 'babel'},
             {test: /\.svg$/, loader: 'svg-inline-loader'},
             {
+                test: /\.(woff(2)?|ttf|eot)(\?v=\d+\.\d+\.\d+)?$/,
+                loader: 'file-loader',
+                options: {
+                    name: '[name].[ext]',
+                    outputPath: 'fonts/'
+                }
+            },
+            {
                 test: require.resolve("blueimp-file-upload"),
                 loader: "imports?define=>false"
             },

@@ -76,6 +76,7 @@ class Voting extends React.Component {
             showWeight: false,
             myVote: null,
             weight: 10000,
+            sliderWeight: null,
         };
 
         this.voteUp = e => {
@@ -99,7 +100,7 @@ class Voting extends React.Component {
             const isFlag = this.props.flag ? true : null;
 
             // If this a user who has used the slider, get the weight from localStorage.
-            // Except when weight is 0, in that case they are un-flagging or un-voting .
+            // Except when weight is 0, in that case they are un-flagging or un-voting.
             if (
                 this.props.net_vesting_shares >
                     VOTE_WEIGHT_DROPDOWN_THRESHOLD &&
@@ -130,7 +131,7 @@ class Voting extends React.Component {
             // If this is the flag slider cast weight to negative before saving to localStorage.
             const w = up ? weight : weight * -1;
             // Save to state to ensure component re-renders.
-            this.setState({ weight });
+            this.setState({ sliderWeight: weight });
             localStorage.setItem(
                 'voteWeight' +
                     (up ? '' : 'Down') +
@@ -147,24 +148,11 @@ class Voting extends React.Component {
         };
 
         this.toggleWeightDown = e => {
-            debugger;
             e && e.preventDefault();
             this.toggleWeightUpOrDown(false);
         };
 
         this.toggleWeightUpOrDown = up => {
-            /*
-          const  {is_comment, username} = this.props
-            // If toggling weight clear the saved weight.
-            localStorage.setItem(
-              'voteWeight' +
-              (up ? '' : 'Down') +
-              '-' +
-              username +
-              (is_comment ? '-comment' : ''),
-                0 
-             );
-*/
             this.setState({ showWeight: !this.state.showWeight });
         };
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'Voting');

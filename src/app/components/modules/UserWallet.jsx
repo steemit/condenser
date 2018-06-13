@@ -13,7 +13,6 @@ import {
     vestingSteem,
     delegatedSteem,
 } from 'app/utils/StateFunctions';
-import FoundationDropdownMenu from 'app/components/elements/FoundationDropdownMenu';
 import WalletSubMenu from 'app/components/elements/WalletSubMenu';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import Tooltip from 'app/components/elements/Tooltip';
@@ -26,6 +25,7 @@ import {
 } from 'app/client_config';
 import * as transactionActions from 'app/redux/TransactionReducer';
 import * as globalActions from 'app/redux/GlobalReducer';
+import DropdownMenu from 'app/components/elements/DropdownMenu';
 
 const assetPrecision = 1000;
 
@@ -544,12 +544,11 @@ class UserWallet extends React.Component {
                     </div>
                     <div className="column small-12 medium-4">
                         {isMyAccount ? (
-                            <FoundationDropdownMenu
+                            <DropdownMenu
                                 className="Wallet_dropdown"
-                                dropdownPosition="bottom"
-                                dropdownAlignment="right"
-                                label={steem_balance_str + ' STEEM'}
-                                menu={steem_menu}
+                                items={steem_menu}
+                                el="li"
+                                selected={steem_balance_str + ' STEEM'}
                             />
                         ) : (
                             steem_balance_str + ' STEEM'
@@ -589,12 +588,11 @@ class UserWallet extends React.Component {
                     </div>
                     <div className="column small-12 medium-4">
                         {isMyAccount ? (
-                            <FoundationDropdownMenu
+                            <DropdownMenu
                                 className="Wallet_dropdown"
-                                dropdownPosition="bottom"
-                                dropdownAlignment="right"
-                                label={power_balance_str + ' STEEM'}
-                                menu={power_menu}
+                                items={power_menu}
+                                el="li"
+                                selected={power_balance_str + ' STEEM'}
                             />
                         ) : (
                             power_balance_str + ' STEEM'
@@ -621,12 +619,11 @@ class UserWallet extends React.Component {
                     </div>
                     <div className="column small-12 medium-4">
                         {isMyAccount ? (
-                            <FoundationDropdownMenu
+                            <DropdownMenu
                                 className="Wallet_dropdown"
-                                dropdownPosition="bottom"
-                                dropdownAlignment="right"
-                                label={sbd_balance_str}
-                                menu={dollar_menu}
+                                items={dollar_menu}
+                                el="li"
+                                selected={sbd_balance_str}
                             />
                         ) : (
                             sbd_balance_str
@@ -668,24 +665,22 @@ class UserWallet extends React.Component {
                     </div>
                     <div className="column small-12 medium-4">
                         {isMyAccount ? (
-                            <FoundationDropdownMenu
+                            <DropdownMenu
                                 className="Wallet_dropdown"
-                                dropdownPosition="bottom"
-                                dropdownAlignment="right"
-                                label={savings_balance_str}
-                                menu={savings_menu}
+                                items={savings_menu}
+                                el="li"
+                                selected={savings_balance_str}
                             />
                         ) : (
                             savings_balance_str
                         )}
                         <br />
                         {isMyAccount ? (
-                            <FoundationDropdownMenu
+                            <DropdownMenu
                                 className="Wallet_dropdown"
-                                dropdownPosition="bottom"
-                                dropdownAlignment="right"
-                                label={savings_sbd_balance_str}
-                                menu={savings_sbd_menu}
+                                items={savings_sbd_menu}
+                                el="li"
+                                selected={savings_sbd_balance_str}
                             />
                         ) : (
                             savings_sbd_balance_str
@@ -765,7 +760,10 @@ export default connect(
     // mapStateToProps
     (state, ownProps) => {
         let price_per_steem = undefined;
-        const feed_price = state.global.get('feed_price');
+        const feed_price = state.user.get(
+            'latest_feed_price',
+            state.global.get('feed_price')
+        );
         if (feed_price && feed_price.has('base') && feed_price.has('quote')) {
             const { base, quote } = feed_price.toJS();
             if (/ SBD$/.test(base) && / STEEM$/.test(quote))

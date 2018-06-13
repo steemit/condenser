@@ -79,11 +79,11 @@ class Voting extends React.Component {
         };
 
         this.voteUp = e => {
-            e.preventDefault();
+            e && e.preventDefault();
             this.voteUpOrDown(true);
         };
         this.voteDown = e => {
-            e.preventDefault();
+            e && e.preventDefault();
             this.voteUpOrDown(false);
         };
         this.voteUpOrDown = up => {
@@ -127,7 +127,7 @@ class Voting extends React.Component {
             this.toggleWeightUpOrDown(true);
         };
         this.toggleWeightDown = e => {
-            e.preventDefault();
+            e && e.preventDefault();
             this.toggleWeightUpOrDown(false);
         };
         this.toggleWeightUpOrDown = up => {
@@ -183,8 +183,9 @@ class Voting extends React.Component {
             post_obj,
             price_per_steem,
             sbd_print_rate,
+            username,
         } = this.props;
-        const { username } = this.props;
+
         const { votingUp, votingDown, showWeight, weight, myVote } = this.state;
         // console.log('-- Voting.render -->', myVote, votingUp, votingDown);
         if (flag && !username) return null;
@@ -200,6 +201,7 @@ class Voting extends React.Component {
                             ? 'empty'
                             : myVote < 0 ? 'flag2' : 'flag1'
                     }
+                    className="flag"
                 />
             );
             const classDown =
@@ -207,7 +209,6 @@ class Voting extends React.Component {
                 (myVote < 0 ? ' Voting__button--downvoted' : '') +
                 (votingDownActive ? ' votingDown' : '');
             const flagWeight = post_obj.getIn(['stats', 'flagWeight']);
-
             // myVote === current vote
             const dropdown = (
                 <FoundationDropdown
@@ -246,7 +247,6 @@ class Voting extends React.Component {
                     </div>
                 </FoundationDropdown>
             );
-
             const flagClickAction =
                 myVote === null || myVote === 0
                     ? this.toggleWeightDown
@@ -262,7 +262,12 @@ class Voting extends React.Component {
                         {votingDownActive ? (
                             down
                         ) : (
-                            <a href="#" onClick={flagClickAction} title="Flag">
+                            <a
+                                href="#"
+                                onClick={flagClickAction}
+                                title="Flag"
+                                id="downvote_button"
+                            >
                                 {down}
                             </a>
                         )}
@@ -307,7 +312,10 @@ class Voting extends React.Component {
         // Show pending payout amount for declined payment posts
         if (max_payout === 0) payout = pending_payout;
         const up = (
-            <Icon name={votingUpActive ? 'empty' : 'chevron-up-circle'} />
+            <Icon
+                name={votingUpActive ? 'empty' : 'chevron-up-circle'}
+                className="upvote"
+            />
         );
         const classUp =
             'Voting__button Voting__button-up' +
@@ -500,6 +508,7 @@ class Voting extends React.Component {
                                         ? tt('g.remove_vote')
                                         : tt('g.upvote')
                                 }
+                                id="upvote_button"
                             >
                                 {up}
                             </a>

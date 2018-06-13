@@ -2,19 +2,292 @@ import React from 'react';
 import { IntlProvider } from 'react-intl';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
-import { configure, shallow } from 'enzyme';
+import { configure, mount, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-15';
-import { fromJS } from 'immutable';
+import { fromJS, Map } from 'immutable';
 import renderer from 'react-test-renderer';
 import rootReducer from 'app/redux/RootReducer';
-
 import Voting from './Voting';
+import configureMockStore from 'redux-mock-store';
+
+global.window = {};
+import localStorage from 'mock-local-storage';
+window.localStorage = global.localStorage;
 
 configure({ adapter: new Adapter() });
 
-const store = createStore(rootReducer);
+const voteTestObj = fromJS({
+    stats: {
+        total_votes: 1,
+    },
+    max_accepted_payout: '999999 SBD',
+    percent_steem_dollars: 0,
+    pending_payout_value: '10 SBD',
+    cashout_time: '2018-03-30T10:00:00Z',
+});
+
+const mockGlobal = Map({
+    props: Map({ sbd_print_rate: 99 }),
+    feed_price: Map({
+        base: '5 SBD',
+        quote: '10 STEEM',
+    }),
+    content: Map({
+        test: Map({
+            author: 'Jane Doe',
+            permlink: 'zip',
+            active_votes: Map({}),
+            stats: {
+                total_votes: 1,
+            },
+            max_accepted_payout: '999999 SBD',
+            percent_steem_dollars: 0,
+            pending_payout_value: '10 SBD',
+            cashout_time: '2018-03-30T10:00:00Z',
+            pending_payout_sbd: 99,
+        }),
+    }),
+});
+
+const mockUser = Map({ current: Map({ username: 'Janice' }) });
 
 describe('Voting', () => {
+    it('should render nothing if flag prop is true and user is not logged in.', () => {
+        const mockStore = configureMockStore()({
+            global: Map({}),
+            market: {},
+            offchain: {},
+            user: {},
+            transaction: {},
+            discussion: {},
+            routing: {},
+            app: {},
+        });
+        let wrapped = shallow(
+            <Voting
+                post="test"
+                flag={true}
+                vote={(w, p) => {}}
+                post_obj={voteTestObj}
+                price_per_steem={1}
+                sbd_print_rate={10000}
+                store={mockStore}
+            />
+        ).dive();
+        expect(wrapped.isEmptyRender()).toEqual(true);
+    });
+
+    it('should render flag if user is logged in and flag prop is true.', () => {
+        const mockStore = configureMockStore()({
+            global: mockGlobal,
+            market: {},
+            offchain: {},
+            user: mockUser,
+            transaction: {},
+            discussion: {},
+            routing: {},
+            app: {},
+        });
+        let wrapped = shallow(
+            <Voting
+                post="test"
+                flag={true}
+                vote={(w, p) => {}}
+                post_obj={voteTestObj}
+                price_per_steem={1}
+                sbd_print_rate={10000}
+                store={mockStore}
+            />
+        ).dive();
+        expect(wrapped.find('.Voting').length).toEqual(1);
+        expect(wrapped.find('.flag').length).toEqual(1);
+    });
+
+    it('should change state.weight and state.showWeight as expected when flag is clicked', () => {
+        const mockStore = configureMockStore()({
+            global: mockGlobal,
+            market: {},
+            offchain: {},
+            user: mockUser,
+            transaction: {},
+            discussion: {},
+            routing: {},
+            app: {},
+        });
+        let wrapped = shallow(
+            <Voting
+                post="test"
+                flag={true}
+                vote={(w, p) => {}}
+                post_obj={voteTestObj}
+                price_per_steem={1}
+                sbd_print_rate={10000}
+                store={mockStore}
+            />
+        ).dive();
+        wrapped.setState({ weight: 666, showWeight: false });
+        wrapped.find('#downvote_button').simulate('click');
+        expect(wrapped.state().weight).toEqual(10000);
+        expect(wrapped.state().showWeight).toEqual(true);
+    });
+
+    it('should not dispatch an action when flag is clicked and myVote is 0.', () => {
+        const mockStore = configureMockStore()({
+            global: mockGlobal,
+            market: {},
+            offchain: {},
+            user: mockUser,
+            transaction: {},
+            discussion: {},
+            routing: {},
+            app: {},
+        });
+        let wrapped = shallow(
+            <Voting
+                post="test"
+                flag={true}
+                vote={(w, p) => {}}
+                post_obj={voteTestObj}
+                price_per_steem={1}
+                sbd_print_rate={10000}
+                store={mockStore}
+            />
+        ).dive();
+        wrapped.setState({ myVote: 0 });
+        wrapped.find('#downvote_button').simulate('click');
+        expect(mockStore.getActions()).toEqual([]);
+    });
+
+    it('should dispatch an action when flag is clicked and myVote is negative', () => {
+        const mockStore = configureMockStore()({
+            global: mockGlobal,
+            market: {},
+            offchain: {},
+            user: mockUser,
+            transaction: {},
+            discussion: {},
+            routing: {},
+            app: {},
+        });
+        let wrapped = shallow(
+            <Voting
+                post="test"
+                flag={true}
+                vote={(w, p) => {}}
+                post_obj={voteTestObj}
+                price_per_steem={1}
+                sbd_print_rate={10000}
+                store={mockStore}
+            />
+        ).dive();
+        wrapped.setState({ myVote: -666 });
+        wrapped.find('#downvote_button').simulate('click');
+        expect(mockStore.getActions()[0].type).toEqual(
+            'transaction/BROADCAST_OPERATION'
+        );
+        expect(mockStore.getActions()[0].payload.operation.weight).toEqual(0);
+        expect(mockStore.getActions()[0].payload.operation.voter).toEqual(
+            'Janice'
+        );
+    });
+
+    it('should dispatch an action when flag is clicked and myVote is greater than 0', () => {
+        const mockStore = configureMockStore()({
+            global: mockGlobal,
+            market: {},
+            offchain: {},
+            user: mockUser,
+            transaction: {},
+            discussion: {},
+            routing: {},
+            app: {},
+        });
+        let wrapped = shallow(
+            <Voting
+                post="test"
+                flag={true}
+                vote={(w, p) => {}}
+                post_obj={voteTestObj}
+                price_per_steem={1}
+                sbd_print_rate={10000}
+                store={mockStore}
+            />
+        ).dive();
+        wrapped.setState({ myVote: 666 });
+        expect(mockStore.getActions()).toEqual([]);
+        wrapped.find('#downvote_button').simulate('click');
+        expect(mockStore.getActions()[0].type).toEqual(
+            'transaction/BROADCAST_OPERATION'
+        );
+        expect(mockStore.getActions()[0].payload.operation.weight).toEqual(
+            -10000
+        );
+        expect(mockStore.getActions()[0].payload.operation.voter).toEqual(
+            'Janice'
+        );
+    });
+
+    it('should render upvote and should not render flag if user is logged in and flag prop is false.', () => {
+        const mockStore = configureMockStore()({
+            global: mockGlobal,
+            market: {},
+            offchain: {},
+            user: mockUser,
+            transaction: {},
+            discussion: {},
+            routing: {},
+            app: {},
+        });
+        let wrapped = shallow(
+            <Voting
+                post="test"
+                flag={false}
+                vote={(w, p) => {}}
+                post_obj={voteTestObj}
+                price_per_steem={1}
+                sbd_print_rate={10000}
+                store={mockStore}
+            />
+        ).dive();
+        expect(wrapped.find('.flag').length).toEqual(0);
+        expect(wrapped.find('.Voting__inner').length).toEqual(1);
+        expect(wrapped.find('.upvote').length).toEqual(1);
+    });
+
+    it('should dispatch an action with payload when upvote button is clicked.', () => {
+        const mockStore = configureMockStore()({
+            global: mockGlobal,
+            market: {},
+            offchain: {},
+            user: mockUser,
+            transaction: {},
+            discussion: {},
+            routing: {},
+            app: {},
+        });
+        let wrapped = shallow(
+            <Voting
+                post="test"
+                flag={false}
+                vote={(w, p) => {}}
+                post_obj={voteTestObj}
+                price_per_steem={1}
+                sbd_print_rate={10000}
+                store={mockStore}
+            />
+        ).dive();
+        wrapped.find('#upvote_button').simulate('click');
+        expect(mockStore.getActions()[0].type).toEqual(
+            'transaction/BROADCAST_OPERATION'
+        );
+        expect(mockStore.getActions()[0].payload.operation.weight).toEqual(
+            10000
+        );
+        expect(mockStore.getActions()[0].payload.operation.voter).toEqual(
+            'Janice'
+        );
+    });
+
     it('should show all SP if percent_steem_dollars is 0', () => {
         const post_obj = fromJS({
             stats: {
@@ -25,6 +298,7 @@ describe('Voting', () => {
             pending_payout_value: '10 SBD',
             cashout_time: '2018-03-30T10:00:00Z',
         });
+        const store = createStore(rootReducer);
         const component = renderer.create(
             <Provider store={store}>
                 <IntlProvider locale="en">
@@ -44,6 +318,7 @@ describe('Voting', () => {
     });
 
     it('should omit liquid steem if print rate is 10000', () => {
+        const store = createStore(rootReducer);
         const post_obj = fromJS({
             stats: {
                 total_votes: 1,
@@ -81,6 +356,7 @@ describe('Voting', () => {
             pending_payout_value: '10 SBD',
             cashout_time: '2018-03-30T10:00:00Z',
         });
+        const store = createStore(rootReducer);
         const component = renderer.create(
             <Provider store={store}>
                 <IntlProvider locale="en">

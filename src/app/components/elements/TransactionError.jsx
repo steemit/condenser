@@ -1,10 +1,11 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as transactionActions from 'app/redux/TransactionReducer';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import { Map } from 'immutable';
 
-const { func, string } = React.PropTypes;
+const { func, string } = PropTypes;
 
 /** Sole consumer for a transaction error of a given type. */
 class TransactionError extends React.Component {

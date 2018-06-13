@@ -4,13 +4,13 @@ import transaction from 'app/redux/Transaction';
 import Slider from 'react-rangeslider';
 import Icon from 'app/components/elements/Icon';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
-import {formatDecimal, parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
+import { parsePayoutAmount } from 'app/utils/ParsersAndFormatters';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import FoundationDropdown from 'app/components/elements/FoundationDropdown';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import tt from 'counterpart';
-import LocalizedCurrency, {localizedCurrency} from 'app/components/elements/LocalizedCurrency';
+import LocalizedCurrency, { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
 import { DEBT_TICKER } from 'app/client_config';
 
 const MAX_VOTES_DISPLAY = 20;
@@ -33,6 +33,7 @@ class Voting extends React.Component {
         active_votes: React.PropTypes.object,
         loggedin: React.PropTypes.bool,
         post_obj: React.PropTypes.object,
+        net_vesting_shares: React.PropTypes.number,
         vesting_shares: React.PropTypes.number,
         voting: React.PropTypes.bool,
     };
@@ -63,7 +64,7 @@ class Voting extends React.Component {
             this.setState({votingUp: up, votingDown: !up});
             const {myVote} = this.state;
             const {author, permlink, username, is_comment} = this.props;
-            if (this.props.vesting_shares > VOTE_WEIGHT_DROPDOWN_THRESHOLD) {
+            if (this.props.net_vesting_shares > VOTE_WEIGHT_DROPDOWN_THRESHOLD) {
                 localStorage.setItem('voteWeight' + (up ? '' : 'Down') + '-'+username+(is_comment ? '-comment' : ''),
                     this.state.weight);
             }
@@ -117,10 +118,9 @@ class Voting extends React.Component {
     }
 
     render() {
-        const {active_votes, showList, voting, flag, vesting_shares, is_comment, post_obj} = this.props;
+        const {active_votes, showList, voting, flag, net_vesting_shares, is_comment, post_obj} = this.props;
         const {username} = this.props;
         const {votingUp, votingDown, showWeight, weight, myVote} = this.state;
-        // console.log('-- Voting.render -->', myVote, votingUp, votingDown);
         if(flag && !username) return null
 
         const votingUpActive = voting && votingUp;
@@ -143,7 +143,7 @@ class Voting extends React.Component {
 
             // myVote === current vote
             const dropdown = <FoundationDropdown show={showWeight} onHide={() => this.setState({showWeight: false})} className="Voting__adjust_weight_down">
-                {(myVote == null || myVote === 0) && vesting_shares > VOTE_WEIGHT_DROPDOWN_THRESHOLD &&
+                {(myVote == null || myVote === 0) && net_vesting_shares > VOTE_WEIGHT_DROPDOWN_THRESHOLD &&
                     <div>
                         <div className="weight-display">- {weight / 100}%</div>
                         <Slider min={100} max={10000} step={100} value={weight} onChange={this.handleWeightChange} />
@@ -235,7 +235,7 @@ class Voting extends React.Component {
 
         let voteUpClick = this.voteUp;
         let dropdown = null;
-        if (myVote <= 0 && vesting_shares > VOTE_WEIGHT_DROPDOWN_THRESHOLD) {
+        if (myVote <= 0 && net_vesting_shares > VOTE_WEIGHT_DROPDOWN_THRESHOLD) {
             voteUpClick = this.toggleWeightUp;
             dropdown = <FoundationDropdown show={showWeight} onHide={() => this.setState({showWeight: false})}>
                 <div className="Voting__adjust_weight">
@@ -262,7 +262,6 @@ class Voting extends React.Component {
 }
 
 export default connect(
-    // mapStateToProps
     (state, ownProps) => {
         const post = state.global.getIn(['content', ownProps.post])
         if (!post) return ownProps
@@ -272,22 +271,38 @@ export default connect(
         const is_comment = post.get('parent_author') !== ''
 
         const current_account = state.user.get('current')
-        const username = current_account ? current_account.get('username') : null;
-        const vesting_shares = current_account ? current_account.get('vesting_shares') : 0.0;
+        const username = current_account
+            ? current_account.get('username')
+            : null;
+        const vesting_shares = current_account
+            ? current_account.get('vesting_shares')
+            : 0.0;
+        const delegated_vesting_shares = current_account
+            ? current_account.get('delegated_vesting_shares')
+            : 0.0;
+        const received_vesting_shares = current_account
+            ? current_account.get('received_vesting_shares')
+            : 0.0;
+        const net_vesting_shares = vesting_shares - delegated_vesting_shares + received_vesting_shares;
         const voting = state.global.get(`transaction_vote_active_${author}_${permlink}`)
 
         return {
             post: ownProps.post,
             flag: ownProps.flag,
             showList: ownProps.showList,
-            author, permlink, username, active_votes, vesting_shares, is_comment,
+            author,
+            permlink,
+            username,
+            active_votes,
+            net_vesting_shares,
+            vesting_shares,
+            is_comment,
             post_obj: post,
             loggedin: username != null,
             voting
         }
     },
 
-    // mapDispatchToProps
     (dispatch) => ({
         vote: (weight, {author, permlink, username, myVote}) => {
             const confirm = () => {

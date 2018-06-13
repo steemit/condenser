@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import { cleanReduxInput } from 'app/utils/ReduxForms';
@@ -7,18 +8,18 @@ import tt from 'counterpart';
 class CategorySelector extends React.Component {
     static propTypes = {
         // HTML props
-        id: React.PropTypes.string, // DOM id for active component (focusing, etc...)
-        autoComplete: React.PropTypes.string,
-        placeholder: React.PropTypes.string,
-        onChange: React.PropTypes.func.isRequired,
-        onBlur: React.PropTypes.func.isRequired,
-        isEdit: React.PropTypes.bool,
-        disabled: React.PropTypes.bool,
-        value: React.PropTypes.string,
-        tabIndex: React.PropTypes.number,
+        id: PropTypes.string, // DOM id for active component (focusing, etc...)
+        autoComplete: PropTypes.string,
+        placeholder: PropTypes.string,
+        onChange: PropTypes.func.isRequired,
+        onBlur: PropTypes.func.isRequired,
+        isEdit: PropTypes.bool,
+        disabled: PropTypes.bool,
+        value: PropTypes.string,
+        tabIndex: PropTypes.number,
 
         // redux connect (overwrite in HTML)
-        trending: React.PropTypes.object.isRequired, // Immutable.List
+        trending: PropTypes.object.isRequired, // Immutable.List
     };
     static defaultProps = {
         autoComplete: 'on',

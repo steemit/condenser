@@ -75,5 +75,7 @@
   "chain_id": "0000000000000000000000000000000000000000000000000000000000000000",
   "address_prefix": "STM",
   "docker_tag": false,
-  "source_commit": false
+  "source_commit": false,
+  "conveyor_posting_wif": false,
+  "conveyor_username": false
 }

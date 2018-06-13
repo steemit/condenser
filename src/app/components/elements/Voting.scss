@@ -61,6 +61,9 @@
     margin-left: 0;
     border-radius: 50%;
   }
+  div > a {
+    padding-right: 0.5rem;
+  }
   > a {
     padding-right: 0.5rem;
   }
@@ -238,9 +241,6 @@
     }
     .rangeslider {
       margin-right: 2rem;
-    }
-    .close-button {
-      right: 0;
     }
 }
 

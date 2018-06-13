@@ -59,7 +59,7 @@ class TermsAgree extends Component {
                         <a
                             target="_blank"
                             rel="noopener noreferrer"
-                            href="https://steemit.com/tos.html"
+                            href="/tos.html"
                         >
                             {tt('termsagree_jsx.terms_of_service')}
                         </a>
@@ -77,7 +77,7 @@ class TermsAgree extends Component {
                         <a
                             target="_blank"
                             rel="noopener noreferrer"
-                            href="https://steemit.com/privacy.html"
+                            href="/privacy.html"
                         >
                             {tt('termsagree_jsx.privacy_policy')}
                         </a>

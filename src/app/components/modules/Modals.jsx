@@ -183,7 +183,12 @@ export default connect(
             show_promote_post_modal: state.user.get('show_promote_post_modal'),
             show_signup_modal: state.user.get('show_signup_modal'),
             notifications: state.app.get('notifications'),
-            show_terms_modal: state.user.get('show_terms_modal'),
+            show_terms_modal:
+                state.user.get('show_terms_modal') &&
+                state.routing.locationBeforeTransitions.pathname !==
+                    '/tos.html' &&
+                state.routing.locationBeforeTransitions.pathname !==
+                    '/privacy.html',
             show_bandwidth_error_modal: state.transaction.getIn([
                 'errors',
                 'bandwidthError',

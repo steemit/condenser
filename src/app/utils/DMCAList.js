@@ -114,6 +114,7 @@ export default `
 /dbooks/@tracytegan/mr-washington-chapter-3-undefined
 /dbooks/@tracytegan/mr-washington-chapter-2-
 /dbooks/@tracytegan/mr-washington-chapter-1-chapter-one
+/octoberfullmovie/@gautamsoni4k/october-2018-full-movie-download-online-free-watch-hd-print-bluray
 `
     .trim()
     .split('\n');

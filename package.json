@@ -99,7 +99,6 @@
     "react-copy-to-clipboard": "4.3.1",
     "react-dom": "15.6.2",
     "react-dropzone": "3.13.4",
-    "react-foundation-components": "git+https://github.com/valzav/react-foundation-components.git#d14362c7c8eee946a4acc3b18d70271d5a82813e",
     "react-highcharts": "8.4.2",
     "react-intl": "2.4.0",
     "react-medium-editor": "1.8.1",

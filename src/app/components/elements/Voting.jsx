@@ -243,6 +243,7 @@ class Voting extends React.Component {
                         value={b}
                         onChange={this.handleWeightChange(up)}
                         onChangeComplete={this.storeSliderWeight(up)}
+                        tooltip={false}
                     />
                 </span>
             );

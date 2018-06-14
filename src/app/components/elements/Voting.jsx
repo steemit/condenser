@@ -40,8 +40,7 @@ const ABOUT_FLAG = (
 );
 
 const MAX_VOTES_DISPLAY = 20;
-//const VOTE_WEIGHT_DROPDOWN_THRESHOLD = 1.0 * 1000.0 * 1000.0;
-const VOTE_WEIGHT_DROPDOWN_THRESHOLD = 1;
+const VOTE_WEIGHT_DROPDOWN_THRESHOLD = 1.0 * 1000.0 * 1000.0;
 const SBD_PRINT_RATE_MAX = 10000;
 
 class Voting extends React.Component {

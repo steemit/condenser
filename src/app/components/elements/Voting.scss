@@ -299,6 +299,7 @@
       transform: translate3d(-50%,-50%,0);
       &:active {
         background: $color-teal;
+        box-shadow: none;
       }
     }
   }
@@ -313,14 +314,6 @@
       background: $color-teal;
       box-shadow: none;
       left: 0;
-    }
-    .rangeslider__handle {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      &:active {
-        box-shadow: none;
-      }
     }
   }
   .Voting__adjust_weight_close {

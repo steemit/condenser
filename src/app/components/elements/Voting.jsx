@@ -40,7 +40,8 @@ const ABOUT_FLAG = (
 );
 
 const MAX_VOTES_DISPLAY = 20;
-const VOTE_WEIGHT_DROPDOWN_THRESHOLD = 1.0 * 1000.0 * 1000.0;
+//const VOTE_WEIGHT_DROPDOWN_THRESHOLD = 1.0 * 1000.0 * 1000.0;
+const VOTE_WEIGHT_DROPDOWN_THRESHOLD = 1;
 const SBD_PRINT_RATE_MAX = 10000;
 
 class Voting extends React.Component {
@@ -233,9 +234,10 @@ class Voting extends React.Component {
             const b = up
                 ? this.state.sliderWeight.up
                 : this.state.sliderWeight.down;
+            const s = up ? '' : '-';
             return (
                 <span>
-                    <div className="weight-display">{b / 100}%</div>
+                    <div className="weight-display">{s + b / 100}%</div>
                     <Slider
                         min={100}
                         max={10000}

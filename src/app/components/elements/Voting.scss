@@ -292,8 +292,11 @@
       background: #fff;
       border: 1px solid #ccc;
       cursor: pointer;
-      display: inline-block;
-      position: absolute;
+      width: 30px;
+      height: 30px;
+      border-radius: 30px;
+      top: 50%;
+      transform: translate3d(-50%,-50%,0);
       &:active {
         background: $color-teal;
       }
@@ -315,7 +318,6 @@
       width: 30px;
       height: 30px;
       border-radius: 50%;
-      top: -10px;
       &:active {
         box-shadow: none;
       }

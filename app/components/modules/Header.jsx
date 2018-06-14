@@ -225,25 +225,27 @@ class Header extends React.Component {
                         </div>
                     </div>
                 </div>
-                <div className={'Header__sub-nav show-for-medium hide-for-small ' + (this.state.subheader_hidden ? ' hidden' : '')}>
-                    <div className="row">
-                        <div className="columns">
-                            <HorizontalMenu items={sort_order_menu_horizontal} >
-                            <LinkWithDropdown
-                                closeOnClickOutside
-                                dropdownPosition="bottom"
-                                dropdownAlignment="left"
-                                dropdownContent={<VerticalMenu items={domestic_menu} title={tt('settings_jsx.choose_domestic')} />}
-                                >
-                                <a className="domestic-selector" title={tt('settings_jsx.choose_domestic')} onClick={e => e.preventDefault()}>
-                                    <Icon className="flag" name={'flags/1x1/' + currentDomesticKey} /> <Icon className="caret" name="caret-down" />
-                                    {/* {DOMESTIC[currentDomesticKey].split(' ')[0]} <Icon name="caret-down" /> */}
-                                </a>
-                                </LinkWithDropdown>
-                            </HorizontalMenu>
+                {route.hideSubMenu ? null :
+                    <div className={'Header__sub-nav show-for-medium hide-for-small ' + (this.state.subheader_hidden ? ' hidden' : '')}>
+                        <div className="row">
+                            <div className="columns">
+                                <HorizontalMenu items={sort_order_menu_horizontal} >
+                                <LinkWithDropdown
+                                    closeOnClickOutside
+                                    dropdownPosition="bottom"
+                                    dropdownAlignment="left"
+                                    dropdownContent={<VerticalMenu items={domestic_menu} title={tt('settings_jsx.choose_domestic')} />}
+                                    >
+                                    <a className="domestic-selector" title={tt('settings_jsx.choose_domestic')} onClick={e => e.preventDefault()}>
+                                        <Icon className="flag" name={'flags/1x1/' + currentDomesticKey} /> <Icon className="caret" name="caret-down" />
+                                        {/* {DOMESTIC[currentDomesticKey].split(' ')[0]} <Icon name="caret-down" /> */}
+                                    </a>
+                                    </LinkWithDropdown>
+                                </HorizontalMenu>
+                            </div>
                         </div>
                     </div>
-                </div>
+                }
             </header>
         );
     }

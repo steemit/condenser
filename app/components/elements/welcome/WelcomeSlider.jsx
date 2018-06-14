@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { Link } from 'react-router'
 import Slider from 'react-slick'
 import Userpic from 'app/components/elements/Userpic'
@@ -9,7 +10,7 @@ export default class WelcomeSlider extends Component {
     slides: PropTypes.array,
   }
 
-  defaultProps = {
+  static defaultProps = {
     slides: []
   }
 

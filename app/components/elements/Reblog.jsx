@@ -22,7 +22,7 @@ export default class Reblog extends React.Component {
         this.state = {active: false, loading: false}
     }
 
-    componentWillMount() {
+    componentDidMount() {
         const {account} = this.props
         if(account) {
             this.setState({active: this.isReblogged(account)})

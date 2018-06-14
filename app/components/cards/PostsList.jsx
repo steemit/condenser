@@ -53,10 +53,6 @@ class PostsList extends React.Component {
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'PostsList')
     }
 
-    componentWillMount() {
-        this.readNsfwPref()
-    }
-
     readNsfwPref() {
         if(!process.env.BROWSER) return
         const {username} = this.props
@@ -66,6 +62,7 @@ class PostsList extends React.Component {
     }
 
     componentDidMount() {
+        this.readNsfwPref()
         this.attachScrollListener();
     }
 

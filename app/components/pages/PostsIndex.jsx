@@ -46,11 +46,12 @@ class PostsIndex extends React.Component {
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'PostsIndex')
         this.loadSelected = this.loadSelected.bind(this);
         this.updateSubscribe = this.updateSubscribe.bind(this);
+        this.listRef = React.createRef();
     }
 
     componentDidUpdate(prevProps) {
         if (window.innerHeight && window.innerHeight > 3000 && prevProps.discussions !== this.props.discussions) {
-            this.refs.list.fetchIfNeeded();
+            this.listRef.fetchIfNeeded();
         }
     }
 
@@ -185,7 +186,7 @@ class PostsIndex extends React.Component {
                     {markNotificationRead}
                     {(!fetching && (posts && !posts.size)) ? <Callout>{emptyText}</Callout> :
                         <PostsList
-                            ref="list"
+                            ref={this.listRef}
                             posts={posts ? posts : Immutable.List()}
                             loading={fetching}
                             category={category}

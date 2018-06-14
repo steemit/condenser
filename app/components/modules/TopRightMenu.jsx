@@ -123,10 +123,10 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
     }
     additional_menu.push(
         { link: '/welcome', value: tt("navigation.welcome") },
-        { link: getURL('WIKI_URL'), value: tt('navigation.wiki') },
+        { link: getURL('WIKI_URL'), value: tt('navigation.wiki'), target: 'blank' },
         { link: '/market', value: tt('userwallet_jsx.market') },
         { link: '/~witnesses', value: tt("navigation.witnesses") },
-        { link: 'http://golostools.com/', value: tt('navigation.APP_NAME_app_center', { APP_NAME }) }
+        { link: 'http://golostools.com/', value: tt('navigation.APP_NAME_app_center', { APP_NAME }), target: 'blank' }
     );
     const navAdditional = <LinkWithDropdown
         closeOnClickOutside

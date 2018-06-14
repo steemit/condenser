@@ -24,7 +24,7 @@ export default function resolveRoute(path)
         return {page: 'About'};
     }
     if (path === '/welcome') {
-        return {page: 'Welcome'};
+        return {page: 'Welcome', hideSubMenu: true};
     }
     if (path === '/start'){
         return {page: 'Start'}

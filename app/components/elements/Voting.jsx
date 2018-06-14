@@ -100,7 +100,7 @@ class Voting extends React.Component {
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'Voting')
     }
 
-    componentWillMount() {
+    componentDidMount() {
         const {username, active_votes} = this.props;
         this._checkMyVote(username, active_votes)
     }

@@ -1,10 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="15" height="17" viewBox="0 0 15 17">
-    <defs>
-        <path id="a" d="M1012.898 93.334H999v-1.515h14.05l-5.322-5.322a.758.758 0 0 1 1.072-1.071l6.003 6.003.11-.11 1.071 1.07-.11.111.11.11-1.071 1.072-.11-.11-6.003 6.002a.758.758 0 0 1-1.072-1.071l5.17-5.17z"/>
-    </defs>
-    <g fill="#FFF" fill-rule="evenodd" opacity=".3" transform="matrix(0 -1 -1 0 100 1016)">
-        <use xlink:href="#a"/>
-        <use xlink:href="#a"/>
-        <use xlink:href="#a"/>
-    </g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 15 17"><defs><path id="a" d="M1012.898 93.334H999v-1.515h14.05l-5.322-5.322a.758.758 0 0 1 1.072-1.071l6.003 6.003.11-.11 1.071 1.07-.11.111.11.11-1.071 1.072-.11-.11-6.003 6.002a.758.758 0 0 1-1.072-1.071l5.17-5.17z"/></defs><g fill="#FFF" fill-rule="evenodd" opacity=".3" transform="matrix(0 -1 -1 0 100 1016)"><use xlink:href="#a"/><use xlink:href="#a"/><use xlink:href="#a"/></g></svg>

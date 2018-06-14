@@ -235,7 +235,7 @@ class Header extends React.Component {
                                 dropdownContent={<VerticalMenu items={domestic_menu} title={tt('settings_jsx.choose_domestic')} />}
                                 >
                                 <a className="domestic-selector" title={tt('settings_jsx.choose_domestic')} onClick={e => e.preventDefault()}>
-                                    <Icon className="flag" name={'flags/1x1/' + currentDomesticKey} /> <Icon className="caret" name="caret-down" />
+                                    <img className="flag" src={`/images/flags/${currentDomesticKey}.svg`} /> <Icon className="caret" name="caret-down" />
                                     {/* {DOMESTIC[currentDomesticKey].split(' ')[0]} <Icon name="caret-down" /> */}
                                 </a>
                                 </LinkWithDropdown>

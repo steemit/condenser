@@ -17,6 +17,8 @@ import Mixpanel from 'mixpanel';
 import { PublicKey, Signature, hash } from '@steemit/steem-js/lib/auth/ecc';
 import { api, broadcast } from '@steemit/steem-js';
 
+const ACCEPTED_TOS_TAG = 'accepted_tos_20180614';
+
 const mixpanel = config.get('mixpanel')
     ? Mixpanel.init(config.get('mixpanel'))
     : null;
@@ -594,7 +596,7 @@ export default function useGeneralApi(app) {
                 config.get('conveyor_posting_wif')
             );
 
-            this.body = JSON.stringify(res.includes('accepted_tos'));
+            this.body = JSON.stringify(res.includes(ACCEPTED_TOS_TAG));
         } catch (error) {
             console.error(
                 'Error in /isTosAccepted api call',
@@ -622,7 +624,7 @@ export default function useGeneralApi(app) {
                 'conveyor.assign_tag',
                 {
                     uid: this.session.a,
-                    tag: 'accepted_tos',
+                    tag: ACCEPTED_TOS_TAG,
                 },
                 config.get('conveyor_username'),
                 config.get('conveyor_posting_wif')

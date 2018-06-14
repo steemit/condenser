@@ -236,7 +236,7 @@ You can earn digital tokens on Steemit by:
 
 **Voting and curating** - If you discover a post and upvote it before it becomes popular, you can earn a curation reward. The reward amount will depend on the amount of Steem Power you have.
 
-**Purchasing** - Users can purchase STEEM or Steem Dollar tokens directly through their Steemit wallet using bitcoin, Ether, or BitShares tokens. They are also available from other markets and exchanges including [Binance](https://www.binance.com/), [BitShares](https://openledger.info/), [Bittrex](https://bittrex.com), [BlockTrades](https://blocktrades.us), [Changelly](https://changelly.com), [GOPAX](https://www.gopax.co.kr), [HitBTC](https://hitbtc.com/), [Poloniex](https://poloniex.com), [Shapeshift.io](https://shapeshift.io), and [UpBit](https://upbit.com/).
+**Purchasing** - Users can purchase STEEM or Steem Dollar tokens directly through their Steemit wallet using bitcoin, Ether, or BitShares tokens. They are also available from other markets and exchanges including [Binance](https://www.binance.com/), [BitShares](https://openledger.info/), [Bittrex](https://bittrex.com), [BlockTrades](https://blocktrades.us), [Changelly](https://changelly.com), [GOPAX](https://www.gopax.co.kr), [HitBTC](https://hitbtc.com/), [Poloniex](https://poloniex.com), [Shapeshift.io](https://shapeshift.io), [UpBit](https://upbit.com/), and [Yensesa](https://yensesa.com).
 
 **Vesting** - STEEM tokens that are powered up to Steem Power will earn a small amount of new tokens for holding.
 
@@ -688,6 +688,7 @@ STEEM and SBD are listed on the following exchanges:
 | [Poloniex](https://poloniex.com) | Y      |    Y |
 | [Shapeshift.io](https://shapeshift.io) | Y      |    N |
 | [UpBit](https://upbit.com/) | Y      |    Y |
+| [Yensesa](https://yensesa.com) | Y      |    Y |
 
 <a href="#Table_of_Contents_Economics">^</a>
 ## <span id="What_is_the_reward_pool">What is the reward pool?</span>
@@ -766,7 +767,7 @@ To buy:
 
 STEEM purchases made via steemit.com are facilitated by <a href="https://blocktrades.us">BlockTrades</a>.
 
-bitcoin can also be exchanged for STEEM on external markets such as [Binance](https://www.binance.com/), [BitShares](https://openledger.info/), [Bittrex](https://bittrex.com), [Changelly](https://changelly.com), [GOPAX](https://www.gopax.co.kr), [HitBTC](https://hitbtc.com/), [Poloniex](https://poloniex.com), [Shapeshift.io](https://shapeshift.io), and [UpBit](https://upbit.com/).
+bitcoin can also be exchanged for STEEM on external markets such as [Binance](https://www.binance.com/), [BitShares](https://openledger.info/), [Bittrex](https://bittrex.com), [Changelly](https://changelly.com), [GOPAX](https://www.gopax.co.kr), [HitBTC](https://hitbtc.com/), [Poloniex](https://poloniex.com), [Shapeshift.io](https://shapeshift.io), [UpBit](https://upbit.com/), and [Yensesa](https://yensesa.com).
 
 <a href="#Table_of_Contents_Economics">^</a>
 ## <span id="How_long_does_it_take_STEEM_or_STEEM_Power_that_I_purchased_to_show_up_in_my_account">How long does it take STEEM or Steem Power that I purchased to show up in my account?</span>

@@ -76,7 +76,10 @@ class Voting extends React.Component {
             showWeight: false,
             myVote: null,
             weight: 10000,
-            sliderWeight: null,
+            sliderWeight: {
+                up: 10000,
+                down: 10000,
+            },
         };
 
         this.voteUp = e => {
@@ -107,15 +110,11 @@ class Voting extends React.Component {
                 weight !== 0
             ) {
                 const saved_weight = localStorage.getItem(
-                    'voteWeight' +
-                        (up ? '' : 'Down') +
-                        '-' +
-                        username +
-                        (is_comment ? '-comment' : '')
+                    'voteWeight' + (up ? '' : 'Down') + '-' + username
                 );
-                weight = Number(saved_weight);
+                const castToNegative = up ? 1 : -1;
+                weight = Number(saved_weight) * castToNegative;
             }
-
             this.props.vote(weight, {
                 author,
                 permlink,
@@ -125,21 +124,51 @@ class Voting extends React.Component {
             });
         };
 
-        // Slider vote weight adjustment handler. Saves the vote weight to localStorage.
         this.handleWeightChange = up => weight => {
-            const { is_comment, username } = this.props;
-            // If this is the flag slider cast weight to negative before saving to localStorage.
-            const w = up ? weight : weight * -1;
-            // Save to state to ensure component re-renders.
-            this.setState({ sliderWeight: weight });
+            let w;
+            if (up) {
+                w = {
+                    up: weight,
+                    down: this.state.sliderWeight.down,
+                };
+            } else {
+                w = {
+                    up: this.state.sliderWeight.up,
+                    down: weight,
+                };
+            }
+            this.setState({ sliderWeight: w });
+        };
+
+        this.storeSliderWeight = up => () => {
+            const { username } = this.props;
+            const weight = up
+                ? this.state.sliderWeight.up
+                : this.state.sliderWeight.down;
             localStorage.setItem(
-                'voteWeight' +
-                    (up ? '' : 'Down') +
-                    '-' +
-                    username +
-                    (is_comment ? '-comment' : ''),
-                w
+                'voteWeight' + (up ? '' : 'Down') + '-' + username,
+                weight
             );
+        };
+        this.syncSliderWeight = () => {
+            const { username, net_vesting_shares } = this.props;
+            if (net_vesting_shares > VOTE_WEIGHT_DROPDOWN_THRESHOLD) {
+                const sliderWeightUp = Number(
+                    localStorage.getItem('voteWeight' + '-' + username)
+                );
+                const sliderWeightDown = Number(
+                    localStorage.getItem('voteWeight' + 'Down' + '-' + username)
+                );
+                const up = sliderWeightUp ? sliderWeightUp : 10000;
+                const down = sliderWeightDown ? sliderWeightDown : 10000;
+                const sliderWeight = {
+                    up,
+                    down,
+                };
+                this.setState({
+                    sliderWeight,
+                });
+            }
         };
 
         this.toggleWeightUp = e => {
@@ -161,6 +190,7 @@ class Voting extends React.Component {
     componentWillMount() {
         const { username, active_votes } = this.props;
         this._checkMyVote(username, active_votes);
+        this.syncSliderWeight();
     }
 
     componentWillReceiveProps(nextProps) {
@@ -194,32 +224,25 @@ class Voting extends React.Component {
         } = this.props;
 
         const { votingUp, votingDown, showWeight, weight, myVote } = this.state;
-        // console.log('-- Voting.render -->', myVote, votingUp, votingDown);
         if (flag && !username) return null;
 
         const votingUpActive = voting && votingUp;
         const votingDownActive = voting && votingDown;
 
         const slider = up => {
-            const sliderWeight = localStorage.getItem(
-                'voteWeight' +
-                    (up ? '' : 'Down') +
-                    '-' +
-                    username +
-                    (is_comment ? '-comment' : '')
-            );
-            const w = sliderWeight ? Number(sliderWeight) : b;
-            // Slider only accepts positive values.
-            const b = up ? w : w * -1;
+            const b = up
+                ? this.state.sliderWeight.up
+                : this.state.sliderWeight.down;
             return (
                 <span>
-                    <div className="weight-display">{w / 100}%</div>
+                    <div className="weight-display">{b / 100}%</div>
                     <Slider
                         min={100}
                         max={10000}
                         step={100}
                         value={b}
                         onChange={this.handleWeightChange(up)}
+                        onChangeComplete={this.storeSliderWeight(up)}
                     />
                 </span>
             );
@@ -271,7 +294,10 @@ class Voting extends React.Component {
                 <Dropdown
                     show={showWeight}
                     onHide={() => this.setState({ showWeight: false })}
-                    onShow={() => this.setState({ showWeight: true })}
+                    onShow={() => {
+                        this.setState({ showWeight: true });
+                        this.syncSliderWeight();
+                    }}
                     title={invokeFlag}
                     position={'left'}
                 >
@@ -300,6 +326,7 @@ class Voting extends React.Component {
                     </div>
                 </Dropdown>
             );
+
             const flag =
                 myVote === null || myVote === 0 ? dropdown : revokeFlag;
             return (
@@ -520,7 +547,10 @@ class Voting extends React.Component {
                 <Dropdown
                     show={showWeight}
                     onHide={() => this.setState({ showWeight: false })}
-                    onShow={() => this.setState({ showWeight: true })}
+                    onShow={() => {
+                        this.setState({ showWeight: true });
+                        this.syncSliderWeight();
+                    }}
                     title={up}
                 >
                     <div className="Voting__adjust_weight">

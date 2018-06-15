@@ -1,15 +1,16 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import Icon from 'app/components/elements/Icon';
 import tt from 'counterpart';
 
 export default class HorizontalMenu extends React.Component {
     static propTypes = {
-        items: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
-        title: React.PropTypes.string,
-        className: React.PropTypes.string,
-        hideValue: React.PropTypes.string,
-        includeSearch: React.PropTypes.bool,
+        items: PropTypes.arrayOf(PropTypes.object).isRequired,
+        title: PropTypes.string,
+        className: PropTypes.string,
+        hideValue: PropTypes.string,
+        includeSearch: PropTypes.bool,
     };
 
     render() {

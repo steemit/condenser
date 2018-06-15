@@ -36,6 +36,8 @@ const FETCH_JSON = 'global/FETCH_JSON';
 const FETCH_JSON_RESULT = 'global/FETCH_JSON_RESULT';
 const SHOW_DIALOG = 'global/SHOW_DIALOG';
 const HIDE_DIALOG = 'global/HIDE_DIALOG';
+const ADD_ACTIVE_WITNESS_VOTE = 'global/ADD_ACTIVE_WITNESS_VOTE';
+const REMOVE_ACTIVE_WITNESS_VOTE = 'global/REMOVE_ACTIVE_WITNESS_VOTE';
 // Saga-related:
 export const GET_STATE = 'global/GET_STATE';
 
@@ -410,6 +412,21 @@ export default function reducer(state = defaultState, action = {}) {
             return state.update('active_dialogs', d => d.delete(payload.name));
         }
 
+        case ADD_ACTIVE_WITNESS_VOTE: {
+            return state.update(
+                `transaction_witness_vote_active_${payload.account}`,
+                Set(),
+                s => s.add(payload.witness)
+            );
+        }
+
+        case REMOVE_ACTIVE_WITNESS_VOTE: {
+            return state.update(
+                `transaction_witness_vote_active_${payload.account}`,
+                s => s.delete(payload.witness)
+            );
+        }
+
         default:
             return state;
     }
@@ -545,6 +562,16 @@ export const showDialog = payload => ({
 
 export const hideDialog = payload => ({
     type: HIDE_DIALOG,
+    payload,
+});
+
+export const addActiveWitnessVote = payload => ({
+    type: ADD_ACTIVE_WITNESS_VOTE,
+    payload,
+});
+
+export const removeActiveWitnessVote = payload => ({
+    type: REMOVE_ACTIVE_WITNESS_VOTE,
     payload,
 });
 

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import tt from 'counterpart';
 
 function validatePassword(value, new_password) {
@@ -11,11 +12,11 @@ function validatePassword(value, new_password) {
 
 export default class PasswordInput extends React.Component {
     static propTypes = {
-        inputNewPassword: React.PropTypes.bool,
-        inputConfirmPassword: React.PropTypes.bool,
-        disabled: React.PropTypes.bool,
-        onChange: React.PropTypes.func.isRequired,
-        passwordLabel: React.PropTypes.string.isRequired,
+        inputNewPassword: PropTypes.bool,
+        inputConfirmPassword: PropTypes.bool,
+        disabled: PropTypes.bool,
+        onChange: PropTypes.func.isRequired,
+        passwordLabel: PropTypes.string.isRequired,
     };
 
     constructor(props) {

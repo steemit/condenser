@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import CloseButton from 'app/components/elements/CloseButton';
 import Reveal from 'app/components/elements/Reveal';
@@ -31,24 +32,24 @@ class Modals extends React.Component {
         show_login_modal: false,
     };
     static propTypes = {
-        show_login_modal: React.PropTypes.bool,
-        show_confirm_modal: React.PropTypes.bool,
-        show_transfer_modal: React.PropTypes.bool,
-        show_powerdown_modal: React.PropTypes.bool,
-        show_bandwidth_error_modal: React.PropTypes.bool,
-        show_signup_modal: React.PropTypes.bool,
-        show_promote_post_modal: React.PropTypes.bool,
-        hideLogin: React.PropTypes.func.isRequired,
-        username: React.PropTypes.string,
-        hideConfirm: React.PropTypes.func.isRequired,
-        hideSignUp: React.PropTypes.func.isRequired,
-        hideTransfer: React.PropTypes.func.isRequired,
-        hidePowerdown: React.PropTypes.func.isRequired,
-        hidePromotePost: React.PropTypes.func.isRequired,
-        hideBandwidthError: React.PropTypes.func.isRequired,
-        notifications: React.PropTypes.object,
-        show_terms_modal: React.PropTypes.bool,
-        removeNotification: React.PropTypes.func,
+        show_login_modal: PropTypes.bool,
+        show_confirm_modal: PropTypes.bool,
+        show_transfer_modal: PropTypes.bool,
+        show_powerdown_modal: PropTypes.bool,
+        show_bandwidth_error_modal: PropTypes.bool,
+        show_signup_modal: PropTypes.bool,
+        show_promote_post_modal: PropTypes.bool,
+        hideLogin: PropTypes.func.isRequired,
+        username: PropTypes.string,
+        hideConfirm: PropTypes.func.isRequired,
+        hideSignUp: PropTypes.func.isRequired,
+        hideTransfer: PropTypes.func.isRequired,
+        hidePowerdown: PropTypes.func.isRequired,
+        hidePromotePost: PropTypes.func.isRequired,
+        hideBandwidthError: PropTypes.func.isRequired,
+        notifications: PropTypes.object,
+        show_terms_modal: PropTypes.bool,
+        removeNotification: PropTypes.func,
     };
 
     constructor() {
@@ -183,7 +184,12 @@ export default connect(
             show_promote_post_modal: state.user.get('show_promote_post_modal'),
             show_signup_modal: state.user.get('show_signup_modal'),
             notifications: state.app.get('notifications'),
-            show_terms_modal: state.user.get('show_terms_modal'),
+            show_terms_modal:
+                state.user.get('show_terms_modal') &&
+                state.routing.locationBeforeTransitions.pathname !==
+                    '/tos.html' &&
+                state.routing.locationBeforeTransitions.pathname !==
+                    '/privacy.html',
             show_bandwidth_error_modal: state.transaction.getIn([
                 'errors',
                 'bandwidthError',

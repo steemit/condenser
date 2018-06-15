@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Link from 'app/components/elements/Link';
 import * as globalActions from 'app/redux/GlobalReducer';
@@ -9,14 +10,14 @@ import tt from 'counterpart';
 class CardView extends React.Component {
     static propTypes = {
         // HTML properties
-        formId: React.PropTypes.string,
-        canEdit: React.PropTypes.bool,
+        formId: PropTypes.string,
+        canEdit: PropTypes.bool,
 
         // redux or html
-        metaLinkData: React.PropTypes.object,
+        metaLinkData: PropTypes.object,
 
         // redux
-        clearMetaElement: React.PropTypes.func,
+        clearMetaElement: PropTypes.func,
     };
     static defaultProps = {
         canEdit: false,

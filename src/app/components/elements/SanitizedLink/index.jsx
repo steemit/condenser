@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import tt from 'counterpart';
 import classnames from 'classnames';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';

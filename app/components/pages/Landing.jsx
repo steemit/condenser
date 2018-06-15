@@ -6,6 +6,7 @@ import WhatIsGolos from 'app/components/elements/LandingWhatIsGolos'
 import Faq from 'app/components/elements/LandingFaq'
 import Team from 'app/components/elements/LandingTeam'
 import Partners from 'app/components/elements/LandingPartners'
+import Tools from 'app/components/elements/LandingTools'
 import { APP_NAME } from 'app/client_config';
 
 class Landing extends React.Component {
@@ -18,6 +19,7 @@ class Landing extends React.Component {
 				<Faq />
 				{/* <Distribution button={buyGolosButton} /> */}
 				<Partners />
+                <Tools />
             </div>
         )
     }

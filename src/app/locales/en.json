@@ -854,10 +854,7 @@
         "transfers_are_temporary_disabled": "Transfers are temporary disabled.",
         "history": "HISTORY",
         "redeem_rewards": "Redeem Rewards (Transfer to Balance)",
-        "buy_steem_or_steem_power": "Buy STEEM or STEEM POWER",
-        "savings_tip": "asdf",
-        "steem_dollars_tip": "Tradable tokens that may be transferred anywhere at anytime.",
-        "savings_tip": "Balances subject to 3 day withdraw waiting period."
+        "buy_steem_or_steem_power": "Buy STEEM or STEEM POWER"
     },
     "powerdown_jsx": {
         "power_down": "Power Down",

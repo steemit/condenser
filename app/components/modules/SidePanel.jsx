@@ -1,10 +1,11 @@
 import React from 'react';
-import CloseButton from 'react-foundation-components/lib/global/close-button';
+import PropTypes from 'prop-types'
+import CloseButton from 'react-foundation-components/lib/global/close-button'
 
 export default class SidePanel extends React.Component {
     static propTypes = {
-        children: React.PropTypes.array,
-        alignment: React.PropTypes.string
+        children: PropTypes.array,
+        alignment: PropTypes.string
     };
 
     constructor(props) {

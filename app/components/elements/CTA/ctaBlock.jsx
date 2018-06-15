@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from "react";
+import React, { Component } from "react";
+import PropTypes from 'prop-types'
 import {connect} from 'react-redux';
 import Userpic from 'app/components/elements/Userpic';
 import {parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
@@ -9,12 +10,12 @@ import { popupClickUrl, popupClickButton } from 'app/utils/Analytics';
 class CTABlock extends Component {
 
     static propTypes = {
-        user: React.PropTypes.string.isRequired,
-        post: React.PropTypes.string.isRequired,
-        payout: React.PropTypes.number,
-        visible: React.PropTypes.bool,
-        special: React.PropTypes.object,
-        currency: React.PropTypes.string
+        user: PropTypes.string.isRequired,
+        post: PropTypes.string.isRequired,
+        payout: PropTypes.number,
+        visible: PropTypes.bool,
+        special: PropTypes.object,
+        currency: PropTypes.string
     };
 
     constructor(props) {

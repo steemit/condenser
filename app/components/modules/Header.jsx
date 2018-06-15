@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types'
 import { Link } from 'react-router';
 import {connect} from 'react-redux';
 import TopRightMenu from 'app/components/modules/TopRightMenu';
@@ -25,9 +26,9 @@ function sortOrderToLink(so, topic, account) {
 
 class Header extends React.Component {
     static propTypes = {
-        location: React.PropTypes.object.isRequired,
-        current_account_name: React.PropTypes.string,
-        account_meta: React.PropTypes.object
+        location: PropTypes.object.isRequired,
+        current_account_name: PropTypes.string,
+        account_meta: PropTypes.object
     };
 
     constructor() {
@@ -224,25 +225,27 @@ class Header extends React.Component {
                         </div>
                     </div>
                 </div>
-                <div className={'Header__sub-nav show-for-medium hide-for-small ' + (this.state.subheader_hidden ? ' hidden' : '')}>
-                    <div className="row">
-                        <div className="columns">
-                            <HorizontalMenu items={sort_order_menu_horizontal} >
-                            <LinkWithDropdown
-                                closeOnClickOutside
-                                dropdownPosition="bottom"
-                                dropdownAlignment="left"
-                                dropdownContent={<VerticalMenu items={domestic_menu} title={tt('settings_jsx.choose_domestic')} />}
-                                >
-                                <a className="domestic-selector" title={tt('settings_jsx.choose_domestic')} onClick={e => e.preventDefault()}>
-                                    <Icon className="flag" name={'flags/1x1/' + currentDomesticKey} /> <Icon className="caret" name="caret-down" />
-                                    {/* {DOMESTIC[currentDomesticKey].split(' ')[0]} <Icon name="caret-down" /> */}
-                                </a>
-                                </LinkWithDropdown>
-                            </HorizontalMenu>
+                {route.hideSubMenu ? null :
+                    <div className={'Header__sub-nav show-for-medium hide-for-small ' + (this.state.subheader_hidden ? ' hidden' : '')}>
+                        <div className="row">
+                            <div className="columns">
+                                <HorizontalMenu items={sort_order_menu_horizontal} >
+                                <LinkWithDropdown
+                                    closeOnClickOutside
+                                    dropdownPosition="bottom"
+                                    dropdownAlignment="left"
+                                    dropdownContent={<VerticalMenu items={domestic_menu} title={tt('settings_jsx.choose_domestic')} />}
+                                    >
+                                    <a className="domestic-selector" title={tt('settings_jsx.choose_domestic')} onClick={e => e.preventDefault()}>
+                                        <Icon className="flag" name={'flags/1x1/' + currentDomesticKey} /> <Icon className="caret" name="caret-down" />
+                                        {/* {DOMESTIC[currentDomesticKey].split(' ')[0]} <Icon name="caret-down" /> */}
+                                    </a>
+                                    </LinkWithDropdown>
+                                </HorizontalMenu>
+                            </div>
                         </div>
                     </div>
-                </div>
+                }
             </header>
         );
     }

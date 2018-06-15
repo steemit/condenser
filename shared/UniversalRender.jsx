@@ -5,7 +5,12 @@ import Iso from 'iso';
 import React from 'react';
 import { render } from 'react-dom';
 import { renderToString } from 'react-dom/server';
-import { Router, RouterContext, match, applyRouterMiddleware } from 'react-router';
+import {
+    Router,
+    RouterContext,
+    match,
+    applyRouterMiddleware
+} from 'react-router';
 import * as api from 'app/utils/APIWrapper'
 import { Provider } from 'react-redux';
 import RootRoute from 'app/RootRoute';
@@ -15,13 +20,7 @@ import { useScroll } from 'react-router-scroll';
 import createSagaMiddleware from 'redux-saga';
 import { syncHistoryWithStore } from 'react-router-redux';
 import rootReducer from 'app/redux/RootReducer';
-import {fetchDataWatches} from 'app/redux/FetchDataSaga';
-import {marketWatches} from 'app/redux/MarketSaga';
-import {sharedWatches} from 'app/redux/SagaShared';
-import {userWatches} from 'app/redux/UserSaga';
-import {authWatches} from 'app/redux/AuthSaga';
-import {transactionWatches} from 'app/redux/TransactionSaga';
-import PollDataSaga from 'app/redux/PollDataSaga';
+import rootSaga from 'app/redux/RootSaga';
 import {component as NotFound} from 'app/components/pages/NotFound';
 import extractMeta from 'app/utils/ExtractMeta';
 import Translator from 'app/Translator';
@@ -33,14 +32,7 @@ import {APP_NAME, IGNORE_TAGS, PUBLIC_API, SEO_TITLE} from 'app/client_config';
 import constants from 'app/redux/constants';
 import proxify from 'db/proxify';
 
-const sagaMiddleware = createSagaMiddleware(
-    ...userWatches, // keep first to remove keys early when a page change happens
-    ...fetchDataWatches,
-    ...sharedWatches,
-    ...authWatches,
-    ...transactionWatches,
-    ...marketWatches
-);
+const sagaMiddleware = createSagaMiddleware();
 
 let middleware;
 
@@ -62,7 +54,14 @@ const onRouterError = (error) => {
     console.error('onRouterError', error);
 };
 
-async function universalRender({ location, initial_state, offchain, ErrorPage, tarantool, chainproxy,  metrics }) {
+export async function serverRender({ 
+    location,
+    offchain,
+    ErrorPage,
+    tarantool,
+    chainproxy,
+    metrics
+}) {
     let error, redirect, renderProps;
     
     const ctx = {
@@ -89,45 +88,8 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
         };
     }
 
-    if (process.env.BROWSER) {
-        const store = createStore(rootReducer, initial_state, middleware);
-        sagaMiddleware.run(PollDataSaga).done
-            .then(() => console.log('PollDataSaga is finished'))
-            .catch(err => console.log('PollDataSaga is finished with error', err));
-
-        const history = syncHistoryWithStore(browserHistory, store);
-        // const scrollHistory = useScroll(() => history)();
-
-        window.store = {
-            getState: () => {debugger}
-        }
-        // Bump transaction (for live UI testing).. Put 0 in now (no effect),
-        // to enable browser's autocomplete and help prevent typos.
-        window.bump = parseInt(localStorage.getItem('bump') || 0);
-        const scroll = useScroll((prevLocation, {location}) => {
-            if (location.hash || location.action === 'POP') return false;
-            return !prevLocation || prevLocation.location.pathname !== location.pathname;
-        });
-        if (process.env.NODE_ENV === 'production') {
-            // console.log('%c%s', 'color: red; background: yellow; font-size: 24px;', 'WARNING!');
-            // console.log('%c%s', 'color: black; font-size: 16px;', 'This is a developer console, you must read and understand anything you paste or type here or you could compromise your account and your private keys.');
-        }
-        return render(
-            <Provider store={store}>
-                <Translator>
-                    <Router
-                        routes={RootRoute}
-                        history={history}
-                        onError={onRouterError}
-                        render={applyRouterMiddleware(scroll)} />
-                </Translator>
-            </Provider>,
-            document.getElementById('content')
-        );
-    }
-
     // below is only executed on the server
-    let server_store, onchain;
+    let serverStore, onchain;
     try {
         let url = location === '/' ? 'trending' : location;
         // Replace /curation-rewards and /author-rewards with /transfers for UserProfile to resolve data correctly
@@ -181,12 +143,19 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
 
         offchain.signup_bonus = sdDisp;
         offchain.server_location = location;
-        server_store = createStore(rootReducer, { global: onchain, offchain});
-        server_store.dispatch({type: '@@router/LOCATION_CHANGE', payload: {pathname: location}});
+        serverStore = createStore(rootReducer, {
+            global: onchain,
+            offchain
+        });
+        serverStore.dispatch({
+            type: '@@router/LOCATION_CHANGE',
+            payload: { pathname: location }
+        });
+
         if (offchain.account) {
             try {
                 const notifications = await tarantool.select('notifications', 0, 1, 0, 'eq', offchain.account);
-                server_store.dispatch({type: 'UPDATE_NOTIFICOUNTERS', payload: notificationsArrayToMap(notifications)});
+                serverStore.dispatch({type: 'UPDATE_NOTIFICOUNTERS', payload: notificationsArrayToMap(notifications)});
             } catch(e) {
                 console.warn('WARNING! cannot retrieve notifications from tarantool in universalRender:', e.message);
             }
@@ -216,7 +185,7 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
     let app, status, meta;
     try {
         app = renderToString(
-            <Provider store={server_store}>
+            <Provider store={serverStore}>
                 <Translator>
                     <RouterContext { ...renderProps } />
                 </Translator>
@@ -235,8 +204,41 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
         titleBase: SEO_TITLE + ' - ',
         meta,
         statusCode: status,
-        body: Iso.render(app, server_store.getState())
+        body: Iso.render(app, serverStore.getState())
     };
 }
 
-export default universalRender;
+export function clientRender(initialState) {
+    const store = createStore(rootReducer, initialState, middleware);
+    sagaMiddleware.run(rootSaga)
+
+    const history = syncHistoryWithStore(browserHistory, store);
+
+    window.store = {
+        getState: () => { debugger }
+    }
+    // Bump transaction (for live UI testing).. Put 0 in now (no effect),
+    // to enable browser's autocomplete and help prevent typos.
+    window.bump = parseInt(localStorage.getItem('bump') || 0);
+    const scroll = useScroll((prevLocation, { location }) => {
+        if (location.hash || location.action === 'POP') return false;
+        return !prevLocation || prevLocation.location.pathname !== location.pathname;
+    });
+
+    if (process.env.NODE_ENV === 'production') {
+        // console.log('%c%s', 'color: red; background: yellow; font-size: 24px;', 'WARNING!');
+        // console.log('%c%s', 'color: black; font-size: 16px;', 'This is a developer console, you must read and understand anything you paste or type here or you could compromise your account and your private keys.');
+    }
+    return render(
+        <Provider store={store}>
+            <Translator>
+                <Router
+                    routes={RootRoute}
+                    history={history}
+                    onError={onRouterError}
+                    render={applyRouterMiddleware(scroll)} />
+            </Translator>
+        </Provider>,
+        document.getElementById('content')
+    );
+}

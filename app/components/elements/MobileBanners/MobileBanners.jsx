@@ -1,11 +1,12 @@
-import React, {Component, PropTypes} from "react";
+import React, {Component} from "react";
+import PropTypes from 'prop-types'
 import AndroidMarket from "./AndroidMarket"
 
 export default class MobileBanners extends Component {
 
     static propTypes = {
-        showAndroid: React.PropTypes.bool,
-        showiOS: React.PropTypes.bool
+        showAndroid: PropTypes.bool,
+        showiOS: PropTypes.bool
     };
 
     render() {

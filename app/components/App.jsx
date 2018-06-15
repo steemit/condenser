@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types'
 import {connect} from 'react-redux';
 import AppPropTypes from 'app/utils/AppPropTypes';
 import Header from 'app/components/modules/Header';
@@ -6,6 +7,7 @@ import Footer from 'app/components/modules/Footer';
 import user from 'app/redux/User';
 import g from 'app/redux/GlobalReducer';
 import { browserHistory, Link } from 'react-router';
+import resolveRoute from 'app/ResolveRoute';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import Dialogs from '@modules/Dialogs';
 import Modals from '@modules/Modals';
@@ -40,14 +42,11 @@ class App extends React.Component {
         expandCallout: false,
     }
 
-    componentWillMount() {
+    componentDidMount() {
         if (process.env.BROWSER) localStorage.removeItem('autopost') // July 14 '16 compromise, renamed to autopost2
         this.props.loginUser();
         this.props.loadExchangeRates();
-        // this.initVendorScripts()
-    }
 
-    componentDidMount() {
         window.addEventListener('storage', this.checkLogin);
         if (process.env.BROWSER) {
             window.addEventListener('click', this.checkLeaveGolos)
@@ -125,12 +124,6 @@ class App extends React.Component {
             console.log('onEntropyEvent Unknown', e.type, e)
     }
 
-    signUp() {
-    }
-
-    learnMore() {
-    }
-
     isShowInfoBox() {
         if (process.env.BROWSER) {
             if (!localStorage.getItem('infobox')) {
@@ -159,6 +152,7 @@ class App extends React.Component {
         const APP_NAME = tt('g.APP_NAME');
 
         const {location, params, children, flash, new_visitor, depositSteem, signup_bonus} = this.props;
+        const route = resolveRoute(location.pathname);
         const theme = process.env.BROWSER ? localStorage.getItem('theme') : DEFAULT_THEME
         let currentTheme = ' theme-' + DEFAULT_THEME.toLowerCase();
         if (THEMES.indexOf(theme) !== -1) {
@@ -238,34 +232,36 @@ class App extends React.Component {
         }
 
         return (
-            <div className={'App' + currentTheme + (lp ? ' LP' : '') + (ip ? ' index-page' : '') + (miniHeader ? ' mini-' : '')}
-                onMouseMove={this.onEntropyEvent}>
-                {miniHeader ? <MiniHeader /> : <Header />}
-                <div className="App__content">
-                    {welcome_screen}
-                    {callout}
-                    {children}
-                    <Footer />
-                    <ScrollButton />
-                    <MobileAppButton />
+            <React.StrictMode>
+                <div className={'App' + currentTheme + (lp ? ' LP' : '') + (ip ? ' index-page' : '') + (miniHeader ? ' mini-' : '')}
+                    onMouseMove={this.onEntropyEvent}>
+                    {miniHeader ? <MiniHeader /> : <Header />}
+                    <div className={"App__content" + (route.hideSubMenu ? ' App_hideSubMenu' : '')}>
+                        {welcome_screen}
+                        {callout}
+                        {children}
+                        <Footer />
+                        <ScrollButton />
+                        <MobileAppButton />
+                    </div>
+                    <Dialogs />
+                    <Modals />
+                    <PageViewsCounter />
                 </div>
-                <Dialogs />
-                <Modals />
-                <PageViewsCounter />
-            </div>
+            </React.StrictMode>
         )
     }
 }
 
 App.propTypes = {
-    theme: React.PropTypes.string,
-    error: React.PropTypes.string,
+    theme: PropTypes.string,
+    error: PropTypes.string,
     children: AppPropTypes.Children,
-    location: React.PropTypes.object,
-    signup_bonus: React.PropTypes.string,
-    loginUser: React.PropTypes.func.isRequired,
-    logoutUser: React.PropTypes.func.isRequired,
-    depositSteem: React.PropTypes.func.isRequired
+    location: PropTypes.object,
+    signup_bonus: PropTypes.string,
+    loginUser: PropTypes.func.isRequired,
+    logoutUser: PropTypes.func.isRequired,
+    depositSteem: PropTypes.func.isRequired
 };
 
 export default connect(

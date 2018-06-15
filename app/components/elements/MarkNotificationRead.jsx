@@ -1,13 +1,14 @@
 import React from 'react';
+import PropTypes from 'prop-types'
 import {connect} from 'react-redux';
 import {markNotificationRead} from 'app/utils/ServerApiClient';
 
 class MarkNotificationRead extends React.Component {
 
     static propTypes = {
-        fields: React.PropTypes.string,
-        account: React.PropTypes.string,
-        update: React.PropTypes.func
+        fields: PropTypes.string,
+        account: PropTypes.string,
+        update: PropTypes.func
     };
 
     shouldComponentUpdate() {

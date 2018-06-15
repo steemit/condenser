@@ -1,9 +1,10 @@
-import React, {PropTypes, Component} from 'react'
+import React, {Component} from 'react'
+import PropTypes from 'prop-types'
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import Keys from 'app/components/elements/Keys'
 import g from 'app/redux/GlobalReducer'
 import {connect} from 'react-redux';
-import QRCode from 'react-qr'
+import QRCode from 'app/components/elements/QrCode'
 import tt from 'counterpart';
 
 const keyTypes = ['Posting', 'Active', 'Owner', 'Memo']

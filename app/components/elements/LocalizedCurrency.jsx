@@ -1,5 +1,6 @@
 import 'isomorphic-fetch';
 import React from 'react';
+import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 // import cc from 'currency-codes';
 // import { injectIntl } from 'react-intl';
@@ -15,15 +16,15 @@ import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 class LocalizedCurrency extends React.Component {
 
   static propTypes = {
-    fetching: React.PropTypes.bool,
-    reloadExchangeRates: React.PropTypes.func.isRequired,
-    noSymbol: React.PropTypes.bool,
-    fractionDigits: React.PropTypes.number,
-    amount: React.PropTypes.number.isRequired,
-    currency: React.PropTypes.string,
-    rounding: React.PropTypes.bool,
-    short: React.PropTypes.bool,
-    minimumAmountToShow: React.PropTypes.number,
+    fetching: PropTypes.bool,
+    reloadExchangeRates: PropTypes.func.isRequired,
+    noSymbol: PropTypes.bool,
+    fractionDigits: PropTypes.number,
+    amount: PropTypes.number.isRequired,
+    currency: PropTypes.string,
+    rounding: PropTypes.bool,
+    short: PropTypes.bool,
+    minimumAmountToShow: PropTypes.number,
   }
 
   static defaultProps = {

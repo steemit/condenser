@@ -1,12 +1,11 @@
 import { fromJS } from 'immutable'
-import { call, put, select } from 'redux-saga/effects';
-import { takeEvery } from 'redux-saga';
+import { call, put, select, takeEvery } from 'redux-saga/effects';
 import g from 'app/redux/GlobalReducer'
 import tt from 'counterpart';
 import { api } from 'golos-js';
 
 export const sharedWatches = [
-    watchTransactionErrors
+    watchTransactionErrors()
 ]
 
 export function* getAccount(username, force = false) {
@@ -22,7 +21,7 @@ export function* getAccount(username, force = false) {
 }
 
 export function* watchTransactionErrors() {
-    yield* takeEvery('transaction/ERROR', showTransactionErrorNotification);
+    yield takeEvery('transaction/ERROR', showTransactionErrorNotification);
 }
 
 function* showTransactionErrorNotification() {

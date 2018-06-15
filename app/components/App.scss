@@ -21,6 +21,10 @@
       margin-top: 0.75rem;
       border: 1px solid $light-gray;
     }
+
+    &.App_hideSubMenu {
+      margin-top: 0;
+    }
 }
 
 .mini-header .App__content {

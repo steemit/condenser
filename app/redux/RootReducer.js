@@ -1,5 +1,5 @@
 import {Map, fromJS} from 'immutable';
-import {combineReducers} from 'redux';
+import { combineReducers, __DO_NOT_USE__ActionTypes as ActionTypes } from 'redux';
 import {routerReducer} from 'react-router-redux';
 import appReducer from './AppReducer';
 import globalReducerModule from './GlobalReducer';
@@ -15,7 +15,7 @@ function initReducer(reducer, type) {
         if(!state) return reducer(state, action);
 
         // @@redux/INIT server and client init
-        if (action.type === '@@redux/INIT' || action.type === '@@INIT') {
+        if (action.type === ActionTypes.INIT || action.type === '@@INIT') {
             if(!(state instanceof Map)) {
                 state = fromJS(state);
             }

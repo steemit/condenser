@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {Component} from 'react'
 import Remarkable from 'remarkable'
@@ -21,15 +22,15 @@ class MarkdownViewer extends Component {
 
     static propTypes = {
         // HTML properties
-        text: React.PropTypes.string,
-        className: React.PropTypes.string,
-        large: React.PropTypes.bool,
-        // formId: React.PropTypes.string, // This is unique for every editor of every post (including reply or edit)
-        canEdit: React.PropTypes.bool,
-        jsonMetadata: React.PropTypes.object,
-        highQualityPost: React.PropTypes.bool,
-        noImage: React.PropTypes.bool,
-        allowDangerousHTML: React.PropTypes.bool,
+        text: PropTypes.string,
+        className: PropTypes.string,
+        large: PropTypes.bool,
+        // formId: PropTypes.string, // This is unique for every editor of every post (including reply or edit)
+        canEdit: PropTypes.bool,
+        jsonMetadata: PropTypes.object,
+        highQualityPost: PropTypes.bool,
+        noImage: PropTypes.bool,
+        allowDangerousHTML: PropTypes.bool,
     }
 
     static defaultProps = {

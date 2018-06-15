@@ -1,69 +1,82 @@
-import webpack from 'webpack';
-import git from 'git-rev-sync';
-import { isArray } from 'lodash';
-import baseConfig from './base.config';
-import startKoa from './utils/start-koa';
+const path = require('path');
+const webpack = require('webpack');
+const merge = require('webpack-merge');
+const git = require('git-rev-sync');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const baseConfig = require('./base.config');
+const StartServerPlugin = require('./plugins/StartServerPlugin');
 
-const LOCAL_IP = require('dev-ip')();
+const Webpack_isomorphic_tools_plugin = require('webpack-isomorphic-tools/plugin');
+const webpack_isomorphic_tools_plugin =
+    new Webpack_isomorphic_tools_plugin(require('./webpack-isotools-config'));
+
 const WEBPACK_PORT = process.env.PORT ? parseInt(process.env.PORT)+1 : 8081;
-const HOST = (isArray(LOCAL_IP) && LOCAL_IP[0]) || LOCAL_IP || 'localhost';
-const PUBLIC_PATH = "/assets/";
 
-export default {
-    server: {
-        port: WEBPACK_PORT,
-        options: {
-            publicPath: PUBLIC_PATH,
-            hot: true,
-            stats: {
-                assets: true,
-                colors: true,
-                version: false,
-                hash: false,
-                timings: true,
-                chunks: false,
-                chunkModules: false
+module.exports = merge(baseConfig, {
+    mode: 'development',
+    devtool: 'source-map',
+    output: {
+        publicPath: '/assets/'
+    },
+    plugins: [
+        // new NpmInstallPlugin(),
+        // new webpack.debug.ProfilingPlugin(),
+        // new webpack.HotModuleReplacementPlugin(),
+        new webpack.DefinePlugin({
+            'process.env': {
+                BROWSER: JSON.stringify(true),
+                NODE_ENV: JSON.stringify('development'),
+                VERSION: JSON.stringify(git.long())
+            },
+            global: {
+                TYPED_ARRAY_SUPPORT: JSON.stringify(false)
             }
+        }),
+        webpack_isomorphic_tools_plugin.development(),
+        new StartServerPlugin()
+    ],
+    module: {
+        rules: [
+            {
+                test: /\.(sa|sc|c)ss$/,
+                use: [
+                    'css-hot-loader',
+                    MiniCssExtractPlugin.loader,
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            sourceMap: true
+                        }
+                    },
+                    {
+                        loader: 'postcss-loader',
+                        options: {
+                            plugins: () => [require('autoprefixer')({
+                                'browsers': ['> 1%', 'last 2 versions']
+                            })],
+                            sourceMap: true
+                        }
+                    },
+                    {
+                        loader: 'sass-loader',
+                        options: {
+                            sourceMap: true
+                        }
+                    }
+                ],
+            },
+        ]
+    },
+    optimization: {
+        noEmitOnErrors: true, // NoEmitOnErrorsPlugin
+    },
+    serve: {
+        port: WEBPACK_PORT,
+        hot: {
+            port: 8090,
+        },
+        dev: {
+            publicPath: '/assets/'
         }
     },
-    webpack: {
-        ...baseConfig,
-        devtool: 'source-map',
-        entry: {
-            app: [
-                './app/Main.js',
-                //`webpack-hot-middleware/client?path=//${HOST}:${PORT}/__webpack_hmr`,
-            ]
-        },
-        output: {...baseConfig.output, publicPath: PUBLIC_PATH},
-        module: {
-            ...baseConfig.module,
-            loaders: [
-                ...baseConfig.module.loaders,
-            ]
-        },
-        plugins: [
-            new webpack.optimize.OccurenceOrderPlugin(),
-            new webpack.HotModuleReplacementPlugin(),
-            new webpack.NoErrorsPlugin(),
-            new webpack.DefinePlugin({
-                'process.env': {
-                    BROWSER: JSON.stringify(true),
-                    NODE_ENV: JSON.stringify('development'),
-                    VERSION: JSON.stringify(git.tag())
-                },
-                global: {
-                    'TYPED_ARRAY_SUPPORT': JSON.stringify(false)
-                }
-            }),
-            new webpack.optimize.DedupePlugin(),
-            new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.js'),
-            ...baseConfig.plugins,
-            function () {
-                console.log("Please wait for app server startup (~60s)" +
-                    " after webpack server startup...");
-                this.plugin('done', startKoa);
-            }
-        ]
-    }
-};
+})

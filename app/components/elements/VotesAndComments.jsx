@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types'
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import Icon from 'app/components/elements/Icon';
@@ -9,12 +10,12 @@ class VotesAndComments extends React.Component {
 
     static propTypes = {
         // HTML properties
-        post: React.PropTypes.string.isRequired,
-        commentsLink: React.PropTypes.string.isRequired,
+        post: PropTypes.string.isRequired,
+        commentsLink: PropTypes.string.isRequired,
 
         // Redux connect properties
-        votes: React.PropTypes.number,
-        comments: React.PropTypes.number,
+        votes: PropTypes.number,
+        comments: PropTypes.number,
     };
 
     constructor(props) {

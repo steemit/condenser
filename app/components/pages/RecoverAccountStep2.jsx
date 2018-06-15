@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types'
 import {connect} from 'react-redux';
 import GeneratedPasswordInput from 'app/components/elements/GeneratedPasswordInput';
 import {PrivateKey} from 'golos-js/lib/auth/ecc';
@@ -20,8 +21,8 @@ function passwordToOwnerPubKey(account_name, password) {
 class RecoverAccountStep2 extends React.Component {
 
     static propTypes = {
-        account_to_recover: React.PropTypes.string,
-        recoverAccount: React.PropTypes.func.isRequired
+        account_to_recover: PropTypes.string,
+        recoverAccount: PropTypes.func.isRequired
     };
 
     constructor(props) {

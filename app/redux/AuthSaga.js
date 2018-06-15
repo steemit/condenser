@@ -1,5 +1,4 @@
-import {takeEvery} from 'redux-saga';
-import {call, put, select} from 'redux-saga/effects';
+import { call, put, select, takeEvery } from 'redux-saga/effects';
 import {Set, Map, fromJS, List} from 'immutable'
 import user from 'app/redux/User'
 import {getAccount} from 'app/redux/SagaShared'
@@ -10,11 +9,11 @@ import {api} from 'golos-js';
 const postingOps = Set(`vote, comment, delete_comment, custom_json`.trim().split(/,\s*/))
 
 export const authWatches = [
-    watchForAuth
+    watchForAuth()
 ]
 
 function* watchForAuth() {
-    yield* takeEvery('user/ACCOUNT_AUTH_LOOKUP', accountAuthLookup);
+    yield takeEvery('user/ACCOUNT_AUTH_LOOKUP', accountAuthLookup);
 }
 
 export function* accountAuthLookup({payload: {account, private_keys, login_owner_pubkey}}) {

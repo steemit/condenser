@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types'
 import { Link } from 'react-router';
 import {connect} from 'react-redux';
 import { browserHistory } from 'react-router';
@@ -10,7 +11,7 @@ import cookie from "react-cookie";
 
 export default class TagsIndex extends React.Component {
     static propTypes = {
-        tagsAll: React.PropTypes.object.isRequired,
+        tagsAll: PropTypes.object.isRequired,
     };
 
     constructor(props) {

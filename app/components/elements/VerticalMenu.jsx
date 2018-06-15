@@ -1,18 +1,19 @@
 import React from 'react';
+import PropTypes from 'prop-types'
 import { Link } from 'react-router'
 import Icon from 'app/components/elements/Icon.jsx';
 
 export default class VerticalMenu extends React.Component {
     static propTypes = {
-        items: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
-        title: React.PropTypes.oneOfType([
-            React.PropTypes.string,
-            React.PropTypes.object
+        items: PropTypes.arrayOf(PropTypes.object).isRequired,
+        title: PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.object
         ]),
-        className: React.PropTypes.string,
-        hideValue: React.PropTypes.oneOfType([
-            React.PropTypes.string,
-            React.PropTypes.element
+        className: PropTypes.string,
+        hideValue: PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.element
         ]),
     };
 
@@ -32,7 +33,7 @@ export default class VerticalMenu extends React.Component {
             {items.map((i, k) => {
                 if(i.value === hideValue) return null
                 const iconSize = i.iconSize || '1x'
-                const target = i.target || '_self'
+                const target = i.target
                 return <li key={i.value} onClick={this.closeMenu}>
                     {i.link ? <Link to={i.link} target={target} onClick={i.onClick}>
                         {i.icon && <Icon name={i.icon} size={iconSize} />}{i.label ? i.label : i.value}

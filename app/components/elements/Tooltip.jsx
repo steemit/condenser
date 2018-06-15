@@ -1,5 +1,5 @@
 import React from 'react';
-import {LinkWithTooltip} from 'react-foundation-components/lib/global/tooltip';
+import { LinkWithTooltip } from 'react-foundation-components/lib/global/tooltip';
 
 export default ({children, className, t}) => {
     //return (<LinkWithTooltip tooltipContent={t} tooltipPosition="top" tooltipIndicator={false}>

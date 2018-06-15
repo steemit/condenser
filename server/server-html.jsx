@@ -49,14 +49,26 @@ export default function ServerHTML({ body, assets, locale, title, meta, analytic
             <meta name="msapplication-square150x150logo" content="/images/favicons/ms-icon-150x150.png" />
             <meta name="msapplication-wide310x150logo" content="/images/favicons/ms-icon-310x150.png" />
             <meta name="msapplication-square310x310logo" content="/images/favicons/ms-icon-310x310.png" />
-            { assets.style.map((href, idx) => <link href={href} key={idx} rel="stylesheet" type="text/css" />) }
+
+            {/* styles (will be present only in production with webpack extract text plugin) */}
+            {Object.keys(assets.styles).map((style, i) =>
+                <link href={assets.styles[style]} key={i} media="screen, projection"
+                    rel="stylesheet" type="text/css" />)}
+
             <title>{page_title}</title>
         </head>
         <body>
-        {/* <AnalyticsScripts { ...analytics }/> */}
-        <div id="content" dangerouslySetInnerHTML={ { __html: body } }></div>
-        { assets.script.map((href, idx) => <script key={ idx } src={ href }></script>) }
-        { config.get('vk_pixel_id') && <script dangerouslySetInnerHTML={ { __html: `(window.Image ? (new Image()) : document.createElement('img')).src = 'https://vk.com/rtrg?p=${config.get('vk_pixel_id')}';` } }></script> }
+            {/* <AnalyticsScripts { ...analytics }/> */}
+            <div id="content" dangerouslySetInnerHTML={ { __html: body } }></div>
+
+            {/* javascripts */}
+            {/* (usually one for each "entry" in webpack configuration) */}
+            {/* (for more informations on "entries" see https://github.com/petehunt/webpack-howto/) */}
+            {Object.keys(assets.javascript).map((script, i) =>
+                <script src={assets.javascript[script]} key={i} />
+            )}
+
+            { config.get('vk_pixel_id') && <script dangerouslySetInnerHTML={ { __html: `(window.Image ? (new Image()) : document.createElement('img')).src = 'https://vk.com/rtrg?p=${config.get('vk_pixel_id')}';` } }></script> }
         </body>
         </html>
     );

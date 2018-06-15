@@ -1,18 +1,14 @@
 {
-  "presets": ["es2015", "stage-0", "react"],
-  "plugins": ["transform-runtime", "transform-decorators-legacy"],
-  "env": {
-      "browser": {
-        "plugins": [["react-transform", {
-          "transforms": [
-          {
-            "transform": "react-transform-catch-errors",
-            "imports": [
-              "react",
-              "redbox-react"
-            ]
-          }]
-        }]]
+  "presets": ["env", "stage-2", "react"],
+  "plugins": [
+    "transform-regenerator",
+    [
+      "transform-runtime",
+      {
+        "helpers": true,
+        "polyfill": true,
+        "regenerator": true
       }
-    }
+    ]
+  ]
 }

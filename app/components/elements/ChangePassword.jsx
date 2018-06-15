@@ -1,5 +1,6 @@
 /* eslint react/prop-types: 0 */
 import React from 'react'
+import PropTypes from 'prop-types'
 import transaction from 'app/redux/Transaction'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
 import {PrivateKey, PublicKey, key_utils} from 'golos-js/lib/auth/ecc'
@@ -9,7 +10,7 @@ import tt from 'counterpart';
 import { APP_NAME } from 'app/client_config';
 import {api} from 'golos-js'
 
-const {string, oneOf} = React.PropTypes
+const {string, oneOf} = PropTypes
 
 class ChangePassword extends React.Component {
     static propTypes = {

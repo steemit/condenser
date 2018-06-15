@@ -127,9 +127,7 @@ app.use(function*(next) {
         this.body = {
             status: 'ok',
             docker_tag: process.env.DOCKER_TAG ? process.env.DOCKER_TAG : false,
-            source_commit: process.env.SOURCE_COMMIT
-                ? process.env.SOURCE_COMMIT
-                : false,
+            source_commit: process.env.SOURCE_COMMIT ? process.env.SOURCE_COMMIT : false,
         };
         return;
     }

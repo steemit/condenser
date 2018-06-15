@@ -5,7 +5,7 @@ import { DEFAULT_LANGUAGE } from 'app/client_config';
 const SHOW_LOGIN = 'user/SHOW_LOGIN';
 const HIDE_LOGIN = 'user/HIDE_LOGIN';
 const SHOW_TERMS = 'user/SHOW_TERMS';
-const HIDE_TERMS = 'user/HIDE_TERMS';
+export const ACCEPT_TERMS = 'user/ACCEPT_TERMS';
 export const SAVE_LOGIN_CONFIRM = 'user/SAVE_LOGIN_CONFIRM';
 export const SAVE_LOGIN = 'user/SAVE_LOGIN';
 const REMOVE_HIGH_SECURITY_KEYS = 'user/REMOVE_HIGH_SECURITY_KEYS';
@@ -25,6 +25,7 @@ export const SET_USER = 'user/SET_USER';
 const CLOSE_LOGIN = 'user/CLOSE_LOGIN';
 export const LOGIN_ERROR = 'user/LOGIN_ERROR';
 export const LOGOUT = 'user/LOGOUT';
+const SET_LATEST_FEED_PRICE = 'user/SET_LATEST_FEED_PRICE';
 const SHOW_SIGN_UP = 'user/SHOW_SIGN_UP';
 const HIDE_SIGN_UP = 'user/HIDE_SIGN_UP';
 const KEYS_ERROR = 'user/KEYS_ERROR';
@@ -71,6 +72,9 @@ export default function reducer(state = defaultState, action) {
             });
         }
 
+        case SET_LATEST_FEED_PRICE:
+            return state.set('latest_feed_price', payload);
+
         case HIDE_LOGIN:
             return state.merge({
                 show_login_modal: false,
@@ -89,7 +93,7 @@ export default function reducer(state = defaultState, action) {
             });
         }
 
-        case HIDE_TERMS:
+        case ACCEPT_TERMS:
             return state.merge({
                 show_terms_modal: false,
                 termsDefault: undefined,
@@ -267,10 +271,7 @@ export const showTerms = payload => ({
     payload,
 });
 
-export const hideTerms = payload => ({
-    type: HIDE_TERMS,
-    payload,
-});
+export const acceptTerms = () => ({ type: ACCEPT_TERMS });
 
 export const saveLoginConfirm = payload => ({
     type: SAVE_LOGIN_CONFIRM,
@@ -389,6 +390,11 @@ export const accountAuthLookup = payload => ({
 
 export const setAuthority = payload => ({
     type: SET_AUTHORITY,
+    payload,
+});
+
+export const setLatestFeedPrice = payload => ({
+    type: SET_LATEST_FEED_PRICE,
     payload,
 });
 

@@ -113,10 +113,10 @@ const Topics = ({
 };
 
 Topics.propTypes = {
-    categories: React.PropTypes.object.isRequired,
-    order: React.PropTypes.string.isRequired,
-    current: React.PropTypes.string,
-    compact: React.PropTypes.bool.isRequired,
+    categories: PropTypes.object.isRequired,
+    order: PropTypes.string.isRequired,
+    current: PropTypes.string,
+    compact: PropTypes.bool.isRequired,
 };
 
 Topics.defaultProps = {

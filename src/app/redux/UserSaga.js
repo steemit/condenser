@@ -13,6 +13,8 @@ import {
     serverApiLogin,
     serverApiLogout,
     serverApiRecordEvent,
+    isTosAccepted,
+    acceptTos,
 } from 'app/utils/ServerApiClient';
 import { loadFollows } from 'app/redux/FollowSaga';
 import { translate } from 'app/Translator';
@@ -28,6 +30,8 @@ export const userWatches = [
     lookupPreviousOwnerAuthorityWatch,
     watchLoadSavingsWithdraw,
     uploadImageWatch,
+    acceptTosWatch,
+    getLatestFeedPrice,
 ];
 
 const highSecurityPages = [
@@ -65,6 +69,17 @@ function* watchLoadSavingsWithdraw() {
 
 export function* watchRemoveHighSecurityKeys() {
     yield* takeLatest('@@router/LOCATION_CHANGE', removeHighSecurityKeys);
+}
+
+function* getLatestFeedPrice() {
+    try {
+        const history = yield call([api, api.getFeedHistoryAsync]);
+        const feed = history['price_history'];
+        const last = fromJS(feed[feed.length - 1]);
+        yield put(userActions.setLatestFeedPrice(last));
+    } catch (error) {
+        // (exceedingly rare) ignore, UI will fall back to feed_price
+    }
 }
 
 function* loadSavingsWithdraw() {
@@ -367,7 +382,7 @@ function* usernamePasswordLogin2({
             };
             sign('posting', private_keys.get('posting_private'));
             // sign('active', private_keys.get('active_private'))
-            serverApiLogin(username, signatures);
+            yield serverApiLogin(username, signatures);
         }
     } catch (error) {
         // Does not need to be fatal
@@ -381,11 +396,35 @@ function* usernamePasswordLogin2({
         private_keys.get('posting_private').toString()
     );
 
+    // TOS acceptance
+    yield fork(promptTosAcceptance, username);
+
     if (afterLoginRedirectToWelcome) {
         browserHistory.push('/welcome');
     } else if (feedURL) {
         if (document.location.pathname === '/') browserHistory.push(feedURL);
     }
+}
+
+function* promptTosAcceptance(username) {
+    try {
+        const accepted = yield call(isTosAccepted, username);
+        if (!accepted) {
+            yield put(userActions.showTerms());
+        }
+    } catch (e) {
+        // TODO: log error to server, conveyor is unavailable
+    }
+}
+
+function* acceptTosWatch() {
+    yield* takeLatest(userActions.ACCEPT_TERMS, function*() {
+        try {
+            yield call(acceptTos);
+        } catch (e) {
+            // TODO: log error to server, conveyor is unavailable
+        }
+    });
 }
 
 function* getFeatureFlags(username, posting_private) {

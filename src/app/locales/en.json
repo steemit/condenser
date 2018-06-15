@@ -41,15 +41,18 @@
         "in_reply_to": "in reply to",
         "insufficient_balance": "Insufficient balance",
         "invalid_amount": "Invalid amount",
+        "links": "Links",
         "joined": "Joined",
         "loading": "Loading",
         "login": "Login",
         "logout": "Logout",
         "memo": "Memo",
         "mute": "Mute",
-        "myblog": "My blog",
-        "mycomments": "My comments",
-        "myreplies": "Replies to me",
+        "my_blog": "My blog",
+        "my_comments": "My comments",
+        "my_feed": "My feed",
+        "my_replies": "Replies to me",
+        "my_wallet": "My wallet",
         "new": "New",
         "newer": "Newer",
         "next": "Next",
@@ -111,7 +114,6 @@
         "toggle_nightmode": "Toggle Night Mode",
         "all_tags": "All tags",
         "all_tags_mobile": "All content",
-        "my_feed": "My feed",
         "transfer": "Transfer ",
         "trending_topics": "Trending Topics",
         "type": "Type",
@@ -684,7 +686,7 @@
             "to_self": {
                 "to_savings": "Receive from savings %(amount)s from ",
                 "from_savings": "Transfer from savings %(amount)s from ",
-                "not_savings": "Transfer %(amount)s from "
+                "not_savings": "Received %(amount)s from "
             },
             "to_someone_from_someone": {
                 "to_savings":
@@ -830,8 +832,7 @@
         "convert_to_VESTING_TOKEN": "Convert to %(VESTING_TOKEN)s",
         "balance_subject_to_3_day_withdraw_waiting_period":
             "Balance subject to 3 day withdraw waiting period,",
-        "move_funds_to_another_account":
-            "Move funds to another %(APP_NAME)s account.",
+        "move_funds_to_another_account": "Move funds to another Steem account.",
         "protect_funds_by_requiring_a_3_day_withdraw_waiting_period":
             "Protect funds by requiring a 3 day withdraw waiting period.",
         "withdraw_funds_after_the_required_3_day_waiting_period":
@@ -890,7 +891,14 @@
         "i_understand_dont_show_again": "I understand, don't show me again"
     },
     "termsagree_jsx": {
-        "i_agree_to_these_terms": "I agree to these terms",
+        "please_review": "Please review our terms to continue",
+        "hi_user": "Hi %(username)s,",
+        "blurb":
+            "Our Terms of Service set the rules and guidelines that you must accept and follow in order to use Steemit and our Privacy Policy explains the type of information we collect and what we do with it. Don't worry, we don't sell your data to anyone. We do use it to meet legal requirements and to learn how to make Steemit better.",
+        "i_agree_to_steemits": "I agree to Steemit's",
+        "terms_of_service": "Terms of Service",
+        "privacy_policy": "Privacy Policy",
+        "continue": "Continue",
         "cancel": "Cancel"
     },
     "confirmtransactionform_jsx": {

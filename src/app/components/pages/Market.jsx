@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 //import Highcharts from 'highcharts';
@@ -26,14 +27,14 @@ import {
 
 class Market extends React.Component {
     static propTypes = {
-        orderbook: React.PropTypes.object,
-        open_orders: React.PropTypes.array,
-        open_orders_sort: React.PropTypes.instanceOf(Map),
-        ticker: React.PropTypes.object,
+        orderbook: PropTypes.object,
+        open_orders: PropTypes.array,
+        open_orders_sort: PropTypes.instanceOf(Map),
+        ticker: PropTypes.object,
         // redux PropTypes
-        placeOrder: React.PropTypes.func.isRequired,
-        user: React.PropTypes.string,
-        feed: React.PropTypes.instanceOf(Map),
+        placeOrder: PropTypes.func.isRequired,
+        user: PropTypes.string,
+        feed: PropTypes.instanceOf(Map),
     };
 
     constructor(props) {

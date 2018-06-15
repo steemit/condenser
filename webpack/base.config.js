@@ -4,8 +4,6 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 const alias = require('./alias')
 
-const devMode = process.env.NODE_ENV !== 'production'
-
 module.exports = {
     context: path.resolve(__dirname, '..'),
     entry: {
@@ -56,10 +54,6 @@ module.exports = {
         new ProgressBarPlugin({
             format: 'Build [:bar] :percent (:elapsed seconds)',
             clear: false,
-        }),
-        new MiniCssExtractPlugin({
-            filename: devMode ? '[name].css' : '[name].[hash].css',
-            chunkFilename: devMode ? '[id].css' : '[id].[hash].css',
         })
     ],
     optimization: {

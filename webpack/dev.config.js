@@ -33,6 +33,10 @@ module.exports = merge(baseConfig, {
             }
         }),
         webpack_isomorphic_tools_plugin.development(),
+        new MiniCssExtractPlugin({
+            filename: '[name].css',
+            chunkFilename: '[id].css',
+        }),
         new StartServerPlugin()
     ],
     module: {
@@ -40,14 +44,8 @@ module.exports = merge(baseConfig, {
             {
                 test: /\.(sa|sc|c)ss$/,
                 use: [
-                    'css-hot-loader',
-                    MiniCssExtractPlugin.loader,
-                    {
-                        loader: 'css-loader',
-                        options: {
-                            sourceMap: true
-                        }
-                    },
+                    'style-loader',
+                    { loader: 'css-loader', options: { sourceMap: true } },
                     {
                         loader: 'postcss-loader',
                         options: {
@@ -57,18 +55,10 @@ module.exports = merge(baseConfig, {
                             sourceMap: true
                         }
                     },
-                    {
-                        loader: 'sass-loader',
-                        options: {
-                            sourceMap: true
-                        }
-                    }
+                    { loader: 'sass-loader', options: { sourceMap: true } },
                 ],
             },
         ]
-    },
-    optimization: {
-        noEmitOnErrors: true, // NoEmitOnErrorsPlugin
     },
     serve: {
         port: WEBPACK_PORT,

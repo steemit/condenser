@@ -55,6 +55,10 @@ export default function ServerHTML({ body, assets, locale, title, meta, analytic
                 <link href={assets.styles[style]} key={i} media="screen, projection"
                     rel="stylesheet" type="text/css" />)}
 
+            {/* resolves the initial style flash (flicker) on page load in development mode */}
+            {Object.keys(assets.styles).length === 0 ?
+                <style dangerouslySetInnerHTML={{ __html: '#content{display:none}' }} /> : null}
+
             <title>{page_title}</title>
         </head>
         <body>

@@ -13,6 +13,10 @@
 @import "app/components/themes/green/all";
 @import "app/components/themes/red/all";
 
+#content {
+  display: block;
+}
+
 /* Small only */
 @media screen and (max-width: 39.9375em) {
   body {

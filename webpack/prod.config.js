@@ -24,10 +24,11 @@ module.exports = merge(baseConfig, {
                 TYPED_ARRAY_SUPPORT: JSON.stringify(false)
             }
         }),
-
-        // optimizations
-        // new webpack.optimize.DedupePlugin(),
-        webpack_isomorphic_tools_plugin
+        webpack_isomorphic_tools_plugin,
+        new MiniCssExtractPlugin({
+            filename: '[name].[hash].css',
+            chunkFilename: '[id].[hash].css',
+        })
     ],
     module: {
         rules: [
@@ -50,7 +51,6 @@ module.exports = merge(baseConfig, {
         ]
     },
     optimization: {
-        concatenateModules: true, //ModuleConcatenationPlugin
         minimizer: [ // in production mode webpack 4 use own uglify
             new UglifyJsPlugin({
                 cache: true,

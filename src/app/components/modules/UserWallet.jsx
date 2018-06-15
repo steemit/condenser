@@ -441,10 +441,7 @@ class UserWallet extends React.Component {
         const sbdInterest = this.props.sbd_interest / 100;
         const sbdMessage = (
             <span>
-                {tt('userwallet_jsx.tokens_worth_about_1_of_LIQUID_TICKER', {
-                    LIQUID_TICKER,
-                    sbdInterest,
-                })}
+                {tt('userwallet_jsx.sbd_tip')}
             </span>
         );
 
@@ -654,12 +651,6 @@ class UserWallet extends React.Component {
                                 {tt(
                                     'transfer_jsx.balance_subject_to_3_day_withdraw_waiting_period'
                                 )}
-                            </span>
-                            <span>
-                                {tt('transfer_jsx.asset_currently_collecting', {
-                                    asset: DEBT_TOKENS,
-                                    interest: sbdInterest,
-                                })}
                             </span>
                         </div>
                     </div>

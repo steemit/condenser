@@ -12,12 +12,14 @@ export default class LandingJoinUs extends React.Component {
       'Китовый сонар',
 			'Golos Explorer',
 			'SteepShot',
+			'GoldVoice.club',
 			'MapalaNet',
 			'OnePlace',
 			'CPEDA.SPACE',
 			'База знаний Golos Wiki',
 			'Фотопремия Golos Photography Awards',
 			'Pokupo',
+			'Golos today',
 			'Статистика аккаунта'
 		]
 		const secondaryTexts = [
@@ -29,12 +31,14 @@ export default class LandingJoinUs extends React.Component {
       'Приложение демонстрирует активность пользователей с различными настройками',
 			'Сервис для просмотра транзакций в блокчейне Голос в реальном времени и поиска информации по ним',
 			'Социальная платформа, вознаграждающая пользователей за публикации фотографий о своей жизни и окружающем мире.',
+			'Cоциальная сеть',
 			'Cообщество самостоятельных путешественников',
 			'Веб-клиент для блокчейнов Golos и Steem',
 			'Cоциальная сеть на блокчейне Голос',
 			'Вики является результатом коллективного труда. Каждый может поучаствовать в ее развитии',
 			'Первая криптовалютная награда в области фотографии, созданная на базе медиа-блокчейна «Голос»',
 			'Платформа для создания интерент магазина за 10 минут и 0 рублей без абонентской платы',
+			'Веб-клиент для блокчейна Golos',
 			'Сервис для просмотра статистики аккаунта'
 		]
 		const urls = [
@@ -46,21 +50,23 @@ export default class LandingJoinUs extends React.Component {
       'http://golos.loadsup.net/sonar/',
 			'https://explorer.golos.io/',
 			'https://steepshot.io/',
+			'https://goldvoice.club/',
 			'http://mapala.net',
 			'https://oneplace.media/g',
 			'https://cpeda.space/socnet/',
 			'https://wiki.golos.io/',
 			'http://golosphoto.ru/',
 			'https://pokupo.ru',
+			'https://golos.today',
 			'http://golos.accusta.tk/'
 		]
 
 		function renderItems() {
 			return mainTexts.map((header, index) => {
 				return 	<div key={header} className="JoinUs__item small-12 medium-6 large-6 columns">
-							<div className="row">
+					<div className="row row align-middle">
 								<div className="small-2 columns">
-									<a target="_blank" href={urls[index]}><img src={`images/landing/l${index + 1}.jpg`} /></a>
+									<a target="_blank" href={urls[index]}><img src={`images/landing/l${index + 1}.jpg`} alt="" /></a>
 								</div>
 								<div className="small-10 columns">
 									<strong><a target="_blank" href={urls[index]}>{header}</a></strong>
@@ -83,8 +89,8 @@ export default class LandingJoinUs extends React.Component {
 				</div>
 				<div className="row text-left JoinUs__reasons">
 					{renderItems()}
-					<div className="small-12 text-center">
-						<a href="http://chainstore.io" target="_blank">Больше приложений для блокчейна Голос</a>
+					<div className="JoinUs__more small-12 text-center">
+						<a href="http://chainstore.io" target="_blank" className="button">Больше приложений для блокчейна Голос</a>
 					</div>
 				</div>
 				<hr />

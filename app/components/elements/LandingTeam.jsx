@@ -41,7 +41,7 @@ export default class LandingTeam extends React.Component {
                             <img className="Team__member__img" src="images/landing/jevgenika.jpg" />
                         </div>
                         <strong>Евгения Харченко</strong>
-                        <p>Product Owner</p>
+                        <p>CMO, Product Owner</p>
                         <ul>
                             <li><a href="https://www.linkedin.com/in/jevgenija-kharchenko-1a816b10/"><img src="images/landing/linkedin_icon.jpg" /></a></li>
                             <li><a href="https://www.facebook.com/jevgenija.kharchenko"><img className="Team__facebook-logo" src="https://cdn1.iconfinder.com/data/icons/logotypes/32/square-facebook-512.png" /></a></li>
@@ -64,9 +64,9 @@ export default class LandingTeam extends React.Component {
 
                     <div data-wow-delay="1s" className="wow fadeIn small-12 medium-4 large-3 columns small-centered Team__member Team__member__pavel">
                         <div className="Team__members__image-wrapper">
-                            <img className="Team__member__img" src="https://avatars2.githubusercontent.com/u/3322340?v=3&s=460" alt="фотография Ткаченко Игоря" />
+                            <img className="Team__member__img" src="https://avatars2.githubusercontent.com/u/3322340?v=3&s=460" alt="фотография Игоря Ткаченко" />
                         </div>
-                        <strong>Ткаченко Игорь</strong>
+                        <strong>Игорь Ткаченко</strong>
                         <p>Web dev</p>
                         <ul>
                             <li><a href="https://github.com/b1acksun"><img src="images/landing/github_icon.jpg" /></a></li>
@@ -88,13 +88,13 @@ export default class LandingTeam extends React.Component {
 
                     <div data-wow-delay="1s" className="wow fadeIn small-12 medium-4 large-3 columns small-centered Team__member Team__member__pavel">
                         <div className="Team__members__image-wrapper">
-                            <img className="Team__member__img" src="https://avatars3.githubusercontent.com/u/25533641?v=3&s=460" alt="фотография Горошко Павла" />
+                            <img className="Team__member__img" src="images/landing/pevgenii.png" />
                         </div>
-                        <strong>Горошко Павел</strong>
-                        <p>Web dev</p>
+                        <strong>Евгений Паршин</strong>
+                        <p>QA Tester</p>
                         <ul>
-                            <li><a href="https://github.com/pavelit"><img src="images/landing/github_icon.jpg" /></a></li>
-                            <li><a href="https://golos.io/@pav"><Icon name={APP_ICON} size="2x" /></a></li>
+                            <li><a href="https://github.com/BaroH4er"><img src="images/landing/github_icon.jpg" /></a></li>
+                            <li><a href="/@dekol"><Icon name={APP_ICON} size="2x" /></a></li>
                         </ul>
                     </div>
 
@@ -124,6 +124,18 @@ export default class LandingTeam extends React.Component {
 
                     <div data-wow-delay="1s" className="wow fadeIn small-12 medium-4 large-3 columns small-centered Team__member Team__member__pavel">
                         <div className="Team__members__image-wrapper">
+                            <img className="Team__member__img" src="images/landing/artemiyshlenskiy.jpg" />
+                        </div>
+                        <strong>Артемий Шленский</strong>
+                        <p>Юрист</p>
+                        <ul>
+                            <li><a href="https://github.com/aartsh"><img src="images/landing/github_icon.jpg" /></a></li>
+                            <li><a href="/@aart"><Icon name={APP_ICON} size="2x" /></a></li>
+                        </ul>
+                    </div>
+
+                    <div data-wow-delay="1s" className="wow fadeIn small-12 medium-4 large-3 columns small-centered Team__member Team__member__pavel">
+                        <div className="Team__members__image-wrapper">
                             <img className="Team__member__img" src="images/landing/firsov.png" />
                         </div>
                         <strong>Александр Фирсов</strong>
@@ -142,6 +154,7 @@ export default class LandingTeam extends React.Component {
                         <strong>Юлия Родникова</strong>
                         <p>Комьюнити-менеджер</p>
                         <ul>
+                            <li><a href="https://github.com/rodnikova"><img src="images/landing/github_icon.jpg" /></a></li>
                             <li><a href="mailto:community@golos.io" title="mail to community@golos.io"><Icon name="envelope" size="2x" /></a></li>
                             <li><a href="/@yulia.rodnikova"><Icon name={APP_ICON} size="2x" /></a></li>
                         </ul>
@@ -154,6 +167,7 @@ export default class LandingTeam extends React.Component {
                         <strong>Денис Белых</strong>
                         <p>Support Manager</p>
                         <ul>
+                            <li><a href="https://github.com/dankinescop"><img src="images/landing/github_icon.jpg" /></a></li>
                             <li><a href="mailto:support@golos.io" title="mail to support@golos.io"><Icon name="envelope" size="2x" /></a></li>
                             <li><a href="/@dan-kinescop"><Icon name={APP_ICON} size="2x" /></a></li>
                         </ul>
@@ -166,7 +180,20 @@ export default class LandingTeam extends React.Component {
                         <strong>Алеся Николаенкова</strong>
                         <p>Support Manager</p>
                         <ul>
+                            <li><a href="https://github.com/chinpu"><img src="images/landing/github_icon.jpg" /></a></li>
                             <li><a href="/@chinpu"><Icon name={APP_ICON} size="2x" /></a></li>
+                        </ul>
+                    </div>
+
+                    <div data-wow-delay="1s" className="wow fadeIn small-12 medium-4 large-3 columns small-centered Team__member Team__member__pavel">
+                        <div className="Team__members__image-wrapper">
+                            <img className="Team__member__img" src="images/landing/allakuchinskaya.jpg" alt="фотография Аллы Кучинской" />
+                        </div>
+                        <strong>Алла Кучинская</strong>
+                        <p>Designer</p>
+                        <ul>
+                            <li><a href="https://github.com/kucinskaya.alla"><img src="images/landing/github_icon.jpg" /></a></li>
+                            <li><a href="/@kuchinskaya"><Icon name={APP_ICON} size="2x" /></a></li>
                         </ul>
                     </div>
 
@@ -184,13 +211,83 @@ export default class LandingTeam extends React.Component {
 
                     <div data-wow-delay="1s" className="wow fadeIn small-12 medium-4 large-3 columns small-centered Team__member Team__member__pavel">
                         <div className="Team__members__image-wrapper">
-                            <img className="Team__member__img" src="images/landing/pevgenii.png" />
+                            <img className="Team__member__img" src="images/landing/alexeyelizarov.jpg" alt="фотография Алексея Елизарова" />
                         </div>
-                        <strong>Евгений Паршин</strong>
-                        <p>QA Tester</p>
+                        <strong>Алексей Елизаров</strong>
+                        <p>Web dev</p>
                         <ul>
-                            <li><a href="https://github.com/BaroH4er"><img src="images/landing/github_icon.jpg" /></a></li>
-                            <li><a href="/@dekol"><Icon name={APP_ICON} size="2x" /></a></li>
+                            <li><a href="https://github.com/beautyfree"><img src="images/landing/github_icon.jpg" /></a></li>
+                            <li><a href="/@devall"><Icon name={APP_ICON} size="2x" /></a></li>
+                        </ul>
+                    </div>
+
+                    <div data-wow-delay="1s" className="wow fadeIn small-12 medium-4 large-3 columns small-centered Team__member Team__member__pavel">
+                        <div className="Team__members__image-wrapper">
+                            <img className="Team__member__img" src="images/landing/olegpavlov.jpg" alt="фотография Олег Павлов" />
+                        </div>
+                        <strong>Олег Павлов</strong>
+                        <p>Web dev</p>
+                        <ul>
+                            <li><a href="https://github.com/Format-X22"><img src="images/landing/github_icon.jpg" /></a></li>
+                            <li><a href="/@format-x22"><Icon name={APP_ICON} size="2x" /></a></li>
+                        </ul>
+                    </div>
+
+                    <div data-wow-delay="1s" className="wow fadeIn small-12 medium-4 large-3 columns small-centered Team__member Team__member__pavel">
+                        <div className="Team__members__image-wrapper">
+                            <img className="Team__member__img" src="images/landing/ilyalebedev.jpg" alt="фотография Ильи Лебедева" />
+                        </div>
+                        <strong>Илья Лебедев</strong>
+                        <p>Web dev</p>
+                        <ul>
+                            <li><a href="https://github.com/Bacher"><img src="images/landing/github_icon.jpg" /></a></li>
+                            <li><a href="/@bacher"><Icon name={APP_ICON} size="2x" /></a></li>
+                        </ul>
+                    </div>
+
+                    <div data-wow-delay="1s" className="wow fadeIn small-12 medium-4 large-3 columns small-centered Team__member Team__member__pavel">
+                        <div className="Team__members__image-wrapper">
+                            <img className="Team__member__img" src="images/landing/evgeniymoykin.jpg" alt="фотография Евгения Мойкина" />
+                        </div>
+                        <strong>Евгений Мойкин</strong>
+                        <p>Digital marketing</p>
+                        <ul>
+                            <li><a href="https://github.com/moykin"><img src="images/landing/github_icon.jpg" /></a></li>
+                            <li><a href="/@moykin"><Icon name={APP_ICON} size="2x" /></a></li>
+                        </ul>
+                    </div>
+
+                    <div data-wow-delay="1s" className="wow fadeIn small-12 medium-4 large-3 columns small-centered Team__member Team__member__pavel">
+                        <div className="Team__members__image-wrapper">
+                            <img className="Team__member__img" src="images/landing/anastasiyazhuravleva.jpg" alt="фотография Анастасии Журавлевой" />
+                        </div>
+                        <strong>Анастасия Журавлева</strong>
+                        <p>Wounderwoman</p>
+                        <ul>
+                            <li><a href="https://github.com/anastasiamarkovna"><img src="images/landing/github_icon.jpg" /></a></li>
+                            <li><a href="/@anastasia.mark"><Icon name={APP_ICON} size="2x" /></a></li>
+                        </ul>
+                    </div>
+
+                    <div data-wow-delay="1s" className="wow fadeIn small-12 medium-4 large-3 columns small-centered Team__member Team__member__pavel">
+                        <div className="Team__members__image-wrapper">
+                            <img className="Team__member__img" src="images/landing/uliya-ermilova.jpg" alt="фотография Юлиb Ермиловой" />
+                        </div>
+                        <strong>Юлия Ермилова</strong>
+                        <p>Finance manager</p>
+                        <ul>
+                            <li><a href="https://github.com/Yuliyaaa"><img src="images/landing/github_icon.jpg" /></a></li>
+                        </ul>
+                    </div>
+
+                    <div data-wow-delay="1s" className="wow fadeIn small-12 medium-4 large-3 columns small-centered Team__member Team__member__pavel">
+                        <div className="Team__members__image-wrapper">
+                            <img className="Team__member__img" src="images/landing/irinanemogaeva.jpg" alt="фотография Ирины Немогаевой" />
+                        </div>
+                        <strong>Ирина Немогаева</strong>
+                        <p>HR</p>
+                        <ul>
+                            <li><a href="https://github.com/nemogaevairina"><img src="images/landing/github_icon.jpg" /></a></li>
                         </ul>
                     </div>
                 </div>
@@ -211,22 +308,10 @@ export default class LandingTeam extends React.Component {
 
                     <div data-wow-delay="1s" className="wow fadeIn small-12 medium-12 large-3 columns small-centered Team__member Team__member__mihail">
                         <div className="Team__members__image-wrapper">
-                            <img className="Team__member__img" src="https://avatars2.githubusercontent.com/u/958279?v=4&s=400" />
-                        </div>
-                        <strong>Александр Боргардт</strong>
-                        <p>Блокчейн разработка</p>
-                        <ul>
-                            <li><a href="https://github.com/kotbegemot"><img src="images/landing/github_icon.jpg" /></a></li>
-                            <li><a href="/@kotbegemot"><Icon name={APP_ICON} size="2x" /></a></li>
-                        </ul>
-                    </div>
-
-                    <div data-wow-delay="1s" className="wow fadeIn small-12 medium-12 large-3 columns small-centered Team__member Team__member__mihail">
-                        <div className="Team__members__image-wrapper">
                             <img className="Team__member__img" src="images/landing/timur.jpg" />
                         </div>
                         <strong>Тимур Купаев</strong>
-                        <p>Data scientist</p>
+                        <p>Блокчейн аналитик</p>
                         <ul>
                             <li><a href="https://github.com/timurkupaev"><img src="images/landing/github_icon.jpg" /></a></li>
                             <li><a href="/@timurku"><Icon name={APP_ICON} size="2x" /></a></li>
@@ -238,9 +323,9 @@ export default class LandingTeam extends React.Component {
                             <img className="Team__member__img" src="images/landing/maria-d.jpg" />
                         </div>
                         <strong>Мария Дьячук</strong>
-                        <p>Community Manager</p>
+                        <p>Project manager</p>
                         <ul>
-                            <li><a href="mailto:mariacore@golos.io" title="mail to mariacore@golos.io"><Icon name="envelope" size="2x" /></a></li>
+                            <li><a href="https://github.com/marijadia"><img src="images/landing/github_icon.jpg" /></a></li>
                             <li><a href="/@mariadia"><Icon name={APP_ICON} size="2x" /></a></li>
                         </ul>
                     </div>
@@ -260,23 +345,11 @@ export default class LandingTeam extends React.Component {
                         <div className="Team__members__image-wrapper">
                             <img className="Team__member__img" src="images/landing/konstantin.jpg" />
                         </div>
-                        <strong>Константинов Константин</strong>
+                        <strong>Константин Константинов</strong>
                         <p>Блокчейн разработка</p>
                         <ul>
                             <li><a href="https://github.com/zxcat"><img src="images/landing/github_icon.jpg" /></a></li>
                             <li><a href="/@zxcat"><Icon name={APP_ICON} size="2x" /></a></li>
-                        </ul>
-                    </div>
-
-                    <div data-wow-delay="1s" className="wow fadeIn small-12 medium-12 large-3 columns small-centered Team__member Team__member__mihail">
-                        <div className="Team__members__image-wrapper">
-                            <img className="Team__member__img" src="images/landing/vpavliv.jpg" />
-                        </div>
-                        <strong>Владимир Павлив</strong>
-                        <p>Блокчейн разработка</p>
-                        <ul>
-                            <li><a href="https://github.com/vpavliv"><img src="images/landing/github_icon.jpg" /></a></li>
-                            <li><a href="/@abgvedr"><Icon name={APP_ICON} size="2x" /></a></li>
                         </ul>
                     </div>
 
@@ -301,6 +374,56 @@ export default class LandingTeam extends React.Component {
                         <ul>
                             <li><a href="https://github.com/muhazzz/"><img src="images/landing/github_icon.jpg" /></a></li>
                             <li><a href="/@muhazokotuha"><Icon name={APP_ICON} size="2x" /></a></li>
+                        </ul>
+                    </div>
+
+                    {/*-----------------*/}
+
+                    <div data-wow-delay="1s" className="wow fadeIn small-12 medium-4 large-3 columns small-centered Team__member Team__member__pavel">
+                        <div className="Team__members__image-wrapper">
+                            <img className="Team__member__img" src="images/landing/anna-ch.jpg" alt="фотография Анна Чемерицкая" />
+                        </div>
+                        <strong>Анна Чемерицкая</strong>
+                        <p>Community manager</p>
+                        <ul>
+                            <li><a href="https://github.com/annaeq"><img src="images/landing/github_icon.jpg" /></a></li>
+                            <li><a href="/@annaeq"><Icon name={APP_ICON} size="2x" /></a></li>
+                        </ul>
+                    </div>
+
+                    <div data-wow-delay="1s" className="wow fadeIn small-12 medium-4 large-3 columns small-centered Team__member Team__member__pavel">
+                        <div className="Team__members__image-wrapper">
+                            <img className="Team__member__img" src="images/landing/vadim-ka.jpg" alt="фотография Вадим Кайнаров" />
+                        </div>
+                        <strong>Вадим Кайнаров</strong>
+                        <p>С++ dev</p>
+                        <ul>
+                            <li><a href="https://github.com/kaynarov"><img src="images/landing/github_icon.jpg" /></a></li>
+                            <li><a href="/@kaynarov"><Icon name={APP_ICON} size="2x" /></a></li>
+                        </ul>
+                    </div>
+
+                    <div data-wow-delay="1s" className="wow fadeIn small-12 medium-4 large-3 columns small-centered Team__member Team__member__pavel">
+                        <div className="Team__members__image-wrapper">
+                            <img className="Team__member__img" src="images/landing/uliya-zh.png" alt="фотография Юлия Журавлева" />
+                        </div>
+                        <strong>Юлия Журавлева</strong>
+                        <p>С++ dev</p>
+                        <ul>
+                            <li><a href="https://github.com/maslenitsa93"><img src="images/landing/github_icon.jpg" /></a></li>
+                            <li><a href="/@maslenitsa"><Icon name={APP_ICON} size="2x" /></a></li>
+                        </ul>
+                    </div>
+
+                    <div data-wow-delay="1s" className="wow fadeIn small-12 medium-4 large-3 columns small-centered Team__member Team__member__pavel">
+                        <div className="Team__members__image-wrapper">
+                            <img className="Team__member__img" src="images/landing/alexandernazarov.jpg" alt="фотография Александр Назаров" />
+                        </div>
+                        <strong>Александр Назаров</strong>
+                        <p>Технический писатель</p>
+                        <ul>
+                            <li><a href="https://github.com/anazarov79"><img src="images/landing/github_icon.jpg" /></a></li>
+                            <li><a href="/@anazarov79"><Icon name={APP_ICON} size="2x" /></a></li>
                         </ul>
                     </div>
                 </div>

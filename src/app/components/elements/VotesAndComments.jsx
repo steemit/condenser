@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import Icon from 'app/components/elements/Icon';
@@ -8,12 +9,12 @@ import tt from 'counterpart';
 class VotesAndComments extends React.Component {
     static propTypes = {
         // HTML properties
-        post: React.PropTypes.string.isRequired,
-        commentsLink: React.PropTypes.string.isRequired,
+        post: PropTypes.string.isRequired,
+        commentsLink: PropTypes.string.isRequired,
 
         // Redux connect properties
-        comments: React.PropTypes.number,
-        totalVotes: React.PropTypes.number,
+        comments: PropTypes.number,
+        totalVotes: PropTypes.number,
     };
 
     constructor(props) {

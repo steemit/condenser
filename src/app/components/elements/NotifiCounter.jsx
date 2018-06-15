@@ -1,9 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 class NotifiCounter extends React.Component {
     static propTypes = {
-        value: React.PropTypes.number,
+        value: PropTypes.number,
     };
 
     render() {

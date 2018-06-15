@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import { connect } from 'react-redux';
 import * as userActions from 'app/redux/UserReducer';

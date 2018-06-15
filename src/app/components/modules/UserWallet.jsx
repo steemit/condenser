@@ -760,7 +760,10 @@ export default connect(
     // mapStateToProps
     (state, ownProps) => {
         let price_per_steem = undefined;
-        const feed_price = state.global.get('feed_price');
+        const feed_price = state.user.get(
+            'latest_feed_price',
+            state.global.get('feed_price')
+        );
         if (feed_price && feed_price.has('base') && feed_price.has('quote')) {
             const { base, quote } = feed_price.toJS();
             if (/ SBD$/.test(base) && / STEEM$/.test(quote))

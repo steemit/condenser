@@ -161,7 +161,6 @@
     "chai-immutable": "^1.5.3",
     "co-mocha": "^1.2.2",
     "co-supertest": "0.0.10",
-    "css-hot-loader": "^1.3.9",
     "dirty-chai": "^1.2.2",
     "enzyme": "^2.1.0",
     "eslint": "^4.9.0",

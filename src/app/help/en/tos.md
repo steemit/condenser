@@ -356,11 +356,10 @@ agent, or the law; and
 information in your notice is accurate and that you are the copyright owner or
 are authorized to act on the copyright owner's behalf.
 
-15.2 Your right to file a counter-notice. If we remove your user content in
-response to a copyright or trademark notice, we will notify you. If you believe
-your user content was wrongly removed due to a mistake or misidentification of
-the material, you can send a counter-notice to our Copyright Agent (contact
-information provided above) that includes the following:
+15.2 Your right to file a counter-notice.  If you believe your user content was
+wrongly removed due to a mistake or misidentification of the material, you can s
+end a counter-notice to our Copyright Agent (contact information provided above)
+ that includes the following:
 
 1.        Your physical or electronic signature;
 

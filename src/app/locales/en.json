@@ -846,7 +846,7 @@
         "withdraw_DEBT_TOKENS": "Withdraw %(DEBT_TOKENS)s",
         "tokens_worth_about_1_of_LIQUID_TICKER":
             "Tokens worth about $1.00 of %(LIQUID_TICKER)s, currently collecting %(sbdInterest)s%% APR.",
-        "sbd_tip": "Tradeable tokens that may be transferred anywhere at anytime.",
+        "tradeable_tokens_transferred": "Tradeable tokens that may be transferred anywhere at anytime.",
         "savings": "SAVINGS",
         "estimated_account_value": "Estimated Account Value",
         "next_power_down_is_scheduled_to_happen":

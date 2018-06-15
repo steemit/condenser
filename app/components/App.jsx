@@ -17,6 +17,7 @@ import tt from 'counterpart';
 import PageViewsCounter from '@elements/PageViewsCounter';
 import {APP_ICON, VEST_TICKER, WIKI_URL, LANDING_PAGE_URL, ABOUT_PAGE_URL, WHITEPAPER_URL, TERMS_OF_SERVICE_URL, PRIVACY_POLICY_URL, THEMES, DEFAULT_THEME } from 'app/client_config';
 import LocalizedCurrency from '@elements/LocalizedCurrency';
+import MobileAppButton from 'app/components/elements/MobileBanners/MobileAppButton';
 
 const availableLinks = [
     'https://www.facebook.com/www.golos.io',
@@ -246,6 +247,7 @@ class App extends React.Component {
                     {children}
                     <Footer />
                     <ScrollButton />
+                    <MobileAppButton />
                 </div>
                 <Dialogs />
                 <Modals />

@@ -30,7 +30,7 @@ export default function resolveRoute(path)
         return {page: 'Start'}
     }
     if (path === '/about') {
-        return {page: 'Landing'};
+        return {page: 'Landing', hideSubMenu: true};
     }
     if (path === '/faq.html') {
         return {page: 'Faq'};

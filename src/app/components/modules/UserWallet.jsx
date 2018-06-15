@@ -441,7 +441,7 @@ class UserWallet extends React.Component {
         const sbdInterest = this.props.sbd_interest / 100;
         const sbdMessage = (
             <span>
-                {tt('userwallet_jsx.sbd_tip')}
+                {tt('userwallet_jsx.tradeable_tokens_transferred')}
             </span>
         );
 

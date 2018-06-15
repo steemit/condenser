@@ -817,7 +817,7 @@
         "this_memo_is_public": "This memo is public",
         "convert_to_VESTING_TOKEN": "Convert to %(VESTING_TOKEN)s",
         "balance_subject_to_3_day_withdraw_waiting_period":
-            "Balance subject to 3 day withdraw waiting period,",
+            "Balances subject to 3 day withdraw waiting period.",
         "move_funds_to_another_account": "Move funds to another Steem account.",
         "protect_funds_by_requiring_a_3_day_withdraw_waiting_period":
             "Protect funds by requiring a 3 day withdraw waiting period.",
@@ -846,6 +846,7 @@
         "withdraw_DEBT_TOKENS": "Withdraw %(DEBT_TOKENS)s",
         "tokens_worth_about_1_of_LIQUID_TICKER":
             "Tokens worth about $1.00 of %(LIQUID_TICKER)s, currently collecting %(sbdInterest)s%% APR.",
+        "tradeable_tokens_transferred": "Tradeable tokens that may be transferred anywhere at anytime.",
         "savings": "SAVINGS",
         "estimated_account_value": "Estimated Account Value",
         "next_power_down_is_scheduled_to_happen":

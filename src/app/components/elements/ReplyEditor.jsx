@@ -82,8 +82,6 @@ class ReplyEditor extends React.Component {
                 const { category, title } = this.state;
                 if (category) category.props.onChange(draft.category);
                 if (title) title.props.onChange(draft.title);
-                if (draft.beneficiaries)
-                    this.props.setBeneficiaries(formId, draft.beneficiaries);
                 if (draft.payoutType)
                     this.props.setPayoutType(formId, draft.payoutType);
                 raw = draft.body;
@@ -127,18 +125,16 @@ class ReplyEditor extends React.Component {
                 ts.body.value !== ns.body.value ||
                 (ns.category && ts.category.value !== ns.category.value) ||
                 (ns.title && ts.title.value !== ns.title.value) ||
-                np.beneficiaries !== tp.beneficiaries ||
                 np.payoutType !== tp.payoutType
             ) {
                 // also prevents saving after parent deletes this information
-                const { formId, beneficiaries, payoutType } = np;
+                const { formId, payoutType } = np;
                 const { category, title, body } = ns;
                 const data = {
                     formId,
                     title: title ? title.value : undefined,
                     category: category ? category.value : undefined,
                     body: body.value,
-                    beneficiaries,
                     payoutType,
                 };
 
@@ -215,7 +211,6 @@ class ReplyEditor extends React.Component {
                 rte_value: stateFromHtml(this.props.richTextEditor),
             });
             this.setState({ progress: {} });
-            this.props.setBeneficiaries(formId, []);
             this.props.setPayoutType(formId, defaultPayoutType);
             if (onCancel) onCancel(e);
         }
@@ -340,7 +335,6 @@ class ReplyEditor extends React.Component {
             successCallback,
             defaultPayoutType,
             payoutType,
-            beneficiaries,
         } = this.props;
         const { submitting, valid, handleSubmit } = this.state.replyForm;
         const { postError, titleWarn, rte } = this.state;
@@ -353,7 +347,6 @@ class ReplyEditor extends React.Component {
         };
         const successCallbackWrapper = (...args) => {
             this.setState({ loading: false });
-            this.props.setBeneficiaries(formId, []);
             this.props.setPayoutType(formId, defaultPayoutType);
             if (successCallback) successCallback(args);
         };
@@ -371,7 +364,6 @@ class ReplyEditor extends React.Component {
             isStory,
             jsonMetadata,
             payoutType,
-            beneficiaries,
             successCallback: successCallbackWrapper,
             errorCallback,
         };
@@ -594,15 +586,6 @@ class ReplyEditor extends React.Component {
                                         {tt('reply_editor.advanced_settings')}
                                     </a>{' '}
                                     <div>
-                                        {beneficiaries &&
-                                            beneficiaries.length > 0 && (
-                                                <div>
-                                                    {tt('g.beneficiaries')}
-                                                    {': '}
-                                                    {beneficiaries.length}
-                                                    {'. '}
-                                                </div>
-                                            )}
                                         {this.props.payoutType != '50%' && (
                                             <div>
                                                 {tt('g.rewards')}
@@ -792,14 +775,6 @@ export default formId =>
                 payoutType = defaultPayoutType;
             }
 
-            let beneficiaries = state.user.getIn([
-                'current',
-                'post',
-                formId,
-                'beneficiaries',
-            ]);
-            beneficiaries = beneficiaries ? beneficiaries.toJS() : [];
-
             const ret = {
                 ...ownProps,
                 fields,
@@ -811,7 +786,6 @@ export default formId =>
                 state,
                 formId,
                 richTextEditor,
-                beneficiaries,
             };
             return ret;
         },
@@ -833,13 +807,6 @@ export default formId =>
                 dispatch(userActions.uploadImage({ file, progress })),
             showAdvancedSettings: formId =>
                 dispatch(userActions.showPostAdvancedSettings({ formId })),
-            setBeneficiaries: (formId, beneficiaries) =>
-                dispatch(
-                    userActions.set({
-                        key: ['current', 'post', formId, 'beneficiaries'],
-                        value: fromJS(beneficiaries),
-                    })
-                ),
             setPayoutType: (formId, payoutType) =>
                 dispatch(
                     userActions.set({
@@ -860,7 +827,6 @@ export default formId =>
                 type,
                 originalPost,
                 payoutType = '50%',
-                beneficiaries = [],
                 state,
                 jsonMetadata,
                 successCallback,
@@ -997,28 +963,6 @@ export default formId =>
                             };
                             break;
                         default: // 50% steem power, 50% sd+steem
-                    }
-                    if (beneficiaries) {
-                        __config.comment_options.extensions = [
-                            [
-                                0,
-                                {
-                                    beneficiaries: beneficiaries
-                                        .sort(
-                                            (a, b) =>
-                                                a.username < b.username
-                                                    ? -1
-                                                    : a.username > b.username
-                                                      ? 1
-                                                      : 0
-                                        )
-                                        .map(elt => ({
-                                            account: elt.username,
-                                            weight: parseInt(elt.percent) * 100,
-                                        })),
-                                },
-                            ],
-                        ];
                     }
                 }
 

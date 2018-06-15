@@ -1,11 +1,12 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 export default class SvgImage extends React.Component {
     static propTypes = {
-        name: React.PropTypes.string.isRequired,
-        width: React.PropTypes.string.isRequired,
-        height: React.PropTypes.string.isRequired,
-        className: React.PropTypes.string,
+        name: PropTypes.string.isRequired,
+        width: PropTypes.string.isRequired,
+        height: PropTypes.string.isRequired,
+        className: PropTypes.string,
     };
     render() {
         const style = {

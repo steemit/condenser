@@ -67,6 +67,11 @@ export default function reducer(state = defaultState, action) {
                             errorKey = 'You already voted for this post';
                             console.error('You already voted for this post.');
                         }
+                        if (/Voting weight is too small/.test(errorStr)) {
+                            errorKey = 'Voting weight is too small';
+                            errorStr =
+                                'Voting weight is too small, please accumulate more voting power or steem power.';
+                        }
                         break;
                     case 'comment':
                         if (

@@ -501,7 +501,10 @@ function* accepted_account_update({ operation }) {
 export function* preBroadcast_comment({ operation, username }) {
     if (!operation.author) operation.author = username;
     let permlink = operation.permlink;
-    const { author, __config: { originalBody, comment_options } } = operation;
+    const {
+        author,
+        __config: { originalBody, comment_options },
+    } = operation;
     const {
         parent_author = '',
         parent_permlink = operation.category,

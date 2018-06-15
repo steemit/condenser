@@ -1,19 +1,17 @@
 import React, {Component} from 'react';
-const ANDROID_APP_URL = 'https://play.google.com/store/apps/details?id=io.golos.golos';
+import settings from './settings'
 
 class MobileAppButton extends Component {
     onClick = () => {
-        localStorage.setItem('golos_app_page_visited', true)
-        window.location.assign(ANDROID_APP_URL)
+        window.location.assign(settings.android.market_source)
     }
 
     render() {
         if (!process.env.BROWSER) return null
 
         const android = navigator.userAgent.match(/Android/i)
-        const visited = localStorage.getItem('golos_app_page_visited')
 
-        return (android && !visited)
+        return (android)
             ? <div role="button" onClick={this.onClick} className="btn visit-app-btn">Открыть в приложении</div>
             : null
     }

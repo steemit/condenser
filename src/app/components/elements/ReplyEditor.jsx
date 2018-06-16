@@ -580,12 +580,6 @@ class ReplyEditor extends React.Component {
                         <div className={vframe_section_shrink_class}>
                             {!isEdit && (
                                 <div className="ReplyEditor__options">
-                                    <a
-                                        href="#"
-                                        onClick={this.showAdvancedSettings}
-                                    >
-                                        {tt('reply_editor.advanced_settings')}
-                                    </a>{' '}
                                     <div>
                                         {this.props.payoutType != '50%' && (
                                             <div>
@@ -604,6 +598,15 @@ class ReplyEditor extends React.Component {
                                                 {'. '}
                                             </div>
                                         )}
+                                        <a
+                                            href="#"
+                                            onClick={this.showAdvancedSettings}
+                                        >
+                                            {tt(
+                                                'reply_editor.advanced_settings'
+                                            )}
+                                        </a>{' '}
+                                        <br />
                                         &nbsp;
                                     </div>
                                 </div>

@@ -33,7 +33,12 @@ class PostAdvancedSettings extends Component {
     };
 
     render() {
-        const { formId, initialPayoutType } = this.props;
+        const {
+            formId,
+            username,
+            defaultPayoutType,
+            initialPayoutType,
+        } = this.props;
         const { payoutType } = this.state;
         const { submitting, valid, handleSubmit } = this.state.advancedSettings;
         const disabled =
@@ -52,13 +57,6 @@ class PostAdvancedSettings extends Component {
                     </h4>
                 </div>
                 <div className="row">
-                    <div className="column">
-                        {tt(
-                            'post_advanced_settings_jsx.update_default_in_settings'
-                        )}
-                    </div>
-                </div>
-                <div className="row">
                     <div className="small-12 medium-6 large-12 columns">
                         <select
                             defaultValue={payoutType}
@@ -74,6 +72,26 @@ class PostAdvancedSettings extends Component {
                                 {tt('reply_editor.power_up_100')}
                             </option>
                         </select>
+                    </div>
+                </div>
+                <br />
+                <div className="row">
+                    <div className="column">
+                        {tt('post_advanced_settings_jsx.current_default')}:{' '}
+                        {defaultPayoutType === '0%'
+                            ? defaultPayoutType === '50%'
+                              ? tt('reply_editor.decline_payout')
+                              : tt('reply_editor.default_50_50')
+                            : tt('reply_editor.power_up_100')}
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="column">
+                        <a href={'/@' + username + '/settings'}>
+                            {tt(
+                                'post_advanced_settings_jsx.update_default_in_settings'
+                            )}
+                        </a>
                     </div>
                 </div>
                 <br />
@@ -114,6 +132,14 @@ export default connect(
     (state, ownProps) => {
         const formId = ownProps.formId;
         const username = state.user.getIn(['current', 'username']);
+        const isStory = formId.startsWith('postFull');
+        const defaultPayoutType = state.app.getIn(
+            [
+                'user_preferences',
+                isStory ? 'defaultBlogPayout' : 'defaultCommentPayout',
+            ],
+            '50%'
+        );
         const initialPayoutType = state.user.getIn([
             'current',
             'post',
@@ -123,6 +149,7 @@ export default connect(
         return {
             ...ownProps,
             fields: [],
+            defaultPayoutType,
             initialPayoutType,
             username,
             initialValues: {},

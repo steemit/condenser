@@ -38,7 +38,7 @@ const Reveal = ({ children, onHide, show }) => {
 };
 
 Reveal.propTypes = {
-    show: PropTypes.bool.isRequired,
+    show: PropTypes.object.isRequired,
     onHide: PropTypes.func.isRequired,
 };
 

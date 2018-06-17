@@ -110,7 +110,7 @@ class Voting extends React.Component {
                 weight !== 0
             ) {
                 const saved_weight = localStorage.getItem(
-                    'voteWeight' + (up ? '' : 'Down') + '-' + username
+                    'voteWeight' + (up ? '' : 'Down') + (is_comment ? '-comment' : '') + '-' + username
                 );
                 const castToNegative = up ? 1 : -1;
                 weight = Number(saved_weight) * castToNegative;
@@ -141,23 +141,23 @@ class Voting extends React.Component {
         };
 
         this.storeSliderWeight = up => () => {
-            const { username } = this.props;
+            const { username, is_comment } = this.props;
             const weight = up
                 ? this.state.sliderWeight.up
                 : this.state.sliderWeight.down;
             localStorage.setItem(
-                'voteWeight' + (up ? '' : 'Down') + '-' + username,
+                'voteWeight' + (up ? '' : 'Down') + (is_comment ? '-comment' : '') + '-' + username,
                 weight
             );
         };
         this.syncSliderWeight = () => {
-            const { username, net_vesting_shares } = this.props;
+            const { username, net_vesting_shares, is_comment } = this.props;
             if (net_vesting_shares > VOTE_WEIGHT_DROPDOWN_THRESHOLD) {
                 const sliderWeightUp = Number(
-                    localStorage.getItem('voteWeight' + '-' + username)
+                    localStorage.getItem('voteWeight' + (is_comment ? '-comment' : '') + '-' + username)
                 );
                 const sliderWeightDown = Number(
-                    localStorage.getItem('voteWeight' + 'Down' + '-' + username)
+                    localStorage.getItem('voteWeightDown' + (is_comment ? '-comment' : '') + '-' + username)
                 );
                 const up = sliderWeightUp ? sliderWeightUp : 10000;
                 const down = sliderWeightDown ? sliderWeightDown : 10000;

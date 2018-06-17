@@ -218,6 +218,8 @@ a[rel="nofollow noopener"]:after {
   margin-left: 0.4rem;
   padding: 0.2rem 0.5rem;
   border-radius: 0.3rem;
+  text-shadow: none;
+  font-size: 0.9375rem;
   @include themify($themes) {
     background-color: themed('colorAccent');
     color: themed('buttonText');

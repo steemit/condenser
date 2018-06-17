@@ -107,6 +107,7 @@ class Author extends React.Component {
                         <Link to={'/@' + author}>{author}</Link>
                     </strong>{' '}
                     <Reputation value={authorRepLog10} />
+                    {EmployeeList.includes(author) ? <span className="employee">{tt("g.employees")}</span> : null}
                 </span>
             );
         }

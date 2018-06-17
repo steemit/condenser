@@ -4,6 +4,7 @@ sneak
 vandeberg
 andrarchy
 roelandp
+goldibex
 steem
 steemit
 steemitblog

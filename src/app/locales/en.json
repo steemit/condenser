@@ -30,7 +30,7 @@
         "email": "Email",
         "external_link_message":
             "This link will take you away from steemit.com",
-        "employees": "%(APP_NAME)s Team",
+        "employees": "Steemit Team",
         "feed": "Feed",
         "follow": "Follow",
         "for": " for ",

@@ -132,7 +132,7 @@ To upvote, click on the <Icon name="chevron-up-circle" /> *Upvote* icon at the b
 
 Downvotes (flags) are Steemit's way of saying you disapprove of someone's post or comment.
 
-To downvote (flag), click on the <Icon name="flag" /> *Flag* icon at the top right of the post/comment.
+To downvote (flag), click on the <Icon name="flag1" /> *Flag* icon at the top right of the post/comment.
 
 <a href="#Table_of_Contents">^</a>
 ### <span id="Comments">Comments</span>
@@ -206,7 +206,7 @@ The higher the reputation, the more upvotes the account received.
 
 All new users start at 25.
 
-Your reputation will go up as you earn upvotes for your posts and comments, but it can come down if they are flagged.
+Your reputation will go up as you earn upvotes for your posts and comments, but it can come down if they are downvoted.
 
 <a href="#Table_of_Contents">^</a>
 ### <span id="Cashing_out_or_Spending_SBD">Cashing out or Spending SBD</span>

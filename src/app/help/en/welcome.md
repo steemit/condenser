@@ -55,13 +55,13 @@ You are entirely responsible for generating your password, saving it and keeping
 It is strongly recommended that you store an offline copy of your password somewhere safe in case of a hard drive failure or other calamity. Consider digital offline storage, secure cloud-based storage, as well as printed paper. Use multiple methods of storage for best redundancy. 
 
 If your account is valuable, value it!
-<a href="#Table_of_Contents">^</a>
 
+<a href="#Table_of_Contents">^</a>
 ### <span id="Review_the_Quick_Start_Guide">2. Review the Quick Start Guide</span>
 
 The <a href="#Quick_Start_Guide">Quick Start Guide</a> section of this Welcome page contains basic information to help get you started.
-<a href="#Table_of_Contents">^</a>
 
+<a href="#Table_of_Contents">^</a>
 ### <span id="Read_the_Helpful_Posts_from_Steemit_Users">3. Read the Helpful Posts from Steemit Users</span>
 
 The <a href="#Helpful_Posts_from_Steemit_Users">Helpful Posts from Steemit Users</a> section of this Welcome page contains many well-written articles from members of the community with tips on how to use Steemit and succeed on the Steem blockchain.

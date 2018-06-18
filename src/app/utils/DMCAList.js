@@ -118,6 +118,7 @@ export default `
 /deadpool2/@watch-hd-movies/download-deadpool-2-2018-1080p-full-movie-online
 /travel/@indiantraveller/how-i-traveled-around-sri-lanka-for-two-weeks-by-sammy
 /kr/@jesusaddict/about-ico-r3security-token-offering
+/children/@elizapfau/children-are-the-future-of-our-nations-they-will-correct-your-current-mistakes-in-future
 `
     .trim()
     .split('\n');

@@ -137,7 +137,7 @@ To downvote (flag), click on the <Icon name="flag1" /> *Flag* icon at the top ri
 <a href="#Table_of_Contents">^</a>
 ### <span id="Comments">Comments</span>
 
-When you are new, commenting on other people's posts can be a great way to get involved and connect with people!
+When you are new, commenting on other people's posts can be a great way to get involved in the community and to connect with people!
 
 To comment on a post, or reply to an existing comment, click on the "Reply" link at the bottom of the post/comment.
 

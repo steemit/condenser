@@ -320,13 +320,14 @@ class PostFull extends React.Component {
             </div>)
         }
 
-        const archived = post_content.get('cashout_time') === '1969-12-31T23:59:59' // TODO: audit after HF17. #1259
-        const readonly = archived || $STM_Config.read_only_mode
-        const showPromote = username && post_content.get('last_payout') === '1970-01-01T00:00:00' && post_content.get('depth') == 0 // TODO: audit after HF17. #1259
-        const showReplyOption = post_content.get('depth') < 255
-        const showEditOption = username === author
-        const showDonate = Boolean(username && (username !== author))
-        const showDeleteOption = username === author && post_content.get('children') === 0 && content.stats.netVoteSign <= 0
+        const readonly = $STM_Config.read_only_mode
+        const _isPaidout = post_content.get('cashout_time') === '1969-12-31T23:59:59';
+        const showReblog = !_isPaidout;
+        const showPromote = username && !_isPaidout && post_content.get('depth') == 0;
+        const showReplyOption = post_content.get('depth') < 255;
+        const showEditOption = username === author;
+        const showDeleteOption = username === author && content.stats.allowDelete && !_isPaidout;
+        const showDonate = Boolean(username && (username !== author));
 
         const authorRepLog10 = repLog10(content.author_reputation)
         const isPreViewCount = Date.parse(post_content.get('created')) < 1480723200000 // check if post was created before view-count tracking began (2016-12-03)
@@ -362,12 +363,20 @@ class PostFull extends React.Component {
                         <Voting post={post} />
                     </div>
                     <div className="RightShare__Menu small-11 medium-5 large-5 columns text-right">
-                        {!readonly && <Reblog author={author} permlink={permlink} />}
+                        {!readonly && showReblog && (
+                            <Reblog author={author} permlink={permlink} />
+                        )}
                         {!readonly &&
                             <span className="PostFull__reply">
-                                {showReplyOption && <a onClick={onShowReply}>{tt('g.reply')}</a>}
-                                {' '}{showEditOption && !showEdit && <a onClick={onShowEdit}>{tt('g.edit')}</a>}
-                                {' '}{showDeleteOption && !showReply && <a onClick={onDeletePost}>{tt('g.delete')}</a>}
+                                {showReplyOption && (
+                                    <a onClick={onShowReply}>{tt('g.reply')}</a>
+                                )}{' '}
+                                {showEditOption && !showEdit && (
+                                    <a onClick={onShowEdit}>{tt('g.edit')}</a>
+                                )}{' '}
+                                {showDeleteOption && !showReply && (
+                                    <a onClick={onDeletePost}>{tt('g.delete')}</a>
+                                )}
                             </span>}
                         <span className="PostFull__responses">
                             <Link to={link} title={tt('votesandcomments_jsx.response_count', {count: content.children})}>

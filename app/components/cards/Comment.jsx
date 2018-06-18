@@ -245,7 +245,7 @@ class CommentImpl extends React.Component {
             console.error('Comment -- missing stats object')
             comment.stats = {}
         }
-        const {netVoteSign, hasReplies, authorRepLog10, pictures, gray} = comment.stats
+        const { allowDelete, authorRepLog10, pictures, gray } = comment.stats;
         const {author, json_metadata} = comment
         const {username, depth, anchor_link,
             showNegativeComments, ignore_list, noImage} = this.props
@@ -271,14 +271,12 @@ class CommentImpl extends React.Component {
         } catch(error) {
             // console.error('Invalid json metadata string', json_metadata, 'in post', this.props.content);
         }
-        // const get_asset_value = ( asset_str ) => { return parseFloat( asset_str.split(' ')[0] ); }
-        // const steem_supply = this.props.global.getIn(['props','current_supply']);
 
-        const showDeleteOption = username === author && !hasReplies && netVoteSign <= 0
-        const showEditOption = username === author
-        const showReplyOption = comment.depth < 255
-        const archived = comment.cashout_time === '1969-12-31T23:59:59' // TODO: audit after HF17. #1259
-        const readonly = archived || $STM_Config.read_only_mode
+        const readonly = $STM_Config.read_only_mode;
+        const _isPaidout = comment.cashout_time === '1969-12-31T23:59:59';
+        const showDeleteOption = username === author  && allowDelete && !_isPaidout;
+        const showEditOption = username === author;
+        const showReplyOption = comment.depth < 255;
 
         let replies = null;
         let body = null;
@@ -294,9 +292,15 @@ class CommentImpl extends React.Component {
 					<Voting post={post} />
 					{!readonly &&
 						<span className="Comment__footer__controls">
-							{showReplyOption && <a onClick={onShowReply}>{tt('g.reply')}</a>}
-							{' '}{showEditOption   && <a onClick={onShowEdit}>{tt('g.edit')}</a>}
-							{' '}{showDeleteOption && <a onClick={onDeletePost}>{tt('g.delete')}</a>}
+							{showReplyOption && ( 
+                                <a onClick={onShowReply}>{tt('g.reply')}</a>
+                            )}{' '}
+                            {showEditOption && (
+                                <a onClick={onShowEdit}>{tt('g.edit')}</a>
+                            )}{' '}
+                            {showDeleteOption && (
+                                <a onClick={onDeletePost}>{tt('g.delete')}</a>
+                            )}
 						</span>}
 				</div>;
 			}
@@ -334,7 +338,6 @@ class CommentImpl extends React.Component {
         let innerCommentClass = ignore || gray ? 'downvoted' : ''
         if(this.state.highlight) innerCommentClass = innerCommentClass + ' highlighted'
 
-        //console.log(comment);
         let renderedEditor = null;
         if (showReply || showEdit) {
             renderedEditor = <div key="editor">

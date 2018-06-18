@@ -172,7 +172,7 @@ class Modals extends React.Component {
                 {show_post_advanced_settings_modal && (
                     <Reveal
                         onHide={hidePostAdvancedSettings}
-                        show={show_post_advanced_settings_modal}
+                        show={show_post_advanced_settings_modal ? true : false}
                     >
                         <CloseButton onClick={hidePostAdvancedSettings} />
                         <PostAdvancedSettings

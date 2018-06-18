@@ -7,7 +7,7 @@ import {PrivateKey} from 'golos-js/lib/auth/ecc';
 import {api} from 'golos-js';
 
 // operations that require only posting authority
-const postingOps = Set(`vote, comment, delete_comment, custom_json`.trim().split(/,\s*/))
+const postingOps = Set(`vote, comment, delete_comment, custom_json, account_metadata`.trim().split(/,\s*/))
 
 export const authWatches = [
     watchForAuth

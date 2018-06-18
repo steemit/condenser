@@ -983,5 +983,9 @@
     "exceeded_maximum_allowed_bandwidth": "Недостаточно пропускной способности аккаунта. Пополните Силу Голоса либо дождитесь восстановления",
     "already_voted": "Вы уже голосовали за этот пост",
     "only_vote_once_every": "Голосовать можно не чаще, чем раз в 3 секунды"
+  },
+  "delegatevestingshares_jsx" :{
+    "form_title" : "Делегировать %(VESTING_TOKEN2)s",
+    "button_title": "Делегировать"
   }
 }

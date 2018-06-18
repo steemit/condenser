@@ -21,7 +21,7 @@ import {sharedWatches} from 'app/redux/SagaShared';
 import {userWatches} from 'app/redux/UserSaga';
 import {authWatches} from 'app/redux/AuthSaga';
 import {transactionWatches} from 'app/redux/TransactionSaga';
-import PollDataSaga from 'app/redux/PollDataSaga';
+// import PollDataSaga from 'app/redux/PollDataSaga';
 import {component as NotFound} from 'app/components/pages/NotFound';
 import extractMeta from 'app/utils/ExtractMeta';
 import Translator from 'app/Translator';
@@ -91,9 +91,9 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
 
     if (process.env.BROWSER) {
         const store = createStore(rootReducer, initial_state, middleware);
-        sagaMiddleware.run(PollDataSaga).done
-            .then(() => console.log('PollDataSaga is finished'))
-            .catch(err => console.log('PollDataSaga is finished with error', err));
+        // sagaMiddleware.run(PollDataSaga).done
+        //     .then(() => console.log('PollDataSaga is finished'))
+        //     .catch(err => console.log('PollDataSaga is finished with error', err));
 
         const history = syncHistoryWithStore(browserHistory, store);
         // const scrollHistory = useScroll(() => history)();
@@ -183,14 +183,14 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
         offchain.server_location = location;
         server_store = createStore(rootReducer, { global: onchain, offchain});
         server_store.dispatch({type: '@@router/LOCATION_CHANGE', payload: {pathname: location}});
-        if (offchain.account) {
-            try {
-                const notifications = await tarantool.select('notifications', 0, 1, 0, 'eq', offchain.account);
-                server_store.dispatch({type: 'UPDATE_NOTIFICOUNTERS', payload: notificationsArrayToMap(notifications)});
-            } catch(e) {
-                console.warn('WARNING! cannot retrieve notifications from tarantool in universalRender:', e.message);
-            }
-        }
+        // if (offchain.account) {
+        //     try {
+        //         const notifications = await tarantool.select('notifications', 0, 1, 0, 'eq', offchain.account);
+        //         server_store.dispatch({type: 'UPDATE_NOTIFICOUNTERS', payload: notificationsArrayToMap(notifications)});
+        //     } catch(e) {
+        //         console.warn('WARNING! cannot retrieve notifications from tarantool in universalRender:', e.message);
+        //     }
+        // }
     } catch (e) {
         // Ensure 404 page when username not found
         if (location.match(routeRegex.UserProfile1)) {

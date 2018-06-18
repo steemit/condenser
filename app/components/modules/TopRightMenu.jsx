@@ -12,8 +12,8 @@ import NotifiCounter from 'app/components/elements/NotifiCounter';
 import tt from 'counterpart';
 import { LIQUID_TICKER, DEBT_TICKER } from 'app/client_config';
 import LocalizedCurrency from 'app/components/elements/LocalizedCurrency';
-import {vestingSteem} from 'app/utils/StateFunctions';
-import { getURL } from 'app/utils/URLConstants'
+import {vestsToSteem} from 'app/utils/StateFunctions';
+import cookie from "react-cookie";
 
 const defaultNavigate = (e) => {
     if (e.metaKey || e.ctrlKey) {
@@ -57,7 +57,7 @@ const calculateEstimateOutput = ({ account, price_per_golos, savings_withdraws, 
     // saving_balance_steem
     + parseFloat(account.get('savings_balance').split(' ')[0])
     // vesting_steem
-    + vestingSteem(account.toJS(), globalprops.toJS())
+    + vestsToSteem(a.get('vesting_shares'), g.toJS())
     + savings_pending
     // + steemOrders
   ;

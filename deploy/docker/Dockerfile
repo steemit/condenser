@@ -1,4 +1,4 @@
-FROM node:7.5
+FROM node:8.7
 
 # yarn > npm
 #RUN npm install --global yarn
@@ -11,6 +11,8 @@ ADD package.json yarn.lock /var/app/
 RUN yarn
 
 COPY . /var/app
+
+RUN cd ./node_modules/golos-js && yarn install && npm run build
 
 # FIXME TODO: fix eslint warnings
 

@@ -1,5 +1,7 @@
 import { PUBLIC_API } from 'app/client_config'
 
+const DEFAULT_VOTE_LIMIT = 10000
+
 export default async function getState(api, url, options, offchain = {}) {
     if (!url || typeof url !== 'string' || !url.length || url === '/') url = 'trending'
     if (url[0] === '/') url = url.substr(1)
@@ -66,7 +68,7 @@ export default async function getState(api, url, options, offchain = {}) {
                 break
 
                 case 'recent-replies':
-                    const replies = await api.getRepliesByLastUpdate(uname, '', 50)
+                    const replies = await api.getRepliesByLastUpdate(uname, '', 50, DEFAULT_VOTE_LIMIT)
                     state.accounts[uname].recent_replies = []
 
                     replies.forEach(reply => {
@@ -96,7 +98,7 @@ export default async function getState(api, url, options, offchain = {}) {
                         const { author, permlink } = feedEntries[key]
                         const link = `${author}/${permlink}`
                         state.accounts[uname].feed.push(link)
-                        state.content[link] = await api.getContent(author, permlink)
+                        state.content[link] = await api.getContent(author, permlink, DEFAULT_VOTE_LIMIT)
                         
                         if (feedEntries[key].reblog_by.length > 0) {
                             state.content[link].first_reblogged_by = feedEntries[key].reblog_by[0]
@@ -115,7 +117,7 @@ export default async function getState(api, url, options, offchain = {}) {
                         const { author, permlink } = blogEntries[key]
                         const link = `${author}/${permlink}`
 
-                        state.content[link] = await api.getContent(author, permlink)
+                        state.content[link] = await api.getContent(author, permlink, DEFAULT_VOTE_LIMIT)
                         state.accounts[uname].blog.push(link)
                     
                         if (blogEntries[key].reblog_on !== '1970-01-01T00:00:00') {
@@ -132,10 +134,10 @@ export default async function getState(api, url, options, offchain = {}) {
         const permlink = parts[2]
 
         const curl = `${account}/${permlink}`
-        state.content[curl] = await api.getContent(account, permlink)
+        state.content[curl] = await api.getContent(account, permlink, DEFAULT_VOTE_LIMIT)
         accounts.add(account)
 
-        const replies = await api.getAllContentReplies(account, permlink)
+        const replies = await api.getAllContentReplies(account, permlink, DEFAULT_VOTE_LIMIT)
 
        for (let key in replies) {
             let reply = replies[key]

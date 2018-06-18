@@ -7,7 +7,7 @@ import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import PostsList from 'app/components/cards/PostsList';
 import {isFetchingOrRecentlyUpdated} from 'app/utils/StateFunctions';
 import {Link} from 'react-router';
-import MarkNotificationRead from 'app/components/elements/MarkNotificationRead';
+// import MarkNotificationRead from 'app/components/elements/MarkNotificationRead';
 import tt from 'counterpart';
 import Immutable from "immutable";
 import Callout from 'app/components/elements/Callout';
@@ -141,7 +141,7 @@ class PostsIndex extends React.Component {
         let topics_order = order;
         let posts = [];
         let emptyText = '';
-        let markNotificationRead = null;
+        // let markNotificationRead = null;
         if (category === 'feed') {
             const account_name = order.slice(1);
             order = 'by_feed';
@@ -157,7 +157,7 @@ class PostsIndex extends React.Component {
                     <Link to="/welcome">{tt('submit_a_story.welcome_to_the_blockchain')}</Link><br />
                     <a href="https://golos.io/ru--golos/@bitcoinfo/samyi-polnyi-f-a-q-o-golose-spisok-luchshykh-postov-raskryvayushikh-vse-aspekty-proekta-bonusy-v-vide-kreativa">{tt('user_profile.full_faq', {APP_NAME})}</a>
                 </div>;
-                markNotificationRead = <MarkNotificationRead fields="feed" account={account_name} />
+                // markNotificationRead = <MarkNotificationRead fields="feed" account={account_name} />
             } else {
                 emptyText = <div>{tt('user_profile.user_hasnt_followed_anything_yet', {name: account_name})}</div>;
             }
@@ -181,7 +181,7 @@ class PostsIndex extends React.Component {
                     <div className="PostsIndex__topics_compact show-for-small hide-for-medium">
                         <Topics order={topics_order} current={category} loading={fetching} loadSelected={this.loadSelected} compact />
                     </div>
-                    {markNotificationRead}
+                    {/* markNotificationRead*/}
                     {(!fetching && (posts && !posts.size)) ? <Callout>{emptyText}</Callout> :
                         <PostsList
                             ref="list"

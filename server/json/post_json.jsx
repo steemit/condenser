@@ -3,6 +3,8 @@ import React from 'react';
 import {routeRegex} from "app/ResolveRoute";
 import {api} from 'golos-js';
 
+const DEFAULT_VOTE_LIMIT = 10000
+
 export default function usePostJson(app) {
     const router = koa_router();
     app.use(router.routes());
@@ -12,7 +14,7 @@ export default function usePostJson(app) {
         const author = this.url.match(/(\@[\w\d\.-]+)/)[0].replace('@', '');
         const permalink = this.url.match(/(\@[\w\d\.-]+)\/?([\w\d-]+)/)[2];
         let status = "";
-        let post = yield api.getContentAsync(author, permalink);
+        let post = yield api.getContentAsync(author, permalink, DEFAULT_VOTE_LIMIT);
 
         if (post.author) {
             status = "200";

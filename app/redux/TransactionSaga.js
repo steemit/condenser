@@ -11,6 +11,7 @@ import {DEBT_TICKER} from 'app/client_config'
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient'
 import {PrivateKey, PublicKey} from 'golos-js/lib/auth/ecc'
 import {api, broadcast, auth, memo} from 'golos-js'
+import constants from './constants';
 import tt from 'counterpart';
 
 
@@ -373,9 +374,9 @@ function* preBroadcast_comment({operation, username}) {
                 percent_steem_dollars,
                 allow_votes,
                 allow_curation_rewards,
-                extensions: [
-                    [ 0, { beneficiaries: [{ account: 'golosio', weight: 1000 }] } ]
-                ]
+                extensions: $STM_Config.isTestnet 
+                    ? [] 
+                    : [ [ 0, { beneficiaries: [{ account: 'golosio', weight: 1000 }] } ] ]
             }]
         )
     }
@@ -396,7 +397,7 @@ function* createPermlink(title, author, parent_author, parent_permlink) {
             s = base58.encode(secureRandom.randomBuffer(4))
         }
         // ensure the permlink(slug) is unique
-        const slugState = yield call([api, api.getContentAsync], author, s)
+        const slugState = yield call([api, api.getContentAsync], author, s, constants.DEFAULT_VOTE_LIMIT)
         let prefix
         if (slugState.body !== '') {
             // make sure slug is unique

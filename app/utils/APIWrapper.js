@@ -25,8 +25,8 @@ export function getAccountHistory(account, from, limit) {
     return api.getAccountHistoryAsync(account, from, limit)
 }
 
-export function getRepliesByLastUpdate(startAuthor, startPermlink, limit) {
-    return api.getRepliesByLastUpdateAsync(startAuthor, startPermlink, limit)
+export function getRepliesByLastUpdate(startAuthor, startPermlink, limit, voteLimit) {
+    return api.getRepliesByLastUpdateAsync(startAuthor, startPermlink, limit, voteLimit)
 }
 
 export function getDiscussionsByComments(query) {
@@ -53,16 +53,16 @@ export function getWitnessesByVote(from, limit) {
     return api.getWitnessesByVoteAsync(from, limit)
 }
 
-export function getContent(author, permlink) {
-    return api.getContentAsync(author, permlink)
+export function getContent(author, permlink, voteLimit) {
+    return api.getContentAsync(author, permlink, voteLimit)
 }
 
-export function getContentReplies(author, permlink) {
-    return api.getContentRepliesAsync(author, permlink)
+export function getContentReplies(author, permlink, voteLimit) {
+    return api.getContentRepliesAsync(author, permlink, voteLimit)
 }
 
-export function getAllContentReplies(author, permlink) {
-    return api.getAllContentRepliesAsync(author, permlink)
+export function getAllContentReplies(author, permlink, voteLimit) {
+    return api.getAllContentRepliesAsync(author, permlink, voteLimit)
 }
 
 export function gedDiscussionsBy(type, args) {

@@ -121,6 +121,8 @@ export default `
 /children/@elizapfau/children-are-the-future-of-our-nations-they-will-correct-your-current-mistakes-in-future
 /j/@kavyasheth3/tu-sooraj-main-saanjh-piyaji-17th-april-2018-full-episode-watch-online
 /steemit/@jerrytsuseer/diem-terribilus
+/model/@blamehim559/ana-lorde
+/nsfwsnapchat/@pornwhale/ana-lorde-fuck-meet
 `
     .trim()
     .split('\n');

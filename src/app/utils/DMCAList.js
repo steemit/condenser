@@ -117,6 +117,7 @@ export default `
 /octoberfullmovie/@gautamsoni4k/october-2018-full-movie-download-online-free-watch-hd-print-bluray
 /deadpool2/@watch-hd-movies/download-deadpool-2-2018-1080p-full-movie-online
 /travel/@indiantraveller/how-i-traveled-around-sri-lanka-for-two-weeks-by-sammy
+/kr/@jesusaddict/about-ico-r3security-token-offering
 `
     .trim()
     .split('\n');

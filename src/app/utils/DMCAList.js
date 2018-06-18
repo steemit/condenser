@@ -116,6 +116,7 @@ export default `
 /dbooks/@tracytegan/mr-washington-chapter-1-chapter-one
 /octoberfullmovie/@gautamsoni4k/october-2018-full-movie-download-online-free-watch-hd-print-bluray
 /deadpool2/@watch-hd-movies/download-deadpool-2-2018-1080p-full-movie-online
+/travel/@indiantraveller/how-i-traveled-around-sri-lanka-for-two-weeks-by-sammy
 `
     .trim()
     .split('\n');

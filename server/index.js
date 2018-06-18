@@ -25,7 +25,7 @@ global.$STM_Config = {
     google_analytics_id: config.get('google_analytics_id'),
     chain_id: config.get('chain_id'),
     lang_server : config.get('lang_server'),
-    isTestnet: config.get('is_testnet'),
+    /* isTestnet: config.get('is_testnet'), */
     push_server_url: config.get('wss_push_service_url')
 };
 

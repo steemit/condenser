@@ -374,9 +374,7 @@ function* preBroadcast_comment({operation, username}) {
                 percent_steem_dollars,
                 allow_votes,
                 allow_curation_rewards,
-                extensions: $STM_Config.isTestnet 
-                    ? [] 
-                    : [ [ 0, { beneficiaries: [{ account: 'golosio', weight: 1000 }] } ] ]
+                extensions: /* $STM_Config.isTestnet ? [] : */ [ [ 0, { beneficiaries: [{ account: 'golosio', weight: 1000 }] } ] ]
             }]
         )
     }

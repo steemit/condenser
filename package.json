@@ -146,6 +146,10 @@
     "xmldom": "^0.1.27"
   },
   "devDependencies": {
+    "@storybook/addon-actions": "^4.0.0-alpha.9",
+    "@storybook/addon-links": "^4.0.0-alpha.9",
+    "@storybook/addons": "^4.0.0-alpha.9",
+    "@storybook/react": "^4.0.0-alpha.9",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
     "babel-eslint": "^8.2.3",
@@ -184,11 +188,7 @@
     "webpack-bundle-analyzer": "^2.9.0",
     "webpack-command": "^0.2.1",
     "webpack-merge": "^4.1.2",
-    "webpack-serve": "^1.0.4",
-    "@storybook/react": "^4.0.0-alpha.9",
-    "@storybook/addon-actions": "^4.0.0-alpha.9",
-    "@storybook/addon-links": "^4.0.0-alpha.9",
-    "@storybook/addons": "^4.0.0-alpha.9"
+    "webpack-serve": "^1.0.4"
   },
   "optionalDependencies": {
     "fsevents": "*"

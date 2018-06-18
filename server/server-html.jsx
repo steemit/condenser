@@ -57,7 +57,7 @@ export default function ServerHTML({ body, assets, locale, title, meta, analytic
 
             {/* resolves the initial style flash (flicker) on page load in development mode */}
             {Object.keys(assets.styles).length === 0 ?
-                <style dangerouslySetInnerHTML={{ __html: '#content{display:none}' }} /> : null}
+                <style dangerouslySetInnerHTML={{ __html: '#content{visibility:hidden}' }} /> : null}
 
             <title>{page_title}</title>
         </head>

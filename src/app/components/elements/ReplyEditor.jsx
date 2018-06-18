@@ -581,23 +581,21 @@ class ReplyEditor extends React.Component {
                             {!isEdit && (
                                 <div className="ReplyEditor__options">
                                     <div>
-                                        {this.props.payoutType != '50%' && (
-                                            <div>
-                                                {tt('g.rewards')}
-                                                {': '}
-                                                {this.props.payoutType ==
-                                                    '0%' &&
-                                                    tt(
-                                                        'reply_editor.decline_payout'
-                                                    )}
-                                                {this.props.payoutType ==
-                                                    '100%' &&
-                                                    tt(
-                                                        'reply_editor.power_up_100'
-                                                    )}
-                                                {'. '}
-                                            </div>
-                                        )}
+                                        <div>
+                                            {tt('g.rewards')}
+                                            {': '}
+                                            {this.props.payoutType == '0%' &&
+                                                tt(
+                                                    'reply_editor.decline_payout'
+                                                )}
+                                            {this.props.payoutType == '50%' &&
+                                                tt(
+                                                    'reply_editor.default_50_50'
+                                                )}
+                                            {this.props.payoutType == '100%' &&
+                                                tt('reply_editor.power_up_100')}
+                                            {'. '}
+                                        </div>
                                         <a
                                             href="#"
                                             onClick={this.showAdvancedSettings}
@@ -952,7 +950,6 @@ export default formId =>
 
                 const originalBody = isEdit ? originalPost.body : null;
                 const __config = { originalBody };
-
                 // Avoid changing payout option during edits #735
                 if (!isEdit) {
                     switch (payoutType) {

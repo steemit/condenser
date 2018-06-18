@@ -12,8 +12,8 @@ import NotifiCounter from 'app/components/elements/NotifiCounter';
 import tt from 'counterpart';
 import { LIQUID_TICKER, DEBT_TICKER } from 'app/client_config';
 import LocalizedCurrency from 'app/components/elements/LocalizedCurrency';
-import {vestsToSteem} from 'app/utils/StateFunctions';
-import cookie from "react-cookie";
+import { vestsToSteem, toAsset } from 'app/utils/StateFunctions';
+import { getURL } from 'app/utils/URLConstants';
 
 const defaultNavigate = (e) => {
     if (e.metaKey || e.ctrlKey) {
@@ -46,18 +46,18 @@ const calculateEstimateOutput = ({ account, price_per_golos, savings_withdraws, 
     // sbd_balance
     + parseFloat(account.get('sbd_balance'))
     // sbd_balance_savings
-    + parseFloat(account.get('savings_sbd_balance').split(' ')[0])
+    + parseFloat(toAsset(account.get('savings_sbd_balance')).amount)
     + savings_sbd_pending
     // + conversionValue
     // + sbdOrders
   ;
   const total_steem = 0
     // balance_steem
-    + parseFloat(account.get('balance').split(' ')[0])
+    + parseFloat(toAsset(account.get('balance')).amount)
     // saving_balance_steem
-    + parseFloat(account.get('savings_balance').split(' ')[0])
+    + parseFloat(toAsset(account.get('savings_balance')).amount)
     // vesting_steem
-    + vestsToSteem(a.get('vesting_shares'), g.toJS())
+    + vestsToSteem(account.get('vesting_shares'), globalprops.toJS())
     + savings_pending
     // + steemOrders
   ;

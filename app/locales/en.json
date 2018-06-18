@@ -269,7 +269,9 @@
     "password_or_wif": "Password or WIF",
     "requires_auth_key": "This operation requires your %(authType)s key (or use your master password)",
     "keep_me_logged_in": "Keep me logged in",
-    "donate": "Donate"
+    "donate": "Donate",
+    "received_vesting": "%(VESTING_TOKEN)s delegated to this account",
+    "delegated_vesting": "%(VESTING_TOKEN)s delegated from this account"
   },
   "navigation": {
     "about": "About",

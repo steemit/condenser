@@ -44,6 +44,8 @@ class UserWallet extends React.Component {
 
         if (!account) return null;
         let vesting_steem = vestsToSteem(account.get('vesting_shares'), gprops);
+        const received_vesting_shares = vestsToSteem(account.get('received_vesting_shares'), gprops);
+        const delegated_vesting_shares = vestsToSteem(account.get('delegated_vesting_shares'), gprops);
 
         let isMyAccount = current_user && current_user.get('username') === account.get('name');
 
@@ -75,6 +77,12 @@ class UserWallet extends React.Component {
             e.preventDefault()
             const name = account.get('name')
             this.props.delegateVesting(name)
+        }
+
+        const showDelegateVestingInfo = (type, e) => {
+            e.preventDefault()
+            const name = account.get('name')
+            this.props.showDelegatedVesting(name, type)
         }
 
         // Sum savings withrawals
@@ -192,6 +200,8 @@ class UserWallet extends React.Component {
         const sbd_balance_str = numberWithCommas(sbd_balance.toFixed(3)) + ' ' + DEBT_TICKER;
         const sbd_orders_balance_str = numberWithCommas(sbdOrders.toFixed(3)) + ' ' + DEBT_TICKER;
         const savings_sbd_balance_str = numberWithCommas(sbd_balance_savings.toFixed(3)) + ' ' + DEBT_TICKER;
+        const received_vesting_shares_str = `${numberWithCommas(received_vesting_shares)} ${LIQUID_TICKER}`;
+        const delegated_vesting_shares_str = `${numberWithCommas(delegated_vesting_shares)} ${LIQUID_TICKER}`;
 
         const steemTip = tt('tips_js.tradeable_tokens_that_may_be_transferred_anywhere_at_anytime') + ' ' + tt('tips_js.LIQUID_TOKEN_can_be_converted_to_VESTING_TOKEN_in_a_process_called_powering_up', {LIQUID_TOKEN, VESTING_TOKEN2, VESTING_TOKENS});
         const powerTip = tt('tips_js.influence_tokens_which_give_you_more_control_over', {VESTING_TOKEN, VESTING_TOKENS});
@@ -258,6 +268,24 @@ class UserWallet extends React.Component {
                           />
                         : power_balance_str
                     }
+                    {received_vesting_shares != 0 ? (
+                            <div style={{ paddingRight: isMyAccount ? '0.85rem' : null }} >
+                                <Tooltip t={tt('g.received_vesting', {VESTING_TOKEN})}>
+                                    <a href="#" onClick={showDelegateVestingInfo.bind(this, 'received')}>
+                                        + {received_vesting_shares_str}
+                                    </a>
+                                </Tooltip>
+                            </div>
+                        ) : null}
+                    {delegated_vesting_shares != 0 ? (
+                            <div style={{ paddingRight: isMyAccount ? '0.85rem' : null }} >
+                                <Tooltip t={tt('g.delegated_vesting', {VESTING_TOKEN})}>
+                                    <a href="#" onClick={showDelegateVestingInfo.bind(this, 'delegated')}>
+                                        - {delegated_vesting_shares_str}
+                                    </a>
+                                </Tooltip>
+                            </div>
+                        ) : null}
                 </div>
             </div>
 
@@ -416,6 +444,9 @@ export default connect(
         },
         delegateVesting: (username) => {
             dispatch(g.actions.showDialog({name: 'delegate_vesting', params: {username}}))
+        },
+        showDelegatedVesting: (account, type) => {
+            dispatch(g.actions.showDialog({name: 'delegate_vesting_info', params: {account, type}}))
         }
     })
 )(UserWallet)

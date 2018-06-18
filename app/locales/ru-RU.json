@@ -411,7 +411,9 @@
     "password_or_wif": "Пароль или WIF",
     "requires_auth_key": "Эта операция требует Вашего %(authType)s ключа (или используйте главный пароль)",
     "keep_me_logged_in": "Оставить меня залогиненным",
-    "donate": "Отблагодарить"
+    "donate": "Отблагодарить",
+    "received_vesting": "%(VESTING_TOKEN)s делегированная на этот аккаунт",
+    "delegated_vesting": "%(VESTING_TOKEN)s делегированная с этого аккаунта"
   },
   "header_jsx": {
     "home": "Лента",

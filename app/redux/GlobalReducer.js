@@ -323,6 +323,10 @@ export default createModule({
             reducer: (state, {payload: {name}}) =>
                 state.update('active_dialogs', d => d.delete(name))
         },
-        
+        {
+            action: 'RECEIVE_ACCOUNT_VESTING_DELEGATIONS',
+            reducer: (state, { payload: { account, type, vesting_delegations } }) => 
+                state.setIn([ 'accounts', account, `${type}_vesting` ], fromJS(vesting_delegations))
+        },
     ]
 });

@@ -16,7 +16,8 @@ export const fetchDataWatches = [
     watchFetchJsonRequests,
     watchFetchState,
     watchGetContent,
-    watchFetchExchangeRates
+    watchFetchExchangeRates,
+    watchFetchVestingDelegations
 ];
 
 export function* watchGetContent() {
@@ -468,4 +469,19 @@ function storeExchangeValues(created, gold, pair, picked) {
   localStorage.setItem('xchange.gold', gold || 1);
   localStorage.setItem('xchange.pair', pair || 1);
   localStorage.setItem('xchange.picked', picked || DEBT_TOKEN_SHORT);
+}
+
+export function* watchFetchVestingDelegations() {
+    yield* takeEvery('global/FETCH_VESTING_DELEGATIONS', fetchVestingDelegations)
+}
+
+export function* fetchVestingDelegations({ payload: { account, type } }) {
+    const r = yield call([ api, api.getVestingDelegationsAsync ], account, '', 100, type)
+
+    const vesting_delegations = {}
+    for (let v in r) {
+        vesting_delegations[ type === 'delegated' ? r[v].delegatee : r[v].delegator ] = r[v]
+    }
+
+    yield put(GlobalReducer.actions.receiveAccountVestingDelegations({ account, type, vesting_delegations }))
 }

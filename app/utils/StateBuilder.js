@@ -2,6 +2,8 @@ import { PUBLIC_API } from 'app/client_config'
 
 const DEFAULT_VOTE_LIMIT = 10000
 
+const isHardfork = (v) => v.split('.')[1] === '18'
+
 export default async function getState(api, url, options, offchain = {}) {
     if (!url || typeof url !== 'string' || !url.length || url === '/') url = 'trending'
     if (url[0] === '/') url = url.substr(1)
@@ -21,6 +23,9 @@ export default async function getState(api, url, options, offchain = {}) {
     state.discussion_idx = {}
     state.feed_price = await api.getCurrentMedianHistoryPrice()
     state.select_tags = []
+
+    const hardfork_version = await api.getHardforkVersion()
+    state.is_hardfork = isHardfork(hardfork_version)
     
     let accounts = new Set()
 

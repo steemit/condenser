@@ -72,3 +72,7 @@ export function gedDiscussionsBy(type, args) {
 export function getActiveVotesAsync(account, permlink) {
     return api.getActiveVotesAsync(account, permlink)
 }
+
+export function getHardforkVersion() {
+    return api.getHardforkVersionAsync()
+}

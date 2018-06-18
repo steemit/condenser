@@ -248,7 +248,9 @@ class CommentImpl extends React.Component {
         const { allowDelete, authorRepLog10, pictures, gray } = comment.stats;
         const {author, json_metadata} = comment
         const {username, depth, anchor_link,
-            showNegativeComments, ignore_list, noImage} = this.props
+            showNegativeComments, ignore_list, noImage,
+            is_hardfork
+        } = this.props
         const {onShowReply, onShowEdit, onDeletePost} = this
         const post = comment.author + '/' + comment.permlink
         const {PostReplyEditor, PostEditEditor, showReply, showEdit, hide, hide_body} = this.state
@@ -272,11 +274,14 @@ class CommentImpl extends React.Component {
             // console.error('Invalid json metadata string', json_metadata, 'in post', this.props.content);
         }
 
-        const readonly = $STM_Config.read_only_mode;
         const _isPaidout = comment.cashout_time === '1969-12-31T23:59:59';
         const showDeleteOption = username === author  && allowDelete && !_isPaidout;
         const showEditOption = username === author;
         const showReplyOption = comment.depth < 255;
+        
+        // TODO remove after HF18
+        const archived = _isPaidout && !is_hardfork
+        const readonly = $STM_Config.read_only_mode || archived;
 
         let replies = null;
         let body = null;
@@ -415,11 +420,14 @@ const Comment = connect(
         const username = state.user.getIn(['current', 'username'])
         const ignore_list = username ? state.global.getIn(['follow', 'getFollowingAsync', username, 'ignore_result']) : null
 
+        const is_hardfork = state.global.get('is_hardfork')
+
         return {
             ...ownProps,
             anchor_link: '#@' + content, // Using a hash here is not standard but intentional; see issue #124 for details
             username,
-            ignore_list
+            ignore_list,
+            is_hardfork
         }
     },
 

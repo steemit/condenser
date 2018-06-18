@@ -375,10 +375,8 @@ randowhal
 randwhale
 rendowhale
 scoin
-seksi
 shapeshif
 shapeshift
-sneaky.ninja
 steampunks
 steemitpay
 steempay
@@ -397,7 +395,6 @@ techno-comanche
 technocommander
 thealien
 thebiton
-therisin
 therocktrading
 tidex.com
 topbtc

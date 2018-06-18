@@ -71,14 +71,14 @@ class TransferHistoryRow extends React.Component {
 
             const { amount } = data
             if( data.from === context ) {
-                description_start += tt('transferhistoryrow_jsx.transfer') + `${fromWhere} ${data.amount}` + tt('g.to');
+                description_start += tt('transferhistoryrow_jsx.transfer') + ` ${fromWhere} ${data.amount}` + tt('g.to');
                 other_account = data.to;
             }
             else if( data.to === context ) {
-                description_start += tt('g.receive') + `${fromWhere} ${data.amount}` + tt('g.from');
+                description_start += tt('g.receive') + ` ${fromWhere} ${data.amount}` + tt('g.from');
                 other_account = data.from;
             } else {
-                description_start += tt('g.transfer') + `${fromWhere} ${data.amount}` + tt('g.from');
+                description_start += tt('g.transfer') + ` ${fromWhere} ${data.amount}` + tt('g.from');
                 other_account = data.from;
                 description_end += tt('g.to') + data.to;
             }

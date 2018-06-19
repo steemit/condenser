@@ -263,6 +263,7 @@ export default function reducer(state = defaultState, action = {}) {
             let new_state;
             if (
                 order === 'by_author' ||
+                order === 'by_author_noreblog' ||
                 order === 'by_feed' ||
                 order === 'by_comments' ||
                 order === 'by_replies'
@@ -273,7 +274,10 @@ export default function reducer(state = defaultState, action = {}) {
                     return list.withMutations(posts => {
                         data.forEach(value => {
                             const key2 = `${value.author}/${value.permlink}`;
-                            if (!posts.includes(key2)) posts.push(key2);
+
+                            if (!posts.includes(key2)) {
+                                posts.push(key2);
+                            }
                         });
                     });
                 });
@@ -302,13 +306,19 @@ export default function reducer(state = defaultState, action = {}) {
                     });
                 });
             });
+            const lastValue = data.length > 0 ? data[data.length - 1] : null;
+            const lastPost = payload.lastPost ? payload.lastPost : '';
+            const fetching = payload.fetching ? payload.fetching : false;
             new_state = new_state.updateIn(
                 ['status', category || '', order],
                 () => {
-                    if (data.length < constants.FETCH_DATA_BATCH_SIZE) {
-                        return { fetching: false, last_fetch: new Date() };
+                    if (
+                        payload.endOfData &&
+                        data.length < constants.FETCH_DATA_BATCH_SIZE
+                    ) {
+                        return { fetching, last_fetch: new Date(), lastPost };
                     }
-                    return { fetching: false };
+                    return { fetching, lastPost };
                 }
             );
             return new_state;

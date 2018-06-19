@@ -270,7 +270,7 @@ export function* fetchData(action) {
                 start_permlink: permlink,
             },
         ];
-    } else if (order === 'by_author') {
+    } else if (order === 'by_author' || order === 'by_author_noreblog') {
         call_name = 'getDiscussionsByBlogAsync';
         args = [
             {
@@ -302,17 +302,51 @@ export function* fetchData(action) {
     }
     yield put(appActions.fetchDataBegin());
     try {
-        const data = yield call([api, api[call_name]], ...args);
-        yield put(
-            globalActions.receiveData({
-                data,
-                order,
-                category,
-                author,
-                permlink,
-                accountname,
-            })
-        );
+        const firstPermlink = permlink;
+        var fetched = 0;
+        var endOfData = false;
+        var batch = 0;
+        while (!endOfData && fetched < constants.FETCH_DATA_BATCH_SIZE) {
+            var data = yield call([api, api[call_name]], ...args);
+            endOfData =
+                data.length < constants.FETCH_DATA_BATCH_SIZE ||
+                batch >= constants.MAX_BATCHES - 1;
+
+            const lastValue = data.length > 0 ? data[data.length - 1] : null;
+            if (lastValue) {
+                args[0].start_author = lastValue.author;
+                args[0].start_permlink = lastValue.permlink;
+            }
+
+            // filter
+            data = data.filter(
+                value =>
+                    order !== 'by_author_noreblog' ||
+                    value.author === accountname
+            );
+            fetched += data.length;
+
+            yield put(
+                globalActions.receiveData({
+                    data,
+                    order,
+                    category,
+                    author,
+                    firstPermlink,
+                    accountname,
+                    fetching:
+                        fetched < constants.FETCH_DATA_BATCH_SIZE && !endOfData,
+                    lastPost: lastValue
+                        ? `${lastValue.author}/${lastValue.permlink}`
+                        : '',
+                    endOfData,
+                })
+            );
+            batch++;
+            if (order !== 'by_author_noreblog') {
+                break;
+            }
+        }
     } catch (error) {
         console.error('~~ Saga fetchData error ~~>', call_name, args, error);
         yield put(appActions.steemApiError(error.message));

@@ -13,14 +13,16 @@ export default class LandingTeam extends React.Component {
                 </div>
 
                 <div className="row">
-                    <div className="small-12"><h3>GOLOS.io</h3></div>
+                    <div className="small-12">
+                        <h3>
+                            GOLOS.io
+                            <a href="/@golosio" title="Новости Golos.io"><Icon name={APP_ICON} size="2x" /></a>
+                        </h3>
+                    </div>
                 </div>
                 <div className="row align-middle collapse">
                     <div className="columns small-12 medium-6">
                         Разработка, поддержка и развитие клиента <a href="/welcome">Golos.io</a>
-                    </div>
-                    <div className="columns small-12 medium-6">
-                        <a className="button" href="/@golosio">Новости проекта</a>
                     </div>
                 </div>
                 <div className="row Team__members text-center">
@@ -58,8 +60,8 @@ export default class LandingTeam extends React.Component {
                         <p>CMO, Product Owner</p>
                         <ul>
                             <li><a href="/@jevgenika"><Icon name={APP_ICON} size="2x" /></a></li>
-                            <li><a href="https://github.com/jevgenika"><img src="images/landing/github_icon.jpg" /></a></li>
                             <li><a href="mailto:marketing@golos.io" title="mail to marketing@golos.io"><Icon name="envelope" size="2x" /></a></li>
+                            <li><a href="https://github.com/jevgenika"><img src="images/landing/github_icon.jpg" /></a></li>
                             <li><a href="https://www.linkedin.com/in/jevgenija-kharchenko-1a816b10/"><img src="images/landing/linkedin_icon.jpg" /></a></li>
                             <li><a href="https://www.facebook.com/jevgenija.kharchenko"><img className="Team__facebook-logo" src="https://cdn1.iconfinder.com/data/icons/logotypes/32/square-facebook-512.png" /></a></li>
                         </ul>
@@ -146,6 +148,7 @@ export default class LandingTeam extends React.Component {
                         <ul>
                             <li><a href="/@devall"><Icon name={APP_ICON} size="2x" /></a></li>
                             <li><a href="https://github.com/beautyfree"><img src="images/landing/github_icon.jpg" /></a></li>
+                            <li><a href="https://www.linkedin.com/in/alexey-elizarov-b2b1b336/"><img src="images/landing/linkedin_icon.jpg" /></a></li>
                         </ul>
                     </div>
 
@@ -232,6 +235,7 @@ export default class LandingTeam extends React.Component {
                         <p>Support Manager</p>
                         <ul>
                             <li><a href="/@chinpu"><Icon name={APP_ICON} size="2x" /></a></li>
+                            <li><a href="mailto:support@golos.io" title="mail to support@golos.io"><Icon name="envelope" size="2x" /></a></li>
                             <li><a href="https://github.com/chinpu"><img src="images/landing/github_icon.jpg" /></a></li>
                         </ul>
                     </div>
@@ -241,7 +245,7 @@ export default class LandingTeam extends React.Component {
                             <img className="Team__member__img" src="images/landing/anastasiyazhuravleva.jpg" alt="фотография Анастасии Журавлевой" />
                         </div>
                         <strong>Анастасия Журавлева</strong>
-                        <p>Wounderwoman</p>
+                        <p>Manager</p>
                         <ul>
                             <li><a href="/@anastasia.mark"><Icon name={APP_ICON} size="2x" /></a></li>
                             <li><a href="https://github.com/anastasiamarkovna"><img src="images/landing/github_icon.jpg" /></a></li>
@@ -272,14 +276,16 @@ export default class LandingTeam extends React.Component {
                 </div>
 
                 <div className="row">
-                    <div className="small-12"><h3>Golos Core</h3></div>
+                    <div className="small-12">
+                        <h3>
+                            Golos Core
+                            <a href="/@goloscore" title="Новости Golos Core"><Icon name={APP_ICON} size="2x" /></a>
+                        </h3>
+                    </div>
                 </div>
                 <div className="row align-middle collapse">
                     <div className="columns small-12 medium-6">
                         Разработка, поддержка и развитие блокчейна Golos
-                    </div>
-                    <div className="columns small-12 medium-6">
-                        <a className="button" href="/@goloscore">Новости проекта</a>
                     </div>
                 </div>
                 <div className="row Team__members text-center">
@@ -288,7 +294,7 @@ export default class LandingTeam extends React.Component {
                             <img className="Team__member__img" src="images/landing/andrew.jpg" />
                         </div>
                         <strong>Андрей Фалалеев</strong>
-                        <p>Блокчейн разработка</p>
+                        <p>Team Lead</p>
                         <ul>
                             <li><a href="/@andreypf"><Icon name={APP_ICON} size="2x" /></a></li>
                             <li><a href="https://github.com/afalaleev"><img src="images/landing/github_icon.jpg" /></a></li>

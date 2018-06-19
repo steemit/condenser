@@ -46,11 +46,11 @@
 @import "./elements/Voting";
 @import "./elements/YoutubePreview";
 @import "./elements/welcome/WelcomeSlider";
-@import "elements/common/Button/Button";
-@import "./elements/common/RadioGroup/RadioGroup";
-@import "./elements/common/Hint/Hint";
+@import "./elements/common/Button/index";
+@import "./elements/common/RadioGroup/index";
+@import "./elements/common/Hint/index";
 @import "./elements/common/HintIcon/HintIcon";
-@import "./elements/common/DialogManager/DialogManager";
+@import "./elements/common/DialogManager/index";
 @import "./elements/common/TooltipManager/index";
 @import "./elements/postEditor/PostTitle/PostTitle";
 @import "./elements/postEditor/MarkdownEditor/MarkdownEditor";

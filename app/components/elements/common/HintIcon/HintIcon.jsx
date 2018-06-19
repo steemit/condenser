@@ -1,7 +1,7 @@
 import React from 'react';
 import Icon from 'app/components/elements/Icon';
 
-export default class HintIcon extends React.Component {
+export default class HintIcon extends React.PureComponent {
     constructor(props) {
         super(props);
 

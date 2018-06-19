@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import cn from 'classnames';
 import tt from 'counterpart';
 import TagInput from 'app/components/elements/postEditor/TagInput';

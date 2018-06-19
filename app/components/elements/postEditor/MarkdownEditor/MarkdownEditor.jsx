@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Dropzone from 'react-dropzone';
 import tt from 'counterpart';
 import MarkdownEditorToolbar from 'app/components/elements/postEditor/MarkdownEditorToolbar';
@@ -12,8 +13,8 @@ if (process.env.BROWSER) {
 
 export default class MarkdownEditor extends React.Component {
     static propTypes = {
-        initialValue: React.PropTypes.string,
-        onChangeNotify: React.PropTypes.func.isRequired,
+        initialValue: PropTypes.string,
+        onChangeNotify: PropTypes.func.isRequired,
     };
 
     componentDidMount() {

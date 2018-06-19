@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import cn from 'classnames';
 import tt from 'counterpart';
 import Icon from 'app/components/elements/Icon';
@@ -7,9 +8,9 @@ import { validateTag } from 'app/utils/tags';
 
 export default class TagInput extends React.PureComponent {
     static propTypes = {
-        tags: React.PropTypes.array.isRequired,
-        className: React.PropTypes.string,
-        onChange: React.PropTypes.func.isRequired,
+        tags: PropTypes.array.isRequired,
+        className: PropTypes.string,
+        onChange: PropTypes.func.isRequired,
     };
 
     constructor(props) {

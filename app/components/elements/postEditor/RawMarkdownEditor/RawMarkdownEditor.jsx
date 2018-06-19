@@ -1,13 +1,14 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Dropzone from 'react-dropzone';
 import tt from 'counterpart';
 import DialogManager from 'app/components/elements/common/DialogManager';
 
 export default class RawMarkdownEditor extends React.PureComponent {
     static propTypes = {
-        value: React.PropTypes.string.isRequired,
-        uploadImage: React.PropTypes.func.isRequired,
-        onChange: React.PropTypes.func.isRequired,
+        value: PropTypes.string.isRequired,
+        uploadImage: PropTypes.func.isRequired,
+        onChange: PropTypes.func.isRequired,
     };
 
     render() {

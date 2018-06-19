@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux';
+import cn from 'classnames';
 import AppPropTypes from 'app/utils/AppPropTypes';
 import Header from 'app/components/modules/Header';
 import Footer from 'app/components/modules/Footer';
@@ -256,7 +257,9 @@ class App extends React.Component {
                 <div className={'App' + currentTheme + (lp ? ' LP' : '') + (ip ? ' index-page' : '') + (miniHeader ? ' mini-' : '')}
                     onMouseMove={this.onEntropyEvent}>
                     {miniHeader ? <MiniHeader /> : <Header />}
-                    <div className={"App__content" + (route.hideSubMenu ? ' App_hideSubMenu' : '')}>
+                    <div className={cn('App__content', {
+                        'App__content_hide-sub-menu': route.hideSubMenu,
+                    })}>
                         {welcome_screen}
                         {callout}
                         {children}

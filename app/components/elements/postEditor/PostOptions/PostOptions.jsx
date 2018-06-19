@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import cn from 'classnames';
 import tt from 'counterpart';
 import Icon from 'app/components/elements/Icon';
@@ -8,9 +9,9 @@ import { PAYOUT_OPTIONS } from 'app/components/modules/PostForm/PostForm';
 
 export default class PostOptions extends React.PureComponent {
     static propTypes = {
-        value: React.PropTypes.object.isRequired,
-        editMode: React.PropTypes.bool,
-        onChange: React.PropTypes.func.isRequired,
+        value: PropTypes.object.isRequired,
+        editMode: PropTypes.bool,
+        onChange: PropTypes.func.isRequired,
     };
 
     constructor(props) {

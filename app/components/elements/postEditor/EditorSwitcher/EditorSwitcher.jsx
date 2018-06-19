@@ -1,15 +1,16 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import cn from 'classnames';
 import tt from 'counterpart';
 import Icon from 'app/components/elements/Icon';
 
 export default class EditorSwitcher extends React.Component {
     static propTypes = {
-        items: React.PropTypes.array.isRequired,
-        isPreview: React.PropTypes.bool.isRequired,
-        activeId: React.PropTypes.number,
-        onChange: React.PropTypes.func.isRequired,
-        onPreviewChange: React.PropTypes.func.isRequired,
+        items: PropTypes.array.isRequired,
+        isPreview: PropTypes.bool.isRequired,
+        activeId: PropTypes.number,
+        onChange: PropTypes.func.isRequired,
+        onPreviewChange: PropTypes.func.isRequired,
     };
 
     render() {

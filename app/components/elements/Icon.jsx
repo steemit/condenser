@@ -121,7 +121,7 @@ const icons = new Map([
     ['editor-toolbar/picture', require('app/assets/icons/editor-toolbar/picture.svg')],
     ['editor-toolbar/video', require('app/assets/icons/editor-toolbar/video.svg')],
     ['editor-toolbar/search', require('app/assets/icons/editor-toolbar/search.svg')],
-];
+]);
 
 const rem_sizes = {
     '0_75x': '0.75',

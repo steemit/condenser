@@ -12,7 +12,7 @@ RUN yarn
 
 COPY . /var/app
 
-RUN cd ./node_modules/golos-js && yarn install && npm run build
+# RUN cd ./node_modules/golos-js && yarn install && npm run build
 
 # FIXME TODO: fix eslint warnings
 

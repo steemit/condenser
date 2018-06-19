@@ -3209,9 +3209,9 @@ glogg@^1.0.0:
   dependencies:
     sparkles "^1.0.0"
 
-"golos-js@https://github.com/GolosChain/golos-js#0ce890626bee1fe18903be2f353b6b0667e70ff9":
+golos-js@0.7.0:
   version "0.7.0"
-  resolved "https://github.com/GolosChain/golos-js#0ce890626bee1fe18903be2f353b6b0667e70ff9"
+  resolved "https://registry.yarnpkg.com/golos-js/-/golos-js-0.7.0.tgz#10d15fdc0255b991859d46f023c52533aafbcbd1"
   dependencies:
     bigi "^1.4.2"
     bluebird "^3.4.6"

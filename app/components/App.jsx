@@ -43,7 +43,8 @@ const availableDomains = [
     'goldvoice.club',
     'oneplace.media',
     'golos.today',
-    'cpeda.space'
+    'cpeda.space',
+    'linkedin.com'
 ]
 
 class App extends React.Component {

@@ -43,7 +43,7 @@ class UserWallet extends React.Component {
         const gprops = this.props.gprops.toJS();
 
         if (!account) return null;
-        let vesting_steem = vestsToSteem(account.get('vesting_shares'), gprops);
+        const vesting_steem = vestsToSteem(account.get('vesting_shares'), gprops);
         const received_vesting_shares = vestsToSteem(account.get('received_vesting_shares'), gprops);
         const delegated_vesting_shares = vestsToSteem(account.get('delegated_vesting_shares'), gprops);
 
@@ -143,14 +143,14 @@ class UserWallet extends React.Component {
 
         // set displayed estimated value
         const total_sbd = sbd_balance + sbd_balance_savings + savings_sbd_pending + sbdOrders + conversionValue;
-        const total_steem = vesting_steem + balance_steem + saving_balance_steem + savings_pending + steemOrders;
+        const total_steem = parseFloat(vesting_steem) + balance_steem + saving_balance_steem + savings_pending + steemOrders;
 
         // set displayed estimated value
         const total_value = Number(((total_steem * price_per_golos) + total_sbd).toFixed(2))
 
         // format spacing on estimated value based on account state
         const estimate_output = <LocalizedCurrency amount={total_value} />
-
+        
         /// transfer log
         let idx = 0
         const transfer_log = account.get('transfer_history', [])

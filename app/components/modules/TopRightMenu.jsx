@@ -42,25 +42,17 @@ const calculateEstimateOutput = ({ account, price_per_golos, savings_withdraws, 
     })
   }
 
-  const total_sbd = 0
-    // sbd_balance
+  const total_sbd = 0 
     + parseFloat(account.get('sbd_balance'))
-    // sbd_balance_savings
     + parseFloat(toAsset(account.get('savings_sbd_balance')).amount)
     + savings_sbd_pending
-    // + conversionValue
-    // + sbdOrders
-  ;
+
   const total_steem = 0
-    // balance_steem
     + parseFloat(toAsset(account.get('balance')).amount)
-    // saving_balance_steem
     + parseFloat(toAsset(account.get('savings_balance')).amount)
-    // vesting_steem
-    + vestsToSteem(account.get('vesting_shares'), globalprops.toJS())
+    + parseFloat(vestsToSteem(account.get('vesting_shares'), globalprops.toJS()))
     + savings_pending
-    // + steemOrders
-  ;
+
   return Number(((total_steem * price_per_golos) + total_sbd).toFixed(2) );
 }
 

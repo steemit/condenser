@@ -6,7 +6,7 @@ import Header from 'app/components/modules/Header';
 import Footer from 'app/components/modules/Footer';
 import user from 'app/redux/User';
 import g from 'app/redux/GlobalReducer';
-import { browserHistory, Link } from 'react-router';
+import { Link } from 'react-router';
 import resolveRoute from 'app/ResolveRoute';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import Dialogs from '@modules/Dialogs';
@@ -32,8 +32,17 @@ const availableDomains = [
     'golos.blog',
     'golostools.com',
     'github.com',
-    'play.google.com'
+    'play.google.com',
+    'explorer.golos.io',
+    'kuna.com.ua',
+    'forklog.com',
+    'steepshot.io',
+    'goldvoice.club',
+    'oneplace.media',
+    'golos.today',
+    'cpeda.space'
 ]
+
 class App extends React.Component {
 
     state = {

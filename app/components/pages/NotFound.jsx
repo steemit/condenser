@@ -1,5 +1,4 @@
 import React from 'react';
-import SvgImage from 'app/components/elements/SvgImage';
 import { Link } from 'react-router';
 import Icon from 'app/components/elements/Icon.jsx';
 import { APP_NAME, APP_ICON } from 'app/client_config';

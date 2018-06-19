@@ -177,14 +177,15 @@ ul > li.Header__top-logo > a {
       overflow: hidden;
     }
     &.domestic-selector .flag {
+      width: 1.12rem;
+      height: 1.12rem;
       border-radius: 1.12rem;
+      vertical-align: middle;
     }
     .caret-down {
       margin-left: 0.24rem;
     }
   }
-    //domestic icons
-    [class*="/all"],
     .caret-down {
       fill: $dark-gray;
     }

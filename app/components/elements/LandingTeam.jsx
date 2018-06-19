@@ -16,13 +16,13 @@ export default class LandingTeam extends React.Component {
                     <div className="small-12">
                         <h3>
                             GOLOS.io
-                            <a href="/@golosio" title="Новости Golos.io"><Icon name={APP_ICON} size="2x" /></a>
                         </h3>
                     </div>
                 </div>
                 <div className="row align-middle collapse">
                     <div className="columns small-12 medium-6">
-                        Разработка, поддержка и развитие клиента <a href="/welcome">Golos.io</a>
+                        Разработка, поддержка и развитие клиента <a href="/welcome">Golos.io</a>&nbsp;-&nbsp;
+                        <a href="/@golosio" title="Новости Golos.io">Новости проекта</a>
                     </div>
                 </div>
                 <div className="row Team__members text-center">
@@ -240,7 +240,7 @@ export default class LandingTeam extends React.Component {
                         </ul>
                     </div>
 
-                    <div data-wow-delay="1s" className="wow fadeIn small-12 medium-4 large-3 columns small-centered Team__member Team__member__pavel">
+                    {/* <div data-wow-delay="1s" className="wow fadeIn small-12 medium-4 large-3 columns small-centered Team__member Team__member__pavel">
                         <div className="Team__members__image-wrapper">
                             <img className="Team__member__img" src="images/landing/anastasiyazhuravleva.jpg" alt="фотография Анастасии Журавлевой" />
                         </div>
@@ -250,7 +250,7 @@ export default class LandingTeam extends React.Component {
                             <li><a href="/@anastasia.mark"><Icon name={APP_ICON} size="2x" /></a></li>
                             <li><a href="https://github.com/anastasiamarkovna"><img src="images/landing/github_icon.jpg" /></a></li>
                         </ul>
-                    </div>
+                    </div> */}
 
                     <div data-wow-delay="1s" className="wow fadeIn small-12 medium-4 large-3 columns small-centered Team__member Team__member__pavel">
                         <div className="Team__members__image-wrapper">
@@ -279,13 +279,13 @@ export default class LandingTeam extends React.Component {
                     <div className="small-12">
                         <h3>
                             Golos Core
-                            <a href="/@goloscore" title="Новости Golos Core"><Icon name={APP_ICON} size="2x" /></a>
                         </h3>
                     </div>
                 </div>
                 <div className="row align-middle collapse">
                     <div className="columns small-12 medium-6">
-                        Разработка, поддержка и развитие блокчейна Golos
+                        Разработка, поддержка и развитие блокчейна Golos&nbsp;-&nbsp;
+                        <a href="/@goloscore" title="Новости Golos Core">Новости проекта</a>
                     </div>
                 </div>
                 <div className="row Team__members text-center">
@@ -294,7 +294,7 @@ export default class LandingTeam extends React.Component {
                             <img className="Team__member__img" src="images/landing/andrew.jpg" />
                         </div>
                         <strong>Андрей Фалалеев</strong>
-                        <p>Team Lead</p>
+                        <p>Team Lead, Блокчейн Разработка</p>
                         <ul>
                             <li><a href="/@andreypf"><Icon name={APP_ICON} size="2x" /></a></li>
                             <li><a href="https://github.com/afalaleev"><img src="images/landing/github_icon.jpg" /></a></li>

@@ -1,0 +1,94 @@
+
+.TagsEditLine {
+  $tag-height: 24px;
+
+  position: relative;
+
+  &_drag {
+    cursor: move !important;
+  }
+
+  &_inline &__wrapper {
+    height: 100%;
+    padding: 13px 0;
+    overflow-y: auto;
+  }
+
+  &__tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    min-height: 30px;
+    margin-bottom: -6px;
+
+    &_popular {
+      margin-top: 6px;
+    }
+  }
+
+  &__shrink {
+    display: inline-block;
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__tag {
+    display: inline-block;
+    white-space: nowrap;
+    height: $tag-height;
+    line-height: $tag-height - 2px;
+    padding: 0 10px;
+    margin-right: 6px;
+    margin-bottom: 6px;
+    border: 1px solid #E1E1E1;
+    border-radius: $tag-height/2;
+    font-size: 12px;
+    color: #333;
+    cursor: move;
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+    &_over {
+      background: #ffd6d3;
+    }
+
+    &_drag {
+      background: #eee;
+    }
+
+    &_favorite {
+      border-color: #f3f3f3;
+      color: #c2c2c2;
+      cursor: pointer;
+
+      &:hover {
+        color: #333;
+        border-color: #e1e1e1;
+      }
+    }
+  }
+
+  &__tag-icon {
+    display: inline-block;
+    vertical-align: top;
+    margin: -1px -2px 0 8px;
+    color: #e2e2e2;
+    transition: color 0.08s;
+    cursor: pointer;
+  }
+
+  &__tag_over &__tag-icon {
+    color: #fff;
+  }
+
+  &__tag-icon:hover,
+  &__tag_favorite:hover &__tag-icon {
+    color: #000;
+  }
+
+  &_drag &__tag-remove:hover {
+    color: #e2e2e2;
+  }
+}

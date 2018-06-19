@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
 
 const icons = new Map([
     ['user', require('app/assets/icons/user.svg')],
@@ -102,7 +102,26 @@ const icons = new Map([
     ['new/wikipedia', require('app/assets/icons/new/wikipedia.svg')],
     ['new/envelope', require('app/assets/icons/new/envelope.svg')],
     ['new/monitor', require('app/assets/icons/new/monitor.svg')],
-]);
+    ['editor/plus-18', require('app/assets/icons/editor/plus-18.svg')],
+    ['editor/coin', require('app/assets/icons/editor/coin.svg')],
+    ['editor/share', require('app/assets/icons/editor/share.svg')],
+    ['editor/info', require('app/assets/icons/editor/info.svg')],
+    ['editor/plus', require('app/assets/icons/editor/plus.svg')],
+    ['editor/cross', require('app/assets/icons/editor/cross.svg')],
+    ['editor/eye', require('app/assets/icons/editor/eye.svg')],
+    ['editor-toolbar/bold', require('app/assets/icons/editor-toolbar/bold.svg')],
+    ['editor-toolbar/italic', require('app/assets/icons/editor-toolbar/italic.svg')],
+    ['editor-toolbar/header', require('app/assets/icons/editor-toolbar/header.svg')],
+    ['editor-toolbar/strike', require('app/assets/icons/editor-toolbar/strike.svg')],
+    ['editor-toolbar/link', require('app/assets/icons/editor-toolbar/link.svg')],
+    ['editor-toolbar/quote', require('app/assets/icons/editor-toolbar/quote.svg')],
+    ['editor-toolbar/plus', require('app/assets/icons/editor-toolbar/plus.svg')],
+    ['editor-toolbar/bullet-list', require('app/assets/icons/editor-toolbar/bullet-list.svg')],
+    ['editor-toolbar/number-list', require('app/assets/icons/editor-toolbar/number-list.svg')],
+    ['editor-toolbar/picture', require('app/assets/icons/editor-toolbar/picture.svg')],
+    ['editor-toolbar/video', require('app/assets/icons/editor-toolbar/video.svg')],
+    ['editor-toolbar/search', require('app/assets/icons/editor-toolbar/search.svg')],
+];
 
 const rem_sizes = {
     '0_75x': '0.75',
@@ -133,24 +152,30 @@ export default class Icon extends React.PureComponent {
             '5x',
             '10x',
         ]),
-        inverse: PropTypes.bool,
-        className: PropTypes.string,
     };
 
     render() {
         const { name, size, className } = this.props;
         let classes = 'Icon ' + name;
-        let style = { display: 'inline-block', width: `${rem_sizes['1x']}rem` };
+        let style;
+
         if (size) {
             classes += ' Icon_' + size;
-            style = { display: 'inline-block', width: `${rem_sizes[size]}rem` };
+            style = { width: `${rem_sizes[size]}rem` };
         }
+
         if (className) {
             classes += ' ' + className;
         }
 
+        const passProps = { ...this.props };
+        delete passProps.name;
+        delete passProps.size;
+        delete passProps.className;
+
         return (
             <span
+                {...passProps}
                 className={classes}
                 style={style}
                 dangerouslySetInnerHTML={{ __html: icons.get(name) }}

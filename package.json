@@ -123,6 +123,7 @@
     "sendgrid": "^4.10.0",
     "sequelize": "^3.33.0",
     "sequelize-cli": "^3.2.0",
+    "simplemde": "^1.11.2",
     "slick-carousel": "^1.8.1",
     "socketcluster-client": "^11.0.0",
     "speakingurl": "^9.0.0",
@@ -134,6 +135,7 @@
     "svg-inline-react": "^1.0.3",
     "svgo-loader": "^1.2.1",
     "tarantool-driver": "^2.0.1",
+    "turndown": "^4.0.2",
     "twilio": "^3.17.0",
     "uncontrollable": "^3.3.1",
     "underscore.string": "^3.3.4",
@@ -196,5 +198,11 @@
   "engines": {
     "node": ">=8.11.3",
     "npm": ">=5.6.0"
+  },
+  "prettier": {
+    "singleQuote": true,
+    "tabWidth": 4,
+    "semi": true,
+    "trailingComma": "es5"
   }
 }

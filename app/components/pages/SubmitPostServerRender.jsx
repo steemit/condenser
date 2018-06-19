@@ -12,6 +12,6 @@ class SubmitPostServerRender extends React.Component {
 }
 
 module.exports = {
-    path: 'submit.html',
+    path: 'submit',
     component: SubmitPostServerRender
 };

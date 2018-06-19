@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
+import tt from 'counterpart';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
-import tt from 'counterpart';
+import { validateTags } from 'app/utils/tags';
 
 class CategorySelector extends React.Component {
     static propTypes = {
@@ -76,22 +77,11 @@ class CategorySelector extends React.Component {
     }
 }
 export function validateCategory(category, required = true) {
-    if(!category || category.trim() === '') return required ? tt('g.required') : null
-    const cats = category.trim().split(' ')
-    return (
-        // !category || category.trim() === '' ? 'Required' :
-        cats.length > 5 ? tt('category_selector_jsx.use_limitied_amount_of_categories', {amount: 5}) :
-        cats.find(c => c.length > 24)           ? tt('category_selector_jsx.maximum_tag_length_is_24_characters') :
-        cats.find(c => c.split('-').length > 2) ? tt('category_selector_jsx.use_one_dash') :
-        cats.find(c => c.indexOf(',') >= 0)     ? tt('category_selector_jsx.use_spaces_to_separate_tags') :
-        cats.find(c => /[A-ZА-ЯЁҐЄІЇ]/.test(c))      ? tt('category_selector_jsx.use_only_lowercase_letters') :
-        // Check for English and Russian symbols
-        cats.find(c => '18+' !== c && !/^[a-zа-яё0-9-ґєії]+$/.test(c)) ? tt('category_selector_jsx.use_only_allowed_characters') :
-        cats.find(c => '18+' !== c && !/^[a-zа-яё-ґєії]/.test(c)) ? tt('category_selector_jsx.must_start_with_a_letter') :
-        cats.find(c => '18+' !== c && !/[a-zа-яё0-9ґєії]$/.test(c)) ? tt('category_selector_jsx.must_end_with_a_letter_or_number') :
-        cats.find(c => [ 'stihi-io' ].includes(c)) ? tt('category_selector_jsx.denied_to_publish_the_posts_with_tag') :
-        null
-    )
+    if(!category || category.trim() === '') {
+        return required ? tt('g.required') : null;
+    }
+
+    return validateTags(category.trim().split(' '));
 }
 export default connect((state, ownProps) => {
     const trending = state.global.getIn(['tag_idx', 'trending'])

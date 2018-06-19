@@ -1,0 +1,49 @@
+
+.PostFooter {
+
+  &_fix-height {
+    height: 80px;
+  }
+
+  &_edit {
+    margin-bottom: 50px;
+  }
+
+  &__line {
+    display: flex;
+    align-items: center;
+    height: 80px;
+  }
+
+  &__tags {
+    flex-grow: 1;
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
+
+  &__inline-tags-line {
+    flex-grow: 1;
+    height: 100%;
+    margin-left: 20px;
+  }
+
+  &__tags-line {
+    margin-top: -6px;
+  }
+
+  &__buttons {
+    display: flex;
+    flex-shrink: 0;
+  }
+
+  &__button {
+    position: relative;
+    flex-shrink: 0;
+    margin-right: 15px;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}

@@ -1,0 +1,14 @@
+
+.MarkdownEditor {
+
+  .CodeMirror {
+    border: none;
+    color: #757575;
+    margin: 0 -12px;
+    background: none;
+  }
+
+  .CodeMirror-scroll {
+    min-height: 350px;
+  }
+}

@@ -1,0 +1,69 @@
+
+.RadioGroup {
+
+  $dot-size: 20px;
+
+  &__item {
+    display: flex;
+    align-items: center;
+  }
+
+  &__label {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin: 9px 0;
+    flex-grow: 1;
+    text-transform: none;
+    user-select: none;
+    cursor: pointer;
+  }
+
+  &__input {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 0;
+    height: 0;
+    opacity: 0;
+    cursor: pointer;
+    overflow: hidden;
+  }
+
+  &__svg-wrapper {
+    display: inline-block;
+    width: $dot-size;
+    height: $dot-size;
+    color: #333;
+
+    &_value {
+      color: #0078C4;
+    }
+  }
+
+  &__input:focus + &__svg-wrapper {
+    border-radius: $dot-size / 2;
+    background: rgba(0,120,196, 0.1);
+  }
+
+  &__label-text {
+    margin-left: 15px;
+    font-size: 14px;
+  }
+
+  &__hint {
+    flex-shrink: 0;
+  }
+
+  &_disabled &__label {
+    cursor: default;
+  }
+
+  &_disabled &__svg-wrapper {
+    color: #d0d0d0;
+  }
+
+  &_disabled &__label-text {
+    color: #9c9c9c;
+  }
+}

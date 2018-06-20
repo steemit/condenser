@@ -7,7 +7,7 @@ import radioOff from './radio-off.svg';
 
 export default class RadioGroup extends React.PureComponent {
     static propTypes = {
-        items: PropTypes.array.isRequired,
+        options: PropTypes.array.isRequired,
         disabled: PropTypes.bool,
         className: PropTypes.string,
         name: PropTypes.string,
@@ -17,10 +17,10 @@ export default class RadioGroup extends React.PureComponent {
     };
 
     render() {
-        const { items, name, value, className, disabled } = this.props;
+        const { options, name, value, className, disabled } = this.props;
 
         return <div className={cn('RadioGroup', { RadioGroup_disabled: disabled }, className)}>
-                {items.map(item => (
+                {options.map(item => (
                     <div key={item.id} className="RadioGroup__item">
                         <label
                             className="RadioGroup__label"

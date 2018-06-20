@@ -79,7 +79,7 @@ export default class PostOptions extends React.PureComponent {
                 </div>
                 <RadioGroup
                     disabled={editMode}
-                    items={PAYOUT_OPTIONS.map(({ id, title, hint }) => ({
+                    options={PAYOUT_OPTIONS.map(({ id, title, hint }) => ({
                         id,
                         title: tt(title),
                         hint: hint ? tt(hint) : null,

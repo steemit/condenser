@@ -19,10 +19,7 @@ import UserList from 'app/components/elements/UserList';
 import Follow from 'app/components/elements/Follow';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import PostsList from 'app/components/cards/PostsList';
-import {
-    isFetchingOrRecentlyUpdated,
-    getLastFetchedPost,
-} from 'app/utils/StateFunctions';
+import { isFetchingOrRecentlyUpdated } from 'app/utils/StateFunctions';
 import { repLog10 } from 'app/utils/ParsersAndFormatters.js';
 import Tooltip from 'app/components/elements/Tooltip';
 import VerticalMenu from 'app/components/elements/VerticalMenu';
@@ -102,8 +99,10 @@ export default class UserProfile extends React.Component {
         this.props.clearPowerdownDefaults();
     }
 
-    loadMore(last_post, category, showResteem, ignoreLastPostFromStatus) {
+    loadMore(last_post, category, showResteem) {
         const { accountname } = this.props.routeParams;
+
+        if (!last_post) return;
 
         let order;
         switch (category) {
@@ -111,7 +110,7 @@ export default class UserProfile extends React.Component {
                 order = 'by_feed';
                 break;
             case 'blog':
-                order = showResteem ? 'by_author' : 'by_author_noreblog';
+                order = 'by_author';
                 break;
             case 'comments':
                 order = 'by_comments';
@@ -123,24 +122,19 @@ export default class UserProfile extends React.Component {
                 console.log('unhandled category:', category);
         }
 
-        const lastPostFromStatus = getLastFetchedPost(
-            this.props.global_status,
-            order,
-            category
-        );
-        if (!ignoreLastPostFromStatus && lastPostFromStatus) {
-            last_post = lastPostFromStatus;
-        }
-        if (!last_post) return;
-
         if (
             isFetchingOrRecentlyUpdated(
                 this.props.global_status,
                 order,
                 category
             )
-        )
+        ) {
             return;
+        }
+
+        const postFilter = showResteem
+            ? null
+            : value => value.author === accountname;
         const [author, permlink] = last_post.split('/');
         this.props.requestData({
             author,
@@ -148,6 +142,7 @@ export default class UserProfile extends React.Component {
             order,
             category,
             accountname,
+            postFilter,
         });
     }
 
@@ -155,26 +150,21 @@ export default class UserProfile extends React.Component {
         e.preventDefault();
         const newShowResteem = !this.state.showResteem;
         this.setState({ showResteem: newShowResteem });
+        /*
         // normalize account from cased params
         var accountname = this.props.routeParams.accountname.toLowerCase();
         const accountImm = this.props.accounts.get(accountname);
         const posts = accountImm.get('blog');
         if (posts) {
-            const firstPost = posts.get(0);
-            if (firstPost) {
-                // Clear account state to reset fetch state
-                this.props.resetAccountBlogPosts(
-                    accountname,
-                    List.of(firstPost)
-                );
+            const lastPost = posts.get(-1);
+            if (lastPost) {
                 this.loadMore(
-                    firstPost,
+                    lastPost,
                     'blog',
                     newShowResteem,
-                    /*ignoreLastPostFromStatus */ true
                 );
             }
-        }
+        }*/
     };
 
     render() {
@@ -197,10 +187,7 @@ export default class UserProfile extends React.Component {
 
         // Loading status
         const status = global_status
-            ? global_status.getIn([
-                  section,
-                  showResteem ? 'by_author' : 'by_author_noreblog',
-              ])
+            ? global_status.getIn([section, 'by_author'])
             : null;
         const fetching = (status && status.fetching) || this.props.loading;
 
@@ -818,14 +805,6 @@ module.exports = {
                         operation: { account, vesting_shares },
                         errorCallback,
                         successCallback: successCallbackWrapper,
-                    })
-                );
-            },
-            resetAccountBlogPosts: (accountname, posts) => {
-                dispatch(
-                    globalActions.set({
-                        key: ['accounts', accountname, 'blog'],
-                        value: posts,
                     })
                 );
             },

@@ -12,6 +12,10 @@
     height: 100%;
     padding: 13px 0;
     overflow-y: auto;
+
+    &::-webkit-scrollbar {
+      width: 0;
+    }
   }
 
   &__tag-list {

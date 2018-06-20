@@ -4,15 +4,15 @@
   flex-direction: column;
   min-height: 100%;
 
-  &_page {
-    padding-top: 10px;
-  }
-
   &__work-area {
     flex-grow: 1;
     flex-shrink: 0;
     width: 100%;
     min-height: 400px;
+  }
+
+  &_page &__work-area {
+    padding-top: 10px;
   }
 
   &_page &__work-area {

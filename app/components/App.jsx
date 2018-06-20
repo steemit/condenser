@@ -109,7 +109,7 @@ class App extends React.Component {
 
     checkLeaveGolos = (e) => {
       const a = e.target.closest('a')
-      
+
       if (
         a &&
         a.hostname &&
@@ -253,28 +253,26 @@ class App extends React.Component {
         }
 
         return (
-            <React.StrictMode>
-                <div className={'App' + currentTheme + (lp ? ' LP' : '') + (ip ? ' index-page' : '') + (miniHeader ? ' mini-' : '')}
-                    onMouseMove={this.onEntropyEvent}>
-                    {miniHeader ? <MiniHeader /> : <Header />}
-                    <div className={cn('App__content', {
-                        'App__content_hide-sub-menu': route.hideSubMenu,
-                    })}>
-                        {welcome_screen}
-                        {callout}
-                        {children}
-                        {location.pathname.startsWith('/submit') ? null : <Footer />}
-                        <ScrollButton />
-                        <MobileAppButton />
-                    </div>
-                    <Dialogs />
-                    <Modals />
-                    <DialogManager />
-                    {process.env.BROWSER ? <TooltipManager /> : null}
-                    <PageViewsCounter hidden />
+            <div className={'App' + currentTheme + (lp ? ' LP' : '') + (ip ? ' index-page' : '') + (miniHeader ? ' mini-' : '')}
+                 onMouseMove={this.onEntropyEvent}>
+                {miniHeader ? <MiniHeader /> : <Header />}
+                <div className={cn('App__content', {
+                    'App__content_hide-sub-menu': route.hideSubMenu,
+                })}>
+                    {welcome_screen}
+                    {callout}
+                    {children}
+                    {location.pathname.startsWith('/submit') ? null : <Footer />}
+                    <ScrollButton />
+                    <MobileAppButton />
                 </div>
-            </React.StrictMode>
-        )
+                <Dialogs />
+                <Modals />
+                <DialogManager />
+                {process.env.BROWSER ? <TooltipManager /> : null}
+                <PageViewsCounter hidden />
+            </div>
+        );
     }
 }
 

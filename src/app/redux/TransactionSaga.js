@@ -697,6 +697,14 @@ function slug(text) {
 const pwPubkey = (name, pw, role) =>
     auth.wifToPublic(auth.toWif(name, pw.trim(), role));
 
+function* resetRoute(outgoingAutoVestingRoute, newActive) {
+    const { from_account, to_account } = outgoingAutoVestingRoute;
+    yield call(
+        [api, api.setWithdrawVestingRoute],
+        [newActive, from_account, to_account, 0, true]
+    );
+}
+
 function* recoverAccount({
     payload: {
         account_to_recover,
@@ -806,6 +814,16 @@ function* recoverAccount({
             },
             [newOwnerPrivate]
         );
+        // Reset all outgoing auto-vesting routes for this user. Condenser - #2835
+        const outgoingAutoVestingRoutes = yield call(
+            [api, api.getWithdrawRoutes],
+            [account.name, 'outgoing']
+        );
+        if (outgoingAutoVestingRoutes.length > 0) {
+            outgoingAutoVestingRoutes.map(ovr => {
+                resetRoute(ovr, newActive);
+            });
+        }
         if (onSuccess) onSuccess();
     } catch (error) {
         console.error('Recover account', error);

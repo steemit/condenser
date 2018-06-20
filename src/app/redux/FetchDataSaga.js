@@ -129,7 +129,7 @@ export function* watchFetchState() {
 }
 
 export function* fetchData(action) {
-    const { order, author, permlink, accountname } = action.payload;
+    const { order, author, permlink, accountname, postFilter } = action.payload;
     let { category } = action.payload;
     if (!category) category = '';
     category = category.toLowerCase();
@@ -270,7 +270,7 @@ export function* fetchData(action) {
                 start_permlink: permlink,
             },
         ];
-    } else if (order === 'by_author' || order === 'by_author_noreblog') {
+    } else if (order === 'by_author') {
         call_name = 'getDiscussionsByBlogAsync';
         args = [
             {
@@ -323,13 +323,9 @@ export function* fetchData(action) {
                 args[0].start_permlink = lastValue.permlink;
             }
 
-            // filter reblog
-            data = data.filter(
-                value =>
-                    order !== 'by_author_noreblog' ||
-                    value.author === accountname
-            );
-            fetched += data.length;
+            fetched += postFilter
+                ? data.filter(postFilter).length
+                : data.length;
 
             fetchDone =
                 endOfData ||
@@ -345,9 +341,6 @@ export function* fetchData(action) {
                     firstPermlink,
                     accountname,
                     fetching: !fetchDone,
-                    lastPost: lastValue
-                        ? `${lastValue.author}/${lastValue.permlink}`
-                        : '',
                     endOfData,
                 })
             );

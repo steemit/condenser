@@ -106,13 +106,6 @@ export function isFetchingOrRecentlyUpdated(global_status, order, category) {
     return false;
 }
 
-export function getLastFetchedPost(global_status, order, category) {
-    const status = global_status
-        ? global_status.getIn([category || '', order])
-        : null;
-    return status ? status.lastPost : null;
-}
-
 export function contentStats(content) {
     if (!content) return {};
     if (!(content instanceof Map)) content = fromJS(content);

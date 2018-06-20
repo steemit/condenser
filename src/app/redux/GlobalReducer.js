@@ -264,7 +264,6 @@ export default function reducer(state = defaultState, action = {}) {
                 order,
                 category,
                 accountname,
-                lastPost,
                 fetching,
                 endOfData,
             } = payload;
@@ -315,9 +314,9 @@ export default function reducer(state = defaultState, action = {}) {
                 ['status', category || '', order],
                 () => {
                     if (endOfData) {
-                        return { fetching, last_fetch: new Date(), lastPost };
+                        return { fetching, last_fetch: new Date() };
                     }
-                    return { fetching, lastPost };
+                    return { fetching };
                 }
             );
             return new_state;

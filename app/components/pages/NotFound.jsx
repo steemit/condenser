@@ -11,7 +11,7 @@ class NotFound extends React.Component {
                 <div className="Header__top header">
                     <div className="columns">
                         <div className="top-bar-left">
-                            <ul className="menu">
+                            <ul className="menu" style={{ alignItems: 'center' }}>
                                 <li className="Header__top-logo">
                                     <Link to='/'>
                                         <Icon name={APP_ICON} size="2x" />

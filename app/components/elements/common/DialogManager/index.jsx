@@ -1,5 +1,6 @@
 import React from 'react';
 import cn from 'classnames';
+import KEYS from 'app/utils/keyCodes';
 import Dialog from 'app/components/dialogs/common/Dialog';
 
 let queue = [];
@@ -181,7 +182,7 @@ export default class DialogManager extends React.PureComponent {
     };
 
     _onKeyDown = e => {
-        if (this._dialogs.length && e.which === 27) {
+        if (this._dialogs.length && e.which === KEYS.ESCAPE) {
             e.preventDefault();
             this._close();
         }

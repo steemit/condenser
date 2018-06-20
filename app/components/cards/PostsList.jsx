@@ -10,8 +10,8 @@ import Icon from 'app/components/elements/Icon';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import {connect} from 'react-redux';
 import tt from 'counterpart';
-import {encode} from 'app/utils/helpers';
 import { isPostVisited, getVisitedPosts, visitPost } from 'app/utils/helpers';
+import KEYS from 'app/utils/keyCodes';
 
 function topPosition(domElt) {
     if (!domElt) {
@@ -109,7 +109,7 @@ class PostsList extends React.Component {
     }
 
     onBackButton(e) {
-        if ('keyCode' in e && e.keyCode !== 27) return;
+        if ('keyCode' in e && e.keyCode !== KEYS.ESCAPE) return;
         window.removeEventListener('popstate', this.onBackButton);
         window.removeEventListener('keydown', this.onBackButton);
         this.closePostModal();

@@ -1,9 +1,10 @@
 import React from 'react';
 import cn from 'classnames';
+import tt from 'counterpart';
 import Dropzone from 'react-dropzone';
+import KEYS from 'app/utils/keyCodes';
 import Icon from 'app/components/elements/Icon';
 import DialogManager from 'app/components/elements/common/DialogManager';
-import tt from 'counterpart';
 
 const GUIDE_URL =
     'https://golos.io/ru--golos/@on0tole/osnovy-oformleniya-postov-na-golose-polnyi-kurs-po-rabote-s-markdown';
@@ -45,10 +46,12 @@ export default class MarkdownEditorToolbar extends React.PureComponent {
 
     componentDidMount() {
         this._editor.codemirror.on('cursorActivity', this._onCursorActivity);
+        document.addEventListener('keydown', this._onGlobalKeyDown);
     }
 
     componentWillUnmount() {
         this._editor.codemirror.off('cursorActivity', this._onCursorActivity);
+        document.removeEventListener('keydown', this._onGlobalKeyDown);
     }
 
     render() {
@@ -99,9 +102,9 @@ export default class MarkdownEditorToolbar extends React.PureComponent {
                     if (deltaRight > 0) {
                         toolbarTipLeft = Math.min(
                             TOOLBAR_WIDTH - MIN_TIP_OFFSET,
-                            TOOLBAR_WIDTH / 2 + deltaRight - 7
+                            TOOLBAR_WIDTH / 2 + deltaRight
                         );
-                        left = rootPos.right - TOOLBAR_WIDTH / 2;
+                        left = rootPos.width - TOOLBAR_WIDTH / 2;
                     }
                 }
 
@@ -361,7 +364,7 @@ export default class MarkdownEditorToolbar extends React.PureComponent {
     };
 
     _onInputKeyDown = e => {
-        if (e.which === 13) {
+        if (e.which === KEYS.ENTER) {
             const value = e.target.value;
             e.target.value = '';
 
@@ -539,5 +542,13 @@ export default class MarkdownEditorToolbar extends React.PureComponent {
         }
 
         cm.focus();
+    };
+
+    _onGlobalKeyDown = e => {
+        if (this.state.toolbarShow && e.which === KEYS.ESCAPE) {
+            this.setState({
+                toolbarShow: false,
+            });
+        }
     };
 }

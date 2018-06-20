@@ -5,6 +5,7 @@ import tt from 'counterpart';
 import Icon from 'app/components/elements/Icon';
 import Hint from 'app/components/elements/common/Hint';
 import { validateTag } from 'app/utils/tags';
+import KEYS from 'app/utils/keyCodes';
 
 export default class TagInput extends React.PureComponent {
     static propTypes = {
@@ -95,7 +96,7 @@ export default class TagInput extends React.PureComponent {
     }
 
     _onInputKeyDown = e => {
-        if (e.which === 13) {
+        if (e.which === KEYS.ENTER) {
             e.preventDefault();
             this._onPlusClick();
         }

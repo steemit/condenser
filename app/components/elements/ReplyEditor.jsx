@@ -22,6 +22,7 @@ import { DEFAULT_DOMESTIC, DOMESTIC, SUPPORT_EMAIL } from 'app/client_config';
 import Icon from 'app/components/elements/Icon';
 import { detransliterate } from 'app/utils/ParsersAndFormatters';
 import { replyAction } from './ReplyEditorActions';
+import KEYS from 'app/utils/keyCodes';
 
 const remarkable = new Remarkable({ html: true, linkify: false, breaks: true });
 const RichTextEditor = process.env.BROWSER
@@ -361,7 +362,7 @@ class ReplyEditor extends React.Component {
 
     onTextAreaKeyDown = e => {
         const { keyCode } = e;
-        if (keyCode === 13) {
+        if (keyCode === KEYS.ENTER) {
             if (e.ctrlKey && e.metaKey) return;
             const submitRequested = e.ctrlKey || e.metaKey;
             if (submitRequested) {

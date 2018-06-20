@@ -128,8 +128,6 @@ export default class UserProfile extends React.Component {
             order,
             category
         );
-        console.log('statusglobal');
-        console.log(lastPostFromStatus);
         if (!ignoreLastPostFromStatus && lastPostFromStatus) {
             last_post = lastPostFromStatus;
         }
@@ -162,15 +160,19 @@ export default class UserProfile extends React.Component {
         const accountImm = this.props.accounts.get(accountname);
         const posts = accountImm.get('blog');
         if (posts) {
-            // clear account state if toggling back to show all because
-            // we've been filtering out resteems so we should just refetch
             const firstPost = posts.get(0);
             if (firstPost) {
+                // Clear account state to reset fetch state
                 this.props.resetAccountBlogPosts(
                     accountname,
                     List.of(firstPost)
                 );
-                this.loadMore(firstPost, 'blog', newShowResteem, true);
+                this.loadMore(
+                    firstPost,
+                    'blog',
+                    newShowResteem,
+                    /*ignoreLastPostFromStatus */ true
+                );
             }
         }
     };

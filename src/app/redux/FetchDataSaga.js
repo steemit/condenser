@@ -305,26 +305,36 @@ export function* fetchData(action) {
         const firstPermlink = permlink;
         var fetched = 0;
         var endOfData = false;
+        var fetchLimitReached = false;
+        var fetchDone = false;
         var batch = 0;
-        while (!endOfData && fetched < constants.FETCH_DATA_BATCH_SIZE) {
+        while (!fetchDone) {
             var data = yield call([api, api[call_name]], ...args);
-            endOfData =
-                data.length < constants.FETCH_DATA_BATCH_SIZE ||
-                batch >= constants.MAX_BATCHES - 1;
 
+            endOfData = data.length < constants.FETCH_DATA_BATCH_SIZE;
+
+            batch++;
+            fetchLimitReached = batch >= constants.MAX_BATCHES;
+
+            // next arg. Note 'by_replies' does not use same structure.
             const lastValue = data.length > 0 ? data[data.length - 1] : null;
-            if (lastValue) {
+            if (lastValue && order !== 'by_replies') {
                 args[0].start_author = lastValue.author;
                 args[0].start_permlink = lastValue.permlink;
             }
 
-            // filter
+            // filter reblog
             data = data.filter(
                 value =>
                     order !== 'by_author_noreblog' ||
                     value.author === accountname
             );
             fetched += data.length;
+
+            fetchDone =
+                endOfData ||
+                fetchLimitReached ||
+                fetched >= constants.FETCH_DATA_BATCH_SIZE;
 
             yield put(
                 globalActions.receiveData({
@@ -334,18 +344,13 @@ export function* fetchData(action) {
                     author,
                     firstPermlink,
                     accountname,
-                    fetching:
-                        fetched < constants.FETCH_DATA_BATCH_SIZE && !endOfData,
+                    fetching: !fetchDone,
                     lastPost: lastValue
                         ? `${lastValue.author}/${lastValue.permlink}`
                         : '',
                     endOfData,
                 })
             );
-            batch++;
-            if (order !== 'by_author_noreblog') {
-                break;
-            }
         }
     } catch (error) {
         console.error('~~ Saga fetchData error ~~>', call_name, args, error);

@@ -22,11 +22,13 @@ const TYPES = {
 export default class Dialog extends React.PureComponent {
     static propTypes = {
         type: PropTypes.oneOf(['info', 'alert', 'confirm', 'prompt']),
+        title: PropTypes.string,
+        text: PropTypes.string,
         onClose: PropTypes.func.isRequired,
     };
 
     render() {
-        const { text, title, type } = this.props;
+        const { text, title, type = 'info' } = this.props;
 
         const options = TYPES[type];
 
@@ -67,10 +69,17 @@ export default class Dialog extends React.PureComponent {
                             autoFocus: true,
                         })}
                     </div>
-                ) : (
+                ) : type === 'alert' ? (
                     <div className="Dialog__footer">
                         {this._renderButton(tt('g.ok'), {
                             warning: true,
+                            autoFocus: true,
+                        })}
+                    </div>
+                ) : (
+                    <div className="Dialog__footer">
+                        {this._renderButton(tt('g.ok'), {
+                            primary: true,
                             autoFocus: true,
                         })}
                     </div>

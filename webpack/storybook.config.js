@@ -42,7 +42,7 @@ module.exports = (baseConfig, env, defaultConfig) => merge(removeSvgLoaders(defa
       {
         test: /\.(sa|sc|c)ss$/,
         use: [
-          'css-hot-loader',
+          'style-loader',
           {
             loader: 'css-loader',
             options: {
@@ -76,4 +76,5 @@ module.exports = (baseConfig, env, defaultConfig) => merge(removeSvgLoaders(defa
 
 function removeSvgLoaders(config) {
     config.module.rules = config.module.rules.filter(rule => rule.test.toString() !== '/\\.svg$/')
+    return config;
 }

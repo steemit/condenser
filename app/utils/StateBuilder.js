@@ -24,8 +24,8 @@ export default async function getState(api, url, options, offchain = {}) {
     state.feed_price = await api.getCurrentMedianHistoryPrice()
     state.select_tags = []
 
-    const hardfork_version = await api.getHardforkVersion()
-    state.is_hardfork = isHardfork(hardfork_version)
+    // const hardfork_version = await api.getHardforkVersion()
+    // state.is_hardfork = isHardfork(hardfork_version)
     
     let accounts = new Set()
 

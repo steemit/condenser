@@ -224,7 +224,7 @@ class PostFull extends React.Component {
     };
 
   render() {
-        const {props: {username, post, aiPosts, is_hardfork}, state: {PostFullReplyEditor, PostFullEditEditor, formId, showReply, showEdit},
+        const {props: {username, post, aiPosts}, state: {PostFullReplyEditor, PostFullEditEditor, formId, showReply, showEdit},
             onShowReply, onShowEdit, onDeletePost} = this
         const post_content = this.props.cont.get(this.props.post);
         if (!post_content) return null;
@@ -320,6 +320,7 @@ class PostFull extends React.Component {
             </div>)
         }
 
+        const readonly = $STM_Config.read_only_mode;
         const _isPaidout = post_content.get('cashout_time') === '1969-12-31T23:59:59';
         const showReblog = !_isPaidout;
         const showPromote = username && !_isPaidout && post_content.get('depth') == 0;
@@ -328,9 +329,6 @@ class PostFull extends React.Component {
         const showDeleteOption = username === author && content.stats.allowDelete && !_isPaidout;
         const showDonate = Boolean(username && (username !== author));
 
-        // TODO remove after HF18
-        const archived = _isPaidout && !is_hardfork
-        const readonly = $STM_Config.read_only_mode || archived;
 
         const authorRepLog10 = repLog10(content.author_reputation)
         const isPreViewCount = Date.parse(post_content.get('created')) < 1480723200000 // check if post was created before view-count tracking began (2016-12-03)
@@ -409,8 +407,7 @@ export default connect(
     // mapStateToProps
     (state, ownProps) => ({
         ...ownProps,
-        username: state.user.getIn(['current', 'username']),
-        is_hardfork: state.global.get('is_hardfork')
+        username: state.user.getIn(['current', 'username'])
     }),
 
     // mapDispatchToProps

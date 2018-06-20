@@ -39,7 +39,7 @@ class UserWallet extends React.Component {
         const TOKEN_WORTH = tt('token_names.TOKEN_WORTH')
 
         const {showDeposit, depositType, toggleDivestError} = this.state
-        const {convertToSteem, price_per_golos, savings_withdraws, account, current_user, open_orders, is_hardfork} = this.props
+        const {convertToSteem, price_per_golos, savings_withdraws, account, current_user, open_orders} = this.props
         const gprops = this.props.gprops.toJS();
 
         if (!account) return null;
@@ -175,9 +175,6 @@ class UserWallet extends React.Component {
             { value: tt('userwallet_jsx.power_down'), link: '#', onClick: powerDown.bind(this, false) },
             { value: tt('delegatevestingshares_jsx.form_title', {VESTING_TOKEN2}), link:'#', onClick: showDelegateVesting.bind(this) }
         ]
-
-        // TODO remove after HF18
-        if (!is_hardfork) power_menu.splice(1, 1)
 
         if( divesting ) {
             power_menu.pop()
@@ -425,16 +422,13 @@ export default connect(
         const gprops = state.global.get('props');
         const sbd_interest = gprops.get('sbd_interest_rate')
 
-        const is_hardfork = state.global.get('is_hardfork')
-
         return {
             ...ownProps,
             open_orders: state.market.get('open_orders'),
             price_per_golos,
             savings_withdraws,
             sbd_interest,
-            gprops,
-            is_hardfork
+            gprops
         }
     },
     // mapDispatchToProps

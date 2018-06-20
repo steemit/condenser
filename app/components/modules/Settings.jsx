@@ -223,9 +223,9 @@ class Settings extends React.Component {
         if(!metaData.profile.location) delete metaData.profile.location;
         if(!metaData.profile.website) delete metaData.profile.website;
 
-        const {account, updateAccount, is_hardfork} = this.props
+        const {account, updateAccount} = this.props
         this.setState({loading: true})
-        updateAccount(is_hardfork, {
+        updateAccount({
             json_metadata: JSON.stringify(metaData),
             account: account.name,
             memo_key: account.memo_key,
@@ -495,15 +495,12 @@ export default connect(
         if (typeof metaData === 'string') metaData = o2j.ifStringParseJSON(metaData); // issue #1237
         const profile = metaData && metaData.profile ? metaData.profile : {}
 
-        const is_hardfork = state.global.get('is_hardfork')
-
         return {
             account,
             metaData,
             accountname,
             isOwnAccount: username == accountname,
             profile,
-            is_hardfork,
             follow: state.global.get('follow'),
             ...ownProps
         }
@@ -525,13 +522,13 @@ export default connect(
         changeTheme: (theme) => {
             dispatch(user.actions.changeTheme(theme))
         },
-        updateAccount: (is_hardfork, {successCallback, errorCallback, ...operation}) => {
+        updateAccount: ({successCallback, errorCallback, ...operation}) => {
             const success = () => {
                 dispatch(user.actions.getAccount())
                 successCallback()
             }
 
-            const options = {type: is_hardfork ? 'account_metadata' : 'account_update', operation, successCallback: success, errorCallback}
+            const options = {type: 'account_metadata', operation, successCallback: success, errorCallback}
             dispatch(transaction.actions.broadcastOperation(options))
         },
         notify: (message, dismiss = 3000) => {

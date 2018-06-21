@@ -305,7 +305,9 @@ class PostForm extends React.Component {
                     return;
                 }
 
-                const td = new Turndown();
+                const td = new Turndown({
+                    headingStyle: 'atx',
+                });
 
                 newText = td.turndown(this.refs.editor.getValue());
 

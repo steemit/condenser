@@ -4,7 +4,6 @@ import PostForm from 'app/components/modules/PostForm/PostForm';
 import ReplyEditor from 'app/components/elements/ReplyEditor';
 
 class SubmitPost extends React.PureComponent {
-
     constructor(props) {
         super(props);
 

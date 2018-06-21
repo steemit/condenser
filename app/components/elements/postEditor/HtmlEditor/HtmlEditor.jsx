@@ -55,6 +55,6 @@ export default class HtmlEditor extends React.PureComponent {
 }
 
 function stripHtmlWrapper(text) {
-    const match = text.match(/<html>\n*(.+?)?\n*<\/html>/m);
+    const match = text.match(/<html>\n*([\s\S]+?)?\n*<\/html>/);
     return match && match.length === 2 ? match[1] : text;
 }

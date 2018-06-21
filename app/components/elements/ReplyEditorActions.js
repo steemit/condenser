@@ -69,7 +69,7 @@ export const replyAction = (dispatch, remarkable) => ({
         throw new Error('Unknown type: ' + type);
     }
 
-    if (isHtml && !/^<html>.*<\/html>$/.test(body)) {
+    if (isHtml && !/^<html>[\s\S]*<\/html>$/.test(body)) {
         errorCallback('HTML posts must begin with <html> and end with </html>');
         return;
     }

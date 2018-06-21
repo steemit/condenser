@@ -76,7 +76,7 @@ class PostsList extends React.Component {
 
     componentDidUpdate(prevProps, prevState) {
         if (this.state.showPost && !prevState.showPost) {
-            document.getElementsByTagName('body')[0].className = 'with-post-overlay';
+            document.body.classList.add('with-post-overlay');
             window.addEventListener('popstate', this.onBackButton);
             window.addEventListener('keydown', this.onBackButton);
             const post_overlay = document.getElementById('post_overlay');
@@ -87,7 +87,7 @@ class PostsList extends React.Component {
         }
         if (!this.state.showPost && prevState.showPost) {
             window.history.pushState({}, '', this.props.pathname);
-            document.getElementsByTagName('body')[0].className = '';
+            document.body.classList.remove('with-post-overlay');
             this.post_url = null;
         }
     }
@@ -105,7 +105,7 @@ class PostsList extends React.Component {
         window.removeEventListener('keydown', this.onBackButton);
         const post_overlay = document.getElementById('post_overlay');
         if (post_overlay) post_overlay.removeEventListener('click', this.closeOnOutsideClick);
-        document.getElementsByTagName('body')[0].className = "";
+        document.body.classList.remove('with-post-overlay');
     }
 
     onBackButton(e) {

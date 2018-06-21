@@ -6,7 +6,7 @@ module.exports = {
     alias: alias,
     assets: {
         images: {
-            extensions: ['png', 'jpg', 'gif']
+            extensions: ['png', 'jpg', 'gif', 'svg']
         },
         fonts: {
             extensions: ['woff', 'ttf']
@@ -45,10 +45,6 @@ module.exports = {
             // How to extract these Webpack `module`s' javascript `source` code.
             // basically takes `module.source` and modifies `module.exports` a little.
             parser: webpack_isomorphic_tools_plugin.cssLoaderParser
-        },
-        svg: {
-            extension: 'svg',
-            parser: webpack_isomorphic_tools_plugin.urlLoaderParser
         }
     }
 };

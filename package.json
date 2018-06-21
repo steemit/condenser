@@ -140,7 +140,7 @@
     "url-loader": "^1.0.1",
     "web-push": "^3.2.3",
     "webpack": "^4.12.0",
-    "webpack-isomorphic-tools": "3.0.5",
+    "webpack-isomorphic-tools": "3.0.6",
     "websocket": "^1.0.24",
     "whatwg-fetch": "^0.11.1",
     "xmldom": "^0.1.27"

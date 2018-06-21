@@ -6,7 +6,7 @@ import config from 'config';
 export default function ServerHTML({ body, assets, locale, title, meta, analytics }) {
     let page_title = title;
     return (
-        <html lang="en">
+        <html>
         <head>
             <meta charSet="utf-8" />
             <meta name="viewport" content="width=device-width, initial-scale=1.0" />

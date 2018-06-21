@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux';
 import transaction from 'app/redux/Transaction';
 import user from 'app/redux/User';
@@ -21,22 +22,22 @@ class Voting extends React.Component {
 
     static propTypes = {
         // HTML properties
-        post: React.PropTypes.string.isRequired,
-        flag: React.PropTypes.bool,
-        showList: React.PropTypes.bool,
+        post: PropTypes.string.isRequired,
+        flag: PropTypes.bool,
+        showList: PropTypes.bool,
 
         // Redux connect properties
-        vote: React.PropTypes.func.isRequired,
-        author: React.PropTypes.string, // post was deleted
-        permlink: React.PropTypes.string,
-        username: React.PropTypes.string,
-        is_comment: React.PropTypes.bool,
-        active_votes: React.PropTypes.object,
-        loggedin: React.PropTypes.bool,
-        post_obj: React.PropTypes.object,
-        net_vesting_shares: React.PropTypes.number,
-        vesting_shares: React.PropTypes.number,
-        voting: React.PropTypes.bool,
+        vote: PropTypes.func.isRequired,
+        author: PropTypes.string, // post was deleted
+        permlink: PropTypes.string,
+        username: PropTypes.string,
+        is_comment: PropTypes.bool,
+        active_votes: PropTypes.object,
+        loggedin: PropTypes.bool,
+        post_obj: PropTypes.object,
+        net_vesting_shares: PropTypes.number,
+        vesting_shares: PropTypes.number,
+        voting: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -100,7 +101,7 @@ class Voting extends React.Component {
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'Voting')
     }
 
-    componentWillMount() {
+    componentDidMount() {
         const {username, active_votes} = this.props;
         this._checkMyVote(username, active_votes)
     }

@@ -1,5 +1,4 @@
-import {takeLatest, takeEvery, SagaCancellationException} from 'redux-saga';
-import {call, put, select, fork} from 'redux-saga/effects';
+import { call, put, select, fork, cancelled, takeLatest, takeEvery } from 'redux-saga/effects';
 import {loadFollows, fetchFollowCount} from 'app/redux/FollowSaga';
 import {getContent} from 'app/redux/SagaShared';
 import GlobalReducer from './GlobalReducer';
@@ -11,17 +10,17 @@ import {api} from 'golos-js';
 // import * as api from 'app/utils/APIWrapper'
 
 export const fetchDataWatches = [
-    watchLocationChange,
-    watchDataRequests,
-    watchFetchJsonRequests,
-    watchFetchState,
-    watchGetContent,
-    watchFetchExchangeRates,
-    watchFetchVestingDelegations
+    watchLocationChange(),
+    watchDataRequests(),
+    watchFetchJsonRequests(),
+    watchFetchState(),
+    watchGetContent(),
+    watchFetchExchangeRates(),
+    watchFetchVestingDelegations()
 ];
 
 export function* watchGetContent() {
-    yield* takeEvery('GET_CONTENT', getContentCaller);
+    yield takeEvery('GET_CONTENT', getContentCaller);
 }
 
 export function* getContentCaller(action) {
@@ -29,11 +28,11 @@ export function* getContentCaller(action) {
 }
 
 export function* watchLocationChange() {
-    yield* takeLatest('@@router/LOCATION_CHANGE', fetchState);
+    yield takeLatest('@@router/LOCATION_CHANGE', fetchState);
 }
 
 export function* watchFetchState() {
-    yield* takeLatest('FETCH_STATE', fetchState);
+    yield takeLatest('FETCH_STATE', fetchState);
 }
 
 let is_initial_state = true;
@@ -242,14 +241,14 @@ export function* fetchState(location_change_action) {
         yield put({type: 'global/FETCHING_STATE', payload: false});
         yield put({type: 'global/CHAIN_API_ERROR', error: error.message});
 
-        if(!(error instanceof SagaCancellationException)) {
+        if (!(yield cancelled())) {
             yield put({type: 'FETCH_DATA_END'})
         }
     }
 }
 
 export function* watchDataRequests() {
-    yield* takeLatest('REQUEST_DATA', fetchData);
+    yield takeLatest('REQUEST_DATA', fetchData);
 }
 
 export function* fetchData(action) {
@@ -328,14 +327,14 @@ export function* fetchData(action) {
         console.error('~~ Saga fetchData error ~~>', call_name, args, error);
         yield put({type: 'global/CHAIN_API_ERROR', error: error.message});
 
-        if(!(error instanceof SagaCancellationException)) {
+        if (!(yield cancelled())) {
             yield put({type: 'FETCH_DATA_END'})
         }
     }
 }
 
 // export function* watchMetaRequests() {
-//     yield* takeLatest('global/REQUEST_META', fetchMeta);
+//     yield takeLatest('global/REQUEST_META', fetchMeta);
 // }
 // export function* fetchMeta({payload: {id, link}}) {
 //     try {
@@ -379,7 +378,7 @@ export function* fetchData(action) {
 // }
 
 export function* watchFetchJsonRequests() {
-    yield* takeEvery('global/FETCH_JSON', fetchJson);
+    yield takeEvery('global/FETCH_JSON', fetchJson);
 }
 
 /**
@@ -411,7 +410,7 @@ function* fetchJson({payload: {id, url, body, successCallback, skipLoading = fal
 }
 
 export function* watchFetchExchangeRates() {
-    yield* takeEvery('global/FETCH_EXCHANGE_RATES', fetchExchangeRates);
+    yield takeEvery('global/FETCH_EXCHANGE_RATES', fetchExchangeRates);
 }
 
 export function* fetchExchangeRates() {

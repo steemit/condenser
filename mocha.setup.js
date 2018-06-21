@@ -3,11 +3,12 @@ require('babel-register')();
 process.env.NODE_PATH = require('path').resolve(__dirname, '.');
 require('module').Module._initPaths();
 
-const jsdom = require('jsdom').jsdom;
+const jsdom = require('jsdom');
+const { JSDOM } = jsdom;
 
 const exposedProperties = ['window', 'navigator', 'document'];
 
-global.document = jsdom('');
+global.document = (new JSDOM('')).window.document;
 global.$GLS_Config = {currency: 'USD'}
 global.window = document.defaultView;
 

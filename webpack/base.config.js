@@ -1,17 +1,14 @@
-import path from 'path';
-import ExtractTextPlugin from 'extract-text-webpack-plugin';
-import writeStats from './utils/write-stats';
-import alias from './alias'
+const path = require('path');
+const webpack = require('webpack');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const ProgressBarPlugin = require('progress-bar-webpack-plugin');
+const alias = require('./alias')
 
-const Webpack_isomorphic_tools_plugin = require('webpack-isomorphic-tools/plugin');
-const webpack_isomorphic_tools_plugin =
-    new Webpack_isomorphic_tools_plugin(require('./webpack-isotools-config'))
-        .development();
-
-export default {
+module.exports = {
+    context: path.resolve(__dirname, '..'),
     entry: {
         app: ['babel-polyfill', './app/Main.js'],
-        vendor: ['react', 'react-dom', 'react-router']
+        // vendor: ['react', 'react-dom', 'react-router']
     },
     output: {
         path: path.resolve(__dirname, '../dist'),
@@ -20,11 +17,20 @@ export default {
         publicPath: '/assets/'
     },
     module: {
-        loaders: [
-            {test: /\.(jpe?g|png|gif)/, loader: 'url-loader?limit=4096'},
-            {test: /\.json$/, loader: 'json'},
-            {test: /\.js$|\.jsx$/, exclude: /node_modules/, loader: 'babel'},
-            {test: /\.svg$/, loader: 'svg-inline-loader'},
+        rules: [
+            { 
+                test: /\.js$|\.jsx$/, 
+                exclude: /node_modules/, 
+                use: 'babel-loader' 
+            },
+            {
+                test: /\.(jpe?g|png|gif)/,
+                loader: 'url-loader',
+                options: {
+                    limit: 4096
+                }
+            },
+            { test: /\.svg$/, use: 'svg-inline-loader' },
             {
                 test: /\.(woff(2)?|ttf|eot)(\?v=\d+\.\d+\.\d+)?$/,
                 loader: 'file-loader',
@@ -35,39 +41,44 @@ export default {
             },
             {
                 test: require.resolve("blueimp-file-upload"),
-                loader: "imports?define=>false"
+                use: "imports?define=>false"
             },
             {
                 test: require.resolve("medium-editor-insert-plugin"),
-                loader: "imports?define=>false"
+                use: "imports?define=>false"
             },
-            {
-                test: /\.css$/,
-                loader: 'style!css!autoprefixer'
-            },
-            {
-                test: /\.scss$/,
-                loader: ExtractTextPlugin.extract('style', 'css!autoprefixer!sass?outputStyle=expanded')
-            },
-            {
-                test: /\.md/,
-                loader: 'raw'
-            }
+            { test: /\.md/, use: 'raw-loader' }
         ]
     },
     plugins: [
-        function () {
-            this.plugin('done', writeStats);
-        },
-        webpack_isomorphic_tools_plugin,
-        new ExtractTextPlugin('[name]-[chunkhash].css')
+        new ProgressBarPlugin({
+            format: 'Build [:bar] :percent (:elapsed seconds)',
+            clear: false,
+        })
     ],
+    optimization: {
+        splitChunks: {
+            chunks: 'all',
+            cacheGroups: {
+                vendors: {
+                    test: /node_modules/,
+                    enforce: true
+                },
+                styles: {
+                    name: 'styles',
+                    test: /\.css$/,
+                    chunks: 'all',
+                    enforce: true
+                }
+            }
+        }
+    },
     resolve: {
-        root: [
-            path.resolve(__dirname, '..')
+        modules: [
+            path.resolve(__dirname, '..'),
+            'node_modules'
         ],
+        extensions: ['.js', '.json', '.jsx', '.css', '.scss'],
         alias,
-        extensions: ['', '.js', '.json', '.jsx'],
-        modulesDirectories: ['node_modules']
     }
 };

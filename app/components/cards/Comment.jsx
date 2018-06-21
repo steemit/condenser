@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types'
 import Author from 'app/components/elements/Author';
 import ReplyEditor from 'app/components/elements/ReplyEditor';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer';
@@ -106,22 +107,22 @@ class CommentImpl extends React.Component {
 
     static propTypes = {
         // html props
-        cont: React.PropTypes.object.isRequired,
-        content: React.PropTypes.string.isRequired,
-        sort_order: React.PropTypes.oneOf(['votes', 'new', 'trending']).isRequired,
-        root: React.PropTypes.bool,
-        showNegativeComments: React.PropTypes.bool,
-        onHide: React.PropTypes.func,
-        noImage: React.PropTypes.bool,
+        cont: PropTypes.object.isRequired,
+        content: PropTypes.string.isRequired,
+        sort_order: PropTypes.oneOf(['votes', 'new', 'trending']).isRequired,
+        root: PropTypes.bool,
+        showNegativeComments: PropTypes.bool,
+        onHide: PropTypes.func,
+        noImage: PropTypes.bool,
 
         // component props (for recursion)
-        depth: React.PropTypes.number,
+        depth: PropTypes.number,
 
         // redux props
-        username: React.PropTypes.string,
-        rootComment: React.PropTypes.string,
-        anchor_link: React.PropTypes.string.isRequired,
-        deletePost: React.PropTypes.func.isRequired,
+        username: PropTypes.string,
+        rootComment: PropTypes.string,
+        anchor_link: PropTypes.string.isRequired,
+        deletePost: PropTypes.func.isRequired,
     };
     static defaultProps = {
         depth: 1,

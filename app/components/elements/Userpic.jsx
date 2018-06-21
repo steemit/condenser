@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux';
 import cn from 'classnames';
 import CircularProgress from './CircularProgress'
@@ -34,25 +35,25 @@ class Userpic extends Component {
 
         // TODO: Rewrite bottom block
 
-        // try to extract image url from users metaData
-        try {
-            const md = JSON.parse(json_metadata);
-            if(md.profile) url = md.profile.profile_image;
-        } catch (e) {
-            console.warn('Try to extract image url from users metaData failed!')
-        }
-
         if (imageUrl) {
             url = imageUrl
+        } else {
+            // try to extract image url from users metaData
+            try {
+                const md = JSON.parse(json_metadata);
+                if (md.profile) url = md.profile.profile_image;
+            } catch (e) {
+                console.warn('Try to extract image url from users metaData failed!')
+            }
         }
 
         if (url && /^(https?:)\/\//.test(url)) {
             const size = width && width > 48 ? '320x320' : '120x120';
-            if($STM_Config.img_proxy_prefix) {
+            if ($STM_Config.img_proxy_prefix) {
                 url = $STM_Config.img_proxy_prefix + size + '/' + url;
             }
         } else {
-            if(hideIfDefault) {
+            if (hideIfDefault) {
                 return null;
             }
             url = require('app/assets/images/user.png');
@@ -93,14 +94,14 @@ class Userpic extends Component {
         const { width, height, votingPower, showProgress } = this.props
 
         const style = {
-          width: `${width}px`,
-          height: `${height}px`,
-          backgroundImage: `url(${this.extractUrl()})`
+            width: `${width}px`,
+            height: `${height}px`,
+            backgroundImage: `url(${this.extractUrl()})`
         }
 
         if (votingPower) {
             const percentage = this.votingPowerToPercents(votingPower)
-            const toggle = showProgress ? false : this.toggleProgress
+            const toggle = showProgress ? () => { } : this.toggleProgress
 
             return (
                 <div className="Userpic" onClick={toggle} style={style}>
@@ -115,7 +116,7 @@ class Userpic extends Component {
 
 export default connect(
     (state, ownProps) => {
-        const {account, width, height, hideIfDefault} = ownProps
+        const { account, width, height, hideIfDefault } = ownProps
         return {
             json_metadata: state.global.getIn(['accounts', account, 'json_metadata']),
             width,

@@ -1,5 +1,4 @@
-import {takeEvery} from 'redux-saga';
-import {call, put, select} from 'redux-saga/effects';
+import { call, put, select, takeEvery } from 'redux-saga/effects';
 import {fromJS, Set, Map} from 'immutable'
 import {getAccount, getContent} from 'app/redux/SagaShared'
 import {findSigningKey} from 'app/redux/AuthSaga'
@@ -16,23 +15,23 @@ import tt from 'counterpart';
 
 
 export const transactionWatches = [
-    watchForBroadcast,
-    watchForUpdateAuthorities,
-    watchForUpdateMeta,
-    watchForRecoverAccount,
+    watchForBroadcast(),
+    watchForUpdateAuthorities(),
+    watchForUpdateMeta(),
+    watchForRecoverAccount(),
 ]
 
 export function* watchForBroadcast() {
-    yield* takeEvery('transaction/BROADCAST_OPERATION', broadcastOperation);
+    yield takeEvery('transaction/BROADCAST_OPERATION', broadcastOperation);
 }
 export function* watchForUpdateAuthorities() {
-    yield* takeEvery('transaction/UPDATE_AUTHORITIES', updateAuthorities);
+    yield takeEvery('transaction/UPDATE_AUTHORITIES', updateAuthorities);
 }
 export function* watchForUpdateMeta() {
-    yield* takeEvery('transaction/UPDATE_META', updateMeta);
+    yield takeEvery('transaction/UPDATE_META', updateMeta);
 }
 export function* watchForRecoverAccount() {
-    yield* takeEvery('transaction/RECOVER_ACCOUNT', recoverAccount);
+    yield takeEvery('transaction/RECOVER_ACCOUNT', recoverAccount);
 }
 
 const hook = {

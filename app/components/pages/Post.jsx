@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types'
 import Comment from 'app/components/cards/Comment';
 import PostFull from 'app/components/cards/PostFull';
 import {connect} from 'react-redux';
@@ -16,13 +17,13 @@ import CTABlock from '../elements/CTA/ctaBlock'
 class Post extends React.Component {
 
     static propTypes = {
-        content: React.PropTypes.object.isRequired,
-        post: React.PropTypes.string,
-        aiPosts: React.PropTypes.array,
-        routeParams: React.PropTypes.object,
-        location: React.PropTypes.object,
-        signup_bonus: React.PropTypes.string,
-        current_user: React.PropTypes.object,
+        content: PropTypes.object.isRequired,
+        post: PropTypes.string,
+        aiPosts: PropTypes.array,
+        routeParams: PropTypes.object,
+        location: PropTypes.object,
+        signup_bonus: PropTypes.string,
+        current_user: PropTypes.object,
     };
     constructor() {
         super();

@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { Link } from 'react-router'
 import reactForm from 'app/utils/ReactForm'
 import transaction from 'app/redux/Transaction'
@@ -33,20 +34,20 @@ class ReplyEditor extends React.Component {
     static propTypes = {
 
         // html component attributes
-        formId: React.PropTypes.string.isRequired, // unique form id for each editor
-        type: React.PropTypes.oneOf(['submit_feedback', 'submit_story', 'submit_comment', 'edit']),
-        successCallback: React.PropTypes.func, // indicator that the editor is done and can be hidden
-        onCancel: React.PropTypes.func, // hide editor when cancel button clicked
+        formId: PropTypes.string.isRequired, // unique form id for each editor
+        type: PropTypes.oneOf(['submit_feedback', 'submit_story', 'submit_comment', 'edit']),
+        successCallback: PropTypes.func, // indicator that the editor is done and can be hidden
+        onCancel: PropTypes.func, // hide editor when cancel button clicked
 
-        author: React.PropTypes.string, // empty or string for top-level post
-        permlink: React.PropTypes.string, // new or existing category (default calculated from title)
-        parent_author: React.PropTypes.string, // empty or string for top-level post
-        parent_permlink: React.PropTypes.string, // new or existing category
-        jsonMetadata: React.PropTypes.object, // An existing comment has its own meta data
-        category: React.PropTypes.string, // initial value
-        title: React.PropTypes.string, // initial value
-        domestic: React.PropTypes.string, // initial value
-        body: React.PropTypes.string, // initial value
+        author: PropTypes.string, // empty or string for top-level post
+        permlink: PropTypes.string, // new or existing category (default calculated from title)
+        parent_author: PropTypes.string, // empty or string for top-level post
+        parent_permlink: PropTypes.string, // new or existing category
+        jsonMetadata: PropTypes.object, // An existing comment has its own meta data
+        category: PropTypes.string, // initial value
+        title: PropTypes.string, // initial value
+        domestic: PropTypes.string, // initial value
+        body: PropTypes.string, // initial value
     }
 
     static defaultProps = {

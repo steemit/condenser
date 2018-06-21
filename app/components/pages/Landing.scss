@@ -19,6 +19,7 @@
 		padding: 23px 63px;
 		text-transform: none;
 		font-weight: bold;
+		margin: 0;
 	}
 	.btn_block {
 		.button {
@@ -139,7 +140,6 @@
 .WhatIsGolos {
 	.WhatIsGolos__video {
 		margin-top: 80px;
-		margin-bottom: 80px;
 		margin-left: auto;
 		margin-right: auto;
 		iframe { max-width: 100%; }
@@ -241,5 +241,21 @@
 			margin-top: 30px;
 		}
 	}
-    .Partners__forklog-logo { transform: translateY(19%); }
+	
+	.Partners__forklog-logo { transform: translateY(19%); }
+}
+
+.JoinUs {
+	.JoinUs__reasons {
+		margin-top: 50px;
+		margin-bottom: 50px;
+
+		.JoinUs__item {
+			margin-bottom: 20px;
+		}
+
+		.JoinUs__more {
+			margin-top: 30px;
+		}
+	}
 }

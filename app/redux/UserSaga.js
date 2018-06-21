@@ -1,6 +1,5 @@
 import {fromJS, Set, List} from 'immutable'
-import {takeLatest, takeEvery} from 'redux-saga';
-import {call, put, select, fork} from 'redux-saga/effects';
+import { call, put, select, fork, takeLatest, takeEvery } from 'redux-saga/effects';
 import {accountAuthLookup} from 'app/redux/AuthSaga'
 import user from 'app/redux/User'
 import {getAccount} from 'app/redux/SagaShared'
@@ -19,42 +18,42 @@ import PushNotificationSaga from 'app/redux/services/PushNotificationSaga';
 const MAX_UPLOAD_IMAGE_SIZE = 1024 * 1024
 
 export const userWatches = [
-    watchRemoveHighSecurityKeys, // keep first to remove keys early when a page change happens
-    loginWatch,
-    saveLoginWatch,
-    logoutWatch,
-    getAccountWatch,
-    loginErrorWatch,
-    lookupPreviousOwnerAuthorityWatch,
-    watchLoadSavingsWithdraw,
-    uploadImageWatch,
+    watchRemoveHighSecurityKeys(), // keep first to remove keys early when a page change happens
+    loginWatch(),
+    saveLoginWatch(),
+    logoutWatch(),
+    getAccountWatch(),
+    loginErrorWatch(),
+    lookupPreviousOwnerAuthorityWatch(),
+    watchLoadSavingsWithdraw(),
+    uploadImageWatch(),
 ]
 
 const highSecurityPages = Array(/\/market/, /\/@.+\/(transfers|permissions|password)/, /\/~witnesses/)
 
 function* lookupPreviousOwnerAuthorityWatch() {
-    yield* takeLatest('user/lookupPreviousOwnerAuthority', lookupPreviousOwnerAuthority);
+    yield takeLatest('user/lookupPreviousOwnerAuthority', lookupPreviousOwnerAuthority);
 }
 function* loginWatch() {
-    yield* takeLatest('user/USERNAME_PASSWORD_LOGIN', usernamePasswordLogin);
+    yield takeLatest('user/USERNAME_PASSWORD_LOGIN', usernamePasswordLogin);
 }
 function* saveLoginWatch() {
-    yield* takeLatest('user/SAVE_LOGIN', saveLogin_localStorage);
+    yield takeLatest('user/SAVE_LOGIN', saveLogin_localStorage);
 }
 function* logoutWatch() {
-    yield* takeLatest('user/LOGOUT', logout);
+    yield takeLatest('user/LOGOUT', logout);
 }
 
 function* loginErrorWatch() {
-    yield* takeLatest('user/LOGIN_ERROR', loginError);
+    yield takeLatest('user/LOGIN_ERROR', loginError);
 }
 
 function* watchLoadSavingsWithdraw() {
-    yield* takeLatest('user/LOAD_SAVINGS_WITHDRAW', loadSavingsWithdraw);
+    yield takeLatest('user/LOAD_SAVINGS_WITHDRAW', loadSavingsWithdraw);
 }
 
 export function* watchRemoveHighSecurityKeys() {
-    yield* takeLatest('@@router/LOCATION_CHANGE', removeHighSecurityKeys);
+    yield takeLatest('@@router/LOCATION_CHANGE', removeHighSecurityKeys);
 }
 
 function* loadSavingsWithdraw() {
@@ -78,10 +77,10 @@ function* loadSavingsWithdraw() {
 const strCmp = (a, b) => a > b ? 1 : a < b ? -1 : 0
 
 // function* getCurrentAccountWatch() {
-//     // yield* takeLatest('user/SHOW_TRANSFER', getCurrentAccount);
+//     // yield takeLatest('user/SHOW_TRANSFER', getCurrentAccount);
 // }
 function* getAccountWatch() {
-    yield* takeEvery('user/GET_ACCOUNT', getAccountHandler);
+    yield takeEvery('user/GET_ACCOUNT', getAccountHandler);
 }
 
 function* removeHighSecurityKeys({payload: {pathname}}) {
@@ -437,7 +436,7 @@ function* lookupPreviousOwnerAuthority({payload: {}}) {
 }
 
 function* uploadImageWatch() {
-    yield* takeLatest('user/UPLOAD_IMAGE', uploadImage);
+    yield takeLatest('user/UPLOAD_IMAGE', uploadImage);
 }
 
 function* uploadImage({payload: {file, dataUrl, filename = 'image.txt', progress}}) {

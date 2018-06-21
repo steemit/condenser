@@ -1,16 +1,17 @@
-import webpack from 'webpack';
-import git from 'git-rev-sync';
-import baseConfig from './base.config';
-// Analyse bundle library
-// import {BundleAnalyzerPlugin} from 'webpack-bundle-analyzer';
+const webpack = require('webpack');
+const merge = require('webpack-merge');
+const git = require('git-rev-sync');
+const baseConfig = require('./base.config');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
-export default {
-    ...baseConfig,
-    module: {
-        loaders: [
-            ...baseConfig.module.loaders
-        ]
-    },
+const Webpack_isomorphic_tools_plugin = require('webpack-isomorphic-tools/plugin');
+const webpack_isomorphic_tools_plugin =
+    new Webpack_isomorphic_tools_plugin(require('./webpack-isotools-config'));
+
+module.exports = merge(baseConfig, {
+    mode: 'production',
     plugins: [
         new webpack.DefinePlugin({
             'process.env': {
@@ -23,37 +24,40 @@ export default {
                 TYPED_ARRAY_SUPPORT: JSON.stringify(false)
             }
         }),
-
-        // optimizations
-        new webpack.optimize.DedupePlugin(),
-        new webpack.optimize.OccurenceOrderPlugin(),
-        new webpack.optimize.UglifyJsPlugin({
-            compress: {
-                warnings: false,
-                screw_ie8: true,
-                sequences: true,
-                dead_code: true,
-                drop_debugger: true,
-                comparisons: true,
-                conditionals: true,
-                evaluate: true,
-                booleans: true,
-                loops: true,
-                unused: true,
-                hoist_funs: true,
-                if_return: true,
-                join_vars: true,
-                cascade: true,
-                //drop_console: true
+        webpack_isomorphic_tools_plugin,
+        new MiniCssExtractPlugin({
+            filename: '[name].[hash].css',
+            chunkFilename: '[id].[hash].css',
+        })
+    ],
+    module: {
+        rules: [
+            {
+                test: /\.(sa|sc|c)ss$/,
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    'css-loader',
+                    {
+                        loader: 'postcss-loader',
+                        options: {
+                            plugins: () => [require('autoprefixer')({
+                                'browsers': ['> 1%', 'last 2 versions']
+                            })],
+                        }
+                    },
+                    'sass-loader',
+                ],
             },
-            output: {
-                comments: false
-            }
-        }),
-
-        // Analyse your bundle dependencies
-        // new BundleAnalyzerPlugin(),
-
-        ...baseConfig.plugins
-    ]
-};
+        ]
+    },
+    optimization: {
+        minimizer: [ // in production mode webpack 4 use own uglify
+            new UglifyJsPlugin({
+                cache: true,
+                parallel: true,
+                sourceMap: false
+            }),
+            new OptimizeCSSAssetsPlugin({})
+        ],
+    }
+});

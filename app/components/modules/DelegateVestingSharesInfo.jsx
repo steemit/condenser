@@ -1,4 +1,4 @@
-import React, { PropTypes, Component } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import tt from 'counterpart'
@@ -7,7 +7,7 @@ import { LIQUID_TICKER, VESTING_TOKEN } from 'app/client_config'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
 import { numberWithCommas, vestsToSteem } from 'app/utils/StateFunctions'
 
-class DelegateVestingSharesInfo extends Component {
+class DelegateVestingSharesInfo extends React.Component {
 
     componentDidMount() {
         const { account, type, fetchVestingDelegations } = this.props

@@ -1,4 +1,5 @@
-import React, {PropTypes} from 'react';
+import React from 'react';
+import PropTypes from 'prop-types'
 import {connect} from 'react-redux';
 // import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
@@ -21,7 +22,7 @@ export default class Reblog extends React.Component {
         this.state = {active: false, loading: false}
     }
 
-    componentWillMount() {
+    componentDidMount() {
         const {account} = this.props
         if(account) {
             this.setState({active: this.isReblogged(account)})

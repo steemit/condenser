@@ -1,11 +1,12 @@
 /* eslint react/prop-types: 0 */
 import React from 'react'
+import PropTypes from 'prop-types'
 // import g from 'app/redux/GlobalReducer'
 // import transaction from 'app/redux/Transaction'
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 // import {Map} from 'immutable'
 
-// const {string, object} = React.PropTypes
+// const {string, object} = PropTypes
 
 class Template extends React.Component {
     // static propTypes = {

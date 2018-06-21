@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types'
 import { Link } from 'react-router';
 import {connect} from 'react-redux';
 import Icon from 'app/components/elements/Icon';
@@ -114,10 +115,10 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
     }
     additional_menu.push(
         { link: '/welcome', value: tt("navigation.welcome") },
-        { link: getURL('WIKI_URL'), value: tt('navigation.wiki') },
+        { link: getURL('WIKI_URL'), value: tt('navigation.wiki'), target: 'blank' },
         { link: '/market', value: tt('userwallet_jsx.market') },
         { link: '/~witnesses', value: tt("navigation.witnesses") },
-        { link: 'http://golostools.com/', value: tt('navigation.APP_NAME_app_center', { APP_NAME }) }
+        { link: 'http://golostools.com/', value: tt('navigation.APP_NAME_app_center', { APP_NAME }), target: 'blank' }
     );
     const navAdditional = <LinkWithDropdown
         closeOnClickOutside
@@ -222,13 +223,13 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
 }
 
 TopRightMenu.propTypes = {
-    username: React.PropTypes.string,
-    loggedIn: React.PropTypes.bool,
-    probablyLoggedIn: React.PropTypes.bool,
-    showLogin: React.PropTypes.func.isRequired,
-    logout: React.PropTypes.func.isRequired,
-    vertical: React.PropTypes.bool,
-    navigate: React.PropTypes.func,
+    username: PropTypes.string,
+    loggedIn: PropTypes.bool,
+    probablyLoggedIn: PropTypes.bool,
+    showLogin: PropTypes.func.isRequired,
+    logout: PropTypes.func.isRequired,
+    vertical: PropTypes.bool,
+    navigate: PropTypes.func,
 };
 
 export default connect(

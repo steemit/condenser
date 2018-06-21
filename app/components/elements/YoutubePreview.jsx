@@ -1,9 +1,10 @@
 /* eslint react/prop-types: 0 */
 import React from 'react'
+import PropTypes from 'prop-types'
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import { APP_DOMAIN } from 'app/client_config'
 
-const {string, number} = React.PropTypes
+const {string, number} = PropTypes
 
 /** Lots of iframes in a post can be very slow.  This component only inserts the iframe when it is actually needed. */
 export default class YoutubePreview extends React.Component {

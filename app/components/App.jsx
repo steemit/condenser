@@ -1,11 +1,13 @@
 import React from 'react';
+import PropTypes from 'prop-types'
 import {connect} from 'react-redux';
 import AppPropTypes from 'app/utils/AppPropTypes';
 import Header from 'app/components/modules/Header';
 import Footer from 'app/components/modules/Footer';
 import user from 'app/redux/User';
 import g from 'app/redux/GlobalReducer';
-import { browserHistory, Link } from 'react-router';
+import { Link } from 'react-router';
+import resolveRoute from 'app/ResolveRoute';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import Dialogs from '@modules/Dialogs';
 import Modals from '@modules/Modals';
@@ -17,6 +19,7 @@ import tt from 'counterpart';
 import PageViewsCounter from '@elements/PageViewsCounter';
 import {APP_ICON, VEST_TICKER, WIKI_URL, LANDING_PAGE_URL, ABOUT_PAGE_URL, WHITEPAPER_URL, TERMS_OF_SERVICE_URL, PRIVACY_POLICY_URL, THEMES, DEFAULT_THEME } from 'app/client_config';
 import LocalizedCurrency from '@elements/LocalizedCurrency';
+import MobileAppButton from 'app/components/elements/MobileBanners/MobileAppButton';
 
 const availableLinks = [
     'https://www.facebook.com/www.golos.io',
@@ -29,8 +32,21 @@ const availableDomains = [
     'golos.blog',
     'golostools.com',
     'github.com',
-    'play.google.com'
+    'play.google.com',
+    't.me',
+    'facebook.com',
+    'twitter.com',
+    'explorer.golos.io',
+    'kuna.com.ua',
+    'forklog.com',
+    'steepshot.io',
+    'goldvoice.club',
+    'oneplace.media',
+    'golos.today',
+    'cpeda.space',
+    'linkedin.com'
 ]
+
 class App extends React.Component {
 
     state = {
@@ -39,14 +55,11 @@ class App extends React.Component {
         expandCallout: false,
     }
 
-    componentWillMount() {
+    componentDidMount() {
         if (process.env.BROWSER) localStorage.removeItem('autopost') // July 14 '16 compromise, renamed to autopost2
         this.props.loginUser();
         this.props.loadExchangeRates();
-        // this.initVendorScripts()
-    }
 
-    componentDidMount() {
         window.addEventListener('storage', this.checkLogin);
         if (process.env.BROWSER) {
             window.addEventListener('click', this.checkLeaveGolos)
@@ -124,12 +137,6 @@ class App extends React.Component {
             console.log('onEntropyEvent Unknown', e.type, e)
     }
 
-    signUp() {
-    }
-
-    learnMore() {
-    }
-
     isShowInfoBox() {
         if (process.env.BROWSER) {
             if (!localStorage.getItem('infobox')) {
@@ -158,6 +165,7 @@ class App extends React.Component {
         const APP_NAME = tt('g.APP_NAME');
 
         const {location, params, children, flash, new_visitor, depositSteem, signup_bonus} = this.props;
+        const route = resolveRoute(location.pathname);
         const theme = process.env.BROWSER ? localStorage.getItem('theme') : DEFAULT_THEME
         let currentTheme = ' theme-' + DEFAULT_THEME.toLowerCase();
         if (THEMES.indexOf(theme) !== -1) {
@@ -237,33 +245,36 @@ class App extends React.Component {
         }
 
         return (
-            <div className={'App' + currentTheme + (lp ? ' LP' : '') + (ip ? ' index-page' : '') + (miniHeader ? ' mini-' : '')}
-                onMouseMove={this.onEntropyEvent}>
-                {miniHeader ? <MiniHeader /> : <Header />}
-                <div className="App__content">
-                    {welcome_screen}
-                    {callout}
-                    {children}
-                    <Footer />
-                    <ScrollButton />
+            <React.StrictMode>
+                <div className={'App' + currentTheme + (lp ? ' LP' : '') + (ip ? ' index-page' : '') + (miniHeader ? ' mini-' : '')}
+                    onMouseMove={this.onEntropyEvent}>
+                    {miniHeader ? <MiniHeader /> : <Header />}
+                    <div className={"App__content" + (route.hideSubMenu ? ' App_hideSubMenu' : '')}>
+                        {welcome_screen}
+                        {callout}
+                        {children}
+                        <Footer />
+                        <ScrollButton />
+                        <MobileAppButton />
+                    </div>
+                    <Dialogs />
+                    <Modals />
+                    <PageViewsCounter />
                 </div>
-                <Dialogs />
-                <Modals />
-                <PageViewsCounter />
-            </div>
+            </React.StrictMode>
         )
     }
 }
 
 App.propTypes = {
-    theme: React.PropTypes.string,
-    error: React.PropTypes.string,
+    theme: PropTypes.string,
+    error: PropTypes.string,
     children: AppPropTypes.Children,
-    location: React.PropTypes.object,
-    signup_bonus: React.PropTypes.string,
-    loginUser: React.PropTypes.func.isRequired,
-    logoutUser: React.PropTypes.func.isRequired,
-    depositSteem: React.PropTypes.func.isRequired
+    location: PropTypes.object,
+    signup_bonus: PropTypes.string,
+    loginUser: PropTypes.func.isRequired,
+    logoutUser: PropTypes.func.isRequired,
+    depositSteem: PropTypes.func.isRequired
 };
 
 export default connect(

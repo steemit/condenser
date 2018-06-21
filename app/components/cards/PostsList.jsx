@@ -1,4 +1,5 @@
-import React, {PropTypes} from 'react';
+import React from 'react';
+import PropTypes from 'prop-types'
 import PostSummary from 'app/components/cards/PostSummary';
 import Post from 'app/components/pages/Post';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
@@ -52,10 +53,6 @@ class PostsList extends React.Component {
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'PostsList')
     }
 
-    componentWillMount() {
-        this.readNsfwPref()
-    }
-
     readNsfwPref() {
         if(!process.env.BROWSER) return
         const {username} = this.props
@@ -65,6 +62,7 @@ class PostsList extends React.Component {
     }
 
     componentDidMount() {
+        this.readNsfwPref()
         this.attachScrollListener();
     }
 

@@ -30,11 +30,7 @@ global.$STM_Config = {
 };
 
 const WebpackIsomorphicTools = require('webpack-isomorphic-tools');
-const WebpackIsomorphicToolsConfig = require('../webpack/webpack-isotools-config');
-
-global.webpackIsomorphicTools = new WebpackIsomorphicTools(
-    WebpackIsomorphicToolsConfig
-);
+global.webpackIsomorphicTools = new WebpackIsomorphicTools(require('../webpack/webpack-isotools-config'));
 
 global.webpackIsomorphicTools.server(ROOT, () => {
     golos.config.set('websocket', config.get('ws_connection_server'))

@@ -1,10 +1,15 @@
 import React from 'react';
-import { renderToString } from 'react-dom/server';
+import { renderToNodeStream } from 'react-dom/server';
+import stringToStream from 'string-to-stream';
+import multiStream from 'multistream';
+
+import { ServerStyleSheet } from 'styled-components'
 import Tarantool from 'db/tarantool';
 import ServerHTML from './server-html';
-import universalRender from '../shared/UniversalRender';
+import { serverRender } from '../shared/UniversalRender';
 import models from 'db/models';
 import secureRandom from 'secure-random';
+
 import ErrorPage from 'server/server-error';
 import {
   DEFAULT_LANGUAGE, LANGUAGES, LOCALE_COOKIE_KEY,
@@ -93,7 +98,7 @@ async function appRender(ctx) {
           title,
           statusCode,
           meta
-        } = await universalRender({
+        } = await serverRender({
           location: ctx.request.url,
           store,
           offchain,
@@ -106,7 +111,7 @@ async function appRender(ctx) {
         if (metrics) metrics.timing(`universalRender.time`, new Date() - start)
 
         // Assets name are found in `webpack-stats` file
-        const assets_filename = process.env.NODE_ENV === 'production' ? 'tmp/webpack-stats-prod.json' : 'tmp/webpack-stats-dev.json';
+        const assets_filename = process.env.NODE_ENV === 'production' ? 'tmp/webpack-isotools-assets-prod.json' : 'tmp/webpack-isotools-assets-dev.json';
         const assets = require(assets_filename);
 
         // Don't cache assets name on dev
@@ -120,8 +125,13 @@ async function appRender(ctx) {
         };
 
         const props = { body, assets, title, meta, analytics};
+        const sheet = new ServerStyleSheet()
+        const jsx = sheet.collectStyles(<ServerHTML {...props} />)
+        const stream = sheet.interleaveWithNodeStream(renderToNodeStream(jsx))
+
         ctx.status = statusCode;
-        ctx.body = '<!DOCTYPE html>' + renderToString(<ServerHTML { ...props } />);
+        ctx.type = 'text/html'
+        ctx.body = multiStream([stringToStream('<!DOCTYPE html>'), stream])
     } catch (err) {
         // Render 500 error page from server
         const { error, redirect } = err;

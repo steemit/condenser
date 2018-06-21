@@ -1,5 +1,6 @@
 /* eslint react/prop-types: 0 */
 import React from 'react';
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux';
 import LoadingIndicator from '@elements/LoadingIndicator';
 import {PrivateKey} from 'golos-js/lib/auth/ecc';
@@ -19,8 +20,8 @@ import { successReg } from 'app/utils/Analytics';
 class CreateAccount extends React.Component {
 
     static propTypes = {
-        loginUser: React.PropTypes.func.isRequired,
-        serverBusy: React.PropTypes.bool
+        loginUser: PropTypes.func.isRequired,
+        serverBusy: PropTypes.bool
     };
 
     constructor(props) {

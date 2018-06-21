@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
 import { connect } from 'react-redux'
 import reactForm from 'app/utils/ReactForm'
@@ -9,7 +10,7 @@ import { LIQUID_TICKER } from 'app/client_config'
 import tt from 'counterpart'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
 
-class DelegateVestingShares extends Component {
+class DelegateVestingShares extends React.Component {
 
     static propTypes = {
         currentAccount: PropTypes.object.isRequired

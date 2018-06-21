@@ -21,16 +21,16 @@ export default function resolveRoute(path)
         return {page: 'NotFound'};
     }
     if (path === '/about.html') {
-        return {page: 'About'};
+        return {page: 'About', hideSubMenu: true};
     }
     if (path === '/welcome') {
-        return {page: 'Welcome'};
+        return {page: 'Welcome', hideSubMenu: true};
     }
     if (path === '/start'){
         return {page: 'Start'}
     }
     if (path === '/about') {
-        return {page: 'Landing'};
+        return {page: 'Landing', hideSubMenu: true};
     }
     if (path === '/faq.html') {
         return {page: 'Faq'};

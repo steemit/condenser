@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom';
 import {connect} from 'react-redux';
 import transaction from 'app/redux/Transaction'
@@ -15,12 +16,12 @@ import { DEBT_TOKEN_SHORT, LIQUID_TICKER, DEBT_TICKER } from 'app/client_config'
 
 class Market extends React.Component {
     static propTypes = {
-        orderbook: React.PropTypes.object,
-        open_orders: React.PropTypes.array,
-        ticker: React.PropTypes.object,
+        orderbook: PropTypes.object,
+        open_orders: PropTypes.array,
+        ticker: PropTypes.object,
         // redux PropTypes
-        placeOrder: React.PropTypes.func.isRequired,
-        user: React.PropTypes.string,
+        placeOrder: PropTypes.func.isRequired,
+        user: PropTypes.string,
     };
 
     constructor(props) {

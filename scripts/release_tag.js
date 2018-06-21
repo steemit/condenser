@@ -65,7 +65,8 @@ async function run() {
         },
         {
             type: 'input',
-            name: 'Enter the comment',
+            name: 'comment',
+            message: 'Enter the comment',
             validate(msg) {
                 if (msg.length > 0) {
                     return true;

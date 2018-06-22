@@ -19,7 +19,7 @@ button {
 }
 input, textarea, select {
     // Overwrite 16px margin-bottom, it was pusing error messages down away from the form element
-    margin-bottom: 0px !important;
+    margin-bottom: 0 !important;
 }
 .error {
     color: $alert-color;
@@ -49,7 +49,7 @@ input, textarea, select {
 }
 .darkbtn {
     padding: 12px;
-    background-color: #eeeeee;
+    background-color: #eee;
 }
 
 // // what about touch-screen only?

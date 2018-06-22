@@ -1,0 +1,21 @@
+
+.MarkdownEditor {
+
+  & .CodeMirror {
+    padding: 0;
+    margin: 0 -4px;
+    border: none;
+    color: #333;
+    background: none;
+  }
+
+  & .CodeMirror-scroll {
+    min-height: 350px;
+  }
+
+  & .CodeMirror-lines {
+    font-family: 'Source Serif Pro', serif;
+    font-size: 1.2em;
+    line-height: 1.5em;
+  }
+}

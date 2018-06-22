@@ -1,0 +1,47 @@
+
+.PostForm {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+
+  &__work-area {
+    flex-grow: 1;
+    flex-shrink: 0;
+    width: 100%;
+    min-height: 400px;
+  }
+
+  &_page &__work-area {
+    padding-top: 10px;
+  }
+
+  &_page &__work-area {
+    height: calc(100% - 80px);
+    overflow-y: auto;
+  }
+
+  &__content {
+    max-width: 75rem;
+    padding: 0 8px;
+    margin: 0 auto;
+  }
+
+  &__footer {
+    width: 100%;
+    flex-shrink: 0;
+    z-index: 1;
+    user-select: none;
+  }
+
+  &_page &__footer {
+    background: #fff;
+    box-shadow: 0 -2px 12px 0 rgba(0,0,0, 0.07);
+  }
+
+  &__footer-content {
+    width: 100%;
+    max-width: 75rem;
+    padding: 0 8px;
+    margin: 0 auto;
+  }
+}

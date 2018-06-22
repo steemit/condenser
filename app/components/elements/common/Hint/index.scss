@@ -1,0 +1,71 @@
+@import "../../../extends";
+
+.Hint {
+  position: absolute;
+  bottom: 100%;
+  animation: from-down 0.2s forwards;
+  font-size: 15px;
+  z-index: 10;
+
+  &_center {
+    left: 50%;
+  }
+
+  &_center &__content {
+    transform: translate3d(-50%, 0, 0);
+  }
+
+  &_left &__content::after {
+    left: 38px;
+  }
+
+  &_right &__content::after {
+    left: unset;
+    right: 38px;
+  }
+
+  &__content {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-width: 276px;
+    max-width: 500px;
+    padding: 22px 26px 20px;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 2px 12px 0 rgba(0,0,0, 0.15);
+
+    &::after {
+      @extend %dialog-tip;
+    }
+  }
+
+  &__icon {
+    margin-right: 15px;
+    vertical-align: top;
+    flex-shrink: 0;
+
+    &_warning {
+      color: #f00;
+    }
+
+    &_info {
+      color: #789821;
+    }
+  }
+
+  &__inner {
+
+  }
+}
+
+@keyframes from-down {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, -10px, 0);
+  }
+}

@@ -410,7 +410,7 @@ class Welcome extends Component {
                                             <a className="questions-link" href="mailto:support@golos.io"><Icon name="new/envelope" size="2x" />Напишите на почту</a>
                                         </div>
                                         <div className="columns">
-                                            <a className="questions-link" href="/submit.html?type=submit_feedback"><Icon name="new/monitor" size="2x" />Или через сайт</a>
+                                            <a className="questions-link" href="/submit?type=submit_feedback"><Icon name="new/monitor" size="2x" />Или через сайт</a>
                                         </div>
                                     </div>
                                 </div>

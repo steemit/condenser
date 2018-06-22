@@ -268,7 +268,7 @@ export default class UserProfile extends React.Component {
                 let posts = accountImm.get('blog');
                 const emptyText = isMyAccount ? <div>
                     {tt('submit_a_story.you_hasnt_started_bloggin_yet')}<br /><br />
-                    <Link to="/submit.html">{tt('g.submit_a_story')}</Link><br />
+                    <Link to="/submit">{tt('g.submit_a_story')}</Link><br />
                     <a href="/welcome">{tt('submit_a_story.welcome_to_the_blockchain')}</a>
                 </div>:
                     tt('user_profile.user_hasnt_started_bloggin_yet', {name: accountname});

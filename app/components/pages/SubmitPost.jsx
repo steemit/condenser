@@ -1,36 +1,46 @@
 import React from 'react';
-import PropTypes from 'prop-types'
-// import {connect} from 'react-redux';
 import { browserHistory } from 'react-router';
-import ReplyEditor from 'app/components/elements/ReplyEditor'
+import PostForm from 'app/components/modules/PostForm/PostForm';
+import ReplyEditor from 'app/components/elements/ReplyEditor';
 
-const formId = 'submitStory'
-const SubmitReplyEditor = ReplyEditor(formId)
+class SubmitPost extends React.PureComponent {
+    constructor(props) {
+        super(props);
 
-class SubmitPost extends React.Component {
-    // static propTypes = {
-    //     routeParams: PropTypes.object.isRequired,
-    // }
-    constructor() {
-        super()
-        this.success = (/*operation*/) => {
-            // const { category } = operation
-            // localStorage.removeItem('replyEditorData-' + formId)
-            browserHistory.push('/created')//'/category/' + category)
+        this.SubmitReplyEditor = ReplyEditor('submitStory');
+    }
+
+    componentWillMount() {
+        document.body.classList.add('submit-page');
+    }
+
+    componentWillUnmount() {
+        document.body.classList.remove('submit-page');
+    }
+
+    render() {
+        const { query } = this.props.location;
+
+        if (window.IS_MOBILE) {
+            return (
+                <div className="SubmitPost">
+                    <this.SubmitReplyEditor
+                        type={query.type || 'submit_story'}
+                        successCallback={this._onSuccess}
+                    />
+                </div>
+            );
+        } else {
+            return <PostForm onSuccess={this._onSuccess} />;
         }
     }
-    render() {
-        const {success} = this
-        const {query} = this.props.location
-        return (
-            <div className="SubmitPost">
-               <SubmitReplyEditor type={query.type || 'submit_story'} successCallback={success} />
-            </div>
-        );
-    }
+
+    _onSuccess = () => {
+        browserHistory.push('/created');
+    };
 }
 
 module.exports = {
-    path: 'submit.html',
-    component: SubmitPost // connect(state => ({ global: state.global }))(SubmitPost)
+    path: 'submit',
+    component: SubmitPost,
 };

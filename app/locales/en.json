@@ -23,6 +23,7 @@
     "APP_NAME_account": "%(APP_NAME)s account",
     "24_hour": "24 hour",
     "30_day": "30 day",
+    "add": "Add",
     "age": "age",
     "all_langs": "All languages",
     "amount": "Amount",
@@ -367,7 +368,14 @@
     "use_only_allowed_characters": "Use only lowercase letters, digits and one dash",
     "must_start_with_a_letter": "Must start with a letter",
     "must_end_with_a_letter_or_number": "Must end with a letter or number",
-    "denied_to_publish_the_posts_with_tag":"It is denied to publish the posts with tag 'stihi-io'"
+    "denied_to_publish_the_posts_with_tag":"It is denied to publish the posts with tag 'stihi-io'",
+    "must_set_category":"Need to add at least one tag",
+    "main_tag_hint": "First tag is main. Post will be posted in that category.",
+    "title_is_required": "Title is not specified",
+    "title_is_not_valid": "Title is not valid"
+  },
+  "post-editor": {
+    "cant_ends_with_special_char": "Can't ends with special char"
   },
   "tags_page": {
     "replies": "Replies",
@@ -977,5 +985,32 @@
   "delegatevestingshares_jsx" :{
     "form_title" : "Delegate %(VESTING_TOKEN2)s",
     "button_title": "Delegate"
+  },
+  "post_editor": {
+    "preview_mode": "Preview mode",
+    "payout_hint": "Payout method",
+    "nsfw_hint": "Mark for not safe for children",
+    "payout_option_100": "Power of voice 100%%",
+    "payout_option_100_hint": "This mean 100%% pay of voice",
+    "payout_option_50": "50/50",
+    "payout_option_50_hint": "",
+    "payout_option_0": "Refuse payout",
+    "tags_input_placeholder": "Add tags (max 5)",
+    "convert_to_md_warning": "Converting to Markdown may cause some changes and markup loses. Are you sure?"
+  },
+  "editor_toolbar": {
+    "enter_the_link": "Enter the link",
+    "add_link": "Add link",
+    "add_image_link": "Add image via link",
+    "add_video": "Add media (youtube/vimeo)",
+    "markdown_help": "Open Markdown Guide",
+    "enter_video_link": "Enter YouTube/Vimeo link",
+    "enter_link": "Enter the link"
+  },
+  "dialog": {
+    "info": "Information",
+    "alert": "Alert",
+    "confirm": "Confirmation",
+    "prompt": "Enter the data"
   }
 }

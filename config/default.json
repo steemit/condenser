@@ -122,7 +122,7 @@
   "upload_image": false,
   "ws_connection_client": "wss://ws.golos.io",
   "ws_connection_server": "wss://ws.golos.io",
-  "chain_id": "0000000000000000000000000000000000000000000000000000000000000000",
+  "chain_id": "782a3039b478c839e4cb0c941ff4eaeb7df40bdd68bd441afd444b9da763de12",
   "metrics": {
     "name": "golos",
     "host": "127.0.0.1"

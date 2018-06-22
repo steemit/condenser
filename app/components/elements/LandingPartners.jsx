@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default class LandingPress extends React.Component {
+export default class LandingPartners extends React.Component {
 	render() {
 		return (
 			<section className="Partners">

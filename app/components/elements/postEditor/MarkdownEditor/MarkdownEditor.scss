@@ -1,0 +1,10 @@
+
+.MarkdownEditor {
+  padding-top: 4px;
+
+  &__dropzone {
+    position: relative;
+  }
+}
+
+@import "./simplemde-overrides";

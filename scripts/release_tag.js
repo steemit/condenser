@@ -103,11 +103,12 @@ async function run() {
         for (let command of commands) {
             const { stdout, stderr } = await asyncExec(command);
 
-            if (stderr) {
-                console.error(stderr);
-                process.exit(1);
-            } else {
+            if (stdout) {
                 console.log(stdout);
+            }
+
+            if (stderr) {
+                console.log(stderr);
             }
         }
     }

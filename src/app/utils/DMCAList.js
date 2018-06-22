@@ -115,6 +115,14 @@ export default `
 /dbooks/@tracytegan/mr-washington-chapter-2-
 /dbooks/@tracytegan/mr-washington-chapter-1-chapter-one
 /octoberfullmovie/@gautamsoni4k/october-2018-full-movie-download-online-free-watch-hd-print-bluray
+/deadpool2/@watch-hd-movies/download-deadpool-2-2018-1080p-full-movie-online
+/travel/@indiantraveller/how-i-traveled-around-sri-lanka-for-two-weeks-by-sammy
+/kr/@jesusaddict/about-ico-r3security-token-offering
+/children/@elizapfau/children-are-the-future-of-our-nations-they-will-correct-your-current-mistakes-in-future
+/j/@kavyasheth3/tu-sooraj-main-saanjh-piyaji-17th-april-2018-full-episode-watch-online
+/steemit/@jerrytsuseer/diem-terribilus
+/model/@blamehim559/ana-lorde
+/nsfwsnapchat/@pornwhale/ana-lorde-fuck-meet
 `
     .trim()
     .split('\n');

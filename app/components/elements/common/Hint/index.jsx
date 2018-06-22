@@ -8,18 +8,51 @@ export default class Hint extends React.PureComponent {
         className: PropTypes.string,
         info: PropTypes.bool,
         warning: PropTypes.bool,
-        align: PropTypes.oneOf(['left', 'center']),
+        align: PropTypes.oneOf(['left', 'center', 'right']),
     };
 
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            align: 'center',
+            alignCalculation: !props.align,
+        };
+    }
+
+    componentDidMount() {
+        if (this.state.alignCalculation) {
+            const box = this.refs.root.getBoundingClientRect();
+
+            let align = 'center';
+
+            if ((box.x + box.width / 2) - window.scrollX > window.innerWidth - 150) {
+                align = 'right';
+            } else if (box.x - box.width / 2 - window.scrollX < 150) {
+                align = 'left';
+            }
+
+            this.setState({
+                alignCalculation: false,
+                align,
+            });
+        }
+    }
+
     render() {
+        if (this.state.alignCalculation) {
+            return <div ref="root" />;
+        }
+
         const {
             className,
             info,
             warning,
             children,
-            align = 'center',
             innerRef,
         } = this.props;
+
+        const align = this.props.align || this.state.align;
 
         return (
             <div

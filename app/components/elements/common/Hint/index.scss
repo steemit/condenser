@@ -3,16 +3,34 @@
 .Hint {
   position: absolute;
   bottom: 100%;
-  animation: from-down 0.2s forwards;
   font-size: 15px;
   z-index: 10;
 
   &_center {
     left: 50%;
+    transform: translate3d(-50%, 0, 0);
   }
 
-  &_center &__content {
-    transform: translate3d(-50%, 0, 0);
+  &_right {
+    left: 100%;
+    transform: translate3d(-100%, 0, 0);
+  }
+
+  &__content {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-width: 276px;
+    max-width: 300px;
+    padding: 22px 26px 20px;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 2px 12px 0 rgba(0,0,0, 0.15);
+    animation: from-down 0.2s forwards;
+
+    &::after {
+      @extend %dialog-tip;
+    }
   }
 
   &_left &__content::after {
@@ -22,22 +40,6 @@
   &_right &__content::after {
     left: unset;
     right: 38px;
-  }
-
-  &__content {
-    position: relative;
-    display: flex;
-    align-items: center;
-    min-width: 276px;
-    max-width: 500px;
-    padding: 22px 26px 20px;
-    border-radius: 8px;
-    background: #fff;
-    box-shadow: 0 2px 12px 0 rgba(0,0,0, 0.15);
-
-    &::after {
-      @extend %dialog-tip;
-    }
   }
 
   &__icon {

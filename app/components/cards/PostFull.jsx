@@ -598,7 +598,6 @@ class PostFull extends React.Component {
                         authorRepLog10={authorRepLog10}
                     />
                     <Voting post={post} />
->>>>>>> sprintRC4_editor
                 </div>
                 <div className="RightShare__Menu small-11 medium-5 large-5 columns text-right">
                     {!readonly ? (

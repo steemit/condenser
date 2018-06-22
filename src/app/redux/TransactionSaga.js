@@ -1,5 +1,5 @@
 import { takeEvery } from 'redux-saga';
-import { call, put, select } from 'redux-saga/effects';
+import { call, put, select, all } from 'redux-saga/effects';
 import { fromJS, Set, Map } from 'immutable';
 import tt from 'counterpart';
 import getSlug from 'speakingurl';
@@ -705,7 +705,7 @@ function* resetRoute(outgoingAutoVestingRoute, newActive) {
     );
 }
 
-function* recoverAccount({
+export function* recoverAccount({
     payload: {
         account_to_recover,
         old_password,
@@ -718,6 +718,7 @@ function* recoverAccount({
         [api, api.getAccountsAsync],
         [account_to_recover]
     );
+
     if (!account) {
         onError('Unknown account ' + account);
         return;
@@ -768,6 +769,7 @@ function* recoverAccount({
     };
 
     try {
+        // TODO: Investigate wrapping in a redux-saga call fn, so it can be tested!.
         yield broadcast.sendAsync(
             {
                 extensions: [],
@@ -788,6 +790,7 @@ function* recoverAccount({
         // change password
         // change password probably requires a separate transaction (single trx has not been tested)
         const { json_metadata } = account;
+        // TODO: Investigate wrapping in a redux-saga call fn, so it can be tested!
         yield broadcast.sendAsync(
             {
                 extensions: [],
@@ -819,10 +822,15 @@ function* recoverAccount({
             [api, api.getWithdrawRoutes],
             [account.name, 'outgoing']
         );
-        if (outgoingAutoVestingRoutes.length > 0) {
-            outgoingAutoVestingRoutes.map(ovr => {
-                resetRoute(ovr, newActive);
-            });
+        if (outgoingAutoVestingRoutes && outgoingAutoVestingRoutes.length > 0) {
+            yield all(
+                outgoingAutoVestingRoutes.map(ovr => {
+                    return call(
+                        [broadcast, broadcast.setWithdrawVestingRoute],
+                        [newActive, ovr.from_account, ovr.to_account, 0, true]
+                    );
+                })
+            );
         }
         if (onSuccess) onSuccess();
     } catch (error) {

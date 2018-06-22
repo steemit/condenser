@@ -245,7 +245,7 @@ class App extends React.Component {
         }
 
         return (
-            <React.StrictMode>
+           // <React.StrictMode>
                 <div className={'App' + currentTheme + (lp ? ' LP' : '') + (ip ? ' index-page' : '') + (miniHeader ? ' mini-' : '')}
                     onMouseMove={this.onEntropyEvent}>
                     {miniHeader ? <MiniHeader /> : <Header />}
@@ -261,7 +261,7 @@ class App extends React.Component {
                     <Modals />
                     <PageViewsCounter />
                 </div>
-            </React.StrictMode>
+         //   </React.StrictMode>
         )
     }
 }

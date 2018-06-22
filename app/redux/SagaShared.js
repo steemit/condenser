@@ -1,13 +1,12 @@
 import { fromJS } from 'immutable'
-import { call, put, select, takeEvery } from 'redux-saga/effects';
+import { fork, call, put, select, takeEvery } from 'redux-saga/effects';
 import g from 'app/redux/GlobalReducer'
-import tt from 'counterpart';
 import constants from './constants';
 import { api } from 'golos-js';
 
-export const sharedWatches = [
-    watchTransactionErrors()
-]
+export function* sharedWatches() {
+    yield fork(watchTransactionErrors)
+}   
 
 export function* getAccount(username, force = false) {
     let account = yield select(state => state.global.get('accounts').get(username))

@@ -1,7 +1,6 @@
-import { call, put, select } from 'redux-saga/effects';
+import { fork, call, put, select } from 'redux-saga/effects';
 import {getNotifications, webPushRegister} from 'app/utils/ServerApiClient';
 import registerServiceWorker from 'app/utils/RegisterServiceWorker';
-import {api} from 'golos-js';
 
 const wait = ms => (
     new Promise(resolve => {
@@ -11,7 +10,7 @@ const wait = ms => (
 
 let webpush_params = null;
 
-function* pollData() {
+export default function* pollData() {
     while(true) {
         yield call(wait, 20000);
 
@@ -31,5 +30,3 @@ function* pollData() {
         }
     }
 }
-
-export default pollData;

@@ -1,4 +1,4 @@
-import { call, put, select, takeEvery } from 'redux-saga/effects';
+import { fork, call, put, select, takeEvery } from 'redux-saga/effects';
 import {Set, Map, fromJS, List} from 'immutable'
 import user from 'app/redux/User'
 import {getAccount} from 'app/redux/SagaShared'
@@ -8,9 +8,9 @@ import {api} from 'golos-js';
 // operations that require only posting authority
 const postingOps = Set(`vote, comment, delete_comment, custom_json, account_metadata`.trim().split(/,\s*/))
 
-export const authWatches = [
-    watchForAuth()
-]
+export function* authWatches() {
+    yield fork(watchForAuth) 
+}
 
 function* watchForAuth() {
     yield takeEvery('user/ACCOUNT_AUTH_LOOKUP', accountAuthLookup);

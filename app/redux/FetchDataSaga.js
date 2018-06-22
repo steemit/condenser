@@ -9,15 +9,15 @@ import cookie from "react-cookie";
 import {api} from 'golos-js';
 // import * as api from 'app/utils/APIWrapper'
 
-export const fetchDataWatches = [
-    watchLocationChange(),
-    watchDataRequests(),
-    watchFetchJsonRequests(),
-    watchFetchState(),
-    watchGetContent(),
-    watchFetchExchangeRates(),
-    watchFetchVestingDelegations()
-];
+export function* fetchDataWatches () {
+    yield fork(watchLocationChange);
+    yield fork(watchDataRequests);
+    yield fork(watchFetchJsonRequests);
+    yield fork(watchFetchState);
+    yield fork(watchGetContent);
+    yield fork(watchFetchExchangeRates);
+    yield fork(watchFetchVestingDelegations);
+}
 
 export function* watchGetContent() {
     yield takeEvery('GET_CONTENT', getContentCaller);

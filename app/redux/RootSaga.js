@@ -9,13 +9,10 @@ import PollDataSaga from 'app/redux/PollDataSaga';
 
 
 export default function* rootSaga() {
-  yield all([
-    ...userWatches, // keep first to remove keys early when a page change happens
-    PollDataSaga,
-    ...fetchDataWatches,
-    ...sharedWatches,
-    ...authWatches,
-    ...transactionWatches,
-    ...marketWatches,
-  ])
+  yield fork(userWatches);
+  yield fork(fetchDataWatches)
+  yield fork(sharedWatches)
+  yield fork(authWatches)
+  yield fork(transactionWatches)
+  yield fork(marketWatches)
 }

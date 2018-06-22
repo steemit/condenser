@@ -17,17 +17,19 @@ import PushNotificationSaga from 'app/redux/services/PushNotificationSaga';
 
 const MAX_UPLOAD_IMAGE_SIZE = 1024 * 1024
 
-export const userWatches = [
-    watchRemoveHighSecurityKeys(), // keep first to remove keys early when a page change happens
-    loginWatch(),
-    saveLoginWatch(),
-    logoutWatch(),
-    getAccountWatch(),
-    loginErrorWatch(),
-    lookupPreviousOwnerAuthorityWatch(),
-    watchLoadSavingsWithdraw(),
-    uploadImageWatch(),
-]
+export function* userWatches() {
+    yield fork(watchRemoveHighSecurityKeys); // keep first to remove keys early when a page change happens
+    yield fork(loginWatch);
+    yield fork(saveLoginWatch);
+    yield fork(logoutWatch);
+    yield fork(getAccountWatch);
+    yield fork(loginErrorWatch);
+    yield fork(lookupPreviousOwnerAuthorityWatch);
+    yield fork(watchLoadSavingsWithdraw);
+    yield fork(uploadImageWatch);
+}
+    
+
 
 const highSecurityPages = Array(/\/market/, /\/@.+\/(transfers|permissions|password)/, /\/~witnesses/)
 

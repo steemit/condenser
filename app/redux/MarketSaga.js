@@ -1,13 +1,14 @@
-import { call, put, takeLatest } from 'redux-saga/effects';
+import { fork, call, put, takeLatest } from 'redux-saga/effects';
 import MarketReducer from './MarketReducer';
 import {getAccount} from './SagaShared';
 import {api} from 'golos-js';
 
-export const marketWatches = [
-    watchLocationChange(),
-    watchUserLogin(),
-    watchMarketUpdate()
-];
+export function* marketWatches() {
+    yield fork(watchLocationChange);
+    yield fork(watchUserLogin);
+    yield fork(watchMarketUpdate);
+}
+ 
 
 const wait = ms => (
     new Promise(resolve => {

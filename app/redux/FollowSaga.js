@@ -2,7 +2,7 @@ import {fromJS, Map, Set} from 'immutable'
 import {call, put, select} from 'redux-saga/effects';
 import {api} from 'golos-js';
 
-/**
+/** 
     This loadFollows both 'blog' and 'ignore'
 */
 

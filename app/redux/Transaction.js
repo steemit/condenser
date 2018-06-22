@@ -112,7 +112,7 @@ export default createModule({
                         });
                     }
                 }
-                if (errorCallback) try { errorCallback(errorKey) } catch (error2) { console.error(error2) }
+                if (errorCallback) try { setTimeout((() => errorCallback(errorKey))) } catch (error2) { console.error(error2) }
                 return state
             },
         },

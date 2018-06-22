@@ -1,4 +1,4 @@
-import { call, put, select, takeEvery } from 'redux-saga/effects';
+import { fork, call, put, select, takeEvery } from 'redux-saga/effects';
 import {fromJS, Set, Map} from 'immutable'
 import {getAccount, getContent} from 'app/redux/SagaShared'
 import {findSigningKey} from 'app/redux/AuthSaga'
@@ -14,12 +14,12 @@ import constants from './constants';
 import tt from 'counterpart';
 
 
-export const transactionWatches = [
-    watchForBroadcast(),
-    watchForUpdateAuthorities(),
-    watchForUpdateMeta(),
-    watchForRecoverAccount(),
-]
+export function* transactionWatches() {
+    yield fork(watchForBroadcast);
+    yield fork(watchForUpdateAuthorities);
+    yield fork(watchForUpdateMeta);
+    yield fork(watchForRecoverAccount);
+}
 
 export function* watchForBroadcast() {
     yield takeEvery('transaction/BROADCAST_OPERATION', broadcastOperation);
@@ -126,9 +126,9 @@ function* error_account_witness_vote({operation: {account, witness, approve}}) {
 }
 
 /** Keys, username, and password are not needed for the initial call.  This will check the login and may trigger an action to prompt for the password / key. */
-function* broadcastOperation({payload:
-    {type, operation, confirm, warning, keys, username, password, successCallback, errorCallback}
-}) {
+function* broadcastOperation(
+    {payload:
+        {type, operation, confirm, warning, keys, username, password, successCallback, errorCallback}}) {
     const operationParam = {type, operation, keys, username, password, successCallback, errorCallback}
     const conf = typeof confirm === 'function' ? confirm() : confirm
     if(conf) {

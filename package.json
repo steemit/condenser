@@ -116,7 +116,7 @@
     "react-timeago": "3.4.3",
     "redux": "3.7.2",
     "redux-form": "5.3.4",
-    "redux-saga": "0.9.5",
+    "redux-saga": "0.16.0",
     "remarkable": "1.7.1",
     "sanitize-html": "1.14.1",
     "sass-loader": "6.0.6",

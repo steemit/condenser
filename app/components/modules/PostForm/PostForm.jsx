@@ -597,9 +597,9 @@ class PostForm extends React.Component {
             () => {
                 try {
                     if (editMode) {
-                        localStorage.removeItem(DRAFT_KEY);
-                    } else {
                         sessionStorage.removeItem(EDIT_KEY);
+                    } else {
+                        localStorage.removeItem(DRAFT_KEY);
                     }
                 } catch (err) {}
 
@@ -609,7 +609,15 @@ class PostForm extends React.Component {
                     updateFavoriteTags(tags);
                 }
             },
-            err => this.refs.footer.showPostError(err)
+            err => {
+                let errorMessage = err;
+
+                if (err.toString().includes('maximum_block_size')) {
+                    errorMessage = tt('post_editor.body_length_over_limit_error');
+                }
+
+                this.refs.footer.showPostError(errorMessage);
+            }
         );
     };
 

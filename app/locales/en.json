@@ -997,7 +997,8 @@
     "payout_option_0": "Refuse payout",
     "tags_input_placeholder": "Add tags (max 5)",
     "convert_to_md_warning": "Converting to Markdown may cause some changes and markup loses. Are you sure?",
-    "body_length_over_limit_error": "Post body too big"
+    "body_length_over_limit_error": "Post body too big",
+    "empty_body_error": "Empty body"
   },
   "editor_toolbar": {
     "enter_the_link": "Enter the link",

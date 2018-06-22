@@ -610,9 +610,13 @@ class PostForm extends React.Component {
                 }
             },
             err => {
-                let errorMessage = err;
+                const error = err.toString().trim();
 
-                if (err.toString().includes('maximum_block_size')) {
+                let errorMessage = error;
+
+                if (error.includes('maximum_block_size')) {
+                    errorMessage = tt('post_editor.body_length_over_limit_error');
+                } else if (error === 'Body is empty') {
                     errorMessage = tt('post_editor.body_length_over_limit_error');
                 }
 

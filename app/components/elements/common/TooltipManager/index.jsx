@@ -2,6 +2,7 @@ import React from 'react';
 import cn from 'classnames';
 import debounce from 'lodash.debounce';
 
+const RAISE_TIME = 350;
 let key = 0;
 
 export default class TooltipManager extends React.PureComponent {
@@ -66,7 +67,7 @@ export default class TooltipManager extends React.PureComponent {
 
             this._timeout = setTimeout(() => {
                 this._showTooltip();
-            }, 500);
+            }, RAISE_TIME);
         }
     };
 

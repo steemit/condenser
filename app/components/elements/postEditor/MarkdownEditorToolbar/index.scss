@@ -27,7 +27,7 @@
   }
 
   &__toolbar-tip {
-    @extend %dialog-tip;
+    @include dialog-tip();
   }
 
   &__icon {

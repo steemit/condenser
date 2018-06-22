@@ -29,7 +29,7 @@
     animation: from-down 0.2s forwards;
 
     &::after {
-      @extend %dialog-tip;
+      @include dialog-tip();
     }
   }
 

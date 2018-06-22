@@ -27,7 +27,7 @@
   }
 
   &::after {
-    @extend %dialog-tip;
+    @include dialog-tip();
   }
 
   &_left::after {

@@ -1,5 +1,5 @@
 
-%dialog-tip {
+@mixin dialog-tip() {
   position: absolute;
   bottom: 0;
   left: 50%;

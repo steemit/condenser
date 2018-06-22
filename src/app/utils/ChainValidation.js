@@ -60,7 +60,7 @@ export function validate_account_name(value) {
  * @returns {null|string} string if there's a validation error
  */
 export function validate_account_name_with_memo(name, memo) {
-    if (VerifiedExchangeList.includes(value) && !memo) {
+    if (VerifiedExchangeList.includes(name) && !memo) {
         return tt('chainvalidation_js.verified_exchange_no_memo');
     }
     return validate_account_name(name);

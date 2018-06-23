@@ -43,6 +43,15 @@ export function* fetchState(location_change_action) {
         yield fork(loadFollows, 'getFollowingAsync', username, 'blog');
     }
 
+    console.log(pathname);
+    if (pathname.indexOf('trending') !== -1) {
+        const promotedPath = pathname.replace('trending', 'promoted');
+        yield fork(getStateForDiscussion, promotedPath);
+    } else if (pathname.indexOf('hot') !== -1) {
+        const promotedPath = pathname.replace('hot', 'promoted');
+        yield fork(getStateForDiscussion, promotedPath);
+    }
+
     // `ignore_fetch` case should only trigger on initial page load. No need to call
     // fetchState immediately after loading fresh state from the server. Details: #593
     const server_location = yield select(state =>
@@ -70,6 +79,7 @@ export function* fetchState(location_change_action) {
     try {
         const state = yield call([api, api.getStateAsync], url);
         yield put(globalActions.receiveState(state));
+
         // If a user's transfer page is being loaded, fetch related account data.
         yield call(getTransferUsers, pathname);
     } catch (error) {
@@ -78,6 +88,37 @@ export function* fetchState(location_change_action) {
     }
 
     yield put(appActions.fetchDataEnd());
+}
+
+/**
+ * Get state for discussion fetch.
+ *
+ * @param {String} pathname
+ */
+function* getStateForDiscussion(pathname) {
+    console.log('maybe getting state for ' + pathname);
+    let m = pathname.match(/^\/([a-z]*)\/(.*)\/?/);
+    let tag = '';
+    if (m) {
+        tag = m[2];
+    } else {
+        m = pathname.match(/^\/([a-z]*)\/?/);
+        if (!m) {
+            return;
+        }
+    }
+    const order = m[1];
+    const discussions = yield select(state =>
+        state.global.getIn(['discussion_idx', tag, order])
+    );
+
+    if (discussions && discussions.size > 0) {
+        return;
+    }
+
+    console.log('fetching state for ' + tag + ' and ' + order);
+    const state = yield call([api, api.getStateAsync], pathname);
+    yield put(globalActions.receiveState(state));
 }
 
 /**

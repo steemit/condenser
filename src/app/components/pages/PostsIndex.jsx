@@ -55,7 +55,19 @@ class PostsIndex extends React.Component {
     getPosts(order, category) {
         const topic_discussions = this.props.discussions.get(category || '');
         if (!topic_discussions) return null;
-        return topic_discussions.get(order);
+        const mainDiscussions = topic_discussions.get(order);
+        if (order === 'trending' || order === 'hot') {
+            const promotedDiscussions = topic_discussions.get('promoted');
+            return promotedDiscussions
+                .interleave(
+                    mainDiscussions
+                        .groupBy((v, k) => Math.floor(k / 5))
+                        .valueSeq()
+                )
+                .flatten();
+        } else {
+            return mainDiscussions;
+        }
     }
 
     loadMore(last_post) {

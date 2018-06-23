@@ -292,6 +292,11 @@
         }
       }
   }
+  &__summary.promoted {
+    border: 1px solid $color-teal;
+    padding-top: 5px;
+    padding-left: 5px;
+  }
   &__resteem-icon {
     position: relative;
     top: -1px;
@@ -742,6 +747,11 @@ a#changeLayout:focus {
           padding-bottom: 6px;
         }
       }
+      &__summary.promoted {
+        border: 1px solid $color-teal;
+        padding-top: 5px;
+        padding-left: 5px;
+      }
       &__h2 {
         @include font-size(16px);
 
@@ -871,6 +881,11 @@ a#changeLayout:focus {
         @include themify($themes) {
           border-bottom: themed('borderTransparent');
         }
+      }
+      &__summary.promoted {
+        border: 1px solid $color-teal;
+        padding-top: 5px;
+        padding-left: 5px;
       }
       &__summary-header {
         padding: 2px 0;

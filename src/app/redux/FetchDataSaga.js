@@ -43,13 +43,8 @@ export function* fetchState(location_change_action) {
         yield fork(loadFollows, 'getFollowingAsync', username, 'blog');
     }
 
-    console.log(pathname);
-    if (pathname.indexOf('trending') !== -1) {
-        const promotedPath = pathname.replace('trending', 'promoted');
-        yield fork(getStateForDiscussion, promotedPath);
-    } else if (pathname.indexOf('hot') !== -1) {
-        const promotedPath = pathname.replace('hot', 'promoted');
-        yield fork(getStateForDiscussion, promotedPath);
+    if (pathname.indexOf('trending') !== -1 || pathname.indexOf('hot') !== -1) {
+        yield fork(getPromotedState, pathname);
     }
 
     // `ignore_fetch` case should only trigger on initial page load. No need to call
@@ -79,7 +74,6 @@ export function* fetchState(location_change_action) {
     try {
         const state = yield call([api, api.getStateAsync], url);
         yield put(globalActions.receiveState(state));
-
         // If a user's transfer page is being loaded, fetch related account data.
         yield call(getTransferUsers, pathname);
     } catch (error) {
@@ -91,33 +85,23 @@ export function* fetchState(location_change_action) {
 }
 
 /**
- * Get state for discussion fetch.
+ * Get promoted state for given path.
  *
  * @param {String} pathname
  */
-function* getStateForDiscussion(pathname) {
-    console.log('maybe getting state for ' + pathname);
-    let m = pathname.match(/^\/([a-z]*)\/(.*)\/?/);
-    let tag = '';
-    if (m) {
-        tag = m[2];
-    } else {
-        m = pathname.match(/^\/([a-z]*)\/?/);
-        if (!m) {
-            return;
-        }
-    }
-    const order = m[1];
+export function* getPromotedState(pathname) {
+    const m = pathname.match(/^\/[a-z]*\/(.*)\/?/);
+    const tag = m ? m[1] : '';
+
     const discussions = yield select(state =>
-        state.global.getIn(['discussion_idx', tag, order])
+        state.global.getIn(['discussion_idx', tag, 'promoted'])
     );
 
     if (discussions && discussions.size > 0) {
         return;
     }
 
-    console.log('fetching state for ' + tag + ' and ' + order);
-    const state = yield call([api, api.getStateAsync], pathname);
+    const state = yield call([api, api.getStateAsync], `/promoted/${tag}`);
     yield put(globalActions.receiveState(state));
 }
 

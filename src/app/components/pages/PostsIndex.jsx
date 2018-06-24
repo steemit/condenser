@@ -17,6 +17,7 @@ import SidebarNewUsers from 'app/components/elements/SidebarNewUsers';
 import ArticleLayoutSelector from 'app/components/modules/ArticleLayoutSelector';
 import Topics from './Topics';
 import SortOrder from 'app/components/elements/SortOrder';
+import { PROMOTED_POST_PAD_SIZE } from 'shared/constants';
 
 class PostsIndex extends React.Component {
     static propTypes = {
@@ -58,16 +59,19 @@ class PostsIndex extends React.Component {
         const mainDiscussions = topic_discussions.get(order);
         if (order === 'trending' || order === 'hot') {
             const promotedDiscussions = topic_discussions.get('promoted');
-            return promotedDiscussions
-                .interleave(
-                    mainDiscussions
-                        .groupBy((v, k) => Math.floor(k / 5))
-                        .valueSeq()
-                )
-                .flatten();
-        } else {
-            return mainDiscussions;
+            if (promotedDiscussions && promotedDiscussions.size > 0) {
+                return promotedDiscussions
+                    .interleave(
+                        mainDiscussions
+                            .groupBy((v, k) =>
+                                Math.floor(k / PROMOTED_POST_PAD_SIZE)
+                            )
+                            .valueSeq()
+                    )
+                    .flatten();
+            }
         }
+        return mainDiscussions;
     }
 
     loadMore(last_post) {

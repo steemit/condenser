@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import { connect } from 'react-redux';
 import * as userActions from 'app/redux/UserReducer';
 import tt from 'counterpart';
@@ -22,7 +21,6 @@ class ShowKey extends Component {
     constructor() {
         super();
         this.state = {};
-        this.shouldComponentUpdate = shouldComponentUpdate(this, 'ShowKey');
         this.onShow = () => {
             const { state: { show, wif } } = this;
             const { onKey, pubkey } = this.props;

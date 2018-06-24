@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { renderToString } from 'react-dom/server';
 import * as globalActions from 'app/redux/GlobalReducer';
-import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import Icon from 'app/components/elements/Icon';
 import tt from 'counterpart';
 import { APP_NAME, APP_ICON } from 'app/client_config';
@@ -23,7 +22,6 @@ class SuggestPassword extends React.Component {
         const { suggestedPassword, createSuggestedPassword } = this.props;
         if (!suggestedPassword) createSuggestedPassword();
     }
-    shouldComponentUpdate = shouldComponentUpdate(this, 'SuggestPassword');
     componentDidUpdate() {
         const { print } = this.props;
         if (print && !this.printed) {

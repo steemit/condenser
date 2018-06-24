@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import QRCode from 'react-qr';
+// import QRCode from 'react-qr';
 import tt from 'counterpart';
-import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import Keys from 'app/components/elements/Keys';
 import * as globalActions from 'app/redux/GlobalReducer';
 
@@ -22,7 +21,6 @@ class UserKeys extends Component {
     };
     constructor() {
         super();
-        this.shouldComponentUpdate = shouldComponentUpdate(this, 'UserKeys');
         this.state = {};
         this.onKey = {};
         keyTypes.forEach(key => {
@@ -58,7 +56,7 @@ class UserKeys extends Component {
                           <div className="row">
                               <div className="column small-2">
                                   <label>{tt('userkeys_jsx.public')}</label>
-                                  <QRCode text={keyObj.pubkey} />
+                                  {/*<QRCode text={keyObj.pubkey} />*/}
                               </div>
                               <div className="column small-8">
                                   <label>

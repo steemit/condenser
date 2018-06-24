@@ -5,7 +5,6 @@ import tt from 'counterpart';
 import * as transactionActions from 'app/redux/TransactionReducer';
 import * as globalActions from 'app/redux/GlobalReducer';
 import * as userActions from 'app/redux/UserReducer';
-import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Memo from 'app/components/elements/Memo';
@@ -14,10 +13,6 @@ class SavingsWithdrawHistory extends React.Component {
     constructor() {
         super();
         this.state = {};
-        this.shouldComponentUpdate = shouldComponentUpdate(
-            this,
-            'SavingsWithdrawHistory'
-        );
     }
 
     componentWillMount() {

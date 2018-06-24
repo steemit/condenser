@@ -1,20 +1,19 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { browserHistory } from 'react-router';
 import Icon from 'app/components/elements/Icon';
 import { findParent } from 'app/utils/DomUtils';
 
 export default class Dropdown extends React.Component {
     static propTypes = {
-        children: React.PropTypes.object,
-        className: React.PropTypes.string,
-        title: React.PropTypes.oneOfType([
-            React.PropTypes.string,
-            React.PropTypes.object,
-        ]).isRequired,
-        href: React.PropTypes.string,
-        onHide: React.PropTypes.func,
-        onShow: React.PropTypes.func,
-        show: React.PropTypes.bool,
+        children: PropTypes.object,
+        className: PropTypes.string,
+        title: PropTypes.oneOfType([PropTypes.string, PropTypes.object])
+            .isRequired,
+        href: PropTypes.string,
+        onHide: PropTypes.func,
+        onShow: PropTypes.func,
+        show: PropTypes.bool,
     };
 
     static defaultProps = {

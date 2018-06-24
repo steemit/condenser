@@ -11,7 +11,6 @@ import debounce from 'lodash.debounce';
 import CloseButton from 'app/components/elements/CloseButton';
 import { findParent } from 'app/utils/DomUtils';
 import Icon from 'app/components/elements/Icon';
-import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 
 function topPosition(domElt) {
     if (!domElt) {
@@ -46,7 +45,6 @@ class PostsList extends React.Component {
         this.scrollListener = this.scrollListener.bind(this);
         this.onBackButton = this.onBackButton.bind(this);
         this.closeOnOutsideClick = this.closeOnOutsideClick.bind(this);
-        this.shouldComponentUpdate = shouldComponentUpdate(this, 'PostsList');
     }
 
     componentDidMount() {

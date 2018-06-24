@@ -7,7 +7,6 @@ import MarkdownViewer from 'app/components/cards/MarkdownViewer';
 import CategorySelector from 'app/components/cards/CategorySelector';
 import { validateCategory } from 'app/components/cards/CategorySelector';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
-import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import Tooltip from 'app/components/elements/Tooltip';
 import sanitizeConfig, { allowedTags } from 'app/utils/SanitizeConfig';
 import sanitize from 'sanitize-html';
@@ -108,8 +107,6 @@ class ReplyEditor extends React.Component {
             else if (this.refs.rte) this.refs.rte._focus();
         }, 300);
     }
-
-    shouldComponentUpdate = shouldComponentUpdate(this, 'ReplyEditor');
 
     componentWillUpdate(nextProps, nextState) {
         if (process.env.BROWSER) {

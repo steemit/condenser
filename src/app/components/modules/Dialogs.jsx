@@ -5,7 +5,6 @@ import CloseButton from 'app/components/elements/CloseButton';
 import Reveal from 'app/components/elements/Reveal';
 import { Map, List } from 'immutable';
 import * as globalActions from 'app/redux/GlobalReducer';
-import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import QrReader from 'app/components/elements/QrReader';
 import ConvertToSteem from 'app/components/elements/ConvertToSteem';
 import SuggestPassword from 'app/components/elements/SuggestPassword';
@@ -22,7 +21,6 @@ class Dialogs extends React.Component {
     };
     constructor() {
         super();
-        this.shouldComponentUpdate = shouldComponentUpdate(this, 'Dialogs');
         this.hide = name => {
             this.props.hide(name);
         };

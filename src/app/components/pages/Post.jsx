@@ -10,7 +10,6 @@ import { sortComments } from 'app/components/cards/Comment';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
 import { Set } from 'immutable';
 import tt from 'counterpart';
-import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 import { INVEST_TOKEN_UPPERCASE } from 'app/client_config';
 import { SIGNUP_URL } from 'shared/constants';

@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import CloseButton from 'app/components/elements/CloseButton';
 import Reveal from 'app/components/elements/Reveal';
-import { NotificationStack } from 'react-notification';
 import { OrderedSet } from 'immutable';
 import tt from 'counterpart';
 import * as userActions from 'app/redux/UserReducer';
@@ -14,7 +13,6 @@ import ConfirmTransactionForm from 'app/components/modules/ConfirmTransactionFor
 import Transfer from 'app/components/modules/Transfer';
 import SignUp from 'app/components/modules/SignUp';
 import Powerdown from 'app/components/modules/Powerdown';
-import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import TermsAgree from 'app/components/modules/TermsAgree';
 
 class Modals extends React.Component {
@@ -54,7 +52,6 @@ class Modals extends React.Component {
 
     constructor() {
         super();
-        this.shouldComponentUpdate = shouldComponentUpdate(this, 'Modals');
     }
 
     render() {
@@ -163,11 +160,13 @@ class Modals extends React.Component {
                         </div>
                     </Reveal>
                 )}
+                {/*
                 <NotificationStack
                     style={false}
                     notifications={notifications_array}
                     onDismiss={n => removeNotification(n.key)}
                 />
+                */}
             </div>
         );
     }

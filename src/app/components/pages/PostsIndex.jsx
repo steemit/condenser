@@ -7,7 +7,6 @@ import tt from 'counterpart';
 import { List } from 'immutable';
 import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
 import constants from 'app/redux/constants';
-import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import PostsList from 'app/components/cards/PostsList';
 import { isFetchingOrRecentlyUpdated } from 'app/utils/StateFunctions';
 import Callout from 'app/components/elements/Callout';
@@ -39,7 +38,6 @@ class PostsIndex extends React.Component {
         super();
         this.state = {};
         this.loadMore = this.loadMore.bind(this);
-        this.shouldComponentUpdate = shouldComponentUpdate(this, 'PostsIndex');
     }
 
     componentDidUpdate(prevProps) {

@@ -5,7 +5,7 @@ import Author from './index';
 import rootReducer from 'app/redux/RootReducer';
 import { configure, shallow } from 'enzyme';
 
-import Adapter from 'enzyme-adapter-react-15';
+import Adapter from 'enzyme-adapter-react-16';
 
 configure({ adapter: new Adapter() });
 

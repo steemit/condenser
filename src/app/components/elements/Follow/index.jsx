@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
-import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import * as transactionActions from 'app/redux/TransactionReducer';
 import * as userActions from 'app/redux/UserReducer';
 import { Set, Map } from 'immutable';
@@ -32,7 +31,6 @@ export default class Follow extends React.Component {
         this.state = {};
         this.initEvents(props);
         this.followLoggedOut = this.followLoggedOut.bind(this);
-        this.shouldComponentUpdate = shouldComponentUpdate(this, 'Follow');
     }
 
     componentWillUpdate(nextProps) {

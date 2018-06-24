@@ -30,6 +30,7 @@ class PostsList extends React.Component {
         fetchState: PropTypes.func.isRequired,
         pathname: PropTypes.string,
         nsfwPref: PropTypes.string.isRequired,
+        promoted: PropTypes.object,
     };
 
     static defaultProps = {
@@ -146,6 +147,7 @@ class PostsList extends React.Component {
     render() {
         const {
             posts,
+            promoted,
             showSpam,
             loading,
             category,
@@ -178,6 +180,7 @@ class PostsList extends React.Component {
                         thumbSize={thumbSize}
                         ignore={item.ignore}
                         nsfwPref={nsfwPref}
+                        promoted={promoted}
                     />
                 </li>
             ));

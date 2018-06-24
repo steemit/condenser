@@ -29,6 +29,7 @@ class PostSummary extends React.Component {
         content: PropTypes.object.isRequired,
         thumbSize: PropTypes.string,
         nsfwPref: PropTypes.string,
+        promoted: PropTypes.object,
     };
 
     constructor() {
@@ -56,7 +57,7 @@ class PostSummary extends React.Component {
 
     render() {
         const { thumbSize, ignore } = this.props;
-        const { post, content } = this.props;
+        const { post, promoted, content } = this.props;
         const { account } = this.props;
         if (!content) return null;
 
@@ -99,7 +100,11 @@ class PostSummary extends React.Component {
         const { gray, authorRepLog10, flagWeight, isNsfw } = content
             .get('stats', Map())
             .toJS();
-        const isPromoted = parsePayoutAmount(content.get('promoted')) > 0;
+        const isPromoted =
+            promoted &&
+            promoted.contains(
+                `${content.get('author')}/${content.get('permlink')}`
+            );
         const p = extractContent(immutableAccessor, content);
         const desc = p.desc;
 

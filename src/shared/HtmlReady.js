@@ -144,11 +144,7 @@ function link(state, child) {
         if (state.mutate) {
             // If this link is not relative, http, https, or steem -- add https.
             if (!/^((#)|(\/(?!\/))|(((steem|https?):)?\/\/))/.test(url)) {
-                if (/(mailto:)/.test(url)) {
-                    // Do not adjust for mailto anchor tags
-                } else {
-                    child.setAttribute('href', 'https://' + url);
-                }
+                child.setAttribute('href', 'https://' + url);
             }
 
             // Unlink potential phishing attempts

@@ -153,7 +153,7 @@ export default class MarkdownEditorToolbar extends React.PureComponent {
                         MET__icon_active: state.strikethrough,
                     })}
                     name="editor-toolbar/strike"
-                    onClick={() => SM.toggleStrikethrough(editor)}
+                    onClick={this._toggleStrikeThrough}
                 />
                 <i className="MET__separator" />
                 <Icon
@@ -375,6 +375,30 @@ export default class MarkdownEditorToolbar extends React.PureComponent {
                 selected: null,
             });
         }
+    };
+
+    _toggleStrikeThrough = () => {
+        const cm = this._cm;
+
+        const selection = cm.getSelection();
+        const selectionTrimmed = selection.trim();
+
+        if (selection !== selectionTrimmed && selectionTrimmed && !selection.includes('\n')) {
+            const start = cm.getCursor('start');
+            const end = cm.getCursor('end');
+
+            cm.setSelection({
+                ch: start.ch + (selection.length - selection.trimLeft().length),
+                line: start.line,
+            }, {
+                ch: end.ch - (selection.length - selection.trimRight().length),
+                line: end.line,
+            });
+        }
+
+        setTimeout(() => {
+            this.props.SM.toggleStrikethrough(this._editor);
+        });
     };
 
     _makeNewLineAction(text) {

@@ -298,7 +298,6 @@ Don't get discouraged if you don't earn much at first. Keep up the good work!
 - [Apps Built on Steem](https://steemprojects.com/) - Directory of apps, sites and tools built by Steem community
 - [Steem Block Explorer](https://steemd.com/) - Shows the raw Steem blockchain data 
 - [Steem Blockchain Explorer](https://steemdb.com/) - Analysis pages for the Steem blockchain data
-- [Steem 'Markdown' Course](https://steemskills.teachable.com/p/steemmarkdown) - A free online course in using 'markdown'
 
 <a href="#Table_of_Contents">^</a>
 ## <span id="Get_Help">Get Help</span>

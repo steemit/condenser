@@ -226,6 +226,7 @@ gatehub
 gatehub.net
 gdax.com
 gemini.com
+good-kama
 gtg.witnesses
 hitbtc.com
 hitbtcexchange

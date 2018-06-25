@@ -170,7 +170,7 @@
     "lint-staged": "6.0.0",
     "mock-local-storage": "1.0.5",
     "node-watch": "0.5.5",
-    "nsp": "^3.2.1",
+    "nsp": "3.2.1",
     "nsp-preprocessor-yarn": "^1.1.2",
     "prettier": "1.8.2",
     "react-addons-perf": "15.4.2",

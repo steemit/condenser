@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import reactForm from 'app/utils/ReactForm';
 import { Map } from 'immutable';
@@ -12,7 +13,7 @@ import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import ConfirmTransfer from 'app/components/elements/ConfirmTransfer';
 import runTests, { browserTests } from 'app/utils/BrowserTests';
 import {
-    validate_account_name,
+    validate_account_name_with_memo,
     validate_memo_field,
 } from 'app/utils/ChainValidation';
 import { countDecimals } from 'app/utils/ParsersAndFormatters';
@@ -158,7 +159,7 @@ class TransferForm extends Component {
             validation: values => ({
                 to: !values.to
                     ? tt('g.required')
-                    : validate_account_name(values.to, values.memo),
+                    : validate_account_name_with_memo(values.to, values.memo),
                 amount: !values.amount
                     ? 'Required'
                     : !/^\d+(\.\d+)?$/.test(values.amount)

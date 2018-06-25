@@ -16,16 +16,6 @@ window.localStorage = global.localStorage;
 
 configure({ adapter: new Adapter() });
 
-const voteTestObj = fromJS({
-    stats: {
-        total_votes: 1,
-    },
-    max_accepted_payout: '999999 SBD',
-    percent_steem_dollars: 0,
-    pending_payout_value: '10 SBD',
-    cashout_time: '2018-03-30T10:00:00Z',
-});
-
 const mockGlobal = Map({
     props: Map({ sbd_print_rate: 99 }),
     feed_price: Map({
@@ -50,6 +40,16 @@ const mockGlobal = Map({
 });
 
 const mockUser = Map({ current: Map({ username: 'Janice' }) });
+
+const voteTestObj = fromJS({
+    stats: {
+        total_votes: 1,
+    },
+    max_accepted_payout: '999999 SBD',
+    percent_steem_dollars: 0,
+    pending_payout_value: '10 SBD',
+    cashout_time: '2018-03-30T10:00:00Z',
+});
 
 describe('Voting', () => {
     it('should render nothing if flag prop is true and user is not logged in.', () => {
@@ -100,7 +100,9 @@ describe('Voting', () => {
             />
         ).dive();
         expect(wrapped.find('.Voting').length).toEqual(1);
-        expect(wrapped.find('.flag').length).toEqual(1);
+        expect(wrapped.find('Dropdown').html()).toContain(
+            '<span href="#" title="Flag" id="downvote_button" class="flag">'
+        );
     });
 
     it('should change state.weight and state.showWeight as expected when flag is clicked', () => {
@@ -126,8 +128,18 @@ describe('Voting', () => {
             />
         ).dive();
         wrapped.setState({ weight: 666, showWeight: false });
-        wrapped.find('#downvote_button').simulate('click');
-        expect(wrapped.state().weight).toEqual(10000);
+        expect(
+            wrapped
+                .find('Dropdown')
+                .dive()
+                .find('#downvote_button').length
+        ).toEqual(1);
+        wrapped
+            .find('Dropdown')
+            .dive()
+            .find('#downvote_button')
+            .simulate('click');
+        expect(wrapped.state().weight).toEqual(666);
         expect(wrapped.state().showWeight).toEqual(true);
     });
 
@@ -154,7 +166,11 @@ describe('Voting', () => {
             />
         ).dive();
         wrapped.setState({ myVote: 0 });
-        wrapped.find('#downvote_button').simulate('click');
+        wrapped
+            .find('Dropdown')
+            .dive()
+            .find('#downvote_button')
+            .simulate('click');
         expect(mockStore.getActions()).toEqual([]);
     });
 
@@ -181,47 +197,11 @@ describe('Voting', () => {
             />
         ).dive();
         wrapped.setState({ myVote: -666 });
-        wrapped.find('#downvote_button').simulate('click');
+        wrapped.find('#revoke_downvote_button').simulate('click');
         expect(mockStore.getActions()[0].type).toEqual(
             'transaction/BROADCAST_OPERATION'
         );
         expect(mockStore.getActions()[0].payload.operation.weight).toEqual(0);
-        expect(mockStore.getActions()[0].payload.operation.voter).toEqual(
-            'Janice'
-        );
-    });
-
-    it('should dispatch an action when flag is clicked and myVote is greater than 0', () => {
-        const mockStore = configureMockStore()({
-            global: mockGlobal,
-            market: {},
-            offchain: {},
-            user: mockUser,
-            transaction: {},
-            discussion: {},
-            routing: {},
-            app: {},
-        });
-        let wrapped = shallow(
-            <Voting
-                post="test"
-                flag={true}
-                vote={(w, p) => {}}
-                post_obj={voteTestObj}
-                price_per_steem={1}
-                sbd_print_rate={10000}
-                store={mockStore}
-            />
-        ).dive();
-        wrapped.setState({ myVote: 666 });
-        expect(mockStore.getActions()).toEqual([]);
-        wrapped.find('#downvote_button').simulate('click');
-        expect(mockStore.getActions()[0].type).toEqual(
-            'transaction/BROADCAST_OPERATION'
-        );
-        expect(mockStore.getActions()[0].payload.operation.weight).toEqual(
-            -10000
-        );
         expect(mockStore.getActions()[0].payload.operation.voter).toEqual(
             'Janice'
         );
@@ -250,7 +230,6 @@ describe('Voting', () => {
             />
         ).dive();
         expect(wrapped.find('.flag').length).toEqual(0);
-        expect(wrapped.find('.Voting__inner').length).toEqual(1);
         expect(wrapped.find('.upvote').length).toEqual(1);
     });
 

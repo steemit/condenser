@@ -236,7 +236,7 @@ You can earn digital tokens on Steemit by:
 
 **Voting and curating** - If you discover a post and upvote it before it becomes popular, you can earn a curation reward. The reward amount will depend on the amount of Steem Power you have.
 
-**Purchasing** - Users can purchase STEEM or Steem Dollar tokens directly through their Steemit wallet using bitcoin, Ether, or BitShares tokens. They are also available from other markets and exchanges including [Binance](https://www.binance.com/), [BitShares](https://openledger.info/), [Bittrex](https://bittrex.com), [BlockTrades](https://blocktrades.us), [Changelly](https://changelly.com), [GOPAX](https://www.gopax.co.kr), [HitBTC](https://hitbtc.com/), [Poloniex](https://poloniex.com), [Shapeshift.io](https://shapeshift.io), and [UpBit](https://upbit.com/).
+**Purchasing** - Users can purchase STEEM or Steem Dollar tokens directly through their Steemit wallet using bitcoin, Ether, or BitShares tokens. They are also available from other markets and exchanges including [Binance](https://www.binance.com/), [BitShares](https://openledger.info/), [Bittrex](https://bittrex.com), [BlockTrades](https://blocktrades.us), [Changelly](https://changelly.com), [GOPAX](https://www.gopax.co.kr), [HitBTC](https://hitbtc.com/), [Poloniex](https://poloniex.com), [Shapeshift.io](https://shapeshift.io), [UpBit](https://upbit.com/), and [Yensesa](https://yensesa.com).
 
 **Vesting** - STEEM tokens that are powered up to Steem Power will earn a small amount of new tokens for holding.
 
@@ -688,6 +688,7 @@ STEEM and SBD are listed on the following exchanges:
 | [Poloniex](https://poloniex.com) | Y      |    Y |
 | [Shapeshift.io](https://shapeshift.io) | Y      |    N |
 | [UpBit](https://upbit.com/) | Y      |    Y |
+| [Yensesa](https://yensesa.com) | Y      |    Y |
 
 <a href="#Table_of_Contents_Economics">^</a>
 ## <span id="What_is_the_reward_pool">What is the reward pool?</span>
@@ -766,7 +767,7 @@ To buy:
 
 STEEM purchases made via steemit.com are facilitated by <a href="https://blocktrades.us">BlockTrades</a>.
 
-bitcoin can also be exchanged for STEEM on external markets such as [Binance](https://www.binance.com/), [BitShares](https://openledger.info/), [Bittrex](https://bittrex.com), [Changelly](https://changelly.com), [GOPAX](https://www.gopax.co.kr), [HitBTC](https://hitbtc.com/), [Poloniex](https://poloniex.com), [Shapeshift.io](https://shapeshift.io), and [UpBit](https://upbit.com/).
+bitcoin can also be exchanged for STEEM on external markets such as [Binance](https://www.binance.com/), [BitShares](https://openledger.info/), [Bittrex](https://bittrex.com), [Changelly](https://changelly.com), [GOPAX](https://www.gopax.co.kr), [HitBTC](https://hitbtc.com/), [Poloniex](https://poloniex.com), [Shapeshift.io](https://shapeshift.io), [UpBit](https://upbit.com/), and [Yensesa](https://yensesa.com).
 
 <a href="#Table_of_Contents_Economics">^</a>
 ## <span id="How_long_does_it_take_STEEM_or_STEEM_Power_that_I_purchased_to_show_up_in_my_account">How long does it take STEEM or Steem Power that I purchased to show up in my account?</span>
@@ -1350,7 +1351,7 @@ You can also create a post on steemit.com with the tag #help, and someone in the
 
 ## <span id="Third_Party_References_and_User_Links">Third Party References and User Links</span>
 
-AnonSteem, Binance, bitcoinfees, Bitcointalk, BitShares, Bittrex, blockchain.info, BlockTrades, Busy.org, Changelly, @cheetah, Coinbase, DTube, GOPAX, HitBTC, Localbitcoins, Markdown Cheatsheet, Pexels, Pixabay, Poloniex, Postimage, Shapeshift.io, Steemcleaners, SteemConnect, SteemCreate, steemd, SteemDB, steem.chat, SteemStats, SteemProjects, Streemian, The Steemit Shop, UpBit, and Utopian.io are third party applications/services, and are not owned or maintained by Steemit, Inc. Their listing here, as well as any other third party applications or websites that are listed, does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
+AnonSteem, Binance, bitcoinfees, Bitcointalk, BitShares, Bittrex, blockchain.info, BlockTrades, Busy.org, Changelly, @cheetah, Coinbase, DTube, GOPAX, HitBTC, Localbitcoins, Markdown Cheatsheet, Pexels, Pixabay, Poloniex, Postimage, Shapeshift.io, Steemcleaners, SteemConnect, SteemCreate, steemd, SteemDB, steem.chat, SteemStats, SteemProjects, Streemian, The Steemit Shop, UpBit, Utopian.io, and Yensesa are third party applications/services, and are not owned or maintained by Steemit, Inc. Their listing here, as well as any other third party applications or websites that are listed, does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
 
 All links to user posts were created by our users and do not necessarily represent the views of Steemit, Inc. or its management. Their listing here does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
 

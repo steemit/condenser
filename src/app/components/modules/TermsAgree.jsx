@@ -1,5 +1,6 @@
 /* eslint react/prop-types: 0 */
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import tt from 'counterpart';
 
@@ -59,7 +60,7 @@ class TermsAgree extends Component {
                         <a
                             target="_blank"
                             rel="noopener noreferrer"
-                            href="https://steemit.com/tos.html"
+                            href="/tos.html"
                         >
                             {tt('termsagree_jsx.terms_of_service')}
                         </a>
@@ -77,7 +78,7 @@ class TermsAgree extends Component {
                         <a
                             target="_blank"
                             rel="noopener noreferrer"
-                            href="https://steemit.com/privacy.html"
+                            href="/privacy.html"
                         >
                             {tt('termsagree_jsx.privacy_policy')}
                         </a>

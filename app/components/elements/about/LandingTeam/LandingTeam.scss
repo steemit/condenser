@@ -1,0 +1,72 @@
+.Team {
+
+  &__title, &__info {
+    margin: 0 18px;
+  }
+
+  &__members {
+    margin-bottom: 50px;
+  }
+
+  &__member {
+    margin-top: 50px;
+  }
+
+  &__member-contact-item {
+    display: inline-block;
+    padding: 0 10px;
+  }
+
+  &__member-name {
+    font-weight: bold;
+  }
+
+  &__facebook-logo {
+    width: 33px;
+    height: 30px;
+    margin-bottom: 1px;
+  }
+
+  &__cyberfund-logo {
+    display: inline-block;
+    font-size: 42px;
+    color: red;
+    transform: translateY(11%);
+  }
+
+  &__member-avatar, &__member-avatar-wrapper {
+    display: block;
+    width: 164px;
+    height: 164px;
+    border-radius: 50%;
+    margin: 0 auto 25px;
+    border: 5px solid rgba(200, 200, 200, 0.25);
+  }
+
+  &__member-avatar-wrapper {
+    position: relative;
+    overflow: hidden;
+  }
+
+  &__member-external-avatar {
+    width: 164px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+@include breakpoint(small only) {
+  .Team {
+
+    &__member-avatar, &__member-avatar-wrapper {
+      width: 150px;
+      height: 150px;
+    }
+
+    h3 {
+      text-align: center;
+    }
+  }
+}

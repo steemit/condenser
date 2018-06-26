@@ -13,6 +13,7 @@ export default class PostFooter extends React.PureComponent {
         editMode: PropTypes.bool,
         options: PropTypes.object.isRequired,
         tags: PropTypes.array,
+        postDisabled: PropTypes.bool,
         onOptionsChange: PropTypes.func.isRequired,
         onTagsChange: PropTypes.func.isRequired,
         onPostClick: PropTypes.func.isRequired,
@@ -40,7 +41,7 @@ export default class PostFooter extends React.PureComponent {
     }
 
     render() {
-        const { editMode, tags, onTagsChange } = this.props;
+        const { editMode, tags, postDisabled, onTagsChange } = this.props;
         const { temporaryErrorText, multiLine } = this.state;
 
         return (
@@ -85,7 +86,7 @@ export default class PostFooter extends React.PureComponent {
                             {temporaryErrorText ? (
                                 <Hint warning>{temporaryErrorText}</Hint>
                             ) : null}
-                            <Button primary onClick={this.props.onPostClick}>
+                            <Button primary disabled={postDisabled} onClick={this.props.onPostClick}>
                                 {editMode
                                     ? tt('reply_editor.update_post')
                                     : tt('g.post')}

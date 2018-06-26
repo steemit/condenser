@@ -8,11 +8,12 @@ import tt from 'counterpart';
 import transaction from 'app/redux/Transaction';
 import HtmlReady, { getTags } from 'shared/HtmlReady';
 import DialogManager from 'app/components/elements/common/DialogManager';
+import Icon from 'app/components/elements/Icon';
 import MarkdownEditor from 'app/components/elements/postEditor/MarkdownEditor/MarkdownEditor';
 import HtmlEditor from 'app/components/elements/postEditor/HtmlEditor/HtmlEditor';
 import EditorSwitcher from 'app/components/elements/postEditor/EditorSwitcher/EditorSwitcher';
-import NewPostFooter from 'app/components/elements/postEditor/PostFooter/PostFooter';
-import NewPostTitle from 'app/components/elements/postEditor/PostTitle/PostTitle';
+import PostFooter from 'app/components/elements/postEditor/PostFooter/PostFooter';
+import PostTitle from 'app/components/elements/postEditor/PostTitle/PostTitle';
 import MarkdownViewer, {
     getRemarkable,
 } from 'app/components/cards/MarkdownViewer';
@@ -96,6 +97,7 @@ class PostForm extends React.Component {
                 coinMode: PAYOUT_TYPES.PAY_50,
                 plus18: false,
             },
+            uploadingCount: 0,
         };
 
         this._saveDraftLazy = debounce(this._saveDraft, 100);
@@ -184,6 +186,10 @@ class PostForm extends React.Component {
         this.state.tags = tags;
     }
 
+    componentWillUnmount() {
+        this._unmount = true;
+    }
+
     render() {
         const { editMode } = this.props;
 
@@ -194,6 +200,7 @@ class PostForm extends React.Component {
             options,
             isPreview,
             postError,
+            uploadingCount,
         } = this.state;
 
         return (
@@ -221,7 +228,7 @@ class PostForm extends React.Component {
                             onChange={this._onEditorChange}
                             onPreviewChange={this._onPreviewChange}
                         />
-                        <NewPostTitle
+                        <PostTitle
                             value={title}
                             validate={this._validateTitle}
                             onTab={this._onTitleTab}
@@ -232,7 +239,7 @@ class PostForm extends React.Component {
                 </div>
                 <div className="PostForm__footer">
                     <div className="PostForm__footer-content">
-                        <NewPostFooter
+                        <PostFooter
                             ref="footer"
                             editMode={editMode}
                             errorText={postError}
@@ -240,12 +247,18 @@ class PostForm extends React.Component {
                             onTagsChange={this._onTagsChange}
                             options={options}
                             onOptionsChange={this._onOptionsChange}
+                            postDisabled={uploadingCount > 0}
                             onPostClick={this._postSafe}
                             onResetClick={this._onResetClick}
                             onCancelClick={this._onCancelClick}
                         />
                     </div>
                 </div>
+                {uploadingCount ? (
+                    <div className="PostForm__spinner">
+                        <Icon name="clock" size="4x" className="PostForm__spinner-inner" />
+                    </div>
+                ) : null}
             </div>
         );
     }
@@ -263,7 +276,7 @@ class PostForm extends React.Component {
                     ref="editor"
                     initialValue={text}
                     placeholder={tt('post_editor.text_placeholder')}
-                    uploadImage={this.props.uploadImage}
+                    uploadImage={this._onUploadImage}
                     onChangeNotify={this._onTextChangeNotify}
                 />
             );
@@ -636,6 +649,27 @@ class PostForm extends React.Component {
             this.props.onCancel();
         }
     };
+
+    _onUploadImage = (file, progress) => {
+        this.setState({
+            uploadingCount: this.state.uploadingCount + 1,
+        });
+
+        this.props.uploadImage({
+            file,
+            progress: data => {
+                if (!this._unmount) {
+                    if (data && (data.url || data.error)) {
+                        this.setState({
+                            uploadingCount: this.state.uploadingCount - 1,
+                        });
+                    }
+
+                    progress(data);
+                }
+            },
+        });
+    };
 }
 
 function markdownToHtmlEditorState(markdown) {
@@ -664,10 +698,25 @@ export default connect(
                 })
             );
         },
-        uploadImage: (file, progress) => {
+        uploadImage({ file, progress }) {
             dispatch({
                 type: 'user/UPLOAD_IMAGE',
-                payload: { file, progress },
+                payload: {
+                    file,
+                    progress: data => {
+                        if (data && data.error) {
+                            dispatch({
+                                type: 'ADD_NOTIFICATION',
+                                payload: {
+                                    message: data.error,
+                                    dismissAfter: 5000,
+                                },
+                            });
+                        }
+
+                        progress(data);
+                    },
+                },
             });
         },
     })

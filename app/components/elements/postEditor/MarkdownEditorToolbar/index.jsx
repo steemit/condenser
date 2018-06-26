@@ -77,7 +77,7 @@ export default class MarkdownEditorToolbar extends React.PureComponent {
 
         const editor = this._editor;
 
-        let style = {
+        const style = {
             width: TOOLBAR_WIDTH,
         };
 

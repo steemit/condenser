@@ -16,6 +16,7 @@ export default class MarkdownEditor extends React.Component {
         initialValue: PropTypes.string,
         placeholder: PropTypes.string,
         onChangeNotify: PropTypes.func.isRequired,
+        uploadImage: PropTypes.func.isRequired,
     };
 
     componentDidMount() {

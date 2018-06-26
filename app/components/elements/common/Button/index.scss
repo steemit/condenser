@@ -12,12 +12,18 @@
   margin: 0 !important;
 
   &_primary {
+    border: none;
     color: #fff;
-    border-color: #2879ff;
     background-color: #2879ff;
   }
 
+  &_primary[disabled] {
+    color: #5d5d5d;
+    background: #92aede;
+  }
+
   &[disabled] {
+    color: #7d7d7d;
     cursor: not-allowed;
   }
 }

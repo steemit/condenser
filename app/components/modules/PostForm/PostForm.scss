@@ -44,4 +44,28 @@
     padding: 0 8px;
     margin: 0 auto;
   }
+
+  &__spinner {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 100%;
+    color: #999;
+    pointer-events: none;
+    opacity: 0;
+    animation: fade-in 1s forwards;
+    animation-delay: 0.3s;
+  }
+
+  &__spinner-inner {
+    width: unset !important;
+    height: unset !important;
+    padding: 40px 60px;
+    border-radius: 18px;
+    background: rgba(0,0,0, 0.1);
+  }
 }

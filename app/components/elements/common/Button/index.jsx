@@ -3,7 +3,7 @@ import cn from 'classnames';
 
 export default class Button extends React.PureComponent {
     render() {
-        const { children, primary, className, onClick } = this.props;
+        const { children, primary, className, disabled, onClick } = this.props;
 
         return (
             <button
@@ -15,6 +15,7 @@ export default class Button extends React.PureComponent {
                     },
                     className
                 )}
+                disabled={disabled}
                 onClick={onClick}
             >
                 {children}

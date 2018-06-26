@@ -64,9 +64,11 @@ module.exports = merge(baseConfig, {
         port: WEBPACK_PORT,
         hot: {
             port: 8090,
+            logLevel: 'warn',
         },
         dev: {
-            publicPath: '/assets/'
-        }
+            publicPath: '/assets/',
+            logLevel: 'warn',
+        },
     },
 })

@@ -57,41 +57,44 @@ class Memo extends React.Component {
     }
 
     renderDonate = (text) => {
-      const {data: {from, to}, username} = this.props
-      try {
-        const obj = JSON.parse(text)
-        const {donate: {post}} = obj;
-        if (!post) {return false}
-        let el;
-        if (from === username) {
-          // txt = `Вы отблагодарили @${to} за пост ${post}`
-          el = <span>
-            {`Вы отблагодарили`}&nbsp;
-            <Link to={`/@${to}`}>
-              {`@${to}`}&nbsp;
-            </Link>
-            {`за пост `}
-            <Link to={post}>
-              {`${post}`}
-            </Link>
-          </span>
-        }
-        else if (to === username) {
-          // txt = `@${from} отблагодарил вас за пост ${post}`
-          el = <span>
-            <Link to={`/@${from}`}>
-              {`@${from}`}&nbsp;
-            </Link>
-            {`отблагодарил вас за пост `}
-            <Link to={post}>
-              {`${post}`}&nbsp;
-            </Link>
-            </span>
-        }
-        return el
-      }
-      catch(e) {
-        return false
+      const { data, username } = this.props
+      if (data) {
+          const { from, to } = data
+          try {
+            const obj = JSON.parse(text)
+            const {donate: {post}} = obj;
+            if (!post) {return false}
+            let el;
+            if (from === username) {
+              // txt = `Вы отблагодарили @${to} за пост ${post}`
+              el = <span>
+                {`Вы отблагодарили`}&nbsp;
+                <Link to={`/@${to}`}>
+                  {`@${to}`}&nbsp;
+                </Link>
+                {`за пост `}
+                <Link to={post}>
+                  {`${post}`}
+                </Link>
+              </span>
+            }
+            else if (to === username) {
+              // txt = `@${from} отблагодарил вас за пост ${post}`
+              el = <span>
+                <Link to={`/@${from}`}>
+                  {`@${from}`}&nbsp;
+                </Link>
+                {`отблагодарил вас за пост `}
+                <Link to={post}>
+                  {`${post}`}&nbsp;
+                </Link>
+                </span>
+            }
+            return el
+          }
+          catch(e) {
+            return false
+          }
       }
     }
 
@@ -101,7 +104,7 @@ class Memo extends React.Component {
         const isEncoded = /^#/.test(text);
         // fixme: ugly and temporary
         const donate = this.renderDonate(text);
-
+        
         if(!isEncoded) return <span>{donate || linkify(text)}</span>
             if(!myAccount) return <span></span>
             if(memo_private) return <span>{decodeMemo(memo_private, text)}</span>

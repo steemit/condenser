@@ -697,14 +697,6 @@ function slug(text) {
 const pwPubkey = (name, pw, role) =>
     auth.wifToPublic(auth.toWif(name, pw.trim(), role));
 
-function* resetRoute(outgoingAutoVestingRoute, newActive) {
-    const { from_account, to_account } = outgoingAutoVestingRoute;
-    yield call(
-        [api, api.setWithdrawVestingRoute],
-        [newActive, from_account, to_account, 0, true]
-    );
-}
-
 export function* recoverAccount({
     payload: {
         account_to_recover,

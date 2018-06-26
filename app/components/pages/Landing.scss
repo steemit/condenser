@@ -137,19 +137,6 @@
 	}
 }
 
-.WhatIsGolos {
-	.WhatIsGolos__video {
-		margin-top: 80px;
-		margin-left: auto;
-		margin-right: auto;
-		iframe { max-width: 100%; }
-	}
-	.WhatIsGolos__action {
-		margin-top: 65px;
-		margin-bottom: 100px;
-	}
-}
-
 .Faq {
 	.Faq__headers {
 		margin-bottom: 80px;
@@ -166,83 +153,6 @@
 		}
 		.button { margin-right: 0 !important; }
 	}
-}
-
-.Team {
-	.Team__members { margin-bottom: 150px; }
-    > .Team__members { margin-bottom: 50px; }
-	.Team__partners {
-		margin: 50px auto;
-		.columns {
-			margin-left: auto;
-			margin-right: auto;
-		}
-	}
-	.Team__member {
-		margin-top: 50px;
-		strong { display: block; }
-		ul { margin-left: 0; }
-		li {
-			display: inline;
-			padding: 0 10px;
-			list-style-type: none;
-		}
-	}
-	.Team__facebook-logo {
-		width: 33px;
-	    height: 30px;
-	    margin-bottom: 1px;
-	}
-	.Team__cyberfund-logo {
-		color: red;
-		font-size: 42px;
-		display: inline-block;
-		transform: translateY(11%);
-	}
-	.Team__members__image-wrapper {
-		width: 164px;
-		height: 164px;
-		position: relative;
-		overflow: hidden;
-		border-radius: 50%;
-		margin: 0 auto 25px;
-		border: 5px solid rgba(200,200,200,.25);
-	}
-	.Team__member__img {
-		width: 164px;
-		position: absolute;
-	    left: 50%;
-	    top: 50%;
-	    transform: translate(-50%, -50%);
-	}
-	h3 {
-		> a {
-			margin-left: 10px;
-		}
-	}
-
-	@include breakpoint(small only) {
-		.Team__members__image-wrapper {
-			width: 150px;
-			height: 150px;
-		}
-		h3 {
-			text-align: center;
-		}
-	}
-}
-
-.Partners {
-	.Partners__logos {
-		margin: 90px auto;
-		margin-top: 0;
-		img {
-			max-height: 100px;
-			margin-top: 30px;
-		}
-	}
-	
-	.Partners__forklog-logo { transform: translateY(19%); }
 }
 
 .JoinUs {

@@ -7,6 +7,7 @@ import DialogManager from 'app/components/elements/common/DialogManager';
 export default class RawMarkdownEditor extends React.PureComponent {
     static propTypes = {
         value: PropTypes.string.isRequired,
+        placeholder: PropTypes.string,
         uploadImage: PropTypes.func.isRequired,
         onChange: PropTypes.func.isRequired,
     };
@@ -44,6 +45,10 @@ export default class RawMarkdownEditor extends React.PureComponent {
                 </p>
             </div>
         );
+    }
+
+    focus() {
+        this.refs.textarea.focus();
     }
 
     getValue() {

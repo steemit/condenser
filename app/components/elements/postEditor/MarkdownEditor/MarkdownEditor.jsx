@@ -14,6 +14,7 @@ if (process.env.BROWSER) {
 export default class MarkdownEditor extends React.Component {
     static propTypes = {
         initialValue: PropTypes.string,
+        placeholder: PropTypes.string,
         onChangeNotify: PropTypes.func.isRequired,
     };
 
@@ -26,6 +27,7 @@ export default class MarkdownEditor extends React.Component {
         this._simplemde = new SimpleMDE({
             spellChecker: false,
             status: false,
+            placeholder: this.props.placeholder,
             initialValue: this.props.initialValue || '',
             element: this.refs.textarea,
             promptURLs: true,
@@ -42,9 +44,12 @@ export default class MarkdownEditor extends React.Component {
 
         this.forceUpdate();
 
-        window.SM = SimpleMDE;
-        window.sm = this._simplemde;
-        window.cm = this._cm;
+        // DEV: For experiments
+        if (process.env.NODE_ENV !== 'production') {
+            window.SM = SimpleMDE;
+            window.sm = this._simplemde;
+            window.cm = this._cm;
+        }
     }
 
     componentWillUnmount() {
@@ -76,6 +81,10 @@ export default class MarkdownEditor extends React.Component {
                 </Dropzone>
             </div>
         );
+    }
+
+    focus() {
+        this._cm.focus();
     }
 
     getValue() {

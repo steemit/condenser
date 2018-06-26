@@ -1010,7 +1010,8 @@
     "tags_input_placeholder": "Добавьте теги (до 5 шт.)",
     "convert_to_md_warning": "Будет произведена попытка перевода текста в Markdown, при это какие-то элементы могут пропасть. Вы точно уверены?",
     "body_length_over_limit_error": "Слишком длинное тело поста",
-    "empty_body_error": "Пустое тело поста"
+    "empty_body_error": "Пустое тело поста",
+    "text_placeholder": "Расскажите свою историю..."
   },
   "editor_toolbar": {
     "enter_the_link": "Введите ссылку",

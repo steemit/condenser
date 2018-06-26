@@ -9,7 +9,12 @@
     border: none;
     background: none;
     font-size: 32px;
+    font-family: 'Source Serif Pro', serif;
     color: #555;
     outline: none !important;
+
+    &::placeholder {
+      color: #999;
+    }
   }
 }

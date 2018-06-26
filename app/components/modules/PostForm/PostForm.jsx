@@ -225,6 +225,7 @@ class PostForm extends React.Component {
                         <NewPostTitle
                             value={title}
                             validate={this._validateTitle}
+                            onTab={this._onTitleTab}
                             onChange={this._onTitleChange}
                         />
                         {this._renderEditorPanel()}
@@ -262,6 +263,7 @@ class PostForm extends React.Component {
                 <MarkdownEditor
                     ref="editor"
                     initialValue={text}
+                    placeholder={tt('post_editor.text_placeholder')}
                     uploadImage={this.props.uploadImage}
                     onChangeNotify={this._onTextChangeNotify}
                 />
@@ -372,6 +374,12 @@ class PostForm extends React.Component {
             },
             this._saveDraftLazy
         );
+    };
+
+    _onTitleTab = () => {
+        try {
+            this.refs.editor.focus();
+        } catch(err) {}
     };
 
     _onHtmlEditorChange = state => {

@@ -22,7 +22,8 @@
     "start:win32": "cross-env ./node_modules/babel-cli/bin/babel-node.js ./webpack/dev-server.js",
     "webpush": "./node_modules/babel-cli/bin/babel-node.js ./scripts/webpush_notify.js",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "release-tag": "node scripts/release_tag.js"
   },
   "author": "Golos.io",
   "license": "MIT",

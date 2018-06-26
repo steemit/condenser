@@ -125,6 +125,7 @@ export default `
 /nsfwsnapchat/@pornwhale/ana-lorde-fuck-meet
 /hentai/@doujinblog/cg180617tsrj227700-jlfb7lduze
 /hentai/@doujinblog/150718ver104rj150720-r72jgjf3s5
+/news/@monaalexis27/sandy-hook-michael-vabner-website-shows-noah-pozner-all-grown-up-mirrored
 `
     .trim()
     .split('\n');

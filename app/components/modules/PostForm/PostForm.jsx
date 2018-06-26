@@ -6,7 +6,7 @@ import Turndown from 'turndown';
 import cn from 'classnames';
 import tt from 'counterpart';
 import transaction from 'app/redux/Transaction';
-import HtmlReady from 'shared/HtmlReady';
+import HtmlReady, { getTags } from 'shared/HtmlReady';
 import DialogManager from 'app/components/elements/common/DialogManager';
 import MarkdownEditor from 'app/components/elements/postEditor/MarkdownEditor/MarkdownEditor';
 import HtmlEditor from 'app/components/elements/postEditor/HtmlEditor/HtmlEditor';
@@ -314,10 +314,12 @@ class PostForm extends React.Component {
                 newText = td.turndown(this.refs.editor.getValue());
 
                 newText = newText.replace(
-                    /~~~ embed:([A-Za-z0-9_]+) (youtube|vimeo) ~~~/g,
+                    /~~~ embed:([A-Za-z0-9_]+) (youtube|vimeo|coub) ~~~/g,
                     (a, code, hosting) => {
                         if (hosting === 'youtube') {
                             return `https://youtube.com/watch?v=${code}`;
+                        } else if (hosting === 'coub') {
+                            return `https://coub.com/view/${code}`;
                         } else {
                             return `https://vimeo.com/${code}`;
                         }
@@ -538,9 +540,7 @@ class PostForm extends React.Component {
             html = body;
         }
 
-        const rtags = HtmlReady(html, {
-            mutate: false,
-        });
+        const rtags = getTags(html);
 
         if (editorId === EDITORS_TYPES.HTML) {
             rtags.htmltags.delete('html');
@@ -665,7 +665,7 @@ function markdownToHtmlEditorState(markdown) {
 
     if (markdown && markdown.trim() !== '') {
         html = getRemarkable().render(markdown);
-        html = HtmlReady(html).html;
+        html = HtmlReady(html);
     }
 
     return HtmlEditor.getStateFromHtml(html);

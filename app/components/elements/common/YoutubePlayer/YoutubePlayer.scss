@@ -1,0 +1,30 @@
+.YoutubePlayer {
+  $play-size: 128px;
+
+  &_preview {
+    position: relative;
+    background: no-repeat center;
+    background-size: cover;
+    cursor: pointer;
+  }
+
+  &_preview::after {
+    position: absolute;
+    content: '';
+    left: 50%;
+    top: 50%;
+    width: $play-size;
+    height: $play-size;
+    margin-left: -$play-size / 2;
+    margin-top: -$play-size / 2;
+    background: url('/images/youtube.svg');
+    background-size: $play-size;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+  }
+
+  &_preview:hover::after {
+    opacity: 1;
+  }
+}
+

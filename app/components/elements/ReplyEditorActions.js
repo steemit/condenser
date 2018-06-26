@@ -4,7 +4,7 @@ import sanitizeConfig, { allowedTags } from '../../utils/SanitizeConfig';
 import transaction from '../../redux/Transaction';
 import { detransliterate } from '../../utils/ParsersAndFormatters';
 import { DEBT_TICKER, DOMESTIC } from '../../client_config';
-import HtmlReady from '../../../shared/HtmlReady';
+import { getTags } from '../../../shared/HtmlReady';
 
 export const replyAction = (dispatch, remarkable) => ({
     category,
@@ -74,9 +74,7 @@ export const replyAction = (dispatch, remarkable) => ({
         return;
     }
 
-    const rtags = HtmlReady(isHtml ? body : remarkable.render(body), {
-        mutate: false,
-    });
+    const rtags = getTags(isHtml ? body : remarkable.render(body));
 
     for (let tag of allowedTags) {
         rtags.htmltags.delete(tag);

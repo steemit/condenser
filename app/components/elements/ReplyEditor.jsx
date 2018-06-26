@@ -940,7 +940,7 @@ function stateFromMarkdown(markdown) {
 
     if (markdown && markdown.trim() !== '') {
         html = remarkable.render(markdown);
-        html = HtmlReady(html).html; // TODO: option to disable youtube conversion, @-links, img proxy
+        html = HtmlReady(html);
         //html = htmlclean(html) // normalize whitespace
         console.log('markdown converted to:', html);
     }

@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux'
-import Remarkable from 'remarkable'
+import { connect } from 'react-redux';
+import Remarkable from 'remarkable';
 import cn from 'classnames';
 import tt from 'counterpart';
-import sanitize from 'sanitize-html'
-import HtmlReady from 'shared/HtmlReady'
-import YoutubePreview from 'app/components/elements/YoutubePreview';
+import sanitize from 'sanitize-html';
+import HtmlReady from 'shared/HtmlReady';
+import YoutubePlayer from 'app/components/elements/common/YoutubePlayer/YoutubePlayer';
 import sanitizeConfig, { noImageText } from 'app/utils/SanitizeConfig';
 
 let remarkable = null;
@@ -14,10 +14,12 @@ let remarkable = null;
 export function getRemarkable() {
     if (!remarkable) {
         remarkable = new Remarkable({
-            html: true, // remarkable renders first then sanitize runs...
+            html: true,
             breaks: true,
-            linkify: false, // linkify is done locally
-            typographer: false, // https://github.com/jonschlinkert/remarkable/issues/142#issuecomment-221546793
+            // Linkify is done locally
+            // Issue: https://github.com/jonschlinkert/remarkable/issues/142#issuecomment-221546793
+            linkify: false,
+            typographer: false,
             quotes: '“”‘’',
         });
     }
@@ -38,13 +40,12 @@ class MarkdownViewer extends Component {
     };
 
     static defaultProps = {
-        className: '',
         large: false,
         allowDangerousHTML: false,
     };
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         this.state = {
             allowNoImage: true,
@@ -66,51 +67,40 @@ class MarkdownViewer extends Component {
     };
 
     render() {
-        const { noImage, className } = this.props;
+        const { noImage, className, large, highQualityPost } = this.props;
         const { allowNoImage } = this.state;
-        let { text } = this.props;
-        if (!text) text = ''; // text can be empty, still view the link meta data
-        const { large, highQualityPost } = this.props;
 
-        let html = false;
+        let text = this.props.text || '';
+
+        let isHtml = false;
         // See also ReplyEditor isHtmlTest
-        const m = text.match(/^<html>([\S\s]*)<\/html>$/);
+        const htmlMatch = text.match(/^<html>([\S\s]*)<\/html>$/);
 
-        if (m && m.length === 2) {
-            html = true;
-            text = m[1];
+        if (htmlMatch) {
+            text = htmlMatch[1];
+            isHtml = true;
         } else {
-            // See also ReplyEditor isHtmlTest
-            html = /^<p>[\S\s]*<\/p>/.test(text);
+            isHtml = text.startsWith('<p>');
         }
 
-        // Strip out HTML comments. "JS-DOS" bug.
-        text = text.replace(
-            /<!--([\s\S]+?)(-->|$)/g,
-            '(html comment removed: $1)'
-        );
+        // Strip out HTML comments.
+        text = text.replace(/<!--([\s\S]+?)(?:-->|$)/g, '');
 
-        if (!html) {
-            text = text.replace(
-                /^#+/gm,
-                match => (match.length <= 5 ? '#' : '') + match
-            );
-        }
+        let renderedText = isHtml ? text : getRemarkable().render(text);
 
-        let renderedText = html ? text : getRemarkable().render(text);
-
-        // Embed videos, link mentions and hashtags, etc...
         if (renderedText) {
-            renderedText = HtmlReady(renderedText).html;
+            // Embed videos, link mentions and hashtags, etc...
+            renderedText = HtmlReady(renderedText);
         }
 
-        // Complete removal of javascript and other dangerous tags..
-        // The must remain as close as possible to dangerouslySetInnerHTML
-        let cleanText = renderedText;
+        let cleanText;
 
         if (this.props.allowDangerousHTML === true) {
-            console.log('WARN\tMarkdownViewer rendering unsanitized content');
+            console.warn('WARN\tMarkdownViewer rendering unsanitized content');
+            cleanText = renderedText;
         } else {
+            // Complete removal of javascript and other dangerous tags..
+            // The must remain as close as possible to dangerouslySetInnerHTML
             cleanText = sanitize(
                 renderedText,
                 sanitizeConfig({
@@ -119,16 +109,18 @@ class MarkdownViewer extends Component {
                     noImage: noImage && allowNoImage,
                 })
             );
+
+            console.log('CLEARED:', cleanText);
         }
 
-        //sanitize escaped &mdash; to &amp;mdash; and so on
+        // "&amp;mdash;" -> "&mdash;" and so on
         cleanText = cleanText.replace(
             /&amp;(mdash|rdquo|ndash|ldquo|laquo|raquo|zwj)/g,
-            string => string.replace(/&amp;/, '&')
+            (match, word) => '&' + word
         );
 
         cleanText = cleanText.replace(
-            /<a\s+href="http:\/\/bit\.do\/.+<\/a>/g,
+            /<a\s+href="http:\/\/bit\.do\/.+?<\/a>/g,
             '[ fishing link ]'
         );
 
@@ -143,48 +135,54 @@ class MarkdownViewer extends Component {
 
         const noImageActive = cleanText.indexOf(noImageText) !== -1;
 
-        // In addition to inserting the youtube component, this allows react to compare separately preventing excessive re-rendering.
         let idx = 0;
         const sections = [];
 
         // HtmlReady inserts ~~~ embed:${id} type ~~~
         for (let section of cleanText.split('~~~ embed:')) {
             const match = section.match(
-                /^([A-Za-z0-9_\-]+) (youtube|vimeo) ~~~/
+                /^([A-Za-z0-9_-]+) (youtube|vimeo|coub) ~~~/
             );
-            if (match && match.length >= 3) {
-                const id = match[1];
-                const type = match[2];
+
+            if (match) {
+                const [, id, type] = match;
 
                 const w = large ? 640 : 480;
                 const h = large ? 360 : 270;
 
                 if (type === 'youtube') {
                     sections.push(
-                        <YoutubePreview
-                            key={idx++}
+                        <YoutubePlayer
+                            className="videoWrapper"
+                            key={++idx}
                             width={w}
                             height={h}
                             youTubeId={id}
-                            frameBorder="0"
-                            allowFullScreen="true"
                         />
                     );
                 } else if (type === 'vimeo') {
-                    const url = `https://player.vimeo.com/video/${id}`;
                     sections.push(
-                        <div className="videoWrapper">
+                        <div className="videoWrapper" key={++idx}>
                             <iframe
-                                key={idx++}
-                                src={url}
+                                src={`https://player.vimeo.com/video/${id}`}
                                 width={w}
                                 height={h}
                                 frameBorder="0"
-                                webkitallowfullscreen
-                                mozallowfullscreen
                                 allowFullScreen
                             />
                         </div>
+                    );
+                } else if (type === 'coub') {
+                    sections.push(
+                        <iframe
+                            key={++idx}
+                            src={`//coub.com/embed/${id}?muted=true&autostart=true&originalSize=false&startWithHD=false&hideTopBar=true`}
+                            allowFullScreen
+                            frameBorder="0"
+                            width="100%"
+                            height="200"
+                            allow="autoplay"
+                        />
                     );
                 } else {
                     console.error('MarkdownViewer unknown embed type', type);
@@ -198,7 +196,7 @@ class MarkdownViewer extends Component {
 
             sections.push(
                 <div
-                    key={idx++}
+                    key={++idx}
                     dangerouslySetInnerHTML={{ __html: section }}
                 />
             );
@@ -207,7 +205,7 @@ class MarkdownViewer extends Component {
         return (
             <div
                 className={cn('MarkdownViewer Markdown', className, {
-                    html,
+                    html: isHtml,
                     'MarkdownViewer--small': !large,
                 })}
             >

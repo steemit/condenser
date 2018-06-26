@@ -196,5 +196,11 @@
   "engines": {
     "node": ">=8.11.3",
     "npm": ">=5.6.0"
+  },
+  "prettier": {
+    "singleQuote": true,
+    "tabWidth": 4,
+    "semi": true,
+    "trailingComma": "es5"
   }
 }

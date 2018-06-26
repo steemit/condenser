@@ -58,11 +58,18 @@ class App extends React.Component {
         expandCallout: false,
     }
 
+    componentWillMount() {
+        if (process.env.BROWSER) {
+            window.IS_MOBILE =
+                /android|iphone/i.test(navigator.userAgent) ||
+                window.innerWidth < 765 ||
+                window.innerHeight < 400;
+        }
+    }
+
     componentDidMount() {
         if (process.env.BROWSER) {
             localStorage.removeItem('autopost') // July 14 '16 compromise, renamed to autopost2
-
-            window.IS_MOBILE = /android|iphone/i.test(navigator.userAgent) || window.innerWidth < 450;
         }
 
         this.props.loginUser();

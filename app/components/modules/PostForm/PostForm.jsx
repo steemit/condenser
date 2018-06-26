@@ -13,7 +13,6 @@ import HtmlEditor from 'app/components/elements/postEditor/HtmlEditor/HtmlEditor
 import EditorSwitcher from 'app/components/elements/postEditor/EditorSwitcher/EditorSwitcher';
 import NewPostFooter from 'app/components/elements/postEditor/PostFooter/PostFooter';
 import NewPostTitle from 'app/components/elements/postEditor/PostTitle/PostTitle';
-import RawMarkdownEditor from 'app/components/elements/postEditor/RawMarkdownEditor/RawMarkdownEditor';
 import MarkdownViewer, {
     getRemarkable,
 } from 'app/components/cards/MarkdownViewer';
@@ -29,25 +28,10 @@ const DRAFT_KEY = 'golos.post.draft';
 const EDIT_KEY = 'golos.post.editDraft';
 
 const EDITORS_TYPES = {
-    MARKDOWN_ADVANCED: 1,
-    MARKDOWN: 2,
+    MARKDOWN: 1,
+    MARKDOWN_OLD: 2,
     HTML: 3,
 };
-
-const EDITORS = [
-    {
-        id: EDITORS_TYPES.MARKDOWN_ADVANCED,
-        text: 'Markdown+',
-    },
-    {
-        id: EDITORS_TYPES.MARKDOWN,
-        text: 'Markdown',
-    },
-    {
-        id: EDITORS_TYPES.HTML,
-        text: 'HTML',
-    },
-];
 
 export const PAYOUT_TYPES = {
     PAY_0: 1,
@@ -102,7 +86,7 @@ class PostForm extends React.Component {
 
         this.state = {
             isPreview: false,
-            editorId: EDITORS_TYPES.MARKDOWN_ADVANCED,
+            editorId: EDITORS_TYPES.MARKDOWN,
             title: '',
             text: '',
             rteState: null,
@@ -148,15 +132,21 @@ class PostForm extends React.Component {
                 return;
             }
 
-            this.state.editorId = draft.editorId;
-            this.state.title = draft.title;
-            this.state.text = draft.text;
-            this.state.tags = draft.tags;
-            this.state.options = draft.options || {};
+            const state = this.state;
 
-            if (this.state.editorId === EDITORS_TYPES.HTML) {
-                this.state.text = null;
-                this.state.rteState = HtmlEditor.getStateFromHtml(draft.text);
+            state.editorId = draft.editorId;
+            state.title = draft.title;
+            state.text = draft.text;
+            state.tags = draft.tags;
+            state.options = draft.options || {};
+
+            if (state.editorId === EDITORS_TYPES.MARKDOWN_OLD) {
+                state.editorId = EDITORS_TYPES.MARKDOWN;
+            }
+
+            if (state.editorId === EDITORS_TYPES.HTML) {
+                state.text = null;
+                state.rteState = HtmlEditor.getStateFromHtml(draft.text);
             }
 
             return true;
@@ -167,7 +157,7 @@ class PostForm extends React.Component {
         const { editParams, jsonMetadata } = this.props;
 
         if (jsonMetadata.format === 'markdown') {
-            this.state.editorId = EDITORS_TYPES.MARKDOWN_ADVANCED;
+            this.state.editorId = EDITORS_TYPES.MARKDOWN;
         } else if (editParams.title.body.startsWith('<html')) {
             this.state.editorId = EDITORS_TYPES.HTML;
         }
@@ -216,7 +206,16 @@ class PostForm extends React.Component {
                 <div className="PostForm__work-area">
                     <div className="PostForm__content">
                         <EditorSwitcher
-                            items={EDITORS}
+                            items={[
+                                {
+                                    id: EDITORS_TYPES.MARKDOWN,
+                                    text: tt('post_editor.editor'),
+                                },
+                                {
+                                    id: EDITORS_TYPES.HTML,
+                                    text: 'HTML',
+                                },
+                            ]}
                             activeId={editorId}
                             isPreview={isPreview}
                             onChange={this._onEditorChange}
@@ -258,7 +257,7 @@ class PostForm extends React.Component {
             return <MarkdownViewer text={text} large />;
         }
 
-        if (editorId === EDITORS_TYPES.MARKDOWN_ADVANCED) {
+        if (editorId === EDITORS_TYPES.MARKDOWN) {
             return (
                 <MarkdownEditor
                     ref="editor"
@@ -266,16 +265,6 @@ class PostForm extends React.Component {
                     placeholder={tt('post_editor.text_placeholder')}
                     uploadImage={this.props.uploadImage}
                     onChangeNotify={this._onTextChangeNotify}
-                />
-            );
-        } else if (editorId === EDITORS_TYPES.MARKDOWN) {
-            return (
-                <RawMarkdownEditor
-                    ref="editor"
-                    value={text}
-                    placeholder={tt('g.write_your_story')}
-                    uploadImage={this.props.uploadImage}
-                    onChange={this._onTextChange}
                 />
             );
         } else if (editorId === EDITORS_TYPES.HTML) {
@@ -328,10 +317,7 @@ class PostForm extends React.Component {
 
                 newRteState = null;
             }
-        } else if (
-            editorId === EDITORS_TYPES.MARKDOWN ||
-            editorId === EDITORS_TYPES.MARKDOWN_ADVANCED
-        ) {
+        } else if (editorId === EDITORS_TYPES.MARKDOWN) {
             if (toEditorId === EDITORS_TYPES.HTML) {
                 newText = null;
                 newRteState = markdownToHtmlEditorState(
@@ -381,22 +367,13 @@ class PostForm extends React.Component {
     _onTitleTab = () => {
         try {
             this.refs.editor.focus();
-        } catch(err) {}
+        } catch (err) {}
     };
 
     _onHtmlEditorChange = state => {
         this.setState(
             {
                 rteState: state,
-            },
-            this._saveDraftLazy
-        );
-    };
-
-    _onTextChange = text => {
-        this.setState(
-            {
-                text,
             },
             this._saveDraftLazy
         );
@@ -531,10 +508,7 @@ class PostForm extends React.Component {
             body = this.refs.editor.getValue();
         }
 
-        if (
-            editorId === EDITORS_TYPES.MARKDOWN_ADVANCED ||
-            editorId === EDITORS_TYPES.MARKDOWN
-        ) {
+        if (editorId === EDITORS_TYPES.MARKDOWN) {
             html = getRemarkable().render(body);
         } else if (editorId === EDITORS_TYPES.HTML) {
             html = body;
@@ -623,9 +597,13 @@ class PostForm extends React.Component {
                 let errorMessage = error;
 
                 if (error.includes('maximum_block_size')) {
-                    errorMessage = tt('post_editor.body_length_over_limit_error');
+                    errorMessage = tt(
+                        'post_editor.body_length_over_limit_error'
+                    );
                 } else if (error === 'Body is empty') {
-                    errorMessage = tt('post_editor.body_length_over_limit_error');
+                    errorMessage = tt(
+                        'post_editor.body_length_over_limit_error'
+                    );
                 }
 
                 this.refs.footer.showPostError(errorMessage);

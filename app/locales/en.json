@@ -987,6 +987,7 @@
     "button_title": "Delegate"
   },
   "post_editor": {
+    "editor": "Editor",
     "preview_mode": "Preview mode",
     "payout_hint": "Payout method",
     "nsfw_hint": "Mark for not safe for children",

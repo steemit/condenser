@@ -43,7 +43,7 @@ export default class EditorSwitcher extends React.Component {
                     <Icon
                         name="editor/eye"
                         className="EditorSwitcher__eye-icon"
-                        data-tooltip={tt('post_editor.preview_mode')}
+                        data-tooltip={isPreview ? tt('post_editor.edit_mode') : tt('post_editor.preview_mode')}
                     />
                 </i>
             </div>

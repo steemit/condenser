@@ -1,0 +1,38 @@
+
+.AddImageDialog {
+
+  &__splitter {
+    margin: 10px 0;
+    border-bottom: 1px solid #bbb;
+  }
+
+  &__link-input {
+    display: block;
+    width: 100%;
+    padding: 4px 6px;
+    margin-top: 2px;
+    border: 1px solid #999;
+    border-radius: 3px;
+    color: #333;
+  }
+
+  &__drop-zone {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  &__drop-zone-icon {
+    display: block;
+    height: 24px;
+    margin-right: 5px;
+
+    & > SVG {
+      height: 24px;
+    }
+  }
+
+  &__drop-zone-text {
+    border-bottom: 1px dashed #bbb;
+  }
+}

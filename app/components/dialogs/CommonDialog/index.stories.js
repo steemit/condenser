@@ -1,7 +1,7 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
-import Dialog from './Dialog';
+import CommonDialog from './index';
 
 function DialogWrapper({ children }) {
     return <div style={{ maxWidth: 600, padding: 50 }}>{children}</div>;
@@ -12,12 +12,12 @@ const actions = { onClose: action('onClose') };
 storiesOf('Dialogs', module)
     .add('without type', () => (
         <DialogWrapper>
-            <Dialog title="Some title" text="Some body" {...actions} />
+            <CommonDialog title="Some title" text="Some body" {...actions} />
         </DialogWrapper>
     ))
     .add('type=confirm', () => (
         <DialogWrapper>
-            <Dialog
+            <CommonDialog
                 type="confirm"
                 title="Some title"
                 text="Some body"
@@ -27,7 +27,7 @@ storiesOf('Dialogs', module)
     ))
     .add('type=info', () => (
         <DialogWrapper>
-            <Dialog
+            <CommonDialog
                 type="info"
                 title="Some title"
                 text="Some body"
@@ -37,7 +37,7 @@ storiesOf('Dialogs', module)
     ))
     .add('type=alert', () => (
         <DialogWrapper>
-            <Dialog
+            <CommonDialog
                 type="alert"
                 title="Some title"
                 text="Some body"
@@ -47,7 +47,7 @@ storiesOf('Dialogs', module)
     ))
     .add('type=prompt', () => (
         <DialogWrapper>
-            <Dialog
+            <CommonDialog
                 type="prompt"
                 title="Some title"
                 text="Some body"

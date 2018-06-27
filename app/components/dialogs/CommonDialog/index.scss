@@ -1,0 +1,14 @@
+
+.CommonDialog {
+
+  &__prompt-input {
+    display: block;
+    width: 100%;
+    padding: 5px 6px;
+    margin-top: 4px;
+    border: 1px solid #bdbdbd;
+    border-radius: 3px;
+    outline: none;
+    color: #333;
+  }
+}

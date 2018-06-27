@@ -216,11 +216,11 @@ class PostForm extends React.Component {
                             items={[
                                 {
                                     id: EDITORS_TYPES.MARKDOWN,
-                                    text: tt('post_editor.editor'),
+                                    text: tt('post_editor.new_editor'),
                                 },
                                 {
                                     id: EDITORS_TYPES.HTML,
-                                    text: 'HTML',
+                                    text: tt('post_editor.html_editor'),
                                 },
                             ]}
                             activeId={editorId}

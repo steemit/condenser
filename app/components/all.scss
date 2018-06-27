@@ -64,7 +64,9 @@
 @import "./elements/postEditor/TagsEditLine/index";
 
 // dialogs
-@import "./dialogs/common/Dialog";
+@import "./dialogs/DialogFrame/index";
+@import "./dialogs/CommonDialog/index";
+@import "./dialogs/AddImageDialog/index";
 
 // modules
 @import "./modules/BlocktradesDeposit";

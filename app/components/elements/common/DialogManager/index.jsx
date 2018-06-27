@@ -1,7 +1,7 @@
 import React from 'react';
 import cn from 'classnames';
 import KEYS from 'app/utils/keyCodes';
-import Dialog from 'app/components/dialogs/common/Dialog';
+import CommonDialog from 'app/components/dialogs/CommonDialog';
 
 let queue = [];
 let instance = null;
@@ -18,7 +18,7 @@ export default class DialogManager extends React.PureComponent {
 
     static info(text, title) {
         DialogManager.showDialog({
-            component: Dialog,
+            component: CommonDialog,
             props: {
                 title,
                 text,
@@ -28,7 +28,7 @@ export default class DialogManager extends React.PureComponent {
 
     static alert(text, title) {
         DialogManager.showDialog({
-            component: Dialog,
+            component: CommonDialog,
             props: {
                 title,
                 type: 'alert',
@@ -40,7 +40,7 @@ export default class DialogManager extends React.PureComponent {
     static confirm(text, title) {
         return new Promise(resolve => {
             DialogManager.showDialog({
-                component: Dialog,
+                component: CommonDialog,
                 props: {
                     title,
                     type: 'confirm',
@@ -54,7 +54,7 @@ export default class DialogManager extends React.PureComponent {
     static prompt(text, title) {
         return new Promise(resolve => {
             DialogManager.showDialog({
-                component: Dialog,
+                component: CommonDialog,
                 props: {
                     title,
                     type: 'prompt',

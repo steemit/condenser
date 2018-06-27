@@ -1,10 +1,10 @@
 import React from 'react';
 import cn from 'classnames';
 import tt from 'counterpart';
-import Dropzone from 'react-dropzone';
 import KEYS from 'app/utils/keyCodes';
 import Icon from 'app/components/elements/Icon';
 import DialogManager from 'app/components/elements/common/DialogManager';
+import AddImageDialog from '../../../dialogs/AddImageDialog';
 
 const GUIDE_URL =
     'https://golos.io/ru--golos/@on0tole/osnovy-oformleniya-postov-na-golose-polnyi-kurs-po-rabote-s-markdown';
@@ -15,6 +15,11 @@ const TOOLBAR_WIDTH = 412;
 const MIN_TIP_OFFSET = 29;
 
 const PLUS_ACTIONS = [
+    {
+        id: 'picture',
+        icon: 'picture',
+        tooltip: 'post_editor.add_image',
+    },
     {
         id: 'link',
         icon: 'link',
@@ -193,13 +198,13 @@ export default class MarkdownEditorToolbar extends React.PureComponent {
                         MET__icon_active: state.link,
                     })}
                     name="editor-toolbar/link"
-                    onClick={() => this._draw()}
+                    onClick={this._draw}
                 />
                 <Icon
                     className="MET__icon"
                     name="editor-toolbar/picture"
-                    data-tooltip={tt('editor_toolbar.add_image_link')}
-                    onClick={() => this._draw(true)}
+                    data-tooltip={tt('editor_toolbar.add_image')}
+                    onClick={this._addImage}
                 />
                 <Icon
                     className="MET__icon"
@@ -252,18 +257,6 @@ export default class MarkdownEditorToolbar extends React.PureComponent {
                         'MET__new-line-actions_selected': selected,
                     })}
                 >
-                    <Dropzone
-                        className="MET__new-line-item"
-                        multiple={false}
-                        accept="image/*"
-                        onDrop={this._onDrop}
-                    >
-                        <Icon
-                            className="MET__new-line-icon"
-                            name="editor-toolbar/picture"
-                            data-tooltip="Добавить изображение с компьютера"
-                        />
-                    </Dropzone>
                     {PLUS_ACTIONS.map(action => (
                         <Icon
                             key={action.id}
@@ -362,9 +355,13 @@ export default class MarkdownEditorToolbar extends React.PureComponent {
     };
 
     _onActionClick = id => {
-        this.setState({
-            selected: id,
-        });
+        if (id === 'picture') {
+            this._addImage();
+        } else {
+            this.setState({
+                selected: id,
+            });
+        }
     };
 
     _onResetActionClick = () => {
@@ -393,17 +390,28 @@ export default class MarkdownEditorToolbar extends React.PureComponent {
         const selection = cm.getSelection();
         const selectionTrimmed = selection.trim();
 
-        if (selection !== selectionTrimmed && selectionTrimmed && !selection.includes('\n')) {
+        if (
+            selection !== selectionTrimmed &&
+            selectionTrimmed &&
+            !selection.includes('\n')
+        ) {
             const start = cm.getCursor('start');
             const end = cm.getCursor('end');
 
-            cm.setSelection({
-                ch: start.ch + (selection.length - selection.trimLeft().length),
-                line: start.line,
-            }, {
-                ch: end.ch - (selection.length - selection.trimRight().length),
-                line: end.line,
-            });
+            cm.setSelection(
+                {
+                    ch:
+                        start.ch +
+                        (selection.length - selection.trimLeft().length),
+                    line: start.line,
+                },
+                {
+                    ch:
+                        end.ch -
+                        (selection.length - selection.trimRight().length),
+                    line: end.line,
+                }
+            );
         }
 
         setTimeout(() => {
@@ -443,18 +451,7 @@ export default class MarkdownEditorToolbar extends React.PureComponent {
         }
     }
 
-    _onDrop = (acceptedFiles, rejectedFiles) => {
-        const file = acceptedFiles[0];
-
-        if (!file) {
-            if (rejectedFiles.length) {
-                DialogManager.alert(
-                    tt('reply_editor.please_insert_only_image_files')
-                );
-            }
-            return;
-        }
-
+    _onImageUpload = file => {
         this.setState({
             newLineOpen: false,
             selected: null,
@@ -469,39 +466,50 @@ export default class MarkdownEditorToolbar extends React.PureComponent {
         });
     };
 
-    async _draw(isImage) {
-        const cm = this._cm;
-
+    async _draw() {
         const url = await DialogManager.prompt(
             tt('editor_toolbar.enter_the_link') + ':'
         );
 
         if (url) {
-            const startPoint = cm.getCursor('start');
-            const selection = cm.getSelection();
-
-            let offset;
-            if (isImage) {
-                cm.replaceSelection(`![${selection}](${url})`);
-                offset = 2;
-            } else {
-                cm.replaceSelection(`[${selection}](${url})`);
-                offset = 1;
-            }
-
-            cm.setSelection(
-                {
-                    ch: startPoint.ch + offset,
-                    line: startPoint.line,
-                },
-                {
-                    ch: startPoint.ch + offset + selection.length,
-                    line: startPoint.line,
-                }
-            );
-            cm.focus();
+            this._insertLink(url);
         }
     }
+
+    _insertLink(url, isImage) {
+        const cm = this._cm;
+
+        const startPoint = cm.getCursor('start');
+        const selection = cm.getSelection();
+
+        let offset;
+        if (isImage) {
+            cm.replaceSelection(`![${selection}](${url})`);
+            offset = 2;
+        } else {
+            cm.replaceSelection(`[${selection}](${url})`);
+            offset = 1;
+        }
+
+        cm.setSelection(
+            {
+                ch: startPoint.ch + offset,
+                line: startPoint.line,
+            },
+            {
+                ch: startPoint.ch + offset + selection.length,
+                line: startPoint.line,
+            }
+        );
+        cm.focus();
+    }
+
+    _addImage = () => {
+        DialogManager.showDialog({
+            component: AddImageDialog,
+            onClose: this._onAddImageClose,
+        });
+    };
 
     _drawVideo = async () => {
         const url = await DialogManager.prompt(
@@ -576,6 +584,27 @@ export default class MarkdownEditorToolbar extends React.PureComponent {
         }
 
         cm.focus();
+    };
+
+    _onAddImageClose = data => {
+        this.setState({
+            newLineOpen: false,
+            selected: null,
+        });
+
+        if (!data) {
+            return;
+        }
+
+        if (data.file) {
+            this.props.uploadImage(data.file, progress => {
+                if (progress.url) {
+                    this._insertLink(progress.url, true);
+                }
+            });
+        } else if (data.url) {
+            this._insertLink(data.url, true);
+        }
     };
 
     _onGlobalKeyDown = e => {

@@ -4,8 +4,9 @@ import tt from 'counterpart';
 import DialogFrame from 'app/components/dialogs/DialogFrame';
 import DropZone from 'react-dropzone';
 import DialogManager from 'app/components/elements/common/DialogManager';
+import Input from 'app/components/elements/common/Input';
 import StorageSvg from 'app/assets/icons/storage.svg';
-import keyCodes from '../../../utils/keyCodes';
+import keyCodes from 'app/utils/keyCodes';
 
 export default class AddImageDialog extends React.PureComponent {
     static propTypes = {
@@ -38,7 +39,8 @@ export default class AddImageDialog extends React.PureComponent {
                     <div className="AddImageDialog__link-text">
                         {tt('editor_toolbar.add_image_via_link')}:
                     </div>
-                    <input
+                    <Input
+                        block
                         className="AddImageDialog__link-input"
                         placeholder="https://"
                         onKeyDown={this._onInputKeyDown}

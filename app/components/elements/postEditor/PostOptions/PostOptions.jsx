@@ -76,7 +76,7 @@ export default class PostOptions extends React.PureComponent {
         return (
             <Hint align="center" innerRef={this._onBubbleRef}>
                 <div className="PostOptions__bubble-text">
-                    Установки награды за свой пост:
+                    {tt('post_editor.set_payout_type')}:
                 </div>
                 <RadioGroup
                     disabled={editMode}

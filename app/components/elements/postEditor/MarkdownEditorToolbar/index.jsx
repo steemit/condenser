@@ -5,6 +5,7 @@ import KEYS from 'app/utils/keyCodes';
 import Icon from 'app/components/elements/Icon';
 import DialogManager from 'app/components/elements/common/DialogManager';
 import AddImageDialog from '../../../dialogs/AddImageDialog';
+import LinkOptionsDialog from '../../../dialogs/LinkOptionsDialog';
 
 const GUIDE_URL =
     'https://golos.io/ru--golos/@on0tole/osnovy-oformleniya-postov-na-golose-polnyi-kurs-po-rabote-s-markdown';
@@ -62,6 +63,8 @@ export default class MarkdownEditorToolbar extends React.PureComponent {
     }
 
     componentWillUnmount() {
+        this._unmount = true;
+
         clearTimeout(this._delayedListenTimeout);
         this._cm.off('cursorActivity', this._onCursorActivityDelayed);
         this._cm.off('focus', this._onCursorActivityDelayed);
@@ -466,15 +469,37 @@ export default class MarkdownEditorToolbar extends React.PureComponent {
         });
     };
 
-    async _draw() {
-        const url = await DialogManager.prompt(
-            tt('editor_toolbar.enter_the_link') + ':'
-        );
+    _draw = () => {
+        const selection = this._cm.getSelection();
 
-        if (url) {
-            this._insertLink(url);
+        const props = {
+            text: '',
+            link: '',
+        };
+
+        if (selection) {
+            const match = selection.match(/^\[([^\]]*)\]\(([^)]*)\)$/);
+
+            if (match) {
+                props.text = match[1];
+                props.link = match[2];
+            } else if (/^http|^\/\//.test(selection)) {
+                props.link = selection;
+            } else {
+                props.text = selection;
+            }
         }
-    }
+
+        DialogManager.showDialog({
+            component: LinkOptionsDialog,
+            props,
+            onClose: data => {
+                if (!this._unmount && data) {
+                    this._cm.replaceSelection(`[${data.text}](${data.link})`);
+                }
+            },
+        });
+    };
 
     _insertLink(url, isImage) {
         const cm = this._cm;

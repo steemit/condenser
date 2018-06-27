@@ -47,6 +47,7 @@
 @import "./elements/common/YoutubePlayer/YoutubePlayer";
 @import "./elements/welcome/WelcomeSlider";
 @import "./elements/common/Button/index";
+@import "./elements/common/Input/index";
 @import "./elements/common/RadioGroup/index";
 @import "./elements/common/Hint/index";
 @import "./elements/common/HintIcon/HintIcon";
@@ -67,6 +68,7 @@
 @import "./dialogs/DialogFrame/index";
 @import "./dialogs/CommonDialog/index";
 @import "./dialogs/AddImageDialog/index";
+@import "./dialogs/LinkOptionsDialog/index";
 
 // modules
 @import "./modules/BlocktradesDeposit";

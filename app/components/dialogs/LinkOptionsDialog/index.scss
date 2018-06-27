@@ -1,0 +1,14 @@
+
+.LinkOptionsDialog {
+
+  &__label {
+    text-transform: none;
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 8px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}

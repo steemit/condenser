@@ -1015,7 +1015,8 @@
     "body_length_over_limit_error": "Слишком длинное тело поста",
     "empty_body_error": "Пустое тело поста",
     "text_placeholder": "Расскажите свою историю...",
-    "add_image": "Добавить изображение"
+    "add_image": "Добавить изображение",
+    "set_payout_type": "Выбери тип награды за свой пост"
   },
   "editor_toolbar": {
     "enter_the_link": "Введите ссылку",
@@ -1025,7 +1026,9 @@
     "add_image_via_link": "Добавить изображение ссылкой",
     "markdown_help": "Руководство по Markdown",
     "enter_video_link": "Вставьте ссылку на YouTube/Vimeo",
-    "enter_link": "Вставьте ссылку"
+    "enter_link": "Вставьте ссылку",
+    "link_text": "Текст отображения",
+    "link_value": "Ссылка"
   },
   "dialog": {
     "info": "Информация",

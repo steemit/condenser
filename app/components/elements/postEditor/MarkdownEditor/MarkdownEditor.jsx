@@ -54,6 +54,10 @@ export default class MarkdownEditor extends React.Component {
 
         // Hack: Need some action for fix cursor position
         setTimeout(() => {
+            if (this._unmount) {
+                return;
+            }
+
             if (this.props.initialValue) {
                 this._cm.execCommand('selectAll');
                 this._cm.execCommand('undoSelection');
@@ -62,10 +66,12 @@ export default class MarkdownEditor extends React.Component {
                 this._cm.replaceSelection(' ');
                 this._cm.execCommand('delCharBefore');
             }
-        }, 500);
+        }, 600);
     }
 
     componentWillUnmount() {
+        this._unmount = true;
+
         this._cm.off('change', this._onChange);
         this._cm = null;
         this._simplemde = null;

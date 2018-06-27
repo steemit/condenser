@@ -1003,7 +1003,8 @@
     "body_length_over_limit_error": "Post body too big",
     "empty_body_error": "Empty body",
     "text_placeholder": "Start your story...",
-    "add_image": "Add image"
+    "add_image": "Add image",
+    "set_payout_type": "Select the type of payment for your post"
   },
   "editor_toolbar": {
     "enter_the_link": "Enter the link",
@@ -1013,7 +1014,9 @@
     "add_image_via_link": "Add image via link",
     "markdown_help": "Open Markdown Guide",
     "enter_video_link": "Enter YouTube/Vimeo link",
-    "enter_link": "Enter the link"
+    "enter_link": "Enter the link",
+    "link_text": "Link title",
+    "link_value": "Link url"
   },
   "dialog": {
     "info": "Information",

@@ -49,12 +49,17 @@ export default class MarkdownEditorToolbar extends React.PureComponent {
     }
 
     componentDidMount() {
-        this._editor.codemirror.on('cursorActivity', this._onCursorActivityDelayed);
+        this._delayedListenTimeout = setTimeout(() => {
+            this._cm.on('cursorActivity', this._onCursorActivityDelayed);
+            this._cm.on('focus', this._onCursorActivityDelayed);
+        }, 700);
         document.addEventListener('keydown', this._onGlobalKeyDown);
     }
 
     componentWillUnmount() {
-        this._editor.codemirror.off('cursorActivity', this._onCursorActivityDelayed);
+        clearTimeout(this._delayedListenTimeout);
+        this._cm.off('cursorActivity', this._onCursorActivityDelayed);
+        this._cm.off('focus', this._onCursorActivityDelayed);
         document.removeEventListener('keydown', this._onGlobalKeyDown);
         clearTimeout(this._timeoutId);
     }

@@ -51,6 +51,18 @@ export default class MarkdownEditor extends React.Component {
             window.sm = this._simplemde;
             window.cm = this._cm;
         }
+
+        // Hack: Need some action for fix cursor position
+        setTimeout(() => {
+            if (this.props.initialValue) {
+                this._cm.execCommand('selectAll');
+                this._cm.execCommand('undoSelection');
+            } else {
+                this._cm.execCommand('goLineEnd');
+                this._cm.replaceSelection(' ');
+                this._cm.execCommand('delCharBefore');
+            }
+        }, 500);
     }
 
     componentWillUnmount() {

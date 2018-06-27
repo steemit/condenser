@@ -254,7 +254,7 @@ class PostForm extends React.Component {
                         />
                     </div>
                 </div>
-                {uploadingCount ? (
+                {uploadingCount > 0 ? (
                     <div className="PostForm__spinner">
                         <Icon name="clock" size="4x" className="PostForm__spinner-inner" />
                     </div>
@@ -653,21 +653,21 @@ class PostForm extends React.Component {
     _onUploadImage = (file, progress) => {
         this.setState({
             uploadingCount: this.state.uploadingCount + 1,
-        });
+        }, () => {
+            this.props.uploadImage({
+                file,
+                progress: data => {
+                    if (!this._unmount) {
+                        if (data && (data.url || data.error)) {
+                            this.setState({
+                                uploadingCount: this.state.uploadingCount - 1,
+                            });
+                        }
 
-        this.props.uploadImage({
-            file,
-            progress: data => {
-                if (!this._unmount) {
-                    if (data && (data.url || data.error)) {
-                        this.setState({
-                            uploadingCount: this.state.uploadingCount - 1,
-                        });
+                        progress(data);
                     }
-
-                    progress(data);
-                }
-            },
+                },
+            });
         });
     };
 }

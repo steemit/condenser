@@ -8,6 +8,7 @@
   &__toolbar {
     position: absolute;
     display: flex;
+    top: -9999px;
     height: $toolbar_height;
     padding: 0 16px;
     border-radius: $toolbar_height / 2;

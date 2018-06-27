@@ -7,14 +7,14 @@ import TagsEditLine from 'app/components/elements/postEditor/TagsEditLine';
 import PostOptions from 'app/components/elements/postEditor/PostOptions/PostOptions';
 import Button from 'app/components/elements/common/Button';
 import Hint from 'app/components/elements/common/Hint';
+import { NSFW_TAG } from 'app/utils/tags';
 
 export default class PostFooter extends React.PureComponent {
     static propTypes = {
         editMode: PropTypes.bool,
-        options: PropTypes.object.isRequired,
         tags: PropTypes.array,
         postDisabled: PropTypes.bool,
-        onOptionsChange: PropTypes.func.isRequired,
+        onPayoutTypeChange: PropTypes.func.isRequired,
         onTagsChange: PropTypes.func.isRequired,
         onPostClick: PropTypes.func.isRequired,
         onResetClick: PropTypes.func.isRequired,
@@ -66,9 +66,11 @@ export default class PostFooter extends React.PureComponent {
                         ) : null}
                     </div>
                     <PostOptions
-                        value={this.props.options}
+                        nsfw={this.props.tags.includes(NSFW_TAG)}
+                        onNsfwClick={this._onNsfwClick}
+                        payoutType={this.props.payoutType}
                         editMode={editMode}
-                        onChange={this.props.onOptionsChange}
+                        onPayoutChange={this.props.onPayoutTypeChange}
                     />
                     <div className="PostFooter__buttons">
                         <div className="PostFooter__button">
@@ -119,4 +121,17 @@ export default class PostFooter extends React.PureComponent {
             });
         }, 5000);
     }
+
+    _onNsfwClick = () => {
+        const tags = this.props.tags;
+        let newTags;
+
+        if (tags.includes(NSFW_TAG)) {
+            newTags = tags.filter(t => t !== NSFW_TAG);
+        } else {
+            newTags = tags.concat(NSFW_TAG);
+        }
+
+        this.props.onTagsChange(newTags);
+    };
 }

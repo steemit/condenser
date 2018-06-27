@@ -93,10 +93,7 @@ class PostForm extends React.Component {
             rteState: null,
             tags: [],
             postError: null,
-            options: {
-                coinMode: PAYOUT_TYPES.PAY_50,
-                plus18: false,
-            },
+            payoutType: PAYOUT_TYPES.PAY_50,
             uploadingCount: 0,
         };
 
@@ -140,7 +137,7 @@ class PostForm extends React.Component {
             state.title = draft.title;
             state.text = draft.text;
             state.tags = draft.tags;
-            state.options = draft.options || {};
+            state.payoutType = draft.payoutType || PAYOUT_TYPES.PAY_50;
 
             if (state.editorId === EDITORS_TYPES.MARKDOWN_OLD) {
                 state.editorId = EDITORS_TYPES.MARKDOWN;
@@ -175,8 +172,6 @@ class PostForm extends React.Component {
 
         let tags = jsonMetadata.tags || [];
 
-        this.state.options.plus18 = tags.includes('nsfw');
-
         tags = tags.filter(t => t !== 'nsfw');
 
         if (tags[0] !== editParams.category) {
@@ -197,7 +192,7 @@ class PostForm extends React.Component {
             editorId,
             title,
             tags,
-            options,
+            payoutType,
             isPreview,
             postError,
             uploadingCount,
@@ -245,8 +240,8 @@ class PostForm extends React.Component {
                             errorText={postError}
                             tags={tags}
                             onTagsChange={this._onTagsChange}
-                            options={options}
-                            onOptionsChange={this._onOptionsChange}
+                            payoutType={payoutType}
+                            onPayoutTypeChange={this._onPayoutTypeChange}
                             postDisabled={uploadingCount > 0}
                             onPostClick={this._postSafe}
                             onResetClick={this._onResetClick}
@@ -256,7 +251,11 @@ class PostForm extends React.Component {
                 </div>
                 {uploadingCount > 0 ? (
                     <div className="PostForm__spinner">
-                        <Icon name="clock" size="4x" className="PostForm__spinner-inner" />
+                        <Icon
+                            name="clock"
+                            size="4x"
+                            className="PostForm__spinner-inner"
+                        />
                     </div>
                 ) : null}
             </div>
@@ -405,18 +404,13 @@ class PostForm extends React.Component {
         );
     };
 
-    _onOptionsChange = options => {
-        this.setState(
-            {
-                options,
-            },
-            this._saveDraftLazy
-        );
+    _onPayoutTypeChange = payoutType => {
+        this.setState({ payoutType }, this._saveDraftLazy);
     };
 
     _saveDraft = () => {
         const { editMode, editParams } = this.props;
-        const { isPreview, editorId, title, text, tags, options } = this.state;
+        const { isPreview, editorId, title, text, tags, payoutType } = this.state;
 
         try {
             let body;
@@ -433,7 +427,7 @@ class PostForm extends React.Component {
                 title,
                 text: body,
                 tags,
-                options,
+                payoutType,
             };
 
             const json = JSON.stringify(save);
@@ -477,7 +471,7 @@ class PostForm extends React.Component {
 
     _post = () => {
         const { author, editMode } = this.props;
-        const { title, options, tags, text, editorId, isPreview } = this.state;
+        const { title, tags, text, payoutType, editorId, isPreview } = this.state;
         let error;
 
         if (!title.trim()) {
@@ -507,10 +501,6 @@ class PostForm extends React.Component {
         }
 
         const processedTags = processTagsToSend(tags);
-
-        if (options.plus18 && !processedTags.includes('nsfw')) {
-            processedTags.push('nsfw');
-        }
 
         let body;
         let html;
@@ -578,9 +568,9 @@ class PostForm extends React.Component {
         } else {
             const commentOptions = {};
 
-            if (options.coinMode === PAYOUT_TYPES.PAY_0) {
+            if (payoutType === PAYOUT_TYPES.PAY_0) {
                 commentOptions.max_accepted_payout = '0.000 ' + DEBT_TICKER;
-            } else if (options.coinMode === PAYOUT_TYPES.PAY_100) {
+            } else if (payoutType === PAYOUT_TYPES.PAY_100) {
                 commentOptions.percent_steem_dollars = 0;
             }
 
@@ -651,24 +641,28 @@ class PostForm extends React.Component {
     };
 
     _onUploadImage = (file, progress) => {
-        this.setState({
-            uploadingCount: this.state.uploadingCount + 1,
-        }, () => {
-            this.props.uploadImage({
-                file,
-                progress: data => {
-                    if (!this._unmount) {
-                        if (data && (data.url || data.error)) {
-                            this.setState({
-                                uploadingCount: this.state.uploadingCount - 1,
-                            });
-                        }
+        this.setState(
+            {
+                uploadingCount: this.state.uploadingCount + 1,
+            },
+            () => {
+                this.props.uploadImage({
+                    file,
+                    progress: data => {
+                        if (!this._unmount) {
+                            if (data && (data.url || data.error)) {
+                                this.setState({
+                                    uploadingCount:
+                                        this.state.uploadingCount - 1,
+                                });
+                            }
 
-                        progress(data);
-                    }
-                },
-            });
-        });
+                            progress(data);
+                        }
+                    },
+                });
+            }
+        );
     };
 }
 

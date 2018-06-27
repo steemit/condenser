@@ -9,9 +9,11 @@ import { PAYOUT_OPTIONS } from 'app/components/modules/PostForm/PostForm';
 
 export default class PostOptions extends React.PureComponent {
     static propTypes = {
-        value: PropTypes.object.isRequired,
+        nsfw: PropTypes.bool.isRequired,
+        payoutType: PropTypes.number.isRequired,
         editMode: PropTypes.bool,
-        onChange: PropTypes.func.isRequired,
+        onNsfwClick: PropTypes.func.isRequired,
+        onPayoutChange: PropTypes.func.isRequired,
     };
 
     constructor(props) {
@@ -33,7 +35,6 @@ export default class PostOptions extends React.PureComponent {
     }
 
     render() {
-        const { plus18 } = this.props.value;
         const { showCoinMenu } = this.state;
 
         return (
@@ -55,9 +56,9 @@ export default class PostOptions extends React.PureComponent {
                 </span>
                 <span
                     className={cn('PostOptions__item', {
-                        PostOptions__item_warning: plus18,
+                        PostOptions__item_warning: this.props.nsfw,
                     })}
-                    onClick={this._onPlus18Click}
+                    onClick={this.props.onNsfwClick}
                 >
                     <Icon
                         name="editor/plus-18"
@@ -70,7 +71,7 @@ export default class PostOptions extends React.PureComponent {
     }
 
     _renderCoinMenu() {
-        const { editMode, value } = this.props;
+        const { editMode, payoutType } = this.props;
 
         return (
             <Hint align="center" innerRef={this._onBubbleRef}>
@@ -84,7 +85,7 @@ export default class PostOptions extends React.PureComponent {
                         title: tt(title),
                         hint: hint ? tt(hint) : null,
                     }))}
-                    value={value.coinMode}
+                    value={payoutType}
                     onChange={this._onCoinModeChange}
                 />
             </Hint>
@@ -107,18 +108,8 @@ export default class PostOptions extends React.PureComponent {
         );
     };
 
-    _onPlus18Click = () => {
-        this.props.onChange({
-            coinMode: this.props.value.coinMode,
-            plus18: !this.props.value.plus18,
-        });
-    };
-
     _onCoinModeChange = coinMode => {
-        this.props.onChange({
-            coinMode: coinMode,
-            plus18: this.props.value.plus18,
-        });
+        this.props.onPayoutChange(coinMode);
     };
 
     _onAwayClick = e => {

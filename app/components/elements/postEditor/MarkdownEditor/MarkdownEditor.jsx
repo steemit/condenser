@@ -159,61 +159,109 @@ export default class MarkdownEditor extends React.Component {
             alreadyWidgets.add(widget);
         }
 
-        outer: for (let line = 0, last = cm.lineCount(); line < last; line++) {
+        for (let line = 0, last = cm.lineCount(); line < last; line++) {
             const lineContent = cm.getLine(line);
 
-            const match = lineContent.match(/!\[[^\]]*\]\(([^)]+)\)/);
+            let match;
+
+            match = lineContent.match(/!\[[^\]]*\]\(([^)]+)\)/);
+
+            if (!match) {
+                match = lineContent.match(
+                    /(?:^|\s)((?:https?:)?\/\/[^\s]+\.[^\s]+\.(?:jpe?g|png|gif))(?:\s|$)/
+                );
+            }
 
             if (match) {
-                const url = match[1];
+                let url = match[1];
 
-                for (let widget of this._lineWidgets) {
-                    if (widget.line.lineNo() === line) {
-                        if (widget.url === url) {
-                            alreadyWidgets.delete(widget);
-                            continue outer;
-                        }
-                    }
+                if (!url.startsWith('http')) {
+                    url = 'http:' + url;
                 }
 
-                if (this._imagesPending.has(url)) {
+                if (this._addLineWidget(alreadyWidgets, line, url)) {
                     continue;
                 }
+            }
 
-                const img = new Image();
-                img.classList.add('MarkdownEditor__preview');
+            match = lineContent.match(
+                /(?:^|\s)(?:https?:)?\/\/(?:www\.)?(?:youtube\.com|youtu\.be)\/watch\?v=([A-Za-z0-9_-]{11})(?:\s|&|$)/
+            );
 
-                img.addEventListener('load', () => {
-                    this._imagesPending.delete(url);
-                    const widget = this._cm.addLineWidget(line, img);
-                    widget.id = ++lastWidgetId;
-                    widget.url = url;
-                    this._lineWidgets.push(widget);
-                });
-
-                img.addEventListener('error', () => {
-                    this._imagesPending.delete(url);
-                    const div = document.createElement('div');
-                    div.classList.add('MarkdownEditor__preview-error');
-                    div.innerText = tt('post_editor.image_preview_error');
-                    const widget = this._cm.addLineWidget(line, div);
-                    widget.id = ++lastWidgetId;
-                    widget.url = url;
-                    this._lineWidgets.push(widget);
-                });
-
-                img.src = url;
-
-                this._imagesPending.add(url);
+            if (match) {
+                this._addLineWidget(
+                    alreadyWidgets,
+                    line,
+                    'https://www.youtube.com/embed/' + match[1],
+                    true
+                );
             }
         }
 
-        this._lineWidgets = this._lineWidgets.filter(widget => !alreadyWidgets.has(widget));
+        this._lineWidgets = this._lineWidgets.filter(
+            widget => !alreadyWidgets.has(widget)
+        );
 
         for (let widget of alreadyWidgets) {
             widget.clear();
         }
     };
+
+    _addLineWidget(alreadyWidgets, line, url, isYoutube) {
+        for (let widget of this._lineWidgets) {
+            if (widget.line.lineNo() === line) {
+                if (widget.url === url) {
+                    alreadyWidgets.delete(widget);
+                    return;
+                }
+            }
+        }
+
+        if (!isYoutube && this._imagesPending.has(url)) {
+            return;
+        }
+
+        if (isYoutube) {
+            const div = document.createElement('div');
+            div.classList.add('videoWrapper');
+            const iframe = document.createElement('iframe');
+            iframe.setAttribute('frameborder', '0');
+            iframe.setAttribute('width', '100%');
+            iframe.src = url;
+            div.appendChild(iframe);
+
+            const widget = this._cm.addLineWidget(line, div);
+            widget.id = ++lastWidgetId;
+            widget.url = url;
+            this._lineWidgets.push(widget);
+        } else {
+            const img = new Image();
+            img.classList.add('MarkdownEditor__preview');
+
+            img.addEventListener('load', () => {
+                this._imagesPending.delete(url);
+                const widget = this._cm.addLineWidget(line, img);
+                widget.id = ++lastWidgetId;
+                widget.url = url;
+                this._lineWidgets.push(widget);
+            });
+
+            img.addEventListener('error', () => {
+                this._imagesPending.delete(url);
+                const div = document.createElement('div');
+                div.classList.add('MarkdownEditor__preview-error');
+                div.innerText = tt('post_editor.image_preview_error');
+                const widget = this._cm.addLineWidget(line, div);
+                widget.id = ++lastWidgetId;
+                widget.url = url;
+                this._lineWidgets.push(widget);
+            });
+
+            img.src = $STM_Config.img_proxy_prefix + '0x0/' + url;
+
+            this._imagesPending.add(url);
+        }
+    }
 
     _tryToFixCursorPosition() {
         // Hack: Need some action for fix cursor position

@@ -156,6 +156,12 @@
     direction: rtl;
   }
 
+  blockquote > p {
+    color: rgba(0,0,0,.6);
+  }
+}
+
+.Markdown, .ReplyEditor__body.rte, .MarkdownEditor {
   div.videoWrapper {
     width: 100%;
     height: 0;
@@ -169,9 +175,5 @@
       left: 0;
       top: 0;
     }
-  }
-
-  blockquote > p {
-    color: rgba(0,0,0,.6);
   }
 }

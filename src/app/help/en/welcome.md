@@ -226,9 +226,9 @@ The community is looking for you to create engaging content.
 
 Plagiarising, which is posting someone else's material as if it were your own, is very frowned upon by the Steem community.
 
-If you are using anyone else's material as part of your posts (including images), even if it is free to use, please cite your sources. You should make sure that you are not violating any copyright laws if you are using someone else's material/images. 
+If you are using anyone else's material as part of your posts (including images), even if it is free to use, please cite your sources. You should make sure that you are not violating any copyright laws if you are using someone else's material/images. Limited, sourced material sharing is OK under fair use and fair dealing doctrines.
 
-Remember, your posts should have original content in them. Quotes should not exceed more than half of a publication. Include your own thoughts, photographs, art, and ideas. 
+Remember, your posts should have original content in them. Quotes should not compose an entire publication. Include your own thoughts, photographs, art, and ideas. 
 
 <a href="#Table_of_Contents">^</a>
 ### <span id="Password_Security">Password Security</span>

@@ -175,7 +175,7 @@ If you want to share someone else's post with all of your followers, click on th
 <a href="#Table_of_Contents">^</a>
 ### <span id="Digital_Currencies">Digital Currencies</span>
 
-STEEM, Steem Power and Steem Dollars are the three forms of digital currency tokens used by the Steem Blockchain.
+STEEM, Steem Power and Steem Dollars are the three forms of digital currency used by the Steem Blockchain.
 
 More information on the three types of tokens can be found in the [Steemit FAQ](https://steemit.com/faq.html#What_is_the_difference_between_STEEM__STEEM_Power__and_Steem_Dollars).
 

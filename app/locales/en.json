@@ -1004,7 +1004,8 @@
     "empty_body_error": "Empty body",
     "text_placeholder": "Start your story...",
     "add_image": "Add image",
-    "set_payout_type": "Select the type of payment for your post"
+    "set_payout_type": "Select the type of payment for your post",
+    "image_preview_error": "Image loading error"
   },
   "editor_toolbar": {
     "enter_the_link": "Enter the link",

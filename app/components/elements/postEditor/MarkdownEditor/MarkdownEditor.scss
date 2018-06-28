@@ -5,6 +5,21 @@
   &__dropzone {
     position: relative;
   }
+
+  &__preview {
+    padding: 0 4px;
+    opacity: 0.8;
+    transition: opacity 0.3s;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  &__preview-error {
+    padding: 0 4px;
+    background: #ff9ea3;
+  }
 }
 
 @import "./simplemde-overrides";

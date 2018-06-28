@@ -1016,7 +1016,8 @@
     "empty_body_error": "Пустое тело поста",
     "text_placeholder": "Расскажите свою историю...",
     "add_image": "Добавить изображение",
-    "set_payout_type": "Выбери тип награды за свой пост"
+    "set_payout_type": "Выбери тип награды за свой пост",
+    "image_preview_error": "Ошибка загрузки изображения"
   },
   "editor_toolbar": {
     "enter_the_link": "Введите ссылку",

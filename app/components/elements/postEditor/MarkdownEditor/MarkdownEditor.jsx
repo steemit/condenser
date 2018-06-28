@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import debounce from 'lodash.debounce';
 import Dropzone from 'react-dropzone';
 import tt from 'counterpart';
 import MarkdownEditorToolbar from 'app/components/elements/postEditor/MarkdownEditorToolbar';
@@ -10,6 +11,8 @@ let SimpleMDE;
 if (process.env.BROWSER) {
     SimpleMDE = require('simplemde');
 }
+
+let lastWidgetId = 0;
 
 export default class MarkdownEditor extends React.Component {
     static propTypes = {
@@ -24,6 +27,8 @@ export default class MarkdownEditor extends React.Component {
         if (!SimpleMDE) {
             return;
         }
+
+        this._processImagesPreviewLazy = debounce(this._processImagesPreview);
 
         this._simplemde = new SimpleMDE({
             spellChecker: false,
@@ -40,6 +45,9 @@ export default class MarkdownEditor extends React.Component {
             },
         });
 
+        this._lineWidgets = [];
+        this._imagesPending = new Set();
+
         this._cm = this._simplemde.codemirror;
         this._cm.on('change', this._onChange);
 
@@ -52,25 +60,24 @@ export default class MarkdownEditor extends React.Component {
             window.cm = this._cm;
         }
 
-        // Hack: Need some action for fix cursor position
-        setTimeout(() => {
-            if (this._unmount) {
-                return;
+        this._previewTimeout = setTimeout(() => {
+            if (!this._unmount) {
+                this._processImagesPreview();
             }
+        }, 500);
 
-            if (this.props.initialValue) {
-                this._cm.execCommand('selectAll');
-                this._cm.execCommand('undoSelection');
-            } else {
-                this._cm.execCommand('goLineEnd');
-                this._cm.replaceSelection(' ');
-                this._cm.execCommand('delCharBefore');
+        this._fixTimeout = setTimeout(() => {
+            if (!this._unmount) {
+                this._tryToFixCursorPosition();
             }
-        }, 600);
+        }, 1000);
     }
 
     componentWillUnmount() {
         this._unmount = true;
+
+        clearTimeout(this._fixTimeout);
+        clearTimeout(this._previewTimeout);
 
         this._cm.off('change', this._onChange);
         this._cm = null;
@@ -116,6 +123,7 @@ export default class MarkdownEditor extends React.Component {
 
     _onChange = () => {
         this.props.onChangeNotify();
+        this._processImagesPreviewLazy();
     };
 
     _onDrop = (acceptedFiles, rejectedFiles, e) => {
@@ -143,4 +151,79 @@ export default class MarkdownEditor extends React.Component {
             }
         });
     };
+
+    _processImagesPreview = () => {
+        const alreadyWidgets = new Set();
+
+        for (let widget of this._lineWidgets) {
+            alreadyWidgets.add(widget);
+        }
+
+        outer: for (let line = 0, last = cm.lineCount(); line < last; line++) {
+            const lineContent = cm.getLine(line);
+
+            const match = lineContent.match(/!\[[^\]]*\]\(([^)]+)\)/);
+
+            if (match) {
+                const url = match[1];
+
+                for (let widget of this._lineWidgets) {
+                    if (widget.line.lineNo() === line) {
+                        if (widget.url === url) {
+                            alreadyWidgets.delete(widget);
+                            continue outer;
+                        }
+                    }
+                }
+
+                if (this._imagesPending.has(url)) {
+                    continue;
+                }
+
+                const img = new Image();
+                img.classList.add('MarkdownEditor__preview');
+
+                img.addEventListener('load', () => {
+                    this._imagesPending.delete(url);
+                    const widget = this._cm.addLineWidget(line, img);
+                    widget.id = ++lastWidgetId;
+                    widget.url = url;
+                    this._lineWidgets.push(widget);
+                });
+
+                img.addEventListener('error', () => {
+                    this._imagesPending.delete(url);
+                    const div = document.createElement('div');
+                    div.classList.add('MarkdownEditor__preview-error');
+                    div.innerText = tt('post_editor.image_preview_error');
+                    const widget = this._cm.addLineWidget(line, div);
+                    widget.id = ++lastWidgetId;
+                    widget.url = url;
+                    this._lineWidgets.push(widget);
+                });
+
+                img.src = url;
+
+                this._imagesPending.add(url);
+            }
+        }
+
+        this._lineWidgets = this._lineWidgets.filter(widget => !alreadyWidgets.has(widget));
+
+        for (let widget of alreadyWidgets) {
+            widget.clear();
+        }
+    };
+
+    _tryToFixCursorPosition() {
+        // Hack: Need some action for fix cursor position
+        if (this.props.initialValue) {
+            this._cm.execCommand('selectAll');
+            this._cm.execCommand('undoSelection');
+        } else {
+            this._cm.execCommand('goLineEnd');
+            this._cm.replaceSelection(' ');
+            this._cm.execCommand('delCharBefore');
+        }
+    }
 }

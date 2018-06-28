@@ -5,6 +5,8 @@ This page is full of information to help you learn about the platform and become
 
 Included on the page is a "To Do List" with recommended steps to get started with your account, and a "Quick Start Guide" with information on how the platform works. 
 
+Below that is a section of "Helpful Posts from Steemit Users", which contains a collection of posts from users in the community that are helpful for new users getting started. 
+
 Below that is a list of recommended users to follow, a collection of other resources including the <a href="/faq.html">FAQ Page</a> and [Steem 'Bluepaper'](https://steem.io/steem-bluepaper.pdf), as well as information on where to find help. 
 
 ## <span id="Table_of_Contents">Table of Contents</span>
@@ -52,7 +54,7 @@ Unlike centralized web services, **it is not possible to recover lost passwords 
 
 You are entirely responsible for generating your password, saving it and keeping it secure.
 
-It is strongly recommended that you store an offline copy of your password somewhere safe in case of a hard drive failure or other calamity. Consider digital offline storage, secure cloud-based storage, as well as printed paper. Use multiple methods of storage for best redundancy. 
+It is strongly recommended that you store an offline copy of your password somewhere safe in case of a hard drive failure or other calamity. Consider digital offline storage, secure private cloud-based storage, as well as printed paper. Use multiple methods of storage for best redundancy. 
 
 If your account is valuable, value it!
 
@@ -310,6 +312,8 @@ New Member Support Community is a group of people dedicated to helping new users
 ## <span id="Third_Party_References">Third Party References</span>
 
 Peerhub, BlockTrades, Bittrex, Steem Chat, New Member Support Community, and Discord Chat, as well as the tools listed under "Other Resources", are third party applications/services and are not owned or maintained by Steemit, Inc. Their listing here does not constitute an endorsement or recommendation on behalf of Steemit, Inc.
+
+All of the links in the "Helpful Posts from Steemit Users" section were created by our users and do not necessarily represent the views of Steemit, Inc. or its management.
 
 Please use the third party tools and content at your own risk.
 

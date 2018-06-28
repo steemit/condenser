@@ -12,7 +12,7 @@ const GUIDE_URL =
 
 const MAX_HEADING = 4;
 const TOOLBAR_OFFSET = 7;
-const TOOLBAR_WIDTH = 412;
+const TOOLBAR_WIDTH = 518;
 const MIN_TIP_OFFSET = 29;
 
 const PLUS_ACTIONS = [
@@ -219,7 +219,7 @@ export default class MarkdownEditorToolbar extends React.PureComponent {
                 <a href={GUIDE_URL} target="_blank">
                     <Icon
                         className="MET__icon"
-                        name="editor-toolbar/search"
+                        name="editor/info"
                         data-tooltip={tt('editor_toolbar.markdown_help')}
                     />
                 </a>

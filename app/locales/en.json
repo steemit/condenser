@@ -1010,7 +1010,7 @@
   "editor_toolbar": {
     "enter_the_link": "Enter the link",
     "add_link": "Add link",
-    "add_video": "Add media (youtube/vimeo)",
+    "add_video": "Add media (youtube/vimeo/coub...)",
     "add_image_from_computer": "Add image from computer",
     "add_image_via_link": "Add image via link",
     "markdown_help": "Open Markdown Guide",

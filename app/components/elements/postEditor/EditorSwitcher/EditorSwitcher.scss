@@ -11,13 +11,15 @@
     margin-bottom: -1px;
     border-bottom: 4px solid transparent;
     white-space: nowrap;
+    letter-spacing: 1.4px;
     color: #b7b7b9;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 500;
     transition: color 0.1s;
     flex-shrink: 0;
     cursor: pointer;
     user-select: none;
+    text-transform: uppercase;
 
     &_active {
       color: #000;
@@ -40,30 +42,29 @@
 
   &__eye {
     display: block;
-    width: 44px;
-    height: 44px;
-    margin-top: -4px;
+    width: 40px;
+    height: 40px;
+    margin-top: -2px;
     border-radius: 50%;
-    line-height: 42px;
+    line-height: 38px;
     text-align: center;
     cursor: pointer;
-    box-shadow: 0 0 8px 0 transparent;
     color: #000;
-    transition: color 0.1s, box-shadow 0.15s;
+    transition: color 0.1s;
+    box-shadow: 0 0 12px 0 rgba(0,0,0, 0.2);
 
     &_active, &:hover {
       color: #0078c4;
-      box-shadow: 0 0 12px 0 rgba(0,0,0, 0.2);
     }
   }
 
   &__eye-icon {
-    width: 30px;
-    height: 30px;
+    width: 24px;
+    height: 24px;
 
     & > SVG {
-      width: 30px;
-      height: 30px;
+      width: 24px;
+      height: 24px;
     }
   }
 }

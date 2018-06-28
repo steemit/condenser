@@ -1022,7 +1022,7 @@
   "editor_toolbar": {
     "enter_the_link": "Введите ссылку",
     "add_link": "Добавить ссылку",
-    "add_video": "Добавить мультимедиа (youtube/vimeo)",
+    "add_video": "Добавить мультимедиа (youtube/vimeo/coub...)",
     "add_image_from_computer": "Добавить изображение с компьютера",
     "add_image_via_link": "Добавить изображение ссылкой",
     "markdown_help": "Руководство по Markdown",

@@ -41,6 +41,7 @@ export default class TagInput extends React.PureComponent {
                     value={this.state.value}
                     type="text"
                     ref="input"
+                    maxLength="25"
                     placeholder={tt('post_editor.tags_input_placeholder')}
                     onFocus={
                         !tags.length && !this._hintTimeout

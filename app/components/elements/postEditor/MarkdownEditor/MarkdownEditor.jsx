@@ -153,6 +153,7 @@ export default class MarkdownEditor extends React.Component {
     };
 
     _processImagesPreview = () => {
+        const cm = this._cm;
         const alreadyWidgets = new Set();
 
         for (let widget of this._lineWidgets) {

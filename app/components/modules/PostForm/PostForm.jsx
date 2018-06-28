@@ -90,6 +90,7 @@ class PostForm extends React.Component {
             editorId: EDITORS_TYPES.MARKDOWN,
             title: '',
             text: '',
+            emptyBody: true,
             rteState: null,
             tags: [],
             postError: null,
@@ -97,7 +98,8 @@ class PostForm extends React.Component {
             uploadingCount: 0,
         };
 
-        this._saveDraftLazy = debounce(this._saveDraft, 100);
+        this._saveDraftLazy = debounce(this._saveDraft, 500);
+        this._checkBodyLazy = debounce(this._checkBody, 300);
         this._postSafe = this._safeWrapper(this._post);
 
         let isLoaded = false;
@@ -136,6 +138,7 @@ class PostForm extends React.Component {
             state.editorId = draft.editorId;
             state.title = draft.title;
             state.text = draft.text;
+            state.emptyBody = draft.text.trim().length === 0;
             state.tags = draft.tags;
             state.payoutType = draft.payoutType || PAYOUT_TYPES.PAY_50;
 
@@ -191,12 +194,16 @@ class PostForm extends React.Component {
         const {
             editorId,
             title,
+            text,
+            emptyBody,
             tags,
             payoutType,
             isPreview,
             postError,
             uploadingCount,
         } = this.state;
+
+        const allowPost = uploadingCount === 0 && title.trim() && !emptyBody;
 
         return (
             <div
@@ -229,7 +236,12 @@ class PostForm extends React.Component {
                             onTab={this._onTitleTab}
                             onChange={this._onTitleChange}
                         />
-                        {this._renderEditorPanel()}
+                        <div style={{ display: isPreview ? 'none' : 'block' }}>
+                            {this._renderEditorPanel()}
+                        </div>
+                        {isPreview ? (
+                            <MarkdownViewer text={text} large />
+                        ) : null}
                     </div>
                 </div>
                 <div className="PostForm__footer">
@@ -242,7 +254,7 @@ class PostForm extends React.Component {
                             onTagsChange={this._onTagsChange}
                             payoutType={payoutType}
                             onPayoutTypeChange={this._onPayoutTypeChange}
-                            postDisabled={uploadingCount > 0}
+                            postDisabled={!allowPost}
                             onPostClick={this._postSafe}
                             onResetClick={this._onResetClick}
                             onCancelClick={this._onCancelClick}
@@ -263,11 +275,7 @@ class PostForm extends React.Component {
     }
 
     _renderEditorPanel() {
-        const { editorId, isPreview, text } = this.state;
-
-        if (isPreview) {
-            return <MarkdownViewer text={text} large />;
-        }
+        const { editorId, text } = this.state;
 
         if (editorId === EDITORS_TYPES.MARKDOWN) {
             return (
@@ -393,6 +401,7 @@ class PostForm extends React.Component {
 
     _onTextChangeNotify = () => {
         this._saveDraftLazy();
+        this._checkBodyLazy();
     };
 
     _onTagsChange = tags => {
@@ -410,7 +419,14 @@ class PostForm extends React.Component {
 
     _saveDraft = () => {
         const { editMode, editParams } = this.props;
-        const { isPreview, editorId, title, text, tags, payoutType } = this.state;
+        const {
+            isPreview,
+            editorId,
+            title,
+            text,
+            tags,
+            payoutType,
+        } = this.state;
 
         try {
             let body;
@@ -471,7 +487,14 @@ class PostForm extends React.Component {
 
     _post = () => {
         const { author, editMode } = this.props;
-        const { title, tags, text, payoutType, editorId, isPreview } = this.state;
+        const {
+            title,
+            tags,
+            text,
+            payoutType,
+            editorId,
+            isPreview,
+        } = this.state;
         let error;
 
         if (!title.trim()) {
@@ -502,13 +525,12 @@ class PostForm extends React.Component {
 
         const processedTags = processTagsToSend(tags);
 
-        let body;
+        const body = this.refs.editor.getValue();
         let html;
 
-        if (isPreview) {
-            body = text;
-        } else {
-            body = this.refs.editor.getValue();
+        if (!body || !body.trim()) {
+            this.refs.footer.showPostError(tt('post_editor.empty_body_error'));
+            return;
         }
 
         if (editorId === EDITORS_TYPES.MARKDOWN) {
@@ -595,21 +617,7 @@ class PostForm extends React.Component {
                 }
             },
             err => {
-                const error = err.toString().trim();
-
-                let errorMessage = error;
-
-                if (error.includes('maximum_block_size')) {
-                    errorMessage = tt(
-                        'post_editor.body_length_over_limit_error'
-                    );
-                } else if (error === 'Body is empty') {
-                    errorMessage = tt(
-                        'post_editor.body_length_over_limit_error'
-                    );
-                }
-
-                this.refs.footer.showPostError(errorMessage);
+                this.refs.footer.showPostError(err.toString().trim());
             }
         );
     };
@@ -664,6 +672,18 @@ class PostForm extends React.Component {
             }
         );
     };
+
+    _checkBody() {
+        const editor = this.refs.editor;
+
+        if (editor) {
+            const value = editor.getValue();
+
+            this.setState({
+                emptyBody: value.trim().length === 0,
+            });
+        }
+    }
 }
 
 function markdownToHtmlEditorState(markdown) {
@@ -687,6 +707,7 @@ export default connect(
                 transaction.actions.broadcastOperation({
                     type: 'comment',
                     operation: payload,
+                    hideErrors: true,
                     errorCallback: onError,
                     successCallback: onSuccess,
                 })

@@ -109,8 +109,6 @@ class MarkdownViewer extends Component {
                     noImage: noImage && allowNoImage,
                 })
             );
-
-            console.log('CLEARED:', cleanText);
         }
 
         // "&amp;mdash;" -> "&mdash;" and so on

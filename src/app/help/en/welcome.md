@@ -208,7 +208,7 @@ The higher the reputation, the more upvotes the account received.
 
 All new users start at 25.
 
-Your reputation will go up as you earn upvotes for your posts and comments, but it can come down if they are downvoted.
+Your reputation will go up as you earn upvotes for your posts and comments, but it can come down if they are downvoted (flagged).
 
 <a href="#Table_of_Contents">^</a>
 ### <span id="Cashing_out_or_Spending_SBD">Cashing out or Spending SBD</span>

@@ -193,8 +193,7 @@ export default class MarkdownEditor extends React.Component {
                 this._addLineWidget(
                     alreadyWidgets,
                     line,
-                    'https://www.youtube.com/embed/' + match[1],
-                    true
+                    `https://img.youtube.com/vi/${match[1]}/0.jpg`
                 );
             }
         }
@@ -222,46 +221,31 @@ export default class MarkdownEditor extends React.Component {
             return;
         }
 
-        if (isYoutube) {
-            const div = document.createElement('div');
-            div.classList.add('videoWrapper');
-            const iframe = document.createElement('iframe');
-            iframe.setAttribute('frameborder', '0');
-            iframe.setAttribute('width', '100%');
-            iframe.src = url;
-            div.appendChild(iframe);
+        const img = new Image();
+        img.classList.add('MarkdownEditor__preview');
 
+        img.addEventListener('load', () => {
+            this._imagesPending.delete(url);
+            const widget = this._cm.addLineWidget(line, img);
+            widget.id = ++lastWidgetId;
+            widget.url = url;
+            this._lineWidgets.push(widget);
+        });
+
+        img.addEventListener('error', () => {
+            this._imagesPending.delete(url);
+            const div = document.createElement('div');
+            div.classList.add('MarkdownEditor__preview-error');
+            div.innerText = tt('post_editor.image_preview_error');
             const widget = this._cm.addLineWidget(line, div);
             widget.id = ++lastWidgetId;
             widget.url = url;
             this._lineWidgets.push(widget);
-        } else {
-            const img = new Image();
-            img.classList.add('MarkdownEditor__preview');
+        });
 
-            img.addEventListener('load', () => {
-                this._imagesPending.delete(url);
-                const widget = this._cm.addLineWidget(line, img);
-                widget.id = ++lastWidgetId;
-                widget.url = url;
-                this._lineWidgets.push(widget);
-            });
+        img.src = $STM_Config.img_proxy_prefix + '0x0/' + url;
 
-            img.addEventListener('error', () => {
-                this._imagesPending.delete(url);
-                const div = document.createElement('div');
-                div.classList.add('MarkdownEditor__preview-error');
-                div.innerText = tt('post_editor.image_preview_error');
-                const widget = this._cm.addLineWidget(line, div);
-                widget.id = ++lastWidgetId;
-                widget.url = url;
-                this._lineWidgets.push(widget);
-            });
-
-            img.src = $STM_Config.img_proxy_prefix + '0x0/' + url;
-
-            this._imagesPending.add(url);
-        }
+        this._imagesPending.add(url);
     }
 
     _tryToFixCursorPosition() {

@@ -173,6 +173,8 @@ class PostForm extends React.Component {
             this.state.text = editParams.body;
         }
 
+        this.state.emptyBody = false;
+
         let tags = jsonMetadata.tags || [];
 
         tags = tags.filter(t => t !== 'nsfw');

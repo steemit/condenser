@@ -34,6 +34,18 @@ $color-border-light-lightest: #f6f6f6;
 $color-border-dark: #232F38;
 $color-border-dark-lightest: #2B3A45;
 
-$font-primary: helvetica, sans-serif;
+$font-primary:
+  // Safari for OS X and iOS (San Francisco)
+  -apple-system,
+  // Chrome < 56 for OS X (San Francisco)
+  BlinkMacSystemFont,
+  // Windows
+  "Segoe UI",
+  // Android
+  "Roboto",
+  // Basic web fallback
+  "Helvetica Neue", Arial, sans-serif,
+  // Emoji fonts
+  "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !default;
 
 $alert-color: $color-red;

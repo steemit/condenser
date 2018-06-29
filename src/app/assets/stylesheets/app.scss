@@ -1,21 +1,14 @@
-
+@import "./variables";
 @import "./foundation-settings";
 @import "~foundation-sites/scss/foundation";
-
 @include foundation-everything(true);
-
-@import "./variables";
 @import "./mixins";
 @import "./layout";
 @import "./themes";
-
 @import "./foundation-overrides";
-
 @import './animation';
-
 @import "./fonts";
 @import "./forms";
-
 @import "./markdown";
 @import "./notifications";
 @import "src/app/components/all";

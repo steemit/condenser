@@ -1,4 +1,5 @@
 import React from 'react';
+import tt from 'counterpart';
 import KEYS from 'app/utils/keyCodes';
 import Hint from 'app/components/elements/common/Hint';
 
@@ -11,7 +12,7 @@ export default class PostTitle extends React.PureComponent {
             <div className="PostTitle">
                 <input
                     className="PostTitle__input"
-                    placeholder="Заголовок"
+                    placeholder={tt('submit_a_story.placeholder')}
                     value={value}
                     onKeyDown={this._onKeyDown}
                     onChange={this._onChange}

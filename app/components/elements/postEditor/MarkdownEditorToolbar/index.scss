@@ -85,10 +85,17 @@
     @media screen and (max-width: 1279px) {
       left: 0;
       margin-top: 20px;
+      opacity: 0.7;
+      transition: width 0.3s, opacity 0.2s;
+
+      &:hover {
+        opacity: 1;
+      }
     }
 
     &_open {
       width: 187px;
+      opacity: 1;
     }
 
     &_selected {

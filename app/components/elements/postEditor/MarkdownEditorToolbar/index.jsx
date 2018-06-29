@@ -176,18 +176,14 @@ export default class MarkdownEditorToolbar extends React.PureComponent {
                 />
                 <i className="MET__separator" />
                 <Icon
-                    className={cn('MET__icon', {
-                        MET__icon_active: state['unordered-list'],
-                    })}
+                    className="MET__icon"
                     name="editor-toolbar/bullet-list"
                     onClick={() => SM.toggleUnorderedList(editor)}
                 />
                 <Icon
-                    className={cn('MET__icon', {
-                        MET__icon_active: state['ordered-list'],
-                    })}
+                    className="MET__icon"
                     name="editor-toolbar/number-list"
-                    onClick={() => SM.toggleOrderedList(editor)}
+                    onClick={this._onToggleOrderedList}
                 />
                 <i className="MET__separator" />
                 <Icon
@@ -299,11 +295,9 @@ export default class MarkdownEditorToolbar extends React.PureComponent {
 
         const cm = this._cm;
 
-        const cursor = cm.getCursor();
         const selection = cm.getSelection();
-        const currentLine = cm.getLine(cursor.line);
 
-        if (currentLine.trim() === '') {
+        if (selection.trim() === '') {
             const pos = cm.cursorCoords();
 
             this.setState({
@@ -314,7 +308,15 @@ export default class MarkdownEditorToolbar extends React.PureComponent {
                 newLineOpen: false,
                 selected: null,
             });
-        } else if (selection) {
+            return;
+        }
+
+        const newState = {
+            toolbarShow: false,
+            newLineHelper: null,
+        };
+
+        if (selection) {
             const pos = cm.cursorCoords();
 
             const toolbarPosition = {
@@ -328,19 +330,15 @@ export default class MarkdownEditorToolbar extends React.PureComponent {
             if (selectionNode) {
                 const bound = selectionNode.getBoundingClientRect();
 
+                toolbarPosition.top = Math.round(bound.top);
                 toolbarPosition.left = Math.round(bound.left + bound.width / 2);
             }
 
-            this.setState({
-                toolbarShow: true,
-                toolbarPosition,
-            });
-        } else {
-            this.setState({
-                toolbarShow: false,
-                newLineHelper: null,
-            });
+            newState.toolbarShow = true;
+            newState.toolbarPosition = toolbarPosition;
         }
+
+        this.setState(newState);
     };
 
     _onPlusClick = () => {
@@ -452,21 +450,6 @@ export default class MarkdownEditorToolbar extends React.PureComponent {
             console.error('INVALID_CASE');
         }
     }
-
-    _onImageUpload = file => {
-        this.setState({
-            newLineOpen: false,
-            selected: null,
-        });
-
-        this.props.uploadImage(file, progress => {
-            if (progress.url) {
-                const imageUrl = `![${file.name}](${progress.url})`;
-
-                this._cm.replaceSelection(imageUrl);
-            }
-        });
-    };
 
     _draw = () => {
         const selection = this._cm.getSelection();
@@ -608,6 +591,57 @@ export default class MarkdownEditorToolbar extends React.PureComponent {
         }
 
         cm.focus();
+    };
+
+    _onToggleOrderedList = () => {
+        //this.props.SM.toggleOrderedList(this._editor);
+        //return;
+        const cm = this._cm;
+
+        const cursor = cm.getCursor('start');
+        const cursorEnd = cm.getCursor('end');
+        const selection = cm.getSelection();
+
+        if (!selection.trim()) {
+            cm.replaceSelection('1. ');
+            cm.setCursor({
+                ch: 2,
+                line: cursor.line,
+            });
+            return;
+        }
+
+        cm.setSelection(
+            {
+                ch: 0,
+                line: cursor.line,
+            },
+            {
+                ch: cursorEnd.ch,
+                line: cursorEnd.line,
+            }
+        );
+
+        let selectionLines = cm.getSelection().split('\n');
+
+        if (/^\d+\. /.test(selectionLines[0])) {
+            selectionLines = selectionLines.map(line =>
+                line.replace(/^\d+\.\s+/, '')
+            );
+        } else {
+            selectionLines = selectionLines.map(
+                (line, i) => `${i + 1}. ${line}`
+            );
+        }
+
+        cm.replaceSelection(selectionLines.join('\n'));
+        cm.setSelection({
+            ch: 0,
+            line: cursor.line,
+        }, {
+            ch: 99999,
+            line: cursorEnd.line,
+        })
     };
 
     _onAddImageClose = data => {

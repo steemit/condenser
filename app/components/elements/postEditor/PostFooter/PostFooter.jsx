@@ -86,7 +86,7 @@ export default class PostFooter extends React.PureComponent {
                         </div>
                         <div className="PostFooter__button">
                             {temporaryErrorText ? (
-                                <Hint warning>{temporaryErrorText}</Hint>
+                                <Hint error>{temporaryErrorText}</Hint>
                             ) : null}
                             <Button primary disabled={postDisabled} onClick={this.props.onPostClick}>
                                 {editMode

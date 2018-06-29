@@ -6,6 +6,7 @@ import Icon from 'app/components/elements/Icon';
 import Hint from 'app/components/elements/common/Hint';
 import { validateTag } from 'app/utils/tags';
 import KEYS from 'app/utils/keyCodes';
+import { TAGS_LIMIT } from '../../../../utils/tags';
 
 export default class TagInput extends React.PureComponent {
     static propTypes = {
@@ -31,8 +32,7 @@ export default class TagInput extends React.PureComponent {
     }
 
     render() {
-        const { tags, className } = this.props;
-        const { inputError, temporaryHintText } = this.state;
+        const { className } = this.props;
 
         return (
             <div className={cn('TagInput', className)}>
@@ -43,11 +43,8 @@ export default class TagInput extends React.PureComponent {
                     ref="input"
                     maxLength="25"
                     placeholder={tt('post_editor.tags_input_placeholder')}
-                    onFocus={
-                        !tags.length && !this._hintTimeout
-                            ? this._onFocus
-                            : null
-                    }
+                    onFocus={this._onFocus}
+                    onBlur={this._onBlur}
                     onChange={this._onInputChange}
                     onKeyDown={this._onInputKeyDown}
                 />
@@ -58,18 +55,66 @@ export default class TagInput extends React.PureComponent {
                 >
                     <Icon name="editor/plus" />
                 </i>
-                {inputError ? (
-                    <Hint warning align="left">
-                        {inputError}
-                    </Hint>
-                ) : temporaryHintText ? (
-                    <Hint info align="left">
-                        {temporaryHintText}
-                    </Hint>
-                ) : null}
+                {this._renderErrorBlock()}
             </div>
         );
     }
+
+    _renderErrorBlock() {
+        const { tags } = this.props;
+        const { inputError, temporaryHintText } = this.state;
+
+        if (this.refs.input === document.activeElement && tags.length === 5) {
+            return (
+                <Hint warning align="left">
+                    {tt(
+                        'category_selector_jsx.use_limitied_amount_of_categories',
+                        { amount: TAGS_LIMIT }
+                    )}
+                </Hint>
+            );
+        }
+
+        if (inputError) {
+            return (
+                <Hint error align="left">
+                    {inputError}
+                </Hint>
+            );
+        }
+
+        if (temporaryHintText) {
+            return (
+                <Hint info align="left">
+                    {temporaryHintText}
+                </Hint>
+            );
+        }
+    }
+
+    _onFocus = () => {
+        const { tags } = this.props;
+
+        if (!tags.length && !this._hintTimeout) {
+            this._hintTimeout = setTimeout(() => {
+                this.setState({
+                    temporaryHintText: tt('category_selector_jsx.main_tag_hint'),
+                });
+
+                this._hintTimeout = setTimeout(() => {
+                    this.setState({
+                        temporaryHintText: null,
+                    });
+                }, 4000);
+            }, 200);
+        }
+
+        this.forceUpdate();
+    };
+
+    _onBlur = () => {
+        this.forceUpdate();
+    };
 
     _onInputChange = e => {
         const value = e.target.value;
@@ -118,18 +163,4 @@ export default class TagInput extends React.PureComponent {
 
         return validateTag(tag);
     }
-
-    _onFocus = () => {
-        this._hintTimeout = setTimeout(() => {
-            this.setState({
-                temporaryHintText: tt('category_selector_jsx.main_tag_hint'),
-            });
-
-            this._hintTimeout = setTimeout(() => {
-                this.setState({
-                    temporaryHintText: null,
-                });
-            }, 4000);
-        }, 200);
-    };
 }

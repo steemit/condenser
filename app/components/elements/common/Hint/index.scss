@@ -47,8 +47,12 @@
     vertical-align: top;
     flex-shrink: 0;
 
-    &_warning {
+    &_error {
       color: #f00;
+    }
+
+    &_warning {
+      color: #ffba1f;
     }
 
     &_info {

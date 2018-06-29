@@ -119,7 +119,7 @@
     "auth_token": false,
     "sender_id": false
   },
-  "upload_image": false,
+  "upload_image": "https://images.golos.io",
   "ws_connection_client": "wss://ws.golos.io",
   "ws_connection_server": "wss://ws.golos.io",
   "chain_id": "782a3039b478c839e4cb0c941ff4eaeb7df40bdd68bd441afd444b9da763de12",

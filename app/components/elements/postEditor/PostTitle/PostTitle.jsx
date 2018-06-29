@@ -17,7 +17,7 @@ export default class PostTitle extends React.PureComponent {
                     onChange={this._onChange}
                 />
                 {error ? (
-                    <Hint warning align="left">
+                    <Hint error align="left">
                         {error}
                     </Hint>
                 ) : null}

@@ -7,6 +7,7 @@ export default class Hint extends React.PureComponent {
     static propTypes = {
         className: PropTypes.string,
         info: PropTypes.bool,
+        error: PropTypes.bool,
         warning: PropTypes.bool,
         align: PropTypes.oneOf(['left', 'center', 'right']),
     };
@@ -47,12 +48,25 @@ export default class Hint extends React.PureComponent {
         const {
             className,
             info,
+            error,
             warning,
             children,
             innerRef,
         } = this.props;
 
         const align = this.props.align || this.state.align;
+
+        let icon = 'Hint__icon';
+
+        if (warning) {
+            icon += ' Hint__icon_warning';
+        } else if (error) {
+            icon += ' Hint__icon_error';
+        } else if (info) {
+            icon += ' Hint__icon_info';
+        } else {
+            icon = null;
+        }
 
         return (
             <div
@@ -66,17 +80,11 @@ export default class Hint extends React.PureComponent {
                 ref={innerRef}
             >
                 <div className="Hint__content">
-                    {warning ? (
+                    {icon ? (
                         <Icon
                             name="editor/info"
                             size="1_5x"
-                            className="Hint__icon Hint__icon_warning"
-                        />
-                    ) : info ? (
-                        <Icon
-                            name="editor/info"
-                            size="1_5x"
-                            className="Hint__icon Hint__icon_info"
+                            className={icon}
                         />
                     ) : null}
                     <div className="Hint__inner">{children}</div>

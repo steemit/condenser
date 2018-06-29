@@ -100,7 +100,7 @@
     flex-shrink: 0;
     cursor: pointer;
 
-    & > SVG {
+    & > svg {
       width: 14px;
       height: 14px;
       transform-origin: center;
@@ -110,7 +110,7 @@
     }
   }
 
-  &__new-line-helper_open &__plus > SVG {
+  &__new-line-helper_open &__plus > svg {
     transform: rotate(45deg);
   }
 
@@ -149,7 +149,7 @@
       color: #0078c4;
     }
 
-    & > SVG {
+    & > svg {
       width: unset;
       height: 21px;
     }

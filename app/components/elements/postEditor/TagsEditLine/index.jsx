@@ -62,7 +62,7 @@ export default class TagsEditLine extends React.PureComponent {
                 )}
             >
                 {realTags.length > TAGS_LIMIT ? (
-                    <Hint warning>
+                    <Hint error>
                         {tt(
                             'category_selector_jsx.use_limitied_amount_of_categories',
                             { amount: TAGS_LIMIT }

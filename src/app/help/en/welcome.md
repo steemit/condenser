@@ -254,36 +254,36 @@ Don't get discouraged if you don't earn much at first. Keep up the good work!
 
 ## <span id="Helpful_Posts_from_Steemit_Users">Helpful Posts from Steemit Users</span>
 ### <span id="Blogging">Blogging</span>
-- [Advice on How To Build a Following](https://steemit.com/steemit/@allasyummyfood/how-i-build-a-following-of-160-k-from-scratch)
-- [Steemit Etiquette Guide](https://steemit.com/steemit/@thecryptofiend/the-complete-steemit-etiquette-guide-revision-2-0)
-- [8 Mistakes to Avoid](https://steemit.com/steemit/@alcibiades/8-mistakes-i-see-beginners-make-on-steemit)
-- [The Importance of Citation](https://steemit.com/steemcleaners/@steemcleaners/the-importance-of-citation)
-- [How to Find Success as a Steemit Blogger](https://steemit.com/blog/@inquiringtimes/how-to-find-sucess-as-a-steemit-blogger)
-- [The Art of Commenting](https://steemit.com/steemcleaners/@steemcleaners/the-art-of-commenting)
-- [Blogging Tools](https://steemit.com/blogging/@munteanu/blogging-tools)
-- [The Ultimate Guide of Tips for New Steem Users](https://steemit.com/steem-help/@timcliff/the-ultimate-guide-of-tips-for-new-steem-users)
-- [Ways to Find Free and Legal Images](https://steemit.com/steem-help/@mindover/don-t-plagiarize-images-here-are-13-free-and-legal-ways-to-find-high-quality-photos-you-can-use-on-steemit)
-- [The Game of Tags](https://steemit.com/steemcleaners/@steemcleaners/the-game-of-tags)
-- [Steemit for Artists](https://steemit.com/art/@voronoi/steemit-for-artists-a-new-stage-for-craft)
-- [Video interview on how to be successful](https://steemit.com/blog/@terrybrock/steemit-success-series--timcliff-on-who-to-target-with-your-content-1512178826-124805)
+- [Advice on How To Build a Following](/steemit/@allasyummyfood/how-i-build-a-following-of-160-k-from-scratch)
+- [Steemit Etiquette Guide](/steemit/@thecryptofiend/the-complete-steemit-etiquette-guide-revision-2-0)
+- [8 Mistakes to Avoid](/steemit/@alcibiades/8-mistakes-i-see-beginners-make-on-steemit)
+- [The Importance of Citation](/steemcleaners/@steemcleaners/the-importance-of-citation)
+- [How to Find Success as a Steemit Blogger](/blog/@inquiringtimes/how-to-find-sucess-as-a-steemit-blogger)
+- [The Art of Commenting](/steemcleaners/@steemcleaners/the-art-of-commenting)
+- [Blogging Tools](/blogging/@munteanu/blogging-tools)
+- [The Ultimate Guide of Tips for New Steem Users](/steem-help/@timcliff/the-ultimate-guide-of-tips-for-new-steem-users)
+- [Ways to Find Free and Legal Images](/steem-help/@mindover/don-t-plagiarize-images-here-are-13-free-and-legal-ways-to-find-high-quality-photos-you-can-use-on-steemit)
+- [The Game of Tags](/steemcleaners/@steemcleaners/the-game-of-tags)
+- [Steemit for Artists](/art/@voronoi/steemit-for-artists-a-new-stage-for-craft)
+- [Video interview on how to be successful](/blog/@terrybrock/steemit-success-series--timcliff-on-who-to-target-with-your-content-1512178826-124805)
 
 ### <span id="Curation">Curation</span>
-- [Curation Rewards Explained](https://steemit.com/curation/@liberosist/mind-your-votes-ii-a-guide-to-maximizing-your-curation-rewards)
-- [More Information on Curation Rewards](https://steemit.com/steemit/@calamus056/curation-rewards-explained-in-great-detail)
-- [Everything you need to know about potential payouts and flagging](https://steemit.com/payout/@timcliff/everything-you-need-to-know-about-potential-payouts-and-flagging-for-new-users)
-- [Guide To Steemit Payouts](https://steemit.com/steemit/@shenanigator/the-ultimate-guide-to-steemit-payouts)
+- [Curation Rewards Explained](/curation/@liberosist/mind-your-votes-ii-a-guide-to-maximizing-your-curation-rewards)
+- [More Information on Curation Rewards](/steemit/@calamus056/curation-rewards-explained-in-great-detail)
+- [Everything you need to know about potential payouts and flagging](/payout/@timcliff/everything-you-need-to-know-about-potential-payouts-and-flagging-for-new-users)
+- [Guide To Steemit Payouts](/steemit/@shenanigator/the-ultimate-guide-to-steemit-payouts)
 
 ### <span id="Formatting">Formatting</span>
-- [Emojis for Steemit](https://steemit.com/emojis/@blueorgy/steemit-emojis-master-list)
-- [5 'Markdown' Tips](https://steemit.com/steemit/@steemitguide/markdown-and-html-code-guide-for-beginners-that-includes-5-useful-tips-to-edit-posts-and-comments-using-the-raw-editor)
+- [Emojis for Steemit](/emojis/@blueorgy/steemit-emojis-master-list)
+- [5 'Markdown' Tips](/steemit/@steemitguide/markdown-and-html-code-guide-for-beginners-that-includes-5-useful-tips-to-edit-posts-and-comments-using-the-raw-editor)
 
 ### <span id="Wallet_and_Keys">Wallet and Keys</span>
-- [Understanding Your Wallet](https://steemit.com/steemit-help/@merej99/the-steemit-newbie-s-comprehensive-guide-to-understanding-your-wallet-by-merej99)
-- [Steem Keys and Passwords Guide](https://steemit.com/steemit-guides/@pfunk/a-user-s-guide-to-the-different-steem-keys-or-passwords)
-- [A Guide To Cashing Out Your STEEM/SBD Using PayPal](https://steemit.com/tutorial/@son-of-satire/a-minnows-guide-to-cashing-out-your-steem-sbd-using-paypal-without-using-coinbase-and-their-invasive-identity-checks)
+- [Understanding Your Wallet](/steemit-help/@merej99/the-steemit-newbie-s-comprehensive-guide-to-understanding-your-wallet-by-merej99)
+- [Steem Keys and Passwords Guide](/steemit-guides/@pfunk/a-user-s-guide-to-the-different-steem-keys-or-passwords)
+- [A Guide To Cashing Out Your STEEM/SBD Using PayPal](/tutorial/@son-of-satire/a-minnows-guide-to-cashing-out-your-steem-sbd-using-paypal-without-using-coinbase-and-their-invasive-identity-checks)
 
 ### <span id="Witnesses">Witnesses</span>
-- [Witness Voting Guide](https://steemit.com/witness-category/@timcliff/witness-voting-guide)
+- [Witness Voting Guide](/witness-category/@timcliff/witness-voting-guide)
 
 <a href="#Table_of_Contents">^</a>
 ## <span id="Users_to_Follow">Users to Follow</span>

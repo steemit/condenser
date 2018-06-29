@@ -606,7 +606,7 @@
     "this_memo_is_public": "このメモは公開されます",
     "convert_to_VESTING_TOKEN": "%(VESTING_TOKEN)sに変換",
     "balance_subject_to_3_day_withdraw_waiting_period": "引き出しに3日間の待ち時間が必要となる貯蓄口座です。",
-    "move_funds_to_another_account": "資金を他の%(APP_NAME)sアカウントに送ります。",
+    "move_funds_to_another_account": "資金を他のSteemアカウントに送ります。",
     "protect_funds_by_requiring_a_3_day_withdraw_waiting_period": "3日間の引き出し待ち時間で資金を守ります。",
     "withdraw_funds_after_the_required_3_day_waiting_period": "3日間の待ち時間の後に資金を引き出します。",
     "from": "送信者",

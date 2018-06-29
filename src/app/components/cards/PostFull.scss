@@ -121,15 +121,10 @@
         fill: themed('textColorSecondary');
     }
   }
-  a, .FoundationDropdownMenu__label {
-    font-size: 94%;
-    font-weight: 600;
-    @extend .link;
-    @extend .link--secondary;
-  }
-  .Voting {
-    //padding-right: 1rem;
-    //margin-right: 1rem;
+  .RightShare__Menu {
+    @include MQ(FL) {
+      text-align: right;
+    }
   }
   .VerticalMenu > li > a {
     @include themify($themes) {
@@ -233,9 +228,6 @@ input.share-box {
     -webkit-box-flex: 0;
     -ms-flex: 0 0 100%;
     flex: 0 0 100%;
-  }
-  .PostFull__footer > .RightShare__Menu {
-    text-align: left;
   }
   input.share-box {
     height: 2.8em;

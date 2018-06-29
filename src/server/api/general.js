@@ -17,6 +17,8 @@ import Mixpanel from 'mixpanel';
 import { PublicKey, Signature, hash } from '@steemit/steem-js/lib/auth/ecc';
 import { api, broadcast } from '@steemit/steem-js';
 
+const ACCEPTED_TOS_TAG = 'accepted_tos_20180614';
+
 const mixpanel = config.get('mixpanel')
     ? Mixpanel.init(config.get('mixpanel'))
     : null;
@@ -566,6 +568,71 @@ export default function useGeneralApi(app) {
         } catch (error) {
             console.error(
                 'Error in /setUserPreferences api call',
+                this.session.uid,
+                error
+            );
+            this.body = JSON.stringify({ error: error.message });
+            this.status = 500;
+        }
+    });
+
+    router.post('/isTosAccepted', koaBody, function*() {
+        const params = this.request.body;
+        const { csrf } =
+            typeof params === 'string' ? JSON.parse(params) : params;
+        if (!checkCSRF(this, csrf)) return;
+
+        if (!this.session.a) {
+            this.body = 'missing username';
+            this.status = 500;
+            return;
+        }
+
+        try {
+            const res = yield api.signedCallAsync(
+                'conveyor.get_tags_for_user',
+                [this.session.a],
+                config.get('conveyor_username'),
+                config.get('conveyor_posting_wif')
+            );
+
+            this.body = JSON.stringify(res.includes(ACCEPTED_TOS_TAG));
+        } catch (error) {
+            console.error(
+                'Error in /isTosAccepted api call',
+                this.session.a,
+                error
+            );
+            this.body = JSON.stringify({ error: error.message });
+            this.status = 500;
+        }
+    });
+
+    router.post('/acceptTos', koaBody, function*() {
+        const params = this.request.body;
+        const { csrf } =
+            typeof params === 'string' ? JSON.parse(params) : params;
+        if (!checkCSRF(this, csrf)) return;
+
+        if (!this.session.a) {
+            this.body = 'missing logged in account';
+            this.status = 500;
+            return;
+        }
+        try {
+            yield api.signedCallAsync(
+                'conveyor.assign_tag',
+                {
+                    uid: this.session.a,
+                    tag: ACCEPTED_TOS_TAG,
+                },
+                config.get('conveyor_username'),
+                config.get('conveyor_posting_wif')
+            );
+            this.body = JSON.stringify({ status: 'ok' });
+        } catch (error) {
+            console.error(
+                'Error in /acceptTos api call',
                 this.session.uid,
                 error
             );

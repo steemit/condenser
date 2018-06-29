@@ -1,6 +1,7 @@
 /* eslint react/prop-types: 0 */
 /*global $STM_csrf, $STM_Config */
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { api } from '@steemit/steem-js';
@@ -16,8 +17,8 @@ import { SIGNUP_URL } from 'shared/constants';
 
 class CreateAccount extends React.Component {
     static propTypes = {
-        loginUser: React.PropTypes.func.isRequired,
-        serverBusy: React.PropTypes.bool,
+        loginUser: PropTypes.func.isRequired,
+        serverBusy: PropTypes.bool,
     };
 
     constructor(props) {
@@ -340,7 +341,6 @@ class CreateAccount extends React.Component {
                             Please read the Steemit Rules and fill in the form
                             below to create your Steemit account
                         </h4>
-                        {/*<Progress tabIndex="0" value={95} max={100} />*/}
                         {showRules ? (
                             <div className="CreateAccount__rules">
                                 <p>

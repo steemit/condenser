@@ -2,33 +2,23 @@ import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { VIEW_MODE_WHISTLE, PARAM_VIEW_MODE } from '../shared/constants';
 import ServerHTML from './server-html';
-import universalRender from '../shared/UniversalRender';
+import { serverRender } from '../shared/UniversalRender';
 import models from 'db/models';
 import secureRandom from 'secure-random';
 import ErrorPage from 'server/server-error';
-import fs from 'fs';
 import { determineViewMode } from '../app/utils/Links';
+import { getSupportedLocales } from './utils/misc';
 
 const path = require('path');
 const ROOT = path.join(__dirname, '../..');
 const DB_RECONNECT_TIMEOUT =
     process.env.NODE_ENV === 'development' ? 1000 * 60 * 60 : 1000 * 60 * 10;
 
-function getSupportedLocales() {
-    const locales = [];
-    const files = fs.readdirSync(path.join(ROOT, 'src/app/locales'));
-    for (const filename of files) {
-        const match_res = filename.match(/(\w+)\.json?$/);
-        if (match_res) locales.push(match_res[1]);
-    }
-    return locales;
-}
-
 const supportedLocales = getSupportedLocales();
 
-async function appRender(ctx) {
+async function appRender(ctx, locales = false, resolvedAssets = false) {
+    ctx.state.requestTimer.startTimer('appRender_ms');
     const store = {};
-
     // This is the part of SSR where we make session-specific changes:
     try {
         let userPreferences = {};
@@ -46,6 +36,7 @@ async function appRender(ctx) {
         if (!userPreferences.locale) {
             let locale = ctx.getLocaleFromHeader();
             if (locale) locale = locale.substring(0, 2);
+            const supportedLocales = locales ? locales : getSupportedLocales();
             const localeIsSupported = supportedLocales.find(l => l === locale);
             if (!localeIsSupported) locale = 'en';
             userPreferences.locale = locale;
@@ -73,35 +64,32 @@ async function appRender(ctx) {
             }
         }
         // ... and that's the end of user-session-related SSR
-
         const initial_state = {
             app: {
                 viewMode: determineViewMode(ctx.request.search),
             },
         };
 
-        const { body, title, statusCode, meta } = await universalRender({
+        const { body, title, statusCode, meta } = await serverRender(
+            ctx.request.url,
             initial_state,
-            location: ctx.request.url,
-            store,
             ErrorPage,
             userPreferences,
             offchain,
-        });
+            ctx.state.requestTimer
+        );
 
-        // Assets name are found in `webpack-stats` file
-        const assets_filename =
-            ROOT +
-            (process.env.NODE_ENV === 'production'
-                ? '/tmp/webpack-stats-prod.json'
-                : '/tmp/webpack-stats-dev.json');
-        const assets = require(assets_filename);
-
-        // Don't cache assets name on dev
-        if (process.env.NODE_ENV === 'development') {
+        let assets;
+        // If resolvedAssets argument parameter is falsey we infer that we are in
+        // development mode and therefore resolve the assets on each render.
+        if (!resolvedAssets) {
+            // Assets name are found in `webpack-stats` file
+            const assets_filename = ROOT + '/tmp/webpack-stats-dev.json';
+            assets = require(assets_filename);
             delete require.cache[require.resolve(assets_filename)];
+        } else {
+            assets = resolvedAssets;
         }
-
         const props = { body, assets, title, meta };
         ctx.status = statusCode;
         ctx.body =
@@ -119,6 +107,8 @@ async function appRender(ctx) {
 
         throw err;
     }
+
+    ctx.state.requestTimer.stopTimer('appRender_ms');
 }
 
 appRender.dbStatus = { ok: true };

@@ -6,7 +6,7 @@ import { VIEW_MODE_WHISTLE, PARAM_VIEW_MODE } from 'shared/constants';
 import './assets/stylesheets/app.scss';
 import plugins from 'app/utils/JsPlugins';
 import Iso from 'iso';
-import universalRender from 'shared/UniversalRender';
+import { clientRender } from 'shared/UniversalRender';
 import ConsoleExports from './utils/ConsoleExports';
 import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 import * as steem from '@steemit/steem-js';
@@ -112,10 +112,13 @@ function runApp(initial_state) {
     const location = `${window.location.pathname}${window.location.search}${
         window.location.hash
     }`;
-    universalRender({ history, location, initial_state }).catch(error => {
+
+    try {
+        clientRender(initial_state);
+    } catch (error) {
         console.error(error);
         serverApiRecordEvent('client_error', error);
-    });
+    }
 }
 
 if (!window.Intl) {

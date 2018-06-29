@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Icon from 'app/components/elements/Icon';
@@ -67,15 +68,15 @@ class PostFull extends React.Component {
     static propTypes = {
         // html props
         /* Show extra options (component is being viewed alone) */
-        cont: React.PropTypes.object.isRequired,
-        post: React.PropTypes.string.isRequired,
+        cont: PropTypes.object.isRequired,
+        post: PropTypes.string.isRequired,
 
         // connector props
-        username: React.PropTypes.string,
-        unlock: React.PropTypes.func.isRequired,
-        deletePost: React.PropTypes.func.isRequired,
-        showPromotePost: React.PropTypes.func.isRequired,
-        showExplorePost: React.PropTypes.func.isRequired,
+        username: PropTypes.string,
+        unlock: PropTypes.func.isRequired,
+        deletePost: PropTypes.func.isRequired,
+        showPromotePost: PropTypes.func.isRequired,
+        showExplorePost: PropTypes.func.isRequired,
     };
 
     constructor() {
@@ -470,14 +471,16 @@ class PostFull extends React.Component {
                 )}
                 <TagList post={content} horizontal />
                 <div className="PostFull__footer row">
-                    <div className="column">
+                    <div className="columns medium-12 large-5">
                         <TimeAuthorCategory
                             content={content}
                             authorRepLog10={authorRepLog10}
                         />
+                    </div>
+                    <div className="columns medium-12 large-2 ">
                         <Voting post={post} />
                     </div>
-                    <div className="RightShare__Menu small-11 medium-5 large-5 columns text-right">
+                    <div className="RightShare__Menu small-11 medium-12 large-5 columns">
                         {!readonly && (
                             <Reblog author={author} permlink={permlink} />
                         )}

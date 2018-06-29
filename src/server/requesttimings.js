@@ -1,20 +1,16 @@
-function requestTime(numProcesses) {
-    let number_of_requests = 0;
+import RequestTimer from './utils/RequestTimer';
+
+function requestTime(statsLoggerClient) {
     return function*(next) {
-        number_of_requests += 1;
-        const start = Date.now();
+        this.state.requestTimer = new RequestTimer(
+            statsLoggerClient,
+            'request',
+            `method=${this.request.method} path=${this.request.path}`
+        );
+
         yield* next;
-        const delta = Math.ceil(Date.now() - start);
-        // log all requests that take longer than 150ms
-        if (delta > 150)
-            console.log(
-                `Request took too long! ${delta}ms: ${this.request.method} ${
-                    this.request.path
-                }. Number of parallel requests: ${
-                    number_of_requests
-                }, number of processes: ${numProcesses}`
-            );
-        number_of_requests -= 1;
+
+        this.state.requestTimer.finish();
     };
 }
 

@@ -9,7 +9,7 @@ const SubmitReplyEditor = ReplyEditor(formId);
 
 class SubmitPost extends React.Component {
     // static propTypes = {
-    //     routeParams: React.PropTypes.object.isRequired,
+    //     routeParams: PropTypes.object.isRequired,
     // }
     constructor() {
         super();

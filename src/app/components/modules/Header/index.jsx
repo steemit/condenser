@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import Icon from 'app/components/elements/Icon';
@@ -8,7 +9,7 @@ import { APP_NAME } from 'app/client_config';
 import SortOrder from 'app/components/elements/SortOrder';
 import SearchInput from 'app/components/elements/SearchInput';
 import IconButton from 'app/components/elements/IconButton';
-import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdown';
+import DropdownMenu from 'app/components/elements/DropdownMenu';
 import * as userActions from 'app/redux/UserReducer';
 import * as appActions from 'app/redux/AppReducer';
 import Userpic from 'app/components/elements/Userpic';
@@ -21,11 +22,11 @@ import normalizeProfile from 'app/utils/NormalizeProfile';
 
 class Header extends React.Component {
     static propTypes = {
-        current_account_name: React.PropTypes.string,
-        account_meta: React.PropTypes.object,
-        category: React.PropTypes.string,
-        order: React.PropTypes.string,
-        pathname: React.PropTypes.string,
+        current_account_name: PropTypes.string,
+        account_meta: PropTypes.object,
+        category: PropTypes.string,
+        order: PropTypes.string,
+        pathname: PropTypes.string,
     };
 
     constructor() {
@@ -315,37 +316,26 @@ class Header extends React.Component {
 
                         {/*SUBMIT STORY*/}
                         {submit_story}
-
-                        {/*USER AVATAR*/}
+                        {/*USER AVATAR */}
                         {loggedIn && (
-                            <LinkWithDropdown
-                                closeOnClickOutside
-                                dropdownPosition="bottom"
-                                dropdownAlignment="right"
-                                dropdownContent={
-                                    <VerticalMenu
-                                        items={user_menu}
-                                        title={username}
-                                    />
-                                }
+                            <DropdownMenu
+                                className={'Header__usermenu'}
+                                items={user_menu}
+                                title={username}
+                                el="span"
+                                selected={tt('g.rewards')}
+                                position="left"
                             >
-                                {!vertical && (
-                                    <li className={'Header__userpic '}>
-                                        <a
-                                            href={account_link}
-                                            title={username}
-                                            onClick={e => e.preventDefault()}
-                                        >
-                                            <Userpic account={username} />
-                                        </a>
-                                        <div className="TopRightMenu__notificounter">
-                                            <NotifiCounter fields="total" />
-                                        </div>
-                                    </li>
-                                )}
-                            </LinkWithDropdown>
+                                <li className={'Header__userpic '}>
+                                    <span title={username}>
+                                        <Userpic account={username} />
+                                    </span>
+                                    <div className="TopRightMenu__notificounter">
+                                        <NotifiCounter fields="total" />
+                                    </div>
+                                </li>
+                            </DropdownMenu>
                         )}
-
                         {/*HAMBURGER*/}
                         <span
                             onClick={showSidePanel}

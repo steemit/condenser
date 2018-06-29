@@ -73,5 +73,7 @@
   "steemd_connection_server": "https://api.steemit.com",
   "steemd_use_appbase": false,
   "chain_id": "0000000000000000000000000000000000000000000000000000000000000000",
-  "address_prefix": "STM"
+  "address_prefix": "STM",
+  "conveyor_posting_wif": false,
+  "conveyor_username": false
 }

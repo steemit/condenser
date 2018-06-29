@@ -43,9 +43,9 @@
         "logout": "Wyloguj",
         "memo": "Memo",
         "mute": "Blokuj",
-        "myblog": "mój blog",
-        "mycomments": "moje komentarze",
-        "myreplies": "odpowiada mi",
+        "my_blog": "mój blog",
+        "my_comments": "moje komentarze",
+        "my_replies": "odpowiada mi",
         "new": "nowe",
         "newer": "Nowsze",
         "next": "Następny",
@@ -702,7 +702,7 @@
         "balance_subject_to_3_day_withdraw_waiting_period":
             "Saldo zależy od 3-dniowego okresu karencji wymaganego do wycofania środków,",
         "move_funds_to_another_account":
-            "Przenieś fundusze na inne konto %(APP_NAME)s.",
+            "Przenieś fundusze na inne konto Steem.",
         "protect_funds_by_requiring_a_3_day_withdraw_waiting_period":
             "Chroni fundusze poprzez 3-dniowy okres karencji.",
         "withdraw_funds_after_the_required_3_day_waiting_period":

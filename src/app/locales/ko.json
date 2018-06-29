@@ -43,9 +43,9 @@
         "logout": "로그아웃",
         "memo": "메모",
         "mute": "차단",
-        "myblog": "내 블로그",
-        "mycomments": "내가 쓴 댓글",
-        "myreplies": "받은 댓글",
+        "my_blog": "내 블로그",
+        "my_comments": "내가 쓴 댓글",
+        "my_replies": "받은 댓글",
         "new": "최신글",
         "newer": "최근",
         "next": "다음",
@@ -278,7 +278,7 @@
         "use_limited_amount_of_tags":
             "You have %(tagsLength)s tags total%(includingCategory)s. Please use only 5 in your post and category line.",
         "are_you_sure_you_want_to_clear_this_form":
-            "Are you sure you want to clear this form?",
+            "Are you sure you want to exit the comment editor?",
         "uploading": "Uploading",
         "draft_saved": "임시 저장.",
         "editor": "에디터",
@@ -714,7 +714,7 @@
         "convert_to_VESTING_TOKEN": "Convert to %(VESTING_TOKEN)s",
         "balance_subject_to_3_day_withdraw_waiting_period":
             "3일간의 예치기간이 지나야 출금하실 수 있으며, ",
-        "move_funds_to_another_account": "다른 %(APP_NAME)s 계좌로 송금",
+        "move_funds_to_another_account": "다른 Steem 계좌로 송금",
         "protect_funds_by_requiring_a_3_day_withdraw_waiting_period":
             "금고 보관 시 출금에 3일의 예치기간이 소요됩니다.",
         "withdraw_funds_after_the_required_3_day_waiting_period":

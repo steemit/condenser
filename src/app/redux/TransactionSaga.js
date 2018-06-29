@@ -52,6 +52,7 @@ const hook = {
     error_account_witness_vote,
     accepted_comment,
     accepted_delete_comment,
+    accepted_account_witness_vote,
     accepted_vote,
     accepted_account_update,
     accepted_withdraw_vesting,
@@ -100,8 +101,12 @@ function* preBroadcast_vote({ operation, username }) {
 function* preBroadcast_account_witness_vote({ operation, username }) {
     if (!operation.account) operation.account = username;
     const { account, witness, approve } = operation;
+    // give immediate feedback
     yield put(
-        globalActions.updateAccountWitnessVote({ account, witness, approve })
+        globalActions.addActiveWitnessVote({
+            account,
+            witness,
+        })
     );
     return operation;
 }
@@ -452,6 +457,21 @@ function* accepted_vote({ operation: { author, permlink, weight } }) {
     yield call(getContent, { author, permlink });
 }
 
+function* accepted_account_witness_vote({
+    operation: { account, witness, approve },
+}) {
+    yield put(
+        globalActions.updateAccountWitnessVote({ account, witness, approve })
+    );
+
+    yield put(
+        globalActions.removeActiveWitnessVote({
+            account,
+            witness,
+        })
+    );
+}
+
 function* accepted_withdraw_vesting({ operation }) {
     let [account] = yield call(
         [api, api.getAccountsAsync],
@@ -501,10 +521,7 @@ function* accepted_account_update({ operation }) {
 export function* preBroadcast_comment({ operation, username }) {
     if (!operation.author) operation.author = username;
     let permlink = operation.permlink;
-    const {
-        author,
-        __config: { originalBody, comment_options },
-    } = operation;
+    const { author, __config: { originalBody, comment_options } } = operation;
     const {
         parent_author = '',
         parent_permlink = operation.category,

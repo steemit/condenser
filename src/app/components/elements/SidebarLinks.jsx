@@ -4,7 +4,7 @@ import tt from 'counterpart';
 const SidebarLinks = ({ username }) => (
     <div className="c-sidebar__module">
         <div className="c-sidebar__header">
-            <h3 className="c-sidebar__h3">Links</h3>
+            <h3 className="c-sidebar__h3">{tt('g.links')}</h3>
         </div>
         <div className="c-sidebar__content">
             <ul className="c-sidebar__list">
@@ -16,7 +16,7 @@ const SidebarLinks = ({ username }) => (
 
                 <li className="c-sidebar__list-item">
                     <a className="c-sidebar__link" href={'/@' + username}>
-                        My blog
+                        {tt('g.my_blog')}
                     </a>
                 </li>
                 <li className="c-sidebar__list-item">
@@ -24,7 +24,7 @@ const SidebarLinks = ({ username }) => (
                         className="c-sidebar__link"
                         href={'/@' + username + '/transfers'}
                     >
-                        My wallet
+                        {tt('g.my_wallet')}
                     </a>
                 </li>
                 {/*   <li className="c-sidebar__list-item"><a className="c-sidebar__link" href={username + ''}>Pay someone</a></li> */}

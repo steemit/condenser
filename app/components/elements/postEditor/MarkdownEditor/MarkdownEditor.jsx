@@ -28,7 +28,7 @@ export default class MarkdownEditor extends React.Component {
             return;
         }
 
-        this._processImagesPreviewLazy = debounce(this._processImagesPreview);
+        this._processTextLazy = debounce(this._processText, 100);
 
         this._simplemde = new SimpleMDE({
             spellChecker: false,
@@ -46,7 +46,6 @@ export default class MarkdownEditor extends React.Component {
         });
 
         this._lineWidgets = [];
-        this._imagesPending = new Set();
 
         this._cm = this._simplemde.codemirror;
         this._cm.on('change', this._onChange);
@@ -62,7 +61,7 @@ export default class MarkdownEditor extends React.Component {
 
         this._previewTimeout = setTimeout(() => {
             if (!this._unmount) {
-                this._processImagesPreview();
+                this._processText();
             }
         }, 500);
 
@@ -123,7 +122,7 @@ export default class MarkdownEditor extends React.Component {
 
     _onChange = () => {
         this.props.onChangeNotify();
-        this._processImagesPreviewLazy();
+        this._processTextLazy();
     };
 
     _onDrop = (acceptedFiles, rejectedFiles, e) => {
@@ -150,6 +149,11 @@ export default class MarkdownEditor extends React.Component {
                 this._cm.replaceRange(imageUrl, cursorPosition);
             }
         });
+    };
+
+    _processText = () => {
+        this._cutIframes();
+        this._processImagesPreview();
     };
 
     _processImagesPreview = () => {
@@ -207,7 +211,46 @@ export default class MarkdownEditor extends React.Component {
         }
     };
 
-    _addLineWidget(alreadyWidgets, line, url, isYoutube) {
+    _cutIframes() {
+        const text = this._simplemde.value();
+
+        let updated = false;
+
+        const updatedText = text.replace(
+            /<iframe\s+([^>]*)>[\s\S]*<\/iframe>/g,
+            (a, attrsStr) => {
+                const match = attrsStr.match(/src="([^"]+)"/);
+
+                if (match) {
+                    const match2 = match[1].match(
+                        /https:\/\/www\.youtube\.com\/embed\/([A-Za-z0-9_-]+)/
+                    );
+
+                    if (match2) {
+                        updated = true;
+                        return `https://youtube.com/watch?v=${match2[1]}`;
+                    }
+                }
+            }
+        );
+
+        if (updated) {
+            for (let w of this._lineWidgets) {
+                w.clear();
+            }
+
+            this._lineWidgets = [];
+
+            const cursor = this._cm.getCursor();
+            console.log(cursor);
+            this._simplemde.value(updatedText);
+            setTimeout(() => {
+                this._cm.setCursor(cursor);
+            }, 0);
+        }
+    }
+
+    _addLineWidget(alreadyWidgets, line, url) {
         for (let widget of this._lineWidgets) {
             if (widget.line.lineNo() === line) {
                 if (widget.url === url) {
@@ -217,35 +260,31 @@ export default class MarkdownEditor extends React.Component {
             }
         }
 
-        if (!isYoutube && this._imagesPending.has(url)) {
-            return;
-        }
-
         const img = new Image();
         img.classList.add('MarkdownEditor__preview');
 
         img.addEventListener('load', () => {
-            this._imagesPending.delete(url);
-            const widget = this._cm.addLineWidget(line, img);
+            const widget = this._cm.addLineWidget(line, img, {
+                handleMouseEvents: true,
+            });
             widget.id = ++lastWidgetId;
             widget.url = url;
             this._lineWidgets.push(widget);
         });
 
         img.addEventListener('error', () => {
-            this._imagesPending.delete(url);
             const div = document.createElement('div');
             div.classList.add('MarkdownEditor__preview-error');
             div.innerText = tt('post_editor.image_preview_error');
-            const widget = this._cm.addLineWidget(line, div);
+            const widget = this._cm.addLineWidget(line, div, {
+                handleMouseEvents: true,
+            });
             widget.id = ++lastWidgetId;
             widget.url = url;
             this._lineWidgets.push(widget);
         });
 
         img.src = $STM_Config.img_proxy_prefix + '0x0/' + url;
-
-        this._imagesPending.add(url);
     }
 
     _tryToFixCursorPosition() {

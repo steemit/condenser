@@ -82,6 +82,11 @@
     z-index: 10;
     animation: fade-in 0.1s;
 
+    @media screen and (max-width: 1279px) {
+      left: 0;
+      margin-top: 20px;
+    }
+
     &_open {
       width: 187px;
     }

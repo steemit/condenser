@@ -594,7 +594,6 @@ class ReplyEditor extends React.Component {
                                                 )}
                                             {this.props.payoutType == '100%' &&
                                                 tt('reply_editor.power_up_100')}
-                                            {'. '}
                                         </div>
                                         <a
                                             href="#"

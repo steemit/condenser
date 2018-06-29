@@ -52,9 +52,18 @@ class PostAdvancedSettings extends Component {
                 })}
             >
                 <div className="row">
-                    <h4 className="column">
-                        {tt('post_advanced_settings_jsx.payout_option_header')}
-                    </h4>
+                    <div className="column">
+                        <h4>
+                            {tt(
+                                'post_advanced_settings_jsx.payout_option_header'
+                            )}
+                        </h4>
+                        <p>
+                            {tt(
+                                'post_advanced_settings_jsx.payout_option_description'
+                            )}
+                        </p>
+                    </div>
                 </div>
                 <div className="row">
                     <div className="small-12 medium-6 large-12 columns">

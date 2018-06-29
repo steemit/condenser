@@ -90,7 +90,7 @@ export default class PostFooter extends React.PureComponent {
                             ) : null}
                             <Button primary disabled={postDisabled} onClick={this.props.onPostClick}>
                                 {editMode
-                                    ? tt('reply_editor.update_post')
+                                    ? tt('post_editor.update')
                                     : tt('g.post')}
                             </Button>
                         </div>

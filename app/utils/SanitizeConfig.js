@@ -102,9 +102,6 @@ const iframeWhitelist = [
             src.replace(/#.*$/, '') + '&hideTopBar=true&noSiteButtons=true',
         addClass: 'g-coub',
     },
-    {
-        re: /^(?:https?:)?\/\/(?:www\.)?slideshare\.net\//,
-    },
 ];
 
 const DEFAULT_IFRAME_ATTRS = {

@@ -189,9 +189,13 @@ export default class MarkdownEditor extends React.Component {
                 }
             }
 
-            match = lineContent.match(
-                /(?:^|\s)(?:https?:)?\/\/(?:www\.)?(?:youtube\.com|youtu\.be)\/watch\?v=([A-Za-z0-9_-]{11})(?:\s|&|$)/
-            );
+            match =
+                lineContent.match(
+                    /(?:^|\s)(?:https?:)?\/\/(?:www\.)?youtube\.com\/watch\?v=([A-Za-z0-9_-]{11})(?:\s|&|$)/
+                ) ||
+                lineContent.match(
+                    /(?:^|\s)(?:https?:)?\/\/youtu\.be\/([A-Za-z0-9_-]{11})(?:\s|&|$)/
+                );
 
             if (match) {
                 this._addLineWidget(
@@ -222,13 +226,31 @@ export default class MarkdownEditor extends React.Component {
                 const match = attrsStr.match(/src="([^"]+)"/);
 
                 if (match) {
-                    const match2 = match[1].match(
-                        /https:\/\/www\.youtube\.com\/embed\/([A-Za-z0-9_-]+)/
+                    let match2 = match[1].match(
+                        /^https:\/\/www\.youtube\.com\/embed\/([A-Za-z0-9_-]+)/
                     );
 
                     if (match2) {
                         updated = true;
                         return `https://youtube.com/watch?v=${match2[1]}`;
+                    }
+
+                    match2 = match[1].match(
+                        /^(?:https?:)?\/\/rutube\.ru\/play\/embed\/([A-Za-z0-9_-]+)/
+                    );
+
+                    if (match2) {
+                        updated = true;
+                        return `https://rutube.ru/video/${match2[1]}/`;
+                    }
+
+                    match2 = match[1].match(
+                        /^(?:https?:)?\/\/ok\.ru\/videoembed\/([A-Za-z0-9_-]+)/
+                    );
+
+                    if (match2) {
+                        updated = true;
+                        return `https://ok.ru/video/${match2[1]}`;
                     }
                 }
             }

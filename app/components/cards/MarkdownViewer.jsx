@@ -139,7 +139,7 @@ class MarkdownViewer extends Component {
         // HtmlReady inserts ~~~ embed:${id} type ~~~
         for (let section of cleanText.split('~~~ embed:')) {
             const match = section.match(
-                /^([A-Za-z0-9_-]+) (youtube|vimeo|coub) ~~~/
+                /^([A-Za-z0-9_-]+) (youtube|vimeo|coub|ok_video|rutube) ~~~/
             );
 
             if (match) {
@@ -181,6 +181,32 @@ class MarkdownViewer extends Component {
                             height="200"
                             allow="autoplay"
                         />
+                    );
+                } else if (type === 'rutube') {
+                    sections.push(
+                        <div className="videoWrapper" key={++idx}>
+                            <iframe
+                                src={`//rutube.ru/play/embed/${id}/`}
+                                allowFullScreen
+                                frameBorder="0"
+                                width="100%"
+                                height="200"
+                                allow="autoplay"
+                            />
+                        </div>
+                    );
+                } else if (type === 'ok_video') {
+                    sections.push(
+                        <div className="videoWrapper" key={++idx}>
+                            <iframe
+                                src={`//ok.ru/videoembed/${id}`}
+                                allowFullScreen
+                                frameBorder="0"
+                                width="100%"
+                                height="200"
+                                allow="autoplay"
+                            />
+                        </div>
                     );
                 } else {
                     console.error('MarkdownViewer unknown embed type', type);

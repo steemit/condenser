@@ -183,7 +183,10 @@ function iframe(state, child) {
 
     if (
         /^(https?:)?\/\/(?:www\.)?(?:youtube\.com|youtu\.be)\//.test(url) ||
-        /^(https?:)?\/\/(?:www\.|video\.)?vimeo.com\//.test(url)
+        /^(https?:)?\/\/(?:www\.|video\.)?vimeo.com\//.test(url) ||
+        /^(https?:)?\/\/(?:www\.)?vk\.com\/video_ext\.php\?/.test(url) ||
+        /^(https?:)?\/\/(?:www\.)?ok\.com\/videoembed\//.test(url) ||
+        /^(https?:)?\/\/(?:www\.)?rutube\.ru\/play\/embed\//.test(url)
     ) {
         const tagName = child.parentNode.tagName;
 
@@ -264,6 +267,14 @@ function linkifyNode(state, child) {
         }
 
         if (safeCall(embedCoubNode, state, child)) {
+            return;
+        }
+
+        if (safeCall(embedRutubeNode, state, child)) {
+            return;
+        }
+
+        if (safeCall(embedOkruNode, state, child)) {
             return;
         }
 
@@ -436,6 +447,48 @@ function embedCoubNode(state, node) {
 
     if (state.links) {
         state.links.add(`https://coub.com/view/${id}`);
+    }
+
+    return true;
+}
+
+function embedRutubeNode(state, node) {
+    const match = node.data.match(linksRe.rutubeId);
+
+    if (!match) {
+        return;
+    }
+
+    const id = match[1];
+
+    node.parentNode.replaceChild(
+        DOMParser.parseFromString(`~~~ embed:${id} rutube ~~~`),
+        node
+    );
+
+    if (state.links) {
+        state.links.add(`https://rutube.ru/video/${id}/`);
+    }
+
+    return true;
+}
+
+function embedOkruNode(state, node) {
+    const match = node.data.match(linksRe.okVideoId);
+
+    if (!match) {
+        return;
+    }
+
+    const id = match[1];
+
+    node.parentNode.replaceChild(
+        DOMParser.parseFromString(`~~~ embed:${id} ok_video ~~~`),
+        node
+    );
+
+    if (state.links) {
+        state.links.add(`https://ok.ru/live/${id}`);
     }
 
     return true;

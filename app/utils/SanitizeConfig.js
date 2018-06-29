@@ -61,9 +61,7 @@ const iframeWhitelist = [
     },
     {
         re: /^(?:https?:)?\/\/www\.youtube\.com\/embed\//i,
-        fn: src => {
-            return src.replace(/\?.+$/, ''); // strip query string (yt: autoplay=1,controls=0,showinfo=0, etc)
-        },
+        fn: cutParams,
         forceSize: true,
     },
     {
@@ -95,6 +93,17 @@ const iframeWhitelist = [
     },
     {
         re: /^(?:https?:)?\/\/(:?www\.)?deezer\.com\//,
+    },
+    {
+        re: /^(?:https?:)?\/\/(:?www\.)?vk\.com\/video_ext\.php\?/,
+    },
+    {
+        re: /^(?:https?:)?\/\/(:?www\.)?ok\.com\/videoembed\//,
+        fn: cutParams,
+    },
+    {
+        re: /^(?:https?:)?\/\/(:?www\.)?rutube\.ru\/play\/embed\//,
+        fn: cutParams,
     },
     {
         re: /^(?:https?:)?\/\/coub\.com\/embed\//,
@@ -299,3 +308,7 @@ export default ({
         },
     },
 });
+
+function cutParams(url) {
+    return url.replace(/\?.+$/, ''); // strip query string autoplay=1&controls=0&showinfo=0
+}

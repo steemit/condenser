@@ -91,24 +91,26 @@
     }
   }
 
-  &__plus-wrapper {
+  &__plus {
     display: flex;
-    flex-shrink: 0;
-    justify-content: center;
-    align-items: center;
     width: 40px;
     height: 40px;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
     cursor: pointer;
+
+    & > SVG {
+      width: 14px;
+      height: 14px;
+      transform-origin: center;
+      transition: transform 0.2s;
+      pointer-events: none;
+      color: #2f2f2f;
+    }
   }
 
-  &__plus {
-    transform-origin: center;
-    transition: transform 0.2s;
-    pointer-events: none;
-    color: #777;
-  }
-
-  &__new-line-helper_open &__plus {
+  &__new-line-helper_open &__plus > SVG {
     transform: rotate(45deg);
   }
 

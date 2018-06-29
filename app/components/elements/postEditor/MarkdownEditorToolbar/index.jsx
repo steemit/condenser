@@ -6,6 +6,7 @@ import Icon from 'app/components/elements/Icon';
 import DialogManager from 'app/components/elements/common/DialogManager';
 import AddImageDialog from '../../../dialogs/AddImageDialog';
 import LinkOptionsDialog from '../../../dialogs/LinkOptionsDialog';
+import plusSvg from 'app/assets/icons/editor-toolbar/plus.svg';
 
 const GUIDE_URL =
     'https://golos.io/ru--golos/@on0tole/osnovy-oformleniya-postov-na-golose-polnyi-kurs-po-rabote-s-markdown';
@@ -248,13 +249,11 @@ export default class MarkdownEditorToolbar extends React.PureComponent {
                         window.scrollY,
                 }}
             >
-                <div className="MET__plus-wrapper" onClick={this._onPlusClick}>
-                    <Icon
-                        className="MET__plus"
-                        name="editor-toolbar/plus"
-                        size="1_25x"
-                    />
-                </div>
+                <i
+                    className="MET__plus"
+                    dangerouslySetInnerHTML={{ __html: plusSvg }}
+                    onClick={this._onPlusClick}
+                />
                 <div
                     className={cn('MET__new-line-actions', {
                         'MET__new-line-actions_selected': selected,

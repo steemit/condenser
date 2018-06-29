@@ -115,7 +115,6 @@ const icons = new Map([
     ['editor-toolbar/strike', require('app/assets/icons/editor-toolbar/strike.svg')],
     ['editor-toolbar/link', require('app/assets/icons/editor-toolbar/link.svg')],
     ['editor-toolbar/quote', require('app/assets/icons/editor-toolbar/quote.svg')],
-    ['editor-toolbar/plus', require('app/assets/icons/editor-toolbar/plus.svg')],
     ['editor-toolbar/bullet-list', require('app/assets/icons/editor-toolbar/bullet-list.svg')],
     ['editor-toolbar/number-list', require('app/assets/icons/editor-toolbar/number-list.svg')],
     ['editor-toolbar/picture', require('app/assets/icons/editor-toolbar/picture.svg')],

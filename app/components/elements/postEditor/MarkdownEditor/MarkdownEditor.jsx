@@ -156,7 +156,7 @@ export default class MarkdownEditor extends React.Component {
         this._processImagesPreview();
     };
 
-    _processImagesPreview = () => {
+    _processImagesPreview() {
         const cm = this._cm;
         const alreadyWidgets = new Set();
 
@@ -209,7 +209,7 @@ export default class MarkdownEditor extends React.Component {
         for (let widget of alreadyWidgets) {
             widget.clear();
         }
-    };
+    }
 
     _cutIframes() {
         const text = this._simplemde.value();

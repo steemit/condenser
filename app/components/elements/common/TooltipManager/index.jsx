@@ -116,6 +116,7 @@ export default class TooltipManager extends React.PureComponent {
         this._hoverText = null;
         this._elementBound = null;
 
+        this._onMouseMove.cancel();
         clearTimeout(this._timeout);
 
         if (this.state.tooltip) {

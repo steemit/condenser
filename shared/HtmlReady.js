@@ -452,7 +452,7 @@ function header(state, node) {
     node.tagName = node.nodeName = node.localName = 'h' + newIndex;
 
     if (!node.getAttribute('id') && node.textContent) {
-        const idBase = detransliterate(node.textContent.trim(), true).replace(/[^a-z0-9]+/ig, '_');
+        const idBase = detransliterate(node.textContent.trim().toLowerCase(), true).replace(/[^a-z0-9]+/ig, '_');
         let id = idBase;
 
         let index = 0;

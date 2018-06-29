@@ -12,7 +12,7 @@ export default class PostTitle extends React.PureComponent {
             <div className="PostTitle">
                 <input
                     className="PostTitle__input"
-                    placeholder={tt('submit_a_story.placeholder')}
+                    placeholder={tt('submit_a_story.title')}
                     value={value}
                     onKeyDown={this._onKeyDown}
                     onChange={this._onChange}

@@ -182,7 +182,7 @@ More information on the three types of tokens can be found in the [Steemit FAQ](
 <a href="#Table_of_Contents">^</a>
 ### <span id="Curation">Curation</span>
 
-Up to 25% of the reward for each publication goes to the people who voted on it. These people are called Curators.
+Up to 25% of the reward for each post goes to the people who voted on it. These people are called Curators.
 
 The more Steem Power you have in your account, the more your upvotes will be worth, and the more potential curation rewards you can earn!
 
@@ -228,7 +228,7 @@ Plagiarising, which is posting someone else's material as if it were your own, i
 
 If you are using anyone else's material as part of your posts (including images), even if it is free to use, please cite your sources. You should make sure that you are not violating any copyright laws if you are using someone else's material/images. Limited, sourced material sharing is OK under fair use and fair dealing doctrines.
 
-Remember, your posts should have original content in them. Quotes should not compose an entire publication. Include your own thoughts, photographs, art, and ideas. 
+Remember, your posts should have original content in them. Quotes should not compose an entire post. Include your own thoughts, photographs, art, and ideas. 
 
 <a href="#Table_of_Contents">^</a>
 ### <span id="Password_Security">Password Security</span>

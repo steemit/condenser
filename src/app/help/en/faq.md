@@ -13,6 +13,7 @@
 - <a href="#Where_do_the_tokens_come_from">Where do the tokens come from?</a>
 - <a href="#Where_does_the_value_come_from">Where does the value come from?</a>
 - <a href="#Why_are_people_getting_vastly_different_rewards">Why are people getting vastly different rewards?</a>
+- <a href="#Is_there_a_desktop_wallet_available_for_STEEM">Is there a desktop wallet available for STEEM?</a>
 - <a href="#What_are_Smart_Media_Tokens_SMTs">What are Smart Media Tokens (SMTs)?</a>
 
 ### <span id="Table_of_Contents_Accounts">Accounts</span>
@@ -260,6 +261,11 @@ Steemit is not a "get rich quick" scheme. While it is possible to post content t
 Most of the authors that you see earning high rewards are users that have spent a lot of time in the network building followings, making connections with others, and developing a reputation for bringing high quality content.
 
 It is best to have realistic expectations, without focusing on rewards when you are first starting out. Work on building a following, making connections, and developing a good reputation. Consistency will pay off in the long run.
+
+<a href="#Table_of_Contents_General">^</a>
+## <span id="Is_there_a_desktop_wallet_available_for_STEEM">Is there a desktop wallet available for STEEM?</span>
+
+Yes. There is a third party wallet called [Vessel](https://github.com/aaroncox/vessel/), developed by one of the Steem witnesses @jesta. The latest release can be downloaded [here](https://github.com/aaroncox/vessel/releases).
 
 <a href="#Table_of_Contents_General">^</a>
 ## <span id="What_are_Smart_Media_Tokens_SMTs">What are Smart Media Tokens (SMTs)?</span>
@@ -1359,7 +1365,7 @@ You can also create a post on steemit.com with the tag #help, and someone in the
 
 ## <span id="Third_Party_References_and_User_Links">Third Party References and User Links</span>
 
-AnonSteem, Binance, bitcoinfees, Bitcointalk, Bithumb, BitShares, Bittrex, blockchain.info, BlockTrades, Busy.org, Changelly, @cheetah, Coinbase, DTube, GOBADA, GOPAX, HitBTC, Huobi, LocalBitcoinCash, Localbitcoins, Markdown Cheatsheet, Pexels, Pixabay, Poloniex, Postimage, Shapeshift.io, Steemcleaners, SteemConnect, SteemCreate, steemd, SteemDB, steem.chat, SteemStats, SteemProjects, Streemian, The Steemit Shop, UpBit, Utopian.io, and Yensesa are third party applications/services, and are not owned or maintained by Steemit, Inc. Their listing here, as well as any other third party applications or websites that are listed, does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
+AnonSteem, Binance, bitcoinfees, Bitcointalk, Bithumb, BitShares, Bittrex, blockchain.info, BlockTrades, Busy.org, Changelly, @cheetah, Coinbase, DTube, GOBADA, GOPAX, HitBTC, Huobi, LocalBitcoinCash, Localbitcoins, Markdown Cheatsheet, Pexels, Pixabay, Poloniex, Postimage, Shapeshift.io, Steemcleaners, SteemConnect, SteemCreate, steemd, SteemDB, steem.chat, SteemStats, SteemProjects, Streemian, The Steemit Shop, UpBit, Utopian.io, Vessel, and Yensesa are third party applications/services, and are not owned or maintained by Steemit, Inc. Their listing here, as well as any other third party applications or websites that are listed, does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
 
 All links to user posts were created by our users and do not necessarily represent the views of Steemit, Inc. or its management. Their listing here does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
 

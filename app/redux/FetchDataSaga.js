@@ -471,7 +471,7 @@ function storeExchangeValues(created, gold, pair, picked) {
 }
 
 export function* watchFetchVestingDelegations() {
-    yield* takeEvery('global/FETCH_VESTING_DELEGATIONS', fetchVestingDelegations)
+    yield takeLatest('global/FETCH_VESTING_DELEGATIONS', fetchVestingDelegations)
 }
 
 export function* fetchVestingDelegations({ payload: { account, type } }) {

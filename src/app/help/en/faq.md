@@ -291,9 +291,9 @@ You will need to provide your email address and phone number.
 <a href="#Table_of_Contents_Accounts">^</a>
 ## <span id="How_long_does_the_account_approval_process_take">How long does the account approval process take?</span>
 
-Some accounts are approved faster than others. Most accounts are approved within 24 hours. Some may take a week or more to review.
+Some accounts are approved faster than others. Most accounts are approved within 24 hours. Some may take a week or two to review.
 
-If your account has not been approved after more than a week, you can ask for help in the <a href="https://steem.chat/channel/help">#help</a> channel on <a href="https://steem.chat/home">steem.chat</a>.
+If your account has not been approved after more than two weeks, you can ask for help in the <a href="https://steem.chat/channel/help">#help</a> channel on <a href="https://steem.chat/home">steem.chat</a>.
 
 <a href="#Table_of_Contents_Accounts">^</a>
 ## <span id="Can_I_speed_up_the_account_approval_process">Can I speed up the account approval process?</span>

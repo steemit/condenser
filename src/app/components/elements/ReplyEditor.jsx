@@ -635,6 +635,7 @@ class ReplyEditor extends React.Component {
                                     {!isHtml && (
                                         <div className="float-right">
                                             <a
+                                                className="markdown-link"
                                                 target="_blank"
                                                 href="https://guides.github.com/features/mastering-markdown/"
                                                 rel="noopener noreferrer"

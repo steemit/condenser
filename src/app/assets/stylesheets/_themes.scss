@@ -322,7 +322,6 @@ $themes: (
   }
 }
 
-
 .theme-dark {
   .button.hollow {
     &:hover, &:focus {
@@ -331,4 +330,8 @@ $themes: (
       outline-color: $color-teal;
     }
   }
+}
+
+.static-page {
+  padding-top: 1.5rem;
 }

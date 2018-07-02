@@ -32,7 +32,14 @@
 }
 
 .Post_comments__content {
-  max-width: 50rem;
-  margin: 0 auto 3.5rem;
-  font-size: 92%;
+  max-width: 46rem;
+  margin: 0rem auto 3.5rem;
+  @include font-size(12px);
+  @include MQ(M) {
+    @include font-size(14px);
+  }
+}
+
+.Comment.root {
+  padding-top: 1em;
 }

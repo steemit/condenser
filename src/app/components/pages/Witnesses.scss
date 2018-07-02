@@ -1,10 +1,14 @@
 
 .Witnesses {
+	padding-top: 2rem;
 	.extlink path {
 		transition: 0.2s all ease-in-out;
 	     @include themify($themes) { 
 	       fill: themed('textColorAccent');  
 	    }   		
+	}
+	h2 {
+		font-weight: bold;
 	}
 	a:hover .extlink path {
 		transition: 0.2s all ease-in-out;

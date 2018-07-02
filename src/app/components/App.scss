@@ -6,10 +6,6 @@
 .App__content {
     margin-top: 1rem;
 
-    @media print, screen and (min-width: 52.5em) {
-      margin-top: 2.1rem;
-    }
-
     // /* Small only */
     // @media screen and (max-width: 39.9375em) {
     //     margin-top: 2.25rem;

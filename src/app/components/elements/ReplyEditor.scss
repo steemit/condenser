@@ -2,6 +2,7 @@
   max-width: 54rem;
   margin-bottom: 0.5rem;
   padding-bottom: 2em;
+  padding-top: 1.5rem;
   .vframe {
     display: block;
     .public-DraftEditor-content {
@@ -12,7 +13,7 @@
   }
   .button {
     @extend .e-btn;
-    margin-bottom: 2em;
+    margin-bottom: 1em;
   }
   .button.hollow.no-border {
     background-color: transparent;
@@ -26,6 +27,10 @@
     text-shadow: 0 0 0 rgba(0,0,0,0.0);
     border: transparent;
   }
+  textarea {
+    padding: 1rem;
+    border-radius: 0;
+  }
 }
 
 .upload-enabled {
@@ -36,13 +41,13 @@
 
 .drag-and-drop {
     font-size: 85%;
-    padding: 3px 8px;
+    padding: 8px 16px;
     margin: 0;
     color: #767676;
     background-color: #fafafa;
-    border-left: 1px solid #ccc;
-    border-right: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
+    border-left: 1px solid #cacaca;
+    border-right: 1px solid #cacaca;
+    border-bottom: 1px solid #cacaca;
     border-bottom-right-radius: 3;
     border-bottom-left-radius: 3;
 }

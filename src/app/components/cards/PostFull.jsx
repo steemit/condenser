@@ -445,7 +445,7 @@ class PostFull extends React.Component {
                     renderedEditor
                 ) : (
                     <span>
-                        <div className="float-right">
+                        <div className="PostFull__flag float-right">
                             <Voting post={post} flag />
                         </div>
                         <div className="PostFull__header">
@@ -461,80 +461,86 @@ class PostFull extends React.Component {
                     </span>
                 )}
 
-                {showPromote && (
-                    <button
-                        className="Promote__button float-right button hollow tiny"
-                        onClick={this.showPromotePost}
-                    >
-                        {tt('g.promote')}
-                    </button>
-                )}
-                <TagList post={content} horizontal />
-                <div className="PostFull__footer row">
-                    <div className="columns medium-12 large-5">
-                        <TimeAuthorCategory
-                            content={content}
-                            authorRepLog10={authorRepLog10}
-                        />
-                    </div>
-                    <div className="columns medium-12 large-2 ">
-                        <Voting post={post} />
-                    </div>
-                    <div className="RightShare__Menu small-11 medium-12 large-5 columns">
-                        {!readonly && (
-                            <Reblog author={author} permlink={permlink} />
-                        )}
-                        <span className="PostFull__reply">
-                            {showReplyOption && (
-                                <a onClick={onShowReply}>{tt('g.reply')}</a>
-                            )}{' '}
-                            {!readonly &&
-                                showEditOption &&
-                                !showEdit && (
-                                    <a onClick={onShowEdit}>{tt('g.edit')}</a>
-                                )}{' '}
-                            {!readonly &&
-                                showDeleteOption &&
-                                !showReply && (
-                                    <a onClick={onDeletePost}>
-                                        {tt('g.delete')}
-                                    </a>
-                                )}
-                        </span>
-                        <span className="PostFull__responses">
-                            <Link
-                                to={link}
-                                title={tt('g.responses', {
-                                    count: content.children,
-                                })}
-                            >
-                                <Icon
-                                    name="chatboxes"
-                                    className="space-right"
+                <div className="PostActions">
+                    <div className="PostFull__footer">
+                        <div className="PostFull__voting-row">
+                            <Voting post={post} />
+                            {showPromote && (
+                                <button
+                                    className="Promote__button float-right button hollow tiny"
+                                    onClick={this.showPromotePost}
+                                >
+                                    {tt('g.promote')}
+                                </button>
+                            )}
+                        </div>
+                        <div className="PostActions__pad">
+                            <div>
+                                <TimeAuthorCategory
+                                    content={content}
+                                    authorRepLog10={authorRepLog10}
                                 />
-                                {content.children}
-                            </Link>
-                        </span>
-                        <span className="PostFull__views">
-                            <PageViewsCounter
-                                hidden={false}
-                                sinceDate={isPreViewCount ? 'Dec 2016' : null}
-                            />
-                        </span>
-                        <ShareMenu menu={share_menu} />
-                        <button
-                            className="explore-post"
-                            title={tt('g.share_this_post')}
-                            onClick={this.showExplorePost}
-                        >
-                            <Icon name="link" className="chain-right" />
-                        </button>
+                            </div>
+                            <TagList post={content} horizontal />
+                        </div>
+                        <div className="RightShare__Menu">
+                            <span className="PostFull__reply">
+                                {showReplyOption && (
+                                    <a onClick={onShowReply}>{tt('g.reply')}</a>
+                                )}{' '}
+                                {!readonly &&
+                                    showEditOption &&
+                                    !showEdit && (
+                                        <a onClick={onShowEdit}>
+                                            {tt('g.edit')}
+                                        </a>
+                                    )}{' '}
+                                {!readonly &&
+                                    showDeleteOption &&
+                                    !showReply && (
+                                        <a onClick={onDeletePost}>
+                                            {tt('g.delete')}
+                                        </a>
+                                    )}
+                            </span>
+                            {!readonly && (
+                                <Reblog author={author} permlink={permlink} />
+                            )}
+                            <span className="PostFull__responses">
+                                <Link
+                                    to={link}
+                                    title={tt('g.responses', {
+                                        count: content.children,
+                                    })}
+                                >
+                                    <Icon
+                                        name="chatboxes"
+                                        className="space-right"
+                                    />
+                                    {content.children}
+                                </Link>
+                            </span>
+                            <span className="PostFull__views">
+                                <PageViewsCounter
+                                    hidden={false}
+                                    sinceDate={
+                                        isPreViewCount ? 'Dec 2016' : null
+                                    }
+                                />
+                            </span>
+                            <ShareMenu menu={share_menu} />
+                            <button
+                                className="explore-post"
+                                title={tt('g.share_this_post')}
+                                onClick={this.showExplorePost}
+                            >
+                                <Icon name="link" className="chain-right" />
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <div className="row">
-                    <div className="column large-8 medium-10 small-12">
-                        {showReply && renderedEditor}
-                    </div>
+                    <div className="column">{showReply && renderedEditor}</div>
                 </div>
             </article>
         );

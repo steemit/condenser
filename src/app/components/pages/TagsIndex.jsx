@@ -113,7 +113,7 @@ export default class TagsIndex extends React.Component {
             <div className="TagsIndex row">
                 <div className="column">
                     <br />
-                    <h4>{tt('g.trending_topics')}</h4>
+                    <h1>{tt('g.trending_topics')}</h1>
                     <table>
                         <thead>
                             <tr>{cols}</tr>

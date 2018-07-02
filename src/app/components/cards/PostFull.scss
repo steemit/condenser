@@ -2,7 +2,7 @@
   @include themify($themes) {
     background-color: themed('moduleBackgroundColor');
   }
-  padding-top: 1.5rem;
+  padding-top: 1rem;
 }
 
 .PostFull {

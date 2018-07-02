@@ -190,7 +190,7 @@ class RecoverAccountStep1 extends React.Component {
             <div className="RestoreAccount SignUp">
                 {show_account_and_passwords && (
                     <div className="row">
-                        <div className="column large-4">
+                        <div className="column">
                             <h2>{tt('navigation.stolen_account_recovery')}</h2>
                             <p>
                                 {tt(

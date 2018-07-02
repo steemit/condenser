@@ -4,10 +4,8 @@ import HelpContent from 'app/components/elements/HelpContent';
 class Welcome extends React.Component {
     render() {
         return (
-            <div className="row static-page">
-                <div className="column large-8 medium-10 small-12">
-                    <HelpContent path="welcome" />
-                </div>
+            <div className="row content-page">
+                <HelpContent path="welcome" />
             </div>
         );
     }

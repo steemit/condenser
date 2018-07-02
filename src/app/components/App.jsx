@@ -235,16 +235,18 @@ class App extends React.Component {
                 )}
 
                 <div className="App__content">
-                    {process.env.BROWSER &&
-                    ip &&
-                    new_visitor &&
-                    this.state.showBanner ? (
-                        <WelcomePanel
-                            setShowBannerFalse={this.setShowBannerFalse}
-                        />
-                    ) : null}
-                    {callout}
-                    {children}
+                    <div className="App__content-container">
+                        {process.env.BROWSER &&
+                        ip &&
+                        new_visitor &&
+                        this.state.showBanner ? (
+                            <WelcomePanel
+                                setShowBannerFalse={this.setShowBannerFalse}
+                            />
+                        ) : null}
+                        {callout}
+                        {children}
+                    </div>
                 </div>
                 <Dialogs />
                 <Modals />

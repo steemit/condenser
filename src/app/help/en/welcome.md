@@ -1,5 +1,5 @@
 <span id="disable_router_nav_history_direction_check"></span>
-## Welcome to Steemit!
+# Welcome to Steemit!
 
 This page is full of information to help you learn about the platform and become a successful Steemian. You can return to this page at any time by clicking on the "Welcome" link in the main menu. There is a table of contents below to help you navigate the page.
 

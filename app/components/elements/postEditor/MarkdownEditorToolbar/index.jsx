@@ -103,7 +103,6 @@ export default class MarkdownEditorToolbar extends React.PureComponent {
             style.top =
                 toolbarPosition.top -
                 rootPos.top -
-                window.scrollY -
                 TOOLBAR_OFFSET;
 
             if (toolbarPosition.left != null) {

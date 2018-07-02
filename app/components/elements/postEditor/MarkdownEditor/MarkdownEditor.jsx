@@ -29,6 +29,7 @@ export default class MarkdownEditor extends React.Component {
         }
 
         this._processTextLazy = debounce(this._processText, 100);
+        this._onCursorActivityLazy = debounce(this._onCursorActivity, 50);
 
         this._simplemde = new SimpleMDE({
             spellChecker: false,
@@ -49,6 +50,7 @@ export default class MarkdownEditor extends React.Component {
 
         this._cm = this._simplemde.codemirror;
         this._cm.on('change', this._onChange);
+        this._cm.on('cursorActivity', this._onCursorActivityLazy);
 
         this.forceUpdate();
 
@@ -78,7 +80,11 @@ export default class MarkdownEditor extends React.Component {
         clearTimeout(this._fixTimeout);
         clearTimeout(this._previewTimeout);
 
+        this._processTextLazy.cancel();
+        this._onCursorActivityLazy.cancel();
+
         this._cm.off('change', this._onChange);
+        this._cm.off('cursorActivity', this._onCursorActivity);
         this._cm = null;
         this._simplemde = null;
     }
@@ -320,4 +326,13 @@ export default class MarkdownEditor extends React.Component {
             this._cm.execCommand('delCharBefore');
         }
     }
+
+    _onCursorActivity = () => {
+        const workArea = document.querySelector('.PostForm__work-area');
+        const cursorPos = this._cm.cursorCoords();
+
+        if (cursorPos.top + 28 > workArea.offsetTop + workArea.offsetHeight) {
+            workArea.scrollTop += 40;
+        }
+    };
 }

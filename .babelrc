@@ -1,14 +1,35 @@
 {
-  "presets": ["env", "stage-2", "react"],
-  "plugins": [
-    "transform-regenerator",
-    [
-      "transform-runtime",
-      {
-        "helpers": true,
-        "polyfill": true,
-        "regenerator": true
-      }
-    ]
-  ]
+    "presets": ["env", "stage-2", "react"],
+    "plugins": [
+        "transform-regenerator",
+        [
+            "transform-runtime",
+            {
+                "helpers": true,
+                "polyfill": true,
+                "regenerator": true
+            }
+        ],
+        [
+            "babel-plugin-styled-components",
+            {
+                "ssr": true
+            }
+        ]
+    ],
+    "env": {
+        "development": {
+            "plugins": [
+                [
+                    "babel-plugin-styled-components",
+                    {
+                        "displayName": true
+                    }
+                ]
+            ]
+        },
+        "production": {
+            "presets": ["react-optimize"]
+        }
+    }
 }

@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import cn from 'classnames';
 import CircularProgress from './CircularProgress'
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
+import proxifyImageUrl from 'app/utils/ProxifyUrl';
 
 class Userpic extends Component {
     static propTypes = {
@@ -49,9 +50,7 @@ class Userpic extends Component {
 
         if (url && /^(https?:)\/\//.test(url)) {
             const size = width && width > 48 ? '320x320' : '120x120';
-            if ($STM_Config.img_proxy_prefix) {
-                url = $STM_Config.img_proxy_prefix + size + '/' + url;
-            }
+            url = proxifyImageUrl(url, size);
         } else {
             if (hideIfDefault) {
                 return null;

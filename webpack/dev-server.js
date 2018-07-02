@@ -1,15 +1,11 @@
-const fs = require('fs')
-if(!fs.existsSync('tmp'))
-    fs.mkdirSync('tmp')
+process.env.BABEL_ENV = 'browser';
+process.env.NODE_ENV = 'development';
 
-process.env.BABEL_ENV = 'browser'
-process.env.NODE_ENV = 'development'
+const serve = require('webpack-serve');
+const config = require('./dev.config');
 
-const serve = require('webpack-serve')
-const config = require('./dev.config')
-
-serve({ config }).then((server) => {
+serve({ config }).then(server => {
     server.on('listening', ({ server, options }) => {
-        console.log('webpack dev server listening on port %s', options.port)
-    })
-})
+        console.log('webpack dev server listening on port %s', options.port);
+    });
+});

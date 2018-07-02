@@ -1245,7 +1245,9 @@ It is strongly recommended that you store an offline copy of your password somew
 <a href="#Table_of_Contents_Security">^</a>
 ## <span id="Are_my_STEEM_and_Steem_Dollar_tokens_insured_in_the_event_of_a_hack_or_if_someone_takes_over_my_account">Are my STEEM and Steem Dollar tokens insured in the event of a hack or if someone takes over my account?</span>
 
-No, liquid tokens can not be taken back if stolen or sent to the wrong account. If your tokens are in Steem Power, it is impossible for a hacker to take out more than 1/13 per week. If your tokens are in savings, there is a three-day wait period for them to become transferable.
+No, liquid tokens can not be taken back if stolen or sent to the wrong account.
+
+If your tokens are in Steem Power, it is impossible for a hacker to take out more than 1/13 per week. If your tokens are in savings, there is a three-day wait period for them to become transferable.
 
 <a href="#Table_of_Contents_Security">^</a>
 ## <span id="What_should_I_do_if_I_discover_that_someone_hacked_my_account">What should I do if I discover that someone hacked my account?</span>
@@ -1260,6 +1262,8 @@ If your password has been changed without your consent, then the account designa
 Steemit Inc. owns the default recovery account (@steem) for all users who sign up using steemit.com. Steemit can only identify users by their original email, Facebook, or Reddit logins that were used to signup via steemit.com.
 
 If you don't have the master password or owner key that was valid the past 30 days, or are unable to prove that you are the original owner of the account, then your account will be unrecoverable.
+
+The stolen account recovery process can only restore ownership of the account. It is not possible to recover funds that were stolen.
 
 <a href="#Table_of_Contents_Security">^</a>
 ## <span id="How_do_I_report_a_security_vulnerability">How do I report a security vulnerability?</span>

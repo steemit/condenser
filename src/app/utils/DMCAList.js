@@ -128,6 +128,7 @@ export default `
 /news/@monaalexis27/sandy-hook-michael-vabner-website-shows-noah-pozner-all-grown-up-mirrored
 /news/@monaalexis27/sandy-hook-not-only-is-noah-pozner-a-fiction-but-his-father-lenny-is-also-a-fake-mirrored
 /politics/@barrysoetoro/neil-heslin-is-dead-9-11-fireman
+/travel/@mounirzaza07/tourism-in-the-comoros-a-beautiful-bride-and-rare-fragrances-and-wild-flowers
 `
     .trim()
     .split('\n');

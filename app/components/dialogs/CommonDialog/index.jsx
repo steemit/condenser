@@ -51,7 +51,7 @@ export default class CommonDialog extends React.PureComponent {
     }
 
     _getButtons() {
-        const { type } = this.props;
+        const { type, danger } = this.props;
 
         if (type === 'prompt') {
             return [
@@ -72,6 +72,7 @@ export default class CommonDialog extends React.PureComponent {
                 {
                     text: tt('g.ok'),
                     primary: true,
+                    warning: danger,
                     autoFocus: true,
                     onClick: this._onOkClick,
                 },

@@ -116,5 +116,9 @@
     &_warning:hover {
       color: red;
     }
+
+    &_warning:focus {
+      background: #ffe3dd;
+    }
   }
 }

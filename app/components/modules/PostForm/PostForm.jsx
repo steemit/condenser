@@ -309,7 +309,7 @@ class PostForm extends React.Component {
                 newRteState = null;
             } else {
                 if (
-                    !(await DialogManager.confirm(
+                    !(await DialogManager.dangerConfirm(
                         tt('post_editor.convert_to_md_warning')
                     ))
                 ) {
@@ -338,15 +338,20 @@ class PostForm extends React.Component {
                 newRteState = null;
             }
         } else if (editorId === EDITORS_TYPES.MARKDOWN) {
-            if (toEditorId === EDITORS_TYPES.HTML) {
-                newText = null;
-                newRteState = markdownToHtmlEditorState(
-                    this.refs.editor.getValue()
-                );
-            } else {
-                newText = this.refs.editor.getValue();
-                newRteState = null;
+            const body = this.refs.editor.getValue();
+
+            if (body.trim()) {
+                if (
+                    !(await DialogManager.dangerConfirm(
+                        tt('post_editor.convert_to_html_warning')
+                    ))
+                ) {
+                    return;
+                }
             }
+
+            newText = null;
+            newRteState = markdownToHtmlEditorState(body);
         }
 
         this.setState(
@@ -487,12 +492,7 @@ class PostForm extends React.Component {
 
     _post = () => {
         const { author, editMode } = this.props;
-        const {
-            title,
-            tags,
-            payoutType,
-            editorId,
-        } = this.state;
+        const { title, tags, payoutType, editorId } = this.state;
         let error;
 
         if (!title.trim()) {

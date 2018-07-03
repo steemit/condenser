@@ -51,6 +51,21 @@ export default class DialogManager extends React.PureComponent {
         });
     }
 
+    static dangerConfirm(text, title) {
+        return new Promise(resolve => {
+            DialogManager.showDialog({
+                component: CommonDialog,
+                props: {
+                    title,
+                    type: 'confirm',
+                    danger: true,
+                    text,
+                },
+                onClose: resolve,
+            });
+        });
+    }
+
     static prompt(text, title) {
         return new Promise(resolve => {
             DialogManager.showDialog({

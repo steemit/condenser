@@ -21,7 +21,10 @@ export default {
             cb(null, [require('@pages/Privacy')]);
         } else if (route.page === 'Support') {
             cb(null, [require('@pages/Support')]);
-        } else if (route.page === 'XSSTest' && process.env.NODE_ENV === 'development') {
+        } else if (
+            route.page === 'XSSTest' &&
+            process.env.NODE_ENV === 'development'
+        ) {
             cb(null, [require('@pages/XSS')]);
         } else if (route.page === 'Tags') {
             cb(null, [require('@pages/TagsIndex')]);
@@ -42,12 +45,12 @@ export default {
         } else if (route.page === 'LeavePage') {
             cb(null, [require('@pages/LeavePage')]);
         } else if (route.page === 'SubmitPost') {
-            if (process.env.BROWSER)
-                cb(null, [require('@pages/SubmitPost')]);
-            else
-                cb(null, [require('@pages/SubmitPostServerRender')]);
+            if (process.env.BROWSER) cb(null, [require('@pages/SubmitPost')]);
+            else cb(null, [require('@pages/SubmitPostServerRender')]);
+        // } else if (route.page === 'UserProfile') {
+        //     cb(null, [require('@pages/UserProfile')]);
         } else if (route.page === 'UserProfile') {
-            cb(null, [require('@pages/UserProfile')]);
+            cb(null, [require('src/app/containers/UserProfile').default]);
         } else if (route.page === 'Market') {
             cb(null, [require('@pages/Market')]);
         } else if (route.page === 'Post') {
@@ -57,10 +60,12 @@ export default {
         } else if (route.page === 'PostsIndex') {
             cb(null, [PostsIndex]);
         } else {
-            cb(process.env.BROWSER ? null : Error(404), [require('@pages/NotFound')]);
+            cb(process.env.BROWSER ? null : Error(404), [
+                require('@pages/NotFound'),
+            ]);
         }
     },
     indexRoute: {
-        component: PostsIndex.component
-    }
+        component: PostsIndex.component,
+    },
 };

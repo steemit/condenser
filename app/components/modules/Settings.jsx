@@ -51,12 +51,12 @@ class Settings extends React.Component {
     }
 
     componentWillMount() {
-        const {accountname} = this.props
+        const {accountName} = this.props
         const {vesting_shares} = this.props.account
         
         let rounding, nsfwPref;
 
-        nsfwPref = (process.env.BROWSER ? localStorage.getItem('nsfwPref-' + accountname) : null) || 'warn'
+        nsfwPref = (process.env.BROWSER ? localStorage.getItem('nsfwPref-' + accountName) : null) || 'warn'
         this.setState({nsfwPref, oldNsfwPref: nsfwPref})
 
         if(process.env.BROWSER){
@@ -152,9 +152,9 @@ class Settings extends React.Component {
     }
 
     onNsfwPrefSubmit(e) {
-        const {accountname} = this.props;
+        const {accountName} = this.props;
         const {nsfwPref} = this.state;
-        localStorage.setItem('nsfwPref-'+accountname, nsfwPref)
+        localStorage.setItem('nsfwPref-'+accountName, nsfwPref)
         this.setState({oldNsfwPref: nsfwPref})
     }
 
@@ -487,8 +487,8 @@ class Settings extends React.Component {
 export default connect(
     // mapStateToProps
     (state, ownProps) => {
-        const {accountname} = ownProps.routeParams
-        const account = state.global.getIn(['accounts', accountname]).toJS()
+        const {accountName} = ownProps.routeParams
+        const account = state.global.getIn(['accounts', accountName]).toJS()
         const current_user = state.user.get('current')
         const username = current_user ? current_user.get('username') : ''
         let metaData = account ? o2j.ifStringParseJSON(account.json_metadata) : {}
@@ -498,8 +498,8 @@ export default connect(
         return {
             account,
             metaData,
-            accountname,
-            isOwnAccount: username == accountname,
+            accountName,
+            isOwnAccount: username == accountName,
             profile,
             follow: state.global.get('follow'),
             ...ownProps

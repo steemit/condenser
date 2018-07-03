@@ -16,7 +16,6 @@ export default class Follow extends React.Component {
         follower: string, // OPTIONAL default to current user
         showFollow: bool,
         showMute: bool,
-        fat: bool,
         children: any,
         showLogin: PropTypes.func.isRequired,
     };
@@ -24,14 +23,12 @@ export default class Follow extends React.Component {
     static defaultProps = {
         showFollow: true,
         showMute: true,
-        fat: false,
     };
 
     constructor(props) {
         super();
         this.state = {};
         this.initEvents(props);
-        this.followLoggedOut = this.followLoggedOut.bind(this);
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'Follow');
     }
 
@@ -59,7 +56,7 @@ export default class Follow extends React.Component {
         this.unignore = upd.bind(null, null, tt('g.confirm_unignore'))
     }
 
-    followLoggedOut(e) {
+    followLoggedOut = (e) => {
         // close author preview if present
         const author_preview = document.querySelector('.dropdown-pane.is-open');
         if(author_preview) author_preview.remove();
@@ -84,12 +81,11 @@ export default class Follow extends React.Component {
         if(follower === following) return <span></span>
 
         const {followingWhat} = this.props; // redux
-        const {showFollow, showMute, fat, children} = this.props; // html
+        const {showFollow, showMute, children} = this.props; // html
         const {busy} = this.state;
 
         const cnBusy = busy ? 'disabled' : '';
-        const cnActive = 'button' + (fat ? '' : ' slim');
-        const cnInactive = cnActive + ' hollow secondary ' + cnBusy;
+        const cnInactive = 'button slim hollow secondary ' + cnBusy;
         return <span>
             {showFollow && followingWhat !== 'blog' &&
                 <label className={cnInactive} onClick={this.follow}>{tt('g.follow')}</label>}

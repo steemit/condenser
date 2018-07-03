@@ -1,6 +1,4 @@
-import React from 'react';
 import tt from 'counterpart';
-
 import 'app/assets/stylesheets/app.scss';
 
 tt.registerTranslations('en', require('app/locales/en.json'));

@@ -82,7 +82,7 @@ export default function resolveRoute(path)
         // @user/"posts" is deprecated in favor of "comments" as of oct-2016 (#443)
         path.match(routeRegex.UserProfile2);
     if (match) {
-        return {page: 'UserProfile', params: match.slice(1)};
+        return {page: 'UserProfile', params: match.slice(1), hideSubMenu: true};
     }
     match = path.match(routeRegex.PostNoCategory);
     if (match) {

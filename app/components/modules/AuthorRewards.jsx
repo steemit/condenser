@@ -7,18 +7,7 @@ import tt from 'counterpart';
 import { LIQUID_TICKER, VEST_TICKER, DEBT_TICKER, DEBT_TOKEN_SHORT } from 'app/client_config';
 
 class AuthorRewards extends React.Component {
-    constructor() {
-        super()
-        this.state = {historyIndex: 0}
-        this.onShowDeposit = () => {this.setState({showDeposit: !this.state.showDeposit})}
-        this.onShowDepositSteem = () => {
-            this.setState({showDeposit: !this.state.showDeposit, depositType: LIQUID_TICKER})
-        }
-        this.onShowDepositPower = () => {
-            this.setState({showDeposit: !this.state.showDeposit, depositType: VEST_TICKER})
-        }
-        // this.onShowDeposit = this.onShowDeposit.bind(this)
-    }
+    state = { historyIndex: 0 }
 
     shouldComponentUpdate(nextProps, nextState) {
         return (
@@ -37,6 +26,9 @@ class AuthorRewards extends React.Component {
 
         const {state: {historyIndex}} = this
         const account = this.props.account;
+
+        // FIX bug, golos doesn't return transfer_history sometimes
+        if (account.transfer_history) return null;
 
         /// transfer log
         let rewards24Vests = 0, rewardsWeekVests = 0, totalRewardsVests = 0;

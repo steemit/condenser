@@ -5,6 +5,10 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import tt from 'counterpart';
 import { blockedUsers, blockedUsersContent } from 'app/utils/IllegalContent';
+import { isFetchingOrRecentlyUpdated } from 'app/utils/StateFunctions';
+
+import user from 'app/redux/User';
+import transaction from 'app/redux/Transaction';
 
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import Callout from 'app/components/elements/Callout';
@@ -15,11 +19,51 @@ import Settings from 'app/components/modules/Settings';
 import CurationRewards from 'app/components/modules/CurationRewards';
 import AuthorRewards from 'app/components/modules/AuthorRewards';
 
+import IllegalContentMessage from 'app/components/elements/IllegalContentMessage';
+import UserList from 'app/components/elements/UserList';
+import UserKeys from 'app/components/elements/UserKeys';
+import PasswordReset from 'app/components/elements/PasswordReset';
+
 import UserHeader from 'src/app/components/UserHeader';
 import UserNavigation from 'src/app/components/UserNavigation';
 
 export default class UserProfile extends Component {
     static propTypes = { accountName: PropTypes.string };
+
+    shouldComponentUpdate(np) {
+        const {follow} = this.props;
+        const {follow_count} = this.props;
+
+        let followersLoading = false, npFollowersLoading = false;
+        let followingLoading = false, npFollowingLoading = false;
+
+        const account = np.routeParams.accountName.toLowerCase();
+        if (follow) {
+            followersLoading = follow.getIn(['getFollowersAsync', account, 'blog_loading'], false);
+            followingLoading = follow.getIn(['getFollowingAsync', account, 'blog_loading'], false);
+        }
+        if (np.follow) {
+            npFollowersLoading = np.follow.getIn(['getFollowersAsync', account, 'blog_loading'], false);
+            npFollowingLoading = np.follow.getIn(['getFollowingAsync', account, 'blog_loading'], false);
+        }
+
+        return (
+            np.current_user !== this.props.current_user ||
+            np.accounts.get(account) !== this.props.accounts.get(account) ||
+            np.wifShown !== this.props.wifShown ||
+            np.global_status !== this.props.global_status ||
+            ((npFollowersLoading !== followersLoading) && !npFollowersLoading) ||
+            ((npFollowingLoading !== followingLoading) && !npFollowingLoading) ||
+            np.loading !== this.props.loading ||
+            np.location.pathname !== this.props.location.pathname ||
+            np.routeParams.accountName !== this.props.routeParams.accountName ||
+            np.follow_count !== this.props.follow_count
+        )
+    }
+
+    componentWillUnmount() {
+        this.props.clearTransferDefaults()
+    }
 
     loadMore = (last_post, category) => {
         const { accountName } = this.props.routeParams;

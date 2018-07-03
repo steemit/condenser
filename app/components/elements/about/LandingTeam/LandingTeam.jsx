@@ -35,19 +35,19 @@ export default class LandingTeam extends PureComponent {
                 <div className="row align-middle collapse">
                     {type === 'golos.io' ? (
                         <div className="Team__info columns small-12 medium-6">
-                            Разработка, поддержка и развитие клиента{' '}
-                            <a href="/welcome">Golos.io</a>&nbsp;-&nbsp;
+                            Разработка, поддержка и развитие клиента<br/>
+                            <a href="/@golosio">Читать блог Golos.io</a>&nbsp;-&nbsp;
                             <a href="/@golosio" title="Новости Golos.io">
-                                Новости проекта
-                            </a>
+                                @golosio
+                            </a>.
                         </div>
                     ) : (
                         <div className="Team__info columns small-12 medium-6">
-                            Разработка, поддержка и развитие блокчейна
-                            Golos&nbsp;-&nbsp;
+                            Разработка, поддержка и развитие блокчейна<br/>
+                            <a href="/@goloscore">Читать блог Golos Core</a>&nbsp;-&nbsp;
                             <a href="/@goloscore" title="Новости Golos Core">
-                                Новости проекта
-                            </a>
+                                @goloscore
+                            </a>.
                         </div>
                     )}
                 </div>

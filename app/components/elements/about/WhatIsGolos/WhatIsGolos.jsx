@@ -6,10 +6,9 @@ export default class WhatIsGolos extends PureComponent {
             <section className="WhatIsGolos text-center" id="what-is-golos">
                 <div className="row">
                     <div className="small-12 medium-12 large-centered columns columns WhatIsGolos__video">
-                        <p>
-                            Golos.io - это блог-платформа, построенная на
-                            децентрализованной системе блокчейн.
-                        </p>
+                        <h1>
+                            Golos.io — это блог-платформа, построенная на медиаблокчейне Голос.
+                        </h1>
                         <div>
                             <iframe
                                 width="853"

@@ -2,20 +2,23 @@ const webpack_isomorphic_tools_plugin = require('webpack-isomorphic-tools/plugin
 const alias = require('./alias');
 
 module.exports = {
-    webpack_assets_file_path: (process.env.NODE_ENV === 'production' ? 'tmp/webpack-isotools-assets-prod.json' : 'tmp/webpack-isotools-assets-dev.json'),
+    webpack_assets_file_path:
+        process.env.NODE_ENV === 'production'
+            ? 'tmp/webpack-isotools-assets-prod.json'
+            : 'tmp/webpack-isotools-assets-dev.json',
     alias: alias,
     assets: {
         images: {
             extensions: ['png', 'jpg', 'gif', 'svg']
         },
         fonts: {
-            extensions: ['woff', 'ttf']
+            extensions: ['woff', 'woff2', 'eot', 'ttf'],
         },
         styles: {
             extensions: ['css', 'scss'],
 
             // which `module`s to parse CSS from:
-            filter: function (module, regularExpression, options, log) {
+            filter: function(module, regularExpression, options, log) {
                 if (options.development) {
                     // In development mode there's Webpack "style-loader",
                     // which outputs `module`s with `module.name == asset_path`,
@@ -27,7 +30,12 @@ module.exports = {
                     //
                     // Therefore using a non-default `filter` function here.
                     //
-                    return webpack_isomorphic_tools_plugin.styleLoaderFilter(module, regularExpression, options, log)
+                    return webpack_isomorphic_tools_plugin.styleLoaderFilter(
+                        module,
+                        regularExpression,
+                        options,
+                        log
+                    );
                 }
 
                 // In production mode there will be no CSS text at all
@@ -44,7 +52,7 @@ module.exports = {
 
             // How to extract these Webpack `module`s' javascript `source` code.
             // basically takes `module.source` and modifies `module.exports` a little.
-            parser: webpack_isomorphic_tools_plugin.cssLoaderParser
-        }
-    }
+            parser: webpack_isomorphic_tools_plugin.cssLoaderParser,
+        },
+    },
 };

@@ -54,7 +54,7 @@ const onRouterError = (error) => {
     console.error('onRouterError', error);
 };
 
-export async function serverRender({ 
+export async function serverRender({
     location,
     offchain,
     ErrorPage,
@@ -63,7 +63,7 @@ export async function serverRender({
     metrics
 }) {
     let error, redirect, renderProps;
-    
+
     const ctx = {
         chainproxy,
         metrics
@@ -259,16 +259,25 @@ export function clientRender(initialState) {
         // console.log('%c%s', 'color: red; background: yellow; font-size: 24px;', 'WARNING!');
         // console.log('%c%s', 'color: black; font-size: 16px;', 'This is a developer console, you must read and understand anything you paste or type here or you could compromise your account and your private keys.');
     }
+
+    const Wrapper =
+        process.env.NODE_ENV !== 'production' && localStorage['react.strict']
+            ? React.StrictMode
+            : React.Fragment;
+
     return render(
-        <Provider store={store}>
-            <Translator>
-                <Router
-                    routes={RootRoute}
-                    history={history}
-                    onError={onRouterError}
-                    render={applyRouterMiddleware(scroll)} />
-            </Translator>
-        </Provider>,
+        <Wrapper>
+            <Provider store={store}>
+                <Translator>
+                    <Router
+                        routes={RootRoute}
+                        history={history}
+                        onError={onRouterError}
+                        render={applyRouterMiddleware(scroll)}
+                    />
+                </Translator>
+            </Provider>
+        </Wrapper>,
         document.getElementById('content')
     );
 }

@@ -20,9 +20,6 @@ export default function resolveRoute(path)
     if (path.indexOf("@bm-chara728") !== -1) {
         return {page: 'NotFound'};
     }
-    if (path === '/about.html') {
-        return {page: 'About', hideSubMenu: true};
-    }
     if (path === '/welcome') {
         return {page: 'Welcome', hideSubMenu: true};
     }
@@ -71,8 +68,8 @@ export default function resolveRoute(path)
     if (path === '/~witnesses') {
         return {page: 'Witnesses'};
     }
-    if (path === '/submit.html') {
-        return {page: 'SubmitPost'};
+    if (path === '/submit') {
+        return {page: 'SubmitPost', hideSubMenu: true};
     }
     if (path === '/leave_page') {
         return {page: 'LeavePage'};
@@ -85,7 +82,7 @@ export default function resolveRoute(path)
         // @user/"posts" is deprecated in favor of "comments" as of oct-2016 (#443)
         path.match(routeRegex.UserProfile2);
     if (match) {
-        return {page: 'UserProfile', params: match.slice(1)};
+        return {page: 'UserProfile', params: match.slice(1), hideSubMenu: true};
     }
     match = path.match(routeRegex.PostNoCategory);
     if (match) {

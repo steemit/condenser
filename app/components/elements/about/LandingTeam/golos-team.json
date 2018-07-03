@@ -1,0 +1,180 @@
+[
+  {
+    "name": "Георгий Комаров",
+    "role": "CEO",
+    "avatar": "george.komarow",
+    "contacts": {
+      "golos": "insider",
+      "email": "Gkkazak@gmail.com",
+      "facebook": "george.komarow"
+    }
+  },
+  {
+    "name": "Николай Штефан",
+    "role": "Team Lead, Scrum Master",
+    "avatar": "shtefan",
+    "contacts": {
+      "golos": "nickshtefan",
+      "github": "NickShtefan"
+    }
+  },
+  {
+    "name": "Евгения Харченко",
+    "role": "CMO, Product Owner",
+    "avatar": "jevgenika",
+    "contacts": {
+      "golos": "jevgenika",
+      "email": "marketing@golos.io",
+      "github": "jevgenika",
+      "linkedin": "jevgenija-kharchenko-1a816b10",
+      "facebook": "jevgenija.kharchenko"
+    }
+  },
+  {
+    "name": "Игорь Ткаченко",
+    "role": "Web Developer",
+    "avatarUrl": "https://avatars2.githubusercontent.com/u/3322340?v=3&s=460",
+    "contacts": {
+      "golos": "b1acksun",
+      "github": "b1acksun"
+    }
+  },
+  {
+    "name": "Олег Павлов",
+    "role": "Web Developer",
+    "avatar": "olegpavlov",
+    "contacts": {
+      "golos": "format-x22",
+      "github": "Format-X22"
+    }
+  },
+  {
+    "name": "Денис Захаренков",
+    "role": "DevOps",
+    "avatarUrl": "https://avatars0.githubusercontent.com/u/19325076?v=3&s=460",
+    "contacts": {
+      "golos": "muhazokotuha",
+      "github": "muhazzz"
+    }
+  },
+  {
+    "name": "Алла Кучинская",
+    "role": "Designer",
+    "avatar": "allakuchinskaya",
+    "contacts": {
+      "golos": "kuchinskaya",
+      "github": "kucinskaya.alla"
+    }
+  },
+  {
+    "name": "Юрий Бородкин",
+    "role": "Android Developer",
+    "avatarUrl": "https://avatars1.githubusercontent.com/u/13299756?s=460&v=4",
+    "contacts": {
+      "golos": "yuri-vlad",
+      "github": "yurivlad"
+    }
+  },
+  {
+    "name": "Сергей Монастырский",
+    "role": "iOs dev",
+    "avatar": "sergeim",
+    "contacts": {
+      "golos": "msm72",
+      "github": "Monserg"
+    }
+  },
+  {
+    "name": "Алексей Елизаров",
+    "role": "Web Developer",
+    "avatar": "alexeyelizarov",
+    "contacts": {
+      "golos": "devall",
+      "github": "beautyfree",
+      "linkedin": "alexey-elizarov-b2b1b336"
+    }
+  },
+  {
+    "name": "Илья Лебедев",
+    "role": "Web Developer",
+    "avatar": "ilyalebedev",
+    "contacts": {
+      "golos": "bacher",
+      "github": "Bacher"
+    }
+  },
+  {
+    "name": "Евгений Паршин",
+    "role": "QA Tester",
+    "avatar": "pevgenii",
+    "contacts": {
+      "golos": "dekol",
+      "github": "BaroH4er"
+    }
+  },
+  {
+    "name": "Александр Фирсов",
+    "role": "Head of Communications",
+    "avatar": "firsov",
+    "contacts": {
+      "golos": "alex-firsov",
+      "email": "pr@golos.io",
+      "facebook": "alex.v.firsov"
+    }
+  },
+  {
+    "name": "Юлия Родникова",
+    "role": "Комьюнити-менеджер",
+    "avatar": "rodnikova",
+    "contacts": {
+      "golos": "yulia.rodnikova",
+      "email": "community@golos.io",
+      "github": "rodnikova"
+    }
+  },
+  {
+    "name": "Евгений Мойкин",
+    "role": "Digital marketing",
+    "avatar": "evgeniymoykin",
+    "contacts": {
+      "golos": "moykin",
+      "github": "moykin"
+    }
+  },
+  {
+    "name": "Денис Белых",
+    "role": "Support Manager",
+    "avatar": "dankinescop",
+    "contacts": {
+      "golos": "dan-kinescop",
+      "email": "support@golos.io",
+      "github": "dankinescop"
+    }
+  },
+  {
+    "name": "Алеся Николаенкова",
+    "role": "Support Manager",
+    "avatar": "alessia",
+    "contacts": {
+      "golos": "chinpu",
+      "email": "support@golos.io",
+      "github": "chinpu"
+    }
+  },
+  {
+    "name": "Анастасия Пирогова",
+    "role": "Office Manager",
+    "avatar": "anastasiapirogova",
+    "contacts": {
+      "golos": "pirogova"
+    }
+  },
+  {
+    "name": "Ирина Немогаева",
+    "role": "HR",
+    "avatar": "irinanemogaeva",
+    "contacts": {
+      "github": "nemogaevairina"
+    }
+  }
+]

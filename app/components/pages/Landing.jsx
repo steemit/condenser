@@ -1,30 +1,25 @@
-import React from 'react'
-// import CountDowns from 'app/components/elements/LandingCountDowns'
+import React, { PureComponent } from 'react';
+import WhatIsGolos from 'app/components/elements/about/WhatIsGolos/WhatIsGolos';
+import LandingTeam from 'app/components/elements/about/LandingTeam/LandingTeam';
+import LandingPartners from 'app/components/elements/about/LandingPartners/LandingPartners';
 // import Distribution from 'app/components/elements/LandingDistribution'
-import WhatIsGolos from 'app/components/elements/LandingWhatIsGolos'
-// import Faq from 'app/components/elements/LandingFaq'
-import Team from 'app/components/elements/LandingTeam'
-import Partners from 'app/components/elements/LandingPartners'
-// import Tools from 'app/components/elements/LandingTools'
-// import { APP_NAME } from 'app/client_config';
 
-class Landing extends React.Component {
+class Landing extends PureComponent {
     render() {
         return (
             <div className="Landing">
-				{/* <CountDowns /> */}
-				<WhatIsGolos />
-				<Team />
-				{/* <Faq /> */}
-				{/* <Distribution button={buyGolosButton} /> */}
-				<Partners />
-                {/* <Tools /> */}
+                <WhatIsGolos />
+                <hr />
+                <LandingTeam />
+                <hr />
+                {/* <Distribution button={buyGolosButton} /> */}
+                <LandingPartners />
             </div>
-        )
+        );
     }
 }
 
 module.exports = {
     path: 'about',
-	component: Landing
+    component: Landing,
 };

@@ -1,11 +1,32 @@
 
-.MarkdownViewer__negative_group {
-    color: crimson;
-    border-top: 1px solid $medium-gray;
-    padding-top: 1rem;
-}
-
 .MarkdownViewer {
   height: 100%;
   overflow: hidden;
+
+  &__negative_group {
+    color: crimson;
+    border-top: 1px solid $medium-gray;
+    padding-top: 1rem;
+  }
+
+  .g-coub {
+    display: block;
+    margin: 0.5em auto;
+  }
+
+  .header-anchor {
+    display: inline-block;
+    margin-left: 6px;
+    width: 24px;
+    height: 24px;
+    background: url('/images/link.svg');
+    opacity: 0.1;
+    transition: opacity 0.25s;
+  }
+
+  H1, H2, H3, H4, H5, H6 {
+    &:hover .header-anchor {
+      opacity: 1;
+    }
+  }
 }

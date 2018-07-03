@@ -1,24 +1,13 @@
-import xmldom from 'xmldom'
-import linksRe, { any as linksAny } from 'app/utils/Links'
-import {validate_account_name} from 'app/utils/ChainValidation'
-import {detransliterate} from 'app/utils/ParsersAndFormatters'
-import { isWhite } from 'app/utils/EmbedContentWhitelist'
+import xmldom from 'xmldom';
+import linksRe, { any as linksAny } from 'app/utils/Links';
+import { validate_account_name } from 'app/utils/ChainValidation';
+import { detransliterate } from 'app/utils/ParsersAndFormatters';
 
-const noop = () => {}
-const DOMParser = new xmldom.DOMParser({
-    errorHandler: {warning: noop, error: noop}
-})
-const XMLSerializer = new xmldom.XMLSerializer()
+let DOMParser = null;
+let XMLSerializer = null;
 
 /**
  * Functions performed by HTMLReady
- *
- * State reporting
- *  - hashtags: collect all #tags in content
- *  - usertags: collect all @mentions in content
- *  - htmltags: collect all html <tags> used (for validation)
- *  - images: collect all image URLs in content
- *  - links: collect all href URLs in content
  *
  * Mutations
  *  - link()
@@ -53,275 +42,496 @@ const XMLSerializer = new xmldom.XMLSerializer()
  *    - convert <iframe>s to custom objects
  *    - linkify #tags and @mentions
  *    - proxify images
- *
- * TODO:
- *  - change ipfsPrefix(url) to normalizeUrl(url)
- *    - rewrite IPFS prefixes to valid URLs
- *    - schema normalization
- *    - gracefully handle protocols like ftp, mailto
  */
 
-/** Split the HTML on top-level elements. This allows react to compare separately, preventing excessive re-rendering.
- * Used in MarkdownViewer.jsx
+/**
+ * Embed videos, link mentions, etc...
  */
-// export function sectionHtml (html) {
-//   const doc = DOMParser.parseFromString(html, 'text/html')
-//   const sections = Array(...doc.childNodes).map(child => XMLSerializer.serializeToString(child))
-//   return sections
-// }
-
-/** Embed videos, link mentions and hashtags, etc...
-*/
-export default function (html, {mutate = true} = {}, resolve = false) {
-    const state = {mutate}
-    state.hashtags = new Set()
-    state.usertags = new Set()
-    state.htmltags = new Set()
-    state.images = new Set()
-    state.links = new Set()
+export default function(html) {
     try {
-        const doc = DOMParser.parseFromString(html, 'text/html')
-        traverse(doc, state, 0, resolve)
-        if(mutate) proxifyImages(doc)
-        // console.log('state', state)
-        if(!mutate) return state
-        return {html: (doc) ? XMLSerializer.serializeToString(doc) : '', ...state}
-    }catch(error) {
-        // Not Used, parseFromString might throw an error in the future
-        console.error(error.toString())
-        return {html}
+        const { doc } = _parseHtml(html, true);
+
+        if (!doc) {
+            return '';
+        }
+
+        proxifyImages(doc);
+
+        return XMLSerializer.serializeToString(doc);
+    } catch (error) {
+        console.error(error);
+        return html;
     }
 }
 
-function traverse(node, state, depth = 0, resolve) {
-    if(!node || !node.childNodes) return
-    Array(...node.childNodes).forEach(child => {
-        // console.log(depth, 'child.tag,data', child.tagName, child.data)
-        const tag = child.tagName ? child.tagName.toLowerCase() : null
-        if(tag) state.htmltags.add(tag)
+/**
+ *  State reporting
+ *  - hashtags: collect all #tags in content
+ *  - usertags: collect all @mentions in content
+ *  - htmltags: collect all html <tags> used (for validation)
+ *  - images: collect all image URLs in content
+ *  - links: collect all href URLs in content
+ *
+ * @param {string} html
+ * @returns {{hashtags: Set<any>, usertags: Set<any>, htmltags: Set<any>, images: Set<any>, links: Set<any>}}
+ */
+export function getTags(html) {
+    return _parseHtml(html).state;
+}
 
-        if(tag === 'img')
-            img(state, child)
-        else if(tag === 'iframe')
-            iframe(state, child)
-        else if(tag === 'a')
-            link(state, child)
-        else if(child.nodeName === '#text')
-            linkifyNode(child, state, resolve)
+function _parseHtml(html, mutate) {
+    if (!DOMParser) {
+        DOMParser = new xmldom.DOMParser({
+            errorHandler: { warning: noop, error: noop },
+        });
+    }
 
-        traverse(child, state, depth + 1, resolve)
-    })
+    if (!XMLSerializer) {
+        XMLSerializer = new xmldom.XMLSerializer();
+    }
+
+    const state = {
+        mutate,
+        hashtags: new Set(),
+        usertags: new Set(),
+        htmltags: new Set(),
+        images: new Set(),
+        links: new Set(),
+        anchors: new Set(),
+    };
+
+    const doc = DOMParser.parseFromString(html, 'text/html');
+
+    const savedDocumentElement = doc.documentElement;
+
+    traverse(doc, state);
+
+    if (!doc.documentElement) {
+        doc.documentElement = savedDocumentElement;
+    }
+
+    return {
+        doc,
+        state,
+    };
+}
+
+function traverse(node, state, depth = 0) {
+    if (!node || !node.childNodes) {
+        return;
+    }
+
+    for (let child of Array.from(node.childNodes)) {
+        const tag = child.tagName ? child.tagName.toLowerCase() : null;
+
+        if (tag) {
+            state.htmltags.add(tag);
+        }
+
+        if (tag === 'img') {
+            img(state, child);
+        } else if (tag === 'iframe') {
+            iframe(state, child);
+        } else if (tag === 'a') {
+            link(state, child);
+        } else if (/^h[1-6]$/.test(tag)) {
+            header(state, child);
+        } else if (child.nodeName === '#text') {
+            linkifyNode(state, child);
+        }
+
+        traverse(child, state, depth + 1);
+    }
 }
 
 function link(state, child) {
-    const url = child.getAttribute('href')
-    if(url) {
-        state.links.add(url)
-        if(state.mutate) {
-            // If this link is not relative, http, or https -- add https.
-            if(! /^\/(?!\/)|(https?:)?\/\//.test(url)) {
-                child.setAttribute('href', "https://"+url)
+    const url = child.getAttribute('href');
+
+    if (url) {
+        state.links.add(url);
+
+        if (state.mutate) {
+            // If this link is not hash, relative, http or https - add https
+            if (!/^#|^\/(?!\/)|^(?:https?:)?\/\//.test(url)) {
+                child.setAttribute('href', 'https://' + url);
             }
         }
     }
 }
 
-// wrap iframes in div.videoWrapper to control size/aspect ratio
 function iframe(state, child) {
-    const url = child.getAttribute('src')
-    if(url) {
-        const {images, links} = state
-        const yt = youTubeId(url)
-        if(yt && images && links) {
-            links.add(yt.url)
-            images.add('https://img.youtube.com/vi/' + yt.id + '/0.jpg')
-        }
+    const url = child.getAttribute('src').trim();
+
+    if (!url) {
+        return;
     }
 
-    const {mutate} = state
-    if(!mutate) return
+    const { images, links } = state;
 
-    const tag = child.parentNode.tagName ? child.parentNode.tagName.toLowerCase() : child.parentNode.tagName
-    if(tag == 'div' && child.parentNode.getAttribute('class') == 'videoWrapper') return;
-    const html = XMLSerializer.serializeToString(child)
-    child.parentNode.replaceChild(DOMParser.parseFromString(`<div class="videoWrapper">${html}</div>`), child)
+    const yt = youTubeId(url);
+
+    if (yt && images && links) {
+        links.add(yt.url);
+        images.add(`https://img.youtube.com/vi/${yt.id}/0.jpg`);
+    }
+
+    if (!state.mutate) {
+        return;
+    }
+
+    child.data = '';
+
+    if (
+        /^(https?:)?\/\/(?:www\.)?(?:youtube\.com|youtu\.be)\//.test(url) ||
+        /^(https?:)?\/\/(?:www\.|video\.)?vimeo.com\//.test(url) ||
+        /^(https?:)?\/\/(?:www\.)?vk\.com\/video_ext\.php\?/.test(url) ||
+        /^(https?:)?\/\/(?:www\.)?ok\.com\/videoembed\//.test(url) ||
+        /^(https?:)?\/\/(?:www\.)?rutube\.ru\/play\/embed\//.test(url)
+    ) {
+        const tagName = child.parentNode.tagName;
+
+        if (
+            tagName &&
+            tagName.toLowerCase() === 'div' &&
+            child.parentNode.getAttribute('class') === 'videoWrapper'
+        ) {
+            return;
+        }
+
+        const html = XMLSerializer.serializeToString(child);
+
+        // wrap iframes in div.videoWrapper to control size/aspect ratio
+        child.parentNode.replaceChild(
+            DOMParser.parseFromString(
+                `<div class="videoWrapper">${html}</div>`
+            ),
+            child
+        );
+    }
 }
 
 function img(state, child) {
-    const url = child.getAttribute('src')
-    if(url) {
-        state.images.add(url)
-        if(state.mutate) {
-            let url2 = ipfsPrefix(url)
-            if(/^\/\//.test(url2)) {
-                // Change relative protocol imgs to https
-                url2 = "https:" + url2
-            }
-            if(url2 !== url) {
-                child.setAttribute('src', url2)
+    const url = child.getAttribute('src');
+
+    if (url) {
+        state.images.add(url);
+
+        if (state.mutate) {
+            if (/^\/\//.test(url)) {
+                child.setAttribute('src', 'https:' + url);
             }
         }
     }
 }
 
-// For all img elements with non-local URLs, prepend the proxy URL (e.g. `https://img0.steemit.com/0x0/`)
+// For all img elements with non-local URLs
 function proxifyImages(doc) {
-    if (!$STM_Config.img_proxy_prefix) return
-    if (!doc) return;
-    [...doc.getElementsByTagName('img')].forEach(node => {
-        const url = node.getAttribute('src')
-        if(! linksRe.local.test(url))
-            node.setAttribute('src', $STM_Config.img_proxy_prefix + '0x0/' + url)
-    })
+    if (!$STM_Config.img_proxy_prefix) {
+        return;
+    }
+
+    if (!doc) {
+        return;
+    }
+
+    for (let node of [...doc.getElementsByTagName('img')]) {
+        const url = node.getAttribute('src');
+
+        if (!linksRe.local.test(url)) {
+            node.setAttribute(
+                'src',
+                $STM_Config.img_proxy_prefix + '0x0/' + url
+            );
+        }
+    }
 }
 
-function linkifyNode(child, state, resolve) {try{
-    const tag = child.parentNode.tagName ? child.parentNode.tagName.toLowerCase() : child.parentNode.tagName
-    if(tag === 'code') return
-    if(tag === 'a') return
-
-    const {mutate} = state
-    if(!child.data) return
-    if(embedYouTubeNode(child, state.links, state.images)) return
-    if(embedVimeoNode(child, state.links, state.images)) return
-    if(embedContentNode(child, state.links, resolve)) return
-
-    const data = XMLSerializer.serializeToString(child)
-    const content = linkify(data, state.mutate, state.hashtags, state.usertags, state.images, state.links)
-    if(mutate && content !== data) {
-        const newChild = DOMParser.parseFromString(`<span>${content}</span>`)
-        child.parentNode.replaceChild(newChild, child)
-        return newChild;
+function linkifyNode(state, child) {
+    if (!child.data) {
+        return;
     }
-} catch(error) {console.log(error)}}
 
-function linkify(content, mutate, hashtags, usertags, images, links) {
+    try {
+        const outerTag = (child.parentNode.tagName || '').toLowerCase();
+
+        if (outerTag === 'code' || outerTag === 'a') {
+            return;
+        }
+
+        if (safeCall(embedYouTubeNode, state, child)) {
+            return;
+        }
+
+        if (safeCall(embedVimeoNode, state, child)) {
+            return;
+        }
+
+        if (safeCall(embedCoubNode, state, child)) {
+            return;
+        }
+
+        if (safeCall(embedRutubeNode, state, child)) {
+            return;
+        }
+
+        if (safeCall(embedOkruNode, state, child)) {
+            return;
+        }
+
+        const data = XMLSerializer.serializeToString(child);
+        const content = linkify(state, data);
+
+        if (state.mutate && content !== data) {
+            const newChild = DOMParser.parseFromString(
+                `<span>${content}</span>`
+            );
+
+            child.parentNode.replaceChild(newChild, child);
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+function linkify(state, content) {
     // hashtag
-    content = content.replace(/(^|\s)(#[-a-zа-яёґєії\d]+)/ig, tag => {
-        if(/#[\d]+$/.test(tag)) return tag // Don't allow numbers to be tags
-        const space = /^\s/.test(tag) ? tag[0] : ''
-        let tag2 = tag.trim().substring(1)
+    content = content.replace(/(^|\s)(#[-a-zа-яёґєії\d]+)/gi, tag => {
+        // Don't allow numbers to be tags
+        if (/#[\d]+$/.test(tag)) {
+            return tag;
+        }
+
+        const space = /^\s/.test(tag) ? tag[0] : '';
+
+        let tag2 = tag.trim().substring(1);
         // Parse tags:
         // if tag string starts with russian symbol, add 'ru-' prefix to it
         // when transletirate it
         // This is needed to be able to detransletirate it back to russian in future (to show russian categories to user)
         // (all of this is needed because blockchain does not allow russian symbols in category)
-        if(/^[а-яёґєії]/.test(tag2)) tag2 = 'ru--' + detransliterate(tag2, true)
-        const tagLower = tag2.toLowerCase()
-        if(hashtags) hashtags.add(tagLower)
-        if(!mutate) return tag
-        return space + `<a href="/trending/${tagLower}">${tag}</a>`
-    })
+        if (/^[а-яёґєії]/.test(tag2)) {
+            tag2 = 'ru--' + detransliterate(tag2, true);
+        }
+
+        const tagLower = tag2.toLowerCase();
+
+        if (state.hashtags) {
+            state.hashtags.add(tagLower);
+        }
+
+        if (!state.mutate) {
+            return tag;
+        }
+
+        return space + `<a href="/trending/${tagLower}">${tag}</a>`;
+    });
 
     // usertag (mention)
-	content = content.replace(/(^|\s)(@[a-z][-\.a-z\d]+[a-z\d])/ig, user => {
-		const space = /^\s/.test(user) ? user[0] : ''
-		const user2 = user.trim().substring(1)
-		const userLower = user2.toLowerCase()
-		const valid = validate_account_name(userLower) == null
-		if(valid && usertags) usertags.add(userLower)
-		if(!mutate) return user
-		return space + (valid
-							? `<a href="/@${userLower}">@${user2}</a>`
-							: '@' + user2
-			)
-	})
+    content = content.replace(/(^|\s)(@[a-z][-\.a-z\d]+[a-z\d])/gi, user => {
+        const space = /^\s/.test(user) ? user[0] : '';
+        const user2 = user.trim().substring(1);
+        const userLower = user2.toLowerCase();
+        const valid = validate_account_name(userLower) == null;
+
+        if (valid && state.usertags) {
+            state.usertags.add(userLower);
+        }
+
+        if (!state.mutate) {
+            return user;
+        }
+
+        return (
+            space +
+            (valid ? `<a href="/@${userLower}">@${user2}</a>` : '@' + user2)
+        );
+    });
 
     content = content.replace(linksAny('gi'), ln => {
-        if(linksRe.image.test(ln)) {
-            if(images) images.add(ln)
-            return `<img src="${ipfsPrefix(ln)}" />`
+        if (linksRe.image.test(ln)) {
+            if (state.images) {
+                state.images.add(ln);
+            }
+
+            return `<img src="${ln}" />`;
         }
 
         // do not linkify .exe or .zip urls
-        if(/\.(zip|exe)$/i.test(ln)) return ln;
-
-        if(links) links.add(ln)
-        return `<a href="${ipfsPrefix(ln)}">${ln}</a>`
-    })
-    return content
-}
-
-function embedYouTubeNode(child, links, images) { try {
-    if(!child.data) return false
-    const data = child.data
-    const yt = youTubeId(data)
-    if(!yt) return false
-
-    const v = DOMParser.parseFromString(`~~~ embed:${yt.id} youtube ~~~`)
-    child.parentNode.replaceChild(v, child)
-    if(links) links.add(yt.url)
-    if(images) images.add('https://img.youtube.com/vi/' + yt.id + '/0.jpg')
-    return true
-} catch(error) { console.log(error); return false } }
-
-/** @return {id, url} or <b>null</b> */
-function youTubeId(data) {
-    if(!data) return null
-
-    const m1 = data.match(linksRe.youTube)
-    const url = m1 ? m1[0] : null
-    if(!url) return null
-
-    const m2 = url.match(linksRe.youTubeId)
-    const id = m2 && m2.length >= 2 ? m2[1] : null
-    if(!id) return null
-
-    return {id, url}
-}
-
-function embedVimeoNode(child, links, /*images*/) {try{
-    if(!child.data) return false
-    const data = child.data
-
-    let id
-    {
-        const m = data.match(linksRe.vimeoId)
-        id = m && m.length >= 2 ? m[1] : null
-    }
-    if(!id) return false;
-
-    const url = `https://player.vimeo.com/video/${id}`
-    const v = DOMParser.parseFromString(`~~~ embed:${id} vimeo ~~~`)
-    child.parentNode.replaceChild(v, child)
-    if(links) links.add(url)
-
-    // Preview image requires a callback.. http://stackoverflow.com/questions/1361149/get-img-thumbnails-from-vimeo
-    // if(images) images.add('https://.../vi/' + id + '/0.jpg')
-
-    return true
-} catch(error) {console.log(error); return false}}
-
-function embedContentNode(child, links, resolve) {try{
-    if(!child.data) return false
-    let data = child.data.trim()
-
-    let url
-    let w
-    {
-        const m = data.match(linksRe.embedContent)
-        url = m ? m[0] : null
-        w = m && m.length > 0 ? m[1] : null
-    }
-    if(!url) return false
-    if(!w || !isWhite(w)) return false
-    if(!resolve) return false
-
-    const v = DOMParser.parseFromString(`~~~ embed:${url} ~~~`)
-    child.parentNode.replaceChild(v, child)
-    if(links) links.add(url)
-
-    return true
-} catch(error) {console.log(error); return false}}
-
-function ipfsPrefix(url) {
-    if($STM_Config.ipfs_prefix) {
-        // Convert //ipfs/xxx  or /ipfs/xxx  into  https://steemit.com/ipfs/xxxxx
-        if(/^\/?\/ipfs\//.test(url)) {
-            const slash = url.charAt(1) === '/' ? 1 : 0
-            url = url.substring(slash + '/ipfs/'.length) // start with only 1 /
-            return $STM_Config.ipfs_prefix + '/' + url
+        if (/\.(zip|exe)$/i.test(ln)) {
+            return ln;
         }
-    }
-    return url
+
+        if (state.links) {
+            state.links.add(ln);
+        }
+
+        return `<a href="${ln}">${ln}</a>`;
+    });
+
+    return content;
 }
+
+function embedYouTubeNode(state, node) {
+    const yt = youTubeId(node.data);
+
+    if (!yt) {
+        return;
+    }
+
+    const v = DOMParser.parseFromString(`~~~ embed:${yt.id} youtube ~~~`);
+    node.parentNode.replaceChild(v, node);
+
+    if (state.links) {
+        state.links.add(yt.url);
+    }
+
+    if (state.images) {
+        state.images.add('https://img.youtube.com/vi/' + yt.id + '/0.jpg');
+    }
+
+    return true;
+}
+
+/** @return ?{id, url} */
+function youTubeId(data) {
+    const m1 = data.match(linksRe.youTube);
+    const url = m1 ? m1[0] : null;
+
+    if (!url) {
+        return null;
+    }
+
+    const m2 = url.match(linksRe.youTubeId);
+    const id = m2 && m2.length >= 2 ? m2[1] : null;
+
+    if (!id) {
+        return null;
+    }
+
+    return { id, url };
+}
+
+function embedVimeoNode(state, node) {
+    const match = node.data.match(linksRe.vimeoId);
+
+    if (!match) {
+        return;
+    }
+
+    const id = match[1];
+
+    const url = `https://player.vimeo.com/video/${id}`;
+    const v = DOMParser.parseFromString(`~~~ embed:${id} vimeo ~~~`);
+    node.parentNode.replaceChild(v, node);
+
+    if (state.links) {
+        state.links.add(url);
+    }
+
+    return true;
+}
+
+function embedCoubNode(state, node) {
+    const match = node.data.match(linksRe.coubId);
+
+    if (!match) {
+        return;
+    }
+
+    const id = match[1];
+
+    node.parentNode.replaceChild(
+        DOMParser.parseFromString(`~~~ embed:${id} coub ~~~`),
+        node
+    );
+
+    if (state.links) {
+        state.links.add(`https://coub.com/view/${id}`);
+    }
+
+    return true;
+}
+
+function embedRutubeNode(state, node) {
+    const match = node.data.match(linksRe.rutubeId);
+
+    if (!match) {
+        return;
+    }
+
+    const id = match[1];
+
+    node.parentNode.replaceChild(
+        DOMParser.parseFromString(`~~~ embed:${id} rutube ~~~`),
+        node
+    );
+
+    if (state.links) {
+        state.links.add(`https://rutube.ru/video/${id}/`);
+    }
+
+    return true;
+}
+
+function embedOkruNode(state, node) {
+    const match = node.data.match(linksRe.okVideoId);
+
+    if (!match) {
+        return;
+    }
+
+    const id = match[1];
+
+    node.parentNode.replaceChild(
+        DOMParser.parseFromString(`~~~ embed:${id} ok_video ~~~`),
+        node
+    );
+
+    if (state.links) {
+        state.links.add(`https://ok.ru/live/${id}`);
+    }
+
+    return true;
+}
+
+function header(state, node) {
+    if (!state.mutate) {
+        return;
+    }
+
+    const tag = node.tagName;
+    const hIndex = parseInt(tag[1], 10);
+    const newIndex = Math.min(hIndex + 1, 6);
+    node.tagName = node.nodeName = node.localName = 'h' + newIndex;
+
+    if (!node.getAttribute('id') && node.textContent) {
+        const idBase = detransliterate(node.textContent.trim().toLowerCase(), true).replace(/[^a-z0-9]+/ig, '_');
+        let id = idBase;
+
+        let index = 0;
+
+        while (state.anchors.has(id)) {
+            index++;
+            id = `${idBase}_${index}`;
+        }
+
+        state.anchors.add(id)
+
+        node.setAttribute('id', id);
+        node.appendChild(
+            DOMParser.parseFromString(
+                `<a class="header-anchor" href="#${id}"></a>`
+            )
+        );
+    }
+}
+
+function safeCall(fn, ...args) {
+    try {
+        return fn(...args);
+    } catch(err) {
+        console.warn(err);
+    }
+}
+
+function noop() {}

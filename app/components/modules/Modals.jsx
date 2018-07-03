@@ -11,7 +11,8 @@ import user from 'app/redux/User';
 import tr from 'app/redux/Transaction';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import {NotificationStack} from 'react-notification';
-import {OrderedSet} from 'immutable';
+
+let keyIndex = 0;
 
 class Modals extends React.Component {
     static propTypes = {
@@ -42,6 +43,9 @@ class Modals extends React.Component {
         } = this.props;
 
         const notifications_array = notifications ? notifications.toArray().map(n => {
+            if (!n.key) {
+                n.key = ++keyIndex;
+            }
             n.onClick = () => removeNotification(n.key);
             return n;
         }) : [];

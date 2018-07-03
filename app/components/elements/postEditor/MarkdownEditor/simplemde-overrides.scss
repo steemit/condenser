@@ -1,0 +1,36 @@
+
+.MarkdownEditor {
+
+  & .CodeMirror {
+    padding: 0;
+    margin: 0 -4px;
+    border: none;
+    color: #333;
+    background: none;
+  }
+
+  & .CodeMirror-scroll {
+    min-height: 350px;
+  }
+
+  &_comment {
+    & .CodeMirror,
+    & .CodeMirror-scroll {
+      min-height: 3em;
+    }
+  }
+
+  & .CodeMirror-lines {
+    font-family: 'Source Serif Pro', serif;
+    font-size: 1.2em;
+    line-height: 1.5em;
+  }
+
+  &_comment .CodeMirror-lines {
+    font-family: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  }
+
+  & .cm-formatting-strikethrough {
+    text-decoration: none !important;
+  }
+}

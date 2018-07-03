@@ -1,0 +1,108 @@
+[
+  {
+    "name": "Андрей Фалалеев",
+    "role": "Team Lead, Блокчейн Разработка",
+    "avatar": "andrew",
+    "contacts": {
+      "golos": "andreypf",
+      "github": "afalaleev"
+    }
+  },
+  {
+    "name": "Мария Дьячук",
+    "role": "Project manager",
+    "avatar": "maria-d",
+    "contacts": {
+      "golos": "mariadia",
+      "github": "marijadia"
+    }
+  },
+  {
+    "name": "Александр Назаров",
+    "role": "Технический писатель",
+    "avatar": "alexandernazarov",
+    "contacts": {
+      "golos": "anazarov79",
+      "github": "anazarov79"
+    }
+  },
+  {
+    "name": "Константин Константинов",
+    "role": "Блокчейн разработка",
+    "avatar": "konstantin",
+    "contacts": {
+      "golos": "zxcat",
+      "github": "zxcat"
+    }
+  },
+  {
+    "name": "Антон Корпусенко",
+    "role": "Блокчейн разработка",
+    "avatar": "korpusenko",
+    "contacts": {
+      "github": "AKorpusenko"
+    }
+  },
+  {
+    "name": "Денис Захаренков",
+    "role": "DevOps",
+    "avatarUrl": "https://avatars0.githubusercontent.com/u/19325076?v=3&s=460",
+    "contacts": {
+      "golos": "muhazokotuha",
+      "github": "muhazzz"
+    }
+  },
+  {
+    "name": "Вадим Кайнаров",
+    "role": "С++ dev",
+    "avatar": "vadim-ka",
+    "contacts": {
+      "golos": "kaynarov",
+      "github": "kaynarov"
+    }
+  },
+  {
+    "name": "Юлия Журавлева",
+    "role": "С++ dev",
+    "avatar": "uliya-zh",
+    "contacts": {
+      "golos": "maslenitsa",
+      "github": "maslenitsa93"
+    }
+  },
+  {
+    "name": "Ростислав Величко",
+    "role": "С++ dev",
+    "avatar": "rostislav",
+    "contacts": {
+      "golos": "rostislav.vel"
+    }
+  },
+  {
+    "name": "Тимур Купаев",
+    "role": "Блокчейн аналитик",
+    "avatar": "timur",
+    "contacts": {
+      "golos": "timurku",
+      "github": "timurkupaev"
+    }
+  },
+  {
+    "name": "Ерлан Шиндаулетов",
+    "avatar": "erlan",
+    "role": "Инженер-программист",
+    "contacts": {
+      "golos": "epexa",
+      "github": "epexa"
+    }
+  },
+  {
+    "name": "Анна Чемерицкая",
+    "role": "Community manager",
+    "avatar": "anna-ch",
+    "contacts": {
+      "golos": "annaeq",
+      "github": "annaeq"
+    }
+  }
+]

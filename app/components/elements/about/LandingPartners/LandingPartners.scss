@@ -1,0 +1,15 @@
+
+.LandingPartners {
+  &__logos {
+    margin: 0 auto 90px;
+
+    img {
+      max-height: 100px;
+      margin-top: 30px;
+    }
+  }
+
+  &__forklog-logo {
+    transform: translateY(19%);
+  }
+}

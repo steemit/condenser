@@ -2,7 +2,7 @@ import remarkableStripper from 'app/utils/RemarkableStripper'
 import links from 'app/utils/Links'
 import sanitize from 'sanitize-html'
 import {htmlDecode} from 'app/utils/Html'
-import HtmlReady from 'shared/HtmlReady'
+import { getTags } from 'shared/HtmlReady'
 import Remarkable from 'remarkable'
 
 const remarkable = new Remarkable({ html: true, linkify: false })
@@ -60,7 +60,7 @@ export default function extractContent(get, content) {
         {
             const isHtml = /^<html>([\S\s]*)<\/html>$/.test(body)
             const htmlText = isHtml ? body : remarkable.render(body.replace(/<!--([\s\S]+?)(-->|$)/g, '(html comment removed: $1)'))
-            rtags = HtmlReady(htmlText, {mutate: false})
+            rtags = getTags(htmlText);
         }
 
         [image_link] = Array.from(rtags.images)

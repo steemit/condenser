@@ -43,7 +43,7 @@
   "helmet": {
     "directives": {
       "defaultSrc": "'self' golos.io www.youtube.com *.facebook.com",
-      "childSrc": "'self' www.youtube.com w.soundcloud.com *.facebook.com player.vimeo.com chat.golos.io livejournal.com www.google.com/maps/",
+      "childSrc": "'self' www.youtube.com w.soundcloud.com *.facebook.com player.vimeo.com chat.golos.io livejournal.com www.google.com/maps/ coub.com yandex.ru/map-widget/ music.yandex.ru deezer.com vk.com/video_ext.php ok.com/videoembed rutube.ru/play/embed/",
       "scriptSrc": "'self' 'unsafe-inline' *.facebook.com cyber.fund www.google-analytics.com *.facebook.net js-agent.newrelic.com bam.nr-data.net cdn.polyfill.io cdn.segment.com *.mxpnl.com *.metabar.ru mc.yandex.ru chat.golos.io media.reformal.ru",
       "styleSrc": "'self' 'unsafe-inline' cdnjs.cloudflare.com fonts.googleapis.com",
       "imgSrc": "* data:",
@@ -119,10 +119,10 @@
     "auth_token": false,
     "sender_id": false
   },
-  "upload_image": false,
+  "upload_image": "https://images.golos.io",
   "ws_connection_client": "wss://ws.golos.io",
   "ws_connection_server": "wss://ws.golos.io",
-  "chain_id": "0000000000000000000000000000000000000000000000000000000000000000",
+  "chain_id": "782a3039b478c839e4cb0c941ff4eaeb7df40bdd68bd441afd444b9da763de12",
   "metrics": {
     "name": "golos",
     "host": "127.0.0.1"

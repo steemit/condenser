@@ -1,158 +1,260 @@
-import React from 'react';
-import PropTypes from 'prop-types'
-import {connect} from 'react-redux'
-import {Component} from 'react'
-import Remarkable from 'remarkable'
-import YoutubePreview from 'app/components/elements/YoutubePreview'
-import sanitizeConfig, {noImageText} from 'app/utils/SanitizeConfig'
-import {renderToString} from 'react-dom/server';
-import sanitize from 'sanitize-html'
-import HtmlReady from 'shared/HtmlReady'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import Remarkable from 'remarkable';
+import cn from 'classnames';
 import tt from 'counterpart';
+import sanitize from 'sanitize-html';
+import HtmlReady from 'shared/HtmlReady';
+import YoutubePlayer from 'app/components/elements/common/YoutubePlayer/YoutubePlayer';
+import sanitizeConfig, { noImageText } from 'app/utils/SanitizeConfig';
 
-const remarkable = new Remarkable({
-    html: true, // remarkable renders first then sanitize runs...
-    breaks: true,
-    linkify: false, // linkify is done locally
-    typographer: false, // https://github.com/jonschlinkert/remarkable/issues/142#issuecomment-221546793
-    quotes: '“”‘’'
-})
+let remarkable = null;
+
+export function getRemarkable() {
+    if (!remarkable) {
+        remarkable = new Remarkable({
+            html: true,
+            breaks: true,
+            // Linkify is done locally
+            // Issue: https://github.com/jonschlinkert/remarkable/issues/142#issuecomment-221546793
+            linkify: false,
+            typographer: false,
+            quotes: '“”‘’',
+        });
+    }
+
+    return remarkable;
+}
 
 class MarkdownViewer extends Component {
-
     static propTypes = {
-        // HTML properties
         text: PropTypes.string,
         className: PropTypes.string,
         large: PropTypes.bool,
-        // formId: PropTypes.string, // This is unique for every editor of every post (including reply or edit)
+        formId: PropTypes.string, // This is unique for every editor of every post (including reply or edit)
         canEdit: PropTypes.bool,
-        jsonMetadata: PropTypes.object,
         highQualityPost: PropTypes.bool,
         noImage: PropTypes.bool,
         allowDangerousHTML: PropTypes.bool,
-    }
+    };
 
     static defaultProps = {
-        className: '',
         large: false,
         allowDangerousHTML: false,
-    }
+    };
 
-    constructor() {
-        super()
-        this.state = {allowNoImage: true}
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            allowNoImage: true,
+        };
     }
 
     shouldComponentUpdate(np, ns) {
-        return np.text !== this.props.text ||
-        np.large !== this.props.large ||
-        // np.formId !== this.props.formId ||
-        np.canEdit !== this.props.canEdit ||
-        ns.allowNoImage !== this.state.allowNoImage
+        return (
+            np.text !== this.props.text ||
+            np.large !== this.props.large ||
+            // np.formId !== this.props.formId ||
+            np.canEdit !== this.props.canEdit ||
+            ns.allowNoImage !== this.state.allowNoImage
+        );
     }
 
     onAllowNoImage = () => {
-        this.setState({allowNoImage: false})
-    }
+        this.setState({ allowNoImage: false });
+    };
 
     render() {
-        const {noImage} = this.props
-        const {allowNoImage} = this.state
-        let {text} = this.props
-        if (!text) text = '' // text can be empty, still view the link meta data
-        const {large, /*formId, canEdit, jsonMetadata,*/ highQualityPost} = this.props
+        const { noImage, className, large, highQualityPost } = this.props;
+        const { allowNoImage } = this.state;
 
-        let html = false;
+        let text = this.props.text || '';
+
+        let isHtml = false;
         // See also ReplyEditor isHtmlTest
-        const m = text.match(/^<html>([\S\s]*)<\/html>$/);
-        if (m && m.length === 2) {
-            html = true;
-            text = m[1];
+        const htmlMatch = text.match(/^<html>([\S\s]*)<\/html>$/);
+
+        if (htmlMatch) {
+            text = htmlMatch[1];
+            isHtml = true;
         } else {
-            // See also ReplyEditor isHtmlTest
-            html = /^<p>[\S\s]*<\/p>/.test(text)
+            isHtml = text.startsWith('<p>');
         }
 
-        // Strip out HTML comments. "JS-DOS" bug.
-        text = text.replace(/<!--([\s\S]+?)(-->|$)/g, '(html comment removed: $1)')
+        // Strip out HTML comments.
+        text = text.replace(/<!--([\s\S]+?)(?:-->|$)/g, '');
 
-        let renderedText = html ? text : remarkable.render(text)
+        let renderedText = isHtml ? text : getRemarkable().render(text);
 
-        // Embed videos, link mentions and hashtags, etc...
-        if(renderedText) renderedText = HtmlReady(renderedText).html
+        if (renderedText) {
+            // Embed videos, link mentions and hashtags, etc...
+            renderedText = HtmlReady(renderedText);
+        }
 
-        // Complete removal of javascript and other dangerous tags..
-        // The must remain as close as possible to dangerouslySetInnerHTML
-        let cleanText = renderedText
+        let cleanText;
+
         if (this.props.allowDangerousHTML === true) {
-            console.log('WARN\tMarkdownViewer rendering unsanitized content')
+            console.warn('WARN\tMarkdownViewer rendering unsanitized content');
+            cleanText = renderedText;
         } else {
-            cleanText = sanitize(renderedText, sanitizeConfig({large, highQualityPost, noImage: noImage && allowNoImage}))
+            // Complete removal of javascript and other dangerous tags..
+            // The must remain as close as possible to dangerouslySetInnerHTML
+            cleanText = sanitize(
+                renderedText,
+                sanitizeConfig({
+                    large,
+                    highQualityPost,
+                    noImage: noImage && allowNoImage,
+                })
+            );
         }
 
-        //sanitize escaped &mdash; to &amp;mdash; and so on
-        cleanText = cleanText.replace(/&amp;(mdash|rdquo|ndash|ldquo|laquo|raquo|zwj)/g, string => string.replace(/&amp;/, '&'))
+        // "&amp;mdash;" -> "&mdash;" and so on
+        cleanText = cleanText.replace(
+            /&amp;(mdash|rdquo|ndash|ldquo|laquo|raquo|zwj)/g,
+            (match, word) => '&' + word
+        );
 
-        cleanText = cleanText.replace(/<a\s+href="http:\/\/bit\.do\/.+<\/a>/g, '[ fishing link ]')
+        cleanText = cleanText.replace(
+            /<a\s+href="http:\/\/bit\.do\/.+?<\/a>/g,
+            '[ fishing link ]'
+        );
 
-        if(/<\s*script/ig.test(cleanText)) {
+        if (/<\s*script/gi.test(cleanText)) {
             // Not meant to be complete checking, just a secondary trap and red flag (code can change)
-            console.error('Refusing to render script tag in post text', cleanText)
-            return <div></div>
+            console.error(
+                'Refusing to render script tag in post text',
+                cleanText
+            );
+            return <div />;
         }
 
-        const noImageActive = cleanText.indexOf(noImageText) !== -1
+        const noImageActive = cleanText.indexOf(noImageText) !== -1;
 
-        // In addition to inserting the youtube compoennt, this allows react to compare separately preventing excessive re-rendering.
-        let idx = 0
-        const sections = []
+        let idx = 0;
+        const sections = [];
 
         // HtmlReady inserts ~~~ embed:${id} type ~~~
-        for(let section of cleanText.split('~~~ embed:')) {
-            const match = section.match(/^([A-Za-z0-9\_\-]+) (youtube|vimeo) ~~~/)
-            if(match && match.length >= 3) {
-                const id = match[1]
-                const type = match[2]
-                const w = large ? 640 : 480,
-                      h = large ? 360 : 270
-                if(type === 'youtube') {
+        for (let section of cleanText.split('~~~ embed:')) {
+            const match = section.match(
+                /^([A-Za-z0-9_-]+) (youtube|vimeo|coub|ok_video|rutube) ~~~/
+            );
+
+            if (match) {
+                const [, id, type] = match;
+
+                const w = large ? 640 : 480;
+                const h = large ? 360 : 270;
+
+                if (type === 'youtube') {
                     sections.push(
-                        <YoutubePreview key={idx++} width={w} height={h} youTubeId={id}
-                            frameBorder="0" allowFullScreen="true" />
-                    )
-                } else if(type === 'vimeo') {
-                    const url = `https://player.vimeo.com/video/${id}`
+                        <YoutubePlayer
+                            className="videoWrapper"
+                            key={++idx}
+                            width={w}
+                            height={h}
+                            youTubeId={id}
+                        />
+                    );
+                } else if (type === 'vimeo') {
                     sections.push(
-                        <div className="videoWrapper">
-                            <iframe key={idx++} src={url} width={w} height={h} frameBorder="0"
-                                webkitallowfullscreen mozallowfullscreen allowFullScreen></iframe>
+                        <div className="videoWrapper" key={++idx}>
+                            <iframe
+                                src={`https://player.vimeo.com/video/${id}`}
+                                width={w}
+                                height={h}
+                                frameBorder="0"
+                                allowFullScreen
+                            />
                         </div>
-                    )
+                    );
+                } else if (type === 'coub') {
+                    sections.push(
+                        <iframe
+                            key={++idx}
+                            src={`//coub.com/embed/${id}?muted=true&autostart=true&originalSize=false&startWithHD=false&hideTopBar=true`}
+                            allowFullScreen
+                            frameBorder="0"
+                            width="100%"
+                            height="200"
+                            allow="autoplay"
+                        />
+                    );
+                } else if (type === 'rutube') {
+                    sections.push(
+                        <div className="videoWrapper" key={++idx}>
+                            <iframe
+                                src={`//rutube.ru/play/embed/${id}/`}
+                                allowFullScreen
+                                frameBorder="0"
+                                width="100%"
+                                height="200"
+                                allow="autoplay"
+                            />
+                        </div>
+                    );
+                } else if (type === 'ok_video') {
+                    sections.push(
+                        <div className="videoWrapper" key={++idx}>
+                            <iframe
+                                src={`//ok.ru/videoembed/${id}`}
+                                allowFullScreen
+                                frameBorder="0"
+                                width="100%"
+                                height="200"
+                                allow="autoplay"
+                            />
+                        </div>
+                    );
                 } else {
                     console.error('MarkdownViewer unknown embed type', type);
                 }
-                section = section.substring(`${id} ${type} ~~~`.length)
-                if(section === '') continue
+                section = section.substring(`${id} ${type} ~~~`.length);
+
+                if (section === '') {
+                    continue;
+                }
             }
-            sections.push(<div key={idx++} dangerouslySetInnerHTML={{__html: section}} />)
+
+            sections.push(
+                <div
+                    key={++idx}
+                    dangerouslySetInnerHTML={{ __html: section }}
+                />
+            );
         }
 
-        const cn = 'Markdown' + (this.props.className ? ` ${this.props.className}` : '') + (html ? ' html' : '') + (large ? '' : ' MarkdownViewer--small')
-        return (<div className={"MarkdownViewer " + cn}>
-            {sections}
-            {noImageActive && allowNoImage &&
-                <div onClick={this.onAllowNoImage} className="MarkdownViewer__negative_group">
-                    {tt('markdownviewer_jsx.images_were_hidden_due_to_low_ratings')}
-                    <button style={{marginBottom: 0}} className="button hollow tiny float-right">{tt('g.show')}</button>
-                </div>
-            }
-        </div>)
+        return (
+            <div
+                className={cn('MarkdownViewer Markdown', className, {
+                    html: isHtml,
+                    'MarkdownViewer--small': !large,
+                })}
+            >
+                {sections}
+                {noImageActive &&
+                    allowNoImage && (
+                        <div
+                            onClick={this.onAllowNoImage}
+                            className="MarkdownViewer__negative_group"
+                        >
+                            {tt(
+                                'markdownviewer_jsx.images_were_hidden_due_to_low_ratings'
+                            )}
+                            <button
+                                style={{ marginBottom: 0 }}
+                                className="button hollow tiny float-right"
+                            >
+                                {tt('g.show')}
+                            </button>
+                        </div>
+                    )}
+            </div>
+        );
     }
 }
 
-export default connect(
-    (state, ownProps) => {
-        return {...ownProps}
-    }
-)(MarkdownViewer)
+// TODO: Why needs a connect?
+export default connect((state, props) => props)(MarkdownViewer);

@@ -5,7 +5,6 @@ import PasswordInput from 'app/components/elements/PasswordInput';
 import constants from 'app/redux/constants';
 import {PrivateKey} from 'golos-js/lib/auth/ecc';
 import tt from 'counterpart';
-import { FormattedHTMLMessage } from 'react-intl';
 import { APP_NAME, APP_DOMAIN, SUPPORT_EMAIL } from 'app/client_config';
 import {api} from 'golos-js';
 
@@ -231,8 +230,6 @@ class RecoverAccountStep1 extends React.Component {
                             {
                                 email_submitted
                                 ?   <div>
-                                        {/* currently translateHtml() does not work, using <FormattedHTMLMessage /> instead */}
-                                        {/* <FormattedHTMLMessage id="thanks_for_submitting_request_for_account_recovery" /> */}
                                         <p>{tt('recoveraccountstep1_jsx.thanks_for_submitting_request_for_account_recovery_1', {APP_NAME})}</p>
                                         <p>{tt('recoveraccountstep1_jsx.thanks_for_submitting_request_for_account_recovery_2')}</p>
                                         <p>{tt('recoveraccountstep1_jsx.thanks_for_submitting_request_for_account_recovery_3')}</p>

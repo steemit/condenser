@@ -7,9 +7,16 @@ export default class PostFormLoader extends PureComponent {
         if (!PostForm) {
             require.ensure('app/components/modules/PostForm/PostForm', require => {
                 PostForm = require('app/components/modules/PostForm/PostForm').default;
-                this.forceUpdate();
+
+                if (!this._unmount) {
+                    this.forceUpdate();
+                }
             });
         }
+    }
+
+    componentWillUnmount() {
+        this._unmount = true;
     }
 
     render() {

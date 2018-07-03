@@ -18,10 +18,10 @@ const Button = styled.button`
   border: 0;
   outline: none;
 
-  color: #FFFFFF;
+  color: #fff;
   background: #2879FF;
 
-  font-family: 'Roboto';
+  font-family: ${props => props.theme.fontFamilyBold};
   font-size: 12px;
   font-weight: bold;
   text-align: center;
@@ -62,10 +62,10 @@ const Button = styled.button`
       props.light &&
       `
     color: #393636;
-    background: #ffffff;
+    background: #fff;
     border: 1px solid rgba(57,54,54,0.30);
     &:hover {
-      background: #ffffff;
+      background: #fff;
       border: 1px solid ${darken(0.05, 'rgba(57,54,54,0.30)')};
     }
   `}

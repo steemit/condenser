@@ -71,11 +71,11 @@ const Details = styled.div`
 
 const Name = styled.div`
     color: #393636;
-    font-family: 'Roboto Slab';
+    font-family: ${props => props.theme.fontFamilyBold};
     font-size: 30px;
     font-weight: bold;
     line-height: 1;
-    text-shadow: 0px 0px 1px #fff;
+    text-shadow: 0 0 1px #fff;
 
     @media (max-width: 768px) {
         font-size: 18px;
@@ -107,7 +107,7 @@ const IconCover = styled(Dropzone)`
     position: absolute !important;
     top: 9px;
     right: 34px;
-
+    overflow: hidden;
     cursor: pointer;
 `;
 

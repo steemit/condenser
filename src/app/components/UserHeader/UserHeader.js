@@ -37,10 +37,10 @@ const Wrapper = styled.div`
         background-size: 41px;
         background-repeat: repeat;
         background-position: 0 -26px;
-        background-image: url('images/profile/pattern.png');
+        background-image: url('/images/profile/pattern.png');
         
         @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) { 
-            background-image: url('images/profile/pattern@2x.png');
+            background-image: url('/images/profile/pattern@2x.png');
         }
         `
     }

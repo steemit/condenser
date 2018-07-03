@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
@@ -60,7 +60,7 @@ const Wrapper = styled.div`
     }
 `;
 
-export default class UserProfileAvatar extends Component {
+export default class UserProfileAvatar extends PureComponent {
     static propTypes = {
         avatarUrl: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
     };
@@ -73,9 +73,9 @@ export default class UserProfileAvatar extends Component {
 
         return (
             <Wrapper backgroundUrl={backgroundUrl}>
-                {!backgroundUrl &&
+                {!backgroundUrl && (
                     <Icon name="user" width="65px" height="70px" />
-                }
+                )}
                 {children &&
                     React.cloneElement(children, {
                         children: <Icon name="picture" size="20px" />,

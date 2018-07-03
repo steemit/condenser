@@ -2,6 +2,14 @@
 .MarkdownEditor {
   padding-top: 4px;
 
+  &_comment {
+    font-size: 14px;
+  }
+
+  &__textarea {
+    visibility: hidden;
+  }
+
   &__dropzone {
     position: relative;
   }

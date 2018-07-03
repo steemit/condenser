@@ -14,6 +14,7 @@ const GUIDE_URL =
 const MAX_HEADING = 4;
 const TOOLBAR_OFFSET = 7;
 const TOOLBAR_WIDTH = 518;
+const TOOLBAR_COMMENT_WIDTH = 376;
 const MIN_TIP_OFFSET = 29;
 
 const PLUS_ACTIONS = [
@@ -74,10 +75,11 @@ export default class MarkdownEditorToolbar extends React.PureComponent {
     }
 
     render() {
+        const { commentMode } = this.props;
         const { newLineHelper } = this.state;
 
         return (
-            <div className="MET" ref="root">
+            <div className={cn('MET', { MET_comment: commentMode })} ref="root">
                 {this._renderToolbar()}
                 {newLineHelper ? this._renderHelper(newLineHelper) : null}
             </div>
@@ -85,14 +87,16 @@ export default class MarkdownEditorToolbar extends React.PureComponent {
     }
 
     _renderToolbar() {
-        const { SM } = this.props;
+        const { SM, commentMode } = this.props;
         const { state, toolbarPosition, toolbarShow } = this.state;
         const { root } = this.refs;
 
         const editor = this._editor;
 
+        const toolbarWidth = commentMode ? TOOLBAR_COMMENT_WIDTH : TOOLBAR_WIDTH;
+
         const style = {
-            width: TOOLBAR_WIDTH,
+            width: toolbarWidth,
         };
 
         let toolbarTipLeft = null;
@@ -100,35 +104,86 @@ export default class MarkdownEditorToolbar extends React.PureComponent {
         if (toolbarPosition) {
             const rootPos = root.getBoundingClientRect();
 
-            style.top =
-                toolbarPosition.top -
-                rootPos.top -
-                TOOLBAR_OFFSET;
+            style.top = toolbarPosition.top - rootPos.top - TOOLBAR_OFFSET;
 
             if (toolbarPosition.left != null) {
                 let left = Math.round(toolbarPosition.left - rootPos.left);
-                toolbarTipLeft = TOOLBAR_WIDTH / 2;
+                toolbarTipLeft = toolbarWidth / 2;
 
-                const deltaLeft = left - TOOLBAR_WIDTH / 2;
+                const deltaLeft = left - toolbarWidth / 2;
 
                 if (deltaLeft < 0) {
                     toolbarTipLeft = Math.max(MIN_TIP_OFFSET, left);
-                    left = TOOLBAR_WIDTH / 2;
+                    left = toolbarWidth / 2;
                 } else {
-                    const deltaRight = left + TOOLBAR_WIDTH / 2 - rootPos.width;
+                    const deltaRight = left + toolbarWidth / 2 - rootPos.width;
 
                     if (deltaRight > 0) {
                         toolbarTipLeft = Math.min(
-                            TOOLBAR_WIDTH - MIN_TIP_OFFSET,
-                            TOOLBAR_WIDTH / 2 + deltaRight
+                            toolbarWidth - MIN_TIP_OFFSET,
+                            toolbarWidth / 2 + deltaRight
                         );
-                        left = rootPos.width - TOOLBAR_WIDTH / 2;
+                        left = rootPos.width - toolbarWidth / 2;
                     }
                 }
 
                 style.left = Math.round(left);
             }
         }
+
+        const actions = [
+            {
+                active: state.bold,
+                icon: 'bold',
+                onClick: () => SM.toggleBold(editor),
+            },
+            {
+                active: state.italic,
+                icon: 'italic',
+                onClick: () => SM.toggleItalic(editor),
+            },
+            commentMode ? null : {
+                active: state.heading,
+                icon: 'header',
+                onClick: this._onHeadingClick,
+            },
+            {
+                active: state.strikethrough,
+                icon: 'strike',
+                onClick: this._toggleStrikeThrough,
+            },
+            'SEPARATOR',
+            {
+                icon: 'bullet-list',
+                onClick: () => SM.toggleUnorderedList(editor),
+            },
+            {
+                icon: 'number-list',
+                onClick: this._onToggleOrderedList,
+            },
+            'SEPARATOR',
+            {
+                active: state.quote,
+                icon: 'quote',
+                onClick: () => SM.toggleBlockquote(editor),
+            },
+            {
+                active: state.link,
+                icon: 'link',
+                onClick: this._draw,
+            },
+            {
+                icon: 'picture',
+                tooltip: tt('editor_toolbar.add_image'),
+                onClick: this._addImage,
+            },
+            {
+                icon: 'video',
+                tooltip: tt('editor_toolbar.add_video'),
+                onClick: this._drawVideo,
+            },
+            'SEPARATOR',
+        ];
 
         return (
             <div
@@ -145,76 +200,25 @@ export default class MarkdownEditorToolbar extends React.PureComponent {
                         }}
                     />
                 ) : null}
-                <Icon
-                    className={cn('MET__icon', {
-                        MET__icon_active: state.bold,
-                    })}
-                    name="editor-toolbar/bold"
-                    onClick={() => SM.toggleBold(editor)}
-                />
-                <Icon
-                    className={cn('MET__icon', {
-                        MET__icon_active: state.italic,
-                    })}
-                    name="editor-toolbar/italic"
-                    onClick={() => SM.toggleItalic(editor)}
-                />
-                <Icon
-                    className={cn('MET__icon', {
-                        MET__icon_active: state.heading,
-                    })}
-                    name="editor-toolbar/header"
-                    onClick={this._onHeadingClick}
-                />
-                <Icon
-                    className={cn('MET__icon', {
-                        MET__icon_active: state.strikethrough,
-                    })}
-                    name="editor-toolbar/strike"
-                    onClick={this._toggleStrikeThrough}
-                />
-                <i className="MET__separator" />
-                <Icon
-                    className="MET__icon"
-                    name="editor-toolbar/bullet-list"
-                    onClick={() => SM.toggleUnorderedList(editor)}
-                />
-                <Icon
-                    className="MET__icon"
-                    name="editor-toolbar/number-list"
-                    onClick={this._onToggleOrderedList}
-                />
-                <i className="MET__separator" />
-                <Icon
-                    className={cn('MET__icon', {
-                        MET__icon_active: state.quote,
-                    })}
-                    name="editor-toolbar/quote"
-                    onClick={() => SM.toggleBlockquote(editor)}
-                />
-                <Icon
-                    className={cn('MET__icon', {
-                        MET__icon_active: state.link,
-                    })}
-                    name="editor-toolbar/link"
-                    onClick={this._draw}
-                />
-                <Icon
-                    className="MET__icon"
-                    name="editor-toolbar/picture"
-                    data-tooltip={tt('editor_toolbar.add_image')}
-                    onClick={this._addImage}
-                />
-                <Icon
-                    className="MET__icon"
-                    name="editor-toolbar/video"
-                    data-tooltip={tt('editor_toolbar.add_video')}
-                    onClick={this._drawVideo}
-                />
-                <i className="MET__separator" />
+                {actions.map(
+                    (action, i) =>
+                        !action ? null : action === 'SEPARATOR' ? (
+                            <i className="MET__separator" />
+                        ) : (
+                            <Icon
+                                key={i}
+                                className={cn('MET__icon', {
+                                    MET__icon_active: action.active,
+                                })}
+                                name={`editor-toolbar/${action.icon}`}
+                                data-tooltip={action.tooltip}
+                                onClick={action.onClick}
+                            />
+                        )
+                )}
                 <a href={GUIDE_URL} target="_blank">
                     <Icon
-                        className="MET__icon"
+                        className="MET__icon MET__icon_help"
                         name="editor/info"
                         data-tooltip={tt('editor_toolbar.markdown_help')}
                     />
@@ -238,10 +242,11 @@ export default class MarkdownEditorToolbar extends React.PureComponent {
                     'MET__new-line-helper_selected': newLineOpen && selected,
                 })}
                 style={{
-                    top:
+                    top: Math.round(
                         pos.top -
-                        root.getBoundingClientRect().top -
-                        window.scrollY,
+                            root.getBoundingClientRect().top -
+                            window.scrollY
+                    ),
                 }}
             >
                 <i
@@ -294,10 +299,17 @@ export default class MarkdownEditorToolbar extends React.PureComponent {
 
         const cm = this._cm;
 
+        const cursor = cm.getCursor();
+        const line = cm.getLine(cursor.line);
         const selection = cm.getSelection();
 
-        if (selection.trim() === '') {
+        if (line.trim() === '') {
             const pos = cm.cursorCoords();
+
+            // Sometimes editor being in invalid state, skip it
+            if (pos.top > 20000) {
+                return;
+            }
 
             this.setState({
                 newLineHelper: {
@@ -634,13 +646,16 @@ export default class MarkdownEditorToolbar extends React.PureComponent {
         }
 
         cm.replaceSelection(selectionLines.join('\n'));
-        cm.setSelection({
-            ch: 0,
-            line: cursor.line,
-        }, {
-            ch: 99999,
-            line: cursorEnd.line,
-        })
+        cm.setSelection(
+            {
+                ch: 0,
+                line: cursor.line,
+            },
+            {
+                ch: 99999,
+                line: cursorEnd.line,
+            }
+        );
     };
 
     _onAddImageClose = data => {

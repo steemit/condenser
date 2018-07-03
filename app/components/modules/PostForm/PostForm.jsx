@@ -177,8 +177,6 @@ class PostForm extends React.Component {
 
         let tags = jsonMetadata.tags || [];
 
-        tags = tags.filter(t => t !== 'nsfw');
-
         if (tags[0] !== editParams.category) {
             tags.unshift(editParams.category);
         }
@@ -492,10 +490,8 @@ class PostForm extends React.Component {
         const {
             title,
             tags,
-            text,
             payoutType,
             editorId,
-            isPreview,
         } = this.state;
         let error;
 

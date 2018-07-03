@@ -2,8 +2,9 @@
 
 .MET {
   display: flex;
-  background: #f00;
+  font-size: 16px;
   $toolbar_height: 46px;
+  $toolbar_comment_height: 36px;
 
   &__toolbar {
     position: absolute;
@@ -25,6 +26,11 @@
       opacity: 1;
       pointer-events: initial;
     }
+  }
+
+  &_comment &__toolbar {
+    height: $toolbar_comment_height;
+    border-radius: $toolbar_comment_height / 2;
   }
 
   &__toolbar-tip {
@@ -54,9 +60,16 @@
       width: unset;
       height: 18px;
     }
+  }
 
-    &_small > svg {
-      height: 14px;
+  &_comment &__icon {
+    width: 30px;
+    height: 22px;
+    padding-top: 4px;
+
+    & > svg {
+      vertical-align: top;
+      height: 15px;
     }
   }
 
@@ -64,6 +77,14 @@
     height: 30px;
     margin: 0 8px;
     border-right: 1px solid #d9d9d9;
+  }
+
+  &_comment &__icon_help {
+    padding-top: 2px;
+  }
+
+  &_comment &__separator {
+    height: 24px;
   }
 
   &__new-line-helper {
@@ -100,6 +121,17 @@
 
     &_selected {
       width: 400px;
+    }
+  }
+
+  &_comment &__new-line-helper {
+    left: 0;
+    margin-top: 20px;
+    opacity: 0.7;
+    transition: width 0.3s, opacity 0.2s;
+
+    &:hover {
+      opacity: 1;
     }
   }
 

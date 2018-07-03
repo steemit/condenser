@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import debounce from 'lodash.debounce';
 import Dropzone from 'react-dropzone';
 import tt from 'counterpart';
+import cn from 'classnames';
 import MarkdownEditorToolbar from 'app/components/elements/postEditor/MarkdownEditorToolbar';
 import DialogManager from 'app/components/elements/common/DialogManager';
 
+const DELAYED_TIMEOUT = 1000;
 let SimpleMDE;
 
 if (process.env.BROWSER) {
@@ -13,14 +15,24 @@ if (process.env.BROWSER) {
 }
 
 let lastWidgetId = 0;
+const initDate = Date.now();
 
-export default class MarkdownEditor extends React.Component {
+export default class MarkdownEditor extends PureComponent {
     static propTypes = {
         initialValue: PropTypes.string,
         placeholder: PropTypes.string,
+        autoFocus: PropTypes.bool,
+        commentMode: PropTypes.bool,
         onChangeNotify: PropTypes.func.isRequired,
         uploadImage: PropTypes.func.isRequired,
     };
+
+    constructor(props) {
+        super(props);
+
+        this._processTextLazy = debounce(this._processText, 100);
+        this._onCursorActivityLazy = debounce(this._onCursorActivity, 50);
+    }
 
     componentDidMount() {
         // Don't init on server
@@ -28,14 +40,24 @@ export default class MarkdownEditor extends React.Component {
             return;
         }
 
-        this._processTextLazy = debounce(this._processText, 100);
-        this._onCursorActivityLazy = debounce(this._onCursorActivity, 50);
+        const timeDelta = DELAYED_TIMEOUT - (Date.now() - initDate);
+
+        if (timeDelta > 0) {
+            this._delayedTimeout = setTimeout(() => this._init(), timeDelta);
+        } else {
+            this._init();
+        }
+    }
+
+    _init() {
+        const props = this.props;
 
         this._simplemde = new SimpleMDE({
             spellChecker: false,
             status: false,
-            placeholder: this.props.placeholder,
-            initialValue: this.props.initialValue || '',
+            autofocus: props.autoFocus,
+            placeholder: props.placeholder,
+            initialValue: props.initialValue || '',
             element: this.refs.textarea,
             promptURLs: true,
             dragDrop: true,
@@ -62,23 +84,13 @@ export default class MarkdownEditor extends React.Component {
         }
 
         this._previewTimeout = setTimeout(() => {
-            if (!this._unmount) {
-                this._processText();
-            }
+            this._processText();
         }, 500);
-
-        this._fixTimeout = setTimeout(() => {
-            if (!this._unmount) {
-                this._tryToFixCursorPosition();
-            }
-        }, 1000);
     }
 
     componentWillUnmount() {
-        this._unmount = true;
-
-        clearTimeout(this._fixTimeout);
         clearTimeout(this._previewTimeout);
+        clearTimeout(this._delayedTimeout);
 
         this._processTextLazy.cancel();
         this._onCursorActivityLazy.cancel();
@@ -90,10 +102,14 @@ export default class MarkdownEditor extends React.Component {
     }
 
     render() {
-        const { uploadImage } = this.props;
+        const { uploadImage, commentMode } = this.props;
 
         return (
-            <div className="MarkdownEditor">
+            <div
+                className={cn('MarkdownEditor', {
+                    MarkdownEditor_comment: commentMode,
+                })}
+            >
                 <Dropzone
                     className="MarkdownEditor__dropzone"
                     disableClick
@@ -103,12 +119,13 @@ export default class MarkdownEditor extends React.Component {
                 >
                     {this._simplemde ? (
                         <MarkdownEditorToolbar
+                            commentMode={commentMode}
                             editor={this._simplemde}
                             uploadImage={uploadImage}
                             SM={SimpleMDE}
                         />
                     ) : null}
-                    <textarea ref="textarea" />
+                    <textarea ref="textarea" className="MarkdownEditor__textarea" />
                 </Dropzone>
             </div>
         );
@@ -270,7 +287,6 @@ export default class MarkdownEditor extends React.Component {
             this._lineWidgets = [];
 
             const cursor = this._cm.getCursor();
-            console.log(cursor);
             this._simplemde.value(updatedText);
             setTimeout(() => {
                 this._cm.setCursor(cursor);
@@ -315,24 +331,27 @@ export default class MarkdownEditor extends React.Component {
         img.src = $STM_Config.img_proxy_prefix + '0x0/' + url;
     }
 
-    _tryToFixCursorPosition() {
-        // Hack: Need some action for fix cursor position
-        if (this.props.initialValue) {
-            this._cm.execCommand('selectAll');
-            this._cm.execCommand('undoSelection');
-        } else {
-            this._cm.execCommand('goLineEnd');
-            this._cm.replaceSelection(' ');
-            this._cm.execCommand('delCharBefore');
-        }
-    }
+    // _tryToFixCursorPosition() {
+    //     // Hack: Need some action for fix cursor position
+    //     if (this.props.initialValue) {
+    //         this._cm.execCommand('selectAll');
+    //         this._cm.execCommand('undoSelection');
+    //     } else {
+    //         this._cm.execCommand('goLineEnd');
+    //         this._cm.replaceSelection(' ');
+    //         this._cm.execCommand('delCharBefore');
+    //     }
+    // }
 
     _onCursorActivity = () => {
         const workArea = document.querySelector('.PostForm__work-area');
-        const cursorPos = this._cm.cursorCoords();
 
-        if (cursorPos.top + 28 > workArea.offsetTop + workArea.offsetHeight) {
-            workArea.scrollTop += 40;
+        if (workArea) {
+            const cursorPos = this._cm.cursorCoords();
+
+            if (cursorPos.top + 28 > workArea.offsetTop + workArea.offsetHeight) {
+                workArea.scrollTop += 40;
+            }
         }
     };
 }

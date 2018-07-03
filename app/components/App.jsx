@@ -23,6 +23,7 @@ import {APP_ICON, VEST_TICKER, WIKI_URL, LANDING_PAGE_URL, ABOUT_PAGE_URL, WHITE
 import LocalizedCurrency from '@elements/LocalizedCurrency';
 import MobileAppButton from 'app/components/elements/MobileBanners/MobileAppButton';
 import DialogManager from 'app/components/elements/common/DialogManager';
+import { init as initAnchorHelper } from 'app/utils/anchorHelper';
 
 const availableLinks = [
     'https://www.facebook.com/www.golos.io',
@@ -80,6 +81,10 @@ class App extends React.Component {
             window.addEventListener('click', this.checkLeaveGolos)
         }
         // setTimeout(() => this.setState({showCallout: false}), 15000);
+
+        if (process.env.BROWSER) {
+            initAnchorHelper();
+        }
     }
 
     componentWillUnmount() {

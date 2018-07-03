@@ -1,0 +1,14 @@
+
+.CommentFooter {
+  margin-bottom: 20px;
+
+  &__buttons {
+    display: flex;
+    align-items: center;
+  }
+
+  &__button {
+    position: relative;
+    margin-right: 8px;
+  }
+}

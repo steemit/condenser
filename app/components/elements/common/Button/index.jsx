@@ -3,7 +3,7 @@ import cn from 'classnames';
 
 export default class Button extends React.PureComponent {
     render() {
-        const { children, primary, className, disabled, onClick } = this.props;
+        const { children, primary, small, className, disabled, onClick } = this.props;
 
         return (
             <button
@@ -12,6 +12,7 @@ export default class Button extends React.PureComponent {
                     'Button',
                     {
                         Button_primary: primary,
+                        Button_small: small,
                     },
                     className
                 )}

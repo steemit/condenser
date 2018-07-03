@@ -25,6 +25,7 @@ import ShareMenu from 'app/components/elements/ShareMenu';
 import Userpic from 'app/components/elements/Userpic';
 import PostFormLoader from 'app/components/modules/PostForm/loader';
 import { getEditDraftPermLink } from 'app/utils/postForm';
+import CommentFormLoader from 'app/components/modules/CommentForm/loader';
 
 import { APP_ICON, SEO_TITLE, LIQUID_TICKER } from 'app/client_config';
 
@@ -110,7 +111,6 @@ class PostFull extends React.Component {
         const formId = `postFull-${props.post}`;
 
         this.PostFullEditor = ReplyEditor(formId + '-edit');
-        this.PostFullReplyEditor = ReplyEditor(formId + '-reply');
 
         this.state = {
             formId,
@@ -131,9 +131,7 @@ class PostFull extends React.Component {
                     if (permLink === content.get('permlink')) {
                         this.state.showEdit = true;
                     }
-                }
-
-                if (showEditor.type === 'reply') {
+                } else if (showEditor.type === 'reply') {
                     this.state.showReply = true;
                 }
 
@@ -307,7 +305,7 @@ class PostFull extends React.Component {
         const p = extractContent(immutableAccessor, postContent);
         const content = postContent.toJS();
         const { author, permlink, parent_author, parent_permlink } = content;
-        const jsonMetadata = this.state.showReply ? null : p.json_metadata;
+        const jsonMetadata = showReply ? null : p.json_metadata;
         let link = `/@${content.author}/${content.permlink}`;
 
         const { category, title, body } = content;
@@ -356,11 +354,13 @@ class PostFull extends React.Component {
                           authorRepLog10
                       )}
                 {this._renderFooter(postContent, content, link, authorRepLog10)}
-                <div className="row">
-                    <div className="column large-8 medium-10 small-12">
-                        {showReply && this._renderReplyEditor(replyParams)}
+                {showReply ? (
+                    <div className="row">
+                        <div className="column large-8 medium-10 small-12">
+                            {this._renderReplyEditor(replyParams, p.json_metadata)}
+                        </div>
                     </div>
-                </div>
+                ) : null}
             </article>
         );
     }
@@ -389,16 +389,14 @@ class PostFull extends React.Component {
         }
     }
 
-    _renderReplyEditor(replyParams) {
+    _renderReplyEditor(replyParams, jsonMetadata) {
         return (
-            <div>
-                <this.PostFullReplyEditor
-                    {...replyParams}
-                    type="submit_comment"
-                    successCallback={this._onEditFinish}
-                    onCancel={this._onEditFinish}
-                />
-            </div>
+            <CommentFormLoader
+                params={replyParams}
+                jsonMetadata={jsonMetadata}
+                onSuccess={this._onEditFinish}
+                onCancel={this._onEditFinish}
+            />
         );
     }
 

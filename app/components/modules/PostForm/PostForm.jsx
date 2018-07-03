@@ -25,6 +25,7 @@ import {
     updateFavoriteTags,
 } from 'app/utils/tags';
 import { DRAFT_KEY, EDIT_KEY } from 'app/utils/postForm';
+import './PostForm.scss';
 
 const EDITORS_TYPES = {
     MARKDOWN: 1,

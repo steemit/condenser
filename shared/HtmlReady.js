@@ -505,17 +505,23 @@ function header(state, node) {
     node.tagName = node.nodeName = node.localName = 'h' + newIndex;
 
     if (!node.getAttribute('id') && node.textContent) {
-        const idBase = detransliterate(node.textContent.trim().toLowerCase(), true).replace(/[^a-z0-9]+/ig, '_');
+        const idBase = detransliterate(
+            node.textContent.trim().toLowerCase(),
+            true
+        )
+            .replace(/^[^a-z0-9]+/, '')
+            .replace(/[^a-z0-9]+$/, '')
+            .replace(/[^a-z0-9]+/gi, '-');
         let id = idBase;
 
         let index = 0;
 
-        while (state.anchors.has(id)) {
+        while (!id || state.anchors.has(id)) {
             index++;
             id = `${idBase}_${index}`;
         }
 
-        state.anchors.add(id)
+        state.anchors.add(id);
 
         node.setAttribute('id', id);
         node.appendChild(
@@ -529,7 +535,7 @@ function header(state, node) {
 function safeCall(fn, ...args) {
     try {
         return fn(...args);
-    } catch(err) {
+    } catch (err) {
         console.warn(err);
     }
 }

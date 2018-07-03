@@ -8,6 +8,7 @@ import { blockedUsers, blockedUsersContent } from 'app/utils/IllegalContent';
 
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import Callout from 'app/components/elements/Callout';
+import IllegalContentMessage from 'app/components/elements/IllegalContentMessage';
 
 import PostsList from 'app/components/cards/PostsList';
 import UserWallet from 'app/components/modules/UserWallet';
@@ -218,15 +219,7 @@ export default class UserProfile extends Component {
                     <br />
                     <PasswordReset account={accountImm} />
                 </div>
-        } /*else if( section === 'invites' ) {
-            walletClass = 'active'
-            tab_content = <div>
-                    <WalletSubMenu account_name={account.name} />
-
-                    <br />
-                    <UserInvites account={accountImm} />
-                </div>
-        }*/
+        } 
 
 		if (blockedUsers.includes(accountName)) {
 			tab_content = <IllegalContentMessage />;

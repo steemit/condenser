@@ -23,7 +23,8 @@ import Author from 'app/components/elements/Author';
 import PageViewsCounter from 'app/components/elements/PageViewsCounter';
 import ShareMenu from 'app/components/elements/ShareMenu';
 import Userpic from 'app/components/elements/Userpic';
-import PostForm from 'app/components/modules/PostForm/PostForm';
+import PostFormLoader from 'app/components/modules/PostForm/loader';
+import { getEditDraftPermLink } from 'app/utils/postForm';
 
 import { APP_ICON, SEO_TITLE, LIQUID_TICKER } from 'app/client_config';
 
@@ -124,7 +125,7 @@ class PostFull extends React.Component {
                 const showEditor = JSON.parse(showEditorJson);
 
                 if (showEditor.type === 'edit') {
-                    const permLink = PostForm.getEditDraftPermLink();
+                    const permLink = getEditDraftPermLink();
                     const content = this.props.cont.get(this.props.post);
 
                     if (permLink === content.get('permlink')) {
@@ -377,7 +378,7 @@ class PostFull extends React.Component {
             );
         } else {
             return (
-                <PostForm
+                <PostFormLoader
                     editMode
                     editParams={replyParams}
                     jsonMetadata={jsonMetadata}

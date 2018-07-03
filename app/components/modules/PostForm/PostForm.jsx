@@ -9,7 +9,7 @@ import transaction from 'app/redux/Transaction';
 import HtmlReady, { getTags } from 'shared/HtmlReady';
 import DialogManager from 'app/components/elements/common/DialogManager';
 import Icon from 'app/components/elements/Icon';
-//import MarkdownEditor from 'app/components/elements/postEditor/MarkdownEditor/MarkdownEditor';
+import MarkdownEditor from 'app/components/elements/postEditor/MarkdownEditor/MarkdownEditor';
 import HtmlEditor from 'app/components/elements/postEditor/HtmlEditor/HtmlEditor';
 import EditorSwitcher from 'app/components/elements/postEditor/EditorSwitcher/EditorSwitcher';
 import PostFooter from 'app/components/elements/postEditor/PostFooter/PostFooter';
@@ -24,9 +24,7 @@ import {
     validateTags,
     updateFavoriteTags,
 } from 'app/utils/tags';
-
-const DRAFT_KEY = 'golos.post.draft';
-const EDIT_KEY = 'golos.post.editDraft';
+import { DRAFT_KEY, EDIT_KEY } from 'app/utils/postForm';
 
 const EDITORS_TYPES = {
     MARKDOWN: 1,
@@ -57,8 +55,6 @@ export const PAYOUT_OPTIONS = [
     },
 ];
 
-let MarkdownEditor = null;
-
 class PostForm extends React.Component {
     static propTypes = {
         editMode: PropTypes.bool,
@@ -67,20 +63,6 @@ class PostForm extends React.Component {
         onCancel: PropTypes.func,
         onSuccess: PropTypes.func,
     };
-
-    static getEditDraftPermLink() {
-        try {
-            const json = sessionStorage.getItem(EDIT_KEY);
-
-            if (json) {
-                const data = JSON.parse(json);
-
-                if (data.permLink) {
-                    return data.permLink;
-                }
-            }
-        } catch (err) {}
-    }
 
     constructor(props) {
         super(props);
@@ -282,23 +264,16 @@ class PostForm extends React.Component {
         const { editorId, text } = this.state;
 
         if (editorId === EDITORS_TYPES.MARKDOWN) {
-            if (MarkdownEditor) {
-                return (
-                    <MarkdownEditor
-                        ref="editor"
-                        initialValue={text}
-                        scrollContainer={this.refs.workArea}
-                        placeholder={tt('post_editor.text_placeholder')}
-                        uploadImage={this._onUploadImage}
-                        onChangeNotify={this._onTextChangeNotify}
-                    />
-                );
-            } else {
-                require.ensure('app/components/elements/postEditor/MarkdownEditor/MarkdownEditor', require => {
-                    MarkdownEditor = require('app/components/elements/postEditor/MarkdownEditor/MarkdownEditor').default;
-                    this.forceUpdate();
-                });
-            }
+            return (
+                <MarkdownEditor
+                    ref="editor"
+                    initialValue={text}
+                    scrollContainer={this.refs.workArea}
+                    placeholder={tt('post_editor.text_placeholder')}
+                    uploadImage={this._onUploadImage}
+                    onChangeNotify={this._onTextChangeNotify}
+                />
+            );
         } else if (editorId === EDITORS_TYPES.HTML) {
             return (
                 <HtmlEditor

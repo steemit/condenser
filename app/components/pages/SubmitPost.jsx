@@ -1,6 +1,6 @@
 import React from 'react';
 import { browserHistory } from 'react-router';
-import PostForm from 'app/components/modules/PostForm/PostForm';
+import PostFormLoader from 'app/components/modules/PostForm/loader';
 import ReplyEditor from 'app/components/elements/ReplyEditor';
 
 class SubmitPost extends React.PureComponent {
@@ -31,7 +31,7 @@ class SubmitPost extends React.PureComponent {
                 </div>
             );
         } else {
-            return <PostForm onSuccess={this._onSuccess} />;
+            return <PostFormLoader onSuccess={this._onSuccess} />;
         }
     }
 

@@ -7,9 +7,7 @@ export default {
     component: App,
     getChildRoutes(nextState, cb) {
         const route = resolveRoute(nextState.location.pathname);
-        if (route.page === 'About') {
-            cb(null, [require('@pages/About')]);
-        } else if (route.page === 'Landing') {
+        if (route.page === 'Landing') {
             cb(null, [require('@pages/Landing')]);
         } else if (route.page === 'Welcome') {
             cb(null, [require('@pages/Welcome')]);

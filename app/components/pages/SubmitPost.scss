@@ -1,3 +1,13 @@
+BODY.submit-page {
+  &, #content, .App, .App__content, .PostForm {
+    height: 100%;
+  }
+
+  .App__content {
+    margin-top: 0;
+  }
+}
+
 .SubmitPost {
-  padding: 1rem 0;
+  padding: 25px 0 1rem;
 }

@@ -1,5 +1,6 @@
-import React from 'react'
+// DO NOT USED
 
+import React from 'react'
 
 export default class LandingPress extends React.Component {
 	render() {

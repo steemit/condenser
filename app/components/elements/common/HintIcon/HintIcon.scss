@@ -1,0 +1,51 @@
+
+.HintIcon {
+  position: relative;
+  display: inline-block;
+
+  &__icon {
+    cursor: pointer;
+
+    &:hover {
+      color: #0078c4;
+    }
+  }
+
+  &__bubble {
+    position: absolute;
+    top: -8px;
+    left: -14px;
+    min-height: 40px;
+    line-height: 40px;
+    padding: 0 20px;
+    border-radius: 20px;
+    background: #fff;
+    white-space: nowrap;
+    box-shadow: 0 2px 12px 0 rgba(0,0,0, 0.15);
+    transform-origin: 28px 50%;
+    animation: from-scale 0.2s forwards;
+  }
+
+  &__close {
+    margin-left: -4px;
+    color: #e1e1e1;
+    cursor: pointer;
+  }
+
+  &__text {
+    margin-left: 15px;
+    font-size: 14px;
+    color: #333;
+  }
+}
+
+@keyframes from-scale {
+  from {
+    opacity: 0;
+    transform: scale(0);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

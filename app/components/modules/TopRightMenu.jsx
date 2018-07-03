@@ -66,12 +66,12 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
     const scn = vertical ? '' : 'show-for-medium';
     const nav = navigate || defaultNavigate;
     const submitStory = <li className={scn + ' submit-story'}>
-        <a href="/submit.html" onClick={nav} className={'button small alert'}>
+        <a href="/submit" onClick={nav} className={'button small alert'}>
             <Icon name="new/add" size="0_95x" />{tt('g.submit_a_story')}
         </a>
     </li>;
     const submitStoryPencil = <li className="hide-for-medium submit-story-pencil">
-        <Link to="/submit.html" className="button small alert">
+        <Link to="/submit" className="button small alert">
             <Icon name="new/add" size="0_95x"/>
         </Link>
     </li>;

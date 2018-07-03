@@ -128,14 +128,14 @@ function* error_account_witness_vote({operation: {account, witness, approve}}) {
 /** Keys, username, and password are not needed for the initial call.  This will check the login and may trigger an action to prompt for the password / key. */
 function* broadcastOperation(
     {payload:
-        {type, operation, confirm, warning, keys, username, password, successCallback, errorCallback}}) {
+        {type, operation, confirm, warning, keys, username, password, hideErrors, successCallback, errorCallback}}) {
     const operationParam = {type, operation, keys, username, password, successCallback, errorCallback}
     const conf = typeof confirm === 'function' ? confirm() : confirm
     if(conf) {
         yield put(tr.actions.confirmOperation({confirm, warning, operation: operationParam, errorCallback}))
         return
     }
-    const payload = {operations: [[type, operation]], keys, username, successCallback, errorCallback}
+    const payload = {operations: [[type, operation]], keys, username, hideErrors, successCallback, errorCallback}
     try {
         if (!keys || keys.length === 0) {
             payload.keys = []
@@ -161,7 +161,7 @@ function* broadcastOperation(
     }
 }
 
-function* broadcastPayload({payload: {operations, keys, username, successCallback, errorCallback}}) {
+function* broadcastPayload({payload: {operations, keys, username, hideErrors, successCallback, errorCallback}}) {
     if ($STM_Config.read_only_mode) {
         yield put({type: 'ADD_NOTIFICATION', payload: {
             key: "trx_" + Date.now(),
@@ -205,22 +205,15 @@ function* broadcastPayload({payload: {operations, keys, username, successCallbac
     }
     try {
         yield new Promise((resolve, reject) => {
-            if (process.env.BROWSER && window.bump === 1) { // for testing
-                console.log('TransactionSaga bump(no broadcast) and reject', JSON.stringify(operations, null, 2))
-                setTimeout(() => {reject(new Error('Testing, fake error'))}, 2000)
-            } else if (process.env.BROWSER && window.bump === 2) { // also for testing
-                console.log('TransactionSaga bump(no broadcast) and resolve', JSON.stringify(operations, null, 2))
-                setTimeout(() => {resolve(); broadcastedEvent()}, 2000)
-            } else
-                broadcast.send({ extensions: [], operations }, keys, (err) => {
-                    if(err) {
-                        console.error(err);
-                        reject(err)
-                    } else {
-                        broadcastedEvent()
-                        resolve()
-                    }
-                })
+            broadcast.send({ extensions: [], operations }, keys, (err) => {
+                if(err) {
+                    console.error(err);
+                    reject(err)
+                } else {
+                    broadcastedEvent()
+                    resolve()
+                }
+            })
         })
         // status: accepted
         for (const [type, operation] of operations) {
@@ -244,7 +237,9 @@ function* broadcastPayload({payload: {operations, keys, username, successCallbac
     } catch (error) {
         console.error('TransactionSaga\tbroadcast', error)
         // status: error
-        yield put(tr.actions.error({operations, error, errorCallback}))
+
+        yield put(tr.actions.error({operations, error, hideErrors, errorCallback}))
+
         for (const [type, operation] of operations) {
             if (hook['error_' + type]) {
                 try {

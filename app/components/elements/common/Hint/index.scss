@@ -1,0 +1,77 @@
+@import "../../../extends";
+
+.Hint {
+  position: absolute;
+  bottom: 100%;
+  font-size: 15px;
+  z-index: 10;
+
+  &_center {
+    left: 50%;
+    transform: translate3d(-50%, 0, 0);
+  }
+
+  &_right {
+    left: 100%;
+    transform: translate3d(-100%, 0, 0);
+  }
+
+  &__content {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-width: 276px;
+    max-width: 300px;
+    padding: 22px 26px 20px;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 2px 12px 0 rgba(0,0,0, 0.15);
+    animation: from-down 0.2s forwards;
+
+    &::after {
+      @include dialog-tip();
+    }
+  }
+
+  &_left &__content::after {
+    left: 38px;
+  }
+
+  &_right &__content::after {
+    left: unset;
+    right: 38px;
+  }
+
+  &__icon {
+    margin-right: 15px;
+    vertical-align: top;
+    flex-shrink: 0;
+
+    &_error {
+      color: #f00;
+    }
+
+    &_warning {
+      color: #ffba1f;
+    }
+
+    &_info {
+      color: #789821;
+    }
+  }
+
+  &__inner {
+
+  }
+}
+
+@keyframes from-down {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, -10px, 0);
+  }
+}

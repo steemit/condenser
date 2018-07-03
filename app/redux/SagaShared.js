@@ -26,9 +26,12 @@ export function* watchTransactionErrors() {
 
 function* showTransactionErrorNotification() {
     const errors = yield select(state => state.transaction.get('errors'));
-    for (const [key, message] of errors) {
-        yield put({type: 'ADD_NOTIFICATION', payload: {key, message}});
-        yield put({type: 'transaction/DELETE_ERROR', payload: {key}});
+
+    if (errors) {
+        for (const [key, message] of errors) {
+            yield put({ type: 'ADD_NOTIFICATION', payload: { key, message } });
+            yield put({ type: 'transaction/DELETE_ERROR', payload: { key } });
+        }
     }
 }
 

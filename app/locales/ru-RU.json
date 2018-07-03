@@ -34,7 +34,14 @@
     "use_only_allowed_characters": "Используйте только строчные буквы, цифры и одно тире",
     "must_start_with_a_letter": "Должно начинаться с буквы",
     "must_end_with_a_letter_or_number": "Должно заканчиваться с буквы или номера",
-    "denied_to_publish_the_posts_with_tag":"Запрещено публиковать посты с тегом 'stihi-io'"
+    "denied_to_publish_the_posts_with_tag":"Запрещено публиковать посты с тегом 'stihi-io'",
+    "must_set_category":"Необходимо добавить хотя бы один тег",
+    "main_tag_hint": "Первый тег – основной. Пост будет опубликован в этой теме.",
+    "title_is_required": "Не заполнено поле заголовок",
+    "title_is_not_valid": "Заголовок неправильно заполнен"
+  },
+  "post-editor": {
+    "cant_ends_with_special_char": "Не может заканчиваться на точку"
   },
   "mobilevalidation_js": {
     "not_be_empty": "не может быть пустым",
@@ -164,6 +171,7 @@
     "APP_NAME_account": "%(APP_NAME)s аккаунт",
     "24_hour": "24 часа",
     "30_day": "30 дней",
+    "add": "Добавить",
     "auto": "автоматически",
     "age": "возраст",
     "active" : "Активный ключ",
@@ -989,5 +997,46 @@
   "delegatevestingshares_jsx" :{
     "form_title" : "Делегировать %(VESTING_TOKEN2)s",
     "button_title": "Делегировать"
+  },
+  "post_editor": {
+    "new_editor": "Новый редактор",
+    "html_editor": "HTML редактор",
+    "preview_mode": "Режим предпросмотра",
+    "edit_mode": "Вернуться в режим редактирования",
+    "payout_hint": "Режим выплат",
+    "nsfw_hint": "Отметка о небезопасном контенте",
+    "payout_option_100": "Сила голоса 100%%",
+    "payout_option_100_hint": "Это значит 100%% оплата голоса",
+    "payout_option_50": "50/50",
+    "payout_option_50_hint": "Это значит 50/50 оплата голоса",
+    "payout_option_0": "Отказаться от выплат",
+    "tags_input_placeholder": "Добавьте теги (до 5 шт.)",
+    "convert_to_md_warning": "Будет произведена попытка перевода текста в Markdown, при это какие-то элементы могут пропасть. Вы точно уверены?",
+    "convert_to_html_warning": "Будет произведен перевод текста в HTML, при это какие-то элементы могут пропасть. Вы точно уверены?",
+    "body_length_over_limit_error": "Слишком длинное тело поста",
+    "empty_body_error": "Пустое тело поста",
+    "text_placeholder": "Расскажите свою историю...",
+    "add_image": "Добавить изображение",
+    "set_payout_type": "Выбери тип награды за свой пост",
+    "image_preview_error": "Ошибка загрузки изображения",
+    "update": "Обновить"
+  },
+  "editor_toolbar": {
+    "enter_the_link": "Введите ссылку",
+    "add_link": "Добавить ссылку",
+    "add_video": "Добавить мультимедиа (youtube/vimeo/coub...)",
+    "add_image_from_computer": "Добавить изображение с компьютера",
+    "add_image_via_link": "Добавить изображение ссылкой",
+    "markdown_help": "Руководство по Markdown",
+    "enter_video_link": "Вставьте ссылку на YouTube/Vimeo",
+    "enter_link": "Вставьте ссылку",
+    "link_text": "Текст отображения",
+    "link_value": "Ссылка"
+  },
+  "dialog": {
+    "info": "Информация",
+    "alert": "Предупреждение",
+    "confirm": "Подтверждение",
+    "prompt": "Введите данные"
   }
 }

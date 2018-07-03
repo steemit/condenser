@@ -1,0 +1,36 @@
+
+.MarkdownEditor {
+  padding-top: 4px;
+
+  &_comment {
+    font-size: 14px;
+  }
+
+  &__textarea {
+    visibility: hidden;
+  }
+
+  &__dropzone {
+    position: relative;
+  }
+
+  &__preview {
+    display: inline-block;
+    height: 207px;
+    max-width: 100%;
+    padding: 0 4px;
+    opacity: 0.7;
+    transition: opacity 0.3s;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  &__preview-error {
+    padding: 0 4px;
+    background: #ff9ea3;
+  }
+}
+
+@import "./simplemde-overrides";

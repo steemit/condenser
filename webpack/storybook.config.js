@@ -1,10 +1,9 @@
 const path = require('path');
 const webpack = require('webpack');
 const merge = require('webpack-merge');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const alias = require('./alias')
+const alias = require('./alias');
 
-module.exports = (baseConfig, env, defaultConfig) => merge(defaultConfig, {
+module.exports = (baseConfig, env, defaultConfig) => merge(removeSvgLoaders(defaultConfig), {
   resolve: {
     modules: [
       path.resolve(__dirname, '..'),
@@ -29,7 +28,7 @@ module.exports = (baseConfig, env, defaultConfig) => merge(defaultConfig, {
         use: 'babel-loader'
       },
       {
-        test: /\.(jpe?g|png)/,
+        test: /\.(jpe?g|png)$/,
         loader: 'url-loader',
         options: {
           limit: 4096
@@ -43,7 +42,7 @@ module.exports = (baseConfig, env, defaultConfig) => merge(defaultConfig, {
       {
         test: /\.(sa|sc|c)ss$/,
         use: [
-          'css-hot-loader',
+          'style-loader',
           {
             loader: 'css-loader',
             options: {
@@ -68,9 +67,14 @@ module.exports = (baseConfig, env, defaultConfig) => merge(defaultConfig, {
         ],
       },
       {
-        test: /\.md/,
+        test: /\.md$/,
         use: 'raw-loader'
       }
     ]
   },
 });
+
+function removeSvgLoaders(config) {
+    config.module.rules = config.module.rules.filter(rule => rule.test.toString() !== '/\\.svg$/')
+    return config;
+}

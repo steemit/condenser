@@ -1,0 +1,70 @@
+
+.EditorSwitcher {
+  display: flex;
+  padding-top: 8px;
+  margin: 0 0 40px;
+  border-bottom: 1px solid #e1e1e1;
+
+  &__item {
+    padding: 3px 3px 10px;
+    margin-right: 30px;
+    margin-bottom: -1px;
+    border-bottom: 4px solid transparent;
+    white-space: nowrap;
+    letter-spacing: 1.4px;
+    color: #b7b7b9;
+    font-size: 18px;
+    font-weight: 500;
+    transition: color 0.1s;
+    flex-shrink: 0;
+    cursor: pointer;
+    user-select: none;
+    text-transform: uppercase;
+
+    &_active {
+      color: #000;
+      border-bottom-color: #000;
+      cursor: default;
+    }
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+    &:hover {
+      color: #000;
+    }
+  }
+
+  &__filler {
+    flex-grow: 1;
+  }
+
+  &__eye {
+    display: block;
+    width: 40px;
+    height: 40px;
+    margin-top: -2px;
+    border-radius: 50%;
+    line-height: 38px;
+    text-align: center;
+    cursor: pointer;
+    color: #000;
+    transition: color 0.1s;
+    box-shadow: 0 0 12px 0 rgba(0,0,0, 0.2);
+
+    &_active, &:hover {
+      color: #0078c4;
+    }
+  }
+
+  &__eye-icon {
+    width: 24px;
+    height: 24px;
+
+    & > svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+}

@@ -27,6 +27,9 @@ run/config/client/golos.json
 run/config/client/golos-dev.json
 run/config/pm2/process.json
 
+scripts/package-lock.json
+scripts/yarn.lock
+
 .vagrant
 
 .env.*

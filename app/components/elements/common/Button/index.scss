@@ -1,0 +1,31 @@
+
+.Button {
+  height: 40px;
+  min-width: 160px;
+  border: 1px solid #e1e1e1;
+  border-radius: 80px;
+  color: #000;
+  letter-spacing: 1.4px;
+  background: #fff;
+  font-weight: 500;
+  cursor: pointer;
+  outline: none !important;
+  margin: 0 !important;
+  transition: color 0.1s, background-color 0.1s;
+
+  &_primary {
+    border: none;
+    color: #fff;
+    background-color: #2879ff;
+  }
+
+  &_primary[disabled] {
+    color: #5d5d5d;
+    background: #92aede;
+  }
+
+  &[disabled] {
+    color: #fff;
+    cursor: not-allowed;
+  }
+}

@@ -1,17 +1,19 @@
 .Icon {
+  display: inline-block;
   vertical-align: middle;
+  user-select: none;
 
   width: 1.12rem;
   height: 1.12rem;
 
-  > svg {
+  & > svg {
     width: 1.12rem;
     height: 1.12rem;
     vertical-align: top;
   }
 
-  &.fill-black > svg > path {
-    fill:black;
+  &.dropdown-arrow {
+    fill: $dark-gray;
   }
 }
 
@@ -62,6 +64,3 @@
   margin: 24px 0 24px 0;
 }
 
-.Icon.dropdown-arrow polygon {
-  fill: $dark-gray;
-}

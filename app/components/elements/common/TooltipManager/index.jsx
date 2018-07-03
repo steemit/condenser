@@ -88,7 +88,7 @@ export default class TooltipManager extends React.PureComponent {
                             ? 'Tooltip_right'
                             : null,
                 style: {
-                    top: Math.round(bound.top),
+                    top: Math.round(bound.top + window.scrollY),
                     left: Math.round(bound.left + bound.width / 2),
                 },
             },

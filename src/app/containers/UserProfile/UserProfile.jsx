@@ -12,7 +12,6 @@ import transaction from 'app/redux/Transaction';
 
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import Callout from 'app/components/elements/Callout';
-import IllegalContentMessage from 'app/components/elements/IllegalContentMessage';
 
 import PostsList from 'app/components/cards/PostsList';
 import UserWallet from 'app/components/modules/UserWallet';

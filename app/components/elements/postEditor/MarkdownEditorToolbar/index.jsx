@@ -203,7 +203,7 @@ export default class MarkdownEditorToolbar extends React.PureComponent {
                 {actions.map(
                     (action, i) =>
                         !action ? null : action === 'SEPARATOR' ? (
-                            <i className="MET__separator" />
+                            <i key={i} className="MET__separator" />
                         ) : (
                             <Icon
                                 key={i}

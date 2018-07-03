@@ -8,6 +8,7 @@ import MarkdownEditorToolbar from 'app/components/elements/postEditor/MarkdownEd
 import DialogManager from 'app/components/elements/common/DialogManager';
 
 const DELAYED_TIMEOUT = 1000;
+const LINE_HEIGHT = 28;
 let SimpleMDE;
 
 if (process.env.BROWSER) {
@@ -22,6 +23,7 @@ export default class MarkdownEditor extends PureComponent {
         initialValue: PropTypes.string,
         placeholder: PropTypes.string,
         autoFocus: PropTypes.bool,
+        scrollContainer: PropTypes.any,
         commentMode: PropTypes.bool,
         onChangeNotify: PropTypes.func.isRequired,
         uploadImage: PropTypes.func.isRequired,
@@ -62,6 +64,7 @@ export default class MarkdownEditor extends PureComponent {
             promptURLs: true,
             dragDrop: true,
             toolbar: false,
+            toolbarTips: false,
             autoDownloadFontAwesome: false,
             blockStyles: {
                 italic: '_',
@@ -72,7 +75,10 @@ export default class MarkdownEditor extends PureComponent {
 
         this._cm = this._simplemde.codemirror;
         this._cm.on('change', this._onChange);
-        this._cm.on('cursorActivity', this._onCursorActivityLazy);
+
+        if (props.scrollContainer) {
+            this._cm.on('cursorActivity', this._onCursorActivityLazy);
+        }
 
         this.forceUpdate();
 
@@ -96,7 +102,7 @@ export default class MarkdownEditor extends PureComponent {
         this._onCursorActivityLazy.cancel();
 
         this._cm.off('change', this._onChange);
-        this._cm.off('cursorActivity', this._onCursorActivity);
+        this._cm.off('cursorActivity', this._onCursorActivityLazy);
         this._cm = null;
         this._simplemde = null;
     }
@@ -288,6 +294,7 @@ export default class MarkdownEditor extends PureComponent {
 
             const cursor = this._cm.getCursor();
             this._simplemde.value(updatedText);
+
             setTimeout(() => {
                 this._cm.setCursor(cursor);
             }, 0);
@@ -344,13 +351,13 @@ export default class MarkdownEditor extends PureComponent {
     // }
 
     _onCursorActivity = () => {
-        const workArea = document.querySelector('.PostForm__work-area');
+        const { scrollContainer } = this.props;
 
-        if (workArea) {
+        if (scrollContainer) {
             const cursorPos = this._cm.cursorCoords();
 
-            if (cursorPos.top + 28 > workArea.offsetTop + workArea.offsetHeight) {
-                workArea.scrollTop += 40;
+            if (cursorPos.top + LINE_HEIGHT + 4 > scrollContainer.offsetTop + scrollContainer.offsetHeight) {
+                scrollContainer.scrollTop += LINE_HEIGHT;
             }
         }
     };

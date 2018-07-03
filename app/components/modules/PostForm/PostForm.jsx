@@ -9,7 +9,7 @@ import transaction from 'app/redux/Transaction';
 import HtmlReady, { getTags } from 'shared/HtmlReady';
 import DialogManager from 'app/components/elements/common/DialogManager';
 import Icon from 'app/components/elements/Icon';
-import MarkdownEditor from 'app/components/elements/postEditor/MarkdownEditor/MarkdownEditor';
+//import MarkdownEditor from 'app/components/elements/postEditor/MarkdownEditor/MarkdownEditor';
 import HtmlEditor from 'app/components/elements/postEditor/HtmlEditor/HtmlEditor';
 import EditorSwitcher from 'app/components/elements/postEditor/EditorSwitcher/EditorSwitcher';
 import PostFooter from 'app/components/elements/postEditor/PostFooter/PostFooter';
@@ -57,6 +57,8 @@ export const PAYOUT_OPTIONS = [
     },
 ];
 
+let MarkdownEditor = null;
+
 class PostForm extends React.Component {
     static propTypes = {
         editMode: PropTypes.bool,
@@ -95,6 +97,7 @@ class PostForm extends React.Component {
             tags: [],
             postError: null,
             payoutType: PAYOUT_TYPES.PAY_50,
+            isPosting: false,
             uploadingCount: 0,
         };
 
@@ -201,9 +204,10 @@ class PostForm extends React.Component {
             isPreview,
             postError,
             uploadingCount,
+            isPosting,
         } = this.state;
 
-        const allowPost = uploadingCount === 0 && title.trim() && !emptyBody;
+        const allowPost = uploadingCount === 0 && title.trim() && !emptyBody && !isPosting;
 
         return (
             <div
@@ -212,7 +216,7 @@ class PostForm extends React.Component {
                     PostForm_edit: editMode,
                 })}
             >
-                <div className="PostForm__work-area">
+                <div className="PostForm__work-area" ref="workArea">
                     <div className="PostForm__content">
                         <EditorSwitcher
                             items={[
@@ -261,7 +265,7 @@ class PostForm extends React.Component {
                         />
                     </div>
                 </div>
-                {uploadingCount > 0 ? (
+                {uploadingCount > 0 || isPosting ? (
                     <div className="PostForm__spinner">
                         <Icon
                             name="clock"
@@ -278,15 +282,23 @@ class PostForm extends React.Component {
         const { editorId, text } = this.state;
 
         if (editorId === EDITORS_TYPES.MARKDOWN) {
-            return (
-                <MarkdownEditor
-                    ref="editor"
-                    initialValue={text}
-                    placeholder={tt('post_editor.text_placeholder')}
-                    uploadImage={this._onUploadImage}
-                    onChangeNotify={this._onTextChangeNotify}
-                />
-            );
+            if (MarkdownEditor) {
+                return (
+                    <MarkdownEditor
+                        ref="editor"
+                        initialValue={text}
+                        scrollContainer={this.refs.workArea}
+                        placeholder={tt('post_editor.text_placeholder')}
+                        uploadImage={this._onUploadImage}
+                        onChangeNotify={this._onTextChangeNotify}
+                    />
+                );
+            } else {
+                require.ensure('app/components/elements/postEditor/MarkdownEditor/MarkdownEditor', require => {
+                    MarkdownEditor = require('app/components/elements/postEditor/MarkdownEditor/MarkdownEditor').default;
+                    this.forceUpdate();
+                });
+            }
         } else if (editorId === EDITORS_TYPES.HTML) {
             return (
                 <HtmlEditor
@@ -597,6 +609,10 @@ class PostForm extends React.Component {
             data.__config.comment_options = commentOptions;
         }
 
+        this.setState({
+            isPosting: true,
+        });
+
         this.props.onPost(
             data,
             () => {
@@ -608,14 +624,26 @@ class PostForm extends React.Component {
                     }
                 } catch (err) {}
 
-                this.props.onSuccess();
+                if (!this._unmount) {
+                    this.setState({
+                        isPosting: false,
+                    });
+
+                    this.props.onSuccess();
+                }
 
                 if (!editMode) {
                     updateFavoriteTags(tags);
                 }
             },
             err => {
-                this.refs.footer.showPostError(err.toString().trim());
+                if (!this._unmount) {
+                    this.setState({
+                        isPosting: false,
+                    });
+
+                    this.refs.footer.showPostError(err.toString().trim());
+                }
             }
         );
     };

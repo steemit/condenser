@@ -28,7 +28,7 @@ class AuthorRewards extends React.Component {
         const account = this.props.account;
 
         // FIX bug, golos doesn't return transfer_history sometimes
-        if (account.transfer_history) return null;
+        if (!account.transfer_history) account.transfer_history = [];
 
         /// transfer log
         let rewards24Vests = 0, rewardsWeekVests = 0, totalRewardsVests = 0;

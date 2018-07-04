@@ -20,22 +20,26 @@ import { key_utils } from 'golos-js/lib/auth/ecc';
 import MiniHeader from '@modules/MiniHeader';
 import tt from 'counterpart';
 import PageViewsCounter from '@elements/PageViewsCounter';
+
+import LocalizedCurrency from '@elements/LocalizedCurrency';
+import MobileAppButton from 'app/components/elements/MobileBanners/MobileAppButton';
+import DialogManager from 'app/components/elements/common/DialogManager';
+import defaultTheme from 'src/app/themes';
+import { init as initAnchorHelper } from 'app/utils/anchorHelper';
+
 import {
     APP_ICON,
     VEST_TICKER,
     THEMES,
     DEFAULT_THEME,
 } from 'app/client_config';
-import LocalizedCurrency from '@elements/LocalizedCurrency';
-import MobileAppButton from 'app/components/elements/MobileBanners/MobileAppButton';
-import DialogManager from 'app/components/elements/common/DialogManager';
-import defaultTheme from 'src/app/themes';
 
 injectGlobal`
     body {
         fill: currentColor;
     }
 `;
+
 
 const availableLinks = [
     'https://www.facebook.com/www.golos.io',
@@ -92,6 +96,10 @@ class App extends React.Component {
             window.addEventListener('click', this.checkLeaveGolos);
         }
         // setTimeout(() => this.setState({showCallout: false}), 15000);
+
+        if (process.env.BROWSER) {
+            initAnchorHelper();
+        }
     }
 
     componentWillUnmount() {

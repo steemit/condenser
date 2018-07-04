@@ -5,7 +5,7 @@ import DialogFrame from 'app/components/dialogs/DialogFrame';
 import DropZone from 'react-dropzone';
 import DialogManager from 'app/components/elements/common/DialogManager';
 import Input from 'app/components/elements/common/Input';
-import StorageSvg from 'app/assets/icons/storage.svg';
+import PictureSvg from 'app/assets/icons/editor-toolbar/picture.svg';
 import keyCodes from 'app/utils/keyCodes';
 
 export default class AddImageDialog extends React.PureComponent {
@@ -28,7 +28,7 @@ export default class AddImageDialog extends React.PureComponent {
                 >
                     <i
                         className="AddImageDialog__drop-zone-icon"
-                        dangerouslySetInnerHTML={{ __html: StorageSvg }}
+                        dangerouslySetInnerHTML={{ __html: PictureSvg }}
                     />
                     <span className="AddImageDialog__drop-zone-text">
                         {tt('editor_toolbar.add_image_from_computer')}

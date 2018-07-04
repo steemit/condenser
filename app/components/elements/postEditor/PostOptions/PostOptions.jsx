@@ -6,6 +6,7 @@ import Icon from 'app/components/elements/Icon';
 import Hint from 'app/components/elements/common/Hint';
 import RadioGroup from 'app/components/elements/common/RadioGroup';
 import { PAYOUT_OPTIONS } from 'app/components/modules/PostForm/PostForm';
+import './PostOptions.scss';
 
 export default class PostOptions extends React.PureComponent {
     static propTypes = {

@@ -5,6 +5,7 @@ import tt from 'counterpart';
 import Icon from 'app/components/elements/Icon';
 import Hint from 'app/components/elements/common/Hint';
 import { TAGS_LIMIT, filterRealTags, getFavoriteTags } from 'app/utils/tags';
+import './index.scss';
 
 export default class TagsEditLine extends React.PureComponent {
     static propTypes = {

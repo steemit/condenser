@@ -2,6 +2,7 @@ import React from 'react';
 import tt from 'counterpart';
 import KEYS from 'app/utils/keyCodes';
 import Hint from 'app/components/elements/common/Hint';
+import './PostTitle.scss';
 
 export default class PostTitle extends React.PureComponent {
     render() {

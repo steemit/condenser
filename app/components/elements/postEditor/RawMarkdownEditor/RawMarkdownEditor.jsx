@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Dropzone from 'react-dropzone';
 import tt from 'counterpart';
 import DialogManager from 'app/components/elements/common/DialogManager';
+import './RawMarkdownEditor.scss';
 
 export default class RawMarkdownEditor extends React.PureComponent {
     static propTypes = {

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import cn from 'classnames';
 import tt from 'counterpart';
 import Icon from 'app/components/elements/Icon';
+import './EditorSwitcher.scss';
 
 export default class EditorSwitcher extends React.Component {
     static propTypes = {

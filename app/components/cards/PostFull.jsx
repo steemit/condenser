@@ -574,18 +574,15 @@ class PostFull extends React.Component {
             },
         ];
 
-        const archived =
-            postContent.get('cashout_time') === '1969-12-31T23:59:59'; // TODO: audit after HF17. #1259
-
         const readonly = $STM_Config.read_only_mode;
-
+        const _isPaidout = postContent.get('cashout_time') === '1969-12-31T23:59:59';
+        const showReblog = !_isPaidout;
         const showReplyOption = postContent.get('depth') < 255;
         const showEditOption = username === author;
-
         const showDeleteOption =
             username === author &&
-            postContent.get('children') === 0 &&
-            content.stats.netVoteSign <= 0;
+            content.stats.allowDelete &&
+            !_isPaidout;
 
         // check if post was created before view-count tracking began (2016-12-03)
         const isPreViewCount =
@@ -601,7 +598,7 @@ class PostFull extends React.Component {
                     <Voting post={post} />
                 </div>
                 <div className="RightShare__Menu small-11 medium-5 large-5 columns text-right">
-                    {!readonly ? (
+                    {!readonly && showReblog ? (
                         <Reblog author={author} permlink={permlink} />
                     ) : null}
                     {!readonly && (

@@ -21,9 +21,20 @@ import Follow from './../Follow';
 
 // Styled Components
 const Wrapper = styled.div`
+    position: relative;
     display: flex;
     align-items: center;
     min-height: 207px;
+
+    &:before {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        background-color: rgba(255,255,255,0.25);
+    }
 
     ${({ backgroundUrl }) => backgroundUrl ? 
         `
@@ -75,7 +86,7 @@ const Name = styled.div`
     font-size: 30px;
     font-weight: bold;
     line-height: 1;
-    text-shadow: 0 0 1px #fff;
+    mix-blend-mode: multiply;
 
     @media (max-width: 768px) {
         font-size: 18px;
@@ -88,7 +99,7 @@ const Login = styled.div`
     font-size: 20px;
     line-height: 1;
     margin-top: 6px;
-    text-shadow: 0px 0px 1px rgba(255,255,255,0.4);
+    mix-blend-mode: difference;
 
     @media (max-width: 768px) {
         font-size: 14px;

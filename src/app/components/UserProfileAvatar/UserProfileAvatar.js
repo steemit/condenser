@@ -68,7 +68,7 @@ export default class UserProfileAvatar extends PureComponent {
     render() {
         const { children, avatarUrl } = this.props;
         const backgroundUrl = avatarUrl
-            ? proxifyImageUrl(avatarUrl, '120x120')
+            ? proxifyImageUrl(avatarUrl, '125x125')
             : null;
 
         return (

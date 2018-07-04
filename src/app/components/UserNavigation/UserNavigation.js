@@ -26,21 +26,18 @@ const RightIcons = styled.div`
     justify-content: flex-end;
 `;
 
+const SettingsIcon = styled(Icon)``;
+
 const IconLink = styled(Link)`
     display: flex;
-    color: #b7b7b9;
 
-    &:hover {
-        color: #333;
+    ${SettingsIcon} {
+        color: #b7b7b9;
 
-        svg {
+        &:hover {
             color: #333;
         }
     }
-`;
-
-const SettingsIcon = styled(Icon)`
-    color: #b7b7b9;
 `;
 
 export default class UserNavigation extends PureComponent {

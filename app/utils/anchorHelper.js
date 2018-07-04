@@ -15,10 +15,10 @@ export function init() {
 }
 
 function tryMoveToAnchor() {
-    const hash = location.hash;
+    const hash = location.hash.substr(1);
 
     if (hash) {
-        const anchor = document.querySelector(hash);
+        const anchor = document.getElementById(hash);
 
         if (anchor) {
             if (anchor.scrollIntoViewIfNeeded) {

@@ -7,6 +7,7 @@ import DialogManager from 'app/components/elements/common/DialogManager';
 import AddImageDialog from '../../../dialogs/AddImageDialog';
 import LinkOptionsDialog from '../../../dialogs/LinkOptionsDialog';
 import plusSvg from 'app/assets/icons/editor-toolbar/plus.svg';
+import './index.scss';
 
 const GUIDE_URL =
     'https://golos.io/ru--golos/@on0tole/osnovy-oformleniya-postov-na-golose-polnyi-kurs-po-rabote-s-markdown';

@@ -6,6 +6,8 @@ import tt from 'counterpart';
 import cn from 'classnames';
 import MarkdownEditorToolbar from 'app/components/elements/postEditor/MarkdownEditorToolbar';
 import DialogManager from 'app/components/elements/common/DialogManager';
+import 'simplemde/dist/simplemde.min.css';
+import './MarkdownEditor.scss';
 
 const DELAYED_TIMEOUT = 1000;
 const LINE_HEIGHT = 28;

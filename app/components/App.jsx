@@ -74,8 +74,7 @@ class App extends React.Component {
         if (process.env.BROWSER) {
             window.IS_MOBILE =
                 /android|iphone/i.test(navigator.userAgent) ||
-                window.innerWidth < 765 ||
-                window.innerHeight < 400;
+                window.innerWidth < 765;
         }
     }
 

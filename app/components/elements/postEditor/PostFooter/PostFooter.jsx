@@ -8,6 +8,7 @@ import PostOptions from 'app/components/elements/postEditor/PostOptions/PostOpti
 import Button from 'app/components/elements/common/Button';
 import Hint from 'app/components/elements/common/Hint';
 import { NSFW_TAG } from 'app/utils/tags';
+import './PostFooter.scss';
 
 export default class PostFooter extends React.PureComponent {
     static propTypes = {

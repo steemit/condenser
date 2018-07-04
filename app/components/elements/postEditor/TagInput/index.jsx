@@ -7,6 +7,7 @@ import Hint from 'app/components/elements/common/Hint';
 import { validateTag } from 'app/utils/tags';
 import KEYS from 'app/utils/keyCodes';
 import { TAGS_LIMIT } from '../../../../utils/tags';
+import './index.scss';
 
 export default class TagInput extends React.PureComponent {
     static propTypes = {

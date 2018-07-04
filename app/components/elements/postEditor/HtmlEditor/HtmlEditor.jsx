@@ -1,4 +1,5 @@
 import React from 'react';
+import './HtmlEditor.scss';
 
 let RichTextEditor;
 

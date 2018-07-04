@@ -18,7 +18,6 @@ if (process.env.BROWSER) {
 }
 
 let lastWidgetId = 0;
-const initDate = Date.now();
 
 export default class MarkdownEditor extends PureComponent {
     static propTypes = {
@@ -40,17 +39,20 @@ export default class MarkdownEditor extends PureComponent {
 
     componentDidMount() {
         // Don't init on server
-        if (!SimpleMDE) {
+        if (!process.env.BROWSER) {
             return;
         }
 
-        const timeDelta = DELAYED_TIMEOUT - (Date.now() - initDate);
+        if (window.INIT_TIMESSTAMP) {
+            const timeDelta = DELAYED_TIMEOUT - (Date.now() - INIT_TIMESSTAMP);
 
-        if (timeDelta > 0) {
-            this._delayedTimeout = setTimeout(() => this._init(), timeDelta);
-        } else {
-            this._init();
+            if (timeDelta > 0) {
+                this._delayedTimeout = setTimeout(() => this._init(), timeDelta);
+                return;
+            }
         }
+
+        this._init();
     }
 
     _init() {

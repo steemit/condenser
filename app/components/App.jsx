@@ -75,6 +75,8 @@ class App extends React.Component {
             window.IS_MOBILE =
                 /android|iphone/i.test(navigator.userAgent) ||
                 window.innerWidth < 765;
+
+            window.INIT_TIMESSTAMP = Date.now();
         }
     }
 

@@ -19,6 +19,7 @@ import Settings from 'app/components/modules/Settings';
 import CurationRewards from 'app/components/modules/CurationRewards';
 import AuthorRewards from 'app/components/modules/AuthorRewards';
 
+import WalletSubMenu from 'app/components/elements/WalletSubMenu';
 import IllegalContentMessage from 'app/components/elements/IllegalContentMessage';
 import UserList from 'app/components/elements/UserList';
 import UserKeys from 'app/components/elements/UserKeys';

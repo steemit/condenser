@@ -576,7 +576,6 @@ class PostFull extends React.Component {
 
         const readonly = $STM_Config.read_only_mode;
         const _isPaidout = postContent.get('cashout_time') === '1969-12-31T23:59:59';
-        const showReblog = !_isPaidout;
         const showReplyOption = postContent.get('depth') < 255;
         const showEditOption = username === author;
         const showDeleteOption =
@@ -598,7 +597,7 @@ class PostFull extends React.Component {
                     <Voting post={post} />
                 </div>
                 <div className="RightShare__Menu small-11 medium-5 large-5 columns text-right">
-                    {!readonly && showReblog ? (
+                    {!readonly ? (
                         <Reblog author={author} permlink={permlink} />
                     ) : null}
                     {!readonly && (

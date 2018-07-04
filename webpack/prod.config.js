@@ -61,7 +61,11 @@ module.exports = merge(baseConfig, {
                 parallel: true,
                 sourceMap: false,
             }),
-            new OptimizeCSSAssetsPlugin({}),
+            new OptimizeCSSAssetsPlugin({
+                cssProcessorOptions: {
+                    safe: true,
+                }
+            }),
         ],
     },
 });

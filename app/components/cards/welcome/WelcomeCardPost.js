@@ -6,6 +6,7 @@ import Icon from 'app/components/elements/Icon';
 import { parsePayoutAmount } from 'app/utils/ParsersAndFormatters';
 import extractContent from 'app/utils/ExtractContent';
 import { objAccessor } from 'app/utils/Accessors';
+import './WelcomeCardPost.scss';
 
 export default class WelcomeCardPost extends Component {
   render() {

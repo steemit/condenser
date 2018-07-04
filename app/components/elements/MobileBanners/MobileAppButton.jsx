@@ -1,20 +1,20 @@
-import React, {Component} from 'react';
-import settings from './settings'
+import React from 'react';
+import settings from './settings';
 
-class MobileAppButton extends Component {
-    onClick = () => {
-        window.location.assign(settings.android.market_source)
+export default function MobileAppButton() {
+    if (process.env.BROWSER && navigator.userAgent.match(/Android/i)) {
+        return (
+            <div
+                className="btn visit-app-btn"
+                role="button"
+                onClick={() => {
+                    window.location.assign(settings.android.market_source);
+                }}
+            >
+                Открыть в приложении
+            </div>
+        );
     }
 
-    render() {
-        if (!process.env.BROWSER) return null
-
-        const android = navigator.userAgent.match(/Android/i)
-
-        return (android)
-            ? <div role="button" onClick={this.onClick} className="btn visit-app-btn">Открыть в приложении</div>
-            : null
-    }
+    return null;
 }
-
-export default MobileAppButton

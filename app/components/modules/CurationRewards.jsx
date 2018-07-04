@@ -27,7 +27,7 @@ class CurationRewards extends React.Component {
         const account = this.props.account;
 
         // FIX bug, golos doesn't return transfer_history sometimes
-        if (account.transfer_history) return null;
+        if (!account.transfer_history) account.transfer_history = [];
 
         /// transfer log
         let rewards24 = 0, rewardsWeek = 0, totalRewards = 0;

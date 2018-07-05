@@ -114,6 +114,12 @@ const Button = StyledButton.extend`
     width: 167px;
 `;
 
+const AvatarDropzone = styled(Dropzone)`
+   position: absolute !important;
+   height: 100%;
+   width: 100%;
+`;
+
 const IconCover = styled(Dropzone)`
     position: absolute !important;
     top: 9px;
@@ -212,7 +218,7 @@ class UserHeader extends Component {
                 <Container align="center">
                     <UserProfileAvatar avatarUrl={profile_image}>
                         {isOwner ? (
-                            <Dropzone
+                            <AvatarDropzone
                                 ref={r => (this.dropzoneAvatar = r)}
                                 onDrop={this.handleDropAvatar}
                                 multiple={false}

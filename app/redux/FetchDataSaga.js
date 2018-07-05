@@ -314,6 +314,7 @@ export function* fetchData(action) {
         delete args[0].select_tags
         args[0].select_authors = [accountname];
     } else if( order === 'by_comments' ) {
+        delete args[0].select_tags;
         call_name = 'getDiscussionsByCommentsAsync';
     } else {
         call_name = 'getDiscussionsByActiveAsync';

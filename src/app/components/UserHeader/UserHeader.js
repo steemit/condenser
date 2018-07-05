@@ -241,14 +241,16 @@ class UserHeader extends Component {
                             </Buttons>
                         )}
                     </Details>
-                    <IconCover
-                        ref={r => (this.dropzoneCover = r)}
-                        onDrop={this.handleDropCover}
-                        multiple={false}
-                        accept="image/*"
-                    >
-                        <Icon name="picture" size="20px" />
-                    </IconCover>
+                    {isOwner ? (
+                            <IconCover
+                            ref={r => (this.dropzoneCover = r)}
+                            onDrop={this.handleDropCover}
+                            multiple={false}
+                            accept="image/*"
+                        >
+                            <Icon name="picture" size="20px" />
+                        </IconCover>
+                        ) : null}
                 </Container>
             </Wrapper>
         );

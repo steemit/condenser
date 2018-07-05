@@ -222,6 +222,7 @@ export function* fetchState(location_change_action) {
             yield call(fetchData, {payload: { order: parts[0], category : tag }})
 
         } else if (parts[0] == 'tags') {
+            const tags = {}
             const trending_tags = yield call([api, api.getTrendingTagsAsync], '', parts[0] == 'tags' ? '250' : '50')
             trending_tags.forEach (tag => tags[tag.name] = tag)
             state.tags = tags

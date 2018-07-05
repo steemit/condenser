@@ -14,7 +14,7 @@ import transaction from 'app/redux/Transaction';
 import Dropzone from 'react-dropzone';
 import StyledButton from 'golos-ui/Button';
 import Icon from 'golos-ui/Icon';
-import Flex from './../Flex';
+import Flex from 'golos-ui/Flex';
 import StyledContainer from './../Container';
 import UserProfileAvatar from './../UserProfileAvatar';
 import Follow from './../Follow';
@@ -33,18 +33,18 @@ const Wrapper = styled.div`
         right: 0;
         top: 0;
         bottom: 0;
-        background-color: rgba(255,255,255,0.25);
+        background-color: rgba(255, 255, 255, 0.25);
     }
 
-    ${({ backgroundUrl }) => backgroundUrl ? 
-        `
+    ${({ backgroundUrl }) =>
+        backgroundUrl
+            ? `
         background-size: cover;
         background-repeat: no-repeat;
         background-position: 50%;
         background-image: url(${backgroundUrl});
-        ` 
-        : 
         `
+            : `
         background-size: 41px;
         background-repeat: repeat;
         background-position: 0 -26px;
@@ -53,8 +53,7 @@ const Wrapper = styled.div`
         @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) { 
             background-image: url('/images/profile/pattern@2x.png');
         }
-        `
-    }
+        `};
 `;
 
 const Container = StyledContainer.extend`
@@ -115,9 +114,9 @@ const Button = StyledButton.extend`
 `;
 
 const AvatarDropzone = styled(Dropzone)`
-   position: absolute !important;
-   height: 100%;
-   width: 100%;
+    position: absolute !important;
+    height: 100%;
+    width: 100%;
 `;
 
 const IconCover = styled(Dropzone)`
@@ -242,7 +241,7 @@ class UserHeader extends Component {
                         )}
                     </Details>
                     {isOwner ? (
-                            <IconCover
+                        <IconCover
                             ref={r => (this.dropzoneCover = r)}
                             onDrop={this.handleDropCover}
                             multiple={false}

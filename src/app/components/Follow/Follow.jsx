@@ -66,7 +66,9 @@ export default class Follow extends Component {
         // Show follow preview for new users
         if (!follower || !following)
             return (
-                <Button onClick={this.followLoggedOut}>{tt('g.follow')}</Button>
+                <Button onClick={this.followLoggedOut}>
+                    <Icon name="subscribe" height="10px" width="14px" />{tt('g.follow')}
+                </Button>
             );
 
         // Can't follow or ignore self

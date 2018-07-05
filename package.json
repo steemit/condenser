@@ -189,7 +189,7 @@
     "progress-bar-webpack-plugin": "^1.11.0",
     "sinon": "^1.17.7",
     "sinon-chai": "^2.8.0",
-    "storybook-router": "0.3.3",
+    "storybook-router-react": "0.3.3",
     "supertest": "^1.2.0",
     "svg-sprite-loader": "^3.8.0",
     "uglifyjs-webpack-plugin": "^1.2.5",

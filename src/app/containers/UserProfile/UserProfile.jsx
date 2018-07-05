@@ -25,27 +25,43 @@ import UserList from 'app/components/elements/UserList';
 import UserKeys from 'app/components/elements/UserKeys';
 import PasswordReset from 'app/components/elements/PasswordReset';
 
+import Container from 'src/app/components/Container';
 import UserHeader from 'src/app/components/UserHeader';
 import UserNavigation from 'src/app/components/UserNavigation';
+import UserCardAbout from 'src/app/components/UserCardAbout';
 
 export default class UserProfile extends Component {
     static propTypes = { accountName: PropTypes.string };
 
     shouldComponentUpdate(np) {
-        const {follow} = this.props;
-        const {follow_count} = this.props;
+        const { follow } = this.props;
+        const { follow_count } = this.props;
 
-        let followersLoading = false, npFollowersLoading = false;
-        let followingLoading = false, npFollowingLoading = false;
+        let followersLoading = false,
+            npFollowersLoading = false;
+        let followingLoading = false,
+            npFollowingLoading = false;
 
         const account = np.routeParams.accountName.toLowerCase();
         if (follow) {
-            followersLoading = follow.getIn(['getFollowersAsync', account, 'blog_loading'], false);
-            followingLoading = follow.getIn(['getFollowingAsync', account, 'blog_loading'], false);
+            followersLoading = follow.getIn(
+                ['getFollowersAsync', account, 'blog_loading'],
+                false
+            );
+            followingLoading = follow.getIn(
+                ['getFollowingAsync', account, 'blog_loading'],
+                false
+            );
         }
         if (np.follow) {
-            npFollowersLoading = np.follow.getIn(['getFollowersAsync', account, 'blog_loading'], false);
-            npFollowingLoading = np.follow.getIn(['getFollowingAsync', account, 'blog_loading'], false);
+            npFollowersLoading = np.follow.getIn(
+                ['getFollowersAsync', account, 'blog_loading'],
+                false
+            );
+            npFollowingLoading = np.follow.getIn(
+                ['getFollowingAsync', account, 'blog_loading'],
+                false
+            );
         }
 
         return (
@@ -53,17 +69,17 @@ export default class UserProfile extends Component {
             np.accounts.get(account) !== this.props.accounts.get(account) ||
             np.wifShown !== this.props.wifShown ||
             np.global_status !== this.props.global_status ||
-            ((npFollowersLoading !== followersLoading) && !npFollowersLoading) ||
-            ((npFollowingLoading !== followingLoading) && !npFollowingLoading) ||
+            (npFollowersLoading !== followersLoading && !npFollowersLoading) ||
+            (npFollowingLoading !== followingLoading && !npFollowingLoading) ||
             np.loading !== this.props.loading ||
             np.location.pathname !== this.props.location.pathname ||
             np.routeParams.accountName !== this.props.routeParams.accountName ||
             np.follow_count !== this.props.follow_count
-        )
+        );
     }
 
     componentWillUnmount() {
-        this.props.clearTransferDefaults()
+        this.props.clearTransferDefaults();
     }
 
     loadMore = (last_post, category) => {
@@ -339,7 +355,7 @@ export default class UserProfile extends Component {
                 </div>
             );
         }
-        
+
         if (blockedUsers.includes(accountName)) {
             tab_content = <IllegalContentMessage />;
         }
@@ -375,7 +391,10 @@ export default class UserProfile extends Component {
                     isOwner={isMyAccount}
                     section={section}
                 />
-                <div>{tab_content}</div>
+                <Container>
+                    <UserCardAbout />
+                    {tab_content}
+                </Container>
             </Fragment>
         );
     }

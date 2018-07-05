@@ -21,7 +21,7 @@ const Button = styled.button`
   color: #fff;
   background: #2879FF;
 
-  font-family: ${props => props.theme.fontFamilyBold};
+  font-family: ${props => props.theme.fontFamily};
   font-size: 12px;
   font-weight: bold;
   text-align: center;

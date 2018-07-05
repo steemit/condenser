@@ -10209,16 +10209,14 @@ stealthy-require@^1.1.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/stealthy-require/-/stealthy-require-1.1.1.tgz#35b09875b4ff49f26a777e509b3090a3226bf24b"
 
-storybook-router@0.3.3:
+storybook-router-react@0.3.3:
   version "0.3.3"
-  resolved "https://registry.yarnpkg.com/storybook-router/-/storybook-router-0.3.3.tgz#a70a8e49baee4a2b54e8de8ab632d107d05fcc7b"
+  resolved "https://registry.yarnpkg.com/storybook-router-react/-/storybook-router-react-0.3.3.tgz#ea100f7a423eb1991621772e1ec5924e9ed2f026"
   dependencies:
     "@storybook/addon-actions" "^3.2.10"
     prop-types "^15.5.10"
     react "^0.14.7 || ^15.0.0"
     react-router "^3.0.0 || ^4.0.0"
-    vue "^2.4.4"
-    vue-router "^2.7.0"
 
 stream-browserify@^2.0.1:
   version "2.0.1"
@@ -11233,14 +11231,6 @@ vm-browserify@0.0.4:
   resolved "https://registry.yarnpkg.com/vm-browserify/-/vm-browserify-0.0.4.tgz#5d7ea45bbef9e4a6ff65f95438e0a87c357d5a73"
   dependencies:
     indexof "0.0.1"
-
-vue-router@^2.7.0:
-  version "2.8.1"
-  resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-2.8.1.tgz#9833c9ee57ac83beb0269056fefee71713f20695"
-
-vue@^2.4.4:
-  version "2.5.16"
-  resolved "https://registry.yarnpkg.com/vue/-/vue-2.5.16.tgz#07edb75e8412aaeed871ebafa99f4672584a0085"
 
 w3c-hr-time@^1.0.1:
   version "1.0.1"

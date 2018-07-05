@@ -25,7 +25,7 @@ const Tab = styled.div`
     height: 50px;
     margin: 0 15px;
 
-    font-family: ${props => props.theme.fontFamilyBold};
+    font-family: ${props => props.theme.fontFamily};
     font-size: 14px;
     font-weight: 400;
     letter-spacing: 1.09px;

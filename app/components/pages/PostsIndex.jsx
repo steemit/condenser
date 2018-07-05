@@ -92,7 +92,7 @@ class PostsIndex extends React.Component {
                     this.setState({
                         loading: false,
                         changed: false,
-                        errorMessage: translate('server_returned_error')
+                        errorMessage: tt('g.server_returned_error')
                     })
                 }
             },
@@ -101,7 +101,7 @@ class PostsIndex extends React.Component {
                     loading: false,
                     changed: false,
                     errorMessage: '',
-                    successMessage: translate('saved') + '!',
+                    successMessage: tt('g.saved') + '!',
                 })
                 // remove successMessage after a while
                 setTimeout(() => this.setState({successMessage: ''}), 4000)

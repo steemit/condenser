@@ -61,8 +61,6 @@ class PostsList extends PureComponent {
     }
 
     componentWillUpdate() {
-        console.log('Will update');
-
         const path = `${location.pathname}${location.search}${location.hash}`;
         if (this.state.showPost && path !== this.post_url) {
             this.setState({ showPost: null });
@@ -196,7 +194,6 @@ class PostsList extends PureComponent {
     };
 
     render() {
-        console.log('PostsList render');
         const {
             posts,
             showSpam,

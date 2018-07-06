@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import styled from 'styled-components';
 
 import { Link } from 'react-router';
 import tt from 'counterpart';
@@ -29,6 +30,10 @@ import Container from 'src/app/components/Container';
 import UserHeader from 'src/app/components/UserHeader';
 import UserNavigation from 'src/app/components/UserNavigation';
 import UserCardAbout from 'src/app/components/UserCardAbout';
+
+const Main = styled.div`
+	background-color: #F9F9F9;
+`;
 
 export default class UserProfile extends Component {
     static propTypes = { accountName: PropTypes.string };
@@ -391,10 +396,12 @@ export default class UserProfile extends Component {
                     isOwner={isMyAccount}
                     section={section}
                 />
-                <Container>
-                    <UserCardAbout />
-                    {tab_content}
-                </Container>
+                <Main>
+                    <Container>
+                        <UserCardAbout />
+                        {tab_content}
+                    </Container>
+                </Main>
             </Fragment>
         );
     }

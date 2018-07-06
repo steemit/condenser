@@ -53,7 +53,7 @@ const Tab = styled.div`
 `;
 
 Tab.propTypes = {
-    active: PropTypes.bool,
+    active: PropTypes.number,
     activeClassName: PropTypes.string,
 };
 

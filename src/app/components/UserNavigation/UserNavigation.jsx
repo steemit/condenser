@@ -14,10 +14,12 @@ import VerticalMenu from 'app/components/elements/VerticalMenu';
 import Container from './../Container';
 
 const Wrapper = styled.div`
+    position: relative;
     flex-wrap: wrap;
     min-height: 50px;
     background-color: #ffffff;
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.15);
+    z-index: 1;
 `;
 
 const RightIcons = styled.div`
@@ -58,7 +60,7 @@ IconLink.defaultProps = {
 >>>>>>> WIP left side and fixes #669:src/app/components/UserNavigation/UserNavigation.jsx
 
 export default class UserNavigation extends PureComponent {
-    propTypes = {
+    static propTypes = {
         accountName: PropTypes.string,
         isOwner: PropTypes.bool,
     };
@@ -110,7 +112,7 @@ export default class UserNavigation extends PureComponent {
                         dropdownPosition="bottom"
                         dropdownContent={<VerticalMenu items={rewardsMenu} />}
                     >
-                        <TabLink active={rewardsActive}>
+                        <TabLink active={rewardsActive ? 1 : 0}>
                             {tt('g.rewards')}
                         </TabLink>
                     </LinkWithDropdown>

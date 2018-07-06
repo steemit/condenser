@@ -41,5 +41,4 @@ export const CardTitle = Flex.extend`
 CardTitle.propTypes = {};
 CardTitle.defaultProps = {
     auto: true,
-    align: 'align'
 };

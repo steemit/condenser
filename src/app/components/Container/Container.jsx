@@ -2,6 +2,7 @@ import Flex from 'golos-ui/Flex';
 
 const Container = Flex.extend.attrs({
     auto: true,
+    align: 'flex-start',
 })`
     max-width: 1200px;
     margin: 0 auto;
@@ -11,7 +12,8 @@ const Container = Flex.extend.attrs({
     }
 `;
 Container.defaulProps = {
-    auto: true
-}
+    auto: true,
+    align: 'flex-start',
+};
 
 export default Container;

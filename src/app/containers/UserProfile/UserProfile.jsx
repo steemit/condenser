@@ -32,7 +32,8 @@ import UserNavigation from 'src/app/components/UserNavigation';
 import UserCardAbout from 'src/app/components/UserCardAbout';
 
 const Main = styled.div`
-	background-color: #F9F9F9;
+    background-color: #f9f9f9;
+    padding: 20px 0;
 `;
 
 export default class UserProfile extends Component {
@@ -168,12 +169,27 @@ export default class UserProfile extends Component {
                 </div>
             );
         }
+
+        // MUST BE REFACTORED!
+
         const followers =
             follow && follow.getIn(['getFollowersAsync', accountName]);
         const following =
             follow && follow.getIn(['getFollowingAsync', accountName]);
 
-        // MUST BE REFACTORED!
+        // instantiate following items
+        let totalCounts = this.props.follow_count;
+        let followerCount = 0;
+        let followingCount = 0;
+
+        if (totalCounts && accountName) {
+            totalCounts = totalCounts.get(accountName);
+            if (totalCounts) {
+                totalCounts = totalCounts.toJS();
+                followerCount = totalCounts.follower_count;
+                followingCount = totalCounts.following_count;
+            }
+        }
 
         const isMyAccount = username === account.name;
         let tab_content = null;
@@ -397,8 +413,12 @@ export default class UserProfile extends Component {
                     section={section}
                 />
                 <Main>
-                    <Container>
-                        <UserCardAbout />
+                    <Container align="flex-start">
+                        <UserCardAbout
+                            account={account}
+                            followerCount={followerCount}
+                            followingCount={followingCount}
+                        />
                         {tab_content}
                     </Container>
                 </Main>

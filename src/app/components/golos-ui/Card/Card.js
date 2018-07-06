@@ -7,6 +7,7 @@ import Flex from 'golos-ui/Flex';
 const Card = styled.div`
     display: flex;
     flex-direction: column;
+    flex-shrink: 0;
 
     border-radius: 6px;
     background-color: #ffffff;

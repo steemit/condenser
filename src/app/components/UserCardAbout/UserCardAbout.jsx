@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Link } from 'react-router';
 
+import normalizeProfile from 'app/utils/NormalizeProfile';
+
 import Icon from 'golos-ui/Icon';
 import Card, { CardTitle } from 'golos-ui/Card';
 
@@ -99,26 +101,39 @@ const SocialLink = styled(Link)`
     color: #333;
 `;
 
-const UserCardAbout = () => {
+const UserCardAbout = ({ account, followerCount, followingCount }) => {
+    const { location, about, website } = normalizeProfile(account);
+
+    // set account join date
+    let accountJoin = account.created;
+    const transferFromSteemToGolosDate = '2016-09-29T12:00:00';
+    if (new Date(accountJoin) < new Date(transferFromSteemToGolosDate)) {
+        accountJoin = transferFromSteemToGolosDate;
+    }
+
+    const websiteLabel = website
+        ? website.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')
+        : null;
+
     return (
         <Card style={{ width: '273px' }}>
             <CardTitle>Краткая информация</CardTitle>
             <CardContentCounters>
                 <Row>
                     <Column>
-                        <Bold>1,2</Bold>
+                        <Bold>{account.post_count}</Bold>
                         <Title>Постов</Title>
                     </Column>
                     <Divider />
                     <Column>
-                        <Bold>3,454</Bold>
+                        <Bold>{followingCount}</Bold>
                         <Title>Подписчиков</Title>
                     </Column>
                 </Row>
 
                 <Row>
                     <Column>
-                        <Bold>2,56</Bold>
+                        <Bold>{followerCount}</Bold>
                         <Title>Подписок</Title>
                     </Column>
                     <Divider />
@@ -141,27 +156,41 @@ const UserCardAbout = () => {
                 </Row>
             </CardContentCounters>
 
-            <CardTitle justify="space-between">О себе<UserCardCity>Минск</UserCardCity></CardTitle>
-            <CardContent>
-                <UserCardSite to="#">devall.ru</UserCardSite>
-                <UserCardBio>
-                    Начинающий PR-менеджер может рассказать о себе так:
-                    «Окончила балетную школу, обучалась актерскому мастерству,
-                    играла в музыкальном театре и в команде КВН. В университете
-                    занималась.
-                </UserCardBio>
-            </CardContent>
+            {(website || about || location) && (
+                <CardTitle justify="space-between">
+                    О себе{location && <UserCardCity>{location}</UserCardCity>}
+                </CardTitle>
+            )}
+            {(website || about) && (
+                <CardContent>
+                    {website && (
+                        <UserCardSite to={website}>{websiteLabel}</UserCardSite>
+                    )}
+                    {about && <UserCardBio>{about}</UserCardBio>}
+                </CardContent>
+            )}
 
             <CardTitle justify="space-between">
-              <SocialLink to="#"><Icon name="facebook" width="13px" height="24px"/></SocialLink>
-              <SocialLink to="#"><Icon name="vk" width="28px" height="18px"/></SocialLink>
-              <SocialLink to="#"><Icon name="instagram" size="23px"/></SocialLink>
-              <SocialLink to="#"><Icon name="twitter" width="26px" height="22px"/></SocialLink>
+                <SocialLink to="#">
+                    <Icon name="facebook" width="13px" height="24px" />
+                </SocialLink>
+                <SocialLink to="#">
+                    <Icon name="vk" width="28px" height="18px" />
+                </SocialLink>
+                <SocialLink to="#">
+                    <Icon name="instagram" size="23px" />
+                </SocialLink>
+                <SocialLink to="#">
+                    <Icon name="twitter" width="26px" height="22px" />
+                </SocialLink>
             </CardTitle>
         </Card>
     );
 };
 
-UserCardAbout.propTypes = {};
+UserCardAbout.propTypes = {
+    account: PropTypes.object,
+    follow: PropTypes.object,
+};
 
 export default UserCardAbout;

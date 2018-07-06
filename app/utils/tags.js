@@ -42,7 +42,7 @@ export function validateTag(tag) {
     if (tag.length > TAGS_MAX_LENGTH) {
         return tt('category_selector_jsx.maximum_tag_length_is_24_characters');
     }
-    if (tag.split('-').length > 2) {
+    if (tag.replace(/^[a-z]+--/i, '').split('-').length > 2) {
         return tt('category_selector_jsx.use_one_dash');
     }
     if (tag.includes(',')) {

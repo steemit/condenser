@@ -1,0 +1,89 @@
+.ctablock {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0,0,0, 0.5);
+  padding: 10px 16px;
+  z-index: 99;
+
+  &__main {
+    display: flex;
+    align-items: center;
+  }
+
+  &__user-pic {
+    margin: 5px 10px 5px 0;
+    flex-shrink: 0;
+  }
+
+  &__content {
+    max-width: 50vw;
+    margin: 8px 0;
+    text-align: left;
+  }
+
+  &__button-block {
+    margin: 5px 10px;
+    flex-shrink: 0;
+  }
+
+  &__button {
+    margin: 0;
+    border-radius: 8px;
+    background: #4696e5;
+  }
+
+  @media screen and (max-width: 600px) {
+    flex-wrap: wrap;
+
+    &__content {
+      max-width: unset;
+    }
+
+    &__button-block {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      margin: 5px 0;
+    }
+  }
+
+  @media screen and (max-width: 400px) {
+    &__user-pic {
+      display: none;
+    }
+
+    &__content {
+      text-align: center;
+      max-width: unset;
+      margin: 8px 0;
+    }
+  }
+
+  &__text-special {
+    font-size: 1rem;
+  }
+
+  &__text-regular {
+    display: inline-block;
+    margin-bottom: 0;
+    font-size: 0.8rem;
+  }
+
+  .Userpic {
+    display: block;
+  }
+
+  .right {
+    text-align: right;
+  }
+
+  .left {
+    text-align: left;
+  }
+}

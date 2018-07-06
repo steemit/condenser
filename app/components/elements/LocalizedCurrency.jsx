@@ -6,7 +6,7 @@ import {connect} from 'react-redux'
 // import { injectIntl } from 'react-intl';
 import g from 'app/redux/GlobalReducer';
 import { getSymbolFromCurrency } from 'currency-symbol-map';
-import { FRACTION_DIGITS, DEFAULT_CURRENCY, DEBT_TOKEN_SHORT, FRACTION_DIGITS_MARKET } from 'app/client_config';
+import { FRACTION_DIGITS, DEFAULT_CURRENCY, DEBT_TOKEN_SHORT, LIQUID_TICKER, FRACTION_DIGITS_MARKET } from 'app/client_config';
 import { short as shortAmount } from 'app/utils/FormatNumbers'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 
@@ -22,7 +22,6 @@ class LocalizedCurrency extends React.Component {
     currency: PropTypes.string,
     rounding: PropTypes.bool,
     short: PropTypes.bool,
-    minimumAmountToShow: PropTypes.number,
   }
 
   static defaultProps = {
@@ -66,7 +65,6 @@ class LocalizedCurrency extends React.Component {
       fractionDigits,
       rounding,
       short,
-      minimumAmountToShow, 
       vesting_shares
     } = this.props
 
@@ -78,8 +76,13 @@ class LocalizedCurrency extends React.Component {
       return <LoadingIndicator type="little" />;
 
     let symbol = getSymbolFromCurrency(xchangePicked);
-    if (typeof symbol == 'undefined')
-      symbol = DEBT_TOKEN_SHORT
+    if (typeof symbol == 'undefined') {
+      if (xchangePicked == LIQUID_TICKER) {
+        symbol = LIQUID_TICKER;
+      } else {
+        symbol = DEBT_TOKEN_SHORT;
+      }
+    }
     /**
      * localyze currency
      * @param  {number} amount to parse
@@ -95,11 +98,14 @@ class LocalizedCurrency extends React.Component {
       // : number,
       // options
       // )
-      let currencyAmount =  Number(
-        symbol.localeCompare(DEBT_TOKEN_SHORT) != 0
-        ? number * (xchangeGold / 31103.4768) * xchangePair
-        : number
-      )
+      let currencyAmount = 0;
+      if (symbol.localeCompare(DEBT_TOKEN_SHORT) == 0) {
+        currencyAmount = number;
+      } else if (symbol.localeCompare(LIQUID_TICKER) == 0) {
+        currencyAmount = number > 0 ? number / xchangePair : 0;
+      } else {
+        currencyAmount = number * (xchangeGold / 31103.4768) * xchangePair;
+      }
 
       let lang, nRounding
       if(process.env.BROWSER) {

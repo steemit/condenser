@@ -4,7 +4,7 @@ import {getContent} from 'app/redux/SagaShared';
 import GlobalReducer from './GlobalReducer';
 import constants from './constants';
 import {fromJS, Map} from 'immutable'
-import { DEBT_TOKEN_SHORT, DEFAULT_CURRENCY, IGNORE_TAGS, PUBLIC_API, SELECT_TAGS_KEY } from 'app/client_config';
+import { DEBT_TOKEN_SHORT, LIQUID_TICKER, DEFAULT_CURRENCY, IGNORE_TAGS, PUBLIC_API, SELECT_TAGS_KEY } from 'app/client_config';
 import cookie from "react-cookie";
 import {api} from 'golos-js';
 // import * as api from 'app/utils/APIWrapper'
@@ -423,7 +423,14 @@ export function* fetchExchangeRates() {
 
     let pickedCurrency = localStorage.getItem('xchange.picked') || DEFAULT_CURRENCY;
     if (pickedCurrency.localeCompare(DEBT_TOKEN_SHORT) == 0) {
-      pickedCurrency = DEFAULT_CURRENCY;
+        // pickedCurrency = DEFAULT_CURRENCY;
+        storeExchangeValues(1, 1, 1, DEBT_TOKEN_SHORT); // For GBG currency on site #687
+        return;
+    }
+    if (pickedCurrency.localeCompare(LIQUID_TICKER) == 0) { // For Golos currency on site #687
+        const state = yield call([api, api.getTickerAsync]);
+        storeExchangeValues(1, 1, state.latest, pickedCurrency);
+        return;
     }
     if (Date.now() - created < fourHours) {
       return;

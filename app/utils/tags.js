@@ -66,6 +66,10 @@ export function validateTag(tag) {
     return null;
 }
 
+export function processTagsFromData(tags) {
+    return tags.map(tag => detransliterate(tag));
+}
+
 export function processTagsToSend(tags) {
     return tags.map(
         item =>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 import tt from 'counterpart';
@@ -10,7 +10,7 @@ import Hint from 'app/components/elements/common/Hint';
 import { NSFW_TAG } from 'app/utils/tags';
 import './PostFooter.scss';
 
-export default class PostFooter extends React.PureComponent {
+export default class PostFooter extends PureComponent {
     static propTypes = {
         editMode: PropTypes.bool,
         tags: PropTypes.array,
@@ -27,39 +27,43 @@ export default class PostFooter extends React.PureComponent {
 
         this.state = {
             temporaryErrorText: null,
-            multiLine: true,
+            singleLine: true,
         };
     }
 
     componentDidMount() {
-        this.setState({
-            multiLine: this.refs.root.clientWidth > 950,
-        });
+        this._checkSingleLine();
+
+        this._resizeInterval = setInterval(() => {
+            this._checkSingleLine();
+        }, 1000);
     }
 
     componentWillUnmount() {
+        clearInterval(this._resizeInterval);
         clearTimeout(this._temporaryErrorTimeout);
     }
 
     render() {
         const { editMode, tags, postDisabled, onTagsChange } = this.props;
-        const { temporaryErrorText, multiLine } = this.state;
+        const { temporaryErrorText, singleLine } = this.state;
 
         return (
             <div
                 className={cn('PostFooter', {
                     PostFooter_edit: editMode,
-                    'PostFooter_fix-height': multiLine,
+                    'PostFooter_fix-height': singleLine,
                 })}
                 ref="root"
             >
                 <div className="PostFooter__line">
                     <div className="PostFooter__tags">
                         <TagInput tags={tags} onChange={onTagsChange} />
-                        {multiLine ? (
+                        {singleLine ? (
                             <TagsEditLine
                                 tags={tags}
                                 inline
+                                editMode={editMode}
                                 className="PostFooter__inline-tags-line"
                                 hidePopular={editMode}
                                 onChange={this.props.onTagsChange}
@@ -97,9 +101,10 @@ export default class PostFooter extends React.PureComponent {
                         </div>
                     </div>
                 </div>
-                {multiLine ? null : (
+                {singleLine ? null : (
                     <TagsEditLine
                         className="PostFooter__tags-line"
+                        editMode={editMode}
                         tags={tags}
                         hidePopular={editMode}
                         onChange={onTagsChange}
@@ -121,6 +126,14 @@ export default class PostFooter extends React.PureComponent {
                 temporaryErrorText: null,
             });
         }, 5000);
+    }
+
+    _checkSingleLine() {
+        const singleLine = this.refs.root.clientWidth > 950
+
+        if (this.state.singleLine !== singleLine) {
+            this.setState({ singleLine });
+        }
     }
 
     _onNsfwClick = () => {

@@ -20,6 +20,7 @@ import MarkdownViewer, {
 import { checkPostHtml } from 'app/utils/validator';
 import { DEBT_TICKER } from 'app/client_config';
 import {
+    processTagsFromData,
     processTagsToSend,
     validateTags,
     updateFavoriteTags,
@@ -160,7 +161,7 @@ class PostForm extends React.Component {
 
         this.state.emptyBody = false;
 
-        let tags = jsonMetadata.tags || [];
+        let tags = processTagsFromData(jsonMetadata.tags || []);
 
         if (tags[0] !== editParams.category) {
             tags.unshift(editParams.category);

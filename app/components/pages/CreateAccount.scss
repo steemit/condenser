@@ -1,33 +1,40 @@
-.CreateAccount__rules {
-  opacity: 0.5;
-  p {}
-}
-
-.CreateAccount__rules-button {
-  background-color: $gray95;
-  padding: 0.2rem 1rem;
-  border-radius: 10px;
-  margin: 1rem 0;
-  font-size: 0.8rem;
-  color: $dark-gray;
-}
-
-.CreateAccount__sms {
-  padding-right: 3rem;
-  padding-left: 3rem;
-}
-
 .CreateAccount {
   margin: 20px 0;
 
+  &__rules {
+    opacity: 0.5;
+  }
+
+  &__rules-button {
+    background-color: $gray95;
+    padding: 0.2rem 1rem;
+    border-radius: 10px;
+    margin: 1rem 0;
+    font-size: 0.8rem;
+    color: $dark-gray;
+  }
+
+  &__check-info {
+    padding: 10px 15px;
+    border-radius: 6px;
+    line-height: 1.5em;
+    text-align: justify;
+    color: #333;
+    background: #f9f9f9;
+    animation: fade-in 0.5s;
+  }
+
   form {
     .callout {
+      border-radius: 6px;
+
       .LoadingIndicator {
         float: left;
       }
     }
     .button {
       padding: 0.5em 0.75em;
+      margin: 0;
     }
     .success {
       color: #268c4c;

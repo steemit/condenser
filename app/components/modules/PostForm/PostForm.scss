@@ -22,8 +22,20 @@
 
   &__content {
     max-width: 75rem;
-    padding: 0 8px;
     margin: 0 auto;
+  }
+
+  &_page &__content {
+    padding: 0 8px;
+  }
+
+  &__preview {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  &__title-preview {
+    font: 700 200% 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Geneva, Arial, sans-serif;
   }
 
   &__footer {

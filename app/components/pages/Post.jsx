@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import Comment from 'app/components/cards/Comment';
 import PostFull from 'app/components/cards/PostFull';
 import {connect} from 'react-redux';
-import {sortComments} from 'app/components/cards/Comment';
+import {sortComments} from 'app/utils/comments';
 import FoundationDropdownMenu from 'app/components/elements/FoundationDropdownMenu';
 import IllegalContentMessage from 'app/components/elements/IllegalContentMessage';
 import {Set} from 'immutable'
@@ -119,7 +119,7 @@ class Post extends React.Component {
                     key={post + reply}
                     content={reply}
                     cont={content}
-                    sort_order={sort_order}
+                    sortOrder={sort_order}
                     showNegativeComments={showNegativeComments}
                     onHide={this.onHideComment}
                 />)

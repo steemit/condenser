@@ -3,6 +3,9 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router'
 import Slider from 'react-slick'
 import Userpic from 'app/components/elements/Userpic'
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+import './WelcomeSlider.scss';
 
 export default class WelcomeSlider extends Component {
 

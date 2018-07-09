@@ -1,12 +1,12 @@
 import React, { PureComponent } from 'react';
 
-let PostForm = null;
+let CommentForm = null;
 
-export default class PostFormLoader extends PureComponent {
+export default class CommentFormLoader extends PureComponent {
     componentDidMount() {
-        if (!PostForm) {
-            require.ensure('./PostForm', require => {
-                PostForm = require('./PostForm').default;
+        if (!CommentForm) {
+            require.ensure('./CommentForm', require => {
+                CommentForm = require('./CommentForm').default;
 
                 if (!this._unmount) {
                     this.forceUpdate();
@@ -20,8 +20,8 @@ export default class PostFormLoader extends PureComponent {
     }
 
     render() {
-        if (PostForm) {
-            return <PostForm {...this.props} />
+        if (CommentForm) {
+            return <CommentForm {...this.props} />
         }
 
         return <div />;

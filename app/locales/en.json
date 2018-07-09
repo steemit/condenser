@@ -1026,5 +1026,8 @@
     "alert": "Alert",
     "confirm": "Confirmation",
     "prompt": "Enter the data"
+  },
+  "mobile_app_button": {
+    "open_in_app": "Open in application"
   }
 }

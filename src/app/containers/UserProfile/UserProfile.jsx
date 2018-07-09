@@ -133,8 +133,7 @@ export default class UserProfile extends Component {
                     <div className="UserProfile__center">
                         <LoadingIndicator
                             type="circle"
-                            width="40px"
-                            height="40px"
+                            size="40px"
                         />
                     </div>
                 </div>

@@ -47,10 +47,10 @@ export default {
         } else if (route.page === 'SubmitPost') {
             if (process.env.BROWSER) cb(null, [require('@pages/SubmitPost')]);
             else cb(null, [require('@pages/SubmitPostServerRender')]);
-        // } else if (route.page === 'UserProfile') {
-        //     cb(null, [require('@pages/UserProfile')]);
         } else if (route.page === 'UserProfile') {
-            cb(null, [require('src/app/containers/UserProfile').default]);
+            cb(null, [require('@pages/UserProfile')]);
+        // } else if (route.page === 'UserProfile') {
+        //     cb(null, [require('src/app/containers/UserProfile').default]);
         } else if (route.page === 'Market') {
             cb(null, [require('@pages/Market')]);
         } else if (route.page === 'Post') {

@@ -48,7 +48,10 @@
     border-radius: $tag-height/2;
     font-size: 12px;
     color: #333;
-    cursor: move;
+
+    &_draggable {
+      cursor: move;
+    }
 
     &:last-child {
       margin-right: 0;

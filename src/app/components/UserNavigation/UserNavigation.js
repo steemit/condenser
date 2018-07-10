@@ -29,16 +29,20 @@ const RightIcons = styled.div`
 const SettingsIcon = styled(Icon)``;
 
 const IconLink = styled(Link)`
-    display: flex;
+   display: flex;
 
-    ${SettingsIcon} {
-        color: #b7b7b9;
+   ${SettingsIcon} {
+       color: #b7b7b9;
 
-        &:hover {
-            color: #333;
-        }
-    }
+       &.${props => props.activeClassName},
+       &:hover {
+           color: #333;
+       }
+   }
 `;
+IconLink.defaultProps = {
+   activeClassName: 'active'
+};
 
 export default class UserNavigation extends PureComponent {
     propTypes = {

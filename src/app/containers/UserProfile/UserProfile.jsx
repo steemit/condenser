@@ -103,7 +103,7 @@ export default class UserProfile extends Component {
             permlink,
             order,
             category,
-            accountName,
+            accountname: accountName,
         });
     };
 

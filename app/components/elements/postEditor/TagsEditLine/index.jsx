@@ -11,17 +11,14 @@ export default class TagsEditLine extends React.PureComponent {
     static propTypes = {
         tags: PropTypes.arrayOf(PropTypes.string).isRequired,
         inline: PropTypes.bool,
+        editMode: PropTypes.bool,
         hidePopular: PropTypes.bool,
         onChange: PropTypes.func.isRequired,
     };
 
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            favoriteTags: [],
-        };
-    }
+    state = {
+        favoriteTags: [],
+    };
 
     componentDidMount() {
         window.addEventListener('mouseup', this._onGlobalMouseUp);
@@ -83,33 +80,43 @@ export default class TagsEditLine extends React.PureComponent {
 
         return (
             <div className="TagsEditLine__tag-list">
-                {tags.map(tag => (
-                    <span
-                        key={tag}
-                        className={cn('TagsEditLine__tag', {
-                            TagsEditLine__tag_drag: this._draggingTag === tag,
-                            TagsEditLine__tag_over:
-                                overTags && overTags.has(tag),
-                        })}
-                        data-tag={tag}
-                        ref={this._draggingTag === tag ? 'drag-item' : null}
-                        onMouseDown={this._onMouseDown}
-                        onMouseMove={
-                            this._isDragging && this._draggingTag !== tag
-                                ? this._onTagMouseMove
-                                : null
-                        }
-                    >
-                        {tag}
-                        <i
-                            className="TagsEditLine__tag-icon"
-                            onClick={() => this._removeTag(tag)}
-                        >
-                            <Icon name="editor/cross" size="0_75x" />
-                        </i>
-                    </span>
-                ))}
+                {tags.map((tag, i) => this._renderTag(tag, i, overTags))}
             </div>
+        );
+    }
+
+    _renderTag(tag, i, overTags) {
+        const { editMode } = this.props;
+        const allowMove = i !== 0 || !editMode;
+
+        return (
+            <span
+                key={tag}
+                className={cn('TagsEditLine__tag', {
+                    TagsEditLine__tag_draggable: allowMove,
+                    TagsEditLine__tag_drag:
+                        allowMove && this._draggingTag === tag,
+                    TagsEditLine__tag_over: overTags && overTags.has(tag),
+                })}
+                data-tag={tag}
+                ref={this._draggingTag === tag ? 'drag-item' : null}
+                onMouseDown={allowMove ? this._onMouseDown : null}
+                onMouseMove={
+                    this._isDragging && this._draggingTag !== tag
+                        ? this._onTagMouseMove
+                        : null
+                }
+            >
+                {tag}
+                {allowMove ? (
+                    <i
+                        className="TagsEditLine__tag-icon"
+                        onClick={() => this._removeTag(tag)}
+                    >
+                        <Icon name="editor/cross" size="0_75x" />
+                    </i>
+                ) : null}
+            </span>
         );
     }
 
@@ -210,13 +217,17 @@ export default class TagsEditLine extends React.PureComponent {
         const draggingBox = this.refs['drag-item'].getBoundingClientRect();
 
         const modifier = box.x > draggingBox.x ? 0.2 : 0.8;
-        const positionShift = e.clientX > box.x + box.width * modifier ? 1 : 0;
+        let positionShift = e.clientX > box.x + box.width * modifier ? 1 : 0;
 
         const newTags = this.props.tags.filter(
             tag => tag !== this._draggingTag
         );
 
         const tagIndex = newTags.indexOf(tag);
+
+        if (this.props.editMode && tagIndex === 0) {
+            positionShift = 1;
+        }
 
         newTags.splice(tagIndex + positionShift, 0, this._draggingTag);
 

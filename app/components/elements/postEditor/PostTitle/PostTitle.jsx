@@ -1,19 +1,18 @@
-import React from 'react';
-import tt from 'counterpart';
+import React, { PureComponent } from 'react';
 import KEYS from 'app/utils/keyCodes';
 import Hint from 'app/components/elements/common/Hint';
 import './PostTitle.scss';
 
-export default class PostTitle extends React.PureComponent {
+export default class PostTitle extends PureComponent {
     render() {
-        const { value } = this.props;
+        const { value, placeholder } = this.props;
         const error = this.props.validate(value);
 
         return (
             <div className="PostTitle">
                 <input
                     className="PostTitle__input"
-                    placeholder={tt('submit_a_story.title')}
+                    placeholder={placeholder}
                     value={value}
                     onKeyDown={this._onKeyDown}
                     onChange={this._onChange}

@@ -20,6 +20,7 @@ import MarkdownViewer, {
 import { checkPostHtml } from 'app/utils/validator';
 import { DEBT_TICKER } from 'app/client_config';
 import {
+    processTagsFromData,
     processTagsToSend,
     validateTags,
     updateFavoriteTags,
@@ -160,7 +161,7 @@ class PostForm extends React.Component {
 
         this.state.emptyBody = false;
 
-        let tags = jsonMetadata.tags || [];
+        let tags = processTagsFromData(jsonMetadata.tags || []);
 
         if (tags[0] !== editParams.category) {
             tags.unshift(editParams.category);
@@ -189,7 +190,8 @@ class PostForm extends React.Component {
             isPosting,
         } = this.state;
 
-        const allowPost = uploadingCount === 0 && title.trim() && !emptyBody && !isPosting;
+        const allowPost =
+            uploadingCount === 0 && title.trim() && !emptyBody && !isPosting;
 
         return (
             <div
@@ -216,17 +218,25 @@ class PostForm extends React.Component {
                             onChange={this._onEditorChange}
                             onPreviewChange={this._onPreviewChange}
                         />
-                        <PostTitle
-                            value={title}
-                            validate={this._validateTitle}
-                            onTab={this._onTitleTab}
-                            onChange={this._onTitleChange}
-                        />
+                        {isPreview ? null : (
+                            <PostTitle
+                                value={title}
+                                placeholder={tt('submit_a_story.title')}
+                                validate={this._validateTitle}
+                                onTab={this._onTitleTab}
+                                onChange={this._onTitleChange}
+                            />
+                        )}
                         <div style={{ display: isPreview ? 'none' : 'block' }}>
                             {this._renderEditorPanel()}
                         </div>
                         {isPreview ? (
-                            <MarkdownViewer text={text} large />
+                            <div className="PostForm__preview">
+                                <h1 className="PostForm__title-preview">
+                                    {title.trim() || tt('submit_a_story.title')}
+                                </h1>
+                                <MarkdownViewer text={text} large />
+                            </div>
                         ) : null}
                     </div>
                 </div>

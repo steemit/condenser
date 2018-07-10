@@ -716,7 +716,7 @@
     "influence_tokens_which_give_you_more_control_over":"%(VESTING_TOKEN)s nemișcate, numărul lor crește în depozit pe termen lung. Cu cât mai mult %(VESTING_TOKENS)s, cu atât mai mult influențați la remunerarea pentru postare și mai mult câștigți pentru vot.",
     "the_more_you_hold_the_more_you_influence_post_rewards":"Cu cât mai mult aveți %(VESTING_TOKENS)s, cu atât mai mult influențați remunerarea pentru postare și mai mult câștigți pentru vot.'",
     "the_estimated_value_is_based_on_an_average_value_of_steem_in_US_dollars":"Valoarea estimată este calculată din valoarea medie în 7 zile %(LIQUID_TOKEN)s.",
-    "VESTING_TOKEN_is_non_transferrable_and_requires_convert_back_to_LIQUID_TOKEN":"%(VESTING_TOKEN2)s nu poate fi transferat și va avea nevoie de 20 de săptămâni pentru a-l transmite înapoi în %(LIQUID_TOKEN)s.",
+    "VESTING_TOKEN_is_non_transferrable_and_requires_convert_back_to_LIQUID_TOKEN":"%(VESTING_TOKEN2)s nu poate fi transferat și va avea nevoie de 13 de săptămâni pentru a-l transmite înapoi în %(LIQUID_TOKEN)s.",
     "converted_VESTING_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again":"%(VESTING_TOKEN)s convertată poate fi trimisă sie sau altcuiva, dar nu poate fi transmisă din nou, înapoi fără convertare %(LIQUID_TOKEN)s.",
     "profile":"Profil",
     "send_to_account":"Trimite contului",

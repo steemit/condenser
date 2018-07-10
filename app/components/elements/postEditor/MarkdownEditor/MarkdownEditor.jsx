@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import debounce from 'lodash.debounce';
+import debounce from 'lodash/debounce';
+import throttle from 'lodash/throttle';
 import Dropzone from 'react-dropzone';
 import tt from 'counterpart';
 import cn from 'classnames';
@@ -33,7 +34,7 @@ export default class MarkdownEditor extends PureComponent {
     constructor(props) {
         super(props);
 
-        this._processTextLazy = debounce(this._processText, 100);
+        this._processTextLazy = throttle(this._processText, 100, { leading: false });
         this._onCursorActivityLazy = debounce(this._onCursorActivity, 50);
     }
 

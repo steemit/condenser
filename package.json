@@ -75,7 +75,7 @@
     "koa-static-cache": "^4.1.1",
     "libsodium": "0.4.8",
     "libsodium-wrappers": "0.4.8",
-    "lodash.debounce": "^4.0.8",
+    "lodash": "^4.17.10",
     "medium-editor-insert-plugin": "^2.3.2",
     "minimist": "^1.2.0",
     "multistream": "^2.1.1",

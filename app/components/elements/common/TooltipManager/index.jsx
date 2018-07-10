@@ -1,6 +1,6 @@
 import React from 'react';
 import cn from 'classnames';
-import debounce from 'lodash.debounce';
+import debounce from 'lodash/debounce';
 
 const RAISE_TIME = 350;
 let key = 0;

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import debounce from 'lodash.debounce';
+import throttle from 'lodash/throttle';
 import { connect } from 'react-redux';
 import Turndown from 'turndown';
 import cn from 'classnames';
@@ -85,8 +85,8 @@ class PostForm extends React.Component {
             uploadingCount: 0,
         };
 
-        this._saveDraftLazy = debounce(this._saveDraft, 500);
-        this._checkBodyLazy = debounce(this._checkBody, 300);
+        this._saveDraftLazy = throttle(this._saveDraft, 500, { leading: true });
+        this._checkBodyLazy = throttle(this._checkBody, 300, { leading: false });
         this._postSafe = this._safeWrapper(this._post);
 
         let isLoaded = false;

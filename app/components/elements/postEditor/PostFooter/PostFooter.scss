@@ -45,5 +45,18 @@
     &:last-child {
       margin-right: 0;
     }
+
+    &_hint-disabled {
+
+    }
+  }
+
+  &__disabled-hint {
+    opacity: 0;
+    transition: opacity 0.25s;
+  }
+
+  &__button_hint-disabled:hover &__disabled-hint {
+    opacity: 1;
   }
 }

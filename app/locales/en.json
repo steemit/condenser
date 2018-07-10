@@ -361,7 +361,6 @@
     "tag_your_story": "Tag (up to 5 tags), the first tag is your main category.",
     "select_a_tag": "Select a tag",
     "maximum_tag_length_is_24_characters": "Maximum tag length is 24 characters",
-    "use_limitied_amount_of_categories": "Please use only %(amount)s categories",
     "use_only_lowercase_letters": "Use only lowercase letters",
     "use_one_dash": "Use only one dash",
     "use_spaces_to_separate_tags": "Use spaces to separate tags",
@@ -375,7 +374,7 @@
     "title_is_not_valid": "Title is not valid"
   },
   "post-editor": {
-    "cant_ends_with_special_char": "Can't ends with special char"
+    "cant_ends_with_special_char": "Title ended with dot is a bad taste"
   },
   "tags_page": {
     "replies": "Replies",
@@ -994,6 +993,7 @@
     "edit_mode": "Go back to edit mode",
     "payout_hint": "Payout method",
     "nsfw_hint": "Mark for not safe for children",
+    "title_placeholder": "Enter the title",
     "payout_option_100": "Power of voice 100%%",
     "payout_option_100_hint": "This mean 100%% pay of voice",
     "payout_option_50": "50/50",
@@ -1008,7 +1008,10 @@
     "add_image": "Add image",
     "set_payout_type": "Select the type of payment for your post",
     "image_preview_error": "Image loading error",
-    "update": "Update"
+    "update": "Update",
+    "wait_uploading": "Images uploading...",
+    "enter_title": "Enter the title",
+    "enter_body": "Enter the body"
   },
   "editor_toolbar": {
     "enter_the_link": "Enter the link",

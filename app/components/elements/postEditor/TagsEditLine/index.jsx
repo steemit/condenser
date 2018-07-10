@@ -1,10 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
-import tt from 'counterpart';
 import Icon from 'app/components/elements/Icon';
-import Hint from 'app/components/elements/common/Hint';
-import { TAGS_LIMIT, filterRealTags, getFavoriteTags } from 'app/utils/tags';
+import { getFavoriteTags } from 'app/utils/tags';
 import './index.scss';
 
 export default class TagsEditLine extends React.PureComponent {
@@ -40,14 +38,6 @@ export default class TagsEditLine extends React.PureComponent {
     render() {
         const { tags, className, hidePopular, inline } = this.props;
 
-        const realTags = filterRealTags(tags);
-        const overLimit = realTags.length > TAGS_LIMIT;
-        let overTags = null;
-
-        if (overLimit) {
-            overTags = new Set(realTags.slice(TAGS_LIMIT));
-        }
-
         return (
             <div
                 className={cn(
@@ -59,33 +49,25 @@ export default class TagsEditLine extends React.PureComponent {
                     className
                 )}
             >
-                {realTags.length > TAGS_LIMIT ? (
-                    <Hint error>
-                        {tt(
-                            'category_selector_jsx.use_limitied_amount_of_categories',
-                            { amount: TAGS_LIMIT }
-                        )}
-                    </Hint>
-                ) : null}
                 <div className="TagsEditLine__wrapper">
-                    {this._renderTagList(overTags)}
+                    {this._renderTagList()}
                     {hidePopular ? null : this._renderPopularList()}
                 </div>
             </div>
         );
     }
 
-    _renderTagList(overTags) {
+    _renderTagList() {
         const { tags } = this.props;
 
         return (
             <div className="TagsEditLine__tag-list">
-                {tags.map((tag, i) => this._renderTag(tag, i, overTags))}
+                {tags.map((tag, i) => this._renderTag(tag, i))}
             </div>
         );
     }
 
-    _renderTag(tag, i, overTags) {
+    _renderTag(tag, i) {
         const { editMode } = this.props;
         const allowMove = i !== 0 || !editMode;
 
@@ -96,7 +78,6 @@ export default class TagsEditLine extends React.PureComponent {
                     TagsEditLine__tag_draggable: allowMove,
                     TagsEditLine__tag_drag:
                         allowMove && this._draggingTag === tag,
-                    TagsEditLine__tag_over: overTags && overTags.has(tag),
                 })}
                 data-tag={tag}
                 ref={this._draggingTag === tag ? 'drag-item' : null}

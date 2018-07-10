@@ -27,7 +27,6 @@
     "tag_your_story": "Добавь тэги (до 5 штук), первый тэг станет основной категорией.",
     "select_a_tag": "Выбрать тэг",
     "maximum_tag_length_is_24_characters": "Максимальная длина категории 24 знака",
-    "use_limitied_amount_of_categories": "Пожалуйста, используйте только %(amount)s категории",
     "use_only_lowercase_letters": "Используйте только символы нижнего регистра",
     "use_one_dash": "Используйте только одно тире",
     "use_spaces_to_separate_tags": "Используйте пробел, чтобы разделить тэги",
@@ -41,7 +40,7 @@
     "title_is_not_valid": "Заголовок неправильно заполнен"
   },
   "post-editor": {
-    "cant_ends_with_special_char": "Не может заканчиваться на точку"
+    "cant_ends_with_special_char": "На нашем ресурсе не принято оканчивать заголовок спец символами или точкой"
   },
   "mobilevalidation_js": {
     "not_be_empty": "не может быть пустым",
@@ -1006,6 +1005,7 @@
     "edit_mode": "Вернуться в режим редактирования",
     "payout_hint": "Режим выплат",
     "nsfw_hint": "Отметка о небезопасном контенте",
+    "title_placeholder": "Введите заголовок",
     "payout_option_100": "Сила голоса 100%%",
     "payout_option_100_hint": "Это значит 100%% оплата голоса",
     "payout_option_50": "50/50",
@@ -1020,7 +1020,10 @@
     "add_image": "Добавить изображение",
     "set_payout_type": "Выбери тип награды за свой пост",
     "image_preview_error": "Ошибка загрузки изображения",
-    "update": "Обновить"
+    "update": "Обновить",
+    "wait_uploading": "Загружаются файлы",
+    "enter_title": "Введите заголовок",
+    "enter_body": "Введите тело поста"
   },
   "editor_toolbar": {
     "enter_the_link": "Введите ссылку",

@@ -100,7 +100,6 @@ const fr = 	{
 	including_the_category: "(y compris la catégorie '{rootCategory}')",
 	use_limited_amount_of_tags: 'Vous avez {tagsLength} tags en tout{includingCategory}. Veuillez n\'utiliser que 5 tags en tout.',
 	// this is mainly used in CategorySelector
-	use_limitied_amount_of_categories: 'S\'il vous plait, n\'utilisez que {amount} catégories',
 	use_one_dash: 'N\'utilisez qu\'un seul signe dièse',
 	use_spaces_to_separate_tags: 'Utilisez des espaces pour séparer les tags',
 	use_only_allowed_characters: 'Utilisez uniquement des lettres minuscules, des chiffres et un signe dièse',

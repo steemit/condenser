@@ -1,14 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types'
 import { Link } from 'react-router';
-import {connect} from 'react-redux';
 import { browserHistory } from 'react-router';
 import tt from 'counterpart';
 import { detransliterate } from 'app/utils/ParsersAndFormatters';
 import { IGNORE_TAGS, SELECT_TAGS_KEY } from 'app/client_config';
 import cookie from "react-cookie";
 
-class Topics extends React.Component {
+export default class Topics extends React.Component {
     static propTypes = {
         categories: PropTypes.object.isRequired,
         user: PropTypes.string,
@@ -164,6 +163,3 @@ class Topics extends React.Component {
     }
 }
 
-export default connect(state => ({
-    categories: state.global.get('tag_idx')
-}))(Topics);

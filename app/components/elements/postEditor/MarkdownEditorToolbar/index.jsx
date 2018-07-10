@@ -63,11 +63,18 @@ export default class MarkdownEditorToolbar extends React.PureComponent {
             this._cm.on('focus', this._onCursorActivityDelayed);
         }, 700);
         document.addEventListener('keydown', this._onGlobalKeyDown);
+
+        this._initTimeout = setTimeout(() => {
+            if (this._cm.hasFocus()) {
+                this._onCursorActivity();
+            }
+        }, 500);
     }
 
     componentWillUnmount() {
         this._unmount = true;
 
+        clearTimeout(this._initTimeout);
         clearTimeout(this._delayedListenTimeout);
         this._cm.off('cursorActivity', this._onCursorActivityDelayed);
         this._cm.off('focus', this._onCursorActivityDelayed);
@@ -80,7 +87,11 @@ export default class MarkdownEditorToolbar extends React.PureComponent {
         const { newLineHelper } = this.state;
 
         return (
-            <div className={cn('MET', { MET_comment: commentMode })} ref="root">
+            <div
+                className={cn('MET', { MET_comment: commentMode })}
+                ref="root"
+                style={{ display: 'none' }}
+            >
                 {this._renderToolbar()}
                 {newLineHelper ? this._renderHelper(newLineHelper) : null}
             </div>
@@ -94,7 +105,9 @@ export default class MarkdownEditorToolbar extends React.PureComponent {
 
         const editor = this._editor;
 
-        const toolbarWidth = commentMode ? TOOLBAR_COMMENT_WIDTH : TOOLBAR_WIDTH;
+        const toolbarWidth = commentMode
+            ? TOOLBAR_COMMENT_WIDTH
+            : TOOLBAR_WIDTH;
 
         const style = {
             width: toolbarWidth,
@@ -143,11 +156,13 @@ export default class MarkdownEditorToolbar extends React.PureComponent {
                 icon: 'italic',
                 onClick: () => SM.toggleItalic(editor),
             },
-            commentMode ? null : {
-                active: state.heading,
-                icon: 'header',
-                onClick: this._onHeadingClick,
-            },
+            commentMode
+                ? null
+                : {
+                      active: state.heading,
+                      icon: 'header',
+                      onClick: this._onHeadingClick,
+                  },
             {
                 active: state.strikethrough,
                 icon: 'strike',

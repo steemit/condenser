@@ -1,0 +1,52 @@
+
+.CommentForm {
+  display: flex;
+  flex-direction: column;
+
+  &__work-area {
+    flex-grow: 1;
+    flex-shrink: 0;
+    width: 100%;
+    min-height: 100px;
+  }
+
+  &__content {
+    max-width: 75rem;
+    margin: 0 auto;
+  }
+
+  &__footer {
+    width: 100%;
+    flex-shrink: 0;
+    z-index: 1;
+    user-select: none;
+  }
+
+  &__footer-content {
+
+  }
+
+  &__spinner {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 100%;
+    color: #999;
+    pointer-events: none;
+    opacity: 0;
+    animation: fade-in 1s forwards;
+    animation-delay: 0.3s;
+  }
+
+  &__spinner-inner {
+    width: unset !important;
+    height: unset !important;
+    padding: 40px 60px;
+    border-radius: 18px;
+    background: rgba(0,0,0, 0.1);
+  }
+}

@@ -10,7 +10,14 @@ export default {
         if (route.page === 'Landing') {
             cb(null, [require('@pages/Landing')]);
         } else if (route.page === 'Welcome') {
-            cb(null, [require('@pages/Welcome')]);
+            if (process.env.BROWSER) {
+                cb(null, [require('@pages/WelcomeLoader')])
+            } else {
+                cb(null, [{
+                    path: 'welcome',
+                    component: require('@pages/Welcome').default,
+                }]);
+            }
         } else if (route.page === 'Start') {
             cb(null, [require('@pages/Landings/Start')]);
         } else if (route.page === 'Faq') {
@@ -41,7 +48,7 @@ export default {
         } else if (route.page === 'RecoverAccountStep2') {
             cb(null, [require('@pages/RecoverAccountStep2')]);
         } else if (route.page === 'Witnesses') {
-            cb(null, [require('@pages/Witnesses')]);
+            cb(null, [require('@pages/WitnessesLoader')]);
         } else if (route.page === 'LeavePage') {
             cb(null, [require('@pages/LeavePage')]);
         } else if (route.page === 'SubmitPost') {
@@ -52,7 +59,7 @@ export default {
         // } else if (route.page === 'UserProfile') {
         //     cb(null, [require('src/app/containers/UserProfile').default]);
         } else if (route.page === 'Market') {
-            cb(null, [require('@pages/Market')]);
+            cb(null, [require('@pages/MarketLoader')]);
         } else if (route.page === 'Post') {
             cb(null, [require('@pages/PostPage')]);
         } else if (route.page === 'PostNoCategory') {

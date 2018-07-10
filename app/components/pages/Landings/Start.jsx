@@ -1,27 +1,18 @@
 import React from 'react';
 import Icon from '../../elements/Icon'
 import ReactTooltip from 'react-tooltip'
-import CTABlock from '../../elements/CTA/ctaBlock'
 
 class Start extends React.Component {
-
-    constructor() {
-        super();
-        this.state = {
-            simple: true
-        }
-        this.toggleAnswer = this
-            .toggleAnswer
-            .bind(this);
+    state = {
+        simple: true,
     }
 
-    toggleAnswer(e, answr) {
+    toggleAnswer = (e, answr) => {
         e.preventDefault()
         this.setState({simple: answr})
-    }
+    };
 
     render() {
-
         let {simple} = this.state
         let simpleAnswer = <p className='landing-start-block-text'>
             <b>{'Golos.io '}</b>
@@ -230,5 +221,5 @@ class Start extends React.Component {
 
 module.exports = {
     path: 'start',
-    component: Start
+    component: Start,
 };

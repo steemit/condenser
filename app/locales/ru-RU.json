@@ -992,7 +992,8 @@
     "only_post_once_every": "Публиковать посты можно не чаще, чем раз в 5 минут",
     "exceeded_maximum_allowed_bandwidth": "Недостаточно пропускной способности аккаунта. Пополните Силу Голоса либо дождитесь восстановления",
     "already_voted": "Вы уже голосовали за этот пост",
-    "only_vote_once_every": "Голосовать можно не чаще, чем раз в 3 секунды"
+    "only_vote_once_every": "Голосовать можно не чаще, чем раз в 3 секунды",
+    "account_does_not_have_sufficient_power_for_withdraw": "Количество Силы Голоса недостаточно для понижения"
   },
   "delegatevestingshares_jsx" :{
     "form_title" : "Делегировать %(VESTING_TOKEN2)s",

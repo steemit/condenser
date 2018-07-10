@@ -42,6 +42,14 @@ export default function transactionErrorReducer(
                     errorKey =
                         'Account requires 10x the account creation fee in Steem Power ' +
                         '(approximately 300 SP) before it can power down.';
+                } else if (
+                    errorStr.includes(
+                        'Account does not have sufficient Golos Power for withdraw.'
+                    ) 
+                ) {
+                    errorKey = tt(
+                        'chain_errors.account_does_not_have_sufficient_power_for_withdraw'
+                    );
                 }
                 break;
         }
@@ -106,6 +114,7 @@ export default function transactionErrorReducer(
             } else if (errorKey.includes('Can only vote once every')) {
                 errorKey = errorStr = tt('chain_errors.only_vote_once_every');
             }
+            console.log('-------', errorKey, errorStr)
 
             if (!hideErrors) {
                 state = state.update('errors', errors => {

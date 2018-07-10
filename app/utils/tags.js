@@ -1,14 +1,13 @@
-import { detransliterate } from './ParsersAndFormatters';
 import tt from 'counterpart';
+import { detransliterate } from './ParsersAndFormatters';
 
-export const TAGS_LIMIT = 5;
 export const TAGS_MAX_LENGTH = 24;
 export const NSFW_TAG = 'nsfw';
 export const NSFW_TAG_NUMERIC = '18+';
 
 const FAVORITE_KEY = 'golos.favorite-tags';
 
-export function filterRealTags(tags) {
+function filterRealTags(tags) {
     return tags.filter(tag => tag !== NSFW_TAG_NUMERIC && tag !== NSFW_TAG);
 }
 
@@ -17,12 +16,6 @@ export function validateTags(tags, finalCheck) {
 
     if (finalCheck && realTags.length === 0) {
         return tt('category_selector_jsx.must_set_category');
-    }
-
-    if (realTags.length > TAGS_LIMIT) {
-        return tt('category_selector_jsx.use_limitied_amount_of_categories', {
-            amount: TAGS_LIMIT,
-        });
     }
 
     for (let tag of realTags) {

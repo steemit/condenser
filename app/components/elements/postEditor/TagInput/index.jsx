@@ -6,7 +6,6 @@ import Icon from 'app/components/elements/Icon';
 import Hint from 'app/components/elements/common/Hint';
 import { validateTag } from 'app/utils/tags';
 import KEYS from 'app/utils/keyCodes';
-import { TAGS_LIMIT } from '../../../../utils/tags';
 import './index.scss';
 
 export default class TagInput extends React.PureComponent {
@@ -62,19 +61,7 @@ export default class TagInput extends React.PureComponent {
     }
 
     _renderErrorBlock() {
-        const { tags } = this.props;
         const { inputError, temporaryHintText } = this.state;
-
-        if (this.refs.input === document.activeElement && tags.length === 5) {
-            return (
-                <Hint warning align="left">
-                    {tt(
-                        'category_selector_jsx.use_limitied_amount_of_categories',
-                        { amount: TAGS_LIMIT }
-                    )}
-                </Hint>
-            );
-        }
 
         if (inputError) {
             return (

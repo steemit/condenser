@@ -27,7 +27,6 @@
     "tag_your_story": "Добавь тэги (до 5 штук), первый тэг станет основной категорией.",
     "select_a_tag": "Выбрать тэг",
     "maximum_tag_length_is_24_characters": "Максимальная длина категории 24 знака",
-    "use_limitied_amount_of_categories": "Пожалуйста, используйте только %(amount)s категории",
     "use_only_lowercase_letters": "Используйте только символы нижнего регистра",
     "use_one_dash": "Используйте только одно тире",
     "use_spaces_to_separate_tags": "Используйте пробел, чтобы разделить тэги",

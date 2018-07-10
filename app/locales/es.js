@@ -100,7 +100,6 @@ const es = 	{
 	including_the_category: "(incluyendo la categoria '{rootCategory}')",
 	use_limited_amount_of_tags: 'Tienes etiqueta {tagsLength} total{includingCategory}.  Por favor usa solo 5 en tu publicación y linea de categoría.',
 	// this is mainly used in CategorySelector
-	use_limitied_amount_of_categories: 'Por favor solo usa {amount} categorías',
 	use_one_dash: 'Solo usa un guión',
 	use_spaces_to_separate_tags: 'Usa espacios para separar las etiquetas',
 	use_only_allowed_characters: 'Usa solo minusculas, digitos o un guión',

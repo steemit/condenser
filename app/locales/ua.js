@@ -563,7 +563,6 @@ const ua = {
   upvote_post: 'Проголосувати за пост',
   url_is_too_long: 'Слишком длинный адрес URL',
   use_limited_amount_of_tags: 'У вас {tagsLength} тегів, включаючи {includingCategory}. Будь ласка, використовуйте не більше 5 в пості і категорії.',
-  use_limitied_amount_of_categories: 'Будь ласка, використовуйте не більше {amount} категорій',
   use_one_dash: 'Використовуйте тільки одне тире',
   use_only_2_digits_of_precison: 'Вводите не более 2-х цифр в дробной части',
   use_only_allowed_characters: 'Використовуйте тільки малі літери, цифри і одне тире',

@@ -100,7 +100,6 @@ const jp = 	{
 	including_the_category: "('{rootCategory}'を含む)",
 	use_limited_amount_of_tags: 'You have {tagsLength} tags total{includingCategory}. 最大5つのタグを選びましょう',
 	// this is mainly used in CategorySelector
-	use_limitied_amount_of_categories: ' {amount}だけカテゴリを選びましょう',
 	use_one_dash: 'ダッシュ（-）は一回だけ',
 	use_spaces_to_separate_tags: 'スペースでタグ分け',
 	use_only_allowed_characters: '小文字、英数字、ダッシュのみ',

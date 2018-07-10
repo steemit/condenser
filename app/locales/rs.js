@@ -562,7 +562,6 @@ const rs_latin =  {
   upvote_post: 'Upvote(glasaj) za post',
   url_is_too_long: 'Url adresa je predugacka',
   use_limited_amount_of_tags: 'Imate {tagsLength} ukupno tagova u {includingCategory}.  Molimo vas da koristite samo 5 tagova u vašem post i liniji katogorije.',
-  use_limitied_amount_of_categories: 'Molimo vas da koristite samo {amount} kategorija',
   use_one_dash: 'Koristiti samo jedanu tačku',
   use_only_2_digits_of_precison: 'Unesite ne više od 2 broja u frakcionom delu',
   use_only_allowed_characters: 'Koristite samo mala slova, brojeve i jednu tačku ili crtu',

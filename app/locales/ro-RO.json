@@ -27,7 +27,6 @@
     "tag_your_story":"Adăugați etichete (până la 5), prima etichetă va fi categoria de bază.",
     "select_a_tag":"Selectează eticheta",
     "maximum_tag_length_is_24_characters":"Lungimea maximă a categoriei 24 de caractere",
-    "use_limitied_amount_of_categories":"Vă rugăm utilizați numai %(amount)s categorii",
     "use_only_lowercase_letters":"Utilizați numai litere mici",
     "use_one_dash":"Utilizați doar o singură cratimă",
     "use_spaces_to_separate_tags":"Folosiți spații pentru a separa etichetele",

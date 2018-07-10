@@ -57,10 +57,6 @@
       margin-right: 0;
     }
 
-    &_over {
-      background: #ffd6d3;
-    }
-
     &_drag {
       background: #eee;
     }
@@ -84,10 +80,6 @@
     color: #e2e2e2;
     transition: color 0.12s ease-in;
     cursor: pointer;
-  }
-
-  &__tag_over &__tag-icon {
-    color: #fff;
   }
 
   &__tag-icon:hover,

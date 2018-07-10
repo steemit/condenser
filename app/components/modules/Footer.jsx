@@ -162,9 +162,8 @@ class Footer extends React.Component {
                     <div className="row">
                         <div className="small-12 medium-12 columns">
                             <span className="text-left">
-                                © 2018 Golos.io - социальная платформа, сообщество блогеров, медиасеть -
-                                разработанная на Медиаблокчейне ГОЛОС
-                            </span>
+                                © 2018 Golos.io - социальная платформа, сообщество блогеров, медиасеть,
+                                разработанная на Медиаблокчейне ГОЛОС</span>
                         </div>
                     </div>
                 </div>

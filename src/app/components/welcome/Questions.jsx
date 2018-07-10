@@ -112,7 +112,7 @@ export default class Questions extends PureComponent {
                                             <Icon
                                                 name="new/monitor"
                                                 size="2x"
-                                            />Или через сайт
+                                            />Уточните через сайт
                                         </Link>
                                     </div>
                                 </div>

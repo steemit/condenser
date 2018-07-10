@@ -30,7 +30,7 @@ const Greeting = styled.div`
 `;
 
 const Congratulations = styled.div`
-    font-size: 25px;
+    font-size: 22px;
     line-height: 1;
     text-align: left;
     margin-top: 20px;
@@ -51,7 +51,7 @@ export default class Hero extends PureComponent {
                             Добро пожаловать <br /> на Golos.io
                         </Greeting>
                         <Congratulations>
-                            Поздравляем с регистрацией.
+                            Мы рады вас видеть!
                         </Congratulations>
                     </div>
                     <div className="column small-12 medium-5">

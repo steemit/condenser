@@ -4,7 +4,32 @@ import { Link } from 'react-router';
 import Slider from 'react-slick';
 import styled from 'styled-components';
 import Userpic from 'app/components/elements/Userpic';
-import './WelcomeSlider.scss';
+
+const Root = styled.div`
+    .welcome-slider {
+        display: flex !important;
+        align-items: center;
+    }
+
+    .welcome-slider__dots {
+        position: relative;
+        list-style: none;
+
+        li {
+            text-align: center;
+            margin: 5px 0;
+        }
+
+        .Userpic {
+            cursor: pointer;
+        }
+
+        .slick-active .Userpic {
+            width: 60px !important;
+            height: 60px !important;
+        }
+    }
+`;
 
 const SliderSlide = styled.div`
     position: relative;
@@ -73,6 +98,7 @@ export default class WelcomeSlider extends Component {
             pauseOnHover: true,
             focusOnSelect: true,
             speed: 500,
+            autoplaySpeed: 6000,
             slidesToShow: 1,
             slidesToScroll: 1,
             className: 'welcome-slider',
@@ -81,8 +107,8 @@ export default class WelcomeSlider extends Component {
         };
 
         return (
-            <div>
-                <Slider {...settings} ref="slider">
+            <Root>
+                <Slider {...settings}>
                     {slides.map((slide, i) => (
                         <Link key={i} to={slide.link}>
                             <SliderSlide>
@@ -97,7 +123,7 @@ export default class WelcomeSlider extends Component {
                         </Link>
                     ))}
                 </Slider>
-            </div>
+            </Root>
         );
     }
 

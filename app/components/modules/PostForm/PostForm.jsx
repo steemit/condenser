@@ -162,13 +162,13 @@ class PostForm extends React.Component {
 
         this.state.emptyBody = false;
 
-        let tags = processTagsFromData(jsonMetadata.tags || []);
+        const tagsFromData = [...(jsonMetadata.tags || [])];
 
-        if (tags[0] !== editParams.category) {
-            tags.unshift(editParams.category);
+        if (tagsFromData[0] !== editParams.category) {
+            tagsFromData.unshift(editParams.category);
         }
 
-        this.state.tags = tags;
+        this.state.tags = processTagsFromData(tagsFromData);
     }
 
     componentWillUnmount() {

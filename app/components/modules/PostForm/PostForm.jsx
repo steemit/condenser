@@ -249,8 +249,14 @@ class PostForm extends React.Component {
                             onTagsChange={this._onTagsChange}
                             payoutType={payoutType}
                             onPayoutTypeChange={this._onPayoutTypeChange}
-                            postDisabled={Boolean(disallowPostCode) || isPosting}
-                            disabledHint={disallowPostCode ? tt(`post_editor.${disallowPostCode}`) : null}
+                            postDisabled={
+                                Boolean(disallowPostCode) || isPosting
+                            }
+                            disabledHint={
+                                disallowPostCode
+                                    ? tt(`post_editor.${disallowPostCode}`)
+                                    : null
+                            }
                             onPostClick={this._postSafe}
                             onResetClick={this._onResetClick}
                             onCancelClick={this._onCancelClick}
@@ -397,7 +403,7 @@ class PostForm extends React.Component {
             {
                 rteState: state,
             },
-            this._saveDraftLazy
+            this._onTextChangeNotify
         );
     };
 

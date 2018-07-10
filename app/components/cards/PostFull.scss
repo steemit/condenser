@@ -224,6 +224,10 @@ input.share-box {
   }
 }
 
+.with-cta-block .PostsList__post_overlay .Post {
+  margin-bottom: 90px;
+}
+
 /* Medium only */
 @media screen and (min-width: 40em) and (max-width: 63.9375em) {
   input.share-box {

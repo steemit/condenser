@@ -158,7 +158,7 @@ class PostSummary extends React.Component {
             <Voting post={post} showList={false} />
             <VotesAndComments post={post} commentsLink={comments_link} />
             <span className="PostSummary__time_author_category">
-            <Reblog author={p.author} permlink={p.permlink} />
+            {!p.parent_author && <Reblog author={p.author} permlink={p.permlink} />}
                 <span className="show-for-medium">
                     {author_category}
                 </span>

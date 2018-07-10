@@ -8,7 +8,7 @@ const Flex = styled.div`
     align-items: ${({ align }) => align};
     justify-content: ${({ justify }) => justify};
     flex-wrap: ${({ wrap }) => wrap};
-    flex-shrink: ${({ shrink }) => shrink}
+    flex-shrink: ${({ shrink }) => shrink};
 `;
 
 Flex.propTypes = {

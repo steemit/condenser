@@ -27,10 +27,10 @@ export default class Review extends PureComponent {
         return (
             <Root>
                 <Row className="row align-middle">
-                    <div className="columns small-12 medium-6">
+                    <div className="columns small-12 medium-4 large-6">
                         <img src="images/new/welcome/welcome__reviews.svg" />
                     </div>
-                    <div className="columns small-12 medium-6">
+                    <div className="columns small-12 medium-8 large-6">
                         <Header>Голоса сообщества</Header>
                         <WelcomeSlider slides={slides} />
                     </div>

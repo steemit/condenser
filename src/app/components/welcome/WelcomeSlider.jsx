@@ -54,6 +54,20 @@ const SliderSlide = styled.div`
         right: 0;
         bottom: 3px;
     }
+
+    @media screen and (max-width: 800px) {
+        padding: 40px 0 34px;
+
+        &:before {
+            top: 0;
+            left: 0;
+        }
+
+        &:after {
+            right: 0;
+            bottom: 0;
+        }
+    }
 `;
 
 const QuoteName = styled.div`
@@ -62,10 +76,6 @@ const QuoteName = styled.div`
     font-weight: bold;
     font-size: 21px;
     color: #fff;
-`;
-
-const Position = styled.span`
-    display: inline-block;
 `;
 
 const QuoteDescription = styled.div`
@@ -113,8 +123,7 @@ export default class WelcomeSlider extends Component {
                         <Link key={i} to={slide.link}>
                             <SliderSlide>
                                 <QuoteName>
-                                    {slide.name}
-                                    <Position>, {slide.position}</Position>
+                                    {slide.name}, {slide.position}
                                 </QuoteName>
                                 <QuoteDescription>
                                     {slide.description}

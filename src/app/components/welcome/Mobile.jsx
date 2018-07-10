@@ -20,16 +20,26 @@ const Header = styled.div`
 `;
 
 const SubHeader = styled.div`
-    font-family: 'Open Sans', sans-serif;
-    font-size: 17px;
-    line-height: 1.75;
-    color: #9fa3a7;
+    max-width: 25em;
     margin-top: 28px;
+    line-height: 1.75;
+    font-size: 17px;
+    color: #9fa3a7;
+    font-family: 'Open Sans', sans-serif;
 `;
 
 const MobileLinks = styled.div`
+    @media screen and (max-width: 39.9375em) {
+        display: flex;
+        justify-content: center;
+    }
+
     & .mobile-banners-wrapper {
-        margin: 30px 0 0 -10px;
+        margin: 0 -11px;
+
+        @media screen and (max-width: 39.9375em) {
+            margin-bottom: 40px;
+        }
 
         img {
             max-height: 70px;
@@ -49,8 +59,8 @@ export default class Mobile extends PureComponent {
                             приложение для Android
                         </Header>
                         <SubHeader>
-                            Мы уже работаем над приложением для<br />
-                            iPhone, оно будет готово летом.
+                            Мы уже работаем над приложением для iPhone, оно
+                            будет готово летом.
                         </SubHeader>
                         <MobileLinks>
                             <MobileBanners showAndroid />

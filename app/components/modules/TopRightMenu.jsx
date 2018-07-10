@@ -14,7 +14,7 @@ import tt from 'counterpart';
 import { LIQUID_TICKER, DEBT_TICKER } from 'app/client_config';
 import LocalizedCurrency from 'app/components/elements/LocalizedCurrency';
 import { vestsToSteem, toAsset } from 'app/utils/StateFunctions';
-import { getURL } from 'app/utils/URLConstants';
+import { WIKI_URL } from 'app/client_config';
 
 const defaultNavigate = (e) => {
     if (e.metaKey || e.ctrlKey) {
@@ -115,7 +115,7 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
     }
     additional_menu.push(
         { link: '/welcome', value: tt("navigation.welcome") },
-        { link: getURL('WIKI_URL'), value: tt('navigation.wiki'), target: 'blank' },
+        { link: WIKI_URL, value: tt('navigation.wiki'), target: 'blank' },
         { link: '/market', value: tt('userwallet_jsx.market') },
         { link: '/~witnesses', value: tt("navigation.witnesses") },
         { link: 'http://golostools.com/', value: tt('navigation.APP_NAME_app_center', { APP_NAME }), target: 'blank' },

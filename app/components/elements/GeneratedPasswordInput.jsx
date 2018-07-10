@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types'
 import { key_utils } from 'golos-js/lib/auth/ecc';
 import tt from 'counterpart';
-import { APP_NAME, TERMS_OF_SERVICE_URL } from 'app/client_config';
+import { APP_NAME_UP, TERMS_OF_SERVICE_URL } from 'app/client_config';
 
 function allChecked(confirmCheckboxes) {
     return confirmCheckboxes.box1 && confirmCheckboxes.box2 && confirmCheckboxes.box3;
@@ -67,7 +67,7 @@ export default class GeneratedPasswordInput extends React.Component {
                 </div>
                 <div className="GeneratedPasswordInput__checkboxes">
                     <label><input type="checkbox" name="box1" onChange={this.confirmCheckChange} checked={confirmCheckboxes.box1} disabled={disabled} />
-                        {tt('g.understand_that_APP_NAME_cannot_recover_password', {APP_NAME: "GOLOS.io"})}.
+                        {tt('g.understand_that_APP_NAME_cannot_recover_password', {APP_NAME: APP_NAME_UP})}.
                     </label>
                     <label><input type="checkbox" name="box2" onChange={this.confirmCheckChange} checked={confirmCheckboxes.box2} disabled={disabled} />
                         {tt('g.i_saved_password')}.

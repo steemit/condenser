@@ -6,16 +6,10 @@ const RAISE_TIME = 350;
 let key = 0;
 
 export default class TooltipManager extends React.PureComponent {
-    constructor(props) {
-        super(props);
-
-        this.state = {};
-
-        this._onMouseMove = debounce(this._onMouseMove, 50);
-    }
+    state = {};
 
     componentDidMount() {
-        document.addEventListener('mousemove', this._onMouseMove);
+        document.addEventListener('mousemove', this._onMouseMove, true);
         document.addEventListener('resize', this._resetTooltips);
         document.addEventListener('mousedown', this._resetTooltips, true);
         document.addEventListener('keydown', this._resetTooltips, true);
@@ -23,7 +17,7 @@ export default class TooltipManager extends React.PureComponent {
     }
 
     componentWillUnmount() {
-        document.removeEventListener('mousemove', this._onMouseMove);
+        document.removeEventListener('mousemove', this._onMouseMove, true);
         document.removeEventListener('resize', this._resetTooltips);
         document.removeEventListener('mousedown', this._resetTooltips, true);
         document.removeEventListener('keydown', this._resetTooltips, true);
@@ -50,7 +44,7 @@ export default class TooltipManager extends React.PureComponent {
         );
     }
 
-    _onMouseMove = e => {
+    _onMouseMove = debounce(e => {
         const tooltip = e.target.closest('[data-tooltip]');
         const text = tooltip ? tooltip.dataset.tooltip.trim() : null;
 
@@ -69,7 +63,7 @@ export default class TooltipManager extends React.PureComponent {
                 this._showTooltip();
             }, RAISE_TIME);
         }
-    };
+    }, 50);
 
     _showTooltip() {
         const element = this._hoverElement;

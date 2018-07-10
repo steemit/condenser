@@ -1007,7 +1007,10 @@
     "add_image": "Add image",
     "set_payout_type": "Select the type of payment for your post",
     "image_preview_error": "Image loading error",
-    "update": "Update"
+    "update": "Update",
+    "wait_uploading": "Images uploading...",
+    "enter_title": "Enter the title",
+    "enter_body": "Enter the body"
   },
   "editor_toolbar": {
     "enter_the_link": "Enter the link",

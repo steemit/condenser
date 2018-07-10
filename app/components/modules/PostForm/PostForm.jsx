@@ -182,7 +182,6 @@ class PostForm extends React.Component {
             editorId,
             title,
             text,
-            emptyBody,
             tags,
             payoutType,
             isPreview,
@@ -191,8 +190,7 @@ class PostForm extends React.Component {
             isPosting,
         } = this.state;
 
-        const allowPost =
-            uploadingCount === 0 && title.trim() && !emptyBody && !isPosting;
+        const disallowPostCode = this._checkDisallowPost();
 
         return (
             <div
@@ -251,7 +249,8 @@ class PostForm extends React.Component {
                             onTagsChange={this._onTagsChange}
                             payoutType={payoutType}
                             onPayoutTypeChange={this._onPayoutTypeChange}
-                            postDisabled={!allowPost}
+                            postDisabled={Boolean(disallowPostCode) || isPosting}
+                            disabledHint={disallowPostCode ? tt(`post_editor.${disallowPostCode}`) : null}
                             onPostClick={this._postSafe}
                             onResetClick={this._onResetClick}
                             onCancelClick={this._onCancelClick}
@@ -694,6 +693,22 @@ class PostForm extends React.Component {
             this.setState({
                 emptyBody: value.trim().length === 0,
             });
+        }
+    }
+
+    _checkDisallowPost() {
+        const { title, emptyBody, uploadingCount } = this.state;
+
+        if (uploadingCount > 0) {
+            return 'wait_uploading';
+        }
+
+        if (!title.trim()) {
+            return 'enter_title';
+        }
+
+        if (emptyBody) {
+            return 'enter_body';
         }
     }
 }

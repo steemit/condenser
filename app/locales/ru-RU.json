@@ -1019,7 +1019,10 @@
     "add_image": "Добавить изображение",
     "set_payout_type": "Выбери тип награды за свой пост",
     "image_preview_error": "Ошибка загрузки изображения",
-    "update": "Обновить"
+    "update": "Обновить",
+    "wait_uploading": "Загружаются файлы",
+    "enter_title": "Введите заголовок",
+    "enter_body": "Введите тело поста"
   },
   "editor_toolbar": {
     "enter_the_link": "Введите ссылку",

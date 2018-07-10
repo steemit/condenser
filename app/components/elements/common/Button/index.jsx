@@ -3,11 +3,19 @@ import cn from 'classnames';
 
 export default class Button extends React.PureComponent {
     render() {
-        const { children, primary, small, className, disabled, onClick } = this.props;
+        const { children, primary, small, className } = this.props;
+
+        const passProps = {
+            ...this.props,
+            children: undefined,
+            primary: undefined,
+            small: undefined,
+        };
 
         return (
             <button
                 type="button"
+                {...passProps}
                 className={cn(
                     'Button',
                     {
@@ -16,8 +24,6 @@ export default class Button extends React.PureComponent {
                     },
                     className
                 )}
-                disabled={disabled}
-                onClick={onClick}
             >
                 {children}
             </button>

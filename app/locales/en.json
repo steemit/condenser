@@ -993,6 +993,7 @@
     "edit_mode": "Go back to edit mode",
     "payout_hint": "Payout method",
     "nsfw_hint": "Mark for not safe for children",
+    "title_placeholder": "Enter the title",
     "payout_option_100": "Power of voice 100%%",
     "payout_option_100_hint": "This mean 100%% pay of voice",
     "payout_option_50": "50/50",

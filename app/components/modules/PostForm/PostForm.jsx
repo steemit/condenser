@@ -220,7 +220,7 @@ class PostForm extends React.Component {
                         {isPreview ? null : (
                             <PostTitle
                                 value={title}
-                                placeholder={tt('submit_a_story.title')}
+                                placeholder={tt('post_editor.title_placeholder')}
                                 validate={this._validateTitle}
                                 onTab={this._onTitleTab}
                                 onChange={this._onTitleChange}
@@ -232,7 +232,7 @@ class PostForm extends React.Component {
                         {isPreview ? (
                             <div className="PostForm__preview">
                                 <h1 className="PostForm__title-preview">
-                                    {title.trim() || tt('submit_a_story.title')}
+                                    {title.trim() || tt('post_editor.title_placeholder')}
                                 </h1>
                                 <MarkdownViewer text={text} large />
                             </div>

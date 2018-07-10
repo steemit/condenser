@@ -554,7 +554,6 @@
     "why_send_sms": "Why send SMS?",
     "mobile_description": {
       "one": "Right now, the registration on media-blockchain %(APP_NAME)s costs money for the system. In order for the community to grow quicker, we take those costs on board and pay out 5 %(APP_NAME)s tokens to each new member.",
-      "second": "Unfortunately, people have started to take advantage of that and automated account registration had started to grow. Verification methods like: email checks, scripts or sending out a free sms verification, simply do not work. And cannot prove that the registry isn't a robot.",
       "third": "Accepting a paid sms from a user, is a good method to check out his motivation to register on the %(APP_NAME)s platform, also it is by far, more economically efficient for the whole system.",
       "fourth": "We are interested in real users (not bots) to register on our platform, hence, we kindly ask you to send out an sms to the stated number. It is no more than a human verification process. And works for the best of the whole community. Thank you!"
     },

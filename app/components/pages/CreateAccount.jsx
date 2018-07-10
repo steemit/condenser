@@ -265,7 +265,7 @@ class CreateAccount extends React.Component {
                                                 : null
                                         }
                                     >
-                                        {tt('createaccount_jsx.get_code')}
+                                        {tt('g.continue')}
                                     </a>
                                 </p>
                             )}
@@ -463,7 +463,6 @@ class CreateAccount extends React.Component {
                             APP_NAME: 'GOLOS.io',
                         })}
                     </p>
-                    <p>{tt('createaccount_jsx.mobile_description.second')}</p>
                     <div className="text-left">
                         <a
                             className="CreateAccount__rules-button"
@@ -548,11 +547,9 @@ class CreateAccount extends React.Component {
     _renderCheckInfo() {
         return (
             <p className="CreateAccount__check-info">
-                Если вы уже отправили СМС на номер но ничего не произошло, то
-                проверьте пожалуйста, правильно ли вы ввели свой номер в поле
-                выше и на правильный ли номер отправили код подтверждения.<br />
-                Если вы всё сделали правильно то пожалуйста напишите нам в тех
-                поддержку{' '}
+                Проверьте, пожалуйста, равильно ли вы ввели свой номер в поле
+                выше и на тот ли номер отправили код подтверждения. Если вы всё
+                сделали правильно, но подтверждения не получили, напишите нам{' '}
                 <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>.
             </p>
         );

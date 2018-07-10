@@ -4,7 +4,8 @@ import styled from 'styled-components';
 
 import Flex from 'golos-ui/Flex';
 
-const Card = styled.div`
+const Card = Flex.extend`
+    position: relative;
     display: flex;
     flex-direction: column;
     flex-shrink: 0;
@@ -15,7 +16,6 @@ const Card = styled.div`
 
     overflow: hidden;
 `;
-Card.propTypes = {};
 export default Card;
 
 export const CardTitle = Flex.extend`
@@ -27,7 +27,7 @@ export const CardTitle = Flex.extend`
     height: 50px;
 
     color: #333333;
-    font-family: ${props => props.theme.fontFamily};
+    font-family: ${({ theme }) => theme.fontFamily};
     font-size: 14px;
     font-weight: 500;
     letter-spacing: 0.78px;

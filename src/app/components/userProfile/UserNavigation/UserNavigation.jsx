@@ -11,7 +11,7 @@ import Icon from 'golos-ui/Icon';
 import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdown';
 import VerticalMenu from 'app/components/elements/VerticalMenu';
 
-import Container from './../Container';
+import Container from 'src/app/components/Container';
 
 const Wrapper = styled.div`
     position: relative;
@@ -36,28 +36,14 @@ const IconLink = styled(Link)`
    ${SettingsIcon} {
        color: #b7b7b9;
 
-<<<<<<< HEAD:src/app/components/UserNavigation/UserNavigation.js
-       &.${props => props.activeClassName},
-       &:hover {
-           color: #333;
-       }
-   }
-`;
-IconLink.defaultProps = {
-   activeClassName: 'active'
-};
-=======
-        &.${props => props.activeClassName},
-        &:hover {
-            color: #333;
+        &.${props => props.activeClassName}, &:hover {
+            color: #2879ff;
         }
     }
 `;
 IconLink.defaultProps = {
-    activeClassName: 'active'
+    activeClassName: 'active',
 };
-
->>>>>>> WIP left side and fixes #669:src/app/components/UserNavigation/UserNavigation.jsx
 
 export default class UserNavigation extends PureComponent {
     static propTypes = {

@@ -2,8 +2,6 @@ import 'isomorphic-fetch';
 import React from 'react';
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
-// import cc from 'currency-codes';
-// import { injectIntl } from 'react-intl';
 import g from 'app/redux/GlobalReducer';
 import { getSymbolFromCurrency } from 'currency-symbol-map';
 import { FRACTION_DIGITS, DEFAULT_CURRENCY, DEBT_TOKEN_SHORT, LIQUID_TICKER, FRACTION_DIGITS_MARKET } from 'app/client_config';

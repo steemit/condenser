@@ -16,9 +16,9 @@ import Callout from 'app/components/elements/Callout';
 
 import PostsList from 'app/components/cards/PostsList';
 import UserWallet from 'app/components/modules/UserWallet';
-import Settings from 'app/components/modules/Settings';
 import CurationRewards from 'app/components/modules/CurationRewards';
 import AuthorRewards from 'app/components/modules/AuthorRewards';
+import SettingsContainer from './SettingsContainer';
 
 import WalletSubMenu from 'app/components/elements/WalletSubMenu';
 import IllegalContentMessage from 'app/components/elements/IllegalContentMessage';
@@ -27,16 +27,16 @@ import UserKeys from 'app/components/elements/UserKeys';
 import PasswordReset from 'app/components/elements/PasswordReset';
 
 import Container from 'src/app/components/Container';
-import UserHeader from 'src/app/components/UserHeader';
-import UserNavigation from 'src/app/components/UserNavigation';
-import UserCardAbout from 'src/app/components/UserCardAbout';
+import UserHeader from 'src/app/components/userProfile/UserHeader';
+import UserNavigation from 'src/app/components/userProfile/UserNavigation';
+import UserCardAbout from 'src/app/components/userProfile/UserCardAbout';
 
 const Main = styled.div`
     background-color: #f9f9f9;
     padding: 20px 0;
 `;
 
-export default class UserProfile extends Component {
+export default class UserProfileContainer extends Component {
     static propTypes = { accountName: PropTypes.string };
 
     shouldComponentUpdate(np) {
@@ -130,8 +130,8 @@ export default class UserProfile extends Component {
     };
 
     render() {
-        const { global_status, loading, current_user, follow } = this.props;
-        let { accountName, section } = this.props.routeParams;
+        const { global_status, loading, current_user, follow, routeParams } = this.props;
+        let { accountName, section } = routeParams;
         accountName = accountName.toLowerCase(); // normalize account from cased params
         const username = current_user ? current_user.get('username') : null;
 
@@ -250,7 +250,7 @@ export default class UserProfile extends Component {
                 );
             }
         } else if (section === 'settings') {
-            tab_content = <Settings routeParams={this.props.routeParams} />;
+            tab_content = <SettingsContainer routeParams={routeParams} />;
         } else if (section === 'comments') {
             if (account.comments) {
                 let posts =
@@ -414,11 +414,13 @@ export default class UserProfile extends Component {
                 />
                 <Main>
                     <Container align="flex-start">
-                        <UserCardAbout
-                            account={account}
-                            followerCount={followerCount}
-                            followingCount={followingCount}
-                        />
+                        {section !== 'settings' && (
+                            <UserCardAbout
+                                account={account}
+                                followerCount={followerCount}
+                                followingCount={followingCount}
+                            />
+                        )}
                         {tab_content}
                     </Container>
                 </Main>
@@ -482,5 +484,5 @@ module.exports = {
             requestData: args =>
                 dispatch({ type: 'REQUEST_DATA', payload: args }),
         })
-    )(UserProfile),
+    )(UserProfileContainer),
 };

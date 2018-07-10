@@ -15,9 +15,9 @@ import Dropzone from 'react-dropzone';
 import StyledButton from 'golos-ui/Button';
 import Icon from 'golos-ui/Icon';
 import Flex from 'golos-ui/Flex';
-import StyledContainer from './../Container';
+import StyledContainer from 'src/app/components/Container';
 import UserProfileAvatar from './../UserProfileAvatar';
-import Follow from './../Follow';
+import Follow from 'src/app/components/Follow';
 
 // Styled Components
 const Wrapper = styled.div`
@@ -122,7 +122,7 @@ const AvatarDropzone = styled(Dropzone)`
 const IconCover = styled(Dropzone)`
     position: absolute !important;
     top: 9px;
-    right: 34px;
+    right: 5px;
     overflow: hidden;
     cursor: pointer;
 `;
@@ -193,7 +193,7 @@ class UserHeader extends Component {
     };
 
     render() {
-        const { account, userName, isOwner, follow } = this.props;
+        const { account, userName, isOwner } = this.props;
         const {
             name,
             // gender,
@@ -259,8 +259,7 @@ class UserHeader extends Component {
 export default connect(
     // mapStateToProps
     (state, { account }) => {
-        const current_user = state.user.get('current');
-        const userName = current_user ? current_user.get('username') : '';
+        const userName = state.user.getIn(['current', 'username'], '');
 
         let metaData = account
             ? o2j.ifStringParseJSON(account.json_metadata)
@@ -272,8 +271,7 @@ export default connect(
             userName,
             metaData,
             isOwner: userName == account.name,
-            profile,
-            follow: state.global.get('follow'),
+            profile
         };
     },
     // mapDispatchToProps

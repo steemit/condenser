@@ -14,9 +14,6 @@ form {
     color: $success-color;
   }
 }
-button {
-    margin-right: 15px !important;
-}
 input, textarea, select {
     // Overwrite 16px margin-bottom, it was pusing error messages down away from the form element
     margin-bottom: 0 !important;

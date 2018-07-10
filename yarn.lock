@@ -10218,6 +10218,10 @@ storybook-router-react@0.3.3:
     react "^0.14.7 || ^15.0.0"
     react-router "^3.0.0 || ^4.0.0"
 
+storybook-styled-components@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/storybook-styled-components/-/storybook-styled-components-1.1.1.tgz#7eefe9b251c09fde944243f44167a31ab5d665ea"
+
 stream-browserify@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/stream-browserify/-/stream-browserify-2.0.1.tgz#66266ee5f9bdb9940a4e4514cafb43bb71e5c9db"

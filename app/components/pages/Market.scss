@@ -132,19 +132,6 @@ tr {
   transition: background-color 750ms linear;
 }
 
-ul.pager {
-  padding-left: 0;
-  margin: 20px 0;
-  text-align: center;
-  list-style: none;
-
-  > li {
-    display: inline;
-    cursor: pointer;
-    user-select: none;
-  }
-}
-
 .DepthChart > div {
   height: 250px;
 }

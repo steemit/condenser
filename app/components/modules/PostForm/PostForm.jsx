@@ -640,14 +640,20 @@ class PostForm extends React.Component {
     };
 
     _onResetClick = () => {
-        if (this.refs.editor) {
-            this.refs.editor.setValue('');
+        let rteState = null;
+
+        if (this.state.editorId === EDITORS_TYPES.MARKDOWN) {
+            if (this.refs.editor) {
+                this.refs.editor.setValue('');
+            }
+        } else {
+            rteState = HtmlEditor.getStateFromHtml('');
         }
 
         this.setState({
             title: '',
             text: '',
-            rteState: null,
+            rteState,
             tags: [],
             isPreview: false,
         });

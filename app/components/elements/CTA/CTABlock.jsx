@@ -26,11 +26,24 @@ class CTABlock extends PureComponent {
     componentDidMount() {
         this._timeout = setTimeout(() => {
             this.setState({ loading: false });
+
+            if (this.props.visible) {
+                document.body.classList.add('with-cta-block');
+            }
         }, 1000);
     }
 
     componentWillUnmount() {
         clearTimeout(this._timeout);
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.visible !== prevProps.visible) {
+            document.body.classList.toggle(
+                'with-cta-block',
+                this.props.visible
+            );
+        }
     }
 
     render() {
@@ -80,8 +93,7 @@ class CTABlock extends PureComponent {
 
         return (
             <div className="ctablock__text-regular">
-                Сообщество <b>Golos.io</b>{' '}
-                {ctaInfo.regularStartText}{' '}
+                Сообщество <b>Golos.io</b> {ctaInfo.regularStartText}{' '}
                 <b>{user}</b> заработал более{' '}
                 <span className="ctablock__text-regular">
                     <LocalizedCurrency
@@ -89,12 +101,9 @@ class CTABlock extends PureComponent {
                         rounding={true}
                         noSymbol={true}
                     />
-                </span>
-                {' '}{currency}.{' '}
-                <a
-                    href={'/start'}
-                    onClick={() => popupClickUrl()}
-                >
+                </span>{' '}
+                {currency}.{' '}
+                <a href={'/start'} onClick={() => popupClickUrl()}>
                     {ctaInfo.regularEndText}
                 </a>
             </div>

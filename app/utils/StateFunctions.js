@@ -54,9 +54,8 @@ export function isFetchingOrRecentlyUpdated(global_status, order, category) {
     const status = global_status ? global_status.getIn([category || '', order]) : null;
     if (!status) return false;
     if (status.fetching) return true;
-    if (status.last_fetch) {
-        const res = new Date() - status.last_fetch < constants.FETCH_DATA_EXPIRE_SEC * 1000;
-        return res;
+    if (status.lastFetch) {
+        return Date.now() - status.lastFetch < constants.FETCH_DATA_EXPIRE_SEC * 1000;
     }
     return false;
 }

@@ -1,7 +1,7 @@
 @import "../../../extends";
 
 .MET {
-  display: flex;
+  display: flex !important;
   font-size: 16px;
   $toolbar_height: 46px;
   $toolbar_comment_height: 36px;

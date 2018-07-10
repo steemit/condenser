@@ -4,7 +4,7 @@ import {getContent} from 'app/redux/SagaShared';
 import GlobalReducer from './GlobalReducer';
 import constants from './constants';
 import {fromJS, Map} from 'immutable'
-import { DEBT_TOKEN_SHORT, DEFAULT_CURRENCY, IGNORE_TAGS, PUBLIC_API, SELECT_TAGS_KEY } from 'app/client_config';
+import { DEBT_TOKEN_SHORT, LIQUID_TICKER, DEFAULT_CURRENCY, IGNORE_TAGS, PUBLIC_API, SELECT_TAGS_KEY } from 'app/client_config';
 import cookie from "react-cookie";
 import {api} from 'golos-js';
 // import * as api from 'app/utils/APIWrapper'
@@ -253,84 +253,102 @@ export function* watchDataRequests() {
 }
 
 export function* fetchData(action) {
-    const {order, author, permlink, accountname, keys} = action.payload;
-    let {category} = action.payload;
-    if( !category ) category = "";
-    category = category.toLowerCase();
+    const { order, author, permlink, accountname, keys } = action.payload;
+    let category = (action.payload.category || '').toLowerCase();
 
-    let call_name, args;
-    args = [{
-      limit: constants.FETCH_DATA_BATCH_SIZE,
-      truncate_body: constants.FETCH_DATA_TRUNCATE_BODY,
-      start_author: author,
-      start_permlink: permlink
-    }];
+    let callName;
+    let args = [
+        {
+            limit: constants.FETCH_DATA_BATCH_SIZE,
+            truncate_body: constants.FETCH_DATA_TRUNCATE_BODY,
+            start_author: author,
+            start_permlink: permlink,
+        },
+    ];
+
     if (category.length) {
-      args[0].select_tags = [category];
+        args[0].select_tags = [category];
     } else {
-      let select_tags = cookie.load(SELECT_TAGS_KEY);
-      if (select_tags && select_tags.length) {
-        args[0].select_tags = select_tags;
-        category = select_tags.sort().join('/')
-      }
-      else {
-        args[0].filter_tags = IGNORE_TAGS
-      }
+        const selectTags = cookie.load(SELECT_TAGS_KEY);
+
+        if (selectTags && selectTags.length) {
+            args[0].select_tags = selectTags;
+            category = selectTags.sort().join('/');
+        } else {
+            args[0].filter_tags = IGNORE_TAGS;
+        }
     }
 
-    yield put({type: 'global/FETCHING_DATA', payload: {order, category}});
+    yield put({ type: 'global/FETCHING_DATA', payload: { order, category } });
 
     if (order === 'trending') {
-        call_name = 'getDiscussionsByTrendingAsync';
+        callName = 'getDiscussionsByTrendingAsync';
     } else if (order === 'promoted') {
-        call_name = 'getDiscussionsByPromotedAsync';
-    } else if( order === 'active' ) {
-        call_name = 'getDiscussionsByActiveAsync';
-    } else if( order === 'cashout' ) {
-        call_name = 'getDiscussionsByCashoutAsync';
-    } else if( order === 'payout' ) {
-        call_name = 'getPostDiscussionsByPayoutAsync';
-    } else if( order === 'payout_comments' ) {
-        call_name = 'getCommentDiscussionsByPayoutAsync';
-    } else if( order === 'updated' ) {
-        call_name = 'getDiscussionsByActiveAsync';
-    } else if( order === 'created' || order === 'recent' ) {
-        call_name = 'getDiscussionsByCreatedAsync';
-    } else if( order === 'by_replies' ) {
-        call_name = 'getRepliesByLastUpdateAsync';
-        args = [author, permlink, constants.FETCH_DATA_BATCH_SIZE, constants.DEFAULT_VOTE_LIMIT];
-    } else if( order === 'responses' ) {
-        call_name = 'getDiscussionsByChildrenAsync';
-    } else if( order === 'votes' ) {
-        call_name = 'getDiscussionsByVotesAsync';
-    } else if( order === 'hot' ) {
-        call_name = 'getDiscussionsByHotAsync';
-    } else if( order === 'by_feed' ) { // https://github.com/steemit/steem/issues/249
-        call_name = 'getDiscussionsByFeedAsync';
-        delete args[0].select_tags
-        args[0].select_authors = [accountname];
-    } else if( order === 'by_author' ) {
-        call_name = 'getDiscussionsByBlogAsync';
-        delete args[0].select_tags
-        args[0].select_authors = [accountname];
-    } else if( order === 'by_comments' ) {
+        callName = 'getDiscussionsByPromotedAsync';
+    } else if (order === 'active') {
+        callName = 'getDiscussionsByActiveAsync';
+    } else if (order === 'cashout') {
+        callName = 'getDiscussionsByCashoutAsync';
+    } else if (order === 'payout') {
+        callName = 'getPostDiscussionsByPayoutAsync';
+    } else if (order === 'payout_comments') {
+        callName = 'getCommentDiscussionsByPayoutAsync';
+    } else if (order === 'updated') {
+        callName = 'getDiscussionsByActiveAsync';
+    } else if (order === 'created' || order === 'recent') {
+        callName = 'getDiscussionsByCreatedAsync';
+    } else if (order === 'by_replies') {
+        callName = 'getRepliesByLastUpdateAsync';
+        args = [
+            author,
+            permlink,
+            constants.FETCH_DATA_BATCH_SIZE,
+            constants.DEFAULT_VOTE_LIMIT,
+        ];
+    } else if (order === 'responses') {
+        callName = 'getDiscussionsByChildrenAsync';
+    } else if (order === 'votes') {
+        callName = 'getDiscussionsByVotesAsync';
+    } else if (order === 'hot') {
+        callName = 'getDiscussionsByHotAsync';
+    } else if (order === 'by_feed') {
+        // https://github.com/steemit/steem/issues/249
+        callName = 'getDiscussionsByFeedAsync';
         delete args[0].select_tags;
-        call_name = 'getDiscussionsByCommentsAsync';
+        args[0].select_authors = [accountname];
+    } else if (order === 'by_author') {
+        callName = 'getDiscussionsByBlogAsync';
+        delete args[0].select_tags;
+        args[0].select_authors = [accountname];
+    } else if (order === 'by_comments') {
+        delete args[0].select_tags;
+        callName = 'getDiscussionsByCommentsAsync';
     } else {
-        call_name = 'getDiscussionsByActiveAsync';
+        callName = 'getDiscussionsByActiveAsync';
     }
 
-    yield put({type: 'FETCH_DATA_BEGIN'})
+    yield put({ type: 'FETCH_DATA_BEGIN' });
+
     try {
-        const data = yield call([api, api[call_name]], ...args);
-        yield put(GlobalReducer.actions.receiveData({data, order, category, author, permlink, accountname, keys}));
-        yield put({type: 'FETCH_DATA_END'})
+        const data = yield call([api, api[callName]], ...args);
+        yield put(
+            GlobalReducer.actions.receiveData({
+                data,
+                order,
+                category,
+                author,
+                permlink,
+                accountname,
+                keys,
+            })
+        );
+        yield put({ type: 'FETCH_DATA_END' });
     } catch (error) {
-        console.error('~~ Saga fetchData error ~~>', call_name, args, error);
-        yield put({type: 'global/CHAIN_API_ERROR', error: error.message});
+        console.error('~~ Saga fetchData error ~~>', callName, args, error);
+        yield put({ type: 'global/CHAIN_API_ERROR', error: error.message });
 
         if (!(yield cancelled())) {
-            yield put({type: 'FETCH_DATA_END'})
+            yield put({ type: 'FETCH_DATA_END' });
         }
     }
 }
@@ -423,7 +441,14 @@ export function* fetchExchangeRates() {
 
     let pickedCurrency = localStorage.getItem('xchange.picked') || DEFAULT_CURRENCY;
     if (pickedCurrency.localeCompare(DEBT_TOKEN_SHORT) == 0) {
-      pickedCurrency = DEFAULT_CURRENCY;
+        // pickedCurrency = DEFAULT_CURRENCY;
+        storeExchangeValues(1, 1, 1, DEBT_TOKEN_SHORT); // For GBG currency on site #687
+        return;
+    }
+    if (pickedCurrency.localeCompare(LIQUID_TICKER) == 0) { // For Golos currency on site #687
+        const state = yield call([api, api.getTickerAsync]);
+        storeExchangeValues(1, 1, state.latest, pickedCurrency);
+        return;
     }
     if (Date.now() - created < fourHours) {
       return;

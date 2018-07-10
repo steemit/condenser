@@ -1,67 +1,44 @@
 $buy-color: #009600;
+$sell-color: #960000;
+
 .buy-color {
   color: $buy-color !important;
 }
+
 input.buy-color {
   border-color: $buy-color !important;
   background-color: smart-scale($buy-color, 95%) !important;
 }
+
 input.buy-color:hover {
   color: smart-scale($buy-color, -12%) !important;
   border-color: smart-scale($buy-color, -12%) !important;
   background-color: smart-scale($buy-color, 90%) !important;
 }
 
-$sell-color: #960000;
 .sell-color {
   color: $sell-color !important;
 }
+
 input.sell-color {
   border-color: $sell-color !important;
   background-color: smart-scale($sell-color, 95%) !important;
 }
+
 input.sell-color:hover {
   color: smart-scale($sell-color, -12%) !important;
   border-color: smart-scale($sell-color, -12%) !important;
   background-color: smart-scale($sell-color, 90%) !important;
 }
 
-.tab-selector {
-  margin-bottom: 1rem;
-
-  >ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  li {
-    >a {
-      padding: 0.7rem 1rem;
-      line-height: 1.5rem;
-      display: flex;
-      flex-flow: row nowrap;
-    }
-  }
-
-  .is-active {
-    color: #333333;
-    background-color: $gray95;
-  }
-
-  label > [type='checkbox']{
-    padding-left: 0.5rem;
-  }
-}
-
 .Market__orderbook {
-    tbody > tr {
-        cursor: pointer;
-    }
+  tbody > tr {
+    cursor: pointer;
+  }
 }
 
-
-.Market__orderbook, .Market__trade-history {
+.Market__orderbook,
+.Market__trade-history {
   thead th {
     line-height: 1.1;
     small {
@@ -70,13 +47,14 @@ input.sell-color:hover {
     }
   }
 
-  thead th, tbody td {
+  thead th,
+  tbody td {
     padding: 0.1rem 0.3rem;
     text-align: right;
   }
 
   tbody > tr > td {
-      font-size: 90%;
+    font-size: 90%;
   }
 
   .sell-arrow {
@@ -87,9 +65,7 @@ input.sell-color:hover {
   .buy-arrow {
     fill: $buy-color;
   }
-
 }
-
 
 .Market__orderform {
   margin-bottom: 1rem;
@@ -98,10 +74,6 @@ input.sell-color:hover {
   .input-group-label {
     min-width: 6rem;
     font-size: 83%;
-  }
-
-  label {
-    //display: inline-block; width: 20%;
   }
 
   input[type='text'] {
@@ -117,18 +89,20 @@ input.sell-color:hover {
   }
 }
 
-.Market__ticker-pct-up {
-  color: #080;
-}
+.Market {
+  &__ticker-pct-up {
+    color: #080;
+  }
 
-.Market__ticker-pct-down {
-  color: #C00;
+  &__ticker-pct-down {
+    color: #c00;
+  }
 }
-
 
 table.Market__open-orders {
   margin-bottom: 5rem;
-  thead tr, tbody tr {
+  thead tr,
+  tbody tr {
     :nth-child(3),
     :nth-child(4),
     :nth-child(5),
@@ -139,7 +113,8 @@ table.Market__open-orders {
 }
 
 table.Market__trade-history {
-  thead tr, tbody tr {
+  thead tr,
+  tbody tr {
     :nth-child(3),
     :nth-child(4),
     :nth-child(5) {
@@ -148,36 +123,16 @@ table.Market__trade-history {
   }
 }
 
-table.Market__orderbook > tbody > tr.animate, table.Market__trade-history > tbody > tr.animate {
-    background-color: #d1d2d2;
+table.Market__orderbook > tbody > tr.animate,
+table.Market__trade-history > tbody > tr.animate {
+  background-color: #d1d2d2;
 }
 
 tr {
-    -webkit-transition: background-color 750ms linear;
-    -moz-transition: background-color 750ms linear;
-    -o-transition: background-color 750ms linear;
-    -ms-transition: background-color 750ms linear;
-    transition: background-color 750ms linear;
-}
-
-ul.pager {
-    padding-left: 0;
-    margin: 20px 0;
-    text-align: center;
-    list-style: none;
-
-    > li {
-        display: inline;
-        cursor: pointer;
-        -webkit-touch-callout: none; /* iOS Safari */
-        -webkit-user-select: none;   /* Chrome/Safari/Opera */
-        -khtml-user-select: none;    /* Konqueror */
-        -moz-user-select: none;      /* Firefox */
-        -ms-user-select: none;       /* Internet Explorer/Edge */
-        user-select: none;
-    }
+  transition: background-color 750ms linear;
 }
 
 .DepthChart > div {
   height: 250px;
 }
+

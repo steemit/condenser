@@ -85,12 +85,12 @@ module.exports = {
                     test: /node_modules/,
                     enforce: true,
                 },
-                styles: {
-                    name: 'styles',
-                    test: /\.css$/,
-                    chunks: 'all',
-                    enforce: true,
-                },
+                // styles: {
+                //     name: 'styles',
+                //     test: /\.css$/,
+                //     chunks: 'all',
+                //     enforce: true,
+                // },
             },
         },
     },

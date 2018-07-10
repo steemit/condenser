@@ -1,20 +1,34 @@
-import React, {Component} from 'react';
-import settings from './settings'
+import React, { Component } from 'react';
+import tt from 'counterpart';
+import settings from './settings';
 
-class MobileAppButton extends Component {
-    onClick = () => {
-        window.location.assign(settings.android.market_source)
+export default class MobileAppButton extends Component {
+    shouldComponentUpdate() {
+        return false;
     }
-
     render() {
-        if (!process.env.BROWSER) return null
+        if (!process.env.BROWSER) {
+            return null;
+        }
 
-        const android = navigator.userAgent.match(/Android/i)
+        const android = navigator.userAgent.match(/android/i);
 
-        return (android)
-            ? <div role="button" onClick={this.onClick} className="btn visit-app-btn">Открыть в приложении</div>
-            : null
+        if (!android) {
+            return null;
+        }
+
+        return (
+            <div
+                role="button"
+                className="btn visit-app-btn"
+                onClick={this._onClick}
+            >
+                {tt('mobile_app_button.open_in_app')}
+            </div>
+        );
     }
-}
 
-export default MobileAppButton
+    _onClick = () => {
+        window.location.assign(settings.android.market_source);
+    };
+}

@@ -476,10 +476,6 @@ class PostForm extends React.Component {
         ) {
             return tt('submit_a_story.markdown_not_supported');
         }
-
-        if (/[.,;:]$/.test(_title)) {
-            return tt('post-editor.cant_ends_with_special_char');
-        }
     };
 
     _safeWrapper(callback) {

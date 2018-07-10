@@ -9,6 +9,7 @@ export default class Hint extends React.PureComponent {
         info: PropTypes.bool,
         error: PropTypes.bool,
         warning: PropTypes.bool,
+        width: PropTypes.number,
         align: PropTypes.oneOf(['left', 'center', 'right']),
     };
 
@@ -27,7 +28,10 @@ export default class Hint extends React.PureComponent {
 
             let align = 'center';
 
-            if ((box.x + box.width / 2) - window.scrollX > window.innerWidth - 150) {
+            if (
+                box.x + box.width / 2 - window.scrollX >
+                window.innerWidth - 150
+            ) {
                 align = 'right';
             } else if (box.x - box.width / 2 - window.scrollX < 150) {
                 align = 'left';
@@ -50,6 +54,7 @@ export default class Hint extends React.PureComponent {
             info,
             error,
             warning,
+            width,
             children,
             innerRef,
         } = this.props;
@@ -68,6 +73,12 @@ export default class Hint extends React.PureComponent {
             icon = null;
         }
 
+        let contentStyle;
+
+        if (width) {
+            contentStyle = { width, maxWidth: 'unset' };
+        }
+
         return (
             <div
                 className={cn(
@@ -79,13 +90,9 @@ export default class Hint extends React.PureComponent {
                 )}
                 ref={innerRef}
             >
-                <div className="Hint__content">
+                <div className="Hint__content" style={contentStyle}>
                     {icon ? (
-                        <Icon
-                            name="editor/info"
-                            size="1_5x"
-                            className={icon}
-                        />
+                        <Icon name="editor/info" size="1_5x" className={icon} />
                     ) : null}
                     <div className="Hint__inner">{children}</div>
                 </div>

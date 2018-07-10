@@ -84,8 +84,6 @@ class PostSummary extends React.Component {
 			return null
 		}
 
-        const archived = content.get('cashout_time') === '1969-12-31T23:59:59' // TODO: audit after HF17. #1259
-
         let reblogged_by;
         if(content.get('reblogged_by') && content.get('reblogged_by').size > 0) {
             reblogged_by = content.get('reblogged_by').toJS()
@@ -160,7 +158,7 @@ class PostSummary extends React.Component {
             <Voting post={post} showList={false} />
             <VotesAndComments post={post} commentsLink={comments_link} />
             <span className="PostSummary__time_author_category">
-                {!archived && <Reblog author={p.author} permlink={p.permlink} />}
+            <Reblog author={p.author} permlink={p.permlink} />
                 <span className="show-for-medium">
                     {author_category}
                 </span>

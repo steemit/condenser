@@ -147,7 +147,7 @@ class PostForm extends React.Component {
 
         if (jsonMetadata.format === 'markdown') {
             this.state.editorId = EDITORS_TYPES.MARKDOWN;
-        } else if (editParams.title.body.startsWith('<html')) {
+        } else if (editParams.body.startsWith('<html')) {
             this.state.editorId = EDITORS_TYPES.HTML;
         }
 

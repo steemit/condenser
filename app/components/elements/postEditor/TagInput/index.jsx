@@ -120,26 +120,56 @@ export default class TagInput extends React.PureComponent {
     _onInputChange = e => {
         const value = e.target.value;
 
-        this.setState({
-            value,
-            inputError: value ? this._checkTag(value) : null,
-        });
+        if (/\s/.test(value) || Math.abs(this.state.value.length - value.length) >= 2) {
+            const tags = value.split(/\s+/).filter(t => t);
+
+            let inputError;
+
+            for (let tag of tags) {
+                inputError = this._checkTag(tag);
+
+                if (inputError) {
+                    break;
+                }
+            }
+
+            if (inputError) {
+                this.setState({
+                    value,
+                    inputError,
+                });
+            } else {
+                this._addTags(tags);
+            }
+        } else {
+            this.setState({
+                value,
+                inputError: value ? this._checkTag(value) : null,
+            });
+        }
     };
 
-    _addTag(tag) {
+    _addTags(addTags) {
         const { tags } = this.props;
 
         const newTags = [...tags];
 
-        if (tag && !tags.includes(tag)) {
-            newTags.push(tag);
+        for (let newTag of addTags) {
+            if (newTag && !tags.includes(newTag)) {
+                newTags.push(newTag);
+            }
         }
 
         this.setState({
             value: '',
+            inputError: null,
         });
 
         this.props.onChange(newTags);
+    }
+
+    _addTag(tag) {
+        this._addTags([tag]);
     }
 
     _onInputKeyDown = e => {

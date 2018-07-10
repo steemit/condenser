@@ -144,6 +144,7 @@
     "created": "New First",
     "old": "Old First",
     "type": "Type",
+    "update": "Update",
     "unfollow": "Unfollow",
     "unknown": "Unknown",
     "unmute": "Unmute",
@@ -372,9 +373,6 @@
     "main_tag_hint": "First tag is main. Post will be posted in that category.",
     "title_is_required": "Title is not specified",
     "title_is_not_valid": "Title is not valid"
-  },
-  "post-editor": {
-    "cant_ends_with_special_char": "Title ended with dot is a bad taste"
   },
   "tags_page": {
     "replies": "Replies",
@@ -1011,7 +1009,11 @@
     "update": "Update",
     "wait_uploading": "Images uploading...",
     "enter_title": "Enter the title",
-    "enter_body": "Enter the body"
+    "enter_body": "Enter the body",
+    "cant_ends_with_special_char": "Title ended with dot is a bad taste"
+  },
+  "comment_editor": {
+    "cancel_comment": "Comment text will be erased. Are you sure?"
   },
   "editor_toolbar": {
     "enter_the_link": "Enter the link",

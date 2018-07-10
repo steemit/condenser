@@ -39,9 +39,6 @@
     "title_is_required": "Не заполнено поле заголовок",
     "title_is_not_valid": "Заголовок неправильно заполнен"
   },
-  "post-editor": {
-    "cant_ends_with_special_char": "На нашем ресурсе не принято оканчивать заголовок спец символами или точкой"
-  },
   "mobilevalidation_js": {
     "not_be_empty": "не может быть пустым",
     "be_longer": "должен быть длиннее",
@@ -295,6 +292,7 @@
     "trending_topics": "Популярное",
     "trending": "Популярное",
     "type": "Тип",
+    "update": "Обновить",
     "unfollow": "Отписаться",
     "unknown": "Неизвестный",
     "unmute": "Разблокировать",
@@ -1023,7 +1021,11 @@
     "update": "Обновить",
     "wait_uploading": "Загружаются файлы",
     "enter_title": "Введите заголовок",
-    "enter_body": "Введите тело поста"
+    "enter_body": "Введите тело поста",
+    "cant_ends_with_special_char": "На нашем ресурсе не принято оканчивать заголовок спец символами или точкой"
+  },
+  "comment_editor": {
+    "cancel_comment": "Текст комментария будет утрачен. Вы уверены?"
   },
   "editor_toolbar": {
     "enter_the_link": "Введите ссылку",

@@ -42,7 +42,7 @@ export default class PostTitle extends PureComponent {
         let isDotWarning = false;
 
         if (!error && showDotAlert) {
-            error = tt('post-editor.cant_ends_with_special_char');
+            error = tt('post_editor.cant_ends_with_special_char');
             isDotWarning = true;
         }
 

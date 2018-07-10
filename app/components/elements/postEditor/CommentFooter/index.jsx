@@ -51,8 +51,8 @@ export default class CommentFooter extends React.PureComponent {
                             ) : null}
                             <Button small primary disabled={postDisabled} onClick={this.props.onPostClick}>
                                 {editMode
-                                    ? tt('post_editor.update')
-                                    : tt('g.post')}
+                                    ? tt('g.update')
+                                    : tt('g.reply')}
                             </Button>
                         </div>
                         <div className="CommentFooter__button">

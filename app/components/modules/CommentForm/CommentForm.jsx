@@ -60,14 +60,17 @@ class CommentForm extends React.Component {
     }
 
     _tryLoadDraft() {
-        const { editMode } = this.props;
+        const { editMode, params } = this.props;
 
         const json = localStorage.getItem(DRAFT_KEY);
 
         if (json) {
             const draft = JSON.parse(json);
 
-            if (editMode && draft.permLink !== this.props.params.permlink) {
+            if (
+                draft.editMode !== editMode ||
+                draft.permLink !== params.permlink
+            ) {
                 return;
             }
 
@@ -170,7 +173,8 @@ class CommentForm extends React.Component {
 
         try {
             const save = {
-                permLink: editMode ? params.permlink : undefined,
+                editMode,
+                permLink: params.permlink,
                 text: body,
             };
 
@@ -288,7 +292,7 @@ class CommentForm extends React.Component {
         if (
             !body ||
             !body.trim() ||
-            (await DialogManager.confirm(tt('g.are_you_sure')))
+            (await DialogManager.confirm(tt('comment_editor.cancel_comment')))
         ) {
             try {
                 localStorage.removeItem(DRAFT_KEY);

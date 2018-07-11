@@ -1010,7 +1010,7 @@
     "update": "Update",
     "wait_uploading": "Images uploading...",
     "enter_title": "Enter the title",
-    "enter_body": "Enter the body",
+    "enter_body": "Write the post",
     "cant_ends_with_special_char": "Title ended with dot is a bad taste"
   },
   "comment_editor": {

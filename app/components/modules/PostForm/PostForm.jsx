@@ -255,7 +255,7 @@ class PostForm extends React.Component {
                             }
                             disabledHint={
                                 disallowPostCode
-                                    ? tt(`post_editor.${disallowPostCode}`)
+                                    ? tt(disallowPostCode)
                                     : null
                             }
                             onPostClick={this._postSafe}
@@ -706,18 +706,22 @@ class PostForm extends React.Component {
     }
 
     _checkDisallowPost() {
-        const { title, emptyBody, uploadingCount } = this.state;
+        const { title, emptyBody, tags, uploadingCount } = this.state;
 
         if (uploadingCount > 0) {
-            return 'wait_uploading';
+            return 'post_editor.wait_uploading';
         }
 
         if (!title.trim()) {
-            return 'enter_title';
+            return 'post_editor.enter_title';
         }
 
         if (emptyBody) {
-            return 'enter_body';
+            return 'post_editor.enter_body';
+        }
+
+        if (!tags.length) {
+            return 'category_selector_jsx.must_set_category';
         }
     }
 }

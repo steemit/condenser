@@ -14,6 +14,7 @@ import HtmlEditor from 'app/components/elements/postEditor/HtmlEditor/HtmlEditor
 import EditorSwitcher from 'app/components/elements/postEditor/EditorSwitcher/EditorSwitcher';
 import PostFooter from 'app/components/elements/postEditor/PostFooter/PostFooter';
 import PostTitle from 'app/components/elements/postEditor/PostTitle/PostTitle';
+import PreviewButton from 'app/components/elements/postEditor/PreviewButton';
 import MarkdownViewer, {
     getRemarkable,
 } from 'app/components/cards/MarkdownViewer';
@@ -87,7 +88,9 @@ class PostForm extends React.Component {
         };
 
         this._saveDraftLazy = throttle(this._saveDraft, 500, { leading: true });
-        this._checkBodyLazy = throttle(this._checkBody, 300, { leading: false });
+        this._checkBodyLazy = throttle(this._checkBody, 300, {
+            leading: false,
+        });
         this._postSafe = this._safeWrapper(this._post);
 
         let isLoaded = false;
@@ -202,6 +205,10 @@ class PostForm extends React.Component {
             >
                 <div className="PostForm__work-area" ref="workArea">
                     <div className="PostForm__content">
+                        <PreviewButton
+                            isPreview={isPreview}
+                            onPreviewChange={this._onPreviewChange}
+                        />
                         <EditorSwitcher
                             items={[
                                 {
@@ -214,14 +221,14 @@ class PostForm extends React.Component {
                                 },
                             ]}
                             activeId={editorId}
-                            isPreview={isPreview}
                             onChange={this._onEditorChange}
-                            onPreviewChange={this._onPreviewChange}
                         />
                         {isPreview ? null : (
                             <PostTitle
                                 value={title}
-                                placeholder={tt('post_editor.title_placeholder')}
+                                placeholder={tt(
+                                    'post_editor.title_placeholder'
+                                )}
                                 validate={this._validateTitle}
                                 onTab={this._onTitleTab}
                                 onChange={this._onTitleChange}
@@ -233,7 +240,8 @@ class PostForm extends React.Component {
                         {isPreview ? (
                             <div className="PostForm__preview">
                                 <h1 className="PostForm__title-preview">
-                                    {title.trim() || tt('post_editor.title_placeholder')}
+                                    {title.trim() ||
+                                        tt('post_editor.title_placeholder')}
                                 </h1>
                                 <MarkdownViewer text={text} large />
                             </div>

@@ -3,11 +3,9 @@ import {loadFollows, fetchFollowCount} from 'app/redux/FollowSaga';
 import {getContent} from 'app/redux/SagaShared';
 import GlobalReducer from './GlobalReducer';
 import constants from './constants';
-import {fromJS, Map} from 'immutable'
 import { DEBT_TOKEN_SHORT, LIQUID_TICKER, DEFAULT_CURRENCY, IGNORE_TAGS, PUBLIC_API, SELECT_TAGS_KEY } from 'app/client_config';
 import cookie from "react-cookie";
 import {api} from 'golos-js';
-// import * as api from 'app/utils/APIWrapper'
 
 export function* fetchDataWatches () {
     yield fork(watchLocationChange);
@@ -299,7 +297,7 @@ export function* fetchData(action) {
         delete args[0].select_tags
         args[0].select_authors = [accountname];
     } else if (order === 'by_author') {
-        callName = 'getDiscussionsByBlogAsync';
+        call_name = 'getDiscussionsByBlogAsync';
         delete args[0].select_tags;
         args[0].select_authors = [accountname];
     } else if (order === 'by_comments') {
@@ -315,7 +313,7 @@ export function* fetchData(action) {
     yield put({ type: 'FETCH_DATA_BEGIN' });
 
     try {
-        const data = yield call([api, api[callName]], ...args);
+        const data = yield call([api, api[call_name]], ...args);
         yield put(
             GlobalReducer.actions.receiveData({
                 data,
@@ -329,7 +327,7 @@ export function* fetchData(action) {
         );
         yield put({ type: 'FETCH_DATA_END' });
     } catch (error) {
-        console.error('~~ Saga fetchData error ~~>', callName, args, error);
+        console.error('~~ Saga fetchData error ~~>', call_name, args, error);
         yield put({ type: 'global/CHAIN_API_ERROR', error: error.message });
 
         if (!(yield cancelled())) {
@@ -337,50 +335,6 @@ export function* fetchData(action) {
         }
     }
 }
-
-// export function* watchMetaRequests() {
-//     yield takeLatest('global/REQUEST_META', fetchMeta);
-// }
-// export function* fetchMeta({payload: {id, link}}) {
-//     try {
-//         const metaArray = yield call(() => new Promise((resolve, reject) => {
-//             function reqListener() {
-//                 const resp = JSON.parse(this.responseText)
-//                 if (resp.error) {
-//                     reject(resp.error)
-//                     return
-//                 }
-//                 resolve(resp)
-//             }
-//             const oReq = new XMLHttpRequest()
-//             oReq.addEventListener('load', reqListener)
-//             oReq.open('GET', '/http_metadata/' + link)
-//             oReq.send()
-//         }))
-//         const {title, metaTags} = metaArray
-//         let meta = {title}
-//         for (let i = 0; i < metaTags.length; i++) {
-//             const [name, content] = metaTags[i]
-//             meta[name] = content
-//         }
-//         // http://postimg.org/image/kbefrpbe9/
-//         meta = {
-//             link,
-//             card: meta['twitter:card'],
-//             site: meta['twitter:site'], // @username tribbute
-//             title: meta['twitter:title'],
-//             description: meta['twitter:description'],
-//             image: meta['twitter:image'],
-//             alt: meta['twitter:alt'],
-//         }
-//         if(!meta.image) {
-//             meta.image = meta['twitter:image:src']
-//         }
-//         yield put(GlobalReducer.actions.receiveMeta({id, meta}))
-//     } catch(error) {
-//         yield put(GlobalReducer.actions.receiveMeta({id, meta: {error}}))
-//     }
-// }
 
 export function* watchFetchJsonRequests() {
     yield takeEvery('global/FETCH_JSON', fetchJson);

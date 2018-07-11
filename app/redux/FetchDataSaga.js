@@ -205,25 +205,13 @@ export function* fetchState(location_change_action) {
                 state.witnesses[witness.owner] = witness
             })
 
-        } else if ([
-            'trending',
-            'promoted',
-            'responses',
-            'hot',
-            'votes',
-            'cashout',
-            'payout',
-            'payout_comments',
-            'active',
-            'created',
-            'recent'
-        ].includes(parts[0])) {
+        } else if (Object.keys(PUBLIC_API).includes(parts[0])) {
 
             yield call(fetchData, {payload: { order: parts[0], category : tag }})
 
         } else if (parts[0] == 'tags') {
             const tags = {}
-            const trending_tags = yield call([api, api.getTrendingTagsAsync], '', parts[0] == 'tags' ? '250' : '50')
+            const trending_tags = yield call([api, api.getTrendingTagsAsync], '', 250)
             trending_tags.forEach (tag => tags[tag.name] = tag)
             state.tags = tags
         }
@@ -253,59 +241,60 @@ export function* watchDataRequests() {
 }
 
 export function* fetchData(action) {
-    const {order, author, permlink, accountname, keys} = action.payload;
-    let {category} = action.payload;
+    const {
+        order,
+        author,
+        permlink,
+        accountname,
+        keys
+    } = action.payload;
+    let { category } = action.payload;
+
     if( !category ) category = "";
     category = category.toLowerCase();
 
     let call_name, args;
-    args = [{
-      limit: constants.FETCH_DATA_BATCH_SIZE,
-      truncate_body: constants.FETCH_DATA_TRUNCATE_BODY,
-      start_author: author,
-      start_permlink: permlink
-    }];
+    args = [
+        {
+            limit: constants.FETCH_DATA_BATCH_SIZE,
+            truncate_body: constants.FETCH_DATA_TRUNCATE_BODY,
+            start_author: author,
+            start_permlink: permlink
+        }
+    ];
     if (category.length) {
-      args[0].select_tags = [category];
+        args[0].select_tags = [category];
     } else {
-      let select_tags = cookie.load(SELECT_TAGS_KEY);
-      if (select_tags && select_tags.length) {
-        args[0].select_tags = select_tags;
-        category = select_tags.sort().join('/')
-      }
-      else {
-        args[0].filter_tags = IGNORE_TAGS
-      }
+        let select_tags = cookie.load(SELECT_TAGS_KEY);
+        if (select_tags && select_tags.length) {
+            args[0].select_tags = select_tags;
+            category = select_tags.sort().join('/')
+        } else {
+            args[0].filter_tags = IGNORE_TAGS
+        }
     }
 
     yield put({type: 'global/FETCHING_DATA', payload: {order, category}});
 
     if (order === 'trending') {
-        call_name = 'getDiscussionsByTrendingAsync';
+        call_name = PUBLIC_API.trending;
     } else if (order === 'promoted') {
-        call_name = 'getDiscussionsByPromotedAsync';
-    } else if( order === 'active' ) {
-        call_name = 'getDiscussionsByActiveAsync';
+        call_name = PUBLIC_API.promoted;
+    } else if( order === 'active' /*|| order === 'updated'*/) {
+        call_name = PUBLIC_API.active;
     } else if( order === 'cashout' ) {
-        call_name = 'getDiscussionsByCashoutAsync';
+        call_name = PUBLIC_API.cashout;
     } else if( order === 'payout' ) {
-        call_name = 'getPostDiscussionsByPayoutAsync';
-    } else if( order === 'payout_comments' ) {
-        call_name = 'getCommentDiscussionsByPayoutAsync';
-    } else if( order === 'updated' ) {
-        call_name = 'getDiscussionsByActiveAsync';
+        call_name = PUBLIC_API.payout;
     } else if( order === 'created' || order === 'recent' ) {
-        call_name = 'getDiscussionsByCreatedAsync';
-    } else if( order === 'by_replies' ) {
-        call_name = 'getRepliesByLastUpdateAsync';
-        args = [author, permlink, constants.FETCH_DATA_BATCH_SIZE, constants.DEFAULT_VOTE_LIMIT];
+        call_name = PUBLIC_API.created;
     } else if( order === 'responses' ) {
-        call_name = 'getDiscussionsByChildrenAsync';
+        call_name = PUBLIC_API.responses;
     } else if( order === 'votes' ) {
-        call_name = 'getDiscussionsByVotesAsync';
+        call_name = PUBLIC_API.votes;
     } else if( order === 'hot' ) {
-        call_name = 'getDiscussionsByHotAsync';
-    } else if( order === 'by_feed' ) { // https://github.com/steemit/steem/issues/249
+        call_name = PUBLIC_API.hot;
+    } else if( order === 'by_feed' ) {
         call_name = 'getDiscussionsByFeedAsync';
         delete args[0].select_tags
         args[0].select_authors = [accountname];
@@ -316,8 +305,11 @@ export function* fetchData(action) {
     } else if( order === 'by_comments' ) {
         delete args[0].select_tags;
         call_name = 'getDiscussionsByCommentsAsync';
+    } else if( order === 'by_replies' ) {
+        call_name = 'getRepliesByLastUpdateAsync';
+        args = [author, permlink, constants.FETCH_DATA_BATCH_SIZE, constants.DEFAULT_VOTE_LIMIT];
     } else {
-        call_name = 'getDiscussionsByActiveAsync';
+        call_name = PUBLIC_API.active;
     }
 
     yield put({type: 'FETCH_DATA_BEGIN'})

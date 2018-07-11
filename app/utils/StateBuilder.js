@@ -161,21 +161,9 @@ export default async function getState(api, url, options, offchain = {}) {
             state.witnesses[witness.owner] = witness
         })
   
-    } else if ([
-        'trending',
-        'promoted',
-        'responses',
-        'hot',
-        'votes',
-        'cashout',
-        'payout',
-        'payout_comments',
-        'active',
-        'created',
-        'recent'
-    ].includes(parts[0])) {
+    } else if (Object.keys(PUBLIC_API).includes(parts[0])) {
         let args = { limit: 20, truncate_body: 1024 }
-
+        const discussionsType = parts[0]
         if (typeof tag === 'string' && tag.length) {
             args.select_tags = [tag]
         } else {
@@ -185,14 +173,14 @@ export default async function getState(api, url, options, offchain = {}) {
                 args.filter_tags = state.filter_tags = options.IGNORE_TAGS
             }
         }
-        const discussions = await api.gedDiscussionsBy(PUBLIC_API[parts[0]][1], args)
+        const discussions = await api.gedDiscussionsBy(discussionsType, args)
           
         const discussion_idxes = {}
-        discussion_idxes[ PUBLIC_API[parts[0]][1] ] = []
+        discussion_idxes[discussionsType] = []
 
         discussions.forEach(discussion => {
             const link = `${discussion.author}/${discussion.permlink}`
-            discussion_idxes[ PUBLIC_API[ parts[0] ][1] ].push(link)
+            discussion_idxes[discussionsType].push(link)
             state.content[link] = discussion
         })
         

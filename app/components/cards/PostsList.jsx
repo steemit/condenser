@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import debounce from 'lodash.debounce';
+import throttle from 'lodash/throttle';
 import tt from 'counterpart';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import PostSummary from 'app/components/cards/PostSummary';
@@ -141,7 +141,7 @@ class PostsList extends PureComponent {
         this.scrollListener();
     }
 
-    scrollListener = debounce(() => {
+    scrollListener = throttle(() => {
         const el = window.document.getElementById('posts_list');
         if (!el) return;
         const scrollTop =
@@ -171,7 +171,7 @@ class PostsList extends PureComponent {
         } else {
             this.setState({ thumbSize: 'desktop' });
         }
-    }, 150);
+    }, 150, { leading: false });
 
     attachScrollListener() {
         window.addEventListener('scroll', this.scrollListener);

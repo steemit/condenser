@@ -5,8 +5,16 @@
     padding: 0;
     margin: 0 -4px;
     border: none;
+    border-radius: 0;
     color: #333;
     background: none;
+  }
+
+  &_comment .CodeMirror {
+    padding: 10px 8px 0;
+    margin: 0;
+    background: #fafafa;
+    border-radius: 6px;
   }
 
   & .CodeMirror-scroll {
@@ -28,6 +36,7 @@
 
   &_comment .CodeMirror-lines {
     font-family: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+    font-size: 16px;
   }
 
   & .cm-formatting-strikethrough {

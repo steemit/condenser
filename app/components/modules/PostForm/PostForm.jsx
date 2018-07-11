@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import debounce from 'lodash.debounce';
+import throttle from 'lodash/throttle';
 import { connect } from 'react-redux';
 import Turndown from 'turndown';
 import cn from 'classnames';
@@ -85,8 +85,8 @@ class PostForm extends React.Component {
             uploadingCount: 0,
         };
 
-        this._saveDraftLazy = debounce(this._saveDraft, 500);
-        this._checkBodyLazy = debounce(this._checkBody, 300);
+        this._saveDraftLazy = throttle(this._saveDraft, 500, { leading: true });
+        this._checkBodyLazy = throttle(this._checkBody, 300, { leading: false });
         this._postSafe = this._safeWrapper(this._post);
 
         let isLoaded = false;
@@ -147,7 +147,7 @@ class PostForm extends React.Component {
 
         if (jsonMetadata.format === 'markdown') {
             this.state.editorId = EDITORS_TYPES.MARKDOWN;
-        } else if (editParams.title.body.startsWith('<html')) {
+        } else if (editParams.body.startsWith('<html')) {
             this.state.editorId = EDITORS_TYPES.HTML;
         }
 
@@ -162,13 +162,13 @@ class PostForm extends React.Component {
 
         this.state.emptyBody = false;
 
-        let tags = processTagsFromData(jsonMetadata.tags || []);
+        const tagsFromData = [...(jsonMetadata.tags || [])];
 
-        if (tags[0] !== editParams.category) {
-            tags.unshift(editParams.category);
+        if (tagsFromData[0] !== editParams.category) {
+            tagsFromData.unshift(editParams.category);
         }
 
-        this.state.tags = tags;
+        this.state.tags = processTagsFromData(tagsFromData);
     }
 
     componentWillUnmount() {
@@ -182,7 +182,6 @@ class PostForm extends React.Component {
             editorId,
             title,
             text,
-            emptyBody,
             tags,
             payoutType,
             isPreview,
@@ -191,8 +190,7 @@ class PostForm extends React.Component {
             isPosting,
         } = this.state;
 
-        const allowPost =
-            uploadingCount === 0 && title.trim() && !emptyBody && !isPosting;
+        const disallowPostCode = this._checkDisallowPost();
 
         return (
             <div
@@ -222,7 +220,7 @@ class PostForm extends React.Component {
                         {isPreview ? null : (
                             <PostTitle
                                 value={title}
-                                placeholder={tt('submit_a_story.title')}
+                                placeholder={tt('post_editor.title_placeholder')}
                                 validate={this._validateTitle}
                                 onTab={this._onTitleTab}
                                 onChange={this._onTitleChange}
@@ -234,7 +232,7 @@ class PostForm extends React.Component {
                         {isPreview ? (
                             <div className="PostForm__preview">
                                 <h1 className="PostForm__title-preview">
-                                    {title.trim() || tt('submit_a_story.title')}
+                                    {title.trim() || tt('post_editor.title_placeholder')}
                                 </h1>
                                 <MarkdownViewer text={text} large />
                             </div>
@@ -251,7 +249,14 @@ class PostForm extends React.Component {
                             onTagsChange={this._onTagsChange}
                             payoutType={payoutType}
                             onPayoutTypeChange={this._onPayoutTypeChange}
-                            postDisabled={!allowPost}
+                            postDisabled={
+                                Boolean(disallowPostCode) || isPosting
+                            }
+                            disabledHint={
+                                disallowPostCode
+                                    ? tt(`post_editor.${disallowPostCode}`)
+                                    : null
+                            }
                             onPostClick={this._postSafe}
                             onResetClick={this._onResetClick}
                             onCancelClick={this._onCancelClick}
@@ -398,7 +403,7 @@ class PostForm extends React.Component {
             {
                 rteState: state,
             },
-            this._saveDraftLazy
+            this._onTextChangeNotify
         );
     };
 
@@ -470,10 +475,6 @@ class PostForm extends React.Component {
             )
         ) {
             return tt('submit_a_story.markdown_not_supported');
-        }
-
-        if (/[.,;:]$/.test(_title)) {
-            return tt('post-editor.cant_ends_with_special_char');
         }
     };
 
@@ -635,14 +636,20 @@ class PostForm extends React.Component {
     };
 
     _onResetClick = () => {
-        if (this.refs.editor) {
-            this.refs.editor.setValue('');
+        let rteState = null;
+
+        if (this.state.editorId === EDITORS_TYPES.MARKDOWN) {
+            if (this.refs.editor) {
+                this.refs.editor.setValue('');
+            }
+        } else {
+            rteState = HtmlEditor.getStateFromHtml('');
         }
 
         this.setState({
             title: '',
             text: '',
-            rteState: null,
+            rteState,
             tags: [],
             isPreview: false,
         });
@@ -694,6 +701,22 @@ class PostForm extends React.Component {
             this.setState({
                 emptyBody: value.trim().length === 0,
             });
+        }
+    }
+
+    _checkDisallowPost() {
+        const { title, emptyBody, uploadingCount } = this.state;
+
+        if (uploadingCount > 0) {
+            return 'wait_uploading';
+        }
+
+        if (!title.trim()) {
+            return 'enter_title';
+        }
+
+        if (emptyBody) {
+            return 'enter_body';
         }
     }
 }

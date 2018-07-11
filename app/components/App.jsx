@@ -327,17 +327,6 @@ class App extends React.Component {
                             </a>
                             <br />
                             <br />
-                            <div className="tag3">
-                                <b>
-                                    {tt('submit_a_story.get_sp_when_sign_up1')}
-                                    <LocalizedCurrency
-                                        amount={Number(signup_bonus)}
-                                    />
-                                    {tt('submit_a_story.get_sp_when_sign_up2', {
-                                        VESTING_TOKENS: '',
-                                    })}
-                                </b>
-                            </div>
                         </div>
                     </div>
                 </div>

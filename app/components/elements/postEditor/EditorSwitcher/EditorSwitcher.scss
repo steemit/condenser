@@ -1,7 +1,7 @@
 
 .EditorSwitcher {
   display: flex;
-  padding-top: 8px;
+  padding-top: 16px;
   margin: 0 0 40px;
   border-bottom: 1px solid #e1e1e1;
 
@@ -14,7 +14,6 @@
     letter-spacing: 1.4px;
     color: #b7b7b9;
     font-size: 18px;
-    font-weight: 500;
     transition: color 0.1s;
     flex-shrink: 0;
     cursor: pointer;
@@ -22,8 +21,9 @@
     text-transform: uppercase;
 
     &_active {
+      font-weight: 500;
       color: #000;
-      border-bottom-color: #000;
+      border-bottom-color: #0078C4;
       cursor: default;
     }
 

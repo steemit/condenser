@@ -11,10 +11,11 @@ import { NSFW_TAG } from 'app/utils/tags';
 import './PostFooter.scss';
 
 export default class PostFooter extends PureComponent {
-    static propTypes = {
+    propTypes = {
         editMode: PropTypes.bool,
         tags: PropTypes.array,
         postDisabled: PropTypes.bool,
+        disabledHint: PropTypes.string,
         onPayoutTypeChange: PropTypes.func.isRequired,
         onTagsChange: PropTypes.func.isRequired,
         onPostClick: PropTypes.func.isRequired,
@@ -22,14 +23,10 @@ export default class PostFooter extends PureComponent {
         onCancelClick: PropTypes.func.isRequired,
     };
 
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            temporaryErrorText: null,
-            singleLine: true,
-        };
-    }
+    state = {
+        temporaryErrorText: null,
+        singleLine: true,
+    };
 
     componentDidMount() {
         this._checkSingleLine();
@@ -45,7 +42,13 @@ export default class PostFooter extends PureComponent {
     }
 
     render() {
-        const { editMode, tags, postDisabled, onTagsChange } = this.props;
+        const {
+            editMode,
+            tags,
+            postDisabled,
+            disabledHint,
+            onTagsChange,
+        } = this.props;
         const { temporaryErrorText, singleLine } = this.state;
 
         return (
@@ -89,11 +92,30 @@ export default class PostFooter extends PureComponent {
                                 </Button>
                             )}
                         </div>
-                        <div className="PostFooter__button">
-                            {temporaryErrorText ? (
-                                <Hint error>{temporaryErrorText}</Hint>
+                        <div
+                            className={cn('PostFooter__button', {
+                                'PostFooter__button_hint-disabled': postDisabled,
+                            })}
+                        >
+                            {postDisabled && disabledHint ? (
+                                <Hint
+                                    key="1"
+                                    error
+                                    align="right"
+                                    className="PostFooter__disabled-hint"
+                                >
+                                    {disabledHint}
+                                </Hint>
+                            ) : temporaryErrorText ? (
+                                <Hint key="2" error align="right">
+                                    {temporaryErrorText}
+                                </Hint>
                             ) : null}
-                            <Button primary disabled={postDisabled} onClick={this.props.onPostClick}>
+                            <Button
+                                primary
+                                disabled={postDisabled}
+                                onClick={this.props.onPostClick}
+                            >
                                 {editMode
                                     ? tt('post_editor.update')
                                     : tt('g.post')}
@@ -129,7 +151,7 @@ export default class PostFooter extends PureComponent {
     }
 
     _checkSingleLine() {
-        const singleLine = this.refs.root.clientWidth > 950
+        const singleLine = this.refs.root.clientWidth > 950;
 
         if (this.state.singleLine !== singleLine) {
             this.setState({ singleLine });

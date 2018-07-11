@@ -7,7 +7,7 @@
     flex-grow: 1;
     flex-shrink: 0;
     width: 100%;
-    min-height: 100px;
+    margin-bottom: 20px;
   }
 
   &__content {
@@ -20,10 +20,6 @@
     flex-shrink: 0;
     z-index: 1;
     user-select: none;
-  }
-
-  &__footer-content {
-
   }
 
   &__spinner {
@@ -48,5 +44,14 @@
     padding: 40px 60px;
     border-radius: 18px;
     background: rgba(0,0,0, 0.1);
+  }
+
+  &__preview {
+    padding: 0.45rem 10px 0;
+    border: 1px solid #e1e1e1;
+
+    & > * {
+      font-size: 16px !important;
+    }
   }
 }

@@ -117,7 +117,6 @@ const ru = {
   use_limited_amount_of_tags: 'У вас {tagsLength} тэгов, включая {includingCategory}. Пожалуйста, используйте не более 5 в посте и категории.',
   // this is mainly used in CategorySelector
   maximum_tag_length_is_24_characters: 'Максимальная длина категории 24 знака',
-  use_limitied_amount_of_categories: 'Пожалуйста используйте не более {amount} категорий',
   use_only_lowercase_letters: 'Используйте только символы нижнего регистра',
   use_one_dash: 'Используйте только одно тире',
   use_spaces_to_separate_tags: 'Используйте пробел чтобы разделить тэги',

@@ -100,7 +100,6 @@ const it = 	{
 	including_the_category: "(including the category '{rootCategory}')",
 	use_limited_amount_of_tags: 'You have {tagsLength} tags total{includingCategory}.  Per cortesia utilizzane un massimo di 5 per post.',
 	// this is mainly used in CategorySelector
-	use_limitied_amount_of_categories: 'Please use only {amount} categories',
 	use_one_dash: 'Utilizza un solo trattino',
 	use_spaces_to_separate_tags: 'Usa gli spazi per separare i vari tag',
 	use_only_allowed_characters: 'Usa solo lettere minuscole, numeri e un trattino',

@@ -115,7 +115,6 @@ const en =  {
   use_limited_amount_of_tags: 'You have {tagsLength} tags total {includingCategory}.  Please use only 5 in your post and category line.',
   // this is mainly used in CategorySelector
   maximum_tag_length_is_24_characters: 'Maximum tag length is 24 characters',
-  use_limitied_amount_of_categories: 'Please use only {amount} categories',
   use_only_lowercase_letters: 'Use only lowercase letters',
   use_one_dash: 'Use only one dash',
   use_spaces_to_separate_tags: 'Use spaces to separate tags',

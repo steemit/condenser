@@ -1,24 +1,21 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import tt from 'counterpart';
-import { api } from 'golos-js';
+import {api} from 'golos-js';
 import Icon from 'app/components/elements/Icon';
 import LocalizedCurrency from 'app/components/elements/LocalizedCurrency';
 
 class Footer extends React.Component {
     state = {
-        virtualSupply: 0,
+        currentSupply: 0
     };
 
     async componentDidMount() {
-        const { pricePerGolos } = this.props;
+        const {pricePerGolos} = this.props;
 
         const res = await api.getDynamicGlobalProperties();
-
         this.setState({
-            virtualSupply: Math.floor(
-                parseInt(res.virtual_supply) * pricePerGolos
-            ),
+            currentSupply: Math.floor(parseInt(res.current_supply) / pricePerGolos)
         });
     }
 
@@ -29,7 +26,7 @@ class Footer extends React.Component {
                     <li className="social-icons">
                         {items.map((item, i) => (
                             <a key={i} href={item.url} target="blank">
-                                <Icon name={item.icon} size={item.size} />
+                                <Icon name={item.icon} size={item.size}/>
                             </a>
                         ))}
                     </li>
@@ -69,95 +66,90 @@ class Footer extends React.Component {
     }
 
     render() {
-        const { virtualSupply } = this.state;
+        const {currentSupply} = this.state;
 
         const menuItems = [];
 
-        if (virtualSupply > 0) {
+        if (currentSupply > 0) {
             menuItems.push({
                 name: 'Всего выплачено',
                 columnAlign: 'left',
                 width: 'medium-3',
                 items: [
                     {
-                        name: (
-                            <LocalizedCurrency amount={virtualSupply} short />
-                        ),
+                        name: (<LocalizedCurrency amount={currentSupply} short/>),
                         url: 'https://explorer.golos.io',
-                        className: 'big',
-                    },
-                ],
+                        className: 'big'
+                    }
+                ]
             });
         }
 
-        menuItems.push(
-            {
-                name: 'Golos.io',
-                columnAlign: 'left',
-                width: 'medium-4 space-between-columns',
-                items: [
-                    [
-                        { name: tt('navigation.welcome'), url: '/welcome' },
-                        { name: tt('g.golos_fest'), url: '/@golosio' },
-                        // { name: 'Подписка на рассылку', url: '' },
-                        { name: tt('g.team'), url: '/about#team' },
-                    ],
-                    [
-                        {
-                            name: tt('navigation.feedback'),
-                            url: '/submit?type=submit_feedback',
-                        },
-                        {
-                            name: tt('navigation.privacy_policy'),
-                            url:
-                                '/ru--konfidenczialxnostx/@golos/politika-konfidencialnosti',
-                        },
-                        {
-                            name: tt('navigation.terms_of_service'),
-                            url: '/legal/terms_of_service.pdf',
-                        },
-                    ],
+        menuItems.push({
+            name: 'Golos.io',
+            columnAlign: 'left',
+            width: 'medium-4 space-between-columns',
+            items: [
+                [
+                    {
+                        name: tt('navigation.welcome'),
+                        url: '/welcome'
+                    }, {
+                        name: tt('g.golos_fest'),
+                        url: '/@golosio'
+                    },
+                    // { name: 'Подписка на рассылку', url: '' },
+                    {
+                        name: tt('g.team'),
+                        url: '/about#team'
+                    }
                 ],
-            },
-            {
-                name: 'Социальные сети',
-                columnAlign: 'left',
-                width: 'medium-3',
-                items: [
+                [
                     {
-                        name: 'Facebook',
-                        url: 'https://www.facebook.com/www.golos.io',
-                        icon: 'new/facebook',
-                        size: '1_5x',
-                    },
-                    {
-                        name: 'VK',
-                        url: 'https://vk.com/goloschain',
-                        icon: 'new/vk',
-                        size: '2x',
-                    },
-                    {
-                        name: 'Telegram',
-                        url: 'https://t.me/golos_support',
-                        icon: 'new/telegram',
-                        size: '1_5x',
-                    },
-                ],
-            },
-            {
-                name: 'Приложения',
-                columnAlign: 'left',
-                width: 'medium-2',
-                items: [
-                    // { name: 'IOS', url: '' },
-                    {
-                        name: 'Android',
-                        url:
-                            'https://play.google.com/store/apps/details?id=io.golos.golos',
-                    },
-                ],
-            }
-        );
+                        name: tt('navigation.feedback'),
+                        url: '/submit?type=submit_feedback'
+                    }, {
+                        name: tt('navigation.privacy_policy'),
+                        url: '/ru--konfidenczialxnostx/@golos/politika-konfidencialnosti'
+                    }, {
+                        name: tt('navigation.terms_of_service'),
+                        url: '/legal/terms_of_service.pdf'
+                    }
+                ]
+            ]
+        }, {
+            name: 'Социальные сети',
+            columnAlign: 'left',
+            width: 'medium-3',
+            items: [
+                {
+                    name: 'Facebook',
+                    url: 'https://www.facebook.com/www.golos.io',
+                    icon: 'new/facebook',
+                    size: '1_5x'
+                }, {
+                    name: 'VK',
+                    url: 'https://vk.com/goloschain',
+                    icon: 'new/vk',
+                    size: '2x'
+                }, {
+                    name: 'Telegram',
+                    url: 'https://t.me/golos_support',
+                    icon: 'new/telegram',
+                    size: '1_5x'
+                }
+            ]
+        }, {
+            name: 'Приложения',
+            columnAlign: 'left',
+            width: 'medium-2',
+            items: [// { name: 'IOS', url: '' },
+                {
+                    name: 'Android',
+                    url: 'https://play.google.com/store/apps/details?id=io.golos.golos'
+                }
+            ]
+        });
 
         return (
             <section className="Footer">
@@ -170,9 +162,8 @@ class Footer extends React.Component {
                     <div className="row">
                         <div className="small-12 medium-12 columns">
                             <span className="text-left">
-                                © 2018 Golos.io - социальная платформа,
-                                сообщество блогеров, медиасеть - разработанная
-                                на Медиаблокчейне ГОЛОС
+                                © 2018 Golos.io - социальная платформа, сообщество блогеров, медиасеть -
+                                разработанная на Медиаблокчейне ГОЛОС
                             </span>
                         </div>
                     </div>
@@ -185,10 +176,7 @@ class Footer extends React.Component {
         return menuItems.map((menu, index) => (
             <div
                 key={index}
-                className={`small-12 ${menu.width} columns text-${
-                    menu.columnAlign
-                    }`}
-            >
+                className={`small-12 ${menu.width} columns text-${menu.columnAlign}`}>
                 <strong>{menu.name}</strong>
                 {this.renderItems(menu.items)}
             </div>
@@ -196,21 +184,17 @@ class Footer extends React.Component {
     }
 }
 
-export default connect(
-    state => {
-        const feedPrice = state.global.get('feed_price');
-        let pricePerGolos = undefined;
+export default connect(state => {
+    const feedPrice = state
+        .global
+        .get('feed_price');
+    let pricePerGolos = undefined;
 
-        if (feedPrice && feedPrice.has('base') && feedPrice.has('quote')) {
-            const { base, quote } = feedPrice.toJS();
-            if (/ GBG$/.test(base) && / GOLOS$/.test(quote))
-                pricePerGolos =
-                    parseFloat(base.split(' ')[0]) /
-                    parseFloat(quote.split(' ')[0]);
+    if (feedPrice && feedPrice.has('base') && feedPrice.has('quote')) {
+        const {base, quote} = feedPrice.toJS();
+        if (/ GBG$/.test(base) && / GOLOS$/.test(quote)) 
+            pricePerGolos =  parseFloat(base.split(' ')[0]) / parseFloat(quote.split(' ')[0]);
         }
-
-        return {
-            pricePerGolos,
-        };
-    },
-)(Footer);
+    
+    return {pricePerGolos};
+},)(Footer);

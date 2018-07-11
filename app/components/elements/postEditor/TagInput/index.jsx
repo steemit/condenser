@@ -6,7 +6,6 @@ import Icon from 'app/components/elements/Icon';
 import Hint from 'app/components/elements/common/Hint';
 import { validateTag } from 'app/utils/tags';
 import KEYS from 'app/utils/keyCodes';
-import { TAGS_LIMIT } from '../../../../utils/tags';
 import './index.scss';
 
 export default class TagInput extends React.PureComponent {
@@ -62,19 +61,7 @@ export default class TagInput extends React.PureComponent {
     }
 
     _renderErrorBlock() {
-        const { tags } = this.props;
         const { inputError, temporaryHintText } = this.state;
-
-        if (this.refs.input === document.activeElement && tags.length === 5) {
-            return (
-                <Hint warning align="left">
-                    {tt(
-                        'category_selector_jsx.use_limitied_amount_of_categories',
-                        { amount: TAGS_LIMIT }
-                    )}
-                </Hint>
-            );
-        }
 
         if (inputError) {
             return (
@@ -120,26 +107,56 @@ export default class TagInput extends React.PureComponent {
     _onInputChange = e => {
         const value = e.target.value;
 
-        this.setState({
-            value,
-            inputError: value ? this._checkTag(value) : null,
-        });
+        if (/\s/.test(value) || Math.abs(this.state.value.length - value.length) >= 2) {
+            const tags = value.split(/\s+/).filter(t => t);
+
+            let inputError;
+
+            for (let tag of tags) {
+                inputError = this._checkTag(tag);
+
+                if (inputError) {
+                    break;
+                }
+            }
+
+            if (inputError) {
+                this.setState({
+                    value,
+                    inputError,
+                });
+            } else {
+                this._addTags(tags);
+            }
+        } else {
+            this.setState({
+                value,
+                inputError: value ? this._checkTag(value) : null,
+            });
+        }
     };
 
-    _addTag(tag) {
+    _addTags(addTags) {
         const { tags } = this.props;
 
         const newTags = [...tags];
 
-        if (tag && !tags.includes(tag)) {
-            newTags.push(tag);
+        for (let newTag of addTags) {
+            if (newTag && !tags.includes(newTag)) {
+                newTags.push(newTag);
+            }
         }
 
         this.setState({
             value: '',
+            inputError: null,
         });
 
         this.props.onChange(newTags);
+    }
+
+    _addTag(tag) {
+        this._addTags([tag]);
     }
 
     _onInputKeyDown = e => {

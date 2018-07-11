@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import debounce from 'lodash.debounce';
+import throttle from 'lodash/throttle';
 import { connect } from 'react-redux';
 import cn from 'classnames';
 import tt from 'counterpart';
@@ -34,15 +34,16 @@ class CommentForm extends React.Component {
         const { editMode } = this.props;
 
         this.state = {
-            isPreview: false,
             text: '',
             emptyBody: true,
             postError: null,
             uploadingCount: 0,
         };
 
-        this._saveDraftLazy = debounce(this._saveDraft, 500);
-        this._checkBodyLazy = debounce(this._checkBody, 300);
+        this._saveDraftLazy = throttle(this._saveDraft, 300, {
+            leading: false,
+        });
+        this._checkBodyLazy = throttle(this._checkBody, 300, { leading: true });
         this._postSafe = this._safeWrapper(this._post);
 
         let isLoaded = false;
@@ -59,14 +60,17 @@ class CommentForm extends React.Component {
     }
 
     _tryLoadDraft() {
-        const { editMode } = this.props;
+        const { editMode, params } = this.props;
 
         const json = localStorage.getItem(DRAFT_KEY);
 
         if (json) {
             const draft = JSON.parse(json);
 
-            if (editMode && draft.permLink !== this.props.params.permlink) {
+            if (
+                draft.editMode !== editMode ||
+                draft.permLink !== params.permlink
+            ) {
                 return;
             }
 
@@ -100,13 +104,7 @@ class CommentForm extends React.Component {
     render() {
         const { editMode } = this.props;
 
-        const {
-            text,
-            emptyBody,
-            isPreview,
-            postError,
-            uploadingCount,
-        } = this.state;
+        const { text, emptyBody, postError, uploadingCount } = this.state;
 
         const allowPost = uploadingCount === 0 && !emptyBody;
 
@@ -118,20 +116,15 @@ class CommentForm extends React.Component {
             >
                 <div className="CommentForm__work-area">
                     <div className="CommentForm__content">
-                        <div style={{ display: isPreview ? 'none' : 'block' }}>
-                            <MarkdownEditor
-                                ref="editor"
-                                autoFocus
-                                commentMode
-                                initialValue={text}
-                                placeholder={tt('g.reply')}
-                                uploadImage={this._onUploadImage}
-                                onChangeNotify={this._onTextChangeNotify}
-                            />
-                        </div>
-                        {isPreview ? (
-                            <MarkdownViewer text={text} large />
-                        ) : null}
+                        <MarkdownEditor
+                            ref="editor"
+                            autoFocus
+                            commentMode
+                            initialValue={text}
+                            placeholder={tt('g.reply')}
+                            uploadImage={this._onUploadImage}
+                            onChangeNotify={this._onTextChangeNotify}
+                        />
                     </div>
                 </div>
                 <div className="CommentForm__footer">
@@ -146,6 +139,11 @@ class CommentForm extends React.Component {
                         />
                     </div>
                 </div>
+                {text ? (
+                    <div className="CommentForm__preview">
+                        <MarkdownViewer text={text} />
+                    </div>
+                ) : null}
                 {uploadingCount > 0 ? (
                     <div className="CommentForm__spinner">
                         <Icon
@@ -166,19 +164,17 @@ class CommentForm extends React.Component {
 
     _saveDraft = () => {
         const { editMode, params } = this.props;
-        const { isPreview, text } = this.state;
+
+        const body = this.refs.editor.getValue();
+
+        this.setState({
+            text: body,
+        });
 
         try {
-            let body;
-
-            if (isPreview) {
-                body = text;
-            } else {
-                body = this.refs.editor.getValue();
-            }
-
             const save = {
-                permLink: editMode ? params.permlink : undefined,
+                editMode,
+                permLink: params.permlink,
                 text: body,
             };
 
@@ -230,7 +226,7 @@ class CommentForm extends React.Component {
         if (reply && !editMode) {
             try {
                 meta.tags = JSON.parse(params.json_metadata).tags || [];
-            } catch(err) {
+            } catch (err) {
                 meta.tags = [];
             }
         } else {
@@ -291,7 +287,13 @@ class CommentForm extends React.Component {
     };
 
     _onCancelClick = async () => {
-        if (await DialogManager.confirm(tt('g.are_you_sure'))) {
+        const body = this.refs.editor.getValue();
+
+        if (
+            !body ||
+            !body.trim() ||
+            (await DialogManager.confirm(tt('comment_editor.cancel_comment')))
+        ) {
             try {
                 localStorage.removeItem(DRAFT_KEY);
             } catch (err) {}

@@ -27,7 +27,6 @@
     "tag_your_story":"Tag (up to 5 tags), prva oznaka je vaša glavna kategorija.",
     "select_a_tag":"Obeleži tag",
     "maximum_tag_length_is_24_characters":"Maksimalna dužina oznaka je 24 znakova",
-    "use_limitied_amount_of_categories":"Molimo vas da koristite samo %(amount)s kategorija",
     "use_only_lowercase_letters":"Koristite samo mala slova",
     "use_one_dash":"Koristiti samo jedanu tačku",
     "use_spaces_to_separate_tags":"Koristite razmake za odvajanje tagova",

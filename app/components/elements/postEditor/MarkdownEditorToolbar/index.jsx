@@ -9,13 +9,10 @@ import LinkOptionsDialog from '../../../dialogs/LinkOptionsDialog';
 import plusSvg from 'app/assets/icons/editor-toolbar/plus.svg';
 import './index.scss';
 
-const GUIDE_URL =
-    'https://golos.io/ru--golos/@on0tole/osnovy-oformleniya-postov-na-golose-polnyi-kurs-po-rabote-s-markdown';
-
 const MAX_HEADING = 4;
 const TOOLBAR_OFFSET = 7;
-const TOOLBAR_WIDTH = 518;
-const TOOLBAR_COMMENT_WIDTH = 376;
+const TOOLBAR_WIDTH = 468;
+const TOOLBAR_COMMENT_WIDTH = 336;
 const MIN_TIP_OFFSET = 29;
 
 const PLUS_ACTIONS = [
@@ -149,11 +146,13 @@ export default class MarkdownEditorToolbar extends React.PureComponent {
             {
                 active: state.bold,
                 icon: 'bold',
+                tooltip: tt('editor_toolbar.bold'),
                 onClick: () => SM.toggleBold(editor),
             },
             {
                 active: state.italic,
                 icon: 'italic',
+                tooltip: tt('editor_toolbar.italic'),
                 onClick: () => SM.toggleItalic(editor),
             },
             commentMode
@@ -161,31 +160,37 @@ export default class MarkdownEditorToolbar extends React.PureComponent {
                 : {
                       active: state.heading,
                       icon: 'header',
+                      tooltip: tt('editor_toolbar.header'),
                       onClick: this._onHeadingClick,
                   },
             {
                 active: state.strikethrough,
                 icon: 'strike',
+                tooltip: tt('editor_toolbar.strikethrough'),
                 onClick: this._toggleStrikeThrough,
             },
             'SEPARATOR',
             {
                 icon: 'bullet-list',
+                tooltip: tt('editor_toolbar.unordered_list'),
                 onClick: () => SM.toggleUnorderedList(editor),
             },
             {
                 icon: 'number-list',
+                tooltip: tt('editor_toolbar.ordered_list'),
                 onClick: this._onToggleOrderedList,
             },
             'SEPARATOR',
             {
                 active: state.quote,
                 icon: 'quote',
+                tooltip: tt('editor_toolbar.quote'),
                 onClick: () => SM.toggleBlockquote(editor),
             },
             {
                 active: state.link,
                 icon: 'link',
+                tooltip: tt('editor_toolbar.add_link'),
                 onClick: this._draw,
             },
             {
@@ -198,7 +203,6 @@ export default class MarkdownEditorToolbar extends React.PureComponent {
                 tooltip: tt('editor_toolbar.add_video'),
                 onClick: this._drawVideo,
             },
-            'SEPARATOR',
         ];
 
         return (
@@ -232,13 +236,6 @@ export default class MarkdownEditorToolbar extends React.PureComponent {
                             />
                         )
                 )}
-                <a href={GUIDE_URL} target="_blank">
-                    <Icon
-                        className="MET__icon MET__icon_help"
-                        name="editor/info"
-                        data-tooltip={tt('editor_toolbar.markdown_help')}
-                    />
-                </a>
             </div>
         );
     }

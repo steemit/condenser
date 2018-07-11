@@ -1,26 +1,34 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import is from 'styled-is';
 
 import Flex from 'golos-ui/Flex';
 
-const Card = Flex.extend`
+const Card = styled(Flex).attrs({
+    column: true,
+})`
     position: relative;
-    display: flex;
-    flex-direction: column;
     flex-shrink: 0;
+    max-width: 100%;
 
     border-radius: 6px;
-    background-color: #ffffff;
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.06);
+    background-color: #ffffff;
 
     overflow: hidden;
+
+    ${is('transparent')`
+        background-color: transparent;
+    `} @media (max-width: 576px) {
+        border-radius: 0;
+        box-shadow: none;
+        background-color: transparent;
+    }
 `;
 export default Card;
 
-export const CardTitle = Flex.extend`
-    display: flex;
-    flex: 1;
+export const CardTitle = styled(Flex)`
     align-items: center;
 
     padding: 0 20px;
@@ -39,7 +47,39 @@ export const CardTitle = Flex.extend`
         border-top: 1px solid #e9e9e9;
     }
 `;
-CardTitle.propTypes = {};
-CardTitle.defaultProps = {
-    auto: true,
-};
+
+export const CardRow = styled(Flex).attrs({ auto: true })`
+    @media (max-width: 576px) {
+        flex-direction: column;
+    }
+`;
+
+export const CardColumn = styled(Flex).attrs({
+    column: true,
+})`
+    position: relative;
+    background-color: #ffffff;
+    flex: 1;
+
+    @media (min-width: 576px) {
+        &:not(:last-child) {
+            margin-right: -1px;
+
+            &::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                right: 0;
+                width: 1px;
+                background: #f3f3f3;
+                z-index: 1;
+            }
+        }
+    }
+
+    @media (max-width: 576px) {
+        box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.06);
+        margin-bottom: 10px;
+    }
+`;

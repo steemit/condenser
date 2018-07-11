@@ -18,7 +18,7 @@ import PostsList from 'app/components/cards/PostsList';
 import UserWallet from 'app/components/modules/UserWallet';
 import CurationRewards from 'app/components/modules/CurationRewards';
 import AuthorRewards from 'app/components/modules/AuthorRewards';
-import SettingsContainer from './SettingsContainer';
+import SettingsContent from './SettingsContent';
 
 import WalletSubMenu from 'app/components/elements/WalletSubMenu';
 import IllegalContentMessage from 'app/components/elements/IllegalContentMessage';
@@ -26,7 +26,7 @@ import UserList from 'app/components/elements/UserList';
 import UserKeys from 'app/components/elements/UserKeys';
 import PasswordReset from 'app/components/elements/PasswordReset';
 
-import Container from 'src/app/components/Container';
+import Container from 'src/app/components/common/Container';
 import UserHeader from 'src/app/components/userProfile/UserHeader';
 import UserNavigation from 'src/app/components/userProfile/UserNavigation';
 import UserCardAbout from 'src/app/components/userProfile/UserCardAbout';
@@ -250,7 +250,7 @@ export default class UserProfileContainer extends Component {
                 );
             }
         } else if (section === 'settings') {
-            tab_content = <SettingsContainer routeParams={routeParams} />;
+            tab_content = <SettingsContent routeParams={routeParams} />;
         } else if (section === 'comments') {
             if (account.comments) {
                 let posts =
@@ -385,25 +385,6 @@ export default class UserProfileContainer extends Component {
             tab_content = <div>{tt('g.blocked_user_content')}</div>;
         }
 
-        if (
-            !(
-                section === 'transfers' ||
-                section === 'permissions' ||
-                section === 'password' ||
-                //   section === 'invites' ||
-                section === 'assets' ||
-                section === 'create-asset'
-            )
-        ) {
-            tab_content = (
-                <div className="row">
-                    <div className="UserProfile__tab_content column">
-                        {tab_content}
-                    </div>
-                </div>
-            );
-        }
-
         return (
             <Fragment>
                 <UserHeader account={account} />
@@ -413,7 +394,7 @@ export default class UserProfileContainer extends Component {
                     section={section}
                 />
                 <Main>
-                    <Container align="flex-start">
+                    <Container align="flex-start" justify="center" small>
                         {section !== 'settings' && (
                             <UserCardAbout
                                 account={account}

@@ -17,7 +17,7 @@ const CardContent = styled.div`
     margin: 17px 20px;
 `;
 
-const CardContentCounters = CardContent.extend`
+const CardContentCounters = styled(CardContent)`
     margin: 0;
 `;
 

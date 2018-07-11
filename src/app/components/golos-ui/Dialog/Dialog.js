@@ -5,36 +5,48 @@ import is from 'styled-is';
 
 import Card from 'golos-ui/Card';
 
-const Wrapper = Card.extend`
-    min-width: 460px;
+export const Dialog = styled(Card)`
+    flex-basis: 576px;
     max-width: 100%;
 `;
+Dialog.displayName = 'Dialog';
 
-const DialogHeader = styled.div`
+export const DialogHeader = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+
     padding-top: 10px;
     height: 70px;
+
     font-size: 18px;
     font-weight: 500;
 `;
 
-const DialogContent = styled.div`
+export const DialogContent = styled.div`
     padding: 10px 30px 28px;
     line-height: 1.5em;
     color: #666;
 `;
 
-const DialogFooter = styled.div`
+export const DialogFooter = styled.div`
     display: flex;
     height: 50px;
+
     border-radius: 0 0 8px 8px;
     box-shadow: 0 0px 15px 0 rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+
     overflow: hidden;
+    z-index: 1;
+
+    @media (max-width: 576px) {
+        border-radius: 0;
+        box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.15);
+    }
 `;
 
-const DialogButton = styled.button`
+export const DialogButton = styled.button`
     position: relative;
     flex: 1;
 
@@ -78,9 +90,7 @@ const DialogButton = styled.button`
         &:focus {
           background: #ddebff;
         }
-    `} 
-    
-    ${is('warning')`
+    `} ${is('warning')`
         color: #ff4641;
 
         &:hover,
@@ -89,23 +99,6 @@ const DialogButton = styled.button`
         }
     `};
 `;
-
-const Dialog = () => {
-    return (
-        <Wrapper>
-            <DialogHeader>Header</DialogHeader>
-            <DialogContent>Content</DialogContent>
-            <DialogFooter>
-                <DialogButton>Cancel</DialogButton>
-                <DialogButton primary>OK</DialogButton>
-            </DialogFooter>
-        </Wrapper>
-    );
-};
-
-Dialog.propTypes = {};
-
-export default Dialog;
 
 // .Dialog {
 //   &__close {

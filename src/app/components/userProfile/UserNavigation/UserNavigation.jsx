@@ -11,7 +11,7 @@ import Icon from 'golos-ui/Icon';
 import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdown';
 import VerticalMenu from 'app/components/elements/VerticalMenu';
 
-import Container from 'src/app/components/Container';
+import Container from 'src/app/components/common/Container';
 
 const Wrapper = styled.div`
     position: relative;
@@ -31,14 +31,11 @@ const RightIcons = styled.div`
 const SettingsIcon = styled(Icon)``;
 
 const IconLink = styled(Link)`
-   display: flex;
+    display: flex;
+    color: #b7b7b9;
 
-   ${SettingsIcon} {
-       color: #b7b7b9;
-
-        &.${props => props.activeClassName}, &:hover {
-            color: #2879ff;
-        }
+    &.${props => props.activeClassName}, &:hover {
+        color: #2879ff;
     }
 `;
 IconLink.defaultProps = {

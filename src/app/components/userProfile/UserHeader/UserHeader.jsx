@@ -15,9 +15,9 @@ import Dropzone from 'react-dropzone';
 import StyledButton from 'golos-ui/Button';
 import Icon from 'golos-ui/Icon';
 import Flex from 'golos-ui/Flex';
-import StyledContainer from 'src/app/components/Container';
+import StyledContainer from 'src/app/components/common/Container';
 import UserProfileAvatar from './../UserProfileAvatar';
-import Follow from 'src/app/components/Follow';
+import Follow from 'src/app/components/common/Follow';
 
 // Styled Components
 const Wrapper = styled.div`
@@ -105,7 +105,7 @@ const Login = styled.div`
     }
 `;
 
-const Buttons = Flex.extend`
+const Buttons = styled(Flex)`
     margin-top: 24px;
 `;
 

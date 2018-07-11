@@ -8,9 +8,7 @@ import Icon from 'app/components/elements/Icon';
 import * as userActions from 'app/redux/UserReducer';
 import * as appActions from 'app/redux/AppReducer';
 import Userpic from 'app/components/elements/Userpic';
-import VerticalMenu from 'app/components/elements/VerticalMenu';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
-import NotifiCounter from 'app/components/elements/NotifiCounter';
 import { SIGNUP_URL } from 'shared/constants';
 
 const defaultNavigate = e => {
@@ -72,7 +70,6 @@ function TopRightMenu({
                 link: feed_link,
                 icon: 'home',
                 value: tt('g.feed'),
-                addon: <NotifiCounter fields="feed" />,
             },
             { link: account_link, icon: 'profile', value: tt('g.blog') },
             { link: comments_link, icon: 'replies', value: tt('g.comments') },
@@ -80,15 +77,11 @@ function TopRightMenu({
                 link: replies_link,
                 icon: 'reply',
                 value: tt('g.replies'),
-                addon: <NotifiCounter fields="comment_reply" />,
             },
             {
                 link: wallet_link,
                 icon: 'wallet',
                 value: tt('g.wallet'),
-                addon: (
-                    <NotifiCounter fields="follow,send,receive,account_update" />
-                ),
             },
             {
                 link: '#',
@@ -128,9 +121,6 @@ function TopRightMenu({
                             <span title={username}>
                                 <Userpic account={username} />
                             </span>
-                            <div className="TopRightMenu__notificounter">
-                                <NotifiCounter fields="total" />
-                            </div>
                         </li>
                     </DropdownMenu>
                 )}

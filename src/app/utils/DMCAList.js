@@ -125,6 +125,12 @@ export default `
 /nsfwsnapchat/@pornwhale/ana-lorde-fuck-meet
 /hentai/@doujinblog/cg180617tsrj227700-jlfb7lduze
 /hentai/@doujinblog/150718ver104rj150720-r72jgjf3s5
+/hentai/@doujinblog/180105rj217786-ok9aaxz9sx
+/hentai/@doujinblog/180413nycslandwindowsver20rj222471-63ac4wfzfp
+/hentai/@doujinblog/180520--rj222308-cwmlzud01n
+/hentai/@doujinblog/180123mariaalchemistrj211306-84eznl4fov
+/hentai/@doujinblog/180531ver101rj219149-11xw01depj
+/hentai/@doujinblog/161116hver102rj188697-vrew3n9j1z
 /news/@monaalexis27/sandy-hook-michael-vabner-website-shows-noah-pozner-all-grown-up-mirrored
 /news/@monaalexis27/sandy-hook-not-only-is-noah-pozner-a-fiction-but-his-father-lenny-is-also-a-fake-mirrored
 /politics/@barrysoetoro/neil-heslin-is-dead-9-11-fireman

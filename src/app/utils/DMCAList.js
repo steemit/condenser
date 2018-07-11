@@ -137,6 +137,7 @@ export default `
 /travel/@mounirzaza07/tourism-in-the-comoros-a-beautiful-bride-and-rare-fragrances-and-wild-flowers
 /sexy/@phoxinus/thais-assuno
 /sanju/@kallu213/sanju-2018-full-movie-download-in-720p-hd-in-dvdrip-mp4-hindi
+/shutterstock/@jorawar/download-shutterstock-images-for-free-without-watermark-2017820t224832z
 `
     .trim()
     .split('\n');

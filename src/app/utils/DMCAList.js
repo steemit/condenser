@@ -130,6 +130,7 @@ export default `
 /politics/@barrysoetoro/neil-heslin-is-dead-9-11-fireman
 /travel/@mounirzaza07/tourism-in-the-comoros-a-beautiful-bride-and-rare-fragrances-and-wild-flowers
 /sexy/@phoxinus/thais-assuno
+/sanju/@kallu213/sanju-2018-full-movie-download-in-720p-hd-in-dvdrip-mp4-hindi
 `
     .trim()
     .split('\n');

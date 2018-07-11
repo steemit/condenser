@@ -39,32 +39,4 @@
   &__filler {
     flex-grow: 1;
   }
-
-  &__eye {
-    display: block;
-    width: 40px;
-    height: 40px;
-    margin-top: -2px;
-    border-radius: 50%;
-    line-height: 38px;
-    text-align: center;
-    cursor: pointer;
-    color: #000;
-    transition: color 0.1s;
-    box-shadow: 0 0 12px 0 rgba(0,0,0, 0.2);
-
-    &_active, &:hover {
-      color: #0078c4;
-    }
-  }
-
-  &__eye-icon {
-    width: 24px;
-    height: 24px;
-
-    & > svg {
-      width: 24px;
-      height: 24px;
-    }
-  }
 }

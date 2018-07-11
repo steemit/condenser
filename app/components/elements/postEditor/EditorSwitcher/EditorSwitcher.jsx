@@ -1,21 +1,17 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
-import tt from 'counterpart';
-import Icon from 'app/components/elements/Icon';
 import './EditorSwitcher.scss';
 
-export default class EditorSwitcher extends React.Component {
+export default class EditorSwitcher extends PureComponent {
     static propTypes = {
         items: PropTypes.array.isRequired,
-        isPreview: PropTypes.bool.isRequired,
         activeId: PropTypes.number,
         onChange: PropTypes.func.isRequired,
-        onPreviewChange: PropTypes.func.isRequired,
     };
 
     render() {
-        const { items, activeId, isPreview } = this.props;
+        const { items, activeId } = this.props;
 
         return (
             <div className="EditorSwitcher">
@@ -35,23 +31,7 @@ export default class EditorSwitcher extends React.Component {
                     </div>
                 ))}
                 <i className="EditorSwitcher__filler" />
-                <i
-                    className={cn('EditorSwitcher__eye', {
-                        EditorSwitcher__eye_active: isPreview,
-                    })}
-                    onClick={this._onPreviewClick}
-                >
-                    <Icon
-                        name="editor/eye"
-                        className="EditorSwitcher__eye-icon"
-                        data-tooltip={isPreview ? tt('post_editor.edit_mode') : tt('post_editor.preview_mode')}
-                    />
-                </i>
             </div>
         );
     }
-
-    _onPreviewClick = () => {
-        this.props.onPreviewChange(!this.props.isPreview);
-    };
 }

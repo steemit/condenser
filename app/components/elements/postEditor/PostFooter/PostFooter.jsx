@@ -100,7 +100,7 @@ export default class PostFooter extends PureComponent {
                             {postDisabled && disabledHint ? (
                                 <Hint
                                     key="1"
-                                    error
+                                    warning
                                     align="right"
                                     className="PostFooter__disabled-hint"
                                 >

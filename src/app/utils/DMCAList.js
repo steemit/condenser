@@ -129,6 +129,7 @@ export default `
 /news/@monaalexis27/sandy-hook-not-only-is-noah-pozner-a-fiction-but-his-father-lenny-is-also-a-fake-mirrored
 /politics/@barrysoetoro/neil-heslin-is-dead-9-11-fireman
 /travel/@mounirzaza07/tourism-in-the-comoros-a-beautiful-bride-and-rare-fragrances-and-wild-flowers
+/sexy/@phoxinus/thais-assuno
 `
     .trim()
     .split('\n');

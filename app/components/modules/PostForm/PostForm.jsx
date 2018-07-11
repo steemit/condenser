@@ -54,6 +54,7 @@ export const PAYOUT_OPTIONS = [
     {
         id: PAYOUT_TYPES.PAY_0,
         title: 'post_editor.payout_option_0',
+        hint: 'post_editor.payout_option_0_hint',
     },
 ];
 

@@ -34,7 +34,9 @@ export default class MarkdownEditor extends PureComponent {
     constructor(props) {
         super(props);
 
-        this._processTextLazy = throttle(this._processText, 100, { leading: false });
+        this._processTextLazy = throttle(this._processText, 100, {
+            leading: false,
+        });
         this._onCursorActivityLazy = debounce(this._onCursorActivity, 50);
     }
 
@@ -48,7 +50,10 @@ export default class MarkdownEditor extends PureComponent {
             const timeDelta = DELAYED_TIMEOUT - (Date.now() - INIT_TIMESSTAMP);
 
             if (timeDelta > 0) {
-                this._delayedTimeout = setTimeout(() => this._init(), timeDelta);
+                this._delayedTimeout = setTimeout(
+                    () => this._init(),
+                    timeDelta
+                );
                 return;
             }
         }
@@ -80,6 +85,7 @@ export default class MarkdownEditor extends PureComponent {
 
         this._cm = this._simplemde.codemirror;
         this._cm.on('change', this._onChange);
+        this._cm.on('paste', this._onPaste);
 
         if (props.scrollContainer) {
             this._cm.on('cursorActivity', this._onCursorActivityLazy);
@@ -107,6 +113,7 @@ export default class MarkdownEditor extends PureComponent {
         this._onCursorActivityLazy.cancel();
 
         this._cm.off('change', this._onChange);
+        this._cm.off('paste', this._onPaste);
         this._cm.off('cursorActivity', this._onCursorActivityLazy);
         this._cm = null;
         this._simplemde = null;
@@ -136,7 +143,10 @@ export default class MarkdownEditor extends PureComponent {
                             SM={SimpleMDE}
                         />
                     ) : null}
-                    <textarea ref="textarea" className="MarkdownEditor__textarea" />
+                    <textarea
+                        ref="textarea"
+                        className="MarkdownEditor__textarea"
+                    />
                 </Dropzone>
             </div>
         );
@@ -343,6 +353,40 @@ export default class MarkdownEditor extends PureComponent {
         img.src = $STM_Config.img_proxy_prefix + '0x0/' + url;
     }
 
+    _onPaste = (cm, e) => {
+        try {
+            if (e.clipboardData) {
+                let fileName = null;
+
+                for (let item of e.clipboardData.items) {
+                    if (item.kind === 'string') {
+                        try {
+                            fileName = item.getAsString(a => (fileName = a));
+                        } catch (err) {}
+                    }
+
+                    if (item.kind === 'file' && item.type.startsWith('image')) {
+                        e.preventDefault();
+
+                        const file = item.getAsFile();
+
+                        this.props.uploadImage(file, progress => {
+                            if (progress.url) {
+                                const imageUrl = `![${fileName || file.name}](${
+                                    progress.url
+                                })`;
+
+                                this._cm.replaceSelection(imageUrl);
+                            }
+                        });
+                    }
+                }
+            }
+        } catch (err) {
+            console.warn('Error analyzing clipboard event', err);
+        }
+    };
+
     // _tryToFixCursorPosition() {
     //     // Hack: Need some action for fix cursor position
     //     if (this.props.initialValue) {
@@ -361,7 +405,10 @@ export default class MarkdownEditor extends PureComponent {
         if (scrollContainer) {
             const cursorPos = this._cm.cursorCoords();
 
-            if (cursorPos.top + LINE_HEIGHT + 4 > scrollContainer.offsetTop + scrollContainer.offsetHeight) {
+            if (
+                cursorPos.top + LINE_HEIGHT + 4 >
+                scrollContainer.offsetTop + scrollContainer.offsetHeight
+            ) {
                 scrollContainer.scrollTop += LINE_HEIGHT;
             }
         }

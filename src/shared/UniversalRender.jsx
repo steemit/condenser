@@ -192,17 +192,7 @@ class OffsetScrollBehavior extends ScrollBehavior {
 }
 //END: SCROLL CODE
 
-/*
-if (process.env.BROWSER && process.env.NODE_ENV === 'development') {
-    const composeEnhancers =
-        window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose; // eslint-disable-line no-underscore-dangle
-    middleware = composeEnhancers(applyMiddleware(sagaMiddleware));
-} else {
-    middleware = applyMiddleware(sagaMiddleware);
-}
-*/
 const bindMiddleware = middleware => {
-    debugger;
     if (process.env.BROWSER && process.env.NODE_ENV === 'development') {
         const { composeWithDevTools } = require('redux-devtools-extension');
         return composeWithDevTools(applyMiddleware(...middleware));

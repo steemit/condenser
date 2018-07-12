@@ -102,7 +102,6 @@ function* removeHighSecurityKeys({ payload: { pathname } }) {
         key_types: active, owner, posting keys.
 */
 function* usernamePasswordLogin(action) {
-    debugger;
     // Sets 'loading' while the login is taking place.  The key generation can take a while on slow computers.
     yield call(usernamePasswordLogin2, action.payload);
     const current = yield select(state => state.user.get('current'));

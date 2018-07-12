@@ -132,7 +132,7 @@ export function updateFavoriteTags(tags) {
 export function reveseTag(tag) {
     if (isCyrillicTag(tag)) {
         return processCyrillicTag(tag)
-    } else if (starstWithRU(tag)){
+    } else if (startsWithRU(tag)){
         return detransliterate(tag)
     }
 }
@@ -143,7 +143,7 @@ export function prepareTrendingTags(tags) {
         .slice(0, 50)
         .map(t => {
             t_tags.add(
-                starstWithRU(t.name)
+                startsWithRU(t.name)
                     ? detransliterate(t.name)
                     : t.name
             )

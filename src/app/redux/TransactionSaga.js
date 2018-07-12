@@ -1,5 +1,4 @@
-import { takeEvery } from 'redux-saga';
-import { call, put, select, all } from 'redux-saga/effects';
+import { call, put, select, all, takeEvery } from 'redux-saga/effects';
 import { fromJS, Set, Map } from 'immutable';
 import tt from 'counterpart';
 import getSlug from 'speakingurl';

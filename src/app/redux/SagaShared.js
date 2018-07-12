@@ -1,6 +1,5 @@
 import { fromJS } from 'immutable';
-import { call, put, select } from 'redux-saga/effects';
-import { takeEvery, takeLatest } from 'redux-saga';
+import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 import tt from 'counterpart';
 import { api } from '@steemit/steem-js';
 import * as globalActions from './GlobalReducer';

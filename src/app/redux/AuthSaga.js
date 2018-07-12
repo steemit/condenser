@@ -1,5 +1,4 @@
-import { takeEvery } from 'redux-saga';
-import { call, put, select } from 'redux-saga/effects';
+import { call, put, select, takeEvery } from 'redux-saga/effects';
 import { Set, Map, fromJS, List } from 'immutable';
 import { api } from '@steemit/steem-js';
 import { PrivateKey } from '@steemit/steem-js/lib/auth/ecc';

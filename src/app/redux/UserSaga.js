@@ -1,6 +1,5 @@
 import { fromJS, Set, List } from 'immutable';
-import { takeLatest } from 'redux-saga';
-import { call, put, select, fork } from 'redux-saga/effects';
+import { call, put, select, fork, takeLatest } from 'redux-saga/effects';
 import { api } from '@steemit/steem-js';
 import { PrivateKey, Signature, hash } from '@steemit/steem-js/lib/auth/ecc';
 

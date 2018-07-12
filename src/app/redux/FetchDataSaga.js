@@ -1,5 +1,11 @@
-import { takeLatest, takeEvery } from 'redux-saga';
-import { call, put, select, fork } from 'redux-saga/effects';
+import {
+    call,
+    put,
+    select,
+    fork,
+    takeLatest,
+    takeEvery,
+} from 'redux-saga/effects';
 import { loadFollows, fetchFollowCount } from 'app/redux/FollowSaga';
 import { getContent } from 'app/redux/SagaShared';
 import * as globalActions from './GlobalReducer';

@@ -3,6 +3,7 @@ import {loadFollows, fetchFollowCount} from 'app/redux/FollowSaga';
 import {getContent} from 'app/redux/SagaShared';
 import GlobalReducer from './GlobalReducer';
 import constants from './constants';
+import { reveseTag } from 'app/utils/tags';
 import { DEBT_TOKEN_SHORT, LIQUID_TICKER, DEFAULT_CURRENCY, IGNORE_TAGS, PUBLIC_API, SELECT_TAGS_KEY } from 'app/client_config';
 import cookie from "react-cookie";
 import {api} from 'golos-js';
@@ -261,7 +262,10 @@ export function* fetchData(action) {
         }
     ];
     if (category.length) {
-        args[0].select_tags = [category];
+        const reversed = reveseTag(category)
+        reversed
+            ? args[0].select_tags = [ category, reversed ]
+            : args[0].select_tags = [ category ]
     } else {
         let select_tags = cookie.load(SELECT_TAGS_KEY);
         if (select_tags && select_tags.length) {

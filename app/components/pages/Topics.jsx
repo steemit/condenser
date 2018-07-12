@@ -117,25 +117,23 @@ export default class Topics extends React.Component {
             return <select className={cn} onChange={(e) => browserHistory.push(e.target.value)} value={currentValue}>
                 <option key={'*'} value={'/' + order}>{tt('g.topics')}...</option>
                 {categories.map(cat => {
-                    const translitCat = /[а-яёґєії]/.test(cat) ? 'ru--' + detransliterate(cat.toLowerCase(), true) : cat
-                    const link = order ? `/${order}/${translitCat}` : `/${translitCat}`;
-                    return <option key={cat} value={link}>{detransliterate(cat)}</option>
+                    const link = order ? `/${order}/${cat}` : `/hot/${cat}`;
+                    return <option key={cat} value={link}>{cat}</option>
                 })}
             </select>;
         }
 
         if (IGNORE_TAGS) {
-            const ignoreTags = [...IGNORE_TAGS, 'lesnik-случайнаявст'];
-            categories = categories.filter(val => ignoreTags.indexOf(val) === -1).filter(val => !val.endsWith('камынежде'));
+            const ignoreTags = [...IGNORE_TAGS];
+            categories = categories.filter(val => ignoreTags.indexOf(val) === -1);
         }
         
         categories = categories.map(cat => {
-            const translitCat = /[а-яёґєії]/.test(cat) ? 'ru--' + detransliterate(cat.toLowerCase(), true) : cat
-            const link = order ? `/${order}/${translitCat}` : `/${translitCat}`;
+            const link = order ? `/${order}/${cat}` : `/hot/${cat}`;
             isSelected = selected.indexOf(cat) !== -1
             return <li key={cat} className={isSelected ? 'Topics__selected__remove' : 'Topics__selected__add'}>
                         <a className="action" onClick={() => onSelectTag(cat)}>{isSelected ? '×' : '+'}</a>
-                        <Link to={link} className="tagname" activeClassName="active" title={detransliterate(cat)}>{detransliterate(cat)}</Link>
+                        <Link to={link} className="tagname" activeClassName="active" title={cat}>{cat}</Link>
                     </li>;
         });
         return (

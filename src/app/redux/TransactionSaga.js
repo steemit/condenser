@@ -18,27 +18,11 @@ import { DEBT_TICKER } from 'app/client_config';
 import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 
 export const transactionWatches = [
-    watchForBroadcast,
-    watchForUpdateAuthorities,
-    watchForUpdateMeta,
-    watchForRecoverAccount,
+    takeEvery(transactionActions.BROADCAST_OPERATION, broadcastOperation),
+    takeEvery(transactionActions.UPDATE_AUTHORITIES, updateAuthorities),
+    takeEvery(transactionActions.UPDATE_META, updateMeta),
+    takeEvery(transactionActions.RECOVER_ACCOUNT, recoverAccount),
 ];
-
-export function* watchForBroadcast() {
-    yield* takeEvery(
-        transactionActions.BROADCAST_OPERATION,
-        broadcastOperation
-    );
-}
-export function* watchForUpdateAuthorities() {
-    yield* takeEvery(transactionActions.UPDATE_AUTHORITIES, updateAuthorities);
-}
-export function* watchForUpdateMeta() {
-    yield* takeEvery(transactionActions.UPDATE_META, updateMeta);
-}
-export function* watchForRecoverAccount() {
-    yield* takeEvery(transactionActions.RECOVER_ACCOUNT, recoverAccount);
-}
 
 const hook = {
     preBroadcast_comment,

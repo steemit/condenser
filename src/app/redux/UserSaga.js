@@ -21,17 +21,34 @@ import { translate } from 'app/Translator';
 import DMCAUserList from 'app/utils/DMCAUserList';
 
 export const userWatches = [
-    watchRemoveHighSecurityKeys, // keep first to remove keys early when a page change happens
-    loginWatch,
-    saveLoginWatch,
-    logoutWatch,
-    // getCurrentAccountWatch,
-    loginErrorWatch,
-    lookupPreviousOwnerAuthorityWatch,
-    watchLoadSavingsWithdraw,
-    uploadImageWatch,
-    acceptTosWatch,
-    getLatestFeedPrice,
+    takeLatest('@@router/LOCATION_CHANGE', removeHighSecurityKeys), // keep first to remove keys early when a page change happens
+    takeLatest(
+        'user/lookupPreviousOwnerAuthority',
+        lookupPreviousOwnerAuthority
+    ),
+    takeLatest(userActions.USERNAME_PASSWORD_LOGIN, usernamePasswordLogin),
+    takeLatest(userActions.SAVE_LOGIN, saveLogin_localStorage),
+    takeLatest(userActions.LOGOUT, logout),
+    takeLatest(userActions.LOGIN_ERROR, loginError),
+    takeLatest(userActions.LOAD_SAVINGS_WITHDRAW, loadSavingsWithdraw),
+    function* getLatestFeedPrice() {
+        try {
+            const history = yield call([api, api.getFeedHistoryAsync]);
+            const feed = history['price_history'];
+            const last = fromJS(feed[feed.length - 1]);
+            yield put(userActions.setLatestFeedPrice(last));
+        } catch (error) {
+            // (exceedingly rare) ignore, UI will fall back to feed_price
+        }
+    },
+    takeLatest(userActions.ACCEPT_TERMS, function*() {
+        try {
+            yield call(acceptTos);
+        } catch (e) {
+            // TODO: log error to server, conveyor is unavailable
+        }
+    }),
+    takeLatest(userActions.UPLOAD_IMAGE, uploadImage),
 ];
 
 const highSecurityPages = [
@@ -39,48 +56,6 @@ const highSecurityPages = [
     /\/@.+\/(transfers|permissions|password)/,
     /\/~witnesses/,
 ];
-
-function* lookupPreviousOwnerAuthorityWatch() {
-    yield* takeLatest(
-        'user/lookupPreviousOwnerAuthority',
-        lookupPreviousOwnerAuthority
-    );
-}
-function* loginWatch() {
-    yield* takeLatest(
-        userActions.USERNAME_PASSWORD_LOGIN,
-        usernamePasswordLogin
-    );
-}
-function* saveLoginWatch() {
-    yield* takeLatest(userActions.SAVE_LOGIN, saveLogin_localStorage);
-}
-function* logoutWatch() {
-    yield* takeLatest(userActions.LOGOUT, logout);
-}
-
-function* loginErrorWatch() {
-    yield* takeLatest(userActions.LOGIN_ERROR, loginError);
-}
-
-function* watchLoadSavingsWithdraw() {
-    yield* takeLatest(userActions.LOAD_SAVINGS_WITHDRAW, loadSavingsWithdraw);
-}
-
-export function* watchRemoveHighSecurityKeys() {
-    yield* takeLatest('@@router/LOCATION_CHANGE', removeHighSecurityKeys);
-}
-
-function* getLatestFeedPrice() {
-    try {
-        const history = yield call([api, api.getFeedHistoryAsync]);
-        const feed = history['price_history'];
-        const last = fromJS(feed[feed.length - 1]);
-        yield put(userActions.setLatestFeedPrice(last));
-    } catch (error) {
-        // (exceedingly rare) ignore, UI will fall back to feed_price
-    }
-}
 
 function* loadSavingsWithdraw() {
     const username = yield select(state =>
@@ -417,16 +392,6 @@ function* promptTosAcceptance(username) {
     }
 }
 
-function* acceptTosWatch() {
-    yield* takeLatest(userActions.ACCEPT_TERMS, function*() {
-        try {
-            yield call(acceptTos);
-        } catch (e) {
-            // TODO: log error to server, conveyor is unavailable
-        }
-    });
-}
-
 function* getFeatureFlags(username, posting_private) {
     try {
         const flags = yield call(
@@ -556,10 +521,6 @@ function* lookupPreviousOwnerAuthority({ payload: {} }) {
     }
     // console.log('UserSage ---> previous_owner_authority', previous_owner_authority.toJS())
     yield put(userActions.setUser({ previous_owner_authority }));
-}
-
-function* uploadImageWatch() {
-    yield* takeLatest(userActions.UPLOAD_IMAGE, uploadImage);
 }
 
 function* uploadImage({

@@ -14,11 +14,9 @@ const postingOps = Set(
         .split(/,\s*/)
 );
 
-export const authWatches = [watchForAuth];
-
-function* watchForAuth() {
-    yield* takeEvery('user/ACCOUNT_AUTH_LOOKUP', accountAuthLookup);
-}
+export const authWatches = [
+    takeEvery('user/ACCOUNT_AUTH_LOOKUP', accountAuthLookup),
+];
 
 export function* accountAuthLookup({
     payload: { account, private_keys, login_owner_pubkey },

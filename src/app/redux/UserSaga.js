@@ -31,6 +31,14 @@ export const userWatches = [
     takeLatest(userActions.LOGOUT, logout),
     takeLatest(userActions.LOGIN_ERROR, loginError),
     takeLatest(userActions.LOAD_SAVINGS_WITHDRAW, loadSavingsWithdraw),
+    takeLatest(userActions.UPLOAD_IMAGE, uploadImage),
+    takeLatest(userActions.ACCEPT_TERMS, function*() {
+        try {
+            yield call(acceptTos);
+        } catch (e) {
+            // TODO: log error to server, conveyor is unavailable
+        }
+    }),
     function* getLatestFeedPrice() {
         try {
             const history = yield call([api, api.getFeedHistoryAsync]);
@@ -41,14 +49,6 @@ export const userWatches = [
             // (exceedingly rare) ignore, UI will fall back to feed_price
         }
     },
-    takeLatest(userActions.ACCEPT_TERMS, function*() {
-        try {
-            yield call(acceptTos);
-        } catch (e) {
-            // TODO: log error to server, conveyor is unavailable
-        }
-    }),
-    takeLatest(userActions.UPLOAD_IMAGE, uploadImage),
 ];
 
 const highSecurityPages = [
@@ -102,6 +102,7 @@ function* removeHighSecurityKeys({ payload: { pathname } }) {
         key_types: active, owner, posting keys.
 */
 function* usernamePasswordLogin(action) {
+    debugger;
     // Sets 'loading' while the login is taking place.  The key generation can take a while on slow computers.
     yield call(usernamePasswordLogin2, action.payload);
     const current = yield select(state => state.user.get('current'));

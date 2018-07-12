@@ -18,14 +18,10 @@ import * as appActions from 'app/redux/AppReducer';
 import { createStore, applyMiddleware, compose } from 'redux';
 import { useScroll } from 'react-router-scroll';
 import createSagaMiddleware from 'redux-saga';
+import { all } from 'redux-saga/effects';
 import { syncHistoryWithStore } from 'react-router-redux';
 import rootReducer from 'app/redux/RootReducer';
-import { fetchDataWatches } from 'app/redux/FetchDataSaga';
-import { marketWatches } from 'app/redux/MarketSaga';
-import { sharedWatches } from 'app/redux/SagaShared';
-import { userWatches } from 'app/redux/UserSaga';
-import { authWatches } from 'app/redux/AuthSaga';
-import { transactionWatches } from 'app/redux/TransactionSaga';
+import rootSaga from 'shared/RootSaga';
 import { component as NotFound } from 'app/components/pages/NotFound';
 import extractMeta from 'app/utils/ExtractMeta';
 import Translator from 'app/Translator';
@@ -196,17 +192,7 @@ class OffsetScrollBehavior extends ScrollBehavior {
 }
 //END: SCROLL CODE
 
-const sagaMiddleware = createSagaMiddleware(
-    ...userWatches, // keep first to remove keys early when a page change happens
-    ...fetchDataWatches,
-    ...sharedWatches,
-    ...authWatches,
-    ...transactionWatches,
-    ...marketWatches
-);
-
-let middleware;
-
+/*
 if (process.env.BROWSER && process.env.NODE_ENV === 'development') {
     const composeEnhancers =
         window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose; // eslint-disable-line no-underscore-dangle
@@ -214,6 +200,15 @@ if (process.env.BROWSER && process.env.NODE_ENV === 'development') {
 } else {
     middleware = applyMiddleware(sagaMiddleware);
 }
+*/
+const bindMiddleware = middleware => {
+    debugger;
+    if (process.env.BROWSER && process.env.NODE_ENV === 'development') {
+        const { composeWithDevTools } = require('redux-devtools-extension');
+        return composeWithDevTools(applyMiddleware(...middleware));
+    }
+    return applyMiddleware(...middleware);
+};
 
 const runRouter = (location, routes) => {
     return new Promise(resolve =>
@@ -391,7 +386,6 @@ export async function serverRender(
 
 /**
  * dependencies:
- * middleware
  * browserHistory
  * useScroll
  * OffsetScrollBehavior
@@ -400,8 +394,13 @@ export async function serverRender(
  * @param {*} initialState
  */
 export function clientRender(initialState) {
-    const store = createStore(rootReducer, initialState, middleware);
-
+    const sagaMiddleware = createSagaMiddleware();
+    const store = createStore(
+        rootReducer,
+        initialState,
+        bindMiddleware([sagaMiddleware])
+    );
+    sagaMiddleware.run(rootSaga);
     const history = syncHistoryWithStore(browserHistory, store);
 
     /**

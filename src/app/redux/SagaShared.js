@@ -14,9 +14,16 @@ const wait = ms =>
     });
 
 export const sharedWatches = [
-    watchGetState,
-    watchTransactionErrors,
-    watchUserSettingsUpdates,
+    takeEvery(globalActions.GET_STATE, getState),
+    takeLatest(
+        [
+            appActions.SET_USER_PREFERENCES,
+            appActions.TOGGLE_NIGHTMODE,
+            appActions.TOGGLE_BLOGMODE,
+        ],
+        saveUserPreferences
+    ),
+    takeEvery('transaction/ERROR', showTransactionErrorNotification),
 ];
 
 export function* getAccount(username, force = false) {
@@ -33,9 +40,6 @@ export function* getAccount(username, force = false) {
     return account;
 }
 
-export function* watchGetState() {
-    yield* takeEvery(globalActions.GET_STATE, getState);
-}
 /** Manual refreshes.  The router is in FetchDataSaga. */
 export function* getState({ payload: { url } }) {
     try {
@@ -45,10 +49,6 @@ export function* getState({ payload: { url } }) {
         console.error('~~ Saga getState error ~~>', url, error);
         yield put(appActions.steemApiError(error.message));
     }
-}
-
-export function* watchTransactionErrors() {
-    yield* takeEvery('transaction/ERROR', showTransactionErrorNotification);
 }
 
 function* showTransactionErrorNotification() {
@@ -93,15 +93,4 @@ function* saveUserPreferences({ payload }) {
 
     const prefs = yield select(state => state.app.get('user_preferences'));
     yield setUserPreferences(prefs.toJS());
-}
-
-function* watchUserSettingsUpdates() {
-    yield* takeLatest(
-        [
-            appActions.SET_USER_PREFERENCES,
-            appActions.TOGGLE_NIGHTMODE,
-            appActions.TOGGLE_BLOGMODE,
-        ],
-        saveUserPreferences
-    );
 }

@@ -1,4 +1,4 @@
-import { takeLatest } from 'redux-saga';
+import { takeLatest } from 'redux-saga/effects';
 import { call, put } from 'redux-saga/effects';
 import { api } from '@steemit/steem-js';
 

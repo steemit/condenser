@@ -25,7 +25,7 @@ Below that is a list of recommended users to follow, a collection of other resou
 ### Quick Start Guide
 
 - <a href="#Free_to_Participate">Free to Participate</a>
-- <a href="#Upvotes">Upvotes</a>
+- <a href="#Votes">Votes</a>
 - <a href="#Comments">Comments</a>
 - <a href="#Creating_Posts">Creating Posts</a>
 - <a href="#Followers_and_Feeds">Followers and Feeds</a>
@@ -52,9 +52,9 @@ Below that is a list of recommended users to follow, a collection of other resou
 
 Unlike centralized web services, **it is not possible to recover lost passwords on the Steem blockchain**.
 
-You are entirely responsible for generating your password, saving it and keeping it secure.
+You are entirely responsible for saving your password, saving it and keeping it secure.
 
-It is strongly recommended that you store an offline copy of your password somewhere safe in case of a hard drive failure or other calamity. Consider digital offline storage, secure private cloud-based storage, as well as printed paper. Use multiple methods of storage for best redundancy. 
+It is strongly recommended that you store an offline copy of your password somewhere safe in case of a hard drive failure or other calamity. Consider digital offline storage (such as a flash drive or burned CD), secure private cloud-based storage, as well as printed paper. Use multiple methods of storage for best redundancy. 
 
 If your account is valuable, value it!
 
@@ -126,9 +126,9 @@ The <a href="#Other_Resources">Other Resources</a> section of this Welcome page 
 It is free to post, comment, or vote on all content on Steemit.com. You might even get paid for it!
 
 <a href="#Table_of_Contents">^</a>
-### <span id="Upvotes">Votes</span>
+### <span id="Votes">Votes</span>
 
-Upvotes are Steemit's way of saying you like someone's post or comment.
+Votes are Steemit's way of saying you like someone's post or comment.
 
 To upvote, click on the <Icon name="chevron-up-circle" /> *Upvote* icon at the bottom of the post/comment.
 
@@ -184,7 +184,7 @@ More information on the three types of tokens can be found in the [Steemit FAQ](
 
 Up to 25% of the reward for each post goes to the people who voted on it. These people are called Curators.
 
-The more Steem Power you have in your account, the more your upvotes will be worth, and the more potential curation rewards you can earn!
+The more Steem Power you have in your account, the more your votes will be worth, and the more potential curation rewards you can earn!
 
 <a href="#Table_of_Contents">^</a>
 ### <span id="Payments">Payments</span>
@@ -204,11 +204,11 @@ Authors also have the option to decline payout, or be paid in 100% Steem Power!
 
 A reputation score is one way that Steemit measures the amount of value you have brought to the community.
 
-The higher the reputation, the more upvotes the account received.
+The higher the reputation, the more votes the account received.
 
 All new users start at 25.
 
-Your reputation will go up as you earn upvotes for your posts and comments, but it can come down if they are downvoted (flagged).
+Your reputation will go up as you earn votes for your posts and comments, but it can come down if they are downvoted (flagged).
 
 <a href="#Table_of_Contents">^</a>
 ### <span id="Cashing_out_or_Spending_SBD">Cashing out or Spending SBD</span>
@@ -289,7 +289,7 @@ Don't get discouraged if you don't earn much at first. Keep up the good work!
 ## <span id="Users_to_Follow">Users to Follow</span>
 
 - @steemitblog - Official Steemit Announcements
-- @ned - Ned Scott, CEO and Co-Founder of Steemit, Inc
+- @ned - Ned Scott, CEO and Co-Founder of Steemit, Inc.
 
 <a href="#Table_of_Contents">^</a>
 ## <span id="Other_Resources">Other Resources</span>

@@ -1,5 +1,4 @@
-import { takeLatest } from 'redux-saga/effects';
-import { call, put } from 'redux-saga/effects';
+import { call, put, takeLatest } from 'redux-saga/effects';
 import { api } from '@steemit/steem-js';
 
 import * as marketActions from './MarketReducer';

@@ -110,7 +110,11 @@ class Voting extends React.Component {
                 weight !== 0
             ) {
                 const saved_weight = localStorage.getItem(
-                    'voteWeight' + (up ? '' : 'Down') + '-' + username
+                    'voteWeight' +
+                        (up ? '' : 'Down') +
+                        '-' +
+                        username +
+                        (is_comment ? '-comment' : '')
                 );
                 const castToNegative = up ? 1 : -1;
                 weight = Number(saved_weight) * castToNegative;
@@ -141,23 +145,38 @@ class Voting extends React.Component {
         };
 
         this.storeSliderWeight = up => () => {
-            const { username } = this.props;
+            const { username, is_comment } = this.props;
             const weight = up
                 ? this.state.sliderWeight.up
                 : this.state.sliderWeight.down;
             localStorage.setItem(
-                'voteWeight' + (up ? '' : 'Down') + '-' + username,
+                'voteWeight' +
+                    (up ? '' : 'Down') +
+                    '-' +
+                    username +
+                    (is_comment ? '-comment' : ''),
                 weight
             );
         };
         this.syncSliderWeight = () => {
-            const { username, net_vesting_shares } = this.props;
+            const { username, net_vesting_shares, is_comment } = this.props;
             if (net_vesting_shares > VOTE_WEIGHT_DROPDOWN_THRESHOLD) {
                 const sliderWeightUp = Number(
-                    localStorage.getItem('voteWeight' + '-' + username)
+                    localStorage.getItem(
+                        'voteWeight' +
+                            '-' +
+                            username +
+                            (is_comment ? '-comment' : '')
+                    )
                 );
                 const sliderWeightDown = Number(
-                    localStorage.getItem('voteWeight' + 'Down' + '-' + username)
+                    localStorage.getItem(
+                        'voteWeight' +
+                            'Down' +
+                            '-' +
+                            username +
+                            (is_comment ? '-comment' : '')
+                    )
                 );
                 const up = sliderWeightUp ? sliderWeightUp : 10000;
                 const down = sliderWeightDown ? sliderWeightDown : 10000;

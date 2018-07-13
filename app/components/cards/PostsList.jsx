@@ -105,11 +105,10 @@ class PostsList extends PureComponent {
     }
 
     onBackButton = e => {
-        if (!e.keyCode || e.keyCode === KEYS.ESCAPE) {
-            window.removeEventListener('popstate', this.onBackButton);
-            window.removeEventListener('keydown', this.onBackButton);
-            this.closePostModal();
-        }
+        if ('keyCode' in e && e.keyCode !== KEYS.ESCAPE) return;
+        window.removeEventListener('popstate', this.onBackButton);
+        window.removeEventListener('keydown', this.onBackButton);
+        this.closePostModal();
     };
 
     closeOnOutsideClick = e => {

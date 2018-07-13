@@ -164,7 +164,7 @@ function* error_account_witness_vote({
 }
 
 /** Keys, username, and password are not needed for the initial call.  This will check the login and may trigger an action to prompt for the password / key. */
-function* broadcastOperation({
+export function* broadcastOperation({
     payload: {
         type,
         operation,
@@ -816,7 +816,7 @@ export function* recoverAccount({
 
 /** auths must start with most powerful key: owner for example */
 // const twofaAccount = 'steem'
-function* updateAuthorities({
+export function* updateAuthorities({
     payload: { accountName, signingKey, auths, twofa, onSuccess, onError },
 }) {
     // Be sure this account is up-to-date (other required fields are sent in the update)
@@ -956,7 +956,7 @@ function* updateAuthorities({
 
 /** auths must start with most powerful key: owner for example */
 // const twofaAccount = 'steem'
-function* updateMeta(params) {
+export function* updateMeta(params) {
     // console.log('params', params)
     const {
         meta,

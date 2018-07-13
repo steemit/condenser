@@ -1,19 +1,19 @@
 /* global describe, it, before, beforeEach, after, afterEach */
 
-import { call, select, all } from 'redux-saga/effects';
+import { call, select, all, takeEvery } from 'redux-saga/effects';
 import steem, { api, broadcast } from '@steemit/steem-js';
 import { cloneableGenerator } from 'redux-saga/utils';
-
+import * as transactionActions from 'app/redux/TransactionReducer';
 import {
     preBroadcast_comment,
     createPermlink,
     createPatch,
     recoverAccount,
-    watchForBroadcast,
-    watchForUpdateAuthorities,
-    watchForUpdateMeta,
-    watchForRecoverAccount,
     preBroadcast_transfer,
+    transactionWatches,
+    broadcastOperation,
+    updateAuthorities,
+    updateMeta,
 } from './TransactionSaga';
 import { DEBT_TICKER } from 'app/client_config';
 
@@ -45,6 +45,24 @@ const operation = {
 const username = 'Beatrice';
 
 describe('TransactionSaga', () => {
+    describe('watch user actions and trigger appropriate saga', () => {
+        const gen = transactionWatches;
+        it('should call the broadcastOperation saga with every transactionActions.BROADCAST_OPERATION action', () => {
+            expect(gen).toEqual([
+                takeEvery(
+                    transactionActions.BROADCAST_OPERATION,
+                    broadcastOperation
+                ),
+                takeEvery(
+                    transactionActions.UPDATE_AUTHORITIES,
+                    updateAuthorities
+                ),
+                takeEvery(transactionActions.UPDATE_META, updateMeta),
+                takeEvery(transactionActions.RECOVER_ACCOUNT, recoverAccount),
+            ]);
+        });
+    });
+
     describe('recoverAccount', () => {
         const gen = cloneableGenerator(recoverAccount)({
             payload: {

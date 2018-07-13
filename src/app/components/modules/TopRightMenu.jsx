@@ -2,16 +2,16 @@ import React from 'react';
 import { browserHistory, Link } from 'react-router';
 import { connect } from 'react-redux';
 import tt from 'counterpart';
-import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdown';
+import DropdownMenu from 'app/components/elements/DropdownMenu';
 import Icon from 'app/components/elements/Icon';
 import * as userActions from 'app/redux/UserReducer';
 import * as appActions from 'app/redux/AppReducer';
 import Userpic from 'app/components/elements/Userpic';
-import VerticalMenu from 'app/components/elements/VerticalMenu';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
-import NotifiCounter from 'app/components/elements/NotifiCounter';
 import YotifiCounter from 'app/components/elements/YotifiCounter';
 import YotificationModule, { LAYOUT_DROPDOWN } from './YotificationList';
+
+import { SIGNUP_URL } from 'shared/constants';
 
 const bodyClick = e => {
     // If this was not a left click, or if CTRL or CMD were held, do not close the menu.
@@ -80,7 +80,6 @@ function TopRightMenu({
                 link: feed_link,
                 icon: 'home',
                 value: tt('g.feed'),
-                addon: <NotifiCounter fields="feed" />,
             },
             { link: account_link, icon: 'profile', value: tt('g.blog') },
             { link: comments_link, icon: 'replies', value: tt('g.comments') },
@@ -88,15 +87,11 @@ function TopRightMenu({
                 link: replies_link,
                 icon: 'reply',
                 value: tt('g.replies'),
-                addon: <NotifiCounter fields="comment_reply" />,
             },
             {
                 link: wallet_link,
                 icon: 'wallet',
                 value: tt('g.wallet'),
-                addon: (
-                    <NotifiCounter fields="follow,send,receive,account_update" />
-                ),
             },
             {
                 link: '#',
@@ -123,15 +118,11 @@ function TopRightMenu({
             <ul className={mcn + mcl}>
                 {!pathCheck ? submit_story : null}
                 {!vertical && submit_icon}
-
-                <LinkWithDropdown
-                    dropdownClassName="small-8 medium-6 large-4"
-                    closeOnClickOutside
-                    dropdownPosition="bottom"
-                    dropdownAlignment="right"
-                    dropdownContent={
+                <DropdownMenu
+                    className="small-8 medium-6 large-4"
+                    position="right"
+                    items={
                         <div className="NotificationMenuWrapper">
-                            {/*<NotificationMenu items={user_menu} account_link={ account_link } /> */}
                             <YotificationModule
                                 layout={LAYOUT_DROPDOWN}
                                 onViewAll={bodyClick}
@@ -153,30 +144,24 @@ function TopRightMenu({
                             </a>
                         </li>
                     )}
-                </LinkWithDropdown>
-                <LinkWithDropdown
-                    closeOnClickOutside
-                    dropdownPosition="bottom"
-                    dropdownAlignment="right"
-                    dropdownContent={
-                        <VerticalMenu items={user_menu} title={username} />
-                    }
-                >
-                    {!vertical && (
+                </DropdownMenu>
+                {!vertical && (
+                    <DropdownMenu
+                        className={'Header__usermenu'}
+                        items={user_menu}
+                        title={username}
+                        el="span"
+                        selected={tt('g.rewards')}
+                        position="left"
+                    >
                         <li className={'Header__userpic '}>
-                            <a
-                                href={account_link}
-                                title={username}
-                                onClick={e => e.preventDefault()}
-                            >
+                            <span title={username}>
                                 <Userpic account={username} />
-                            </a>
-                            <div className="TopRightMenu__notificounter">
-                                <NotifiCounter fields="total" />
-                            </div>
+                            </span>
                         </li>
-                    )}
-                </LinkWithDropdown>
+                    </DropdownMenu>
+                )}
+
                 {toggleOffCanvasMenu && (
                     <li className="toggle-menu Header__hamburger">
                         <a href="#" onClick={toggleOffCanvasMenu}>
@@ -206,7 +191,7 @@ function TopRightMenu({
     return (
         <ul className={mcn + mcl}>
             <li className={lcn}>
-                <a href="/pick_account">{tt('g.sign_up')}</a>
+                <a href={SIGNUP_URL}>{tt('g.sign_up')}</a>
             </li>
             <li className={lcn}>
                 <a href="/login.html" onClick={showLogin}>

@@ -511,8 +511,8 @@
     "userkeys_jsx": {
         "public": "Público",
         "private": "Privado",
-        "public_something_key": "Contraseña %(count)s pública",
-        "private_something_key": "Contraseña %(count)s privada",
+        "public_something_key": "Contraseña %(key)s pública",
+        "private_something_key": "Contraseña %(key)s privada",
         "posting_key_is_required_it_should_be_different":
             "La contraseña de posteado se usa para postear y para votar. Debería ser diferente a la contraseña activa y a la contraseña de propietario.",
         "the_active_key_is_used_to_make_transfers_and_place_orders":
@@ -695,8 +695,7 @@
         "location_is_too_long": "Localización es demasiado largo",
         "website_url_is_too_long": "La URL de la página web es muy larga",
         "public_profile_settings": "Herramientas para el perfil público",
-        "private_post_display_settings":
-            "Herramientas privadas para la visualización del post",
+        "preferences": "Herramientas privadas para la visualización del post",
         "not_safe_for_work_nsfw_content": "(NSFW) contenido para adultos",
         "always_hide": "Ocultar siempre",
         "always_warn": "Advertir siempre",
@@ -721,8 +720,7 @@
         "convert_to_VESTING_TOKEN": "Convertir a %(VESTING_TOKEN)s",
         "balance_subject_to_3_day_withdraw_waiting_period":
             "El saldo está sujeto a 3 días de espera para la retirada",
-        "move_funds_to_another_account":
-            "Mover fondos a otra %(APP_NAME)scuenta.",
+        "move_funds_to_another_account": "Mover fondos a otra steemscuenta.",
         "protect_funds_by_requiring_a_3_day_withdraw_waiting_period":
             "Protege los fondos al pedir la retirada con un periodo de 3 días de espera",
         "withdraw_funds_after_the_required_3_day_waiting_period":

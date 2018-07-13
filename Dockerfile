@@ -1,5 +1,10 @@
 FROM node:8.7
 
+ARG SOURCE_COMMIT
+ENV SOURCE_COMMIT ${SOURCE_COMMIT}
+ARG DOCKER_TAG
+ENV DOCKER_TAG ${DOCKER_TAG}
+
 # yarn > npm
 #RUN npm install --global yarn
 
@@ -7,7 +12,7 @@ RUN npm install -g yarn
 
 WORKDIR /var/app
 RUN mkdir -p /var/app
-ADD package.json /var/app/package.json
+ADD package.json yarn.lock /var/app/
 RUN yarn install --non-interactive --frozen-lockfile
 
 COPY . /var/app

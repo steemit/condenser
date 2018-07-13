@@ -460,7 +460,7 @@
             "Разжигание ненависти или Интернет троллинг",
         "intentional_miss_categorized_content_or_spam":
             "Преднамеренная неправильная категоризация контента или спам",
-        "pending_payout": "Ожидаемая выплата",
+        "pending_payout": "Ожидаемая выплата $%(value)s",
         "payout_declined": "Автор отказался от вознаграждения",
         "max_accepted_payout":
             "Максимально допустимое вознаграждение: $%(value)s",
@@ -714,8 +714,7 @@
         "location_is_too_long": "Местоположение слишком длинное",
         "website_url_is_too_long": "URL-адрес веб-сайта слишком длинный",
         "public_profile_settings": "Настройки Публичного Профиля",
-        "private_post_display_settings":
-            "Настройки отображения приватных постов",
+        "preferences": "Настройки отображения приватных постов",
         "not_safe_for_work_nsfw_content":
             "Небезопасный для работы (NSFW) контент",
         "always_hide": "Всегда скрывать",
@@ -742,7 +741,7 @@
         "balance_subject_to_3_day_withdraw_waiting_period":
             "Вывод баланса из сейфа на обычный счет, занимает 3 дня,",
         "move_funds_to_another_account":
-            "Отправить средства на другой %(APP_NAME)s аккаунт.",
+            "Отправить средства на другой Steem аккаунт.",
         "protect_funds_by_requiring_a_3_day_withdraw_waiting_period":
             "Защитите средства от вывода 3-х дневным периодом ожидания.",
         "withdraw_funds_after_the_required_3_day_waiting_period":

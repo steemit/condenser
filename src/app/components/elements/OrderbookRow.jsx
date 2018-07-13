@@ -1,12 +1,13 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 export default class OrderRow extends React.Component {
     static propTypes = {
-        order: React.PropTypes.object,
-        side: React.PropTypes.string,
-        index: React.PropTypes.number,
-        total: React.PropTypes.number,
-        animate: React.PropTypes.bool,
+        order: PropTypes.object,
+        side: PropTypes.string,
+        index: PropTypes.number,
+        total: PropTypes.number,
+        animate: PropTypes.bool,
     };
 
     constructor(props) {

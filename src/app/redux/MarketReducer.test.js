@@ -1,14 +1,9 @@
-import chai, { expect } from 'chai';
-import chaiImmutable from 'chai-immutable';
-
 import { Map } from 'immutable';
 
 import reducer, {
     receiveOpenOrders,
     toggleOpenOrdersSort,
 } from './MarketReducer';
-
-chai.use(chaiImmutable);
 
 const someOpenOrders = [
     {
@@ -22,7 +17,7 @@ const someOpenOrders = [
             base: '3.000 STEEM',
             quote: '1.998 SBD',
         },
-        real_price: '0.66600000000000004',
+        real_price: '0',
         rewarded: false,
     },
     {
@@ -36,7 +31,7 @@ const someOpenOrders = [
             base: '7.000 STEEM',
             quote: '4.578 SBD',
         },
-        real_price: '0.65400000000000003',
+        real_price: '0',
         rewarded: false,
     },
     {
@@ -50,7 +45,7 @@ const someOpenOrders = [
             base: '3.000 STEEM',
             quote: '1.953 SBD',
         },
-        real_price: '0.65100000000000002',
+        real_price: '0',
         rewarded: false,
     },
     {
@@ -64,7 +59,7 @@ const someOpenOrders = [
             base: '0.507 SBD',
             quote: '1.000 STEEM',
         },
-        real_price: '0.50700000000000001',
+        real_price: '0',
         rewarded: false,
     },
     {
@@ -78,13 +73,13 @@ const someOpenOrders = [
             base: '0.507 SBD',
             quote: '1.000 STEEM',
         },
-        real_price: '0.50700000000000001',
+        real_price: '0',
         rewarded: false,
     },
 ];
 
 const toggleSortByPrice = {
-    column: 'real_price',
+    column: 'price',
     dataType: 'float',
 };
 
@@ -92,7 +87,7 @@ describe('market reducer', () => {
     it('should provide a nice initial state', () => {
         const initial = reducer();
 
-        expect(initial.get('open_orders_sort')).to.equal(
+        expect(initial.get('open_orders_sort')).toEqual(
             Map({
                 column: 'created',
                 dataType: 'string',
@@ -100,7 +95,7 @@ describe('market reducer', () => {
             })
         );
 
-        expect(initial.get('status')).to.deep.equal({});
+        expect(initial.get('status')).toEqual({});
     });
 
     it('should receive open orders', () => {
@@ -110,13 +105,13 @@ describe('market reducer', () => {
 
         const orders = withOrders.get('open_orders');
 
-        expect(orders[0].price).to.equal(0.666);
-        expect(orders[0].sbd).to.equal('1.998 SBD');
-        expect(orders[1].type).to.equal('ask');
-        expect(orders[2].price).to.equal(0.651);
-        expect(orders[2].sbd).to.equal('1.953 SBD');
-        expect(orders[3].type).to.equal('bid');
-        expect(orders[3].type).to.equal('bid');
+        expect(orders[0].price).toBe(0.666);
+        expect(orders[0].sbd).toBe('1.998 SBD');
+        expect(orders[1].type).toBe('ask');
+        expect(orders[2].price).toBe(0.651);
+        expect(orders[2].sbd).toBe('1.953 SBD');
+        expect(orders[3].type).toBe('bid');
+        expect(orders[3].type).toBe('bid');
     });
 
     it('should sort open orders', () => {
@@ -136,7 +131,7 @@ describe('market reducer', () => {
 
         const orders = byPriceAsc.get('open_orders');
 
-        expect(orders[0].price).to.equal(0.507);
-        expect(orders[4].price).to.equal(0.666);
+        expect(orders[0].price).toBe(0.507);
+        expect(orders[4].price).toBe(0.666);
     });
 });

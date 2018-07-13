@@ -1,0 +1,71 @@
+  .helptip {
+    position: relative;
+    display: inline-flex;
+    z-index: 98;
+    cursor: pointer;
+    width: auto;
+    vertical-align: middle;
+    margin-left: 0.625em;
+    svg.icon-button__svg.icon-button__svg--small {
+      width: 24px;
+      height: 24px;
+    }
+  };
+
+  .helptip:before {
+    position:absolute;
+    content:'';
+    top:-10px;
+    right:-10px;
+    left:-10px;
+    bottom:-10px;
+    z-index:40;
+  }
+
+  .helptip__box {
+    position: absolute;
+    padding: 1em;
+    @include themify($themes) {
+      background: themed('moduleBackgroundColor');
+    }
+    border: 1px solid;
+    @include themify($themes) {
+      border-color: themed('colorAccentReverse');
+    }
+    bottom: 150%;
+    right: 0;
+    width: auto;
+    @include MQ(M) {
+      min-width: 150px;
+    }
+    @include MQ(L) {
+      min-width: 200px;
+    }
+  }
+
+  .helptip__box:after, .helptip__box:before {
+    top: 100%;
+    left: calc(100% - 20px);
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+  }
+
+  .helptip__box:after {
+    @include themify($themes) {
+      border-top-color: themed('moduleBackgroundColor');
+    }
+    border-width: 10px;
+    margin-left: -5px;
+  }
+
+  .helptip__box:before {
+    @include themify($themes) {
+      border-top-color: themed('colorAccentReverse');
+    }
+    border-width: 11px;
+    margin-left: -6px;
+  }

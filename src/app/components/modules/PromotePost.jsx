@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import ReactDOM from 'react-dom';
 import * as transactionActions from 'app/redux/TransactionReducer';
@@ -117,9 +118,13 @@ class PromotePost extends Component {
                                 </div>
                             </div>
                         </div>
-                        <div>{`${tt('g.balance')}: ${balance} ${
-                            DEBT_TOKEN_SHORT
-                        } (${CURRENCY_SIGN})`}</div>
+                        <div>
+                            {tt('g.balance', {
+                                balanceValue: `${balance} ${
+                                    DEBT_TOKEN_SHORT
+                                } (${CURRENCY_SIGN})`,
+                            })}
+                        </div>
                         <br />
                         {loading && (
                             <span>

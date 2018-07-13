@@ -115,6 +115,8 @@ export function contentStats(content) {
     let total_votes = 0;
     let up_votes = 0;
 
+    // TODO: breaks if content has no active_votes attribute.
+
     content.get('active_votes').forEach(v => {
         const sign = Math.sign(v.get('percent'));
         if (sign === 0) return;
@@ -173,6 +175,7 @@ export function contentStats(content) {
         tags = [];
     }
     tags.push(content.get('category'));
+    tags = filterTags(tags);
     const isNsfw = tags.filter(tag => tag && tag.match(/^nsfw$/i)).length > 0;
 
     return {
@@ -186,4 +189,10 @@ export function contentStats(content) {
         up_votes,
         hasPendingPayout,
     };
+}
+
+export function filterTags(tags) {
+    return tags
+        .filter(tag => typeof tag === 'string')
+        .filter((value, index, self) => value && self.indexOf(value) === index);
 }

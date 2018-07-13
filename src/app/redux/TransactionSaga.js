@@ -52,12 +52,13 @@ const hook = {
     error_account_witness_vote,
     accepted_comment,
     accepted_delete_comment,
+    accepted_account_witness_vote,
     accepted_vote,
     accepted_account_update,
     accepted_withdraw_vesting,
 };
 
-function* preBroadcast_transfer({ operation }) {
+export function* preBroadcast_transfer({ operation }) {
     let memoStr = operation.memo;
     if (memoStr) {
         memoStr = toStringUtf8(memoStr);
@@ -100,8 +101,12 @@ function* preBroadcast_vote({ operation, username }) {
 function* preBroadcast_account_witness_vote({ operation, username }) {
     if (!operation.account) operation.account = username;
     const { account, witness, approve } = operation;
+    // give immediate feedback
     yield put(
-        globalActions.updateAccountWitnessVote({ account, witness, approve })
+        globalActions.addActiveWitnessVote({
+            account,
+            witness,
+        })
     );
     return operation;
 }
@@ -452,6 +457,21 @@ function* accepted_vote({ operation: { author, permlink, weight } }) {
     yield call(getContent, { author, permlink });
 }
 
+function* accepted_account_witness_vote({
+    operation: { account, witness, approve },
+}) {
+    yield put(
+        globalActions.updateAccountWitnessVote({ account, witness, approve })
+    );
+
+    yield put(
+        globalActions.removeActiveWitnessVote({
+            account,
+            witness,
+        })
+    );
+}
+
 function* accepted_withdraw_vesting({ operation }) {
     let [account] = yield call(
         [api, api.getAccountsAsync],
@@ -498,13 +518,10 @@ function* accepted_account_update({ operation }) {
 
 // function* preBroadcast_account_witness_vote({operation, username}) {
 // }
-function* preBroadcast_comment({ operation, username }) {
+export function* preBroadcast_comment({ operation, username }) {
     if (!operation.author) operation.author = username;
     let permlink = operation.permlink;
-    const {
-        author,
-        __config: { originalBody, autoVote, comment_options },
-    } = operation;
+    const { author, __config: { originalBody, comment_options } } = operation;
     const {
         parent_author = '',
         parent_permlink = operation.category,
@@ -570,20 +587,10 @@ function* preBroadcast_comment({ operation, username }) {
         ]);
     }
 
-    if (autoVote) {
-        const vote = {
-            voter: op.author,
-            author: op.author,
-            permlink: op.permlink,
-            weight: 10000,
-        };
-        comment_op.push(['vote', vote]);
-    }
-
     return comment_op;
 }
 
-function* createPermlink(title, author, parent_author, parent_permlink) {
+export function* createPermlink(title, author, parent_author, parent_permlink) {
     let permlink;
     if (title && title.trim() !== '') {
         let s = slug(title);
@@ -618,7 +625,7 @@ function* createPermlink(title, author, parent_author, parent_permlink) {
 import diff_match_patch from 'diff-match-patch';
 const dmp = new diff_match_patch();
 
-function createPatch(text1, text2) {
+export function createPatch(text1, text2) {
     if (!text1 && text1 === '') return undefined;
     const patches = dmp.patch_make(text1, text2);
     const patch = dmp.patch_toText(patches);

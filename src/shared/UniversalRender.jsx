@@ -26,7 +26,6 @@ import { sharedWatches } from 'app/redux/SagaShared';
 import { userWatches } from 'app/redux/UserSaga';
 import { authWatches } from 'app/redux/AuthSaga';
 import { transactionWatches } from 'app/redux/TransactionSaga';
-import PollDataSaga from 'app/redux/PollDataSaga';
 import {
     NotificationFetchSaga,
     NotificationPollSaga,
@@ -35,12 +34,20 @@ import { NotificationSettingsSaga } from 'app/redux/NotificationSettingsSaga';
 import { component as NotFound } from 'app/components/pages/NotFound';
 import extractMeta from 'app/utils/ExtractMeta';
 import Translator from 'app/Translator';
-import { notificationsArrayToMap } from 'app/utils/Notifications';
 import { routeRegex } from 'app/ResolveRoute';
 import { contentStats } from 'app/utils/StateFunctions';
 import ScrollBehavior from 'scroll-behavior';
 
 import { api } from '@steemit/steem-js';
+
+let get_state_perf,
+    get_content_perf = false;
+if (process.env.OFFLINE_SSR_TEST) {
+    const testDataDir = process.env.OFFLINE_SSR_TEST_DATA_DIR || 'api_mockdata';
+    let uri = `${__dirname}/../../`;
+    get_state_perf = require(uri + testDataDir + '/get_state');
+    get_content_perf = require(uri + testDataDir + '/get_content');
+}
 
 const calcOffsetRoot = startEl => {
     let offset = 0;
@@ -223,15 +230,26 @@ const onRouterError = error => {
     console.error('onRouterError', error);
 };
 
-async function universalRender({
+/**
+ *
+ * @param {*} location
+ * @param {*} initialState
+ * @param {*} ErrorPage
+ * @param {*} userPreferences
+ * @param {*} offchain
+ * @param {RequestTimer} requestTimer
+ * @returns promise
+ */
+export async function serverRender(
     location,
-    initial_state,
-    offchain,
+    initialState,
     ErrorPage,
-    tarantool,
     userPreferences,
-}) {
+    offchain,
+    requestTimer
+) {
     let error, redirect, renderProps;
+
     try {
         [error, redirect, renderProps] = await runRouter(location, RootRoute);
     } catch (e) {
@@ -244,6 +262,7 @@ async function universalRender({
             ),
         };
     }
+
     if (error || !renderProps) {
         // debug('error')('Router error', error);
         return {
@@ -253,88 +272,16 @@ async function universalRender({
         };
     }
 
-    if (process.env.BROWSER) {
-        const store = createStore(rootReducer, initial_state, middleware);
-        sagaMiddleware
-            .run(PollDataSaga)
-            .done.then(() => console.log('PollDataSaga is finished'))
-            .catch(err =>
-                console.log('PollDataSaga is finished with error', err)
-            );
-
-        sagaMiddleware.run(NotificationFetchSaga);
-        sagaMiddleware.run(NotificationPollSaga);
-        sagaMiddleware.run(NotificationSettingsSaga);
-
-        const history = syncHistoryWithStore(browserHistory, store);
-
-        /**
-         * When to scroll - on hash link navigation determine if the page should scroll to that element (forward nav, or ignore nav direction)
-         */
-        const scroll = useScroll({
-            createScrollBehavior: config => new OffsetScrollBehavior(config), //information assembler for has scrolling.
-            shouldUpdateScroll: (prevLocation, { location }) => {
-                // eslint-disable-line no-shadow
-                //if there is a hash, we may want to scroll to it
-                if (location.hash) {
-                    //if disableNavDirectionCheck exists, we want to always navigate to the hash (the page is telling us that's desired behavior based on the element's existence
-                    const disableNavDirectionCheck = document.getElementById(
-                        DISABLE_ROUTER_HISTORY_NAV_DIRECTION_EL_ID
-                    );
-                    //we want to navigate to the corresponding id=<hash> element on 'PUSH' navigation (prev null + POP is a new window url nav ~= 'PUSH')
-                    if (
-                        disableNavDirectionCheck ||
-                        (prevLocation === null && location.action === 'POP') ||
-                        location.action === 'PUSH'
-                    ) {
-                        return location.hash;
-                    }
-                }
-                return true;
-            },
-        });
-
-        if (process.env.NODE_ENV === 'production') {
-            console.log(
-                '%c%s',
-                'color: red; background: yellow; font-size: 24px;',
-                'WARNING!'
-            );
-            console.log(
-                '%c%s',
-                'color: black; font-size: 16px;',
-                'This is a developer console, you must read and understand anything you paste or type here or you could compromise your account and your private keys.'
-            );
-        }
-        return render(
-            <Provider store={store}>
-                <Translator>
-                    <Router
-                        routes={RootRoute}
-                        history={history}
-                        onError={onRouterError}
-                        render={applyRouterMiddleware(scroll)}
-                    />
-                </Translator>
-            </Provider>,
-            document.getElementById('content')
-        );
-    }
-
-    // below is only executed on the server
     let server_store, onchain;
     try {
-        let url = location === '/' ? 'trending' : location;
-        // Replace /curation-rewards and /author-rewards with /transfers for UserProfile
-        // to resolve data correctly
-        if (url.indexOf('/curation-rewards') !== -1)
-            url = url.replace(/\/curation-rewards$/, '/transfers');
-        if (url.indexOf('/author-rewards') !== -1)
-            url = url.replace(/\/author-rewards$/, '/transfers');
+        const url = getUrlFromLocation(location);
 
-        //todo: this line is triggering a node exception when client hard reloads the page in dev. Doesn't seem to be a production issue, but should be noted.
-        onchain = await api.getStateAsync(url);
+        requestTimer.startTimer('apiGetState_ms');
+        onchain = await apiGetState(url);
+        requestTimer.stopTimer('apiGetState_ms');
 
+        // If a user profile URL is requested but no profile information is
+        // included in the API response, return User Not Found.
         if (
             Object.getOwnPropertyNames(onchain.accounts).length === 0 &&
             (url.match(routeRegex.UserProfile1) ||
@@ -356,12 +303,11 @@ async function universalRender({
                 onchain.content[key]['stats'] = contentStats(
                     onchain.content[key]
                 );
-                onchain.content[key]['active_votes'] = onchain.content[key][
-                    'active_votes'
-                ].filter(vote => vote.voter === offchain.account);
+                onchain.content[key]['active_votes'] = null;
             }
         }
 
+        // Are we loading an un-category-aliased post?
         if (
             !url.match(routeRegex.PostsIndex) &&
             !url.match(routeRegex.UserProfile1) &&
@@ -369,7 +315,12 @@ async function universalRender({
             url.match(routeRegex.PostNoCategory)
         ) {
             const params = url.substr(2, url.length - 1).split('/');
-            const content = await api.getContentAsync(params[0], params[1]);
+            let content;
+            if (process.env.OFFLINE_SSR_TEST) {
+                content = get_content_perf;
+            } else {
+                content = await api.getContentAsync(params[0], params[1]);
+            }
             if (content.author && content.permlink) {
                 // valid short post url
                 onchain.content[url.substr(2, url.length - 1)] = content;
@@ -382,26 +333,9 @@ async function universalRender({
                 };
             }
         }
-        // Calculate signup bonus
-        const fee = parseFloat($STM_Config.registrar_fee.split(' ')[0]),
-            { base, quote } = onchain.feed_price,
-            feed =
-                parseFloat(base.split(' ')[0]) /
-                parseFloat(quote.split(' ')[0]);
-        const sd = fee * feed;
-        let sdDisp;
-        if (sd < 1.0) {
-            sdDisp = '¢' + parseInt(sd * 100);
-        } else {
-            const sdInt = parseInt(sd),
-                sdDec = sd - sdInt;
-            sdDisp = '$' + sdInt + (sdInt < 5 && sdDec >= 0.5 ? '.50' : '');
-        }
 
-        offchain.signup_bonus = sdDisp;
-        offchain.server_location = location;
         server_store = createStore(rootReducer, {
-            app: initial_state.app,
+            app: initialState.app,
             global: onchain,
             offchain,
         });
@@ -410,28 +344,6 @@ async function universalRender({
             payload: { pathname: location },
         });
         server_store.dispatch(appActions.setUserPreferences(userPreferences));
-        if (offchain.account) {
-            try {
-                const notifications = await tarantool.select(
-                    'notifications',
-                    0,
-                    1,
-                    0,
-                    'eq',
-                    offchain.account
-                );
-                server_store.dispatch(
-                    appActions.updateNotificounters(
-                        notificationsArrayToMap(notifications)
-                    )
-                );
-            } catch (e) {
-                console.warn(
-                    'WARNING! cannot retrieve notifications from tarantool in universalRender:',
-                    e.message
-                );
-            }
-        }
     } catch (e) {
         // Ensure 404 page when username not found
         if (location.match(routeRegex.UserProfile1)) {
@@ -456,6 +368,7 @@ async function universalRender({
 
     let app, status, meta;
     try {
+        requestTimer.startTimer('ssr_ms');
         app = renderToString(
             <Provider store={server_store}>
                 <Translator>
@@ -463,6 +376,7 @@ async function universalRender({
                 </Translator>
             </Provider>
         );
+        requestTimer.stopTimer('ssr_ms');
         meta = extractMeta(onchain, renderProps.params);
         status = 200;
     } catch (re) {
@@ -480,4 +394,105 @@ async function universalRender({
     };
 }
 
-export default universalRender;
+/**
+ * dependencies:
+ * middleware
+ * browserHistory
+ * useScroll
+ * OffsetScrollBehavior
+ * location
+ *
+ * @param {*} initialState
+ */
+export function clientRender(initialState) {
+    const store = createStore(rootReducer, initialState, middleware);
+
+    sagaMiddleware.run(NotificationFetchSaga);
+    sagaMiddleware.run(NotificationPollSaga);
+    sagaMiddleware.run(NotificationSettingsSaga);
+
+    const history = syncHistoryWithStore(browserHistory, store);
+
+    /**
+     * When to scroll - on hash link navigation determine if the page should scroll to that element (forward nav, or ignore nav direction)
+     */
+    const scroll = useScroll({
+        createScrollBehavior: config => new OffsetScrollBehavior(config), //information assembler for has scrolling.
+        shouldUpdateScroll: (prevLocation, { location }) => {
+            // eslint-disable-line no-shadow
+            //if there is a hash, we may want to scroll to it
+            if (location.hash) {
+                //if disableNavDirectionCheck exists, we want to always navigate to the hash (the page is telling us that's desired behavior based on the element's existence
+                const disableNavDirectionCheck = document.getElementById(
+                    DISABLE_ROUTER_HISTORY_NAV_DIRECTION_EL_ID
+                );
+                //we want to navigate to the corresponding id=<hash> element on 'PUSH' navigation (prev null + POP is a new window url nav ~= 'PUSH')
+                if (
+                    disableNavDirectionCheck ||
+                    (prevLocation === null && location.action === 'POP') ||
+                    location.action === 'PUSH'
+                ) {
+                    return location.hash;
+                }
+            }
+            return true;
+        },
+    });
+
+    if (process.env.NODE_ENV === 'production') {
+        console.log(
+            '%c%s',
+            'color: red; background: yellow; font-size: 24px;',
+            'WARNING!'
+        );
+        console.log(
+            '%c%s',
+            'color: black; font-size: 16px;',
+            'This is a developer console, you must read and understand anything you paste or type here or you could compromise your account and your private keys.'
+        );
+    }
+
+    return render(
+        <Provider store={store}>
+            <Translator>
+                <Router
+                    routes={RootRoute}
+                    history={history}
+                    onError={onRouterError}
+                    render={applyRouterMiddleware(scroll)}
+                />
+            </Translator>
+        </Provider>,
+        document.getElementById('content')
+    );
+}
+
+/**
+ * Do some pre-state-fetch url rewriting.
+ *
+ * @param {string} location
+ * @returns {string}
+ */
+function getUrlFromLocation(location) {
+    let url = location === '/' ? 'trending' : location;
+    // Replace /curation-rewards and /author-rewards with /transfers for UserProfile
+    // to resolve data correctly
+    if (url.indexOf('/curation-rewards') !== -1)
+        url = url.replace(/\/curation-rewards$/, '/transfers');
+    if (url.indexOf('/author-rewards') !== -1)
+        url = url.replace(/\/author-rewards$/, '/transfers');
+
+    return url;
+}
+
+async function apiGetState(url) {
+    let offchain;
+
+    if (process.env.OFFLINE_SSR_TEST) {
+        offchain = get_state_perf;
+    }
+
+    offchain = await api.getStateAsync(url);
+
+    return offchain;
+}

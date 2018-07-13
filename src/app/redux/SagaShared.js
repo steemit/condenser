@@ -3,9 +3,8 @@ import { call, put, select } from 'redux-saga/effects';
 import { takeEvery, takeLatest } from 'redux-saga';
 import tt from 'counterpart';
 import { api } from '@steemit/steem-js';
-
 import * as globalActions from './GlobalReducer';
-import appActions from './AppReducer';
+import * as appActions from './AppReducer';
 import * as transactionActions from './TransactionReducer';
 import { setUserPreferences } from 'app/utils/ServerApiClient';
 
@@ -55,8 +54,11 @@ export function* watchTransactionErrors() {
 function* showTransactionErrorNotification() {
     const errors = yield select(state => state.transaction.get('errors'));
     for (const [key, message] of errors) {
-        yield put(appActions.addNotification({ key, message }));
-        yield put(transactionActions.deleteError({ key }));
+        // Do not display a notification for the bandwidthError key.
+        if (key !== 'bandwidthError') {
+            yield put(appActions.addNotification({ key, message }));
+            yield put(transactionActions.deleteError({ key }));
+        }
     }
 }
 

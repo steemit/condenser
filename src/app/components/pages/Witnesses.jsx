@@ -1,16 +1,33 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import links from 'app/utils/Links';
 import Icon from 'app/components/elements/Icon';
 import * as transactionActions from 'app/redux/TransactionReducer';
 import ByteBuffer from 'bytebuffer';
-import { is } from 'immutable';
+import { is, Set } from 'immutable';
 import * as globalActions from 'app/redux/GlobalReducer';
 import tt from 'counterpart';
 
 const Long = ByteBuffer.Long;
 const { string, func, object } = PropTypes;
+
+const DISABLED_SIGNING_KEY = 'STM1111111111111111111111111111111114T1Anm';
+
+function _blockGap(head_block, last_block) {
+    if (!last_block || last_block < 1) return 'forever';
+    const secs = (head_block - last_block) * 3;
+    if (secs < 120) return 'recently';
+    const mins = Math.floor(secs / 60);
+    if (mins < 120) return mins + ' mins ago';
+    const hrs = Math.floor(mins / 60);
+    if (hrs < 48) return hrs + ' hrs ago';
+    const days = Math.floor(hrs / 24);
+    if (days < 14) return days + ' days ago';
+    const weeks = Math.floor(days / 7);
+    if (weeks < 104) return weeks + ' weeks ago';
+}
 
 class Witnesses extends React.Component {
     static propTypes = {
@@ -22,6 +39,7 @@ class Witnesses extends React.Component {
         username: string,
         witness_votes: object,
     };
+
     constructor() {
         super();
         this.state = { customUsername: '', proxy: '', proxyFailed: false };
@@ -34,6 +52,8 @@ class Witnesses extends React.Component {
         this.onWitnessChange = e => {
             const customUsername = e.target.value;
             this.setState({ customUsername });
+            // Force update to ensure witness vote appears
+            this.forceUpdate();
         };
         this.accountWitnessProxy = e => {
             e.preventDefault();
@@ -47,6 +67,7 @@ class Witnesses extends React.Component {
     shouldComponentUpdate(np, ns) {
         return (
             !is(np.witness_votes, this.props.witness_votes) ||
+            !is(np.witnessVotesInProgress, this.props.witnessVotesInProgress) ||
             np.witnesses !== this.props.witnesses ||
             np.current_proxy !== this.props.current_proxy ||
             np.username !== this.props.username ||
@@ -58,7 +79,12 @@ class Witnesses extends React.Component {
 
     render() {
         const {
-            props: { witness_votes, current_proxy },
+            props: {
+                witness_votes,
+                witnessVotesInProgress,
+                current_proxy,
+                head_block,
+            },
             state: { customUsername, proxy },
             accountWitnessVote,
             accountWitnessProxy,
@@ -69,22 +95,34 @@ class Witnesses extends React.Component {
                 Long.fromString(String(a.get('votes'))).toString()
             )
         );
-        const up = <Icon name="chevron-up-circle" />;
         let witness_vote_count = 30;
         let rank = 1;
+
         const witnesses = sorted_witnesses.map(item => {
             const owner = item.get('owner');
             const thread = item.get('url');
             const myVote = witness_votes ? witness_votes.has(owner) : null;
+            const signingKey = item.get('signing_key');
+            const isDisabled = signingKey == DISABLED_SIGNING_KEY;
+            const lastBlock = item.get('last_confirmed_block_num');
+            const votingActive = witnessVotesInProgress.has(owner);
             const classUp =
                 'Voting__button Voting__button-up' +
-                (myVote === true ? ' Voting__button--upvoted' : '');
+                (myVote === true ? ' Voting__button--upvoted' : '') +
+                (votingActive ? ' votingUp' : '');
+            const up = (
+                <Icon
+                    name={votingActive ? 'empty' : 'chevron-up-circle'}
+                    className="upvote"
+                />
+            );
+
             let witness_thread = '';
             if (thread) {
                 if (links.remote.test(thread)) {
                     witness_thread = (
                         <a href={thread}>
-                            {tt('witnesses_jsx.witness_thread')}&nbsp;<Icon name="extlink" />
+                            {tt('witnesses_jsx.external_site')}&nbsp;<Icon name="extlink" />
                         </a>
                     );
                 } else {
@@ -95,6 +133,11 @@ class Witnesses extends React.Component {
                     );
                 }
             }
+
+            const ownerStyle = isDisabled
+                ? { textDecoration: 'line-through', color: '#AAA' }
+                : {};
+
             return (
                 <tr key={owner}>
                     <td width="75">
@@ -102,21 +145,34 @@ class Witnesses extends React.Component {
                         {rank++}
                         &nbsp;&nbsp;
                         <span className={classUp}>
-                            <a
-                                href="#"
-                                onClick={accountWitnessVote.bind(
-                                    this,
-                                    owner,
-                                    !myVote
-                                )}
-                                title={tt('g.vote')}
-                            >
-                                {up}
-                            </a>
+                            {votingActive ? (
+                                up
+                            ) : (
+                                <a
+                                    href="#"
+                                    onClick={accountWitnessVote.bind(
+                                        this,
+                                        owner,
+                                        !myVote
+                                    )}
+                                    title={tt('g.vote')}
+                                >
+                                    {up}
+                                </a>
+                            )}
                         </span>
                     </td>
                     <td>
-                        <Link to={'/@' + owner}>{owner}</Link>
+                        <Link to={'/@' + owner} style={ownerStyle}>
+                            {owner}
+                        </Link>
+                        {isDisabled && (
+                            <small>
+                                {' '}
+                                ({tt('witnesses_jsx.disabled')}{' '}
+                                {_blockGap(head_block, lastBlock)})
+                            </small>
+                        )}
                     </td>
                     <td>{witness_thread}</td>
                 </tr>
@@ -127,27 +183,44 @@ class Witnesses extends React.Component {
         if (witness_votes) {
             witness_vote_count -= witness_votes.size;
             addl_witnesses = witness_votes
+                .union(witnessVotesInProgress)
                 .filter(item => {
                     return !sorted_witnesses.has(item);
                 })
                 .map(item => {
+                    const votingActive = witnessVotesInProgress.has(item);
+                    const classUp =
+                        'Voting__button Voting__button-up' +
+                        (votingActive
+                            ? ' votingUp'
+                            : ' Voting__button--upvoted');
+                    const up = (
+                        <Icon
+                            name={votingActive ? 'empty' : 'chevron-up-circle'}
+                            className="upvote"
+                        />
+                    );
                     return (
                         <div className="row" key={item}>
                             <div className="column small-12">
                                 <span>
                                     {/*className="Voting"*/}
-                                    <span className="Voting__button Voting__button-up space-right Voting__button--upvoted">
-                                        <a
-                                            href="#"
-                                            onClick={accountWitnessVote.bind(
-                                                this,
-                                                item,
-                                                false
-                                            )}
-                                            title={tt('g.vote')}
-                                        >
-                                            {up}
-                                        </a>
+                                    <span className={classUp}>
+                                        {votingActive ? (
+                                            up
+                                        ) : (
+                                            <a
+                                                href="#"
+                                                onClick={accountWitnessVote.bind(
+                                                    this,
+                                                    item,
+                                                    false
+                                                )}
+                                                title={tt('g.vote')}
+                                            >
+                                                {up}
+                                            </a>
+                                        )}
                                         &nbsp;
                                     </span>
                                 </span>
@@ -345,10 +418,17 @@ module.exports = {
                 current_account && current_account.get('witness_votes').toSet();
             const current_proxy =
                 current_account && current_account.get('proxy');
+            const witnesses = state.global.get('witnesses');
+            const witnessVotesInProgress = state.global.get(
+                `transaction_witness_vote_active_${username}`,
+                Set()
+            );
             return {
-                witnesses: state.global.get('witnesses'),
+                head_block: state.global.getIn(['props', 'head_block_number']),
+                witnesses,
                 username,
                 witness_votes,
+                witnessVotesInProgress,
                 current_proxy,
             };
         },

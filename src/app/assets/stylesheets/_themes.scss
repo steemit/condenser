@@ -5,7 +5,7 @@ $themes: (
     colorAccentReverse: $color-blue-original-light,
     colorWhite: $color-white,
     backgroundColor: $color-background-off-white,
-      backgroundColorEmphasis: $color-background-almost-white,
+    backgroundColorEmphasis: $color-background-almost-white,
     backgroundColorOpaque: $color-background-off-white,
     backgroundTransparent: transparent,
     moduleBackgroundColor: $color-white,
@@ -223,17 +223,16 @@ $themes: (
   text-transform: capitalize;
   border-radius: 0;
   text-decoration: none;
-  text-transform: capitalize;
   @include font-size(18px);
   @include themify($themes) {
     background-color: themed('buttonBackground');
-    box-shadow: 0px 0px 0px 0 rgba(0,0,0,0), 5px 5px 0 0 themed('buttonBoxShadow');
+    box-shadow: 0px 0px 0px 0 rgba(0,0,0,0), 2px 2px 0px 0px themed('buttonBoxShadow');
     color: themed('buttonText');
   }
   &:hover, &:focus {
     @include themify($themes) {
       background-color: themed('buttonBackgroundHover');
-      box-shadow: 2px 2px 2px 0 rgba(0,0,0,0.1), 7px 7px 0 0 themed('buttonBoxShadowHover');
+      box-shadow: 2px 2px 2px 0 rgba(0,0,0,0.1), 4px 4px 0 0 themed('buttonBoxShadowHover');
       color: themed('buttonTextHover');
       text-shadow: themed('buttonTextShadow');
     }

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
+import { filterTags } from 'app/utils/StateFunctions';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
 
 export default ({ post, horizontal, single }) => {
@@ -32,10 +33,7 @@ export default ({ post, horizontal, single }) => {
     // Category should always be first.
     tags.unshift(post.category);
 
-    // Uniqueness filter.
-    tags = tags.filter(
-        (value, index, self) => value && self.indexOf(value) === index
-    );
+    tags = filterTags(tags);
 
     if (horizontal) {
         // show it as a dropdown in Preview

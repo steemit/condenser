@@ -1,12 +1,8 @@
 .sub-menu {
     li {
-        padding: .7rem 0.5rem;
         a {
-            padding: 0px;
+            padding: 0.7rem 0.5rem;
         }
-    }
-    li:last-child {
-        padding: 0 0 0 1rem;
     }
 }
 
@@ -19,16 +15,8 @@ li.Header__userpic {
   .Userpic {
     width: 36px !important;
     height: 36px !important;
+    vertical-align: middle;
   }
-}
-
-.TopRightMenu__notificounter {
-    position: absolute;
-    top: 4px;
-    right: 4px;
-    > .NotifiCounter {
-        display: block;
-    }
 }
 
 div.Header__top
@@ -37,22 +25,22 @@ div.Header__top
         padding: 0;
         &:hover path, &:focus path {
           @include themify($themes) {
-            fill: themed('textColorAccent');  
-          }             
+            fill: themed('textColorAccent');
+          }
         }
         &:visited path, &:active path {
           @include themify($themes) {
-            fill: themed('textColorPrimary');  
-          }             
-        }          
+            fill: themed('textColorPrimary');
+          }
+        }
         > a {
             padding: 14px;
         }
         > a path {
             transition: 0.2s all ease-in-out;
           @include themify($themes) {
-            fill: themed('textColorPrimary');  
-          }                 
+            fill: themed('textColorPrimary');
+          }
         }
     }
     li.Header__hamburger.toggle-menu {
@@ -69,8 +57,8 @@ li.submit-story {
     padding: 0;
     > a {
           @include themify($themes) {
-            background: themed('textColorAccent');  
-          }         
+            background: themed('textColorAccent');
+          }
         padding: 8px 24px;
         margin: 0 6px;
         color: white;

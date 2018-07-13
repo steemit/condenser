@@ -1,4 +1,3 @@
-
 .PostsList {
   clear: right;
 }
@@ -6,6 +5,12 @@
 .PostsList__summaries {
   list-style-type: none;
   margin-left: 0;
+}
+
+.PostsIndex {
+    .articles__h1--no-wrap {
+        white-space: nowrap;
+    }
 }
 
 .PostsIndex__topics {
@@ -58,7 +63,7 @@
 //   padding-bottom: 4em;
 //   min-height: 100%;
 //   @include themify($themes) {
-//       background-color: themed('backgroundColor');  
+//       background-color: themed('backgroundColor');
 //       color: themed('textColor');
 //     }
 // }
@@ -79,6 +84,14 @@
 }
 
 // Sidebar components on the homepage
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
 
 .c-sidebar {
   width: 100%;
@@ -87,20 +100,21 @@
   &__module {
       padding: 1.5em 2em;
     @include themify($themes) {
-        background-color: themed('moduleBackgroundColor');  
-        border: themed('border'); 
-    }    
+        background-color: themed('moduleBackgroundColor');
+        border: themed('border');
+    }
     margin-bottom: 1em;
     box-shadow: 0px 5px 10px 0 rgba(0,0,0,0);
     transition: 0.2s box-shadow ease-in-out;
+    animation: 1s ease-out 0s 1 fadeIn;
     &:hover {
-      @include MQ(M) {  
+      @include MQ(M) {
         box-shadow: 0px 5px 10px 0 rgba(0,0,0,0.03);
       }
-    }   
+    }
     &--tags {
       display: none;
-      @include MQ(M) {
+      @include MQ(FL) {
         display: block;
       }
       @include MQ(L) {
@@ -108,7 +122,7 @@
       }
     }
   }
-  &--left { 
+  &--left {
     display: none;
     order: 1;
     @include MQ(L) {
@@ -140,15 +154,15 @@
     // @extend .h3;
     font-family: $font-primary;
     font-weight: bold;
-    @include font-size(18px); 
-    margin: 0 0 16px 0;   
+    @include font-size(18px);
+    margin: 0 0 16px 0;
     &--inline {
       display: inline;
     }
   }
   &__link {
-    @extend .link;  
-    @extend .link--primary; 
+    @extend .link;
+    @extend .link--primary;
     font-family: $font-primary;
     &--emphasis {
       font-weight: bold;
@@ -160,12 +174,12 @@
   }
   &__label {
     display: block;
-    @include font-size(14px);     
+    @include font-size(14px);
     margin-bottom: 2px;
   }
   &__score {
     font-weight: bold;
-    @include font-size(17px); 
+    @include font-size(17px);
     margin-bottom: 24px;
   }
 }
@@ -193,10 +207,10 @@
     transition: all 0.2s ease-out;
     border: transparent;
     min-width: 300px;
-    max-width: 540px;
+    width: 100%;
     margin: auto;
     background-color: transparent;
-  
+
   @include MQ(M) {
     margin: 0 1em;
     padding: 0.5em 0em;
@@ -213,67 +227,70 @@
     max-width: 664px;
     padding: 1.5em 4em;
     @include themify($themes) {
-        border: themed('border'); 
-        box-shadow: 5px 5px 0 0 themed('contentBorderAccent');  
-        background-color: themed('moduleBackgroundColor'); 
-    }   
+        border: themed('border');
+        box-shadow: 5px 5px 0 0 themed('contentBorderAccent');
+        background-color: themed('moduleBackgroundColor');
+    }
   }
 
   &:hover {
     @include MQ(L) {
       @include themify($themes) {
-          box-shadow: 6px 6px 0 0 themed('contentBorderAccent');  
-      }   
-    }   
+          box-shadow: 6px 6px 0 0 themed('contentBorderAccent');
+      }
+    }
   }
 
   &__hr {
     margin-bottom: 20px;
     margin-top: 0px;
     @include themify($themes) {
-        border-bottom: themed('border'); 
-      }    
+        border-bottom: themed('border');
+      }
     @include MQ(M) {
         display: none;
-    }        
+    }
   }
 
   &__layout-selector {
     display: none;
     cursor: pointer;
-    @include MQ(M) {
-      display: inline-block;
-      padding-left: 14px;
+    @include MQ(FL) {
+      display: flex;
+      float: right;
+    }
+    @include MQ(FM) {
+        display: flex;
+        justify-content: flex-end;
     }
   }
   &__icon--layout {
     width: 24px;
     height: 24px;
     position: relative;
-    top: 5px;
   }
   &__summary {
       margin: 0em 0 1em;
-      transition: 0.2s all ease-in-out;     
+      transition: 0.2s all ease-in-out;
       border: transparent;
       padding-bottom: 10px;
       @include themify($themes) {
-          background-color: themed('moduleBackgroundColor'); 
-          border-bottom: themed('border');           
-        }       
+          background-color: themed('moduleBackgroundColor');
+          border-bottom: themed('border');
+        }
       @include MQ(M) {
         margin: 0 0 40px;
         box-shadow: 0px 5px 10px 0 rgba(0,0,0,0.0);
         padding-bottom: 0;
         @include themify($themes) {
-            border: themed('border'); 
-          }         
+            border: themed('border');
+          }
       }
       &:hover {
-        @include MQ(M) {  
+        @include MQ(M) {
           box-shadow: 0px 5px 10px 0 rgba(0,0,0,0.03);
         }
-      }   
+      }
   }
   &__resteem-icon {
     position: relative;
@@ -286,39 +303,39 @@
     padding: 6px 0 8px;
     position: relative;
     @include MQ(M) {
-      padding: 10px 16px 5px;     
+      padding: 10px 16px 5px;
       @include themify($themes) {
-          border-bottom: themed('border'); 
-        }         
+          border-bottom: themed('border');
+        }
       }
     &--footer {
       @include themify($themes) {
           border-top: themed('border');
-          border-bottom: themed('border'); 
-        }         
+          border-bottom: themed('border');
+        }
       @include MQ(M) {
         @include themify($themes) {
-            border-bottom: transparent; 
-          } 
+            border-bottom: transparent;
+          }
       }
-    }   
+    }
   }
   &__summary-footer {
     display: flex;
     align-items: center;
     position: relative;
     width: 100%;
-    @include font-size(15px); 
+    @include font-size(15px);
     @include MQ(M) {
       padding: 16px;
       @include themify($themes) {
           border-top: themed('border');
-        } 
+        }
     }
     a {
       @extend .link;
       @extend .link--primary;
-      @include font-size(15px); 
+      @include font-size(15px);
     }
   }
   &__header {
@@ -332,6 +349,11 @@
     line-height: 1;
     @include MQ(M) {
       padding-top: 0;
+    }
+    &-select {
+        select {
+            max-width: 300px;
+        }
     }
   }
   &__header-col {
@@ -352,20 +374,20 @@
       margin-top: 8px;
       padding-bottom: 5px;
       @include themify($themes) {
-          border-bottom: themed('border'); 
-        }       
+          border-bottom: themed('border');
+        }
       }
   }
   &__resteem-text {
-    @include font-size(13px);     
+    @include font-size(13px);
     margin-bottom: 0px;
     @include themify($themes) {
-        color: themed('textColorSecondary');  
-    }  
+        color: themed('textColorSecondary');
+    }
     @include MQ(M) {
       margin-bottom: 2px;
       @include font-size(14px);
-    } 
+    }
   }
   &__resteem-username {
     @extend .link--secondary;
@@ -383,40 +405,41 @@
   &__h1 {
     font-family: $font-primary;
     font-weight: bold;
-    @include font-size(18px);     
+    @include font-size(18px);
     margin: 0;
     text-transform: capitalize;
     @include MQ(M) {
-      @include font-size(18px);       
+      @include font-size(18px);
     }
   }
   &__h2 {
     // @extend .h2;
     margin: 0;
-    @include font-size(16px);     
+    @include font-size(16px);
       overflow : hidden;
       text-overflow: ellipsis;
       display: -webkit-box;
       -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;            
+      -webkit-box-orient: vertical;
     a {
     font-weight: bold;
     @include themify($themes) {
-        color: themed('textColorPrimary');  
-    }   
+        color: themed('textColorPrimary');
+    }
      &:visited {
         @include themify($themes) {
-            color: themed('textColorSecondary');  
-        } 
+            color: themed('textColorSecondary');
+        }
       }
     }
     @include MQ(M) {
-      @include font-size(18px);       
-    }   
+      @include font-size(18px);
+    }
   }
   &__h3 {
     display: inline;
   }
+
   &__tag-selector {
     display: inline-block;
     select.Topics {
@@ -426,14 +449,14 @@
       border-bottom: 1px solid #999;
       border-radius: 0;
       position: relative;
-      top: -4px; 
-      margin-top: 12px; 
+      top: -4px;
+      margin-top: 12px;
       @include themify($themes) {
-          color: themed('textColorSecondary');  
-      }       
+          color: themed('textColorSecondary');
+      }
       @media only screen and (min-width: 370px) {
-        margin-top: 0; 
-      }        
+        margin-top: 0;
+      }
     }
     @include MQ(L) {
       display: none;
@@ -442,17 +465,17 @@
   &__p {
     // @extend .p;
     margin: 0;
-    padding-top: 4px;   
+    padding-top: 4px;
     overflow : hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
     -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;   
+    -webkit-box-orient: vertical;
   }
   &__link {
     text-decoration: none;
     @include themify($themes) {
-        color: themed('textColorPrimary');  
+        color: themed('textColorPrimary');
       }
   }
   // &__profile-img {
@@ -467,16 +490,16 @@
   }
   &__tags {
     @include themify($themes) {
-        color: themed('textColorSecondary');  
-      }     
-    @include font-size(14px);     
+        color: themed('textColorSecondary');
+      }
+    @include font-size(14px);
     margin-bottom: 18px;
   }
   &__tag-link {
-     @include font-size(14px);  
+     @include font-size(14px);
     @include themify($themes) {
-        color: themed('textColorSecondary');  
-      }     
+        color: themed('textColorSecondary');
+      }
     a {
       @extend .link;
       @extend .link--secondary;
@@ -496,16 +519,16 @@
 
     .icon-flag-svg {
       @include themify($themes) {
-          fill: themed('textColorSecondary');  
-        }   
+          fill: themed('textColorSecondary');
+        }
       transition: 0.2s all ease-in-out;
     }
     &:hover {
       cursor: pointer;
       .icon-flag-svg {
         @include themify($themes) {
-            fill: themed('textColorError');  
-          }   
+            fill: themed('textColorError');
+          }
       }
     }
   }
@@ -526,10 +549,10 @@
       padding-left: 1.1em;
       padding-right: 1.1em;
     }
-  } 
+  }
 }
 
-// ,user layout-block             
+// ,user layout-block
 
 .user {
   display: flex;
@@ -548,8 +571,8 @@
       .user__username {
         transition: 0.2s all ease-in-out;
         @include themify($themes) {
-            color: themed('textColorAccent');  
-          } 
+            color: themed('textColorAccent');
+          }
       }
     }
   }
@@ -563,7 +586,7 @@
       height: 48px !important;
       margin-right: 10px;
     }
-  } 
+  }
   &__name {
     display: inline;
     font-weight: bold;
@@ -575,16 +598,16 @@
       @extend .link;
       @extend .link--primary;
       font-weight: bold;
-      @include font-size(14px); 
+      @include font-size(14px);
       @include MQ(M) {
-        @include font-size(16px); 
-      }       
+        @include font-size(16px);
+      }
     }
   }
   &__username, &__reputation {
     @extend .link--secondary;
     font-weight: normal;
-    @include font-size(14px);       
+    @include font-size(14px);
   }
 }
 
@@ -597,7 +620,7 @@
   &__time {
     @extend .link--secondary;
     font-weight: normal;
-    @include font-size(14px);       
+    @include font-size(14px);
   }
 }
 
@@ -606,13 +629,13 @@
 .icon-svg {
   transition: 0.2s all 0.05s ease-in-out;
   @include themify($themes) {
-      fill: themed('textColorSecondary'); 
-    } 
+      fill: themed('textColorSecondary');
+    }
   &--accent {
     @include themify($themes) {
-        fill: themed('textColorAccent'); 
-      } 
-  } 
+        fill: themed('textColorAccent');
+      }
+  }
   &--layout-line1, &--layout-line2, &--layout-line3 {
     height: 2px;
     @include opacity(1);
@@ -630,20 +653,23 @@
 }
 
 
-.articles__layout-selector .icon-svg {
-  &--accent {
-    @include themify($themes) {
-        fill: themed('textColorSecondary'); 
-      } 
-  } 
+.articles__layout-selector {
+    display: inline-block;
+        .icon-svg {
+            &--accent {
+                @include themify($themes) {
+                    fill: themed('textColorSecondary');
+                }
+            }
+    }
 }
 
 .articles__layout-selector:hover .icon-svg {
   &--accent {
     @include themify($themes) {
-        fill: themed('textColorPrimary'); 
-      } 
-  } 
+        fill: themed('textColorPrimary');
+      }
+  }
 }
 
 // Compressed list view CSS
@@ -670,12 +696,12 @@ a#changeLayout:focus {
       }
       &--layout-line1 {
         y: 6px;
-      }             
-    } 
+      }
+    }
     .content-container {
       max-width: 1520px;
     }
-    .c-sidebar { 
+    .c-sidebar {
       &--right {
         display: none;
         order: 3;
@@ -683,26 +709,26 @@ a#changeLayout:focus {
           display: block;
           margin-right: 1em;
         }
-      }    
+      }
     }
     .articles {
       padding: 1.5em 1.5em;
       max-width: none;
       max-width: 1056px;
-      @include MQ(XL) { 
+      @include MQ(XL) {
         min-width: 1050px;
       }
       @include themify($themes) {
-         background-color: themed('moduleBackgroundColor'); 
-         border: themed('border'); 
+         background-color: themed('moduleBackgroundColor');
+         border: themed('border');
       }
-      &__hr {   
+      &__hr {
         @include MQ(M) {
           display: block;
           @include themify($themes) {
-            border-bottom: themed('border'); 
-          } 
-        }          
+            border-bottom: themed('border');
+          }
+        }
       }
       &__summary {
         border: transparent;
@@ -710,18 +736,18 @@ a#changeLayout:focus {
         padding-bottom: 0px;
         margin: 0 0 1.4em;
         @include themify($themes) {
-          border-bottom: themed('borderLight'); 
-        } 
+          border-bottom: themed('borderLight');
+        }
         @include MQ(M) {
           padding-bottom: 6px;
         }
       }
       &__h2 {
-        @include font-size(16px);  
+        @include font-size(16px);
 
         @include MQ(M) {
           -webkit-line-clamp: 2;
-        }        
+        }
         @include MQ(XL) {
           -webkit-line-clamp: 1;
         }
@@ -736,7 +762,7 @@ a#changeLayout:focus {
       }
       &__feature-img {
         position: absolute;
-        width:100% !important;   
+        width:100% !important;
         top: 50%;
         transform:translateY(-50%)
       }
@@ -750,15 +776,15 @@ a#changeLayout:focus {
         padding: 4px;
         padding-top: 3px;
         // @include themify($themes) {
-        //     border-bottom: themed('borderLight'); 
-        //   }           
-      }     
+        //     border-bottom: themed('borderLight');
+        //   }
+      }
       &__p {
-        @include font-size(15px);       
+        @include font-size(15px);
         -webkit-line-clamp: 1;
         padding-right: 6px;
         margin-top: 2px;
-        padding-top: 0px;   
+        padding-top: 0px;
       }
       &__content {
         display: flex;
@@ -776,7 +802,7 @@ a#changeLayout:focus {
       }
       &__tags {
         margin: 4px 0 0;
-      } 
+      }
       &__flag {
         top: 0;
       }
@@ -789,15 +815,15 @@ a#changeLayout:focus {
           padding-left: 0;
           padding-right: 0;
         }
-      }       
+      }
     }
     // ,user layout-list
     .user {
       &__name {
-        @include font-size(15px);               
+        @include font-size(15px);
         font-weight: normal;
         a {
-          @include font-size(14px);               
+          @include font-size(14px);
         }
       }
     }
@@ -808,14 +834,14 @@ a#changeLayout:focus {
 .layout-list {
   @include MQ(L) {
     .articles {
-      padding: 1.5em 3em; 
+      padding: 1.5em 3em;
     }
   }
   @include MQ(XL) {
     .articles {
-      padding: 1.5em 4em; 
+      padding: 1.5em 4em;
     }
-  }  
+  }
 }
 
 .layout-list .user .Userpic {
@@ -843,8 +869,8 @@ a#changeLayout:focus {
         margin: 0 0 10px;
         padding-bottom: 0;
         @include themify($themes) {
-          border-bottom: themed('borderTransparent'); 
-        }       
+          border-bottom: themed('borderTransparent');
+        }
       }
       &__summary-header {
         padding: 2px 0;
@@ -884,7 +910,7 @@ a#changeLayout:focus {
           font-weight: normal;
         }
       }
-    }  
+    }
   }
 }
 
@@ -892,13 +918,13 @@ a#changeLayout:focus {
 .icon-svg {
   transition: 0.2s all ease-in-out;
   @include themify($themes) {
-      fill: themed('textColorSecondary'); 
-    } 
+      fill: themed('textColorSecondary');
+    }
   &--accent {
     @include themify($themes) {
-        fill: themed('textColorAccent'); 
-      } 
-  } 
+        fill: themed('textColorAccent');
+      }
+  }
   &--layout-line1, &--layout-line2, &--layout-line3 {
     height: 2px;
     @include opacity(1);

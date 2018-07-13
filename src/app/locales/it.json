@@ -260,7 +260,7 @@
         "welcome": "Benvenuto",
         "faq": "FAQ",
         "shop": "The Steemit Shop",
-        "chat": "Steemit Chat",
+        "chat": "Steem Chat",
         "app_center": "Steemit App Center",
         "api_docs": "Steemit API Docs",
         "bluepaper": "Steem Bluepaper",
@@ -697,8 +697,7 @@
         "location_is_too_long": "Luogo è troppo lungo",
         "website_url_is_too_long": "L'url del sito è troppo lunga ",
         "public_profile_settings": "Impostazioni profilo pubblico",
-        "private_post_display_settings":
-            "Impostazioni di Visualizzazione del Post Privato",
+        "preferences": "Impostazioni di Visualizzazione del Post Privato",
         "not_safe_for_work_nsfw_content":
             "Contenuto inappropriato da visualizzare da un luogo di lavoro (NSFW)",
         "always_hide": "Nascondi sempre",
@@ -725,7 +724,7 @@
         "balance_subject_to_3_day_withdraw_waiting_period":
             "Saldo soggetto a 3 giorni di attesa per il prelievo.",
         "move_funds_to_another_account":
-            "Sposta i fondi verso un altro account %(APP_NAME)s",
+            "Sposta i fondi verso un altro account Steem",
         "protect_funds_by_requiring_a_3_day_withdraw_waiting_period":
             "Proteggi i fondi richiedendo un periodo di attesa di 3 giorni.",
         "withdraw_funds_after_the_required_3_day_waiting_period":

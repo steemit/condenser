@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer';
 import Icon from 'app/components/elements/Icon';
 import { renderToString } from 'react-dom/server';
@@ -68,8 +69,9 @@ function split_into_sections(str) {
 
 export default class HelpContent extends React.Component {
     static propTypes = {
-        path: React.PropTypes.string.isRequired,
-        section: React.PropTypes.string,
+        path: PropTypes.string.isRequired,
+        section: PropTypes.string,
+        title: PropTypes.string,
     };
 
     constructor(props) {
@@ -140,12 +142,21 @@ export default class HelpContent extends React.Component {
                 return renderToString(<Icon name={name} />);
             }
         );
+        let title = null;
+        if (this.props.title) {
+            title = <h1>{this.props.title}</h1>;
+        }
+
         return (
-            <MarkdownViewer
-                className="HelpContent"
-                text={value}
-                allowDangerousHTML
-            />
+            <div>
+                {title}
+                <MarkdownViewer
+                    className="HelpContent"
+                    text={value}
+                    allowDangerousHTML
+                    breaks={false}
+                />
+            </div>
         );
     }
 }

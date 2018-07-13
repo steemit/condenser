@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Component } from 'react';
 import Remarkable from 'remarkable';
@@ -16,27 +17,37 @@ const remarkable = new Remarkable({
     quotes: '“”‘’',
 });
 
+const remarkableToSpec = new Remarkable({
+    html: true,
+    breaks: false, // real markdown uses \n\n for paragraph breaks
+    linkify: false,
+    typographer: false,
+    quotes: '“”‘’',
+});
+
 class MarkdownViewer extends Component {
     static propTypes = {
         // HTML properties
-        text: React.PropTypes.string,
-        className: React.PropTypes.string,
-        large: React.PropTypes.bool,
-        // formId: React.PropTypes.string, // This is unique for every editor of every post (including reply or edit)
-        canEdit: React.PropTypes.bool,
-        jsonMetadata: React.PropTypes.object,
-        highQualityPost: React.PropTypes.bool,
-        noImage: React.PropTypes.bool,
-        allowDangerousHTML: React.PropTypes.bool,
-        hideImages: React.PropTypes.bool, // whether to replace images with just a span containing the src url
+        text: PropTypes.string,
+        className: PropTypes.string,
+        large: PropTypes.bool,
+        // formId: PropTypes.string, // This is unique for every editor of every post (including reply or edit)
+        canEdit: PropTypes.bool,
+        jsonMetadata: PropTypes.object,
+        highQualityPost: PropTypes.bool,
+        noImage: PropTypes.bool,
+        allowDangerousHTML: PropTypes.bool,
+        hideImages: PropTypes.bool, // whether to replace images with just a span containing the src url
+        breaks: PropTypes.bool, // true to use bastardized markdown that cares about newlines
         // used for the ImageUserBlockList
     };
 
     static defaultProps = {
-        className: '',
-        large: false,
         allowDangerousHTML: false,
+        breaks: true,
+        className: '',
         hideImages: false,
+        large: false,
     };
 
     constructor() {
@@ -85,7 +96,17 @@ class MarkdownViewer extends Component {
             '(html comment removed: $1)'
         );
 
-        let renderedText = html ? text : remarkable.render(text);
+        let renderer = remarkableToSpec;
+        if (this.props.breaks === true) {
+            renderer = remarkable;
+        }
+
+        let renderedText = html ? text : renderer.render(text);
+
+        // If content isn't wrapped with an html element at this point, add it.
+        if (!renderedText.indexOf('<html>') !== 0) {
+            renderedText = '<html>' + renderedText + '</html>';
+        }
 
         // Embed videos, link mentions and hashtags, etc...
         if (renderedText)
@@ -118,7 +139,8 @@ class MarkdownViewer extends Component {
 
         const noImageActive = cleanText.indexOf(noImageText) !== -1;
 
-        // In addition to inserting the youtube compoennt, this allows react to compare separately preventing excessive re-rendering.
+        // In addition to inserting the youtube component, this allows
+        // react to compare separately preventing excessive re-rendering.
         let idx = 0;
         const sections = [];
 

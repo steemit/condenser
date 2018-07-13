@@ -1,19 +1,19 @@
 import 'babel-core/register';
 import 'babel-polyfill';
 import 'whatwg-fetch';
+import store from 'store';
 import { VIEW_MODE_WHISTLE, PARAM_VIEW_MODE } from 'shared/constants';
 import './assets/stylesheets/app.scss';
 import plugins from 'app/utils/JsPlugins';
 import Iso from 'iso';
-import universalRender from 'shared/UniversalRender';
 import ConsoleExports from 'app/utils/ConsoleExports';
+import { clientRender } from 'shared/UniversalRender';
 import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 import * as steem from '@steemit/steem-js';
 import { determineViewMode } from 'app/utils/Links';
+import frontendLogger from 'app/utils/FrontendLogger';
 
-window.onerror = error => {
-    if (window.$STM_csrf) serverApiRecordEvent('client_error', error);
-};
+window.addEventListener('error', frontendLogger);
 
 const kCommand = {
     CMD_LOG_T: 'log-t',
@@ -87,7 +87,10 @@ function runApp(initial_state) {
     }
 
     const config = initial_state.offchain.config;
-    steem.api.setOptions({ url: config.steemd_connection_client });
+    steem.api.setOptions({
+        url: config.steemd_connection_client,
+        useAppbaseApi: !!config.steemd_use_appbase,
+    });
     steem.config.set('address_prefix', config.address_prefix);
     steem.config.set('chain_id', config.chain_id);
     window.$STM_Config = config;
@@ -102,13 +105,28 @@ function runApp(initial_state) {
 
     initial_state.app.viewMode = determineViewMode(window.location.search);
 
+    const locale = store.get('language');
+    if (locale) initial_state.user.locale = locale;
+    initial_state.user.maybeLoggedIn = !!store.get('autopost2');
+    if (initial_state.user.maybeLoggedIn) {
+        const username = new Buffer(store.get('autopost2'), 'hex')
+            .toString()
+            .split('\t')[0];
+        initial_state.user.current = {
+            username,
+        };
+    }
+
     const location = `${window.location.pathname}${window.location.search}${
         window.location.hash
     }`;
-    universalRender({ history, location, initial_state }).catch(error => {
+
+    try {
+        clientRender(initial_state);
+    } catch (error) {
         console.error(error);
         serverApiRecordEvent('client_error', error);
-    });
+    }
 }
 
 if (!window.Intl) {
@@ -122,6 +140,7 @@ if (!window.Intl) {
             require('intl/locale-data/jsonp/fr.js');
             require('intl/locale-data/jsonp/it.js');
             require('intl/locale-data/jsonp/ko.js');
+            require('intl/locale-data/jsonp/ja.js');
             Iso.bootstrap(runApp);
         },
         'IntlBundle'

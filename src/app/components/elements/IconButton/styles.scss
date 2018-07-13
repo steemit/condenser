@@ -1,0 +1,106 @@
+
+.icon-button__svg {
+    display: block;
+    transition: all 0.3s ease-in-out;
+    &.icon-button__svg--small {
+      width: 32px;
+      height: 32px;
+      @include MQ(M) {
+          width: 32px;
+          height: 32px;
+      }
+    }
+    &.icon-button__svg--medium {
+      width: 36px;
+      height: 36px;
+      @include MQ(M) {
+          width: 42px;
+          height: 42px;
+      }
+    }
+    &.icon-button__svg--large {
+      width: 42px;
+      height: 42px;
+      @include MQ(M) {
+          width: 48px;
+          height: 48px;
+      }
+    }
+    &.icon-button__svg--green {
+      fill: $color-teal;
+    }
+    &.icon-button__svg--transparent {
+      fill: transparent;
+    }
+    .icon-button{
+        transition: all 0.3s ease-in-out;
+        stroke-width: 0.5;
+        &.icon-button__border--transparent {
+            @include themify($themes) {
+                stroke: themed('iconColorSecondary');
+            }
+        }
+        &.icon-button__border--green{
+            @include themify($themes) {
+                stroke: $color-teal;
+            }
+        }
+        &.icon-button--transparent {
+            fill-rule: evenodd;
+            @include themify($themes) {
+                fill: themed('colorAccentReverse');
+            }
+            &.icon-button__magnifyingGlass{
+              fill: transparent;
+              stroke-width: 1;
+                @include themify($themes) {
+                    stroke: themed('colorAccentReverse');
+                }
+            }
+        }
+        &.icon-button--green {
+            fill-rule: evenodd;
+            @include themify($themes) {
+                fill: themed('colorWhite');
+            }
+        }
+    }
+    :hover {
+        stroke: $color-border-light;
+        stroke-width: 0.5;
+        cursor: pointer;
+        @include themify($themes) {
+          fill: themed('buttonBackground');
+        }
+        .icon-button {
+            &.icon-button__border {
+                stroke-width: 2;
+                @include themify($themes) {
+                    stroke: themed('buttonBackground');
+                }
+            }
+            &.icon-button__svg {
+                @include themify($themes) {
+                  fill: themed('buttonBackground');
+              }
+            }
+            &.icon-button--transparent {
+                @include themify($themes) {
+                    fill: themed('buttonText');
+                }
+                &.icon-button__magnifyingGlass{
+                  fill: transparent;
+                  stroke-width: 1;
+                    @include themify($themes) {
+                        stroke: themed('buttonText');
+                    }
+                }
+            }
+            &.icon-button--green{
+            @include themify($themes) {
+                fill: themed('buttonText');
+            }
+            }
+        }
+    }
+}

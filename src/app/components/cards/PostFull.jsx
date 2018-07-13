@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Icon from 'app/components/elements/Icon';
@@ -25,27 +26,6 @@ import tt from 'counterpart';
 import userIllegalContent from 'app/utils/userIllegalContent';
 import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
-
-// function loadFbSdk(d, s, id) {
-//     return new Promise(resolve => {
-//         window.fbAsyncInit = function () {
-//             window.FB.init({
-//                 appId: $STM_Config.fb_app,
-//                 xfbml: false,
-//                 version: 'v2.6',
-//                 status: true
-//             });
-//             resolve(window.FB);
-//         };
-//
-//         var js, fjs = d.getElementsByTagName(s)[0];
-//         if (d.getElementById(id)) {return;}
-//         js = d.createElement(s);
-//         js.id = id;
-//         js.src = "//connect.facebook.net/en_US/sdk.js";
-//         fjs.parentNode.insertBefore(js, fjs);
-//     });
-// }
 
 function TimeAuthorCategory({ content, authorRepLog10, showTags }) {
     return (
@@ -88,15 +68,15 @@ class PostFull extends React.Component {
     static propTypes = {
         // html props
         /* Show extra options (component is being viewed alone) */
-        cont: React.PropTypes.object.isRequired,
-        post: React.PropTypes.string.isRequired,
+        cont: PropTypes.object.isRequired,
+        post: PropTypes.string.isRequired,
 
         // connector props
-        username: React.PropTypes.string,
-        unlock: React.PropTypes.func.isRequired,
-        deletePost: React.PropTypes.func.isRequired,
-        showPromotePost: React.PropTypes.func.isRequired,
-        showExplorePost: React.PropTypes.func.isRequired,
+        username: PropTypes.string,
+        unlock: PropTypes.func.isRequired,
+        deletePost: PropTypes.func.isRequired,
+        showPromotePost: PropTypes.func.isRequired,
+        showExplorePost: PropTypes.func.isRequired,
     };
 
     constructor() {
@@ -104,6 +84,7 @@ class PostFull extends React.Component {
         this.state = {};
         this.fbShare = this.fbShare.bind(this);
         this.twitterShare = this.twitterShare.bind(this);
+        this.redditShare = this.redditShare.bind(this);
         this.linkedInShare = this.linkedInShare.bind(this);
         this.showExplorePost = this.showExplorePost.bind(this);
         this.onShowReply = () => {
@@ -156,18 +137,12 @@ class PostFull extends React.Component {
     fbShare(e) {
         const href = this.share_params.url;
         e.preventDefault();
-        // loadFbSdk(document, 'script', 'facebook-jssdk').then(fb => {
-        window.FB.ui(
-            {
-                method: 'share',
-                href,
-            },
-            response => {
-                if (response && !response.error_message)
-                    serverApiRecordEvent('FbShare', this.share_params.link);
-            }
+        window.open(
+            `https://www.facebook.com/sharer/sharer.php?u=${href}`,
+            'fbshare',
+            'width=600, height=400, scrollbars=no'
         );
-        // });
+        serverApiRecordEvent('FbShare', this.share_params.link);
     }
 
     twitterShare(e) {
@@ -195,6 +170,18 @@ class PostFull extends React.Component {
                 ',height=' +
                 winHeight
         );
+    }
+
+    redditShare(e) {
+        serverApiRecordEvent('RedditShare', this.share_params.link);
+        e.preventDefault();
+        const s = this.share_params;
+        const q =
+            'title=' +
+            encodeURIComponent(s.title) +
+            '&url=' +
+            encodeURIComponent(s.url);
+        window.open('https://www.reddit.com/submit?' + q, 'Share');
     }
 
     linkedInShare(e) {
@@ -319,6 +306,13 @@ class PostFull extends React.Component {
                 value: 'Twitter',
                 title: tt('postfull_jsx.share_on_twitter'),
                 icon: 'twitter',
+            },
+            {
+                link: '#',
+                onClick: this.redditShare,
+                value: 'Reddit',
+                title: tt('postfull_jsx.share_on_reddit'),
+                icon: 'reddit',
             },
             {
                 link: '#',
@@ -477,14 +471,16 @@ class PostFull extends React.Component {
                 )}
                 <TagList post={content} horizontal />
                 <div className="PostFull__footer row">
-                    <div className="column">
+                    <div className="columns medium-12 large-5">
                         <TimeAuthorCategory
                             content={content}
                             authorRepLog10={authorRepLog10}
                         />
+                    </div>
+                    <div className="columns medium-12 large-2 ">
                         <Voting post={post} />
                     </div>
-                    <div className="RightShare__Menu small-11 medium-5 large-5 columns text-right">
+                    <div className="RightShare__Menu small-11 medium-12 large-5 columns">
                         {!readonly && (
                             <Reblog author={author} permlink={permlink} />
                         )}

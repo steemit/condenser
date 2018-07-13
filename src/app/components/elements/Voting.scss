@@ -61,6 +61,9 @@
     margin-left: 0;
     border-radius: 50%;
   }
+  div > a {
+    padding-right: 0.5rem;
+  }
   > a {
     padding-right: 0.5rem;
   }
@@ -80,6 +83,15 @@
           box-shadow: 0 0 0 rgba(75, 162, 242, 1);
           animation: pulse 2s infinite;
       }
+  }
+  .close-button {
+    position: relative;
+    margin-left: 1em;
+  }
+  > .dropdown-comp > .dropdown__content {
+    position: absolute;
+    top: -30px;
+    left: -26px;
   }
 }
 
@@ -165,7 +177,7 @@
 }
 
 .Voting .DropdownMenu ul {
-  width: 240px;
+  width: 260px;
 
   li > a {
     padding: 0 0.5rem;
@@ -239,9 +251,6 @@
     .rangeslider {
       margin-right: 2rem;
     }
-    .close-button {
-      right: 0;
-    }
 }
 
 .Voting__adjust_weight {
@@ -283,10 +292,14 @@
       background: #fff;
       border: 1px solid #ccc;
       cursor: pointer;
-      display: inline-block;
-      position: absolute;
+      width: 30px;
+      height: 30px;
+      border-radius: 30px;
+      top: 50%;
+      transform: translate3d(-50%,-50%,0);
       &:active {
         background: $color-teal;
+        box-shadow: none;
       }
     }
   }
@@ -301,15 +314,6 @@
       background: $color-teal;
       box-shadow: none;
       left: 0;
-    }
-    .rangeslider__handle {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      top: -10px;
-      &:active {
-        box-shadow: none;
-      }
     }
   }
   .Voting__adjust_weight_close {

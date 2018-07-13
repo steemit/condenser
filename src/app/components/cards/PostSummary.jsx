@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Icon from 'app/components/elements/Icon';
@@ -17,15 +18,16 @@ import tt from 'counterpart';
 import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 import proxifyImageUrl from 'app/utils/ProxifyUrl';
 import Userpic, { avatarSize } from 'app/components/elements/Userpic';
+import { SIGNUP_URL } from 'shared/constants';
 
 class PostSummary extends React.Component {
     static propTypes = {
-        post: React.PropTypes.string.isRequired,
-        pending_payout: React.PropTypes.string.isRequired,
-        total_payout: React.PropTypes.string.isRequired,
-        content: React.PropTypes.object.isRequired,
-        thumbSize: React.PropTypes.string,
-        nsfwPref: React.PropTypes.string,
+        post: PropTypes.string.isRequired,
+        pending_payout: PropTypes.string.isRequired,
+        total_payout: PropTypes.string.isRequired,
+        content: PropTypes.object.isRequired,
+        thumbSize: PropTypes.string,
+        nsfwPref: PropTypes.string,
     };
 
     constructor() {
@@ -102,27 +104,34 @@ class PostSummary extends React.Component {
         const archived = content.get('cashout_time') === '1969-12-31T23:59:59'; // TODO: audit after HF17. #1259
         const full_power = content.get('percent_steem_dollars') === 0;
 
-        let title_link_url;
-        let title_text = p.title;
-        let comments_link;
+        let post_url;
+        let title_text;
+        let comments_url;
 
-        if (content.get('parent_author') !== '') {
+        if (content.get('depth') > 0) {
             title_text = tt('g.re_to', { topic: content.get('root_title') });
-            title_link_url = content.get('url');
-            comments_link = title_link_url;
+            post_url =
+                '/' +
+                content.get('category') +
+                '/@' +
+                content.get('author') +
+                '/' +
+                content.get('permlink');
+            comments_url = p.link + '#comments';
         } else {
-            title_link_url = p.link;
-            comments_link = p.link + '#comments';
+            title_text = p.title;
+            post_url = p.link;
+            comments_url = post_url + '#comments';
         }
 
         const content_body = (
             <div className="PostSummary__body entry-content">
-                <Link to={title_link_url}>{desc}</Link>
+                <Link to={post_url}>{desc}</Link>
             </div>
         );
         const content_title = (
             <h2 className="articles__h2 entry-title">
-                <Link to={title_link_url}>
+                <Link to={post_url}>
                     {isNsfw && <span className="nsfw-flag">nsfw</span>}
                     {title_text}
                 </Link>
@@ -140,7 +149,7 @@ class PostSummary extends React.Component {
                     mute={false}
                 />
                 {} {tt('g.in')} <TagList post={p} single />&nbsp;•&nbsp;
-                <Link to={title_link_url}>
+                <Link to={post_url}>
                     <TimeAgoWrapper date={p.created} className="updated" />
                 </Link>
             </span>
@@ -173,7 +182,7 @@ class PostSummary extends React.Component {
                         <span className="articles__tag-link">
                             {tt('g.in')}&nbsp;<TagList post={p} single />&nbsp;•&nbsp;
                         </span>
-                        <Link className="timestamp__link" to={title_link_url}>
+                        <Link className="timestamp__link" to={post_url}>
                             <span className="timestamp__time">
                                 <TimeAgoWrapper
                                     date={p.created}
@@ -201,7 +210,7 @@ class PostSummary extends React.Component {
         const content_footer = (
             <div className="PostSummary__footer">
                 <Voting post={post} showList={false} />
-                <VotesAndComments post={post} commentsLink={comments_link} />
+                <VotesAndComments post={post} commentsLink={comments_url} />
                 <span className="PostSummary__time_author_category">
                     {!archived && (
                         <Reblog
@@ -218,7 +227,7 @@ class PostSummary extends React.Component {
         const summary_footer = (
             <div className="articles__summary-footer">
                 <Voting post={post} showList={false} />
-                <VotesAndComments post={post} commentsLink={comments_link} />
+                <VotesAndComments post={post} commentsLink={comments_url} />
                 <span className="PostSummary__time_author_category">
                     {!archived && (
                         <Reblog
@@ -255,7 +264,7 @@ class PostSummary extends React.Component {
                                 role="button"
                                 onClick={this.onRevealNsfw}
                             >
-                                {tt('postsummary_jsx.reveal_it')}
+                                <a>{tt('postsummary_jsx.reveal_it')}</a>
                             </span>{' '}
                             {tt('g.or') + ' '}
                             {username ? (
@@ -269,11 +278,11 @@ class PostSummary extends React.Component {
                                 </span>
                             ) : (
                                 <span>
-                                    <Link to="/pick_account">
+                                    <a href={SIGNUP_URL}>
                                         {tt(
                                             'postsummary_jsx.create_an_account'
                                         )}
-                                    </Link>{' '}
+                                    </a>{' '}
                                     {tt(
                                         'postsummary_jsx.to_save_your_preferences'
                                     )}.
@@ -344,10 +353,7 @@ class PostSummary extends React.Component {
                 >
                     {thumb ? (
                         <div className="articles__content-block articles__content-block--img">
-                            <Link
-                                className="articles__link"
-                                to={title_link_url}
-                            >
+                            <Link className="articles__link" to={post_url}>
                                 {thumb}
                             </Link>
                         </div>

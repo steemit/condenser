@@ -1,5 +1,6 @@
 /* eslint react/prop-types: 0 */
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import tt from 'counterpart';
@@ -9,13 +10,13 @@ import constants from 'app/redux/constants';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import PostsList from 'app/components/cards/PostsList';
 import { isFetchingOrRecentlyUpdated } from 'app/utils/StateFunctions';
-import MarkNotificationRead from 'app/components/elements/MarkNotificationRead';
 import Callout from 'app/components/elements/Callout';
 // import SidebarStats from 'app/components/elements/SidebarStats';
 import SidebarLinks from 'app/components/elements/SidebarLinks';
 import SidebarNewUsers from 'app/components/elements/SidebarNewUsers';
 import ArticleLayoutSelector from 'app/components/modules/ArticleLayoutSelector';
 import Topics from './Topics';
+import SortOrder from 'app/components/elements/SortOrder';
 
 class PostsIndex extends React.Component {
     static propTypes = {
@@ -27,6 +28,7 @@ class PostsIndex extends React.Component {
         loading: PropTypes.bool,
         username: PropTypes.string,
         blogmode: PropTypes.bool,
+        categories: PropTypes.object,
     };
 
     static defaultProps = {
@@ -58,8 +60,8 @@ class PostsIndex extends React.Component {
 
     loadMore(last_post) {
         if (!last_post) return;
-        let { accountname } = this.props.routeParams;
         let {
+            accountname,
             category,
             order = constants.DEFAULT_SORT_ORDER,
         } = this.props.routeParams;
@@ -86,12 +88,15 @@ class PostsIndex extends React.Component {
             category,
             order = constants.DEFAULT_SORT_ORDER,
         } = this.props.routeParams;
+
+        const { categories } = this.props;
+
         let topics_order = order;
         let posts = [];
+        let account_name = '';
         let emptyText = '';
-        let markNotificationRead = null;
         if (category === 'feed') {
-            const account_name = order.slice(1);
+            account_name = order.slice(1);
             order = 'by_feed';
             topics_order = 'trending';
             posts = this.props.accounts.getIn([account_name, 'feed']);
@@ -116,12 +121,6 @@ class PostsIndex extends React.Component {
                         </Link>
                         <br />
                     </div>
-                );
-                markNotificationRead = (
-                    <MarkNotificationRead
-                        fields="feed"
-                        account={account_name}
-                    />
                 );
             } else {
                 emptyText = (
@@ -162,8 +161,13 @@ class PostsIndex extends React.Component {
         // Logged-in:
         // At homepage (@user/feed) say "My feed"
         let page_title = 'Posts'; // sensible default here?
-        if (typeof this.props.username !== 'undefined' && category === 'feed') {
-            page_title = 'My feed'; // todo: localization
+        if (category === 'feed') {
+            if (account_name === this.props.username)
+                page_title = tt('posts_index.my_feed');
+            else
+                page_title = tt('posts_index.accountnames_feed', {
+                    account_name,
+                });
         } else {
             switch (topics_order) {
                 case 'trending': // cribbed from Header.jsx where it's repeated 2x already :P
@@ -181,13 +185,13 @@ class PostsIndex extends React.Component {
             }
             if (typeof category !== 'undefined') {
                 page_title = `${page_title}: ${category}`; // maybe todo: localize the colon?
+            } else {
+                page_title = `${page_title}: ${tt('g.all_tags')}`;
             }
         }
-
         const layoutClass = this.props.blogmode
             ? ' layout-block'
             : ' layout-list';
-
         return (
             <div
                 className={
@@ -197,23 +201,33 @@ class PostsIndex extends React.Component {
                 }
             >
                 <article className="articles">
-                    <div className="articles__header">
-                        <div className="articles__header-col">
-                            <h1 className="articles__h1">{page_title}</h1>
-                        </div>
-                        <div className="articles__header-col articles__header-col--right">
-                            <div className="articles__tag-selector">
+                    <div className="articles__header row">
+                        <div className="small-6 medium-6 large-6 column">
+                            <h1 className="articles__h1 show-for-mq-large articles__h1--no-wrap">
+                                {page_title}
+                            </h1>
+                            <span className="hide-for-mq-large articles__header-select">
                                 <Topics
+                                    username={this.props.username}
                                     order={topics_order}
                                     current={category}
-                                    compact
+                                    categories={categories}
+                                    compact={true}
                                 />
-                            </div>
+                            </span>
+                        </div>
+                        <div className="small-6 medium-5 large-5 column hide-for-large articles__header-select">
+                            <SortOrder
+                                sortOrder={this.props.sortOrder}
+                                topic={this.props.topic}
+                                horizontal={false}
+                            />
+                        </div>
+                        <div className="medium-1 show-for-mq-medium column">
                             <ArticleLayoutSelector />
                         </div>
                     </div>
                     <hr className="articles__hr" />
-                    {markNotificationRead}
                     {!fetching && (posts && !posts.size) ? (
                         <Callout>{emptyText}</Callout>
                     ) : (
@@ -228,13 +242,17 @@ class PostsIndex extends React.Component {
                     )}
                 </article>
                 <aside className="c-sidebar c-sidebar--right">
-                    {!this.props.username ? (
+                    {this.props.isBrowser &&
+                    !this.props.maybeLoggedIn &&
+                    !this.props.username ? (
                         <SidebarNewUsers />
                     ) : (
-                        <div>
-                            {/* <SidebarStats steemPower={123} followers={23} reputation={62} />  */}
-                            <SidebarLinks username={this.props.username} />
-                        </div>
+                        this.props.isBrowser && (
+                            <div>
+                                {/* <SidebarStats steemPower={123} followers={23} reputation={62} />  */}
+                                <SidebarLinks username={this.props.username} />
+                            </div>
+                        )
                     )}
                 </aside>
                 <aside className="c-sidebar c-sidebar--left">
@@ -242,6 +260,8 @@ class PostsIndex extends React.Component {
                         order={topics_order}
                         current={category}
                         compact={false}
+                        username={this.props.username}
+                        categories={categories}
                     />
                     <small>
                         <a
@@ -263,7 +283,7 @@ class PostsIndex extends React.Component {
 module.exports = {
     path: ':order(/:category)',
     component: connect(
-        state => {
+        (state, ownProps) => {
             return {
                 discussions: state.global.get('discussion_idx'),
                 status: state.global.get('status'),
@@ -273,6 +293,13 @@ module.exports = {
                     state.user.getIn(['current', 'username']) ||
                     state.offchain.get('account'),
                 blogmode: state.app.getIn(['user_preferences', 'blogmode']),
+                sortOrder: ownProps.params.order,
+                topic: ownProps.params.category,
+                categories: state.global
+                    .getIn(['tag_idx', 'trending'])
+                    .take(50),
+                maybeLoggedIn: state.user.get('maybeLoggedIn'),
+                isBrowser: process.env.BROWSER,
             };
         },
         dispatch => {

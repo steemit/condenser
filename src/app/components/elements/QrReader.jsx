@@ -1,9 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 export default class Qr extends React.Component {
     static propTypes = {
-        handleScan: React.PropTypes.func.isRequired,
-        onClose: React.PropTypes.func,
+        handleScan: PropTypes.func.isRequired,
+        onClose: PropTypes.func,
     };
     constructor(props) {
         super();

@@ -13,12 +13,12 @@ class Userpic extends Component {
         showProgress: PropTypes.bool,
         progressClass: PropTypes.string,
         imageUrl: PropTypes.string,
+        size: PropTypes.number,
         onClick: PropTypes.func,
     }
 
     static defaultProps = {
-        width: 48,
-        height: 48,
+        size: 48,
         hideIfDefault: false,
         showProgress: false
     }
@@ -31,7 +31,7 @@ class Userpic extends Component {
     shouldComponentUpdate = shouldComponentUpdate(this, 'Userpic')
 
     extractUrl = () => {
-        const { json_metadata, width, hideIfDefault, imageUrl } = this.props
+        const { json_metadata, size, hideIfDefault, imageUrl } = this.props
 
         let url = null;
 
@@ -50,8 +50,7 @@ class Userpic extends Component {
         }
 
         if (url && /^(https?:)\/\//.test(url)) {
-            const size = width && width > 48 ? '320x320' : '120x120';
-            url = proxifyImageUrl(url, size);
+            url = proxifyImageUrl(url, size && size > 120 ? '320x320' : '120x120');
         } else {
             if (hideIfDefault) {
                 return null;
@@ -83,7 +82,7 @@ class Userpic extends Component {
                 <CircularProgress
                     percentage={percentage}
                     show={showProgress}
-                    size={this.props.width}
+                    size={this.props.size}
                     strokeWidth={2.5}
                 />
             </div>
@@ -91,13 +90,13 @@ class Userpic extends Component {
     }
 
     render() {
-        const { width, height, votingPower, showProgress, onClick } = this.props
+        const { size, votingPower, showProgress, onClick } = this.props
 
         const style = {
-            width: `${width}px`,
-            height: `${height}px`,
-            backgroundImage: `url(${this.extractUrl()})`
-        }
+            width: size,
+            height: size,
+            backgroundImage: `url(${this.extractUrl()})`,
+        };
 
         if (votingPower) {
             const percentage = this.votingPowerToPercents(votingPower)
@@ -116,12 +115,9 @@ class Userpic extends Component {
 
 export default connect(
     (state, props) => {
-        const { account, width, height, hideIfDefault, onClick } = props;
-
+        const { account, hideIfDefault } = props;
         return {
             json_metadata: state.global.getIn(['accounts', account, 'json_metadata']),
-            width,
-            height,
             hideIfDefault,
             onClick,
         };

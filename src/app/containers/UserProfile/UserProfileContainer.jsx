@@ -14,7 +14,8 @@ import transaction from 'app/redux/Transaction';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import Callout from 'app/components/elements/Callout';
 
-import PostsList from 'app/components/cards/PostsList';
+//import PostsList from 'app/components/cards/PostsList';
+import PostsList from 'src/app/components/common/PostsList';
 import UserWallet from 'app/components/modules/UserWallet';
 import CurationRewards from 'app/components/modules/CurationRewards';
 import AuthorRewards from 'app/components/modules/AuthorRewards';
@@ -30,10 +31,17 @@ import Container from 'src/app/components/common/Container';
 import UserHeader from 'src/app/components/userProfile/UserHeader';
 import UserNavigation from 'src/app/components/userProfile/UserNavigation';
 import UserCardAbout from 'src/app/components/userProfile/UserCardAbout';
+import RightColumnStub from 'src/app/components/userProfile/RightColumnStub'
 
 const Main = styled.div`
     background-color: #f9f9f9;
     padding: 20px 0;
+`;
+
+const Content = styled.div`
+    flex-shrink: 1;
+    flex-grow: 1;
+    margin: 0 18px;
 `;
 
 export default class UserProfileContainer extends Component {
@@ -120,6 +128,7 @@ export default class UserProfileContainer extends Component {
         )
             return;
         const [author, permlink] = last_post.split('/');
+        debugger
         this.props.requestData({
             author,
             permlink,
@@ -266,6 +275,8 @@ export default class UserProfileContainer extends Component {
                 } else {
                     tab_content = (
                         <PostsList
+                            key={routeParams.accountName}
+                            account={routeParams.accountName}
                             posts={posts}
                             loading={fetching}
                             category="comments"
@@ -306,9 +317,11 @@ export default class UserProfileContainer extends Component {
                 } else {
                     tab_content = (
                         <PostsList
+                            key={account.name}
                             account={account.name}
                             posts={posts}
                             loading={fetching}
+                            order="by_author"
                             category="blog"
                             loadMore={this.loadMore}
                             showSpam
@@ -402,7 +415,10 @@ export default class UserProfileContainer extends Component {
                                 followingCount={followingCount}
                             />
                         )}
-                        {tab_content}
+                        <Content>
+                            {tab_content}
+                        </Content>
+                        <RightColumnStub />
                     </Container>
                 </Main>
             </Fragment>

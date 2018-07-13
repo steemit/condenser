@@ -315,6 +315,9 @@ export default connect(
                 if(weight < 0) return tt('voting_jsx.changing_to_a_downvote') + t
                 return null
             }
+
+            debugger
+
             dispatch(transaction.actions.broadcastOperation({
                 type: 'vote',
                 operation: {voter: username, author, permlink, weight,

@@ -35,7 +35,7 @@ const transfer = data => {
   return (
     <div className="NotificationContent__container">
       <div className="NotificationContent__container_left">
-        <Userpic width="37" height="37" imageUrl={profile_image} />
+        <Userpic size={37} imageUrl={profile_image} />
       </div>
       <div className="NotificationContent__container_center">
         <Link to={`/@${to}/transfers`}>
@@ -95,7 +95,7 @@ const comment = data => {
     <div className="NotificationContent__container">
       <div className="NotificationContent__container_left">
         {
-          oncePerBlock ? <Userpic width="37" height="37" imageUrl={profile_image} /> :
+          oncePerBlock ? <Userpic size={37} imageUrl={profile_image} /> :
             <span className="NotificationContent__icon" dangerouslySetInnerHTML={{__html: commentMulti}} />
         }
       </div>
@@ -154,7 +154,7 @@ const upvote = data => {
     <div className="NotificationContent__container">
       <div className="NotificationContent__container_left">
         {
-          oncePerBlock ? <Userpic width="37" height="37" imageUrl={profile_image} /> :
+          oncePerBlock ? <Userpic size={37} imageUrl={profile_image} /> :
             <span className="NotificationContent__icon" dangerouslySetInnerHTML={{__html: upVoteMulti}} />
         }
       </div>
@@ -213,7 +213,7 @@ const downvote = data => {
     <div className="NotificationContent__container">
       <div className="NotificationContent__container_left">
         {
-          oncePerBlock ? <Userpic width="37" height="37" imageUrl={profile_image} /> :
+          oncePerBlock ? <Userpic size={37} imageUrl={profile_image} /> :
             <span className="NotificationContent__icon" dangerouslySetInnerHTML={{__html: downVoteMulti}} />
         }
       </div>

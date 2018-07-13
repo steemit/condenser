@@ -13,6 +13,7 @@
 - <a href="#Where_do_the_tokens_come_from">Where do the tokens come from?</a>
 - <a href="#Where_does_the_value_come_from">Where does the value come from?</a>
 - <a href="#Why_are_people_getting_vastly_different_rewards">Why are people getting vastly different rewards?</a>
+- <a href="#Is_there_a_desktop_wallet_available_for_STEEM">Is there a desktop wallet available for STEEM?</a>
 - <a href="#What_are_Smart_Media_Tokens_SMTs">What are Smart Media Tokens (SMTs)?</a>
 
 ### <span id="Table_of_Contents_Accounts">Accounts</span>
@@ -236,7 +237,7 @@ You can earn digital tokens on Steemit by:
 
 **Voting and curating** - If you discover a post and upvote it before it becomes popular, you can earn a curation reward. The reward amount will depend on the amount of Steem Power you have.
 
-**Purchasing** - Users can purchase STEEM or Steem Dollar tokens directly through their Steemit wallet using bitcoin, Ether, or BitShares tokens. They are also available from other markets and exchanges including [Binance](https://www.binance.com/), [BitShares](https://openledger.info/), [Bittrex](https://bittrex.com), [BlockTrades](https://blocktrades.us), [Changelly](https://changelly.com), [GOPAX](https://www.gopax.co.kr), [HitBTC](https://hitbtc.com/), [Poloniex](https://poloniex.com), [Shapeshift.io](https://shapeshift.io), [UpBit](https://upbit.com/), and [Yensesa](https://yensesa.com).
+**Purchasing** - Users can purchase STEEM or Steem Dollar tokens directly through their Steemit wallet using bitcoin, Ether, or BitShares tokens. They are also available from other markets and exchanges including [Binance](https://www.binance.com/), [Bithumb](https://www.bithumb.com/), [BitShares](https://wallet.bitshares.org/), [Bittrex](https://bittrex.com), [BlockTrades](https://blocktrades.us), [Changelly](https://changelly.com), [GOBADA](https://www.gobaba.com/), [GOPAX](https://www.gopax.co.kr), [HitBTC](https://hitbtc.com/), [Huobi](https://www.huobi.pro/), [LocalBitcoinCash](https://www.localbitcoincash.org/), [Poloniex](https://poloniex.com), [Shapeshift.io](https://shapeshift.io), [UpBit](https://upbit.com/), and [Yensesa](https://yensesa.com).
 
 **Vesting** - STEEM tokens that are powered up to Steem Power will earn a small amount of new tokens for holding.
 
@@ -260,6 +261,11 @@ Steemit is not a "get rich quick" scheme. While it is possible to post content t
 Most of the authors that you see earning high rewards are users that have spent a lot of time in the network building followings, making connections with others, and developing a reputation for bringing high quality content.
 
 It is best to have realistic expectations, without focusing on rewards when you are first starting out. Work on building a following, making connections, and developing a good reputation. Consistency will pay off in the long run.
+
+<a href="#Table_of_Contents_General">^</a>
+## <span id="Is_there_a_desktop_wallet_available_for_STEEM">Is there a desktop wallet available for STEEM?</span>
+
+Yes. There is a third party wallet called [Vessel](https://github.com/aaroncox/vessel/), developed by one of the Steem witnesses @jesta. The latest release can be downloaded [here](https://github.com/aaroncox/vessel/releases).
 
 <a href="#Table_of_Contents_General">^</a>
 ## <span id="What_are_Smart_Media_Tokens_SMTs">What are Smart Media Tokens (SMTs)?</span>
@@ -291,9 +297,9 @@ You will need to provide your email address and phone number.
 <a href="#Table_of_Contents_Accounts">^</a>
 ## <span id="How_long_does_the_account_approval_process_take">How long does the account approval process take?</span>
 
-Some accounts are approved faster than others. Most accounts are approved within 24 hours. Some may take a week or more to review.
+Some accounts are approved faster than others. Most accounts are approved within 24 hours. Some may take a week or two to review.
 
-If your account has not been approved after more than a week, you can ask for help in the <a href="https://steem.chat/channel/help">#help</a> channel on <a href="https://steem.chat/home">steem.chat</a>.
+If your account has not been approved after more than two weeks, you can ask for help in the <a href="https://steem.chat/channel/help">#help</a> channel on <a href="https://steem.chat/home">steem.chat</a>.
 
 <a href="#Table_of_Contents_Accounts">^</a>
 ## <span id="Can_I_speed_up_the_account_approval_process">Can I speed up the account approval process?</span>
@@ -679,12 +685,16 @@ STEEM and SBD are listed on the following exchanges:
 | Exchange        | STEEM           | SBD  |
 | ------------- |:-------------:| -----:|
 | [Binance](https://www.binance.com/)      | Y | N |
-| [BitShares](https://openledger.info/)      | Y      |   Y |
+| [Bithumb](https://www.bithumb.com/)  | Y | N |
+| [BitShares](https://wallet.bitshares.org/)      | Y      |   Y |
 | [Bittrex](https://bittrex.com) | Y      |    Y |
 | [BlockTrades](https://blocktrades.us) | Y      |    Y |
 | [Changelly](https://changelly.com) | Y      |    N |
+| [GOBADA](https://www.gobaba.com/)  | Y | N |
 | [GOPAX](https://www.gopax.co.kr) | Y      |    Y |
 | [HitBTC](https://hitbtc.com/) | Y      |    Y |
+| [Huobi](https://www.huobi.pro/)  | Y | N |
+| [LocalBitcoinCash](https://www.localbitcoincash.org/)  | Y | N |
 | [Poloniex](https://poloniex.com) | Y      |    Y |
 | [Shapeshift.io](https://shapeshift.io) | Y      |    N |
 | [UpBit](https://upbit.com/) | Y      |    Y |
@@ -767,7 +777,7 @@ To buy:
 
 STEEM purchases made via steemit.com are facilitated by <a href="https://blocktrades.us">BlockTrades</a>.
 
-bitcoin can also be exchanged for STEEM on external markets such as [Binance](https://www.binance.com/), [BitShares](https://openledger.info/), [Bittrex](https://bittrex.com), [Changelly](https://changelly.com), [GOPAX](https://www.gopax.co.kr), [HitBTC](https://hitbtc.com/), [Poloniex](https://poloniex.com), [Shapeshift.io](https://shapeshift.io), [UpBit](https://upbit.com/), and [Yensesa](https://yensesa.com).
+bitcoin can also be exchanged for STEEM on external markets such as [Binance](https://www.binance.com/), [Bithumb](https://www.bithumb.com/), [BitShares](https://wallet.bitshares.org/), [Bittrex](https://bittrex.com), [Changelly](https://changelly.com), [GOBADA](https://www.gobaba.com/), [GOPAX](https://www.gopax.co.kr), [HitBTC](https://hitbtc.com/), [Huobi](https://www.huobi.pro/), [LocalBitcoinCash](https://www.localbitcoincash.org/), [Poloniex](https://poloniex.com), [Shapeshift.io](https://shapeshift.io), [UpBit](https://upbit.com/), and [Yensesa](https://yensesa.com).
 
 <a href="#Table_of_Contents_Economics">^</a>
 ## <span id="How_long_does_it_take_STEEM_or_STEEM_Power_that_I_purchased_to_show_up_in_my_account">How long does it take STEEM or Steem Power that I purchased to show up in my account?</span>
@@ -1241,7 +1251,9 @@ It is strongly recommended that you store an offline copy of your password somew
 <a href="#Table_of_Contents_Security">^</a>
 ## <span id="Are_my_STEEM_and_Steem_Dollar_tokens_insured_in_the_event_of_a_hack_or_if_someone_takes_over_my_account">Are my STEEM and Steem Dollar tokens insured in the event of a hack or if someone takes over my account?</span>
 
-No, liquid tokens can not be taken back if stolen or sent to the wrong account. If your tokens are in Steem Power, it is impossible for a hacker to take out more than 1/13 per week. If your tokens are in savings, there is a three-day wait period for them to become transferable.
+No, liquid tokens can not be taken back if stolen or sent to the wrong account.
+
+If your tokens are in Steem Power, it is impossible for a hacker to take out more than 1/13 per week. If your tokens are in savings, there is a three-day wait period for them to become transferable.
 
 <a href="#Table_of_Contents_Security">^</a>
 ## <span id="What_should_I_do_if_I_discover_that_someone_hacked_my_account">What should I do if I discover that someone hacked my account?</span>
@@ -1256,6 +1268,8 @@ If your password has been changed without your consent, then the account designa
 Steemit Inc. owns the default recovery account (@steem) for all users who sign up using steemit.com. Steemit can only identify users by their original email, Facebook, or Reddit logins that were used to signup via steemit.com.
 
 If you don't have the master password or owner key that was valid the past 30 days, or are unable to prove that you are the original owner of the account, then your account will be unrecoverable.
+
+The stolen account recovery process can only restore ownership of the account. It is not possible to recover funds that were stolen.
 
 <a href="#Table_of_Contents_Security">^</a>
 ## <span id="How_do_I_report_a_security_vulnerability">How do I report a security vulnerability?</span>
@@ -1351,7 +1365,7 @@ You can also create a post on steemit.com with the tag #help, and someone in the
 
 ## <span id="Third_Party_References_and_User_Links">Third Party References and User Links</span>
 
-AnonSteem, Binance, bitcoinfees, Bitcointalk, BitShares, Bittrex, blockchain.info, BlockTrades, Busy.org, Changelly, @cheetah, Coinbase, DTube, GOPAX, HitBTC, Localbitcoins, Markdown Cheatsheet, Pexels, Pixabay, Poloniex, Postimage, Shapeshift.io, Steemcleaners, SteemConnect, SteemCreate, steemd, SteemDB, steem.chat, SteemStats, SteemProjects, Streemian, The Steemit Shop, UpBit, Utopian.io, and Yensesa are third party applications/services, and are not owned or maintained by Steemit, Inc. Their listing here, as well as any other third party applications or websites that are listed, does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
+AnonSteem, Binance, bitcoinfees, Bitcointalk, Bithumb, BitShares, Bittrex, blockchain.info, BlockTrades, Busy.org, Changelly, @cheetah, Coinbase, DTube, GOBADA, GOPAX, HitBTC, Huobi, LocalBitcoinCash, Localbitcoins, Markdown Cheatsheet, Pexels, Pixabay, Poloniex, Postimage, Shapeshift.io, Steemcleaners, SteemConnect, SteemCreate, steemd, SteemDB, steem.chat, SteemStats, SteemProjects, Streemian, The Steemit Shop, UpBit, Utopian.io, Vessel, and Yensesa are third party applications/services, and are not owned or maintained by Steemit, Inc. Their listing here, as well as any other third party applications or websites that are listed, does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
 
 All links to user posts were created by our users and do not necessarily represent the views of Steemit, Inc. or its management. Their listing here does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
 

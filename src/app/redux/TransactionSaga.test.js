@@ -173,54 +173,6 @@ describe('TransactionSaga', () => {
         });
     });
 
-    describe('watchForBroadcast', () => {
-        const gen = watchForBroadcast();
-        it('should call takeEvery with BROADCAST_OPERATION', () => {
-            const actual = gen.next().value;
-            const expected = {
-                '@@redux-saga/IO': true,
-                TAKE: { pattern: 'transaction/BROADCAST_OPERATION' },
-            };
-            expect(actual).toEqual(expected);
-        });
-    });
-
-    describe('watchForUpdateAuthorities', () => {
-        const gen = watchForUpdateAuthorities();
-        it('should call takeEvery with UPDATE_AUTHORITIES', () => {
-            const actual = gen.next().value;
-            const expected = {
-                '@@redux-saga/IO': true,
-                TAKE: { pattern: 'transaction/UPDATE_AUTHORITIES' },
-            };
-            expect(actual).toEqual(expected);
-        });
-    });
-
-    describe('watchForUpdateMeta', () => {
-        const gen = watchForUpdateMeta();
-        it('should call takeEvery with UPDATE_META', () => {
-            const actual = gen.next().value;
-            const expected = {
-                '@@redux-saga/IO': true,
-                TAKE: { pattern: 'transaction/UPDATE_META' },
-            };
-            expect(actual).toEqual(expected);
-        });
-    });
-
-    describe('watchForRecoverAccount', () => {
-        const gen = watchForRecoverAccount();
-        it('should call takeEvery with RECOVER_ACCOUNT', () => {
-            const actual = gen.next().value;
-            const expected = {
-                '@@redux-saga/IO': true,
-                TAKE: { pattern: 'transaction/RECOVER_ACCOUNT' },
-            };
-            expect(actual).toEqual(expected);
-        });
-    });
-
     describe('preBroadcast_transfer', () => {
         const operationSansMemo = {
             ...operation,

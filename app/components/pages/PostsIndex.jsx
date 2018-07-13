@@ -138,7 +138,7 @@ class PostsIndex extends React.Component {
     }
 
     render() {
-        let {loggedIn} = this.props;
+        let { loggedIn, categories } = this.props;
         let {category, order = constants.DEFAULT_SORT_ORDER} = this.props.routeParams;
         let topics_order = order;
         let posts = [];
@@ -181,7 +181,14 @@ class PostsIndex extends React.Component {
             <div className={'PostsIndex row' + (fetching ? ' fetching' : '')}>
                 <div className="PostsIndex__left column small-collapse">
                     <div className="PostsIndex__topics_compact show-for-small hide-for-medium">
-                        <Topics order={topics_order} current={category} loading={fetching} loadSelected={this.loadSelected} compact />
+                        <Topics
+                            categories={categories}
+                            order={topics_order}
+                            current={category}
+                            loading={fetching}
+                            loadSelected={this.loadSelected}
+                            compact
+                        />
                     </div>
                     {/* markNotificationRead*/}
                     {(!fetching && (posts && !posts.size)) ? <Callout>{emptyText}</Callout> :
@@ -196,6 +203,7 @@ class PostsIndex extends React.Component {
                 </div>
                 <div className="PostsIndex__topics column shrink show-for-large">
                     <Topics
+                        categories={categories}
                         order={topics_order}
                         current={category}
                         loading={fetching}
@@ -224,6 +232,7 @@ module.exports = {
                 loggedIn: !!state.user.get('current'),
                 username: state.user.getIn(['current', 'username']) || state.offchain.get('account'),
                 fetching: state.global.get('fetching'),
+                categories: state.global.get('tag_idx')
             };
         },
         (dispatch) => {

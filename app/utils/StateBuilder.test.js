@@ -535,8 +535,7 @@ describe('StateBuilder', function() {
                     permlink: 'new-hope',
                     category: 'rebel',
                     replies: [
-                        'rey/re-lyke-new-hope',
-                        'chewbacca/re-rey-re-lyke-new-hope'
+                        'rey/re-lyke-new-hope'
                     ]
                 },
                 'rey/re-lyke-new-hope': {
@@ -559,6 +558,7 @@ describe('StateBuilder', function() {
             accounts: {
                 'rey': {
                     name: 'rey',
+                    reputation: '801751331759'
                 }
             },
             witnesses: {},

@@ -66,7 +66,7 @@ export function getAllContentReplies(author, permlink, voteLimit) {
 }
 
 export function gedDiscussionsBy(type, args) {
-    return api[PUBLIC_API[type][0]](args)
+    return api[PUBLIC_API[type]](args)
 }
 
 export function getActiveVotesAsync(account, permlink) {

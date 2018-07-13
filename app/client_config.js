@@ -63,21 +63,16 @@ export const FIRST_DATE = new Date(Date.UTC(2016, 7, 1)); //1 september
 export const IGNORE_TAGS = ['test', 'bm-open', 'bm-ceh23', 'bm-tasks', 'bm-taskceh1']
 export const SELECT_TAGS_KEY = 'gls.select.tags'
 export const PUBLIC_API = {
-  trending:        ['getDiscussionsByTrendingAsync',      'trending'],
-  trending30:      ['getDiscussionsByTrending30Async',    'trending30'],
-  responses:       ['getDiscussionsByChildrenAsync',      'responses'],
-  hot:             ['getDiscussionsByHotAsync',           'hot'],
-  promoted:        ['getDiscussionsByPromotedAsync',      'promoted'],
-  votes:           ['getDiscussionsByVotesAsync',         'votes'],
-  cashout:         ['getDiscussionsByCashoutAsync',       'cashout'],
-  payout:          ['getPostDiscussionsByPayoutAsync',    'payout'],
-  payout_comments: ['getCommentDiscussionsByPayoutAsync', 'payout_comments'],
-  active:          ['getDiscussionsByActiveAsync',        'active'],
-  created:         ['getDiscussionsByCreatedAsync',       'created'],
-  recent:          ['getDiscussionsByCreatedAsync',       'created'],
-  witnesses:       ['getWitnessesByVoteAsync',            'witnesses'],
-  tags:            ['getTrendingTagsAsync',               'tags'],
-  tagsbyauthor:    ['getTagsUsedByAuthorAsync',           'tagsbyauthor']
+  created:   'getDiscussionsByCreatedAsync',
+  recent:    'getDiscussionsByCreatedAsync',
+  hot:       'getDiscussionsByHotAsync',
+  trending:  'getDiscussionsByTrendingAsync',
+  promoted:  'getDiscussionsByPromotedAsync',
+  active:    'getDiscussionsByActiveAsync',
+  responses: 'getDiscussionsByChildrenAsync',
+  votes:     'getDiscussionsByVotesAsync',
+  cashout:   'getDiscussionsByCashoutAsync',
+  payout:     'getDiscussionsByPayoutAsync',
 }
 export const SEO_TITLE = 'GOLOS.io Блоги'
 export const DEFAULT_DOMESTIC = 'all'

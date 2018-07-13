@@ -79,44 +79,43 @@ export default class About extends PureComponent {
                             Это сила сообщества, генерирующая смыслы и действия.
                         </SubHeader>
                         <div className="row small-up-1 medium-up-2 large-up-4">
-                            <div className="columns">
-                                <ImageW pic="startup" />
-                                <Description>
-                                    Оригинальные идеи,{' '}
-                                    <Stroke>а не проплаченные статьи</Stroke>
-                                </Description>
-                            </div>
-                            <div className="columns">
-                                <ImageW pic="post" />
-                                <Description>
-                                    Посты и комментарии,{' '}
-                                    <Stroke>а не баннеры и реклама</Stroke>
-                                </Description>
-                            </div>
-                            <div className="columns">
-                                <ImageW pic="book" />
-                                <Description>
-                                    Удобство выдачи,{' '}
-                                    <Stroke>а не закрытые алгоритмы</Stroke>
-                                </Description>
-                            </div>
-                            <div className="columns">
-                                <ImageW pic="teamwork" />
-                                <Description>
-                                    Информация принадлежит вам,{' '}
-                                    <Stroke>а не модерируется</Stroke>
-                                </Description>
-                            </div>
+                            {this._renderItem(
+                                'Оригинальные идеи,',
+                                'а не проплаченные статьи',
+                                'startup'
+                            )}
+                            {this._renderItem(
+                                'Посты и комментарии,',
+                                'а не баннеры и реклама',
+                                'post'
+                            )}
+                            {this._renderItem(
+                                'Удобство выдачи,',
+                                'а не закрытые алгоритмы',
+                                'book'
+                            )}
+                            {this._renderItem(
+                                'Информация принадлежит вам,',
+                                'а не модерируется',
+                                'teamwork'
+                            )}
                         </div>
                     </div>
                 </Row>
             </Root>
         );
     }
-}
 
-const ImageW = ({ pic }) => (
-    <Image>
-        <img src={`images/new/welcome/${pic}.svg`} />
-    </Image>
-);
+    _renderItem(text, neg, icon) {
+        return (
+            <div className="columns">
+                <Image>
+                    <img src={`images/new/welcome/${icon}.svg`} />
+                </Image>
+                <Description>
+                    {text} <Stroke>{neg}</Stroke>
+                </Description>
+            </div>
+        );
+    }
+}

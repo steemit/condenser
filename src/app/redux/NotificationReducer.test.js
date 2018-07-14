@@ -1,7 +1,3 @@
-/* eslint no-undef:0 */
-import chai, { expect } from 'chai';
-import chaiImmutable from 'chai-immutable';
-
 import { Set } from 'immutable';
 
 import {
@@ -11,8 +7,6 @@ import {
     appendSome,
     updateSome,
 } from './NotificationReducer';
-
-chai.use(chaiImmutable);
 
 const notificationReceiveAllAction = receiveAll([
     {
@@ -208,16 +202,16 @@ describe('byId', () => {
     it('should create a new, immutable state when receiving all notifications', () => {
         const reduced = byId(undefined, notificationReceiveAllAction);
 
-        expect(reduced).to.have.size(9);
+        expect(reduced.count()).toEqual(9);
     });
 
     it('should merge in some appended notifications, and store them newest-first', () => {
         const initial = byId(undefined, notificationReceiveAllAction);
         const reduced = byId(initial, notificationAppendSomeAction);
 
-        expect(reduced).to.have.size(12);
-        expect(reduced.first().id).to.equal('UID5');
-        expect(reduced.last().id).to.equal('UID8');
+        expect(reduced.count()).toEqual(12);
+        expect(reduced.first().id).toEqual('UID5');
+        expect(reduced.last().id).toEqual('UID8');
     });
 
     it('should provide an action which takes a list of ids and props/values to update, and applies the updates only to those ids specified', () => {
@@ -227,8 +221,8 @@ describe('byId', () => {
             updateSome(['UID', 'UID5'], { author: '☺' })
         );
 
-        expect(reduced.get('UID').author).to.equal('☺');
-        expect(reduced.get('UID5').author).to.equal('☺');
+        expect(reduced.get('UID').author).toEqual('☺');
+        expect(reduced.get('UID5').author).toEqual('☺');
     });
 });
 
@@ -239,7 +233,7 @@ describe('unread', () => {
             notificationReceiveAllAction
         );
 
-        expect(reduced).to.equal(new Set(['UID1', 'UID2', 'UID5', 'UID7']));
+        expect(reduced).toEqual(new Set(['UID1', 'UID2', 'UID5', 'UID7']));
     });
 
     it('should merge in some appended notifications, but only unread ones', () => {
@@ -252,7 +246,7 @@ describe('unread', () => {
             notificationAppendSomeAction
         );
 
-        expect(reduced).to.equal(
+        expect(reduced).toEqual(
             new Set(['UID1', 'UID2', 'UID5', 'UID7', 'UID6.1', 'UID8', 'UID10'])
         );
     });
@@ -265,7 +259,7 @@ describe('unshown', () => {
             notificationReceiveAllAction
         );
 
-        expect(reduced).to.equal(new Set(['UID1', 'UID5']));
+        expect(reduced).toEqual(new Set(['UID1', 'UID5']));
     });
 
     it('should merge in some appended notifications, but only unshown ones', () => {
@@ -278,7 +272,7 @@ describe('unshown', () => {
             notificationAppendSomeAction
         );
 
-        expect(reduced).to.equal(new Set(['UID1', 'UID5', 'UID6.1', 'UID8']));
+        expect(reduced).toEqual(new Set(['UID1', 'UID5', 'UID6.1', 'UID8']));
     });
 });
 
@@ -286,25 +280,25 @@ describe('createList', () => {
     it('should create a reducer which filters based on a certain property value', () => {
         const unread = createList({ prop: 'read', val: false });
         const initialUnread = unread(undefined, notificationReceiveAllAction);
-        expect(initialUnread).to.equal(
+        expect(initialUnread).toEqual(
             new Set(['UID1', 'UID2', 'UID5', 'UID7'])
         );
         const reducedUnread = unread(
             initialUnread,
             notificationAppendSomeAction
         );
-        expect(reducedUnread).to.equal(
+        expect(reducedUnread).toEqual(
             new Set(['UID1', 'UID2', 'UID5', 'UID7', 'UID6.1', 'UID8', 'UID10'])
         );
 
         const unshown = createList({ prop: 'shown', val: false });
         const initialUnshown = unshown(undefined, notificationReceiveAllAction);
-        expect(initialUnshown).to.equal(new Set(['UID1', 'UID5']));
+        expect(initialUnshown).toEqual(new Set(['UID1', 'UID5']));
         const reducedUnshown = unshown(
             initialUnshown,
             notificationAppendSomeAction
         );
-        expect(reducedUnshown).to.equal(
+        expect(reducedUnshown).toEqual(
             new Set(['UID1', 'UID5', 'UID6.1', 'UID8'])
         );
 
@@ -316,12 +310,12 @@ describe('createList', () => {
             undefined,
             notificationReceiveAllAction
         );
-        expect(initialOnlyPowerDown).to.equal(new Set(['UID']));
+        expect(initialOnlyPowerDown).toEqual(new Set(['UID']));
         const reducedOnlyPowerDown = onlyPowerDown(
             initialOnlyPowerDown,
             notificationAppendSomeAction
         );
-        expect(reducedOnlyPowerDown).to.equal(
+        expect(reducedOnlyPowerDown).toEqual(
             new Set(['UID', 'UID8', 'UID9', 'UID10'])
         );
     });
@@ -329,7 +323,7 @@ describe('createList', () => {
     it('should provide an action which takes a list of ids and props/values to update, and adds or removes items from the list based on that update', () => {
         const unread = createList({ prop: 'read', val: false });
         const initialUnread = unread(undefined, notificationReceiveAllAction);
-        expect(initialUnread).to.equal(
+        expect(initialUnread).toEqual(
             new Set(['UID1', 'UID2', 'UID5', 'UID7'])
         );
 
@@ -337,6 +331,6 @@ describe('createList', () => {
             initialUnread,
             updateSome(['UID2', 'UID5'], { read: true })
         );
-        expect(reduced).to.equal(new Set(['UID1', 'UID7']));
+        expect(reduced).toEqual(new Set(['UID1', 'UID7']));
     });
 });

@@ -7,7 +7,7 @@ describe('routeRegex', () => {
             ['UserProfile1', /^\/(@[\w\.\d-]+)\/?$/],
             [
                 'UserProfile2',
-                /^\/(@[\w\.\d-]+)\/(blog|posts|comments|recommended|transfers|curation-rewards|author-rewards|permissions|created|recent-replies|feed|password|followed|followers|settings)\/?$/,
+                /^\/(@[\w\.\d-]+)\/(blog|posts|comments|recommended|transfers|curation-rewards|author-rewards|permissions|created|recent-replies|feed|password|followed|followers|settings|notifications)(\/([a-z]|[A-Z])+)?\/?$/,
             ],
             ['UserProfile3', /^\/(@[\w\.\d-]+)\/[\w\.\d-]+/],
             [
@@ -55,7 +55,10 @@ describe('resolveRoute', () => {
         ],
         [
             '/@maitland/blog',
-            { page: 'UserProfile', params: ['@maitland', 'blog'] },
+            {
+                page: 'UserProfile',
+                params: ['@maitland', 'blog', undefined, undefined],
+            },
         ],
         [
             '/@cool/nice345',

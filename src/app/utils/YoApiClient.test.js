@@ -1,8 +1,3 @@
-/* eslint no-undef:0 no-unused-vars:0 */
-/* global describe, it, before, beforeEach, after, afterEach */
-import chai, { expect } from 'chai';
-import chaiImmutable from 'chai-immutable';
-
 import { fromJS, Set } from 'immutable';
 
 import {
@@ -10,8 +5,6 @@ import {
     denormalizeSettingsToApi,
     normalize,
 } from './YoApiClient';
-
-chai.use(chaiImmutable);
 
 const apiMockData = {
     get_transports: {
@@ -176,20 +169,20 @@ describe('normalizeSettingsFromApi', () => {
         const normalized = normalizeSettingsFromApi(
             apiMockData.get_transports.result
         );
-        expect(normalized.toJS()).to.deep.equal(desired.settings);
+        expect(normalized.toJS()).toEqual(desired.settings);
     });
 });
 
 describe('denormalizeSettingsToApi', () => {
     it('should take redux state and turn it into something the api can gobble up', () => {
         const denormalized = denormalizeSettingsToApi(fromJS(desired.settings));
-        expect(denormalized).to.deep.equal(apiMockData.saved_transports.result);
+        expect(denormalized).toEqual(apiMockData.saved_transports.result);
     });
 });
 
 describe('normalize', () => {
     it('should clean up incoming notification data', () => {
         const normalized = normalize(apiMockData.get_notifications.result);
-        expect(normalized).to.deep.equal(desired.get_notifications);
+        expect(normalized).toEqual(desired.get_notifications);
     });
 });

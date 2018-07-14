@@ -1,5 +1,5 @@
 import { Map } from 'immutable';
-import { combineReducers } from 'redux-immutable';
+import { combineReducers } from 'redux';
 
 // Action constants
 export const FETCH = 'notificationsettings/FETCH'; // watched by saga

@@ -1,5 +1,5 @@
 import { Map, OrderedMap, Set } from 'immutable';
-import { combineReducers } from 'redux-immutable';
+import { combineReducers } from 'redux';
 import { filters } from 'app/components/elements/notification/type';
 
 // Action constants

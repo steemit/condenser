@@ -25,7 +25,7 @@ YotifiCounter.propTypes = {
 
 export default connect(
     state => ({
-        unshown: state.notification.get('unshown'),
+        unshown: state.notification.unshown,
         username:
             state.user.getIn(['current', 'username']) ||
             state.offchain.get('account') ||

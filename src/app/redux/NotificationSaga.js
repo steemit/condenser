@@ -16,19 +16,19 @@ export function getUsernameFromState(state) {
 }
 
 export function getNotificationsById(state) {
-    return state.notification.get('byId');
+    return state.notification.byId;
 }
 
 export function getIdsReadPending(state) {
-    return state.notification.get('idsReadPending');
+    return state.notification.idsReadPending;
 }
 
 export function getIdsUnreadPending(state) {
-    return state.notification.get('idsUnreadPending');
+    return state.notification.idsUnreadPending;
 }
 
 export function getIdsShownPending(state) {
-    return state.notification.get('idsShownPending');
+    return state.notification.idsShownPending;
 }
 
 /**

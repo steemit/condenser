@@ -301,7 +301,7 @@ export default connect(
                 : FILTER_ALL;
         let allRead = true;
 
-        state.notification.get('byId').forEach(n => {
+        state.notification.byId.forEach(n => {
             if (n.read === false) {
                 allRead = false;
                 return false;
@@ -312,21 +312,18 @@ export default connect(
         const filterToken =
             filter === FILTER_ALL ? FILTER_ALL : filters[filter].toString();
         const noMoreToFetch =
-            state.notification.getIn([
-                'lastFetchBeforeCount',
-                'filterToken',
-            ]) === 0;
+            state.notification.lastFetchBeforeCount.get('filterToken') === 0;
 
         return {
             ...ownProps,
             username: userSelectors.getUsername(state.user),
-            notifications: state.notification.get('byId'),
+            notifications: state.notification.byId,
             filterIds:
                 filter === FILTER_ALL
-                    ? state.notification.get('allIds')
-                    : state.notification.getIn(['byUserFacingType', filter]),
+                    ? state.notification.allIds
+                    : state.notification.byUserFacingType.get(filter),
             noMoreToFetch,
-            isFetchingBefore: state.notification.get('isFetchingBefore'),
+            isFetchingBefore: state.notification.isFetchingBefore,
             showClearAll: allRead,
         };
     },

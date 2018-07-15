@@ -124,12 +124,12 @@ function* watchPollData() {
  */
 export function* fetchAll() {
     const username = yield select(getUsernameFromState);
-    const payload = yield call(fetchNotifications, username);
 
-    if (payload.error) {
-        yield put(notificationActions.receiveAllError(payload.error));
-    } else {
+    try {
+        const payload = yield call(fetchNotifications, username);
         yield put(notificationActions.receiveAll(payload));
+    } catch (error) {
+        yield put(notificationActions.receiveAllError(payload.error));
     }
 }
 
@@ -163,16 +163,15 @@ export function* fetchSome({ types = null, direction = 'after' }) {
             filter[direction] = timestamp;
         }
 
-        const payload = yield call(fetchNotifications, {
-            username,
-            types,
-            ...filter,
-        });
+        try {
+            const payload = yield call(fetchNotifications, {
+                username,
+                types,
+                ...filter,
+            });
 
-        if (payload.error) {
-            yield put(notificationActions.appendSomeError(payload.error));
-        } else {
             yield put(notificationActions.appendSome(payload));
+
             if (direction === 'before') {
                 yield put(
                     notificationActions.setLastFetchBeforeCount(
@@ -181,6 +180,8 @@ export function* fetchSome({ types = null, direction = 'after' }) {
                     )
                 );
             }
+        } catch (error) {
+            yield put(notificationActions.appendSomeError(error));
         }
     } catch (err) {
         yield put(notificationActions.fetchSomeError('poll cancelled'));
@@ -197,17 +198,23 @@ export function* fetchSome({ types = null, direction = 'after' }) {
  */
 export function* updateOne({ id, updates }) {
     if (updates.read === true) {
-        const payload = yield call(markAsRead, [id]);
-
-        yield put(notificationActions.appendSome(payload));
+        try {
+            const payload = yield call(markAsRead, [id]);
+            yield put(notificationActions.appendSome(payload));
+        } catch (error) {
+            // TODO
+        }
     }
 }
 
 export function* updateSome({ ids, updates }) {
     if (updates.read === true) {
-        const payload = yield call(markAsRead, ids);
-
-        yield put(notificationActions.appendSome(payload));
+        try {
+            const payload = yield call(markAsRead, ids);
+            yield put(notificationActions.appendSome(payload));
+        } catch (error) {
+            // TODO
+        }
     }
 }
 

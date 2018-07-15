@@ -16,13 +16,10 @@ import * as notificationActions from 'app/redux/NotificationReducer';
 const TIMEOUT_MARK_SHOWN_MILLIS = 3000;
 
 class NotificationLink extends React.Component {
-    constructor(notification, ...args) {
-        super(notification, ...args);
-        this.state = {
-            id: notification.id,
-            onClick: notification.onClick,
-        };
-    }
+    static propTypes = {
+        data: React.PropTypes.object.isRequired,
+        onClick: React.PropTypes.func,
+    };
 
     componentDidMount() {
         this.cueMarkShown();
@@ -33,13 +30,13 @@ class NotificationLink extends React.Component {
     }
 
     markReadDefault = e => {
-        this.props.markRead(this.state.id);
+        this.props.markRead(this.props.id);
     };
 
     markRead = e => {
         e.preventDefault();
         e.stopPropagation();
-        this.props.markRead(this.state.id);
+        this.props.markRead(this.props.id);
     };
 
     cueMarkShown = () => {
@@ -53,18 +50,18 @@ class NotificationLink extends React.Component {
     markUnread = e => {
         e.preventDefault();
         e.stopPropagation();
-        this.props.markUnread(this.state.id);
+        this.props.markUnread(this.props.id);
     };
 
     render() {
         const amount = this.props.data.amount;
         const author = this.props.data.author;
-        const classNames = this.props.read ? '' : 'unread';
-        const created = this.props.created;
+        const classNames = this.props.data.read ? '' : 'unread';
+        const created = this.props.data.created;
         const item = this.props.data.item;
-        const read = this.props.read;
+        const read = this.props.data.read;
         const post = this.props.data.rootItem;
-        const notificationType = this.props.notificationType;
+        const notificationType = this.props.data.notificationType;
 
         const badge = badges[notificationType]
             ? badges[notificationType]

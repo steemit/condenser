@@ -41,7 +41,7 @@ const renderNotificationList = (notifications, filterIds, onViewAll) => (
                         })}
                         key={notification.id}
                     >
-                        <Notification {...notification} onClick={onViewAll} />
+                        <Notification data={notification} onClick={onViewAll} />
                     </li>
                 );
             }
@@ -312,7 +312,7 @@ export default connect(
         const filterToken =
             filter === FILTER_ALL ? FILTER_ALL : filters[filter].toString();
         const noMoreToFetch =
-            state.notification.lastFetchBeforeCount.get('filterToken') === 0;
+            state.notification.lastFetchBeforeCount.get(filterToken) === 0;
 
         return {
             ...ownProps,
@@ -321,7 +321,7 @@ export default connect(
             filterIds:
                 filter === FILTER_ALL
                     ? state.notification.allIds
-                    : state.notification.byUserFacingType.get(filter),
+                    : state.notification.byUserFacingType[filter],
             noMoreToFetch,
             isFetchingBefore: state.notification.isFetchingBefore,
             showClearAll: allRead,

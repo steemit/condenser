@@ -176,8 +176,8 @@ export function* fetchSome({ types = null, direction = 'after' }) {
             if (direction === 'before') {
                 yield put(
                     notificationActions.setLastFetchBeforeCount(
-                        payload.length,
-                        types ? types.toString() : 'all'
+                        types ? types.toString() : 'all',
+                        payload.length
                     )
                 );
             }

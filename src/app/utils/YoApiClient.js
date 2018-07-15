@@ -165,7 +165,7 @@ export const markAsRead = ids => markIds(ids, 'yo.mark_read');
 
 export const markAsUnread = ids => markIds(ids, 'yo.mark_unread');
 
-export const markAsShown = ids => markids(ids, 'yo.mark_shown');
+export const markAsShown = ids => markIds(ids, 'yo.mark_shown');
 
 /**
  *

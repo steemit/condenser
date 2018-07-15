@@ -14,6 +14,7 @@ const SENT_UPDATES_ERROR = 'notification/SENT_UPDATES_ERROR';
 const SET_LAST_FETCH_BEFORE_COUNT = 'notification/SET_LAST_FETCH_BEFORE_COUNT';
 // Saga-related
 export const FETCH_SOME = 'notification/FETCH_SOME';
+export const FETCH_SOME_ERROR = 'notification/FETCH_SOME_ERROR';
 export const FETCH_ALL = 'notification/FETCH_ALL';
 
 /**
@@ -290,6 +291,11 @@ export const fetchSome = (direction, types) => ({
     type: FETCH_SOME,
     direction,
     types,
+});
+
+export const fetchSomeError = msg => ({
+    type: FETCH_SOME_ERROR,
+    msg,
 });
 
 export const fetchAll = () => ({

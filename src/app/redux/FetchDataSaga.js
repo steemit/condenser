@@ -43,7 +43,12 @@ export function* fetchState(location_change_action) {
         yield fork(loadFollows, 'getFollowingAsync', username, 'blog');
     }
 
-    if (pathname.indexOf('trending') !== -1 || pathname.indexOf('hot') !== -1) {
+    if (
+        pathname === '/' ||
+        pathname === '' ||
+        pathname.indexOf('trending') !== -1 ||
+        pathname.indexOf('hot') !== -1
+    ) {
         yield fork(getPromotedState, pathname);
     }
 

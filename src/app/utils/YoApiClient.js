@@ -1,10 +1,9 @@
 import { Map } from 'immutable';
+import { api } from '@steemit/steem-js';
 import types, {
     settingsInitFalse,
     toggleNotificationGroups,
 } from 'app/components/elements/notification/type';
-
-const YO = 'https://api.steemitdev.com';
 
 /**
  * Re-formats API notifications response a little bit.
@@ -126,61 +125,38 @@ const buildJussiRequest = (method, params) => ({
  * @param {String[]} [options.types] only these notification types
  * @return {Object} normalized notifications, or if error, an object with error property
  */
-export function fetchNotifications({ username, before, after, types }) {
+export async function fetchNotifications({ username, before, after, types }) {
     const optionalParams = {};
     if (after) optionalParams.updated_after = after;
     if (before) optionalParams.created_before = before;
     if (types) optionalParams.notify_types = types;
 
-    return fetch(
-        YO,
-        buildJussiRequest('yo.get_notifications', {
-            username,
-            ...optionalParams,
-        })
-    )
-        .then(r => r.json())
-        .then(res => {
-            if (res.result && res.result.length > 0) {
-                return normalize(res.result);
-            }
-            return [];
-        })
-        .catch(error => {
-            return { error };
-        });
+    const res = api.callAsync('yo.get_notifications', {
+        username,
+        ...optionalParams,
+    });
+
+    if (res.result && res.result.length > 0) {
+        return normalize(res.result);
+    }
+
+    return [];
 }
 
-const markIds = (ids, op) =>
-    fetch(YO, buildJussiRequest(op, { ids }))
-        .then(r => r.json())
-        .then(res => {
-            return res; // will either be { success: something } or { error: something }
-        })
-        .catch(error => {
-            return { error };
-        });
+export const markAsRead = async ids => api.callAsync('yo.mark_read', ids);
 
-export const markAsRead = ids => markIds(ids, 'yo.mark_read');
+export const markAsUnread = async ids => api.callAsync('yo.mark_unread', ids);
 
-export const markAsUnread = ids => markIds(ids, 'yo.mark_unread');
-
-export const markAsShown = ids => markIds(ids, 'yo.mark_shown');
+export const markAsShown = async ids => api.callAsync('yo.mark_shown', ids);
 
 /**
  *
  * @param {String} username
  * @return {Map|Object} if error, object w/ error prop
  */
-export function getNotificationSettings(username) {
-    return fetch(YO, buildJussiRequest('yo.get_transports', { username }))
-        .then(r => r.json())
-        .then(res => {
-            return normalizeSettingsFromApi(res.result);
-        })
-        .catch(error => {
-            return { error };
-        });
+export async function getNotificationSettings(username) {
+    const res = api.callAsync('yo.get_transports', { username });
+    return normalizeSettingsFromApi(res.result);
 }
 
 /**
@@ -189,19 +165,11 @@ export function getNotificationSettings(username) {
  * @param {Object} settings
  * @return {Map|Object} if error, object w/ error prop
  */
-export function saveNotificationSettings(username, settings) {
-    return fetch(
-        YO,
-        buildJussiRequest('yo.set_transports', {
-            username,
-            transports: denormalizeSettingsToApi(settings),
-        })
-    )
-        .then(r => r.json())
-        .then(res => {
-            return normalizeSettingsFromApi(res.result);
-        })
-        .catch(error => {
-            return { error };
-        });
+export async function saveNotificationSettings(username, settings) {
+    const res = api.callAsync(
+        'yo.set_transports',
+        username,
+        denormalizeSettingsToApi(settings)
+    );
+    return normalizeSettingsFromApi(res.result);
 }

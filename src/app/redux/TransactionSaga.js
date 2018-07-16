@@ -1,4 +1,5 @@
-import { call, put, select, all, takeEvery } from 'redux-saga/effects';
+import { takeEvery } from 'redux-saga';
+import { call, put, select } from 'redux-saga/effects';
 import { fromJS, Set, Map } from 'immutable';
 import tt from 'counterpart';
 import getSlug from 'speakingurl';
@@ -17,11 +18,27 @@ import { DEBT_TICKER } from 'app/client_config';
 import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 
 export const transactionWatches = [
-    takeEvery(transactionActions.BROADCAST_OPERATION, broadcastOperation),
-    takeEvery(transactionActions.UPDATE_AUTHORITIES, updateAuthorities),
-    takeEvery(transactionActions.UPDATE_META, updateMeta),
-    takeEvery(transactionActions.RECOVER_ACCOUNT, recoverAccount),
+    watchForBroadcast,
+    watchForUpdateAuthorities,
+    watchForUpdateMeta,
+    watchForRecoverAccount,
 ];
+
+export function* watchForBroadcast() {
+    yield* takeEvery(
+        transactionActions.BROADCAST_OPERATION,
+        broadcastOperation
+    );
+}
+export function* watchForUpdateAuthorities() {
+    yield* takeEvery(transactionActions.UPDATE_AUTHORITIES, updateAuthorities);
+}
+export function* watchForUpdateMeta() {
+    yield* takeEvery(transactionActions.UPDATE_META, updateMeta);
+}
+export function* watchForRecoverAccount() {
+    yield* takeEvery(transactionActions.RECOVER_ACCOUNT, recoverAccount);
+}
 
 const hook = {
     preBroadcast_comment,
@@ -164,7 +181,7 @@ function* error_account_witness_vote({
 }
 
 /** Keys, username, and password are not needed for the initial call.  This will check the login and may trigger an action to prompt for the password / key. */
-export function* broadcastOperation({
+function* broadcastOperation({
     payload: {
         type,
         operation,
@@ -680,7 +697,7 @@ function slug(text) {
 const pwPubkey = (name, pw, role) =>
     auth.wifToPublic(auth.toWif(name, pw.trim(), role));
 
-export function* recoverAccount({
+function* recoverAccount({
     payload: {
         account_to_recover,
         old_password,
@@ -693,7 +710,6 @@ export function* recoverAccount({
         [api, api.getAccountsAsync],
         [account_to_recover]
     );
-
     if (!account) {
         onError('Unknown account ' + account);
         return;
@@ -744,7 +760,6 @@ export function* recoverAccount({
     };
 
     try {
-        // TODO: Investigate wrapping in a redux-saga call fn, so it can be tested!.
         yield broadcast.sendAsync(
             {
                 extensions: [],
@@ -765,7 +780,6 @@ export function* recoverAccount({
         // change password
         // change password probably requires a separate transaction (single trx has not been tested)
         const { json_metadata } = account;
-        // TODO: Investigate wrapping in a redux-saga call fn, so it can be tested!
         yield broadcast.sendAsync(
             {
                 extensions: [],
@@ -792,21 +806,6 @@ export function* recoverAccount({
             },
             [newOwnerPrivate]
         );
-        // Reset all outgoing auto-vesting routes for this user. Condenser - #2835
-        const outgoingAutoVestingRoutes = yield call(
-            [api, api.getWithdrawRoutes],
-            [account.name, 'outgoing']
-        );
-        if (outgoingAutoVestingRoutes && outgoingAutoVestingRoutes.length > 0) {
-            yield all(
-                outgoingAutoVestingRoutes.map(ovr => {
-                    return call(
-                        [broadcast, broadcast.setWithdrawVestingRoute],
-                        [newActive, ovr.from_account, ovr.to_account, 0, true]
-                    );
-                })
-            );
-        }
         if (onSuccess) onSuccess();
     } catch (error) {
         console.error('Recover account', error);
@@ -816,7 +815,7 @@ export function* recoverAccount({
 
 /** auths must start with most powerful key: owner for example */
 // const twofaAccount = 'steem'
-export function* updateAuthorities({
+function* updateAuthorities({
     payload: { accountName, signingKey, auths, twofa, onSuccess, onError },
 }) {
     // Be sure this account is up-to-date (other required fields are sent in the update)
@@ -956,7 +955,7 @@ export function* updateAuthorities({
 
 /** auths must start with most powerful key: owner for example */
 // const twofaAccount = 'steem'
-export function* updateMeta(params) {
+function* updateMeta(params) {
     // console.log('params', params)
     const {
         meta,

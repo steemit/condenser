@@ -700,7 +700,7 @@
     "name_is_too_long": "Имя слишком длинное",
     "name_must_not_begin_with": "Имя не должно начинаться с @",
     "about_is_too_long": "Информация о Вашем блоге слишком длинная",
-    "location_is_too_long": "Местоположение слишком длинное",
+    "location_is_too_long": "Информация о вашем городе слишком длинная",
     "website_url_is_too_long": "URL-адрес веб-сайта слишком длинный",
     "public_profile_settings": "Настройки Публичного Профиля",
     "private_post_display_settings": "Настройки отображения приватных постов",
@@ -710,20 +710,21 @@
     "always_show": "Отображать всегда",
     "muted_users": "Заблокированные пользователи",
     "update": "Обновить",
+    "reset": "Сбросить",
     "profile_image_url": "Вставьте ссылку на изображение или загрузите его",
     "cover_image_url": "Вставьте ссылку на обложку или загрузите ее",
     "profile_name": "Отображаемое имя",
     "profile_gender": {
       "title": "Пол",
       "genders": {
-        "undefined": "Неизвестен",
+        "undefined": "Не указано",
         "male": "Мужской",
         "female": "Женский"
       }
     },
-    "profile_about": "О проекте",
-    "profile_location": "Местоположение",
-    "profile_website": "Веб-сайт",
+    "profile_about": "О себе",
+    "profile_location": "Город",
+    "profile_website": "Ваш сайт",
     "rounding_numbers": {
       "info_message": "Отображение наград",
       "integer": "Округлять до целого числа",

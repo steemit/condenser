@@ -1,8 +1,9 @@
-// import React from 'react';
-// import { Router as ReactRouter, createMemoryHistory } from 'react-router';
+import React from 'react';
+import { Router as ReactRouter, Route } from 'react-router';
+import createMemoryHistory from 'react-router/lib/createMemoryHistory';
 
-// const history = createMemoryHistory();
-
-// export const Router = story => (
-//     <ReactRouter history={history}>{story()}</ReactRouter>
-// );
+export const Router = story => (
+    <ReactRouter history={createMemoryHistory('/')}>
+        <Route path="/" component={() => story()} />
+    </ReactRouter>
+);

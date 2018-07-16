@@ -19,6 +19,7 @@ import PostsList from 'src/app/components/common/PostsList';
 import UserWallet from 'app/components/modules/UserWallet';
 import CurationRewards from 'app/components/modules/CurationRewards';
 import AuthorRewards from 'app/components/modules/AuthorRewards';
+import ActivityContent from './ActivityContent';
 import SettingsContent from './SettingsContent';
 
 import WalletSubMenu from 'app/components/elements/WalletSubMenu';
@@ -388,6 +389,8 @@ export default class UserProfileContainer extends Component {
                     <PasswordReset account={accountImm} />
                 </div>
             );
+        } else if (section === 'activity') {
+            tab_content = <ActivityContent />;
         }
 
         if (blockedUsers.includes(accountName)) {

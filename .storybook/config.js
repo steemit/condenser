@@ -1,7 +1,7 @@
 import { configure, addDecorator } from "@storybook/react";
 import { injectGlobal } from "styled-components";
 import { withThemes } from 'storybook-styled-components';
-import { Center } from './decorators';
+import { Center, Router } from './decorators';
 
 import { themes } from './../src/app/themes';
 
@@ -29,6 +29,7 @@ function loadStories() {
 }
 
 addDecorator(withThemes(themes));
+addDecorator(Router)
 addDecorator(Center);
 
 configure(loadStories, module);

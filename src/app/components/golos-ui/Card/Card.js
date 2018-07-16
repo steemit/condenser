@@ -5,9 +5,7 @@ import is from 'styled-is';
 
 import Flex from 'golos-ui/Flex';
 
-const Card = styled(Flex).attrs({
-    column: true,
-})`
+const Card = styled(Flex)`
     position: relative;
     flex-shrink: 0;
     max-width: 100%;
@@ -26,6 +24,9 @@ const Card = styled(Flex).attrs({
         background-color: transparent;
     }
 `;
+Card.defaultProps = {
+    column: true
+}
 export default Card;
 
 export const CardTitle = styled(Flex)`
@@ -48,18 +49,20 @@ export const CardTitle = styled(Flex)`
     }
 `;
 
-export const CardRow = styled(Flex).attrs({ auto: true })`
+export const CardRow = styled(Flex)`
     @media (max-width: 576px) {
         flex-direction: column;
     }
 `;
+CardRow.defaultProps = {
+    auto: true,
+};
 
-export const CardColumn = styled(Flex).attrs({
-    column: true,
-})`
+export const CardColumn = styled(Flex)`
     position: relative;
     background-color: #ffffff;
     flex: 1;
+    overflow: hidden;
 
     @media (min-width: 576px) {
         &:not(:last-child) {
@@ -83,3 +86,6 @@ export const CardColumn = styled(Flex).attrs({
         margin-bottom: 10px;
     }
 `;
+CardColumn.defaultProps = {
+    column: true,
+};

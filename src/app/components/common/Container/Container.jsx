@@ -2,9 +2,7 @@ import styled from 'styled-components';
 import is from 'styled-is';
 import Flex from 'golos-ui/Flex';
 
-const Container = styled(Flex).attrs({
-    auto: true,
-})`
+const Container = styled(Flex)`
     max-width: 1200px;
     margin: 0 auto;
 
@@ -18,5 +16,8 @@ const Container = styled(Flex).attrs({
         }
     `};
 `;
+Container.defaultProps = {
+    auto: true
+}
 
 export default Container;

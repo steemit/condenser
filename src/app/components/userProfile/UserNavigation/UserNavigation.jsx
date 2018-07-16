@@ -5,7 +5,7 @@ import tt from 'counterpart';
 
 import { Link } from 'react-router';
 
-import { TabLink } from 'golos-ui/Tab';
+import { TabLink as StyledTabLink } from 'golos-ui/Tab';
 import Icon from 'golos-ui/Icon';
 
 import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdown';
@@ -22,6 +22,23 @@ const Wrapper = styled.div`
     z-index: 1;
 `;
 
+const TabLink = styled(StyledTabLink)`
+    &.${({ activeClassName }) => activeClassName} {
+        :after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: #333333;
+        }
+    }
+`;
+TabLink.defaultProps = {
+    activeClassName: 'active',
+};
+
 const RightIcons = styled.div`
     display: flex;
     flex: 1;
@@ -34,7 +51,7 @@ const IconLink = styled(Link)`
     display: flex;
     color: #b7b7b9;
 
-    &.${props => props.activeClassName}, &:hover {
+    &.${({ activeClassName }) => activeClassName}, &:hover {
         color: #2879ff;
     }
 `;
@@ -65,6 +82,7 @@ export default class UserNavigation extends PureComponent {
             { value: tt('g.comments'), to: `/@${accountName}/comments` },
             { value: tt('g.replies'), to: `/@${accountName}/recent-replies` },
             { value: tt('g.wallet'), to: `/@${accountName}/transfers` },
+            { value: 'Активность', to: `/@${accountName}/activity` },
         ];
 
         const rewardsMenu = [
@@ -78,9 +96,7 @@ export default class UserNavigation extends PureComponent {
             },
         ];
 
-        const rewardsActive = ['curation-rewards', 'author-rewards'].includes(
-            section
-        );
+        const rewardsActive = ['curation-rewards', 'author-rewards'].includes(section);
 
         return (
             <Wrapper>
@@ -95,17 +111,12 @@ export default class UserNavigation extends PureComponent {
                         dropdownPosition="bottom"
                         dropdownContent={<VerticalMenu items={rewardsMenu} />}
                     >
-                        <TabLink active={rewardsActive ? 1 : 0}>
-                            {tt('g.rewards')}
-                        </TabLink>
+                        <TabLink active={rewardsActive ? 1 : 0}>{tt('g.rewards')}</TabLink>
                     </LinkWithDropdown>
 
                     <RightIcons>
                         {isOwner && (
-                            <IconLink
-                                to={`/@${accountName}/settings`}
-                                title={tt('g.settings')}
-                            >
+                            <IconLink to={`/@${accountName}/settings`} title={tt('g.settings')}>
                                 <SettingsIcon name="setting" size="24px" />
                             </IconLink>
                         )}

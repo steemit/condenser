@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import ReactDOM from 'react-dom';
 import reactForm from 'app/utils/ReactForm';
+import { SUBMIT_FORM_ID } from 'shared/constants';
 import tt from 'counterpart';
 import { fromJS } from 'immutable';
 
@@ -88,10 +89,10 @@ class PostAdvancedSettings extends Component {
                     <div className="column">
                         {tt('post_advanced_settings_jsx.current_default')}:{' '}
                         {defaultPayoutType === '0%'
-                            ? defaultPayoutType === '50%'
-                              ? tt('reply_editor.decline_payout')
-                              : tt('reply_editor.default_50_50')
-                            : tt('reply_editor.power_up_100')}
+                            ? tt('reply_editor.decline_payout')
+                            : defaultPayoutType === '50%'
+                              ? tt('reply_editor.default_50_50')
+                              : tt('reply_editor.power_up_100')}
                     </div>
                 </div>
                 <div className="row">
@@ -141,7 +142,7 @@ export default connect(
     (state, ownProps) => {
         const formId = ownProps.formId;
         const username = state.user.getIn(['current', 'username']);
-        const isStory = formId.startsWith('postFull');
+        const isStory = formId === SUBMIT_FORM_ID;
         const defaultPayoutType = state.app.getIn(
             [
                 'user_preferences',

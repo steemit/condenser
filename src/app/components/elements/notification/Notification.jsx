@@ -30,27 +30,27 @@ class NotificationLink extends React.Component {
     }
 
     markReadDefault = e => {
-        this.props.markRead(this.props.id);
+        this.props.markRead(this.props.data.id);
     };
 
     markRead = e => {
         e.preventDefault();
         e.stopPropagation();
-        this.props.markRead(this.props.id);
+        this.props.markRead(this.props.data.id);
     };
 
     cueMarkShown = () => {
         const self = this;
         clearTimeout(this.markShownTimeout);
         this.markShownTimeout = setTimeout(() => {
-            self.props.markShown(this.props.id);
+            self.props.markShown(this.props.data.id);
         }, TIMEOUT_MARK_SHOWN_MILLIS);
     };
 
     markUnread = e => {
         e.preventDefault();
         e.stopPropagation();
-        this.props.markUnread(this.props.id);
+        this.props.markUnread(this.props.data.id);
     };
 
     render() {

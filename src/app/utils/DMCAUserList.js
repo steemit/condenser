@@ -1,5 +1,4 @@
 const list = `
-spaces
 the-gaming-llama
 cmgsteems
 iamgod

@@ -407,9 +407,24 @@ export async function serverRender(
 export function clientRender(initialState) {
     const store = createStore(rootReducer, initialState, middleware);
 
-    sagaMiddleware.run(NotificationFetchSaga);
-    sagaMiddleware.run(NotificationPollSaga);
-    sagaMiddleware.run(NotificationSettingsSaga);
+    sagaMiddleware
+        .run(NotificationFetchSaga)
+        .done.then(() => console.log('NotificationFetchSaga is finished'))
+        .catch(err =>
+            console.log('NotificationFetchSaga is finished with error', err)
+        );
+    sagaMiddleware
+        .run(NotificationPollSaga)
+        .done.then(() => console.log('NotificationPollSaga is finished'))
+        .catch(err =>
+            console.log('NotificaitonPollSaga is finished with error', err)
+        );
+    sagaMiddleware
+        .run(NotificationSettingsSaga)
+        .done.then(() => console.log('NotificationSettingsSaga is finished'))
+        .catch(err =>
+            console.log('NotificationSettingsSaga is finished with error', err)
+        );
 
     const history = syncHistoryWithStore(browserHistory, store);
 

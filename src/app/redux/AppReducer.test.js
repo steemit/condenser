@@ -7,7 +7,6 @@ import reducer, {
     fetchDataEnd,
     addNotification,
     removeNotification,
-    updateNotificounters,
     setUserPreferences,
     receiveFeatureFlags,
     selectors,
@@ -21,14 +20,6 @@ const mockPayloads = {
     },
     removeNotification: {
         pathname: 'testPath',
-    },
-    updateNotificounters: {
-        follow: 1,
-        total: 2,
-    },
-    updateNotificountersNoFollow: {
-        follow: 0,
-        total: 2,
     },
     removeNotification: {
         key: 'testKey',
@@ -108,27 +99,6 @@ describe('App reducer', () => {
         );
         const out = actual.get('notifications');
         const expected = OrderedMap();
-        expect(out).toEqual(expected);
-    });
-    it('should return correct state for a UPDATE_NOTIFICOUNTERS action with a follow in payload', () => {
-        const initial = reducer();
-        let actual = reducer(
-            initial,
-            updateNotificounters(mockPayloads.updateNotificounters)
-        );
-
-        let out = actual.get('notificounters');
-        let expected = Map({ follow: 0, total: 1 });
-        expect(out).toEqual(expected);
-    });
-    it('should return correct state for a UPDATE_NOTIFICOUNTERS action with no follow in payload', () => {
-        const initial = reducer();
-        const actual = reducer(
-            initial,
-            updateNotificounters(mockPayloads.updateNotificountersNoFollow)
-        );
-        const out = actual.get('notificounters');
-        const expected = Map({ follow: 0, total: 2 });
         expect(out).toEqual(expected);
     });
     it('should return correct state for a SET_USER_PREFERENCES action', () => {

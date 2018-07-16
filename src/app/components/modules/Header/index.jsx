@@ -13,9 +13,6 @@ import DropdownMenu from 'app/components/elements/DropdownMenu';
 import * as userActions from 'app/redux/UserReducer';
 import * as appActions from 'app/redux/AppReducer';
 import Userpic from 'app/components/elements/Userpic';
-import VerticalMenu from 'app/components/elements/VerticalMenu';
-import LoadingIndicator from 'app/components/elements/LoadingIndicator';
-import NotifiCounter from 'app/components/elements/NotifiCounter';
 import { SIGNUP_URL } from 'shared/constants';
 import SteemLogo from 'app/components/elements/SteemLogo';
 import normalizeProfile from 'app/utils/NormalizeProfile';
@@ -226,7 +223,6 @@ class Header extends React.Component {
                 link: feed_link,
                 icon: 'home',
                 value: tt('g.feed'),
-                addon: <NotifiCounter fields="feed" />,
             },
             { link: account_link, icon: 'profile', value: tt('g.blog') },
             { link: comments_link, icon: 'replies', value: tt('g.comments') },
@@ -234,15 +230,11 @@ class Header extends React.Component {
                 link: replies_link,
                 icon: 'reply',
                 value: tt('g.replies'),
-                addon: <NotifiCounter fields="comment_reply" />,
             },
             {
                 link: wallet_link,
                 icon: 'wallet',
                 value: tt('g.wallet'),
-                addon: (
-                    <NotifiCounter fields="follow,send,receive,account_update" />
-                ),
             },
             {
                 link: '#',
@@ -330,9 +322,6 @@ class Header extends React.Component {
                                     <span title={username}>
                                         <Userpic account={username} />
                                     </span>
-                                    <div className="TopRightMenu__notificounter">
-                                        <NotifiCounter fields="total" />
-                                    </div>
                                 </li>
                             </DropdownMenu>
                         )}

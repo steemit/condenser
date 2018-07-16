@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router';
-import NotifiCounter from 'app/components/elements/NotifiCounter';
 import tt from 'counterpart';
 
 export default ({ account_name }) => {
@@ -11,7 +10,7 @@ export default ({ account_name }) => {
                     to={`/@${account_name}/transfers`}
                     activeClassName="active"
                 >
-                    {tt('g.balances')} <NotifiCounter fields="send,receive" />
+                    {tt('g.balances')}
                 </Link>
             </li>
             <li>
@@ -19,8 +18,7 @@ export default ({ account_name }) => {
                     to={`/@${account_name}/permissions`}
                     activeClassName="active"
                 >
-                    {tt('g.permissions')}{' '}
-                    <NotifiCounter fields="account_update" />
+                    {tt('g.permissions')}
                 </Link>
             </li>
             <li>

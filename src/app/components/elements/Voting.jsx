@@ -117,7 +117,9 @@ class Voting extends React.Component {
                         (is_comment ? '-comment' : '')
                 );
                 const castToNegative = up ? 1 : -1;
-                weight = Number(saved_weight) * castToNegative;
+                if (saved_weight !== null) {
+                    weight = Number(saved_weight) * castToNegative;
+                }
             }
             this.props.vote(weight, {
                 author,

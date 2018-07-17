@@ -6,7 +6,6 @@ const FETCH_DATA_BEGIN = 'app/FETCH_DATA_BEGIN';
 const FETCH_DATA_END = 'app/FETCH_DATA_END';
 const ADD_NOTIFICATION = 'app/ADD_NOTIFICATION';
 const REMOVE_NOTIFICATION = 'app/REMOVE_NOTIFICATION';
-const UPDATE_NOTIFICOUNTERS = 'app/UPDATE_NOTIFICOUNTERS';
 export const SET_USER_PREFERENCES = 'app/SET_USER_PREFERENCES';
 export const TOGGLE_NIGHTMODE = 'app/TOGGLE_NIGHTMODE';
 export const TOGGLE_BLOGMODE = 'app/TOGGLE_BLOGMODE';
@@ -17,19 +16,6 @@ export const defaultState = Map({
     error: '',
     location: {},
     notifications: null,
-    notificounters: Map({
-        total: 0,
-        feed: 0,
-        reward: 0,
-        send: 0,
-        mention: 0,
-        follow: 0,
-        vote: 0,
-        reply: 0,
-        account_update: 0,
-        message: 0,
-        receive: 0,
-    }),
     user_preferences: Map({
         locale: null,
         nsfwPref: 'warn',
@@ -73,17 +59,6 @@ export default function reducer(state = defaultState, action = {}) {
             return state.update('notifications', s =>
                 s.delete(action.payload.key)
             );
-        case UPDATE_NOTIFICOUNTERS: {
-            if (action.payload) {
-                const nc = action.payload;
-                if (nc.follow > 0) {
-                    nc.total -= nc.follow;
-                    nc.follow = 0;
-                }
-                return state.set('notificounters', Map(nc));
-            }
-            return state;
-        }
         case SET_USER_PREFERENCES:
             return state.set('user_preferences', Map(action.payload));
         case TOGGLE_NIGHTMODE:
@@ -126,11 +101,6 @@ export const addNotification = payload => ({
 
 export const removeNotification = payload => ({
     type: REMOVE_NOTIFICATION,
-    payload,
-});
-
-export const updateNotificounters = payload => ({
-    type: UPDATE_NOTIFICOUNTERS,
     payload,
 });
 

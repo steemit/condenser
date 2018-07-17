@@ -53,7 +53,7 @@ Below that is a list of recommended users to follow, a collection of other resou
 
 Unlike centralized web services, **the Steem Blockchain has no account password recovery**.
 
-You are entirely responsible for keeping your password, and keeping it secure.
+You are entirely responsible for saving your password, backing it up, and keeping it secure.
 
 Save your master key and keep it somewhere safe.
 
@@ -287,7 +287,7 @@ It is possible to earn thousands of dollars, but most authors who are doing this
 ## <span id="Users_to_Follow">Users to Follow</span>
 
 - @steemitblog - Official Steemit Announcements
-- @ned - Ned Scott, CEO and Co-Founder of Steemit
+- @ned - Ned Scott, CEO and Co-Founder of Steemit Inc.
 
 <a href="#Table_of_Contents">^</a>
 ## <span id="Other_Resources">Other Resources</span>

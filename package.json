@@ -25,6 +25,7 @@
   "dependencies": {
     "@steem/crypto-session": "git+https://github.com/steemit/crypto-session.git#83a90b319ce5bc6a70362d52a15a815de7e729bb",
     "@steemit/steem-js": "0.7.1",
+    "ajv": "6.5.2",
     "assert": "1.4.1",
     "autoprefixer-loader": "3.2.0",
     "babel-cli": "6.26.0",

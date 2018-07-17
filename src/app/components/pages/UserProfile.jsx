@@ -21,8 +21,6 @@ import PostsList from 'app/components/cards/PostsList';
 import { isFetchingOrRecentlyUpdated } from 'app/utils/StateFunctions';
 import { repLog10 } from 'app/utils/ParsersAndFormatters.js';
 import Tooltip from 'app/components/elements/Tooltip';
-import VerticalMenu from 'app/components/elements/VerticalMenu';
-import NotifiCounter from 'app/components/elements/NotifiCounter';
 import DateJoinWrapper from 'app/components/elements/DateJoinWrapper';
 import tt from 'counterpart';
 import WalletSubMenu from 'app/components/elements/WalletSubMenu';
@@ -546,10 +544,7 @@ export default class UserProfile extends React.Component {
                                 to={`/@${accountname}/recent-replies`}
                                 activeClassName="active"
                             >
-                                {tt('g.replies')}{' '}
-                                {isMyAccount && (
-                                    <NotifiCounter fields="comment_reply" />
-                                )}
+                                {tt('g.replies')}
                             </Link>
                         </li>
                         {/*<li><Link to={`/@${accountname}/feed`} activeClassName="active">Feed</Link></li>*/}
@@ -574,10 +569,7 @@ export default class UserProfile extends React.Component {
                                     return false;
                                 }}
                             >
-                                {tt('g.wallet')}{' '}
-                                {isMyAccount && (
-                                    <NotifiCounter fields="send,receive,account_update" />
-                                )}
+                                {tt('g.wallet')}
                             </a>
                         </li>
                         {isMyAccount && (
@@ -652,9 +644,6 @@ export default class UserProfile extends React.Component {
                                             count: followerCount,
                                         })}
                                     </Link>
-                                    {isMyAccount && (
-                                        <NotifiCounter fields="follow" />
-                                    )}
                                 </span>
                                 <span>
                                     <Link to={`/@${accountname}`}>

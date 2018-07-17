@@ -123,7 +123,7 @@ The <a href="#Other_Resources">Other Resources</a> section of this Welcome page 
 
 ### <span id="Free_to_Participate">Free to Participate</span>
 
-It is free to post, comment, or vote on all content on Steemit.com. You might even get paid for it!
+It is free to post, comment, or upvote on all content on Steemit.com. You might even get paid for it!
 
 <a href="#Table_of_Contents">^</a>
 ### <span id="Votes">Votes</span>
@@ -182,7 +182,7 @@ More information on the three types of tokens can be found in the [Steemit FAQ](
 <a href="#Table_of_Contents">^</a>
 ### <span id="Curation">Curation</span>
 
-Up to 25% of the reward for each post goes to the people who voted on it. These people are called Curators.
+Up to 25% of the reward for each post goes to the people who upvoted on it. These people are called Curators.
 
 The more Steem Power you have in your account, the more your votes will be worth, and the more potential curation rewards you can earn!
 
@@ -204,11 +204,11 @@ Authors also have the option to decline payout, or be paid in 100% Steem Power!
 
 A reputation score is one way that Steemit measures the amount of value you have brought to the community.
 
-The higher the reputation, the more votes the account received.
+The higher the reputation, the more upvotes the account received.
 
 All new users start at 25.
 
-Your reputation will go up as you earn votes for your posts and comments, but it can come down if they are downvoted (flagged).
+Your reputation will go up as you earn upvotes for your posts and comments, but it can come down if they are downvoted (flagged).
 
 <a href="#Table_of_Contents">^</a>
 ### <span id="Cashing_out_or_Spending_SBD">Cashing out or Spending SBD</span>

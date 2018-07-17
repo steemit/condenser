@@ -52,7 +52,7 @@ Below that is a list of recommended users to follow, a collection of other resou
 
 Unlike centralized web services, **it is not possible to recover lost passwords on the Steem blockchain**.
 
-You are entirely responsible for saving your password, saving it and keeping it secure.
+You are entirely responsible for saving your password, backing it up, and keeping it secure.
 
 It is strongly recommended that you store an offline copy of your password somewhere safe in case of a hard drive failure or other calamity. Consider digital offline storage (such as a flash drive or burned CD), secure private cloud-based storage, as well as printed paper. Use multiple methods of storage for best redundancy. 
 

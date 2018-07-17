@@ -123,12 +123,12 @@ The <a href="#Other_Resources">Other Resources</a> section of this Welcome page 
 
 ### <span id="Free_to_Participate">Free to Participate</span>
 
-It is free to post, comment, or upvote on all content on Steemit.com. You might even get paid for it!
+It is free to post, comment, or vote on all content on Steemit.com. You might even get paid for it!
 
 <a href="#Table_of_Contents">^</a>
 ### <span id="Votes">Votes</span>
 
-Votes are Steemit's way of saying you like someone's post or comment.
+Upvotes are Steemit's way of saying you like someone's post or comment.
 
 To upvote, click on the <Icon name="chevron-up-circle" /> *Upvote* icon at the bottom of the post/comment.
 

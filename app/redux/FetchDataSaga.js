@@ -269,7 +269,16 @@ export function* fetchData(action) {
     } else {
         let select_tags = cookie.load(SELECT_TAGS_KEY);
         if (select_tags && select_tags.length) {
-            args[0].select_tags = select_tags;
+            let selectTags = []
+            
+            select_tags.forEach( t => {
+                const reversed = reveseTag(t)
+                reversed
+                ? selectTags = [ ...selectTags, t, reversed ]
+                : selectTags = [ ...selectTags, t, ] 
+                
+            })
+            args[0].select_tags = selectTags;
             category = select_tags.sort().join('/')
         } else {
             args[0].filter_tags = IGNORE_TAGS
@@ -313,7 +322,7 @@ export function* fetchData(action) {
     } else {
         call_name = PUBLIC_API.active;
     }
-
+    
     yield put({ type: 'FETCH_DATA_BEGIN' });
 
     try {

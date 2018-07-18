@@ -113,6 +113,8 @@ export default function transactionErrorReducer(
                 errorKey = errorStr = tt('chain_errors.already_voted');
             } else if (errorKey.includes('Can only vote once every')) {
                 errorKey = errorStr = tt('chain_errors.only_vote_once_every');
+            } else if (errorKey.includes('Missing Active Authority')) {
+                errorKey = errorStr = tt('chain_errors.missing_active_authority');
             }
             console.log('-------', errorKey, errorStr)
 

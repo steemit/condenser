@@ -876,7 +876,6 @@
   },
   "settings_jsx": {
     "choose_language": "Choose language",
-    "choose_domestic": "Choose domestic",
     "choose_currency": "Choose currency",
     "choose_theme": "Choose theme",
     "invalid_url": "Invalid URL",

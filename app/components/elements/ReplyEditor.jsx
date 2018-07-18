@@ -18,7 +18,7 @@ import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdow
 import VerticalMenu from 'app/components/elements/VerticalMenu';
 import tt from 'counterpart';
 import { getURL } from 'app/utils/URLConstants';
-import { DEFAULT_DOMESTIC, DOMESTIC, SUPPORT_EMAIL } from 'app/client_config';
+import { SUPPORT_EMAIL } from 'app/client_config';
 import Icon from 'app/components/elements/Icon';
 import { detransliterate } from 'app/utils/ParsersAndFormatters';
 import { replyAction } from './ReplyEditorActions';
@@ -50,7 +50,6 @@ class ReplyEditor extends React.Component {
         jsonMetadata: PropTypes.object, // An existing comment has its own meta data
         category: PropTypes.string, // initial value
         title: PropTypes.string, // initial value
-        domestic: PropTypes.string, // initial value
         body: PropTypes.string, // initial value
     };
 
@@ -205,19 +204,6 @@ class ReplyEditor extends React.Component {
         });
         const { title } = this.state;
         title.props.onChange(e);
-    };
-
-    onDomesticChange = e => {
-        if (e) e.preventDefault();
-        const targetValue = e.target.text.trim();
-        let value = DEFAULT_DOMESTIC;
-        for (var key in DOMESTIC) {
-            if (targetValue.localeCompare(DOMESTIC[key]) == 0) {
-                value = key;
-                break;
-            }
-        }
-        this.state.domestic.props.onChange(value);
     };
 
     onCancel = e => {
@@ -382,7 +368,7 @@ class ReplyEditor extends React.Component {
             body: this.props.body,
         };
         const { onCancel, onTitleChange, autoVoteOnChange } = this;
-        const { title, domestic, category, body, autoVote } = this.state;
+        const { title, category, body, autoVote } = this.state;
         const {
             reply,
             username,
@@ -467,22 +453,6 @@ class ReplyEditor extends React.Component {
             ? 'vframe__section--shrink'
             : '';
 
-        DOMESTIC.all = tt('g.auto');
-        let currentDomesticKey = DEFAULT_DOMESTIC;
-        let currentDomesticTitle = DOMESTIC[currentDomesticKey];
-        const domestic_menu = [];
-        for (let key in DOMESTIC) {
-            if (domestic && domestic.value === key) {
-                currentDomesticKey = key;
-                currentDomesticTitle = DOMESTIC[currentDomesticKey];
-            } else
-                domestic_menu.push({
-                    link: '#' + key,
-                    onClick: this.onDomesticChange,
-                    value: DOMESTIC[key],
-                });
-        }
-
         return (
             <div className="ReplyEditor row">
                 <div className="column small-12">
@@ -561,38 +531,6 @@ class ReplyEditor extends React.Component {
                                         className="float-right secondary"
                                         style={{ marginRight: '1rem' }}
                                     >
-                                        <input
-                                            type="hidden"
-                                            {...domestic.props}
-                                        />
-                                        {tt('settings_jsx.choose_domestic')}:{' '}
-                                        <LinkWithDropdown
-                                            closeOnClickOutside
-                                            dropdownPosition="bottom"
-                                            dropdownAlignment="left"
-                                            dropdownContent={
-                                                <VerticalMenu
-                                                    items={domestic_menu}
-                                                    title={tt(
-                                                        'settings_jsx.choose_domestic'
-                                                    )}
-                                                />
-                                            }
-                                        >
-                                            <a
-                                                className="ReplyEditor__domestic"
-                                                title={tt(
-                                                    'settings_jsx.choose_domestic'
-                                                )}
-                                                onClick={e =>
-                                                    e.preventDefault()
-                                                }
-                                                style={{ marginRight: '1rem' }}
-                                            >
-                                                {currentDomesticTitle}{' '}
-                                                <Icon name="caret-down" />
-                                            </a>
-                                        </LinkWithDropdown>
                                         {rte && (
                                             <a
                                                 href="#"
@@ -964,9 +902,8 @@ export default formId =>
 
             if (isStory) fields.push('title');
             if (isStory) fields.push('category');
-            if (isStory) fields.push('domestic');
 
-            let { category, title, body, domestic } = ownProps;
+            let { category, title, body } = ownProps;
             if (/submit_/.test(type)) title = body = '';
             if (isStory && jsonMetadata && jsonMetadata.tags) {
                 const detags = jsonMetadata.tags.map(tag =>
@@ -982,7 +919,7 @@ export default formId =>
                 fields,
                 isStory,
                 username,
-                initialValues: { title, domestic, body, category },
+                initialValues: { title, body, category },
                 state,
                 formId,
             };

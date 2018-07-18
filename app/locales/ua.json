@@ -642,7 +642,6 @@
   },
   "settings_jsx": {
     "choose_language": "Виберіть мову інтерфейсу",
-    "choose_domestic": "Виберіть мову контенту",
     "choose_currency": "Виберіть валюту",
     "choose_theme": "Виберіть тему",
     "invalid_url": "Неприпустима URL-адреса",

@@ -3,7 +3,6 @@ import {connect} from 'react-redux'
 import user from 'app/redux/User';
 import g from 'app/redux/GlobalReducer';
 import tt from 'counterpart';
-import { CURRENCIES, DEFAULT_CURRENCY, CURRENCY_COOKIE_KEY, LANGUAGES, DEFAULT_LANGUAGE, LOCALE_COOKIE_KEY, THEMES, DEFAULT_THEME, USER_GENDER, FRACTION_DIGITS, FRACTION_DIGITS_MARKET, MIN_VESTING_SHARES } from 'app/client_config'
 import transaction from 'app/redux/Transaction'
 import o2j from 'shared/clash/object2json'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
@@ -12,6 +11,18 @@ import reactForm from 'app/utils/ReactForm'
 import UserList from 'app/components/elements/UserList';
 import cookie from "react-cookie";
 import Dropzone from 'react-dropzone'
+import {
+    CURRENCIES,
+    DEFAULT_CURRENCY,
+    CURRENCY_COOKIE_KEY,
+    LANGUAGES,
+    DEFAULT_LANGUAGE,
+    LOCALE_COOKIE_KEY,
+    USER_GENDER,
+    FRACTION_DIGITS,
+    FRACTION_DIGITS_MARKET,
+    MIN_VESTING_SHARES
+} from 'app/client_config'
 
 class Settings extends React.Component {
 
@@ -183,13 +194,6 @@ class Settings extends React.Component {
         this.notify()
     }
 
-    onThemeChange = (event) => {
-        const theme = event.target.value
-        localStorage.setItem('theme', theme)
-        this.props.changeTheme(theme)
-        this.notify()
-    }
-
     handleSubmit = ({updateInitialValues}) => {
         let {metaData} = this.props
         if (!metaData) metaData = {}
@@ -278,12 +282,6 @@ class Settings extends React.Component {
           })}
         </select>;
 
-        const themeSelectBox = <select defaultValue={process.env.BROWSER ? localStorage.getItem('theme') : DEFAULT_THEME} onChange={this.onThemeChange}>
-            {THEMES.map(i => {
-                return <option key={i} value={i}>{i}</option>
-            })}
-        </select>;
-
         const selectorStyle = pImageUploading ?
           {
             whiteSpace: `nowrap`,
@@ -346,10 +344,6 @@ class Settings extends React.Component {
                         </select>
                     </label>
 
-                    <label>
-                        {tt('settings_jsx.choose_theme')}
-                        {themeSelectBox}
-                    </label>
                     <div className="error"></div>
 
                     <label>
@@ -518,9 +512,6 @@ export default connect(
         },
         reloadExchangeRates: () => {
           dispatch(g.actions.fetchExchangeRates())
-        },
-        changeTheme: (theme) => {
-            dispatch(user.actions.changeTheme(theme))
         },
         updateAccount: ({successCallback, errorCallback, ...operation}) => {
             const success = () => {

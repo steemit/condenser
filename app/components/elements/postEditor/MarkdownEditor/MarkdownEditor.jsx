@@ -359,7 +359,7 @@ export default class MarkdownEditor extends PureComponent {
                 let fileName = null;
 
                 for (let item of e.clipboardData.items) {
-                    if (item.kind === 'string') {
+                    if (item.kind === 'string' && item.type === 'text/plain') {
                         try {
                             fileName = item.getAsString(a => (fileName = a));
                         } catch (err) {}

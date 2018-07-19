@@ -49,6 +49,10 @@ export const CardTitle = styled(Flex)`
     }
 `;
 
+export const CardContent = styled(Flex)`
+    padding: 20px;
+`;
+
 export const CardRow = styled(Flex)`
     @media (max-width: 576px) {
         flex-direction: column;

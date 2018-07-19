@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { storiesOf } from '@storybook/react';
 
-import Tab from './Tab';
+import TabContainer from './TabContainer';
 import Tabs from './Tabs';
 
 const Tab1 = () => {
@@ -20,12 +20,12 @@ storiesOf('Tabs', module).add('default', () => (
         }}
     >
         <Fragment>
-            <Tab id="tab1" title="Tab 1">
+            <TabContainer id="tab1" title="Tab 1">
                 <Tab1 />
-            </Tab>
-            <Tab id="tab2" title="Tab 2">
+            </TabContainer>
+            <TabContainer id="tab2" title="Tab 2">
                 <Tab2 />
-            </Tab>
+            </TabContainer>
         </Fragment>
     </Tabs>
 ));

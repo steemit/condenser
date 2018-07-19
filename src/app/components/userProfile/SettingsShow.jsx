@@ -206,7 +206,7 @@ export default class SettingsShow extends PureComponent {
                                 {({ input, meta }) => (
                                     <FormGroupRow>
                                         <LabelRow>
-                                            <Icon name="facebook" width="13px" height="24px" />
+                                            <Icon name="facebook" width="13" height="24" />
                                         </LabelRow>
                                         <Input
                                             {...input}
@@ -221,7 +221,7 @@ export default class SettingsShow extends PureComponent {
                                 {({ input, meta }) => (
                                     <FormGroupRow>
                                         <LabelRow>
-                                            <Icon name="vk" width="28px" height="18px" />
+                                            <Icon name="vk" width="28" height="18" />
                                         </LabelRow>
                                         <Input
                                             {...input}
@@ -236,7 +236,7 @@ export default class SettingsShow extends PureComponent {
                                 {({ input, meta }) => (
                                     <FormGroupRow>
                                         <LabelRow>
-                                            <Icon name="instagram" size="23px" />
+                                            <Icon name="instagram" size="23" />
                                         </LabelRow>
                                         <Input
                                             {...input}
@@ -251,7 +251,7 @@ export default class SettingsShow extends PureComponent {
                                 {({ input, meta }) => (
                                     <FormGroupRow>
                                         <LabelRow>
-                                            <Icon name="twitter" width="26px" height="22px" />
+                                            <Icon name="twitter" width="26" height="22" />
                                         </LabelRow>
                                         <Input
                                             {...input}

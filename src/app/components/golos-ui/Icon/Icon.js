@@ -8,8 +8,8 @@ if (process.env.BROWSER) {
 }
 
 const Icon = ({ name, size, height, width, ...props = {} }) => {
-    props.height = size || height;
-    props.width = size || width;
+    props.height = `${size || height}px`;
+    props.width = `${size || width}px`;
 
     return (
         <svg { ...props }>
@@ -20,14 +20,23 @@ const Icon = ({ name, size, height, width, ...props = {} }) => {
 
 Icon.propTypes = {
     name: PropTypes.string,
-    size: PropTypes.string,
-    height: PropTypes.string,
-    width: PropTypes.string,
+    size: PropTypes.oneOfType([
+        PropTypes.number,
+        PropTypes.string,
+    ]),
+    height: PropTypes.oneOfType([
+        PropTypes.number,
+        PropTypes.string,
+    ]),
+    width: PropTypes.oneOfType([
+        PropTypes.number,
+        PropTypes.string,
+    ]),
 }
 
 Icon.defaultProps = {
-    height: '24px',
-    width: '24px',
+    height: '24',
+    width: '24',
 }
 
 const StyledIcon = styled(Icon)``;

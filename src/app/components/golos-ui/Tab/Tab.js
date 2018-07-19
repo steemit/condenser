@@ -4,7 +4,6 @@ import { Link } from 'react-router';
 
 const activeStyles = `
     color: #333333;
-    font-weight: 500;
     cursor: default;
 `;
 
@@ -18,7 +17,7 @@ const Tab = styled.div`
 
     font-family: ${({ theme }) => theme.fontFamily};
     font-size: 14px;
-    font-weight: 400;
+    font-weight: 500;
     letter-spacing: 1.09px;
     text-transform: uppercase;
     color: #b7b7b9;
@@ -44,7 +43,10 @@ const Tab = styled.div`
 `;
 
 Tab.propTypes = {
-    active: PropTypes.number,
+    active: PropTypes.oneOfType([
+        PropTypes.number,
+        PropTypes.bool
+    ]),
     activeClassName: PropTypes.string,
 };
 

@@ -66,7 +66,7 @@ export default class UserNavigation extends PureComponent {
     };
 
     render() {
-        const { accountName, isOwner, section } = this.props;
+        const { accountName, isOwner } = this.props;
 
         // const items = [
         //     { value: 'Посты', to: `/@${accountName}` },
@@ -78,7 +78,7 @@ export default class UserNavigation extends PureComponent {
         //     { value: tt('g.wallet'), to: `/@${accountName}/transfers` },
         // ];
         const items = [
-            { value: tt('g.blog'), to: `/@${accountName}` },
+            { value: tt('g.blog'), to: `/@${accountName}/blog` },
             { value: tt('g.comments'), to: `/@${accountName}/comments` },
             { value: tt('g.replies'), to: `/@${accountName}/recent-replies` },
             { value: tt('g.wallet'), to: `/@${accountName}/transfers` },
@@ -88,15 +88,13 @@ export default class UserNavigation extends PureComponent {
         const rewardsMenu = [
             {
                 link: `/@${accountName}/curation-rewards`,
-                label: tt('g.curation_rewards'),
+                value: tt('g.curation_rewards'),
             },
             {
                 link: `/@${accountName}/author-rewards`,
-                label: tt('g.author_rewards'),
+                value: tt('g.author_rewards'),
             },
         ];
-
-        const rewardsActive = ['curation-rewards', 'author-rewards'].includes(section);
 
         return (
             <Wrapper>
@@ -111,13 +109,13 @@ export default class UserNavigation extends PureComponent {
                         dropdownPosition="bottom"
                         dropdownContent={<VerticalMenu items={rewardsMenu} />}
                     >
-                        <TabLink active={rewardsActive ? 1 : 0}>{tt('g.rewards')}</TabLink>
+                        <TabLink>{tt('g.rewards')}</TabLink>
                     </LinkWithDropdown>
 
                     <RightIcons>
                         {isOwner && (
                             <IconLink to={`/@${accountName}/settings`} title={tt('g.settings')}>
-                                <SettingsIcon name="setting" size="24px" />
+                                <SettingsIcon name="setting" size="24" />
                             </IconLink>
                         )}
                     </RightIcons>

@@ -67,7 +67,7 @@ export default class Follow extends Component {
         if (!follower || !following)
             return (
                 <Button onClick={this.followLoggedOut}>
-                    <Icon name="subscribe" height="10px" width="14px" />{tt('g.follow')}
+                    <Icon name="subscribe" height="10" width="14" />{tt('g.follow')}
                 </Button>
             );
 
@@ -82,14 +82,14 @@ export default class Follow extends Component {
                 {showFollow && followingWhat !== 'blog' ? 
                     (
                         <Button disabled={busy} onClick={this.follow}>
-                            <Icon name="subscribe" height="10px" width="14px" />
+                            <Icon name="subscribe" height="10" width="14" />
                             {tt('g.follow')}
                         </Button>
                     )
                     :
                     (
                         <Button disabled={busy} light onClick={this.unfollow}>
-                            <Icon name="cross" height="10px" width="10px" />
+                            <Icon name="cross" height="10" width="10" />
                             {tt('g.unfollow')}
                         </Button>
                     )}

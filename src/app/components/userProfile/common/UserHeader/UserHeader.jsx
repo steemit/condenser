@@ -128,9 +128,11 @@ const IconCover = styled(Dropzone)`
 `;
 
 // Component
-class UserHeader extends Component {
+export default class UserHeader extends Component {
     static propTypes = {
-        account: PropTypes.object,
+        currentAccount: PropTypes.object,
+        currentUser: PropTypes.object,
+        isOwner: PropTypes.bool,
 
         uploadImage: PropTypes.func,
         updateAccount: PropTypes.func,
@@ -141,13 +143,12 @@ class UserHeader extends Component {
     dropzoneCover = null;
 
     uploadDropped = (acceptedFiles, rejectedFiles, key) => {
-        const {
-            account,
-            profile,
-            uploadImage,
-            updateAccount,
-            notify,
-        } = this.props;
+        const { currentAccount, uploadImage, updateAccount, notify } = this.props;
+
+        const metaData = currentAccount
+            ? o2j.ifStringParseJSON(currentAccount.get('json_metadata'))
+            : {};
+        const profile = metaData && metaData.profile ? metaData.profile : {};
 
         if (rejectedFiles.length) {
             notify(tt('reply_editor.please_insert_only_image_files'), 10000);
@@ -168,8 +169,8 @@ class UserHeader extends Component {
 
                 updateAccount({
                     json_metadata: JSON.stringify({ profile }),
-                    account: account.name,
-                    memo_key: account.memo_key,
+                    account: currentAccount.get('name'),
+                    memo_key: currentAccount.get('memo_key'),
                     errorCallback: e => {
                         if (e !== 'Canceled') {
                             notify(tt('g.server_returned_error'), 10000);
@@ -193,24 +194,10 @@ class UserHeader extends Component {
     };
 
     render() {
-        const { account, userName, isOwner } = this.props;
-        const {
-            name,
-            // gender,
-            // location,
-            // about,
-            // website,
-            profile_image,
-            cover_image,
-        } = normalizeProfile(account);
+        const { currentAccount, currentUser, isOwner } = this.props;
+        const { name, profile_image, cover_image } = normalizeProfile(currentAccount.toJS());
 
-        // const website_label = website
-        //     ? website.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')
-        //     : null;
-
-        const backgroundUrl = cover_image
-            ? proxifyImageUrl(cover_image, '0x0')
-            : false;
+        const backgroundUrl = cover_image ? proxifyImageUrl(cover_image, '0x0') : false;
 
         return (
             <Wrapper backgroundUrl={backgroundUrl}>
@@ -227,15 +214,15 @@ class UserHeader extends Component {
                     </UserProfileAvatar>
                     <Details>
                         {name ? <Name>{name}</Name> : null}
-                        <Login>@{account.name}</Login>
+                        <Login>@{currentAccount.get('name')}</Login>
                         {!isOwner && (
                             <Buttons>
                                 {/* <Button light>
-                                <Icon name="reply" height="17px" width="18px" />Написать
+                                <Icon name="reply" height="17" width="18" />Написать
                             </Button> */}
                                 <Follow
-                                    follower={userName}
-                                    following={account.name}
+                                    follower={currentUser.get('username')}
+                                    following={currentAccount.get('name')}
                                 />
                             </Buttons>
                         )}
@@ -247,63 +234,11 @@ class UserHeader extends Component {
                             multiple={false}
                             accept="image/*"
                         >
-                            <Icon name="picture" size="20px" />
+                            <Icon name="picture" size="20" />
                         </IconCover>
-                        ) : null}
+                    ) : null}
                 </Container>
             </Wrapper>
         );
     }
 }
-
-export default connect(
-    // mapStateToProps
-    (state, { account }) => {
-        const userName = state.user.getIn(['current', 'username'], '');
-
-        let metaData = account
-            ? o2j.ifStringParseJSON(account.json_metadata)
-            : {};
-        const profile = metaData && metaData.profile ? metaData.profile : {};
-
-        return {
-            account,
-            userName,
-            metaData,
-            isOwner: userName == account.name,
-            profile
-        };
-    },
-    // mapDispatchToProps
-    dispatch => ({
-        uploadImage: (file, progress) => {
-            dispatch({
-                type: 'user/UPLOAD_IMAGE',
-                payload: { file, progress },
-            });
-        },
-        updateAccount: ({ successCallback, errorCallback, ...operation }) => {
-            dispatch(
-                transaction.actions.broadcastOperation({
-                    type: 'account_metadata',
-                    operation,
-                    successCallback() {
-                        dispatch(user.actions.getAccount());
-                        successCallback();
-                    },
-                    errorCallback,
-                })
-            );
-        },
-        notify: (message, dismiss = 3000) => {
-            dispatch({
-                type: 'ADD_NOTIFICATION',
-                payload: {
-                    key: 'settings_' + Date.now(),
-                    message,
-                    dismissAfter: dismiss,
-                },
-            });
-        },
-    })
-)(UserHeader);

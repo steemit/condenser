@@ -6,6 +6,7 @@ import throttle from 'lodash/throttle';
 import PostCard from 'src/app/components/common/PostCard';
 import { isFetchingOrRecentlyUpdated } from 'app/utils/StateFunctions';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
+import { Map } from 'immutable';
 
 const Root = styled.div``;
 
@@ -19,6 +20,10 @@ class PostsList extends PureComponent {
     static propTypes = {
         content: PropTypes.object, // immutable.Map
         posts: PropTypes.object, // immutable.List
+    };
+
+    static defaultProps = {
+        posts: Map(),
     };
 
     componentDidMount() {

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { TabsConsumer } from './TabsContext';
 
-class Tab extends Component {
+class TabContainer extends Component {
     render() {
         const { id, title, children } = this.props;
 
@@ -16,4 +16,4 @@ class Tab extends Component {
     }
 }
 
-export default Tab;
+export default TabContainer;

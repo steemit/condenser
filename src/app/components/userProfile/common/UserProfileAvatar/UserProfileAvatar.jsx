@@ -74,11 +74,11 @@ export default class UserProfileAvatar extends PureComponent {
         return (
             <Wrapper backgroundUrl={backgroundUrl}>
                 {!backgroundUrl && (
-                    <Icon name="user" width="65px" height="70px" />
+                    <Icon name="user" width="65" height="70" />
                 )}
                 {children &&
                     React.cloneElement(children, {
-                        children: <Icon name="picture" size="20px" />,
+                        children: <Icon name="picture" size="20" />,
                     })}
             </Wrapper>
         );

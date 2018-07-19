@@ -69,7 +69,7 @@ class SettingsContent extends Component {
 export default connect(
     // mapStateToProps
     (state, ownProps) => {
-        const { accountName } = ownProps.routeParams;
+        const { accountName } = ownProps.params;
 
         const account = state.global.getIn(['accounts', accountName]).toJS();
 

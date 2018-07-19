@@ -67,7 +67,7 @@ const Column = styled.div`
 
 const Bold = styled.div`
     color: #333;
-    font-family: ${({theme}) => theme.fontFamily};
+    font-family: ${({ theme }) => theme.fontFamily};
     font-size: 20px;
     font-weight: bold;
     line-height: 1;
@@ -76,7 +76,7 @@ const Bold = styled.div`
 
 const Title = styled.div`
     color: #393636;
-    font-family: ${({theme}) => theme.fontFamily};
+    font-family: ${({ theme }) => theme.fontFamily};
     font-size: 14px;
     font-weight: 300;
     line-height: 1;
@@ -85,7 +85,7 @@ const Title = styled.div`
 
 const UserCardCity = styled.div`
     color: #393636;
-    font-family: ${({theme}) => theme.fontFamily};
+    font-family: ${({ theme }) => theme.fontFamily};
     font-size: 13px;
     font-weight: 400;
     line-height: 1;
@@ -122,10 +122,10 @@ export default class UserCardAbout extends PureComponent {
 
     render() {
         const { account, followerCount, followingCount } = this.props;
-        const { location, gender, about, website } = normalizeProfile(account);
+        const { location, gender, about, website } = normalizeProfile(account.toJS());
 
         // set account join date
-        let accountJoin = account.created;
+        let accountJoin = account.get('created');
         const transferFromSteemToGolosDate = '2016-09-29T12:00:00';
         if (new Date(accountJoin) < new Date(transferFromSteemToGolosDate)) {
             accountJoin = transferFromSteemToGolosDate;
@@ -135,15 +135,15 @@ export default class UserCardAbout extends PureComponent {
             ? website.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')
             : null;
 
-        const reputation = repLog10(account.reputation);
+        const reputation = repLog10(account.get('reputation'));
 
         return (
-            <Card style={{ width: '273px' }}>
+            <Card>
                 <CardTitle>Краткая информация</CardTitle>
                 <CardContentCounters>
                     <Row>
                         <Column>
-                            <Bold>{account.post_count}</Bold>
+                            <Bold>{account.get('post_count')}</Bold>
                             <Title>Постов</Title>
                         </Column>
                         <Column>
@@ -164,10 +164,12 @@ export default class UserCardAbout extends PureComponent {
                     </Row>
 
                     <Row>
-                        <Column>
-                            <Bold>{gender}</Bold>
-                            <Title>Пол</Title>
-                        </Column>
+                        {gender && (
+                            <Column>
+                                <Bold>{gender}</Bold>
+                                <Title>Пол</Title>
+                            </Column>
+                        )}
                         <Column>
                             <Bold>
                                 <FormattedDate
@@ -184,34 +186,28 @@ export default class UserCardAbout extends PureComponent {
 
                 {(website || about || location) && (
                     <CardTitle justify="space-between">
-                        О себе{location && (
-                            <UserCardCity>{location}</UserCardCity>
-                        )}
+                        О себе{location && <UserCardCity>{location}</UserCardCity>}
                     </CardTitle>
                 )}
                 {(website || about) && (
                     <CardContent>
-                        {website && (
-                            <UserCardSite to={website}>
-                                {websiteLabel}
-                            </UserCardSite>
-                        )}
+                        {website && <UserCardSite to={website}>{websiteLabel}</UserCardSite>}
                         {about && <UserCardBio>{about}</UserCardBio>}
                     </CardContent>
                 )}
 
                 <CardTitle justify="space-between">
                     <SocialLink to="#">
-                        <Icon name="facebook" width="13px" height="24px" />
+                        <Icon name="facebook" width="13" height="24" />
                     </SocialLink>
                     <SocialLink to="#">
-                        <Icon name="vk" width="28px" height="18px" />
+                        <Icon name="vk" width="28" height="18" />
                     </SocialLink>
                     <SocialLink to="#">
-                        <Icon name="instagram" size="23px" />
+                        <Icon name="instagram" size="23" />
                     </SocialLink>
                     <SocialLink to="#">
-                        <Icon name="twitter" width="26px" height="22px" />
+                        <Icon name="twitter" width="26" height="22" />
                     </SocialLink>
                 </CardTitle>
             </Card>

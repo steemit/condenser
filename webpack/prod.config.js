@@ -30,7 +30,7 @@ module.exports = merge(baseConfig, {
             filename: '[name].[hash].css',
             chunkFilename: '[id].[hash].css',
         }),
-        //new (require('webpack-bundle-analyzer').BundleAnalyzerPlugin)()
+        // new (require('webpack-bundle-analyzer').BundleAnalyzerPlugin)()
     ],
     module: {
         rules: [

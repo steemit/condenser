@@ -2,426 +2,121 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
+import { Map } from 'immutable';
 
-import { Link } from 'react-router';
 import tt from 'counterpart';
 import { blockedUsers, blockedUsersContent } from 'app/utils/IllegalContent';
-import { isFetchingOrRecentlyUpdated } from 'app/utils/StateFunctions';
 
-import user from 'app/redux/User';
 import transaction from 'app/redux/Transaction';
 
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
-import Callout from 'app/components/elements/Callout';
-
-//import PostsList from 'app/components/cards/PostsList';
-import PostsList from 'src/app/components/common/PostsList';
-import UserWallet from 'app/components/modules/UserWallet';
-import CurationRewards from 'app/components/modules/CurationRewards';
-import AuthorRewards from 'app/components/modules/AuthorRewards';
-import ActivityContent from './ActivityContent';
-import SettingsContent from './SettingsContent';
-
-import WalletSubMenu from 'app/components/elements/WalletSubMenu';
-import IllegalContentMessage from 'app/components/elements/IllegalContentMessage';
-import UserList from 'app/components/elements/UserList';
-import UserKeys from 'app/components/elements/UserKeys';
-import PasswordReset from 'app/components/elements/PasswordReset';
 
 import Container from 'src/app/components/common/Container';
-import UserHeader from 'src/app/components/userProfile/UserHeader';
-import UserNavigation from 'src/app/components/userProfile/UserNavigation';
-import UserCardAbout from 'src/app/components/userProfile/UserCardAbout';
-import RightColumnStub from 'src/app/components/userProfile/RightColumnStub'
+import UserHeader from 'src/app/components/userProfile/common/UserHeader';
+import UserNavigation from 'src/app/components/userProfile/common/UserNavigation';
+import UserCardAbout from 'src/app/components/userProfile/common/UserCardAbout';
 
 const Main = styled.div`
     background-color: #f9f9f9;
     padding: 20px 0;
 `;
 
+const SidebarLeft = styled.div`
+    width: 273px;
+    flex-shrink: 0;
+`;
+
 const Content = styled.div`
+    display: flex;
     flex-shrink: 1;
     flex-grow: 1;
+    justify-content: center;
     margin: 0 18px;
+
+    &:first-child {
+        margin-left: 0;
+    }
+
+    &:last-child {
+        margin-right: 0;
+    }
+`;
+
+const SidebarRight = styled.div`
+    width: 273px;
+    flex-shrink: 0;
 `;
 
 export default class UserProfileContainer extends Component {
-    static propTypes = { accountName: PropTypes.string };
-
-    shouldComponentUpdate(np) {
-        const { follow } = this.props;
-        const { follow_count } = this.props;
-
-        let followersLoading = false,
-            npFollowersLoading = false;
-        let followingLoading = false,
-            npFollowingLoading = false;
-
-        const account = np.routeParams.accountName.toLowerCase();
-        if (follow) {
-            followersLoading = follow.getIn(
-                ['getFollowersAsync', account, 'blog_loading'],
-                false
-            );
-            followingLoading = follow.getIn(
-                ['getFollowingAsync', account, 'blog_loading'],
-                false
-            );
-        }
-        if (np.follow) {
-            npFollowersLoading = np.follow.getIn(
-                ['getFollowersAsync', account, 'blog_loading'],
-                false
-            );
-            npFollowingLoading = np.follow.getIn(
-                ['getFollowingAsync', account, 'blog_loading'],
-                false
-            );
-        }
-
-        return (
-            np.current_user !== this.props.current_user ||
-            np.accounts.get(account) !== this.props.accounts.get(account) ||
-            np.wifShown !== this.props.wifShown ||
-            np.global_status !== this.props.global_status ||
-            (npFollowersLoading !== followersLoading && !npFollowersLoading) ||
-            (npFollowingLoading !== followingLoading && !npFollowingLoading) ||
-            np.loading !== this.props.loading ||
-            np.location.pathname !== this.props.location.pathname ||
-            np.routeParams.accountName !== this.props.routeParams.accountName ||
-            np.follow_count !== this.props.follow_count
-        );
-    }
-
-    componentWillUnmount() {
-        this.props.clearTransferDefaults();
-    }
-
-    loadMore = (last_post, category) => {
-        const { accountName } = this.props.routeParams;
-
-        if (!last_post) return;
-
-        let order;
-        switch (category) {
-            case 'feed':
-                order = 'by_feed';
-                break;
-            case 'blog':
-                order = 'by_author';
-                break;
-            case 'comments':
-                order = 'by_comments';
-                break;
-            case 'recent_replies':
-                order = 'by_replies';
-                break;
-            default:
-                console.log('unhandled category:', category);
-        }
-
-        if (
-            isFetchingOrRecentlyUpdated(
-                this.props.global_status,
-                order,
-                category
-            )
-        )
-            return;
-        const [author, permlink] = last_post.split('/');
-        debugger
-        this.props.requestData({
-            author,
-            permlink,
-            order,
-            category,
-            accountname: accountName,
-        });
-    };
+    static propTypes = {};
 
     render() {
-        const { global_status, loading, current_user, follow, routeParams } = this.props;
-        let { accountName, section } = routeParams;
-        accountName = accountName.toLowerCase(); // normalize account from cased params
-        const username = current_user ? current_user.get('username') : null;
+        const {
+            currentUser,
+            currentAccount,
 
-        if (!section) section = 'blog';
-        // @user/"posts" is deprecated in favor of "comments" as of oct-2016 (#443)
-        if (section == 'posts') section = 'comments';
+            fetching,
+            isOwner,
 
-        // Loading status
-        const status = global_status
-            ? global_status.getIn([section, 'by_author'])
-            : null;
-        const fetching = (status && status.fetching) || loading;
+            followerCount,
+            followingCount,
 
-        let account;
-        let accountImm = this.props.accounts.get(accountName);
-        if (accountImm) {
-            account = accountImm.toJS();
-        } else if (fetching) {
+            uploadImage,
+            updateAccount,
+            notify,
+        } = this.props;
+
+        if (fetching) {
             return (
                 <div className="UserProfile loader">
                     <div className="UserProfile__center">
-                        <LoadingIndicator
-                            type="circle"
-                            size="40px"
-                        />
+                        <LoadingIndicator type="circle" size="40px" />
                     </div>
                 </div>
             );
-        } else {
+        }
+
+        if (!currentAccount) {
             return (
                 <div className="UserProfile">
-                    <div className="UserProfile__center">
-                        {tt('user_profile.unknown_account')}
-                    </div>
+                    <div className="UserProfile__center">{tt('user_profile.unknown_account')}</div>
                 </div>
             );
         }
 
-        // MUST BE REFACTORED!
-
-        const followers =
-            follow && follow.getIn(['getFollowersAsync', accountName]);
-        const following =
-            follow && follow.getIn(['getFollowingAsync', accountName]);
-
-        // instantiate following items
-        let totalCounts = this.props.follow_count;
-        let followerCount = 0;
-        let followingCount = 0;
-
-        if (totalCounts && accountName) {
-            totalCounts = totalCounts.get(accountName);
-            if (totalCounts) {
-                totalCounts = totalCounts.toJS();
-                followerCount = totalCounts.follower_count;
-                followingCount = totalCounts.following_count;
-            }
+        if (blockedUsers.includes(currentAccount.get('name'))) {
+            return <IllegalContentMessage />;
         }
 
-        const isMyAccount = username === account.name;
-        let tab_content = null;
-
-        let walletClass = '';
-        if (section === 'transfers') {
-            // transfers, check if url has query params
-            const {
-                location: { query },
-            } = this.props;
-            const { to, amount, token, memo } = query;
-            const hasAllParams = !!to && !!amount && !!token && !!memo;
-            walletClass = 'active';
-            tab_content = (
-                <div>
-                    <UserWallet
-                        transferDetails={{ immediate: hasAllParams, ...query }}
-                        account={accountImm}
-                        showTransfer={this.props.showTransfer}
-                        current_user={current_user}
-                        withdrawVesting={this.props.withdrawVesting}
-                    />
-                    {/* isMyAccount && <div><MarkNotificationRead fields="send,receive" account={account.name} /></div>*/}
-                </div>
-            );
-        } else if (section === 'curation-rewards') {
-            tab_content = (
-                <CurationRewards
-                    account={account}
-                    current_user={current_user}
-                />
-            );
-        } else if (section === 'author-rewards') {
-            tab_content = (
-                <AuthorRewards account={account} current_user={current_user} />
-            );
-        } else if (section === 'followers') {
-            if (followers && followers.has('blog_result')) {
-                tab_content = (
-                    <div>
-                        <UserList
-                            title={tt('user_profile.followers')}
-                            account={account}
-                            users={followers.get('blog_result')}
-                        />
-                        {/* isMyAccount && <div><MarkNotificationRead fields="send,receive" account={account.name} /></div>*/}
-                    </div>
-                );
-            }
-        } else if (section === 'followed') {
-            if (following && following.has('blog_result')) {
-                tab_content = (
-                    <UserList
-                        title="Followed"
-                        account={account}
-                        users={following.get('blog_result')}
-                    />
-                );
-            }
-        } else if (section === 'settings') {
-            tab_content = <SettingsContent routeParams={routeParams} />;
-        } else if (section === 'comments') {
-            if (account.comments) {
-                let posts =
-                    accountImm.get('posts') || accountImm.get('comments');
-                if (!fetching && (posts && !posts.size)) {
-                    tab_content = (
-                        <Callout>
-                            {tt('user_profile.user_hasnt_made_any_posts_yet', {
-                                name: accountName,
-                            })}
-                        </Callout>
-                    );
-                } else {
-                    tab_content = (
-                        <PostsList
-                            key={routeParams.accountName}
-                            account={routeParams.accountName}
-                            posts={posts}
-                            loading={fetching}
-                            category="comments"
-                            loadMore={this.loadMore}
-                            showSpam
-                        />
-                    );
-                }
-            } else {
-                tab_content = (
-                    <center>
-                        <LoadingIndicator type="circle" />
-                    </center>
-                );
-            }
-        } else if (!section || section === 'blog') {
-            if (account.blog) {
-                let posts = accountImm.get('blog');
-                const emptyText = isMyAccount ? (
-                    <div>
-                        {tt('submit_a_story.you_hasnt_started_bloggin_yet')}
-                        <br />
-                        <br />
-                        <Link to="/submit.html">{tt('g.submit_a_story')}</Link>
-                        <br />
-                        <a href="/welcome">
-                            {tt('submit_a_story.welcome_to_the_blockchain')}
-                        </a>
-                    </div>
-                ) : (
-                    tt('user_profile.user_hasnt_started_bloggin_yet', {
-                        name: accountName,
-                    })
-                );
-
-                if (!fetching && (posts && !posts.size)) {
-                    tab_content = <Callout>{emptyText}</Callout>;
-                } else {
-                    tab_content = (
-                        <PostsList
-                            key={account.name}
-                            account={account.name}
-                            posts={posts}
-                            loading={fetching}
-                            order="by_author"
-                            category="blog"
-                            loadMore={this.loadMore}
-                            showSpam
-                        />
-                    );
-                }
-            } else {
-                tab_content = (
-                    <center>
-                        <LoadingIndicator type="circle" />
-                    </center>
-                );
-            }
-        } else if (section === 'recent-replies') {
-            if (account.recent_replies) {
-                let posts = accountImm.get('recent_replies');
-                if (!fetching && (posts && !posts.size)) {
-                    tab_content = (
-                        <Callout>
-                            {tt('user_profile.user_hasnt_had_any_replies_yet', {
-                                name: accountName,
-                            }) + '.'}
-                        </Callout>
-                    );
-                } else {
-                    tab_content = (
-                        <div>
-                            <PostsList
-                                posts={posts}
-                                loading={fetching}
-                                category="recent_replies"
-                                loadMore={this.loadMore}
-                                showSpam={false}
-                            />
-                            {/* isMyAccount && <div><MarkNotificationRead fields="send,receive" account={account.name} /></div>*/}
-                        </div>
-                    );
-                }
-            } else {
-                tab_content = (
-                    <center>
-                        <LoadingIndicator type="circle" />
-                    </center>
-                );
-            }
-        } else if (section === 'permissions' && isMyAccount) {
-            walletClass = 'active';
-            tab_content = (
-                <div>
-                    <WalletSubMenu account_name={account.name} />
-
-                    <br />
-                    <UserKeys account={accountImm} />
-                    {/* isMyAccount && <div><MarkNotificationRead fields="send,receive" account={account.name} /></div>*/}
-                </div>
-            );
-        } else if (section === 'password') {
-            walletClass = 'active';
-            tab_content = (
-                <div>
-                    <WalletSubMenu account_name={account.name} />
-
-                    <br />
-                    <PasswordReset account={accountImm} />
-                </div>
-            );
-        } else if (section === 'activity') {
-            tab_content = <ActivityContent />;
-        }
-
-        if (blockedUsers.includes(accountName)) {
-            tab_content = <IllegalContentMessage />;
-        }
-
-        if (blockedUsersContent.includes(accountName)) {
-            tab_content = <div>{tt('g.blocked_user_content')}</div>;
+        if (blockedUsersContent.includes(currentAccount.get('name'))) {
+            return <div>{tt('g.blocked_user_content')}</div>;
         }
 
         return (
             <Fragment>
-                <UserHeader account={account} />
-                <UserNavigation
-                    accountName={accountName}
-                    isOwner={isMyAccount}
-                    section={section}
+                <UserHeader
+                    currentUser={currentUser}
+                    currentAccount={currentAccount}
+                    uploadImage={uploadImage}
+                    updateAccount={updateAccount}
+                    notify={notify}
                 />
+                <UserNavigation accountName={currentAccount.get('name')} isOwner={isOwner} />
                 <Main>
                     <Container align="flex-start" justify="center" small>
-                        {section !== 'settings' && (
-                            <UserCardAbout
-                                account={account}
-                                followerCount={followerCount}
-                                followingCount={followingCount}
-                            />
+                        {this.props.routes.slice(-1)[0].path !== 'settings' && (
+                            <SidebarLeft>
+                                <UserCardAbout
+                                    account={currentAccount}
+                                    followerCount={followerCount}
+                                    followingCount={followingCount}
+                                />
+                            </SidebarLeft>
                         )}
-                        <Content>
-                            {tab_content}
-                        </Content>
-                        <RightColumnStub />
+                        <Content>{this.props.content}</Content>
+                        {this.props.sidebarRight && (
+                            <SidebarRight>{this.props.sidebarRight}</SidebarRight>
+                        )}
                     </Container>
                 </Main>
             </Fragment>
@@ -430,59 +125,113 @@ export default class UserProfileContainer extends Component {
 }
 
 module.exports = {
-    path: '@:accountName(/:section)',
+    path: '@:accountName',
+    indexRoute: {
+        onEnter: ({ params: { accountName } }, replace) => replace(`/@${accountName}/blog`),
+    },
+    childRoutes: [
+        {
+            path: 'blog',
+            getComponents(nextState, cb) {
+                cb(null, {
+                    content: require('./blog/BlogContent').default,
+                });
+            },
+        },
+        {
+            path: 'comments',
+            getComponents(nextState, cb) {
+                cb(null, { content: require('./comments/CommentsContent').default });
+            },
+        },
+        {
+            path: 'recent-replies',
+            getComponents(nextState, cb) {
+                cb(null, { content: require('./replies/RepliesContent').default });
+            },
+        },
+        {
+            path: 'settings',
+            getComponents(nextState, cb) {
+                cb(null, {
+                    content: require('./settings/SettingsContent').default,
+                });
+            },
+        },
+        {
+            path: 'activity',
+            getComponents(nextState, cb) {
+                cb(null, {
+                    content: require('./activity/ActivityContent').default,
+                    sidebarRight: require('./activity/ActivitySidebar').default,
+                });
+            },
+        },
+    ],
     component: connect(
-        state => {
-            const wifShown = state.global.get('UserKeys_wifShown');
-            const current_user = state.user.get('current');
+        (state, ownProps) => {
+            const route = ownProps.routes.slice(-1)[0].path;
+            const accountName = ownProps.params.accountName.toLowerCase();
+
+            const currentUser = state.user.get('current') || Map();
+            const currentAccount = state.global.getIn(['accounts', accountName]);
+
+            const fetching =
+                state.global.getIn(['status', route, 'by_author'], {}).fetching ||
+                state.app.get('loading');
+            const isOwner = currentUser.get('username') === accountName;
+
+            const followerCount = state.global.getIn(
+                ['follow_count', accountName, 'follower_count'],
+                0
+            );
+
+            const followingCount = state.global.getIn(
+                ['follow_count', accountName, 'following_count'],
+                0
+            );
 
             return {
-                discussions: state.global.get('discussion_idx'),
-                current_user,
-                // current_account,
-                wifShown,
-                loading: state.app.get('loading'),
-                global_status: state.global.get('status'),
-                accounts: state.global.get('accounts'),
-                follow: state.global.get('follow'),
-                follow_count: state.global.get('follow_count'),
+                currentUser,
+                currentAccount,
+
+                fetching,
+                isOwner,
+
+                followerCount,
+                followingCount,
             };
         },
         dispatch => ({
-            login: () => {
-                dispatch(user.actions.showLogin());
+            uploadImage: (file, progress) => {
+                dispatch({
+                    type: 'user/UPLOAD_IMAGE',
+                    payload: { file, progress },
+                });
             },
-            clearTransferDefaults: () => {
-                dispatch(user.actions.clearTransferDefaults());
-            },
-            showTransfer: transferDefaults => {
-                dispatch(user.actions.setTransferDefaults(transferDefaults));
-                dispatch(user.actions.showTransfer());
-            },
-            withdrawVesting: ({
-                account,
-                vesting_shares,
-                errorCallback,
-                successCallback,
-            }) => {
-                const successCallbackWrapper = (...args) => {
-                    dispatch({
-                        type: 'FETCH_STATE',
-                        payload: { pathname: `@${account}/transfers` },
-                    });
-                    return successCallback(...args);
-                };
+            updateAccount: ({ successCallback, errorCallback, ...operation }) => {
                 dispatch(
                     transaction.actions.broadcastOperation({
-                        type: 'withdraw_vesting',
-                        operation: { account, vesting_shares },
+                        type: 'account_metadata',
+                        operation,
+                        successCallback() {
+                            dispatch(user.actions.getAccount());
+                            successCallback();
+                        },
                         errorCallback,
-                        successCallback: successCallbackWrapper,
                     })
                 );
             },
-            requestData: args =>
-                dispatch({ type: 'REQUEST_DATA', payload: args }),
+            notify: (message, dismiss = 3000) => {
+                dispatch({
+                    type: 'ADD_NOTIFICATION',
+                    payload: {
+                        key: 'settings_' + Date.now(),
+                        message,
+                        dismissAfter: dismiss,
+                    },
+                });
+            },
         })
     )(UserProfileContainer),
 };

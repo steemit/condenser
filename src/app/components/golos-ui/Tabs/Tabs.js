@@ -1,9 +1,7 @@
-import React, { Component } from 'react';
+import React, { Fragment, Component } from 'react';
 import styled from 'styled-components';
-import is from 'styled-is';
 
 import { TabsConsumer, TabsProvider } from './TabsContext';
-import Tab from './Tab';
 
 import { default as StyledTab } from 'golos-ui/Tab';
 
@@ -33,7 +31,7 @@ TabTitleItem.defaultProps = {
 
 const TabActiveBorder = styled.div`
     position: absolute;
-    bottom: 0;
+    bottom: -1px;
     transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
     will-change: left, width;
 
@@ -46,7 +44,7 @@ const TabActiveBorder = styled.div`
 
     &:after,
     &:before {
-        top: 100%;
+        bottom: 100%;
         left: 50%;
         border: solid transparent;
         content: ' ';
@@ -58,29 +56,26 @@ const TabActiveBorder = styled.div`
 
     &:after {
         border-color: rgba(255, 255, 255, 0);
-        border-top-color: #ffffff;
-        border-width: 7px;
-        margin-left: -7px;
+        border-bottom-color: #ffffff;
+        border-width: 5px;
+        margin-left: -5px;
     }
     &:before {
         border-color: rgba(233, 233, 233, 0);
-        border-top-color: #e9e9e9;
-        border-width: 8px;
-        margin-left: -8px;
+        border-bottom-color: #e9e9e9;
+        border-width: 6px;
+        margin-left: -6px;
     }
 `;
 
 const TabsContainer = styled.div`
     position: relative;
     border-bottom: 1px solid #e9e9e9;
-`;
 
-const ReactTabs = styled.div`
-    position: realative;
+    padding: 0 20px;
 `;
 
 class Tabs extends Component {
-    static Tab = Tab;
 
     state = {
         tabsElements: [],
@@ -114,20 +109,18 @@ class Tabs extends Component {
         const { activeTab, children } = this.props;
         const { tabsElements } = this.state;
 
-        console.log(tabsElements);
-
         return (
             <TabsProvider activeTab={activeTab}>
                 <TabsConsumer>
                     {({ context }) => (
-                        <ReactTabs>
+                        <Fragment>
                             <TabsContainer>
                                 <TabsList>{this.renderTabsList(context)}</TabsList>
                                 <TabActiveBorder activeTab={tabsElements[context.activeTab.id]} />
                             </TabsContainer>
 
                             {children}
-                        </ReactTabs>
+                        </Fragment>
                     )}
                 </TabsConsumer>
             </TabsProvider>

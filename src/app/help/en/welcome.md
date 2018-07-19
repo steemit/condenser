@@ -39,6 +39,7 @@ Below that is a list of recommended users to follow, a collection of other resou
 - <a href="#Password_Security">Password Security</a>
 - <a href="#Earning_on_Steemit">Earning on Steemit</a>
 
+### <a href="#Helpful_Posts_from_Steemit_Users">Helpful Posts from Steemit Users</a>
 ### <a href="#Users_to_Follow">Users to Follow</a>
 ### <a href="#Other_Resources">Other Resources</a>
 ### <a href="#Get_Help">Get Help</a>

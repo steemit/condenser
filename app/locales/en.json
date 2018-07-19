@@ -978,7 +978,9 @@
     "exceeded_maximum_allowed_bandwidth": "Account exceeded maximum allowed bandwidth per vesting share",
     "already_voted": "You have already voted in a similar way",
     "only_vote_once_every": "Can only vote once every 3 seconds",
-    "account_does_not_have_sufficient_power_for_withdraw": "Account does not have sufficient Golos Power for withdraw"
+    "account_does_not_have_sufficient_power_for_withdraw": "Account does not have sufficient Golos Power for withdraw",
+    "missing_active_authority": "Missing Active Authority",
+    "voting_weight_is_too_small": "Voting weight is too small, please accumulate more voting power or steem power"
   },
   "delegatevestingshares_jsx" :{
     "form_title" : "Delegate %(VESTING_TOKEN2)s",

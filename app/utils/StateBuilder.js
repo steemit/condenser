@@ -177,13 +177,22 @@ export default async function getState(api, url, options, offchain = {}) {
                 : args.select_tags = [ tag ]
         } else {
             if (typeof offchain.select_tags === "object" && offchain.select_tags.length) {
-                args.select_tags = state.select_tags = offchain.select_tags;
+                let selectTags = []
+                
+                offchain.select_tags.forEach( t => {
+                    const reversed = reveseTag(t)
+                    reversed
+                        ? selectTags = [ ...selectTags, t, reversed ]
+                        : selectTags = [ ...selectTags, t, ] 
+
+                })
+                args.select_tags = state.select_tags = selectTags;
             } else {
                 args.filter_tags = state.filter_tags = options.IGNORE_TAGS
             }
         }
         const discussions = await api.gedDiscussionsBy(discussionsType, args)
-
+        
         const discussion_idxes = {}
         discussion_idxes[discussionsType] = []
 
@@ -195,7 +204,7 @@ export default async function getState(api, url, options, offchain = {}) {
         
         const discussions_key = typeof tag === 'string' && tag.length 
             ? tag 
-            : state.select_tags.sort().join('/')
+            : state.select_tags.sort().filter(t => !t.startsWith('ru--')).join('/')
 
         state.discussion_idx[discussions_key] = discussion_idxes
 

@@ -158,6 +158,16 @@ app.use(
     })
 );
 
+app.use(
+    mount('/.well-known/assetlinks.json', function*() {
+        this.type = 'application/json';
+        const file_content = fs
+            .readFileSync(path.join(__dirname, '../app/assets/.well-known/assetlinks.json'))
+            .toString();
+        this.body = file_content
+    })
+);
+
 // app.use(
 //     mount('/service-worker.js', function*() {
 //         this.set('Cache-Control', 'public, max-age=7200000');

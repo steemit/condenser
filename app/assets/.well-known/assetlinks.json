@@ -1,0 +1,9 @@
+[{
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "io.golos.golos",
+      "sha256_cert_fingerprints":
+      ["69:48:DE:FA:C2:29:AD:50:E4:15:E0:E7:EF:FC:CB:19:DC:EC:AE:32:99:56:C4:74:26:EC:5D:D1:A1:C6:E4:44","F6:78:18:F3:ED:2D:D9:BC:5C:51:42:0A:10:8A:8E:14:EC:29:3C:CA:B0:0D:FD:D2:50:5F:B8:19:B0:2D:6C:D0"]
+    }
+}]

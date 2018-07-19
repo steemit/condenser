@@ -208,7 +208,7 @@ function* usernamePasswordLogin2({
         return;
     }
 
-    let private_keys;
+    let private_keys = Map({});
     try {
         const private_key = PrivateKey.fromWif(password);
         login_wif_owner_pubkey = private_key.toPublicKey().toString();

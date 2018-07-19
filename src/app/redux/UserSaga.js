@@ -389,16 +389,16 @@ function* usernamePasswordLogin2({
         console.error('Server Login Error', error);
     }
 
-    // Feature flags
-    yield fork(
-        getFeatureFlags,
-        username,
-        private_keys.get('posting_private').toString()
-    );
-
+    // Feature Flags
+    if (private_keys.get('posting_private')) {
+        yield fork(
+            getFeatureFlags,
+            username,
+            private_keys.get('posting_private').toString()
+        );
+    }
     // TOS acceptance
     yield fork(promptTosAcceptance, username);
-
     if (afterLoginRedirectToWelcome) {
         browserHistory.push('/welcome');
     } else if (feedURL) {
@@ -438,7 +438,7 @@ function* getFeatureFlags(username, posting_private) {
         );
         yield put(receiveFeatureFlags(flags));
     } catch (error) {
-        // Do nothing; feature flags are not ready yet.
+        // Do nothing; feature flags are not ready yet. Or posting_private is not available.
     }
 }
 

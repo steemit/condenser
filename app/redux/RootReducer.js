@@ -4,6 +4,7 @@ import {routerReducer} from 'react-router-redux';
 import appReducer from './AppReducer';
 import globalReducerModule from './GlobalReducer';
 import marketReducerModule from './MarketReducer';
+import profileReducer from './ProfileReducer';
 import user from './User';
 import transaction from './Transaction';
 import offchain from './Offchain';
@@ -53,7 +54,8 @@ export default combineReducers({
     discussion: initReducer((state = {}) => state),
     routing: initReducer(routerReducer),
     app: initReducer(appReducer),
-    form: formReducer
+    form: formReducer,
+    profile: profileReducer,
 });
 
 /*

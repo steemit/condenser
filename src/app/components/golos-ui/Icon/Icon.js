@@ -7,9 +7,9 @@ if (process.env.BROWSER) {
     files.keys().forEach(files);
 }
 
-const Icon = ({ name, size, height, width, ...props = {} }) => {
-    props.height = `${size || height}px`;
-    props.width = `${size || width}px`;
+const Icon = ({ name, size, height, width, ...props }) => {
+    props.height = size || height;
+    props.width = size || width;
 
     return (
         <svg { ...props }>
@@ -39,6 +39,4 @@ Icon.defaultProps = {
     width: '24',
 }
 
-const StyledIcon = styled(Icon)``;
-
-export default StyledIcon;
+export default styled(Icon)``;

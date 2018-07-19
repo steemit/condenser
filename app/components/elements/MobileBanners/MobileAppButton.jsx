@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { browserHistory } from 'react-router';
 import tt from 'counterpart';
 import settings from './settings';
 
@@ -10,7 +11,7 @@ export default class MobileAppButton extends Component {
         if (!process.env.BROWSER) {
             return null;
         }
-
+        
         const android = navigator.userAgent.match(/android/i);
 
         if (!android) {
@@ -21,14 +22,14 @@ export default class MobileAppButton extends Component {
             <div
                 role="button"
                 className="btn visit-app-btn"
-                onClick={this._onClick}
+                onClick={e =>this._onClick(this.props.path)}
             >
                 {tt('mobile_app_button.open_in_app')}
             </div>
         );
     }
 
-    _onClick = () => {
-        window.location.assign(settings.android.market_source);
+    _onClick = (path) => {
+        browserHistory.push(`/app${path}`)
     };
 }

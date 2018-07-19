@@ -1,1 +1,1 @@
-export { default, TabLink } from './Tab';
+export { default, TabLinkIndex, TabLink } from './Tab';

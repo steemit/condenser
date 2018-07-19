@@ -9,7 +9,7 @@ import {
     DialogButton,
 } from './Dialog';
 
-storiesOf('Dialog', module).add('default', () => (
+storiesOf('Golos UI/Dialog', module).add('default', () => (
     <Dialog>
         <DialogHeader>Header</DialogHeader>
         <DialogContent>Content</DialogContent>

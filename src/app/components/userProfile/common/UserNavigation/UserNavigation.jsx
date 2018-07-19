@@ -5,7 +5,7 @@ import tt from 'counterpart';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
-import { TabLink as StyledTabLink } from 'golos-ui/Tab';
+import { TabLink as StyledTabLink, TabLinkIndex as StyledTabLinkIndex } from 'golos-ui/Tab';
 import Icon from 'golos-ui/Icon';
 
 import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdown';
@@ -38,6 +38,8 @@ const TabLink = styled(StyledTabLink)`
 TabLink.defaultProps = {
     activeClassName: 'active',
 };
+
+const TabLinkIndex = TabLink.withComponent(StyledTabLinkIndex);
 
 const RightIcons = styled.div`
     display: flex;
@@ -100,8 +102,8 @@ class UserNavigation extends PureComponent {
         //     { value: 'Мои ключи', to: '--' },
         //     { value: tt('g.wallet'), to: `/@${accountName}/transfers` },
         // ];
-        const items = [
-            { value: tt('g.blog'), to: `/@${accountName}/blog` },
+        const indexTabLink = { value: tt('g.blog'), to: `/@${accountName}` };
+        const tabLinks = [
             { value: tt('g.comments'), to: `/@${accountName}/comments` },
             { value: tt('g.replies'), to: `/@${accountName}/recent-replies` },
             { value: tt('g.wallet'), to: `/@${accountName}/transfers` },
@@ -122,7 +124,10 @@ class UserNavigation extends PureComponent {
         return (
             <Wrapper>
                 <Container align="center" wrap="wrap">
-                    {items.map(({ value, to }, key) => (
+                    <TabLinkIndex key={indexTabLink.to} to={indexTabLink.to}>
+                        {indexTabLink.value}
+                    </TabLinkIndex>
+                    {tabLinks.map(({ value, to }, key) => (
                         <TabLink key={key} to={to}>
                             {value}
                         </TabLink>

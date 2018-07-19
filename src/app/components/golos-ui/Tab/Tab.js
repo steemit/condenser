@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router';
+import { IndexLink, Link } from 'react-router';
 
 const activeStyles = `
     color: #333333;
@@ -55,5 +55,6 @@ Tab.defaultProps = {
     activeClassName: 'active',
 };
 
+export const TabLinkIndex = Tab.withComponent(IndexLink);
 export const TabLink = Tab.withComponent(Link);
 export default Tab;

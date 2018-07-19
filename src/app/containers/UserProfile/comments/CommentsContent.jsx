@@ -12,7 +12,7 @@ class CommentsContent extends Component {
         const { currentAccount, fetching } = this.props;
 
         const posts = currentAccount.get('posts') || currentAccount.get('comments');
-        if (fetching || !posts) {
+        if (fetching) {
             return (
                 <center>
                     <LoadingIndicator type="circle" />

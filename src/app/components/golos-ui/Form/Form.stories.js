@@ -3,7 +3,7 @@ import { storiesOf } from '@storybook/react';
 
 import { FormGroup, Label, Input, Select, Textarea } from './Form';
 
-storiesOf('Form', module).add('default', () => (
+storiesOf('Golos UI/Form', module).add('default', () => (
     <div>
         <FormGroup>
             <Label>Input</Label>

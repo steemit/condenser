@@ -66,22 +66,24 @@ export default class UserProfileContainer extends Component {
             notify,
         } = this.props;
 
-        if (fetching) {
-            return (
-                <div className="UserProfile loader">
-                    <div className="UserProfile__center">
-                        <LoadingIndicator type="circle" size="40px" />
-                    </div>
-                </div>
-            );
-        }
-
         if (!currentAccount) {
-            return (
-                <div className="UserProfile">
-                    <div className="UserProfile__center">{tt('user_profile.unknown_account')}</div>
-                </div>
-            );
+            if (fetching) {
+                return (
+                    <div className="UserProfile loader">
+                        <div className="UserProfile__center">
+                            <LoadingIndicator type="circle" width="40px" height="40px" />
+                        </div>
+                    </div>
+                );
+            } else {
+                return (
+                    <div className="UserProfile">
+                        <div className="UserProfile__center">
+                            {tt('user_profile.unknown_account')}
+                        </div>
+                    </div>
+                );
+            }
         }
 
         if (blockedUsers.includes(currentAccount.get('name'))) {
@@ -126,18 +128,12 @@ export default class UserProfileContainer extends Component {
 
 module.exports = {
     path: '@:accountName',
-    indexRoute: {
-        onEnter: ({ params: { accountName } }, replace) => replace(`/@${accountName}/blog`),
+    getIndexRoute(nextState, cb) {
+        cb(null, {
+            content: require('./blog/BlogContent').default,
+        });
     },
     childRoutes: [
-        {
-            path: 'blog',
-            getComponents(nextState, cb) {
-                cb(null, {
-                    content: require('./blog/BlogContent').default,
-                });
-            },
-        },
         {
             path: 'comments',
             getComponents(nextState, cb) {

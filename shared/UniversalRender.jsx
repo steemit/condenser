@@ -87,12 +87,7 @@ export async function serverRender({
 
     if (process.env.BROWSER) {
         const store = createStore(rootReducer, initial_state, middleware);
-        // sagaMiddleware.run(PollDataSaga).done
-        //     .then(() => console.log('PollDataSaga is finished'))
-        //     .catch(err => console.log('PollDataSaga is finished with error', err));
-
         const history = syncHistoryWithStore(browserHistory, store);
-        // const scrollHistory = useScroll(() => history)();
 
         window.store = {
             getState: () => {debugger}
@@ -104,10 +99,6 @@ export async function serverRender({
             if (location.hash || location.action === 'POP') return false;
             return !prevLocation || prevLocation.location.pathname !== location.pathname;
         });
-        if (process.env.NODE_ENV === 'production') {
-            // console.log('%c%s', 'color: red; background: yellow; font-size: 24px;', 'WARNING!');
-            // console.log('%c%s', 'color: black; font-size: 16px;', 'This is a developer console, you must read and understand anything you paste or type here or you could compromise your account and your private keys.');
-        }
         return render(
             <Provider store={store}>
                 <Translator>

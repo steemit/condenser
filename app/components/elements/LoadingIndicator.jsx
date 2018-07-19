@@ -1,67 +1,76 @@
 import React from 'react';
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
+import cn from 'classnames';
 
-class LoadingIndicator extends React.Component {
-
+export default class LoadingIndicator extends React.Component {
     static propTypes = {
-        // html component attributes
         type: PropTypes.oneOf(['dots', 'circle', 'little']),
         inline: PropTypes.bool,
-        width: PropTypes.string,
-        height: PropTypes.string,
+        size: PropTypes.string,
     };
 
-    constructor(props) {
-        super(props);
-        this.state = {progress: 0};
-    }
+    state = { progress: 0 };
 
     render() {
-        const {type, inline, width, height} = this.props;
-        let style = {}
+        const { type, inline, size } = this.props;
 
-        if (width) style.width = width
-        if (height) style.height = height
+        const style = size
+            ? {
+                  width: size,
+                  height: size,
+              }
+            : null;
 
         switch (type) {
             case 'dots':
                 return (
                     <div className="LoadingIndicator three-bounce">
-                        <div className="bounce1"></div>
-                        <div className="bounce2"></div>
-                        <div className="bounce3"></div>
+                        <div className="bounce1" />
+                        <div className="bounce2" />
+                        <div className="bounce3" />
                     </div>
                 );
             case 'circle':
-                return  (
-                    <div className={'LoadingIndicator circle' + (inline ? ' inline' : '')}>
-                        <div style={style}></div>
+                return (
+                    <div
+                        className={
+                            'LoadingIndicator circle' +
+                            (inline ? ' inline' : '')
+                        }
+                    >
+                        <div style={style} />
                     </div>
                 );
             case 'little':
-                return  (
-                    <div className={'LoadingIndicator circle little' + (inline ? ' inline' : '')}>
-                        <div style={style}></div>
+                return (
+                    <div
+                        className={
+                            'LoadingIndicator circle little' +
+                            (inline ? ' inline' : '')
+                        }
+                    >
+                        <div style={style} />
                     </div>
                 );
             default:
-                var classes = 'LoadingIndicator loading-overlay';
-                if(this.progress > 0) { classes += ' with-progress'; }
                 return (
-                    <div className={classes}>
+                    <div
+                        className={cn('LoadingIndicator loading-overlay', {
+                            'with-progress': this.progress > 0,
+                        })}
+                    >
                         <div className="loading-panel">
                             <div className="spinner">
-                                <div className="bounce1"></div>
-                                <div className="bounce2"></div>
-                                <div className="bounce3"></div>
+                                <div className="bounce1" />
+                                <div className="bounce2" />
+                                <div className="bounce3" />
                             </div>
-                            <div className="progress-indicator"><span>{this.state.progress}</span></div>
+                            <div className="progress-indicator">
+                                <span>{this.state.progress}</span>
+                            </div>
                         </div>
                     </div>
                 );
         }
     }
-
 }
-
-export default LoadingIndicator;

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 let Welcome = null;
 
-class WelcomeLoader extends Component {
+export default class WelcomeLoader extends Component {
     componentDidMount() {
         if (!Welcome && process.env.BROWSER) {
             require.ensure('./Welcome', require => {
@@ -27,8 +27,3 @@ class WelcomeLoader extends Component {
         return <div />;
     }
 }
-
-module.exports = {
-    path: 'welcome',
-    component: WelcomeLoader,
-};

@@ -16,11 +16,19 @@
 	li {
 		color: black;
     list-style-type: none;
+    margin: 6px 0;
+
 		a { 
-      color: #333333;      
+      color: #333;
       font-size: 18px;
       font-weight: 300;
-      line-height: 30px;
+      line-height: 18px;
+    }
+  }
+  
+  @media screen and (max-width: 400px) {
+    li a {
+      font-size: 16px;
     }
   }
   

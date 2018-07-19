@@ -22,7 +22,6 @@
 @import "./elements/Icon";
 @import "./elements/LoadingIndicator";
 @import "./elements/MobileBanners/MobileAppButton";
-@import "./elements/MobileBanners/MobileBanners";
 @import "./elements/Notifications/NotifyContent";
 @import "./elements/NotifiCounter";
 @import "./elements/QrKeyView";
@@ -70,6 +69,7 @@
 @import "./modules/UserWallet";
 @import "./modules/TopRightMenu";
 @import "./modules/UserWallet";
+@import "./modules/Powerdown.scss";
 
 // pages
 @import "./pages/CreateAccount";
@@ -85,7 +85,6 @@
 @import "./pages/Topics";
 @import "./pages/Tos";
 @import "./pages/UserProfile";
-@import "./pages/Welcome";
 
 // themes
 @import "./themes/green/all";

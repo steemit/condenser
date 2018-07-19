@@ -1,0 +1,110 @@
+[
+  {
+    "id": 1,
+    "name": "Блокчейн",
+    "items": [
+      {
+        "author": "master-set",
+        "permlink": "blokchein-tolkovyi-slovar-kriptovalyutnykh-terminov"
+      },
+      {
+        "author": "aleco",
+        "permlink": "kriptoinvestor-koshelki-dlya-ethereum-mist-vs-myetherwallet"
+      },
+      {
+        "author": "forklog",
+        "permlink": "hodl-volny-bitkoina-novyi-instrument-analiza-dannykh"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Технологии",
+    "items": [
+      {
+        "author": "activist",
+        "permlink": "ru-istoriya-razvitiya-tekhnologiij-dopolnennoij-i-virtualxnoij-realxnosti"
+      },
+      {
+        "author": "teeves",
+        "permlink": "mir-bez-rasstoyaniij-proizvodstvo-smeshchaetsya-k-potrebitelyu"
+      },
+      {
+        "author": "prabaker",
+        "permlink": "kvant-kotoryi-teper-eshyo-i-kompyuter-mnogabukaf"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Культура",
+    "items": [
+      {
+        "author": "natabelu",
+        "permlink": "andaluzskii-pyos-pyos-ego-znaet-o-chyom-etot-film"
+      },
+      {
+        "author": "rblogger",
+        "permlink": "vladimir-mayakovskii-v-stikhakh-i-pesnyakh"
+      },
+      {
+        "author": "vp-painting",
+        "permlink": "pikasso-szhiganie-kartin-i-konflikt-s-luvrom"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "name": "История",
+    "items": [
+      {
+        "author": "ms-boss",
+        "permlink": "dela-v-temnye-veka"
+      },
+      {
+        "author": "vood.one",
+        "permlink": "nacionalnaya-politika-aleksandra-ii-i-polnyi-bardak-v-voprose-brachnykh-otnoshenii"
+      },
+      {
+        "author": "istfak",
+        "permlink": "san-francisko-gorod-pokhoronennykh-korablei"
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "name": "Путешествия",
+    "items": [
+      {
+        "author": "nameless-berk",
+        "permlink": "peresechenie-graniczy-yekvadora-s-bezhenczami-50-ottenkov-mrachnogo-i-neprivetlivogo-quito"
+      },
+      {
+        "author": "vp-zarubezhje",
+        "permlink": "ledyanyie-vanny-v-molochnoij-reke-i-poiski-villy-shtrausa"
+      },
+      {
+        "author": "megumi-tyan",
+        "permlink": "chto-nuzhno-znat-otpravlyayas-v-puteshestvie-primer-shri-lanka"
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "name": "Фотография",
+    "items": [
+      {
+        "author": "vp-photo.pro",
+        "permlink": "kak-privezti-interesnye-kadry-iz-puteshestvii-v-lyubykh-usloviyakh"
+      },
+      {
+        "author": "genyakuc",
+        "permlink": "6geizx-raboty-ot-ostanovis-mgnovene"
+      },
+      {
+        "author": "ratel",
+        "permlink": "ratel-foto-145-lesnye-pticy-96"
+      }
+    ]
+  }
+]

@@ -149,7 +149,7 @@ export default class UserProfile extends React.Component {
             account = accountImm.toJS();
         } else if (fetching) {
             return <div className="UserProfile loader">
-                <div className="UserProfile__center"><LoadingIndicator type="circle" width="40px" height="40px" /></div>
+                <div className="UserProfile__center"><LoadingIndicator type="circle" size="40px" /></div>
             </div>;
         } else {
             return <div className="UserProfile">
@@ -200,6 +200,7 @@ export default class UserProfile extends React.Component {
                     transferDetails={{immediate: hasAllParams, ...query}}
                     account={accountImm}
                     showTransfer={this.props.showTransfer}
+                    showPowerdown={this.props.showPowerdown}
                     current_user={current_user}
                     withdrawVesting={this.props.withdrawVesting} />
                 {/* isMyAccount && <div><MarkNotificationRead fields="send,receive" account={account.name} /></div>*/}
@@ -530,6 +531,10 @@ module.exports = {
             showTransfer: (transferDefaults) => {
                 dispatch(user.actions.setTransferDefaults(transferDefaults))
                 dispatch(user.actions.showTransfer())
+            },
+            showPowerdown: powerdownDefaults => {
+                dispatch(user.actions.setPowerdownDefaults(powerdownDefaults));
+                dispatch(user.actions.showPowerdown());
             },
             withdrawVesting: ({account, vesting_shares, errorCallback, successCallback}) => {
                 const successCallbackWrapper = (...args) => {

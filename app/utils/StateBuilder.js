@@ -1,5 +1,7 @@
 import { PUBLIC_API } from 'app/client_config'
 
+import { reveseTag, prepareTrendingTags } from 'app/utils/tags'
+
 const DEFAULT_VOTE_LIMIT = 10000
 
 const isHardfork = (v) => v.split('.')[1] === '18'
@@ -31,6 +33,10 @@ export default async function getState(api, url, options, offchain = {}) {
 
     // by default trending tags limit=50, but if we in '/tags/' path then limit = 250
     const trending_tags = await api.getTrendingTags('', parts[0] == 'tags' ? '250' : '50')
+
+    state.tag_idx = {
+        'trending': prepareTrendingTags(trending_tags)
+    }
 
     if (parts[0][0] === '@') {
         const uname = parts[0].substr(1)
@@ -161,44 +167,44 @@ export default async function getState(api, url, options, offchain = {}) {
             state.witnesses[witness.owner] = witness
         })
   
-    } else if ([
-        'trending',
-        'promoted',
-        'responses',
-        'hot',
-        'votes',
-        'cashout',
-        'payout',
-        'payout_comments',
-        'active',
-        'created',
-        'recent'
-    ].includes(parts[0])) {
+    } else if (Object.keys(PUBLIC_API).includes(parts[0])) {
         let args = { limit: 20, truncate_body: 1024 }
-
+        const discussionsType = parts[0]
         if (typeof tag === 'string' && tag.length) {
-            args.select_tags = [tag]
+            const reversed = reveseTag(tag)
+            reversed
+                ? args.select_tags = [ tag, reversed ]
+                : args.select_tags = [ tag ]
         } else {
             if (typeof offchain.select_tags === "object" && offchain.select_tags.length) {
-                args.select_tags = state.select_tags = offchain.select_tags;
+                let selectTags = []
+                
+                offchain.select_tags.forEach( t => {
+                    const reversed = reveseTag(t)
+                    reversed
+                        ? selectTags = [ ...selectTags, t, reversed ]
+                        : selectTags = [ ...selectTags, t, ] 
+
+                })
+                args.select_tags = state.select_tags = selectTags;
             } else {
                 args.filter_tags = state.filter_tags = options.IGNORE_TAGS
             }
         }
-        const discussions = await api.gedDiscussionsBy(PUBLIC_API[parts[0]][1], args)
-          
+        const discussions = await api.gedDiscussionsBy(discussionsType, args)
+        
         const discussion_idxes = {}
-        discussion_idxes[ PUBLIC_API[parts[0]][1] ] = []
+        discussion_idxes[discussionsType] = []
 
         discussions.forEach(discussion => {
             const link = `${discussion.author}/${discussion.permlink}`
-            discussion_idxes[ PUBLIC_API[ parts[0] ][1] ].push(link)
+            discussion_idxes[discussionsType].push(link)
             state.content[link] = discussion
         })
         
         const discussions_key = typeof tag === 'string' && tag.length 
             ? tag 
-            : state.select_tags.sort().join('/')
+            : state.select_tags.sort().filter(t => !t.startsWith('ru--')).join('/')
 
         state.discussion_idx[discussions_key] = discussion_idxes
 
@@ -207,8 +213,6 @@ export default async function getState(api, url, options, offchain = {}) {
         trending_tags.forEach (tag => tags[tag.name] = tag)
         state.tags = tags
     }
-
-    state.tag_idx = { 'trending': trending_tags.map(t => t.name) }
 
     if (accounts.size > 0) {
         const acc = await api.getAccounts(Array.from(accounts))

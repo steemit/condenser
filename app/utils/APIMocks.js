@@ -31,7 +31,7 @@ export function getTagsUsedByAuthor(author) {
 }
 
 export function getAccounts(names) {
-    return Promise.resolve([{ name: 'rey' }])
+    return Promise.resolve([{ name: 'rey', reputation: '801751331759' }])
 }
 
 export function getAccountHistory(account, from, limit) {
@@ -94,7 +94,7 @@ export function getContent(author, permlink) {
     }
 }
 
-export function getContentReplies(author, permlink) {
+export function getAllContentReplies(author, permlink) {
     return Promise.resolve(contentReplies)
 }
 

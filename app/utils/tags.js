@@ -63,10 +63,22 @@ export function processTagsFromData(tags) {
     return tags.map(tag => detransliterate(tag));
 }
 
+export function isCyrillicTag(tag) {
+    return /[а-яёґєії]/.test(tag)
+}
+
+export function startsWithRU(tag) {
+    return /ru--/.test(tag)
+}
+
+export function processCyrillicTag(tag) {
+    return `ru--${detransliterate(tag, true)}`
+}
+
 export function processTagsToSend(tags) {
     return tags.map(
         item =>
-            /^[а-яё]/.test(item) ? 'ru--' + detransliterate(item, true) : item
+            isCyrillicTag(item) ? processCyrillicTag(item) : item
     );
 }
 
@@ -115,6 +127,29 @@ export function updateFavoriteTags(tags) {
     } catch (err) {
         console.error(err);
     }
+}
+
+export function reveseTag(tag) {
+    if (isCyrillicTag(tag)) {
+        return processCyrillicTag(tag)
+    } else if (startsWithRU(tag)){
+        return detransliterate(tag)
+    }
+}
+
+export function prepareTrendingTags(tags) {
+    const t_tags = new Set()
+    tags
+        .slice(0, 50)
+        .map(t => {
+            t_tags.add(
+                startsWithRU(t.name)
+                    ? detransliterate(t.name)
+                    : t.name
+            )
+        })
+
+    return Array.from(t_tags)
 }
 
 if (process.env.BROWSER) {

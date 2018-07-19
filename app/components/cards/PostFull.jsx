@@ -24,8 +24,8 @@ import PageViewsCounter from 'app/components/elements/PageViewsCounter';
 import ShareMenu from 'app/components/elements/ShareMenu';
 import Userpic from 'app/components/elements/Userpic';
 import PostFormLoader from 'app/components/modules/PostForm/loader';
-import { getEditDraftPermLink } from 'app/utils/postForm';
 import CommentFormLoader from 'app/components/modules/CommentForm/loader';
+import { getEditDraftPermLink } from 'app/utils/postForm';
 
 import { APP_ICON, SEO_TITLE, LIQUID_TICKER } from 'app/client_config';
 
@@ -346,7 +346,7 @@ class PostFull extends React.Component {
                 itemType="http://schema.org/blogPost"
             >
                 {showEdit
-                    ? this._renderPostEditor(replyParams, jsonMetadata)
+                    ? this._renderPostEditor(replyParams, jsonMetadata, content)
                     : this._renderContent(
                           postContent,
                           content,
@@ -357,7 +357,10 @@ class PostFull extends React.Component {
                 {showReply ? (
                     <div className="row">
                         <div className="column large-8 medium-10 small-12">
-                            {this._renderReplyEditor(replyParams, p.json_metadata)}
+                            {this._renderReplyEditor(
+                                replyParams,
+                                p.json_metadata
+                            )}
                         </div>
                     </div>
                 ) : null}
@@ -365,7 +368,7 @@ class PostFull extends React.Component {
         );
     }
 
-    _renderPostEditor(replyParams, jsonMetadata) {
+    _renderPostEditor(replyParams, jsonMetadata, content) {
         if (window.IS_MOBILE) {
             return (
                 <this.PostFullEditor
@@ -377,21 +380,26 @@ class PostFull extends React.Component {
                 />
             );
         } else {
-            return (
-                <PostFormLoader
-                    editMode
-                    editParams={replyParams}
-                    jsonMetadata={jsonMetadata}
-                    onSuccess={this._onEditFinish}
-                    onCancel={this._onEditFinish}
-                />
-            );
+            if (content.depth) {
+                return this._renderReplyEditor(replyParams, jsonMetadata, true);
+            } else {
+                return (
+                    <PostFormLoader
+                        editMode
+                        editParams={replyParams}
+                        jsonMetadata={jsonMetadata}
+                        onSuccess={this._onEditFinish}
+                        onCancel={this._onEditFinish}
+                    />
+                );
+            }
         }
     }
 
-    _renderReplyEditor(replyParams, jsonMetadata) {
+    _renderReplyEditor(replyParams, jsonMetadata, isEdit) {
         return (
             <CommentFormLoader
+                editMode={isEdit}
                 params={replyParams}
                 jsonMetadata={jsonMetadata}
                 onSuccess={this._onEditFinish}
@@ -573,13 +581,12 @@ class PostFull extends React.Component {
         ];
 
         const readonly = $STM_Config.read_only_mode;
-        const _isPaidout = postContent.get('cashout_time') === '1969-12-31T23:59:59';
+        const _isPaidout =
+            postContent.get('cashout_time') === '1969-12-31T23:59:59';
         const showReplyOption = postContent.get('depth') < 255;
         const showEditOption = username === author;
         const showDeleteOption =
-            username === author &&
-            content.stats.allowDelete &&
-            !_isPaidout;
+            username === author && content.stats.allowDelete && !_isPaidout;
 
         // check if post was created before view-count tracking began (2016-12-03)
         const isPreViewCount =

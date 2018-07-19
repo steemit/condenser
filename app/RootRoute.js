@@ -10,14 +10,14 @@ export default {
         if (route.page === 'Landing') {
             cb(null, [require('@pages/Landing')]);
         } else if (route.page === 'Welcome') {
-            if (process.env.BROWSER) {
-                cb(null, [require('@pages/WelcomeLoader')])
-            } else {
-                cb(null, [{
+            cb(null, [
+                {
                     path: 'welcome',
-                    component: require('@pages/Welcome').default,
-                }]);
-            }
+                    component: process.env.BROWSER
+                        ? require('@pages/WelcomeLoader').default
+                        : require('@pages/Welcome').default,
+                },
+            ]);
         } else if (route.page === 'Start') {
             cb(null, [require('@pages/Landings/Start')]);
         } else if (route.page === 'Faq') {

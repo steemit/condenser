@@ -12,7 +12,8 @@ class Userpic extends Component {
         votingPower: PropTypes.number,
         showProgress: PropTypes.bool,
         progressClass: PropTypes.string,
-        imageUrl: PropTypes.string
+        imageUrl: PropTypes.string,
+        onClick: PropTypes.func,
     }
 
     static defaultProps = {
@@ -90,7 +91,7 @@ class Userpic extends Component {
     }
 
     render() {
-        const { width, height, votingPower, showProgress } = this.props
+        const { width, height, votingPower, showProgress, onClick } = this.props
 
         const style = {
             width: `${width}px`,
@@ -108,19 +109,21 @@ class Userpic extends Component {
                 </div>
             )
         } else {
-            return <div className="Userpic" style={style} />
+            return <div className="Userpic" style={style} onClick={onClick} />
         }
     }
 }
 
 export default connect(
-    (state, ownProps) => {
-        const { account, width, height, hideIfDefault } = ownProps
+    (state, props) => {
+        const { account, width, height, hideIfDefault, onClick } = props;
+
         return {
             json_metadata: state.global.getIn(['accounts', account, 'json_metadata']),
             width,
             height,
             hideIfDefault,
-        }
+            onClick,
+        };
     }
 )(Userpic)

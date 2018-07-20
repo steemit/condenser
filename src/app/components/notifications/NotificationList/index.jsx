@@ -3,8 +3,8 @@ import tt from 'counterpart';
 import classNames from 'classnames';
 import Icon from 'app/components/elements/Icon';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
-import Notification from 'app/components/elements/notification';
-import { filters } from 'app/components/elements/notification/type';
+import Notification from 'app/components/notifications/Notification';
+import { filters } from 'app/components/notifications/Notification/type';
 import { Link } from 'react-router';
 import debounce from 'lodash.debounce';
 import Immutable from 'immutable';
@@ -66,7 +66,6 @@ const renderFilterList = (username, filter) => {
 class NotificationList extends React.Component {
     constructor(props) {
         super(props);
-        this.htmlId = 'YotifModule_' + Math.floor(Math.random() * 1000);
     }
 
     componentDidMount() {
@@ -125,39 +124,10 @@ class NotificationList extends React.Component {
         }
     }, 150);
 
-    renderTitle(absolute = false) {
-        return (
-            <div className={classNames('title', { absolute })}>
-                {tt('g.notifications')}
-                <span className="controls-right">
-                    {this.props.showClearAll ? (
-                        <button
-                            className="ptc"
-                            onClick={this.markDisplayedHidden}
-                        >
-                            {tt('notifications.controls.mark_all_hidden')}
-                        </button>
-                    ) : (
-                        <button
-                            className="ptc"
-                            onClick={this.markDisplayedRead}
-                        >
-                            {tt('notifications.controls.mark_all_read')}
-                        </button>
-                    )}
-                    <Link to={Url.profileSettings(this.props.username)}>
-                        <Icon name="cog" />
-                    </Link>
-                </span>
-            </div>
-        );
-    }
-
     render() {
-        if (typeof this.props.username === 'undefined') return <div />;
         return (
             <div
-                id={this.htmlId}
+                id={'NotificationsList Page'}
                 className={classNames('NotificationsModule', 'Page', {
                     'no-notifications': this.props.notifications.size === 0,
                 })}
@@ -165,15 +135,35 @@ class NotificationList extends React.Component {
                     this.rootEl = el;
                 }}
             >
-                {this.renderTitle()}
+                <div className={classNames('title')}>
+                    {tt('g.notifications')}
+                    <span className="controls-right">
+                        {this.props.showClearAll ? (
+                            <button
+                                className="ptc"
+                                onClick={this.markDisplayedHidden}
+                            >
+                                {tt('notifications.controls.mark_all_hidden')}
+                            </button>
+                        ) : (
+                            <button
+                                className="ptc"
+                                onClick={this.markDisplayedRead}
+                            >
+                                {tt('notifications.controls.mark_all_read')}
+                            </button>
+                        )}
+                        <Link to={Url.profileSettings(this.props.username)}>
+                            <Icon name="cog" />
+                        </Link>
+                    </span>
+                </div>
                 {renderFilterList(this.props.username, this.props.filter)}
                 {renderNotificationList(
                     this.props.notifications,
                     this.props.filterIds,
                     this.props.onViewAll
                 )}
-                {this.renderTitle(true)}
-
                 <div className="footer get-more">
                     {this.props.noMoreToFetch ? (
                         <div>No more to fetch!</div>
@@ -215,15 +205,13 @@ export default connect(
             ownProps.filter && filters[ownProps.filter]
                 ? ownProps.filter
                 : FILTER_ALL;
-        let allRead = true;
 
-        state.notification.byId.forEach(n => {
-            if (n.read === false) {
-                allRead = false;
-                return false;
-            }
-            return true;
-        });
+        let allRead =
+            state.notification.byId.find(n => {
+                return n.read === false;
+            }) === undefined
+                ? true
+                : false;
 
         const filterToken =
             filter === FILTER_ALL ? FILTER_ALL : filters[filter].toString();

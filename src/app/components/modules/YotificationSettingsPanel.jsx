@@ -6,7 +6,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 import tt from 'counterpart';
-import { toggleNotificationGroupNames } from 'app/components/elements/notification/type';
+import { toggleNotificationGroupNames } from 'app/components/notifications/Notification/type';
 import Icon from 'app/components/elements/Icon';
 import IOSToggle from 'app/components/elements/IOSToggle';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
@@ -12,7 +11,8 @@ class CommentsContent extends Component {
         const { currentAccount, fetching } = this.props;
 
         const posts = currentAccount.get('posts') || currentAccount.get('comments');
-        if (fetching) {
+
+        if (fetching || !posts) {
             return (
                 <center>
                     <LoadingIndicator type="circle" />
@@ -20,7 +20,7 @@ class CommentsContent extends Component {
             );
         }
 
-        if (posts && !posts.size) {
+        if (!posts.size) {
             return (
                 <Callout>
                     {tt('user_profile.user_hasnt_made_any_posts_yet', {
@@ -32,36 +32,25 @@ class CommentsContent extends Component {
 
         return (
             <PostsList
-                key={currentAccount.get('name')}
                 account={currentAccount.get('name')}
-                posts={posts}
-                loading={fetching}
                 category="comments"
-                showSpam
+                //order="by_author"
+                //showSpam TODO
             />
         );
     }
 }
 
-export default connect(
-    // mapStateToProps
-    (state, ownProps) => {
-        const route = ownProps.routes.slice(-1)[0].path;
-        const accountName = ownProps.params.accountName.toLowerCase();
+export default connect((state, props) => {
+    const accountName = props.params.accountName.toLowerCase();
+    const currentAccount = state.global.getIn(['accounts', accountName]);
 
-        const currentAccount = state.global.getIn(['accounts', accountName]);
+    const fetching =
+        state.global.getIn(['status', 'comments', 'by_author'], {}).fetching || state.app.get('loading');
 
-        const fetching =
-            state.global.getIn(['status', route, 'by_author'], {}).fetching ||
-            state.app.get('loading');
-
-        return {
-            accountName,
-            currentAccount,
-
-            fetching,
-        };
-    },
-    // mapDispatchToProps
-    dispatch => ({})
-)(CommentsContent);
+    return {
+        accountName,
+        currentAccount,
+        fetching,
+    };
+})(CommentsContent);

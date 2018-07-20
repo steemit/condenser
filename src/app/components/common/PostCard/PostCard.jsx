@@ -1,5 +1,6 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import cn from 'classnames';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
@@ -10,27 +11,24 @@ import { immutableAccessor } from 'app/utils/Accessors';
 import Userpic from 'app/components/elements/Userpic';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import { detransliterate } from 'app/utils/ParsersAndFormatters';
-import likeSvg from 'app/assets/icons/profile/like2.svg';
 import brilliantSvg from 'app/assets/icons/profile/brilliant.svg';
 import starSvg from 'app/assets/icons/profile/star.svg';
 import clipSvg from 'app/assets/icons/profile/clip.svg';
 import DialogManager from 'app/components/elements/common/DialogManager';
 import user from 'app/redux/User';
 import transaction from 'app/redux/Transaction';
-
-const Root = styled.div`
-    position: relative;
-    margin-bottom: 20px;
-    border-radius: 8px;
-    background: #fff;
-    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.06);
-`;
+import VotePanel from '../VotePanel';
 
 const Header = styled.div`
+    padding: 10px 0 6px;
+    flex-shrink: 0;
+`;
+
+const HeaderLine = styled.div`
     display: flex;
     position: relative;
     align-items: center;
-    padding: 12px 18px 8px;
+    padding: 2px 18px;
     z-index: 1;
     pointer-events: none;
 
@@ -38,6 +36,7 @@ const Header = styled.div`
         pointer-events: initial;
     }
 `;
+
 const AuthorBlock = styled.div`
     display: flex;
     align-items: center;
@@ -67,6 +66,7 @@ const AuthorName = styled.a`
 const PostDate = styled.div`
     font-size: 13px;
     color: #959595;
+    cursor: default;
 `;
 const Category = styled.div`
     height: 28px;
@@ -80,6 +80,7 @@ const Category = styled.div`
     text-overflow: ellipsis;
     color: #fff;
     background: #789821;
+    cursor: default;
 `;
 const Toolbar = styled.div`
     display: flex;
@@ -98,7 +99,7 @@ const Icon = styled.div`
     justify-content: center;
     width: 32px;
     height: 32px;
-    color: ${a => (a.withImage ? '#fff' : '#393636')};
+    color: ${({ forceWhite }) => (forceWhite ? '#fff' : '#393636')};
     cursor: pointer;
     transition: transform 0.15s;
 
@@ -132,23 +133,32 @@ const IconStar = Icon.extend`
 
 const BodyLink = styled.a`
     display: block;
-    //text-decoration: none;
+
+    ${is('showLine')`
+        border-bottom: 2px solid #f3f3f3;
+    `};
+
+    ${is('half')`
+        width: 50%;
+    `};
+
+    ${is('grid')`
+        flex-shrink: 1;
+        flex-grow: 1;
+        overflow: hidden;
+    `};
 `;
 
 const Body = styled.div`
     position: relative;
     padding: 0 18px 12px;
-    border-bottom: 2px solid #f3f3f3;
-
-    ${is('half')`
-        width: 50%;
-    `};
 `;
 const PostTitle = styled.div`
     font-size: 20px;
     font-family: ${a => a.theme.fontFamilyBold};
     color: #212121;
-    line-height: 34px;
+    //line-height: 34px;
+    line-height: 29px;
     margin-bottom: 8px;
 `;
 const PostBody = styled.div`
@@ -159,6 +169,7 @@ const PostBody = styled.div`
 const Footer = styled.div`
     position: relative;
     display: flex;
+    flex-shrink: 0;
     align-items: center;
     padding: 12px 18px;
     z-index: 1;
@@ -167,64 +178,22 @@ const Footer = styled.div`
     & > * {
         pointer-events: initial;
     }
+
+    ${is('grid')`
+        display: block;
+    `};
+`;
+
+const VotePanelStyled = styled(VotePanel)`
+    ${is('grid')`
+        justify-content: space-around;
+    `};
 `;
 
 const Brilliant = styled.div`
     width: 64px;
     height: 62px;
     margin: -10px -10px -10px 0;
-`;
-
-const LikeCount = styled.span`
-    color: #959595;
-    transition: color 0.15s;
-`;
-
-const LikeIcon = styled.div`
-    margin-right: 8px;
-    vertical-align: middle;
-    color: #393636;
-    transition: color 0.2s;
-
-    & > svg {
-        width: 20px;
-        height: 20px;
-    }
-`;
-
-const LikeIconNeg = LikeIcon.extend`
-    transform: scale(1, -1);
-`;
-
-const LikeBlock = styled.div`
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    user-select: none;
-    padding-right: 4px;
-    
-    .filler {
-        display: none;
-    }
-
-    ${is('active')` .filler {
-        display: initial;
-    }`}
-
-    &:hover, &:hover ${LikeCount}, &:hover ${LikeIcon}, &:hover ${LikeIconNeg} {
-        color: #000 !important;
-    }
-    //color: #74b94d;
-    //color: #f93131;
-`;
-
-const Money = styled.div`
-    height: 26px;
-    padding: 0 9px;
-    margin: 0 10px;
-    border-radius: 100px;
-    border: 1px solid #959595;
-    color: #393636;
 `;
 
 const PostImage = styled.div`
@@ -249,7 +218,14 @@ const PostImage = styled.div`
         background-color: rgba(100,100,100,0.15);
         //transition: background-color 0.15s;
     }
-    //
+    
+    ${is('grid')`
+        top: unset;
+        left: 0;
+        width: unset;
+        height: 133px;
+    `}
+    
     //&:hover:after {
     //    background-color: rgba(127,127,127,0);
     //}
@@ -259,11 +235,51 @@ const Filler = styled.div`
     flex-grow: 1;
 `;
 
+const Root = styled.div`
+    position: relative;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.06);
+
+    ${is('grid')`
+        display: flex;
+        flex-direction: column;
+        height: 338px;
+    `};
+
+    ${is('withImage', 'grid')`
+    
+    `} &.PostCard_image.PostCard_grid {
+        ${Footer} {
+            opacity: 0;
+            transition: opacity 0.25s;
+        }
+
+        &:hover ${Footer} {
+            opacity: 1;
+        }
+
+        ${Footer} {
+            margin-top: 82px;
+        }
+
+        ${PostImage}:after {
+            background-color: rgba(0, 0, 0, 0);
+            transition: background-color 0.15s;
+        }
+
+        &:hover ${PostImage}:after {
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+    }
+`;
+
 class PostCard extends PureComponent {
     static propTypes = {
         permLink: PropTypes.string,
         myAccount: PropTypes.string,
         data: PropTypes.object,
+        grid: PropTypes.bool,
     };
 
     state = {
@@ -294,7 +310,7 @@ class PostCard extends PureComponent {
     }
 
     render() {
-        const { data } = this.props;
+        const { data, className, grid } = this.props;
 
         const p = extractContent(immutableAccessor, data);
         const withImage = Boolean(p.image_link);
@@ -304,98 +320,112 @@ class PostCard extends PureComponent {
         }
 
         return (
-            <Root>
+            <Root
+                className={cn(
+                    {
+                        PostCard_image: withImage,
+                        PostCard_grid: grid,
+                    },
+                    className
+                )}
+                grid={grid}
+            >
                 {this._renderHeader(withImage)}
                 {this._renderBody(withImage, p)}
-                {this._renderFooter()}
+                {this._renderFooter(withImage)}
             </Root>
         );
     }
 
     _renderHeader(withImage) {
-        const { data } = this.props;
+        const { data, grid } = this.props;
 
         const author = data.get('author');
         const category = detransliterate(data.get('category'));
 
         return (
             <Header>
-                <AuthorBlock>
-                    <Avatar href={`/@${author}`}>
-                        <Userpic account={author} size={42} />
-                    </Avatar>
-                    <PostDesc>
-                        <AuthorName href={`/@${author}`}>{author}</AuthorName>
-                        <PostDate>
-                            <TimeAgoWrapper date={data.get('created')} />
-                        </PostDate>
-                    </PostDesc>
-                </AuthorBlock>
-                <Filler />
-                <Category>{category}</Category>
-                <Toolbar>
-                    <ToolbarAction>
-                        <IconClip
-                            withImage={withImage}
-                            data-tooltip="Закрепить пост"
-                            dangerouslySetInnerHTML={{ __html: clipSvg }}
-                        />
-                    </ToolbarAction>
-                    <ToolbarAction>
-                        <IconStar
-                            withImage={withImage}
-                            data-tooltip="В избранное"
-                            active={false}
-                            dangerouslySetInnerHTML={{ __html: starSvg }}
-                        />
-                    </ToolbarAction>
-                </Toolbar>
+                <HeaderLine>
+                    <AuthorBlock>
+                        <Avatar href={`/@${author}`}>
+                            <Userpic account={author} size={42} />
+                        </Avatar>
+                        <PostDesc>
+                            <AuthorName href={`/@${author}`}>{author}</AuthorName>
+                            <PostDate>
+                                <TimeAgoWrapper date={data.get('created')} />
+                            </PostDate>
+                        </PostDesc>
+                    </AuthorBlock>
+                    <Filler />
+                    {grid ? null : <Category>{category}</Category>}
+                    <Toolbar>
+                        <ToolbarAction>
+                            <IconClip
+                                forceWhite={withImage && !grid}
+                                data-tooltip="Закрепить пост"
+                                dangerouslySetInnerHTML={{ __html: clipSvg }}
+                            />
+                        </ToolbarAction>
+                        <ToolbarAction>
+                            <IconStar
+                                forceWhite={withImage && !grid}
+                                data-tooltip="В избранное"
+                                active={false}
+                                dangerouslySetInnerHTML={{ __html: starSvg }}
+                            />
+                        </ToolbarAction>
+                    </Toolbar>
+                </HeaderLine>
+                {grid ? (
+                    <HeaderLine>
+                        <Category>{category}</Category>
+                        <Filler />
+                        <Brilliant dangerouslySetInnerHTML={{ __html: brilliantSvg }} />
+                    </HeaderLine>
+                ) : null}
             </Header>
         );
     }
 
     _renderBody(withImage, p) {
+        const { grid } = this.props;
+
         return (
-            <BodyLink href={p.link} onClick={e => this._onClick(e, p.link)}>
-                <Body half={withImage}>
+            <BodyLink
+                href={p.link}
+                showLine={!grid || !withImage}
+                half={withImage && !grid}
+                grid={grid}
+                onClick={e => this._onClick(e, p.link)}
+            >
+                <Body>
                     <PostTitle>{p.title}</PostTitle>
                     <PostBody dangerouslySetInnerHTML={{ __html: p.desc }} />
                 </Body>
-                {withImage ? <PostImage src={p.image_link} /> : null}
+                {withImage ? <PostImage grid={grid} src={p.image_link} /> : null}
             </BodyLink>
         );
     }
 
-    _renderFooter() {
-        const { data, myAccount } = this.props;
-
-        const votes = data.get('active_votes');
-        let myVote;
-        let dislikesCount = 0;
-
-        for (let vote of votes.toJS()) {
-            if (vote.percent < 0) {
-                dislikesCount++;
-            }
-
-            if (vote.voter === myAccount) {
-                myVote = vote;
-            }
-        }
+    _renderFooter(withImage) {
+        const { data, myAccount, grid } = this.props;
 
         return (
-            <Footer>
-                <LikeBlock active={myVote && myVote.percent > 0} onClick={this._onLikeClick}>
-                    <LikeIcon dangerouslySetInnerHTML={{ __html: likeSvg }} />
-                    <LikeCount>{data.get('net_votes')}</LikeCount>
-                </LikeBlock>
-                <Money>$1.07</Money>
-                <LikeBlock active={myVote && myVote.percent < 0} onClick={this._onDislikeClick}>
-                    <LikeIconNeg dangerouslySetInnerHTML={{ __html: likeSvg }} />
-                    <LikeCount>{dislikesCount}</LikeCount>
-                </LikeBlock>
-                <Filler />
-                <Brilliant dangerouslySetInnerHTML={{ __html: brilliantSvg }} />
+            <Footer grid={grid}>
+                <VotePanelStyled
+                    data={data}
+                    me={myAccount}
+                    whiteTheme={withImage && grid}
+                    grid={grid}
+                    onChange={this._onVoteChange}
+                />
+                {grid ? null : (
+                    <Fragment>
+                        <Filler />
+                        <Brilliant dangerouslySetInnerHTML={{ __html: brilliantSvg }} />
+                    </Fragment>
+                )}
             </Footer>
         );
     }
@@ -405,27 +435,7 @@ class PostCard extends PureComponent {
         browserHistory.push(link);
     };
 
-    _onLikeClick = () => {
-        const { myVote } = this.state;
-
-        if (myVote && myVote.percent > 0) {
-            this._setVote(0);
-        } else {
-            this._setVote(1);
-        }
-    };
-
-    _onDislikeClick = () => {
-        const { myVote } = this.state;
-
-        if (myVote && myVote.percent < 0) {
-            this._setVote(0);
-        } else {
-            this._setVote(-1);
-        }
-    };
-
-    async _setVote(weight) {
+    _onVoteChange = async weight => {
         const props = this.props;
         const { myVote } = this.state;
 
@@ -456,7 +466,7 @@ class PostCard extends PureComponent {
             author: props.data.get('author'),
             permlink: props.data.get('permlink'),
         });
-    }
+    };
 }
 
 export default connect(

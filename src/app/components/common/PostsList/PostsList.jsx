@@ -1,14 +1,28 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import is from 'styled-is';
 import { connect } from 'react-redux';
 import throttle from 'lodash/throttle';
+import { Map } from 'immutable';
 import PostCard from 'src/app/components/common/PostCard';
+import CommentCard from 'src/app/components/common/CommentCard';
 import { isFetchingOrRecentlyUpdated } from 'app/utils/StateFunctions';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
-import { Map } from 'immutable';
 
-const Root = styled.div``;
+const Root = styled.div`
+    ${is('grid')`
+        position: relative;
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0 -8px;
+        // display: grid;
+        // grid-gap: 16px;
+        // grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        // grid-auto-rows: minmax(100px, auto);
+        // grid-auto-flow: dense;
+    `};
+`;
 
 const Loader = styled.div`
     display: flex;
@@ -16,10 +30,26 @@ const Loader = styled.div`
     margin-bottom: 20px;
 `;
 
+const PostCardStyled = styled(PostCard)`
+    margin-bottom: 16px;
+
+    ${is('grid')`
+        flex-basis: 200px;
+        flex-grow: 1;
+        flex-shrink: 0;
+        margin: 0 8px 16px;
+    `};
+`;
+
+const CommentCardStyled = styled(CommentCard)`
+    margin-bottom: 16px;
+`;
+
 class PostsList extends PureComponent {
     static propTypes = {
         content: PropTypes.object, // immutable.Map
         posts: PropTypes.object, // immutable.List
+        layout: PropTypes.oneOf(['list', 'grid']),
     };
 
     static defaultProps = {
@@ -27,6 +57,7 @@ class PostsList extends PureComponent {
     };
 
     componentDidMount() {
+        console.log('PostsList Did Mount');
         window.addEventListener('scroll', this._onScroll);
     }
 
@@ -36,21 +67,26 @@ class PostsList extends PureComponent {
     }
 
     render() {
-        const { posts } = this.props;
+        const { posts, category, layout } = this.props;
+
+        const isGrid = category === 'blog' && layout === 'grid';
+        const EntryComponent = category === 'blog' ? PostCardStyled : CommentCardStyled;
 
         return (
-            <Root innerRef={this._onRef}>
-                {posts.map(permLink => <PostCard key={permLink} permLink={permLink} />)}
+            <Root innerRef={this._onRef} grid={isGrid}>
+                {posts.map(permLink => (
+                    <EntryComponent key={permLink} permLink={permLink} grid={isGrid} />
+                ))}
                 {this._renderLoaderIfNeed()}
             </Root>
         );
     }
 
     _renderLoaderIfNeed() {
-        const { section, loading, globalStatus } = this.props;
+        const { section, globalStatus } = this.props;
 
         const status = globalStatus ? globalStatus.getIn([section, 'by_author']) : null;
-        const showLoader = loading || (status && status.fetching);
+        const showLoader = status && status.fetching;
 
         if (showLoader) {
             return (
@@ -100,18 +136,14 @@ class PostsList extends PureComponent {
 
 export default connect(
     (state, props) => {
-        if (process.env.BROWSER) {
-            window.state = state;
-        }
-
         return {
-            loading: state.app.get('loading'),
             myAccount: state.user.getIn(['current', 'username']),
             globalStatus: state.global.get('status'),
+            layout: state.profile.get('layout'),
             posts: state.global
                 .get('accounts')
                 .get(props.account)
-                .get('blog'),
+                .get(props.category),
         };
     },
     {

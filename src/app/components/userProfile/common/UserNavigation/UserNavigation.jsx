@@ -176,7 +176,7 @@ class UserNavigation extends PureComponent {
                     to={`/@${accountName}/settings`}
                     data-tooltip={tt('g.settings')}
                 >
-                    <SettingsIcon name="setting" size="24px" />
+                    <SettingsIcon name="setting" size="24" />
                 </IconLink>
             );
         }
@@ -196,9 +196,11 @@ class UserNavigation extends PureComponent {
 }
 
 export default connect(
-    state => ({
-        layout: state.profile.get('layout'),
-    }),
+    state => {
+        return {
+            layout: state.profile ? state.profile.get('layout') : 'list',
+        };
+    },
     {
         onLayoutChange: layout => ({
             type: CHANGE_LAYOUT,

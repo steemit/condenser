@@ -36,8 +36,9 @@ export default class TooltipManager extends React.PureComponent {
                         key={tooltip.key}
                         className={cn('Tooltip', tooltip.addClass)}
                         style={tooltip.style}
+                        dangerouslySetInnerHTML={tooltip.isHtml ? { __html: tooltip.text } : null}
                     >
-                        {tooltip.text}
+                        {tooltip.isHtml ? null : tooltip.text}
                     </div>
                 ) : null}
             </div>
@@ -75,6 +76,7 @@ export default class TooltipManager extends React.PureComponent {
             tooltip: {
                 key: ++key,
                 text: this._hoverText,
+                isHtml: element.dataset.tooltipHtml != null,
                 addClass:
                     bound.left < 100
                         ? 'Tooltip_left'

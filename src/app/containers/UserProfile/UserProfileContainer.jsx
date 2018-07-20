@@ -1,16 +1,17 @@
 import React, { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { Map } from 'immutable';
+import { last } from 'ramda';
 
 import tt from 'counterpart';
 import { blockedUsers, blockedUsersContent } from 'app/utils/IllegalContent';
 
+import user from 'app/redux/User';
 import transaction from 'app/redux/Transaction';
 
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
-
+import IllegalContentMessage from 'app/components/elements/IllegalContentMessage';
 import Container from 'src/app/components/common/Container';
 import UserHeader from 'src/app/components/userProfile/common/UserHeader';
 import UserNavigation from 'src/app/components/userProfile/common/UserNavigation';
@@ -27,10 +28,8 @@ const SidebarLeft = styled.div`
 `;
 
 const Content = styled.div`
-    display: flex;
     flex-shrink: 1;
     flex-grow: 1;
-    justify-content: center;
     margin: 0 18px;
 
     &:first-child {
@@ -106,7 +105,7 @@ export default class UserProfileContainer extends Component {
                 <UserNavigation accountName={currentAccount.get('name')} isOwner={isOwner} />
                 <Main>
                     <Container align="flex-start" justify="center" small>
-                        {this.props.routes.slice(-1)[0].path !== 'settings' && (
+                        {last(this.props.routes).path !== 'settings' && (
                             <SidebarLeft>
                                 <UserCardAbout
                                     account={currentAccount}
@@ -130,7 +129,9 @@ module.exports = {
     path: '@:accountName',
     getIndexRoute(nextState, cb) {
         cb(null, {
-            content: require('./blog/BlogContent').default,
+            components: {
+                content: require('./blog/BlogContent').default,
+            }
         });
     },
     childRoutes: [
@@ -165,16 +166,13 @@ module.exports = {
         },
     ],
     component: connect(
-        (state, ownProps) => {
-            const route = ownProps.routes.slice(-1)[0].path;
-            const accountName = ownProps.params.accountName.toLowerCase();
+        (state, props) => {
+            const accountName = props.params.accountName.toLowerCase();
 
             const currentUser = state.user.get('current') || Map();
             const currentAccount = state.global.getIn(['accounts', accountName]);
 
-            const fetching =
-                state.global.getIn(['status', route, 'by_author'], {}).fetching ||
-                state.app.get('loading');
+            const fetching = state.app.get('loading');
             const isOwner = currentUser.get('username') === accountName;
 
             const followerCount = state.global.getIn(

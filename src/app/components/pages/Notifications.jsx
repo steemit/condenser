@@ -1,10 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import YotificationList, {
-    LAYOUT_PAGE,
+import NotificationList, {
     FILTER_ALL,
-} from 'app/components/modules/YotificationList';
+} from 'app/components/notifications/NotificationList';
 import { showLogin } from 'app/redux/UserReducer';
 import { urlLogin, urlNotifications, urlSignup } from 'app/utils/Url';
 
@@ -39,12 +38,7 @@ class NotificationPage extends React.Component {
                 </div>
             );
         }
-        return (
-            <YotificationList
-                layout={LAYOUT_PAGE}
-                filter={this.props.subsection}
-            />
-        );
+        return <NotificationList filter={this.props.subsection} />;
     }
 }
 

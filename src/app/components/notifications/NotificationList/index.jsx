@@ -13,21 +13,7 @@ import Url from 'app/utils/Url';
 import * as notificationActions from 'app/redux/NotificationReducer';
 import { selectors as userSelectors } from 'app/redux/UserReducer';
 
-export const LAYOUT_PAGE = 'Page';
-export const LAYOUT_DROPDOWN = 'Dropdown';
 export const FILTER_ALL = 'all';
-
-/**
- * Find the absolute offset relative to the window
- * @param domElt
- * @returns {*}
- */
-function topPosition(domElt) {
-    if (!domElt) {
-        return 0;
-    }
-    return domElt.offsetTop + topPosition(domElt.offsetParent);
-}
 
 const renderNotificationList = (notifications, filterIds, onViewAll) => (
     <ul className="Notifications">
@@ -77,60 +63,32 @@ const renderFilterList = (username, filter) => {
     return <ul className="menu">{filterLIs}</ul>;
 };
 
-class YotificationList extends React.Component {
+class NotificationList extends React.Component {
     constructor(props) {
         super(props);
         this.htmlId = 'YotifModule_' + Math.floor(Math.random() * 1000);
-        switch (props.layout) { //eslint-disable-line
-            case LAYOUT_DROPDOWN:
-                this.state = {
-                    layout: props.layout,
-                    showFilters: false,
-                    showFooter: true,
-                };
-                break;
-            case LAYOUT_PAGE:
-                this.state = {
-                    layout: props.layout,
-                    showFilters: true,
-                    showFooter: false,
-                };
-                break;
-        }
-        //this.scrollListener = this.scrollListener.bind(this);
     }
 
     componentDidMount() {
-        if (LAYOUT_PAGE === this.state.layout) {
-            window.addEventListener('scroll', this.scrollListenerPage, {
-                capture: false,
-                passive: true,
-            });
-            window.addEventListener('resize', this.scrollListenerPage, {
-                capture: false,
-                passive: true,
-            });
-        } else if (LAYOUT_DROPDOWN === this.state.layout) {
-            this.rootEl.parentElement.addEventListener(
-                'scroll',
-                this.scrollListenerDropdown,
-                { capture: false, passive: true }
-            );
-        }
+        window.addEventListener('scroll', this.scrollListenerPage, {
+            capture: false,
+            passive: true,
+        });
+        window.addEventListener('resize', this.scrollListenerPage, {
+            capture: false,
+            passive: true,
+        });
     }
 
     markDisplayedRead = () => {
-        //eslint-disable-line no-undef
         this.props.updateSome(this.props.filterIds.toArray(), { read: true });
     };
 
     markDisplayedHidden = () => {
-        //eslint-disable-line no-undef
         this.props.updateSome(this.props.filterIds.toArray(), { hide: true });
     };
 
     appendSome = () => {
-        //eslint-disable-line no-undef
         this.props.appendSome(
             this.props.filter !== FILTER_ALL
                 ? filters[this.props.filter]
@@ -159,25 +117,6 @@ class YotificationList extends React.Component {
             10
         ) {
             //eslint-disable-line no-mixed-operators
-            this.props.appendSome(
-                this.props.filter !== FILTER_ALL
-                    ? filters[this.props.filter]
-                    : false
-            );
-        }
-    }, 150);
-
-    scrollListenerDropdown = debounce(() => {
-        //eslint-disable-line no-undef
-        if (this.props.noMoreToFetch) return;
-
-        const el = window.document.getElementById(this.htmlId);
-        if (!el) return;
-
-        if (
-            el.scrollHeight <
-            el.parentElement.offsetHeight + el.parentElement.scrollTop + 10
-        ) {
             this.props.appendSome(
                 this.props.filter !== FILTER_ALL
                     ? filters[this.props.filter]
@@ -219,19 +158,15 @@ class YotificationList extends React.Component {
         return (
             <div
                 id={this.htmlId}
-                className={classNames(
-                    'NotificationsModule',
-                    this.state.layout,
-                    { 'no-notifications': this.props.notifications.size === 0 }
-                )}
+                className={classNames('NotificationsModule', 'Page', {
+                    'no-notifications': this.props.notifications.size === 0,
+                })}
                 ref={el => {
                     this.rootEl = el;
                 }}
             >
                 {this.renderTitle()}
-                {this.state.showFilters
-                    ? renderFilterList(this.props.username, this.props.filter)
-                    : null}
+                {renderFilterList(this.props.username, this.props.filter)}
                 {renderNotificationList(
                     this.props.notifications,
                     this.props.filterIds,
@@ -250,29 +185,12 @@ class YotificationList extends React.Component {
                         </button>
                     )}
                 </div>
-
-                {this.state.showFooter ? (
-                    <div className="footer">
-                        {tt('notifications.controls.go_to_page')}
-                    </div>
-                ) : null}
-                {this.state.showFooter ? (
-                    <div className="footer absolute">
-                        <Link
-                            to={Url.profile() + '/notifications'}
-                            onClick={this.props.onViewAll}
-                            className="view-all"
-                        >
-                            {tt('notifications.controls.go_to_page')}
-                        </Link>
-                    </div>
-                ) : null}
             </div>
         );
     }
 }
 
-YotificationList.propTypes = {
+NotificationList.propTypes = {
     updateSome: React.PropTypes.func.isRequired,
     appendSome: React.PropTypes.func.isRequired,
     notifications: React.PropTypes.instanceOf(Immutable.Map).isRequired,
@@ -280,15 +198,13 @@ YotificationList.propTypes = {
         React.PropTypes.instanceOf(Immutable.Set),
         React.PropTypes.instanceOf(Immutable.List), // initial state is fromJS'ed as a List
     ]).isRequired,
-    layout: React.PropTypes.oneOf([LAYOUT_PAGE, LAYOUT_DROPDOWN]),
     showClearAll: React.PropTypes.bool.isRequired,
     noMoreToFetch: React.PropTypes.bool.isRequired,
     isFetchingBefore: React.PropTypes.bool.isRequired,
     onViewAll: React.PropTypes.func,
 };
 
-YotificationList.defaultProps = {
-    layout: LAYOUT_PAGE,
+NotificationList.defaultProps = {
     onViewAll: null,
 };
 
@@ -333,4 +249,4 @@ export default connect(
         appendSome: types =>
             dispatch(notificationActions.fetchSome('before', types)),
     })
-)(YotificationList);
+)(NotificationList);

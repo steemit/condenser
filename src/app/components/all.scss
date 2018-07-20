@@ -45,7 +45,6 @@
 @import "./modules/Header/styles";
 @import "./modules/SignUp";
 @import "./modules/LoginForm";
-@import "modules/YotificationList";
 @import "./modules/MiniHeader";
 @import "./modules/SidePanel/styles";
 @import "./modules/Settings";
@@ -69,3 +68,6 @@
 @import "./pages/Welcome";
 @import "./pages/RecoverAccountStep1";
 @import "./pages/Witnesses";
+
+// notifications
+@import "./notifications/NotificationList/NotificationList";

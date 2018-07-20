@@ -18,14 +18,16 @@ export default class MobileAppButton extends Component {
             return null;
         }
 
+        const { path } = this.props
         return (
-            <div
+            <a
                 role="button"
                 className="btn visit-app-btn"
-                onClick={e =>this._onClick(this.props.path)}
+                // onClick={e =>this._onClick(this.props.path)}
+                href={`https://sandbox.golos.app.io${path === '/' ? `/trending` : `${path}`}`}
             >
                 {tt('mobile_app_button.open_in_app')}
-            </div>
+            </a>
         );
     }
 

@@ -25,7 +25,9 @@ export const defaultState = Map({
         defaultBlogPayout: '50%',
         defaultCommentPayout: '50%',
     }),
-    featureFlags: Map({}),
+    featureFlags: Map({
+        notifsv001: true,
+    }),
 });
 
 export default function reducer(state = defaultState, action = {}) {

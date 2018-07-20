@@ -9,6 +9,8 @@ import types, {
 
 import yoSchema from './schemas/yo';
 
+import YoMockData from './YoMockData'; //dev thing do not commit!
+
 // Set up the validator
 const ajv = new Ajv();
 ajv.addMetaSchema(require('ajv/lib/refs/json-schema-draft-06.json'));
@@ -112,6 +114,12 @@ export async function fetchNotifications({ username, before, after, types }) {
     if (after) optionalParams.updated_after = after;
     if (before) optionalParams.created_before = before;
     if (types) optionalParams.notify_types = types;
+
+    if (!before && !after) {
+        // dev thing do not commit!
+        console.log('returning fake notifs');
+        return YoMockData.get_notifications.result;
+    }
 
     const res = await api.callAsync('yo.get_notifications', {
         username,

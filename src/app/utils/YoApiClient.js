@@ -1,36 +1,18 @@
 import { Map } from 'immutable';
+import Ajv from 'ajv';
 import { api } from '@steemit/steem-js';
+
 import types, {
     settingsInitFalse,
     toggleNotificationGroups,
 } from 'app/components/elements/notification/type';
 
-/**
- * Re-formats API notifications response a little bit.
- *
- * @param {Array} res
- *
- * @return {Array}
- */
-export const normalize = res =>
-    res.map(fromApi => {
-        const normalized = {
-            ...fromApi,
-            id: fromApi.notify_id.toString(),
-            notificationType: fromApi.notify_type,
-        };
+import yoSchema from './schemas/yo';
 
-        delete normalized.notify_id;
-        delete normalized.notify_type;
-
-        if (fromApi.data.item && fromApi.data.item.parent_summary) {
-            normalized.data.item.parentSummary =
-                fromApi.data.item.parent_summary;
-            delete normalized.data.item.parent_summary;
-        }
-
-        return normalized;
-    });
+// Set up the validator
+const ajv = new Ajv();
+ajv.addMetaSchema(require('ajv/lib/refs/json-schema-draft-06.json'));
+const validateNotification = ajv.compile(yoSchema);
 
 /**
  * Cleans up settings from Yo.
@@ -131,13 +113,14 @@ export async function fetchNotifications({ username, before, after, types }) {
     if (before) optionalParams.created_before = before;
     if (types) optionalParams.notify_types = types;
 
-    const res = api.callAsync('yo.get_notifications', {
+    const res = await api.callAsync('yo.get_notifications', {
         username,
         ...optionalParams,
     });
 
     if (res.result && res.result.length > 0) {
-        return normalize(res.result);
+        // Only return valid notifications
+        return res.result.filter(notif => validateNotification(notif), []);
     }
 
     return [];
@@ -155,7 +138,7 @@ export const markAsShown = async ids => api.callAsync('yo.mark_shown', ids);
  * @return {Map|Object} if error, object w/ error prop
  */
 export async function getNotificationSettings(username) {
-    const res = api.callAsync('yo.get_transports', { username });
+    const res = await api.callAsync('yo.get_transports', { username });
     return normalizeSettingsFromApi(res.result);
 }
 

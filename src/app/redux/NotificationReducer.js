@@ -27,7 +27,7 @@ export const FETCH_ALL = 'notification/FETCH_ALL';
 function apiToMap(payload) {
     if (!payload || payload.length === 0) return Map();
 
-    return Map(Object.assign(...payload.map(d => ({ [d.id]: d }))));
+    return Map(Object.assign(...payload.map(d => ({ [d.notify_id]: d }))));
 }
 
 /**
@@ -317,3 +317,11 @@ export const setLastFetchBeforeCount = (types, count) => ({
     types,
     count,
 });
+
+// Selectors
+export const selectors = {
+    getNotificationsById: state => state.notification.byId,
+    getIdsReadPending: state => state.notification.idsReadPending,
+    getIdsUnreadPending: state => state.notification.idsUnreadPending,
+    getIdsShownPending: state => state.notification.idsShownPending,
+};

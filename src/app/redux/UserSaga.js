@@ -19,6 +19,7 @@ import {
 import { loadFollows } from 'app/redux/FollowSaga';
 import { translate } from 'app/Translator';
 import DMCAUserList from 'app/utils/DMCAUserList';
+import { fetchAll as fetchAllNotifications } from './NotificationReducer';
 
 export const userWatches = [
     watchRemoveHighSecurityKeys, // keep first to remove keys early when a page change happens
@@ -437,8 +438,20 @@ function* getFeatureFlags(username, posting_private) {
             posting_private
         );
         yield put(receiveFeatureFlags(flags));
+        yield put(receiveFeatureFlags({ notifV001: true }));
     } catch (error) {
         // Do nothing; feature flags are not ready yet.
+    }
+
+    // After receiving flags, run any feature-flag-dependent sagas:
+    yield fork(flagDependentSagas);
+}
+
+function* flagDependentSagas() {
+    const flags = yield select(state => state.app.get('featureFlags'));
+
+    if (flags.get('notifV001')) {
+        yield put(fetchAllNotifications());
     }
 }
 

@@ -3,106 +3,10 @@ import { fromJS, Set } from 'immutable';
 import {
     normalizeSettingsFromApi,
     denormalizeSettingsToApi,
-    normalize,
+    fetchNotifications,
 } from './YoApiClient';
 
-const apiMockData = {
-    get_transports: {
-        id: 1,
-        jsonrpc: '2.0',
-        result: {
-            email: {
-                notification_types: [
-                    'account_update',
-                    'power_down',
-                    'security_new_mobile_device',
-                    'security_withdrawal',
-                    'security_password_changed',
-                    'receive',
-                    'reward',
-                    'send',
-                    'post_reply',
-                ],
-                sub_data: 'test@example.com',
-            },
-            wwwpoll: {
-                notification_types: null,
-                sub_data: '',
-            },
-        },
-    },
-    saved_transports: {
-        id: 1,
-        jsonrpc: '2.0',
-        result: {
-            email: {
-                notification_types: [
-                    'account_update',
-                    'power_down',
-                    'security_new_mobile_device',
-                    'security_withdrawal',
-                    'security_password_changed',
-                    'receive',
-                    'reward',
-                    'send',
-                    'post_reply',
-                ],
-                sub_data: 'test@example.com',
-            },
-            wwwpoll: {
-                notification_types: [
-                    'account_update',
-                    'power_down',
-                    'security_new_mobile_device',
-                    'security_withdrawal',
-                    'security_password_changed',
-                    'receive',
-                    'reward',
-                    'send',
-                    'mention',
-                    'feed',
-                    'resteem',
-                ],
-                sub_data: '',
-            },
-        },
-    },
-    get_notifications: {
-        jsonrpc: '2.0',
-        id: 1,
-        result: [
-            {
-                notify_id: 39,
-                notify_type: 'power_down',
-                created: '2017-10-27T01:31:29.382749',
-                updated: '2017-10-27T01:31:29.382749',
-                read: false,
-                shown: false,
-                username: 'test_user',
-                data: {
-                    author: 'roadscape',
-                    amount: 10000.2,
-                },
-            },
-            {
-                notify_id: 55,
-                notify_type: 'power_down',
-                created: '2017-10-27T01:15:29.383842',
-                updated: '2017-10-27T01:15:29.383842',
-                read: false,
-                shown: false,
-                username: 'test_user',
-                data: {
-                    author: 'roadscape',
-                    amount: 10000.2,
-                    item: {
-                        parent_summary: 'whatever',
-                    },
-                },
-            },
-        ],
-    },
-};
+import apiMockData from './YoMockData';
 
 const desired = {
     settings: {
@@ -180,9 +84,14 @@ describe('denormalizeSettingsToApi', () => {
     });
 });
 
-describe('normalize', () => {
-    it('should clean up incoming notification data', () => {
-        const normalized = normalize(apiMockData.get_notifications.result);
-        expect(normalized).toEqual(desired.get_notifications);
+describe('fetchNotifications', () => {
+    it('should return fetched notifications', async () => {
+        const res = await fetchNotifications({ username: 'good' });
+        expect(res).toEqual(apiMockData.get_notifications.result);
+    });
+
+    it('should validate incoming notifications and only return good ones', async () => {
+        const res = await fetchNotifications({ username: 'bad' });
+        expect(res.length).toEqual(1);
     });
 });

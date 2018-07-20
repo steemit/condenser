@@ -61,7 +61,7 @@ class NotificationLink extends React.Component {
         const item = this.props.data.item;
         const read = this.props.data.read;
         const post = this.props.data.rootItem;
-        const notificationType = this.props.data.notificationType;
+        const notificationType = this.props.data.notify_type;
 
         const badge = badges[notificationType]
             ? badges[notificationType]

@@ -419,5 +419,5 @@ export const hideSidePanel = () => {
 // Selectors
 export const selectors = {
     getUsername: state =>
-        state.get('current') ? state.getIn(['current', 'username']) : '',
+        state.user.get('current') ? state.getIn(['current', 'username']) : '',
 };

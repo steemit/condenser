@@ -4,12 +4,6 @@ import { connect } from 'react-redux';
 import * as notificationActions from 'app/redux/NotificationReducer';
 
 class YotifiCounter extends React.Component {
-    componentWillMount() {
-        if (!!this.props.username) {
-            this.props.fetchNotifications(this.props.username);
-        }
-    }
-
     render() {
         const { unshown } = this.props;
         const count = unshown.count();
@@ -20,18 +14,12 @@ class YotifiCounter extends React.Component {
 
 YotifiCounter.propTypes = {
     unshown: React.PropTypes.object.isRequired,
-    fetchNotifications: React.PropTypes.func.isRequired,
 };
 
-export default connect(
-    state => ({
-        unshown: state.notification.unshown,
-        username:
-            state.user.getIn(['current', 'username']) ||
-            state.offchain.get('account') ||
-            '', // to see if we're logged in
-    }),
-    dispatch => ({
-        fetchNotifications: () => dispatch(notificationActions.fetchAll()),
-    })
-)(YotifiCounter);
+export default connect(state => ({
+    unshown: state.notification.unshown,
+    username:
+        state.user.getIn(['current', 'username']) ||
+        state.offchain.get('account') ||
+        '', // to see if we're logged in
+}))(YotifiCounter);

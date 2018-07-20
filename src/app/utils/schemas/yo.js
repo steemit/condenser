@@ -1,3 +1,5 @@
+const operations = require('./operations');
+
 const NotificationType = {
     power_down: 1,
     power_up: 2,
@@ -50,11 +52,12 @@ const TRANSPORT_TYPES = Object.keys(TransportType);
 const EVENT_ORIGINS = Object.keys(EventOrigin);
 const EVENT_PRIORITIES = Object.keys(EventPriority);
 
-module.exports = {
+const upstreamDef = {
     $schema: 'http://json-schema.org/draft-06/schema#',
-    id: 'https://schema.steemit.com/yo/objects.json',
+    $id: 'https://schema.steemit.com/yo/objects.json',
     title: 'notification transport schema',
     definitions: {
+        ...operations,
         transport: {
             title: 'transport',
             type: 'object',
@@ -80,7 +83,7 @@ module.exports = {
             title: 'notification schema',
             type: 'object',
             properties: {
-                nid: {
+                notify_id: {
                     type: 'number',
                 },
                 notify_type: {
@@ -89,14 +92,29 @@ module.exports = {
                 created: {
                     type: 'string',
                 },
+                updated: {
+                    type: 'string',
+                },
+                read: {
+                    type: 'boolean',
+                },
+                shown: {
+                    type: 'boolean',
+                },
+                username: {
+                    type: 'string',
+                },
                 to_username: {
                     type: 'string',
                 },
                 from_username: {
                     type: 'string',
                 },
-                json_data: {
+                data: {
                     type: 'object',
+                    anyOf: Object.keys(operations).map(opName => ({
+                        '#ref': `#/definitions/${opName}`,
+                    })),
                 },
                 priority: {
                     $ref: '#/definitions/priority',
@@ -154,4 +172,9 @@ module.exports = {
             additionalProperties: false,
         },
     },
+};
+
+module.exports = {
+    ...upstreamDef,
+    ...upstreamDef.definitions.notification,
 };

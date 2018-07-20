@@ -7,29 +7,13 @@ import {
     markAsUnread,
     markAsShown,
 } from 'app/utils/YoApiClient';
-import * as notificationActions from 'app/redux/NotificationReducer';
+import * as notificationActions from './NotificationReducer';
+
+import { selectors as userSelectors } from './UserReducer';
 
 const POLL_WAIT_MS = 5000;
 
-export function getUsernameFromState(state) {
-    return state.user.getIn(['current', 'username']);
-}
-
-export function getNotificationsById(state) {
-    return state.notification.byId;
-}
-
-export function getIdsReadPending(state) {
-    return state.notification.idsReadPending;
-}
-
-export function getIdsUnreadPending(state) {
-    return state.notification.idsUnreadPending;
-}
-
-export function getIdsShownPending(state) {
-    return state.notification.idsShownPending;
-}
+const notificationSelectors = notificationActions.selectors;
 
 /**
  * Derive the correct timestamp from some notifications based on the desired direction.
@@ -73,9 +57,15 @@ function* watchPollData() {
             notificationActions.APPEND_SOME, // or after one of the polls are done
         ]);
 
-        const idsReadPending = yield select(getIdsReadPending);
-        const idsUnreadPending = yield select(getIdsUnreadPending);
-        const idsShownPending = yield select(getIdsShownPending);
+        const idsReadPending = yield select(
+            notificationSelectors.getIdsReadPending
+        );
+        const idsUnreadPending = yield select(
+            notificationSelectors.getIdsUnreadPending
+        );
+        const idsShownPending = yield select(
+            notificationSelectors.getIdsShownPending
+        );
 
         if (idsReadPending.count() > 0) {
             const payload = yield call(markAsRead, idsReadPending.toArray());
@@ -123,13 +113,13 @@ function* watchPollData() {
  * Fetch all notifications, with the expectation they'll replace the current store.
  */
 export function* fetchAll() {
-    const username = yield select(getUsernameFromState);
+    const username = yield select(userSelectors.getUsername);
 
     try {
         const payload = yield call(fetchNotifications, username);
         yield put(notificationActions.receiveAll(payload));
     } catch (error) {
-        yield put(notificationActions.receiveAllError(payload.error));
+        yield put(notificationActions.receiveAllError(error));
     }
 }
 
@@ -145,9 +135,11 @@ export function* fetchAll() {
  */
 export function* fetchSome({ types = null, direction = 'after' }) {
     try {
-        const username = yield select(getUsernameFromState);
+        const username = yield select(userSelectors.getUsername);
 
-        const allNotifs = yield select(getNotificationsById);
+        const allNotifs = yield select(
+            notificationSelectors.getNotificationsById
+        );
 
         // If direction is specified, find the latest or earliest notification's timestamp.
         // If types are specified, only search within those types.

@@ -10,7 +10,7 @@ import {
 
 const notificationReceiveAllAction = receiveAll([
     {
-        id: 'UID',
+        notify_id: 'UID',
         read: true,
         shown: true,
         notificationType: 'powerDown',
@@ -19,7 +19,7 @@ const notificationReceiveAllAction = receiveAll([
         amount: 10000.2,
     },
     {
-        id: 'UID1',
+        notify_id: 'UID1',
         read: false,
         shown: false,
         notificationType: 'resteem',
@@ -35,7 +35,7 @@ const notificationReceiveAllAction = receiveAll([
         },
     },
     {
-        id: 'UID2',
+        notify_id: 'UID2',
         read: false,
         shown: true,
         notificationType: 'vote',
@@ -52,7 +52,7 @@ const notificationReceiveAllAction = receiveAll([
         },
     },
     {
-        id: 'UID3',
+        notify_id: 'UID3',
         read: true,
         shown: true,
         notificationType: 'receiveSteem',
@@ -61,7 +61,7 @@ const notificationReceiveAllAction = receiveAll([
         amount: 10000.2,
     },
     {
-        id: 'UID4',
+        notify_id: 'UID4',
         read: true,
         shown: true,
         notificationType: 'tag',
@@ -85,7 +85,7 @@ const notificationReceiveAllAction = receiveAll([
         },
     },
     {
-        id: 'UID5',
+        notify_id: 'UID5',
         read: false,
         shown: false,
         notificationType: 'vote',
@@ -101,7 +101,7 @@ const notificationReceiveAllAction = receiveAll([
         },
     },
     {
-        id: 'UID6',
+        notify_id: 'UID6',
         read: true,
         shown: true,
         notificationType: 'postReply',
@@ -127,7 +127,7 @@ const notificationReceiveAllAction = receiveAll([
         },
     },
     {
-        id: 'UID6.1',
+        notify_id: 'UID6.1',
         read: true,
         shown: true,
         notificationType: 'securityNewMobileDevice',
@@ -135,7 +135,7 @@ const notificationReceiveAllAction = receiveAll([
         author: 'security',
     },
     {
-        id: 'UID7',
+        notify_id: 'UID7',
         read: false,
         shown: true,
         notificationType: 'commentReply',
@@ -162,7 +162,7 @@ const notificationReceiveAllAction = receiveAll([
 
 const notificationAppendSomeAction = appendSome([
     {
-        id: 'UID6.1',
+        notify_id: 'UID6.1',
         read: false,
         shown: false,
         notificationType: 'securityNewMobileDevice',
@@ -170,7 +170,7 @@ const notificationAppendSomeAction = appendSome([
         author: 'security',
     },
     {
-        id: 'UID8',
+        notify_id: 'UID8',
         read: false,
         shown: false,
         notificationType: 'powerDown',
@@ -179,7 +179,7 @@ const notificationAppendSomeAction = appendSome([
         amount: 138,
     },
     {
-        id: 'UID9',
+        notify_id: 'UID9',
         read: true,
         shown: true,
         notificationType: 'powerDown',
@@ -188,7 +188,7 @@ const notificationAppendSomeAction = appendSome([
         amount: 138,
     },
     {
-        id: 'UID10',
+        notify_id: 'UID10',
         read: false,
         shown: true,
         notificationType: 'powerDown',
@@ -210,8 +210,8 @@ describe('byId', () => {
         const reduced = byId(initial, notificationAppendSomeAction);
 
         expect(reduced.count()).toEqual(12);
-        expect(reduced.first().id).toEqual('UID5');
-        expect(reduced.last().id).toEqual('UID8');
+        expect(reduced.first().notify_id).toEqual('UID5');
+        expect(reduced.last().notify_id).toEqual('UID8');
     });
 
     it('should provide an action which takes a list of ids and props/values to update, and applies the updates only to those ids specified', () => {

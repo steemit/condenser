@@ -9,66 +9,139 @@ import * as type from './type';
 import badges from './icon';
 import * as notificationActions from 'app/redux/NotificationReducer';
 
-const TIMEOUT_MARK_SHOWN_MILLIS = 3000;
-
 class Notification extends React.Component {
     static propTypes = {
-        data: React.PropTypes.object.isRequired,
+        notification: React.PropTypes.object.isRequired,
         onClick: React.PropTypes.func,
     };
 
-    componentDidMount() {
-        this.cueMarkShown();
-    }
-
-    componentWillUnmount() {
-        clearTimeout(this.markShownTimeout);
-    }
-
     markReadDefault = e => {
-        this.props.markRead(this.props.data.id);
+        this.props.markRead(this.props.notification.id);
     };
 
     markRead = e => {
         e.preventDefault();
         e.stopPropagation();
-        this.props.markRead(this.props.data.id);
-    };
-
-    cueMarkShown = () => {
-        const self = this;
-        clearTimeout(this.markShownTimeout);
-        this.markShownTimeout = setTimeout(() => {
-            self.props.markShown(this.props.data.id);
-        }, TIMEOUT_MARK_SHOWN_MILLIS);
+        this.props.markRead(this.props.notification.id);
     };
 
     markUnread = e => {
         e.preventDefault();
         e.stopPropagation();
-        this.props.markUnread(this.props.data.id);
+        this.props.markUnread(this.props.notification.id);
     };
 
     render() {
-        const amount = this.props.data.amount;
-        const author = this.props.data.author;
-        const classNames = this.props.data.read ? '' : 'unread';
-        const created = this.props.data.created;
-        const item = this.props.data.item;
-        const read = this.props.data.read;
-        const post = this.props.data.rootItem;
-        const notificationType = this.props.data.notificationType;
+        const {
+            notification,
+            notification: { notify_type, read } = {},
+        } = this.props;
 
-        const badge = badges[notificationType]
-            ? badges[notificationType]
-            : null;
-        const localeRoot = `notifications.${notificationType}`;
+        const switchTypes = types => key =>
+            types.hasOwnProperty(key) ? types[key] : types['default'];
 
-        let bodyContent = null;
-        let headerContent = null;
-        let link = Url.comment(post, item);
-        let localeAction = `${localeRoot}.action`;
-        let picture = null;
+        const notificationTypes = {
+            default: notification => {
+                return (
+                    <div className="item-panel">
+                        <div className={'Comment__Userpic show-for-medium '}>
+                            {/*<Userpic account={notification.data.account} />*/}
+                        </div>
+                        <div className="item-header">HEADER HERE</div>
+                        <div className="item-body">BODY HERE</div>
+                        <div className="item-footer">
+                            <TimeAgoWrapper
+                                date={notification.created}
+                                className="updated"
+                            />
+                        </div>
+                    </div>
+                );
+            },
+            account_update: notification => {
+                return (
+                    <div className="item-panel">
+                        <div className={'Comment__Userpic show-for-medium '}>
+                            <Userpic account={notification.data.account} />
+                        </div>
+                        <div className="item-header">
+                            <span>
+                                <span className="subject">Account Update</span>
+                            </span>
+                        </div>
+                        <div className="item-footer">
+                            <TimeAgoWrapper
+                                date={notification.created}
+                                className="updated"
+                            />
+                        </div>
+                    </div>
+                );
+            },
+            comment_reply: notification => {
+                return (
+                    <div className="item-panel">
+                        <div className={'Comment__Userpic show-for-medium '}>
+                            <Userpic account={notification.data.author} />
+                        </div>
+                        <div className="item-header">
+                            <span>
+                                <span className="user">
+                                    {notification.data.author}
+                                </span>{' '}
+                                <strong>{notification.data.title}</strong>
+                            </span>
+                        </div>
+                        <div className="item-body">
+                            {notification.data.body}
+                        </div>
+                        <div className="item-footer">
+                            <TimeAgoWrapper
+                                date={notification.created}
+                                className="updated"
+                            />
+                        </div>
+                    </div>
+                );
+            },
+            feed: notification => {
+                return (
+                    <div className="item-panel">
+                        <div className={'Comment__Userpic show-for-medium '}>
+                            <Userpic account={notification.username} />
+                        </div>
+                        <div className="item-header">
+                            <span>
+                                <span className="user">
+                                    {notification.username}
+                                </span>
+                                Feed Notification
+                            </span>
+                        </div>
+                        <div className="item-footer">
+                            <TimeAgoWrapper
+                                date={notification.created}
+                                className="updated"
+                            />
+                        </div>
+                    </div>
+                );
+            },
+        };
+
+        const notificationInner = switchTypes(notificationTypes)(notify_type)(
+            notification
+        );
+        // const amount = this.props.notification.amount;
+        // const author = this.props.notification.author;
+        // const classNames = this.props.notification.read ? '' : 'unread';
+        // const created = this.props.notification.created;
+        // const item = this.props.notification.item;
+        // const read = this.props.notification.read;
+        const post = this.props.notification.rootItem;
+        const badge = badges[type] ? badges[type] : null;
+
+        /*
         switch (notificationType) {
             case type.POST_REPLY:
                 headerContent = (
@@ -166,9 +239,11 @@ class Notification extends React.Component {
                 );
                 return null;
         }
+        */
 
+        /*
         if (!picture) {
-            switch (notificationType) {
+            switch (type) {
                 //case type.ANNOUNCEMENT_IMPORTANT :
                 //todo: special image - unknown json format in notification
                 case type.POWER_DOWN:
@@ -178,16 +253,38 @@ class Notification extends React.Component {
                     picture = <Userpic account={author} badge={badge} />;
             }
         }
-
-        const readControl = (
-            <div
-                className="rightControls"
-                onClick={read ? this.markUnread : this.markRead}
-                dangerouslySetInnerHTML={{
-                    __html: read ? badges.visibilityOn : badges.visibilityOff,
-                }}
-            />
+        */
+        return (
+            <li className={`item ${!read && 'unread'}`}>
+                <Link
+                    to={'@test-safari'}
+                    onClick={e => {
+                        if (this.props.onClick) {
+                            this.props.onClick(e);
+                        }
+                        this.markReadDefault(e);
+                    }}
+                >
+                    {!this.props.shown ? (
+                        <span
+                            className="unseenIndicator"
+                            dangerouslySetInnerHTML={{ __html: '&#9679' }}
+                        />
+                    ) : null}
+                    {notificationInner}
+                    <div
+                        className="rightControls"
+                        onClick={read ? this.markUnread : this.markRead}
+                        dangerouslySetInnerHTML={{
+                            __html: read
+                                ? badges.visibilityOn
+                                : badges.visibilityOff,
+                        }}
+                    />
+                </Link>
+            </li>
         );
+        /*
         return (
             <Link
                 to={link}
@@ -206,12 +303,7 @@ class Notification extends React.Component {
                     />
                 ) : null}
                 <div className="item-panel">
-                    <div
-                        className={
-                            'Comment__Userpic show-for-medium ' +
-                            notificationType
-                        }
-                    >
+                    <div className={'Comment__Userpic show-for-medium ' + type}>
                         {picture}
                     </div>
                     <div className="item-header">{headerContent}</div>
@@ -224,7 +316,7 @@ class Notification extends React.Component {
                 </div>
                 {readControl}
             </Link>
-        );
+        );*/
     }
 }
 

@@ -5,7 +5,7 @@ import { api } from '@steemit/steem-js';
 import types, {
     settingsInitFalse,
     toggleNotificationGroups,
-} from 'app/components/elements/notification/type';
+} from 'app/components/notifications/Notification/type';
 
 import yoSchema from './schemas/yo';
 

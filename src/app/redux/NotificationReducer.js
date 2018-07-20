@@ -1,6 +1,6 @@
 import { Map, OrderedMap, Set } from 'immutable';
 import { combineReducers } from 'redux';
-import { filters } from 'app/components/elements/notification/type';
+import { filters } from 'app/components/notifications/Notification/type';
 
 // Action constants
 export const RECEIVE_ALL = 'notification/RECEIVE_ALL'; // watched by saga also

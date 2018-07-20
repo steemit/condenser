@@ -3,6 +3,7 @@ import tt from 'counterpart';
 import classNames from 'classnames';
 import Icon from 'app/components/elements/Icon';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
+import { NotificationHOC } from 'app/components/notifications/NotificationHOC';
 import Notification from 'app/components/notifications/Notification';
 import { filters } from 'app/components/notifications/Notification/type';
 import { Link } from 'react-router';
@@ -14,26 +15,6 @@ import * as notificationActions from 'app/redux/NotificationReducer';
 import { selectors as userSelectors } from 'app/redux/UserReducer';
 
 export const FILTER_ALL = 'all';
-
-const renderNotificationList = (notifications, filterIds, onViewAll) => (
-    <ul className="Notifications">
-        {filterIds.map(id => {
-            const notification = notifications.get(id);
-            if (!notification.hide) {
-                return (
-                    <li
-                        className={classNames('item', {
-                            unread: !notification.read,
-                        })}
-                        key={notification.id}
-                    >
-                        <Notification data={notification} onClick={onViewAll} />
-                    </li>
-                );
-            }
-        })}
-    </ul>
-);
 
 const renderFilterList = (username, filter) => {
     let className = filter === FILTER_ALL ? 'selected' : '';
@@ -125,11 +106,30 @@ class NotificationList extends React.Component {
     }, 150);
 
     render() {
+        const {
+            notifications,
+            username,
+            filter,
+            filterIds,
+            showClearAll,
+        } = this.props;
+        let notifArr = [];
+        filterIds.map(id => {
+            const notification = notifications.get(id);
+            // TODO: Abstract shared 'isShown' on componentDidMount logic into HOC.
+            /*
+            notifArr.push(
+                NotificationHOC(<Notification notification={notification} />)
+            );
+            */
+            notifArr.push(<Notification notification={notification} />);
+        });
+
         return (
             <div
                 id={'NotificationsList Page'}
                 className={classNames('NotificationsModule', 'Page', {
-                    'no-notifications': this.props.notifications.size === 0,
+                    'no-notifications': notifications.size === 0,
                 })}
                 ref={el => {
                     this.rootEl = el;
@@ -138,7 +138,7 @@ class NotificationList extends React.Component {
                 <div className={classNames('title')}>
                     {tt('g.notifications')}
                     <span className="controls-right">
-                        {this.props.showClearAll ? (
+                        {showClearAll ? (
                             <button
                                 className="ptc"
                                 onClick={this.markDisplayedHidden}
@@ -153,17 +153,13 @@ class NotificationList extends React.Component {
                                 {tt('notifications.controls.mark_all_read')}
                             </button>
                         )}
-                        <Link to={Url.profileSettings(this.props.username)}>
+                        <Link to={Url.profileSettings(username)}>
                             <Icon name="cog" />
                         </Link>
                     </span>
                 </div>
-                {renderFilterList(this.props.username, this.props.filter)}
-                {renderNotificationList(
-                    this.props.notifications,
-                    this.props.filterIds,
-                    this.props.onViewAll
-                )}
+                {renderFilterList(username, filter)}
+                <ul className="Notifications">{notifArr}</ul>
                 <div className="footer get-more">
                     {this.props.noMoreToFetch ? (
                         <div>No more to fetch!</div>
@@ -191,11 +187,6 @@ NotificationList.propTypes = {
     showClearAll: React.PropTypes.bool.isRequired,
     noMoreToFetch: React.PropTypes.bool.isRequired,
     isFetchingBefore: React.PropTypes.bool.isRequired,
-    onViewAll: React.PropTypes.func,
-};
-
-NotificationList.defaultProps = {
-    onViewAll: null,
 };
 
 export default connect(

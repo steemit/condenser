@@ -6,7 +6,7 @@
   "helmet": {
     "directives": {
       "childSrc": "'self' www.youtube.com staticxx.facebook.com w.soundcloud.com player.vimeo.com",
-      "connectSrc": "'self' vit.tube wss://testnet.vit.tube/ws api.blocktrades.us",
+      "connectSrc": "'self' vit.tube wss://peer.proto.vit.tube api.blocktrades.us",
       "defaultSrc": "'self' www.youtube.com staticxx.facebook.com player.vimeo.com",
       "fontSrc": "data: fonts.gstatic.com",
       "frameAncestors": "'none'",
@@ -69,9 +69,9 @@
     "auth_token": false
   },
   "upload_image": false,
-  "steemd_connection_client": "wss://testnet.vit.tube/ws",
-  "steemd_connection_server": "wss://testnet.vit.tube/ws",
+  "steemd_connection_client": "wss://peer.proto.vit.tube",
+  "steemd_connection_server": "wss://peer.proto.vit.tube",
   "steemd_use_appbase": false,
-  "chain_id": "18dcf0a285365fc58b71f18b3d3fec954aa0c141c44e4e5cb4cf777b9eab274e",
-  "address_prefix": "TST"
+  "chain_id": "1d50f6bcf387a5af6ebac42146ef920aedb5cc61d8f8ed37fb1ac671d722a302",
+  "address_prefix": "WIT"
 }

@@ -32,6 +32,12 @@ function addSiteMeta(metas) {
     metas.push({name: 'al:android:package', content: ANDROID_PACKAGE});
 }
 
+function addPlatformMeta(metas, url) {
+    metas.push({property: 'al:android:url', content: `${ANDRIOD_URL_SCHEME}://${APP_DOMAIN}${url}`});
+    metas.push({property: 'al:android:app_name', content: ANDROID_APP_NAME});
+    metas.push({property: 'al:android:package', content: ANDROID_PACKAGE});
+}
+
 export default function extractMeta(chain_data, rp) {
     const metas = [];
     if (rp.username && rp.slug) { // post
@@ -62,7 +68,6 @@ export default function extractMeta(chain_data, rp) {
             metas.push({property: 'fb:app_id',       content: $STM_Config.fb_app});
             metas.push({property: 'article:tag',     content: category});
             metas.push({property: 'article:published_time', content: created});
-            metas.push({property: 'al:android:url', content: `${ANDRIOD_URL_SCHEME}://${APP_DOMAIN}${d.link}`});
 
             // Twitter card data
             metas.push({name: 'twitter:card',        content: image ? 'summary_large_image' : 'summary'});
@@ -70,6 +75,8 @@ export default function extractMeta(chain_data, rp) {
             metas.push({name: 'twitter:title',       content: title});
             metas.push({name: 'twitter:description', content: desc});
             metas.push({name: 'twitter:image',       content: image || TWITTER_SHARE_IMAGE});
+
+            addPlatformMeta(metas, d.link)
         } else {
             addSiteMeta(metas);
         }
@@ -94,6 +101,8 @@ export default function extractMeta(chain_data, rp) {
         metas.push({name: 'twitter:title',       content: title});
         metas.push({name: 'twitter:description', content: desc});
         metas.push({name: 'twitter:image',       content: image});
+
+        addPlatformMeta(metas, `/@${accountname}`)
     } else { // site
         addSiteMeta(metas);
     }

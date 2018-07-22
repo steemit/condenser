@@ -115,4 +115,7 @@ export const SMS_SERVICES = {
   '380':   '+380931777772'
 }
 
-export const ANDROID_APP_URL = 'https://play.google.com/store/apps/details?id=io.golos.golos'
+export const ANDROID_APP_NAME = 'Golos.io'
+export const ANDROID_PACKAGE = 'io.golos.golos'
+export const ANDROID_APP_URL = `https://play.google.com/store/apps/details?id=${ANDROID_PACKAGE}`
+export const ANDRIOD_URL_SCHEME = 'golosioapp'

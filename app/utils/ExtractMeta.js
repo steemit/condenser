@@ -1,7 +1,18 @@
 import extractContent from 'app/utils/ExtractContent';
 import {objAccessor} from 'app/utils/Accessors';
 import normalizeProfile from 'app/utils/NormalizeProfile';
-import { SEO_TITLE, APP_NAME, APP_DOMAIN, SITE_DESCRIPTION, TWITTER_HANDLE, SHARE_IMAGE, TWITTER_SHARE_IMAGE } from 'app/client_config';
+import {
+    SEO_TITLE,
+    APP_NAME,
+    APP_DOMAIN,
+    SITE_DESCRIPTION,
+    TWITTER_HANDLE,
+    SHARE_IMAGE,
+    TWITTER_SHARE_IMAGE,
+    ANDROID_APP_NAME,
+    ANDROID_PACKAGE,
+    ANDRIOD_URL_SCHEME
+} from 'app/client_config';
 
 function addSiteMeta(metas) {
     metas.push({title: SEO_TITLE});
@@ -17,6 +28,8 @@ function addSiteMeta(metas) {
     metas.push({name: 'twitter:title', content: SEO_TITLE});
     metas.push({name: 'twitter:description', site_desc: SITE_DESCRIPTION});
     metas.push({name: 'twitter:image', content: SHARE_IMAGE});
+    metas.push({name: 'al:android:app_name', content: ANDROID_APP_NAME});
+    metas.push({name: 'al:android:package', content: ANDROID_PACKAGE});
 }
 
 export default function extractMeta(chain_data, rp) {
@@ -49,6 +62,7 @@ export default function extractMeta(chain_data, rp) {
             metas.push({property: 'fb:app_id',       content: $STM_Config.fb_app});
             metas.push({property: 'article:tag',     content: category});
             metas.push({property: 'article:published_time', content: created});
+            metas.push({property: 'al:android:url', content: `${ANDRIOD_URL_SCHEME}://${APP_DOMAIN}${d.link}`});
 
             // Twitter card data
             metas.push({name: 'twitter:card',        content: image ? 'summary_large_image' : 'summary'});

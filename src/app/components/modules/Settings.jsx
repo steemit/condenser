@@ -561,7 +561,7 @@ export default connect(
     (state, ownProps) => {
         const { accountname } = ownProps.routeParams;
         const account = state.global.getIn(['accounts', accountname]).toJS();
-        const username = userActions.selectors.getUsername(state.user);
+        const username = userActions.selectors.getUsername(state);
         let metaData = account
             ? o2j.ifStringParseJSON(account.json_metadata)
             : {};

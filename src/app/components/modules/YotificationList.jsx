@@ -316,7 +316,7 @@ export default connect(
 
         return {
             ...ownProps,
-            username: userSelectors.getUsername(state.user),
+            username: userSelectors.getUsername(state),
             notifications: state.notification.byId,
             filterIds:
                 filter === FILTER_ALL

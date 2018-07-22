@@ -1064,5 +1064,11 @@
     "per_week": "Это ~%(AMOUNT)s %(LIQUID_TICKER)s в неделю.",
     "warning": "Оставлять меньше чем %(AMOUNT)s %(LIQUID_TICKER)s не рекомендуется, т.к. это может остановить все транзакции с использованием это аккаунта.",
     "error": "Неполучается уменьшить силу голоса (ERROR: %(MESSAGE)s)"
-}
+  },
+  "delegate_vesting_shares_info_jsx": {
+    "confirm_title": "Отмена делегирования %(VESTING_TOKENS)s",
+    "confirm_cancel_delegation": "Вы действительно хотите отозвать делегированную %(VESTING_TOKEN2)s у пользователя %(delegatee)s",
+    "from": "От кого",
+    "to": "Кому"
+  }
 }

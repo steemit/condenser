@@ -42,6 +42,7 @@ const ABOUT_FLAG = (
 const MAX_VOTES_DISPLAY = 20;
 const VOTE_WEIGHT_DROPDOWN_THRESHOLD = 1.0 * 1000.0 * 1000.0;
 const SBD_PRINT_RATE_MAX = 10000;
+const MAX_WEIGHT = 10000;
 
 class Voting extends React.Component {
     static propTypes = {
@@ -59,7 +60,7 @@ class Voting extends React.Component {
         active_votes: PropTypes.object,
         loggedin: PropTypes.bool,
         post_obj: PropTypes.object,
-        net_vesting_shares: PropTypes.number,
+        enable_slider: PropTypes.bool,
         voting: PropTypes.bool,
         price_per_steem: PropTypes.number,
         sbd_print_rate: PropTypes.number,
@@ -75,10 +76,9 @@ class Voting extends React.Component {
         this.state = {
             showWeight: false,
             myVote: null,
-            weight: 10000,
             sliderWeight: {
-                up: 10000,
-                down: 10000,
+                up: MAX_WEIGHT,
+                down: MAX_WEIGHT,
             },
         };
 
@@ -93,32 +93,25 @@ class Voting extends React.Component {
         this.voteUpOrDown = up => {
             if (this.props.voting) return;
             this.setState({ votingUp: up, votingDown: !up });
+            if (this.state.showWeight) this.setState({ showWeight: false });
             const { myVote } = this.state;
             const { author, permlink, username, is_comment } = this.props;
-            // already voted Up, remove the vote
-            let weight = up
-                ? myVote > 0 ? 0 : this.state.weight
-                : myVote < 0 ? 0 : -1 * this.state.weight;
-            if (this.state.showWeight) this.setState({ showWeight: false });
-            const isFlag = this.props.flag ? true : null;
 
-            // If this a user who has used the slider, get the weight from localStorage.
-            // Except when weight is 0, in that case they are un-flagging or un-voting.
-            if (
-                this.props.net_vesting_shares >
-                    VOTE_WEIGHT_DROPDOWN_THRESHOLD &&
-                weight !== 0
-            ) {
-                const saved_weight = localStorage.getItem(
-                    'voteWeight' +
-                        (up ? '' : 'Down') +
-                        '-' +
-                        username +
-                        (is_comment ? '-comment' : '')
-                );
-                const castToNegative = up ? 1 : -1;
-                weight = Number(saved_weight) * castToNegative;
+            let weight;
+            if (myVote > 0 || myVote < 0) {
+                // if there is a current vote, we're clearing it
+                weight = 0;
+            } else if (this.props.enable_slider) {
+                // if slider is enabled, read its value
+                weight = up
+                    ? this.state.sliderWeight.up
+                    : -this.state.sliderWeight.down;
+            } else {
+                // otherwise, use max power
+                weight = up ? MAX_WEIGHT : -MAX_WEIGHT;
             }
+
+            const isFlag = this.props.flag ? true : null;
             this.props.vote(weight, {
                 author,
                 permlink,
@@ -158,9 +151,9 @@ class Voting extends React.Component {
                 weight
             );
         };
-        this.syncSliderWeight = () => {
-            const { username, net_vesting_shares, is_comment } = this.props;
-            if (net_vesting_shares > VOTE_WEIGHT_DROPDOWN_THRESHOLD) {
+        this.readSliderWeight = () => {
+            const { username, enable_slider, is_comment } = this.props;
+            if (enable_slider) {
                 const sliderWeightUp = Number(
                     localStorage.getItem(
                         'voteWeight' +
@@ -178,14 +171,11 @@ class Voting extends React.Component {
                             (is_comment ? '-comment' : '')
                     )
                 );
-                const up = sliderWeightUp ? sliderWeightUp : 10000;
-                const down = sliderWeightDown ? sliderWeightDown : 10000;
-                const sliderWeight = {
-                    up,
-                    down,
-                };
                 this.setState({
-                    sliderWeight,
+                    sliderWeight: {
+                        up: sliderWeightUp ? sliderWeightUp : MAX_WEIGHT,
+                        down: sliderWeightDown ? sliderWeightDown : MAX_WEIGHT,
+                    },
                 });
             }
         };
@@ -209,7 +199,6 @@ class Voting extends React.Component {
     componentWillMount() {
         const { username, active_votes } = this.props;
         this._checkMyVote(username, active_votes);
-        this.syncSliderWeight();
     }
 
     componentWillReceiveProps(nextProps) {
@@ -234,7 +223,7 @@ class Voting extends React.Component {
             showList,
             voting,
             flag,
-            net_vesting_shares,
+            enable_slider,
             is_comment,
             post_obj,
             price_per_steem,
@@ -242,7 +231,7 @@ class Voting extends React.Component {
             username,
         } = this.props;
 
-        const { votingUp, votingDown, showWeight, weight, myVote } = this.state;
+        const { votingUp, votingDown, showWeight, myVote } = this.state;
         if (flag && !username) return null;
 
         const votingUpActive = voting && votingUp;
@@ -258,7 +247,7 @@ class Voting extends React.Component {
                     <div className="weight-display">{s + b / 100}%</div>
                     <Slider
                         min={100}
-                        max={10000}
+                        max={MAX_WEIGHT}
                         step={100}
                         value={b}
                         onChange={this.handleWeightChange(up)}
@@ -317,15 +306,14 @@ class Voting extends React.Component {
                     onHide={() => this.setState({ showWeight: false })}
                     onShow={() => {
                         this.setState({ showWeight: true });
-                        this.syncSliderWeight();
+                        this.readSliderWeight();
                     }}
                     title={invokeFlag}
                     position={'left'}
                 >
                     <div className="Voting__adjust_weight_down">
                         {(myVote == null || myVote === 0) &&
-                            net_vesting_shares >
-                                VOTE_WEIGHT_DROPDOWN_THRESHOLD && (
+                            enable_slider && (
                                 <div className="weight-container">
                                     {slider(false)}
                                 </div>
@@ -557,10 +545,7 @@ class Voting extends React.Component {
                 {up}
             </a>
         );
-        if (
-            myVote <= 0 &&
-            net_vesting_shares > VOTE_WEIGHT_DROPDOWN_THRESHOLD
-        ) {
+        if (myVote <= 0 && enable_slider) {
             voteUpClick = this.toggleWeightUp;
             voteChevron = null;
             // Vote weight adjust
@@ -570,7 +555,7 @@ class Voting extends React.Component {
                     onHide={() => this.setState({ showWeight: false })}
                     onShow={() => {
                         this.setState({ showWeight: true });
-                        this.syncSliderWeight();
+                        this.readSliderWeight();
                     }}
                     title={up}
                 >
@@ -655,6 +640,8 @@ export default connect(
         }
 
         const sbd_print_rate = state.global.getIn(['props', 'sbd_print_rate']);
+        const enable_slider =
+            net_vesting_shares > VOTE_WEIGHT_DROPDOWN_THRESHOLD;
 
         return {
             post: ownProps.post,
@@ -664,7 +651,7 @@ export default connect(
             permlink,
             username,
             active_votes,
-            net_vesting_shares,
+            enable_slider,
             is_comment,
             post_obj: post,
             loggedin: username != null,

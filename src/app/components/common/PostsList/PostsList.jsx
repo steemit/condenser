@@ -13,36 +13,31 @@ import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 const Root = styled.div`
     ${is('grid')`
         position: relative;
-        display: flex;
-        flex-wrap: wrap;
         margin: 0 -8px;
-        // display: grid;
-        // grid-gap: 16px;
-        // grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-        // grid-auto-rows: minmax(100px, auto);
-        // grid-auto-flow: dense;
     `};
 `;
 
 const Loader = styled.div`
-    display: flex;
-    justify-content: center;
     margin-bottom: 20px;
 `;
 
-const PostCardStyled = styled(PostCard)`
+const EntryWrapper = styled.div`
     margin-bottom: 16px;
 
     ${is('grid')`
-        flex-basis: 200px;
-        flex-grow: 1;
-        flex-shrink: 0;
-        margin: 0 8px 16px;
-    `};
-`;
-
-const CommentCardStyled = styled(CommentCard)`
-    margin-bottom: 16px;
+        display: inline-block;
+        width: 33.3%;
+        vertical-align: top;
+        padding: 0 8px;
+    
+        @media screen and (max-width: 1260px) {
+            width: 50%;
+        }
+        
+        @media screen and (max-width: 830px) {
+            width: 100%;
+        }
+    `}
 `;
 
 class PostsList extends PureComponent {
@@ -70,12 +65,14 @@ class PostsList extends PureComponent {
         const { posts, category, layout } = this.props;
 
         const isGrid = category === 'blog' && layout === 'grid';
-        const EntryComponent = category === 'blog' ? PostCardStyled : CommentCardStyled;
+        const EntryComponent = category === 'blog' ? PostCard : CommentCard;
 
         return (
             <Root innerRef={this._onRef} grid={isGrid}>
                 {posts.map(permLink => (
-                    <EntryComponent key={permLink} permLink={permLink} grid={isGrid} />
+                    <EntryWrapper grid={isGrid}>
+                        <EntryComponent key={permLink} permLink={permLink} grid={isGrid} />
+                    </EntryWrapper>
                 ))}
                 {this._renderLoaderIfNeed()}
             </Root>
@@ -91,7 +88,7 @@ class PostsList extends PureComponent {
         if (showLoader) {
             return (
                 <Loader>
-                    <LoadingIndicator type="circle" size={40} />
+                    <LoadingIndicator type="circle" center size={40} />
                 </Loader>
             );
         }

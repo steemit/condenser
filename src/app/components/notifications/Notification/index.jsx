@@ -1,20 +1,37 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import tt from 'counterpart';
-import Userpic from 'app/components/elements/Userpic';
-import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
-import Url from 'app/utils/Url';
-import InlineSVG from 'svg-inline-react';
-import vizOn from 'assets/icons/visibility_on.svg';
-import vizOff from 'assets/icons/visibility_off.svg';
 import * as notificationActions from 'app/redux/NotificationReducer';
+import NotificationItem from 'app/components/notifications/NotificationItem';
 
 class Notification extends React.Component {
     static propTypes = {
         notification: React.PropTypes.object.isRequired,
         onClick: React.PropTypes.func,
     };
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            timeOutId: null,
+        };
+    }
+
+    componentDidMount() {
+        const { notification } = this.props;
+        if (!notification.shown) {
+            const timeOutId = setTimeout(
+                () => this.props.markShown(notification.id),
+                3000
+            );
+            this.setState({
+                timeOutId,
+            });
+        }
+    }
+    componentWillUnmount() {
+        clearTimeout(this.state.timeOutId);
+    }
 
     markReadDefault = e => {
         this.props.markRead(this.props.notification.id);
@@ -44,109 +61,51 @@ class Notification extends React.Component {
         const notificationTypes = {
             default: notification => {
                 return (
-                    <div className="item-panel">
-                        <div className={'Comment__Userpic show-for-medium '}>
-                            {/*<Userpic account={notification.data.account} />*/}
-                        </div>
-                        <div className="item-header">HEADER HERE</div>
-                        <div className="item-body">BODY HERE</div>
-                        <div className="item-footer">
-                            <TimeAgoWrapper
-                                date={notification.created}
-                                className="updated"
-                            />
-                        </div>
-                        <div
-                            className="rightControls"
-                            onClick={
-                                notification.read
-                                    ? this.markUnread
-                                    : this.markRead
-                            }
-                        >
-                            <InlineSVG
-                                src={notification.read ? vizOn : vizOff}
-                            />
-                        </div>
-                    </div>
+                    <NotificationItem
+                        header={'Header placeholder'}
+                        body={'Body placeholder'}
+                        created={notification.created}
+                        read={notification.read}
+                        shown={notification.shown}
+                        markRead={this.markRead}
+                    />
                 );
             },
             account_update: notification => {
                 return (
-                    <div className="item-panel">
-                        {!notification.shown ? (
-                            <span className="unseenIndicator">●</span>
-                        ) : null}
-                        <div className={'Comment__Userpic show-for-medium '}>
-                            <Userpic account={notification.data.account} />
-                        </div>
-                        <div className="item-header">
-                            <span>
-                                <span className="subject">Account Update</span>
-                            </span>
-                        </div>
-                        <div className="item-footer">
-                            <TimeAgoWrapper
-                                date={notification.created}
-                                className="updated"
-                            />
-                        </div>
-                    </div>
+                    <NotificationItem
+                        username={notification.data.account}
+                        header={'Account Update'}
+                        created={notification.created}
+                        read={notification.read}
+                        shown={notification.shown}
+                        markRead={this.markRead}
+                    />
                 );
             },
             comment_reply: notification => {
                 return (
-                    <div className="item-panel">
-                        {!notification.shown ? (
-                            <span className="unseenIndicator">●</span>
-                        ) : null}
-                        <div className={'Comment__Userpic show-for-medium '}>
-                            <Userpic account={notification.data.author} />
-                        </div>
-                        <div className="item-header">
-                            <span>
-                                <span className="user">
-                                    {notification.data.author}
-                                </span>{' '}
-                                <strong>{notification.data.title}</strong>
-                            </span>
-                        </div>
-                        <div className="item-body">
-                            {notification.data.body}
-                        </div>
-                        <div className="item-footer">
-                            <TimeAgoWrapper
-                                date={notification.created}
-                                className="updated"
-                            />
-                        </div>
-                    </div>
+                    <NotificationItem
+                        username={notification.data.author}
+                        header={notification.data.title}
+                        body={notification.data.body}
+                        created={notification.created}
+                        read={notification.read}
+                        shown={notification.shown}
+                        markRead={this.markRead}
+                    />
                 );
             },
             feed: notification => {
                 return (
-                    <div className="item-panel">
-                        {!notification.shown ? (
-                            <span className="unseenIndicator">●</span>
-                        ) : null}
-                        <div className={'Comment__Userpic show-for-medium '}>
-                            <Userpic account={notification.username} />
-                        </div>
-                        <div className="item-header">
-                            <span>
-                                <span className="user">
-                                    {notification.username}
-                                </span>
-                                Feed Notification
-                            </span>
-                        </div>
-                        <div className="item-footer">
-                            <TimeAgoWrapper
-                                date={notification.created}
-                                className="updated"
-                            />
-                        </div>
-                    </div>
+                    <NotificationItem
+                        username={notification.username}
+                        header={'Feed Notification'}
+                        created={notification.created}
+                        read={notification.read}
+                        shown={notification.shown}
+                        markRead={this.markRead}
+                    />
                 );
             },
         };
@@ -162,21 +121,7 @@ class Notification extends React.Component {
         const badge = badges[type] ? badges[type] : null;
         */
 
-        return (
-            <li className={`item ${!read && 'unread'}`}>
-                <Link
-                    to={'@test-safari'}
-                    onClick={e => {
-                        if (this.props.onClick) {
-                            this.props.onClick(e);
-                        }
-                        this.markReadDefault(e);
-                    }}
-                >
-                    {notificationInner}
-                </Link>
-            </li>
-        );
+        return <span>{notificationInner}</span>;
     }
 }
 

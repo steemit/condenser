@@ -3,7 +3,6 @@ import tt from 'counterpart';
 import classNames from 'classnames';
 import Icon from 'app/components/elements/Icon';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
-import { NotificationHOC } from 'app/components/notifications/NotificationHOC';
 import Notification from 'app/components/notifications/Notification';
 import { filters } from 'app/components/notifications/Notification/type';
 import { Link } from 'react-router';
@@ -116,13 +115,14 @@ class NotificationList extends React.Component {
         let notifArr = [];
         filterIds.map(id => {
             const notification = notifications.get(id);
-            // TODO: Abstract shared 'isShown' on componentDidMount logic into HOC.
-            /*
             notifArr.push(
-                NotificationHOC(<Notification notification={notification} />)
+                <li
+                    key={`steem_notification ${id} ${notification.created}`}
+                    className={`item ${!notification.read && 'unread'}`}
+                >
+                    <Notification notification={notification} />
+                </li>
             );
-            */
-            notifArr.push(<Notification notification={notification} />);
         });
 
         return (

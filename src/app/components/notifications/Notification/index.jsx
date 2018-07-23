@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import * as notificationActions from 'app/redux/NotificationReducer';
 import NotificationItem from 'app/components/notifications/NotificationItem';
@@ -101,6 +100,136 @@ class Notification extends React.Component {
                     <NotificationItem
                         username={notification.username}
                         header={'Feed Notification'}
+                        created={notification.created}
+                        read={notification.read}
+                        shown={notification.shown}
+                        markRead={this.markRead}
+                    />
+                );
+            },
+            follow: notification => {
+                return (
+                    <NotificationItem
+                        username={notification.username}
+                        header={`Now Follows You `}
+                        body={`${
+                            notification.username
+                        } follows your ${JSON.parse(notification.data.json)[
+                            'what'
+                        ].toString()}.`}
+                        created={notification.created}
+                        read={notification.read}
+                        shown={notification.shown}
+                        markRead={this.markRead}
+                    />
+                );
+            },
+            mention: notification => {
+                return (
+                    <NotificationItem
+                        username={notification.username}
+                        header={`Mentioned You In ${notification.data.title}`}
+                        body={notification.data.body}
+                        created={notification.created}
+                        read={notification.read}
+                        shown={notification.shown}
+                        markRead={this.markRead}
+                    />
+                );
+            },
+            post_reply: notification => {
+                return (
+                    <NotificationItem
+                        username={notification.username}
+                        header={`Replied In ${notification.data.title}`}
+                        body={notification.data.body}
+                        created={notification.created}
+                        read={notification.read}
+                        shown={notification.shown}
+                        markRead={this.markRead}
+                    />
+                );
+            },
+            power_down: notification => {
+                return (
+                    <NotificationItem
+                        username={notification.username}
+                        header={`Powerdown`}
+                        body={notification.data.vesting_shares}
+                        created={notification.created}
+                        read={notification.read}
+                        shown={notification.shown}
+                        markRead={this.markRead}
+                    />
+                );
+            },
+            send: notification => {
+                return (
+                    <NotificationItem
+                        username={notification.username}
+                        header={`Sent Money`}
+                        body={`${notification.data.amount} to ${
+                            notification.data.to
+                        }`}
+                        created={notification.created}
+                        read={notification.read}
+                        shown={notification.shown}
+                        markRead={this.markRead}
+                    />
+                );
+            },
+            receive: notification => {
+                return (
+                    <NotificationItem
+                        username={notification.username}
+                        header={`Received Money`}
+                        body={`${notification.data.amount} from ${
+                            notification.data.from
+                        }`}
+                        created={notification.created}
+                        read={notification.read}
+                        shown={notification.shown}
+                        markRead={this.markRead}
+                    />
+                );
+            },
+            resteem: notification => {
+                return (
+                    <NotificationItem
+                        username={notification.username}
+                        header={`Resteemed`}
+                        created={notification.created}
+                        read={notification.read}
+                        shown={notification.shown}
+                        markRead={this.markRead}
+                    />
+                );
+            },
+            reward: notification => {
+                return (
+                    <NotificationItem
+                        username={notification.username}
+                        header={`Rewarded Money For ${
+                            notification.data.permlink
+                        }`}
+                        body={`SBD payout: ${
+                            notification.data.sbd_payout
+                        }, STEEM payout: ${
+                            notification.data.steem_payput
+                        }, Vesting payout: ${notification.data.vesting_payout}`}
+                        created={notification.created}
+                        read={notification.read}
+                        shown={notification.shown}
+                        markRead={this.markRead}
+                    />
+                );
+            },
+            vote: notification => {
+                return (
+                    <NotificationItem
+                        username={notification.username}
+                        header={`Voted`}
+                        body={`Weight: ${notification.data.weight}`}
                         created={notification.created}
                         read={notification.read}
                         shown={notification.shown}

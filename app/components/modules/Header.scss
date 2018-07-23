@@ -159,9 +159,8 @@ ul > li.Header__top-logo > a {
   // No margin adjustments for first child element in menu items
   li:first-child {
     margin: 0 0 0 0;
-    // for domestic selector
-    padding: 0;
   }
+
   li > a {
     color: $dark-gray;
     background-color: $white;
@@ -169,24 +168,14 @@ ul > li.Header__top-logo > a {
     font-size: 1rem;
     line-height: 0;
     padding: 0;
-    &.domestic-selector .Icon {
-      width: 1.12rem;
-      height: 1.12rem;
-      overflow: hidden;
-    }
-    &.domestic-selector .flag {
-      width: 1.12rem;
-      height: 1.12rem;
-      border-radius: 1.12rem;
-      vertical-align: middle;
-    }
+
     .caret-down {
       margin-left: 0.24rem;
     }
   }
-    .caret-down {
-      fill: $dark-gray;
-    }
+  .caret-down {
+    fill: $dark-gray;
+  }
   a.active {
     color: $black;
   }

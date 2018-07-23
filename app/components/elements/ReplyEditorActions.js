@@ -3,13 +3,12 @@ import sanitize from 'sanitize-html';
 import sanitizeConfig, { allowedTags } from '../../utils/SanitizeConfig';
 import transaction from '../../redux/Transaction';
 import { detransliterate } from '../../utils/ParsersAndFormatters';
-import { DEBT_TICKER, DOMESTIC } from '../../client_config';
+import { DEBT_TICKER } from '../../client_config';
 import { getTags } from '../../../shared/HtmlReady';
 
 export const replyAction = (dispatch, remarkable) => ({
     category,
     title,
-    domestic,
     body,
     author,
     permlink,
@@ -142,12 +141,6 @@ export const replyAction = (dispatch, remarkable) => ({
         meta.links = rtags.links;
     } else {
         delete meta.links;
-    }
-
-    if (domestic && Object.keys(DOMESTIC).indexOf(domestic) !== -1) {
-        meta.language = domestic;
-    } else {
-        delete meta.language;
     }
 
     meta.app = 'golos.io/0.1';

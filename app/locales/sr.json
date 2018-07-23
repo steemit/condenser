@@ -652,7 +652,6 @@
   },
   "settings_jsx":{
     "choose_language":"Izaberite jezik",
-    "choose_domestic":"Национальный язык",
     "choose_currency":"Izaberite valutu",
     "invalid_url":"Neispravan URL adresa ",
     "name_is_too_long":"Ime je predugaćko",

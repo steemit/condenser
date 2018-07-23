@@ -75,26 +75,7 @@ export const PUBLIC_API = {
   payout:     'getDiscussionsByPayoutAsync',
 }
 export const SEO_TITLE = 'GOLOS.io Блоги'
-export const DEFAULT_DOMESTIC = 'all'
-export const DOMESTIC = {
-  all: 'All langs',
-  ru:  'Русский',
-  ua:  'Український',
-  us:  'English',
-  by:  'Белору́сский',
-  rs:  'Srpski',
-  ro:  'Română',
-  am:  'գրաբար',
-  kz:  'Қазақ тілі',
-  tj:  'Забо́ни тоҷикӣ',
-  md:  'Limba moldovenească',
-  ar:  'العربية',
-  cn:  '漢',
-  es:  'Español',
-  in:  'हिन्दी',
-  pt:  'Portuguesa',
-  fr:  'Français'
-}
+
 export const SEGMENT_ANALYTICS_KEY = 'F7tldQJxt491gXYqDGi5TkTT4wFpSPps'
 // ui themes
 export const THEMES = ['Default', 'Green', 'Red']

@@ -1,6 +1,6 @@
 import {fromJS} from 'immutable';
 import createModule from 'redux-modules';
-import {DEFAULT_LANGUAGE, LOCALE_COOKIE_KEY, DEFAULT_THEME} from 'app/client_config';
+import {DEFAULT_LANGUAGE, LOCALE_COOKIE_KEY} from 'app/client_config';
 import cookie from "react-cookie";
 
 const defaultState = fromJS({
@@ -11,7 +11,6 @@ const defaultState = fromJS({
     show_signup_modal: false,
     pub_keys_used: null,
     locale: DEFAULT_LANGUAGE,
-    theme: DEFAULT_THEME
 });
 
 if (process.env.BROWSER) {
@@ -67,9 +66,6 @@ export default createModule({
         },
         { action: 'CHANGE_LANGUAGE', reducer: (state, {payload}) => {
             return state.set('locale', payload)}
-        },
-        { action: 'CHANGE_THEME', reducer: (state, {payload}) => {
-            return state.set('theme', payload)}
         },
         { action: 'SHOW_TRANSFER', reducer: state => state.set('show_transfer_modal', true) },
         { action: 'HIDE_TRANSFER', reducer: state => state.set('show_transfer_modal', false) },

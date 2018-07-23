@@ -298,7 +298,12 @@ class PostSummary extends React.Component {
         const userBlacklisted = ImageUserBlockList.includes(p.author);
 
         let thumb = null;
-        if (!gray && p.image_link && !userBlacklisted) {
+        if (
+            !gray &&
+            p.image_link &&
+            typeof p.image_link === 'string' &&
+            !userBlacklisted
+        ) {
             // on mobile, we always use blog layout style -- there's no toggler
             // on desktop, we offer a choice of either blog or list
             // if blogmode is false, output an image with a srcset

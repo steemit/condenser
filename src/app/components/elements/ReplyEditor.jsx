@@ -578,36 +578,44 @@ class ReplyEditor extends React.Component {
                             )}
                         </div>
                         <div className={vframe_section_shrink_class}>
-                            {!isEdit && (
-                                <div className="ReplyEditor__options">
-                                    <div>
+                            {isStory &&
+                                !isEdit && (
+                                    <div className="ReplyEditor__options">
                                         <div>
-                                            {tt('g.rewards')}
-                                            {': '}
-                                            {this.props.payoutType == '0%' &&
-                                                tt(
-                                                    'reply_editor.decline_payout'
+                                            <div>
+                                                {tt('g.rewards')}
+                                                {': '}
+                                                {this.props.payoutType ==
+                                                    '0%' &&
+                                                    tt(
+                                                        'reply_editor.decline_payout'
+                                                    )}
+                                                {this.props.payoutType ==
+                                                    '50%' &&
+                                                    tt(
+                                                        'reply_editor.default_50_50'
+                                                    )}
+                                                {this.props.payoutType ==
+                                                    '100%' &&
+                                                    tt(
+                                                        'reply_editor.power_up_100'
+                                                    )}
+                                            </div>
+                                            <a
+                                                href="#"
+                                                onClick={
+                                                    this.showAdvancedSettings
+                                                }
+                                            >
+                                                {tt(
+                                                    'reply_editor.advanced_settings'
                                                 )}
-                                            {this.props.payoutType == '50%' &&
-                                                tt(
-                                                    'reply_editor.default_50_50'
-                                                )}
-                                            {this.props.payoutType == '100%' &&
-                                                tt('reply_editor.power_up_100')}
+                                            </a>{' '}
+                                            <br />
+                                            &nbsp;
                                         </div>
-                                        <a
-                                            href="#"
-                                            onClick={this.showAdvancedSettings}
-                                        >
-                                            {tt(
-                                                'reply_editor.advanced_settings'
-                                            )}
-                                        </a>{' '}
-                                        <br />
-                                        &nbsp;
                                     </div>
-                                </div>
-                            )}
+                                )}
                         </div>
                         <div className={vframe_section_shrink_class}>
                             {postError && (
@@ -655,6 +663,22 @@ class ReplyEditor extends React.Component {
                                     >
                                         {tt('g.clear')}
                                     </button>
+                                )}
+                            {!isStory &&
+                                !isEdit &&
+                                this.props.payoutType != '50%' && (
+                                    <div className="ReplyEditor__options float-right text-right">
+                                        {tt('g.rewards')}
+                                        {': '}
+                                        {this.props.payoutType == '0%' &&
+                                            tt('reply_editor.decline_payout')}
+                                        {this.props.payoutType == '100%' &&
+                                            tt('reply_editor.power_up_100')}
+                                        {'. '}
+                                        <a href={'/@' + username + '/settings'}>
+                                            Update settings
+                                        </a>
+                                    </div>
                                 )}
                         </div>
                         {!loading &&

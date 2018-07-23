@@ -244,12 +244,12 @@ class Header extends React.Component {
                     <NotifiCounter fields="follow,send,receive,account_update" />
                 ),
             },
-            {
-                link: '#',
-                icon: 'eye',
-                onClick: toggleNightmode,
-                value: tt('g.toggle_nightmode'),
-            },
+            // {
+            //     link: '#',
+            //     icon: 'eye',
+            //     onClick: toggleNightmode,
+            //     value: tt('g.toggle_nightmode'),
+            // },
             {
                 link: reset_password_link,
                 icon: 'key',

@@ -4,7 +4,6 @@ import stringToStream from 'string-to-stream';
 import multiStream from 'multistream';
 
 import { ServerStyleSheet } from 'styled-components'
-import Tarantool from 'db/tarantool';
 import ServerHTML from './server-html';
 import { serverRender } from '../shared/UniversalRender';
 import models from 'db/models';
@@ -20,7 +19,6 @@ import { metrics } from './metrics';
 const DB_RECONNECT_TIMEOUT = process.env.NODE_ENV === 'development' ? 1000 * 60 * 60 : 1000 * 60 * 10;
 
 async function appRender(ctx) {
-    const store = {};
     try {
         let login_challenge = ctx.session.login_challenge;
         if (!login_challenge) {
@@ -100,12 +98,8 @@ async function appRender(ctx) {
           meta
         } = await serverRender({
           location: ctx.request.url,
-          store,
           offchain,
           ErrorPage,
-          tarantool: Tarantool.instance('tarantool'),
-          chainproxy: Tarantool.instance('chainproxy'),
-          metrics
         });
 
         if (metrics) metrics.timing(`universalRender.time`, new Date() - start)

@@ -6,7 +6,7 @@ if (config.metrics) {
   metrics = new StatsD({ host: config.get('metrics.host'), prefix: 'tolstoy_' });
   metrics.track = track
   metrics.cache = cache
-} 
+}
 
 function track(context, method, args) {
   const start = new Date()

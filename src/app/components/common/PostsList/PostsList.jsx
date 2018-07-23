@@ -70,8 +70,8 @@ class PostsList extends PureComponent {
         return (
             <Root innerRef={this._onRef} grid={isGrid}>
                 {posts.map(permLink => (
-                    <EntryWrapper grid={isGrid}>
-                        <EntryComponent key={permLink} permLink={permLink} grid={isGrid} />
+                    <EntryWrapper key={permLink} grid={isGrid}>
+                        <EntryComponent permLink={permLink} grid={isGrid} />
                     </EntryWrapper>
                 ))}
                 {this._renderLoaderIfNeed()}
@@ -136,7 +136,7 @@ export default connect(
         return {
             myAccount: state.user.getIn(['current', 'username']),
             globalStatus: state.global.get('status'),
-            layout: state.profile.get('layout'),
+            layout: state.profile ? state.profile.get('layout') : 'list',
             posts: state.global
                 .get('accounts')
                 .get(props.account)

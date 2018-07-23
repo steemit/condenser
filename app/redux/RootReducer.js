@@ -9,7 +9,7 @@ import user from './User';
 import transaction from './Transaction';
 import offchain from './Offchain';
 import {reducer as formReducer} from 'redux-form'; // @deprecated, instead use: app/utils/ReactForm.js
-import {contentStats, fromJSGreedy} from 'app/utils/StateFunctions'
+import {contentStats} from 'app/utils/StateFunctions'
 
 function initReducer(reducer, type) {
     return (state, action) => {
@@ -24,9 +24,6 @@ function initReducer(reducer, type) {
                 const content = state.get('content').withMutations(c => {
                     c.forEach((cc, key) => {
                         if(!c.getIn([key, 'stats'])) {
-                            // This may have already been set in UniversalRender; if so, then
-                            //   active_votes were cleared from server response. In this case it
-                            //   is important to not try to recalculate the stats. (#1040)
                             c.setIn([key, 'stats'], fromJS(contentStats(cc)))
                         }
                     })

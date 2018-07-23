@@ -26,7 +26,6 @@ import extractMeta from 'app/utils/ExtractMeta';
 import Translator from 'app/Translator';
 import getState from 'app/utils/StateBuilder';
 import {routeRegex} from "app/ResolveRoute";
-import {contentStats} from 'app/utils/StateFunctions'
 import {APP_NAME, IGNORE_TAGS, SEO_TITLE} from 'app/client_config';
 
 const sagaMiddleware = createSagaMiddleware();
@@ -55,16 +54,8 @@ export async function serverRender({
     location,
     offchain,
     ErrorPage,
-    tarantool,
-    chainproxy,
-    metrics
 }) {
     let error, redirect, renderProps;
-
-    const ctx = {
-        chainproxy,
-        metrics
-    }
 
     try {
         [error, redirect, renderProps] = await runRouter(location, RootRoute);
@@ -83,34 +74,6 @@ export async function serverRender({
             statusCode: 404,
             body: renderToString(<NotFound />)
         };
-    }
-
-    if (process.env.BROWSER) {
-        const store = createStore(rootReducer, initial_state, middleware);
-        const history = syncHistoryWithStore(browserHistory, store);
-
-        window.store = {
-            getState: () => {debugger}
-        }
-        // Bump transaction (for live UI testing).. Put 0 in now (no effect),
-        // to enable browser's autocomplete and help prevent typos.
-        window.bump = parseInt(localStorage.getItem('bump') || 0);
-        const scroll = useScroll((prevLocation, {location}) => {
-            if (location.hash || location.action === 'POP') return false;
-            return !prevLocation || prevLocation.location.pathname !== location.pathname;
-        });
-        return render(
-            <Provider store={store}>
-                <Translator>
-                    <Router
-                        routes={RootRoute}
-                        history={history}
-                        onError={onRouterError}
-                        render={applyRouterMiddleware(scroll)} />
-                </Translator>
-            </Provider>,
-            document.getElementById('content')
-        );
     }
 
     // below is only executed on the server
@@ -132,16 +95,6 @@ export async function serverRender({
                 statusCode: 404,
                 body: renderToString(<NotFound />)
             };
-        }
-
-        // If we are not loading a post, truncate state data to bring response size down.
-        if (!url.match(routeRegex.Post)) {
-            for (let key in onchain.content) {
-                //onchain.content[key]['body'] = onchain.content[key]['body'].substring(0, 1024) // TODO: can be removed. will be handled by steemd
-                // Count some stats then remove voting data. But keep current user's votes. (#1040)
-                onchain.content[key]['stats'] = contentStats(onchain.content[key])
-                onchain.content[key]['active_votes'] = onchain.content[key]['active_votes'].filter(vote => vote.voter === offchain.account)
-            }
         }
 
         if (!url.match(routeRegex.PostsIndex) && !url.match(routeRegex.UserProfile1) && !url.match(routeRegex.UserProfile2) && url.match(routeRegex.PostNoCategory)) {
@@ -209,12 +162,14 @@ export async function serverRender({
         status = 500;
     }
 
+    const body = Iso.render(app, serverStore.getState());
+
     return {
         title: SEO_TITLE,
         titleBase: SEO_TITLE + ' - ',
         meta,
         statusCode: status,
-        body: Iso.render(app, serverStore.getState())
+        body,
     };
 }
 
@@ -224,9 +179,6 @@ export function clientRender(initialState) {
 
     const history = syncHistoryWithStore(browserHistory, store);
 
-    window.store = {
-        getState: () => { debugger }
-    }
     // Bump transaction (for live UI testing).. Put 0 in now (no effect),
     // to enable browser's autocomplete and help prevent typos.
     window.bump = parseInt(localStorage.getItem('bump') || 0);
@@ -234,11 +186,6 @@ export function clientRender(initialState) {
         if (location.hash || location.action === 'POP') return false;
         return !prevLocation || prevLocation.location.pathname !== location.pathname;
     });
-
-    if (process.env.NODE_ENV === 'production') {
-        // console.log('%c%s', 'color: red; background: yellow; font-size: 24px;', 'WARNING!');
-        // console.log('%c%s', 'color: black; font-size: 16px;', 'This is a developer console, you must read and understand anything you paste or type here or you could compromise your account and your private keys.');
-    }
 
     const Wrapper =
         process.env.NODE_ENV !== 'production' && localStorage['react.strict']

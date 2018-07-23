@@ -1,5 +1,11 @@
-import { takeLatest, takeEvery } from 'redux-saga';
-import { call, put, select, fork } from 'redux-saga/effects';
+import {
+    call,
+    put,
+    select,
+    fork,
+    takeLatest,
+    takeEvery,
+} from 'redux-saga/effects';
 import { loadFollows, fetchFollowCount } from 'app/redux/FollowSaga';
 import { getContent } from 'app/redux/SagaShared';
 import * as globalActions from './GlobalReducer';
@@ -13,20 +19,12 @@ const GET_CONTENT = 'fetchDataSaga/GET_CONTENT';
 const FETCH_STATE = 'fetchDataSaga/FETCH_STATE';
 
 export const fetchDataWatches = [
-    watchLocationChange,
-    watchDataRequests,
-    watchFetchJsonRequests,
-    watchFetchState,
-    watchGetContent,
+    takeLatest(REQUEST_DATA, fetchData),
+    takeEvery(GET_CONTENT, getContentCaller),
+    takeLatest('@@router/LOCATION_CHANGE', fetchState),
+    takeLatest(FETCH_STATE, fetchState),
+    takeEvery('global/FETCH_JSON', fetchJson),
 ];
-
-export function* watchDataRequests() {
-    yield* takeLatest(REQUEST_DATA, fetchData);
-}
-
-export function* watchGetContent() {
-    yield* takeEvery(GET_CONTENT, getContentCaller);
-}
 
 export function* getContentCaller(action) {
     yield getContent(action.payload);
@@ -118,14 +116,6 @@ function* getTransferUsers(pathname) {
 function* getAccounts(usernames) {
     const accounts = yield call([api, api.getAccountsAsync], usernames);
     yield put(globalActions.receiveAccounts({ accounts }));
-}
-
-export function* watchLocationChange() {
-    yield* takeLatest('@@router/LOCATION_CHANGE', fetchState);
-}
-
-export function* watchFetchState() {
-    yield* takeLatest(FETCH_STATE, fetchState);
 }
 
 export function* fetchData(action) {
@@ -365,10 +355,6 @@ export function* fetchMeta({ payload: { id, link } }) {
     } catch (error) {
         yield put(globalActions.receiveMeta({ id, meta: { error } }));
     }
-}
-
-export function* watchFetchJsonRequests() {
-    yield* takeEvery('global/FETCH_JSON', fetchJson);
 }
 
 /**

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { last } from 'ramda';
 import { connect } from 'react-redux';
 
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
@@ -9,15 +8,13 @@ import PostsList from 'src/app/components/common/PostsList';
 
 class BlogContent extends Component {
     render() {
-        const { fetching, currentAccount } = this.props;
+        const { currentAccount } = this.props;
 
         const posts = currentAccount.get('blog');
 
-        if (fetching || !posts) {
+        if (!posts) {
             return (
-                <center>
-                    <LoadingIndicator type="circle" />
-                </center>
+                <LoadingIndicator type="circle" center size={40} />
             );
         }
 
@@ -62,15 +59,11 @@ class BlogContent extends Component {
 export default connect((state, props) => {
     const accountName = props.params.accountName.toLowerCase();
     const currentAccount = state.global.getIn(['accounts', accountName]);
-    const fetching =
-        state.app.get('loading') ||
-        state.global.getIn(['status', 'blog', 'by_author'], {}).fetching;
     const isOwner = state.user.getIn(['current', 'username'], null) === accountName;
 
     return {
         accountName,
         currentAccount,
-        fetching,
         isOwner,
     };
 })(BlogContent);

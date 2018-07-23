@@ -11,9 +11,7 @@ import { immutableAccessor } from 'app/utils/Accessors';
 import Userpic from 'app/components/elements/Userpic';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import { detransliterate } from 'app/utils/ParsersAndFormatters';
-import brilliantSvg from 'app/assets/icons/profile/brilliant.svg';
-import starSvg from 'app/assets/icons/profile/star.svg';
-import clipSvg from 'app/assets/icons/profile/clip.svg';
+import Icon from 'golos-ui/Icon';
 import DialogManager from 'app/components/elements/common/DialogManager';
 import user from 'app/redux/User';
 import transaction from 'app/redux/Transaction';
@@ -93,7 +91,7 @@ const ToolbarAction = styled.div`
         margin-right: 0;
     }
 `;
-const Icon = styled.div`
+const IconWrapper = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
@@ -106,29 +104,6 @@ const Icon = styled.div`
     &:hover {
         transform: scale(1.15);
     }
-`;
-const IconClip = Icon.extend`
-    & > svg {
-        width: 12px;
-        height: 22px;
-    }
-`;
-
-const IconStar = Icon.extend`
-    & > svg {
-        width: 20px;
-        height: 20px;
-    }
-
-    #bg {
-        display: none;
-    }
-
-    ${is('active')`
-        #bg {
-            display: initial;
-        }
-    `};
 `;
 
 const BodyLink = styled.a`
@@ -188,12 +163,6 @@ const VotePanelStyled = styled(VotePanel)`
     ${is('grid')`
         justify-content: space-around;
     `};
-`;
-
-const Brilliant = styled.div`
-    width: 64px;
-    height: 62px;
-    margin: -10px -10px -10px 0;
 `;
 
 const PostImage = styled.div`
@@ -361,19 +330,20 @@ class PostCard extends PureComponent {
                     {grid ? null : <Category>{category}</Category>}
                     <Toolbar>
                         <ToolbarAction>
-                            <IconClip
+                            <IconWrapper
                                 forceWhite={withImage && !grid}
                                 data-tooltip="Закрепить пост"
-                                dangerouslySetInnerHTML={{ __html: clipSvg }}
-                            />
+                            >
+                                <Icon name="clip" width={12} height={22} />
+                            </IconWrapper>
                         </ToolbarAction>
                         <ToolbarAction>
-                            <IconStar
+                            <IconWrapper
                                 forceWhite={withImage && !grid}
                                 data-tooltip="В избранное"
-                                active={false}
-                                dangerouslySetInnerHTML={{ __html: starSvg }}
-                            />
+                            >
+                                <Icon name="star" width={20} height={20} />
+                            </IconWrapper>
                         </ToolbarAction>
                     </Toolbar>
                 </HeaderLine>
@@ -381,7 +351,7 @@ class PostCard extends PureComponent {
                     <HeaderLine>
                         <Category>{category}</Category>
                         <Filler />
-                        <Brilliant dangerouslySetInnerHTML={{ __html: brilliantSvg }} />
+                        {/*<Brilliant dangerouslySetInnerHTML={{ __html: brilliantSvg }} />*/}
                     </HeaderLine>
                 ) : null}
             </Header>
@@ -423,7 +393,7 @@ class PostCard extends PureComponent {
                 {grid ? null : (
                     <Fragment>
                         <Filler />
-                        <Brilliant dangerouslySetInnerHTML={{ __html: brilliantSvg }} />
+                        {/*<Brilliant dangerouslySetInnerHTML={{ __html: brilliantSvg }} />*/}
                     </Fragment>
                 )}
             </Footer>

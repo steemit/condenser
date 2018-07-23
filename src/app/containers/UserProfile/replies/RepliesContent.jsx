@@ -9,14 +9,13 @@ import PostsList from 'src/app/components/common/PostsList';
 
 class RepliesContent extends Component {
     render() {
-        const { currentAccount, fetching } = this.props;
+        const { currentAccount } = this.props;
 
         const posts = currentAccount.get('recent_replies');
-        if (fetching || !posts) {
+
+        if (!posts) {
             return (
-                <center>
-                    <LoadingIndicator type="circle" />
-                </center>
+                <LoadingIndicator type="circle" center size={40}/>
             );
         }
 
@@ -35,7 +34,6 @@ class RepliesContent extends Component {
                 key={currentAccount.get('name')}
                 account={currentAccount.get('name')}
                 posts={posts}
-                loading={fetching}
                 category="recent_replies"
                 showSpam
             />
@@ -51,15 +49,9 @@ export default connect(
 
         const currentAccount = state.global.getIn(['accounts', accountName]);
 
-        const fetching =
-            state.global.getIn(['status', route, 'by_author'], {}).fetching ||
-            state.app.get('loading');
-
         return {
             accountName,
             currentAccount,
-
-            fetching,
         };
     },
     // mapDispatchToProps

@@ -149,7 +149,7 @@ export default class UserProfile extends React.Component {
             account = accountImm.toJS();
         } else if (fetching) {
             return <div className="UserProfile loader">
-                <div className="UserProfile__center"><LoadingIndicator type="circle" size="40px" /></div>
+                <div className="UserProfile__center"><LoadingIndicator type="circle" size={40} /></div>
             </div>;
         } else {
             return <div className="UserProfile">

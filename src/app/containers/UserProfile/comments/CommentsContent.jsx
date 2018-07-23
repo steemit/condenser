@@ -8,15 +8,13 @@ import PostsList from 'src/app/components/common/PostsList';
 
 class CommentsContent extends Component {
     render() {
-        const { currentAccount, fetching } = this.props;
+        const { currentAccount } = this.props;
 
         const posts = currentAccount.get('posts') || currentAccount.get('comments');
 
-        if (fetching || !posts) {
+        if (!posts) {
             return (
-                <center>
-                    <LoadingIndicator type="circle" />
-                </center>
+                <LoadingIndicator type="circle" center size={40} />
             );
         }
 
@@ -45,12 +43,8 @@ export default connect((state, props) => {
     const accountName = props.params.accountName.toLowerCase();
     const currentAccount = state.global.getIn(['accounts', accountName]);
 
-    const fetching =
-        state.global.getIn(['status', 'comments', 'by_author'], {}).fetching || state.app.get('loading');
-
     return {
         accountName,
         currentAccount,
-        fetching,
     };
 })(CommentsContent);

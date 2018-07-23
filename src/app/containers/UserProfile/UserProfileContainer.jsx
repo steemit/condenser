@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { Map } from 'immutable';
@@ -47,19 +48,26 @@ const SidebarRight = styled.div`
 `;
 
 export default class UserProfileContainer extends Component {
-    static propTypes = {};
+    static propTypes = {
+        isOwner: PropTypes.bool,
+        params: PropTypes.object,
+        route: PropTypes.object,
+        routeParams: PropTypes.object,
+        routes: PropTypes.array,
+        router: PropTypes.any,
+        content: PropTypes.any, // Routed component
+        currentUser: PropTypes.object, // Immutable.Map
+        currentAccount: PropTypes.object, // Immutable.Map
+    };
 
     render() {
         const {
             currentUser,
             currentAccount,
-
             fetching,
             isOwner,
-
             followerCount,
             followingCount,
-
             uploadImage,
             updateAccount,
             notify,
@@ -70,7 +78,7 @@ export default class UserProfileContainer extends Component {
                 return (
                     <div className="UserProfile loader">
                         <div className="UserProfile__center">
-                            <LoadingIndicator type="circle" width="40px" height="40px" />
+                            <LoadingIndicator type="circle" size={40} />
                         </div>
                     </div>
                 );
@@ -93,6 +101,8 @@ export default class UserProfileContainer extends Component {
             return <div>{tt('g.blocked_user_content')}</div>;
         }
 
+        const route = last(this.props.routes).path;
+
         return (
             <Fragment>
                 <UserHeader
@@ -102,10 +112,14 @@ export default class UserProfileContainer extends Component {
                     updateAccount={updateAccount}
                     notify={notify}
                 />
-                <UserNavigation accountName={currentAccount.get('name')} isOwner={isOwner} />
+                <UserNavigation
+                    accountName={currentAccount.get('name')}
+                    isOwner={isOwner}
+                    showLayout={!route || route === 'blog'}
+                />
                 <Main>
                     <Container align="flex-start" justify="center" small>
-                        {last(this.props.routes).path !== 'settings' && (
+                        {route !== 'settings' && (
                             <SidebarLeft>
                                 <UserCardAbout
                                     account={currentAccount}
@@ -131,7 +145,7 @@ module.exports = {
         cb(null, {
             components: {
                 content: require('./blog/BlogContent').default,
-            }
+            },
         });
     },
     childRoutes: [

@@ -91,7 +91,7 @@ class PostsList extends PureComponent {
         if (showLoader) {
             return (
                 <Loader>
-                    <LoadingIndicator type="circle" width="40px" height="40px" />
+                    <LoadingIndicator type="circle" size={40} />
                 </Loader>
             );
         }

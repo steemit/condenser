@@ -87,6 +87,7 @@ class UserNavigation extends PureComponent {
     static propTypes = {
         accountName: PropTypes.string,
         isOwner: PropTypes.bool,
+        showLayout: PropTypes.bool,
         layout: PropTypes.oneOf(['list', 'grid']).isRequired,
     };
 
@@ -146,28 +147,30 @@ class UserNavigation extends PureComponent {
     }
 
     _renderRightIcons() {
-        const { accountName, isOwner, layout } = this.props;
+        const { accountName, isOwner, layout, showLayout } = this.props;
 
         const icons = [];
 
-        icons.push(
-            <IconWrap
-                key="l-list"
-                active={layout === 'list'}
-                data-tooltip="Список"
-                onClick={this._onListClick}
-            >
-                <SimpleIcon name="layout_list" />
-            </IconWrap>,
-            <IconWrap
-                key="l-grid"
-                active={layout === 'grid'}
-                data-tooltip="Сетка"
-                onClick={this._onGridClick}
-            >
-                <SimpleIcon name="layout_grid" />
-            </IconWrap>
-        );
+        if (showLayout) {
+            icons.push(
+                <IconWrap
+                    key="l-list"
+                    active={layout === 'list'}
+                    data-tooltip="Список"
+                    onClick={this._onListClick}
+                >
+                    <SimpleIcon name="layout_list" />
+                </IconWrap>,
+                <IconWrap
+                    key="l-grid"
+                    active={layout === 'grid'}
+                    data-tooltip="Сетка"
+                    onClick={this._onGridClick}
+                >
+                    <SimpleIcon name="layout_grid" />
+                </IconWrap>
+            );
+        }
 
         if (isOwner) {
             icons.push(

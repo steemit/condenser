@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { browserHistory } from 'react-router';
 import tt from 'counterpart';
-import settings from './settings';
+import { ANDROID_PACKAGE } from 'app/client_config';
 
 export default class MobileAppButton extends Component {
     shouldComponentUpdate() {
@@ -19,14 +18,28 @@ export default class MobileAppButton extends Component {
         }
         const { path } = this.props
 
+        const redirectToApp = (path) => {
+            const iframe = document.createElement("iframe");
+            iframe.src = `golosioapp://${$STM_Config.site_domain}${path === '/' ? `/trending` : `${path}`}`;
+            document.body.appendChild(iframe);
+        }
+
         return (
-            <a
+            <div
                 role="button"
                 className="btn visit-app-btn"
-                href={`golosioapp://${$STM_Config.site_domain}${path === '/' ? `/trending` : `${path}`}`}
+                onClick={
+                    e => {
+                        redirectToApp(path)
+                        setTimeout(
+                            () => window.location.replace(`market://details?id=${ANDROID_PACKAGE}`),
+                            250
+                        )
+                    }
+                }
             >
                 {tt('mobile_app_button.open_in_app')}
-            </a>
+            </div>
         );
     }
 }

@@ -1,5 +1,4 @@
-import { takeLatest } from 'redux-saga';
-import { call, put } from 'redux-saga/effects';
+import { call, put, takeLatest } from 'redux-saga/effects';
 import { api } from '@steemit/steem-js';
 
 import * as marketActions from './MarketReducer';
@@ -8,9 +7,9 @@ import * as userActions from './UserReducer';
 import { getAccount } from './SagaShared';
 
 export const marketWatches = [
-    watchLocationChange,
-    watchUserLogin,
-    watchMarketUpdate,
+    takeLatest(userActions.SET_USER, fetchOpenOrders),
+    takeLatest('@@router/LOCATION_CHANGE', fetchMarket),
+    takeLatest(marketActions.UPDATE_MARKET, reloadMarket),
 ];
 
 const wait = ms =>
@@ -85,16 +84,4 @@ export function* fetchOpenOrders(set_user_action) {
 export function* reloadMarket(reload_action) {
     yield fetchMarket(reload_action);
     yield fetchOpenOrders(reload_action);
-}
-
-export function* watchUserLogin() {
-    yield* takeLatest(userActions.SET_USER, fetchOpenOrders);
-}
-
-export function* watchLocationChange() {
-    yield* takeLatest('@@router/LOCATION_CHANGE', fetchMarket);
-}
-
-export function* watchMarketUpdate() {
-    yield* takeLatest(marketActions.UPDATE_MARKET, reloadMarket);
 }

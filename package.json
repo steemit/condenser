@@ -126,6 +126,7 @@
     "sendgrid": "^4.10.0",
     "sequelize": "^3.33.0",
     "sequelize-cli": "^3.2.0",
+    "simple-jsonrpc-js": "^0.0.10",
     "simplemde": "^1.11.2",
     "slick-carousel": "^1.8.1",
     "socketcluster-client": "^11.0.0",

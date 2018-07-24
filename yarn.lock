@@ -2185,10 +2185,6 @@ bl@~1.0.0:
   dependencies:
     readable-stream "~2.0.5"
 
-blacklist@^1.1.2:
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/blacklist/-/blacklist-1.1.4.tgz#b2dd09d6177625b2caa69835a37b28995fa9a2f2"
-
 block-stream@*:
   version "0.0.9"
   resolved "https://registry.yarnpkg.com/block-stream/-/block-stream-0.0.9.tgz#13ebfe778a03205cfe03751481ebb4b3300c126a"
@@ -6937,7 +6933,7 @@ medium-editor-insert-plugin@^2.3.2:
     jquery-sortable "~0.9.12"
     medium-editor "^5.15.0"
 
-medium-editor@^5.10.0, medium-editor@^5.15.0:
+medium-editor@^5.15.0:
   version "5.23.3"
   resolved "https://registry.yarnpkg.com/medium-editor/-/medium-editor-5.23.3.tgz#6fb638759ae2fc76c423feb056f346d9c518d3b7"
 
@@ -8897,14 +8893,6 @@ react-lifecycles-compat@^3.0.0, react-lifecycles-compat@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
 
-react-medium-editor@^1.8.1:
-  version "1.8.1"
-  resolved "https://registry.yarnpkg.com/react-medium-editor/-/react-medium-editor-1.8.1.tgz#016ffc3bb82f9364af15f7e43be75d6882555f5a"
-  dependencies:
-    blacklist "^1.1.2"
-    medium-editor "^5.10.0"
-    object-assign "^4.0.1"
-
 react-modal@^3.4.5:
   version "3.4.5"
   resolved "https://registry.yarnpkg.com/react-modal/-/react-modal-3.4.5.tgz#75a7eefb8f4c8247278d5ce1c41249d7785d9f69"
@@ -9051,17 +9039,6 @@ react-textarea-autosize@^6.1.0:
   version "6.1.0"
   resolved "https://registry.yarnpkg.com/react-textarea-autosize/-/react-textarea-autosize-6.1.0.tgz#df91387f8a8f22020b77e3833c09829d706a09a5"
   dependencies:
-    prop-types "^15.6.0"
-
-react-timeago@^3.4.3:
-  version "3.4.3"
-  resolved "https://registry.yarnpkg.com/react-timeago/-/react-timeago-3.4.3.tgz#eb9061eefb044e4a2b09ce8c99d34645b2dbfa25"
-
-react-tooltip@^3.4.0:
-  version "3.6.1"
-  resolved "https://registry.yarnpkg.com/react-tooltip/-/react-tooltip-3.6.1.tgz#2ca993baa50d7e0271b8d13c6024445a883842eb"
-  dependencies:
-    classnames "^2.2.5"
     prop-types "^15.6.0"
 
 react-transition-group@^2.0.0:
@@ -10037,6 +10014,10 @@ signal-exit@^3.0.0, signal-exit@^3.0.2:
 simple-html-tokenizer@^0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/simple-html-tokenizer/-/simple-html-tokenizer-0.1.1.tgz#05c2eec579ffffe145a030ac26cfea61b980fabe"
+
+simple-jsonrpc-js@^0.0.10:
+  version "0.0.10"
+  resolved "https://registry.yarnpkg.com/simple-jsonrpc-js/-/simple-jsonrpc-js-0.0.10.tgz#0f0852df0dfdafd57cc745c63c0b72bdb196e305"
 
 simplemde@^1.11.2:
   version "1.11.2"

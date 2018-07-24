@@ -3,4 +3,4 @@ import { storiesOf } from '@storybook/react';
 
 import UserNavigation from './UserNavigation';
 
-storiesOf('UserNavigation', module).add('default', () => <UserNavigation />);
+storiesOf('User Profile/common/UserNavigation', module).add('default', () => <UserNavigation />);

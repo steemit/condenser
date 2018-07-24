@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components';
+import is from 'styled-is';
 
 import Flex from 'golos-ui/Flex';
 
@@ -32,7 +33,7 @@ export const formControlStyles = css`
 
 const labelStyles = css`
     display: flex;
-    color: #757575;
+    color: #959595;
     font-family: ${({ theme }) => theme.fontFamily};
     font-size: 14px;
     line-height: 1;
@@ -40,8 +41,13 @@ const labelStyles = css`
 `;
 
 export const Label = styled.label`
-    margin-bottom: 10px;
+    margin-bottom: 12px;
     ${labelStyles};
+
+    ${is('bold')`
+        color: #393636;
+        font-weight: bold;
+    `};
 `;
 
 export const LabelRow = styled.label`
@@ -63,6 +69,9 @@ export const Textarea = styled.textarea`
     ${formControlStyles};
     line-height: 17px;
 `;
+
+export const Error = ({ meta: { touched, error, submitError } }) =>
+    touched && (error || submitError) ? <span>{error || submitError}</span> : null;
 
 export const FormGroup = styled(Flex)`
     :not(:last-child) {

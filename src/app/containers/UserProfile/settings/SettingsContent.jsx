@@ -60,9 +60,9 @@ class SettingsContent extends Component {
     };
 
     render() {
-        const { profile } = this.props;
+        const { profile, account } = this.props;
 
-        return <SettingsShow profile={profile} onSubmit={this.onSubmit} />;
+        return <SettingsShow profile={profile} account={account} onSubmit={this.onSubmit} />;
     }
 }
 

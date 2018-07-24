@@ -34,7 +34,7 @@ export const DialogFooter = styled.div`
     height: 50px;
 
     border-radius: 0 0 8px 8px;
-    box-shadow: 0 0px 15px 0 rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.1);
     background-color: #ffffff;
 
     overflow: hidden;

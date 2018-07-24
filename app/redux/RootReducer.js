@@ -7,7 +7,7 @@ import marketReducerModule from './MarketReducer';
 import profileReducer from './ProfileReducer';
 import user from './User';
 import transaction from './Transaction';
-import offchain from './Offchain';
+import offchain from './OffchainReducer';
 import {reducer as formReducer} from 'redux-form'; // @deprecated, instead use: app/utils/ReactForm.js
 import {contentStats} from 'app/utils/StateFunctions'
 

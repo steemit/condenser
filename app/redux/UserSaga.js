@@ -12,6 +12,7 @@ import {api} from 'golos-js'
 import g from 'app/redux/GlobalReducer'
 import React from 'react';
 import PushNotificationSaga from 'app/redux/services/PushNotificationSaga';
+import { watchOnPings } from 'app/redux/services/GateSaga';
 import uploadImageWatch from './UserSaga_UploadImage';
 
 export function* userWatches() {
@@ -128,6 +129,8 @@ function* usernamePasswordLogin(action) {
         yield fork(loadFollows, "getFollowingAsync", username, 'blog')
         yield fork(loadFollows, "getFollowingAsync", username, 'ignore')
         if(process.env.BROWSER) {
+          yield call(watchOnPings);
+
           const notification_channel_created = yield select(state => state.user.get('notification_channel_created'))
           if (!notification_channel_created) {
             // console.log(']]]]]]]]]]]]]]]]]]]]]]] ', notification_channel_created)

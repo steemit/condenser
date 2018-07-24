@@ -81,7 +81,7 @@ const Details = styled.div`
 
 const Name = styled.div`
     color: #393636;
-    font-family: ${props => props.theme.fontFamilyBold};
+    font-family: ${({ theme }) => theme.fontFamilyBold};
     font-size: 30px;
     font-weight: bold;
     line-height: 1;
@@ -203,14 +203,14 @@ export default class UserHeader extends Component {
             <Wrapper backgroundUrl={backgroundUrl}>
                 <Container align="center">
                     <UserProfileAvatar avatarUrl={profile_image}>
-                        {isOwner ? (
+                        {isOwner && (
                             <AvatarDropzone
                                 ref={r => (this.dropzoneAvatar = r)}
                                 onDrop={this.handleDropAvatar}
                                 multiple={false}
                                 accept="image/*"
                             />
-                        ) : null}
+                        )}
                     </UserProfileAvatar>
                     <Details>
                         {name ? <Name>{name}</Name> : null}
@@ -227,7 +227,7 @@ export default class UserHeader extends Component {
                             </Buttons>
                         )}
                     </Details>
-                    {isOwner ? (
+                    {isOwner && (
                         <IconCover
                             ref={r => (this.dropzoneCover = r)}
                             onDrop={this.handleDropCover}
@@ -236,7 +236,7 @@ export default class UserHeader extends Component {
                         >
                             <Icon name="picture" size="20" />
                         </IconCover>
-                    ) : null}
+                    )}
                 </Container>
             </Wrapper>
         );

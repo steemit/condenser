@@ -54,7 +54,7 @@ export default class ActivityItem extends Component {
         const { profile_image } = normalizeProfile(account);
 
         const icon = {
-            name: 'subsribe_small',
+            name: 'subscribe_small',
             width: 14,
             height: 14
         }

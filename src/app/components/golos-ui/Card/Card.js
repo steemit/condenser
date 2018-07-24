@@ -16,12 +16,9 @@ const Card = styled(Flex)`
 
     overflow: hidden;
 
-    ${is('transparent')`
-        background-color: transparent;
-    `} @media (max-width: 576px) {
+    @media (max-width: 576px) {
         border-radius: 0;
         box-shadow: none;
-        background-color: transparent;
     }
 `;
 Card.defaultProps = {
@@ -51,6 +48,7 @@ export const CardTitle = styled(Flex)`
 
 export const CardContent = styled(Flex)`
     padding: 20px;
+    margin-bottom: 10px;
 `;
 
 export const CardRow = styled(Flex)`

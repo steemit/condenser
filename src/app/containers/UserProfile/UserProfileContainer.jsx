@@ -24,7 +24,7 @@ const Main = styled.div`
 `;
 
 const SidebarLeft = styled.div`
-    width: 273px;
+    flex-basis: 273px;
     flex-shrink: 0;
 `;
 
@@ -43,7 +43,7 @@ const Content = styled.div`
 `;
 
 const SidebarRight = styled.div`
-    width: 273px;
+    flex-basis: 273px;
     flex-shrink: 0;
 `;
 
@@ -106,8 +106,9 @@ export default class UserProfileContainer extends Component {
         return (
             <Fragment>
                 <UserHeader
-                    currentUser={currentUser}
                     currentAccount={currentAccount}
+                    currentUser={currentUser}
+                    isOwner={isOwner}
                     uploadImage={uploadImage}
                     updateAccount={updateAccount}
                     notify={notify}
@@ -145,6 +146,7 @@ module.exports = {
         cb(null, {
             components: {
                 content: require('./blog/BlogContent').default,
+                sidebarRight: require('src/app/components/userProfile/common/RightColumnStub').default,
             },
         });
     },

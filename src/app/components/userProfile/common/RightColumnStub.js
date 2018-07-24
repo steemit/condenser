@@ -7,7 +7,7 @@ const Root = styled.div`
     &:after {
         display: block;
         content: '';
-        width: 296px;
+        flex-basis: 296px;
         height: 942px;
         margin: -12px -11px -12px -12px;
         background: url('/images/TEMP/right_column_stub.png');

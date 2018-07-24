@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 
-export default class LoadingIndicator extends React.Component {
+export default class LoadingIndicator extends PureComponent {
     static propTypes = {
         type: PropTypes.oneOf(['dots', 'circle', 'little']),
         center: PropTypes.bool,
         inline: PropTypes.bool,
-        size: PropTypes.string,
+        size: PropTypes.number,
     };
 
     state = { progress: 0 };

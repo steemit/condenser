@@ -173,8 +173,18 @@ export async function serverRender({
     };
 }
 
+let store = null;
+
+export function getStoreState() {
+    if (!store) {
+        throw new Error('NO_STORE');
+    }
+
+    return store.getState();
+}
+
 export function clientRender(initialState) {
-    const store = createStore(rootReducer, initialState, middleware);
+    store = createStore(rootReducer, initialState, middleware);
     sagaMiddleware.run(rootSaga)
 
     const history = syncHistoryWithStore(browserHistory, store);

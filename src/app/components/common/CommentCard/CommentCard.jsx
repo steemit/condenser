@@ -1,10 +1,9 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 import { Link } from 'react-router';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import { browserHistory } from 'react-router';
 import tt from 'counterpart';
 import extractContent from 'app/utils/ExtractContent';
 import { immutableAccessor } from 'app/utils/Accessors';
@@ -12,9 +11,11 @@ import Userpic from 'app/components/elements/Userpic';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import { detransliterate } from 'app/utils/ParsersAndFormatters';
 import DialogManager from 'app/components/elements/common/DialogManager';
+import CommentFormLoader from 'app/components/modules/CommentForm/loader';
 import user from 'app/redux/User';
 import transaction from 'app/redux/Transaction';
 import Icon from 'golos-ui/Icon';
+import Button from 'golos-ui/Button';
 import VotePanel from '../VotePanel';
 
 const Header = styled.div`
@@ -90,6 +91,7 @@ const Title = styled.div`
     color: #212121;
 `;
 const TitleIcon = Icon.extend`
+    position: relative;
     height: 20px;
     margin-right: 6px;
     margin-bottom: -3px;
@@ -130,16 +132,37 @@ const Root = styled.div`
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.06);
 `;
 
+const Reply = styled.div`
+    padding: 0 18px 18px 18px;
+`;
+
+const IconEdit = Icon.extend`
+    position: absolute;
+    top: 6px;
+    right: 23px;
+    color: #aaa;
+    cursor: pointer;
+    transition: color 0.15s;
+
+    &:hover {
+        color: #333;
+    }
+`;
+
 class CommentCard extends PureComponent {
     static propTypes = {
         permLink: PropTypes.string,
         myAccount: PropTypes.string,
         data: PropTypes.object,
         grid: PropTypes.bool,
+        allowInlineReply: PropTypes.bool,
+        allowInlineEdit: PropTypes.bool,
     };
 
     state = {
         myVote: this._getMyVote(this.props),
+        showReply: false,
+        edit: false,
     };
 
     componentWillReceiveProps(newProps) {
@@ -167,6 +190,7 @@ class CommentCard extends PureComponent {
 
     render() {
         const { data, className } = this.props;
+        const { showReply } = this.state;
 
         const d = data.toJS();
 
@@ -175,6 +199,7 @@ class CommentCard extends PureComponent {
                 {this._renderHeader(d)}
                 {this._renderBody(d)}
                 {this._renderFooter()}
+                {showReply ? this._renderReplyEditor() : null}
             </Root>
         );
     }
@@ -205,7 +230,8 @@ class CommentCard extends PureComponent {
     }
 
     _renderBody(json) {
-        const { data } = this.props;
+        const { data, allowInlineEdit } = this.props;
+        const { edit } = this.state;
 
         const p = extractContent(immutableAccessor, data);
         let title = p.title;
@@ -221,25 +247,87 @@ class CommentCard extends PureComponent {
                 <Title>
                     <TitleIcon name="comment_small" />
                     {tt('g.re2')}: <TitleLink to={parentLink}>{title}</TitleLink>
+                    {allowInlineEdit && !edit ? (
+                        <IconEdit
+                            name="pen"
+                            size={20}
+                            data-tooltip={'Редактировать комментарий'}
+                            onClick={this._onEditClick}
+                        />
+                    ) : null}
                 </Title>
-                <PostBody to={p.link} dangerouslySetInnerHTML={{ __html: p.desc }} />
+                {edit ? (
+                    <CommentFormLoader
+                        reply
+                        editMode
+                        params={data.toJS()}
+                        onSuccess={this._onEditDone}
+                        onCancel={this._onEditDone}
+                    />
+                ) : (
+                    <PostBody to={p.link} dangerouslySetInnerHTML={{ __html: p.desc }} />
+                )}
             </Body>
         );
     }
 
     _renderFooter() {
-        const { data, myAccount } = this.props;
+        const { data, myAccount, allowInlineReply } = this.props;
 
         return (
             <Footer>
                 <VotePanel data={data} me={myAccount} onChange={this._onVoteChange} />
+                {allowInlineReply ? (
+                    <Fragment>
+                        <Filler />
+                        <Button light onClick={this._onReplyClick}>
+                            <Icon name="comment_small" size={18} /> Ответить
+                        </Button>
+                    </Fragment>
+                ) : null}
             </Footer>
         );
     }
 
-    _onClick = (e, link) => {
-        e.preventDefault();
-        browserHistory.push(link);
+    _renderReplyEditor() {
+        const { data } = this.props;
+
+        return (
+            <Reply>
+                <CommentFormLoader
+                    reply
+                    params={data.toJS()}
+                    onSuccess={this._onReplySuccess}
+                    onCancel={this._onReplyCancel}
+                />
+            </Reply>
+        );
+    }
+
+    _onReplySuccess = () => {
+        this.setState({
+            showReply: false,
+        });
+
+        this.props.onNotify('Ответ опубликован');
+    };
+
+    _onReplyCancel = () => {
+        this.setState({
+            showReply: false,
+        });
+    };
+
+    _onEditClick = () => {
+        this.setState({
+            edit: true,
+        });
+    };
+
+    _onEditDone = () => {
+        this.setState({
+            edit: false,
+        });
     };
 
     _onVoteChange = async weight => {
@@ -274,6 +362,12 @@ class CommentCard extends PureComponent {
             permlink: props.data.get('permlink'),
         });
     };
+
+    _onReplyClick = () => {
+        this.setState({
+            showReply: true,
+        });
+    };
 }
 
 export default connect(
@@ -300,6 +394,15 @@ export default connect(
                     successCallback: () => dispatch(user.actions.getAccount()),
                 })
             );
+        },
+        onNotify: text => {
+            dispatch({
+                type: 'ADD_NOTIFICATION',
+                payload: {
+                    message: text,
+                    dismissAfter: 5000,
+                },
+            });
         },
     })
 )(CommentCard);

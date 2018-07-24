@@ -32,6 +32,7 @@ class CommentsContent extends Component {
             <PostsList
                 account={currentAccount.get('name')}
                 category="comments"
+                allowInlineEdit
                 //order="by_author"
                 //showSpam TODO
             />
@@ -44,7 +45,6 @@ export default connect((state, props) => {
     const currentAccount = state.global.getIn(['accounts', accountName]);
 
     return {
-        accountName,
         currentAccount,
     };
 })(CommentsContent);

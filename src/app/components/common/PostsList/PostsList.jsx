@@ -41,6 +41,8 @@ class PostsList extends PureComponent {
         content: PropTypes.instanceOf(immutable.Map),
         posts: PropTypes.instanceOf(immutable.List),
         layout: PropTypes.oneOf(['list', 'grid']),
+        allowInlineReply: PropTypes.bool,
+        allowInlineEdit: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -58,7 +60,7 @@ class PostsList extends PureComponent {
     }
 
     render() {
-        const { posts, category, layout } = this.props;
+        const { posts, category, layout, allowInlineReply, allowInlineEdit } = this.props;
 
         const isGrid = category === 'blog' && layout === 'grid';
         const EntryComponent = category === 'blog' ? PostCard : CommentCard;
@@ -67,7 +69,12 @@ class PostsList extends PureComponent {
             <Root innerRef={this._onRef} grid={isGrid}>
                 {posts.map(permLink => (
                     <EntryWrapper key={permLink} grid={isGrid}>
-                        <EntryComponent permLink={permLink} grid={isGrid} />
+                        <EntryComponent
+                            permLink={permLink}
+                            grid={isGrid}
+                            allowInlineReply={allowInlineReply}
+                            allowInlineEdit={allowInlineEdit}
+                        />
                     </EntryWrapper>
                 ))}
                 {this._renderLoaderIfNeed()}

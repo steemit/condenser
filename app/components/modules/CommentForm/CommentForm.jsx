@@ -10,9 +10,7 @@ import DialogManager from 'app/components/elements/common/DialogManager';
 import Icon from 'app/components/elements/Icon';
 import MarkdownEditor from 'app/components/elements/postEditor/MarkdownEditor/MarkdownEditor';
 import CommentFooter from 'app/components/elements/postEditor/CommentFooter';
-import MarkdownViewer, {
-    getRemarkable,
-} from 'app/components/cards/MarkdownViewer';
+import MarkdownViewer, { getRemarkable } from 'app/components/cards/MarkdownViewer';
 import { checkPostHtml } from 'app/utils/validator';
 import './CommentForm.scss';
 
@@ -22,7 +20,7 @@ class CommentForm extends React.Component {
     static propTypes = {
         reply: PropTypes.bool,
         editMode: PropTypes.bool,
-        params: PropTypes.object,
+        params: PropTypes.object.isRequired,
         jsonMetadata: PropTypes.object,
         onSuccess: PropTypes.func,
         onCancel: PropTypes.func,
@@ -67,10 +65,7 @@ class CommentForm extends React.Component {
         if (json) {
             const draft = JSON.parse(json);
 
-            if (
-                draft.editMode !== editMode ||
-                draft.permLink !== params.permlink
-            ) {
+            if (draft.editMode !== editMode || draft.permLink !== params.permlink) {
                 return;
             }
 
@@ -146,11 +141,7 @@ class CommentForm extends React.Component {
                 ) : null}
                 {uploadingCount > 0 ? (
                     <div className="CommentForm__spinner">
-                        <Icon
-                            name="clock"
-                            size="4x"
-                            className="CommentForm__spinner-inner"
-                        />
+                        <Icon name="clock" size="4x" className="CommentForm__spinner-inner" />
                     </div>
                 ) : null}
             </div>
@@ -313,8 +304,7 @@ class CommentForm extends React.Component {
                         if (!this._unmount) {
                             if (data && (data.url || data.error)) {
                                 this.setState({
-                                    uploadingCount:
-                                        this.state.uploadingCount - 1,
+                                    uploadingCount: this.state.uploadingCount - 1,
                                 });
                             }
 

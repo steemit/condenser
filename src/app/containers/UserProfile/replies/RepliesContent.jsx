@@ -14,12 +14,10 @@ class RepliesContent extends Component {
         const posts = currentAccount.get('recent_replies');
 
         if (!posts) {
-            return (
-                <LoadingIndicator type="circle" center size={40}/>
-            );
+            return <LoadingIndicator type="circle" center size={40} />;
         }
 
-        if (posts && !posts.size) {
+        if (!posts.size) {
             return (
                 <Callout>
                     {tt('user_profile.user_hasnt_had_any_replies_yet', {
@@ -31,29 +29,22 @@ class RepliesContent extends Component {
 
         return (
             <PostsList
-                key={currentAccount.get('name')}
                 account={currentAccount.get('name')}
                 posts={posts}
                 category="recent_replies"
-                showSpam
+                allowInlineReply
+                //showSpam
             />
         );
     }
 }
 
-export default connect(
-    // mapStateToProps
-    (state, ownProps) => {
-        const route = ownProps.routes.slice(-1)[0].path;
-        const accountName = ownProps.params.accountName.toLowerCase();
+export default connect((state, props) => {
+    const accountName = props.params.accountName.toLowerCase();
 
-        const currentAccount = state.global.getIn(['accounts', accountName]);
+    const currentAccount = state.global.getIn(['accounts', accountName]);
 
-        return {
-            accountName,
-            currentAccount,
-        };
-    },
-    // mapDispatchToProps
-    dispatch => ({})
-)(RepliesContent);
+    return {
+        currentAccount,
+    };
+})(RepliesContent);

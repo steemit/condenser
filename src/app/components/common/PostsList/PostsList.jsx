@@ -26,14 +26,10 @@ const EntryWrapper = styled.div`
 
     ${is('grid')`
         display: inline-block;
-        width: 33.3%;
+        width: 50%;
         vertical-align: top;
         padding: 0 8px;
     
-        @media screen and (max-width: 1260px) {
-            width: 50%;
-        }
-        
         @media screen and (max-width: 830px) {
             width: 100%;
         }

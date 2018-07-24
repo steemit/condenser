@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import tt from 'counterpart';
 import styled from 'styled-components';
 import is from 'styled-is';
 import { getStoreState } from 'shared/UniversalRender';
@@ -11,13 +12,18 @@ const VOTE_PERCENT_THRESHOLD = 1000000;
 const LIKE_PERCENT_KEY = 'golos.like-percent';
 const DISLIKE_PERCENT_KEY = 'golos.dislike-percent';
 
+const SLIDER_OFFSET = 8;
+
+const LikeWrapper = styled.i`
+    margin-right: 8px;
+`;
+
 const LikeCount = styled.span`
     color: #959595;
     transition: color 0.15s;
 `;
 
 const LikeIcon = Icon.extend`
-    margin-right: 8px;
     vertical-align: middle;
     width: 20px;
     height: 20px;
@@ -26,21 +32,39 @@ const LikeIcon = Icon.extend`
     transition: color 0.2s;
 `;
 
-const LikeSliderIcon = LikeIcon.extend`
-    margin-top: -3px;
-    color: #2879ff;
+const OkIcon = Icon.extend`
+    width: 16px;
+    margin-right: 8px;
+    color: #a8a8a8;
+    cursor: pointer;
+    transition: color 0.15s;
 
-    ${is('dislike')`
-        color: #ff4e00;
-        margin-top: 0;
-        margin-bottom: -3px;
-        transform: scale(1, -1);
+    &:hover {
+        color: #2879ff;
+    }
+
+    ${is('red')`
+        &:hover {
+            color: #ff4e00;
+        }
     `};
+`;
+
+const CancelIcon = Icon.extend`
+    width: 12px;
+    margin-left: 8px;
+    color: #e1e1e1;
+    transition: color 0.15s;
+    cursor: pointer;
+
+    &:hover {
+        color: #333;
+    }
 `;
 
 const LikeIconNeg = LikeIcon.extend`
     margin-top: 0;
-    margin-bottom: -7px;
+    margin-bottom: -5px;
     transform: scale(1, -1);
 `;
 
@@ -60,7 +84,9 @@ const LikeBlock = styled.div`
         ${LikeIcon}, ${LikeCount} {
             color: #2879ff !important;
         } 
-    `} ${is('activeNeg')`
+    `};
+
+    ${is('activeNeg')`
         ${LikeIconNeg}, ${LikeCount} {
             color: #ff4e00 !important;
         } 
@@ -110,34 +136,47 @@ const IconTriangle = Icon.extend`
 const SliderBlock = styled.div`
     position: absolute;
     display: flex;
-    top: 0;
-    bottom: 0;
+    height: 40px;
+    top: -50px;
     left: 0;
-    right: 0;
+    width: 100%;
+    min-width: 220px;
     padding: 0 14px;
-    margin: -7px -2px -5px;
+    margin: 0 -${SLIDER_OFFSET}px;
     align-items: center;
-    border-radius: 100px;
+    border-radius: 8px;
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.15);
     background: #fff;
-    animation: fade-in 0.2s;
+    animation: vote-from-down 0.2s;
+
+    @keyframes vote-from-down {
+        from {
+            opacity: 0;
+            transform: translate3d(0, 10px, 0);
+        }
+        to {
+            opacity: 1;
+            transform: translate3d(0, 0, 0);
+        }
+    }
+`;
+
+const SliderBlockTip = styled.div`
+    position: absolute;
+    bottom: 0;
+    left: ${a => a.left || '50%'};
+    margin-left: -5px;
+    margin-bottom: -5px;
+    width: 10px;
+    height: 10px;
+    transform: rotate(45deg);
+    background: #fff;
+    box-shadow: 2px 2px 4px 0 rgba(0, 0, 0, 0.1);
 `;
 
 const SliderStyled = styled(Slider)`
     flex-grow: 1;
     flex-shrink: 1;
-`;
-
-const OkButton = styled.div`
-    margin-left: 10px;
-    color: #333;
-    cursor: pointer;
-    user-select: none;
-    font-size: 14px;
-
-    &:hover {
-        color: #000;
-    }
 `;
 
 export default class VotePanel extends PureComponent {
@@ -160,7 +199,7 @@ export default class VotePanel extends PureComponent {
 
     render() {
         const { data, me, whiteTheme, className } = this.props;
-        const { sliderAction, showSlider, votePercent } = this.state;
+        const { showSlider, sliderAction } = this.state;
 
         this._myPercent = 0;
         const votes = data.get('active_votes');
@@ -184,12 +223,14 @@ export default class VotePanel extends PureComponent {
         return (
             <Root whiteTheme={whiteTheme} className={className} innerRef={this._onRef}>
                 <LikeBlock
-                    active={this._myPercent > 0}
-                    data-tooltip={makeTooltip(likes)}
+                    active={this._myPercent > 0 || sliderAction === 'like'}
+                    data-tooltip={showSlider ? null : makeTooltip(likes)}
                     data-tooltip-html
                     onClick={this._onLikeClick}
                 >
-                    <LikeIcon name="like" />
+                    <LikeWrapper innerRef={this._onLikeRef}>
+                        <LikeIcon name="like" />
+                    </LikeWrapper>
                     <LikeCount>
                         {likes.length}
                         <IconTriangle name="triangle" />
@@ -197,35 +238,61 @@ export default class VotePanel extends PureComponent {
                 </LikeBlock>
                 <Money>$1.07</Money>
                 <LikeBlockNeg
-                    activeNeg={this._myPercent < 0}
-                    data-tooltip={makeTooltip(dislikes)}
+                    activeNeg={this._myPercent < 0 || sliderAction === 'dislike'}
+                    data-tooltip={showSlider ? null : makeTooltip(dislikes)}
                     data-tooltip-html
                     onClick={this._onDislikeClick}
                 >
-                    <LikeIconNeg name="like" />
+                    <LikeWrapper innerRef={this._onDisLikeRef}>
+                        <LikeIconNeg name="like" />
+                    </LikeWrapper>
                     <LikeCount>
                         {dislikes.length}
                         <IconTriangle name="triangle" />
                     </LikeCount>
                 </LikeBlockNeg>
-                {showSlider ? (
-                    <SliderBlock className={className}>
-                        <LikeSliderIcon name="like" dislike={sliderAction === 'dislike' ? 1 : 0} />
-                        <SliderStyled
-                            value={votePercent}
-                            red={sliderAction === 'dislike'}
-                            onChange={this._onPercentChange}
-                        />
-                        <OkButton onClick={this._onOkVoteClick}>OK</OkButton>
-                    </SliderBlock>
-                ) : null}
+                {showSlider ? this._renderSlider() : null}
             </Root>
+        );
+    }
+
+    _renderSlider() {
+        const { sliderAction, votePercent } = this.state;
+
+        const like = sliderAction === 'like' ? this._like : this._disLike;
+
+        const box = this._root.getBoundingClientRect();
+        const likeBox = like.getBoundingClientRect();
+
+        const tipLeft = SLIDER_OFFSET + (likeBox.left - box.left + likeBox.width / 2);
+
+        return (
+            <SliderBlock>
+                <SliderBlockTip left={`${tipLeft}px`} />
+                <OkIcon
+                    name="check"
+                    red={sliderAction === 'dislike' ? 1 : 0}
+                    data-tooltip={tt('g.vote')}
+                    onClick={this._onOkVoteClick}
+                />
+                <SliderStyled
+                    value={votePercent}
+                    red={sliderAction === 'dislike'}
+                    onChange={this._onPercentChange}
+                />
+                <CancelIcon
+                    name="cross"
+                    data-tooltip={tt('g.cancel')}
+                    onClick={this._onCancelVoteClick}
+                />
+            </SliderBlock>
         );
     }
 
     _hideSlider() {
         this.setState({
             showSlider: false,
+            sliderAction: null,
         });
 
         window.removeEventListener('click', this._onAwayClick);
@@ -235,21 +302,29 @@ export default class VotePanel extends PureComponent {
         this._root = el;
     };
 
-    _onLikeClick = () => {
-        if (this._myPercent > 0) {
-            this.props.onChange(0);
-        } else {
-            if (isNeedShowSlider()) {
-                this.setState({
-                    votePercent: getSavedPercent(LIKE_PERCENT_KEY),
-                    sliderAction: 'like',
-                    showSlider: true,
-                });
+    _onLikeRef = el => {
+        this._like = el;
+    };
 
-                window.addEventListener('click', this._onAwayClick);
-            } else {
-                this.props.onChange(1);
-            }
+    _onDisLikeRef = el => {
+        this._disLike = el;
+    };
+
+    _onLikeClick = () => {
+        if (this.state.showSlider) {
+            this._hideSlider();
+        } else if (this._myPercent > 0) {
+            this.props.onChange(0);
+        } else if (isNeedShowSlider()) {
+            this.setState({
+                votePercent: getSavedPercent(LIKE_PERCENT_KEY),
+                sliderAction: 'like',
+                showSlider: true,
+            });
+
+            window.addEventListener('click', this._onAwayClick);
+        } else {
+            this.props.onChange(1);
         }
     };
 
@@ -260,26 +335,24 @@ export default class VotePanel extends PureComponent {
     };
 
     _onDislikeClick = () => {
-        if (this._myPercent < 0) {
+        if (this.state.showSlider) {
+            this._hideSlider();
+        } else if (this._myPercent < 0) {
             this.props.onChange(0);
-        } else {
-            if (isNeedShowSlider()) {
-                this.setState({
-                    votePercent: getSavedPercent(DISLIKE_PERCENT_KEY),
-                    sliderAction: 'dislike',
-                    showSlider: true,
-                });
+        } else if (isNeedShowSlider()) {
+            this.setState({
+                votePercent: getSavedPercent(DISLIKE_PERCENT_KEY),
+                sliderAction: 'dislike',
+                showSlider: true,
+            });
 
-                window.addEventListener('click', this._onAwayClick);
-            } else {
-                this.props.onChange(-1);
-            }
+            window.addEventListener('click', this._onAwayClick);
+        } else {
+            this.props.onChange(-1);
         }
     };
 
     _onPercentChange = percent => {
-        const { sliderAction } = this.state;
-
         this.setState({
             votePercent: percent,
         });
@@ -292,6 +365,10 @@ export default class VotePanel extends PureComponent {
         this.props.onChange(multiplier * (votePercent / 100));
         savePercent(sliderAction === 'like' ? LIKE_PERCENT_KEY : DISLIKE_PERCENT_KEY, votePercent);
 
+        this._hideSlider();
+    };
+
+    _onCancelVoteClick = () => {
         this._hideSlider();
     };
 }

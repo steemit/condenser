@@ -108,6 +108,7 @@ const IconWrapper = styled.div`
 
 const BodyLink = styled.a`
     display: block;
+    transition: none !important;
 
     ${is('showLine')`
         border-bottom: 2px solid #f3f3f3;

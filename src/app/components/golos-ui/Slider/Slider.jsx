@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import is from 'styled-is';
+import keyCodes from 'app/utils/keyCodes';
 
 const HandleSlot = styled.div`
     position: relative;
@@ -95,9 +96,7 @@ export default class Slider extends PureComponent {
     };
 
     componentWillUnmount() {
-        if (this.state.active) {
-            this._removeListeners();
-        }
+        this._removeListeners();
     }
 
     render() {
@@ -107,19 +106,10 @@ export default class Slider extends PureComponent {
         const percent = (100 * (value - min)) / (max - min);
 
         return (
-            <Root {...passProps} onMouseDown={this._onMouseDown}>
-                <Filler
-                    style={{
-                        width: `${percent}%`,
-                    }}
-                />
+            <Root {...passProps} onMouseDown={this._onMouseDown} onClick={this._onClick}>
+                <Filler style={{ width: `${percent}%` }} />
                 <HandleSlot innerRef={this._onRef}>
-                    <Handle
-                        active={active}
-                        style={{
-                            left: `${percent}%`,
-                        }}
-                    >
+                    <Handle active={active} style={{ left: `${percent}%` }}>
                         {value}
                     </Handle>
                 </HandleSlot>
@@ -132,9 +122,13 @@ export default class Slider extends PureComponent {
     };
 
     _removeListeners() {
-        window.removeEventListener('mousemove', this._onMouseMove);
-        window.removeEventListener('mouseup', this._onMouseUp);
-        window.removeEventListener('visibilitychange', this._onVisibilityChange);
+        if (this._isListenerActive) {
+            this._isListenerActive = false;
+            window.removeEventListener('mousemove', this._onMouseMove);
+            window.removeEventListener('mouseup', this._onMouseUp);
+            window.removeEventListener('keydown', this._onKeyDown);
+            window.removeEventListener('visibilitychange', this._onVisibilityChange);
+        }
     }
 
     _calculateValue(e) {
@@ -146,15 +140,35 @@ export default class Slider extends PureComponent {
         return Math.min(max, Math.max(min, unbound));
     }
 
+    _resetMoving() {
+        this.setState({
+            active: false,
+        });
+
+        this._removeListeners();
+    }
+
+    _onClick = e => {
+        this.setState({
+            value: this._calculateValue(e),
+        });
+    }
+
     _onMouseDown = e => {
+        e.preventDefault();
+
         this.setState({
             active: true,
             value: this._calculateValue(e),
         });
 
-        window.addEventListener('mousemove', this._onMouseMove);
-        window.addEventListener('mouseup', this._onMouseUp);
-        window.addEventListener('visibilitychange', this._onVisibilityChange);
+        if (!this._isListenerActive) {
+            this._isListenerActive = true;
+            window.addEventListener('mousemove', this._onMouseMove);
+            window.addEventListener('mouseup', this._onMouseUp);
+            window.addEventListener('keydown', this._onKeyDown);
+            window.addEventListener('visibilitychange', this._onVisibilityChange);
+        }
     };
 
     _onMouseMove = e => {
@@ -162,22 +176,20 @@ export default class Slider extends PureComponent {
     };
 
     _onMouseUp = e => {
-        this.setState({
-            active: false,
-        });
-
-        this._removeListeners();
+        this._resetMoving();
 
         this.props.onChange(this._calculateValue(e));
     };
 
-    _onVisibilityChange() {
-        if (document.hidden) {
-            this.setState({
-                active: false,
-            });
-
-            this._removeListeners();
+    _onKeyDown = e => {
+        if (e.which === keyCodes.ESCAPE) {
+            this._resetMoving();
         }
-    }
+    };
+
+    _onVisibilityChange = () => {
+        if (document.hidden) {
+            this._resetMoving();
+        }
+    };
 }

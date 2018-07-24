@@ -21,11 +21,16 @@ import {
 } from 'golos-ui/Form';
 import Icon from 'golos-ui/Icon';
 
-const LabelRow = styled(StyledLabelRow)`
+const LabelIcon = styled(StyledLabelRow)`
     flex-basis: 28px;
     color: #393636;
 `;
-LabelRow.displayName = 'LabelRow';
+
+const LabelRow = styled(StyledLabelRow)``;
+
+const UserName = styled.div`
+    color: #363636;
+`;
 
 const Account = ({ profile, account, onSubmit }) => {
   profile.username = account.name; // for disabled input, omitting from submit data
@@ -36,12 +41,11 @@ const Account = ({ profile, account, onSubmit }) => {
               <form onSubmit={handleSubmit}>
                   <CardContent column>
                       <Field name="username">
-                          {({ input, meta }) => (
-                              <FormGroup>
-                                  <Label>{tt('settings_jsx.profile_username')}</Label>
-                                  <Input {...input} type="text" disabled />
-                                  <Error meta={meta} />
-                              </FormGroup>
+                          {({ input }) => (
+                              <FormGroupRow justify="space-between">
+                                  <LabelRow>{tt('settings_jsx.profile_username')}</LabelRow>
+                                  <UserName>@{input.value}</UserName>
+                              </FormGroupRow>
                           )}
                       </Field>
                       <Field name="name">
@@ -71,6 +75,19 @@ const Account = ({ profile, account, onSubmit }) => {
                                           );
                                       })}
                                   </Select>
+                                  <Error meta={meta} />
+                              </FormGroup>
+                          )}
+                      </Field>
+                      <Field name="email">
+                          {({ input, meta }) => (
+                              <FormGroup>
+                                  <Label>{tt('settings_jsx.profile_email')}</Label>
+                                  <Input
+                                      {...input}
+                                      autocomplete="email"
+                                      type="text"
+                                  />
                                   <Error meta={meta} />
                               </FormGroup>
                           )}
@@ -117,9 +134,9 @@ const Account = ({ profile, account, onSubmit }) => {
                           <Field name="social.facebook">
                               {({ input, meta }) => (
                                   <FormGroupRow>
-                                      <LabelRow>
+                                      <LabelIcon>
                                           <Icon name="facebook" width="13" height="24" />
-                                      </LabelRow>
+                                      </LabelIcon>
                                       <Input
                                           {...input}
                                           type="text"
@@ -132,9 +149,9 @@ const Account = ({ profile, account, onSubmit }) => {
                           <Field name="social.vkontakte">
                               {({ input, meta }) => (
                                   <FormGroupRow>
-                                      <LabelRow>
+                                      <LabelIcon>
                                           <Icon name="vk" width="28" height="18" />
-                                      </LabelRow>
+                                      </LabelIcon>
                                       <Input
                                           {...input}
                                           type="text"
@@ -147,9 +164,9 @@ const Account = ({ profile, account, onSubmit }) => {
                           <Field name="social.instagram">
                               {({ input, meta }) => (
                                   <FormGroupRow>
-                                      <LabelRow>
+                                      <LabelIcon>
                                           <Icon name="instagram" size="23" />
-                                      </LabelRow>
+                                      </LabelIcon>
                                       <Input
                                           {...input}
                                           type="text"
@@ -162,9 +179,9 @@ const Account = ({ profile, account, onSubmit }) => {
                           <Field name="social.twitter">
                               {({ input, meta }) => (
                                   <FormGroupRow>
-                                      <LabelRow>
+                                      <LabelIcon>
                                           <Icon name="twitter" width="26" height="22" />
-                                      </LabelRow>
+                                      </LabelIcon>
                                       <Input
                                           {...input}
                                           type="text"

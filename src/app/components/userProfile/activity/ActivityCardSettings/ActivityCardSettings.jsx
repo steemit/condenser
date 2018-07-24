@@ -7,7 +7,7 @@ import tt from 'counterpart';
 
 import Card, { CardTitle, CardContent } from 'golos-ui/Card';
 import { DialogFooter, DialogButton } from 'golos-ui/Dialog';
-import { Switcher } from 'golos-ui/Form';
+import { Switcher, Label } from 'golos-ui/Form';
 
 const Group = styled.div`
     &:not(:first-child) {
@@ -68,7 +68,7 @@ export default class ActivityCardSettings extends PureComponent {
             <Form onSubmit={onSubmit} initialValues={{}}>
                 {({ handleSubmit, submitError, form, submitting, pristine, values }) => (
                     <form onSubmit={handleSubmit}>
-                        <GroupTitle>Звук</GroupTitle>
+                        <Label bold>Звук</Label>
                         <Field name="sound">
                             {({ input, meta }) => (
                                 <GroupField>

@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
+import is from 'styled-is';
 import { Map } from 'immutable';
 import { last } from 'ramda';
 
@@ -40,6 +41,11 @@ const Content = styled.div`
     &:last-child {
         margin-right: 0;
     }
+
+    ${is('center')`
+        flex-shrink: 0;
+        flex-grow: 0;
+    `}
 `;
 
 const SidebarRight = styled.div`
@@ -129,7 +135,7 @@ export default class UserProfileContainer extends Component {
                                 />
                             </SidebarLeft>
                         )}
-                        <Content>{this.props.content}</Content>
+                        <Content center={route == 'settings'}>{this.props.content}</Content>
                         {this.props.sidebarRight && (
                             <SidebarRight>{this.props.sidebarRight}</SidebarRight>
                         )}

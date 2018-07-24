@@ -10,13 +10,13 @@ import { immutableAccessor } from 'app/utils/Accessors';
 import Userpic from 'app/components/elements/Userpic';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import { detransliterate } from 'app/utils/ParsersAndFormatters';
-import DialogManager from 'app/components/elements/common/DialogManager';
 import CommentFormLoader from 'app/components/modules/CommentForm/loader';
 import user from 'app/redux/User';
 import transaction from 'app/redux/Transaction';
 import Icon from 'golos-ui/Icon';
 import Button from 'golos-ui/Button';
 import VotePanel from '../VotePanel';
+import { confirmVote } from 'src/app/helpers/votes';
 
 const Header = styled.div`
     padding: 10px 0 6px;
@@ -330,37 +330,17 @@ class CommentCard extends PureComponent {
         });
     };
 
-    _onVoteChange = async weight => {
+    _onVoteChange = async percent => {
         const props = this.props;
         const { myVote } = this.state;
 
-        if (myVote) {
-            let action;
-
-            if (weight === 0) {
-                action = tt('voting_jsx.removing_your_vote');
-            } else if (weight < 0 && myVote.percent > 0) {
-                action = tt('voting_jsx.changing_to_a_downvote');
-            } else if (weight > 0 && myVote.percent < 0) {
-                action = tt('voting_jsx.changing_to_an_upvote');
-            }
-
-            if (action) {
-                if (
-                    !(await DialogManager.confirm(
-                        action + tt('voting_jsx.we_will_reset_curation_rewards_for_this_post')
-                    ))
-                ) {
-                    return;
-                }
-            }
+        if (await confirmVote(myVote, percent)) {
+            this.props.onVote(percent, {
+                myAccount: props.myAccount,
+                author: props.data.get('author'),
+                permlink: props.data.get('permlink'),
+            });
         }
-
-        this.props.onVote(weight, {
-            myAccount: props.myAccount,
-            author: props.data.get('author'),
-            permlink: props.data.get('permlink'),
-        });
     };
 
     _onReplyClick = () => {
@@ -378,7 +358,7 @@ export default connect(
         };
     },
     dispatch => ({
-        onVote: (weight, { myAccount, author, permlink }) => {
+        onVote: (percent, { myAccount, author, permlink }) => {
             dispatch(
                 transaction.actions.broadcastOperation({
                     type: 'vote',
@@ -386,9 +366,9 @@ export default connect(
                         voter: myAccount,
                         author,
                         permlink,
-                        weight: weight * 10000,
+                        weight: percent * 10000,
                         __config: {
-                            title: weight < 0 ? tt('voting_jsx.confirm_flag') : null,
+                            title: percent < 0 ? tt('voting_jsx.confirm_flag') : null,
                         },
                     },
                     successCallback: () => dispatch(user.actions.getAccount()),

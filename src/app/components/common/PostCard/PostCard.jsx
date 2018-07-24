@@ -12,10 +12,10 @@ import Userpic from 'app/components/elements/Userpic';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import { detransliterate } from 'app/utils/ParsersAndFormatters';
 import Icon from 'golos-ui/Icon';
-import DialogManager from 'app/components/elements/common/DialogManager';
 import user from 'app/redux/User';
 import transaction from 'app/redux/Transaction';
 import VotePanel from '../VotePanel';
+import { confirmVote } from 'src/app/helpers/votes';
 
 const Header = styled.div`
     padding: 10px 0 6px;
@@ -410,33 +410,13 @@ class PostCard extends PureComponent {
         const props = this.props;
         const { myVote } = this.state;
 
-        if (myVote && myVote.weight > 0) {
-            let action;
-
-            if (percent === 0) {
-                action = tt('voting_jsx.removing_your_vote');
-            } else if (percent < 0 && myVote.percent > 0) {
-                action = tt('voting_jsx.changing_to_a_downvote');
-            } else if (percent > 0 && myVote.percent < 0) {
-                action = tt('voting_jsx.changing_to_an_upvote');
-            }
-
-            if (action) {
-                if (
-                    !(await DialogManager.confirm(
-                        action + tt('voting_jsx.we_will_reset_curation_rewards_for_this_post')
-                    ))
-                ) {
-                    return;
-                }
-            }
+        if (await confirmVote(myVote, percent)) {
+            this.props.onVote(percent, {
+                myAccount: props.myAccount,
+                author: props.data.get('author'),
+                permlink: props.data.get('permlink'),
+            });
         }
-
-        this.props.onVote(percent, {
-            myAccount: props.myAccount,
-            author: props.data.get('author'),
-            permlink: props.data.get('permlink'),
-        });
     };
 }
 

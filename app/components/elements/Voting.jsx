@@ -316,8 +316,6 @@ export default connect(
                 return null
             }
 
-            debugger
-
             dispatch(transaction.actions.broadcastOperation({
                 type: 'vote',
                 operation: {voter: username, author, permlink, weight,

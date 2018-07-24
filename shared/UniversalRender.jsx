@@ -105,7 +105,7 @@ export async function serverRender({
                 //onchain.content[key]['body'] = onchain.content[key]['body'].substring(0, 1024) // TODO: can be removed. will be handled by steemd
                 // Count some stats then remove voting data. But keep current user's votes. (#1040)
                 post.stats = contentStats(post)
-                post.votesSummary = calcVotesStats(post['active_votes'], offchain.account || 'destroyer2k');
+                post.votesSummary = calcVotesStats(post['active_votes'], offchain.account);
                 post['active_votes'] = post['active_votes'].filter(vote => vote.voter === offchain.account)
             }
         }

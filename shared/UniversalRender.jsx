@@ -26,6 +26,7 @@ import extractMeta from 'app/utils/ExtractMeta';
 import Translator from 'app/Translator';
 import getState from 'app/utils/StateBuilder';
 import {routeRegex} from "app/ResolveRoute";
+import { contentStats, calcVotesStats } from 'app/utils/StateFunctions'
 import {APP_NAME, IGNORE_TAGS, SEO_TITLE} from 'app/client_config';
 
 const sagaMiddleware = createSagaMiddleware();
@@ -95,6 +96,18 @@ export async function serverRender({
                 statusCode: 404,
                 body: renderToString(<NotFound />)
             };
+        }
+
+        // If we are not loading a post, truncate state data to bring response size down.
+        if (!url.match(routeRegex.Post)) {
+            for (let key in onchain.content) {
+                const post = onchain.content[key];
+                //onchain.content[key]['body'] = onchain.content[key]['body'].substring(0, 1024) // TODO: can be removed. will be handled by steemd
+                // Count some stats then remove voting data. But keep current user's votes. (#1040)
+                post.stats = contentStats(post)
+                post.votesSummary = calcVotesStats(post['active_votes'], offchain.account || 'destroyer2k');
+                post['active_votes'] = post['active_votes'].filter(vote => vote.voter === offchain.account)
+            }
         }
 
         if (!url.match(routeRegex.PostsIndex) && !url.match(routeRegex.UserProfile1) && !url.match(routeRegex.UserProfile2) && url.match(routeRegex.PostNoCategory)) {

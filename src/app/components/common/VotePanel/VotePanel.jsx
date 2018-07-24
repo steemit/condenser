@@ -4,6 +4,7 @@ import tt from 'counterpart';
 import styled from 'styled-components';
 import is from 'styled-is';
 import { getStoreState } from 'shared/UniversalRender';
+import { calcVotesStats } from 'app/utils/StateFunctions';
 import Icon from 'golos-ui/Icon';
 import Slider from 'golos-ui/Slider';
 
@@ -201,30 +202,20 @@ export default class VotePanel extends PureComponent {
         const { data, me, whiteTheme, className } = this.props;
         const { showSlider, sliderAction } = this.state;
 
-        this._myPercent = 0;
         const votes = data.get('active_votes');
-        const likes = [];
-        const dislikes = [];
-
-        for (let vote of votes.toJS()) {
-            if (vote.percent > 0) {
-                likes.push(vote.voter);
-            }
-
-            if (vote.percent < 0) {
-                dislikes.push(vote.voter);
-            }
-
-            if (vote.voter === me) {
-                this._myPercent = vote.percent;
-            }
-        }
+        const votesSummaryIm = data.get('votesSummary');
+        const votesSummary = votesSummaryIm ? votesSummaryIm.toJS() : calcVotesStats(votes.toJS(), me);
+        this._myVote = votesSummary.myVote;
 
         return (
             <Root whiteTheme={whiteTheme} className={className} innerRef={this._onRef}>
                 <LikeBlock
-                    active={this._myPercent > 0 || sliderAction === 'like'}
-                    data-tooltip={showSlider ? null : makeTooltip(likes)}
+                    active={this._myVote === 'like' || sliderAction === 'like'}
+                    data-tooltip={
+                        showSlider
+                            ? null
+                            : makeTooltip(votesSummary.firstLikes, votesSummary.likes > 10)
+                    }
                     data-tooltip-html
                     onClick={this._onLikeClick}
                 >
@@ -232,14 +223,18 @@ export default class VotePanel extends PureComponent {
                         <LikeIcon name="like" />
                     </LikeWrapper>
                     <LikeCount>
-                        {likes.length}
+                        {votesSummary.likes}
                         <IconTriangle name="triangle" />
                     </LikeCount>
                 </LikeBlock>
                 <Money>$1.07</Money>
                 <LikeBlockNeg
-                    activeNeg={this._myPercent < 0 || sliderAction === 'dislike'}
-                    data-tooltip={showSlider ? null : makeTooltip(dislikes)}
+                    activeNeg={this._myVote === 'dislike' || sliderAction === 'dislike'}
+                    data-tooltip={
+                        showSlider
+                            ? null
+                            : makeTooltip(votesSummary.firstDislikes, votesSummary.dislikes > 10)
+                    }
                     data-tooltip-html
                     onClick={this._onDislikeClick}
                 >
@@ -247,7 +242,7 @@ export default class VotePanel extends PureComponent {
                         <LikeIconNeg name="like" />
                     </LikeWrapper>
                     <LikeCount>
-                        {dislikes.length}
+                        {votesSummary.dislikes}
                         <IconTriangle name="triangle" />
                     </LikeCount>
                 </LikeBlockNeg>
@@ -313,7 +308,7 @@ export default class VotePanel extends PureComponent {
     _onLikeClick = () => {
         if (this.state.showSlider) {
             this._hideSlider();
-        } else if (this._myPercent > 0) {
+        } else if (this._myVote === 'like') {
             this.props.onChange(0);
         } else if (isNeedShowSlider()) {
             this.setState({
@@ -328,16 +323,10 @@ export default class VotePanel extends PureComponent {
         }
     };
 
-    _onAwayClick = e => {
-        if (this._root && !this._root.contains(e.target)) {
-            this._hideSlider();
-        }
-    };
-
     _onDislikeClick = () => {
         if (this.state.showSlider) {
             this._hideSlider();
-        } else if (this._myPercent < 0) {
+        } else if (this._myVote === 'dislike') {
             this.props.onChange(0);
         } else if (isNeedShowSlider()) {
             this.setState({
@@ -349,6 +338,12 @@ export default class VotePanel extends PureComponent {
             window.addEventListener('click', this._onAwayClick);
         } else {
             this.props.onChange(-1);
+        }
+    };
+
+    _onAwayClick = e => {
+        if (this._root && !this._root.contains(e.target)) {
+            this._hideSlider();
         }
     };
 
@@ -373,12 +368,8 @@ export default class VotePanel extends PureComponent {
     };
 }
 
-function makeTooltip(accounts) {
-    if (accounts.length > 10) {
-        return accounts.slice(0, 10).join('<br>') + '<br>...';
-    } else {
-        return accounts.join('<br>');
-    }
+function makeTooltip(accounts, isMore) {
+    return accounts.join('<br>') + (isMore ? '<br>...' : '');
 }
 
 function isNeedShowSlider() {

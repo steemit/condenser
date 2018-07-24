@@ -151,3 +151,39 @@ export function fromJSGreedy(js) {
       Seq(js).map(fromJSGreedy).toList() :
       Seq(js).map(fromJSGreedy).toMap();
 }
+
+export function calcVotesStats(votes, me) {
+    const stats = {
+        likes: 0,
+        firstLikes: [],
+        dislikes: 0,
+        firstDislikes: [],
+        myVote: null,
+    };
+
+    for (let { voter, percent } of votes) {
+        if (voter === me) {
+            if (percent > 0) {
+                stats.myVote = 'like';
+            } else if (percent < 0) {
+                stats.myVote = 'dislike';
+            }
+        }
+
+        if (percent > 0) {
+            stats.likes++;
+
+            if (stats.likes <= 10) {
+                stats.firstLikes.push(voter);
+            }
+        } else if (percent < 0) {
+            stats.dislikes++;
+
+            if (stats.dislikes <= 10) {
+                stats.firstDislikes.push(voter);
+            }
+        }
+    }
+
+    return stats;
+}

@@ -406,18 +406,18 @@ class PostCard extends PureComponent {
         browserHistory.push(link);
     };
 
-    _onVoteChange = async weight => {
+    _onVoteChange = async percent => {
         const props = this.props;
         const { myVote } = this.state;
 
-        if (myVote) {
+        if (myVote && myVote.weight > 0) {
             let action;
 
-            if (weight === 0) {
+            if (percent === 0) {
                 action = tt('voting_jsx.removing_your_vote');
-            } else if (weight < 0 && myVote.percent > 0) {
+            } else if (percent < 0 && myVote.percent > 0) {
                 action = tt('voting_jsx.changing_to_a_downvote');
-            } else if (weight > 0 && myVote.percent < 0) {
+            } else if (percent > 0 && myVote.percent < 0) {
                 action = tt('voting_jsx.changing_to_an_upvote');
             }
 
@@ -432,7 +432,7 @@ class PostCard extends PureComponent {
             }
         }
 
-        this.props.onVote(weight, {
+        this.props.onVote(percent, {
             myAccount: props.myAccount,
             author: props.data.get('author'),
             permlink: props.data.get('permlink'),
@@ -448,7 +448,7 @@ export default connect(
         };
     },
     dispatch => ({
-        onVote: (weight, { myAccount, author, permlink }) => {
+        onVote: (percent, { myAccount, author, permlink }) => {
             dispatch(
                 transaction.actions.broadcastOperation({
                     type: 'vote',
@@ -456,9 +456,9 @@ export default connect(
                         voter: myAccount,
                         author,
                         permlink,
-                        weight: weight * 10000,
+                        weight: Math.round(percent * 10000),
                         __config: {
-                            title: weight < 0 ? tt('voting_jsx.confirm_flag') : null,
+                            title: percent < 0 ? tt('voting_jsx.confirm_flag') : null,
                         },
                     },
                     successCallback: () => dispatch(user.actions.getAccount()),

@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import is from 'styled-is';
 import { connect } from 'react-redux';
 import throttle from 'lodash/throttle';
-import { Map } from 'immutable';
+import immutable from 'immutable';
 import PostCard from 'src/app/components/common/PostCard';
 import CommentCard from 'src/app/components/common/CommentCard';
 import { isFetchingOrRecentlyUpdated } from 'app/utils/StateFunctions';
@@ -33,18 +33,18 @@ const EntryWrapper = styled.div`
         @media screen and (max-width: 830px) {
             width: 100%;
         }
-    `}
+    `};
 `;
 
 class PostsList extends PureComponent {
     static propTypes = {
-        content: PropTypes.object, // immutable.Map
-        posts: PropTypes.object, // immutable.List
+        content: PropTypes.instanceOf(immutable.Map),
+        posts: PropTypes.instanceOf(immutable.List),
         layout: PropTypes.oneOf(['list', 'grid']),
     };
 
     static defaultProps = {
-        posts: Map(),
+        posts: immutable.Map(),
     };
 
     componentDidMount() {
@@ -133,10 +133,7 @@ export default connect(
             myAccount: state.user.getIn(['current', 'username']),
             globalStatus: state.global.get('status'),
             layout: state.profile ? state.profile.get('layout') : 'list',
-            posts: state.global
-                .get('accounts')
-                .get(props.account)
-                .get(props.category),
+            posts: state.global.getIn(['accounts', props.account, props.category]),
         };
     },
     {

@@ -136,6 +136,7 @@ export default createModule({
 
                 return state.updateIn(['content', key], Map(), c => {
                     c = emptyContentMap.mergeDeep(c);
+                    c = c.delete('votesSummary');
                     c = c.delete('active_votes');
                     c = c.mergeDeep(content);
                     c = c.set('stats', fromJS(contentStats(c)));

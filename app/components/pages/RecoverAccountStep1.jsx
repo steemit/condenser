@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types'
 import SvgImage from 'app/components/elements/SvgImage';
 import PasswordInput from 'app/components/elements/PasswordInput';
+import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import constants from 'app/redux/constants';
 import {PrivateKey} from 'golos-js/lib/auth/ecc';
 import tt from 'counterpart';

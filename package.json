@@ -189,6 +189,7 @@
     "optimize-css-assets-webpack-plugin": "^4.0.2",
     "postcss-loader": "^2.1.5",
     "progress-bar-webpack-plugin": "^1.11.0",
+    "redux-saga-devtools": "0.2.0",
     "sinon": "^1.17.7",
     "sinon-chai": "^2.8.0",
     "storybook-router-react": "0.3.3",

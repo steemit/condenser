@@ -1,1 +1,1 @@
-export { default, CardTitle, CardContent, CardRow, CardColumn } from './Card';
+export { default, CardTitle, CardContent, CardDivider, CardRow, CardColumn } from './Card';

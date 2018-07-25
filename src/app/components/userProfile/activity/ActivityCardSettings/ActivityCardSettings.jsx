@@ -68,7 +68,7 @@ export default class ActivityCardSettings extends PureComponent {
             <Form onSubmit={onSubmit} initialValues={{}}>
                 {({ handleSubmit, submitError, form, submitting, pristine, values }) => (
                     <form onSubmit={handleSubmit}>
-                        <Label bold>Звук</Label>
+                        <Label dark bold>Звук</Label>
                         <Field name="sound">
                             {({ input, meta }) => (
                                 <GroupField>

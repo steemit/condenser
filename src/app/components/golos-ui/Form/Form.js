@@ -38,16 +38,19 @@ const labelStyles = css`
     font-size: 14px;
     line-height: 1;
     text-transform: initial;
+
+    ${is('dark')`
+        color: #393636;
+    `}
+
+    ${is('bold')`
+        font-weight: bold;
+    `};
 `;
 
 export const Label = styled.label`
     margin-bottom: 12px;
     ${labelStyles};
-
-    ${is('bold')`
-        color: #393636;
-        font-weight: bold;
-    `};
 `;
 
 export const LabelRow = styled.label`

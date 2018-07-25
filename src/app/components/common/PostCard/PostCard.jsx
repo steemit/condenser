@@ -131,14 +131,14 @@ const Body = styled.div`
 `;
 const PostTitle = styled.div`
     font-size: 20px;
-    font-family: ${a => a.theme.fontFamilyBold};
+    font-family: ${({theme}) => theme.fontFamilyBold};
     color: #212121;
     //line-height: 34px;
     line-height: 29px;
     margin-bottom: 8px;
 `;
 const PostBody = styled.div`
-    font-family: ${a => a.theme.fontFamily};
+    font-family: ${({theme}) => theme.fontFamily};
     color: #959595;
 `;
 

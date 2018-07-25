@@ -55,8 +55,14 @@ export default {
             if (process.env.BROWSER) cb(null, [require('@pages/SubmitPost')]);
             else cb(null, [require('@pages/SubmitPostServerRender')]);
         } else if (route.page === 'UserProfile') {
-            //cb(null, [require('@pages/UserProfile')]);
-            cb(null, [require('src/app/containers/userProfile').UserProfileContainer]);
+            if (process.env.NODE_ENV === 'development') {
+                cb(null, [
+                    require('src/app/containers/userProfile')
+                        .UserProfileContainer,
+                ]);
+            } else {
+                cb(null, [require('@pages/UserProfile')]);
+            }
         } else if (route.page === 'Market') {
             cb(null, [require('@pages/MarketLoader')]);
         } else if (route.page === 'Post') {

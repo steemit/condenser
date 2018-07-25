@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import is from 'styled-is';
 
-const Main = styled.div`
+const Wrapper = styled.div`
     display: inline-block;
     width: 34px;
     height: 14px;
@@ -37,8 +37,8 @@ const Toggler = styled.div`
 `;
 
 const Switcher = ({ value, onChange }) => (
-    <Main checked={value} onClick={() => onChange(!value)}>
+    <Wrapper checked={value} onClick={() => onChange(!value)}>
         <Toggler checked={value} />
-    </Main>
+    </Wrapper>
 );
 export default Switcher;

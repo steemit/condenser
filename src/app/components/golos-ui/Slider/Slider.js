@@ -4,53 +4,9 @@ import styled from 'styled-components';
 import is from 'styled-is';
 import keyCodes from 'app/utils/keyCodes';
 
-const HandleSlot = styled.div`
+const Wrapper = styled.div`
     position: relative;
-    margin: 0 10px;
-`;
-
-const Handle = styled.div`
-    position: absolute;
-    left: 0;
-    width: 22px;
-    height: 22px;
-    margin-left: -11px;
-    border: 1px solid #2879ff;
-    border-radius: 50%;
-    line-height: 22px;
-    font-size: 11px;
-    font-weight: bold;
-    text-align: center;
-    color: #fff;
-    background: #2879ff;
-    cursor: pointer;
-    transition: background-color 0.15s, border-color 0.15s;
-    overflow: hidden;
-
-    &:hover {
-        background: #5191ff;
-        border-color: #5191ff;
-    }
-
-    ${is('active')`
-        background: #2879ff !important;
-        border-color: #2879ff !important;
-    `};
-`;
-
-const Filler = styled.div`
-    position: absolute;
-    top: 10px;
-    left: 0;
-    width: 0;
-    height: 2px;
-    border-radius: 1px;
-    background: #2879ff;
-`;
-
-const Root = styled.div`
-    position: relative;
-    height: 22px;
+    height: ${({ showCaptions }) => (showCaptions ? 50 : 20)}px;
     user-select: none;
     cursor: pointer;
 
@@ -66,7 +22,7 @@ const Root = styled.div`
     }
 
     ${is('red')`
-        ${Filler} {
+        ${Progress} {
             background: #ff4e00;
         }
         
@@ -77,22 +33,81 @@ const Root = styled.div`
     `};
 `;
 
+const Progress = styled.div`
+    position: absolute;
+    top: 10px;
+    left: 0;
+    width: ${({ width }) => width}%;
+    height: 2px;
+    border-radius: 1px;
+    background: #2879ff;
+`;
+
+const HandleSlot = styled.div`
+    position: relative;
+    margin: 0 10px;
+`;
+
+const Handle = styled.div`
+    position: absolute;
+    left: ${({ left }) => left}%;
+    width: 22px;
+    height: 22px;
+    margin-left: -11px;
+
+    line-height: 22px;
+    font-size: 11px;
+    font-weight: bold;
+    text-align: center;
+    color: #fff;
+
+    border: 1px solid #2879ff;
+    border-radius: 50%;
+
+    background: #2879ff;
+    box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.25);
+
+    cursor: pointer;
+    transition: background-color 0.15s, border-color 0.15s;
+    overflow: hidden;
+`;
+
+const Captions = styled.div`
+    position: relative;
+    display: flex;
+    top: 32px;
+    line-height: 1;
+    font-size: 12px;
+    color: #959595;
+`;
+
+const Caption = styled.div`
+    flex: 1;
+
+    ${is('left')`
+        text-align: left;
+    `}
+    ${is('center')`
+        text-align: center;
+    `}
+    ${is('right')`
+        text-align: right;
+    `}
+`;
 export default class Slider extends PureComponent {
     static propTypes = {
         value: PropTypes.number.isRequired,
         min: PropTypes.number,
         max: PropTypes.number,
         red: PropTypes.bool,
+        showCaptions: PropTypes.bool,
         onChange: PropTypes.func.isRequired,
     };
 
     static defaultProps = {
         min: 0,
         max: 100,
-    };
-
-    state = {
-        active: false,
+        showCaptions: false,
     };
 
     componentWillUnmount() {
@@ -100,20 +115,29 @@ export default class Slider extends PureComponent {
     }
 
     render() {
-        const { value, min, max, ...passProps } = this.props;
-        const { active } = this.state;
+        const { value, min, max, showCaptions, ...passProps } = this.props;
 
         const percent = (100 * (value - min)) / (max - min);
 
         return (
-            <Root {...passProps} onMouseDown={this._onMouseDown} onClick={this._onClick}>
-                <Filler style={{ width: `${percent}%` }} />
+            <Wrapper
+                {...passProps}
+                onMouseDown={this._onMouseDown}
+                onClick={this._onClick}
+                showCaptions={showCaptions}
+            >
+                <Progress width={percent} />
                 <HandleSlot innerRef={this._onRef}>
-                    <Handle active={active} style={{ left: `${percent}%` }}>
-                        {value}
-                    </Handle>
+                    <Handle left={percent}>{value}</Handle>
                 </HandleSlot>
-            </Root>
+                {showCaptions && (
+                    <Captions>
+                        <Caption left>0%</Caption>
+                        <Caption center>50%</Caption>
+                        <Caption right>100%</Caption>
+                    </Captions>
+                )}
+            </Wrapper>
         );
     }
 
@@ -141,10 +165,6 @@ export default class Slider extends PureComponent {
     }
 
     _resetMoving() {
-        this.setState({
-            active: false,
-        });
-
         this._removeListeners();
     }
 
@@ -152,13 +172,12 @@ export default class Slider extends PureComponent {
         this.setState({
             value: this._calculateValue(e),
         });
-    }
+    };
 
     _onMouseDown = e => {
         e.preventDefault();
 
         this.setState({
-            active: true,
             value: this._calculateValue(e),
         });
 

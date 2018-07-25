@@ -18,6 +18,7 @@ import {createStore, applyMiddleware, compose} from 'redux';
 import { browserHistory } from 'react-router';
 import { useScroll } from 'react-router-scroll';
 import createSagaMiddleware from 'redux-saga';
+import { DockableSagaView, createSagaMonitor } from 'redux-saga-devtools';
 import { syncHistoryWithStore } from 'react-router-redux';
 import rootReducer from 'app/redux/RootReducer';
 import rootSaga from 'app/redux/RootSaga';
@@ -28,19 +29,6 @@ import getState from 'app/utils/StateBuilder';
 import {routeRegex} from "app/ResolveRoute";
 import { contentStats, calcVotesStats } from 'app/utils/StateFunctions'
 import {APP_NAME, IGNORE_TAGS, SEO_TITLE} from 'app/client_config';
-
-const sagaMiddleware = createSagaMiddleware();
-
-let middleware;
-
-if (process.env.BROWSER && process.env.NODE_ENV === 'development') {
-    const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
-    middleware = composeEnhancers(
-        applyMiddleware(sagaMiddleware)
-    );
-} else {
-    middleware = applyMiddleware(sagaMiddleware);
-}
 
 const runRouter = (location, routes) => {
     return new Promise((resolve) =>
@@ -197,6 +185,22 @@ export function getStoreState() {
 }
 
 export function clientRender(initialState) {
+    let monitor;
+    let sagaMiddleware;
+    let middleware;
+    
+    if (process.env.NODE_ENV === 'development') {
+        monitor = createSagaMonitor()
+        sagaMiddleware = createSagaMiddleware({ sagaMonitor: monitor });
+        const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+        middleware = composeEnhancers(
+            applyMiddleware(sagaMiddleware)
+        );
+    } else {
+        sagaMiddleware = createSagaMiddleware();
+        middleware = applyMiddleware(sagaMiddleware);
+    }
+    
     store = createStore(rootReducer, initialState, middleware);
     sagaMiddleware.run(rootSaga)
 
@@ -227,6 +231,7 @@ export function clientRender(initialState) {
                     />
                 </Translator>
             </Provider>
+            {monitor && <DockableSagaView monitor={monitor} />}
         </Wrapper>,
         document.getElementById('content')
     );

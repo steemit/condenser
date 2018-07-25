@@ -6,12 +6,22 @@ import tt from 'counterpart';
 
 import { TabContainer, Tabs } from 'golos-ui/Tabs';
 
+import Online from './notifications/Online';
+import Push from './notifications/Push';
+import Email from './notifications/Email';
+
 const Notifications = ({ profile, onSubmit }) => {
     return (
-        <Tabs activeTab={{ id: 'tab1' }}>
-            <TabContainer id="online" title="Онлайн" />
-            <TabContainer id="push" title="Пуш" />
-            <TabContainer id="email" title="E-mail" />
+        <Tabs activeTab={{ id: 'onlineTab' }}>
+            <TabContainer id="onlineTab" title="Онлайн">
+                <Online profile={profile} onSubmit={onSubmit}/>
+            </TabContainer>
+            <TabContainer id="pushTab" title="Пуш">
+                <Push profile={profile} onSubmit={onSubmit}/>
+            </TabContainer>
+            <TabContainer id="emailTab" title="E-mail">
+                <Email profile={profile} onSubmit={onSubmit}/>
+            </TabContainer>
         </Tabs>
     );
 };

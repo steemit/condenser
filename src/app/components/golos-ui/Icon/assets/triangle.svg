@@ -1,4 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg viewBox="0 0 5 3" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <polygon points="0.2 0 2.5 2.9 4.8 0" fill="#393636"></polygon>
-</svg>
+<svg viewBox="0 0 5 3" xmlns="http://www.w3.org/2000/svg"><path fill="#393636" d="M.2 0l2.3 2.9L4.8 0z"/></svg>

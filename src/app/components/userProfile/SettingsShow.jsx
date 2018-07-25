@@ -9,7 +9,6 @@ import { TabContainer, Tabs } from 'golos-ui/Tabs';
 
 import Common from './settings/Common';
 import Account from './settings/Account';
-import Publications from './settings/Publications';
 import Notifications from './settings/Notifications';
 
 export default class SettingsShow extends PureComponent {
@@ -23,18 +22,15 @@ export default class SettingsShow extends PureComponent {
         const { profile, account, onSubmit } = this.props;
 
         return (
-            <Card style={{ flexBasis: '566px' }}>
-                <Tabs activeTab={{ id: 'common' }}>
-                    <TabContainer id="common" title="Общие">
-                        <Common />
+            <Card style={{ width: '566px' }}>
+                <Tabs activeTab={{ id: 'commonTab' }}>
+                    <TabContainer id="commonTab" title="Общие">
+                        <Common profile={profile} onSubmit={onSubmit} />
                     </TabContainer>
-                    <TabContainer id="account" title="Учетная запись">
+                    <TabContainer id="accountTab" title="Учетная запись">
                         <Account profile={profile} account={account} onSubmit={onSubmit} />
                     </TabContainer>
-                    <TabContainer id="publications" title="Публикации">
-                        <Publications profile={profile} onSubmit={onSubmit} />
-                    </TabContainer>
-                    <TabContainer id="notifications" title="Уведомления">
+                    <TabContainer id="notificationsTab" title="Уведомления">
                         <Notifications profile={profile} onSubmit={onSubmit} />
                     </TabContainer>
                 </Tabs>

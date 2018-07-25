@@ -245,7 +245,7 @@ class CommentCard extends PureComponent {
         return (
             <Body>
                 <Title>
-                    <TitleIcon name="comment_small" />
+                    <TitleIcon name="comment" />
                     {tt('g.re2')}: <TitleLink to={parentLink}>{title}</TitleLink>
                     {allowInlineEdit && !edit ? (
                         <IconEdit

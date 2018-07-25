@@ -79,7 +79,7 @@ const Account = ({ profile, account, onSubmit }) => {
                               </FormGroup>
                           )}
                       </Field>
-                      <Field name="email">
+                      {/* <Field name="email">
                           {({ input, meta }) => (
                               <FormGroup>
                                   <Label>{tt('settings_jsx.profile_email')}</Label>
@@ -91,7 +91,7 @@ const Account = ({ profile, account, onSubmit }) => {
                                   <Error meta={meta} />
                               </FormGroup>
                           )}
-                      </Field>
+                      </Field> */}
                       <Field name="location">
                           {({ input, meta }) => (
                               <FormGroup>

@@ -48,7 +48,13 @@ export const CardTitle = styled(Flex)`
 
 export const CardContent = styled(Flex)`
     padding: 20px;
-    margin-bottom: 10px;
+`;
+
+export const CardDivider = styled.div`
+    display: flex;
+    flex: 1;
+    height: 1px;
+    background: #F2F2F2;
 `;
 
 export const CardRow = styled(Flex)`

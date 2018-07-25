@@ -24,7 +24,7 @@ export const DialogHeader = styled.div`
 `;
 
 export const DialogContent = styled.div`
-    padding: 10px 30px 28px;
+    padding: 10px 30px 18px;
     line-height: 1.5em;
     color: #666;
 `;
@@ -37,6 +37,7 @@ export const DialogFooter = styled.div`
     box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.1);
     background-color: #ffffff;
 
+    margin-top: 10px;
     overflow: hidden;
     z-index: 1;
 

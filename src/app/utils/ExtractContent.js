@@ -10,7 +10,7 @@ const remarkable = new Remarkable({ html: true, linkify: false });
 const getValidImage = array => {
     return array &&
         Array.isArray(array) &&
-        array.size >= 1 &&
+        array.length >= 1 &&
         typeof array[0] === 'string'
         ? array[0]
         : null;

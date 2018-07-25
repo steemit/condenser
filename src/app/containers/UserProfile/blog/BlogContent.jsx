@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import styled from 'styled-components';
 
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import Callout from 'app/components/elements/Callout';
 
 import PostsList from 'src/app/components/common/PostsList';
+
+const Loader = styled(LoadingIndicator)`
+    margin-top: 30px;
+`;
 
 class BlogContent extends Component {
     render() {
@@ -14,7 +19,7 @@ class BlogContent extends Component {
 
         if (!posts) {
             return (
-                <LoadingIndicator type="circle" center size={40} />
+                <Loader type="circle" center size={40} />
             );
         }
 

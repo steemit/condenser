@@ -13,6 +13,8 @@
 //}
 
 .LoadingIndicator {
+  pointer-events: none;
+
   &_center {
     display: flex;
     align-items: center;

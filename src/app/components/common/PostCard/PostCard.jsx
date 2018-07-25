@@ -1,9 +1,9 @@
 import React, { PureComponent, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
+import { Link } from 'react-router';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import { browserHistory } from 'react-router';
 import is from 'styled-is';
 import tt from 'counterpart';
 import extractContent from 'app/utils/ExtractContent';
@@ -106,11 +106,11 @@ const IconWrapper = styled.div`
     }
 `;
 
-const BodyLink = styled.a`
+const BodyLink = styled(Link)`
     display: block;
     transition: none !important;
 
-    ${is('showLine')`
+    ${is('line')`
         border-bottom: 2px solid #f3f3f3;
     `};
 
@@ -250,6 +250,7 @@ class PostCard extends PureComponent {
         myAccount: PropTypes.string,
         data: PropTypes.object,
         grid: PropTypes.bool,
+        onClick: PropTypes.func,
     };
 
     state = {
@@ -284,6 +285,8 @@ class PostCard extends PureComponent {
 
         const p = extractContent(immutableAccessor, data);
         const withImage = Boolean(p.image_link);
+
+        this._url = p.link;
 
         if (withImage) {
             p.desc = p.desc.replace(p.image_link, '');
@@ -364,11 +367,11 @@ class PostCard extends PureComponent {
 
         return (
             <BodyLink
-                href={p.link}
-                showLine={!grid || !withImage}
-                half={withImage && !grid}
-                grid={grid}
-                onClick={e => this._onClick(e, p.link)}
+                to={p.link}
+                line={(!grid || !withImage) ? 1 : 0}
+                half={(withImage && !grid) ? 1 : 0}
+                grid={grid ? 1 : 0}
+                onClick={this._onClick}
             >
                 <Body>
                     <PostTitle>{p.title}</PostTitle>
@@ -401,10 +404,12 @@ class PostCard extends PureComponent {
         );
     }
 
-    _onClick = (e, link) => {
-        e.preventDefault();
-        browserHistory.push(link);
-    };
+    _onClick = e => {
+        if (this.props.onClick) {
+            e.preventDefault();
+            this.props.onClick(this._url);
+        }
+    }
 
     _onVoteChange = async percent => {
         const props = this.props;

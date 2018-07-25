@@ -18,7 +18,6 @@ import {createStore, applyMiddleware, compose} from 'redux';
 import { browserHistory } from 'react-router';
 import { useScroll } from 'react-router-scroll';
 import createSagaMiddleware from 'redux-saga';
-import { DockableSagaView, createSagaMonitor } from 'redux-saga-devtools';
 import { syncHistoryWithStore } from 'react-router-redux';
 import rootReducer from 'app/redux/RootReducer';
 import rootSaga from 'app/redux/RootSaga';
@@ -188,9 +187,13 @@ export function clientRender(initialState) {
     let monitor;
     let sagaMiddleware;
     let middleware;
-    
+
+    let sagaDev;
+
     if (process.env.NODE_ENV === 'development') {
-        monitor = createSagaMonitor()
+        sagaDev = require('redux-saga-devtools');
+
+        monitor = sagaDev.createSagaMonitor();
         sagaMiddleware = createSagaMiddleware({ sagaMonitor: monitor });
         const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
         middleware = composeEnhancers(
@@ -231,7 +234,7 @@ export function clientRender(initialState) {
                     />
                 </Translator>
             </Provider>
-            {monitor && <DockableSagaView monitor={monitor} />}
+            {monitor && sagaDev && <sagaDev.DockableSagaView monitor={monitor} />}
         </Wrapper>,
         document.getElementById('content')
     );

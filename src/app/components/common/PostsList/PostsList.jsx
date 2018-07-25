@@ -9,6 +9,9 @@ import PostCard from 'src/app/components/common/PostCard';
 import CommentCard from 'src/app/components/common/CommentCard';
 import { isFetchingOrRecentlyUpdated } from 'app/utils/StateFunctions';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
+import PostOverlay from '../PostOverlay';
+import { getStoreState } from 'shared/UniversalRender';
+import DialogManager from 'app/components/elements/common/DialogManager';
 
 const Root = styled.div`
     ${is('grid')`
@@ -49,9 +52,14 @@ class PostsList extends PureComponent {
         posts: immutable.Map(),
     };
 
+    state = {
+        showPostPermLink: null,
+    };
+
     componentDidMount() {
-        console.log('PostsList Did Mount');
         window.addEventListener('scroll', this._onScroll);
+
+        this._initialUrl = location.pathname + location.search + location.hash;
     }
 
     componentWillUnmount() {
@@ -74,10 +82,12 @@ class PostsList extends PureComponent {
                             grid={isGrid}
                             allowInlineReply={allowInlineReply}
                             allowInlineEdit={allowInlineEdit}
+                            onClick={this._onEntryClick}
                         />
                     </EntryWrapper>
                 ))}
                 {this._renderLoaderIfNeed()}
+                {this._renderPostOverlayInNeed()}
             </Root>
         );
     }
@@ -94,6 +104,14 @@ class PostsList extends PureComponent {
                     <LoadingIndicator type="circle" center size={40} />
                 </Loader>
             );
+        }
+    }
+
+    _renderPostOverlayInNeed() {
+        const { showPostPermLink } = this.state;
+
+        if (showPostPermLink) {
+            return <PostOverlay permLink={showPostPermLink} onClose={this._onOverlayClose} />;
         }
     }
 
@@ -132,10 +150,40 @@ class PostsList extends PureComponent {
         100,
         { leading: false, tailing: true }
     );
+
+    _onEntryClick = async ({ permLink, url }) => {
+        const state = getStoreState();
+
+        if (!state.global.hasIn(['content', permLink])) {
+            try {
+                await this.props.loadContent(permLink);
+            } catch (err) {
+                DialogManager.alert('Не удалось загрузить данные');
+            }
+        }
+
+        window.history.pushState({}, '', url);
+
+        this.setState({
+            showPostPermLink: permLink,
+        });
+    };
+
+    _onOverlayClose = () => {
+        this.setState({
+            showPostPermLink: null,
+        });
+
+        window.history.pushState({}, '', this._initialUrl);
+    };
 }
 
 export default connect(
     (state, props) => {
+        if (process.env.BROWSER && process.env.NODE_ENV === 'development') {
+            window.state = state;
+        }
+
         return {
             myAccount: state.user.getIn(['current', 'username']),
             globalStatus: state.global.get('status'),
@@ -143,9 +191,24 @@ export default connect(
             posts: state.global.getIn(['accounts', props.account, props.category]),
         };
     },
-    {
+    dispatch => ({
         loadMore(params) {
-            return { type: 'REQUEST_DATA', payload: params };
+            dispatch({ type: 'REQUEST_DATA', payload: params });
         },
-    }
+        loadContent(permLink) {
+            return new Promise((resolve, reject) => {
+                const [author, permlink] = permLink.split('/');
+
+                dispatch({
+                    type: 'GET_CONTENT',
+                    payload: {
+                        author,
+                        permlink,
+                        resolve,
+                        reject,
+                    },
+                });
+            });
+        },
+    })
 )(PostsList);

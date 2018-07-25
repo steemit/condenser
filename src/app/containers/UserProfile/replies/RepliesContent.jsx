@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import Callout from 'app/components/elements/Callout';
 
 import PostsList from 'src/app/components/common/PostsList';
+import styled from 'styled-components';
+
+const Loader = styled(LoadingIndicator)`
+    margin-top: 30px;
+`;
 
 class RepliesContent extends Component {
     render() {
@@ -14,7 +18,7 @@ class RepliesContent extends Component {
         const posts = currentAccount.get('recent_replies');
 
         if (!posts) {
-            return <LoadingIndicator type="circle" center size={40} />;
+            return <Loader type="circle" center size={40} />;
         }
 
         if (!posts.size) {

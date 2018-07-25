@@ -192,21 +192,22 @@ class CommentCard extends PureComponent {
         const { data, className } = this.props;
         const { showReply } = this.state;
 
-        const d = data.toJS();
+        this._data = data.toJS();
+        this._content = extractContent(immutableAccessor, data);
 
         return (
             <Root className={cn(className)}>
-                {this._renderHeader(d)}
-                {this._renderBody(d)}
+                {this._renderHeader()}
+                {this._renderBody()}
                 {this._renderFooter()}
                 {showReply ? this._renderReplyEditor() : null}
             </Root>
         );
     }
 
-    _renderHeader(json) {
-        const author = json.author;
-        const category = detransliterate(json.category);
+    _renderHeader() {
+        const author = this._data.author;
+        const category = detransliterate(this._data.category);
 
         return (
             <Header>
@@ -218,7 +219,7 @@ class CommentCard extends PureComponent {
                         <PostDesc>
                             <AuthorName href={`/@${author}`}>{author}</AuthorName>
                             <PostDate>
-                                <TimeAgoWrapper date={json.created} />
+                                <TimeAgoWrapper date={this._data.created} />
                             </PostDate>
                         </PostDesc>
                     </AuthorBlock>
@@ -229,24 +230,26 @@ class CommentCard extends PureComponent {
         );
     }
 
-    _renderBody(json) {
-        const { data, allowInlineEdit } = this.props;
+    _renderBody() {
+        const { allowInlineEdit } = this.props;
         const { edit } = this.state;
 
-        const p = extractContent(immutableAccessor, data);
-        let title = p.title;
-        let parentLink = p.link;
+        let title = this._content.title;
+        let parentLink = this._content.link;
 
-        if (json.parent_author) {
-            title = json.root_title;
-            parentLink = `/${json.category}/@${json.parent_author}/${json.parent_permlink}`;
+        if (this._data.parent_author) {
+            title = this._data.root_title;
+            parentLink = `/${this._data.category}/@${this._data.parent_author}/${this._data.parent_permlink}`;
         }
 
         return (
             <Body>
                 <Title>
                     <TitleIcon name="comment" />
-                    {tt('g.re2')}: <TitleLink to={parentLink}>{title}</TitleLink>
+                    {tt('g.re2')}:{' '}
+                    <TitleLink to={parentLink} onClick={this._onTitleClick}>
+                        {title}
+                    </TitleLink>
                     {allowInlineEdit && !edit ? (
                         <IconEdit
                             name="pen"
@@ -260,12 +263,16 @@ class CommentCard extends PureComponent {
                     <CommentFormLoader
                         reply
                         editMode
-                        params={data.toJS()}
+                        params={dataRaw}
                         onSuccess={this._onEditDone}
                         onCancel={this._onEditDone}
                     />
                 ) : (
-                    <PostBody to={p.link} dangerouslySetInnerHTML={{ __html: p.desc }} />
+                    <PostBody
+                        to={this._content.link}
+                        onClick={this._onClick}
+                        dangerouslySetInnerHTML={{ __html: this._content.desc }}
+                    />
                 )}
             </Body>
         );
@@ -303,6 +310,36 @@ class CommentCard extends PureComponent {
             </Reply>
         );
     }
+
+    _onTitleClick = e => {
+        if (this.props.onClick) {
+            e.preventDefault();
+
+            const url = e.currentTarget.href;
+
+            if (this._data.parent_author) {
+                this.props.onClick({
+                    permLink: `${this._data.parent_author}/${this._data.parent_permlink}`,
+                    url,
+                });
+            } else {
+                this.props.onClick({
+                    permLink: this.props.permLink,
+                    url,
+                });
+            }
+        }
+    };
+
+    _onClick = e => {
+        if (this.props.onClick) {
+            e.preventDefault();
+            this.props.onClick({
+                permLink: this.props.permLink,
+                url: this._content.link,
+            });
+        }
+    };
 
     _onReplySuccess = () => {
         this.setState({

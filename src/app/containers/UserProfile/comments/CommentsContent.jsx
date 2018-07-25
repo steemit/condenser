@@ -5,6 +5,11 @@ import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import Callout from 'app/components/elements/Callout';
 
 import PostsList from 'src/app/components/common/PostsList';
+import styled from 'styled-components';
+
+const Loader = styled(LoadingIndicator)`
+    margin-top: 30px;
+`;
 
 class CommentsContent extends Component {
     render() {
@@ -14,7 +19,7 @@ class CommentsContent extends Component {
 
         if (!posts) {
             return (
-                <LoadingIndicator type="circle" center size={40} />
+                <Loader type="circle" center size={40} />
             );
         }
 

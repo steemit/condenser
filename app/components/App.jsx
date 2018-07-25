@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import cn from 'classnames';
-import { ThemeProvider, injectGlobal } from 'styled-components';
+import { injectGlobal } from 'styled-components';
 import AppPropTypes from 'app/utils/AppPropTypes';
 import Header from 'app/components/modules/Header';
 import Footer from 'app/components/modules/Footer';
@@ -24,14 +24,11 @@ import PageViewsCounter from '@elements/PageViewsCounter';
 import LocalizedCurrency from '@elements/LocalizedCurrency';
 import MobileAppButton from 'app/components/elements/MobileBanners/MobileAppButton';
 import DialogManager from 'app/components/elements/common/DialogManager';
-import defaultTheme from 'src/app/themes';
 import { init as initAnchorHelper } from 'app/utils/anchorHelper';
 
 import {
     APP_ICON,
     VEST_TICKER,
-    THEMES,
-    DEFAULT_THEME,
 } from 'app/client_config';
 
 injectGlobal`
@@ -121,7 +118,6 @@ class App extends React.Component {
         const p = this.props;
         const n = nextProps;
         return (
-            nextProps.theme !== this.props.theme ||
             p.location !== n.location ||
             p.visitor !== n.visitor ||
             p.flash !== n.flash ||
@@ -210,13 +206,6 @@ class App extends React.Component {
         } = this.props;
 
         const route = resolveRoute(location.pathname);
-        const theme = process.env.BROWSER
-            ? localStorage.getItem('theme')
-            : DEFAULT_THEME;
-        let currentTheme = ' theme-' + DEFAULT_THEME.toLowerCase();
-        if (THEMES.indexOf(theme) !== -1) {
-            currentTheme = ' theme-' + theme.toLowerCase();
-        }
         const lp = false; //location.pathname === '/';
         const miniHeader = location.pathname === '/create_account';
         const params_keys = Object.keys(params);
@@ -334,41 +323,38 @@ class App extends React.Component {
         }
 
         return (
-            <ThemeProvider theme={defaultTheme}>
-                <div
-                    className={
-                        'App' +
-                        currentTheme +
-                        (lp ? ' LP' : '') +
-                        (ip ? ' index-page' : '') +
-                        (miniHeader ? ' mini-' : '')
-                    }
-                    onMouseMove={this.onEntropyEvent}
-                >
-                    {miniHeader ? <MiniHeader /> : <Header />}
-                    <div className={cn('App__content', {
-                        'App__content_hide-sub-menu': route.hideSubMenu,
-                    })}>
-                        {welcome_screen}
-                        {callout}
-                        {children}
-                        {location.pathname.startsWith('/submit') ? null : <Footer />}
-                        <ScrollButton />
-                        <MobileAppButton />
-                    </div>
-                    <Dialogs />
-                    <Modals />
-                    <DialogManager />
-                    {process.env.BROWSER ? <TooltipManager /> : null}
-                    <PageViewsCounter hidden/>
+            <div
+                className={
+                    'App' +
+                    (lp ? ' LP' : '') +
+                    (ip ? ' index-page' : '') +
+                    (miniHeader ? ' mini-' : '')
+                }
+                onMouseMove={this.onEntropyEvent}
+            >
+                {miniHeader ? <MiniHeader /> : <Header />}
+                <div className={cn('App__content', {
+                    'App__content_hide-sub-menu': route.hideSubMenu,
+                })}>
+                    {welcome_screen}
+                    {callout}
+                    {children}
+                    {location.pathname.startsWith('/submit') ? null : <Footer />}
+                    <ScrollButton />
+                    <MobileAppButton path={location.pathname}/>
                 </div>
-            </ThemeProvider>
+                <Dialogs />
+                <Modals />
+                <DialogManager />
+                {process.env.BROWSER ? <TooltipManager /> : null}
+                <PageViewsCounter hidden/>
+            </div>
+
         );
     }
 }
 
 App.propTypes = {
-    theme: PropTypes.string,
     error: PropTypes.string,
     children: AppPropTypes.Children,
     location: PropTypes.object,
@@ -381,7 +367,6 @@ App.propTypes = {
 export default connect(
     state => {
         return {
-            theme: state.user.get('theme'),
             error: state.app.get('error'),
             flash: state.offchain.get('flash'),
             signup_bonus: state.offchain.get('signup_bonus'),

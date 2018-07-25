@@ -876,9 +876,7 @@
   },
   "settings_jsx": {
     "choose_language": "Choose language",
-    "choose_domestic": "Choose domestic",
     "choose_currency": "Choose currency",
-    "choose_theme": "Choose theme",
     "invalid_url": "Invalid URL",
     "name_is_too_long": "Name is too long",
     "name_must_not_begin_with": "Name must not begin with @",
@@ -1054,5 +1052,11 @@
     "per_week": "That's ~%(AMOUNT)s %(LIQUID_TICKER)s per week.",
     "warning": "Leaving less than %(AMOUNT)s %(VESTING_TOKEN)s in your account is not recommended and can leave your account in a unusable state.",
     "error": "Unable to power down (ERROR: %(MESSAGE)s)"
+  },
+  "delegate_vesting_shares_info_jsx": {
+    "confirm_title": "Cancel %(VESTING_TOKENS)s delegation",
+    "confirm_cancel_delegation": "Are you sure you want to cancel %(VESTING_TOKEN2)s delegation",
+    "from": "From",
+    "to": "To"
   }
 }

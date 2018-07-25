@@ -75,30 +75,8 @@ export const PUBLIC_API = {
   payout:     'getDiscussionsByPayoutAsync',
 }
 export const SEO_TITLE = 'GOLOS.io Блоги'
-export const DEFAULT_DOMESTIC = 'all'
-export const DOMESTIC = {
-  all: 'All langs',
-  ru:  'Русский',
-  ua:  'Український',
-  us:  'English',
-  by:  'Белору́сский',
-  rs:  'Srpski',
-  ro:  'Română',
-  am:  'գրաբար',
-  kz:  'Қазақ тілі',
-  tj:  'Забо́ни тоҷикӣ',
-  md:  'Limba moldovenească',
-  ar:  'العربية',
-  cn:  '漢',
-  es:  'Español',
-  in:  'हिन्दी',
-  pt:  'Portuguesa',
-  fr:  'Français'
-}
+
 export const SEGMENT_ANALYTICS_KEY = 'F7tldQJxt491gXYqDGi5TkTT4wFpSPps'
-// ui themes
-export const THEMES = ['Default', 'Green', 'Red']
-export const DEFAULT_THEME = THEMES[0]
 
 export const USER_GENDER = ['undefined', 'male', 'female']
 
@@ -110,4 +88,7 @@ export const SMS_SERVICES = {
   '380':   '+380931777772'
 }
 
-export const ANDROID_APP_URL = 'https://play.google.com/store/apps/details?id=io.golos.golos'
+export const ANDROID_APP_NAME = 'Golos.io'
+export const ANDROID_PACKAGE = 'io.golos.golos'
+export const ANDROID_APP_URL = `https://play.google.com/store/apps/details?id=${ANDROID_PACKAGE}`
+export const ANDRIOD_URL_SCHEME = 'golosioapp'

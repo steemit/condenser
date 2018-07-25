@@ -398,8 +398,9 @@ export function* fetchExchangeRates() {
         return;
     }
     if (pickedCurrency.localeCompare(LIQUID_TICKER) == 0) { // For Golos currency on site #687
-        const state = yield call([api, api.getTickerAsync]);
-        storeExchangeValues(1, 1, state.latest, pickedCurrency);
+        const feedPrice = yield call([api, api.getCurrentMedianHistoryPriceAsync]);
+        let pricePerGolos = feedPrice.base.split(' ')[0] / parseFloat(parseFloat(feedPrice.quote.split(' ')[0] ));
+        storeExchangeValues(1, 1, pricePerGolos, pickedCurrency);
         return;
     }
     if (Date.now() - created < fourHours) {

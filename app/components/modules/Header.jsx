@@ -4,17 +4,18 @@ import { Link } from 'react-router';
 import {connect} from 'react-redux';
 import TopRightMenu from 'app/components/modules/TopRightMenu';
 import Icon from 'app/components/elements/Icon.jsx';
-import user from 'app/redux/User';
 import resolveRoute from 'app/ResolveRoute';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import HorizontalMenu from 'app/components/elements/HorizontalMenu';
 import normalizeProfile from 'app/utils/NormalizeProfile';
-import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdown';
-import VerticalMenu from 'app/components/elements/VerticalMenu';
 import tt from 'counterpart';
-import { APP_NAME_UP, APP_ICON, DEFAULT_DOMESTIC, DOMESTIC, SEO_TITLE } from 'app/client_config';
 import {detransliterate, capitalizeFirstLetter} from 'app/utils/ParsersAndFormatters';
+import {
+    APP_NAME_UP,
+    APP_ICON,
+    SEO_TITLE
+} from 'app/client_config';
 
 function sortOrderToLink(so, topic, account) {
     // to prevent probmes check if topic is not the same as account name
@@ -180,20 +181,6 @@ class Header extends React.Component {
                 return {link: sortOrderToLink(so[0], topic_original_link, current_account_name), value: so[1], active};
             });
 
-        // domestic
-        DOMESTIC.all = tt('g.all_langs');
-        let currentDomesticKey = DEFAULT_DOMESTIC;
-        let currentDomesticTitle = DOMESTIC[currentDomesticKey];
-        const domestic_menu = [];
-        for (var key in DOMESTIC) {
-          if (this.props.current_domestic === key) {
-            currentDomesticKey = key;
-            currentDomesticTitle = DOMESTIC[currentDomesticKey];
-          }
-
-          domestic_menu.push({link: '#' + key, onClick: this.props.changeDomestic, value: DOMESTIC[key]})
-        }
-
         let sort_order_extra_menu = null;
         if (sort_order === 'trending' || sort_order === 'trending30') {
             const items = [
@@ -230,19 +217,7 @@ class Header extends React.Component {
                     <div className={'Header__sub-nav show-for-medium hide-for-small ' + (this.state.subheader_hidden ? ' hidden' : '')}>
                         <div className="row">
                             <div className="columns">
-                                <HorizontalMenu items={sort_order_menu_horizontal} >
-                                    <LinkWithDropdown
-                                        closeOnClickOutside
-                                        dropdownPosition="bottom"
-                                        dropdownAlignment="left"
-                                        dropdownContent={<VerticalMenu items={domestic_menu} title={tt('settings_jsx.choose_domestic')} />}
-                                    >
-                                        <a className="domestic-selector" title={tt('settings_jsx.choose_domestic')} onClick={e => e.preventDefault()}>
-                                            <img className="flag" src={`/images/flags/${currentDomesticKey}.svg`} /> <Icon className="caret" name="caret-down" />
-                                            {/* {DOMESTIC[currentDomesticKey].split(' ')[0]} <Icon name="caret-down" /> */}
-                                        </a>
-                                    </LinkWithDropdown>
-                                </HorizontalMenu>
+                                <HorizontalMenu items={sort_order_menu_horizontal} />
                             </div>
                         </div>
                     </div>
@@ -256,7 +231,6 @@ export {Header as _Header_};
 
 export default connect(
     state => {
-        const current_domestic = state.user.get('domestic');
         const current_user = state.user.get('current');
         const account_user = state.global.get('accounts');
         const current_account_name = current_user ? current_user.get('username') : state.offchain.get('account');
@@ -266,19 +240,6 @@ export default connect(
             locationQueryParams: query,
             current_account_name,
             account_meta: account_user,
-            current_domestic: current_domestic || DEFAULT_DOMESTIC
         }
-    },
-    dispatch => ({
-        changeDomestic: e => {
-          if (e) e.preventDefault();
-          const targetDomestic = e.target.text.trim();
-          let domestic = DEFAULT_DOMESTIC;
-          for (var key in DOMESTIC) {
-            if (targetDomestic.localeCompare(DOMESTIC[key]) == 0)
-              domestic = key;
-          }
-          dispatch(user.actions.changeDomestic(domestic));
-        }
-    })
+    }
 )(Header);

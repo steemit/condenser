@@ -7,8 +7,8 @@ export const APP_NAME_UPPERCASE = 'VIT.TUBE';
 export const APP_ICON = 'steem'; // don't change this value, the icon has been changed
 // FIXME figure out best way to do this on both client and server from env
 // vars. client should read $STM_Config, server should read config package.
-export const APP_URL = 'https://steemit.com';
-export const APP_DOMAIN = 'steemit.com';
+export const APP_URL = 'https://touchit.social';
+export const APP_DOMAIN = 'touchit.social';
 export const LIQUID_TOKEN = 'VIT';
 // sometimes it's impossible to use html tags to style coin name, hence usage of _UPPERCASE modifier
 export const LIQUID_TOKEN_UPPERCASE = 'VIT';
@@ -24,6 +24,12 @@ export const TERMS_OF_SERVICE_URL = 'https://' + APP_DOMAIN + '/tos.html';
 export const PRIVACY_POLICY_URL = 'https://' + APP_DOMAIN + '/privacy.html';
 export const WHITEPAPER_URL =
     'https://vicetoken.com/static/Vice_Industry_Token_Whitepaper.pdf';
+
+// default avatar and sizes
+export const DEFAULT_AVATAR = 'https://proto.touchit.social/images/user.png';
+export const AVATAR_SIZE_SMALL = 64;
+export const AVATAR_SIZE_MEDIUM = 128;
+export const AVATAR_SIZE_LARGE = 512;
 
 // these are dealing with asset types, not displaying to client, rather sending data over websocket
 export const LIQUID_TICKER = 'VIT';

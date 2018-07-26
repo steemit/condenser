@@ -118,7 +118,8 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
         { link: getURL('WIKI_URL'), value: tt('navigation.wiki'), target: 'blank' },
         { link: '/market', value: tt('userwallet_jsx.market') },
         { link: '/~witnesses', value: tt("navigation.witnesses") },
-        { link: 'http://golostools.com/', value: tt('navigation.APP_NAME_app_center', { APP_NAME }), target: 'blank' }
+        { link: 'http://golostools.com/', value: tt('navigation.APP_NAME_app_center', { APP_NAME }), target: 'blank' },
+        { link: '/recover_account_step_1', value: tt('header_jsx.stolen_account_recovery')}
     );
     const navAdditional = <LinkWithDropdown
         closeOnClickOutside

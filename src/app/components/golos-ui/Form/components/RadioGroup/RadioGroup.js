@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import is from 'styled-is';
 
 import Icon from 'golos-ui/Icon';
+import { Label as StyledLabel } from 'golos-ui/Form';
 // import HintIcon from 'app/components/elements/common/HintIcon/HintIcon';
 
 const Wrapper = styled.div``;
@@ -11,18 +12,15 @@ const Wrapper = styled.div``;
 const Item = styled.div`
     display: flex;
     align-items: center;
+
+    &:not(:last-child) {
+        margin-bottom: 18px;
+    }
 `;
 
-const Label = styled.div`
-    position: relative;
-    display: flex;
-    align-items: center;
-    margin: 9px 0;
+const Label = styled(StyledLabel)`
     flex-grow: 1;
-    text-transform: none;
-    user-select: none;
-    cursor: pointer;
-
+    margin: 0;
     ${is('disabled')`
         cursor: default;
     `};
@@ -35,9 +33,7 @@ const LabelText = styled.span`
 
     ${is('light')`
         color: #959595;
-    `}
-
-    ${is('disabled')`
+    `} ${is('disabled')`
         color: #9c9c9c;
     `};
 `;

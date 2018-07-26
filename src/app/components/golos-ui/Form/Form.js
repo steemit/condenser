@@ -32,12 +32,18 @@ export const formControlStyles = css`
 `;
 
 const labelStyles = css`
+    position: relative;
     display: flex;
-    color: #959595;
+    align-items: center;
+
     font-family: ${({ theme }) => theme.fontFamily};
     font-size: 14px;
+    color: #959595;
     line-height: 1;
-    text-transform: initial;
+
+    text-transform: none;
+    cursor: pointer;
+
 
     ${is('dark')`
         color: #393636;
@@ -49,7 +55,7 @@ const labelStyles = css`
 `;
 
 export const Label = styled.label`
-    margin-bottom: 12px;
+    margin-bottom: 18px;
     ${labelStyles};
 `;
 

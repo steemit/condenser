@@ -1,6 +1,8 @@
 import React, { PureComponent } from 'react';
 import styled from 'styled-components';
 import Icon from 'golos-ui/Icon';
+import DialogManager from 'app/components/elements/common/DialogManager';
+import TransferDialog from './dialogs/TransferDialog/TransferDialog';
 
 const Root = styled.div`
     margin-bottom: 18px;
@@ -14,7 +16,7 @@ const Action = styled.div`
     align-items: center;
     height: 50px;
     padding: 0 20px;
-    box-sizing: padding-box;
+    box-sizing: content-box;
     border-bottom: 1px solid #e9e9e9;
     font-size: 12px;
     font-weight: 500;
@@ -57,7 +59,7 @@ export default class RightActions extends PureComponent {
                     <ActionIcon name="wallet" />
                     <ActionTitle>Купить или продать</ActionTitle>
                 </Action>
-                <Action>
+                <Action onClick={this._onTransferClick}>
                     <ActionIcon name="coins" />
                     <ActionTitle>Передать</ActionTitle>
                 </Action>
@@ -76,4 +78,10 @@ export default class RightActions extends PureComponent {
             </Root>
         );
     }
+
+    _onTransferClick = () => {
+        DialogManager.showDialog({
+            component: TransferDialog,
+        });
+    };
 }

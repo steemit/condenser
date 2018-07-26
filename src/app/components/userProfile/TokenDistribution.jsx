@@ -22,7 +22,7 @@ const Labels = styled.div``;
 const Label = styled.div`
     display: flex;
     height: 52px;
-    box-sizing: padding-box;
+    box-sizing: content-box;
     align-items: center;
     padding: 0 20px;
     border-bottom: 1px solid #e9e9e9;

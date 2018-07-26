@@ -33,13 +33,23 @@
   }
 
   &__header {
+    padding-top: 30px;
+  }
+
+  &__title {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding-top: 10px;
-    height: 70px;
+    height: 40px;
     font-size: 18px;
     font-weight: 500;
+  }
+
+  &__header-icon {
+    display: flex;
+    margin-bottom: 10px;
+    justify-content: center;
+    color: #e0e0e0;
   }
 
   &__content {

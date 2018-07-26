@@ -12,6 +12,7 @@ import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import PostOverlay from '../PostOverlay';
 import { getStoreState } from 'shared/UniversalRender';
 import DialogManager from 'app/components/elements/common/DialogManager';
+import keyCodes from '../../../../../app/utils/keyCodes';
 
 const Root = styled.div`
     ${is('grid')`
@@ -63,6 +64,8 @@ class PostsList extends PureComponent {
     }
 
     componentWillUnmount() {
+        window.removeEventListener('popstate', this._onPopState);
+        window.removeEventListener('keydown', this._onKeyDown);
         window.removeEventListener('scroll', this._onScroll);
         this._onScroll.cancel();
     }
@@ -162,6 +165,11 @@ class PostsList extends PureComponent {
             }
         }
 
+        window.removeEventListener('popstate', this._onPopState);
+        window.removeEventListener('keydown', this._onKeyDown);
+        window.addEventListener('popstate', this._onPopState);
+        window.addEventListener('keydown', this._onKeyDown);
+
         window.history.pushState({}, '', url);
 
         this.setState({
@@ -169,13 +177,32 @@ class PostsList extends PureComponent {
         });
     };
 
-    _onOverlayClose = () => {
-        this.setState({
-            showPostPermLink: null,
-        });
-
-        window.history.pushState({}, '', this._initialUrl);
+    _onPopState = () => {
+        this._closeOverlay();
     };
+
+    _onKeyDown = e => {
+        if (e.which === keyCodes.ESCAPE) {
+            this._closeOverlay();
+        }
+    };
+
+    _onOverlayClose = () => {
+        this._closeOverlay();
+    };
+
+    _closeOverlay() {
+        if (this.state.showPostPermLink) {
+            window.removeEventListener('popstate', this._onPopState);
+            window.removeEventListener('keydown', this._onKeyDown);
+
+            this.setState({
+                showPostPermLink: null,
+            });
+
+            window.history.pushState({}, '', this._initialUrl);
+        }
+    }
 }
 
 export default connect(

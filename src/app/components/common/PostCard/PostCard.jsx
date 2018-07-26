@@ -131,14 +131,14 @@ const Body = styled.div`
 `;
 const PostTitle = styled.div`
     font-size: 20px;
-    font-family: ${({theme}) => theme.fontFamilyBold};
+    font-family: ${({ theme }) => theme.fontFamilyBold};
     color: #212121;
     //line-height: 34px;
     line-height: 29px;
     margin-bottom: 8px;
 `;
 const PostBody = styled.div`
-    font-family: ${({theme}) => theme.fontFamily};
+    font-family: ${({ theme }) => theme.fontFamily};
     color: #959595;
 `;
 
@@ -342,10 +342,7 @@ class PostCard extends PureComponent {
                             </IconWrapper>
                         </ToolbarAction>
                         <ToolbarAction>
-                            <IconWrapper
-                                forceWhite={withImage && !grid}
-                                data-tooltip="В избранное"
-                            >
+                            <IconWrapper forceWhite={withImage && !grid} data-tooltip="В избранное">
                                 <Icon name="star" width={20} height={20} />
                             </IconWrapper>
                         </ToolbarAction>
@@ -368,8 +365,8 @@ class PostCard extends PureComponent {
         return (
             <BodyLink
                 to={p.link}
-                line={(!grid || !withImage) ? 1 : 0}
-                half={(withImage && !grid) ? 1 : 0}
+                line={!grid || !withImage ? 1 : 0}
+                half={withImage && !grid ? 1 : 0}
                 grid={grid ? 1 : 0}
                 onClick={this._onClick}
             >
@@ -407,9 +404,12 @@ class PostCard extends PureComponent {
     _onClick = e => {
         if (this.props.onClick) {
             e.preventDefault();
-            this.props.onClick(this._url);
+            this.props.onClick({
+                permLink: this.props.permLink,
+                url: this._url,
+            });
         }
-    }
+    };
 
     _onVoteChange = async percent => {
         const props = this.props;

@@ -49,7 +49,7 @@ const Content = styled.div`
 `;
 
 const SidebarRight = styled.div`
-    flex-basis: 273px;
+    width: 273px;
     flex-shrink: 0;
 `;
 
@@ -135,7 +135,7 @@ export default class UserProfileContainer extends Component {
                                 />
                             </SidebarLeft>
                         )}
-                        <Content center={route == 'settings'}>{this.props.content}</Content>
+                        <Content center={route === 'settings'}>{this.props.content}</Content>
                         {this.props.sidebarRight && (
                             <SidebarRight>{this.props.sidebarRight}</SidebarRight>
                         )}
@@ -152,7 +152,7 @@ module.exports = {
         cb(null, {
             components: {
                 content: require('./blog/BlogContent').default,
-                sidebarRight: require('src/app/components/userProfile/common/RightColumnStub').default,
+                sidebarRight: require('./rightPanel').default,
             },
         });
     },
@@ -160,13 +160,19 @@ module.exports = {
         {
             path: 'comments',
             getComponents(nextState, cb) {
-                cb(null, { content: require('./comments/CommentsContent').default });
+                cb(null, {
+                    content: require('./comments/CommentsContent').default,
+                    sidebarRight: require('./rightPanel').default,
+                });
             },
         },
         {
             path: 'recent-replies',
             getComponents(nextState, cb) {
-                cb(null, { content: require('./replies/RepliesContent').default });
+                cb(null, {
+                    content: require('./replies/RepliesContent').default,
+                    sidebarRight: require('./rightPanel').default,
+                });
             },
         },
         {

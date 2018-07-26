@@ -288,7 +288,7 @@ class CommentCard extends PureComponent {
                     <Fragment>
                         <Filler />
                         <Button light onClick={this._onReplyClick}>
-                            <Icon name="comment_small" size={18} /> Ответить
+                            <Icon name="comment" size={18} /> Ответить
                         </Button>
                     </Fragment>
                 ) : null}

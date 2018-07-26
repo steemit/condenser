@@ -191,9 +191,11 @@ export function clientRender(initialState) {
     let sagaDev;
 
     if (process.env.NODE_ENV === 'development') {
-        sagaDev = require('redux-saga-devtools');
+        if (process.env.SAGA_MONITOR) {
+            sagaDev = require('redux-saga-devtools');
+            monitor = sagaDev.createSagaMonitor();
+        }
 
-        monitor = sagaDev.createSagaMonitor();
         sagaMiddleware = createSagaMiddleware({ sagaMonitor: monitor });
         const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
         middleware = composeEnhancers(

@@ -400,6 +400,7 @@ class PostFull extends React.Component {
         return (
             <CommentFormLoader
                 editMode={isEdit}
+                reply={!isEdit}
                 params={replyParams}
                 jsonMetadata={jsonMetadata}
                 onSuccess={this._onEditFinish}

@@ -263,7 +263,7 @@ class CommentCard extends PureComponent {
                     <CommentFormLoader
                         reply
                         editMode
-                        params={dataRaw}
+                        params={this._data}
                         onSuccess={this._onEditDone}
                         onCancel={this._onEditDone}
                     />

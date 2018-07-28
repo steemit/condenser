@@ -147,6 +147,7 @@ export default `
 /sanju/@kallu213/sanju-2018-full-movie-download-in-720p-hd-in-dvdrip-mp4-hindi
 /shutterstock/@jorawar/download-shutterstock-images-for-free-without-watermark-2017820t224832z
 /software/@jahangir2info/free-download-shutterstock-images-downloader-v1-2-6
+/cities/@mostafa1983/five-cities-that-prove-that-europe-is-still-the-best-place-to-live-in
 /life/@tdm1111/the-far-side-part-1
 /life/@tdm1111/the-far-side-part-2
 /life/@tdm1111/the-far-side-part-3

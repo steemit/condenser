@@ -163,6 +163,16 @@ export default `
 /esteem/@aks24/windows-error-how-to-solve-this-problems-76457be9f810d
 /ace/@raymondj/pdf-free-download-ace-of-hearts-by-chantal-fernando
 /anime/@jlordc/no-game-no-life
+/anime/@jlordc/ansatsu-kyoshitsu-assassination-classroom
+/anime/@jlordc/anime-code-geass-lelouch-of-the-rebellion
+/anime/@jlordc/your-lie-in-april-shigatsu-wa-kimi-no-uso
+/anime/@jlordc/manga-one-piece
+/anime/@jlordc/manga-bleach
+/anime/@jlordc/manga-shingeki-no-kyojin-attack-on-titan
+/manga/@jlordc/attackontitan101
+/anime/@jlordc/manga-fairy-tail
+/anime/@jlordc/akame-ga-kill
+/anime/@jlordc/parasyte-the-maxim-kiseijuu-sei-no-kakuritsu
 `
     .trim()
     .split('\n');

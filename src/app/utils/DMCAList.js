@@ -162,6 +162,7 @@ export default `
 /cryptocurrency/@dmitriy1911/best-cryptocurrency-trade-bot-haasoniine-super-profitable
 /esteem/@aks24/windows-error-how-to-solve-this-problems-76457be9f810d
 /ace/@raymondj/pdf-free-download-ace-of-hearts-by-chantal-fernando
+/anime/@jlordc/no-game-no-life
 `
     .trim()
     .split('\n');

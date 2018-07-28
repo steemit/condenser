@@ -173,6 +173,11 @@ export default `
 /anime/@jlordc/manga-fairy-tail
 /anime/@jlordc/akame-ga-kill
 /anime/@jlordc/parasyte-the-maxim-kiseijuu-sei-no-kakuritsu
+/sanjjuu/@jarinhassan/1080px-watch-sanju-full-hindi-online-movie-free 
+/sanju/@full-movie/2j6qda-hindi-full-movie-download 
+/sanju/@sonetaber21/hindi-movie-sanju-f-ull-movie-online-2018-dubbed-free-download-720p-1080p-or-filmywap 
+/sannjua/@jarinhassan/putlocker-hd-720p-watch-sanju-2018 
+/mgsc/@akshay96/sanju-movie-review-audience-all-praises-for-this-sanjay-dutt-biopic
 `
     .trim()
     .split('\n');

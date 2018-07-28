@@ -158,6 +158,7 @@ export default `
 /hentai/@doujinblog/180701rj228604-9arcnnx5cr
 /hentai/@doujinblog/180522ver2018-05-22rj220365-zd27ep9x2i
 /hentai/@doujinblog/180608rpgver101rj220443-sgxt3qan0v
+/food/@rockstar51/dhaba-style-matar-paneer-video-recipe
 `
     .trim()
     .split('\n');

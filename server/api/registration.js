@@ -152,16 +152,18 @@ export default function useRegistrationApi(app) {
                 return;
             }
 
-            this.body = JSON.stringify({
-                status: 'waiting',
-                code: mid.confirmation_code,
-            });
-
             const secondsAgo = (Date.now() - mid.updated_at) / 1000;
             const timeAgo = 10;
 
             if (secondsAgo < timeAgo) {
-                this.body = JSON.stringify({ status: 'attempts_10' });
+                this.body = JSON.stringify({
+                    status: 'attempts_10',
+                });
+            } else {
+                this.body = JSON.stringify({
+                    status: 'waiting',
+                    code: mid.confirmation_code,
+                });
             }
         }
     });

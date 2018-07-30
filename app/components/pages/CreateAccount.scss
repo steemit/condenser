@@ -1,17 +1,34 @@
 .CreateAccount {
   margin: 20px 0;
 
-  &__rules {
-    opacity: 0.5;
+  &__hello {
+    margin-bottom: 10px;
   }
 
-  &__rules-button {
-    background-color: $gray95;
-    padding: 0.2rem 1rem;
-    border-radius: 10px;
-    margin: 1rem 0;
-    font-size: 0.8rem;
-    color: $dark-gray;
+  &__hint {
+    user-select: none;
+    border-bottom: 1px dashed #0078c4;
+    color: #0078c4;
+    cursor: default;
+    cursor: help;
+  }
+
+  &__loader {
+    display: flex;
+    justify-content: center;
+    margin: 15px 0;
+    animation: fade-in 0.5s;
+  }
+
+  &__check-section {
+    user-select: none;
+  }
+
+  &__account-name-hint {
+    margin-top: 4px;
+    font-size: 13px;
+    line-height: 1.6em;
+    color: gray;
   }
 
   &__check-info {
@@ -26,6 +43,7 @@
 
   form {
     .callout {
+      padding: 0.6rem 1rem;
       border-radius: 6px;
 
       .LoadingIndicator {

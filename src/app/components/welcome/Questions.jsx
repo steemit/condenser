@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import styled from 'styled-components';
-import { getURL } from 'app/utils/URLConstants';
 import Icon from 'app/components/elements/Icon';
 import CardPost from 'src/app/components/welcome/CardPost';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
@@ -93,7 +92,7 @@ export default class Questions extends PureComponent {
                                         </Link>
                                     </div>
                                     <div className="columns">
-                                        <Link href={WIKI_URL>
+                                        <Link href={WIKI_URL}>
                                             <Icon
                                                 name="new/wikipedia"
                                                 size="2x"

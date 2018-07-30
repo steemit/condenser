@@ -198,7 +198,7 @@ class CommentForm extends React.Component {
     }
 
     _post = () => {
-        const { author, reply, editMode, params, jsonMetadata } = this.props;
+        const { author, editMode, params, jsonMetadata } = this.props;
         let error;
 
         const body = this.refs.editor.getValue();
@@ -221,16 +221,15 @@ class CommentForm extends React.Component {
         const meta = {
             app: 'golos.io/0.1',
             format: 'markdown',
+            tags: [],
         };
 
-        if (reply && !editMode) {
-            try {
-                meta.tags = JSON.parse(params.json_metadata).tags || [];
-            } catch (err) {
-                meta.tags = [];
-            }
+        if (jsonMetadata && jsonMetadata.tags) {
+            meta.tags = jsonMetadata.tags;
         } else {
-            meta.tags = jsonMetadata.tags || [];
+            try {
+                meta.tags = JSON.parse(params.json_metadata).tags;
+            } catch (err) {}
         }
 
         if (params && params.category && meta.tags[0] !== params.category) {

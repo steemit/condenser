@@ -4,35 +4,6 @@ import styled from 'styled-components';
 import is from 'styled-is';
 import keyCodes from 'app/utils/keyCodes';
 
-const Wrapper = styled.div`
-    position: relative;
-    height: ${({ showCaptions }) => (showCaptions ? 50 : 20)}px;
-    user-select: none;
-    cursor: pointer;
-
-    &:before {
-        position: absolute;
-        content: '';
-        top: 10px;
-        left: 0;
-        right: 0;
-        height: 2px;
-        border-radius: 1px;
-        background: #e1e1e1;
-    }
-
-    ${is('red')`
-        ${Progress} {
-            background: #ff4e00;
-        }
-        
-        ${Handle} {
-            background: #ff4e00 !important;
-            border-color: #ff4e00 !important;
-        }
-    `};
-`;
-
 const Progress = styled.div`
     position: absolute;
     top: 10px;
@@ -94,6 +65,36 @@ const Caption = styled.div`
         text-align: right;
     `}
 `;
+
+const Wrapper = styled.div`
+    position: relative;
+    height: ${({ showCaptions }) => (showCaptions ? 50 : 20)}px;
+    user-select: none;
+    cursor: pointer;
+
+    &:before {
+        position: absolute;
+        content: '';
+        top: 10px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        border-radius: 1px;
+        background: #e1e1e1;
+    }
+
+    ${is('red')`
+        ${Progress} {
+            background: #ff4e00;
+        }
+
+        ${Handle} {
+            background: #ff4e00 !important;
+            border-color: #ff4e00 !important;
+        }
+    `};
+`;
+
 export default class Slider extends PureComponent {
     static propTypes = {
         value: PropTypes.number.isRequired,

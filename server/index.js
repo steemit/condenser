@@ -26,6 +26,7 @@ global.$STM_Config = {
     chain_id: config.get('chain_id'),
     lang_server : config.get('lang_server'),
     /* isTestnet: config.get('is_testnet'), */
+    is_sandbox: config.get('is_sandbox'),
     push_server_url: config.get('wss_push_service_url')
 };
 

@@ -4,6 +4,7 @@ import tt from 'counterpart';
 import {api} from 'golos-js';
 import Icon from 'app/components/elements/Icon';
 import LocalizedCurrency from 'app/components/elements/LocalizedCurrency';
+import { TERMS_OF_SERVICE_URL } from 'app/client_config';
 
 class Footer extends React.Component {
     state = {
@@ -95,9 +96,9 @@ class Footer extends React.Component {
                         name: tt('navigation.welcome'),
                         url: '/welcome'
                     }, {
-                        name: tt('g.golos_fest'),
-                        url: '/@golosio'
-                    },
+                    name: tt('g.golos_fest'),
+                    url: '/@golosio'
+                },
                     // { name: 'Подписка на рассылку', url: '' },
                     {
                         name: tt('g.team'),
@@ -109,12 +110,12 @@ class Footer extends React.Component {
                         name: tt('navigation.feedback'),
                         url: '/submit?type=submit_feedback'
                     }, {
-                        name: tt('navigation.privacy_policy'),
-                        url: '/ru--konfidenczialxnostx/@golos/politika-konfidencialnosti'
-                    }, {
-                        name: tt('navigation.terms_of_service'),
-                        url: '/legal/terms_of_service.pdf'
-                    }
+                    name: tt('navigation.privacy_policy'),
+                    url: '/ru--konfidenczialxnostx/@golos/politika-konfidencialnosti'
+                }, {
+                    name: tt('navigation.terms_of_service'),
+                    url: TERMS_OF_SERVICE_URL,
+                }
                 ]
             ]
         }, {
@@ -191,9 +192,9 @@ export default connect(state => {
 
     if (feedPrice && feedPrice.has('base') && feedPrice.has('quote')) {
         const {base, quote} = feedPrice.toJS();
-        if (/ GBG$/.test(base) && / GOLOS$/.test(quote)) 
+        if (/ GBG$/.test(base) && / GOLOS$/.test(quote))
             pricePerGolos =  parseFloat(base.split(' ')[0]) / parseFloat(quote.split(' ')[0]);
-        }
-    
+    }
+
     return {pricePerGolos};
 },)(Footer);

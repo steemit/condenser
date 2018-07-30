@@ -11,7 +11,7 @@ import {
     TWITTER_SHARE_IMAGE,
     ANDROID_APP_NAME,
     ANDROID_PACKAGE,
-    ANDRIOD_URL_SCHEME
+    ANDROID_URL_SCHEME,
 } from 'app/client_config';
 
 function addSiteMeta(metas) {
@@ -33,7 +33,7 @@ function addSiteMeta(metas) {
 }
 
 function addPlatformMeta(metas, url) {
-    metas.push({property: 'al:android:url', content: `${ANDRIOD_URL_SCHEME}://${APP_DOMAIN}${url}`});
+    metas.push({property: 'al:android:url', content: `${ANDROID_URL_SCHEME}://${APP_DOMAIN}${url}`});
     metas.push({property: 'al:android:app_name', content: ANDROID_APP_NAME});
     metas.push({property: 'al:android:package', content: ANDROID_PACKAGE});
 }

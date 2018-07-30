@@ -521,6 +521,20 @@
     "comments_were_hidden_due_to_low_ratings": "Comments were hidden due to low ratings"
   },
   "createaccount_jsx": {
+    "enter_email": "Enter e-mail",
+    "enter_account_name": "Enter your account name",
+    "account_name_hint": "Account name can't be changed after registration.",
+    "account_name_already_used": "This account name already used.",
+    "request_error": "Account name can't be verified right now due to server failure. Please try again later.",
+    "create_account": "Create Account",
+    "final_confirm": "Accept our Terms of Use:",
+    "take_your_secret_key": "Receive your generated password",
+    "sms_how_much": "How much does sms cost?",
+    "sms_how_much_answer": "SMS will cost the default price in your network.",
+    "sent_sms": "I sent sms",
+    "sent_sms_descriptio": "Дождитесь подтверждения вашего номера телефона (процесс может занять несколько минут), после чего поля регистрации станут активны для заполнения.",
+    "sent_sms_description": "Wait until your phone number will be confirmed (it may take several minutes).",
+    "check_code": "Please, check the code and sent number. If all is ok but registration doesn't continue write to us on",
     "get_code": "Get confirmation code",
     "will_be_send_to_phone_number": "Number: +",
     "our_records_indicate_you_already_have_account": "Our records indicate that you already have %(APP_NAME)s account",
@@ -554,7 +568,6 @@
     "why_send_sms": "Why send SMS?",
     "mobile_description": {
       "one": "Right now, the registration on media-blockchain %(APP_NAME)s costs money for the system. In order for the community to grow quicker, we take those costs on board and pay out 5 %(APP_NAME)s tokens to each new member.",
-      "second": "Unfortunately, people have started to take advantage of that and automated account registration had started to grow. Verification methods like: email checks, scripts or sending out a free sms verification, simply do not work. And cannot prove that the registry isn't a robot.",
       "third": "Accepting a paid sms from a user, is a good method to check out his motivation to register on the %(APP_NAME)s platform, also it is by far, more economically efficient for the whole system.",
       "fourth": "We are interested in real users (not bots) to register on our platform, hence, we kindly ask you to send out an sms to the stated number. It is no more than a human verification process. And works for the best of the whole community. Thank you!"
     },
@@ -566,7 +579,7 @@
     "didnt_receive_the_verification_code": "Didn't receive the verification code? ",
     "you_can_change_your_number": "You can change your number at any time if we didn't receive your sms with verification code. ",
     "re_send": "Re-send",
-    "phone_number_has_been_verified": "Phone number has been verified",
+    "phone_number_has_been_verified": "Phone number has been verified, please continue the registration.",
     "this_phone_number_has_already_been_used": "This phone number has already been used"
   },
   "voting_jsx": {

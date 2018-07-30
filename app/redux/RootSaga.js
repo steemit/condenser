@@ -6,6 +6,7 @@ import { userWatches } from 'app/redux/UserSaga';
 import { authWatches } from 'app/redux/AuthSaga';
 import { transactionWatches } from 'app/redux/TransactionSaga';
 import PollDataSaga from 'app/redux/PollDataSaga';
+import gateWatches from 'src/app/redux/sagas/gate';
 
 
 export default function* rootSaga() {
@@ -15,4 +16,5 @@ export default function* rootSaga() {
   yield fork(authWatches)
   yield fork(transactionWatches)
   yield fork(marketWatches)
+  yield fork(gateWatches)
 }

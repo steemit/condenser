@@ -120,6 +120,7 @@
     "redux-modules": "0.0.5",
     "redux-saga": "^0.16.0",
     "remarkable": "1.7.1",
+    "rpc-websockets": "^4.2.6",
     "sanitize-html": "^1.14.1",
     "sass-loader": "6.0.6",
     "secure-random": "^1.1.1",

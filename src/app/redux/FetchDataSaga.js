@@ -6,13 +6,14 @@ import {
     takeLatest,
     takeEvery,
 } from 'redux-saga/effects';
+import { api } from '@steemit/steem-js';
 import { loadFollows, fetchFollowCount } from 'app/redux/FollowSaga';
 import { getContent } from 'app/redux/SagaShared';
 import * as globalActions from './GlobalReducer';
 import * as appActions from './AppReducer';
 import constants from './constants';
 import { fromJS, Map, Set } from 'immutable';
-import { api } from '@steemit/steem-js';
+import { getStateAsync } from 'app/utils/steemApi';
 
 const REQUEST_DATA = 'fetchDataSaga/REQUEST_DATA';
 const GET_CONTENT = 'fetchDataSaga/GET_CONTENT';
@@ -66,7 +67,7 @@ export function* fetchState(location_change_action) {
 
     yield put(appActions.fetchDataBegin());
     try {
-        const state = yield call([api, api.getStateAsync], url);
+        const state = yield call(getStateAsync, url);
         yield put(globalActions.receiveState(state));
         // If a user's transfer page is being loaded, fetch related account data.
         yield call(getTransferUsers, pathname);

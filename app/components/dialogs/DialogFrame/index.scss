@@ -16,7 +16,7 @@
     top: 8px;
     width: 30px;
     height: 30px;
-    padding-top: 7px;
+    padding: 8px;
     text-align: center;
     color: #e1e1e1;
     cursor: pointer;
@@ -24,11 +24,6 @@
 
     &:hover {
       color: #000;
-    }
-
-    & > svg {
-      width: 14px;
-      height: 14px;
     }
   }
 

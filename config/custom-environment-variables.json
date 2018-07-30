@@ -108,7 +108,7 @@
   },
   "blockcypher_token": "SDC_BLOCKCYPHER_TOKEN",
   "is_testnet": "SDC_IS_TESTNET",
+  "is_sandbox": "SDC_IS_SANDBOX",
   "openexchangerates_app_id": "SDC_OPENEXCHANGERATES_APP_ID",
   "wss_push_service_url": "SDC_SERVICE_PUSH_CLIENT_URL"
-
 }

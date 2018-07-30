@@ -4,24 +4,38 @@ import PropTypes from 'prop-types';
 const SteemLogo = () => {
     return (
         <span className="logo">
-            <svg width="40" height="40" viewBox="0 0 40 40" version="1.1">
+            <svg width="89" height="40" viewBox="0 0 89 40" version="1.1">
                 <title>vit.tube logo</title>
                 <g id="vittube">
                     <path
-                        className="logo__lefthalftop"
-                        d="M25.73 29.96L31.47 20L19.99 20L8.51 20L14.25 29.96L19.99 39.93L25.73 29.96Z"
+                        className="logo__diamond"
+                        d="M 6.2981159,21.624418 16.306193,1.290311 26.314271,20.645154 16.306193,40 Z"
+                        id="path4560"
                     />
                     <path
-                        className="logo__righthalftop"
-                        d="M25.73 10.04L31.47 20.01L19.99 20.01L8.51 20.01L14.25 10.04L19.99 0.08L25.73 10.04Z"
+                        className="logo__diamond"
+                        d="M 48.780727,31.612912 39.323121,8.387075 H 43.85281 L 50.124964,24.065823 56.819613,8.387117 H 61.16223 L 51.04226,31.612912 Z"
+                        id="path4558"
                     />
                     <path
-                        className="logo__uptri"
-                        d="M1.17 10.22L7.03 0.22L18.42 0.13L7.23 19.66L1.17 10.22Z"
+                        className="logo__diamond"
+                        d="M 63.725558,8.3871 H 67.59653 V 31.612912 H 63.725558 Z"
+                        id="path4556"
                     />
                     <path
-                        className="logo__downtri"
-                        d="M38.72 10.18L32.86 0.17L21.47 0.08L32.66 19.61L38.72 10.18Z"
+                        className="logo__diamond"
+                        d="m 77.273953,12.258069 -7.015312,-0.02097 -0.08146,-3.849886 h 18.70968 v 3.870969 h -7.741944 v 19.354843 h -3.870959 z"
+                        id="path4554"
+                    />
+                    <path
+                        className="logo__sides"
+                        d="M 0,10.004706 5.0302695,0 13.443697,6.98e-4 4.5411863,19.012521 Z"
+                        id="path4552"
+                    />
+                    <path
+                        className="logo__sides"
+                        d="m 18.942524,0.027683 8.639594,-0.02767 5.030267,10.004706 -4.56576,8.704976 z"
+                        id="path21"
                     />
                 </g>
             </svg>

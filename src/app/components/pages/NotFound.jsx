@@ -2,6 +2,7 @@ import React from 'react';
 import SvgImage from 'app/components/elements/SvgImage';
 import { Link } from 'react-router';
 import Icon from 'app/components/elements/Icon';
+import { APP_NAME_UPPERCASE } from 'app/client_config';
 
 class NotFound extends React.Component {
     render() {
@@ -17,11 +18,7 @@ class NotFound extends React.Component {
                                     </Link>
                                 </li>
                                 <li className="Header__top-steemit show-for-medium noPrint">
-                                    <a href="/">
-                                        steemit<span className="beta">
-                                            beta
-                                        </span>
-                                    </a>
+                                    <a href="/">{APP_NAME_UPPERCASE}</a>
                                 </li>
                             </ul>
                         </div>

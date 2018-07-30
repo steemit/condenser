@@ -20,7 +20,7 @@
     "reportOnly": false,
     "setAllHeaders": true
   },
-  "img_proxy_prefix": "https://steemitdevimages.com/",
+  "img_proxy_prefix": "https://media.vit.tube/resize/",
   "ipfs_prefix": false,
   "mixpanel": false,
   "newrelic": false,
@@ -34,7 +34,7 @@
   },
   "registrar": {
     "account": "-",
-    "fee": "0.5 STEEM",
+    "fee": "0.5 VIT",
     "delegation": "150250.000000 VESTS",
     "signing_key": "5J..."
   },

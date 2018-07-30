@@ -20,6 +20,7 @@ import Tooltip from 'app/components/elements/Tooltip';
 import { FormattedHTMLMessage } from 'app/Translator';
 import {
     LIQUID_TOKEN,
+    LIQUID_TOKEN_UPPERCASE,
     LIQUID_TICKER,
     DEBT_TOKENS,
     VESTING_TOKEN,
@@ -413,7 +414,7 @@ class UserWallet extends React.Component {
             '$' + sbdOrders.toFixed(3)
         );
         const savings_balance_str = numberWithCommas(
-            saving_balance_steem.toFixed(3) + ' STEEM'
+            saving_balance_steem.toFixed(3) + ' ' + LIQUID_TOKEN_UPPERCASE
         );
         const savings_sbd_balance_str = numberWithCommas(
             '$' + sbd_balance_savings.toFixed(3)
@@ -458,7 +459,9 @@ class UserWallet extends React.Component {
                 : null;
         const reward_sp =
             parseFloat(account.get('reward_vesting_steem').split(' ')[0]) > 0
-                ? account.get('reward_vesting_steem').replace('STEEM', 'SP')
+                ? account
+                      .get('reward_vesting_steem')
+                      .replace(LIQUID_TOKEN_UPPERCASE, 'SP')
                 : null;
 
         let rewards = [];
@@ -535,7 +538,7 @@ class UserWallet extends React.Component {
                 </div>
                 <div className="UserWallet__balance row">
                     <div className="column small-12 medium-8">
-                        STEEM
+                        {LIQUID_TOKEN_UPPERCASE}
                         <FormattedHTMLMessage
                             className="secondary"
                             id="tips_js.liquid_token"
@@ -548,11 +551,15 @@ class UserWallet extends React.Component {
                                 className="Wallet_dropdown"
                                 dropdownPosition="bottom"
                                 dropdownAlignment="right"
-                                label={steem_balance_str + ' STEEM'}
+                                label={
+                                    steem_balance_str +
+                                    ' ' +
+                                    LIQUID_TOKEN_UPPERCASE
+                                }
                                 menu={steem_menu}
                             />
                         ) : (
-                            steem_balance_str + ' STEEM'
+                            steem_balance_str + ' ' + LIQUID_TOKEN_UPPERCASE
                         )}
                         {steemOrders ? (
                             <div
@@ -564,7 +571,8 @@ class UserWallet extends React.Component {
                             >
                                 <Link to="/market">
                                     <Tooltip t={tt('market_jsx.open_orders')}>
-                                        (+{steem_orders_balance_str} STEEM)
+                                        (+{steem_orders_balance_str}{' '}
+                                        {LIQUID_TOKEN_UPPERCASE})
                                     </Tooltip>
                                 </Link>
                             </div>
@@ -573,7 +581,7 @@ class UserWallet extends React.Component {
                 </div>
                 <div className="UserWallet__balance row zebra">
                     <div className="column small-12 medium-8">
-                        STEEM POWER
+                        {LIQUID_TOKEN_UPPERCASE} POWER
                         <FormattedHTMLMessage
                             className="secondary"
                             id="tips_js.influence_token"
@@ -593,11 +601,15 @@ class UserWallet extends React.Component {
                                 className="Wallet_dropdown"
                                 dropdownPosition="bottom"
                                 dropdownAlignment="right"
-                                label={power_balance_str + ' STEEM'}
+                                label={
+                                    power_balance_str +
+                                    ' ' +
+                                    LIQUID_TOKEN_UPPERCASE
+                                }
                                 menu={power_menu}
                             />
                         ) : (
-                            power_balance_str + ' STEEM'
+                            power_balance_str + ' ' + LIQUID_TOKEN_UPPERCASE
                         )}
                         {delegated_steem != 0 ? (
                             <div
@@ -607,8 +619,14 @@ class UserWallet extends React.Component {
                                         : null,
                                 }}
                             >
-                                <Tooltip t="STEEM POWER delegated to/from this account">
-                                    ({received_power_balance_str} STEEM)
+                                <Tooltip
+                                    t={
+                                        LIQUID_TOKEN_UPPERCASE +
+                                        ' POWER delegated to/from this account'
+                                    }
+                                >
+                                    ({received_power_balance_str}{' '}
+                                    {LIQUID_TOKEN_UPPERCASE})
                                 </Tooltip>
                             </div>
                         ) : null}
@@ -616,7 +634,7 @@ class UserWallet extends React.Component {
                 </div>
                 <div className="UserWallet__balance row">
                     <div className="column small-12 medium-8">
-                        STEEM DOLLARS
+                        {LIQUID_TOKEN_UPPERCASE} DOLLARS
                         <div className="secondary">{sbdMessage}</div>
                     </div>
                     <div className="column small-12 medium-4">

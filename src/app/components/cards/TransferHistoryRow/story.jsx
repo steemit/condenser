@@ -12,6 +12,7 @@ import { receiveState } from 'app/redux/GlobalReducer';
 import mockState from '../../../../../api_mockdata/get_state';
 
 import TransferHistoryRow from './';
+import { LIQUID_TOKEN_UPPERCASE } from 'app/client_config';
 
 const store = createStore(rootReducer);
 
@@ -58,10 +59,9 @@ storiesOf('Cards', module)
                                         'transfer_to_vesting'
                                     ),
                                     {
-                                        amount: `${number(
-                                            'amount',
-                                            138.69
-                                        )} STEEM`,
+                                        amount: `${number('amount', 138.69)} ${
+                                            LIQUID_TOKEN_UPPERCASE
+                                        }`,
                                         to: select(
                                             'to user (affects transfer_to_vesting)',
                                             ['userA', 'userB', 'userC'],
@@ -98,13 +98,13 @@ storiesOf('Cards', module)
                                         steem_payout: `${text(
                                             'steem_payout',
                                             '0.000'
-                                        )} STEEM`,
+                                        )} ${LIQUID_TOKEN_UPPERCASE}`,
                                         author: 'author',
                                         permlink: 'permlink',
                                         reward_steem: `${text(
                                             'reward_steem',
                                             '1.234'
-                                        )} STEEM`,
+                                        )} ${LIQUID_TOKEN_UPPERCASE}`,
                                         reward_sbd: `${text(
                                             'reward_sbd',
                                             '3.456'

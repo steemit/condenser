@@ -65,7 +65,7 @@ function* preBroadcast_transfer({operation}) {
             if(!account) throw new Error(`Unknown to account ${operation.to}`)
             const memo_key = account.get('memo_key')
             memoStr = memo.encode(memo_private, memo_key, memoStr)
-            operation.memo = memo
+            operation.memo = memoStr
         }
     }
     return operation

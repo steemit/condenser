@@ -228,6 +228,7 @@
     "login": "Войти",
     "logout": "Выйти",
     "memo": "Ключ заметок",
+    "messages": "Сообщения",
     "more": "больше",
     "mute": "Заблокировать",
     "new": "Новое",
@@ -1070,5 +1071,8 @@
     "confirm_cancel_delegation": "Вы действительно хотите отозвать делегированную %(VESTING_TOKEN2)s у пользователя %(delegatee)s",
     "from": "От кого",
     "to": "Кому"
+  },
+  "messages_jsx": {
+    "start_conversation": "Написать сообщение"
   }
 }

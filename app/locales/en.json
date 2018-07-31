@@ -83,6 +83,7 @@
     "login": "Login",
     "logout": "Logout",
     "memo": "Memo",
+    "messages": "Messages",
     "more": "more",
     "mute": "Mute",
     "new": "new",
@@ -1058,5 +1059,8 @@
     "confirm_cancel_delegation": "Are you sure you want to cancel %(VESTING_TOKEN2)s delegation",
     "from": "From",
     "to": "To"
+  },
+  "messages_jsx": {
+    "start_conversation": "Start conversation"
   }
 }

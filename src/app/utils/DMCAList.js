@@ -180,6 +180,7 @@ export default `
 /mgsc/@akshay96/sanju-movie-review-audience-all-praises-for-this-sanjay-dutt-biopic
 /pbc/@douwe/pbc-how-to-get-rich-from-a-private-coin
 /steemit/@amitayboneh/this-is-why-cindicator-cnd-worth-5usd-20usd-the-full-pbc-review
+/let/@herih511/let-the-sunshine-in-full-movie-hd
 `
     .trim()
     .split('\n');

@@ -152,7 +152,7 @@ module.exports = {
         cb(null, {
             components: {
                 content: require('./blog/BlogContent').default,
-                sidebarRight: require('./rightPanel').default,
+                sidebarRight: require('./RightPanel').default,
             },
         });
     },
@@ -162,7 +162,7 @@ module.exports = {
             getComponents(nextState, cb) {
                 cb(null, {
                     content: require('./comments/CommentsContent').default,
-                    sidebarRight: require('./rightPanel').default,
+                    sidebarRight: require('./RightPanel').default,
                 });
             },
         },
@@ -171,7 +171,7 @@ module.exports = {
             getComponents(nextState, cb) {
                 cb(null, {
                     content: require('./replies/RepliesContent').default,
-                    sidebarRight: require('./rightPanel').default,
+                    sidebarRight: require('./RightPanel').default,
                 });
             },
         },

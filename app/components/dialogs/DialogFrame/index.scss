@@ -96,34 +96,19 @@
     margin: 0 !important;
     cursor: pointer;
     outline: none;
+
     color: #6d6d6d;
+    &:focus { background: #ddebff; }
+    &:hover { color: #3a3a3a; }
+    &[disabled] { color: #999; background: none; cursor: not-allowed; }
 
-    &:focus {
-      background: #ddebff;
-    }
+    &_primary { color: #2879ff; }
+    &_primary:hover { color: #60a0ff; }
+    &_primary[disabled] { color: #8fc3ff; }
 
-    &_primary {
-      color: #2879ff;
-    }
-
-    &_warning {
-      color: #ff4641;
-    }
-
-    &:hover {
-      color: #3a3a3a;
-    }
-
-    &_primary:hover {
-      color: #60a0ff;
-    }
-
-    &_warning:hover {
-      color: red;
-    }
-
-    &_warning:focus {
-      background: #ffe3dd;
-    }
+    &_warning { color: #ff4641; }
+    &_warning:hover { color: red; }
+    &_warning:focus { background: #ffe3dd; }
+    &_warning[disabled] { color: #ffe3dd; background: none; }
   }
 }

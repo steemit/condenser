@@ -36,7 +36,7 @@ export default class DialogFrame extends PureComponent {
         );
     }
 
-    _renderButton = ({ text, autoFocus, primary, warning, onClick }, index) => {
+    _renderButton = ({ text, autoFocus, disabled, primary, warning, onClick }, index) => {
         return (
             <div className="Dialog__footer-button-wrapper" key={index}>
                 <button
@@ -45,6 +45,7 @@ export default class DialogFrame extends PureComponent {
                         'Dialog__footer-button_warning': warning,
                     })}
                     type="button"
+                    disabled={disabled}
                     autoFocus={autoFocus}
                     onClick={onClick}
                 >

@@ -82,6 +82,9 @@ export default class RightActions extends PureComponent {
     _onTransferClick = () => {
         DialogManager.showDialog({
             component: TransferDialog,
+            props: {
+                pageAccountName: this.props.pageAccountName,
+            },
         });
     };
 }

@@ -5,10 +5,12 @@ import TokenDistribution from 'src/app/components/userProfile/TokenDistribution'
 
 export default class RightPanel extends PureComponent {
     render() {
+        const { params } = this.props;
+
         return (
             <div>
                 <AccountPrice />
-                <RightActions />
+                <RightActions pageAccountName={params.accountName || null} />
                 <TokenDistribution />
             </div>
         );

@@ -4,7 +4,7 @@ import config from 'config';
 import models from 'db/models';
 import { checkCSRF, getRemoteIp, rateLimitReq } from 'server/utils/misc';
 import { hash } from 'golos-js/lib/auth/ecc';
-import crypto from 'crypto';
+import secureRandom from 'secure-random';
 
 function digits(text) {
     const digitArray = text.match(/\d+/g);
@@ -33,8 +33,9 @@ export default function useRegistrationApi(app) {
             return;
         }
 
-        const accountSid = this.request.body.AccountSid || ''
-
+        const accountSid = this.request.body.AccountSid
+            ? this.request.body.AccountSid
+            : '';
         if (accountSid.localeCompare(config.get('twilio.account_sid')) != 0) {
             this.status = 401;
             this.body = 'Unauthorized';
@@ -47,7 +48,6 @@ export default function useRegistrationApi(app) {
         } else if (this.request.body.phone) {
             phone = this.request.body.phone;
         }
-
         if (!phone || digits(phone).length === 0) {
             this.status = 401;
             this.body = 'Bad Request Data from';
@@ -60,7 +60,6 @@ export default function useRegistrationApi(app) {
         } else if (this.request.body.mes) {
             confirmation_code = this.request.body.mes.substr(0, 4);
         }
-
         if (!confirmation_code || digits(confirmation_code).length !== 4) {
             this.status = 400;
             this.body = 'Bad Request Data body';
@@ -82,37 +81,30 @@ export default function useRegistrationApi(app) {
             },
             order: 'id DESC',
         });
-
         if (!mid) {
             this.status = 401;
             this.body = 'Wrong confirmation code';
             return;
         }
-
         if (mid.verified) {
             this.status = 401;
             this.body = 'Phone number has already been verified';
             return;
         }
 
-        const hours_ago = (Date.now() - mid.updated_at) / 1000 / 3600;
-        if (hours_ago > 24) {
+        const hours_ago = (Date.now() - mid.updated_at) / 1000.0 / 3600.0;
+        if (hours_ago > 24.0) {
             this.status = 401;
             this.body = 'Confirmation code has been expired';
             return;
         }
-
         yield mid.update({ verified: true });
-
         this.body =
             'GOLOS.io \nСпасибо за подтверждение вашего номера телефона';
     });
 
     router.post('/check_code', koaBody, function*() {
-        if (rateLimitReq(this, this.req)) {
-            return;
-        }
-
+        if (rateLimitReq(this, this.req)) return;
         const body = this.request.body;
         let params = {};
         if (typeof body === 'string') {
@@ -122,10 +114,7 @@ export default function useRegistrationApi(app) {
         } else {
             params = body;
         }
-
-        if (!checkCSRF(this, params.csrf)) {
-            return;
-        }
+        if (!checkCSRF(this, params.csrf)) return;
 
         this.body = JSON.stringify({ status: 'session' });
 
@@ -145,37 +134,28 @@ export default function useRegistrationApi(app) {
             where: { user_id, provider: 'phone' },
             order: 'id DESC',
         });
-
         if (mid) {
             if (mid.verified) {
                 this.body = JSON.stringify({ status: 'done' });
                 return;
             }
-
-            const secondsAgo = (Date.now() - mid.updated_at) / 1000;
+            this.body = JSON.stringify({
+                status: 'waiting',
+                code: mid.confirmation_code,
+            });
+            const seconds_ago = (Date.now() - mid.updated_at) / 1000.0;
             const timeAgo = 10;
-
-            if (secondsAgo < timeAgo) {
-                this.body = JSON.stringify({
-                    status: 'attempts_10',
-                });
-            } else {
-                this.body = JSON.stringify({
-                    status: 'waiting',
-                    code: mid.confirmation_code,
-                });
+            if (seconds_ago < timeAgo) {
+                this.body = JSON.stringify({ status: 'attempts_10' });
+                return;
             }
         }
     });
 
     router.post('/send_code', koaBody, function*() {
-        if (rateLimitReq(this, this.req)) {
-            return;
-        }
-
+        if (rateLimitReq(this, this.req)) return;
         const body = this.request.body;
         let params = {};
-
         if (typeof body === 'string') {
             try {
                 params = JSON.parse(body);
@@ -183,14 +163,12 @@ export default function useRegistrationApi(app) {
         } else {
             params = body;
         }
+        if (!checkCSRF(this, params.csrf)) return;
 
-        if (!checkCSRF(this, params.csrf)) {
-            return;
-        }
-
-        const country = params.country || null;
-        const localPhone = params.phone;
-        const retry = params.retry;
+        const country = params.country ? params.country : null;
+        const localPhone = params.phone ? params.phone : null;
+        const retry = params.retry ? params.retry : null;
+        console.log(params);
 
         if (!country || country === '') {
             this.body = JSON.stringify({ status: 'select_country' });
@@ -204,14 +182,9 @@ export default function useRegistrationApi(app) {
 
         const phone = digits(parseInt(country) + localPhone);
         const phoneHash = hash.sha256(phone, 'hex');
-
         const existing_phone = yield models.Identity.findOne({
             attributes: ['user_id'],
-            where: {
-                phone: phoneHash,
-                provider: 'phone',
-                verified: true,
-            },
+            where: { phone: phoneHash, provider: 'phone', verified: true },
             order: 'id DESC',
         });
 
@@ -228,8 +201,12 @@ export default function useRegistrationApi(app) {
             return;
         }
 
-        let confirmation_code = generateCode();
-
+        let confirmation_code = parseInt(
+            secureRandom.randomBuffer(8).toString('hex'),
+            16
+        )
+            .toString(10)
+            .substring(0, 4); // 4 digit code
         let mid = yield models.Identity.findOne({
             attributes: [
                 'id',
@@ -241,7 +218,6 @@ export default function useRegistrationApi(app) {
             where: { user_id, provider: 'phone' },
             order: 'id DESC',
         });
-
         if (mid) {
             if (mid.verified) {
                 if (mid.phone === phoneHash) {
@@ -250,14 +226,12 @@ export default function useRegistrationApi(app) {
                 }
                 yield mid.update({ verified: false, phone: phoneHash });
             }
-
-            const secondsAgo = (Date.now() - mid.updated_at) / 1000;
+            const seconds_ago = (Date.now() - mid.updated_at) / 1000.0;
             const timeAgo = process.env.NODE_ENV === 'production' ? 300 : 10;
-
             if (retry) {
                 confirmation_code = mid.confirmation_code;
             } else {
-                if (secondsAgo < timeAgo) {
+                if (seconds_ago < timeAgo) {
                     this.body = JSON.stringify({ status: 'attempts_300' });
                     return;
                 }
@@ -271,7 +245,6 @@ export default function useRegistrationApi(app) {
                     where: { id: user_id },
                 });
             }
-
             if (!user) {
                 user = yield models.User.create({
                     uid: this.session.uid,
@@ -279,8 +252,7 @@ export default function useRegistrationApi(app) {
                 });
                 this.session.user = user_id = user.id;
             }
-
-            yield models.Identity.create({
+            mid = yield models.Identity.create({
                 provider: 'phone',
                 user_id,
                 uid: this.session.uid,
@@ -289,20 +261,9 @@ export default function useRegistrationApi(app) {
                 confirmation_code,
             });
         }
-
         this.body = JSON.stringify({
             status: 'waiting',
             code: confirmation_code,
         });
     });
-}
-
-function generateCode() {
-    const num = crypto.randomBytes(4).readUInt32LE();
-
-    if (num < 1000) {
-        return generateCode();
-    }
-
-    return num.toString().substr(0, 4);
 }

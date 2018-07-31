@@ -5,12 +5,21 @@
     margin-bottom: 10px;
   }
 
+  &__hint-block {
+    margin: 4px 0;
+  }
+
   &__hint {
     user-select: none;
     border-bottom: 1px dashed #0078c4;
     color: #0078c4;
     cursor: default;
     cursor: help;
+  }
+
+  &__how-much-text {
+    font-size: 14px;
+    color: #555;
   }
 
   &__loader {
@@ -39,6 +48,10 @@
     color: #333;
     background: #f9f9f9;
     animation: fade-in 0.5s;
+  }
+
+  &__send-sms-block {
+    margin-bottom: 7px;
   }
 
   form {

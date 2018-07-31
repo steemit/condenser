@@ -18,7 +18,7 @@ import {Map} from 'immutable';
 import Author from 'app/components/elements/Author';
 import UserNames from 'app/components/elements/UserNames';
 import tt from 'counterpart';
-import { APP_ICON, TERMS_OF_SERVICE_URL } from 'app/client_config';
+import { APP_ICON } from 'app/client_config';
 import { detransliterate } from 'app/utils/ParsersAndFormatters';
 import PostSummaryThumb from 'app/components/elements/PostSummaryThumb'
 

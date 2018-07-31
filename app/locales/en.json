@@ -29,6 +29,7 @@
     "amount": "Amount",
     "and": "and",
     "announcement_text": "Golos.io: Грантовая программа поддержки молодых авторов и уникального контента",
+    "please": "Please",
     "read_only_mode": "Из-за технического обслуживания серверов мы работаем в режиме чтения. Извините за неудобство.",
     "read_only_mode_notify": "Ведутся технические работы",
     "are_you_sure": "Are you sure?",
@@ -874,6 +875,8 @@
     "you_can_change_your_number": "You can select another one phone number.",
     "select_another_number": "Select another phone",
     "waiting_from_you": "Waiting SMS message with confirmation code %(code)s from your number to our verification number %(phone)s.",
+    "waiting_from_you_line_1": "Please, send SMS with text %(code)s on %(phone)s",
+    "waiting_from_you_line_2": "Golos.io interested in registration real people, not robots. We ask you to send SMS.",
     "attempts_10": "Confirmation was attempted a moment ago. You can try again only in 10 seconds",
     "attempts_300": "Confirmation was attempted a moment ago. You can try again only in 5 minutes"
   },

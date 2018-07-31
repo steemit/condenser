@@ -45,6 +45,7 @@ class CreateAccount extends React.Component {
         showRules: false,
         allBoxChecked: false,
         iSent: false,
+        showHowMuchHelp: false,
     };
 
     componentDidMount() {
@@ -229,6 +230,7 @@ class CreateAccount extends React.Component {
                                                 autoComplete="off"
                                                 disabled={fetchState.checking}
                                                 onChange={this.onMobileChange}
+                                                onBlur={this._onMobileBlur}
                                                 value={phone}
                                             />
                                         </label>
@@ -366,24 +368,34 @@ class CreateAccount extends React.Component {
     }
 
     _renderCodeWaiting() {
-        const { country, fetchState, iSent } = this.state;
+        const { country, fetchState, iSent, showHowMuchHelp } = this.state;
 
         return (
             <div className="callout">
-                <div>
-                    {tt('mobilevalidation_js.waiting_from_you_line_1', {
-                        code: fetchState.code,
-                        phone: SMS_SERVICES[country] || SMS_SERVICES['default'],
-                    })}
+                <div className="CreateAccount__send-sms-block">
+                    {tt('g.please')},{' '}
+                    <b>
+                        {tt('mobilevalidation_js.waiting_from_you_line_1', {
+                            code: fetchState.code,
+                            phone:
+                                SMS_SERVICES[country] ||
+                                SMS_SERVICES['default'],
+                        })}
+                    </b>
                 </div>
                 <div>{tt('mobilevalidation_js.waiting_from_you_line_2')}</div>
-                <div>
+                <div className="CreateAccount__hint-block">
                     <span
                         className="CreateAccount__hint"
-                        data-tooltip={tt('createaccount_jsx.sms_how_much_answer')}
+                        onClick={this._onHowMuchClick}
                     >
                         {tt('createaccount_jsx.sms_how_much')}
                     </span>
+                    {showHowMuchHelp ? (
+                        <div className="CreateAccount__how-much-text">
+                            {tt('createaccount_jsx.sms_how_much_answer')}
+                        </div>
+                    ) : null}
                 </div>
                 <p>
                     <small>
@@ -499,12 +511,17 @@ class CreateAccount extends React.Component {
     _renderCheckInfo() {
         return (
             <p className="CreateAccount__check-info">
-                {tt('createaccount_jsx.check_code')}
-                {' '}
+                {tt('createaccount_jsx.check_code')}{' '}
                 <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>.
             </p>
         );
     }
+
+    _onHowMuchClick = () => {
+        this.setState({
+            showHowMuchHelp: !this.state.showHowMuchHelp,
+        });
+    };
 
     _onISendClick = () => {
         this.setState({
@@ -583,18 +600,24 @@ class CreateAccount extends React.Component {
         this.setState({ phone });
     };
 
-    validateMobilePhone = value => {
-        let phoneError = '';
-        let phoneHint = '';
-        if (value == null || value.length === 0) {
+    _onMobileBlur = () => {
+        const { phone } = this.state;
+        this.validateMobilePhone(phone, true);
+    };
+
+    validateMobilePhone = (value, isFinal) => {
+        let phoneError = null;
+        let phoneHint = null;
+
+        if (!value) {
             phoneError = tt('mobilevalidation_js.not_be_empty');
         } else if (!/^[0-9]{1,45}$/.test(value)) {
             phoneError = tt('mobilevalidation_js.have_only_digits');
-        } else if (value.length < 7) {
+        } else if (value.length < 7 && isFinal) {
             phoneError = tt('mobilevalidation_js.be_longer');
         }
 
-        if (phoneError.length) {
+        if (phoneError) {
             phoneError =
                 tt('createaccount_jsx.phone_number') + ' ' + phoneError;
         } else {
@@ -603,6 +626,7 @@ class CreateAccount extends React.Component {
                 this.state.country +
                 value;
         }
+
         this.setState({ phoneError, phoneHint });
     };
 

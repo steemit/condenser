@@ -88,8 +88,8 @@ export default class GeneratedPasswordInput extends React.Component {
             const APP_NAME = tt('g.APP_NAME');
 
             return (
-                <div className="GeneratedPasswordInput__rules">
-                    <p>
+                <div>
+                    <p className="GeneratedPasswordInput__rule">
                         {tt('g.the_rules_of_APP_NAME.one', { APP_NAME })}
                         <br />
                         {tt('g.the_rules_of_APP_NAME.second', { APP_NAME })}

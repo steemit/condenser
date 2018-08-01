@@ -2,12 +2,11 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import is from 'styled-is';
+import tt from 'counterpart';
 import transaction from 'app/redux/Transaction';
 import DialogFrame from 'app/components/dialogs/DialogFrame';
 import ComplexInput from 'golos-ui/ComplexInput';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
-import tt from 'counterpart';
 import DialogManager from 'app/components/elements/common/DialogManager';
 
 const CURRENCIES = {
@@ -107,21 +106,36 @@ class TransferDialog extends PureComponent {
         pageAccountName: PropTypes.string,
     };
 
+    componentDidMount() {
+        this.props.onRef(this);
+    }
+
+    componentWillUnmount() {
+        this.props.onRef(null);
+    }
+
     constructor(props) {
         super(props);
 
+        let target = '';
+
+        if (props.pageAccountName && props.pageAccountName !== props.myUser.get('username')) {
+            target = props.pageAccountName;
+        }
+
         this.state = {
-            target: this.props.pageAccountName || '',
+            target,
             amount: '',
             currency: CURRENCIES.GBG,
             note: '',
+            amountInFocus: false,
             loader: false,
         };
     }
 
     render() {
         const { myAccount } = this.props;
-        const { target, amount, currency, note, loader } = this.state;
+        const { target, amount, currency, note, loader, amountInFocus } = this.state;
 
         const buttons = [
             {
@@ -152,10 +166,14 @@ class TransferDialog extends PureComponent {
 
         if (match && match[1].length > 3) {
             error = 'Можно использовать только 3 знака после запятой';
-        } else if (amountValue && amountValue > balance) {
-            error = 'Недостаточно средств';
         } else if (!/^\d*(?:\.\d*)?$/.test(amountFixed)) {
             error = 'Неправильный формат';
+        } else if (amountValue && amountValue > balance) {
+            error = 'Недостаточно средств';
+        }
+
+        if (amountFixed !== '' && amountValue === 0 && !amountInFocus) {
+            error = 'Введите сумму';
         }
 
         const allow = target && target.trim() && amountValue > 0 && !error && !loader;
@@ -184,6 +202,8 @@ class TransferDialog extends PureComponent {
                         <Section>
                             <Label>Кому</Label>
                             <SimpleInput
+                                name="account"
+                                spellCheck="false"
                                 placeholder={'Отправить аккаунту'}
                                 value={target}
                                 onChange={this._onTargetChange}
@@ -193,10 +213,13 @@ class TransferDialog extends PureComponent {
                             <Label>Сколько</Label>
                             <ComplexInput
                                 placeholder={`Доступно ${balance}`}
+                                spellCheck="false"
                                 value={amount}
                                 activeId={currency}
                                 buttons={buttons}
                                 onChange={this._onAmountChange}
+                                onFocus={this._onAmountFocus}
+                                onBlur={this._onAmountBlur}
                                 onActiveChange={this._onCurrencyChange}
                             />
                         </Section>
@@ -222,6 +245,20 @@ class TransferDialog extends PureComponent {
         );
     }
 
+    confirmClose() {
+        if (this.state.note.trim() || this.state.amount.trim()) {
+            DialogManager.dangerConfirm('Вы действительно хотите закрыть окно?').then(y => {
+                if (y) {
+                    this.props.onClose();
+                }
+            });
+
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     _onNoteChange = e => {
         this.setState({
             note: e.target.value,
@@ -230,7 +267,19 @@ class TransferDialog extends PureComponent {
 
     _onAmountChange = e => {
         this.setState({
-            amount: e.target.value.replace(/[^\d .]+/g, ''),
+            amount: e.target.value.replace(/[^\d .]+/g, '').replace(/,/g, '.'),
+        });
+    };
+
+    _onAmountFocus = () => {
+        this.setState({
+            amountInFocus: true,
+        });
+    };
+
+    _onAmountBlur = () => {
+        this.setState({
+            amountInFocus: false,
         });
     };
 

@@ -57,11 +57,7 @@ const ComplexButton = styled.button`
 
 export default props => (
     <Root className={props.className}>
-        <ComplexInnerInput
-            placeholder={props.placeholder}
-            value={props.value}
-            onChange={props.onChange}
-        />
+        <ComplexInnerInput {...{ ...props, className: null, activeId: null }} />
         {props.buttons.map(button => (
             <ComplexButton
                 key={button.id}

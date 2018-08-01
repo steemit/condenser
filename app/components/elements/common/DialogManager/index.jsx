@@ -1,5 +1,6 @@
 import React from 'react';
 import cn from 'classnames';
+import _ from 'lodash';
 import KEYS from 'app/utils/keyCodes';
 import CommonDialog from 'app/components/dialogs/CommonDialog';
 
@@ -121,28 +122,27 @@ export default class DialogManager extends React.PureComponent {
             return null;
         }
 
-        const dialogs = this._dialogs.map(({ key, top, options }, i) => (
+        const dialogs = this._dialogs.map((dialog, i) => (
             <div
-                key={key}
+                key={dialog.key}
                 className={cn('DialogManager__window', {
-                    DialogManager__window_active:
-                        i === this._dialogs.length - 1,
+                    DialogManager__window_active: i === this._dialogs.length - 1,
                 })}
-                style={{ top }}
+                style={{ top: dialog.top }}
             >
                 <div
                     className="DialogManager__dialog"
                     style={
                         i > 0
                             ? {
-                                  transform: `translate3d(${i * 30}px,${i *
-                                      30}px,0)`,
+                                  transform: `translate3d(${i * 30}px,${i * 30}px,0)`,
                               }
                             : null
                     }
                 >
-                    <options.component
-                        {...options.props}
+                    <dialog.options.component
+                        {...dialog.options.props}
+                        onRef={el => (dialog.el = el)}
                         onClose={this._onDialogClose}
                     />
                 </div>
@@ -151,17 +151,14 @@ export default class DialogManager extends React.PureComponent {
 
         return (
             <div className="DialogManager">
-                <div
-                    className="DialogManager__shade"
-                    onClick={this._onShadeClick}
-                />
+                <div className="DialogManager__shade" onClick={this._onShadeClick} />
                 {dialogs}
             </div>
         );
     }
 
     _close(data) {
-        const dialog = this._dialogs[this._dialogs.length - 1];
+        const dialog = _.last(this._dialogs);
 
         if (dialog.options.onClose) {
             try {
@@ -189,6 +186,14 @@ export default class DialogManager extends React.PureComponent {
     }
 
     _onShadeClick = () => {
+        const dialog = _.last(this._dialogs);
+
+        if (dialog.el && dialog.el.confirmClose) {
+            if (!dialog.el.confirmClose()) {
+                return;
+            }
+        }
+
         this._close();
     };
 

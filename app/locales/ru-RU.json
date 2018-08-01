@@ -1053,9 +1053,6 @@
     "confirm": "Подтверждение",
     "prompt": "Введите данные"
   },
-  "mobile_app_button": {
-    "open_in_app": "Открыть в приложении"
-  },
   "powerdown_jsx": {
     "power_down": "Уменьшить силу голоса",
     "amount": "Количество",
@@ -1070,5 +1067,10 @@
     "confirm_cancel_delegation": "Вы действительно хотите отозвать делегированную %(VESTING_TOKEN2)s у пользователя %(delegatee)s",
     "from": "От кого",
     "to": "Кому"
+  },
+  "start_mobile_app": {
+    "open_in_app": "Открыть в приложении",
+    "close_once": "Закрыть один раз",
+    "close_forever": "Закрыть навсегда"
   }
 }

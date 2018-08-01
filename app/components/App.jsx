@@ -341,7 +341,7 @@ class App extends React.Component {
                     {children}
                     {location.pathname.startsWith('/submit') ? null : <Footer />}
                     <ScrollButton />
-                    <MobileAppButton path={location.pathname}/>
+                    <MobileAppButton path={location.pathname} />
                 </div>
                 <Dialogs />
                 <Modals />

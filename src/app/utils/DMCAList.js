@@ -143,6 +143,9 @@ export default `
 /hentai/@doujinblog/180701rj228604-9arcnnx5cr
 /hentai/@doujinblog/180522ver2018-05-22rj220365-zd27ep9x2i
 /hentai/@doujinblog/180608rpgver101rj220443-sgxt3qan0v
+/hentai/@doujinblog/180713growth1rj229081-s15w5sofld
+/hentai/@doujinblog/180714--rj227798-90djgnbgos
+/hentai/@doujinblog/180714mugcathrj228912-qh4lrzq5y0
 /news/@monaalexis27/sandy-hook-michael-vabner-website-shows-noah-pozner-all-grown-up-mirrored
 /news/@monaalexis27/sandy-hook-not-only-is-noah-pozner-a-fiction-but-his-father-lenny-is-also-a-fake-mirrored
 /politics/@barrysoetoro/neil-heslin-is-dead-9-11-fireman

@@ -7,6 +7,7 @@ import transaction from 'app/redux/Transaction';
 import DialogFrame from 'app/components/dialogs/DialogFrame';
 import ComplexInput from 'src/app/components/golos-ui/ComplexInput';
 import SplashLoader from 'src/app/components/golos-ui/SplashLoader';
+import Icon from 'src/app/components/golos-ui/Icon';
 import DialogManager from 'app/components/elements/common/DialogManager';
 import { parseAmount } from 'src/app/helpers/currency';
 
@@ -16,11 +17,10 @@ const CURRENCIES = {
 };
 
 const Content = styled.div`
-    padding: 10px 30px 14px;
+    padding: 5px 30px 14px;
 `;
 
 const SubHeader = styled.div`
-    margin-top: -15px;
     margin-bottom: 16px;
     text-align: center;
     font-size: 14px;
@@ -58,14 +58,21 @@ const Section = styled.div`
 `;
 
 const Label = styled.div`
-    margin: 14px 0 9px;
+    display: flex;
+    align-items: center;
+    margin: 19px 0 9px;
     font-size: 14px;
+`;
+
+const NoteIcon = Icon.extend`
+    margin: -10px 6px -10px 0;
+    color: #e1e1e1;
 `;
 
 const Note = styled.textarea`
     display: block;
     width: 100%;
-    height: 116px;
+    height: 118px;
     padding: 7px 11px;
     border: 1px solid #e1e1e1;
     outline: none;
@@ -203,7 +210,7 @@ class TransferDialog extends PureComponent {
                         </Column>
                         <Column>
                             <Section>
-                                <Label>Заметка</Label>
+                                <Label><NoteIcon name="note" /> Заметка</Label>
                                 <Note
                                     placeholder={'Эта заметка является публичной'}
                                     value={note}

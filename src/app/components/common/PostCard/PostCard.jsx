@@ -217,9 +217,7 @@ const Root = styled.div`
         height: 338px;
     `};
 
-    ${is('withImage', 'grid')`
-    
-    `} &.PostCard_image.PostCard_grid {
+    &.PostCard_image.PostCard_grid {
         ${Footer} {
             opacity: 0;
             transition: opacity 0.25s;
@@ -240,6 +238,17 @@ const Root = styled.div`
 
         &:hover ${PostImage}:after {
             background-color: rgba(0, 0, 0, 0.2);
+        }
+
+        &:after {
+            position: absolute;
+            content: '';
+            height: 30px;
+            left: 0;
+            right: 0;
+            bottom: 133px;
+            background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
+            pointer-events: none;
         }
     }
 `;

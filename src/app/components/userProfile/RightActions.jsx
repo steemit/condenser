@@ -2,7 +2,8 @@ import React, { PureComponent } from 'react';
 import styled from 'styled-components';
 import Icon from 'golos-ui/Icon';
 import DialogManager from 'app/components/elements/common/DialogManager';
-import TransferDialog from './dialogs/TransferDialog/TransferDialog';
+import TransferDialog from './dialogs/TransferDialog';
+import SafeDialog from './dialogs/SafeDialog';
 
 const Root = styled.div`
     margin-bottom: 18px;
@@ -63,7 +64,7 @@ export default class RightActions extends PureComponent {
                     <ActionIcon name="coins" />
                     <ActionTitle>Передать</ActionTitle>
                 </Action>
-                <Action>
+                <Action onClick={this._onSafeClick}>
                     <ActionIcon name="locked" />
                     <ActionTitle>Вывести/перевести в сейф</ActionTitle>
                 </Action>
@@ -85,6 +86,12 @@ export default class RightActions extends PureComponent {
             props: {
                 pageAccountName: this.props.pageAccountName,
             },
+        });
+    };
+
+    _onSafeClick = () => {
+        DialogManager.showDialog({
+            component: SafeDialog,
         });
     };
 }

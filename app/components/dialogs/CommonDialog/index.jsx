@@ -38,14 +38,16 @@ export default class CommonDialog extends React.PureComponent {
                 buttons={this._getButtons()}
                 onCloseClick={this._onCloseClick}
             >
-                {text}
-                {type === 'prompt' ? (
-                    <input
-                        className="CommonDialog__prompt-input"
-                        ref="input"
-                        autoFocus
-                    />
-                ) : null}
+                <div className="CommonDialog__body">
+                    {text}
+                    {type === 'prompt' ? (
+                        <input
+                            className="CommonDialog__prompt-input"
+                            ref="input"
+                            autoFocus
+                        />
+                    ) : null}
+                </div>
             </DialogFrame>
         );
     }

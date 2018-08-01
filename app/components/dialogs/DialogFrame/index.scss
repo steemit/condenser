@@ -3,7 +3,7 @@
   $border-radius: 8px;
 
   position: relative;
-  min-width: 364px;
+  min-width: 340px;
   max-width: 100%;
   color: #333;
   background: #fff;
@@ -47,11 +47,11 @@
     color: #e0e0e0;
   }
 
-  &__content {
-    padding: 10px 30px 28px;
-    line-height: 1.5em;
-    color: #666;
-  }
+  //&__content {
+  //  padding: 10px 30px 28px;
+  //  line-height: 1.5em;
+  //  color: #666;
+  //}
 
   &__footer {
     display: flex;

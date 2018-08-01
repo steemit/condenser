@@ -1,40 +1,66 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
+import is from 'styled-is';
 import tt from 'counterpart';
 import transaction from 'app/redux/Transaction';
 import DialogFrame from 'app/components/dialogs/DialogFrame';
-import ComplexInput from 'src/app/components/golos-ui/ComplexInput';
-import SplashLoader from 'src/app/components/golos-ui/SplashLoader';
+import ComplexInput from 'golos-ui/ComplexInput';
 import DialogManager from 'app/components/elements/common/DialogManager';
+import SplashLoader from 'src/app/components/golos-ui/SplashLoader';
+import { Checkbox } from 'src/app/components/golos-ui/Form';
 import { parseAmount } from 'src/app/helpers/currency';
+
+const TYPES = {
+    SAVE: 'SAVE',
+    RECEIVE: 'RECEIVE',
+};
 
 const CURRENCIES = {
     GBG: 'GBG',
     GOLOS: 'GOLOS',
 };
 
+const TypeSelect = styled.div`
+    display: flex;
+    margin-top: 14px;
+    border-top: 1px solid #e1e1e1;
+    border-bottom: 1px solid #e1e1e1;
+`;
+
+const TypeButton = styled.div.attrs({ role: 'button' })`
+    flex-basis: 200px;
+    flex-grow: 1;
+    height: 38px;
+    line-height: 36px;
+    text-align: center;
+    border-left: 1px solid #e1e1e1;
+    color: #b7b7ba;
+    user-select: none;
+    cursor: pointer;
+
+    &:first-child {
+        border-left: none;
+    }
+
+    ${is('active')`
+        color: #333;
+    `};
+`;
+
 const Content = styled.div`
+    width: 348px;
     padding: 10px 30px 14px;
 `;
 
 const SubHeader = styled.div`
-    margin-top: -15px;
-    margin-bottom: 16px;
+    margin: 10px 0 20px;
     text-align: center;
     font-size: 14px;
     color: #959595;
 `;
 
 const Body = styled.div`
-    display: flex;
-    margin: 0 -10px;
-`;
-
-const Column = styled.div`
-    width: 288px;
-    padding: 0 10px;
 `;
 
 const SimpleInput = styled.input`
@@ -54,25 +80,16 @@ const SimpleInput = styled.input`
 `;
 
 const Section = styled.div`
-    margin-bottom: 10px;
+    margin: 10px 0;
+
+    ${is('flex')`
+        display: flex;
+    `}
 `;
 
 const Label = styled.div`
-    margin: 14px 0 9px;
+    margin-bottom: 9px;
     font-size: 14px;
-`;
-
-const Note = styled.textarea`
-    display: block;
-    width: 100%;
-    height: 116px;
-    padding: 7px 11px;
-    border: 1px solid #e1e1e1;
-    outline: none;
-    border-radius: 6px;
-    resize: none;
-    font-size: 14px;
-    box-shadow: none !important;
 `;
 
 const ErrorBlock = styled.div`
@@ -84,11 +101,7 @@ const ErrorLine = styled.div`
     animation: fade-in 0.15s;
 `;
 
-class TransferDialog extends PureComponent {
-    static propTypes = {
-        pageAccountName: PropTypes.string,
-    };
-
+class SafeDialog extends PureComponent {
     componentDidMount() {
         this.props.onRef(this);
     }
@@ -97,29 +110,20 @@ class TransferDialog extends PureComponent {
         this.props.onRef(null);
     }
 
-    constructor(props) {
-        super(props);
-
-        let target = '';
-
-        if (props.pageAccountName && props.pageAccountName !== props.myUser.get('username')) {
-            target = props.pageAccountName;
-        }
-
-        this.state = {
-            target,
-            amount: '',
-            currency: CURRENCIES.GBG,
-            note: '',
-            amountInFocus: false,
-            loader: false,
-            disabled: false,
-        };
-    }
+    state = {
+        type: TYPES.SAVE,
+        target: '',
+        amount: '',
+        currency: CURRENCIES.GBG,
+        amountInFocus: false,
+        saveTo: false,
+        loader: false,
+        disabled: false,
+    };
 
     render() {
-        const { myAccount, myUser } = this.props;
-        const { target, amount, currency, note, loader, disabled, amountInFocus } = this.state;
+        const { myAccount } = this.props;
+        const { target, amount, currency, loader, disabled, amountInFocus, type, saveTo } = this.state;
 
         const buttons = [
             {
@@ -134,30 +138,34 @@ class TransferDialog extends PureComponent {
 
         let currencyKey = null;
 
-        if (currency === CURRENCIES.GOLOS) {
-            currencyKey = 'balance';
-        } else if (currency === CURRENCIES.GBG) {
-            currencyKey = 'sbd_balance';
-        }
-
-        const balanceString = myAccount.get(currencyKey)
-        const balance = parseFloat(balanceString);
-
-        let { value, error } = parseAmount(amount, balance, !amountInFocus);
-
-        if (!error) {
-            if (myUser.get('username') === target.trim()) {
-                error = 'Нельзя выполнить перевод самому себе';
+        if (type === TYPES.SAVE) {
+            if (currency === CURRENCIES.GOLOS) {
+                currencyKey = 'balance';
+            } else if (currency === CURRENCIES.GBG) {
+                currencyKey = 'sbd_balance';
+            }
+        } else {
+            if (currency === CURRENCIES.GOLOS) {
+                currencyKey = 'savings_balance';
+            } else if (currency === CURRENCIES.GBG) {
+                currencyKey = 'savings_sbd_balance';
             }
         }
 
-        const allow = target && target.trim() && value > 0 && !error && !loader && !disabled;
+        const balanceString = myAccount.get(currencyKey);
+        const balance = parseFloat(balanceString);
+
+        const { value, error } = parseAmount(amount, balance, !amountInFocus);
+
+        const targetCheck = saveTo ? target && target.trim() : true;
+
+        const allow = targetCheck && value > 0 && !error && !loader && !disabled;
 
         return (
             <DialogFrame
-                title={'Передать пользователю'}
+                title={'Сейф'}
                 titleSize={20}
-                icon="coins"
+                icon="locked"
                 buttons={[
                     {
                         text: tt('g.cancel'),
@@ -172,10 +180,50 @@ class TransferDialog extends PureComponent {
                 ]}
                 onCloseClick={this._onCloseClick}
             >
+                <TypeSelect>
+                    <TypeButton
+                        active={type === TYPES.SAVE}
+                        onClick={type === TYPES.SAVE ? null : this._onClickSaveType}
+                    >
+                        Перевести
+                    </TypeButton>
+                    <TypeButton
+                        active={type === TYPES.RECEIVE}
+                        onClick={type === TYPES.RECEIVE ? null : this._onClickReceiveType}
+                    >
+                        Вывести
+                    </TypeButton>
+                </TypeSelect>
                 <Content>
-                    <SubHeader>Отправить средства на другой счет.</SubHeader>
+                    <SubHeader>
+                        {type === TYPES.SAVE
+                            ? 'Защитите средства от вывода трехдневным периодом ожидания.'
+                            : 'Снять средства после необходимого трехдневного периода ожидания.'}
+                    </SubHeader>
                     <Body>
-                        <Column>
+                        <Section>
+                            <Label>Сколько</Label>
+                            <ComplexInput
+                                placeholder={`Доступно ${balanceString}`}
+                                spellCheck="false"
+                                value={amount}
+                                activeId={currency}
+                                buttons={buttons}
+                                onChange={this._onAmountChange}
+                                onFocus={this._onAmountFocus}
+                                onBlur={this._onAmountBlur}
+                                onActiveChange={this._onCurrencyChange}
+                            />
+                        </Section>
+                        <Section flex>
+                            <Checkbox
+                                title="Перевести на другой аккаунт"
+                                inline
+                                value={saveTo}
+                                onChange={this._onSaveTypeChange}
+                            />
+                        </Section>
+                        {saveTo ? (
                             <Section>
                                 <Label>Кому</Label>
                                 <SimpleInput
@@ -186,43 +234,17 @@ class TransferDialog extends PureComponent {
                                     onChange={this._onTargetChange}
                                 />
                             </Section>
-                            <Section>
-                                <Label>Сколько</Label>
-                                <ComplexInput
-                                    placeholder={`Доступно ${balanceString}`}
-                                    spellCheck="false"
-                                    value={amount}
-                                    activeId={currency}
-                                    buttons={buttons}
-                                    onChange={this._onAmountChange}
-                                    onFocus={this._onAmountFocus}
-                                    onBlur={this._onAmountBlur}
-                                    onActiveChange={this._onCurrencyChange}
-                                />
-                            </Section>
-                        </Column>
-                        <Column>
-                            <Section>
-                                <Label>Заметка</Label>
-                                <Note
-                                    placeholder={'Эта заметка является публичной'}
-                                    value={note}
-                                    onChange={this._onNoteChange}
-                                />
-                            </Section>
-                        </Column>
+                        ) : null}
                     </Body>
                     <ErrorBlock>{error ? <ErrorLine>{error}</ErrorLine> : null}</ErrorBlock>
                 </Content>
-                {loader ? (
-                    <SplashLoader />
-                ) : null}
+                {loader ? <SplashLoader /> : null}
             </DialogFrame>
         );
     }
 
     confirmClose() {
-        if (this.state.note.trim() || this.state.amount.trim()) {
+        if (this.state.amount.trim() || this.state.target.trim()) {
             DialogManager.dangerConfirm('Вы действительно хотите закрыть окно?').then(y => {
                 if (y) {
                     this.props.onClose();
@@ -235,9 +257,9 @@ class TransferDialog extends PureComponent {
         }
     }
 
-    _onNoteChange = e => {
+    _onSaveTypeChange = checked => {
         this.setState({
-            note: e.target.value,
+            saveTo: checked,
         });
     };
 
@@ -277,24 +299,30 @@ class TransferDialog extends PureComponent {
 
     _onOkClick = () => {
         const { myUser } = this.props;
-        const { target, amount, currency, note, loader, disabled } = this.state;
+        const { target, amount, currency, type, saveTo, loader, disabled } = this.state;
 
         if (loader || disabled) {
             return;
         }
 
-        const operation = {
-            from: myUser.get('username'),
-            to: target.trim(),
-            amount: parseFloat(amount.replace(/\s+/, '')).toFixed(3) + ' ' + currency,
-            memo: note,
-        };
-
         this.setState({
             loader: true,
+            disabled: true,
         });
 
-        this.props.transfer(operation, err => {
+        const iAm = myUser.get('username');
+
+        const operation = {
+            from: iAm,
+            to: saveTo ? target.trim() : iAm,
+            amount: parseFloat(amount.replace(/\s+/, '')).toFixed(3) + ' ' + currency,
+            memo: '',
+            request_id: Math.floor((Date.now() / 1000) % 4294967295)
+        };
+
+        const actionType = type === TYPES.SAVE ? 'transfer_to_savings' : 'transfer_from_savings';
+
+        this.props.transfer(actionType, operation, err => {
             if (err) {
                 this.setState({
                     loader: false,
@@ -304,16 +332,31 @@ class TransferDialog extends PureComponent {
                 if (err !== 'Canceled') {
                     DialogManager.alert(err.toString());
                 }
-
             } else {
                 this.setState({
                     loader: false,
                 });
 
-                DialogManager.info(`Перевод на аккаунт ${operation.to} успешно завершен!`).then(() => {
+                DialogManager.info('Операция успешно завершена!').then(() => {
                     this.props.onClose();
                 });
             }
+        });
+    };
+
+    _onClickSaveType = () => {
+        this.setState({
+            type: TYPES.SAVE,
+            amount: '',
+            saveTo: false,
+        });
+    };
+
+    _onClickReceiveType = () => {
+        this.setState({
+            type: TYPES.RECEIVE,
+            amount: '',
+            saveTo: false,
         });
     };
 }
@@ -329,10 +372,10 @@ export default connect(
         };
     },
     dispatch => ({
-        transfer(operation, callback) {
+        transfer(type, operation, callback) {
             dispatch(
                 transaction.actions.broadcastOperation({
-                    type: 'transfer',
+                    type,
                     operation,
                     successCallback() {
                         callback(null);
@@ -355,4 +398,4 @@ export default connect(
             );
         },
     })
-)(TransferDialog);
+)(SafeDialog);

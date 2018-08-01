@@ -39,28 +39,30 @@ export default class LinkOptionsDialog extends React.PureComponent {
                 ]}
                 onCloseClick={this._onCloseClick}
             >
-                <label className="LinkOptionsDialog__label">
-                    {tt('editor_toolbar.link_text')}:
-                    <Input
-                        ref="text"
-                        block
-                        value={text}
-                        autoFocus={!text}
-                        onKeyDown={this._onKeyDown}
-                        onChange={this._onTextChange}
-                    />
-                </label>
-                <label className="LinkOptionsDialog__label">
-                    {tt('editor_toolbar.link_value')}:
-                    <Input
-                        ref="link"
-                        block
-                        value={link}
-                        autoFocus={text && !link}
-                        onKeyDown={this._onKeyDown}
-                        onChange={this._onLinkChange}
-                    />
-                </label>
+                <div className="LinkOptionsDialog__body">
+                    <label className="LinkOptionsDialog__label">
+                        {tt('editor_toolbar.link_text')}:
+                        <Input
+                            ref="text"
+                            block
+                            value={text}
+                            autoFocus={!text}
+                            onKeyDown={this._onKeyDown}
+                            onChange={this._onTextChange}
+                        />
+                    </label>
+                    <label className="LinkOptionsDialog__label">
+                        {tt('editor_toolbar.link_value')}:
+                        <Input
+                            ref="link"
+                            block
+                            value={link}
+                            autoFocus={text && !link}
+                            onKeyDown={this._onKeyDown}
+                            onChange={this._onLinkChange}
+                        />
+                    </label>
+                </div>
             </DialogFrame>
         );
     }

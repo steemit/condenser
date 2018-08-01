@@ -18,12 +18,15 @@ export default class DialogManager extends React.PureComponent {
     }
 
     static info(text, title) {
-        DialogManager.showDialog({
-            component: CommonDialog,
-            props: {
-                title,
-                text,
-            },
+        return new Promise(resolve => {
+            DialogManager.showDialog({
+                component: CommonDialog,
+                props: {
+                    title,
+                    text,
+                },
+                onClose: resolve,
+            });
         });
     }
 
@@ -143,7 +146,7 @@ export default class DialogManager extends React.PureComponent {
                     <dialog.options.component
                         {...dialog.options.props}
                         onRef={el => (dialog.el = el)}
-                        onClose={this._onDialogClose}
+                        onClose={data => this._onDialogClose(dialog, data)}
                     />
                 </div>
             </div>
@@ -157,20 +160,21 @@ export default class DialogManager extends React.PureComponent {
         );
     }
 
-    _close(data) {
-        const dialog = _.last(this._dialogs);
+    _closeDialog(dialog, data) {
+        const index = this._dialogs.indexOf(dialog);
 
-        if (dialog.options.onClose) {
-            try {
-                dialog.options.onClose(data);
-            } catch (err) {
-                console.error(err);
+        if (index !== -1) {
+            if (dialog.options.onClose) {
+                try {
+                    dialog.options.onClose(data);
+                } catch (err) {
+                    console.error(err);
+                }
             }
+
+            this._dialogs.splice(index, 1);
+            this.forceUpdate();
         }
-
-        this._dialogs.pop();
-
-        this.forceUpdate();
     }
 
     _showDialog(options, silent) {
@@ -186,6 +190,21 @@ export default class DialogManager extends React.PureComponent {
     }
 
     _onShadeClick = () => {
+        this._tryToClose();
+    };
+
+    _onDialogClose = (dialog, data) => {
+        this._closeDialog(dialog, data);
+    };
+
+    _onKeyDown = e => {
+        if (this._dialogs.length && e.which === KEYS.ESCAPE) {
+            e.preventDefault();
+            this._tryToClose();
+        }
+    };
+
+    _tryToClose() {
         const dialog = _.last(this._dialogs);
 
         if (dialog.el && dialog.el.confirmClose) {
@@ -194,17 +213,6 @@ export default class DialogManager extends React.PureComponent {
             }
         }
 
-        this._close();
-    };
-
-    _onDialogClose = data => {
-        this._close(data);
-    };
-
-    _onKeyDown = e => {
-        if (this._dialogs.length && e.which === KEYS.ESCAPE) {
-            e.preventDefault();
-            this._close();
-        }
-    };
+        this._closeDialog(_.last(this._dialogs));
+    }
 }

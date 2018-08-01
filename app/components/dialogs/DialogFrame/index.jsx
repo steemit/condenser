@@ -13,7 +13,7 @@ export default class DialogFrame extends PureComponent {
     };
 
     render() {
-        const { title, icon, buttons, children, className } = this.props;
+        const { title, titleSize, icon, buttons, children, className } = this.props;
 
         return (
             <div className={cn('Dialog', className)}>
@@ -25,7 +25,12 @@ export default class DialogFrame extends PureComponent {
                                 <Icon name={icon} size={40} />
                             </div>
                         ) : null}
-                        <div className="Dialog__title">{title}</div>
+                        <div
+                            className="Dialog__title"
+                            style={titleSize ? { fontSize: titleSize } : null}
+                        >
+                            {title}
+                        </div>
                     </div>
                 ) : null}
                 <div className="Dialog__content">{children}</div>

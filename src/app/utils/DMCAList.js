@@ -182,6 +182,7 @@ export default `
 /steemit/@amitayboneh/this-is-why-cindicator-cnd-worth-5usd-20usd-the-full-pbc-review
 /let/@herih511/let-the-sunshine-in-full-movie-hd
 /junga/@janinet/watch-junga-2018-hdrip-full-tamil-movie-watch-online-free-download-hd-print
+/steemstem/@kevalshah/types-of-port-70875646cced9
 `
     .trim()
     .split('\n');

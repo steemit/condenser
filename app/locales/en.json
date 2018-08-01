@@ -1058,9 +1058,6 @@
     "confirm": "Confirmation",
     "prompt": "Enter the data"
   },
-  "mobile_app_button": {
-    "open_in_app": "Open in application"
-  },
   "powerdown_jsx": {
     "power_down": "Power Down",
     "amount": "Amount",
@@ -1078,5 +1075,10 @@
   },
   "messages_jsx": {
     "start_conversation": "Start conversation"
+  },
+  "start_mobile_app": {
+    "open_in_app": "Open in Application",
+    "close_once": "Close once",
+    "close_forever": "Close forever"
   }
 }

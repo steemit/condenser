@@ -1070,9 +1070,6 @@
     "confirm": "Подтверждение",
     "prompt": "Введите данные"
   },
-  "mobile_app_button": {
-    "open_in_app": "Открыть в приложении"
-  },
   "powerdown_jsx": {
     "power_down": "Уменьшить силу голоса",
     "amount": "Количество",
@@ -1090,5 +1087,10 @@
   },
   "messages_jsx": {
     "start_conversation": "Написать сообщение"
+  },
+  "start_mobile_app": {
+    "open_in_app": "Открыть в приложении",
+    "close_once": "Закрыть один раз",
+    "close_forever": "Закрыть навсегда"
   }
 }

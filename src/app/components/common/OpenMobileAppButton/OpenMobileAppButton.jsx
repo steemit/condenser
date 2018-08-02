@@ -121,7 +121,7 @@ export default class OpenMobileAppButton extends Component {
             this.setState({
                 show: true,
             });
-        }, 3000);
+        }, 1000);
     }
 
     componentWillUnmount() {

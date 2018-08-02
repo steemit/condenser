@@ -90,5 +90,6 @@ export const SMS_SERVICES = {
 
 export const ANDROID_APP_NAME = 'Golos.io'
 export const ANDROID_PACKAGE = 'io.golos.golos'
-export const ANDROID_APP_URL = `https://play.google.com/store/apps/details?id=${ANDROID_PACKAGE}`
+//export const ANDROID_APP_URL = `https://play.google.com/store/apps/details?id=${ANDROID_PACKAGE}`
+export const ANDROID_DEEP_LINK_DOMAIN = 'golos.io';
 export const ANDRIOD_URL_SCHEME = 'golosioapp'

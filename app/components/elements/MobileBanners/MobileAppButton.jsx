@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { ANDROID_PACKAGE } from 'app/client_config';
+import React, { PureComponent } from 'react';
+import { ANDROID_PACKAGE, ANDROID_DEEP_LINK_DOMAIN } from 'app/client_config';
 import OpenMobileAppButton from 'src/app/components/common/OpenMobileAppButton';
 
 const STORE_KEY = 'golos.hideOpenAppLink';
@@ -10,11 +10,7 @@ if (process.env.BROWSER) {
     hide = Boolean(localStorage.getItem(STORE_KEY));
 }
 
-export default class MobileAppButton extends Component {
-    shouldComponentUpdate(np) {
-        return this.props.path !== np.path;
-    }
-
+export default class MobileAppButton extends PureComponent {
     render() {
         if (!process.env.BROWSER) {
             return null;
@@ -34,12 +30,11 @@ export default class MobileAppButton extends Component {
     }
 
     _onClick = () => {
-        const { path } = this.props;
-
+        const path = window.location.pathname;
         const iframe = document.createElement('iframe');
-        iframe.src = `golosioapp://${$STM_Config.site_domain}${
-            path === '/' ? '/trending' : path
-        }`;
+        const rewritePath = path === '/' ? '/trending' : path;
+
+        iframe.src = `golosioapp://${ANDROID_DEEP_LINK_DOMAIN}${rewritePath}`;
         document.body.appendChild(iframe);
 
         setTimeout(() => {

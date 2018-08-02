@@ -7,13 +7,11 @@ import Icon from 'golos-ui/Icon';
 
 const Root = styled.div`
     position: fixed;
-    display: flex;
-    justify-content: center;
-    left: 0;
-    right: 0;
+    left: 50%;
     bottom: 24px;
-    pointer-events: none;
+    transform: translate(-50%, 0);
     z-index: 400;
+    pointer-events: all;
 `;
 
 const ButtonBlock = styled.div`
@@ -22,11 +20,11 @@ const ButtonBlock = styled.div`
     height: 50px;
     border-radius: 100px;
     background: #2879ff;
-    pointer-events: initial;
     overflow: hidden;
     transform: translate(0, 100px);
     transition: background-color 0.25s, transform 0.35s;
     box-shadow: 0 10px 37px 0 rgba(202, 202, 202, 0.76);
+    pointer-events: all;
 
     ${is('second')`
         background: #fff;

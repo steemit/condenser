@@ -55,7 +55,6 @@ export const SITE_DESCRIPTION = 'Голос - социальная сеть, п�
 
 // various
 export const SUPPORT_EMAIL = 'support@yourdomain.name'
-export const SEGMENT_ANALYTICS_KEY = 'SEGMENT_ANALYTICS_KEY'
 export const FIRST_DATE = new Date(Date.UTC(2016, 7, 1)); //1 september
 export const SCRAP_EMBED_SINCE = new Date(Date.UTC(2017, 4, 5));
 

@@ -5,21 +5,26 @@ import is from 'styled-is';
 import tt from 'counterpart';
 import transaction from 'app/redux/Transaction';
 import DialogFrame from 'app/components/dialogs/DialogFrame';
-import ComplexInput from 'golos-ui/ComplexInput';
 import DialogManager from 'app/components/elements/common/DialogManager';
 import SplashLoader from 'src/app/components/golos-ui/SplashLoader';
 import { Checkbox } from 'src/app/components/golos-ui/Form';
 import { parseAmount } from 'src/app/helpers/currency';
+import { vestsToSteem } from 'app/utils/StateFunctions';
+import Shrink from 'src/app/components/golos-ui/Shrink';
 
 const TYPES = {
-    SAVE: 'SAVE',
-    RECEIVE: 'RECEIVE',
+    GOLOS: 'GOLOS',
+    POWER: 'POWER',
 };
 
-const CURRENCIES = {
-    GBG: 'GBG',
-    GOLOS: 'GOLOS',
+const TYPES_TRANSLATE = {
+    GOLOS: 'Голос',
+    POWER: 'Силу голоса',
 };
+
+const Container = styled.div`
+    width: 540px;
+`;
 
 const TypeSelect = styled.div`
     display: flex;
@@ -49,19 +54,27 @@ const TypeButton = styled.div.attrs({ role: 'button' })`
 `;
 
 const Content = styled.div`
-    width: 348px;
+    width: 420px;
     padding: 10px 30px 14px;
 `;
 
 const SubHeader = styled.div`
-    margin: 10px 0 20px;
+    padding: 30px 30px 15px;
+    border-bottom: 1px solid #e1e1e1;
     text-align: center;
     font-size: 14px;
     color: #959595;
 `;
 
-const Body = styled.div`
+const SubHeaderLine = styled.div`
+    margin-bottom: 10px;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
 `;
+
+const Body = styled.div``;
 
 const SimpleInput = styled.input`
     display: block;
@@ -84,7 +97,7 @@ const Section = styled.div`
 
     ${is('flex')`
         display: flex;
-    `}
+    `};
 `;
 
 const Label = styled.div`
@@ -101,7 +114,7 @@ const ErrorLine = styled.div`
     animation: fade-in 0.15s;
 `;
 
-class SafeDialog extends PureComponent {
+class ConvertDialog extends PureComponent {
     componentDidMount() {
         this.props.onRef(this);
     }
@@ -111,48 +124,40 @@ class SafeDialog extends PureComponent {
     }
 
     state = {
-        type: TYPES.SAVE,
+        type: TYPES.GOLOS,
         target: '',
         amount: '',
-        currency: CURRENCIES.GBG,
         amountInFocus: false,
         saveTo: false,
+        collapsed: true,
         loader: false,
         disabled: false,
     };
 
     render() {
         const { myAccount } = this.props;
-        const { target, amount, currency, loader, disabled, amountInFocus, type, saveTo } = this.state;
+        const {
+            target,
+            amount,
+            loader,
+            disabled,
+            collapsed,
+            amountInFocus,
+            type,
+            saveTo,
+        } = this.state;
 
-        const buttons = [
-            {
-                id: CURRENCIES.GBG,
-                title: 'GBG',
-            },
-            {
-                id: CURRENCIES.GOLOS,
-                title: tt('token_names.LIQUID_TOKEN'),
-            },
-        ];
+        let balanceString = null;
 
-        let currencyKey = null;
-
-        if (type === TYPES.SAVE) {
-            if (currency === CURRENCIES.GOLOS) {
-                currencyKey = 'balance';
-            } else if (currency === CURRENCIES.GBG) {
-                currencyKey = 'sbd_balance';
-            }
-        } else {
-            if (currency === CURRENCIES.GOLOS) {
-                currencyKey = 'savings_balance';
-            } else if (currency === CURRENCIES.GBG) {
-                currencyKey = 'savings_sbd_balance';
-            }
+        if (type === TYPES.GOLOS) {
+            balanceString = myAccount.get('balance');
+        } else if (type === TYPES.POWER) {
+            balanceString = vestsToSteem(
+                myAccount.get('vesting_shares'),
+                this.props.globalProps.toJS()
+            );
         }
 
-        const balanceString = myAccount.get(currencyKey);
         const balance = parseFloat(balanceString);
 
         const { value, error } = parseAmount(amount, balance, !amountInFocus);
@@ -161,18 +166,28 @@ class SafeDialog extends PureComponent {
 
         const allow = targetCheck && value > 0 && !error && !loader && !disabled;
 
+        const headerLines =
+            type === TYPES.GOLOS
+                ? [
+                      'Сила Голоса неперемещаемая, её количество увеличивается при долгосрочном хранении. Чем больше у Вас Силы Голоса, тем сильней вы влияете на вознаграждения за пост и тем больше зарабатываете за голосование.',
+                  ]
+                : [
+                      'Сила Голоса неперемещаемая, её количество увеличивается при долгосрочном хранении. Чем больше у Вас Силы Голоса, тем сильней вы влияете на вознаграждения за пост и тем больше зарабатываете за голосование.',
+                      'Силу Голоса нельзя передать, и Вам потребуются 20 недель, чтобы перевести её обратно в токены GOLOS.',
+                  ];
+
         return (
             <DialogFrame
-                title={'Сейф'}
+                title={'Конвертировать в'}
                 titleSize={20}
-                icon="locked"
+                icon="refresh"
                 buttons={[
                     {
                         text: tt('g.cancel'),
                         onClick: this._onCloseClick,
                     },
                     {
-                        text: 'Передать',
+                        text: 'Конвертировать',
                         primary: true,
                         disabled: !allow,
                         onClick: this._onOkClick,
@@ -180,71 +195,72 @@ class SafeDialog extends PureComponent {
                 ]}
                 onCloseClick={this._onCloseClick}
             >
-                <TypeSelect>
-                    <TypeButton
-                        active={type === TYPES.SAVE}
-                        onClick={type === TYPES.SAVE ? null : this._onClickSaveType}
-                    >
-                        Перевести
-                    </TypeButton>
-                    <TypeButton
-                        active={type === TYPES.RECEIVE}
-                        onClick={type === TYPES.RECEIVE ? null : this._onClickReceiveType}
-                    >
-                        Вывести
-                    </TypeButton>
-                </TypeSelect>
-                <Content>
+                <Container>
+                    <TypeSelect>
+                        <TypeButton
+                            active={type === TYPES.GOLOS}
+                            onClick={type === TYPES.GOLOS ? null : this._onClickGolosType}
+                        >
+                            {TYPES_TRANSLATE[TYPES.GOLOS]}
+                        </TypeButton>
+                        <TypeButton
+                            active={type === TYPES.POWER}
+                            onClick={type === TYPES.POWER ? null : this._onClickPowerType}
+                        >
+                            {TYPES_TRANSLATE[TYPES.POWER]}
+                        </TypeButton>
+                    </TypeSelect>
                     <SubHeader>
-                        {type === TYPES.SAVE
-                            ? 'Защитите средства от вывода трехдневным периодом ожидания.'
-                            : 'Снять средства после необходимого трехдневного периода ожидания.'}
+                        <Shrink height={72}>
+                            {headerLines.map((line, i) => (
+                                <SubHeaderLine key={i}>{line}</SubHeaderLine>
+                            ))}
+                        </Shrink>
                     </SubHeader>
-                    <Body>
-                        <Section>
-                            <Label>Сколько</Label>
-                            <ComplexInput
-                                placeholder={`Доступно ${balanceString}`}
-                                spellCheck="false"
-                                value={amount}
-                                activeId={currency}
-                                buttons={buttons}
-                                onChange={this._onAmountChange}
-                                onFocus={this._onAmountFocus}
-                                onBlur={this._onAmountBlur}
-                                onActiveChange={this._onCurrencyChange}
-                            />
-                        </Section>
-                        <Section flex>
-                            <Checkbox
-                                title="Перевести на другой аккаунт"
-                                inline
-                                value={saveTo}
-                                onChange={this._onSaveTypeChange}
-                            />
-                        </Section>
-                        {saveTo ? (
+                    <Content>
+                        <Body>
                             <Section>
-                                <Label>Кому</Label>
+                                <Label>Сколько</Label>
                                 <SimpleInput
-                                    name="account"
+                                    placeholder={`Доступно ${balanceString}`}
                                     spellCheck="false"
-                                    placeholder={'Отправить аккаунту'}
-                                    value={target}
-                                    onChange={this._onTargetChange}
+                                    value={amount}
+                                    onChange={this._onAmountChange}
+                                    onFocus={this._onAmountFocus}
+                                    onBlur={this._onAmountBlur}
                                 />
                             </Section>
-                        ) : null}
-                    </Body>
-                    <ErrorBlock>{error ? <ErrorLine>{error}</ErrorLine> : null}</ErrorBlock>
-                </Content>
+                            <Section flex>
+                                <Checkbox
+                                    title="Перевести на другой аккаунт"
+                                    inline
+                                    value={saveTo}
+                                    onChange={this._onSaveTypeChange}
+                                />
+                            </Section>
+                            {saveTo ? (
+                                <Section>
+                                    <Label>Кому</Label>
+                                    <SimpleInput
+                                        name="account"
+                                        spellCheck="false"
+                                        placeholder={'Отправить аккаунту'}
+                                        value={target}
+                                        onChange={this._onTargetChange}
+                                    />
+                                </Section>
+                            ) : null}
+                        </Body>
+                        <ErrorBlock>{error ? <ErrorLine>{error}</ErrorLine> : null}</ErrorBlock>
+                    </Content>
+                </Container>
                 {loader ? <SplashLoader /> : null}
             </DialogFrame>
         );
     }
 
     confirmClose() {
-        if (this.state.amount.trim() || this.state.target.trim()) {
+        if (this.state.amount.trim() || this.state.saveTo ? this.state.target.trim() : true) {
             DialogManager.dangerConfirm('Вы действительно хотите закрыть окно?').then(y => {
                 if (y) {
                     this.props.onClose();
@@ -281,12 +297,6 @@ class SafeDialog extends PureComponent {
         });
     };
 
-    _onCurrencyChange = currency => {
-        this.setState({
-            currency,
-        });
-    };
-
     _onTargetChange = e => {
         this.setState({
             target: e.target.value,
@@ -299,7 +309,7 @@ class SafeDialog extends PureComponent {
 
     _onOkClick = () => {
         const { myUser } = this.props;
-        const { target, amount, currency, type, saveTo, loader, disabled } = this.state;
+        const { target, amount, type, saveTo, loader, disabled } = this.state;
 
         if (loader || disabled) {
             return;
@@ -315,12 +325,12 @@ class SafeDialog extends PureComponent {
         const operation = {
             from: iAm,
             to: saveTo ? target.trim() : iAm,
-            amount: parseFloat(amount.replace(/\s+/, '')).toFixed(3) + ' ' + currency,
+            amount: parseFloat(amount.replace(/\s+/, '')).toFixed(3) + ' ' + type,
             memo: '',
-            request_id: Math.floor((Date.now() / 1000) % 4294967295)
+            request_id: Math.floor((Date.now() / 1000) % 4294967295),
         };
 
-        const actionType = type === TYPES.SAVE ? 'transfer_to_savings' : 'transfer_from_savings';
+        const actionType = type === TYPES.GOLOS ? 'transfer_to_savings' : 'transfer_from_savings';
 
         this.props.transfer(actionType, operation, err => {
             if (err) {
@@ -344,19 +354,21 @@ class SafeDialog extends PureComponent {
         });
     };
 
-    _onClickSaveType = () => {
+    _onClickGolosType = () => {
         this.setState({
-            type: TYPES.SAVE,
+            type: TYPES.GOLOS,
             amount: '',
             saveTo: false,
+            collapsed: true,
         });
     };
 
-    _onClickReceiveType = () => {
+    _onClickPowerType = () => {
         this.setState({
-            type: TYPES.RECEIVE,
+            type: TYPES.POWER,
             amount: '',
             saveTo: false,
+            collapsed: true,
         });
     };
 }
@@ -369,6 +381,7 @@ export default connect(
         return {
             myUser,
             myAccount,
+            globalProps: state.global.get('props'),
         };
     },
     dispatch => ({
@@ -398,4 +411,4 @@ export default connect(
             );
         },
     })
-)(SafeDialog);
+)(ConvertDialog);

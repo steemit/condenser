@@ -4,6 +4,7 @@ import Icon from 'golos-ui/Icon';
 import DialogManager from 'app/components/elements/common/DialogManager';
 import TransferDialog from './dialogs/TransferDialog';
 import SafeDialog from './dialogs/SafeDialog';
+import ConvertDialog from './dialogs/ConvertDialog';
 
 const Root = styled.div`
     margin-bottom: 18px;
@@ -72,7 +73,7 @@ export default class RightActions extends PureComponent {
                     <ActionIcon name="voice" />
                     <ActionTitle>Делегировать/уменьшить СГ</ActionTitle>
                 </Action>
-                <Action>
+                <Action onClick={this._onConvertClick}>
                     <ActionIcon name="refresh" />
                     <ActionTitle>Конвертировать</ActionTitle>
                 </Action>
@@ -92,6 +93,12 @@ export default class RightActions extends PureComponent {
     _onSafeClick = () => {
         DialogManager.showDialog({
             component: SafeDialog,
+        });
+    };
+
+    _onConvertClick = () => {
+        DialogManager.showDialog({
+            component: ConvertDialog,
         });
     };
 }

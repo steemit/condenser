@@ -177,7 +177,7 @@ class UserWallet extends React.Component {
 
         // format spacing on estimated value based on account state
         const estimate_output = <LocalizedCurrency amount={total_value} />
-        
+
         /// transfer log
         let idx = 0
         const transfer_log = account.get('transfer_history', [])

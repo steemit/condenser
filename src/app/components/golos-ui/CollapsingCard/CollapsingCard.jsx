@@ -111,7 +111,7 @@ export default class CollapsingCard extends PureComponent {
         if (collapsed) {
             this.setState({
                 collapsed: false,
-                height: this._body.scrollHeight,
+                height: this._body.offsetHeight,
                 animated: true,
             });
 
@@ -125,7 +125,7 @@ export default class CollapsingCard extends PureComponent {
             this.setState(
                 {
                     collapsed: true,
-                    height: this._body.scrollHeight,
+                    height: this._body.offsetHeight,
                     animation: false,
                 },
                 () => {

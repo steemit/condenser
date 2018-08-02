@@ -187,6 +187,11 @@ export default `
 /junga/@janinet/watch-junga-2018-hdrip-full-tamil-movie-watch-online-free-download-hd-print
 /steemstem/@kevalshah/types-of-port-70875646cced9
 /introduceyourself/@dami-lee/dami-lee-on-steemit
+/bitcoin/@ycrypt/palm-beach-confidential-high-value-free-documents
+/bitcoin/@ycrypt/palm-beach-confidential-high-value-free-documents-part-2
+/cryptocurrency/@mycryptocrunch/looking-for-palm-beach-confidential-feb-2018-1st-and-2nd-mail-edition-reports
+/pbc/@amitayboneh/palm-beach-confidential-march-2018-pick-aion
+/ripple/@jzeal/ripple-xrp-palm-beach-confidential-teeka-tiwari-s-article-and-breakdown
 `
     .trim()
     .split('\n');

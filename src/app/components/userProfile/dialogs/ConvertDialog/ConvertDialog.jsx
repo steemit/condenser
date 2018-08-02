@@ -129,7 +129,6 @@ class ConvertDialog extends PureComponent {
         amount: '',
         amountInFocus: false,
         saveTo: false,
-        collapsed: true,
         loader: false,
         disabled: false,
     };
@@ -141,7 +140,6 @@ class ConvertDialog extends PureComponent {
             amount,
             loader,
             disabled,
-            collapsed,
             amountInFocus,
             type,
             saveTo,
@@ -175,6 +173,8 @@ class ConvertDialog extends PureComponent {
                       'Сила Голоса неперемещаемая, её количество увеличивается при долгосрочном хранении. Чем больше у Вас Силы Голоса, тем сильней вы влияете на вознаграждения за пост и тем больше зарабатываете за голосование.',
                       'Силу Голоса нельзя передать, и Вам потребуются 20 недель, чтобы перевести её обратно в токены GOLOS.',
                   ];
+
+        console.log('HINT:', headerLines);
 
         return (
             <DialogFrame
@@ -327,10 +327,10 @@ class ConvertDialog extends PureComponent {
             to: saveTo ? target.trim() : iAm,
             amount: parseFloat(amount.replace(/\s+/, '')).toFixed(3) + ' ' + type,
             memo: '',
-            request_id: Math.floor((Date.now() / 1000) % 4294967295),
+            //request_id: Math.floor((Date.now() / 1000) % 4294967295),
         };
 
-        const actionType = type === TYPES.GOLOS ? 'transfer_to_savings' : 'transfer_from_savings';
+        const actionType = type === TYPES.GOLOS ? 'transfer_to_vesting' : 'transfer_from_vesting';
 
         this.props.transfer(actionType, operation, err => {
             if (err) {
@@ -359,7 +359,6 @@ class ConvertDialog extends PureComponent {
             type: TYPES.GOLOS,
             amount: '',
             saveTo: false,
-            collapsed: true,
         });
     };
 
@@ -368,7 +367,6 @@ class ConvertDialog extends PureComponent {
             type: TYPES.POWER,
             amount: '',
             saveTo: false,
-            collapsed: true,
         });
     };
 }

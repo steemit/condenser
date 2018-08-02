@@ -52,6 +52,15 @@ export default class Shrink extends PureComponent {
         shrink: true,
     };
 
+    componentDidUpdate() {
+        const newHeight = this._content.offsetHeight;
+
+        if (this._contentHeight !== newHeight) {
+            this._contentHeight = newHeight;
+            this.forceUpdate();
+        }
+    }
+
     render() {
         const { children, height } = this.props;
         const { shrink } = this.state;
@@ -87,6 +96,8 @@ export default class Shrink extends PureComponent {
     }
 
     _onContentRef = el => {
+        this._content = el;
+
         if (el) {
             this._contentHeight = el.offsetHeight;
             this.forceUpdate();

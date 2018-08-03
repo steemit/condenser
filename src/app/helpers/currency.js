@@ -14,9 +14,7 @@ export function parseAmount(amount, balance, isFinal) {
         error = 'Неправильный формат';
     } else if (amountValue && amountValue > balance) {
         error = 'Недостаточно средств';
-    }
-
-    if (amountFixed !== '' && amountValue === 0 && isFinal) {
+    } else if (amountFixed !== '' && amountValue === 0 && isFinal) {
         error = 'Введите сумму';
     }
 

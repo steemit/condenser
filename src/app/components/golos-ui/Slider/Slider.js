@@ -120,7 +120,7 @@ export default class Slider extends PureComponent {
     render() {
         const { value, min, max, hideHandleValue, showCaptions, ...passProps } = this.props;
 
-        const percent = (100 * (value - min)) / (max - min);
+        const percent = (100 * (value - min)) / (max - min) || 0;
 
         return (
             <Wrapper

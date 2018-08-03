@@ -13,6 +13,8 @@ import { vestsToSteem, steemToVests } from 'app/utils/StateFunctions';
 import Shrink from 'src/app/components/golos-ui/Shrink';
 import Slider from 'src/app/components/golos-ui/Slider';
 
+const POWER_TO_GOLOS_INTERVAL = 13; // weeks
+
 const TYPES = {
     GOLOS: 'GOLOS',
     POWER: 'POWER',
@@ -121,13 +123,25 @@ const Label = styled.div`
     font-size: 14px;
 `;
 
-const ErrorBlock = styled.div`
+const SliderWrapper = styled.div`
+    margin-bottom: 3px;
+`;
+
+const Footer = styled.div`
     min-height: 25px;
 `;
 
-const ErrorLine = styled.div`
-    color: #ff4641;
+const FooterLine = styled.div`
     animation: fade-in 0.15s;
+`;
+
+const ErrorLine = FooterLine.extend`
+    color: #ff4641;
+`;
+
+const HintLine = FooterLine.extend`
+    font-size: 14px;
+    color: #666;
 `;
 
 class ConvertDialog extends PureComponent {
@@ -173,6 +187,15 @@ class ConvertDialog extends PureComponent {
         const targetCheck = saveTo ? target && target.trim() : true;
 
         const allow = targetCheck && value > 0 && !error && !loader && !disabled;
+
+        let hint = null;
+
+        if (type === TYPES.POWER && value > 0) {
+            const perWeek = value / POWER_TO_GOLOS_INTERVAL;
+            const perWeekStr = perWeek.toFixed(3);
+
+            hint = `Выплаты составят примерно ${perWeekStr} GOLOS в неделю.`;
+        }
 
         return (
             <DialogFrame
@@ -221,7 +244,13 @@ class ConvertDialog extends PureComponent {
                             </Section>
                             {this._renderAdditionalSection(balanceReal)}
                         </Body>
-                        <ErrorBlock>{error ? <ErrorLine>{error}</ErrorLine> : null}</ErrorBlock>
+                        <Footer>
+                            {error ? (
+                                <ErrorLine>{error}</ErrorLine>
+                            ) : hint ? (
+                                <HintLine>{hint}</HintLine>
+                            ) : null}
+                        </Footer>
                     </Content>
                 </Container>
                 {loader ? <SplashLoader /> : null}
@@ -282,29 +311,23 @@ class ConvertDialog extends PureComponent {
                 const max = Math.floor(balanceReal * 1000000);
 
                 return (
-                    <Slider
-                        value={cur}
-                        max={max}
-                        showCaptions
-                        hideHandleValue
-                        onChange={this._onSliderChange}
-                    />
+                    <SliderWrapper>
+                        <Slider
+                            value={cur}
+                            max={max}
+                            showCaptions
+                            hideHandleValue
+                            onChange={this._onSliderChange}
+                        />
+                    </SliderWrapper>
                 );
         }
     }
 
     confirmClose() {
-        const { type, amount, saveTo, target } = this.state;
+        const { amount, saveTo, target } = this.state;
 
-        let amountChanged = false;
-
-        if (type === TYPES.POWER) {
-            amountChanged = amount.trim() !== this._powerInitialAmount;
-        } else {
-            amountChanged = Boolean(amount.trim());
-        }
-
-        if (amountChanged || (saveTo ? target.trim() : false)) {
+        if (amount.trim() || (saveTo ? target.trim() : false)) {
             DialogManager.dangerConfirm('Вы действительно хотите закрыть окно?').then(y => {
                 if (y) {
                     this.props.onClose();
@@ -320,11 +343,13 @@ class ConvertDialog extends PureComponent {
     _getBodyHeight() {
         const { type, saveTo } = this.state;
 
+        // This height constants taken by experimental way from actual height in browser
+        // Heights needs from smooth height animation
         switch (type) {
             case TYPES.GOLOS:
                 return saveTo ? 192 : 117;
             case TYPES.POWER:
-                return 135;
+                return 138;
             case TYPES.GBG:
                 return 85;
         }
@@ -459,28 +484,22 @@ class ConvertDialog extends PureComponent {
     };
 
     _onClickType = type => {
-        if (type === TYPES.POWER) {
-            const { golos } = getVesting(this.props.myAccount, this.props.globalProps);
-
-            this._powerInitialAmount = golos;
-
-            this.setState({
-                type: TYPES.POWER,
-                amount: golos,
-                saveTo: false,
-            });
-        } else {
-            this.setState({
-                type: type,
-                amount: '',
-                saveTo: false,
-            });
-        }
+        this.setState({
+            type: type,
+            amount: '',
+            saveTo: false,
+        });
     };
 
     _onSliderChange = value => {
+        let amount = '';
+
+        if (value > 0) {
+            amount = vestsToSteem((value / 1000000).toFixed(6) + ' GESTS', this.props.globalProps);
+        }
+
         this.setState({
-            amount: vestsToSteem((value / 1000000).toFixed(6) + ' GESTS', this.props.globalProps),
+            amount,
         });
     };
 }

@@ -10,6 +10,7 @@ import DialogManager from 'app/components/elements/common/DialogManager';
 import SplashLoader from 'src/app/components/golos-ui/SplashLoader';
 import { Checkbox } from 'src/app/components/golos-ui/Form';
 import { parseAmount } from 'src/app/helpers/currency';
+import DialogTypeSelect from 'src/app/components/userProfile/common/DialogTypeSelect';
 
 const TYPES = {
     SAVE: 'SAVE',
@@ -20,33 +21,6 @@ const CURRENCIES = {
     GBG: 'GBG',
     GOLOS: 'GOLOS',
 };
-
-const TypeSelect = styled.div`
-    display: flex;
-    margin-top: 14px;
-    border-top: 1px solid #e1e1e1;
-    border-bottom: 1px solid #e1e1e1;
-`;
-
-const TypeButton = styled.div.attrs({ role: 'button' })`
-    flex-basis: 200px;
-    flex-grow: 1;
-    height: 38px;
-    line-height: 38px;
-    text-align: center;
-    border-left: 1px solid #e1e1e1;
-    color: #b7b7ba;
-    user-select: none;
-    cursor: pointer;
-
-    &:first-child {
-        border-left: none;
-    }
-
-    ${is('active')`
-        color: #333;
-    `};
-`;
 
 const Content = styled.div`
     width: 348px;
@@ -60,8 +34,7 @@ const SubHeader = styled.div`
     color: #959595;
 `;
 
-const Body = styled.div`
-`;
+const Body = styled.div``;
 
 const SimpleInput = styled.input`
     display: block;
@@ -84,7 +57,7 @@ const Section = styled.div`
 
     ${is('flex')`
         display: flex;
-    `}
+    `};
 `;
 
 const Label = styled.div`
@@ -123,7 +96,16 @@ class SafeDialog extends PureComponent {
 
     render() {
         const { myAccount } = this.props;
-        const { target, amount, currency, loader, disabled, amountInFocus, type, saveTo } = this.state;
+        const {
+            target,
+            amount,
+            currency,
+            loader,
+            disabled,
+            amountInFocus,
+            type,
+            saveTo,
+        } = this.state;
 
         const buttons = [
             {
@@ -180,20 +162,14 @@ class SafeDialog extends PureComponent {
                 ]}
                 onCloseClick={this._onCloseClick}
             >
-                <TypeSelect>
-                    <TypeButton
-                        active={type === TYPES.SAVE}
-                        onClick={type === TYPES.SAVE ? null : this._onClickSaveType}
-                    >
-                        Перевести
-                    </TypeButton>
-                    <TypeButton
-                        active={type === TYPES.RECEIVE}
-                        onClick={type === TYPES.RECEIVE ? null : this._onClickReceiveType}
-                    >
-                        Вывести
-                    </TypeButton>
-                </TypeSelect>
+                <DialogTypeSelect
+                    activeId={type}
+                    buttons={[
+                        { id: TYPES.SAVE, title: 'Перевести' },
+                        { id: TYPES.RECEIVE, title: 'Вывести' },
+                    ]}
+                    onClick={this._onTypeClick}
+                />
                 <Content>
                     <SubHeader>
                         {type === TYPES.SAVE
@@ -317,7 +293,7 @@ class SafeDialog extends PureComponent {
             to: saveTo ? target.trim() : iAm,
             amount: parseFloat(amount.replace(/\s+/, '')).toFixed(3) + ' ' + currency,
             memo: '',
-            request_id: Math.floor((Date.now() / 1000) % 4294967296)
+            request_id: Math.floor((Date.now() / 1000) % 4294967296),
         };
 
         const actionType = type === TYPES.SAVE ? 'transfer_to_savings' : 'transfer_from_savings';
@@ -344,17 +320,9 @@ class SafeDialog extends PureComponent {
         });
     };
 
-    _onClickSaveType = () => {
+    _onTypeClick = type => {
         this.setState({
-            type: TYPES.SAVE,
-            amount: '',
-            saveTo: false,
-        });
-    };
-
-    _onClickReceiveType = () => {
-        this.setState({
-            type: TYPES.RECEIVE,
+            type: type,
             amount: '',
             saveTo: false,
         });

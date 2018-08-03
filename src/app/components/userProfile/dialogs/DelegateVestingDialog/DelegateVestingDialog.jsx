@@ -1,4 +1,4 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import is from 'styled-is';
@@ -6,32 +6,17 @@ import tt from 'counterpart';
 import transaction from 'app/redux/Transaction';
 import DialogFrame from 'app/components/dialogs/DialogFrame';
 import DialogManager from 'app/components/elements/common/DialogManager';
+import ComplexInput from 'src/app/components/golos-ui/ComplexInput';
 import SplashLoader from 'src/app/components/golos-ui/SplashLoader';
-import { Checkbox } from 'src/app/components/golos-ui/Form';
+import DialogTypeSelect from 'src/app/components/userProfile/common/DialogTypeSelect';
 import { parseAmount } from 'src/app/helpers/currency';
 import { vestsToSteem, steemToVests } from 'app/utils/StateFunctions';
 import Shrink from 'src/app/components/golos-ui/Shrink';
-import Slider from 'src/app/components/golos-ui/Slider';
-import DialogTypeSelect from 'src/app/components/userProfile/common/DialogTypeSelect';
-
-const POWER_TO_GOLOS_INTERVAL = 13; // weeks
+import DelegationsList from './DelegationsList';
 
 const TYPES = {
-    GOLOS: 'GOLOS',
-    POWER: 'POWER',
-    GBG: 'GBG',
-};
-
-const TYPES_TRANSLATE = {
-    GOLOS: ['Голос', 'Сила голоса'],
-    POWER: ['Сила голоса', 'Голос'],
-    GBG: ['GBG', 'Голос'],
-};
-
-const TYPES_SUCCESS_TEXT = {
-    GOLOS: 'Операция успешно завершена!',
-    POWER: 'Операция запущена!',
-    GBG: 'Операция запущена!',
+    DELEGATE: 'DELEGATE',
+    CANCEL: 'CANCEL',
 };
 
 const Container = styled.div`
@@ -43,7 +28,7 @@ const Content = styled.div`
 `;
 
 const SubHeader = styled.div`
-    padding: 30px 30px 15px;
+    padding: 30px;
     border-bottom: 1px solid #e1e1e1;
     text-align: center;
     font-size: 14px;
@@ -56,6 +41,17 @@ const SubHeaderLine = styled.div`
     &:last-child {
         margin-bottom: 0;
     }
+`;
+
+const Columns = styled.div`
+    display: flex;
+    margin: 0 -10px;
+`;
+
+const Column = styled.div`
+    flex-basis: 100px;
+    flex-grow: 1;
+    margin: 0 10px;
 `;
 
 const Body = styled.div`
@@ -93,10 +89,6 @@ const Label = styled.div`
     font-size: 14px;
 `;
 
-const SliderWrapper = styled.div`
-    margin-bottom: 3px;
-`;
-
 const Footer = styled.div`
     min-height: 25px;
 `;
@@ -114,7 +106,7 @@ const HintLine = FooterLine.extend`
     color: #666;
 `;
 
-class ConvertDialog extends PureComponent {
+class DelegateVestingDialog extends PureComponent {
     componentDidMount() {
         this.props.onRef(this);
     }
@@ -124,52 +116,43 @@ class ConvertDialog extends PureComponent {
     }
 
     state = {
-        type: TYPES.GOLOS,
+        type: TYPES.DELEGATE,
         target: '',
         amount: '',
         amountInFocus: false,
-        saveTo: false,
         loader: false,
         disabled: false,
     };
 
     render() {
         const { myAccount, globalProps } = this.props;
-        const { target, amount, loader, disabled, amountInFocus, type, saveTo } = this.state;
+        const { target, amount, loader, disabled, amountInFocus, type } = this.state;
 
         let balanceString = null;
         let balanceReal = null;
 
-        if (type === TYPES.GOLOS) {
-            balanceString = myAccount.get('balance');
-        } else if (type === TYPES.POWER) {
+        if (type === TYPES.DELEGATE) {
             const { golos, gests } = getVesting(myAccount, globalProps);
             balanceReal = gests;
             balanceString = golos;
-        } else if (type === TYPES.GBG) {
-            balanceString = myAccount.get('sbd_balance');
+        } else if (type === TYPES.CANCEL) {
         }
 
         const balance = parseFloat(balanceString);
 
         const { value, error } = parseAmount(amount, balance, !amountInFocus);
 
-        const targetCheck = saveTo ? target && target.trim() : true;
+        const allow = target.trim() && value > 0 && !error && !loader && !disabled;
 
-        const allow = targetCheck && value > 0 && !error && !loader && !disabled;
+        const hint = null;
 
-        let hint = null;
-
-        if (type === TYPES.POWER && value > 0) {
-            const perWeek = value / POWER_TO_GOLOS_INTERVAL;
-            const perWeekStr = perWeek.toFixed(3);
-
-            hint = `Выплаты составят примерно ${perWeekStr} GOLOS в неделю.`;
-        }
+        const params = {
+            balanceString,
+        };
 
         return (
             <DialogFrame
-                title={'Конвертировать'}
+                title={'Делегировать Силу Голоса'}
                 titleSize={20}
                 icon="refresh"
                 buttons={[
@@ -190,11 +173,10 @@ class ConvertDialog extends PureComponent {
                     <DialogTypeSelect
                         activeId={type}
                         buttons={[
-                            { id: TYPES.GOLOS, title: makeTitle(TYPES_TRANSLATE[TYPES.GOLOS]) },
-                            { id: TYPES.POWER, title: makeTitle(TYPES_TRANSLATE[TYPES.POWER]) },
-                            { id: TYPES.GBG, title: makeTitle(TYPES_TRANSLATE[TYPES.GBG]) },
+                            { id: TYPES.DELEGATE, title: 'Делегировать' },
+                            { id: TYPES.CANCEL, title: 'Отозвать' },
                         ]}
-                        onClick={this._onClickType}
+                        onClick={this._onTypeClick}
                     />
                     <SubHeader>
                         <Shrink height={72}>
@@ -205,18 +187,9 @@ class ConvertDialog extends PureComponent {
                     </SubHeader>
                     <Content>
                         <Body style={{ height: this._getBodyHeight() }}>
-                            <Section>
-                                <Label>Сколько</Label>
-                                <SimpleInput
-                                    placeholder={`Доступно ${balanceString}`}
-                                    spellCheck="false"
-                                    value={amount}
-                                    onChange={this._onAmountChange}
-                                    onFocus={this._onAmountFocus}
-                                    onBlur={this._onAmountBlur}
-                                />
-                            </Section>
-                            {this._renderAdditionalSection(balanceReal)}
+                            {type === TYPES.DELEGATE
+                                ? this._renderDelegateBody(params)
+                                : this._renderCancelBody(params)}
                         </Body>
                         <Footer>
                             {error ? (
@@ -232,60 +205,52 @@ class ConvertDialog extends PureComponent {
         );
     }
 
-    _renderAdditionalSection(balanceReal) {
-        const { globalProps } = this.props;
-        const { type, target, saveTo, amount } = this.state;
+    _renderDelegateBody({ balanceString }) {
+        const { target, amount } = this.state;
 
-        switch (type) {
-            case TYPES.GOLOS:
-                return (
-                    <Fragment>
-                        <Section flex>
-                            <Checkbox
-                                title="Перевести на другой аккаунт"
-                                inline
-                                value={saveTo}
-                                onChange={this._onSaveTypeChange}
-                            />
-                        </Section>
-                        {saveTo ? (
-                            <Section>
-                                <Label>Кому</Label>
-                                <SimpleInput
-                                    name="account"
-                                    spellCheck="false"
-                                    placeholder={'Отправить аккаунту'}
-                                    value={target}
-                                    onChange={this._onTargetChange}
-                                />
-                            </Section>
-                        ) : null}
-                    </Fragment>
-                );
-            case TYPES.POWER:
-                const cur = Math.floor(
-                    steemToVests(parseFloat(amount.replace(/\s+/, '')), globalProps) * 1000000
-                );
-                const max = Math.floor(balanceReal * 1000000);
-
-                return (
-                    <SliderWrapper>
-                        <Slider
-                            value={cur}
-                            max={max}
-                            showCaptions
-                            hideHandleValue
-                            onChange={this._onSliderChange}
+        return (
+            <Columns>
+                <Column>
+                    <Section>
+                        <Label>Кому</Label>
+                        <SimpleInput
+                            name="account"
+                            spellCheck="false"
+                            placeholder={'Делегировать аккаунту'}
+                            value={target}
+                            onChange={this._onTargetChange}
                         />
-                    </SliderWrapper>
-                );
-        }
+                    </Section>
+                </Column>
+                <Column>
+                    <Section>
+                        <Label>Сколько</Label>
+                        <ComplexInput
+                            placeholder={`Доступно ${balanceString}`}
+                            spellCheck="false"
+                            value={amount}
+                            activeId="power"
+                            buttons={[{ id: 'power', title: 'СГ' }]}
+                            onChange={this._onAmountChange}
+                            onFocus={this._onAmountFocus}
+                            onBlur={this._onAmountBlur}
+                        />
+                    </Section>
+                </Column>
+            </Columns>
+        );
+    }
+
+    _renderCancelBody(params) {
+        return (
+            <DelegationsList />
+        );
     }
 
     confirmClose() {
-        const { amount, saveTo, target } = this.state;
+        const { amount, target } = this.state;
 
-        if (amount.trim() || (saveTo ? target.trim() : false)) {
+        if (amount.trim() || target.trim()) {
             DialogManager.dangerConfirm('Вы действительно хотите закрыть окно?').then(y => {
                 if (y) {
                     this.props.onClose();
@@ -299,47 +264,29 @@ class ConvertDialog extends PureComponent {
     }
 
     _getBodyHeight() {
-        const { type, saveTo } = this.state;
+        const { type } = this.state;
 
         // This height constants taken by experimental way from actual height in browser
         // Heights needs from smooth height animation
-        switch (type) {
-            case TYPES.GOLOS:
-                return saveTo ? 192 : 117;
-            case TYPES.POWER:
-                return 138;
-            case TYPES.GBG:
-                return 85;
-        }
+        // TODO
+        return 'auto';
     }
 
     _getHintText() {
         const { type } = this.state;
 
         switch (type) {
-            case TYPES.GOLOS:
+            case TYPES.DELEGATE:
                 return [
-                    'Сила Голоса неперемещаемая, её количество увеличивается при долгосрочном хранении. Чем больше у Вас Силы Голоса, тем сильней вы влияете на вознаграждения за пост и тем больше зарабатываете за голосование.',
+                    'Часть своей Силы Голоса вы решили делегировать другим пользователям. В любой момент вы можете отменить делегирование.',
                 ];
-            case TYPES.POWER:
+            case TYPES.CANCEL:
                 return [
                     'Сила Голоса неперемещаемая, её количество увеличивается при долгосрочном хранении. Чем больше у Вас Силы Голоса, тем сильней вы влияете на вознаграждения за пост и тем больше зарабатываете за голосование.',
                     'Силу Голоса нельзя передать, и Вам потребуются 20 недель, чтобы перевести её обратно в токены GOLOS.',
                 ];
-            case TYPES.GBG:
-                return [
-                    'Конвертация золотых будет происходить в течении 3.5 дней с момента запуска. Отменить её нельзя. После запуска конвертации, конвертируемые монеты станут недоступны.',
-                    'Токены Золотой ликвидны и их можно передавать между аккаунтами. Перед запуском конвертации, проверьте опции Купить или Продать Золотой, на внутренней бирже. Также, токен Золотой, доступен к выводу (и торговле) на внешних биржах.',
-                    'Неделя отсрочки, путем автоматической конвертации, необходима, в целях предотвращения злоупотребления спекуляцией, по средней ценовой котировке.',
-                ];
         }
     }
-
-    _onSaveTypeChange = checked => {
-        this.setState({
-            saveTo: checked,
-        });
-    };
 
     _onAmountChange = e => {
         this.setState({
@@ -419,7 +366,7 @@ class ConvertDialog extends PureComponent {
 
         console.log('call transfer', operationType, operation);
 
-        this.props.transfer(operationType, operation, err => {
+        this.props.delegate(operation, err => {
             if (err) {
                 this.setState({
                     loader: false,
@@ -434,14 +381,14 @@ class ConvertDialog extends PureComponent {
                     loader: false,
                 });
 
-                DialogManager.info(TYPES_SUCCESS_TEXT[type]).then(() => {
+                DialogManager.info('Операция успешно завершена!').then(() => {
                     this.props.onClose();
                 });
             }
         });
     };
 
-    _onClickType = type => {
+    _onTypeClick = type => {
         this.setState({
             type: type,
             amount: '',
@@ -474,10 +421,10 @@ export default connect(
         };
     },
     dispatch => ({
-        transfer(type, operation, callback) {
+        delegate(operation, callback) {
             dispatch(
                 transaction.actions.broadcastOperation({
-                    type,
+                    type: 'LOL',
                     operation,
                     successCallback() {
                         callback(null);
@@ -500,7 +447,7 @@ export default connect(
             );
         },
     })
-)(ConvertDialog);
+)(DelegateVestingDialog);
 
 function getVesting(account, props) {
     const vesting = parseFloat(account.get('vesting_shares'));
@@ -512,8 +459,4 @@ function getVesting(account, props) {
         gests: availableVesting,
         golos: vestsToSteem(availableVesting.toFixed(6) + ' GESTS', props),
     };
-}
-
-function makeTitle([a, b]) {
-    return a + ' → ' + b;
 }

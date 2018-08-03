@@ -5,6 +5,7 @@ import DialogManager from 'app/components/elements/common/DialogManager';
 import TransferDialog from './dialogs/TransferDialog';
 import SafeDialog from './dialogs/SafeDialog';
 import ConvertDialog from './dialogs/ConvertDialog';
+import DelegateVestingDialog from './dialogs/DelegateVestingDialog';
 
 const Root = styled.div`
     margin-bottom: 18px;
@@ -69,7 +70,7 @@ export default class RightActions extends PureComponent {
                     <ActionIcon name="locked" />
                     <ActionTitle>Вывести/перевести в сейф</ActionTitle>
                 </Action>
-                <Action>
+                <Action onClick={this._onDelegateClick}>
                     <ActionIcon name="voice" />
                     <ActionTitle>Делегировать/уменьшить СГ</ActionTitle>
                 </Action>
@@ -99,6 +100,15 @@ export default class RightActions extends PureComponent {
     _onConvertClick = () => {
         DialogManager.showDialog({
             component: ConvertDialog,
+        });
+    };
+
+    _onDelegateClick = () => {
+        DialogManager.showDialog({
+            component: DelegateVestingDialog,
+            props: {
+                pageAccountName: this.props.pageAccountName,
+            },
         });
     };
 }

@@ -16,7 +16,7 @@ const Progress = styled.div`
 
 const HandleSlot = styled.div`
     position: relative;
-    margin: 0 10px;
+    margin: 0 11px;
 `;
 
 const Handle = styled.div`
@@ -68,7 +68,7 @@ const Caption = styled.div`
 
 const Wrapper = styled.div`
     position: relative;
-    height: ${({ showCaptions }) => (showCaptions ? 50 : 20)}px;
+    height: ${({ showCaptions }) => (showCaptions ? 50 : 22)}px;
     user-select: none;
     cursor: pointer;
 
@@ -102,6 +102,7 @@ export default class Slider extends PureComponent {
         max: PropTypes.number,
         red: PropTypes.bool,
         showCaptions: PropTypes.bool,
+        hideHandleValue: PropTypes.bool,
         onChange: PropTypes.func.isRequired,
     };
 
@@ -109,6 +110,7 @@ export default class Slider extends PureComponent {
         min: 0,
         max: 100,
         showCaptions: false,
+        hideHandleValue: false,
     };
 
     componentWillUnmount() {
@@ -116,7 +118,7 @@ export default class Slider extends PureComponent {
     }
 
     render() {
-        const { value, min, max, showCaptions, ...passProps } = this.props;
+        const { value, min, max, hideHandleValue, showCaptions, ...passProps } = this.props;
 
         const percent = (100 * (value - min)) / (max - min);
 
@@ -129,7 +131,7 @@ export default class Slider extends PureComponent {
             >
                 <Progress width={percent} />
                 <HandleSlot innerRef={this._onRef}>
-                    <Handle left={percent}>{value}</Handle>
+                    <Handle left={percent}>{hideHandleValue ? null : value}</Handle>
                 </HandleSlot>
                 {showCaptions && (
                     <Captions>

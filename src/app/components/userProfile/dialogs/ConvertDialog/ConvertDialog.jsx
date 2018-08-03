@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import is from 'styled-is';
@@ -9,21 +9,30 @@ import DialogManager from 'app/components/elements/common/DialogManager';
 import SplashLoader from 'src/app/components/golos-ui/SplashLoader';
 import { Checkbox } from 'src/app/components/golos-ui/Form';
 import { parseAmount } from 'src/app/helpers/currency';
-import { vestsToSteem } from 'app/utils/StateFunctions';
+import { vestsToSteem, steemToVests } from 'app/utils/StateFunctions';
 import Shrink from 'src/app/components/golos-ui/Shrink';
+import Slider from 'src/app/components/golos-ui/Slider';
 
 const TYPES = {
     GOLOS: 'GOLOS',
     POWER: 'POWER',
+    GBG: 'GBG',
 };
 
 const TYPES_TRANSLATE = {
-    GOLOS: 'Голос',
-    POWER: 'Силу голоса',
+    GOLOS: ['Голос', 'Сила голоса'],
+    POWER: ['Сила голоса', 'Голос'],
+    GBG: ['GBG', 'Голос'],
+};
+
+const TYPES_SUCCESS_TEXT = {
+    GOLOS: 'Операция успешно завершена!',
+    POWER: 'Операция запущена!',
+    GBG: 'Операция запущена!',
 };
 
 const Container = styled.div`
-    width: 540px;
+    width: 580px;
 `;
 
 const TypeSelect = styled.div`
@@ -40,9 +49,13 @@ const TypeButton = styled.div.attrs({ role: 'button' })`
     line-height: 38px;
     text-align: center;
     border-left: 1px solid #e1e1e1;
+    font-size: 15px;
     color: #b7b7ba;
     user-select: none;
     cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 
     &:first-child {
         border-left: none;
@@ -54,7 +67,6 @@ const TypeButton = styled.div.attrs({ role: 'button' })`
 `;
 
 const Content = styled.div`
-    width: 420px;
     padding: 10px 30px 14px;
 `;
 
@@ -74,7 +86,11 @@ const SubHeaderLine = styled.div`
     }
 `;
 
-const Body = styled.div``;
+const Body = styled.div`
+    height: auto;
+    transition: height 0.15s;
+    overflow: hidden;
+`;
 
 const SimpleInput = styled.input`
     display: block;
@@ -134,26 +150,20 @@ class ConvertDialog extends PureComponent {
     };
 
     render() {
-        const { myAccount } = this.props;
-        const {
-            target,
-            amount,
-            loader,
-            disabled,
-            amountInFocus,
-            type,
-            saveTo,
-        } = this.state;
+        const { myAccount, globalProps } = this.props;
+        const { target, amount, loader, disabled, amountInFocus, type, saveTo } = this.state;
 
         let balanceString = null;
+        let balanceReal = null;
 
         if (type === TYPES.GOLOS) {
             balanceString = myAccount.get('balance');
         } else if (type === TYPES.POWER) {
-            balanceString = vestsToSteem(
-                myAccount.get('vesting_shares'),
-                this.props.globalProps.toJS()
-            );
+            const { golos, gests } = getVesting(myAccount, globalProps);
+            balanceReal = gests;
+            balanceString = golos;
+        } else if (type === TYPES.GBG) {
+            balanceString = myAccount.get('sbd_balance');
         }
 
         const balance = parseFloat(balanceString);
@@ -164,21 +174,9 @@ class ConvertDialog extends PureComponent {
 
         const allow = targetCheck && value > 0 && !error && !loader && !disabled;
 
-        const headerLines =
-            type === TYPES.GOLOS
-                ? [
-                      'Сила Голоса неперемещаемая, её количество увеличивается при долгосрочном хранении. Чем больше у Вас Силы Голоса, тем сильней вы влияете на вознаграждения за пост и тем больше зарабатываете за голосование.',
-                  ]
-                : [
-                      'Сила Голоса неперемещаемая, её количество увеличивается при долгосрочном хранении. Чем больше у Вас Силы Голоса, тем сильней вы влияете на вознаграждения за пост и тем больше зарабатываете за голосование.',
-                      'Силу Голоса нельзя передать, и Вам потребуются 20 недель, чтобы перевести её обратно в токены GOLOS.',
-                  ];
-
-        console.log('HINT:', headerLines);
-
         return (
             <DialogFrame
-                title={'Конвертировать в'}
+                title={'Конвертировать'}
                 titleSize={20}
                 icon="refresh"
                 buttons={[
@@ -197,28 +195,19 @@ class ConvertDialog extends PureComponent {
             >
                 <Container>
                     <TypeSelect>
-                        <TypeButton
-                            active={type === TYPES.GOLOS}
-                            onClick={type === TYPES.GOLOS ? null : this._onClickGolosType}
-                        >
-                            {TYPES_TRANSLATE[TYPES.GOLOS]}
-                        </TypeButton>
-                        <TypeButton
-                            active={type === TYPES.POWER}
-                            onClick={type === TYPES.POWER ? null : this._onClickPowerType}
-                        >
-                            {TYPES_TRANSLATE[TYPES.POWER]}
-                        </TypeButton>
+                        {this._renderTypeButton(TYPES.GOLOS)}
+                        {this._renderTypeButton(TYPES.POWER)}
+                        {this._renderTypeButton(TYPES.GBG)}
                     </TypeSelect>
                     <SubHeader>
                         <Shrink height={72}>
-                            {headerLines.map((line, i) => (
+                            {this._getHintText().map((line, i) => (
                                 <SubHeaderLine key={i}>{line}</SubHeaderLine>
                             ))}
                         </Shrink>
                     </SubHeader>
                     <Content>
-                        <Body>
+                        <Body style={{ height: this._getBodyHeight() }}>
                             <Section>
                                 <Label>Сколько</Label>
                                 <SimpleInput
@@ -230,26 +219,7 @@ class ConvertDialog extends PureComponent {
                                     onBlur={this._onAmountBlur}
                                 />
                             </Section>
-                            <Section flex>
-                                <Checkbox
-                                    title="Перевести на другой аккаунт"
-                                    inline
-                                    value={saveTo}
-                                    onChange={this._onSaveTypeChange}
-                                />
-                            </Section>
-                            {saveTo ? (
-                                <Section>
-                                    <Label>Кому</Label>
-                                    <SimpleInput
-                                        name="account"
-                                        spellCheck="false"
-                                        placeholder={'Отправить аккаунту'}
-                                        value={target}
-                                        onChange={this._onTargetChange}
-                                    />
-                                </Section>
-                            ) : null}
+                            {this._renderAdditionalSection(balanceReal)}
                         </Body>
                         <ErrorBlock>{error ? <ErrorLine>{error}</ErrorLine> : null}</ErrorBlock>
                     </Content>
@@ -259,8 +229,82 @@ class ConvertDialog extends PureComponent {
         );
     }
 
+    _renderTypeButton(renderType) {
+        const { type } = this.state;
+        const isActive = type === renderType;
+
+        const [from, to] = TYPES_TRANSLATE[renderType];
+
+        return (
+            <TypeButton
+                active={isActive}
+                onClick={isActive ? null : () => this._onClickType(renderType)}
+            >
+                {from + ' → ' + to}
+            </TypeButton>
+        );
+    }
+
+    _renderAdditionalSection(balanceReal) {
+        const { globalProps } = this.props;
+        const { type, target, saveTo, amount } = this.state;
+
+        switch (type) {
+            case TYPES.GOLOS:
+                return (
+                    <Fragment>
+                        <Section flex>
+                            <Checkbox
+                                title="Перевести на другой аккаунт"
+                                inline
+                                value={saveTo}
+                                onChange={this._onSaveTypeChange}
+                            />
+                        </Section>
+                        {saveTo ? (
+                            <Section>
+                                <Label>Кому</Label>
+                                <SimpleInput
+                                    name="account"
+                                    spellCheck="false"
+                                    placeholder={'Отправить аккаунту'}
+                                    value={target}
+                                    onChange={this._onTargetChange}
+                                />
+                            </Section>
+                        ) : null}
+                    </Fragment>
+                );
+            case TYPES.POWER:
+                const cur = Math.floor(
+                    steemToVests(parseFloat(amount.replace(/\s+/, '')), globalProps) * 1000000
+                );
+                const max = Math.floor(balanceReal * 1000000);
+
+                return (
+                    <Slider
+                        value={cur}
+                        max={max}
+                        showCaptions
+                        hideHandleValue
+                        onChange={this._onSliderChange}
+                    />
+                );
+        }
+    }
+
     confirmClose() {
-        if (this.state.amount.trim() || this.state.saveTo ? this.state.target.trim() : true) {
+        const { type, amount, saveTo, target } = this.state;
+
+        let amountChanged = false;
+
+        if (type === TYPES.POWER) {
+            amountChanged = amount.trim() !== this._powerInitialAmount;
+        } else {
+            amountChanged = Boolean(amount.trim());
+        }
+
+        if (amountChanged || (saveTo ? target.trim() : false)) {
             DialogManager.dangerConfirm('Вы действительно хотите закрыть окно?').then(y => {
                 if (y) {
                     this.props.onClose();
@@ -270,6 +314,41 @@ class ConvertDialog extends PureComponent {
             return false;
         } else {
             return true;
+        }
+    }
+
+    _getBodyHeight() {
+        const { type, saveTo } = this.state;
+
+        switch (type) {
+            case TYPES.GOLOS:
+                return saveTo ? 192 : 117;
+            case TYPES.POWER:
+                return 135;
+            case TYPES.GBG:
+                return 85;
+        }
+    }
+
+    _getHintText() {
+        const { type } = this.state;
+
+        switch (type) {
+            case TYPES.GOLOS:
+                return [
+                    'Сила Голоса неперемещаемая, её количество увеличивается при долгосрочном хранении. Чем больше у Вас Силы Голоса, тем сильней вы влияете на вознаграждения за пост и тем больше зарабатываете за голосование.',
+                ];
+            case TYPES.POWER:
+                return [
+                    'Сила Голоса неперемещаемая, её количество увеличивается при долгосрочном хранении. Чем больше у Вас Силы Голоса, тем сильней вы влияете на вознаграждения за пост и тем больше зарабатываете за голосование.',
+                    'Силу Голоса нельзя передать, и Вам потребуются 20 недель, чтобы перевести её обратно в токены GOLOS.',
+                ];
+            case TYPES.GBG:
+                return [
+                    'Конвертация золотых будет происходить в течении 3.5 дней с момента запуска. Отменить её нельзя. После запуска конвертации, конвертируемые монеты станут недоступны.',
+                    'Токены Золотой ликвидны и их можно передавать между аккаунтами. Перед запуском конвертации, проверьте опции Купить или Продать Золотой, на внутренней бирже. Также, токен Золотой, доступен к выводу (и торговле) на внешних биржах.',
+                    'Неделя отсрочки, путем автоматической конвертации, необходима, в целях предотвращения злоупотребления спекуляцией, по средней ценовой котировке.',
+                ];
         }
     }
 
@@ -322,17 +401,42 @@ class ConvertDialog extends PureComponent {
 
         const iAm = myUser.get('username');
 
-        const operation = {
-            from: iAm,
-            to: saveTo ? target.trim() : iAm,
-            amount: parseFloat(amount.replace(/\s+/, '')).toFixed(3) + ' ' + type,
-            memo: '',
-            //request_id: Math.floor((Date.now() / 1000) % 4294967295),
-        };
+        let operationType;
+        let operation;
 
-        const actionType = type === TYPES.GOLOS ? 'transfer_to_vesting' : 'transfer_from_vesting';
+        if (type === TYPES.GOLOS) {
+            operationType = 'transfer_to_vesting';
+            operation = {
+                from: iAm,
+                to: saveTo ? target.trim() : iAm,
+                amount: parseFloat(amount.replace(/\s+/, '')).toFixed(3) + ' GOLOS',
+                memo: '',
+                //request_id: Math.floor((Date.now() / 1000) % 4294967296),
+            };
+        } else if (type === TYPES.POWER) {
+            operationType = 'withdraw_vesting';
 
-        this.props.transfer(actionType, operation, err => {
+            const vesting = steemToVests(
+                parseFloat(amount.replace(/\s+/, '')),
+                this.props.globalProps
+            );
+
+            operation = {
+                account: iAm,
+                vesting_shares: vesting + ' GESTS',
+            };
+        } else if (type === TYPES.GBG) {
+            operationType = 'convert';
+            operation = {
+                owner: iAm,
+                amount: parseFloat(amount.replace(/\s+/, '')).toFixed(3) + ' GBG',
+                requestid: Math.floor(Date.now() / 1000),
+            };
+        }
+
+        console.log('call transfer', operationType, operation);
+
+        this.props.transfer(operationType, operation, err => {
             if (err) {
                 this.setState({
                     loader: false,
@@ -347,39 +451,49 @@ class ConvertDialog extends PureComponent {
                     loader: false,
                 });
 
-                DialogManager.info('Операция успешно завершена!').then(() => {
+                DialogManager.info(TYPES_SUCCESS_TEXT[type]).then(() => {
                     this.props.onClose();
                 });
             }
         });
     };
 
-    _onClickGolosType = () => {
-        this.setState({
-            type: TYPES.GOLOS,
-            amount: '',
-            saveTo: false,
-        });
+    _onClickType = type => {
+        if (type === TYPES.POWER) {
+            const { golos } = getVesting(this.props.myAccount, this.props.globalProps);
+
+            this._powerInitialAmount = golos;
+
+            this.setState({
+                type: TYPES.POWER,
+                amount: golos,
+                saveTo: false,
+            });
+        } else {
+            this.setState({
+                type: type,
+                amount: '',
+                saveTo: false,
+            });
+        }
     };
 
-    _onClickPowerType = () => {
+    _onSliderChange = value => {
         this.setState({
-            type: TYPES.POWER,
-            amount: '',
-            saveTo: false,
+            amount: vestsToSteem((value / 1000000).toFixed(6) + ' GESTS', this.props.globalProps),
         });
     };
 }
 
 export default connect(
     state => {
-        const myUser = state.user.getIn(['current']);
+        const myUser = state.user.get('current');
         const myAccount = myUser ? state.global.getIn(['accounts', myUser.get('username')]) : null;
 
         return {
             myUser,
             myAccount,
-            globalProps: state.global.get('props'),
+            globalProps: state.global.get('props').toJS(),
         };
     },
     dispatch => ({
@@ -410,3 +524,15 @@ export default connect(
         },
     })
 )(ConvertDialog);
+
+function getVesting(account, props) {
+    const vesting = parseFloat(account.get('vesting_shares'));
+    const delegated = parseFloat(account.get('delegated_vesting_shares'));
+
+    const availableVesting = vesting - delegated;
+
+    return {
+        gests: availableVesting,
+        golos: vestsToSteem(availableVesting.toFixed(6) + ' GESTS', props),
+    };
+}

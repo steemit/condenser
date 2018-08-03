@@ -244,7 +244,7 @@ class SafeDialog extends PureComponent {
     }
 
     confirmClose() {
-        if (this.state.amount.trim() || this.state.target.trim()) {
+        if (this.state.amount.trim() || (this.state.saveTo ? this.state.target.trim() : false)) {
             DialogManager.dangerConfirm('Вы действительно хотите закрыть окно?').then(y => {
                 if (y) {
                     this.props.onClose();
@@ -317,7 +317,7 @@ class SafeDialog extends PureComponent {
             to: saveTo ? target.trim() : iAm,
             amount: parseFloat(amount.replace(/\s+/, '')).toFixed(3) + ' ' + currency,
             memo: '',
-            request_id: Math.floor((Date.now() / 1000) % 4294967295)
+            request_id: Math.floor((Date.now() / 1000) % 4294967296)
         };
 
         const actionType = type === TYPES.SAVE ? 'transfer_to_savings' : 'transfer_from_savings';

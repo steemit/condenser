@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import tt from 'counterpart';
 import transaction from 'app/redux/Transaction';
 import DialogFrame from 'app/components/dialogs/DialogFrame';
+import SimpleInput from 'src/app/components/golos-ui/SimpleInput';
 import ComplexInput from 'src/app/components/golos-ui/ComplexInput';
 import SplashLoader from 'src/app/components/golos-ui/SplashLoader';
 import Icon from 'src/app/components/golos-ui/Icon';
@@ -35,22 +36,6 @@ const Body = styled.div`
 const Column = styled.div`
     width: 288px;
     padding: 0 10px;
-`;
-
-const SimpleInput = styled.input`
-    display: block;
-    width: 100%;
-    height: 34px;
-    padding: 0 11px;
-    border: 1px solid #e1e1e1;
-    outline: none;
-    border-radius: 6px;
-    font-size: 14px;
-    transition: border-color 0.25s;
-
-    &:focus {
-        border-color: #8a8a8a;
-    }
 `;
 
 const Section = styled.div`
@@ -147,8 +132,7 @@ class TransferDialog extends PureComponent {
             currencyKey = 'sbd_balance';
         }
 
-        const balanceString = myAccount.get(currencyKey)
-        const balance = parseFloat(balanceString);
+        const balance = parseFloat(myAccount.get(currencyKey));
 
         let { value, error } = parseAmount(amount, balance, !amountInFocus);
 
@@ -196,7 +180,7 @@ class TransferDialog extends PureComponent {
                             <Section>
                                 <Label>Сколько</Label>
                                 <ComplexInput
-                                    placeholder={`Доступно ${balanceString}`}
+                                    placeholder={`Доступно ${balance.toFixed(3)}`}
                                     spellCheck="false"
                                     value={amount}
                                     activeId={currency}

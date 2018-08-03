@@ -62,7 +62,7 @@ export default props => (
             <ComplexButton
                 key={button.id}
                 active={props.activeId === button.id}
-                onClick={() => props.onActiveChange(button.id)}
+                onClick={props.onActiveChange ? () => props.onActiveChange(button.id) : null}
             >
                 {button.title}
             </ComplexButton>

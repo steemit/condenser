@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import styled from 'styled-components';
+import tt from 'counterpart';
 
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import Callout from 'app/components/elements/Callout';
-
 import PostsList from 'src/app/components/common/PostsList';
-import styled from 'styled-components';
 
 const Loader = styled(LoadingIndicator)`
     margin-top: 30px;

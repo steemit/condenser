@@ -1,14 +1,22 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
+import tt from 'counterpart';
+import { Link } from 'react-router';
 
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
-import Callout from 'app/components/elements/Callout';
-
 import PostsList from 'src/app/components/common/PostsList';
 
 const Loader = styled(LoadingIndicator)`
     margin-top: 30px;
+`;
+
+const InfoBlock = styled.div`
+    min-height: 160px;
+    padding: 15px 18px;
+    border-radius: 6px;
+    background-color: #fff;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.06);
 `;
 
 class BlogContent extends Component {
@@ -18,9 +26,7 @@ class BlogContent extends Component {
         const posts = currentAccount.get('blog');
 
         if (!posts) {
-            return (
-                <Loader type="circle" center size={40} />
-            );
+            return <Loader type="circle" center size={40} />;
         }
 
         if (!posts.size) {
@@ -38,25 +44,25 @@ class BlogContent extends Component {
     }
 
     _renderCallOut() {
-        const { currentAccount, isOwner } = this.props;
+        const { isOwner, accountName } = this.props;
 
         return (
-            <Callout>
+            <InfoBlock>
                 {isOwner ? (
-                    <div>
+                    <Fragment>
                         {tt('submit_a_story.you_hasnt_started_bloggin_yet')}
                         <br />
                         <br />
                         <Link to="/submit">{tt('g.submit_a_story')}</Link>
                         <br />
-                        <a href="/welcome">{tt('submit_a_story.welcome_to_the_blockchain')}</a>
-                    </div>
+                        <Link to="/welcome">{tt('submit_a_story.welcome_to_the_blockchain')}</Link>
+                    </Fragment>
                 ) : (
                     tt('user_profile.user_hasnt_started_bloggin_yet', {
-                        name: currentAccount.get('name'),
+                        name: accountName,
                     })
                 )}
-            </Callout>
+            </InfoBlock>
         );
     }
 }

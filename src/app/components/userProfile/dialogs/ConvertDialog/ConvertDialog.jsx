@@ -12,6 +12,8 @@ import { parseAmount } from 'src/app/helpers/currency';
 import { vestsToSteem, steemToVests } from 'app/utils/StateFunctions';
 import Shrink from 'src/app/components/golos-ui/Shrink';
 import Slider from 'src/app/components/golos-ui/Slider';
+import SimpleInput from 'src/app/components/golos-ui/SimpleInput';
+import ComplexInput from 'src/app/components/golos-ui/ComplexInput';
 import DialogTypeSelect from 'src/app/components/userProfile/common/DialogTypeSelect';
 
 const POWER_TO_GOLOS_INTERVAL = 13; // weeks
@@ -22,10 +24,16 @@ const TYPES = {
     GBG: 'GBG',
 };
 
-const TYPES_TRANSLATE = {
+const TYPES_SELECT_TRANSLATE = {
     GOLOS: ['Голос', 'Сила голоса'],
     POWER: ['Сила голоса', 'Голос'],
     GBG: ['GBG', 'Голос'],
+};
+
+const TYPES_TRANSLATE = {
+    GOLOS: 'Голос',
+    POWER: 'Сила Голоса',
+    GBG: 'GBG',
 };
 
 const TYPES_SUCCESS_TEXT = {
@@ -62,22 +70,6 @@ const Body = styled.div`
     height: auto;
     transition: height 0.15s;
     overflow: hidden;
-`;
-
-const SimpleInput = styled.input`
-    display: block;
-    width: 100%;
-    height: 34px;
-    padding: 0 11px;
-    border: 1px solid #e1e1e1;
-    outline: none;
-    border-radius: 6px;
-    font-size: 14px;
-    transition: border-color 0.25s;
-
-    &:focus {
-        border-color: #8a8a8a;
-    }
 `;
 
 const Section = styled.div`
@@ -151,6 +143,7 @@ class ConvertDialog extends PureComponent {
         }
 
         const balance = parseFloat(balanceString);
+        const balanceString2 = balanceString.match(/^[^\s]*/)[0];
 
         const { value, error } = parseAmount(amount, balance, !amountInFocus);
 
@@ -190,9 +183,15 @@ class ConvertDialog extends PureComponent {
                     <DialogTypeSelect
                         activeId={type}
                         buttons={[
-                            { id: TYPES.GOLOS, title: makeTitle(TYPES_TRANSLATE[TYPES.GOLOS]) },
-                            { id: TYPES.POWER, title: makeTitle(TYPES_TRANSLATE[TYPES.POWER]) },
-                            { id: TYPES.GBG, title: makeTitle(TYPES_TRANSLATE[TYPES.GBG]) },
+                            {
+                                id: TYPES.GOLOS,
+                                title: makeTitle(TYPES_SELECT_TRANSLATE[TYPES.GOLOS]),
+                            },
+                            {
+                                id: TYPES.POWER,
+                                title: makeTitle(TYPES_SELECT_TRANSLATE[TYPES.POWER]),
+                            },
+                            { id: TYPES.GBG, title: makeTitle(TYPES_SELECT_TRANSLATE[TYPES.GBG]) },
                         ]}
                         onClick={this._onClickType}
                     />
@@ -207,13 +206,15 @@ class ConvertDialog extends PureComponent {
                         <Body style={{ height: this._getBodyHeight() }}>
                             <Section>
                                 <Label>Сколько</Label>
-                                <SimpleInput
-                                    placeholder={`Доступно ${balanceString}`}
+                                <ComplexInput
+                                    placeholder={`Доступно ${balanceString2}`}
                                     spellCheck="false"
                                     value={amount}
                                     onChange={this._onAmountChange}
                                     onFocus={this._onAmountFocus}
                                     onBlur={this._onAmountBlur}
+                                    activeId={type}
+                                    buttons={[{ id: type, title: TYPES_TRANSLATE[type] }]}
                                 />
                             </Section>
                             {this._renderAdditionalSection(balanceReal)}

@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import is from 'styled-is';
@@ -6,6 +6,7 @@ import tt from 'counterpart';
 import transaction from 'app/redux/Transaction';
 import DialogFrame from 'app/components/dialogs/DialogFrame';
 import DialogManager from 'app/components/elements/common/DialogManager';
+import SimpleInput from 'src/app/components/golos-ui/SimpleInput';
 import ComplexInput from 'src/app/components/golos-ui/ComplexInput';
 import SplashLoader from 'src/app/components/golos-ui/SplashLoader';
 import DialogTypeSelect from 'src/app/components/userProfile/common/DialogTypeSelect';
@@ -13,6 +14,8 @@ import { parseAmount } from 'src/app/helpers/currency';
 import { vestsToSteem, steemToVests } from 'app/utils/StateFunctions';
 import Shrink from 'src/app/components/golos-ui/Shrink';
 import DelegationsList from './DelegationsList';
+import { api } from 'golos-js';
+import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 
 const TYPES = {
     DELEGATE: 'DELEGATE',
@@ -60,22 +63,6 @@ const Body = styled.div`
     overflow: hidden;
 `;
 
-const SimpleInput = styled.input`
-    display: block;
-    width: 100%;
-    height: 34px;
-    padding: 0 11px;
-    border: 1px solid #e1e1e1;
-    outline: none;
-    border-radius: 6px;
-    font-size: 14px;
-    transition: border-color 0.25s;
-
-    &:focus {
-        border-color: #8a8a8a;
-    }
-`;
-
 const Section = styled.div`
     margin: 10px 0;
 
@@ -106,15 +93,14 @@ const HintLine = FooterLine.extend`
     color: #666;
 `;
 
+const LoaderWrapper = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 400px;
+`;
+
 class DelegateVestingDialog extends PureComponent {
-    componentDidMount() {
-        this.props.onRef(this);
-    }
-
-    componentWillUnmount() {
-        this.props.onRef(null);
-    }
-
     state = {
         type: TYPES.DELEGATE,
         target: '',
@@ -122,7 +108,19 @@ class DelegateVestingDialog extends PureComponent {
         amountInFocus: false,
         loader: false,
         disabled: false,
+        delegationError: null,
+        delegationData: null,
     };
+
+    componentDidMount() {
+        this.props.onRef(this);
+
+        this._loadDelegationsData();
+    }
+
+    componentWillUnmount() {
+        this.props.onRef(null);
+    }
 
     render() {
         const { myAccount, globalProps } = this.props;
@@ -135,7 +133,6 @@ class DelegateVestingDialog extends PureComponent {
             const { golos, gests } = getVesting(myAccount, globalProps);
             balanceReal = gests;
             balanceString = golos;
-        } else if (type === TYPES.CANCEL) {
         }
 
         const balance = parseFloat(balanceString);
@@ -178,27 +175,31 @@ class DelegateVestingDialog extends PureComponent {
                         ]}
                         onClick={this._onTypeClick}
                     />
-                    <SubHeader>
-                        <Shrink height={72}>
-                            {this._getHintText().map((line, i) => (
-                                <SubHeaderLine key={i}>{line}</SubHeaderLine>
-                            ))}
-                        </Shrink>
-                    </SubHeader>
-                    <Content>
-                        <Body style={{ height: this._getBodyHeight() }}>
-                            {type === TYPES.DELEGATE
-                                ? this._renderDelegateBody(params)
-                                : this._renderCancelBody(params)}
-                        </Body>
-                        <Footer>
-                            {error ? (
-                                <ErrorLine>{error}</ErrorLine>
-                            ) : hint ? (
-                                <HintLine>{hint}</HintLine>
-                            ) : null}
-                        </Footer>
-                    </Content>
+                    {type === TYPES.DELEGATE ? (
+                        <Fragment>
+                            <SubHeader>
+                                <Shrink height={72}>
+                                    {this._getHintText().map((line, i) => (
+                                        <SubHeaderLine key={i}>{line}</SubHeaderLine>
+                                    ))}
+                                </Shrink>
+                            </SubHeader>
+                            <Content>
+                                <Body style={{ height: this._getBodyHeight() }}>
+                                    {this._renderDelegateBody(params)}
+                                </Body>
+                                <Footer>
+                                    {error ? (
+                                        <ErrorLine>{error}</ErrorLine>
+                                    ) : hint ? (
+                                        <HintLine>{hint}</HintLine>
+                                    ) : null}
+                                </Footer>
+                            </Content>
+                        </Fragment>
+                    ) : (
+                        <Content>{this._renderCancelBody()}</Content>
+                    )}
                 </Container>
                 {loader ? <SplashLoader /> : null}
             </DialogFrame>
@@ -241,9 +242,28 @@ class DelegateVestingDialog extends PureComponent {
         );
     }
 
-    _renderCancelBody(params) {
+    _renderCancelBody() {
+        const { myUser, globalProps } = this.props;
+        const { delegationError, delegationData } = this.state;
+
+        if (delegationError) {
+            return String(delegationError);
+        }
+
+        if (!delegationData) {
+            return (
+                <LoaderWrapper>
+                    <LoadingIndicator type="circle" size={60} />
+                </LoaderWrapper>
+            );
+        }
+
         return (
-            <DelegationsList />
+            <DelegationsList
+                myAccountName={myUser.get('username')}
+                globalProps={globalProps}
+                data={delegationData}
+            />
         );
     }
 
@@ -396,17 +416,28 @@ class DelegateVestingDialog extends PureComponent {
         });
     };
 
-    _onSliderChange = value => {
-        let amount = '';
+    async _loadDelegationsData() {
+        const { myUser } = this.props;
 
-        if (value > 0) {
-            amount = vestsToSteem((value / 1000000).toFixed(6) + ' GESTS', this.props.globalProps);
+        try {
+            const result = await api.getVestingDelegationsAsync(
+                myUser.get('username'),
+                '',
+                100,
+                'delegated'
+            );
+
+            this.setState({
+                delegationError: null,
+                delegationData: result,
+            });
+        } catch (err) {
+            this.setState({
+                delegationError: err,
+                delegationData: null,
+            });
         }
-
-        this.setState({
-            amount,
-        });
-    };
+    }
 }
 
 export default connect(

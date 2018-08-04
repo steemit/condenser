@@ -736,6 +736,12 @@ class UserWallet extends React.Component {
                                     'transfer_jsx.beware_of_spam_and_phishing_links'
                                 )}
                             </span>
+                            &nbsp;
+                            <span>
+                                {tt(
+                                    'transfer_jsx.transactions_make_take_a_few_minutes'
+                                )}
+                            </span>
                         </div>
                         <table>
                             <tbody>{transfer_log}</tbody>

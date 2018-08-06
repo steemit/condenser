@@ -178,8 +178,6 @@ export default class Slider extends PureComponent {
     };
 
     _onMouseDown = e => {
-        e.preventDefault();
-
         this.setState({
             value: this._calculateValue(e),
         });

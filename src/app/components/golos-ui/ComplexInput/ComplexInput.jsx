@@ -28,6 +28,10 @@ const ComplexInnerInput = styled.input`
             border-color: #8a8a8a;
         }
     }
+
+    ${is('error')`
+        border-color: #fc544e !important;
+    `}
 `;
 
 const ComplexButton = styled.button`

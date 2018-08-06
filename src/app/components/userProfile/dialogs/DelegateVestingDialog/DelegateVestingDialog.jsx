@@ -10,12 +10,15 @@ import SimpleInput from 'src/app/components/golos-ui/SimpleInput';
 import ComplexInput from 'src/app/components/golos-ui/ComplexInput';
 import SplashLoader from 'src/app/components/golos-ui/SplashLoader';
 import DialogTypeSelect from 'src/app/components/userProfile/common/DialogTypeSelect';
-import { parseAmount } from 'src/app/helpers/currency';
+import { parseAmount2 } from 'src/app/helpers/currency';
 import { vestsToSteem, steemToVests } from 'app/utils/StateFunctions';
 import Shrink from 'src/app/components/golos-ui/Shrink';
 import DelegationsList from './DelegationsList';
 import { api } from 'golos-js';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
+import DelegationEdit from './DelegationEdit';
+
+const MIN_VESTING = 3;
 
 const TYPES = {
     DELEGATE: 'DELEGATE',
@@ -110,6 +113,7 @@ class DelegateVestingDialog extends PureComponent {
         disabled: false,
         delegationError: null,
         delegationData: null,
+        editAccountName: null,
     };
 
     componentDidMount() {
@@ -126,25 +130,20 @@ class DelegateVestingDialog extends PureComponent {
         const { myAccount, globalProps } = this.props;
         const { target, amount, loader, disabled, amountInFocus, type } = this.state;
 
-        let balanceString = null;
-        let balanceReal = null;
+        const { golos } = getVesting(myAccount, globalProps);
 
-        if (type === TYPES.DELEGATE) {
-            const { golos, gests } = getVesting(myAccount, globalProps);
-            balanceReal = gests;
-            balanceString = golos;
-        }
+        const availableBalance = Math.max(0, Math.round((parseFloat(golos) - MIN_VESTING) * 1000));
+        const availableBalanceString = (availableBalance / 1000).toFixed(3);
 
-        const balance = parseFloat(balanceString);
-
-        const { value, error } = parseAmount(amount, balance, !amountInFocus);
+        const { value, error } = parseAmount2(amount, availableBalance, !amountInFocus, 1000);
 
         const allow = target.trim() && value > 0 && !error && !loader && !disabled;
 
         const hint = null;
 
         const params = {
-            balanceString,
+            availableBalance,
+            availableBalanceString,
         };
 
         return (
@@ -198,7 +197,7 @@ class DelegateVestingDialog extends PureComponent {
                             </Content>
                         </Fragment>
                     ) : (
-                        <Content>{this._renderCancelBody()}</Content>
+                        <Content>{this._renderCancelBody(params)}</Content>
                     )}
                 </Container>
                 {loader ? <SplashLoader /> : null}
@@ -206,7 +205,7 @@ class DelegateVestingDialog extends PureComponent {
         );
     }
 
-    _renderDelegateBody({ balanceString }) {
+    _renderDelegateBody({ availableBalanceString }) {
         const { target, amount } = this.state;
 
         return (
@@ -227,7 +226,7 @@ class DelegateVestingDialog extends PureComponent {
                     <Section>
                         <Label>Сколько</Label>
                         <ComplexInput
-                            placeholder={`Доступно ${balanceString}`}
+                            placeholder={`Доступно ${availableBalanceString}`}
                             spellCheck="false"
                             value={amount}
                             activeId="power"
@@ -242,9 +241,9 @@ class DelegateVestingDialog extends PureComponent {
         );
     }
 
-    _renderCancelBody() {
+    _renderCancelBody({ availableBalance }) {
         const { myUser, globalProps } = this.props;
-        const { delegationError, delegationData } = this.state;
+        const { delegationError, delegationData, editAccountName } = this.state;
 
         if (delegationError) {
             return String(delegationError);
@@ -258,12 +257,38 @@ class DelegateVestingDialog extends PureComponent {
             );
         }
 
+        let delegation = null;
+        let vestingShares = null;
+
+        if (editAccountName) {
+            for (let data of delegationData) {
+                if (data.delegatee === editAccountName) {
+                    delegation = data;
+                    vestingShares = Math.round(
+                        parseFloat(vestsToSteem(data.vesting_shares, globalProps)) * 1000
+                    );
+                }
+            }
+        }
+
         return (
-            <DelegationsList
-                myAccountName={myUser.get('username')}
-                globalProps={globalProps}
-                data={delegationData}
-            />
+            <Fragment>
+                <DelegationsList
+                    myAccountName={myUser.get('username')}
+                    globalProps={globalProps}
+                    data={delegationData}
+                    onEditClick={this._onDelegationEdit}
+                    onCancelClick={this._onDelegationCancel}
+                />
+                {delegation ? (
+                    <DelegationEdit
+                        value={vestingShares}
+                        max={availableBalance + vestingShares}
+                        onSave={this._onDelegationEditSave}
+                        onCancel={this._onDelegationEditCancel}
+                    />
+                ) : null}
+            </Fragment>
         );
     }
 
@@ -299,6 +324,8 @@ class DelegateVestingDialog extends PureComponent {
             case TYPES.DELEGATE:
                 return [
                     'Часть своей Силы Голоса вы решили делегировать другим пользователям. В любой момент вы можете отменить делегирование.',
+                    'Как дела? Тестовая строка',
+                    'Как дела? Тестовая строка - 2',
                 ];
             case TYPES.CANCEL:
                 return [
@@ -384,8 +411,6 @@ class DelegateVestingDialog extends PureComponent {
             };
         }
 
-        console.log('call transfer', operationType, operation);
-
         this.props.delegate(operation, err => {
             if (err) {
                 this.setState({
@@ -438,6 +463,24 @@ class DelegateVestingDialog extends PureComponent {
             });
         }
     }
+
+    _onDelegationEdit = accountName => {
+        this.setState({
+            editAccountName: accountName,
+        });
+    };
+
+    _onDelegationCancel = accountName => {};
+
+    _onDelegationEditSave = value => {
+        debugger;
+    };
+
+    _onDelegationEditCancel = () => {
+        this.setState({
+            editAccountName: null,
+        });
+    };
 }
 
 export default connect(

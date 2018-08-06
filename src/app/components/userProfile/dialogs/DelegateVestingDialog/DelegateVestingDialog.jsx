@@ -146,23 +146,28 @@ class DelegateVestingDialog extends PureComponent {
             availableBalanceString,
         };
 
+        const buttons = [
+            {
+                text: tt('g.cancel'),
+                onClick: this._onCloseClick,
+            },
+        ];
+
+        if (type === TYPES.DELEGATE) {
+            buttons.push({
+                text: 'Конвертировать',
+                primary: true,
+                disabled: !allow,
+                onClick: this._onOkClick,
+            });
+        }
+
         return (
             <DialogFrame
                 title={'Делегировать Силу Голоса'}
                 titleSize={20}
                 icon="refresh"
-                buttons={[
-                    {
-                        text: tt('g.cancel'),
-                        onClick: this._onCloseClick,
-                    },
-                    {
-                        text: 'Конвертировать',
-                        primary: true,
-                        disabled: !allow,
-                        onClick: this._onOkClick,
-                    },
-                ]}
+                buttons={buttons}
                 onCloseClick={this._onCloseClick}
             >
                 <Container>
@@ -170,7 +175,7 @@ class DelegateVestingDialog extends PureComponent {
                         activeId={type}
                         buttons={[
                             { id: TYPES.DELEGATE, title: 'Делегировать' },
-                            { id: TYPES.CANCEL, title: 'Отозвать' },
+                            { id: TYPES.CANCEL, title: 'Текущие' },
                         ]}
                         onClick={this._onTypeClick}
                     />
@@ -365,7 +370,7 @@ class DelegateVestingDialog extends PureComponent {
 
     _onOkClick = () => {
         const { myUser } = this.props;
-        const { target, amount, type, saveTo, loader, disabled } = this.state;
+        const { target, amount, loader, disabled } = this.state;
 
         if (loader || disabled) {
             return;
@@ -378,38 +383,13 @@ class DelegateVestingDialog extends PureComponent {
 
         const iAm = myUser.get('username');
 
-        let operationType;
-        let operation;
+        const vesting = steemToVests(parseFloat(amount.replace(/\s+/, '')), this.props.globalProps);
 
-        if (type === TYPES.GOLOS) {
-            operationType = 'transfer_to_vesting';
-            operation = {
-                from: iAm,
-                to: saveTo ? target.trim() : iAm,
-                amount: parseFloat(amount.replace(/\s+/, '')).toFixed(3) + ' GOLOS',
-                memo: '',
-                //request_id: Math.floor((Date.now() / 1000) % 4294967296),
-            };
-        } else if (type === TYPES.POWER) {
-            operationType = 'withdraw_vesting';
-
-            const vesting = steemToVests(
-                parseFloat(amount.replace(/\s+/, '')),
-                this.props.globalProps
-            );
-
-            operation = {
-                account: iAm,
-                vesting_shares: vesting + ' GESTS',
-            };
-        } else if (type === TYPES.GBG) {
-            operationType = 'convert';
-            operation = {
-                owner: iAm,
-                amount: parseFloat(amount.replace(/\s+/, '')).toFixed(3) + ' GBG',
-                requestid: Math.floor(Date.now() / 1000),
-            };
-        }
+        const operation = {
+            delegator: iAm,
+            delegatee: target.trim(),
+            vesting_shares: vesting + ' GESTS',
+        };
 
         this.props.delegate(operation, err => {
             if (err) {
@@ -426,12 +406,52 @@ class DelegateVestingDialog extends PureComponent {
                     loader: false,
                 });
 
-                DialogManager.info('Операция успешно завершена!').then(() => {
-                    this.props.onClose();
-                });
+                DialogManager.info('Операция успешно завершена!');
+
+                this._loadDelegationsData();
             }
         });
     };
+
+    _updateDelegation(delegatee, value) {
+        const { myUser } = this.props;
+
+        const vesting = value > 0 ? steemToVests(value / 1000, this.props.globalProps) : '0.000000';
+
+        const iAm = myUser.get('username');
+
+        const operation = {
+            delegator: iAm,
+            delegatee: delegatee,
+            vesting_shares: vesting + ' GESTS',
+        };
+
+        this.setState({
+            disabled: true,
+            loader: true,
+        });
+
+        this.props.delegate(operation, err => {
+            if (err) {
+                this.setState({
+                    disabled: false,
+                    loader: false,
+                });
+
+                if (err !== 'Canceled') {
+                    DialogManager.alert(err.toString());
+                }
+            } else {
+                this.setState({
+                    disabled: false,
+                    loader: false,
+                    editAccountName: null,
+                });
+
+                this._loadDelegationsData();
+            }
+        });
+    }
 
     _onTypeClick = type => {
         this.setState({
@@ -470,10 +490,14 @@ class DelegateVestingDialog extends PureComponent {
         });
     };
 
-    _onDelegationCancel = accountName => {};
+    _onDelegationCancel = async accountName => {
+        if (await DialogManager.confirm()) {
+            this._updateDelegation(accountName, 0);
+        }
+    };
 
     _onDelegationEditSave = value => {
-        debugger;
+        this._updateDelegation(this.state.editAccountName, value);
     };
 
     _onDelegationEditCancel = () => {
@@ -496,9 +520,11 @@ export default connect(
     },
     dispatch => ({
         delegate(operation, callback) {
+            console.log('OPERATION', operation);
+
             dispatch(
                 transaction.actions.broadcastOperation({
-                    type: 'LOL',
+                    type: 'delegate_vesting_shares',
                     operation,
                     successCallback() {
                         callback(null);

@@ -1,12 +1,15 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import styled from 'styled-components';
 import Icon from 'golos-ui/Icon';
 import { vestsToSteem } from 'app/utils/StateFunctions';
 
-const Root = styled.div`
-    height: 263px;
+const Root = styled.div``;
+
+const DelegationLines = styled.div`
+    overflow-y: auto;
+    height: 230px;
 `;
 
 const DelegationLine = styled.div`
@@ -55,7 +58,7 @@ const ActionButton = styled.button`
     background: transparent;
     color: #333;
     cursor: pointer;
-    transition: color 0.15s, background-color 0.15s;
+    transition: color 0.15s, background-color 0.25s;
 
     &:last-child {
         margin-right: 0;
@@ -64,11 +67,16 @@ const ActionButton = styled.button`
     &:hover {
         color: #fff;
         background: ${props => props.red ? '#fc544e' : '#3684ff'};
-        //background: #fb150d;
     }
 `;
 
-const ActionIcon = Icon.extend``;
+const EmptyList = styled.div`
+    padding-top: 20px;
+    text-align: center;
+    font-weight: 500;
+    font-size: 20px;
+    color: #999;
+`;
 
 export default class DelegationsList extends PureComponent {
     propTypes = {
@@ -83,39 +91,47 @@ export default class DelegationsList extends PureComponent {
 
         return (
             <Root>
-                <DelegationsHeader>
-                    <Delegatee>Кому</Delegatee>
-                    <Value>Силы Голоса</Value>
-                    <Action>Действия</Action>
-                </DelegationsHeader>
-                {data.map(info => (
-                    <DelegationLine key={info.id}>
-                        <Delegatee>
-                            <Link to={'@' + info.delegatee} onClick={this._onLinkClick}>
-                                {info.delegatee}
-                            </Link>
-                        </Delegatee>
-                        <Value>
-                            {vestsToSteem(info.vesting_shares, globalProps)}
-                            {' GOLOS'}
-                        </Value>
-                        <Action>
-                            <ActionButton
-                                data-tooltip="Изменить"
-                                onClick={() => this.props.onEditClick(info.delegatee)}
-                            >
-                                <ActionIcon name="pen" size={14} />
-                            </ActionButton>
-                            <ActionButton
-                                red
-                                data-tooltip="Отозвать"
-                                onClick={() => this.props.onCancelClick(info.delegatee)}
-                            >
-                                <ActionIcon name="cross" size={12} />
-                            </ActionButton>
-                        </Action>
-                    </DelegationLine>
-                ))}
+                {data.length ?
+                    <Fragment>
+                        <DelegationsHeader>
+                            <Delegatee>Кому</Delegatee>
+                            <Value>Силы Голоса</Value>
+                            <Action>Действия</Action>
+                        </DelegationsHeader>
+                        <DelegationLines>
+                            {data.map(info => (
+                                <DelegationLine key={info.id}>
+                                    <Delegatee>
+                                        <Link to={'@' + info.delegatee} onClick={this._onLinkClick}>
+                                            {info.delegatee}
+                                        </Link>
+                                    </Delegatee>
+                                    <Value>
+                                        {vestsToSteem(info.vesting_shares, globalProps)}
+                                        {' GOLOS'}
+                                    </Value>
+                                    <Action>
+                                        <ActionButton
+                                            data-tooltip="Изменить"
+                                            onClick={() => this.props.onEditClick(info.delegatee)}
+                                        >
+                                            <Icon name="pen" size={14}/>
+                                        </ActionButton>
+                                        <ActionButton
+                                            red
+                                            data-tooltip="Отозвать"
+                                            onClick={() => this.props.onCancelClick(info.delegatee)}
+                                        >
+                                            <Icon name="cross" size={12}/>
+                                        </ActionButton>
+                                    </Action>
+                                </DelegationLine>
+                            ))}
+                        </DelegationLines>
+                    </Fragment>
+                    :
+                    <EmptyList>Список пуст</EmptyList>
+                }
             </Root>
         );
     }

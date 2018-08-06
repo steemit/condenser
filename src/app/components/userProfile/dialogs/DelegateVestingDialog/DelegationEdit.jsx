@@ -1,5 +1,7 @@
 import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import is from 'styled-is';
 import Icon from 'src/app/components/golos-ui/Icon';
 import Slider from 'src/app/components/golos-ui/Slider';
 import ComplexInput from 'src/app/components/golos-ui/ComplexInput';
@@ -43,17 +45,23 @@ const Footer = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 4px 0;
 `;
 
 const Button = styled.button.attrs({ type: 'button' })`
     display: inline-flex;
     align-items: center;
+    flex-basis: 140px;
+    padding: 4px 0;
     margin: 0 16px;
     font-size: 13px;
     color: #aaa;
     transition: color 0.15s;
     cursor: pointer;
+    outline: none;
+    
+    ${is('right')`
+        justify-content: flex-end;
+    `}
 
     &:hover {
         color: #333;
@@ -71,11 +79,17 @@ const DelegationEditButtonIcon = Icon.extend`
 
 const DelegationEditSplitter = styled.div`
     width: 1px;
-    height: 14px;
+    height: 16px;
     background: #bbb;
 `;
 
 export default class DelegationEdit extends PureComponent {
+    propTypes = {
+        value: PropTypes.number.isRequired,
+        max: PropTypes.number.isRequired,
+        onSave: PropTypes.func.isRequired,
+    };
+
     constructor(props) {
         super(props);
 
@@ -94,7 +108,7 @@ export default class DelegationEdit extends PureComponent {
 
         return (
             <Root>
-                <Overlay onClick={this._onDelegationOverlayClick} />
+                <Overlay onClick={this.props.onCancel} />
                 <EditBlock>
                     <Field>
                         <ComplexInput
@@ -111,20 +125,19 @@ export default class DelegationEdit extends PureComponent {
                     <Field>
                         <Slider
                             value={value || 0}
+                            min={10}
                             max={max}
                             hideHandleValue
                             onChange={this._onDelegationSliderChange}
                         />
                     </Field>
                     <Footer>
-                        <Button
-                            disabled={isError}
-                        >
+                        <Button disabled={isError} right={1} onClick={isError ? null : this._onSaveClick}>
                             Сохранить
                             <DelegationEditButtonIcon name="check" right={1} size={16} />
                         </Button>
                         <DelegationEditSplitter />
-                        <Button onClick={this._onDelegationEditCancel}>
+                        <Button onClick={this.props.onCancel}>
                             <DelegationEditButtonIcon name="cross" size={13} />
                             Отмена
                         </Button>
@@ -140,19 +153,20 @@ export default class DelegationEdit extends PureComponent {
         });
     };
 
-    _onDelegationOverlayClick = () => {
-        this._onDelegationEditCancel();
-    };
-
-    _onDelegationEditCancel = () => {
-        this.setState({
-            editAccountName: null,
-        });
-    };
-
     _onValueChange = e => {
         this.setState({
             inputValue: e.target.value.replace(/[^\d .]+/g, '').replace(/,/g, '.'),
         });
+    };
+
+    _onSaveClick = () => {
+        const { max } = this.props;
+        const { inputValue } = this.state;
+
+        const { value, error } = parseAmount2(inputValue, max, false, 1000);
+
+        if (!error) {
+            this.props.onSave(value);
+        }
     };
 }

@@ -97,3 +97,5 @@ export const TERMS_OF_SERVICE_URL = 'https://golos.io/legal/terms_of_service.pdf
 export const PRIVACY_POLICY_URL = 'https://golos.io/ru--konfidenczialxnostx/@golos/politika-konfidencialnosti';
 export const WIKI_URL = 'https://wiki.golos.io/';
 export const MARKDOWN_STYLING_GUIDE_URL = 'https://golos.io/ru--golos/@on0tole/osnovy-oformleniya-postov-na-golose-polnyi-kurs-po-rabote-s-markdown';
+
+export const MIN_VOICE_POWER = 3;

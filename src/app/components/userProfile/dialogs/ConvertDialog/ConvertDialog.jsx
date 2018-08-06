@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import is from 'styled-is';
 import tt from 'counterpart';
+import { MIN_VOICE_POWER } from 'app/client_config';
 import transaction from 'app/redux/Transaction';
 import DialogFrame from 'app/components/dialogs/DialogFrame';
 import DialogManager from 'app/components/elements/common/DialogManager';
@@ -129,20 +130,22 @@ class ConvertDialog extends PureComponent {
         const { myAccount, globalProps } = this.props;
         const { target, amount, loader, disabled, amountInFocus, type, saveTo } = this.state;
 
+        let balance = null;
         let balanceString = null;
-        let balanceReal = null;
 
         if (type === TYPES.GOLOS) {
             balanceString = myAccount.get('balance');
+            balance = parseFloat(balanceString);
         } else if (type === TYPES.POWER) {
-            const { golos, gests } = getVesting(myAccount, globalProps);
-            balanceReal = gests;
-            balanceString = golos;
+            const { golos } = getVesting(myAccount, globalProps);
+
+            balance = Math.max(0, parseFloat(golos) - MIN_VOICE_POWER);
+            balanceString = balance.toFixed(3);
         } else if (type === TYPES.GBG) {
             balanceString = myAccount.get('sbd_balance');
+            balance = parseFloat(balanceString);
         }
 
-        const balance = parseFloat(balanceString);
         const balanceString2 = balanceString.match(/^[^\s]*/)[0];
 
         const { value, error } = parseAmount(amount, balance, !amountInFocus);
@@ -217,7 +220,7 @@ class ConvertDialog extends PureComponent {
                                     buttons={[{ id: type, title: TYPES_TRANSLATE[type] }]}
                                 />
                             </Section>
-                            {this._renderAdditionalSection(balanceReal)}
+                            {this._renderAdditionalSection(balance)}
                         </Body>
                         <Footer>
                             {error ? (
@@ -233,7 +236,7 @@ class ConvertDialog extends PureComponent {
         );
     }
 
-    _renderAdditionalSection(balanceReal) {
+    _renderAdditionalSection(balance) {
         const { globalProps } = this.props;
         const { type, target, saveTo, amount } = this.state;
 
@@ -264,10 +267,8 @@ class ConvertDialog extends PureComponent {
                     </Fragment>
                 );
             case TYPES.POWER:
-                const cur = Math.floor(
-                    steemToVests(parseFloat(amount.replace(/\s+/, '')), globalProps) * 1000000
-                );
-                const max = Math.floor(balanceReal * 1000000);
+                const cur = Math.round(parseFloat(amount.replace(/\s+/, '')) * 1000);
+                const max = Math.round(balance * 1000);
 
                 return (
                     <SliderWrapper>
@@ -454,7 +455,7 @@ class ConvertDialog extends PureComponent {
         let amount = '';
 
         if (value > 0) {
-            amount = vestsToSteem((value / 1000000).toFixed(6) + ' GESTS', this.props.globalProps);
+            amount = (value / 1000).toFixed(3);
         }
 
         this.setState({
@@ -510,7 +511,6 @@ function getVesting(account, props) {
     const availableVesting = vesting - delegated;
 
     return {
-        gests: availableVesting,
         golos: vestsToSteem(availableVesting.toFixed(6) + ' GESTS', props),
     };
 }

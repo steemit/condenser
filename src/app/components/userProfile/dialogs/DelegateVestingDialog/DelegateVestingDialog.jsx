@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import is from 'styled-is';
 import tt from 'counterpart';
+import { MIN_VOICE_POWER } from 'app/client_config';
 import transaction from 'app/redux/Transaction';
 import DialogFrame from 'app/components/dialogs/DialogFrame';
 import DialogManager from 'app/components/elements/common/DialogManager';
@@ -17,8 +18,6 @@ import DelegationsList from './DelegationsList';
 import { api } from 'golos-js';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import DelegationEdit from './DelegationEdit';
-
-const MIN_VESTING = 3;
 
 const TYPES = {
     DELEGATE: 'DELEGATE',
@@ -132,7 +131,7 @@ class DelegateVestingDialog extends PureComponent {
 
         const { golos } = getVesting(myAccount, globalProps);
 
-        const availableBalance = Math.max(0, Math.round((parseFloat(golos) - MIN_VESTING) * 1000));
+        const availableBalance = Math.max(0, Math.round((parseFloat(golos) - MIN_VOICE_POWER) * 1000));
         const availableBalanceString = (availableBalance / 1000).toFixed(3);
 
         const { value, error } = parseAmount2(amount, availableBalance, !amountInFocus, 1000);

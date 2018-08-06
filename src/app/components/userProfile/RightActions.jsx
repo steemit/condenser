@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router';
 import Icon from 'golos-ui/Icon';
 import DialogManager from 'app/components/elements/common/DialogManager';
 import TransferDialog from './dialogs/TransferDialog';
@@ -58,10 +59,12 @@ export default class RightActions extends PureComponent {
     render() {
         return (
             <Root>
-                <Action>
-                    <ActionIcon name="wallet" />
-                    <ActionTitle>Купить или продать</ActionTitle>
-                </Action>
+                <Link to="/market">
+                    <Action>
+                        <ActionIcon name="wallet" />
+                        <ActionTitle>Купить или продать</ActionTitle>
+                    </Action>
+                </Link>
                 <Action onClick={this._onTransferClick}>
                     <ActionIcon name="coins" />
                     <ActionTitle>Передать</ActionTitle>

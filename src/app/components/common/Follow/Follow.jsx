@@ -12,6 +12,10 @@ import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import Button from 'golos-ui/Button';
 import Icon from 'golos-ui/Icon';
 
+const ButtonStyled = Button.extend`
+    margin-right: 8px;
+`;
+
 export default class Follow extends Component {
     static propTypes = {
         following: PropTypes.string,
@@ -66,9 +70,9 @@ export default class Follow extends Component {
         // Show follow preview for new users
         if (!follower || !following)
             return (
-                <Button onClick={this.followLoggedOut}>
+                <ButtonStyled onClick={this.followLoggedOut}>
                     <Icon name="subscribe" height="10" width="14" />{tt('g.follow')}
-                </Button>
+                </ButtonStyled>
             );
 
         // Can't follow or ignore self
@@ -81,30 +85,30 @@ export default class Follow extends Component {
             <Fragment>
                 {showFollow && followingWhat !== 'blog' ? 
                     (
-                        <Button disabled={busy} onClick={this.follow}>
+                        <ButtonStyled disabled={busy} onClick={this.follow}>
                             <Icon name="subscribe" height="10" width="14" />
                             {tt('g.follow')}
-                        </Button>
+                        </ButtonStyled>
                     )
                     :
                     (
-                        <Button disabled={busy} light onClick={this.unfollow}>
+                        <ButtonStyled disabled={busy} light onClick={this.unfollow}>
                             <Icon name="cross" height="10" width="10" />
                             {tt('g.unfollow')}
-                        </Button>
+                        </ButtonStyled>
                     )}
 
                 {showMute && followingWhat !== 'ignore' ? 
                     (
-                        <Button disabled={busy} onClick={this.ignore}>
+                        <ButtonStyled disabled={busy} onClick={this.ignore}>
                             {tt('g.mute')}
-                        </Button>
+                        </ButtonStyled>
                     )
                     :
                     (
-                        <Button disabled={busy} light onClick={this.unignore}>
+                        <ButtonStyled disabled={busy} light onClick={this.unignore}>
                             {tt('g.unmute')}
-                        </Button>
+                        </ButtonStyled>
                     )}
 
                 {children && <span>&nbsp;&nbsp;{children}</span>}

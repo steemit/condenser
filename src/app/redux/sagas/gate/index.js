@@ -1,1 +1,1 @@
-export { default } from './gate'
+export { default } from './api/gate';

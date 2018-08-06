@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import is from 'styled-is';
 
 import proxifyImageUrl from 'app/utils/ProxifyUrl';
 
@@ -15,6 +16,10 @@ const Wrapper = styled.div`
     height: ${({ size }) => size}px;
     width: ${({ size }) => size}px;
 
+    ${is('icon')`
+        margin-left: 6px;
+    `}
+
     background-size: cover;
     background-repeat: no-repeat;
     background-position: 50% 50%;
@@ -22,6 +27,7 @@ const Wrapper = styled.div`
     background-color: #fff;
     background-image: ${({ backgroundUrl }) => `url(${backgroundUrl})`};
 `;
+
 
 const AvatarBadge = styled.div`
     display: flex;
@@ -57,7 +63,7 @@ export default class Avatar extends PureComponent {
             : null;
 
         return (
-            <Wrapper backgroundUrl={backgroundUrl} size={size}>
+            <Wrapper backgroundUrl={backgroundUrl} size={size} icon={icon ? 1 : 0}>
                 {icon && (
                     <AvatarBadge>
                         <Icon name={icon.name} width={icon.width} height={icon.height} />

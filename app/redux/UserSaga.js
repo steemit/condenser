@@ -134,8 +134,6 @@ function* usernamePasswordLogin(action) {
         yield fork(loadFollows, 'getFollowingAsync', username, 'blog');
         yield fork(loadFollows, 'getFollowingAsync', username, 'ignore');
         // if (process.env.BROWSER) {
-            // yield call(watchOnPings, current);
-
             // const notification_channel_created = yield select(state =>
             //     state.user.get('notification_channel_created')
             // );

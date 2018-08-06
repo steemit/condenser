@@ -1,24 +1,37 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
+import { activityContentSelector } from 'src/app/redux/selectors/userProfile/activity';
+import { notifyGetHistory } from 'src/app/redux/actions/gate';
 import { ActivityShow } from 'src/app/components/userProfile';
 
-class ActivityContent extends Component {
-    render() {
-        const { account } = this.props;
-
-        return <ActivityShow account={account}/>;
-    }
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators(
+        {
+            notifyGetHistory,
+        },
+        dispatch
+    );
 }
 
-export default connect(
-    // mapStateToProps
-    (state, ownProps) => {
-        const { accountName } = ownProps.params;
-        const account = state.global.getIn(['accounts', accountName]).toJS();
-        return { account, ...ownProps };
-    },
-    // mapDispatchToProps
-    dispatch => ({})
-)(ActivityContent);
+@connect(
+    activityContentSelector,
+    mapDispatchToProps
+)
+export default class ActivityContent extends Component {
+    componentDidMount() {
+        this.props.notifyGetHistory({
+            types: 'all',
+            skip: 0,
+            limit: 15,
+        });
+    }
+
+    render() {
+        const { notifies } = this.props;
+
+        return <ActivityShow notifies={notifies} />;
+    }
+}

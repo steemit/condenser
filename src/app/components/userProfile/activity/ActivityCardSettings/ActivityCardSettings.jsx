@@ -91,7 +91,7 @@ export default class ActivityCardSettings extends PureComponent {
                                 </GroupField>
                             )}
                         </Field>
-                        <pre>{JSON.stringify(values, 0, 2)}</pre>
+                        {/* <pre>{JSON.stringify(values, 0, 2)}</pre> */}
                     </form>
                 )}
             </Form>

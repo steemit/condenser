@@ -17,6 +17,7 @@ import RootRoute from 'app/RootRoute';
 import {createStore, applyMiddleware, compose} from 'redux';
 import { browserHistory } from 'react-router';
 import { useScroll } from 'react-router-scroll';
+import thunk from 'redux-thunk';
 import createSagaMiddleware from 'redux-saga';
 import { syncHistoryWithStore } from 'react-router-redux';
 import rootReducer from 'app/redux/RootReducer';
@@ -199,11 +200,11 @@ export function clientRender(initialState) {
         sagaMiddleware = createSagaMiddleware({ sagaMonitor: monitor });
         const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
         middleware = composeEnhancers(
-            applyMiddleware(sagaMiddleware)
+            applyMiddleware(thunk, sagaMiddleware)
         );
     } else {
         sagaMiddleware = createSagaMiddleware();
-        middleware = applyMiddleware(sagaMiddleware);
+        middleware = applyMiddleware(thunk, sagaMiddleware);
     }
     
     store = createStore(rootReducer, initialState, middleware);

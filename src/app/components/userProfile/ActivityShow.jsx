@@ -5,39 +5,31 @@ import styled from 'styled-components';
 import Card, { CardContent } from 'golos-ui/Card';
 import { TabContainer, Tabs } from 'golos-ui/Tabs';
 
-import ActivityItem from './activity/ActivityItem';
-
-const Tab2 = () => {
-    return <div>This is tab 2</div>;
-};
+import ActivityList from './activity/ActivityList';
 
 export default class ActivityShow extends PureComponent {
 
-    static propTypes = {
-        account: PropTypes.object,
-    }
-
     render() {
-        const { account } = this.props;
+        const { accounts, notifies } = this.props;
 
         return (
             <Card auto>
                 <Tabs activeTab={{ id: 'tab1' }}>
                     <CardContent>
                         <TabContainer id="tab1" title="Все">
-                            <ActivityItem account={account} />
+                            <ActivityList notifies={notifies} />
                         </TabContainer>
                         <TabContainer id="tab2" title="Награды">
-                            <Tab2 />
+                            <ActivityList notifies={notifies} />
                         </TabContainer>
                         <TabContainer id="tab3" title="Ответы">
-                            <Tab2 />
+                            <ActivityList notifies={notifies} />
                         </TabContainer>
                         <TabContainer id="tab4" title="Социальные">
-                            <Tab2 />
+                            <ActivityList notifies={notifies} />
                         </TabContainer>
                         <TabContainer id="tab5" title="Упоминания">
-                            <Tab2 />
+                            <ActivityList notifies={notifies} />
                         </TabContainer>
                     </CardContent>
                 </Tabs>

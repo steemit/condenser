@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
+import tt from 'counterpart';
 import normalizeProfile from 'app/utils/NormalizeProfile';
 
 import Avatar from 'src/app/components/common/Avatar';
@@ -11,6 +12,10 @@ const Wrapper = styled.div`
     display: flex;
     flex: 1;
     align-items: center;
+
+    :not(:last-child) {
+        margin-bottom: 30px;
+    }
 `;
 
 const ActivityDesc = styled.div`
@@ -34,24 +39,23 @@ const ActivityTop = styled.div`
 
 const ActivityDate = styled.div`
     font-size: 12px;
-    color: #757575;
+    color: #959595;
 `;
 
 const ActivityText = styled.div`
-    color: #757575;
+    color: #959595;
     font-family: ${({ theme }) => theme.fontFamily};
     font-size: 16px;
-    font-weight: 300;
 `;
 
 export default class ActivityItem extends Component {
     static propTypes = {
-        account: PropTypes.object,
+        // account: PropTypes.object,
     };
 
     render() {
-        const { account } = this.props;
-        const { profile_image } = normalizeProfile(account);
+        const { notify } = this.props;
+        // const { profile_image } = normalizeProfile(account);
 
         const icon = {
             name: 'subscribe_small',
@@ -61,12 +65,12 @@ export default class ActivityItem extends Component {
 
         return (
             <Wrapper>
-                <Avatar avatarUrl={profile_image} size={40} icon={icon} />
+                <Avatar avatarUrl={null} size={40} icon={icon} />
                 <ActivityDesc>
                     <ActivityTop>
                         <AuthorName href={`/@test`}>Ivanov Dima</AuthorName>
                         <ActivityDate>
-                            <TimeAgoWrapper date={new Date()} />
+                            <TimeAgoWrapper date={notify.get('createdAt')} />
                         </ActivityDate>
                     </ActivityTop>
                     <ActivityText>Ваш пост “Блокчейн” заработал больше 100$.</ActivityText>

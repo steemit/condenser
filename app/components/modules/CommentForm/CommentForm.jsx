@@ -228,7 +228,7 @@ class CommentForm extends React.Component {
             meta.tags = jsonMetadata.tags;
         } else {
             try {
-                meta.tags = JSON.parse(params.json_metadata).tags;
+                meta.tags = JSON.parse(params.json_metadata).tags || [];
             } catch (err) {}
         }
 

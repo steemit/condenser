@@ -519,8 +519,6 @@ export default connect(
     },
     dispatch => ({
         delegate(operation, callback) {
-            console.log('OPERATION', operation);
-
             dispatch(
                 transaction.actions.broadcastOperation({
                     type: 'delegate_vesting_shares',

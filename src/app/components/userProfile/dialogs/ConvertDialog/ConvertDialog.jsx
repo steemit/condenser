@@ -419,8 +419,6 @@ class ConvertDialog extends PureComponent {
             };
         }
 
-        console.log('call transfer', operationType, operation);
-
         this.props.transfer(operationType, operation, err => {
             if (err) {
                 this.setState({

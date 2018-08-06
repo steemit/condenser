@@ -1,5 +1,5 @@
 import { Map } from 'immutable';
-
+import { LIQUID_TICKER, DEBT_TICKER } from 'app/client_config';
 import reducer, {
     receiveOpenOrders,
     toggleOpenOrdersSort,
@@ -14,8 +14,8 @@ const someOpenOrders = [
         orderid: 1512431634,
         for_sale: 3000,
         sell_price: {
-            base: '3.000 STEEM',
-            quote: '1.998 SBD',
+            base: '3.000 ' + LIQUID_TICKER,
+            quote: '1.998 ' + DEBT_TICKER,
         },
         real_price: '0.66600000000000004',
         rewarded: false,
@@ -28,8 +28,8 @@ const someOpenOrders = [
         orderid: 1512431689,
         for_sale: 7000,
         sell_price: {
-            base: '7.000 STEEM',
-            quote: '4.578 SBD',
+            base: '7.000 ' + LIQUID_TICKER,
+            quote: '4.578 ' + DEBT_TICKER,
         },
         real_price: '0.65400000000000003',
         rewarded: false,
@@ -42,8 +42,8 @@ const someOpenOrders = [
         orderid: 1512431835,
         for_sale: 3000,
         sell_price: {
-            base: '3.000 STEEM',
-            quote: '1.953 SBD',
+            base: '3.000 ' + LIQUID_TICKER,
+            quote: '1.953 ' + DEBT_TICKER,
         },
         real_price: '0.65100000000000002',
         rewarded: false,
@@ -56,8 +56,8 @@ const someOpenOrders = [
         orderid: 1512492109,
         for_sale: 507,
         sell_price: {
-            base: '0.507 SBD',
-            quote: '1.000 STEEM',
+            base: '0.507 ' + DEBT_TICKER,
+            quote: '1.000 ' + LIQUID_TICKER,
         },
         real_price: '0.50700000000000001',
         rewarded: false,
@@ -70,8 +70,8 @@ const someOpenOrders = [
         orderid: 1512492144,
         for_sale: 507,
         sell_price: {
-            base: '0.507 SBD',
-            quote: '1.000 STEEM',
+            base: '0.507 ' + DEBT_TICKER,
+            quote: '1.000 ' + LIQUID_TICKER,
         },
         real_price: '0.50700000000000001',
         rewarded: false,

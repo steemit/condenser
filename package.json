@@ -9,7 +9,7 @@
   "main": "index.js",
   "scripts": {
     "build": "NODE_ENV=production webpack --config ./webpack/prod.config.js && rm -rf ./lib && babel src --out-dir lib -Dq",
-    "test": "jest && nsp check --output summary",
+    "test": "jest",
     "eslint": "LIST=`git diff-index --name-only HEAD | grep .*\\.js | grep -v json`; if [ \"$LIST\" ]; then eslint $LIST; fi",
     "fmt": "prettier --config .prettierrc --write 'src/**/*.js*'",
     "precommit": "lint-staged",

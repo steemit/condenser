@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import styled from 'styled-components';
+import is from 'styled-is';
 import { Link } from 'react-router';
 import Icon from 'golos-ui/Icon';
 import DialogManager from 'app/components/elements/common/DialogManager';
@@ -33,9 +34,9 @@ const Action = styled.div`
     transition: color 0.15s;
     cursor: pointer;
 
-    &:last-child {
+    ${is('last')`
         border-bottom: none;
-    }
+    `}
 
     &:hover {
         color: #000;
@@ -77,7 +78,7 @@ export default class RightActions extends PureComponent {
                     <ActionIcon name="voice" />
                     <ActionTitle>Делегировать/уменьшить СГ</ActionTitle>
                 </Action>
-                <Action onClick={this._onConvertClick}>
+                <Action last onClick={this._onConvertClick}>
                     <ActionIcon name="refresh" />
                     <ActionTitle>Конвертировать</ActionTitle>
                 </Action>

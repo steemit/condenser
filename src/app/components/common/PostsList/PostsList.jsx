@@ -42,11 +42,11 @@ const EntryWrapper = styled.div`
 
 class PostsList extends PureComponent {
     static propTypes = {
+        pageAccountName: PropTypes.string.isRequired,
         content: PropTypes.instanceOf(immutable.Map),
         posts: PropTypes.instanceOf(immutable.List),
         layout: PropTypes.oneOf(['list', 'grid']),
         allowInlineReply: PropTypes.bool,
-        allowInlineEdit: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -71,7 +71,7 @@ class PostsList extends PureComponent {
     }
 
     render() {
-        const { posts, category, layout, allowInlineReply, allowInlineEdit } = this.props;
+        const { posts, category, layout, allowInlineReply } = this.props;
 
         const isGrid = category === 'blog' && layout === 'grid';
         const EntryComponent = category === 'blog' ? PostCard : CommentCard;
@@ -84,7 +84,6 @@ class PostsList extends PureComponent {
                             permLink={permLink}
                             grid={isGrid}
                             allowInlineReply={allowInlineReply}
-                            allowInlineEdit={allowInlineEdit}
                             onClick={this._onEntryClick}
                         />
                     </EntryWrapper>
@@ -215,7 +214,7 @@ export default connect(
             myAccount: state.user.getIn(['current', 'username']),
             globalStatus: state.global.get('status'),
             layout: state.profile ? state.profile.get('layout') : 'list',
-            posts: state.global.getIn(['accounts', props.account, props.category]),
+            posts: state.global.getIn(['accounts', props.pageAccountName, props.category]),
         };
     },
     dispatch => ({

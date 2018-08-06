@@ -152,11 +152,10 @@ const IconEdit = Icon.extend`
 class CommentCard extends PureComponent {
     static propTypes = {
         permLink: PropTypes.string,
-        myAccount: PropTypes.string,
+        myAccountName: PropTypes.string,
         data: PropTypes.object,
         grid: PropTypes.bool,
         allowInlineReply: PropTypes.bool,
-        allowInlineEdit: PropTypes.bool,
     };
 
     state = {
@@ -174,11 +173,11 @@ class CommentCard extends PureComponent {
     }
 
     _getMyVote(props) {
-        const { data, myAccount } = props;
+        const { data, myAccountName } = props;
         const votes = data.get('active_votes');
 
         for (let vote of votes) {
-            if (vote.get('voter') === myAccount) {
+            if (vote.get('voter') === myAccountName) {
                 const v = vote.toJS();
                 v.weight = parseInt(v.weight || 0, 10);
                 return v;
@@ -231,7 +230,7 @@ class CommentCard extends PureComponent {
     }
 
     _renderBody() {
-        const { allowInlineEdit } = this.props;
+        const { myAccountName } = this.props;
         const { edit } = this.state;
 
         let title = this._content.title;
@@ -242,6 +241,8 @@ class CommentCard extends PureComponent {
             parentLink = `/${this._data.category}/@${this._data.parent_author}/${this._data.parent_permlink}`;
         }
 
+        const showEditButton = myAccountName === this._data.author;
+
         return (
             <Body>
                 <Title>
@@ -250,7 +251,7 @@ class CommentCard extends PureComponent {
                     <TitleLink to={parentLink} onClick={this._onTitleClick}>
                         {title}
                     </TitleLink>
-                    {allowInlineEdit && !edit ? (
+                    {showEditButton && !edit ? (
                         <IconEdit
                             name="pen"
                             size={20}
@@ -279,12 +280,12 @@ class CommentCard extends PureComponent {
     }
 
     _renderFooter() {
-        const { data, myAccount, allowInlineReply } = this.props;
+        const { data, myAccountName, allowInlineReply } = this.props;
 
         return (
             <Footer>
-                <VotePanel data={data} me={myAccount} onChange={this._onVoteChange} />
-                {allowInlineReply ? (
+                <VotePanel data={data} me={myAccountName} onChange={this._onVoteChange} />
+                {allowInlineReply && this._data.author !== myAccountName ? (
                     <Fragment>
                         <Filler />
                         <Button light onClick={this._onReplyClick}>
@@ -373,7 +374,7 @@ class CommentCard extends PureComponent {
 
         if (await confirmVote(myVote, percent)) {
             this.props.onVote(percent, {
-                myAccount: props.myAccount,
+                myAccountName: props.myAccountName,
                 author: props.data.get('author'),
                 permlink: props.data.get('permlink'),
             });
@@ -390,17 +391,17 @@ class CommentCard extends PureComponent {
 export default connect(
     (state, props) => {
         return {
-            myAccount: state.user.getIn(['current', 'username']),
+            myAccountName: state.user.getIn(['current', 'username']),
             data: state.global.getIn(['content', props.permLink]),
         };
     },
     dispatch => ({
-        onVote: (percent, { myAccount, author, permlink }) => {
+        onVote: (percent, { myAccountName, author, permlink }) => {
             dispatch(
                 transaction.actions.broadcastOperation({
                     type: 'vote',
                     operation: {
-                        voter: myAccount,
+                        voter: myAccountName,
                         author,
                         permlink,
                         weight: percent * 10000,

@@ -14,9 +14,9 @@ const Loader = styled(LoadingIndicator)`
 
 class BlogContent extends Component {
     render() {
-        const { currentAccount } = this.props;
+        const { pageAccount } = this.props;
 
-        const posts = currentAccount.get('blog');
+        const posts = pageAccount.get('blog');
 
         if (!posts) {
             return <Loader type="circle" center size={40} />;
@@ -28,7 +28,7 @@ class BlogContent extends Component {
 
         return (
             <PostsList
-                account={currentAccount.get('name')}
+                pageAccountName={pageAccount.get('name')}
                 order="by_author"
                 category="blog"
                 //showSpam TODO
@@ -37,7 +37,7 @@ class BlogContent extends Component {
     }
 
     _renderCallOut() {
-        const { isOwner, accountName } = this.props;
+        const { isOwner, pageAccount } = this.props;
 
         return (
             <InfoBlock>
@@ -52,7 +52,7 @@ class BlogContent extends Component {
                     </Fragment>
                 ) : (
                     tt('user_profile.user_hasnt_started_bloggin_yet', {
-                        name: accountName,
+                        name: pageAccount.get('name'),
                     })
                 )}
             </InfoBlock>
@@ -61,13 +61,12 @@ class BlogContent extends Component {
 }
 
 export default connect((state, props) => {
-    const accountName = props.params.accountName.toLowerCase();
-    const currentAccount = state.global.getIn(['accounts', accountName]);
-    const isOwner = state.user.getIn(['current', 'username'], null) === accountName;
+    const pageAccountName = props.params.accountName.toLowerCase();
+    const pageAccount = state.global.getIn(['accounts', pageAccountName]);
+    const isOwner = state.user.getIn(['current', 'username']) === pageAccountName;
 
     return {
-        accountName,
-        currentAccount,
+        pageAccount,
         isOwner,
     };
 })(BlogContent);

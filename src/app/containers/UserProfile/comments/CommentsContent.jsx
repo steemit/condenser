@@ -13,31 +13,29 @@ const Loader = styled(LoadingIndicator)`
 
 class CommentsContent extends Component {
     render() {
-        const { currentAccount } = this.props;
+        const { pageAccount, isOwner } = this.props;
 
-        const posts = currentAccount.get('posts') || currentAccount.get('comments');
+        const posts = pageAccount.get('posts') || pageAccount.get('comments');
 
         if (!posts) {
-            return (
-                <Loader type="circle" center size={40} />
-            );
+            return <Loader type="circle" center size={40} />;
         }
+
+        const pageUserName = pageAccount.get('name');
 
         if (!posts.size) {
             return (
                 <InfoBlock>
-                    {tt('user_profile.user_hasnt_made_any_posts_yet', {
-                        name: currentAccount.get('name'),
-                    })}
+                    Похоже, что {pageUserName} ещё не оставил ни одного комментария!
                 </InfoBlock>
             );
         }
 
         return (
             <PostsList
-                account={currentAccount.get('name')}
+                pageAccountName={pageUserName}
                 category="comments"
-                allowInlineEdit
+                allowInlineReply={!isOwner}
                 //order="by_author"
                 //showSpam TODO
             />
@@ -46,10 +44,12 @@ class CommentsContent extends Component {
 }
 
 export default connect((state, props) => {
-    const accountName = props.params.accountName.toLowerCase();
-    const currentAccount = state.global.getIn(['accounts', accountName]);
+    const pageAccountName = props.params.accountName.toLowerCase();
+    const pageAccount = state.global.getIn(['accounts', pageAccountName]);
+    const isOwner = state.user.getIn(['current', 'username']) === pageAccountName;
 
     return {
-        currentAccount,
+        pageAccount,
+        isOwner
     };
 })(CommentsContent);

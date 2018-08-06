@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
-import Callout from 'app/components/elements/Callout';
+import InfoBlock from 'src/app/components/common/InfoBlock';
 
 import PostsList from 'src/app/components/common/PostsList';
 import styled from 'styled-components';
@@ -23,11 +23,11 @@ class RepliesContent extends Component {
 
         if (!posts.size) {
             return (
-                <Callout>
+                <InfoBlock>
                     {tt('user_profile.user_hasnt_had_any_replies_yet', {
                         name: currentAccount.get('name'),
                     })}
-                </Callout>
+                </InfoBlock>
             );
         }
 

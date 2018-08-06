@@ -6,17 +6,10 @@ import { Link } from 'react-router';
 
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import PostsList from 'src/app/components/common/PostsList';
+import InfoBlock from 'src/app/components/common/InfoBlock';
 
 const Loader = styled(LoadingIndicator)`
     margin-top: 30px;
-`;
-
-const InfoBlock = styled.div`
-    min-height: 160px;
-    padding: 15px 18px;
-    border-radius: 6px;
-    background-color: #fff;
-    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.06);
 `;
 
 class BlogContent extends Component {

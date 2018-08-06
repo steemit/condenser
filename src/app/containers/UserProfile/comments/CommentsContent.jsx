@@ -4,8 +4,8 @@ import styled from 'styled-components';
 import tt from 'counterpart';
 
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
-import Callout from 'app/components/elements/Callout';
 import PostsList from 'src/app/components/common/PostsList';
+import InfoBlock from 'src/app/components/common/InfoBlock';
 
 const Loader = styled(LoadingIndicator)`
     margin-top: 30px;
@@ -25,11 +25,11 @@ class CommentsContent extends Component {
 
         if (!posts.size) {
             return (
-                <Callout>
+                <InfoBlock>
                     {tt('user_profile.user_hasnt_made_any_posts_yet', {
                         name: currentAccount.get('name'),
                     })}
-                </Callout>
+                </InfoBlock>
             );
         }
 

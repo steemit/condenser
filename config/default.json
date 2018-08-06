@@ -137,5 +137,5 @@
   "is_sandbox": false,
   "openexchangerates_app_id": "app id",
   "wss_push_service_url": "url",
-  "gate_service_url": "url"
+  "gate_service_url": "ws://95.216.154.157:3000"
 }

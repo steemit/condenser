@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import styled from 'styled-components';
 import PieChart from 'src/app/components/common/PieChart';
-import CollapsingCard from '../golos-ui/CollapsingCard/CollapsingCard';
+import CollapsingCard from 'src/app/components/golos-ui/CollapsingCard/CollapsingCard';
 
 const Body = styled.div``;
 

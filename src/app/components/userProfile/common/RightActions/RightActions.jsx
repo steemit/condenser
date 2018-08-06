@@ -3,10 +3,10 @@ import styled from 'styled-components';
 import { Link } from 'react-router';
 import Icon from 'golos-ui/Icon';
 import DialogManager from 'app/components/elements/common/DialogManager';
-import TransferDialog from './dialogs/TransferDialog';
-import SafeDialog from './dialogs/SafeDialog';
-import ConvertDialog from './dialogs/ConvertDialog';
-import DelegateVestingDialog from './dialogs/DelegateVestingDialog';
+import TransferDialog from 'src/app/components/userProfile/dialogs/TransferDialog';
+import SafeDialog from 'src/app/components/userProfile/dialogs/SafeDialog';
+import ConvertDialog from 'src/app/components/userProfile/dialogs/ConvertDialog';
+import DelegateVestingDialog from 'src/app/components/userProfile/dialogs/DelegateVestingDialog';
 
 const Root = styled.div`
     margin-bottom: 18px;

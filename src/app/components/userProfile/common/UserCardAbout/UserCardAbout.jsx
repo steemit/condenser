@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import is from 'styled-is';
 import { Link } from 'react-router';
 
 import { FormattedDate } from 'react-intl';
@@ -109,8 +110,22 @@ const UserCardBio = styled.div`
     color: #7d7d7d;
 `;
 
+const SocialBlock = CardTitle.extend`
+    margin: 0 -4px;
+`;
+
 const SocialLink = styled(Link)`
+    padding: 0 10px;
     color: #333;
+
+    ${is('fb')`
+        padding-left: 14px;
+        padding-right: 6px;
+    `}
+`;
+
+const IconStyled = Icon.extend`
+    display: block;
 `;
 
 export default class UserCardAbout extends PureComponent {
@@ -196,20 +211,20 @@ export default class UserCardAbout extends PureComponent {
                     </CardContent>
                 )}
 
-                <CardTitle justify="space-between">
-                    <SocialLink to="#">
-                        <Icon name="facebook" width="13" height="24" />
+                <SocialBlock justify="space-between">
+                    <SocialLink fb to="#">
+                        <IconStyled name="facebook" width="13" height="24" />
                     </SocialLink>
                     <SocialLink to="#">
-                        <Icon name="vk" width="28" height="18" />
+                        <IconStyled name="vk" width="28" height="18" />
                     </SocialLink>
                     <SocialLink to="#">
-                        <Icon name="instagram" size="23" />
+                        <IconStyled name="instagram" size="23" />
                     </SocialLink>
                     <SocialLink to="#">
-                        <Icon name="twitter" width="26" height="22" />
+                        <IconStyled name="twitter" width="26" height="22" />
                     </SocialLink>
-                </CardTitle>
+                </SocialBlock>
             </Card>
         );
     }

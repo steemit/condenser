@@ -119,7 +119,6 @@ export default connect(
         return {
             json_metadata: state.global.getIn(['accounts', account, 'json_metadata']),
             hideIfDefault,
-            onClick,
         };
     }
 )(Userpic)

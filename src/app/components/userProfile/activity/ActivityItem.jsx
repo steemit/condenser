@@ -140,8 +140,6 @@ export default class ActivityItem extends Component {
                 };
         }
 
-        console.log(profile_image);
-
         return (
             <Wrapper>
                 <Avatar avatarUrl={profile_image} size={40} icon={icon} />

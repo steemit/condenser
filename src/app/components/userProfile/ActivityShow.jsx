@@ -20,16 +20,16 @@ export default class ActivityShow extends PureComponent {
                             <ActivityList notifies={notifies} accounts={accounts} />
                         </TabContainer>
                         <TabContainer id="tab2" title="Награды">
-                            <ActivityList notifies={notifies} />
+                            <ActivityList notifies={notifies}  accounts={accounts} />
                         </TabContainer>
                         <TabContainer id="tab3" title="Ответы">
-                            <ActivityList notifies={notifies} />
+                            <ActivityList notifies={notifies}  accounts={accounts} />
                         </TabContainer>
                         <TabContainer id="tab4" title="Социальные">
-                            <ActivityList notifies={notifies} />
+                            <ActivityList notifies={notifies}  accounts={accounts} />
                         </TabContainer>
                         <TabContainer id="tab5" title="Упоминания">
-                            <ActivityList notifies={notifies} />
+                            <ActivityList notifies={notifies}  accounts={accounts} />
                         </TabContainer>
                     </CardContent>
                 </Tabs>

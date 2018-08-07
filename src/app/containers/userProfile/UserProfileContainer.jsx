@@ -184,6 +184,15 @@ module.exports = {
             },
         },
         {
+            path: 'transfers',
+            getComponents(nextState, cb) {
+                cb(null, {
+                    content: require('./wallet/WalletContent').default,
+                    sidebarRight: require('../../components/userProfile/common/RightPanel').default,
+                });
+            },
+        },
+        {
             path: 'activity',
             getComponents(nextState, cb) {
                 cb(null, {

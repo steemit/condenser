@@ -1,7 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import is from 'styled-is';
 
 import Flex from 'golos-ui/Flex';
 
@@ -12,7 +10,7 @@ const Card = styled(Flex)`
 
     border-radius: 6px;
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.06);
-    background-color: #ffffff;
+    background-color: #fff;
 
     overflow: hidden;
 
@@ -30,9 +28,9 @@ export const CardTitle = styled(Flex)`
     align-items: center;
 
     padding: 0 20px;
-    height: 50px;
+    height: 51px;
 
-    color: #333333;
+    color: #333;
     font-family: ${({ theme }) => theme.fontFamily};
     font-size: 14px;
     font-weight: 500;
@@ -54,7 +52,7 @@ export const CardDivider = styled.div`
     display: flex;
     flex: 1;
     height: 1px;
-    background: #F2F2F2;
+    background: #f2f2f2;
 `;
 
 export const CardRow = styled(Flex)`
@@ -68,7 +66,7 @@ CardRow.defaultProps = {
 
 export const CardColumn = styled(Flex)`
     position: relative;
-    background-color: #ffffff;
+    background-color: #fff;
     flex: 1;
     overflow: hidden;
 

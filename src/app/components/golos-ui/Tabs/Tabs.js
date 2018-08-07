@@ -7,17 +7,17 @@ import { default as StyledTab } from 'golos-ui/Tab';
 
 const TabsList = styled.ul`
     padding-left: 0;
-    list-style: none;
     margin: 0;
+    list-style: none;
 `;
 
 const activeStyles = `
-    transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
     cursor: default;
 `;
 
 const TabTitleItem = styled(StyledTab)`
-    transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
 
     ${({ active }) => active && activeStyles}
@@ -32,7 +32,7 @@ TabTitleItem.defaultProps = {
 const TabActiveBorder = styled.div`
     position: absolute;
     bottom: -1px;
-    transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
     will-change: left, width;
 
     ${({ activeTab }) =>
@@ -70,9 +70,9 @@ const TabActiveBorder = styled.div`
 
 const TabsContainer = styled.div`
     position: relative;
+    padding: 0 14px;
     border-bottom: 1px solid #e9e9e9;
-
-    padding: 0 20px;
+    user-select: none;
 `;
 
 class Tabs extends Component {

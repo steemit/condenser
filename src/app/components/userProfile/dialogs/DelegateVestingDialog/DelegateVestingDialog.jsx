@@ -154,7 +154,7 @@ class DelegateVestingDialog extends PureComponent {
 
         if (type === TYPES.DELEGATE) {
             buttons.push({
-                text: 'Конвертировать',
+                text: 'Делегировать',
                 primary: true,
                 disabled: !allow,
                 onClick: this._onOkClick,

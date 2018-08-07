@@ -76,6 +76,9 @@ const TabsContainer = styled.div`
 `;
 
 class Tabs extends Component {
+    static defaultProps = {
+        onChange: () => {}
+    };
 
     state = {
         tabsElements: [],
@@ -95,7 +98,7 @@ class Tabs extends Component {
         return context.tabs.map((tab, index) => (
             <TabTitleItem
                 key={index}
-                onClick={context.onClick(tab)}
+                onClick={this.onClick(context, tab)}
                 id={tab.id}
                 innerRef={ref => this.setTabRef(ref, tab)}
                 active={context.activeTab.id === tab.id}
@@ -103,6 +106,11 @@ class Tabs extends Component {
                 {tab.title}
             </TabTitleItem>
         ));
+    };
+
+    onClick = (context, tab) => () => {
+        this.props.onChange(tab);
+        context.onClick(tab);
     };
 
     render() {

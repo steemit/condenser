@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { Link } from 'react-router';
 
 import tt from 'counterpart';
 import normalizeProfile from 'app/utils/NormalizeProfile';
@@ -24,7 +25,7 @@ const ActivityDesc = styled.div`
     margin-left: 10px;
 `;
 
-const AuthorName = styled.div`
+const AuthorName = styled(Link)`
     font-size: 14px;
     font-weight: 500;
     color: #393636;
@@ -99,7 +100,10 @@ export default class ActivityItem extends Component {
         let msg = '';
         let icon = null;
 
-        const userName = notify.get('fromUsers').get(0).toLowerCase();
+        const userName = notify
+            .get('fromUsers')
+            .get(0)
+            .toLowerCase();
         const account = accounts.getIn([userName]);
         const { name, profile_image } = normalizeProfile(account.toJS());
 
@@ -142,10 +146,12 @@ export default class ActivityItem extends Component {
 
         return (
             <Wrapper>
-                <Avatar avatarUrl={profile_image} size={40} icon={icon} />
+                <Link to={`/@${userName}`}>
+                    <Avatar  avatarUrl={profile_image} size={40} icon={icon} />
+                </Link>
                 <ActivityDesc>
                     <ActivityTop>
-                        <AuthorName href={`/@test`}>{name || userName}</AuthorName>
+                        <AuthorName to={`/@${userName}`}>{name || userName}</AuthorName>
                         <ActivityDate>
                             <TimeAgoWrapper date={notify.get('createdAt')} />
                         </ActivityDate>

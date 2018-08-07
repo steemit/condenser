@@ -115,8 +115,20 @@ const Button = StyledButton.extend`
 
 const AvatarDropzone = styled(Dropzone)`
     position: absolute !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     height: 100%;
     width: 100%;
+    border: none !important;
+    cursor: pointer;
+    background: rgba(248, 248, 248, 0.8);
+    opacity: 0;
+    transition: opacity 0.5s;
+
+    &:hover {
+        opacity: 1;
+    }
 `;
 
 const IconCover = styled(Dropzone)`
@@ -125,6 +137,10 @@ const IconCover = styled(Dropzone)`
     right: 5px;
     overflow: hidden;
     cursor: pointer;
+`;
+
+const IconPicture = styled(Icon)`
+    color: #333;
 `;
 
 // Component
@@ -209,7 +225,9 @@ export default class UserHeader extends Component {
                                 onDrop={this.handleDropAvatar}
                                 multiple={false}
                                 accept="image/*"
-                            />
+                            >
+                                <IconPicture name="picture" size="20" />
+                            </AvatarDropzone>
                         )}
                     </UserProfileAvatar>
                     <Details>

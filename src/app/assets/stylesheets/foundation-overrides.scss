@@ -123,6 +123,9 @@ tbody tr:nth-child(even) {
     @extend .e-btn--black;
     min-width: 100px;
   }
+  h4 {
+    font-weight: bold;
+  }
 }
 
 .progress {

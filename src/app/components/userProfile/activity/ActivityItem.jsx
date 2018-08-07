@@ -99,12 +99,8 @@ export default class ActivityItem extends Component {
         let msg = '';
         let icon = null;
 
-        console.log(12313, accounts);
-        console.log(notify.toJS());
-
         const userName = notify.get('fromUsers').get(0);
         const account = accounts.getIn([userName]);
-        console.log(account,756756)
         const { profile_image } = normalizeProfile(account.toJS());
 
         switch (notify.get('eventType')) {

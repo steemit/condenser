@@ -188,7 +188,7 @@ module.exports = {
             getComponents(nextState, cb) {
                 cb(null, {
                     content: require('./activity/ActivityContent').default,
-                    sidebarRight: require('./activity/ActivitySidebar').default,
+                    sidebarRight: require('../../components/userProfile/common/RightPanel').default,
                 });
             },
         },

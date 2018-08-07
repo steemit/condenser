@@ -54,18 +54,101 @@ export default class ActivityItem extends Component {
     };
 
     render() {
-        const { notify } = this.props;
-        // const { profile_image } = normalizeProfile(account);
+        const { notify, accounts } = this.props;
 
-        const icon = {
-            name: 'subscribe_small',
-            width: 14,
-            height: 14
+        // Создала новый пост “Блокчейн”.
+        // У вас осталось 30 неизрасходованных апвоутов за…
+
+        // vote               // лайк (голос)
+        // Поставил лайк вашему посту “Блокчейн”.
+        // Ваш пост “Блокчейн” получил 3 дизлайкa.
+
+        // flag               // флаг (дизлайк, жалоба)
+        // Поставил дизлайк вашему посту “Блокчейн”.
+
+        // transfer           // перевод средств
+        // Отблагодарил вас за пост “Пигмалион” и перевел вам 1000$.
+        // Перевел на ваш счет 100$.
+
+        // reply              // ответ на пост или комментарий
+        // Ответил на комментарий к вашему посту “Пигмалион”.
+        // Ответил на ваш комментарий поста “Пигмалион”.
+
+        // subscribe          // подписка на блог
+        // Подписался на ваш блог.
+
+        // unsubscribe        // отписка от блога
+
+        // mention            // упоминание в посте, заголовке поста или в комменте (через @)
+        // Упомянул вас в посте “Пигмалион”.
+
+        // repost             // репост
+        // Cделал репост вашего поста “Блокчейн”.
+
+        // award              // награда пользователю (не реализованно в данной версии)
+        // Ваш пост “Блокчейн” заработал больше 100$.
+        // Ваш пост “Пигмалион” собрал 150 голосов и заработал 20$.
+
+        // curatorAward       // награда куратору     (не реализованно в данной версии)
+        // Ваши  оценочные кураторские награды за последнюю неделю…
+
+        // message            // личное сообщение     (не реализованно в данной версии)
+        // witnessVote        // голос за делегата
+        // witnessCancelVote  // отмена голоса за делегата
+
+        let msg = '';
+        let icon = null;
+
+        console.log(12313, accounts);
+        console.log(notify.toJS());
+
+        const userName = notify.get('fromUsers').get(0);
+        const account = accounts.getIn([userName]);
+        console.log(account,756756)
+        const { profile_image } = normalizeProfile(account.toJS());
+
+        switch (notify.get('eventType')) {
+            case 'vote':
+                msg = 'Поставил лайк вашему посту “Блокчейн”.';
+                icon = {
+                    name: 'like',
+                    width: 14,
+                    height: 14,
+                };
+                break;
+            case 'subscribe':
+                msg = 'Подписался на ваш блог.';
+                icon = {
+                    name: 'radion-checked',
+                    width: 14,
+                    height: 14,
+                };
+                break;
+            case 'transfer':
+                msg = 'Перевел на ваш счет 100$.';
+                icon = {
+                    name: 'coins',
+                    width: 14,
+                    height: 11,
+                };
+                break;
+            case 'reply':
+                msg = 'Ответил на комментарий к вашему посту “Пигмалион”.';
+                break;
+            case 'mention':
+                msg = 'Упомянул вас в посте “Пигмалион”.';
+                icon = {
+                    name: 'avatar',
+                    width: 14,
+                    height: 14,
+                };
         }
+
+        console.log(profile_image);
 
         return (
             <Wrapper>
-                <Avatar avatarUrl={null} size={40} icon={icon} />
+                <Avatar avatarUrl={profile_image} size={40} icon={icon} />
                 <ActivityDesc>
                     <ActivityTop>
                         <AuthorName href={`/@test`}>Ivanov Dima</AuthorName>
@@ -73,7 +156,7 @@ export default class ActivityItem extends Component {
                             <TimeAgoWrapper date={notify.get('createdAt')} />
                         </ActivityDate>
                     </ActivityTop>
-                    <ActivityText>Ваш пост “Блокчейн” заработал больше 100$.</ActivityText>
+                    <ActivityText>{msg}</ActivityText>
                 </ActivityDesc>
             </Wrapper>
         );

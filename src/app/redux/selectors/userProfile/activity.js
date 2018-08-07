@@ -13,9 +13,10 @@ export const pageAccountSelector = createDeepEqualSelector(
 );
 
 export const activityContentSelector = createDeepEqualSelector(
-    [pageAccountSelector, entitiesArraySelector('notifies')],
-    (account, notifies) => ({
+    [pageAccountSelector, entitiesArraySelector('notifies'), globalSelector('accounts')],
+    (account, notifies, accounts) => ({
         account,
-        notifies
+        notifies,
+        accounts
     })
 );

@@ -19,7 +19,7 @@ const Wrapper = styled.div`
 const Item = styled.div`
     display: flex;
     flex-direction: column;
-    flex-basis: 100px;
+    flex-basis: 120px;
     align-items: center;
     margin: 10px;
 `

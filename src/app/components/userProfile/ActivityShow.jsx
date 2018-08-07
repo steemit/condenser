@@ -10,14 +10,14 @@ import ActivityList from './activity/ActivityList';
 export default class ActivityShow extends PureComponent {
 
     render() {
-        const { accounts, notifies } = this.props;
+        const { notifies, accounts } = this.props;
 
         return (
             <Card auto>
                 <Tabs activeTab={{ id: 'tab1' }}>
                     <CardContent>
                         <TabContainer id="tab1" title="Все">
-                            <ActivityList notifies={notifies} />
+                            <ActivityList notifies={notifies} accounts={accounts} />
                         </TabContainer>
                         <TabContainer id="tab2" title="Награды">
                             <ActivityList notifies={notifies} />

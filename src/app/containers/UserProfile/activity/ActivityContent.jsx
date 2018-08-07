@@ -30,8 +30,8 @@ export default class ActivityContent extends Component {
     }
 
     render() {
-        const { notifies } = this.props;
+        const { notifies, accounts } = this.props;
 
-        return <ActivityShow notifies={notifies} />;
+        return <ActivityShow notifies={notifies} accounts={accounts} />;
     }
 }

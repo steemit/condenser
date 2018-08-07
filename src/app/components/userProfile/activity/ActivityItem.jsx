@@ -99,9 +99,9 @@ export default class ActivityItem extends Component {
         let msg = '';
         let icon = null;
 
-        const userName = notify.get('fromUsers').get(0);
+        const userName = notify.get('fromUsers').get(0).toLowerCase();
         const account = accounts.getIn([userName]);
-        const { profile_image } = normalizeProfile(account.toJS());
+        const { name, profile_image } = normalizeProfile(account.toJS());
 
         switch (notify.get('eventType')) {
             case 'vote':
@@ -145,7 +145,7 @@ export default class ActivityItem extends Component {
                 <Avatar avatarUrl={profile_image} size={40} icon={icon} />
                 <ActivityDesc>
                     <ActivityTop>
-                        <AuthorName href={`/@test`}>Ivanov Dima</AuthorName>
+                        <AuthorName href={`/@test`}>{name || userName}</AuthorName>
                         <ActivityDate>
                             <TimeAgoWrapper date={notify.get('createdAt')} />
                         </ActivityDate>

@@ -23,41 +23,6 @@ const Wrapper = styled.div`
     border-radius: 50%;
     background-color: #fff;
     background-image: ${({ backgroundUrl }) => `url(${backgroundUrl})`};
-
-    > div {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: none !important;
-
-        width: 100%;
-        height: 100%;
-
-        cursor: pointer;
-
-        ${Icon} {
-            display: none;
-            z-index: 1;
-            margin-left: 5px;
-            margin-top: 5px;
-        }
-
-        &:hover {
-            :after {
-                content: '';
-                position: absolute;
-                left: 0;
-                right: 0;
-                top: 0;
-                bottom: 0;
-                background-color: rgba(248, 248, 248, 0.8);
-            }
-
-            ${Icon} {
-                display: block;
-            }
-        }
-    }
 `;
 
 export default class UserProfileAvatar extends PureComponent {
@@ -76,10 +41,7 @@ export default class UserProfileAvatar extends PureComponent {
                 {!backgroundUrl && (
                     <Icon name="user" width="65" height="70" />
                 )}
-                {children &&
-                    React.cloneElement(children, {
-                        children: <Icon name="picture" size="20" />,
-                    })}
+                {children}
             </Wrapper>
         );
     }

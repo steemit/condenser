@@ -300,7 +300,7 @@
         "selecting_them": "les sélectionnant",
         "image_upload": "Téléchargement d'image",
         "power_up_100": "Conversion en influence à 100%%",
-        "default_50_50": "Par défaut (50 %%/ 50%%)",
+        "default_50_50": "50 %%/ 50%%",
         "decline_payout": "Refuser les gains",
         "check_this_to_auto_upvote_your_post":
             "Cocher cette case pour auto-voter pour votre article",
@@ -328,6 +328,13 @@
         "must_start_with_a_letter": "Le premier caractère doit être une lettre",
         "must_end_with_a_letter_or_number":
             "Le dernier caractère doit être une lettre ou un chiffre"
+    },
+    "post_advanced_settings_jsx": {
+        "payout_option_header": "Author rewards",
+        "payout_option_description":
+            "What type of tokens do you want as rewards from this post?",
+        "current_default": "Default",
+        "update_default_in_settings": "Update"
     },
     "postfull_jsx": {
         "this_post_is_not_available_due_to_a_copyright_claim":

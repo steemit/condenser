@@ -212,7 +212,7 @@ export default class UserCardAbout extends PureComponent {
                 )}
 
                 <SocialBlock justify="space-between">
-                    <SocialLink fb to="#">
+                    <SocialLink fb={1} to="#">
                         <IconStyled name="facebook" width="13" height="24" />
                     </SocialLink>
                     <SocialLink to="#">

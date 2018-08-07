@@ -15,6 +15,7 @@ app/assets/sitemap.xml
 app/assets/robots.txt
 
 config/golos.json
+config/local.json
 config/golos-dev.json
 config/process.json
 config/process-dev.json

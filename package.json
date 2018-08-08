@@ -193,6 +193,7 @@
   },
   "jest": {
     "rootDir": "src",
+    "testURL": "http://localhost",
     "modulePaths": [
       "<rootDir>/"
     ],

@@ -2,7 +2,6 @@ pipeline {
   agent {
     docker {
       image 'node:8'
-      args '-p 9002:8080'
     }
 
   }

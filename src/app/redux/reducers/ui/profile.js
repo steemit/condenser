@@ -1,10 +1,15 @@
 import { fromJS } from 'immutable';
+import {
+    UI_PROFILE_CHANGE_LAYOUT
+} from 'src/app/redux/constants/ui'
 
-export const CHANGE_LAYOUT = 'CHANGE_LAYOUT';
 const LAYOUT_STORAGE_KEY = 'profile.layout';
 
 const initialState = fromJS({
     layout: getSavedLayout() || 'list',
+    activity: {
+        currentTabId: 'all'
+    }
 });
 
 export default function(state = initialState, { type, payload }) {
@@ -13,7 +18,7 @@ export default function(state = initialState, { type, payload }) {
     }
 
     switch (type) {
-        case CHANGE_LAYOUT:
+        case UI_PROFILE_CHANGE_LAYOUT:
             localStorage.setItem(LAYOUT_STORAGE_KEY, payload.layout);
             return state.set('layout', payload.layout);
     }

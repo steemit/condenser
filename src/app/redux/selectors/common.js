@@ -6,9 +6,10 @@ import isEqual from 'react-fast-compare';
 export const createDeepEqualSelector = createSelectorCreator(defaultMemoize, isEqual);
 
 // export const routerSelector = state => state.router;
+export const globalSelector = type => state => state.global.get(type);
 export const statusSelector = type => state => state.status[type];
 export const entitiesSelector = type => state => state.entities[type];
-export const globalSelector = type => state => state.global.get(type);
+export const uiSelector = type => state => state.ui[type];
 
 // Router selectors
 
@@ -26,12 +27,9 @@ export const entitySelector = (type, id) =>
 
 // Users selectors
 
-// export const currentUserSelector = createDeepEqualSelector(
-//     [statusSelector('auth'), entitiesSelector('users')],
-//     (authStatus, usersEntities) => usersEntities[authStatus.user]
-// );
+export const currentUserSelector = state => state.user.get('current')
 
-// export const currentUsernameSelector = createDeepEqualSelector(
-//     [currentUserSelector],
-//     currentUser => currentUser && currentUser.username
-// );
+export const currentUsernameSelector = createDeepEqualSelector(
+    [currentUserSelector],
+    currentUser => currentUser && currentUser.get('username')
+);

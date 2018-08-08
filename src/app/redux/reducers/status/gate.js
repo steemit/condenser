@@ -18,9 +18,7 @@ const initialState = fromJS({
     error: '',
 });
 
-export default function(state = initialState, action) {
-    const { type, payload, error } = action;
-
+export default function(state = initialState, { type, payload, error }) {
     switch (type) {
         case GATE_CONNECT:
             return initialState.set('connecting', true);

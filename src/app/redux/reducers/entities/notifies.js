@@ -2,9 +2,7 @@ import { fromJS } from 'immutable';
 
 const initialState = fromJS({});
 
-export default function(state = initialState, action) {
-    const { type, payload } = action;
-
+export default function(state = initialState, { type, payload } ) {
     switch (type) {
 
     default:

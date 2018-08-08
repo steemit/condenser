@@ -1,0 +1,1 @@
+export const UI_PROFILE_CHANGE_LAYOUT = 'ui/profile/CHANGE_LAYOUT';

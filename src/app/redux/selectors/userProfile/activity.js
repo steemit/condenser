@@ -1,8 +1,9 @@
 import {
     createDeepEqualSelector,
     globalSelector,
-    routerParamSelector,
     entitiesArraySelector,
+    uiSelector,
+    routerParamSelector,
 } from './../common';
 
 // Activity selectors
@@ -13,10 +14,11 @@ export const pageAccountSelector = createDeepEqualSelector(
 );
 
 export const activityContentSelector = createDeepEqualSelector(
-    [pageAccountSelector, entitiesArraySelector('notifies'), globalSelector('accounts')],
-    (account, notifies, accounts) => ({
+    [pageAccountSelector, entitiesArraySelector('notifies'), globalSelector('accounts'), uiSelector('activity')],
+    (account, notifies, accounts, activityUi) => ({
         account,
         notifies,
-        accounts
+        accounts,
+        currentTabId: activityUi.get('currentTabId')
     })
 );

@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 
 import { activityContentSelector } from 'src/app/redux/selectors/userProfile/activity';
-import { notifyGetHistory } from 'src/app/redux/actions/gate';
+import { getNotifyHistory } from 'src/app/redux/actions/gate';
+import { changeProfileActivityTab } from 'src/app/redux/actions/ui';
 
 import Card, { CardContent } from 'golos-ui/Card';
 import { TabContainer, Tabs } from 'golos-ui/Tabs';
@@ -12,22 +12,23 @@ import { TabContainer, Tabs } from 'golos-ui/Tabs';
 // import { ActivityShow } from 'src/app/components/userProfile';
 import ActivityList from 'src/app/components/userProfile/activity/ActivityList';
 
-function mapDispatchToProps(dispatch) {
-    return bindActionCreators(
-        {
-            notifyGetHistory,
-        },
-        dispatch
-    );
-}
-
 @connect(
     activityContentSelector,
-    mapDispatchToProps
+    {
+        getNotifyHistory,
+        changeProfileActivityTab,
+    }
 )
 export default class ActivityContent extends Component {
+
+    static propTypes = {
+        currentTabId: PropTypes.string,
+        changeProfileActivityTab: PropTypes.func,
+        getNotifyHistory: PropTypes.func
+    }
+
     componentDidMount() {
-        this.props.notifyGetHistory({
+        this.props.getNotifyHistory({
             types: 'all',
             skip: 0,
             limit: 15,
@@ -35,25 +36,25 @@ export default class ActivityContent extends Component {
     }
 
     render() {
-        const { notifies, accounts } = this.props;
+        const { notifies, accounts, currentTabId } = this.props;
 
         return (
             <Card auto>
-                <Tabs activeTab={{ id: 'tab1' }} onChange={(tab) => console.log(tab)}>
+                <Tabs activeTab={{ id: currentTabId }} onChange={(tab) => console.log(tab)}>
                     <CardContent>
-                        <TabContainer id="tab1" title="Все">
+                        <TabContainer id="all" title="Все">
                             <ActivityList notifies={notifies} accounts={accounts} />
                         </TabContainer>
-                        <TabContainer id="tab2" title="Награды">
+                        <TabContainer id="awards" title="Награды">
                             <ActivityList notifies={notifies}  accounts={accounts} />
                         </TabContainer>
-                        <TabContainer id="tab3" title="Ответы">
+                        <TabContainer id="answers" title="Ответы">
                             <ActivityList notifies={notifies}  accounts={accounts} />
                         </TabContainer>
-                        <TabContainer id="tab4" title="Социальные">
+                        <TabContainer id="social" title="Социальные">
                             <ActivityList notifies={notifies}  accounts={accounts} />
                         </TabContainer>
-                        <TabContainer id="tab5" title="Упоминания">
+                        <TabContainer id="mentions" title="Упоминания">
                             <ActivityList notifies={notifies}  accounts={accounts} />
                         </TabContainer>
                     </CardContent>

@@ -7,7 +7,7 @@ import {
 import Schemas from 'src/app/redux/sagas/gate/api/schemas';
 import { hydrateNotifies } from 'src/app/redux/sagas/gate/notifies';
 
-export function notifyGetHistory({ skip = 0, limit = 10, types = 'all' }) {
+export function getNotifyHistory({ skip = 0, limit = 10, types = 'all' }) {
     return {
         type: GATE_SEND_MESSAGE,
         payload: {

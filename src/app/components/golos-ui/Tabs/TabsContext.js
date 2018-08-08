@@ -41,7 +41,7 @@ class TabsProvider extends Component {
         });
     };
 
-    onClick = tab => event => {
+    onClick = tab => {
         this.setState((prevState, props) => {
             return {
                 prevActiveTab: prevState.activeTab,

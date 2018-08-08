@@ -11,7 +11,7 @@ import Icon from 'golos-ui/Icon';
 import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdown';
 import VerticalMenu from 'app/components/elements/VerticalMenu';
 import Container from 'src/app/components/common/Container';
-import { UI_PROFILE_CHANGE_LAYOUT } from 'src/app/redux/constants/ui';
+import { changeProfileLayout } from 'src/app/redux/actions/ui';
 
 const Wrapper = styled.div`
     position: relative;
@@ -89,7 +89,7 @@ class UserNavigation extends PureComponent {
         isOwner: PropTypes.bool,
         showLayout: PropTypes.bool,
         layout: PropTypes.oneOf(['list', 'grid']).isRequired,
-        changeLayout: PropTypes.func,
+        changeProfileLayout: PropTypes.func,
     };
 
     render() {
@@ -191,11 +191,11 @@ class UserNavigation extends PureComponent {
     }
 
     _onGridClick = () => {
-        this.props.changeLayout('grid');
+        this.props.changeProfileLayout('grid');
     };
 
     _onListClick = () => {
-        this.props.changeLayout('list');
+        this.props.changeProfileLayout('list');
     };
 }
 
@@ -204,11 +204,6 @@ export default connect(
         layout: state.ui.profile.get('layout') || 'list',
     }),
     {
-        changeLayout: layout => ({
-            type: UI_PROFILE_CHANGE_LAYOUT,
-            payload: {
-                layout,
-            },
-        }),
+        changeProfileLayout
     }
 )(UserNavigation);

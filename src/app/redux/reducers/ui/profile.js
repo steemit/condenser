@@ -3,18 +3,20 @@ import { fromJS } from 'immutable';
 export const CHANGE_LAYOUT = 'CHANGE_LAYOUT';
 const LAYOUT_STORAGE_KEY = 'profile.layout';
 
-export default function(state, { type, payload }) {
+function getSavedLayout() {
+    try {
+        return localStorage.getItem(LAYOUT_STORAGE_KEY);
+    } catch (err) {}
+}
+
+const initialState = fromJS({
+    layout: getSavedLayout() || 'list',
+});
+
+export default function(state = initialState, { type, payload }) {
     if (!process.env.BROWSER) {
         return null;
     }
-
-    if (!state) {
-        state = {
-            layout: getSavedLayout() || 'list',
-        };
-    }
-
-    state = fromJS(state);
 
     switch (type) {
         case CHANGE_LAYOUT:
@@ -25,8 +27,4 @@ export default function(state, { type, payload }) {
     return state;
 }
 
-function getSavedLayout() {
-    try {
-        return localStorage.getItem(LAYOUT_STORAGE_KEY);
-    } catch (err) {}
-}
+

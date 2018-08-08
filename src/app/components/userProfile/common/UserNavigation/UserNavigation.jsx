@@ -11,7 +11,7 @@ import Icon from 'golos-ui/Icon';
 import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdown';
 import VerticalMenu from 'app/components/elements/VerticalMenu';
 import Container from 'src/app/components/common/Container';
-import { CHANGE_LAYOUT } from 'app/redux/ProfileReducer';
+import { CHANGE_LAYOUT } from 'src/app/redux/reducers/ui/profile';
 
 const Wrapper = styled.div`
     position: relative;
@@ -134,11 +134,11 @@ class UserNavigation extends PureComponent {
                         </TabLink>
                     ))}
                     {/*<LinkWithDropdown*/}
-                        {/*closeOnClickOutside*/}
-                        {/*dropdownPosition="bottom"*/}
-                        {/*dropdownContent={<VerticalMenu items={rewardsMenu} />}*/}
+                    {/*closeOnClickOutside*/}
+                    {/*dropdownPosition="bottom"*/}
+                    {/*dropdownContent={<VerticalMenu items={rewardsMenu} />}*/}
                     {/*>*/}
-                        {/*<TabLink>{tt('g.rewards')}</TabLink>*/}
+                    {/*<TabLink>{tt('g.rewards')}</TabLink>*/}
                     {/*</LinkWithDropdown>*/}
                     {this._renderRightIcons()}
                 </Container>
@@ -199,11 +199,9 @@ class UserNavigation extends PureComponent {
 }
 
 export default connect(
-    state => {
-        return {
-            layout: state.profile ? state.profile.get('layout') : 'list',
-        };
-    },
+    state => ({
+        layout: state.ui.profile.get('layout') || 'list',
+    }),
     {
         onLayoutChange: layout => ({
             type: CHANGE_LAYOUT,

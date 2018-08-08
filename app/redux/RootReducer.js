@@ -7,13 +7,13 @@ import { contentStats } from 'app/utils/StateFunctions';
 import appReducer from './AppReducer';
 import globalReducerModule from './GlobalReducer';
 import marketReducerModule from './MarketReducer';
-import profileReducer from './ProfileReducer';
 import user from './User';
 import transaction from './Transaction';
 import offchain from './OffchainReducer';
 import { reducer as formReducer } from 'redux-form'; // @deprecated, instead use: app/utils/ReactForm.js
 import status from 'src/app/redux/reducers/status';
 import entities from 'src/app/redux/reducers/entities';
+import ui from 'src/app/redux/reducers/ui';
 
 function initReducer(reducer, type) {
     return (state, action) => {
@@ -56,9 +56,10 @@ export default combineReducers({
     routing: initReducer(routerReducer),
     app: initReducer(appReducer),
     form: formReducer,
-    profile: profileReducer,
+    
     status: initReducer(status),
     entities: initReducer(entities),
+    ui: initReducer(ui)
 });
 
 /*

@@ -206,14 +206,10 @@ class PostsList extends PureComponent {
 
 export default connect(
     (state, props) => {
-        if (process.env.BROWSER && process.env.NODE_ENV === 'development') {
-            window.state = state;
-        }
-
         return {
             myAccount: state.user.getIn(['current', 'username']),
             globalStatus: state.global.get('status'),
-            layout: state.profile ? state.profile.get('layout') : 'list',
+            layout: state.ui.profile.get('layout') || 'list',
             posts: state.global.getIn(['accounts', props.pageAccountName, props.category]),
         };
     },

@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import styled from 'styled-components';
+import { last } from 'ramda';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Card, { CardContent } from 'golos-ui/Card';
 import { TabContainer, Tabs } from 'golos-ui/Tabs';
 import Icon from 'golos-ui/Icon';
-import { last } from 'ramda';
+import { vestsToSteem } from 'app/utils/StateFunctions';
+import { getStoreState } from 'shared/UniversalRender';
 
 const MAIN_TABS = {
     TRANSACTIONS: 'TRANSACTIONS',
@@ -19,18 +21,30 @@ const CURRENCY = {
     ALL: 'ALL',
     GOLOS: 'GOLOS',
     GBG: 'GBG',
+    GOLOS_POWER: 'GOLOS_POWER',
     SAFE: 'SAFE',
 };
 
 const CURRENCY_TRANSLATE = {
     GOLOS: 'Голос',
     GBG: 'Золото',
+    GOLOS_POWER: 'Сила Голоса',
 };
 
 const CURRENCY_COLOR = {
     GOLOS: '#2879ff',
     GBG: '#ffb839',
     SAFE: '#583652',
+};
+
+const REWARDS_TABS = {
+    HISTORY: 'HISTORY',
+    STATISTIC: 'STATISTIC',
+};
+
+const REWARDS_TYPES = {
+    CURATORIAL: 'CURATORIAL',
+    AUTHOR: 'AUTHOR',
 };
 
 const DIRECTION = {
@@ -53,6 +67,10 @@ const MONTHS = [
     'ноября',
     'декабря',
 ];
+
+const CardStyled = styled(Card)`
+    max-width: 618px;
+`;
 
 const CardContentStyled = styled(CardContent)`
     display: block;
@@ -99,6 +117,18 @@ const WhoTitle = styled.div``;
 
 const WhoLink = styled(Link)`
     color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+`;
+
+const WhoPostLink = styled(Link)`
+    display: block;
+    color: #333;
+    white-space: nowrap;
+    text-decoration: underline;
+    overflow: hidden;
+    text-overflow: ellipsis;
 `;
 
 const TimeStamp = styled.div`
@@ -165,7 +195,7 @@ const DateWrapper = styled.div`
 const DateSplitter = styled.div`
     height: 30px;
     line-height: 30px;
-    padding: 0 10px;
+    padding: 0 13px;
     margin: -15px 0;
     border-radius: 100px;
     font-size: 14px;
@@ -188,48 +218,79 @@ class WalletContent extends Component {
         mainTab: MAIN_TABS.TRANSACTIONS,
         currency: CURRENCY.ALL,
         direction: DIRECTION.ALL,
+        rewardTab: REWARDS_TABS.HISTORY,
+        rewardType: REWARDS_TYPES.CURATORIAL,
     };
 
     render() {
         const { mainTab } = this.state;
 
         return (
-            <Card auto>
-                <Tabs
-                    activeTab={{ id: mainTab }}
-                    onChange={this._onMainTabChange}
-                >
+            <CardStyled auto>
+                <Tabs activeTab={{ id: mainTab }} onChange={this._onMainTabChange}>
                     <CardContentStyled>
                         <TabContainer id={MAIN_TABS.TRANSACTIONS} title="История транзакций">
-                            {this._renderTransactions()}
+                            {this._renderTransactionsTabs()}
                         </TabContainer>
                         <TabContainer id={MAIN_TABS.POWER} title="Сила голоса" />
-                        <TabContainer id={MAIN_TABS.REWARDS} title="Награды" />
+                        <TabContainer id={MAIN_TABS.REWARDS} title="Награды">
+                            {this._renderRewardsTabs()}
+                        </TabContainer>
                     </CardContentStyled>
                 </Tabs>
                 <Content>{this._renderList()}</Content>
-            </Card>
+            </CardStyled>
         );
     }
 
-    _renderTransactions() {
+    _renderTransactionsTabs() {
         const { currency } = this.state;
 
         return (
             <Tabs activeTab={{ id: currency }} onChange={this._onCurrencyChange}>
                 <TabsContent>
                     <TabContainer id={CURRENCY.ALL} title="Все">
-                        {this._renderTransactionsType('all')}
+                        {this._renderTransactionsType()}
                     </TabContainer>
                     <TabContainer id={CURRENCY.GOLOS} title="Голос">
-                        {this._renderTransactionsType('golos')}
+                        {this._renderTransactionsType()}
                     </TabContainer>
                     <TabContainer id={CURRENCY.GBG} title="Золото">
-                        {this._renderTransactionsType('gbg')}
+                        {this._renderTransactionsType()}
                     </TabContainer>
                     <TabContainer id={CURRENCY.SAFE} title="Сейф">
-                        {this._renderTransactionsType('safe')}
+                        {this._renderTransactionsType()}
                     </TabContainer>
+                </TabsContent>
+            </Tabs>
+        );
+    }
+
+    _renderRewardsTabs() {
+        const { rewardTab } = this.state;
+
+        return (
+            <Tabs activeTab={{ id: rewardTab }} onChange={this._onRewardTabChange}>
+                <TabsContent>
+                    <TabContainer id={REWARDS_TABS.HISTORY} title="История">
+                        {this._renderRewardsType()}
+                    </TabContainer>
+                    <TabContainer id={REWARDS_TABS.STATISTIC} title="Статистика">
+                        {this._renderRewardsType()}
+                    </TabContainer>
+                </TabsContent>
+            </Tabs>
+        );
+    }
+
+    _renderRewardsType() {
+        const { rewardType } = this.state;
+
+        return (
+            <Tabs activeTab={{ id: rewardType }} onChange={this._onRewardTypeChange}>
+                <TabsContent>
+                    <TabContainer id={REWARDS_TYPES.CURATORIAL} title="Кураторские" />
+                    <TabContainer id={REWARDS_TYPES.AUTHOR} title="Авторские" />
                 </TabsContent>
             </Tabs>
         );
@@ -251,14 +312,16 @@ class WalletContent extends Component {
 
     _renderList() {
         const { pageAccount } = this.props;
-        const { mainTab } = this.state;
-
-        if (mainTab === MAIN_TABS.REWARDS) {
-            return <EmptyBlock>Пока не готово</EmptyBlock>;
-        }
+        const { mainTab, rewardTab } = this.state;
 
         if (!pageAccount) {
             return <LoadingIndicator type="circle" size={40} center />;
+        }
+
+        if (mainTab === MAIN_TABS.REWARDS && rewardTab === REWARDS_TABS.STATISTIC) {
+            return (
+                <EmptyBlock>Функицонал пока что не готов</EmptyBlock>
+            );
         }
 
         const transfers = pageAccount.get('transfer_history');
@@ -277,21 +340,33 @@ class WalletContent extends Component {
 
             const [type, data] = operations.get('op').toJS();
 
+            let line = null;
+
             if (mainTab === MAIN_TABS.TRANSACTIONS) {
                 if (
                     type === 'transfer' ||
                     type === 'transfer_to_savings' ||
                     type === 'transfer_from_savings'
                 ) {
-                    this._processTransactions(type, data, stamp, list);
+                    line = this._processTransactions(type, data, stamp);
                 }
             } else if (mainTab === MAIN_TABS.POWER) {
                 if (type === 'transfer_to_vesting') {
-                    this._processVesting(type, data, stamp, list);
+                    line = this._processVesting(type, data, stamp);
+                }
+            } else if (mainTab === MAIN_TABS.REWARDS) {
+                if (type === 'curation_reward') {
+                    line = this._processRewards(type, data, stamp);
                 }
             }
 
-            console.log(type);
+            if (line) {
+                line.stamp = stamp;
+                line.day = [stamp.getFullYear(), stamp.getMonth(), stamp.getDate()].join('-');
+                line.addDate = list.length && last(list).day !== line.day;
+
+                list.push(line);
+            }
         }
 
         if (list.length) {
@@ -321,6 +396,9 @@ class WalletContent extends Component {
                             </WhoName>
                         ) : null}
                         {item.title ? <WhoTitle>{item.title}</WhoTitle> : null}
+                        {item.post ? (
+                            <WhoPostLink to={`/${item.post}`}>{item.post}</WhoPostLink>
+                        ) : null}
                         <TimeStamp>
                             <TimeAgoWrapper date={item.stamp} />
                         </TimeStamp>
@@ -338,7 +416,7 @@ class WalletContent extends Component {
         );
     }
 
-    _processTransactions(type, data, stamp, list) {
+    _processTransactions(type, data) {
         const { pageAccountName } = this.props;
         const { currency, direction } = this.state;
 
@@ -366,9 +444,7 @@ class WalletContent extends Component {
                 (currency === CURRENCY.SAFE && isSafe) ||
                 (currency === opCurrency && !isSafe)
             ) {
-                const day = [stamp.getFullYear(), stamp.getMonth(), stamp.getDate()].join('-');
-
-                list.push({
+                return {
                     type: isReceive ? DIRECTION.RECEIVE : DIRECTION.SENT,
                     name: samePerson && isSafe ? null : isReceive ? data.from : data.to,
                     title:
@@ -380,7 +456,7 @@ class WalletContent extends Component {
                     amount: sign + amount,
                     currency: opCurrency,
                     memo: data.memo || null,
-                    icon: isSafe ? 'lock' : opCurrency === CURRENCY.GOLOS ? 'golos' : 'brilliant',
+                    icon: isSafe ? 'lock' : opCurrency === CURRENCY.GOLOS ? 'logo' : 'brilliant',
                     color: isSafe
                         ? CURRENCY_COLOR.SAFE
                         : isReceive
@@ -389,44 +465,64 @@ class WalletContent extends Component {
                     data: isSafe
                         ? null
                         : 'Golos.io: Новый релиз бла бла бла бла бла бла бла бла бла бла бла бла',
-                    stamp,
-                    day,
-                    addDate: list.length && last(list).day !== day,
-                });
+                };
             }
         }
     }
 
-    _processVesting(type, data, stamp, list) {
+    _processVesting(type, data) {
         const { pageAccountName } = this.props;
 
         const samePerson = data.to === data.from;
-        const isSent = data.from === pageAccountName;
         const isReceive = data.to === pageAccountName && !samePerson;
 
-        const [amount, opCurrency] = data.amount.split(' ');
+        const [amount] = data.amount.split(' ');
 
         if (/^0\.0+$/.test(amount)) {
             return;
         }
 
-        const sign = isReceive || type === 'transfer_from_savings' ? '+' : '-';
+        const sign = isReceive ? '+' : '-';
 
-        const day = [stamp.getFullYear(), stamp.getMonth(), stamp.getDate()].join('-');
-
-        list.push({
+        return {
             type: isReceive ? DIRECTION.RECEIVE : DIRECTION.SENT,
             name: samePerson ? null : isReceive ? data.from : data.to,
             amount: sign + amount,
-            currency: opCurrency,
+            currency: CURRENCY.GOLOS_POWER,
             memo: data.memo || null,
             icon: 'logo',
             color: '#f57c02',
-            data: null,
-            stamp,
-            day,
-            addDate: list.length && last(list).day !== day,
-        });
+        };
+    }
+
+    _processRewards(type, data) {
+        const { pageAccountName } = this.props;
+        const { rewardType } = this.state;
+
+        if (
+            (rewardType === REWARDS_TYPES.CURATORIAL && data.curator === pageAccountName) ||
+            (rewardType === REWARDS_TYPES.AUTHOR && data.comment_author === pageAccountName)
+        ) {
+            const amount = vestsToSteem(
+                data.reward,
+                getStoreState()
+                    .global.get('props')
+                    .toJS()
+            );
+            if (/^0\.0+$/.test(amount)) {
+                return;
+            }
+
+            return {
+                type: DIRECTION.RECEIVE,
+                post: data.comment_author + '/' + data.comment_permlink,
+                amount: '+' + amount,
+                currency: CURRENCY.GOLOS_POWER,
+                memo: data.memo || null,
+                icon: rewardType === REWARDS_TYPES.CURATORIAL ? 'k' : 'a',
+                color: '#f57c02',
+            };
+        }
     }
 
     _onMainTabChange = ({ id }) => {
@@ -444,6 +540,18 @@ class WalletContent extends Component {
     _onDirectionChange = ({ id }) => {
         this.setState({
             direction: id,
+        });
+    };
+
+    _onRewardTabChange = ({ id }) => {
+        this.setState({
+            rewardTab: id,
+        });
+    };
+
+    _onRewardTypeChange = ({ id }) => {
+        this.setState({
+            rewardType: id,
         });
     };
 }

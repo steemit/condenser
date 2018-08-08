@@ -1,53 +1,37 @@
 import React, { Component } from 'react';
 
 const TabsContext = React.createContext({
-    prevActiveTab: {},
     activeTab: {},
 });
 
 class TabsProvider extends Component {
     state = {
         tabs: [],
-        prevActiveTab: {},
         activeTab: this.props.activeTab,
     };
 
     addTab = newTab => {
-        let isNewTabFound;
-
-        for (let i in this.state.tabs) {
-            let tab = this.state.tabs[i];
-
+        for (let tab of this.state.tabs) {
             if (tab.id === newTab.id) {
-                isNewTabFound = true;
-                break;
+                return;
             }
         }
 
-        if (!isNewTabFound) {
-            this.setState((prevState, props) => {
-                return {
-                    tabs: prevState.tabs.concat(newTab),
-                };
-            });
-        }
+        this.setState(state => ({
+            tabs: state.tabs.concat(newTab),
+        }));
     };
 
     removeTab = tabId => {
-        this.setState((prevState, props) => {
-            return {
-                tabs: prevState.tabs.filter(tab => tab.id !== tabId),
-            };
-        });
+        this.setState(state => ({
+            tabs: state.tabs.filter(tab => tab.id !== tabId),
+        }));
     };
 
     onClick = tab => {
-        this.setState((prevState, props) => {
-            return {
-                prevActiveTab: prevState.activeTab,
-                activeTab: tab,
-            };
-        });
+        this.setState(() => ({
+            activeTab: tab,
+        }));
     };
 
     render() {

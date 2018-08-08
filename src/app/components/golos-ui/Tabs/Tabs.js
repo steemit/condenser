@@ -77,7 +77,7 @@ const TabsContainer = styled.div`
 
 class Tabs extends Component {
     static defaultProps = {
-        onChange: () => {}
+        onChange: () => {},
     };
 
     state = {
@@ -114,7 +114,7 @@ class Tabs extends Component {
     };
 
     render() {
-        const { activeTab, children } = this.props;
+        const { activeTab, hideMark, children } = this.props;
         const { tabsElements } = this.state;
 
         return (
@@ -124,7 +124,11 @@ class Tabs extends Component {
                         <Fragment>
                             <TabsContainer>
                                 <TabsList>{this.renderTabsList(context)}</TabsList>
-                                <TabActiveBorder activeTab={tabsElements[context.activeTab.id]} />
+                                {hideMark ? null : (
+                                    <TabActiveBorder
+                                        activeTab={tabsElements[context.activeTab.id]}
+                                    />
+                                )}
                             </TabsContainer>
 
                             {children}

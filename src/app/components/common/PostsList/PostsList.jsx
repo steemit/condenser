@@ -12,7 +12,7 @@ import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import PostOverlay from '../PostOverlay';
 import { getStoreState } from 'shared/UniversalRender';
 import DialogManager from 'app/components/elements/common/DialogManager';
-import keyCodes from '../../../../../app/utils/keyCodes';
+import keyCodes from 'app/utils/keyCodes';
 
 const Root = styled.div`
     ${is('grid')`
@@ -205,14 +205,12 @@ class PostsList extends PureComponent {
 }
 
 export default connect(
-    (state, props) => {
-        return {
-            myAccount: state.user.getIn(['current', 'username']),
-            globalStatus: state.global.get('status'),
-            layout: state.ui.profile.get('layout') || 'list',
-            posts: state.global.getIn(['accounts', props.pageAccountName, props.category]),
-        };
-    },
+    (state, props) => ({
+        myAccount: state.user.getIn(['current', 'username']),
+        globalStatus: state.global.get('status'),
+        layout: state.ui.profile && state.ui.profile.get('layout') || 'list',
+        posts: state.global.getIn(['accounts', props.pageAccountName, props.category]),
+    }),
     dispatch => ({
         loadMore(params) {
             dispatch({ type: 'REQUEST_DATA', payload: params });

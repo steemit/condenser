@@ -13,7 +13,8 @@ const Tab = styled.div`
     align-items: center;
 
     height: 50px;
-    margin: 0 15px;
+    padding: 0 6px;
+    margin: 0 3px;
 
     font-family: ${({ theme }) => theme.fontFamily};
     font-size: 14px;

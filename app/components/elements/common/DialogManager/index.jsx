@@ -1,6 +1,6 @@
 import React from 'react';
 import cn from 'classnames';
-import R from 'ramda';
+import { last } from 'ramda';
 import KEYS from 'app/utils/keyCodes';
 import CommonDialog from 'app/components/dialogs/CommonDialog';
 
@@ -205,7 +205,7 @@ export default class DialogManager extends React.PureComponent {
     };
 
     _tryToClose() {
-        const dialog = R.last(this._dialogs);
+        const dialog = last(this._dialogs);
 
         if (dialog.el && dialog.el.confirmClose) {
             if (!dialog.el.confirmClose()) {
@@ -213,6 +213,6 @@ export default class DialogManager extends React.PureComponent {
             }
         }
 
-        this._closeDialog(R.last(this._dialogs));
+        this._closeDialog(last(this._dialogs));
     }
 }

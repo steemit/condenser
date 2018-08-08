@@ -3,12 +3,6 @@ import { fromJS } from 'immutable';
 export const CHANGE_LAYOUT = 'CHANGE_LAYOUT';
 const LAYOUT_STORAGE_KEY = 'profile.layout';
 
-function getSavedLayout() {
-    try {
-        return localStorage.getItem(LAYOUT_STORAGE_KEY);
-    } catch (err) {}
-}
-
 const initialState = fromJS({
     layout: getSavedLayout() || 'list',
 });
@@ -27,4 +21,8 @@ export default function(state = initialState, { type, payload }) {
     return state;
 }
 
-
+function getSavedLayout() {
+    try {
+        return localStorage.getItem(LAYOUT_STORAGE_KEY);
+    } catch (err) {}
+}

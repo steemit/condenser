@@ -107,7 +107,7 @@ class UserNavigation extends PureComponent {
         const tabLinks = [
             { value: tt('g.comments'), to: `/@${accountName}/comments` },
             { value: tt('g.replies'), to: `/@${accountName}/recent-replies` },
-            //{ value: tt('g.wallet'), to: `/@${accountName}/transfers` },
+            { value: tt('g.wallet'), to: `/@${accountName}/transfers` },
             { value: 'Активность', to: `/@${accountName}/activity` },
         ];
 

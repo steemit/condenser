@@ -5,10 +5,6 @@ import {
     GATE_CONNECT_ERROR,
     GATE_AUTHORIZED,
     GATE_DISCONNECT,
-
-    GATE_NOTIFY_GET_HISTORY,
-    GATE_NOTIFY_GET_HISTORY_SUCCESS,
-    GATE_NOTIFY_GET_HISTORY_ERROR,
 } from 'src/app/redux/constants/gate';
 
 const initialState = fromJS({

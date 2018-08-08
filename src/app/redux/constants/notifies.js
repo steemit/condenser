@@ -1,0 +1,3 @@
+export const NOTIFY_GET_HISTORY = 'notify/GET_HISTORY';
+export const NOTIFY_GET_HISTORY_SUCCESS = 'notify/GET_HISTORY_SUCCESS';
+export const NOTIFY_GET_HISTORY_ERROR = 'notify/GET_HISTORY_ERROR';

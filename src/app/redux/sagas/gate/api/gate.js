@@ -1,12 +1,9 @@
 import { fork, take, call, put, cancel, select, actionChannel } from 'redux-saga/effects';
-import { eventChannel } from 'redux-saga';
+import { eventChannel, buffers } from 'redux-saga';
 import golos from 'golos-js';
 import { Client as WebSocket } from 'rpc-websockets';
 import { normalize } from 'normalizr';
 
-// import {
-//   login, logout, addUser, removeUser, newMessage, sendMessage
-// } from 'src/app/redux/actions';
 import {
     GATE_SEND_MESSAGE,
     GATE_CONNECT,
@@ -84,6 +81,7 @@ function* write(socket, writeChannel) {
     yield take(GATE_AUTHORIZED);
 
     while (true) {
+        // TODO: need to cancel same request.?
         const action = yield take(writeChannel);
         const {
             payload: {
@@ -122,7 +120,7 @@ function* flow() {
     );
 
     // Channel listen messages for writing
-    const writeChannel = yield actionChannel(GATE_SEND_MESSAGE);
+    const writeChannel = yield actionChannel(GATE_SEND_MESSAGE, buffers.expanding(10));
 
     while (true) {
         // Wait for user login

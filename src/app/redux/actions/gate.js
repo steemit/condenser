@@ -1,11 +1,11 @@
+import { GATE_SEND_MESSAGE } from 'src/app/redux/constants/gate';
 import {
-    GATE_SEND_MESSAGE,
-    GATE_NOTIFY_GET_HISTORY,
-    GATE_NOTIFY_GET_HISTORY_SUCCESS,
-    GATE_NOTIFY_GET_HISTORY_ERROR,
-} from 'src/app/redux/constants/gate';
+    NOTIFY_GET_HISTORY,
+    NOTIFY_GET_HISTORY_SUCCESS,
+    NOTIFY_GET_HISTORY_ERROR,
+} from 'src/app/redux/constants/notifies';
 import Schemas from 'src/app/redux/sagas/gate/api/schemas';
-import { hydrateNotifies } from 'src/app/redux/sagas/gate/notifies';
+import { hydrateNotifies } from 'src/app/redux/sagas/actions/notifies';
 
 export function getNotifyHistory({ skip = 0, limit = 10, types = 'all' }) {
     return {
@@ -13,9 +13,9 @@ export function getNotifyHistory({ skip = 0, limit = 10, types = 'all' }) {
         payload: {
             method: 'notify.history',
             types: [
-                GATE_NOTIFY_GET_HISTORY,
-                GATE_NOTIFY_GET_HISTORY_SUCCESS,
-                GATE_NOTIFY_GET_HISTORY_ERROR,
+                NOTIFY_GET_HISTORY,
+                NOTIFY_GET_HISTORY_SUCCESS,
+                NOTIFY_GET_HISTORY_ERROR,
             ],
             data: { skip, limit, types },
             saga: hydrateNotifies,

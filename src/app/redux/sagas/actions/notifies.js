@@ -3,14 +3,13 @@ import constants from 'app/redux/constants';
 import GlobalReducer from 'app/redux//GlobalReducer';
 import { api } from 'golos-js';
 
+// TODO: optimize
 export function* hydrateNotifies(notifies) {
-    for (let key in notifies) {
-        const notify = notifies[key];
+    for (let notify of notifies) {
         const { fromUsers } = notify;
 
         const accounts = yield call([api, api.getAccountsAsync], fromUsers);
-        for (let i in accounts) {
-            const account = accounts[i];
+        for (let account of accounts) {
             yield put(GlobalReducer.actions.receiveAccount({ account }));
         }
 

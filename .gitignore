@@ -8,4 +8,4 @@ vendor/*
 tmp/*
 .vagrant
 lib
-
+!**/.gitkeep

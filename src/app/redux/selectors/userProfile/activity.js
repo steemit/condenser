@@ -14,11 +14,11 @@ export const pageAccountSelector = createDeepEqualSelector(
 );
 
 export const activityContentSelector = createDeepEqualSelector(
-    [pageAccountSelector, entitiesArraySelector('notifies'), globalSelector('accounts'), uiSelector('activity')],
-    (account, notifies, accounts, activityUi) => ({
+    [pageAccountSelector, entitiesArraySelector('notifies'), globalSelector('accounts'), uiSelector('profile')],
+    (account, notifies, accounts, profileUi) => ({
         account,
         notifies,
         accounts,
-        currentTabId: activityUi.get('currentTabId')
+        currentTabId: profileUi.getIn(['activity', 'currentTabId'])
     })
 );

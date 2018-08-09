@@ -17,7 +17,7 @@ const Body = styled.div`
 export default class AccountPrice extends PureComponent {
     render() {
         return (
-            <CollapsingCard title={'Стоимость аккаунта'}>
+            <CollapsingCard title={'Стоимость аккаунта'} saveStateKey="price">
                 <Body>$ 13,65</Body>
             </CollapsingCard>
         );

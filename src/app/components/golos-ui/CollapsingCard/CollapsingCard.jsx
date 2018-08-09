@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import is from 'styled-is';
 import Icon from 'golos-ui/Icon';
@@ -19,6 +20,7 @@ const Header = styled.div`
     font-weight: 500;
     text-transform: uppercase;
     color: #393636;
+    cursor: pointer;
     user-select: none;
 `;
 
@@ -34,7 +36,6 @@ const CollapseIcon = Icon.extend`
     height: 32px;
     padding: 9px;
     margin-right: -8px;
-    cursor: pointer;
     transform: rotate(0);
     transition: transform 0.4s;
 
@@ -60,10 +61,19 @@ const Body = styled.div`
 `;
 
 export default class CollapsingCard extends PureComponent {
-    state = {
-        collapsed: false,
-        animated: false,
+    propTypes = {
+        title: PropTypes.string.isRequired,
+        saveStateKey: PropTypes.string,
     };
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            collapsed: props.saveStateKey ? getState(props.saveStateKey) : false,
+            animated: false,
+        };
+    }
 
     componentWillUnmount() {
         clearTimeout(this._animationOffTimeout);
@@ -75,12 +85,11 @@ export default class CollapsingCard extends PureComponent {
 
         return (
             <Root innerRef={this._onRootRef}>
-                <Header>
+                <Header onClick={this._onCollapseClick}>
                     <HeaderTitle>{title}</HeaderTitle>
                     <CollapseIcon
                         name="chevron"
                         flip={collapsed ? 1 : 0}
-                        onClick={this._onCollapseClick}
                     />
                 </Header>
                 <BodyWrapper
@@ -104,7 +113,14 @@ export default class CollapsingCard extends PureComponent {
     };
 
     _onCollapseClick = () => {
+        const { saveStateKey } = this.props;
         const { collapsed } = this.state;
+
+        if (saveStateKey) {
+            try {
+                setState(saveStateKey, !collapsed);
+            } catch(err) {}
+        }
 
         clearTimeout(this._animationOffTimeout);
 
@@ -147,4 +163,23 @@ export default class CollapsingCard extends PureComponent {
             );
         }
     };
+}
+
+function getState(key) {
+    if (process.env.BROWSER) {
+        return Boolean(localStorage.getItem(`golos.collapse.${key}`));
+    } else {
+        return false;
+    }
+}
+
+function setState(key, state) {
+    const fullKey = `golos.collapse.${key}`;
+
+    if (state) {
+        localStorage.setItem(fullKey, '1');
+    } else {
+        localStorage.removeItem(fullKey);
+    }
+
 }

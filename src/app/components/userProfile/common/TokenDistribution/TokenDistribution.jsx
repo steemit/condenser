@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import PieChart from 'src/app/components/common/PieChart';
-import CollapsingCard from 'src/app/components/golos-ui/CollapsingCard/CollapsingCard';
+import CollapsingCard from 'src/app/components/golos-ui/CollapsingCard';
 import { vestsToGolos } from 'app/utils/StateFunctions';
 
 const Body = styled.div``;
@@ -97,7 +97,7 @@ class TokenDistribution extends PureComponent {
         ];
 
         return (
-            <CollapsingCard title={'Распределение токенов'}>
+            <CollapsingCard title={'Распределение токенов'} saveStateKey="tokens">
                 <Body>
                     <ChartBlock>
                         <ChartWrapper>

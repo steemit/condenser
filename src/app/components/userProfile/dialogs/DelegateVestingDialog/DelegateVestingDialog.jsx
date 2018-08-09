@@ -12,7 +12,7 @@ import ComplexInput from 'src/app/components/golos-ui/ComplexInput';
 import SplashLoader from 'src/app/components/golos-ui/SplashLoader';
 import DialogTypeSelect from 'src/app/components/userProfile/common/DialogTypeSelect';
 import { parseAmount2 } from 'src/app/helpers/currency';
-import { vestsToSteem, steemToVests } from 'app/utils/StateFunctions';
+import { vestsToGolos, golosToVests } from 'app/utils/StateFunctions';
 import Shrink from 'src/app/components/golos-ui/Shrink';
 import DelegationsList from './DelegationsList';
 import { api } from 'golos-js';
@@ -269,7 +269,7 @@ class DelegateVestingDialog extends PureComponent {
                 if (data.delegatee === editAccountName) {
                     delegation = data;
                     vestingShares = Math.round(
-                        parseFloat(vestsToSteem(data.vesting_shares, globalProps)) * 1000
+                        parseFloat(vestsToGolos(data.vesting_shares, globalProps)) * 1000
                     );
                 }
             }
@@ -382,7 +382,7 @@ class DelegateVestingDialog extends PureComponent {
 
         const iAm = myUser.get('username');
 
-        const vesting = steemToVests(parseFloat(amount.replace(/\s+/, '')), this.props.globalProps);
+        const vesting = golosToVests(parseFloat(amount.replace(/\s+/, '')), this.props.globalProps);
 
         const operation = {
             delegator: iAm,
@@ -415,7 +415,7 @@ class DelegateVestingDialog extends PureComponent {
     _updateDelegation(delegatee, value) {
         const { myUser } = this.props;
 
-        const vesting = value > 0 ? steemToVests(value / 1000, this.props.globalProps) : '0.000000';
+        const vesting = value > 0 ? golosToVests(value / 1000, this.props.globalProps) : '0.000000';
 
         const iAm = myUser.get('username');
 
@@ -554,6 +554,6 @@ function getVesting(account, props) {
 
     return {
         gests: availableVesting,
-        golos: vestsToSteem(availableVesting.toFixed(6) + ' GESTS', props),
+        golos: vestsToGolos(availableVesting.toFixed(6) + ' GESTS', props),
     };
 }

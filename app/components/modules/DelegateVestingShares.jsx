@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import reactForm from 'app/utils/ReactForm'
 import transaction from 'app/redux/Transaction'
 import { validate_account_name } from 'app/utils/ChainValidation'
-import { vestsToSteem, steemToVests } from 'app/utils/StateFunctions';
+import { vestsToGolos, golosToVests } from 'app/utils/StateFunctions';
 import { LIQUID_TICKER } from 'app/client_config'
 import tt from 'counterpart'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
@@ -32,7 +32,7 @@ class DelegateVestingShares extends React.Component {
 
         const insufficientFunds = (amount) => {
             const { gprops, currentAccount } = this.props
-			const balance = vestsToSteem(currentAccount.get('vesting_shares'), gprops)
+			const balance = vestsToGolos(currentAccount.get('vesting_shares'), gprops)
             return parseFloat(amount) > parseFloat(balance)
 		}
 
@@ -60,7 +60,7 @@ class DelegateVestingShares extends React.Component {
 
     balanceValue = () => {
         const { gprops, currentAccount } = this.props
-        return vestsToSteem(currentAccount.get('vesting_shares'), gprops)
+        return vestsToGolos(currentAccount.get('vesting_shares'), gprops)
     }
 
 	assetBalanceClick = e => {
@@ -214,7 +214,7 @@ export default connect(
         dispatchSubmit: ({ to, amount, errorCallback, success, gprops, currentAccount }) => {
             const delegator = currentAccount.get('name')
             const delegatee = to
-            const vesting_shares = `${steemToVests(amount, gprops)} GESTS`
+            const vesting_shares = `${golosToVests(amount, gprops)} GESTS`
 
             const successCallback = () => {
                 dispatch({ type: 'FETCH_STATE', payload: { pathname: `@${delegator}/transfers` } })

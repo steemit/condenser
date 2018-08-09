@@ -8,7 +8,7 @@ import TransactionError from 'app/components/elements/TransactionError';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Reveal from 'react-foundation-components/lib/global/reveal';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
-import {numberWithCommas, vestsToSteem} from 'app/utils/StateFunctions';
+import {numberWithCommas, vestsToGolos} from 'app/utils/StateFunctions';
 import FoundationDropdownMenu from 'app/components/elements/FoundationDropdownMenu';
 import WalletSubMenu from 'app/components/elements/WalletSubMenu';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
@@ -43,9 +43,9 @@ class UserWallet extends React.Component {
         const gprops = this.props.gprops.toJS();
 
         if (!account) return null;
-        const vesting_steem = vestsToSteem(account.get('vesting_shares'), gprops);
-        const received_vesting_shares = vestsToSteem(account.get('received_vesting_shares'), gprops);
-        const delegated_vesting_shares = vestsToSteem(account.get('delegated_vesting_shares'), gprops);
+        const vesting_steem = vestsToGolos(account.get('vesting_shares'), gprops);
+        const received_vesting_shares = vestsToGolos(account.get('received_vesting_shares'), gprops);
+        const delegated_vesting_shares = vestsToGolos(account.get('delegated_vesting_shares'), gprops);
 
         let isMyAccount = current_user && current_user.get('username') === account.get('name');
 

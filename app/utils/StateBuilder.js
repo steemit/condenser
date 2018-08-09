@@ -224,7 +224,7 @@ export default async function getState(api, url, options, offchain = {}) {
     return Promise.resolve(state)
 }
 
-async function getGbgPerGolos() {
+async function getGbgPerGolos(api) {
     const feedPrice = await api.getCurrentMedianHistoryPrice();
 
     if (

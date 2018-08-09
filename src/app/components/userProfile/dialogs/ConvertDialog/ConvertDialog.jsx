@@ -10,7 +10,7 @@ import DialogManager from 'app/components/elements/common/DialogManager';
 import SplashLoader from 'src/app/components/golos-ui/SplashLoader';
 import { Checkbox } from 'src/app/components/golos-ui/Form';
 import { parseAmount } from 'src/app/helpers/currency';
-import { vestsToSteem, steemToVests } from 'app/utils/StateFunctions';
+import { vestsToGolos, golosToVests } from 'app/utils/StateFunctions';
 import Shrink from 'src/app/components/golos-ui/Shrink';
 import Slider from 'src/app/components/golos-ui/Slider';
 import SimpleInput from 'src/app/components/golos-ui/SimpleInput';
@@ -401,7 +401,7 @@ class ConvertDialog extends PureComponent {
         } else if (type === TYPES.POWER) {
             operationType = 'withdraw_vesting';
 
-            const vesting = steemToVests(
+            const vesting = golosToVests(
                 parseFloat(amount.replace(/\s+/, '')),
                 this.props.globalProps
             );
@@ -509,7 +509,7 @@ function getVesting(account, props) {
     const availableVesting = vesting - delegated;
 
     return {
-        golos: vestsToSteem(availableVesting.toFixed(6) + ' GESTS', props),
+        golos: vestsToGolos(availableVesting.toFixed(6) + ' GESTS', props),
     };
 }
 

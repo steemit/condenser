@@ -9,7 +9,7 @@ import TextCut from 'src/app/components/common/TextCut';
 import Card, { CardContent } from 'golos-ui/Card';
 import { TabContainer, Tabs } from 'golos-ui/Tabs';
 import Icon from 'golos-ui/Icon';
-import { vestsToSteemEasy } from 'app/utils/StateFunctions';
+import { vestsToGolosEasy } from 'app/utils/StateFunctions';
 
 const MAIN_TABS = {
     TRANSACTIONS: 'TRANSACTIONS',
@@ -567,7 +567,7 @@ class WalletContent extends Component {
         const { rewardType } = this.state;
 
         if (rewardType === REWARDS_TYPES.CURATORIAL && type === 'curation_reward') {
-            const amount = vestsToSteemEasy(data.reward);
+            const amount = vestsToGolosEasy(data.reward);
 
             if (/^0+\.0+$/.test(amount)) {
                 return;
@@ -586,7 +586,7 @@ class WalletContent extends Component {
             const currencies = [];
 
             const golos = data.steem_payout.split(' ')[0];
-            const power = vestsToSteemEasy(data.vesting_payout);
+            const power = vestsToGolosEasy(data.vesting_payout);
             const gold = data.sbd_payout.split(' ')[0];
 
             addValueIfNotZero(currencies, golos, CURRENCY.GOLOS);

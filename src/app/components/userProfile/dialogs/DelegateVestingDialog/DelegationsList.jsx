@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import styled from 'styled-components';
 import Icon from 'golos-ui/Icon';
-import { vestsToSteem } from 'app/utils/StateFunctions';
+import { vestsToGolos } from 'app/utils/StateFunctions';
 
 const Root = styled.div``;
 
@@ -107,7 +107,7 @@ export default class DelegationsList extends PureComponent {
                                         </Link>
                                     </Delegatee>
                                     <Value>
-                                        {vestsToSteem(info.vesting_shares, globalProps)}
+                                        {vestsToGolos(info.vesting_shares, globalProps)}
                                         {' GOLOS'}
                                     </Value>
                                     <Action>

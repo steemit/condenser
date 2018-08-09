@@ -6,7 +6,7 @@ import g from 'app/redux/GlobalReducer'
 import { LIQUID_TICKER } from 'app/client_config'
 import transaction from 'app/redux/Transaction'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
-import { numberWithCommas, vestsToSteem } from 'app/utils/StateFunctions'
+import { numberWithCommas, vestsToGolos } from 'app/utils/StateFunctions'
 
 class DelegateVestingSharesInfo extends React.Component {
 
@@ -35,7 +35,7 @@ class DelegateVestingSharesInfo extends React.Component {
 
         const rows = Object.keys(delegatedVesting).map(k => {
             const c = delegatedVesting[k]
-            const vestingShares = vestsToSteem(c.vesting_shares, gprops)
+            const vestingShares = vestsToGolos(c.vesting_shares, gprops)
             const vestingShares_str = `${numberWithCommas(vestingShares)} ${LIQUID_TICKER}`
 
             return <tr key={k}>

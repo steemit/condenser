@@ -13,7 +13,7 @@ import NotifiCounter from 'app/components/elements/NotifiCounter';
 import tt from 'counterpart';
 import { LIQUID_TICKER, DEBT_TICKER } from 'app/client_config';
 import LocalizedCurrency from 'app/components/elements/LocalizedCurrency';
-import { vestsToSteem, toAsset } from 'app/utils/StateFunctions';
+import { vestsToGolos, toAsset } from 'app/utils/StateFunctions';
 import { WIKI_URL } from 'app/client_config';
 
 const defaultNavigate = (e) => {
@@ -51,7 +51,7 @@ const calculateEstimateOutput = ({ account, price_per_golos, savings_withdraws, 
   const total_steem = 0
     + parseFloat(toAsset(account.get('balance')).amount)
     + parseFloat(toAsset(account.get('savings_balance')).amount)
-    + parseFloat(vestsToSteem(account.get('vesting_shares'), globalprops.toJS()))
+    + parseFloat(vestsToGolos(account.get('vesting_shares'), globalprops.toJS()))
     + savings_pending
 
   return Number(((total_steem * price_per_golos) + total_sbd).toFixed(2) );

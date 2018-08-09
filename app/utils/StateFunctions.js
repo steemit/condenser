@@ -1,49 +1,55 @@
 import assert from 'assert';
 import constants from 'app/redux/constants';
-import {parsePayoutAmount, repLog10} from 'app/utils/ParsersAndFormatters';
-import {Long} from 'bytebuffer';
-import {VEST_TICKER, LIQUID_TICKER} from 'app/client_config'
-import {Map, Seq, fromJS} from 'immutable';
+import { parsePayoutAmount, repLog10 } from 'app/utils/ParsersAndFormatters';
+import { Long } from 'bytebuffer';
+import { VEST_TICKER, LIQUID_TICKER } from 'app/client_config';
+import { Map, Seq, fromJS } from 'immutable';
 import { getStoreState } from 'shared/UniversalRender';
 
-export const numberWithCommas = (x) => x.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+export const numberWithCommas = x => x.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 
 export const toAsset = (value) => {
-    const [ amount, symbol ] = value.split(' ')
-    return { amount: parseFloat(amount), symbol }
+    const [amount, symbol] = value.split(' ');
+
+    return {
+        amount: parseFloat(amount),
+        symbol,
+    };
 }
 
-export function vestsToSp(state, vesting_shares) {
-    const {global} = state
-    const vests = assetFloat(vesting_shares, VEST_TICKER)
-    const total_vests = assetFloat(global.getIn(['props', 'total_vesting_shares']), VEST_TICKER)
-    const total_vest_steem = assetFloat(global.getIn(['props', 'total_vesting_fund_steem']), LIQUID_TICKER)
-    const vesting_steemf = total_vest_steem * (vests / total_vests);
-    const steem_power = vesting_steemf.toFixed(3)
-    return steem_power
+export function vestsToGolosPower(state, vesting_shares) {
+    const { global } = state;
+    const vests = assetFloat(vesting_shares, VEST_TICKER);
+    const total_vests = assetFloat(global.getIn(['props', 'total_vesting_shares']), VEST_TICKER);
+    const total_vest_golos = assetFloat(global.getIn(['props', 'total_vesting_fund_steem']), LIQUID_TICKER);
+    const vesting_golosf = total_vest_golos * (vests / total_vests);
+    const golosPower = vesting_golosf.toFixed(3);
+    return golosPower;
 }
 
-export function vestsToSteem (vestingShares, gprops) {
-    const { total_vesting_fund_steem, total_vesting_shares } = gprops
-    const totalVestingFundSteem = toAsset(total_vesting_fund_steem).amount
-    const totalVestingShares = toAsset(total_vesting_shares).amount
-    const vesting_shares = toAsset(vestingShares).amount
-    return (totalVestingFundSteem * (vesting_shares / totalVestingShares)).toFixed(3)
+export function vestsToGolos(vestingShares, gprops) {
+    const { total_vesting_fund_steem, total_vesting_shares } = gprops;
+    const totalVestingFundGolos = toAsset(total_vesting_fund_steem).amount;
+    const totalVestingShares = toAsset(total_vesting_shares).amount;
+    const vesting_shares = toAsset(vestingShares).amount;
+    return (totalVestingFundGolos * (vesting_shares / totalVestingShares)).toFixed(3);
 }
 
-export function vestsToSteemEasy(amount) {
-    return vestsToSteem(
+export function vestsToGolosEasy(amount) {
+    return vestsToGolos(
         amount,
-        getStoreState().global.get('props').toJS()
+        getStoreState()
+            .global.get('props')
+            .toJS()
     );
 }
 
-export function steemToVests(steem, gprops) {
-    const { total_vesting_fund_steem, total_vesting_shares } = gprops
-    const totalVestingFundSteem =  toAsset(total_vesting_fund_steem).amount
-    const totalVestingShares =  toAsset(total_vesting_shares).amount
-    const vests = steem / (totalVestingFundSteem / totalVestingShares)
-    return vests.toFixed(6)
+export function golosToVests(golos, gprops) {
+    const { total_vesting_fund_steem, total_vesting_shares } = gprops;
+    const totalVestingFundGolos = toAsset(total_vesting_fund_steem).amount;
+    const totalVestingShares = toAsset(total_vesting_shares).amount;
+    const vests = golos / (totalVestingFundGolos / totalVestingShares);
+    return vests.toFixed(6);
 }
 
 export function assetFloat(str, asset) {
@@ -121,7 +127,7 @@ export function contentStats(content) {
     let tags = []
     try {
         tags = (json && JSON.parse(json).tags) || [];
-        if(typeof tags == 'string') {
+        if(typeof tags === 'string') {
             tags = [tags];
         } if(!Array.isArray(tags)) {
             tags = [];
@@ -154,10 +160,10 @@ export function filterTags(tags) {
 }
 
 export function fromJSGreedy(js) {
-  return typeof js !== 'object' || js === null ? js :
-    Array.isArray(js) ?
-      Seq(js).map(fromJSGreedy).toList() :
-      Seq(js).map(fromJSGreedy).toMap();
+    return typeof js !== 'object' || js === null ? js :
+        Array.isArray(js) ?
+            Seq(js).map(fromJSGreedy).toList() :
+            Seq(js).map(fromJSGreedy).toMap();
 }
 
 export function calcVotesStats(votes, me) {

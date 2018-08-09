@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import PieChart from 'src/app/components/common/PieChart';
 import CollapsingCard from 'src/app/components/golos-ui/CollapsingCard/CollapsingCard';
-import { vestsToSteem } from 'app/utils/StateFunctions';
+import { vestsToGolos } from 'app/utils/StateFunctions';
 
 const Body = styled.div``;
 
@@ -92,26 +92,24 @@ class TokenDistribution extends PureComponent {
             {
                 title: 'Сила голоса',
                 color: '#78c2d0',
-                value: vestsToSteem(power, globalProps),
+                value: vestsToGolos(power, globalProps),
             },
         ];
 
         return (
             <CollapsingCard title={'Распределение токенов'}>
                 <Body>
-                    {gbgPerGolos ? (
-                        <ChartBlock>
-                            <ChartWrapper>
-                                <PieChart
-                                    parts={labels.map((label, i) => ({
-                                        isBig: i === hoverIndex,
-                                        value: parseFloat(label.value) / (label.rate || 1),
-                                        color: label.color,
-                                    }))}
-                                />
-                            </ChartWrapper>
-                        </ChartBlock>
-                    ) : null}
+                    <ChartBlock>
+                        <ChartWrapper>
+                            <PieChart
+                                parts={labels.map((label, i) => ({
+                                    isBig: i === hoverIndex,
+                                    value: parseFloat(label.value) / (label.rate || 1),
+                                    color: label.color,
+                                }))}
+                            />
+                        </ChartWrapper>
+                    </ChartBlock>
                     <Labels>
                         {labels.map((label, i) => (
                             <Label

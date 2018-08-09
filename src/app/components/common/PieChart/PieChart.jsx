@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react';
-import cn from 'classnames';
 import styled from 'styled-components';
 
 const Root = styled.div`
@@ -15,6 +14,7 @@ const Root = styled.div`
 export default class PieChart extends PureComponent {
     render() {
         const { parts } = this.props;
+
         let sum = 0;
 
         const __parts = [];
@@ -41,9 +41,7 @@ export default class PieChart extends PureComponent {
                             cy="0"
                             r="1"
                             fill={part.color}
-                            className={cn({
-                                'pie-chart-big': part.isBig,
-                            })}
+                            className={part.isBig ? 'pie-chart-big': null}
                         />
                     </svg>
                 </Root>
@@ -80,9 +78,7 @@ export default class PieChart extends PureComponent {
             return {
                 d: `M ${prev.x} ${prev.y} A 1 1 0 ${isBig ? 1 : 0} 1 ${cur.x} ${cur.y} L 0 0`,
                 fill: part.color,
-                className: cn({
-                    'pie-chart-big': part.isBig,
-                }),
+                className: part.isBig ? 'pie-chart-big' : null,
             };
         });
 

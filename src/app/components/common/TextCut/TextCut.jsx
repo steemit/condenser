@@ -9,6 +9,7 @@ const IconStyled = styled(Icon)`
     margin-left: 3px;
     color: #aaa;
     cursor: pointer;
+    user-select: none;
     transform: rotate(0.5turn);
     transition: color 0.15s, transform 0.2s;
     will-change: color, transform;
@@ -36,7 +37,7 @@ const Root = styled.div`
         &:hover ${IconStyled} {
             color: #333;
         }
-    `}
+    `};
 `;
 
 export default class TextCut extends PureComponent {
@@ -56,7 +57,7 @@ export default class TextCut extends PureComponent {
                 className={className}
                 closed={closed}
                 style={{
-                    height: open ? this._contentHeight : height,
+                    height: open ? this._el.clientHeight : height,
                 }}
                 onClick={closed ? this._onClick : null}
             >
@@ -74,10 +75,10 @@ export default class TextCut extends PureComponent {
     }
 
     _onRef = el => {
-        if (el) {
-            this._contentHeight = el.clientHeight;
+        this._el = el;
 
-            if (this._contentHeight > this.props.height) {
+        if (el) {
+            if (el.clientHeight > this.props.height) {
                 this.setState({
                     withCut: true,
                 });

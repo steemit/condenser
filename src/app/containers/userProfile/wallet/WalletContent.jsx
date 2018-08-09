@@ -162,9 +162,20 @@ const MemoCut = styled(TextCut)`
     margin: 15px 0;
 `;
 
+const MemoCentrer = styled.div`
+    &::after {
+        display: inline-block;
+        content: '';
+        height: 50px;
+        vertical-align: middle;
+    }
+`;
+
 const MemoText = styled.div`
-    padding: 5px 0;
+    display: inline-block;
+    padding: 4px 0;
     line-height: 1.4em;
+    vertical-align: middle;
 `;
 
 const DataLink = styled(Link)`
@@ -447,9 +458,11 @@ class WalletContent extends Component {
                         <Memo>
                             <MemoIcon name="note" data-tooltip={'Пометка'} />
                             <MemoCut height={50}>
-                                <MemoText>
-                                    {item.memo}
-                                </MemoText>
+                                <MemoCentrer>
+                                    <MemoText>
+                                        {item.memo}
+                                    </MemoText>
+                                </MemoCentrer>
                             </MemoCut>
                         </Memo>
                     ) : null}

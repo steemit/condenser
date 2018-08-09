@@ -5,7 +5,7 @@ export default class TimeAgoWrapper extends Component {
     render() {
         let { date, className } = this.props;
 
-        if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/) {
+        if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/.test(date)) {
             date += 'Z';
         }
 

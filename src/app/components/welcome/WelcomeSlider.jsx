@@ -5,6 +5,9 @@ import Slider from 'react-slick';
 import styled from 'styled-components';
 import Userpic from 'app/components/elements/Userpic';
 
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+
 const Root = styled.div`
     .welcome-slider {
         display: flex !important;
@@ -31,8 +34,9 @@ const Root = styled.div`
     }
 `;
 
-const SliderSlide = styled.div`
+const SliderSlide = styled(Link)`
     position: relative;
+    display: block;
     padding: 0 63px;
 
     &:after,
@@ -120,16 +124,14 @@ export default class WelcomeSlider extends Component {
             <Root>
                 <Slider {...settings}>
                     {slides.map((slide, i) => (
-                        <Link key={i} to={slide.link}>
-                            <SliderSlide>
-                                <QuoteName>
-                                    {slide.name}, {slide.position}
-                                </QuoteName>
-                                <QuoteDescription>
-                                    {slide.description}
-                                </QuoteDescription>
-                            </SliderSlide>
-                        </Link>
+                        <SliderSlide key={i} to={slide.link}>
+                            <QuoteName>
+                                {slide.name}, {slide.position}
+                            </QuoteName>
+                            <QuoteDescription>
+                                {slide.description}
+                            </QuoteDescription>
+                        </SliderSlide>
                     ))}
                 </Slider>
             </Root>

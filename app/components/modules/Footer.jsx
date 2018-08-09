@@ -185,16 +185,7 @@ class Footer extends React.Component {
 }
 
 export default connect(state => {
-    const feedPrice = state
-        .global
-        .get('feed_price');
-    let pricePerGolos = undefined;
-
-    if (feedPrice && feedPrice.has('base') && feedPrice.has('quote')) {
-        const {base, quote} = feedPrice.toJS();
-        if (/ GBG$/.test(base) && / GOLOS$/.test(quote))
-            pricePerGolos =  parseFloat(base.split(' ')[0]) / parseFloat(quote.split(' ')[0]);
-    }
-
-    return {pricePerGolos};
+    return {
+        pricePerGolos: state.global.getIn(['rates', 'gbgPerGolos']),
+    };
 },)(Footer);

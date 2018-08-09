@@ -112,10 +112,9 @@ export async function serverRender({
             }
         }
         // Calculate signup bonus
-        const fee = parseFloat($STM_Config.registrar_fee.split(' ')[0]),
-              {base, quote} = onchain.feed_price,
-              feed = parseFloat(base.split(' ')[0]) / parseFloat(quote.split(' ')[0]);
-        const sd = fee * feed,
+        const fee = parseFloat($STM_Config.registrar_fee.split(' ')[0]);
+
+        const sd = fee * onchain.rates.gbgPerGolos,
               sdInt = parseInt(sd),
               sdDec = (sd - sdInt),
               sdDisp = sdInt + (sdInt < 5 && sdDec >= 0.5 ? '.50' : '');
@@ -177,7 +176,7 @@ export async function serverRender({
 let store = null;
 
 export function getStoreState() {
-    if (!store) {
+    if (!store || !process.env.BROWSER) {
         throw new Error('NO_STORE');
     }
 

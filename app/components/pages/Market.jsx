@@ -268,17 +268,13 @@ class Market extends Component {
                 sbd_volume,
             } = this.props.ticker;
 
-            let { base, quote } = this.props.feed;
-
             ticker = {
                 latest: parseFloat(latest),
                 lowest_ask: roundUp(parseFloat(lowest_ask), 6),
                 highest_bid: roundDown(parseFloat(highest_bid), 6),
                 percent_change: parseFloat(percent_change),
                 sbd_volume: parseFloat(sbd_volume),
-                feed_price:
-                    parseFloat(base.split(' ')[0]) /
-                    parseFloat(quote.split(' ')[0]),
+                feed_price: this.props.gbgPerGolos,
             };
         }
 
@@ -875,7 +871,7 @@ export default connect(
                 : null,
             history: state.market.get('history'),
             user: username,
-            feed: state.global.get('feed_price').toJS(),
+            gbgPerGolos: state.global.getIn(['rates', 'gbgPerGolos']),
         };
     },
     dispatch => ({

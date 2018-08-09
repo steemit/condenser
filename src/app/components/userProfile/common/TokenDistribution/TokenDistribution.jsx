@@ -1,7 +1,9 @@
 import React, { PureComponent } from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 import PieChart from 'src/app/components/common/PieChart';
 import CollapsingCard from 'src/app/components/golos-ui/CollapsingCard/CollapsingCard';
+import { vestsToSteem } from 'app/utils/StateFunctions';
 
 const Body = styled.div``;
 
@@ -55,53 +57,68 @@ const LabelValue = styled.div`
     letter-spacing: 0.7px;
 `;
 
-export default class TokenDistribution extends PureComponent {
+class TokenDistribution extends PureComponent {
     state = {
+        hoverIndex: null,
         collapsed: false,
     };
 
     render() {
+        const { golos, golosSafe, gold, goldSafe, power, gbgPerGolos, globalProps } = this.props;
+        const { hoverIndex } = this.state;
+
         const labels = [
             {
                 title: 'Голос',
                 color: '#2879ff',
-                value: '0.001',
+                value: golos,
+            },
+            {
+                title: 'Голос (сейф)',
+                color: '#583652',
+                value: golosSafe,
             },
             {
                 title: 'Золотой',
                 color: '#ffb839',
-                value: '3,394.904',
+                value: gold,
+                rate: gbgPerGolos,
+            },
+            {
+                title: 'Золотой (сейф)',
+                color: '#583652',
+                value: goldSafe,
             },
             {
                 title: 'Сила голоса',
                 color: '#78c2d0',
-                value: '21,394.84',
-            },
-            {
-                title: 'Сейф',
-                color: '#583652',
-                value: '3,394.904',
+                value: vestsToSteem(power, globalProps),
             },
         ];
 
         return (
             <CollapsingCard title={'Распределение токенов'}>
                 <Body>
-                    <ChartBlock>
-                        <ChartWrapper>
-                            <PieChart
-                                parts={[
-                                    { value: 3, color: '#ffb839' },
-                                    { value: 2, color: '#78c2d0' },
-                                    { value: 1, color: '#583652' },
-                                    { value: 9, color: '#2879ff' },
-                                ]}
-                            />
-                        </ChartWrapper>
-                    </ChartBlock>
+                    {gbgPerGolos ? (
+                        <ChartBlock>
+                            <ChartWrapper>
+                                <PieChart
+                                    parts={labels.map((label, i) => ({
+                                        isBig: i === hoverIndex,
+                                        value: parseFloat(label.value) / (label.rate || 1),
+                                        color: label.color,
+                                    }))}
+                                />
+                            </ChartWrapper>
+                        </ChartBlock>
+                    ) : null}
                     <Labels>
-                        {labels.map(label => (
-                            <Label key={label.title}>
+                        {labels.map((label, i) => (
+                            <Label
+                                key={label.title}
+                                onMouseEnter={() => this._onHover(i)}
+                                onMouseLeave={() => this._onHoverOut(i)}
+                            >
                                 <ColorMark style={{ backgroundColor: label.color }} />
                                 <LabelTitle>{label.title}</LabelTitle>
                                 <LabelValue>{label.value}</LabelValue>
@@ -112,4 +129,32 @@ export default class TokenDistribution extends PureComponent {
             </CollapsingCard>
         );
     }
+
+    _onHover = idx => {
+        this.setState({
+            hoverIndex: idx,
+        });
+    };
+
+    _onHoverOut = idx => {
+        if (this.state.hoverIndex === idx) {
+            this.setState({
+                hoverIndex: null,
+            });
+        }
+    };
 }
+
+export default connect((state, props) => {
+    const account = state.global.getIn(['accounts', props.accountName]);
+
+    return {
+        golos: account.get('balance').split(' ')[0],
+        golosSafe: account.get('savings_balance').split(' ')[0],
+        gold: account.get('sbd_balance').split(' ')[0],
+        goldSafe: account.get('savings_sbd_balance').split(' ')[0],
+        power: account.get('vesting_shares'),
+        gbgPerGolos: state.global.getIn(['rates', 'gbgPerGolos']),
+        globalProps: state.global.get('props').toJS(),
+    };
+})(TokenDistribution);

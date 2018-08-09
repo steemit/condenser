@@ -438,13 +438,7 @@ class UserWallet extends React.Component {
 export default connect(
     // mapStateToProps
     (state, ownProps) => {
-        let price_per_golos = undefined
-        const feed_price = state.global.get('feed_price')
-        if(feed_price && feed_price.has('base') && feed_price.has('quote')) {
-            const {base, quote} = feed_price.toJS()
-            if(/ GBG$/.test(base) && / GOLOS$/.test(quote))
-                price_per_golos = parseFloat(base.split(' ')[0]) / parseFloat(quote.split(' ')[0])
-        }
+        const price_per_golos = state.global.getIn(['rates', 'gbgPerGolos']);
         const savings_withdraws = state.user.get('savings_withdraws')
         const gprops = state.global.get('props');
         const sbd_interest = gprops.get('sbd_interest_rate')

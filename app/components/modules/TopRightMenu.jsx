@@ -251,13 +251,7 @@ export default connect(
         const loggedIn = !!username;
 
         const savings_withdraws = state.user.get('savings_withdraws');
-        let price_per_golos = undefined;
-        const feed_price = state.global.get('feed_price');
-        if(feed_price && feed_price.has('base') && feed_price.has('quote')) {
-            const {base, quote} = feed_price.toJS()
-            if(/ GBG$/.test(base) && / GOLOS$/.test(quote))
-                price_per_golos = parseFloat(base.split(' ')[0]) / parseFloat(quote.split(' ')[0])
-        }
+        const price_per_golos = state.global.getIn(['rates', 'gbgPerGolos']);
         const globalprops = state.global.get('props');
 
         return {

@@ -9,7 +9,7 @@ const isHardfork = (v) => v.split('.')[1] === '18'
 export default async function getState(api, url, options, offchain = {}) {
     if (!url || typeof url !== 'string' || !url.length || url === '/') url = 'trending'
     if (url[0] === '/') url = url.substr(1)
-    
+
     const parts = url.split('/')
     // decode tag for cyrillic symbols
     const tag = typeof parts[1] !== 'undefined' ? decodeURIComponent(parts[1]) : ''
@@ -23,12 +23,14 @@ export default async function getState(api, url, options, offchain = {}) {
     state.accounts = {}
     state.witnesses = {}
     state.discussion_idx = {}
-    state.feed_price = await api.getCurrentMedianHistoryPrice()
     state.select_tags = []
+    state.rates = {
+        gbgPerGolos: await getGbgPerGolos(api) || 1,
+    };
 
     // const hardfork_version = await api.getHardforkVersion()
     // state.is_hardfork = isHardfork(hardfork_version)
-    
+
     let accounts = new Set()
 
     // by default trending tags limit=50, but if we in '/tags/' path then limit = 250
@@ -42,7 +44,7 @@ export default async function getState(api, url, options, offchain = {}) {
         const uname = parts[0].substr(1)
         const [ account ] = await api.getAccounts([uname])
         state.accounts[uname] = account
-        
+
         if (account) {
             state.accounts[uname].tags_usage = await api.getTagsUsedByAuthor(uname)
             state.accounts[uname].guest_bloggers = await api.getBlogAuthors(uname)
@@ -52,7 +54,7 @@ export default async function getState(api, url, options, offchain = {}) {
                     const history = await api.getAccountHistory(uname, -1, 1000)
                     account.transfer_history = []
                     account.other_history = []
-                    
+
                     history.forEach(operation => {
                         switch (operation[1].op[0]) {
                             case 'transfer_to_vesting':
@@ -110,7 +112,7 @@ export default async function getState(api, url, options, offchain = {}) {
                         const link = `${author}/${permlink}`
                         state.accounts[uname].feed.push(link)
                         state.content[link] = await api.getContent(author, permlink, DEFAULT_VOTE_LIMIT)
-                        
+
                         if (feedEntries[key].reblog_by.length > 0) {
                             state.content[link].first_reblogged_by = feedEntries[key].reblog_by[0]
                             state.content[link].reblogged_by = feedEntries[key].reblog_by
@@ -130,7 +132,7 @@ export default async function getState(api, url, options, offchain = {}) {
 
                         state.content[link] = await api.getContent(author, permlink, DEFAULT_VOTE_LIMIT)
                         state.accounts[uname].blog.push(link)
-                    
+
                         if (blogEntries[key].reblog_on !== '1970-01-01T00:00:00') {
                             state.content[link].first_reblogged_on = blogEntries[key].reblog_on
                         }
@@ -160,13 +162,13 @@ export default async function getState(api, url, options, offchain = {}) {
                 state.content[curl].replies.push(link)
             }
         }
-        
+
     } else if (parts[0] === 'witnesses' || parts[0] === '~witnesses') {
         const witnesses = await api.getWitnessesByVote('', 100)
         witnesses.forEach( witness => {
             state.witnesses[witness.owner] = witness
         })
-  
+
     } else if (Object.keys(PUBLIC_API).includes(parts[0])) {
         let args = { limit: 20, truncate_body: 1024 }
         const discussionsType = parts[0]
@@ -178,12 +180,12 @@ export default async function getState(api, url, options, offchain = {}) {
         } else {
             if (typeof offchain.select_tags === "object" && offchain.select_tags.length) {
                 let selectTags = []
-                
+
                 offchain.select_tags.forEach( t => {
                     const reversed = reveseTag(t)
                     reversed
                         ? selectTags = [ ...selectTags, t, reversed ]
-                        : selectTags = [ ...selectTags, t, ] 
+                        : selectTags = [ ...selectTags, t, ]
 
                 })
                 args.select_tags = state.select_tags = selectTags;
@@ -192,7 +194,7 @@ export default async function getState(api, url, options, offchain = {}) {
             }
         }
         const discussions = await api.gedDiscussionsBy(discussionsType, args)
-        
+
         const discussion_idxes = {}
         discussion_idxes[discussionsType] = []
 
@@ -201,9 +203,9 @@ export default async function getState(api, url, options, offchain = {}) {
             discussion_idxes[discussionsType].push(link)
             state.content[link] = discussion
         })
-        
-        const discussions_key = typeof tag === 'string' && tag.length 
-            ? tag 
+
+        const discussions_key = typeof tag === 'string' && tag.length
+            ? tag
             : state.select_tags.sort().filter(t => !t.startsWith('ru--')).join('/')
 
         state.discussion_idx[discussions_key] = discussion_idxes
@@ -220,4 +222,17 @@ export default async function getState(api, url, options, offchain = {}) {
     }
 
     return Promise.resolve(state)
+}
+
+async function getGbgPerGolos() {
+    const feedPrice = await api.getCurrentMedianHistoryPrice();
+
+    if (
+        feedPrice.base &&
+        feedPrice.base.endsWith(' GBG') &&
+        feedPrice.quote &&
+        feedPrice.quote.endsWith(' GOLOS')
+    ) {
+        return parseFloat(feedPrice.base) / parseFloat(feedPrice.quote);
+    }
 }

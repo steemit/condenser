@@ -8,8 +8,7 @@ import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Card, { CardContent } from 'golos-ui/Card';
 import { TabContainer, Tabs } from 'golos-ui/Tabs';
 import Icon from 'golos-ui/Icon';
-import { vestsToSteem } from 'app/utils/StateFunctions';
-import { getStoreState } from 'shared/UniversalRender';
+import { vestsToSteemEasy } from 'app/utils/StateFunctions';
 
 const MAIN_TABS = {
     TRANSACTIONS: 'TRANSACTIONS',
@@ -34,6 +33,7 @@ const CURRENCY_TRANSLATE = {
 const CURRENCY_COLOR = {
     GOLOS: '#2879ff',
     GBG: '#ffb839',
+    GOLOS_POWER: '#f57c02',
     SAFE: '#583652',
 };
 
@@ -161,6 +161,23 @@ const DataLink = styled(Link)`
     color: #333;
     overflow: hidden;
     text-overflow: ellipsis;
+`;
+
+const Currencies = styled.div`
+    display: flex;
+    flex-shrink: 0;
+`;
+
+const ListValue = styled.div`
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    flex-direction: column;
+    margin-right: 9px;
+
+    &:last-child {
+        margin-right: 0;
+    }
 `;
 
 const Value = styled.div`
@@ -319,9 +336,7 @@ class WalletContent extends Component {
         }
 
         if (mainTab === MAIN_TABS.REWARDS && rewardTab === REWARDS_TABS.STATISTIC) {
-            return (
-                <EmptyBlock>Функицонал пока что не готов</EmptyBlock>
-            );
+            return <EmptyBlock>Функицонал пока что не готов</EmptyBlock>;
         }
 
         const transfers = pageAccount.get('transfer_history');
@@ -336,7 +351,7 @@ class WalletContent extends Component {
             const item = transfers.get(i);
 
             const operations = item.get(1);
-            const stamp = new Date(operations.get('timestamp'));
+            const stamp = new Date(operations.get('timestamp') + 'Z');
 
             const [type, data] = operations.get('op').toJS();
 
@@ -355,9 +370,13 @@ class WalletContent extends Component {
                     line = this._processVesting(type, data, stamp);
                 }
             } else if (mainTab === MAIN_TABS.REWARDS) {
-                if (type === 'curation_reward') {
+                if (type === 'curation_reward' || type === 'author_reward') {
                     line = this._processRewards(type, data, stamp);
                 }
+            }
+
+            if (process.env.BROWSER) {
+                console.log(type, data);
             }
 
             if (line) {
@@ -407,10 +426,21 @@ class WalletContent extends Component {
                         {item.memo ? <MemoIcon name="note" data-tooltip={item.memo} /> : null}
                     </Memo>
                     {item.data ? <DataLink to={item.link}>{item.data}</DataLink> : null}
-                    <Value>
-                        <Amount color={item.color}>{item.amount}</Amount>
-                        <Currency>{CURRENCY_TRANSLATE[item.currency]}</Currency>
-                    </Value>
+                    {item.currencies ? (
+                        <Currencies>
+                            {item.currencies.map(({ amount, currency }) => (
+                                <ListValue key={currency}>
+                                    <Amount color={CURRENCY_COLOR[currency]}>{amount}</Amount>
+                                    <Currency>{CURRENCY_TRANSLATE[currency]}</Currency>
+                                </ListValue>
+                            ))}
+                        </Currencies>
+                    ) : (
+                        <Value>
+                            <Amount color={item.color}>{item.amount}</Amount>
+                            <Currency>{CURRENCY_TRANSLATE[item.currency]}</Currency>
+                        </Value>
+                    )}
                 </Line>
             </LineWrapper>
         );
@@ -478,7 +508,7 @@ class WalletContent extends Component {
 
         const [amount] = data.amount.split(' ');
 
-        if (/^0\.0+$/.test(amount)) {
+        if (/^0+\.0+$/.test(amount)) {
             return;
         }
 
@@ -496,20 +526,12 @@ class WalletContent extends Component {
     }
 
     _processRewards(type, data) {
-        const { pageAccountName } = this.props;
         const { rewardType } = this.state;
 
-        if (
-            (rewardType === REWARDS_TYPES.CURATORIAL && data.curator === pageAccountName) ||
-            (rewardType === REWARDS_TYPES.AUTHOR && data.comment_author === pageAccountName)
-        ) {
-            const amount = vestsToSteem(
-                data.reward,
-                getStoreState()
-                    .global.get('props')
-                    .toJS()
-            );
-            if (/^0\.0+$/.test(amount)) {
+        if (rewardType === REWARDS_TYPES.CURATORIAL && type === 'curation_reward') {
+            const amount = vestsToSteemEasy(data.reward);
+
+            if (/^0+\.0+$/.test(amount)) {
                 return;
             }
 
@@ -519,7 +541,33 @@ class WalletContent extends Component {
                 amount: '+' + amount,
                 currency: CURRENCY.GOLOS_POWER,
                 memo: data.memo || null,
-                icon: rewardType === REWARDS_TYPES.CURATORIAL ? 'k' : 'a',
+                icon: 'k',
+                color: '#f57c02',
+            };
+        } else if (rewardType === REWARDS_TYPES.AUTHOR && type === 'author_reward') {
+            const currencies = [];
+
+            const golos = data.steem_payout.split(' ')[0];
+            const power = vestsToSteemEasy(data.vesting_payout);
+            const gold = data.sbd_payout.split(' ')[0];
+
+            addValueIfNotZero(currencies, golos, CURRENCY.GOLOS);
+            addValueIfNotZero(currencies, power, CURRENCY.GOLOS_POWER);
+            addValueIfNotZero(currencies, gold, CURRENCY.GBG);
+
+            if (!currencies.length) {
+                currencies.push({
+                    amount: '0',
+                    currency: CURRENCY.GOLOS,
+                });
+            }
+
+            return {
+                type: DIRECTION.RECEIVE,
+                post: data.author + '/' + data.permlink,
+                currencies,
+                memo: data.memo || null,
+                icon: 'a',
                 color: '#f57c02',
             };
         }
@@ -565,3 +613,12 @@ export default connect((state, props) => {
         pageAccount,
     };
 })(WalletContent);
+
+function addValueIfNotZero(list, amount, currency) {
+    if (!/^0+\.0+$/.test(amount)) {
+        list.push({
+            amount,
+            currency,
+        });
+    }
+}

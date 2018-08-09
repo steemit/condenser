@@ -4,6 +4,7 @@ import {parsePayoutAmount, repLog10} from 'app/utils/ParsersAndFormatters';
 import {Long} from 'bytebuffer';
 import {VEST_TICKER, LIQUID_TICKER} from 'app/client_config'
 import {Map, Seq, fromJS} from 'immutable';
+import { getStoreState } from 'shared/UniversalRender';
 
 export const numberWithCommas = (x) => x.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 
@@ -28,6 +29,13 @@ export function vestsToSteem (vestingShares, gprops) {
     const totalVestingShares = toAsset(total_vesting_shares).amount
     const vesting_shares = toAsset(vestingShares).amount
     return (totalVestingFundSteem * (vesting_shares / totalVestingShares)).toFixed(3)
+}
+
+export function vestsToSteemEasy(amount) {
+    return vestsToSteem(
+        amount,
+        getStoreState().global.get('props').toJS()
+    );
 }
 
 export function steemToVests(steem, gprops) {
@@ -122,7 +130,7 @@ export function contentStats(content) {
         tags = []
     }
     tags.push(content.get('category'))
-    
+
     tags = filterTags(tags)
 
     const isNsfw = tags.filter(tag => tag && tag.match(/^nsfw$|^ru--mat$|^18\+$/i)).length > 0;

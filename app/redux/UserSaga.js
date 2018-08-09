@@ -10,9 +10,7 @@ import { loadFollows } from 'app/redux/FollowSaga';
 import { PrivateKey, Signature, hash } from 'golos-js/lib/auth/ecc';
 import { api } from 'golos-js';
 import g from 'app/redux/GlobalReducer';
-// import React from 'react';
 // import PushNotificationSaga from 'app/redux/services/PushNotificationSaga';
-// import { watchOnPings } from 'app/redux/services/GateSaga';
 import uploadImageWatch from './UserSaga_UploadImage';
 
 export function* userWatches() {

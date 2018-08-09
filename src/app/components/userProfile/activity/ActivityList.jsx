@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
@@ -11,24 +11,33 @@ const Wrapper = styled.div`
 
 const Loader = styled(LoadingIndicator)`
     margin: 30px 0;
-`
+`;
 
 export default class ActivityList extends Component {
     static propTypes = {
+        isFetching: PropTypes.bool,
         // notify: PropTypes.object,
     };
 
     render() {
-        const { notifies, accounts } = this.props;
+        const { isFetching, notifies, accounts } = this.props;
+
+        if (isFetching) {
+            return <Loader type="circle" center />;
+        }
+        if (!notifies.size) {
+            return <div>Пусто</div>;
+        }
 
         return (
-            <Wrapper>
-                {!notifies.size && <Loader type="circle" center/>}
+            <Fragment>
                 {notifies
                     .sortBy(notify => notify.get('createdAt'))
                     .reverse()
-                    .map(notify => <ActivityItem notify={notify} accounts={accounts} key={notify.get('_id')} />)}
-            </Wrapper>
+                    .map(notify => (
+                        <ActivityItem notify={notify} accounts={accounts} key={notify.get('_id')} />
+                    ))}
+            </Fragment>
         );
     }
 }

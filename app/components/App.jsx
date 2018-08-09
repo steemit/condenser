@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import cn from 'classnames';
-import { injectGlobal } from 'styled-components';
+import { ThemeProvider, injectGlobal } from 'styled-components';
 import AppPropTypes from 'app/utils/AppPropTypes';
 import Header from 'app/components/modules/Header';
 import Footer from 'app/components/modules/Footer';
@@ -24,19 +24,17 @@ import PageViewsCounter from '@elements/PageViewsCounter';
 import LocalizedCurrency from '@elements/LocalizedCurrency';
 import MobileAppButton from 'app/components/elements/MobileBanners/MobileAppButton';
 import DialogManager from 'app/components/elements/common/DialogManager';
+import defaultTheme from 'src/app/themes';
+import Notifications from 'src/app/components/common/Notifications';
 import { init as initAnchorHelper } from 'app/utils/anchorHelper';
 
-import {
-    APP_ICON,
-    VEST_TICKER,
-} from 'app/client_config';
+import { APP_ICON, VEST_TICKER } from 'app/client_config';
 
 injectGlobal`
     body {
         fill: currentColor;
     }
 `;
-
 
 const availableLinks = [
     'https://www.facebook.com/www.golos.io',
@@ -74,8 +72,7 @@ class App extends React.Component {
     componentWillMount() {
         if (process.env.BROWSER) {
             window.IS_MOBILE =
-                /android|iphone/i.test(navigator.userAgent) ||
-                window.innerWidth < 765;
+                /android|iphone/i.test(navigator.userAgent) || window.innerWidth < 765;
 
             window.INIT_TIMESSTAMP = Date.now();
         }
@@ -83,7 +80,7 @@ class App extends React.Component {
 
     componentDidMount() {
         if (process.env.BROWSER) {
-            localStorage.removeItem('autopost') // July 14 '16 compromise, renamed to autopost2
+            localStorage.removeItem('autopost'); // July 14 '16 compromise, renamed to autopost2
         }
 
         this.props.loginUser();
@@ -128,8 +125,7 @@ class App extends React.Component {
     checkLogin = event => {
         if (event.key === 'autopost2') {
             if (!event.newValue) this.props.logoutUser();
-            else if (!event.oldValue || event.oldValue !== event.newValue)
-                this.props.loginUser();
+            else if (!event.oldValue || event.oldValue !== event.newValue) this.props.loginUser();
         }
     };
 
@@ -141,9 +137,7 @@ class App extends React.Component {
             a.hostname &&
             a.hostname !== window.location.hostname &&
             !availableLinks.includes(a.href) &&
-            !availableDomains.some(domain =>
-                new RegExp(`${domain}$`).test(a.hostname)
-            )
+            !availableDomains.some(domain => new RegExp(`${domain}$`).test(a.hostname))
         ) {
             e.stopPropagation();
             e.preventDefault();
@@ -167,8 +161,7 @@ class App extends React.Component {
     // };
 
     onEntropyEvent(e) {
-        if (e.type === 'mousemove')
-            key_utils.addEntropy(e.pageX, e.pageY, e.screenX, e.screenY);
+        if (e.type === 'mousemove') key_utils.addEntropy(e.pageX, e.pageY, e.screenX, e.screenY);
         else console.log('onEntropyEvent Unknown', e.type, e);
     }
 
@@ -196,14 +189,7 @@ class App extends React.Component {
     }
 
     render() {
-        const {
-            location,
-            params,
-            children,
-            flash,
-            new_visitor,
-            signup_bonus,
-        } = this.props;
+        const { location, params, children, flash, new_visitor, signup_bonus } = this.props;
 
         const route = resolveRoute(location.pathname);
         const lp = false; //location.pathname === '/';
@@ -225,11 +211,7 @@ class App extends React.Component {
                 <div className="App__announcement row">
                     <div className="column">
                         <div className="callout">
-                            <CloseButton
-                                onClick={() =>
-                                    this.setState({ showCallout: false })
-                                }
-                            />
+                            <CloseButton onClick={() => this.setState({ showCallout: false })} />
                             <p>{alert || warning || success}</p>
                         </div>
                     </div>
@@ -270,11 +252,7 @@ class App extends React.Component {
                 <div className="App__announcement row">
                     <div className="column">
                         <div className="callout warning">
-                            <CloseButton
-                                onClick={() =>
-                                    this.setState({ showCallout: false })
-                                }
-                            />
+                            <CloseButton onClick={() => this.setState({ showCallout: false })} />
                             <p>{tt('g.read_only_mode')}</p>
                         </div>
                     </div>
@@ -287,18 +265,10 @@ class App extends React.Component {
             welcome_screen = (
                 <div className="welcomeWrapper">
                     <div className="welcomeBanner">
-                        <CloseButton
-                            onClick={() => this.setState({ showBanner: false })}
-                        />
+                        <CloseButton onClick={() => this.setState({ showBanner: false })} />
                         <div className="text-center">
-                            <h2>
-                                {tt('submit_a_story.welcome_to_the_blockchain')}
-                            </h2>
-                            <h4>
-                                {tt(
-                                    'submit_a_story.your_voice_is_worth_something'
-                                )}
-                            </h4>
+                            <h2>{tt('submit_a_story.welcome_to_the_blockchain')}</h2>
+                            <h4>{tt('submit_a_story.your_voice_is_worth_something')}</h4>
                             <br />
                             <a className="button" href="/create_account">
                                 {' '}
@@ -323,33 +293,37 @@ class App extends React.Component {
         }
 
         return (
-            <div
-                className={
-                    'App' +
-                    (lp ? ' LP' : '') +
-                    (ip ? ' index-page' : '') +
-                    (miniHeader ? ' mini-' : '')
-                }
-                onMouseMove={this.onEntropyEvent}
-            >
-                {miniHeader ? <MiniHeader /> : <Header />}
-                <div className={cn('App__content', {
-                    'App__content_hide-sub-menu': route.hideSubMenu,
-                })}>
-                    {welcome_screen}
-                    {callout}
-                    {children}
-                    {location.pathname.startsWith('/submit') ? null : <Footer />}
-                    <ScrollButton />
-                    <MobileAppButton />
+            <ThemeProvider theme={defaultTheme}>
+                <div
+                    className={
+                        'App' +
+                        (lp ? ' LP' : '') +
+                        (ip ? ' index-page' : '') +
+                        (miniHeader ? ' mini-' : '')
+                    }
+                    onMouseMove={this.onEntropyEvent}
+                >
+                    {miniHeader ? <MiniHeader /> : <Header />}
+                    <div
+                        className={cn('App__content', {
+                            'App__content_hide-sub-menu': route.hideSubMenu,
+                        })}
+                    >
+                        {welcome_screen}
+                        {callout}
+                        {children}
+                        {location.pathname.startsWith('/submit') ? null : <Footer />}
+                        <ScrollButton />
+                        <MobileAppButton />
+                    </div>
+                    <Dialogs />
+                    <Modals />
+                    <Notifications />
+                    <DialogManager />
+                    {process.env.BROWSER ? <TooltipManager /> : null}
+                    <PageViewsCounter hidden />
                 </div>
-                <Dialogs />
-                <Modals />
-                <DialogManager />
-                {process.env.BROWSER ? <TooltipManager /> : null}
-                <PageViewsCounter hidden/>
-            </div>
-
+            </ThemeProvider>
         );
     }
 }

@@ -2,6 +2,7 @@ import {
     createDeepEqualSelector,
     globalSelector,
     entitiesArraySelector,
+    statusSelector,
     uiSelector,
     routerParamSelector,
 } from './../common';
@@ -29,7 +30,7 @@ export const filteredNotifiesSelector = createDeepEqualSelector(
                 const eventType = notify.get('eventType');
                 return types.includes(eventType);
             })
-            .sort((a, b) => a.get('createdAt') < b.get('createdAt'));
+            .sort((a, b) => a.get('updatedAt') < b.get('updatedAt'));
     }
 );
 
@@ -38,12 +39,14 @@ export const activityContentSelector = createDeepEqualSelector(
         pageAccountSelector,
         globalSelector('accounts'),
         filteredNotifiesSelector,
+        statusSelector('notifies'),
         uiSelector('profile'),
     ],
-    (account, accounts, notifies, profileUi) => ({
+    (account, accounts, notifies, notifiesStatus, profileUi) => ({
         account,
         accounts,
         notifies,
+        isFetching: notifiesStatus.get('isFetching'),
         currentTabId: profileUi.getIn(['activity', 'currentTabId']),
     })
 );

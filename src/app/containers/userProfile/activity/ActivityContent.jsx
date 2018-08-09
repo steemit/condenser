@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { List } from 'immutable';
+import styled from 'styled-components';
 
 import throttle from 'lodash/throttle';
 
@@ -13,7 +14,6 @@ import { changeProfileActivityTab } from 'src/app/redux/actions/ui';
 import Card, { CardContent } from 'golos-ui/Card';
 import { TabContainer, Tabs } from 'golos-ui/Tabs';
 
-// import { ActivityShow } from 'src/app/components/userProfile';
 import ActivityList from 'src/app/components/userProfile/activity/ActivityList';
 
 @connect(
@@ -23,17 +23,19 @@ import ActivityList from 'src/app/components/userProfile/activity/ActivityList';
         changeProfileActivityTab,
     }
 )
-export default class ActivityContent extends Component {
+export default class ActivityContent extends PureComponent {
     static propTypes = {
-        notifies: PropTypes.instanceOf(List),
+        isFetching: PropTypes.bool,
         currentTabId: PropTypes.string,
+        notifies: PropTypes.instanceOf(List),
+        
         changeProfileActivityTab: PropTypes.func,
         getNotifyHistory: PropTypes.func,
     };
 
     state = {
         page: 0,
-    }
+    };
 
     rootRef = null;
 
@@ -53,12 +55,11 @@ export default class ActivityContent extends Component {
         }
     }
 
-    setRootRef = el => this.rootRef = el;
+    setRootRef = el => (this.rootRef = el);
 
     handeScroll = throttle(
         () => {
             // const rect = this.rootRef.getBoundingClientRect();
-
             // if (rect.top + rect.height < window.innerHeight * 1.5) {
             //     this.loadMore();
             // }
@@ -79,28 +80,31 @@ export default class ActivityContent extends Component {
         });
     };
 
+    renderTabs = () => {
+        const { isFetching, notifies, accounts } = this.props;
+        const tabs = [
+            { id: 'all', title: 'Все' },
+            { id: 'awards', title: 'Награды' },
+            { id: 'answers', title: 'Ответы' },
+            { id: 'social', title: 'Социальные' },
+            { id: 'mentions', title: 'Упоминания' },
+        ];
+
+        return tabs.map(({ id, title }, key) => (
+            <TabContainer id={id} title={title} key={key}>
+                <ActivityList isFetching={isFetching} notifies={notifies} accounts={accounts} />
+            </TabContainer>
+        ));
+    };
+
     render() {
-        const { notifies, accounts, currentTabId } = this.props;
+        const { currentTabId } = this.props;
 
         return (
             <Card auto innerRef={this.setRootRef}>
                 <Tabs activeTab={{ id: currentTabId }} onChange={this.handleChangeTab}>
-                    <CardContent>
-                        <TabContainer id="all" title="Все">
-                            <ActivityList notifies={notifies} accounts={accounts} />
-                        </TabContainer>
-                        <TabContainer id="awards" title="Награды">
-                            <ActivityList notifies={notifies} accounts={accounts} />
-                        </TabContainer>
-                        <TabContainer id="answers" title="Ответы">
-                            <ActivityList notifies={notifies} accounts={accounts} />
-                        </TabContainer>
-                        <TabContainer id="social" title="Социальные">
-                            <ActivityList notifies={notifies} accounts={accounts} />
-                        </TabContainer>
-                        <TabContainer id="mentions" title="Упоминания">
-                            <ActivityList notifies={notifies} accounts={accounts} />
-                        </TabContainer>
+                    <CardContent column auto>
+                        {this.renderTabs()}
                     </CardContent>
                 </Tabs>
             </Card>

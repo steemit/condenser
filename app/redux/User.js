@@ -145,8 +145,8 @@ export default createModule({
                 return state.setIn(key, fromJS(value))
             }
         },
-        { action: 'NOTIFICATION_CHANNEL_CREATED', reducer: state => state.set('notification_channel_created', true) },
-        { action: 'NOTIFICATION_CHANNEL_DESTROYED', reducer: state => state.set('notification_channel_created', false) },
+        // { action: 'NOTIFICATION_CHANNEL_CREATED', reducer: state => state.set('notification_channel_created', true) },
+        // { action: 'NOTIFICATION_CHANNEL_DESTROYED', reducer: state => state.set('notification_channel_created', false) },
         { action: 'SHOW_MESSAGES', reducer: state => state.set('show_messages_modal', true)  },
         { action: 'HIDE_MESSAGES', reducer: state => state.set('show_messages_modal', false) },
     ]

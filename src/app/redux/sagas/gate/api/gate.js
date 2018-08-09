@@ -1,3 +1,4 @@
+import React from 'react';
 import { fork, take, call, put, cancel, select, actionChannel } from 'redux-saga/effects';
 import { eventChannel, buffers } from 'redux-saga';
 import golos from 'golos-js';
@@ -55,13 +56,13 @@ function* subscribe(socket) {
                     sign: xsign,
                 })
                 .then(() => {
-                    socket.call('notify.subscribe', {});
                     emit({ type: GATE_AUTHORIZED });
+                    socket.call('notify.subscribe', {});
                 });
         });
 
         socket.on('notify.subscribe', data => {
-            console.log(999, data)
+            
         });
 
         return () => emit({ type: GATE_DISCONNECT });
@@ -99,7 +100,7 @@ function* write(socket, writeChannel) {
             let payload = yield call([socket, 'call'], method, data);
             // TODO: review
             if (saga) {
-                yield call(saga, payload)
+                yield call(saga, payload);
             }
             payload = schema ? normalize(payload, schema) : payload;
             yield put(actionWith({ type: successType, payload }));

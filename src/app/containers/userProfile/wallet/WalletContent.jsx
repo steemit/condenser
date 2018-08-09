@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { last } from 'ramda';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
+import TextCut from 'src/app/components/common/TextCut';
 import Card, { CardContent } from 'golos-ui/Card';
 import { TabContainer, Tabs } from 'golos-ui/Tabs';
 import Icon from 'golos-ui/Icon';
@@ -93,21 +94,25 @@ const LineWrapper = styled.div`
 
 const Line = styled.div`
     display: flex;
-    align-items: center;
-    height: 80px;
+    align-items: flex-start;
     padding: 0 20px;
 `;
 
 const LineIcon = styled(Icon)`
     flex-shrink: 0;
     width: 24px;
+    height: 80px;
     margin-right: 16px;
     color: ${props => props.color || '#b7b7ba'};
 `;
 
 const Who = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     flex-grow: 1;
     flex-basis: 10px;
+    height: 80px;
     overflow: hidden;
 `;
 
@@ -137,19 +142,29 @@ const TimeStamp = styled.div`
 `;
 
 const Memo = styled.div`
-    flex-shrink: 0;
-    width: 24px;
-    margin-right: 12px;
+    display: flex;
+    flex-grow: 1;
+    flex-basis: 10px;
 `;
 
 const MemoIcon = styled(Icon)`
     display: block;
+    flex-shrink: 0;
+    flex-basis: 24px;
+    margin-top: 27px;
+    margin-right: 12px;
     color: #333;
     transition: color 0.15s;
+`;
 
-    &:hover {
-        color: #2879ff;
-    }
+const MemoCut = styled(TextCut)`
+    flex-grow: 1;
+    margin: 15px 0;
+`;
+
+const MemoText = styled.div`
+    padding: 5px 0;
+    line-height: 1.4em;
 `;
 
 const DataLink = styled(Link)`
@@ -166,6 +181,9 @@ const DataLink = styled(Link)`
 const Currencies = styled.div`
     display: flex;
     flex-shrink: 0;
+    align-items: center;
+    height: 80px;
+    overflow: hidden;
 `;
 
 const ListValue = styled.div`
@@ -186,9 +204,12 @@ const Value = styled.div`
     flex-direction: column;
     align-items: flex-end;
     width: 80px;
+    height: 80px;
+    justify-content: center;
 `;
 
 const Amount = styled.div`
+    margin-top: 2px;
     line-height: 24px;
     font-size: 20px;
     font-weight: bold;
@@ -422,9 +443,16 @@ class WalletContent extends Component {
                             <TimeAgoWrapper date={item.stamp} />
                         </TimeStamp>
                     </Who>
-                    <Memo>
-                        {item.memo ? <MemoIcon name="note" data-tooltip={item.memo} /> : null}
-                    </Memo>
+                    {item.memo ? (
+                        <Memo>
+                            <MemoIcon name="note" data-tooltip={'Пометка'} />
+                            <MemoCut height={50}>
+                                <MemoText>
+                                    {item.memo}
+                                </MemoText>
+                            </MemoCut>
+                        </Memo>
+                    ) : null}
                     {item.data ? <DataLink to={item.link}>{item.data}</DataLink> : null}
                     {item.currencies ? (
                         <Currencies>
@@ -492,9 +520,6 @@ class WalletContent extends Component {
                         : isReceive
                             ? CURRENCY_COLOR[opCurrency]
                             : null,
-                    data: isSafe
-                        ? null
-                        : 'Golos.io: Новый релиз бла бла бла бла бла бла бла бла бла бла бла бла',
                 };
             }
         }

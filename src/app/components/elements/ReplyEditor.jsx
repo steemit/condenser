@@ -1031,7 +1031,7 @@ export default formId =>
                             break;
                         default: // 50% steem power, 50% sd+steem
                     }
-                    if (beneficiaries) {
+                    if (beneficiaries && beneficiaries.length > 0) {
                         if (!__config.comment_options) {
                             __config.comment_options = {};
                         }

@@ -40,6 +40,10 @@ const Root = styled.div`
     `};
 `;
 
+const Wrapper = styled.div`
+    overflow: hidden;
+`;
+
 export default class TextCut extends PureComponent {
     state = {
         withCut: false,
@@ -61,7 +65,7 @@ export default class TextCut extends PureComponent {
                 }}
                 onClick={closed ? this._onClick : null}
             >
-                <div ref={this._onRef}>{children}</div>
+                <Wrapper innerRef={this._onRef}>{children}</Wrapper>
                 {withCut ? (
                     <IconStyled
                         name="chevron"

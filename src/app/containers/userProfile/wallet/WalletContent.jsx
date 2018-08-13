@@ -153,6 +153,7 @@ const Memo = styled.div`
     display: flex;
     flex-grow: 1;
     flex-basis: 10px;
+    overflow: hidden;
 `;
 
 const MemoIcon = styled(Icon)`
@@ -181,9 +182,11 @@ const MemoCentrer = styled.div`
 
 const MemoText = styled.div`
     display: inline-block;
+    width: 100%;
     padding: 4px 0;
     line-height: 1.4em;
     vertical-align: middle;
+    word-wrap: break-word;
 `;
 
 const DataLink = styled(Link)`
@@ -356,7 +359,9 @@ class WalletContent extends Component {
                         <TabContainer id={MAIN_TABS.TRANSACTIONS} title="История транзакций">
                             {this._renderTransactionsTabs()}
                         </TabContainer>
-                        <TabContainer id={MAIN_TABS.POWER} title="Сила голоса" />
+                        <TabContainer id={MAIN_TABS.POWER} title="Сила голоса">
+                            {this._renderTransactionsType()}
+                        </TabContainer>
                         <TabContainer id={MAIN_TABS.REWARDS} title="Награды">
                             {this._renderRewardsTabs()}
                         </TabContainer>
@@ -396,20 +401,22 @@ class WalletContent extends Component {
     }
 
     _renderRewardsTabs() {
-        const { rewardTab } = this.state;
+        return this._renderRewardsType();
 
-        return (
-            <Tabs activeTab={{ id: rewardTab }} onChange={this._onRewardTabChange}>
-                <TabsContent>
-                    <TabContainer id={REWARDS_TABS.HISTORY} title="История">
-                        {this._renderRewardsType()}
-                    </TabContainer>
-                    <TabContainer id={REWARDS_TABS.STATISTIC} title="Статистика">
-                        {this._renderRewardsType()}
-                    </TabContainer>
-                </TabsContent>
-            </Tabs>
-        );
+        // const { rewardTab } = this.state;
+        //
+        // return (
+        //     <Tabs activeTab={{ id: rewardTab }} onChange={this._onRewardTabChange}>
+        //         <TabsContent>
+        //             <TabContainer id={REWARDS_TABS.HISTORY} title="История">
+        //                 {this._renderRewardsType()}
+        //             </TabContainer>
+        //             <TabContainer id={REWARDS_TABS.STATISTIC} title="Статистика">
+        //                 {this._renderRewardsType()}
+        //             </TabContainer>
+        //         </TabsContent>
+        //     </Tabs>
+        // );
     }
 
     _renderRewardsType() {
@@ -473,6 +480,10 @@ class WalletContent extends Component {
             list = this._makeTransferList();
         }
 
+        if (list == null) {
+            return <Loader />;
+        }
+
         if (list.length) {
             for (let i = 0; i < list.length; ++i) {
                 const line = list[i];
@@ -494,8 +505,8 @@ class WalletContent extends Component {
 
         const transfers = pageAccount.get('transfer_history');
 
-        if (!transfers || true) {
-            return <Loader />;
+        if (!transfers) {
+            return null;
         }
 
         const list = [];
@@ -526,10 +537,6 @@ class WalletContent extends Component {
                 }
             }
 
-            if (process.env.BROWSER) {
-                //console.log(type, data);
-            }
-
             if (line) {
                 line.stamp = stamp;
                 list.push(line);
@@ -541,32 +548,39 @@ class WalletContent extends Component {
 
     _makeGolosPowerList() {
         const { myAccountName, pageAccountName, globalProps } = this.props;
-        const { delegationData } = this.state;
+        const { delegationData, direction } = this.state;
 
         const list = [];
 
         for (let item of delegationData) {
             const isReceive = item.delegatee === pageAccountName;
+            const isSent = item.delegator === pageAccountName;
 
-            const sign = isReceive ? '+' : '-';
+            if (
+                direction === DIRECTION.ALL ||
+                (direction === DIRECTION.SENT && isSent) ||
+                (direction === DIRECTION.RECEIVE && isReceive)
+            ) {
+                const sign = isReceive ? '+' : '-';
 
-            const amount = vestsToGolos(item.vesting_shares, globalProps);
-            const currency = CURRENCY.GOLOS_POWER;
+                const amount = vestsToGolos(item.vesting_shares, globalProps);
+                const currency = CURRENCY.GOLOS_POWER;
 
-            const stamp = new Date(item.min_delegation_time + 'Z');
+                const stamp = new Date(item.min_delegation_time + 'Z');
 
-            list.push({
-                id: item.id,
-                type: isReceive ? DIRECTION.RECEIVE : DIRECTION.SENT,
-                name: isReceive ? item.delegator : item.delegatee,
-                amount: sign + amount,
-                currency,
-                memo: item.memo || null,
-                icon: 'voice',
-                color: isReceive ? CURRENCY_COLOR[currency] : null,
-                showDelegationActions: item.delegator === myAccountName,
-                stamp,
-            });
+                list.push({
+                    id: item.id,
+                    type: isReceive ? DIRECTION.RECEIVE : DIRECTION.SENT,
+                    name: isReceive ? item.delegator : item.delegatee,
+                    amount: sign + amount,
+                    currency,
+                    memo: item.memo || null,
+                    icon: 'voice',
+                    color: isReceive ? CURRENCY_COLOR[currency] : null,
+                    showDelegationActions: item.delegator === myAccountName,
+                    stamp,
+                });
+            }
         }
 
         return list;
@@ -630,7 +644,7 @@ class WalletContent extends Component {
                     )}
                 </Line>
                 {this._renderEditDelegation(item)}
-                {loaderForId === item.id ? <SplashLoader /> : null}
+                {loaderForId && loaderForId === item.id ? <SplashLoader light /> : null}
             </LineWrapper>
         );
     }
@@ -845,6 +859,8 @@ class WalletContent extends Component {
     _onMainTabChange = ({ id }) => {
         this.setState({
             mainTab: id,
+            currency: CURRENCY.ALL,
+            direction: DIRECTION.ALL,
             editDelegationId: null,
         });
     };

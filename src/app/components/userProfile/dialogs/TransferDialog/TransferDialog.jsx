@@ -57,7 +57,7 @@ const NoteIcon = Icon.extend`
 const Note = styled.textarea`
     display: block;
     width: 100%;
-    height: 118px;
+    height: 120px;
     padding: 7px 11px;
     border: 1px solid #e1e1e1;
     outline: none;

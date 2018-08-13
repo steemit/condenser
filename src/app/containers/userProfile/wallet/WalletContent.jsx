@@ -398,20 +398,22 @@ class WalletContent extends Component {
     }
 
     _renderRewardsTabs() {
-        const { rewardTab } = this.state;
+        return this._renderRewardsType();
 
-        return (
-            <Tabs activeTab={{ id: rewardTab }} onChange={this._onRewardTabChange}>
-                <TabsContent>
-                    <TabContainer id={REWARDS_TABS.HISTORY} title="История">
-                        {this._renderRewardsType()}
-                    </TabContainer>
-                    <TabContainer id={REWARDS_TABS.STATISTIC} title="Статистика">
-                        {this._renderRewardsType()}
-                    </TabContainer>
-                </TabsContent>
-            </Tabs>
-        );
+        // const { rewardTab } = this.state;
+        //
+        // return (
+        //     <Tabs activeTab={{ id: rewardTab }} onChange={this._onRewardTabChange}>
+        //         <TabsContent>
+        //             <TabContainer id={REWARDS_TABS.HISTORY} title="История">
+        //                 {this._renderRewardsType()}
+        //             </TabContainer>
+        //             <TabContainer id={REWARDS_TABS.STATISTIC} title="Статистика">
+        //                 {this._renderRewardsType()}
+        //             </TabContainer>
+        //         </TabsContent>
+        //     </Tabs>
+        // );
     }
 
     _renderRewardsType() {
@@ -475,6 +477,10 @@ class WalletContent extends Component {
             list = this._makeTransferList();
         }
 
+        if (list == null) {
+            return <Loader />;
+        }
+
         if (list.length) {
             for (let i = 0; i < list.length; ++i) {
                 const line = list[i];
@@ -496,8 +502,8 @@ class WalletContent extends Component {
 
         const transfers = pageAccount.get('transfer_history');
 
-        if (!transfers || true) {
-            return <Loader />;
+        if (!transfers) {
+            return null;
         }
 
         const list = [];
@@ -526,10 +532,6 @@ class WalletContent extends Component {
                 if (type === 'curation_reward' || type === 'author_reward') {
                     line = this._processRewards(type, data, stamp);
                 }
-            }
-
-            if (process.env.BROWSER) {
-                //console.log(type, data);
             }
 
             if (line) {
@@ -639,7 +641,7 @@ class WalletContent extends Component {
                     )}
                 </Line>
                 {this._renderEditDelegation(item)}
-                {loaderForId === item.id ? <SplashLoader /> : null}
+                {loaderForId && loaderForId === item.id ? <SplashLoader light /> : null}
             </LineWrapper>
         );
     }

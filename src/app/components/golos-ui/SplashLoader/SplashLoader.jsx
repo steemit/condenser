@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import is from 'styled-is';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import React from 'react';
 
@@ -16,11 +17,15 @@ const Root = styled.div`
     animation: fade-in 0.5s forwards;
     animation-delay: 0.2s;
     z-index: 1;
+
+    ${is('light')`
+        background: rgba(255, 255, 255, 0.09);
+    `};
 `;
 
-export default function SplashLoader() {
+export default function SplashLoader(props) {
     return (
-        <Root>
+        <Root {...props}>
             <LoadingIndicator type="circle" size={60} />
         </Root>
     );

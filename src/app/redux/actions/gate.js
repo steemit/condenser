@@ -1,26 +1,26 @@
 import { GATE_SEND_MESSAGE } from 'src/app/redux/constants/gate';
 import {
-    NOTIFY_GET_HISTORY,
-    NOTIFY_GET_HISTORY_SUCCESS,
-    NOTIFY_GET_HISTORY_ERROR,
-} from 'src/app/redux/constants/notifies';
+    NOTIFICATION_GET_HISTORY,
+    NOTIFICATION_GET_HISTORY_SUCCESS,
+    NOTIFICATION_GET_HISTORY_ERROR,
+} from 'src/app/redux/constants/notifications';
 import Schemas from 'src/app/redux/sagas/gate/api/schemas';
-import { hydrateNotifies } from 'src/app/redux/sagas/actions/notifies';
+import { hydrateNotifications } from 'src/app/redux/sagas/actions/notifications';
 
-export function getNotifyHistory({ skip = 0, limit = 10, types = 'all' }) {
+export function getNotificationsHistory({ fromId = null, limit = 10, types = 'all' }) {
     return {
         type: GATE_SEND_MESSAGE,
         payload: {
-            method: 'notify.history',
+            method: 'getNotifyHistory',
             types: [
-                NOTIFY_GET_HISTORY,
-                NOTIFY_GET_HISTORY_SUCCESS,
-                NOTIFY_GET_HISTORY_ERROR,
+                NOTIFICATION_GET_HISTORY,
+                NOTIFICATION_GET_HISTORY_SUCCESS,
+                NOTIFICATION_GET_HISTORY_ERROR,
             ],
-            data: { skip, limit, types },
-            saga: hydrateNotifies,
-            schema: Schemas.NOTIFY_ARRAY,
+            data: { fromId, limit, types },
+            saga: hydrateNotifications,
+            schema: Schemas.NOTIFICATION_ARRAY,
         },
-        meta: { skip, limit, types },
+        meta: { fromId, limit, types },
     };
 }

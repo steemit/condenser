@@ -18,16 +18,13 @@ const Wrapper = styled.div`
 
     ${is('icon')`
         margin-left: 6px;
-    `}
-
-    background-size: cover;
+    `} background-size: cover;
     background-repeat: no-repeat;
     background-position: 50% 50%;
     border-radius: 50%;
     background-color: #fff;
     background-image: ${({ backgroundUrl }) => `url(${backgroundUrl})`};
 `;
-
 
 const AvatarBadge = styled.div`
     display: flex;
@@ -54,7 +51,10 @@ export default class Avatar extends PureComponent {
         icon: PropTypes.object,
     };
 
-    static defaultProps = { size: 40 };
+    static defaultProps = {
+        size: 40,
+        icon: null,
+    };
 
     render() {
         const { avatarUrl, size, icon } = this.props;

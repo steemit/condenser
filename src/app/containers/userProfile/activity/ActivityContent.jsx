@@ -6,9 +6,9 @@ import styled from 'styled-components';
 
 import throttle from 'lodash/throttle';
 
-import { NOTIFIES_FILTER_TYPES } from 'src/app/redux/constants/common';
+import { NOTIFICATIONS_FILTER_TYPES } from 'src/app/redux/constants/common';
 import { activityContentSelector } from 'src/app/redux/selectors/userProfile/activity';
-import { getNotifyHistory } from 'src/app/redux/actions/gate';
+import { getNotificationsHistory } from 'src/app/redux/actions/gate';
 import { changeProfileActivityTab } from 'src/app/redux/actions/ui';
 
 import Card, { CardContent } from 'golos-ui/Card';
@@ -19,7 +19,7 @@ import ActivityList from 'src/app/components/userProfile/activity/ActivityList';
 @connect(
     activityContentSelector,
     {
-        getNotifyHistory,
+        getNotificationsHistory,
         changeProfileActivityTab,
     }
 )
@@ -27,10 +27,10 @@ export default class ActivityContent extends PureComponent {
     static propTypes = {
         isFetching: PropTypes.bool,
         currentTabId: PropTypes.string,
-        notifies: PropTypes.instanceOf(List),
+        notifications: PropTypes.instanceOf(List),
         
         changeProfileActivityTab: PropTypes.func,
-        getNotifyHistory: PropTypes.func,
+        getNotificationsHistory: PropTypes.func,
     };
 
     state = {
@@ -73,15 +73,15 @@ export default class ActivityContent extends PureComponent {
     loadMore = () => {
         const { page } = this.state;
 
-        this.props.getNotifyHistory({
-            types: NOTIFIES_FILTER_TYPES[this.props.currentTabId],
+        this.props.getNotificationsHistory({
+            types: NOTIFICATIONS_FILTER_TYPES[this.props.currentTabId],
             skip: page * 5,
             limit: page * 5 + 15,
         });
     };
 
     renderTabs = () => {
-        const { isFetching, notifies, accounts } = this.props;
+        const { isFetching, notifications, accounts } = this.props;
         const tabs = [
             { id: 'all', title: 'Все' },
             { id: 'awards', title: 'Награды' },
@@ -92,7 +92,7 @@ export default class ActivityContent extends PureComponent {
 
         return tabs.map(({ id, title }, key) => (
             <TabContainer id={id} title={title} key={key}>
-                <ActivityList isFetching={isFetching} notifies={notifies} accounts={accounts} />
+                <ActivityList isFetching={isFetching} notifications={notifications} accounts={accounts} />
             </TabContainer>
         ));
     };

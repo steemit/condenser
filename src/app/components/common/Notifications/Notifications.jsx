@@ -6,6 +6,14 @@ import { NotificationStack } from 'react-notification';
 
 let keyIndex = 0;
 
+function defaultActiveBarStyleFactory(index, style) {
+    return Object.assign(
+      {},
+      style,
+      { bottom: `${2 + (index * 5)}rem` }
+    );
+  }
+
 @connect(
     state => ({
         notifications: state.app.get('notifications'),
@@ -24,20 +32,26 @@ export default class Notifications extends Component {
         const { notifications, removeNotification } = this.props;
 
         const notificationsArray = notifications
-            ? notifications.toArray().map(n => {
-                  if (!n.key) {
-                      n.key = ++keyIndex;
+            ? notifications.toArray().map(notify => {
+                  if (!notify.key) {
+                      notify.key = ++keyIndex;
                   }
-                  n.onClick = () => removeNotification(n.key);
-                  return n;
+                  if (!notify.onClick) {
+                      notify.onClick = (notification, deactivate) => {
+                          deactivate();
+                          removeNotification(notify.key);
+                      };
+                  }
+                  return notify;
               })
             : [];
 
         return (
             <NotificationStack
                 style={false}
+                activeBarStyleFactory={defaultActiveBarStyleFactory}
                 notifications={notificationsArray}
-                onDismiss={n => removeNotification(n.key)}
+                onDismiss={notify => removeNotification(notify.key)}
             />
         );
     }

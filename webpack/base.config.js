@@ -63,10 +63,6 @@ module.exports = {
                 test: require.resolve('blueimp-file-upload'),
                 use: 'imports?define=>false',
             },
-            {
-                test: require.resolve('medium-editor-insert-plugin'),
-                use: 'imports?define=>false',
-            },
             { test: /\.md/, use: 'raw-loader' },
         ],
     },

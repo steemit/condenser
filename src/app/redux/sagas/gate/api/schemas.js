@@ -1,10 +1,10 @@
 import { schema } from 'normalizr';
 
-const notifySchema = new schema.Entity('notifies', {}, {
+const notificationSchema = new schema.Entity('notifications', {}, {
     idAttribute: '_id'
 });
 
 export default {
-    NOTIFY: notifySchema,
-    NOTIFY_ARRAY: [notifySchema],
+    NOTIFICATION: notificationSchema,
+    NOTIFICATION_ARRAY: [notificationSchema],
 };

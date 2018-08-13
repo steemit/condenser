@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
 import gate from './gate';
-import notifies from './notifies';
+import notifications from './notifications';
 
 export default combineReducers({
     gate,
-    notifies,
+    notifications,
 });

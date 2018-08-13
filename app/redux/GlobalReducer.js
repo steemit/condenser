@@ -114,6 +114,30 @@ export default createModule({
             },
         },
         {
+            action: 'RECEIVE_ACCOUNTS',
+            reducer: (state, { payload: { accounts } }) => {
+                return state.withMutations(state => {
+                    accounts.forEach(account => {
+                        account = fromJS(account, (key, value) => {
+                            if (key === 'witness_votes') {
+                                return value.toSet();
+                            } else {
+                                return Iterable.isIndexed(value)
+                                    ? value.toList()
+                                    : value.toOrderedMap();
+                            }
+                        });
+                        // Merging accounts: A get_state will provide a very full account but a get_accounts will provide a smaller version
+                        state.updateIn(
+                            ['accounts', account.get('name')],
+                            Map(),
+                            a => a.mergeDeep(account)
+                        );
+                    });
+                })
+            },
+        },
+        {
             action: 'RECEIVE_COMMENT',
             reducer: (state, { payload: op }) => {
                 const {
@@ -176,6 +200,27 @@ export default createModule({
                     c = c.mergeDeep(content);
                     c = c.set('stats', fromJS(contentStats(c)));
                     return c;
+                });
+            },
+        },
+        {
+            action: 'RECEIVE_CONTENTS',
+            reducer: (state, { payload: { contents } }) => {
+                contents = fromJS(contents);
+                return state.withMutations(state => {
+                    contents.forEach(content => {
+                        const key =
+                            content.get('author') + '/' + content.get('permlink');
+
+                        state.updateIn(['content', key], Map(), c => {
+                            c = emptyContentMap.mergeDeep(c);
+                            c = c.delete('votesSummary');
+                            c = c.delete('active_votes');
+                            c = c.mergeDeep(content);
+                            c = c.set('stats', fromJS(contentStats(c)));
+                            return c;
+                        });
+                    });
                 });
             },
         },

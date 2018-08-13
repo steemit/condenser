@@ -1,6 +1,6 @@
 import { combineEntitiesReducers } from 'redux-entities-immutable';
-import notifies from './notifies';
+import notifications from './notifications';
 
 export default combineEntitiesReducers({
-    notifies,
+    notifications,
 });

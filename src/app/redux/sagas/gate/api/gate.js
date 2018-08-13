@@ -1,9 +1,10 @@
-import React from 'react';
 import { fork, take, call, put, cancel, select, actionChannel } from 'redux-saga/effects';
 import { eventChannel, buffers } from 'redux-saga';
 import golos from 'golos-js';
 import { Client as WebSocket } from 'rpc-websockets';
 import { normalize } from 'normalizr';
+
+import { addNotificationOnline } from 'src/app/redux/actions/notificationsOnline'
 
 import {
     GATE_SEND_MESSAGE,
@@ -13,7 +14,7 @@ import {
     GATE_DISCONNECT,
 } from 'src/app/redux/constants/gate';
 
-const makeFakeAuthTransaction = ({ userName, sign }) => ({
+const makeFakeAuthTransaction = (userName, secret) => ({
     ref_block_num: 3367,
     ref_block_prefix: 879276768,
     expiration: '2018-07-06T14:52:24',
@@ -23,13 +24,42 @@ const makeFakeAuthTransaction = ({ userName, sign }) => ({
             {
                 voter: userName,
                 author: 'test',
-                permlink: sign,
+                permlink: secret,
                 weight: 1,
             },
         ],
     ],
     extensions: [],
 });
+
+export default function* rootSaga() {
+    yield fork(flow);
+}
+
+function* flow() {
+    const gateServiceUrl = yield select(state =>
+        state.offchain.getIn(['config', 'gate_service_url'])
+    );
+
+    // Channel listen messages for writing
+    const writeChannel = yield actionChannel(GATE_SEND_MESSAGE, buffers.expanding(10));
+
+    while (true) {
+        // Wait for user login
+        yield take(`user/SET_USER`);
+
+        yield put({ type: GATE_CONNECT });
+        const socket = yield call(connect, gateServiceUrl);
+        yield put({ type: GATE_CONNECT_SUCCESS });
+
+        const task = yield fork(handleIO, socket, writeChannel);
+
+        // Wait for user logout
+        yield take(`user/LOGOUT`);
+
+        yield cancel(task);
+    }
+}
 
 function connect(gateServiceUrl) {
     const socket = new WebSocket(gateServiceUrl);
@@ -38,35 +68,9 @@ function connect(gateServiceUrl) {
     });
 }
 
-function* subscribe(socket) {
-    const current = yield select(state => state.user.get('current'));
-    const postingPrivateKey = current.getIn(['private_keys', 'posting_private']);
-    const userName = current.get('username');
-
-    return eventChannel(emit => {
-        socket.on('sign', ([sign]) => {
-            const transaction = makeFakeAuthTransaction({ userName, sign });
-            const {
-                signatures: [xsign],
-            } = golos.auth.signTransaction(transaction, [postingPrivateKey]);
-
-            socket
-                .call('get', {
-                    user: userName,
-                    sign: xsign,
-                })
-                .then(() => {
-                    emit({ type: GATE_AUTHORIZED });
-                    socket.call('notify.subscribe', {});
-                });
-        });
-
-        socket.on('notify.subscribe', data => {
-            
-        });
-
-        return () => emit({ type: GATE_DISCONNECT });
-    });
+function* handleIO(socket, writeChannel) {
+    yield fork(write, socket, writeChannel);
+    yield fork(read, socket);
 }
 
 function* read(socket) {
@@ -100,46 +104,49 @@ function* write(socket, writeChannel) {
             let payload = yield call([socket, 'call'], method, data);
             // TODO: review
             if (saga) {
-                yield call(saga, payload);
+                yield call(saga, payload.data);
             }
-            payload = schema ? normalize(payload, schema) : payload;
+            payload = schema ? normalize(payload.data, schema) : payload;
             yield put(actionWith({ type: successType, payload }));
         } catch (e) {
+            yield put({
+                type: 'ADD_NOTIFICATION',
+                payload: {
+                    message: e.message,
+                    dismissAfter: 5000,
+                },
+            });
             yield put(actionWith({ type: failureType, error: e.message }));
         }
     }
 }
 
-function* handleIO(socket, writeChannel) {
-    yield fork(write, socket, writeChannel);
-    yield fork(read, socket);
-}
+function* subscribe(socket) {
+    const current = yield select(state => state.user.get('current'));
+    const postingPrivateKey = current.getIn(['private_keys', 'posting_private']);
+    const userName = current.get('username');
 
-function* flow() {
-    const gateServiceUrl = yield select(state =>
-        state.offchain.getIn(['config', 'gate_service_url'])
-    );
+    return eventChannel(emit => {
+        socket.on('sign', ({ secret }) => {
+            const transaction = makeFakeAuthTransaction(userName, secret);
+            const {
+                signatures: [xsign],
+            } = golos.auth.signTransaction(transaction, [postingPrivateKey]);
 
-    // Channel listen messages for writing
-    const writeChannel = yield actionChannel(GATE_SEND_MESSAGE, buffers.expanding(10));
+            socket
+                .call('auth', {
+                    user: userName,
+                    sign: xsign,
+                })
+                .then(() => {
+                    emit({ type: GATE_AUTHORIZED });
 
-    while (true) {
-        // Wait for user login
-        yield take(`user/SET_USER`);
+                    socket.call('onlineNotifyOn', {});
+                });
+        });
 
-        yield put({ type: GATE_CONNECT });
-        const socket = yield call(connect, gateServiceUrl);
-        yield put({ type: GATE_CONNECT_SUCCESS });
+        socket.on('onlineNotify', ({ result }) => emit(addNotificationOnline(result)));
 
-        const task = yield fork(handleIO, socket, writeChannel);
-
-        // Wait for user logout
-        yield take(`user/LOGOUT`);
-
-        yield cancel(task);
-    }
-}
-
-export default function* rootSaga() {
-    yield fork(flow);
+        return () => emit({ type: GATE_DISCONNECT });
+    });
 }

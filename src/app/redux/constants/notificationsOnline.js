@@ -1,0 +1,1 @@
+export const NOTIFICATION_ONLINE_ADD_NOTIFICATION = 'notificationOnline/ADD_NOTIFICATION';

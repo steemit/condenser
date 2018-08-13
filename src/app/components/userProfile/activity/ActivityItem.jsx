@@ -55,7 +55,7 @@ export default class ActivityItem extends Component {
     };
 
     render() {
-        const { notify, accounts } = this.props;
+        const { notification, accounts } = this.props;
 
         // Создала новый пост “Блокчейн”.
         // У вас осталось 30 неизрасходованных апвоутов за…
@@ -100,14 +100,14 @@ export default class ActivityItem extends Component {
         let msg = '';
         let icon = null;
 
-        const userName = notify
+        const userName = notification
             .get('fromUsers')
             .get(0)
             .toLowerCase();
         const account = accounts.getIn([userName]);
         const { name, profile_image } = normalizeProfile(account.toJS());
 
-        switch (notify.get('eventType')) {
+        switch (notification.get('eventType')) {
             case 'vote':
                 msg = 'Поставил лайк вашему посту “Блокчейн”.';
                 icon = {
@@ -134,6 +134,11 @@ export default class ActivityItem extends Component {
                 break;
             case 'reply':
                 msg = 'Ответил на комментарий к вашему посту “Пигмалион”.';
+                icon = {
+                    name: 'comment',
+                    width: 12,
+                    height: 12,
+                }
                 break;
             case 'mention':
                 msg = 'Упомянул вас в посте “Пигмалион”.';
@@ -153,7 +158,7 @@ export default class ActivityItem extends Component {
                     <ActivityTop>
                         <AuthorName to={`/@${userName}`}>{name || userName}</AuthorName>
                         <ActivityDate>
-                            <TimeAgoWrapper date={notify.get('createdAt')} />
+                            <TimeAgoWrapper date={notification.get('updatedAt')} />
                         </ActivityDate>
                     </ActivityTop>
                     <ActivityText>{msg}</ActivityText>

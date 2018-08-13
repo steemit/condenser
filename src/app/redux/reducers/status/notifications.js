@@ -1,9 +1,9 @@
 import { fromJS } from 'immutable';
 import {
-    NOTIFY_GET_HISTORY,
-    NOTIFY_GET_HISTORY_SUCCESS,
-    NOTIFY_GET_HISTORY_ERROR,
-} from 'src/app/redux/constants/notifies';
+    NOTIFICATION_GET_HISTORY,
+    NOTIFICATION_GET_HISTORY_SUCCESS,
+    NOTIFICATION_GET_HISTORY_ERROR,
+} from 'src/app/redux/constants/notifications';
 
 const initialState = fromJS({
     isFetching: false,
@@ -12,13 +12,13 @@ const initialState = fromJS({
 
 export default function(state = initialState, { type, payload, error }) {
     switch (type) {
-        case NOTIFY_GET_HISTORY:
+        case NOTIFICATION_GET_HISTORY:
             return initialState.set('isFetching', true);
 
-        case NOTIFY_GET_HISTORY_SUCCESS:
+        case NOTIFICATION_GET_HISTORY_SUCCESS:
             return initialState;
 
-        case NOTIFY_GET_HISTORY_ERROR:
+        case NOTIFICATION_GET_HISTORY_ERROR:
             return initialState.set('error', error);
 
         default:

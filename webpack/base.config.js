@@ -59,10 +59,6 @@ module.exports = {
                     outputPath: 'fonts/',
                 },
             },
-            {
-                test: require.resolve('blueimp-file-upload'),
-                use: 'imports?define=>false',
-            },
             { test: /\.md/, use: 'raw-loader' },
         ],
     },

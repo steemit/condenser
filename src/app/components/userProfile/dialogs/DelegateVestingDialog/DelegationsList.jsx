@@ -71,6 +71,7 @@ const ActionButton = styled.button`
 `;
 
 const EmptyList = styled.div`
+    height: 264px;
     padding-top: 20px;
     text-align: center;
     font-weight: 500;
@@ -79,7 +80,7 @@ const EmptyList = styled.div`
 `;
 
 export default class DelegationsList extends PureComponent {
-    propTypes = {
+    static propTypes = {
         globalProps: PropTypes.object.isRequired,
         data: PropTypes.array.isRequired,
         onEditClick: PropTypes.func.isRequired,

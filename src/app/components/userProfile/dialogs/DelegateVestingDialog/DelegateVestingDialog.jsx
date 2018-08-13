@@ -12,7 +12,7 @@ import ComplexInput from 'src/app/components/golos-ui/ComplexInput';
 import SplashLoader from 'src/app/components/golos-ui/SplashLoader';
 import DialogTypeSelect from 'src/app/components/userProfile/common/DialogTypeSelect';
 import { parseAmount2 } from 'src/app/helpers/currency';
-import { vestsToGolos, golosToVests } from 'app/utils/StateFunctions';
+import { vestsToGolos, golosToVests, getVesting } from 'app/utils/StateFunctions';
 import Shrink from 'src/app/components/golos-ui/Shrink';
 import DelegationsList from './DelegationsList';
 import { api } from 'golos-js';
@@ -34,6 +34,7 @@ const Content = styled.div`
 
 const SubHeader = styled.div`
     padding: 30px;
+    margin-bottom: 1px;
     border-bottom: 1px solid #e1e1e1;
     text-align: center;
     font-size: 14px;
@@ -131,7 +132,10 @@ class DelegateVestingDialog extends PureComponent {
 
         const { golos } = getVesting(myAccount, globalProps);
 
-        const availableBalance = Math.max(0, Math.round((parseFloat(golos) - MIN_VOICE_POWER) * 1000));
+        const availableBalance = Math.max(
+            0,
+            Math.round((parseFloat(golos) - MIN_VOICE_POWER) * 1000)
+        );
         const availableBalanceString = (availableBalance / 1000).toFixed(3);
 
         const { value, error } = parseAmount2(amount, availableBalance, !amountInFocus, 1000);
@@ -145,20 +149,28 @@ class DelegateVestingDialog extends PureComponent {
             availableBalanceString,
         };
 
-        const buttons = [
-            {
-                text: tt('g.cancel'),
-                onClick: this._onCloseClick,
-            },
-        ];
+        let buttons;
 
         if (type === TYPES.DELEGATE) {
-            buttons.push({
-                text: 'Делегировать',
-                primary: true,
-                disabled: !allow,
-                onClick: this._onOkClick,
-            });
+            buttons = [
+                {
+                    text: tt('g.close'),
+                    onClick: this._onCloseClick,
+                },
+            ];
+        } else {
+            buttons = [
+                {
+                    text: tt('g.cancel'),
+                    onClick: this._onCloseClick,
+                },
+                {
+                    text: 'Делегировать',
+                    primary: true,
+                    disabled: !allow,
+                    onClick: this._onOkClick,
+                },
+            ];
         }
 
         return (
@@ -546,14 +558,3 @@ export default connect(
     })
 )(DelegateVestingDialog);
 
-function getVesting(account, props) {
-    const vesting = parseFloat(account.get('vesting_shares'));
-    const delegated = parseFloat(account.get('delegated_vesting_shares'));
-
-    const availableVesting = vesting - delegated;
-
-    return {
-        gests: availableVesting,
-        golos: vestsToGolos(availableVesting.toFixed(6) + ' GESTS', props),
-    };
-}

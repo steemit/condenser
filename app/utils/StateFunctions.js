@@ -201,3 +201,15 @@ export function calcVotesStats(votes, me) {
 
     return stats;
 }
+
+export function getVesting(account, props) {
+    const vesting = parseFloat(account.get('vesting_shares'));
+    const delegated = parseFloat(account.get('delegated_vesting_shares'));
+
+    const availableVesting = vesting - delegated;
+
+    return {
+        gests: availableVesting,
+        golos: vestsToGolos(availableVesting.toFixed(6) + ' GESTS', props),
+    };
+}

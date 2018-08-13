@@ -356,7 +356,9 @@ class WalletContent extends Component {
                         <TabContainer id={MAIN_TABS.TRANSACTIONS} title="История транзакций">
                             {this._renderTransactionsTabs()}
                         </TabContainer>
-                        <TabContainer id={MAIN_TABS.POWER} title="Сила голоса" />
+                        <TabContainer id={MAIN_TABS.POWER} title="Сила голоса">
+                            {this._renderTransactionsType()}
+                        </TabContainer>
                         <TabContainer id={MAIN_TABS.REWARDS} title="Награды">
                             {this._renderRewardsTabs()}
                         </TabContainer>
@@ -541,32 +543,39 @@ class WalletContent extends Component {
 
     _makeGolosPowerList() {
         const { myAccountName, pageAccountName, globalProps } = this.props;
-        const { delegationData } = this.state;
+        const { delegationData, direction } = this.state;
 
         const list = [];
 
         for (let item of delegationData) {
             const isReceive = item.delegatee === pageAccountName;
+            const isSent = item.delegator === pageAccountName;
 
-            const sign = isReceive ? '+' : '-';
+            if (
+                direction === DIRECTION.ALL ||
+                (direction === DIRECTION.SENT && isSent) ||
+                (direction === DIRECTION.RECEIVE && isReceive)
+            ) {
+                const sign = isReceive ? '+' : '-';
 
-            const amount = vestsToGolos(item.vesting_shares, globalProps);
-            const currency = CURRENCY.GOLOS_POWER;
+                const amount = vestsToGolos(item.vesting_shares, globalProps);
+                const currency = CURRENCY.GOLOS_POWER;
 
-            const stamp = new Date(item.min_delegation_time + 'Z');
+                const stamp = new Date(item.min_delegation_time + 'Z');
 
-            list.push({
-                id: item.id,
-                type: isReceive ? DIRECTION.RECEIVE : DIRECTION.SENT,
-                name: isReceive ? item.delegator : item.delegatee,
-                amount: sign + amount,
-                currency,
-                memo: item.memo || null,
-                icon: 'voice',
-                color: isReceive ? CURRENCY_COLOR[currency] : null,
-                showDelegationActions: item.delegator === myAccountName,
-                stamp,
-            });
+                list.push({
+                    id: item.id,
+                    type: isReceive ? DIRECTION.RECEIVE : DIRECTION.SENT,
+                    name: isReceive ? item.delegator : item.delegatee,
+                    amount: sign + amount,
+                    currency,
+                    memo: item.memo || null,
+                    icon: 'voice',
+                    color: isReceive ? CURRENCY_COLOR[currency] : null,
+                    showDelegationActions: item.delegator === myAccountName,
+                    stamp,
+                });
+            }
         }
 
         return list;
@@ -845,6 +854,8 @@ class WalletContent extends Component {
     _onMainTabChange = ({ id }) => {
         this.setState({
             mainTab: id,
+            currency: CURRENCY.ALL,
+            direction: DIRECTION.ALL,
             editDelegationId: null,
         });
     };

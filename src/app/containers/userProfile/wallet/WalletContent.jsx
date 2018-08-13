@@ -295,20 +295,25 @@ class WalletContent extends Component {
     _renderTransactionsTabs() {
         const { currency } = this.state;
 
+        const innerTabs = this._renderTransactionsType();
+
         return (
             <Tabs activeTab={{ id: currency }} onChange={this._onCurrencyChange}>
                 <TabsContent>
                     <TabContainer id={CURRENCY.ALL} title="Все">
-                        {this._renderTransactionsType()}
+                        {innerTabs}
                     </TabContainer>
                     <TabContainer id={CURRENCY.GOLOS} title="Голос">
-                        {this._renderTransactionsType()}
+                        {innerTabs}
                     </TabContainer>
                     <TabContainer id={CURRENCY.GBG} title="Золото">
-                        {this._renderTransactionsType()}
+                        {innerTabs}
+                    </TabContainer>
+                    <TabContainer id={CURRENCY.GOLOS_POWER} title="Сила Голоса">
+                        {innerTabs}
                     </TabContainer>
                     <TabContainer id={CURRENCY.SAFE} title="Сейф">
-                        {this._renderTransactionsType()}
+                        {innerTabs}
                     </TabContainer>
                 </TabsContent>
             </Tabs>
@@ -393,14 +398,13 @@ class WalletContent extends Component {
                 if (
                     type === 'transfer' ||
                     type === 'transfer_to_savings' ||
-                    type === 'transfer_from_savings'
+                    type === 'transfer_from_savings' ||
+                    type === 'transfer_to_vesting'
                 ) {
                     line = this._processTransactions(type, data, stamp);
                 }
             } else if (mainTab === MAIN_TABS.POWER) {
-                if (type === 'transfer_to_vesting') {
-                    line = this._processVesting(type, data, stamp);
-                }
+
             } else if (mainTab === MAIN_TABS.REWARDS) {
                 if (type === 'curation_reward' || type === 'author_reward') {
                     line = this._processRewards(type, data, stamp);
@@ -408,7 +412,7 @@ class WalletContent extends Component {
             }
 
             if (process.env.BROWSER) {
-                console.log(type, data);
+                //console.log(type, data);
             }
 
             if (line) {
@@ -502,7 +506,11 @@ class WalletContent extends Component {
             (direction === DIRECTION.RECEIVE && isReceive) ||
             (direction === DIRECTION.SENT && isSent)
         ) {
-            const [amount, opCurrency] = data.amount.split(' ');
+            let [amount, opCurrency] = data.amount.split(' ');
+
+            if (type === 'transfer_to_vesting') {
+                opCurrency = CURRENCY.GOLOS_POWER;
+            }
 
             if (/^0\.0+$/.test(amount)) {
                 return;
@@ -515,52 +523,39 @@ class WalletContent extends Component {
                 (currency === CURRENCY.SAFE && isSafe) ||
                 (currency === opCurrency && !isSafe)
             ) {
-                return {
-                    type: isReceive ? DIRECTION.RECEIVE : DIRECTION.SENT,
-                    name: samePerson && isSafe ? null : isReceive ? data.from : data.to,
-                    title:
-                        samePerson && isSafe
-                            ? type === 'transfer_to_savings'
+                if (type === 'transfer_to_vesting') {
+                    return {
+                        type: isReceive ? DIRECTION.RECEIVE : DIRECTION.SENT,
+                        name: samePerson ? null : isReceive ? data.from : data.to,
+                        amount: sign + amount,
+                        currency: CURRENCY.GOLOS_POWER,
+                        memo: data.memo || null,
+                        icon: 'logo',
+                        color: '#f57c02',
+                    };
+                } else {
+                    return {
+                        type: isReceive ? DIRECTION.RECEIVE : DIRECTION.SENT,
+                        name: samePerson && isSafe ? null : isReceive ? data.from : data.to,
+                        title:
+                            samePerson && isSafe
+                                ? type === 'transfer_to_savings'
                                 ? 'Перевод в сейф'
                                 : 'Возврат из сейфа'
-                            : null,
-                    amount: sign + amount,
-                    currency: opCurrency,
-                    memo: data.memo || null,
-                    icon: isSafe ? 'lock' : opCurrency === CURRENCY.GOLOS ? 'logo' : 'brilliant',
-                    color: isSafe
-                        ? CURRENCY_COLOR.SAFE
-                        : isReceive
-                            ? CURRENCY_COLOR[opCurrency]
-                            : null,
-                };
+                                : null,
+                        amount: sign + amount,
+                        currency: opCurrency,
+                        memo: data.memo || null,
+                        icon: isSafe ? 'lock' : opCurrency === CURRENCY.GOLOS ? 'logo' : 'brilliant',
+                        color: isSafe
+                            ? CURRENCY_COLOR.SAFE
+                            : isReceive
+                                ? CURRENCY_COLOR[opCurrency]
+                                : null,
+                    };
+                }
             }
         }
-    }
-
-    _processVesting(type, data) {
-        const { pageAccountName } = this.props;
-
-        const samePerson = data.to === data.from;
-        const isReceive = data.to === pageAccountName && !samePerson;
-
-        const [amount] = data.amount.split(' ');
-
-        if (/^0+\.0+$/.test(amount)) {
-            return;
-        }
-
-        const sign = isReceive ? '+' : '-';
-
-        return {
-            type: isReceive ? DIRECTION.RECEIVE : DIRECTION.SENT,
-            name: samePerson ? null : isReceive ? data.from : data.to,
-            amount: sign + amount,
-            currency: CURRENCY.GOLOS_POWER,
-            memo: data.memo || null,
-            icon: 'logo',
-            color: '#f57c02',
-        };
     }
 
     _processRewards(type, data) {

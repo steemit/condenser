@@ -84,7 +84,7 @@ const DelegationEditSplitter = styled.div`
 `;
 
 export default class DelegationEdit extends PureComponent {
-    propTypes = {
+    static propTypes = {
         value: PropTypes.number.isRequired,
         max: PropTypes.number.isRequired,
         onSave: PropTypes.func.isRequired,

@@ -79,7 +79,7 @@ const EmptyList = styled.div`
 `;
 
 export default class DelegationsList extends PureComponent {
-    propTypes = {
+    static propTypes = {
         globalProps: PropTypes.object.isRequired,
         data: PropTypes.array.isRequired,
         onEditClick: PropTypes.func.isRequired,

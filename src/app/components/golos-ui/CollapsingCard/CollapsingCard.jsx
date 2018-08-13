@@ -61,7 +61,7 @@ const Body = styled.div`
 `;
 
 export default class CollapsingCard extends PureComponent {
-    propTypes = {
+    static propTypes = {
         title: PropTypes.string.isRequired,
         saveStateKey: PropTypes.string,
     };

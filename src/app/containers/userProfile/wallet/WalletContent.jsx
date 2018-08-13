@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import styled from 'styled-components';
-import { last } from 'ramda';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import TextCut from 'src/app/components/common/TextCut';
@@ -10,6 +9,15 @@ import Card, { CardContent } from 'golos-ui/Card';
 import { TabContainer, Tabs } from 'golos-ui/Tabs';
 import Icon from 'golos-ui/Icon';
 import { vestsToGolosEasy } from 'app/utils/StateFunctions';
+import { api } from 'golos-js';
+import EditGolosPower from 'src/app/components/userProfile/common/EditGolosPower';
+import DialogManager from 'app/components/elements/common/DialogManager';
+import { MIN_VOICE_POWER } from 'app/client_config';
+import { vestsToGolos, golosToVests, getVesting } from 'app/utils/StateFunctions';
+import transaction from 'app/redux/Transaction';
+import SplashLoader from 'src/app/components/golos-ui/SplashLoader';
+
+const LOAD_LIMIT = 500;
 
 const MAIN_TABS = {
     TRANSACTIONS: 'TRANSACTIONS',
@@ -262,6 +270,63 @@ const EmptyBlock = styled.div`
     color: #c5c5c5;
 `;
 
+const LoaderWrapper = styled.div`
+    display: flex;
+    padding: 20px 0;
+    justify-content: center;
+    opacity: 0;
+    animation: fade-in 0.25s forwards;
+    animation-delay: 0.25s;
+`;
+
+const Actions = styled.div`
+    display: flex;
+    align-items: center;
+    flex-basis: 10px;
+    flex-grow: 0.5;
+    height: 80px;
+`;
+
+const ActionIcon = styled(Icon)`
+    width: 36px;
+    height: 36px;
+    padding: 8px;
+    margin-right: 20px;
+    user-select: none;
+    color: #333;
+    cursor: pointer;
+    transition: color 0.15s;
+
+    &:last-child {
+        margin-right: 0;
+    }
+
+    &:hover {
+        color: ${props => props.color};
+    }
+`;
+
+const Stub = styled.div`
+    padding: 20px;
+    color: #777;
+`;
+
+const EditDelegationBlock = styled.div`
+    height: 0;
+    padding: 0 20px;
+    transition: height 0.15s;
+    overflow: hidden;
+    will-change: height;
+`;
+
+function Loader() {
+    return (
+        <LoaderWrapper>
+            <LoadingIndicator type="circle" size={40} />
+        </LoaderWrapper>
+    );
+}
+
 class WalletContent extends Component {
     state = {
         mainTab: MAIN_TABS.TRANSACTIONS,
@@ -269,7 +334,17 @@ class WalletContent extends Component {
         direction: DIRECTION.ALL,
         rewardTab: REWARDS_TABS.HISTORY,
         rewardType: REWARDS_TYPES.CURATORIAL,
+        editDelegationId: null,
+        startEditDelegationGrow: false,
     };
+
+    componentDidMount() {
+        this._loadDelegationsData();
+    }
+
+    componentWillUnmount() {
+        this._unmount = true;
+    }
 
     render() {
         const { mainTab } = this.state;
@@ -287,7 +362,7 @@ class WalletContent extends Component {
                         </TabContainer>
                     </CardContentStyled>
                 </Tabs>
-                <Content>{this._renderList()}</Content>
+                <Content>{this._renderContent()}</Content>
             </CardStyled>
         );
     }
@@ -364,22 +439,63 @@ class WalletContent extends Component {
         );
     }
 
+    _renderContent() {
+        const { mainTab, delegationData, delegationError } = this.state;
+
+        if (mainTab === MAIN_TABS.POWER) {
+            if (delegationError) {
+                return <Stub>Ошибка при загрузке данных</Stub>;
+            } else if (!delegationData) {
+                return <Loader />;
+            }
+        }
+
+        return this._renderList();
+    }
+
     _renderList() {
         const { pageAccount } = this.props;
         const { mainTab, rewardTab } = this.state;
 
         if (!pageAccount) {
-            return <LoadingIndicator type="circle" size={40} center />;
+            return <Loader />;
         }
 
         if (mainTab === MAIN_TABS.REWARDS && rewardTab === REWARDS_TABS.STATISTIC) {
-            return <EmptyBlock>Функицонал пока что не готов</EmptyBlock>;
+            return <EmptyBlock>Функционал пока что не готов</EmptyBlock>;
         }
+
+        let list;
+
+        if (mainTab === MAIN_TABS.POWER) {
+            list = this._makeGolosPowerList();
+        } else {
+            list = this._makeTransferList();
+        }
+
+        if (list.length) {
+            for (let i = 0; i < list.length; ++i) {
+                const line = list[i];
+                const stamp = line.stamp;
+
+                line.day = [stamp.getFullYear(), stamp.getMonth(), stamp.getDate()].join('-');
+                line.addDate = i > 0 && list[i - 1].day !== line.day;
+            }
+
+            return <Lines>{list.map((item, i) => this._renderLine(item, i))}</Lines>;
+        } else {
+            return <EmptyBlock>Список пуст</EmptyBlock>;
+        }
+    }
+
+    _makeTransferList() {
+        const { pageAccount } = this.props;
+        const { mainTab } = this.state;
 
         const transfers = pageAccount.get('transfer_history');
 
-        if (!transfers) {
-            return <LoadingIndicator type="circle" size={40} center />;
+        if (!transfers || true) {
+            return <Loader />;
         }
 
         const list = [];
@@ -404,7 +520,6 @@ class WalletContent extends Component {
                     line = this._processTransactions(type, data, stamp);
                 }
             } else if (mainTab === MAIN_TABS.POWER) {
-
             } else if (mainTab === MAIN_TABS.REWARDS) {
                 if (type === 'curation_reward' || type === 'author_reward') {
                     line = this._processRewards(type, data, stamp);
@@ -417,21 +532,49 @@ class WalletContent extends Component {
 
             if (line) {
                 line.stamp = stamp;
-                line.day = [stamp.getFullYear(), stamp.getMonth(), stamp.getDate()].join('-');
-                line.addDate = list.length && last(list).day !== line.day;
-
                 list.push(line);
             }
         }
 
-        if (list.length) {
-            return <Lines>{list.map((item, i) => this._renderLine(item, i))}</Lines>;
-        } else {
-            return <EmptyBlock>Список пуст</EmptyBlock>;
+        return list;
+    }
+
+    _makeGolosPowerList() {
+        const { myAccountName, pageAccountName, globalProps } = this.props;
+        const { delegationData } = this.state;
+
+        const list = [];
+
+        for (let item of delegationData) {
+            const isReceive = item.delegatee === pageAccountName;
+
+            const sign = isReceive ? '+' : '-';
+
+            const amount = vestsToGolos(item.vesting_shares, globalProps);
+            const currency = CURRENCY.GOLOS_POWER;
+
+            const stamp = new Date(item.min_delegation_time + 'Z');
+
+            list.push({
+                id: item.id,
+                type: isReceive ? DIRECTION.RECEIVE : DIRECTION.SENT,
+                name: isReceive ? item.delegator : item.delegatee,
+                amount: sign + amount,
+                currency,
+                memo: item.memo || null,
+                icon: 'voice',
+                color: isReceive ? CURRENCY_COLOR[currency] : null,
+                showDelegationActions: item.delegator === myAccountName,
+                stamp,
+            });
         }
+
+        return list;
     }
 
     _renderLine(item, i) {
+        const { loaderForId } = this.state;
+
         return (
             <LineWrapper key={i}>
                 {item.addDate ? (
@@ -463,14 +606,13 @@ class WalletContent extends Component {
                             <MemoIcon name="note" data-tooltip={'Пометка'} />
                             <MemoCut height={50}>
                                 <MemoCentrer>
-                                    <MemoText>
-                                        {item.memo}
-                                    </MemoText>
+                                    <MemoText>{item.memo}</MemoText>
                                 </MemoCentrer>
                             </MemoCut>
                         </Memo>
                     ) : null}
                     {item.data ? <DataLink to={item.link}>{item.data}</DataLink> : null}
+                    {item.showDelegationActions ? this._renderDelegationActions(item.id) : null}
                     {item.currencies ? (
                         <Currencies>
                             {item.currencies.map(({ amount, currency }) => (
@@ -487,8 +629,98 @@ class WalletContent extends Component {
                         </Value>
                     )}
                 </Line>
+                {this._renderEditDelegation(item)}
+                {loaderForId === item.id ? <SplashLoader /> : null}
             </LineWrapper>
         );
+    }
+
+    _renderDelegationActions(id) {
+        const { loaderForId } = this.state;
+
+        return (
+            <Actions>
+                <ActionIcon
+                    color="#3684ff"
+                    name="pen"
+                    data-tooltip="Редактировать делегирование"
+                    onClick={loaderForId ? null : () => this._onEditDelegationClick(id)}
+                />
+                <ActionIcon
+                    color="#fc544e"
+                    name="round-cross"
+                    data-tooltip="Отменить делегирование"
+                    onClick={loaderForId ? null : () => this._onCancelDelegationClick(id)}
+                />
+            </Actions>
+        );
+    }
+
+    _renderEditDelegation(item) {
+        const { editDelegationId } = this.state;
+
+        if (editDelegationId === item.id) {
+            const { pageAccount, globalProps } = this.props;
+            const { startEditDelegationGrow } = this.state;
+
+            const { golos } = getVesting(pageAccount, globalProps);
+
+            const availableBalance = Math.max(
+                0,
+                Math.round((parseFloat(golos) - MIN_VOICE_POWER) * 1000)
+            );
+
+            const value = Math.round(Math.abs(parseFloat(item.amount)) * 1000);
+
+            const data = this.state.delegationData.find(data => data.id === item.id);
+
+            return (
+                <EditDelegationBlock style={{ height: startEditDelegationGrow ? 118 : 0 }}>
+                    <EditGolosPower
+                        value={value}
+                        max={availableBalance + value}
+                        onSave={value => this._onDelegationSaveClick(data, value)}
+                        onCancel={this._onDelegationEditCancelClick}
+                    />
+                </EditDelegationBlock>
+            );
+        }
+    }
+
+    async _loadDelegationsData() {
+        const { pageAccountName } = this.props;
+
+        try {
+            const [delegated, received] = await Promise.all([
+                api.getVestingDelegationsAsync(pageAccountName, '', LOAD_LIMIT, 'delegated'),
+                api.getVestingDelegationsAsync(pageAccountName, '', LOAD_LIMIT, 'received'),
+            ]);
+
+            const items = delegated.concat(received);
+
+            for (let item of items) {
+                item.id = item.delegator + '%' + item.delegatee;
+                item.stamp = new Date(item.min_delegation_time + 'Z');
+            }
+
+            items.sort((a, b) => a.stamp - b.stamp);
+
+            if (!this._unmount) {
+                this.setState({
+                    delegationError: null,
+                    delegationData: items,
+                });
+            }
+        } catch (err) {
+            console.error(err);
+
+            if (!this._unmount) {
+                this.setState({
+                    delegationError: err,
+                    delegationData: null,
+                });
+            }
+        }
     }
 
     _processTransactions(type, data) {
@@ -540,13 +772,17 @@ class WalletContent extends Component {
                         title:
                             samePerson && isSafe
                                 ? type === 'transfer_to_savings'
-                                ? 'Перевод в сейф'
-                                : 'Возврат из сейфа'
+                                    ? 'Перевод в сейф'
+                                    : 'Возврат из сейфа'
                                 : null,
                         amount: sign + amount,
                         currency: opCurrency,
                         memo: data.memo || null,
-                        icon: isSafe ? 'lock' : opCurrency === CURRENCY.GOLOS ? 'logo' : 'brilliant',
+                        icon: isSafe
+                            ? 'lock'
+                            : opCurrency === CURRENCY.GOLOS
+                                ? 'logo'
+                                : 'brilliant',
                         color: isSafe
                             ? CURRENCY_COLOR.SAFE
                             : isReceive
@@ -609,6 +845,7 @@ class WalletContent extends Component {
     _onMainTabChange = ({ id }) => {
         this.setState({
             mainTab: id,
+            editDelegationId: null,
         });
     };
 
@@ -635,17 +872,122 @@ class WalletContent extends Component {
             rewardType: id,
         });
     };
+
+    _onEditDelegationClick = id => {
+        const { editDelegationId, startEditDelegationGrow } = this.state;
+
+        if (editDelegationId === id && startEditDelegationGrow) {
+            this.setState({
+                startEditDelegationGrow: false,
+            });
+        } else {
+            this.setState(
+                {
+                    editDelegationId: id,
+                    startEditDelegationGrow: false,
+                },
+                () => {
+                    setTimeout(() => {
+                        this.setState({
+                            startEditDelegationGrow: true,
+                        });
+                    }, 50);
+                }
+            );
+        }
+    };
+
+    _onCancelDelegationClick = async id => {
+        if (await DialogManager.dangerConfirm()) {
+            const data = this.data.delegationData.find(data => data.id === id);
+
+            this._updateDelegation(data, 0);
+        }
+    };
+
+    _onDelegationSaveClick = (item, value) => {
+        const { loaderForId } = this.state;
+
+        if (loaderForId) {
+            return;
+        }
+
+        this._updateDelegation(item, value);
+    };
+
+    _updateDelegation(item, value) {
+        const { myAccountName } = this.props;
+
+        const vesting = value > 0 ? golosToVests(value / 1000, this.props.globalProps) : '0.000000';
+
+        const operation = {
+            delegator: myAccountName,
+            delegatee: item.delegatee,
+            vesting_shares: vesting + ' GESTS',
+        };
+
+        this.setState({
+            loaderForId: item.id,
+        });
+
+        this.props.delegate(operation, err => {
+            if (err) {
+                this.setState({
+                    loaderForId: null,
+                });
+
+                if (err !== 'Canceled') {
+                    DialogManager.alert(err.toString());
+                }
+            } else {
+                this.setState({
+                    loaderForId: null,
+                    editDelegationId: null,
+                });
+
+                this._loadDelegationsData();
+            }
+        });
+    }
+
+    _onDelegationEditCancelClick = () => {
+        this.setState({
+            startEditDelegationGrow: false,
+        });
+    };
 }
 
-export default connect((state, props) => {
-    const pageAccountName = props.params.accountName.toLowerCase();
-    const pageAccount = state.global.getIn(['accounts', pageAccountName]);
+export default connect(
+    (state, props) => {
+        const globalProps = state.global.get('props');
+        const pageAccountName = props.params.accountName.toLowerCase();
+        const pageAccount = state.global.getIn(['accounts', pageAccountName]);
+        const myAccountName = state.user.getIn(['current', 'username']);
 
-    return {
-        pageAccountName,
-        pageAccount,
-    };
-})(WalletContent);
+        return {
+            pageAccountName,
+            pageAccount,
+            myAccountName,
+            globalProps: globalProps.toJS(),
+        };
+    },
+    dispatch => ({
+        delegate(operation, callback) {
+            dispatch(
+                transaction.actions.broadcastOperation({
+                    type: 'delegate_vesting_shares',
+                    operation,
+                    successCallback() {
+                        callback(null);
+                    },
+                    errorCallback(err) {
+                        callback(err);
+                    },
+                })
+            );
+        },
+    })
+)(WalletContent);
 
 function addValueIfNotZero(list, amount, currency) {
     if (!/^0+\.0+$/.test(amount)) {

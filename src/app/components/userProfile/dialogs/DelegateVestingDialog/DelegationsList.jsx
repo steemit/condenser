@@ -71,6 +71,7 @@ const ActionButton = styled.button`
 `;
 
 const EmptyList = styled.div`
+    height: 264px;
     padding-top: 20px;
     text-align: center;
     font-weight: 500;

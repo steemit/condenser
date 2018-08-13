@@ -153,6 +153,7 @@ const Memo = styled.div`
     display: flex;
     flex-grow: 1;
     flex-basis: 10px;
+    overflow: hidden;
 `;
 
 const MemoIcon = styled(Icon)`
@@ -181,9 +182,11 @@ const MemoCentrer = styled.div`
 
 const MemoText = styled.div`
     display: inline-block;
+    width: 100%;
     padding: 4px 0;
     line-height: 1.4em;
     vertical-align: middle;
+    word-wrap: break-word;
 `;
 
 const DataLink = styled(Link)`

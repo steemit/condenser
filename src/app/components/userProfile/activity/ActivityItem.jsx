@@ -107,6 +107,7 @@ export default class ActivityItem extends Component {
         const account = accounts.getIn([userName]);
         const { name, profile_image } = normalizeProfile(account.toJS());
 
+        // TODO:
         switch (notification.get('eventType')) {
             case 'vote':
                 msg = 'Поставил лайк вашему посту “Блокчейн”.';

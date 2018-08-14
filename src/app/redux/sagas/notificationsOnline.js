@@ -3,7 +3,6 @@ import { call, fork, put, all, takeEvery, select } from 'redux-saga/effects';
 import React from 'react';
 import { api } from 'golos-js';
 
-import g from 'app/redux/GlobalReducer';
 import { getAccount } from 'app/redux/SagaShared';
 
 import { NOTIFICATION_ONLINE_ADD_NOTIFICATION } from 'src/app/redux/constants/notificationsOnline';
@@ -45,7 +44,7 @@ function createAddNotificationOnlineAction(props) {
             cursor: 'pointer',
         },
         key: 'chain_' + Date.now(),
-        dismissAfter: 15000,
+        dismissAfter: 1500000,
     };
 
     return {
@@ -63,49 +62,137 @@ function* addNotificationsOnlineWatch() {
 }
 
 // TODO: look in cache before call to api
-function* handleAddNotification({ payload: { vote, subscribe, unsubscribe, reply, mention } }) {
+function* handleAddNotification({
+    payload: { vote, flag, transfer, subscribe, unsubscribe, reply, mention, repost, witnessVote, witnessCancelVote },
+}) {
     const stateGlobal = yield select(state => state.global);
 
     console.log(stateGlobal.toJS());
 
     if (vote) {
-        yield all(vote.map(function*(notification) {
-            const { counter, voter, permlink } = notification; // {counter: 1, voter: "destroyer2k", permlink: "re-nickshtefan-re-destroyer2k-s-20180803t094131915z"}
-        
-            const current = yield select(state => state.user.get('current'));
-            const author = current.get('username');
+        yield all(
+            vote.map(function*(notification) {
+                const { counter, voter, permlink } = notification; // {counter: 1, voter: "destroyer2k", permlink: "re-nickshtefan-re-destroyer2k-s-20180803t094131915z"}
 
-            const account = yield call(getAccount, voter);
+                const current = yield select(state => state.user.get('current'));
+                const author = current.get('username');
 
-            const content = yield call(
-                [api, api.getContentAsync],
-                author,
-                permlink,
-                constants.DEFAULT_VOTE_LIMIT
-            );
+                const account = yield call(getAccount, voter);
 
-            console.log(23, content)
+                const content = yield call(
+                    [api, api.getContentAsync],
+                    author,
+                    permlink,
+                    constants.DEFAULT_VOTE_LIMIT
+                );
 
-            let title = content.title;
-            let link = content.link;
+                let title = content.title;
+                let link = content.link;
 
-            if (content.parent_author) {
-                title = content.root_title;
-                link = content.url;
-                // link = `/${content.category}/@${content.parent_author}/${
-                //     content.parent_permlink
-                // }`;
-            }
+                if (content.parent_author) {
+                    title = content.root_title;
+                    link = content.url;
+                }
 
-            yield put(
-                createAddNotificationOnlineAction({
-                    type: 'vote',
-                    account,
-                    title,
-                    link,
-                })
-            );
-        }));
+                yield put(
+                    createAddNotificationOnlineAction({
+                        type: 'vote',
+                        account,
+                        title,
+                        link,
+                    })
+                );
+            })
+        );
+    }
+
+    if (flag) {
+        yield all(
+            flag.map(function*(notification) {
+                const { counter, voter, permlink } = notification; // {counter: 1, voter: "destroyer2k", permlink: "re-nickshtefan-re-destroyer2k-s-20180803t094131915z"}
+
+                const current = yield select(state => state.user.get('current'));
+                const author = current.get('username');
+
+                const account = yield call(getAccount, voter);
+
+                const content = yield call(
+                    [api, api.getContentAsync],
+                    author,
+                    permlink,
+                    constants.DEFAULT_VOTE_LIMIT
+                );
+
+                let title = content.title;
+                let link = content.link;
+
+                if (content.parent_author) {
+                    title = content.root_title;
+                    link = content.url;
+                }
+
+                yield put(
+                    createAddNotificationOnlineAction({
+                        type: 'flag',
+                        account,
+                        title,
+                        link,
+                    })
+                );
+            })
+        );
+    }
+
+    if (transfer) {
+        yield all(
+            transfer.map(function*(notification) {
+                const { counter, from, amount } = notification; // {counter: 1, voter: "destroyer2k", permlink: "re-nickshtefan-re-destroyer2k-s-20180803t094131915z"}
+
+                const account = yield call(getAccount, from);
+
+                yield put(
+                    createAddNotificationOnlineAction({
+                        type: 'transfer',
+                        account,
+                        amount,
+                    })
+                );
+            })
+        );
+    }
+
+    if (reply) {
+        yield all(
+            reply.map(function*(notification) {
+                const { counter, author, permlink } = notification; // {"counter":1,"author":"destroyer2k","permlink":"re-devall-re-nickshtefan-re-destroyer2k-s-20180810t180227217z"}
+
+                const account = yield call(getAccount, author);
+
+                const content = yield call(
+                    [api, api.getContentAsync],
+                    author,
+                    permlink,
+                    constants.DEFAULT_VOTE_LIMIT
+                );
+
+                let title = content.title;
+                let link = content.link;
+
+                if (content.parent_author) {
+                    title = content.root_title;
+                    link = content.url;
+                }
+
+                yield put(
+                    createAddNotificationOnlineAction({
+                        type: 'reply',
+                        account,
+                        title,
+                        link,
+                    })
+                );
+            })
+        );
     }
 
     if (subscribe) {
@@ -140,10 +227,10 @@ function* handleAddNotification({ payload: { vote, subscribe, unsubscribe, reply
         );
     }
 
-    if (reply) {
+    if (mention) {
         yield all(
-            reply.map(function*(notification) {
-                const { counter, author, permlink } = notification; // {"counter":1,"author":"destroyer2k","permlink":"re-devall-re-nickshtefan-re-destroyer2k-s-20180810t180227217z"}
+            mention.map(function*(notification) {
+                const { counter, author, permlink } = notification; // {"counter":1,"permlink":"re-devall-re-nickshtefan-re-destroyer2k-s-20180810t180227217z"}
 
                 const account = yield call(getAccount, author);
 
@@ -160,14 +247,11 @@ function* handleAddNotification({ payload: { vote, subscribe, unsubscribe, reply
                 if (content.parent_author) {
                     title = content.root_title;
                     link = content.url;
-                    // link = `/${content.category}/@${content.parent_author}/${
-                    //     content.parent_permlink
-                    // }`;
                 }
 
                 yield put(
                     createAddNotificationOnlineAction({
-                        type: 'reply',
+                        type: 'mention',
                         account,
                         title,
                         link,
@@ -177,10 +261,73 @@ function* handleAddNotification({ payload: { vote, subscribe, unsubscribe, reply
         );
     }
 
-    if (mention) {
+    if (repost) {
         yield all(
-            mention.map(function*(notification) {
-                const { counter, permlink } = notification; // {"counter":1,"permlink":"re-devall-re-nickshtefan-re-destroyer2k-s-20180810t180227217z"}
+            repost.map(function*(notification) {
+                const { counter, reposter, permlink } = notification; // {"counter":1,"permlink":"re-devall-re-nickshtefan-re-destroyer2k-s-20180810t180227217z"}
+
+                const current = yield select(state => state.user.get('current'));
+                const author = current.get('username');
+
+                const account = yield call(getAccount, reposter);
+
+                const content = yield call(
+                    [api, api.getContentAsync],
+                    author,
+                    permlink,
+                    constants.DEFAULT_VOTE_LIMIT
+                );
+
+                let title = content.title;
+                let link = content.link;
+
+                if (content.parent_author) {
+                    title = content.root_title;
+                    link = content.url;
+                }
+
+                yield put(
+                    createAddNotificationOnlineAction({
+                        type: 'repost',
+                        account,
+                        title,
+                        link,
+                    })
+                );
+            })
+        );
+    }
+
+    if (witnessVote) {
+        yield all(
+            witnessVote.map(function*(notification) {
+                const { counter, from } = notification; // {"counter":1,"permlink":"re-devall-re-nickshtefan-re-destroyer2k-s-20180810t180227217z"}
+
+                const account = yield call(getAccount, from);
+
+                yield put(
+                    createAddNotificationOnlineAction({
+                        type: 'witnessVote',
+                        account,
+                    })
+                );
+            })
+        );
+    }
+
+    if (witnessCancelVote) {
+        yield all(
+            witnessCancelVote.map(function*(notification) {
+                const { counter, from } = notification; // {"counter":1,"permlink":"re-devall-re-nickshtefan-re-destroyer2k-s-20180810t180227217z"}
+
+                const account = yield call(getAccount, from);
+
+                yield put(
+                    createAddNotificationOnlineAction({
+                        type: 'witnessCancelVote',
+                        account,
+                    })
+                );
             })
         );
     }

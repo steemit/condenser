@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
+import { Link, browserHistory } from 'react-router';
+import throttle from 'lodash/throttle';
 import styled from 'styled-components';
+import { api } from 'golos-js';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import TextCut from 'src/app/components/common/TextCut';
@@ -9,7 +11,6 @@ import Card, { CardContent } from 'golos-ui/Card';
 import { TabContainer, Tabs } from 'golos-ui/Tabs';
 import Icon from 'golos-ui/Icon';
 import { vestsToGolosEasy } from 'app/utils/StateFunctions';
-import { api } from 'golos-js';
 import EditGolosPower from 'src/app/components/userProfile/common/EditGolosPower';
 import DialogManager from 'app/components/elements/common/DialogManager';
 import { MIN_VOICE_POWER } from 'app/client_config';
@@ -17,6 +18,7 @@ import { vestsToGolos, golosToVests, getVesting } from 'app/utils/StateFunctions
 import transaction from 'app/redux/Transaction';
 import SplashLoader from 'src/app/components/golos-ui/SplashLoader';
 
+const DEFAULT_ROWS_LIMIT = 25;
 const LOAD_LIMIT = 500;
 
 const MAIN_TABS = {
@@ -339,14 +341,19 @@ class WalletContent extends Component {
         rewardType: REWARDS_TYPES.CURATORIAL,
         editDelegationId: null,
         startEditDelegationGrow: false,
+        limit: DEFAULT_ROWS_LIMIT,
     };
 
     componentDidMount() {
         this._loadDelegationsData();
+
+        window.addEventListener('scroll', this._onScrollLazy);
     }
 
     componentWillUnmount() {
         this._unmount = true;
+
+        window.removeEventListener('scroll', this._onScrollLazy);
     }
 
     render() {
@@ -367,7 +374,7 @@ class WalletContent extends Component {
                         </TabContainer>
                     </CardContentStyled>
                 </Tabs>
-                <Content>{this._renderContent()}</Content>
+                <Content innerRef={this._onContentRef}>{this._renderContent()}</Content>
             </CardStyled>
         );
     }
@@ -501,7 +508,7 @@ class WalletContent extends Component {
 
     _makeTransferList() {
         const { pageAccount } = this.props;
-        const { mainTab } = this.state;
+        const { mainTab, limit } = this.state;
 
         const transfers = pageAccount.get('transfer_history');
 
@@ -510,6 +517,8 @@ class WalletContent extends Component {
         }
 
         const list = [];
+
+        this._hasMore = false;
 
         for (let i = transfers.size - 1; i >= 0; --i) {
             const item = transfers.get(i);
@@ -540,6 +549,11 @@ class WalletContent extends Component {
             if (line) {
                 line.stamp = stamp;
                 list.push(line);
+
+                if (list.length === limit) {
+                    this._hasMore = true;
+                    break;
+                }
             }
         }
 
@@ -608,9 +622,7 @@ class WalletContent extends Component {
                             </WhoName>
                         ) : null}
                         {item.title ? <WhoTitle>{item.title}</WhoTitle> : null}
-                        {item.post ? (
-                            <WhoPostLink to={`/${item.post}`}>{item.post}</WhoPostLink>
-                        ) : null}
+                        {item.post ? this._renderPostLink(item.post) : null}
                         <TimeStamp>
                             <TimeAgoWrapper date={item.stamp} />
                         </TimeStamp>
@@ -647,6 +659,12 @@ class WalletContent extends Component {
                 {loaderForId && loaderForId === item.id ? <SplashLoader light /> : null}
             </LineWrapper>
         );
+    }
+
+    _renderPostLink(post) {
+        const fullLink = post.author + '/' + post.permLink;
+
+        return <WhoPostLink onClick={() => this._onPostClick(post)}>{fullLink}</WhoPostLink>;
     }
 
     _renderDelegationActions(id) {
@@ -820,7 +838,7 @@ class WalletContent extends Component {
 
             return {
                 type: DIRECTION.RECEIVE,
-                post: data.comment_author + '/' + data.comment_permlink,
+                post: { author: data.comment_author, permLink: data.comment_permlink },
                 amount: '+' + amount,
                 currency: CURRENCY.GOLOS_POWER,
                 memo: data.memo || null,
@@ -847,7 +865,7 @@ class WalletContent extends Component {
 
             return {
                 type: DIRECTION.RECEIVE,
-                post: data.author + '/' + data.permlink,
+                post: { author: data.author, permLink: data.permlink },
                 currencies,
                 memo: data.memo || null,
                 icon: 'a',
@@ -862,30 +880,35 @@ class WalletContent extends Component {
             currency: CURRENCY.ALL,
             direction: DIRECTION.ALL,
             editDelegationId: null,
+            limit: DEFAULT_ROWS_LIMIT,
         });
     };
 
     _onCurrencyChange = ({ id }) => {
         this.setState({
             currency: id,
+            limit: DEFAULT_ROWS_LIMIT,
         });
     };
 
     _onDirectionChange = ({ id }) => {
         this.setState({
             direction: id,
+            limit: DEFAULT_ROWS_LIMIT,
         });
     };
 
     _onRewardTabChange = ({ id }) => {
         this.setState({
             rewardTab: id,
+            limit: DEFAULT_ROWS_LIMIT,
         });
     };
 
     _onRewardTypeChange = ({ id }) => {
         this.setState({
             rewardType: id,
+            limit: DEFAULT_ROWS_LIMIT,
         });
     };
 
@@ -970,6 +993,29 @@ class WalletContent extends Component {
         this.setState({
             startEditDelegationGrow: false,
         });
+    };
+
+    _onPostClick = async post => {
+        const postData = await api.getContentAsync(post.author, post.permLink, 0);
+        browserHistory.push(postData.url);
+    };
+
+    _onScrollLazy = throttle(
+        () => {
+            if (this._hasMore) {
+                if (this._content.getBoundingClientRect().bottom < window.innerHeight * 1.2) {
+                    this.setState({
+                        limit: this.state.limit + DEFAULT_ROWS_LIMIT,
+                    });
+                }
+            }
+        },
+        100,
+        { leading: false }
+    );
+
+    _onContentRef = el => {
+        this._content = el;
     };
 }
 

@@ -117,10 +117,10 @@ export default class ActivityItem extends Component {
                     height: 14,
                 };
                 break;
-            case 'subscribe':
-                msg = 'Подписался на ваш блог.';
+            case 'flag':
+                msg = 'Поставил дизлайк вашему посту “Блокчейн”.';
                 icon = {
-                    name: 'radion-checked',
+                    name: 'dislike',
                     width: 14,
                     height: 14,
                 };
@@ -141,6 +141,22 @@ export default class ActivityItem extends Component {
                     height: 12,
                 }
                 break;
+            case 'subscribe':
+                msg = 'Подписался на ваш блог.';
+                icon = {
+                    name: 'radion-checked',
+                    width: 14,
+                    height: 14,
+                };
+                break;
+            case 'unsubscribe':
+                msg = 'Отписался от вашего блога.';
+                icon = {
+                    name: 'round-cross',
+                    width: 14,
+                    height: 14,
+                };
+                break;
             case 'mention':
                 msg = 'Упомянул вас в посте “Пигмалион”.';
                 icon = {
@@ -148,6 +164,15 @@ export default class ActivityItem extends Component {
                     width: 14,
                     height: 14,
                 };
+                break;
+            case 'repost':
+                msg = 'Сделал репост вашего поста';
+                icon = {
+                    name: 'avatar',
+                    width: 14,
+                    height: 14,
+                };
+                break;
         }
 
         return (
@@ -159,7 +184,7 @@ export default class ActivityItem extends Component {
                     <ActivityTop>
                         <AuthorName to={`/@${userName}`}>{name || userName}</AuthorName>
                         <ActivityDate>
-                            <TimeAgoWrapper date={notification.get('updatedAt')} />
+                            <TimeAgoWrapper date={notification.get('createdAt')} />
                         </ActivityDate>
                     </ActivityTop>
                     <ActivityText>{msg}</ActivityText>

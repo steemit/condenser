@@ -30,7 +30,7 @@ export const filteredNotificationsSelector = createDeepEqualSelector(
                 const eventType = notification.get('eventType');
                 return types.includes(eventType);
             })
-            .sortBy(a => a.get('updatedAt'))
+            .sortBy(a => a.get('createdAt'))
             .reverse()
             .map((notification, key) => {
                 const prevNotification = notifications.get(key - 1);
@@ -39,8 +39,8 @@ export const filteredNotificationsSelector = createDeepEqualSelector(
                 }
 
                 const isNextDay =
-                    new Date(notification.get('updatedAt')).toDateString() !==
-                    new Date(prevNotification.get('updatedAt')).toDateString();
+                    new Date(notification.get('createdAt')).toDateString() !==
+                    new Date(prevNotification.get('createdAt')).toDateString();
                 if (!isNextDay) {
                     return notification;
                 }

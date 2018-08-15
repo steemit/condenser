@@ -10,17 +10,32 @@ import Online from './notifications/Online';
 import Push from './notifications/Push';
 import Email from './notifications/Email';
 
-const Notifications = ({ profile, onSubmit }) => {
+const Notifications = ({ profile, options, isChanging, onSubmitGate }) => {
     return (
         <Tabs activeTab={{ id: 'onlineTab' }}>
             <TabContainer id="onlineTab" title="Онлайн">
-                <Online profile={profile} onSubmit={onSubmit}/>
+                <Online
+                    profile={profile}
+                    options={options}
+                    isChanging={isChanging}
+                    onSubmitGate={onSubmitGate}
+                />
             </TabContainer>
             <TabContainer id="pushTab" title="Пуш">
-                <Push profile={profile} onSubmit={onSubmit}/>
+                <Push
+                    profile={profile}
+                    options={options}
+                    isChanging={isChanging}
+                    onSubmitGate={onSubmitGate}
+                />
             </TabContainer>
             <TabContainer id="emailTab" title="E-mail">
-                <Email profile={profile} onSubmit={onSubmit}/>
+                <Email
+                    profile={profile}
+                    options={options}
+                    isChanging={isChanging}
+                    onSubmitGate={onSubmitGate}
+                />
             </TabContainer>
         </Tabs>
     );

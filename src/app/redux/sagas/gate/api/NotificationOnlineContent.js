@@ -56,7 +56,7 @@ export default class NotificationContent extends PureComponent {
             return (
                 <Fragment>
                     <Link to={`/@${userName}`}>@{userName}</Link> негативно оценил вашу запись{' '}
-                    <Link to={link}>{title}</Link>. 😵 💸
+                    <Link to={link}>{title}</Link>. 😵
                 </Fragment>
             );
         } else if (type === 'transfer') {

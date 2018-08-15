@@ -32,11 +32,11 @@ const UserName = styled.div`
     color: #363636;
 `;
 
-const Account = ({ profile, account, onSubmit }) => {
+const Account = ({ profile, account, onSubmitBlockchain }) => {
   profile.username = account.name; // for disabled input, omitting from submit data
 
   return (
-      <Form onSubmit={onSubmit} initialValues={profile}>
+      <Form onSubmit={onSubmitBlockchain} initialValues={profile}>
           {({ handleSubmit, submitError, form, submitting, pristine, values }) => (
               <form onSubmit={handleSubmit}>
                   <CardContent column>

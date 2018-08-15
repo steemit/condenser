@@ -67,8 +67,6 @@ function* handleAddNotification({
 }) {
     const stateGlobal = yield select(state => state.global);
 
-    console.log(stateGlobal.toJS());
-
     if (vote) {
         yield all(
             vote.map(function*(notification) {

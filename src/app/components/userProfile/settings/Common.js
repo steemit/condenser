@@ -22,9 +22,9 @@ const LabelRow = styled(StyledLabelRow)`
     margin-left: 14px;
 `;
 
-const Common = ({ profile, onSubmit }) => {
+const Common = ({ profile, onSubmitGate }) => {
     return (
-        <Form onSubmit={onSubmit} initialValues={profile}>
+        <Form onSubmit={onSubmitGate} initialValues={profile}>
             {({ handleSubmit, submitError, form, submitting, pristine, values }) => (
                 <form onSubmit={handleSubmit}>
                     <CardContent column>

@@ -4,16 +4,11 @@ import {
     entitiesArraySelector,
     statusSelector,
     uiSelector,
-    routerParamSelector,
+    pageAccountSelector,
 } from './../common';
 import { NOTIFICATIONS_FILTER_TYPES } from 'src/app/redux/constants/common';
 
 // Activity selectors
-
-export const pageAccountSelector = createDeepEqualSelector(
-    [globalSelector('accounts'), routerParamSelector('accountName')],
-    (accounts, userName) => accounts.get(userName)
-);
 
 export const filteredNotificationsSelector = createDeepEqualSelector(
     [entitiesArraySelector('notifications'), uiSelector('profile')],
@@ -21,7 +16,7 @@ export const filteredNotificationsSelector = createDeepEqualSelector(
         const currentTabId = profileUi.getIn(['activity', 'currentTabId']);
         const types = NOTIFICATIONS_FILTER_TYPES[currentTabId];
 
-        return notifications
+        const filteredNotifications = notifications
             .filter(notification => {
                 if (currentTabId == 'all') {
                     return true;
@@ -31,22 +26,26 @@ export const filteredNotificationsSelector = createDeepEqualSelector(
                 return types.includes(eventType);
             })
             .sortBy(a => a.get('createdAt'))
-            .reverse()
-            .map((notification, key) => {
-                const prevNotification = notifications.get(key - 1);
-                if (!prevNotification) {
-                    return notification;
-                }
+            .reverse();
 
-                const isNextDay =
-                    new Date(notification.get('createdAt')).toDateString() !==
-                    new Date(prevNotification.get('createdAt')).toDateString();
-                if (!isNextDay) {
-                    return notification;
-                }
+        return filteredNotifications.map((notification, key) => {
+            // if first element
+            if (key == 0) {
+                return notification;
+            }
 
-                return notification.set('isNextDay', isNextDay);
-            }) ;
+            const prevNotification = filteredNotifications.get(key - 1);
+
+            const isNextDay =
+                new Date(prevNotification.get('createdAt')).toDateString() !==
+                new Date(notification.get('createdAt')).toDateString();
+
+            if (!isNextDay) {
+                return notification;
+            }
+
+            return notification.set('isNextDay', isNextDay);
+        });
     }
 );
 

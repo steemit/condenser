@@ -4,7 +4,7 @@ import { withState } from '@dump247/storybook-state';
 
 import Switcher from './Switcher';
 
-storiesOf('Golos UI/Switcher', module).add(
+storiesOf('Golos UI/Form//Switcher', module).add(
     'default',
     withState({ checked: false })(({ store }) => (
         <Switcher

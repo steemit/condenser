@@ -19,11 +19,12 @@ const DateWrapper = styled.div`
     justify-content: center;
 `;
 
-const DateSplitter = styled.div`
+const Date = styled.div`
+    display: flex;
+    align-items: center;
     height: 30px;
-    line-height: 30px;
     padding: 0 13px;
-    margin: -15px 0;
+    margin: -15px 0 0;
     border-radius: 100px;
     font-size: 14px;
     font-weight: 300;
@@ -52,18 +53,18 @@ export default class ActivityList extends Component {
 
         return (
             <Fragment>
-                {notifications.map((notification, key) => (
+                {notifications.map((notification) => (
                     <Fragment key={notification.get('_id')}>
                         {notification.get('isNextDay') && (
                             <DateWrapper>
-                                <DateSplitter>
+                                <Date>
                                     <FormattedDate
-                                        value={notification.get('updatedAt')}
+                                        value={notification.get('createdAt')}
                                         day="numeric"
                                         month="long"
                                         year="numeric"
                                     />
-                                </DateSplitter>
+                                </Date>
                             </DateWrapper>
                         )}
                         <ActivityItem notification={notification} accounts={accounts} />

@@ -27,9 +27,14 @@ export const entitySelector = (type, id) =>
 
 // Users selectors
 
-export const currentUserSelector = state => state.user.get('current')
-
-export const currentUsernameSelector = createDeepEqualSelector(
-    [currentUserSelector],
-    currentUser => currentUser && currentUser.get('username')
+export const pageAccountSelector = createDeepEqualSelector(
+    [globalSelector('accounts'), routerParamSelector('accountName')],
+    (accounts, userName) => accounts.get(userName)
 );
+
+// export const currentUserSelector = state => state.user.get('current')
+
+// export const currentUsernameSelector = createDeepEqualSelector(
+//     [currentUserSelector],
+//     currentUser => currentUser && currentUser.get('username')
+// );

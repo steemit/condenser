@@ -1,0 +1,7 @@
+export const SETTING_GET_OPTIONS = 'settings/GET_OPTIONS';
+export const SETTING_GET_OPTIONS_SUCCESS = 'settings/GET_OPTIONS_SUCCESS';
+export const SETTING_GET_OPTIONS_ERROR = 'settings/GET_OPTIONS_ERROR';
+
+export const SETTING_SET_OPTIONS = 'settings/SET_OPTIONS';
+export const SETTING_SET_OPTIONS_SUCCESS = 'settings/SET_OPTIONS_SUCCESS';
+export const SETTING_SET_OPTIONS_ERROR = 'settings/SET_OPTIONS_ERROR';

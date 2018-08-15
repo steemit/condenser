@@ -4,7 +4,7 @@ import { withState } from '@dump247/storybook-state';
 
 import Checkbox from './Checkbox';
 
-storiesOf('Golos UI/Checkbox', module).add(
+storiesOf('Golos UI/Form//Checkbox', module).add(
     'default',
     withState({ checked: false })(({ store }) => (
         <Checkbox

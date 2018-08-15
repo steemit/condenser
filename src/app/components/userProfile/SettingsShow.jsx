@@ -1,6 +1,6 @@
 import React, { PureComponent, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import { Map } from 'immutable';
 
 import tt from 'counterpart';
 
@@ -15,23 +15,53 @@ export default class SettingsShow extends PureComponent {
     static propTypes = {
         profile: PropTypes.object,
         account: PropTypes.object,
-        onSubmit: PropTypes.func,
+
+        options: PropTypes.instanceOf(Map),
+        isChanging: PropTypes.bool,
+
+        onSubmitBlockchain: PropTypes.func,
+        onSubmitGate: PropTypes.func,
     };
 
     render() {
-        const { profile, account, onSubmit } = this.props;
+        const {
+            profile,
+            account,
+
+            options,
+            isChanging,
+
+            onSubmitBlockchain,
+            onSubmitGate,
+        } = this.props;
 
         return (
             <Card style={{ width: '566px' }}>
                 <Tabs activeTab={{ id: 'commonTab' }}>
                     <TabContainer id="commonTab" title="Общие">
-                        <Common profile={profile} onSubmit={onSubmit} />
+                        <Common
+                            profile={profile}
+                            options={options}
+                            isChanging={isChanging}
+                            onSubmitGate={onSubmitGate}
+                        />
                     </TabContainer>
                     <TabContainer id="accountTab" title="Учетная запись">
-                        <Account profile={profile} account={account} onSubmit={onSubmit} />
+                        <Account
+                            profile={profile}
+                            account={account}
+                            options={options}
+                            isChanging={isChanging}
+                            onSubmitBlockchain={onSubmitBlockchain}
+                        />
                     </TabContainer>
                     <TabContainer id="notificationsTab" title="Уведомления">
-                        <Notifications profile={profile} onSubmit={onSubmit} />
+                        <Notifications
+                            profile={profile}
+                            options={options}
+                            isChanging={isChanging}
+                            onSubmitGate={onSubmitGate}
+                        />
                     </TabContainer>
                 </Tabs>
             </Card>

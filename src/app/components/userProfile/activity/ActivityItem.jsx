@@ -173,6 +173,12 @@ export default class ActivityItem extends Component {
                     height: 14,
                 };
                 break;
+            case 'witnessVote':
+                msg = 'test';
+                break;
+            case 'witnessCancelVote':
+                msg = 'test';
+                break;
         }
 
         return (

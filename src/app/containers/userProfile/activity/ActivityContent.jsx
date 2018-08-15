@@ -8,7 +8,7 @@ import throttle from 'lodash/throttle';
 
 import { NOTIFICATIONS_FILTER_TYPES } from 'src/app/redux/constants/common';
 import { activityContentSelector } from 'src/app/redux/selectors/userProfile/activity';
-import { getNotificationsHistory } from 'src/app/redux/actions/gate';
+import { getNotificationsHistory } from 'src/app/redux/actions/notifications';
 import { changeProfileActivityTab } from 'src/app/redux/actions/ui';
 
 import Card, { CardContent } from 'golos-ui/Card';

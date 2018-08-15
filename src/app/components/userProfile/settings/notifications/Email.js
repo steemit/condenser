@@ -42,9 +42,9 @@ const LabelIcon = styled(StyledLabelRow)`
     `};
 `;
 
-const Email = ({ profile, onSubmit }) => {
+const Email = ({ profile, isChanging, onSubmitGate }) => {
     return (
-        <Form onSubmit={onSubmit} initialValues={profile}>
+        <Form onSubmit={onSubmitGate} initialValues={profile}>
             {({ handleSubmit, submitError, form, submitting, pristine, values }) => (
                 <form onSubmit={handleSubmit}>
                     <CardContent column>

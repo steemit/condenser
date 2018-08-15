@@ -6,6 +6,7 @@ import is from 'styled-is';
 import { Form, Field } from 'react-final-form';
 import tt from 'counterpart';
 
+import SplashLoader from 'golos-ui/SplashLoader';
 import { CardContent, CardDivider } from 'golos-ui/Card';
 import { DialogFooter, DialogButton } from 'golos-ui/Dialog';
 import {
@@ -41,167 +42,169 @@ const LabelIcon = styled(StyledLabelRow)`
     `};
 `;
 
-const Online = ({ profile, onSubmit }) => {
-    return (
-        <Form onSubmit={onSubmit} initialValues={profile}>
-            {({ handleSubmit, submitError, form, submitting, pristine, values }) => (
-                <form onSubmit={handleSubmit}>
-                    <CardContent column>
-                        <FormGroup>
-                            <Label dark>Мгновенные уведомления на сайте</Label>
-                            <Field name="a">
-                                {({ input }) => (
-                                    <FormGroupRow>
-                                        <LabelIcon active={input.value}>
-                                            <Icon name="bell" width="19" height="20" />
-                                        </LabelIcon>
-                                        <LabelRow dark>
-                                            Включить/выключить все онлайн уведомления
-                                        </LabelRow>
-                                        <Switcher {...input} />
-                                    </FormGroupRow>
-                                )}
-                            </Field>
-                        </FormGroup>
-                    </CardContent>
-                    <CardDivider />
-                    <CardContent column>
-                        <Field name="b">
-                            {({ input }) => (
-                                <FormGroupRow>
-                                    <LabelIcon active={input.value}>
-                                        <Icon name="like" width="19" height="20" />
-                                    </LabelIcon>
-                                    <LabelRow dark>Лайк(голос)</LabelRow>
-                                    <Switcher {...input} />
-                                </FormGroupRow>
-                            )}
-                        </Field>
-                        <Field name="c">
-                            {({ input }) => (
-                                <FormGroupRow>
-                                    <LabelIcon active={input.value}>
-                                        <Icon name="dislike" width="18" height="18" />
-                                    </LabelIcon>
-                                    <LabelRow dark>Дизлайк(жалоба)</LabelRow>
-                                    <Switcher {...input} />
-                                </FormGroupRow>
-                            )}
-                        </Field>
-                        <Field name="c">
-                            {({ input }) => (
-                                <FormGroupRow>
-                                    <LabelIcon active={input.value}>
-                                        <Icon name="coins_plus" width="20" height="16" />
-                                    </LabelIcon>
-                                    <LabelRow dark>Перевод средств</LabelRow>
-                                    <Switcher {...input} />
-                                </FormGroupRow>
-                            )}
-                        </Field>
-                        <Field name="c">
-                            {({ input }) => (
-                                <FormGroupRow>
-                                    <LabelIcon active={input.value}>
-                                        <Icon name="comment-reply" width="19" height="18" />
-                                    </LabelIcon>
-                                    <LabelRow dark>Ответ на пост или комментарий</LabelRow>
-                                    <Switcher {...input} />
-                                </FormGroupRow>
-                            )}
-                        </Field>
-                        <Field name="c">
-                            {({ input }) => (
-                                <FormGroupRow>
-                                    <LabelIcon active={input.value}>
-                                        <Icon name="round-check" width="18" height="18" />
-                                    </LabelIcon>
-                                    <LabelRow dark>Подписка на блог</LabelRow>
-                                    <Switcher {...input} />
-                                </FormGroupRow>
-                            )}
-                        </Field>
-                        <Field name="c">
-                            {({ input }) => (
-                                <FormGroupRow>
-                                    <LabelIcon active={input.value}>
-                                        <Icon name="round-cross" width="18" height="18" />
-                                    </LabelIcon>
-                                    <LabelRow dark>Отписка от блога</LabelRow>
-                                    <Switcher {...input} />
-                                </FormGroupRow>
-                            )}
-                        </Field>
-                        <Field name="c">
-                            {({ input }) => (
-                                <FormGroupRow>
-                                    <LabelIcon active={input.value}>
-                                        <Icon name="at" width="17" height="17" />
-                                    </LabelIcon>
-                                    <LabelRow dark>Упоминание в посте или комменте через @</LabelRow>
-                                    <Switcher {...input} />
-                                </FormGroupRow>
-                            )}
-                        </Field>
-                        <Field name="c">
-                            {({ input }) => (
-                                <FormGroupRow>
-                                    <LabelIcon active={input.value}>
-                                        <Icon name="repost-right" width="19" height="15" />
-                                    </LabelIcon>
-                                    <LabelRow dark>Репост</LabelRow>
-                                    <Switcher {...input} />
-                                </FormGroupRow>
-                            )}
-                        </Field>
-                        <Field name="c">
-                            {({ input }) => (
-                                <FormGroupRow>
-                                    <LabelIcon active={input.value}>
-                                        <Icon name="a" width="14" height="15" />
-                                    </LabelIcon>
-                                    <LabelRow dark>Награда пользователю</LabelRow>
-                                    <Switcher {...input} />
-                                </FormGroupRow>
-                            )}
-                        </Field>
-                        <Field name="c">
-                            {({ input }) => (
-                                <FormGroupRow>
-                                    <LabelIcon active={input.value}>
-                                        <Icon name="k" width="13" height="15" />
-                                    </LabelIcon>
-                                    <LabelRow dark>Награда куратору</LabelRow>
-                                    <Switcher {...input} />
-                                </FormGroupRow>
-                            )}
-                        </Field>
-                        <Field name="c">
-                            {({ input }) => (
-                                <FormGroupRow>
-                                    <LabelIcon active={input.value}>
-                                        <Icon name="comment" width="19" height="15" />
-                                    </LabelIcon>
-                                    <LabelRow dark>Личное сообщения</LabelRow>
-                                    <Switcher {...input} />
-                                </FormGroupRow>
-                            )}
-                        </Field>
+export default class Online extends PureComponent {
+    static propTypes = {
+        options: PropTypes.object,
+        isChanging: PropTypes.bool,
+        onSubmitGate: PropTypes.func,
+    };
 
-                        {submitError && <div>{submitError}</div>}
-                    </CardContent>
-                    <DialogFooter>
-                        <DialogButton onClick={form.reset} disabled={submitting || pristine}>
-                            {tt('settings_jsx.reset')}
-                        </DialogButton>
-                        <DialogButton type="submit" primary disabled={submitting}>
-                            {tt('settings_jsx.update')}
-                        </DialogButton>
-                    </DialogFooter>
-                </form>
-            )}
-        </Form>
-    );
-};
+    state = {
+        switchAll: false,
+        data: {
+            notify: this.props.options.get('notify').toJS(),
+        },
+    };
 
-export default Online;
+    onSwitchAll = value => {
+        const { show } = this.state.data.notify;
+
+        const newShow = {};
+        for (let key in show) {
+            newShow[key] = value;
+        }
+
+        this.setState({
+            switchAll: value,
+            data: {
+                notify: {
+                    show: newShow,
+                },
+            },
+        });
+    };
+
+    resetSwitchAll = value => {
+        if (!value) {
+            this.setState({ switchAll: false });
+        }
+    };
+
+    renderSwitchers = () => {
+        const switchers = [
+            {
+                name: 'notify.show.vote',
+                label: tt('settings_jsx.notifications.vote'),
+                icon: { name: 'like', width: '19', height: '20' },
+            },
+            {
+                name: 'notify.show.flag',
+                label: tt('settings_jsx.notifications.flag'),
+                icon: { name: 'dislike', size: '18' },
+            },
+            {
+                name: 'notify.show.transfer',
+                label: tt('settings_jsx.notifications.transfer'),
+                icon: { name: 'coins_plus', width: '20', height: '16' },
+            },
+            {
+                name: 'notify.show.reply',
+                label: tt('settings_jsx.notifications.reply'),
+                icon: { name: 'comment-reply', width: '19', height: '18' },
+            },
+            {
+                name: 'notify.show.subscribe',
+                label: tt('settings_jsx.notifications.subscribe'),
+                icon: { name: 'round-check', size: '18' },
+            },
+            {
+                name: 'notify.show.unsubscribe',
+                label: tt('settings_jsx.notifications.unsubscribe'),
+                icon: { name: 'round-cross', size: '18' },
+            },
+            {
+                name: 'notify.show.mention',
+                label: tt('settings_jsx.notifications.mention'),
+                icon: { name: 'at', size: '17' },
+            },
+            {
+                name: 'notify.show.repost',
+                label: tt('settings_jsx.notifications.repost'),
+                icon: { name: 'repost-right', width: '19', height: '15' },
+            },
+            {
+                name: 'notify.show.award',
+                label: tt('settings_jsx.notifications.award'),
+                icon: { name: 'a', width: '14', height: '15' },
+            },
+            {
+                name: 'notify.show.curatorAward',
+                label: tt('settings_jsx.notifications.curatorAward'),
+                icon: { name: 'k', width: '13', height: '15' },
+            },
+            {
+                name: 'notify.show.message',
+                label: tt('settings_jsx.notifications.message'),
+                icon: { name: 'comment', width: '19', height: '15' },
+            },
+        ];
+
+        return switchers.map(({ name, label, icon }, key) => (
+            <Field name={name} key={key}>
+                {({ input }) => (
+                    <FormGroupRow>
+                        <LabelIcon active={input.value}>
+                            <Icon {...icon} />
+                        </LabelIcon>
+                        <LabelRow dark>{label}</LabelRow>
+                        <Switcher
+                            {...input}
+                            onChange={value => {
+                                input.onChange(value);
+                                this.resetSwitchAll(value);
+                            }}
+                        />
+                    </FormGroupRow>
+                )}
+            </Field>
+        ));
+    };
+
+    render() {
+        const { isChanging, onSubmitGate } = this.props;
+        const { data, switchAll } = this.state;
+
+        return (
+            <Form onSubmit={onSubmitGate} initialValues={data}>
+                {({ handleSubmit, submitError, form, submitting, pristine, values }) => (
+                    <form onSubmit={handleSubmit}>
+                        {isChanging && <SplashLoader />}
+
+                        <CardContent column>
+                            <FormGroup>
+                                <Label dark>{tt('settings_jsx.notifications.allOnlineLabel')}</Label>
+                                <FormGroupRow>
+                                    <LabelIcon active={switchAll}>
+                                        <Icon name="bell" width="19" height="20" />
+                                    </LabelIcon>
+                                    <LabelRow dark>
+                                        {tt('settings_jsx.notifications.allOnline')}
+                                    </LabelRow>
+                                    <Switcher
+                                        value={switchAll}
+                                        onChange={value => this.onSwitchAll(value)}
+                                    />
+                                </FormGroupRow>
+                            </FormGroup>
+                        </CardContent>
+                        <CardDivider />
+                        <CardContent column>
+                            {this.renderSwitchers()}
+                            {/* <pre>{JSON.stringify(values, 0, 2)}</pre> */}
+
+                            {submitError && <div>{submitError}</div>}
+                        </CardContent>
+                        <DialogFooter>
+                            <DialogButton onClick={form.reset} disabled={submitting || pristine}>
+                                {tt('settings_jsx.reset')}
+                            </DialogButton>
+                            <DialogButton type="submit" primary disabled={submitting}>
+                                {tt('settings_jsx.update')}
+                            </DialogButton>
+                        </DialogFooter>
+                    </form>
+                )}
+            </Form>
+        );
+    }
+}

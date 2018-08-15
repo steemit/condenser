@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Map } from 'immutable';
 
 import user from 'app/redux/User';
 import transaction from 'app/redux/Transaction';
@@ -8,18 +9,58 @@ import transaction from 'app/redux/Transaction';
 import { FORM_ERROR } from 'final-form';
 import { pick } from 'ramda';
 import tt from 'counterpart';
-import o2j from 'shared/clash/object2json';
+
+import { settingsContentSelector } from 'src/app/redux/selectors/userProfile/settings';
+import { getSettingsOptions, setSettingsOptions } from 'src/app/redux/actions/settings';
 
 import { SettingsShow } from 'src/app/components/userProfile';
 
-class SettingsContent extends Component {
+@connect(
+    settingsContentSelector,
+    // mapDispatchToProps
+    dispatch => ({
+        updateAccount: ({ successCallback, errorCallback, ...operation }) => {
+            dispatch(
+                transaction.actions.broadcastOperation({
+                    type: 'account_metadata',
+                    operation,
+                    successCallback: () => {
+                        dispatch(user.actions.getAccount());
+                        successCallback();
+                    },
+                    errorCallback,
+                })
+            );
+        },
+        notify: (message, dismiss = 3000) => {
+            dispatch({
+                type: 'ADD_NOTIFICATION',
+                payload: {
+                    key: 'settings_' + Date.now(),
+                    message,
+                    dismissAfter: dismiss,
+                },
+            });
+        },
+        getSettingsOptions: () => dispatch(getSettingsOptions()),
+        setSettingsOptions: (values) => dispatch(setSettingsOptions(values)),
+    })
+)
+export default class SettingsContent extends PureComponent {
     static propTypes = {
         account: PropTypes.object,
         profile: PropTypes.object,
+        options: PropTypes.instanceOf(Map),
         updateAccount: PropTypes.func,
+
+        getSettingsOptions: PropTypes.func,
     };
 
-    onSubmit = values => {
+    componentDidMount() {
+        this.props.getSettingsOptions();
+    }
+
+    onSubmitBlockchain = values => {
         const { account, metaData, updateAccount, notify } = this.props;
 
         metaData.profile = pick(
@@ -59,63 +100,24 @@ class SettingsContent extends Component {
         });
     };
 
-    render() {
-        const { profile, account } = this.props;
+    onSubmitGate = values => this.props.setSettingsOptions(values);
 
-        return <SettingsShow profile={profile} account={account} onSubmit={this.onSubmit} />;
+    render() {
+        const { profile, account, options, isChanging } = this.props;
+
+        console.log(56, options.toJS());
+
+        return (
+            <SettingsShow
+                profile={profile}
+                account={account}
+
+                options={options}
+                isChanging={isChanging}
+                
+                onSubmitBlockchain={this.onSubmitBlockchain}
+                onSubmitGate={this.onSubmitGate}
+            />
+        );
     }
 }
-
-export default connect(
-    // mapStateToProps
-    (state, ownProps) => {
-        const { accountName } = ownProps.params;
-
-        const account = state.global.getIn(['accounts', accountName]).toJS();
-
-        let metaData = account
-            ? o2j.ifStringParseJSON(account.json_metadata)
-            : {};
-        if (typeof metaData === 'string')
-            metaData = o2j.ifStringParseJSON(metaData); // issue #1237
-
-        //fix https://github.com/GolosChain/tolstoy/issues/450
-        if (
-            typeof metaData === 'string' &&
-            metaData.localeCompare("{created_at: 'GENESIS'}") == 0
-        ) {
-            metaData = {};
-            metaData.created_at = 'GENESIS';
-        }
-
-        const profile = metaData && metaData.profile ? metaData.profile : {};
-
-        return { account, metaData, profile, ...ownProps };
-    },
-    // mapDispatchToProps
-    dispatch => ({
-        updateAccount: ({ successCallback, errorCallback, ...operation }) => {
-            dispatch(
-                transaction.actions.broadcastOperation({
-                    type: 'account_metadata',
-                    operation,
-                    successCallback: () => {
-                        dispatch(user.actions.getAccount());
-                        successCallback();
-                    },
-                    errorCallback,
-                })
-            );
-        },
-        notify: (message, dismiss = 3000) => {
-            dispatch({
-                type: 'ADD_NOTIFICATION',
-                payload: {
-                    key: 'settings_' + Date.now(),
-                    message,
-                    dismissAfter: dismiss,
-                },
-            });
-        },
-    })
-)(SettingsContent);

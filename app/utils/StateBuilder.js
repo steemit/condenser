@@ -6,7 +6,7 @@ const DEFAULT_VOTE_LIMIT = 10000
 
 const isHardfork = (v) => v.split('.')[1] === '18'
 
-export default async function getState(api, url, options, offchain = {}) {
+export default async function getState(api, url, options, offchain, rates) {
     if (!url || typeof url !== 'string' || !url.length || url === '/') url = 'trending'
     if (url[0] === '/') url = url.substr(1)
 
@@ -24,9 +24,7 @@ export default async function getState(api, url, options, offchain = {}) {
     state.witnesses = {}
     state.discussion_idx = {}
     state.select_tags = []
-    state.rates = {
-        gbgPerGolos: await getGbgPerGolos(api) || 1,
-    };
+    state.rates = rates;
 
     // const hardfork_version = await api.getHardforkVersion()
     // state.is_hardfork = isHardfork(hardfork_version)
@@ -222,17 +220,4 @@ export default async function getState(api, url, options, offchain = {}) {
     }
 
     return Promise.resolve(state)
-}
-
-async function getGbgPerGolos(api) {
-    const feedPrice = await api.getCurrentMedianHistoryPrice();
-
-    if (
-        feedPrice.base &&
-        feedPrice.base.endsWith(' GBG') &&
-        feedPrice.quote &&
-        feedPrice.quote.endsWith(' GOLOS')
-    ) {
-        return parseFloat(feedPrice.base) / parseFloat(feedPrice.quote);
-    }
 }

@@ -2,8 +2,12 @@ import React from 'react';
 import { renderToNodeStream } from 'react-dom/server';
 import stringToStream from 'string-to-stream';
 import multiStream from 'multistream';
-
 import { ServerStyleSheet } from 'styled-components'
+import config from 'config';
+import jayson from 'jayson';
+import merge from 'lodash/merge';
+
+import { getCurrentMedianHistoryPrice } from 'app/utils/APIWrapper';
 import ServerHTML from './server-html';
 import { serverRender } from '../shared/UniversalRender';
 import models from 'db/models';
@@ -100,6 +104,7 @@ async function appRender(ctx) {
           location: ctx.request.url,
           offchain,
           ErrorPage,
+          rates: await getRates(),
         });
 
         if (metrics) metrics.timing(`universalRender.time`, new Date() - start)
@@ -140,6 +145,70 @@ async function appRender(ctx) {
         throw err;
     }
 }
+
+async function getRates() {
+    const rates = {
+        GOLOS: {
+            GBG: 1,
+        },
+        GBG: {
+            GOLOS: 1,
+        },
+    };
+
+    await Promise.all([
+        getGbgPerGolos().then(rate => {
+            merge(rates, {
+                GOLOS: {
+                    GBG: 1 / rate,
+                },
+                GBG: {
+                    GOLOS: rate,
+                },
+            });
+        }, noop),
+        getActualRates().then(data => {
+            merge(rates, data);
+        }),
+    ]);
+
+    return rates;
+}
+
+function getActualRates() {
+    const url = config.get('rate_service_url');
+
+    if (!url) {
+        return;
+    }
+
+    const client = jayson.client.http(url);
+
+    return new Promise((resolve, reject) => {
+        client.request('getActual', [], (err, data) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(data.result.rates);
+            }
+        });
+    });
+}
+
+async function getGbgPerGolos() {
+    const feedPrice = await getCurrentMedianHistoryPrice();
+
+    if (
+        feedPrice.base &&
+        feedPrice.base.endsWith(' GBG') &&
+        feedPrice.quote &&
+        feedPrice.quote.endsWith(' GOLOS')
+    ) {
+        return parseFloat(feedPrice.base) / parseFloat(feedPrice.quote);
+    }
+}
+
+function noop() {}
 
 appRender.dbStatus = {ok: true};
 module.exports = appRender;

@@ -105,8 +105,6 @@ export default class SettingsContent extends PureComponent {
     render() {
         const { profile, account, options, isChanging } = this.props;
 
-        console.log(56, options.toJS());
-
         return (
             <SettingsShow
                 profile={profile}

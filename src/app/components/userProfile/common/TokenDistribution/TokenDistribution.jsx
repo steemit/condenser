@@ -152,7 +152,7 @@ export default connect((state, props) => {
         gold: account.get('sbd_balance').split(' ')[0],
         goldSafe: account.get('savings_sbd_balance').split(' ')[0],
         power: account.get('vesting_shares'),
-        gbgPerGolos: state.global.getIn(['rates', 'gbgPerGolos']),
+        gbgPerGolos: state.global.getIn(['rates', 'GBG', 'GOLOS']),
         globalProps: state.global.get('props').toJS(),
     };
 })(TokenDistribution);

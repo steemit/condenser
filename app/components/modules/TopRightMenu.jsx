@@ -251,7 +251,7 @@ export default connect(
         const loggedIn = !!username;
 
         const savings_withdraws = state.user.get('savings_withdraws');
-        const price_per_golos = state.global.getIn(['rates', 'gbgPerGolos']);
+        const price_per_golos = state.global.getIn(['rates', 'GBG', 'GOLOS']);
         const globalprops = state.global.get('props');
 
         return {

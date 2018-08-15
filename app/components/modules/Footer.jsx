@@ -186,6 +186,6 @@ class Footer extends React.Component {
 
 export default connect(state => {
     return {
-        pricePerGolos: state.global.getIn(['rates', 'gbgPerGolos']),
+        pricePerGolos: state.global.getIn(['rates', 'GBG', 'GOLOS']),
     };
 },)(Footer);

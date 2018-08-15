@@ -43,6 +43,7 @@ export async function serverRender({
     location,
     offchain,
     ErrorPage,
+    rates,
 }) {
     let error, redirect, renderProps;
 
@@ -75,7 +76,7 @@ export async function serverRender({
 
         const options = { IGNORE_TAGS }
 
-        onchain = await getState(api, url, options, offchain)
+        onchain = await getState(api, url, options, offchain, rates);
 
          // protect for invalid account
         if (Object.getOwnPropertyNames(onchain.accounts).length === 0 && (location.match(routeRegex.UserProfile1) || location.match(routeRegex.UserProfile3))) {
@@ -114,7 +115,7 @@ export async function serverRender({
         // Calculate signup bonus
         const fee = parseFloat($STM_Config.registrar_fee.split(' ')[0]);
 
-        const sd = fee * onchain.rates.gbgPerGolos,
+        const sd = fee * onchain.rates.GBG.GOLOS,
               sdInt = parseInt(sd),
               sdDec = (sd - sdInt),
               sdDisp = sdInt + (sdInt < 5 && sdDec >= 0.5 ? '.50' : '');

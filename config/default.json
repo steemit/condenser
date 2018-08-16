@@ -126,5 +126,5 @@
   "openexchangerates_app_id": "app id",
   "wss_push_service_url": "url",
   "gate_service_url": "url",
-  "rate_service_url": ""
+  "rates_service_url": ""
 }

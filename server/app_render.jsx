@@ -176,7 +176,7 @@ async function getRates() {
 }
 
 function getActualRates() {
-    const url = config.get('rate_service_url');
+    const url = config.get('rates_service_url');
 
     if (!url) {
         return Promise.resolve({});

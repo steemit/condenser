@@ -99,5 +99,6 @@
   "is_sandbox": "SDC_IS_SANDBOX",
   "openexchangerates_app_id": "SDC_OPENEXCHANGERATES_APP_ID",
   "wss_push_service_url": "SDC_SERVICE_PUSH_CLIENT_URL",
-  "gate_service_url": "SDC_GATE_SERVICE_URL"
+  "gate_service_url": "SDC_GATE_SERVICE_URL",
+  "rates_service_url": "SDC_RATES_SERVICE_URL"
 }

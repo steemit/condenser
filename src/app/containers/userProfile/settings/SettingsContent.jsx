@@ -43,7 +43,21 @@ import { SettingsShow } from 'src/app/components/userProfile';
             });
         },
         getSettingsOptions: () => dispatch(getSettingsOptions()),
-        setSettingsOptions: (values) => dispatch(setSettingsOptions(values)),
+        setSettingsOptions: values =>
+            dispatch(
+                setSettingsOptions({
+                    ...values,
+                    successCallback: () => {
+                        dispatch({
+                            type: 'ADD_NOTIFICATION',
+                            payload: {
+                                message: tt('g.saved'),
+                                dismissAfter: 5000,
+                            },
+                        });
+                    },
+                })
+            ),
     })
 )
 export default class SettingsContent extends PureComponent {
@@ -109,10 +123,8 @@ export default class SettingsContent extends PureComponent {
             <SettingsShow
                 profile={profile}
                 account={account}
-
                 options={options}
                 isChanging={isChanging}
-                
                 onSubmitBlockchain={this.onSubmitBlockchain}
                 onSubmitGate={this.onSubmitGate}
             />

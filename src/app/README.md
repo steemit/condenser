@@ -1,0 +1,1 @@
+# TODO: write about structure of containers, components, actions, constants, sagas

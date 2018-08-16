@@ -25,7 +25,7 @@ export function getSettingsOptions({ profile = 'web' } = {}) {
     };
 }
 
-export function setSettingsOptions({ profile = 'web', ...values } = {}) {
+export function setSettingsOptions({ profile = 'web', successCallback, ...values } = {}) {
     return {
         type: GATE_SEND_MESSAGE,
         payload: {
@@ -36,6 +36,7 @@ export function setSettingsOptions({ profile = 'web', ...values } = {}) {
                 SETTING_SET_OPTIONS_ERROR,
             ],
             data: { profile, ...values },
+            successCallback,
         },
         meta: { profile, ...values },
     };

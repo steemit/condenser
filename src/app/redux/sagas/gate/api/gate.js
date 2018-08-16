@@ -4,7 +4,7 @@ import golos from 'golos-js';
 import { Client as WebSocket } from 'rpc-websockets';
 import { normalize } from 'normalizr';
 
-import { addNotificationOnline } from 'src/app/redux/actions/notificationsOnline'
+import { addNotificationOnline } from 'src/app/redux/actions/notificationsOnline';
 
 import {
     GATE_SEND_MESSAGE,
@@ -95,6 +95,8 @@ function* write(socket, writeChannel) {
                 data,
                 saga,
                 schema,
+                successCallback,
+                errorCallback,
             },
         } = action;
 
@@ -107,7 +109,15 @@ function* write(socket, writeChannel) {
                 yield call(saga, payload.data);
             }
             payload = schema ? normalize(payload.data, schema) : payload;
+
             yield put(actionWith({ type: successType, payload }));
+            if (successCallback) {
+                try {
+                    successCallback();
+                } catch (error) {
+                    console.error(error);
+                }
+            }
         } catch (e) {
             yield put({
                 type: 'ADD_NOTIFICATION',
@@ -116,7 +126,9 @@ function* write(socket, writeChannel) {
                     dismissAfter: 5000,
                 },
             });
+
             yield put(actionWith({ type: failureType, error: e.message }));
+            if (errorCallback) errorCallback(error.toString());
         }
     }
 }

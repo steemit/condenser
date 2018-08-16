@@ -9,7 +9,6 @@ import { browserHistory } from 'react-router';
 import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdown';
 import VerticalMenu from 'app/components/elements/VerticalMenu';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
-import NotifiCounter from 'app/components/elements/NotifiCounter';
 import tt from 'counterpart';
 import { LIQUID_TICKER, DEBT_TICKER } from 'app/client_config';
 import LocalizedCurrency from 'app/components/elements/LocalizedCurrency';
@@ -139,11 +138,11 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
 
     if (loggedIn) { // change back to if(username) after bug fix:  Clicking on Login does not cause drop-down to close #TEMP!
         let user_menu = [
-            {link: feedLink, icon: 'new/home', iconSize: '1_25x', value: tt('g.feed'), addon: <NotifiCounter fields="feed" />},
+            {link: feedLink, icon: 'new/home', iconSize: '1_25x', value: tt('g.feed')},
             {link: accountLink, icon: 'new/blogging', value: tt('g.blog')},
             {link: commentsLink, icon: 'new/comment', value: tt('g.comments')},
-            {link: repliesLink, icon: 'new/answer', value: tt('g.replies'), addon: <NotifiCounter fields="comment_reply" />},
-            {link: walletLink, icon: 'new/wallet', value: tt('g.wallet'), addon: <NotifiCounter fields="follow,send,receive,account_update" />},
+            {link: repliesLink, icon: 'new/answer', value: tt('g.replies')},
+            {link: walletLink, icon: 'new/wallet', value: tt('g.wallet')},
             {link: reset_password_link, icon: 'key', value: tt('g.change_password')},
             {link: settingsLink, icon: 'new/setting', value: tt('g.settings')},
             loggedIn ?
@@ -183,7 +182,6 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
                                 </div>
                             </div>
                         </a>
-                        <div className="TopRightMenu__notificounter"><NotifiCounter fields="total" /></div>
                     </li>}
                 </LinkWithDropdown>
                 {/* <li className={"delim " + scn} /> */}

@@ -179,7 +179,7 @@ function getActualRates() {
     const url = config.get('rate_service_url');
 
     if (!url) {
-        return;
+        return Promise.resolve({});
     }
 
     const client = jayson.client.http(url);

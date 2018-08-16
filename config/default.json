@@ -78,14 +78,6 @@
     "recovery_account": "golos",
     "signing_key": "5J..."
   },
-  "sendgrid": {
-    "from": "noreply@example.com",
-    "key": "SG.xxx_yyyy",
-    "templates": {
-      "confirm_email": false,
-      "waiting_list_invite": false
-    }
-  },
   "postmark": {
     "from": "noreply@example.com",
     "key": "postmark server key",
@@ -109,10 +101,6 @@
     "password": "",
     "port": "3301",
     "username": "guest"
-  },
-  "telesign": {
-    "customer_id": false,
-    "rest_api_key": false
   },
   "twilio": {
     "account_sid": false,

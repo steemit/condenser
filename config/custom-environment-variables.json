@@ -54,14 +54,6 @@
     "recovery_account": "SDC_RECOVERY_ACCOUNT",
     "signing_key": "SDC_RECOVERY_SIGNINGKEY"
   },
-  "sendgrid": {
-    "from": "SDC_SENDGRID_FROM",
-    "key": "SDC_SENDGRID_API_KEY",
-    "templates": {
-      "confirm_email": "SDC_SENDGRID_CONFIRMTEMPLATE",
-      "waiting_list_invite": "SDC_SENDGRID_WAITINGTEMPLATE"
-    }
-  },
   "postmark": {
     "from": "SDC_POSTMARK_FROM",
     "key": "SDC_POSTMARK_API_KEY",
@@ -83,10 +75,6 @@
     "password": "SDC_CHAIN_PROXY_PASSWORD",
     "port": "SDC_CHAIN_PROXY_PORT",
     "username": "SDC_CHAIN_PROXY_USERNAME"
-  },
-  "telesign": {
-    "customer_id": "SDC_TELESIGN_CUSTOMER_ID",
-    "rest_api_key": "SDC_TELESIGN_API_KEY"
   },
   "twilio": {
     "account_sid": "SDC_TWILIO_ACCOUNT_SID",

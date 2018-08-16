@@ -10,7 +10,6 @@ import { loadFollows } from 'app/redux/FollowSaga';
 import { PrivateKey, Signature, hash } from 'golos-js/lib/auth/ecc';
 import { api } from 'golos-js';
 import g from 'app/redux/GlobalReducer';
-// import PushNotificationSaga from 'app/redux/services/PushNotificationSaga';
 import uploadImageWatch from './UserSaga_UploadImage';
 
 export function* userWatches() {
@@ -131,19 +130,6 @@ function* usernamePasswordLogin(action) {
         const username = current.get('username');
         yield fork(loadFollows, 'getFollowingAsync', username, 'blog');
         yield fork(loadFollows, 'getFollowingAsync', username, 'ignore');
-        // if (process.env.BROWSER) {
-            // const notification_channel_created = yield select(state =>
-            //     state.user.get('notification_channel_created')
-            // );
-            // if (!notification_channel_created) {
-            //     // console.log(']]]]]]]]]]]]]]]]]]]]]]] ', notification_channel_created)
-            //     const { onUserLogin } = PushNotificationSaga;
-            //     // clientside
-            //     // when logged in
-            //     // start listening to the personal server event channel
-            //     yield call(onUserLogin);
-            // }
-        // }
     }
 }
 

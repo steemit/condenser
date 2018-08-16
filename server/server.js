@@ -168,22 +168,6 @@ app.use(
     })
 );
 
-// app.use(
-//     mount('/service-worker.js', function*() {
-//         this.set('Cache-Control', 'public, max-age=7200000');
-//         this.type = 'application/javascript';
-//         const file_content = fs
-//             .readFileSync(path.join(__dirname, './service-worker.js'))
-//             .toString();
-//         // TODO: use APP_DOMAIN from client_config.js
-//         // actually use a config value for it
-//         this.body = file_content.replace(
-//             /\{DEFAULT_URL\}/i,
-//             'https://' + this.request.header.host
-//         );
-//     })
-// );
-
 // set user's uid - used to identify users in logs and some other places
 // FIXME SECURITY PRIVACY cycle this uid after a period of time
 app.use(function*(next) {
@@ -207,7 +191,6 @@ usePostJson(app);
 
 useAccountRecoveryApi(app);
 useGeneralApi(app);
-// useNotificationsApi(app);
 useProxyRoutes(app);
 useRatesRoutes(app);
 

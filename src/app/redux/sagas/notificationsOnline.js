@@ -43,7 +43,7 @@ function createAddNotificationOnlineAction(props) {
             cursor: 'pointer',
         },
         key: 'chain_' + Date.now(),
-        dismissAfter: 1500000,
+        dismissAfter: 15000,
     };
 
     return {

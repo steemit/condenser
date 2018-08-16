@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { FormattedRelative, FormattedDate } from 'react-intl';
+import { FormattedDate } from 'react-intl';
 
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import ActivityItem from './ActivityItem';

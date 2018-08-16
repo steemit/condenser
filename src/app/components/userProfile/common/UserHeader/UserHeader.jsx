@@ -81,7 +81,7 @@ const Details = styled.div`
 
 const Name = styled.div`
     color: #393636;
-    font-family: ${({ theme }) => theme.fontFamilyBold};
+    font-family: ${({ theme }) => theme.fontFamilySerif};
     font-size: 30px;
     font-weight: bold;
     line-height: 1;

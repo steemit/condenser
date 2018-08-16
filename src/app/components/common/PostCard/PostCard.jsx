@@ -131,7 +131,7 @@ const Body = styled.div`
 `;
 const PostTitle = styled.div`
     font-size: 20px;
-    font-family: ${({ theme }) => theme.fontFamilyBold};
+    font-family: ${({ theme }) => theme.fontFamilySerif};
     color: #212121;
     //line-height: 34px;
     line-height: 29px;

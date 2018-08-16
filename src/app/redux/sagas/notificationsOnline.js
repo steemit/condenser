@@ -3,12 +3,11 @@ import { call, fork, put, all, takeEvery, select } from 'redux-saga/effects';
 import React from 'react';
 import { api } from 'golos-js';
 
-import { getAccount } from 'app/redux/SagaShared';
-
 import { NOTIFICATION_ONLINE_ADD_NOTIFICATION } from 'src/app/redux/constants/notificationsOnline';
 import constants from 'app/redux/constants';
+import { getAccount } from 'app/redux/SagaShared';
 
-import NotificationOnlineContent from 'src/app/redux/sagas/gate/api/NotificationOnlineContent';
+import NotificationOnlineContent from 'src/app/components/common/NotificationOnlineContent';
 import Icon from 'golos-ui/Icon';
 
 function createAddNotificationOnlineAction(props) {
@@ -65,8 +64,6 @@ function* addNotificationsOnlineWatch() {
 function* handleAddNotification({
     payload: { vote, flag, transfer, subscribe, unsubscribe, reply, mention, repost, witnessVote, witnessCancelVote },
 }) {
-    const stateGlobal = yield select(state => state.global);
-
     if (vote) {
         yield all(
             vote.map(function*(notification) {
@@ -228,7 +225,7 @@ function* handleAddNotification({
     if (mention) {
         yield all(
             mention.map(function*(notification) {
-                const { counter, author, permlink } = notification; // {"counter":1,"permlink":"re-devall-re-nickshtefan-re-destroyer2k-s-20180810t180227217z"}
+                const { counter, author, permlink } = notification;
 
                 const account = yield call(getAccount, author);
 
@@ -262,7 +259,7 @@ function* handleAddNotification({
     if (repost) {
         yield all(
             repost.map(function*(notification) {
-                const { counter, reposter, permlink } = notification; // {"counter":1,"permlink":"re-devall-re-nickshtefan-re-destroyer2k-s-20180810t180227217z"}
+                const { counter, reposter, permlink } = notification;
 
                 const current = yield select(state => state.user.get('current'));
                 const author = current.get('username');
@@ -299,7 +296,7 @@ function* handleAddNotification({
     if (witnessVote) {
         yield all(
             witnessVote.map(function*(notification) {
-                const { counter, from } = notification; // {"counter":1,"permlink":"re-devall-re-nickshtefan-re-destroyer2k-s-20180810t180227217z"}
+                const { counter, from } = notification;
 
                 const account = yield call(getAccount, from);
 
@@ -316,7 +313,7 @@ function* handleAddNotification({
     if (witnessCancelVote) {
         yield all(
             witnessCancelVote.map(function*(notification) {
-                const { counter, from } = notification; // {"counter":1,"permlink":"re-devall-re-nickshtefan-re-destroyer2k-s-20180810t180227217z"}
+                const { counter, from } = notification;
 
                 const account = yield call(getAccount, from);
 

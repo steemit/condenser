@@ -154,13 +154,6 @@ class DelegateVestingDialog extends PureComponent {
         if (type === TYPES.DELEGATE) {
             buttons = [
                 {
-                    text: tt('g.close'),
-                    onClick: this._onCloseClick,
-                },
-            ];
-        } else {
-            buttons = [
-                {
                     text: tt('g.cancel'),
                     onClick: this._onCloseClick,
                 },
@@ -169,6 +162,13 @@ class DelegateVestingDialog extends PureComponent {
                     primary: true,
                     disabled: !allow,
                     onClick: this._onOkClick,
+                },
+            ];
+        } else {
+            buttons = [
+                {
+                    text: tt('g.close'),
+                    onClick: this._onCloseClick,
                 },
             ];
         }
@@ -557,4 +557,3 @@ export default connect(
         },
     })
 )(DelegateVestingDialog);
-

@@ -45,10 +45,6 @@ const Avatar = styled.a`
     height: 46px;
     margin-right: 10px;
     border-radius: 50%;
-
-    //& .Userpic {
-    //    border: 2px solid #aaa;
-    //}
 `;
 const PostDesc = styled.div`
     padding-bottom: 2px;
@@ -133,7 +129,6 @@ const PostTitle = styled.div`
     font-size: 20px;
     font-family: ${({ theme }) => theme.fontFamilySerif};
     color: #212121;
-    //line-height: 34px;
     line-height: 29px;
     margin-bottom: 8px;
 `;
@@ -185,8 +180,7 @@ const PostImage = styled.div`
         bottom: 0;
         left: 0;
         right: 0;
-        background-color: rgba(100,100,100,0.15);
-        //transition: background-color 0.15s;
+        background-color: rgba(100, 100, 100, 0.15);
     }
     
     ${is('grid')`
@@ -195,10 +189,6 @@ const PostImage = styled.div`
         width: unset;
         height: 133px;
     `}
-    
-    //&:hover:after {
-    //    background-color: rgba(127,127,127,0);
-    //}
 `;
 
 const Filler = styled.div`
@@ -361,7 +351,6 @@ class PostCard extends PureComponent {
                     <HeaderLine>
                         <Category>{category}</Category>
                         <Filler />
-                        {/*<Brilliant dangerouslySetInnerHTML={{ __html: brilliantSvg }} />*/}
                     </HeaderLine>
                 ) : null}
             </Header>
@@ -401,10 +390,7 @@ class PostCard extends PureComponent {
                     onChange={this._onVoteChange}
                 />
                 {grid ? null : (
-                    <Fragment>
-                        <Filler />
-                        {/*<Brilliant dangerouslySetInnerHTML={{ __html: brilliantSvg }} />*/}
-                    </Fragment>
+                    <Filler />
                 )}
             </Footer>
         );

@@ -12,7 +12,7 @@ const Row = styled.div`
 `;
 
 const Header = styled.div`
-    font-family: ${a => a.theme.fontFamilyBold};
+    font-family: ${a => a.theme.fontFamilySerif};
     font-size: 34px;
     line-height: 1.37;
     letter-spacing: 0.6px;

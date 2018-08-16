@@ -10,7 +10,7 @@ const Row = styled.div`
 `;
 
 const Header = styled.div`
-    font-family: ${a => a.theme.fontFamilyBold};
+    font-family: ${a => a.theme.fontFamilySerif};
     font-size: 36px;
     line-height: 1.06;
     letter-spacing: 0.6px;
@@ -38,7 +38,7 @@ const Image = styled.div`
 `;
 
 const Description = styled.div`
-    font-family: ${a => a.theme.fontFamilyBold};
+    font-family: ${a => a.theme.fontFamilySerif};
     font-size: 18px;
     line-height: 1.42;
     color: #212121;

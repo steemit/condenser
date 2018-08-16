@@ -39,7 +39,7 @@ const Content = styled.div`
 `;
 
 const ContentTitle = styled.div`
-    font-family: ${a => a.theme.fontFamilyBold};
+    font-family: ${a => a.theme.fontFamilySerif};
     font-size: 17px;
     line-height: 1.2;
     color: #212121;

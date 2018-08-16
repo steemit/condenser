@@ -19,7 +19,7 @@ const Row = styled.div`
 `;
 
 const Greeting = styled.div`
-    font-family: ${a => a.theme.fontFamilyBold};
+    font-family: ${a => a.theme.fontFamilySerif};
     font-size: 65px;
     line-height: 1.3;
     text-align: left;

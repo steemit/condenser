@@ -146,6 +146,15 @@ export default `
 /hentai/@doujinblog/180713growth1rj229081-s15w5sofld
 /hentai/@doujinblog/180714--rj227798-90djgnbgos
 /hentai/@doujinblog/180714mugcathrj228912-qh4lrzq5y0
+/hentai/@doujinblog/180720glare1morerj227099-9fzz3a5vim
+/hentai/@doujinblog/180701beyondbeyond-2ndreport-hdd132025-x0gpvqrequ
+/hentai/@doujinblog/cg171215starlitskyver20171219rj213131-7mgk9xm3l8
+/hentai/@doujinblog/180714ya-ho-gamesifrj227963-kb47qicdxd
+/hentai/@doujinblog/180722riphialver2018-07-24rj229618-607j2ao2m5
+/hentai/@doujinblog/160615elfsuccubusver202rj174818-4lblazptpn
+/hentai/@doujinblog/180611jkrj227497-cojwitt3ou
+/hentai/@doujinblog/180630rj226466-booljr1545
+/hentai/@doujinblog/180729rj214362-1grt7j8qv6
 /news/@monaalexis27/sandy-hook-michael-vabner-website-shows-noah-pozner-all-grown-up-mirrored
 /news/@monaalexis27/sandy-hook-not-only-is-noah-pozner-a-fiction-but-his-father-lenny-is-also-a-fake-mirrored
 /politics/@barrysoetoro/neil-heslin-is-dead-9-11-fireman

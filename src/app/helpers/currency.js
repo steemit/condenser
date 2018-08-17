@@ -1,3 +1,8 @@
+const CURRENCY_SIGNS = {
+    'USD': '$_',
+    'EUR': '€_',
+    'RUB': '_₽',
+};
 
 export function parseAmount(amount, balance, isFinal) {
     const amountFixed = amount.trim().replace(/\s+/, '');
@@ -47,4 +52,38 @@ export function parseAmount2(amount, balance, isFinal, multiplier) {
         error,
         value: error ? null : amountValue,
     };
+}
+
+export function formatCurrency(amount, currency, decimals) {
+    let decimalsCount;
+
+    if (decimals === 'adaptive') {
+        if (amount < 10 && !CURRENCY_SIGNS[currency]) {
+            decimalsCount = 3;
+        } else if (amount < 100) {
+            decimalsCount = 2;
+        } else if (amount < 1000) {
+            decimalsCount = 1;
+        } else {
+            decimalsCount = 0;
+        }
+    } else if (decimals) {
+        decimalsCount = decimals;
+    } else {
+        decimalsCount = CURRENCY_SIGNS[currency] ? 2 : 3;
+    }
+
+    let amountString;
+
+    if (!amount) {
+        amountString = '0';
+    } else {
+        amountString = amount.toFixed(decimalsCount);
+    }
+
+    if (CURRENCY_SIGNS[currency]) {
+        return CURRENCY_SIGNS[currency].replace('_', amountString);
+    } else {
+        return `${amountString} ${currency}`;
+    }
 }

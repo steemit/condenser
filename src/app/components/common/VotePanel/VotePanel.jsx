@@ -7,6 +7,7 @@ import { getStoreState } from 'shared/UniversalRender';
 import { calcVotesStats } from 'app/utils/StateFunctions';
 import Icon from 'golos-ui/Icon';
 import Slider from 'golos-ui/Slider';
+import { formatCurrency } from 'src/app/helpers/currency';
 
 const VOTE_PERCENT_THRESHOLD = 1000000;
 
@@ -328,17 +329,7 @@ export default class VotePanel extends PureComponent {
                 rate = 1;
             }
 
-            if (value) {
-                stringValue = (value * rate).toFixed(3);
-            } else {
-                stringValue = '0';
-            }
-
-            if (currency === 'USD') {
-                stringValue = '$' + stringValue;
-            } else {
-                stringValue += ` ${currency}`;
-            }
+            stringValue = formatCurrency(value * rate, currency);
         }
 
         return stringValue;

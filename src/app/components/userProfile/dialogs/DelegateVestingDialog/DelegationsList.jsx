@@ -66,7 +66,7 @@ const ActionButton = styled.button`
 
     &:hover {
         color: #fff;
-        background: ${props => props.red ? '#fc544e' : '#3684ff'};
+        background: ${props => (props.red ? '#fc544e' : '#3684ff')};
     }
 `;
 
@@ -88,11 +88,11 @@ export default class DelegationsList extends PureComponent {
     };
 
     render() {
-        const { globalProps, data } = this.props;
+        const { data, globalProps } = this.props;
 
         return (
             <Root>
-                {data.length ?
+                {data.length ? (
                     <Fragment>
                         <DelegationsHeader>
                             <Delegatee>Кому</Delegatee>
@@ -116,23 +116,23 @@ export default class DelegationsList extends PureComponent {
                                             data-tooltip="Изменить"
                                             onClick={() => this.props.onEditClick(info.delegatee)}
                                         >
-                                            <Icon name="pen" size={14}/>
+                                            <Icon name="pen" size={14} />
                                         </ActionButton>
                                         <ActionButton
                                             red
                                             data-tooltip="Отозвать"
                                             onClick={() => this.props.onCancelClick(info.delegatee)}
                                         >
-                                            <Icon name="cross" size={12}/>
+                                            <Icon name="cross" size={12} />
                                         </ActionButton>
                                     </Action>
                                 </DelegationLine>
                             ))}
                         </DelegationLines>
                     </Fragment>
-                    :
+                ) : (
                     <EmptyList>Список пуст</EmptyList>
-                }
+                )}
             </Root>
         );
     }

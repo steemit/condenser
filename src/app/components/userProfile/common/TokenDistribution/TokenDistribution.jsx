@@ -63,8 +63,20 @@ class TokenDistribution extends PureComponent {
         collapsed: false,
     };
 
+    constructor(props) {
+        super(props);
+
+        this._globalProps = props.globalProps.toJS();
+    }
+
+    componentWillReceiveProps(newProps) {
+        if (this.props.globalProps !== newProps.globalProps) {
+            this._globalProps = newProps.globalProps.toJS();
+        }
+    }
+
     render() {
-        const { golos, golosSafe, gold, goldSafe, power, gbgPerGolos, globalProps } = this.props;
+        const { golos, golosSafe, gold, goldSafe, power, gbgPerGolos } = this.props;
         const { hoverIndex } = this.state;
 
         const labels = [
@@ -92,7 +104,7 @@ class TokenDistribution extends PureComponent {
             {
                 title: 'Сила голоса',
                 color: '#78c2d0',
-                value: vestsToGolos(power, globalProps),
+                value: vestsToGolos(power, this._globalProps),
             },
         ];
 
@@ -153,6 +165,6 @@ export default connect((state, props) => {
         goldSafe: account.get('savings_sbd_balance').split(' ')[0],
         power: account.get('vesting_shares'),
         gbgPerGolos: state.global.getIn(['rates', 'GBG', 'GOLOS']),
-        globalProps: state.global.get('props').toJS(),
+        globalProps: state.global.get('props'),
     };
 })(TokenDistribution);

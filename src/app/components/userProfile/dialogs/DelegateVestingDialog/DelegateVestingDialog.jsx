@@ -116,6 +116,12 @@ class DelegateVestingDialog extends PureComponent {
         editAccountName: null,
     };
 
+    constructor(props) {
+        super(props);
+
+        this._globalProps = props.globalProps.toJS();
+    }
+
     componentDidMount() {
         this.props.onRef(this);
 
@@ -126,11 +132,17 @@ class DelegateVestingDialog extends PureComponent {
         this.props.onRef(null);
     }
 
+    componentWillReceiveProps(newProps) {
+        if (this.props.globalProps !== newProps.globalProps) {
+            this._globalProps = newProps.globalProps.toJS();
+        }
+    }
+
     render() {
-        const { myAccount, globalProps } = this.props;
+        const { myAccount } = this.props;
         const { target, amount, loader, disabled, amountInFocus, type } = this.state;
 
-        const { golos } = getVesting(myAccount, globalProps);
+        const { golos } = getVesting(myAccount, this._globalProps);
 
         const availableBalance = Math.max(
             0,
@@ -258,7 +270,7 @@ class DelegateVestingDialog extends PureComponent {
     }
 
     _renderCancelBody({ availableBalance }) {
-        const { myUser, globalProps } = this.props;
+        const { myUser } = this.props;
         const { delegationError, delegationData, editAccountName } = this.state;
 
         if (delegationError) {
@@ -281,7 +293,7 @@ class DelegateVestingDialog extends PureComponent {
                 if (data.delegatee === editAccountName) {
                     delegation = data;
                     vestingShares = Math.round(
-                        parseFloat(vestsToGolos(data.vesting_shares, globalProps)) * 1000
+                        parseFloat(vestsToGolos(data.vesting_shares, this._globalProps)) * 1000
                     );
                 }
             }
@@ -291,7 +303,7 @@ class DelegateVestingDialog extends PureComponent {
             <Fragment>
                 <DelegationsList
                     myAccountName={myUser.get('username')}
-                    globalProps={globalProps}
+                    globalProps={this._globalProps}
                     data={delegationData}
                     onEditClick={this._onDelegationEdit}
                     onCancelClick={this._onDelegationCancel}
@@ -394,7 +406,7 @@ class DelegateVestingDialog extends PureComponent {
 
         const iAm = myUser.get('username');
 
-        const vesting = golosToVests(parseFloat(amount.replace(/\s+/, '')), this.props.globalProps);
+        const vesting = golosToVests(parseFloat(amount.replace(/\s+/, '')), this._globalProps);
 
         const operation = {
             delegator: iAm,
@@ -427,7 +439,7 @@ class DelegateVestingDialog extends PureComponent {
     _updateDelegation(delegatee, value) {
         const { myUser } = this.props;
 
-        const vesting = value > 0 ? golosToVests(value / 1000, this.props.globalProps) : '0.000000';
+        const vesting = value > 0 ? golosToVests(value / 1000, this._globalProps) : '0.000000';
 
         const iAm = myUser.get('username');
 
@@ -526,7 +538,7 @@ export default connect(
         return {
             myUser,
             myAccount,
-            globalProps: state.global.get('props').toJS(),
+            globalProps: state.global.get('props'),
         };
     },
     dispatch => ({

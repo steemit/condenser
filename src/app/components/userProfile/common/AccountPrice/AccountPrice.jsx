@@ -24,6 +24,13 @@ class AccountPrice extends PureComponent {
         accountName: PropTypes.string.isRequired,
     };
 
+    constructor(props) {
+        super(props);
+
+        this._rates = props.rates.toJS();
+        this._globalProps = props.globalProps.toJS();
+    }
+
     componentWillReceiveProps(newProps) {
         if (this.props.rates !== newProps.rates) {
             this._rates = newProps.rates.toJS();

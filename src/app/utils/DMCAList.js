@@ -201,6 +201,7 @@ export default `
 /cryptocurrency/@mycryptocrunch/looking-for-palm-beach-confidential-feb-2018-1st-and-2nd-mail-edition-reports
 /pbc/@amitayboneh/palm-beach-confidential-march-2018-pick-aion
 /ripple/@jzeal/ripple-xrp-palm-beach-confidential-teeka-tiwari-s-article-and-breakdown
+/travel/@pikto/flower-wonder-park-in-dubai-uae
 `
     .trim()
     .split('\n');

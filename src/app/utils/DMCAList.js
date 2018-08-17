@@ -202,6 +202,8 @@ export default `
 /pbc/@amitayboneh/palm-beach-confidential-march-2018-pick-aion
 /ripple/@jzeal/ripple-xrp-palm-beach-confidential-teeka-tiwari-s-article-and-breakdown
 /travel/@pikto/flower-wonder-park-in-dubai-uae
+/j/@kavyasheth3/kulfi-kumar-bajewala-17th-april-2018-full-episode-watch-online
+/j/@kavyasheth3/kya-haal-mr-paanchal-18th-april-2018-full-episode-watch-online
 `
     .trim()
     .split('\n');

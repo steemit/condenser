@@ -1,11 +1,10 @@
-import React from 'react';
-import PropTypes from 'prop-types'
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import transaction from 'app/redux/Transaction';
 import user from 'app/redux/User';
 import Slider from 'react-rangeslider';
 import Icon from 'app/components/elements/Icon';
-import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import { parsePayoutAmount } from 'app/utils/ParsersAndFormatters';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
@@ -14,12 +13,12 @@ import CloseButton from 'react-foundation-components/lib/global/close-button';
 import tt from 'counterpart';
 import LocalizedCurrency, { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
 import { DEBT_TICKER } from 'app/client_config';
+import { getPayout } from 'src/app/helpers/currency';
 
 const MAX_VOTES_DISPLAY = 20;
-const VOTE_WEIGHT_DROPDOWN_THRESHOLD = 1.0 * 1000.0 * 1000.0;
+const VOTE_WEIGHT_DROPDOWN_THRESHOLD = 1000 * 1000;
 
-class Voting extends React.Component {
-
+class Voting extends PureComponent {
     static propTypes = {
         // HTML properties
         post: PropTypes.string.isRequired,
@@ -28,302 +27,514 @@ class Voting extends React.Component {
 
         // Redux connect properties
         vote: PropTypes.func.isRequired,
-        author: PropTypes.string, // post was deleted
+        author: PropTypes.string,
         permlink: PropTypes.string,
         username: PropTypes.string,
-        is_comment: PropTypes.bool,
-        active_votes: PropTypes.object,
-        loggedin: PropTypes.bool,
-        post_obj: PropTypes.object,
-        net_vesting_shares: PropTypes.number,
-        vesting_shares: PropTypes.number,
+        isComment: PropTypes.bool,
+        activeVotes: PropTypes.object,
+        postData: PropTypes.object,
+        netVestingShares: PropTypes.number,
         voting: PropTypes.bool,
     };
 
     static defaultProps = {
         showList: true,
-        flag: false
+        flag: false,
     };
 
     constructor(props) {
         super(props);
+
         this.state = {
             showWeight: false,
             myVote: null,
-            weight: 10000
+            weight: 10000,
         };
-
-        this.voteUp = e => {
-            e.preventDefault();
-            this.voteUpOrDown(true)
-        };
-        this.voteDown = e => {
-            e.preventDefault();
-            this.voteUpOrDown(false)
-        };
-        this.voteUpOrDown = (up) => {
-            if(this.props.voting) return;
-            this.setState({votingUp: up, votingDown: !up});
-            const {myVote} = this.state;
-            const {author, permlink, username, is_comment} = this.props;
-            if (this.props.net_vesting_shares > VOTE_WEIGHT_DROPDOWN_THRESHOLD) {
-                localStorage.setItem('voteWeight' + (up ? '' : 'Down') + '-'+username+(is_comment ? '-comment' : ''),
-                    this.state.weight);
-            }
-            // already voted Up, remove the vote
-            const weight = up ? (myVote > 0 ? 0 : this.state.weight) : (myVote < 0 ? 0 : -1 * this.state.weight);
-            if (this.state.showWeight) this.setState({showWeight: false});
-            this.props.vote(weight, {author, permlink, username, myVote})
-        };
-
-        this.handleWeightChange = weight => {
-            this.setState({weight})
-        };
-
-        this.toggleWeightUp = e => {
-            e.preventDefault();
-            this.toggleWeightUpOrDown(true)
-        };
-        this.toggleWeightDown = e => {
-            e.preventDefault();
-            this.toggleWeightUpOrDown(false)
-        };
-        this.toggleWeightUpOrDown = up => {
-            const {username, is_comment} = this.props;
-            // Upon opening dialog, read last used weight (this works accross tabs)
-            if(! this.state.showWeight) {
-                localStorage.removeItem('vote_weight'); // deprecated. remove this line after 8/31
-                const saved_weight = localStorage.getItem('voteWeight' + (up ? '' : 'Down') + '-'+username+(is_comment ? '-comment' : ''));
-                this.setState({weight: saved_weight ? parseInt(saved_weight, 10) : 10000});
-            }
-            this.setState({showWeight: !this.state.showWeight})
-        };
-        this.shouldComponentUpdate = shouldComponentUpdate(this, 'Voting')
     }
 
     componentDidMount() {
-        const {username, active_votes} = this.props;
-        this._checkMyVote(username, active_votes)
+        const { username, activeVotes } = this.props;
+
+        this._checkMyVote(username, activeVotes);
     }
 
     componentWillReceiveProps(nextProps) {
-        const {username, active_votes} = nextProps;
-        this._checkMyVote(username, active_votes)
+        const { username, activeVotes } = nextProps;
+
+        this._checkMyVote(username, activeVotes);
     }
 
-    _checkMyVote(username, active_votes) {
-        if (username && active_votes) {
-            const vote = active_votes.find(el => el.get('voter') === username);
+    _checkMyVote(username, activeVotes) {
+        if (username && activeVotes) {
+            const vote = activeVotes.find(el => el.get('voter') === username);
+
             // weight warning, the API may send a string or a number (when zero)
-            if(vote) this.setState({myVote: parseInt(vote.get('percent') || 0, 10)})
+            if (vote) {
+                this.setState({
+                    myVote: parseInt(vote.get('percent') || 0, 10),
+                });
+            }
         }
     }
 
     render() {
-        const {active_votes, showList, voting, flag, net_vesting_shares, is_comment, post_obj} = this.props;
-        const {username} = this.props;
-        const {votingUp, votingDown, showWeight, weight, myVote} = this.state;
-        if(flag && !username) return null
+        const {
+            activeVotes,
+            showList,
+            voting,
+            flag,
+            netVestingShares,
+            isComment,
+            postData,
+            username,
+        } = this.props;
+
+        const { votingUp, votingDown, showWeight, weight, myVote } = this.state;
+
+        if (flag && !username) {
+            return null;
+        }
 
         const votingUpActive = voting && votingUp;
         const votingDownActive = voting && votingDown;
 
-        const ABOUT_FLAG = <div>
-            <p>{tt('voting_jsx.flagging_post_can_remove_rewards_the_flag_should_be_used_for_the_following')}:</p>
-            <ul>
-                <li>{tt('voting_jsx.disagreement_on_rewards')}</li>
-                <li>{tt('voting_jsx.fraud_or_plagiarism')}</li>
-                <li>{tt('voting_jsx.hate_speech_or_internet_trolling')}</li>
-                <li>{tt('voting_jsx.intentional_miss_categorized_content_or_spam')}</li>
-            </ul>
-        </div>;
+        const ABOUT_FLAG = (
+            <div>
+                <p>
+                    {tt(
+                        'voting_jsx.flagging_post_can_remove_rewards_the_flag_should_be_used_for_the_following'
+                    )}:
+                </p>
+                <ul>
+                    <li>{tt('voting_jsx.disagreement_on_rewards')}</li>
+                    <li>{tt('voting_jsx.fraud_or_plagiarism')}</li>
+                    <li>{tt('voting_jsx.hate_speech_or_internet_trolling')}</li>
+                    <li>{tt('voting_jsx.intentional_miss_categorized_content_or_spam')}</li>
+                </ul>
+            </div>
+        );
 
         if (flag) {
-            const down = <Icon name={votingDownActive ? 'empty' : (myVote < 0 ? 'flag2' : 'flag1')} />;
-            const classDown = 'Voting__button Voting__button-down' + (myVote < 0 ? ' Voting__button--downvoted' : '') + (votingDownActive ? ' votingDown' : '');
-            const flagWeight = post_obj.getIn(['stats', 'flagWeight']);
+            const down = (
+                <Icon name={votingDownActive ? 'empty' : myVote < 0 ? 'flag2' : 'flag1'} />
+            );
+            const classDown =
+                'Voting__button Voting__button-down' +
+                (myVote < 0 ? ' Voting__button--downvoted' : '') +
+                (votingDownActive ? ' votingDown' : '');
+            const flagWeight = postData.getIn(['stats', 'flagWeight']);
 
             // myVote === current vote
-            const dropdown = <FoundationDropdown show={showWeight} onHide={() => this.setState({showWeight: false})} className="Voting__adjust_weight_down">
-                {(myVote == null || myVote === 0) && net_vesting_shares > VOTE_WEIGHT_DROPDOWN_THRESHOLD &&
-                    <div>
-                        <div className="weight-display">- {weight / 100}%</div>
-                        <Slider min={100} max={10000} step={100} value={weight} onChange={this.handleWeightChange} />
+            const dropdown = (
+                <FoundationDropdown
+                    show={showWeight}
+                    onHide={() => this.setState({ showWeight: false })}
+                    className="Voting__adjust_weight_down"
+                >
+                    {(myVote == null || myVote === 0) &&
+                        netVestingShares > VOTE_WEIGHT_DROPDOWN_THRESHOLD && (
+                            <div>
+                                <div className="weight-display">- {weight / 100}%</div>
+                                <Slider
+                                    min={100}
+                                    max={10000}
+                                    step={100}
+                                    value={weight}
+                                    onChange={this._handleWeightChange}
+                                />
+                            </div>
+                        )}
+                    <CloseButton onClick={() => this.setState({ showWeight: false })} />
+                    <div className="clear Voting__about-flag">
+                        <p>{ABOUT_FLAG}</p>
+                        <a
+                            href="#"
+                            onClick={this._voteDown}
+                            className="button outline"
+                            title={tt('g.flag')}
+                        >
+                            {tt('g.flag')}
+                        </a>
                     </div>
-                }
-                <CloseButton onClick={() => this.setState({showWeight: false})} />
-                <div className="clear Voting__about-flag">
-                    <p>{ABOUT_FLAG}</p>
-                    <a href="#" onClick={this.voteDown} className="button outline" title={tt('g.flag')}>{tt('g.flag')}</a>
-                </div>
-            </FoundationDropdown>;
+                </FoundationDropdown>
+            );
 
-            const flagClickAction = myVote === null || myVote === 0 ? this.toggleWeightDown : this.voteDown
-            return <span className="Voting">
-                <span className={classDown}>
-                    {flagWeight > 0 && <span className="Voting__button-downvotes">{"•".repeat(flagWeight)}</span>}
-                    {votingDownActive ? down : <a href="#" onClick={flagClickAction} title={tt('g.flag')}>{down}</a>}
-                    {dropdown}
+            const flagClickAction =
+                myVote === null || myVote === 0 ? this._toggleWeightDown : this._voteDown;
+
+            return (
+                <span className="Voting">
+                    <span className={classDown}>
+                        {flagWeight > 0 && (
+                            <span className="Voting__button-downvotes">
+                                {'•'.repeat(flagWeight)}
+                            </span>
+                        )}
+                        {votingDownActive ? (
+                            down
+                        ) : (
+                            <a href="#" onClick={flagClickAction} title={tt('g.flag')}>
+                                {down}
+                            </a>
+                        )}
+                        {dropdown}
+                    </span>
                 </span>
-            </span>
+            );
         }
 
-        const total_votes = post_obj.getIn(['stats', 'total_votes']);
+        const totalVotes = postData.getIn(['stats', 'total_votes']);
 
-        const cashout_time = post_obj.get('cashout_time');
-        const max_payout = parsePayoutAmount(post_obj.get('max_accepted_payout'));
-        const pending_payout = parsePayoutAmount(post_obj.get('pending_payout_value'));
-        const promoted = parsePayoutAmount(post_obj.get('promoted'));
-        const total_author_payout = parsePayoutAmount(post_obj.get('total_payout_value'));
-        const total_curator_payout = parsePayoutAmount(post_obj.get('curator_payout_value'));
+        const cashOutTime = postData.get('cashout_time');
+        const max_payout = parsePayoutAmount(postData.get('max_accepted_payout'));
+        const promoted = parsePayoutAmount(postData.get('promoted'));
 
-        let payout = pending_payout + total_author_payout + total_curator_payout;
-        if (payout < 0.0) payout = 0.0;
-        if (payout > max_payout) payout = max_payout;
-        const payout_limit_hit = payout >= max_payout;
-        // Show pending payout amount for declined payment posts
-        if (max_payout === 0) payout = pending_payout;
+        const pending_payout = parsePayoutAmount(postData.get('pending_payout_value'));
+        const total_author_payout = parsePayoutAmount(postData.get('total_payout_value'));
+        const total_curator_payout = parsePayoutAmount(postData.get('curator_payout_value'));
+
         const up = <Icon name={votingUpActive ? 'empty' : 'chevron-up-circle'} />;
-        const classUp = 'Voting__button Voting__button-up' + (myVote > 0 ? ' Voting__button--upvoted' : '') + (votingUpActive ? ' votingUp' : '');
+        const classUp =
+            'Voting__button Voting__button-up' +
+            (myVote > 0 ? ' Voting__button--upvoted' : '') +
+            (votingUpActive ? ' votingUp' : '');
 
         // There is an "active cashout" if: (a) there is a pending payout, OR (b) there is a valid cashout_time AND it's NOT a comment with 0 votes.
-        const cashout_active = pending_payout > 0 || (cashout_time.indexOf('1969') !== 0 && !(is_comment && total_votes == 0));
+        const cashout_active =
+            pending_payout > 0 ||
+            (cashOutTime.indexOf('1969') !== 0 && !(isComment && totalVotes == 0));
         const payoutItems = [];
 
-        if(cashout_active) {
-            payoutItems.push({value: tt('voting_jsx.potential_payout') + ' ' + localizedCurrency(pending_payout) + ' (' + pending_payout.toFixed(3) + ' ' + DEBT_TICKER + ')'});
-        }
-        if(promoted > 0) {
-            payoutItems.push({value: tt('voting_jsx.boost_payments') + ' ' + localizedCurrency(promoted)});
-        }
-        if(cashout_active) {
-            payoutItems.push({value: <TimeAgoWrapper date={cashout_time} />});
+        if (cashout_active) {
+            payoutItems.push({
+                value:
+                    tt('voting_jsx.potential_payout') +
+                    ' ' +
+                    localizedCurrency(pending_payout) +
+                    ' (' +
+                    pending_payout.toFixed(3) +
+                    ' ' +
+                    DEBT_TICKER +
+                    ')',
+            });
         }
 
-        if(max_payout == 0) {
-            payoutItems.push({value: tt('voting_jsx.payouts_declined')})
+        if (promoted > 0) {
+            payoutItems.push({
+                value: tt('voting_jsx.boost_payments') + ' ' + localizedCurrency(promoted),
+            });
+        }
+
+        if (cashout_active) {
+            payoutItems.push({ value: <TimeAgoWrapper date={cashOutTime} /> });
+        }
+
+        if (max_payout == 0) {
+            payoutItems.push({ value: tt('voting_jsx.payouts_declined') });
         } else if (max_payout < 1000000) {
-            payoutItems.push({value: tt('voting_jsx.max_accepted_payout') + localizedCurrency(max_payout)})
+            payoutItems.push({
+                value: tt('voting_jsx.max_accepted_payout') + localizedCurrency(max_payout),
+            });
         }
-        if(total_author_payout > 0) {
-            payoutItems.push({value: tt('voting_jsx.past_payouts') + ' ' + localizedCurrency(total_author_payout + total_curator_payout)});
-            payoutItems.push({value: ' - ' + tt('voting_jsx.authors') + ': ' + localizedCurrency(total_author_payout)});
-            payoutItems.push({value: ' - ' + tt('voting_jsx.curators') + ': ' + localizedCurrency(total_curator_payout)});
-        }
-        const payoutEl = <DropdownMenu el="div" items={payoutItems}>
-            <span style={payout_limit_hit ? {opacity: '0.33'} : {}}>
-                <LocalizedCurrency amount={payout} className={max_payout === 0 ? 'strikethrough' : ''} />
-                {payoutItems.length > 0 && <Icon name="dropdown-arrow" />}
-            </span>
-        </DropdownMenu>;
 
-        let voters_list = null;
-        if (showList && total_votes > 0 && active_votes) {
-            const avotes = active_votes.toJS();
-            avotes.sort((a, b) => Math.abs(parseInt(a.rshares)) > Math.abs(parseInt(b.rshares)) ? -1 : 1)
+        if (total_author_payout > 0) {
+            payoutItems.push({
+                value:
+                    tt('voting_jsx.past_payouts') +
+                    ' ' +
+                    localizedCurrency(total_author_payout + total_curator_payout),
+            });
+
+            payoutItems.push({
+                value:
+                    ' - ' +
+                    tt('voting_jsx.authors') +
+                    ': ' +
+                    localizedCurrency(total_author_payout),
+            });
+
+            payoutItems.push({
+                value:
+                    ' - ' +
+                    tt('voting_jsx.curators') +
+                    ': ' +
+                    localizedCurrency(total_curator_payout),
+            });
+        }
+
+        const payoutEl = (
+            <DropdownMenu el="div" items={payoutItems}>
+                <span>
+                    {getPayout(postData)}
+                    {payoutItems.length > 0 && <Icon name="dropdown-arrow" />}
+                </span>
+            </DropdownMenu>
+        );
+
+        let votersList = null;
+
+        if (showList && totalVotes > 0 && activeVotes) {
+            const avotes = activeVotes.toJS();
+
+            avotes.sort(
+                (a, b) => (Math.abs(parseInt(a.rshares)) > Math.abs(parseInt(b.rshares)) ? -1 : 1)
+            );
+
             let voters = [];
-            for( let v = 0; v < avotes.length && voters.length < MAX_VOTES_DISPLAY; ++v ) {
-                const {percent, voter} = avotes[v]
-                const sign = Math.sign(percent)
-                const voterPercent= percent / 100 + '%';
-                if(sign === 0) continue
-                voters.push({value: (sign > 0 ? '+ ' : '- ') + voter, link: '/@' + voter, data: voterPercent})
+
+            for (let v = 0; v < avotes.length && voters.length < MAX_VOTES_DISPLAY; ++v) {
+                const { percent, voter } = avotes[v];
+                const sign = Math.sign(percent);
+                const voterPercent = percent / 100 + '%';
+
+                if (sign === 0) {
+                    continue;
+                }
+
+                voters.push({
+                    value: (sign > 0 ? '+ ' : '- ') + voter,
+                    link: '/@' + voter,
+                    data: voterPercent,
+                });
             }
-            if (total_votes > voters.length) {
-                voters.push({value: <span>&hellip; {tt('g.and')} {(total_votes - voters.length)} {tt('g.more')}</span>});
+
+            if (totalVotes > voters.length) {
+                voters.push({
+                    value: (
+                        <span>
+                            &hellip; {tt('g.and')} {totalVotes - voters.length} {tt('g.more')}
+                        </span>
+                    ),
+                });
             }
-            voters_list = <DropdownMenu selected={tt('votesandcomments_jsx.vote_count', {count: total_votes})} className="Voting__voters_list" items={voters} el="div" />;
+
+            votersList = (
+                <DropdownMenu
+                    selected={tt('votesandcomments_jsx.vote_count', { count: totalVotes })}
+                    className="Voting__voters_list"
+                    items={voters}
+                    el="div"
+                />
+            );
         }
 
-        let voteUpClick = this.voteUp;
+        let voteUpClick = this._voteUp;
         let dropdown = null;
-        if (myVote <= 0 && net_vesting_shares > VOTE_WEIGHT_DROPDOWN_THRESHOLD) {
-            voteUpClick = this.toggleWeightUp;
-            dropdown = <FoundationDropdown show={showWeight} onHide={() => this.setState({showWeight: false})}>
-                <div className="Voting__adjust_weight row align-middle collapse">
-                    <a href="#" onClick={this.voteUp} className="columns small-2 confirm_weight" title={tt('g.upvote')}><Icon size="2x" name="chevron-up-circle" /></a>
-                    <div className="columns small-2 weight-display">{weight / 100}%</div>
-                    <Slider min={100} max={10000} step={100} value={weight} className="columns small-6" onChange={this.handleWeightChange} />
-                    <CloseButton className="columns small-2 Voting__adjust_weight_close" onClick={() => this.setState({showWeight: false})} />
-                </div>
-            </FoundationDropdown>;
+
+        if (myVote <= 0 && netVestingShares > VOTE_WEIGHT_DROPDOWN_THRESHOLD) {
+            voteUpClick = this._toggleWeightUp;
+
+            dropdown = (
+                <FoundationDropdown
+                    show={showWeight}
+                    onHide={() => this.setState({ showWeight: false })}
+                >
+                    <div className="Voting__adjust_weight row align-middle collapse">
+                        <a
+                            href="#"
+                            onClick={this._voteUp}
+                            className="columns small-2 confirm_weight"
+                            title={tt('g.upvote')}
+                        >
+                            <Icon size="2x" name="chevron-up-circle" />
+                        </a>
+                        <div className="columns small-2 weight-display">{weight / 100}%</div>
+                        <Slider
+                            min={100}
+                            max={10000}
+                            step={100}
+                            value={weight}
+                            className="columns small-6"
+                            onChange={this._handleWeightChange}
+                        />
+                        <CloseButton
+                            className="columns small-2 Voting__adjust_weight_close"
+                            onClick={() => this.setState({ showWeight: false })}
+                        />
+                    </div>
+                </FoundationDropdown>
+            );
         }
+
         return (
             <span className="Voting">
                 <span className="Voting__inner">
                     <span className={classUp}>
-                        {votingUpActive ? up : <a href="#" onClick={voteUpClick} title={tt(myVote > 0 ? 'g.remove_vote' : 'g.upvote')}>{up}</a>}
+                        {votingUpActive ? (
+                            up
+                        ) : (
+                            <a
+                                href="#"
+                                onClick={voteUpClick}
+                                title={tt(myVote > 0 ? 'g.remove_vote' : 'g.upvote')}
+                            >
+                                {up}
+                            </a>
+                        )}
                         {dropdown}
                     </span>
                     {payoutEl}
                 </span>
-                {voters_list}
+                {votersList}
             </span>
         );
     }
+
+    _voteUp = e => {
+        e.preventDefault();
+        this._voteUpOrDown(true);
+    };
+
+    _voteDown = e => {
+        e.preventDefault();
+        this._voteUpOrDown(false);
+    };
+
+    _voteUpOrDown = up => {
+        if (this.props.voting) {
+            return;
+        }
+
+        this.setState({
+            votingUp: up,
+            votingDown: !up,
+        });
+
+        const { myVote } = this.state;
+        const { author, permlink, username, isComment, netVestingShares } = this.props;
+
+        if (netVestingShares > VOTE_WEIGHT_DROPDOWN_THRESHOLD) {
+            localStorage.setItem(
+                'voteWeight' + (up ? '' : 'Down') + '-' + username + (isComment ? '-comment' : ''),
+                this.state.weight
+            );
+        }
+
+        // already voted Up, remove the vote
+        const weight = up
+            ? myVote > 0
+                ? 0
+                : this.state.weight
+            : myVote < 0
+                ? 0
+                : -1 * this.state.weight;
+
+        if (this.state.showWeight) {
+            this.setState({ showWeight: false });
+        }
+
+        this.props.vote(weight, { author, permlink, username, myVote });
+    };
+
+    _handleWeightChange = weight => {
+        this.setState({ weight });
+    };
+
+    _toggleWeightUp = e => {
+        e.preventDefault();
+        this._toggleWeightUpOrDown(true);
+    };
+
+    _toggleWeightDown = e => {
+        e.preventDefault();
+        this._toggleWeightUpOrDown(false);
+    };
+
+    _toggleWeightUpOrDown = up => {
+        const { username, isComment } = this.props;
+        // Upon opening dialog, read last used weight (this works accross tabs)
+        if (!this.state.showWeight) {
+            localStorage.removeItem('vote_weight'); // deprecated. remove this line after 8/31
+
+            const saved_weight = localStorage.getItem(
+                'voteWeight' + (up ? '' : 'Down') + '-' + username + (isComment ? '-comment' : '')
+            );
+
+            this.setState({
+                weight: saved_weight ? parseInt(saved_weight, 10) : 10000,
+            });
+        }
+        this.setState({
+            showWeight: !this.state.showWeight,
+        });
+    };
 }
 
 export default connect(
-    (state, ownProps) => {
-        const post = state.global.getIn(['content', ownProps.post])
-        if (!post) return ownProps
-        const author = post.get('author')
-        const permlink = post.get('permlink')
-        const active_votes = post.get('active_votes')
-        const is_comment = post.get('parent_author') !== ''
+    (state, props) => {
+        const post = state.global.getIn(['content', props.post]);
 
-        const current_account = state.user.get('current')
-        const username = current_account
-            ? current_account.get('username')
-            : null;
-        const vesting_shares = current_account
-            ? current_account.get('vesting_shares')
-            : 0.0;
+        if (!post) {
+            return;
+        }
+
+        const author = post.get('author');
+        const permlink = post.get('permlink');
+        const activeVotes = post.get('active_votes');
+        const isComment = post.get('parent_author') !== '';
+
+        const current_account = state.user.get('current');
+        const username = current_account ? current_account.get('username') : null;
+        const vestingShares = current_account ? current_account.get('vesting_shares') : 0;
         const delegated_vesting_shares = current_account
             ? current_account.get('delegated_vesting_shares')
-            : 0.0;
-        const received_vesting_shares = current_account
+            : 0;
+        const receivedVestingShares = current_account
             ? current_account.get('received_vesting_shares')
-            : 0.0;
-        const net_vesting_shares = vesting_shares - delegated_vesting_shares + received_vesting_shares;
-        const voting = state.global.get(`transaction_vote_active_${author}_${permlink}`)
+            : 0;
+        const netVestingShares = vestingShares - delegated_vesting_shares + receivedVestingShares;
+        const voting = state.global.get(`transaction_vote_active_${author}_${permlink}`);
 
         return {
-            post: ownProps.post,
-            flag: ownProps.flag,
-            showList: ownProps.showList,
             author,
             permlink,
             username,
-            active_votes,
-            net_vesting_shares,
-            vesting_shares,
-            is_comment,
-            post_obj: post,
-            loggedin: username != null,
-            voting
-        }
+            activeVotes,
+            netVestingShares,
+            isComment,
+            postData: post,
+            voting,
+        };
     },
 
-    (dispatch) => ({
-        vote: (weight, {author, permlink, username, myVote}) => {
+    dispatch => ({
+        vote: (weight, { author, permlink, username, myVote }) => {
             const confirm = () => {
-                if(myVote == null) return
-                const t = tt('voting_jsx.we_will_reset_curation_rewards_for_this_post')
-                if(weight === 0) return tt('voting_jsx.removing_your_vote') + t
-                if(weight > 0) return tt('voting_jsx.changing_to_an_upvote') + t
-                if(weight < 0) return tt('voting_jsx.changing_to_a_downvote') + t
-                return null
-            }
+                if (myVote == null) {
+                    return;
+                }
 
-            dispatch(transaction.actions.broadcastOperation({
-                type: 'vote',
-                operation: {voter: username, author, permlink, weight,
-                    __config: {title: weight < 0 ? tt('voting_jsx.confirm_flag') : null},
-                },
-                confirm,
-                successCallback: () => dispatch(user.actions.getAccount())                   
-            }))
+                const t = tt('voting_jsx.we_will_reset_curation_rewards_for_this_post');
+
+                if (weight === 0) {
+                    return tt('voting_jsx.removing_your_vote') + t;
+                }
+
+                if (weight > 0) {
+                    return tt('voting_jsx.changing_to_an_upvote') + t;
+                }
+
+                if (weight < 0) {
+                    return tt('voting_jsx.changing_to_a_downvote') + t;
+                }
+
+                return null;
+            };
+
+            dispatch(
+                transaction.actions.broadcastOperation({
+                    type: 'vote',
+                    operation: {
+                        voter: username,
+                        author,
+                        permlink,
+                        weight,
+                        __config: { title: weight < 0 ? tt('voting_jsx.confirm_flag') : null },
+                    },
+                    confirm,
+                    successCallback: () => dispatch(user.actions.getAccount()),
+                })
+            );
         },
     })
-)(Voting)
+)(Voting);

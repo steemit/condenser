@@ -9,7 +9,7 @@ export default class RightPanel extends PureComponent {
 
         return (
             <div>
-                <AccountPrice />
+                <AccountPrice accountName={params.accountName} />
                 <RightActions pageAccountName={params.accountName || null} />
                 <TokenDistribution accountName={params.accountName} />
             </div>

@@ -344,6 +344,12 @@ class WalletContent extends Component {
         limit: DEFAULT_ROWS_LIMIT,
     };
 
+    constructor(props) {
+        super(props);
+
+        this._globalProps = props.globalProps.toJS();
+    }
+
     componentDidMount() {
         this._loadDelegationsData();
 
@@ -354,6 +360,12 @@ class WalletContent extends Component {
         this._unmount = true;
 
         window.removeEventListener('scroll', this._onScrollLazy);
+    }
+
+    componentWillReceiveProps(newProps) {
+        if (this.props.globalProps !== newProps.globalProps) {
+            this._globalProps = newProps.globalProps.toJS();
+        }
     }
 
     render() {
@@ -561,8 +573,9 @@ class WalletContent extends Component {
     }
 
     _makeGolosPowerList() {
-        const { myAccountName, pageAccountName, globalProps } = this.props;
+        const { myAccountName, pageAccountName } = this.props;
         const { delegationData, direction } = this.state;
+        const globalProps = this._globalProps;
 
         const list = [];
 
@@ -692,10 +705,10 @@ class WalletContent extends Component {
         const { editDelegationId } = this.state;
 
         if (editDelegationId === item.id) {
-            const { pageAccount, globalProps } = this.props;
+            const { pageAccount } = this.props;
             const { startEditDelegationGrow } = this.state;
 
-            const { golos } = getVesting(pageAccount, globalProps);
+            const { golos } = getVesting(pageAccount, this._globalProps);
 
             const availableBalance = Math.max(
                 0,
@@ -957,7 +970,7 @@ class WalletContent extends Component {
     _updateDelegation(item, value) {
         const { myAccountName } = this.props;
 
-        const vesting = value > 0 ? golosToVests(value / 1000, this.props.globalProps) : '0.000000';
+        const vesting = value > 0 ? golosToVests(value / 1000, this._globalProps) : '0.000000';
 
         const operation = {
             delegator: myAccountName,
@@ -1030,7 +1043,7 @@ export default connect(
             pageAccountName,
             pageAccount,
             myAccountName,
-            globalProps: globalProps.toJS(),
+            globalProps,
         };
     },
     dispatch => ({

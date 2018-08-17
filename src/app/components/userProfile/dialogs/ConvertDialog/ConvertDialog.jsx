@@ -108,14 +108,6 @@ const HintLine = FooterLine.extend`
 `;
 
 class ConvertDialog extends PureComponent {
-    componentDidMount() {
-        this.props.onRef(this);
-    }
-
-    componentWillUnmount() {
-        this.props.onRef(null);
-    }
-
     state = {
         type: TYPES.GOLOS,
         target: '',
@@ -126,8 +118,28 @@ class ConvertDialog extends PureComponent {
         disabled: false,
     };
 
+    constructor(props) {
+        super(props);
+
+        this._globalProps = props.globalProps.toJS();
+    }
+
+    componentDidMount() {
+        this.props.onRef(this);
+    }
+
+    componentWillUnmount() {
+        this.props.onRef(null);
+    }
+
+    componentWillReceiveProps(newProps) {
+        if (this.props.globalProps !== newProps.globalProps) {
+            this._globalProps = newProps.globalProps.toJS();
+        }
+    }
+
     render() {
-        const { myAccount, globalProps } = this.props;
+        const { myAccount } = this.props;
         const { target, amount, loader, disabled, amountInFocus, type, saveTo } = this.state;
 
         let balance = null;
@@ -137,7 +149,7 @@ class ConvertDialog extends PureComponent {
             balanceString = myAccount.get('balance');
             balance = parseFloat(balanceString);
         } else if (type === TYPES.POWER) {
-            const { golos } = getVesting(myAccount, globalProps);
+            const { golos } = getVesting(myAccount, this._globalProps);
 
             balance = Math.max(0, parseFloat(golos) - MIN_VOICE_POWER);
             balanceString = balance.toFixed(3);
@@ -237,7 +249,6 @@ class ConvertDialog extends PureComponent {
     }
 
     _renderAdditionalSection(balance) {
-        const { globalProps } = this.props;
         const { type, target, saveTo, amount } = this.state;
 
         switch (type) {
@@ -401,10 +412,7 @@ class ConvertDialog extends PureComponent {
         } else if (type === TYPES.POWER) {
             operationType = 'withdraw_vesting';
 
-            const vesting = golosToVests(
-                parseFloat(amount.replace(/\s+/, '')),
-                this.props.globalProps
-            );
+            const vesting = golosToVests(parseFloat(amount.replace(/\s+/, '')), this._globalProps);
 
             operation = {
                 account: iAm,
@@ -464,13 +472,14 @@ class ConvertDialog extends PureComponent {
 
 export default connect(
     state => {
+        const globalProps = state.global.get('props');
         const myUser = state.user.get('current');
         const myAccount = myUser ? state.global.getIn(['accounts', myUser.get('username')]) : null;
 
         return {
             myUser,
             myAccount,
-            globalProps: state.global.get('props').toJS(),
+            globalProps,
         };
     },
     dispatch => ({

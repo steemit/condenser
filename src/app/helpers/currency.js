@@ -1,3 +1,6 @@
+import React from 'react';
+import { getStoreState } from 'shared/UniversalRender';
+
 const CURRENCY_SIGNS = {
     'USD': '$_',
     'EUR': '€_',
@@ -86,4 +89,70 @@ export function formatCurrency(amount, currency, decimals) {
     } else {
         return `${amountString} ${currency}`;
     }
+}
+
+export function getPayout(data) {
+    const max = parseFloat(data.get('max_accepted_payout'));
+    const isDeclined = max === 0;
+
+    let isLimit = false;
+    let gbgValue = 0;
+
+    gbgValue += parseFloat(data.get('pending_payout_value')) || 0;
+
+    if (!isDeclined) {
+        gbgValue += parseFloat(data.get('total_payout_value')) || 0;
+        gbgValue += parseFloat(data.get('curator_payout_value')) || 0;
+    }
+
+    if (gbgValue < 0) {
+        gbgValue = 0;
+    }
+
+    if (max != null && gbgValue > max) {
+        gbgValue = max;
+        isLimit = true;
+    }
+
+    let stringValue;
+
+    if (process.env.BROWSER) {
+        const state = getStoreState();
+
+        let currency = localStorage.getItem('xchange.picked') || 'GBG';
+        let rate;
+
+        if (currency !== 'GBG') {
+            rate = state.global.getIn(['rates', 'GBG', currency]);
+        }
+
+        if (!rate) {
+            currency = 'GBG';
+            rate = 1;
+        }
+
+        stringValue = formatCurrency(gbgValue * rate, currency);
+    } else {
+        stringValue = `${gbgValue.toFixed(3)} GBG`;
+    }
+
+    let style;
+
+    if (isLimit || isDeclined) {
+        style = {};
+
+        if (isLimit) {
+            style.opacity = 0.33;
+        }
+
+        if (isDeclined) {
+            style.textDecoration = 'line-through';
+        }
+    }
+
+    return (
+        <span style={style}>
+            {stringValue}
+        </span>
+    );
 }

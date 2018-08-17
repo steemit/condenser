@@ -7,7 +7,7 @@ import { getStoreState } from 'shared/UniversalRender';
 import { calcVotesStats } from 'app/utils/StateFunctions';
 import Icon from 'golos-ui/Icon';
 import Slider from 'golos-ui/Slider';
-import { formatCurrency } from 'src/app/helpers/currency';
+import { getPayout } from 'src/app/helpers/currency';
 
 const VOTE_PERCENT_THRESHOLD = 1000000;
 
@@ -208,8 +208,6 @@ export default class VotePanel extends PureComponent {
         const votesSummary = votesSummaryIm ? votesSummaryIm.toJS() : calcVotesStats(votes.toJS(), me);
         this._myVote = votesSummary.myVote;
 
-        const stringValue = this._extractValue();
-
         return (
             <Root whiteTheme={whiteTheme} className={className} innerRef={this._onRef}>
                 <LikeBlock
@@ -230,7 +228,7 @@ export default class VotePanel extends PureComponent {
                         <IconTriangle name="triangle" />
                     </LikeCount>
                 </LikeBlock>
-                <Money>{stringValue}</Money>
+                <Money>{getPayout(data)}</Money>
                 <LikeBlockNeg
                     activeNeg={this._myVote === 'dislike' || sliderAction === 'dislike'}
                     data-tooltip={
@@ -299,40 +297,7 @@ export default class VotePanel extends PureComponent {
     _extractValue() {
         const { data } = this.props;
 
-        let gbgValue = data.get('total_payout_value');
 
-        if (!parseFloat(gbgValue)) {
-            gbgValue = data.get('total_pending_payout_value');
-        }
-
-        let stringValue = gbgValue;
-
-        if (process.env.BROWSER) {
-            let value = 0;
-
-            if (gbgValue) {
-                value = parseFloat(gbgValue) || 0;
-            }
-
-            const state = getStoreState();
-
-            let currency = localStorage.getItem('xchange.picked') || 'GBG';
-
-            let rate;
-
-            if (currency !== 'GBG') {
-                rate = state.global.getIn(['rates', 'GBG', currency]);
-            }
-
-            if (!rate) {
-                currency = 'GBG';
-                rate = 1;
-            }
-
-            stringValue = formatCurrency(value * rate, currency);
-        }
-
-        return stringValue;
     }
 
     _onRef = el => {

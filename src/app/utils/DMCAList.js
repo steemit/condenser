@@ -205,6 +205,7 @@ export default `
 /j/@kavyasheth3/kulfi-kumar-bajewala-17th-april-2018-full-episode-watch-online
 /j/@kavyasheth3/kya-haal-mr-paanchal-18th-april-2018-full-episode-watch-online
 /introduceyourself/@tukio/paradox-by-catherine-coulter-pdf-free-download
+/billions/@nick338422/if-all-goes-to-plan-by-2020-michael-jordan-s-annual-nike-royalty-check-will-be-ridiculous
 `
     .trim()
     .split('\n');

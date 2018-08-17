@@ -82,6 +82,7 @@ const icons = {
         height: 14,
     },
     mention: {
+        name: 'round-user',
         width: 14,
         height: 14,
     },

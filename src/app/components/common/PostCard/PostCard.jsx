@@ -372,9 +372,19 @@ class PostCard extends PureComponent {
                     <PostTitle>{p.title}</PostTitle>
                     <PostBody dangerouslySetInnerHTML={{ __html: p.desc }} />
                 </Body>
-                {withImage ? <PostImage grid={grid} src={p.image_link} /> : null}
+                {withImage ? <PostImage grid={grid} src={this._getImageSrc(p.image_link)} /> : null}
             </BodyLink>
         );
+    }
+
+    _getImageSrc(url) {
+        const proxy = $STM_Config.img_proxy_prefix;
+
+        if (proxy) {
+            return `${proxy}309x500/${url}`;
+        } else {
+            return url;
+        }
     }
 
     _renderFooter(withImage) {
@@ -389,9 +399,7 @@ class PostCard extends PureComponent {
                     grid={grid}
                     onChange={this._onVoteChange}
                 />
-                {grid ? null : (
-                    <Filler />
-                )}
+                {grid ? null : <Filler />}
             </Footer>
         );
     }

@@ -3,13 +3,9 @@ import constants from 'app/redux/constants';
 import GlobalReducer from 'app/redux//GlobalReducer';
 import { api } from 'golos-js';
 
-// TODO: cache
 export function* hydrateNotifications(notifications) {
     const hydrateUsers = [];
     const hydrateContents = [];
-
-    // const current = yield select(state => state.user.get('current'));
-    // const author = current.get('username');
 
     for (let notification of notifications) {
         const { fromUsers } = notification;
@@ -39,11 +35,15 @@ export function* hydrateNotifications(notifications) {
         }
     }
 
-    const contents = yield all(hydrateContents);
-    yield put(GlobalReducer.actions.receiveContents({ contents }));
+    if (hydrateContents.length) {
+        const contents = yield all(hydrateContents);
+        yield put(GlobalReducer.actions.receiveContents({ contents }));
+    }
 
-    const accounts = yield call([api, api.getAccountsAsync], hydrateUsers);
-    yield put(GlobalReducer.actions.receiveAccounts({ accounts }));
+    if (hydrateUsers.length) {
+        const accounts = yield call([api, api.getAccountsAsync], hydrateUsers);
+        yield put(GlobalReducer.actions.receiveAccounts({ accounts }));
+    }
 
     return notifications;
 }

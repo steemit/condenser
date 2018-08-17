@@ -1,56 +1,10 @@
 import { call, fork, put, all, takeEvery, select } from 'redux-saga/effects';
-
-import React from 'react';
 import { api } from 'golos-js';
 
+import { createAddNotificationOnlineAction } from 'src/app/redux/actions/notificationsOnline';
 import { NOTIFICATION_ONLINE_ADD_NOTIFICATION } from 'src/app/redux/constants/notificationsOnline';
-import constants from 'app/redux/constants';
 import { getAccount } from 'app/redux/SagaShared';
-
-import NotificationOnlineContent from 'src/app/components/common/NotificationOnlineContent';
-import Icon from 'golos-ui/Icon';
-
-function createAddNotificationOnlineAction(props) {
-    const baseStyles = {
-        display: 'flex',
-        alignItems: 'center',
-        left: 'auto',
-        background: '#FFFFFF',
-        borderRadius: '6px',
-        paddingTop: '0',
-        paddingBottom: '0',
-        paddingLeft: '20px',
-        paddingRight: '20px',
-        lineHeight: '1',
-        minHeight: '60px',
-    };
-
-    const payload = {
-        barStyle: {
-            ...baseStyles,
-            right: '-100%',
-        },
-        activeBarStyle: {
-            ...baseStyles,
-            right: '2.5rem',
-        },
-        message: <NotificationOnlineContent {...props} />,
-        action: <Icon name="cross" size="14" style={{ color: '#E1E1E1' }} />,
-        actionStyle: {
-            display: 'flex',
-            alignItems: 'center',
-            marginLeft: '18px',
-            cursor: 'pointer',
-        },
-        key: 'chain_' + Date.now(),
-        dismissAfter: 15000,
-    };
-
-    return {
-        type: 'ADD_NOTIFICATION',
-        payload,
-    };
-}
+import constants from 'app/redux/constants';
 
 export default function* rootSaga() {
     yield fork(addNotificationsOnlineWatch);

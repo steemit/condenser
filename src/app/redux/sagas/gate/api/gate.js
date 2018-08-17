@@ -4,6 +4,7 @@ import golos from 'golos-js';
 import { Client as WebSocket } from 'rpc-websockets';
 import { normalize } from 'normalizr';
 
+import { makeFakeAuthTransaction } from './utils';
 import { addNotificationOnline } from 'src/app/redux/actions/notificationsOnline';
 
 import {
@@ -13,24 +14,6 @@ import {
     GATE_AUTHORIZED,
     GATE_DISCONNECT,
 } from 'src/app/redux/constants/gate';
-
-const makeFakeAuthTransaction = (userName, secret) => ({
-    ref_block_num: 3367,
-    ref_block_prefix: 879276768,
-    expiration: '2018-07-06T14:52:24',
-    operations: [
-        [
-            'vote',
-            {
-                voter: userName,
-                author: 'test',
-                permlink: secret,
-                weight: 1,
-            },
-        ],
-    ],
-    extensions: [],
-});
 
 export default function* rootSaga() {
     yield fork(flow);
@@ -61,6 +44,7 @@ function* flow() {
     }
 }
 
+// TODO: reconnect
 function connect(gateServiceUrl) {
     const socket = new WebSocket(gateServiceUrl);
     return new Promise(resolve => {
@@ -82,7 +66,7 @@ function* read(socket) {
 }
 
 function* write(socket, writeChannel) {
-    // Wait for authorization
+    // Wait for authorization on gate
     yield take(GATE_AUTHORIZED);
 
     while (true) {
@@ -93,6 +77,7 @@ function* write(socket, writeChannel) {
                 types: [requestType, successType, failureType],
                 method,
                 data,
+                transform,
                 saga,
                 schema,
                 successCallback,
@@ -104,11 +89,11 @@ function* write(socket, writeChannel) {
         yield put(actionWith({ type: requestType }));
         try {
             let payload = yield call([socket, 'call'], method, data);
-            // TODO: review
-            if (saga) {
-                yield call(saga, payload.data);
-            }
-            payload = schema ? normalize(payload.data, schema) : payload;
+            // if we need to get result from unusual property
+            if (transform) payload = transform(payload);
+            // if exists saga for hydrate data from blockchain
+            if (saga) payload = yield call(saga, payload);
+            payload = schema ? normalize(payload, schema) : payload;
 
             yield put(actionWith({ type: successType, payload }));
             if (successCallback) {
@@ -128,7 +113,7 @@ function* write(socket, writeChannel) {
             });
 
             yield put(actionWith({ type: failureType, error: e.message }));
-            if (errorCallback) errorCallback(error.toString());
+            if (errorCallback) errorCallback(e.message);
         }
     }
 }

@@ -35,12 +35,17 @@ function* showTransactionErrorNotification() {
     }
 }
 
-export function* getContent({author, permlink, resolve, reject}) {
-    const content = yield call([api, api.getContentAsync], author, permlink, constants.DEFAULT_VOTE_LIMIT);
-    yield put(g.actions.receiveContent({content}))
-    if (resolve && content) {
+export function* getContent({ author, permlink, resolve, reject }, force = true) {
+    let content = yield select(state => state.global.getIn(['content', `${author}/${permlink}`]));
+    if (force || !content) {
+        content = yield call([api, api.getContentAsync], author, permlink, constants.DEFAULT_VOTE_LIMIT);
+        yield put(g.actions.receiveContent({content}))
+        if (resolve && content) {
+            resolve(content);
+        } else if (reject && !content) {
+            reject();
+        }
+    } else {
         resolve(content);
-    } else if (reject && !content) {
-        reject();
     }
 }

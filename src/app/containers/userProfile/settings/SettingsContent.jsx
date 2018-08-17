@@ -43,21 +43,7 @@ import { SettingsShow } from 'src/app/components/userProfile';
             });
         },
         getSettingsOptions: () => dispatch(getSettingsOptions()),
-        setSettingsOptions: values =>
-            dispatch(
-                setSettingsOptions({
-                    ...values,
-                    successCallback: () => {
-                        dispatch({
-                            type: 'ADD_NOTIFICATION',
-                            payload: {
-                                message: tt('g.saved'),
-                                dismissAfter: 5000,
-                            },
-                        });
-                    },
-                })
-            ),
+        setSettingsOptions: values => dispatch(setSettingsOptions(values)),
     })
 )
 export default class SettingsContent extends PureComponent {
@@ -96,6 +82,10 @@ export default class SettingsContent extends PureComponent {
                 json_metadata: JSON.stringify(metaData),
                 account: account.name,
                 memo_key: account.memo_key,
+                successCallback: () => {
+                    notify(tt('g.saved'));
+                    resolve();
+                },
                 errorCallback: e => {
                     if (e === 'Canceled') {
                         resolve();
@@ -106,15 +96,31 @@ export default class SettingsContent extends PureComponent {
                         });
                     }
                 },
-                successCallback: () => {
-                    notify(tt('g.saved'));
-                    resolve();
-                },
             });
         });
     };
 
-    onSubmitGate = values => this.props.setSettingsOptions(values);
+    onSubmitGate = values => {
+        const { setSettingsOptions, notify } = this.props;
+        return new Promise((resolve, reject) => {
+            setSettingsOptions({
+                ...values,
+                successCallback: () => {
+                    notify(tt('g.saved'));
+                },
+                errorCallback: e => {
+                    if (e === 'Canceled') {
+                        resolve();
+                    } else {
+                        console.log('updateAccount ERROR', e);
+                        reject({
+                            [FORM_ERROR]: tt('g.server_returned_error'),
+                        });
+                    }
+                },
+            });
+        });
+    };
 
     render() {
         const { profile, account, options, isChanging } = this.props;

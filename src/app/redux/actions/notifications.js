@@ -18,6 +18,7 @@ export function getNotificationsHistory({ fromId = null, limit = 10, types = 'al
                 NOTIFICATION_GET_HISTORY_ERROR,
             ],
             data: { fromId, limit, types },
+            transform: (payload) => payload.data,
             saga: hydrateNotifications,
             schema: Schemas.NOTIFICATION_ARRAY,
         },

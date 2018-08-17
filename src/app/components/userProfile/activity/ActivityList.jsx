@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { List } from 'immutable';
 import { FormattedDate } from 'react-intl';
 
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
@@ -37,7 +38,7 @@ const Date = styled.div`
 export default class ActivityList extends Component {
     static propTypes = {
         isFetching: PropTypes.bool,
-        // notification: PropTypes.object,
+        notifications: PropTypes.instanceOf(List),
     };
 
     render() {

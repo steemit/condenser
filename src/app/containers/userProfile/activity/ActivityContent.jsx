@@ -74,7 +74,7 @@ export default class ActivityContent extends PureComponent {
 
         this.props.getNotificationsHistory({
             types: NOTIFICATIONS_FILTER_TYPES[this.props.currentTabId],
-            skip: page * 5,
+            fromId: null,
             limit: page * 5 + 15,
         });
     };

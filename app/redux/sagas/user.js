@@ -1,16 +1,16 @@
 import { fromJS, Set, List } from 'immutable';
 import { call, put, select, fork, takeLatest, takeEvery } from 'redux-saga/effects';
-import { accountAuthLookup } from 'app/redux/AuthSaga';
+import { accountAuthLookup } from 'app/redux/sagas/auth';
 import user from 'app/redux/User';
-import { getAccount } from 'app/redux/SagaShared';
+import { getAccount } from 'app/redux/sagas/shared';
 import { browserHistory } from 'react-router';
 import { serverApiLogin, serverApiLogout } from 'app/utils/ServerApiClient';
 import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
-import { loadFollows } from 'app/redux/FollowSaga';
+import { loadFollows } from 'app/redux/sagas/follow';
 import { PrivateKey, Signature, hash } from 'golos-js/lib/auth/ecc';
 import { api } from 'golos-js';
 import g from 'app/redux/GlobalReducer';
-import uploadImageWatch from './UserSaga_UploadImage';
+import uploadImageWatch from './../UserSaga_UploadImage';
 
 export function* userWatches() {
     yield fork(watchRemoveHighSecurityKeys); // keep first to remove keys early when a page change happens

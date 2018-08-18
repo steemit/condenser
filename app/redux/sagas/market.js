@@ -1,6 +1,6 @@
 import { fork, call, put, takeLatest } from 'redux-saga/effects';
-import MarketReducer from './MarketReducer';
-import {getAccount} from './SagaShared';
+import MarketReducer from 'app/redux/MarketReducer';
+import {getAccount} from './shared';
 import {api} from 'golos-js';
 
 export function* marketWatches() {

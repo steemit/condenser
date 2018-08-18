@@ -4,12 +4,12 @@ import { routerReducer } from 'react-router-redux/lib';
 
 import { contentStats } from 'app/utils/StateFunctions';
 
-import appReducer from './AppReducer';
-import globalReducerModule from './GlobalReducer';
-import marketReducerModule from './MarketReducer';
-import user from './User';
-import transaction from './Transaction';
-import offchain from './OffchainReducer';
+import app from './app';
+import globalReducerModule from './../GlobalReducer';
+import marketReducerModule from './../MarketReducer';
+import user from './../User';
+import transaction from './../Transaction';
+import offchain from './offchain';
 import { reducer as formReducer } from 'redux-form'; // @deprecated, instead use: app/utils/ReactForm.js
 import status from 'src/app/redux/reducers/status';
 import entities from 'src/app/redux/reducers/entities';
@@ -54,7 +54,7 @@ export default combineReducers({
     transaction: initReducer(transaction.reducer),
     discussion: initReducer((state = {}) => state),
     routing: initReducer(routerReducer),
-    app: initReducer(appReducer),
+    app: initReducer(app),
     form: formReducer,
     
     status: initReducer(status),

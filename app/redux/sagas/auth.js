@@ -1,7 +1,7 @@
 import { fork, call, put, select, takeEvery } from 'redux-saga/effects';
 import {Set, Map, fromJS, List} from 'immutable'
 import user from 'app/redux/User'
-import {getAccount} from 'app/redux/SagaShared'
+import {getAccount} from 'app/redux/sagas/shared'
 import {PrivateKey} from 'golos-js/lib/auth/ecc';
 import {api} from 'golos-js';
 
@@ -137,23 +137,3 @@ export function* findSigningKey({opType, username, password}) {
     }
     return null
 }
-
-// function isPostingOnlyKey(pubkey, account) {
-//     // TODO Support account auths
-//     // yield put(g.actions.authLookup({account, pubkeys: pubkey})
-//     // authorityLookup({pubkeys, authority: Map(account.posting), authType: 'posting'})
-//     for (const p of account.posting.key_auths) {
-//         if (pubkey === p[0]) {
-//             if (account.active.account_auths.length || account.owner.account_auths.length) {
-//                 console.log('UserSaga, skipping save password, account_auths are not yet supported.')
-//                 return false
-//             }
-//             for (const a of account.active.key_auths)
-//                 if (pubkey === a[0]) return false
-//             for (const a of account.owner.key_auths)
-//                 if (pubkey === a[0]) return false
-//             return true
-//         }
-//     }
-//     return false
-// }

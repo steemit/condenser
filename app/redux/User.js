@@ -124,11 +124,11 @@ export default createModule({
         // { action: 'UPDATE_PERMISSIONS', reducer: state => {
         //     return state // saga
         // }},
-        { // AuthSaga
+        { // auth saga
             action: 'ACCOUNT_AUTH_LOOKUP',
             reducer: state => state
         },
-        { // AuthSaga
+        { // auth saga
             action: 'SET_AUTHORITY',
             reducer: (state, {payload: {accountName, auth, pub_keys_used}}) => {
                 state = state.setIn(['authority', accountName], fromJS(auth))

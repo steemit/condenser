@@ -1,7 +1,7 @@
 import { fork, call, put, select, takeEvery } from 'redux-saga/effects';
 import {fromJS, Set, Map} from 'immutable'
-import {getAccount, getContent} from 'app/redux/SagaShared'
-import {findSigningKey} from 'app/redux/AuthSaga'
+import {getAccount, getContent} from 'app/redux/sagas/shared'
+import {findSigningKey} from 'app/redux/sagas/auth'
 import g from 'app/redux/GlobalReducer'
 import user from 'app/redux/User'
 import tr from 'app/redux/Transaction'
@@ -10,7 +10,7 @@ import {DEBT_TICKER} from 'app/client_config'
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient'
 import {PrivateKey, PublicKey} from 'golos-js/lib/auth/ecc'
 import {api, broadcast, auth, memo} from 'golos-js'
-import constants from './constants';
+import constants from './../constants';
 import tt from 'counterpart';
 
 
@@ -115,7 +115,7 @@ function* preBroadcast_custom_json({operation}) {
                 }))
             }
         } catch(e) {
-            console.error('TransactionSaga unrecognized follow custom_json format', operation.json);
+            console.error('transaction saga unrecognized follow custom_json format', operation.json);
         }
     }
     return operation
@@ -156,7 +156,7 @@ function* broadcastOperation(
         const page = eventType === 'Vote' ? `@${operation.author}/${operation.permlink}` : '';
         serverApiRecordEvent(eventType, page);
     } catch(error) {
-        console.error('TransactionSaga', error)
+        console.error('transaction saga', error)
         if(errorCallback) errorCallback(error.toString())
     }
 }
@@ -235,7 +235,7 @@ function* broadcastPayload({payload: {operations, keys, username, hideErrors, su
         }
         if (successCallback) try { successCallback() } catch (error) { console.error(error) }
     } catch (error) {
-        console.error('TransactionSaga\tbroadcast', error)
+        console.error('transaction saga\tbroadcast', error)
         // status: error
 
         yield put(tr.actions.error({operations, error, hideErrors, errorCallback}))

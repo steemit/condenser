@@ -1,10 +1,10 @@
-import { all, fork } from 'redux-saga/effects'
-import { fetchDataWatches } from 'app/redux/FetchDataSaga';
-import { marketWatches } from 'app/redux/MarketSaga';
-import { sharedWatches } from 'app/redux/SagaShared';
-import { userWatches } from 'app/redux/UserSaga';
-import { authWatches } from 'app/redux/AuthSaga';
-import { transactionWatches } from 'app/redux/TransactionSaga';
+import { fork } from 'redux-saga/effects'
+import { fetchDataWatches } from 'app/redux/sagas/fetchData';
+import { marketWatches } from 'app/redux/sagas/market';
+import { sharedWatches } from 'app/redux/sagas/shared';
+import { userWatches } from 'app/redux/sagas/user';
+import { authWatches } from 'app/redux/sagas/auth';
+import { transactionWatches } from 'app/redux/sagas/transaction';
 import gateWatches from 'src/app/redux/sagas/gate';
 import notificationsOnlineWatches from 'src/app/redux/sagas/notificationsOnline';
 

@@ -1,6 +1,6 @@
 import { call, put, select, fork, cancelled, takeLatest, takeEvery } from 'redux-saga/effects';
-import {loadFollows, fetchFollowCount} from 'app/redux/FollowSaga';
-import {getContent} from 'app/redux/SagaShared';
+import {loadFollows, fetchFollowCount} from 'app/redux/sagas/follow';
+import {getContent} from 'app/redux/sagas/shared';
 import GlobalReducer from './GlobalReducer';
 import constants from './constants';
 import { reveseTag } from 'app/utils/tags';

@@ -3,7 +3,7 @@ import { api } from 'golos-js';
 
 import { createAddNotificationOnlineAction } from 'src/app/redux/actions/notificationsOnline';
 import { NOTIFICATION_ONLINE_ADD_NOTIFICATION } from 'src/app/redux/constants/notificationsOnline';
-import { getAccount } from 'app/redux/SagaShared';
+import { getAccount } from 'app/redux/sagas/shared';
 import constants from 'app/redux/constants';
 
 export default function* rootSaga() {

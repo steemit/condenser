@@ -57,7 +57,7 @@ export const replyAction = (dispatch, remarkable) => ({
               parent_author: author,
               parent_permlink: permlink,
               author: username,
-              // permlink,  assigned in TransactionSaga
+              // permlink,  assigned in transaction saga
           }
         : // edit existing
           isEdit

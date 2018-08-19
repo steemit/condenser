@@ -48,7 +48,7 @@
 
 Контейнеры это компоненты верхнего уровня, задачами которых является получить данные и экшены через ```props```, и описать основные методы, которые понадобятся в presentational components
 
-Пример: [containers/userProfile/settings/SettingsContent]()
+Пример: [containers/userProfile/settings/SettingsContent](app/containers/userProfile/settings/SettingsContent.jsx)
 
 ## Presentational components
 
@@ -56,10 +56,10 @@
 
 В рамках этого слоя в идеальном варианте должен быть компонент, который является основным presentational component'ом для конкретного контейнера. Он должен описывать рендеринг других presentational components для разделения логики по выполняемым задачам и отображаемым сущностям.
 
-Пример: [components/userProfile/SettingsShow]()
+Пример: [components/userProfile/SettingsShow](app/components/userProfile/SettingsShow.jsx)
 
 ## Dumb components
 
 Компоненты, которые не реализуют логику, а вызывают переданные методы и рендерят конечные данные.
 
-Пример: [components/golos-ui]()
+Пример: [components/golos-ui](app/components/golos-ui/), [components/common](app/components/common/) и styled-components в presentational components

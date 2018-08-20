@@ -1,7 +1,8 @@
-import React, { PureComponent } from 'react';
+import React, { Fragment, PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { List } from 'immutable';
+import styled from 'styled-components';
 
 import throttle from 'lodash/throttle';
 
@@ -13,8 +14,15 @@ import { changeProfileActivityTab } from 'src/app/redux/actions/ui';
 import Card, { CardContent } from 'golos-ui/Card';
 import { TabContainer, Tabs } from 'golos-ui/Tabs';
 
+import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import ActivityList from 'src/app/components/userProfile/activity/ActivityList';
 
+const WrapperLoader = styled.div`
+    display: flex;
+    justify-content: center;
+    height: 80px;
+    padding-top: 20px;
+`;
 @connect(
     activityContentSelector,
     {
@@ -27,25 +35,23 @@ export default class ActivityContent extends PureComponent {
         isFetching: PropTypes.bool,
         currentTabId: PropTypes.string,
         notifications: PropTypes.instanceOf(List),
-        
+
         changeProfileActivityTab: PropTypes.func,
         getNotificationsHistory: PropTypes.func,
     };
 
-    state = {
-        page: 0,
-    };
-
     rootRef = null;
+
+    lastNotificationId = null;
 
     componentDidMount() {
         this.loadMore();
-        window.addEventListener('scroll', this.handeScroll);
+        window.addEventListener('scroll', this.handleScroll);
     }
 
     componentWillUnmount() {
-        window.removeEventListener('scroll', this.handeScroll);
-        this.handeScroll.cancel();
+        window.removeEventListener('scroll', this.handleScroll);
+        this.handleScroll.cancel();
     }
 
     componentDidUpdate(prevProps) {
@@ -56,27 +62,34 @@ export default class ActivityContent extends PureComponent {
 
     setRootRef = el => (this.rootRef = el);
 
-    handeScroll = throttle(
-        () => {
-            // const rect = this.rootRef.getBoundingClientRect();
-            // if (rect.top + rect.height < window.innerHeight * 1.5) {
-            //     this.loadMore();
-            // }
-        },
-        100,
-        { leading: false, tailing: true }
-    );
-
     handleChangeTab = tab => this.props.changeProfileActivityTab(tab.id);
 
-    loadMore = () => {
-        const { page } = this.state;
+    handleScroll = throttle(() => {
+        const { isFetching } = this.props;
 
-        this.props.getNotificationsHistory({
-            types: NOTIFICATIONS_FILTER_TYPES[this.props.currentTabId],
-            fromId: null,
-            limit: page * 5 + 15,
-        });
+        if (!isFetching) {
+            const rect = this.rootRef.getBoundingClientRect();
+            if (rect.top + rect.height < window.innerHeight * 1.5) {
+                this.loadMore();
+            }
+        }
+    }, 1000);
+
+    loadMore = () => {
+        const { notifications } = this.props;
+
+        const lastNotification = notifications && notifications.get(-1);
+        const fromId = (lastNotification && lastNotification.get('_id')) || null;
+
+        if (!this.lastNotificationId || this.lastNotificationId !== fromId) {
+            this.props.getNotificationsHistory({
+                types: NOTIFICATIONS_FILTER_TYPES[this.props.currentTabId],
+                fromId,
+                limit: 5,
+            });
+        }
+
+        this.lastNotificationId = fromId;
     };
 
     renderTabs = () => {
@@ -91,22 +104,29 @@ export default class ActivityContent extends PureComponent {
 
         return tabs.map(({ id, title }, key) => (
             <TabContainer id={id} title={title} key={key}>
-                <ActivityList isFetching={isFetching} notifications={notifications} accounts={accounts} />
+                <ActivityList
+                    isFetching={isFetching}
+                    notifications={notifications}
+                    accounts={accounts}
+                />
             </TabContainer>
         ));
     };
 
     render() {
-        const { currentTabId } = this.props;
+        const { isFetching, currentTabId } = this.props;
 
         return (
-            <Card auto innerRef={this.setRootRef}>
-                <Tabs activeTab={{ id: currentTabId }} onChange={this.handleChangeTab}>
-                    <CardContent column auto>
-                        {this.renderTabs()}
-                    </CardContent>
-                </Tabs>
-            </Card>
+            <Fragment>
+                <Card auto innerRef={this.setRootRef}>
+                    <Tabs activeTab={{ id: currentTabId }} onChange={this.handleChangeTab}>
+                        <CardContent column auto>
+                            {this.renderTabs()}
+                        </CardContent>
+                    </Tabs>
+                </Card>
+                <WrapperLoader>{isFetching && <LoadingIndicator type="circle" center />}</WrapperLoader>
+            </Fragment>
         );
     }
 }

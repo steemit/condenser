@@ -16,9 +16,13 @@ const Wrapper = styled.div`
     height: ${({ size }) => size}px;
     width: ${({ size }) => size}px;
 
+    color: #E1E1E1;
+
     ${is('icon')`
         margin-left: 6px;
-    `} background-size: cover;
+    `} 
+    
+    background-size: cover;
     background-repeat: no-repeat;
     background-position: 50% 50%;
     border-radius: 50%;
@@ -64,6 +68,9 @@ export default class Avatar extends PureComponent {
 
         return (
             <Wrapper backgroundUrl={backgroundUrl} size={size} icon={icon ? 1 : 0}>
+                {!backgroundUrl && (
+                    <Icon name="avatar-centered" size={size} />
+                )}
                 {icon && (
                     <AvatarBadge>
                         <Icon name={icon.name} width={icon.width} height={icon.height} />

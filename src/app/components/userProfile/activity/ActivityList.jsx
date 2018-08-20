@@ -4,16 +4,7 @@ import styled from 'styled-components';
 import { List } from 'immutable';
 import { FormattedDate } from 'react-intl';
 
-import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import ActivityItem from './ActivityItem';
-
-const Wrapper = styled.div`
-    flex: 1;
-`;
-
-const Loader = styled(LoadingIndicator)`
-    margin: 30px 0;
-`;
 
 const DateWrapper = styled.div`
     display: flex;
@@ -42,19 +33,11 @@ export default class ActivityList extends Component {
     };
 
     render() {
-        const { isFetching, notifications, accounts } = this.props;
-
-        if (isFetching) {
-            return <Loader type="circle" center />;
-        }
-
-        if (!notifications.size) {
-            return <div>Пусто</div>;
-        }
+        const { notifications, accounts } = this.props;
 
         return (
             <Fragment>
-                {notifications.map((notification) => (
+                {notifications.map(notification => (
                     <Fragment key={notification.get('_id')}>
                         {notification.get('isNextDay') && (
                             <DateWrapper>
@@ -71,6 +54,7 @@ export default class ActivityList extends Component {
                         <ActivityItem notification={notification} accounts={accounts} />
                     </Fragment>
                 ))}
+                {!notifications.size && <div>Пусто</div>}
             </Fragment>
         );
     }

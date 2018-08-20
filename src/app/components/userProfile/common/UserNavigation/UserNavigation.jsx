@@ -93,24 +93,18 @@ class UserNavigation extends PureComponent {
     };
 
     render() {
-        const { accountName } = this.props;
-
-        // const items = [
-        //     { value: 'Посты', to: `/@${accountName}` },
-        //     { value: tt('g.replies'), to: `/@${accountName}/recent-replies` },
-        //     { value: 'Избранное', to: '--' },
-        //     { value: 'Уведомления', to: '--' },
-        //     { value: 'Сообщения', to: '--' },
-        //     { value: 'Мои ключи', to: '--' },
-        //     { value: tt('g.wallet'), to: `/@${accountName}/transfers` },
-        // ];
+        const { accountName, isOwner } = this.props;
+ 
         const indexTabLink = { value: tt('g.blog'), to: `/@${accountName}` };
         const tabLinks = [
             { value: tt('g.comments'), to: `/@${accountName}/comments` },
             { value: tt('g.replies'), to: `/@${accountName}/recent-replies` },
             { value: tt('g.wallet'), to: `/@${accountName}/transfers` },
-            { value: 'Активность', to: `/@${accountName}/activity` },
         ];
+
+        if (isOwner) {
+            tabLinks.push({ value: 'Активность', to: `/@${accountName}/activity` }) 
+        }
 
         const rewardsMenu = [
             {

@@ -35,9 +35,9 @@
 * ```dumb components``` - папка components/golos-ui, components/common и styled-components в presentational components 
 
 ## Store
-* entities
-* status
-* ui
+* ```entities``` - хранит результат работы [redux-entities-immutable](https://github.com/beautyfree/redux-entities-immutable), после нормализации
+* ```status``` - хранит статусы запросов, ошибки, данные которые нельзя вынести в entities из за неподходящей реализации api
+* ```ui``` - хранит изменение интерфейса, сгруппированные по страницам
 * и остальная структура хранения данных пришедшая от steem.it
 
 ## Selectors

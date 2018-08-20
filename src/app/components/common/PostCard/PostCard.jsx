@@ -310,7 +310,7 @@ class PostCard extends PureComponent {
     }
 
     _renderHeader(withImage) {
-        const { data, grid } = this.props;
+        const { data, grid, isFavorite } = this.props;
 
         const author = data.get('author');
         const category = detransliterate(data.get('category'));
@@ -341,8 +341,16 @@ class PostCard extends PureComponent {
                             </IconWrapper>
                         </ToolbarAction>
                         <ToolbarAction>
-                            <IconWrapper forceWhite={withImage && !grid} data-tooltip="В избранное">
-                                <Icon name="star" width={20} height={20} />
+                            <IconWrapper
+                                forceWhite={withImage && !grid}
+                                data-tooltip={isFavorite ? 'Убрать из избранного' : 'В избранное'}
+                                onClick={this._onFavoriteClick}
+                            >
+                                <Icon
+                                    name={isFavorite ? 'star_filled' : 'star'}
+                                    width={20}
+                                    height={20}
+                                />
                             </IconWrapper>
                         </ToolbarAction>
                     </Toolbar>
@@ -426,6 +434,15 @@ class PostCard extends PureComponent {
             });
         }
     };
+
+    _onFavoriteClick = () => {
+        const { isFavorite, data } = this.props;
+
+        this.props.toggleFavorite(
+            data.get('author') + '/' + data.get('permlink'),
+            !isFavorite
+        );
+    };
 }
 
 export default connect(
@@ -433,6 +450,7 @@ export default connect(
         return {
             myAccount: state.user.getIn(['current', 'username']),
             data: state.global.getIn(['content', props.permLink]),
+            isFavorite: state.data.favorite.set.has(props.permLink),
         };
     },
     dispatch => ({
@@ -452,6 +470,15 @@ export default connect(
                     successCallback: () => dispatch(user.actions.getAccount()),
                 })
             );
+        },
+        toggleFavorite: (link, isAdd) => {
+            dispatch({
+                type: 'FAVORITE/TOGGLE',
+                payload: {
+                    isAdd,
+                    link,
+                },
+            });
         },
     })
 )(PostCard);

@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import is from 'styled-is';
-import { connect } from 'react-redux';
 import throttle from 'lodash/throttle';
 import immutable from 'immutable';
 import PostCard from 'src/app/components/common/PostCard';
@@ -13,6 +12,8 @@ import PostOverlay from '../PostOverlay';
 import { getStoreState } from 'shared/UniversalRender';
 import DialogManager from 'app/components/elements/common/DialogManager';
 import keyCodes from 'app/utils/keyCodes';
+
+const PAGE_SIZE = 20;
 
 const Root = styled.div`
     ${is('grid')`
@@ -40,7 +41,7 @@ const EntryWrapper = styled.div`
     `};
 `;
 
-class PostsList extends PureComponent {
+export default class PostsList extends PureComponent {
     static propTypes = {
         pageAccountName: PropTypes.string.isRequired,
         content: PropTypes.instanceOf(immutable.Map),
@@ -51,10 +52,12 @@ class PostsList extends PureComponent {
 
     static defaultProps = {
         posts: immutable.Map(),
+        layout: 'list',
     };
 
     state = {
         showPostPermLink: null,
+        limit: this.props.isFavorite ? PAGE_SIZE : null,
     };
 
     componentDidMount() {
@@ -71,14 +74,25 @@ class PostsList extends PureComponent {
     }
 
     render() {
-        const { posts, category, layout, allowInlineReply } = this.props;
+        const { posts, category, layout, allowInlineReply, isFavorite } = this.props;
+        const { limit } = this.state;
 
-        const isGrid = category === 'blog' && layout === 'grid';
-        const EntryComponent = category === 'blog' ? PostCard : CommentCard;
+        const isPosts = category === 'blog' || isFavorite;
+
+        const isGrid = isPosts && layout === 'grid';
+        const EntryComponent = isPosts ? PostCard : CommentCard;
+
+        let limitedPosts;
+
+        if (limit) {
+            limitedPosts = posts.slice(0, limit);
+        } else {
+            limitedPosts = posts;
+        }
 
         return (
             <Root innerRef={this._onRef} grid={isGrid}>
-                {posts.map(permLink => (
+                {limitedPosts.map(permLink => (
                     <EntryWrapper key={permLink} grid={isGrid}>
                         <EntryComponent
                             permLink={permLink}
@@ -95,10 +109,16 @@ class PostsList extends PureComponent {
     }
 
     _renderLoaderIfNeed() {
-        const { section, globalStatus } = this.props;
+        const { isFavorite, isLoading, section, globalStatus } = this.props;
 
-        const status = globalStatus ? globalStatus.getIn([section, 'by_author']) : null;
-        const showLoader = status && status.fetching;
+        let showLoader;
+
+        if (isFavorite) {
+            showLoader = isLoading;
+        } else {
+            const status = globalStatus ? globalStatus.getIn([section, 'by_author']) : null;
+            showLoader = status && status.fetching;
+        }
 
         if (showLoader) {
             return (
@@ -122,23 +142,35 @@ class PostsList extends PureComponent {
     };
 
     _loadMore = () => {
-        const { globalStatus, order, category, myAccount } = this.props;
+        const { isFavorite } = this.props;
 
-        if (isFetchingOrRecentlyUpdated(globalStatus, order, category)) {
-            return;
+        if (isFavorite) {
+            const { isLoading, posts } = this.props;
+            const { limit } = this.state;
+
+            if (!isLoading && limit < posts.size) {
+                this.setState({
+                    limit: limit + PAGE_SIZE,
+                });
+            }
+        } else {
+            const { globalStatus, order, category, pageAccountName } = this.props;
+
+            if (isFetchingOrRecentlyUpdated(globalStatus, order, category)) {
+                return;
+            }
+
+            const lastPost = this.props.posts.last();
+            const [author, permlink] = lastPost.split('/');
+
+            this.props.loadMore({
+                order,
+                category,
+                accountname: pageAccountName,
+                author,
+                permlink,
+            });
         }
-
-        const lastPost = this.props.posts.last();
-
-        const [author, permlink] = lastPost.split('/');
-
-        this.props.loadMore({
-            order,
-            category,
-            accountname: myAccount,
-            author,
-            permlink,
-        });
     };
 
     _onScroll = throttle(
@@ -203,32 +235,3 @@ class PostsList extends PureComponent {
         }
     }
 }
-
-export default connect(
-    (state, props) => ({
-        myAccount: state.user.getIn(['current', 'username']),
-        globalStatus: state.global.get('status'),
-        layout: state.ui.profile && state.ui.profile.get('layout') || 'list',
-        posts: state.global.getIn(['accounts', props.pageAccountName, props.category]),
-    }),
-    dispatch => ({
-        loadMore(params) {
-            dispatch({ type: 'REQUEST_DATA', payload: params });
-        },
-        loadContent(permLink) {
-            return new Promise((resolve, reject) => {
-                const [author, permlink] = permLink.split('/');
-
-                dispatch({
-                    type: 'GET_CONTENT',
-                    payload: {
-                        author,
-                        permlink,
-                        resolve,
-                        reject,
-                    },
-                });
-            });
-        },
-    })
-)(PostsList);

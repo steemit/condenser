@@ -184,6 +184,10 @@ export function getStoreState() {
     return store.getState();
 }
 
+export function dispatch(action) {
+    store.dispatch(action);
+}
+
 export function clientRender(initialState) {
     let monitor;
     let sagaMiddleware;
@@ -219,6 +223,10 @@ export function clientRender(initialState) {
         if (location.hash || location.action === 'POP') return false;
         return !prevLocation || prevLocation.location.pathname !== location.pathname;
     });
+
+    if (process.env.BROWSER && process.env.NODE_ENV === 'development') {
+        window.__store = store;
+    }
 
     const Wrapper =
         process.env.NODE_ENV !== 'production' && localStorage['react.strict']

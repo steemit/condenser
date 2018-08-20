@@ -166,10 +166,10 @@ async function getRates() {
                     GOLOS: rate,
                 },
             });
-        }, noop),
+        }),
         getActualRates().then(data => {
             merge(rates, data);
-        }),
+        }, noop),
     ]);
 
     return rates;
@@ -182,9 +182,9 @@ function getActualRates() {
         return Promise.resolve({});
     }
 
-    const client = jayson.client.http(url);
-
     return new Promise((resolve, reject) => {
+        const client = jayson.client.http(url);
+
         client.request('getActual', [], (err, data) => {
             if (err) {
                 reject(err);

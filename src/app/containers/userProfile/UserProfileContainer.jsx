@@ -66,6 +66,10 @@ export default class UserProfileContainer extends Component {
         currentAccount: PropTypes.object, // Immutable.Map
     };
 
+    componentDidMount() {
+        this.props.loadFavorites();
+    }
+
     render() {
         const {
             currentUser,
@@ -122,7 +126,7 @@ export default class UserProfileContainer extends Component {
                 <UserNavigation
                     accountName={currentAccount.get('name')}
                     isOwner={isOwner}
-                    showLayout={!route || route === 'blog'}
+                    showLayout={!route || route === 'blog' || route === 'favorite'}
                 />
                 <Main>
                     <Container align="flex-start" justify="center" small>
@@ -201,6 +205,15 @@ module.exports = {
                 });
             },
         },
+        {
+            path: 'favorite',
+            getComponents(nextState, cb) {
+                cb(null, {
+                    content: require('./favorite/favoriteContent').default,
+                    sidebarRight: require('../../components/userProfile/common/RightPanel').default,
+                });
+            },
+        },
     ],
     component: connect(
         (state, props) => {
@@ -263,6 +276,12 @@ module.exports = {
                     },
                 });
             },
+            loadFavorites() {
+                dispatch({
+                    type: 'FAVORITE/LOAD',
+                    payload: {},
+                });
+            }
         })
     )(UserProfileContainer),
 };

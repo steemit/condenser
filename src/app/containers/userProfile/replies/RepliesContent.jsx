@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import InfoBlock from 'src/app/components/common/InfoBlock';
-import PostsList from 'src/app/components/common/PostsList';
+import PostsListBlog from 'src/app/components/common/PostsList/PostsListBlog';
 
 const Loader = styled(LoadingIndicator)`
     margin-top: 30px;
@@ -28,7 +28,7 @@ class RepliesContent extends Component {
         }
 
         return (
-            <PostsList
+            <PostsListBlog
                 pageAccountName={pageAccount.get('name')}
                 posts={posts}
                 category="recent_replies"

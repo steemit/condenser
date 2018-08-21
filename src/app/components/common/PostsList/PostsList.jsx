@@ -13,8 +13,6 @@ import { getStoreState } from 'shared/UniversalRender';
 import DialogManager from 'app/components/elements/common/DialogManager';
 import keyCodes from 'app/utils/keyCodes';
 
-const PAGE_SIZE = 20;
-
 const Root = styled.div`
     ${is('grid')`
         position: relative;
@@ -51,13 +49,12 @@ export default class PostsList extends PureComponent {
     };
 
     static defaultProps = {
-        posts: immutable.Map(),
+        posts: immutable.List(),
         layout: 'list',
     };
 
     state = {
         showPostPermLink: null,
-        limit: this.props.isFavorite ? PAGE_SIZE : null,
     };
 
     componentDidMount() {
@@ -75,24 +72,15 @@ export default class PostsList extends PureComponent {
 
     render() {
         const { posts, category, layout, allowInlineReply, isFavorite } = this.props;
-        const { limit } = this.state;
 
         const isPosts = category === 'blog' || isFavorite;
 
         const isGrid = isPosts && layout === 'grid';
         const EntryComponent = isPosts ? PostCard : CommentCard;
 
-        let limitedPosts;
-
-        if (limit) {
-            limitedPosts = posts.slice(0, limit);
-        } else {
-            limitedPosts = posts;
-        }
-
         return (
             <Root innerRef={this._onRef} grid={isGrid}>
-                {limitedPosts.map(permLink => (
+                {posts.map(permLink => (
                     <EntryWrapper key={permLink} grid={isGrid}>
                         <EntryComponent
                             permLink={permLink}
@@ -145,13 +133,10 @@ export default class PostsList extends PureComponent {
         const { isFavorite } = this.props;
 
         if (isFavorite) {
-            const { isLoading, posts } = this.props;
-            const { limit } = this.state;
+            const { isLoading } = this.props;
 
-            if (!isLoading && limit < posts.size) {
-                this.setState({
-                    limit: limit + PAGE_SIZE,
-                });
+            if (!isLoading) {
+                this.props.loadMore();
             }
         } else {
             const { globalStatus, order, category, pageAccountName } = this.props;

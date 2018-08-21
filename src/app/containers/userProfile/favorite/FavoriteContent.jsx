@@ -7,12 +7,20 @@ import { Link } from 'react-router';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import PostsListFavorite from 'src/app/components/common/PostsList/PostsListFavorite';
 import InfoBlock from 'src/app/components/common/InfoBlock';
+import { favoriteLoadNextPageAction } from 'src/app/redux/actions/favorite';
 
 const Loader = styled(LoadingIndicator)`
     margin-top: 30px;
 `;
 
 class FavoriteContent extends Component {
+    componentDidMount() {
+        const { isPageLoading, list } = this.props;
+        if (!isPageLoading && !list) {
+            this.props.favoriteLoadNextPageAction();
+        }
+    }
+
     render() {
         if (!process.env.BROWSER) {
             return <Loader type="circle" center size={40} />;
@@ -49,16 +57,22 @@ class FavoriteContent extends Component {
     }
 }
 
-export default connect((state, props) => {
-    const pageAccountName = props.params.accountName.toLowerCase();
-    const isOwner = state.user.getIn(['current', 'username']) === pageAccountName;
+export default connect(
+    (state, props) => {
+        const pageAccountName = props.params.accountName.toLowerCase();
+        const isOwner = state.user.getIn(['current', 'username']) === pageAccountName;
 
-    const { isLoading, list } = state.data.favorite;
+        const { isLoading, isPageLoading, showList } = state.data.favorite;
 
-    return {
-        isOwner,
-        list,
-        isLoading,
-        pageAccountName,
-    };
-})(FavoriteContent);
+        return {
+            isOwner,
+            isLoading,
+            pageAccountName,
+            isPageLoading,
+            list: showList,
+        };
+    },
+    {
+        favoriteLoadNextPageAction,
+    }
+)(FavoriteContent);

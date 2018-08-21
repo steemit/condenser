@@ -18,6 +18,7 @@ import Container from 'src/app/components/common/Container';
 import UserHeader from 'src/app/components/userProfile/common/UserHeader';
 import UserNavigation from 'src/app/components/userProfile/common/UserNavigation';
 import UserCardAbout from 'src/app/components/userProfile/common/UserCardAbout';
+import { FAVORITE_LOAD } from '../../redux/constants/favorites';
 
 const Main = styled.div`
     background-color: #f9f9f9;
@@ -278,7 +279,7 @@ module.exports = {
             },
             loadFavorites() {
                 dispatch({
-                    type: 'FAVORITE/LOAD',
+                    type: FAVORITE_LOAD,
                     payload: {},
                 });
             }

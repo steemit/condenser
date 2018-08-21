@@ -16,6 +16,7 @@ import user from 'app/redux/User';
 import transaction from 'app/redux/Transaction';
 import VotePanel from '../VotePanel';
 import { confirmVote } from 'src/app/helpers/votes';
+import { toggleFavoriteAction } from 'src/app/redux/actions/favorite';
 
 const Header = styled.div`
     padding: 10px 0 6px;
@@ -472,13 +473,7 @@ export default connect(
             );
         },
         toggleFavorite: (link, isAdd) => {
-            dispatch({
-                type: 'FAVORITE/TOGGLE',
-                payload: {
-                    isAdd,
-                    link,
-                },
-            });
+            dispatch(toggleFavoriteAction({ link, isAdd }));
         },
     })
 )(PostCard);

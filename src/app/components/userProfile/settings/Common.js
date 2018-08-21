@@ -1,4 +1,4 @@
-import React, { PureComponent, Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Map } from 'immutable';
@@ -8,15 +8,7 @@ import tt from 'counterpart';
 
 import {
     CURRENCIES,
-    DEFAULT_CURRENCY,
-    CURRENCY_COOKIE_KEY,
     LANGUAGES,
-    DEFAULT_LANGUAGE,
-    LOCALE_COOKIE_KEY,
-    USER_GENDER,
-    FRACTION_DIGITS,
-    FRACTION_DIGITS_MARKET,
-    MIN_VESTING_SHARES,
 } from 'app/client_config';
 
 import SplashLoader from 'golos-ui/SplashLoader';
@@ -182,8 +174,7 @@ export default class Common extends PureComponent {
                                     </FormGroup>
                                 )}
                             </Field>
-
-                            <pre>{JSON.stringify(values, 0, 2)}</pre>
+                            {/* <pre>{JSON.stringify(values, 0, 2)}</pre> */}
 
                             {submitError && <div>{submitError}</div>}
                         </CardContent>

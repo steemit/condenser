@@ -27,7 +27,6 @@
 @import "./elements/Reputation";
 @import "./elements/ScrollButton";
 @import "./elements/ShareMenu";
-@import "./elements/SignupProgressBar";
 @import "./elements/TagList";
 @import "./elements/TickerPriceStat";
 @import "./elements/UserNames";
@@ -54,15 +53,11 @@
 @import "./dialogs/LinkOptionsDialog/index";
 
 // modules
-@import "./modules/BlocktradesDeposit";
-@import "./modules/BottomPanel";
 @import "./modules/Footer";
 @import "./modules/Header";
 @import "./modules/LoginForm";
 @import "./modules/Settings";
-@import "./modules/SidePanel";
 @import "./modules/SignUp";
-@import "./modules/BottomPanel";
 @import "./modules/UserWallet";
 @import "./modules/TopRightMenu";
 @import "./modules/UserWallet";
@@ -73,7 +68,6 @@
 // pages
 @import "./pages/CreateAccount";
 @import "./pages/Landing";
-@import "./pages/Landings/Hardfork";
 @import "./pages/Landings/Start";
 @import "./pages/LeavePage";
 @import "./pages/Post";

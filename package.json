@@ -189,6 +189,7 @@
     "uglifyjs-webpack-plugin": "^1.2.5",
     "webpack-bundle-analyzer": "^2.13.1",
     "webpack-command": "^0.2.1",
+    "webpack-deadcode-plugin": "^0.1.7",
     "webpack-merge": "^4.1.2",
     "webpack-serve": "^1.0.4"
   },

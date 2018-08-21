@@ -1,8 +1,6 @@
-import React, { PureComponent, Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
-
-import tt from 'counterpart';
 
 import SplashLoader from 'golos-ui/SplashLoader';
 import Card from 'golos-ui/Card';

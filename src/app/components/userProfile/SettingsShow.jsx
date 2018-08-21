@@ -8,7 +8,8 @@ import { TabContainer, Tabs } from 'golos-ui/Tabs';
 
 import Common from './settings/Common';
 import Account from './settings/Account';
-import Notifications from './settings/Notifications';
+// import Notifications from './settings/Notifications'; // TODO: uncomment after realize push and email
+import Online from './settings/notifications/Online';
 
 export default class SettingsShow extends PureComponent {
     static propTypes = {
@@ -59,12 +60,17 @@ export default class SettingsShow extends PureComponent {
                         />
                     </TabContainer>
                     <TabContainer id="notificationsTab" title="Уведомления">
-                        <Notifications
+                        <Online
+                            options={options}
+                            isChanging={isChanging}
+                            onSubmitGate={onSubmitGate}
+                        />
+                        {/* <Notifications
                             options={options}
                             isFetching={isFetching}
                             isChanging={isChanging}
                             onSubmitGate={onSubmitGate}
-                        />
+                        /> */}
                     </TabContainer>
                 </Tabs>
             </Card>

@@ -1,4 +1,4 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 import { Link } from 'react-router';
@@ -40,7 +40,7 @@ const AuthorBlock = styled.div`
     display: flex;
     align-items: center;
 `;
-const Avatar = styled.a`
+const Avatar = styled(Link)`
     display: block;
     width: 46px;
     height: 46px;
@@ -51,7 +51,7 @@ const PostDesc = styled.div`
     padding-bottom: 2px;
     font-family: ${a => a.theme.fontFamily};
 `;
-const AuthorName = styled.a`
+const AuthorName = styled(Link)`
     display: block;
     font-size: 15px;
     font-weight: 500;
@@ -320,11 +320,11 @@ class PostCard extends PureComponent {
             <Header>
                 <HeaderLine>
                     <AuthorBlock>
-                        <Avatar href={`/@${author}`}>
+                        <Avatar to={`/@${author}`}>
                             <Userpic account={author} size={42} />
                         </Avatar>
                         <PostDesc>
-                            <AuthorName href={`/@${author}`}>{author}</AuthorName>
+                            <AuthorName to={`/@${author}`}>{author}</AuthorName>
                             <PostDate>
                                 <TimeAgoWrapper date={data.get('created')} />
                             </PostDate>

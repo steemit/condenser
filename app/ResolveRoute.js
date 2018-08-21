@@ -1,9 +1,9 @@
 export const routeRegex = {
     PostsIndex: /^\/(@[\w\.\d-]+)\/feed\/?$/,
     UserProfile1: /^\/(@[\w\.\d-]+)\/?$/,
-    UserProfile2: /^\/(@[\w\.\d-]+)\/(blog|posts|comments|recommended|transfers|invites|curation-rewards|author-rewards|permissions|created|recent-replies|feed|password|followed|followers|settings|activity)\/??(?:&?[^=&]*=[^=&]*)*$/,
+    UserProfile2: /^\/(@[\w\.\d-]+)\/(blog|posts|comments|recommended|transfers|invites|curation-rewards|author-rewards|permissions|created|recent-replies|feed|password|followed|followers|settings|activity|favorite)\/??(?:&?[^=&]*=[^=&]*)*$/,
     UserProfile3: /^\/(@[\w\.\d-]+)\/[\w\.\d-]+/,
-    UserEndPoints: /^(blog|posts|comments|recommended|transfers|invites|curation-rewards|author-rewards|permissions|assets|created|recent-replies|feed|password|followed|followers|settings|activity)$/,
+    UserEndPoints: /^(blog|posts|comments|recommended|transfers|invites|curation-rewards|author-rewards|permissions|assets|created|recent-replies|feed|password|followed|followers|settings|activity|favorite)$/,
     CategoryFilters: /^\/(hot|votes|responses|trending|trending30|promoted|cashout|payout|payout_comments|created|active)\/?$/ig,
     PostNoCategory: /^\/(@[\w\.\d-]+)\/([\w\d-]+)/,
     Post: /^\/([\w\d\-\/]+)\/(\@[\w\d\.-]+)\/([\w\d-]+)\/?($|\?)/,

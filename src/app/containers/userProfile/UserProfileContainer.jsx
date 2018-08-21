@@ -18,6 +18,7 @@ import Container from 'src/app/components/common/Container';
 import UserHeader from 'src/app/components/userProfile/common/UserHeader';
 import UserNavigation from 'src/app/components/userProfile/common/UserNavigation';
 import UserCardAbout from 'src/app/components/userProfile/common/UserCardAbout';
+import { FAVORITE_LOAD } from '../../redux/constants/favorites';
 
 const Main = styled.div`
     background-color: #f9f9f9;
@@ -65,6 +66,10 @@ export default class UserProfileContainer extends Component {
         currentUser: PropTypes.object, // Immutable.Map
         currentAccount: PropTypes.object, // Immutable.Map
     };
+
+    componentDidMount() {
+        this.props.loadFavorites();
+    }
 
     render() {
         const {
@@ -122,7 +127,7 @@ export default class UserProfileContainer extends Component {
                 <UserNavigation
                     accountName={currentAccount.get('name')}
                     isOwner={isOwner}
-                    showLayout={!route || route === 'blog'}
+                    showLayout={!route || route === 'blog' || route === 'favorite'}
                 />
                 <Main>
                     <Container align="flex-start" justify="center" small>
@@ -201,6 +206,15 @@ module.exports = {
                 });
             },
         },
+        {
+            path: 'favorite',
+            getComponents(nextState, cb) {
+                cb(null, {
+                    content: require('./favorite/favoriteContent').default,
+                    sidebarRight: require('../../components/userProfile/common/RightPanel').default,
+                });
+            },
+        },
     ],
     component: connect(
         (state, props) => {
@@ -263,6 +277,12 @@ module.exports = {
                     },
                 });
             },
+            loadFavorites() {
+                dispatch({
+                    type: FAVORITE_LOAD,
+                    payload: {},
+                });
+            }
         })
     )(UserProfileContainer),
 };

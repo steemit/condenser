@@ -79,6 +79,7 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
     const walletLink = `/@${username}/transfers`;
     const settingsLink = `/@${username}/settings`;
     const accountLink = `/@${username}`;
+    const favoriteLink = `/@${username}/favorite`;
     const commentsLink = `/@${username}/comments`;
     const reset_password_link = `/@${username}/password`;
 
@@ -140,6 +141,7 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
         let user_menu = [
             {link: feedLink, icon: 'new/home', iconSize: '1_25x', value: tt('g.feed')},
             {link: accountLink, icon: 'new/blogging', value: tt('g.blog')},
+            {link: favoriteLink, icon: 'new/blogging', value: 'Избранное'},
             {link: commentsLink, icon: 'new/comment', value: tt('g.comments')},
             {link: repliesLink, icon: 'new/answer', value: tt('g.replies')},
             {link: walletLink, icon: 'new/wallet', value: tt('g.wallet')},
@@ -151,7 +153,7 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
         ];
 
         if ($STM_Config.is_sandbox) {
-            user_menu.splice(2, 0, {link: '#', icon: 'chatboxes', onClick: showMessages, value: tt('g.messages')});
+            user_menu.splice(3, 0, {link: '#', icon: 'chatboxes', onClick: showMessages, value: tt('g.messages')});
         }
       
         const voting_power_percent = account.get('voting_power') / 100

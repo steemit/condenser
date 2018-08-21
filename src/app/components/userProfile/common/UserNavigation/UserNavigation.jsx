@@ -94,13 +94,19 @@ class UserNavigation extends PureComponent {
 
     render() {
         const { accountName, isOwner } = this.props;
- 
         const indexTabLink = { value: tt('g.blog'), to: `/@${accountName}` };
-        const tabLinks = [
+
+        const tabLinks = [];
+
+        if (isOwner) {
+            tabLinks.push({ value: 'Избранное', to: `/@${accountName}/favorite` });
+        }
+
+        tabLinks.push(
             { value: tt('g.comments'), to: `/@${accountName}/comments` },
             { value: tt('g.replies'), to: `/@${accountName}/recent-replies` },
             { value: tt('g.wallet'), to: `/@${accountName}/transfers` },
-        ];
+        );
 
         if (isOwner) {
             tabLinks.push({ value: 'Активность', to: `/@${accountName}/activity` }) 
@@ -123,8 +129,8 @@ class UserNavigation extends PureComponent {
                     <TabLinkIndex key={indexTabLink.to} to={indexTabLink.to}>
                         {indexTabLink.value}
                     </TabLinkIndex>
-                    {tabLinks.map(({ value, to }, key) => (
-                        <TabLink key={key} to={to}>
+                    {tabLinks.map(({ value, to }) => (
+                        <TabLink key={to} to={to}>
                             {value}
                         </TabLink>
                     ))}
@@ -195,9 +201,9 @@ class UserNavigation extends PureComponent {
 
 export default connect(
     state => ({
-        layout: state.ui.profile && state.ui.profile.get('layout') || 'list',
+        layout: (state.ui.profile && state.ui.profile.get('layout')) || 'list',
     }),
     {
-        changeProfileLayout
+        changeProfileLayout,
     }
 )(UserNavigation);

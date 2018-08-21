@@ -14,6 +14,7 @@ import { reducer as formReducer } from 'redux-form'; // @deprecated, instead use
 import status from 'src/app/redux/reducers/status';
 import entities from 'src/app/redux/reducers/entities';
 import ui from 'src/app/redux/reducers/ui';
+import data from 'src/app/redux/reducers/data';
 
 function initReducer(reducer, type) {
     return (state, action) => {
@@ -59,7 +60,8 @@ export default combineReducers({
     
     status: initReducer(status),
     entities: initReducer(entities),
-    ui: initReducer(ui)
+    ui: initReducer(ui),
+    data: initReducer(data),
 });
 
 /*

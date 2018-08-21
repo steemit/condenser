@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import tt from 'counterpart';
 
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
-import PostsList from 'src/app/components/common/PostsList';
+import PostsListBlog from 'src/app/components/common/PostsList/PostsListBlog';
 import InfoBlock from 'src/app/components/common/InfoBlock';
 
 const Loader = styled(LoadingIndicator)`
@@ -32,7 +31,7 @@ class CommentsContent extends Component {
         }
 
         return (
-            <PostsList
+            <PostsListBlog
                 pageAccountName={pageUserName}
                 category="comments"
                 allowInlineReply={!isOwner}

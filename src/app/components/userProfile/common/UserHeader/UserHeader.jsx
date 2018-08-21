@@ -128,6 +128,7 @@ const AvatarDropzone = styled(Dropzone)`
 
     &:hover {
         opacity: 1;
+        transition-delay: 0.2s;
     }
 `;
 

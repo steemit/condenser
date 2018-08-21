@@ -22,7 +22,6 @@ class Post extends React.Component {
         aiPosts: PropTypes.array,
         routeParams: PropTypes.object,
         location: PropTypes.object,
-        signup_bonus: PropTypes.string,
         current_user: PropTypes.object,
     };
     constructor() {
@@ -58,7 +57,7 @@ class Post extends React.Component {
     render() {
         const LIQUID_TOKEN = tt('token_names.LIQUID_TOKEN')
 
-        const {current_user, ignoring, signup_bonus, content} = this.props
+        const {current_user, ignoring, content} = this.props
         const {showNegativeComments, commentHidden, showAnyway} = this.state
         let post = this.props.post;
         const aiPosts = this.props.aiPosts;
@@ -227,7 +226,6 @@ export default connect(state => {
     }
     return {
         content: state.global.get('content'),
-        signup_bonus: state.offchain.get('signup_bonus'),
         current_user,
         ignoring,
     }

@@ -6,7 +6,6 @@ import Reveal from 'react-foundation-components/lib/global/reveal';
 import LoginForm from 'app/components/modules/LoginForm';
 import ConfirmTransactionForm from 'app/components/modules/ConfirmTransactionForm';
 import Transfer from 'app/components/modules/Transfer';
-import SignUp from 'app/components/modules/SignUp';
 import user from 'app/redux/User';
 import tr from 'app/redux/Transaction';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
@@ -19,11 +18,9 @@ class Modals extends React.Component {
         show_confirm_modal: PropTypes.bool,
         show_transfer_modal: PropTypes.bool,
         show_powerdown_modal: PropTypes.bool,
-        show_signup_modal: PropTypes.bool,
         show_promote_post_modal: PropTypes.bool,
         hideLogin: PropTypes.func.isRequired,
         hideConfirm: PropTypes.func.isRequired,
-        hideSignUp: PropTypes.func.isRequired,
         hideTransfer: PropTypes.func.isRequired,
         hidePowerdown: PropTypes.func.isRequired,
         hidePromotePost: PropTypes.func.isRequired,
@@ -42,12 +39,10 @@ class Modals extends React.Component {
             show_confirm_modal,
             show_transfer_modal,
             show_powerdown_modal,
-            show_signup_modal,
             hideLogin,
             hideTransfer,
             hidePowerdown,
             hideConfirm,
-            hideSignUp,
             show_messages_modal,
             hideMessages,
         } = this.props;
@@ -77,12 +72,6 @@ class Modals extends React.Component {
                         <Powerdown />
                     </Reveal>
                 )}
-                {show_signup_modal && (
-                    <Reveal onHide={hideSignUp} show={show_signup_modal}>
-                        <CloseButton onClick={hideSignUp} />
-                        <SignUp />
-                    </Reveal>
-                )}
                 {show_messages_modal && (
                     <Reveal
                         onHide={hideMessages}
@@ -106,7 +95,6 @@ export default connect(
             show_confirm_modal: state.transaction.get('show_confirm_modal'),
             show_transfer_modal: state.user.get('show_transfer_modal'),
             show_promote_post_modal: state.user.get('show_promote_post_modal'),
-            show_signup_modal: state.user.get('show_signup_modal'),
             show_powerdown_modal: state.user.get('show_powerdown_modal'),
             show_messages_modal: state.user.get('show_messages_modal'),
         };
@@ -131,10 +119,6 @@ export default connect(
         hidePromotePost: e => {
             if (e) e.preventDefault();
             dispatch(user.actions.hidePromotePost());
-        },
-        hideSignUp: e => {
-            if (e) e.preventDefault();
-            dispatch(user.actions.hideSignUp());
         },
         hideMessages: e => {
             if (e) e.preventDefault();

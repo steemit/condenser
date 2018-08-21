@@ -97,7 +97,10 @@ const Wrapper = styled.div`
 
 export default class Slider extends PureComponent {
     static propTypes = {
-        value: PropTypes.number.isRequired,
+        value: PropTypes.oneOfType([
+            PropTypes.number,
+            PropTypes.string,
+        ]).isRequired,
         min: PropTypes.number,
         max: PropTypes.number,
         red: PropTypes.bool,
@@ -107,6 +110,7 @@ export default class Slider extends PureComponent {
     };
 
     static defaultProps = {
+        value: 0,
         min: 0,
         max: 100,
         showCaptions: false,
@@ -118,7 +122,8 @@ export default class Slider extends PureComponent {
     }
 
     render() {
-        const { value, min, max, hideHandleValue, showCaptions, ...passProps } = this.props;
+        const { min, max, hideHandleValue, showCaptions, ...passProps } = this.props;
+        const value = Number(this.props.value);
 
         const percent = (100 * (value - min)) / (max - min) || 0;
 

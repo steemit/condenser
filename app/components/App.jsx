@@ -189,7 +189,7 @@ class App extends React.Component {
     }
 
     render() {
-        const { location, params, children, flash, new_visitor, signup_bonus } = this.props;
+        const { location, params, children, flash, new_visitor } = this.props;
 
         const route = resolveRoute(location.pathname);
         const lp = false; //location.pathname === '/';
@@ -332,7 +332,6 @@ App.propTypes = {
     error: PropTypes.string,
     children: AppPropTypes.Children,
     location: PropTypes.object,
-    signup_bonus: PropTypes.string,
     loginUser: PropTypes.func.isRequired,
     logoutUser: PropTypes.func.isRequired,
     depositSteem: PropTypes.func.isRequired,
@@ -343,7 +342,6 @@ export default connect(
         return {
             error: state.app.get('error'),
             flash: state.offchain.get('flash'),
-            signup_bonus: state.offchain.get('signup_bonus'),
             new_visitor:
                 !state.user.get('current') &&
                 !state.offchain.get('user') &&

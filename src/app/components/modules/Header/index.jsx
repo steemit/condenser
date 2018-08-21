@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import Icon from 'app/components/elements/Icon';
@@ -8,24 +9,21 @@ import { APP_NAME } from 'app/client_config';
 import SortOrder from 'app/components/elements/SortOrder';
 import SearchInput from 'app/components/elements/SearchInput';
 import IconButton from 'app/components/elements/IconButton';
-import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdown';
+import DropdownMenu from 'app/components/elements/DropdownMenu';
 import * as userActions from 'app/redux/UserReducer';
 import * as appActions from 'app/redux/AppReducer';
 import Userpic from 'app/components/elements/Userpic';
-import VerticalMenu from 'app/components/elements/VerticalMenu';
-import LoadingIndicator from 'app/components/elements/LoadingIndicator';
-import NotifiCounter from 'app/components/elements/NotifiCounter';
 import { SIGNUP_URL } from 'shared/constants';
 import SteemLogo from 'app/components/elements/SteemLogo';
 import normalizeProfile from 'app/utils/NormalizeProfile';
 
 class Header extends React.Component {
     static propTypes = {
-        current_account_name: React.PropTypes.string,
-        account_meta: React.PropTypes.object,
-        category: React.PropTypes.string,
-        order: React.PropTypes.string,
-        pathname: React.PropTypes.string,
+        current_account_name: PropTypes.string,
+        account_meta: PropTypes.object,
+        category: PropTypes.string,
+        order: PropTypes.string,
+        pathname: PropTypes.string,
     };
 
     constructor() {
@@ -63,7 +61,6 @@ class Header extends React.Component {
             logout,
             loggedIn,
             vertical,
-            probablyLoggedIn,
             nightmodeEnabled,
             toggleNightmode,
             userPath,
@@ -226,7 +223,6 @@ class Header extends React.Component {
                 link: feed_link,
                 icon: 'home',
                 value: tt('g.feed'),
-                addon: <NotifiCounter fields="feed" />,
             },
             { link: account_link, icon: 'profile', value: tt('g.blog') },
             { link: comments_link, icon: 'replies', value: tt('g.comments') },
@@ -234,15 +230,11 @@ class Header extends React.Component {
                 link: replies_link,
                 icon: 'reply',
                 value: tt('g.replies'),
-                addon: <NotifiCounter fields="comment_reply" />,
             },
             {
                 link: wallet_link,
                 icon: 'wallet',
                 value: tt('g.wallet'),
-                addon: (
-                    <NotifiCounter fields="follow,send,receive,account_update" />
-                ),
             },
             // {
             //     link: '#',
@@ -296,24 +288,23 @@ class Header extends React.Component {
                     </div>
                     <div className="small-7 large-4 columns Header__buttons">
                         {/*NOT LOGGED IN SIGN IN AND SIGN UP LINKS*/}
-                        {!loggedIn &&
-                            !probablyLoggedIn && (
-                                <span className="Header__user-signup show-for-medium">
-                                    <a
-                                        className="Header__login-link"
-                                        href="/login.html"
-                                        onClick={showLogin}
-                                    >
-                                        {tt('g.login')}
-                                    </a>
-                                    <a
-                                        className="Header__signup-link"
-                                        href={SIGNUP_URL}
-                                    >
-                                        {tt('g.sign_up')}
-                                    </a>
-                                </span>
-                            )}
+                        {!loggedIn && (
+                            <span className="Header__user-signup show-for-medium">
+                                <a
+                                    className="Header__login-link"
+                                    href="/login.html"
+                                    onClick={showLogin}
+                                >
+                                    {tt('g.login')}
+                                </a>
+                                <a
+                                    className="Header__signup-link"
+                                    href={SIGNUP_URL}
+                                >
+                                    {tt('g.sign_up')}
+                                </a>
+                            </span>
+                        )}
 
                         {/*SUBMIT STORY*/}
 
@@ -324,39 +315,31 @@ class Header extends React.Component {
                         </span>
 
                         {submit_story}
-
-                        {/*USER AVATAR*/}
+                        {/*USER AVATAR */}
                         {loggedIn && (
-                            <LinkWithDropdown
-                                closeOnClickOutside
-                                dropdownPosition="bottom"
-                                dropdownAlignment="right"
-                                dropdownContent={
-                                    <VerticalMenu
-                                        items={user_menu}
-                                        title={username}
-                                    />
-                                }
+                            <DropdownMenu
+                                className={'Header__usermenu'}
+                                items={user_menu}
+                                title={username}
+                                el="span"
+                                selected={tt('g.rewards')}
+                                position="left"
                             >
-                                {!vertical && (
-                                    <li className={'Header__userpic '}>
-                                        <a
-                                            href={account_link}
-                                            title={username}
-                                            onClick={e => e.preventDefault()}
-                                        >
-                                            <Userpic account={username} />
-                                        </a>
-                                        <div className="TopRightMenu__notificounter">
-                                            <NotifiCounter fields="total" />
-                                        </div>
-                                    </li>
-                                )}
-                            </LinkWithDropdown>
+                                <li className={'Header__userpic '}>
+                                    <span title={username}>
+                                        <Userpic account={username} />
+                                    </span>
+                                </li>
+                            </DropdownMenu>
                         )}
 
-                        {/*LOGGED IN LOADING INDICATOR*/}
-                        {probablyLoggedIn && <LoadingIndicator type="circle" />}
+                        {/*HAMBURGER*/}
+                        {/* <span
+                            onClick={showSidePanel}
+                            className="toggle-menu Header__hamburger"
+                        >
+                            <span className="hamburger" />
+                        </span> */}
                     </div>
                 </nav>
             </header>
@@ -372,7 +355,6 @@ const mapStateToProps = (state, ownProps) => {
         return {
             username: null,
             loggedIn: false,
-            probablyLoggedIn: !!state.offchain.get('account'),
         };
     }
 
@@ -388,7 +370,6 @@ const mapStateToProps = (state, ownProps) => {
         username,
         loggedIn,
         userPath,
-        probablyLoggedIn: false,
         nightmodeEnabled: state.user.getIn(['user_preferences', 'nightmode']),
         account_meta: account_user,
         current_account_name,

@@ -5,7 +5,6 @@ import crypto from 'crypto';
 import models from 'db/models';
 import findUser from 'db/utils/find_user';
 import config from 'config';
-import recordWebEvent from 'server/record_web_event';
 import { esc, escAttrs } from 'db/models';
 import {
     emailRegex,
@@ -17,6 +16,8 @@ import coBody from 'co-body';
 import Mixpanel from 'mixpanel';
 import { PublicKey, Signature, hash } from '@steemit/steem-js/lib/auth/ecc';
 import { api, broadcast } from '@steemit/steem-js';
+
+const ACCEPTED_TOS_TAG = 'accepted_tos_20180614';
 
 const mixpanel = config.get('mixpanel')
     ? Mixpanel.init(config.get('mixpanel'))
@@ -93,11 +94,6 @@ export default function useGeneralApi(app) {
             console.error('Error in /accounts_wait', error);
         }
         this.body = JSON.stringify({ status: 'ok' });
-        recordWebEvent(
-            this,
-            'api/accounts_wait',
-            account ? account.name : 'n/a'
-        );
     });
 
     router.post('/accounts', koaBody, function*() {
@@ -263,7 +259,6 @@ export default function useGeneralApi(app) {
             this.body = JSON.stringify({ error: error.message });
             this.status = 500;
         }
-        recordWebEvent(this, 'api/accounts', account ? account.name : 'n/a');
     });
 
     /**
@@ -318,7 +313,6 @@ export default function useGeneralApi(app) {
             this.body = JSON.stringify({ error: error.message });
             this.status = 500;
         }
-        recordWebEvent(this, 'api/create_user', { name, email });
     });
 
     router.post('/update_email', koaBody, function*() {
@@ -359,7 +353,6 @@ export default function useGeneralApi(app) {
             this.body = JSON.stringify({ error: error.message });
             this.status = 500;
         }
-        recordWebEvent(this, 'api/update_email', email);
     });
 
     router.post('/login_account', koaBody, function*() {
@@ -468,7 +461,6 @@ export default function useGeneralApi(app) {
             this.body = JSON.stringify({ error: error.message });
             this.status = 500;
         }
-        recordWebEvent(this, 'api/login_account', account);
     });
 
     router.post('/logout_account', koaBody, function*() {
@@ -487,35 +479,6 @@ export default function useGeneralApi(app) {
                 this.session.uid,
                 error
             );
-            this.body = JSON.stringify({ error: error.message });
-            this.status = 500;
-        }
-    });
-
-    router.post('/record_event', koaBody, function*() {
-        if (rateLimitReq(this, this.req)) return;
-        try {
-            const params = this.request.body;
-            const { csrf, type, value } =
-                typeof params === 'string' ? JSON.parse(params) : params;
-            if (!checkCSRF(this, csrf)) return;
-            logRequest('record_event', this, { type, value });
-            const str_value =
-                typeof value === 'string' ? value : JSON.stringify(value);
-            if (type.match(/^[A-Z]/)) {
-                if (mixpanel) {
-                    mixpanel.track(type, {
-                        distinct_id: this.session.uid,
-                        Page: str_value,
-                    });
-                    mixpanel.people.increment(this.session.uid, type, 1);
-                }
-            } else {
-                recordWebEvent(this, type, str_value);
-            }
-            this.body = JSON.stringify({ status: 'ok' });
-        } catch (error) {
-            console.error('Error in /record_event api call', error.message);
             this.body = JSON.stringify({ error: error.message });
             this.status = 500;
         }
@@ -540,7 +503,6 @@ export default function useGeneralApi(app) {
                 '--',
                 this.req.headers['user-agent']
             );
-            recordWebEvent(this, 'csp_violation', value);
         } else {
             console.log(
                 '-- /csp_violation [no csp-report] -->',
@@ -550,82 +512,6 @@ export default function useGeneralApi(app) {
             );
         }
         this.body = '';
-    });
-
-    router.post('/page_view', koaBody, function*() {
-        const params = this.request.body;
-        const { csrf, page, ref } =
-            typeof params === 'string' ? JSON.parse(params) : params;
-        if (!checkCSRF(this, csrf)) return;
-        if (page.match(/\/feed$/)) {
-            this.body = JSON.stringify({ views: 0 });
-            return;
-        }
-        const remote_ip = getRemoteIp(this.req);
-        logRequest('page_view', this, { page });
-        try {
-            let views = 1,
-                unique = true;
-            const page_model = yield models.Page.findOne({
-                attributes: ['id', 'views'],
-                where: { permlink: esc(page) },
-                logging: false,
-            });
-            if (unique) {
-                if (page_model) {
-                    views = page_model.views + 1;
-                    yield yield models.Page.update(
-                        { views },
-                        { where: { id: page_model.id }, logging: false }
-                    );
-                } else {
-                    yield models.Page.create(
-                        escAttrs({ permlink: page, views }),
-                        { logging: false }
-                    );
-                }
-            } else {
-                if (page_model) views = page_model.views;
-            }
-            this.body = JSON.stringify({ views });
-            if (mixpanel) {
-                let referring_domain = '';
-                if (ref) {
-                    const matches = ref.match(
-                        /^https?\:\/\/([^\/?#]+)(?:[\/?#]|$)/i
-                    );
-                    referring_domain = matches && matches[1];
-                }
-                const mp_params = {
-                    distinct_id: this.session.uid,
-                    Page: page,
-                    ip: remote_ip,
-                    $referrer: ref,
-                    $referring_domain: referring_domain,
-                };
-                mixpanel.track('PageView', mp_params);
-                if (!this.session.mp) {
-                    mixpanel.track('FirstVisit', mp_params);
-                    this.session.mp = 1;
-                }
-                if (ref)
-                    mixpanel.people.set_once(
-                        this.session.uid,
-                        '$referrer',
-                        ref
-                    );
-                mixpanel.people.set_once(this.session.uid, 'FirstPage', page);
-                mixpanel.people.increment(this.session.uid, 'PageView', 1);
-            }
-        } catch (error) {
-            console.error(
-                'Error in /page_view api call',
-                this.session.uid,
-                error.message
-            );
-            this.body = JSON.stringify({ error: error.message });
-            this.status = 500;
-        }
     });
 
     router.post('/save_cords', koaBody, function*() {
@@ -682,6 +568,70 @@ export default function useGeneralApi(app) {
         } catch (error) {
             console.error(
                 'Error in /setUserPreferences api call',
+                this.session.uid,
+                error
+            );
+            this.body = JSON.stringify({ error: error.message });
+            this.status = 500;
+        }
+    });
+
+    router.post('/isTosAccepted', koaBody, function*() {
+        const params = this.request.body;
+        const { csrf } =
+            typeof params === 'string' ? JSON.parse(params) : params;
+        if (!checkCSRF(this, csrf)) return;
+
+        if (!this.session.a) {
+            this.body = 'missing username';
+            this.status = 500;
+            return;
+        }
+
+        try {
+            const res = yield api.signedCallAsync(
+                'conveyor.get_tags_for_user',
+                [this.session.a],
+                config.get('conveyor_username'),
+                config.get('conveyor_posting_wif')
+            );
+            this.body = JSON.stringify(res.includes(ACCEPTED_TOS_TAG));
+        } catch (error) {
+            console.error(
+                'Error in /isTosAccepted api call',
+                this.session.a,
+                error
+            );
+            this.body = JSON.stringify({ error: error.message });
+            this.status = 500;
+        }
+    });
+
+    router.post('/acceptTos', koaBody, function*() {
+        const params = this.request.body;
+        const { csrf } =
+            typeof params === 'string' ? JSON.parse(params) : params;
+        if (!checkCSRF(this, csrf)) return;
+
+        if (!this.session.a) {
+            this.body = 'missing logged in account';
+            this.status = 500;
+            return;
+        }
+        try {
+            yield api.signedCallAsync(
+                'conveyor.assign_tag',
+                {
+                    uid: this.session.a,
+                    tag: ACCEPTED_TOS_TAG,
+                },
+                config.get('conveyor_username'),
+                config.get('conveyor_posting_wif')
+            );
+            this.body = JSON.stringify({ status: 'ok' });
+        } catch (error) {
+            console.error(
+                'Error in /acceptTos api call',
                 this.session.uid,
                 error
             );

@@ -1,5 +1,6 @@
 /* eslint react/prop-types: 0 */
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import tt from 'counterpart';
@@ -162,8 +163,11 @@ class PostsIndex extends React.Component {
         let page_title = 'Posts'; // sensible default here?
         if (category === 'feed') {
             if (account_name === this.props.username)
-                page_title = 'My feed'; // todo: localization
-            else page_title = account_name + "'s Feed";
+                page_title = tt('posts_index.my_feed');
+            else
+                page_title = tt('posts_index.accountnames_feed', {
+                    account_name,
+                });
         } else {
             switch (topics_order) {
                 case 'trending': // cribbed from Header.jsx where it's repeated 2x already :P
@@ -238,13 +242,17 @@ class PostsIndex extends React.Component {
                     )}
                 </article>
                 <aside className="c-sidebar c-sidebar--right">
-                    {!this.props.username ? (
+                    {this.props.isBrowser &&
+                    !this.props.maybeLoggedIn &&
+                    !this.props.username ? (
                         <SidebarNewUsers />
                     ) : (
-                        <div>
-                            {/* <SidebarStats steemPower={123} followers={23} reputation={62} />  */}
-                            <SidebarLinks username={this.props.username} />
-                        </div>
+                        this.props.isBrowser && (
+                            <div>
+                                {/* <SidebarStats steemPower={123} followers={23} reputation={62} />  */}
+                                <SidebarLinks username={this.props.username} />
+                            </div>
+                        )
                     )}
                 </aside>
                 <aside className="c-sidebar c-sidebar--left">
@@ -290,6 +298,8 @@ module.exports = {
                 categories: state.global
                     .getIn(['tag_idx', 'trending'])
                     .take(50),
+                maybeLoggedIn: state.user.get('maybeLoggedIn'),
+                isBrowser: process.env.BROWSER,
             };
         },
         dispatch => {

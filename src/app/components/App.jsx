@@ -1,11 +1,12 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import AppPropTypes from 'app/utils/AppPropTypes';
 import Header from 'app/components/modules/Header';
 import * as userActions from 'app/redux/UserReducer';
 import classNames from 'classnames';
 import ConnectedSidePanel from 'app/components/modules/ConnectedSidePanel';
-import CloseButton from 'react-foundation-components/lib/global/close-button';
+import CloseButton from 'app/components/elements/CloseButton';
 import Dialogs from 'app/components/modules/Dialogs';
 import Modals from 'app/components/modules/Modals';
 import WelcomePanel from 'app/components/elements/WelcomePanel';
@@ -88,12 +89,11 @@ class App extends React.Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        const { pathname, new_visitor, flash, nightmodeEnabled } = this.props;
+        const { pathname, new_visitor, nightmodeEnabled } = this.props;
         const n = nextProps;
         return (
             pathname !== n.pathname ||
             new_visitor !== n.new_visitor ||
-            flash !== n.flash ||
             this.state.showBanner !== nextState.showBanner ||
             this.state.showCallout !== nextState.showCallout ||
             nightmodeEnabled !== n.nightmodeEnabled
@@ -122,7 +122,6 @@ class App extends React.Component {
         const {
             params,
             children,
-            flash,
             new_visitor,
             nightmodeEnabled,
             viewMode,
@@ -142,29 +141,19 @@ class App extends React.Component {
             (params_keys.length === 2 &&
                 params_keys[0] === 'order' &&
                 params_keys[1] === 'category');
-        const alert =
-            this.props.error || flash.get('alert') || flash.get('error');
-        const warning = flash.get('warning');
-        const success = flash.get('success');
+        const alert = this.props.error;
         let callout = null;
-        if (this.state.showCallout && (alert || warning || success)) {
+        if (this.state.showCallout && alert) {
             callout = (
                 <div className="App__announcement row">
                     <div className="column">
-                        <div
-                            className={classNames(
-                                'callout',
-                                { alert },
-                                { warning },
-                                { success }
-                            )}
-                        >
+                        <div className={classNames('callout', { alert })}>
                             <CloseButton
                                 onClick={() =>
                                     this.setState({ showCallout: false })
                                 }
                             />
-                            <p>{alert || warning || success}</p>
+                            <p>{alert}</p>
                         </div>
                     </div>
                 </div>
@@ -267,12 +256,12 @@ class App extends React.Component {
 }
 
 App.propTypes = {
-    error: React.PropTypes.string,
+    error: PropTypes.string,
     children: AppPropTypes.Children,
-    pathname: React.PropTypes.string,
-    category: React.PropTypes.string,
-    order: React.PropTypes.string,
-    loginUser: React.PropTypes.func.isRequired,
+    pathname: PropTypes.string,
+    category: PropTypes.string,
+    order: PropTypes.string,
+    loginUser: PropTypes.func.isRequired,
 };
 
 export default connect(
@@ -286,7 +275,6 @@ export default connect(
         return {
             viewMode: state.app.get('viewMode'),
             error: state.app.get('error'),
-            flash: state.offchain.get('flash'),
             new_visitor:
                 !state.user.get('current') &&
                 !state.offchain.get('user') &&

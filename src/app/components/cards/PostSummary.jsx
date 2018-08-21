@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Icon from 'app/components/elements/Icon';
@@ -21,12 +22,12 @@ import { SIGNUP_URL } from 'shared/constants';
 
 class PostSummary extends React.Component {
     static propTypes = {
-        post: React.PropTypes.string.isRequired,
-        pending_payout: React.PropTypes.string.isRequired,
-        total_payout: React.PropTypes.string.isRequired,
-        content: React.PropTypes.object.isRequired,
-        thumbSize: React.PropTypes.string,
-        nsfwPref: React.PropTypes.string,
+        post: PropTypes.string.isRequired,
+        pending_payout: PropTypes.string.isRequired,
+        total_payout: PropTypes.string.isRequired,
+        content: PropTypes.object.isRequired,
+        thumbSize: PropTypes.string,
+        nsfwPref: PropTypes.string,
     };
 
     constructor() {
@@ -109,7 +110,13 @@ class PostSummary extends React.Component {
 
         if (content.get('depth') > 0) {
             title_text = tt('g.re_to', { topic: content.get('root_title') });
-            post_url = '/' + content.get('category') + '/@' + content.get('parent_author') + '/' + content.get('parent_permlink') + '#@' + content.get('author') + '/' + content.get('permlink');
+            post_url =
+                '/' +
+                content.get('category') +
+                '/@' +
+                content.get('author') +
+                '/' +
+                content.get('permlink');
             comments_url = p.link + '#comments';
         } else {
             title_text = p.title;
@@ -346,10 +353,7 @@ class PostSummary extends React.Component {
                 >
                     {thumb ? (
                         <div className="articles__content-block articles__content-block--img">
-                            <Link
-                                className="articles__link"
-                                to={post_url}
-                            >
+                            <Link className="articles__link" to={post_url}>
                                 {thumb}
                             </Link>
                         </div>

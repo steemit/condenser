@@ -69,9 +69,11 @@
     "auth_token": false
   },
   "upload_image": false,
-  "steemd_connection_client": "wss://peer.proto.vit.tube",
-  "steemd_connection_server": "wss://peer.proto.vit.tube",
+  "steemd_connection_client": "https://jussi.proto.vit.tube/",
+  "steemd_connection_server": "https://jussi.proto.vit.tube/",
   "steemd_use_appbase": false,
   "chain_id": "1d50f6bcf387a5af6ebac42146ef920aedb5cc61d8f8ed37fb1ac671d722a302",
-  "address_prefix": "WIT"
+  "address_prefix": "WIT",
+  "conveyor_posting_wif": "",
+  "conveyor_username": ""
 }

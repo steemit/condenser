@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
@@ -17,7 +18,7 @@ export default class Follow extends React.Component {
         showMute: bool,
         fat: bool,
         children: any,
-        showLogin: React.PropTypes.func.isRequired,
+        showLogin: PropTypes.func.isRequired,
     };
 
     static defaultProps = {
@@ -189,6 +190,7 @@ module.exports = connect(
                         json: JSON.stringify(json),
                     },
                     successCallback: done,
+                    // TODO: Why?
                     errorCallback: done,
                 })
             );

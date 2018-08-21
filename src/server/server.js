@@ -1,10 +1,10 @@
 import path from 'path';
-import fs from 'fs';
 import Koa from 'koa';
 import mount from 'koa-mount';
 import helmet from 'koa-helmet';
 import koa_logger from 'koa-logger';
 import requestTime from './requesttimings';
+import StatsLoggerClient from './utils/StatsLoggerClient';
 import hardwareStats from './hardwarestats';
 import cluster from 'cluster';
 import os from 'os';
@@ -21,13 +21,13 @@ import usePostJson from './json/post_json';
 import isBot from 'koa-isbot';
 import session from '@steem/crypto-session';
 import csrf from 'koa-csrf';
-import flash from 'koa-flash';
 import minimist from 'minimist';
 import config from 'config';
 import { routeRegex } from 'app/ResolveRoute';
 import secureRandom from 'secure-random';
 import userIllegalContent from 'app/utils/userIllegalContent';
 import koaLocale from 'koa-locale';
+import { getSupportedLocales } from './utils/misc';
 
 if (cluster.isMaster) console.log('application server starting, please wait.');
 
@@ -37,13 +37,69 @@ const app = new Koa();
 app.name = 'Steemit app';
 const env = process.env.NODE_ENV || 'development';
 // cache of a thousand days
-const cacheOpts = { maxAge: 86400000, gzip: true };
+const cacheOpts = { maxAge: 86400000, gzip: true, buffer: true };
+
+// Serve static assets without fanfare
+app.use(
+    favicon(path.join(__dirname, '../app/assets/images/favicons/favicon.ico'))
+);
+app.use(
+    mount(
+        '/favicons',
+        staticCache(
+            path.join(__dirname, '../app/assets/images/favicons'),
+            cacheOpts
+        )
+    )
+);
+app.use(
+    mount(
+        '/images',
+        staticCache(path.join(__dirname, '../app/assets/images'), cacheOpts)
+    )
+);
+// Proxy asset folder to webpack development server in development mode
+if (env === 'development') {
+    const webpack_dev_port = process.env.PORT
+        ? parseInt(process.env.PORT) + 1
+        : 8081;
+    const proxyhost = 'http://0.0.0.0:' + webpack_dev_port;
+    console.log('proxying to webpack dev server at ' + proxyhost);
+    const proxy = require('koa-proxy')({
+        host: proxyhost,
+        map: filePath => 'assets/' + filePath,
+    });
+    app.use(mount('/assets', proxy));
+} else {
+    app.use(
+        mount(
+            '/assets',
+            staticCache(path.join(__dirname, '../../dist'), cacheOpts)
+        )
+    );
+}
+
+let resolvedAssets = false;
+let supportedLocales = false;
+
+if (process.env.NODE_ENV === 'production') {
+    resolvedAssets = require(path.join(
+        __dirname,
+        '../..',
+        '/tmp/webpack-stats-prod.json'
+    ));
+    supportedLocales = getSupportedLocales();
+}
+
+app.use(isBot());
 
 // set number of processes equal to number of cores
 // (unless passed in as an env var)
 const numProcesses = process.env.NUM_PROCESSES || os.cpus().length;
 
-app.use(requestTime(numProcesses));
+const statsLoggerClient = new StatsLoggerClient(process.env.STATSD_IP);
+
+app.use(requestTime(statsLoggerClient));
 
 app.keys = [config.get('session_key')];
 
@@ -55,7 +111,6 @@ session(app, {
 });
 csrf(app);
 
-app.use(flash({ key: 'flash' }));
 koaLocale(app);
 
 function convertEntriesToArrays(obj) {
@@ -69,7 +124,13 @@ function convertEntriesToArrays(obj) {
 app.use(function*(next) {
     if (this.method === 'GET' && this.url === '/.well-known/healthcheck.json') {
         this.status = 200;
-        this.body = { status: 'ok' };
+        this.body = {
+            status: 'ok',
+            docker_tag: process.env.DOCKER_TAG ? process.env.DOCKER_TAG : false,
+            source_commit: process.env.SOURCE_COMMIT
+                ? process.env.SOURCE_COMMIT
+                : false,
+        };
         return;
     }
 
@@ -215,50 +276,10 @@ if (env === 'production') {
     app.use(helmet.contentSecurityPolicy(helmetConfig));
 }
 
-app.use(
-    favicon(path.join(__dirname, '../app/assets/images/favicons/favicon.ico'))
-);
-app.use(isBot());
-app.use(
-    mount(
-        '/favicons',
-        staticCache(
-            path.join(__dirname, '../app/assets/images/favicons'),
-            cacheOpts
-        )
-    )
-);
-app.use(
-    mount(
-        '/images',
-        staticCache(path.join(__dirname, '../app/assets/images'), cacheOpts)
-    )
-);
-// Proxy asset folder to webpack development server in development mode
-if (env === 'development') {
-    const webpack_dev_port = process.env.PORT
-        ? parseInt(process.env.PORT) + 1
-        : 8081;
-    const proxyhost = 'http://0.0.0.0:' + webpack_dev_port;
-    console.log('proxying to webpack dev server at ' + proxyhost);
-    const proxy = require('koa-proxy')({
-        host: proxyhost,
-        map: filePath => 'assets/' + filePath,
-    });
-    app.use(mount('/assets', proxy));
-} else {
-    app.use(
-        mount(
-            '/assets',
-            staticCache(path.join(__dirname, '../../dist'), cacheOpts)
-        )
-    );
-}
-
 if (env !== 'test') {
     const appRender = require('./app_render');
     app.use(function*() {
-        yield appRender(this);
+        yield appRender(this, supportedLocales, resolvedAssets);
         // if (app_router.dbStatus.ok) recordWebEvent(this, 'page_load');
         const bot = this.state.isBot;
         if (bot) {

@@ -11,6 +11,7 @@
         "blog": "Blog",
         "browse": "Browse",
         "buy": "Buy",
+        "buy_steem_power": "Buy VIT Power",
         "buy_or_sell": "Buy or Sell",
         "by": "by",
         "cancel": "Cancel",
@@ -38,15 +39,18 @@
         "in_reply_to": "in reply to",
         "insufficient_balance": "Insufficient balance",
         "invalid_amount": "Invalid amount",
+        "links": "Links",
         "joined": "Joined",
         "loading": "Loading",
         "login": "Login",
         "logout": "Logout",
         "memo": "Memo",
         "mute": "Mute",
-        "myblog": "My blog",
-        "mycomments": "My comments",
-        "myreplies": "Replies to me",
+        "my_blog": "My blog",
+        "my_comments": "My comments",
+        "my_feed": "My feed",
+        "my_replies": "Replies to me",
+        "my_wallet": "My wallet",
         "new": "New",
         "newer": "Newer",
         "next": "Next",
@@ -108,7 +112,6 @@
         "toggle_nightmode": "Toggle Night Mode",
         "all_tags": "All tags",
         "all_tags_mobile": "All content",
-        "my_feed": "My feed",
         "transfer": "Transfer ",
         "trending_topics": "Trending Topics",
         "type": "Type",
@@ -286,7 +289,7 @@
         "use_limited_amount_of_tags":
             "You have %(tagsLength)s tags total%(includingCategory)s. Please use only 5 in your post and category line.",
         "are_you_sure_you_want_to_clear_this_form":
-            "Are you sure you want to clear this form?",
+            "Are you sure you want to exit the comment editor?",
         "uploading": "Uploading...",
         "draft_saved": "Draft saved.",
         "editor": "Editor",
@@ -296,7 +299,7 @@
         "selecting_them": "selecting them",
         "image_upload": "Image upload",
         "power_up_100": "Power Up 100%%",
-        "default_50_50": "Default (50%% / 50%%)",
+        "default_50_50": "50%% SBD / 50%% SP",
         "decline_payout": "Decline Payout",
         "check_this_to_auto_upvote_your_post":
             "Check this to auto-upvote your post",
@@ -304,7 +307,8 @@
         "or_by": "or by",
         "title": "Title",
         "update_post": "Update Post",
-        "markdown_not_supported": "Markdown is not supported here"
+        "markdown_not_supported": "Markdown is not supported here",
+        "advanced_settings": "Advanced settings"
     },
     "category_selector_jsx": {
         "tag_your_story":
@@ -322,11 +326,19 @@
         "must_start_with_a_letter": "Must start with a letter",
         "must_end_with_a_letter_or_number": "Must end with a letter or number"
     },
+    "post_advanced_settings_jsx": {
+        "payout_option_header": "Author rewards",
+        "payout_option_description":
+            "What type of tokens do you want as rewards from this post?",
+        "current_default": "Default",
+        "update_default_in_settings": "Update"
+    },
     "postfull_jsx": {
         "this_post_is_not_available_due_to_a_copyright_claim":
             "This post is not available due to a copyright claim.",
         "share_on_facebook": "Share on Facebook",
         "share_on_twitter": "Share on Twitter",
+        "share_on_reddit": "Share on Reddit",
         "share_on_linkedin": "Share on Linkedin",
         "recent_password": "Recent Password",
         "in_week_convert_DEBT_TOKEN_to_LIQUID_TOKEN":
@@ -377,7 +389,7 @@
         "request_already_submitted_contact_support":
             "Your request has been already submitted and we are working on it. Please contact %(SUPPORT_EMAIL)s for the status of your request.",
         "recover_account_intro":
-            "From time to time, a Steemian's owner key may be compromised. Stolen Account Recovery gives the rightful account owner 30 days to recover their account from the moment the thief changed their owner key. Stolen Account Recovery can only be used on %(APP_URL)s if the account owner had previously listed '%(APP_NAME)s' as their account trustee and complied with %(APP_NAME)s's Terms of Service.",
+            "From time to time, a VITian's owner key may be compromised. Stolen Account Recovery gives the rightful account owner 30 days to recover their account from the moment the thief changed their owner key. Stolen Account Recovery can only be used on %(APP_URL)s if the account owner had previously listed '%(APP_NAME)s' as their account trustee and complied with %(APP_NAME)s's Terms of Service.",
         "login_with_facebook_or_reddit_media_to_verify_identity":
             "Please login with Facebook or Reddit to verify your identity",
         "login_with_social_media_to_verify_identity":
@@ -486,6 +498,8 @@
     },
     "witnesses_jsx": {
         "witness_thread": "witness thread",
+        "external_site": "external site",
+        "disabled": "disabled",
         "top_witnesses": "Witness Voting",
         "you_have_votes_remaining": {
             "zero": "You have no votes remaining",
@@ -604,7 +618,9 @@
             "If you recently added new users to follow, your personalized feed will populate once new content is available",
         "empty_feed_3": "Explore Trending Articles",
         "empty_feed_4": "Read The Quick Start Guide",
-        "empty_feed_5": "Browse The FAQ"
+        "empty_feed_5": "Browse The FAQ",
+        "my_feed": "My Feed",
+        "accountnames_feed": "%(account_name)s's Feed"
     },
     "transferhistoryrow_jsx": {
         "to_savings": "to savings",
@@ -663,7 +679,7 @@
             "to_self": {
                 "to_savings": "Receive from savings %(amount)s from ",
                 "from_savings": "Transfer from savings %(amount)s from ",
-                "not_savings": "Transfer %(amount)s from "
+                "not_savings": "Received %(amount)s from "
             },
             "to_someone_from_someone": {
                 "to_savings":
@@ -745,7 +761,8 @@
         "signup_button_emphasis": "FREE VIT!",
         "sign_up_get_steem": "Sign up. Get VIT",
         "returning_users": "Returning Users: ",
-        "join_our": "Join our"
+        "join_our": "Join our",
+        "sign_transfer": "Sign to complete transfer"
     },
     "chainvalidation_js": {
         "account_name_should_not_be_empty": "Account name should not be empty.",
@@ -783,8 +800,12 @@
         "always_hide": "Always hide",
         "always_warn": "Always warn",
         "always_show": "Always show",
+        "choose_default_blog_payout": "Blog post rewards",
+        "choose_default_comment_payout": "Comment post rewards",
         "muted_users": "Muted Users",
         "update": "Update",
+        "upload_image": "Upload an image",
+        "uploading_image": "Uploading image",
         "profile_image_url": "Profile picture url",
         "cover_image_url": "Cover image url",
         "profile_name": "Display Name",
@@ -803,9 +824,8 @@
         "this_memo_is_public": "This memo is public",
         "convert_to_VESTING_TOKEN": "Convert to %(VESTING_TOKEN)s",
         "balance_subject_to_3_day_withdraw_waiting_period":
-            "Balance subject to 3 day withdraw waiting period,",
-        "move_funds_to_another_account":
-            "Move funds to another %(APP_NAME)s account.",
+            "Balances subject to 3 day withdraw waiting period.",
+        "move_funds_to_another_account": "Move funds to another VIT account.",
         "protect_funds_by_requiring_a_3_day_withdraw_waiting_period":
             "Protect funds by requiring a 3 day withdraw waiting period.",
         "withdraw_funds_after_the_required_3_day_waiting_period":
@@ -816,8 +836,11 @@
             "%(asset)s currently collecting %(interest)s%% APR.",
         "beware_of_spam_and_phishing_links":
             "Beware of spam and phishing links in transfer memos. Do not open links from users you do not trust. Do not provide your private keys to any third party websites.",
+        "transactions_make_take_a_few_minutes":
+            "Transactions will not show until they are confirmed on the blockchain, which may take a few minutes.",
         "autocomplete_previous_transfers": "previous transfers",
-        "autocomplete_user_following": "following"
+        "autocomplete_user_following": "following",
+        "confirm_transfer": "Transfer %(amount)s from %(from)s to %(to)s?"
     },
     "userwallet_jsx": {
         "transfer": "Transfer",
@@ -832,6 +855,8 @@
         "withdraw_DEBT_TOKENS": "Withdraw %(DEBT_TOKENS)s",
         "tokens_worth_about_1_of_LIQUID_TICKER":
             "Tokens worth about $1.00 of %(LIQUID_TICKER)s, currently collecting %(sbdInterest)s%% APR.",
+        "tradeable_tokens_transferred":
+            "Tradeable tokens that may be transferred anywhere at anytime.",
         "savings": "SAVINGS",
         "estimated_account_value": "Estimated Account Value",
         "next_power_down_is_scheduled_to_happen":
@@ -863,10 +888,33 @@
         "i_understand_dont_show_again": "I understand, don't show me again"
     },
     "termsagree_jsx": {
-        "i_agree_to_these_terms": "I agree to these terms",
+        "please_review": "Please review our terms to continue",
+        "hi_user": "Hi %(username)s,",
+        "blurb":
+            "Our Terms of Service set the rules and guidelines that you must accept and follow in order to use VIT and our Privacy Policy explains the type of information we collect and what we do with it. Don't worry, we don't sell your data to anyone. We do use it to meet legal requirements and to learn how to make VIT better.",
+        "i_agree_to_steemits": "I agree to VIT's",
+        "terms_of_service": "Terms of Service",
+        "privacy_policy": "Privacy Policy",
+        "continue": "Continue",
         "cancel": "Cancel"
     },
     "confirmtransactionform_jsx": {
         "confirm": "Confirm %(transactionType)s"
+    },
+    "modals_jsx": {
+        "your_transaction_failed": "Your transaction failed to process",
+        "out_of_bandwidth_title": "Why? You've run out of bandwidth",
+        "out_of_bandwidth_reason":
+            "Actions such as posting and voting use computing resources placing a real cost on the community members who run the VIT blockchain for everyone.",
+        "out_of_bandwidth_reason_2":
+            "To keep things free, VIT intelligently allocates bandwidth to each user based on their VIT Power holdings, their recent usage and overall network demand. This system prioritizes actions by good community members while limiting spam.",
+        "out_of_bandwidth_option_title": "To keep interacting on VIT:",
+        "out_of_bandwidth_option_1": "Buy and hold more VIT Power",
+        "out_of_bandwidth_option_2": "Wait until your bandwidth recharges",
+        "out_of_bandwidth_option_3": "Wait until the network usage decreases"
+    },
+    "sanitizedlink_jsx": {
+        "phishylink_caution": "Link hidden; phishing attempt",
+        "phishylink_reveal": "show link"
     }
 }

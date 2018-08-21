@@ -1,6 +1,5 @@
 import { fromJS, Set, List } from 'immutable';
-import { takeLatest } from 'redux-saga';
-import { call, put, select, fork } from 'redux-saga/effects';
+import { call, put, select, fork, takeLatest } from 'redux-saga/effects';
 import { api } from '@steemit/steem-js';
 import { PrivateKey, Signature, hash } from '@steemit/steem-js/lib/auth/ecc';
 
@@ -13,21 +12,42 @@ import {
     serverApiLogin,
     serverApiLogout,
     serverApiRecordEvent,
+    isTosAccepted,
+    acceptTos,
 } from 'app/utils/ServerApiClient';
 import { loadFollows } from 'app/redux/FollowSaga';
 import { translate } from 'app/Translator';
 import DMCAUserList from 'app/utils/DMCAUserList';
 
 export const userWatches = [
-    watchRemoveHighSecurityKeys, // keep first to remove keys early when a page change happens
-    loginWatch,
-    saveLoginWatch,
-    logoutWatch,
-    // getCurrentAccountWatch,
-    loginErrorWatch,
-    lookupPreviousOwnerAuthorityWatch,
-    watchLoadSavingsWithdraw,
-    uploadImageWatch,
+    takeLatest('@@router/LOCATION_CHANGE', removeHighSecurityKeys), // keep first to remove keys early when a page change happens
+    takeLatest(
+        'user/lookupPreviousOwnerAuthority',
+        lookupPreviousOwnerAuthority
+    ),
+    takeLatest(userActions.USERNAME_PASSWORD_LOGIN, usernamePasswordLogin),
+    takeLatest(userActions.SAVE_LOGIN, saveLogin_localStorage),
+    takeLatest(userActions.LOGOUT, logout),
+    takeLatest(userActions.LOGIN_ERROR, loginError),
+    takeLatest(userActions.LOAD_SAVINGS_WITHDRAW, loadSavingsWithdraw),
+    takeLatest(userActions.UPLOAD_IMAGE, uploadImage),
+    takeLatest(userActions.ACCEPT_TERMS, function*() {
+        try {
+            yield call(acceptTos);
+        } catch (e) {
+            // TODO: log error to server, conveyor is unavailable
+        }
+    }),
+    function* getLatestFeedPrice() {
+        try {
+            const history = yield call([api, api.getFeedHistoryAsync]);
+            const feed = history['price_history'];
+            const last = fromJS(feed[feed.length - 1]);
+            yield put(userActions.setLatestFeedPrice(last));
+        } catch (error) {
+            // (exceedingly rare) ignore, UI will fall back to feed_price
+        }
+    },
 ];
 
 const highSecurityPages = [
@@ -35,37 +55,6 @@ const highSecurityPages = [
     /\/@.+\/(transfers|permissions|password)/,
     /\/~witnesses/,
 ];
-
-function* lookupPreviousOwnerAuthorityWatch() {
-    yield* takeLatest(
-        'user/lookupPreviousOwnerAuthority',
-        lookupPreviousOwnerAuthority
-    );
-}
-function* loginWatch() {
-    yield* takeLatest(
-        userActions.USERNAME_PASSWORD_LOGIN,
-        usernamePasswordLogin
-    );
-}
-function* saveLoginWatch() {
-    yield* takeLatest(userActions.SAVE_LOGIN, saveLogin_localStorage);
-}
-function* logoutWatch() {
-    yield* takeLatest(userActions.LOGOUT, logout);
-}
-
-function* loginErrorWatch() {
-    yield* takeLatest(userActions.LOGIN_ERROR, loginError);
-}
-
-function* watchLoadSavingsWithdraw() {
-    yield* takeLatest(userActions.LOAD_SAVINGS_WITHDRAW, loadSavingsWithdraw);
-}
-
-export function* watchRemoveHighSecurityKeys() {
-    yield* takeLatest('@@router/LOCATION_CHANGE', removeHighSecurityKeys);
-}
 
 function* loadSavingsWithdraw() {
     const username = yield select(state =>
@@ -367,24 +356,38 @@ function* usernamePasswordLogin2({
             };
             sign('posting', private_keys.get('posting_private'));
             // sign('active', private_keys.get('active_private'))
-            serverApiLogin(username, signatures);
+            yield serverApiLogin(username, signatures);
         }
     } catch (error) {
         // Does not need to be fatal
         console.error('Server Login Error', error);
     }
 
-    // Feature flags
-    yield fork(
-        getFeatureFlags,
-        username,
-        private_keys.get('posting_private').toString()
-    );
-
+    // Feature Flags
+    if (private_keys.get('posting_private')) {
+        yield fork(
+            getFeatureFlags,
+            username,
+            private_keys.get('posting_private').toString()
+        );
+    }
+    // TOS acceptance
+    yield fork(promptTosAcceptance, username);
     if (afterLoginRedirectToWelcome) {
         browserHistory.push('/welcome');
     } else if (feedURL) {
         if (document.location.pathname === '/') browserHistory.push(feedURL);
+    }
+}
+
+function* promptTosAcceptance(username) {
+    try {
+        const accepted = yield call(isTosAccepted, username);
+        if (!accepted) {
+            yield put(userActions.showTerms());
+        }
+    } catch (e) {
+        // TODO: log error to server, conveyor is unavailable
     }
 }
 
@@ -399,7 +402,7 @@ function* getFeatureFlags(username, posting_private) {
         );
         yield put(receiveFeatureFlags(flags));
     } catch (error) {
-        // Do nothing; feature flags are not ready yet.
+        // Do nothing; feature flags are not ready yet. Or posting_private is not available.
     }
 }
 
@@ -517,10 +520,6 @@ function* lookupPreviousOwnerAuthority({ payload: {} }) {
     }
     // console.log('UserSage ---> previous_owner_authority', previous_owner_authority.toJS())
     yield put(userActions.setUser({ previous_owner_authority }));
-}
-
-function* uploadImageWatch() {
-    yield* takeLatest(userActions.UPLOAD_IMAGE, uploadImage);
 }
 
 function* uploadImage({

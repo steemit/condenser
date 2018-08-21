@@ -191,4 +191,22 @@ describe('htmlready', () => {
         const res = HtmlReady(dirty).html;
         expect(res).toEqual(cleansed);
     });
+
+    it('should not omit text on same line as youtube link', () => {
+        const testString =
+            '<html><p>before text https://www.youtube.com/watch?v=NrS9vvNgx7I after text</p></html>';
+        const htmlified =
+            '<html xmlns="http://www.w3.org/1999/xhtml"><p>before text ~~~ embed:NrS9vvNgx7I youtube ~~~ after text</p></html>';
+        const res = HtmlReady(testString).html;
+        expect(res).toEqual(htmlified);
+    });
+
+    it('should not omit text on same line as vimeo link', () => {
+        const testString =
+            '<html><p>before text https://vimeo.com/193628816/ after text</p></html>';
+        const htmlified =
+            '<html xmlns="http://www.w3.org/1999/xhtml"><p>before text ~~~ embed:193628816 vimeo ~~~ after text</p></html>';
+        const res = HtmlReady(testString).html;
+        expect(res).toEqual(htmlified);
+    });
 });

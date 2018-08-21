@@ -1,5 +1,4 @@
-import { takeEvery } from 'redux-saga';
-import { call, put, select } from 'redux-saga/effects';
+import { call, put, select, takeEvery } from 'redux-saga/effects';
 import { Set, Map, fromJS, List } from 'immutable';
 import { api } from '@steemit/steem-js';
 import { PrivateKey } from '@steemit/steem-js/lib/auth/ecc';
@@ -14,11 +13,9 @@ const postingOps = Set(
         .split(/,\s*/)
 );
 
-export const authWatches = [watchForAuth];
-
-function* watchForAuth() {
-    yield* takeEvery('user/ACCOUNT_AUTH_LOOKUP', accountAuthLookup);
-}
+export const authWatches = [
+    takeEvery('user/ACCOUNT_AUTH_LOOKUP', accountAuthLookup),
+];
 
 export function* accountAuthLookup({
     payload: { account, private_keys, login_owner_pubkey },
@@ -131,6 +128,11 @@ export function* findSigningKey({ opType, username, password }) {
 
     username = username || currentUsername;
     if (!username) return null;
+
+    if (username.indexOf('/') > -1) {
+        // "alice/active" will login only with Alices active key
+        username = username.split('/')[0];
+    }
 
     const private_keys =
         currentUsername === username ? currentUser.get('private_keys') : Map();

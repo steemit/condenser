@@ -1,5 +1,7 @@
 /* eslint react/prop-types: 0 */
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { Map } from 'immutable';
 import * as transactionActions from 'app/redux/TransactionReducer';
 import * as globalActions from 'app/redux/GlobalReducer';
 import * as userActions from 'app/redux/UserReducer';
@@ -15,7 +17,7 @@ import { SIGNUP_URL } from 'shared/constants';
 
 class LoginForm extends Component {
     static propTypes = {
-        //Steemit
+        // Steemit.
         login_error: PropTypes.string,
         onCancel: PropTypes.func,
     };
@@ -268,6 +270,45 @@ class LoginForm extends Component {
                 ? tt('loginform_jsx.password_info')
                 : null;
 
+        const isTransfer =
+            Map.isMap(loginBroadcastOperation) &&
+            loginBroadcastOperation.has('type') &&
+            loginBroadcastOperation
+                .get('type')
+                .toLowerCase()
+                .indexOf('transfer') >= 0;
+
+        const titleText = !isTransfer ? (
+            <h3>
+                {tt('loginform_jsx.returning_users')}
+                <span className="OpAction">{title}</span>
+            </h3>
+        ) : (
+            <h3>
+                <span className="OpAction">
+                    {tt('loginform_jsx.sign_transfer')}
+                </span>
+            </h3>
+        );
+
+        const signupLink = (
+            <div className="sign-up">
+                <hr />
+                <p>
+                    {tt('loginform_jsx.join_our')}{' '}
+                    <em>{tt('loginform_jsx.amazing_community')}</em>
+                    {tt('loginform_jsx.to_comment_and_reward_others')}
+                </p>
+                <button
+                    type="button"
+                    className="button hollow"
+                    onClick={this.SignUp}
+                >
+                    {tt('loginform_jsx.sign_up_get_steem')}
+                </button>
+            </div>
+        );
+
         const form = (
             <form
                 onSubmit={handleSubmit(({ data }) => {
@@ -293,7 +334,7 @@ class LoginForm extends Component {
                         {...username.props}
                         onChange={usernameOnChange}
                         autoComplete="on"
-                        disabled={submitting}
+                        disabled={submitting || isTransfer}
                     />
                 </div>
                 {username.touched && username.blur && username.error ? (
@@ -362,21 +403,7 @@ class LoginForm extends Component {
                         </button>
                     )}
                 </div>
-                <div className="sign-up">
-                    <hr />
-                    <p>
-                        {tt('loginform_jsx.join_our')}{' '}
-                        <em>{tt('loginform_jsx.amazing_community')}</em>
-                        {tt('loginform_jsx.to_comment_and_reward_others')}
-                    </p>
-                    <button
-                        type="button"
-                        className="button hollow"
-                        onClick={this.SignUp}
-                    >
-                        {tt('loginform_jsx.sign_up_get_steem')}
-                    </button>
-                </div>
+                {!isTransfer && signupLink}
             </form>
         );
 
@@ -384,10 +411,7 @@ class LoginForm extends Component {
             <div className="LoginForm row">
                 <div className="column">
                     {message}
-                    <h3>
-                        {tt('loginform_jsx.returning_users')}
-                        <span className="OpAction">{title}</span>
-                    </h3>
+                    {titleText}
                     {form}
                 </div>
             </div>
@@ -433,7 +457,6 @@ export default connect(
         const loginBroadcastOperation = state.user.get(
             'loginBroadcastOperation'
         );
-
         const initialValues = {
             saveLogin: saveLoginDefault,
         };

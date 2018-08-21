@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import reactForm from 'app/utils/ReactForm';
 import * as transactionActions from 'app/redux/TransactionReducer';
 import * as userActions from 'app/redux/UserReducer';
@@ -24,20 +25,22 @@ const RTE_DEFAULT = false;
 class ReplyEditor extends React.Component {
     static propTypes = {
         // html component attributes
-        formId: React.PropTypes.string.isRequired, // unique form id for each editor
-        type: React.PropTypes.oneOf(['submit_story', 'submit_comment', 'edit']),
-        successCallback: React.PropTypes.func, // indicator that the editor is done and can be hidden
-        onCancel: React.PropTypes.func, // hide editor when cancel button clicked
+        formId: PropTypes.string.isRequired, // unique form id for each editor
+        type: PropTypes.oneOf(['submit_story', 'submit_comment', 'edit']),
+        successCallback: PropTypes.func, // indicator that the editor is done and can be hidden
+        onCancel: PropTypes.func, // hide editor when cancel button clicked
 
-        author: React.PropTypes.string, // empty or string for top-level post
-        permlink: React.PropTypes.string, // new or existing category (default calculated from title)
-        parent_author: React.PropTypes.string, // empty or string for top-level post
-        parent_permlink: React.PropTypes.string, // new or existing category
-        jsonMetadata: React.PropTypes.object, // An existing comment has its own meta data
-        category: React.PropTypes.string, // initial value
-        title: React.PropTypes.string, // initial value
-        body: React.PropTypes.string, // initial value
-        richTextEditor: React.PropTypes.func,
+        author: PropTypes.string, // empty or string for top-level post
+        permlink: PropTypes.string, // new or existing category (default calculated from title)
+        parent_author: PropTypes.string, // empty or string for top-level post
+        parent_permlink: PropTypes.string, // new or existing category
+        jsonMetadata: PropTypes.object, // An existing comment has its own meta data
+        category: PropTypes.string, // initial value
+        title: PropTypes.string, // initial value
+        body: PropTypes.string, // initial value
+        richTextEditor: PropTypes.func,
+        defaultPayoutType: PropTypes.string,
+        payoutType: PropTypes.string,
     };
 
     static defaultProps = {
@@ -80,6 +83,8 @@ class ReplyEditor extends React.Component {
                 const { category, title } = this.state;
                 if (category) category.props.onChange(draft.category);
                 if (title) title.props.onChange(draft.title);
+                if (draft.payoutType)
+                    this.props.setPayoutType(formId, draft.payoutType);
                 raw = draft.body;
             }
 
@@ -95,12 +100,6 @@ class ReplyEditor extends React.Component {
                 rte_value: rte
                     ? stateFromHtml(this.props.richTextEditor, raw)
                     : null,
-            });
-            this.setAutoVote();
-            this.setState({
-                payoutType: this.props.isStory
-                    ? localStorage.getItem('defaultPayoutType') || '50%'
-                    : '50%',
             });
         }
     }
@@ -119,21 +118,25 @@ class ReplyEditor extends React.Component {
         if (process.env.BROWSER) {
             const ts = this.state;
             const ns = nextState;
+            const tp = this.props;
+            const np = nextProps;
 
             // Save curent draft to localStorage
             if (
                 ts.body.value !== ns.body.value ||
                 (ns.category && ts.category.value !== ns.category.value) ||
-                (ns.title && ts.title.value !== ns.title.value)
+                (ns.title && ts.title.value !== ns.title.value) ||
+                np.payoutType !== tp.payoutType
             ) {
                 // also prevents saving after parent deletes this information
-                const { formId } = nextProps;
+                const { formId, payoutType } = np;
                 const { category, title, body } = ns;
                 const data = {
                     formId,
                     title: title ? title.value : undefined,
                     category: category ? category.value : undefined,
                     body: body.value,
+                    payoutType,
                 };
 
                 clearTimeout(saveEditorTimeout);
@@ -198,27 +201,20 @@ class ReplyEditor extends React.Component {
 
     onCancel = e => {
         if (e) e.preventDefault();
-        const { onCancel } = this.props;
+        const { formId, onCancel, defaultPayoutType } = this.props;
         const { replyForm, body } = this.state;
         if (
             !body.value ||
             confirm(tt('reply_editor.are_you_sure_you_want_to_clear_this_form'))
         ) {
             replyForm.resetForm();
-            this.setAutoVote();
             this.setState({
                 rte_value: stateFromHtml(this.props.richTextEditor),
             });
             this.setState({ progress: {} });
+            this.props.setPayoutType(formId, defaultPayoutType);
             if (onCancel) onCancel(e);
         }
-    };
-
-    autoVoteOnChange = () => {
-        const { autoVote } = this.state;
-        const key = 'replyEditorData-autoVote-story';
-        localStorage.setItem(key, !autoVote.value);
-        autoVote.props.onChange(!autoVote.value);
     };
 
     // As rte_editor is updated, keep the (invisible) 'body' field in sync.
@@ -229,17 +225,6 @@ class ReplyEditor extends React.Component {
         if (body.value !== html) body.props.onChange(html);
     };
 
-    setAutoVote() {
-        const { isStory } = this.props;
-        if (isStory) {
-            const { autoVote } = this.state;
-            const key = 'replyEditorData-autoVote-story';
-            const autoVoteDefault = JSON.parse(
-                localStorage.getItem(key) || false
-            );
-            autoVote.props.onChange(autoVoteDefault);
-        }
-    }
     toggleRte = e => {
         e.preventDefault();
         const state = { rte: !this.state.rte };
@@ -259,11 +244,10 @@ class ReplyEditor extends React.Component {
         draft.className = 'ReplyEditor__draft ReplyEditor__draft-saved';
     }
 
-    onPayoutTypeChange = e => {
-        const payoutType = e.currentTarget.value;
-        this.setState({ payoutType });
-        if (payoutType !== '0%')
-            localStorage.setItem('defaultPayoutType', payoutType);
+    showAdvancedSettings = e => {
+        e.preventDefault();
+        this.props.setPayoutType(this.props.formId, this.props.payoutType);
+        this.props.showAdvancedSettings(this.props.formId);
     };
 
     onDrop = (acceptedFiles, rejectedFiles) => {
@@ -334,8 +318,8 @@ class ReplyEditor extends React.Component {
             category: this.props.category,
             body: this.props.body,
         };
-        const { onCancel, onTitleChange, autoVoteOnChange } = this;
-        const { title, category, body, autoVote } = this.state;
+        const { onCancel, onTitleChange } = this;
+        const { title, category, body } = this.state;
         const {
             reply,
             username,
@@ -350,9 +334,11 @@ class ReplyEditor extends React.Component {
             jsonMetadata,
             state,
             successCallback,
+            defaultPayoutType,
+            payoutType,
         } = this.props;
         const { submitting, valid, handleSubmit } = this.state.replyForm;
-        const { postError, titleWarn, rte, payoutType } = this.state;
+        const { postError, titleWarn, rte } = this.state;
         const { progress, noClipboardData } = this.state;
         const disabled = submitting || !valid;
         const loading = submitting || this.state.loading;
@@ -362,12 +348,11 @@ class ReplyEditor extends React.Component {
         };
         const successCallbackWrapper = (...args) => {
             this.setState({ loading: false });
+            this.props.setPayoutType(formId, defaultPayoutType);
             if (successCallback) successCallback(args);
         };
         const isEdit = type === 'edit';
         const isHtml = rte || isHtmlTest(body.value);
-        // Be careful, autoVote can reset curation rewards.  Never autoVote on edit..
-        const autoVoteValue = !isEdit && autoVote.value;
         const replyParams = {
             author,
             permlink,
@@ -379,7 +364,6 @@ class ReplyEditor extends React.Component {
             isHtml,
             isStory,
             jsonMetadata,
-            autoVote: autoVoteValue,
             payoutType,
             successCallback: successCallbackWrapper,
             errorCallback,
@@ -594,6 +578,46 @@ class ReplyEditor extends React.Component {
                             )}
                         </div>
                         <div className={vframe_section_shrink_class}>
+                            {isStory &&
+                                !isEdit && (
+                                    <div className="ReplyEditor__options">
+                                        <div>
+                                            <div>
+                                                {tt('g.rewards')}
+                                                {': '}
+                                                {this.props.payoutType ==
+                                                    '0%' &&
+                                                    tt(
+                                                        'reply_editor.decline_payout'
+                                                    )}
+                                                {this.props.payoutType ==
+                                                    '50%' &&
+                                                    tt(
+                                                        'reply_editor.default_50_50'
+                                                    )}
+                                                {this.props.payoutType ==
+                                                    '100%' &&
+                                                    tt(
+                                                        'reply_editor.power_up_100'
+                                                    )}
+                                            </div>
+                                            <a
+                                                href="#"
+                                                onClick={
+                                                    this.showAdvancedSettings
+                                                }
+                                            >
+                                                {tt(
+                                                    'reply_editor.advanced_settings'
+                                                )}
+                                            </a>{' '}
+                                            <br />
+                                            &nbsp;
+                                        </div>
+                                    </div>
+                                )}
+                        </div>
+                        <div className={vframe_section_shrink_class}>
                             {postError && (
                                 <div className="error">{postError}</div>
                             )}
@@ -640,50 +664,20 @@ class ReplyEditor extends React.Component {
                                         {tt('g.clear')}
                                     </button>
                                 )}
-                            {isStory &&
-                                !isEdit && (
+                            {!isStory &&
+                                !isEdit &&
+                                this.props.payoutType != '50%' && (
                                     <div className="ReplyEditor__options float-right text-right">
-                                        {tt('g.rewards')} &nbsp;
-                                        <select
-                                            value={this.state.payoutType}
-                                            onChange={this.onPayoutTypeChange}
-                                            style={{
-                                                color:
-                                                    this.state.payoutType ==
-                                                    '0%'
-                                                        ? 'orange'
-                                                        : '',
-                                            }}
-                                        >
-                                            <option value="100%">
-                                                {tt(
-                                                    'reply_editor.power_up_100'
-                                                )}
-                                            </option>
-                                            <option value="50%">
-                                                {tt(
-                                                    'reply_editor.default_50_50'
-                                                )}
-                                            </option>
-                                            <option value="0%">
-                                                {tt(
-                                                    'reply_editor.decline_payout'
-                                                )}
-                                            </option>
-                                        </select>
-                                        <br />
-                                        <label
-                                            title={tt(
-                                                'reply_editor.check_this_to_auto_upvote_your_post'
-                                            )}
-                                        >
-                                            {tt('g.upvote_post')} &nbsp;
-                                            <input
-                                                type="checkbox"
-                                                checked={autoVote.value}
-                                                onChange={autoVoteOnChange}
-                                            />
-                                        </label>
+                                        {tt('g.rewards')}
+                                        {': '}
+                                        {this.props.payoutType == '0%' &&
+                                            tt('reply_editor.decline_payout')}
+                                        {this.props.payoutType == '100%' &&
+                                            tt('reply_editor.power_up_100')}
+                                        {'. '}
+                                        <a href={'/@' + username + '/settings'}>
+                                            Update settings
+                                        </a>
                                     </div>
                                 )}
                         </div>
@@ -775,7 +769,7 @@ export default formId =>
         // mapStateToProps
         (state, ownProps) => {
             const username = state.user.getIn(['current', 'username']);
-            const fields = ['body', 'autoVote:checked'];
+            const fields = ['body'];
             const { type, parent_author, jsonMetadata } = ownProps;
             const isEdit = type === 'edit';
             const isStory =
@@ -788,11 +782,31 @@ export default formId =>
             if (isStory && jsonMetadata && jsonMetadata.tags) {
                 category = Set([category, ...jsonMetadata.tags]).join(' ');
             }
+
+            const defaultPayoutType = state.app.getIn(
+                [
+                    'user_preferences',
+                    isStory ? 'defaultBlogPayout' : 'defaultCommentPayout',
+                ],
+                '50%'
+            );
+            let payoutType = state.user.getIn([
+                'current',
+                'post',
+                formId,
+                'payoutType',
+            ]);
+            if (!payoutType) {
+                payoutType = defaultPayoutType;
+            }
+
             const ret = {
                 ...ownProps,
                 fields,
                 isStory,
                 username,
+                defaultPayoutType,
+                payoutType,
                 initialValues: { title, body, category },
                 state,
                 formId,
@@ -816,6 +830,15 @@ export default formId =>
             },
             uploadImage: (file, progress) =>
                 dispatch(userActions.uploadImage({ file, progress })),
+            showAdvancedSettings: formId =>
+                dispatch(userActions.showPostAdvancedSettings({ formId })),
+            setPayoutType: (formId, payoutType) =>
+                dispatch(
+                    userActions.set({
+                        key: ['current', 'post', formId, 'payoutType'],
+                        value: payoutType,
+                    })
+                ),
             reply: ({
                 category,
                 title,
@@ -828,7 +851,6 @@ export default formId =>
                 isStory,
                 type,
                 originalPost,
-                autoVote = false,
                 payoutType = '50%',
                 state,
                 jsonMetadata,
@@ -950,8 +972,7 @@ export default formId =>
                 startLoadingIndicator();
 
                 const originalBody = isEdit ? originalPost.body : null;
-                const __config = { originalBody, autoVote };
-
+                const __config = { originalBody };
                 // Avoid changing payout option during edits #735
                 if (!isEdit) {
                     switch (payoutType) {

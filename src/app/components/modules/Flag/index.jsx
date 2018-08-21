@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 const Flag = ({ flagged, FlagComponent, Fallback = null, children }) => {
     if (flagged && children) return { ...children };
@@ -6,11 +7,11 @@ const Flag = ({ flagged, FlagComponent, Fallback = null, children }) => {
 };
 
 Flag.propTypes = {
-    flagged: React.PropTypes.bool.isRequired,
+    flagged: PropTypes.bool.isRequired,
     FlagComponent: (props, propName, componentName) => {
         // First ensure it is a React element
-        React.PropTypes.checkPropTypes(
-            { FlagComponent: React.PropTypes.element },
+        PropTypes.checkPropTypes(
+            { FlagComponent: PropTypes.element },
             props,
             'FlagComponent',
             'Flag'
@@ -22,7 +23,7 @@ Flag.propTypes = {
             );
         }
     },
-    Fallback: React.PropTypes.element,
+    Fallback: PropTypes.element,
 };
 
 export default Flag;

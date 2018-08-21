@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 //import Highcharts from 'highcharts';
@@ -26,14 +27,14 @@ import {
 
 class Market extends React.Component {
     static propTypes = {
-        orderbook: React.PropTypes.object,
-        open_orders: React.PropTypes.array,
-        open_orders_sort: React.PropTypes.instanceOf(Map),
-        ticker: React.PropTypes.object,
+        orderbook: PropTypes.object,
+        open_orders: PropTypes.array,
+        open_orders_sort: PropTypes.instanceOf(Map),
+        ticker: PropTypes.object,
         // redux PropTypes
-        placeOrder: React.PropTypes.func.isRequired,
-        user: React.PropTypes.string,
-        feed: React.PropTypes.instanceOf(Map),
+        placeOrder: PropTypes.func.isRequired,
+        user: PropTypes.string,
+        feed: PropTypes.instanceOf(Map),
     };
 
     constructor(props) {
@@ -311,37 +312,6 @@ class Market extends React.Component {
         const orderbook = aggOrders(normalizeOrders(this.props.orderbook));
         const { open_orders, open_orders_sort } = this.props;
 
-        // ORDERBOOK TABLE GENERATOR
-        // function table(orderbook, side = 'bids', callback = ((price,steem,sbd) => {})) {
-        //
-        //     let rows = orderbook[side].slice(0, 25).map( (o,i) =>
-        //         <OrderbookRow side={side} onClick={e => {callback( o.price, o.steem_depth, o.sbd_depth) }} />
-        //     );
-        //
-        //     return
-        // }
-
-        function normalizeOpenOrders(open_orders) {
-            return open_orders.map(o => {
-                const type =
-                    o.sell_price.base.indexOf(LIQUID_TICKER) > 0
-                        ? 'ask'
-                        : 'bid';
-                //{orderid: o.orderid,
-                // created: o.created,
-                return {
-                    ...o,
-                    type: type,
-                    price: parseFloat(
-                        type == 'ask' ? o.real_price : o.real_price
-                    ),
-                    steem:
-                        type == 'ask' ? o.sell_price.base : o.sell_price.quote,
-                    sbd: type == 'bid' ? o.sell_price.base : o.sell_price.quote,
-                };
-            });
-        }
-
         // Logged-in user's open orders
         function open_orders_table(open_orders, open_orders_sort) {
             const rows =
@@ -407,11 +377,11 @@ class Market extends React.Component {
                             </th>
                             <th
                                 className={classNames(
-                                    activeClass('real_price'),
+                                    activeClass('price'),
                                     'sortable'
                                 )}
                                 onClick={e =>
-                                    handleToggleOpenOrdersSort('real_price')
+                                    handleToggleOpenOrdersSort('price')
                                 }
                             >
                                 {tt('g.price')}

@@ -291,7 +291,7 @@
         "selecting_them": "выбрав их",
         "image_upload": "Загрузка изображения",
         "power_up_100": "Сила Голоса 100%%",
-        "default_50_50": "По умолчанию (50%% / 50%%)",
+        "default_50_50": "50%% / 50%%",
         "decline_payout": "Отказаться от выплаты",
         "check_this_to_auto_upvote_your_post":
             "Отметьте, чтобы проголосовать за свой пост",
@@ -319,6 +319,13 @@
         "must_start_with_a_letter": "Должно начинаться с буквы",
         "must_end_with_a_letter_or_number":
             "Должно заканчиваться с буквы или номера"
+    },
+    "post_advanced_settings_jsx": {
+        "payout_option_header": "Author rewards",
+        "payout_option_description":
+            "What type of tokens do you want as rewards from this post?",
+        "current_default": "Default",
+        "update_default_in_settings": "Update"
     },
     "postfull_jsx": {
         "this_post_is_not_available_due_to_a_copyright_claim":
@@ -741,7 +748,7 @@
         "balance_subject_to_3_day_withdraw_waiting_period":
             "Вывод баланса из сейфа на обычный счет, занимает 3 дня,",
         "move_funds_to_another_account":
-            "Отправить средства на другой %(APP_NAME)s аккаунт.",
+            "Отправить средства на другой Steem аккаунт.",
         "protect_funds_by_requiring_a_3_day_withdraw_waiting_period":
             "Защитите средства от вывода 3-х дневным периодом ожидания.",
         "withdraw_funds_after_the_required_3_day_waiting_period":

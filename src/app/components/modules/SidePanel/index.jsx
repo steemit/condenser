@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import tt from 'counterpart';
-import CloseButton from 'react-foundation-components/lib/global/close-button';
+import CloseButton from 'app/components/elements/CloseButton';
 import Icon from 'app/components/elements/Icon';
 import { Link } from 'react-router';
 
@@ -78,14 +78,16 @@ const SidePanel = ({ alignment, visible, hideSidePanel, username }) => {
             {
                 value: 'blocktrades',
                 label: 'Blocktrades',
-                link: `https://blocktrades.us/?input_coin_type=eth&output_coin_type=steem&receive_address=${
-                    username
-                }`,
+                link: username
+                    ? `https://blocktrades.us/?input_coin_type=eth&output_coin_type=steem&receive_address=${
+                          username
+                      }`
+                    : `https://blocktrades.us/?input_coin_type=eth&output_coin_type=steem`,
             },
             {
                 value: 'gopax',
                 label: 'GOPAX',
-                link: 'https://www.gopax.co.kr/exchange?market=STEEM/KRW',
+                link: 'https://www.gopax.co.kr/exchange/steem-krw/',
             },
         ],
         external: [

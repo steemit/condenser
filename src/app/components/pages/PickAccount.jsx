@@ -1,8 +1,8 @@
 /* eslint react/prop-types: 0 */
 /*global $STM_csrf, $STM_Config */
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Progress from 'react-foundation-components/lib/global/progress-bar';
 import { Link } from 'react-router';
 import classNames from 'classnames';
 import { api } from '@steemit/steem-js';
@@ -15,8 +15,8 @@ import { makeParams } from 'app/utils/Links';
 
 class PickAccount extends React.Component {
     static propTypes = {
-        loginUser: React.PropTypes.func.isRequired,
-        serverBusy: React.PropTypes.bool,
+        loginUser: PropTypes.func.isRequired,
+        serverBusy: PropTypes.bool,
     };
 
     constructor(props) {
@@ -285,7 +285,10 @@ class PickAccount extends React.Component {
                         style={{ maxWidth: '36rem', margin: '0 auto' }}
                     >
                         <br />
-                        <Progress tabIndex="0" value={10} max={100} />
+                        <div className="progress">
+                            <div style={{ width: '10%' }} />
+                        </div>
+
                         <br />
                         <h4 className="CreateAccount__title">
                             Welcome to vit.tube

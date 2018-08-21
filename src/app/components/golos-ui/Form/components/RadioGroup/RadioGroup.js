@@ -56,7 +56,7 @@ const IconWrapper = styled.i`
     color: #d8d8d9;
 
     ${is('value')`
-        color: #0078C4;
+        color: #2879ff;
     `};
 
     ${is('disabled')`

@@ -40,8 +40,6 @@ export const LANGUAGES = {
   en: 'English',
   /* in react-intl they use 'uk' instead of 'ua' */
   uk: 'Українська',
-  sr: 'Srpski',
-  ro: 'Română',
 }
 // First element always is USD, it needs to be correct fetch yahoo exchange rates from server side
 export const CURRENCIES = ['USD', 'RUB', 'UAH', 'BYN', 'EUR', 'CNY', 'GEL', 'KZT', DEBT_TOKEN_SHORT, LIQUID_TICKER];

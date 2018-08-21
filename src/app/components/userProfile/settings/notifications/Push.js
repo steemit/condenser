@@ -41,9 +41,12 @@ const LabelIcon = styled(StyledLabelRow)`
     `};
 `;
 
-const Online = ({ profile, isChanging, onSubmitGate }) => {
+const Online = ({ isChanging, onSubmitGate }) => {
+    // TODO: 
+    const data = {};
+
     return (
-        <Form onSubmit={onSubmitGate} initialValues={profile}>
+        <Form onSubmit={onSubmitGate} initialValues={data}>
             {({ handleSubmit, submitError, form, submitting, pristine, values }) => (
                 <form onSubmit={handleSubmit}>
                     <CardContent column>

@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Map } from 'immutable';
@@ -50,7 +50,10 @@ export default class SettingsContent extends PureComponent {
     static propTypes = {
         account: PropTypes.object,
         profile: PropTypes.object,
+
         options: PropTypes.instanceOf(Map),
+        isFetching: PropTypes.bool,
+        isChanging: PropTypes.bool,
         updateAccount: PropTypes.func,
 
         getSettingsOptions: PropTypes.func,
@@ -107,6 +110,7 @@ export default class SettingsContent extends PureComponent {
                 ...values,
                 successCallback: () => {
                     notify(tt('g.saved'));
+                    resolve();
                 },
                 errorCallback: e => {
                     if (e === 'Canceled') {
@@ -123,14 +127,17 @@ export default class SettingsContent extends PureComponent {
     };
 
     render() {
-        const { profile, account, options, isChanging } = this.props;
+        const { profile, account, options, isFetching, isChanging } = this.props;
 
         return (
             <SettingsShow
                 profile={profile}
                 account={account}
+
                 options={options}
+                isFetching={isFetching}
                 isChanging={isChanging}
+                
                 onSubmitBlockchain={this.onSubmitBlockchain}
                 onSubmitGate={this.onSubmitGate}
             />

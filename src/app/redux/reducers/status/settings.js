@@ -16,6 +16,15 @@ const initialState = fromJS({
     isChanging: false,
 });
 
+const setSettingsOptionsFromMeta = (options, meta) => {
+    return options.withMutations(options => {
+        const data = pick(['notify', 'push', 'basic', 'mail'], meta);
+        for (let key in data) {
+            options.set(key, fromJS(data[key]));
+        }
+    });
+};
+
 export default function(state = initialState, { type, payload, error, meta }) {
     switch (type) {
         case SETTING_GET_OPTIONS:
@@ -28,18 +37,15 @@ export default function(state = initialState, { type, payload, error, meta }) {
             return initialState.set('error', error);
 
         case SETTING_SET_OPTIONS:
-            return state.set('isChanging', true);
+            return state
+                .set('isChanging', true)
+                .updateIn(['options'], options => setSettingsOptionsFromMeta(options, meta));
 
         // update options with new values from action
         case SETTING_SET_OPTIONS_SUCCESS:
-            return state.set('isChanging', false).updateIn(['options'], options =>
-                options.withMutations(options => {
-                    const data = pick(['notify', 'push', 'basic', 'mail'], meta);
-                    for (let key in data) {
-                        options.set(key, fromJS(data[key]));
-                    }
-                })
-            );
+            return state
+                .set('isChanging', false)
+                .updateIn(['options'], options => setSettingsOptionsFromMeta(options, meta));
 
         case SETTING_SET_OPTIONS_ERROR:
             return state.set('isChanging', false).set('error', error);

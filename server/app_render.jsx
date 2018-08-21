@@ -35,6 +35,7 @@ async function appRender(ctx) {
             select_tags = JSON.parse(decodeURIComponent(ctx.cookies.get(SELECT_TAGS_KEY) || '[]') || '[]') || [];
         } catch(e) {}
 
+        // TODO: @beautyfree - locale from settings service
         const offchain = {
             csrf: ctx.csrf,
             flash: ctx.flash,

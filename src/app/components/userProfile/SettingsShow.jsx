@@ -1,9 +1,10 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { PureComponent, Component } from 'react';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
 
 import tt from 'counterpart';
 
+import SplashLoader from 'golos-ui/SplashLoader';
 import Card from 'golos-ui/Card';
 import { TabContainer, Tabs } from 'golos-ui/Tabs';
 
@@ -17,6 +18,7 @@ export default class SettingsShow extends PureComponent {
         account: PropTypes.object,
 
         options: PropTypes.instanceOf(Map),
+        isFetching: PropTypes.bool,
         isChanging: PropTypes.bool,
 
         onSubmitBlockchain: PropTypes.func,
@@ -29,6 +31,7 @@ export default class SettingsShow extends PureComponent {
             account,
 
             options,
+            isFetching,
             isChanging,
 
             onSubmitBlockchain,
@@ -37,11 +40,12 @@ export default class SettingsShow extends PureComponent {
 
         return (
             <Card style={{ width: '566px' }}>
+                {(!options.size || isFetching) && <SplashLoader />}
                 <Tabs activeTab={{ id: 'commonTab' }}>
                     <TabContainer id="commonTab" title="Общие">
                         <Common
-                            profile={profile}
                             options={options}
+                            isFetching={isFetching}
                             isChanging={isChanging}
                             onSubmitGate={onSubmitGate}
                         />
@@ -51,14 +55,15 @@ export default class SettingsShow extends PureComponent {
                             profile={profile}
                             account={account}
                             options={options}
+                            isFetching={isFetching}
                             isChanging={isChanging}
                             onSubmitBlockchain={onSubmitBlockchain}
                         />
                     </TabContainer>
                     <TabContainer id="notificationsTab" title="Уведомления">
                         <Notifications
-                            profile={profile}
                             options={options}
+                            isFetching={isFetching}
                             isChanging={isChanging}
                             onSubmitGate={onSubmitGate}
                         />

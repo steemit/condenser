@@ -51,8 +51,6 @@ export const DialogButton = styled.button`
     position: relative;
     flex: 1;
 
-    /* font-size: 15px; */
-
     font-family: Roboto;
     font-size: 12px;
     font-weight: bold;
@@ -82,6 +80,13 @@ export const DialogButton = styled.button`
     &:hover,
     &:focus {
         background: #fafafa;
+    }
+
+    &:disabled,
+    &[disabled]{
+        color: rgba(0,0,0,0.3);
+        background: rgba(0,0,0,0.03);
+        cursor: default;
     }
 
     ${is('primary')`

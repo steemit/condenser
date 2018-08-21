@@ -28,6 +28,7 @@ export const settingsContentSelector = createDeepEqualSelector(
             profile,
 
             options: settingsStatus.get('options'),
+            isFetching: settingsStatus.get('isFetching'),
             isChanging: settingsStatus.get('isChanging'),
         };
     }

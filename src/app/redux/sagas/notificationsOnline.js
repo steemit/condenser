@@ -36,7 +36,7 @@ function* handleAddNotification({
                 );
 
                 let title = content.title;
-                let link = content.link;
+                let link = `/@${content.author}/${content.permlink}`;
 
                 if (content.parent_author) {
                     title = content.root_title;
@@ -73,7 +73,7 @@ function* handleAddNotification({
                 );
 
                 let title = content.title;
-                let link = content.link;
+                let link = `/@${content.author}/${content.permlink}`;
 
                 if (content.parent_author) {
                     title = content.root_title;
@@ -125,7 +125,7 @@ function* handleAddNotification({
                 );
 
                 let title = content.title;
-                let link = content.link;
+                let link = `/@${content.author}/${content.permlink}`;
 
                 if (content.parent_author) {
                     title = content.root_title;
@@ -191,7 +191,7 @@ function* handleAddNotification({
                 );
 
                 let title = content.title;
-                let link = content.link;
+                let link = `/@${content.author}/${content.permlink}`;
 
                 if (content.parent_author) {
                     title = content.root_title;
@@ -228,7 +228,7 @@ function* handleAddNotification({
                 );
 
                 let title = content.title;
-                let link = content.link;
+                let link = `/@${content.author}/${content.permlink}`;
 
                 if (content.parent_author) {
                     title = content.root_title;

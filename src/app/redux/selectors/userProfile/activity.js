@@ -68,7 +68,7 @@ export const hydratedNotificationsSelector = createDeepEqualSelector(
                                 ['computed'],
                                 fromJS({
                                     title: content.get('title'),
-                                    link: content.get('link'),
+                                    link: `/@${content.get('author')}/${content.get('permlink')}`,
                                 })
                             );
                         }

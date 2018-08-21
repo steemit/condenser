@@ -8,7 +8,7 @@ import {
     FAVORITE_LOADING_STARTED,
     FAVORITE_SET_DATA,
     FAVORITE_SET_PAGE_LOADING,
-} from '../../constants/favorites';
+} from '../constants/favorites';
 
 const PAGE_SIZE = 20;
 

@@ -4,7 +4,7 @@ import { marketWatches } from 'app/redux/sagas/market';
 import { sharedWatches } from 'app/redux/sagas/shared';
 import { userWatches } from 'app/redux/sagas/user';
 import { authWatches } from 'app/redux/sagas/auth';
-import { watch } from 'src/app/redux/sagas/actions/favorite';
+import { watch } from 'src/app/redux/sagas/favorite';
 import { transactionWatches } from 'app/redux/sagas/transaction';
 import gateWatches from 'src/app/redux/sagas/gate';
 import notificationsOnlineWatches from 'src/app/redux/sagas/notificationsOnline';

@@ -210,7 +210,7 @@ module.exports = {
             path: 'favorite',
             getComponents(nextState, cb) {
                 cb(null, {
-                    content: require('./favorite/favoriteContent').default,
+                    content: require('./favorite/FavoriteContent').default,
                     sidebarRight: require('../../components/userProfile/common/RightPanel').default,
                 });
             },

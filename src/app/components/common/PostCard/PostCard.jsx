@@ -270,6 +270,14 @@ class PostCard extends PureComponent {
         myVote: this._getMyVote(this.props),
     };
 
+    componentDidMount() {
+        window.addEventListener('resize', this._onResize);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this._onResize);
+    }
+
     componentWillReceiveProps(newProps) {
         if (this.props.data !== newProps.data) {
             this.setState({

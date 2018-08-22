@@ -33,10 +33,6 @@ const EntryWrapper = styled.div`
         min-width: 280px;
         vertical-align: top;
         padding: 0 8px;
-    
-        @media screen and (max-width: 830px) {
-            width: 100%;
-        }
     `};
 `;
 
@@ -61,7 +57,6 @@ export default class PostsList extends PureComponent {
 
     componentDidMount() {
         window.addEventListener('scroll', this._onScroll);
-
         this._initialUrl = location.pathname + location.search + location.hash;
     }
 
@@ -91,7 +86,10 @@ export default class PostsList extends PureComponent {
         return (
             <Root innerRef={this._onRef} grid={isGrid}>
                 {posts.map(permLink => (
-                    <EntryWrapper key={permLink} grid={isGrid}>
+                    <EntryWrapper
+                        key={permLink}
+                        grid={isGrid}
+                    >
                         <EntryComponent
                             permLink={permLink}
                             grid={isGrid}
@@ -224,3 +222,4 @@ export default class PostsList extends PureComponent {
         }
     }
 }
+

@@ -106,11 +106,11 @@ class UserNavigation extends PureComponent {
 
         tabLinks.push(
             { value: tt('g.replies'), to: `/@${accountName}/recent-replies` },
-            { value: tt('g.wallet'), to: `/@${accountName}/transfers` },
+            { value: tt('g.wallet'), to: `/@${accountName}/transfers` }
         );
 
         if (isOwner) {
-            tabLinks.push({ value: 'Активность', to: `/@${accountName}/activity` }) 
+            tabLinks.push({ value: 'Активность', to: `/@${accountName}/activity` });
         }
 
         const rewardsMenu = [
@@ -203,10 +203,14 @@ class UserNavigation extends PureComponent {
     };
 }
 
-export default connect(
-    state => ({
+const mapStateToProps = state => {
+    return {
         layout: (state.ui.profile && state.ui.profile.get('layout')) || 'list',
-    }),
+    };
+};
+
+export default connect(
+    mapStateToProps,
     {
         changeProfileLayout,
     }

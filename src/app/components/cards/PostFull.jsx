@@ -16,14 +16,14 @@ import extractContent from 'app/utils/ExtractContent';
 import TagList from 'app/components/elements/TagList';
 import Author from 'app/components/elements/Author';
 import { repLog10, parsePayoutAmount } from 'app/utils/ParsersAndFormatters';
-import DMCAList from 'app/utils/DMCAList';
+// import DMCAList from 'app/utils/DMCAList';
 import PageViewsCounter from 'app/components/elements/PageViewsCounter';
 import ShareMenu from 'app/components/elements/ShareMenu';
 import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 import Userpic from 'app/components/elements/Userpic';
 import { APP_DOMAIN, APP_NAME } from 'app/client_config';
 import tt from 'counterpart';
-import userIllegalContent from 'app/utils/userIllegalContent';
+// import userIllegalContent from 'app/utils/userIllegalContent';
 import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 
@@ -255,8 +255,10 @@ class PostFull extends React.Component {
 
         let content_body = content.body;
         const url = `/${category}/@${author}/${permlink}`;
-        const bDMCAStop = DMCAList.includes(url);
-        const bIllegalContentUser = userIllegalContent.includes(content.author);
+        const bDMCAStop = this.props.dmcaContents.includes(url);
+        const bIllegalContentUser = this.props.blockedUsers.includes(
+            content.author
+        );
         if (bDMCAStop) {
             content_body = tt(
                 'postfull_jsx.this_post_is_not_available_due_to_a_copyright_claim'
@@ -546,6 +548,8 @@ export default connect(
     (state, ownProps) => ({
         ...ownProps,
         username: state.user.getIn(['current', 'username']),
+        dmcaContents: state.app.get('dmcaContents'),
+        blockedUsers: state.app.get('blockedUsers'),
     }),
 
     // mapDispatchToProps

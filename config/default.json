@@ -74,7 +74,9 @@
   "steemd_use_appbase": false,
   "chain_id": "1d50f6bcf387a5af6ebac42146ef920aedb5cc61d8f8ed37fb1ac671d722a302",
   "address_prefix": "WIT",
-  "conveyor_posting_wif": "",
-  "conveyor_username": "",
-  "conveyor_tos_tag": "tos_accepted"
+  "conveyor_posting_wif": false,
+  "conveyor_username": false,
+  "conveyor_tos_tag": "tos_accepted",
+  "dmca_content_endpoint": "http://localhost:8080/static/DMCAContents",
+  "dmca_user_endpoint": "http://localhost:8080/static/DMCAUsers"
 }

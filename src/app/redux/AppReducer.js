@@ -10,6 +10,8 @@ export const SET_USER_PREFERENCES = 'app/SET_USER_PREFERENCES';
 export const TOGGLE_NIGHTMODE = 'app/TOGGLE_NIGHTMODE';
 export const TOGGLE_BLOGMODE = 'app/TOGGLE_BLOGMODE';
 export const RECEIVE_FEATURE_FLAGS = 'app/RECEIVE_FEATURE_FLAGS';
+const SET_DMCA_CONTENTS = 'global/SET_DMCA_CONTENTS';
+const SET_BLOCKED_USERS = 'global/SET_DMCA_USERS';
 
 export const defaultState = Map({
     loading: false,
@@ -26,6 +28,8 @@ export const defaultState = Map({
         defaultCommentPayout: '50%',
     }),
     featureFlags: Map({}),
+    dmcaContents: [],
+    blockedUsers: [],
 });
 
 export default function reducer(state = defaultState, action = {}) {
@@ -76,6 +80,17 @@ export default function reducer(state = defaultState, action = {}) {
                 ? state.get('featureFlags').merge(action.flags)
                 : Map(action.flags);
             return state.set('featureFlags', newFlags);
+
+        case SET_DMCA_CONTENTS: {
+            const { result } = action.payload;
+            return state.set('dmcaContents', result);
+        }
+
+        case SET_BLOCKED_USERS: {
+            const { result } = action.payload;
+            return state.set('blockedUsers', result);
+        }
+
         default:
             return state;
     }
@@ -126,3 +141,13 @@ export const selectors = {
     getFeatureFlag: (state, flagName) =>
         state.getIn(['featureFlags', flagName], false),
 };
+
+export const setDMCAContents = payload => ({
+    type: SET_DMCA_CONTENTS,
+    payload,
+});
+
+export const setBlockedUsers = payload => ({
+    type: SET_BLOCKED_USERS,
+    payload,
+});

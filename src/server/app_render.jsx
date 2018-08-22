@@ -7,7 +7,7 @@ import models from 'db/models';
 import secureRandom from 'secure-random';
 import ErrorPage from 'server/server-error';
 import { determineViewMode } from '../app/utils/Links';
-import { getSupportedLocales } from './utils/misc';
+import { getSupportedLocales, fetchBlockedData } from './utils/misc';
 
 const path = require('path');
 const ROOT = path.join(__dirname, '../..');
@@ -76,7 +76,8 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
             ErrorPage,
             userPreferences,
             offchain,
-            ctx.state.requestTimer
+            ctx.state.requestTimer,
+            fetchBlockedData
         );
 
         let assets;

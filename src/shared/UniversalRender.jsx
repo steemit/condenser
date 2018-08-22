@@ -226,7 +226,8 @@ export async function serverRender(
     ErrorPage,
     userPreferences,
     offchain,
-    requestTimer
+    requestTimer,
+    fetchBlockedData
 ) {
     let error, redirect, renderProps;
 
@@ -323,7 +324,19 @@ export async function serverRender(
             type: '@@router/LOCATION_CHANGE',
             payload: { pathname: location },
         });
+
         server_store.dispatch(appActions.setUserPreferences(userPreferences));
+
+        const { blockedContents, blockedUsers } = await fetchBlockedData(
+            offchain.config.dmca_content_endpoint,
+            offchain.config.dmca_user_endpoint
+        );
+        server_store.dispatch(
+            appActions.setBlockedUsers({ result: blockedUsers })
+        );
+        server_store.dispatch(
+            appActions.setDMCAContents({ result: blockedContents })
+        );
     } catch (e) {
         // Ensure 404 page when username not found
         if (location.match(routeRegex.UserProfile1)) {

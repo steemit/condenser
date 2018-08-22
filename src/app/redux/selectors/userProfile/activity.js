@@ -34,27 +34,32 @@ export const filteredNotificationsSelector = createDeepEqualSelector(
 
 // Prepare all data for render notifications on activity page
 export const hydratedNotificationsSelector = createDeepEqualSelector(
-    [filteredNotificationsSelector, globalSelector('accounts'), globalSelector('content')],
-    (notifications, accounts, contents) =>
+    [
+        filteredNotificationsSelector,
+        pageAccountSelector,
+        globalSelector('accounts'),
+        globalSelector('content'),
+    ],
+    (notifications, account, accounts, contents) =>
         notifications.map((notification, key) =>
             notification.withMutations(notify => {
                 // Add content title and link from store data
                 if (
-                    [
-                        'vote',
-                        'flag',
-                        'repost',
-                        'reply',
-                        'mention',
-                        'award',
-                        'curatorAward',
-                    ].includes(notify.get('eventType'))
+                    ['vote', 'flag', 'repost', 'reply', 'mention'].includes(notify.get('eventType'))
                 ) {
-                    const content = contents.getIn([
-                        `${notify.get('fromUsers').get(0)}/${notify.get('permlink')}`,
-                    ]);
+                    let author = '';
+                    if (['vote', 'flag'].includes(notify.get('eventType'))) {
+                        author = account.get('name');
+                    }
+
+                    if (['repost', 'reply', 'mention'].includes(notify.get('eventType'))) {
+                        author = notify.get('fromUsers').get(0);
+                    }
+
+                    const content = contents.getIn([`${author}/${notify.get('permlink')}`]);
                     if (content) {
                         // if it isn't post
+                        console.log(notify.get('eventType'), content.toJS());
                         if (content.get('parent_author')) {
                             notify.setIn(
                                 ['computed'],

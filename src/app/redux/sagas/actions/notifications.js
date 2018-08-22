@@ -7,29 +7,34 @@ export function* hydrateNotifications(notifications) {
     const hydrateUsers = [];
     const hydrateContents = [];
 
+    const currentUser = yield select(state => state.user.get('current'));
+
     for (let notification of notifications) {
         const { fromUsers } = notification;
-
-        const author = fromUsers[0];
 
         for (let user of fromUsers) {
             let account = yield select(state => state.global.get('accounts').get(user));
             if (!account) hydrateUsers.push(user);
         }
 
-        if (['vote', 'flag', 'repost', 'reply', 'mention', 'award', 'curatorAward'].includes(notification.eventType)) {
+        if (['vote', 'flag', 'repost', 'reply', 'mention'].includes(notification.eventType)) {
+            let author = '';
+            if (['vote', 'flag'].includes(notification.eventType)) {
+                author = currentUser.get('username');
+            }
+
+            if (['repost', 'reply', 'mention'].includes(notification.eventType)) {
+                author = fromUsers[0];
+            }
+
             const { permlink } = notification;
             let content = yield select(state =>
                 state.global.getIn(['content', `${author}/${permlink}`])
             );
+
             if (!content) {
                 hydrateContents.push(
-                    call(
-                        [api, api.getContentAsync],
-                        author,
-                        permlink,
-                        constants.DEFAULT_VOTE_LIMIT
-                    )
+                    call([api, api.getContentAsync], author, permlink, constants.DEFAULT_VOTE_LIMIT)
                 );
             }
         }

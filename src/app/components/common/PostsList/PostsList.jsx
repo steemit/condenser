@@ -46,6 +46,7 @@ export default class PostsList extends PureComponent {
         posts: PropTypes.instanceOf(immutable.List),
         layout: PropTypes.oneOf(['list', 'grid']),
         allowInlineReply: PropTypes.bool,
+        showPinButton: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -71,7 +72,15 @@ export default class PostsList extends PureComponent {
     }
 
     render() {
-        const { posts, category, layout, allowInlineReply, isFavorite } = this.props;
+        const {
+            posts,
+            category,
+            layout,
+            allowInlineReply,
+            pageAccountName,
+            showPinButton,
+            isFavorite,
+        } = this.props;
 
         const isPosts = category === 'blog' || isFavorite;
 
@@ -86,6 +95,8 @@ export default class PostsList extends PureComponent {
                             permLink={permLink}
                             grid={isGrid}
                             allowInlineReply={allowInlineReply}
+                            pageAccountName={pageAccountName}
+                            showPinButton={showPinButton}
                             onClick={this._onEntryClick}
                         />
                     </EntryWrapper>

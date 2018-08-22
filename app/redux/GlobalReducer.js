@@ -96,6 +96,8 @@ export default createModule({
         {
             action: 'RECEIVE_ACCOUNT',
             reducer: (state, { payload: { account } }) => {
+                extractPinnedPosts(account);
+
                 account = fromJS(account, (key, value) => {
                     if (key === 'witness_votes') {
                         return value.toSet();
@@ -105,6 +107,7 @@ export default createModule({
                             : value.toOrderedMap();
                     }
                 });
+
                 // Merging accounts: A get_state will provide a very full account but a get_accounts will provide a smaller version
                 return state.updateIn(
                     ['accounts', account.get('name')],
@@ -520,5 +523,26 @@ export default createModule({
                     fromJS(vesting_delegations)
                 ),
         },
+        {
+            action: 'PINNED_UPDATE',
+            reducer: (state, { payload }) => {
+                const { accountName, pinnedPosts } = payload;
+
+                return state.setIn(
+                    ['accounts', accountName, 'pinnedPosts'],
+                    List(pinnedPosts)
+                );
+            },
+        },
     ],
 });
+
+function extractPinnedPosts(account) {
+    if (account.json_metadata) {
+        try {
+            account.pinnedPosts = JSON.parse(account.json_metadata).pinnedPosts || [];
+        } catch (err) {
+            console.error(err);
+        }
+    }
+}

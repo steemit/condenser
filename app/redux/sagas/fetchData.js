@@ -7,6 +7,7 @@ import { reveseTag } from 'app/utils/tags';
 import { DEBT_TOKEN_SHORT, LIQUID_TICKER, DEFAULT_CURRENCY, IGNORE_TAGS, PUBLIC_API, SELECT_TAGS_KEY } from 'app/client_config';
 import cookie from "react-cookie";
 import {api} from 'golos-js';
+import { processBlog } from 'shared/state';
 
 export function* fetchDataWatches () {
     yield fork(watchLocationChange);
@@ -155,20 +156,10 @@ export function* fetchState(location_change_action) {
 
                     case 'blog':
                     default:
-                        const blogEntries = yield call([api, api.getBlogEntriesAsync], uname, 0, 20)
-                        state.accounts[uname].blog = []
-
-                        for (let key in blogEntries) {
-                            const { author, permlink } = blogEntries[key]
-                            const link = `${author}/${permlink}`
-
-                            state.content[link] = yield call([api, api.getContentAsync], author, permlink, constants.DEFAULT_VOTE_LIMIT)
-                            state.accounts[uname].blog.push(link)
-                        
-                            if (blogEntries[key].reblog_on !== '1970-01-01T00:00:00') {
-                                state.content[link].first_reblogged_on = blogEntries[key].reblog_on
-                            }
-                        }
+                        yield processBlog(state, {
+                            uname,
+                            voteLimit: constants.DEFAULT_VOTE_LIMIT,
+                        });
                     break
                 }
             }

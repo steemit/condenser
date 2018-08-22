@@ -1,5 +1,6 @@
 import { PUBLIC_API } from 'app/client_config'
 
+import { processBlog } from 'shared/state';
 import { reveseTag, prepareTrendingTags } from 'app/utils/tags'
 
 const DEFAULT_VOTE_LIMIT = 10000
@@ -121,21 +122,15 @@ export default async function getState(api, url, options, offchain, rates) {
 
                 case 'blog':
                 default:
-                    const blogEntries = await api.getBlogEntries(uname, 0, 20)
-                    state.accounts[uname].blog = []
-
-                    for (let key in blogEntries) {
-                        const { author, permlink } = blogEntries[key]
-                        const link = `${author}/${permlink}`
-
-                        state.content[link] = await api.getContent(author, permlink, DEFAULT_VOTE_LIMIT)
-                        state.accounts[uname].blog.push(link)
-
-                        if (blogEntries[key].reblog_on !== '1970-01-01T00:00:00') {
-                            state.content[link].first_reblogged_on = blogEntries[key].reblog_on
-                        }
+                    try {
+                        await processBlog(state, {
+                            uname,
+                            voteLimit: DEFAULT_VOTE_LIMIT,
+                        });
+                    } catch (err) {
+                        console.error(err);
                     }
-                break
+                    break;
             }
         }
 

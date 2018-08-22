@@ -12,7 +12,7 @@ import {
 
 const PAGE_SIZE = 20;
 
-export function* watch() {
+export default function* watch() {
     yield takeEvery(FAVORITE_LOAD, loadFavorite);
     yield takeEvery(FAVORITE_TOGGLE, toggleFavorite);
     yield takeEvery(FAVORITE_LOAD_NEXT_PAGE, loadFavoriteNextPage);

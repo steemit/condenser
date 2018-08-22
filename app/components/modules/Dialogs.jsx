@@ -4,18 +4,11 @@ import { connect } from 'react-redux';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import Reveal from 'react-foundation-components/lib/global/reveal';
 import g from 'app/redux/GlobalReducer';
-import { Map, List } from 'immutable';
+import { Map } from 'immutable';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
-import QrReader from 'app/components/elements/QrReader';
-import ConvertToSteem from 'app/components/elements/ConvertToSteem';
-//import SuggestPassword from 'app/components/elements/SuggestPassword';
-import ChangePassword from 'app/components/elements/ChangePassword';
 import CheckLoginOwner from 'app/components/elements/CheckLoginOwner';
-import QrKeyView from 'app/components/elements/QrKeyView';
 import PromotePost from 'app/components/modules/PromotePost';
 import ExplorePost from 'app/components/modules/ExplorePost';
-import DelegateVestingShares from 'app/components/modules/DelegateVestingShares';
-import DelegateVestingSharesInfo from 'app/components/modules/DelegateVestingSharesInfo';
 
 class Dialogs extends React.Component {
     static propTypes = {
@@ -78,14 +71,10 @@ class Dialogs extends React.Component {
 const emptyMap = Map();
 
 export default connect(
-    state => {
-        return {
-            active_dialogs: state.global.get('active_dialogs') || emptyMap,
-        };
-    },
-    dispatch => ({
-        hide: name => {
-            dispatch(g.actions.hideDialog({ name }));
-        },
-    })
+    state => ({
+        active_dialogs: state.global.get('active_dialogs') || emptyMap,
+    }),
+    {
+        hide: name => g.actions.hideDialog({ name }),
+    }
 )(Dialogs);

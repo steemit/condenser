@@ -338,7 +338,6 @@ function* usernamePasswordLogin2({
     if (!autopost && saveLogin) yield put(user.actions.saveLogin());
 
     try {
-        // const challengeString = yield serverApiLoginChallenge()
         const offchainData = yield select(state => state.offchain);
         const serverAccount = offchainData.get('account');
         const challengeString = offchainData.get('login_challenge');
@@ -357,7 +356,6 @@ function* usernamePasswordLogin2({
             if (res.guid) {
                 localStorage.setItem('guid', res.guid);
             }
-            serverApiLogin(username, signatures);
         }
     } catch (error) {
         // Does not need to be fatal

@@ -2,9 +2,7 @@ import { put, select, takeEvery } from 'redux-saga/effects';
 import transaction from 'app/redux/Transaction';
 import DialogManager from 'app/components/elements/common/DialogManager';
 import { dispatch } from 'shared/UniversalRender';
-import {
-    PINNED_TOGGLE,
-} from '../constants/pinnedPosts';
+import { PINNED_TOGGLE } from '../constants/pinnedPosts';
 
 export default function* watch() {
     yield takeEvery(PINNED_TOGGLE, togglePinned);
@@ -26,6 +24,7 @@ function* togglePinned(action) {
         }
 
         if (pinnedPosts.length >= 5) {
+            DialogManager.info('Вы можете закрепить только 5 постов.');
             return;
         }
 
@@ -36,25 +35,27 @@ function* togglePinned(action) {
 
     metadata.pinnedPosts = pinnedPosts;
 
-    yield put(transaction.actions.broadcastOperation({
-        type: 'account_metadata',
-        operation: {
-            account: account.get('name'),
-            memo_key: account.get('memo_key'),
-            json_metadata: JSON.stringify(metadata),
-        },
-        successCallback: () => {
-            dispatch({
-                type: 'global/PINNED_UPDATE',
-                payload: {
-                    accountName: account.get('name'),
-                    pinnedPosts,
-                },
-            });
-        },
-        errorCallback: err => {
-            console.error(err);
-            DialogManager.alert('Не удалось выполнить запрос');
-        },
-    }))
+    yield put(
+        transaction.actions.broadcastOperation({
+            type: 'account_metadata',
+            operation: {
+                account: account.get('name'),
+                memo_key: account.get('memo_key'),
+                json_metadata: JSON.stringify(metadata),
+            },
+            successCallback: () => {
+                dispatch({
+                    type: 'global/PINNED_UPDATE',
+                    payload: {
+                        accountName: account.get('name'),
+                        pinnedPosts,
+                    },
+                });
+            },
+            errorCallback: err => {
+                console.error(err);
+                DialogManager.alert('Не удалось выполнить запрос');
+            },
+        })
+    );
 }

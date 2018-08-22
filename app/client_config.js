@@ -42,7 +42,7 @@ export const LANGUAGES = {
   uk: 'Українська',
 }
 // First element always is USD, it needs to be correct fetch yahoo exchange rates from server side
-export const CURRENCIES = ['USD', 'RUB', 'UAH', 'BYN', 'EUR', 'CNY', 'GEL', 'KZT', DEBT_TOKEN_SHORT, LIQUID_TICKER];
+export const CURRENCIES = ['USD', 'RUB', 'EUR', DEBT_TOKEN_SHORT, LIQUID_TICKER];
 export const DEFAULT_CURRENCY = CURRENCIES[0]
 export const CURRENCY_COOKIE_KEY = 'gls.currency'
 export const FRACTION_DIGITS = 2 // default amount of decimal digits

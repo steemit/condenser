@@ -1,4 +1,5 @@
 import React from 'react';
+import { APP_NAME } from 'app/client_config';
 
 export default function ServerHTML({ body, assets, locale, title, meta }) {
     let page_title = title;
@@ -51,7 +52,7 @@ export default function ServerHTML({ body, assets, locale, title, meta }) {
                         return null;
                     })}
                 <link rel="manifest" href="/static/manifest.json" />
-                <link rel="icon" type="image/x-icon" href="/favicon.ico?v=2" />
+                <link rel="icon" type="image/x-icon" href="/favicon.ico?v=3" />
                 <link
                     rel="apple-touch-icon-precomposed"
                     sizes="57x57"
@@ -130,7 +131,7 @@ export default function ServerHTML({ body, assets, locale, title, meta }) {
                     href="/images/favicons/favicon-128.png"
                     sizes="128x128"
                 />
-                <meta name="application-name" content="Steemit" />
+                <meta name="application-name" content={APP_NAME} />
                 <meta name="msapplication-TileColor" content="#FFFFFF" />
                 <meta
                     name="msapplication-TileImage"

@@ -113,7 +113,7 @@ class Header extends React.Component {
         } else if (route.page == 'CreateAccount') {
             page_title = tt('header_jsx.create_account');
         } else if (route.page == 'PickAccount') {
-            page_title = `Pick Your New Steemit Account`;
+            page_title = `Pick Your New vit.tube Account`;
         } else if (route.page == 'Approval') {
             page_title = `Account Confirmation`;
         } else if (
@@ -236,12 +236,12 @@ class Header extends React.Component {
                 icon: 'wallet',
                 value: tt('g.wallet'),
             },
-            {
-                link: '#',
-                icon: 'eye',
-                onClick: toggleNightmode,
-                value: tt('g.toggle_nightmode'),
-            },
+            // {
+            //     link: '#',
+            //     icon: 'eye',
+            //     onClick: toggleNightmode,
+            //     value: tt('g.toggle_nightmode'),
+            // },
             {
                 link: reset_password_link,
                 icon: 'key',
@@ -268,6 +268,16 @@ class Header extends React.Component {
                     </div>
 
                     <div className="large-4 columns show-for-large large-centered Header__sort">
+                        {/*CUSTOM SEARCH*/}
+                        {/*<span className="Header__search--desktop">
+                            <SearchInput />
+                        </span>*/}
+                        {/*<span className="Header__search">
+                            <a href="/static/search.html">
+                                <IconButton icon="magnifyingGlass" />
+                            </a>
+                        </span>*/}
+
                         {/*SORT*/}
                         <SortOrder
                             sortOrder={order}
@@ -296,17 +306,14 @@ class Header extends React.Component {
                             </span>
                         )}
 
-                        {/*CUSTOM SEARCH*/}
+                        {/*SUBMIT STORY*/}
+
                         <span className="Header__search--desktop">
-                            <SearchInput />
-                        </span>
-                        <span className="Header__search">
                             <a href="/static/search.html">
                                 <IconButton icon="magnifyingGlass" />
                             </a>
                         </span>
 
-                        {/*SUBMIT STORY*/}
                         {submit_story}
                         {/*USER AVATAR */}
                         {loggedIn && (
@@ -325,13 +332,14 @@ class Header extends React.Component {
                                 </li>
                             </DropdownMenu>
                         )}
+
                         {/*HAMBURGER*/}
-                        <span
+                        {/* <span
                             onClick={showSidePanel}
                             className="toggle-menu Header__hamburger"
                         >
                             <span className="hamburger" />
-                        </span>
+                        </span> */}
                     </div>
                 </nav>
             </header>

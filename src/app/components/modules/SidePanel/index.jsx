@@ -78,10 +78,11 @@ const SidePanel = ({ alignment, visible, hideSidePanel, username }) => {
             {
                 value: 'blocktrades',
                 label: 'Blocktrades',
-                link: username ? `https://blocktrades.us/?input_coin_type=eth&output_coin_type=steem&receive_address=${
-                    username
-                    }` : `https://blocktrades.us/?input_coin_type=eth&output_coin_type=steem`
-                ,
+                link: username
+                    ? `https://blocktrades.us/?input_coin_type=eth&output_coin_type=steem&receive_address=${
+                          username
+                      }`
+                    : `https://blocktrades.us/?input_coin_type=eth&output_coin_type=steem`,
             },
             {
                 value: 'gopax',
@@ -159,7 +160,7 @@ const SidePanel = ({ alignment, visible, hideSidePanel, username }) => {
             {
                 value: 'signup',
                 label: tt('g.sign_up'),
-                link: 'https://signup.steemit.com',
+                link: 'https://signup.vit.tube',
             },
             {
                 value: 'post',

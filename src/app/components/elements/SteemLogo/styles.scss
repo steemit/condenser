@@ -1,26 +1,29 @@
 .logo {
     cursor: pointer;
     transition: all 0.3s ease-in-out;
+        transition: 0.25s all ease-in-out;
+font-size: 2em;
+font-weight: inherit;
+color: #000000;
     .logo__beta{
-        fill: $color-text-gray;
+        fill: $color-red;
         transition: 0.25s all ease-in-out;
     }
     .logo__steemit{
-        fill: $color-teal;
-        transition: 0.25s all ease-in-out;
+        fill: $color-black;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+
     }
     // Fixes #2639 - Don't apply hover styles on devices that do not support it.
     @media (hover: hover) {
         &:hover, &:active {
             .logo__beta{
-                @include themify($themes) {
-                    fill: themed('colorAccentReverse');
-                }
+                        fill: $color-red-dark;
             }
             .logo__steemit{
-                @include themify($themes) {
-                    fill: themed('colorAccentReverse');
-                }
+         fill: $color-black;
             }
         }
     }

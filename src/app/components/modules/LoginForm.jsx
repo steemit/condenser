@@ -396,7 +396,7 @@ class LoginForm extends Component {
                         <button
                             type="button float-right"
                             disabled={submitting}
-                            className="button hollow"
+                            className="button"
                             onClick={onCancel}
                         >
                             {tt('g.cancel')}

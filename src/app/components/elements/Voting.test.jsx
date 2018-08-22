@@ -9,6 +9,7 @@ import renderer from 'react-test-renderer';
 import rootReducer from 'app/redux/RootReducer';
 import Voting from './Voting';
 import configureMockStore from 'redux-mock-store';
+import { LIQUID_TICKER, DEBT_TICKER } from 'app/client_config';
 
 global.window = {};
 import localStorage from 'mock-local-storage';
@@ -350,7 +351,7 @@ describe('Voting', () => {
             </Provider>
         );
         expect(JSON.stringify(component.toJSON())).toContain(
-            '(2.50 SBD, 2.50 STEEM, 5.00 SP)'
+            `(2.50 ${DEBT_TICKER}, 2.50 ${LIQUID_TICKER}, 5.00 SP)`
         );
     });
 });

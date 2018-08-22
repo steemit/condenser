@@ -70,5 +70,6 @@
   "chain_id": "SDC_CHAIN_ID",
   "address_prefix": "SDC_ADDRESS_PREFIX",
   "conveyor_posting_wif": "CONVEYOR_POSTING_WIF",
-  "conveyor_username": "CONVEYOR_USERNAME"
+  "conveyor_username": "CONVEYOR_USERNAME",
+  "conveyor_tos_tag": "CONVEYOR_TOS_TAG"
 }

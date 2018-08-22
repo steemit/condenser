@@ -427,7 +427,9 @@ class TransferForm extends Component {
                                             border: 'none',
                                         }}
                                     >
-                                        <option value="STEEM">STEEM</option>
+                                        <option value="STEEM">
+                                            {LIQUID_TOKEN}
+                                        </option>
                                         <option value="SBD">SBD</option>
                                     </select>
                                 </span>

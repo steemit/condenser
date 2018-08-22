@@ -17,6 +17,7 @@ import transaction from 'app/redux/Transaction';
 import VotePanel from '../VotePanel';
 import { confirmVote } from 'src/app/helpers/votes';
 import { toggleFavoriteAction } from 'src/app/redux/actions/favorite';
+import { togglePinAction } from '../../../redux/actions/pinnedPosts';
 
 const Header = styled.div`
     padding: 10px 0 6px;
@@ -94,13 +95,16 @@ const IconWrapper = styled.div`
     justify-content: center;
     width: 32px;
     height: 32px;
-    color: ${({ forceWhite }) => (forceWhite ? '#fff' : '#393636')};
-    cursor: pointer;
-    transition: transform 0.15s;
+    color: ${({ color }) => color || '#393636'};
 
-    &:hover {
-        transform: scale(1.15);
-    }
+    ${is('enabled')`
+        cursor: pointer;
+        transition: transform 0.15s;
+
+        &:hover {
+            transform: scale(1.15);
+        }
+    `};
 `;
 
 const BodyLink = styled(Link)`
@@ -250,6 +254,10 @@ class PostCard extends PureComponent {
         myAccount: PropTypes.string,
         data: PropTypes.object,
         grid: PropTypes.bool,
+        pageAccountName: PropTypes.string,
+        showPinButton: PropTypes.bool,
+        pinDisabled: PropTypes.bool,
+        isPinned: PropTypes.bool,
         onClick: PropTypes.func,
     };
 
@@ -311,7 +319,7 @@ class PostCard extends PureComponent {
     }
 
     _renderHeader(withImage) {
-        const { data, grid, isFavorite } = this.props;
+        const { data, grid } = this.props;
 
         const author = data.get('author');
         const category = detransliterate(data.get('category'));
@@ -333,27 +341,8 @@ class PostCard extends PureComponent {
                     <Filler />
                     {grid ? null : <Category>{category}</Category>}
                     <Toolbar>
-                        <ToolbarAction>
-                            <IconWrapper
-                                forceWhite={withImage && !grid}
-                                data-tooltip="Закрепить пост"
-                            >
-                                <Icon name="clip" width={12} height={22} />
-                            </IconWrapper>
-                        </ToolbarAction>
-                        <ToolbarAction>
-                            <IconWrapper
-                                forceWhite={withImage && !grid}
-                                data-tooltip={isFavorite ? 'Убрать из избранного' : 'В избранное'}
-                                onClick={this._onFavoriteClick}
-                            >
-                                <Icon
-                                    name={isFavorite ? 'star_filled' : 'star'}
-                                    width={20}
-                                    height={20}
-                                />
-                            </IconWrapper>
-                        </ToolbarAction>
+                        {this._renderPinButton(withImage)}
+                        {this._renderFavoriteButton(withImage)}
                     </Toolbar>
                 </HeaderLine>
                 {grid ? (
@@ -363,6 +352,62 @@ class PostCard extends PureComponent {
                     </HeaderLine>
                 ) : null}
             </Header>
+        );
+    }
+
+    _renderPinButton(withImage) {
+        const { grid, showPinButton, isPinned, pinDisabled } = this.props;
+
+        const showPin = showPinButton && (!pinDisabled || isPinned);
+
+        if (!showPin) {
+            return;
+        }
+
+        let pinTip;
+
+        if (showPinButton) {
+            if (pinDisabled) {
+                if (isPinned) {
+                    pinTip = 'Пост закреплен';
+                }
+            } else {
+                if (isPinned) {
+                    pinTip = 'Открепить';
+                } else {
+                    pinTip = 'Закрепить пост';
+                }
+            }
+        }
+
+        return (
+            <ToolbarAction>
+                <IconWrapper
+                    color={isPinned ? '#3684ff' : withImage && !grid ? '#fff' : ''}
+                    enabled={!pinDisabled}
+                    data-tooltip={pinTip}
+                    onClick={!pinDisabled ? this._onPinClick : null}
+                >
+                    <Icon name="clip" width={12} height={22} />
+                </IconWrapper>
+            </ToolbarAction>
+        );
+    }
+
+    _renderFavoriteButton(withImage) {
+        const { grid, isFavorite } = this.props;
+
+        return (
+            <ToolbarAction>
+                <IconWrapper
+                    color={withImage && !grid ? '#fff' : ''}
+                    data-tooltip={isFavorite ? 'Убрать из избранного' : 'В избранное'}
+                    enabled
+                    onClick={this._onFavoriteClick}
+                >
+                    <Icon name={isFavorite ? 'star_filled' : 'star'} width={20} height={20} />
+                </IconWrapper>
+            </ToolbarAction>
         );
     }
 
@@ -439,19 +484,40 @@ class PostCard extends PureComponent {
     _onFavoriteClick = () => {
         const { isFavorite, data } = this.props;
 
-        this.props.toggleFavorite(
-            data.get('author') + '/' + data.get('permlink'),
-            !isFavorite
-        );
+        this.props.toggleFavorite(data.get('author') + '/' + data.get('permlink'), !isFavorite);
+    };
+
+    _onPinClick = () => {
+        const { data, isPinned } = this.props;
+
+        this.props.togglePin(data.get('author') + '/' + data.get('permlink'), !isPinned);
     };
 }
 
 export default connect(
     (state, props) => {
+        const myAccountName = state.user.getIn(['current', 'username']);
+
+        let isPinned = false;
+
+        if (props.showPinButton) {
+            const pinnedPosts = state.global.getIn([
+                'accounts',
+                props.pageAccountName,
+                'pinnedPosts',
+            ]);
+
+            if (pinnedPosts) {
+                isPinned = pinnedPosts.includes(props.permLink);
+            }
+        }
+
         return {
-            myAccount: state.user.getIn(['current', 'username']),
+            myAccount: myAccountName,
             data: state.global.getIn(['content', props.permLink]),
             isFavorite: state.data.favorite.set.has(props.permLink),
+            pinDisabled: props.pageAccountName !== myAccountName,
+            isPinned,
         };
     },
     dispatch => ({
@@ -474,6 +540,9 @@ export default connect(
         },
         toggleFavorite: (link, isAdd) => {
             dispatch(toggleFavoriteAction({ link, isAdd }));
+        },
+        togglePin: (link, isPin) => {
+            dispatch(togglePinAction(link, isPin));
         },
     })
 )(PostCard);

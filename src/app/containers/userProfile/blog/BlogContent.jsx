@@ -31,6 +31,7 @@ class BlogContent extends Component {
                 pageAccountName={pageAccount.get('name')}
                 order="by_author"
                 category="blog"
+                showPinButton
                 //showSpam TODO
             />
         );

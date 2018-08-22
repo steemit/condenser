@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import tt from 'counterpart';
 import styled from 'styled-components';
 import is from 'styled-is';
-import { getStoreState } from 'shared/UniversalRender';
+import { getStoreState } from 'app/clientRender';
 import { calcVotesStats } from 'app/utils/StateFunctions';
 import Icon from 'golos-ui/Icon';
 import Slider from 'golos-ui/Slider';

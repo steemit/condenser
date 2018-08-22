@@ -5,7 +5,7 @@ import './assets/stylesheets/app.scss';
 import plugins from 'app/utils/JsPlugins';
 import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 import Iso from 'iso';
-import { clientRender } from 'shared/UniversalRender';
+import clientRender from 'app/clientRender';
 import * as golos from 'golos-js';
 
 // window.onerror = error => {

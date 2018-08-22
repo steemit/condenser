@@ -9,7 +9,7 @@ import CommentCard from 'src/app/components/common/CommentCard';
 import { isFetchingOrRecentlyUpdated } from 'app/utils/StateFunctions';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import PostOverlay from '../PostOverlay';
-import { getStoreState } from 'shared/UniversalRender';
+import { getStoreState } from 'app/clientRender';
 import DialogManager from 'app/components/elements/common/DialogManager';
 import keyCodes from 'app/utils/keyCodes';
 

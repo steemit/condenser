@@ -7,6 +7,12 @@ const DEFAULT_VOTE_LIMIT = 10000
 
 const isHardfork = (v) => v.split('.')[1] === '18'
 
+setTimeout(() => {
+    if (process.env.BROWSER) {
+        alert(3);
+    }
+}, 1000);
+
 export default async function getState(api, url, options, offchain, rates) {
     if (!url || typeof url !== 'string' || !url.length || url === '/') url = 'trending'
     if (url[0] === '/') url = url.substr(1)

@@ -6,10 +6,10 @@ import { ServerStyleSheet } from 'styled-components'
 import config from 'config';
 import jayson from 'jayson';
 import merge from 'lodash/merge';
+import { api } from 'golos-js';
 
-import { getCurrentMedianHistoryPrice } from 'app/utils/APIWrapper';
 import ServerHTML from './server-html';
-import { serverRender } from '../shared/UniversalRender';
+import serverRender from './serverRender';
 import models from 'db/models';
 import secureRandom from 'secure-random';
 
@@ -197,7 +197,7 @@ function getActualRates() {
 }
 
 async function getGbgPerGolos() {
-    const feedPrice = await getCurrentMedianHistoryPrice();
+    const feedPrice = await api.getCurrentMedianHistoryPriceAsync();
 
     if (
         feedPrice.base &&

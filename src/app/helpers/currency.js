@@ -1,5 +1,5 @@
 import React from 'react';
-import { getStoreState } from 'shared/UniversalRender';
+import { getStoreState } from 'app/clientRender';
 
 const CURRENCY_SIGNS = {
     'USD': '$_',

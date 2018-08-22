@@ -1,6 +1,6 @@
 import throttle from 'lodash/throttle';
 import { api } from 'golos-js';
-import { getStoreState, dispatch } from 'shared/UniversalRender';
+import { getStoreState, dispatch } from 'app/clientRender';
 
 let usersToLoad = [];
 let currentLoading = [];

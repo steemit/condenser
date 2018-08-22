@@ -1,7 +1,7 @@
 import { put, select, takeEvery } from 'redux-saga/effects';
 import transaction from 'app/redux/Transaction';
 import DialogManager from 'app/components/elements/common/DialogManager';
-import { dispatch } from 'shared/UniversalRender';
+import { dispatch } from 'app/clientRender';
 import { PINNED_TOGGLE } from '../constants/pinnedPosts';
 
 export default function* watch() {

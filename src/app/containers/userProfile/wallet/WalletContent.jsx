@@ -207,6 +207,7 @@ const Currencies = styled.div`
     flex-shrink: 0;
     align-items: center;
     height: 80px;
+    margin-left: 6px;
     overflow: hidden;
 `;
 
@@ -801,14 +802,32 @@ class WalletContent extends Component {
                 (currency === opCurrency && !isSafe)
             ) {
                 if (type === 'transfer_to_vesting') {
+                    const options = {};
+
+                    if (samePerson) {
+                        options.title = 'Увеличение Силы Голоса';
+                        options.currencies = [
+                            {
+                                amount: '-' + amount,
+                                currency: CURRENCY.GOLOS,
+                            },
+                            {
+                                amount: '+' + amount,
+                                currency: CURRENCY.GOLOS_POWER,
+                            },
+                        ];
+                    } else {
+                        options.name = samePerson ? null : isReceive ? data.from : data.to;
+                        options.amount = sign + amount;
+                        options.currency = CURRENCY.GOLOS_POWER;
+                    }
+
                     return {
                         type: isReceive ? DIRECTION.RECEIVE : DIRECTION.SENT,
-                        name: samePerson ? null : isReceive ? data.from : data.to,
-                        amount: sign + amount,
-                        currency: CURRENCY.GOLOS_POWER,
                         memo: data.memo || null,
                         icon: 'logo',
                         color: '#f57c02',
+                        ...options,
                     };
                 } else {
                     return {

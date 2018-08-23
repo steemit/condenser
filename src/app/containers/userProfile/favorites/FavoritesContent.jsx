@@ -8,6 +8,7 @@ import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import PostsListFavorite from 'src/app/components/common/PostsList/PostsListFavorite';
 import InfoBlock from 'src/app/components/common/InfoBlock';
 import { favoritesLoadNextPageAction } from 'src/app/redux/actions/favorites';
+import EmptyBlock, { EmptySubText } from 'src/app/components/common/EmptyBlock';
 
 const Loader = styled(LoadingIndicator)`
     margin-top: 30px;
@@ -37,23 +38,19 @@ class FavoritesContent extends Component {
         }
 
         if (!list.size) {
-            return this._renderCallOut();
+            return (
+                <InfoBlock>
+                    <EmptyBlock>
+                        Пока нет избранных постов
+                        <EmptySubText>
+                            Нажми на звездочку у поста. чтобы добавить пост в избранное.
+                        </EmptySubText>
+                    </EmptyBlock>
+                </InfoBlock>
+            );
         }
 
         return <PostsListFavorite pageAccountName={pageAccountName} />;
-    }
-
-    _renderCallOut() {
-        return (
-            <InfoBlock>
-                {tt('submit_a_story.you_hasnt_started_bloggin_yet')}
-                <br />
-                <br />
-                <Link to="/submit">{tt('g.submit_a_story')}</Link>
-                <br />
-                <Link to="/welcome">{tt('submit_a_story.welcome_to_the_blockchain')}</Link>
-            </InfoBlock>
-        );
     }
 }
 

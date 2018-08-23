@@ -78,10 +78,11 @@ const SidePanel = ({ alignment, visible, hideSidePanel, username }) => {
             {
                 value: 'blocktrades',
                 label: 'Blocktrades',
-                link: username ? `https://blocktrades.us/?input_coin_type=eth&output_coin_type=steem&receive_address=${
-                    username
-                    }` : `https://blocktrades.us/?input_coin_type=eth&output_coin_type=steem`
-                ,
+                link: username
+                    ? `https://blocktrades.us/?input_coin_type=eth&output_coin_type=steem&receive_address=${
+                          username
+                      }`
+                    : `https://blocktrades.us/?input_coin_type=eth&output_coin_type=steem`,
             },
             {
                 value: 'gopax',
@@ -109,6 +110,11 @@ const SidePanel = ({ alignment, visible, hideSidePanel, username }) => {
                 value: 'tools',
                 label: tt('navigation.app_center'),
                 link: 'https://steemprojects.com/',
+            },
+            {
+                value: 'businesses',
+                label: tt('navigation.steem_businesses'),
+                link: 'https://steemeconomy.com/',
             },
             {
                 value: 'api_docs',

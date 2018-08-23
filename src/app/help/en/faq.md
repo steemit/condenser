@@ -823,7 +823,7 @@ You can exchange them. Visit the internal Market, found in the main menu. There 
 - "Power Up" to Steem Power
 - Exchange for SBD in the internal market
 - Withdraw to an exchange, and trade for BTC or other digital tokens
-- Purchase items through third-party stores that accept STEEM tokens
+- Purchase items through [third-party stores](https://steemeconomy.com/) that accept STEEM tokens
 
 <a href="#Table_of_Contents_Economics">^</a>
 ## <span id="What_can_I_do_with_my_SBD_tokens">What can I do with my SBD tokens?</span>
@@ -831,7 +831,7 @@ You can exchange them. Visit the internal Market, found in the main menu. There 
 - Convert to STEEM via your wallet (takes 3.5 days)
 - Exchange for STEEM in the internal market
 - Withdraw to an exchange, and trade for BTC or other digital tokens
-- Purchase items through third-party stores that accept SBD tokens
+- Purchase items through [third-party stores](https://steemeconomy.com/) that accept SBD tokens
 
 <a href="#Table_of_Contents_Economics">^</a>
 ## <span id="What_is_a_MVEST">What is a MVEST?</span>
@@ -1365,7 +1365,7 @@ You can also create a post on steemit.com with the tag #help, and someone in the
 
 ## <span id="Third_Party_References_and_User_Links">Third Party References and User Links</span>
 
-AnonSteem, Binance, bitcoinfees, Bitcointalk, Bithumb, BitShares, Bittrex, blockchain.info, BlockTrades, Busy.org, Changelly, @cheetah, Coinbase, DTube, GOBADA, GOPAX, HitBTC, Huobi, LocalBitcoinCash, Localbitcoins, Markdown Cheatsheet, Pexels, Pixabay, Poloniex, Postimage, Shapeshift.io, Steemcleaners, SteemConnect, SteemCreate, steemd, SteemDB, steem.chat, SteemStats, SteemProjects, Streemian, The Steemit Shop, UpBit, Utopian.io, Vessel, and Yensesa are third party applications/services, and are not owned or maintained by Steemit, Inc. Their listing here, as well as any other third party applications or websites that are listed, does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
+AnonSteem, Binance, bitcoinfees, Bitcointalk, Bithumb, BitShares, Bittrex, blockchain.info, BlockTrades, Busy.org, Changelly, @cheetah, Coinbase, DTube, GOBADA, GOPAX, HitBTC, Huobi, LocalBitcoinCash, Localbitcoins, Markdown Cheatsheet, Pexels, Pixabay, Poloniex, Postimage, Shapeshift.io, Steemcleaners, SteemConnect, SteemCreate, steemd, SteemDB, SteemEconomy.com, steem.chat, SteemStats, SteemProjects, Streemian, The Steemit Shop, UpBit, Utopian.io, Vessel, and Yensesa are third party applications/services, and are not owned or maintained by Steemit, Inc. Their listing here, as well as any other third party applications or websites that are listed, does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
 
 All links to user posts were created by our users and do not necessarily represent the views of Steemit, Inc. or its management. Their listing here does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
 

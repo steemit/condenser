@@ -384,7 +384,7 @@ class WalletContent extends Component {
                         <TabContainer id={MAIN_TABS.TRANSACTIONS} title="История транзакций">
                             {this._renderTransactionsTabs()}
                         </TabContainer>
-                        <TabContainer id={MAIN_TABS.POWER} title="Сила голоса">
+                        <TabContainer id={MAIN_TABS.POWER} title="Делегирование">
                             {this._renderTransactionsType()}
                         </TabContainer>
                         <TabContainer id={MAIN_TABS.REWARDS} title="Награды">
@@ -414,7 +414,7 @@ class WalletContent extends Component {
                     <TabContainer id={CURRENCY.GBG} title="Золото">
                         {innerTabs}
                     </TabContainer>
-                    <TabContainer id={CURRENCY.GOLOS_POWER} title="Делегирование">
+                    <TabContainer id={CURRENCY.GOLOS_POWER} title="Сила Голоса">
                         {innerTabs}
                     </TabContainer>
                     <TabContainer id={CURRENCY.SAFE} title="Сейф">

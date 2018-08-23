@@ -11,16 +11,16 @@ export default class TooltipManager extends React.PureComponent {
     componentDidMount() {
         document.addEventListener('mousemove', this._onMouseMove, true);
         document.addEventListener('resize', this._resetTooltips);
-        document.addEventListener('mousedown', this._resetTooltips, true);
-        document.addEventListener('keydown', this._resetTooltips, true);
+        document.addEventListener('mousedown', this._resetTooltipsEvent, true);
+        document.addEventListener('keydown', this._resetTooltipsEvent, true);
         window.addEventListener('scroll', this._resetTooltips);
     }
 
     componentWillUnmount() {
         document.removeEventListener('mousemove', this._onMouseMove, true);
         document.removeEventListener('resize', this._resetTooltips);
-        document.removeEventListener('mousedown', this._resetTooltips, true);
-        document.removeEventListener('keydown', this._resetTooltips, true);
+        document.removeEventListener('mousedown', this._resetTooltipsEvent, true);
+        document.removeEventListener('keydown', this._resetTooltipsEvent, true);
         window.removeEventListener('scroll', this._resetTooltips);
 
         this._resetTooltips();
@@ -46,6 +46,23 @@ export default class TooltipManager extends React.PureComponent {
     }
 
     _onMouseMove = debounce(e => {
+        const hint = e.target.closest('[data-hint]');
+        const hintText = hint ? hint.dataset.hint.trim() : null;
+
+        if (hint && hintText) {
+            if (hintText === this._hoverText) {
+                return;
+            }
+
+            this._resetTooltips();
+
+            this._hoverElement = hint;
+            this._hoverText = hintText;
+
+            this._showTooltip(true);
+            return;
+        }
+
         const tooltip = e.target.closest('[data-tooltip]');
         const text = tooltip ? tooltip.dataset.tooltip.trim() : null;
 
@@ -66,7 +83,7 @@ export default class TooltipManager extends React.PureComponent {
         }
     }, 50);
 
-    _showTooltip() {
+    _showTooltip(isHint) {
         const element = this._hoverElement;
         const bound = element.getBoundingClientRect();
 
@@ -76,6 +93,7 @@ export default class TooltipManager extends React.PureComponent {
             tooltip: {
                 key: ++key,
                 text: this._hoverText,
+                isHint,
                 isHtml: element.dataset.tooltipHtml != null,
                 addClass:
                     bound.left < 100
@@ -118,6 +136,16 @@ export default class TooltipManager extends React.PureComponent {
         if (this.state.tooltip) {
             this._hideTooltip();
         }
+    };
+
+    _resetTooltipsEvent = () => {
+        const { tooltip } = this.state;
+
+        if (tooltip && tooltip.isHint) {
+            return;
+        }
+
+        this._resetTooltips();
     };
 
     _hideTooltip() {

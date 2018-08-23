@@ -1,26 +1,23 @@
 import { Set, List } from 'immutable';
-
 import {
     FAVORITES_COMPLETE_PAGE_LOADING,
-    FAVORITES_TOGGLE,
     FAVORITES_LOADING_STARTED,
     FAVORITES_SET_DATA,
     FAVORITES_SET_PAGE_LOADING,
+    FAVORITES_TOGGLE_REQUEST_SUCCESS,
 } from '../../constants/favorites';
 
-export default function(state, { type, payload }) {
-    if (!state) {
-        state = {
-            isLoading: false,
-            isLoaded: false,
-            list: List(),
-            set: Set(),
-            showList: null,
-            pages: 0,
-            isPageLoading: false,
-        };
-    }
+const initialState = {
+    isLoading: false,
+    isLoaded: false,
+    list: List(),
+    set: Set(),
+    showList: null,
+    pages: 0,
+    isPageLoading: false,
+};
 
+export default function(state = initialState, { type, payload, meta }) {
     switch (type) {
         case FAVORITES_LOADING_STARTED:
             return {
@@ -47,14 +44,14 @@ export default function(state, { type, payload }) {
                 showList: List(payload.list),
                 isPageLoading: false,
             };
-        case FAVORITES_TOGGLE:
+        case FAVORITES_TOGGLE_REQUEST_SUCCESS:
             if (!state.isLoading) {
                 let list;
 
-                if (payload.isAdd) {
-                    list = state.list.push(payload.link);
+                if (meta.isAdd) {
+                    list = state.list.push(meta.link);
                 } else {
-                    list = state.list.filter(link => link !== payload.link);
+                    list = state.list.filter(link => link !== meta.link);
                 }
 
                 return {
@@ -63,6 +60,7 @@ export default function(state, { type, payload }) {
                     set: Set(list),
                 };
             }
+            break;
     }
 
     return state;

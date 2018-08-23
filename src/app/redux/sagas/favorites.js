@@ -1,5 +1,7 @@
-import { call, put, all, select, takeEvery } from 'redux-saga/effects';
+import { put, all, select, takeEvery } from 'redux-saga/effects';
 import { loadUserLazy } from 'src/app/helpers/users';
+import { loadFavoritesAction, toggleFavoriteRequestAction } from '../actions/favorites';
+import DialogManager from 'app/components/elements/common/DialogManager';
 import {
     FAVORITES_COMPLETE_PAGE_LOADING,
     FAVORITES_LOAD,
@@ -8,6 +10,8 @@ import {
     FAVORITES_LOADING_STARTED,
     FAVORITES_SET_DATA,
     FAVORITES_SET_PAGE_LOADING,
+    FAVORITES_REQUEST_SUCCESS,
+    FAVORITES_TOGGLE_REQUEST_ERROR,
 } from '../constants/favorites';
 
 const PAGE_SIZE = 20;
@@ -16,6 +20,8 @@ export default function* watch() {
     yield takeEvery(FAVORITES_LOAD, loadFavorites);
     yield takeEvery(FAVORITES_TOGGLE, toggleFavorite);
     yield takeEvery(FAVORITES_LOAD_NEXT_PAGE, loadFavoritesNextPage);
+    yield takeEvery(FAVORITES_REQUEST_SUCCESS, loadFavoritesSuccess);
+    yield takeEvery(FAVORITES_TOGGLE_REQUEST_ERROR, onToggleRequestError);
 }
 
 function* loadFavorites() {
@@ -27,14 +33,17 @@ function* loadFavorites() {
 
     yield put({ type: FAVORITES_LOADING_STARTED, payload: {} });
 
-    const data = yield call(loadFavoritesList);
+    return; // TODO: Backend not ready yet
+    yield put(loadFavoritesAction());
+}
 
+function* loadFavoritesSuccess({ payload }) {
     const isPageLoading = yield select(state => state.data.favorites.isPageLoading);
 
     yield put({
         type: FAVORITES_SET_DATA,
         payload: {
-            list: data.list,
+            list: payload.list.filter(link => link),
         },
     });
 
@@ -111,10 +120,9 @@ function* loadFavoriteContent() {
 }
 
 function* toggleFavorite({ payload }) {
-    console.log('CALL API TOGGLE FAVORITE', payload);
+    yield put(toggleFavoriteRequestAction(payload.link, payload.isAdd));
 }
 
-function loadFavoritesList() {
-    // Stub
-    return Promise.resolve([]);
+function onToggleRequestError() {
+    DialogManager.alert('Запрос завершился с ошибкой');
 }

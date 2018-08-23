@@ -104,6 +104,8 @@ function* write(socket, writeChannel) {
                 }
             }
         } catch (e) {
+            console.error('Gate error:', e);
+
             yield put({
                 type: 'ADD_NOTIFICATION',
                 payload: {

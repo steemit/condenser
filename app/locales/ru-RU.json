@@ -277,6 +277,10 @@
     "follow": "Подписаться",
     "for": " для ",
     "from": " от ",
+    "gender": {
+      "female": "Женский",
+      "male": "Мужской\n"
+    },
     "generated_password": "Сгенерированный пароль",
     "golos_fest": "Новости Golos.io",
     "hide": "Скрыть",

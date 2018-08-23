@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import is from 'styled-is';
 import { Link } from 'react-router';
 
+import tt from 'counterpart';
 import { FormattedDate } from 'react-intl';
 
 import { repLog10 } from 'app/utils/ParsersAndFormatters';
@@ -121,7 +122,7 @@ const SocialLink = styled(Link)`
     ${is('fb')`
         padding-left: 14px;
         padding-right: 6px;
-    `}
+    `};
 `;
 
 const IconStyled = Icon.extend`
@@ -137,7 +138,7 @@ export default class UserCardAbout extends PureComponent {
 
     render() {
         const { account, followerCount, followingCount } = this.props;
-        const { location, gender, about, website } = normalizeProfile(account.toJS());
+        const { location, gender, about, website, social } = normalizeProfile(account.toJS());
 
         // set account join date
         let accountJoin = account.get('created');
@@ -151,6 +152,11 @@ export default class UserCardAbout extends PureComponent {
             : null;
 
         const reputation = repLog10(account.get('reputation'));
+
+        const localizedGender = {
+            'male': tt('g.gender.male'),
+            'female': tt('g.gender.female')
+        }
 
         return (
             <Card>
@@ -179,9 +185,9 @@ export default class UserCardAbout extends PureComponent {
                     </Row>
 
                     <Row>
-                        {gender && (
+                        {localizedGender[gender] && (
                             <Column>
-                                <Bold>{gender}</Bold>
+                                <Bold>{localizedGender[gender]}</Bold>
                                 <Title>Пол</Title>
                             </Column>
                         )}
@@ -201,7 +207,8 @@ export default class UserCardAbout extends PureComponent {
 
                 {(website || about || location) && (
                     <CardTitle justify="space-between">
-                        О себе{location && <UserCardCity>{location}</UserCardCity>}
+                        О себе
+                        {location && <UserCardCity>{location}</UserCardCity>}
                     </CardTitle>
                 )}
                 {(website || about) && (
@@ -211,20 +218,31 @@ export default class UserCardAbout extends PureComponent {
                     </CardContent>
                 )}
 
-                <SocialBlock justify="space-between">
-                    <SocialLink fb={1} to="#">
-                        <IconStyled name="facebook" width="13" height="24" />
-                    </SocialLink>
-                    <SocialLink to="#">
-                        <IconStyled name="vk" width="28" height="18" />
-                    </SocialLink>
-                    <SocialLink to="#">
-                        <IconStyled name="instagram" size="23" />
-                    </SocialLink>
-                    <SocialLink to="#">
-                        <IconStyled name="twitter" width="26" height="22" />
-                    </SocialLink>
-                </SocialBlock>
+                {social &&
+                    Object.keys(social).length && (
+                        <SocialBlock justify="space-between">
+                            {social.facebook && (
+                                <SocialLink to={`https://facebook.com/${social.facebook}`} fb={1}>
+                                    <IconStyled name="facebook" width="13" height="24" />
+                                </SocialLink>
+                            )}
+                            {social.vkontakte && (
+                                <SocialLink to={`https://vk.com/${social.vkontakte}`}>
+                                    <IconStyled name="vk" width="28" height="18" />
+                                </SocialLink>
+                            )}
+                            {social.instagram && (
+                                <SocialLink to={`https://instagram.com/${social.instagram}`}>
+                                    <IconStyled name="instagram" size="23" />
+                                </SocialLink>
+                            )}
+                            {social.twitter && (
+                                <SocialLink to={`https://twitter.com/${social.twitter}`}>
+                                    <IconStyled name="twitter" width="26" height="22" />
+                                </SocialLink>
+                            )}
+                        </SocialBlock>
+                    )}
             </Card>
         );
     }

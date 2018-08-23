@@ -274,6 +274,10 @@
     "follow": "Follow",
     "for": " for ",
     "from": " from ",
+    "gender": {
+      "female": "Female",
+      "male": "Male"
+    },
     "generated_password": "Generated Password",
     "golos_fest": "Golos.io News",
     "hide": "Hide",

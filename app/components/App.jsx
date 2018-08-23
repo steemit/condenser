@@ -155,14 +155,6 @@ class App extends React.Component {
         }
     };
 
-    toggleOffCanvasMenu(e) {
-        e.preventDefault();
-        // this.setState({open: this.state.open ? null : 'left'});
-        this.refs.side_panel.show();
-    }
-
-    handleClose = () => this.setState({ open: null });
-
     // navigate = (e) => {
     //     const a = e.target.nodeName.toLowerCase() === 'a' ? e.target : e.target.parentNode;
     //     if (a.host !== window.location.host) return;
@@ -173,29 +165,6 @@ class App extends React.Component {
     onEntropyEvent(e) {
         if (e.type === 'mousemove') key_utils.addEntropy(e.pageX, e.pageY, e.screenX, e.screenY);
         else console.log('onEntropyEvent Unknown', e.type, e);
-    }
-
-    isShowInfoBox() {
-        if (process.env.BROWSER) {
-            if (!localStorage.getItem('infobox')) {
-                const init = {
-                    id: 1512732747890, //initial value
-                    show: true,
-                };
-                localStorage.setItem('infobox', JSON.stringify(init));
-                return true;
-            } else {
-                const value = JSON.parse(localStorage.getItem('infobox'));
-                return value.show;
-            }
-        }
-        return false;
-    }
-
-    closeBox() {
-        const infoBox = JSON.parse(localStorage.getItem('infobox'));
-        infoBox.show = false;
-        localStorage.setItem('infobox', JSON.stringify(infoBox));
     }
 
     render() {
@@ -213,7 +182,6 @@ class App extends React.Component {
         const warning = flash.get('warning');
         const success = flash.get('success');
         let callout = null;
-        const showInfoBox = false && this.isShowInfoBox();
 
         if (this.state.showCallout && (alert || warning || success)) {
             callout = (
@@ -222,35 +190,6 @@ class App extends React.Component {
                         <div className="callout">
                             <CloseButton onClick={() => this.setState({ showCallout: false })} />
                             <p>{alert || warning || success}</p>
-                        </div>
-                    </div>
-                </div>
-            );
-        } else if (this.state.showCallout && showInfoBox) {
-            callout = (
-                <div className="App__announcement row">
-                    <div className="column">
-                        <div
-                            className="callout"
-                            style={{
-                                backgroundColor: '#1b519a',
-                                color: 'white',
-                            }}
-                        >
-                            <CloseButton
-                                onClick={() => {
-                                    this.setState({ showCallout: false });
-                                    this.closeBox();
-                                }}
-                            />
-                            <Link
-                                className="link"
-                                to="golosio/@golosio/golos-io-grantovaya-programma-podderzhki-molodykh-avtorov-i-unikalnogo-kontenta"
-                            >
-                                <Icon className="logo-icon" name={APP_ICON} />&nbsp;{tt(
-                                    'g.announcement_text'
-                                )}
-                            </Link>
                         </div>
                     </div>
                 </div>

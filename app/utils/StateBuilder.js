@@ -181,7 +181,8 @@ export default async function getState(api, url, options, offchain, rates) {
                 args.filter_tags = state.filter_tags = options.IGNORE_TAGS
             }
         }
-        const discussions = await api.gedDiscussionsByAsync(discussionsType, args)
+
+        const discussions = await api[PUBLIC_API[discussionsType]](args);
 
         const discussion_idxes = {}
         discussion_idxes[discussionsType] = []

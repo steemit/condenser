@@ -39,7 +39,7 @@ export default class CommonDialog extends React.PureComponent {
                 onCloseClick={this._onCloseClick}
             >
                 <div className="CommonDialog__body">
-                    {text}
+                    {format(text)}
                     {type === 'prompt' ? (
                         <input
                             className="CommonDialog__prompt-input"
@@ -117,4 +117,24 @@ export default class CommonDialog extends React.PureComponent {
     _onCloseClick = () => {
         this.props.onClose();
     };
+}
+
+function format(text) {
+    const lines = text.split('\n');
+
+    if (lines.length === 1) {
+        return text;
+    }
+
+    const components = [];
+
+    for (let i = 0; i < lines.length; ++i) {
+        components.push(lines[i]);
+
+        if (i !== lines.length - 1) {
+            components.push(<br key={i} />);
+        }
+    }
+
+    return components;
 }

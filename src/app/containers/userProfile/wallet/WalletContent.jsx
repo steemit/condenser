@@ -17,6 +17,7 @@ import { MIN_VOICE_POWER } from 'app/client_config';
 import { vestsToGolos, golosToVests, getVesting } from 'app/utils/StateFunctions';
 import transaction from 'app/redux/Transaction';
 import SplashLoader from 'src/app/components/golos-ui/SplashLoader';
+import Linkify from 'src/app/components/common/Linkify';
 
 const DEFAULT_ROWS_LIMIT = 25;
 const LOAD_LIMIT = 500;
@@ -126,7 +127,11 @@ const Who = styled.div`
     overflow: hidden;
 `;
 
-const WhoName = styled.div``;
+const WhoName = styled.div`
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+`;
 
 const WhoTitle = styled.div``;
 
@@ -153,7 +158,7 @@ const TimeStamp = styled.div`
 
 const Memo = styled.div`
     display: flex;
-    flex-grow: 1;
+    flex-grow: 1.5;
     flex-basis: 10px;
     overflow: hidden;
 `;
@@ -646,7 +651,9 @@ class WalletContent extends Component {
                             <MemoIcon name="note" data-tooltip={'Пометка'} />
                             <MemoCut height={50}>
                                 <MemoCentrer>
-                                    <MemoText>{item.memo}</MemoText>
+                                    <MemoText>
+                                        <Linkify>{item.memo}</Linkify>
+                                    </MemoText>
                                 </MemoCentrer>
                             </MemoCut>
                         </Memo>

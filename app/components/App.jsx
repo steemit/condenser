@@ -50,6 +50,7 @@ const availableDomains = [
     'play.google.com',
     't.me',
     'facebook.com',
+    'vk.com',
     'twitter.com',
     'explorer.golos.io',
     'kuna.com.ua',
@@ -137,11 +138,21 @@ class App extends React.Component {
             a.hostname &&
             a.hostname !== window.location.hostname &&
             !availableLinks.includes(a.href) &&
-            !availableDomains.some(domain => new RegExp(`${domain}$`).test(a.hostname))
+            !availableDomains.some(domain =>
+                domain === a.hostname ||
+                domain.endsWith('.' + a.hostname)
+            )
         ) {
             e.stopPropagation();
             e.preventDefault();
-            this.props.router.push(`/leave_page?${a.href}`);
+
+            const url = `/leave_page?${a.href}`;
+
+            if (a.target === '_blank' || e.ctrlKey || e.metaKey) {
+                window.open(url, '_blank');
+            } else {
+                this.props.router.push(url);
+            }
         }
     };
 
@@ -192,7 +203,6 @@ class App extends React.Component {
         const { location, params, children, flash, new_visitor } = this.props;
 
         const route = resolveRoute(location.pathname);
-        const lp = false; //location.pathname === '/';
         const miniHeader = location.pathname === '/create_account';
         const params_keys = Object.keys(params);
         const ip =
@@ -297,7 +307,6 @@ class App extends React.Component {
                 <div
                     className={
                         'App' +
-                        (lp ? ' LP' : '') +
                         (ip ? ' index-page' : '') +
                         (miniHeader ? ' mini-' : '')
                     }

@@ -9,12 +9,10 @@ import Footer from 'app/components/modules/Footer';
 import TooltipManager from 'app/components/elements/common/TooltipManager';
 import user from 'app/redux/User';
 import g from 'app/redux/GlobalReducer';
-import { Link } from 'react-router';
 import resolveRoute from 'app/ResolveRoute';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import Dialogs from '@modules/Dialogs';
 import Modals from '@modules/Modals';
-import Icon from '@elements/Icon';
 import ScrollButton from '@elements/ScrollButton';
 import { key_utils } from 'golos-js/lib/auth/ecc';
 import MiniHeader from '@modules/MiniHeader';
@@ -27,7 +25,7 @@ import defaultTheme from 'src/app/themes';
 import Notifications from 'src/app/components/common/Notifications';
 import { init as initAnchorHelper } from 'app/utils/anchorHelper';
 
-import { APP_ICON, VEST_TICKER } from 'app/client_config';
+import { VEST_TICKER } from 'app/client_config';
 
 injectGlobal`
     body {
@@ -50,6 +48,7 @@ const availableDomains = [
     't.me',
     'facebook.com',
     'vk.com',
+    'instagram.com',
     'twitter.com',
     'explorer.golos.io',
     'kuna.com.ua',

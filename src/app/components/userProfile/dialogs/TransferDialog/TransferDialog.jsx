@@ -164,7 +164,7 @@ class TransferDialog extends PureComponent {
                 onCloseClick={this._onCloseClick}
             >
                 <Content>
-                    <SubHeader>Отправить средства на другой счет.</SubHeader>
+                    <SubHeader>Отправить средства на другой аккаунт</SubHeader>
                     <Body>
                         <Column>
                             <Section>

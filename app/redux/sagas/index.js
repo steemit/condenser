@@ -4,7 +4,7 @@ import { marketWatches } from 'app/redux/sagas/market';
 import { sharedWatches } from 'app/redux/sagas/shared';
 import { userWatches } from 'app/redux/sagas/user';
 import { authWatches } from 'app/redux/sagas/auth';
-import favoriteWatch from 'src/app/redux/sagas/favorite';
+import favoritesWatch from 'src/app/redux/sagas/favorites';
 import pinnedPostsWatch from 'src/app/redux/sagas/pinnedPosts';
 import { transactionWatches } from 'app/redux/sagas/transaction';
 import gateWatches from 'src/app/redux/sagas/gate';
@@ -20,6 +20,6 @@ export default function* rootSaga() {
   yield fork(marketWatches)
   yield fork(gateWatches)
   yield fork(notificationsOnlineWatches)
-  yield fork(favoriteWatch)
+  yield fork(favoritesWatch)
   yield fork(pinnedPostsWatch)
 }

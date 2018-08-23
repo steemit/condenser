@@ -8,8 +8,6 @@ import { Link } from 'react-router';
 import { TabLink as StyledTabLink, TabLinkIndex as StyledTabLinkIndex } from 'golos-ui/Tab';
 import Icon from 'golos-ui/Icon';
 
-import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdown';
-import VerticalMenu from 'app/components/elements/VerticalMenu';
 import Container from 'src/app/components/common/Container';
 import { changeProfileLayout } from 'src/app/redux/actions/ui';
 
@@ -98,12 +96,15 @@ class UserNavigation extends PureComponent {
 
         const tabLinks = [];
 
-        if (isOwner) {
-            tabLinks.push({ value: 'Избранное', to: `/@${accountName}/favorite` });
-        }
-
         tabLinks.push(
             { value: tt('g.comments'), to: `/@${accountName}/comments` },
+        );
+
+        // if (isOwner) {
+        //     tabLinks.push({ value: 'Избранное', to: `/@${accountName}/favorites` });
+        // }
+
+        tabLinks.push(
             { value: tt('g.replies'), to: `/@${accountName}/recent-replies` },
             { value: tt('g.wallet'), to: `/@${accountName}/transfers` },
         );

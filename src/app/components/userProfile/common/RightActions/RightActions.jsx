@@ -76,7 +76,7 @@ export default class RightActions extends PureComponent {
                 </Action>
                 <Action onClick={this._onDelegateClick}>
                     <ActionIcon name="voice" />
-                    <ActionTitle>Делегировать/уменьшить СГ</ActionTitle>
+                    <ActionTitle>Делегировать Силу Голоса</ActionTitle>
                 </Action>
                 <Action last onClick={this._onConvertClick}>
                     <ActionIcon name="refresh" />

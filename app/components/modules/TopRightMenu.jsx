@@ -79,7 +79,7 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
     const walletLink = `/@${username}/transfers`;
     const settingsLink = `/@${username}/settings`;
     const accountLink = `/@${username}`;
-    const favoriteLink = `/@${username}/favorite`;
+    const favoritesLink = `/@${username}/favorites`;
     const commentsLink = `/@${username}/comments`;
     const reset_password_link = `/@${username}/password`;
 
@@ -141,9 +141,9 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
         let user_menu = [
             {link: feedLink, icon: 'new/home', iconSize: '1_25x', value: tt('g.feed')},
             {link: accountLink, icon: 'new/blogging', value: tt('g.blog')},
-            {link: favoriteLink, icon: 'new/blogging', value: 'Избранное'},
             {link: commentsLink, icon: 'new/comment', value: tt('g.comments')},
             {link: repliesLink, icon: 'new/answer', value: tt('g.replies')},
+            //{link: favoritesLink, icon: 'new/blogging', value: 'Избранное'},
             {link: walletLink, icon: 'new/wallet', value: tt('g.wallet')},
             {link: reset_password_link, icon: 'key', value: tt('g.change_password')},
             {link: settingsLink, icon: 'new/setting', value: tt('g.settings')},

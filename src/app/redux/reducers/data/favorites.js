@@ -1,11 +1,11 @@
 import { Set, List } from 'immutable';
 
 import {
-    FAVORITE_COMPLETE_PAGE_LOADING,
-    FAVORITE_TOGGLE,
-    FAVORITE_LOADING_STARTED,
-    FAVORITE_SET_DATA,
-    FAVORITE_SET_PAGE_LOADING,
+    FAVORITES_COMPLETE_PAGE_LOADING,
+    FAVORITES_TOGGLE,
+    FAVORITES_LOADING_STARTED,
+    FAVORITES_SET_DATA,
+    FAVORITES_SET_PAGE_LOADING,
 } from '../../constants/favorites';
 
 export default function(state, { type, payload }) {
@@ -22,12 +22,12 @@ export default function(state, { type, payload }) {
     }
 
     switch (type) {
-        case FAVORITE_LOADING_STARTED:
+        case FAVORITES_LOADING_STARTED:
             return {
                 ...state,
                 isLoading: true,
             };
-        case FAVORITE_SET_DATA:
+        case FAVORITES_SET_DATA:
             return {
                 ...state,
                 isLoading: false,
@@ -35,19 +35,19 @@ export default function(state, { type, payload }) {
                 list: List(payload.list),
                 set: Set(payload.list),
             };
-        case FAVORITE_SET_PAGE_LOADING:
+        case FAVORITES_SET_PAGE_LOADING:
             return {
                 ...state,
                 pages: state.pages + 1,
                 isPageLoading: true,
             };
-        case FAVORITE_COMPLETE_PAGE_LOADING:
+        case FAVORITES_COMPLETE_PAGE_LOADING:
             return {
                 ...state,
                 showList: List(payload.list),
                 isPageLoading: false,
             };
-        case FAVORITE_TOGGLE:
+        case FAVORITES_TOGGLE:
             if (!state.isLoading) {
                 let list;
 

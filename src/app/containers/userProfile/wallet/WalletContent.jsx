@@ -281,6 +281,12 @@ const EmptyBlock = styled.div`
     color: #c5c5c5;
 `;
 
+const EmptySubText = styled.div`
+    margin-top: 10px;
+    line-height: 1.2em;
+    font-size: 18px;
+`;
+
 const LoaderWrapper = styled.div`
     display: flex;
     padding: 20px 0;
@@ -384,7 +390,7 @@ class WalletContent extends Component {
                         <TabContainer id={MAIN_TABS.TRANSACTIONS} title="История транзакций">
                             {this._renderTransactionsTabs()}
                         </TabContainer>
-                        <TabContainer id={MAIN_TABS.POWER} title="Сила голоса">
+                        <TabContainer id={MAIN_TABS.POWER} title="Делегирование">
                             {this._renderTransactionsType()}
                         </TabContainer>
                         <TabContainer id={MAIN_TABS.REWARDS} title="Награды">
@@ -487,7 +493,7 @@ class WalletContent extends Component {
 
     _renderList() {
         const { pageAccount } = this.props;
-        const { mainTab, rewardTab } = this.state;
+        const { mainTab, rewardTab, rewardType } = this.state;
 
         if (!pageAccount) {
             return <Loader />;
@@ -520,6 +526,24 @@ class WalletContent extends Component {
 
             return <Lines>{list.map((item, i) => this._renderLine(item, i))}</Lines>;
         } else {
+            if (mainTab === MAIN_TABS.REWARDS) {
+                if (rewardType === REWARDS_TYPES.AUTHOR) {
+                    return (
+                        <EmptyBlock>
+                            Тут пока пусто
+                            <EmptySubText>Начни писать посты, чтобы получать награду.</EmptySubText>
+                        </EmptyBlock>
+                    );
+                } else {
+                    return (
+                        <EmptyBlock>
+                            Тут пока пусто
+                            <EmptySubText>Начни комментировать и ставить лайки, чтобы получать награду.</EmptySubText>
+                        </EmptyBlock>
+                    );
+                }
+            }
+
             return <EmptyBlock>Список пуст</EmptyBlock>;
         }
     }

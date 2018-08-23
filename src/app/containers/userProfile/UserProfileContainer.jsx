@@ -28,12 +28,19 @@ const Main = styled.div`
 const SidebarLeft = styled.div`
     flex-basis: 273px;
     flex-shrink: 0;
+    
+    @media (max-width: 890px) {
+        order: 2;
+    }
 `;
 
 const Content = styled.div`
     flex-shrink: 1;
     flex-grow: 1;
     margin: 0 18px;
+    min-width: 280px;
+    max-width: 618px;
+    
 
     &:first-child {
         margin-left: 0;
@@ -47,11 +54,21 @@ const Content = styled.div`
         flex-shrink: 0;
         flex-grow: 0;
     `}
+    
+    @media (max-width: 890px) {
+        order: 3;
+        max-width: none;
+    }
 `;
 
 const SidebarRight = styled.div`
     width: 273px;
     flex-shrink: 0;
+    
+    @media (max-width: 890px) {
+        width: 100%;
+        order: 1;
+    }
 `;
 
 export default class UserProfileContainer extends Component {

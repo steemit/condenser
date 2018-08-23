@@ -11,7 +11,7 @@ const Container = styled(Flex)`
     }
 
     ${is('small')`
-        @media (max-width: 576px) {
+        @media (max-width: 890px) {
             margin: 0 auto;
             flex-direction: column;
             align-items: normal;

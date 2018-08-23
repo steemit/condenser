@@ -74,6 +74,10 @@ const IconWrap = styled.div`
     &:hover {
         color: #393636;
     }
+    
+    @media (max-width: 1200px) {
+        display: none;
+    }
 `;
 
 const SimpleIcon = Icon.extend`

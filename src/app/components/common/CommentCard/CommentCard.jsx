@@ -120,6 +120,15 @@ const Footer = styled.div`
     & > * {
         pointer-events: initial;
     }
+
+    @media (min-width: 890px) and (max-width: 1000px), (max-width: 420px) {
+        flex-direction: column;
+
+        & > div:first-child {
+            width: 100%;
+            justify-content: space-between;
+        }
+    }
 `;
 
 const Filler = styled.div`
@@ -129,7 +138,7 @@ const Filler = styled.div`
 const Root = styled.div`
     position: relative;
     border-radius: 8px;
-    background: #fff;
+    background: #ffffff;
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.06);
 `;
 

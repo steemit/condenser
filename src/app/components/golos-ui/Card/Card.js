@@ -14,14 +14,15 @@ const Card = styled(Flex)`
 
     overflow: hidden;
 
-    @media (max-width: 576px) {
+    @media (max-width: 890px) {
         border-radius: 0;
         box-shadow: none;
+        margin-bottom: 20px;
     }
 `;
 Card.defaultProps = {
     column: true
-}
+};
 export default Card;
 
 export const CardTitle = styled(Flex)`

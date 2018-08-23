@@ -167,14 +167,14 @@ export default class UserCardAbout extends PureComponent {
                             <Title>Постов</Title>
                         </Column>
                         <Column>
-                            <Bold>{followingCount}</Bold>
+                            <Bold>{followerCount}</Bold>
                             <Title>Подписчиков</Title>
                         </Column>
                     </Row>
 
                     <Row>
                         <Column>
-                            <Bold>{followerCount}</Bold>
+                            <Bold>{followingCount}</Bold>
                             <Title>Подписок</Title>
                         </Column>
                         <Column>

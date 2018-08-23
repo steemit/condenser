@@ -46,6 +46,23 @@ export default class TooltipManager extends React.PureComponent {
     }
 
     _onMouseMove = debounce(e => {
+        const hint = e.target.closest('[data-hint]');
+        const hintText = hint ? hint.dataset.hint.trim() : null;
+
+        if (hint && hintText) {
+            if (hintText === this._hoverText) {
+                return;
+            }
+
+            this._resetTooltips();
+
+            this._hoverElement = hint;
+            this._hoverText = hintText;
+
+            this._showTooltip();
+            return;
+        }
+
         const tooltip = e.target.closest('[data-tooltip]');
         const text = tooltip ? tooltip.dataset.tooltip.trim() : null;
 

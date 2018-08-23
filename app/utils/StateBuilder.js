@@ -3,15 +3,7 @@ import { PUBLIC_API } from 'app/client_config'
 import { processBlog } from 'shared/state';
 import { reveseTag, prepareTrendingTags } from 'app/utils/tags'
 
-const DEFAULT_VOTE_LIMIT = 10000
-
-const isHardfork = (v) => v.split('.')[1] === '18'
-
-setTimeout(() => {
-    if (process.env.BROWSER) {
-        alert(3);
-    }
-}, 1000);
+const DEFAULT_VOTE_LIMIT = 10000;
 
 export default async function getState(api, url, options, offchain, rates) {
     if (!url || typeof url !== 'string' || !url.length || url === '/') url = 'trending'
@@ -23,7 +15,7 @@ export default async function getState(api, url, options, offchain, rates) {
 
     const state = {}
     state.current_route = `/${url}`
-    state.props = await api.getDynamicGlobalProperties()
+    state.props = await api.getDynamicGlobalPropertiesAsync();
     state.categories = {}
     state.tags = {}
     state.content = {}
@@ -33,13 +25,10 @@ export default async function getState(api, url, options, offchain, rates) {
     state.select_tags = []
     state.rates = rates;
 
-    // const hardfork_version = await api.getHardforkVersion()
-    // state.is_hardfork = isHardfork(hardfork_version)
-
     let accounts = new Set()
 
     // by default trending tags limit=50, but if we in '/tags/' path then limit = 250
-    const trending_tags = await api.getTrendingTags('', parts[0] == 'tags' ? '250' : '50')
+    const trending_tags = await api.getTrendingTagsAsync('', parts[0] === 'tags' ? '250' : '50')
 
     state.tag_idx = {
         'trending': prepareTrendingTags(trending_tags)
@@ -47,16 +36,16 @@ export default async function getState(api, url, options, offchain, rates) {
 
     if (parts[0][0] === '@') {
         const uname = parts[0].substr(1)
-        const [ account ] = await api.getAccounts([uname])
+        const [ account ] = await api.getAccountsAsync([uname])
         state.accounts[uname] = account
 
         if (account) {
-            state.accounts[uname].tags_usage = await api.getTagsUsedByAuthor(uname)
-            state.accounts[uname].guest_bloggers = await api.getBlogAuthors(uname)
+            state.accounts[uname].tags_usage = await api.getTagsUsedByAuthorAsync(uname)
+            state.accounts[uname].guest_bloggers = await api.getBlogAuthorsAsync(uname)
 
             switch (parts[1]) {
                 case 'transfers':
-                    const history = await api.getAccountHistory(uname, -1, 1000)
+                    const history = await api.getAccountHistoryAsync(uname, -1, 1000)
                     account.transfer_history = []
                     account.other_history = []
 
@@ -86,7 +75,7 @@ export default async function getState(api, url, options, offchain, rates) {
                 break
 
                 case 'recent-replies':
-                    const replies = await api.getRepliesByLastUpdate(uname, '', 50, DEFAULT_VOTE_LIMIT)
+                    const replies = await api.getRepliesByLastUpdateAsync(uname, '', 50, DEFAULT_VOTE_LIMIT)
                     state.accounts[uname].recent_replies = []
 
                     replies.forEach(reply => {
@@ -98,7 +87,7 @@ export default async function getState(api, url, options, offchain, rates) {
 
                 case 'posts':
                 case 'comments':
-                    const comments = await api.getDiscussionsByComments({ start_author: uname, limit: 20 })
+                    const comments = await api.getDiscussionsByCommentsAsync({ start_author: uname, limit: 20 })
                     state.accounts[uname].comments = []
 
                     comments.forEach(comment => {
@@ -109,14 +98,14 @@ export default async function getState(api, url, options, offchain, rates) {
                 break
 
                 case 'feed':
-                    const feedEntries = await api.getFeedEntries(uname, 0, 20)
+                    const feedEntries = await api.getFeedEntriesAsync(uname, 0, 20)
                     state.accounts[uname].feed = []
 
                     for (let key in feedEntries) {
                         const { author, permlink } = feedEntries[key]
                         const link = `${author}/${permlink}`
                         state.accounts[uname].feed.push(link)
-                        state.content[link] = await api.getContent(author, permlink, DEFAULT_VOTE_LIMIT)
+                        state.content[link] = await api.getContentAsync(author, permlink, DEFAULT_VOTE_LIMIT)
 
                         if (feedEntries[key].reblog_by.length > 0) {
                             state.content[link].first_reblogged_by = feedEntries[key].reblog_by[0]
@@ -140,16 +129,16 @@ export default async function getState(api, url, options, offchain, rates) {
             }
         }
 
-    } else if (parts.length === 3 && parts[1].length > 0 && parts[1][0] == '@') {
+    } else if (parts.length === 3 && parts[1].length > 0 && parts[1][0] === '@') {
         const account = parts[1].substr(1)
         const category = parts[0]
         const permlink = parts[2]
 
         const curl = `${account}/${permlink}`
-        state.content[curl] = await api.getContent(account, permlink, DEFAULT_VOTE_LIMIT)
+        state.content[curl] = await api.getContentAsync(account, permlink, DEFAULT_VOTE_LIMIT)
         accounts.add(account)
 
-        const replies = await api.getAllContentReplies(account, permlink, DEFAULT_VOTE_LIMIT)
+        const replies = await api.getAllContentRepliesAsync(account, permlink, DEFAULT_VOTE_LIMIT)
 
        for (let key in replies) {
             let reply = replies[key]
@@ -163,7 +152,7 @@ export default async function getState(api, url, options, offchain, rates) {
         }
 
     } else if (parts[0] === 'witnesses' || parts[0] === '~witnesses') {
-        const witnesses = await api.getWitnessesByVote('', 100)
+        const witnesses = await api.getWitnessesByVoteAsync('', 100)
         witnesses.forEach( witness => {
             state.witnesses[witness.owner] = witness
         })
@@ -192,7 +181,7 @@ export default async function getState(api, url, options, offchain, rates) {
                 args.filter_tags = state.filter_tags = options.IGNORE_TAGS
             }
         }
-        const discussions = await api.gedDiscussionsBy(discussionsType, args)
+        const discussions = await api.gedDiscussionsByAsync(discussionsType, args)
 
         const discussion_idxes = {}
         discussion_idxes[discussionsType] = []
@@ -209,16 +198,16 @@ export default async function getState(api, url, options, offchain, rates) {
 
         state.discussion_idx[discussions_key] = discussion_idxes
 
-    } else if (parts[0] == 'tags') {
+    } else if (parts[0] === 'tags') {
         const tags = {}
         trending_tags.forEach (tag => tags[tag.name] = tag)
         state.tags = tags
     }
 
     if (accounts.size > 0) {
-        const acc = await api.getAccounts(Array.from(accounts))
+        const acc = await api.getAccountsAsync(Array.from(accounts))
         acc.forEach(account =>  state.accounts[ account.name ] = account)
     }
 
-    return Promise.resolve(state)
+    return state;
 }

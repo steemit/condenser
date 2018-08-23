@@ -7,6 +7,7 @@ import { Link } from 'react-router';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import PostsListBlog from 'src/app/components/common/PostsList/PostsListBlog';
 import InfoBlock from 'src/app/components/common/InfoBlock';
+import EmptyBlock, { EmptySubText } from 'src/app/components/common/EmptyBlock';
 
 const Loader = styled(LoadingIndicator)`
     margin-top: 30px;
@@ -43,18 +44,19 @@ class BlogContent extends Component {
         return (
             <InfoBlock>
                 {isOwner ? (
-                    <Fragment>
-                        {tt('submit_a_story.you_hasnt_started_bloggin_yet')}
-                        <br />
-                        <br />
-                        <Link to="/submit">{tt('g.submit_a_story')}</Link>
-                        <br />
-                        <Link to="/welcome">{tt('submit_a_story.welcome_to_the_blockchain')}</Link>
-                    </Fragment>
+                    <EmptyBlock>
+                        Тут пока пусто
+                        <EmptySubText>
+                            Можешь написать свой первый пост с тегами{' '}
+                            <Link to="/submit">#голос</Link> <Link to="/submit">#знакомство</Link>.
+                        </EmptySubText>
+                    </EmptyBlock>
                 ) : (
-                    tt('user_profile.user_hasnt_started_bloggin_yet', {
-                        name: pageAccount.get('name'),
-                    })
+                    <EmptyBlock>
+                        {tt('user_profile.user_hasnt_started_bloggin_yet', {
+                            name: pageAccount.get('name'),
+                        })}
+                    </EmptyBlock>
                 )}
             </InfoBlock>
         );

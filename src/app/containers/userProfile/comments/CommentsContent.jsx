@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import PostsListBlog from 'src/app/components/common/PostsList/PostsListBlog';
 import InfoBlock from 'src/app/components/common/InfoBlock';
+import EmptyBlock, { EmptySubText } from 'src/app/components/common/EmptyBlock';
 
 const Loader = styled(LoadingIndicator)`
     margin-top: 30px;
@@ -25,7 +26,12 @@ class CommentsContent extends Component {
         if (!posts.size) {
             return (
                 <InfoBlock>
-                    Похоже, что {pageUserName} ещё не оставил ни одного комментария!
+                    <EmptyBlock>
+                        Тут пока пусто
+                        {isOwner ? (
+                            <EmptySubText>Начни писать комментарии к постам.</EmptySubText>
+                        ) : null}
+                    </EmptyBlock>
                 </InfoBlock>
             );
         }
@@ -49,6 +55,6 @@ export default connect((state, props) => {
 
     return {
         pageAccount,
-        isOwner
+        isOwner,
     };
 })(CommentsContent);

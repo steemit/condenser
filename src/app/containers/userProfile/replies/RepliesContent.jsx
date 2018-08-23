@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import InfoBlock from 'src/app/components/common/InfoBlock';
 import PostsListBlog from 'src/app/components/common/PostsList/PostsListBlog';
+import EmptyBlock, { EmptySubText } from 'src/app/components/common/EmptyBlock';
 
 const Loader = styled(LoadingIndicator)`
     margin-top: 30px;
@@ -22,7 +23,14 @@ class RepliesContent extends Component {
         if (!posts.size) {
             return (
                 <InfoBlock>
-                    Ответов нет
+                    <EmptyBlock>
+                        Тут пока пусто
+                        {isOwner ? (
+                            <EmptySubText>
+                                Начни писать посты и получать комментарии от пользователей.
+                            </EmptySubText>
+                        ) : null}
+                    </EmptyBlock>
                 </InfoBlock>
             );
         }

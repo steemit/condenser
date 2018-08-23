@@ -198,7 +198,7 @@ class DelegateVestingDialog extends PureComponent {
                         activeId={type}
                         buttons={[
                             { id: TYPES.DELEGATE, title: 'Делегировать' },
-                            { id: TYPES.CANCEL, title: 'Текущие' },
+                            { id: TYPES.CANCEL, title: 'Отправленные' },
                         ]}
                         onClick={this._onTypeClick}
                     />
@@ -212,7 +212,7 @@ class DelegateVestingDialog extends PureComponent {
                                 </Shrink>
                             </SubHeader>
                             <Content>
-                                <Body style={{ height: this._getBodyHeight() }}>
+                                <Body style={{ height: 'auto' }}>
                                     {this._renderDelegateBody(params)}
                                 </Body>
                                 <Footer>
@@ -336,31 +336,19 @@ class DelegateVestingDialog extends PureComponent {
         }
     }
 
-    _getBodyHeight() {
-        const { type } = this.state;
-
-        // This height constants taken by experimental way from actual height in browser
-        // Heights needs from smooth height animation
-        // TODO
-        return 'auto';
-    }
-
     _getHintText() {
         const { type } = this.state;
 
         switch (type) {
             case TYPES.DELEGATE:
                 return [
-                    'Часть своей Силы Голоса вы решили делегировать другим пользователям. В любой момент вы можете отменить делегирование.',
-                    'Как дела? Тестовая строка',
-                    'Как дела? Тестовая строка - 2',
-                ];
-            case TYPES.CANCEL:
-                return [
-                    'Сила Голоса неперемещаемая, её количество увеличивается при долгосрочном хранении. Чем больше у Вас Силы Голоса, тем сильней вы влияете на вознаграждения за пост и тем больше зарабатываете за голосование.',
-                    'Силу Голоса нельзя передать, и Вам потребуются 20 недель, чтобы перевести её обратно в токены GOLOS.',
+                    'Вы можете делегировать другим пользователям часть своей Силы Голоса.',
+                    'Отменить делегирование или изменить сумму возможно в любой момент. ' +
+                        'При отмене делегированная Сила Голоса вернется вам через 7 дней.',
                 ];
         }
+
+        return [];
     }
 
     _onAmountChange = e => {

@@ -10,6 +10,7 @@ const Root = styled.div``;
 const DelegationLines = styled.div`
     overflow-y: auto;
     height: 230px;
+    margin-bottom: 1px;
 `;
 
 const DelegationLine = styled.div`

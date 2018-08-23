@@ -72,7 +72,7 @@ const Online = ({ isChanging, onSubmitGate }) => {
                         <Field name="b">
                             {({ input }) => (
                                 <FormGroupRow>
-                                    <LabelRow dark>Количество лайков и комментариев за сутки</LabelRow>
+                                    <LabelRow dark>Количество полученных лайков и комментариев за сутки</LabelRow>
                                     <Switcher {...input} />
                                 </FormGroupRow>
                             )}
@@ -80,7 +80,7 @@ const Online = ({ isChanging, onSubmitGate }) => {
                         <Field name="c">
                             {({ input }) => (
                                 <FormGroupRow>
-                                    <LabelRow dark>Количество авторских и кураторских наград за неделю</LabelRow>
+                                    <LabelRow dark>Награда за пост</LabelRow>
                                     <Switcher {...input} />
                                 </FormGroupRow>
                             )}
@@ -88,7 +88,7 @@ const Online = ({ isChanging, onSubmitGate }) => {
                         <Field name="c">
                             {({ input }) => (
                                 <FormGroupRow>
-                                    <LabelRow dark>Количество лайков или награды одного поста</LabelRow>
+                                    <LabelRow dark>Количество поставленных лайков за сутки</LabelRow>
                                     <Switcher {...input} />
                                 </FormGroupRow>
                             )}
@@ -96,7 +96,7 @@ const Online = ({ isChanging, onSubmitGate }) => {
                         <Field name="c">
                             {({ input }) => (
                                 <FormGroupRow>
-                                    <LabelRow dark>Мощность Голоса за сутки</LabelRow>
+                                    <LabelRow dark>Количество поставленных лайков за сутки</LabelRow>
                                     <Switcher {...input} />
                                 </FormGroupRow>
                             )}
@@ -104,7 +104,7 @@ const Online = ({ isChanging, onSubmitGate }) => {
                         <Field name="c">
                             {({ input }) => (
                                 <FormGroupRow>
-                                    <LabelRow dark>Уведомление о публикации поста автора, на которого вы подписаны</LabelRow>
+                                    <LabelRow dark>Уведомление о публикации автора, на которого вы подписаны</LabelRow>
                                     <Switcher {...input} />
                                 </FormGroupRow>
                             )}

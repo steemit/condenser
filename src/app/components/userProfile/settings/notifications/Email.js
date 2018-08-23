@@ -52,7 +52,7 @@ const Email = ({ isChanging, onSubmitGate }) => {
                 <form onSubmit={handleSubmit}>
                     <CardContent column>
                         <FormGroup>
-                            <Label dark>Мгновенные уведомления на сайте</Label>
+                            <Label dark>Уведомления в почте</Label>
                             <Field name="a">
                                 {({ input }) => (
                                     <FormGroupRow>
@@ -60,7 +60,7 @@ const Email = ({ isChanging, onSubmitGate }) => {
                                             <Icon name="bell" width="19" height="20" />
                                         </LabelIcon>
                                         <LabelRow dark>
-                                            Включить/выключить все онлайн уведомления
+                                            Включить/выключить все e-mail уведомления
                                         </LabelRow>
                                         <Switcher {...input} />
                                     </FormGroupRow>
@@ -83,7 +83,7 @@ const Email = ({ isChanging, onSubmitGate }) => {
                                     <LabelIcon active={input.value}>
                                         <Icon name="like" width="19" height="20" />
                                     </LabelIcon>
-                                    <LabelRow dark>Лайк(голос)</LabelRow>
+                                    <LabelRow dark>Лайк (голос)</LabelRow>
                                     <Switcher {...input} />
                                 </FormGroupRow>
                             )}
@@ -94,7 +94,7 @@ const Email = ({ isChanging, onSubmitGate }) => {
                                     <LabelIcon active={input.value}>
                                         <Icon name="dislike" width="18" height="18" />
                                     </LabelIcon>
-                                    <LabelRow dark>Дизлайк(жалоба)</LabelRow>
+                                    <LabelRow dark>Дизлайк (флаг)</LabelRow>
                                     <Switcher {...input} />
                                 </FormGroupRow>
                             )}
@@ -150,7 +150,7 @@ const Email = ({ isChanging, onSubmitGate }) => {
                                         <Icon name="at" width="17" height="17" />
                                     </LabelIcon>
                                     <LabelRow dark>
-                                        Упоминание в посте или комменте через @
+                                        Упоминание в посте или комментарии
                                     </LabelRow>
                                     <Switcher {...input} />
                                 </FormGroupRow>
@@ -173,7 +173,7 @@ const Email = ({ isChanging, onSubmitGate }) => {
                                     <LabelIcon active={input.value}>
                                         <Icon name="a" width="14" height="15" />
                                     </LabelIcon>
-                                    <LabelRow dark>Награда пользователю</LabelRow>
+                                    <LabelRow dark>Авторская награда</LabelRow>
                                     <Switcher {...input} />
                                 </FormGroupRow>
                             )}
@@ -184,7 +184,7 @@ const Email = ({ isChanging, onSubmitGate }) => {
                                     <LabelIcon active={input.value}>
                                         <Icon name="k" width="13" height="15" />
                                     </LabelIcon>
-                                    <LabelRow dark>Награда куратору</LabelRow>
+                                    <LabelRow dark>Кураторская награда</LabelRow>
                                     <Switcher {...input} />
                                 </FormGroupRow>
                             )}
@@ -217,7 +217,7 @@ const Email = ({ isChanging, onSubmitGate }) => {
                             {({ input }) => (
                                 <FormGroupRow>
                                     <LabelRow dark>
-                                        Количество лайков или награды одного поста
+                                        Награда за пост
                                     </LabelRow>
                                     <Switcher {...input} />
                                 </FormGroupRow>
@@ -227,7 +227,7 @@ const Email = ({ isChanging, onSubmitGate }) => {
                             {({ input }) => (
                                 <FormGroupRow>
                                     <LabelRow dark>
-                                        Мощность Голоса за сутки
+                                        Количество поставленных лайков за сутки
                                     </LabelRow>
                                     <Switcher {...input} />
                                 </FormGroupRow>

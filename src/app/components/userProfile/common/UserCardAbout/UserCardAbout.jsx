@@ -82,7 +82,6 @@ const Title = styled.div`
     font-size: 14px;
     font-weight: 300;
     line-height: 1;
-    text-transform: lowercase;
 `;
 
 const UserCardCity = styled.div`
@@ -154,9 +153,9 @@ export default class UserCardAbout extends PureComponent {
         const reputation = repLog10(account.get('reputation'));
 
         const localizedGender = {
-            'male': tt('g.gender.male'),
-            'female': tt('g.gender.female')
-        }
+            male: tt('g.gender.male'),
+            female: tt('g.gender.female'),
+        };
 
         return (
             <Card>
@@ -192,15 +191,10 @@ export default class UserCardAbout extends PureComponent {
                             </Column>
                         )}
                         <Column>
-                            <Bold>
-                                <FormattedDate
-                                    value={accountJoin}
-                                    year="numeric"
-                                    month="numeric"
-                                    day="numeric"
-                                />
-                            </Bold>
-                            <Title>Дата регистрации</Title>
+                            <Title>
+                                На Golos с{' '}
+                                <FormattedDate value={accountJoin} year="numeric" month="numeric" />
+                            </Title>
                         </Column>
                     </Row>
                 </CardContentCounters>

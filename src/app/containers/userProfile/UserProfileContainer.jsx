@@ -18,7 +18,7 @@ import Container from 'src/app/components/common/Container';
 import UserHeader from 'src/app/components/userProfile/common/UserHeader';
 import UserNavigation from 'src/app/components/userProfile/common/UserNavigation';
 import UserCardAbout from 'src/app/components/userProfile/common/UserCardAbout';
-import { FAVORITE_LOAD } from '../../redux/constants/favorites';
+import { FAVORITES_LOAD } from 'src/app/redux/constants/favorites';
 
 const Main = styled.div`
     background-color: #f9f9f9;
@@ -127,7 +127,7 @@ export default class UserProfileContainer extends Component {
                 <UserNavigation
                     accountName={currentAccount.get('name')}
                     isOwner={isOwner}
-                    showLayout={!route || route === 'blog' || route === 'favorite'}
+                    showLayout={!route || route === 'blog' || route === 'favorites'}
                 />
                 <Main>
                     <Container align="flex-start" justify="center" small>
@@ -207,10 +207,10 @@ module.exports = {
             },
         },
         {
-            path: 'favorite',
+            path: 'favorites',
             getComponents(nextState, cb) {
                 cb(null, {
-                    content: require('./favorite/FavoriteContent').default,
+                    content: require('./favorites/FavoritesContent').default,
                     sidebarRight: require('../../components/userProfile/common/RightPanel').default,
                 });
             },
@@ -279,7 +279,7 @@ module.exports = {
             },
             loadFavorites() {
                 dispatch({
-                    type: FAVORITE_LOAD,
+                    type: FAVORITES_LOAD,
                     payload: {},
                 });
             }

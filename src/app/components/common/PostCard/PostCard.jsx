@@ -16,8 +16,8 @@ import user from 'app/redux/User';
 import transaction from 'app/redux/Transaction';
 import VotePanel from '../VotePanel';
 import { confirmVote } from 'src/app/helpers/votes';
-import { toggleFavoriteAction } from 'src/app/redux/actions/favorite';
-import { togglePinAction } from '../../../redux/actions/pinnedPosts';
+import { toggleFavoriteAction } from 'src/app/redux/actions/favorites';
+import { togglePinAction } from 'src/app/redux/actions/pinnedPosts';
 
 const Header = styled.div`
     padding: 10px 0 6px;
@@ -515,7 +515,7 @@ export default connect(
         return {
             myAccount: myAccountName,
             data: state.global.getIn(['content', props.permLink]),
-            isFavorite: state.data.favorite.set.has(props.permLink),
+            isFavorite: state.data.favorites.set.has(props.permLink),
             pinDisabled: props.pageAccountName !== myAccountName,
             isPinned,
         };

@@ -7,17 +7,17 @@ import { Link } from 'react-router';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import PostsListFavorite from 'src/app/components/common/PostsList/PostsListFavorite';
 import InfoBlock from 'src/app/components/common/InfoBlock';
-import { favoriteLoadNextPageAction } from 'src/app/redux/actions/favorite';
+import { favoritesLoadNextPageAction } from 'src/app/redux/actions/favorites';
 
 const Loader = styled(LoadingIndicator)`
     margin-top: 30px;
 `;
 
-class FavoriteContent extends Component {
+class FavoritesContent extends Component {
     componentDidMount() {
         const { isPageLoading, list } = this.props;
         if (!isPageLoading && !list) {
-            this.props.favoriteLoadNextPageAction();
+            this.props.favoritesLoadNextPageAction();
         }
     }
 
@@ -62,7 +62,7 @@ export default connect(
         const pageAccountName = props.params.accountName.toLowerCase();
         const isOwner = state.user.getIn(['current', 'username']) === pageAccountName;
 
-        const { isLoading, isPageLoading, showList } = state.data.favorite;
+        const { isLoading, isPageLoading, showList } = state.data.favorites;
 
         return {
             isOwner,
@@ -73,6 +73,6 @@ export default connect(
         };
     },
     {
-        favoriteLoadNextPageAction,
+        favoritesLoadNextPageAction,
     }
-)(FavoriteContent);
+)(FavoritesContent);

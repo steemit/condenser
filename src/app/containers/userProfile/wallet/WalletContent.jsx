@@ -414,7 +414,7 @@ class WalletContent extends Component {
                     <TabContainer id={CURRENCY.GBG} title="Золото">
                         {innerTabs}
                     </TabContainer>
-                    <TabContainer id={CURRENCY.GOLOS_POWER} title="Сила Голоса">
+                    <TabContainer id={CURRENCY.GOLOS_POWER} title="Делегирование">
                         {innerTabs}
                     </TabContainer>
                     <TabContainer id={CURRENCY.SAFE} title="Сейф">

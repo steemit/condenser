@@ -70,7 +70,7 @@ const Column = styled.div`
 const Bold = styled.div`
     color: #333;
     font-family: ${({ theme }) => theme.fontFamily};
-    font-size: 20px;
+    font-size: 17px;
     font-weight: bold;
     line-height: 1;
     margin-bottom: 5px;

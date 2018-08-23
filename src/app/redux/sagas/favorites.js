@@ -116,5 +116,5 @@ function* toggleFavorite({ payload }) {
 
 function loadFavoritesList() {
     // Stub
-    return Promise.reject([]);
+    return Promise.resolve([]);
 }

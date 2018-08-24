@@ -25,11 +25,11 @@ class RepliesContent extends Component {
                 <InfoBlock>
                     <EmptyBlock>
                         Тут пока пусто
-                        {isOwner ? (
-                            <EmptySubText>
-                                Начни писать посты и получать комментарии от пользователей.
-                            </EmptySubText>
-                        ) : null}
+                        <EmptySubText>
+                            {isOwner
+                                ? 'Начни писать посты и получать комментарии от пользователей.'
+                                : 'Пользователь пока не получил комментариев. Напиши свой комментарий.'}
+                        </EmptySubText>
                     </EmptyBlock>
                 </InfoBlock>
             );

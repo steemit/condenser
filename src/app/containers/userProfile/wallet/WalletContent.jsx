@@ -492,7 +492,7 @@ class WalletContent extends Component {
     }
 
     _renderList() {
-        const { pageAccount } = this.props;
+        const { pageAccount, isOwner } = this.props;
         const { mainTab, rewardTab, rewardType } = this.state;
 
         if (!pageAccount) {
@@ -531,14 +531,22 @@ class WalletContent extends Component {
                     return (
                         <EmptyBlock>
                             Тут пока пусто
-                            <EmptySubText>Начни писать посты, чтобы получать награду.</EmptySubText>
+                            <EmptySubText>
+                                {isOwner
+                                    ? 'Начни писать посты, чтобы получать награду.'
+                                    : 'Пользователь еще не начал писать посты, чтобы получать награду.'}
+                            </EmptySubText>
                         </EmptyBlock>
                     );
                 } else {
                     return (
                         <EmptyBlock>
                             Тут пока пусто
-                            <EmptySubText>Начни комментировать и ставить лайки, чтобы получать награду.</EmptySubText>
+                            <EmptySubText>
+                                {isOwner
+                                    ? 'Начни комментировать и ставить лайки, чтобы получать награду.'
+                                    : 'Пользователь еще не начал комментировать и оценивать посты, чтобы получать награду.'}
+                            </EmptySubText>
                         </EmptyBlock>
                     );
                 }
@@ -1093,6 +1101,7 @@ export default connect(
             pageAccountName,
             pageAccount,
             myAccountName,
+            isOwner: pageAccountName === myAccountName,
             globalProps,
         };
     },

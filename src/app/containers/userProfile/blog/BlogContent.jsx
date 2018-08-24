@@ -43,21 +43,20 @@ class BlogContent extends Component {
 
         return (
             <InfoBlock>
-                {isOwner ? (
-                    <EmptyBlock>
-                        Тут пока пусто
-                        <EmptySubText>
-                            Можешь написать свой первый пост с тегами{' '}
-                            <Link to="/submit">#голос</Link> <Link to="/submit">#знакомство</Link>.
-                        </EmptySubText>
-                    </EmptyBlock>
-                ) : (
-                    <EmptyBlock>
-                        {tt('user_profile.user_hasnt_started_bloggin_yet', {
-                            name: pageAccount.get('name'),
-                        })}
-                    </EmptyBlock>
-                )}
+                <EmptyBlock>
+                    Тут пока пусто
+                    <EmptySubText>
+                        {isOwner ? (
+                            <Fragment>
+                                Можешь написать свой первый пост с тегами{' '}
+                                <Link to="/submit">#голос</Link>{' '}
+                                <Link to="/submit">#знакомство</Link>.
+                            </Fragment>
+                        ) : (
+                            'Пользователь еще не начал писать посты.'
+                        )}
+                    </EmptySubText>
+                </EmptyBlock>
             </InfoBlock>
         );
     }

@@ -32,6 +32,7 @@ export function serverApiRecordEvent(type, val, rate_limit_ms = 5000) {
     if (last_call && new Date() - last_call < rate_limit_ms) return;
     last_call = new Date();
     const value = val && val.stack ? `${val.toString()} | ${val.stack}` : val;
+    /*
     api.call(
         'overseer.collect',
         { collection: 'event', metadata: { type, value } },
@@ -39,6 +40,7 @@ export function serverApiRecordEvent(type, val, rate_limit_ms = 5000) {
             // if (error) console.warn('overseer error', error, error.data);
         }
     );
+    */
 }
 
 let last_page, last_views, last_page_promise;
@@ -46,7 +48,7 @@ export function recordPageView(page, referer, account) {
     if (last_page_promise && page === last_page) return last_page_promise;
 
     if (!process.env.BROWSER) return Promise.resolve(0);
-
+    /*
     if (window.ga) {
         // virtual pageview
         window.ga('set', 'page', page);
@@ -59,6 +61,8 @@ export function recordPageView(page, referer, account) {
     });
     last_page = page;
     return last_page_promise;
+    */
+    return Promise.resolve(0);
 }
 
 export function saveCords(x, y) {

@@ -57,6 +57,7 @@ const ActionTitle = styled.div`
 `;
 
 export default class RightActions extends PureComponent {
+
     render() {
         return (
             <Root>

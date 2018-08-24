@@ -74,10 +74,6 @@ const IconWrap = styled.div`
     &:hover {
         color: #393636;
     }
-    
-    @media (max-width: 1200px) {
-        display: none;
-    }
 `;
 
 const SimpleIcon = Icon.extend`
@@ -86,6 +82,12 @@ const SimpleIcon = Icon.extend`
 `;
 
 class UserNavigation extends PureComponent {
+    constructor() {
+        super();
+        this.state = {
+            screenLessThenMainContainer: false
+        }
+    }
     static propTypes = {
         accountName: PropTypes.string,
         isOwner: PropTypes.bool,
@@ -94,15 +96,22 @@ class UserNavigation extends PureComponent {
         changeProfileLayout: PropTypes.func,
     };
 
+    componentDidMount() {
+        this._checkScreenSize();
+        window.addEventListener('resize', this._checkScreenSize);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this._checkScreenSize);
+    }
+
     render() {
         const { accountName, isOwner } = this.props;
         const indexTabLink = { value: tt('g.posts'), to: `/@${accountName}` };
 
         const tabLinks = [];
 
-        tabLinks.push(
-            { value: tt('g.comments'), to: `/@${accountName}/comments` },
-        );
+        tabLinks.push({ value: tt('g.comments'), to: `/@${accountName}/comments` });
 
         if (isOwner) {
             tabLinks.push({ value: 'Избранное', to: `/@${accountName}/favorites` });
@@ -153,11 +162,16 @@ class UserNavigation extends PureComponent {
     }
 
     _renderRightIcons() {
-        const { accountName, isOwner, layout, showLayout } = this.props;
+        const {
+            accountName,
+            isOwner,
+            layout,
+            showLayout
+        } = this.props;
 
         const icons = [];
 
-        if (showLayout) {
+        if (showLayout && !this.state.screenLessThenMainContainer) {
             if (layout === 'list') {
                 icons.push(
                     <IconWrap
@@ -205,16 +219,26 @@ class UserNavigation extends PureComponent {
     _onListClick = () => {
         this.props.changeProfileLayout('list');
     };
+
+    _checkScreenSize = () => {
+        const documentWidth = document.documentElement.clientWidth;
+        if (documentWidth <= this.props.mainContainerWidthPoint && !this.state.screenLessThenMainContainer) {
+            this.setState({screenLessThenMainContainer: true})
+        }
+        if (documentWidth > this.props.mainContainerWidthPoint && this.state.screenLessThenMainContainer) {
+            this.setState({screenLessThenMainContainer: false})
+        }
+    }
 }
 
-const mapStateToProps = state => {
-    return {
-        layout: (state.ui.profile && state.ui.profile.get('layout')) || 'list',
-    };
-};
-
 export default connect(
-    mapStateToProps,
+    state => {
+        const mainContainerWidthPoint = 1199;
+        return {
+            mainContainerWidthPoint,
+            layout: (state.ui.profile && state.ui.profile.get('layout')) || 'list'
+        };
+    },
     {
         changeProfileLayout,
     }

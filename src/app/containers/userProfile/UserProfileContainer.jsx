@@ -72,6 +72,7 @@ const SidebarRight = styled.div`
 `;
 
 export default class UserProfileContainer extends Component {
+
     static propTypes = {
         isOwner: PropTypes.bool,
         params: PropTypes.object,

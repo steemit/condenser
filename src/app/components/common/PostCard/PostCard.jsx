@@ -388,7 +388,7 @@ class PostCard extends PureComponent {
                     data-tooltip={pinTip}
                     onClick={!pinDisabled ? this._onPinClick : null}
                 >
-                    <Icon name="clip" width={12} height={22} />
+                    <Icon name="pin" width={24} height={24} />
                 </IconWrapper>
             </ToolbarAction>
         );

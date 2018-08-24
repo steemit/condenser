@@ -112,6 +112,7 @@ const Money = styled.div`
 const Root = styled.div`
     position: relative;
     display: flex;
+    padding: 12px 18px;
 
     ${is('whiteTheme')`
         ${Money} {

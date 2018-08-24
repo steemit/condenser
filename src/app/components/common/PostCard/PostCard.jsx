@@ -165,8 +165,7 @@ const VotePanelStyled = styled(VotePanel)`
     padding: 12px 18px;
 
     ${is('grid')`
-        padding: 0;
-        padding-bottom: 20px;
+        padding: 20px 0;
         justify-content: space-around;
     `};
 `;
@@ -251,6 +250,42 @@ const Root = styled.div`
             pointer-events: none;
         }
     }
+`;
+
+const ReplyCount = styled.div`
+    font-size: 16px;
+    font-weight: 500;
+    color: #959595;
+    cursor: default;
+    user-select: none;
+`;
+
+const Splitter = styled.div`
+    width: 1px;
+    height: 26px;
+    background: #e1e1e1;
+`;
+
+const ReplyLink = styled(Link)`
+    display: flex;
+    align-items: center;
+    padding-left: 7px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #393636 !important;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, .15);
+    
+    &:hover {
+        text-shadow: 0 2px 4px rgba(0, 0, 0, .5);
+    }
+    
+    ${is('grid')`
+        height: 100%;
+        width: 50%;
+    `};
 `;
 
 class PostCard extends PureComponent {

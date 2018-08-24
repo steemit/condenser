@@ -1,5 +1,4 @@
 const list = `
-bnchdrff
 `
     .trim()
     .split('\n');

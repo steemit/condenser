@@ -357,8 +357,6 @@ class PostCard extends PureComponent {
     render() {
         const { data, className, grid } = this.props;
 
-        console.log(data.toJS());
-
         const p = extractContent(immutableAccessor, data);
         const withImage = Boolean(p.image_link);
 

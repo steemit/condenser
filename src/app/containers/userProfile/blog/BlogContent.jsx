@@ -39,7 +39,7 @@ class BlogContent extends Component {
     }
 
     _renderCallOut() {
-        const { isOwner, pageAccount } = this.props;
+        const { isOwner } = this.props;
 
         return (
             <InfoBlock>

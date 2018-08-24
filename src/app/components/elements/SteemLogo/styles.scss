@@ -1,6 +1,10 @@
 .logo {
     cursor: pointer;
     transition: all 0.3s ease-in-out;
+
+    svg {
+        transform: rotateY(180deg);
+    }
     .logo__beta{
         fill: $color-text-gray;
         transition: 0.25s all ease-in-out;

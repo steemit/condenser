@@ -2,7 +2,7 @@ import GDPRUserList from '../utils/GDPRUserList';
 
 const accountsToRemove = GDPRUserList;
 
-const filterAccounts = stateAccounts =>
+const gdprFilterAccounts = stateAccounts =>
     Object.keys(stateAccounts)
         .filter(name => !accountsToRemove.includes(name))
         .reduce(
@@ -13,7 +13,7 @@ const filterAccounts = stateAccounts =>
             {}
         );
 
-const filterContent = stateContent => {
+const gdprFilterContent = stateContent => {
     const contentToRemove = Object.keys(stateContent).filter(key =>
         accountsToRemove.includes(stateContent[key].author)
     );
@@ -49,7 +49,7 @@ const filterContent = stateContent => {
 export default function stateCleaner(state) {
     return {
         ...state,
-        accounts: filterAccounts(state.accounts),
-        content: filterContent(state.content),
+        accounts: gdprFilterAccounts(state.accounts),
+        content: gdprFilterContent(state.content),
     };
 }

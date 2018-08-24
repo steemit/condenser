@@ -33,7 +33,6 @@ function* loadFavorites() {
 
     yield put({ type: FAVORITES_LOADING_STARTED, payload: {} });
 
-    return; // TODO: Backend not ready yet
     yield put(loadFavoritesAction());
 }
 

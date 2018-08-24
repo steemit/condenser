@@ -142,8 +142,11 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
             {link: feedLink, icon: 'new/home', iconSize: '1_25x', value: tt('g.feed')},
             {link: accountLink, icon: 'new/blogging', value: tt('g.blog')},
             {link: commentsLink, icon: 'new/comment', value: tt('g.comments')},
+            $STM_Config.is_sandbox
+                ? { link: '#', icon: 'chatboxes', onClick: showMessages, value: tt('g.messages') }
+                : null,
             {link: repliesLink, icon: 'new/answer', value: tt('g.replies')},
-            //{link: favoritesLink, icon: 'new/blogging', value: 'Избранное'},
+            {link: favoritesLink, icon: 'new/star', value: 'Избранное'},
             {link: walletLink, icon: 'new/wallet', value: tt('g.wallet')},
             {link: reset_password_link, icon: 'key', value: tt('g.change_password')},
             {link: settingsLink, icon: 'new/setting', value: tt('g.settings')},
@@ -152,9 +155,7 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
                 {link: '#', onClick: showLogin, value: tt('g.login')}
         ];
 
-        if ($STM_Config.is_sandbox) {
-            user_menu.splice(3, 0, {link: '#', icon: 'chatboxes', onClick: showMessages, value: tt('g.messages')});
-        }
+        user_menu = user_menu.filter(item => item);
       
         const voting_power_percent = account.get('voting_power') / 100
 

@@ -8,7 +8,7 @@ function fractional_part_len(value) {
 // FIXME this should be unit tested.. here is one bug: 501,695,.505
 export function formatDecimal(value, decPlaces = 2, truncate0s = true) {
     let decSeparator, fl, i, j, sign, thouSeparator, abs_value;
-    if (!value || value === null || value === void 0 || isNaN(value)) {
+    if (value === null || value === void 0 || isNaN(value)) {
         return ['N', 'a', 'N'];
     }
     if (truncate0s) {

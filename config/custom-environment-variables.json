@@ -71,5 +71,7 @@
   "address_prefix": "SDC_ADDRESS_PREFIX",
   "conveyor_posting_wif": "CONVEYOR_POSTING_WIF",
   "conveyor_username": "CONVEYOR_USERNAME",
-  "conveyor_tos_tag": "CONVEYOR_TOS_TAG"
+  "conveyor_tos_tag": "CONVEYOR_TOS_TAG",
+  "dmca_content_endpoint": "DMCA_CONTENT_ENDPOINT",
+  "dmca_user_endpoint": "DMCA_USER_ENDPOINT"
 }

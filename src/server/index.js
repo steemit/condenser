@@ -32,6 +32,8 @@ global.$STM_Config = {
     site_domain: config.get('site_domain'),
     facebook_app_id: config.get('facebook_app_id'),
     google_analytics_id: config.get('google_analytics_id'),
+    dmca_content_endpoint: config.get('dmca_content_endpoint'),
+    dmca_user_endpoint: config.get('dmca_user_endpoint'),
 };
 
 const WebpackIsomorphicTools = require('webpack-isomorphic-tools');

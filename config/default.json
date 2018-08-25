@@ -6,7 +6,7 @@
   "helmet": {
     "directives": {
       "childSrc": "'self' www.youtube.com staticxx.facebook.com w.soundcloud.com player.vimeo.com",
-      "connectSrc": "'self' vit.tube wss://peer.proto.vit.tube api.blocktrades.us",
+      "connectSrc": "'self' vit.tube wss://peer.proto.vit.tube https://jussi.proto.vit.tube api.blocktrades.us",
       "defaultSrc": "'self' www.youtube.com staticxx.facebook.com player.vimeo.com",
       "fontSrc": "data: fonts.gstatic.com",
       "frameAncestors": "'none'",

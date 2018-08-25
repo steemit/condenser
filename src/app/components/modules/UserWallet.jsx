@@ -516,7 +516,7 @@ class UserWallet extends React.Component {
                             </div>
                         )}
                     </div>
-                    {/*
+                    {/* {
                         <div className="columns shrink">
                             {isMyAccount && (
                                 <button
@@ -529,7 +529,7 @@ class UserWallet extends React.Component {
                                 </button>
                             )}
                         </div>
-                    */}
+                    } */}
                 </div>
                 <div className="UserWallet__balance row">
                     <div className="column small-12 medium-8">

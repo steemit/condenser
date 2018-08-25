@@ -1,12 +1,13 @@
 import React from 'react';
 // import ReactMarkdown from 'react-markdown';
+import PropTypes from 'prop-types';
 import Comment from 'app/components/cards/Comment';
 import PostFull from 'app/components/cards/PostFull';
 import { connect } from 'react-redux';
 
 import { sortComments } from 'app/components/cards/Comment';
 // import { Link } from 'react-router';
-import FoundationDropdownMenu from 'app/components/elements/FoundationDropdownMenu';
+import DropdownMenu from 'app/components/elements/DropdownMenu';
 import { Set } from 'immutable';
 import tt from 'counterpart';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
@@ -18,10 +19,10 @@ import { isLoggedIn } from 'app/utils/UserUtil';
 
 class Post extends React.Component {
     static propTypes = {
-        content: React.PropTypes.object.isRequired,
-        post: React.PropTypes.string,
-        routeParams: React.PropTypes.object,
-        sortOrder: React.PropTypes.string,
+        content: PropTypes.object.isRequired,
+        post: PropTypes.string,
+        routeParams: PropTypes.object,
+        sortOrder: PropTypes.string,
     };
     constructor() {
         super();
@@ -142,7 +143,6 @@ class Post extends React.Component {
         ];
         let sort_menu = [];
         let sort_label;
-
         let selflink = `/${dis.get('category')}/@${post}`;
         for (let o = 0; o < sort_orders.length; ++o) {
             if (sort_orders[o] == sortOrder) sort_label = sort_labels[o];
@@ -227,11 +227,11 @@ class Post extends React.Component {
                             {positiveComments.length ? (
                                 <div className="Post__comments_sort_order float-right">
                                     {tt('post_jsx.sort_order')}: &nbsp;
-                                    <FoundationDropdownMenu
-                                        menu={sort_menu}
-                                        label={sort_label}
-                                        dropdownPosition="bottom"
-                                        dropdownAlignment="right"
+                                    <DropdownMenu
+                                        items={sort_menu}
+                                        el="li"
+                                        selected={sort_label}
+                                        position="left"
                                     />
                                 </div>
                             ) : null}

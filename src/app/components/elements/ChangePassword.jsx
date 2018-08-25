@@ -1,5 +1,6 @@
 /* eslint react/prop-types: 0 */
 import React from 'react';
+import PropTypes from 'prop-types';
 import tt from 'counterpart';
 import {
     PrivateKey,
@@ -15,7 +16,7 @@ import { validate_account_name } from 'app/utils/ChainValidation';
 import { cleanReduxInput } from 'app/utils/ReduxForms';
 import { APP_NAME } from 'app/client_config';
 
-const { string, oneOf } = React.PropTypes;
+const { string, oneOf } = PropTypes;
 
 class ChangePassword extends React.Component {
     static propTypes = {

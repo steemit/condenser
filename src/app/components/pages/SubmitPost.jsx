@@ -1,15 +1,16 @@
 import React from 'react';
 import { browserHistory } from 'react-router';
 import ReplyEditor from 'app/components/elements/ReplyEditor';
+import { SUBMIT_FORM_ID } from 'shared/constants';
 
-const formId = 'submitStory';
+const formId = SUBMIT_FORM_ID;
 // const richTextEditor = process.env.BROWSER ? require('react-rte-image').default : null;
 // const SubmitReplyEditor = ReplyEditor(formId, richTextEditor);
 const SubmitReplyEditor = ReplyEditor(formId);
 
 class SubmitPost extends React.Component {
     // static propTypes = {
-    //     routeParams: React.PropTypes.object.isRequired,
+    //     routeParams: PropTypes.object.isRequired,
     // }
     constructor() {
         super();

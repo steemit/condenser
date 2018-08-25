@@ -3,7 +3,7 @@ import BadActorList from 'app/utils/BadActorList';
 import VerifiedExchangeList from 'app/utils/VerifiedExchangeList';
 import { PrivateKey, PublicKey } from '@steemit/steem-js/lib/auth/ecc';
 
-export function validate_account_name(value, memo) {
+export function validate_account_name(value) {
     let i, label, len, length, ref;
 
     if (!value) {
@@ -18,9 +18,6 @@ export function validate_account_name(value, memo) {
     }
     if (BadActorList.includes(value)) {
         return tt('chainvalidation_js.badactor');
-    }
-    if (VerifiedExchangeList.includes(value) && !memo) {
-        return tt('chainvalidation_js.verified_exchange_no_memo');
     }
     ref = value.split('.');
     for (i = 0, len = ref.length; i < len; i++) {
@@ -52,6 +49,21 @@ export function validate_account_name(value, memo) {
         }
     }
     return null;
+}
+
+/**
+ * Do some additional validation for situations where an account name is used along with a memo.
+ * Currently only used in the Transfers compoonent.
+ *
+ * @param {string} name
+ * @param {string} memo
+ * @returns {null|string} string if there's a validation error
+ */
+export function validate_account_name_with_memo(name, memo) {
+    if (VerifiedExchangeList.includes(name) && !memo) {
+        return tt('chainvalidation_js.verified_exchange_no_memo');
+    }
+    return validate_account_name(name);
 }
 
 export function validate_memo_field(value, username, memokey) {

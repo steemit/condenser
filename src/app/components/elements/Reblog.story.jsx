@@ -6,6 +6,7 @@ import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import Reblog from './Reblog';
 import { Center } from 'decorators';
+import { LIQUID_TOKEN } from 'app/client_config';
 
 const store = createStore(rootReducer);
 
@@ -17,6 +18,6 @@ storiesOf('Elements', module)
         <Reblog
             permlink={'foo/bar'}
             author={'maitland'}
-            reblog={() => alert('STEEM WAZ HERE')}
+            reblog={() => alert(LIQUID_TOKEN + ' WAZ HERE')}
         />
     ));

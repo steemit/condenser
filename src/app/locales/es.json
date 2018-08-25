@@ -290,7 +290,7 @@
         "selecting_them": "Seleccionándolos",
         "image_upload": "Subir imagen",
         "power_up_100": "Power Up 100%%",
-        "default_50_50": "Por defecto (50 1%% / 50 1%%)",
+        "default_50_50": "50 1%% / 50 1%%",
         "decline_payout": "Rechazar Pago",
         "check_this_to_auto_upvote_your_post":
             "Seleciona para autovotarte el post",
@@ -720,8 +720,7 @@
         "convert_to_VESTING_TOKEN": "Convertir a %(VESTING_TOKEN)s",
         "balance_subject_to_3_day_withdraw_waiting_period":
             "El saldo está sujeto a 3 días de espera para la retirada",
-        "move_funds_to_another_account":
-            "Mover fondos a otra %(APP_NAME)scuenta.",
+        "move_funds_to_another_account": "Mover fondos a otra steemscuenta.",
         "protect_funds_by_requiring_a_3_day_withdraw_waiting_period":
             "Protege los fondos al pedir la retirada con un periodo de 3 días de espera",
         "withdraw_funds_after_the_required_3_day_waiting_period":

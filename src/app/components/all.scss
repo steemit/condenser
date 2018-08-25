@@ -15,9 +15,7 @@
 @import "./elements/Voting";
 @import "./elements/FormattedAsset";
 @import "./elements/ReplyEditor";
-@import "./elements/NotifiCounter";
 @import "./elements/DropdownMenu";
-@import "./elements/FoundationDropdownMenu";
 @import "./elements/VerticalMenu";
 @import "./elements/HorizontalMenu";
 @import "./elements/VotesAndComments";
@@ -38,6 +36,9 @@
 @import "./elements/IconButton/styles";
 @import "./elements/NativeSelect/styles";
 @import "./elements/SteemLogo/styles";
+@import "./elements/SanitizedLink/styles";
+@import "./elements/HelpTip/styles";
+@import "./elements/Dropdown";
 
 // modules
 @import "./modules/Header/styles";

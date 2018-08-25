@@ -6,7 +6,7 @@
   "helmet": {
     "directives": {
       "childSrc": "'self' www.youtube.com staticxx.facebook.com w.soundcloud.com player.vimeo.com",
-      "connectSrc": "'self' steemit.com https://api.steemit.com api.blocktrades.us",
+      "connectSrc": "'self' vit.tube wss://peer.proto.vit.tube api.blocktrades.us",
       "defaultSrc": "'self' www.youtube.com staticxx.facebook.com player.vimeo.com",
       "fontSrc": "data: fonts.gstatic.com",
       "frameAncestors": "'none'",
@@ -20,7 +20,7 @@
     "reportOnly": false,
     "setAllHeaders": true
   },
-  "img_proxy_prefix": "https://steemitdevimages.com/",
+  "img_proxy_prefix": "https://media.vit.tube/resize/",
   "ipfs_prefix": false,
   "mixpanel": false,
   "newrelic": false,
@@ -34,7 +34,7 @@
   },
   "registrar": {
     "account": "-",
-    "fee": "0.5 STEEM",
+    "fee": "0.5 VIT",
     "delegation": "150250.000000 VESTS",
     "signing_key": "5J..."
   },
@@ -69,9 +69,12 @@
     "auth_token": false
   },
   "upload_image": false,
-  "steemd_connection_client": "https://api.steemit.com",
-  "steemd_connection_server": "https://api.steemit.com",
+  "steemd_connection_client": "https://jussi.proto.vit.tube/",
+  "steemd_connection_server": "https://jussi.proto.vit.tube/",
   "steemd_use_appbase": false,
-  "chain_id": "0000000000000000000000000000000000000000000000000000000000000000",
-  "address_prefix": "STM"
+  "chain_id": "1d50f6bcf387a5af6ebac42146ef920aedb5cc61d8f8ed37fb1ac671d722a302",
+  "address_prefix": "WIT",
+  "conveyor_posting_wif": "",
+  "conveyor_username": "",
+  "conveyor_tos_tag": "tos_accepted"
 }

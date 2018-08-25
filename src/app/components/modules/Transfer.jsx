@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import reactForm from 'app/utils/ReactForm';
 import { Map } from 'immutable';
@@ -9,9 +10,10 @@ import * as transactionActions from 'app/redux/TransactionReducer';
 import * as userActions from 'app/redux/UserReducer';
 import * as globalActions from 'app/redux/GlobalReducer';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
+import ConfirmTransfer from 'app/components/elements/ConfirmTransfer';
 import runTests, { browserTests } from 'app/utils/BrowserTests';
 import {
-    validate_account_name,
+    validate_account_name_with_memo,
     validate_memo_field,
 } from 'app/utils/ChainValidation';
 import { countDecimals } from 'app/utils/ParsersAndFormatters';
@@ -157,7 +159,7 @@ class TransferForm extends Component {
             validation: values => ({
                 to: !values.to
                     ? tt('g.required')
-                    : validate_account_name(values.to, values.memo),
+                    : validate_account_name_with_memo(values.to, values.memo),
                 amount: !values.amount
                     ? 'Required'
                     : !/^\d+(\.\d+)?$/.test(values.amount)
@@ -425,7 +427,9 @@ class TransferForm extends Component {
                                             border: 'none',
                                         }}
                                     >
-                                        <option value="STEEM">STEEM</option>
+                                        <option value="STEEM">
+                                            {LIQUID_TOKEN}
+                                        </option>
                                         <option value="SBD">SBD</option>
                                     </select>
                                 </span>
@@ -503,7 +507,7 @@ class TransferForm extends Component {
                                 >
                                     {toVesting
                                         ? tt('g.power_up')
-                                        : tt('g.submit')}
+                                        : tt('g.next')}
                                 </button>
                                 {transferToSelf && (
                                     <button
@@ -633,12 +637,11 @@ export default connect(
                 amount: parseFloat(amount, 10).toFixed(3) + ' ' + asset2,
                 memo: toVesting ? undefined : memo ? memo : '',
             };
-
+            const confirm = () => <ConfirmTransfer operation={operation} />;
             if (transferType === 'Savings Withdraw')
                 operation.request_id = Math.floor(
                     (Date.now() / 1000) % 4294967295
                 );
-
             dispatch(
                 transactionActions.broadcastOperation({
                     type: toVesting
@@ -653,6 +656,7 @@ export default connect(
                     operation,
                     successCallback,
                     errorCallback,
+                    confirm,
                 })
             );
         },

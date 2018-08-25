@@ -13,19 +13,20 @@ import {
     vestingSteem,
     delegatedSteem,
 } from 'app/utils/StateFunctions';
-import FoundationDropdownMenu from 'app/components/elements/FoundationDropdownMenu';
 import WalletSubMenu from 'app/components/elements/WalletSubMenu';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import Tooltip from 'app/components/elements/Tooltip';
 import { FormattedHTMLMessage } from 'app/Translator';
 import {
     LIQUID_TOKEN,
+    LIQUID_TOKEN_UPPERCASE,
     LIQUID_TICKER,
     DEBT_TOKENS,
     VESTING_TOKEN,
 } from 'app/client_config';
 import * as transactionActions from 'app/redux/TransactionReducer';
 import * as globalActions from 'app/redux/GlobalReducer';
+import DropdownMenu from 'app/components/elements/DropdownMenu';
 
 const assetPrecision = 1000;
 
@@ -349,7 +350,7 @@ class UserWallet extends React.Component {
             { value: tt('userwallet_jsx.market'), link: '/market' },
         ];
         if (isMyAccount) {
-            steem_menu.push({
+            /* steem_menu.push({
                 value: tt('g.buy'),
                 link: '#',
                 onClick: onShowDepositSteem.bind(
@@ -361,12 +362,12 @@ class UserWallet extends React.Component {
                 value: tt('g.sell'),
                 link: '#',
                 onClick: onShowWithdrawSteem,
-            });
+            }); */
             steem_menu.push({
                 value: tt('userwallet_jsx.market'),
                 link: '/market',
             });
-            power_menu.push({
+            /* power_menu.push({
                 value: tt('g.buy'),
                 link: '#',
                 onClick: onShowDepositPower.bind(
@@ -386,7 +387,7 @@ class UserWallet extends React.Component {
                 value: tt('g.sell'),
                 link: '#',
                 onClick: onShowWithdrawSBD,
-            });
+            }); */
         }
         if (divesting) {
             power_menu.push({
@@ -413,7 +414,7 @@ class UserWallet extends React.Component {
             '$' + sbdOrders.toFixed(3)
         );
         const savings_balance_str = numberWithCommas(
-            saving_balance_steem.toFixed(3) + ' STEEM'
+            saving_balance_steem.toFixed(3) + ' ' + LIQUID_TOKEN_UPPERCASE
         );
         const savings_sbd_balance_str = numberWithCommas(
             '$' + sbd_balance_savings.toFixed(3)
@@ -440,12 +441,7 @@ class UserWallet extends React.Component {
         // set dynamic secondary wallet values
         const sbdInterest = this.props.sbd_interest / 100;
         const sbdMessage = (
-            <span>
-                {tt('userwallet_jsx.tokens_worth_about_1_of_LIQUID_TICKER', {
-                    LIQUID_TICKER,
-                    sbdInterest,
-                })}
-            </span>
+            <span>{tt('userwallet_jsx.tradeable_tokens_transferred')}</span>
         );
 
         const reward_steem =
@@ -458,7 +454,9 @@ class UserWallet extends React.Component {
                 : null;
         const reward_sp =
             parseFloat(account.get('reward_vesting_steem').split(' ')[0]) > 0
-                ? account.get('reward_vesting_steem').replace('STEEM', 'SP')
+                ? account
+                      .get('reward_vesting_steem')
+                      .replace(LIQUID_TOKEN_UPPERCASE, 'SP')
                 : null;
 
         let rewards = [];
@@ -518,7 +516,7 @@ class UserWallet extends React.Component {
                             </div>
                         )}
                     </div>
-                    {
+                    {/* {
                         <div className="columns shrink">
                             {isMyAccount && (
                                 <button
@@ -531,11 +529,11 @@ class UserWallet extends React.Component {
                                 </button>
                             )}
                         </div>
-                    }
+                    } */}
                 </div>
                 <div className="UserWallet__balance row">
                     <div className="column small-12 medium-8">
-                        STEEM
+                        {LIQUID_TOKEN_UPPERCASE}
                         <FormattedHTMLMessage
                             className="secondary"
                             id="tips_js.liquid_token"
@@ -544,15 +542,19 @@ class UserWallet extends React.Component {
                     </div>
                     <div className="column small-12 medium-4">
                         {isMyAccount ? (
-                            <FoundationDropdownMenu
+                            <DropdownMenu
                                 className="Wallet_dropdown"
-                                dropdownPosition="bottom"
-                                dropdownAlignment="right"
-                                label={steem_balance_str + ' STEEM'}
-                                menu={steem_menu}
+                                position="left"
+                                items={steem_menu}
+                                el="li"
+                                selected={
+                                    steem_balance_str +
+                                    ' ' +
+                                    LIQUID_TOKEN_UPPERCASE
+                                }
                             />
                         ) : (
-                            steem_balance_str + ' STEEM'
+                            steem_balance_str + ' ' + LIQUID_TOKEN_UPPERCASE
                         )}
                         {steemOrders ? (
                             <div
@@ -564,7 +566,8 @@ class UserWallet extends React.Component {
                             >
                                 <Link to="/market">
                                     <Tooltip t={tt('market_jsx.open_orders')}>
-                                        (+{steem_orders_balance_str} STEEM)
+                                        (+{steem_orders_balance_str}{' '}
+                                        {LIQUID_TOKEN_UPPERCASE})
                                     </Tooltip>
                                 </Link>
                             </div>
@@ -573,7 +576,7 @@ class UserWallet extends React.Component {
                 </div>
                 <div className="UserWallet__balance row zebra">
                     <div className="column small-12 medium-8">
-                        STEEM POWER
+                        {LIQUID_TOKEN_UPPERCASE} POWER
                         <FormattedHTMLMessage
                             className="secondary"
                             id="tips_js.influence_token"
@@ -589,15 +592,19 @@ class UserWallet extends React.Component {
                     </div>
                     <div className="column small-12 medium-4">
                         {isMyAccount ? (
-                            <FoundationDropdownMenu
+                            <DropdownMenu
                                 className="Wallet_dropdown"
-                                dropdownPosition="bottom"
-                                dropdownAlignment="right"
-                                label={power_balance_str + ' STEEM'}
-                                menu={power_menu}
+                                position="left"
+                                items={power_menu}
+                                el="li"
+                                selected={
+                                    power_balance_str +
+                                    ' ' +
+                                    LIQUID_TOKEN_UPPERCASE
+                                }
                             />
                         ) : (
-                            power_balance_str + ' STEEM'
+                            power_balance_str + ' ' + LIQUID_TOKEN_UPPERCASE
                         )}
                         {delegated_steem != 0 ? (
                             <div
@@ -607,8 +614,14 @@ class UserWallet extends React.Component {
                                         : null,
                                 }}
                             >
-                                <Tooltip t="STEEM POWER delegated to/from this account">
-                                    ({received_power_balance_str} STEEM)
+                                <Tooltip
+                                    t={
+                                        LIQUID_TOKEN_UPPERCASE +
+                                        ' POWER delegated to/from this account'
+                                    }
+                                >
+                                    ({received_power_balance_str}{' '}
+                                    {LIQUID_TOKEN_UPPERCASE})
                                 </Tooltip>
                             </div>
                         ) : null}
@@ -616,17 +629,17 @@ class UserWallet extends React.Component {
                 </div>
                 <div className="UserWallet__balance row">
                     <div className="column small-12 medium-8">
-                        STEEM DOLLARS
+                        {LIQUID_TOKEN_UPPERCASE} DOLLARS
                         <div className="secondary">{sbdMessage}</div>
                     </div>
                     <div className="column small-12 medium-4">
                         {isMyAccount ? (
-                            <FoundationDropdownMenu
+                            <DropdownMenu
                                 className="Wallet_dropdown"
-                                dropdownPosition="bottom"
-                                dropdownAlignment="right"
-                                label={sbd_balance_str}
-                                menu={dollar_menu}
+                                position="left"
+                                items={dollar_menu}
+                                el="li"
+                                selected={sbd_balance_str}
                             />
                         ) : (
                             sbd_balance_str
@@ -658,34 +671,28 @@ class UserWallet extends React.Component {
                                     'transfer_jsx.balance_subject_to_3_day_withdraw_waiting_period'
                                 )}
                             </span>
-                            <span>
-                                {tt('transfer_jsx.asset_currently_collecting', {
-                                    asset: DEBT_TOKENS,
-                                    interest: sbdInterest,
-                                })}
-                            </span>
                         </div>
                     </div>
                     <div className="column small-12 medium-4">
                         {isMyAccount ? (
-                            <FoundationDropdownMenu
+                            <DropdownMenu
                                 className="Wallet_dropdown"
-                                dropdownPosition="bottom"
-                                dropdownAlignment="right"
-                                label={savings_balance_str}
-                                menu={savings_menu}
+                                position="left"
+                                items={savings_menu}
+                                el="li"
+                                selected={savings_balance_str}
                             />
                         ) : (
                             savings_balance_str
                         )}
                         <br />
                         {isMyAccount ? (
-                            <FoundationDropdownMenu
+                            <DropdownMenu
                                 className="Wallet_dropdown"
-                                dropdownPosition="bottom"
-                                dropdownAlignment="right"
-                                label={savings_sbd_balance_str}
-                                menu={savings_sbd_menu}
+                                position="left"
+                                items={savings_sbd_menu}
+                                el="li"
+                                selected={savings_sbd_balance_str}
                             />
                         ) : (
                             savings_sbd_balance_str
@@ -750,6 +757,12 @@ class UserWallet extends React.Component {
                                     'transfer_jsx.beware_of_spam_and_phishing_links'
                                 )}
                             </span>
+                            &nbsp;
+                            <span>
+                                {tt(
+                                    'transfer_jsx.transactions_make_take_a_few_minutes'
+                                )}
+                            </span>
                         </div>
                         <table>
                             <tbody>{transfer_log}</tbody>
@@ -765,7 +778,10 @@ export default connect(
     // mapStateToProps
     (state, ownProps) => {
         let price_per_steem = undefined;
-        const feed_price = state.global.get('feed_price');
+        const feed_price = state.user.get(
+            'latest_feed_price',
+            state.global.get('feed_price')
+        );
         if (feed_price && feed_price.has('base') && feed_price.has('quote')) {
             const { base, quote } = feed_price.toJS();
             if (/ SBD$/.test(base) && / STEEM$/.test(quote))

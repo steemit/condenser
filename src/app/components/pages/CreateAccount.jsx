@@ -1,6 +1,7 @@
 /* eslint react/prop-types: 0 */
 /*global $STM_csrf, $STM_Config */
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { api } from '@steemit/steem-js';
@@ -16,8 +17,8 @@ import { SIGNUP_URL } from 'shared/constants';
 
 class CreateAccount extends React.Component {
     static propTypes = {
-        loginUser: React.PropTypes.func.isRequired,
-        serverBusy: React.PropTypes.bool,
+        loginUser: PropTypes.func.isRequired,
+        serverBusy: PropTypes.bool,
     };
 
     constructor(props) {
@@ -216,9 +217,8 @@ class CreateAccount extends React.Component {
                         <br />
                         <div className="callout alert">
                             <p>
-                                Membership to Steemit.com is now under
-                                invitation only because of unexpectedly high
-                                sign up rate.
+                                Membership to vit.tube is now under invitation
+                                only because of unexpectedly high sign up rate.
                             </p>
                         </div>
                     </div>
@@ -233,8 +233,8 @@ class CreateAccount extends React.Component {
                         <div className="callout alert">
                             <h4>Cryptography test failed</h4>
                             <p>
-                                We will be unable to create your Steem account
-                                with this browser.
+                                We will be unable to create your vit.tube
+                                account with this browser.
                             </p>
                             <p>
                                 The latest versions of{' '}
@@ -268,7 +268,7 @@ class CreateAccount extends React.Component {
                                 before you can create another account.
                             </p>
                             <p>
-                                Please note that Steemit can only register one
+                                Please note that vit.tube can only register one
                                 account per verified user.
                             </p>
                         </div>
@@ -337,19 +337,18 @@ class CreateAccount extends React.Component {
                 <div className="CreateAccount row">
                     <div className="column">
                         <h4>
-                            Please read the Steemit Rules and fill in the form
-                            below to create your Steemit account
+                            Please read the vit.tube Rules and fill in the form
+                            below to create your vit.tube account
                         </h4>
-                        {/*<Progress tabIndex="0" value={95} max={100} />*/}
                         {showRules ? (
                             <div className="CreateAccount__rules">
                                 <p>
-                                    The first rule of Steemit is: Do not lose
+                                    The first rule of vit.tube is: Do not lose
                                     your password.<br />
-                                    The second rule of Steemit is: Do{' '}
+                                    The second rule of vit.tube is: Do{' '}
                                     <strong>not</strong> lose your password.<br
                                     />
-                                    The third rule of Steemit is: We cannot
+                                    The third rule of vit.tube is: We cannot
                                     recover your password, or your account if
                                     you lose your password.<br />
                                     The forth rule: Do not tell anyone your
@@ -360,7 +359,7 @@ class CreateAccount extends React.Component {
                                     <br />
                                     Seriously, we are, for technical reasons,
                                     entirely unable to gain access to an account
-                                    without knowing the password. Steemit is a
+                                    without knowing the password. vit.tube is a
                                     new model, entirely unlike other sites on
                                     the Internet. It's not simply policy:{' '}
                                     <strong>
@@ -401,7 +400,7 @@ class CreateAccount extends React.Component {
                                         this.setState({ showRules: true })
                                     }
                                 >
-                                    Steemit Rules &nbsp; &raquo;
+                                    vit.tube Rules &nbsp; &raquo;
                                 </a>
                             </div>
                         )}

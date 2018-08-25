@@ -46,20 +46,16 @@ export default function reducer(state = defaultState, action = {}) {
                         o.sell_price.base.indexOf(LIQUID_TICKER) > 0
                             ? 'ask'
                             : 'bid';
+                    const sbd =
+                        type == 'bid' ? o.sell_price.base : o.sell_price.quote;
+                    const steem =
+                        type == 'ask' ? o.sell_price.base : o.sell_price.quote;
                     return {
                         ...o,
                         type: type,
-                        price: parseFloat(
-                            type == 'ask' ? o.real_price : o.real_price
-                        ),
-                        steem:
-                            type == 'ask'
-                                ? o.sell_price.base
-                                : o.sell_price.quote,
-                        sbd:
-                            type == 'bid'
-                                ? o.sell_price.base
-                                : o.sell_price.quote,
+                        price: parseFloat(sbd) / parseFloat(steem),
+                        steem,
+                        sbd,
                     };
                 })
                 .sort(createOrderSorter(getValue, column, dir));

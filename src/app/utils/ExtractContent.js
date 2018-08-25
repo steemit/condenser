@@ -7,6 +7,15 @@ import Remarkable from 'remarkable';
 
 const remarkable = new Remarkable({ html: true, linkify: false });
 
+const getValidImage = array => {
+    return array &&
+        Array.isArray(array) &&
+        array.length >= 1 &&
+        typeof array[0] === 'string'
+        ? array[0]
+        : null;
+};
+
 export default function extractContent(get, content) {
     const {
         author,
@@ -45,10 +54,8 @@ export default function extractContent(get, content) {
             jsonMetadata = JSON.parse(jsonMetadata);
         }
         // First, attempt to find an image url in the json metadata
-        if (jsonMetadata) {
-            if (jsonMetadata.image && Array.isArray(jsonMetadata.image)) {
-                [image_link] = jsonMetadata.image;
-            }
+        if (jsonMetadata && jsonMetadata.image) {
+            image_link = getValidImage(jsonMetadata.image);
         }
     } catch (error) {
         // console.error('Invalid json metadata string', json_metadata, 'in post', author, permlink);

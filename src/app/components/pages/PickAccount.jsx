@@ -1,8 +1,8 @@
 /* eslint react/prop-types: 0 */
 /*global $STM_csrf, $STM_Config */
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Progress from 'react-foundation-components/lib/global/progress-bar';
 import { Link } from 'react-router';
 import classNames from 'classnames';
 import { api } from '@steemit/steem-js';
@@ -15,8 +15,8 @@ import { makeParams } from 'app/utils/Links';
 
 class PickAccount extends React.Component {
     static propTypes = {
-        loginUser: React.PropTypes.func.isRequired,
-        serverBusy: React.PropTypes.bool,
+        loginUser: PropTypes.func.isRequired,
+        serverBusy: PropTypes.bool,
     };
 
     constructor(props) {
@@ -148,8 +148,8 @@ class PickAccount extends React.Component {
                         <div className="callout alert">
                             <h4>Browser Out of Date</h4>
                             <p>
-                                We will be unable to create your Steem account
-                                with this browser.
+                                We will be unable to create your vit.tube
+                                account with this browser.
                             </p>
                             <p>
                                 The latest versions of{' '}
@@ -182,7 +182,7 @@ class PickAccount extends React.Component {
                                 before you can create an additional account.
                             </p>
                             <p>
-                                Please note that Steemit can only register one
+                                Please note that vit.tube can only register one
                                 account per verified user.
                             </p>
                         </div>
@@ -238,7 +238,7 @@ class PickAccount extends React.Component {
         //         <div className="column">
         //             <div className="callout alert">
         //                 <p>Our records indicate that you already have steem account: <strong>{existingUserAccount}</strong></p>
-        //                 <p>In order to prevent abuse Steemit can only register one account per verified user.</p>
+        //                 <p>In order to prevent abuse vit.tube can only register one account per verified user.</p>
         //                 <p>You can either <a href="/login.html">login</a> to your existing account
         //                     or <a href="mailto:support@steemit.com">send us email</a> if you need a new account.</p>
         //             </div>
@@ -285,10 +285,13 @@ class PickAccount extends React.Component {
                         style={{ maxWidth: '36rem', margin: '0 auto' }}
                     >
                         <br />
-                        <Progress tabIndex="0" value={10} max={100} />
+                        <div className="progress">
+                            <div style={{ width: '10%' }} />
+                        </div>
+
                         <br />
                         <h4 className="CreateAccount__title">
-                            Welcome to Steemit
+                            Welcome to vit.tube
                         </h4>
                         <div>
                             <p>

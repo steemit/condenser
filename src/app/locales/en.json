@@ -11,7 +11,7 @@
         "blog": "Blog",
         "browse": "Browse",
         "buy": "Buy",
-        "buy_steem_power": "Buy Steem Power",
+        "buy_steem_power": "Buy VIT Power",
         "buy_or_sell": "Buy or Sell",
         "by": "by",
         "cancel": "Cancel",
@@ -28,8 +28,7 @@
         "dismiss": "Dismiss",
         "edit": "Edit",
         "email": "Email",
-        "external_link_message":
-            "This link will take you away from steemit.com",
+        "external_link_message": "This link will take you away from vit.tube",
         "feed": "Feed",
         "follow": "Follow",
         "for": " for ",
@@ -40,15 +39,18 @@
         "in_reply_to": "in reply to",
         "insufficient_balance": "Insufficient balance",
         "invalid_amount": "Invalid amount",
+        "links": "Links",
         "joined": "Joined",
         "loading": "Loading",
         "login": "Login",
         "logout": "Logout",
         "memo": "Memo",
         "mute": "Mute",
-        "myblog": "My blog",
-        "mycomments": "My comments",
-        "myreplies": "Replies to me",
+        "my_blog": "My blog",
+        "my_comments": "My comments",
+        "my_feed": "My feed",
+        "my_replies": "Replies to me",
+        "my_wallet": "My wallet",
         "new": "New",
         "newer": "Newer",
         "next": "Next",
@@ -110,7 +112,6 @@
         "toggle_nightmode": "Toggle Night Mode",
         "all_tags": "All tags",
         "all_tags_mobile": "All content",
-        "my_feed": "My feed",
         "transfer": "Transfer ",
         "trending_topics": "Trending Topics",
         "type": "Type",
@@ -187,7 +188,7 @@
         "vote_currently_exists_user_must_be_indicate_a_to_reject_witness":
             "vote currently exists, user must be indicate a desire to reject witness",
         "only_one_APP_NAME_account_allowed_per_ip_address_every_10_minutes":
-            "Only one Steem account allowed per IP address every 10 minutes",
+            "Only one vit.tube account allowed per IP address every 10 minutes",
         "resteem_this_post": "Resteem This Post",
         "reblog": "Resteem",
         "write_your_story": "Write your story...",
@@ -213,8 +214,8 @@
             "authors_get_paid_when_people_like_you_upvote_their_post":
                 "Authors get paid when people like you upvote their post",
             "if_you_enjoyed_what_you_read_earn_amount":
-                "If you enjoyed what you read here, create your account today and start earning FREE STEEM!",
-            "free_steem": "FREE STEEM!",
+                "If you enjoyed what you read here, create your account today and start earning FREE VIT!",
+            "free_steem": "FREE VIT!",
             "sign_up_earn_steem": "Sign up now to earn "
         },
         "next_3_strings_together": {
@@ -240,9 +241,9 @@
         },
         "post_key_warning": {
             "confirm":
-                "You are about to publish a STEEM private key or master password. You will probably lose control of the associated account and all its funds.",
+                "You are about to publish a VIT private key or master password. You will probably lose control of the associated account and all its funds.",
             "warning":
-                "Legitimate users, including employees of Steemit Inc., will never ask you for a private key or master password.",
+                "Legitimate users, including employees of vit.tube Inc., will never ask you for a private key or master password.",
             "checkbox": "I understand"
         }
     },
@@ -264,17 +265,17 @@
         "learn_more": "Learn more",
         "welcome": "Welcome",
         "faq": "FAQ",
-        "shop": "The Steemit Shop",
-        "chat": "Steem Chat",
-        "app_center": "Apps Built on Steem",
-        "api_docs": "Steemit API Docs",
-        "bluepaper": "Steem Bluepaper",
+        "shop": "The vit.tube Shop",
+        "chat": "vit.tube Chat",
+        "app_center": "Apps Built on vit.tube",
+        "api_docs": "vit.tube API Docs",
+        "bluepaper": "vit.tube Bluepaper",
         "smt_whitepaper": "SMT Whitepaper",
-        "whitepaper": "Steem Whitepaper",
-        "intro_tagline": "Your voice is worth something",
+        "whitepaper": "vit.tube Whitepaper",
+        "intro_tagline": "Get paid to watch videos",
         "intro_paragraph":
-            "Get paid for good content. Post and upvote articles on Steemit to get your share of the daily rewards pool.",
-        "jobs": "Jobs at Steemit"
+            "Post and upvote articles on vit.tube to get your share of the daily rewards pool.",
+        "jobs": "Jobs at vit.tube"
     },
     "main_menu": {
         "hot": "Hot",
@@ -288,7 +289,7 @@
         "use_limited_amount_of_tags":
             "You have %(tagsLength)s tags total%(includingCategory)s. Please use only 5 in your post and category line.",
         "are_you_sure_you_want_to_clear_this_form":
-            "Are you sure you want to clear this form?",
+            "Are you sure you want to exit the comment editor?",
         "uploading": "Uploading...",
         "draft_saved": "Draft saved.",
         "editor": "Editor",
@@ -298,7 +299,7 @@
         "selecting_them": "selecting them",
         "image_upload": "Image upload",
         "power_up_100": "Power Up 100%%",
-        "default_50_50": "Default (50%% / 50%%)",
+        "default_50_50": "50%% SBD / 50%% SP",
         "decline_payout": "Decline Payout",
         "check_this_to_auto_upvote_your_post":
             "Check this to auto-upvote your post",
@@ -306,7 +307,8 @@
         "or_by": "or by",
         "title": "Title",
         "update_post": "Update Post",
-        "markdown_not_supported": "Markdown is not supported here"
+        "markdown_not_supported": "Markdown is not supported here",
+        "advanced_settings": "Advanced settings"
     },
     "category_selector_jsx": {
         "tag_your_story":
@@ -324,11 +326,19 @@
         "must_start_with_a_letter": "Must start with a letter",
         "must_end_with_a_letter_or_number": "Must end with a letter or number"
     },
+    "post_advanced_settings_jsx": {
+        "payout_option_header": "Author rewards",
+        "payout_option_description":
+            "What type of tokens do you want as rewards from this post?",
+        "current_default": "Default",
+        "update_default_in_settings": "Update"
+    },
     "postfull_jsx": {
         "this_post_is_not_available_due_to_a_copyright_claim":
             "This post is not available due to a copyright claim.",
         "share_on_facebook": "Share on Facebook",
         "share_on_twitter": "Share on Twitter",
+        "share_on_reddit": "Share on Reddit",
         "share_on_linkedin": "Share on Linkedin",
         "recent_password": "Recent Password",
         "in_week_convert_DEBT_TOKEN_to_LIQUID_TOKEN":
@@ -379,7 +389,7 @@
         "request_already_submitted_contact_support":
             "Your request has been already submitted and we are working on it. Please contact %(SUPPORT_EMAIL)s for the status of your request.",
         "recover_account_intro":
-            "From time to time, a Steemian's owner key may be compromised. Stolen Account Recovery gives the rightful account owner 30 days to recover their account from the moment the thief changed their owner key. Stolen Account Recovery can only be used on %(APP_URL)s if the account owner had previously listed '%(APP_NAME)s' as their account trustee and complied with %(APP_NAME)s's Terms of Service.",
+            "From time to time, a VITian's owner key may be compromised. Stolen Account Recovery gives the rightful account owner 30 days to recover their account from the moment the thief changed their owner key. Stolen Account Recovery can only be used on %(APP_URL)s if the account owner had previously listed '%(APP_NAME)s' as their account trustee and complied with %(APP_NAME)s's Terms of Service.",
         "login_with_facebook_or_reddit_media_to_verify_identity":
             "Please login with Facebook or Reddit to verify your identity",
         "login_with_social_media_to_verify_identity":
@@ -488,6 +498,8 @@
     },
     "witnesses_jsx": {
         "witness_thread": "witness thread",
+        "external_site": "external site",
+        "disabled": "disabled",
         "top_witnesses": "Witness Voting",
         "you_have_votes_remaining": {
             "zero": "You have no votes remaining",
@@ -569,7 +581,7 @@
         "converted_VESTING_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again":
             "Converted %(VESTING_TOKEN)s can be sent to yourself or someone else but can not transfer again without converting back to %(LIQUID_TOKEN)s.",
         "part_of_your_steem_power_is_currently_delegated":
-            "Part of %(user_name)s's STEEM POWER is currently delegated. Delegation is donated for influence or to help new users perform actions on steemit. Your delegation amount can fluctuate."
+            "Part of %(user_name)s's VIT POWER is currently delegated. Delegation is donated for influence or to help new users perform actions on vit.tube. Your delegation amount can fluctuate."
     },
     "promote_post_jsx": {
         "promote_post": "Promote Post",
@@ -583,7 +595,7 @@
     "about_jsx": {
         "about_app": "About %(APP_NAME)s",
         "about_app_details":
-            "%(APP_NAME)s is a social media platform where everyone gets paid for creating and curating content. It leverages a robust digital points system, called Steem, that supports real value for digital rewards through market price discovery and liquidity.",
+            "%(APP_NAME)s is a social media platform where everyone gets paid for creating and curating content. It leverages a robust digital points system, called VIT, that supports real value for digital rewards through market price discovery and liquidity.",
         "learn_more_at_app_url": "Learn more at %(APP_URL)s",
         "resources": "Resources"
     },
@@ -616,7 +628,7 @@
         "cancel_transfer_from_savings":
             "Cancel transfer from savings (request %(request_id)s)",
         "stop_power_down": "Stop power down",
-        "withdraw_vesting": "Start power down of %(powerdown_vests)s STEEM",
+        "withdraw_vesting": "Start power down of %(powerdown_vests)s VIT",
         "start_power_down_of": "Start power down of",
         "receive_interest_of": "Receive interest of",
         "bad_actor_caution": "Caution",
@@ -628,9 +640,9 @@
             "This is from an account with a bad reputation. If you wish, you may temporarily reveal this memo which may contain dangerous links.",
         "from_negative_rep_user_reveal_memo":
             "I understand the risk; show anyway.",
-        "curation_reward": "%(curation_reward)s STEEM POWER for ",
+        "curation_reward": "%(curation_reward)s VIT POWER for ",
         "author_reward":
-            "%(sbd_payout)s%(steem_payout)s and %(author_reward)s STEEM POWER for ",
+            "%(sbd_payout)s%(steem_payout)s and %(author_reward)s VIT POWER for ",
         "claim_reward_balance": {
             "three_rewards":
                 "Claim rewards: %(first_reward)s, %(second_reward)s and %(third_reward)s",
@@ -648,15 +660,15 @@
                 "Paid %(current_pays)s for %(open_pays)s"
         },
         "comment_benefactor_reward":
-            "%(benefactor_reward)s STEEM POWER for %(author)s/%(permlink)s",
+            "%(benefactor_reward)s VIT POWER for %(author)s/%(permlink)s",
         "transfer_to_vesting": {
             "from_self": {
-                "no_to": "Transfer %(amount)s to STEEM POWER",
-                "to_someone": "Transfer %(amount)s STEEM POWER to "
+                "no_to": "Transfer %(amount)s to VIT POWER",
+                "to_someone": "Transfer %(amount)s VIT POWER to "
             },
-            "to_self": "Receive %(amount)s STEEM POWER from ",
+            "to_self": "Receive %(amount)s VIT POWER from ",
             "from_user_to_user":
-                " Transfer %(amount)s STEEM POWER from %(from) to "
+                " Transfer %(amount)s VIT POWER from %(from) to "
         },
         "transfer": {
             "from_self": {
@@ -667,7 +679,7 @@
             "to_self": {
                 "to_savings": "Receive from savings %(amount)s from ",
                 "from_savings": "Transfer from savings %(amount)s from ",
-                "not_savings": "Transfer %(amount)s from "
+                "not_savings": "Received %(amount)s from "
             },
             "to_someone_from_someone": {
                 "to_savings":
@@ -737,7 +749,7 @@
         "password_update_succes":
             "The password for %(accountName)s was successfully updated",
         "password_info":
-            "This password or private key was entered incorrectly.  There is probably a handwriting or data-entry error.  Hint: A password or private key generated by Steemit will never contain 0 (zero), O (capital o), I (capital i) and l (lower case L) characters.",
+            "This password or private key was entered incorrectly.  There is probably a handwriting or data-entry error.  Hint: A password or private key generated by vit.tube will never contain 0 (zero), O (capital o), I (capital i) and l (lower case L) characters.",
         "enter_your_username": "Enter your username",
         "password_or_wif": "Password or WIF",
         "this_operation_requires_your_key_or_master_password":
@@ -746,10 +758,11 @@
         "amazing_community": "amazing community",
         "to_comment_and_reward_others": " to comment and reward others.",
         "signup_button": "Sign up now to earn ",
-        "signup_button_emphasis": "FREE STEEM!",
-        "sign_up_get_steem": "Sign up. Get STEEM!",
+        "signup_button_emphasis": "FREE VIT!",
+        "sign_up_get_steem": "Sign up. Get VIT",
         "returning_users": "Returning Users: ",
-        "join_our": "Join our"
+        "join_our": "Join our",
+        "sign_transfer": "Sign to complete transfer"
     },
     "chainvalidation_js": {
         "account_name_should_not_be_empty": "Account name should not be empty.",
@@ -787,8 +800,12 @@
         "always_hide": "Always hide",
         "always_warn": "Always warn",
         "always_show": "Always show",
+        "choose_default_blog_payout": "Blog post rewards",
+        "choose_default_comment_payout": "Comment post rewards",
         "muted_users": "Muted Users",
         "update": "Update",
+        "upload_image": "Upload an image",
+        "uploading_image": "Uploading image",
         "profile_image_url": "Profile picture url",
         "cover_image_url": "Cover image url",
         "profile_name": "Display Name",
@@ -807,9 +824,8 @@
         "this_memo_is_public": "This memo is public",
         "convert_to_VESTING_TOKEN": "Convert to %(VESTING_TOKEN)s",
         "balance_subject_to_3_day_withdraw_waiting_period":
-            "Balance subject to 3 day withdraw waiting period,",
-        "move_funds_to_another_account":
-            "Move funds to another %(APP_NAME)s account.",
+            "Balances subject to 3 day withdraw waiting period.",
+        "move_funds_to_another_account": "Move funds to another VIT account.",
         "protect_funds_by_requiring_a_3_day_withdraw_waiting_period":
             "Protect funds by requiring a 3 day withdraw waiting period.",
         "withdraw_funds_after_the_required_3_day_waiting_period":
@@ -820,8 +836,11 @@
             "%(asset)s currently collecting %(interest)s%% APR.",
         "beware_of_spam_and_phishing_links":
             "Beware of spam and phishing links in transfer memos. Do not open links from users you do not trust. Do not provide your private keys to any third party websites.",
+        "transactions_make_take_a_few_minutes":
+            "Transactions will not show until they are confirmed on the blockchain, which may take a few minutes.",
         "autocomplete_previous_transfers": "previous transfers",
-        "autocomplete_user_following": "following"
+        "autocomplete_user_following": "following",
+        "confirm_transfer": "Transfer %(amount)s from %(from)s to %(to)s?"
     },
     "userwallet_jsx": {
         "transfer": "Transfer",
@@ -836,6 +855,8 @@
         "withdraw_DEBT_TOKENS": "Withdraw %(DEBT_TOKENS)s",
         "tokens_worth_about_1_of_LIQUID_TICKER":
             "Tokens worth about $1.00 of %(LIQUID_TICKER)s, currently collecting %(sbdInterest)s%% APR.",
+        "tradeable_tokens_transferred":
+            "Tradeable tokens that may be transferred anywhere at anytime.",
         "savings": "SAVINGS",
         "estimated_account_value": "Estimated Account Value",
         "next_power_down_is_scheduled_to_happen":
@@ -843,7 +864,7 @@
         "transfers_are_temporary_disabled": "Transfers are temporary disabled.",
         "history": "HISTORY",
         "redeem_rewards": "Redeem Rewards (Transfer to Balance)",
-        "buy_steem_or_steem_power": "Buy STEEM or STEEM POWER"
+        "buy_steem_or_steem_power": "Buy VIT or VIT POWER"
     },
     "powerdown_jsx": {
         "power_down": "Power Down",
@@ -867,7 +888,14 @@
         "i_understand_dont_show_again": "I understand, don't show me again"
     },
     "termsagree_jsx": {
-        "i_agree_to_these_terms": "I agree to these terms",
+        "please_review": "Please review our terms to continue",
+        "hi_user": "Hi %(username)s,",
+        "blurb":
+            "Our Terms of Service set the rules and guidelines that you must accept and follow in order to use VIT and our Privacy Policy explains the type of information we collect and what we do with it. Don't worry, we don't sell your data to anyone. We do use it to meet legal requirements and to learn how to make VIT better.",
+        "i_agree_to_steemits": "I agree to VIT's",
+        "terms_of_service": "Terms of Service",
+        "privacy_policy": "Privacy Policy",
+        "continue": "Continue",
         "cancel": "Cancel"
     },
     "confirmtransactionform_jsx": {
@@ -877,12 +905,16 @@
         "your_transaction_failed": "Your transaction failed to process",
         "out_of_bandwidth_title": "Why? You've run out of bandwidth",
         "out_of_bandwidth_reason":
-            "Actions such as posting and voting use computing resources placing a real cost on the community members who run the Steem blockchain for everyone.",
+            "Actions such as posting and voting use computing resources placing a real cost on the community members who run the VIT blockchain for everyone.",
         "out_of_bandwidth_reason_2":
-            "To keep things free, Steem intelligently allocates bandwidth to each user based on their Steem Power holdings, their recent usage and overall network demand. This system prioritizes actions by good community members while limiting spam.",
-        "out_of_bandwidth_option_title": "To keep interacting on Steemit:",
-        "out_of_bandwidth_option_1": "Buy and hold more Steem Power",
+            "To keep things free, VIT intelligently allocates bandwidth to each user based on their VIT Power holdings, their recent usage and overall network demand. This system prioritizes actions by good community members while limiting spam.",
+        "out_of_bandwidth_option_title": "To keep interacting on VIT:",
+        "out_of_bandwidth_option_1": "Buy and hold more VIT Power",
         "out_of_bandwidth_option_2": "Wait until your bandwidth recharges",
         "out_of_bandwidth_option_3": "Wait until the network usage decreases"
+    },
+    "sanitizedlink_jsx": {
+        "phishylink_caution": "Link hidden; phishing attempt",
+        "phishylink_reveal": "show link"
     }
 }

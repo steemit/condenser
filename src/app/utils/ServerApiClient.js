@@ -15,7 +15,7 @@ export function serverApiLogin(account, signatures) {
     const request = Object.assign({}, request_base, {
         body: JSON.stringify({ account, signatures, csrf: $STM_csrf }),
     });
-    fetch('/api/v1/login_account', request);
+    return fetch('/api/v1/login_account', request);
 }
 
 export function serverApiLogout() {
@@ -32,10 +32,6 @@ export function serverApiRecordEvent(type, val, rate_limit_ms = 5000) {
     if (last_call && new Date() - last_call < rate_limit_ms) return;
     last_call = new Date();
     const value = val && val.stack ? `${val.toString()} | ${val.stack}` : val;
-    const request = Object.assign({}, request_base, {
-        body: JSON.stringify({ csrf: $STM_csrf, type, value }),
-    });
-    fetch('/api/v1/record_event', request);
     api.call(
         'overseer.collect',
         { collection: 'event', metadata: { type, value } },
@@ -79,4 +75,18 @@ export function setUserPreferences(payload) {
         body: JSON.stringify({ csrf: window.$STM_csrf, payload }),
     });
     return fetch('/api/v1/setUserPreferences', request);
+}
+
+export function isTosAccepted() {
+    const request = Object.assign({}, request_base, {
+        body: JSON.stringify({ csrf: window.$STM_csrf }),
+    });
+    return fetch('/api/v1/isTosAccepted', request).then(res => res.json());
+}
+
+export function acceptTos() {
+    const request = Object.assign({}, request_base, {
+        body: JSON.stringify({ csrf: window.$STM_csrf }),
+    });
+    return fetch('/api/v1/acceptTos', request);
 }

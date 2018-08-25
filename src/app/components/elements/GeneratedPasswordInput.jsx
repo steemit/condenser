@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import tt from 'counterpart';
 import { APP_NAME } from 'app/client_config';
 import { key_utils } from '@steemit/steem-js/lib/auth/ecc';
@@ -9,9 +10,9 @@ function allChecked(confirmCheckboxes) {
 
 export default class GeneratedPasswordInput extends React.Component {
     static propTypes = {
-        disabled: React.PropTypes.bool,
-        onChange: React.PropTypes.func.isRequired,
-        showPasswordString: React.PropTypes.bool.isRequired,
+        disabled: PropTypes.bool,
+        onChange: PropTypes.func.isRequired,
+        showPasswordString: PropTypes.bool.isRequired,
     };
 
     constructor(props) {

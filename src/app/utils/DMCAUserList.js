@@ -1,5 +1,4 @@
 const list = `
-spaces
 the-gaming-llama
 cmgsteems
 iamgod
@@ -8,6 +7,7 @@ braini
 cracked-games
 gautampartapsoni
 jimreitz
+bitchminer
 `
     .trim()
     .split('\n');

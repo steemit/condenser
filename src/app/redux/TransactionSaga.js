@@ -1,5 +1,4 @@
-import { takeEvery } from 'redux-saga';
-import { call, put, select } from 'redux-saga/effects';
+import { call, put, select, all, takeEvery } from 'redux-saga/effects';
 import { fromJS, Set, Map } from 'immutable';
 import tt from 'counterpart';
 import getSlug from 'speakingurl';
@@ -18,27 +17,11 @@ import { DEBT_TICKER } from 'app/client_config';
 import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 
 export const transactionWatches = [
-    watchForBroadcast,
-    watchForUpdateAuthorities,
-    watchForUpdateMeta,
-    watchForRecoverAccount,
+    takeEvery(transactionActions.BROADCAST_OPERATION, broadcastOperation),
+    takeEvery(transactionActions.UPDATE_AUTHORITIES, updateAuthorities),
+    takeEvery(transactionActions.UPDATE_META, updateMeta),
+    takeEvery(transactionActions.RECOVER_ACCOUNT, recoverAccount),
 ];
-
-export function* watchForBroadcast() {
-    yield* takeEvery(
-        transactionActions.BROADCAST_OPERATION,
-        broadcastOperation
-    );
-}
-export function* watchForUpdateAuthorities() {
-    yield* takeEvery(transactionActions.UPDATE_AUTHORITIES, updateAuthorities);
-}
-export function* watchForUpdateMeta() {
-    yield* takeEvery(transactionActions.UPDATE_META, updateMeta);
-}
-export function* watchForRecoverAccount() {
-    yield* takeEvery(transactionActions.RECOVER_ACCOUNT, recoverAccount);
-}
 
 const hook = {
     preBroadcast_comment,
@@ -52,6 +35,7 @@ const hook = {
     error_account_witness_vote,
     accepted_comment,
     accepted_delete_comment,
+    accepted_account_witness_vote,
     accepted_vote,
     accepted_account_update,
     accepted_withdraw_vesting,
@@ -100,8 +84,12 @@ function* preBroadcast_vote({ operation, username }) {
 function* preBroadcast_account_witness_vote({ operation, username }) {
     if (!operation.account) operation.account = username;
     const { account, witness, approve } = operation;
+    // give immediate feedback
     yield put(
-        globalActions.updateAccountWitnessVote({ account, witness, approve })
+        globalActions.addActiveWitnessVote({
+            account,
+            witness,
+        })
     );
     return operation;
 }
@@ -176,7 +164,7 @@ function* error_account_witness_vote({
 }
 
 /** Keys, username, and password are not needed for the initial call.  This will check the login and may trigger an action to prompt for the password / key. */
-function* broadcastOperation({
+export function* broadcastOperation({
     payload: {
         type,
         operation,
@@ -452,6 +440,21 @@ function* accepted_vote({ operation: { author, permlink, weight } }) {
     yield call(getContent, { author, permlink });
 }
 
+function* accepted_account_witness_vote({
+    operation: { account, witness, approve },
+}) {
+    yield put(
+        globalActions.updateAccountWitnessVote({ account, witness, approve })
+    );
+
+    yield put(
+        globalActions.removeActiveWitnessVote({
+            account,
+            witness,
+        })
+    );
+}
+
 function* accepted_withdraw_vesting({ operation }) {
     let [account] = yield call(
         [api, api.getAccountsAsync],
@@ -501,10 +504,7 @@ function* accepted_account_update({ operation }) {
 export function* preBroadcast_comment({ operation, username }) {
     if (!operation.author) operation.author = username;
     let permlink = operation.permlink;
-    const {
-        author,
-        __config: { originalBody, autoVote, comment_options },
-    } = operation;
+    const { author, __config: { originalBody, comment_options } } = operation;
     const {
         parent_author = '',
         parent_permlink = operation.category,
@@ -568,16 +568,6 @@ export function* preBroadcast_comment({ operation, username }) {
                     : [],
             },
         ]);
-    }
-
-    if (autoVote) {
-        const vote = {
-            voter: op.author,
-            author: op.author,
-            permlink: op.permlink,
-            weight: 10000,
-        };
-        comment_op.push(['vote', vote]);
     }
 
     return comment_op;
@@ -690,7 +680,7 @@ function slug(text) {
 const pwPubkey = (name, pw, role) =>
     auth.wifToPublic(auth.toWif(name, pw.trim(), role));
 
-function* recoverAccount({
+export function* recoverAccount({
     payload: {
         account_to_recover,
         old_password,
@@ -703,6 +693,7 @@ function* recoverAccount({
         [api, api.getAccountsAsync],
         [account_to_recover]
     );
+
     if (!account) {
         onError('Unknown account ' + account);
         return;
@@ -753,6 +744,7 @@ function* recoverAccount({
     };
 
     try {
+        // TODO: Investigate wrapping in a redux-saga call fn, so it can be tested!.
         yield broadcast.sendAsync(
             {
                 extensions: [],
@@ -773,6 +765,7 @@ function* recoverAccount({
         // change password
         // change password probably requires a separate transaction (single trx has not been tested)
         const { json_metadata } = account;
+        // TODO: Investigate wrapping in a redux-saga call fn, so it can be tested!
         yield broadcast.sendAsync(
             {
                 extensions: [],
@@ -799,6 +792,21 @@ function* recoverAccount({
             },
             [newOwnerPrivate]
         );
+        // Reset all outgoing auto-vesting routes for this user. Condenser - #2835
+        const outgoingAutoVestingRoutes = yield call(
+            [api, api.getWithdrawRoutes],
+            [account.name, 'outgoing']
+        );
+        if (outgoingAutoVestingRoutes && outgoingAutoVestingRoutes.length > 0) {
+            yield all(
+                outgoingAutoVestingRoutes.map(ovr => {
+                    return call(
+                        [broadcast, broadcast.setWithdrawVestingRoute],
+                        [newActive, ovr.from_account, ovr.to_account, 0, true]
+                    );
+                })
+            );
+        }
         if (onSuccess) onSuccess();
     } catch (error) {
         console.error('Recover account', error);
@@ -808,7 +816,7 @@ function* recoverAccount({
 
 /** auths must start with most powerful key: owner for example */
 // const twofaAccount = 'steem'
-function* updateAuthorities({
+export function* updateAuthorities({
     payload: { accountName, signingKey, auths, twofa, onSuccess, onError },
 }) {
     // Be sure this account is up-to-date (other required fields are sent in the update)
@@ -948,7 +956,7 @@ function* updateAuthorities({
 
 /** auths must start with most powerful key: owner for example */
 // const twofaAccount = 'steem'
-function* updateMeta(params) {
+export function* updateMeta(params) {
     // console.log('params', params)
     const {
         meta,

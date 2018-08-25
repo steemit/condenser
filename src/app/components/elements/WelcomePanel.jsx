@@ -1,5 +1,5 @@
 import React from 'react';
-import CloseButton from 'react-foundation-components/lib/global/close-button';
+import CloseButton from 'app/components/elements/CloseButton';
 import { Link } from 'react-router';
 import tt from 'counterpart';
 import { SIGNUP_URL } from 'shared/constants';
@@ -41,12 +41,12 @@ export default class WelcomePanel extends React.Component {
                                     <b>{tt('navigation.sign_up')}</b>{' '}
                                 </a>
 
-                                <Link
+                                {/*<Link
                                     href="/faq.html"
                                     className="button ghost fade-in--7"
                                 >
                                     <b>{tt('navigation.learn_more')}</b>
-                                </Link>
+                                </Link>*/}
                             </div>
                         </div>
                         <div className="text-center welcomeImage medium-6 large-5 show-for-medium">

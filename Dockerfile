@@ -1,4 +1,4 @@
-FROM node:8.7
+FROM node:8.7 as Base
 
 ARG SOURCE_COMMIT
 ENV SOURCE_COMMIT ${SOURCE_COMMIT}
@@ -17,23 +17,22 @@ RUN yarn install --non-interactive --frozen-lockfile
 
 COPY . /var/app
 
-# FIXME TODO: fix eslint warnings
-
-#RUN mkdir tmp && \
-#  npm test && \
-#  ./node_modules/.bin/eslint . && \
-#  npm run build
-
 RUN mkdir tmp && \
     yarn test && yarn build
 
 ENV PORT 8080
-ENV NODE_ENV production
-
 EXPOSE 8080
 
-CMD [ "yarn", "run", "production" ]
+## Development ##
+FROM Base as Development
+ENV NODE_ENV development
+CMD [ "yarn", "run", "start" ]
 
-# uncomment the lines below to run it in development mode
-# ENV NODE_ENV development
-# CMD [ "yarn", "run", "start" ]
+## Production ##
+FROM Base as PreProduction
+RUN rm -rf .git
+FROM node:8.7-alpine as Production
+WORKDIR /var/app
+COPY --from=PreProduction /var/app /var/app
+ENV NODE_ENV production
+CMD [ "yarn", "run", "production" ]

@@ -122,7 +122,7 @@ class UserWallet extends React.Component {
         };
 
         const savings_balance = account.get('savings_balance');
-        const savings_sbd_balance = account.get('savings_sbd_balance');
+        const savings_sbd_balance = 0; //account.get('savings_sbd_balance');
 
         const powerDown = (cancel, e) => {
             e.preventDefault();
@@ -218,6 +218,10 @@ class UserWallet extends React.Component {
         const divesting =
             parseFloat(account.get('vesting_withdraw_rate').split(' ')[0]) >
             0.0;
+        const sbd_balance = 0.0;
+        const sbd_balance_savings = 0.0;
+        const sbdOrders = 0;
+        /*
         const sbd_balance = parseFloat(account.get('sbd_balance'));
         const sbd_balance_savings = parseFloat(
             savings_sbd_balance.split(' ')[0]
@@ -231,7 +235,7 @@ class UserWallet extends React.Component {
                       }
                       return o;
                   }, 0) / assetPrecision;
-
+        */
         const steemOrders =
             !open_orders || !isMyAccount
                 ? 0
@@ -448,10 +452,11 @@ class UserWallet extends React.Component {
             parseFloat(account.get('reward_steem_balance').split(' ')[0]) > 0
                 ? account.get('reward_steem_balance')
                 : null;
-        const reward_sbd =
-            parseFloat(account.get('reward_sbd_balance').split(' ')[0]) > 0
-                ? account.get('reward_sbd_balance')
-                : null;
+        const reward_sbd = null;
+        //const reward_sbd =
+        //    parseFloat(account.get('reward_sbd_balance').split(' ')[0]) > 0
+        //        ? account.get('reward_sbd_balance')
+        //        : null;
         const reward_sp =
             parseFloat(account.get('reward_vesting_steem').split(' ')[0]) > 0
                 ? account
@@ -461,7 +466,7 @@ class UserWallet extends React.Component {
 
         let rewards = [];
         if (reward_steem) rewards.push(reward_steem);
-        if (reward_sbd) rewards.push(reward_sbd);
+        //if (reward_sbd) rewards.push(reward_sbd);
         if (reward_sp) rewards.push(reward_sp);
 
         let rewards_str;
@@ -627,6 +632,7 @@ class UserWallet extends React.Component {
                         ) : null}
                     </div>
                 </div>
+                {/*
                 <div className="UserWallet__balance row">
                     <div className="column small-12 medium-8">
                         {LIQUID_TOKEN_UPPERCASE} DOLLARS
@@ -662,7 +668,8 @@ class UserWallet extends React.Component {
                         {conversions}
                     </div>
                 </div>
-                <div className="UserWallet__balance row zebra">
+                */}
+                <div className="UserWallet__balance row">
                     <div className="column small-12 medium-8">
                         {tt('userwallet_jsx.savings')}
                         <div className="secondary">
@@ -699,6 +706,7 @@ class UserWallet extends React.Component {
                         )}
                     </div>
                 </div>
+                {/*
                 <div className="UserWallet__balance row">
                     <div className="column small-12 medium-8">
                         {tt('userwallet_jsx.estimated_account_value')}
@@ -710,7 +718,8 @@ class UserWallet extends React.Component {
                         {estimate_output}
                     </div>
                 </div>
-                <div className="UserWallet__balance row">
+                */}
+                <div className="UserWallet__balance row rebra">
                     <div className="column small-12">
                         {isWithdrawScheduled && (
                             <span>
@@ -792,7 +801,7 @@ export default connect(
         const sbd_interest = gprops.get('sbd_interest_rate');
         return {
             ...ownProps,
-            open_orders: state.market.get('open_orders'),
+            //open_orders: state.market.get('open_orders'),
             price_per_steem,
             savings_withdraws,
             sbd_interest,
@@ -812,7 +821,7 @@ export default connect(
             const operation = {
                 account: username,
                 reward_steem: account.get('reward_steem_balance'),
-                reward_sbd: account.get('reward_sbd_balance'),
+                //reward_sbd: account.get('reward_sbd_balance'),
                 reward_vests: account.get('reward_vesting_balance'),
             };
 

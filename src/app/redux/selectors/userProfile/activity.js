@@ -59,7 +59,6 @@ export const hydratedNotificationsSelector = createDeepEqualSelector(
                     const content = contents.getIn([`${author}/${notify.get('permlink')}`]);
                     if (content) {
                         // if it isn't post
-                        console.log(notify.get('eventType'), content.toJS());
                         if (content.get('parent_author')) {
                             notify.setIn(
                                 ['computed'],

@@ -211,8 +211,17 @@ const ReplyBlockStyled = styled(ReplyBlock)`
 const Root = styled.div`
     position: relative;
     border-radius: 8px;
-    background: #fff;
+    background: #ffffff;
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.06);
+    
+    ${PostImage}:after {
+        background-color: rgba(0, 0, 0, 0);
+        transition: background-color 0.15s;
+    }
+
+    &:hover ${PostImage}:after {
+        background-color: rgba(0, 0, 0, 0.3);
+    }
 
     ${is('grid')`
         display: flex;
@@ -230,15 +239,6 @@ const Root = styled.div`
             opacity: 1;
         }
 
-        ${PostImage}:after {
-            background-color: rgba(0, 0, 0, 0);
-            transition: background-color 0.15s;
-        }
-
-        &:hover ${PostImage}:after {
-            background-color: rgba(0, 0, 0, 0.2);
-        }
-
         &:after {
             position: absolute;
             content: '';
@@ -252,40 +252,6 @@ const Root = styled.div`
     }
 `;
 
-const ReplyCount = styled.div`
-    font-size: 16px;
-    font-weight: 500;
-    color: #959595;
-    cursor: default;
-    user-select: none;
-`;
-
-const Splitter = styled.div`
-    width: 1px;
-    height: 26px;
-    background: #e1e1e1;
-`;
-
-const ReplyLink = styled(Link)`
-    display: flex;
-    align-items: center;
-    padding-left: 7px;
-    font-size: 12px;
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    color: #393636 !important;
-    height: 100%;
-    text-shadow: 0 2px 12px rgba(0, 0, 0, .15);
-    
-    &:hover {
-        text-shadow: 0 2px 4px rgba(0, 0, 0, .5);
-    }
-    
-    ${is('grid')`
-        width: 50%;
-    `};
-`;
 
 class PostCard extends PureComponent {
     static propTypes = {

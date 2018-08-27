@@ -138,7 +138,7 @@ class UserNavigation extends PureComponent {
         ];
 
         return (
-            <Wrapper>
+            <Wrapper innerRef={ref => this.wrapper = ref}>
                 <Container align="center" wrap="wrap">
                     <TabLinkIndex key={indexTabLink.to} to={indexTabLink.to}>
                         {indexTabLink.value}
@@ -221,11 +221,14 @@ class UserNavigation extends PureComponent {
     };
 
     _checkScreenSize = () => {
-        const documentWidth = document.documentElement.clientWidth;
-        if (documentWidth <= this.props.mainContainerWidthPoint && !this.state.screenLessThenMainContainer) {
+        const wrapperWidth = this.wrapper.clientWidth;
+        if (wrapperWidth <= this.props.MAIN_CONTAINER_WIDTH_POINT && !this.state.screenLessThenMainContainer) {
             this.setState({screenLessThenMainContainer: true})
         }
-        if (documentWidth > this.props.mainContainerWidthPoint && this.state.screenLessThenMainContainer) {
+        if (wrapperWidth <= this.props.MAIN_CONTAINER_WIDTH_POINT && this.props.layout !== 'grid') {
+            this.props.changeProfileLayout('grid')
+        }
+        if (wrapperWidth > this.props.MAIN_CONTAINER_WIDTH_POINT && this.state.screenLessThenMainContainer) {
             this.setState({screenLessThenMainContainer: false})
         }
     }
@@ -233,9 +236,9 @@ class UserNavigation extends PureComponent {
 
 export default connect(
     state => {
-        const mainContainerWidthPoint = 1199;
+        const MAIN_CONTAINER_WIDTH_POINT = 1199;
         return {
-            mainContainerWidthPoint,
+            MAIN_CONTAINER_WIDTH_POINT,
             layout: (state.ui.profile && state.ui.profile.get('layout')) || 'list'
         };
     },

@@ -35,7 +35,7 @@ export const CURRENCY_TRANSLATE = {
     GOLOS_POWER: 'Сила Голоса',
 };
 
-const CURRENCY_COLOR = {
+export const CURRENCY_COLOR = {
     GOLOS: '#2879ff',
     GBG: '#ffb839',
     GOLOS_POWER: '#f57c02',

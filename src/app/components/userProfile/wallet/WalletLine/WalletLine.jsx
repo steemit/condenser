@@ -14,11 +14,9 @@ import DialogManager from 'app/components/elements/common/DialogManager';
 import { golosToVests, getVesting } from 'app/utils/StateFunctions';
 import { MIN_VOICE_POWER } from 'app/client_config';
 import {
-    MAIN_TABS,
-    CURRENCY,
     DIRECTION,
-    REWARDS_TYPES,
     CURRENCY_TRANSLATE,
+    CURRENCY_COLOR
 } from 'src/app/containers/userProfile/wallet/WalletContent';
 
 const MONTHS = [

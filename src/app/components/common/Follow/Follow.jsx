@@ -14,6 +14,10 @@ import Icon from 'golos-ui/Icon';
 
 const ButtonStyled = Button.extend`
     margin-right: 8px;
+
+    @media (max-width: 890px) {
+        height: 30px;
+    }
 `;
 
 export default class Follow extends Component {
@@ -58,7 +62,8 @@ export default class Follow extends Component {
         if (loading)
             return (
                 <span>
-                    <LoadingIndicator /> {tt('g.loading')}&hellip;
+                    <LoadingIndicator /> {tt('g.loading')}
+                    &hellip;
                 </span>
             );
         if (loading !== false) {
@@ -71,7 +76,8 @@ export default class Follow extends Component {
         if (!follower || !following)
             return (
                 <ButtonStyled onClick={this.followLoggedOut}>
-                    <Icon name="subscribe" height="10" width="14" />{tt('g.follow')}
+                    <Icon name="subscribe" height="10" width="14" />
+                    {tt('g.follow')}
                 </ButtonStyled>
             );
 
@@ -83,35 +89,34 @@ export default class Follow extends Component {
 
         return (
             <Fragment>
-                {showFollow && followingWhat !== 'blog' ? 
-                    (
-                        <ButtonStyled disabled={busy} onClick={this.follow}>
-                            <Icon name="subscribe" height="10" width="14" />
-                            {tt('g.follow')}
-                        </ButtonStyled>
-                    )
-                    :
-                    (
-                        <ButtonStyled disabled={busy} light onClick={this.unfollow}>
-                            <Icon name="cross" height="10" width="10" />
-                            {tt('g.unfollow')}
-                        </ButtonStyled>
-                    )}
+                {showFollow && followingWhat !== 'blog' ? (
+                    <ButtonStyled disabled={busy} onClick={this.follow}>
+                        <Icon name="subscribe" height="10" width="14" />
+                        {tt('g.follow')}
+                    </ButtonStyled>
+                ) : (
+                    <ButtonStyled disabled={busy} light onClick={this.unfollow}>
+                        <Icon name="cross" height="10" width="10" />
+                        {tt('g.unfollow')}
+                    </ButtonStyled>
+                )}
 
-                {showMute && followingWhat !== 'ignore' ? 
-                    (
-                        <ButtonStyled disabled={busy} onClick={this.ignore}>
-                            {tt('g.mute')}
-                        </ButtonStyled>
-                    )
-                    :
-                    (
-                        <ButtonStyled disabled={busy} light onClick={this.unignore}>
-                            {tt('g.unmute')}
-                        </ButtonStyled>
-                    )}
+                {showMute && followingWhat !== 'ignore' ? (
+                    <ButtonStyled disabled={busy} onClick={this.ignore}>
+                        {tt('g.mute')}
+                    </ButtonStyled>
+                ) : (
+                    <ButtonStyled disabled={busy} light onClick={this.unignore}>
+                        {tt('g.unmute')}
+                    </ButtonStyled>
+                )}
 
-                {children && <span>&nbsp;&nbsp;{children}</span>}
+                {children && (
+                    <span>
+                        &nbsp;&nbsp;
+                        {children}
+                    </span>
+                )}
             </Fragment>
         );
     }
@@ -129,12 +134,8 @@ module.exports = connect(
         }
 
         const { following } = ownProps;
-        const follow = state.global.getIn(
-            ['follow', 'getFollowingAsync', follower],
-            emptyMap
-        );
-        const loading =
-            follow.get('blog_loading', false) || follow.get('ignore_loading', false);
+        const follow = state.global.getIn(['follow', 'getFollowingAsync', follower], emptyMap);
+        const loading = follow.get('blog_loading', false) || follow.get('ignore_loading', false);
         const followingWhat = follow.get('blog_result', emptySet).contains(following)
             ? 'blog'
             : follow.get('ignore_result', emptySet).contains(following)

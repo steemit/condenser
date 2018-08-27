@@ -7,6 +7,8 @@ import {
     FAVORITES_TOGGLE_REQUEST_SUCCESS,
 } from '../../constants/favorites';
 
+export const PAGE_SIZE = 20;
+
 const initialState = {
     isLoading: false,
     isLoaded: false,
@@ -47,16 +49,27 @@ export default function(state = initialState, { type, payload, meta }) {
         case FAVORITES_TOGGLE_REQUEST_SUCCESS:
             if (!state.isLoading) {
                 let list;
+                let showList;
 
                 if (meta.isAdd) {
                     list = state.list.push(meta.link);
+
+                    // Если мы на последней странице просмотра
+                    if (Math.ceil(state.list.size / PAGE_SIZE) === state.pages) {
+                        showList = state.showList.push(meta.link);
+                    } else {
+                        showList = state.showList;
+                    }
+
                 } else {
                     list = state.list.filter(link => link !== meta.link);
+                    showList = state.showList.filter(link => link !== meta.link);
                 }
 
                 return {
                     ...state,
                     list,
+                    showList,
                     set: Set(list),
                 };
             }

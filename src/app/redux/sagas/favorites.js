@@ -2,6 +2,8 @@ import { put, all, select, takeEvery } from 'redux-saga/effects';
 import { loadUserLazy } from 'src/app/helpers/users';
 import { loadFavoritesAction, toggleFavoriteRequestAction } from '../actions/favorites';
 import DialogManager from 'app/components/elements/common/DialogManager';
+
+import { PAGE_SIZE } from '../reducers/data/favorites';
 import {
     FAVORITES_COMPLETE_PAGE_LOADING,
     FAVORITES_LOAD,
@@ -13,8 +15,6 @@ import {
     FAVORITES_REQUEST_SUCCESS,
     FAVORITES_TOGGLE_REQUEST_ERROR,
 } from '../constants/favorites';
-
-const PAGE_SIZE = 20;
 
 export default function* watch() {
     yield takeEvery(FAVORITES_LOAD, loadFavorites);

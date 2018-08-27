@@ -13,7 +13,6 @@ import { changeProfileLayout } from 'src/app/redux/actions/ui';
 
 const Wrapper = styled.div`
     position: relative;
-    flex-wrap: wrap;
     min-height: 50px;
     background-color: #fff;
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.15);
@@ -85,8 +84,8 @@ class UserNavigation extends PureComponent {
     constructor() {
         super();
         this.state = {
-            screenLessThenMainContainer: false
-        }
+            screenLessThenMainContainer: false,
+        };
     }
     static propTypes = {
         accountName: PropTypes.string,
@@ -106,7 +105,7 @@ class UserNavigation extends PureComponent {
     }
 
     render() {
-        const { accountName, isOwner } = this.props;
+        const { accountName, isOwner, className } = this.props;
         const indexTabLink = { value: tt('g.posts'), to: `/@${accountName}` };
 
         const tabLinks = [];
@@ -138,7 +137,7 @@ class UserNavigation extends PureComponent {
         ];
 
         return (
-            <Wrapper innerRef={ref => this.wrapper = ref}>
+            <Wrapper className={className} innerRef={ref => this.wrapper = ref}>
                 <Container align="center" wrap="wrap">
                     <TabLinkIndex key={indexTabLink.to} to={indexTabLink.to}>
                         {indexTabLink.value}
@@ -162,12 +161,7 @@ class UserNavigation extends PureComponent {
     }
 
     _renderRightIcons() {
-        const {
-            accountName,
-            isOwner,
-            layout,
-            showLayout
-        } = this.props;
+        const { accountName, isOwner, layout, showLayout } = this.props;
 
         const icons = [];
 
@@ -231,7 +225,7 @@ class UserNavigation extends PureComponent {
         if (wrapperWidth > this.props.MAIN_CONTAINER_WIDTH_POINT && this.state.screenLessThenMainContainer) {
             this.setState({screenLessThenMainContainer: false})
         }
-    }
+    };
 }
 
 export default connect(

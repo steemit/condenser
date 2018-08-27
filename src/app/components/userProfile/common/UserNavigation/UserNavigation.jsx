@@ -18,6 +18,7 @@ const Wrapper = styled.div`
     background-color: #fff;
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.15);
     z-index: 1;
+    overflow-x: hidden;
 `;
 
 const TabLink = styled(StyledTabLink)`
@@ -81,12 +82,25 @@ const SimpleIcon = Icon.extend`
     height: 20px;
 `;
 
+const LeftArrow = styled.div`
+    width: 10px;
+    height: 100%;
+    position: absolute;
+    right: 20px;
+    top: 0;
+    cursor: pointer;
+    background-color: black;
+    z-index: 1;
+`;
+
 class UserNavigation extends PureComponent {
     constructor() {
         super();
         this.state = {
             screenLessThenMainContainer: false,
+            currentOffsetIndex: 1,
         };
+        this._setStyleForNavigationIcons = this._setStyleForNavigationIcons.bind(this);
     }
     static propTypes = {
         accountName: PropTypes.string,
@@ -97,14 +111,7 @@ class UserNavigation extends PureComponent {
     };
 
     componentDidUpdate() {
-        for (let key in this.itemsRef) {
-            let item = this.itemsRef[key];
-            if (!item) {
-                continue;
-            }
-            console.log(ReactDOM.findDOMNode(item).clientWidth);
-        }
-        console.log('____');
+        this._setStyleForNavigationIcons();
     }
 
     componentDidMount() {
@@ -116,13 +123,13 @@ class UserNavigation extends PureComponent {
         window.removeEventListener('resize', this._checkScreenSize);
     }
 
-    itemsRef = {};
-
     render() {
         const { accountName, isOwner, className } = this.props;
         const indexTabLink = { value: tt('g.posts'), to: `/@${accountName}` };
 
         const tabLinks = [];
+
+        tabLinks.push({ value: tt('g.blog'), to: `/@${accountName}` });
 
         tabLinks.push({ value: tt('g.comments'), to: `/@${accountName}/comments` });
 
@@ -151,14 +158,11 @@ class UserNavigation extends PureComponent {
         ];
         return (
             <Wrapper className={className} innerRef={ref => (this.wrapper = ref)}>
-                <Container align="center" wrap="wrap" ref={ref => (this.container = ref)}>
-                    <TabLinkIndex key={indexTabLink.to} to={indexTabLink.to}>
-                        {indexTabLink.value}
-                    </TabLinkIndex>
-                    {tabLinks.map(({ value, to }) => (
-                        <TabLink key={to} to={to} ref={ref => (this.itemsRef[to] = ref)}>
+                <Container align="center" ref={ref => (this.container = ref)}>
+                    {tabLinks.map(({ value, to }, index) => (
+                        <TabLinkIndex key={to} to={to}>
                             {value}
-                        </TabLink>
+                        </TabLinkIndex>
                     ))}
                     {/*<LinkWithDropdown*/}
                     {/*closeOnClickOutside*/}
@@ -169,6 +173,7 @@ class UserNavigation extends PureComponent {
                     {/*</LinkWithDropdown>*/}
                     {this._renderRightIcons()}
                 </Container>
+                <LeftArrow />
             </Wrapper>
         );
     }
@@ -210,7 +215,6 @@ class UserNavigation extends PureComponent {
                     key="settings"
                     to={`/@${accountName}/settings`}
                     data-tooltip={tt('g.settings')}
-                    ref={ref => (this.itemsRef['settings'] = ref)}
                 >
                     <SettingsIcon name="setting" size="24" />
                 </IconLink>
@@ -219,6 +223,31 @@ class UserNavigation extends PureComponent {
 
         if (icons.length) {
             return <RightIcons>{icons}</RightIcons>;
+        }
+    }
+
+    _setStyleForNavigationIcons() {
+        let container = ReactDOM.findDOMNode(this.container);
+        let children = container.children;
+        let currentOffsetIndex = this.state.currentOffsetIndex;
+        let currentOffset = children[currentOffsetIndex];
+        for (let i = 0; i < children.length; i++) {
+            let child = children[i];
+
+            if (i < currentOffsetIndex) {
+                if (i === 0) {
+                    console.log('margin');
+                    child.style.marginLeft = child.offsetLeft - currentOffset.offsetLeft + 'px';
+                }
+                child.style.opacity = 0;
+                continue;
+            }
+
+            if (child.offsetLeft + child.clientWidth > container.clientWidth + 20) {
+                child.style.opacity = 0;
+            } else {
+                child.style.opacity = 1;
+            }
         }
     }
 
@@ -247,6 +276,8 @@ class UserNavigation extends PureComponent {
         ) {
             this.setState({ screenLessThenMainContainer: false });
         }
+
+        this._setStyleForNavigationIcons();
     };
 }
 

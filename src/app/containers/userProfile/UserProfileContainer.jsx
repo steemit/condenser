@@ -88,6 +88,7 @@ const SmallUserNavigation = styled(UserNavigation)`
     @media (max-width: 890px) {
         display: block;
         order: 3;
+        margin-bottom: 16px;
     }
 `;
 

@@ -93,7 +93,6 @@ const SmallUserNavigation = styled(UserNavigation)`
 `;
 
 export default class UserProfileContainer extends Component {
-
     static propTypes = {
         isOwner: PropTypes.bool,
         params: PropTypes.object,

@@ -174,12 +174,7 @@ class UserNavigation extends PureComponent {
     }
 
     _renderRightIcons() {
-        const {
-            accountName,
-            isOwner,
-            layout,
-            showLayout
-        } = this.props;
+        const { accountName, isOwner, layout, showLayout } = this.props;
 
         const icons = [];
 

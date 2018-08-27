@@ -28,9 +28,11 @@ class CommentsContent extends Component {
                 <InfoBlock>
                     <EmptyBlock>
                         Тут пока пусто
-                        {isOwner ? (
-                            <EmptySubText>Начни писать комментарии к постам.</EmptySubText>
-                        ) : null}
+                        <EmptySubText>
+                            {isOwner
+                                ? 'Начни писать комментарии к постам.'
+                                : 'Пользователь еще не начал писать комментарии.'}
+                        </EmptySubText>
                     </EmptyBlock>
                 </InfoBlock>
             );

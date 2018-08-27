@@ -100,9 +100,9 @@ class UserNavigation extends PureComponent {
             { value: tt('g.comments'), to: `/@${accountName}/comments` },
         );
 
-        // if (isOwner) {
-        //     tabLinks.push({ value: 'Избранное', to: `/@${accountName}/favorites` });
-        // }
+        if (isOwner) {
+            tabLinks.push({ value: 'Избранное', to: `/@${accountName}/favorites` });
+        }
 
         tabLinks.push(
             { value: tt('g.replies'), to: `/@${accountName}/recent-replies` },

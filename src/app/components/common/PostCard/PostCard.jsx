@@ -147,7 +147,6 @@ const Footer = styled.div`
     display: flex;
     flex-shrink: 0;
     align-items: center;
-    padding: 12px 18px;
     z-index: 1;
     pointer-events: none;
 
@@ -156,12 +155,17 @@ const Footer = styled.div`
     }
 
     ${is('grid')`
-        display: block;
+        flex-direction: column;
+        align-items: center;
     `};
 `;
 
 const VotePanelStyled = styled(VotePanel)`
+    padding: 12px 18px;
+
     ${is('grid')`
+        padding: 0;
+        padding-bottom: 20px;
         justify-content: space-around;
     `};
 `;
@@ -192,7 +196,7 @@ const PostImage = styled.div`
         top: unset;
         left: 0;
         width: unset;
-        height: 133px;
+        height: 173px;
     `}
 `;
 
@@ -213,17 +217,13 @@ const Root = styled.div`
     `};
 
     &.PostCard_image.PostCard_grid {
-        ${Footer} {
+        ${VotePanelStyled} {
             opacity: 0;
-            transition: opacity 0.25s;
+            transition: opacity 0.25s;        
         }
 
-        &:hover ${Footer} {
+        &:hover ${VotePanelStyled} {
             opacity: 1;
-        }
-
-        ${Footer} {
-            margin-top: 82px;
         }
 
         ${PostImage}:after {
@@ -241,11 +241,77 @@ const Root = styled.div`
             height: 30px;
             left: 0;
             right: 0;
-            bottom: 133px;
+            bottom: 173px;
             background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
             pointer-events: none;
         }
     }
+`;
+
+const ReplyCounterBlock = styled.div`
+    display: flex;
+    align-items: center;
+`;
+
+const ReplyCount = styled.div`
+    font-size: 16px;
+    font-weight: 500;
+    color: #959595;
+    cursor: default;
+    user-select: none;
+`;
+
+const Splitter = styled.div`
+    width: 1px;
+    height: 26px;
+    margin: 0 10px;
+    background: #e1e1e1;
+`;
+
+const ReplyLink = styled(Link)`
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #393636 !important;
+`;
+
+const ReplyIcon = styled(Icon)`
+    width: 20px;
+    height: 20px;
+    margin-right: 7px;
+    margin-bottom: -2px;
+`;
+
+const ReplyBlock = styled.div`
+    display: flex;
+    padding: 0 18px;
+    align-items: center;
+    
+    ${is('grid')`
+        width: 100%;
+        height: 56px;
+        justify-content: center;
+        border-top: 1px solid #e9e9e9;
+    `}
+
+    ${is('whiteTheme')`
+        color: #fff;
+        border-top-color: rgba(255, 255, 255, 0.3);
+        
+        ${ReplyCount} {
+            color: #fff;
+        }
+        
+        ${ReplyLink} {
+            color: #fff !important;
+        }
+        
+        ${Splitter} {
+            height: 12px;
+            background: #fff;
+        }
+    `};
 `;
 
 class PostCard extends PureComponent {
@@ -313,7 +379,7 @@ class PostCard extends PureComponent {
             >
                 {this._renderHeader(withImage)}
                 {this._renderBody(withImage, p)}
-                {this._renderFooter(withImage)}
+                {this._renderFooter(withImage, p)}
             </Root>
         );
     }
@@ -388,7 +454,7 @@ class PostCard extends PureComponent {
                     data-tooltip={pinTip}
                     onClick={!pinDisabled ? this._onPinClick : null}
                 >
-                    <Icon name="clip" width={12} height={22} />
+                    <Icon name="pin" width={24} height={24} />
                 </IconWrapper>
             </ToolbarAction>
         );
@@ -441,7 +507,7 @@ class PostCard extends PureComponent {
         }
     }
 
-    _renderFooter(withImage) {
+    _renderFooter(withImage, p) {
         const { data, myAccount, grid } = this.props;
 
         return (
@@ -454,6 +520,14 @@ class PostCard extends PureComponent {
                     onChange={this._onVoteChange}
                 />
                 {grid ? null : <Filler />}
+                <ReplyBlock whiteTheme={withImage} grid={grid}>
+                    <ReplyCounterBlock data-tooltip="Количество комментариев">
+                        <ReplyIcon name="reply" />
+                        <ReplyCount>{data.get('children')}</ReplyCount>
+                    </ReplyCounterBlock>
+                    <Splitter />
+                    <ReplyLink to={`${p.link}#comments`}>Ответить</ReplyLink>
+                </ReplyBlock>
             </Footer>
         );
     }

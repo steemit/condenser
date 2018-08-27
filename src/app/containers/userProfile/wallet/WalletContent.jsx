@@ -11,6 +11,7 @@ import { vestsToGolos } from 'app/utils/StateFunctions';
 import transaction from 'app/redux/Transaction';
 import WalletTabs from 'src/app/components/userProfile/wallet/WalletTabs';
 import WalletLine from 'src/app/components/userProfile/wallet/WalletLine';
+import { APP_DOMAIN } from 'app/client_config';
 
 const DEFAULT_ROWS_LIMIT = 25;
 const LOAD_LIMIT = 500;
@@ -465,6 +466,18 @@ class WalletContent extends Component {
                         ...options,
                     };
                 } else {
+                    let memo = data.memo;
+
+                    if (memo && memo.startsWith('{')) {
+                        try {
+                            const data = JSON.parse(memo);
+
+                            if (data.donate && data.donate.post) {
+                                memo = `Благодарность за https://${APP_DOMAIN}${data.donate.post}`;
+                            }
+                        } catch (err) {}
+                    }
+
                     return {
                         type: isReceive ? DIRECTION.RECEIVE : DIRECTION.SENT,
                         name: samePerson && isSafe ? null : isReceive ? data.from : data.to,
@@ -476,7 +489,7 @@ class WalletContent extends Component {
                                 : null,
                         amount: sign + amount,
                         currency: opCurrency,
-                        memo: data.memo || null,
+                        memo: memo || null,
                         icon: isSafe
                             ? 'lock'
                             : opCurrency === CURRENCY.GOLOS

@@ -270,12 +270,12 @@ const ReplyLink = styled(Link)`
     display: flex;
     align-items: center;
     padding-left: 7px;
-    cursor: pointer;
     font-size: 12px;
     font-weight: bold;
     text-transform: uppercase;
     letter-spacing: 0.8px;
     color: #393636 !important;
+    height: 100%;
     text-shadow: 0 2px 12px rgba(0, 0, 0, .15);
     
     &:hover {
@@ -283,7 +283,6 @@ const ReplyLink = styled(Link)`
     }
     
     ${is('grid')`
-        height: 100%;
         width: 50%;
     `};
 `;

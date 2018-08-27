@@ -150,7 +150,7 @@ class UserNavigation extends PureComponent {
             },
         ];
         return (
-            <Wrapper className={className} innerRef={ref => this.wrapper = ref}>
+            <Wrapper className={className} innerRef={ref => (this.wrapper = ref)}>
                 <Container align="center" wrap="wrap" ref={ref => (this.container = ref)}>
                     <TabLinkIndex key={indexTabLink.to} to={indexTabLink.to}>
                         {indexTabLink.value}
@@ -232,14 +232,20 @@ class UserNavigation extends PureComponent {
 
     _checkScreenSize = () => {
         const wrapperWidth = this.wrapper.clientWidth;
-        if (wrapperWidth <= this.props.MAIN_CONTAINER_WIDTH_POINT && !this.state.screenLessThenMainContainer) {
-            this.setState({screenLessThenMainContainer: true})
+        if (
+            wrapperWidth <= this.props.MAIN_CONTAINER_WIDTH_POINT &&
+            !this.state.screenLessThenMainContainer
+        ) {
+            this.setState({ screenLessThenMainContainer: true });
         }
         if (wrapperWidth <= this.props.MAIN_CONTAINER_WIDTH_POINT && this.props.layout !== 'grid') {
-            this.props.changeProfileLayout('grid')
+            this.props.changeProfileLayout('grid');
         }
-        if (wrapperWidth > this.props.MAIN_CONTAINER_WIDTH_POINT && this.state.screenLessThenMainContainer) {
-            this.setState({screenLessThenMainContainer: false})
+        if (
+            wrapperWidth > this.props.MAIN_CONTAINER_WIDTH_POINT &&
+            this.state.screenLessThenMainContainer
+        ) {
+            this.setState({ screenLessThenMainContainer: false });
         }
     };
 }
@@ -249,7 +255,7 @@ export default connect(
         const MAIN_CONTAINER_WIDTH_POINT = 1199;
         return {
             MAIN_CONTAINER_WIDTH_POINT,
-            layout: (state.ui.profile && state.ui.profile.get('layout')) || 'list'
+            layout: (state.ui.profile && state.ui.profile.get('layout')) || 'list',
         };
     },
     {

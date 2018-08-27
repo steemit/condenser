@@ -10,6 +10,7 @@ import Icon from 'golos-ui/Icon';
 
 import Container from 'src/app/components/common/Container';
 import { changeProfileLayout } from 'src/app/redux/actions/ui';
+import * as ReactDOM from 'react-dom';
 
 const Wrapper = styled.div`
     position: relative;
@@ -95,6 +96,17 @@ class UserNavigation extends PureComponent {
         changeProfileLayout: PropTypes.func,
     };
 
+    componentDidUpdate() {
+        for (let key in this.itemsRef) {
+            let item = this.itemsRef[key];
+            if (!item) {
+                continue;
+            }
+            console.log(ReactDOM.findDOMNode(item).clientWidth);
+        }
+        console.log('____');
+    }
+
     componentDidMount() {
         this._checkScreenSize();
         window.addEventListener('resize', this._checkScreenSize);
@@ -103,6 +115,8 @@ class UserNavigation extends PureComponent {
     componentWillUnmount() {
         window.removeEventListener('resize', this._checkScreenSize);
     }
+
+    itemsRef = {};
 
     render() {
         const { accountName, isOwner, className } = this.props;
@@ -135,15 +149,14 @@ class UserNavigation extends PureComponent {
                 value: tt('g.author_rewards'),
             },
         ];
-
         return (
             <Wrapper className={className} innerRef={ref => this.wrapper = ref}>
-                <Container align="center" wrap="wrap">
+                <Container align="center" wrap="wrap" ref={ref => (this.container = ref)}>
                     <TabLinkIndex key={indexTabLink.to} to={indexTabLink.to}>
                         {indexTabLink.value}
                     </TabLinkIndex>
                     {tabLinks.map(({ value, to }) => (
-                        <TabLink key={to} to={to}>
+                        <TabLink key={to} to={to} ref={ref => (this.itemsRef[to] = ref)}>
                             {value}
                         </TabLink>
                     ))}
@@ -172,6 +185,7 @@ class UserNavigation extends PureComponent {
                         key="l-grid"
                         data-tooltip="Сетка"
                         onClick={this._onGridClick}
+                        ref={ref => (this.itemsRef['grid'] = ref)}
                     >
                         <SimpleIcon name="layout_grid" />
                     </IconWrap>
@@ -182,6 +196,7 @@ class UserNavigation extends PureComponent {
                         key="l-list"
                         data-tooltip="Список"
                         onClick={this._onListClick}
+                        ref={ref => (this.itemsRef['list'] = ref)}
                     >
                         <SimpleIcon name="layout_list" />
                     </IconWrap>
@@ -195,6 +210,7 @@ class UserNavigation extends PureComponent {
                     key="settings"
                     to={`/@${accountName}/settings`}
                     data-tooltip={tt('g.settings')}
+                    ref={ref => (this.itemsRef['settings'] = ref)}
                 >
                     <SettingsIcon name="setting" size="24" />
                 </IconLink>

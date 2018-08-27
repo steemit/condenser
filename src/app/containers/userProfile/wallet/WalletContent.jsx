@@ -467,13 +467,15 @@ class WalletContent extends Component {
                     };
                 } else {
                     let memo = data.memo;
+                    let memoIconText = null;
 
                     if (memo && memo.startsWith('{')) {
                         try {
                             const data = JSON.parse(memo);
 
                             if (data.donate && data.donate.post) {
-                                memo = `Благодарность за https://${APP_DOMAIN}${data.donate.post}`;
+                                memo = `https://${APP_DOMAIN}${data.donate.post}`;
+                                memoIconText = 'Благодарность';
                             }
                         } catch (err) {}
                     }
@@ -490,6 +492,7 @@ class WalletContent extends Component {
                         amount: sign + amount,
                         currency: opCurrency,
                         memo: memo || null,
+                        memoIconText: memoIconText || null,
                         icon: isSafe
                             ? 'lock'
                             : opCurrency === CURRENCY.GOLOS

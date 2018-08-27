@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import styled from 'styled-components';
+import is from 'styled-is';
 import { TabContainer, Tabs } from 'golos-ui/Tabs';
 import { CardContent } from 'golos-ui/Card';
 import Icon from 'golos-ui/Icon';
@@ -16,7 +17,7 @@ import { MIN_VOICE_POWER } from 'app/client_config';
 import {
     DIRECTION,
     CURRENCY_TRANSLATE,
-    CURRENCY_COLOR
+    CURRENCY_COLOR,
 } from 'src/app/containers/userProfile/wallet/WalletContent';
 
 const MONTHS = [
@@ -95,10 +96,14 @@ const MemoIcon = styled(Icon)`
     display: block;
     flex-shrink: 0;
     flex-basis: 24px;
-    margin-top: 27px;
+    margin-top: 28px;
     margin-right: 12px;
     color: #333;
     transition: color 0.15s;
+
+    ${is('text')}:hover {
+        color: #3684ff;
+    }
 `;
 
 const MemoCut = styled(TextCut)`
@@ -282,7 +287,11 @@ export default class WalletLine extends PureComponent {
                     </Who>
                     {data.memo ? (
                         <Memo>
-                            <MemoIcon name="note" data-tooltip={'Пометка'} />
+                            <MemoIcon
+                                name="note"
+                                text={data.memoIconText}
+                                data-tooltip={data.memoIconText}
+                            />
                             <MemoCut height={50}>
                                 <MemoCentrer>
                                     <MemoText>

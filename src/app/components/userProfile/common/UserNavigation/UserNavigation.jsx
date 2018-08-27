@@ -92,7 +92,7 @@ class UserNavigation extends PureComponent {
 
     render() {
         const { accountName, isOwner } = this.props;
-        const indexTabLink = { value: tt('g.blog'), to: `/@${accountName}` };
+        const indexTabLink = { value: tt('g.posts'), to: `/@${accountName}` };
 
         const tabLinks = [];
 

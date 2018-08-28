@@ -14,15 +14,15 @@ const Wrapper = styled.div`
 `;
 
 const ArrowContainer = styled.div`
+    position: absolute;
+    top: 0;
+    z-index: 1;
     display: flex;
     justify-content: center;
     align-items: center;
     width: 10px;
     height: 100%;
-    position: absolute;
-    top: 0;
     cursor: pointer;
-    z-index: 1;
 `;
 
 const LeftArrowContainer = styled(ArrowContainer)`

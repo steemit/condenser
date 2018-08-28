@@ -18,6 +18,7 @@ import DelegationsList from './DelegationsList';
 import { api } from 'golos-js';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import DelegationEdit from './DelegationEdit';
+import { fetchCurrentStateAction } from 'src/app/redux/actions/fetch';
 
 const TYPES = {
     DELEGATE: 'DELEGATE',
@@ -538,15 +539,8 @@ export default connect(
                     successCallback() {
                         callback(null);
 
-                        const path = location.pathname.substr(1);
-
-                        if (path.endsWith('/transfers')) {
-                            dispatch({
-                                type: 'FETCH_STATE',
-                                payload: {
-                                    pathname: path,
-                                },
-                            });
+                        if (location.pathname.endsWith('/transfers')) {
+                            dispatch(fetchCurrentStateAction());
                         }
                     },
                     errorCallback(err) {

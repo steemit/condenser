@@ -167,7 +167,7 @@ export default class Slider extends PureComponent {
         const { min, max } = this.props;
         const box = this._root.getBoundingClientRect();
 
-        const unbound = Math.round(((max - min) * (e.clientX - box.left)) / box.width);
+        const unbound = Math.round(min + ((max - min) * (e.clientX - box.left)) / box.width);
 
         return Math.min(max, Math.max(min, unbound));
     }

@@ -242,6 +242,15 @@ const ActionIcon = styled(Icon)`
     }
 `;
 
+const WhoPostLink = styled(Link)`
+    display: block;
+    color: #333;
+    white-space: nowrap;
+    text-decoration: underline;
+    overflow: hidden;
+    text-overflow: ellipsis;
+`;
+
 export default class WalletLine extends PureComponent {
     static propTypes = {
         data: PropTypes.object.isRequired,
@@ -323,6 +332,12 @@ export default class WalletLine extends PureComponent {
                 {loaderForId && loaderForId === data.id ? <SplashLoader light /> : null}
             </Root>
         );
+    }
+
+    _renderPostLink(post) {
+        const fullLink = post.author + '/' + post.permLink;
+
+        return <WhoPostLink onClick={() => this._onPostClick(post)}>{fullLink}</WhoPostLink>;
     }
 
     _renderEditDelegation(id, amount) {

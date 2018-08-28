@@ -69,15 +69,6 @@ const Content = styled.div`
 
 const Lines = styled.div``;
 
-const WhoPostLink = styled(Link)`
-    display: block;
-    color: #333;
-    white-space: nowrap;
-    text-decoration: underline;
-    overflow: hidden;
-    text-overflow: ellipsis;
-`;
-
 const EmptyBlock = styled.div`
     padding: 28px 20px 30px;
     font-size: 20px;
@@ -361,12 +352,6 @@ class WalletContent extends Component {
         }
 
         return list;
-    }
-
-    _renderPostLink(post) {
-        const fullLink = post.author + '/' + post.permLink;
-
-        return <WhoPostLink onClick={() => this._onPostClick(post)}>{fullLink}</WhoPostLink>;
     }
 
     async _loadDelegationsData() {

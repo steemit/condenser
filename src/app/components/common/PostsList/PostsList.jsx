@@ -26,6 +26,7 @@ const Loader = styled.div`
 
 const EntryWrapper = styled.div`
     margin-bottom: 16px;
+    max-width: 100%;
 
     ${is('grid')`
         flex-basis: 317px;

@@ -68,7 +68,7 @@ const IconWrap = styled.div`
     height: 32px;
     margin-right: 15px;
     cursor: pointer;
-    color: ${a => (a.active ? '#393636' : '#b7b7b9')};
+    color: #b7b7b9;
     transition: color 0.15s;
 
     &:hover {
@@ -154,24 +154,27 @@ class UserNavigation extends PureComponent {
         const icons = [];
 
         if (showLayout) {
-            icons.push(
-                <IconWrap
-                    key="l-list"
-                    active={layout === 'list'}
-                    data-tooltip="Список"
-                    onClick={this._onListClick}
-                >
-                    <SimpleIcon name="layout_list" />
-                </IconWrap>,
-                <IconWrap
-                    key="l-grid"
-                    active={layout === 'grid'}
-                    data-tooltip="Сетка"
-                    onClick={this._onGridClick}
-                >
-                    <SimpleIcon name="layout_grid" />
-                </IconWrap>
-            );
+            if (layout === 'list') {
+                icons.push(
+                    <IconWrap
+                        key="l-grid"
+                        data-tooltip="Сетка"
+                        onClick={this._onGridClick}
+                    >
+                        <SimpleIcon name="layout_grid" />
+                    </IconWrap>
+                );
+            } else {
+                icons.push(
+                    <IconWrap
+                        key="l-list"
+                        data-tooltip="Список"
+                        onClick={this._onListClick}
+                    >
+                        <SimpleIcon name="layout_list" />
+                    </IconWrap>
+                );
+            }
         }
 
         if (isOwner) {

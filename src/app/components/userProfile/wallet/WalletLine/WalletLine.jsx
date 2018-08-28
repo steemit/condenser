@@ -305,7 +305,7 @@ export default class WalletLine extends PureComponent {
                             <MemoIcon
                                 name="note"
                                 text={data.memoIconText}
-                                data-tooltip={data.memoIconText}
+                                data-hint={data.memoIconText}
                             />
                             <MemoCut height={50}>
                                 <MemoCentrer>

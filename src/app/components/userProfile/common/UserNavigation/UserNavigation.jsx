@@ -277,17 +277,28 @@ class UserNavigation extends PureComponent {
 
             const RIGHT_PADDING = 20;
             const LEFT_PADDING = currentOffsetIndex > 0 ? 10 : 0;
+            const LEFT = children[0].offsetLeft - currentOffset.offsetLeft + LEFT_PADDING;
+            rightArrow.style.display = 'none';
 
-            if (container.lastChild.offsetLeft + container.lastChild.clientWidth) {
+            if (container.clientWidth >= container.scrollWidth - LEFT) {
+                for (let i = 0; i < children.length; i++) {
+                    let child = children[i];
+                    if (i === 0) {
+                        child.style.marginLeft = 0;
+                    }
+                    child.style.opacity = 1;
+                }
+                this.setState({
+                    currentOffsetIndex: 0,
+                });
+                return;
             }
 
-            rightArrow.style.display = 'none';
             for (let i = 0; i < children.length; i++) {
                 let child = children[i];
 
                 if (i === 0) {
-                    child.style.marginLeft =
-                        child.offsetLeft - currentOffset.offsetLeft + LEFT_PADDING + 'px';
+                    child.style.marginLeft = LEFT + 'px';
                 }
 
                 if (i < currentOffsetIndex) {

@@ -206,7 +206,9 @@ export default class VotePanel extends PureComponent {
 
         const votes = data.get('active_votes');
         const votesSummaryIm = data.get('votesSummary');
-        const votesSummary = votesSummaryIm ? votesSummaryIm.toJS() : calcVotesStats(votes.toJS(), me);
+        const votesSummary = votesSummaryIm
+            ? votesSummaryIm.toJS()
+            : calcVotesStats(votes.toJS(), me);
         this._myVote = votesSummary.myVote;
 
         return (
@@ -293,6 +295,10 @@ export default class VotePanel extends PureComponent {
         });
 
         window.removeEventListener('click', this._onAwayClick);
+    }
+
+    _extractValue() {
+        const { data } = this.props;
     }
 
     _onRef = el => {

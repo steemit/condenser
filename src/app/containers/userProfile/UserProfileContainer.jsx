@@ -63,7 +63,9 @@ const Content = styled.div`
     ${is('center')`
         flex-shrink: 0;
         flex-grow: 0;
-    `} @media (max-width: 890px) {
+    `};
+
+    @media (max-width: 890px) {
         order: 4;
         max-width: none;
     }

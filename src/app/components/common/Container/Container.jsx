@@ -19,7 +19,7 @@ const Container = styled(Flex)`
     `};
 `;
 Container.defaultProps = {
-    auto: true
-}
+    auto: true,
+};
 
 export default Container;

@@ -123,7 +123,7 @@ class UserNavigation extends PureComponent {
         super();
         this.state = {
             screenLessThenMainContainer: false,
-            currentOffsetIndex: 1,
+            currentOffsetIndex: 0,
         };
         this._setStyleForIconsNavigation = this._setStyleForIconsNavigation.bind(this);
         this.showNextIcon = this.showNextIcon.bind(this);
@@ -268,56 +268,57 @@ class UserNavigation extends PureComponent {
     }
 
     _setStyleForIconsNavigation() {
-        try {
-            let container = ReactDOM.findDOMNode(this.container);
-            let rightArrow = ReactDOM.findDOMNode(this.rightArrow);
-            let children = container.children;
-            let currentOffsetIndex = this.state.currentOffsetIndex;
-            let currentOffset = children[currentOffsetIndex];
+        let container = ReactDOM.findDOMNode(this.container);
+        let rightArrow = ReactDOM.findDOMNode(this.rightArrow);
+        let children = container.children;
+        let currentOffsetIndex = this.state.currentOffsetIndex;
+        let currentOffset = children[currentOffsetIndex];
 
-            const RIGHT_PADDING = 20;
-            const LEFT_PADDING = currentOffsetIndex > 0 ? 10 : 0;
-            const LEFT = children[0].offsetLeft - currentOffset.offsetLeft + LEFT_PADDING;
-            rightArrow.style.display = 'none';
+        const RIGHT_PADDING = 20;
+        const LEFT_PADDING = currentOffsetIndex > 0 ? 10 : 0;
+        const LEFT = children[0].offsetLeft - currentOffset.offsetLeft + LEFT_PADDING;
 
-            if (container.clientWidth >= container.scrollWidth - LEFT) {
-                for (let i = 0; i < children.length; i++) {
-                    let child = children[i];
-                    if (i === 0) {
-                        child.style.marginLeft = 0;
-                    }
-                    child.style.opacity = 1;
-                }
-                this.setState({
-                    currentOffsetIndex: 0,
-                });
-                return;
+        rightArrow.style.display = 'none';
+
+        if (container.clientWidth >= container.scrollWidth - LEFT) {
+            this._clearStyleForIconsNavigation(children);
+            return;
+        }
+
+        children[0].style.marginLeft = LEFT + 'px';
+
+        for (let i = 0; i < children.length; i++) {
+            let child = children[i];
+
+            if (i < currentOffsetIndex) {
+                child.style.opacity = 0;
+                continue;
             }
 
-            for (let i = 0; i < children.length; i++) {
-                let child = children[i];
-
-                if (i === 0) {
-                    child.style.marginLeft = LEFT + 'px';
-                }
-
-                if (i < currentOffsetIndex) {
-                    child.style.opacity = 0;
-                    continue;
-                }
-
-                if (
-                    child.offsetLeft + child.clientWidth - currentOffset.offsetLeft >
-                    container.clientWidth - (i < children.length - 1 ? RIGHT_PADDING : 0)
-                ) {
-                    child.style.opacity = 0;
-                    rightArrow.style.display = 'flex';
-                } else {
-                    child.style.opacity = 1;
-                }
+            if (
+                child.offsetLeft + child.clientWidth - currentOffset.offsetLeft >
+                container.clientWidth - (i < children.length - 1 ? RIGHT_PADDING : 0)
+            ) {
+                child.style.opacity = 0;
+                rightArrow.style.display = 'flex';
+            } else {
+                child.style.opacity = 1;
             }
-        } catch (error) {
-            console.log(error);
+        }
+    }
+
+    _clearStyleForIconsNavigation(children) {
+        for (let i = 0; i < children.length; i++) {
+            let child = children[i];
+            if (i === 0) {
+                child.style.marginLeft = 0;
+            }
+            child.style.opacity = 1;
+        }
+        if (this.state.currentOffsetIndex !== 0) {
+            this.setState({
+                currentOffsetIndex: 0,
+            });
         }
     }
 

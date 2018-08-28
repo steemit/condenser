@@ -41,7 +41,8 @@ const composedUrlValidator = value =>
         isLengthGreaterThan(100, tt('settings_jsx.website_url_is_too_long')),
         isNotUrl(tt('settings_jsx.invalid_url'))
     )(value);
-const usernameValidation = (username, err) => /^[a-zA-Z0-9\-\.]+$/.test(username) ? err : undefined;
+const usernameValidation = (username, err) =>
+    /^[a-zA-Z0-9\-\.]+$/.test(username) ? err : undefined;
 
 const validate = values => ({
     name: composeValidators(
@@ -60,57 +61,53 @@ const validate = values => ({
 });
 
 const Account = ({ profile, account, onSubmitBlockchain }) => {
-  profile.username = account.get('name'); // for disabled input, omitting from submit data
+    profile.username = account.get('name'); // for disabled input, omitting from submit data
 
-  return (
-      <Form 
-        onSubmit={onSubmitBlockchain} 
-        initialValues={profile}
-        validate={validate}
-        >
-          {({ handleSubmit, submitError, form, submitting, pristine, validating, values }) => (
-              <form onSubmit={handleSubmit}>
-                  <CardContent column>
-                      <Field name="username">
-                          {({ input }) => (
-                              <FormGroupRow justify="space-between">
-                                  <LabelRow>{tt('settings_jsx.profile_username')}</LabelRow>
-                                  <UserName>@{input.value}</UserName>
-                              </FormGroupRow>
-                          )}
-                      </Field>
-                      <Field name="name">
-                          {({ input, meta }) => (
-                              <FormGroup>
-                                  <Label>{tt('settings_jsx.profile_name')}</Label>
-                                  <Input
-                                      {...input}
-                                      autocomplete="name"
-                                      type="text"
-                                      placeholder="Имя Фамилия"
-                                  />
-                                  <FormError meta={meta} />
-                              </FormGroup>
-                          )}
-                      </Field>
-                      <Field name="gender">
-                          {({ input, meta }) => (
-                              <FormGroup>
-                                  <Label>{tt('settings_jsx.profile_gender.title')}</Label>
-                                  <Select {...input} placeholder="Выберите ваш пол">
-                                      {USER_GENDER.map(i => {
-                                          return (
-                                              <option key={i} value={i}>
-                                                  {tt('settings_jsx.profile_gender.genders.' + i)}
-                                              </option>
-                                          );
-                                      })}
-                                  </Select>
-                                  <FormError meta={meta} />
-                              </FormGroup>
-                          )}
-                      </Field>
-                      {/* <Field name="email">
+    return (
+        <Form onSubmit={onSubmitBlockchain} initialValues={profile} validate={validate}>
+            {({ handleSubmit, submitError, form, submitting, pristine, invalid, values }) => (
+                <form onSubmit={handleSubmit}>
+                    <CardContent column>
+                        <Field name="username">
+                            {({ input }) => (
+                                <FormGroupRow justify="space-between">
+                                    <LabelRow>{tt('settings_jsx.profile_username')}</LabelRow>
+                                    <UserName>@{input.value}</UserName>
+                                </FormGroupRow>
+                            )}
+                        </Field>
+                        <Field name="name">
+                            {({ input, meta }) => (
+                                <FormGroup>
+                                    <Label>{tt('settings_jsx.profile_name')}</Label>
+                                    <Input
+                                        {...input}
+                                        autocomplete="name"
+                                        type="text"
+                                        placeholder="Имя Фамилия"
+                                    />
+                                    <FormError meta={meta} />
+                                </FormGroup>
+                            )}
+                        </Field>
+                        <Field name="gender">
+                            {({ input, meta }) => (
+                                <FormGroup>
+                                    <Label>{tt('settings_jsx.profile_gender.title')}</Label>
+                                    <Select {...input} placeholder="Выберите ваш пол">
+                                        {USER_GENDER.map(i => {
+                                            return (
+                                                <option key={i} value={i}>
+                                                    {tt('settings_jsx.profile_gender.genders.' + i)}
+                                                </option>
+                                            );
+                                        })}
+                                    </Select>
+                                    <FormError meta={meta} />
+                                </FormGroup>
+                            )}
+                        </Field>
+                        {/* <Field name="email">
                           {({ input, meta }) => (
                               <FormGroup>
                                   <Label>{tt('settings_jsx.profile_email')}</Label>
@@ -123,121 +120,125 @@ const Account = ({ profile, account, onSubmitBlockchain }) => {
                               </FormGroup>
                           )}
                       </Field> */}
-                      <Field name="location">
-                          {({ input, meta }) => (
-                              <FormGroup>
-                                  <Label>{tt('settings_jsx.profile_location')}</Label>
-                                  <Input
-                                      {...input}
-                                      type="text"
-                                      placeholder="Укажите свой город"
-                                  />
-                                  <FormError meta={meta} />
-                              </FormGroup>
-                          )}
-                      </Field>
-                      <Field name="about">
-                          {({ input, meta }) => (
-                              <FormGroup>
-                                  <Label>{tt('settings_jsx.profile_about')}</Label>
-                                  <Textarea
-                                      {...input}
-                                      placeholder={
-                                          'Чему училися\nГде и кем работаю\nМои проекты\nИнтересы\nСемья\nЖизненное кредо'
-                                      }
-                                      rows={6}
-                                  />
-                                  <FormError meta={meta} />
-                              </FormGroup>
-                          )}
-                      </Field>
-                      <Field name="website">
-                          {({ input, meta }) => (
-                              <FormGroup>
-                                  <Label>{tt('settings_jsx.profile_website')}</Label>
-                                  <Input {...input} type="text" placeholder="Ссылка на сайт" />
-                                  <FormError meta={meta} />
-                              </FormGroup>
-                          )}
-                      </Field>
-                      <FormGroup>
-                          <Label>Социальные сети</Label>
-                          <Field name="social.facebook">
-                              {({ input, meta }) => (
-                                  <FormGroupRow>
-                                      <LabelIcon>
-                                          <Icon name="facebook" width="13" height="24" />
-                                      </LabelIcon>
-                                      <Input
-                                          {...input}
-                                          type="text"
-                                          placeholder="Ссылка на Facebook"
-                                      />
-                                      <FormError meta={meta} />
-                                  </FormGroupRow>
-                              )}
-                          </Field>
-                          <Field name="social.vkontakte">
-                              {({ input, meta }) => (
-                                  <FormGroupRow>
-                                      <LabelIcon>
-                                          <Icon name="vk" width="28" height="18" />
-                                      </LabelIcon>
-                                      <Input
-                                          {...input}
-                                          type="text"
-                                          placeholder="Ссылка на Вконтакте"
-                                      />
-                                      <FormError meta={meta} />
-                                  </FormGroupRow>
-                              )}
-                          </Field>
-                          <Field name="social.instagram">
-                              {({ input, meta }) => (
-                                  <FormGroupRow>
-                                      <LabelIcon>
-                                          <Icon name="instagram" size="23" />
-                                      </LabelIcon>
-                                      <Input
-                                          {...input}
-                                          type="text"
-                                          placeholder="Ссылка на Instagran"
-                                      />
-                                      <FormError meta={meta} />
-                                  </FormGroupRow>
-                              )}
-                          </Field>
-                          <Field name="social.twitter">
-                              {({ input, meta }) => (
-                                  <FormGroupRow>
-                                      <LabelIcon>
-                                          <Icon name="twitter" width="26" height="22" />
-                                      </LabelIcon>
-                                      <Input
-                                          {...input}
-                                          type="text"
-                                          placeholder="Ссылка на Twitter"
-                                      />
-                                      <FormError meta={meta} />
-                                  </FormGroupRow>
-                              )}
-                          </Field>
-                      </FormGroup>
+                        <Field name="location">
+                            {({ input, meta }) => (
+                                <FormGroup>
+                                    <Label>{tt('settings_jsx.profile_location')}</Label>
+                                    <Input
+                                        {...input}
+                                        type="text"
+                                        placeholder="Укажите свой город"
+                                    />
+                                    <FormError meta={meta} />
+                                </FormGroup>
+                            )}
+                        </Field>
+                        <Field name="about">
+                            {({ input, meta }) => (
+                                <FormGroup>
+                                    <Label>{tt('settings_jsx.profile_about')}</Label>
+                                    <Textarea
+                                        {...input}
+                                        placeholder={
+                                            'Чему училися\nГде и кем работаю\nМои проекты\nИнтересы\nСемья\nЖизненное кредо'
+                                        }
+                                        rows={6}
+                                    />
+                                    <FormError meta={meta} />
+                                </FormGroup>
+                            )}
+                        </Field>
+                        <Field name="website">
+                            {({ input, meta }) => (
+                                <FormGroup>
+                                    <Label>{tt('settings_jsx.profile_website')}</Label>
+                                    <Input {...input} type="text" placeholder="Ссылка на сайт" />
+                                    <FormError meta={meta} />
+                                </FormGroup>
+                            )}
+                        </Field>
+                        <FormGroup>
+                            <Label>Социальные сети</Label>
+                            <Field name="social.facebook">
+                                {({ input, meta }) => (
+                                    <FormGroupRow>
+                                        <LabelIcon>
+                                            <Icon name="facebook" width="13" height="24" />
+                                        </LabelIcon>
+                                        <Input
+                                            {...input}
+                                            type="text"
+                                            placeholder="Ссылка на Facebook"
+                                        />
+                                        <FormError meta={meta} />
+                                    </FormGroupRow>
+                                )}
+                            </Field>
+                            <Field name="social.vkontakte">
+                                {({ input, meta }) => (
+                                    <FormGroupRow>
+                                        <LabelIcon>
+                                            <Icon name="vk" width="28" height="18" />
+                                        </LabelIcon>
+                                        <Input
+                                            {...input}
+                                            type="text"
+                                            placeholder="Ссылка на Вконтакте"
+                                        />
+                                        <FormError meta={meta} />
+                                    </FormGroupRow>
+                                )}
+                            </Field>
+                            <Field name="social.instagram">
+                                {({ input, meta }) => (
+                                    <FormGroupRow>
+                                        <LabelIcon>
+                                            <Icon name="instagram" size="23" />
+                                        </LabelIcon>
+                                        <Input
+                                            {...input}
+                                            type="text"
+                                            placeholder="Ссылка на Instagran"
+                                        />
+                                        <FormError meta={meta} />
+                                    </FormGroupRow>
+                                )}
+                            </Field>
+                            <Field name="social.twitter">
+                                {({ input, meta }) => (
+                                    <FormGroupRow>
+                                        <LabelIcon>
+                                            <Icon name="twitter" width="26" height="22" />
+                                        </LabelIcon>
+                                        <Input
+                                            {...input}
+                                            type="text"
+                                            placeholder="Ссылка на Twitter"
+                                        />
+                                        <FormError meta={meta} />
+                                    </FormGroupRow>
+                                )}
+                            </Field>
+                        </FormGroup>
 
-                      {submitError && <div>{submitError}</div>}
-                  </CardContent>
-                  <DialogFooter>
-                      <DialogButton onClick={form.reset} disabled={submitting || pristine}>
-                          {tt('settings_jsx.reset')}
-                      </DialogButton>
-                      <DialogButton type="submit" primary disabled={submitting || pristine || !validating}>
-                          {tt('settings_jsx.update')}
-                      </DialogButton>
-                  </DialogFooter>
-              </form>
-          )}
-      </Form>
-  );
+                        {submitError && <div>{submitError}</div>}
+                    </CardContent>
+                    <DialogFooter>
+                        <DialogButton onClick={form.reset} disabled={submitting || pristine}>
+                            {tt('settings_jsx.reset')}
+                        </DialogButton>
+                        <DialogButton
+                            type="submit"
+                            primary
+                            disabled={submitting || pristine || invalid}
+                        >
+                            {tt('settings_jsx.update')}
+                        </DialogButton>
+                    </DialogFooter>
+                </form>
+            )}
+        </Form>
+    );
 };
 
 export default Account;

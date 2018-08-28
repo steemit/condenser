@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Map } from 'immutable';
 
+import { PrivateKey } from 'golos-js/lib/auth/ecc';
+
 import user from 'app/redux/User';
 import transaction from 'app/redux/Transaction';
 
@@ -32,6 +34,22 @@ import { SettingsShow } from 'src/app/components/userProfile';
                 })
             );
         },
+        changePassword: ({ accountName, password, newWif, successCallback, errorCallback }) => {
+            const ph = role => PrivateKey.fromSeed(`${accountName}${role}${newWif}`).toWif();
+            dispatch(
+                transaction.actions.updateAuthorities({
+                    accountName,
+                    auths: [
+                        { authType: 'owner', oldAuth: password, newAuth: ph('owner', newWif) },
+                        { authType: 'active', oldAuth: password, newAuth: ph('active', newWif) },
+                        { authType: 'posting', oldAuth: password, newAuth: ph('posting', newWif) },
+                        { authType: 'memo', oldAuth: password, newAuth: ph('memo', newWif) },
+                    ],
+                    onSuccess: successCallback,
+                    onError: errorCallback,
+                })
+            );
+        },
         notify: (message, dismiss = 3000) => {
             dispatch({
                 type: 'ADD_NOTIFICATION',
@@ -55,6 +73,8 @@ export default class SettingsContent extends PureComponent {
         isFetching: PropTypes.bool,
         isChanging: PropTypes.bool,
         updateAccount: PropTypes.func,
+
+        changePassword: PropTypes.func,
 
         getSettingsOptions: PropTypes.func,
     };
@@ -126,6 +146,33 @@ export default class SettingsContent extends PureComponent {
         });
     };
 
+    onSubmitChangePassword = values => {
+        const { changePassword, notify } = this.props;
+
+        return new Promise((resolve, reject) => {
+            changePassword({
+                accountName: values.username,
+                password: values.password,
+                newWif: values.newWif,
+                successCallback: () => {
+                    notify('Password Updated');
+                    window.location = `/login.html#account=${values.username}&msg=passwordupdated`;
+                    resolve();
+                },
+                errorCallback: e => {
+                    if (e === 'Canceled') {
+                        resolve();
+                    } else {
+                        console.log('updateAccount ERROR', e);
+                        reject({
+                            [FORM_ERROR]: tt('g.server_returned_error'),
+                        });
+                    }
+                },
+            });
+        });
+    };
+
     render() {
         const { profile, account, options, isFetching, isChanging } = this.props;
 
@@ -133,13 +180,12 @@ export default class SettingsContent extends PureComponent {
             <SettingsShow
                 profile={profile}
                 account={account}
-
                 options={options}
                 isFetching={isFetching}
                 isChanging={isChanging}
-                
                 onSubmitBlockchain={this.onSubmitBlockchain}
                 onSubmitGate={this.onSubmitGate}
+                onSubmitChangePassword={this.onSubmitChangePassword}
             />
         );
     }

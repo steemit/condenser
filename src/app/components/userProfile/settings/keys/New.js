@@ -1,9 +1,8 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import styled from 'styled-components';
 
-import { PrivateKey, PublicKey, key_utils } from 'golos-js/lib/auth/ecc';
+import { PublicKey, key_utils } from 'golos-js/lib/auth/ecc';
 import { Form, Field } from 'react-final-form';
 import tt from 'counterpart';
 
@@ -68,89 +67,32 @@ const validate = values => ({
         ? tt('g.required')
         : PublicKey.fromString(values.password)
             ? tt('g.you_need_private_password_or_key_not_a_public_key')
-            : null,
+            : undefined,
     confirmPassword: !values.confirmPassword
         ? tt('g.required')
         : values.confirmPassword.trim() !== values.newWif
             ? tt('g.passwords_do_not_match')
-            : null,
-    confirmCheck: !values.confirmCheck ? tt('g.required') : null,
-    confirmSaved: !values.confirmSaved ? tt('g.required') : null,
+            : undefined,
+    confirmCheck: !values.confirmCheck ? tt('g.required') : undefined,
+    confirmSaved: !values.confirmSaved ? tt('g.required') : undefined,
 });
 
-@connect(
-    null,
-    // mapDispatchToProps
-    dispatch => ({
-        changePassword: (
-            accountName,
-            authType,
-            priorAuthKey,
-            password,
-            twofa = false,
-            success,
-            error
-        ) => {
-            const ph = role => PrivateKey.fromSeed(`${accountName}${role}${newWif}`).toWif();
-            const auths = authType
-                ? [{ authType, oldAuth: priorAuthKey, newAuth: newWif }]
-                : [
-                      { authType: 'owner', oldAuth: password, newAuth: ph('owner', newWif) },
-                      { authType: 'active', oldAuth: password, newAuth: ph('active', newWif) },
-                      { authType: 'posting', oldAuth: password, newAuth: ph('posting', newWif) },
-                      { authType: 'memo', oldAuth: password, newAuth: ph('memo', newWif) },
-                  ];
-            dispatch(
-                transaction.actions.updateAuthorities({
-                    twofa,
-                    // signingKey provides the password if it was not provided in auths
-                    signingKey: authType ? password : null,
-                    accountName,
-                    auths,
-                    onSuccess: success,
-                    onError: error,
-                    // notifySuccess: 'Change password success'
-                })
-            );
-        },
-        notify: message => {
-            dispatch({
-                type: 'ADD_NOTIFICATION',
-                payload: {
-                    key: 'chpwd_' + Date.now(),
-                    message,
-                    dismissAfter: 5000,
-                },
-            });
-        },
-    })
-)
 export default class New extends PureComponent {
     static propTypes = {
         account: PropTypes.object.isRequired,
-        options: PropTypes.object,
-        isChanging: PropTypes.bool,
-        onSubmitBlockchain: PropTypes.func,
+        onSubmitChangePassword: PropTypes.func,
     };
 
     render() {
-        const { account, isChanging, onSubmitBlockchain } = this.props;
+        const { account, onSubmitChangePassword } = this.props;
         const data = {
             username: account.get('name'), // for disabled input, omitting from submit data
             newWif: 'P' + key_utils.get_random_key().toWif(),
         };
 
         return (
-            <Form onSubmit={onSubmitBlockchain} initialValues={data} validate={validate}>
-                {({
-                    handleSubmit,
-                    submitError,
-                    form,
-                    submitting,
-                    pristine,
-                    validating,
-                    values,
-                }) => (
+            <Form onSubmit={onSubmitChangePassword} initialValues={data} validate={validate}>
+                {({ handleSubmit, submitError, form, submitting, pristine, invalid, values }) => (
                     <form onSubmit={handleSubmit}>
                         <CardContent column>
                             <RulesBlock
@@ -251,7 +193,7 @@ export default class New extends PureComponent {
                                 )}
                             </Field>
 
-                            <Field name="confirmSave">
+                            <Field name="confirmSaved">
                                 {({ input, meta }) => (
                                     <FormGroup align="center" column={false}>
                                         <Checkbox {...input} />
@@ -260,20 +202,18 @@ export default class New extends PureComponent {
                                     </FormGroup>
                                 )}
                             </Field>
+                            {/* <pre>{JSON.stringify(values, 0, 2)}</pre> */}
 
                             {submitError && <div>{submitError}</div>}
                         </CardContent>
                         <DialogFooter>
-                            <DialogButton
-                                onClick={form.reset}
-                                disabled={submitting || pristine}
-                            >
+                            <DialogButton onClick={form.reset} disabled={submitting || pristine}>
                                 {tt('settings_jsx.reset')}
                             </DialogButton>
                             <DialogButton
                                 type="submit"
                                 primary
-                                disabled={submitting || pristine || !validating}
+                                disabled={submitting || pristine || invalid}
                             >
                                 {tt('settings_jsx.update')}
                             </DialogButton>

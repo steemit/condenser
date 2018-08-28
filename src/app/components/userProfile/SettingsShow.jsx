@@ -17,13 +17,13 @@ export default class SettingsShow extends PureComponent {
         profile: PropTypes.object,
         account: PropTypes.object,
 
-        // wifShown: PropTypes.instanceOf
         options: PropTypes.instanceOf(Map),
         isFetching: PropTypes.bool,
         isChanging: PropTypes.bool,
 
         onSubmitBlockchain: PropTypes.func,
         onSubmitGate: PropTypes.func,
+        onSubmitChangePassword: PropTypes.func,
     };
 
     render() {
@@ -31,13 +31,13 @@ export default class SettingsShow extends PureComponent {
             profile,
             account,
 
-            wifShown,
             options,
             isFetching,
             isChanging,
 
             onSubmitBlockchain,
             onSubmitGate,
+            onSubmitChangePassword,
         } = this.props;
 
         return (
@@ -64,12 +64,8 @@ export default class SettingsShow extends PureComponent {
                     </TabContainer>
                     <TabContainer id="keysTab" title="Ключи">
                         <Keys
-                            profile={profile}
                             account={account}
-                            options={options}
-                            isFetching={isFetching}
-                            isChanging={isChanging}
-                            onSubmitBlockchain={onSubmitBlockchain}
+                            onSubmitChangePassword={onSubmitChangePassword}
                         />
                     </TabContainer>
                     <TabContainer id="notificationsTab" title="Уведомления">

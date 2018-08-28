@@ -78,6 +78,7 @@ export const hydratedNotificationsSelector = createDeepEqualSelector(
                         }
                     }
                 }
+
                 // Add users from store data
                 const computedAccounts = notify
                     .get('fromUsers')
@@ -94,8 +95,9 @@ export const hydratedNotificationsSelector = createDeepEqualSelector(
                 const isNextDay =
                     new Date(prevNotify.get('createdAt')).toDateString() !==
                     new Date(notify.get('createdAt')).toDateString();
+                notify.set('isNextDay', isNextDay)
 
-                return notify.set('isNextDay', isNextDay);
+                return notify;
             })
         )
 );

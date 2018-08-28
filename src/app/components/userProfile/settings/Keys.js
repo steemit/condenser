@@ -5,7 +5,7 @@ import { TabContainer, Tabs } from 'golos-ui/Tabs';
 import Current from './keys/Current';
 import New from './keys/New';
 
-const Notifications = ({ account, options, isChanging, onSubmitGate }) => {
+const Keys = ({ account, options, isChanging, onSubmitBlockchain }) => {
     return (
         <Tabs activeTab={{ id: 'currentKeysTab' }}>
             <TabContainer id="currentKeysTab" title="Ключи">
@@ -13,18 +13,19 @@ const Notifications = ({ account, options, isChanging, onSubmitGate }) => {
                     account={account}
                     options={options}
                     isChanging={isChanging}
-                    onSubmitGate={onSubmitGate}
+                    onSubmitBlockchain={onSubmitBlockchain}
                 />
             </TabContainer>
             <TabContainer id="newKeyTab" title="Новый ключ">
                 <New
+                    account={account}
                     options={options}
                     isChanging={isChanging}
-                    onSubmitGate={onSubmitGate}
+                    onSubmitBlockchain={onSubmitBlockchain}
                 />
             </TabContainer>
         </Tabs>
     );
 };
 
-export default Notifications;
+export default Keys;

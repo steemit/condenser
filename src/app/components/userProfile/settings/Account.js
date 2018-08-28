@@ -13,7 +13,7 @@ import {
     FormGroup,
     FormGroupRow,
     Label,
-    LabelRow as StyledLabelRow,
+    LabelRow,
     Input,
     Select,
     Textarea,
@@ -21,12 +21,10 @@ import {
 } from 'golos-ui/Form';
 import Icon from 'golos-ui/Icon';
 
-const LabelIcon = styled(StyledLabelRow)`
+const LabelIcon = styled(LabelRow)`
     flex-basis: 28px;
     color: #393636;
 `;
-
-const LabelRow = styled(StyledLabelRow)``;
 
 const UserName = styled.div`
     color: #363636;
@@ -227,13 +225,12 @@ const Account = ({ profile, account, onSubmitBlockchain }) => {
                       </FormGroup>
 
                       {submitError && <div>{submitError}</div>}
-                      {console.log(pristine, validating)}
                   </CardContent>
                   <DialogFooter>
                       <DialogButton onClick={form.reset} disabled={submitting || pristine}>
                           {tt('settings_jsx.reset')}
                       </DialogButton>
-                      <DialogButton type="submit" primary disabled={submitting || pristine || validating}>
+                      <DialogButton type="submit" primary disabled={submitting || pristine || !validating}>
                           {tt('settings_jsx.update')}
                       </DialogButton>
                   </DialogFooter>

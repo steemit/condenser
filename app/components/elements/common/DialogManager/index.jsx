@@ -48,7 +48,7 @@ export default class DialogManager extends React.PureComponent {
                 props: {
                     title,
                     type: 'confirm',
-                    text,
+                    text: text || 'Вы уверены?',
                 },
                 onClose: resolve,
             });
@@ -63,7 +63,7 @@ export default class DialogManager extends React.PureComponent {
                     title,
                     type: 'confirm',
                     danger: true,
-                    text,
+                    text: text || 'Вы уверены?',
                 },
                 onClose: resolve,
             });

@@ -18,6 +18,7 @@ import VotePanel from '../VotePanel';
 import { confirmVote } from 'src/app/helpers/votes';
 import { toggleFavoriteAction } from 'src/app/redux/actions/favorites';
 import { togglePinAction } from 'src/app/redux/actions/pinnedPosts';
+import ReplyBlock from '../ReplyBlock';
 
 const Header = styled.div`
     padding: 10px 0 6px;
@@ -204,6 +205,10 @@ const Filler = styled.div`
     flex-grow: 1;
 `;
 
+const ReplyBlockStyled = styled(ReplyBlock)`
+    padding-right: 18px;
+`;
+
 const Root = styled.div`
     position: relative;
     border-radius: 8px;
@@ -219,7 +224,7 @@ const Root = styled.div`
     &.PostCard_image.PostCard_grid {
         ${VotePanelStyled} {
             opacity: 0;
-            transition: opacity 0.25s;        
+            transition: opacity 0.25s;
         }
 
         &:hover ${VotePanelStyled} {
@@ -246,72 +251,6 @@ const Root = styled.div`
             pointer-events: none;
         }
     }
-`;
-
-const ReplyCounterBlock = styled.div`
-    display: flex;
-    align-items: center;
-`;
-
-const ReplyCount = styled.div`
-    font-size: 16px;
-    font-weight: 500;
-    color: #959595;
-    cursor: default;
-    user-select: none;
-`;
-
-const Splitter = styled.div`
-    width: 1px;
-    height: 26px;
-    margin: 0 10px;
-    background: #e1e1e1;
-`;
-
-const ReplyLink = styled(Link)`
-    font-size: 12px;
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    color: #393636 !important;
-`;
-
-const ReplyIcon = styled(Icon)`
-    width: 20px;
-    height: 20px;
-    margin-right: 7px;
-    margin-bottom: -2px;
-`;
-
-const ReplyBlock = styled.div`
-    display: flex;
-    padding: 0 18px;
-    align-items: center;
-    
-    ${is('grid')`
-        width: 100%;
-        height: 56px;
-        justify-content: center;
-        border-top: 1px solid #e9e9e9;
-    `}
-
-    ${is('whiteTheme')`
-        color: #fff;
-        border-top-color: rgba(255, 255, 255, 0.3);
-        
-        ${ReplyCount} {
-            color: #fff;
-        }
-        
-        ${ReplyLink} {
-            color: #fff !important;
-        }
-        
-        ${Splitter} {
-            height: 12px;
-            background: #fff;
-        }
-    `};
 `;
 
 class PostCard extends PureComponent {
@@ -520,14 +459,13 @@ class PostCard extends PureComponent {
                     onChange={this._onVoteChange}
                 />
                 {grid ? null : <Filler />}
-                <ReplyBlock whiteTheme={withImage} grid={grid}>
-                    <ReplyCounterBlock data-tooltip="Количество комментариев">
-                        <ReplyIcon name="reply" />
-                        <ReplyCount>{data.get('children')}</ReplyCount>
-                    </ReplyCounterBlock>
-                    <Splitter />
-                    <ReplyLink to={`${p.link}#comments`}>Ответить</ReplyLink>
-                </ReplyBlock>
+                <ReplyBlockStyled
+                    withImage={withImage}
+                    grid={grid}
+                    count={data.get('children')}
+                    link={p.link}
+                    text="Ответить"
+                />
             </Footer>
         );
     }

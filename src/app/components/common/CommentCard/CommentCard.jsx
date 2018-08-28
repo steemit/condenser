@@ -17,6 +17,7 @@ import Icon from 'golos-ui/Icon';
 import Button from 'golos-ui/Button';
 import VotePanel from '../VotePanel';
 import { confirmVote } from 'src/app/helpers/votes';
+import ReplyBlock from '../ReplyBlock';
 
 const Header = styled.div`
     padding: 10px 0 6px;
@@ -149,6 +150,10 @@ const IconEdit = Icon.extend`
     }
 `;
 
+const ButtonStyled = styled(Button)`
+    margin-left: 18px;
+`;
+
 class CommentCard extends PureComponent {
     static propTypes = {
         permLink: PropTypes.string,
@@ -238,7 +243,9 @@ class CommentCard extends PureComponent {
 
         if (this._data.parent_author) {
             title = this._data.root_title;
-            parentLink = `/${this._data.category}/@${this._data.parent_author}/${this._data.parent_permlink}`;
+            parentLink = `/${this._data.category}/@${this._data.parent_author}/${
+                this._data.parent_permlink
+            }`;
         }
 
         const showEditButton = myAccountName === this._data.author;
@@ -285,13 +292,16 @@ class CommentCard extends PureComponent {
         return (
             <Footer>
                 <VotePanel data={data} me={myAccountName} onChange={this._onVoteChange} />
+                <Filler />
+                <ReplyBlock
+                    count={data.get('children')}
+                    link={this._content.link}
+                    text="Комментарии"
+                />
                 {allowInlineReply && this._data.author !== myAccountName ? (
-                    <Fragment>
-                        <Filler />
-                        <Button light onClick={this._onReplyClick}>
-                            <Icon name="comment" size={18} /> Ответить
-                        </Button>
-                    </Fragment>
+                    <ButtonStyled light onClick={this._onReplyClick}>
+                        <Icon name="comment" size={18} /> Ответить
+                    </ButtonStyled>
                 ) : null}
             </Footer>
         );

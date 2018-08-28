@@ -40,6 +40,7 @@ export const CURRENCY_COLOR = {
     GOLOS: '#2879ff',
     GBG: '#ffb839',
     GOLOS_POWER: '#f57c02',
+    GOLOS_POWER_DELEGATION: '#78c2d0;',
     SAFE: '#583652',
 };
 
@@ -344,7 +345,7 @@ class WalletContent extends Component {
                     currency,
                     memo: item.memo || null,
                     icon: 'voice',
-                    color: isReceive ? CURRENCY_COLOR[currency] : null,
+                    color: isReceive ? CURRENCY_COLOR.GOLOS_POWER_DELEGATION : null,
                     showDelegationActions: item.delegator === myAccountName,
                     stamp,
                 });

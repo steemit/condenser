@@ -12,6 +12,7 @@ import SplashLoader from 'src/app/components/golos-ui/SplashLoader';
 import { Checkbox } from 'src/app/components/golos-ui/Form';
 import { parseAmount } from 'src/app/helpers/currency';
 import DialogTypeSelect from 'src/app/components/userProfile/common/DialogTypeSelect';
+import { fetchCurrentStateAction } from 'src/app/redux/actions/fetch';
 
 const TYPES = {
     SAVE: 'SAVE',
@@ -332,15 +333,8 @@ export default connect(
                     successCallback() {
                         callback(null);
 
-                        const path = location.pathname.substr(1);
-
-                        if (path.endsWith('/transfers')) {
-                            dispatch({
-                                type: 'FETCH_STATE',
-                                payload: {
-                                    pathname: path,
-                                },
-                            });
+                        if (location.pathname.endsWith('/transfers')) {
+                            dispatch(fetchCurrentStateAction());
                         }
                     },
                     errorCallback(err) {

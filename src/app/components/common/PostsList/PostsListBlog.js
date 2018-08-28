@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import PostsList from './PostsList';
+import { fetchCurrentStateAction } from 'src/app/redux/actions/fetch';
 
 export default connect(
     (state, props) => {
@@ -27,6 +28,9 @@ export default connect(
                     },
                 });
             });
+        },
+        fetchState() {
+            dispatch(fetchCurrentStateAction());
         },
     })
 )(PostsList);

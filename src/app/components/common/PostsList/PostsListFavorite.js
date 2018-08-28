@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import PostsList from './PostsList';
 import { favoritesLoadNextPageAction } from 'src/app/redux/actions/favorites';
+import { fetchCurrentStateAction } from 'src/app/redux/actions/fetch';
 
 export default connect(
     state => {
@@ -33,6 +34,9 @@ export default connect(
                     },
                 });
             });
+        },
+        fetchState() {
+            dispatch(fetchCurrentStateAction());
         },
     })
 )(PostsList);

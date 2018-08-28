@@ -11,6 +11,7 @@ import SplashLoader from 'src/app/components/golos-ui/SplashLoader';
 import Icon from 'src/app/components/golos-ui/Icon';
 import DialogManager from 'app/components/elements/common/DialogManager';
 import { parseAmount } from 'src/app/helpers/currency';
+import { fetchCurrentStateAction } from 'src/app/redux/actions/fetch';
 
 const CURRENCIES = {
     GBG: 'GBG',
@@ -328,15 +329,8 @@ export default connect(
                     successCallback() {
                         callback(null);
 
-                        const path = location.pathname.substr(1);
-
-                        if (path.endsWith('/transfers')) {
-                            dispatch({
-                                type: 'FETCH_STATE',
-                                payload: {
-                                    pathname: path,
-                                },
-                            });
+                        if (location.pathname.endsWith('/transfers')) {
+                            dispatch(fetchCurrentStateAction());
                         }
                     },
                     errorCallback(err) {

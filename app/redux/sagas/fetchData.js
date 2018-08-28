@@ -36,36 +36,47 @@ export function* watchFetchState() {
 }
 
 let is_initial_state = true;
-export function* fetchState(location_change_action) {
-    const {pathname} = location_change_action.payload;
-    const m = pathname.match(/^\/@([a-z0-9\.-]+)/)
-    if(m && m.length === 2) {
-        const username = m[1]
-        yield fork(fetchFollowCount, username)
-        yield fork(loadFollows, "getFollowersAsync", username, 'blog')
-        yield fork(loadFollows, "getFollowingAsync", username, 'blog')
+export function* fetchState(action) {
+    const { pathname } = action.payload;
+
+    let url = pathname;
+
+    if (!url || url === '/') {
+        url = 'trending';
     }
 
-    // `ignore_fetch` case should only trigger on initial page load. No need to call
+    if (url.startsWith('/')) {
+        url = url.substr(1);
+    }
+
+    const profileMatch = url.match(/^@([a-z0-9\.-]+)/);
+
+    if (profileMatch) {
+        const username = profileMatch[1];
+
+        yield fork(fetchFollowCount, username);
+        yield fork(loadFollows, 'getFollowersAsync', username, 'blog');
+        yield fork(loadFollows, 'getFollowingAsync', username, 'blog');
+    }
+
+    // `ignoreFetch` case should only trigger on initial page load. No need to call
     // fetchState immediately after loading fresh state from the server. Details: #593
     const server_location = yield select(state => state.offchain.get('server_location'))
-    const ignore_fetch = (pathname === server_location && is_initial_state)
+    const ignoreFetch = (pathname === server_location && is_initial_state)
     is_initial_state = false
-    if(ignore_fetch) return
 
-    let url = `${pathname}`
-    if (url === '/') url = 'trending'
+    if (ignoreFetch) {
+        return;
+    }
+
     // Replace /curation-rewards and /author-rewards with /transfers for UserProfile to resolve data correctly
     if (url.indexOf("/curation-rewards") !== -1) url = url.replace("/curation-rewards", "/transfers")
     if (url.indexOf("/author-rewards") !== -1) url = url.replace("/author-rewards", "/transfers")
 
     yield put({type: 'FETCH_DATA_BEGIN'})
-    try {
-        if (!url || typeof url !== 'string' || !url.length || url === '/') url = 'trending'
-        if (url[0] === '/') url = url.substr(1)
-        const parts = url.split('/')
-        const tag = typeof parts[1] !== "undefined" ? parts[1] : ''
 
+    try {
+        const parts = url.split('/')
         const state = {}
         state.current_route = location
         state.content = {}
@@ -164,7 +175,7 @@ export function* fetchState(location_change_action) {
                 }
             }
 
-        } else if (parts.length === 3 && parts[1].length > 0 && parts[1][0] == '@') {
+        } else if (parts.length === 3 && parts[1].length > 0 && parts[1][0] === '@') {
             const account = parts[1].substr(1)
             const category = parts[0]
             const permlink = parts[2]
@@ -196,6 +207,7 @@ export function* fetchState(location_change_action) {
             })
 
         } else if (Object.keys(PUBLIC_API).includes(parts[0])) {
+            const tag = parts[1] == null ? '' : parts[1];
 
             yield call(fetchData, {payload: { order: parts[0], category : tag }})
 
@@ -218,7 +230,7 @@ export function* fetchState(location_change_action) {
     } catch (error) {
         console.error('~~ Saga fetchState error ~~>', url, error);
         yield put({type: 'global/FETCHING_STATE', payload: false});
-        yield put({type: 'global/CHAIN_API_ERROR', error: error.message});
+        yield put({type: 'global/CHAIN_API_ERROR', payload: false, error: error.message});
 
         if (!(yield cancelled())) {
             yield put({type: 'FETCH_DATA_END'})
@@ -332,7 +344,7 @@ export function* fetchData(action) {
         yield put({ type: 'FETCH_DATA_END' });
     } catch (error) {
         console.error('~~ Saga fetchData error ~~>', call_name, args, error);
-        yield put({ type: 'global/CHAIN_API_ERROR', error: error.message });
+        yield put({ type: 'global/CHAIN_API_ERROR', payload: false, error: error.message });
 
         if (!(yield cancelled())) {
             yield put({ type: 'FETCH_DATA_END' });

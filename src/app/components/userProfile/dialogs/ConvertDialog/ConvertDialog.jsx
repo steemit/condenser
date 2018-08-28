@@ -16,6 +16,7 @@ import Slider from 'src/app/components/golos-ui/Slider';
 import SimpleInput from 'src/app/components/golos-ui/SimpleInput';
 import ComplexInput from 'src/app/components/golos-ui/ComplexInput';
 import DialogTypeSelect from 'src/app/components/userProfile/common/DialogTypeSelect';
+import { fetchCurrentStateAction } from 'src/app/redux/actions/fetch';
 
 const POWER_TO_GOLOS_INTERVAL = 13; // weeks
 
@@ -517,15 +518,8 @@ export default connect(
                     successCallback() {
                         callback(null);
 
-                        const path = location.pathname.substr(1);
-
-                        if (path.endsWith('/transfers')) {
-                            dispatch({
-                                type: 'FETCH_STATE',
-                                payload: {
-                                    pathname: path,
-                                },
-                            });
+                        if (location.pathname.endsWith('/transfers')) {
+                            dispatch(fetchCurrentStateAction());
                         }
                     },
                     errorCallback(err) {

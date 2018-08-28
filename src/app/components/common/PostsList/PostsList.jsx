@@ -9,8 +9,6 @@ import CommentCard from 'src/app/components/common/CommentCard';
 import { isFetchingOrRecentlyUpdated } from 'app/utils/StateFunctions';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import PostOverlay from '../PostOverlay';
-import { getStoreState } from 'app/clientRender';
-import DialogManager from 'app/components/elements/common/DialogManager';
 import keyCodes from 'app/utils/keyCodes';
 
 const Root = styled.div`
@@ -182,22 +180,14 @@ export default class PostsList extends PureComponent {
     );
 
     _onEntryClick = async ({ permLink, url }) => {
-        const state = getStoreState();
-
-        if (!state.global.hasIn(['content', permLink])) {
-            try {
-                await this.props.loadContent(permLink);
-            } catch (err) {
-                DialogManager.alert('Не удалось загрузить данные');
-            }
-        }
-
         window.removeEventListener('popstate', this._onPopState);
         window.removeEventListener('keydown', this._onKeyDown);
         window.addEventListener('popstate', this._onPopState);
         window.addEventListener('keydown', this._onKeyDown);
 
         window.history.pushState({}, '', url);
+
+        this.props.fetchState();
 
         this.setState({
             showPostPermLink: permLink,

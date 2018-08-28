@@ -35,7 +35,7 @@ const Button = styled.button.attrs({ type: 'button' })`
 
     ${is('right')`
         justify-content: flex-end;
-    `}
+    `};
 
     &:hover {
         color: #333;
@@ -65,13 +65,9 @@ export default class EditGolosPower extends PureComponent {
         onCancel: PropTypes.func.isRequired,
     };
 
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            inputValue: (props.value / 1000).toFixed(3),
-        };
-    }
+    state = {
+        inputValue: (this.props.value / 1000).toFixed(3),
+    };
 
     render() {
         const { max } = this.props;
@@ -105,7 +101,11 @@ export default class EditGolosPower extends PureComponent {
                     />
                 </Field>
                 <Footer>
-                    <Button disabled={isError} right={1} onClick={isError ? null : this._onSaveClick}>
+                    <Button
+                        disabled={isError}
+                        right={1}
+                        onClick={isError ? null : this._onSaveClick}
+                    >
                         Сохранить
                         <DelegationEditButtonIcon name="check" right={1} size={16} />
                     </Button>

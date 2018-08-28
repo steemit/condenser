@@ -261,14 +261,20 @@ export default class WalletLine extends PureComponent {
     };
 
     state = {
-        editDelegationId: null,
-        loaderForId: null,
+        edit: false,
+        loader: false,
         startEditDelegationGrow: false,
     };
 
+    componentWillUnmount() {
+        if (this._resetTimeout) {
+            clearTimeout(this._resetTimeout);
+        }
+    }
+
     render() {
         const { data } = this.props;
-        const { loaderForId } = this.state;
+        const { loader } = this.state;
 
         return (
             <Root>
@@ -311,7 +317,7 @@ export default class WalletLine extends PureComponent {
                         </Memo>
                     ) : null}
                     {data.data ? <DataLink to={data.link}>{data.data}</DataLink> : null}
-                    {data.showDelegationActions ? this._renderDelegationActions(data.id) : null}
+                    {data.showDelegationActions ? this._renderDelegationActions() : null}
                     {data.currencies ? (
                         <Currencies>
                             {data.currencies.map(({ amount, currency }) => (
@@ -328,8 +334,8 @@ export default class WalletLine extends PureComponent {
                         </Value>
                     )}
                 </Line>
-                {this._renderEditDelegation(data.id, data.amount)}
-                {loaderForId && loaderForId === data.id ? <SplashLoader light /> : null}
+                {this._renderEditDelegation()}
+                {loader ? <SplashLoader light /> : null}
             </Root>
         );
     }
@@ -340,14 +346,16 @@ export default class WalletLine extends PureComponent {
         return <WhoPostLink onClick={() => this._onPostClick(post)}>{fullLink}</WhoPostLink>;
     }
 
-    _renderEditDelegation(id, amount) {
-        const { editDelegationId } = this.state;
+    _renderEditDelegation() {
+        const { data } = this.props;
+        const { id, amount } = data;
+        const { edit } = this.state;
 
-        if (editDelegationId === id) {
-            const { account, delegationData, globalProps } = this.props;
+        if (edit) {
+            const { myAccount, delegationData, globalProps } = this.props;
             const { startEditDelegationGrow } = this.state;
 
-            const { golos } = getVesting(account, globalProps);
+            const { golos } = getVesting(myAccount, globalProps);
 
             const availableBalance = Math.max(
                 0,
@@ -371,8 +379,8 @@ export default class WalletLine extends PureComponent {
         }
     }
 
-    _renderDelegationActions(id) {
-        const { loaderForId } = this.state;
+    _renderDelegationActions() {
+        const { loader } = this.state;
 
         return (
             <Actions>
@@ -380,29 +388,29 @@ export default class WalletLine extends PureComponent {
                     color="#3684ff"
                     name="pen"
                     data-tooltip="Редактировать делегирование"
-                    onClick={loaderForId ? null : () => this._onEditDelegationClick(id)}
+                    onClick={loader ? null : () => this._onEditDelegationClick()}
                 />
                 <ActionIcon
                     color="#fc544e"
                     name="round-cross"
                     data-tooltip="Отменить делегирование"
-                    onClick={loaderForId ? null : () => this._onCancelDelegationClick(id)}
+                    onClick={loader ? null : () => this._onCancelDelegationClick()}
                 />
             </Actions>
         );
     }
 
-    _onEditDelegationClick = id => {
-        const { editDelegationId, startEditDelegationGrow } = this.state;
+    _onEditDelegationClick = () => {
+        const { edit, startEditDelegationGrow } = this.state;
 
-        if (editDelegationId === id && startEditDelegationGrow) {
+        if (edit && startEditDelegationGrow) {
             this.setState({
                 startEditDelegationGrow: false,
             });
         } else {
             this.setState(
                 {
-                    editDelegationId: id,
+                    edit: true,
                     startEditDelegationGrow: false,
                 },
                 () => {
@@ -417,26 +425,37 @@ export default class WalletLine extends PureComponent {
     };
 
     _onDelegationEditCancelClick = () => {
-        this.setState({
-            startEditDelegationGrow: false,
-        });
+        this.setState(
+            {
+                startEditDelegationGrow: false,
+            },
+            () => {
+                this._resetTimeout = setTimeout(() => {
+                    this.setState({
+                        edit: false,
+                    });
+                }, 150);
+            }
+        );
     };
 
     _onDelegationSaveClick = (item, value) => {
-        const { loaderForId } = this.state;
+        const { loader } = this.state;
 
-        if (loaderForId) {
+        if (loader) {
             return;
         }
 
         this._updateDelegation(item, value);
     };
 
-    _onCancelDelegationClick = async id => {
+    _onCancelDelegationClick = async () => {
         if (await DialogManager.dangerConfirm()) {
-            const data = this.props.delegationData.find(data => data.id === id);
+            const { data } = this.props;
 
-            this._updateDelegation(data, 0);
+            const delegationData = this.props.delegationData.find(d => d.id === data.id);
+
+            this._updateDelegation(delegationData, 0);
         }
     };
 
@@ -452,13 +471,13 @@ export default class WalletLine extends PureComponent {
         };
 
         this.setState({
-            loaderForId: id,
+            loader: true,
         });
 
         this.props.delegate(operation, err => {
             if (err) {
                 this.setState({
-                    loaderForId: null,
+                    loader: false,
                 });
 
                 if (err !== 'Canceled') {
@@ -466,8 +485,8 @@ export default class WalletLine extends PureComponent {
                 }
             } else {
                 this.setState({
-                    loaderForId: null,
-                    editDelegationId: null,
+                    loader: false,
+                    edit: false,
                 });
 
                 this.props.onLoadDelegationsData();

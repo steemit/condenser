@@ -198,7 +198,7 @@ class WalletContent extends Component {
         }
 
         if (list.length) {
-            const { myAccountName } = this.props;
+            const { myAccountName, myAccount } = this.props;
             const { delegationData } = this.state;
 
             for (let i = 0; i < list.length; ++i) {
@@ -217,6 +217,7 @@ class WalletContent extends Component {
                             data={item}
                             myAccountName={myAccountName}
                             account={pageAccount}
+                            myAccount={myAccount}
                             delegationData={delegationData}
                             globalProps={this._globalProps}
                             delegate={this.props.delegate}
@@ -610,11 +611,13 @@ export default connect(
         const pageAccountName = props.params.accountName.toLowerCase();
         const pageAccount = state.global.getIn(['accounts', pageAccountName]);
         const myAccountName = state.user.getIn(['current', 'username']);
+        const myAccount = state.global.getIn(['accounts', myAccountName]);
 
         return {
             pageAccountName,
             pageAccount,
             myAccountName,
+            myAccount,
             isOwner: pageAccountName === myAccountName,
             globalProps,
         };

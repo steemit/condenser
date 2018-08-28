@@ -77,20 +77,45 @@ const IconWrap = styled.div`
     }
 `;
 
-const SimpleIcon = Icon.extend`
+const SimpleIcon = styled(Icon)`
     width: 20px;
     height: 20px;
 `;
 
-const LeftArrow = styled.div`
+const ArrowContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 10px;
     height: 100%;
     position: absolute;
-    right: 20px;
     top: 0;
     cursor: pointer;
-    background-color: black;
     z-index: 1;
+`;
+
+const LeftArrowContainer = styled(ArrowContainer)`
+    left: 20px;
+`;
+
+const RightArrowContianer = styled(ArrowContainer)`
+    right: 20px;
+`;
+
+const ArrowIcon = styled(Icon)`
+    width: 8px;
+    height: 14px;
+`;
+ArrowIcon.defaultProps = {
+    name: 'chevron',
+};
+
+const LeftArrow = styled(ArrowIcon)`
+    transform: rotate(-90deg);
+`;
+
+const RightArrow = styled(ArrowIcon)`
+    transform: rotate(90deg);
 `;
 
 class UserNavigation extends PureComponent {
@@ -100,7 +125,9 @@ class UserNavigation extends PureComponent {
             screenLessThenMainContainer: false,
             currentOffsetIndex: 1,
         };
-        this._setStyleForNavigationIcons = this._setStyleForNavigationIcons.bind(this);
+        this._setStyleForIconsNavigation = this._setStyleForIconsNavigation.bind(this);
+        this.showNextIcon = this.showNextIcon.bind(this);
+        this.showPrevIcon = this.showPrevIcon.bind(this);
     }
     static propTypes = {
         accountName: PropTypes.string,
@@ -111,7 +138,7 @@ class UserNavigation extends PureComponent {
     };
 
     componentDidUpdate() {
-        this._setStyleForNavigationIcons();
+        this._setStyleForIconsNavigation();
     }
 
     componentDidMount() {
@@ -121,6 +148,20 @@ class UserNavigation extends PureComponent {
 
     componentWillUnmount() {
         window.removeEventListener('resize', this._checkScreenSize);
+    }
+
+    showNextIcon(e) {
+        e.stopPropagation();
+        this.setState({
+            currentOffsetIndex: this.state.currentOffsetIndex + 1,
+        });
+    }
+
+    showPrevIcon(e) {
+        e.stopPropagation();
+        this.setState({
+            currentOffsetIndex: this.state.currentOffsetIndex - 1,
+        });
     }
 
     render() {
@@ -158,6 +199,11 @@ class UserNavigation extends PureComponent {
         ];
         return (
             <Wrapper className={className} innerRef={ref => (this.wrapper = ref)}>
+                {this.state.currentOffsetIndex > 0 && (
+                    <LeftArrowContainer onClick={this.showPrevIcon}>
+                        <LeftArrow />
+                    </LeftArrowContainer>
+                )}
                 <Container align="center" ref={ref => (this.container = ref)}>
                     {tabLinks.map(({ value, to }, index) => (
                         <TabLinkIndex key={to} to={to}>
@@ -173,7 +219,12 @@ class UserNavigation extends PureComponent {
                     {/*</LinkWithDropdown>*/}
                     {this._renderRightIcons()}
                 </Container>
-                <LeftArrow />
+                <RightArrowContianer
+                    ref={ref => (this.rightArrow = ref)}
+                    onClick={this.showNextIcon}
+                >
+                    <RightArrow />
+                </RightArrowContianer>
             </Wrapper>
         );
     }
@@ -226,28 +277,46 @@ class UserNavigation extends PureComponent {
         }
     }
 
-    _setStyleForNavigationIcons() {
-        let container = ReactDOM.findDOMNode(this.container);
-        let children = container.children;
-        let currentOffsetIndex = this.state.currentOffsetIndex;
-        let currentOffset = children[currentOffsetIndex];
-        for (let i = 0; i < children.length; i++) {
-            let child = children[i];
+    _setStyleForIconsNavigation() {
+        try {
+            let container = ReactDOM.findDOMNode(this.container);
+            let rightArrow = ReactDOM.findDOMNode(this.rightArrow);
+            let children = container.children;
+            let currentOffsetIndex = this.state.currentOffsetIndex;
+            let currentOffset = children[currentOffsetIndex];
 
-            if (i < currentOffsetIndex) {
+            const RIGHT_PADDING = 20;
+            const LEFT_PADDING = currentOffsetIndex > 0 ? 10 : 0;
+
+            if (container.lastChild.offsetLeft + container.lastChild.clientWidth) {
+            }
+
+            rightArrow.style.display = 'none';
+            for (let i = 0; i < children.length; i++) {
+                let child = children[i];
+
                 if (i === 0) {
-                    console.log('margin');
-                    child.style.marginLeft = child.offsetLeft - currentOffset.offsetLeft + 'px';
+                    child.style.marginLeft =
+                        child.offsetLeft - currentOffset.offsetLeft + LEFT_PADDING + 'px';
                 }
-                child.style.opacity = 0;
-                continue;
-            }
 
-            if (child.offsetLeft + child.clientWidth > container.clientWidth + 20) {
-                child.style.opacity = 0;
-            } else {
-                child.style.opacity = 1;
+                if (i < currentOffsetIndex) {
+                    child.style.opacity = 0;
+                    continue;
+                }
+
+                if (
+                    child.offsetLeft + child.clientWidth - currentOffset.offsetLeft >
+                    container.clientWidth - (i < children.length - 1 ? RIGHT_PADDING : 0)
+                ) {
+                    child.style.opacity = 0;
+                    rightArrow.style.display = 'flex';
+                } else {
+                    child.style.opacity = 1;
+                }
             }
+        } catch (error) {
+            console.log(error);
         }
     }
 
@@ -277,7 +346,7 @@ class UserNavigation extends PureComponent {
             this.setState({ screenLessThenMainContainer: false });
         }
 
-        this._setStyleForNavigationIcons();
+        this._setStyleForIconsNavigation();
     };
 }
 

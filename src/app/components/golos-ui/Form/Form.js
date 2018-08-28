@@ -1,5 +1,4 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { Fragment } from 'react';
 import styled, { css } from 'styled-components';
 import is from 'styled-is';
 
@@ -79,7 +78,7 @@ export const Textarea = styled.textarea`
     line-height: 17px;
 `;
 
-export const Error = ({ meta: { touched, error, submitError } }) =>
+export const FormError = ({ meta: { touched, error, submitError } }) =>
     touched && (error || submitError) ? <span>{error || submitError}</span> : null;
 
 export const FormGroup = styled(Flex)`

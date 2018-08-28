@@ -8,6 +8,7 @@ import { TabContainer, Tabs } from 'golos-ui/Tabs';
 
 import Common from './settings/Common';
 import Account from './settings/Account';
+import Keys from './settings/Keys';
 // import Notifications from './settings/Notifications'; // TODO: uncomment after realize push and email
 import Online from './settings/notifications/Online';
 
@@ -16,6 +17,7 @@ export default class SettingsShow extends PureComponent {
         profile: PropTypes.object,
         account: PropTypes.object,
 
+        // wifShown: PropTypes.instanceOf
         options: PropTypes.instanceOf(Map),
         isFetching: PropTypes.bool,
         isChanging: PropTypes.bool,
@@ -29,6 +31,7 @@ export default class SettingsShow extends PureComponent {
             profile,
             account,
 
+            wifShown,
             options,
             isFetching,
             isChanging,
@@ -51,6 +54,16 @@ export default class SettingsShow extends PureComponent {
                     </TabContainer>
                     <TabContainer id="accountTab" title="Учетная запись">
                         <Account
+                            profile={profile}
+                            account={account}
+                            options={options}
+                            isFetching={isFetching}
+                            isChanging={isChanging}
+                            onSubmitBlockchain={onSubmitBlockchain}
+                        />
+                    </TabContainer>
+                    <TabContainer id="keysTab" title="Ключи">
+                        <Keys
                             profile={profile}
                             account={account}
                             options={options}

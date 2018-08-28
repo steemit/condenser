@@ -163,19 +163,19 @@ export default class UserCardAbout extends PureComponent {
                 <CardContentCounters>
                     <Row>
                         <Column>
-                            <Bold>{account.get('post_count')}</Bold>
-                            <Title>Постов</Title>
-                        </Column>
-                        <Column>
                             <Bold>{followerCount}</Bold>
                             <Title>Подписчиков</Title>
+                        </Column>
+                        <Column>
+                            <Bold>{followingCount}</Bold>
+                            <Title>Подписок</Title>
                         </Column>
                     </Row>
 
                     <Row>
                         <Column>
-                            <Bold>{followingCount}</Bold>
-                            <Title>Подписок</Title>
+                            <Bold>{account.get('post_count')}</Bold>
+                            <Title>Постов</Title>
                         </Column>
                         <Column>
                             <Bold>{reputation}</Bold>

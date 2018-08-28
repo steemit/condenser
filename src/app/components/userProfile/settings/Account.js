@@ -17,7 +17,7 @@ import {
     Input,
     Select,
     Textarea,
-    Error,
+    FormError,
 } from 'golos-ui/Form';
 import Icon from 'golos-ui/Icon';
 
@@ -32,12 +32,45 @@ const UserName = styled.div`
     color: #363636;
 `;
 
+const composeValidators = (...validators) => value =>
+    validators.reduce((error, validator) => error || (value && validator(value)), undefined);
+
+const isLengthGreaterThan = (min, err) => value => (value.length > min ? err : undefined);
+const isStartWithAt = err => value => (/^\s*@/.test(value) ? err : undefined);
+const isNotUrl = err => value => (!/^https?:\/\//.test(value) ? err : undefined);
+const composedUrlValidator = value =>
+    composeValidators(
+        isLengthGreaterThan(100, tt('settings_jsx.website_url_is_too_long')),
+        isNotUrl(tt('settings_jsx.invalid_url'))
+    )(value);
+const usernameValidation = (username, err) => /^[a-zA-Z0-9\-\.]+$/.test(username) ? err : undefined;
+
+const validate = values => ({
+    name: composeValidators(
+        isLengthGreaterThan(20, tt('settings_jsx.name_is_too_long')),
+        isStartWithAt(tt('settings_jsx.name_must_not_begin_with'))
+    )(values.name),
+    about: isLengthGreaterThan(160, tt('settings_jsx.about_is_too_long')),
+    location: isLengthGreaterThan(160, tt('settings_jsx.location_is_too_long')),
+    website: composedUrlValidator(values.website),
+    social: {
+        facebook: usernameValidation(values.social ? values.social.facebook : false),
+        vkontakte: usernameValidation(values.social ? values.social.vkontakte : false),
+        instagram: usernameValidation(values.social ? values.social.instagram : false),
+        twitter: usernameValidation(values.social ? values.social.twitter : false),
+    },
+});
+
 const Account = ({ profile, account, onSubmitBlockchain }) => {
-  profile.username = account.name; // for disabled input, omitting from submit data
+  profile.username = account.get('name'); // for disabled input, omitting from submit data
 
   return (
-      <Form onSubmit={onSubmitBlockchain} initialValues={profile}>
-          {({ handleSubmit, submitError, form, submitting, pristine, values }) => (
+      <Form 
+        onSubmit={onSubmitBlockchain} 
+        initialValues={profile}
+        validate={validate}
+        >
+          {({ handleSubmit, submitError, form, submitting, pristine, validating, values }) => (
               <form onSubmit={handleSubmit}>
                   <CardContent column>
                       <Field name="username">
@@ -58,7 +91,7 @@ const Account = ({ profile, account, onSubmitBlockchain }) => {
                                       type="text"
                                       placeholder="Имя Фамилия"
                                   />
-                                  <Error meta={meta} />
+                                  <FormError meta={meta} />
                               </FormGroup>
                           )}
                       </Field>
@@ -75,7 +108,7 @@ const Account = ({ profile, account, onSubmitBlockchain }) => {
                                           );
                                       })}
                                   </Select>
-                                  <Error meta={meta} />
+                                  <FormError meta={meta} />
                               </FormGroup>
                           )}
                       </Field>
@@ -88,7 +121,7 @@ const Account = ({ profile, account, onSubmitBlockchain }) => {
                                       autocomplete="email"
                                       type="text"
                                   />
-                                  <Error meta={meta} />
+                                  <FormError meta={meta} />
                               </FormGroup>
                           )}
                       </Field> */}
@@ -101,7 +134,7 @@ const Account = ({ profile, account, onSubmitBlockchain }) => {
                                       type="text"
                                       placeholder="Укажите свой город"
                                   />
-                                  <Error meta={meta} />
+                                  <FormError meta={meta} />
                               </FormGroup>
                           )}
                       </Field>
@@ -116,7 +149,7 @@ const Account = ({ profile, account, onSubmitBlockchain }) => {
                                       }
                                       rows={6}
                                   />
-                                  <Error meta={meta} />
+                                  <FormError meta={meta} />
                               </FormGroup>
                           )}
                       </Field>
@@ -125,7 +158,7 @@ const Account = ({ profile, account, onSubmitBlockchain }) => {
                               <FormGroup>
                                   <Label>{tt('settings_jsx.profile_website')}</Label>
                                   <Input {...input} type="text" placeholder="Ссылка на сайт" />
-                                  <Error meta={meta} />
+                                  <FormError meta={meta} />
                               </FormGroup>
                           )}
                       </Field>
@@ -142,7 +175,7 @@ const Account = ({ profile, account, onSubmitBlockchain }) => {
                                           type="text"
                                           placeholder="Ссылка на Facebook"
                                       />
-                                      <Error meta={meta} />
+                                      <FormError meta={meta} />
                                   </FormGroupRow>
                               )}
                           </Field>
@@ -157,7 +190,7 @@ const Account = ({ profile, account, onSubmitBlockchain }) => {
                                           type="text"
                                           placeholder="Ссылка на Вконтакте"
                                       />
-                                      <Error meta={meta} />
+                                      <FormError meta={meta} />
                                   </FormGroupRow>
                               )}
                           </Field>
@@ -172,7 +205,7 @@ const Account = ({ profile, account, onSubmitBlockchain }) => {
                                           type="text"
                                           placeholder="Ссылка на Instagran"
                                       />
-                                      <Error meta={meta} />
+                                      <FormError meta={meta} />
                                   </FormGroupRow>
                               )}
                           </Field>
@@ -187,19 +220,20 @@ const Account = ({ profile, account, onSubmitBlockchain }) => {
                                           type="text"
                                           placeholder="Ссылка на Twitter"
                                       />
-                                      <Error meta={meta} />
+                                      <FormError meta={meta} />
                                   </FormGroupRow>
                               )}
                           </Field>
                       </FormGroup>
 
                       {submitError && <div>{submitError}</div>}
+                      {console.log(pristine, validating)}
                   </CardContent>
                   <DialogFooter>
                       <DialogButton onClick={form.reset} disabled={submitting || pristine}>
                           {tt('settings_jsx.reset')}
                       </DialogButton>
-                      <DialogButton type="submit" primary disabled={submitting}>
+                      <DialogButton type="submit" primary disabled={submitting || pristine || validating}>
                           {tt('settings_jsx.update')}
                       </DialogButton>
                   </DialogFooter>

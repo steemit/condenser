@@ -410,13 +410,13 @@
     "team": "Team",
     "terms_and_conditions": "Terms and Conditions",
     "the_rules_of_APP_NAME": {
-      "fifth": "The fifth rule: Use only randomly-generated passwords.",
-      "fourth": "The fourth rule: If you can remember the password, it's not secure.",
-      "one": "The first rule of %(APP_NAME)s is: Do not lose your password.",
-      "second": "The second rule of %(APP_NAME)s is: Do <strong>not</strong> lose your password.",
-      "seventh": "The seventh rule: Always back up your password.",
-      "sixth": "The sixth rule: Do not tell anyone your password.",
-      "third": "The third rule of %(APP_NAME)s is: We cannot recover your password."
+      "fifth": "Use only randomly-generated passwords.",
+      "fourth": "If you can remember the password, it's not secure.",
+      "one": "Do not lose your password.",
+      "second": "Do <strong>not</strong> lose your password.",
+      "seventh": "Always back up your password.",
+      "sixth": "Do not tell anyone your password.",
+      "third": "We cannot recover your password."
     },
     "this_is_wrong_password": "This is the wrong password",
     "this_will_update_usernames_authtype_key": "This will update %(username)s %(authType)s key",

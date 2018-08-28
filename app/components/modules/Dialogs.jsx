@@ -1,28 +1,24 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Map } from 'immutable';
+
+import g from 'app/redux/GlobalReducer';
+
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import Reveal from 'react-foundation-components/lib/global/reveal';
-import g from 'app/redux/GlobalReducer';
-import { Map } from 'immutable';
-import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
+
 import CheckLoginOwner from 'app/components/elements/CheckLoginOwner';
 import PromotePost from 'app/components/modules/PromotePost';
 import ExplorePost from 'app/components/modules/ExplorePost';
+import QrKeyView from 'app/components/elements/QrKeyView';
 
-class Dialogs extends React.Component {
+class Dialogs extends Component {
+
     static propTypes = {
         active_dialogs: PropTypes.object,
         hide: PropTypes.func.isRequired,
     };
-
-    constructor() {
-        super();
-        this.shouldComponentUpdate = shouldComponentUpdate(this, 'Dialogs');
-        this.hide = name => {
-            this.props.hide(name);
-        };
-    }
 
     componentWillReceiveProps(nextProps) {
         const { active_dialogs, hide } = nextProps;
@@ -31,13 +27,17 @@ class Dialogs extends React.Component {
         });
     }
 
+    hide = name => {
+        this.props.hide(name);
+    };
+
     render() {
         const { active_dialogs } = this.props;
         let idx = 0;
 
         const dialogs = [];
 
-        active_dialogs.forEach((k, v) => {
+        active_dialogs.forEach((v, k) => {
             if (k === 'promotePost') {
                 dialogs.push(
                     <span key={idx++}>
@@ -53,6 +53,15 @@ class Dialogs extends React.Component {
                         <Reveal onHide={this['hide_' + k]} show>
                             <CloseButton onClick={this['hide_' + k]} />
                             <ExplorePost onClick={this['hide_' + k]} {...v.get('params').toJS()} />
+                        </Reveal>
+                    </span>
+                );
+            } else if (k === 'qr_key') {
+                dialogs.push(
+                    <span key={idx++}>
+                        <Reveal onHide={this['hide_' + k]} show>
+                            <CloseButton onClick={this['hide_' + k]} />
+                            <QrKeyView onClose={this['hide_' + k]} {...v.get('params').toJS()} />
                         </Reveal>
                     </span>
                 );

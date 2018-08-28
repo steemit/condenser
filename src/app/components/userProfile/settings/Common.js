@@ -22,7 +22,7 @@ import {
     Select,
     RadioGroup,
     Checkbox,
-    Error,
+    FormError,
 } from 'golos-ui/Form';
 
 const LabelRow = styled(StyledLabelRow)`
@@ -110,7 +110,7 @@ export default class Common extends PureComponent {
                                             {...input}
                                             light
                                         />
-                                        <Error meta={meta} />
+                                        <FormError meta={meta} />
                                     </FormGroup>
                                 )}
                             </Field>
@@ -119,7 +119,7 @@ export default class Common extends PureComponent {
                                     <FormGroup>
                                         <Label dark>Награда по умолчанию за пост</Label>
                                         <Slider {...input} showCaptions />
-                                        <Error meta={meta} />
+                                        <FormError meta={meta} />
                                     </FormGroup>
                                 )}
                             </Field>
@@ -130,7 +130,7 @@ export default class Common extends PureComponent {
                                         <LabelRow>
                                             Голосовать по умолчанию за свою публикацию
                                         </LabelRow>
-                                        <Error meta={meta} />
+                                        <FormError meta={meta} />
                                     </FormGroup>
                                 )}
                             </Field>
@@ -170,7 +170,7 @@ export default class Common extends PureComponent {
                                             {...input}
                                             light
                                         />
-                                        <Error meta={meta} />
+                                        <FormError meta={meta} />
                                     </FormGroup>
                                 )}
                             </Field>

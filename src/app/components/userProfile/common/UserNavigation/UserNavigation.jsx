@@ -205,7 +205,7 @@ class UserNavigation extends PureComponent {
                     </LeftArrowContainer>
                 )}
                 <Container align="center" ref={ref => (this.container = ref)}>
-                    {tabLinks.map(({ value, to }, index) => (
+                    {tabLinks.map(({ value, to }) => (
                         <TabLinkIndex key={to} to={to}>
                             {value}
                         </TabLinkIndex>
@@ -237,23 +237,13 @@ class UserNavigation extends PureComponent {
         if (showLayout && !this.state.screenLessThenMainContainer) {
             if (layout === 'list') {
                 icons.push(
-                    <IconWrap
-                        key="l-grid"
-                        data-tooltip="Сетка"
-                        onClick={this._onGridClick}
-                        ref={ref => (this.itemsRef['grid'] = ref)}
-                    >
+                    <IconWrap key="l-grid" data-tooltip="Сетка" onClick={this._onGridClick}>
                         <SimpleIcon name="layout_grid" />
                     </IconWrap>
                 );
             } else {
                 icons.push(
-                    <IconWrap
-                        key="l-list"
-                        data-tooltip="Список"
-                        onClick={this._onListClick}
-                        ref={ref => (this.itemsRef['list'] = ref)}
-                    >
+                    <IconWrap key="l-list" data-tooltip="Список" onClick={this._onListClick}>
                         <SimpleIcon name="layout_list" />
                     </IconWrap>
                 );

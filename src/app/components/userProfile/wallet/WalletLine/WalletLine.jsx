@@ -419,7 +419,7 @@ export default class WalletLine extends PureComponent {
 
     _onCancelDelegationClick = async id => {
         if (await DialogManager.dangerConfirm()) {
-            const data = this.data.delegationData.find(data => data.id === id);
+            const data = this.props.delegationData.find(data => data.id === id);
 
             this._updateDelegation(data, 0);
         }

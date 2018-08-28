@@ -48,7 +48,7 @@ export default class DialogManager extends React.PureComponent {
                 props: {
                     title,
                     type: 'confirm',
-                    text,
+                    text: text || 'Вы уверены?',
                 },
                 onClose: resolve,
             });
@@ -63,7 +63,7 @@ export default class DialogManager extends React.PureComponent {
                     title,
                     type: 'confirm',
                     danger: true,
-                    text,
+                    text: text || 'Вы уверены?',
                 },
                 onClose: resolve,
             });
@@ -87,9 +87,10 @@ export default class DialogManager extends React.PureComponent {
     constructor(props) {
         super(props);
 
-        if (process.env.BROWSER) {
-            window.DialogManager = DialogManager; // TODO: remove line
+        if (process.env.NODE_ENV === 'development' && process.env.BROWSER) {
+            window.DialogManager = DialogManager;
         }
+
         instance = this;
 
         this._dialogs = [];
@@ -154,7 +155,7 @@ export default class DialogManager extends React.PureComponent {
 
         return (
             <div className="DialogManager">
-                <div className="DialogManager__shade" onClick={this._onShadeClick} />
+                <div className="DialogManager__shade" ref={this._onShadowRef} onClick={this._onShadeClick} />
                 {dialogs}
             </div>
         );
@@ -188,6 +189,21 @@ export default class DialogManager extends React.PureComponent {
             this.forceUpdate();
         }
     }
+
+    _onShadowRef = el => {
+        const body = document.body;
+        const content = document.getElementById('content')
+
+        if (el) {
+            if (window.innerHeight < body.offsetHeight) {
+                body.style.overflow = 'hidden';
+                content.style['overflow-y'] = 'scroll';
+            }
+        } else {
+            body.style.overflow = '';
+            content.style['overflow-y'] = '';
+        }
+    };
 
     _onShadeClick = () => {
         this._tryToClose();

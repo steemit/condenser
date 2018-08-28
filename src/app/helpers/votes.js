@@ -2,7 +2,8 @@ import tt from 'counterpart';
 import DialogManager from 'app/components/elements/common/DialogManager';
 
 export async function confirmVote(prevVote, percent) {
-    if (prevVote && prevVote.weight > 0) {
+    // Maybe need add condition (prevVote.weight > 0)
+    if (prevVote) {
         let action;
 
         if (prevVote.percent > 0) {

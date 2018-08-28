@@ -22,7 +22,7 @@ export default class CommonDialog extends React.PureComponent {
     static propTypes = {
         type: PropTypes.oneOf(['info', 'alert', 'confirm', 'prompt']),
         title: PropTypes.string,
-        text: PropTypes.string,
+        text: PropTypes.string.isRequired,
         onClose: PropTypes.func.isRequired,
     };
 

@@ -40,6 +40,7 @@ export const CURRENCY_COLOR = {
     GOLOS: '#2879ff',
     GBG: '#ffb839',
     GOLOS_POWER: '#f57c02',
+    GOLOS_POWER_DELEGATION: '#78c2d0;',
     SAFE: '#583652',
 };
 
@@ -68,15 +69,6 @@ const Content = styled.div`
 `;
 
 const Lines = styled.div``;
-
-const WhoPostLink = styled(Link)`
-    display: block;
-    color: #333;
-    white-space: nowrap;
-    text-decoration: underline;
-    overflow: hidden;
-    text-overflow: ellipsis;
-`;
 
 const EmptyBlock = styled.div`
     padding: 28px 20px 30px;
@@ -206,7 +198,7 @@ class WalletContent extends Component {
         }
 
         if (list.length) {
-            const { myAccountName } = this.props;
+            const { myAccountName, myAccount } = this.props;
             const { delegationData } = this.state;
 
             for (let i = 0; i < list.length; ++i) {
@@ -225,6 +217,7 @@ class WalletContent extends Component {
                             data={item}
                             myAccountName={myAccountName}
                             account={pageAccount}
+                            myAccount={myAccount}
                             delegationData={delegationData}
                             globalProps={this._globalProps}
                             delegate={this.props.delegate}
@@ -353,7 +346,7 @@ class WalletContent extends Component {
                     currency,
                     memo: item.memo || null,
                     icon: 'voice',
-                    color: isReceive ? CURRENCY_COLOR[currency] : null,
+                    color: isReceive ? CURRENCY_COLOR.GOLOS_POWER_DELEGATION : null,
                     showDelegationActions: item.delegator === myAccountName,
                     stamp,
                 });
@@ -361,12 +354,6 @@ class WalletContent extends Component {
         }
 
         return list;
-    }
-
-    _renderPostLink(post) {
-        const fullLink = post.author + '/' + post.permLink;
-
-        return <WhoPostLink onClick={() => this._onPostClick(post)}>{fullLink}</WhoPostLink>;
     }
 
     async _loadDelegationsData() {
@@ -624,11 +611,13 @@ export default connect(
         const pageAccountName = props.params.accountName.toLowerCase();
         const pageAccount = state.global.getIn(['accounts', pageAccountName]);
         const myAccountName = state.user.getIn(['current', 'username']);
+        const myAccount = state.global.getIn(['accounts', myAccountName]);
 
         return {
             pageAccountName,
             pageAccount,
             myAccountName,
+            myAccount,
             isOwner: pageAccountName === myAccountName,
             globalProps,
         };

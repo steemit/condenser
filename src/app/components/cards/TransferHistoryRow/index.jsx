@@ -210,8 +210,8 @@ class TransferHistoryRow extends React.Component {
             const rewards = [];
             if (parseFloat(data.reward_steem.split(' ')[0]) > 0)
                 rewards.push(data.reward_steem);
-            if (parseFloat(data.reward_sbd.split(' ')[0]) > 0)
-                rewards.push(data.reward_sbd);
+            //if (parseFloat(data.reward_sbd.split(' ')[0]) > 0)
+            //    rewards.push(data.reward_sbd);
             if (parseFloat(data.reward_vests.split(' ')[0]) > 0)
                 rewards.push(`${reward_vests} ${VESTING_TOKEN}`);
 

@@ -1,4 +1,4 @@
-import { PUBLIC_API } from 'app/client_config'
+import { PUBLIC_API, ACCOUNT_OPERATIONS } from 'app/client_config'
 
 import { processBlog } from 'shared/state';
 import { reveseTag, prepareTrendingTags } from 'app/utils/tags'
@@ -45,32 +45,11 @@ export default async function getState(api, url, options, offchain, rates) {
 
             switch (parts[1]) {
                 case 'transfers':
-                    const history = await api.getAccountHistoryAsync(uname, -1, 1000)
+                    const history = await api.getAccountHistoryAsync(uname, -1, 1000, {select_ops: ACCOUNT_OPERATIONS})
                     account.transfer_history = []
-                    account.other_history = []
 
                     history.forEach(operation => {
-                        switch (operation[1].op[0]) {
-                            case 'transfer_to_vesting':
-                            case 'withdraw_vesting':
-                            case 'interest':
-                            case 'transfer':
-                            case 'liquidity_reward':
-                            case 'author_reward':
-                            case 'curation_reward':
-                            case 'transfer_to_savings':
-                            case 'transfer_from_savings':
-                            case 'cancel_transfer_from_savings':
-                            case 'escrow_transfer':
-                            case 'escrow_approve':
-                            case 'escrow_dispute':
-                            case 'escrow_release':
-                                state.accounts[uname].transfer_history.push(operation)
-                            break
-
-                            default:
-                                state.accounts[uname].other_history.push(operation)
-                        }
+                        state.accounts[uname].transfer_history.push(operation)
                     })
                 break
 

@@ -72,6 +72,20 @@ export const PUBLIC_API = {
   cashout:   'getDiscussionsByCashoutAsync',
   payout:     'getDiscussionsByPayoutAsync',
 }
+export const ACCOUNT_OPERATIONS = [
+  'transfer_to_vesting',
+  'withdraw_vesting',
+  'interest',
+  'transfer',
+  'convert',
+  'fill_convert_request',
+  'transfer_to_savings',
+  'transfer_from_savings',
+  'cancel_transfer_from_savings',
+  'author_reward',
+  'curation_reward'
+]
+
 export const SEO_TITLE = 'GOLOS.io Блоги'
 
 export const SEGMENT_ANALYTICS_KEY = 'F7tldQJxt491gXYqDGi5TkTT4wFpSPps'

@@ -4,7 +4,7 @@ import {getContent} from 'app/redux/sagas/shared';
 import GlobalReducer from './../GlobalReducer';
 import constants from './../constants';
 import { reveseTag } from 'app/utils/tags';
-import { DEBT_TOKEN_SHORT, LIQUID_TICKER, DEFAULT_CURRENCY, IGNORE_TAGS, PUBLIC_API, SELECT_TAGS_KEY } from 'app/client_config';
+import { DEBT_TOKEN_SHORT, LIQUID_TICKER, DEFAULT_CURRENCY, IGNORE_TAGS, PUBLIC_API, SELECT_TAGS_KEY, ACCOUNT_OPERATIONS } from 'app/client_config';
 import cookie from "react-cookie";
 import {api} from 'golos-js';
 import { processBlog } from 'shared/state';
@@ -95,32 +95,11 @@ export function* fetchState(action) {
 
                 switch (parts[1]) {
                     case 'transfers':
-                        const history = yield call([api, api.getAccountHistoryAsync], uname, -1, 1000)
+                        const history = yield call([api, api.getAccountHistoryAsync], uname, -1, 1000, {select_ops: ACCOUNT_OPERATIONS})
                         account.transfer_history = []
-                        account.other_history = []
                         
                         history.forEach(operation => {
-                            switch (operation[1].op[0]) {
-                                case 'transfer_to_vesting':
-                                case 'withdraw_vesting':
-                                case 'interest':
-                                case 'transfer':
-                                case 'liquidity_reward':
-                                case 'author_reward':
-                                case 'curation_reward':
-                                case 'transfer_to_savings':
-                                case 'transfer_from_savings':
-                                case 'cancel_transfer_from_savings':
-                                case 'escrow_transfer':
-                                case 'escrow_approve':
-                                case 'escrow_dispute':
-                                case 'escrow_release':
-                                    state.accounts[uname].transfer_history.push(operation)
-                                break
-
-                                default:
-                                    state.accounts[uname].other_history.push(operation)
-                            }
+                            state.accounts[uname].transfer_history.push(operation)
                         })
                     break
 

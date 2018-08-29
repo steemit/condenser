@@ -57,7 +57,7 @@ const LabelValue = styled.div`
     letter-spacing: 0.7px;
 `;
 
-class TokenDistribution extends PureComponent {
+class AccountTokens extends PureComponent {
     state = {
         hoverIndex: null,
         collapsed: false,
@@ -167,4 +167,4 @@ export default connect((state, props) => {
         gbgPerGolos: state.global.getIn(['rates', 'GBG', 'GOLOS']),
         globalProps: state.global.get('props'),
     };
-})(TokenDistribution);
+})(AccountTokens);

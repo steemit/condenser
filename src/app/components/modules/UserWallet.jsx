@@ -167,7 +167,7 @@ class UserWallet extends React.Component {
         if (savings_withdraws) {
             savings_withdraws.forEach(withdraw => {
                 const [amount, asset] = withdraw.get('amount').split(' ');
-                if (asset === 'STEEM') savings_pending += parseFloat(amount);
+                if (asset === LIQUID_TOKEN) savings_pending += parseFloat(amount);
                 else {
                     if (asset === 'SBD')
                         savings_sbd_pending += parseFloat(amount);
@@ -306,7 +306,7 @@ class UserWallet extends React.Component {
                 link: '#',
                 onClick: showTransfer.bind(
                     this,
-                    'STEEM',
+                    LIQUID_TOKEN,
                     'Transfer to Account'
                 ),
             },
@@ -315,7 +315,7 @@ class UserWallet extends React.Component {
                 link: '#',
                 onClick: showTransfer.bind(
                     this,
-                    'STEEM',
+                    LIQUID_TOKEN,
                     'Transfer to Savings'
                 ),
             },
@@ -426,7 +426,7 @@ class UserWallet extends React.Component {
                     LIQUID_TOKEN,
                 }),
                 link: '#',
-                onClick: showTransfer.bind(this, 'STEEM', 'Savings Withdraw'),
+                onClick: showTransfer.bind(this, LIQUID_TOKEN, 'Savings Withdraw'),
             },
         ];
         const savings_sbd_menu = [

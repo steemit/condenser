@@ -95,7 +95,7 @@ export default class Online extends PureComponent {
             {
                 name: 'notify.show.transfer',
                 label: tt('settings_jsx.notifications.transfer'),
-                icon: { name: 'coins_plus', width: '20', height: '16' },
+                icon: { name: 'coins', width: '20', height: '16' },
             },
             {
                 name: 'notify.show.reply',

@@ -32,6 +32,10 @@ export default class NotificationOnlineContent extends PureComponent {
         title: PropTypes.string,
         link: PropTypes.string,
         amount: PropTypes.number,
+
+        golos: PropTypes.number,
+        golosPower: PropTypes.number,
+        gbg: PropTypes.number,
     };
 
     getPropsForInterpolation() {
@@ -42,6 +46,10 @@ export default class NotificationOnlineContent extends PureComponent {
             title,
             link,
             amount,
+
+            golos,
+            golosPower,
+            gbg,
         } = this.props;
         const userName = account.get('name');
 
@@ -62,6 +70,21 @@ export default class NotificationOnlineContent extends PureComponent {
                     amount,
                 };
 
+            case 'reward':
+                const awards = [];
+                if (golos) awards.push(`${golos} Голосов`);
+                if (golosPower) awards.push(`${golosPower} Силы Голоса`);
+                if (gbg) awards.push(`${gbg} GBG`);
+                return {
+                    content: <Link to={link}>{title}</Link>,
+                    amount: awards.join(','),
+                };
+            case 'curatorReward':
+                return {
+                    content: <Link to={link}>{title}</Link>,
+                    amount,
+                };
+
             case 'subscribe':
             case 'unsubscribe':
             case 'witnessVote':
@@ -77,15 +100,22 @@ export default class NotificationOnlineContent extends PureComponent {
 
     render() {
         const { account, type } = this.props;
-        const { profile_image } = normalizeProfile(account.toJS());
 
-        return (
-            <Wrapper>
+        let avatarLink = null;
+        if (account) {
+            const { profile_image } = normalizeProfile(account.toJS());
+            avatarLink = (
                 <AvatarWrapper>
                     <Link to={`/@${account.get('name')}`}>
                         <Avatar avatarUrl={profile_image} size={40} />
                     </Link>
                 </AvatarWrapper>
+            );
+        }
+
+        return (
+            <Wrapper>
+                {avatarLink}
                 <Message>
                     <Interpolate with={this.getPropsForInterpolation()} component="div">
                         {tt(['notifications', 'online', type], { count: 1, interpolate: false })}

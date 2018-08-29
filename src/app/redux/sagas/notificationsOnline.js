@@ -14,9 +14,44 @@ function* addNotificationsOnlineWatch() {
     yield takeEvery(NOTIFICATION_ONLINE_ADD_NOTIFICATION, handleAddNotification);
 }
 
+function* getContent(author, permlink) {
+    const content = yield call(
+        [api, api.getContentAsync],
+        author,
+        permlink,
+        constants.DEFAULT_VOTE_LIMIT
+    );
+
+    let title = content.title;
+    let link = `/@${content.author}/${content.permlink}`;
+
+    if (content.parent_author) {
+        title = content.root_title;
+        link = content.url;
+    }
+
+    return {
+        title,
+        link,
+    }
+}
+
 // TODO: look in cache before call to api
 function* handleAddNotification({
-    payload: { vote, flag, transfer, subscribe, unsubscribe, reply, mention, repost, witnessVote, witnessCancelVote },
+    payload: {
+        vote,
+        flag,
+        transfer,
+        subscribe,
+        unsubscribe,
+        reply,
+        mention,
+        repost,
+        reward,
+        curatorReward,
+        witnessVote,
+        witnessCancelVote,
+    },
 }) {
     if (vote) {
         yield all(
@@ -28,20 +63,7 @@ function* handleAddNotification({
 
                 const account = yield call(getAccount, voter);
 
-                const content = yield call(
-                    [api, api.getContentAsync],
-                    author,
-                    permlink,
-                    constants.DEFAULT_VOTE_LIMIT
-                );
-
-                let title = content.title;
-                let link = `/@${content.author}/${content.permlink}`;
-
-                if (content.parent_author) {
-                    title = content.root_title;
-                    link = content.url;
-                }
+                const { title, link } = yield call(getContent, author, permlink);
 
                 yield put(
                     createAddNotificationOnlineAction({
@@ -65,20 +87,7 @@ function* handleAddNotification({
 
                 const account = yield call(getAccount, voter);
 
-                const content = yield call(
-                    [api, api.getContentAsync],
-                    author,
-                    permlink,
-                    constants.DEFAULT_VOTE_LIMIT
-                );
-
-                let title = content.title;
-                let link = `/@${content.author}/${content.permlink}`;
-
-                if (content.parent_author) {
-                    title = content.root_title;
-                    link = content.url;
-                }
+                const { title, link } = yield call(getContent, author, permlink);
 
                 yield put(
                     createAddNotificationOnlineAction({
@@ -110,6 +119,49 @@ function* handleAddNotification({
         );
     }
 
+    if (reward) {
+        yield all(
+            curatorReward.map(function*(notification) {
+                const { counter, permlink, golos, golosPower, gbg } = notification;
+
+                const current = yield select(state => state.user.get('current'));
+                const author = current.get('username');
+
+                const { title, link } = yield call(getContent, author, permlink);
+
+                yield put(
+                    createAddNotificationOnlineAction({
+                        type: 'curatorReward',
+                        title,
+                        link,
+                        golos,
+                        golosPower,
+                        gbg,
+                    })
+                );
+            })
+        );
+    }
+
+    if (curatorReward) {
+        yield all(
+            curatorReward.map(function*(notification) {
+                const { counter, author, permlink, reward } = notification; // {counter: 1, voter: "destroyer2k", permlink: "re-nickshtefan-re-destroyer2k-s-20180803t094131915z"}
+
+                const { title, link } = yield call(getContent, author, permlink);
+
+                yield put(
+                    createAddNotificationOnlineAction({
+                        type: 'curatorReward',
+                        title,
+                        link,
+                        amount: reward,
+                    })
+                );
+            })
+        );
+    }
+
     if (reply) {
         yield all(
             reply.map(function*(notification) {
@@ -117,20 +169,7 @@ function* handleAddNotification({
 
                 const account = yield call(getAccount, author);
 
-                const content = yield call(
-                    [api, api.getContentAsync],
-                    author,
-                    permlink,
-                    constants.DEFAULT_VOTE_LIMIT
-                );
-
-                let title = content.title;
-                let link = `/@${content.author}/${content.permlink}`;
-
-                if (content.parent_author) {
-                    title = content.root_title;
-                    link = content.url;
-                }
+                const { title, link } = yield call(getContent, author, permlink);
 
                 yield put(
                     createAddNotificationOnlineAction({
@@ -183,20 +222,7 @@ function* handleAddNotification({
 
                 const account = yield call(getAccount, author);
 
-                const content = yield call(
-                    [api, api.getContentAsync],
-                    author,
-                    permlink,
-                    constants.DEFAULT_VOTE_LIMIT
-                );
-
-                let title = content.title;
-                let link = `/@${content.author}/${content.permlink}`;
-
-                if (content.parent_author) {
-                    title = content.root_title;
-                    link = content.url;
-                }
+                const { title, link } = yield call(getContent, author, permlink);
 
                 yield put(
                     createAddNotificationOnlineAction({
@@ -220,20 +246,7 @@ function* handleAddNotification({
 
                 const account = yield call(getAccount, reposter);
 
-                const content = yield call(
-                    [api, api.getContentAsync],
-                    author,
-                    permlink,
-                    constants.DEFAULT_VOTE_LIMIT
-                );
-
-                let title = content.title;
-                let link = `/@${content.author}/${content.permlink}`;
-
-                if (content.parent_author) {
-                    title = content.root_title;
-                    link = content.url;
-                }
+                const { title, link } = yield call(getContent, author, permlink);
 
                 yield put(
                     createAddNotificationOnlineAction({

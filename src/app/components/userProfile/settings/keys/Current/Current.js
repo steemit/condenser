@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { Map, List } from 'immutable';
 
 import tt from 'counterpart';
-import user from 'app/redux/User';
-import g from 'app/redux/GlobalReducer';
 
 import { CardContent } from 'golos-ui/Card';
 // import KeysItem from './KeysItem';
@@ -36,32 +33,17 @@ const Title = styled.div`
     margin-bottom: 20px;
 `;
 
-const emptyMap = Map();
 const emptyList = List();
 
-@connect(
-    state => {
-        const current = state.user.get('current');
+const authTypes = ['posting', 'active', 'owner', 'memo'];
 
-        let privateKeys = emptyMap;
-        if (current) {
-            privateKeys = current.getIn(['private_keys'], emptyMap); // not bound to one account
-        }
-
-        return { privateKeys };
-    },
-    dispatch => ({
-        showLogin: ({ username, authType }) => {
-            dispatch(user.actions.showLogin({ loginDefault: { username, authType } }));
-        },
-        showQRKey: ({ type, isPrivate, text }) => {
-            dispatch(g.actions.showDialog({ name: 'qr_key', params: { type, isPrivate, text } }));
-        },
-    })
-)
 export default class Current extends Component {
     static propTypes = {
         account: PropTypes.object.isRequired,
+        privateKeys: PropTypes.instanceOf(Map),
+
+        showLogin: PropTypes.func,
+        showQRKey: PropTypes.func,
     };
 
     getPubKeys(authType) {
@@ -74,26 +56,28 @@ export default class Current extends Component {
         }
     }
 
-    renderKey(authType) {
+    renderKeys() {
         const { account, privateKeys, showQRKey, showLogin } = this.props;
 
-        const pubkeys = this.getPubKeys(authType);
-        return (
-            <KeysBlock>
-                <Title>{tt('g.' + authType.toLowerCase())}</Title>
-                {pubkeys.map((pubkey, key) => (
-                    <ShowKey
-                        key={key}
-                        authType={authType}
-                        pubkey={pubkey}
-                        privateKey={privateKeys.get(authType + '_private')}
-                        accountName={account.get('name')}
-                        showQRKey={showQRKey}
-                        showLogin={showLogin}
-                    />
-                ))}
-            </KeysBlock>
-        );
+        return authTypes.map((authType, key) => {
+            const pubkeys = this.getPubKeys(authType);
+            return (
+                <KeysBlock key={key}>
+                    <Title>{tt('g.' + authType.toLowerCase())}</Title>
+                    {pubkeys.map((pubkey, key) => (
+                        <ShowKey
+                            key={key}
+                            authType={authType}
+                            pubkey={pubkey}
+                            privateKey={privateKeys.get(authType + '_private')}
+                            accountName={account.get('name')}
+                            showQRKey={showQRKey}
+                            showLogin={showLogin}
+                        />
+                    ))}
+                </KeysBlock>
+            );
+        });
     }
 
     render() {
@@ -104,10 +88,7 @@ export default class Current extends Component {
                     надежно сохранили ваши ключ.
                 </Info>
 
-                {this.renderKey('posting')}
-                {this.renderKey('active')}
-                {this.renderKey('owner')}
-                {this.renderKey('memo')}
+                {this.renderKeys()}
             </CardContent>
         );
     }

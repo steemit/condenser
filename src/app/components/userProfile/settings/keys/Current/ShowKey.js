@@ -53,7 +53,6 @@ const Button = styled(StyledButton)`
     margin-top: 25px;
 `;
 
-/** Display a public key.  Offer to show a private key, but only if it matches the provided public key */
 export default class ShowKey extends Component {
     static propTypes = {
         pubkey: PropTypes.string.isRequired,

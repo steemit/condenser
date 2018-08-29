@@ -103,7 +103,7 @@ const Email = ({ isChanging, onSubmitGate }) => {
                             {({ input }) => (
                                 <FormGroupRow>
                                     <LabelIcon active={input.value}>
-                                        <Icon name="coins_plus" width="20" height="16" />
+                                        <Icon name="coins" width="20" height="16" />
                                     </LabelIcon>
                                     <LabelRow dark>Перевод средств</LabelRow>
                                     <Switcher {...input} />

@@ -73,7 +73,7 @@ export default class Avatar extends PureComponent {
                 )}
                 {icon && (
                     <AvatarBadge>
-                        <Icon name={icon.name} width={icon.width} height={icon.height} />
+                        <Icon {...icon} />
                     </AvatarBadge>
                 )}
             </Wrapper>

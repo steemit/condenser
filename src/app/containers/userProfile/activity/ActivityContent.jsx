@@ -6,7 +6,7 @@ import styled from 'styled-components';
 
 import throttle from 'lodash/throttle';
 
-import { NOTIFICATIONS_FILTER_TYPES } from 'src/app/redux/constants/common';
+import { NOTIFICATIONS_FILTER_TYPES, NOTIFICATIONS_PER_PAGE } from 'src/app/redux/constants/common';
 import { activityContentSelector } from 'src/app/redux/selectors/userProfile/activity';
 import { getNotificationsHistory } from 'src/app/redux/actions/notifications';
 import { changeProfileActivityTab } from 'src/app/redux/actions/ui';
@@ -23,6 +23,7 @@ const WrapperLoader = styled.div`
     height: 80px;
     padding-top: 20px;
 `;
+
 @connect(
     activityContentSelector,
     {
@@ -85,7 +86,7 @@ export default class ActivityContent extends PureComponent {
             this.props.getNotificationsHistory({
                 types: NOTIFICATIONS_FILTER_TYPES[this.props.currentTabId],
                 fromId,
-                limit: 5,
+                limit: NOTIFICATIONS_PER_PAGE,
             });
         }
 
@@ -125,7 +126,9 @@ export default class ActivityContent extends PureComponent {
                         </CardContent>
                     </Tabs>
                 </Card>
-                <WrapperLoader>{isFetching && <LoadingIndicator type="circle" center />}</WrapperLoader>
+                <WrapperLoader>
+                    {isFetching && <LoadingIndicator type="circle" center />}
+                </WrapperLoader>
             </Fragment>
         );
     }

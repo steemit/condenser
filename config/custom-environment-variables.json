@@ -54,14 +54,6 @@
     "recovery_account": "SDC_RECOVERY_ACCOUNT",
     "signing_key": "SDC_RECOVERY_SIGNINGKEY"
   },
-  "sendgrid": {
-    "from": "SDC_SENDGRID_FROM",
-    "key": "SDC_SENDGRID_API_KEY",
-    "templates": {
-      "confirm_email": "SDC_SENDGRID_CONFIRMTEMPLATE",
-      "waiting_list_invite": "SDC_SENDGRID_WAITINGTEMPLATE"
-    }
-  },
   "postmark": {
     "from": "SDC_POSTMARK_FROM",
     "key": "SDC_POSTMARK_API_KEY",
@@ -84,14 +76,8 @@
     "port": "SDC_CHAIN_PROXY_PORT",
     "username": "SDC_CHAIN_PROXY_USERNAME"
   },
-  "telesign": {
-    "customer_id": "SDC_TELESIGN_CUSTOMER_ID",
-    "rest_api_key": "SDC_TELESIGN_API_KEY"
-  },
   "twilio": {
-    "account_sid": "SDC_TWILIO_ACCOUNT_SID",
-    "auth_token": "SDC_TWILIO_AUTH_TOKEN",
-    "sender_id": "SDC_TWILIO_SENDER_ID"
+    "account_sid": "SDC_TWILIO_ACCOUNT_SID"
   },
   "upload_image": "SDC_UPLOAD_IMAGE_URL",
   "lang_server" : "SDC_LANG_SERVER_URL",
@@ -110,5 +96,7 @@
   "is_testnet": "SDC_IS_TESTNET",
   "is_sandbox": "SDC_IS_SANDBOX",
   "openexchangerates_app_id": "SDC_OPENEXCHANGERATES_APP_ID",
-  "wss_push_service_url": "SDC_SERVICE_PUSH_CLIENT_URL"
+  "wss_push_service_url": "SDC_SERVICE_PUSH_CLIENT_URL",
+  "gate_service_url": "SDC_GATE_SERVICE_URL",
+  "rates_service_url": "SDC_RATES_SERVICE_URL"
 }

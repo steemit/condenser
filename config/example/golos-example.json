@@ -48,17 +48,6 @@
   "ws_connection_server": [
     "wss://ws.golos.io"
   ],
-  "sendgrid": {
-    "key": "SG.xxx_yyyy",
-    "from": "noreply@example.com",
-    "templates": {
-      "confirm_email": "some_template_id"
-    }
-  },
-  "telesign": {
-      "customer_id": "",
-      "rest_api_key": ""
-  },
   "recaptcha": {
     "site_key": "",
     "secret_key": ""

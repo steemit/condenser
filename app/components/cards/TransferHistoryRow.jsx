@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Tooltip from 'app/components/elements/Tooltip';
 import Memo from 'app/components/elements/Memo'
-import {numberWithCommas, vestsToSp} from 'app/utils/StateFunctions'
+import {numberWithCommas, vestsToGolosPower} from 'app/utils/StateFunctions'
 import tt from 'counterpart';
 import { VEST_TICKER, LIQUID_TICKER, DEBT_TOKEN_SHORT } from 'app/client_config';
 
@@ -144,8 +144,8 @@ export default connect(
         const op = ownProps.op
         const type = op[1].op[0]
         const data = op[1].op[1]
-        const curation_reward = type === 'curation_reward' ? numberWithCommas(vestsToSp(state, data.reward)) : undefined
-        const author_reward = type === 'author_reward' ? numberWithCommas(vestsToSp(state, data.vesting_payout)) : undefined
+        const curation_reward = type === 'curation_reward' ? numberWithCommas(vestsToGolosPower(state, data.reward)) : undefined
+        const author_reward = type === 'author_reward' ? numberWithCommas(vestsToGolosPower(state, data.vesting_payout)) : undefined
         return {
             ...ownProps,
             curation_reward,

@@ -65,7 +65,7 @@ class Author extends React.Component {
 
         const dropdown = <div className="Author__dropdown">
             <Link to={'/@' + author}>
-                <Userpic account={author} width="75" height="75" />
+                <Userpic account={author} size={75} />
             </Link>
             <Link to={'/@' + author} className="Author__name">
                 {name}

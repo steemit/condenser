@@ -9,11 +9,10 @@ import { browserHistory } from 'react-router';
 import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdown';
 import VerticalMenu from 'app/components/elements/VerticalMenu';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
-import NotifiCounter from 'app/components/elements/NotifiCounter';
 import tt from 'counterpart';
 import { LIQUID_TICKER, DEBT_TICKER } from 'app/client_config';
 import LocalizedCurrency from 'app/components/elements/LocalizedCurrency';
-import { vestsToSteem, toAsset } from 'app/utils/StateFunctions';
+import { vestsToGolos, toAsset } from 'app/utils/StateFunctions';
 import { WIKI_URL } from 'app/client_config';
 
 const defaultNavigate = (e) => {
@@ -51,7 +50,7 @@ const calculateEstimateOutput = ({ account, price_per_golos, savings_withdraws, 
   const total_steem = 0
     + parseFloat(toAsset(account.get('balance')).amount)
     + parseFloat(toAsset(account.get('savings_balance')).amount)
-    + parseFloat(vestsToSteem(account.get('vesting_shares'), globalprops.toJS()))
+    + parseFloat(vestsToGolos(account.get('vesting_shares'), globalprops.toJS()))
     + savings_pending
 
   return Number(((total_steem * price_per_golos) + total_sbd).toFixed(2) );
@@ -80,6 +79,7 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
     const walletLink = `/@${username}/transfers`;
     const settingsLink = `/@${username}/settings`;
     const accountLink = `/@${username}`;
+    const favoritesLink = `/@${username}/favorites`;
     const commentsLink = `/@${username}/comments`;
     const reset_password_link = `/@${username}/password`;
 
@@ -139,11 +139,15 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
 
     if (loggedIn) { // change back to if(username) after bug fix:  Clicking on Login does not cause drop-down to close #TEMP!
         let user_menu = [
-            {link: feedLink, icon: 'new/home', iconSize: '1_25x', value: tt('g.feed'), addon: <NotifiCounter fields="feed" />},
+            {link: feedLink, icon: 'new/home', iconSize: '1_25x', value: tt('g.feed')},
             {link: accountLink, icon: 'new/blogging', value: tt('g.blog')},
             {link: commentsLink, icon: 'new/comment', value: tt('g.comments')},
-            {link: repliesLink, icon: 'new/answer', value: tt('g.replies'), addon: <NotifiCounter fields="comment_reply" />},
-            {link: walletLink, icon: 'new/wallet', value: tt('g.wallet'), addon: <NotifiCounter fields="follow,send,receive,account_update" />},
+            $STM_Config.is_sandbox
+                ? { link: '#', icon: 'chatboxes', onClick: showMessages, value: tt('g.messages') }
+                : null,
+            {link: repliesLink, icon: 'new/answer', value: tt('g.replies')},
+            {link: favoritesLink, icon: 'new/star', value: 'Избранное'},
+            {link: walletLink, icon: 'new/wallet', value: tt('g.wallet')},
             {link: reset_password_link, icon: 'key', value: tt('g.change_password')},
             {link: settingsLink, icon: 'new/setting', value: tt('g.settings')},
             loggedIn ?
@@ -151,9 +155,7 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
                 {link: '#', onClick: showLogin, value: tt('g.login')}
         ];
 
-        if ($STM_Config.is_sandbox) {
-            user_menu.splice(2, 0, {link: '#', icon: 'chatboxes', onClick: showMessages, value: tt('g.messages')});
-        }
+        user_menu = user_menu.filter(item => item);
       
         const voting_power_percent = account.get('voting_power') / 100
 
@@ -183,7 +185,6 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
                                 </div>
                             </div>
                         </a>
-                        <div className="TopRightMenu__notificounter"><NotifiCounter fields="total" /></div>
                     </li>}
                 </LinkWithDropdown>
                 {/* <li className={"delim " + scn} /> */}
@@ -251,13 +252,7 @@ export default connect(
         const loggedIn = !!username;
 
         const savings_withdraws = state.user.get('savings_withdraws');
-        let price_per_golos = undefined;
-        const feed_price = state.global.get('feed_price');
-        if(feed_price && feed_price.has('base') && feed_price.has('quote')) {
-            const {base, quote} = feed_price.toJS()
-            if(/ GBG$/.test(base) && / GOLOS$/.test(quote))
-                price_per_golos = parseFloat(base.split(' ')[0]) / parseFloat(quote.split(' ')[0])
-        }
+        const price_per_golos = state.global.getIn(['rates', 'GBG', 'GOLOS']);
         const globalprops = state.global.get('props');
 
         return {

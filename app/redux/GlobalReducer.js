@@ -1,10 +1,45 @@
 import { Map, Set, List, fromJS, Iterable } from 'immutable';
 import createModule from 'redux-modules';
-import { emptyContent } from 'app/redux/EmptyState';
 import constants from './constants';
 import { contentStats, fromJSGreedy } from 'app/utils/StateFunctions';
+import { LIQUID_TICKER, DEBT_TICKER } from 'app/client_config'
 
-const emptyContentMap = Map(emptyContent);
+const emptyContentMap = Map({
+    fetched: new Date(), /// the date at which this data was requested from the server
+    id: '2.8.0',
+    author: '',
+    permlink: '',
+    category: '',
+    i18n_category: '',
+    parent_author: '',
+    parent_permlink: '',
+    title: '',
+    body: '',
+    json_metadata: '{}',
+    last_update: new Date().toISOString(),
+    created: new Date().toISOString(),
+    depth: 0,
+    children: 0,
+    children_rshares2: '0',
+    net_rshares: 0,
+    abs_rshares: 0,
+    cashout_time: new Date().toISOString(),
+    total_vote_weight: '0',
+    total_payout_value: ['0.000', DEBT_TICKER].join(" "),
+    pending_payout_value: ['0.000', LIQUID_TICKER].join(" "),
+    total_pending_payout_value: ['0.000', LIQUID_TICKER].join(" "),
+    active_votes: [],
+    replies: [],
+    stats: {
+        authorRepLog10: 86,
+        gray: false,
+        hasPendingPayout: false,
+        hasReplies: false,
+        hide: false,
+        netVoteSign: 0,
+        pictures: true,
+    },
+});
 
 export default createModule({
     name: 'global',
@@ -61,6 +96,8 @@ export default createModule({
         {
             action: 'RECEIVE_ACCOUNT',
             reducer: (state, { payload: { account } }) => {
+                extractPinnedPosts(account);
+
                 account = fromJS(account, (key, value) => {
                     if (key === 'witness_votes') {
                         return value.toSet();
@@ -70,12 +107,37 @@ export default createModule({
                             : value.toOrderedMap();
                     }
                 });
+
                 // Merging accounts: A get_state will provide a very full account but a get_accounts will provide a smaller version
                 return state.updateIn(
                     ['accounts', account.get('name')],
                     Map(),
                     a => a.mergeDeep(account)
                 );
+            },
+        },
+        {
+            action: 'RECEIVE_ACCOUNTS',
+            reducer: (state, { payload: { accounts } }) => {
+                return state.withMutations(state => {
+                    accounts.forEach(account => {
+                        account = fromJS(account, (key, value) => {
+                            if (key === 'witness_votes') {
+                                return value.toSet();
+                            } else {
+                                return Iterable.isIndexed(value)
+                                    ? value.toList()
+                                    : value.toOrderedMap();
+                            }
+                        });
+                        // Merging accounts: A get_state will provide a very full account but a get_accounts will provide a smaller version
+                        state.updateIn(
+                            ['accounts', account.get('name')],
+                            Map(),
+                            a => a.mergeDeep(account)
+                        );
+                    });
+                })
             },
         },
         {
@@ -136,10 +198,32 @@ export default createModule({
 
                 return state.updateIn(['content', key], Map(), c => {
                     c = emptyContentMap.mergeDeep(c);
+                    c = c.delete('votesSummary');
                     c = c.delete('active_votes');
                     c = c.mergeDeep(content);
                     c = c.set('stats', fromJS(contentStats(c)));
                     return c;
+                });
+            },
+        },
+        {
+            action: 'RECEIVE_CONTENTS',
+            reducer: (state, { payload: { contents } }) => {
+                contents = fromJS(contents);
+                return state.withMutations(state => {
+                    contents.forEach(content => {
+                        const key =
+                            content.get('author') + '/' + content.get('permlink');
+
+                        state.updateIn(['content', key], Map(), c => {
+                            c = emptyContentMap.mergeDeep(c);
+                            c = c.delete('votesSummary');
+                            c = c.delete('active_votes');
+                            c = c.mergeDeep(content);
+                            c = c.set('stats', fromJS(contentStats(c)));
+                            return c;
+                        });
+                    });
                 });
             },
         },
@@ -439,5 +523,26 @@ export default createModule({
                     fromJS(vesting_delegations)
                 ),
         },
+        {
+            action: 'PINNED_UPDATE',
+            reducer: (state, { payload }) => {
+                const { accountName, pinnedPosts } = payload;
+
+                return state.setIn(
+                    ['accounts', accountName, 'pinnedPosts'],
+                    List(pinnedPosts)
+                );
+            },
+        },
     ],
 });
+
+function extractPinnedPosts(account) {
+    if (account.json_metadata) {
+        try {
+            account.pinnedPosts = JSON.parse(account.json_metadata).pinnedPosts || [];
+        } catch (err) {
+            console.error(err);
+        }
+    }
+}

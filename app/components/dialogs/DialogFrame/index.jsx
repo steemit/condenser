@@ -1,38 +1,47 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
-import Icon from 'app/components/elements/Icon';
+import Icon from 'golos-ui/Icon';
 
-export default class Dialog extends React.PureComponent {
+export default class DialogFrame extends PureComponent {
     static propTypes = {
         title: PropTypes.string,
+        icon: PropTypes.string,
         className: PropTypes.string,
         buttons: PropTypes.array,
         onCloseClick: PropTypes.func.isRequired,
     };
 
     render() {
-        const { title, buttons, children, className } = this.props;
+        const { title, titleSize, icon, buttons, children, className } = this.props;
 
         return (
             <div className={cn('Dialog', className)}>
-                <Icon
-                    name="cross"
-                    className="Dialog__close"
-                    onClick={this.props.onCloseClick}
-                />
-                {title ? <div className="Dialog__header">{title}</div> : null}
+                <Icon name="cross" className="Dialog__close" onClick={this.props.onCloseClick} />
+                {title || icon ? (
+                    <div className="Dialog__header">
+                        {icon ? (
+                            <div className="Dialog__header-icon">
+                                <Icon name={icon} size={40} />
+                            </div>
+                        ) : null}
+                        <div
+                            className="Dialog__title"
+                            style={titleSize ? { fontSize: titleSize } : null}
+                        >
+                            {title}
+                        </div>
+                    </div>
+                ) : null}
                 <div className="Dialog__content">{children}</div>
                 {buttons && buttons.length ? (
-                    <div className="Dialog__footer">
-                        {buttons.map(this._renderButton)}
-                    </div>
+                    <div className="Dialog__footer">{buttons.map(this._renderButton)}</div>
                 ) : null}
             </div>
         );
     }
 
-    _renderButton = ({ text, autoFocus, primary, warning, onClick }, index) => {
+    _renderButton = ({ text, autoFocus, disabled, primary, warning, onClick }, index) => {
         return (
             <div className="Dialog__footer-button-wrapper" key={index}>
                 <button
@@ -41,6 +50,7 @@ export default class Dialog extends React.PureComponent {
                         'Dialog__footer-button_warning': warning,
                     })}
                     type="button"
+                    disabled={disabled}
                     autoFocus={autoFocus}
                     onClick={onClick}
                 >

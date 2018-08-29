@@ -22,7 +22,7 @@ export default class CommonDialog extends React.PureComponent {
     static propTypes = {
         type: PropTypes.oneOf(['info', 'alert', 'confirm', 'prompt']),
         title: PropTypes.string,
-        text: PropTypes.string,
+        text: PropTypes.string.isRequired,
         onClose: PropTypes.func.isRequired,
     };
 
@@ -38,14 +38,16 @@ export default class CommonDialog extends React.PureComponent {
                 buttons={this._getButtons()}
                 onCloseClick={this._onCloseClick}
             >
-                {text}
-                {type === 'prompt' ? (
-                    <input
-                        className="CommonDialog__prompt-input"
-                        ref="input"
-                        autoFocus
-                    />
-                ) : null}
+                <div className="CommonDialog__body">
+                    {format(text)}
+                    {type === 'prompt' ? (
+                        <input
+                            className="CommonDialog__prompt-input"
+                            ref="input"
+                            autoFocus
+                        />
+                    ) : null}
+                </div>
             </DialogFrame>
         );
     }
@@ -115,4 +117,24 @@ export default class CommonDialog extends React.PureComponent {
     _onCloseClick = () => {
         this.props.onClose();
     };
+}
+
+function format(text) {
+    const lines = text.split('\n');
+
+    if (lines.length === 1) {
+        return text;
+    }
+
+    const components = [];
+
+    for (let i = 0; i < lines.length; ++i) {
+        components.push(lines[i]);
+
+        if (i !== lines.length - 1) {
+            components.push(<br key={i} />);
+        }
+    }
+
+    return components;
 }

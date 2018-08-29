@@ -35,6 +35,13 @@ module.exports = merge(baseConfig, {
             chunkFilename: '[id].css',
         }),
         new StartServerPlugin(),
+        // new require('webpack-deadcode-plugin')({
+        //     patterns: [
+        //         'src/**/*.(js|jsx|css)',
+        //         'app/**/*.(js|jsx|css)'
+        //     ],
+        //     exclude: ['**/*.(stories|spec|test).(js|jsx)'],
+        // }),
     ],
     module: {
         rules: [
@@ -58,6 +65,9 @@ module.exports = merge(baseConfig, {
                 ],
             },
         ],
+    },
+    optimization: {
+        usedExports: true,
     },
     serve: {
         port: WEBPACK_PORT,

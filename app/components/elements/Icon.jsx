@@ -98,6 +98,7 @@ const icons = new Map([
     ['new/more', require('app/assets/icons/new/more.svg')],
     ['new/like', require('app/assets/icons/new/like.svg')],
     ['new/add', require('app/assets/icons/new/add.svg')],
+    ['new/star', require('src/app/components/golos-ui/Icon/assets/star.svg')],
     ['new/search', require('app/assets/icons/new/search.svg')],
     ['new/wikipedia', require('app/assets/icons/new/wikipedia.svg')],
     ['new/envelope', require('app/assets/icons/new/envelope.svg')],

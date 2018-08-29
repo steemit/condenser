@@ -3,7 +3,7 @@
   $border-radius: 8px;
 
   position: relative;
-  min-width: 364px;
+  min-width: 340px;
   max-width: 100%;
   color: #333;
   background: #fff;
@@ -16,7 +16,7 @@
     top: 8px;
     width: 30px;
     height: 30px;
-    padding-top: 7px;
+    padding: 8px;
     text-align: center;
     color: #e1e1e1;
     cursor: pointer;
@@ -25,28 +25,33 @@
     &:hover {
       color: #000;
     }
-
-    & > svg {
-      width: 14px;
-      height: 14px;
-    }
   }
 
   &__header {
+    padding-top: 30px;
+  }
+
+  &__title {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding-top: 10px;
-    height: 70px;
+    height: 40px;
     font-size: 18px;
     font-weight: 500;
   }
 
-  &__content {
-    padding: 10px 30px 28px;
-    line-height: 1.5em;
-    color: #666;
+  &__header-icon {
+    display: flex;
+    margin-bottom: 10px;
+    justify-content: center;
+    color: #e0e0e0;
   }
+
+  //&__content {
+  //  padding: 10px 30px 28px;
+  //  line-height: 1.5em;
+  //  color: #666;
+  //}
 
   &__footer {
     display: flex;
@@ -91,34 +96,19 @@
     margin: 0 !important;
     cursor: pointer;
     outline: none;
+
     color: #6d6d6d;
+    &:focus { background: #ddebff; }
+    &:hover { color: #3a3a3a; }
+    &[disabled] { color: #999; background: none; cursor: not-allowed; }
 
-    &:focus {
-      background: #ddebff;
-    }
+    &_primary { color: #2879ff; }
+    &_primary:hover { color: #60a0ff; }
+    &_primary[disabled] { color: #8fc3ff; }
 
-    &_primary {
-      color: #2879ff;
-    }
-
-    &_warning {
-      color: #ff4641;
-    }
-
-    &:hover {
-      color: #3a3a3a;
-    }
-
-    &_primary:hover {
-      color: #60a0ff;
-    }
-
-    &_warning:hover {
-      color: red;
-    }
-
-    &_warning:focus {
-      background: #ffe3dd;
-    }
+    &_warning { color: #ff4641; }
+    &_warning:hover { color: red; }
+    &_warning:focus { background: #ffe3dd; }
+    &_warning[disabled] { color: #ffe3dd; background: none; }
   }
 }

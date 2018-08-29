@@ -8,14 +8,12 @@ import {
     trendingTagsRaw,
     get_discussion_idx,
     cnt,
-    feedPrice,
+    rates,
     _witnesses,
     accountHistory
 } from 'app/utils/test_fixtures/chain_data'
 
 import getState from 'app/utils/StateBuilder'
-
-const feed_price = { base: "2.724 GBG", quote: "1.000 GOLOS" }
 
 const options = {
     IGNORE_TAGS: []
@@ -34,9 +32,9 @@ describe('StateBuilder', function() {
             accounts: {},
             witnesses: {},
             discussion_idx: get_discussion_idx('', 'trending'),
-            feed_price: feedPrice,
             select_tags: [],
-            filter_tags: []
+            filter_tags: [],
+            rates,
         }
 
         const result = await getState(api, '', options)
@@ -54,9 +52,9 @@ describe('StateBuilder', function() {
             accounts: {},
             witnesses: {},
             discussion_idx: get_discussion_idx('', 'trending'),
-            feed_price: feedPrice,
             select_tags: [],
-            filter_tags: []
+            filter_tags: [],
+            rates,
         }
 
         const result = await getState(api, '/', options)
@@ -74,9 +72,9 @@ describe('StateBuilder', function() {
             accounts: {},
             witnesses: {},
             discussion_idx: get_discussion_idx('', 'created'),
-            feed_price: feedPrice,
             select_tags: [],
-            filter_tags: []
+            filter_tags: [],
+            rates,
         }
 
         const result = await getState(api, '/created', options)
@@ -94,9 +92,9 @@ describe('StateBuilder', function() {
             accounts: {},
             witnesses: {},
             discussion_idx: get_discussion_idx('', 'hot'),
-            feed_price: feedPrice,
             select_tags: [],
-            filter_tags: []
+            filter_tags: [],
+            rates,
         }
 
         const result = await getState(api, '/hot', options)
@@ -114,9 +112,9 @@ describe('StateBuilder', function() {
             accounts: {},
             witnesses: {},
             discussion_idx: get_discussion_idx('', 'trending'),
-            feed_price: feedPrice,
             select_tags: [],
-            filter_tags: []
+            filter_tags: [],
+            rates,
         }
 
         const result = await getState(api, '/trending', options)
@@ -134,8 +132,8 @@ describe('StateBuilder', function() {
             accounts: {},
             witnesses: {},
             discussion_idx: get_discussion_idx('space', 'trending'),
-            feed_price: feedPrice,
-            select_tags: []
+            select_tags: [],
+            rates,
         }
 
         const result = await getState(api, '/trending/space', options)
@@ -153,9 +151,9 @@ describe('StateBuilder', function() {
             accounts: {},
             witnesses: {},
             discussion_idx: get_discussion_idx('', 'promoted'),
-            feed_price: feedPrice,
             select_tags: [],
-            filter_tags: []
+            filter_tags: [],
+            rates,
         }
 
         const result = await getState(api, '/promoted', options)
@@ -173,9 +171,8 @@ describe('StateBuilder', function() {
             accounts: {},
             witnesses: _witnesses,
             discussion_idx: {},
-            feed_price: feedPrice,
-            select_tags: []
-           
+            select_tags: [],
+            rates,
         }
 
         const result = await getState(api, 'witnesses', options)
@@ -193,9 +190,8 @@ describe('StateBuilder', function() {
             accounts: {},
             witnesses: _witnesses,
             discussion_idx: {},
-            feed_price: feedPrice,
-            select_tags: []
-           
+            select_tags: [],
+            rates,
         }
 
         const result = await getState(api, '~witnesses', options)
@@ -219,9 +215,8 @@ describe('StateBuilder', function() {
             accounts: {},
             witnesses: {},
             discussion_idx: {},
-            feed_price: feedPrice,
-            select_tags: []
-           
+            select_tags: [],
+            rates,
         }
 
         const result = await getState(api, 'tags', options)
@@ -267,9 +262,8 @@ describe('StateBuilder', function() {
             },
             witnesses: {},
             discussion_idx: {},
-            feed_price: feedPrice,
-            select_tags: []
-           
+            select_tags: [],
+            rates,
         }
 
         const result = await getState(api, '/@rey', options)
@@ -314,9 +308,8 @@ describe('StateBuilder', function() {
             },
             witnesses: {},
             discussion_idx: {},
-            feed_price: feedPrice,
-            select_tags: []
-           
+            select_tags: [],
+            rates,
         }
 
         const result = await getState(api, '/@rey/blog', options)
@@ -363,9 +356,8 @@ describe('StateBuilder', function() {
             },
             witnesses: {},
             discussion_idx: {},
-            feed_price: feedPrice,
-            select_tags: []
-           
+            select_tags: [],
+            rates,
         }
 
         const result = await getState(api, '/@rey/feed', options)
@@ -420,9 +412,8 @@ describe('StateBuilder', function() {
             },
             witnesses: {},
             discussion_idx: {},
-            feed_price: feedPrice,
-            select_tags: []
-           
+            select_tags: [],
+            rates,
         }
 
         const result = await getState(api, '/@rey/comments', options)
@@ -477,9 +468,8 @@ describe('StateBuilder', function() {
             },
             witnesses: {},
             discussion_idx: {},
-            feed_price: feedPrice,
-            select_tags: []
-           
+            select_tags: [],
+            rates,
         }
 
         const result = await getState(api, '/@rey/recent-replies', options)
@@ -512,9 +502,8 @@ describe('StateBuilder', function() {
             },
             witnesses: {},
             discussion_idx: {},
-            feed_price: feedPrice,
-            select_tags: []
-           
+            select_tags: [],
+            rates,
         }
 
         const result = await getState(api, '/@rey/transfers', options)
@@ -563,9 +552,8 @@ describe('StateBuilder', function() {
             },
             witnesses: {},
             discussion_idx: {},
-            feed_price: feedPrice,
-            select_tags: []
-           
+            select_tags: [],
+            rates,
         }
 
         const result = await getState(api, '/rebel/@lyke/new-hope', options)

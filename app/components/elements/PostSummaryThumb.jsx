@@ -1,7 +1,6 @@
 import React from 'react';
 // keep this in memory, no requests
 import nsfwBanner from 'app/assets/images/nsfw/light.png'
-// import * as pixelate from './utils/effects/close-pixelate'
 
 
 //todo render fallback image by react, not by canvas depending on state?

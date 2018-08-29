@@ -6,16 +6,12 @@ import tt from 'counterpart';
 import en from 'react-intl/locale-data/en';
 import ru from 'react-intl/locale-data/ru';
 import uk from 'react-intl/locale-data/uk';
-import sr from 'react-intl/locale-data/sr';
-import ro from 'react-intl/locale-data/ro';
 
-addLocaleData([...en, ...ru, ...uk, ...sr, ...ro]);
+addLocaleData([...en, ...ru, ...uk]);
 
 tt.registerTranslations('en', require('app/locales/en.json'));
 tt.registerTranslations('ru', require('app/locales/ru-RU.json'));
 tt.registerTranslations('uk', require('app/locales/ua.json'));
-tt.registerTranslations('sr', require('app/locales/sr.json'));
-tt.registerTranslations('ro', require('app/locales/ro-RO.json'));
 
 class Translator extends React.Component {
     render() {

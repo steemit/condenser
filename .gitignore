@@ -16,6 +16,7 @@ app/assets/robots.txt
 
 config/golos.json
 config/golos-dev.json
+config/local.json
 config/process.json
 config/process-dev.json
 config/process-prod.json

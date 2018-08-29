@@ -11,7 +11,7 @@ import { NSFW_TAG } from 'app/utils/tags';
 import './PostFooter.scss';
 
 export default class PostFooter extends PureComponent {
-    propTypes = {
+    static propTypes = {
         editMode: PropTypes.bool,
         tags: PropTypes.array,
         postDisabled: PropTypes.bool,

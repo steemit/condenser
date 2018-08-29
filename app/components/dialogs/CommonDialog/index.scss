@@ -1,6 +1,12 @@
 
 .CommonDialog {
 
+  &__body {
+    color: #666;
+    line-height: 1.5em;
+    padding: 10px 30px 28px;
+  }
+
   &__prompt-input {
     display: block;
     width: 100%;

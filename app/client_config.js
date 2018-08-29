@@ -40,11 +40,9 @@ export const LANGUAGES = {
   en: 'English',
   /* in react-intl they use 'uk' instead of 'ua' */
   uk: 'Українська',
-  sr: 'Srpski',
-  ro: 'Română',
 }
 // First element always is USD, it needs to be correct fetch yahoo exchange rates from server side
-export const CURRENCIES = ['USD', 'RUB', 'UAH', 'BYN', 'EUR', 'CNY', 'GEL', 'KZT', 'GBG', 'GOLOS']
+export const CURRENCIES = ['USD', 'RUB', 'EUR', DEBT_TOKEN_SHORT, LIQUID_TICKER];
 export const DEFAULT_CURRENCY = CURRENCIES[0]
 export const CURRENCY_COOKIE_KEY = 'gls.currency'
 export const FRACTION_DIGITS = 2 // default amount of decimal digits
@@ -97,3 +95,5 @@ export const TERMS_OF_SERVICE_URL = 'https://golos.io/legal/terms_of_service.pdf
 export const PRIVACY_POLICY_URL = 'https://golos.io/ru--konfidenczialxnostx/@golos/politika-konfidencialnosti';
 export const WIKI_URL = 'https://wiki.golos.io/';
 export const MARKDOWN_STYLING_GUIDE_URL = 'https://golos.io/ru--golos/@on0tole/osnovy-oformleniya-postov-na-golose-polnyi-kurs-po-rabote-s-markdown';
+
+export const MIN_VOICE_POWER = 3;

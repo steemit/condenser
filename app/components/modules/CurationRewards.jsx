@@ -2,7 +2,7 @@
 import React from 'react';
 import {connect} from 'react-redux'
 import TransferHistoryRow from 'app/components/cards/TransferHistoryRow';
-import {numberWithCommas, vestsToSp, assetFloat} from 'app/utils/StateFunctions'
+import {numberWithCommas, vestsToGolosPower, assetFloat} from 'app/utils/StateFunctions'
 import tt from 'counterpart';
 import { LIQUID_TICKER, VEST_TICKER } from 'app/client_config';
 
@@ -98,7 +98,7 @@ class CurationRewards extends React.Component {
                     {tt('curationrewards_jsx.estimated_curation_rewards_last_week')}:
                 </div>
                 <div className="column small-12 medium-4">
-                    {numberWithCommas(vestsToSp(this.props.state, rewardsWeek + " " + VEST_TICKER)) + " " + VESTING_TOKENS}
+                    {numberWithCommas(vestsToGolosPower(this.props.state, rewardsWeek + " " + VEST_TICKER)) + " " + VESTING_TOKENS}
                 </div>
             </div>
 
@@ -108,7 +108,7 @@ class CurationRewards extends React.Component {
                     {tt('curationrewards_jsx.curation_rewards_last_24_hours')}:
                 </div>
                 <div className="column small-12 medium-3">
-                    {numberWithCommas(vestsToSp(this.props.state, rewards24 + " " + VEST_TICKER)) + " " + VESTING_TOKEN}
+                    {numberWithCommas(vestsToGolosPower(this.props.state, rewards24 + " " + VEST_TICKER)) + " " + VESTING_TOKEN}
                 </div>
             </div>
             <div className="UserWallet__balance UserReward__row row">
@@ -116,7 +116,7 @@ class CurationRewards extends React.Component {
                     {tt('curationrewards_jsx.daily_average_curation_rewards')}:
                 </div>
                 <div className="column small-12 medium-3">
-                    {numberWithCommas(vestsToSp(this.props.state, averageCuration + " " + VEST_TICKER)) + " " + VESTING_TOKEN}
+                    {numberWithCommas(vestsToGolosPower(this.props.state, averageCuration + " " + VEST_TICKER)) + " " + VESTING_TOKEN}
                 </div>
             </div>
             <div className="UserWallet__balance UserReward__row row">
@@ -124,7 +124,7 @@ class CurationRewards extends React.Component {
                     {tt(!hasFullWeek ? 'estimated_curation_rewards_last_week' : 'curation_rewards_last_week')}:
                 </div>
                 <div className="column small-12 medium-3">
-                    {numberWithCommas(vestsToSp(this.props.state, (hasFullWeek ? rewardsWeek : averageCuration * 7) + " " + VEST_TICKER)) + " " + VESTING_TOKEN}
+                    {numberWithCommas(vestsToGolosPower(this.props.state, (hasFullWeek ? rewardsWeek : averageCuration * 7) + " " + VEST_TICKER)) + " " + VESTING_TOKEN}
                 </div>
             </div>
             */}

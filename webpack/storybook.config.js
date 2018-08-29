@@ -33,10 +33,6 @@ module.exports = (baseConfig, env, defaultConfig) =>
                 },
                 { test: /\.svg$/, use: 'svg-inline-loader' },
                 {
-                    test: require.resolve('blueimp-file-upload'),
-                    use: 'imports?define=>false',
-                },
-                {
                     test: /\.(sa|sc|c)ss$/,
                     use: [
                         'style-loader',

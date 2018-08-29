@@ -53,6 +53,7 @@ export default function normalizeProfile(account) {
         website,
         profile_image,
         cover_image,
+        social,
     } = profile;
 
     name = truncate(name, 20);
@@ -86,5 +87,6 @@ export default function normalizeProfile(account) {
         website,
         profile_image,
         cover_image,
+        social,
     };
 }

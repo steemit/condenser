@@ -18,7 +18,6 @@ class UserKeys extends Component {
         wifShown: PropTypes.bool,
         setWifShown: PropTypes.func.isRequired,
         accountName: PropTypes.string.isRequired,
-        showChangePassword: PropTypes.func.isRequired,
     }
     constructor() {
         super()
@@ -40,9 +39,6 @@ class UserKeys extends Component {
         })
         if(wifShown !== hasWif)
             setWifShown(hasWif)
-    }
-    showChangePassword = () => {
-        this.props.showChangePassword(this.props.accountName)
     }
     render() {
         const {props: {account, isMyAccount}} = this
@@ -116,11 +112,6 @@ export default connect(
     dispatch => ({
         setWifShown: (shown) => {
             dispatch(g.actions.receiveState({UserKeys_wifShown: shown}))
-        },
-        showChangePassword: (username) => {
-            const name = 'changePassword'
-            dispatch(g.actions.remove({key: name}))
-            dispatch(g.actions.showDialog({name, params: {username}}))
         },
     })
 )(UserKeys)

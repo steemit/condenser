@@ -23,7 +23,7 @@ const Header = styled.div`
     line-height: 1.06;
     letter-spacing: 0.6px;
     font-size: 36px;
-    font-family: ${a => a.theme.fontFamilyBold};
+    font-family: ${a => a.theme.fontFamilySerif};
     color: #333;
 `;
 

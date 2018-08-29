@@ -161,7 +161,7 @@ class ChangePassword extends React.Component {
                                 <div className="overflow-ellipsis"><code style={{display: 'block', padding: '0.2rem 0.5rem', background: 'white', color: '#c7254e', wordWrap: 'break-word', fontSize: '100%', textAlign: 'center'}}>{newWif}</code></div>
                             </div>
                             <label className="ChangePassword__backup_text">
-                                {tt('g.backup_password_by_storing_it')}.
+                                {tt('g.backup_password_by_storing_it')}
                             </label>
                         </span>
                         ||

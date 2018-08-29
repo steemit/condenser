@@ -12,6 +12,16 @@
 //  opacity: 0;
 //}
 
+.LoadingIndicator {
+  pointer-events: none;
+
+  &_center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
 .loading-panel {
   z-index: 1000;
   position: absolute;

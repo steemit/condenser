@@ -8,7 +8,7 @@ import TransactionError from 'app/components/elements/TransactionError';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Reveal from 'react-foundation-components/lib/global/reveal';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
-import {numberWithCommas, vestsToSteem} from 'app/utils/StateFunctions';
+import {numberWithCommas, vestsToGolos} from 'app/utils/StateFunctions';
 import FoundationDropdownMenu from 'app/components/elements/FoundationDropdownMenu';
 import WalletSubMenu from 'app/components/elements/WalletSubMenu';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
@@ -43,9 +43,9 @@ class UserWallet extends React.Component {
         const gprops = this.props.gprops.toJS();
 
         if (!account) return null;
-        const vesting_steem = vestsToSteem(account.get('vesting_shares'), gprops);
-        const received_vesting_shares = vestsToSteem(account.get('received_vesting_shares'), gprops);
-        const delegated_vesting_shares = vestsToSteem(account.get('delegated_vesting_shares'), gprops);
+        const vesting_steem = vestsToGolos(account.get('vesting_shares'), gprops);
+        const received_vesting_shares = vestsToGolos(account.get('received_vesting_shares'), gprops);
+        const delegated_vesting_shares = vestsToGolos(account.get('delegated_vesting_shares'), gprops);
 
         let isMyAccount = current_user && current_user.get('username') === account.get('name');
 
@@ -177,7 +177,7 @@ class UserWallet extends React.Component {
 
         // format spacing on estimated value based on account state
         const estimate_output = <LocalizedCurrency amount={total_value} />
-        
+
         /// transfer log
         let idx = 0
         const transfer_log = account.get('transfer_history', [])
@@ -438,13 +438,7 @@ class UserWallet extends React.Component {
 export default connect(
     // mapStateToProps
     (state, ownProps) => {
-        let price_per_golos = undefined
-        const feed_price = state.global.get('feed_price')
-        if(feed_price && feed_price.has('base') && feed_price.has('quote')) {
-            const {base, quote} = feed_price.toJS()
-            if(/ GBG$/.test(base) && / GOLOS$/.test(quote))
-                price_per_golos = parseFloat(base.split(' ')[0]) / parseFloat(quote.split(' ')[0])
-        }
+        const price_per_golos = state.global.getIn(['rates', 'GBG', 'GOLOS']);
         const savings_withdraws = state.user.get('savings_withdraws')
         const gprops = state.global.get('props');
         const sbd_interest = gprops.get('sbd_interest_rate')

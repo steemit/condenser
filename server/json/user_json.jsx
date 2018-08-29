@@ -1,5 +1,4 @@
 import koa_router from 'koa-router';
-import React from 'react';
 import {routeRegex} from "app/ResolveRoute";
 import {api} from 'golos-js';
 

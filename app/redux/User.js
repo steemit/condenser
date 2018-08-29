@@ -8,7 +8,6 @@ const defaultState = fromJS({
     show_login_modal: false,
     show_transfer_modal: false,
     show_promote_post_modal: false,
-    show_signup_modal: false,
     pub_keys_used: null,
     locale: DEFAULT_LANGUAGE,
     show_messages_modal: false
@@ -114,8 +113,6 @@ export default createModule({
         //     // User can only post 1 comment per minute
         //     reducer: (state) => state.merge({ current: {lastComment: Date.now()} })
         // },
-        { action: 'SHOW_SIGN_UP', reducer: state => state.set('show_signup_modal', true) },
-        { action: 'HIDE_SIGN_UP', reducer: state => state.set('show_signup_modal', false) },
 
         {
             action: 'KEYS_ERROR',
@@ -124,11 +121,11 @@ export default createModule({
         // { action: 'UPDATE_PERMISSIONS', reducer: state => {
         //     return state // saga
         // }},
-        { // AuthSaga
+        { // auth saga
             action: 'ACCOUNT_AUTH_LOOKUP',
             reducer: state => state
         },
-        { // AuthSaga
+        { // auth saga
             action: 'SET_AUTHORITY',
             reducer: (state, {payload: {accountName, auth, pub_keys_used}}) => {
                 state = state.setIn(['authority', accountName], fromJS(auth))
@@ -145,8 +142,8 @@ export default createModule({
                 return state.setIn(key, fromJS(value))
             }
         },
-        { action: 'NOTIFICATION_CHANNEL_CREATED', reducer: state => state.set('notification_channel_created', true) },
-        { action: 'NOTIFICATION_CHANNEL_DESTROYED', reducer: state => state.set('notification_channel_created', false) },
+        // { action: 'NOTIFICATION_CHANNEL_CREATED', reducer: state => state.set('notification_channel_created', true) },
+        // { action: 'NOTIFICATION_CHANNEL_DESTROYED', reducer: state => state.set('notification_channel_created', false) },
         { action: 'SHOW_MESSAGES', reducer: state => state.set('show_messages_modal', true)  },
         { action: 'HIDE_MESSAGES', reducer: state => state.set('show_messages_modal', false) },
     ]

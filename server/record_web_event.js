@@ -1,6 +1,10 @@
 import {WebEvent, esc} from 'db/models';
 
 export default function recordWebEvent(ctx, event_type, value) {
+    if (process.env.NODE_ENV === 'development') {
+        return;
+    }
+
     if (ctx.state.isBot) return;
     const s = ctx.session;
     const r = ctx.req;

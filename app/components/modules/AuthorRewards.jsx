@@ -2,7 +2,7 @@
 import React from 'react';
 import {connect} from 'react-redux'
 import TransferHistoryRow from 'app/components/cards/TransferHistoryRow';
-import {numberWithCommas, vestsToSp, assetFloat} from 'app/utils/StateFunctions'
+import {numberWithCommas, vestsToGolosPower, assetFloat} from 'app/utils/StateFunctions'
 import tt from 'counterpart';
 import { LIQUID_TICKER, VEST_TICKER, DEBT_TICKER, DEBT_TOKEN_SHORT } from 'app/client_config';
 
@@ -111,7 +111,7 @@ class AuthorRewards extends React.Component {
                     {tt('authorrewards_jsx.estimated_author_rewards_last_week')}:
                 </div>
                 <div className="column small-12 medium-4">
-                    {numberWithCommas(vestsToSp(this.props.state, rewardsWeekVests + " " + VEST_TICKER)) + " " + VESTING_TOKENS}
+                    {numberWithCommas(vestsToGolosPower(this.props.state, rewardsWeekVests + " " + VEST_TICKER)) + " " + VESTING_TOKENS}
                     <br />
                     {rewardsWeekSteem.toFixed(3) + " " + LIQUID_TICKER}
                     <br />
@@ -125,7 +125,7 @@ class AuthorRewards extends React.Component {
                     {tt('author_rewards_last_24_hours')}:
                 </div>
                 <div className="column small-12 medium-4">
-                    {numberWithCommas(vestsToSp(this.props.state, rewards24Vests + " " + VEST_TICKER)) + " " + VESTING_TOKEN}
+                    {numberWithCommas(vestsToGolosPower(this.props.state, rewards24Vests + " " + VEST_TICKER)) + " " + VESTING_TOKEN}
                     <br />
                     {rewards24Steem.toFixed(3) + " " + LIQUID_TICKER}
                     <br />
@@ -138,7 +138,7 @@ class AuthorRewards extends React.Component {
                     tt('authorrewards_jsx.daily_average_author_rewards')}:
                 </div>
                 <div className="column small-12 medium-4">
-                    {numberWithCommas(vestsToSp(this.props.state, averageCurationVests + " " + VEST_TICKER)) + " " + VESTING_TOKEN}
+                    {numberWithCommas(vestsToGolosPower(this.props.state, averageCurationVests + " " + VEST_TICKER)) + " " + VESTING_TOKEN}
                     <br />
                     {averageCurationSteem.toFixed(3) + " " + LIQUID_TICKER}
                     <br />
@@ -150,7 +150,7 @@ class AuthorRewards extends React.Component {
                     {tt(!hasFullWeek ? 'estimated_author_rewards_last_week' : 'author_rewards_last_week')}:
                 </div>
                 <div className="column small-12 medium-4">
-                    {numberWithCommas(vestsToSp(this.props.state, (hasFullWeek ? rewardsWeekVests : averageCurationVests * 7) + " " + VEST_TICKER)) + " " + VESTING_TOKEN}
+                    {numberWithCommas(vestsToGolosPower(this.props.state, (hasFullWeek ? rewardsWeekVests : averageCurationVests * 7) + " " + VEST_TICKER)) + " " + VESTING_TOKEN}
                     <br />
                     {(hasFullWeek ? rewardsWeekSteem : averageCurationSteem * 7).toFixed(3) + " " + LIQUID_TICKER}
                     <br />

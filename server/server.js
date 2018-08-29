@@ -12,11 +12,8 @@ import favicon from 'koa-favicon';
 import staticCache from 'koa-static-cache';
 import useRedirects from './redirects';
 import useGeneralApi from './api/general';
-import useTestnetApi from './testnet_api';
 import useAccountRecoveryApi from './api/account_recovery';
-// import useNotificationsApi from './api/notifications';
 import useRegistrationApi from './api/registration';
-import {proxyRoutes as useProxyRoutes} from './api/proxy';
 import {ratesRoutes as useRatesRoutes} from './api/rates';
 import useUserJson from './json/user_json';
 import usePostJson from './json/post_json';
@@ -24,7 +21,6 @@ import isBot from 'koa-isbot';
 import session from './utils/cryptoSession';
 import csrf from 'koa-csrf';
 import flash from 'koa-flash';
-import minimist from 'minimist';
 import config from 'config';
 import { routeRegex } from 'app/ResolveRoute';
 import { blockedUsers } from 'app/utils/IllegalContent';
@@ -168,22 +164,6 @@ app.use(
     })
 );
 
-// app.use(
-//     mount('/service-worker.js', function*() {
-//         this.set('Cache-Control', 'public, max-age=7200000');
-//         this.type = 'application/javascript';
-//         const file_content = fs
-//             .readFileSync(path.join(__dirname, './service-worker.js'))
-//             .toString();
-//         // TODO: use APP_DOMAIN from client_config.js
-//         // actually use a config value for it
-//         this.body = file_content.replace(
-//             /\{DEFAULT_URL\}/i,
-//             'https://' + this.request.header.host
-//         );
-//     })
-// );
-
 // set user's uid - used to identify users in logs and some other places
 // FIXME SECURITY PRIVACY cycle this uid after a period of time
 app.use(function*(next) {
@@ -207,13 +187,7 @@ usePostJson(app);
 
 useAccountRecoveryApi(app);
 useGeneralApi(app);
-// useNotificationsApi(app);
-useProxyRoutes(app);
 useRatesRoutes(app);
-
-// if (config.get('is_testnet')) {
-//     useTestnetApi(app);
-// }
 
 // helmet wants some things as bools and some as lists, makes config difficult.
 // our config uses strings, this splits them to lists on whitespace.
@@ -269,8 +243,6 @@ if (env !== 'test') {
             console.log(`[reqid ${this.request.header['x-request-id']}] ${this.method} ${this.originalUrl} ${this.status} (BOT '${bot}')`);
         }
     });
-
-    const argv = minimist(process.argv.slice(2));
 
     const port = process.env.PORT ? parseInt(process.env.PORT) : 8080;
 

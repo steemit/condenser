@@ -25,8 +25,12 @@ export const globalProps = {
     last_irreversible_block_num: 99,
     max_virtual_bandwidth: '5986734968066277376',
     current_reserve_ratio: 20000,
-    vote_regeneration_per_day: 40
+    vote_regeneration_per_day: 40,
 }
+
+export const rates = {
+    gbgPerGolos: 1,
+};
 
 export const trendingTagsRaw = [
     {

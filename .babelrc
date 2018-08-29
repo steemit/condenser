@@ -15,7 +15,9 @@
             {
                 "ssr": true
             }
-        ]
+        ],
+        "transform-decorators-legacy",
+        "transform-export-extensions"
     ],
     "env": {
         "development": {

@@ -1,20 +1,10 @@
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router';
+import { IndexLink, Link } from 'react-router';
 
 const activeStyles = `
     color: #333333;
-    font-weight: 500;
-
-    :after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 4px;
-        background: #333333;
-    }
+    cursor: default;
 `;
 
 const Tab = styled.div`
@@ -23,11 +13,12 @@ const Tab = styled.div`
     align-items: center;
 
     height: 50px;
-    margin: 0 15px;
+    padding: 0 6px;
+    margin: 0 3px;
 
-    font-family: ${props => props.theme.fontFamilyBold};
+    font-family: ${({ theme }) => theme.fontFamily};
     font-size: 14px;
-    font-weight: 400;
+    font-weight: 500;
     letter-spacing: 1.09px;
     text-transform: uppercase;
     color: #b7b7b9;
@@ -46,14 +37,17 @@ const Tab = styled.div`
         color: #333333;
     }
 
-    ${props => props.active && activeStyles}
-    &.${props => props.activeClassName} {
+    ${({ active }) => active && activeStyles}
+    &.${({ activeClassName }) => activeClassName} {
         ${activeStyles}
     }
 `;
 
 Tab.propTypes = {
-    active: PropTypes.bool,
+    active: PropTypes.oneOfType([
+        PropTypes.number,
+        PropTypes.bool
+    ]),
     activeClassName: PropTypes.string,
 };
 
@@ -62,6 +56,6 @@ Tab.defaultProps = {
     activeClassName: 'active',
 };
 
-
+export const TabLinkIndex = Tab.withComponent(IndexLink);
 export const TabLink = Tab.withComponent(Link);
 export default Tab;

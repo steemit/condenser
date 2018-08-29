@@ -20,31 +20,33 @@ export default class AddImageDialog extends React.PureComponent {
                 title={tt('post_editor.add_image')}
                 onCloseClick={this._onCloseClick}
             >
-                <DropZone
-                    className="AddImageDialog__drop-zone"
-                    multiple={false}
-                    accept="image/*"
-                    onDrop={this._onDrop}
-                >
-                    <i
-                        className="AddImageDialog__drop-zone-icon"
-                        dangerouslySetInnerHTML={{ __html: PictureSvg }}
-                    />
-                    <span className="AddImageDialog__drop-zone-text">
+                <div className="AddImageDialog__body">
+                    <DropZone
+                        className="AddImageDialog__drop-zone"
+                        multiple={false}
+                        accept="image/*"
+                        onDrop={this._onDrop}
+                    >
+                        <i
+                            className="AddImageDialog__drop-zone-icon"
+                            dangerouslySetInnerHTML={{ __html: PictureSvg }}
+                        />
+                        <span className="AddImageDialog__drop-zone-text">
                         {tt('editor_toolbar.add_image_from_computer')}
                     </span>
-                </DropZone>
-                <div className="AddImageDialog__splitter" />
-                <div>
-                    <div className="AddImageDialog__link-text">
-                        {tt('editor_toolbar.add_image_via_link')}:
+                    </DropZone>
+                    <div className="AddImageDialog__splitter" />
+                    <div>
+                        <div className="AddImageDialog__link-text">
+                            {tt('editor_toolbar.add_image_via_link')}:
+                        </div>
+                        <Input
+                            block
+                            className="AddImageDialog__link-input"
+                            placeholder="https://"
+                            onKeyDown={this._onInputKeyDown}
+                        />
                     </div>
-                    <Input
-                        block
-                        className="AddImageDialog__link-input"
-                        placeholder="https://"
-                        onKeyDown={this._onInputKeyDown}
-                    />
                 </div>
             </DialogFrame>
         );

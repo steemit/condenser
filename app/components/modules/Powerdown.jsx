@@ -8,9 +8,9 @@ import transaction from 'app/redux/Transaction'
 import { VEST_TICKER, LIQUID_TICKER, VESTING_TOKEN } from 'app/client_config';
 import {
     numberWithCommas,
-    vestsToSp,
+    vestsToGolosPower,
     assetFloat,
-    vestsToSteem
+    vestsToGolos
 } from 'app/utils/StateFunctions';
 
 class Powerdown extends React.Component {
@@ -44,7 +44,7 @@ class Powerdown extends React.Component {
         } = this.state;
 
         const formatSp = amount =>
-            numberWithCommas(vestsToSteem(`${amount} ${VEST_TICKER}`, this.props.gprops));
+            numberWithCommas(vestsToGolos(`${amount} ${VEST_TICKER}`, this.props.gprops));
 
         const sliderChange = value => {
             this.setState({ new_withdraw: value, manual_entry: false });
@@ -52,7 +52,7 @@ class Powerdown extends React.Component {
 
         const inputChange = event => {
             event.preventDefault();
-            let value = vestsToSp(
+            let value = vestsToGolosPower(
                 this.props.state,
                 parseFloat(event.target.value.replace(/,/g, ''))
             );
@@ -112,7 +112,7 @@ class Powerdown extends React.Component {
             );
         }
         if (notes.length === 0) {
-            let AMOUNT =  vestsToSteem(`${new_withdraw} ${VEST_TICKER}`, this.props.gprops) / 13
+            let AMOUNT =  vestsToGolos(`${new_withdraw} ${VEST_TICKER}`, this.props.gprops) / 13
             AMOUNT = AMOUNT.toFixed(AMOUNT >= 10 ? 0 : 1);
             notes.push(
                 <li key="per_week">

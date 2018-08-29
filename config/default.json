@@ -78,14 +78,6 @@
     "recovery_account": "golos",
     "signing_key": "5J..."
   },
-  "sendgrid": {
-    "from": "noreply@example.com",
-    "key": "SG.xxx_yyyy",
-    "templates": {
-      "confirm_email": false,
-      "waiting_list_invite": false
-    }
-  },
   "postmark": {
     "from": "noreply@example.com",
     "key": "postmark server key",
@@ -110,14 +102,8 @@
     "port": "3301",
     "username": "guest"
   },
-  "telesign": {
-    "customer_id": false,
-    "rest_api_key": false
-  },
   "twilio": {
-    "account_sid": false,
-    "auth_token": false,
-    "sender_id": false
+    "account_sid": false
   },
   "upload_image": "https://images.golos.io",
   "ws_connection_client": "wss://ws.golos.io",
@@ -136,5 +122,7 @@
   "is_testnet": false,
   "is_sandbox": false,
   "openexchangerates_app_id": "app id",
-  "wss_push_service_url": "url"
+  "wss_push_service_url": "url",
+  "gate_service_url": "url",
+  "rates_service_url": ""
 }

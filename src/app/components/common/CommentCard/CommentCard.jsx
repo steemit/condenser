@@ -141,8 +141,7 @@ const Root = styled.div`
         props.isCommentOpen
             ? ``
             : `justify-content: center;
-               height: 50px;`
-    };
+               height: 50px;`};
 `;
 
 const Reply = styled.div`
@@ -185,9 +184,9 @@ const ReLinkWrapper = styled.div`
     align-items: center;
 `;
 
-const CommentVotePanel = styled(VotePanel)`   
+const CommentVotePanel = styled(VotePanel)`
     width: 257px;
-      
+
     @media (min-width: 890px) and (max-width: 1087px), (max-width: 502px) {
         flex-grow: 1;
         justify-content: space-between;
@@ -196,7 +195,7 @@ const CommentVotePanel = styled(VotePanel)`
 
 const CommentReplyBlock = styled(ReplyBlock)`
     margin: 0;
-    
+
     @media (min-width: 890px) and (max-width: 1087px), (max-width: 502px) {
         flex-grow: 1;
         justify-content: center;
@@ -209,14 +208,14 @@ class CommentCard extends PureComponent {
         myAccountName: PropTypes.string,
         data: PropTypes.object,
         grid: PropTypes.bool,
-        allowInlineReply: PropTypes.bool
+        allowInlineReply: PropTypes.bool,
     };
 
     state = {
         myVote: this._getMyVote(this.props),
         showReply: false,
         edit: false,
-        isCommentOpen: true
+        isCommentOpen: true,
     };
 
     componentWillReceiveProps(newProps) {
@@ -250,8 +249,7 @@ class CommentCard extends PureComponent {
         this._content = extractContent(immutableAccessor, data);
 
         return (
-            <Root className={cn(className)}
-                  isCommentOpen={isCommentOpen}>
+            <Root className={cn(className)} isCommentOpen={isCommentOpen}>
                 {this._renderHeader()}
                 {this._renderBodyRe()}
                 {this._renderBodyText()}
@@ -472,8 +470,8 @@ class CommentCard extends PureComponent {
     _toggleComment = () => {
         this.setState({
             edit: false,
-            isCommentOpen: !this.state.isCommentOpen
-        })
+            isCommentOpen: !this.state.isCommentOpen,
+        });
     };
 }
 

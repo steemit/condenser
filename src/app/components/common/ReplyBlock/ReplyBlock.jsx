@@ -40,19 +40,19 @@ const ReplyLink = styled(Link)`
     text-transform: uppercase;
     letter-spacing: 0.8px;
     color: #393636 !important;
-    text-shadow: 0 2px 12px rgba(0, 0, 0, .15);
-    
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+
     &:hover {
-        text-shadow: 0 2px 4px rgba(0, 0, 0, .5);
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
     }
-    
+
     ${is('whiteTheme')`
         text-shadow: 0 2px 12px rgba(255, 255, 255, .15);
     
         &:hover {
             text-shadow: 0 2px 4px rgba(255, 255, 255, .5);
         }
-    `}
+    `};
 `;
 
 const ReplyIcon = styled(Icon)`
@@ -100,7 +100,9 @@ export default function ReplyBlock({ withImage, grid, count, link, text, classNa
                 <ReplyCount>{count}</ReplyCount>
             </ReplyCounterBlock>
             <Splitter />
-            <ReplyLink to={`${link}#comments`} whiteTheme={withImage}>{text}</ReplyLink>
+            <ReplyLink to={`${link}#comments`} whiteTheme={withImage}>
+                {text}
+            </ReplyLink>
         </Root>
     );
 }

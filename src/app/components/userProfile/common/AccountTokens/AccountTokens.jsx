@@ -79,8 +79,13 @@ const SubLabel = styled.div`
     align-items: center;
     margin-right: 24px;
 
-    ${LabelTitle}, ${LabelValue} {
+    ${LabelTitle} {
         font-size: 13px;
+    }
+
+    ${LabelValue} {
+        font-size: 13px;
+        font-weight: 500;
     }
 `;
 
@@ -184,12 +189,11 @@ class AccountTokens extends PureComponent {
                             <CollapsingBlockStyled
                                 key={label.id}
                                 initialCollapsed
+                                saveStateKey={`tokens_${label.id}`}
+                                onMouseEnter={() => this._onHover(i)}
+                                onMouseLeave={() => this._onHoverOut(i)}
                                 title={() => (
-                                    <Label
-                                        key={label.id}
-                                        onMouseEnter={() => this._onHover(i)}
-                                        onMouseLeave={() => this._onHoverOut(i)}
-                                    >
+                                    <Label>
                                         <ColorMark style={{ backgroundColor: label.color }} />
                                         <LabelTitle>{label.title}</LabelTitle>
                                         <LabelValue>{label.value}</LabelValue>
@@ -199,7 +203,9 @@ class AccountTokens extends PureComponent {
                                 <LabelBody>
                                     {label.values.map(subLabel => (
                                         <SubLabel>
-                                            <SubColorMark style={{ backgroundColor: label.color }} />
+                                            <SubColorMark
+                                                style={{ backgroundColor: label.color }}
+                                            />
                                             <LabelTitle>{subLabel.title}</LabelTitle>
                                             <LabelValue>{subLabel.value}</LabelValue>
                                         </SubLabel>

@@ -16,7 +16,7 @@ const Body = styled.div`
 
 export default function CollapsingCard(props) {
     return (
-        <CollapsingBlockStyled {...props} upper>
+        <CollapsingBlockStyled {...props} upperCase>
             <Body>{props.children}</Body>
         </CollapsingBlockStyled>
     );

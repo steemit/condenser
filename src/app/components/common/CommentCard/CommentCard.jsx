@@ -20,6 +20,7 @@ import { confirmVote } from 'src/app/helpers/votes';
 import ReplyBlock from '../ReplyBlock';
 
 const Header = styled.div`
+    display: ${props => (props.isCommentOpen ? 'block' : 'none')};
     padding: 10px 0 6px;
     flex-shrink: 0;
 `;
@@ -79,12 +80,11 @@ const Category = styled.div`
     cursor: default;
 `;
 
-const Body = styled.div`
-    position: relative;
-    padding: 0 18px 12px;
-`;
 const Title = styled.div`
-    margin-bottom: 8px;
+    display: flex;
+    position: relative;
+    padding: 0 18px;
+    ${props => (props.isCommentOpen ? `margin-bottom: 8px;` : `justify-content: space-between;`)};
     line-height: 29px;
     font-family: ${a => a.theme.fontFamily};
     font-size: 20px;
@@ -103,31 +103,25 @@ const TitleLink = styled(Link)`
 `;
 
 const PostBody = styled(Link)`
-    display: block;
+    display: ${props => (props.isCommentOpen ? 'block' : 'none')};
+    padding: 0 18px;
     font-family: ${a => a.theme.fontFamily};
     color: #959595 !important;
 `;
 
 const Footer = styled.div`
     position: relative;
-    display: flex;
+    display: ${props => (props.isCommentOpen ? 'flex' : 'none')};
     flex-shrink: 0;
+    justify-content: space-between;
     align-items: center;
-    padding: 12px 18px;
+    flex-wrap: wrap;
+    padding: 12px 0 0 0;
     z-index: 1;
     pointer-events: none;
 
     & > * {
         pointer-events: initial;
-    }
-
-    @media (min-width: 890px) and (max-width: 1000px), (max-width: 420px) {
-        flex-direction: column;
-
-        & > div:first-child {
-            width: 100%;
-            justify-content: space-between;
-        }
     }
 `;
 
@@ -136,10 +130,19 @@ const Filler = styled.div`
 `;
 
 const Root = styled.div`
+    display: flex;
+    flex-direction: column;
     position: relative;
     border-radius: 8px;
     background: #ffffff;
+    overflow: hidden;
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.06);
+    ${props =>
+        props.isCommentOpen
+            ? ``
+            : `justify-content: center;
+               height: 50px;`
+    };
 `;
 
 const Reply = styled.div`
@@ -163,19 +166,57 @@ const ButtonStyled = styled(Button)`
     margin-left: 18px;
 `;
 
+const ToggleCommentOpen = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    ${props =>
+        props.isCommentOpen
+            ? ``
+            : `transform: rotate(180deg); 
+               color: #b7b7ba;`};
+`;
+
+const ReLinkWrapper = styled.div`
+    display: flex;
+    align-items: center;
+`;
+
+const CommentVotePanel = styled(VotePanel)`   
+    width: 257px;
+      
+    @media (min-width: 890px) and (max-width: 1087px), (max-width: 502px) {
+        flex-grow: 1;
+        justify-content: space-between;
+    }
+`;
+
+const CommentReplyBlock = styled(ReplyBlock)`
+    margin: 0;
+    
+    @media (min-width: 890px) and (max-width: 1087px), (max-width: 502px) {
+        flex-grow: 1;
+        justify-content: center;
+    }
+`;
+
 class CommentCard extends PureComponent {
     static propTypes = {
         permLink: PropTypes.string,
         myAccountName: PropTypes.string,
         data: PropTypes.object,
         grid: PropTypes.bool,
-        allowInlineReply: PropTypes.bool,
+        allowInlineReply: PropTypes.bool
     };
 
     state = {
         myVote: this._getMyVote(this.props),
         showReply: false,
         edit: false,
+        isCommentOpen: true
     };
 
     componentWillReceiveProps(newProps) {
@@ -203,15 +244,17 @@ class CommentCard extends PureComponent {
 
     render() {
         const { data, className } = this.props;
-        const { showReply } = this.state;
+        const { showReply, isCommentOpen } = this.state;
 
         this._data = data.toJS();
         this._content = extractContent(immutableAccessor, data);
 
         return (
-            <Root className={cn(className)}>
+            <Root className={cn(className)}
+                  isCommentOpen={isCommentOpen}>
                 {this._renderHeader()}
-                {this._renderBody()}
+                {this._renderBodyRe()}
+                {this._renderBodyText()}
                 {this._renderFooter()}
                 {showReply ? this._renderReplyEditor() : null}
             </Root>
@@ -223,7 +266,7 @@ class CommentCard extends PureComponent {
         const category = detransliterate(this._data.category);
 
         return (
-            <Header>
+            <Header isCommentOpen={this.state.isCommentOpen}>
                 <HeaderLine>
                     <AuthorBlock>
                         <Avatar href={`/@${author}`}>
@@ -238,14 +281,20 @@ class CommentCard extends PureComponent {
                     </AuthorBlock>
                     <Filler />
                     <Category>{category}</Category>
+                    <ToggleCommentOpen
+                        onClick={this._toggleComment}
+                        isCommentOpen={this.state.isCommentOpen}
+                    >
+                        <Icon name="chevron" width="12" height="7" />
+                    </ToggleCommentOpen>
                 </HeaderLine>
             </Header>
         );
     }
 
-    _renderBody() {
+    _renderBodyRe() {
         const { myAccountName } = this.props;
-        const { edit } = this.state;
+        const { edit, isCommentOpen } = this.state;
 
         let title = this._content.title;
         let parentLink = this._content.link;
@@ -260,22 +309,36 @@ class CommentCard extends PureComponent {
         const showEditButton = myAccountName === this._data.author;
 
         return (
-            <Body>
-                <Title>
+            <Title isCommentOpen={this.state.isCommentOpen}>
+                <ReLinkWrapper>
                     <TitleIcon name="comment" />
                     {tt('g.re2')}:{' '}
                     <TitleLink to={parentLink} onClick={this._onTitleClick}>
                         {title}
                     </TitleLink>
-                    {showEditButton && !edit ? (
-                        <IconEdit
-                            name="pen"
-                            size={20}
-                            data-tooltip={'Редактировать комментарий'}
-                            onClick={this._onEditClick}
-                        />
-                    ) : null}
-                </Title>
+                </ReLinkWrapper>
+                {showEditButton && !edit && isCommentOpen ? (
+                    <IconEdit
+                        name="pen"
+                        size={20}
+                        data-tooltip={'Редактировать комментарий'}
+                        onClick={this._onEditClick}
+                    />
+                ) : null}
+                {!isCommentOpen ? (
+                    <ToggleCommentOpen onClick={this._toggleComment}>
+                        <Icon name="chevron" width="12" height="7" />
+                    </ToggleCommentOpen>
+                ) : null}
+            </Title>
+        );
+    }
+
+    _renderBodyText() {
+        const { edit } = this.state;
+
+        return (
+            <Fragment>
                 {edit ? (
                     <CommentFormLoader
                         reply
@@ -289,9 +352,10 @@ class CommentCard extends PureComponent {
                         to={this._content.link}
                         onClick={this._onClick}
                         dangerouslySetInnerHTML={{ __html: this._content.desc }}
+                        isCommentOpen={this.state.isCommentOpen}
                     />
                 )}
-            </Body>
+            </Fragment>
         );
     }
 
@@ -299,10 +363,9 @@ class CommentCard extends PureComponent {
         const { data, myAccountName, allowInlineReply } = this.props;
 
         return (
-            <Footer>
-                <VotePanel data={data} me={myAccountName} onChange={this._onVoteChange} />
-                <Filler />
-                <ReplyBlock
+            <Footer isCommentOpen={this.state.isCommentOpen}>
+                <CommentVotePanel data={data} me={myAccountName} onChange={this._onVoteChange} />
+                <CommentReplyBlock
                     count={data.get('children')}
                     link={this._content.link}
                     text="Комментарии"
@@ -404,6 +467,13 @@ class CommentCard extends PureComponent {
         this.setState({
             showReply: true,
         });
+    };
+
+    _toggleComment = () => {
+        this.setState({
+            edit: false,
+            isCommentOpen: !this.state.isCommentOpen
+        })
     };
 }
 

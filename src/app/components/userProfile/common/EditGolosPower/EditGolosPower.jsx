@@ -8,6 +8,11 @@ import ComplexInput from 'src/app/components/golos-ui/ComplexInput';
 import { parseAmount2 } from 'src/app/helpers/currency';
 
 const Root = styled.div`
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 10px 28px;
     background: #fff;
 `;
 

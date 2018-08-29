@@ -26,7 +26,7 @@ const HeaderTitle = styled.div`
 
     ${is('upper')`
         text-transform: uppercase;
-    `}
+    `};
 `;
 
 const CollapseIcon = Icon.extend`
@@ -91,20 +91,33 @@ export default class CollapsingBlock extends PureComponent {
     }
 
     render() {
-        const { title, children, upperCase, className } = this.props;
+        const { title, children, upperCase } = this.props;
         const { collapsed, height, animated } = this.state;
 
-        return <Root innerRef={this._onRootRef} className={className}>
+        const passProps = {
+            ...this.props,
+            title: undefined,
+            upperCase: undefined,
+            initialCollapsed: undefined,
+            saveStateKey: undefined,
+        };
+
+        return (
+            <Root {...passProps} innerRef={this._onRootRef}>
                 <Header onClick={this._onCollapseClick}>
                     <HeaderTitle upper={upperCase}>
                         {typeof title === 'function' ? title() : title}
                     </HeaderTitle>
                     <CollapseIcon name="chevron" flip={collapsed ? 1 : 0} />
                 </Header>
-                <BodyWrapper animated={animated} style={{ height: height || (collapsed ? 0 : null) }}>
+                <BodyWrapper
+                    animated={animated}
+                    style={{ height: height || (collapsed ? 0 : null) }}
+                >
                     <Body innerRef={this._onBodyRef}>{children}</Body>
                 </BodyWrapper>
-            </Root>;
+            </Root>
+        );
     }
 
     _onRootRef = el => {

@@ -190,12 +190,10 @@ class AccountTokens extends PureComponent {
                                 key={label.id}
                                 initialCollapsed
                                 saveStateKey={`tokens_${label.id}`}
+                                onMouseEnter={() => this._onHover(i)}
+                                onMouseLeave={() => this._onHoverOut(i)}
                                 title={() => (
-                                    <Label
-                                        key={label.id}
-                                        onMouseEnter={() => this._onHover(i)}
-                                        onMouseLeave={() => this._onHoverOut(i)}
-                                    >
+                                    <Label>
                                         <ColorMark style={{ backgroundColor: label.color }} />
                                         <LabelTitle>{label.title}</LabelTitle>
                                         <LabelValue>{label.value}</LabelValue>

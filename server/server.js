@@ -22,7 +22,6 @@ import isBot from 'koa-isbot';
 import session from './utils/cryptoSession';
 import csrf from 'koa-csrf';
 import flash from 'koa-flash';
-import minimist from 'minimist';
 import config from 'config';
 import { routeRegex } from 'app/ResolveRoute';
 import { blockedUsers } from 'app/utils/IllegalContent';
@@ -246,8 +245,6 @@ if (env !== 'test') {
             console.log(`[reqid ${this.request.header['x-request-id']}] ${this.method} ${this.originalUrl} ${this.status} (BOT '${bot}')`);
         }
     });
-
-    const argv = minimist(process.argv.slice(2));
 
     const port = process.env.PORT ? parseInt(process.env.PORT) : 8080;
 

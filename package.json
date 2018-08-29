@@ -71,7 +71,6 @@
     "libsodium": "0.4.8",
     "libsodium-wrappers": "0.4.8",
     "lodash": "^4.17.10",
-    "minimist": "^1.2.0",
     "multistream": "^2.1.1",
     "mysql": "^2.15.0",
     "node-sass": "4.9.0",

@@ -14,7 +14,6 @@ import useRedirects from './redirects';
 import useGeneralApi from './api/general';
 import useAccountRecoveryApi from './api/account_recovery';
 import useRegistrationApi from './api/registration';
-import {proxyRoutes as useProxyRoutes} from './api/proxy';
 import {ratesRoutes as useRatesRoutes} from './api/rates';
 import useUserJson from './json/user_json';
 import usePostJson from './json/post_json';
@@ -188,7 +187,6 @@ usePostJson(app);
 
 useAccountRecoveryApi(app);
 useGeneralApi(app);
-useProxyRoutes(app);
 useRatesRoutes(app);
 
 // helmet wants some things as bools and some as lists, makes config difficult.

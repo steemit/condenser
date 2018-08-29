@@ -77,9 +77,7 @@
     "username": "SDC_CHAIN_PROXY_USERNAME"
   },
   "twilio": {
-    "account_sid": "SDC_TWILIO_ACCOUNT_SID",
-    "auth_token": "SDC_TWILIO_AUTH_TOKEN",
-    "sender_id": "SDC_TWILIO_SENDER_ID"
+    "account_sid": "SDC_TWILIO_ACCOUNT_SID"
   },
   "upload_image": "SDC_UPLOAD_IMAGE_URL",
   "lang_server" : "SDC_LANG_SERVER_URL",

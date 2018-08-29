@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import PieChart from 'src/app/components/common/PieChart';
 import CollapsingCard from 'src/app/components/golos-ui/CollapsingCard';
+import CollapsingBlock from 'src/app/components/golos-ui/CollapsingBlock';
 import { vestsToGolos } from 'app/utils/StateFunctions';
 
 const Body = styled.div``;
@@ -21,17 +22,19 @@ const ChartWrapper = styled.div`
 
 const Labels = styled.div``;
 
-const Label = styled.div`
-    display: flex;
-    height: 52px;
-    box-sizing: content-box;
-    align-items: center;
-    padding: 0 20px;
+const CollapsingBlockStyled = styled(CollapsingBlock)`
     border-bottom: 1px solid #e9e9e9;
 
     &:last-child {
         border-bottom: none;
     }
+`;
+
+const Label = styled.div`
+    display: flex;
+    height: 52px;
+    box-sizing: content-box;
+    align-items: center;
 `;
 
 const ColorMark = styled.div`
@@ -40,6 +43,14 @@ const ColorMark = styled.div`
     margin-right: 12px;
     border-radius: 2px;
     flex-shrink: 0;
+`;
+
+const SubColorMark = styled(ColorMark)`
+    width: 8px;
+    height: 8px;
+    margin-left: 4px;
+    margin-right: 15px;
+    border-radius: 50%;
 `;
 
 const LabelTitle = styled.div`
@@ -57,7 +68,28 @@ const LabelValue = styled.div`
     letter-spacing: 0.7px;
 `;
 
-class TokenDistribution extends PureComponent {
+const LabelBody = styled.div`
+    padding: 0 20px 10px;
+`;
+
+const SubLabel = styled.div`
+    display: flex;
+    height: 30px;
+    box-sizing: content-box;
+    align-items: center;
+    margin-right: 24px;
+
+    ${LabelTitle} {
+        font-size: 13px;
+    }
+
+    ${LabelValue} {
+        font-size: 13px;
+        font-weight: 500;
+    }
+`;
+
+class AccountTokens extends PureComponent {
     state = {
         hoverIndex: null,
         collapsed: false,
@@ -76,37 +108,67 @@ class TokenDistribution extends PureComponent {
     }
 
     render() {
-        const { golos, golosSafe, gold, goldSafe, power, gbgPerGolos } = this.props;
+        const { golos, golosSafe, gold, goldSafe, power, powerDelegated, gbgPerGolos } = this.props;
         const { hoverIndex } = this.state;
 
         const labels = [
             {
+                id: 'golos',
                 title: 'Голос',
                 color: '#2879ff',
-                value: golos,
+                values: [
+                    {
+                        title: 'Свои',
+                        value: golos,
+                    },
+                    {
+                        title: 'Сейф',
+                        value: golosSafe,
+                    },
+                ],
             },
             {
-                title: 'Голос (сейф)',
-                color: '#583652',
-                value: golosSafe,
-            },
-            {
+                id: 'gold',
                 title: 'Золотой',
                 color: '#ffb839',
-                value: gold,
                 rate: gbgPerGolos,
+                values: [
+                    {
+                        title: 'Свои',
+                        value: gold,
+                    },
+                    {
+                        title: 'Сейф',
+                        value: goldSafe,
+                    },
+                ],
             },
             {
-                title: 'Золотой (сейф)',
-                color: '#583652',
-                value: goldSafe,
-            },
-            {
+                id: 'power',
                 title: 'Сила голоса',
                 color: '#78c2d0',
-                value: vestsToGolos(power, this._globalProps),
+                values: [
+                    {
+                        title: 'Свои',
+                        value: vestsToGolos(power, this._globalProps),
+                    },
+                    {
+                        title: 'Делегированные',
+                        value: vestsToGolos(powerDelegated, this._globalProps),
+                    },
+                ],
             },
         ];
+
+        for (let label of labels) {
+            let sum = 0;
+
+            for (let { value } of label.values) {
+                sum += parseFloat(value);
+            }
+
+            label.value = sum.toFixed(3);
+        }
 
         return (
             <CollapsingCard title={'Распределение токенов'} saveStateKey="tokens">
@@ -124,15 +186,32 @@ class TokenDistribution extends PureComponent {
                     </ChartBlock>
                     <Labels>
                         {labels.map((label, i) => (
-                            <Label
-                                key={label.title}
+                            <CollapsingBlockStyled
+                                key={label.id}
+                                initialCollapsed
+                                saveStateKey={`tokens_${label.id}`}
                                 onMouseEnter={() => this._onHover(i)}
                                 onMouseLeave={() => this._onHoverOut(i)}
+                                title={() => (
+                                    <Label>
+                                        <ColorMark style={{ backgroundColor: label.color }} />
+                                        <LabelTitle>{label.title}</LabelTitle>
+                                        <LabelValue>{label.value}</LabelValue>
+                                    </Label>
+                                )}
                             >
-                                <ColorMark style={{ backgroundColor: label.color }} />
-                                <LabelTitle>{label.title}</LabelTitle>
-                                <LabelValue>{label.value}</LabelValue>
-                            </Label>
+                                <LabelBody>
+                                    {label.values.map(subLabel => (
+                                        <SubLabel>
+                                            <SubColorMark
+                                                style={{ backgroundColor: label.color }}
+                                            />
+                                            <LabelTitle>{subLabel.title}</LabelTitle>
+                                            <LabelValue>{subLabel.value}</LabelValue>
+                                        </SubLabel>
+                                    ))}
+                                </LabelBody>
+                            </CollapsingBlockStyled>
                         ))}
                     </Labels>
                 </Body>
@@ -164,7 +243,8 @@ export default connect((state, props) => {
         gold: account.get('sbd_balance').split(' ')[0],
         goldSafe: account.get('savings_sbd_balance').split(' ')[0],
         power: account.get('vesting_shares'),
+        powerDelegated: account.get('delegated_vesting_shares'),
         gbgPerGolos: state.global.getIn(['rates', 'GBG', 'GOLOS']),
         globalProps: state.global.get('props'),
     };
-})(TokenDistribution);
+})(AccountTokens);

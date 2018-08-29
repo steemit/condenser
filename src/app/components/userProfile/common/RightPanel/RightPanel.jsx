@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import AccountPrice from 'src/app/components/userProfile/common/AccountPrice';
 import RightActions from 'src/app/components/userProfile/common/RightActions';
-import TokenDistribution from 'src/app/components/userProfile/common/TokenDistribution';
+import AccountTokens from 'src/app/components/userProfile/common/AccountTokens';
 
 export default class RightPanel extends PureComponent {
     render() {
@@ -11,7 +11,7 @@ export default class RightPanel extends PureComponent {
             <div>
                 <AccountPrice accountName={params.accountName} />
                 <RightActions pageAccountName={params.accountName || null} />
-                <TokenDistribution accountName={params.accountName} />
+                <AccountTokens accountName={params.accountName} />
             </div>
         );
     }

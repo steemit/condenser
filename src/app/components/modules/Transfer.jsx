@@ -130,7 +130,7 @@ class TransferForm extends Component {
             const isWithdraw =
                 transferType && transferType === 'Savings Withdraw';
             const balanceValue =
-                !asset || asset === 'STEEM'
+                !asset || asset === LIQUID_TOKEN
                     ? isWithdraw
                       ? currentAccount.get('savings_balance')
                       : currentAccount.get('balance')
@@ -199,7 +199,7 @@ class TransferForm extends Component {
         const { currentAccount } = this.props;
         const { asset } = this.state;
         const isWithdraw = transferType && transferType === 'Savings Withdraw';
-        return !asset || asset.value === 'STEEM'
+        return !asset || asset.value === LIQUID_TOKEN
             ? isWithdraw
               ? currentAccount.get('savings_balance')
               : currentAccount.get('balance')
@@ -630,7 +630,7 @@ export default connect(
                 }
                 dispatch(userActions.hideTransfer());
             };
-            const asset2 = toVesting ? 'STEEM' : asset;
+            const asset2 = toVesting ? LIQUID_TOKEN : asset;
             const operation = {
                 from: username,
                 to,

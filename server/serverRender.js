@@ -7,7 +7,7 @@ import { RouterContext, match } from 'react-router';
 import { api } from 'golos-js';
 import RootRoute from 'app/RootRoute';
 import { APP_NAME, IGNORE_TAGS, SEO_TITLE } from 'app/client_config';
-import { component as NotFound } from 'app/components/pages/NotFound';
+import NotFound from 'app/components/pages/NotFound';
 import getState from 'app/utils/StateBuilder';
 import { routeRegex } from 'app/ResolveRoute';
 import { contentStats, calcVotesStats } from 'app/utils/StateFunctions';
@@ -33,7 +33,7 @@ export default async function serverRender({ location, offchain, ErrorPage, rate
         return {
             title: 'Page Not Found - ' + APP_NAME,
             statusCode: 404,
-            body: renderToString(<NotFound />),
+            body: renderToString(<NotFound.component />),
         };
     }
 
@@ -59,7 +59,7 @@ export default async function serverRender({ location, offchain, ErrorPage, rate
             return {
                 title: 'User Not Found - ' + APP_NAME,
                 statusCode: 404,
-                body: renderToString(<NotFound />),
+                body: renderToString(<NotFound.component />),
             };
         }
 
@@ -93,7 +93,7 @@ export default async function serverRender({ location, offchain, ErrorPage, rate
                 return {
                     title: 'Page Not Found - ' + APP_NAME,
                     statusCode: 404,
-                    body: renderToString(<NotFound />),
+                    body: renderToString(<NotFound.component />),
                 };
             }
         }
@@ -110,7 +110,7 @@ export default async function serverRender({ location, offchain, ErrorPage, rate
             return {
                 title: 'Page Not Found - ' + APP_NAME,
                 statusCode: 404,
-                body: renderToString(<NotFound />),
+                body: renderToString(<NotFound.component />),
             };
             // Ensure error page on state exception
         } else {

@@ -54,7 +54,7 @@ const SidebarRight = styled.div`
     flex-shrink: 0;
 `;
 
-export default class UserProfileContainer extends Component {
+class UserProfileContainer extends Component {
     static propTypes = {
         isOwner: PropTypes.bool,
         params: PropTypes.object,
@@ -151,7 +151,7 @@ export default class UserProfileContainer extends Component {
     }
 }
 
-module.exports = {
+export default {
     path: '@:accountName',
     getIndexRoute(nextState, cb) {
         cb(null, {

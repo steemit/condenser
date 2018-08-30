@@ -1,5 +1,5 @@
-import 'babel-core/register';
-import 'babel-polyfill';
+import '@babel/register';
+import '@babel/polyfill';
 import 'whatwg-fetch';
 import './assets/stylesheets/app.scss';
 import plugins from 'app/utils/JsPlugins';

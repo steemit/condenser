@@ -216,7 +216,7 @@ class PostsIndex extends React.Component {
     }
 }
 
-module.exports = {
+export default {
     path: ':order(/:category)',
     component: connect(
         (state) => {

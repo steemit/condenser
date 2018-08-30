@@ -6,6 +6,8 @@ import { NOTIFICATION_ONLINE_ADD_NOTIFICATION } from 'src/app/redux/constants/no
 import { getAccount } from 'app/redux/sagas/shared';
 import constants from 'app/redux/constants';
 
+import { numberWithCommas, vestsToGolosPower } from 'app/utils/StateFunctions';
+
 export default function* rootSaga() {
     yield fork(addNotificationsOnlineWatch);
 }
@@ -33,7 +35,7 @@ function* getContent(author, permlink) {
     return {
         title,
         link,
-    }
+    };
 }
 
 // TODO: look in cache before call to api
@@ -144,6 +146,8 @@ function* handleAddNotification({
     }
 
     if (curatorReward) {
+        const state = yield select(state => state);
+
         yield all(
             curatorReward.map(function*(notification) {
                 const { counter, author, permlink, reward } = notification; // {counter: 1, voter: "destroyer2k", permlink: "re-nickshtefan-re-destroyer2k-s-20180803t094131915z"}
@@ -155,7 +159,7 @@ function* handleAddNotification({
                         type: 'curatorReward',
                         title,
                         link,
-                        amount: reward,
+                        amount: numberWithCommas(vestsToGolosPower(state, `${reward} GESTS`)),
                     })
                 );
             })

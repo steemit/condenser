@@ -10,7 +10,7 @@ import user from 'app/redux/User';
 
 const {string, bool, any} = PropTypes;
 
-export default class Follow extends React.Component {
+class Follow extends React.Component {
     static propTypes = {
         following: string,
         follower: string, // OPTIONAL default to current user
@@ -107,7 +107,7 @@ export default class Follow extends React.Component {
 const emptyMap = Map();
 const emptySet = Set();
 
-module.exports = connect(
+export default connect(
     (state, ownProps) => {
         let {follower} = ownProps;
         if(!follower) {

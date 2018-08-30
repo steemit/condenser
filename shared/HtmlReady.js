@@ -234,7 +234,7 @@ function proxifyImages(doc) {
         return;
     }
 
-    for (let node of [...doc.getElementsByTagName('img')]) {
+    for (let node of Array.from(doc.getElementsByTagName('img'))) {
         const url = node.getAttribute('src');
 
         if (!linksRe.local.test(url)) {

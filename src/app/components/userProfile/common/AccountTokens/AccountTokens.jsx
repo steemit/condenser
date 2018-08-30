@@ -201,8 +201,8 @@ class AccountTokens extends PureComponent {
                                 )}
                             >
                                 <LabelBody>
-                                    {label.values.map(subLabel => (
-                                        <SubLabel>
+                                    {label.values.map((subLabel, i) => (
+                                        <SubLabel key={i}>
                                             <SubColorMark
                                                 style={{ backgroundColor: label.color }}
                                             />

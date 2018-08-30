@@ -24,7 +24,7 @@ class ChangePasswordPage extends React.Component {
     }
 }
 
-module.exports = {
+export default {
     path: 'change_password',
     component: ChangePasswordPage
 };

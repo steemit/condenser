@@ -43,7 +43,7 @@ class NotFound extends React.Component {
     }
 }
 
-module.exports = {
+export default {
     path: '*',
     component: NotFound
 };

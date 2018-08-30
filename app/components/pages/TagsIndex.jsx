@@ -9,7 +9,7 @@ import { detransliterate } from 'app/utils/ParsersAndFormatters';
 import { IGNORE_TAGS, SELECT_TAGS_KEY } from 'app/client_config';
 import cookie from "react-cookie";
 
-export default class TagsIndex extends React.Component {
+class TagsIndex extends React.Component {
     static propTypes = {
         tagsAll: PropTypes.object.isRequired,
     };
@@ -120,7 +120,7 @@ export default class TagsIndex extends React.Component {
     }
 }
 
-module.exports = {
+export default {
     path: 'tags(/:order)',
     component: connect(state => ({
         tagsAll: state.global.get('tags')

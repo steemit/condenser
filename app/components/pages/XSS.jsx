@@ -14,7 +14,7 @@ class XSS extends React.Component {
     }
 }
 
-module.exports = {
+export default {
     path: '/xss/test',
     component: XSS
 };

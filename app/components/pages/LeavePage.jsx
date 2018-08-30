@@ -45,7 +45,7 @@ class LeavePage extends Component {
     }
 }
 
-module.exports = {
+export default {
     path: 'leave_page',
     component: LeavePage
 };

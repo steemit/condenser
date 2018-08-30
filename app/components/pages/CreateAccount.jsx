@@ -849,7 +849,7 @@ function callApi(apiName, data) {
     });
 }
 
-module.exports = {
+export default {
     path: 'create_account',
     component: connect(
         state => ({

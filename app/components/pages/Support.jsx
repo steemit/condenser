@@ -17,7 +17,7 @@ class Support extends React.Component {
     }
 }
 
-module.exports = {
+export default {
     path: 'support.html',
     component: Support
 };

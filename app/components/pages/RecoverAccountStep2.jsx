@@ -178,7 +178,7 @@ class RecoverAccountStep2 extends React.Component {
     }
 }
 
-module.exports = {
+export default {
     path: 'recover_account_step_2',
     component: connect(
         state => {

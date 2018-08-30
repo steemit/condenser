@@ -28,7 +28,7 @@ class MarketLoader extends Component {
     }
 }
 
-module.exports = {
+export default {
     path: 'market',
     component: MarketLoader,
 };

@@ -189,7 +189,7 @@ class CreateAccountTestnet extends React.Component {
     }
 }
 
-module.exports = {
+export default {
     path: 'create_account',
     component: CreateAccountTestnet
 };

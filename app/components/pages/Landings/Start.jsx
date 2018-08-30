@@ -258,7 +258,7 @@ class Start extends PureComponent {
     };
 }
 
-module.exports = {
+export default {
     path: 'start',
     component: Start,
 };

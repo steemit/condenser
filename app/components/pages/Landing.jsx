@@ -17,7 +17,7 @@ class Landing extends PureComponent {
     }
 }
 
-module.exports = {
+export default {
     path: 'about',
     component: Landing,
 };

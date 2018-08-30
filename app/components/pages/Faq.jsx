@@ -13,7 +13,7 @@ class Faq extends React.Component {
     }
 }
 
-module.exports = {
+export default {
     path: 'faq.html',
     component: Faq
 };

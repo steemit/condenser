@@ -30,7 +30,7 @@ import Userpic from 'app/components/elements/Userpic';
 import Callout from 'app/components/elements/Callout';
 import normalizeProfile from 'app/utils/NormalizeProfile';
 
-export default class UserProfile extends React.Component {
+class UserProfile extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -489,7 +489,7 @@ export default class UserProfile extends React.Component {
     }
 }
 
-module.exports = {
+export default {
     path: '@:accountname(/:section)',
     component: connect(
         state => {

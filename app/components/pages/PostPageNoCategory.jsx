@@ -79,7 +79,7 @@ const StoreWrapped = connect(
     })
 )(PostWrapper);
 
-module.exports = {
+export default {
     path: '/@:username/:slug',
     component: StoreWrapped,
 };

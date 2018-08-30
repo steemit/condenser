@@ -1,6 +1,6 @@
 import Post from 'app/components/pages/Post';
 
-module.exports = {
+export default {
     path: '/(:category/)@:username/:slug',
     component: Post
 };

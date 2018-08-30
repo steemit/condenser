@@ -28,7 +28,7 @@ class WitnessesLoader extends Component {
     }
 }
 
-module.exports = {
+export default {
     path: '/~witnesses(/:witness)',
     component: WitnessesLoader,
 };

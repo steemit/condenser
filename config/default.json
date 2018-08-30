@@ -5,9 +5,9 @@
   "google_analytics_id": false,
   "helmet": {
     "directives": {
-      "childSrc": "'self' www.youtube.com staticxx.facebook.com w.soundcloud.com player.vimeo.com",
+      "childSrc": "'self' www.youtube.com staticxx.facebook.com w.soundcloud.com player.vimeo.com i.imgur.com",
       "connectSrc": "'self' steemit.com https://api.steemit.com api.blocktrades.us",
-      "defaultSrc": "'self' www.youtube.com staticxx.facebook.com player.vimeo.com",
+      "defaultSrc": "'self' www.youtube.com staticxx.facebook.com player.vimeo.com i.imgur.com",
       "fontSrc": "data: fonts.gstatic.com",
       "frameAncestors": "'none'",
       "imgSrc": "* data:",

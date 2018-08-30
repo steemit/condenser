@@ -147,7 +147,7 @@ class MarkdownViewer extends Component {
         // HtmlReady inserts ~~~ embed:${id} type ~~~
         for (let section of cleanText.split('~~~ embed:')) {
             const match = section.match(
-                /^([A-Za-z0-9\_\-]+) (youtube|vimeo) ~~~/
+                /^([A-Za-z0-9\_\-]+) (youtube|vimeo|imgur) ~~~/
             );
             if (match && match.length >= 3) {
                 const id = match[1];
@@ -179,6 +179,15 @@ class MarkdownViewer extends Component {
                                 mozallowfullscreen
                                 allowFullScreen
                             />
+                        </div>
+                    );
+                } else if (type === 'imgur') {
+                    const url = `https://imgur.com/${id}.mp4`;
+                    sections.push(
+                        <div key={idx++} className="videoWrapper">
+                            <video preload="auto" autoPlay="autoplay" loop="loop" style={{width: w}}>
+                                <source src={url} type="video/mp4"></source>
+                            </video>
                         </div>
                     );
                 } else {

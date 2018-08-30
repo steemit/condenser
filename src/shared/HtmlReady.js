@@ -235,6 +235,7 @@ function linkifyNode(child, state) {
         if (!child.data) return;
         child = embedYouTubeNode(child, state.links, state.images);
         child = embedVimeoNode(child, state.links, state.images);
+        child = embedImgurNode(child, state.links, state.images);
 
         const data = XMLSerializer.serializeToString(child);
         const content = linkify(
@@ -370,6 +371,35 @@ function vimeoId(data) {
         id: m[1],
         url: m[0],
         canonical: `https://player.vimeo.com/video/${m[1]}`,
+        // thumbnail: requires a callback - http://stackoverflow.com/questions/1361149/get-img-thumbnails-from-vimeo
+    };
+}
+
+function embedImgurNode(child, links /*images*/) {
+    try {
+        const data = child.data;
+        const imgur = imgurId(data);
+        if (!imgur) return child;
+
+        child.data = data.replace(imgur.url, `~~~ embed:${imgur.id} imgur ~~~`);
+
+        if (links) links.add(imgur.canonical);
+        // if(images) images.add(vimeo.thumbnail) // not available
+    } catch (error) {
+        console.log(error);
+    }
+    return child;
+}
+
+function imgurId(data) {
+    if (!data) return null;
+    const m = data.match(linksRe.imgur);
+    if (!m || m.length < 2) return null;
+
+    return {
+        id: m[1],
+        url: m[0],
+        canonical: `https://i.imgur.com/${m[1]}.mp4`,
         // thumbnail: requires a callback - http://stackoverflow.com/questions/1361149/get-img-thumbnails-from-vimeo
     };
 }

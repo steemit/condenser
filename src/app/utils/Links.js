@@ -46,6 +46,8 @@ export default {
     youTubeId: /(?:(?:youtube.com\/watch\?v=)|(?:youtu.be\/)|(?:youtube.com\/embed\/))([A-Za-z0-9\_\-]+)/i,
     vimeo: /https?:\/\/(?:vimeo.com\/|player.vimeo.com\/video\/)([0-9]+)\/*/,
     vimeoId: /(?:vimeo.com\/|player.vimeo.com\/video\/)([0-9]+)/,
+    imgur: /https?:\/\/(?:imgur.com\/|i.imgur.com\/)([A-Za-z0-9]+).gifv/,
+    imgurId: /(?:imgur.com\/|i.imgur.com\/)([A-Za-z0-9]+)/,
     // simpleLink: new RegExp(`<a href="(.*)">(.*)<\/a>`, 'ig'),
     ipfsPrefix: /(https?:\/\/.*)?\/ipfs/i,
 };

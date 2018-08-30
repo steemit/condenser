@@ -34,8 +34,5 @@
                 ]
             ]
         },
-        "production": {
-            "presets": ["react-optimize"]
-        }
     }
 }

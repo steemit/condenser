@@ -62,7 +62,6 @@ export default class PostsList extends PureComponent {
     componentDidMount() {
         window.addEventListener('scroll', this._onScroll);
         this._initialUrl = location.pathname + location.search + location.hash;
-        console.log(this.entryWrapper.clientWidth);
     }
 
     componentWillUnmount() {

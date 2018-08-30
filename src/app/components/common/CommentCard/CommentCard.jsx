@@ -73,11 +73,15 @@ const Category = styled.div`
     line-height: 26px;
     font-size: 14px;
     white-space: nowrap;
-    overflow: hidden;
     text-overflow: ellipsis;
     color: #fff;
     background: #789821;
     cursor: default;
+    overflow: hidden;
+
+    ${isNot('isCommentOpen')`
+        display: none;
+    `};
 `;
 
 const Title = styled.div`
@@ -94,6 +98,7 @@ const Title = styled.div`
 const TitleIcon = Icon.extend`
     position: relative;
     height: 20px;
+    min-width: 24px;
     margin-right: 6px;
     margin-bottom: -3px;
 `;
@@ -182,8 +187,8 @@ const ToggleCommentOpen = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 30px;
-    height: 30px;
+    min-width: 30px;
+    min-height: 30px;
     cursor: pointer;
 
     ${isNot('isCommentOpen')`
@@ -235,7 +240,7 @@ class CommentCard extends PureComponent {
         myVote: this._getMyVote(this.props),
         showReply: false,
         edit: false,
-        isCommentOpen: true,
+        isCommentOpen: true
     };
 
     componentWillReceiveProps(newProps) {
@@ -266,7 +271,10 @@ class CommentCard extends PureComponent {
         const { showReply, isCommentOpen } = this.state;
 
         return (
-            <Root className={cn(className)} isCommentOpen={isCommentOpen}>
+            <Root
+                className={cn(className)}
+                isCommentOpen={isCommentOpen}
+            >
                 {this._renderHeader()}
                 {this._renderBodyRe()}
                 {this._renderBodyText()}
@@ -307,7 +315,7 @@ class CommentCard extends PureComponent {
                         </ReLinkWrapper>
                     )}
                     <Filler />
-                    <Category>{category}</Category>
+                    <Category isCommentOpen={this.state.isCommentOpen}>{category}</Category>
                     <ToggleCommentOpen
                         onClick={this._toggleComment}
                         isCommentOpen={this.state.isCommentOpen}
@@ -335,12 +343,11 @@ class CommentCard extends PureComponent {
                     </TitleLink>
                 </ReLinkWrapper>
                 {showEditButton && !edit && isCommentOpen ? (
-                    <IconEditWrapper onClick={this._onEditClick}>
-                        <Icon
-                            name="pen"
-                            size={20}
-                            data-tooltip={'Редактировать комментарий'}
-                        />
+                    <IconEditWrapper
+                        onClick={this._onEditClick}
+                        data-tooltip={'Редактировать комментарий'}
+                    >
+                        <Icon name="pen" size={20} />
                     </IconEditWrapper>
                 ) : null}
             </Title>
@@ -485,10 +492,12 @@ class CommentCard extends PureComponent {
     };
 
     _toggleComment = () => {
-        this.setState({
-            edit: false,
-            isCommentOpen: !this.state.isCommentOpen,
-        });
+        this.setState(
+            {
+                edit: false,
+                isCommentOpen: !this.state.isCommentOpen,
+            }
+        );
     };
 }
 

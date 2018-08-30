@@ -206,7 +206,8 @@ class UserNavigation extends PureComponent {
         ) {
             this.setState({ screenLessThenMainContainer: true });
         }
-        if (wrapperWidth <= this.props.MAIN_CONTAINER_WIDTH_POINT && this.props.layout !== 'grid') {
+        if (wrapperWidth !== 0 && wrapperWidth <= this.props.MAIN_CONTAINER_WIDTH_POINT &&
+            this.props.layout !== 'grid') {
             this.props.changeProfileLayout('grid');
         }
         if (

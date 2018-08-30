@@ -26,7 +26,7 @@ export function* userWatches() {
 
 const highSecurityPages = Array(
     /\/market/,
-    /\/@.+\/(transfers|permissions|password)/,
+    /\/@.+\/(transfers|permissions|password|settings)/, // TODO: beautyfree links with redesign and routing
     /\/~witnesses/
 );
 
@@ -223,6 +223,7 @@ function* usernamePasswordLogin2({
     let authority = yield select(state => state.user.getIn(['authority', username]));
     const hasActiveAuth = authority.get('active') === 'full';
     if (!highSecurityLogin) {
+        console.log(123)
         const accountName = account.get('name');
         authority = authority.set('active', 'none');
         yield put(user.actions.setAuthority({ accountName, auth: authority }));

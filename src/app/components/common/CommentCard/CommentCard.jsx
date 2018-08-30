@@ -336,7 +336,11 @@ class CommentCard extends PureComponent {
                 </ReLinkWrapper>
                 {showEditButton && !edit && isCommentOpen ? (
                     <IconEditWrapper onClick={this._onEditClick}>
-                        <Icon name="pen" size={20} data-tooltip={'Редактировать комментарий'} />
+                        <Icon
+                            name="pen"
+                            size={20}
+                            data-tooltip={'Редактировать комментарий'}
+                        />
                     </IconEditWrapper>
                 ) : null}
             </Title>

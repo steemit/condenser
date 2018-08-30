@@ -291,7 +291,7 @@ class CommentCard extends PureComponent {
         const category = detransliterate(_data.category);
 
         return (
-            <Header isCommentOpen={this.state.isCommentOpen}>
+            <Header isCommentOpen={isCommentOpen}>
                 <HeaderLine>
                     {isCommentOpen ? (
                         <AuthorBlock>
@@ -315,10 +315,10 @@ class CommentCard extends PureComponent {
                         </ReLinkWrapper>
                     )}
                     <Filler />
-                    <Category isCommentOpen={this.state.isCommentOpen}>{category}</Category>
+                    <Category isCommentOpen={isCommentOpen}>{category}</Category>
                     <ToggleCommentOpen
                         onClick={this._toggleComment}
-                        isCommentOpen={this.state.isCommentOpen}
+                        isCommentOpen={isCommentOpen}
                     >
                         <Icon name="chevron" width="12" height="7" />
                     </ToggleCommentOpen>
@@ -334,7 +334,7 @@ class CommentCard extends PureComponent {
         const showEditButton = myAccountName === _data.author;
 
         return (
-            <Title isCommentOpen={this.state.isCommentOpen}>
+            <Title isCommentOpen={isCommentOpen}>
                 <ReLinkWrapper>
                     <TitleIcon name="comment" />
                     {tt('g.re2')}:{' '}
@@ -355,7 +355,7 @@ class CommentCard extends PureComponent {
     }
 
     _renderBodyText() {
-        const { edit } = this.state;
+        const { edit, isCommentOpen } = this.state;
         const { _content, _data } = this.props;
 
         return (
@@ -373,7 +373,7 @@ class CommentCard extends PureComponent {
                         to={_content.link}
                         onClick={this._onClick}
                         dangerouslySetInnerHTML={{ __html: _content.desc }}
-                        isCommentOpen={this.state.isCommentOpen}
+                        isCommentOpen={isCommentOpen}
                     />
                 )}
             </Fragment>

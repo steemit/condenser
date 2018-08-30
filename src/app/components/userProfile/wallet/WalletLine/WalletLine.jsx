@@ -43,9 +43,7 @@ const Root = styled.div`
 
 const Line = styled.div`
     display: flex;
-    justify-content: space-between;
     align-items: flex-start;
-    flex-wrap: wrap;
     padding: 0 20px;
 `;
 
@@ -73,10 +71,10 @@ const WhoName = styled.div`
     text-overflow: ellipsis;
 `;
 
-const WhoTitle = styled.div``;
-
-const WhoWrapper = styled.div`
-    display: flex;
+const WhoTitle = styled.div`
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 `;
 
 const WhoLink = styled(Link)`
@@ -95,15 +93,15 @@ const TimeStamp = styled.div`
 `;
 
 const Memo = styled.div`
-    margin-left: 20px;
+    margin-left: 10px;
     display: flex;
     flex-grow: 1.5;
     flex-basis: 10px;
     overflow: hidden;
     
-    @media (min-width: 890px) and (max-width: 1023px), (max-width: 550px) {
-        min-width: 24px;
+    @media (min-width: 890px) and (max-width: 1050px), (max-width: 550px) {
         flex-grow: 0;
+        min-width: 24px;
     }
 `;
 
@@ -125,7 +123,7 @@ const MemoCut = styled(TextCut)`
     flex-grow: 1;
     margin: 15px 0;
     
-    @media (min-width: 890px) and (max-width: 1023px), (max-width: 550px) {
+    @media (min-width: 890px) and (max-width: 1050px), (max-width: 550px) {
         display: none;
     }
 `;
@@ -185,8 +183,6 @@ const Value = styled.div`
     flex-shrink: 0;
     flex-direction: column;
     align-items: flex-end;
-    flex-grow: 1;
-    justify-content: flex-end;
     width: 80px;
     height: 80px;
     justify-content: center;
@@ -308,22 +304,20 @@ export default class WalletLine extends PureComponent {
                     </DateWrapper>
                 ) : null}
                 <Line>
-                    <WhoWrapper>
-                        <LineIcon name={data.icon} color={data.color} />
-                        <Who>
-                            {data.name ? (
-                                <WhoName>
-                                    {data.type === DIRECTION.SENT ? 'Для ' : 'От '}
-                                    <WhoLink to={`/@${data.name}`}>@{data.name}</WhoLink>
-                                </WhoName>
-                            ) : null}
-                            {data.title ? <WhoTitle>{data.title}</WhoTitle> : null}
-                            {data.post ? this._renderPostLink(data.post) : null}
-                            <TimeStamp>
-                                <TimeAgoWrapper date={data.stamp} />
-                            </TimeStamp>
-                        </Who>
-                    </WhoWrapper>
+                    <LineIcon name={data.icon} color={data.color} />
+                    <Who>
+                        {data.name ? (
+                            <WhoName>
+                                {data.type === DIRECTION.SENT ? 'Для ' : 'От '}
+                                <WhoLink to={`/@${data.name}`}>@{data.name}</WhoLink>
+                            </WhoName>
+                        ) : null}
+                        {data.title ? <WhoTitle>{data.title}</WhoTitle> : null}
+                        {data.post ? this._renderPostLink(data.post) : null}
+                        <TimeStamp>
+                            <TimeAgoWrapper date={data.stamp} />
+                        </TimeStamp>
+                    </Who>
                     {data.memo ? (
                         <Memo>
                             <MemoIcon

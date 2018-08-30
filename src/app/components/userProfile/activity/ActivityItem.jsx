@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Link } from 'react-router';
+import { List } from 'immutable';
 
 import tt from 'counterpart';
 import Interpolate from 'react-interpolate-component';
@@ -9,6 +10,7 @@ import normalizeProfile from 'app/utils/NormalizeProfile';
 
 import Avatar from 'src/app/components/common/Avatar';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
+import Icon from 'golos-ui/Icon';
 
 const Wrapper = styled.div`
     display: flex;
@@ -40,6 +42,8 @@ const ActivityTop = styled.div`
 `;
 
 const ActivityDate = styled.div`
+    flex: 1;
+    text-align: right;
     font-size: 12px;
     color: #959595;
 `;
@@ -50,16 +54,23 @@ const ActivityText = styled.div`
     font-size: 16px;
 `;
 
+const LeftSide = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    margin-left: 6px;
+    color: #2879ff;
+`;
+
 const icons = {
     vote: {
         name: 'like',
-        width: 14,
-        height: 14,
+        size: 14,
     },
     flag: {
         name: 'dislike',
-        width: 14,
-        height: 14,
+        size: 14,
     },
     transfer: {
         name: 'coins',
@@ -68,66 +79,91 @@ const icons = {
     },
     reply: {
         name: 'comment',
-        width: 12,
-        height: 12,
+        size: 12,
     },
     subscribe: {
         name: 'radion-checked',
-        width: 14,
-        height: 14,
+        size: 14,
     },
     unsubscribe: {
         name: 'round-cross',
-        width: 14,
-        height: 14,
+        size: 14,
     },
     mention: {
         name: 'round-user',
-        width: 14,
-        height: 14,
+        size: 14,
     },
     repost: {
         name: 'avatar',
-        width: 14,
-        height: 14,
+        size: 14,
+    },
+    reward: {
+        name: 'coins',
+        width: 23,
+        height: 18,
+    },
+    curatorReward: {
+        name: 'coins',
+        width: 23,
+        height: 18,
     },
     witnessVote: null,
     witnessCancelVote: null,
 };
 
-export default class ActivityItem extends Component {
-    static propTypes = {
-        // account: PropTypes.object,
-    };
+const emptyList = List();
 
+export default class ActivityItem extends Component {
     getPropsForInterpolation() {
         const { notification } = this.props;
 
         const computed = notification.get('computed');
+        const eventType = notification.get('eventType');
+        const props = {};
+
         if (
-            ['vote', 'flag', 'reply', 'mention', 'repost'].includes(notification.get('eventType'))
+            ['vote', 'flag', 'reply', 'mention', 'repost', 'reward', 'curatorReward'].includes(
+                eventType
+            )
         ) {
-            return {
-                content: <Link to={computed.get('link')}>{computed.get('title')}</Link>,
-            };
-        } else if (notification.get('eventType') === 'transfer') {
-            return {
-                amount: notification.get('amount'),
-            };
+            props.content = <Link to={computed.get('link')}>{computed.get('title')}</Link>;
         }
 
-        return {};
+        if (['reward'].includes(eventType)) {
+            props.amount = notification.getIn(['reward', 'gbg']);
+        }
+
+        if (['curatorReward'].includes(eventType)) {
+            props.amount = notification.get('curatorReward');
+        }
+
+        if (['transfer'].includes(eventType)) {
+            props.amount = notification.get('amount');
+        }
+
+        return props;
     }
 
     render() {
         const { notification } = this.props;
 
-        const account = notification.getIn(['computed', 'accounts']).get(0);
-        const userName = account.get('name');
-        const { name, profile_image } = normalizeProfile(account.toJS());
+        let leftSide = null;
+        let nameLink = null;
 
-        return (
-            <Wrapper>
+        if (['reward', 'curatorReward'].includes(notification.get('eventType'))) {
+            leftSide = (
+                <LeftSide>
+                    <Icon {...icons[notification.get('eventType')]} />
+                </LeftSide>
+            );
+        }
+
+        const account = notification.getIn(['computed', 'accounts'], emptyList).get(0);
+        if (account) {
+            const userName = account.get('name');
+            const { name, profile_image } = normalizeProfile(account.toJS());
+
+            leftSide = (
                 <Link to={`/@${userName}`}>
                     <Avatar
                         avatarUrl={profile_image}
@@ -135,9 +171,16 @@ export default class ActivityItem extends Component {
                         icon={icons[notification.get('eventType')]}
                     />
                 </Link>
+            );
+            nameLink = <AuthorName to={`/@${userName}`}>{name || userName}</AuthorName>;
+        }
+
+        return (
+            <Wrapper>
+                {leftSide}
                 <ActivityDesc>
                     <ActivityTop>
-                        <AuthorName to={`/@${userName}`}>{name || userName}</AuthorName>
+                        {nameLink}
                         <ActivityDate>
                             <TimeAgoWrapper date={notification.get('createdAt')} />
                         </ActivityDate>

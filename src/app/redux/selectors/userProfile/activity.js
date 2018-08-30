@@ -44,15 +44,16 @@ export const hydratedNotificationsSelector = createDeepEqualSelector(
         notifications.map((notification, key) =>
             notification.withMutations(notify => {
                 // Add content title and link from store data
+                const eventType = notify.get('eventType');
                 if (
-                    ['vote', 'flag', 'repost', 'reply', 'mention'].includes(notify.get('eventType'))
+                    ['vote', 'flag', 'repost', 'reply', 'mention', 'reward', 'curatorReward'].includes(eventType)
                 ) {
                     let author = '';
-                    if (['vote', 'flag'].includes(notify.get('eventType'))) {
+                    if (['vote', 'flag', 'reward'].includes(eventType)) {
                         author = account.get('name');
-                    }
-
-                    if (['repost', 'reply', 'mention'].includes(notify.get('eventType'))) {
+                    } else if (['curatorReward'].includes(eventType)) {
+                        author = notify.get('curatorTargetAuthor');
+                    } else if (['repost', 'reply', 'mention'].includes(eventType)) {
                         author = notify.get('fromUsers').get(0);
                     }
 

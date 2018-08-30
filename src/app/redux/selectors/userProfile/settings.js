@@ -1,11 +1,25 @@
-import { createDeepEqualSelector, pageAccountSelector, statusSelector, globalSelector } from './../common';
+import {
+    createDeepEqualSelector,
+    pageAccountSelector,
+    currentUserSelector,
+    statusSelector,
+    globalSelector,
+} from './../common';
+import { Map } from 'immutable';
 import o2j from 'shared/clash/object2json';
 
 // Settings selectors
 
+const emptyMap = Map();
+
 export const settingsContentSelector = createDeepEqualSelector(
-    [pageAccountSelector, statusSelector('settings'), globalSelector('UserKeys_wifShown')],
-    (pageAccount, settingsStatus, wifShown) => {
+    [
+        pageAccountSelector,
+        currentUserSelector,
+        statusSelector('settings'),
+        globalSelector('UserKeys_wifShown'),
+    ],
+    (pageAccount, currentUser, settingsStatus, wifShown) => {
         const tempAccount = pageAccount.toJS();
 
         let metaData = tempAccount ? o2j.ifStringParseJSON(tempAccount.json_metadata) : {};
@@ -28,6 +42,7 @@ export const settingsContentSelector = createDeepEqualSelector(
             profile,
 
             wifShown,
+            privateKeys: currentUser.getIn(['private_keys'], emptyMap),
             options: settingsStatus.get('options'),
             isFetching: settingsStatus.get('isFetching'),
             isChanging: settingsStatus.get('isChanging'),

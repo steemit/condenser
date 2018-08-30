@@ -7,6 +7,7 @@ import { PrivateKey } from 'golos-js/lib/auth/ecc';
 
 import user from 'app/redux/User';
 import transaction from 'app/redux/Transaction';
+import g from 'app/redux/GlobalReducer';
 
 import { FORM_ERROR } from 'final-form';
 import { pick } from 'ramda';
@@ -62,6 +63,12 @@ import { SettingsShow } from 'src/app/components/userProfile';
         },
         getSettingsOptions: () => dispatch(getSettingsOptions()),
         setSettingsOptions: values => dispatch(setSettingsOptions(values)),
+        showLogin: ({ username, authType }) => {
+            dispatch(user.actions.showLogin({ loginDefault: { username, authType } }));
+        },
+        showQRKey: ({ type, isPrivate, text }) => {
+            dispatch(g.actions.showDialog({ name: 'qr_key', params: { type, isPrivate, text } }));
+        },
     })
 )
 export default class SettingsContent extends PureComponent {
@@ -69,6 +76,7 @@ export default class SettingsContent extends PureComponent {
         account: PropTypes.object,
         profile: PropTypes.object,
 
+        privateKeys: PropTypes.instanceOf(Map),
         options: PropTypes.instanceOf(Map),
         isFetching: PropTypes.bool,
         isChanging: PropTypes.bool,
@@ -77,6 +85,8 @@ export default class SettingsContent extends PureComponent {
         changePassword: PropTypes.func,
 
         getSettingsOptions: PropTypes.func,
+        showLogin: PropTypes.func,
+        showQRKey: PropTypes.func,
     };
 
     componentDidMount() {
@@ -174,18 +184,30 @@ export default class SettingsContent extends PureComponent {
     };
 
     render() {
-        const { profile, account, options, isFetching, isChanging } = this.props;
+        const {
+            profile,
+            account,
+            options,
+            privateKeys,
+            isFetching,
+            isChanging,
+            showLogin,
+            showQRKey,
+        } = this.props;
 
         return (
             <SettingsShow
                 profile={profile}
                 account={account}
+                privateKeys={privateKeys}
                 options={options}
                 isFetching={isFetching}
                 isChanging={isChanging}
                 onSubmitBlockchain={this.onSubmitBlockchain}
                 onSubmitGate={this.onSubmitGate}
                 onSubmitChangePassword={this.onSubmitChangePassword}
+                showLogin={showLogin}
+                showQRKey={showQRKey}
             />
         );
     }

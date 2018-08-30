@@ -10,25 +10,29 @@ export function* hydrateNotifications(notifications) {
     const currentUser = yield select(state => state.user.get('current'));
 
     for (let notification of notifications) {
-        const { fromUsers } = notification;
+        const { fromUsers = [], eventType } = notification;
 
         for (let user of fromUsers) {
             let account = yield select(state => state.global.get('accounts').get(user));
             if (!account) hydrateUsers.push(user);
         }
 
-        if (['vote', 'flag', 'repost', 'reply', 'mention'].includes(notification.eventType)) {
+        if (
+            ['vote', 'flag', 'repost', 'reply', 'mention', 'reward', 'curatorReward'].includes(
+                eventType
+            )
+        ) {
             let author = '';
-            if (['vote', 'flag'].includes(notification.eventType)) {
+            if (['vote', 'flag', 'reward'].includes(eventType)) {
                 author = currentUser.get('username');
-            }
-
-            if (['repost', 'reply', 'mention'].includes(notification.eventType)) {
+            } else if (['curatorReward'].includes(eventType)) {
+                author = notification.curatorTargetAuthor;
+            } else if (['repost', 'reply', 'mention'].includes(eventType)) {
                 author = fromUsers[0];
             }
 
             const { permlink } = notification;
-            let content = yield select(state =>
+            const content = yield select(state =>
                 state.global.getIn(['content', `${author}/${permlink}`])
             );
 

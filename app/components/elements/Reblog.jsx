@@ -9,7 +9,7 @@ import tt from 'counterpart';
 
 const {string, func} = PropTypes
 
-export default class Reblog extends React.Component {
+class Reblog extends React.Component {
     static propTypes = {
         account: string,
         author: string,
@@ -73,7 +73,8 @@ export default class Reblog extends React.Component {
         </span>
     }
 }
-module.exports = connect(
+
+export default connect(
     (state, ownProps) => {
         const account = state.user.getIn(['current', 'username']) || state.offchain.get('account')
         return {...ownProps, account}

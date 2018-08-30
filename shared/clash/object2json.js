@@ -10,12 +10,12 @@ const expo = {
         return item;
     },
 };
-export { expo as default };
+export default expo;
 
-exports.test = {
-    run: () => {
-        let ob = { a: 2 },
-            st = '{"a":2}';
-        console.log('test eq2', expo.ifStringParseJSON(st).a == ob.a);
-    },
-};
+// exports.test = {
+//     run: () => {
+//         let ob = { a: 2 },
+//             st = '{"a":2}';
+//         console.log('test eq2', expo.ifStringParseJSON(st).a == ob.a);
+//     },
+// };

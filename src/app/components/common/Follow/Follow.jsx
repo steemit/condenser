@@ -16,7 +16,7 @@ const ButtonStyled = Button.extend`
     margin-right: 8px;
 `;
 
-export default class Follow extends Component {
+class Follow extends Component {
     static propTypes = {
         following: PropTypes.string,
         follower: PropTypes.string, // OPTIONAL default to current user
@@ -120,7 +120,7 @@ export default class Follow extends Component {
 const emptyMap = Map();
 const emptySet = Set();
 
-module.exports = connect(
+export default connect(
     (state, ownProps) => {
         let { follower } = ownProps;
         if (!follower) {

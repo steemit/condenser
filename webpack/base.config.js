@@ -6,7 +6,7 @@ const alias = require('./alias');
 module.exports = {
     context: path.resolve(__dirname, '..'),
     entry: {
-        app: ['babel-polyfill', './app/Main.js'],
+        app: ['@babel/polyfill', './app/Main.js'],
         // vendor: ['react', 'react-dom', 'react-router']
     },
     output: {

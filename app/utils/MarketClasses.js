@@ -2,7 +2,7 @@ import {roundDown, roundUp} from "./MarketUtils";
 import { LIQUID_TICKER, DEBT_TICKER } from 'app/client_config'
 const precision = 1000;
 
-class Order {
+export class Order {
     constructor(order, side) {
         this.side = side;
         this.price = parseFloat(order.real_price);
@@ -55,7 +55,7 @@ class Order {
     }
 }
 
-class TradeHistory {
+export class TradeHistory {
 
     constructor(fill) {
         // Norm date (FF bug)
@@ -110,9 +110,4 @@ class TradeHistory {
             this.getStringPrice() === order.getStringPrice()
         );
     }
-}
-
-module.exports = {
-    Order,
-    TradeHistory
 }

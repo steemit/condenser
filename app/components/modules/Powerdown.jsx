@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Slider from 'react-rangeslider';
 import tt from 'counterpart';
-import * as globalActions from 'app/redux/GlobalReducer';
+import g from 'app/redux/GlobalReducer';
 import user from 'app/redux/User';
 import transaction from 'app/redux/Transaction'
 import { VEST_TICKER, LIQUID_TICKER, VESTING_TOKEN } from 'app/client_config';
@@ -212,7 +212,7 @@ export default connect(
         powerDown: e => {
             e.preventDefault();
             const name = 'powerDown';
-            dispatch(globalActions.showDialog({ name }));
+            dispatch(g.actions.showDialog({ name }));
         },
         withdrawVesting: ({
             account,

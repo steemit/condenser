@@ -136,9 +136,8 @@ class App extends React.Component {
             a.hostname &&
             a.hostname !== window.location.hostname &&
             !availableLinks.includes(a.href) &&
-            !availableDomains.some(domain =>
-                domain === a.hostname ||
-                domain.endsWith('.' + a.hostname)
+            !availableDomains.some(
+                domain => domain === a.hostname || ('.' + domain).endsWith(a.hostname)
             )
         ) {
             e.stopPropagation();

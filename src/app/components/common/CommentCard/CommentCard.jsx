@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import cn from 'classnames';
 import { Link } from 'react-router';
 import styled from 'styled-components';
+import { isNot } from 'styled-is';
 import { connect } from 'react-redux';
 import tt from 'counterpart';
 import extractContent from 'app/utils/ExtractContent';
@@ -72,48 +73,62 @@ const Category = styled.div`
     line-height: 26px;
     font-size: 14px;
     white-space: nowrap;
-    overflow: hidden;
     text-overflow: ellipsis;
     color: #fff;
     background: #789821;
     cursor: default;
+    overflow: hidden;
+
+    ${isNot('isCommentOpen')`
+        display: none;
+    `};
 `;
 
-const Body = styled.div`
-    position: relative;
-    padding: 0 18px 12px;
-`;
 const Title = styled.div`
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    padding: 0 18px;
     margin-bottom: 8px;
-    line-height: 29px;
-    font-family: ${a => a.theme.fontFamily};
-    font-size: 20px;
-    font-weight: bold;
-    color: #212121;
+
+    ${isNot('isCommentOpen')`
+        display: none;
+    `};
 `;
 const TitleIcon = Icon.extend`
     position: relative;
     height: 20px;
+    min-width: 24px;
     margin-right: 6px;
     margin-bottom: -3px;
 `;
 const TitleLink = styled(Link)`
     color: #212121 !important;
     text-decoration: underline;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 `;
 
 const PostBody = styled(Link)`
     display: block;
+    padding: 0 18px;
     font-family: ${a => a.theme.fontFamily};
     color: #959595 !important;
+
+    ${isNot('isCommentOpen')`
+        display: none;
+    `};
 `;
 
 const Footer = styled.div`
     position: relative;
     display: flex;
     flex-shrink: 0;
+    justify-content: space-between;
     align-items: center;
-    padding: 12px 18px;
+    flex-wrap: wrap;
+    padding: 12px 0 0 0;
     z-index: 1;
     pointer-events: none;
 
@@ -121,14 +136,9 @@ const Footer = styled.div`
         pointer-events: initial;
     }
 
-    @media (min-width: 890px) and (max-width: 1000px), (max-width: 420px) {
-        flex-direction: column;
-
-        & > div:first-child {
-            width: 100%;
-            justify-content: space-between;
-        }
-    }
+    ${isNot('isCommentOpen')`
+        display: none;
+    `};
 `;
 
 const Filler = styled.div`
@@ -136,20 +146,30 @@ const Filler = styled.div`
 `;
 
 const Root = styled.div`
+    display: flex;
+    flex-direction: column;
     position: relative;
     border-radius: 8px;
     background: #ffffff;
+    overflow: hidden;
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.06);
+
+    ${isNot('isCommentOpen')`
+        justify-content: center;
+        height: 50px;
+    `};
 `;
 
 const Reply = styled.div`
     padding: 0 18px 18px 18px;
 `;
 
-const IconEdit = Icon.extend`
-    position: absolute;
-    top: 6px;
-    right: 23px;
+const IconEditWrapper = styled.div`
+    min-width: 30px;
+    min-height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     color: #aaa;
     cursor: pointer;
     transition: color 0.15s;
@@ -161,6 +181,50 @@ const IconEdit = Icon.extend`
 
 const ButtonStyled = styled(Button)`
     margin-left: 18px;
+`;
+
+const ToggleCommentOpen = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 30px;
+    min-height: 30px;
+    cursor: pointer;
+
+    ${isNot('isCommentOpen')`
+        transform: rotate(180deg); 
+        color: #b7b7ba;
+    `};
+`;
+
+const ReLinkWrapper = styled.div`
+    padding-right: 10px;
+    display: flex;
+    align-items: center;
+    line-height: 29px;
+    font-family: ${a => a.theme.fontFamily};
+    font-size: 20px;
+    font-weight: bold;
+    color: #212121;
+    overflow: hidden;
+`;
+
+const CommentVotePanel = styled(VotePanel)`
+    width: 257px;
+
+    @media (min-width: 890px) and (max-width: 1087px), (max-width: 502px) {
+        flex-grow: 1;
+        justify-content: space-between;
+    }
+`;
+
+const CommentReplyBlock = styled(ReplyBlock)`
+    margin: 0;
+
+    @media (min-width: 890px) and (max-width: 1087px), (max-width: 502px) {
+        flex-grow: 1;
+        justify-content: center;
+    }
 `;
 
 class CommentCard extends PureComponent {
@@ -176,6 +240,7 @@ class CommentCard extends PureComponent {
         myVote: this._getMyVote(this.props),
         showReply: false,
         edit: false,
+        isCommentOpen: true,
     };
 
     componentWillReceiveProps(newProps) {
@@ -202,128 +267,141 @@ class CommentCard extends PureComponent {
     }
 
     render() {
-        const { data, className } = this.props;
-        const { showReply } = this.state;
-
-        this._data = data.toJS();
-        this._content = extractContent(immutableAccessor, data);
+        const { className } = this.props;
+        const { showReply, isCommentOpen } = this.state;
 
         return (
-            <Root className={cn(className)}>
+            <Root className={cn(className)} isCommentOpen={isCommentOpen}>
                 {this._renderHeader()}
-                {this._renderBody()}
+                {this._renderBodyRe()}
+                {this._renderBodyText()}
                 {this._renderFooter()}
-                {showReply ? this._renderReplyEditor() : null}
+                {Boolean(showReply) && this._renderReplyEditor()}
             </Root>
         );
     }
 
     _renderHeader() {
-        const author = this._data.author;
-        const category = detransliterate(this._data.category);
+        const { isCommentOpen } = this.state;
+        const { parentLink, title, _data } = this.props;
+        const author = _data.author;
+        const category = detransliterate(_data.category);
 
         return (
-            <Header>
+            <Header isCommentOpen={isCommentOpen}>
                 <HeaderLine>
-                    <AuthorBlock>
-                        <Avatar href={`/@${author}`}>
-                            <Userpic account={author} size={42} />
-                        </Avatar>
-                        <PostDesc>
-                            <AuthorName href={`/@${author}`}>{author}</AuthorName>
-                            <PostDate>
-                                <TimeAgoWrapper date={this._data.created} />
-                            </PostDate>
-                        </PostDesc>
-                    </AuthorBlock>
+                    {isCommentOpen ? (
+                        <AuthorBlock>
+                            <Avatar href={`/@${author}`}>
+                                <Userpic account={author} size={42} />
+                            </Avatar>
+                            <PostDesc>
+                                <AuthorName href={`/@${author}`}>{author}</AuthorName>
+                                <PostDate>
+                                    <TimeAgoWrapper date={_data.created} />
+                                </PostDate>
+                            </PostDesc>
+                        </AuthorBlock>
+                    ) : (
+                        <ReLinkWrapper>
+                            <TitleIcon name="comment" />
+                            {tt('g.re2')}:{' '}
+                            <TitleLink to={parentLink} onClick={this._onTitleClick}>
+                                {title}
+                            </TitleLink>
+                        </ReLinkWrapper>
+                    )}
                     <Filler />
-                    <Category>{category}</Category>
+                    <Category isCommentOpen={isCommentOpen}>{category}</Category>
+                    <ToggleCommentOpen onClick={this._toggleComment} isCommentOpen={isCommentOpen}>
+                        <Icon name="chevron" width="12" height="7" />
+                    </ToggleCommentOpen>
                 </HeaderLine>
             </Header>
         );
     }
 
-    _renderBody() {
+    _renderBodyRe() {
         const { myAccountName } = this.props;
-        const { edit } = this.state;
-
-        let title = this._content.title;
-        let parentLink = this._content.link;
-
-        if (this._data.parent_author) {
-            title = this._data.root_title;
-            parentLink = `/${this._data.category}/@${this._data.parent_author}/${
-                this._data.parent_permlink
-            }`;
-        }
-
-        const showEditButton = myAccountName === this._data.author;
+        const { edit, isCommentOpen } = this.state;
+        const { parentLink, title, _data } = this.props;
+        const showEditButton = myAccountName === _data.author;
 
         return (
-            <Body>
-                <Title>
+            <Title isCommentOpen={isCommentOpen}>
+                <ReLinkWrapper>
                     <TitleIcon name="comment" />
                     {tt('g.re2')}:{' '}
                     <TitleLink to={parentLink} onClick={this._onTitleClick}>
                         {title}
                     </TitleLink>
-                    {showEditButton && !edit ? (
-                        <IconEdit
-                            name="pen"
-                            size={20}
-                            data-tooltip={'Редактировать комментарий'}
-                            onClick={this._onEditClick}
-                        />
-                    ) : null}
-                </Title>
+                </ReLinkWrapper>
+                {Boolean(showEditButton && !edit) && (
+                    <IconEditWrapper
+                        onClick={this._onEditClick}
+                        data-tooltip={'Редактировать комментарий'}
+                    >
+                        <Icon name="pen" size={20} />
+                    </IconEditWrapper>
+                )}
+            </Title>
+        );
+    }
+
+    _renderBodyText() {
+        const { edit, isCommentOpen } = this.state;
+        const { _content, _data, htmlContent } = this.props;
+
+        return (
+            <Fragment>
                 {edit ? (
                     <CommentFormLoader
                         reply
                         editMode
-                        params={this._data}
+                        params={_data}
                         onSuccess={this._onEditDone}
                         onCancel={this._onEditDone}
                     />
                 ) : (
                     <PostBody
-                        to={this._content.link}
+                        to={_content.link}
                         onClick={this._onClick}
-                        dangerouslySetInnerHTML={{ __html: this._content.desc }}
+                        dangerouslySetInnerHTML={htmlContent}
+                        isCommentOpen={isCommentOpen}
                     />
                 )}
-            </Body>
+            </Fragment>
         );
     }
 
     _renderFooter() {
-        const { data, myAccountName, allowInlineReply } = this.props;
+        const { data, myAccountName, allowInlineReply, _content, _data } = this.props;
 
         return (
-            <Footer>
-                <VotePanel data={data} me={myAccountName} onChange={this._onVoteChange} />
-                <Filler />
-                <ReplyBlock
+            <Footer isCommentOpen={this.state.isCommentOpen}>
+                <CommentVotePanel data={data} me={myAccountName} onChange={this._onVoteChange} />
+                <CommentReplyBlock
                     count={data.get('children')}
-                    link={this._content.link}
+                    link={_content.link}
                     text="Комментарии"
                 />
-                {allowInlineReply && this._data.author !== myAccountName ? (
+                {Boolean(allowInlineReply && _data.author !== myAccountName) && (
                     <ButtonStyled light onClick={this._onReplyClick}>
                         <Icon name="comment" size={18} /> Ответить
                     </ButtonStyled>
-                ) : null}
+                )}
             </Footer>
         );
     }
 
     _renderReplyEditor() {
-        const { data } = this.props;
+        const { _data } = this.props;
 
         return (
             <Reply>
                 <CommentFormLoader
                     reply
-                    params={data.toJS()}
+                    params={_data}
                     onSuccess={this._onReplySuccess}
                     onCancel={this._onReplyCancel}
                 />
@@ -332,14 +410,15 @@ class CommentCard extends PureComponent {
     }
 
     _onTitleClick = e => {
+        const { _data } = this.props;
         if (this.props.onClick) {
             e.preventDefault();
 
             const url = e.currentTarget.href;
 
-            if (this._data.parent_author) {
+            if (_data.parent_author) {
                 this.props.onClick({
-                    permLink: `${this._data.parent_author}/${this._data.parent_permlink}`,
+                    permLink: `${_data.parent_author}/${_data.parent_permlink}`,
                     url,
                 });
             } else {
@@ -356,7 +435,7 @@ class CommentCard extends PureComponent {
             e.preventDefault();
             this.props.onClick({
                 permLink: this.props.permLink,
-                url: this._content.link,
+                url: this.props._content.link,
             });
         }
     };
@@ -388,14 +467,14 @@ class CommentCard extends PureComponent {
     };
 
     _onVoteChange = async percent => {
-        const props = this.props;
+        const { data, myAccountName } = this.props;
         const { myVote } = this.state;
 
         if (await confirmVote(myVote, percent)) {
             this.props.onVote(percent, {
-                myAccountName: props.myAccountName,
-                author: props.data.get('author'),
-                permlink: props.data.get('permlink'),
+                myAccountName: myAccountName,
+                author: data.get('author'),
+                permlink: data.get('permlink'),
             });
         }
     };
@@ -405,13 +484,38 @@ class CommentCard extends PureComponent {
             showReply: true,
         });
     };
+
+    _toggleComment = () => {
+        this.setState({
+            edit: false,
+            isCommentOpen: !this.state.isCommentOpen,
+        });
+    };
 }
 
 export default connect(
     (state, props) => {
+        const data = state.global.getIn(['content', props.permLink]);
+        const _data = data.toJS();
+        const _content = extractContent(immutableAccessor, data);
+        const htmlContent = { __html: _content.desc };
+
+        let parentLink = _content.link;
+        let title = _content.title;
+
+        if (_data.parent_author) {
+            title = _data.root_title;
+            parentLink = `/${_data.category}/@${_data.parent_author}/${_data.parent_permlink}`;
+        }
+
         return {
+            data,
+            title,
+            parentLink,
+            htmlContent,
+            _data,
+            _content,
             myAccountName: state.user.getIn(['current', 'username']),
-            data: state.global.getIn(['content', props.permLink]),
         };
     },
     dispatch => ({

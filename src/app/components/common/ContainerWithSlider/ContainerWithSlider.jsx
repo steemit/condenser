@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import Container from '../Container';
-import * as ReactDOM from 'react-dom';
 import Icon from 'golos-ui/Icon';
 
 const Wrapper = styled.div`
@@ -20,7 +19,7 @@ const ArrowContainer = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 10px;
+    width: 20px;
     height: 100%;
     cursor: pointer;
 `;
@@ -82,11 +81,11 @@ class ContainerWithSlider extends Component {
                         <LeftArrow />
                     </LeftArrowContainer>
                 )}
-                <Container align="center" ref={ref => (this.container = ReactDOM.findDOMNode(ref))}>
+                <Container align="center" innerRef={ref => (this.container = ref)}>
                     {children}
                 </Container>
                 <RightArrowContianer
-                    ref={ref => (this.rightArrow = ReactDOM.findDOMNode(ref))}
+                    innerRef={ref => (this.rightArrow = ref)}
                     onClick={this._showNextIcon}
                 >
                     <RightArrow />
@@ -116,8 +115,8 @@ class ContainerWithSlider extends Component {
         let currentOffsetIndex = this.state.currentOffsetIndex;
         let currentOffset = children[currentOffsetIndex];
 
-        const RIGHT_PADDING = 20;
-        const LEFT_PADDING = currentOffsetIndex > 0 ? 10 : 0;
+        const RIGHT_PADDING = 30;
+        const LEFT_PADDING = currentOffsetIndex > 0 ? 20 : 0;
         const LEFT = children[0].offsetLeft - currentOffset.offsetLeft + LEFT_PADDING;
 
         rightArrow.style.display = 'none';

@@ -76,18 +76,23 @@ class ContainerWithSlider extends Component {
                         <LeftArrow />
                     </LeftArrowContainer>
                 )}
-                <Container align="center" innerRef={ref => (this.container = ref)}>
+                <Container align="center" innerRef={this._setContainerRef}>
                     {children}
                 </Container>
-                <RightArrowContianer
-                    innerRef={ref => (this.rightArrow = ref)}
-                    onClick={this._showNextIcon}
-                >
+                <RightArrowContianer innerRef={this._setRightArrow} onClick={this._showNextIcon}>
                     <RightArrow />
                 </RightArrowContianer>
             </Wrapper>
         );
     }
+
+    _setRightArrow = ref => {
+        this.rightArrow = ref;
+    };
+
+    _setContainerRef = ref => {
+        this.container = ref;
+    };
 
     _showNextIcon = e => {
         e.stopPropagation();
@@ -104,11 +109,11 @@ class ContainerWithSlider extends Component {
     };
 
     _setStyleForIconsNavigation = () => {
-        let container = this.container;
-        let rightArrow = this.rightArrow;
-        let children = container.children;
-        let currentOffsetIndex = this.state.currentOffsetIndex;
-        let currentOffset = children[currentOffsetIndex];
+        const container = this.container;
+        const rightArrow = this.rightArrow;
+        const children = container.children;
+        const currentOffsetIndex = this.state.currentOffsetIndex;
+        const currentOffset = children[currentOffsetIndex];
 
         const RIGHT_PADDING = 30;
         const LEFT_PADDING = currentOffsetIndex > 0 ? 20 : 0;

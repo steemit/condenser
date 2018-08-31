@@ -11,6 +11,7 @@ import Icon from 'golos-ui/Icon';
 import { changeProfileLayout } from 'src/app/redux/actions/ui';
 import ContainerWithSlider from '../../../common/ContainerWithSlider/ContainerWithSlider';
 import * as ReactDOM from 'react-dom';
+import throttle from 'lodash/throttle';
 
 const TabLink = styled(StyledTabLink)`
     &.${({ activeClassName }) => activeClassName} {
@@ -74,12 +75,9 @@ const SimpleIcon = styled(Icon)`
 `;
 
 class UserNavigation extends PureComponent {
-    constructor() {
-        super();
-        this.state = {
-            screenLessThenMainContainer: false,
-        };
-    }
+    state = {
+        screenLessThenMainContainer: false,
+    };
 
     static propTypes = {
         accountName: PropTypes.string,
@@ -91,11 +89,11 @@ class UserNavigation extends PureComponent {
 
     componentDidMount() {
         this._checkScreenSize();
-        window.addEventListener('resize', this._checkScreenSize);
+        window.addEventListener('resize', this._checkScreenSizeLazy);
     }
 
     componentWillUnmount() {
-        window.removeEventListener('resize', this._checkScreenSize);
+        window.removeEventListener('resize', this._checkScreenSizeLazy);
     }
 
     render() {
@@ -206,8 +204,11 @@ class UserNavigation extends PureComponent {
         ) {
             this.setState({ screenLessThenMainContainer: true });
         }
-        if (wrapperWidth !== 0 && wrapperWidth <= this.props.MAIN_CONTAINER_WIDTH_POINT &&
-            this.props.layout !== 'grid') {
+        if (
+            wrapperWidth !== 0 &&
+            wrapperWidth <= this.props.MAIN_CONTAINER_WIDTH_POINT &&
+            this.props.layout !== 'grid'
+        ) {
             this.props.changeProfileLayout('grid');
         }
         if (
@@ -217,6 +218,10 @@ class UserNavigation extends PureComponent {
             this.setState({ screenLessThenMainContainer: false });
         }
     };
+
+    _checkScreenSizeLazy = throttle(this._checkScreenSize, 50, {
+        leading: false,
+    });
 }
 
 export default connect(

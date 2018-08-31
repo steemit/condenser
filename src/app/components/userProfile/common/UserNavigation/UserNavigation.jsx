@@ -13,6 +13,8 @@ import ContainerWithSlider from '../../../common/ContainerWithSlider/ContainerWi
 import * as ReactDOM from 'react-dom';
 import throttle from 'lodash/throttle';
 
+const MAIN_CONTAINER_WIDTH_POINT = 1199;
+
 const TabLink = styled(StyledTabLink)`
     &.${({ activeClassName }) => activeClassName} {
         :after {
@@ -198,23 +200,17 @@ class UserNavigation extends PureComponent {
 
     _checkScreenSize = () => {
         const wrapperWidth = this.wrapper.clientWidth;
-        if (
-            wrapperWidth <= this.props.MAIN_CONTAINER_WIDTH_POINT &&
-            !this.state.screenLessThenMainContainer
-        ) {
+        if (wrapperWidth <= MAIN_CONTAINER_WIDTH_POINT && !this.state.screenLessThenMainContainer) {
             this.setState({ screenLessThenMainContainer: true });
         }
         if (
             wrapperWidth !== 0 &&
-            wrapperWidth <= this.props.MAIN_CONTAINER_WIDTH_POINT &&
+            wrapperWidth <= MAIN_CONTAINER_WIDTH_POINT &&
             this.props.layout !== 'grid'
         ) {
             this.props.changeProfileLayout('grid');
         }
-        if (
-            wrapperWidth > this.props.MAIN_CONTAINER_WIDTH_POINT &&
-            this.state.screenLessThenMainContainer
-        ) {
+        if (wrapperWidth > MAIN_CONTAINER_WIDTH_POINT && this.state.screenLessThenMainContainer) {
             this.setState({ screenLessThenMainContainer: false });
         }
     };
@@ -226,9 +222,7 @@ class UserNavigation extends PureComponent {
 
 export default connect(
     state => {
-        const MAIN_CONTAINER_WIDTH_POINT = 1199;
         return {
-            MAIN_CONTAINER_WIDTH_POINT,
             layout: (state.ui.profile && state.ui.profile.get('layout')) || 'list',
         };
     },

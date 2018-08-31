@@ -98,7 +98,7 @@ const Memo = styled.div`
     flex-grow: 1.5;
     flex-basis: 10px;
     overflow: hidden;
-    
+
     @media (min-width: 890px) and (max-width: 1050px), (max-width: 550px) {
         flex-grow: 0;
         min-width: 24px;
@@ -122,7 +122,7 @@ const MemoIcon = styled(Icon)`
 const MemoCut = styled(TextCut)`
     flex-grow: 1;
     margin: 15px 0;
-    
+
     @media (min-width: 890px) and (max-width: 1050px), (max-width: 550px) {
         display: none;
     }
@@ -196,7 +196,7 @@ const Amount = styled.div`
     color: ${props => props.color || '#b7b7ba'};
     white-space: nowrap;
     overflow: hidden;
-    
+
     @media (min-width: 890px) and (max-width: 1023px), (max-width: 639px) {
         font-size: 18px;
     }
@@ -300,29 +300,29 @@ export default class WalletLine extends PureComponent {
 
         return (
             <Root>
-                {Boolean(data.addDate) && (
+                {data.addDate ? (
                     <DateWrapper>
                         <DateSplitter>
                             {data.stamp.getDate() + ' ' + MONTHS[data.stamp.getMonth()]}
                         </DateSplitter>
                     </DateWrapper>
-                )}
+                ) : null}
                 <Line>
                     <LineIcon name={data.icon} color={data.color} />
                     <Who>
-                        {Boolean(data.name) && (
+                        {data.name ? (
                             <WhoName>
                                 {data.type === DIRECTION.SENT ? 'Для ' : 'От '}
                                 <WhoLink to={`/@${data.name}`}>@{data.name}</WhoLink>
                             </WhoName>
-                        )}
-                        {Boolean(data.title) && <WhoTitle>{data.title}</WhoTitle>}
-                        {Boolean(data.post) && this._renderPostLink(data.post)}
+                        ) : null}
+                        {data.title ? <WhoTitle>{data.title}</WhoTitle> : null}
+                        {data.post ? this._renderPostLink(data.post) : null}
                         <TimeStamp>
                             <TimeAgoWrapper date={data.stamp} />
                         </TimeStamp>
                     </Who>
-                    {Boolean(data.memo) && (
+                    {data.memo ? (
                         <Memo>
                             <MemoIcon
                                 name="note"
@@ -337,9 +337,9 @@ export default class WalletLine extends PureComponent {
                                 </MemoCentrer>
                             </MemoCut>
                         </Memo>
-                    )}
-                    {Boolean(data.data) && <DataLink to={data.link}>{data.data}</DataLink>}
-                    {Boolean(data.showDelegationActions) && this._renderDelegationActions()}
+                    ) : null}
+                    {data.data ? <DataLink to={data.link}>{data.data}</DataLink> : null}
+                    {data.showDelegationActions ? this._renderDelegationActions() : null}
                     {data.currencies ? (
                         <Currencies>
                             {data.currencies.map(({ amount, currency }) => (
@@ -357,7 +357,7 @@ export default class WalletLine extends PureComponent {
                     )}
                 </Line>
                 {this._renderEditDelegation()}
-                {Boolean(loader) && <SplashLoader light />}
+                {loader ? <SplashLoader light /> : null}
             </Root>
         );
     }

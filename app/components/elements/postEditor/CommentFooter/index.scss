@@ -8,13 +8,13 @@
         @media (min-width: 890px) and (max-width: 1000px), (max-width: 420px) {
             justify-content: space-between;
 
-            & div {
+            .CommentFooter__button {
                 flex-grow: 1;
             }
         }
     }
 
-    &__buttons div button {
+    &__button-element {
         width: 100%;
     }
 

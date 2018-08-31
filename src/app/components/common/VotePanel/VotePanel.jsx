@@ -297,10 +297,6 @@ export default class VotePanel extends PureComponent {
         window.removeEventListener('click', this._onAwayClick);
     }
 
-    _extractValue() {
-        const { data } = this.props;
-    }
-
     _onRef = el => {
         this._root = el;
     };

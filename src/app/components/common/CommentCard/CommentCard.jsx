@@ -240,7 +240,7 @@ class CommentCard extends PureComponent {
         myVote: this._getMyVote(this.props),
         showReply: false,
         edit: false,
-        isCommentOpen: true
+        isCommentOpen: true,
     };
 
     componentWillReceiveProps(newProps) {
@@ -271,10 +271,7 @@ class CommentCard extends PureComponent {
         const { showReply, isCommentOpen } = this.state;
 
         return (
-            <Root
-                className={cn(className)}
-                isCommentOpen={isCommentOpen}
-            >
+            <Root className={cn(className)} isCommentOpen={isCommentOpen}>
                 {this._renderHeader()}
                 {this._renderBodyRe()}
                 {this._renderBodyText()}
@@ -316,10 +313,7 @@ class CommentCard extends PureComponent {
                     )}
                     <Filler />
                     <Category isCommentOpen={isCommentOpen}>{category}</Category>
-                    <ToggleCommentOpen
-                        onClick={this._toggleComment}
-                        isCommentOpen={isCommentOpen}
-                    >
+                    <ToggleCommentOpen onClick={this._toggleComment} isCommentOpen={isCommentOpen}>
                         <Icon name="chevron" width="12" height="7" />
                     </ToggleCommentOpen>
                 </HeaderLine>
@@ -492,12 +486,10 @@ class CommentCard extends PureComponent {
     };
 
     _toggleComment = () => {
-        this.setState(
-            {
-                edit: false,
-                isCommentOpen: !this.state.isCommentOpen,
-            }
-        );
+        this.setState({
+            edit: false,
+            isCommentOpen: !this.state.isCommentOpen,
+        });
     };
 }
 

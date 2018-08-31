@@ -300,29 +300,29 @@ export default class WalletLine extends PureComponent {
 
         return (
             <Root>
-                {data.addDate ? (
+                {Boolean(data.addDate) && (
                     <DateWrapper>
                         <DateSplitter>
                             {data.stamp.getDate() + ' ' + MONTHS[data.stamp.getMonth()]}
                         </DateSplitter>
                     </DateWrapper>
-                ) : null}
+                )}
                 <Line>
                     <LineIcon name={data.icon} color={data.color} />
                     <Who>
-                        {data.name ? (
+                        {Boolean(data.name) && (
                             <WhoName>
                                 {data.type === DIRECTION.SENT ? 'Для ' : 'От '}
                                 <WhoLink to={`/@${data.name}`}>@{data.name}</WhoLink>
                             </WhoName>
-                        ) : null}
-                        {data.title ? <WhoTitle>{data.title}</WhoTitle> : null}
-                        {data.post ? this._renderPostLink(data.post) : null}
+                        )}
+                        {Boolean(data.title) && <WhoTitle>{data.title}</WhoTitle>}
+                        {Boolean(data.post) && this._renderPostLink(data.post)}
                         <TimeStamp>
                             <TimeAgoWrapper date={data.stamp} />
                         </TimeStamp>
                     </Who>
-                    {data.memo ? (
+                    {Boolean(data.memo) && (
                         <Memo>
                             <MemoIcon
                                 name="note"
@@ -337,9 +337,9 @@ export default class WalletLine extends PureComponent {
                                 </MemoCentrer>
                             </MemoCut>
                         </Memo>
-                    ) : null}
-                    {data.data ? <DataLink to={data.link}>{data.data}</DataLink> : null}
-                    {data.showDelegationActions ? this._renderDelegationActions() : null}
+                    )}
+                    {Boolean(data.data) && <DataLink to={data.link}>{data.data}</DataLink>}
+                    {Boolean(data.showDelegationActions) && this._renderDelegationActions()}
                     {data.currencies ? (
                         <Currencies>
                             {data.currencies.map(({ amount, currency }) => (
@@ -357,7 +357,7 @@ export default class WalletLine extends PureComponent {
                     )}
                 </Line>
                 {this._renderEditDelegation()}
-                {loader ? <SplashLoader light /> : null}
+                {Boolean(loader) && <SplashLoader light />}
             </Root>
         );
     }

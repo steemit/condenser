@@ -70,15 +70,6 @@ export default class SettingsShow extends PureComponent {
                             onSubmitBlockchain={onSubmitBlockchain}
                         />
                     </TabContainer>
-                    <TabContainer id="keysTab" title="Ключи">
-                        <Keys
-                            account={account}
-                            privateKeys={privateKeys}
-                            onSubmitChangePassword={onSubmitChangePassword}
-                            showLogin={showLogin}
-                            showQRKey={showQRKey}
-                        />
-                    </TabContainer>
                     <TabContainer id="notificationsTab" title="Уведомления">
                         <Online
                             options={options}
@@ -91,6 +82,15 @@ export default class SettingsShow extends PureComponent {
                             isChanging={isChanging}
                             onSubmitGate={onSubmitGate}
                         /> */}
+                    </TabContainer>
+                    <TabContainer id="keysTab" title="Ключи">
+                        <Keys
+                            account={account}
+                            privateKeys={privateKeys}
+                            onSubmitChangePassword={onSubmitChangePassword}
+                            showLogin={showLogin}
+                            showQRKey={showQRKey}
+                        />
                     </TabContainer>
                 </Tabs>
             </Card>

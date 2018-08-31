@@ -13,6 +13,7 @@ export const globalSelector = type => state => state.global.getIn([type], emptyM
 export const userSelector = type => state => state.user.getIn([type], emptyMap);
 export const statusSelector = type => state => state.status[type];
 export const entitiesSelector = type => state => state.entities[type];
+export const dataSelector = type => state => state.data[type];
 export const uiSelector = type => state => state.ui[type];
 
 // Router selectors

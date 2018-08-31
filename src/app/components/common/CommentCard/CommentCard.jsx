@@ -279,7 +279,7 @@ class CommentCard extends PureComponent {
                 {this._renderBodyRe()}
                 {this._renderBodyText()}
                 {this._renderFooter()}
-                {showReply ? this._renderReplyEditor() : null}
+                {Boolean(showReply) && this._renderReplyEditor()}
             </Root>
         );
     }
@@ -342,21 +342,21 @@ class CommentCard extends PureComponent {
                         {title}
                     </TitleLink>
                 </ReLinkWrapper>
-                {showEditButton && !edit && isCommentOpen ? (
+                {Boolean(showEditButton && !edit) && (
                     <IconEditWrapper
                         onClick={this._onEditClick}
                         data-tooltip={'Редактировать комментарий'}
                     >
                         <Icon name="pen" size={20} />
                     </IconEditWrapper>
-                ) : null}
+                )}
             </Title>
         );
     }
 
     _renderBodyText() {
         const { edit, isCommentOpen } = this.state;
-        const { _content, _data } = this.props;
+        const { _content, _data, htmlContent } = this.props;
 
         return (
             <Fragment>
@@ -372,7 +372,7 @@ class CommentCard extends PureComponent {
                     <PostBody
                         to={_content.link}
                         onClick={this._onClick}
-                        dangerouslySetInnerHTML={{ __html: _content.desc }}
+                        dangerouslySetInnerHTML={htmlContent}
                         isCommentOpen={isCommentOpen}
                     />
                 )}
@@ -391,11 +391,11 @@ class CommentCard extends PureComponent {
                     link={_content.link}
                     text="Комментарии"
                 />
-                {allowInlineReply && _data.author !== myAccountName ? (
+                {Boolean(allowInlineReply && _data.author !== myAccountName) && (
                     <ButtonStyled light onClick={this._onReplyClick}>
                         <Icon name="comment" size={18} /> Ответить
                     </ButtonStyled>
-                ) : null}
+                )}
             </Footer>
         );
     }
@@ -506,6 +506,7 @@ export default connect(
         const data = state.global.getIn(['content', props.permLink]);
         const _data = data.toJS();
         const _content = extractContent(immutableAccessor, data);
+        const htmlContent = { __html: _content.desc };
 
         let parentLink = _content.link;
         let title = _content.title;
@@ -519,6 +520,7 @@ export default connect(
             data,
             title,
             parentLink,
+            htmlContent,
             _data,
             _content,
             myAccountName: state.user.getIn(['current', 'username']),

@@ -196,6 +196,10 @@ const Amount = styled.div`
     color: ${props => props.color || '#b7b7ba'};
     white-space: nowrap;
     overflow: hidden;
+    
+    @media (min-width: 890px) and (max-width: 1023px), (max-width: 639px) {
+        font-size: 18px;
+    }
 `;
 
 const Currency = styled.div`

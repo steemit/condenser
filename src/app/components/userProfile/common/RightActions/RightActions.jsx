@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import is from 'styled-is';
 import { Link } from 'react-router';
-import { Map } from 'immutable';
 import Icon from 'golos-ui/Icon';
 import DialogManager from 'app/components/elements/common/DialogManager';
 import TransferDialog from 'src/app/components/userProfile/dialogs/TransferDialog';
@@ -19,7 +18,7 @@ const Root = styled.div`
 `;
 
 const Action = styled.div`
-    display: ${props => (props.isOwner ? 'flex' : 'none')};
+    display: flex;
     align-items: center;
     height: 50px;
     padding: 0 20px;
@@ -62,28 +61,34 @@ class RightActions extends PureComponent {
 
         return (
             <Root>
-                <Link to="/market">
-                    <Action isOwner={isOwner}>
-                        <ActionIcon name="wallet" />
-                        <ActionTitle>Купить или продать</ActionTitle>
-                    </Action>
-                </Link>
-                <Action onClick={this._onTransferClick} isOwner={true}>
+                {isOwner ? (
+                    <Link to="/market">
+                        <Action>
+                            <ActionIcon name="wallet" />
+                            <ActionTitle>Купить или продать</ActionTitle>
+                        </Action>
+                    </Link>
+                ) : null}
+                <Action onClick={this._onTransferClick}>
                     <ActionIcon name="coins" />
                     <ActionTitle>Передать</ActionTitle>
                 </Action>
-                <Action onClick={this._onSafeClick} isOwner={isOwner}>
-                    <ActionIcon name="locked" />
-                    <ActionTitle>Вывести/перевести в сейф</ActionTitle>
-                </Action>
-                <Action onClick={this._onDelegateClick} isOwner={true}>
+                {isOwner ? (
+                    <Action onClick={this._onSafeClick}>
+                        <ActionIcon name="locked" />
+                        <ActionTitle>Вывести/перевести в сейф</ActionTitle>
+                    </Action>
+                ) : null}
+                <Action onClick={this._onDelegateClick}>
                     <ActionIcon name="voice" />
                     <ActionTitle>Делегировать Силу Голоса</ActionTitle>
                 </Action>
-                <Action last onClick={this._onConvertClick} isOwner={isOwner}>
-                    <ActionIcon name="refresh" />
-                    <ActionTitle>Конвертировать</ActionTitle>
-                </Action>
+                {isOwner ? (
+                    <Action last onClick={this._onConvertClick}>
+                        <ActionIcon name="refresh" />
+                        <ActionTitle>Конвертировать</ActionTitle>
+                    </Action>
+                ) : null}
             </Root>
         );
     }
@@ -120,8 +125,7 @@ class RightActions extends PureComponent {
 }
 
 const mapStateToProps = (state, props) => {
-    const currentUser = state.user.get('current') || Map();
-    const isOwner = currentUser.get('username') === props.pageAccountName.toLowerCase();
+    const isOwner = state.user.getIn(['current', 'username']) === props.pageAccountName.toLowerCase();
     return {
         isOwner,
     };

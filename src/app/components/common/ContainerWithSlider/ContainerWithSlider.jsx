@@ -29,7 +29,7 @@ const LeftArrowContainer = styled(ArrowContainer)`
     left: 20px;
 `;
 
-const RightArrowContianer = styled(ArrowContainer)`
+const RightArrowContainer = styled(ArrowContainer)`
     right: 20px;
 `;
 
@@ -79,9 +79,9 @@ class ContainerWithSlider extends Component {
                 <Container align="center" innerRef={this._setContainerRef}>
                     {children}
                 </Container>
-                <RightArrowContianer innerRef={this._setRightArrow} onClick={this._showNextIcon}>
+                <RightArrowContainer innerRef={this._setRightArrow} onClick={this._showNextIcon}>
                     <RightArrow />
-                </RightArrowContianer>
+                </RightArrowContainer>
             </Wrapper>
         );
     }

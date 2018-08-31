@@ -26,15 +26,15 @@ const Loader = styled.div`
 
 const EntryWrapper = styled.div`
     margin-bottom: 16px;
-    max-width: 100%;
-
+    
     ${is('grid')`
+        max-width: 50%;
         flex-basis: 317px;
         flex-grow: 1;
         vertical-align: top;
         padding: 0 8px;
         
-        @media (max-width: 890px) {
+        @media (min-width: 890px) and (max-width: 1200px), (max-width: 669px) {
             max-width: 100%;
         }
     `};

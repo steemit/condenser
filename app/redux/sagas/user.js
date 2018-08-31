@@ -26,7 +26,7 @@ export function* userWatches() {
 
 const highSecurityPages = Array(
     /\/market/,
-    /\/@.+\/(transfers|permissions|password)/,
+    /\/@.+\/(transfers|permissions|password|settings)/, // TODO: beautyfree links with redesign and routing
     /\/~witnesses/
 );
 

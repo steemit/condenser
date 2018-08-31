@@ -149,7 +149,7 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
             {link: favoritesLink, icon: 'new/star', value: 'Избранное'},
             {link: walletLink, icon: 'new/wallet', value: tt('g.wallet')},
             {link: reset_password_link, icon: 'key', value: tt('g.change_password')},
-            {link: settingsLink, icon: 'new/setting', value: tt('g.settings')},
+            // {link: settingsLink, icon: 'new/setting', value: tt('g.settings')},
             loggedIn ?
                 {link: '#', icon: 'new/logout', onClick: logout, value: tt('g.logout')} :
                 {link: '#', onClick: showLogin, value: tt('g.login')}

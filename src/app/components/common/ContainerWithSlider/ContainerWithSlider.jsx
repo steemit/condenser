@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import Container from '../Container';
 import Icon from 'golos-ui/Icon';
+import throttle from 'lodash/throttle';
 
 const Wrapper = styled.div`
     position: relative;
@@ -49,26 +50,20 @@ const RightArrow = styled(ArrowIcon)`
 `;
 
 class ContainerWithSlider extends Component {
-    constructor() {
-        super();
-        this.state = {
-            currentOffsetIndex: 0,
-        };
-        this._setStyleForIconsNavigation = this._setStyleForIconsNavigation.bind(this);
-        this._showNextIcon = this._showNextIcon.bind(this);
-        this._showPrevIcon = this._showPrevIcon.bind(this);
-    }
+    state = {
+        currentOffsetIndex: 0,
+    };
 
     componentDidUpdate() {
         this._setStyleForIconsNavigation();
     }
 
     componentDidMount() {
-        window.addEventListener('resize', this._setStyleForIconsNavigation);
+        window.addEventListener('resize', this._setStyleForIconsNavigationLazy);
     }
 
     componentWillUnmount() {
-        window.removeEventListener('resize', this._setStyleForIconsNavigation);
+        window.removeEventListener('resize', this._setStyleForIconsNavigationLazy);
     }
 
     render() {
@@ -94,21 +89,21 @@ class ContainerWithSlider extends Component {
         );
     }
 
-    _showNextIcon(e) {
+    _showNextIcon = e => {
         e.stopPropagation();
         this.setState({
             currentOffsetIndex: this.state.currentOffsetIndex + 1,
         });
-    }
+    };
 
-    _showPrevIcon(e) {
+    _showPrevIcon = e => {
         e.stopPropagation();
         this.setState({
             currentOffsetIndex: this.state.currentOffsetIndex - 1,
         });
-    }
+    };
 
-    _setStyleForIconsNavigation() {
+    _setStyleForIconsNavigation = () => {
         let container = this.container;
         let rightArrow = this.rightArrow;
         let children = container.children;
@@ -146,7 +141,11 @@ class ContainerWithSlider extends Component {
                 child.style.opacity = 1;
             }
         }
-    }
+    };
+
+    _setStyleForIconsNavigationLazy = throttle(this._setStyleForIconsNavigation, 50, {
+        leading: false,
+    });
 
     _clearStyleForIconsNavigation(children) {
         for (let i = 0; i < children.length; i++) {

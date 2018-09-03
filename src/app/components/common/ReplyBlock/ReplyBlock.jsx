@@ -5,8 +5,13 @@ import is from 'styled-is';
 import Icon from 'golos-ui/Icon';
 
 const ReplyCounterBlock = styled.div`
+    height: 100%;
+    min-height: 50px;
+    padding: 0 11px 0 18px;
     display: flex;
     align-items: center;
+    flex-grow: 1;
+    justify-content: flex-end;
 `;
 
 const ReplyCount = styled.div`
@@ -20,11 +25,16 @@ const ReplyCount = styled.div`
 const Splitter = styled.div`
     width: 1px;
     height: 26px;
-    margin: 0 10px;
     background: #e1e1e1;
 `;
 
 const ReplyLink = styled(Link)`
+    height: 100%;
+    min-height: 50px;
+    padding: 0 18px 0 7px;
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
     font-size: 12px;
     font-weight: bold;
     text-transform: uppercase;
@@ -41,7 +51,6 @@ const ReplyIcon = styled(Icon)`
 
 const Root = styled.div`
     display: flex;
-    margin-left: 18px;
     align-items: center;
 
     ${is('grid')`
@@ -78,7 +87,9 @@ export default function ReplyBlock({ withImage, grid, count, link, text, classNa
                 <ReplyCount>{count}</ReplyCount>
             </ReplyCounterBlock>
             <Splitter />
-            <ReplyLink to={`${link}#comments`}>{text}</ReplyLink>
+            <ReplyLink to={`${link}#comments`} whiteTheme={withImage}>
+                {text}
+            </ReplyLink>
         </Root>
     );
 }

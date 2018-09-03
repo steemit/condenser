@@ -162,8 +162,6 @@ const Footer = styled.div`
 `;
 
 const VotePanelStyled = styled(VotePanel)`
-    padding: 12px 18px;
-
     ${is('grid')`
         padding: 0;
         padding-bottom: 20px;
@@ -177,7 +175,7 @@ const PostImage = styled.div`
     right: 0;
     bottom: 0;
     width: 50%;
-    border-radius: 0 8px 8px 0;
+    border-radius: 0 0 8px 8px;
     background: url('${a => a.src}') no-repeat center;
     background-size: cover;
     z-index: 0;
@@ -205,15 +203,20 @@ const Filler = styled.div`
     flex-grow: 1;
 `;
 
-const ReplyBlockStyled = styled(ReplyBlock)`
-    padding-right: 18px;
-`;
-
 const Root = styled.div`
     position: relative;
     border-radius: 8px;
-    background: #fff;
+    background: #ffffff;
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.06);
+
+    ${PostImage}:after {
+        background-color: rgba(0, 0, 0, 0);
+        transition: background-color 0.15s;
+    }
+
+    &:hover ${PostImage}:after {
+        background-color: rgba(0, 0, 0, 0.3);
+    }
 
     ${is('grid')`
         display: flex;
@@ -229,15 +232,6 @@ const Root = styled.div`
 
         &:hover ${VotePanelStyled} {
             opacity: 1;
-        }
-
-        ${PostImage}:after {
-            background-color: rgba(0, 0, 0, 0);
-            transition: background-color 0.15s;
-        }
-
-        &:hover ${PostImage}:after {
-            background-color: rgba(0, 0, 0, 0.2);
         }
 
         &:after {
@@ -269,6 +263,14 @@ class PostCard extends PureComponent {
     state = {
         myVote: this._getMyVote(this.props),
     };
+
+    componentDidMount() {
+        window.addEventListener('resize', this._onResize);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this._onResize);
+    }
 
     componentWillReceiveProps(newProps) {
         if (this.props.data !== newProps.data) {
@@ -459,7 +461,7 @@ class PostCard extends PureComponent {
                     onChange={this._onVoteChange}
                 />
                 {grid ? null : <Filler />}
-                <ReplyBlockStyled
+                <ReplyBlock
                     withImage={withImage}
                     grid={grid}
                     count={data.get('children')}

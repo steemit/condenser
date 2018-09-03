@@ -13,6 +13,8 @@ import keyCodes from 'app/utils/keyCodes';
 
 const Root = styled.div`
     ${is('grid')`
+        display: flex;
+        flex-wrap: wrap;
         position: relative;
         margin: 0 -8px;
     `};
@@ -24,15 +26,16 @@ const Loader = styled.div`
 
 const EntryWrapper = styled.div`
     margin-bottom: 16px;
-
+    
     ${is('grid')`
-        display: inline-block;
-        width: 50%;
+        max-width: 50%;
+        flex-basis: 317px;
+        flex-grow: 1;
         vertical-align: top;
         padding: 0 8px;
-    
-        @media screen and (max-width: 830px) {
-            width: 100%;
+        
+        @media (min-width: 890px) and (max-width: 1200px), (max-width: 669px) {
+            max-width: 100%;
         }
     `};
 `;
@@ -58,7 +61,6 @@ export default class PostsList extends PureComponent {
 
     componentDidMount() {
         window.addEventListener('scroll', this._onScroll);
-
         this._initialUrl = location.pathname + location.search + location.hash;
     }
 

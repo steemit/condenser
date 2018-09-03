@@ -10,18 +10,19 @@ const Card = styled(Flex)`
 
     border-radius: 6px;
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.06);
-    background-color: #fff;
+    background-color: #ffffff;
 
     overflow: hidden;
 
-    @media (max-width: 576px) {
+    @media (max-width: 890px) {
         border-radius: 0;
         box-shadow: none;
+        margin-bottom: 20px;
     }
 `;
 Card.defaultProps = {
     column: true
-}
+};
 export default Card;
 
 export const CardTitle = styled(Flex)`

@@ -46,10 +46,6 @@ const Button = styled.button`
 
     svg {
         margin-right: 6px;
-
-        &:last-child {
-            margin-right: 0;
-        }
     }
 
     &:disabled {

@@ -61,6 +61,7 @@ const Container = StyledContainer.extend`
 
     @media (max-width: 768px) {
         flex-direction: column;
+        margin: 19px 10px 23px;
     }
 
     @media (max-width: 1200px) {
@@ -73,7 +74,7 @@ const Details = styled.div`
     margin-left: 28px;
 
     @media (max-width: 768px) {
-        margin-top: 12px;
+        margin-top: 9px;
         margin-left: 0;
         text-align: center;
     }
@@ -88,7 +89,7 @@ const Name = styled.div`
     mix-blend-mode: multiply;
 
     @media (max-width: 768px) {
-        font-size: 18px;
+        font-size: 34px;
     }
 `;
 
@@ -102,11 +103,16 @@ const Login = styled.div`
 
     @media (max-width: 768px) {
         font-size: 14px;
+        margin-top: 0;
     }
 `;
 
 const Buttons = styled(Flex)`
     margin-top: 24px;
+
+    @media (max-width: 768px) {
+        margin-top: 16px;
+    }
 `;
 
 const Button = StyledButton.extend`

@@ -55,9 +55,7 @@ const Button = styled.button`
 
     ${is('auto')`
         width: 100%;
-    `} 
-    
-    ${is('light')`
+    `} ${is('light')`
         color: #393636;
         background: #fff;
         border: 1px solid rgba(57,54,54,0.30);

@@ -111,6 +111,7 @@ const Money = styled.div`
 
 const Root = styled.div`
     position: relative;
+    padding: 12px 18px;
     display: flex;
 
     ${is('whiteTheme')`
@@ -205,7 +206,9 @@ export default class VotePanel extends PureComponent {
 
         const votes = data.get('active_votes');
         const votesSummaryIm = data.get('votesSummary');
-        const votesSummary = votesSummaryIm ? votesSummaryIm.toJS() : calcVotesStats(votes.toJS(), me);
+        const votesSummary = votesSummaryIm
+            ? votesSummaryIm.toJS()
+            : calcVotesStats(votes.toJS(), me);
         this._myVote = votesSummary.myVote;
 
         return (

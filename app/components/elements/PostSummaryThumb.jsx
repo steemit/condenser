@@ -42,10 +42,9 @@ export default class PostSummaryThumb extends React.Component {
   }
 
   render() {
-    const {visitedClassName} = this.props;
     return (
       <a href={this.props.href} onClick={this.props.onClick}>
-        {/*<canvas className={'PostSummary__image '} //+ visitedClassName}*/}
+        {/*<canvas className={'PostSummary__image '}}*/}
                 {/*style={!this.props.isNsfw ? {display: "none"} : {}}*/}
                 {/*ref={(c) => {*/}
                   {/*this.canvas = c;*/}
@@ -54,7 +53,7 @@ export default class PostSummaryThumb extends React.Component {
         <img
           src={this.props.src}
           style={this.props.isNsfw ? {display: "none"} : {}}
-          className={this.props.mobile ? ('PostSummary__image-mobile ' + visitedClassName) : 'PostSummary__image '}
+          className={this.props.mobile ? ('PostSummary__image-mobile ') : 'PostSummary__image '}
           // onLoad={this.handleImageLoaded.bind(this)}
           // onError={this.handleImageErrored.bind(this)}
           ref={(img) => {
@@ -68,7 +67,7 @@ export default class PostSummaryThumb extends React.Component {
           style={!this.props.isNsfw ? {display: "none"} : {}}
           // src={`/images/18_plus.png`}
           src={nsfwBanner}
-          className={'PostSummary__image '} //+ visitedClassName}*!/*/}
+          className={'PostSummary__image '}
         >
         </img>
       </a>

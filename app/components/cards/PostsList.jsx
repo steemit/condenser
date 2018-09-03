@@ -9,7 +9,6 @@ import Post from 'app/components/pages/Post';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import { findParent } from 'app/utils/DomUtils';
 import Icon from 'app/components/elements/Icon';
-import { isPostVisited, getVisitedPosts, visitPost } from 'app/utils/helpers';
 import KEYS from 'app/utils/keyCodes';
 
 function topPosition(domElt) {
@@ -39,7 +38,6 @@ class PostsList extends PureComponent {
         thumbSize: 'desktop',
         nsfwPref: 'warn',
         showPost: null,
-        visitedPosts: [],
     };
 
     readNsfwPref() {
@@ -83,13 +81,6 @@ class PostsList extends PureComponent {
             window.history.pushState({}, '', this.props.pathname);
             document.body.classList.remove('with-post-overlay');
             this.post_url = null;
-        }
-    }
-
-    componentWillReceiveProps() {
-        const visited = getVisitedPosts();
-        if (this.state.visitedPosts !== visited) {
-            this.setState({ visitedPosts: visited });
         }
     }
 
@@ -189,7 +180,6 @@ class PostsList extends PureComponent {
         this.props.removeHighSecurityKeys();
         this.setState({ showPost: post, prevTitle: window.document.title });
         window.history.pushState({}, '', url);
-        visitPost(post);
     };
 
     render() {
@@ -245,7 +235,6 @@ class PostsList extends PureComponent {
                         ignore={item.ignore}
                         onClick={this.onPostClick}
                         nsfwPref={nsfwPref}
-                        visited={isPostVisited(item.item)}
                     />
                 </li>
             ));

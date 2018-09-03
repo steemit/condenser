@@ -47,7 +47,6 @@ class PostSummary extends React.Component {
         thumbSize: PropTypes.string,
         nsfwPref: PropTypes.string,
         onClick: PropTypes.func,
-        visited: PropTypes.bool
     };
 
     constructor() {
@@ -62,8 +61,7 @@ class PostSummary extends React.Component {
                props.total_payout !== this.props.total_payout ||
                props.username !== this.props.username ||
                props.nsfwPref !== this.props.nsfwPref ||
-               state.revealNsfw !== this.state.revealNsfw ||
-               props.visited !== this.props.visited;
+               state.revealNsfw !== this.state.revealNsfw;
     }
 
     onRevealNsfw(e) {
@@ -172,14 +170,12 @@ class PostSummary extends React.Component {
             }
         }
 
-        const visitedClassName = this.props.visited ? 'PostSummary__post-visited ' : '';
         let thumb = null;
         if(pictures && p.image_link) {
           const prox = $STM_Config.img_proxy_prefix
           const size = (thumbSize == 'mobile') ? '800x600' : '256x128'
           const url = (prox ? prox + size + '/' : '') + p.image_link
           thumb = <PostSummaryThumb
-              visitedClassName={visitedClassName}
               mobile={thumbSize == 'mobile'}
               isNsfw={warn}
               src={url}
@@ -203,7 +199,7 @@ class PostSummary extends React.Component {
                 </div>
                 {thumb}
                 <div className="PostSummary__content">
-                    <div className={'PostSummary__header show-for-medium ' + visitedClassName}>
+                    <div className={'PostSummary__header show-for-medium'}>
                         {content_title}
                     </div>
                     {content_body}

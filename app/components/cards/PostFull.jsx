@@ -10,7 +10,6 @@ import extractContent from 'app/utils/ExtractContent';
 import { immutableAccessor } from 'app/utils/Accessors';
 import DMCAList from 'app/utils/DMCAList';
 import LEGALList from 'app/utils/LEGALList';
-import { isPostVisited, visitPost } from 'app/utils/helpers';
 import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 import Icon from 'app/components/elements/Icon';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
@@ -133,10 +132,6 @@ class PostFull extends React.Component {
                     }
                 } else if (showEditor.type === 'reply') {
                     this.state.showReply = true;
-                }
-
-                if (!isPostVisited(this.props.post)) {
-                    visitPost(this.props.post);
                 }
             }
         }

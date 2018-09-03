@@ -81,7 +81,7 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
     const accountLink = `/@${username}`;
     const favoritesLink = `/@${username}/favorites`;
     const commentsLink = `/@${username}/comments`;
-    const reset_password_link = `/@${username}/password`;
+    // const reset_password_link = `/@${username}/password`;
 
     const searchItem = <li className={scn}>
         <a href="/static/search.html" title={tt('g.search')}>
@@ -90,13 +90,13 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
       </li>
     ;
 
-    const notificationItem = <li className={scn}>
-        <a href="#" title={tt('g.search')} className="number">
-          <Icon name="new/bell" size="1_25x" />
-          20
-        </a>
-      </li>
-    ;
+    // const notificationItem = <li className={scn}>
+    //     <a href="#" title={tt('g.search')} className="number">
+    //       <Icon name="new/bell" size="1_25x" />
+    //       20
+    //     </a>
+    //   </li>
+    // ;
 
     // const messengerItem = <li className={scn}>
     //     <a href="#" title={tt('g.search')} className="number">
@@ -148,7 +148,7 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
             {link: repliesLink, icon: 'new/answer', value: tt('g.replies')},
             {link: favoritesLink, icon: 'new/star', value: 'Избранное'},
             {link: walletLink, icon: 'new/wallet', value: tt('g.wallet')},
-            {link: reset_password_link, icon: 'key', value: tt('g.change_password')},
+            // {link: reset_password_link, icon: 'key', value: tt('g.change_password')},
             {link: settingsLink, icon: 'new/setting', value: tt('g.settings')},
             loggedIn ?
                 {link: '#', icon: 'new/logout', onClick: logout, value: tt('g.logout')} :

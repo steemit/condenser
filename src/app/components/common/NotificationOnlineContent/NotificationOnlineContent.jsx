@@ -77,7 +77,7 @@ export default class NotificationOnlineContent extends PureComponent {
                 if (gbg) awards.push(`${gbg} GBG`);
                 return {
                     content: <Link to={link}>{title}</Link>,
-                    amount: awards.join(','),
+                    amount: awards.join(', '),
                 };
             case 'curatorReward':
                 return {

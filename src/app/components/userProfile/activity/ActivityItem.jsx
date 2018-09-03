@@ -130,7 +130,14 @@ export default class ActivityItem extends Component {
         }
 
         if (['reward'].includes(eventType)) {
-            props.amount = notification.getIn(['reward', 'gbg']);
+            const awards = [];
+            const golos = notification.getIn(['reward', 'golos'], null);
+            const golosPower = notification.getIn(['reward', 'golosPower'], null);
+            const gbg = notification.getIn(['reward', 'gbg'], null);
+            if (golos) awards.push(`${golos} Голосов`);
+            if (golosPower) awards.push(`${golosPower} Силы Голоса`);
+            if (gbg) awards.push(`${gbg} GBG`);
+            props.amount = awards.join(', ');
         }
 
         if (['curatorReward'].includes(eventType)) {

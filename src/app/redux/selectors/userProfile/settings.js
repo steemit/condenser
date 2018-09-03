@@ -3,6 +3,7 @@ import {
     pageAccountSelector,
     currentUserSelector,
     statusSelector,
+    dataSelector,
     globalSelector,
 } from './../common';
 import { Map } from 'immutable';
@@ -17,9 +18,10 @@ export const settingsContentSelector = createDeepEqualSelector(
         pageAccountSelector,
         currentUserSelector,
         statusSelector('settings'),
+        dataSelector('settings'),
         globalSelector('UserKeys_wifShown'),
     ],
-    (pageAccount, currentUser, settingsStatus, wifShown) => {
+    (pageAccount, currentUser, settingsStatus, settingsData, wifShown) => {
         const tempAccount = pageAccount.toJS();
 
         let metaData = tempAccount ? o2j.ifStringParseJSON(tempAccount.json_metadata) : {};
@@ -43,7 +45,7 @@ export const settingsContentSelector = createDeepEqualSelector(
 
             wifShown,
             privateKeys: currentUser.getIn(['private_keys'], emptyMap),
-            options: settingsStatus.get('options'),
+            options: settingsData,
             isFetching: settingsStatus.get('isFetching'),
             isChanging: settingsStatus.get('isChanging'),
         };

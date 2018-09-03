@@ -49,8 +49,8 @@ const validate = values => ({
         isLengthGreaterThan(20, tt('settings_jsx.name_is_too_long')),
         isStartWithAt(tt('settings_jsx.name_must_not_begin_with'))
     )(values.name),
-    about: isLengthGreaterThan(160, tt('settings_jsx.about_is_too_long')),
-    location: isLengthGreaterThan(160, tt('settings_jsx.location_is_too_long')),
+    about: isLengthGreaterThan(160, tt('settings_jsx.about_is_too_long'))(values.about),
+    location: isLengthGreaterThan(160, tt('settings_jsx.location_is_too_long'))(values.location),
     website: composedUrlValidator(values.website),
     social: {
         facebook: usernameValidation(values.social ? values.social.facebook : false),

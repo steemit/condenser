@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import cn from 'classnames';
@@ -61,7 +61,7 @@ const availableDomains = [
     'linkedin.com',
 ];
 
-class App extends React.Component {
+class App extends Component {
     state = {
         showCallout: true,
         showBanner: true,
@@ -78,10 +78,6 @@ class App extends React.Component {
     }
 
     componentDidMount() {
-        if (process.env.BROWSER) {
-            localStorage.removeItem('autopost'); // July 14 '16 compromise, renamed to autopost2
-        }
-
         this.props.loginUser();
         this.props.loadExchangeRates();
 
@@ -89,7 +85,6 @@ class App extends React.Component {
         if (process.env.BROWSER) {
             window.addEventListener('click', this.checkLeaveGolos);
         }
-        // setTimeout(() => this.setState({showCallout: false}), 15000);
 
         if (process.env.BROWSER) {
             initAnchorHelper();
@@ -104,7 +99,6 @@ class App extends React.Component {
     }
 
     componentDidUpdate(nextProps) {
-        // setTimeout(() => this.setState({showCallout: false}), 15000);
         if (nextProps.location.pathname !== this.props.location.pathname) {
             this.setState({ showBanner: false, showCallout: false });
         }
@@ -152,13 +146,6 @@ class App extends React.Component {
             }
         }
     };
-
-    // navigate = (e) => {
-    //     const a = e.target.nodeName.toLowerCase() === 'a' ? e.target : e.target.parentNode;
-    //     if (a.host !== window.location.host) return;
-    //     e.preventDefault();
-    //     browserHistory.push(a.pathname + a.search + a.hash);
-    // };
 
     onEntropyEvent(e) {
         if (e.type === 'mousemove') key_utils.addEntropy(e.pageX, e.pageY, e.screenX, e.screenY);
@@ -241,11 +228,7 @@ class App extends React.Component {
         return (
             <ThemeProvider theme={defaultTheme}>
                 <div
-                    className={
-                        'App' +
-                        (ip ? ' index-page' : '') +
-                        (miniHeader ? ' mini-' : '')
-                    }
+                    className={'App' + (ip ? ' index-page' : '') + (miniHeader ? ' mini-' : '')}
                     onMouseMove={this.onEntropyEvent}
                 >
                     {miniHeader ? <MiniHeader /> : <Header />}
@@ -283,17 +266,15 @@ App.propTypes = {
 };
 
 export default connect(
-    state => {
-        return {
-            error: state.app.get('error'),
-            flash: state.offchain.get('flash'),
-            new_visitor:
-                !state.user.get('current') &&
-                !state.offchain.get('user') &&
-                !state.offchain.get('account') &&
-                state.offchain.get('new_visit'),
-        };
-    },
+    state => ({
+        error: state.app.get('error'),
+        flash: state.offchain.get('flash'),
+        new_visitor:
+            !state.user.get('current') &&
+            !state.offchain.get('user') &&
+            !state.offchain.get('account') &&
+            state.offchain.get('new_visit'),
+    }),
     dispatch => ({
         loginUser: () => dispatch(user.actions.usernamePasswordLogin()),
         logoutUser: () => dispatch(user.actions.logout()),

@@ -31,7 +31,7 @@ const Splitter = styled.div`
 const ReplyLink = styled(Link)`
     height: 100%;
     min-height: 50px;
-    padding: 0 18px 0 7px;
+    padding: 0 18px 0 10px;
     display: flex;
     align-items: center;
     flex-grow: 1;

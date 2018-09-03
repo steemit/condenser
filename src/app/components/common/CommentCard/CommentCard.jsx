@@ -333,7 +333,7 @@ class CommentCard extends PureComponent {
                     ) : (
                         <ReLinkWrapper>
                             <TitleIcon name="comment" />
-                            {tt('g.re2')}:{' '}
+                            {tt('g.re2')}:&nbsp;
                             <TitleLink to={parentLink} onClick={this._onTitleClick}>
                                 {title}
                             </TitleLink>
@@ -359,7 +359,7 @@ class CommentCard extends PureComponent {
             <Title isCommentOpen={isCommentOpen}>
                 <ReLinkWrapper>
                     <TitleIcon name="comment" />
-                    {tt('g.re2')}:{' '}
+                    {tt('g.re2')}:&nbsp;
                     <TitleLink to={parentLink} onClick={this._onTitleClick}>
                         {title}
                     </TitleLink>

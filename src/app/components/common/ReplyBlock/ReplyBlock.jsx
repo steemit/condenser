@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router';
 import styled from 'styled-components';
-import is from 'styled-is';
+import is, { isNot } from 'styled-is';
 import Icon from 'golos-ui/Icon';
 
-const ReplyCounterBlock = styled.div`
+const ReplyCounterBlock = styled(Link)`
     height: 100%;
     min-height: 50px;
     padding: 0 11px 0 18px;
@@ -12,13 +12,13 @@ const ReplyCounterBlock = styled.div`
     align-items: center;
     flex-grow: 1;
     justify-content: flex-end;
+    cursor: pointer;
 `;
 
 const ReplyCount = styled.div`
     font-size: 16px;
     font-weight: 500;
     color: #959595;
-    cursor: default;
     user-select: none;
 `;
 
@@ -40,6 +40,13 @@ const ReplyLink = styled(Link)`
     text-transform: uppercase;
     letter-spacing: 0.8px;
     color: #393636 !important;
+    cursor: pointer;
+
+    ${isNot('showText')`
+        @media (min-width: 890px) and (max-width: 1200px), (max-width: 639px) {
+            display: none;
+        }
+    `};
 `;
 
 const ReplyIcon = styled(Icon)`
@@ -47,6 +54,7 @@ const ReplyIcon = styled(Icon)`
     height: 20px;
     margin-right: 7px;
     margin-bottom: -2px;
+    color: #393636;
 `;
 
 const Root = styled.div`
@@ -64,11 +72,7 @@ const Root = styled.div`
         color: #fff;
         border-top-color: rgba(255, 255, 255, 0.3);
         
-        ${ReplyCount} {
-            color: #fff;
-        }
-        
-        ${ReplyLink} {
+        ${ReplyCount}, ${ReplyLink}, ${ReplyIcon} {
             color: #fff !important;
         }
         
@@ -79,15 +83,19 @@ const Root = styled.div`
     `};
 `;
 
-export default function ReplyBlock({ withImage, grid, count, link, text, className }) {
+ReplyBlock.defaultProps = {
+    showText: true,
+};
+
+export default function ReplyBlock({ withImage, grid, count, link, text, className, showText }) {
     return (
         <Root whiteTheme={withImage} grid={grid} className={className}>
-            <ReplyCounterBlock data-tooltip="Количество комментариев">
+            <ReplyCounterBlock to={`${link}#comments`} data-tooltip="Количество комментариев">
                 <ReplyIcon name="reply" />
                 <ReplyCount>{count}</ReplyCount>
             </ReplyCounterBlock>
             <Splitter />
-            <ReplyLink to={`${link}#comments`} whiteTheme={withImage}>
+            <ReplyLink to={`${link}#comments`} whiteTheme={withImage} showText={showText}>
                 {text}
             </ReplyLink>
         </Root>

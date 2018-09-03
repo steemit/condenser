@@ -15,7 +15,6 @@ import CommentFormLoader from 'app/components/modules/CommentForm/loader';
 import user from 'app/redux/User';
 import transaction from 'app/redux/Transaction';
 import Icon from 'golos-ui/Icon';
-import Button from 'golos-ui/Button';
 import VotePanel from '../VotePanel';
 import { confirmVote } from 'src/app/helpers/votes';
 import ReplyBlock from '../ReplyBlock';
@@ -127,7 +126,6 @@ const Footer = styled.div`
     flex-shrink: 0;
     justify-content: space-between;
     align-items: center;
-    flex-wrap: wrap;
     padding: 12px 0 0 0;
     z-index: 1;
     pointer-events: none;
@@ -139,6 +137,10 @@ const Footer = styled.div`
     ${isNot('isCommentOpen')`
         display: none;
     `};
+
+    @media (min-width: 890px) and (max-width: 1087px), (max-width: 639px) {
+        flex-direction: column;
+    }
 `;
 
 const Filler = styled.div`
@@ -179,11 +181,23 @@ const IconEditWrapper = styled.div`
     }
 `;
 
-const ButtonStyled = styled(Button)`
-    margin: 0 18px;
-    
-    svg {
-        margin-right: 0;
+const ButtonStyled = styled.div`
+    display: flex;
+    align-items: center;
+    margin-right: 18px;
+    height: 100%;
+    min-height: 50px;
+    flex-grow: 1;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 18px;
+    text-transform: uppercase;
+    cursor: pointer;
+
+    @media (min-width: 890px) and (max-width: 1200px), (max-width: 639px) {
+        margin: 0;
+        padding: 0 18px 0 11px;
     }
 `;
 
@@ -216,8 +230,8 @@ const ReLinkWrapper = styled.div`
 const CommentVotePanel = styled(VotePanel)`
     width: 257px;
 
-    @media (min-width: 890px) and (max-width: 1087px), (max-width: 502px) {
-        flex-grow: 1;
+    @media (min-width: 890px) and (max-width: 1087px), (max-width: 639px) {
+        width: 100%;
         justify-content: space-between;
     }
 `;
@@ -225,17 +239,19 @@ const CommentVotePanel = styled(VotePanel)`
 const CommentReplyBlock = styled(ReplyBlock)`
     margin: 0;
 
-    @media (min-width: 890px) and (max-width: 1087px), (max-width: 502px) {
+    @media (min-width: 890px) and (max-width: 1087px), (max-width: 639px) {
         flex-grow: 1;
         justify-content: center;
     }
 `;
 
-const OnlyForDesktop = styled.span`
-    margin-left: 6px;
+const CommentReplyWrapper = styled.div`
+    display: flex;
+    align-items: center;
 
-    @media (max-width: 600px) {
-        display: none;
+    @media (min-width: 890px) and (max-width: 1087px), (max-width: 639px) {
+        width: 100%;
+        justify-content: center;
     }
 `;
 
@@ -387,22 +403,24 @@ class CommentCard extends PureComponent {
     }
 
     _renderFooter() {
-        const { data, myAccountName, allowInlineReply, content, dataToJS } = this.props;
+        const { data, myAccountName, allowInlineReply, content, dataToJS, isOwner } = this.props;
 
         return (
             <Footer isCommentOpen={this.state.isCommentOpen}>
                 <CommentVotePanel data={data} me={myAccountName} onChange={this._onVoteChange} />
-                <CommentReplyBlock
-                    count={data.get('children')}
-                    link={content.link}
-                    text="Комментарии"
-                />
-                {allowInlineReply && dataToJS.author !== myAccountName ? (
-                    <ButtonStyled light onClick={this._onReplyClick}>
-                        <Icon name="comment" size={18} />
-                        <OnlyForDesktop> Ответить</OnlyForDesktop>
-                    </ButtonStyled>
-                ) : null}
+                <CommentReplyWrapper>
+                    <CommentReplyBlock
+                        count={data.get('children')}
+                        link={content.link}
+                        text="Комментарии"
+                        showText={isOwner}
+                    />
+                    {allowInlineReply && dataToJS.author !== myAccountName ? (
+                        <ButtonStyled light onClick={this._onReplyClick}>
+                            Ответить
+                        </ButtonStyled>
+                    ) : null}
+                </CommentReplyWrapper>
             </Footer>
         );
     }
@@ -512,6 +530,9 @@ export default connect(
         const dataToJS = data.toJS();
         const content = extractContent(immutableAccessor, data);
         const htmlContent = { __html: content.desc };
+        const myAccountName = state.user.getIn(['current', 'username']);
+        const isOwner =
+            state.user.getIn(['current', 'username']) === props.pageAccountName.toLowerCase();
 
         let parentLink = content.link;
         let title = content.title;
@@ -530,7 +551,8 @@ export default connect(
             htmlContent,
             dataToJS,
             content,
-            myAccountName: state.user.getIn(['current', 'username']),
+            isOwner,
+            myAccountName,
         };
     },
     dispatch => ({

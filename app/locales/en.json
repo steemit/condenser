@@ -211,6 +211,7 @@
     "account_not_found": "Account not found",
     "account_recovery_succes": "Your account has been successfully recovered!",
     "account_updated": "Account Updated",
+    "activity": "Activity",
     "add": "Add",
     "age": "age",
     "all_langs": "All languages",
@@ -594,6 +595,84 @@
     "welcome": "Welcome",
     "wiki": "Wiki",
     "witnesses": "Witnesses"
+  },
+  "notifications": {
+    "activity": {
+      "curatorReward": {
+        "one": "Curation reward of entry %(content)s %(amount)s Golos Power "
+      },
+      "flag": {
+        "one": "Disliked your entry %(content)s"
+      },
+      "mention": {
+        "one": "Mentioned you in entry %(content)s"
+      },
+      "reply": {
+        "one": "Repliend your entry %(content)s"
+      },
+      "repost": {
+        "one": "Made the repost of your entry %(content)s"
+      },
+      "reward": {
+        "one": "Author reward of entry %(content)s %(amount)s"
+      },
+      "subscribe": {
+        "one": "Has subscribed to your blog"
+      },
+      "transfer": {
+        "one": "Has transferred to your account %(amount)s"
+      },
+      "unsubscribe": {
+        "one": "Unsubscribed from your blog"
+      },
+      "vote": {
+        "one": "Liked your entry %(content)s"
+      },
+      "witnessCancelVote": {
+        "one": "Has removed your voice from your delegate node"
+      },
+      "witnessVote": {
+        "one": "Voted for you as a delegate"
+      }
+    },
+    "online": {
+      "curatorReward": {
+        "one": "Curation reward of entry %(content)s %(amount)s Golos Power. 💸"
+      },
+      "flag": {
+        "one": "%(user)s disliked your entry %(content)s. 😵"
+      },
+      "mention": {
+        "one": "%(user)s mentioned you in entry %(content)s. 🤔"
+      },
+      "reply": {
+        "one": "%(user)s repliend your entry %(content)s . ✌️"
+      },
+      "repost": {
+        "one": "%(user)s made the repost of your entry %(content)s. 😎"
+      },
+      "reward": {
+        "one": "Author reward of entry %(content)s %(amount)s. 💸"
+      },
+      "subscribe": {
+        "one": "%(user)s has subscribed to your blog. 😊"
+      },
+      "transfer": {
+        "one": "%(user)s has transferred to your account %(amount)s. 💸"
+      },
+      "unsubscribe": {
+        "one": "%(user)s unsubscribed from your blog. 😔"
+      },
+      "vote": {
+        "one": "%(user)s liked your entry %(content)s. 👍"
+      },
+      "witnessCancelVote": {
+        "one": "%(user)s has removed your voice from your delegate node. 🙈"
+      },
+      "witnessVote": {
+        "one": "%(user)s voted for you as a delegate. 🔥"
+      }
+    }
   },
   "plurals": {
     "author_rewards_last_24_hours": "Author rewards last 24 hours",

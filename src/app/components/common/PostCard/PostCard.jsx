@@ -218,11 +218,6 @@ const Root = styled.div`
         background-color: rgba(0, 0, 0, 0.3);
     }
 
-    ${PostImage}:after {
-        background-color: rgba(0, 0, 0, 0);
-        transition: background-color 0.15s;
-    }
-
     ${is('grid')`
         display: flex;
         flex-direction: column;

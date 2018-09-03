@@ -9,7 +9,7 @@ import { TabLink as StyledTabLink, TabLinkIndex as StyledTabLinkIndex } from 'go
 import Icon from 'golos-ui/Icon';
 
 import { changeProfileLayout } from 'src/app/redux/actions/ui';
-import ContainerWithSlider from '../../../common/ContainerWithSlider/ContainerWithSlider';
+import ContainerWithSlider from 'src/app/components/common/ContainerWithSlider';
 import throttle from 'lodash/throttle';
 
 const MAIN_CONTAINER_WIDTH_POINT = 1199;

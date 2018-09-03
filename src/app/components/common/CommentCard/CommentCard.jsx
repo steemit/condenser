@@ -181,6 +181,10 @@ const IconEditWrapper = styled.div`
 
 const ButtonStyled = styled(Button)`
     margin: 0 18px;
+    
+    svg {
+        margin-right: 0;
+    }
 `;
 
 const ToggleCommentOpen = styled.div`
@@ -224,6 +228,14 @@ const CommentReplyBlock = styled(ReplyBlock)`
     @media (min-width: 890px) and (max-width: 1087px), (max-width: 502px) {
         flex-grow: 1;
         justify-content: center;
+    }
+`;
+
+const OnlyForDesktop = styled.span`
+    margin-left: 6px;
+
+    @media (max-width: 600px) {
+        display: none;
     }
 `;
 
@@ -387,7 +399,8 @@ class CommentCard extends PureComponent {
                 />
                 {allowInlineReply && dataToJS.author !== myAccountName ? (
                     <ButtonStyled light onClick={this._onReplyClick}>
-                        <Icon name="comment" size={18} /> Ответить
+                        <Icon name="comment" size={18} />
+                        <OnlyForDesktop> Ответить</OnlyForDesktop>
                     </ButtonStyled>
                 ) : null}
             </Footer>

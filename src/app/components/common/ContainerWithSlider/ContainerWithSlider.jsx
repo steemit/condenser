@@ -67,10 +67,10 @@ class ContainerWithSlider extends Component {
     }
 
     render() {
-        const { children, className } = this.props;
+        const { children, innerRef, className } = this.props;
 
         return (
-            <Wrapper className={className}>
+            <Wrapper className={className} innerRef={innerRef}>
                 {this.state.currentOffsetIndex > 0 && (
                     <LeftArrowContainer onClick={this._showPrevIcon}>
                         <LeftArrow />

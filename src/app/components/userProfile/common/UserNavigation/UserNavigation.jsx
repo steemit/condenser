@@ -10,7 +10,6 @@ import Icon from 'golos-ui/Icon';
 
 import { changeProfileLayout } from 'src/app/redux/actions/ui';
 import ContainerWithSlider from '../../../common/ContainerWithSlider/ContainerWithSlider';
-import * as ReactDOM from 'react-dom';
 import throttle from 'lodash/throttle';
 
 const MAIN_CONTAINER_WIDTH_POINT = 1199;
@@ -131,10 +130,7 @@ class UserNavigation extends PureComponent {
             },
         ];
         return (
-            <ContainerWithSlider
-                className={className}
-                ref={ref => (this.wrapper = ReactDOM.findDOMNode(ref))}
-            >
+            <ContainerWithSlider className={className} innerRef={ref => (this.wrapper = ref)}>
                 {tabLinks.map(({ value, to }) => (
                     <TabLinkIndex key={to} to={to}>
                         {value}

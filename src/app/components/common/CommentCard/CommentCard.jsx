@@ -15,7 +15,6 @@ import CommentFormLoader from 'app/components/modules/CommentForm/loader';
 import user from 'app/redux/User';
 import transaction from 'app/redux/Transaction';
 import Icon from 'golos-ui/Icon';
-import Button from 'golos-ui/Button';
 import VotePanel from '../VotePanel';
 import { confirmVote } from 'src/app/helpers/votes';
 import ReplyBlock from '../ReplyBlock';
@@ -253,14 +252,6 @@ const CommentReplyWrapper = styled.div`
     @media (min-width: 890px) and (max-width: 1087px), (max-width: 639px) {
         width: 100%;
         justify-content: center;
-    }
-`;
-
-const OnlyForDesktop = styled.span`
-    margin-left: 6px;
-
-    @media (max-width: 600px) {
-        display: none;
     }
 `;
 

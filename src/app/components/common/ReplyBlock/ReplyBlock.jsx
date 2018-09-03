@@ -18,7 +18,6 @@ const ReplyCount = styled.div`
     font-size: 16px;
     font-weight: 500;
     color: #959595;
-    cursor: default;
     user-select: none;
 `;
 
@@ -28,7 +27,7 @@ const Splitter = styled.div`
     background: #e1e1e1;
 `;
 
-const ReplyLink = styled(Link)`
+const ReplyLink = styled.div`
     height: 100%;
     min-height: 50px;
     padding: 0 18px 0 7px;
@@ -47,11 +46,13 @@ const ReplyIcon = styled(Icon)`
     height: 20px;
     margin-right: 7px;
     margin-bottom: -2px;
+    color: #393636;
 `;
 
-const Root = styled.div`
+const Root = styled(Link)`
     display: flex;
     align-items: center;
+    cursor: pointer;
 
     ${is('grid')`
         width: 100%;
@@ -64,11 +65,7 @@ const Root = styled.div`
         color: #fff;
         border-top-color: rgba(255, 255, 255, 0.3);
         
-        ${ReplyCount} {
-            color: #fff;
-        }
-        
-        ${ReplyLink} {
+        ${ReplyCount}, ${ReplyLink}, ${ReplyIcon} {
             color: #fff !important;
         }
         
@@ -81,13 +78,13 @@ const Root = styled.div`
 
 export default function ReplyBlock({ withImage, grid, count, link, text, className }) {
     return (
-        <Root whiteTheme={withImage} grid={grid} className={className}>
+        <Root to={`${link}#comments`} whiteTheme={withImage} grid={grid} className={className}>
             <ReplyCounterBlock data-tooltip="Количество комментариев">
                 <ReplyIcon name="reply" />
                 <ReplyCount>{count}</ReplyCount>
             </ReplyCounterBlock>
             <Splitter />
-            <ReplyLink to={`${link}#comments`} whiteTheme={withImage}>
+            <ReplyLink whiteTheme={withImage}>
                 {text}
             </ReplyLink>
         </Root>

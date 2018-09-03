@@ -127,7 +127,6 @@ const Footer = styled.div`
     flex-shrink: 0;
     justify-content: space-between;
     align-items: center;
-    flex-wrap: wrap;
     padding: 12px 0 0 0;
     z-index: 1;
     pointer-events: none;
@@ -139,6 +138,10 @@ const Footer = styled.div`
     ${isNot('isCommentOpen')`
         display: none;
     `};
+    
+    @media (min-width: 890px) and (max-width: 1087px), (max-width: 502px) {
+        flex-direction: column;
+    }
 `;
 
 const Filler = styled.div`
@@ -180,7 +183,7 @@ const IconEditWrapper = styled.div`
 `;
 
 const ButtonStyled = styled(Button)`
-    margin: 0 18px;
+    margin: 0 18px 0 0;
     
     svg {
         margin-right: 0;

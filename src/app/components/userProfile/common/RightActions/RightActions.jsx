@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 import is from 'styled-is';
 import { Link } from 'react-router';
@@ -36,9 +37,7 @@ const Action = styled.div`
 
     ${is('last')`
         border-bottom: none;
-    `}
-
-    &:hover {
+    `} &:hover {
         color: #000;
     }
 `;
@@ -56,32 +55,40 @@ const ActionTitle = styled.div`
     text-overflow: ellipsis;
 `;
 
-export default class RightActions extends PureComponent {
+class RightActions extends PureComponent {
     render() {
+        const { isOwner } = this.props;
+
         return (
             <Root>
-                <Link to="/market">
-                    <Action>
-                        <ActionIcon name="wallet" />
-                        <ActionTitle>Купить или продать</ActionTitle>
-                    </Action>
-                </Link>
+                {isOwner ? (
+                    <Link to="/market">
+                        <Action>
+                            <ActionIcon name="wallet" />
+                            <ActionTitle>Купить или продать</ActionTitle>
+                        </Action>
+                    </Link>
+                ) : null}
                 <Action onClick={this._onTransferClick}>
                     <ActionIcon name="coins" />
                     <ActionTitle>Передать</ActionTitle>
                 </Action>
-                <Action onClick={this._onSafeClick}>
-                    <ActionIcon name="locked" />
-                    <ActionTitle>Вывести/перевести в сейф</ActionTitle>
-                </Action>
+                {isOwner ? (
+                    <Action onClick={this._onSafeClick}>
+                        <ActionIcon name="locked" />
+                        <ActionTitle>Вывести/перевести в сейф</ActionTitle>
+                    </Action>
+                ) : null}
                 <Action onClick={this._onDelegateClick}>
                     <ActionIcon name="voice" />
                     <ActionTitle>Делегировать Силу Голоса</ActionTitle>
                 </Action>
-                <Action last onClick={this._onConvertClick}>
-                    <ActionIcon name="refresh" />
-                    <ActionTitle>Конвертировать</ActionTitle>
-                </Action>
+                {isOwner ? (
+                    <Action last onClick={this._onConvertClick}>
+                        <ActionIcon name="refresh" />
+                        <ActionTitle>Конвертировать</ActionTitle>
+                    </Action>
+                ) : null}
             </Root>
         );
     }
@@ -116,3 +123,12 @@ export default class RightActions extends PureComponent {
         });
     };
 }
+
+const mapStateToProps = (state, props) => {
+    const isOwner = state.user.getIn(['current', 'username']) === props.pageAccountName.toLowerCase();
+    return {
+        isOwner,
+    };
+};
+
+export default connect(mapStateToProps)(RightActions);

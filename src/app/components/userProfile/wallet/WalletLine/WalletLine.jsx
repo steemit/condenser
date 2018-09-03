@@ -71,7 +71,11 @@ const WhoName = styled.div`
     text-overflow: ellipsis;
 `;
 
-const WhoTitle = styled.div``;
+const WhoTitle = styled.div`
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+`;
 
 const WhoLink = styled(Link)`
     color: #333;
@@ -83,13 +87,22 @@ const WhoLink = styled(Link)`
 const TimeStamp = styled.div`
     font-size: 12px;
     color: #959595;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 `;
 
 const Memo = styled.div`
+    margin-left: 10px;
     display: flex;
     flex-grow: 1.5;
     flex-basis: 10px;
     overflow: hidden;
+
+    @media (min-width: 890px) and (max-width: 1050px), (max-width: 550px) {
+        flex-grow: 0;
+        min-width: 24px;
+    }
 `;
 
 const MemoIcon = styled(Icon)`
@@ -109,6 +122,10 @@ const MemoIcon = styled(Icon)`
 const MemoCut = styled(TextCut)`
     flex-grow: 1;
     margin: 15px 0;
+
+    @media (min-width: 890px) and (max-width: 1050px), (max-width: 550px) {
+        display: none;
+    }
 `;
 
 const MemoCentrer = styled.div`
@@ -179,6 +196,10 @@ const Amount = styled.div`
     color: ${props => props.color || '#b7b7ba'};
     white-space: nowrap;
     overflow: hidden;
+
+    @media (min-width: 890px) and (max-width: 1023px), (max-width: 639px) {
+        font-size: 18px;
+    }
 `;
 
 const Currency = styled.div`
@@ -205,6 +226,7 @@ const DateSplitter = styled.div`
     background: #fff;
     box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.3);
     cursor: default;
+    z-index: 2;
 `;
 
 const EditDelegationBlock = styled.div`

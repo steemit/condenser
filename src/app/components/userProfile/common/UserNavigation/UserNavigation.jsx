@@ -8,17 +8,11 @@ import { Link } from 'react-router';
 import { TabLink as StyledTabLink, TabLinkIndex as StyledTabLinkIndex } from 'golos-ui/Tab';
 import Icon from 'golos-ui/Icon';
 
-import Container from 'src/app/components/common/Container';
 import { changeProfileLayout } from 'src/app/redux/actions/ui';
+import ContainerWithSlider from 'src/app/components/common/ContainerWithSlider';
+import throttle from 'lodash/throttle';
 
-const Wrapper = styled.div`
-    position: relative;
-    flex-wrap: wrap;
-    min-height: 50px;
-    background-color: #fff;
-    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.15);
-    z-index: 1;
-`;
+const MAIN_CONTAINER_WIDTH_POINT = 1199;
 
 const TabLink = styled(StyledTabLink)`
     &.${({ activeClassName }) => activeClassName} {
@@ -76,12 +70,16 @@ const IconWrap = styled.div`
     }
 `;
 
-const SimpleIcon = Icon.extend`
+const SimpleIcon = styled(Icon)`
     width: 20px;
     height: 20px;
 `;
 
 class UserNavigation extends PureComponent {
+    state = {
+        screenLessThenMainContainer: false,
+    };
+
     static propTypes = {
         accountName: PropTypes.string,
         isOwner: PropTypes.bool,
@@ -90,15 +88,23 @@ class UserNavigation extends PureComponent {
         changeProfileLayout: PropTypes.func,
     };
 
+    componentDidMount() {
+        this._checkScreenSize();
+        window.addEventListener('resize', this._checkScreenSizeLazy);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this._checkScreenSizeLazy);
+    }
+
     render() {
-        const { accountName, isOwner } = this.props;
-        const indexTabLink = { value: tt('g.posts'), to: `/@${accountName}` };
+        const { accountName, isOwner, className } = this.props;
 
         const tabLinks = [];
 
-        tabLinks.push(
-            { value: tt('g.comments'), to: `/@${accountName}/comments` },
-        );
+        tabLinks.push({ value: tt('g.blog'), to: `/@${accountName}` });
+
+        tabLinks.push({ value: tt('g.comments'), to: `/@${accountName}/comments` });
 
         if (isOwner) {
             tabLinks.push({ value: 'Избранное', to: `/@${accountName}/favorites` });
@@ -106,11 +112,11 @@ class UserNavigation extends PureComponent {
 
         tabLinks.push(
             { value: tt('g.replies'), to: `/@${accountName}/recent-replies` },
-            { value: tt('g.wallet'), to: `/@${accountName}/transfers` },
+            { value: tt('g.wallet'), to: `/@${accountName}/transfers` }
         );
 
         if (isOwner) {
-            tabLinks.push({ value: 'Активность', to: `/@${accountName}/activity` }) 
+            tabLinks.push({ value: 'Активность', to: `/@${accountName}/activity` });
         }
 
         const rewardsMenu = [
@@ -123,28 +129,22 @@ class UserNavigation extends PureComponent {
                 value: tt('g.author_rewards'),
             },
         ];
-
         return (
-            <Wrapper>
-                <Container align="center" wrap="wrap">
-                    <TabLinkIndex key={indexTabLink.to} to={indexTabLink.to}>
-                        {indexTabLink.value}
+            <ContainerWithSlider className={className} innerRef={ref => (this.wrapper = ref)}>
+                {tabLinks.map(({ value, to }) => (
+                    <TabLinkIndex key={to} to={to}>
+                        {value}
                     </TabLinkIndex>
-                    {tabLinks.map(({ value, to }) => (
-                        <TabLink key={to} to={to}>
-                            {value}
-                        </TabLink>
-                    ))}
-                    {/*<LinkWithDropdown*/}
-                    {/*closeOnClickOutside*/}
-                    {/*dropdownPosition="bottom"*/}
-                    {/*dropdownContent={<VerticalMenu items={rewardsMenu} />}*/}
-                    {/*>*/}
-                    {/*<TabLink>{tt('g.rewards')}</TabLink>*/}
-                    {/*</LinkWithDropdown>*/}
-                    {this._renderRightIcons()}
-                </Container>
-            </Wrapper>
+                ))}
+                {/*<LinkWithDropdown*/}
+                {/*closeOnClickOutside*/}
+                {/*dropdownPosition="bottom"*/}
+                {/*dropdownContent={<VerticalMenu items={rewardsMenu} />}*/}
+                {/*>*/}
+                {/*<TabLink>{tt('g.rewards')}</TabLink>*/}
+                {/*</LinkWithDropdown>*/}
+                {this._renderRightIcons()}
+            </ContainerWithSlider>
         );
     }
 
@@ -153,24 +153,16 @@ class UserNavigation extends PureComponent {
 
         const icons = [];
 
-        if (showLayout) {
+        if (showLayout && !this.state.screenLessThenMainContainer) {
             if (layout === 'list') {
                 icons.push(
-                    <IconWrap
-                        key="l-grid"
-                        data-tooltip="Сетка"
-                        onClick={this._onGridClick}
-                    >
+                    <IconWrap key="l-grid" data-tooltip="Сетка" onClick={this._onGridClick}>
                         <SimpleIcon name="layout_grid" />
                     </IconWrap>
                 );
             } else {
                 icons.push(
-                    <IconWrap
-                        key="l-list"
-                        data-tooltip="Список"
-                        onClick={this._onListClick}
-                    >
+                    <IconWrap key="l-list" data-tooltip="Список" onClick={this._onListClick}>
                         <SimpleIcon name="layout_list" />
                     </IconWrap>
                 );
@@ -201,6 +193,27 @@ class UserNavigation extends PureComponent {
     _onListClick = () => {
         this.props.changeProfileLayout('list');
     };
+
+    _checkScreenSize = () => {
+        const wrapperWidth = this.wrapper.clientWidth;
+        if (wrapperWidth <= MAIN_CONTAINER_WIDTH_POINT && !this.state.screenLessThenMainContainer) {
+            this.setState({ screenLessThenMainContainer: true });
+        }
+        if (
+            wrapperWidth !== 0 &&
+            wrapperWidth <= MAIN_CONTAINER_WIDTH_POINT &&
+            this.props.layout !== 'grid'
+        ) {
+            this.props.changeProfileLayout('grid');
+        }
+        if (wrapperWidth > MAIN_CONTAINER_WIDTH_POINT && this.state.screenLessThenMainContainer) {
+            this.setState({ screenLessThenMainContainer: false });
+        }
+    };
+
+    _checkScreenSizeLazy = throttle(this._checkScreenSize, 50, {
+        leading: false,
+    });
 }
 
 export default connect(

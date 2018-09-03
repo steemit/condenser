@@ -110,7 +110,7 @@ class UserNavigation extends PureComponent {
         );
 
         if (isOwner) {
-            tabLinks.push({ value: 'Активность', to: `/@${accountName}/activity` }) 
+            tabLinks.push({ value: tt('g.activity'), to: `/@${accountName}/activity` }) 
         }
 
         const rewardsMenu = [

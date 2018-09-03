@@ -217,11 +217,9 @@ class UserNavigation extends PureComponent {
 }
 
 export default connect(
-    state => {
-        return {
-            layout: (state.ui.profile && state.ui.profile.get('layout')) || 'list',
-        };
-    },
+    state => ({
+        layout: (state.ui.profile && state.ui.profile.get('layout')) || 'list',
+    }),
     {
         changeProfileLayout,
     }

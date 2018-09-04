@@ -25,8 +25,14 @@ export function* hydrateNotifications(notifications) {
             )
         ) {
             let author = '';
-            if (['vote', 'flag', 'reward'].includes(eventType)) {
+            if (['vote', 'flag'].includes(eventType)) {
                 author = currentUser.get('username');
+            } else if (['reward'].includes(eventType)) {
+                author = currentUser.get('username');
+                if (notification.reward && notification.reward.golosPower) {
+                    const golosPower = numberWithCommas(vestsToGolosPower(state, `${notification.reward.golosPower} GESTS`));
+                    notification.reward.golosPower = golosPower;
+                }
             } else if (['curatorReward'].includes(eventType)) {
                 author = notification.curatorTargetAuthor;
                 notification.curatorReward = numberWithCommas(

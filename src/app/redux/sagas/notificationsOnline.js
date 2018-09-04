@@ -122,6 +122,8 @@ function* handleAddNotification({
     }
 
     if (reward) {
+        const state = yield select(state => state);
+
         yield all(
             curatorReward.map(function*(notification) {
                 const { counter, permlink, golos, golosPower, gbg } = notification;
@@ -133,11 +135,11 @@ function* handleAddNotification({
 
                 yield put(
                     createAddNotificationOnlineAction({
-                        type: 'curatorReward',
+                        type: 'reward',
                         title,
                         link,
                         golos,
-                        golosPower,
+                        golosPower: numberWithCommas(vestsToGolosPower(state, `${golosPower} GESTS`)),
                         gbg,
                     })
                 );

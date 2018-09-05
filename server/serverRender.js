@@ -15,7 +15,7 @@ import rootReducer from 'app/redux/reducers';
 import Translator from 'app/Translator';
 import extractMeta from 'app/utils/ExtractMeta';
 
-export default async function serverRender({ location, offchain, ErrorPage, rates }) {
+export default async function serverRender({ location, offchain, ErrorPage, settings, rates }) {
     let error, redirect, renderProps;
 
     try {
@@ -97,11 +97,14 @@ export default async function serverRender({ location, offchain, ErrorPage, rate
                 };
             }
         }
-        // Calculate signup bonus
-        const fee = parseFloat($STM_Config.registrar_fee.split(' ')[0]);
 
         offchain.server_location = location;
-        serverStore = createStore(rootReducer, { global: onchain, offchain });
+        const initialState = {
+            global: onchain,
+            offchain,
+        };
+        if (settings) initialState.data = { settings };
+        serverStore = createStore(rootReducer, initialState);
         serverStore.dispatch({ type: '@@router/LOCATION_CHANGE', payload: { pathname: location } });
     } catch (e) {
         // Ensure 404 page when username not found

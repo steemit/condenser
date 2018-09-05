@@ -114,7 +114,7 @@ export default class Common extends PureComponent {
                                     </FormGroup>
                                 )}
                             </Field>
-                            <Field name="basic.award">
+                            {/* <Field name="basic.award">
                                 {({ input, meta }) => (
                                     <FormGroup>
                                         <Label dark>Награда по умолчанию за пост</Label>
@@ -122,7 +122,7 @@ export default class Common extends PureComponent {
                                         <FormError meta={meta} />
                                     </FormGroup>
                                 )}
-                            </Field>
+                            </Field> */}
                             <Field name="basic.selfVote">
                                 {({ input, meta }) => (
                                     <FormGroup align="center" column={false}>

@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import LocalizedCurrency from 'app/components/elements/LocalizedCurrency'
 
 const animateTime = 1500
 

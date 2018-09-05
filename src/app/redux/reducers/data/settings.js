@@ -6,8 +6,18 @@ import {
     SETTING_SET_OPTIONS,
     SETTING_SET_OPTIONS_SUCCESS,
 } from 'src/app/redux/constants/settings';
+import { DEFAULT_LANGUAGE, DEFAULT_CURRENCY } from 'app/client_config'
 
-const initialState = new Map()
+const initialState = fromJS({
+    basic: {
+        rounding: 0,
+        selfVote: false,
+        nsfw: 'warn',
+        lang: DEFAULT_LANGUAGE,
+        currency: DEFAULT_CURRENCY,
+        award: 0,
+    }
+});
 
 const setSettingsOptionsFromMeta = (state, meta) => {
     return state.withMutations(state => {
@@ -27,7 +37,6 @@ export default function(state = initialState, { type, payload, error, meta }) {
         case SETTING_SET_OPTIONS:
             return setSettingsOptionsFromMeta(state, meta);
 
-        // update options with new values from action
         case SETTING_SET_OPTIONS_SUCCESS:
             return setSettingsOptionsFromMeta(state, meta);
 

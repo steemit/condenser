@@ -10,6 +10,7 @@ import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import { findParent } from 'app/utils/DomUtils';
 import Icon from 'app/components/elements/Icon';
 import KEYS from 'app/utils/keyCodes';
+import { dataSelector } from 'src/app/redux/selectors/common';
 
 function topPosition(domElt) {
     if (!domElt) {
@@ -18,7 +19,38 @@ function topPosition(domElt) {
     return domElt.offsetTop + topPosition(domElt.offsetParent);
 }
 
-class PostsList extends PureComponent {
+@connect(
+    (state, props) => {
+        const current = state.user.get('current');
+        const username = current ? current.get('username') : state.offchain.get('account');
+
+        const settings = dataSelector('settings')(state);
+
+        return {
+            ...props,
+            username,
+            content: state.global.get('content'),
+            ignoreResult: state.global.getIn([
+                'follow',
+                'getFollowingAsync',
+                username,
+                'ignore_result',
+            ]),
+            nsfw: settings.getIn(['basic', 'nsfw']),
+            pathname: state.app.get('location').pathname,
+        };
+    },
+    {
+        fetchState: pathname => ({
+            type: 'FETCH_STATE',
+            payload: { pathname },
+        }),
+        removeHighSecurityKeys: () => ({
+            type: 'user/REMOVE_HIGH_SECURITY_KEYS',
+        }),
+    }
+)
+export default class PostsList extends PureComponent {
     static propTypes = {
         posts: PropTypes.object.isRequired,
         loading: PropTypes.bool.isRequired,
@@ -36,24 +68,10 @@ class PostsList extends PureComponent {
 
     state = {
         thumbSize: 'desktop',
-        nsfwPref: 'warn',
         showPost: null,
     };
 
-    readNsfwPref() {
-        if (!process.env.BROWSER) {
-            return;
-        }
-        const { username } = this.props;
-        const key = 'nsfwPref' + (username ? '-' + username : '');
-
-        this.setState({
-            nsfwPref: localStorage.getItem(key) || 'warn',
-        });
-    }
-
     componentDidMount() {
-        this.readNsfwPref();
         this.scrollListener();
         this.attachScrollListener();
     }
@@ -63,7 +81,6 @@ class PostsList extends PureComponent {
         if (this.state.showPost && path !== this.post_url) {
             this.setState({ showPost: null });
         }
-        this.readNsfwPref();
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -105,17 +122,11 @@ class PostsList extends PureComponent {
     closeOnOutsideClick = e => {
         const inside_post = findParent(e.target, 'PostsList__post_container');
         if (!inside_post) {
-            const inside_top_bar = findParent(
-                e.target,
-                'PostsList__post_top_bar'
-            );
+            const inside_top_bar = findParent(e.target, 'PostsList__post_top_bar');
             if (!inside_top_bar) {
                 const post_overlay = document.getElementById('post_overlay');
                 if (post_overlay) {
-                    post_overlay.removeEventListener(
-                        'click',
-                        this.closeOnOutsideClick
-                    );
+                    post_overlay.removeEventListener('click', this.closeOnOutsideClick);
                 }
                 this.closePostModal();
             }
@@ -131,37 +142,35 @@ class PostsList extends PureComponent {
         this.scrollListener();
     }
 
-    scrollListener = throttle(() => {
-        const el = window.document.getElementById('posts_list');
-        if (!el) return;
-        const scrollTop =
-            window.pageYOffset !== undefined
-                ? window.pageYOffset
-                : (
-                      document.documentElement ||
-                      document.body.parentNode ||
-                      document.body
-                  ).scrollTop;
+    scrollListener = throttle(
+        () => {
+            const el = window.document.getElementById('posts_list');
+            if (!el) return;
+            const scrollTop =
+                window.pageYOffset !== undefined
+                    ? window.pageYOffset
+                    : (document.documentElement || document.body.parentNode || document.body)
+                          .scrollTop;
 
-        if (
-            topPosition(el) + el.offsetHeight - scrollTop - window.innerHeight <
-            10
-        ) {
-            const { loadMore, posts, category } = this.props;
+            if (topPosition(el) + el.offsetHeight - scrollTop - window.innerHeight < 10) {
+                const { loadMore, posts, category } = this.props;
 
-            if (loadMore && posts && posts.size) {
-                loadMore(posts.last(), category);
+                if (loadMore && posts && posts.size) {
+                    loadMore(posts.last(), category);
+                }
             }
-        }
 
-        // Detect if we're in mobile mode (renders larger preview imgs)
-        const mq = window.matchMedia('screen and (max-width: 39.9375em)');
-        if (mq.matches) {
-            this.setState({ thumbSize: 'mobile' });
-        } else {
-            this.setState({ thumbSize: 'desktop' });
-        }
-    }, 150, { leading: false });
+            // Detect if we're in mobile mode (renders larger preview imgs)
+            const mq = window.matchMedia('screen and (max-width: 39.9375em)');
+            if (mq.matches) {
+                this.setState({ thumbSize: 'mobile' });
+            } else {
+                this.setState({ thumbSize: 'desktop' });
+            }
+        },
+        150,
+        { leading: false }
+    );
 
     attachScrollListener() {
         window.addEventListener('scroll', this.scrollListener);
@@ -191,9 +200,10 @@ class PostsList extends PureComponent {
             content,
             ignoreResult,
             account,
+            nsfw,
         } = this.props;
 
-        const { thumbSize, showPost, nsfwPref } = this.state;
+        const { thumbSize, showPost } = this.state;
 
         const postsInfo = [];
         let aiPosts = [];
@@ -234,7 +244,7 @@ class PostsList extends PureComponent {
                         thumbSize={thumbSize}
                         ignore={item.ignore}
                         onClick={this.onPostClick}
-                        nsfwPref={nsfwPref}
+                        nsfwPref={nsfw}
                     />
                 </li>
             ));
@@ -254,11 +264,7 @@ class PostsList extends PureComponent {
                     </center>
                 )}
                 {showPost && (
-                    <div
-                        id="post_overlay"
-                        className="PostsList__post_overlay"
-                        tabIndex={0}
-                    >
+                    <div id="post_overlay" className="PostsList__post_overlay" tabIndex={0}>
                         <div className="PostsList__post_top_overlay">
                             <div className="PostsList__post_top_bar">
                                 <button
@@ -285,34 +291,3 @@ class PostsList extends PureComponent {
         );
     }
 }
-
-export default connect(
-    (state, props) => {
-        const current = state.user.get('current');
-        const username = current
-            ? current.get('username')
-            : state.offchain.get('account');
-
-        return {
-            ...props,
-            username,
-            content: state.global.get('content'),
-            ignoreResult: state.global.getIn([
-                'follow',
-                'getFollowingAsync',
-                username,
-                'ignore_result',
-            ]),
-            pathname: state.app.get('location').pathname,
-        };
-    },
-    {
-        fetchState: pathname => ({
-            type: 'FETCH_STATE',
-            payload: { pathname },
-        }),
-        removeHighSecurityKeys: () => ({
-            type: 'user/REMOVE_HIGH_SECURITY_KEYS',
-        }),
-    }
-)(PostsList);

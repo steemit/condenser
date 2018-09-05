@@ -13,6 +13,8 @@ const defaultState = fromJS({
     show_messages_modal: false
 });
 
+
+// TODO: beautyfree - delete after new profile
 if (process.env.BROWSER) {
     const locale = cookie.load(LOCALE_COOKIE_KEY)
     if (locale) defaultState.locale = locale;

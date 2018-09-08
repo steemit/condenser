@@ -110,4 +110,102 @@ describe('FetchDataSaga', () => {
             expect(actual).toEqual(put(appActions.fetchDataEnd()));
         });
     });
+    describe('should not fetch more batches than max batch size', () => {
+        let payload = {
+            order: 'by_author',
+            author: 'alice',
+            permlink: 'hair',
+            accountname: 'bob',
+            postFilter: value => value.author === 'bob',
+        };
+        let action = {
+            category: '',
+            payload,
+        };
+        constants.FETCH_DATA_BATCH_SIZE = 2;
+        constants.MAX_BATCHES = 2;
+        const gen = fetchData(action);
+
+        let actual = gen.next().value;
+        expect(actual).toEqual(
+            put(
+                globalActions.fetchingData({
+                    order: 'by_author',
+                    category: '',
+                })
+            )
+        );
+
+        actual = gen.next().value;
+        expect(actual).toEqual(put(appActions.fetchDataBegin()));
+
+        actual = gen.next().value;
+        expect(actual).toEqual(
+            call([api, api.getDiscussionsByBlogAsync], {
+                tag: payload.accountname,
+                limit: constants.FETCH_DATA_BATCH_SIZE,
+                start_author: payload.author,
+                start_permlink: payload.permlink,
+            })
+        );
+
+        // these all will not satisfy the filter
+        actual = gen.next([
+            {
+                author: 'alice',
+            },
+            {
+                author: 'alice',
+            },
+        ]).value;
+        expect(actual).toEqual(
+            put(
+                globalActions.receiveData({
+                    data: [{ author: 'alice' }, { author: 'alice' }],
+                    order: 'by_author',
+                    category: '',
+                    author: 'alice',
+                    firstPermlink: payload.permlink,
+                    accountname: 'bob',
+                    fetching: true,
+                    endOfData: false,
+                })
+            )
+        );
+
+        actual = gen.next().value;
+        expect(actual).toEqual(
+            call([api, api.getDiscussionsByBlogAsync], {
+                tag: payload.accountname,
+                limit: constants.FETCH_DATA_BATCH_SIZE,
+                start_author: 'alice',
+            })
+        );
+
+        actual = gen.next([
+            {
+                author: 'alice',
+            },
+            {
+                author: 'alice',
+            },
+        ]).value;
+        expect(actual).toEqual(
+            put(
+                globalActions.receiveData({
+                    data: [{ author: 'alice' }, { author: 'alice' }],
+                    order: 'by_author',
+                    category: '',
+                    author: 'alice',
+                    firstPermlink: payload.permlink,
+                    accountname: 'bob',
+                    fetching: false,
+                    endOfData: false,
+                })
+            )
+        );
+
+        actual = gen.next().value;
+        expect(actual).toEqual(put(appActions.fetchDataEnd()));
+    });
 });

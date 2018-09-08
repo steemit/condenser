@@ -314,6 +314,8 @@ export function* fetchData(action) {
                 args[0].start_permlink = lastValue.permlink;
             }
 
+            // Still return all data but only count ones matching the filter.
+            // Rely on UI to actually hide the posts.
             fetched += postFilter
                 ? data.filter(postFilter).length
                 : data.length;

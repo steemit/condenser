@@ -498,6 +498,102 @@ describe('Global reducer', () => {
             List(['smudge/klop'])
         );
     });
+    it('should handle fetch status for a RECEIVE_DATA action', () => {
+        //Arrange
+        let payload = {
+            data: [],
+            order: 'by_author',
+            category: 'blog',
+            accountname: 'alice',
+        };
+        const initWithData = reducer().merge({
+            accounts: Map({
+                [payload.accountname]: Map({
+                    [payload.category]: List([]),
+                }),
+            }),
+            content: Map({}),
+            status: Map({
+                [payload.category]: Map({
+                    [payload.order]: {},
+                }),
+            }),
+            discussion_idx: Map({
+                [payload.category]: Map({
+                    UnusualOrder: List([
+                        { data: { author: 'ship', permlink: 'bridge' } },
+                    ]),
+                }),
+                '': Map({
+                    FebrileFriday: List([]),
+                }),
+            }),
+        });
+
+        //Act
+        const actual1 = reducer(
+            initWithData,
+            globalActions.receiveData(payload)
+        );
+
+        //Assert
+        expect(
+            actual1.getIn(['status', payload.category, payload.order]).fetching
+        ).toBeFalsy();
+        expect(
+            actual1.getIn(['status', payload.category, payload.order])
+                .last_fetch
+        ).toBeFalsy();
+
+        // Arrange
+        payload.fetching = true;
+        //Act.
+        const actual2 = reducer(
+            initWithData,
+            globalActions.receiveData(payload)
+        );
+
+        // Assert
+        expect(
+            actual2.getIn(['status', payload.category, payload.order]).fetching
+        ).toBeTruthy();
+        expect(
+            actual2.getIn(['status', payload.category, payload.order])
+                .last_fetch
+        ).toBeFalsy();
+
+        // Arrange
+        payload.endOfData = true;
+        // Act
+        const actual3 = reducer(
+            initWithData,
+            globalActions.receiveData(payload)
+        );
+        // Assert.
+        expect(
+            actual3.getIn(['status', payload.category, payload.order]).fetching
+        ).toBeTruthy();
+        expect(
+            actual3.getIn(['status', payload.category, payload.order])
+                .last_fetch
+        ).toBeTruthy();
+
+        // Arrange
+        payload.fetching = false;
+        // Act
+        const actual4 = reducer(
+            initWithData,
+            globalActions.receiveData(payload)
+        );
+        // Assert.
+        expect(
+            actual4.getIn(['status', payload.category, payload.order]).fetching
+        ).toBeFalsy();
+        expect(
+            actual4.getIn(['status', payload.category, payload.order])
+                .last_fetch
+        ).toBeTruthy();
+    });
     it('should return correct state for a RECEIVE_RECENT_POSTS action', () => {
         // Arrange
         const payload = {

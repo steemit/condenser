@@ -394,17 +394,16 @@ describe('Global reducer', () => {
     });
     it('should return correct state for a RECEIVE_DATA action', () => {
         //Arrange
+        const postData = {
+            author: 'smudge',
+            permlink: 'klop',
+            active_votes: {
+                one: { percent: 30 },
+                two: { percent: 70 },
+            },
+        };
         let payload = {
-            data: [
-                {
-                    author: 'smudge',
-                    permlink: 'klop',
-                    active_votes: {
-                        one: { percent: 30 },
-                        two: { percent: 70 },
-                    },
-                },
-            ],
+            data: [postData],
             order: 'by_author',
             category: 'blog',
             accountname: 'alice',
@@ -441,21 +440,20 @@ describe('Global reducer', () => {
             globalActions.receiveData(payload)
         );
 
+        const postKey = `${postData.author}/${postData.permlink}`;
+
         //Assert
-        expect(actual1.getIn(['content', 'author'])).toEqual(payload.author);
-        expect(actual1.getIn(['content', 'permlink'])).toEqual(
-            payload.permlink
+        expect(actual1.getIn(['content', postKey, 'author'])).toEqual(
+            postData.author
         );
-        expect(actual1.getIn(['content', 'active_vites'])).toEqual(
-            payload.active_votes
+        expect(actual1.getIn(['content', postKey, 'permlink'])).toEqual(
+            postData.permlink
+        );
+        expect(actual1.getIn(['content', postKey, 'active_votes'])).toEqual(
+            fromJS(postData.active_votes)
         );
         expect(
-            actual1.getIn([
-                'content',
-                `${payload.data[0].author}/${payload.data[0].permlink}`,
-                'stats',
-                'allowDelete',
-            ])
+            actual1.getIn(['content', postKey, 'stats', 'allowDelete'])
         ).toEqual(false);
 
         // Push new key to posts list, If order meets the condition.

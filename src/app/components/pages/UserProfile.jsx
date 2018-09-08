@@ -148,21 +148,6 @@ export default class UserProfile extends React.Component {
         e.preventDefault();
         const newShowResteem = !this.state.showResteem;
         this.setState({ showResteem: newShowResteem });
-        /*
-        // normalize account from cased params
-        var accountname = this.props.routeParams.accountname.toLowerCase();
-        const accountImm = this.props.accounts.get(accountname);
-        const posts = accountImm.get('blog');
-        if (posts) {
-            const lastPost = posts.get(-1);
-            if (lastPost) {
-                this.loadMore(
-                    lastPost,
-                    'blog',
-                    newShowResteem,
-                );
-            }
-        }*/
     };
 
     render() {

@@ -29,7 +29,6 @@ global.$STM_Config = {
     is_sandbox: config.get('is_sandbox') === 'false' ? false : true,
     push_server_url: config.get('wss_push_service_url'),
     gate_service_url: config.get('gate_service_url'),
-    rates_service_url: config.get('rates_service_url'),
 };
 
 const WebpackIsomorphicTools = require('webpack-isomorphic-tools');

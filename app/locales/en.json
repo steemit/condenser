@@ -268,6 +268,7 @@
     "email_recovery_hint": "Used to recover a hijacked or stolen GOLOS account",
     "enter_username": "Enter your username",
     "expand": "Expand",
+    "favorites": "Favorites",
     "feed": "Feed",
     "feeds": "Feeds",
     "filter": "Filter",
@@ -863,6 +864,13 @@
     "name_is_too_long": "Name is too long",
     "name_must_not_begin_with": "Name must not begin with @",
     "not_safe_for_work_nsfw_content": "Not safe for work (NSFW) content",
+    "notifications": {
+      "allOnline": "Enable/disable all online notifications",
+      "allOnlineLabel": "Instant notifications on the site",
+      "award": "Author's award",
+      "curatorAward": "Curating award",
+      "flag": "Dislike (flag)"
+    },
     "private_post_display_settings": "Private Post Display Settings",
     "profile_about": "About",
     "profile_email": "Email",
@@ -881,6 +889,13 @@
     "profile_website": "Website",
     "public_profile_settings": "Public Profile Settings",
     "reset": "Reset",
+    "rounding_numbers": {
+      "info_message": "Displaying awards",
+      "integer": "Round to integer",
+      "one_decimal": "One decimal place after comma",
+      "three_decimal": "Three decimal places",
+      "two_decimal": "Two decimal places"
+    },
     "update": "Update",
     "website_url_is_too_long": "Website URL is too long"
   },

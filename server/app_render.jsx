@@ -49,7 +49,12 @@ async function appRender(ctx) {
                     : DEFAULT_LANGUAGE, // TODO: set only DEFAULT_LANGUAGE after delete old profile
             select_tags,
         };
+
         let settings = null;
+        if (ctx.session.a) {
+            // TODO: beautyfree move to actions all calls, and check user name
+            settings = await getSettings(ctx.session.a);
+        }
 
         const user_id = ctx.session.user;
         if (user_id) {
@@ -91,9 +96,6 @@ async function appRender(ctx) {
                     prv: ctx.session.prv,
                     account,
                 };
-
-                // TODO: beautyfree move to actions all calls, and check user name
-                settings = await getSettings(user.name);
             }
         }
         if (ctx.session.arec) {

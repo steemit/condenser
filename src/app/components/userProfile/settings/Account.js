@@ -33,7 +33,7 @@ const UserName = styled.div`
 const composeValidators = (...validators) => value =>
     validators.reduce((error, validator) => error || (value && validator(value)), undefined);
 
-const isLengthGreaterThan = (min, err) => value => (value.length > min ? err : undefined);
+const isLengthGreaterThan = (min, err) => value => ((value && value.length > min) ? err : undefined);
 const isStartWithAt = err => value => (/^\s*@/.test(value) ? err : undefined);
 const isNotUrl = err => value => (!/^https?:\/\//.test(value) ? err : undefined);
 const composedUrlValidator = value =>
@@ -42,7 +42,7 @@ const composedUrlValidator = value =>
         isNotUrl(tt('settings_jsx.invalid_url'))
     )(value);
 const usernameValidation = (username, err) =>
-    /^[a-zA-Z0-9\-\.]+$/.test(username) ? err : undefined;
+    username && /^[a-zA-Z0-9\-\.]+$/.test(username) ? err : undefined;
 
 const validate = values => ({
     name: composeValidators(
@@ -220,6 +220,7 @@ const Account = ({ profile, account, onSubmitBlockchain }) => {
                                 )}
                             </Field>
                         </FormGroup>
+                        {/* <pre>{JSON.stringify(values, 0, 2)}</pre> */}
 
                         {submitError && <div>{submitError}</div>}
                     </CardContent>

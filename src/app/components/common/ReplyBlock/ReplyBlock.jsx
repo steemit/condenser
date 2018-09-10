@@ -42,7 +42,7 @@ const ReplyLink = styled(Link)`
     color: #393636 !important;
     cursor: pointer;
 
-    ${isNot('showText')`
+    ${isNot('showtext')`
         @media (min-width: 890px) and (max-width: 1200px), (max-width: 639px) {
             display: none;
         }
@@ -68,7 +68,7 @@ const Root = styled.div`
         border-top: 1px solid #e9e9e9;
     `};
 
-    ${is('whiteTheme')`
+    ${is('whitetheme')`
         color: #fff;
         border-top-color: rgba(255, 255, 255, 0.3);
         
@@ -95,7 +95,11 @@ export default function ReplyBlock({ withImage, grid, count, link, text, classNa
                 <ReplyCount>{count}</ReplyCount>
             </ReplyCounterBlock>
             <Splitter />
-            <ReplyLink to={`${link}#comments`} whiteTheme={withImage} showText={showText}>
+            <ReplyLink
+                to={`${link}#comments`}
+                whitetheme={withImage ? 1 : 0}
+                showtext={showText ? 1 : 0}
+            >
                 {text}
             </ReplyLink>
         </Root>

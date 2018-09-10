@@ -49,6 +49,7 @@ async function appRender(ctx) {
                     : DEFAULT_LANGUAGE, // TODO: set only DEFAULT_LANGUAGE after delete old profile
             select_tags,
         };
+        let settings = null;
 
         const user_id = ctx.session.user;
         if (user_id) {
@@ -90,6 +91,9 @@ async function appRender(ctx) {
                     prv: ctx.session.prv,
                     account,
                 };
+
+                // TODO: beautyfree move to actions all calls, and check user name
+                settings = await getSettings(user.name);
             }
         }
         if (ctx.session.arec) {
@@ -102,15 +106,13 @@ async function appRender(ctx) {
             }
         }
 
-        // TODO: beautyfree move to actions all calls, and check user name
-        // const settings = await getSettings('devall');
 
         const start = new Date();
         const { body, title, statusCode, meta } = await serverRender({
             location: ctx.request.url,
             offchain,
             ErrorPage,
-            settings: await getSettings('devall'),
+            settings,
             rates: await getRates(),
         });
 

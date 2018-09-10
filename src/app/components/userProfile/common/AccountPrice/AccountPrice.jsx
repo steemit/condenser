@@ -19,7 +19,35 @@ const Body = styled.div`
     text-overflow: ellipsis;
 `;
 
-class AccountPrice extends PureComponent {
+function rate(rates, from, to) {
+    if (from === to) {
+        return 1;
+    } else {
+        return rates[from][to];
+    }
+}
+
+@connect((state, props) => {
+    const account = state.global.getIn(['accounts', props.accountName]);
+    const rates = state.global.get('rates');
+
+    let currency = state.data.settings.getIn(['basic', 'currency'], 'GBG');
+    if (currency !== 'GBG' && !rates.GOLOS[currency]) {
+        currency = 'GBG';
+    }
+
+    return {
+        golos: account.get('balance').split(' ')[0],
+        golosSafe: account.get('savings_balance').split(' ')[0],
+        gold: account.get('sbd_balance').split(' ')[0],
+        goldSafe: account.get('savings_sbd_balance').split(' ')[0],
+        power: account.get('vesting_shares'),
+        rates,
+        globalProps: state.global.get('props'),
+        currency,
+    };
+})
+export default class AccountPrice extends PureComponent {
     static propTypes = {
         accountName: PropTypes.string.isRequired,
     };
@@ -42,18 +70,8 @@ class AccountPrice extends PureComponent {
     }
 
     render() {
-        const { golos, golosSafe, gold, goldSafe, power } = this.props;
+        const { golos, golosSafe, gold, goldSafe, power, currency } = this.props;
         const rates = this._rates;
-
-        let currency = 'GBG';
-
-        if (process.env.BROWSER) {
-            currency = localStorage.getItem('xchange.picked') || 'GBG';
-
-            if (currency !== 'GBG' && !rates.GOLOS[currency]) {
-                currency = 'GBG';
-            }
-        }
 
         const golosRate = rate(rates, 'GOLOS', currency);
         const gbgRate = rate(rates, 'GBG', currency);
@@ -73,27 +91,5 @@ class AccountPrice extends PureComponent {
                 <Body fontSize={Math.floor(48 * (8 / sumString.length))}>{sumString}</Body>
             </CollapsingCard>
         );
-    }
-}
-
-export default connect((state, props) => {
-    const account = state.global.getIn(['accounts', props.accountName]);
-
-    return {
-        golos: account.get('balance').split(' ')[0],
-        golosSafe: account.get('savings_balance').split(' ')[0],
-        gold: account.get('sbd_balance').split(' ')[0],
-        goldSafe: account.get('savings_sbd_balance').split(' ')[0],
-        power: account.get('vesting_shares'),
-        rates: state.global.get('rates'),
-        globalProps: state.global.get('props'),
-    };
-})(AccountPrice);
-
-function rate(rates, from, to) {
-    if (from === to) {
-        return 1;
-    } else {
-        return rates[from][to];
     }
 }

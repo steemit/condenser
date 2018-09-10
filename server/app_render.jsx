@@ -167,7 +167,7 @@ async function getSettings(username) {
             { user: username, params: { profile: 'web' } },
             (err, data) => {
                 if (err) {
-                    reject(null);
+                    reject(err);
                 } else {
                     resolve(data.result);
                 }

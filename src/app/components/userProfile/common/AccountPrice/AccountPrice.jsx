@@ -23,7 +23,7 @@ function rate(rates, from, to) {
     if (from === to) {
         return 1;
     } else {
-        return rates[from][to];
+        return rates.getIn([from, to]);
     }
 }
 
@@ -32,7 +32,7 @@ function rate(rates, from, to) {
     const rates = state.global.get('rates');
 
     let currency = state.data.settings.getIn(['basic', 'currency'], 'GBG');
-    if (currency !== 'GBG' && !rates.GOLOS[currency]) {
+    if (currency !== 'GBG' && !rates.getIn(['GOLOS', currency])) {
         currency = 'GBG';
     }
 
@@ -52,26 +52,8 @@ export default class AccountPrice extends PureComponent {
         accountName: PropTypes.string.isRequired,
     };
 
-    constructor(props) {
-        super(props);
-
-        this._rates = props.rates.toJS();
-        this._globalProps = props.globalProps.toJS();
-    }
-
-    componentWillReceiveProps(newProps) {
-        if (this.props.rates !== newProps.rates) {
-            this._rates = newProps.rates.toJS();
-        }
-
-        if (this.props.globalProps !== newProps.globalProps) {
-            this._globalProps = newProps.globalProps.toJS();
-        }
-    }
-
     render() {
-        const { golos, golosSafe, gold, goldSafe, power, currency } = this.props;
-        const rates = this._rates;
+        const { golos, golosSafe, gold, goldSafe, power, currency, rates, globalProps } = this.props;
 
         const golosRate = rate(rates, 'GOLOS', currency);
         const gbgRate = rate(rates, 'GBG', currency);
@@ -82,7 +64,7 @@ export default class AccountPrice extends PureComponent {
         sum += parseFloat(golosSafe) * golosRate || 0;
         sum += parseFloat(gold) * gbgRate || 0;
         sum += parseFloat(goldSafe) * gbgRate || 0;
-        sum += parseFloat(vestsToGolos(power, this._globalProps)) * golosRate || 0;
+        sum += parseFloat(vestsToGolos(power, globalProps.toJS())) * golosRate || 0;
 
         const sumString = formatCurrency(sum, currency, 'adaptive');
 

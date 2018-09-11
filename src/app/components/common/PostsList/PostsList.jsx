@@ -11,6 +11,8 @@ import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import PostOverlay from '../PostOverlay';
 import keyCodes from 'app/utils/keyCodes';
 
+const FORCE_GRID_WIDTH = 1200;
+
 const Root = styled.div`
     ${is('grid')`
         display: flex;
@@ -26,7 +28,7 @@ const Loader = styled.div`
 
 const EntryWrapper = styled.div`
     margin-bottom: 16px;
-    
+
     ${is('grid')`
         max-width: 50%;
         flex-basis: 317px;
@@ -56,18 +58,29 @@ export default class PostsList extends PureComponent {
     };
 
     state = {
+        forceGrid: false,
         showPostPermLink: null,
     };
 
     componentDidMount() {
         window.addEventListener('scroll', this._onScroll);
+        window.addEventListener('resize', this._onResizeLazy);
+
         this._initialUrl = location.pathname + location.search + location.hash;
+
+        if (window.innerWidth < FORCE_GRID_WIDTH) {
+            this.setState({
+                forceGrid: true,
+            });
+        }
     }
 
     componentWillUnmount() {
         window.removeEventListener('popstate', this._onPopState);
         window.removeEventListener('keydown', this._onKeyDown);
         window.removeEventListener('scroll', this._onScroll);
+        window.removeEventListener('resize', this._onResizeLazy);
+        this._onResizeLazy.cancel();
         this._onScroll.cancel();
     }
 
@@ -82,9 +95,11 @@ export default class PostsList extends PureComponent {
             isFavorite,
         } = this.props;
 
+        const { forceGrid } = this.state;
+
         const isPosts = category === 'blog' || isFavorite;
 
-        const isGrid = isPosts && layout === 'grid';
+        const isGrid = isPosts && (layout === 'grid' || forceGrid);
         const EntryComponent = isPosts ? PostCard : CommentCard;
 
         return (
@@ -178,7 +193,7 @@ export default class PostsList extends PureComponent {
             }
         },
         100,
-        { leading: false, tailing: true }
+        { leading: false, trailing: true }
     );
 
     _onEntryClick = async ({ permLink, url }) => {
@@ -222,4 +237,10 @@ export default class PostsList extends PureComponent {
             window.history.pushState({}, '', this._initialUrl);
         }
     }
+
+    _onResizeLazy = throttle(() => {
+        this.setState({
+            forceGrid: window.innerWidth < FORCE_GRID_WIDTH,
+        });
+    }, 100);
 }

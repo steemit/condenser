@@ -9,10 +9,10 @@ import { TabLink as StyledTabLink, TabLinkIndex as StyledTabLinkIndex } from 'go
 import Icon from 'golos-ui/Icon';
 
 import { changeProfileLayout } from 'src/app/redux/actions/ui';
-import ContainerWithSlider from 'src/app/components/common/ContainerWithSlider';
+import SlideContainer from 'src/app/components/common/SlideContainer';
 import throttle from 'lodash/throttle';
 
-const MAIN_CONTAINER_WIDTH_POINT = 1199;
+const MAIN_CONTAINER_WIDTH_POINT = 1200;
 
 const TabLink = styled(StyledTabLink)`
     &.${({ activeClassName }) => activeClassName} {
@@ -38,8 +38,6 @@ const RightIcons = styled.div`
     flex: 1;
     justify-content: flex-end;
 `;
-
-const SettingsIcon = styled(Icon)``;
 
 const IconLink = styled(Link)`
     display: flex;
@@ -76,16 +74,16 @@ const SimpleIcon = styled(Icon)`
 `;
 
 class UserNavigation extends PureComponent {
-    state = {
-        screenLessThenMainContainer: false,
-    };
-
     static propTypes = {
         accountName: PropTypes.string,
         isOwner: PropTypes.bool,
         showLayout: PropTypes.bool,
         layout: PropTypes.oneOf(['list', 'grid']).isRequired,
-        changeProfileLayout: PropTypes.func,
+        changeProfileLayout: PropTypes.func.isRequired,
+    };
+
+    state = {
+        isMobile: false,
     };
 
     componentDidMount() {
@@ -95,6 +93,7 @@ class UserNavigation extends PureComponent {
 
     componentWillUnmount() {
         window.removeEventListener('resize', this._checkScreenSizeLazy);
+        this._checkScreenSizeLazy.cancel();
     }
 
     render() {
@@ -103,7 +102,6 @@ class UserNavigation extends PureComponent {
         const tabLinks = [];
 
         tabLinks.push({ value: tt('g.blog'), to: `/@${accountName}` });
-
         tabLinks.push({ value: tt('g.comments'), to: `/@${accountName}/comments` });
 
         if (isOwner) {
@@ -116,44 +114,28 @@ class UserNavigation extends PureComponent {
         );
 
         if (isOwner) {
-            tabLinks.push({ value: tt('g.activity'), to: `/@${accountName}/activity` }) 
+            tabLinks.push({ value: tt('g.activity'), to: `/@${accountName}/activity` });
         }
 
-        const rewardsMenu = [
-            {
-                link: `/@${accountName}/curation-rewards`,
-                value: tt('g.curation_rewards'),
-            },
-            {
-                link: `/@${accountName}/author-rewards`,
-                value: tt('g.author_rewards'),
-            },
-        ];
         return (
-            <ContainerWithSlider className={className} innerRef={ref => (this.wrapper = ref)}>
+            <SlideContainer className={className}>
                 {tabLinks.map(({ value, to }) => (
                     <TabLinkIndex key={to} to={to}>
                         {value}
                     </TabLinkIndex>
                 ))}
-                {/*<LinkWithDropdown*/}
-                {/*closeOnClickOutside*/}
-                {/*dropdownPosition="bottom"*/}
-                {/*dropdownContent={<VerticalMenu items={rewardsMenu} />}*/}
-                {/*>*/}
-                {/*<TabLink>{tt('g.rewards')}</TabLink>*/}
-                {/*</LinkWithDropdown>*/}
                 {this._renderRightIcons()}
-            </ContainerWithSlider>
+            </SlideContainer>
         );
     }
 
     _renderRightIcons() {
         const { accountName, isOwner, layout, showLayout } = this.props;
+        const { isMobile } = this.state;
 
         const icons = [];
 
-        if (showLayout && !this.state.screenLessThenMainContainer) {
+        if (showLayout && !isMobile) {
             if (layout === 'list') {
                 icons.push(
                     <IconWrap key="l-grid" data-tooltip="Сетка" onClick={this._onGridClick}>
@@ -176,7 +158,7 @@ class UserNavigation extends PureComponent {
                     to={`/@${accountName}/settings`}
                     data-tooltip={tt('g.settings')}
                 >
-                    <SettingsIcon name="setting" size="24" />
+                    <Icon name="setting" size="24" />
                 </IconLink>
             );
         }
@@ -195,25 +177,12 @@ class UserNavigation extends PureComponent {
     };
 
     _checkScreenSize = () => {
-        const wrapperWidth = this.wrapper.clientWidth;
-        if (wrapperWidth <= MAIN_CONTAINER_WIDTH_POINT && !this.state.screenLessThenMainContainer) {
-            this.setState({ screenLessThenMainContainer: true });
-        }
-        if (
-            wrapperWidth !== 0 &&
-            wrapperWidth <= MAIN_CONTAINER_WIDTH_POINT &&
-            this.props.layout !== 'grid'
-        ) {
-            this.props.changeProfileLayout('grid');
-        }
-        if (wrapperWidth > MAIN_CONTAINER_WIDTH_POINT && this.state.screenLessThenMainContainer) {
-            this.setState({ screenLessThenMainContainer: false });
-        }
+        this.setState({
+            isMobile: window.innerWidth < MAIN_CONTAINER_WIDTH_POINT,
+        });
     };
 
-    _checkScreenSizeLazy = throttle(this._checkScreenSize, 50, {
-        leading: false,
-    });
+    _checkScreenSizeLazy = throttle(this._checkScreenSize, 50);
 }
 
 export default connect(

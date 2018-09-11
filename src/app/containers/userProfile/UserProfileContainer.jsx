@@ -33,7 +33,11 @@ const Main = styled(Container).attrs({
 `;
 
 const WrapperMain = styled.div`
-    background-color: #f9f9f9;
+    background: #f9f9f9;
+
+    @media (max-width: 890px) {
+        background: #f3f3f3;
+    }
 `;
 
 const SidebarLeft = styled.div`

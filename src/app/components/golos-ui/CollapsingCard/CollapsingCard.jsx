@@ -8,6 +8,11 @@ const CollapsingBlockStyled = styled(CollapsingBlock)`
     border-radius: 8px;
     background: #fff;
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.06);
+
+    @media (max-width: 890px) {
+        margin-bottom: 14px;
+        border-radius: 0;
+    }
 `;
 
 const Body = styled.div`

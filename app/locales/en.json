@@ -896,6 +896,16 @@
       "three_decimal": "Three decimal places",
       "two_decimal": "Two decimal places"
     },
+    "tabs": {
+      "account": "Account",
+      "common": "Common",
+      "keys": "Keys",
+      "notifications": "Notifications"
+    },
+    "tabs-keys": {
+      "keys": "Keys",
+      "new": "New key"
+    },
     "update": "Update",
     "website_url_is_too_long": "Website URL is too long"
   },

@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import styled from 'styled-components';
 
 import { Set, Map } from 'immutable';
 import tt from 'counterpart';
@@ -12,7 +13,7 @@ import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import Button from 'golos-ui/Button';
 import Icon from 'golos-ui/Icon';
 
-const ButtonStyled = Button.extend`
+const ButtonStyled = styled(Button)`
     margin-right: 8px;
 
     @media (max-width: 890px) {

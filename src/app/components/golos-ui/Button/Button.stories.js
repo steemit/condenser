@@ -1,7 +1,7 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 
-import Button from 'golos-ui/Button';
+import Button, { ButtonLink } from 'golos-ui/Button';
 import Icon from 'golos-ui/Icon';
 
 storiesOf('Golos UI/Button', module)
@@ -13,4 +13,5 @@ storiesOf('Golos UI/Button', module)
     .add('neutral', () => <Button neutral>Подписаться</Button>)
 
     .add('auto', () => <Button auto>Подписаться</Button>)
-    .add('small', () => <Button small>Подписаться</Button>);
+    .add('small', () => <Button small>Подписаться</Button>)
+    .add('link', () => <ButtonLink to="/">Подписаться</ButtonLink>);

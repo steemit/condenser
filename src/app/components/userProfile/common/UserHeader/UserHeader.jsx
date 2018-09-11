@@ -1,6 +1,5 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import styled from 'styled-components';
 
 import tt from 'counterpart';
@@ -8,11 +7,8 @@ import o2j from 'shared/clash/object2json';
 import proxifyImageUrl from 'app/utils/ProxifyUrl';
 import normalizeProfile from 'app/utils/NormalizeProfile';
 
-import user from 'app/redux/User';
-import transaction from 'app/redux/Transaction';
-
 import Dropzone from 'react-dropzone';
-import StyledButton from 'golos-ui/Button';
+import StyledButton, { ButtonLink } from 'golos-ui/Button';
 import Icon from 'golos-ui/Icon';
 import Flex from 'golos-ui/Flex';
 import StyledContainer from 'src/app/components/common/Container';
@@ -240,17 +236,23 @@ export default class UserHeader extends Component {
                     <Details>
                         {name ? <Name>{name}</Name> : null}
                         <Login>@{currentAccount.get('name')}</Login>
-                        {!isOwner && (
-                            <Buttons>
-                                {/* <Button light>
-                                <Icon name="reply" height="17" width="18" />Написать
-                            </Button> */}
-                                <Follow
-                                    follower={currentUser.get('username')}
-                                    following={currentAccount.get('name')}
-                                />
-                            </Buttons>
-                        )}
+                        <Buttons>
+                            {!isOwner && (
+                                <Fragment>
+                                    {/* <Button light>
+                                    <Icon name="reply" height="17" width="18" />Написать
+                                    </Button> */}
+                                    <Follow
+                                        follower={currentUser.get('username')}
+                                        following={currentAccount.get('name')}
+                                    />
+                                </Fragment>
+                            )}
+                            <ButtonLink light={1} to={`https://golos.io/@${currentUser.get('username')}`}>
+                                Вернуть старый профиль
+                            </ButtonLink>
+                        </Buttons>
+
                     </Details>
                     {isOwner && (
                         <IconCover

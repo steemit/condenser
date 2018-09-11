@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
 
+import tt from 'counterpart';
 import SplashLoader from 'golos-ui/SplashLoader';
 import Card from 'golos-ui/Card';
 import { TabContainer, Tabs } from 'golos-ui/Tabs';
@@ -52,7 +53,7 @@ export default class SettingsShow extends PureComponent {
             <Card style={{ width: '566px' }}>
                 {(!options.size || isFetching) && <SplashLoader />}
                 <Tabs activeTab={{ id: 'commonTab' }}>
-                    <TabContainer id="commonTab" title="Общие">
+                    <TabContainer id="commonTab" title={tt('settings_jsx.tabs.common')}>
                         <Common
                             options={options}
                             isFetching={isFetching}
@@ -60,7 +61,7 @@ export default class SettingsShow extends PureComponent {
                             onSubmitGate={onSubmitGate}
                         />
                     </TabContainer>
-                    <TabContainer id="accountTab" title="Учетная запись">
+                    <TabContainer id="accountTab" title={tt('settings_jsx.tabs.account')}>
                         <Account
                             profile={profile}
                             account={account}
@@ -70,7 +71,7 @@ export default class SettingsShow extends PureComponent {
                             onSubmitBlockchain={onSubmitBlockchain}
                         />
                     </TabContainer>
-                    <TabContainer id="notificationsTab" title="Уведомления">
+                    <TabContainer id="notificationsTab" title={tt('settings_jsx.tabs.notifications')}>
                         <Online
                             options={options}
                             isChanging={isChanging}
@@ -83,7 +84,7 @@ export default class SettingsShow extends PureComponent {
                             onSubmitGate={onSubmitGate}
                         /> */}
                     </TabContainer>
-                    <TabContainer id="keysTab" title="Ключи">
+                    <TabContainer id="keysTab" title={tt('settings_jsx.tabs.keys')}>
                         <Keys
                             account={account}
                             privateKeys={privateKeys}

@@ -15,9 +15,8 @@ const Card = styled(Flex)`
     overflow: hidden;
 
     @media (max-width: 890px) {
+        margin-bottom: 14px;
         border-radius: 0;
-        box-shadow: none;
-        margin-bottom: 20px;
     }
 `;
 Card.defaultProps = {

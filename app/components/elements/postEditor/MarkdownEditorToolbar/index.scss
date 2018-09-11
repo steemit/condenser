@@ -99,7 +99,7 @@
     z-index: 10;
     animation: fade-in 0.1s;
 
-    @media screen and (max-width: 890px) {
+    @media (max-width: 890px) {
       left: 0;
       margin-top: 20px;
       opacity: 0.7;

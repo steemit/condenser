@@ -175,7 +175,7 @@ const PostImage = styled.div`
     right: 0;
     bottom: 0;
     width: 50%;
-    border-radius: 0 0 8px 8px;
+    border-radius: 0 8px 8px 0;
     background: url('${a => a.src}') no-repeat center;
     background-size: cover;
     z-index: 0;
@@ -196,6 +196,7 @@ const PostImage = styled.div`
         left: 0;
         width: unset;
         height: 173px;
+        border-radius: 0 0 8px 8px;
     `}
 `;
 

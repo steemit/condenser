@@ -55,11 +55,12 @@ const Columns = styled.div`
     margin: 0 -10px;
     
     @media (max-width: 500px) {
-        flex-direction: column;
+        display: block;
     }
 `;
 
 const Column = styled.div`
+    flex-basis: 100px;
     flex-grow: 1;
     margin: 0 10px;
 `;

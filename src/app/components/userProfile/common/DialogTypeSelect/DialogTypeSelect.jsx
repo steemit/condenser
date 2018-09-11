@@ -11,12 +11,13 @@ const Root = styled.div`
     
     ${is('mobilecolumn')`
         @media (max-width: 600px) {
-            flex-direction: column;    
+            display: block;    
         }
     `}
 `;
 
 const TypeButton = styled.div.attrs({ role: 'button' })`
+    flex-basis: 100px;
     flex-grow: 1;
     height: 38px;
     line-height: 38px;

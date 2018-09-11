@@ -146,7 +146,7 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
                 ? { link: '#', icon: 'chatboxes', onClick: showMessages, value: tt('g.messages') }
                 : null,
             {link: repliesLink, icon: 'new/answer', value: tt('g.replies')},
-            {link: favoritesLink, icon: 'new/star', value: 'Избранное'},
+            {link: favoritesLink, icon: 'new/star', value: tt('g.favorites')},
             {link: walletLink, icon: 'new/wallet', value: tt('g.wallet')},
             // {link: reset_password_link, icon: 'key', value: tt('g.change_password')},
             {link: settingsLink, icon: 'new/setting', value: tt('g.settings')},

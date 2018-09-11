@@ -1,10 +1,10 @@
-import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router';
 import styled from 'styled-components';
 import is from 'styled-is';
 import { darken } from 'polished';
 
-const Button = styled.button`
+const BaseButton = styled.button`
     display: inline-flex;
     overflow: hidden;
     justify-content: center;
@@ -55,25 +55,30 @@ const Button = styled.button`
 
     ${is('auto')`
         width: 100%;
-    `} ${is('light')`
+    `} 
+    
+    ${is('light')`
         color: #393636;
         background: #fff;
         border: 1px solid rgba(57,54,54,0.30);
         &:hover {
-          background: #fff;
-          border: 1px solid ${darken(0.05, 'rgba(57,54,54,0.30)')};
+            color: #393636;
+            background: #fff;
+            border: 1px solid ${darken(0.05, 'rgba(57,54,54,0.30)')};
         }
     `};
 `;
 
-Button.propTypes = {
+BaseButton.propTypes = {
     type: PropTypes.string,
     auto: PropTypes.bool,
     light: PropTypes.bool,
 };
 
+const Button = styled(BaseButton)``;
 Button.defaultProps = {
     type: 'button',
 };
 
+export const ButtonLink = BaseButton.withComponent(Link);
 export default Button;

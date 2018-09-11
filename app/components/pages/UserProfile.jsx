@@ -476,6 +476,9 @@ export default class UserProfile extends React.Component {
                                 <Icon name="calendar" /> <DateJoinWrapper date={accountjoin} />
                             </p>
                         </div>
+                        <div>
+                            <a href={`https://preview.golos.io/@${accountname}`} class="button small">Перейти на новый профиль</a>
+                        </div>
                         <div className="UserProfile__buttons-mobile">
                             <Follow follower={username} following={accountname} what="blog" />
                         </div>

@@ -113,8 +113,8 @@ export default class SettingsContent extends PureComponent {
         return new Promise((resolve, reject) => {
             updateAccount({
                 json_metadata: JSON.stringify(metaData),
-                account: account.name,
-                memo_key: account.memo_key,
+                account: account.get('name'),
+                memo_key: account.get('memo_key'),
                 successCallback: () => {
                     notify(tt('g.saved'));
                     resolve();

@@ -1,34 +1,26 @@
 import React, { PureComponent } from 'react';
+import { connect } from 'react-redux';
 import settings from './settings';
 import tt from 'counterpart';
+import { dataSelector } from 'src/app/redux/selectors/common';
 
+@connect(state => {
+    const settings = dataSelector('settings')(state);
+
+    return {
+        lang: settings.getIn(['basic', 'lang']),
+    };
+})
 export default class AndroidMarket extends PureComponent {
-    state = { language: false };
-
-    componentDidMount() {
-        if (process.env.BROWSER) {
-            let lang = localStorage.getItem('language');
-
-            if (!lang) {
-                lang =
-                    (navigator.languages && navigator.languages[0]) ||
-                    navigator.language ||
-                    navigator.userLanguage;
-            }
-
-            this.setState({ language: lang });
-        }
-    }
-
     render() {
-        const { language } = this.state;
+        const { lang } = this.props;
 
-        if (!language) {
+        if (!lang) {
             return null;
         }
 
         const imgsrc =
-            language === 'ru' || language === 'ru-RU'
+            lang === 'ru' || lang === 'ru-RU'
                 ? settings.android.img_url_ru
                 : settings.android.img_url;
 

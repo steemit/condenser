@@ -16,7 +16,7 @@ import entities from 'src/app/redux/reducers/entities';
 import ui from 'src/app/redux/reducers/ui';
 import data from 'src/app/redux/reducers/data';
 
-function initReducer(reducer, type) {
+export function initReducer(reducer, type) {
     return (state, action) => {
         if (!state) return reducer(state, action);
 
@@ -61,11 +61,5 @@ export default combineReducers({
     status: initReducer(status),
     entities: initReducer(entities),
     ui: initReducer(ui),
-    data: initReducer(data),
+    data,
 });
-
-/*
-let now
-    benchStart: initReducer((state = {}, action) => {console.log('>> action.type', action.type); now = Date.now(); return state}),
-    benchEnd: initReducer((state = {}, action) => {console.log('<< action.type', action.type, (Date.now() - now), 'ms'); return state}),
-*/

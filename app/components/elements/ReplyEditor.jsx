@@ -3,9 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import reactForm from 'app/utils/ReactForm';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer';
-import CategorySelector, {
-    validateCategory,
-} from 'app/components/cards/CategorySelector';
+import CategorySelector, { validateCategory } from 'app/components/cards/CategorySelector';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import Tooltip from 'app/components/elements/Tooltip';
@@ -14,31 +12,24 @@ import g from 'app/redux/GlobalReducer';
 import { Set } from 'immutable';
 import Remarkable from 'remarkable';
 import Dropzone from 'react-dropzone';
-import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdown';
-import VerticalMenu from 'app/components/elements/VerticalMenu';
 import tt from 'counterpart';
 import { SUPPORT_EMAIL, MARKDOWN_STYLING_GUIDE_URL } from 'app/client_config';
 import Icon from 'app/components/elements/Icon';
 import { detransliterate } from 'app/utils/ParsersAndFormatters';
 import { replyAction } from './ReplyEditorActions';
 import KEYS from 'app/utils/keyCodes';
+import { dataSelector } from 'src/app/redux/selectors/common';
+import { setSettingsOptions } from 'src/app/redux/actions/settings';
 
 const remarkable = new Remarkable({ html: true, linkify: false, breaks: true });
-const RichTextEditor = process.env.BROWSER
-    ? require('react-rte-image').default
-    : null;
+const RichTextEditor = process.env.BROWSER ? require('react-rte-image').default : null;
 const RTE_DEFAULT = false;
 
 class ReplyEditor extends React.Component {
     static propTypes = {
         // html component attributes
         formId: PropTypes.string.isRequired, // unique form id for each editor
-        type: PropTypes.oneOf([
-            'submit_feedback',
-            'submit_story',
-            'submit_comment',
-            'edit',
-        ]),
+        type: PropTypes.oneOf(['submit_feedback', 'submit_story', 'submit_comment', 'edit']),
         successCallback: PropTypes.func, // indicator that the editor is done and can be hidden
         onCancel: PropTypes.func, // hide editor when cancel button clicked
 
@@ -179,10 +170,7 @@ class ReplyEditor extends React.Component {
                         : values.title.length > 255
                             ? tt('reply_editor.shorten_title')
                             : null),
-                category:
-                    isStory &&
-                    !isFeedback &&
-                    validateCategory(values.category, !isEdit),
+                category: isStory && !isFeedback && validateCategory(values.category, !isEdit),
                 body: !values.body
                     ? tt('g.required')
                     : values.body.length > maxKb * 1024
@@ -209,10 +197,7 @@ class ReplyEditor extends React.Component {
         if (e) e.preventDefault();
         const { onCancel } = this.props;
         const { replyForm, body } = this.state;
-        if (
-            !body.value ||
-            confirm(tt('reply_editor.are_you_sure_you_want_to_clear_this_form'))
-        ) {
+        if (!body.value || confirm(tt('reply_editor.are_you_sure_you_want_to_clear_this_form'))) {
             replyForm.resetForm();
             this.setAutoVote();
             this.setState({ rte_value: stateFromHtml() });
@@ -223,8 +208,11 @@ class ReplyEditor extends React.Component {
 
     autoVoteOnChange = () => {
         const { autoVote } = this.state;
-        const key = 'replyEditorData-autoVote-story';
-        localStorage.setItem(key, !autoVote.value);
+        setSettingsOptions({
+            basic: {
+                selfVote: !autoVote.value,
+            },
+        });
         autoVote.props.onChange(!autoVote.value);
     };
 
@@ -237,14 +225,10 @@ class ReplyEditor extends React.Component {
     };
 
     setAutoVote() {
-        const { isStory } = this.props;
+        const { isStory, selfVote } = this.props;
         if (isStory) {
             const { autoVote } = this.state;
-            const key = 'replyEditorData-autoVote-story';
-            const autoVoteDefault = JSON.parse(
-                localStorage.getItem(key) || true
-            );
-            autoVote.props.onChange(autoVoteDefault);
+            autoVote.props.onChange(selfVote);
         }
     }
 
@@ -258,7 +242,6 @@ class ReplyEditor extends React.Component {
                 : stateFromMarkdown(body.value);
         }
         this.setState(state);
-        //localStorage.setItem('replyEditorData-rte', !this.state.rte)
     };
 
     showDraftSaved = () => {
@@ -274,8 +257,7 @@ class ReplyEditor extends React.Component {
     onPayoutTypeChange = e => {
         const payoutType = e.currentTarget.value;
         this.setState({ payoutType });
-        if (payoutType !== '0%')
-            localStorage.setItem('defaultPayoutType', payoutType);
+        if (payoutType !== '0%') localStorage.setItem('defaultPayoutType', payoutType);
     };
 
     onDrop = (acceptedFiles, rejectedFiles) => {
@@ -283,9 +265,7 @@ class ReplyEditor extends React.Component {
             if (rejectedFiles.length) {
                 this.setState({
                     progress: {
-                        error: tt(
-                            'reply_editor.please_insert_only_image_files'
-                        ),
+                        error: tt('reply_editor.please_insert_only_image_files'),
                     },
                 });
                 console.log('onDrop Rejected files: ', rejectedFiles);
@@ -424,9 +404,7 @@ class ReplyEditor extends React.Component {
             errorCallback,
         };
         const postLabel = username ? (
-            <Tooltip t={tt('g.post_as') + ' “' + username + '”'}>
-                {tt('g.post')}
-            </Tooltip>
+            <Tooltip t={tt('g.post_as') + ' “' + username + '”'}>{tt('g.post')}</Tooltip>
         ) : (
             tt('g.post')
         );
@@ -434,13 +412,13 @@ class ReplyEditor extends React.Component {
         let titleError = null;
         // The Required title error (triggered onBlur) can shift the form making it hard to click on things..
         if (
-            (hasTitleError &&
-                (title.error !== tt('g.required') || body.value !== '')) ||
+            (hasTitleError && (title.error !== tt('g.required') || body.value !== '')) ||
             titleWarn
         ) {
             titleError = (
                 <div className={hasTitleError ? 'error' : 'warning'}>
-                    {hasTitleError ? title.error : titleWarn}&nbsp;
+                    {hasTitleError ? title.error : titleWarn}
+                    &nbsp;
                 </div>
             );
         }
@@ -448,47 +426,32 @@ class ReplyEditor extends React.Component {
         // TODO: remove all references to these vframe classes. Removed from css and no longer needed.
         const vframe_class = isStory ? 'vframe' : '';
         const vframe_section_class = isStory ? 'vframe__section' : '';
-        const vframe_section_shrink_class = isStory
-            ? 'vframe__section--shrink'
-            : '';
+        const vframe_section_shrink_class = isStory ? 'vframe__section--shrink' : '';
 
         return (
             <div className="ReplyEditor row">
                 <div className="column small-12">
                     {isFeedback && (
                         <div>
-                            <h4>
-                                {tt('reply_editor.feedback_welcome.dear_users')}
-                            </h4>
-                            <p>
-                                {tt('reply_editor.feedback_welcome.message1')}
-                            </p>
-                            <p>
-                                {tt('reply_editor.feedback_welcome.message2')}
-                            </p>
+                            <h4>{tt('reply_editor.feedback_welcome.dear_users')}</h4>
+                            <p>{tt('reply_editor.feedback_welcome.message1')}</p>
+                            <p>{tt('reply_editor.feedback_welcome.message2')}</p>
                             <p>
                                 {tt('reply_editor.feedback_welcome.message3')}
                                 <Link to="/submit">
-                                    <Icon name="pencil" />{' '}
-                                    {tt('g.submit_a_story')}
+                                    <Icon name="pencil" /> {tt('g.submit_a_story')}
                                 </Link>
                                 {tt('reply_editor.feedback_welcome.message4')}
                             </p>
                             <p>
                                 {tt('reply_editor.questions_or_requests')}{' '}
-                                <a href={'mailto:' + SUPPORT_EMAIL}>
-                                    {SUPPORT_EMAIL}
-                                </a>.
+                                <a href={'mailto:' + SUPPORT_EMAIL}>{SUPPORT_EMAIL}</a>.
                             </p>
                             <p>
                                 {tt('reply_editor.support_by_telegram')} —{' '}
-                                <a href="https://t.me/golos_support">
-                                    https://t.me/golos_support
-                                </a>.
+                                <a href="https://t.me/golos_support">https://t.me/golos_support</a>.
                             </p>
-                            <p>
-                                {tt('reply_editor.feedback_welcome.message5')}
-                            </p>
+                            <p>{tt('reply_editor.feedback_welcome.message5')}</p>
                         </div>
                     )}
                     <form
@@ -519,9 +482,7 @@ class ReplyEditor extends React.Component {
                                         {...title.props}
                                         onChange={onTitleChange}
                                         disabled={loading}
-                                        placeholder={tt(
-                                            'reply_editor.placeholder'
-                                        )}
+                                        placeholder={tt('reply_editor.placeholder')}
                                         autoComplete="off"
                                         ref="titleRef"
                                         tabIndex={1}
@@ -531,22 +492,14 @@ class ReplyEditor extends React.Component {
                                         style={{ marginRight: '1rem' }}
                                     >
                                         {rte && (
-                                            <a
-                                                href="#"
-                                                onClick={this.toggleRte}
-                                            >
+                                            <a href="#" onClick={this.toggleRte}>
                                                 {body.value
                                                     ? 'Raw HTML'
-                                                    : `Markdown ${tt(
-                                                          'reply_editor.editor'
-                                                      )}`}
+                                                    : `Markdown ${tt('reply_editor.editor')}`}
                                             </a>
                                         )}
                                         {!rte && (
-                                            <a
-                                                href="#"
-                                                onClick={this.toggleRte}
-                                            >{`HTML ${tt(
+                                            <a href="#" onClick={this.toggleRte}>{`HTML ${tt(
                                                 'reply_editor.editor'
                                             )}`}</a>
                                         )}
@@ -559,15 +512,10 @@ class ReplyEditor extends React.Component {
                         <div
                             className={
                                 'ReplyEditor__body ' +
-                                (rte
-                                    ? `rte ${vframe_section_class}`
-                                    : vframe_section_shrink_class)
+                                (rte ? `rte ${vframe_section_class}` : vframe_section_shrink_class)
                             }
                         >
-                            <div
-                                ref="draft"
-                                className="ReplyEditor__draft ReplyEditor__draft-hide"
-                            >
+                            <div ref="draft" className="ReplyEditor__draft ReplyEditor__draft-hide">
                                 {tt('reply_editor.draft_saved')}
                             </div>
                             {process.env.BROWSER && rte ? (
@@ -583,11 +531,7 @@ class ReplyEditor extends React.Component {
                                 <span>
                                     <Dropzone
                                         onDrop={this.onDrop}
-                                        className={
-                                            type === 'submit_story'
-                                                ? 'dropzone'
-                                                : 'none'
-                                        }
+                                        className={type === 'submit_story' ? 'dropzone' : 'none'}
                                         disableClick
                                         multiple={false}
                                         accept="image/*"
@@ -601,21 +545,15 @@ class ReplyEditor extends React.Component {
                                             onPasteCapture={this.onPasteCapture}
                                             onKeyDown={this.onTextAreaKeyDown}
                                             className={
-                                                type === 'submit_story'
-                                                    ? 'upload-enabled'
-                                                    : ''
+                                                type === 'submit_story' ? 'upload-enabled' : ''
                                             }
                                             disabled={loading}
                                             rows={isStory ? 10 : 3}
                                             placeholder={
                                                 isFeedback
-                                                    ? tt(
-                                                          'reply_editor.feedback_placeholder'
-                                                      )
+                                                    ? tt('reply_editor.feedback_placeholder')
                                                     : isStory
-                                                        ? tt(
-                                                              'g.write_your_story'
-                                                          ) + '...'
+                                                        ? tt('g.write_your_story') + '...'
                                                         : tt('g.reply')
                                             }
                                             autoComplete="off"
@@ -624,19 +562,13 @@ class ReplyEditor extends React.Component {
                                     </Dropzone>
                                     {type === 'submit_story' && (
                                         <p className="drag-and-drop">
-                                            {tt(
-                                                'reply_editor.insert_images_by_dragging_dropping'
-                                            )}
+                                            {tt('reply_editor.insert_images_by_dragging_dropping')}
                                             <a onClick={this.onOpenClick}>
-                                                {tt(
-                                                    'reply_editor.selecting_them'
-                                                )}
+                                                {tt('reply_editor.selecting_them')}
                                             </a>
                                             {noClipboardData
                                                 ? ''
-                                                : tt(
-                                                      'reply_editor.pasting_from_the_clipboard'
-                                                  )}
+                                                : tt('reply_editor.pasting_from_the_clipboard')}
                                         </p>
                                     )}
                                     {progress.message && (
@@ -648,9 +580,7 @@ class ReplyEditor extends React.Component {
                                         </div>
                                     )}
                                     {progress.error && (
-                                        <div className="error">
-                                            {progress.error}
-                                        </div>
+                                        <div className="error">{progress.error}</div>
                                     )}
                                 </span>
                             )}
@@ -678,9 +608,8 @@ class ReplyEditor extends React.Component {
                                             tabIndex={3}
                                         />
                                         <div className="error">
-                                            {(category.touched ||
-                                                category.value) &&
-                                                category.error}&nbsp;
+                                            {(category.touched || category.value) && category.error}
+                                            &nbsp;
                                         </div>
                                     </span>
                                 )}
@@ -699,9 +628,7 @@ class ReplyEditor extends React.Component {
                         </div>
 
                         <div className={vframe_section_shrink_class}>
-                            {postError && (
-                                <div className="error">{postError}</div>
-                            )}
+                            {postError && <div className="error">{postError}</div>}
                         </div>
 
                         <div className={vframe_section_shrink_class}>
@@ -713,9 +640,7 @@ class ReplyEditor extends React.Component {
                                     disabled={disabled}
                                     tabIndex={4}
                                 >
-                                    {isEdit
-                                        ? tt('reply_editor.update_post')
-                                        : postLabel}
+                                    {isEdit ? tt('reply_editor.update_post') : postLabel}
                                 </button>
                             )}
                             {loading && (
@@ -750,32 +675,26 @@ class ReplyEditor extends React.Component {
                             {isStory &&
                                 !isEdit && (
                                     <div className="ReplyEditor__options float-right text-right">
-                                        {tt('g.rewards')}:&nbsp;
+                                        {tt('g.rewards')}
+                                        :&nbsp;
                                         <select
                                             value={this.state.payoutType}
                                             onChange={this.onPayoutTypeChange}
                                             style={{
                                                 color:
-                                                    this.state.payoutType ===
-                                                    '0%'
+                                                    this.state.payoutType === '0%'
                                                         ? 'orange'
                                                         : 'inherit',
                                             }}
                                         >
                                             <option value="100%">
-                                                {tt(
-                                                    'reply_editor.power_up_100'
-                                                )}
+                                                {tt('reply_editor.power_up_100')}
                                             </option>
                                             <option value="50%">
-                                                {tt(
-                                                    'reply_editor.default_50_50'
-                                                )}
+                                                {tt('reply_editor.default_50_50')}
                                             </option>
                                             <option value="0%">
-                                                {tt(
-                                                    'reply_editor.decline_payout'
-                                                )}
+                                                {tt('reply_editor.decline_payout')}
                                             </option>
                                         </select>
                                         <br />
@@ -784,7 +703,8 @@ class ReplyEditor extends React.Component {
                                                 'reply_editor.check_this_to_auto_upvote_your_post'
                                             )}
                                         >
-                                            {tt('g.upvote_post')}&nbsp;
+                                            {tt('g.upvote_post')}
+                                            &nbsp;
                                             <input
                                                 type="checkbox"
                                                 checked={autoVote.value}
@@ -797,20 +717,11 @@ class ReplyEditor extends React.Component {
                         {!loading &&
                             !rte &&
                             body.value && (
-                                <div
-                                    className={
-                                        'Preview ' + vframe_section_shrink_class
-                                    }
-                                >
+                                <div className={'Preview ' + vframe_section_shrink_class}>
                                     {!isHtml && (
                                         <div className="float-right">
-                                            <a
-                                                target="_blank"
-                                                href={MARKDOWN_STYLING_GUIDE_URL}
-                                            >
-                                                {tt(
-                                                    'reply_editor.markdown_styling_guide'
-                                                )}
+                                            <a target="_blank" href={MARKDOWN_STYLING_GUIDE_URL}>
+                                                {tt('reply_editor.markdown_styling_guide')}
                                             </a>
                                         </div>
                                     )}
@@ -894,8 +805,7 @@ export default formId =>
             const { type, parent_author, jsonMetadata } = ownProps;
             const isEdit = type === 'edit';
             const isStory =
-                /submit_story|submit_feedback/.test(type) ||
-                (isEdit && parent_author === '');
+                /submit_story|submit_feedback/.test(type) || (isEdit && parent_author === '');
 
             if (isStory) fields.push('title');
             if (isStory) fields.push('category');
@@ -903,19 +813,18 @@ export default formId =>
             let { category, title, body } = ownProps;
             if (/submit_/.test(type)) title = body = '';
             if (isStory && jsonMetadata && jsonMetadata.tags) {
-                const detags = jsonMetadata.tags.map(tag =>
-                    detransliterate(tag)
-                );
-                category = Set([detransliterate(category), ...detags]).join(
-                    ' '
-                );
+                const detags = jsonMetadata.tags.map(tag => detransliterate(tag));
+                category = Set([detransliterate(category), ...detags]).join(' ');
             }
+
+            const settings = dataSelector('settings')(state);
 
             return {
                 ...ownProps,
                 fields,
                 isStory,
                 username,
+                selfVote: settings.getIn(['basic', 'selfVote']),
                 initialValues: { title, body, category },
                 state,
                 formId,
@@ -942,5 +851,6 @@ export default formId =>
                 });
             },
             reply: replyAction(dispatch, remarkable),
+            setSettingsOptions: values => dispatch(setSettingsOptions(values)),
         })
     )(ReplyEditor);

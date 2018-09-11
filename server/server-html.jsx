@@ -2,7 +2,7 @@ import React from 'react';
 import { LIQUID_TOKEN } from 'app/client_config';
 import config from 'config';
 
-export default function ServerHTML({ body, assets, locale, title, meta, analytics }) {
+export default function ServerHTML({ body, assets, title, meta }) {
     let page_title = title;
     return (
         <html>

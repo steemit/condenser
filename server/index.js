@@ -27,7 +27,6 @@ global.$STM_Config = {
     lang_server : config.get('lang_server'),
     /* isTestnet: config.get('is_testnet'), */
     is_sandbox: config.get('is_sandbox') === 'false' ? false : true,
-    push_server_url: config.get('wss_push_service_url'),
     gate_service_url: config.get('gate_service_url'),
 };
 

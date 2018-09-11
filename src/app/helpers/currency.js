@@ -119,7 +119,7 @@ export function getPayout(data) {
     if (process.env.BROWSER) {
         const state = getStoreState();
 
-        let currency = localStorage.getItem('xchange.picked') || 'GBG';
+        let currency = state.data.settings.getIn(['basic', 'currency'], 'GBG');
         let rate;
 
         if (currency !== 'GBG') {
@@ -131,7 +131,9 @@ export function getPayout(data) {
             rate = 1;
         }
 
-        stringValue = formatCurrency(gbgValue * rate, currency);
+        const rounding = state.data.settings.getIn(['basic', 'rounding'], 3);
+
+        stringValue = formatCurrency(gbgValue * rate, currency, rounding);
     } else {
         stringValue = `${gbgValue.toFixed(3)} GBG`;
     }

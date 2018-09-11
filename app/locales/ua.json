@@ -374,8 +374,7 @@
     "write_your_story": "Написати свою історію",
     "yes": "Так",
     "you_are_viewing_a_single_comments_thread_from": "Ви читаєте одну нитку комментарів від",
-    "you_need_private_password_or_key_not_a_public_key": "Вам потрібен приватний пароль або ключ (не публічний ключ)",
-    "Популярне": "Популярное"
+    "you_need_private_password_or_key_not_a_public_key": "Вам потрібен приватний пароль або ключ (не публічний ключ)"
   },
   "generated_password_input": {
     "i_have_read_and_agree_to_the": "Я прочитав і згоден з",
@@ -645,7 +644,6 @@
     "always_show": "Відображати завжди",
     "always_warn": "Завжди попереджати",
     "choose_currency": "Виберіть валюту",
-    "choose_domestic": "Виберіть мову контенту",
     "choose_language": "Виберіть мову інтерфейсу",
     "cover_image_url": "Додайте URL Вашої обкладинки",
     "invalid_url": "Неприпустима URL-адреса",

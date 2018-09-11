@@ -23,7 +23,7 @@ const Root = styled.div`
             top: 0;
             bottom: 0;
             width: 80px;
-            background: linear-gradient(to right, rgba(255, 255, 255, 1),  rgba(255, 255, 255, 0));
+            background: linear-gradient(to right, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
             z-index: 1;
         }
     `};
@@ -36,7 +36,7 @@ const Root = styled.div`
             top: 0;
             bottom: 0;
             width: 80px;
-            background: linear-gradient(to left, rgba(255, 255, 255, 1),  rgba(255, 255, 255, 0));
+            background: linear-gradient(to left, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
             z-index: 1;
         }
     `};

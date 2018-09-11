@@ -95,7 +95,7 @@ class SlideContainer extends PureComponent {
 
     componentDidMount() {
         window.addEventListener('resize', this._renderLazy);
-        setTimeout(() => this.forceUpdate(), 0);
+        this._renderLazy();
     }
 
     componentWillUnmount() {
@@ -105,15 +105,14 @@ class SlideContainer extends PureComponent {
 
     render() {
         const { children, className } = this.props;
+        const { contentWidth, scrollLeft, width } = this.state;
 
         let left = false;
         let right = false;
 
         if (this._content) {
-            left = this._wrapper.scrollLeft !== 0;
-
-            right =
-                this._wrapper.scrollWidth > this._wrapper.scrollLeft + this._content.offsetWidth;
+            left = scrollLeft !== 0;
+            right = width > scrollLeft + contentWidth;
         }
 
         return (
@@ -178,9 +177,17 @@ class SlideContainer extends PureComponent {
         }
     };
 
-    _renderLazy = throttle(() => {
-        this.forceUpdate();
-    }, 50, { leading: false });
+    _renderLazy = throttle(
+        () => {
+            this.setState({
+                contentWidth: this._content.offsetWidth,
+                scrollLeft: this._wrapper.scrollLeft,
+                width: this._wrapper.scrollWidth,
+            });
+        },
+        50,
+        { leading: false }
+    );
 }
 
 function nextAnimationFrame(callback) {

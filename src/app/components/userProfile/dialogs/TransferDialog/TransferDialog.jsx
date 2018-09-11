@@ -32,6 +32,10 @@ const SubHeader = styled.div`
 const Body = styled.div`
     display: flex;
     margin: 0 -10px;
+    
+    @media (max-width: 500px) {
+        flex-direction: column;    
+    }
 `;
 
 const Column = styled.div`
@@ -66,6 +70,10 @@ const Note = styled.textarea`
     resize: none;
     font-size: 14px;
     box-shadow: none !important;
+    
+    @media (max-width: 500px) {
+        height: 60px;  
+    }
 `;
 
 const ErrorBlock = styled.div`
@@ -80,6 +88,7 @@ const ErrorLine = styled.div`
 class TransferDialog extends PureComponent {
     static propTypes = {
         pageAccountName: PropTypes.string,
+        onRef: PropTypes.func.isRequired,
     };
 
     componentDidMount() {

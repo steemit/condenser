@@ -26,7 +26,7 @@ const TYPES = {
 };
 
 const Container = styled.div`
-    width: 580px;
+    max-width: 580px;
 `;
 
 const Content = styled.div`
@@ -53,10 +53,13 @@ const SubHeaderLine = styled.div`
 const Columns = styled.div`
     display: flex;
     margin: 0 -10px;
+    
+    @media (max-width: 500px) {
+        flex-direction: column;
+    }
 `;
 
 const Column = styled.div`
-    flex-basis: 100px;
     flex-grow: 1;
     margin: 0 10px;
 `;

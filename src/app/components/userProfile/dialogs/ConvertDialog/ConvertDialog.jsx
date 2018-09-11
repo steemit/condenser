@@ -45,7 +45,7 @@ const TYPES_SUCCESS_TEXT = {
 };
 
 const Container = styled.div`
-    width: 580px;
+    max-width: 580px;
 `;
 
 const Content = styled.div`
@@ -202,6 +202,7 @@ class ConvertDialog extends PureComponent {
             >
                 <Container>
                     <DialogTypeSelect
+                        mobileColumn
                         activeId={type}
                         buttons={[
                             {

@@ -96,7 +96,6 @@ export default class DialogManager extends React.PureComponent {
         this._dialogs = [];
 
         this.state = {
-            top: 0,
             dialogOptions: null,
         };
     }
@@ -132,18 +131,8 @@ export default class DialogManager extends React.PureComponent {
                 className={cn('DialogManager__window', {
                     DialogManager__window_active: i === this._dialogs.length - 1,
                 })}
-                style={{ top: dialog.top }}
             >
-                <div
-                    className="DialogManager__dialog"
-                    style={
-                        i > 0
-                            ? {
-                                  transform: `translate3d(${i * 30}px,${i * 30}px,0)`,
-                              }
-                            : null
-                    }
-                >
+                <div className="DialogManager__dialog">
                     <dialog.options.component
                         {...dialog.options.props}
                         onRef={el => (dialog.el = el)}
@@ -155,7 +144,11 @@ export default class DialogManager extends React.PureComponent {
 
         return (
             <div className="DialogManager">
-                <div className="DialogManager__shade" ref={this._onShadowRef} onClick={this._onShadeClick} />
+                <div
+                    className="DialogManager__shade"
+                    ref={this._onShadowRef}
+                    onClick={this._onShadeClick}
+                />
                 {dialogs}
             </div>
         );
@@ -181,7 +174,6 @@ export default class DialogManager extends React.PureComponent {
     _showDialog(options, silent) {
         this._dialogs.push({
             key: ++id,
-            top: window.scrollY || 0,
             options,
         });
 
@@ -192,7 +184,7 @@ export default class DialogManager extends React.PureComponent {
 
     _onShadowRef = el => {
         const body = document.body;
-        const content = document.getElementById('content')
+        const content = document.getElementById('content');
 
         if (el) {
             if (window.innerHeight < body.offsetHeight) {

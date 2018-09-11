@@ -8,10 +8,15 @@ const Root = styled.div`
     border-top: 1px solid #e1e1e1;
     border-bottom: 1px solid #e1e1e1;
     user-select: none;
+    
+    ${is('mobilecolumn')`
+        @media (max-width: 600px) {
+            flex-direction: column;    
+        }
+    `}
 `;
 
 const TypeButton = styled.div.attrs({ role: 'button' })`
-    flex-basis: 200px;
     flex-grow: 1;
     height: 38px;
     line-height: 38px;
@@ -39,7 +44,7 @@ export default class DialogTypeSelect extends PureComponent {
         const { buttons } = this.props;
 
         return (
-            <Root>
+            <Root mobilecolumn={this.props.mobileColumn}>
                 {buttons.map(this._renderButton)}
             </Root>
         );

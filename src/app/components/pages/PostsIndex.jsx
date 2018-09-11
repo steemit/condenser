@@ -297,6 +297,9 @@ module.exports = {
                 topic: ownProps.params.category,
                 categories: state.global
                     .getIn(['tag_idx', 'trending'])
+                    .filter(e => {
+                        return ['touch-tube', 'touchit-social'].indexOf(e) < 0;
+                    })
                     .take(50),
                 maybeLoggedIn: state.user.get('maybeLoggedIn'),
                 isBrowser: process.env.BROWSER,

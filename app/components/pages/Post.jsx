@@ -182,7 +182,6 @@ class Post extends React.Component {
                 </div>
                 {!current_user && <div className="row">
                 <CTABlock post={post}/>
-
                     <div className="column">
                         <div className="Post__promo">
                             {tt('g.next_7_strings_sinngle_block.authors_get_paid_when_people_like_you_upvote_their_post')}.

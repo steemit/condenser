@@ -2,11 +2,10 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import Userpic from 'app/components/elements/Userpic';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
-import LocalizedCurrency from 'app/components/elements/LocalizedCurrency';
 import Icon from 'app/components/elements/Icon';
-import { parsePayoutAmount } from 'app/utils/ParsersAndFormatters';
 import extractContent from 'app/utils/ExtractContent';
 import { objAccessor } from 'app/utils/Accessors';
+import { getPayout } from 'src/app/helpers/currency';
 
 const Root = styled.div`
     border-radius: 8.5px;
@@ -24,12 +23,12 @@ const Main = styled.a`
     display: block;
     height: 342px;
     overflow: hidden;
+`;
 
-    & > img {
-        width: 100%;
-        z-index: 1;
-        position: relative;
-    }
+const Img = styled.img`
+    width: 100%;
+    z-index: 1;
+    position: relative;
 `;
 
 const Content = styled.div`
@@ -39,11 +38,11 @@ const Content = styled.div`
 `;
 
 const ContentTitle = styled.div`
-    font-family: ${a => a.theme.fontFamilySerif};
-    font-size: 17px;
+    margin-bottom: 15px;
     line-height: 1.2;
     color: #212121;
-    margin-bottom: 15px;
+    font-family: ${a => a.theme.fontFamilySerif};
+    font-size: 17px;
 `;
 
 const ContentText = styled.div`
@@ -76,7 +75,7 @@ const FooterName = styled.div`
     font-size: 14px;
     font-weight: 500;
     line-height: 1;
-    color: #333333;
+    color: #333;
     margin-bottom: 7px;
 `;
 
@@ -92,6 +91,11 @@ const FooterActions = styled.div`
     justify-content: flex-end;
 `;
 
+const IconStyled = styled(Icon)`
+    margin-right: 5px;
+    fill: #333;
+`;
+
 const FooterVotes = styled.div`
     display: flex;
     align-items: center;
@@ -101,15 +105,8 @@ const FooterVotes = styled.div`
     line-height: 1.28;
     color: #757575;
 
-    .Icon {
-        fill: #333;
-        margin-right: 5px;
-    }
-
-    &:hover {
-        .Icon {
-            fill: #222;
-        }
+    &:hover ${IconStyled} {
+        fill: #222;
     }
 `;
 
@@ -117,38 +114,25 @@ const FooterPayout = styled.div`
     padding: 4px 7px;
     border: 1px solid #e1e1e1;
     border-radius: 100px;
-    font-size: 12px;
-    font-weight: 300;
     line-height: 1;
     text-align: center;
-    color: #757575;
     white-space: nowrap;
+    font-size: 12px;
+    font-weight: 300;
+    color: #757575;
 `;
 
 export default class CardPost extends Component {
     render() {
-        const { post } = this.props;
+        const { post, className } = this.props;
 
         const p = extractContent(objAccessor, post);
-
-        const max_payout = parsePayoutAmount(post.max_accepted_payout);
-        const pending_payout = parsePayoutAmount(post.pending_payout_value);
-        const total_author_payout = parsePayoutAmount(post.total_payout_value);
-        const total_curator_payout = parsePayoutAmount(
-            post.curator_payout_value
-        );
-
-        let payout =
-            pending_payout + total_author_payout + total_curator_payout;
-        if (payout < 0.0) payout = 0.0;
-        if (payout > max_payout) payout = max_payout;
+        const payout = getPayout(post);
 
         return (
-            <Root>
+            <Root className={className}>
                 <Main href={p.link}>
-                    {p.image_link && (
-                        <img src={p.image_link} alt="" title={p.title} />
-                    )}
+                    {p.image_link && <Img src={p.image_link} title={p.title} />}
                     <Content>
                         <ContentTitle>{p.title}</ContentTitle>
                         <ContentText>{p.desc}</ContentText>
@@ -166,12 +150,10 @@ export default class CardPost extends Component {
                     </FooterProfile>
                     <FooterActions>
                         <FooterVotes>
-                            <Icon name="new/like" />
+                            <IconStyled name="new/like" />
                             {post.net_votes}
                         </FooterVotes>
-                        <FooterPayout>
-                            <LocalizedCurrency amount={payout} />
-                        </FooterPayout>
+                        <FooterPayout>{payout}</FooterPayout>
                     </FooterActions>
                 </Footer>
             </Root>

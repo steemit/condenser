@@ -8,8 +8,8 @@ const Root = styled.section`
     background-color: #f8f8f8;
 `;
 
-const CardPost_W = styled.div`
-    @media screen and (max-width: 74.9375em) {
+const CardPostStyled = styled(CardPost)`
+    @media (max-width: 74.9375em) {
         margin-bottom: 10px;
     }
 `;
@@ -68,13 +68,7 @@ const Tag = styled.div`
 
 export default class Initial extends PureComponent {
     render() {
-        const {
-            tags,
-            tagsActiveId,
-            tagsLoading,
-            tagsCards,
-            className,
-        } = this.props;
+        const { tags, tagsActiveId, tagsLoading, tagsCards, className } = this.props;
 
         return (
             <Root className={className}>
@@ -88,14 +82,8 @@ export default class Initial extends PureComponent {
                                     {tags.map(tag => (
                                         <Tag
                                             key={tag.id}
-                                            className={
-                                                tag.id === tagsActiveId
-                                                    ? 'active'
-                                                    : ''
-                                            }
-                                            onClick={() =>
-                                                this.fetchTagContents(tag)
-                                            }
+                                            className={tag.id === tagsActiveId ? 'active' : ''}
+                                            onClick={() => this.fetchTagContents(tag)}
                                         >
                                             {tag.name}
                                         </Tag>
@@ -112,21 +100,11 @@ export default class Initial extends PureComponent {
                                 <div className="columns">
                                     <div className="row small-up-1 medium-up-2 large-up-3">
                                         {tagsCards[tagsActiveId] &&
-                                            tagsCards[tagsActiveId].map(
-                                                post => (
-                                                    <div
-                                                        className="columns"
-                                                        key={post.id}
-                                                    >
-                                                        <CardPost
-                                                            className={
-                                                                CardPost_W
-                                                            }
-                                                            post={post}
-                                                        />
-                                                    </div>
-                                                )
-                                            )}
+                                            tagsCards[tagsActiveId].map(post => (
+                                                <div className="columns" key={post.id}>
+                                                    <CardPostStyled post={post} />
+                                                </div>
+                                            ))}
                                     </div>
                                 </div>
                             )}

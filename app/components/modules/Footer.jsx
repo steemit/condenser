@@ -3,8 +3,8 @@ import {connect} from 'react-redux';
 import tt from 'counterpart';
 import {api} from 'golos-js';
 import Icon from 'app/components/elements/Icon';
-import LocalizedCurrency from 'app/components/elements/LocalizedCurrency';
 import { TERMS_OF_SERVICE_URL } from 'app/client_config';
+import { renderValue } from 'src/app/helpers/currency';
 
 class Footer extends React.Component {
     state = {
@@ -78,7 +78,7 @@ class Footer extends React.Component {
                 width: 'medium-3',
                 items: [
                     {
-                        name: (<LocalizedCurrency amount={currentSupply} short/>),
+                        name: renderValue(currentSupply, 'short'),
                         url: 'https://explorer.golos.io',
                         className: 'big'
                     }

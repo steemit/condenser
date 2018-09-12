@@ -165,7 +165,15 @@ class PostsList extends React.Component {
             const ignore =
                 ignore_result && ignore_result.has(cont.get('author'));
             const hide = cont.getIn(['stats', 'hide']);
-            if (!(ignore || hide) || showSpam)
+            var show = false;
+            if (
+                JSON.parse(cont.get('json_metadata')).tags &&
+                JSON.parse(cont.get('json_metadata')).tags.indexOf(
+                    'touchit-social'
+                ) >= 0
+            )
+                show = true;
+            if (show && (!(ignore || hide) || showSpam))
                 // rephide
                 postsInfo.push({ item, ignore });
         });

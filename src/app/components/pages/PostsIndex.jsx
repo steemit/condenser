@@ -22,6 +22,7 @@ class PostsIndex extends React.Component {
     static propTypes = {
         discussions: PropTypes.object,
         accounts: PropTypes.object,
+        content: PropTypes.object,
         status: PropTypes.object,
         routeParams: PropTypes.object,
         requestData: PropTypes.func,
@@ -133,6 +134,21 @@ class PostsIndex extends React.Component {
             }
         } else {
             posts = this.getPosts(order, category);
+
+            if (posts) {
+                var cont = this.props.content;
+                posts.filter(post => {
+                    if (
+                        cont.get(post).get('json_metadata').tags &&
+                        cont
+                            .get(post)
+                            .get('json_metadata')
+                            .tags.indexOf('touchit-social') >= 0
+                    )
+                        return post;
+                });
+            }
+
             if (posts && posts.size === 0) {
                 emptyText = (
                     <div>
@@ -192,6 +208,7 @@ class PostsIndex extends React.Component {
         const layoutClass = this.props.blogmode
             ? ' layout-block'
             : ' layout-list';
+
         return (
             <div
                 className={
@@ -289,6 +306,7 @@ module.exports = {
                 status: state.global.get('status'),
                 loading: state.app.get('loading'),
                 accounts: state.global.get('accounts'),
+                content: state.global.get('content'),
                 username:
                     state.user.getIn(['current', 'username']) ||
                     state.offchain.get('account'),

@@ -8,7 +8,6 @@ import ConfirmTransactionForm from 'app/components/modules/ConfirmTransactionFor
 import Transfer from 'app/components/modules/Transfer';
 import user from 'app/redux/User';
 import tr from 'app/redux/Transaction';
-import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import Powerdown from 'app/components/modules/Powerdown';
 import MessageBox from 'app/components/modules/Messages';
 
@@ -27,11 +26,6 @@ class Modals extends React.Component {
         show_messages_modal: PropTypes.bool,
         hideMessages: PropTypes.func.isRequired,
     };
-
-    constructor() {
-        super();
-        this.shouldComponentUpdate = shouldComponentUpdate(this, 'Modals');
-    }
 
     render() {
         const {

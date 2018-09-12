@@ -7,10 +7,6 @@
     "mobileBannerAlt": "Доступно в Google Play",
     "resources": "Ресурсы"
   },
-  "authorrewards_jsx": {
-    "author_rewards_history": "История авторских наград",
-    "estimated_author_rewards_last_week": "Оценочные авторские вознаграждения за прошлую неделю"
-  },
   "category_selector_jsx": {
     "denied_to_publish_the_posts_with_tag": "Запрещено публиковать посты с тегом 'stihi-io'",
     "main_tag_hint": "Первый тег – основной. Пост будет опубликован в этой теме.",
@@ -129,13 +125,6 @@
     "without_country_code": "Без кода страны",
     "you_can_change_your_number": "* Вы можете изменить номер телефона. ",
     "you_need_to": "Вам нужно "
-  },
-  "curationrewards_jsx": {
-    "curation_rewards_history": "История кураторских наград",
-    "curation_rewards_last_24_hours": "Кураторские награды за последние 24 часа",
-    "curation_rewards_last_week": "Кураторские награды за последнюю неделю",
-    "daily_average_curation_rewards": "Среднесуточные кураторские награды",
-    "estimated_curation_rewards_last_week": "Оценочные кураторские награды за последнюю неделю"
   },
   "delegate_vesting_shares_info_jsx": {
     "confirm_cancel_delegation": "Вы действительно хотите отозвать делегированную %(VESTING_TOKEN2)s у пользователя %(delegatee)s",
@@ -979,8 +968,7 @@
     "TOKEN_WORTH": "~1 мг золота",
     "VESTING_TOKEN": "Сила Голоса",
     "VESTING_TOKEN2": "Силу Голоса",
-    "VESTING_TOKENS": "Силы Голоса",
-    "VESTING_TOKEN_UPPERCASE": "СИЛА ГОЛОСА"
+    "VESTING_TOKENS": "Силы Голоса"
   },
   "transfer_jsx": {
     "advanced": "Расширенные опции",
@@ -1004,15 +992,6 @@
     "this_memo_is": "Это примечание",
     "use_only_3_digits_of_precison": "Используйте только 3 цифры точности",
     "withdraw_funds_after_the_required_3_day_waiting_period": "Снять средства после необходимого 3-х дневного периода ожидания."
-  },
-  "transferhistoryrow_jsx": {
-    "cancel_transfer_from_savings": "Отменить перевод из сейфа",
-    "from_savings": "из сейфа",
-    "receive_interest_of": "Получены проценты ",
-    "start_power_down_of": "Ослабление %(VESTING_TOKENS)s начато с",
-    "stop_power_down": "Ослабление %(VESTING_TOKENS)s остановлено",
-    "to_savings": "в сейф",
-    "transfer": "Отправлено"
   },
   "user_profile": {
     "explore_APP_NAME": "Исследовать %(APP_NAME)s",

@@ -1,5 +1,4 @@
 import remarkableStripper from 'app/utils/RemarkableStripper'
-import links from 'app/utils/Links'
 import sanitize from 'sanitize-html'
 import {htmlDecode} from 'app/utils/Html'
 import { getTags } from 'shared/HtmlReady'

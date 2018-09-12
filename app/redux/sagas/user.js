@@ -51,7 +51,7 @@ function* watchLoadSavingsWithdraw() {
     yield takeLatest('user/LOAD_SAVINGS_WITHDRAW', loadSavingsWithdraw);
 }
 
-export function* watchRemoveHighSecurityKeys() {
+function* watchRemoveHighSecurityKeys() {
     yield takeLatest('@@router/LOCATION_CHANGE', removeHighSecurityKeys);
 }
 

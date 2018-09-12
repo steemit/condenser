@@ -4,7 +4,7 @@ import is from 'styled-is';
 
 import Flex from 'golos-ui/Flex';
 
-export const formControlStyles = css`
+const formControlStyles = css`
     position: relative;
     width: 100%;
     height: auto;

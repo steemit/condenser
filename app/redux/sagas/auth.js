@@ -61,7 +61,7 @@ function* authStr({pubkeys, authority, authType, recurse = 1}) {
     return t >= r ? 'full' : t > 0 ? 'partial' : 'none'
 }
 
-export function* threshold({pubkeys, authority, authType, recurse = 1}) {
+function* threshold({pubkeys, authority, authType, recurse = 1}) {
     if (!pubkeys.size) return 0
     let t = pubkeyThreshold({pubkeys, authority})
     const account_auths = authority.get('account_auths')

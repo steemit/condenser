@@ -4,6 +4,7 @@ const git = require('git-rev-sync');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const baseConfig = require('./base.config');
 const StartServerPlugin = require('./plugins/StartServerPlugin');
+const DeadCodePlugin = require('webpack-deadcode-plugin');
 
 const Webpack_isomorphic_tools_plugin = require('webpack-isomorphic-tools/plugin');
 const webpack_isomorphic_tools_plugin = new Webpack_isomorphic_tools_plugin(
@@ -35,13 +36,13 @@ module.exports = merge(baseConfig, {
             chunkFilename: '[id].css',
         }),
         new StartServerPlugin(),
-        // new require('webpack-deadcode-plugin')({
-        //     patterns: [
-        //         'src/**/*.(js|jsx|css)',
-        //         'app/**/*.(js|jsx|css)'
-        //     ],
-        //     exclude: ['**/*.(stories|spec|test).(js|jsx)'],
-        // }),
+        new DeadCodePlugin({
+            patterns: [
+                'src/**/*.(js|jsx|css)',
+                'app/**/*.(js|jsx|css)'
+            ],
+            exclude: ['**/*.(stories|spec|test).(js|jsx)'],
+        }),
     ],
     module: {
         rules: [
@@ -71,11 +72,11 @@ module.exports = merge(baseConfig, {
     },
     serve: {
         port: WEBPACK_PORT,
-        hot: {
+        hotClient: {
             port: 8090,
             logLevel: 'warn',
         },
-        dev: {
+        devMiddleware: {
             publicPath: '/assets/',
             logLevel: 'warn',
         },

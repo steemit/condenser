@@ -1,5 +1,3 @@
-import React from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import is from 'styled-is';
 
@@ -105,26 +103,3 @@ export const DialogButton = styled.button`
         }
     `};
 `;
-
-// .Dialog {
-//   &__close {
-//     position: absolute;
-//     right: 8px;
-//     top: 8px;
-//     width: 30px;
-//     height: 30px;
-//     padding-top: 7px;
-//     text-align: center;
-//     color: #e1e1e1;
-//     cursor: pointer;
-//     transition: color 0.1s;
-
-//     &:hover {
-//       color: #000;
-//     }
-
-//     & > svg {
-//       width: 14px;
-//       height: 14px;
-//     }
-//   }

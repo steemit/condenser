@@ -12,8 +12,6 @@ const rProxyDomain = /^http(s)?:\/\/(imgp|images).golos.io\//g;
 const rProxyDomainsDimensions = /http(s)?:\/\/(imgp|images).golos.io\/([0-9]+x[0-9]+)\//g;
 const NATURAL_SIZE = '0x0/';
 
-export const imageProxy = () => $STM_Config.img_proxy_prefix;
-
 /**
  * Strips all proxy domains from the beginning of the url. Adds the global proxy if dimension is specified
  * @param {string} url

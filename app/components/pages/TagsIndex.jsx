@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types'
 import { Link } from 'react-router';
 import {connect} from 'react-redux';
-import { browserHistory } from 'react-router';
 import { numberWithCommas } from 'app/utils/StateFunctions';
 import tt from 'counterpart';
 import { detransliterate } from 'app/utils/ParsersAndFormatters';

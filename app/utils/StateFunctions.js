@@ -155,7 +155,7 @@ export function contentStats(content) {
     }
 }
 
-export function filterTags(tags) {
+function filterTags(tags) {
     return tags.filter(tag => typeof tag === 'string')
 }
 

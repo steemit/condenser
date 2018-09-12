@@ -1,9 +1,9 @@
 import tt from 'counterpart';
 import { detransliterate } from './ParsersAndFormatters';
 
-export const TAGS_MAX_LENGTH = 24;
+const TAGS_MAX_LENGTH = 24;
 export const NSFW_TAG = 'nsfw';
-export const NSFW_TAG_NUMERIC = '18+';
+const NSFW_TAG_NUMERIC = '18+';
 
 const FAVORITE_KEY = 'golos.favorite-tags';
 
@@ -63,15 +63,15 @@ export function processTagsFromData(tags) {
     return tags.map(tag => detransliterate(tag));
 }
 
-export function isCyrillicTag(tag) {
+function isCyrillicTag(tag) {
     return /[а-яёґєії]/.test(tag)
 }
 
-export function startsWithRU(tag) {
+function startsWithRU(tag) {
     return /ru--/.test(tag)
 }
 
-export function processCyrillicTag(tag) {
+function processCyrillicTag(tag) {
     return `ru--${detransliterate(tag, true)}`
 }
 

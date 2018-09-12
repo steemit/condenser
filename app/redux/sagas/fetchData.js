@@ -19,24 +19,24 @@ export function* fetchDataWatches () {
     yield fork(watchFetchVestingDelegations);
 }
 
-export function* watchGetContent() {
+function* watchGetContent() {
     yield takeEvery('GET_CONTENT', getContentCaller);
 }
 
-export function* getContentCaller(action) {
+function* getContentCaller(action) {
     yield getContent(action.payload);
 }
 
-export function* watchLocationChange() {
+function* watchLocationChange() {
     yield takeLatest('@@router/LOCATION_CHANGE', fetchState);
 }
 
-export function* watchFetchState() {
+function* watchFetchState() {
     yield takeLatest('FETCH_STATE', fetchState);
 }
 
 let is_initial_state = true;
-export function* fetchState(action) {
+function* fetchState(action) {
     const { pathname } = action.payload;
 
     let url = pathname;
@@ -238,11 +238,11 @@ export function* fetchState(action) {
     }
 }
 
-export function* watchDataRequests() {
+function* watchDataRequests() {
     yield takeLatest('REQUEST_DATA', fetchData);
 }
 
-export function* fetchData(action) {
+function* fetchData(action) {
     const {
         order,
         author,
@@ -352,7 +352,7 @@ export function* fetchData(action) {
     }
 }
 
-export function* watchFetchJsonRequests() {
+function* watchFetchJsonRequests() {
     yield takeEvery('global/FETCH_JSON', fetchJson);
 }
 
@@ -384,11 +384,11 @@ function* fetchJson({payload: {id, url, body, successCallback, skipLoading = fal
     }
 }
 
-export function* watchFetchExchangeRates() {
+function* watchFetchExchangeRates() {
     yield takeEvery('global/FETCH_EXCHANGE_RATES', fetchExchangeRates);
 }
 
-export function* fetchExchangeRates() {
+function* fetchExchangeRates() {
   const fourHours = 1000 * 60 * 60 * 4;
 
   try {
@@ -453,11 +453,11 @@ function storeExchangeValues(created, gold, pair, picked) {
   localStorage.setItem('xchange.picked', picked || DEBT_TOKEN_SHORT);
 }
 
-export function* watchFetchVestingDelegations() {
+function* watchFetchVestingDelegations() {
     yield takeLatest('global/FETCH_VESTING_DELEGATIONS', fetchVestingDelegations)
 }
 
-export function* fetchVestingDelegations({ payload: { account, type } }) {
+function* fetchVestingDelegations({ payload: { account, type } }) {
     const r = yield call([ api, api.getVestingDelegationsAsync ], account, '', 100, type)
 
     const vesting_delegations = {}

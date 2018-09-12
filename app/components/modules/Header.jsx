@@ -6,7 +6,6 @@ import TopRightMenu from 'app/components/modules/TopRightMenu';
 import Icon from 'app/components/elements/Icon.jsx';
 import resolveRoute from 'app/ResolveRoute';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
-import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import HorizontalMenu from 'app/components/elements/HorizontalMenu';
 import normalizeProfile from 'app/utils/NormalizeProfile';
 import tt from 'counterpart';
@@ -35,7 +34,6 @@ class Header extends React.Component {
     constructor() {
         super();
         this.state = {subheader_hidden: false}
-        this.shouldComponentUpdate = shouldComponentUpdate(this, 'Header');
         this.hideSubheader = this.hideSubheader.bind(this);
     }
 
@@ -225,8 +223,6 @@ class Header extends React.Component {
         );
     }
 }
-
-export {Header as _Header_};
 
 export default connect(
     state => {

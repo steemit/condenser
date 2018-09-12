@@ -7,10 +7,6 @@
     "mobileBannerAlt": "Get it on Google Play",
     "resources": "Resources"
   },
-  "authorrewards_jsx": {
-    "author_rewards_history": "Author Rewards History",
-    "estimated_author_rewards_last_week": "Estimated author rewards last week"
-  },
   "category_selector_jsx": {
     "denied_to_publish_the_posts_with_tag": "It is denied to publish the posts with tag 'stihi-io'",
     "main_tag_hint": "First tag is main. Post will be posted in that category.",
@@ -127,13 +123,6 @@
     "without_country_code": "Without country code",
     "you_can_change_your_number": "You can change your number at any time if we didn't receive your sms with verification code. ",
     "you_need_to": "You need to "
-  },
-  "curationrewards_jsx": {
-    "curation_rewards_history": "Curation Rewards History",
-    "curation_rewards_last_24_hours": "Curation rewards last 24 hours",
-    "curation_rewards_last_week": "Curation rewards last week",
-    "daily_average_curation_rewards": "Daily average curation rewards",
-    "estimated_curation_rewards_last_week": "Estimated curation rewards last week"
   },
   "delegate_vesting_shares_info_jsx": {
     "confirm_cancel_delegation": "Are you sure you want to cancel %(VESTING_TOKEN2)s delegation",
@@ -963,8 +952,7 @@
     "TOKEN_WORTH": "~1 mg of gold",
     "VESTING_TOKEN": "Golos Power",
     "VESTING_TOKEN2": "Golos Power",
-    "VESTING_TOKENS": "Golos Power",
-    "VESTING_TOKEN_UPPERCASE": "GOLOS POWER"
+    "VESTING_TOKENS": "Golos Power"
   },
   "transfer_jsx": {
     "advanced": "Advanced",
@@ -987,15 +975,6 @@
     "this_memo_is": "This Memo is",
     "use_only_3_digits_of_precison": "Use only 3 digits of precison",
     "withdraw_funds_after_the_required_3_day_waiting_period": "Withdraw funds after the required 3 day waiting period."
-  },
-  "transferhistoryrow_jsx": {
-    "cancel_transfer_from_savings": "Cancel transfer from savings",
-    "from_savings": "from savings",
-    "receive_interest_of": "Receive interest of",
-    "start_power_down_of": "Start power down of",
-    "stop_power_down": "Stop power down",
-    "to_savings": "to savings",
-    "transfer": "Transfer"
   },
   "user_profile": {
     "explore_APP_NAME": "Explore %(APP_NAME)s",

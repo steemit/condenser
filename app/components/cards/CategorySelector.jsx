@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import tt from 'counterpart';
-import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
 import { validateTags } from 'app/utils/tags';
 
@@ -30,7 +29,6 @@ class CategorySelector extends React.Component {
     constructor() {
         super()
         this.state = {createCategory: true}
-        this.shouldComponentUpdate = shouldComponentUpdate(this, 'CategorySelector')
         this.categoryCreateToggle = e => {
             e.preventDefault()
             this.props.onChange()

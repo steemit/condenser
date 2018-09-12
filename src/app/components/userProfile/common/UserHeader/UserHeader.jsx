@@ -8,7 +8,7 @@ import proxifyImageUrl from 'app/utils/ProxifyUrl';
 import normalizeProfile from 'app/utils/NormalizeProfile';
 
 import Dropzone from 'react-dropzone';
-import StyledButton, { ButtonLink } from 'golos-ui/Button';
+import StyledButton, { BaseButton } from 'golos-ui/Button';
 import Icon from 'golos-ui/Icon';
 import Flex from 'golos-ui/Flex';
 import StyledContainer from 'src/app/components/common/Container';
@@ -111,9 +111,7 @@ const Buttons = styled(Flex)`
     }
 `;
 
-const Button = StyledButton.extend`
-    width: 167px;
-`;
+const ButtonLink = BaseButton.withComponent('a');
 
 const AvatarDropzone = styled(Dropzone)`
     position: absolute !important;
@@ -248,7 +246,7 @@ export default class UserHeader extends Component {
                                     />
                                 </Fragment>
                             )}
-                            <ButtonLink light={1} to={`https://golos.io/@${currentUser.get('username')}`}>
+                            <ButtonLink light href={`https://golos.io/@${currentAccount.get('name')}`}>
                                 Вернуть старый профиль
                             </ButtonLink>
                         </Buttons>

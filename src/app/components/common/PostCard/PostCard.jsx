@@ -4,7 +4,7 @@ import cn from 'classnames';
 import { Link } from 'react-router';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import is from 'styled-is';
+import is, { isNot } from 'styled-is';
 import tt from 'counterpart';
 import extractContent from 'app/utils/ExtractContent';
 import { immutableAccessor } from 'app/utils/Accessors';
@@ -112,7 +112,7 @@ const BodyLink = styled(Link)`
     display: block;
     transition: none !important;
 
-    ${is('line')`
+    ${isNot('grid')`
         border-bottom: 2px solid #f3f3f3;
     `};
 
@@ -179,10 +179,10 @@ const PostImage = styled.div`
     background: url('${a => a.src}') no-repeat center;
     background-size: cover;
     z-index: 0;
+    overflow: hidden;
     
     &:after {
         position: absolute;
-        border-radius: 8px;
         content: '';
         top: 0;
         bottom: 0;
@@ -425,7 +425,6 @@ class PostCard extends PureComponent {
         return (
             <BodyLink
                 to={p.link}
-                line={!grid || !withImage ? 1 : 0}
                 half={withImage && !grid ? 1 : 0}
                 grid={grid ? 1 : 0}
                 onClick={this._onClick}

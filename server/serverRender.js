@@ -49,7 +49,7 @@ export default async function serverRender({ location, offchain, ErrorPage, sett
 
         const options = { IGNORE_TAGS };
 
-        onchain = await getState(api, url, options, offchain, rates);
+        onchain = await getState(api, url, options, offchain);
 
         // protect for invalid account
         if (
@@ -102,8 +102,18 @@ export default async function serverRender({ location, offchain, ErrorPage, sett
         const initialState = {
             global: onchain,
             offchain,
+            data: {
+                rates: {
+                    actual: rates,
+                    dates: [],
+                }
+            },
         };
-        if (settings) initialState.data = { settings };
+
+        if (settings) {
+            initialState.data.settings = settings;
+        }
+
         serverStore = createStore(rootReducer, initialState);
         serverStore.dispatch({ type: '@@router/LOCATION_CHANGE', payload: { pathname: location } });
     } catch (e) {

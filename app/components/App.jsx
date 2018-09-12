@@ -79,7 +79,6 @@ class App extends Component {
 
     componentDidMount() {
         this.props.loginUser();
-        this.props.loadExchangeRates();
 
         window.addEventListener('storage', this.checkLogin);
         if (process.env.BROWSER) {
@@ -285,9 +284,6 @@ export default connect(
                     params: { outputCoinType: VEST_TICKER },
                 })
             );
-        },
-        loadExchangeRates: () => {
-            dispatch(g.actions.fetchExchangeRates());
         },
     })
 )(App);

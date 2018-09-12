@@ -871,7 +871,7 @@ export default connect(
                 : null,
             history: state.market.get('history'),
             user: username,
-            gbgPerGolos: state.global.getIn(['rates', 'GBG', 'GOLOS']),
+            gbgPerGolos: state.data.rates.actual.GBG.GOLOS,
         };
     },
     dispatch => ({

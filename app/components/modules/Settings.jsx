@@ -163,9 +163,9 @@ class Settings extends React.Component {
     }
 
     onCurrencyChange = (event) => {
-        localStorage.setItem('xchange.created', 0);
-        localStorage.setItem('xchange.picked', event.target.value);
-        this.props.reloadExchangeRates()
+        // localStorage.setItem('xchange.created', 0);
+        // localStorage.setItem('xchange.picked', event.target.value);
+        //this.props.reloadExchangeRates()
         this.notify()
     }
 
@@ -498,9 +498,6 @@ export default connect(
       },
         changeLanguage: (language) => {
             dispatch(user.actions.changeLanguage(language))
-        },
-        reloadExchangeRates: () => {
-          dispatch(g.actions.fetchExchangeRates())
         },
         updateAccount: ({successCallback, errorCallback, ...operation}) => {
             const success = () => {

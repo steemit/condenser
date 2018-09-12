@@ -4,10 +4,11 @@ import {getContent} from 'app/redux/sagas/shared';
 import GlobalReducer from './../GlobalReducer';
 import constants from './../constants';
 import { reveseTag } from 'app/utils/tags';
-import { DEBT_TOKEN_SHORT, LIQUID_TICKER, DEFAULT_CURRENCY, IGNORE_TAGS, PUBLIC_API, SELECT_TAGS_KEY, ACCOUNT_OPERATIONS } from 'app/client_config';
+import { IGNORE_TAGS, PUBLIC_API, SELECT_TAGS_KEY, ACCOUNT_OPERATIONS } from 'app/client_config';
 import cookie from "react-cookie";
 import {api} from 'golos-js';
 import { processBlog } from 'shared/state';
+import { RATES_GET_ACTUAL } from 'src/app/redux/constants/rates';
 
 const FETCH_MOST_RECENT = -1;
 const DEFAULT_ACCOUNT_HISTORY_LIMIT = 1000;
@@ -19,7 +20,6 @@ export function* fetchDataWatches () {
     yield fork(watchFetchState);
     yield fork(watchFetchRewards);
     yield fork(watchGetContent);
-    yield fork(watchFetchExchangeRates);
     yield fork(watchFetchVestingDelegations);
 }
 
@@ -82,6 +82,7 @@ export function* fetchState(action) {
     if (url.indexOf("/author-rewards") !== -1) url = url.replace("/author-rewards", "/transfers")
 
     yield put({type: 'FETCH_DATA_BEGIN'})
+    yield put({ type: RATES_GET_ACTUAL })
 
     try {
         const parts = url.split('/')
@@ -387,75 +388,6 @@ function* fetchJson({payload: {id, url, body, successCallback, skipLoading = fal
         yield put({type: 'global/FETCHING_JSON', payload: false});
         yield put(GlobalReducer.actions.fetchJsonResult({id, error}))
     }
-}
-
-export function* watchFetchExchangeRates() {
-    yield takeEvery('global/FETCH_EXCHANGE_RATES', fetchExchangeRates);
-}
-
-export function* fetchExchangeRates() {
-  const fourHours = 1000 * 60 * 60 * 4;
-
-  try {
-    const created = localStorage.getItem('xchange.created') || 0;
-
-    let pickedCurrency = localStorage.getItem('xchange.picked') || DEFAULT_CURRENCY;
-    if (pickedCurrency.localeCompare(DEBT_TOKEN_SHORT) == 0) {
-        // pickedCurrency = DEFAULT_CURRENCY;
-        storeExchangeValues(1, 1, 1, DEBT_TOKEN_SHORT); // For GBG currency on site #687
-        return;
-    }
-    if (pickedCurrency.localeCompare(LIQUID_TICKER) == 0) { // For Golos currency on site #687
-        const feedPrice = yield call([api, api.getCurrentMedianHistoryPriceAsync]);
-        let pricePerGolos = feedPrice.base.split(' ')[0] / parseFloat(parseFloat(feedPrice.quote.split(' ')[0] ));
-        storeExchangeValues(1, 1, pricePerGolos, pickedCurrency);
-        return;
-    }
-    if (Date.now() - created < fourHours) {
-      return;
-    }
-    // xchange rates are outdated or not exists
-    console.log('xChange rates are outdated or not exists, fetching...')
-
-    yield put({type: 'global/FETCHING_JSON', payload: true});
-
-    let result = yield call(fetch, '/api/v1/rates/');
-    result = yield result.json();
-
-    if (result.error) {
-      console.log('~~ Saga fetchExchangeRates error ~~>', '[0] The result is undefined.');
-      storeExchangeValues();
-      yield put({type: 'global/FETCHING_XCHANGE', payload: false});
-      return;
-    }
-    if (
-      typeof result === 'object' &&
-      typeof result.rates === 'object' &&
-      typeof result.rates.XAU === 'number' &&
-      typeof result.rates[pickedCurrency] === 'number'
-    ) {
-      // store result into localstorage
-      storeExchangeValues(Date.now(), 1/result.rates.XAU, result.rates[pickedCurrency], pickedCurrency);
-    }
-    else {
-      console.log('~~ Saga fetchExchangeRates error ~~>', 'The result is undefined.');
-      storeExchangeValues();
-    }
-    yield put({type: 'global/FETCHING_XCHANGE', payload: false});
-  }
-  catch(error) {
-    // set default values
-    storeExchangeValues();
-    console.error('~~ Saga fetchExchangeRates error ~~>', error);
-    yield put({type: 'global/FETCHING_XCHANGE', payload: false});
-  }
-}
-
-function storeExchangeValues(created, gold, pair, picked) {
-  localStorage.setItem('xchange.created', created || 0);
-  localStorage.setItem('xchange.gold', gold || 1);
-  localStorage.setItem('xchange.pair', pair || 1);
-  localStorage.setItem('xchange.picked', picked || DEBT_TOKEN_SHORT);
 }
 
 export function* watchFetchVestingDelegations() {

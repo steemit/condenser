@@ -12,7 +12,8 @@ import FoundationDropdown from 'app/components/elements/FoundationDropdown';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import tt from 'counterpart';
 import { DEBT_TICKER } from 'app/client_config';
-import { getPayout, renderValue } from 'src/app/helpers/currency';
+import { renderValue } from 'src/app/helpers/currency';
+import PostPayout from 'src/app/components/common/PostPayout/PostPayout';
 
 const MAX_VOTES_DISPLAY = 20;
 const VOTE_WEIGHT_DROPDOWN_THRESHOLD = 1000 * 1000;
@@ -264,7 +265,7 @@ class Voting extends PureComponent {
         const payoutEl = (
             <DropdownMenu el="div" items={payoutItems}>
                 <span>
-                    {getPayout(postData)}
+                    <PostPayout data={postData} />
                     {payoutItems.length > 0 && <Icon name="dropdown-arrow" />}
                 </span>
             </DropdownMenu>

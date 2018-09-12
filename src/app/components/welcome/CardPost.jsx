@@ -5,7 +5,7 @@ import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Icon from 'app/components/elements/Icon';
 import extractContent from 'app/utils/ExtractContent';
 import { objAccessor } from 'app/utils/Accessors';
-import { getPayout } from 'src/app/helpers/currency';
+import PostPayout from '../common/PostPayout/PostPayout';
 
 const Root = styled.div`
     border-radius: 8.5px;
@@ -127,7 +127,6 @@ export default class CardPost extends Component {
         const { post, className } = this.props;
 
         const p = extractContent(objAccessor, post);
-        const payout = getPayout(post);
 
         return (
             <Root className={className}>
@@ -153,7 +152,9 @@ export default class CardPost extends Component {
                             <IconStyled name="new/like" />
                             {post.net_votes}
                         </FooterVotes>
-                        <FooterPayout>{payout}</FooterPayout>
+                        <FooterPayout>
+                            <PostPayout data={post} />
+                        </FooterPayout>
                     </FooterActions>
                 </Footer>
             </Root>

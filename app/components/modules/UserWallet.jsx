@@ -438,7 +438,7 @@ class UserWallet extends React.Component {
 export default connect(
     // mapStateToProps
     (state, ownProps) => {
-        const price_per_golos = state.global.getIn(['rates', 'GBG', 'GOLOS']);
+        const price_per_golos = state.data.rates.GBG.GOLOS;
         const savings_withdraws = state.user.get('savings_withdraws')
         const gprops = state.global.get('props');
         const sbd_interest = gprops.get('sbd_interest_rate')

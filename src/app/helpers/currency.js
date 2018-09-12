@@ -1,5 +1,6 @@
 import React from 'react';
-import { getStoreState } from 'app/clientRender';
+import { getStoreState, dispatch } from 'app/clientRender';
+import { getHistoricalData } from '../redux/actions/rates';
 
 const CURRENCY_SIGNS = {
     USD: '$_',
@@ -111,7 +112,7 @@ export function formatCurrency(amount, currency, decimals) {
     }
 }
 
-export function renderValue(amount, decimals) {
+export function renderValue(amount, decimals, rates) {
     if (process.env.BROWSER) {
         const state = getStoreState();
 
@@ -119,7 +120,13 @@ export function renderValue(amount, decimals) {
         let rate;
 
         if (currency !== 'GBG') {
-            rate = state.global.getIn(['rates', 'GBG', currency]);
+            if (rates) {
+                rate = rates.GBG[currency];
+            }
+
+            if (!rate) {
+                rate = state.data.rates.actual.GBG[currency];
+            }
         }
 
         if (!rate) {
@@ -148,6 +155,7 @@ export function getPayout(data) {
             pending_payout_value: data.get('pending_payout_value'),
             total_payout_value: data.get('total_payout_value'),
             curator_payout_value: data.get('curator_payout_value'),
+            last_payout: data.get('last_payout'),
         };
     } else {
         params = data;
@@ -175,7 +183,26 @@ export function getPayout(data) {
         isLimit = true;
     }
 
-    const stringValue = renderValue(gbgValue);
+    let rates = null;
+
+    if (process.env.BROWSER) {
+        if (params.last_payout) {
+            const date = new Date(params.last_payout);
+
+            if (date.getFullYear() > 2000) {
+                const state = getStoreState();
+                const dateString = date.toJSON().substr(0, 10);
+
+                rates = state.data.rates.dates.get(dateString);
+
+                if (!rates) {
+                    dispatch(getHistoricalData({ date: dateString }));
+                }
+            }
+        }
+    }
+
+    const stringValue = renderValue(gbgValue, null, rates);
 
     let style;
 

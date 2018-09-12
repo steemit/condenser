@@ -137,7 +137,7 @@ class PostsIndex extends React.Component {
 
             if (posts) {
                 var cont = this.props.content;
-                posts.filter(post => {
+                posts = posts.filter(post => {
                     if (
                         cont.get(post).get('json_metadata').tags &&
                         cont

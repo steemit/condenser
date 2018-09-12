@@ -81,9 +81,7 @@ export const ACCOUNT_OPERATIONS = [
   'fill_convert_request',
   'transfer_to_savings',
   'transfer_from_savings',
-  'cancel_transfer_from_savings',
-  'author_reward',
-  'curation_reward'
+  'cancel_transfer_from_savings'
 ]
 
 export const SEO_TITLE = 'GOLOS.io Блоги'

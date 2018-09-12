@@ -47,6 +47,7 @@ export default async function getState(api, url, options, offchain, rates) {
                 case 'transfers':
                     const history = await api.getAccountHistoryAsync(uname, -1, 1000, {select_ops: ACCOUNT_OPERATIONS})
                     account.transfer_history = []
+                    account.rewards_history = []
 
                     history.forEach(operation => {
                         state.accounts[uname].transfer_history.push(operation)

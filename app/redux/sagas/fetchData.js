@@ -9,11 +9,15 @@ import cookie from "react-cookie";
 import {api} from 'golos-js';
 import { processBlog } from 'shared/state';
 
+const FETCH_MOST_RECENT = -1;
+const DEFAULT_ACCOUNT_HISTORY_LIMIT = 1000;
+
 export function* fetchDataWatches () {
     yield fork(watchLocationChange);
     yield fork(watchDataRequests);
     yield fork(watchFetchJsonRequests);
     yield fork(watchFetchState);
+    yield fork(watchFetchRewards);
     yield fork(watchGetContent);
     yield fork(watchFetchExchangeRates);
     yield fork(watchFetchVestingDelegations);
@@ -57,6 +61,10 @@ export function* fetchState(action) {
         yield fork(fetchFollowCount, username);
         yield fork(loadFollows, 'getFollowersAsync', username, 'blog');
         yield fork(loadFollows, 'getFollowingAsync', username, 'blog');
+
+        if (url.endsWith('transfers')) {
+            yield fork(fetchRewards, username, FETCH_MOST_RECENT, 100);
+        }
     }
 
     // `ignoreFetch` case should only trigger on initial page load. No need to call
@@ -95,8 +103,9 @@ export function* fetchState(action) {
 
                 switch (parts[1]) {
                     case 'transfers':
-                        const history = yield call([api, api.getAccountHistoryAsync], uname, -1, 1000, {select_ops: ACCOUNT_OPERATIONS})
+                        const history = yield call([api, api.getAccountHistoryAsync], uname, FETCH_MOST_RECENT, DEFAULT_ACCOUNT_HISTORY_LIMIT, {select_ops: ACCOUNT_OPERATIONS})
                         account.transfer_history = []
+                        account.rewards_history = []
                         
                         history.forEach(operation => {
                             state.accounts[uname].transfer_history.push(operation)
@@ -214,6 +223,23 @@ export function* fetchState(action) {
         if (!(yield cancelled())) {
             yield put({type: 'FETCH_DATA_END'})
         }
+    }
+}
+
+export function* watchFetchRewards() {
+    yield takeLatest('FETCH_REWARDS', fetchRewards);
+}
+
+export function* fetchRewards(account, from, limit, type = 'all') {
+    let selectedRewards = type === 'all' ? ['author_reward', 'curation_reward'] : [type];
+
+    yield put({type: 'FETCH_DATA_BEGIN'});
+    try {
+        const rewards = yield call([api, api.getAccountHistoryAsync], account, from, limit, {select_ops: selectedRewards});
+        yield put(GlobalReducer.actions.receiveRewards({account, rewards}));
+        yield put({type: 'FETCH_DATA_END'});
+    } catch (error) {
+        console.log(error);
     }
 }
 

@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import is from 'styled-is';
 import { darken } from 'polished';
 
-const BaseButton = styled.button`
+export const BaseButton = styled.button`
     display: inline-flex;
     overflow: hidden;
     justify-content: center;
@@ -61,6 +61,7 @@ const BaseButton = styled.button`
         color: #393636;
         background: #fff;
         border: 1px solid rgba(57,54,54,0.30);
+        &:focus,
         &:hover {
             color: #393636;
             background: #fff;

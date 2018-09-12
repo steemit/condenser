@@ -129,7 +129,7 @@ class UserWallet extends React.Component {
         // Sum conversions
         let conversionValue = 0;
         const currentTime = (new Date()).getTime();
-        const conversions = account.get('other_history', List()).reduce( (out, item) => {
+        const conversions = account.get('transfer_history', List()).reduce( (out, item) => {
             if(item.getIn([1, 'op', 0], "") !== 'convert') return out;
 
             const timestamp = new Date(item.getIn([1, 'timestamp'])).getTime();

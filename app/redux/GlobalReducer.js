@@ -534,6 +534,16 @@ export default createModule({
                 );
             },
         },
+        {
+            action: 'RECEIVE_REWARDS',
+            reducer: (state, { payload: {account, rewards} }) => {
+                return state.updateIn(
+                    ['accounts', account, 'transfer_history' /*'rewards_history'*/ ],
+                    Map(),
+                    r => r.mergeDeep(fromJS(rewards))
+                );
+            }
+        },
     ],
 });
 

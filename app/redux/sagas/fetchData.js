@@ -4,16 +4,20 @@ import {getContent} from 'app/redux/sagas/shared';
 import GlobalReducer from './../GlobalReducer';
 import constants from './../constants';
 import { reveseTag } from 'app/utils/tags';
-import { DEBT_TOKEN_SHORT, LIQUID_TICKER, DEFAULT_CURRENCY, IGNORE_TAGS, PUBLIC_API, SELECT_TAGS_KEY } from 'app/client_config';
+import { DEBT_TOKEN_SHORT, LIQUID_TICKER, DEFAULT_CURRENCY, IGNORE_TAGS, PUBLIC_API, SELECT_TAGS_KEY, ACCOUNT_OPERATIONS } from 'app/client_config';
 import cookie from "react-cookie";
 import {api} from 'golos-js';
 import { processBlog } from 'shared/state';
+
+const FETCH_MOST_RECENT = -1;
+const DEFAULT_ACCOUNT_HISTORY_LIMIT = 1000;
 
 export function* fetchDataWatches () {
     yield fork(watchLocationChange);
     yield fork(watchDataRequests);
     yield fork(watchFetchJsonRequests);
     yield fork(watchFetchState);
+    yield fork(watchFetchRewards);
     yield fork(watchGetContent);
     yield fork(watchFetchExchangeRates);
     yield fork(watchFetchVestingDelegations);
@@ -57,6 +61,10 @@ export function* fetchState(action) {
         yield fork(fetchFollowCount, username);
         yield fork(loadFollows, 'getFollowersAsync', username, 'blog');
         yield fork(loadFollows, 'getFollowingAsync', username, 'blog');
+
+        if (url.endsWith('transfers')) {
+            yield fork(fetchRewards, username, FETCH_MOST_RECENT, 100);
+        }
     }
 
     // `ignoreFetch` case should only trigger on initial page load. No need to call
@@ -95,32 +103,12 @@ export function* fetchState(action) {
 
                 switch (parts[1]) {
                     case 'transfers':
-                        const history = yield call([api, api.getAccountHistoryAsync], uname, -1, 1000)
+                        const history = yield call([api, api.getAccountHistoryAsync], uname, FETCH_MOST_RECENT, DEFAULT_ACCOUNT_HISTORY_LIMIT, {select_ops: ACCOUNT_OPERATIONS})
                         account.transfer_history = []
-                        account.other_history = []
+                        account.rewards_history = []
                         
                         history.forEach(operation => {
-                            switch (operation[1].op[0]) {
-                                case 'transfer_to_vesting':
-                                case 'withdraw_vesting':
-                                case 'interest':
-                                case 'transfer':
-                                case 'liquidity_reward':
-                                case 'author_reward':
-                                case 'curation_reward':
-                                case 'transfer_to_savings':
-                                case 'transfer_from_savings':
-                                case 'cancel_transfer_from_savings':
-                                case 'escrow_transfer':
-                                case 'escrow_approve':
-                                case 'escrow_dispute':
-                                case 'escrow_release':
-                                    state.accounts[uname].transfer_history.push(operation)
-                                break
-
-                                default:
-                                    state.accounts[uname].other_history.push(operation)
-                            }
+                            state.accounts[uname].transfer_history.push(operation)
                         })
                     break
 
@@ -235,6 +223,23 @@ export function* fetchState(action) {
         if (!(yield cancelled())) {
             yield put({type: 'FETCH_DATA_END'})
         }
+    }
+}
+
+export function* watchFetchRewards() {
+    yield takeLatest('FETCH_REWARDS', fetchRewards);
+}
+
+export function* fetchRewards(account, from, limit, type = 'all') {
+    let selectedRewards = type === 'all' ? ['author_reward', 'curation_reward'] : [type];
+
+    yield put({type: 'FETCH_DATA_BEGIN'});
+    try {
+        const rewards = yield call([api, api.getAccountHistoryAsync], account, from, limit, {select_ops: selectedRewards});
+        yield put(GlobalReducer.actions.receiveRewards({account, rewards}));
+        yield put({type: 'FETCH_DATA_END'});
+    } catch (error) {
+        console.log(error);
     }
 }
 

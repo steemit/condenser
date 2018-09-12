@@ -539,7 +539,7 @@ export default createModule({
             reducer: (state, { payload: {account, rewards} }) => {
                 return state.updateIn(
                     ['accounts', account, 'transfer_history' /*'rewards_history'*/ ],
-                    Map(),
+                    List(),
                     r => r.mergeDeep(fromJS(rewards))
                 );
             }

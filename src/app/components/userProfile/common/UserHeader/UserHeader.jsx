@@ -246,7 +246,7 @@ export default class UserHeader extends Component {
                                     />
                                 </Fragment>
                             )}
-                            <ButtonLink light href={`https://golos.io/@${currentAccount.get('name')}`}>
+                            <ButtonLink light href={`https://preview.golos.io/@${currentAccount.get('name')}`}>
                                 Вернуть старый профиль
                             </ButtonLink>
                         </Buttons>

@@ -3,17 +3,18 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import styled from 'styled-components';
 import is from 'styled-is';
-import { TabContainer, Tabs } from 'golos-ui/Tabs';
-import { CardContent } from 'golos-ui/Card';
+
+import { MIN_VOICE_POWER } from 'app/client_config';
+import DialogManager from 'app/components/elements/common/DialogManager';
+import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
+import { golosToVests, getVesting } from 'app/utils/StateFunctions';
+
 import Icon from 'golos-ui/Icon';
 import SplashLoader from 'golos-ui/SplashLoader';
-import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
+
 import Linkify from 'src/app/components/common/Linkify';
 import TextCut from 'src/app/components/common/TextCut';
 import EditGolosPower from 'src/app/components/userProfile/common/EditGolosPower';
-import DialogManager from 'app/components/elements/common/DialogManager';
-import { golosToVests, getVesting } from 'app/utils/StateFunctions';
-import { MIN_VOICE_POWER } from 'app/client_config';
 import {
     DIRECTION,
     CURRENCY_TRANSLATE,

@@ -11,7 +11,7 @@ import { NOTIFICATIONS_FILTER_TYPES } from 'src/app/redux/constants/common';
 
 // Activity selectors
 
-export const filteredNotificationsSelector = createDeepEqualSelector(
+const filteredNotificationsSelector = createDeepEqualSelector(
     [entitiesArraySelector('notifications'), uiSelector('profile')],
     (notifications, profileUi) => {
         const currentTabId = profileUi.getIn(['activity', 'currentTabId']);
@@ -33,7 +33,7 @@ export const filteredNotificationsSelector = createDeepEqualSelector(
 );
 
 // Prepare all data for render notifications on activity page
-export const hydratedNotificationsSelector = createDeepEqualSelector(
+const hydratedNotificationsSelector = createDeepEqualSelector(
     [
         filteredNotificationsSelector,
         pageAccountSelector,

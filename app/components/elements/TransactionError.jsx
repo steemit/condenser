@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import transaction from 'app/redux/Transaction'
-import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import {Map} from 'immutable'
 
 const {func, string} = PropTypes
@@ -24,7 +23,6 @@ class TransactionError extends React.Component {
         const {opType, addListener} = this.props
         addListener(opType)
     }
-    shouldComponentUpdate = shouldComponentUpdate(this, 'TransactionError')
     componentWillUnmount() {
         const {opType, removeListener} = this.props
         removeListener(opType)

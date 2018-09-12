@@ -7,10 +7,6 @@
     "mobileBannerAlt": "Доступно в Google Play",
     "resources": "Ресурси"
   },
-  "authorrewards_jsx": {
-    "author_rewards_history": "Історія авторських нагород",
-    "estimated_author_rewards_last_week": "Оціночні авторські винагороди за минулий тиждень"
-  },
   "category_selector_jsx": {
     "denied_to_publish_the_posts_with_tag": "Заборонено публікувати пости з тегом 'stihi-io'",
     "maximum_tag_length_is_24_characters": "Максимальна довжина категорії 24 знака",
@@ -99,13 +95,6 @@
     "without_country_code": "Without country code",
     "you_can_change_your_number": "You can change your number at any time if we didn't receive your sms with verification code. ",
     "you_need_to": "Вам потрібно "
-  },
-  "curationrewards_jsx": {
-    "curation_rewards_history": "Історія кураторських нагород",
-    "curation_rewards_last_24_hours": "Кураторські нагороди за останні 24 години",
-    "curation_rewards_last_week": "Кураторські нагороди за останній тиждень",
-    "daily_average_curation_rewards": "Середньодобові кураторські нагороди",
-    "estimated_curation_rewards_last_week": "Оціночні кураторські нагороди за останній тиждень"
   },
   "enter_confirm_email_jsx": {
     "email_address": "Адреса електронної пошти",
@@ -719,8 +708,7 @@
     "TOKEN_WORTH": "~1 мг золота",
     "VESTING_TOKEN": "Сила Голосу",
     "VESTING_TOKEN2": "Силу Голосу",
-    "VESTING_TOKENS": "Сили Голосу",
-    "VESTING_TOKEN_UPPERCASE": "СИЛА ГОЛОСУ"
+    "VESTING_TOKENS": "Сили Голосу"
   },
   "transfer_jsx": {
     "advanced": "Розширені опції",
@@ -744,15 +732,6 @@
     "this_memo_is": "Це примітка",
     "use_only_3_digits_of_precison": "Використовуйте тільки 3 цифри точності",
     "withdraw_funds_after_the_required_3_day_waiting_period": "Зняти кошти після необхідного 3-х денного періоду очікування."
-  },
-  "transferhistoryrow_jsx": {
-    "cancel_transfer_from_savings": "Скасувати переказ з сейфа",
-    "from_savings": "з сейфа",
-    "receive_interest_of": "Отримано відсотки ",
-    "start_power_down_of": "Ослаблення Сили Голоса розпочато з",
-    "stop_power_down": "Ослаблення Сили Голоса зупинено",
-    "to_savings": "у сейф",
-    "transfer": "Відправлено"
   },
   "user_profile": {
     "explore_APP_NAME": "Дослідити %(APP_NAME)s",

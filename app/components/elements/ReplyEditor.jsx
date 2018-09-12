@@ -5,7 +5,6 @@ import reactForm from 'app/utils/ReactForm';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer';
 import CategorySelector, { validateCategory } from 'app/components/cards/CategorySelector';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
-import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import Tooltip from 'app/components/elements/Tooltip';
 import HtmlReady from 'shared/HtmlReady';
 import g from 'app/redux/GlobalReducer';
@@ -109,8 +108,6 @@ class ReplyEditor extends React.Component {
             else if (this.refs.rte) this.refs.rte._focus();
         }, 300);
     }
-
-    shouldComponentUpdate = shouldComponentUpdate(this, 'ReplyEditor');
 
     componentWillUpdate(nextProps, nextState) {
         if (process.env.BROWSER) {

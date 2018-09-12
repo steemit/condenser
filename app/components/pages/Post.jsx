@@ -8,7 +8,6 @@ import FoundationDropdownMenu from 'app/components/elements/FoundationDropdownMe
 import IllegalContentMessage from 'app/components/elements/IllegalContentMessage';
 import {Set} from 'immutable'
 import tt from 'counterpart';
-import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import { blockedUsers } from 'app/utils/IllegalContent';
 import { buttonClick } from 'app/utils/Analytics';
 
@@ -29,7 +28,6 @@ class Post extends React.Component {
         this.state = {
             showNegativeComments: false
         };
-        this.shouldComponentUpdate = shouldComponentUpdate(this, 'Post')
     }
 
     componentDidMount() {

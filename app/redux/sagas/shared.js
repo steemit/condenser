@@ -20,7 +20,7 @@ export function* getAccount(username, force = false) {
     return account
 }
 
-export function* watchTransactionErrors() {
+function* watchTransactionErrors() {
     yield takeEvery('transaction/ERROR', showTransactionErrorNotification);
 }
 

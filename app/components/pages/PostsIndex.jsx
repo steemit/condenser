@@ -4,7 +4,6 @@ import PropTypes from 'prop-types'
 import {connect} from 'react-redux';
 import Topics from './Topics';
 import constants from 'app/redux/constants';
-import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import PostsList from 'app/components/cards/PostsList';
 import {isFetchingOrRecentlyUpdated} from 'app/utils/StateFunctions';
 import {Link} from 'react-router';
@@ -42,7 +41,6 @@ class PostsIndex extends React.Component {
         super();
         this.state = {}
         this.loadMore = this.loadMore.bind(this);
-        this.shouldComponentUpdate = shouldComponentUpdate(this, 'PostsIndex')
         this.loadSelected = this.loadSelected.bind(this);
         this.updateSubscribe = this.updateSubscribe.bind(this);
         this.listRef = React.createRef();

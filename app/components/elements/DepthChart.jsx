@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types'
-//import Highcharts from 'highcharts';
 const ReactHighcharts = require("react-highcharts/dist/ReactHighstock");
 import tt from 'counterpart';
 import { DEBT_TOKEN_SHORT, LIQUID_TICKER, CURRENCY_SIGN } from 'app/client_config';

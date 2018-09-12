@@ -21,16 +21,16 @@ export function* transactionWatches() {
     yield fork(watchForRecoverAccount);
 }
 
-export function* watchForBroadcast() {
+function* watchForBroadcast() {
     yield takeEvery('transaction/BROADCAST_OPERATION', broadcastOperation);
 }
-export function* watchForUpdateAuthorities() {
+function* watchForUpdateAuthorities() {
     yield takeEvery('transaction/UPDATE_AUTHORITIES', updateAuthorities);
 }
-export function* watchForUpdateMeta() {
+function* watchForUpdateMeta() {
     yield takeEvery('transaction/UPDATE_META', updateMeta);
 }
-export function* watchForRecoverAccount() {
+function* watchForRecoverAccount() {
     yield takeEvery('transaction/RECOVER_ACCOUNT', recoverAccount);
 }
 
@@ -283,39 +283,11 @@ function* accepted_account_update({operation}) {
     let [account] = yield call([api, api.getAccountsAsync], [operation.account])
     account = fromJS(account)
     yield put(g.actions.receiveAccount({account}))
-
-    // bug, fork, etc.. the folowing would be mis-leading
-    // const {account} = operation
-    // const {owner, active, posting, memo_key, json_metadata} = operation
-    // {
-    //     const update = { accounts: { [account]: {memo_key, json_metadata} } }
-    //     if (posting) update.accounts[account].posting = posting
-    //     if (active) update.accounts[account].active = active
-    //     if (owner) update.accounts[account].owner = owner
-    //     yield put(g.actions.receiveState(update))
-    // }
 }
-
-// TODO remove soon, this was replaced by the UserKeys edit running usernamePasswordLogin (on dialog close)
-// function* error_account_update({operation}) {
-//     const {account} = operation
-//     const stateUser = yield select(state => state.user)
-//     const username = stateUser.getIn(['current', 'username'])
-//     if (username === account) {
-//         const pending_private_key = stateUser.getIn(['current', 'pending_private_key'])
-//         if (pending_private_key) {
-//             // remove pending key
-//             const update = { pending_private_key: undefined }
-//             yield put(user.actions.setUser(update))
-//         }
-//     }
-// }
 
 import base58 from 'bs58'
 import secureRandom from 'secure-random'
 
-// function* preBroadcast_account_witness_vote({operation, username}) {
-// }
 function* preBroadcast_comment({operation, username}) {
     if (!operation.author) operation.author = username
     let permlink = operation.permlink
@@ -432,51 +404,14 @@ function* error_custom_json({operation: {id, required_posting_auths}}) {
         }))
     }
 }
+
 function* error_vote({operation: {author, permlink}}) {
     yield put(g.actions.remove({key: `transaction_vote_active_${author}_${permlink}`}));
     yield call(getContent, {author, permlink}); // unvote
 }
 
-// function* error_comment({operation}) {
-//     // Rollback an immediate UI update (the transaction had an error)
-//     yield put(g.actions.deleteContent(operation))
-//     const {author, permlink, parent_author, parent_permlink} = operation
-//     yield call(getContent, {author, permlink})
-//     if (parent_author !== '' && parent_permlink !== '') {
-//         yield call(getContent, {parent_author, parent_permlink})
-//     }
-// }
-
 function slug(text) {
     return getSlug(text.replace(/[<>]/g, ''), {truncate: 128})
-    //const shorten = txt => {
-    //    let t = ''
-    //    let words = 0
-    //    const txt2 = txt.replace(/ +/g, ' ') // only 1 space in a row
-    //    for (let i = 0; i < txt2.length; i++) {
-    //        const ch = txt2.charAt(i)
-    //        if (ch === '.' && i !== 0) {
-    //            if(i === txt2.length - 1)
-    //                break
-    //            // If it looks like the end of a sentence
-    //            if(txt2.charAt(i + 1) === ' ')
-    //                break
-    //        }
-    //        if (ch === ' ' || ch === '\n') {
-    //            words++
-    //            if (words === 15) break
-    //            if (i > 100) break
-    //        }
-    //        t += ch
-    //    }
-    //    return t
-    //}
-    //return shorten(text)
-    //    .replace(/\n/g, ' ')
-    //    .replace(/[ \.]/g, '-')
-    //    .replace(/[^a-zA-Z0-9-_]+/g, '') // only letters and numbers _ and -
-    //    .replace(/--/g, '-')
-    //    .toLowerCase()
 }
 
 const pwPubkey = (name, pw, role) => auth.wifToPublic(auth.toWif(name, pw.trim(), role))
@@ -550,7 +485,7 @@ function* updateAuthorities({payload: {accountName, signingKey, auths, twofa, on
         onError('Account not found')
         return
     }
-    // const signingPubkey = signingKey ? signingKey.toPublicKey() : null
+
     const ops2 = {}
     let oldPrivate
     const addAuth = (authType, oldAuth, newAuth) => {
@@ -589,10 +524,7 @@ function* updateAuthorities({payload: {accountName, signingKey, auths, twofa, on
             newPrivate = PrivateKey.fromSeed(accountName + authType + newAuth)
             newAuthPubkey = newPrivate.toPublicKey().toString()
         }
-        // if (oldAuthPubkey === newAuthPubkey) {
-        //     onError('This is the same key')
-        //     return false
-        // }
+
         let authority
         if (authType === 'memo') {
             account.memo_key = newAuthPubkey
@@ -600,28 +532,6 @@ function* updateAuthorities({payload: {accountName, signingKey, auths, twofa, on
             authority = fromJS(account[authType]).toJS()
             authority.key_auths = []
             authority.key_auths.push([newAuthPubkey, authority.weight_threshold])
-            // const key_auths = authority.key_auths
-            // let found
-            // for (let i = 0; i < key_auths.length; i++) {
-            //     if (key_auths[i][0] === oldAuthPubkey) {
-            //         key_auths[i][0] = newAuthPubkey
-            //         found = true
-            //         break
-            //     }
-            // }
-            // if (!found) {
-                // key_auths.push([newAuthPubkey, authority.weight_threshold])
-            //     console.log(`Could not find an ${authType} key to update, adding instead`)
-            // }
-
-            // Add twofaAccount with full authority
-            // if(twofa && authType === 'owner') {
-            //     let account_auths = fromJS(authority.account_auths)
-            //     if(!account_auths.find(v => v.get(0) === twofaAccount)) {
-            //         account_auths = account_auths.push(fromJS([twofaAccount, authority.weight_threshold]))
-            //     }
-            //     authority.account_auths = account_auths.toJS()
-            // }
         }
         ops2[authType] = authority ? authority : account[authType]
         return true
@@ -665,15 +575,12 @@ function* updateAuthorities({payload: {accountName, signingKey, auths, twofa, on
         successCallback: onSuccess,
         errorCallback: onError,
     }
-    // console.log('sign key.toPublicKey().toString()', key.toPublicKey().toString())
-    // console.log('payload', payload)
     yield call(broadcastOperation, {payload})
 }
 
 /** auths must start with most powerful key: owner for example */
 // const twofaAccount = 'steem'
 function* updateMeta(params) {
-    // console.log('params', params)
     const {meta, account_name, signingKey, onSuccess, onError} = params.payload.operation
     console.log('meta', meta)
     console.log('account_name', account_name)
@@ -696,8 +603,6 @@ function* updateMeta(params) {
         }];
         yield broadcast.sendAsync({extensions: [], operations}, [signingKey]);
       if(onSuccess) onSuccess();
-      // console.log('sign key.toPublicKey().toString()', key.toPublicKey().toString())
-      // console.log('payload', payload)
     } catch(e) {
       console.error('Update meta', e);
       if(onError) onError(e)

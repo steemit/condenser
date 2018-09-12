@@ -7,7 +7,6 @@ import g from 'app/redux/GlobalReducer'
 import user from 'app/redux/User'
 import {validate_account_name} from 'app/utils/ChainValidation';
 import runTests from 'app/utils/BrowserTests';
-import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import reactForm from 'app/utils/ReactForm'
 import tt from 'counterpart';
 import { APP_DOMAIN } from 'app/client_config';
@@ -59,8 +58,6 @@ class LoginForm extends Component {
         if (this.refs.username && !this.refs.username.value) this.refs.username.focus();
         if (this.refs.username && this.refs.username.value) this.refs.pw.focus();
     }
-
-    shouldComponentUpdate = shouldComponentUpdate(this, 'LoginForm');
 
     initForm(props) {
         reactForm({

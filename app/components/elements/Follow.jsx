@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
-import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import transaction from 'app/redux/Transaction';
 import {Set, Map} from 'immutable'
 import tt from 'counterpart';
@@ -29,7 +28,6 @@ class Follow extends React.Component {
         super();
         this.state = {};
         this.initEvents(props);
-        this.shouldComponentUpdate = shouldComponentUpdate(this, 'Follow');
     }
 
     componentWillUpdate(nextProps) {

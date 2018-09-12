@@ -19,7 +19,7 @@ let polling = false
 let active_user = null
 let last_trade = null
 
-export function* fetchMarket(location_change_action) {
+function* fetchMarket(location_change_action) {
     const {pathname} = location_change_action.payload;
     if (pathname && pathname != "/market") {
         polling = false
@@ -60,7 +60,7 @@ export function* fetchMarket(location_change_action) {
     }
 }
 
-export function* fetchOpenOrders(set_user_action) {
+function* fetchOpenOrders(set_user_action) {
     const {username} = set_user_action.payload
 
     try {
@@ -73,19 +73,19 @@ export function* fetchOpenOrders(set_user_action) {
     }
 }
 
-export function* reloadMarket(reload_action) {
+function* reloadMarket(reload_action) {
     yield fetchMarket(reload_action);
     yield fetchOpenOrders(reload_action);
 }
 
-export function* watchUserLogin() {
+function* watchUserLogin() {
     yield takeLatest('user/SET_USER', fetchOpenOrders);
 }
 
-export function* watchLocationChange() {
+function* watchLocationChange() {
     yield takeLatest('@@router/LOCATION_CHANGE', fetchMarket);
 }
 
-export function* watchMarketUpdate() {
+function* watchMarketUpdate() {
     yield takeLatest('market/UPDATE_MARKET', reloadMarket);
 }

@@ -12,10 +12,8 @@ export const LIQUID_TOKEN_UPPERCASE     = 'ГОЛОС'
 
 
 export const VESTING_TOKEN              = 'Сила Голоса'
-export const VESTING_TOKEN_UPPERCASE    = 'СИЛА ГОЛОСА'
 export const VESTING_TOKEN_SHORT        = 'СГ'
 
-export const VESTING_TOKEN1             = 'Сил Голоса'
 export const VESTING_TOKEN2             = 'Силу Голоса'
 export const VESTING_TOKEN3             = 'Силах Голоса'
 export const VESTING_TOKENS             = 'Силы Голоса'
@@ -30,7 +28,6 @@ export const WIKI_URL = 'https://wiki.golos.io/'
 
 export const LANDING_PAGE_URL       = 'https://golos.io/about'
 export const TERMS_OF_SERVICE_URL   = 'https://golos.io/legal/terms_of_service.pdf'
-export const PRIVACY_POLICY_URL     = 'https://golos.io/ru--konfidenczialxnostx/@golos/politika-konfidencialnosti'
 export const WHITEPAPER_URL         = 'https://golos.io/ru--golos/@golos/golos-russkoyazychnaya-socialno-mediinaya-blokchein-platforma'
 
 
@@ -55,7 +52,6 @@ export const SITE_DESCRIPTION = 'Голос - социальная сеть, п�
 
 // various
 export const SUPPORT_EMAIL = 'support@yourdomain.name'
-export const FIRST_DATE = new Date(Date.UTC(2016, 7, 1)); //1 september
 export const SCRAP_EMBED_SINCE = new Date(Date.UTC(2017, 4, 5));
 
 // ignore special tags, dev-tags, partners tags

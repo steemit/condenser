@@ -13,10 +13,8 @@ export const LIQUID_TOKEN = 'Голос'
 // sometimes it's impossible to use html tags to style coin name, hence usage of _UPPERCASE modifier
 export const LIQUID_TOKEN_UPPERCASE = 'ГОЛОС'
 export const VESTING_TOKEN = 'Сила Голоса'
-export const VESTING_TOKEN_UPPERCASE = 'СИЛА ГОЛОСА'
 export const VESTING_TOKEN_SHORT = 'СГ'
 
-export const VESTING_TOKEN1 = 'Сил Голоса'
 export const VESTING_TOKEN2 = 'Силу Голоса'
 export const VESTING_TOKEN3 = 'Силах Голоса'
 export const VESTING_TOKENS = 'Силы Голоса'
@@ -56,7 +54,6 @@ export const SITE_DESCRIPTION = 'Голос - социальная сеть, п�
 
 // various
 export const SUPPORT_EMAIL = 'support@' + APP_DOMAIN
-export const FIRST_DATE = new Date(Date.UTC(2016, 7, 1)); //1 september
 // ignore special tags, dev-tags, partners tags
 export const IGNORE_TAGS = ['test', 'bm-open', 'bm-ceh23', 'bm-tasks', 'bm-taskceh1']
 export const SELECT_TAGS_KEY = 'gls.select.tags'
@@ -86,8 +83,6 @@ export const ACCOUNT_OPERATIONS = [
 
 export const SEO_TITLE = 'GOLOS.io Блоги'
 
-export const SEGMENT_ANALYTICS_KEY = 'F7tldQJxt491gXYqDGi5TkTT4wFpSPps'
-
 export const USER_GENDER = ['undefined', 'male', 'female']
 
 export const SMS_SERVICES = {
@@ -104,7 +99,6 @@ export const ANDROID_PACKAGE = 'io.golos.golos'
 export const ANDROID_URL_SCHEME = 'golosioapp'
 export const ANDROID_DEEP_LINK_DOMAIN = 'golos.io';
 export const TERMS_OF_SERVICE_URL = 'https://golos.io/legal/terms_of_service.pdf';
-export const PRIVACY_POLICY_URL = 'https://golos.io/ru--konfidenczialxnostx/@golos/politika-konfidencialnosti';
 export const WIKI_URL = 'https://wiki.golos.io/';
 export const MARKDOWN_STYLING_GUIDE_URL = 'https://golos.io/ru--golos/@on0tole/osnovy-oformleniya-postov-na-golose-polnyi-kurs-po-rabote-s-markdown';
 

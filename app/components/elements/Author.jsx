@@ -1,15 +1,12 @@
 /* eslint react/prop-types: 0 */
 import React from 'react';
 import PropTypes from 'prop-types'
-import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdown'
 import Follow from 'app/components/elements/Follow';
 import Icon from 'app/components/elements/Icon';
 import { Link } from 'react-router';
-import {authorNameAndRep} from 'app/utils/ComponentFormatters';
 import Reputation from 'app/components/elements/Reputation';
 import Userpic from 'app/components/elements/Userpic';
-import tt from 'counterpart';
 import normalizeProfile from 'app/utils/NormalizeProfile';
 
 const {string, bool, number} = PropTypes;
@@ -49,7 +46,6 @@ class Author extends React.Component {
         }
     }
 
-    shouldComponentUpdate = shouldComponentUpdate(this, 'Author');
     render() {
         const {author, follow, mute, authorRepLog10} = this.props; // html
         const {username} = this.props; // redux

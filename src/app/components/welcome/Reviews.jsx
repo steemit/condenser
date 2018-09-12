@@ -20,7 +20,7 @@ const Header = styled.div`
     margin: 0 0 40px 63px;
 `;
 
-export default class Review extends PureComponent {
+export default class Reviews extends PureComponent {
     render() {
         const { slides } = this.props;
 

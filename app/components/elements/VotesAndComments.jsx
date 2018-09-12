@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import Icon from 'app/components/elements/Icon';
-import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import tt from 'counterpart';
 
 class VotesAndComments extends React.Component {
@@ -17,11 +16,6 @@ class VotesAndComments extends React.Component {
         votes: PropTypes.number,
         comments: PropTypes.number,
     };
-
-    constructor(props) {
-        super(props);
-        this.shouldComponentUpdate = shouldComponentUpdate(this, 'VotesAndComments');
-    }
 
     render() {
         const {votes, comments, commentsLink} = this.props;

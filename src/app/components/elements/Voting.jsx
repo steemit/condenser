@@ -390,7 +390,6 @@ class Voting extends React.Component {
             payoutItems.push({
                 value: tt('voting_jsx.pending_payout', {
                     value: formatDecimal(pending_payout).join(''),
-                    LIQUID_TOKEN: LIQUID_TOKEN_UPPERCASE,
                 }),
             });
             payoutItems.push({ value: <TimeAgoWrapper date={cashout_time} /> });

@@ -87,7 +87,7 @@ const Account = ({ profile, account, onSubmitBlockchain }) => {
                                         {...input}
                                         autocomplete="name"
                                         type="text"
-                                        placeholder="Имя Фамилия"
+                                        placeholder={tt('settings_jsx.account.placeholders.name')}
                                     />
                                     <FormError meta={meta} />
                                 </FormGroup>
@@ -97,7 +97,7 @@ const Account = ({ profile, account, onSubmitBlockchain }) => {
                             {({ input, meta }) => (
                                 <FormGroup>
                                     <Label>{tt('settings_jsx.profile_gender.title')}</Label>
-                                    <Select {...input} placeholder="Выберите ваш пол">
+                                    <Select {...input} placeholder={tt('settings_jsx.account.placeholders.gender')}>
                                         {USER_GENDER.map(i => {
                                             return (
                                                 <option key={i} value={i}>
@@ -130,7 +130,7 @@ const Account = ({ profile, account, onSubmitBlockchain }) => {
                                     <Input
                                         {...input}
                                         type="text"
-                                        placeholder="Укажите свой город"
+                                        placeholder={tt('settings_jsx.account.placeholders.location')}
                                     />
                                     <FormError meta={meta} />
                                 </FormGroup>
@@ -142,9 +142,7 @@ const Account = ({ profile, account, onSubmitBlockchain }) => {
                                     <Label>{tt('settings_jsx.profile_about')}</Label>
                                     <Textarea
                                         {...input}
-                                        placeholder={
-                                            'Чему училися\nГде и кем работаю\nМои проекты\nИнтересы\nСемья\nЖизненное кредо'
-                                        }
+                                        placeholder={tt('settings_jsx.account.placeholders.about')}
                                         rows={6}
                                     />
                                     <FormError meta={meta} />
@@ -155,13 +153,13 @@ const Account = ({ profile, account, onSubmitBlockchain }) => {
                             {({ input, meta }) => (
                                 <FormGroup>
                                     <Label>{tt('settings_jsx.profile_website')}</Label>
-                                    <Input {...input} type="text" placeholder="Ссылка на сайт" />
+                                    <Input {...input} type="text" placeholder={tt('settings_jsx.account.placeholders.website')} />
                                     <FormError meta={meta} />
                                 </FormGroup>
                             )}
                         </Field>
                         <FormGroup>
-                            <Label>Социальные сети</Label>
+                            <Label>{tt('settings_jsx.social_networks')}</Label>
                             <Field name="social.facebook">
                                 {({ input, meta }) => (
                                     <FormGroupRow>
@@ -171,7 +169,7 @@ const Account = ({ profile, account, onSubmitBlockchain }) => {
                                         <Input
                                             {...input}
                                             type="text"
-                                            placeholder="Ссылка на Facebook"
+                                            placeholder={tt('settings_jsx.account.placeholders.social_facebook')}
                                         />
                                         <FormError meta={meta} />
                                     </FormGroupRow>
@@ -186,7 +184,7 @@ const Account = ({ profile, account, onSubmitBlockchain }) => {
                                         <Input
                                             {...input}
                                             type="text"
-                                            placeholder="Ссылка на Вконтакте"
+                                            placeholder={tt('settings_jsx.account.placeholders.social_vkontakte')}
                                         />
                                         <FormError meta={meta} />
                                     </FormGroupRow>
@@ -201,7 +199,7 @@ const Account = ({ profile, account, onSubmitBlockchain }) => {
                                         <Input
                                             {...input}
                                             type="text"
-                                            placeholder="Ссылка на Instagran"
+                                            placeholder={tt('settings_jsx.account.placeholders.social_instagram')}
                                         />
                                         <FormError meta={meta} />
                                     </FormGroupRow>
@@ -216,7 +214,7 @@ const Account = ({ profile, account, onSubmitBlockchain }) => {
                                         <Input
                                             {...input}
                                             type="text"
-                                            placeholder="Ссылка на Twitter"
+                                            placeholder={tt('settings_jsx.account.placeholders.social_twitter')}
                                         />
                                         <FormError meta={meta} />
                                     </FormGroupRow>

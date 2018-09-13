@@ -201,6 +201,7 @@
     "account_not_found": "Account not found",
     "account_recovery_succes": "Your account has been successfully recovered!",
     "account_updated": "Account Updated",
+    "active": "Active key",
     "activity": "Activity",
     "add": "Add",
     "age": "age",
@@ -291,7 +292,7 @@
     "login_to_see_memo": "login to see memo",
     "login_to_show": "Login to show",
     "logout": "Logout",
-    "memo": "Memo",
+    "memo": "Memo key",
     "messages": "Messages",
     "more": "more",
     "mute": "Mute",
@@ -330,6 +331,7 @@
     "only_one_APP_NAME_account_allowed_per_ip_address_every_10_minutes": "Only one Steem account allowed per IP address every 10 minutes",
     "or": "or",
     "order_placed": "Order placed",
+    "owner": "Owner key",
     "password": "Password",
     "password_is_bound_to_your_accounts_owner_key": "This password is bound to your account's owner key and can not be used to login to this site",
     "password_must_be_characters_or_more": "Password must be %(amount)s characters or more",
@@ -345,6 +347,7 @@
     "please_email_questions_to": "Please email your questions to",
     "post": "Post",
     "post_as": "Post as",
+    "posting": "Posting key",
     "posts": "Posts",
     "powered_up_100": "Powered Up 100%%",
     "preview": "Preview",
@@ -842,6 +845,19 @@
   },
   "settings_jsx": {
     "about_is_too_long": "About is too long",
+    "account": {
+      "placeholders": {
+        "about": "What did I learn\\n\\rWhere and by whom I work\\nMy projects\\nInterests\\nThe family\\nLife credo",
+        "gender": "Select your gender",
+        "location": "Enter your city",
+        "name": "Full name",
+        "social_facebook": "Link to Facebook",
+        "social_instagram": "Link to Instagram",
+        "social_twitter": "Link to Twitter",
+        "social_vkontakte": "Link to Vkontakte",
+        "website": "Link to website"
+      }
+    },
     "always_hide": "Always hide",
     "always_show": "Always show",
     "always_warn": "Always warn",
@@ -849,6 +865,13 @@
     "choose_language": "Choose language",
     "cover_image_url": "Cover image url",
     "invalid_url": "Invalid URL",
+    "keys": {
+      "info": "It's important to keep your password key. Golos.io does not store your passwords. Be sure to securely store your key.",
+      "tabs": {
+        "keys": "Keys",
+        "new": "New key"
+      }
+    },
     "location_is_too_long": "Location is too long",
     "muted_users": "Muted Users",
     "name_is_too_long": "Name is too long",
@@ -859,7 +882,15 @@
       "allOnlineLabel": "Instant notifications on the site",
       "award": "Author's award",
       "curatorAward": "Curating award",
-      "flag": "Dislike (flag)"
+      "flag": "Dislike (flag)",
+      "mention": "Mention in a post or comments",
+      "message": "Private message",
+      "reply": "Reply to a post or comment",
+      "repost": "Repost",
+      "subscribe": "Subscribe to the blog",
+      "transfer": "Transfer",
+      "unsubscribe": "Unsubscribe from blog",
+      "vote": "Like (vote)"
     },
     "private_post_display_settings": "Private Post Display Settings",
     "profile_about": "About",
@@ -868,7 +899,7 @@
       "genders": {
         "female": "Female",
         "male": "Male",
-        "undefined": "Undefined"
+        "undefined": "Not specified"
       },
       "title": "Gender"
     },
@@ -886,15 +917,13 @@
       "three_decimal": "Three decimal places",
       "two_decimal": "Two decimal places"
     },
+    "self_vote_default": "Vote by default for your publication",
+    "social_networks": "Social networks",
     "tabs": {
       "account": "Account",
       "common": "Common",
       "keys": "Keys",
       "notifications": "Notifications"
-    },
-    "tabs-keys": {
-      "keys": "Keys",
-      "new": "New key"
     },
     "update": "Update",
     "website_url_is_too_long": "Website URL is too long"

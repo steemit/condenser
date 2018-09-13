@@ -178,7 +178,7 @@
         "vote_currently_exists_user_must_be_indicate_a_to_reject_witness":
             "голос уже существует, пользователь должен обозначить желание убрать делегата",
         "only_one_APP_NAME_account_allowed_per_ip_address_every_10_minutes":
-            "Только один Steem аккаунт разрешен с одного IP адреса каждые десять минут",
+            "Только один VIT аккаунт разрешен с одного IP адреса каждые десять минут",
         "resteem_this_post": "Поделиться этим постом",
         "reblog": "Поделиться",
         "write_your_story": "Написать свою историю",
@@ -205,8 +205,8 @@
             "authors_get_paid_when_people_like_you_upvote_their_post":
                 "Авторы получают вознаграждение, когда пользователи голосуют за их посты",
             "if_you_enjoyed_what_you_read_earn_amount":
-                "Если Вам понравилось то, что Вы здесь прочитали, создайте свой аккаунт сегодня и начните зарабатывать БЕСПЛАТНЫЕ STEEM-ы!",
-            "free_steem": "БЕСПЛАТНЫЕ STEEM!",
+                "Если Вам понравилось то, что Вы здесь прочитали, создайте свой аккаунт сегодня и начните зарабатывать БЕСПЛАТНЫЕ VIT-ы!",
+            "free_steem": "БЕСПЛАТНЫЕ VIT!",
             "sign_up_earn_steem": "Зарегистрируйтесь сейчас, чтобы заработать "
         },
         "next_3_strings_together": {
@@ -259,13 +259,13 @@
         "learn_more": "Документация",
         "welcome": "Добро пожаловать",
         "faq": "ЧаВО",
-        "shop": "Магазин Steemit",
-        "chat": "Чат Steemit",
-        "app_center": "Центр приложений Steemit",
-        "api_docs": "API-документация Steemit",
-        "bluepaper": "Синяя бумага Steem",
+        "shop": "Магазин VIT",
+        "chat": "Чат VIT",
+        "app_center": "Центр приложений VIT",
+        "api_docs": "API-документация VIT",
+        "bluepaper": "Синяя бумага VIT",
         "smt_whitepaper": "Белая книга SMT",
-        "whitepaper": "Белая книга Steem",
+        "whitepaper": "Белая книга VIT",
         "intro_tagline": "Здесь говорят деньги.",
         "intro_paragraph":
             "Ваше мнение имеет цену. Присоединяйтесь к сообществу, которое платит за контент и за работу по отбору самого лучшего контента."
@@ -390,7 +390,7 @@
             "Нам нужно подтвердить вашу личность. Пожалуйста, укажите вашу электронную почту ниже для начала проверки.",
         "continue_with_email": "Продолжить с электронной почтой",
         "thanks_for_submitting_request_for_account_recovery":
-            "<p>Благодарим Вас за отправку запроса на восстановление аккаунта используя основанную на блокчейне мультифакторную аутентификацию %(APP_NAME)s’a.</p> <p>Мы ответим Вам как можно быстрее, однако, пожалуйста, ожидайте что может быть некоторая задержка из-за большого объема писем.</p> <p>Пожалуйста, будьте готовы подтвердить свою личность.</p><p>С уважением,</p> <p>Ned Scott</p> <p>CEO Steemit</p>",
+            "<p>Благодарим Вас за отправку запроса на восстановление аккаунта используя основанную на блокчейне мультифакторную аутентификацию %(APP_NAME)s’a.</p> <p>Мы ответим Вам как можно быстрее, однако, пожалуйста, ожидайте что может быть некоторая задержка из-за большого объема писем.</p> <p>Пожалуйста, будьте готовы подтвердить свою личность.</p><p>С уважением,</p> <p>Ned Scott</p> <p>CEO VIT</p>",
         "recovering_account": "Восстанавливаем аккаунт",
         "recover_account": "Восстановить аккаунт",
         "checking_account_owner": "Проверяем владельца аккаунта",
@@ -467,14 +467,14 @@
             "Разжигание ненависти или Интернет троллинг",
         "intentional_miss_categorized_content_or_spam":
             "Преднамеренная неправильная категоризация контента или спам",
-        "pending_payout": "Ожидаемая выплата $%(value)s",
+        "pending_payout": "Ожидаемая выплата %(value)s VIT",
         "payout_declined": "Автор отказался от вознаграждения",
         "max_accepted_payout":
-            "Максимально допустимое вознаграждение: $%(value)s",
-        "promotion_cost": "Цена продвижения: $%(value)s",
-        "past_payouts": "Предыдущие выплаты $%(value)s",
-        "past_payouts_author": " - Авторские $%(value)s",
-        "past_payouts_curators": " - Кураторские $%(value)s",
+            "Максимально допустимое вознаграждение: %(value)s VIT",
+        "promotion_cost": "Цена продвижения: %(value)s VIT",
+        "past_payouts": "Предыдущие выплаты %(value)s VIT",
+        "past_payouts_author": " - Авторские %(value)s VIT",
+        "past_payouts_curators": " - Кураторские %(value)s VIT",
         "we_will_reset_curation_rewards_for_this_post":
             "это сбросит выплаты за курирование",
         "removing_your_vote": "Удаление голоса",
@@ -578,7 +578,7 @@
         "converted_VESTING_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again":
             "Конвертированные %(VESTING_TOKEN)s токены могут быть отправлены себе или кому-либо еще, но не могут быть переданы вновь без конвертации в %(LIQUID_TOKEN)s.",
         "part_of_your_steem_power_is_currently_delegated":
-            "Часть STEEM POWER вам делегирована, это увеличивает ваше влияние на платформе. Количество делегированных токенов со временем может изменяться."
+            "Часть VIT POWER вам делегирована, это увеличивает ваше влияние на платформе. Количество делегированных токенов со временем может изменяться."
     },
     "promote_post_jsx": {
         "promote_post": "Продвинуть пост",
@@ -684,7 +684,7 @@
         "password_update_succes":
             "Пароль для %(accountName)s был успешно обновлен",
         "password_info":
-            "Этот пароль или закрытый ключ был введен неправильно. Вероятно, есть ошибка почерка или ввода данных. Подсказка: пароль или закрытый ключ, сгенерированный Steemit, никогда не будет содержать символы 0 (ноль), O (прописная o), I (прописная i) и l (нижний регистр L).",
+            "Этот пароль или закрытый ключ был введен неправильно. Вероятно, есть ошибка почерка или ввода данных. Подсказка: пароль или закрытый ключ, сгенерированный VIT, никогда не будет содержать символы 0 (ноль), O (прописная o), I (прописная i) и l (нижний регистр L).",
         "enter_your_username": "Введи свое имя пользователя",
         "password_or_wif": "Пароль или WIF",
         "this_operation_requires_your_key_or_master_password":
@@ -693,7 +693,7 @@
         "amazing_community": "удивительное сообщество",
         "to_comment_and_reward_others":
             " комментировать и вознаграждать других.",
-        "sign_up_get_steem": "Sign up. Get STEEM",
+        "sign_up_get_steem": "Sign up. Get VIT",
         "signup_button": "Зарегистрируйтесь",
         "signup_button_emphasis": " сейчас!",
         "returning_users": "Вернувшиеся пользователи: ",
@@ -748,7 +748,7 @@
         "balance_subject_to_3_day_withdraw_waiting_period":
             "Вывод баланса из сейфа на обычный счет, занимает 3 дня,",
         "move_funds_to_another_account":
-            "Отправить средства на другой Steem аккаунт.",
+            "Отправить средства на другой VIT аккаунт.",
         "protect_funds_by_requiring_a_3_day_withdraw_waiting_period":
             "Защитите средства от вывода 3-х дневным периодом ожидания.",
         "withdraw_funds_after_the_required_3_day_waiting_period":
@@ -779,7 +779,7 @@
         "transfers_are_temporary_disabled": "Переводы временно преостановлены.",
         "history": "ИСТОРИЯ",
         "redeem_rewards": "Получить вознаграждение",
-        "buy_steem_or_steem_power": "Купить STEEM или STEEM POWER"
+        "buy_steem_or_steem_power": "Купить VIT или VIT POWER"
     },
     "powerdown_jsx": {
         "power_down": "Уменьшить силу голоса (power down)",

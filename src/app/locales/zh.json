@@ -169,7 +169,7 @@
         "vote_currently_exists_user_must_be_indicate_a_to_reject_witness":
             "已经投过此见证人，你是否想取消此见证人的投票",
         "only_one_APP_NAME_account_allowed_per_ip_address_every_10_minutes":
-            "每10分钟一个IP地址只允许一个Steem账号",
+            "每10分钟一个IP地址只允许一个VIT账号",
         "resteem_this_post": "转发这这篇文章",
         "reblog": "转发",
         "write_your_story": "写下你的故事",
@@ -195,8 +195,8 @@
             "authors_get_paid_when_people_like_you_upvote_their_post":
                 "当你和其他人给帖子点赞时，作者会得到报酬",
             "if_you_enjoyed_what_you_read_earn_amount":
-                "如果你喜欢阅读这里的内容，请立即创建你的帐户，并开始免费赚取STEEM！",
-            "free_steem": "免费的Steem代币！",
+                "如果你喜欢阅读这里的内容，请立即创建你的帐户，并开始免费赚取VIT！",
+            "free_steem": "免费的VIT代币！",
             "sign_up_earn_steem": "现在注册来赚取"
         },
         "next_3_strings_together": {
@@ -238,10 +238,10 @@
         "learn_more": "了解更多",
         "welcome": "欢迎",
         "faq": "常见问题",
-        "chat": "Steemit聊天",
-        "app_center": "Steemit应用中心",
-        "api_docs": "Steemit API文档",
-        "whitepaper": "Steem白皮书",
+        "chat": "VIT聊天",
+        "app_center": "VIT应用中心",
+        "api_docs": "VIT API文档",
+        "whitepaper": "VIT白皮书",
         "intro_tagline": "妙笔生金",
         "intro_paragraph":
             "你的思想是有有价值的。赶快加入发表文章获得赏金的社区。"
@@ -347,7 +347,7 @@
         "request_already_submitted_contact_support":
             "您的请求已经提交，我们正在处理。请联系%(SUPPORT_EMAIL)s以获得您的请求的状态。",
         "recover_account_intro":
-            "有时候，Steemit 的拥有者钥匙可能会被盗用。被盗帐户恢复给予合法的帐户所有者30天，从小偷更改其所有者密钥的时候恢复其帐户。盗用帐户恢复只能在%(APP_URL)s上使用，如果帐户所有者已经明确列出 %(APP_NAME)s作为其帐户受信任者，并遵守了 %(APP_NAME)s 的服务条款。",
+            "有时候，VIT 的拥有者钥匙可能会被盗用。被盗帐户恢复给予合法的帐户所有者30天，从小偷更改其所有者密钥的时候恢复其帐户。盗用帐户恢复只能在%(APP_URL)s上使用，如果帐户所有者已经明确列出 %(APP_NAME)s作为其帐户受信任者，并遵守了 %(APP_NAME)s 的服务条款。",
         "login_with_facebook_or_reddit_media_to_verify_identity":
             "请登录Facebook或Reddit以验证你的身份",
         "login_with_social_media_to_verify_identity":
@@ -413,13 +413,13 @@
         "hate_speech_or_internet_trolling": "仇恨言论或互联网钓鱼",
         "intentional_miss_categorized_content_or_spam":
             "故意错误分类或垃圾信息",
-        "pending_payout": "待获得赏金$%(value)s",
+        "pending_payout": "待获得赏金%(value)s VIT",
         "payout_declined": "拒绝赏金",
-        "max_accepted_payout": "赏金上限$%(value)s",
-        "promotion_cost": "推广费$%(value)s",
-        "past_payouts": "累计赏金$%(value)s",
-        "past_payouts_author": "- 作者收入 $%(value)s",
-        "past_payouts_curators": " - 审查收入 $%(value)s",
+        "max_accepted_payout": "赏金上限%(value)s VIT",
+        "promotion_cost": "推广费%(value)s VIT",
+        "past_payouts": "累计赏金%(value)s VIT",
+        "past_payouts_author": "- 作者收入%(value)s VIT",
+        "past_payouts_curators": " - 审查收入%(value)s VIT",
         "we_will_reset_curation_rewards_for_this_post":
             "将重置你对这篇帖子的审查奖励",
         "removing_your_vote": "取消你的投票",
@@ -510,7 +510,7 @@
         "converted_VESTING_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again":
             "%(VESTING_TOKEN)s可以转给你自己或其他人，但是只有转回%(LIQUID_TOKEN)s后，才可以进行下一次转账。",
         "part_of_your_steem_power_is_currently_delegated":
-            "有一部分STEEM POWER是代理给你使用的。代理的STEEM POWER是为了帮助新用户在steemit上进行操作。你被代理的数量可能会有波动。"
+            "有一部分VIT POWER是代理给你使用的。代理的VIT POWER是为了帮助新用户在steemit上进行操作。你被代理的数量可能会有波动。"
     },
     "promote_post_jsx": {
         "promote_post": "推广帖子",
@@ -522,7 +522,7 @@
     "about_jsx": {
         "about_app": "关于%(APP_NAME)s",
         "about_app_details":
-            "%(APP_NAME)s是一个社交媒体平台，通过写文章和审查文章内容，每个人都可以得到赏金。它有一个强大的数字积分系统，称为Steem，其通过市场价格发现机制和流动性，来支撑数字奖励的真实价值。",
+            "%(APP_NAME)s是一个社交媒体平台，通过写文章和审查文章内容，每个人都可以得到赏金。它有一个强大的数字积分系统，称为VIT，其通过市场价格发现机制和流动性，来支撑数字奖励的真实价值。",
         "learn_more_at_app_url": "了解更多%(APP_URL)s",
         "resources": "资源"
     },
@@ -609,7 +609,7 @@
         "you_account_has_been_successfully_recovered": "您的帐号已经成功恢复!",
         "password_update_succes": "%(accountName)s的密码成功修改",
         "password_info":
-            "密码或私钥输入不正确。有可能是输入错误。提示：Steemit创建的密码或私钥中永远不包含 0(零)， O(大写O)， I(大写i)和l (小写L)。",
+            "密码或私钥输入不正确。有可能是输入错误。提示：VIT创建的密码或私钥中永远不包含 0(零)， O(大写O)， I(大写i)和l (小写L)。",
         "enter_your_username": "输入您的用户名",
         "password_or_wif": "密码或WIF",
         "this_operation_requires_your_key_or_master_password":
@@ -667,7 +667,7 @@
         "convert_to_VESTING_TOKEN": "转换成%(VESTING_TOKEN)s",
         "balance_subject_to_3_day_withdraw_waiting_period":
             "余额取决于3天的提款等待期，",
-        "move_funds_to_another_account": "将资金转移给另一个Steem的用户。",
+        "move_funds_to_another_account": "将资金转移给另一个VIT的用户。",
         "protect_funds_by_requiring_a_3_day_withdraw_waiting_period":
             "通过设置3天的提款等待期来保护资金。",
         "withdraw_funds_after_the_required_3_day_waiting_period":
@@ -695,7 +695,7 @@
         "transfers_are_temporary_disabled": "转移功能暂时被禁用。",
         "history": "历史",
         "redeem_rewards": "赎回奖励(转移至余额)",
-        "buy_steem_or_steem_power": "购买STEEM或STEEM Power"
+        "buy_steem_or_steem_power": "购买VIT或VIT Power"
     },
     "powerdown_jsx": {
         "power_down": "Power Down",

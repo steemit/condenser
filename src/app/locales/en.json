@@ -473,13 +473,13 @@
         "hate_speech_or_internet_trolling": "Hate Speech or Internet Trolling",
         "intentional_miss_categorized_content_or_spam":
             "Intentional miss-categorized content or Spam",
-        "pending_payout": "Pending Payout $%(value)s",
+        "pending_payout": "Pending Payout %(value)s VIT",
         "payout_declined": "Payout Declined",
-        "max_accepted_payout": "Max Accepted Payout $%(value)s",
+        "max_accepted_payout": "Max Accepted Payout %(value)s VIT",
         "promotion_cost": "Promotion Cost $%(value)s",
-        "past_payouts": "Past Payouts $%(value)s",
-        "past_payouts_author": " - Author $%(value)s",
-        "past_payouts_curators": " - Curators $%(value)s",
+        "past_payouts": "Past Payouts %(value)s VIT",
+        "past_payouts_author": " - Author %(value)s VIT",
+        "past_payouts_curators": " - Curators %(value)s VIT",
         "removing_your_vote": "Removing your vote",
         "removing_your_vote_will_reset_curation_rewards_for_this_post":
             "Removing your vote will reset your curation rewards for this post",

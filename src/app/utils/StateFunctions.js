@@ -81,7 +81,7 @@ export function assetFloat(str, asset) {
         assert.equal(typeof str, 'string');
         assert.equal(typeof asset, 'string');
         assert(
-            new RegExp(`^\\d+(\\.\\d+)? ${asset}$`).test(str),
+            new RegExp('^\\d+(\\.\\d+)? [A-Z]+$').test(str),
             'Asset should be formatted like 99.99 ' + asset + ': ' + str
         );
         return parseFloat(str.split(' ')[0]);

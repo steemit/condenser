@@ -7,6 +7,7 @@ import tt from 'counterpart';
 
 import { USER_GENDER } from 'app/client_config';
 
+import SplashLoader from 'golos-ui/SplashLoader';
 import { CardContent } from 'golos-ui/Card';
 import { DialogFooter, DialogButton } from 'golos-ui/Dialog';
 import {
@@ -65,8 +66,10 @@ const Account = ({ profile, account, onSubmitBlockchain }) => {
 
     return (
         <Form onSubmit={onSubmitBlockchain} initialValues={profile} validate={validate}>
-            {({ handleSubmit, submitError, form, submitting, pristine, invalid, values }) => (
+            {({ handleSubmit, submitError, form, submitting, pristine, hasValidationErrors }) => (
                 <form onSubmit={handleSubmit}>
+                    {submitting && <SplashLoader />}
+
                     <CardContent column>
                         <Field name="username">
                             {({ input }) => (
@@ -231,7 +234,7 @@ const Account = ({ profile, account, onSubmitBlockchain }) => {
                         <DialogButton
                             type="submit"
                             primary
-                            disabled={submitting || pristine || invalid}
+                            disabled={submitting || pristine || hasValidationErrors}
                         >
                             {tt('settings_jsx.update')}
                         </DialogButton>

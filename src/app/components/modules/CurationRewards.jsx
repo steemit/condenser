@@ -10,8 +10,6 @@ import {
 import tt from 'counterpart';
 import {
     APP_NAME,
-    DEBT_TOKEN,
-    DEBT_TOKEN_SHORT,
     LIQUID_TOKEN,
     CURRENCY_SIGN,
     VESTING_TOKEN,

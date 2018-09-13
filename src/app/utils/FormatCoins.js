@@ -2,8 +2,6 @@ import {
     APP_NAME,
     LIQUID_TOKEN,
     LIQUID_TOKEN_UPPERCASE,
-    DEBT_TOKEN,
-    DEBT_TOKEN_SHORT,
     CURRENCY_SIGN,
     VESTING_TOKEN,
 } from 'app/client_config';
@@ -16,8 +14,6 @@ export function formatCoins(string) {
     if (!string) return string;
     // TODO use .to:owerCase() ? for string normalisation
     string = string
-        .replace('SBD', DEBT_TOKEN_SHORT)
-        .replace('SD', DEBT_TOKEN_SHORT)
         .replace('Vit Power', VESTING_TOKEN)
         .replace('VIT POWER', VESTING_TOKEN)
         .replace('Vit', LIQUID_TOKEN)

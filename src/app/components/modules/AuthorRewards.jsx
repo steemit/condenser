@@ -8,13 +8,7 @@ import {
     assetFloat,
 } from 'app/utils/StateFunctions';
 import tt from 'counterpart';
-import {
-    VESTING_TOKEN,
-    LIQUID_TICKER,
-    VEST_TICKER,
-    DEBT_TICKER,
-    DEBT_TOKEN_SHORT,
-} from 'app/client_config';
+import { VESTING_TOKEN, LIQUID_TICKER, VEST_TICKER } from 'app/client_config';
 
 class AuthorRewards extends React.Component {
     constructor() {
@@ -62,9 +56,6 @@ class AuthorRewards extends React.Component {
         let rewards24Steem = 0,
             rewardsWeekSteem = 0,
             totalRewardsSteem = 0;
-        let rewards24SBD = 0,
-            rewardsWeekSBD = 0,
-            totalRewardsSBD = 0;
         const today = new Date();
         const oneDay = 86400 * 1000;
         const yesterday = new Date(today.getTime() - oneDay).getTime();
@@ -88,24 +79,17 @@ class AuthorRewards extends React.Component {
                         item[1].op[1].steem_payout,
                         LIQUID_TICKER
                     );
-                    const sbd = assetFloat(
-                        item[1].op[1].sbd_payout,
-                        DEBT_TICKER
-                    );
 
                     if (new Date(item[1].timestamp).getTime() > lastWeek) {
                         if (new Date(item[1].timestamp).getTime() > yesterday) {
                             rewards24Vests += vest;
                             rewards24Steem += steem;
-                            rewards24SBD += sbd;
                         }
                         rewardsWeekVests += vest;
                         rewardsWeekSteem += steem;
-                        rewardsWeekSBD += sbd;
                     }
                     totalRewardsVests += vest;
                     totalRewardsSteem += steem;
-                    totalRewardsSBD += sbd;
 
                     return (
                         <TransferHistoryRow
@@ -128,9 +112,6 @@ class AuthorRewards extends React.Component {
         const averageCurationSteem = !daysOfCuration
             ? 0
             : totalRewardsSteem / daysOfCuration;
-        const averageCurationSBD = !daysOfCuration
-            ? 0
-            : totalRewardsSBD / daysOfCuration;
         const hasFullWeek = daysOfCuration >= 7;
         const limitedIndex = Math.min(historyIndex, curationLength - 10);
         author_log = author_log.reverse().filter(() => {
@@ -199,8 +180,6 @@ class AuthorRewards extends React.Component {
                             VESTING_TOKEN}
                         <br />
                         {rewardsWeekSteem.toFixed(3) + ' ' + LIQUID_TICKER}
-                        <br />
-                        {rewardsWeekSBD.toFixed(3) + ' ' + DEBT_TOKEN_SHORT}
                     </div>
                 </div>
 

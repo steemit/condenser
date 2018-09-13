@@ -268,35 +268,6 @@ describe('Voting', () => {
         );
     });
 
-    it('should show all SP if percent_steem_dollars is 0', () => {
-        const post_obj = fromJS({
-            stats: {
-                total_votes: 1,
-            },
-            max_accepted_payout: '999999 SBD',
-            percent_steem_dollars: 0,
-            pending_payout_value: '10 SBD',
-            cashout_time: '2018-03-30T10:00:00Z',
-        });
-        const store = createStore(rootReducer);
-        const component = renderer.create(
-            <Provider store={store}>
-                <IntlProvider locale="en">
-                    <Voting
-                        post="Test post"
-                        vote={(w, p) => {}}
-                        post_obj={post_obj}
-                        price_per_steem={1}
-                        sbd_print_rate={10000}
-                    />
-                </IntlProvider>
-            </Provider>
-        );
-        expect(JSON.stringify(component.toJSON())).toContain(
-            '(0.00 SBD, 10.00 SP)'
-        );
-    });
-
     it('should omit liquid steem if print rate is 10000', () => {
         const store = createStore(rootReducer);
         const post_obj = fromJS({

@@ -1,5 +1,6 @@
 import { fromJS, Map } from 'immutable';
 import tt from 'counterpart';
+import { path } from 'ramda';
 
 export default function transactionErrorReducer(
     state,
@@ -121,6 +122,16 @@ export default function transactionErrorReducer(
                 )
             ) {
                 errorKey = errorStr = tt('chain_errors.voting_weight_is_too_small');
+            }
+
+            // TODO: beautyfree - refacroting other above 'ifs' to this pattern
+            const errorName = path(['payload', 'error', 'data', 'name'], error);
+            if (errorName) {
+                switch(errorName) {
+                    case 'tx_missing_owner_auth':
+                            errorKey = errorStr = tt(`chain_errors.${errorName}`);
+                        break;
+                }
             }
             
             if (!hideErrors) {

@@ -123,9 +123,9 @@ export default class SettingsContent extends PureComponent {
                     if (e === 'Canceled') {
                         resolve();
                     } else {
-                        console.log('updateAccount ERROR', e);
+                        console.log('updateAccount ERROR:', e);
                         reject({
-                            [FORM_ERROR]: tt('g.server_returned_error'),
+                            [FORM_ERROR]: e,
                         });
                     }
                 },
@@ -146,9 +146,9 @@ export default class SettingsContent extends PureComponent {
                     if (e === 'Canceled') {
                         resolve();
                     } else {
-                        console.log('updateAccount ERROR', e);
+                        console.log('setSettingsOptions ERROR:', e);
                         reject({
-                            [FORM_ERROR]: tt('g.server_returned_error'),
+                            [FORM_ERROR]: e,
                         });
                     }
                 },
@@ -173,9 +173,9 @@ export default class SettingsContent extends PureComponent {
                     if (e === 'Canceled') {
                         resolve();
                     } else {
-                        console.log('updateAccount ERROR', e);
+                        console.log('changePassword ERROR:', e);
                         reject({
-                            [FORM_ERROR]: tt('g.server_returned_error'),
+                            [FORM_ERROR]: e,
                         });
                     }
                 },

@@ -41,8 +41,9 @@ class LoginForm extends Component {
         };
         this.onCancel = (e) => {
             if(e.preventDefault) e.preventDefault()
-            const {onCancel, loginBroadcastOperation} = this.props;
+            const {onCancel, loginBroadcastOperation, clearError} = this.props;
             const errorCallback = loginBroadcastOperation && loginBroadcastOperation.get('errorCallback');
+            clearError();
             if (errorCallback) errorCallback('Canceled');
             if (onCancel) onCancel()
         };
@@ -75,12 +76,7 @@ class LoginForm extends Component {
     }
 
     SignUp() {
-        const onType = document.getElementsByClassName("OpAction")[0].textContent;
         window.location.href = "/enter_email";
-    }
-
-    SignIn() {
-        const onType = document.getElementsByClassName("OpAction")[0].textContent;
     }
 
     saveLoginToggle = () => {
@@ -201,7 +197,7 @@ class LoginForm extends Component {
                 </div>}
                 <div>
                     <br />
-                    <button type="submit" disabled={submitting || disabled} className="button" onClick={this.SignIn}>
+                    <button type="submit" disabled={submitting || disabled} className="button">
                         {submitLabel}
                     </button>
                     {this.props.onCancel && <button type="button float-right" disabled={submitting} className="button hollow" onClick={onCancel}>

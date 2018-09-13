@@ -12,7 +12,6 @@ import {
 } from 'app/client_config';
 
 import SplashLoader from 'golos-ui/SplashLoader';
-import Slider from 'golos-ui/Slider';
 import { CardContent } from 'golos-ui/Card';
 import { DialogFooter, DialogButton } from 'golos-ui/Dialog';
 import {
@@ -47,9 +46,9 @@ export default class Common extends PureComponent {
 
         return (
             <Form onSubmit={onSubmitGate} initialValues={data}>
-                {({ handleSubmit, submitError, form, submitting, pristine, values }) => (
+                {({ handleSubmit, submitError, form, submitting, pristine, hasValidationErrors }) => (
                     <form onSubmit={handleSubmit}>
-                        {isChanging && <SplashLoader />}
+                        {submitting && <SplashLoader />}
 
                         <CardContent column>
                             <Field name="basic.lang">
@@ -182,7 +181,7 @@ export default class Common extends PureComponent {
                             <DialogButton onClick={form.reset} disabled={submitting || pristine}>
                                 {tt('settings_jsx.reset')}
                             </DialogButton>
-                            <DialogButton type="submit" primary disabled={submitting}>
+                            <DialogButton type="submit" primary disabled={submitting || pristine || hasValidationErrors}>
                                 {tt('settings_jsx.update')}
                             </DialogButton>
                         </DialogFooter>

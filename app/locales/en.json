@@ -27,10 +27,11 @@
     "account_does_not_have_sufficient_power_for_withdraw": "Account does not have sufficient Golos Power for withdraw",
     "already_voted": "You have already voted in a similar way",
     "exceeded_maximum_allowed_bandwidth": "Account exceeded maximum allowed bandwidth per vesting share",
-    "missing_active_authority": "Missing Active Authority",
+    "missing_active_authority": "Entered the wrong activity key",
     "only_comment_once_every": "You may only comment once every 20 seconds",
     "only_post_once_every": "You may only post once every 5 minutes",
     "only_vote_once_every": "Can only vote once every 3 seconds",
+    "tx_missing_owner_auth": "Entered the wrong owner key",
     "voting_weight_is_too_small": "Voting weight is too small, please accumulate more voting power or steem power"
   },
   "chainvalidation_js": {

@@ -6,6 +6,7 @@ import { PublicKey, key_utils } from 'golos-js/lib/auth/ecc';
 import { Form, Field } from 'react-final-form';
 import tt from 'counterpart';
 
+import SplashLoader from 'golos-ui/SplashLoader';
 import { CardContent } from 'golos-ui/Card';
 import { DialogFooter, DialogButton } from 'golos-ui/Dialog';
 import {
@@ -92,8 +93,10 @@ export default class New extends PureComponent {
 
         return (
             <Form onSubmit={onSubmitChangePassword} initialValues={data} validate={validate}>
-                {({ handleSubmit, submitError, form, submitting, pristine, invalid, values }) => (
+                {({ handleSubmit, submitError, form, submitting, pristine, hasValidationErrors }) => (
                     <form onSubmit={handleSubmit}>
+                        {submitting && <SplashLoader />}
+
                         <CardContent column>
                             <RulesBlock
                                 style={{
@@ -156,6 +159,7 @@ export default class New extends PureComponent {
                                             type="text"
                                             autoComplete="off"
                                             disabled={submitting}
+                                            readOnly
                                         />
                                         <FormError meta={meta} />
                                         <Hint>{tt('g.backup_password_by_storing_it')}</Hint>
@@ -213,7 +217,7 @@ export default class New extends PureComponent {
                             <DialogButton
                                 type="submit"
                                 primary
-                                disabled={submitting || pristine || invalid}
+                                disabled={submitting || pristine || hasValidationErrors}
                             >
                                 {tt('settings_jsx.update')}
                             </DialogButton>

@@ -448,20 +448,15 @@ class UserWallet extends React.Component {
                 ? account.get('reward_steem_balance')
                 : null;
         const reward_sbd = null;
-        //const reward_sbd =
-        //    parseFloat(account.get('reward_sbd_balance').split(' ')[0]) > 0
-        //        ? account.get('reward_sbd_balance')
-        //        : null;
         const reward_sp =
             parseFloat(account.get('reward_vesting_steem').split(' ')[0]) > 0
                 ? account
                       .get('reward_vesting_steem')
-                      .replace(LIQUID_TOKEN_UPPERCASE, 'SP')
+                      .replace(LIQUID_TOKEN_UPPERCASE, 'VP')
                 : null;
 
         let rewards = [];
         if (reward_steem) rewards.push(reward_steem);
-        //if (reward_sbd) rewards.push(reward_sbd);
         if (reward_sp) rewards.push(reward_sp);
 
         let rewards_str;
@@ -627,43 +622,6 @@ class UserWallet extends React.Component {
                         ) : null}
                     </div>
                 </div>
-                {/*
-                <div className="UserWallet__balance row">
-                    <div className="column small-12 medium-8">
-                        {LIQUID_TOKEN_UPPERCASE} DOLLARS
-                        <div className="secondary">{sbdMessage}</div>
-                    </div>
-                    <div className="column small-12 medium-4">
-                        {isMyAccount ? (
-                            <DropdownMenu
-                                className="Wallet_dropdown"
-                                position="left"
-                                items={dollar_menu}
-                                el="li"
-                                selected={sbd_balance_str}
-                            />
-                        ) : (
-                            sbd_balance_str
-                        )}
-                        {sbdOrders ? (
-                            <div
-                                style={{
-                                    paddingRight: isMyAccount
-                                        ? '0.85rem'
-                                        : null,
-                                }}
-                            >
-                                <Link to="/market">
-                                    <Tooltip t={tt('market_jsx.open_orders')}>
-                                        (+{sbd_orders_balance_str})
-                                    </Tooltip>
-                                </Link>
-                            </div>
-                        ) : null}
-                        {conversions}
-                    </div>
-                </div>
-                */}
                 <div className="UserWallet__balance row">
                     <div className="column small-12 medium-8">
                         {tt('userwallet_jsx.savings')}

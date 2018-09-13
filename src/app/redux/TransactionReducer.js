@@ -93,7 +93,7 @@ export default function reducer(state = defaultState, action) {
                             )
                         )
                             errorKey =
-                                'Account requires 10x the account creation fee in Steem Power (approximately 30 SP) before it can power down.';
+                                'Account requires 10x the account creation fee in VIT Power (approximately 30 VP) before it can power down.';
                         break;
                     default:
                         break;

@@ -21,7 +21,6 @@ import {
     LIQUID_TOKEN,
     LIQUID_TOKEN_UPPERCASE,
     LIQUID_TICKER,
-    DEBT_TOKENS,
     VESTING_TOKEN,
 } from 'app/client_config';
 import * as transactionActions from 'app/redux/TransactionReducer';
@@ -167,7 +166,8 @@ class UserWallet extends React.Component {
         if (savings_withdraws) {
             savings_withdraws.forEach(withdraw => {
                 const [amount, asset] = withdraw.get('amount').split(' ');
-                if (asset === LIQUID_TOKEN) savings_pending += parseFloat(amount);
+                if (asset === LIQUID_TOKEN)
+                    savings_pending += parseFloat(amount);
                 else {
                     if (asset === 'SBD')
                         savings_sbd_pending += parseFloat(amount);
@@ -430,16 +430,11 @@ class UserWallet extends React.Component {
                     LIQUID_TOKEN,
                 }),
                 link: '#',
-                onClick: showTransfer.bind(this, LIQUID_TOKEN, 'Savings Withdraw'),
-            },
-        ];
-        const savings_sbd_menu = [
-            {
-                value: tt('userwallet_jsx.withdraw_DEBT_TOKENS', {
-                    DEBT_TOKENS,
-                }),
-                link: '#',
-                onClick: showTransfer.bind(this, 'SBD', 'Savings Withdraw'),
+                onClick: showTransfer.bind(
+                    this,
+                    LIQUID_TOKEN,
+                    'Savings Withdraw'
+                ),
             },
         ];
         // set dynamic secondary wallet values
@@ -691,18 +686,6 @@ class UserWallet extends React.Component {
                             />
                         ) : (
                             savings_balance_str
-                        )}
-                        <br />
-                        {isMyAccount ? (
-                            <DropdownMenu
-                                className="Wallet_dropdown"
-                                position="left"
-                                items={savings_sbd_menu}
-                                el="li"
-                                selected={savings_sbd_balance_str}
-                            />
-                        ) : (
-                            savings_sbd_balance_str
                         )}
                     </div>
                 </div>

@@ -5,7 +5,7 @@ import { reveseTag, prepareTrendingTags } from 'app/utils/tags'
 
 const DEFAULT_VOTE_LIMIT = 10000;
 
-export default async function getState(api, url, options, offchain, rates) {
+export default async function getState(api, url, options, offchain) {
     if (!url || typeof url !== 'string' || !url.length || url === '/') url = 'trending'
     if (url[0] === '/') url = url.substr(1)
 
@@ -23,7 +23,6 @@ export default async function getState(api, url, options, offchain, rates) {
     state.witnesses = {}
     state.discussion_idx = {}
     state.select_tags = []
-    state.rates = rates;
 
     let accounts = new Set()
 

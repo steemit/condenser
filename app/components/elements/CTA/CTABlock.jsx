@@ -3,16 +3,15 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Userpic from 'app/components/elements/Userpic';
 import { parsePayoutAmount } from 'app/utils/ParsersAndFormatters';
-import LocalizedCurrency, { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
 import ctaInfo from './ctainfo';
 import { popupClickUrl, popupClickButton } from 'app/utils/Analytics';
-import { dataSelector } from 'src/app/redux/selectors/common';
+import { renderValue } from 'src/app/helpers/currency';
 
 @connect((state, props) => {
     const post = state.global.getIn(['content', props.post]);
 
     if (!post) {
-        return props;
+        return;
     }
 
     const currentAccount = state.user.get('current');
@@ -20,31 +19,12 @@ import { dataSelector } from 'src/app/redux/selectors/common';
 
     const link = post.get('category') + '/@' + user + '/' + post.get('permlink');
 
-    function compareLinks(specialLink, incomingLink) {
-        return specialLink === incomingLink;
-    }
-
     function isSpecialPost(array, link) {
         for (let i = 0; i < array.length; i++) {
-            if (compareLinks(array[i].link, link)) {
+            if (array[i].link === link) {
                 return array[i];
             }
         }
-    }
-
-    let showMinCurrency, currency;
-
-    const settings = dataSelector('settings')(state);
-    const currentCurrency = settings.getIn(['basic', 'lang']);
-    if (currentCurrency === 'RUB') {
-        showMinCurrency = ctaInfo.minRubValueToShow;
-        currency = ctaInfo.rub;
-    } else if (currentCurrency === 'USD') {
-        showMinCurrency = ctaInfo.minUsdValueToShow;
-        currency = ctaInfo.usd;
-    } else {
-        showMinCurrency = ctaInfo.minRubValueToShow;
-        currency = currentCurrency;
     }
 
     const special = isSpecialPost(ctaInfo.specialLinks, link);
@@ -54,20 +34,26 @@ import { dataSelector } from 'src/app/redux/selectors/common';
     const totalCuratorPayout = parsePayoutAmount(post.get('curator_payout_value'));
 
     const payout = pendingPayout + totalAuthorPayout + totalCuratorPayout;
-    const localizedPayoutValue = localizedCurrency(payout, {
-        noSymbol: true,
-        rounding: true,
-    });
+    const payoutString = renderValue(payout, 'short');
 
-    const visible = !currentAccount && (localizedPayoutValue >= showMinCurrency || special != null);
+    let visible = false;
+
+    if (special != null) {
+        visible = true;
+    } else if (!currentAccount) {
+        if (payoutString.startsWith('$') || payoutString.startsWith('€')) {
+            const amount = payoutString.match(/^.(\d+)/)[1];
+            visible = amount > ctaInfo.minUsdValueToShow;
+        } else if (payoutString.endsWith('₽')) {
+            visible = parseFloat(payoutString) > ctaInfo.minRubValueToShow;
+        }
+    }
 
     return {
-        post: props.post,
         user,
         payout,
         visible,
         special,
-        currency,
     };
 })
 export default class CTABlock extends PureComponent {
@@ -77,7 +63,6 @@ export default class CTABlock extends PureComponent {
         payout: PropTypes.number,
         visible: PropTypes.bool,
         special: PropTypes.object,
-        currency: PropTypes.string,
     };
 
     state = {
@@ -133,7 +118,7 @@ export default class CTABlock extends PureComponent {
     }
 
     _renderTextBlock() {
-        const { user, payout, special, currency } = this.props;
+        const { user, payout, special } = this.props;
 
         if (special) {
             return (
@@ -151,9 +136,8 @@ export default class CTABlock extends PureComponent {
             <div className="ctablock__text-regular">
                 Сообщество <b>Golos.io</b> {ctaInfo.regularStartText} <b>{user}</b> заработал более{' '}
                 <span className="ctablock__text-regular">
-                    <LocalizedCurrency amount={payout} rounding={true} noSymbol={true} />
-                </span>{' '}
-                {currency}.{' '}
+                    {renderValue(payout, 'adaptive')}
+                </span>.{' '}
                 <a href={'/start'} onClick={() => popupClickUrl()}>
                     {ctaInfo.regularEndText}
                 </a>

@@ -7,7 +7,7 @@ import { getStoreState } from 'app/clientRender';
 import { calcVotesStats } from 'app/utils/StateFunctions';
 import Icon from 'golos-ui/Icon';
 import Slider from 'golos-ui/Slider';
-import { getPayout } from 'src/app/helpers/currency';
+import PostPayout from 'src/app/components/common/PostPayout';
 
 const VOTE_PERCENT_THRESHOLD = 1000000;
 
@@ -231,7 +231,9 @@ export default class VotePanel extends PureComponent {
                         <IconTriangle name="triangle" />
                     </LikeCount>
                 </LikeBlock>
-                <Money>{getPayout(data)}</Money>
+                <Money>
+                    <PostPayout data={data} />
+                </Money>
                 <LikeBlockNeg
                     activeNeg={this._myVote === 'dislike' || sliderAction === 'dislike'}
                     data-tooltip={

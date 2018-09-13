@@ -492,10 +492,6 @@ export default createModule({
             reducer: state => state,
         },
         {
-            action: 'FETCH_EXCHANGE_RATES',
-            reducer: state => state,
-        },
-        {
             action: 'FETCH_JSON_RESULT',
             reducer: (state, { payload: { id, result, error } }) =>
                 state.set(id, fromJS({ result, error })),

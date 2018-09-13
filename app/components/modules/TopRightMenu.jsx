@@ -1,19 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types'
-import { Link } from 'react-router';
+import { Link, browserHistory } from 'react-router';
 import {connect} from 'react-redux';
+import tt from 'counterpart';
+import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdown';
 import Icon from 'app/components/elements/Icon';
 import user from 'app/redux/User';
 import Userpic from 'app/components/elements/Userpic';
-import { browserHistory } from 'react-router';
-import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdown';
 import VerticalMenu from 'app/components/elements/VerticalMenu';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
-import tt from 'counterpart';
 import { LIQUID_TICKER, DEBT_TICKER } from 'app/client_config';
-import LocalizedCurrency from 'app/components/elements/LocalizedCurrency';
 import { vestsToGolos, toAsset } from 'app/utils/StateFunctions';
 import { WIKI_URL } from 'app/client_config';
+import { renderValue } from 'src/app/helpers/currency';
 
 const defaultNavigate = (e) => {
     if (e.metaKey || e.ctrlKey) {
@@ -42,23 +41,23 @@ const calculateEstimateOutput = ({ account, price_per_golos, savings_withdraws, 
     })
   }
 
-  const total_sbd = 0 
-    + parseFloat(account.get('sbd_balance'))
-    + parseFloat(toAsset(account.get('savings_sbd_balance')).amount)
-    + savings_sbd_pending
+  const total_sbd =
+    parseFloat(account.get('sbd_balance')) +
+    parseFloat(toAsset(account.get('savings_sbd_balance')).amount) +
+    savings_sbd_pending;
 
-  const total_steem = 0
-    + parseFloat(toAsset(account.get('balance')).amount)
-    + parseFloat(toAsset(account.get('savings_balance')).amount)
-    + parseFloat(vestsToGolos(account.get('vesting_shares'), globalprops.toJS()))
-    + savings_pending
+  const total_steem =
+    parseFloat(toAsset(account.get('balance')).amount) +
+    parseFloat(toAsset(account.get('savings_balance')).amount) +
+    parseFloat(vestsToGolos(account.get('vesting_shares'), globalprops.toJS())) +
+    savings_pending;
 
   return Number(((total_steem * price_per_golos) + total_sbd).toFixed(2) );
 }
 
 function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops, username, showLogin, logout, loggedIn, vertical, navigate, probablyLoggedIn, location, locationQueryParams, showMessages}) {
     const APP_NAME = tt('g.APP_NAME');
-    
+
     const mcn = 'menu' + (vertical ? ' vertical show-for-small-only' : '');
     const mcl = vertical ? '' : ' sub-menu';
     const lcn = vertical ? '' : 'show-for-large';
@@ -135,7 +134,7 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
     </LinkWithDropdown>;
 
     const estimateOutputAmount = calculateEstimateOutput({ account, price_per_golos, savings_withdraws, globalprops })
-    const estimateOutput = <LocalizedCurrency amount={estimateOutputAmount} />
+    const estimateOutput = renderValue(estimateOutputAmount);
 
     if (loggedIn) { // change back to if(username) after bug fix:  Clicking on Login does not cause drop-down to close #TEMP!
         let user_menu = [
@@ -156,7 +155,7 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
         ];
 
         user_menu = user_menu.filter(item => item);
-      
+
         const voting_power_percent = account.get('voting_power') / 100
 
         return (
@@ -252,7 +251,7 @@ export default connect(
         const loggedIn = !!username;
 
         const savings_withdraws = state.user.get('savings_withdraws');
-        const price_per_golos = state.global.getIn(['rates', 'GBG', 'GOLOS']);
+        const price_per_golos = state.data.rates.actual.GBG.GOLOS;
         const globalprops = state.global.get('props');
 
         return {

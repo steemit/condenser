@@ -19,20 +19,21 @@ const Body = styled.div`
     text-overflow: ellipsis;
 `;
 
-function rate(rates, from, to) {
+function getRate(rates, from, to) {
     if (from === to) {
         return 1;
     } else {
-        return rates.getIn([from, to]);
+        return rates[from][to];
     }
 }
 
 @connect((state, props) => {
     const account = state.global.getIn(['accounts', props.accountName]);
-    const rates = state.global.get('rates');
+    const rates = state.data.rates.actual;
 
     let currency = state.data.settings.getIn(['basic', 'currency'], 'GBG');
-    if (currency !== 'GBG' && !rates.getIn(['GOLOS', currency])) {
+
+    if (currency !== 'GBG' && !rates.GOLOS[currency]) {
         currency = 'GBG';
     }
 
@@ -55,8 +56,8 @@ export default class AccountPrice extends PureComponent {
     render() {
         const { golos, golosSafe, gold, goldSafe, power, currency, rates, globalProps } = this.props;
 
-        const golosRate = rate(rates, 'GOLOS', currency);
-        const gbgRate = rate(rates, 'GBG', currency);
+        const golosRate = getRate(rates, 'GOLOS', currency);
+        const gbgRate = getRate(rates, 'GBG', currency);
 
         let sum = 0;
 

@@ -1,10 +1,11 @@
 import React from 'react';
-import { getStoreState } from 'app/clientRender';
+import { getStoreState, dispatch } from 'app/clientRender';
+import { getHistoricalData } from '../redux/actions/rates';
 
 const CURRENCY_SIGNS = {
-    'USD': '$_',
-    'EUR': '€_',
-    'RUB': '_₽',
+    USD: '$_',
+    EUR: '€_',
+    RUB: '_₽',
 };
 
 export function parseAmount(amount, balance, isFinal) {
@@ -58,30 +59,50 @@ export function parseAmount2(amount, balance, isFinal, multiplier) {
 }
 
 export function formatCurrency(amount, currency, decimals) {
-    let decimalsCount;
-
-    if (decimals === 'adaptive') {
-        if (amount < 10 && !CURRENCY_SIGNS[currency]) {
-            decimalsCount = 3;
-        } else if (amount < 100) {
-            decimalsCount = 2;
-        } else if (amount < 1000) {
-            decimalsCount = 1;
-        } else {
-            decimalsCount = 0;
-        }
-    } else if (decimals) {
-        decimalsCount = decimals;
-    } else {
-        decimalsCount = CURRENCY_SIGNS[currency] ? 2 : 3;
-    }
-
     let amountString;
 
     if (!amount) {
         amountString = '0';
     } else {
-        amountString = amount.toFixed(decimalsCount);
+        if (decimals === 'short') {
+            let value;
+            let suffix = '';
+
+            if (amount > 1000000000) {
+                value = amount / 1000000000;
+                suffix = 'B';
+            } else if (amount > 1000000) {
+                value = amount / 1000000;
+                suffix = 'M';
+            } else if (amount > 1000) {
+                value = amount / 1000;
+                suffix = 'K';
+            } else {
+                value = amount;
+            }
+
+            amountString = `${value.toFixed(value > 100 ? 0 : 1)}${suffix}`;
+        } else {
+            let decimalsCount;
+
+            if (decimals === 'adaptive') {
+                if (amount < 10 && !CURRENCY_SIGNS[currency]) {
+                    decimalsCount = 3;
+                } else if (amount < 100) {
+                    decimalsCount = 2;
+                } else if (amount < 1000) {
+                    decimalsCount = 1;
+                } else {
+                    decimalsCount = 0;
+                }
+            } else if (decimals) {
+                decimalsCount = decimals;
+            } else {
+                decimalsCount = CURRENCY_SIGNS[currency] ? 2 : 3;
+            }
+
+            amountString = amount.toFixed(decimalsCount);
+        }
     }
 
     if (CURRENCY_SIGNS[currency]) {
@@ -91,18 +112,66 @@ export function formatCurrency(amount, currency, decimals) {
     }
 }
 
+export function renderValue(amount, decimals, rates) {
+    if (process.env.BROWSER) {
+        const state = getStoreState();
+
+        let currency = state.data.settings.getIn(['basic', 'currency'], 'GBG');
+        let rate;
+
+        if (currency !== 'GBG') {
+            if (rates) {
+                rate = rates.GBG[currency];
+            }
+
+            if (!rate) {
+                rate = state.data.rates.actual.GBG[currency];
+            }
+        }
+
+        if (!rate) {
+            currency = 'GBG';
+            rate = 1;
+        }
+
+        let dec = decimals;
+
+        if (dec == null) {
+            dec = state.data.settings.getIn(['basic', 'rounding'], 3);
+        }
+
+        return formatCurrency(amount * rate, currency, dec);
+    } else {
+        return `${amount.toFixed(3)} GBG`;
+    }
+}
+
 export function getPayout(data) {
-    const max = parseFloat(data.get('max_accepted_payout'));
+    let params;
+
+    if (data.toJS) {
+        params = {
+            max_accepted_payout: data.get('max_accepted_payout'),
+            pending_payout_value: data.get('pending_payout_value'),
+            total_payout_value: data.get('total_payout_value'),
+            curator_payout_value: data.get('curator_payout_value'),
+            last_payout: data.get('last_payout'),
+        };
+    } else {
+        params = data;
+    }
+
+    const max = parseFloat(params.max_accepted_payout);
     const isDeclined = max === 0;
 
     let isLimit = false;
     let gbgValue = 0;
 
-    gbgValue += parseFloat(data.get('pending_payout_value')) || 0;
+    gbgValue += parseFloat(params.pending_payout_value) || 0;
 
     if (!isDeclined) {
-        gbgValue += parseFloat(data.get('total_payout_value')) || 0;
-        gbgValue += parseFloat(data.get('curator_payout_value')) || 0;
+        gbgValue += parseFloat(params.total_payout_value) || 0;
+        gbgValue += parseFloat(params.curator_payout_value) || 0;
     }
 
     if (gbgValue < 0) {
@@ -114,29 +183,26 @@ export function getPayout(data) {
         isLimit = true;
     }
 
-    let stringValue;
+    let rates = null;
 
     if (process.env.BROWSER) {
-        const state = getStoreState();
+        if (params.last_payout) {
+            const date = new Date(params.last_payout);
 
-        let currency = state.data.settings.getIn(['basic', 'currency'], 'GBG');
-        let rate;
+            if (date.getFullYear() > 2000) {
+                const state = getStoreState();
+                const dateString = date.toJSON().substr(0, 10);
 
-        if (currency !== 'GBG') {
-            rate = state.global.getIn(['rates', 'GBG', currency]);
+                rates = state.data.rates.dates.get(dateString);
+
+                if (!rates) {
+                    dispatch(getHistoricalData({ date: dateString }));
+                }
+            }
         }
-
-        if (!rate) {
-            currency = 'GBG';
-            rate = 1;
-        }
-
-        const rounding = state.data.settings.getIn(['basic', 'rounding'], 3);
-
-        stringValue = formatCurrency(gbgValue * rate, currency, rounding);
-    } else {
-        stringValue = `${gbgValue.toFixed(3)} GBG`;
     }
+
+    const stringValue = renderValue(gbgValue, null, rates);
 
     let style;
 
@@ -152,9 +218,5 @@ export function getPayout(data) {
         }
     }
 
-    return (
-        <span style={style}>
-            {stringValue}
-        </span>
-    );
+    return <span style={style}>{stringValue}</span>;
 }

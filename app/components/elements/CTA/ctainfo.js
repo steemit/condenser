@@ -1,8 +1,6 @@
 export default {
     minUsdValueToShow: 30,
     minRubValueToShow: 2000,
-    usd: 'долларов',
-    rub: 'рублей',
     specialStartText : "Присоединитесь, чтобы не пропускать истории",
     specialEndText :"Узнать больше",
 
@@ -34,8 +32,7 @@ export default {
             text: "про майнинг."
         },
         {
-            link: "ru--maijning/@rossomaha.xyz/slyshen-kheshei-legkikh-shelest-kriptolokh-poshel-na" +
-            "-nerest",
+            link: "ru--maijning/@rossomaha.xyz/slyshen-kheshei-legkikh-shelest-kriptolokh-poshel-na-nerest",
             text: "про криптовалюты."
         },
         {
@@ -57,7 +54,7 @@ export default {
         {
             link: "ru--blokcheijn/@nastrom/kakaya-kriptovalyuta-yavlyaetsya-samoi-krutoi-v-2017godu",
             text: "про криптовалюты."
-        },        
+        },
         {
             link: "telegram/@konstantins/kak-raskrutit-telegram-kanal-s-nulya-do-populyarnogo-za-7-shagov",
             text: "про Telegram."

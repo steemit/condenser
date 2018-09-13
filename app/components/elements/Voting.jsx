@@ -11,9 +11,9 @@ import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import FoundationDropdown from 'app/components/elements/FoundationDropdown';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import tt from 'counterpart';
-import LocalizedCurrency, { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
 import { DEBT_TICKER } from 'app/client_config';
-import { getPayout } from 'src/app/helpers/currency';
+import { renderValue } from 'src/app/helpers/currency';
+import PostPayout from 'src/app/components/common/PostPayout/PostPayout';
 
 const MAX_VOTES_DISPLAY = 20;
 const VOTE_WEIGHT_DROPDOWN_THRESHOLD = 1000 * 1000;
@@ -210,7 +210,7 @@ class Voting extends PureComponent {
                 value:
                     tt('voting_jsx.potential_payout') +
                     ' ' +
-                    localizedCurrency(pending_payout) +
+                    renderValue(pending_payout) +
                     ' (' +
                     pending_payout.toFixed(3) +
                     ' ' +
@@ -221,7 +221,7 @@ class Voting extends PureComponent {
 
         if (promoted > 0) {
             payoutItems.push({
-                value: tt('voting_jsx.boost_payments') + ' ' + localizedCurrency(promoted),
+                value: tt('voting_jsx.boost_payments') + ' ' + renderValue(promoted),
             });
         }
 
@@ -233,7 +233,7 @@ class Voting extends PureComponent {
             payoutItems.push({ value: tt('voting_jsx.payouts_declined') });
         } else if (max_payout < 1000000) {
             payoutItems.push({
-                value: tt('voting_jsx.max_accepted_payout') + localizedCurrency(max_payout),
+                value: tt('voting_jsx.max_accepted_payout') + renderValue(max_payout),
             });
         }
 
@@ -242,7 +242,7 @@ class Voting extends PureComponent {
                 value:
                     tt('voting_jsx.past_payouts') +
                     ' ' +
-                    localizedCurrency(total_author_payout + total_curator_payout),
+                    renderValue(total_author_payout + total_curator_payout),
             });
 
             payoutItems.push({
@@ -250,7 +250,7 @@ class Voting extends PureComponent {
                     ' - ' +
                     tt('voting_jsx.authors') +
                     ': ' +
-                    localizedCurrency(total_author_payout),
+                    renderValue(total_author_payout),
             });
 
             payoutItems.push({
@@ -258,14 +258,14 @@ class Voting extends PureComponent {
                     ' - ' +
                     tt('voting_jsx.curators') +
                     ': ' +
-                    localizedCurrency(total_curator_payout),
+                    renderValue(total_curator_payout),
             });
         }
 
         const payoutEl = (
             <DropdownMenu el="div" items={payoutItems}>
                 <span>
-                    {getPayout(postData)}
+                    <PostPayout data={postData} />
                     {payoutItems.length > 0 && <Icon name="dropdown-arrow" />}
                 </span>
             </DropdownMenu>

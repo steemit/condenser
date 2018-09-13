@@ -357,18 +357,8 @@ class PostFull extends React.Component {
         const pending_payout = parsePayoutAmount(content.pending_payout_value);
         const total_payout = parsePayoutAmount(content.total_payout_value);
         const high_quality_post = pending_payout + total_payout > 10.0;
-        const full_power = post_content.get('percent_steem_dollars') === 0;
 
-        let post_header = (
-            <h1 className="entry-title">
-                {content.title}
-                {full_power && (
-                    <span title={tt('g.powered_up_100')}>
-                        <Icon name="steempower" />
-                    </span>
-                )}
-            </h1>
-        );
+        let post_header = <h1 className="entry-title">{content.title}</h1>;
         if (content.depth > 0) {
             const parent_link = `/${content.category}/@${
                 content.parent_author

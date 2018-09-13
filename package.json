@@ -196,6 +196,7 @@
     "svg-sprite-loader": "^3.8.0",
     "uglifyjs-webpack-plugin": "^1.2.5",
     "webpack-bundle-analyzer": "^3.0.2",
+    "webpack-cli": "^3.1.0",
     "webpack-deadcode-plugin": "^0.1.7",
     "webpack-merge": "^4.1.4",
     "webpack-serve": "^2.0.2"

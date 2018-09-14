@@ -88,7 +88,7 @@ export default class Questions extends PureComponent {
                                             <Icon
                                                 name="new/monitor"
                                                 size="2x"
-                                            />Остались вопросы?
+                                            />Частые вопросы и ответы
                                         </Link>
                                     </div>
                                     <div className="columns">

@@ -71,32 +71,6 @@
     }
   },
   {
-    "name": "Ростислав Величко",
-    "role": "С++ dev",
-    "avatar": "rostislav",
-    "contacts": {
-      "golos": "rostislav.vel"
-    }
-  },
-  {
-    "name": "Тимур Купаев",
-    "role": "Блокчейн аналитик",
-    "avatar": "timur",
-    "contacts": {
-      "golos": "timurku",
-      "github": "timurkupaev"
-    }
-  },
-  {
-    "name": "Ерлан Шиндаулетов",
-    "avatar": "erlan",
-    "role": "Инженер-программист",
-    "contacts": {
-      "golos": "epexa",
-      "github": "epexa"
-    }
-  },
-  {
     "name": "Анна Чемерицкая",
     "role": "Community manager",
     "avatar": "anna-ch",

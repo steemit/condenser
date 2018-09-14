@@ -84,6 +84,14 @@ export default class Questions extends PureComponent {
                             <div className="columns small-12 medium-12 large-2">
                                 <div className="row small-up-2 medium-up-2 large-up-1">
                                     <div className="columns">
+                                        <Link href="/faq">
+                                            <Icon
+                                                name="new/monitor"
+                                                size="2x"
+                                            />Остались вопросы?
+                                        </Link>
+                                    </div>
+                                    <div className="columns">
                                         <Link href="https://t.me/golos_support">
                                             <Icon
                                                 name="new/telegram"
@@ -105,14 +113,6 @@ export default class Questions extends PureComponent {
                                                 name="new/envelope"
                                                 size="2x"
                                             />Напишите на почту
-                                        </Link>
-                                    </div>
-                                    <div className="columns">
-                                        <Link href="/submit?type=submit_feedback">
-                                            <Icon
-                                                name="new/monitor"
-                                                size="2x"
-                                            />Уточните через сайт
                                         </Link>
                                     </div>
                                 </div>

@@ -89,7 +89,7 @@ ReplyBlock.defaultProps = {
 
 export default function ReplyBlock({ withImage, grid, count, link, text, className, showText }) {
     return (
-        <Root whiteTheme={withImage} grid={grid} className={className}>
+        <Root whitetheme={withImage} grid={grid} className={className}>
             <ReplyCounterBlock to={`${link}#comments`} data-tooltip="Количество комментариев">
                 <ReplyIcon name="reply" />
                 <ReplyCount>{count}</ReplyCount>

@@ -30,13 +30,25 @@ const EntryWrapper = styled.div`
     margin-bottom: 16px;
 
     ${is('grid')`
-        max-width: 50%;
+        max-width: 33.3333%;
         flex-basis: 317px;
         flex-grow: 1;
         vertical-align: top;
         padding: 0 8px;
         
-        @media (min-width: 890px) and (max-width: 1200px), (max-width: 669px) {
+        @media (max-width: 1180px) {
+            max-width: 50%;
+        }
+
+        @media (max-width: 890px) {
+            max-width: 33.3333%;
+        }
+
+        @media (max-width: 750px) {
+            max-width: 50%;
+        }
+
+        @media (max-width: 600px) {
             max-width: 100%;
         }
     `};

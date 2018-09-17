@@ -112,12 +112,12 @@ const BodyLink = styled(Link)`
     display: block;
     transition: none !important;
 
-    ${isNot('grid')`
-        border-bottom: 2px solid #f3f3f3;
+    ${is('half')`
+        width: 62%;
     `};
 
-    ${is('half')`
-        width: 50%;
+    ${isNot('grid')`
+        border-bottom: 2px solid #f3f3f3;
     `};
 
     ${is('grid')`
@@ -174,7 +174,7 @@ const PostImage = styled.div`
     top: 0;
     right: 0;
     bottom: 0;
-    width: 50%;
+    width: 38%;
     border-radius: 0 8px 8px 0;
     background: url('${a => a.src}') no-repeat center;
     background-size: cover;
@@ -207,7 +207,7 @@ const Filler = styled.div`
 const Root = styled.div`
     position: relative;
     border-radius: 8px;
-    background: #ffffff;
+    background: #fff;
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.06);
 
     ${PostImage}:after {
@@ -223,6 +223,10 @@ const Root = styled.div`
         display: flex;
         flex-direction: column;
         height: 338px;
+
+        @media (max-width: 890px) {
+            height: 355px;
+        }
     `};
 
     &.PostCard_image.PostCard_grid {
@@ -529,7 +533,9 @@ export default connect(
         return {
             myAccount: myAccountName,
             data: state.global.getIn(['content', props.permLink]),
-            isFavorite: state.data.favorites.set ? state.data.favorites.set.includes(props.permLink) : false, // TODO: refactoring to immutable
+            isFavorite: state.data.favorites.set
+                ? state.data.favorites.set.includes(props.permLink)
+                : false,
             pinDisabled: props.pageAccountName !== myAccountName,
             isPinned,
         };

@@ -11,7 +11,8 @@ import { repLog10 } from 'app/utils/ParsersAndFormatters';
 import normalizeProfile from 'app/utils/NormalizeProfile';
 
 import Icon from 'golos-ui/Icon';
-import Card, { CardTitle } from 'golos-ui/Card';
+import { CardTitle } from 'golos-ui/Card';
+import CollapsingCard from 'golos-ui/CollapsingCard';
 
 const CardContent = styled.div`
     display: flex;
@@ -95,7 +96,7 @@ const UserCardCity = styled.div`
 
 const UserCardSite = styled(Link)`
     color: #2879ff;
-    font-family: 'Open Sans';
+    font-family: 'Open Sans', sans-serif;
     font-size: 14px;
     letter-spacing: 0.25px;
     line-height: 1;
@@ -103,7 +104,7 @@ const UserCardSite = styled(Link)`
     text-decoration: underline;
 `;
 const UserCardBio = styled.div`
-    font-family: 'Open Sans';
+    font-family: 'Open Sans', sans-serif;
     font-size: 16px;
     font-weight: 300;
     line-height: 24px;
@@ -158,8 +159,7 @@ export default class UserCardAbout extends PureComponent {
         };
 
         return (
-            <Card>
-                <CardTitle>Краткая информация</CardTitle>
+            <CollapsingCard title={'Краткая информация'} saveStateKey="info">
                 <CardContentCounters>
                     <Row>
                         <Column>
@@ -237,7 +237,7 @@ export default class UserCardAbout extends PureComponent {
                             )}
                         </SocialBlock>
                     )}
-            </Card>
+            </CollapsingCard>
         );
     }
 }

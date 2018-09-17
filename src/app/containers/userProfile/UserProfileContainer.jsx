@@ -40,29 +40,10 @@ const WrapperMain = styled.div`
     }
 `;
 
-const SidebarLeft = styled.div`
-    flex-basis: 273px;
-    flex-shrink: 0;
-
-    @media (max-width: 890px) {
-        order: 2;
-    }
-`;
-
 const Content = styled.div`
     flex-shrink: 1;
     flex-grow: 1;
-    margin: 0 18px;
     min-width: 280px;
-    max-width: 618px;
-
-    &:first-child {
-        margin-left: 0;
-    }
-
-    &:last-child {
-        margin-right: 0;
-    }
 
     ${is('center')`
         flex-shrink: 0;
@@ -71,6 +52,7 @@ const Content = styled.div`
 
     @media (max-width: 890px) {
         order: 4;
+        margin: 0 18px;
         max-width: none;
     }
 `;
@@ -78,9 +60,11 @@ const Content = styled.div`
 const SidebarRight = styled.div`
     width: 273px;
     flex-shrink: 0;
+    margin-left: 18px;
 
     @media (max-width: 890px) {
         width: 100%;
+        margin-left: 0;
         order: 1;
     }
 `;
@@ -178,24 +162,22 @@ class UserProfileContainer extends Component {
                 />
                 <WrapperMain>
                     <Main>
-                        {route !== 'settings' && (
-                            <SidebarLeft>
-                                <UserCardAbout
-                                    account={currentAccount}
-                                    followerCount={followerCount}
-                                    followingCount={followingCount}
-                                />
-                            </SidebarLeft>
-                        )}
                         <SmallUserNavigation
                             accountName={currentAccount.get('name')}
                             isOwner={isOwner}
                             showLayout={!route || route === 'blog' || route === 'favorites'}
                         />
                         <Content center={route === 'settings'}>{this.props.content}</Content>
-                        {this.props.sidebarRight && (
-                            <SidebarRight>{this.props.sidebarRight}</SidebarRight>
-                        )}
+                        {route === 'settings' ? null :
+                            <SidebarRight>
+                                <UserCardAbout
+                                    account={currentAccount}
+                                    followerCount={followerCount}
+                                    followingCount={followingCount}
+                                />
+                                {this.props.sidebarRight}
+                            </SidebarRight>
+                        }
                     </Main>
                 </WrapperMain>
             </Fragment>

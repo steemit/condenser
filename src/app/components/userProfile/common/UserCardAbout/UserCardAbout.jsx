@@ -14,6 +14,11 @@ import Icon from 'golos-ui/Icon';
 import { CardTitle } from 'golos-ui/Card';
 import CollapsingCard from 'golos-ui/CollapsingCard';
 
+const CollapsingCardStyled = styled(CollapsingCard)`
+    margin-bottom: 18px;
+    border-radius: 8px;
+`;
+
 const CardContent = styled.div`
     display: flex;
     flex-direction: column;
@@ -159,7 +164,7 @@ export default class UserCardAbout extends PureComponent {
         };
 
         return (
-            <CollapsingCard title={'Краткая информация'} saveStateKey="info">
+            <CollapsingCardStyled title={'Краткая информация'} saveStateKey="info">
                 <CardContentCounters>
                     <Row>
                         <Column>
@@ -237,7 +242,7 @@ export default class UserCardAbout extends PureComponent {
                             )}
                         </SocialBlock>
                     )}
-            </CollapsingCard>
+            </CollapsingCardStyled>
         );
     }
 }

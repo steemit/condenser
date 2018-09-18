@@ -2,13 +2,13 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import CollapsingCard from 'golos-ui/CollapsingCard';
 import { vestsToGolos } from 'app/utils/StateFunctions';
 import { formatCurrency } from 'src/app/helpers/currency';
 
 const Body = styled.div`
     height: 103px;
     padding: 0 14px;
+    border-bottom: 1px solid #e9e9e9;
     line-height: 102px;
     text-align: center;
     font-size: ${props => props.fontSize}px;
@@ -70,9 +70,7 @@ export default class AccountPrice extends PureComponent {
         const sumString = formatCurrency(sum, currency, 'adaptive');
 
         return (
-            <CollapsingCard title={'Стоимость аккаунта'} saveStateKey="price">
-                <Body fontSize={Math.floor(48 * (8 / sumString.length))}>{sumString}</Body>
-            </CollapsingCard>
+            <Body fontSize={Math.floor(48 * (8 / sumString.length))}>{sumString}</Body>
         );
     }
 }

@@ -10,17 +10,7 @@ import SafeDialog from 'src/app/components/userProfile/dialogs/SafeDialog';
 import ConvertDialog from 'src/app/components/userProfile/dialogs/ConvertDialog';
 import DelegateVestingDialog from 'src/app/components/userProfile/dialogs/DelegateVestingDialog';
 
-const Root = styled.div`
-    margin-bottom: 18px;
-    border-radius: 8px;
-    background: #fff;
-    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.06);
-
-    @media (max-width: 890px) {
-        margin-bottom: 14px;
-        border-radius: 0;
-    }
-`;
+const Root = styled.div``;
 
 const Action = styled.div`
     display: flex;

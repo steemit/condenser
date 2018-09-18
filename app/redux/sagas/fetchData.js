@@ -11,14 +11,13 @@ import { processBlog } from 'shared/state';
 import { RATES_GET_ACTUAL } from 'src/app/redux/constants/rates';
 
 const FETCH_MOST_RECENT = -1;
-const DEFAULT_ACCOUNT_HISTORY_LIMIT = 1000;
+const DEFAULT_ACCOUNT_HISTORY_LIMIT = 500;
 
 export function* fetchDataWatches () {
     yield fork(watchLocationChange);
     yield fork(watchDataRequests);
     yield fork(watchFetchJsonRequests);
     yield fork(watchFetchState);
-    yield fork(watchFetchRewards);
     yield fork(watchGetContent);
     yield fork(watchFetchVestingDelegations);
 }
@@ -53,7 +52,7 @@ function* fetchState(action) {
         url = url.substr(1);
     }
 
-    const profileMatch = url.match(/^@([a-z0-9\.-]+)/);
+    const profileMatch = url.match(/^@([a-z0-9\.-]+)(?:\/([^\/?#]+))?/);
 
     if (profileMatch) {
         const username = profileMatch[1];
@@ -62,8 +61,9 @@ function* fetchState(action) {
         yield fork(loadFollows, 'getFollowersAsync', username, 'blog');
         yield fork(loadFollows, 'getFollowingAsync', username, 'blog');
 
-        if (url.endsWith('transfers')) {
-            yield fork(fetchRewards, username, FETCH_MOST_RECENT, 100);
+        if (profileMatch[2] === 'transfers') {
+            yield fork(fetchTransfers, username, FETCH_MOST_RECENT, DEFAULT_ACCOUNT_HISTORY_LIMIT);
+            yield fork(fetchRewards, username, FETCH_MOST_RECENT, DEFAULT_ACCOUNT_HISTORY_LIMIT);
         }
     }
 
@@ -77,12 +77,8 @@ function* fetchState(action) {
         return;
     }
 
-    // Replace /curation-rewards and /author-rewards with /transfers for UserProfile to resolve data correctly
-    if (url.indexOf("/curation-rewards") !== -1) url = url.replace("/curation-rewards", "/transfers")
-    if (url.indexOf("/author-rewards") !== -1) url = url.replace("/author-rewards", "/transfers")
-
-    yield put({type: 'FETCH_DATA_BEGIN'})
-    yield put({ type: RATES_GET_ACTUAL })
+    yield put({ type: 'FETCH_DATA_BEGIN' });
+    yield put({ type: RATES_GET_ACTUAL });
 
     try {
         const parts = url.split('/')
@@ -91,61 +87,55 @@ function* fetchState(action) {
         state.content = {}
         state.accounts = {}
 
-        let accounts = new Set()
+        const accounts = new Set()
 
         if (parts[0][0] === '@') {
             const uname = parts[0].substr(1)
             const [ account ] = yield call([api, api.getAccountsAsync], [uname])
             state.accounts[uname] = account
-            
+
             if (account) {
-                state.accounts[uname].tags_usage = yield call([api, api.getTagsUsedByAuthorAsync], uname)
-                state.accounts[uname].guest_bloggers = yield call([api, api.getBlogAuthorsAsync], uname)
+                account.tags_usage = yield call([api, api.getTagsUsedByAuthorAsync], uname)
+                account.guest_bloggers = yield call([api, api.getBlogAuthorsAsync], uname)
 
                 switch (parts[1]) {
                     case 'transfers':
-                        const history = yield call([api, api.getAccountHistoryAsync], uname, FETCH_MOST_RECENT, DEFAULT_ACCOUNT_HISTORY_LIMIT, {select_ops: ACCOUNT_OPERATIONS})
-                        account.transfer_history = []
-                        account.rewards_history = []
-                        
-                        history.forEach(operation => {
-                            state.accounts[uname].transfer_history.push(operation)
-                        })
-                    break
+                        // Загрузка данных происходит выше (безусловно, до ignoreFetch выхода).
+                        break
 
                     case 'recent-replies':
                         const replies = yield call([api, api.getRepliesByLastUpdateAsync], uname, '', 50, constants.DEFAULT_VOTE_LIMIT)
-                        state.accounts[uname].recent_replies = []
+                        account.recent_replies = []
 
                         replies.forEach(reply => {
                             const link = `${reply.author}/${reply.permlink}`
                             state.content[link] = reply
-                            state.accounts[uname].recent_replies.push(link)
+                            account.recent_replies.push(link)
                         })
                     break
 
                     case 'posts':
                     case 'comments':
                         const comments = yield call([api, api.getDiscussionsByCommentsAsync], { start_author: uname, limit: 20 })
-                        state.accounts[uname].comments = []
+                        account.comments = []
 
                         comments.forEach(comment => {
                             const link = `${comment.author}/${comment.permlink}`
                             state.content[link] = comment
-                            state.accounts[uname].comments.push(link)
+                            account.comments.push(link)
                         })
                     break
 
                     case 'feed':
                         const feedEntries = yield call([api, api.getFeedEntriesAsync], uname, 0, 20)
-                        state.accounts[uname].feed = []
+                        account.feed = []
 
                         for (let key in feedEntries) {
                             const { author, permlink } = feedEntries[key]
                             const link = `${author}/${permlink}`
-                            state.accounts[uname].feed.push(link)
+                            account.feed.push(link)
                             state.content[link] = yield call([api, api.getContentAsync], author, permlink, constants.DEFAULT_VOTE_LIMIT)
-                            
+
                             if (feedEntries[key].reblog_by.length > 0) {
                                 state.content[link].first_reblogged_by = feedEntries[key].reblog_by[0]
                                 state.content[link].reblogged_by = feedEntries[key].reblog_by
@@ -168,19 +158,19 @@ function* fetchState(action) {
             const account = parts[1].substr(1)
             const category = parts[0]
             const permlink = parts[2]
-    
+
             const curl = `${account}/${permlink}`
             state.content[curl] = yield call([api, api.getContentAsync], account, permlink, constants.DEFAULT_VOTE_LIMIT)
             accounts.add(account)
 
             const replies =  yield call([api, api.getAllContentRepliesAsync], account, permlink, constants.DEFAULT_VOTE_LIMIT)
-            
+
             for (let key in replies) {
                 let reply = replies[key]
                 const link = `${reply.author}/${reply.permlink}`
 
                 accounts.add(reply.author)
- 
+
                 state.content[link] = reply
                 if (reply.parent_permlink === permlink) {
                     state.content[curl].replies.push(link)
@@ -227,18 +217,25 @@ function* fetchState(action) {
     }
 }
 
-export function* watchFetchRewards() {
-    yield takeLatest('FETCH_REWARDS', fetchRewards);
+export function* fetchTransfers(account, from, limit) {
+    try {
+        const transfers = yield call([api, api.getAccountHistoryAsync], account, from, limit, {
+            select_ops: ACCOUNT_OPERATIONS,
+        });
+        yield put(GlobalReducer.actions.receiveTransfers({ account, transfers }));
+    } catch (error) {
+        console.log(error);
+    }
 }
 
-export function* fetchRewards(account, from, limit, type = 'all') {
-    let selectedRewards = type === 'all' ? ['author_reward', 'curation_reward'] : [type];
+export function* fetchRewards(account, from, limit, type) {
+    const selectedRewards = type ? [type] : ['author_reward', 'curation_reward'];
 
-    yield put({type: 'FETCH_DATA_BEGIN'});
     try {
-        const rewards = yield call([api, api.getAccountHistoryAsync], account, from, limit, {select_ops: selectedRewards});
-        yield put(GlobalReducer.actions.receiveRewards({account, rewards}));
-        yield put({type: 'FETCH_DATA_END'});
+        const rewards = yield call([api, api.getAccountHistoryAsync], account, from, limit, {
+            select_ops: selectedRewards
+        });
+        yield put(GlobalReducer.actions.receiveRewards({ account, rewards }));
     } catch (error) {
         console.log(error);
     }
@@ -279,13 +276,13 @@ function* fetchData(action) {
         let select_tags = cookie.load(SELECT_TAGS_KEY);
         if (select_tags && select_tags.length) {
             let selectTags = []
-            
+
             select_tags.forEach( t => {
                 const reversed = reveseTag(t)
                 reversed
                 ? selectTags = [ ...selectTags, t, reversed ]
-                : selectTags = [ ...selectTags, t, ] 
-                
+                : selectTags = [ ...selectTags, t, ]
+
             })
             args[0].select_tags = selectTags;
             category = select_tags.sort().join('/')
@@ -331,7 +328,7 @@ function* fetchData(action) {
     } else {
         call_name = PUBLIC_API.active;
     }
-    
+
     yield put({ type: 'FETCH_DATA_BEGIN' });
 
     try {

@@ -531,14 +531,20 @@ export default createModule({
             },
         },
         {
+            action: 'RECEIVE_TRANSFERS',
+            reducer: (state, { payload: { account, transfers } }) => state.updateIn(
+                ['accounts', account, 'transfer_history'],
+                List(),
+                list => list.mergeDeep(fromJS(transfers))
+            )
+        },
+        {
             action: 'RECEIVE_REWARDS',
-            reducer: (state, { payload: {account, rewards} }) => {
-                return state.updateIn(
-                    ['accounts', account, 'transfer_history' /*'rewards_history'*/ ],
-                    List(),
-                    r => r.mergeDeep(fromJS(rewards))
-                );
-            }
+            reducer: (state, { payload: { account, rewards } }) => state.updateIn(
+                ['accounts', account, 'rewards_history'],
+                List(),
+                list => list.mergeDeep(fromJS(rewards))
+            )
         },
     ],
 });

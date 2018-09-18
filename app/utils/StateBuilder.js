@@ -1,4 +1,4 @@
-import { PUBLIC_API, ACCOUNT_OPERATIONS } from 'app/client_config'
+import { PUBLIC_API } from 'app/client_config'
 
 import { processBlog } from 'shared/state';
 import { reveseTag, prepareTrendingTags } from 'app/utils/tags'
@@ -44,13 +44,7 @@ export default async function getState(api, url, options, offchain) {
 
             switch (parts[1]) {
                 case 'transfers':
-                    const history = await api.getAccountHistoryAsync(uname, -1, 1000, {select_ops: ACCOUNT_OPERATIONS})
-                    account.transfer_history = []
-                    account.rewards_history = []
-
-                    history.forEach(operation => {
-                        state.accounts[uname].transfer_history.push(operation)
-                    })
+                    // Ничего не запрашиваем, данные будут загружаться динамически на клиенте.
                 break
 
                 case 'recent-replies':

@@ -85,8 +85,9 @@ const EmptySubText = styled.div`
 
 const LoaderWrapper = styled.div`
     display: flex;
-    padding: 20px 0;
+    align-items: center;
     justify-content: center;
+    height: 90px;
     opacity: 0;
     animation: fade-in 0.25s forwards;
     animation-delay: 0.25s;
@@ -261,9 +262,15 @@ class WalletContent extends Component {
         const { pageAccount } = this.props;
         const { mainTab, limit } = this.state;
 
-        const transfers = pageAccount.get('transfer_history');
+        let transactions;
 
-        if (!transfers) {
+        if (mainTab === MAIN_TABS.REWARDS) {
+            transactions = pageAccount.get('rewards_history');
+        } else {
+            transactions = pageAccount.get('transfer_history');
+        }
+
+        if (!transactions) {
             return null;
         }
 
@@ -271,8 +278,8 @@ class WalletContent extends Component {
 
         this._hasMore = false;
 
-        for (let i = transfers.size - 1; i >= 0; --i) {
-            const item = transfers.get(i);
+        for (let i = transactions.size - 1; i >= 0; --i) {
+            const item = transactions.get(i);
 
             const operations = item.get(1);
             const stamp = new Date(operations.get('timestamp') + 'Z');

@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import is from 'styled-is';
 import { Link } from 'react-router';
 import Icon from 'golos-ui/Icon';
 import DialogManager from 'app/components/elements/common/DialogManager';
@@ -30,9 +29,11 @@ const Action = styled.div`
     transition: color 0.15s;
     cursor: pointer;
 
-    ${is('last')`
+    &:last-child {
         border-bottom: none;
-    `} &:hover {
+    }
+
+    &:hover {
         color: #000;
     }
 `;
@@ -79,7 +80,7 @@ class RightActions extends PureComponent {
                     <ActionTitle>Делегировать Силу Голоса</ActionTitle>
                 </Action>
                 {isOwner ? (
-                    <Action last onClick={this._onConvertClick}>
+                    <Action onClick={this._onConvertClick}>
                         <ActionIcon name="refresh" />
                         <ActionTitle>Конвертировать</ActionTitle>
                     </Action>

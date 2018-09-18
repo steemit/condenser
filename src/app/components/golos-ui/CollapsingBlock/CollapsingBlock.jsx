@@ -7,6 +7,7 @@ import Icon from 'golos-ui/Icon';
 const Root = styled.div``;
 
 const Header = styled.div`
+    position: relative;
     display: flex;
     align-items: center;
     height: 50px;
@@ -16,6 +17,25 @@ const Header = styled.div`
     color: #393636;
     cursor: pointer;
     user-select: none;
+`;
+
+const Shadow = styled.div`
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 30px;
+    overflow: hidden;
+    pointer-events: none;
+
+    &:after {
+        position: absolute;
+        top: 0;
+        left: -10px;
+        right: -10px;
+        content: '';
+        box-shadow: 0 0 16px 6px rgba(0, 0, 0, 0.05);
+    }
 `;
 
 const HeaderTitle = styled.div`
@@ -91,7 +111,7 @@ export default class CollapsingBlock extends PureComponent {
     }
 
     render() {
-        const { title, children, upperCase } = this.props;
+        const { title, children, upperCase, withShadow } = this.props;
         const { collapsed, height, animated } = this.state;
 
         const passProps = {
@@ -105,6 +125,7 @@ export default class CollapsingBlock extends PureComponent {
         return (
             <Root {...passProps} innerRef={this._onRootRef}>
                 <Header onClick={this._onCollapseClick}>
+                    {withShadow ? <Shadow /> : null}
                     <HeaderTitle upper={upperCase}>
                         {typeof title === 'function' ? title() : title}
                     </HeaderTitle>

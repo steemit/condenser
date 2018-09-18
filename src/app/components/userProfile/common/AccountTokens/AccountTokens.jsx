@@ -1,12 +1,11 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
+import CollapsingBlock from 'golos-ui/CollapsingBlock';
 import PieChart from 'src/app/components/common/PieChart';
-import CollapsingCard from 'src/app/components/golos-ui/CollapsingCard';
-import CollapsingBlock from 'src/app/components/golos-ui/CollapsingBlock';
 import { vestsToGolos } from 'app/utils/StateFunctions';
 
-const Body = styled.div``;
+const Root = styled.div``;
 
 const ChartBlock = styled.div`
     display: flex;
@@ -171,51 +170,49 @@ class AccountTokens extends PureComponent {
         }
 
         return (
-            <CollapsingCard title={'Распределение токенов'} saveStateKey="tokens">
-                <Body>
-                    <ChartBlock>
-                        <ChartWrapper>
-                            <PieChart
-                                parts={labels.map((label, i) => ({
-                                    isBig: i === hoverIndex,
-                                    value: parseFloat(label.value) / (label.rate || 1),
-                                    color: label.color,
-                                }))}
-                            />
-                        </ChartWrapper>
-                    </ChartBlock>
-                    <Labels>
-                        {labels.map((label, i) => (
-                            <CollapsingBlockStyled
-                                key={label.id}
-                                initialCollapsed
-                                saveStateKey={`tokens_${label.id}`}
-                                onMouseEnter={() => this._onHover(i)}
-                                onMouseLeave={() => this._onHoverOut(i)}
-                                title={() => (
-                                    <Label>
-                                        <ColorMark style={{ backgroundColor: label.color }} />
-                                        <LabelTitle>{label.title}</LabelTitle>
-                                        <LabelValue>{label.value}</LabelValue>
-                                    </Label>
-                                )}
-                            >
-                                <LabelBody>
-                                    {label.values.map((subLabel, i) => (
-                                        <SubLabel key={i}>
-                                            <SubColorMark
-                                                style={{ backgroundColor: label.color }}
-                                            />
-                                            <LabelTitle>{subLabel.title}</LabelTitle>
-                                            <LabelValue>{subLabel.value}</LabelValue>
-                                        </SubLabel>
-                                    ))}
-                                </LabelBody>
-                            </CollapsingBlockStyled>
-                        ))}
-                    </Labels>
-                </Body>
-            </CollapsingCard>
+            <Root>
+                <ChartBlock>
+                    <ChartWrapper>
+                        <PieChart
+                            parts={labels.map((label, i) => ({
+                                isBig: i === hoverIndex,
+                                value: parseFloat(label.value) / (label.rate || 1),
+                                color: label.color,
+                            }))}
+                        />
+                    </ChartWrapper>
+                </ChartBlock>
+                <Labels>
+                    {labels.map((label, i) => (
+                        <CollapsingBlockStyled
+                            key={label.id}
+                            initialCollapsed
+                            saveStateKey={`tokens_${label.id}`}
+                            onMouseEnter={() => this._onHover(i)}
+                            onMouseLeave={() => this._onHoverOut(i)}
+                            title={() => (
+                                <Label>
+                                    <ColorMark style={{ backgroundColor: label.color }} />
+                                    <LabelTitle>{label.title}</LabelTitle>
+                                    <LabelValue>{label.value}</LabelValue>
+                                </Label>
+                            )}
+                        >
+                            <LabelBody>
+                                {label.values.map((subLabel, i) => (
+                                    <SubLabel key={i}>
+                                        <SubColorMark
+                                            style={{ backgroundColor: label.color }}
+                                        />
+                                        <LabelTitle>{subLabel.title}</LabelTitle>
+                                        <LabelValue>{subLabel.value}</LabelValue>
+                                    </SubLabel>
+                                ))}
+                            </LabelBody>
+                        </CollapsingBlockStyled>
+                    ))}
+                </Labels>
+            </Root>
         );
     }
 

@@ -7,22 +7,42 @@ import { Map } from 'immutable';
 import tt from 'counterpart';
 import Interpolate from 'react-interpolate-component';
 import normalizeProfile from 'app/utils/NormalizeProfile';
+import { DEBT_TOKEN_SHORT } from 'app/client_config';
 
 import Avatar from 'src/app/components/common/Avatar';
+import Icon from 'golos-ui/Icon';
 
 const Wrapper = styled.div`
     display: flex;
     align-items: center;
 `;
 
-const AvatarWrapper = styled.div`
+const LeftSide = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
     margin-right: 18px;
+    color: #2879ff;
 `;
 
 const Message = styled.div`
-    font-family: ${theme => theme.fontFamily};
     font-size: 14px;
+    line-height: 20px;
 `;
+
+const icons = {
+    reward: {
+        name: 'coins',
+        width: 23,
+        height: 18,
+    },
+    curatorReward: {
+        name: 'coins',
+        width: 23,
+        height: 18,
+    },
+};
 
 export default class NotificationOnlineContent extends PureComponent {
     static propTypes = {
@@ -51,71 +71,65 @@ export default class NotificationOnlineContent extends PureComponent {
             golosPower,
             gbg,
         } = this.props;
-        const userName = account.get('name');
 
-        switch (type) {
-            case 'vote':
-            case 'flag':
-            case 'reply':
-            case 'mention':
-            case 'repost':
-                return {
-                    user: <Link to={`/@${userName}`}>@{userName}</Link>,
-                    content: <Link to={link}>{title}</Link>,
-                };
+        const interProps = {};
 
-            case 'transfer':
-                return {
-                    user: <Link to={`/@${userName}`}>@{userName}</Link>,
-                    amount,
-                };
+        if (['vote', 'flag', 'reply', 'mention', 'repost'].includes(type)) {
+            const userName = account.get('name');
 
-            case 'reward':
-                const awards = [];
-                if (golos) awards.push(`${golos} Голосов`);
-                if (golosPower) awards.push(`${golosPower} Силы Голоса`);
-                if (gbg) awards.push(`${gbg} GBG`);
-                return {
-                    content: <Link to={link}>{title}</Link>,
-                    amount: awards.join(', '),
-                };
-            case 'curatorReward':
-                return {
-                    content: <Link to={link}>{title}</Link>,
-                    amount,
-                };
+            interProps.user = <Link to={`/@${userName}`}>@{userName}</Link>;
+            interProps.content = <Link to={link}>{title}</Link>;
+        } else if (['transfer'].includes(type)) {
+            const userName = account.get('name');
 
-            case 'subscribe':
-            case 'unsubscribe':
-            case 'witnessVote':
-            case 'witnessCancelVote':
-                return {
-                    user: <Link to={`/@${userName}`}>@{userName}</Link>,
-                };
+            interProps.user = <Link to={`/@${userName}`}>@{userName}</Link>;
+            interProps.amount = amount;
+        } else if (['reward'].includes(type)) {
+            const awards = [];
+            if (golos) awards.push(`${golos} ${tt('token_names.LIQUID_TOKEN_PLURALIZE', { count: golos})}`);
+            if (golosPower) awards.push(`${golosPower} ${tt('token_names.VESTING_TOKEN_PLURALIZE', { count: golosPower})}`);
+            if (gbg) awards.push(`${gbg} ${DEBT_TOKEN_SHORT}`);
 
-            default:
-                return {};
+            interProps.content = <Link to={link}>{title}</Link>;
+            interProps.amount = awards.join(', ');
+        } else if (['curatorReward'].includes(type)) {
+            interProps.content = <Link to={link}>{title}</Link>;
+            interProps.amount = amount;
+        } else if (['subscribe', 'unsubscribe', 'witnessVote', 'witnessCancelVote'].includes(type)) {
+            const userName = account.get('name');
+            interProps.user = <Link to={`/@${userName}`}>@{userName}</Link>;
         }
+
+        return interProps;
     }
 
     render() {
         const { account, type } = this.props;
 
-        let avatarLink = null;
+        let leftSide = null;
+
+        if (['reward', 'curatorReward'].includes(type)) {
+            leftSide = (
+                <LeftSide>
+                    <Icon {...icons[type]} />
+                </LeftSide>
+            );
+        }
+
         if (account) {
             const { profile_image } = normalizeProfile(account.toJS());
-            avatarLink = (
-                <AvatarWrapper>
+            leftSide = (
+                <LeftSide>
                     <Link to={`/@${account.get('name')}`}>
                         <Avatar avatarUrl={profile_image} size={40} />
                     </Link>
-                </AvatarWrapper>
+                </LeftSide>
             );
         }
 
         return (
             <Wrapper>
-                {avatarLink}
+                {leftSide}
                 <Message>
                     <Interpolate with={this.getPropsForInterpolation()} component="div">
                         {tt(['notifications', 'online', type], { count: 1, interpolate: false })}

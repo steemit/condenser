@@ -7,6 +7,7 @@ import { List } from 'immutable';
 import tt from 'counterpart';
 import Interpolate from 'react-interpolate-component';
 import normalizeProfile from 'app/utils/NormalizeProfile';
+import { DEBT_TOKEN_SHORT } from 'app/client_config';
 
 import Avatar from 'src/app/components/common/Avatar';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
@@ -119,14 +120,14 @@ export default class ActivityItem extends Component {
 
         const computed = notification.get('computed');
         const eventType = notification.get('eventType');
-        const props = {};
+        const interProps = {};
 
         if (
             ['vote', 'flag', 'reply', 'mention', 'repost', 'reward', 'curatorReward'].includes(
                 eventType
             )
         ) {
-            props.content = <Link to={computed.get('link')}>{computed.get('title')}</Link>;
+            interProps.content = <Link to={computed.get('link')}>{computed.get('title')}</Link>;
         }
 
         if (['reward'].includes(eventType)) {
@@ -134,21 +135,21 @@ export default class ActivityItem extends Component {
             const golos = notification.getIn(['reward', 'golos'], null);
             const golosPower = notification.getIn(['reward', 'golosPower'], null);
             const gbg = notification.getIn(['reward', 'gbg'], null);
-            if (golos) awards.push(`${golos} Голосов`);
-            if (golosPower) awards.push(`${golosPower} Силы Голоса`);
-            if (gbg) awards.push(`${gbg} GBG`);
-            props.amount = awards.join(', ');
+            if (golos) awards.push(`${golos} ${tt('token_names.LIQUID_TOKEN_PLURALIZE', { count: golos})}`);
+            if (golosPower) awards.push(`${golosPower} ${tt('token_names.VESTING_TOKEN_PLURALIZE', { count: golosPower})}`);
+            if (gbg) awards.push(`${gbg} ${DEBT_TOKEN_SHORT}`);
+            interProps.amount = awards.join(', ');
         }
 
         if (['curatorReward'].includes(eventType)) {
-            props.amount = notification.get('curatorReward');
+            interProps.amount = notification.get('curatorReward');
         }
 
         if (['transfer'].includes(eventType)) {
-            props.amount = notification.get('amount');
+            interProps.amount = notification.get('amount');
         }
 
-        return props;
+        return interProps;
     }
 
     render() {

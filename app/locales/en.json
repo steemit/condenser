@@ -978,11 +978,21 @@
     "DEBT_TOKEN": "GOLD BACKED GOLOS",
     "DEBT_TOKENS": "GOLD BACKED GOLOS",
     "LIQUID_TOKEN": "Golos",
+    "LIQUID_TOKEN_PLURALIZE": {
+      "one": "Golos",
+      "other": "Golos",
+      "zero": "Golos"
+    },
     "LIQUID_TOKEN_UPPERCASE": "GOLOS",
     "TOKEN_WORTH": "~1 mg of gold",
     "VESTING_TOKEN": "Golos Power",
     "VESTING_TOKEN2": "Golos Power",
-    "VESTING_TOKENS": "Golos Power"
+    "VESTING_TOKENS": "Golos Power",
+    "VESTING_TOKEN_PLURALIZE": {
+      "one": "Golos Power",
+      "other": "Golos Power",
+      "zero": "Golos Power"
+    }
   },
   "transfer_jsx": {
     "advanced": "Advanced",

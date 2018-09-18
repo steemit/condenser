@@ -83,10 +83,7 @@ export default class Current extends Component {
     render() {
         return (
             <CardContent column>
-                <Info>
-                    Важно сохранить свой ключ-пароль. Golos.io не хранит ваши пароли. Убедитесь, что
-                    надежно сохранили ваши ключ.
-                </Info>
+                <Info>{tt('settings_jsx.keys.info')}</Info>
 
                 {this.renderKeys()}
             </CardContent>

@@ -126,9 +126,7 @@ export default class Common extends PureComponent {
                                 {({ input, meta }) => (
                                     <FormGroup align="center" column={false}>
                                         <Checkbox {...input} />
-                                        <LabelRow>
-                                            Голосовать по умолчанию за свою публикацию
-                                        </LabelRow>
+                                        <LabelRow>{tt('settings_jsx.self_vote_default')}</LabelRow>
                                         <FormError meta={meta} />
                                     </FormGroup>
                                 )}

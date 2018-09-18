@@ -114,6 +114,7 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
     }
     additional_menu.push(
         { link: '/welcome', value: tt("navigation.welcome") },
+        { link: '/faq', value: tt("navigation.faq") },
         { link: WIKI_URL, value: tt('navigation.wiki'), target: 'blank' },
         { link: '/market', value: tt('userwallet_jsx.market') },
         { link: '/~witnesses', value: tt("navigation.witnesses") },

@@ -123,12 +123,12 @@ export default class Online extends PureComponent {
                 icon: { name: 'repost-right', width: '19', height: '15' },
             },
             {
-                name: 'notify.show.award',
+                name: 'notify.show.reward',
                 label: tt('settings_jsx.notifications.award'),
                 icon: { name: 'a', width: '14', height: '15' },
             },
             {
-                name: 'notify.show.curatorAward',
+                name: 'notify.show.curatorReward',
                 label: tt('settings_jsx.notifications.curatorAward'),
                 icon: { name: 'k', width: '13', height: '15' },
             },

@@ -17,6 +17,10 @@ import CollapsingCard from 'golos-ui/CollapsingCard';
 const CollapsingCardStyled = styled(CollapsingCard)`
     margin-bottom: 18px;
     border-radius: 8px;
+
+    @media (max-width: 890px) {
+        border-radius: 0;
+    }
 `;
 
 const CardContent = styled.div`

@@ -939,7 +939,7 @@ class Market extends React.Component {
         );
     }
 }
-const DEFAULT_EXPIRE = 0xffffffff; //Math.floor((Date.now() / 1000) + (60 * 60 * 24)) // 24 hours
+const DEFAULT_EXPIRE = Math.floor(Date.now() / 1000 + 60 * 60 * 24 * 27); // Market orders with expiration greater than 28 days from current Head Block time will be rejected.
 module.exports = {
     path: 'market',
     component: connect(

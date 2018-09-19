@@ -1,6 +1,5 @@
 import React, { PureComponent, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import cn from 'classnames';
 import { Link } from 'react-router';
 import styled from 'styled-components';
 import { isNot } from 'styled-is';
@@ -78,7 +77,7 @@ const Category = styled.div`
     cursor: default;
     overflow: hidden;
 
-    ${isNot('isCommentOpen')`
+    ${isNot('commentopen')`
         display: none;
     `};
 `;
@@ -90,7 +89,7 @@ const Title = styled.div`
     padding: 0 18px;
     margin-bottom: 8px;
 
-    ${isNot('isCommentOpen')`
+    ${isNot('commentopen')`
         display: none;
     `};
 `;
@@ -115,7 +114,7 @@ const PostBody = styled(Link)`
     font-family: ${a => a.theme.fontFamily};
     color: #959595 !important;
 
-    ${isNot('isCommentOpen')`
+    ${isNot('commentopen')`
         display: none;
     `};
 `;
@@ -134,7 +133,7 @@ const Footer = styled.div`
         pointer-events: initial;
     }
 
-    ${isNot('isCommentOpen')`
+    ${isNot('commentopen')`
         display: none;
     `};
 
@@ -156,7 +155,7 @@ const Root = styled.div`
     overflow: hidden;
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.06);
 
-    ${isNot('isCommentOpen')`
+    ${isNot('commentopen')`
         justify-content: center;
         height: 50px;
     `};
@@ -209,7 +208,7 @@ const ToggleCommentOpen = styled.div`
     min-height: 30px;
     cursor: pointer;
 
-    ${isNot('isCommentOpen')`
+    ${isNot('commentopen')`
         transform: rotate(180deg); 
         color: #b7b7ba;
     `};
@@ -295,11 +294,10 @@ class CommentCard extends PureComponent {
     }
 
     render() {
-        const { className } = this.props;
         const { showReply, isCommentOpen } = this.state;
 
         return (
-            <Root className={cn(className)} isCommentOpen={isCommentOpen}>
+            <Root commentopen={isCommentOpen ? 1 : 0}>
                 {this._renderHeader()}
                 {this._renderBodyRe()}
                 {this._renderBodyText()}
@@ -316,7 +314,7 @@ class CommentCard extends PureComponent {
         const category = detransliterate(dataToJS.category);
 
         return (
-            <Header isCommentOpen={isCommentOpen}>
+            <Header commentopen={isCommentOpen ? 1 : 0}>
                 <HeaderLine>
                     {isCommentOpen ? (
                         <AuthorBlock>
@@ -340,8 +338,8 @@ class CommentCard extends PureComponent {
                         </ReLinkWrapper>
                     )}
                     <Filler />
-                    <Category isCommentOpen={isCommentOpen}>{category}</Category>
-                    <ToggleCommentOpen onClick={this._toggleComment} isCommentOpen={isCommentOpen}>
+                    <Category commentopen={isCommentOpen ? 1 : 0}>{category}</Category>
+                    <ToggleCommentOpen onClick={this._toggleComment} commentopen={isCommentOpen ? 1 : 0}>
                         <Icon name="chevron" width="12" height="7" />
                     </ToggleCommentOpen>
                 </HeaderLine>
@@ -356,7 +354,7 @@ class CommentCard extends PureComponent {
         const showEditButton = myAccountName === dataToJS.author;
 
         return (
-            <Title isCommentOpen={isCommentOpen}>
+            <Title commentopen={isCommentOpen ? 1 : 0}>
                 <ReLinkWrapper>
                     <TitleIcon name="comment" />
                     {tt('g.re2')}:&nbsp;
@@ -395,7 +393,7 @@ class CommentCard extends PureComponent {
                         to={content.link}
                         onClick={this._onClick}
                         dangerouslySetInnerHTML={htmlContent}
-                        isCommentOpen={isCommentOpen}
+                        commentopen={isCommentOpen ? 1 : 0}
                     />
                 )}
             </Fragment>
@@ -404,9 +402,10 @@ class CommentCard extends PureComponent {
 
     _renderFooter() {
         const { data, myAccountName, allowInlineReply, content, dataToJS, isOwner } = this.props;
+        const { isCommentOpen } = this.state;
 
         return (
-            <Footer isCommentOpen={this.state.isCommentOpen}>
+            <Footer commentopen={isCommentOpen ? 1 : 0}>
                 <CommentVotePanel data={data} me={myAccountName} onChange={this._onVoteChange} />
                 <CommentReplyWrapper>
                     <CommentReplyBlock

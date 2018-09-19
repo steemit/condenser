@@ -38,6 +38,11 @@ const Action = styled.div`
     }
 `;
 
+const LinkAction = styled(Link)`
+    display: block;
+    border-bottom: 1px solid #e9e9e9;
+`;
+
 const ActionIcon = Icon.extend`
     width: 20px;
     height: 20px;
@@ -58,12 +63,12 @@ class RightActions extends PureComponent {
         return (
             <Root>
                 {isOwner ? (
-                    <Link to="/market">
+                    <LinkAction to="/market">
                         <Action>
                             <ActionIcon name="wallet" />
                             <ActionTitle>Купить или продать</ActionTitle>
                         </Action>
-                    </Link>
+                    </LinkAction>
                 ) : null}
                 <Action onClick={this._onTransferClick}>
                     <ActionIcon name="coins" />

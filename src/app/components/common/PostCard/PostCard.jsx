@@ -18,6 +18,7 @@ import VotePanel from '../VotePanel';
 import { confirmVote } from 'src/app/helpers/votes';
 import { toggleFavoriteAction } from 'src/app/redux/actions/favorites';
 import { togglePinAction } from 'src/app/redux/actions/pinnedPosts';
+import { getPinnedPosts } from 'src/app/redux/selectors/account/pinnedPosts';
 import ReplyBlock from '../ReplyBlock';
 
 const Header = styled.div`
@@ -519,15 +520,7 @@ export default connect(
         let isPinned = false;
 
         if (props.showPinButton) {
-            const pinnedPosts = state.global.getIn([
-                'accounts',
-                props.pageAccountName,
-                'pinnedPosts',
-            ]);
-
-            if (pinnedPosts) {
-                isPinned = pinnedPosts.includes(props.permLink);
-            }
+            isPinned = getPinnedPosts(state, props.pageAccountName).includes(props.permLink);
         }
 
         return {

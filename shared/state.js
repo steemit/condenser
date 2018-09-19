@@ -1,25 +1,26 @@
 import { api } from 'golos-js';
+import { is, clone } from 'ramda';
 
 export async function processBlog(state, { uname, voteLimit }) {
     const blogEntries = await api.getBlogEntriesAsync(uname, 0, 20);
 
     const account = state.accounts[uname];
 
-    if (!account.pinnedPosts) {
-        account.pinnedPosts = [];
-
-        try {
-            const pinnedPosts = JSON.parse(account.json_metadata).pinnedPosts;
-
-            if (pinnedPosts) {
-                account.pinnedPosts = pinnedPosts;
-            }
-        } catch (err) {}
-    }
-
     account.blog = [];
 
-    const pinnedEntries = account.pinnedPosts.map(link => {
+    let pinnedPosts = [];
+
+    try {
+        const pinned = JSON.parse(account.json_metadata).pinnedPosts;
+
+        if (Array.isArray(pinned) && pinned.every(link => is(String, link))) {
+            pinnedPosts = pinned;
+        }
+    } catch(err) {
+        console.error(err);
+    }
+
+    const pinnedEntries = pinnedPosts.map(link => {
         const [author, permlink] = link.split('/');
 
         return {
@@ -28,7 +29,7 @@ export async function processBlog(state, { uname, voteLimit }) {
         };
     });
 
-    const blog = Array.from(pinnedEntries);
+    const blog = clone(pinnedEntries);
 
     outer: for (let entry of blogEntries) {
         for (let { author, permlink } of pinnedEntries) {

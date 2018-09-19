@@ -39,5 +39,5 @@ export const pageAccountSelector = createDeepEqualSelector(
 
 export const currentUserSelector = createDeepEqualSelector(
     [userSelector('current')],
-    (currentUser) => currentUser || emptyMap
+    currentUser => currentUser || emptyMap
 );

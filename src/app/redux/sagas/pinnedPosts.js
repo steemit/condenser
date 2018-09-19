@@ -16,7 +16,7 @@ function* togglePinned(action) {
 
     const metadata = JSON.parse(account.get('json_metadata'));
 
-    let pinnedPosts = account.get('pinnedPosts').toJS();
+    let pinnedPosts = metadata.pinnedPosts || [];
 
     if (isPin) {
         if (pinnedPosts.includes(link)) {
@@ -38,20 +38,22 @@ function* togglePinned(action) {
 
     metadata.pinnedPosts = pinnedPosts;
 
+    const jsonMetadata = JSON.stringify(metadata);
+
     yield put(
         transaction.actions.broadcastOperation({
             type: 'account_metadata',
             operation: {
                 account: account.get('name'),
                 memo_key: account.get('memo_key'),
-                json_metadata: JSON.stringify(metadata),
+                json_metadata: jsonMetadata,
             },
             successCallback: () => {
                 dispatch({
-                    type: 'global/PINNED_UPDATE',
+                    type: 'global/UPDATE_ACCOUNT_METADATA',
                     payload: {
                         accountName: account.get('name'),
-                        pinnedPosts,
+                        jsonMetadata,
                     },
                 });
             },

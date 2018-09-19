@@ -520,13 +520,13 @@ export default createModule({
                 ),
         },
         {
-            action: 'PINNED_UPDATE',
+            action: 'UPDATE_ACCOUNT_METADATA',
             reducer: (state, { payload }) => {
-                const { accountName, pinnedPosts } = payload;
+                const { accountName, jsonMetadata } = payload;
 
                 return state.setIn(
-                    ['accounts', accountName, 'pinnedPosts'],
-                    List(pinnedPosts)
+                    ['accounts', accountName, 'json_metadata'],
+                    jsonMetadata
                 );
             },
         },

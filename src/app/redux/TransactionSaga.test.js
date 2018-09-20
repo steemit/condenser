@@ -1,16 +1,19 @@
 /* global describe, it, before, beforeEach, after, afterEach */
 
-import { call, select } from 'redux-saga/effects';
-import { api } from '@steemit/steem-js';
+import { call, select, all, takeEvery } from 'redux-saga/effects';
+import steem, { api, broadcast } from '@steemit/steem-js';
+import { cloneableGenerator } from 'redux-saga/utils';
+import * as transactionActions from 'app/redux/TransactionReducer';
 import {
     preBroadcast_comment,
     createPermlink,
     createPatch,
-    watchForBroadcast,
-    watchForUpdateAuthorities,
-    watchForUpdateMeta,
-    watchForRecoverAccount,
+    recoverAccount,
     preBroadcast_transfer,
+    transactionWatches,
+    broadcastOperation,
+    updateAuthorities,
+    updateMeta,
 } from './TransactionSaga';
 import { DEBT_TICKER } from 'app/client_config';
 
@@ -42,6 +45,137 @@ const operation = {
 const username = 'Beatrice';
 
 describe('TransactionSaga', () => {
+    describe('watch user actions and trigger appropriate saga', () => {
+        const gen = transactionWatches;
+        it('should call the broadcastOperation saga with every transactionActions.BROADCAST_OPERATION action', () => {
+            expect(gen).toEqual([
+                takeEvery(
+                    transactionActions.BROADCAST_OPERATION,
+                    broadcastOperation
+                ),
+                takeEvery(
+                    transactionActions.UPDATE_AUTHORITIES,
+                    updateAuthorities
+                ),
+                takeEvery(transactionActions.UPDATE_META, updateMeta),
+                takeEvery(transactionActions.RECOVER_ACCOUNT, recoverAccount),
+            ]);
+        });
+    });
+
+    describe('recoverAccount', () => {
+        const gen = cloneableGenerator(recoverAccount)({
+            payload: {
+                account_to_recover: 'one',
+                old_password: 'two34567',
+                new_password: 'two34567',
+                onError: () => 'error!',
+                onSuccess: () => 'success!',
+            },
+        });
+        it('should call getAccountsAsync with account_to_recover username as argument', () => {
+            const actual = gen.next([{ id: 123, name: 'one' }]).value;
+            const mockCall = call([api, api.getAccountsAsync], ['one']);
+            expect(actual).toEqual(mockCall);
+        });
+        it('should call sendAsync with recover_account operation', () => {
+            const actual = gen.next([{ id: 123, name: 'one' }]).value;
+            const mockCall = broadcast.sendAsync(
+                {
+                    extensions: [],
+                    operations: [
+                        [
+                            'recover_account',
+                            {
+                                account_to_recover: 'one',
+                                new_owner_authority: 'idk',
+                                recent_owner_authority: 'something',
+                            },
+                        ],
+                    ],
+                },
+                ['123', '345']
+            );
+            expect(actual).toEqual(mockCall);
+        });
+        it('should call sendAsync with account_update operation', () => {
+            const actual = gen.next().value;
+            const mockCall = broadcast.sendAsync(
+                {
+                    extensions: [],
+                    operations: [
+                        [
+                            'account_update',
+                            {
+                                account_to_recover: 'one',
+                                new_owner_authority: 'idk',
+                                recent_owner_authority: 'something',
+
+                                account: 'one',
+                                active: {
+                                    weight_threshold: 1,
+                                    account_auths: [],
+                                    key_auths: [['newactive', 1]],
+                                },
+                                posting: {
+                                    weight_threshold: 1,
+                                    account_auths: [],
+                                    key_auths: [['newposting', 1]],
+                                },
+                                memo_key: 'newmemo',
+                            },
+                        ],
+                    ],
+                },
+                ['newownerprivate']
+            );
+            expect(actual).toEqual(mockCall);
+        });
+        it('should call getWithdrawRoutes with account name and outgoing as parameters', () => {
+            const noAutoVests = gen.clone();
+            const actual = noAutoVests.next().value;
+            const mockCall = call(
+                [api, api.getWithdrawRoutes],
+                ['one', 'outgoing']
+            );
+            expect(actual).toEqual(mockCall);
+            const done = noAutoVests.next().done;
+            expect(done).toBe(true);
+        });
+        it('should call getWithdrawRoutes with account name and outgoing as parameters, and be done if none are found', () => {
+            const noAutoVests = gen.clone();
+            const actual = noAutoVests.next().value;
+            const mockCall = call(
+                [api, api.getWithdrawRoutes],
+                ['one', 'outgoing']
+            );
+            expect(actual).toEqual(mockCall);
+            const done = noAutoVests.next().done;
+            expect(done).toBe(true);
+        });
+        it('should call getWithdrawRoutes with account name and outgoing as parameters, and reset all outgoing auto vesting routes to 0.', () => {
+            const withAutoVests = gen.clone();
+            withAutoVests.next([{ from_account: 'one', to_account: 'two' }])
+                .value;
+            const actual = withAutoVests.next([
+                { from_account: 'one', to_account: 'two' },
+            ]).value;
+            const mockCall = all([
+                call(
+                    [broadcast, broadcast.setWithdrawVestingRoute],
+                    [
+                        'STM7UbRctdfcdBU6rMBEX5yPjWaR68xmq6buCkotR7RVEJHYWt1Jb',
+                        'one',
+                        'two',
+                        0,
+                        true,
+                    ]
+                ),
+            ]);
+            expect(actual).toEqual(mockCall);
+        });
+    });
+
     describe('createPatch', () => {
         it('should return undefined if empty arguments are passed', () => {
             const actual = createPatch('', '');
@@ -54,42 +188,6 @@ describe('TransactionSaga', () => {
             expect(actual).toEqual(
                 '@@ -120,12 +120,15 @@\n quite simple\n+ILU\n'
             );
-        });
-    });
-
-    describe('watchForBroadcast', () => {
-        const gen = watchForBroadcast();
-        it('should call takeEvery with BROADCAST_OPERATION', () => {
-            const actual = gen.next().value;
-            const expected = {
-                '@@redux-saga/IO': true,
-                TAKE: 'transaction/BROADCAST_OPERATION',
-            };
-            expect(actual).toEqual(expected);
-        });
-    });
-
-    describe('watchForUpdateAuthorities', () => {
-        const gen = watchForUpdateAuthorities();
-        it('should call takeEvery with UPDATE_AUTHORITIES', () => {
-            const actual = gen.next().value;
-            const expected = {
-                '@@redux-saga/IO': true,
-                TAKE: 'transaction/UPDATE_AUTHORITIES',
-            };
-            expect(actual).toEqual(expected);
-        });
-    });
-
-    describe('watchForUpdateMeta', () => {
-        const gen = watchForUpdateMeta();
-        it('should call takeEvery with UPDATE_META', () => {
-            const actual = gen.next().value;
-            const expected = {
-                '@@redux-saga/IO': true,
-                TAKE: 'transaction/UPDATE_META',
-            };
-            expect(actual).toEqual(expected);
         });
     });
 

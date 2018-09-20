@@ -124,6 +124,12 @@ class UserNavigation extends PureComponent {
                         {value}
                     </TabLinkIndex>
                 ))}
+                <TabLinkIndex
+                    key={`/@${accountName}/messages`}
+                    to={`/@${accountName}/messages`}
+                >
+                    {tt('g.messages')}
+                </TabLinkIndex>
                 {this._renderRightIcons()}
             </SlideContainer>
         );

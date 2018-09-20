@@ -249,6 +249,14 @@ export default {
                 });
             },
         },
+        {
+            path: 'messages',
+            getComponents(nextState, cb) {
+                cb(null, {
+                    content: require('../../../messenger/containers/Messenger').default,
+                });
+            },
+        },
     ],
     component: connect(
         (state, props) => {

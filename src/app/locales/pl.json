@@ -471,7 +471,7 @@
         "witness": "Delegat",
         "information": "Informacja",
         "if_you_want_to_vote_outside_of_top_enter_account_name":
-            "Jeśli chcesz zagłosować na delegata spoza pierwszej 50, podaj nazwę konta na które chcesz oddać głos",
+            "Jeśli chcesz zagłosować na delegata spoza pierwszej 100, podaj nazwę konta na które chcesz oddać głos",
         "set_witness_proxy":
             "Możesz również wybrać pełnomocnika, który zagłosuje na delegatów za ciebie. Wybór pełnomocnika wyczyści twoje bieżące głosy.",
         "witness_set":

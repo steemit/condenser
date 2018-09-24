@@ -635,7 +635,6 @@ export default connect(
                 dispatch(userActions.hideTransfer());
             };
             const asset2 = toVesting ? LIQUID_TOKEN_UPPERCASE : asset;
-            debugger;
             const operation = {
                 from: username,
                 to,

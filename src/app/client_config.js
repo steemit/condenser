@@ -10,9 +10,9 @@ export const APP_ICON = 'steem';
 export const APP_URL = 'https://steemit.com';
 export const APP_DOMAIN = 'steemit.com';
 // sometimes it's impossible to use html tags to style coin name, hence usage of _UPPERCASE modifier
-// TODO: Add switch for testnet tokens.
-export const LIQUID_TOKEN_UPPERCASE = process.env.TESTNET ? 'TEST' : 'STEEM';
-export const LIQUID_TOKEN = process.env.TESTNET ? 'Test' : 'Steem';
+export const LIQUID_TOKEN_UPPERCASE = process.env.TESTNET ? 'TESTS' : 'STEEM';
+export const LIQUID_TOKEN = process.env.TESTNET ? 'Tests' : 'Steem';
+// TODO: Vesting token symbols need testnet analog.
 export const VESTING_TOKEN = 'STEEM POWER';
 export const INVEST_TOKEN_UPPERCASE = 'STEEM POWER';
 export const INVEST_TOKEN_SHORT = 'SP';

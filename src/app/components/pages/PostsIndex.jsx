@@ -9,7 +9,10 @@ import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
 import constants from 'app/redux/constants';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import PostsList from 'app/components/cards/PostsList';
-import { isFetchingOrRecentlyUpdated } from 'app/utils/StateFunctions';
+import {
+    isFetchingOrRecentlyUpdated,
+    shouldDisplayPost,
+} from 'app/utils/StateFunctions';
 import Callout from 'app/components/elements/Callout';
 // import SidebarStats from 'app/components/elements/SidebarStats';
 import SidebarLinks from 'app/components/elements/SidebarLinks';
@@ -136,16 +139,8 @@ class PostsIndex extends React.Component {
             posts = this.getPosts(order, category);
 
             if (posts) {
-                var cont = this.props.content;
                 posts = posts.filter(post => {
-                    if (
-                        cont.get(post).get('json_metadata').tags &&
-                        cont
-                            .get(post)
-                            .get('json_metadata')
-                            .tags.indexOf('touchit-social') >= 0
-                    )
-                        return post;
+                    return shouldDisplayPost(this.props, post);
                 });
             }
 

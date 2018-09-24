@@ -10,6 +10,7 @@ import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import debounce from 'lodash.debounce';
 import CloseButton from 'app/components/elements/CloseButton';
 import { findParent } from 'app/utils/DomUtils';
+import { shouldDisplayPost } from 'app/utils/StateFunctions';
 import Icon from 'app/components/elements/Icon';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 
@@ -165,14 +166,7 @@ class PostsList extends React.Component {
             const ignore =
                 ignore_result && ignore_result.has(cont.get('author'));
             const hide = cont.getIn(['stats', 'hide']);
-            var show = false;
-            if (
-                JSON.parse(cont.get('json_metadata')).tags &&
-                JSON.parse(cont.get('json_metadata')).tags.indexOf(
-                    'touchit-social'
-                ) >= 0
-            )
-                show = true;
+            var show = shouldDisplayPost(this.props, item);
             if (show && (!(ignore || hide) || showSpam))
                 // rephide
                 postsInfo.push({ item, ignore });

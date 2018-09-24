@@ -17,7 +17,12 @@ import {
     validate_memo_field,
 } from 'app/utils/ChainValidation';
 import { countDecimals } from 'app/utils/ParsersAndFormatters';
-import { APP_NAME, LIQUID_TOKEN, VESTING_TOKEN } from 'app/client_config';
+import {
+    APP_NAME,
+    LIQUID_TOKEN,
+    VESTING_TOKEN,
+    LIQUID_TOKEN_UPPERCASE,
+} from 'app/client_config';
 
 /** Warning .. This is used for Power UP too. */
 class TransferForm extends Component {
@@ -130,7 +135,7 @@ class TransferForm extends Component {
             const isWithdraw =
                 transferType && transferType === 'Savings Withdraw';
             const balanceValue =
-                !asset || asset === 'STEEM'
+                !asset || asset === LIQUID_TOKEN_UPPERCASE
                     ? isWithdraw
                       ? currentAccount.get('savings_balance')
                       : currentAccount.get('balance')
@@ -197,9 +202,9 @@ class TransferForm extends Component {
     balanceValue() {
         const { transferType } = this.props.initialValues;
         const { currentAccount } = this.props;
-        const { asset } = this.state;
+        let { asset } = this.state;
         const isWithdraw = transferType && transferType === 'Savings Withdraw';
-        return !asset || asset.value === 'STEEM'
+        return !asset || asset.value === LIQUID_TOKEN_UPPERCASE
             ? isWithdraw
               ? currentAccount.get('savings_balance')
               : currentAccount.get('balance')
@@ -427,7 +432,9 @@ class TransferForm extends Component {
                                             border: 'none',
                                         }}
                                     >
-                                        <option value="STEEM">STEEM</option>
+                                        <option value={LIQUID_TOKEN_UPPERCASE}>
+                                            {LIQUID_TOKEN_UPPERCASE}
+                                        </option>
                                         <option value="SBD">SBD</option>
                                     </select>
                                 </span>
@@ -576,7 +583,6 @@ export default connect(
 
         if (initialValues.to !== currentUser.get('username'))
             transferToSelf = false; // don't hide the to field
-
         return {
             ...ownProps,
             currentUser,
@@ -628,7 +634,8 @@ export default connect(
                 }
                 dispatch(userActions.hideTransfer());
             };
-            const asset2 = toVesting ? 'STEEM' : asset;
+            const asset2 = toVesting ? LIQUID_TOKEN_UPPERCASE : asset;
+            debugger;
             const operation = {
                 from: username,
                 to,

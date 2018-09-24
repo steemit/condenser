@@ -188,7 +188,6 @@ export function* broadcastOperation({
         errorCallback,
         allowPostUnsafe,
     };
-
     const conf = typeof confirm === 'function' ? confirm() : confirm;
     if (conf) {
         yield put(
@@ -326,7 +325,6 @@ function* broadcastPayload({
             }
         }
     };
-
     try {
         yield new Promise((resolve, reject) => {
             // Bump transaction (for live UI testing).. Put 0 in now (no effect),

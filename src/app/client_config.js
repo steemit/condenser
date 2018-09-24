@@ -9,9 +9,10 @@ export const APP_ICON = 'steem';
 // vars. client should read $STM_Config, server should read config package.
 export const APP_URL = 'https://steemit.com';
 export const APP_DOMAIN = 'steemit.com';
-export const LIQUID_TOKEN = 'Steem';
 // sometimes it's impossible to use html tags to style coin name, hence usage of _UPPERCASE modifier
-export const LIQUID_TOKEN_UPPERCASE = 'STEEM';
+// TODO: Add switch for testnet tokens.
+export const LIQUID_TOKEN_UPPERCASE = process.env.TESTNET ? 'TEST' : 'STEEM';
+export const LIQUID_TOKEN = process.env.TESTNET ? 'Test' : 'Steem';
 export const VESTING_TOKEN = 'STEEM POWER';
 export const INVEST_TOKEN_UPPERCASE = 'STEEM POWER';
 export const INVEST_TOKEN_SHORT = 'SP';

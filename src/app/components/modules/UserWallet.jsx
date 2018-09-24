@@ -22,6 +22,7 @@ import {
     LIQUID_TICKER,
     DEBT_TOKENS,
     VESTING_TOKEN,
+    LIQUID_TOKEN_UPPERCASE,
 } from 'app/client_config';
 import * as transactionActions from 'app/redux/TransactionReducer';
 import * as globalActions from 'app/redux/GlobalReducer';
@@ -305,7 +306,7 @@ class UserWallet extends React.Component {
                 link: '#',
                 onClick: showTransfer.bind(
                     this,
-                    'STEEM',
+                    LIQUID_TOKEN_UPPERCASE,
                     'Transfer to Account'
                 ),
             },
@@ -314,7 +315,7 @@ class UserWallet extends React.Component {
                 link: '#',
                 onClick: showTransfer.bind(
                     this,
-                    'STEEM',
+                    LIQUID_TOKEN_UPPERCASE,
                     'Transfer to Savings'
                 ),
             },
@@ -440,9 +441,7 @@ class UserWallet extends React.Component {
         // set dynamic secondary wallet values
         const sbdInterest = this.props.sbd_interest / 100;
         const sbdMessage = (
-            <span>
-                {tt('userwallet_jsx.tradeable_tokens_transferred')}
-            </span>
+            <span>{tt('userwallet_jsx.tradeable_tokens_transferred')}</span>
         );
 
         const reward_steem =

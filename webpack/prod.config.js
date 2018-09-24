@@ -9,7 +9,8 @@ module.exports = {
             'process.env': {
                 BROWSER: JSON.stringify(true),
                 NODE_ENV: JSON.stringify('production'),
-                VERSION: JSON.stringify(git.long())
+                VERSION: JSON.stringify(git.long()),
+                TESTNET: JSON.stringify( process.env.SDC_ADDRESS_PREFIX === 'TST')
             }
         }),
         new webpack.optimize.UglifyJsPlugin({

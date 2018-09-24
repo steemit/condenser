@@ -26,10 +26,11 @@ export const PRIVACY_POLICY_URL = 'https://' + APP_DOMAIN + '/privacy.html';
 export const WHITEPAPER_URL = 'https://steem.io/SteemWhitePaper.pdf';
 
 // these are dealing with asset types, not displaying to client, rather sending data over websocket
-export const LIQUID_TICKER = 'STEEM';
+export const LIQUID_TICKER = LIQUID_TOKEN_UPPERCASE;
 export const VEST_TICKER = 'VESTS';
-export const DEBT_TICKER = 'SBD';
-export const DEBT_TOKEN_SHORT = 'SBD';
+
+export const DEBT_TICKER = process.env.TESTNET ? 'TBD' : 'SBD';
+export const DEBT_TOKEN_SHORT = process.env.TESTNET ? 'TBD' : 'SBD';
 
 // application settings
 export const DEFAULT_LANGUAGE = 'en'; // used on application internationalization bootstrap

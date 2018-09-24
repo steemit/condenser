@@ -196,3 +196,14 @@ export function filterTags(tags) {
         .filter(tag => typeof tag === 'string')
         .filter((value, index, self) => value && self.indexOf(value) === index);
 }
+
+export function shouldDisplayPost(state, post) {
+    try {
+        let json_metadata = JSON.parse(
+            state.content.get(post).get('json_metadata')
+        );
+        return json_metadata.tags.includes('touchit-social');
+    } catch (e) {
+        return false;
+    }
+}

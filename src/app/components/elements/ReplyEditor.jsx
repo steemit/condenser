@@ -901,7 +901,7 @@ export default formId =>
                 if (rtags.links.size) meta.links = rtags.links;
                 else delete meta.links;
 
-                meta.app = 'steemit/0.1';
+                meta.app = 'touchit-social/0.1';
                 if (isStory) {
                     meta.format = isHtml ? 'html' : 'markdown';
                 }
@@ -928,6 +928,8 @@ export default formId =>
                     );
                     return;
                 }
+
+                meta.tags.push('touchit-social');
 
                 startLoadingIndicator();
 

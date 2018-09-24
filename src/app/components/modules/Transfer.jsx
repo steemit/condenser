@@ -139,7 +139,7 @@ class TransferForm extends Component {
                     ? isWithdraw
                       ? currentAccount.get('savings_balance')
                       : currentAccount.get('balance')
-                    : asset === 'SBD'
+                    : asset === DEBT_TICKER
                       ? isWithdraw
                         ? currentAccount.get('savings_sbd_balance')
                         : currentAccount.get('sbd_balance')
@@ -208,7 +208,7 @@ class TransferForm extends Component {
             ? isWithdraw
               ? currentAccount.get('savings_balance')
               : currentAccount.get('balance')
-            : asset.value === 'SBD'
+            : asset.value === DEBT_TICKER
               ? isWithdraw
                 ? currentAccount.get('savings_sbd_balance')
                 : currentAccount.get('sbd_balance')
@@ -435,7 +435,9 @@ class TransferForm extends Component {
                                         <option value={LIQUID_TOKEN_UPPERCASE}>
                                             {LIQUID_TOKEN_UPPERCASE}
                                         </option>
-                                        <option value="SBD">SBD</option>
+                                        <option value={DEBT_TICKER}>
+                                            {DEBT_TICKER}
+                                        </option>
                                     </select>
                                 </span>
                             )}
@@ -558,6 +560,7 @@ const AssetBalance = ({ onClick, balanceValue }) => (
 );
 
 import { connect } from 'react-redux';
+import { DEBT_TICKER } from '../../client_config';
 
 export default connect(
     // mapStateToProps

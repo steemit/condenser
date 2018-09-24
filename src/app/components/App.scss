@@ -4,10 +4,10 @@
 }
 
 .App__content {
-    margin-top: 6.8rem;
+    margin-top: 1rem;
 
     @media print, screen and (min-width: 52.5em) {
-      margin-top: 7.1rem;
+      margin-top: 2.1rem;
     }
 
     // /* Small only */
@@ -87,7 +87,7 @@
     max-width: 240px;
     @include opacity(0);
     @include MQ(M) {
-      @include font-size(34px);
+      @include font-size(34px);  
       max-width: 280px;
     }
   }
@@ -111,7 +111,7 @@
   }
   .row {
     @include MQ(M) {
-      align-items: center;
+      align-items: center;  
     }
   }
   .button {
@@ -163,18 +163,18 @@
     background: transparent;
     color: $color-white;
     border: 1px solid #30414A;
-    box-shadow: 0px 0px 0px 0 #30414A, 2px 2px 0 0 #30414A;
+    box-shadow: 0px 0px 0px 0 #30414A, 2px 2px 0 0 #30414A;     
     @include opacity(0);
     &:hover, &:focus {
-      box-shadow: 0px 0px 0px 0 #30414A, 4px 4px 0 0 $color-teal;
-    }
+      box-shadow: 0px 0px 0px 0 #30414A, 4px 4px 0 0 $color-teal; 
+    } 
   }
 
     .heroImage {
         max-height: 360px;
         @include opacity(0);
         animation: fade-in-up 0.6s ease-out both;
-        @media screen and (prefers-reduced-motion) {
+        @media screen and (prefers-reduced-motion) { 
           animation: none;
           @include opacity(1);
         }

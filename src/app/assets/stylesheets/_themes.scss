@@ -4,8 +4,8 @@ $themes: (
     colorAccentHover: $color-blue-original-light,
     colorAccentReverse: $color-blue-original-light,
     colorWhite: $color-white,
-    backgroundColor: orange,
-    backgroundColorEmphasis: orangered,
+    backgroundColor: $color-background-off-white,
+    backgroundColorEmphasis: $color-background-almost-white,
     backgroundColorOpaque: $color-background-off-white,
     backgroundTransparent: transparent,
     moduleBackgroundColor: $color-white,
@@ -38,14 +38,14 @@ $themes: (
     colorAccentHover: $color-teal-dark,
     colorAccentReverse: $color-blue-black,
     colorWhite: $color-white,
-    backgroundColor: orange,
-      backgroundColorEmphasis: orangered,
-    backgroundColorOpaque: lightblue,
+    backgroundColor: $color-background-off-white,
+      backgroundColorEmphasis: $color-background-almost-white,
+    backgroundColorOpaque: $color-background-off-white,
     backgroundTransparent: transparent,
     moduleBackgroundColor: $color-white,
     menuBackgroundColor: $color-background-dark,
     moduleMediumBackgroundColor: $color-transparent,
-    navBackgroundColor: orange,
+    navBackgroundColor: $color-white,
     highlightBackgroundColor: #f3faf0,
     tableRowEvenBackgroundColor: #f4f4f4,
     border: 1px solid $color-border-light,
@@ -73,8 +73,8 @@ $themes: (
     colorAccentHover: $color-teal,
     colorAccentReverse: $color-white,
     colorWhite: $color-white,
-    backgroundColor: darkred,
-      backgroundColorEmphasis: darkred,
+    backgroundColor: $color-background-dark,
+      backgroundColorEmphasis: $color-background-super-dark,
     backgroundColorOpaque: $color-blue-dark,
     moduleBackgroundColor: $color-background-dark,
     backgroundTransparent: transparent,
@@ -129,21 +129,21 @@ $themes: (
 
 
   .theme-original {
-    background-color: orange;
+    background-color: $white;
     color: $color-text-dark;
     @include MQ(M) {
       background-color: $color-background-off-white;
     }
   }
   .theme-light {
-    background-color: orange !important;
+    background-color: $white;
     color: $color-text-dark;
     @include MQ(M) {
       background-color: $color-background-off-white;
     }
   }
   .theme-dark {
-    background-color: darkred;
+    background-color: $color-background-dark;
     color: $color-text-white;
   }
 

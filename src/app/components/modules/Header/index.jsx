@@ -16,7 +16,6 @@ import Userpic from 'app/components/elements/Userpic';
 import { SIGNUP_URL } from 'shared/constants';
 import SteemLogo from 'app/components/elements/SteemLogo';
 import normalizeProfile from 'app/utils/NormalizeProfile';
-import classNames from 'classnames';
 
 class Header extends React.Component {
     static propTypes = {
@@ -335,16 +334,6 @@ class Header extends React.Component {
                         </span>
                     </div>
                 </nav>
-                <div className="row">
-                    <div className="column">
-                        <div className={classNames('callout warning')}>
-                            <p>
-                                THIS CONDENSER IS RUNNING ON A TESTNET. NOTHING
-                                YOU DO HERE IS REAL.
-                            </p>
-                        </div>
-                    </div>
-                </div>
             </header>
         );
     }

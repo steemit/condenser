@@ -351,7 +351,6 @@ class UserWallet extends React.Component {
                 link: '#',
                 onClick: showTransfer.bind(this, 'SBD', 'Transfer to Savings'),
             },
-            { value: tt('userwallet_jsx.market'), link: '/market' },
         ];
         if (isMyAccount) {
             /* steem_menu.push({
@@ -366,31 +365,6 @@ class UserWallet extends React.Component {
                 value: tt('g.sell'),
                 link: '#',
                 onClick: onShowWithdrawSteem,
-            }); */
-            steem_menu.push({
-                value: tt('userwallet_jsx.market'),
-                link: '/market',
-            });
-            /* power_menu.push({
-                value: tt('g.buy'),
-                link: '#',
-                onClick: onShowDepositPower.bind(
-                    this,
-                    current_user.get('username')
-                ),
-            });
-            dollar_menu.push({
-                value: tt('g.buy'),
-                link: '#',
-                onClick: onShowDepositSBD.bind(
-                    this,
-                    current_user.get('username')
-                ),
-            });
-            dollar_menu.push({
-                value: tt('g.sell'),
-                link: '#',
-                onClick: onShowWithdrawSBD,
             }); */
         }
         if (divesting) {

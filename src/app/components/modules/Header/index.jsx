@@ -262,9 +262,9 @@ class Header extends React.Component {
                 <header className="Header">
                     <div className="annoucement-banner">
                         <p className="announcement-banner__text">
-                            The blockchain just successfully upgraded. Some
-                            services, like 'bandwidth' (which is now measured by
-                            resource credits) are stabilizing.{' '}
+                            The blockchain just successfully upgraded.
+                            Bandwidth, which is now measured by resource credits
+                            is stabilizing.{' '}
                             <a
                                 className="announcement-banner__link"
                                 href="https://steemit.com/steem/@steemitblog/hardfork-20-what-to-expect-tomorrow"

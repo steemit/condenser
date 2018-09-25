@@ -168,7 +168,7 @@ class Modals extends React.Component {
                             </button>
                             <p>
                                 <strong style={{ color: 'red' }}>
-                                    Please Note:
+                                    Please Note:{' '}
                                 </strong>The Steem blockchain was upgraded
                                 earlier today. You may experience trouble
                                 posting and transacting while the new bandwidth

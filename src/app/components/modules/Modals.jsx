@@ -167,7 +167,7 @@ class Modals extends React.Component {
                                 {tt('g.buy_steem_power')}
                             </button>
                             <!-- temporary addition while RC system reaches equilibrium -->
-                            <p><strong>Please Note:</strong>  We're currently in the process of updating how Resource Credits are calculated. This process is expected to take a few days to reach equilibrium. In some cases, it may be best to wait until this process completes before deciding to power up more Steem.</p>
+                            <p><strong style="color:red">Please Note:</strong>The Steem blockchain was upgraded earlier today. You may experience trouble posting and transacting while the new bandwidth system stabilizes over the next 24 hours. It may be best to wait until this process completes before buying more Steem Power.</p>
                         </div>
                     </Reveal>
                 )}

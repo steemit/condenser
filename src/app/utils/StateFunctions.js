@@ -81,7 +81,7 @@ export function assetFloat(str, asset) {
         assert.equal(typeof str, 'string');
         assert.equal(typeof asset, 'string');
         assert(
-            new RegExp(`^\\d+(\\.\\d+)? ${asset}$`).test(str),
+            new RegExp('^\\d+(\\.\\d+)? [A-Z]+$').test(str),
             'Asset should be formatted like 99.99 ' + asset + ': ' + str
         );
         return parseFloat(str.split(' ')[0]);
@@ -195,4 +195,15 @@ export function filterTags(tags) {
     return tags
         .filter(tag => typeof tag === 'string')
         .filter((value, index, self) => value && self.indexOf(value) === index);
+}
+
+export function shouldDisplayPost(state, post) {
+    try {
+        let json_metadata = JSON.parse(
+            state.content.get(post).get('json_metadata')
+        );
+        return json_metadata.tags.includes('touchit-social');
+    } catch (e) {
+        return false;
+    }
 }

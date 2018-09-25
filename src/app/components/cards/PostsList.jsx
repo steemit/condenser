@@ -10,6 +10,7 @@ import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import debounce from 'lodash.debounce';
 import CloseButton from 'app/components/elements/CloseButton';
 import { findParent } from 'app/utils/DomUtils';
+import { shouldDisplayPost } from 'app/utils/StateFunctions';
 import Icon from 'app/components/elements/Icon';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 
@@ -165,7 +166,8 @@ class PostsList extends React.Component {
             const ignore =
                 ignore_result && ignore_result.has(cont.get('author'));
             const hide = cont.getIn(['stats', 'hide']);
-            if (!(ignore || hide) || showSpam)
+            var show = shouldDisplayPost(this.props, item);
+            if (show && (!(ignore || hide) || showSpam))
                 // rephide
                 postsInfo.push({ item, ignore });
         });

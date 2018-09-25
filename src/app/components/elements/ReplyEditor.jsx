@@ -578,46 +578,6 @@ class ReplyEditor extends React.Component {
                             )}
                         </div>
                         <div className={vframe_section_shrink_class}>
-                            {isStory &&
-                                !isEdit && (
-                                    <div className="ReplyEditor__options">
-                                        <div>
-                                            <div>
-                                                {tt('g.rewards')}
-                                                {': '}
-                                                {this.props.payoutType ==
-                                                    '0%' &&
-                                                    tt(
-                                                        'reply_editor.decline_payout'
-                                                    )}
-                                                {this.props.payoutType ==
-                                                    '50%' &&
-                                                    tt(
-                                                        'reply_editor.default_50_50'
-                                                    )}
-                                                {this.props.payoutType ==
-                                                    '100%' &&
-                                                    tt(
-                                                        'reply_editor.power_up_100'
-                                                    )}
-                                            </div>
-                                            <a
-                                                href="#"
-                                                onClick={
-                                                    this.showAdvancedSettings
-                                                }
-                                            >
-                                                {tt(
-                                                    'reply_editor.advanced_settings'
-                                                )}
-                                            </a>{' '}
-                                            <br />
-                                            &nbsp;
-                                        </div>
-                                    </div>
-                                )}
-                        </div>
-                        <div className={vframe_section_shrink_class}>
                             {postError && (
                                 <div className="error">{postError}</div>
                             )}
@@ -941,7 +901,7 @@ export default formId =>
                 if (rtags.links.size) meta.links = rtags.links;
                 else delete meta.links;
 
-                meta.app = 'steemit/0.1';
+                meta.app = 'touchit-social/0.1';
                 if (isStory) {
                     meta.format = isHtml ? 'html' : 'markdown';
                 }
@@ -969,26 +929,12 @@ export default formId =>
                     return;
                 }
 
+                meta.tags.push('touchit-social');
+
                 startLoadingIndicator();
 
                 const originalBody = isEdit ? originalPost.body : null;
                 const __config = { originalBody };
-                // Avoid changing payout option during edits #735
-                if (!isEdit) {
-                    switch (payoutType) {
-                        case '0%': // decline payout
-                            __config.comment_options = {
-                                max_accepted_payout: '0.000 SBD',
-                            };
-                            break;
-                        case '100%': // 100% steem power payout
-                            __config.comment_options = {
-                                percent_steem_dollars: 0, // 10000 === 100% (of 50%)
-                            };
-                            break;
-                        default: // 50% steem power, 50% sd+steem
-                    }
-                }
 
                 const operation = {
                     ...linkProps,

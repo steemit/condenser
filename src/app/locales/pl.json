@@ -178,7 +178,7 @@
         "vote_currently_exists_user_must_be_indicate_a_to_reject_witness":
             "głos oddany, użytkownik musi wskazać powód odrzucenia delegata",
         "only_one_APP_NAME_account_allowed_per_ip_address_every_10_minutes":
-            "Dozwolone jest tylko jedno konto Steem dla danego adresu IP w ciągu 10 minut",
+            "Dozwolone jest tylko jedno konto VIT dla danego adresu IP w ciągu 10 minut",
         "resteem_this_post": "Resteemuj ten post",
         "reblog": "Resteem",
         "write_your_story": "Napisz swoją historię",
@@ -205,8 +205,8 @@
             "authors_get_paid_when_people_like_you_upvote_their_post":
                 "Autorzy otrzymują wypłatę gdy ludzie tacy jak Ty głosują na ich wpisy",
             "if_you_enjoyed_what_you_read_earn_amount":
-                "Jeśli podobało Ci się to o czym tu czytałeś, jeszcze dziś załóż tu konto i zacznij zarabiać DARMOWE TOKENY STEEM!",
-            "free_steem": "DARMOWE TOKENY STEEM",
+                "Jeśli podobało Ci się to o czym tu czytałeś, jeszcze dziś załóż tu konto i zacznij zarabiać DARMOWE TOKENY VIT!",
+            "free_steem": "DARMOWE TOKENY VIT",
             "sign_up_earn_steem": "Zarejestruj się by zarabiać"
         },
         "next_3_strings_together": {
@@ -232,7 +232,7 @@
         }
     },
     "navigation": {
-        "about": "O Steem",
+        "about": "O VIT",
         "explore": "Przeglądaj",
         "APP_NAME_whitepaper": "%(APP_NAME)s Whitepaper",
         "buy_LIQUID_TOKEN": "Kup %(LIQUID_TOKEN)s",
@@ -248,10 +248,10 @@
         "learn_more": "Dowiedz się więcej",
         "welcome": "Witaj",
         "faq": "FAQ",
-        "chat": "Steem Chat",
-        "app_center": "Steemit App Center",
-        "api_docs": "Dokumentacja Steemit API",
-        "whitepaper": "Steem Whitepaper",
+        "chat": "VIT Chat",
+        "app_center": "VIT App Center",
+        "api_docs": "Dokumentacja VIT API",
+        "whitepaper": "VIT Whitepaper",
         "intro_tagline": "Pieniądze mają głos.",
         "intro_paragraph":
             "Twój głos ma wartość. Dołącz do społeczności, która płaci za publikowanie i głosowanie na wysokiej jakości treści."
@@ -438,14 +438,14 @@
         "hate_speech_or_internet_trolling": "Mowa nienawiści lub trolowanie",
         "intentional_miss_categorized_content_or_spam":
             "Świadome złe przydzielenie kategorii do treści lub spam",
-        "pending_payout": "Wypłata $%(value)s nastąpi",
+        "pending_payout": "Wypłata %(value)s VIT nastąpi",
         "payout_declined": "Odmowa przyjęcia wypłaty",
         "max_accepted_payout":
-            "Maksymalna akceptowana wysokość wypłaty $%(value)s",
-        "promotion_cost": "Koszty promocji $%(value)s",
-        "past_payouts": "Wcześniejsze wypłaty $%(value)s",
-        "past_payouts_author": "- Autor $%(value)s",
-        "past_payouts_curators": "- Kuratorzy $%(value)s",
+            "Maksymalna akceptowana wysokość wypłaty %(value)s VIT",
+        "promotion_cost": "Koszty promocji %(value)s VIT",
+        "past_payouts": "Wcześniejsze wypłaty %(value)s VIT",
+        "past_payouts_author": "- Autor %(value)s VIT",
+        "past_payouts_curators": "- Kuratorzy %(value)s VIT",
         "we_will_reset_curation_rewards_for_this_post":
             "wyzeruje twoje wynagrodzenie kuratorskie dla tego wpisu",
         "removing_your_vote": "Wycofanie twojego głosu",
@@ -541,7 +541,7 @@
         "converted_VESTING_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again":
             "Przekonwertowane jednostki %(VESTING_TOKEN)s możesz wysłać sobie lub komuś innemu ale nie możesz ich wysłać ponownie bez konwersji z powrotem do tokenów %(LIQUID_TOKEN)s.",
         "part_of_your_steem_power_is_currently_delegated":
-            "Część z Twoich jednostek wpływu STEEM POWER jest Ci oddelegowana. Delegowane jednostek to czasowe użyczenie dla zwiększenia wpływu lub by pomóc nowym użytkownikom platformy w korzystaniu ze Steemit. Kwota oddelegowanych jednostek może się zmieniać w czasie."
+            "Część z Twoich jednostek wpływu VIT POWER jest Ci oddelegowana. Delegowane jednostek to czasowe użyczenie dla zwiększenia wpływu lub by pomóc nowym użytkownikom platformy w korzystaniu ze VIT. Kwota oddelegowanych jednostek może się zmieniać w czasie."
     },
     "promote_post_jsx": {
         "promote_post": "Promuj wpis",
@@ -555,7 +555,7 @@
     "about_jsx": {
         "about_app": "O %(APP_NAME)s",
         "about_app_details":
-            "%(APP_NAME)s jest platformą mediów społecznościowych gdzie wszyscy są opłacani za tworzenie i głosowanie na treści. Bazuje na solidnym systemie cyfrowych tokenów o nazwie Steem, który reprezentuje realną wartość żetonów cyfrowych, opierając się na płynności i wolnorynkowej wycenie.",
+            "%(APP_NAME)s jest platformą mediów społecznościowych gdzie wszyscy są opłacani za tworzenie i głosowanie na treści. Bazuje na solidnym systemie cyfrowych tokenów o nazwie VIT, który reprezentuje realną wartość żetonów cyfrowych, opierając się na płynności i wolnorynkowej wycenie.",
         "learn_more_at_app_url": "Dowiedz się więcej %(APP_URL)s",
         "resources": "Zasoby"
     },
@@ -649,7 +649,7 @@
         "password_update_succes":
             "Hasło %(accountName)s zostało zaktualizowane",
         "password_info":
-            "To hasło lub klucz prywatny zostało wprowadzone błędnie. Sprawdź poprawność zapisu. Wskazówka: Hasło lub klucz prywatny wygenerowany przez Steemit, nigdy nie będzie zawierał znaków: 0 (zero), O (duża litera o), I (duża litera i) i l (mała litera L).",
+            "To hasło lub klucz prywatny zostało wprowadzone błędnie. Sprawdź poprawność zapisu. Wskazówka: Hasło lub klucz prywatny wygenerowany przez VIT, nigdy nie będzie zawierał znaków: 0 (zero), O (duża litera o), I (duża litera i) i l (mała litera L).",
         "enter_your_username": "Podaj nazwę użytkownika",
         "password_or_wif": "Hasło lub WIF",
         "this_operation_requires_your_key_or_master_password":
@@ -658,7 +658,7 @@
         "amazing_community": "niesamowitej społeczności",
         "to_comment_and_reward_others": " aby komentować i nagradzać innych.",
         "sign_up_now_to_earn": "Zarejestruj się aby zarabiać ",
-        "free_money": "DARMOWY STEEM!",
+        "free_money": "DARMOWY VIT!",
         "returning_users": "Powracający użytkownicy: ",
         "join_our": "Dołącz do"
     },
@@ -708,8 +708,7 @@
         "convert_to_VESTING_TOKEN": "Zamień na %(VESTING_TOKEN)s",
         "balance_subject_to_3_day_withdraw_waiting_period":
             "Saldo zależy od 3-dniowego okresu karencji wymaganego do wycofania środków,",
-        "move_funds_to_another_account":
-            "Przenieś fundusze na inne konto Steem.",
+        "move_funds_to_another_account": "Przenieś fundusze na inne konto VIT.",
         "protect_funds_by_requiring_a_3_day_withdraw_waiting_period":
             "Chroni fundusze poprzez 3-dniowy okres karencji.",
         "withdraw_funds_after_the_required_3_day_waiting_period":
@@ -738,7 +737,7 @@
         "transfers_are_temporary_disabled": "Transfery tymczasowo wyłączone.",
         "history": "HISTORIA",
         "redeem_rewards": "Odbierz nagrody (transfer do salda)",
-        "buy_steem_or_steem_power": "Kup STEEM lub STEEM POWER"
+        "buy_steem_or_steem_power": "Kup VIT lub VIT POWER"
     },
     "powerdown_jsx": {
         "power_down": "Zmniejsz moc",

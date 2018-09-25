@@ -9,7 +9,10 @@ import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
 import constants from 'app/redux/constants';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import PostsList from 'app/components/cards/PostsList';
-import { isFetchingOrRecentlyUpdated } from 'app/utils/StateFunctions';
+import {
+    isFetchingOrRecentlyUpdated,
+    shouldDisplayPost,
+} from 'app/utils/StateFunctions';
 import Callout from 'app/components/elements/Callout';
 // import SidebarStats from 'app/components/elements/SidebarStats';
 import SidebarLinks from 'app/components/elements/SidebarLinks';
@@ -22,6 +25,7 @@ class PostsIndex extends React.Component {
     static propTypes = {
         discussions: PropTypes.object,
         accounts: PropTypes.object,
+        content: PropTypes.object,
         status: PropTypes.object,
         routeParams: PropTypes.object,
         requestData: PropTypes.func,
@@ -133,6 +137,13 @@ class PostsIndex extends React.Component {
             }
         } else {
             posts = this.getPosts(order, category);
+
+            if (posts) {
+                posts = posts.filter(post => {
+                    return shouldDisplayPost(this.props, post);
+                });
+            }
+
             if (posts && posts.size === 0) {
                 emptyText = (
                     <div>
@@ -192,6 +203,7 @@ class PostsIndex extends React.Component {
         const layoutClass = this.props.blogmode
             ? ' layout-block'
             : ' layout-list';
+
         return (
             <div
                 className={
@@ -289,6 +301,7 @@ module.exports = {
                 status: state.global.get('status'),
                 loading: state.app.get('loading'),
                 accounts: state.global.get('accounts'),
+                content: state.global.get('content'),
                 username:
                     state.user.getIn(['current', 'username']) ||
                     state.offchain.get('account'),
@@ -297,6 +310,9 @@ module.exports = {
                 topic: ownProps.params.category,
                 categories: state.global
                     .getIn(['tag_idx', 'trending'])
+                    .filter(e => {
+                        return ['touch-tube', 'touchit-social'].indexOf(e) < 0;
+                    })
                     .take(50),
                 maybeLoggedIn: state.user.get('maybeLoggedIn'),
                 isBrowser: process.env.BROWSER,

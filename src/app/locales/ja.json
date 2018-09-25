@@ -207,8 +207,8 @@
             "authors_get_paid_when_people_like_you_upvote_their_post":
                 "投稿者は読者から投稿をupvoteされることで報酬を得ます。",
             "if_you_enjoyed_what_you_read_earn_amount":
-                "読んで楽しんだら、次はアカウントを作成してSTEEMを手に入れましょう！",
-            "free_steem": "STEEMを手に入れよう！",
+                "読んで楽しんだら、次はアカウントを作成してVITを手に入れましょう！",
+            "free_steem": "VITを手に入れよう！",
             "sign_up_earn_steem": "サインアップして "
         },
         "next_3_strings_together": {
@@ -234,9 +234,9 @@
         },
         "post_key_warning": {
             "confirm":
-                "STEEMの秘密キーまたはマスターパスワードを公開しようとしています。関連するアカウントの管理権とすべての資金を失う恐れがあります。",
+                "VITの秘密キーまたはマスターパスワードを公開しようとしています。関連するアカウントの管理権とすべての資金を失う恐れがあります。",
             "warning":
-                "Steemit Inc.の従業員を含む正当なユーザーは秘密キーまたはマスターパスワードを要求することはありません。",
+                "VIT Inc.の従業員を含む正当なユーザーは秘密キーまたはマスターパスワードを要求することはありません。",
             "checkbox": "理解しました。"
         }
     },
@@ -257,10 +257,10 @@
         "learn_more": "詳細",
         "welcome": "ようこそ",
         "faq": "FAQ",
-        "shop": "Steemitショップ",
-        "chat": "Steemitチャット",
-        "app_center": "Steemitアプリセンター",
-        "api_docs": "Steemit API資料",
+        "shop": "VITショップ",
+        "chat": "VITチャット",
+        "app_center": "VITアプリセンター",
+        "api_docs": "VIT API資料",
         "bluepaper": "Steemブルーペーパー",
         "whitepaper": "Steemホワイトペーパー",
         "intro_tagline": "金がものを言う",
@@ -454,13 +454,13 @@
         "hate_speech_or_internet_trolling": "ヘイトスピーチまたは荒らし",
         "intentional_miss_categorized_content_or_spam":
             "意図的なカテゴリ間違いまたはスパム",
-        "pending_payout": "保留支払額 $%(value)s",
+        "pending_payout": "保留支払額 %(value)s VIT",
         "payout_declined": "報酬を辞退",
-        "max_accepted_payout": "最大支払額 $%(value)s",
-        "promotion_cost": "プロモーションコスト $%(value)s",
-        "past_payouts": "支払い済み $%(value)s",
-        "past_payouts_author": " - 投稿者 $%(value)s",
-        "past_payouts_curators": " - キュレーター $%(value)s",
+        "max_accepted_payout": "最大支払額 %(value)s VIT",
+        "promotion_cost": "プロモーションコスト %(value)s VIT",
+        "past_payouts": "支払い済み %(value)s VIT",
+        "past_payouts_author": " - 投稿者 %(value)s VIT",
+        "past_payouts_curators": " - キュレーター %(value)s VIT",
         "we_will_reset_curation_rewards_for_this_post":
             "ことにより、この投稿へのキュレーション報酬はリセットされます",
         "removing_your_vote": "投票を削除する",
@@ -555,7 +555,7 @@
         "converted_VESTING_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again":
             "変換した%(VESTING_TOKEN)sは、自分自身や他の人に送ることが可能ですが、もう一度送るには%(LIQUID_TOKEN)sに変換する必要があります。",
         "part_of_your_steem_power_is_currently_delegated":
-            "現在のSTEEM POWERの一部は委託されたものです。委託は影響力の寄付や、新規ユーザーがSteemitでアクションを起こしやすくするために行われます。委託された額は変動する可能性があります。"
+            "現在のVIT POWERの一部は委託されたものです。委託は影響力の寄付や、新規ユーザーがVITでアクションを起こしやすくするために行われます。委託された額は変動する可能性があります。"
     },
     "promote_post_jsx": {
         "promote_post": "投稿をプロモートする",
@@ -662,7 +662,7 @@
         "password_update_succes":
             "%(accountName)sのパスワードは正常に更新されました。",
         "password_info":
-            "入力したパスワードまたは秘密キーが間違っています。手入力したか、またはデータエラーがある可能性があります。ヒント：Steemitで生成したパスワードまたは秘密キーは0 (ゼロ)、O (大文字のo)、I (大文字のi)、l (小文字のL)を含みません。",
+            "入力したパスワードまたは秘密キーが間違っています。手入力したか、またはデータエラーがある可能性があります。ヒント：VITで生成したパスワードまたは秘密キーは0 (ゼロ)、O (大文字のo)、I (大文字のi)、l (小文字のL)を含みません。",
         "enter_your_username": "ユーザー名を入力してください",
         "password_or_wif": "パスワードまたはWIF",
         "this_operation_requires_your_key_or_master_password":
@@ -672,8 +672,8 @@
         "to_comment_and_reward_others":
             "に参加して、他の人にコメントして報酬を与えましょう。",
         "signup_button": "サインアップして",
-        "signup_button_emphasis": "STEEMを手に入れよう！",
-        "sign_up_get_steem": "登録してSTEEMを手に入れよう！",
+        "signup_button_emphasis": "VITを手に入れよう！",
+        "sign_up_get_steem": "登録してVITを手に入れよう！",
         "returning_users": "再",
         "join_our": ""
     },
@@ -756,7 +756,7 @@
             "送金は一時的に無効になっています。",
         "history": "履歴",
         "redeem_rewards": "報酬の請求 (残高に送る)",
-        "buy_steem_or_steem_power": "STEEMやSTEEM POWERを購入する"
+        "buy_steem_or_steem_power": "VITやVIT POWERを購入する"
     },
     "powerdown_jsx": {
         "power_down": "パワーダウン",

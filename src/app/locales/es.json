@@ -181,7 +181,7 @@
         "vote_currently_exists_user_must_be_indicate_a_to_reject_witness":
             "Este voto ya existe, el usuario tiene que quitar el voto al witness",
         "only_one_APP_NAME_account_allowed_per_ip_address_every_10_minutes":
-            "Sólo una cuenta Steem permitida por dirección IP cada 10 minutos",
+            "Sólo una cuenta VIT permitida por dirección IP cada 10 minutos",
         "resteem_this_post": "Reesteemea esta Publicación",
         "reblog": "Reesteemear",
         "write_your_story": "Escribe tu historia",
@@ -208,7 +208,7 @@
             "authors_get_paid_when_people_like_you_upvote_their_post":
                 "Autores cobran cuando gente como tú vota por sus posts",
             "if_you_enjoyed_what_you_read_earn_amount":
-                "Si te ha gustado lo que has leído aquí, crea tu cuenta hoy mismo y empieza a ganar STEEM!",
+                "Si te ha gustado lo que has leído aquí, crea tu cuenta hoy mismo y empieza a ganar VIT!",
             "free_steem": "¡STEEM GRATIS!",
             "sign_up_earn_steem": "Regístrate ahora para ganar"
         },
@@ -237,7 +237,7 @@
             "confirm":
                 "Está a punto de publicar una clave privada STEEM o una contraseña maestra. Probablemente perderá el control de la cuenta asociada y todos sus fondos.",
             "warning":
-                "Los usuarios legítimos, incluidos los empleados de Steemit Inc., nunca le pedirán una clave privada o contraseña maestra.",
+                "Los usuarios legítimos, incluidos los empleados de VIT Inc., nunca le pedirán una clave privada o contraseña maestra.",
             "checkbox": "Entiendo"
         }
     },
@@ -258,13 +258,13 @@
         "learn_more": "Para saber más",
         "welcome": "Bienvenido",
         "faq": "Preguntas Frecuentes",
-        "shop": "The Steemit Shop",
-        "chat": "Chat de Steemit",
-        "app_center": "Centro de Aplicaciones Steemit",
-        "api_docs": "Documentos API de Steemit",
-        "bluepaper": "Steem Bluepaper",
+        "shop": "The VIT Shop",
+        "chat": "Chat de VIT",
+        "app_center": "Centro de Aplicaciones VIT",
+        "api_docs": "Documentos API de VIT",
+        "bluepaper": "VIT Bluepaper",
         "smt_whitepaper": "Libro blanco de SMT",
-        "whitepaper": "Libro blanco de Steem",
+        "whitepaper": "Libro blanco de VIT",
         "intro_tagline": "El dinero habla.",
         "intro_paragraph":
             "Tu voz tiene valor. Únete a la comunidad que te paga por publicar y votar contenido de alta calidad"
@@ -452,13 +452,13 @@
             "Discurso de odio o trolear en internat",
         "intentional_miss_categorized_content_or_spam":
             "Uso erróneo de los tags o Spam",
-        "pending_payout": "Pago pendiente $ %(value)s",
+        "pending_payout": "Pago pendiente  %(value)s VIT",
         "payout_declined": "Pago rehusado",
-        "max_accepted_payout": "Máximo pago aceptado $ %(value)s",
-        "promotion_cost": "Coste de promoción $ %(value)s",
-        "past_payouts": "Pagos pasados $ %(value)s",
-        "past_payouts_author": "Autor $ %(value)s",
-        "past_payouts_curators": "Curador $ %(value)s",
+        "max_accepted_payout": "Máximo pago aceptado  %(value)s VIT",
+        "promotion_cost": "Coste de promoción  %(value)s VIT",
+        "past_payouts": "Pagos pasados  %(value)s VIT",
+        "past_payouts_author": "Autor  %(value)s VIT",
+        "past_payouts_curators": "Curador  %(value)s VIT",
         "we_will_reset_curation_rewards_for_this_post":
             "Reseteará tus recompensas de curación para este post",
         "removing_your_vote": "Quitando tu voto",
@@ -555,7 +555,7 @@
         "converted_VESTING_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again":
             "Los %(VESTING_TOKEN)s convertidos pueden ser enviados a ti mismo o a otras personas pero no pueden ser transferidos de nuevo sin convertirlos de vuelta a %(LIQUID_TOKEN)s.",
         "part_of_your_steem_power_is_currently_delegated":
-            "Part of %(user_name)s's STEEM POWER is currently delegated. Delegation is donated for influence or to help new users perform actions on steemit. Your delegation amount can fluctuate."
+            "Part of %(user_name)s's VIT POWER is currently delegated. Delegation is donated for influence or to help new users perform actions on steemit. Your delegation amount can fluctuate."
     },
     "promote_post_jsx": {
         "promote_post": "Promociona el Post",
@@ -569,7 +569,7 @@
     "about_jsx": {
         "about_app": "Sobre %(APP_NAME)s",
         "about_app_details":
-            "%(APP_NAME)s es una plataforma social online donde todo el mundo genera ingresos creando y votando contenido. Usa un sistema muy sólido de puntos digitales llamado Steem que soporta valor real gracias al precio de mercado y gracias a su liquidez.",
+            "%(APP_NAME)s es una plataforma social online donde todo el mundo genera ingresos creando y votando contenido. Usa un sistema muy sólido de puntos digitales llamado VIT que soporta valor real gracias al precio de mercado y gracias a su liquidez.",
         "learn_more_at_app_url": "Aprende más en %(APP_URL)s",
         "resources": "Recursos"
     },
@@ -659,7 +659,7 @@
         "password_update_succes":
             "La contraseña %(accountName)s ha sido cambiada correctamente",
         "password_info":
-            "La contraseña o la contraseña privada fue introducida incorrectamente. Probablemente. Ayuda: Las contraseñas generadas por Steemit nunca contendrán 0 (cero), O (o mayúscula), I (i mayúscula), l (L minúscula).",
+            "La contraseña o la contraseña privada fue introducida incorrectamente. Probablemente. Ayuda: Las contraseñas generadas por VIT nunca contendrán 0 (cero), O (o mayúscula), I (i mayúscula), l (L minúscula).",
         "enter_your_username": "Introduce tu nombre de usuario",
         "password_or_wif": "Contraseña o WIF",
         "this_operation_requires_your_key_or_master_password":
@@ -752,7 +752,7 @@
             "Las transferencias están temporalmente inhabilitadas.",
         "history": "HISTORIA",
         "redeem_rewards": "Liquidar recompensas (Transferir al saldo)",
-        "buy_steem_or_steem_power": "Compra STEEM o STEEM POWER."
+        "buy_steem_or_steem_power": "Compra STEEM o VIT POWER."
     },
     "powerdown_jsx": {
         "power_down": "Power Down",

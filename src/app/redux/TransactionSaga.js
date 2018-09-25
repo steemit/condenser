@@ -13,7 +13,7 @@ import * as appActions from 'app/redux/AppReducer';
 import * as globalActions from 'app/redux/GlobalReducer';
 import * as transactionActions from 'app/redux/TransactionReducer';
 import * as userActions from 'app/redux/UserReducer';
-import { DEBT_TICKER } from 'app/client_config';
+import { LIQUID_TOKEN } from 'app/client_config';
 import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 
 export const transactionWatches = [
@@ -549,8 +549,7 @@ export function* preBroadcast_comment({ operation, username }) {
     // comment_options must come directly after comment
     if (comment_options) {
         const {
-            max_accepted_payout = ['1000000.000', DEBT_TICKER].join(' '),
-            percent_steem_dollars = 10000, // 10000 === 100%
+            max_accepted_payout = ['1000000.000', LIQUID_TOKEN].join(' '),
             allow_votes = true,
             allow_curation_rewards = true,
         } = comment_options;
@@ -560,7 +559,6 @@ export function* preBroadcast_comment({ operation, username }) {
                 author,
                 permlink,
                 max_accepted_payout,
-                percent_steem_dollars,
                 allow_votes,
                 allow_curation_rewards,
                 extensions: comment_options.extensions

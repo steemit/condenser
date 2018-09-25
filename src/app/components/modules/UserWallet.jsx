@@ -21,7 +21,6 @@ import {
     LIQUID_TOKEN,
     LIQUID_TOKEN_UPPERCASE,
     LIQUID_TICKER,
-    DEBT_TOKENS,
     VESTING_TOKEN,
 } from 'app/client_config';
 import * as transactionActions from 'app/redux/TransactionReducer';
@@ -167,7 +166,8 @@ class UserWallet extends React.Component {
         if (savings_withdraws) {
             savings_withdraws.forEach(withdraw => {
                 const [amount, asset] = withdraw.get('amount').split(' ');
-                if (asset === LIQUID_TOKEN) savings_pending += parseFloat(amount);
+                if (asset === LIQUID_TOKEN)
+                    savings_pending += parseFloat(amount);
                 else {
                     if (asset === 'SBD')
                         savings_sbd_pending += parseFloat(amount);
@@ -351,7 +351,6 @@ class UserWallet extends React.Component {
                 link: '#',
                 onClick: showTransfer.bind(this, 'SBD', 'Transfer to Savings'),
             },
-            { value: tt('userwallet_jsx.market'), link: '/market' },
         ];
         if (isMyAccount) {
             /* steem_menu.push({
@@ -366,31 +365,6 @@ class UserWallet extends React.Component {
                 value: tt('g.sell'),
                 link: '#',
                 onClick: onShowWithdrawSteem,
-            }); */
-            steem_menu.push({
-                value: tt('userwallet_jsx.market'),
-                link: '/market',
-            });
-            /* power_menu.push({
-                value: tt('g.buy'),
-                link: '#',
-                onClick: onShowDepositPower.bind(
-                    this,
-                    current_user.get('username')
-                ),
-            });
-            dollar_menu.push({
-                value: tt('g.buy'),
-                link: '#',
-                onClick: onShowDepositSBD.bind(
-                    this,
-                    current_user.get('username')
-                ),
-            });
-            dollar_menu.push({
-                value: tt('g.sell'),
-                link: '#',
-                onClick: onShowWithdrawSBD,
             }); */
         }
         if (divesting) {
@@ -430,16 +404,11 @@ class UserWallet extends React.Component {
                     LIQUID_TOKEN,
                 }),
                 link: '#',
-                onClick: showTransfer.bind(this, LIQUID_TOKEN, 'Savings Withdraw'),
-            },
-        ];
-        const savings_sbd_menu = [
-            {
-                value: tt('userwallet_jsx.withdraw_DEBT_TOKENS', {
-                    DEBT_TOKENS,
-                }),
-                link: '#',
-                onClick: showTransfer.bind(this, 'SBD', 'Savings Withdraw'),
+                onClick: showTransfer.bind(
+                    this,
+                    LIQUID_TOKEN,
+                    'Savings Withdraw'
+                ),
             },
         ];
         // set dynamic secondary wallet values
@@ -453,20 +422,15 @@ class UserWallet extends React.Component {
                 ? account.get('reward_steem_balance')
                 : null;
         const reward_sbd = null;
-        //const reward_sbd =
-        //    parseFloat(account.get('reward_sbd_balance').split(' ')[0]) > 0
-        //        ? account.get('reward_sbd_balance')
-        //        : null;
         const reward_sp =
             parseFloat(account.get('reward_vesting_steem').split(' ')[0]) > 0
                 ? account
                       .get('reward_vesting_steem')
-                      .replace(LIQUID_TOKEN_UPPERCASE, 'SP')
+                      .replace(LIQUID_TOKEN_UPPERCASE, 'VP')
                 : null;
 
         let rewards = [];
         if (reward_steem) rewards.push(reward_steem);
-        //if (reward_sbd) rewards.push(reward_sbd);
         if (reward_sp) rewards.push(reward_sp);
 
         let rewards_str;
@@ -632,43 +596,6 @@ class UserWallet extends React.Component {
                         ) : null}
                     </div>
                 </div>
-                {/*
-                <div className="UserWallet__balance row">
-                    <div className="column small-12 medium-8">
-                        {LIQUID_TOKEN_UPPERCASE} DOLLARS
-                        <div className="secondary">{sbdMessage}</div>
-                    </div>
-                    <div className="column small-12 medium-4">
-                        {isMyAccount ? (
-                            <DropdownMenu
-                                className="Wallet_dropdown"
-                                position="left"
-                                items={dollar_menu}
-                                el="li"
-                                selected={sbd_balance_str}
-                            />
-                        ) : (
-                            sbd_balance_str
-                        )}
-                        {sbdOrders ? (
-                            <div
-                                style={{
-                                    paddingRight: isMyAccount
-                                        ? '0.85rem'
-                                        : null,
-                                }}
-                            >
-                                <Link to="/market">
-                                    <Tooltip t={tt('market_jsx.open_orders')}>
-                                        (+{sbd_orders_balance_str})
-                                    </Tooltip>
-                                </Link>
-                            </div>
-                        ) : null}
-                        {conversions}
-                    </div>
-                </div>
-                */}
                 <div className="UserWallet__balance row">
                     <div className="column small-12 medium-8">
                         {tt('userwallet_jsx.savings')}
@@ -691,18 +618,6 @@ class UserWallet extends React.Component {
                             />
                         ) : (
                             savings_balance_str
-                        )}
-                        <br />
-                        {isMyAccount ? (
-                            <DropdownMenu
-                                className="Wallet_dropdown"
-                                position="left"
-                                items={savings_sbd_menu}
-                                el="li"
-                                selected={savings_sbd_balance_str}
-                            />
-                        ) : (
-                            savings_sbd_balance_str
                         )}
                     </div>
                 </div>

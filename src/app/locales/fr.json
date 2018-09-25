@@ -189,7 +189,7 @@
         "vote_currently_exists_user_must_be_indicate_a_to_reject_witness":
             "un vote existe actuellement; l'utilisateur doit indiquer une raison pour rejeter le témoin",
         "only_one_APP_NAME_account_allowed_per_ip_address_every_10_minutes":
-            "Un seul compte Steem est permis par adresse IP toutes les 10 minutes",
+            "Un seul compte VIT est permis par adresse IP toutes les 10 minutes",
         "resteem_this_post": "Resteemer cet article",
         "reblog": "Resteem",
         "write_your_story": "Ecris ton histoire",
@@ -217,8 +217,8 @@
             "authors_get_paid_when_people_like_you_upvote_their_post":
                 "Les auteurs sont payés lorsque des personnes comme vous votent pour leur contenu",
             "if_you_enjoyed_what_you_read_earn_amount":
-                "Si vous avez apprécié ce que vous avez lu ici, créez votre compte dès à présent et commencer par gagner immédiatement du STEEM",
-            "free_steem": "STEEM GRATUIT!",
+                "Si vous avez apprécié ce que vous avez lu ici, créez votre compte dès à présent et commencer par gagner immédiatement du VIT",
+            "free_steem": "VIT GRATUIT!",
             "sign_up_earn_steem": "S'enregistrer pour gagner"
         },
         "next_3_strings_together": {
@@ -244,9 +244,9 @@
         },
         "post_key_warning": {
             "confirm":
-                "You are about to publish a STEEM private key or master password. You will probably lose control of the associated account and all its funds.",
+                "You are about to publish a VIT private key or master password. You will probably lose control of the associated account and all its funds.",
             "warning":
-                "Legitimate users, including employees of Steemit Inc., will never ask you for a private key or master password.",
+                "Legitimate users, including employees of VIT Inc., will never ask you for a private key or master password.",
             "checkbox": "I understand"
         }
     },
@@ -267,12 +267,12 @@
         "learn_more": "En savoir plus",
         "welcome": "Bienvenue",
         "faq": "FAQ",
-        "shop": "The Steemit Shop",
-        "chat": "Salons de discussion Steemit",
-        "app_center": "Centre d'applications Steemit",
-        "api_docs": "Documentation API sur Steemit",
-        "whitepaper": "Livre blanc sur le Steem",
-        "bluepaper": "Steem Bluepaper",
+        "shop": "The VIT Shop",
+        "chat": "Salons de discussion VIT",
+        "app_center": "Centre d'applications VIT",
+        "api_docs": "Documentation API sur VIT",
+        "whitepaper": "Livre blanc sur le VIT",
+        "bluepaper": "VIT Bluepaper",
         "smt_whitepaper": "Livre blanc sur le SMT",
         "intro_tagline": "Présentations sur la monnaie",
         "intro_paragraph":
@@ -390,7 +390,7 @@
         "request_already_submitted_contact_support":
             "Votre requête a déjà été soumise et nous nous en occupons. Veuillez s'il-vous-plaît contacter %(SUPPORT_EMAIL)s pour obtenir le statut de votre requête.",
         "recover_account_intro":
-            "Il est possible que la clé propriétaire d'un Steemien soit compromise. Le processus de récupération de comptes dérobés est autorisé pour l'utilisateur de droit pendant 30 jours à partir du moment où le voleur a modifié la clé propriétaire. La récupération de comptes dérobés ne peut être utilisée sur %(APP_URL)s que si le propriétaire du compte a ajouté '%(APP_NAME)s'comme mandataire de confiance et accepté les conditions d'utilisation de %(APP_NAME)s.",
+            "Il est possible que la clé propriétaire d'un VITien soit compromise. Le processus de récupération de comptes dérobés est autorisé pour l'utilisateur de droit pendant 30 jours à partir du moment où le voleur a modifié la clé propriétaire. La récupération de comptes dérobés ne peut être utilisée sur %(APP_URL)s que si le propriétaire du compte a ajouté '%(APP_NAME)s'comme mandataire de confiance et accepté les conditions d'utilisation de %(APP_NAME)s.",
         "login_with_facebook_or_reddit_media_to_verify_identity":
             "Veuillez vous identifier via Facebook ou Reddit pour vérifier votre identité.",
         "login_with_social_media_to_verify_identity":
@@ -469,13 +469,13 @@
         "hate_speech_or_internet_trolling": "Discours haineux ou troll",
         "intentional_miss_categorized_content_or_spam":
             "Contenu catégorisé incorrectement de façon intentionnelle ou spam",
-        "pending_payout": "%(value)s$ de gains en suspens",
+        "pending_payout": "%(value)s VIT de gains en suspens",
         "payout_declined": "Gains refusés",
-        "max_accepted_payout": "%(value)s$ de gains maximum acceptés",
-        "promotion_cost": "Cout de la promotion: %(value)s$",
-        "past_payouts": "Gains antérieurs: %(value)s$",
-        "past_payouts_author": "- Auteur: %(value)s$",
-        "past_payouts_curators": "Curateurs: %(value)s$",
+        "max_accepted_payout": "%(value)s VIT de gains maximum acceptés",
+        "promotion_cost": "Cout de la promotion: %(value)s VIT",
+        "past_payouts": "Gains antérieurs: %(value)s VIT",
+        "past_payouts_author": "- Auteur: %(value)s VIT",
+        "past_payouts_curators": "Curateurs: %(value)s VIT",
         "we_will_reset_curation_rewards_for_this_post":
             "cela annulera vos potentiels gains de curation pour cet article",
         "removing_your_vote": "Enlever votre vote",
@@ -572,7 +572,7 @@
         "converted_VESTING_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again":
             "Les %(VESTING_TOKEN)s convertis peuvent être envoyés soit à vous, soit à quelqu'un d'autre, mais ne peuvent pas être transférés à nouveau sans être convertis en %(LIQUID_TOKEN)s.",
         "part_of_your_steem_power_is_currently_delegated":
-            "Une partie de votre influence, ou STEEM POWER, est actuellement déléguée. La délégation est un don pour augmenter l'influence ou pour encourager les nouveaux utilisateurs à effectuer des actions sur Steemit. Le montant délégué peut varier."
+            "Une partie de votre influence, ou VIT POWER, est actuellement déléguée. La délégation est un don pour augmenter l'influence ou pour encourager les nouveaux utilisateurs à effectuer des actions sur VIT. Le montant délégué peut varier."
     },
     "promote_post_jsx": {
         "promote_post": "Promouvoir un article",
@@ -586,7 +586,7 @@
     "about_jsx": {
         "about_app": "A propos de %(APP_NAME)s",
         "about_app_details":
-            "%(APP_NAME)s est une plateforme de réseau social où les utilisateurs sont payés pour créer et effecter la curation du contenu. Elle influence un système de points digitaux, appelé Steem, qui ont une valeur réelle en fonction des prix du marché et des liquidités disponibles.",
+            "%(APP_NAME)s est une plateforme de réseau social où les utilisateurs sont payés pour créer et effecter la curation du contenu. Elle influence un système de points digitaux, appelé VIT, qui ont une valeur réelle en fonction des prix du marché et des liquidités disponibles.",
         "learn_more_at_app_url": "Plus d'informations à %(APP_URL)s",
         "resources": "Ressources"
     },
@@ -682,7 +682,7 @@
         "password_update_succes":
             "Le mot de passe pour%(accountName)sa été mis à jour avec succès.",
         "password_info":
-            "Ce mot de passe ou clé privée est incorrect. Il y a probablement une erreur d'écriture ou d'entrée des données. Indication : un mot de passe ou une clé privée générée par Steemit ne contiendra jamais aucun 0 (zéro), O (o majuscule), I (i majuscule) ou l (l minuscule).",
+            "Ce mot de passe ou clé privée est incorrect. Il y a probablement une erreur d'écriture ou d'entrée des données. Indication : un mot de passe ou une clé privée générée par VIT ne contiendra jamais aucun 0 (zéro), O (o majuscule), I (i majuscule) ou l (l minuscule).",
         "enter_your_username": "Entrez votre nom d'utilisateur",
         "password_or_wif": "Mot de passe ou WIF",
         "this_operation_requires_your_key_or_master_password":
@@ -691,9 +691,9 @@
         "amazing_community": "communauté extraordinaire",
         "to_comment_and_reward_others":
             " pour commenter et récompenser les autres.",
-        "sign_up_get_steem": "Sign up. Get STEEM",
+        "sign_up_get_steem": "Sign up. Get VIT",
         "signup_button": "Sign up now to earn ",
-        "signup_button_emphasis": "FREE STEEM!",
+        "signup_button_emphasis": "FREE VIT!",
         "returning_users": "Utilisateurs de retour: ",
         "join_our": "Rejoignez notre"
     },
@@ -747,7 +747,7 @@
         "balance_subject_to_3_day_withdraw_waiting_period":
             "Le solde dépend de la période de 3 jours d'attente requise pour les retraits",
         "move_funds_to_another_account":
-            "Transférer des fonds vers un autre compte Steem ",
+            "Transférer des fonds vers un autre compte VIT ",
         "protect_funds_by_requiring_a_3_day_withdraw_waiting_period":
             "Protéger les fonds en imposant une période de latence de 3 jours pour les retraits.",
         "withdraw_funds_after_the_required_3_day_waiting_period":
@@ -779,7 +779,7 @@
             "Les transferts sont temporairement désactivés.",
         "history": "HISTORIQUE",
         "redeem_rewards": "Réclamer les gains (transférer vers le solde)",
-        "buy_steem_or_steem_power": "Acheter du STEEM ou du STEEM POWER"
+        "buy_steem_or_steem_power": "Acheter du VIT ou du VIT POWER"
     },
     "powerdown_jsx": {
         "power_down": "Diminuer son influence",

@@ -180,7 +180,7 @@
         "vote_currently_exists_user_must_be_indicate_a_to_reject_witness":
             "vote currently exists, user must be indicate a desire to reject witness",
         "only_one_APP_NAME_account_allowed_per_ip_address_every_10_minutes":
-            "매 10 분마다 IP 주소 당 단 하나의 Steem 계정만 허용됩니다.",
+            "매 10 분마다 IP 주소 당 단 하나의 VIT 계정만 허용됩니다.",
         "resteem_this_post": "Resteem This Post",
         "reblog": "리스팀",
         "write_your_story": "내용을 입력하세요",
@@ -206,8 +206,8 @@
             "authors_get_paid_when_people_like_you_upvote_their_post":
                 "보팅을 통해 작가들에게 금전적인 지원을 하실 수 있습니다.",
             "if_you_enjoyed_what_you_read_earn_amount":
-                "즐겁게 읽으셨다면 여러분도 지금 바로 가입하셔서 가상화폐 STEEM 을 보상으로 받으세요!",
-            "free_steem": "FREE STEEM!",
+                "즐겁게 읽으셨다면 여러분도 지금 바로 가입하셔서 가상화폐 VIT 을 보상으로 받으세요!",
+            "free_steem": "FREE VIT!",
             "sign_up_earn_steem": "Sign up now to earn "
         },
         "next_3_strings_together": {
@@ -233,9 +233,9 @@
         },
         "post_key_warning": {
             "confirm":
-                "STEEM 개인 키 또는 마스터 비밀번호를 게시하려고 합니다. 관련된 계정과 모든 자산에 대한 제어권을 상실하게 될 것입니다.",
+                "VIT 개인 키 또는 마스터 비밀번호를 게시하려고 합니다. 관련된 계정과 모든 자산에 대한 제어권을 상실하게 될 것입니다.",
             "warning":
-                "Steemit Inc.의 직원을 포함한 합법적 인 사용자는 어떠한 경우에도 개인 키 또는 마스터 비밀번호를 요구하지 않습니다.",
+                "VIT Inc.의 직원을 포함한 합법적 인 사용자는 어떠한 경우에도 개인 키 또는 마스터 비밀번호를 요구하지 않습니다.",
             "checkbox": "네 이해합니다."
         }
     },
@@ -375,7 +375,7 @@
         "request_already_submitted_contact_support":
             "Your request has been already submitted and we are working on it. Please contact %(SUPPORT_EMAIL)s for the status of your request.",
         "recover_account_intro":
-            "From time to time, a Steemian's owner key may be compromised. Stolen Account Recovery gives the rightful account owner 30 days to recover their account from the moment the thief changed their owner key. Stolen Account Recovery can only be used on %(APP_URL)s if the account owner had previously listed '%(APP_NAME)s' as their account trustee and complied with %(APP_NAME)s's Terms of Service.",
+            "From time to time, a VITian's owner key may be compromised. Stolen Account Recovery gives the rightful account owner 30 days to recover their account from the moment the thief changed their owner key. Stolen Account Recovery can only be used on %(APP_URL)s if the account owner had previously listed '%(APP_NAME)s' as their account trustee and complied with %(APP_NAME)s's Terms of Service.",
         "login_with_facebook_or_reddit_media_to_verify_identity":
             "Please login with Facebook or Reddit to verify your identity",
         "login_with_social_media_to_verify_identity":
@@ -452,13 +452,13 @@
             "증오 및 혐오 발언, 악플과 비난 게시물",
         "intentional_miss_categorized_content_or_spam":
             "의도적인 태그 오용 혹은 스팸",
-        "pending_payout": "예상 보상금액: $%(value)s",
+        "pending_payout": "예상 보상금액: %(value)s VIT",
         "payout_declined": "보상을 사양함",
-        "max_accepted_payout": "최대 허용 보상액 $%(value)s",
-        "promotion_cost": "홍보 비용 $%(value)s",
-        "past_payouts": "지급된 보상 $%(value)s",
-        "past_payouts_author": " - 저자 $%(value)s",
-        "past_payouts_curators": " - 큐레이터 $%(value)s",
+        "max_accepted_payout": "최대 허용 보상액 %(value)s VIT",
+        "promotion_cost": "홍보 비용 %(value)s VIT",
+        "past_payouts": "지급된 보상 %(value)s VIT",
+        "past_payouts_author": " - 저자 %(value)s VIT",
+        "past_payouts_curators": " - 큐레이터 %(value)s VIT",
         "we_will_reset_curation_rewards_for_this_post":
             "will reset your curation rewards for this post",
         "removing_your_vote": "보팅 취소",
@@ -555,7 +555,7 @@
         "converted_VESTING_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again":
             "Converted %(VESTING_TOKEN)s can be sent to yourself or someone else but can not transfer again without converting back to %(LIQUID_TOKEN)s.",
         "part_of_your_steem_power_is_currently_delegated":
-            "%(user_name)s 님은 STEEM POWER 를 임대 받고 있습니다. 임대 받는 양은 가입 시기에 따라 가변적입니다."
+            "%(user_name)s 님은 VIT POWER 를 임대 받고 있습니다. 임대 받는 양은 가입 시기에 따라 가변적입니다."
     },
     "promote_post_jsx": {
         "promote_post": "Promote Post",
@@ -568,7 +568,7 @@
     "about_jsx": {
         "about_app": "About %(APP_NAME)s",
         "about_app_details":
-            "%(APP_NAME)s is a social media platform where everyone gets paid for creating and curating content. It leverages a robust digital points system, called Steem, that supports real value for digital rewards through market price discovery and liquidity.",
+            "%(APP_NAME)s is a social media platform where everyone gets paid for creating and curating content. It leverages a robust digital points system, called VIT, that supports real value for digital rewards through market price discovery and liquidity.",
         "learn_more_at_app_url": "Learn more at %(APP_URL)s",
         "resources": "Resources"
     },
@@ -668,9 +668,8 @@
         "amazing_community": "amazing community",
         "to_comment_and_reward_others": " to comment and reward others.",
         "signup_button": "Sign up now to earn ",
-        "signup_button_emphasis": "FREE STEEM!",
-        "sign_up_get_steem":
-            "계정을 만들고 가상화폐 STEEM 을 보상으로 받으세요.",
+        "signup_button_emphasis": "FREE VIT!",
+        "sign_up_get_steem": "계정을 만들고 가상화폐 VIT 을 보상으로 받으세요.",
         "returning_users": "Returning Users: ",
         "join_our": "Join our"
     },
@@ -721,7 +720,7 @@
         "convert_to_VESTING_TOKEN": "Convert to %(VESTING_TOKEN)s",
         "balance_subject_to_3_day_withdraw_waiting_period":
             "3일간의 예치기간이 지나야 출금하실 수 있으며, ",
-        "move_funds_to_another_account": "다른 Steem 계좌로 송금",
+        "move_funds_to_another_account": "다른 VIT 계좌로 송금",
         "protect_funds_by_requiring_a_3_day_withdraw_waiting_period":
             "금고 보관 시 출금에 3일의 예치기간이 소요됩니다.",
         "withdraw_funds_after_the_required_3_day_waiting_period":
@@ -752,7 +751,7 @@
             "현재 일시적인 이유로 송금이 불가능합니다.",
         "history": "거래 내역",
         "redeem_rewards": "내 지갑으로 입금하기",
-        "buy_steem_or_steem_power": "STEEM, STEEM POWER 구입"
+        "buy_steem_or_steem_power": "VIT, VIT POWER 구입"
     },
     "powerdown_jsx": {
         "power_down": "파워 다운",

@@ -266,7 +266,7 @@ class Header extends React.Component {
                         bandwidth system stabilizes.{' '}
                         <a
                             className="announcement-banner__link"
-                            href="https://steemit.com/steem/@steemitblog/hardfork-20-what-to-expect-tomorrow"
+                            href="https://steemit.com/steem/@steemitblog/hf20-update-hardfork-successful"
                         >
                             Read more here.
                         </a>

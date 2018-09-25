@@ -258,98 +258,96 @@ class Header extends React.Component {
                 : { link: '#', onClick: showLogin, value: tt('g.login') },
         ];
         return (
-            <div>
-                <header className="Header">
-                    <div className="annoucement-banner">
-                        <p className="announcement-banner__text">
-                            The blockchain just successfully upgraded.
-                            Bandwidth, which is now measured by resource credits
-                            is stabilizing.{' '}
-                            <a
-                                className="announcement-banner__link"
-                                href="https://steemit.com/steem/@steemitblog/hardfork-20-what-to-expect-tomorrow"
-                            >
-                                Read more here.
-                            </a>
-                        </p>
+            <header className="Header">
+                <div className="annoucement-banner">
+                    <p className="announcement-banner__text">
+                        The blockchain just successfully upgraded. Bandwidth,
+                        which is now measured by resource credits is
+                        stabilizing.{' '}
+                        <a
+                            className="announcement-banner__link"
+                            href="https://steemit.com/steem/@steemitblog/hardfork-20-what-to-expect-tomorrow"
+                        >
+                            Read more here.
+                        </a>
+                    </p>
+                </div>
+                <nav className="row Header__nav">
+                    <div className="small-5 large-4 columns Header__logotype">
+                        {/*LOGO*/}
+                        <Link to={logo_link}>
+                            <SteemLogo />
+                        </Link>
                     </div>
-                    <nav className="row Header__nav">
-                        <div className="small-5 large-4 columns Header__logotype">
-                            {/*LOGO*/}
-                            <Link to={logo_link}>
-                                <SteemLogo />
-                            </Link>
-                        </div>
 
-                        <div className="large-4 columns show-for-large large-centered Header__sort">
-                            {/*SORT*/}
-                            <SortOrder
-                                sortOrder={order}
-                                topic={category === 'feed' ? '' : category}
-                                horizontal={true}
-                                pathname={pathname}
-                            />
-                        </div>
-                        <div className="small-7 large-4 columns Header__buttons">
-                            {/*NOT LOGGED IN SIGN IN AND SIGN UP LINKS*/}
-                            {!loggedIn && (
-                                <span className="Header__user-signup show-for-medium">
-                                    <a
-                                        className="Header__login-link"
-                                        href="/login.html"
-                                        onClick={showLogin}
-                                    >
-                                        {tt('g.login')}
-                                    </a>
-                                    <a
-                                        className="Header__signup-link"
-                                        href={SIGNUP_URL}
-                                    >
-                                        {tt('g.sign_up')}
-                                    </a>
-                                </span>
-                            )}
-
-                            {/*CUSTOM SEARCH*/}
-                            <span className="Header__search--desktop">
-                                <SearchInput />
-                            </span>
-                            <span className="Header__search">
-                                <a href="/static/search.html">
-                                    <IconButton icon="magnifyingGlass" />
+                    <div className="large-4 columns show-for-large large-centered Header__sort">
+                        {/*SORT*/}
+                        <SortOrder
+                            sortOrder={order}
+                            topic={category === 'feed' ? '' : category}
+                            horizontal={true}
+                            pathname={pathname}
+                        />
+                    </div>
+                    <div className="small-7 large-4 columns Header__buttons">
+                        {/*NOT LOGGED IN SIGN IN AND SIGN UP LINKS*/}
+                        {!loggedIn && (
+                            <span className="Header__user-signup show-for-medium">
+                                <a
+                                    className="Header__login-link"
+                                    href="/login.html"
+                                    onClick={showLogin}
+                                >
+                                    {tt('g.login')}
+                                </a>
+                                <a
+                                    className="Header__signup-link"
+                                    href={SIGNUP_URL}
+                                >
+                                    {tt('g.sign_up')}
                                 </a>
                             </span>
+                        )}
 
-                            {/*SUBMIT STORY*/}
-                            {submit_story}
-                            {/*USER AVATAR */}
-                            {loggedIn && (
-                                <DropdownMenu
-                                    className={'Header__usermenu'}
-                                    items={user_menu}
-                                    title={username}
-                                    el="span"
-                                    selected={tt('g.rewards')}
-                                    position="left"
-                                >
-                                    <li className={'Header__userpic '}>
-                                        <span title={username}>
-                                            <Userpic account={username} />
-                                        </span>
-                                    </li>
-                                </DropdownMenu>
-                            )}
-                            {/*HAMBURGER*/}
-                            <span
-                                onClick={showSidePanel}
-                                className="toggle-menu Header__hamburger"
+                        {/*CUSTOM SEARCH*/}
+                        <span className="Header__search--desktop">
+                            <SearchInput />
+                        </span>
+                        <span className="Header__search">
+                            <a href="/static/search.html">
+                                <IconButton icon="magnifyingGlass" />
+                            </a>
+                        </span>
+
+                        {/*SUBMIT STORY*/}
+                        {submit_story}
+                        {/*USER AVATAR */}
+                        {loggedIn && (
+                            <DropdownMenu
+                                className={'Header__usermenu'}
+                                items={user_menu}
+                                title={username}
+                                el="span"
+                                selected={tt('g.rewards')}
+                                position="left"
                             >
-                                <span className="hamburger" />
-                            </span>
-                        </div>
-                    </nav>
-                </header>
-            </div>
+                                <li className={'Header__userpic '}>
+                                    <span title={username}>
+                                        <Userpic account={username} />
+                                    </span>
+                                </li>
+                            </DropdownMenu>
+                        )}
+                        {/*HAMBURGER*/}
+                        <span
+                            onClick={showSidePanel}
+                            className="toggle-menu Header__hamburger"
+                        >
+                            <span className="hamburger" />
+                        </span>
+                    </div>
+                </nav>
+            </header>
         );
     }
 }

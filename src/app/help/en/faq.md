@@ -745,7 +745,7 @@ Posts and comments remain active for 7 days. When the period is over, you are ab
 
 **Steem Power** - Steem Power (abbreviated SP) is a measurement of how much influence a user has in the Steem network. The more Steem Power a user holds, the more they can influence the value of posts and comments. Steem Power is less liquid. If a user wishes to “Power Down” SP, they will receive equal distributions of the STEEM weekly, over a 13 week period.
 
-**Steem Dollars** - Steem Dollars (commonly abbreviated SBD) are liquid stable-value currency tokens designed to be pegged to $1 USD. Steem Dollars can be traded with STEEM, and transferred to other accounts for commerce or exchange.  Steem Dollars may also be converted into STEEM via a process that takes 3.5 days. Steem Dollars can be used to buy things in marketplaces, such as [The Steemit Shop](https://thesteemitshop.com/).
+**Steem Dollars** - Steem Dollars (commonly abbreviated SBD) are liquid stable-value currency tokens designed to be pegged to $1 USD. Steem Dollars can be traded with STEEM, and transferred to other accounts for commerce or exchange.  Steem Dollars may also be converted into STEEM via a process that takes 3.5 days. 
 
 <a href="#Table_of_Contents_Economics">^</a>
 ## <span id="What_is_delegated_STEEM_Power">What is delegated Steem Power?</span>
@@ -1188,11 +1188,6 @@ The Steemit brand and logo are protected by intellectual property laws, includin
 [Section 107 of the Copyright Act](http://www.copyright.gov/title17/92chap1.html#107) provides the statutory framework for determining whether something is a fair use and identifies certain types of uses—such as criticism, comment, news reporting, teaching, scholarship, and research—as examples of activities that may qualify as fair use. **Steemit considers artistic variations of the Steemit logo that are used for non-commercial purposes, and are not used to harm Steemit users (i.e. through attraction to phishing sites), an instance of fair use.**
 
 The blue Steem logo with the three S-shaped squiggles is licensed under Creative Commons CC0, meaning you’re free to copy, modify, or distribute (even for commercial purposes) without needing to ask permission or give attribution.
-
-<a href="#Table_of_Contents_Steemit__Inc">^</a>
-## <span id="Can_I_purchase_official_Steemit_merchandise">Can I purchase official Steemit merchandise?</span>
-
-Yes. Official Steemit merchandise can be purchased from [The Steemit Shop](https://thesteemitshop.com/).
 
 <a href="#Table_of_Contents_Steemit__Inc">^</a>
 ## <span id="Did_Steemit__pre_mine__tokens">Did Steemit "pre-mine" tokens?</span>

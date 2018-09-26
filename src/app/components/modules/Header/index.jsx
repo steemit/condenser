@@ -259,6 +259,19 @@ class Header extends React.Component {
         ];
         return (
             <header className="Header">
+                <div className="annoucement-banner">
+                    <p className="announcement-banner__text">
+                        The Steem blockchain was upgraded earlier today. You may
+                        experience trouble posting and transacting while the new
+                        bandwidth system stabilizes.{' '}
+                        <a
+                            className="announcement-banner__link"
+                            href="https://steemit.com/steem/@steemitblog/hf20-update-hardfork-successful"
+                        >
+                            Read more here.
+                        </a>
+                    </p>
+                </div>
                 <nav className="row Header__nav">
                     <div className="small-5 large-4 columns Header__logotype">
                         {/*LOGO*/}

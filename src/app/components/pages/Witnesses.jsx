@@ -155,7 +155,7 @@ class Witnesses extends React.Component {
                                         owner,
                                         !myVote
                                     )}
-                                    title={tt('g.vote')}
+                                    title={myVote === true ? tt('g.remove_vote') : tt('g.vote')}
                                 >
                                     {up}
                                 </a>
@@ -216,7 +216,7 @@ class Witnesses extends React.Component {
                                                     item,
                                                     false
                                                 )}
-                                                title={tt('g.vote')}
+                                                title={tt('g.remove_vote')}
                                             >
                                                 {up}
                                             </a>
@@ -439,6 +439,9 @@ module.exports = {
                         transactionActions.broadcastOperation({
                             type: 'account_witness_vote',
                             operation: { account: username, witness, approve },
+                            confirm: !approve
+                                ? 'You are about to remove your vote for this witness'
+                                : null
                         })
                     );
                 },

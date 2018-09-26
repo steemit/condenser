@@ -166,16 +166,6 @@ class Modals extends React.Component {
                             <button className="button" onClick={buySteemPower}>
                                 {tt('g.buy_steem_power')}
                             </button>
-                            <p>
-                                <strong style={{ color: 'red' }}>
-                                    Please Note:{' '}
-                                </strong>The Steem blockchain was upgraded
-                                earlier today. You may experience trouble
-                                posting and transacting while the new bandwidth
-                                system stabilizes over the next 24 hours. It may
-                                be best to wait until this process completes
-                                before buying more Steem Power.
-                            </p>
                         </div>
                     </Reveal>
                 )}

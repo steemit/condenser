@@ -1,12 +1,6 @@
 .App {
   min-height: 100vh;
-  padding-top: 170px;
-  @include MQ(M) {
-    padding-top: 150px;
-  }
-  @include MQ(L) {
-    padding-top: 100px;
-  }
+  padding-top: 50px;
 }
 
 .App__content {

@@ -9,7 +9,7 @@ function fractional_part_len(value) {
 export function formatDecimal(value, decPlaces = 2, truncate0s = true) {
     let decSeparator, fl, i, j, sign, thouSeparator, abs_value;
     if (value === null || value === void 0 || isNaN(value)) {
-        return 'NaN';
+        return ['N', 'a', 'N'];
     }
     if (truncate0s) {
         fl = fractional_part_len(value);

@@ -38,6 +38,7 @@ const HIDE_SIDE_PANEL = 'user/HIDE_SIDE_PANEL';
 const SHOW_POST_ADVANCED_SETTINGS = 'user/SHOW_POST_ADVANCED_SETTINGS';
 const HIDE_POST_ADVANCED_SETTINGS = 'user/HIDE_POST_ADVANCED_SETTINGS';
 const HIDE_ANNOUNCEMENT = 'user/HIDE_ANNOUNCEMENT';
+const SHOW_ANNOUNCEMENT = 'user/SHOW_ANNOUNCEMENT';
 
 // Saga-related
 export const LOAD_SAVINGS_WITHDRAW = 'user/LOAD_SAVINGS_WITHDRAW';
@@ -54,7 +55,7 @@ const defaultState = fromJS({
     locale: DEFAULT_LANGUAGE,
     show_side_panel: false,
     maybeLoggedIn: false,
-    showAnnouncement: true,
+    showAnnouncement: false,
 });
 
 export default function reducer(state = defaultState, action) {
@@ -252,7 +253,14 @@ export default function reducer(state = defaultState, action) {
         case HIDE_POST_ADVANCED_SETTINGS:
             return state.set('show_post_advanced_settings_modal', '');
 
+        case SHOW_ANNOUNCEMENT:
+            typeof sessionStorage !== 'undefined' &&
+                sessionStorage.setItem('hideAnnouncement', 'false');
+            return state.set('showAnnouncement', true);
+
         case HIDE_ANNOUNCEMENT:
+            typeof sessionStorage !== 'undefined' &&
+                sessionStorage.setItem('hideAnnouncement', 'true');
             return state.set('showAnnouncement', false);
 
         default:
@@ -444,4 +452,8 @@ export const hidePostAdvancedSettings = () => ({
 
 export const hideAnnouncement = () => ({
     type: HIDE_ANNOUNCEMENT,
+});
+
+export const showAnnouncement = () => ({
+    type: SHOW_ANNOUNCEMENT,
 });

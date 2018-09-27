@@ -151,11 +151,17 @@ span.Header__hamburger.toggle-menu {
   @include MQ(M) {
     text-align: center;
   }
+  .close-button {
+    position: absolute;
+    top: 2px;
+    right: 0px;
+    transform: scale(0.85);
+  }  
 }
 
 .announcement-banner__text {
     margin: 0;
-    padding: 10px;
+    padding: 10px 44px 10px 10px;
     font-family: helvetica, sans-serif;
     font-size: 14px;
     line-height: 1.3;

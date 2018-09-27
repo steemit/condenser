@@ -16,6 +16,7 @@ import Userpic from 'app/components/elements/Userpic';
 import { SIGNUP_URL } from 'shared/constants';
 import SteemLogo from 'app/components/elements/SteemLogo';
 import normalizeProfile from 'app/utils/NormalizeProfile';
+import CloseButton from 'app/components/elements/CloseButton';
 
 class Header extends React.Component {
     static propTypes = {
@@ -271,6 +272,7 @@ class Header extends React.Component {
                             Learn more.
                         </a>
                     </p>
+                    <CloseButton />
                 </div>
                 <nav className="row Header__nav">
                     <div className="small-5 large-4 columns Header__logotype">

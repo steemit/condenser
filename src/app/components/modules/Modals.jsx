@@ -170,9 +170,9 @@ class Modals extends React.Component {
                                 <strong style={{ color: 'red' }}>
                                     Please Note:{' '}
                                 </strong>The Steem blockchain was upgraded
-                                earlier today. You may experience trouble
+                                on September 25th. You may experience trouble
                                 posting and transacting while the new bandwidth
-                                system stabilizes over the next 24 hours. It may
+                                system stabilizes over the next several days. It may
                                 be best to wait until this process completes
                                 before buying more Steem Power.
                             </p>

@@ -4,14 +4,12 @@ import React from 'react';
 export const Announcement = ({ onClose }) => (
     <div className="annoucement-banner">
         <p className="announcement-banner__text">
-            The Steem blockchain was upgraded on September 25th. You may
-            experience trouble posting and transacting while the new bandwidth
-            system stabilizes.{' '}
+            Update: HF20 restoring continuity. Read our{' '}
             <a
                 className="announcement-banner__link"
-                href="https://steemit.com/@steemitblog/update-on-unexpected-voting-power-behavior"
+                href="https://steemit.com/steem/@steemitblog/hf20-update-restoring-continuity"
             >
-                Learn more.
+                latest post.
             </a>
         </p>
         <button className="close-button" type="button" onClick={onClose}>

@@ -143,7 +143,7 @@ span.Header__hamburger.toggle-menu {
 .annoucement-banner {
   text-align: left;
   position: relative;
-  background: $color-blue-black,;
+  background: #DC273B;
   color: #fff;
   @include themify($themes) {
       border-bottom: themed('borderLight');
@@ -156,6 +156,10 @@ span.Header__hamburger.toggle-menu {
     top: 2px;
     right: 0px;
     transform: scale(0.85);
+    color: #fff;
+    &:hover, &:focus {
+      color: #ccc;
+    }
   }  
 }
 

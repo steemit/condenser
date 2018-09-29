@@ -1,0 +1,23 @@
+.faqs {
+  width: 90%;
+  max-width: 45em; // 720px
+  margin: 0 auto;
+  &__answers a {
+      font-weight: bold;
+  }
+  .Markdown {
+    font-family: $font-primary;
+    h1, h2, h3, h4, h5 {
+      font-family: $font-primary;
+    }
+    h1 {
+      margin-bottom: 1em;
+    }
+    h2, h3 {
+      margin-bottom: 0.5em;
+    }
+    h2 + h3 {
+        margin-top: 1em;
+    }
+  }
+}

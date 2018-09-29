@@ -1,9 +1,7 @@
 <span id="disable_router_nav_history_direction_check"></span>
 # Steemit FAQ
 
-## <span id="Table_of_Contents">Table of Contents</span>
-
-### <span id="Table_of_Contents_General">General</span>
+### <span id="Table_of_Contents_General">General questions</span>
 - <a href="#What_is_Steemit_com">What is Steemit.com?</a>
 - <a href="#How_does_Steemit_work">How does Steemit work?</a>
 - <a href="#How_does_Steemit_differ_from_other_social_media_websites">How does Steemit differ from other social media websites?</a>
@@ -196,7 +194,9 @@
 ### <span id="Table_of_Contents_Disclaimer">Disclaimer</span>
 - <a href="#Third_Party_References_and_User_Links">Third Party References and User Links</a>
 
-# General
+# General questions
+
+<div class="faqs__answers">
 
 ## <span id="What_is_Steemit_com">What is steemit.com?</span>
 
@@ -1177,8 +1177,10 @@ Though not considered an investment, you can purchase STEEM tokens which can go 
 <a href="#Table_of_Contents_Steemit__Inc">^</a>
 ## <span id="What_does_Steemit_s_development_roadmap_look_like">What does Steemit’s development roadmap look like?</span>
 
-You can view the 2017 Roadmap here:
-https://steemit.com/steemit/@steemitblog/steemit-2017-roadmap
+Steemit's Applications Team is building new features for Communities. Communities will bring a whole new form of interaction to the Steem blockchain, and we are excited to see the ecosystem evolve once users can collaborate easily with like-minded individuals, curate topics of shared interest, and truly organize. We anticipate that the Steem blockchain will become the place to be to discuss everything and anything under the sun.
+
+Our blockchain team is developing Smart Media Tokens (SMTs) for the Steem blockchain. We expect SMTs to launch on the TestNet in early 2019 before going live on the MainNet.
+
 
 <a href="#Table_of_Contents_Steemit__Inc">^</a>
 ## <span id="Am_I_allowed_to_use_the_Steem_and_Steemit_logos">Am I allowed to use the Steem and Steemit logos?</span>
@@ -1367,3 +1369,5 @@ All links to user posts were created by our users and do not necessarily represe
 Please use the third party tools and content at your own risk.
 
 <a href="#Table_of_Contents_Disclaimer">^</a>
+
+</div> 

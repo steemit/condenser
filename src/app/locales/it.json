@@ -259,7 +259,6 @@
         "learn_more": "Scopri di più",
         "welcome": "Benvenuto",
         "faq": "FAQ",
-        "shop": "The Steemit Shop",
         "chat": "Steem Chat",
         "app_center": "Steemit App Center",
         "api_docs": "Steemit API Docs",
@@ -291,7 +290,7 @@
         "selecting_them": "selezionandole. ",
         "image_upload": "Carica immagine",
         "power_up_100": "Power Up 100%%",
-        "default_50_50": "Default (50%% / 50%%)",
+        "default_50_50": "50%% / 50%%",
         "decline_payout": "Rinuncia al pagamento",
         "check_this_to_auto_upvote_your_post":
             "Clicca qui per effettuare l'upvote automatico del tuo post",
@@ -317,6 +316,13 @@
         "must_start_with_a_letter": "Deve iniziare con una lettera",
         "must_end_with_a_letter_or_number":
             "Deve terminare con una lettera o un numero"
+    },
+    "post_advanced_settings_jsx": {
+        "payout_option_header": "Author rewards",
+        "payout_option_description":
+            "What type of tokens do you want as rewards from this post?",
+        "current_default": "Default",
+        "update_default_in_settings": "Update"
     },
     "postfull_jsx": {
         "this_post_is_not_available_due_to_a_copyright_claim":
@@ -484,7 +490,7 @@
         "witness": "Witness",
         "information": "Informazioni",
         "if_you_want_to_vote_outside_of_top_enter_account_name":
-            "Se desideri votare un witness al di fuori della top 50, inserisci di seguito il nome account per effettuare il voto. ",
+            "Se desideri votare un witness al di fuori della top 100, inserisci di seguito il nome account per effettuare il voto. ",
         "set_witness_proxy":
             "Puoi anche scegliere un proxy che voterà i witnesses per te. Questo resetterà la tua attuale selezione di testimoni.",
         "witness_set":

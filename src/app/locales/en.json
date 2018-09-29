@@ -266,7 +266,6 @@
         "learn_more": "Learn more",
         "welcome": "Welcome",
         "faq": "FAQ",
-        "shop": "The Steemit Shop",
         "chat": "Steem Chat",
         "app_center": "Apps Built on Steem",
         "api_docs": "Steemit API Docs",
@@ -300,7 +299,7 @@
         "selecting_them": "selecting them",
         "image_upload": "Image upload",
         "power_up_100": "Power Up 100%%",
-        "default_50_50": "Default (50%% SBD / 50%% SP)",
+        "default_50_50": "50%% SBD / 50%% SP",
         "decline_payout": "Decline Payout",
         "check_this_to_auto_upvote_your_post":
             "Check this to auto-upvote your post",
@@ -308,7 +307,8 @@
         "or_by": "or by",
         "title": "Title",
         "update_post": "Update Post",
-        "markdown_not_supported": "Markdown is not supported here"
+        "markdown_not_supported": "Markdown is not supported here",
+        "advanced_settings": "Advanced settings"
     },
     "category_selector_jsx": {
         "tag_your_story":
@@ -325,6 +325,13 @@
             "Use only lowercase letters, digits and one dash",
         "must_start_with_a_letter": "Must start with a letter",
         "must_end_with_a_letter_or_number": "Must end with a letter or number"
+    },
+    "post_advanced_settings_jsx": {
+        "payout_option_header": "Author rewards",
+        "payout_option_description":
+            "What type of tokens do you want as rewards from this post?",
+        "current_default": "Default",
+        "update_default_in_settings": "Update"
     },
     "postfull_jsx": {
         "this_post_is_not_available_due_to_a_copyright_claim":
@@ -504,7 +511,7 @@
         "witness": "Witness",
         "information": "Information",
         "if_you_want_to_vote_outside_of_top_enter_account_name":
-            "If you would like to vote for a witness outside of the top 50, enter the account name below to cast a vote",
+            "If you would like to vote for a witness outside of the top 100, enter the account name below to cast a vote",
         "set_witness_proxy":
             "You can also choose a proxy that will vote for witnesses for you. This will reset your current witness selection.",
         "witness_set":
@@ -829,6 +836,8 @@
             "%(asset)s currently collecting %(interest)s%% APR.",
         "beware_of_spam_and_phishing_links":
             "Beware of spam and phishing links in transfer memos. Do not open links from users you do not trust. Do not provide your private keys to any third party websites.",
+        "transactions_make_take_a_few_minutes":
+            "Transactions will not show until they are confirmed on the blockchain, which may take a few minutes.",
         "autocomplete_previous_transfers": "previous transfers",
         "autocomplete_user_following": "following",
         "confirm_transfer": "Transfer %(amount)s from %(from)s to %(to)s?"
@@ -846,7 +855,8 @@
         "withdraw_DEBT_TOKENS": "Withdraw %(DEBT_TOKENS)s",
         "tokens_worth_about_1_of_LIQUID_TICKER":
             "Tokens worth about $1.00 of %(LIQUID_TICKER)s, currently collecting %(sbdInterest)s%% APR.",
-        "tradeable_tokens_transferred": "Tradeable tokens that may be transferred anywhere at anytime.",
+        "tradeable_tokens_transferred":
+            "Tradeable tokens that may be transferred anywhere at anytime.",
         "savings": "SAVINGS",
         "estimated_account_value": "Estimated Account Value",
         "next_power_down_is_scheduled_to_happen":
@@ -893,14 +903,15 @@
     },
     "modals_jsx": {
         "your_transaction_failed": "Your transaction failed to process",
-        "out_of_bandwidth_title": "Why? You've run out of bandwidth",
+        "out_of_bandwidth_title": "Why? You've run out of Resource Credits",
         "out_of_bandwidth_reason":
-            "Actions such as posting and voting use computing resources placing a real cost on the community members who run the Steem blockchain for everyone.",
+            "Actions such as posting and voting use computing resources, placing a real cost on the community members who run the Steem blockchain for everyone.",
         "out_of_bandwidth_reason_2":
-            "To keep things free, Steem intelligently allocates bandwidth to each user based on their Steem Power holdings, their recent usage and overall network demand. This system prioritizes actions by good community members while limiting spam.",
+            "To keep things free, Steem intelligently allocates Resource Credits to each user based on their Steem Power holdings, which can be used to submit a limited number of feeless transactions. When a user runs low on Resource Credits, they will either need to wait for them to recharge, or purchase additional Steem Power. This system prioritizes actions by good community members while limiting spam.",
         "out_of_bandwidth_option_title": "To keep interacting on Steemit:",
         "out_of_bandwidth_option_1": "Buy and hold more Steem Power",
-        "out_of_bandwidth_option_2": "Wait until your bandwidth recharges",
+        "out_of_bandwidth_option_2":
+            "Wait until your Resource Credits recharge",
         "out_of_bandwidth_option_3": "Wait until the network usage decreases"
     },
     "sanitizedlink_jsx": {

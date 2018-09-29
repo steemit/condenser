@@ -258,7 +258,6 @@
         "learn_more": "Para saber más",
         "welcome": "Bienvenido",
         "faq": "Preguntas Frecuentes",
-        "shop": "The Steemit Shop",
         "chat": "Chat de Steemit",
         "app_center": "Centro de Aplicaciones Steemit",
         "api_docs": "Documentos API de Steemit",
@@ -290,7 +289,7 @@
         "selecting_them": "Seleccionándolos",
         "image_upload": "Subir imagen",
         "power_up_100": "Power Up 100%%",
-        "default_50_50": "Por defecto (50 1%% / 50 1%%)",
+        "default_50_50": "50 1%% / 50 1%%",
         "decline_payout": "Rechazar Pago",
         "check_this_to_auto_upvote_your_post":
             "Seleciona para autovotarte el post",
@@ -484,7 +483,7 @@
         "witness": "Testigos",
         "information": "Información",
         "if_you_want_to_vote_outside_of_top_enter_account_name":
-            "SI quieres votar a un testigo que está fuera de los top 50, por favor introduce el nombre de la cuenta para votarle",
+            "SI quieres votar a un testigo que está fuera de los top 100, por favor introduce el nombre de la cuenta para votarle",
         "set_witness_proxy":
             "También puedes elegir un proxy que votará a los testigos por ti. Esta actividad reseteará tu actual selección de witness",
         "witness_set":

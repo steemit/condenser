@@ -259,7 +259,6 @@
         "learn_more": "Документация",
         "welcome": "Добро пожаловать",
         "faq": "ЧаВО",
-        "shop": "Магазин Steemit",
         "chat": "Чат Steemit",
         "app_center": "Центр приложений Steemit",
         "api_docs": "API-документация Steemit",
@@ -291,7 +290,7 @@
         "selecting_them": "выбрав их",
         "image_upload": "Загрузка изображения",
         "power_up_100": "Сила Голоса 100%%",
-        "default_50_50": "По умолчанию (50%% / 50%%)",
+        "default_50_50": "50%% / 50%%",
         "decline_payout": "Отказаться от выплаты",
         "check_this_to_auto_upvote_your_post":
             "Отметьте, чтобы проголосовать за свой пост",
@@ -319,6 +318,13 @@
         "must_start_with_a_letter": "Должно начинаться с буквы",
         "must_end_with_a_letter_or_number":
             "Должно заканчиваться с буквы или номера"
+    },
+    "post_advanced_settings_jsx": {
+        "payout_option_header": "Author rewards",
+        "payout_option_description":
+            "What type of tokens do you want as rewards from this post?",
+        "current_default": "Default",
+        "update_default_in_settings": "Update"
     },
     "postfull_jsx": {
         "this_post_is_not_available_due_to_a_copyright_claim":
@@ -497,7 +503,7 @@
         "witness": "Делегаты",
         "information": "Информация",
         "if_you_want_to_vote_outside_of_top_enter_account_name":
-            "Если вы хотите проголосовать за делегата вне top 50, введите имя аккаунта ниже",
+            "Если вы хотите проголосовать за делегата вне top 100, введите имя аккаунта ниже",
         "set_witness_proxy":
             "Вы также можете выбрать прокси, который будет вместо вас голосовать за делегатов. Это сбросит ваш текущий выбор делегата.",
         "witness_set":

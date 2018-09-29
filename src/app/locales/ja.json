@@ -1,652 +1,781 @@
 {
-  "g": {
-    "age": "日時",
-    "amount": "数量",
-    "and": "と",
-    "are_you_sure": "よろしいですか？",
-    "ask": "買値",
-    "balance": "残高",
-    "balances": "残高",
-    "bid": "売値",
-    "blog": "ブログ",
-    "browse": "ブラウズ",
-    "buy": "買う",
-    "buy_or_sell": "購入または売却",
-    "by": "by",
-    "cancel": "キャンセル",
-    "change_password": "パスワードの変更",
-    "choose_language": "言語を選択",
-    "clear": "消去",
-    "close": "閉じる",
-    "collapse_or_expand": "折りたたみ/展開",
-    "comments": "コメント",
-    "confirm": "確認",
-    "convert": "変換する",
-    "date": "日時",
-    "delete": "削除",
-    "dismiss": "閉じる",
-    "edit": "編集",
-    "email": "メールアドレス",
-    "feed": "フィード",
-    "follow": "フォロー",
-    "for": " : ",
-    "from": " 送信元:",
-    "go_back": "戻る",
-    "hide": "非表示",
-    "in": "in",
-    "in_reply_to": "in reply to",
-    "insufficient_balance": "残高が不足しています",
-    "invalid_amount": "入力が不正です",
-    "joined": "登録年月：",
-    "loading": "ロード中",
-    "login": "ログイン",
-    "logout": "ログアウト",
-    "memo": "メモ",
-    "mute": "ミュート",
-    "new": "新着",
-    "newer": "新しい",
-    "next": "次へ",
-    "no": "いいえ",
-    "ok": "Ok",
-    "older": "古い",
-    "or": "または",
-    "order_placed": "注文しました",
-    "password": "パスワード",
-    "payouts": "支払額",
-    "permissions": "アクセス権",
-    "phishy_message": "リンクをプレーンテキストに拡張しました。潜在的なフィッシングに注意してください。",
-    "post": "投稿",
-    "post_as": "投稿します:",
-    "posts": "投稿数",
-    "powered_up_100": "パワーアップ 100%%",
-    "preview": "プレビュー",
-    "previous": "前へ",
-    "price": "価格",
-    "print": "印刷",
-    "promote": "プロモート",
-    "promoted": "プロモート",
-    "re": "RE",
-    "re_to": "RE: %(topic)s",
-    "recent_password": "直近のパスワード",
-    "receive": "受信 ",
-    "remove": "削除",
-    "remove_vote": "voteを取り消す",
-    "replied_to": "%(account)sへの返信",
-    "replies": "返信",
-    "reply": "返信",
-    "reply_count": {
-      "zero": "返信がありません",
-      "one": "1件の返信",
-      "other": "%(count)s件の返信"
+    "g": {
+        "age": "日時",
+        "amount": "数量",
+        "and": "と",
+        "are_you_sure": "よろしいですか？",
+        "ask": "買値",
+        "balance": "残高",
+        "balances": "残高",
+        "bid": "売値",
+        "blog": "ブログ",
+        "browse": "ブラウズ",
+        "buy": "買う",
+        "buy_or_sell": "購入または売却",
+        "by": "by",
+        "cancel": "キャンセル",
+        "change_password": "パスワードの変更",
+        "choose_language": "言語を選択",
+        "clear": "消去",
+        "close": "閉じる",
+        "collapse_or_expand": "折りたたみ/展開",
+        "comments": "コメント",
+        "confirm": "確認",
+        "convert": "変換する",
+        "date": "日時",
+        "delete": "削除",
+        "dismiss": "閉じる",
+        "edit": "編集",
+        "email": "メールアドレス",
+        "feed": "フィード",
+        "follow": "フォロー",
+        "for": " : ",
+        "from": " 送信元:",
+        "go_back": "戻る",
+        "hide": "非表示",
+        "in": "in",
+        "in_reply_to": "in reply to",
+        "insufficient_balance": "残高が不足しています",
+        "invalid_amount": "入力が不正です",
+        "joined": "登録年月：",
+        "loading": "ロード中",
+        "login": "ログイン",
+        "logout": "ログアウト",
+        "memo": "メモ",
+        "mute": "ミュート",
+        "new": "新着",
+        "newer": "新しい",
+        "next": "次へ",
+        "no": "いいえ",
+        "ok": "Ok",
+        "older": "古い",
+        "or": "または",
+        "order_placed": "注文しました",
+        "password": "パスワード",
+        "payouts": "支払額",
+        "permissions": "アクセス権",
+        "phishy_message":
+            "リンクをプレーンテキストに拡張しました。潜在的なフィッシングに注意してください。",
+        "post": "投稿",
+        "post_as": "投稿します:",
+        "posts": "投稿数",
+        "powered_up_100": "パワーアップ 100%%",
+        "preview": "プレビュー",
+        "previous": "前へ",
+        "price": "価格",
+        "print": "印刷",
+        "promote": "プロモート",
+        "promoted": "プロモート",
+        "re": "RE",
+        "re_to": "RE: %(topic)s",
+        "recent_password": "直近のパスワード",
+        "receive": "受信 ",
+        "remove": "削除",
+        "remove_vote": "voteを取り消す",
+        "replied_to": "%(account)sへの返信",
+        "replies": "返信",
+        "reply": "返信",
+        "reply_count": {
+            "zero": "返信がありません",
+            "one": "1件の返信",
+            "other": "%(count)s件の返信"
+        },
+        "reputation": "評価",
+        "reveal_comment": "コメントを表示する",
+        "request": "リクエスト",
+        "required": "必須です",
+        "rewards": "報酬",
+        "save": "保存",
+        "saved": "保存しました",
+        "search": "検索",
+        "sell": "売る",
+        "settings": "設定",
+        "share_this_post": "この記事をシェアする",
+        "show": "表示",
+        "sign_in": "ログイン",
+        "sign_up": "登録",
+        "since": "since",
+        "submit": "送信",
+        "power_up": "パワーアップ",
+        "submit_a_story": "投稿",
+        "tag": "タグ",
+        "to": " 宛先:",
+        "topics": "トピック",
+        "toggle_nightmode": "ナイトモード切替",
+        "all_tags": "すべてのタグ",
+        "transfer": "送信 ",
+        "trending_topics": "トレンドトピック",
+        "type": "売買",
+        "unfollow": "フォロー解除",
+        "unmute": "ミュート解除",
+        "unknown": "不明",
+        "upvote": "Upvote",
+        "upvote_post": "投稿をUpvoteする",
+        "username": "ユーザー名",
+        "version": "バージョン",
+        "vote": "投票",
+        "votes": "投票数",
+        "wallet": "ウォレット",
+        "warning": "注意",
+        "yes": "はい",
+        "posting": "投稿",
+        "owner": "オーナー",
+        "active": "アクティブ",
+        "account_not_found": "アカウントが存在しません",
+        "this_is_wrong_password": "パスワードが間違っています。",
+        "do_you_need_to": "必要ですか？",
+        "account_name": "アカウント名",
+        "recover_your_account": "アカウントの回復",
+        "reset_usernames_password": "%(username)sのパスワードをリセットします",
+        "this_will_update_usernames_authtype_key":
+            "%(username)sの%(authType)sキーが更新されます",
+        "passwords_do_not_match": "パスワードが一致しません",
+        "you_need_private_password_or_key_not_a_public_key":
+            "秘密パスワードまたはキーが必要です（公開キーではありません）",
+        "the_rules_of_APP_NAME": {
+            "one": "%(APP_NAME)sの第1のルールは：パスワードをなくさないこと。",
+            "second":
+                "%(APP_NAME)sの第2のルールは：パスワードをなくさないでください。",
+            "third":
+                "%(APP_NAME)sの第3のルールは：紛失したパスワードを回復することはできません。",
+            "fourth":
+                "第4のルールは：覚えられるパスワードは安全ではありません。",
+            "fifth":
+                "第5のルールは：ランダムに生成したパスワードのみを使用してください。",
+            "sixth": "第6のルールは：誰にもパスワードを教えないでください。",
+            "seventh":
+                "第7のルールは：いつもパスワードをバックアップしてください。"
+        },
+        "recover_password": "アカウント回復",
+        "current_password": "現在のパスワード",
+        "generated_password": "生成したパスワード",
+        "backup_password_by_storing_it":
+            "パスワード管理ツールまたはテキストファイルにパスワードをバックアップすることを強く推奨します",
+        "enter_account_show_password":
+            "有効なアカウント名を入力してパスワードを表示します",
+        "click_to_generate_password": "クリックしてパスワードを生成",
+        "re_enter_generate_password": "生成したパスワードを再入力してください",
+        "understand_that_APP_NAME_cannot_recover_password":
+            "私は%(APP_NAME)sが紛失したパスワードを回復できないことを理解しました",
+        "i_saved_password":
+            "私は生成したパスワードを安全なところに保存しました",
+        "update_password": "パスワードを更新",
+        "confirm_password": "パスワードを確認してください",
+        "account_updated": "アカウントが更新されました",
+        "password_must_be_characters_or_more":
+            "パスワードは%(amount)s文字以上でなければなりません",
+        "need_password_or_key":
+            "秘密パスワードまたはキーが必要です（公開キーではありません）",
+        "login_to_see_memo": "メモを見るにはメモキーでログインしてください",
+        "new_password": "新しいパスワード",
+        "incorrect_password": "不正なパスワード",
+        "username_does_not_exist": "存在しないユーザー名です",
+        "account_name_should_start_with_a_letter":
+            "アカウント名はアルファベットで始まる必要があります。",
+        "account_name_should_be_shorter": "アカウント名が長すぎます。",
+        "account_name_should_be_longer": "アカウント名が短すぎます。",
+        "account_name_should_have_only_letters_digits_or_dashes":
+            "アカウント名には英数字またはダッシュが使用できます。",
+        "cannot_increase_reward_of_post_within_the_last_minute_before_payout":
+            "支払いの直前に投稿の報酬を増やすことはできません",
+        "vote_currently_exists_user_must_be_indicate_a_to_reject_witness":
+            "現在、投票が存在し、証人を拒否するには強い意志を示す必要があります",
+        "only_one_APP_NAME_account_allowed_per_ip_address_every_10_minutes":
+            "10分毎に各IPアドレスにつき1つのSteemアカウントのみ許可されています",
+        "resteem_this_post": "この投稿をResteemする",
+        "reblog": "Resteem",
+        "write_your_story": "投稿内容を書いてください",
+        "remember_voting_and_posting_key": "投稿キーを記憶する",
+        "auto_login_question_mark": "自動ログインしますか？",
+        "hide_private_key": "秘密キーを隠す",
+        "show_private_key": "秘密キーを表示する",
+        "login_to_show": "ログインして表示",
+        "not_valid_email": "無効なメールアドレス",
+        "thank_you_for_being_an_early_visitor_to_APP_NAME":
+            "%(APP_NAME)sに来ていただきありがとうございます。できるだけ早くご連絡いたします。",
+        "author_rewards": "投稿者報酬",
+        "curation_rewards": "キュレーション報酬",
+        "sorry_your_reddit_account_doesnt_have_enough_karma":
+            "申し訳ありません。あなたのRedditアカウントはRedditカルマが足りないため無料のサインアップができません。待機リストに載るにはメールアドレスを使用してください。",
+        "register_with_facebook": "Facebookで登録する。",
+        "or_click_the_button_below_to_register_with_facebook":
+            "Facebookで登録するには下のボタンをクリックしてください。",
+        "server_returned_error": "サーバーでエラーが発生しました",
+        "APP_NAME_support": "%(APP_NAME)sサポート",
+        "please_email_questions_to": "質問をメールしてください：",
+        "next_7_strings_single_block": {
+            "authors_get_paid_when_people_like_you_upvote_their_post":
+                "投稿者は読者から投稿をupvoteされることで報酬を得ます。",
+            "if_you_enjoyed_what_you_read_earn_amount":
+                "読んで楽しんだら、次はアカウントを作成してSTEEMを手に入れましょう！",
+            "free_steem": "STEEMを手に入れよう！",
+            "sign_up_earn_steem": "サインアップして "
+        },
+        "next_3_strings_together": {
+            "show_more": "評価の低い投稿の表示を増やす",
+            "show_less": "評価の低い投稿の表示を減らす",
+            "value_posts": ""
+        },
+        "read_only_mode":
+            "サーバーメンテナンスのため読み取り専用モードで実行しています。ご迷惑をおかけして申し訳ありません。",
+        "tags_and_topics": "タグ",
+        "show_more_topics": "すべてのタグを見る",
+        "basic": "基本設定",
+        "advanced": "高度設定",
+        "views": {
+            "zero": "PVなし",
+            "one": "%(count)s PV",
+            "other": "%(count)s PV"
+        },
+        "responses": {
+            "zero": "返信なし",
+            "one": "%(count)s件の返信",
+            "other": "%(count)s件の返信"
+        },
+        "post_key_warning": {
+            "confirm":
+                "STEEMの秘密キーまたはマスターパスワードを公開しようとしています。関連するアカウントの管理権とすべての資金を失う恐れがあります。",
+            "warning":
+                "Steemit Inc.の従業員を含む正当なユーザーは秘密キーまたはマスターパスワードを要求することはありません。",
+            "checkbox": "理解しました。"
+        }
     },
-    "reputation": "評価",
-    "reveal_comment": "コメントを表示する",
-    "request": "リクエスト",
-    "required": "必須です",
-    "rewards": "報酬",
-    "save": "保存",
-    "saved": "保存しました",
-    "search": "検索",
-    "sell": "売る",
-    "settings": "設定",
-    "share_this_post": "この記事をシェアする",
-    "show": "表示",
-    "sign_in": "ログイン",
-    "sign_up": "登録",
-    "since": "since",
-    "submit": "送信",
-    "power_up": "パワーアップ",
-    "submit_a_story": "投稿",
-    "tag": "タグ",
-    "to": " 宛先:",
-    "topics": "トピック",
-    "toggle_nightmode": "ナイトモード切替",
-    "all_tags": "すべてのタグ",
-    "transfer": "送信 ",
-    "trending_topics": "トレンドトピック",
-    "type": "売買",
-    "unfollow": "フォロー解除",
-    "unmute": "ミュート解除",
-    "unknown": "不明",
-    "upvote": "Upvote",
-    "upvote_post": "投稿をUpvoteする",
-    "username": "ユーザー名",
-    "version": "バージョン",
-    "vote": "投票",
-    "votes": "投票数",
-    "wallet": "ウォレット",
-    "warning": "注意",
-    "yes": "はい",
-    "posting": "投稿",
-    "owner": "オーナー",
-    "active": "アクティブ",
-    "account_not_found": "アカウントが存在しません",
-    "this_is_wrong_password": "パスワードが間違っています。",
-    "do_you_need_to": "必要ですか？",
-    "account_name": "アカウント名",
-    "recover_your_account": "アカウントの回復",
-    "reset_usernames_password": "%(username)sのパスワードをリセットします",
-    "this_will_update_usernames_authtype_key": "%(username)sの%(authType)sキーが更新されます",
-    "passwords_do_not_match": "パスワードが一致しません",
-    "you_need_private_password_or_key_not_a_public_key": "秘密パスワードまたはキーが必要です（公開キーではありません）",
-    "the_rules_of_APP_NAME": {
-      "one": "%(APP_NAME)sの第1のルールは：パスワードをなくさないこと。",
-      "second": "%(APP_NAME)sの第2のルールは：パスワードをなくさないでください。",
-      "third": "%(APP_NAME)sの第3のルールは：紛失したパスワードを回復することはできません。",
-      "fourth": "第4のルールは：覚えられるパスワードは安全ではありません。",
-      "fifth": "第5のルールは：ランダムに生成したパスワードのみを使用してください。",
-      "sixth": "第6のルールは：誰にもパスワードを教えないでください。",
-      "seventh": "第7のルールは：いつもパスワードをバックアップしてください。"
+    "navigation": {
+        "about": "Steemについて",
+        "explore": "投稿を探す",
+        "APP_NAME_whitepaper": "%(APP_NAME)sホワイトペーパー",
+        "buy_LIQUID_TOKEN": "%(LIQUID_TOKEN)sを買う",
+        "sell_LIQUID_TOKEN": "%(LIQUID_TOKEN)sを売る",
+        "currency_market": "内部取引所",
+        "stolen_account_recovery": "盗難アカウントの回復",
+        "change_account_password": "パスワードの変更",
+        "witnesses": "証人",
+        "vote_for_witnesses": "証人に投票する",
+        "privacy_policy": "プライバシーポリシー",
+        "terms_of_service": "利用規約",
+        "sign_up": "登録",
+        "learn_more": "詳細",
+        "welcome": "ようこそ",
+        "faq": "FAQ",
+        "chat": "Steemitチャット",
+        "app_center": "Steemitアプリセンター",
+        "api_docs": "Steemit API資料",
+        "bluepaper": "Steemブルーペーパー",
+        "whitepaper": "Steemホワイトペーパー",
+        "intro_tagline": "金がものを言う",
+        "intro_paragraph":
+            "あなたの声には価値があります。あなたのハイクオリティな投稿やキュレーションに報酬を出すコミュニティに参加しましょう。"
     },
-    "recover_password": "アカウント回復",
-    "current_password": "現在のパスワード",
-    "generated_password": "生成したパスワード",
-    "backup_password_by_storing_it": "パスワード管理ツールまたはテキストファイルにパスワードをバックアップすることを強く推奨します",
-    "enter_account_show_password": "有効なアカウント名を入力してパスワードを表示します",
-    "click_to_generate_password": "クリックしてパスワードを生成",
-    "re_enter_generate_password": "生成したパスワードを再入力してください",
-    "understand_that_APP_NAME_cannot_recover_password": "私は%(APP_NAME)sが紛失したパスワードを回復できないことを理解しました",
-    "i_saved_password": "私は生成したパスワードを安全なところに保存しました",
-    "update_password": "パスワードを更新",
-    "confirm_password": "パスワードを確認してください",
-    "account_updated": "アカウントが更新されました",
-    "password_must_be_characters_or_more": "パスワードは%(amount)s文字以上でなければなりません",
-    "need_password_or_key": "秘密パスワードまたはキーが必要です（公開キーではありません）",
-    "login_to_see_memo": "メモを見るにはメモキーでログインしてください",
-    "new_password": "新しいパスワード",
-    "incorrect_password": "不正なパスワード",
-    "username_does_not_exist": "存在しないユーザー名です",
-    "account_name_should_start_with_a_letter": "アカウント名はアルファベットで始まる必要があります。",
-    "account_name_should_be_shorter": "アカウント名が長すぎます。",
-    "account_name_should_be_longer": "アカウント名が短すぎます。",
-    "account_name_should_have_only_letters_digits_or_dashes": "アカウント名には英数字またはダッシュが使用できます。",
-    "cannot_increase_reward_of_post_within_the_last_minute_before_payout": "支払いの直前に投稿の報酬を増やすことはできません",
-    "vote_currently_exists_user_must_be_indicate_a_to_reject_witness": "現在、投票が存在し、証人を拒否するには強い意志を示す必要があります",
-    "only_one_APP_NAME_account_allowed_per_ip_address_every_10_minutes": "10分毎に各IPアドレスにつき1つのSteemアカウントのみ許可されています",
-    "resteem_this_post": "この投稿をResteemする",
-    "reblog": "Resteem",
-    "write_your_story": "投稿内容を書いてください",
-    "remember_voting_and_posting_key": "投稿キーを記憶する",
-    "auto_login_question_mark": "自動ログインしますか？",
-    "hide_private_key": "秘密キーを隠す",
-    "show_private_key": "秘密キーを表示する",
-    "login_to_show": "ログインして表示",
-    "not_valid_email": "無効なメールアドレス",
-    "thank_you_for_being_an_early_visitor_to_APP_NAME": "%(APP_NAME)sに来ていただきありがとうございます。できるだけ早くご連絡いたします。",
-    "author_rewards": "投稿者報酬",
-    "curation_rewards": "キュレーション報酬",
-    "sorry_your_reddit_account_doesnt_have_enough_karma": "申し訳ありません。あなたのRedditアカウントはRedditカルマが足りないため無料のサインアップができません。待機リストに載るにはメールアドレスを使用してください。",
-    "register_with_facebook": "Facebookで登録する。",
-    "or_click_the_button_below_to_register_with_facebook": "Facebookで登録するには下のボタンをクリックしてください。",
-    "server_returned_error": "サーバーでエラーが発生しました",
-    "APP_NAME_support": "%(APP_NAME)sサポート",
-    "please_email_questions_to": "質問をメールしてください：",
-    "next_7_strings_single_block": {
-      "authors_get_paid_when_people_like_you_upvote_their_post": "投稿者は読者から投稿をupvoteされることで報酬を得ます。",
-      "if_you_enjoyed_what_you_read_earn_amount": "読んで楽しんだら、次はアカウントを作成してSTEEMを手に入れましょう！",
-      "free_steem": "STEEMを手に入れよう！",
-      "sign_up_earn_steem": "サインアップして "
+    "main_menu": {
+        "hot": "ホット",
+        "trending": "トレンド"
     },
-    "next_3_strings_together": {
-      "show_more": "評価の低い投稿の表示を増やす",
-      "show_less": "評価の低い投稿の表示を減らす",
-      "value_posts": ""
+    "reply_editor": {
+        "shorten_title": "タイトルが長すぎます",
+        "exceeds_maximum_length": "最大長を超えています (%(maxKb)sKB)",
+        "including_the_category": "(カテゴリ'%(rootCategory)s'を含む)",
+        "use_limited_amount_of_tags":
+            "合計で%(tagsLength)s個のタグがあります%(includingCategory)s。投稿とカテゴリの行には5つ以内にしてください。",
+        "are_you_sure_you_want_to_clear_this_form":
+            "フォームの内容を消去してもよろしいですか？",
+        "uploading": "アップロード中",
+        "draft_saved": "下書きを保存しました。",
+        "editor": "エディタ",
+        "insert_images_by_dragging_dropping":
+            "画像を挿入するにはドラッグ＆ドロップするか、",
+        "pasting_from_the_clipboard": "クリップボードから貼り付けるか、",
+        "selecting_them": "選択してください。",
+        "image_upload": "画像アップロード",
+        "power_up_100": "パワーアップ 100%%",
+        "default_50_50": "50%% / 50%%",
+        "decline_payout": "報酬を辞退",
+        "check_this_to_auto_upvote_your_post":
+            "チェックすると投稿を自動でupvoteします。",
+        "markdown_styling_guide": "マークダウン書式ガイド",
+        "or_by": "または",
+        "title": "タイトル",
+        "update_post": "投稿を更新",
+        "markdown_not_supported": "ここではマークダウンはサポートされていません"
     },
-    "read_only_mode": "サーバーメンテナンスのため読み取り専用モードで実行しています。ご迷惑をおかけして申し訳ありません。",
-    "tags_and_topics": "タグ",
-    "show_more_topics": "すべてのタグを見る",
-    "basic": "基本設定",
-    "advanced": "高度設定",
-    "views": {
-      "zero": "PVなし",
-      "one": "%(count)s PV",
-      "other": "%(count)s PV"
+    "category_selector_jsx": {
+        "tag_your_story":
+            "タグ(最大5つ)。1つ目のタグはメインカテゴリです。日本語の投稿には japanese を含めてください。",
+        "select_a_tag": "タグを選択してください",
+        "maximum_tag_length_is_24_characters": "タグの最大長は24文字です。",
+        "use_limited_amount_of_categories":
+            "タグは%(amount)s個以下にしてください。",
+        "use_only_lowercase_letters": "小文字のみ使用してください。",
+        "use_one_dash": "ダッシュは1つまで使用可能です。",
+        "use_spaces_to_separate_tags":
+            "タグを区切るのにはスペースを使用してください。",
+        "use_only_allowed_characters":
+            "英小文字、数字、ダッシュのみ使用可能です。",
+        "must_start_with_a_letter": "文字で始める必要があります。",
+        "must_end_with_a_letter_or_number":
+            "文字または数字で終わる必要があります。"
     },
-    "responses": {
-      "zero": "返信なし",
-      "one": "%(count)s件の返信",
-      "other": "%(count)s件の返信"
+    "post_advanced_settings_jsx": {
+        "payout_option_header": "Author rewards",
+        "payout_option_description":
+            "What type of tokens do you want as rewards from this post?",
+        "current_default": "Default",
+        "update_default_in_settings": "Update"
     },
-    "post_key_warning": {
-        "confirm": "STEEMの秘密キーまたはマスターパスワードを公開しようとしています。関連するアカウントの管理権とすべての資金を失う恐れがあります。",
-        "warning": "Steemit Inc.の従業員を含む正当なユーザーは秘密キーまたはマスターパスワードを要求することはありません。",
-        "checkbox": "理解しました。"
+    "postfull_jsx": {
+        "this_post_is_not_available_due_to_a_copyright_claim":
+            "この投稿は著作権上の問題により表示されません。",
+        "share_on_facebook": "Facebookでシェア",
+        "share_on_twitter": "Twitterでシェア",
+        "share_on_linkedin": "Linkedinでシェア",
+        "recent_password": "直近のパスワード",
+        "in_week_convert_DEBT_TOKEN_to_LIQUID_TOKEN":
+            "3.5日で、%(amount)s %(DEBT_TOKEN)sを%(LIQUID_TOKEN)sに変換します。",
+        "view_the_full_context": "スレッドをすべて表示する",
+        "view_the_direct_parent": "親コメントを表示する",
+        "you_are_viewing_a_single_comments_thread_from":
+            "次のスレッドのコメントの1つを表示しています "
+    },
+    "market_jsx": {
+        "action": "操作",
+        "date_created": "作成日時",
+        "last_price": "現在値",
+        "24h_volume": "出来高(24h)",
+        "spread": "スプレッド",
+        "total": "合計",
+        "available": "注文可能額",
+        "lowest_ask": "現在買値",
+        "highest_bid": "現在売値",
+        "buy_orders": "買い注文",
+        "sell_orders": "売り注文",
+        "trade_history": "マーケット履歴",
+        "open_orders": "注文一覧",
+        "sell_amount_for_atleast":
+            "%(amount_to_sell)sを%(min_to_receive)sで売ります (%(effectivePrice)s)",
+        "buy_atleast_amount_for":
+            "%(min_to_receive)sを%(amount_to_sell)sで買います (%(effectivePrice)s)",
+        "price_warning_above":
+            "この価格は現在の市場価格%(marketPrice)sを遥かに上回っています。本当によろしいですか？",
+        "price_warning_below":
+            "この価格は現在の市場価格%(marketPrice)sを遥かに下回っています。本当によろしいですか？",
+        "order_cancel_confirm":
+            "%(user)sの注文%(order_id)sをキャンセルしますか？",
+        "order_cancelled": "注文%(order_id)sはキャンセルされました",
+        "higher": "上へ",
+        "lower": "下へ",
+        "total_DEBT_TOKEN_SHORT_CURRENCY_SIGN":
+            "合計%(DEBT_TOKEN_SHORT)s (%(CURRENCY_SIGN)s)"
+    },
+    "recoveraccountstep1_jsx": {
+        "begin_recovery": "回復を開始する",
+        "not_valid": "無効です",
+        "account_name_is_not_found": "アカウント名が存在しません",
+        "unable_to_recover_account_not_change_ownership_recently":
+            "このアカウントは最近パスワードが変更されていないため回復できません。",
+        "password_not_used_in_last_days":
+            "このパスワードは30日以内にこのアカウントで使用されていません。",
+        "request_already_submitted_contact_support":
+            "リクエストは既に送信されていて、現在作業中です。リクエストの状況については%(SUPPORT_EMAIL)sにお問い合わせください。",
+        "recover_account_intro":
+            "時折、Steemianのオーナーキーが盗まれることがあります。盗難アカウントの回復は、盗んだ者がオーナーキーを変更してから30日以内に、アカウントの正しい所有者にアカウントを取り戻します。盗難アカウントの回復は、アカウントの所有者が'%(APP_NAME)s'をアカウント受託者とし、%(APP_NAME)sの利用規約に準拠している場合にのみ%(APP_URL)sで行うことができます。",
+        "login_with_facebook_or_reddit_media_to_verify_identity":
+            "FacebookまたはRedditにログインして本人確認をしてください。",
+        "login_with_social_media_to_verify_identity":
+            "%(provider)sにログインして本人確認をしてください。",
+        "enter_email_toverify_identity":
+            "本人確認が必要です。確認するには以下の欄にメールアドレスを入力してください。",
+        "continue_with_email": "メールアドレスで続ける",
+        "thanks_for_submitting_request_for_account_recovery":
+            "%(APP_NAME)sのブロックチェーンベースマルチファクタ認証を使用してアカウント回復のリクエストを送信していただきありがとうございます。出来る限り早く返答いたしますが、多数のメールが来ているため返答が遅れることがあることをご了承ください。本人確認の準備をしておいてください。",
+        "recovering_account": "アカウント回復中",
+        "recover_account": "アカウント回復",
+        "checking_account_owner": "アカウント所有者を確認しています",
+        "sending_recovery_request": "回復リクエストを送信しています",
+        "cant_confirm_account_ownership":
+            "アカウントの所有者を確認できません。パスワードを確認してください。",
+        "account_recovery_request_not_confirmed":
+            "アカウント回復リクエストはまだ確認されていません。しばらくお待ちいただき、後ほどもう一度ご確認ください。"
+    },
+    "user_profile": {
+        "unknown_account": "不明なアカウント",
+        "user_hasnt_made_any_posts_yet":
+            "%(name)sはまだ1つも投稿していないようです！",
+        "user_hasnt_started_bloggin_yet":
+            "%(name)sはまだブログを開始していないようです！",
+        "user_hasnt_followed_anything_yet":
+            "%(name)sはまだ誰もフォローしていません！%(name)sが最近新しいユーザーをフォローした場合、新しいコンテンツが有効になると個々のフィードに追加されます。",
+        "user_hasnt_had_any_replies_yet": "%(name)sへの返信はまだありません。",
+        "looks_like_you_havent_posted_anything_yet":
+            "あなたはまだ1つも投稿していないようです！",
+        "create_a_post": "投稿を作成する",
+        "explore_trending_articles": "トレンド記事を検索する",
+        "read_the_quick_start_guide": "クイックスタートガイドを読む",
+        "browse_the_faq": "FAQを参照する",
+        "followers": "フォロワー",
+        "this_is_users_reputations_score_it_is_based_on_history_of_votes":
+            "これは%(name)sの評価スコアです。\n\n評価スコアはアカウントが貰ったvoteの履歴に基いており、低品質のコンテンツを非表示にするのに使われます。",
+        "follower_count": {
+            "zero": "フォロワーがいません",
+            "one": "1人のフォロワー",
+            "other": "%(count)s人のフォロワー"
+        },
+        "followed_count": {
+            "zero": "誰もフォローしていません",
+            "one": "1人をフォロー中",
+            "other": "%(count)s人をフォロー中"
+        },
+        "post_count": {
+            "zero": "投稿がありません",
+            "one": "投稿1件",
+            "other": "投稿%(count)s 件"
+        }
+    },
+    "authorrewards_jsx": {
+        "estimated_author_rewards_last_week": "過去1週間の推定投稿者報酬",
+        "author_rewards_history": "投稿者報酬履歴"
+    },
+    "curationrewards_jsx": {
+        "estimated_curation_rewards_last_week":
+            "過去1週間の推定キュレーション報酬",
+        "curation_rewards_history": "キュレーション報酬履歴"
+    },
+    "post_jsx": {
+        "now_showing_comments_with_low_ratings":
+            "評価の低いコメントを表示しています。",
+        "sort_order": "並べ替え",
+        "comments_were_hidden_due_to_low_ratings":
+            "コメントは評価が低いため表示されません。"
+    },
+    "voting_jsx": {
+        "flagging_post_can_remove_rewards_the_flag_should_be_used_for_the_following":
+            "フラグはこの投稿の報酬を減らし、見えにくくします。フラグを立てる一般的な理由は",
+        "disagreement_on_rewards": "報酬に同意できない場合",
+        "fraud_or_plagiarism": "詐欺または剽窃",
+        "hate_speech_or_internet_trolling": "ヘイトスピーチまたは荒らし",
+        "intentional_miss_categorized_content_or_spam":
+            "意図的なカテゴリ間違いまたはスパム",
+        "pending_payout": "保留支払額 $%(value)s",
+        "payout_declined": "報酬を辞退",
+        "max_accepted_payout": "最大支払額 $%(value)s",
+        "promotion_cost": "プロモーションコスト $%(value)s",
+        "past_payouts": "支払い済み $%(value)s",
+        "past_payouts_author": " - 投稿者 $%(value)s",
+        "past_payouts_curators": " - キュレーター $%(value)s",
+        "we_will_reset_curation_rewards_for_this_post":
+            "ことにより、この投稿へのキュレーション報酬はリセットされます",
+        "removing_your_vote": "投票を削除する",
+        "changing_to_an_upvote": "Upvoteに変更する",
+        "changing_to_a_downvote": "Downvoteに変更する",
+        "confirm_flag": "フラグの確認",
+        "and_more": "他%(count)s人",
+        "votes_plural": {
+            "one": "%(count)s件の投票",
+            "other": "%(count)s件の投票"
+        }
+    },
+    "witnesses_jsx": {
+        "witness_thread": "証人スレッド",
+        "top_witnesses": "証人投票",
+        "you_have_votes_remaining": {
+            "zero": "これ以上投票できません",
+            "one": "あと1人に投票できます",
+            "other": "あと%(count)s人に投票できます"
+        },
+        "you_can_vote_for_maximum_of_witnesses": "最大30人の証人に投票できます",
+        "witness": "証人",
+        "information": "情報",
+        "if_you_want_to_vote_outside_of_top_enter_account_name":
+            "トップ100外の証人に投票したい場合、以下の欄にアカウント名を入力して投票してください",
+        "set_witness_proxy":
+            "証人への投票の代理人を選ぶこともできます。この操作はあなたの現在の証人選択をリセットします。",
+        "witness_set":
+            "投票の代理人を設定しています。手動による投票を再度有効にするには、代理人を解除してください。",
+        "witness_proxy_current": "現在の代理人は",
+        "witness_proxy_set": "代理人を設定",
+        "witness_proxy_clear": "代理人を解除",
+        "proxy_update_error": "代理人は更新されませんでした。"
+    },
+    "votesandcomments_jsx": {
+        "no_responses_yet_click_to_respond":
+            "まだ返信がありません。返信するにはクリックしてください。",
+        "response_count_tooltip": {
+            "zero": "返信がありません。返信するにはクリックしてください。",
+            "one": "返信は1件です。返信するにはクリックしてください。 ",
+            "other": "返信は%(count)s件です。返信するにはクリックしてください。"
+        },
+        "vote_count": {
+            "zero": "投票がありません",
+            "one": "1件の投票",
+            "other": "%(count)s件の投票"
+        }
+    },
+    "userkeys_jsx": {
+        "public": "公開",
+        "private": "秘密",
+        "public_something_key": "公開%(key)sキー",
+        "private_something_key": "秘密%(key)sキー",
+        "posting_key_is_required_it_should_be_different":
+            "投稿キーは投稿と投票に使用されます。アクティブキーやオーナーキーとは異なる必要があります。",
+        "the_active_key_is_used_to_make_transfers_and_place_orders":
+            "アクティブキーは送金や内部取引所への発注に使用します。",
+        "the_owner_key_is_required_to_change_other_keys":
+            "オーナーキーはアカウントのマスターキーであり、他のキーを変更する時に必要です。",
+        "the_private_key_or_password_should_be_kept_offline":
+            "オーナーキーの秘密キーやパスワードは可能な限りオフラインに保管してください。",
+        "the_memo_key_is_used_to_create_and_read_memos":
+            "メモキーはメモの暗号化や復号化に使用します。"
+    },
+    "suggestpassword_jsx": {
+        "APP_NAME_cannot_recover_passwords_keep_this_page_in_a_secure_location":
+            "%(APP_NAME)sはパスワードを回復できません。このページを耐火金庫や貸金庫のような安全な場所に保管してください。",
+        "APP_NAME_password_backup": "%(APP_NAME)sパスワードのバックアップ",
+        "APP_NAME_password_backup_required":
+            "%(APP_NAME)sパスワードのバックアップ (必須)",
+        "after_printing_write_down_your_user_name":
+            "印刷後、ユーザー名を書き留めてください。"
+    },
+    "converttosteem_jsx": {
+        "your_existing_DEBT_TOKEN_are_liquid_and_transferable":
+            "あなたが持つ%(DEBT_TOKEN)sは流動的であり移動可能です。代わりに、%(DEBT_TOKEN)sを%(link)sから行けるサイトで直接取引したり、または外部の取引所に送ることができます。",
+        "this_is_a_price_feed_conversion":
+            "これは価格フィードによる変換です。3.5日の遅延は価格フィードの平均値を用いたマネーゲームによる悪用を防止するために必要です。",
+        "convert_to_LIQUID_TOKEN": "%(LIQUID_TOKEN)sへの変換",
+        "DEBT_TOKEN_will_be_unavailable":
+            "この操作は3.5日かかり、キャンセルすることができません。%(DEBT_TOKEN)sはすぐに使用不能になります。"
+    },
+    "tips_js": {
+        "liquid_token":
+            "いつでもどこへでも送ることができる取引可能なトークンです。<br/>%(LIQUID_TOKEN)sはパワーアップによって%(VESTING_TOKEN)sに変換できます。",
+        "influence_token":
+            "投稿への支払額の制御権を持ち、キュレーション報酬を得ることが可能になる、プラットフォームにおける影響力を持つトークンです。",
+        "estimated_value":
+            "推定値は%(LIQUID_TOKEN)sの平均値に基いてUSドルで表されます。",
+        "non_transferable":
+            "%(VESTING_TOKEN)sは移転不可能であり、再び%(LIQUID_TOKEN)sに変換するには、3ヶ月（13週間）かかります。",
+        "converted_VESTING_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again":
+            "変換した%(VESTING_TOKEN)sは、自分自身や他の人に送ることが可能ですが、もう一度送るには%(LIQUID_TOKEN)sに変換する必要があります。",
+        "part_of_your_steem_power_is_currently_delegated":
+            "現在のSTEEM POWERの一部は委託されたものです。委託は影響力の寄付や、新規ユーザーがSteemitでアクションを起こしやすくするために行われます。委託された額は変動する可能性があります。"
+    },
+    "promote_post_jsx": {
+        "promote_post": "投稿をプロモートする",
+        "spend_your_DEBT_TOKEN_to_advertise_this_post":
+            "%(DEBT_TOKEN)sを支払ってプロモートコンテンツセクションでこの投稿を宣伝します。",
+        "you_successfully_promoted_this_post":
+            "この投稿のプロモートに成功しました。",
+        "this_post_was_hidden_due_to_low_ratings":
+            "この投稿は評価が低いため非表示になってしまいました。"
+    },
+    "about_jsx": {
+        "about_app": "%(APP_NAME)sについて",
+        "about_app_details":
+            "%(APP_NAME)sは誰もがコンテンツ作成やキュレーションで報酬を得られるソーシャルメディアプラットフォームです。これにはSteemという堅牢なデジタルポイントシステムを活用しています。それは市場の価格発見と流動性によってデジタル報酬で実価値を与えます。",
+        "learn_more_at_app_url": "詳細は%(APP_URL)sを参照してください。",
+        "resources": "リソース"
+    },
+    "markdownviewer_jsx": {
+        "images_were_hidden_due_to_low_ratings":
+            "評価が低いため画像は非表示になりました。"
+    },
+    "postsummary_jsx": {
+        "resteemed": "Resteemしました",
+        "resteemed_by": "Resteemed by",
+        "this_post_is": "この投稿は",
+        "you_can": "You can",
+        "reveal_it": "この投稿を表示する、",
+        "adjust_your": "を変更してください。",
+        "display_preferences": "表示設定",
+        "create_an_account": "アカウントを作成して",
+        "to_save_your_preferences": "表示設定を行ってください。"
+    },
+    "posts_index": {
+        "empty_feed_1": "あなたはまだ誰もフォローしていないようです。",
+        "empty_feed_2":
+            "最近新しいユーザーをフォローした場合、新しいコンテンツが有効になると個々のフィードに追加されます。",
+        "empty_feed_3": "トレンド記事を検索する",
+        "empty_feed_4": "クイックスタートガイドを読む",
+        "empty_feed_5": "FAQを参照する"
+    },
+    "transferhistoryrow_jsx": {
+        "to_savings": "貯蓄に",
+        "from_savings": "貯蓄から",
+        "cancel_transfer_from_savings":
+            "貯蓄からの引き出しをキャンセルしました",
+        "stop_power_down": "パワーダウンを停止しました",
+        "start_power_down_of": "パワーダウンを開始しました：",
+        "receive_interest_of": "利息受け取りました："
+    },
+    "savingswithdrawhistory_jsx": {
+        "cancel_this_withdraw_request": "引き出し依頼をキャンセルしますか？",
+        "pending_savings_withdrawals": "保留中の貯蓄引き出し",
+        "withdraw": "%(amount)sを引き出して、",
+        "to": "%(to)sの残高に加えます。",
+        "from_to": "%(from)sから%(to)sへ送ります。"
+    },
+    "explorepost_jsx": {
+        "copied": "コピーしました！",
+        "copy": "コピー",
+        "alternative_sources": "その他のソース"
+    },
+    "header_jsx": {
+        "home": "ホーム",
+        "create_a_post": "投稿を作成",
+        "change_account_password": "アカウントパスワードを変更",
+        "create_account": "アカウント作成",
+        "stolen_account_recovery": "盗難アカウントの回復",
+        "people_following": "をフォロー中のユーザー",
+        "people_followed_by": "がフォローしているユーザー",
+        "curation_rewards_by": "のキュレーション報酬",
+        "author_rewards_by": "の投稿者報酬",
+        "replies_to": "への返信",
+        "comments_by": "のコメント"
+    },
+    "loginform_jsx": {
+        "you_need_a_private_password_or_key":
+            "秘密パスワードまたはキーが必要です（公開キーではありません）",
+        "cryptography_test_failed": "暗号化テストに失敗しました",
+        "unable_to_log_you_in": "このブラウザではログインできません。",
+        "the_latest_versions_of": "最新バージョン： ",
+        "are_well_tested_and_known_to_work_with":
+            "はテスト済みであり、%(APP_URL)sでの動作を確認済みです。",
+        "due_to_server_maintenance":
+            "サーバーメンテナンスのため、読み取り専用モードで実行しています。ご迷惑をおかけして申し訳ありません。",
+        "login_to_vote": "ログインして投票します",
+        "login_to_post": "ログインして投稿します",
+        "login_to_comment": "ログインしてコメントします",
+        "posting": "投稿",
+        "active_or_owner": "アクティブまたはオーナー",
+        "this_password_is_bound_to_your_account_owner_key":
+            "このパスワードはアカウントのオーナーキーに紐付けられており、このサイトのログインには使用できません。",
+        "however_you_can_use_it_to": "ですが、",
+        "update_your_password": "パスワードを更新して",
+        "to_obtain_a_more_secure_set_of_keys":
+            "より安全なキーを入手することに使用できます。",
+        "this_password_is_bound_to_your_account_active_key":
+            "このパスワードはアカウントのアクティブキーに紐付けられており、このサイトのログインには使用できません。",
+        "you_may_use_this_active_key_on_other_more":
+            "アクティブキーはウォレットや取引所などのより安全性を重視する場所で使用できます。",
+        "you_account_has_been_successfully_created":
+            "あなたのアカウントは作成済みです！",
+        "you_account_has_been_successfully_recovered":
+            "あなたのアカウントは正常に回復されました！",
+        "password_update_succes":
+            "%(accountName)sのパスワードは正常に更新されました。",
+        "password_info":
+            "入力したパスワードまたは秘密キーが間違っています。手入力したか、またはデータエラーがある可能性があります。ヒント：Steemitで生成したパスワードまたは秘密キーは0 (ゼロ)、O (大文字のo)、I (大文字のi)、l (小文字のL)を含みません。",
+        "enter_your_username": "ユーザー名を入力してください",
+        "password_or_wif": "パスワードまたはWIF",
+        "this_operation_requires_your_key_or_master_password":
+            "この操作には%(authType)sキーまたはマスターパスワードが必要です。",
+        "keep_me_logged_in": "ログイン状態を維持する",
+        "amazing_community": "素晴らしいコミュニティ",
+        "to_comment_and_reward_others":
+            "に参加して、他の人にコメントして報酬を与えましょう。",
+        "signup_button": "サインアップして",
+        "signup_button_emphasis": "STEEMを手に入れよう！",
+        "sign_up_get_steem": "登録してSTEEMを手に入れよう！",
+        "returning_users": "再",
+        "join_our": ""
+    },
+    "chainvalidation_js": {
+        "account_name_should": "アカウント名",
+        "not_be_empty": "が入力されていません。",
+        "be_longer": "が短すぎます。",
+        "be_shorter": "が長すぎます。",
+        "each_account_segment_should": "区切られたアカウント名の各部分",
+        "start_with_a_letter": "は文字で始まる必要があります。",
+        "have_only_letters_digits_or_dashes":
+            "には英数字またはダッシュのみが使用できます。",
+        "have_only_one_dash_in_a_row": "にはダッシュを1つだけ使用可能です。",
+        "end_with_a_letter_or_digit": "は英数字で終わります。",
+        "verified_exchange_no_memo": "取引所へ送信するときはメモが必要です。"
+    },
+    "settings_jsx": {
+        "invalid_url": "無効なURL",
+        "name_is_too_long": "名前が長すぎます",
+        "name_must_not_begin_with": "@で始まる名前は設定できません",
+        "about_is_too_long": "概要が長すぎます",
+        "location_is_too_long": "場所が長すぎます",
+        "website_url_is_too_long": "URLが長すぎます",
+        "public_profile_settings": "公開プロフィール設定",
+        "private_post_display_settings": "ローカル表示設定",
+        "not_safe_for_work_nsfw_content": "閲覧注意 (NSFW) コンテンツ",
+        "always_hide": "常に非表示",
+        "always_warn": "常に警告する",
+        "always_show": "常に表示",
+        "muted_users": "ミュートユーザー",
+        "update": "更新",
+        "profile_image_url": "プロフィール画像URL",
+        "cover_image_url": "カバー画像URL",
+        "profile_name": "表示名",
+        "profile_about": "概要",
+        "profile_location": "場所",
+        "profile_website": "ウェブサイト"
+    },
+    "transfer_jsx": {
+        "amount_is_in_form": "金額は99999.999の形式です",
+        "insufficient_funds": "残高不足です",
+        "use_only_3_digits_of_precison": "小数点以下は3桁以内にしてください",
+        "send_to_account": "送金先アカウント",
+        "asset": "アセット",
+        "this_memo_is_private": "このメモは非公開です",
+        "this_memo_is_public": "このメモは公開されます",
+        "convert_to_VESTING_TOKEN": "%(VESTING_TOKEN)sに変換",
+        "balance_subject_to_3_day_withdraw_waiting_period":
+            "引き出しに3日間の待ち時間が必要となる貯蓄口座です。",
+        "move_funds_to_another_account":
+            "資金を他のSteemアカウントに送ります。",
+        "protect_funds_by_requiring_a_3_day_withdraw_waiting_period":
+            "3日間の引き出し待ち時間で資金を守ります。",
+        "withdraw_funds_after_the_required_3_day_waiting_period":
+            "3日間の待ち時間の後に資金を引き出します。",
+        "from": "送信者",
+        "to": "受信者",
+        "asset_currently_collecting":
+            "%(asset)sの現在の利子は年間%(interest)s%%です。",
+        "beware_of_spam_and_phishing_links":
+            "送金メモのスパムやフィッシングに注意してください。信用していないユーザーからのリンクを開かないでください。第三者のウェブサイトに秘密キーを提供しないでください。"
+    },
+    "userwallet_jsx": {
+        "conversion_complete_tip": "変換完了予定",
+        "in_conversion": "%(amount)sが変換中です",
+        "transfer_to_savings": "貯蓄口座に送る",
+        "power_up": "パワーアップ",
+        "power_down": "パワーダウン",
+        "market": "取引所",
+        "convert_to_LIQUID_TOKEN": "%(LIQUID_TOKEN)sに変換",
+        "withdraw_LIQUID_TOKEN": "%(LIQUID_TOKEN)sを引き出す",
+        "withdraw_DEBT_TOKENS": "%(DEBT_TOKENS)sを引き出す",
+        "tokens_worth_about_1_of_LIQUID_TICKER":
+            "約$1.00の%(LIQUID_TICKER)sと同じ価値のトークンです。現在、利子が年間%(sbdInterest)s%%つきます。",
+        "savings": "貯蓄口座",
+        "estimated_account_value": "推定アカウント価格",
+        "next_power_down_is_scheduled_to_happen":
+            "次回のパワーダウン発生予定：",
+        "transfers_are_temporary_disabled":
+            "送金は一時的に無効になっています。",
+        "history": "履歴",
+        "redeem_rewards": "報酬の請求 (残高に送る)",
+        "buy_steem_or_steem_power": "STEEMやSTEEM POWERを購入する"
+    },
+    "powerdown_jsx": {
+        "power_down": "パワーダウン",
+        "amount": "数量",
+        "already_power_down":
+            "既に%(AMOUNT)s %(LIQUID_TICKER)sのパワーダウン中です (%(WITHDRAWN)s %(LIQUID_TICKER)sが支払い済みです) 。パワーダウン量を変更すると、支払いスケジュールがリセットされることに注意してください。",
+        "delegating":
+            " %(AMOUNT)s %(LIQUID_TICKER)sを委託しています。委託分はロックされており、委託が終了して7日が過ぎるまでパワーダウンできません。",
+        "per_week": "毎週~%(AMOUNT)s %(LIQUID_TICKER)sです。",
+        "warning":
+            "アカウントの残高を%(AMOUNT)s %(VESTING_TOKEN)s未満にするのはおすすめしません。アカウントが使用できない状態になる可能性があります。",
+        "error": "パワーダウンできません (エラー : %(MESSAGE)s)"
+    },
+    "checkloginowner_jsx": {
+        "your_password_permissions_were_reduced":
+            "あなたのパスワード権限が減少しました。",
+        "if_you_did_not_make_this_change":
+            "あなたがこの変更をしていない場合は、",
+        "ownership_changed_on": "所有権変更：",
+        "deadline_for_recovery_is": "アカウント回復の期限は",
+        "i_understand_dont_show_again": "理解しました。再表示は不要です。"
     }
-  },
-  "navigation": {
-    "about": "Steemについて",
-    "explore": "投稿を探す",
-    "APP_NAME_whitepaper": "%(APP_NAME)sホワイトペーパー",
-    "buy_LIQUID_TOKEN": "%(LIQUID_TOKEN)sを買う",
-    "sell_LIQUID_TOKEN": "%(LIQUID_TOKEN)sを売る",
-    "currency_market": "内部取引所",
-    "stolen_account_recovery": "盗難アカウントの回復",
-    "change_account_password": "パスワードの変更",
-    "witnesses": "証人",
-    "vote_for_witnesses": "証人に投票する",
-    "privacy_policy": "プライバシーポリシー",
-    "terms_of_service": "利用規約",
-    "sign_up": "登録",
-    "learn_more": "詳細",
-    "welcome": "ようこそ",
-    "faq": "FAQ",
-    "shop": "Steemitショップ",
-    "chat": "Steemitチャット",
-    "app_center": "Steemitアプリセンター",
-    "api_docs": "Steemit API資料",
-    "bluepaper": "Steemブルーペーパー",
-    "whitepaper": "Steemホワイトペーパー",
-    "intro_tagline": "金がものを言う",
-    "intro_paragraph": "あなたの声には価値があります。あなたのハイクオリティな投稿やキュレーションに報酬を出すコミュニティに参加しましょう。"
-  },
-  "main_menu": {
-    "hot": "ホット",
-    "trending": "トレンド"
-  },
-  "reply_editor": {
-    "shorten_title": "タイトルが長すぎます",
-    "exceeds_maximum_length": "最大長を超えています (%(maxKb)sKB)",
-    "including_the_category": "(カテゴリ'%(rootCategory)s'を含む)",
-    "use_limited_amount_of_tags": "合計で%(tagsLength)s個のタグがあります%(includingCategory)s。投稿とカテゴリの行には5つ以内にしてください。",
-    "are_you_sure_you_want_to_clear_this_form": "フォームの内容を消去してもよろしいですか？",
-    "uploading": "アップロード中",
-    "draft_saved": "下書きを保存しました。",
-    "editor": "エディタ",
-    "insert_images_by_dragging_dropping": "画像を挿入するにはドラッグ＆ドロップするか、",
-    "pasting_from_the_clipboard": "クリップボードから貼り付けるか、",
-    "selecting_them": "選択してください。",
-    "image_upload": "画像アップロード",
-    "power_up_100": "パワーアップ 100%%",
-    "default_50_50": "既定 (50%% / 50%%)",
-    "decline_payout": "報酬を辞退",
-    "check_this_to_auto_upvote_your_post": "チェックすると投稿を自動でupvoteします。",
-    "markdown_styling_guide": "マークダウン書式ガイド",
-    "or_by": "または",
-    "title": "タイトル",
-    "update_post": "投稿を更新",
-    "markdown_not_supported": "ここではマークダウンはサポートされていません"
-  },
-  "category_selector_jsx": {
-    "tag_your_story": "タグ(最大5つ)。1つ目のタグはメインカテゴリです。日本語の投稿には japanese を含めてください。",
-    "select_a_tag": "タグを選択してください",
-    "maximum_tag_length_is_24_characters": "タグの最大長は24文字です。",
-    "use_limited_amount_of_categories": "タグは%(amount)s個以下にしてください。",
-    "use_only_lowercase_letters": "小文字のみ使用してください。",
-    "use_one_dash": "ダッシュは1つまで使用可能です。",
-    "use_spaces_to_separate_tags": "タグを区切るのにはスペースを使用してください。",
-    "use_only_allowed_characters": "英小文字、数字、ダッシュのみ使用可能です。",
-    "must_start_with_a_letter": "文字で始める必要があります。",
-    "must_end_with_a_letter_or_number": "文字または数字で終わる必要があります。"
-  },
-  "postfull_jsx": {
-    "this_post_is_not_available_due_to_a_copyright_claim": "この投稿は著作権上の問題により表示されません。",
-    "share_on_facebook": "Facebookでシェア",
-    "share_on_twitter": "Twitterでシェア",
-    "share_on_linkedin": "Linkedinでシェア",
-    "recent_password": "直近のパスワード",
-    "in_week_convert_DEBT_TOKEN_to_LIQUID_TOKEN": "3.5日で、%(amount)s %(DEBT_TOKEN)sを%(LIQUID_TOKEN)sに変換します。",
-    "view_the_full_context": "スレッドをすべて表示する",
-    "view_the_direct_parent": "親コメントを表示する",
-    "you_are_viewing_a_single_comments_thread_from": "次のスレッドのコメントの1つを表示しています "
-  },
-  "market_jsx": {
-    "action": "操作",
-    "date_created": "作成日時",
-    "last_price": "現在値",
-    "24h_volume": "出来高(24h)",
-    "spread": "スプレッド",
-    "total": "合計",
-    "available": "注文可能額",
-    "lowest_ask": "現在買値",
-    "highest_bid": "現在売値",
-    "buy_orders": "買い注文",
-    "sell_orders": "売り注文",
-    "trade_history": "マーケット履歴",
-    "open_orders": "注文一覧",
-    "sell_amount_for_atleast": "%(amount_to_sell)sを%(min_to_receive)sで売ります (%(effectivePrice)s)",
-    "buy_atleast_amount_for": "%(min_to_receive)sを%(amount_to_sell)sで買います (%(effectivePrice)s)",
-    "price_warning_above": "この価格は現在の市場価格%(marketPrice)sを遥かに上回っています。本当によろしいですか？",
-    "price_warning_below": "この価格は現在の市場価格%(marketPrice)sを遥かに下回っています。本当によろしいですか？",
-    "order_cancel_confirm": "%(user)sの注文%(order_id)sをキャンセルしますか？",
-    "order_cancelled": "注文%(order_id)sはキャンセルされました",
-    "higher": "上へ",
-    "lower": "下へ",
-    "total_DEBT_TOKEN_SHORT_CURRENCY_SIGN": "合計%(DEBT_TOKEN_SHORT)s (%(CURRENCY_SIGN)s)"
-  },
-  "recoveraccountstep1_jsx": {
-    "begin_recovery": "回復を開始する",
-    "not_valid": "無効です",
-    "account_name_is_not_found": "アカウント名が存在しません",
-    "unable_to_recover_account_not_change_ownership_recently": "このアカウントは最近パスワードが変更されていないため回復できません。",
-    "password_not_used_in_last_days": "このパスワードは30日以内にこのアカウントで使用されていません。",
-    "request_already_submitted_contact_support": "リクエストは既に送信されていて、現在作業中です。リクエストの状況については%(SUPPORT_EMAIL)sにお問い合わせください。",
-    "recover_account_intro": "時折、Steemianのオーナーキーが盗まれることがあります。盗難アカウントの回復は、盗んだ者がオーナーキーを変更してから30日以内に、アカウントの正しい所有者にアカウントを取り戻します。盗難アカウントの回復は、アカウントの所有者が'%(APP_NAME)s'をアカウント受託者とし、%(APP_NAME)sの利用規約に準拠している場合にのみ%(APP_URL)sで行うことができます。",
-    "login_with_facebook_or_reddit_media_to_verify_identity": "FacebookまたはRedditにログインして本人確認をしてください。",
-    "login_with_social_media_to_verify_identity": "%(provider)sにログインして本人確認をしてください。",
-    "enter_email_toverify_identity": "本人確認が必要です。確認するには以下の欄にメールアドレスを入力してください。",
-    "continue_with_email": "メールアドレスで続ける",
-    "thanks_for_submitting_request_for_account_recovery": "%(APP_NAME)sのブロックチェーンベースマルチファクタ認証を使用してアカウント回復のリクエストを送信していただきありがとうございます。出来る限り早く返答いたしますが、多数のメールが来ているため返答が遅れることがあることをご了承ください。本人確認の準備をしておいてください。",
-    "recovering_account": "アカウント回復中",
-    "recover_account": "アカウント回復",
-    "checking_account_owner": "アカウント所有者を確認しています",
-    "sending_recovery_request": "回復リクエストを送信しています",
-    "cant_confirm_account_ownership": "アカウントの所有者を確認できません。パスワードを確認してください。",
-    "account_recovery_request_not_confirmed": "アカウント回復リクエストはまだ確認されていません。しばらくお待ちいただき、後ほどもう一度ご確認ください。"
-  },
-  "user_profile": {
-    "unknown_account": "不明なアカウント",
-    "user_hasnt_made_any_posts_yet": "%(name)sはまだ1つも投稿していないようです！",
-    "user_hasnt_started_bloggin_yet": "%(name)sはまだブログを開始していないようです！",
-    "user_hasnt_followed_anything_yet": "%(name)sはまだ誰もフォローしていません！%(name)sが最近新しいユーザーをフォローした場合、新しいコンテンツが有効になると個々のフィードに追加されます。",
-    "user_hasnt_had_any_replies_yet": "%(name)sへの返信はまだありません。",
-    "looks_like_you_havent_posted_anything_yet": "あなたはまだ1つも投稿していないようです！",
-    "create_a_post": "投稿を作成する",
-    "explore_trending_articles": "トレンド記事を検索する",
-    "read_the_quick_start_guide": "クイックスタートガイドを読む",
-    "browse_the_faq": "FAQを参照する",
-    "followers": "フォロワー",
-    "this_is_users_reputations_score_it_is_based_on_history_of_votes": "これは%(name)sの評価スコアです。\n\n評価スコアはアカウントが貰ったvoteの履歴に基いており、低品質のコンテンツを非表示にするのに使われます。",
-    "follower_count": {
-      "zero": "フォロワーがいません",
-      "one": "1人のフォロワー",
-      "other": "%(count)s人のフォロワー"
-    },
-    "followed_count": {
-      "zero": "誰もフォローしていません",
-      "one": "1人をフォロー中",
-      "other": "%(count)s人をフォロー中"
-    },
-    "post_count": {
-      "zero": "投稿がありません",
-      "one": "投稿1件",
-      "other": "投稿%(count)s 件"
-    }
-  },
-  "authorrewards_jsx": {
-    "estimated_author_rewards_last_week": "過去1週間の推定投稿者報酬",
-    "author_rewards_history": "投稿者報酬履歴"
-  },
-  "curationrewards_jsx": {
-    "estimated_curation_rewards_last_week": "過去1週間の推定キュレーション報酬",
-    "curation_rewards_history": "キュレーション報酬履歴"
-  },
-  "post_jsx": {
-    "now_showing_comments_with_low_ratings": "評価の低いコメントを表示しています。",
-    "sort_order": "並べ替え",
-    "comments_were_hidden_due_to_low_ratings": "コメントは評価が低いため表示されません。"
-  },
-  "voting_jsx": {
-    "flagging_post_can_remove_rewards_the_flag_should_be_used_for_the_following": "フラグはこの投稿の報酬を減らし、見えにくくします。フラグを立てる一般的な理由は",
-    "disagreement_on_rewards": "報酬に同意できない場合",
-    "fraud_or_plagiarism": "詐欺または剽窃",
-    "hate_speech_or_internet_trolling": "ヘイトスピーチまたは荒らし",
-    "intentional_miss_categorized_content_or_spam": "意図的なカテゴリ間違いまたはスパム",
-    "pending_payout": "保留支払額 $%(value)s",
-    "payout_declined": "報酬を辞退",
-    "max_accepted_payout": "最大支払額 $%(value)s",
-    "promotion_cost": "プロモーションコスト $%(value)s",
-    "past_payouts": "支払い済み $%(value)s",
-    "past_payouts_author": " - 投稿者 $%(value)s",
-    "past_payouts_curators": " - キュレーター $%(value)s",
-    "we_will_reset_curation_rewards_for_this_post": "ことにより、この投稿へのキュレーション報酬はリセットされます",
-    "removing_your_vote": "投票を削除する",
-    "changing_to_an_upvote": "Upvoteに変更する",
-    "changing_to_a_downvote": "Downvoteに変更する",
-    "confirm_flag": "フラグの確認",
-    "and_more": "他%(count)s人",
-    "votes_plural": {
-      "one": "%(count)s件の投票",
-      "other": "%(count)s件の投票"
-    }
-  },
-  "witnesses_jsx": {
-    "witness_thread": "証人スレッド",
-    "top_witnesses": "証人投票",
-    "you_have_votes_remaining": {
-      "zero": "これ以上投票できません",
-      "one": "あと1人に投票できます",
-      "other": "あと%(count)s人に投票できます"
-    },
-    "you_can_vote_for_maximum_of_witnesses": "最大30人の証人に投票できます",
-    "witness": "証人",
-    "information": "情報",
-    "if_you_want_to_vote_outside_of_top_enter_account_name": "トップ50外の証人に投票したい場合、以下の欄にアカウント名を入力して投票してください",
-    "set_witness_proxy": "証人への投票の代理人を選ぶこともできます。この操作はあなたの現在の証人選択をリセットします。",
-    "witness_set": "投票の代理人を設定しています。手動による投票を再度有効にするには、代理人を解除してください。",
-    "witness_proxy_current": "現在の代理人は",
-    "witness_proxy_set": "代理人を設定",
-    "witness_proxy_clear": "代理人を解除",
-    "proxy_update_error": "代理人は更新されませんでした。"
-  },
-  "votesandcomments_jsx": {
-    "no_responses_yet_click_to_respond": "まだ返信がありません。返信するにはクリックしてください。",
-    "response_count_tooltip": {
-      "zero": "返信がありません。返信するにはクリックしてください。",
-      "one": "返信は1件です。返信するにはクリックしてください。 ",
-      "other": "返信は%(count)s件です。返信するにはクリックしてください。"
-    },
-    "vote_count": {
-      "zero": "投票がありません",
-      "one": "1件の投票",
-      "other": "%(count)s件の投票"
-    }
-  },
-  "userkeys_jsx": {
-    "public": "公開",
-    "private": "秘密",
-    "public_something_key": "公開%(key)sキー",
-    "private_something_key": "秘密%(key)sキー",
-    "posting_key_is_required_it_should_be_different": "投稿キーは投稿と投票に使用されます。アクティブキーやオーナーキーとは異なる必要があります。",
-    "the_active_key_is_used_to_make_transfers_and_place_orders": "アクティブキーは送金や内部取引所への発注に使用します。",
-    "the_owner_key_is_required_to_change_other_keys": "オーナーキーはアカウントのマスターキーであり、他のキーを変更する時に必要です。",
-    "the_private_key_or_password_should_be_kept_offline": "オーナーキーの秘密キーやパスワードは可能な限りオフラインに保管してください。",
-    "the_memo_key_is_used_to_create_and_read_memos": "メモキーはメモの暗号化や復号化に使用します。"
-  },
-  "suggestpassword_jsx": {
-    "APP_NAME_cannot_recover_passwords_keep_this_page_in_a_secure_location": "%(APP_NAME)sはパスワードを回復できません。このページを耐火金庫や貸金庫のような安全な場所に保管してください。",
-    "APP_NAME_password_backup": "%(APP_NAME)sパスワードのバックアップ",
-    "APP_NAME_password_backup_required": "%(APP_NAME)sパスワードのバックアップ (必須)",
-    "after_printing_write_down_your_user_name": "印刷後、ユーザー名を書き留めてください。"
-  },
-  "converttosteem_jsx": {
-    "your_existing_DEBT_TOKEN_are_liquid_and_transferable": "あなたが持つ%(DEBT_TOKEN)sは流動的であり移動可能です。代わりに、%(DEBT_TOKEN)sを%(link)sから行けるサイトで直接取引したり、または外部の取引所に送ることができます。",
-    "this_is_a_price_feed_conversion": "これは価格フィードによる変換です。3.5日の遅延は価格フィードの平均値を用いたマネーゲームによる悪用を防止するために必要です。",
-    "convert_to_LIQUID_TOKEN": "%(LIQUID_TOKEN)sへの変換",
-    "DEBT_TOKEN_will_be_unavailable": "この操作は3.5日かかり、キャンセルすることができません。%(DEBT_TOKEN)sはすぐに使用不能になります。"
-  },
-  "tips_js": {
-    "liquid_token": "いつでもどこへでも送ることができる取引可能なトークンです。<br/>%(LIQUID_TOKEN)sはパワーアップによって%(VESTING_TOKEN)sに変換できます。",
-    "influence_token": "投稿への支払額の制御権を持ち、キュレーション報酬を得ることが可能になる、プラットフォームにおける影響力を持つトークンです。",
-    "estimated_value": "推定値は%(LIQUID_TOKEN)sの平均値に基いてUSドルで表されます。",
-    "non_transferable": "%(VESTING_TOKEN)sは移転不可能であり、再び%(LIQUID_TOKEN)sに変換するには、3ヶ月（13週間）かかります。",
-    "converted_VESTING_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again": "変換した%(VESTING_TOKEN)sは、自分自身や他の人に送ることが可能ですが、もう一度送るには%(LIQUID_TOKEN)sに変換する必要があります。",
-    "part_of_your_steem_power_is_currently_delegated": "現在のSTEEM POWERの一部は委託されたものです。委託は影響力の寄付や、新規ユーザーがSteemitでアクションを起こしやすくするために行われます。委託された額は変動する可能性があります。"
-  },
-  "promote_post_jsx": {
-    "promote_post": "投稿をプロモートする",
-    "spend_your_DEBT_TOKEN_to_advertise_this_post": "%(DEBT_TOKEN)sを支払ってプロモートコンテンツセクションでこの投稿を宣伝します。",
-    "you_successfully_promoted_this_post": "この投稿のプロモートに成功しました。",
-    "this_post_was_hidden_due_to_low_ratings": "この投稿は評価が低いため非表示になってしまいました。"
-  },
-  "about_jsx": {
-    "about_app": "%(APP_NAME)sについて",
-    "about_app_details": "%(APP_NAME)sは誰もがコンテンツ作成やキュレーションで報酬を得られるソーシャルメディアプラットフォームです。これにはSteemという堅牢なデジタルポイントシステムを活用しています。それは市場の価格発見と流動性によってデジタル報酬で実価値を与えます。",
-    "learn_more_at_app_url": "詳細は%(APP_URL)sを参照してください。",
-    "resources": "リソース"
-  },
-  "markdownviewer_jsx": {
-    "images_were_hidden_due_to_low_ratings": "評価が低いため画像は非表示になりました。"
-  },
-  "postsummary_jsx": {
-    "resteemed": "Resteemしました",
-    "resteemed_by": "Resteemed by",
-    "this_post_is": "この投稿は",
-    "you_can": "You can",
-    "reveal_it": "この投稿を表示する、",
-    "adjust_your": "を変更してください。",
-    "display_preferences": "表示設定",
-    "create_an_account": "アカウントを作成して",
-    "to_save_your_preferences": "表示設定を行ってください。"
-  },
-  "posts_index": {
-    "empty_feed_1": "あなたはまだ誰もフォローしていないようです。",
-    "empty_feed_2": "最近新しいユーザーをフォローした場合、新しいコンテンツが有効になると個々のフィードに追加されます。",
-    "empty_feed_3": "トレンド記事を検索する",
-    "empty_feed_4": "クイックスタートガイドを読む",
-    "empty_feed_5": "FAQを参照する"
-  },
-  "transferhistoryrow_jsx": {
-    "to_savings": "貯蓄に",
-    "from_savings": "貯蓄から",
-    "cancel_transfer_from_savings": "貯蓄からの引き出しをキャンセルしました",
-    "stop_power_down": "パワーダウンを停止しました",
-    "start_power_down_of": "パワーダウンを開始しました：",
-    "receive_interest_of": "利息受け取りました："
-  },
-  "savingswithdrawhistory_jsx": {
-    "cancel_this_withdraw_request": "引き出し依頼をキャンセルしますか？",
-    "pending_savings_withdrawals": "保留中の貯蓄引き出し",
-    "withdraw": "%(amount)sを引き出して、",
-    "to": "%(to)sの残高に加えます。",
-    "from_to": "%(from)sから%(to)sへ送ります。"
-  },
-  "explorepost_jsx": {
-    "copied": "コピーしました！",
-    "copy": "コピー",
-    "alternative_sources": "その他のソース"
-  },
-  "header_jsx": {
-    "home": "ホーム",
-    "create_a_post": "投稿を作成",
-    "change_account_password": "アカウントパスワードを変更",
-    "create_account": "アカウント作成",
-    "stolen_account_recovery": "盗難アカウントの回復",
-    "people_following": "をフォロー中のユーザー",
-    "people_followed_by": "がフォローしているユーザー",
-    "curation_rewards_by": "のキュレーション報酬",
-    "author_rewards_by": "の投稿者報酬",
-    "replies_to": "への返信",
-    "comments_by": "のコメント"
-  },
-  "loginform_jsx": {
-    "you_need_a_private_password_or_key": "秘密パスワードまたはキーが必要です（公開キーではありません）",
-    "cryptography_test_failed": "暗号化テストに失敗しました",
-    "unable_to_log_you_in": "このブラウザではログインできません。",
-    "the_latest_versions_of": "最新バージョン： ",
-    "are_well_tested_and_known_to_work_with": "はテスト済みであり、%(APP_URL)sでの動作を確認済みです。",
-    "due_to_server_maintenance": "サーバーメンテナンスのため、読み取り専用モードで実行しています。ご迷惑をおかけして申し訳ありません。",
-    "login_to_vote": "ログインして投票します",
-    "login_to_post": "ログインして投稿します",
-    "login_to_comment": "ログインしてコメントします",
-    "posting": "投稿",
-    "active_or_owner": "アクティブまたはオーナー",
-    "this_password_is_bound_to_your_account_owner_key": "このパスワードはアカウントのオーナーキーに紐付けられており、このサイトのログインには使用できません。",
-    "however_you_can_use_it_to": "ですが、",
-    "update_your_password": "パスワードを更新して",
-    "to_obtain_a_more_secure_set_of_keys": "より安全なキーを入手することに使用できます。",
-    "this_password_is_bound_to_your_account_active_key": "このパスワードはアカウントのアクティブキーに紐付けられており、このサイトのログインには使用できません。",
-    "you_may_use_this_active_key_on_other_more": "アクティブキーはウォレットや取引所などのより安全性を重視する場所で使用できます。",
-    "you_account_has_been_successfully_created": "あなたのアカウントは作成済みです！",
-    "you_account_has_been_successfully_recovered": "あなたのアカウントは正常に回復されました！",
-    "password_update_succes": "%(accountName)sのパスワードは正常に更新されました。",
-    "password_info": "入力したパスワードまたは秘密キーが間違っています。手入力したか、またはデータエラーがある可能性があります。ヒント：Steemitで生成したパスワードまたは秘密キーは0 (ゼロ)、O (大文字のo)、I (大文字のi)、l (小文字のL)を含みません。",
-    "enter_your_username": "ユーザー名を入力してください",
-    "password_or_wif": "パスワードまたはWIF",
-    "this_operation_requires_your_key_or_master_password": "この操作には%(authType)sキーまたはマスターパスワードが必要です。",
-    "keep_me_logged_in": "ログイン状態を維持する",
-    "amazing_community": "素晴らしいコミュニティ",
-    "to_comment_and_reward_others": "に参加して、他の人にコメントして報酬を与えましょう。",
-    "signup_button": "サインアップして",
-    "signup_button_emphasis": "STEEMを手に入れよう！",
-    "sign_up_get_steem": "登録してSTEEMを手に入れよう！",
-    "returning_users": "再",
-    "join_our": ""
-  },
-  "chainvalidation_js": {
-    "account_name_should": "アカウント名",
-    "not_be_empty": "が入力されていません。",
-    "be_longer": "が短すぎます。",
-    "be_shorter": "が長すぎます。",
-    "each_account_segment_should": "区切られたアカウント名の各部分",
-    "start_with_a_letter": "は文字で始まる必要があります。",
-    "have_only_letters_digits_or_dashes": "には英数字またはダッシュのみが使用できます。",
-    "have_only_one_dash_in_a_row": "にはダッシュを1つだけ使用可能です。",
-    "end_with_a_letter_or_digit": "は英数字で終わります。",
-    "verified_exchange_no_memo": "取引所へ送信するときはメモが必要です。"
-  },
-  "settings_jsx": {
-    "invalid_url": "無効なURL",
-    "name_is_too_long": "名前が長すぎます",
-    "name_must_not_begin_with": "@で始まる名前は設定できません",
-    "about_is_too_long": "概要が長すぎます",
-    "location_is_too_long": "場所が長すぎます",
-    "website_url_is_too_long": "URLが長すぎます",
-    "public_profile_settings": "公開プロフィール設定",
-    "private_post_display_settings": "ローカル表示設定",
-    "not_safe_for_work_nsfw_content": "閲覧注意 (NSFW) コンテンツ",
-    "always_hide": "常に非表示",
-    "always_warn": "常に警告する",
-    "always_show": "常に表示",
-    "muted_users": "ミュートユーザー",
-    "update": "更新",
-    "profile_image_url": "プロフィール画像URL",
-    "cover_image_url": "カバー画像URL",
-    "profile_name": "表示名",
-    "profile_about": "概要",
-    "profile_location": "場所",
-    "profile_website": "ウェブサイト"
-  },
-  "transfer_jsx": {
-    "amount_is_in_form": "金額は99999.999の形式です",
-    "insufficient_funds": "残高不足です",
-    "use_only_3_digits_of_precison": "小数点以下は3桁以内にしてください",
-    "send_to_account": "送金先アカウント",
-    "asset": "アセット",
-    "this_memo_is_private": "このメモは非公開です",
-    "this_memo_is_public": "このメモは公開されます",
-    "convert_to_VESTING_TOKEN": "%(VESTING_TOKEN)sに変換",
-    "balance_subject_to_3_day_withdraw_waiting_period": "引き出しに3日間の待ち時間が必要となる貯蓄口座です。",
-    "move_funds_to_another_account": "資金を他のSteemアカウントに送ります。",
-    "protect_funds_by_requiring_a_3_day_withdraw_waiting_period": "3日間の引き出し待ち時間で資金を守ります。",
-    "withdraw_funds_after_the_required_3_day_waiting_period": "3日間の待ち時間の後に資金を引き出します。",
-    "from": "送信者",
-    "to": "受信者",
-    "asset_currently_collecting": "%(asset)sの現在の利子は年間%(interest)s%%です。",
-    "beware_of_spam_and_phishing_links": "送金メモのスパムやフィッシングに注意してください。信用していないユーザーからのリンクを開かないでください。第三者のウェブサイトに秘密キーを提供しないでください。"
-  },
-  "userwallet_jsx": {
-    "conversion_complete_tip": "変換完了予定",
-    "in_conversion": "%(amount)sが変換中です",
-    "transfer_to_savings": "貯蓄口座に送る",
-    "power_up": "パワーアップ",
-    "power_down": "パワーダウン",
-    "market": "取引所",
-    "convert_to_LIQUID_TOKEN": "%(LIQUID_TOKEN)sに変換",
-    "withdraw_LIQUID_TOKEN": "%(LIQUID_TOKEN)sを引き出す",
-    "withdraw_DEBT_TOKENS": "%(DEBT_TOKENS)sを引き出す",
-    "tokens_worth_about_1_of_LIQUID_TICKER": "約$1.00の%(LIQUID_TICKER)sと同じ価値のトークンです。現在、利子が年間%(sbdInterest)s%%つきます。",
-    "savings": "貯蓄口座",
-    "estimated_account_value": "推定アカウント価格",
-    "next_power_down_is_scheduled_to_happen": "次回のパワーダウン発生予定：",
-    "transfers_are_temporary_disabled": "送金は一時的に無効になっています。",
-    "history": "履歴",
-    "redeem_rewards": "報酬の請求 (残高に送る)",
-    "buy_steem_or_steem_power": "STEEMやSTEEM POWERを購入する"
-  },
-  "powerdown_jsx": {
-    "power_down": "パワーダウン",
-    "amount": "数量",
-    "already_power_down": "既に%(AMOUNT)s %(LIQUID_TICKER)sのパワーダウン中です (%(WITHDRAWN)s %(LIQUID_TICKER)sが支払い済みです) 。パワーダウン量を変更すると、支払いスケジュールがリセットされることに注意してください。",
-    "delegating": " %(AMOUNT)s %(LIQUID_TICKER)sを委託しています。委託分はロックされており、委託が終了して7日が過ぎるまでパワーダウンできません。",
-    "per_week": "毎週~%(AMOUNT)s %(LIQUID_TICKER)sです。",
-    "warning": "アカウントの残高を%(AMOUNT)s %(VESTING_TOKEN)s未満にするのはおすすめしません。アカウントが使用できない状態になる可能性があります。",
-    "error": "パワーダウンできません (エラー : %(MESSAGE)s)"
-  },
-  "checkloginowner_jsx": {
-    "your_password_permissions_were_reduced": "あなたのパスワード権限が減少しました。",
-    "if_you_did_not_make_this_change": "あなたがこの変更をしていない場合は、",
-    "ownership_changed_on": "所有権変更：",
-    "deadline_for_recovery_is": "アカウント回復の期限は",
-    "i_understand_dont_show_again": "理解しました。再表示は不要です。"
-  }
 }

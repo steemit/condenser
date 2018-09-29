@@ -267,7 +267,6 @@
         "learn_more": "En savoir plus",
         "welcome": "Bienvenue",
         "faq": "FAQ",
-        "shop": "The Steemit Shop",
         "chat": "Salons de discussion Steemit",
         "app_center": "Centre d'applications Steemit",
         "api_docs": "Documentation API sur Steemit",
@@ -300,7 +299,7 @@
         "selecting_them": "les sélectionnant",
         "image_upload": "Téléchargement d'image",
         "power_up_100": "Conversion en influence à 100%%",
-        "default_50_50": "Par défaut (50 %%/ 50%%)",
+        "default_50_50": "50 %%/ 50%%",
         "decline_payout": "Refuser les gains",
         "check_this_to_auto_upvote_your_post":
             "Cocher cette case pour auto-voter pour votre article",
@@ -328,6 +327,13 @@
         "must_start_with_a_letter": "Le premier caractère doit être une lettre",
         "must_end_with_a_letter_or_number":
             "Le dernier caractère doit être une lettre ou un chiffre"
+    },
+    "post_advanced_settings_jsx": {
+        "payout_option_header": "Author rewards",
+        "payout_option_description":
+            "What type of tokens do you want as rewards from this post?",
+        "current_default": "Default",
+        "update_default_in_settings": "Update"
     },
     "postfull_jsx": {
         "this_post_is_not_available_due_to_a_copyright_claim":
@@ -494,7 +500,7 @@
         "witness": "Témoin",
         "information": "Information",
         "if_you_want_to_vote_outside_of_top_enter_account_name":
-            "Si vous voulez voter pour un témoin en dehors du top 50, veuille entrer le nom du compte concerné ci-dessous afin de voter pour lui",
+            "Si vous voulez voter pour un témoin en dehors du top 100, veuille entrer le nom du compte concerné ci-dessous afin de voter pour lui",
         "set_witness_proxy":
             "Vous pouvez aussi donner une procuration à quelqu'un qui votera pour les témoins en votre nom. Cela annulera votre choix de témoins actuels.",
         "witness_set":

@@ -256,7 +256,6 @@
         "learn_more": "더 알아보기",
         "welcome": "환영합니다!",
         "faq": "자주 묻는 질문",
-        "shop": "스팀잇 스토어",
         "chat": "스팀잇 채팅",
         "app_center": "스팀잇 앱 센터",
         "api_docs": "스팀잇 API 문서",
@@ -313,6 +312,13 @@
         "must_start_with_a_letter": "태그는 반드시 문자로 시작해야 합니다.",
         "must_end_with_a_letter_or_number":
             "태그는 반드시 문자나 숫자로 끝나야 합니다."
+    },
+    "post_advanced_settings_jsx": {
+        "payout_option_header": "Author rewards",
+        "payout_option_description":
+            "What type of tokens do you want as rewards from this post?",
+        "current_default": "Default",
+        "update_default_in_settings": "Update"
     },
     "postfull_jsx": {
         "this_post_is_not_available_due_to_a_copyright_claim":
@@ -477,7 +483,7 @@
         "witness": "증인",
         "information": "Information",
         "if_you_want_to_vote_outside_of_top_enter_account_name":
-            "상위 50위권 밖에 계신 분에게 증인 투표를 하시려면 아래 칸에 해당하는 분의 계정명을 입력하세요.",
+            "상위 100위권 밖에 계신 분에게 증인 투표를 하시려면 아래 칸에 해당하는 분의 계정명을 입력하세요.",
         "set_witness_proxy":
             "You can also choose a proxy that will vote for witnesses for you. This will reset your current witness selection.",
         "witness_set":

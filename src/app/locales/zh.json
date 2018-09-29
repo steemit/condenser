@@ -265,7 +265,7 @@
         "selecting_them": "选择它们",
         "image_upload": "图片上传",
         "power_up_100": "Power Up 100%%",
-        "default_50_50": "默认(50%% / 50%%)",
+        "default_50_50": "50%% / 50%%",
         "decline_payout": "拒绝赏金",
         "check_this_to_auto_upvote_your_post": "点击按钮，自动投票你的帖子",
         "markdown_styling_guide": "Markdown的格式指南",
@@ -285,6 +285,13 @@
         "use_only_allowed_characters": "只使用小写字母、数字和一个破折号",
         "must_start_with_a_letter": "必须从一个字母开始",
         "must_end_with_a_letter_or_number": "必须以字母或数字结尾"
+    },
+    "post_advanced_settings_jsx": {
+        "payout_option_header": "Author rewards",
+        "payout_option_description":
+            "What type of tokens do you want as rewards from this post?",
+        "current_default": "Default",
+        "update_default_in_settings": "Update"
     },
     "postfull_jsx": {
         "this_post_is_not_available_due_to_a_copyright_claim":
@@ -437,7 +444,7 @@
         "witness": "见证人",
         "information": "信息",
         "if_you_want_to_vote_outside_of_top_enter_account_name":
-            "如果你想为50名以外的见证人投票，请输入帐户名称进行投票",
+            "如果你想为100名以外的见证人投票，请输入帐户名称进行投票",
         "set_witness_proxy":
             "你也可以指定代理人来代替你给见证人投票。这将重置你当前的见证人选择。",
         "witness_set":

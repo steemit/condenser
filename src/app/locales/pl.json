@@ -277,7 +277,7 @@
         "selecting_them": "wybranie ich",
         "image_upload": "Wgraj obrazek",
         "power_up_100": "Zwiększ moc 100%%",
-        "default_50_50": "Domyślnie (50%% / 50%%)",
+        "default_50_50": "50%% / 50%%",
         "decline_payout": "Odmowa wypłaty",
         "check_this_to_auto_upvote_your_post":
             "Zaznacz by automatycznie zagłosować na swój wpis",
@@ -303,6 +303,13 @@
             "Możesz użyć wyłącznie małych liter, cyfr i jednego znaku myślnika",
         "must_start_with_a_letter": "Musi zaczynać się od litery",
         "must_end_with_a_letter_or_number": "Musi kończyć się literą lub cyfrą"
+    },
+    "post_advanced_settings_jsx": {
+        "payout_option_header": "Author rewards",
+        "payout_option_description":
+            "What type of tokens do you want as rewards from this post?",
+        "current_default": "Default",
+        "update_default_in_settings": "Update"
     },
     "postfull_jsx": {
         "this_post_is_not_available_due_to_a_copyright_claim":
@@ -464,7 +471,7 @@
         "witness": "Delegat",
         "information": "Informacja",
         "if_you_want_to_vote_outside_of_top_enter_account_name":
-            "Jeśli chcesz zagłosować na delegata spoza pierwszej 50, podaj nazwę konta na które chcesz oddać głos",
+            "Jeśli chcesz zagłosować na delegata spoza pierwszej 100, podaj nazwę konta na które chcesz oddać głos",
         "set_witness_proxy":
             "Możesz również wybrać pełnomocnika, który zagłosuje na delegatów za ciebie. Wybór pełnomocnika wyczyści twoje bieżące głosy.",
         "witness_set":

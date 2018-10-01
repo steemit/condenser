@@ -3,6 +3,16 @@
   padding-top: 50px;
 }
 
+.App.withAnnouncement {
+  padding-top: 170px;
+  @include MQ(M) {
+    padding-top: 150px;
+  }
+  @include MQ(L) {
+    padding-top: 100px;
+  }
+}
+
 .App__content {
     margin-top: 1rem;
 

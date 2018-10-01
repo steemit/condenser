@@ -369,7 +369,7 @@ const mapStateToProps = (state, ownProps) => {
         nightmodeEnabled: state.user.getIn(['user_preferences', 'nightmode']),
         account_meta: account_user,
         current_account_name,
-        // showAnnouncement: state.user.get('showAnnouncement'),
+        showAnnouncement: state.user.get('showAnnouncement'),
         ...ownProps,
     };
 };

@@ -89,14 +89,20 @@ class App extends React.Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        const { pathname, new_visitor, nightmodeEnabled } = this.props;
+        const {
+            pathname,
+            new_visitor,
+            nightmodeEnabled,
+            showAnnouncement,
+        } = this.props;
         const n = nextProps;
         return (
             pathname !== n.pathname ||
             new_visitor !== n.new_visitor ||
             this.state.showBanner !== nextState.showBanner ||
             this.state.showCallout !== nextState.showCallout ||
-            nightmodeEnabled !== n.nightmodeEnabled
+            nightmodeEnabled !== n.nightmodeEnabled ||
+            showAnnouncement !== n.showAnnouncement
         );
     }
 
@@ -219,6 +225,7 @@ class App extends React.Component {
                     'index-page': ip,
                     'mini-header': miniHeader,
                     'whistle-view': whistleView,
+                    withAnnouncement: this.props.showAnnouncement,
                 })}
                 ref="App_root"
             >
@@ -287,6 +294,7 @@ export default connect(
             pathname: ownProps.location.pathname,
             order: ownProps.params.order,
             category: ownProps.params.category,
+            showAnnouncement: state.user.get('showAnnouncement'),
         };
     },
     dispatch => ({

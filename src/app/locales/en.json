@@ -266,7 +266,6 @@
         "learn_more": "Learn more",
         "welcome": "Welcome",
         "faq": "FAQ",
-        "shop": "The Steemit Shop",
         "chat": "Steem Chat",
         "app_center": "Apps Built on Steem",
         "api_docs": "Steemit API Docs",
@@ -512,7 +511,7 @@
         "witness": "Witness",
         "information": "Information",
         "if_you_want_to_vote_outside_of_top_enter_account_name":
-            "If you would like to vote for a witness outside of the top 50, enter the account name below to cast a vote",
+            "If you would like to vote for a witness outside of the top 100, enter the account name below to cast a vote",
         "set_witness_proxy":
             "You can also choose a proxy that will vote for witnesses for you. This will reset your current witness selection.",
         "witness_set":
@@ -904,14 +903,15 @@
     },
     "modals_jsx": {
         "your_transaction_failed": "Your transaction failed to process",
-        "out_of_bandwidth_title": "Why? You've run out of bandwidth",
+        "out_of_bandwidth_title": "Why? You've run out of Resource Credits",
         "out_of_bandwidth_reason":
-            "Actions such as posting and voting use computing resources placing a real cost on the community members who run the Steem blockchain for everyone.",
+            "Actions such as posting and voting use computing resources, placing a real cost on the community members who run the Steem blockchain for everyone.",
         "out_of_bandwidth_reason_2":
-            "To keep things free, Steem intelligently allocates bandwidth to each user based on their Steem Power holdings, their recent usage and overall network demand. This system prioritizes actions by good community members while limiting spam.",
+            "To keep things free, Steem intelligently allocates Resource Credits to each user based on their Steem Power holdings, which can be used to submit a limited number of feeless transactions. When a user runs low on Resource Credits, they will either need to wait for them to recharge, or purchase additional Steem Power. This system prioritizes actions by good community members while limiting spam.",
         "out_of_bandwidth_option_title": "To keep interacting on Steemit:",
         "out_of_bandwidth_option_1": "Buy and hold more Steem Power",
-        "out_of_bandwidth_option_2": "Wait until your bandwidth recharges",
+        "out_of_bandwidth_option_2":
+            "Wait until your Resource Credits recharge",
         "out_of_bandwidth_option_3": "Wait until the network usage decreases"
     },
     "sanitizedlink_jsx": {

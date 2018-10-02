@@ -259,7 +259,6 @@
         "learn_more": "Scopri di più",
         "welcome": "Benvenuto",
         "faq": "FAQ",
-        "shop": "The Steemit Shop",
         "chat": "Steem Chat",
         "app_center": "Steemit App Center",
         "api_docs": "Steemit API Docs",
@@ -491,7 +490,7 @@
         "witness": "Witness",
         "information": "Informazioni",
         "if_you_want_to_vote_outside_of_top_enter_account_name":
-            "Se desideri votare un witness al di fuori della top 50, inserisci di seguito il nome account per effettuare il voto. ",
+            "Se desideri votare un witness al di fuori della top 100, inserisci di seguito il nome account per effettuare il voto. ",
         "set_witness_proxy":
             "Puoi anche scegliere un proxy che voterà i witnesses per te. Questo resetterà la tua attuale selezione di testimoni.",
         "witness_set":

@@ -120,7 +120,7 @@ function* getAccounts(usernames) {
 }
 
 export function* fetchData(action) {
-    const { order, author, permlink, accountname } = action.payload;
+    const { order, author, permlink, accountname, postFilter } = action.payload;
     let { category } = action.payload;
     if (!category) category = '';
     category = category.toLowerCase();
@@ -293,17 +293,51 @@ export function* fetchData(action) {
     }
     yield put(appActions.fetchDataBegin());
     try {
-        const data = yield call([api, api[call_name]], ...args);
-        yield put(
-            globalActions.receiveData({
-                data,
-                order,
-                category,
-                author,
-                permlink,
-                accountname,
-            })
-        );
+        const firstPermlink = permlink;
+        var fetched = 0;
+        var endOfData = false;
+        var fetchLimitReached = false;
+        var fetchDone = false;
+        var batch = 0;
+        while (!fetchDone) {
+            var data = yield call([api, api[call_name]], ...args);
+
+            endOfData = data.length < constants.FETCH_DATA_BATCH_SIZE;
+
+            batch++;
+            fetchLimitReached = batch >= constants.MAX_BATCHES;
+
+            // next arg. Note 'by_replies' does not use same structure.
+            const lastValue = data.length > 0 ? data[data.length - 1] : null;
+            if (lastValue && order !== 'by_replies') {
+                args[0].start_author = lastValue.author;
+                args[0].start_permlink = lastValue.permlink;
+            }
+
+            // Still return all data but only count ones matching the filter.
+            // Rely on UI to actually hide the posts.
+            fetched += postFilter
+                ? data.filter(postFilter).length
+                : data.length;
+
+            fetchDone =
+                endOfData ||
+                fetchLimitReached ||
+                fetched >= constants.FETCH_DATA_BATCH_SIZE;
+
+            yield put(
+                globalActions.receiveData({
+                    data,
+                    order,
+                    category,
+                    author,
+                    firstPermlink,
+                    accountname,
+                    fetching: !fetchDone,
+                    endOfData,
+                })
+            );
+        }
     } catch (error) {
         console.error('~~ Saga fetchData error ~~>', call_name, args, error);
         yield put(appActions.steemApiError(error.message));

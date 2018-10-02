@@ -16,6 +16,7 @@ import Userpic from 'app/components/elements/Userpic';
 import { SIGNUP_URL } from 'shared/constants';
 import SteemLogo from 'app/components/elements/SteemLogo';
 import normalizeProfile from 'app/utils/NormalizeProfile';
+import Announcement from 'app/components/elements/Announcement';
 
 class Header extends React.Component {
     static propTypes = {
@@ -259,19 +260,9 @@ class Header extends React.Component {
         ];
         return (
             <header className="Header">
-                <div className="annoucement-banner">
-                    <p className="announcement-banner__text">
-                        The Steem blockchain was upgraded earlier today. You may
-                        experience trouble posting and transacting while the new
-                        bandwidth system stabilizes.{' '}
-                        <a
-                            className="announcement-banner__link"
-                            href="https://steemit.com/steem/@steemitblog/hf20-update-hardfork-successful"
-                        >
-                            Read more here.
-                        </a>
-                    </p>
-                </div>
+                {this.props.showAnnouncement && (
+                    <Announcement onClose={this.props.hideAnnouncement} />
+                )}
                 <nav className="row Header__nav">
                     <div className="small-5 large-4 columns Header__logotype">
                         {/*LOGO*/}
@@ -378,6 +369,7 @@ const mapStateToProps = (state, ownProps) => {
         nightmodeEnabled: state.user.getIn(['user_preferences', 'nightmode']),
         account_meta: account_user,
         current_account_name,
+        showAnnouncement: state.user.get('showAnnouncement'),
         ...ownProps,
     };
 };
@@ -401,6 +393,7 @@ const mapDispatchToProps = dispatch => ({
     hideSidePanel: () => {
         dispatch(userActions.hideSidePanel());
     },
+    hideAnnouncement: () => dispatch(userActions.hideAnnouncement()),
 });
 
 const connectedHeader = connect(mapStateToProps, mapDispatchToProps)(Header);

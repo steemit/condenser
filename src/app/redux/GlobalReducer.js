@@ -259,10 +259,18 @@ export default function reducer(state = defaultState, action = {}) {
         }
 
         case RECEIVE_DATA: {
-            const { data, order, category, accountname } = payload;
+            const {
+                data,
+                order,
+                category,
+                accountname,
+                fetching,
+                endOfData,
+            } = payload;
             let new_state;
             if (
                 order === 'by_author' ||
+                order === 'by_author_noreblog' ||
                 order === 'by_feed' ||
                 order === 'by_comments' ||
                 order === 'by_replies'
@@ -305,10 +313,10 @@ export default function reducer(state = defaultState, action = {}) {
             new_state = new_state.updateIn(
                 ['status', category || '', order],
                 () => {
-                    if (data.length < constants.FETCH_DATA_BATCH_SIZE) {
-                        return { fetching: false, last_fetch: new Date() };
+                    if (endOfData) {
+                        return { fetching, last_fetch: new Date() };
                     }
-                    return { fetching: false };
+                    return { fetching };
                 }
             );
             return new_state;

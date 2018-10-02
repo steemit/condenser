@@ -1,5 +1,9 @@
 .App {
   min-height: 100vh;
+  padding-top: 50px;
+}
+
+.App.withAnnouncement {
   padding-top: 170px;
   @include MQ(M) {
     padding-top: 150px;

@@ -257,7 +257,6 @@
         "learn_more": "詳細",
         "welcome": "ようこそ",
         "faq": "FAQ",
-        "shop": "Steemitショップ",
         "chat": "Steemitチャット",
         "app_center": "Steemitアプリセンター",
         "api_docs": "Steemit API資料",
@@ -485,7 +484,7 @@
         "witness": "証人",
         "information": "情報",
         "if_you_want_to_vote_outside_of_top_enter_account_name":
-            "トップ50外の証人に投票したい場合、以下の欄にアカウント名を入力して投票してください",
+            "トップ100外の証人に投票したい場合、以下の欄にアカウント名を入力して投票してください",
         "set_witness_proxy":
             "証人への投票の代理人を選ぶこともできます。この操作はあなたの現在の証人選択をリセットします。",
         "witness_set":

@@ -267,7 +267,6 @@
         "learn_more": "En savoir plus",
         "welcome": "Bienvenue",
         "faq": "FAQ",
-        "shop": "The Steemit Shop",
         "chat": "Salons de discussion Steemit",
         "app_center": "Centre d'applications Steemit",
         "api_docs": "Documentation API sur Steemit",
@@ -501,7 +500,7 @@
         "witness": "Témoin",
         "information": "Information",
         "if_you_want_to_vote_outside_of_top_enter_account_name":
-            "Si vous voulez voter pour un témoin en dehors du top 50, veuille entrer le nom du compte concerné ci-dessous afin de voter pour lui",
+            "Si vous voulez voter pour un témoin en dehors du top 100, veuille entrer le nom du compte concerné ci-dessous afin de voter pour lui",
         "set_witness_proxy":
             "Vous pouvez aussi donner une procuration à quelqu'un qui votera pour les témoins en votre nom. Cela annulera votre choix de témoins actuels.",
         "witness_set":

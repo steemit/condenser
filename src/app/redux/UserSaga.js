@@ -110,9 +110,9 @@ function* usernamePasswordLogin(action) {
         (typeof sessionStorage !== 'undefined' &&
             sessionStorage.getItem('hideAnnouncement') !== 'true')
     ) {
-        // Uncomment to re-enable announcment
+        // Comment to disable announcment
         // TODO: use config to enable/disable
-        //yield put(userActions.showAnnouncement());
+        yield put(userActions.showAnnouncement());
     }
 
     // Sets 'loading' while the login is taking place.  The key generation can take a while on slow computers.

@@ -6,7 +6,6 @@
   width: 100%;
   z-index: 100;
   box-shadow: 0 2px 4px 0 rgba(0,0,0,0.05);
-  padding-right: 0.25rem;
   @include themify($themes) {
     background-color: themed('navBackgroundColor');
     border-bottom: themed('border');
@@ -139,4 +138,40 @@ span.Header__hamburger.toggle-menu {
         }
       }
     }
+}
+
+.annoucement-banner {
+  text-align: left;
+  position: relative;
+  background: #171FC9;
+  color: #fff;
+  @include themify($themes) {
+      border-bottom: themed('borderLight');
+  }  
+  @include MQ(M) {
+    text-align: center;
+  }
+  .close-button {
+    position: absolute;
+    top: 2px;
+    right: 0px;
+    transform: scale(0.85);
+    color: #fff;
+    &:hover, &:focus {
+      color: #ccc;
+    }
+  }  
+}
+
+.announcement-banner__text {
+    margin: 0;
+    padding: 10px 44px 10px 10px;
+    font-family: helvetica, sans-serif;
+    font-size: 14px;
+    line-height: 1.3;
+ }
+
+.announcement-banner__link {
+   color: #fafafa !important;
+   text-decoration: underline;
 }

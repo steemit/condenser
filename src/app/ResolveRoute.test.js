@@ -1,3 +1,4 @@
+jest.mock('./utils/GDPRUserList');
 import resolveRoute, { routeRegex } from './ResolveRoute';
 
 describe('routeRegex', () => {
@@ -53,18 +54,22 @@ describe('resolveRoute', () => {
             '/@maitland/feed',
             { page: 'PostsIndex', params: ['home', '@maitland'] },
         ],
+        ['/@gdpr/feed', { page: 'NotFound' }],
         [
             '/@maitland/blog',
             { page: 'UserProfile', params: ['@maitland', 'blog'] },
         ],
+        ['/@gdpr/blog', { page: 'NotFound' }],
         [
             '/@cool/nice345',
             { page: 'PostNoCategory', params: ['@cool', 'nice345'] },
         ],
+        ['/@gdpr/nice345', { page: 'NotFound' }],
         [
             '/ceasar/@salad/circa90',
             { page: 'Post', params: ['ceasar', '@salad', 'circa90', ''] },
         ],
+        ['/taggy/@gdpr/nice345', { page: 'NotFound' }],
     ];
     test_cases.forEach(r => {
         it(`should resolve the route for the ${r[1].page} page`, () => {

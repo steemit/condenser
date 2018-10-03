@@ -441,7 +441,9 @@
             "zero": "Pas d'article",
             "one": "1 article",
             "other": "%(count)s articles"
-        }
+        },
+        "hide_resteems": "Hide Resteems",
+        "show_all": "Show All"
     },
     "authorrewards_jsx": {
         "estimated_author_rewards_last_week":

@@ -440,9 +440,7 @@ class UserWallet extends React.Component {
         // set dynamic secondary wallet values
         const sbdInterest = this.props.sbd_interest / 100;
         const sbdMessage = (
-            <span>
-                {tt('userwallet_jsx.tradeable_tokens_transferred')}
-            </span>
+            <span>{tt('userwallet_jsx.tradeable_tokens_transferred')}</span>
         );
 
         const reward_steem =
@@ -734,6 +732,12 @@ class UserWallet extends React.Component {
                             <span>
                                 {tt(
                                     'transfer_jsx.beware_of_spam_and_phishing_links'
+                                )}
+                            </span>
+                            &nbsp;
+                            <span>
+                                {tt(
+                                    'transfer_jsx.transactions_make_take_a_few_minutes'
                                 )}
                             </span>
                         </div>

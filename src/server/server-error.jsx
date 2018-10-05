@@ -20,7 +20,7 @@ class ServerError extends Component {
                     <h4>Sorry.</h4>
                     <p>Looks like something went wrong on our end.</p>
                     <p>
-                        Head back to <a href="/">Steemit</a> homepage.
+                        Head back to <a href="/">VIT</a> homepage.
                     </p>
                 </div>
             </div>

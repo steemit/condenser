@@ -94,22 +94,6 @@ function* preBroadcast_account_witness_vote({ operation, username }) {
     return operation;
 }
 
-function updateFollowState(action, following, state) {
-    if (action == null) {
-        state = state.update('blog_result', Set(), r => r.delete(following));
-        state = state.update('ignore_result', Set(), r => r.delete(following));
-    } else if (action === 'blog') {
-        state = state.update('blog_result', Set(), r => r.add(following));
-        state = state.update('ignore_result', Set(), r => r.delete(following));
-    } else if (action === 'ignore') {
-        state = state.update('ignore_result', Set(), r => r.add(following));
-        state = state.update('blog_result', Set(), r => r.delete(following));
-    }
-    state = state.set('blog_count', state.get('blog_result', Set()).size);
-    state = state.set('ignore_count', state.get('ignore_result', Set()).size);
-    return state;
-}
-
 function* error_account_witness_vote({
     operation: { account, witness, approve },
 }) {
@@ -377,6 +361,22 @@ function* accepted_comment({ operation }) {
     yield put(globalActions.linkReply(operation));
     // mark the time (can only post 1 per min)
     // yield put(user.actions.acceptedComment())
+}
+
+function updateFollowState(action, following, state) {
+    if (action == null) {
+        state = state.update('blog_result', Set(), r => r.delete(following));
+        state = state.update('ignore_result', Set(), r => r.delete(following));
+    } else if (action === 'blog') {
+        state = state.update('blog_result', Set(), r => r.add(following));
+        state = state.update('ignore_result', Set(), r => r.delete(following));
+    } else if (action === 'ignore') {
+        state = state.update('ignore_result', Set(), r => r.add(following));
+        state = state.update('blog_result', Set(), r => r.delete(following));
+    }
+    state = state.set('blog_count', state.get('blog_result', Set()).size);
+    state = state.set('ignore_count', state.get('ignore_result', Set()).size);
+    return state;
 }
 
 function* accepted_custom_json({ operation }) {

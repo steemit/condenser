@@ -6,6 +6,7 @@ import * as globalActions from './GlobalReducer';
 import * as appActions from './AppReducer';
 import * as transactionActions from './TransactionReducer';
 import { setUserPreferences } from 'app/utils/ServerApiClient';
+import { getStateAsync } from 'app/utils/steemApi';
 
 const wait = ms =>
     new Promise(resolve => {
@@ -42,7 +43,7 @@ export function* getAccount(username, force = false) {
 /** Manual refreshes.  The router is in FetchDataSaga. */
 export function* getState({ payload: { url } }) {
     try {
-        const state = yield call([api, api.getStateAsync], url);
+        const state = yield call(getStateAsync, url);
         yield put(globalActions.receiveState(state));
     } catch (error) {
         console.error('~~ Saga getState error ~~>', url, error);

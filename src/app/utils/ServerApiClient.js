@@ -46,7 +46,6 @@ export function recordPageView(page, referer, account) {
     if (last_page_promise && page === last_page) return last_page_promise;
 
     if (!process.env.BROWSER) return Promise.resolve(0);
-
     if (window.ga) {
         // virtual pageview
         window.ga('set', 'page', page);

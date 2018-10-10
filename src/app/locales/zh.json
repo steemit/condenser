@@ -444,7 +444,7 @@
         "witness": "见证人",
         "information": "信息",
         "if_you_want_to_vote_outside_of_top_enter_account_name":
-            "如果你想为50名以外的见证人投票，请输入帐户名称进行投票",
+            "如果你想为100名以外的见证人投票，请输入帐户名称进行投票",
         "set_witness_proxy":
             "你也可以指定代理人来代替你给见证人投票。这将重置你当前的见证人选择。",
         "witness_set":

@@ -63,20 +63,9 @@ const transformAccount = account =>
  */
 
 const mergeAccounts = (state, account) => {
-    const accountName = account.get('name');
-    let newState = state.updateIn(['accounts', accountName], Map(), a =>
+    return state.updateIn(['accounts', account.get('name')], Map(), a =>
         a.mergeDeep(account)
     );
-
-    // Handle transfer history manually, as it deep-merges the two otherwise. ??? no. transfer history for these is always null. but set a watch point here just in case while debugging.
-    const accountTransferHistory = account.get('transfer_history');
-    if (accountTransferHistory && !accountTransferHistory.isEmpty()) {
-        newState = newState.setIn(
-            ['accounts', accountName, 'transfer_history'],
-            accountTransferHistory
-        );
-    }
-    return newState;
 };
 
 export default function reducer(state = defaultState, action = {}) {

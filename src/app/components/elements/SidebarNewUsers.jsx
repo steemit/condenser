@@ -27,6 +27,10 @@ const SidebarNewUsers = () => (
                     <a className="c-sidebar__link" href={SIGNUP_URL}>
                         Sign up
                     </a>
+                <li className="c-sidebar__list-item">
+                    <a className="c-sidebar__link" href={@STEEMITBLOG}>
+                        Read and follow our Blog
+                    </a>
                 </li>
             </ul>
         </div>

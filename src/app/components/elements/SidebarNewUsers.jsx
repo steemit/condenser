@@ -28,6 +28,11 @@ const SidebarNewUsers = () => (
                         Sign up
                     </a>
                 </li>
+                <li className="c-sidebar__list-item">
+                    <a className="c-sidebar__link" href="/@steemitblog">
+                        Read the offical Steemit blog
+                    </a>
+                </li>
             </ul>
         </div>
     </div>

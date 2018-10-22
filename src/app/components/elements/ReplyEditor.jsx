@@ -324,6 +324,7 @@ class ReplyEditor extends React.Component {
             reply,
             username,
             isStory,
+            formId,
             noImage,
             author,
             permlink,

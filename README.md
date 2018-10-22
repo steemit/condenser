@@ -4,8 +4,7 @@
 
 Condenser is the react.js web interface to the world's first and best
 blockchain-based social media platform, steemit.com.  It uses
-[STEEM](https://github.com/steemit/steem), a blockchain powered by Graphene
-2.0 technology to store JSON-based content for a plethora of web
+[STEEM](https://github.com/steemit/steem), a blockchain powered by DPoS Governance and ChainBase DB to store JSON-based content for a plethora of web
 applications.   
 
 ## Why would I want to use Condenser (steemit.com front-end)?

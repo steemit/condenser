@@ -215,6 +215,7 @@ export default `
 /read/@medameroy/pdf-needful-things-by-stephen-king
 /spanish/@helen02/existe-el-amor-libre-o-todos-nos-atan-df4fadbdd450c
 /steemit/@liamxmail/open-introductory-letter-to-steemit-com-founders-all-steemers-and-all-activist-the-world-over-i-m-running-for-congress-to-fight
+/nanu/@bdtechteam/nanu-ki-jaanu-2018-full-hindi-movie-download-predvdrip-x264-700mb
 `
     .trim()
     .split('\n');

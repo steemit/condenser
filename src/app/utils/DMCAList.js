@@ -211,6 +211,11 @@ export default `
 /introduceyourself/@tukio/pdf-free-download-fear-by-bob-woodward
 /doom/@blk924s/the-greatest-shortcoming-of-the-human-race-is-our-inability-to-understand-the-exponential-function-al-bartlett
 /sales/@grantcardone/get-cardone-university-for-free-2018-4-5-12-26-27
+/all/@hancit/fear-trump-in-the-white-house-by-bob-woodward-conversation-starters-by-daily-books
+/read/@medameroy/pdf-needful-things-by-stephen-king
+/spanish/@helen02/existe-el-amor-libre-o-todos-nos-atan-df4fadbdd450c
+/steemit/@liamxmail/open-introductory-letter-to-steemit-com-founders-all-steemers-and-all-activist-the-world-over-i-m-running-for-congress-to-fight
+/nanu/@bdtechteam/nanu-ki-jaanu-2018-full-hindi-movie-download-predvdrip-x264-700mb
 `
     .trim()
     .split('\n');

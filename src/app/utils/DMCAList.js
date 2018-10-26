@@ -214,6 +214,7 @@ export default `
 /all/@hancit/fear-trump-in-the-white-house-by-bob-woodward-conversation-starters-by-daily-books
 /read/@medameroy/pdf-needful-things-by-stephen-king
 /spanish/@helen02/existe-el-amor-libre-o-todos-nos-atan-df4fadbdd450c
+/steemit/@liamxmail/open-introductory-letter-to-steemit-com-founders-all-steemers-and-all-activist-the-world-over-i-m-running-for-congress-to-fight
 `
     .trim()
     .split('\n');

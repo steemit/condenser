@@ -211,6 +211,7 @@ export default `
 /introduceyourself/@tukio/pdf-free-download-fear-by-bob-woodward
 /doom/@blk924s/the-greatest-shortcoming-of-the-human-race-is-our-inability-to-understand-the-exponential-function-al-bartlett
 /sales/@grantcardone/get-cardone-university-for-free-2018-4-5-12-26-27
+/all/@hancit/fear-trump-in-the-white-house-by-bob-woodward-conversation-starters-by-daily-books
 `
     .trim()
     .split('\n');

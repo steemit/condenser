@@ -404,15 +404,15 @@ class PostFull extends React.Component {
             );
         }
 
-        const archived =
+        const _isPaidout =
             post_content.get('cashout_time') === '1969-12-31T23:59:59'; // TODO: audit after HF19. #1259
-        const readonly = archived || $STM_Config.read_only_mode;
+        const showReblog = !_isPaidout;
         const showPromote =
-            username && !archived && post_content.get('depth') == 0;
+            username && !_isPaidout && post_content.get('depth') == 0;
         const showReplyOption = post_content.get('depth') < 255;
         const showEditOption = username === author;
         const showDeleteOption =
-            username === author && content.stats.allowDelete;
+            username === author && content.stats.allowDelete && !_isPaidout;
 
         const authorRepLog10 = repLog10(content.author_reputation);
         const isPreViewCount =
@@ -481,20 +481,18 @@ class PostFull extends React.Component {
                         <Voting post={post} />
                     </div>
                     <div className="RightShare__Menu small-11 medium-12 large-5 columns">
-                        {!readonly && (
+                        {showReblog && (
                             <Reblog author={author} permlink={permlink} />
                         )}
                         <span className="PostFull__reply">
                             {showReplyOption && (
                                 <a onClick={onShowReply}>{tt('g.reply')}</a>
                             )}{' '}
-                            {!readonly &&
-                                showEditOption &&
+                            {showEditOption &&
                                 !showEdit && (
                                     <a onClick={onShowEdit}>{tt('g.edit')}</a>
                                 )}{' '}
-                            {!readonly &&
-                                showDeleteOption &&
+                            {showDeleteOption &&
                                 !showReply && (
                                     <a onClick={onDeletePost}>
                                         {tt('g.delete')}

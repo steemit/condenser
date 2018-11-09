@@ -144,11 +144,12 @@ class MarkdownViewer extends Component {
         // HtmlReady inserts ~~~ embed:${id} type ~~~
         for (let section of cleanText.split('~~~ embed:')) {
             const match = section.match(
-                /^([A-Za-z0-9\_\-]+) (youtube|vimeo) ~~~/
+                /^([A-Za-z0-9\_\-]+) (youtube|vimeo) (\d+) ~~~/
             );
             if (match && match.length >= 3) {
                 const id = match[1];
                 const type = match[2];
+                const startTime = match[3];
                 const w = large ? 640 : 480,
                     h = large ? 360 : 270;
                 if (type === 'youtube') {
@@ -158,12 +159,17 @@ class MarkdownViewer extends Component {
                             width={w}
                             height={h}
                             youTubeId={id}
+                            startTime={parseInt(startTime)}
                             frameBorder="0"
                             allowFullScreen="true"
                         />
                     );
                 } else if (type === 'vimeo') {
-                    const url = `https://player.vimeo.com/video/${id}`;
+                    var startDate = new Date(null);
+                    startDate.setSeconds(startTime);
+                    var parsedTime = startDate.toISOString().substr(11, 8).split(":");
+                    var formattedTimestamp = `t=${parsedTime[0]}h${parsedTime[1]}m${parsedTime[2]}s`;
+                    const url = `https://player.vimeo.com/video/${id}#${formattedTimestamp}`;
                     sections.push(
                         <div className="videoWrapper">
                             <iframe
@@ -181,7 +187,7 @@ class MarkdownViewer extends Component {
                 } else {
                     console.error('MarkdownViewer unknown embed type', type);
                 }
-                section = section.substring(`${id} ${type} ~~~`.length);
+                section = section.substring(`${id} ${type} ${startTime} ~~~`.length);
                 if (section === '') continue;
             }
             sections.push(

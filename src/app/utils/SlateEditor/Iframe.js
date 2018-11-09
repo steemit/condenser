@@ -19,7 +19,6 @@ export default class Iframe extends React.Component {
 
         // Detect twitch stream
         match = url.match(linksRe.twitch);
-        console.log(match);
         if (match && match.length >= 3) {
             if (match[1] === undefined) {
                 return (

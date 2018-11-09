@@ -209,4 +209,23 @@ describe('htmlready', () => {
         const res = HtmlReady(testString).html;
         expect(res).toEqual(htmlified);
     });
+
+    it('should handle short youtube link start time', () => {
+        const testString =
+            '<html><p>https://youtu.be/ToQfmnj7FR8?t=4572</p></html>';
+        const htmlified =
+            '<html xmlns="http://www.w3.org/1999/xhtml"><p>~~~ embed:ToQfmnj7FR8 youtube 4572 ~~~</p></html>';
+        const res = HtmlReady(testString).html;
+        expect(res).toEqual(htmlified);
+    });
+
+    it('should handle youtube link start time', () => {
+        const testString =
+            '<html><p>https://youtube.com/watch?v=ToQfmnj7FR8?t=4572</p></html>';
+        const htmlified =
+            '<html xmlns="http://www.w3.org/1999/xhtml"><p>~~~ embed:ToQfmnj7FR8 youtube 4572 ~~~</p></html>';
+        const res = HtmlReady(testString).html;
+        expect(res).toEqual(htmlified);
+    });
+
 });

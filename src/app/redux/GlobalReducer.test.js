@@ -54,6 +54,40 @@ describe('Global reducer', () => {
         );
     });
 
+    it('should replace transfer history for a RECEIVE_STATE action', () => {
+        // Arrange, payload has one account with transfer history, one without
+        const payload = {
+            accounts: Map({
+                fooman: Map({
+                    transfer_history: List([Map({ a: 1 })]),
+                }),
+                barman: Map({}),
+            }),
+        };
+
+        // Two accounts both with transfer history
+        const initial = reducer()
+            .setIn(
+                ['accounts', 'fooman', 'transfer_history'],
+                List([Map({ b: 2 })])
+            )
+            .setIn(
+                ['accounts', 'barman', 'transfer_history'],
+                List([Map({ c: 3 })])
+            );
+
+        // Act
+        const actual = reducer(initial, globalActions.receiveState(payload));
+        // Assert
+        expect(
+            actual.getIn(['accounts', 'fooman', 'transfer_history'])
+        ).toEqual(List([Map({ a: 1 })]));
+        // Payload had no transfer history, does not affect account.
+        expect(
+            actual.getIn(['accounts', 'barman', 'transfer_history'])
+        ).toEqual(List([Map({ c: 3 })]));
+    });
+
     it('should return correct state for a RECEIVE_ACCOUNT action', () => {
         // Arrange
         const payload = {

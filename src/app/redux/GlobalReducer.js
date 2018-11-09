@@ -92,7 +92,32 @@ export default function reducer(state = defaultState, action = {}) {
                 });
                 new_state = new_state.set('content', content);
             }
-            return state.mergeDeep(new_state);
+            // let transfer_history from new state override completely, otherwise
+            // deep merge may not work as intended.
+            let mergedState = state.mergeDeep(new_state);
+            return mergedState.update(
+                'accounts',
+                accountMap =>
+                    accountMap
+                        ? accountMap.map(
+                              (v, k) =>
+                                  new_state.hasIn([
+                                      'accounts',
+                                      k,
+                                      'transfer_history',
+                                  ])
+                                      ? v.set(
+                                            'transfer_history',
+                                            new_state.getIn([
+                                                'accounts',
+                                                k,
+                                                'transfer_history',
+                                            ])
+                                        )
+                                      : v
+                          )
+                        : accountMap
+            );
         }
 
         case RECEIVE_ACCOUNT: {

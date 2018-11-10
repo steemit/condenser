@@ -225,7 +225,7 @@ export function* broadcastOperation({
         return;
     }
     try {
-        if (!keys || keys.length === 0) {
+        /*if (!keys || keys.length === 0) {
             payload.keys = [];
             // user may already be logged in, or just enterend a signing passowrd or wif
             const signingKey = yield call(findSigningKey, {
@@ -251,7 +251,7 @@ export function* broadcastOperation({
                     return;
                 }
             }
-        }
+        }*/
         yield call(broadcastPayload, { payload });
         let eventType = type
             .replace(/^([a-z])/, g => g.toUpperCase())
@@ -290,12 +290,24 @@ function hasPrivateKeys(payload) {
 function* broadcastPayload({
     payload: { operations, keys, username, successCallback, errorCallback },
 }) {
+    let needsActiveAuth = false;
+    const postingOps = Set(
+        `vote, comment, delete_comment, custom_json, claim_reward_balance`
+            .trim()
+            .split(/,\s*/)
+    );
+
     // console.log('broadcastPayload')
     if ($STM_Config.read_only_mode) return;
-    for (const [type] of operations) // see also transaction/ERROR
+    for (const [type] of operations) {
+        // see also transaction/ERROR
         yield put(
             transactionActions.remove({ key: ['TransactionError', type] })
         );
+        if (!postingOps.has(type)) {
+            needsActiveAuth = true;
+        }
+    }
 
     {
         const newOps = [];
@@ -327,6 +339,11 @@ function* broadcastPayload({
         }
     };
 
+    // get username
+    const currentUser = yield select(state => state.user.get('current'));
+    const currentUsername = currentUser && currentUser.get('username');
+    username = username || currentUsername;
+
     try {
         yield new Promise((resolve, reject) => {
             // Bump transaction (for live UI testing).. Put 0 in now (no effect),
@@ -355,6 +372,8 @@ function* broadcastPayload({
                     broadcastedEvent();
                 }, 2000);
             } else {
+                if (!window.steem_keychain) {
+                    /*
                 broadcast.send({ extensions: [], operations }, keys, err => {
                     if (err) {
                         console.error(err);
@@ -364,6 +383,23 @@ function* broadcastPayload({
                         resolve();
                     }
                 });
+                */
+                } else {
+                    const authType = needsActiveAuth ? 'active' : 'posting';
+                    window.steem_keychain.broadcast(
+                        username,
+                        operations,
+                        authType,
+                        response => {
+                            if (!response.success) {
+                                reject(response.err);
+                            } else {
+                                broadcastedEvent();
+                                resolve();
+                            }
+                        }
+                    );
+                }
             }
         });
         // status: accepted
@@ -540,8 +576,10 @@ export function* preBroadcast_comment({ operation, username }) {
         parent_author,
         parent_permlink,
         json_metadata,
-        title: new Buffer((operation.title || '').trim(), 'utf-8'),
-        body: new Buffer(body2, 'utf-8'),
+        title: (operation.title || '').trim(),
+        //title: new Buffer((operation.title || '').trim(), 'utf-8'),
+        body: body2,
+        //body: new Buffer(body2, 'utf-8'),
     };
 
     const comment_op = [['comment', op]];

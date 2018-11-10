@@ -197,6 +197,8 @@ function* usernamePasswordLogin2({
     }
 
     let private_keys;
+    if (!window.steem_keychain) {
+        /*
     try {
         const private_key = PrivateKey.fromWif(password);
         login_wif_owner_pubkey = private_key.toPublicKey().toString();
@@ -351,6 +353,20 @@ function* usernamePasswordLogin2({
             })
         );
     }
+    */
+    } else {
+        if (username) feedURL = '/@' + username + '/feed';
+        yield put(
+            userActions.setUser({
+                username,
+                vesting_shares: account.get('vesting_shares'),
+                received_vesting_shares: account.get('received_vesting_shares'),
+                delegated_vesting_shares: account.get(
+                    'delegated_vesting_shares'
+                ),
+            })
+        );
+    }
 
     if (!autopost && saveLogin) yield put(userActions.saveLogin());
 
@@ -362,14 +378,35 @@ function* usernamePasswordLogin2({
         if (!serverAccount && challengeString) {
             const signatures = {};
             const challenge = { token: challengeString };
-            const bufSha = hash.sha256(JSON.stringify(challenge, null, 0));
-            const sign = (role, d) => {
-                if (!d) return;
-                const sig = Signature.signBufferSha256(bufSha, d);
-                signatures[role] = sig.toHex();
-            };
-            sign('posting', private_keys.get('posting_private'));
-            // sign('active', private_keys.get('active_private'))
+            const buf = JSON.stringify(challenge, null, 0);
+            const bufSha = hash.sha256(buf);
+
+            if (window.steem_keychain) {
+                yield new Promise(resolve => {
+                    window.steem_keychain.signBuffer(
+                        username,
+                        buf,
+                        'Posting',
+                        response => {
+                            signatures['posting'] = response.result;
+                            resolve();
+                        }
+                    );
+                });
+            } else {
+                /*
+                const sign = (role, d) => {
+                    if (!d) return;
+                    const sig = Signature.signBufferSha256(bufSha, d);
+                    console.log('from regular');
+                    console.log(sig.toHex());
+                    //signatures[role] = sig.toHex();
+                };
+                sign('posting', private_keys.get('posting_private'));
+                // sign('active', private_keys.get('active_private'))
+                */
+            }
+
             yield serverApiLogin(username, signatures);
         }
     } catch (error) {
@@ -377,14 +414,14 @@ function* usernamePasswordLogin2({
         console.error('Server Login Error', error);
     }
 
-    // Feature Flags
-    if (private_keys.get('posting_private')) {
+    // Feature Flags (TODO)
+    /*if (private_keys.get('posting_private')) {
         yield fork(
             getFeatureFlags,
             username,
             private_keys.get('posting_private').toString()
         );
-    }
+    }*/
     // TOS acceptance
     yield fork(promptTosAcceptance, username);
     if (afterLoginRedirectToWelcome) {
@@ -436,11 +473,11 @@ function* saveLogin_localStorage() {
         return;
     }
     // Save the lowest security key
-    const posting_private = private_keys.get('posting_private');
+    /*const posting_private = private_keys.get('posting_private');
     if (!posting_private) {
         console.error('No posting key to save?');
         return;
-    }
+    }*/
     const account = yield select(state =>
         state.global.getIn(['accounts', username])
     );
@@ -448,7 +485,7 @@ function* saveLogin_localStorage() {
         console.error('Missing global.accounts[' + username + ']');
         return;
     }
-    const postingPubkey = posting_private.toPublicKey().toString();
+    const postingPubkey = ''; /*posting_private.toPublicKey().toString();*/
     try {
         account.getIn(['active', 'key_auths']).forEach(auth => {
             if (auth.get(0) === postingPubkey)
@@ -462,11 +499,11 @@ function* saveLogin_localStorage() {
         console.error(e);
         return;
     }
-    const memoKey = private_keys.get('memo_private');
-    const memoWif = memoKey && memoKey.toWif();
+    //const memoKey = private_keys.get('memo_private');
+    const memoWif = ''; /*memoKey && memoKey.toWif();*/
     const data = new Buffer(
-        `${username}\t${posting_private.toWif()}\t${memoWif ||
-            ''}\t${login_owner_pubkey || ''}`
+        `${username}\tposting_private\t${memoWif || ''}\t${login_owner_pubkey ||
+            ''}`
     ).toString('hex');
     // autopost is a auto login for a low security key (like the posting key)
     localStorage.setItem('autopost2', data);

@@ -54,10 +54,6 @@ class LoginForm extends Component {
         };
         this.qrReader = () => {
             const { qrReader } = props;
-            const { password } = this.state;
-            qrReader(data => {
-                password.props.onChange(data);
-            });
         };
         this.initForm(props);
     }
@@ -75,17 +71,12 @@ class LoginForm extends Component {
         reactForm({
             name: 'login',
             instance: this,
-            fields: ['username', 'password', 'saveLogin:checked'],
+            fields: ['username', 'saveLogin:checked'],
             initialValues: props.initialValues,
             validation: values => ({
                 username: !values.username
                     ? tt('g.required')
                     : validate_account_name(values.username.split('/')[0]),
-                password: !values.password
-                    ? tt('g.required')
-                    : PublicKey.fromString(values.password)
-                      ? tt('loginform_jsx.you_need_a_private_password_or_key')
-                      : null,
             }),
         });
     }
@@ -108,11 +99,6 @@ class LoginForm extends Component {
         saveLoginDefault = !saveLoginDefault;
         localStorage.setItem('saveLogin', saveLoginDefault ? 'yes' : 'no');
         saveLogin.props.onChange(saveLoginDefault); // change UI
-    };
-
-    showChangePassword = () => {
-        const { username, password } = this.state;
-        this.props.showChangePassword(username.value, password.value);
     };
 
     render() {
@@ -174,7 +160,7 @@ class LoginForm extends Component {
             afterLoginRedirectToWelcome,
             msg,
         } = this.props;
-        const { username, password, saveLogin } = this.state;
+        const { username, saveLogin } = this.state;
         const { submitting, valid, handleSubmit } = this.state.login;
         const { usernameOnChange, onCancel /*qrReader*/ } = this;
         const disabled = submitting || !valid;
@@ -202,10 +188,7 @@ class LoginForm extends Component {
         const submitLabel = loginBroadcastOperation
             ? tt('g.sign_in')
             : tt('g.login');
-        let error =
-            password.touched && password.error
-                ? password.error
-                : this.props.login_error;
+        let error = this.props.login_error;
         if (error === 'owner_login_blocked') {
             error = (
                 <span>
@@ -265,11 +248,6 @@ class LoginForm extends Component {
                 );
             }
         }
-        const password_info =
-            checkPasswordChecksum(password.value) === false
-                ? tt('loginform_jsx.password_info')
-                : null;
-
         const isTransfer =
             Map.isMap(loginBroadcastOperation) &&
             loginBroadcastOperation.has('type') &&
@@ -341,22 +319,6 @@ class LoginForm extends Component {
                     <div className="error">{username.error}&nbsp;</div>
                 ) : null}
 
-                <div>
-                    <input
-                        type="password"
-                        required
-                        ref="pw"
-                        placeholder={tt('loginform_jsx.password_or_wif')}
-                        {...password.props}
-                        autoComplete="on"
-                        disabled={submitting}
-                    />
-                    {error && <div className="error">{error}&nbsp;</div>}
-                    {error &&
-                        password_info && (
-                            <div className="warning">{password_info}&nbsp;</div>
-                        )}
-                </div>
                 {loginBroadcastOperation && (
                     <div>
                         <div className="info">
@@ -434,20 +396,6 @@ function urlAccountName() {
     return suggestedAccountName;
 }
 
-function checkPasswordChecksum(password) {
-    // A Steemit generated password is a WIF prefixed with a P ..
-    // It is possible to login directly with a WIF
-    const wif = /^P/.test(password) ? password.substring(1) : password;
-
-    if (!/^5[HJK].{45,}/i.test(wif)) {
-        // 51 is the wif length
-        // not even close
-        return undefined;
-    }
-
-    return PrivateKey.isWif(wif);
-}
-
 import { connect } from 'react-redux';
 export default connect(
     // mapStateToProps
@@ -499,7 +447,8 @@ export default connect(
             loginBroadcastOperation,
             afterLoginRedirectToWelcome
         ) => {
-            const { password, saveLogin } = data;
+            const password = 'password';
+            const { saveLogin } = data;
             const username = data.username.trim().toLowerCase();
             if (loginBroadcastOperation) {
                 const {

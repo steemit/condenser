@@ -114,6 +114,11 @@ class LoginForm extends Component {
         saveLogin.props.onChange(saveLoginDefault); // change UI
     };
 
+    showChangePassword = () => {
+        const { username, password } = this.state;
+        this.props.showChangePassword(username.value, password.value);
+    };
+
     render() {
         if (!process.env.BROWSER) {
             return (
@@ -201,10 +206,10 @@ class LoginForm extends Component {
         const submitLabel = loginBroadcastOperation
             ? tt('g.sign_in')
             : tt('g.login');
-        let error = this.props.login_error;
-        password.touched && password.error
-            ? password.error
-            : this.props.login_error;
+        let error =
+            password.touched && password.error
+                ? password.error
+                : this.props.login_error;
         if (error === 'owner_login_blocked') {
             error = (
                 <span>
@@ -441,11 +446,13 @@ function checkPasswordChecksum(password) {
     // A Steemit generated password is a WIF prefixed with a P ..
     // It is possible to login directly with a WIF
     const wif = /^P/.test(password) ? password.substring(1) : password;
+
     if (!/^5[HJK].{45,}/i.test(wif)) {
         // 51 is the wif length
         // not even close
         return undefined;
     }
+
     return PrivateKey.isWif(wif);
 }
 

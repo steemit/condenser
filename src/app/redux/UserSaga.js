@@ -198,162 +198,173 @@ function* usernamePasswordLogin2({
 
     let private_keys;
     if (!window.steem_keychain) {
-        /*
-    try {
-        const private_key = PrivateKey.fromWif(password);
-        login_wif_owner_pubkey = private_key.toPublicKey().toString();
-        private_keys = fromJS({
-            posting_private: isRole('posting', () => private_key),
-            active_private: isRole('active', () => private_key),
-            memo_private: private_key,
-        });
-    } catch (e) {
-        // Password (non wif)
-        login_owner_pubkey = PrivateKey.fromSeed(username + 'owner' + password)
-            .toPublicKey()
-            .toString();
-        private_keys = fromJS({
-            posting_private: isRole('posting', () =>
-                PrivateKey.fromSeed(username + 'posting' + password)
-            ),
-            active_private: isRole('active', () =>
-                PrivateKey.fromSeed(username + 'active' + password)
-            ),
-            memo_private: PrivateKey.fromSeed(username + 'memo' + password),
-        });
-    }
-    if (memoWif)
-        private_keys = private_keys.set(
-            'memo_private',
-            PrivateKey.fromWif(memoWif)
-        );
-
-    yield call(accountAuthLookup, {
-        payload: {
-            account,
-            private_keys,
-            highSecurityLogin,
-            login_owner_pubkey,
-        },
-    });
-    let authority = yield select(state =>
-        state.user.getIn(['authority', username])
-    );
-    const hasActiveAuth = authority.get('active') === 'full';
-    if (!highSecurityLogin) {
-        const accountName = account.get('name');
-        authority = authority.set('active', 'none');
-        yield put(userActions.setAuthority({ accountName, auth: authority }));
-    }
-    const fullAuths = authority.reduce(
-        (r, auth, type) => (auth === 'full' ? r.add(type) : r),
-        Set()
-    );
-    if (!fullAuths.size) {
-        localStorage.removeItem('autopost2');
-        const owner_pub_key = account.getIn(['owner', 'key_auths', 0, 0]);
-        if (
-            login_owner_pubkey === owner_pub_key ||
-            login_wif_owner_pubkey === owner_pub_key
-        ) {
-            yield put(userActions.loginError({ error: 'owner_login_blocked' }));
-        } else if (!highSecurityLogin && hasActiveAuth) {
-            yield put(
-                userActions.loginError({ error: 'active_login_blocked' })
-            );
-        } else {
-            const generated_type = password[0] === 'P' && password.length > 40;
-            serverApiRecordEvent(
-                'login_attempt',
-                JSON.stringify({
-                    name: username,
-                    login_owner_pubkey,
-                    owner_pub_key,
-                    generated_type,
-                })
-            );
-            yield put(userActions.loginError({ error: 'Incorrect Password' }));
-        }
-        return;
-    }
-    if (authority.get('posting') !== 'full')
-        private_keys = private_keys.remove('posting_private');
-
-    if (!highSecurityLogin || authority.get('active') !== 'full')
-        private_keys = private_keys.remove('active_private');
-
-    const owner_pubkey = account.getIn(['owner', 'key_auths', 0, 0]);
-    const active_pubkey = account.getIn(['active', 'key_auths', 0, 0]);
-    const posting_pubkey = account.getIn(['posting', 'key_auths', 0, 0]);
-
-    if (
-        private_keys.get('memo_private') &&
-        account.get('memo_key') !==
-            private_keys
-                .get('memo_private')
+        try {
+            const private_key = PrivateKey.fromWif(password);
+            login_wif_owner_pubkey = private_key.toPublicKey().toString();
+            private_keys = fromJS({
+                posting_private: isRole('posting', () => private_key),
+                active_private: isRole('active', () => private_key),
+                memo_private: private_key,
+            });
+        } catch (e) {
+            // Password (non wif)
+            login_owner_pubkey = PrivateKey.fromSeed(
+                username + 'owner' + password
+            )
                 .toPublicKey()
-                .toString()
-    )
-        // provided password did not yield memo key
-        private_keys = private_keys.remove('memo_private');
-
-    if (!highSecurityLogin) {
-        if (
-            posting_pubkey === owner_pubkey ||
-            posting_pubkey === active_pubkey
-        ) {
-            yield put(
-                userActions.loginError({
-                    error:
-                        'This login gives owner or active permissions and should not be used here.  Please provide a posting only login.',
-                })
+                .toString();
+            private_keys = fromJS({
+                posting_private: isRole('posting', () =>
+                    PrivateKey.fromSeed(username + 'posting' + password)
+                ),
+                active_private: isRole('active', () =>
+                    PrivateKey.fromSeed(username + 'active' + password)
+                ),
+                memo_private: PrivateKey.fromSeed(username + 'memo' + password),
+            });
+        }
+        if (memoWif)
+            private_keys = private_keys.set(
+                'memo_private',
+                PrivateKey.fromWif(memoWif)
             );
+
+        yield call(accountAuthLookup, {
+            payload: {
+                account,
+                private_keys,
+                highSecurityLogin,
+                login_owner_pubkey,
+            },
+        });
+        let authority = yield select(state =>
+            state.user.getIn(['authority', username])
+        );
+        const hasActiveAuth = authority.get('active') === 'full';
+        if (!highSecurityLogin) {
+            const accountName = account.get('name');
+            authority = authority.set('active', 'none');
+            yield put(
+                userActions.setAuthority({ accountName, auth: authority })
+            );
+        }
+        const fullAuths = authority.reduce(
+            (r, auth, type) => (auth === 'full' ? r.add(type) : r),
+            Set()
+        );
+        if (!fullAuths.size) {
             localStorage.removeItem('autopost2');
+            const owner_pub_key = account.getIn(['owner', 'key_auths', 0, 0]);
+            if (
+                login_owner_pubkey === owner_pub_key ||
+                login_wif_owner_pubkey === owner_pub_key
+            ) {
+                yield put(
+                    userActions.loginError({ error: 'owner_login_blocked' })
+                );
+            } else if (!highSecurityLogin && hasActiveAuth) {
+                yield put(
+                    userActions.loginError({ error: 'active_login_blocked' })
+                );
+            } else {
+                const generated_type =
+                    password[0] === 'P' && password.length > 40;
+                serverApiRecordEvent(
+                    'login_attempt',
+                    JSON.stringify({
+                        name: username,
+                        login_owner_pubkey,
+                        owner_pub_key,
+                        generated_type,
+                    })
+                );
+                yield put(
+                    userActions.loginError({ error: 'Incorrect Password' })
+                );
+            }
             return;
         }
-    }
-    const memo_pubkey = private_keys.has('memo_private')
-        ? private_keys
-              .get('memo_private')
-              .toPublicKey()
-              .toString()
-        : null;
+        if (authority.get('posting') !== 'full')
+            private_keys = private_keys.remove('posting_private');
 
-    if (memo_pubkey === owner_pubkey || memo_pubkey === active_pubkey)
-        // Memo key could be saved in local storage.. In RAM it is not purged upon LOCATION_CHANGE
-        private_keys = private_keys.remove('memo_private');
+        if (!highSecurityLogin || authority.get('active') !== 'full')
+            private_keys = private_keys.remove('active_private');
 
-    // If user is signing operation by operaion and has no saved login, don't save to RAM
-    if (!operationType || saveLogin) {
-        if (username) feedURL = '/@' + username + '/feed';
-        // Keep the posting key in RAM but only when not signing an operation.
-        // No operation or the user has checked: Keep me logged in...
-        yield put(
-            userActions.setUser({
-                username,
-                private_keys,
-                login_owner_pubkey,
-                vesting_shares: account.get('vesting_shares'),
-                received_vesting_shares: account.get('received_vesting_shares'),
-                delegated_vesting_shares: account.get(
-                    'delegated_vesting_shares'
-                ),
-            })
-        );
-    } else {
-        if (username) feedURL = '/@' + username + '/feed';
-        yield put(
-            userActions.setUser({
-                username,
-                vesting_shares: account.get('vesting_shares'),
-                received_vesting_shares: account.get('received_vesting_shares'),
-                delegated_vesting_shares: account.get(
-                    'delegated_vesting_shares'
-                ),
-            })
-        );
-    }
-    */
+        const owner_pubkey = account.getIn(['owner', 'key_auths', 0, 0]);
+        const active_pubkey = account.getIn(['active', 'key_auths', 0, 0]);
+        const posting_pubkey = account.getIn(['posting', 'key_auths', 0, 0]);
+
+        if (
+            private_keys.get('memo_private') &&
+            account.get('memo_key') !==
+                private_keys
+                    .get('memo_private')
+                    .toPublicKey()
+                    .toString()
+        )
+            // provided password did not yield memo key
+            private_keys = private_keys.remove('memo_private');
+
+        if (!highSecurityLogin) {
+            if (
+                posting_pubkey === owner_pubkey ||
+                posting_pubkey === active_pubkey
+            ) {
+                yield put(
+                    userActions.loginError({
+                        error:
+                            'This login gives owner or active permissions and should not be used here.  Please provide a posting only login.',
+                    })
+                );
+                localStorage.removeItem('autopost2');
+                return;
+            }
+        }
+        const memo_pubkey = private_keys.has('memo_private')
+            ? private_keys
+                  .get('memo_private')
+                  .toPublicKey()
+                  .toString()
+            : null;
+
+        if (memo_pubkey === owner_pubkey || memo_pubkey === active_pubkey)
+            // Memo key could be saved in local storage.. In RAM it is not purged upon LOCATION_CHANGE
+            private_keys = private_keys.remove('memo_private');
+
+        // If user is signing operation by operaion and has no saved login, don't save to RAM
+        if (!operationType || saveLogin) {
+            if (username) feedURL = '/@' + username + '/feed';
+            // Keep the posting key in RAM but only when not signing an operation.
+            // No operation or the user has checked: Keep me logged in...
+            yield put(
+                userActions.setUser({
+                    username,
+                    private_keys,
+                    login_owner_pubkey,
+                    vesting_shares: account.get('vesting_shares'),
+                    received_vesting_shares: account.get(
+                        'received_vesting_shares'
+                    ),
+                    delegated_vesting_shares: account.get(
+                        'delegated_vesting_shares'
+                    ),
+                })
+            );
+        } else {
+            if (username) feedURL = '/@' + username + '/feed';
+            yield put(
+                userActions.setUser({
+                    username,
+                    vesting_shares: account.get('vesting_shares'),
+                    received_vesting_shares: account.get(
+                        'received_vesting_shares'
+                    ),
+                    delegated_vesting_shares: account.get(
+                        'delegated_vesting_shares'
+                    ),
+                })
+            );
+        }
     } else {
         if (username) feedURL = '/@' + username + '/feed';
         yield put(
@@ -394,7 +405,6 @@ function* usernamePasswordLogin2({
                     );
                 });
             } else {
-                /*
                 const sign = (role, d) => {
                     if (!d) return;
                     const sig = Signature.signBufferSha256(bufSha, d);
@@ -404,7 +414,6 @@ function* usernamePasswordLogin2({
                 };
                 sign('posting', private_keys.get('posting_private'));
                 // sign('active', private_keys.get('active_private'))
-                */
             }
 
             yield serverApiLogin(username, signatures);
@@ -414,14 +423,14 @@ function* usernamePasswordLogin2({
         console.error('Server Login Error', error);
     }
 
-    // Feature Flags (TODO)
-    /*if (private_keys.get('posting_private')) {
+    // Feature Flags (TODO for steem keychain)
+    if (!window.steem_keychain && private_keys.get('posting_private')) {
         yield fork(
             getFeatureFlags,
             username,
             private_keys.get('posting_private').toString()
         );
-    }*/
+    }
     // TOS acceptance
     yield fork(promptTosAcceptance, username);
     if (afterLoginRedirectToWelcome) {
@@ -473,11 +482,13 @@ function* saveLogin_localStorage() {
         return;
     }
     // Save the lowest security key
-    /*const posting_private = private_keys.get('posting_private');
-    if (!posting_private) {
+    const posting_private = window.steem_keychain
+        ? null
+        : private_keys.get('posting_private');
+    if (!window.steem_keychain && !posting_private) {
         console.error('No posting key to save?');
         return;
-    }*/
+    }
     const account = yield select(state =>
         state.global.getIn(['accounts', username])
     );
@@ -485,7 +496,9 @@ function* saveLogin_localStorage() {
         console.error('Missing global.accounts[' + username + ']');
         return;
     }
-    const postingPubkey = ''; /*posting_private.toPublicKey().toString();*/
+    const postingPubkey = posting_private
+        ? posting_private.toPublicKey().toString()
+        : 'none';
     try {
         account.getIn(['active', 'key_auths']).forEach(auth => {
             if (auth.get(0) === postingPubkey)
@@ -499,11 +512,14 @@ function* saveLogin_localStorage() {
         console.error(e);
         return;
     }
-    //const memoKey = private_keys.get('memo_private');
-    const memoWif = ''; /*memoKey && memoKey.toWif();*/
+    const memoKey = private_keys ? private_keys.get('memo_private') : null;
+    const memoWif = memoKey && memoKey.toWif();
+    const postingPrivateWif = posting_private
+        ? posting_private.toWif()
+        : 'none';
     const data = new Buffer(
-        `${username}\tposting_private\t${memoWif || ''}\t${login_owner_pubkey ||
-            ''}`
+        `${username}\t${postingPrivateWif}\t${memoWif ||
+            ''}\t${login_owner_pubkey || ''}`
     ).toString('hex');
     // autopost is a auto login for a low security key (like the posting key)
     localStorage.setItem('autopost2', data);

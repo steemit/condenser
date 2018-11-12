@@ -225,33 +225,35 @@ export function* broadcastOperation({
         return;
     }
     try {
-        /*if (!keys || keys.length === 0) {
-            payload.keys = [];
-            // user may already be logged in, or just enterend a signing passowrd or wif
-            const signingKey = yield call(findSigningKey, {
-                opType: type,
-                username,
-                password,
-            });
-            if (signingKey) payload.keys.push(signingKey);
-            else {
-                if (!password) {
-                    yield put(
-                        userActions.showLogin({
-                            operation: {
-                                type,
-                                operation,
-                                username,
-                                successCallback,
-                                errorCallback,
-                                saveLogin: true,
-                            },
-                        })
-                    );
-                    return;
+        if (!window.steem_keychain) {
+            if (!keys || keys.length === 0) {
+                payload.keys = [];
+                // user may already be logged in, or just enterend a signing passowrd or wif
+                const signingKey = yield call(findSigningKey, {
+                    opType: type,
+                    username,
+                    password,
+                });
+                if (signingKey) payload.keys.push(signingKey);
+                else {
+                    if (!password) {
+                        yield put(
+                            userActions.showLogin({
+                                operation: {
+                                    type,
+                                    operation,
+                                    username,
+                                    successCallback,
+                                    errorCallback,
+                                    saveLogin: true,
+                                },
+                            })
+                        );
+                        return;
+                    }
                 }
             }
-        }*/
+        }
         yield call(broadcastPayload, { payload });
         let eventType = type
             .replace(/^([a-z])/, g => g.toUpperCase())
@@ -373,17 +375,19 @@ function* broadcastPayload({
                 }, 2000);
             } else {
                 if (!window.steem_keychain) {
-                    /*
-                broadcast.send({ extensions: [], operations }, keys, err => {
-                    if (err) {
-                        console.error(err);
-                        reject(err);
-                    } else {
-                        broadcastedEvent();
-                        resolve();
-                    }
-                });
-                */
+                    broadcast.send(
+                        { extensions: [], operations },
+                        keys,
+                        err => {
+                            if (err) {
+                                console.error(err);
+                                reject(err);
+                            } else {
+                                broadcastedEvent();
+                                resolve();
+                            }
+                        }
+                    );
                 } else {
                     const authType = needsActiveAuth ? 'active' : 'posting';
                     window.steem_keychain.broadcast(
@@ -577,9 +581,7 @@ export function* preBroadcast_comment({ operation, username }) {
         parent_permlink,
         json_metadata,
         title: (operation.title || '').trim(),
-        //title: new Buffer((operation.title || '').trim(), 'utf-8'),
         body: body2,
-        //body: new Buffer(body2, 'utf-8'),
     };
 
     const comment_op = [['comment', op]];

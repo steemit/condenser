@@ -4,8 +4,7 @@
 
 Condenser is the react.js web interface to the world's first and best
 blockchain-based social media platform, steemit.com.  It uses
-[STEEM](https://github.com/steemit/steem), a blockchain powered by Graphene
-2.0 technology to store JSON-based content for a plethora of web
+[STEEM](https://github.com/steemit/steem), a blockchain powered by DPoS Governance and ChainBase DB to store JSON-based content for a plethora of web
 applications.   
 
 ## Why would I want to use Condenser (steemit.com front-end)?
@@ -19,7 +18,7 @@ applications.
 
 #### Docker
 
-We highly recommend using docker to run condenser. This is how we run the
+We highly recommend using docker to run condenser in production. This is how we run the
 live steemit.com site and it is the most supported (and fastest) method of
 both building and running condenser. We will always have the latest version
 of condenser (master branch) available on Docker Hub. Configuration settings
@@ -51,6 +50,7 @@ docker run -it -p 8080:8080 myname/condenser:mybranch
 ```
 
 ## Building from source without docker (the 'traditional' way):
+(better if you're planning to do condenser development)
 
 #### Clone the repository and make a tmp folder
 

@@ -107,6 +107,11 @@ const SidePanel = ({ alignment, visible, hideSidePanel, username }) => {
                 link: 'https://steemprojects.com/',
             },
             {
+                value: 'business',
+                label: tt('navigation.business_center'),
+                link: 'https://steemeconomy.com/',
+            },
+            {
                 value: 'api_docs',
                 label: tt('navigation.api_docs'),
                 link: 'https://developers.steem.io/',

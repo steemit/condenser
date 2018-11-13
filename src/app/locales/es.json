@@ -424,7 +424,9 @@
             "zero": "Sin publicaciones",
             "one": "1 publicación",
             "other": "%(count)s posts"
-        }
+        },
+        "hide_resteems": "Hide Resteems",
+        "show_all": "Show All"
     },
     "authorrewards_jsx": {
         "estimated_author_rewards_last_week":

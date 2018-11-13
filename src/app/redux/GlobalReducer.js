@@ -270,7 +270,6 @@ export default function reducer(state = defaultState, action = {}) {
             let new_state;
             if (
                 order === 'by_author' ||
-                order === 'by_author_noreblog' ||
                 order === 'by_feed' ||
                 order === 'by_comments' ||
                 order === 'by_replies'

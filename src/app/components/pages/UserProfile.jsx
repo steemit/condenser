@@ -345,7 +345,9 @@ export default class UserProfile extends React.Component {
                     tab_content = (
                         <div>
                             <a href="#" onClick={this.toggleShowResteem}>
-                                {showResteem ? 'Hide resteems' : 'Show all'}
+                                {showResteem
+                                    ? tt('user_profile.hide_resteems')
+                                    : tt('user_profile.show_all')}
                             </a>
                             <PostsList
                                 account={account.name}

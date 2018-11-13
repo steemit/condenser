@@ -408,9 +408,7 @@ function* usernamePasswordLogin2({
                 const sign = (role, d) => {
                     if (!d) return;
                     const sig = Signature.signBufferSha256(bufSha, d);
-                    console.log('from regular');
-                    console.log(sig.toHex());
-                    //signatures[role] = sig.toHex();
+                    signatures[role] = sig.toHex();
                 };
                 sign('posting', private_keys.get('posting_private'));
                 // sign('active', private_keys.get('active_private'))

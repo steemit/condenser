@@ -261,6 +261,7 @@
         "faq": "FAQ",
         "chat": "Steem Chat",
         "app_center": "Steemit App Center",
+        "business_center": "Businesses Accepting Steem",
         "api_docs": "Steemit API Docs",
         "bluepaper": "Steem Bluepaper",
         "smt_whitepaper": "SMT Whitepaper",
@@ -430,7 +431,9 @@
             "zero": "Nessun post",
             "one": "1 post",
             "other": "%(count)s post"
-        }
+        },
+        "hide_resteems": "Hide Resteems",
+        "show_all": "Show All"
     },
     "authorrewards_jsx": {
         "estimated_author_rewards_last_week":

@@ -338,13 +338,20 @@ function youTubeId(data) {
     const id = m2 && m2.length >= 2 ? m2[1] : null;
     if (!id) return null;
 
-    // parse timestamp
-    const m3 = url.match(/t=((\d*)h){0,1}((\d*)m){0,1}((\d*)s){0,1}/);
-    // convert timestamp to seconds
-    let hours = m3 ? parseInt((m3[2] || 0)*3600) : 0,
-        minutes = m3 ? parseInt((m3[4] || 0)*60) : 0,
-        seconds = m3 ? parseInt((m3[6] || 0)) : 0;
-    const startTime = hours + minutes + seconds;
+    var startTime;
+    const secondsOnlyRegex = /t=(\d*)$/;
+    const hoursMinutesSecondsRegex = /t=((\d*)h){0,1}((\d*)m){0,1}((\d*)s){0,1}/;
+    if (url.match(secondsOnlyRegex)) {
+        startTime = url.match(secondsOnlyRegex)[1];
+    } else {
+        // parse timestamp
+        const m3 = url.match(hoursMinutesSecondsRegex);
+        // convert timestamp to seconds
+        let hours = m3 ? parseInt((m3[2] || 0)*3600) : 0,
+            minutes = m3 ? parseInt((m3[4] || 0)*60) : 0,
+            seconds = m3 ? parseInt((m3[6] || 0)) : 0;
+        startTime = hours + minutes + seconds;
+    }
 
     return {
         id,

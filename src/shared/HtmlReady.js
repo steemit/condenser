@@ -388,7 +388,7 @@ function embedTwitchNode(child, links /*images*/) {
 
         if (links) links.add(twitch.canonical);
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
     return child;
 }
@@ -396,7 +396,6 @@ function embedTwitchNode(child, links /*images*/) {
 function twitchId(data) {
     if (!data) return null;
     const m = data.match(linksRe.twitch);
-    console.log(m);
     if (!m || m.length < 3) return null;
 
     return {

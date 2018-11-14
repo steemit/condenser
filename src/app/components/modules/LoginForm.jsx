@@ -55,11 +55,9 @@ class LoginForm extends Component {
         this.qrReader = () => {
             const { qrReader } = props;
             const { password } = this.state;
-            if (password) {
-                qrReader(data => {
-                    password.props.onChange(data);
-                });
-            }
+            qrReader(data => {
+                password.props.onChange(data);
+            });
         };
         this.initForm(props);
     }

@@ -339,7 +339,7 @@ function* broadcastPayload({
                         authType,
                         response => {
                             if (!response.success) {
-                                reject(response.err);
+                                reject(response.message);
                             } else {
                                 broadcastedEvent();
                                 resolve();

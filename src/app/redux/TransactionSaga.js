@@ -8,7 +8,7 @@ import { PrivateKey, PublicKey } from '@steemit/steem-js/lib/auth/ecc';
 import { api, broadcast, auth, memo } from '@steemit/steem-js';
 
 import { getAccount, getContent } from 'app/redux/SagaShared';
-import { findSigningKey } from 'app/redux/AuthSaga';
+import { postingOps, findSigningKey } from 'app/redux/AuthSaga';
 import * as appActions from 'app/redux/AppReducer';
 import * as globalActions from 'app/redux/GlobalReducer';
 import * as transactionActions from 'app/redux/TransactionReducer';
@@ -236,11 +236,6 @@ function* broadcastPayload({
     payload: { operations, keys, username, successCallback, errorCallback },
 }) {
     let needsActiveAuth = false;
-    const postingOps = Set(
-        `vote, comment, delete_comment, custom_json, claim_reward_balance`
-            .trim()
-            .split(/,\s*/)
-    );
 
     // console.log('broadcastPayload')
     if ($STM_Config.read_only_mode) return;

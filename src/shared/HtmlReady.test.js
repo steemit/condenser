@@ -237,4 +237,12 @@ describe('htmlready', () => {
         expect(res).toEqual(htmlified);
     });
 
+    it('should handle twitch link', () => {
+        const testString =
+            '<html><p>https://www.twitch.tv/videos/1234567890</p></html>';
+        const htmlified =
+            '<html xmlns="http://www.w3.org/1999/xhtml"><p>~~~ embed:?video=1234567890 twitch 0 ~~~</p></html>';
+        const res = HtmlReady(testString).html;
+        expect(res).toEqual(htmlified);
+    });
 });

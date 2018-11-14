@@ -408,7 +408,7 @@ function embedTwitchNode(child, links /*images*/) {
 
         child.data = data.replace(
             twitch.url,
-            `~~~ embed:${twitch.id} twitch ~~~`
+            `~~~ embed:${twitch.id} twitch 0 ~~~`
         );
 
         if (links) links.add(twitch.canonical);

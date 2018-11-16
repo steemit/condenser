@@ -6,6 +6,7 @@ import * as transactionActions from 'app/redux/TransactionReducer';
 import * as globalActions from 'app/redux/GlobalReducer';
 import * as userActions from 'app/redux/UserReducer';
 import { validate_account_name } from 'app/utils/ChainValidation';
+import { hasCompatibleKeychain } from 'app/utils/SteemKeychain';
 import runTests from 'app/utils/BrowserTests';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import reactForm from 'app/utils/ReactForm';
@@ -81,7 +82,7 @@ class LoginForm extends Component {
                 username: !values.username
                     ? tt('g.required')
                     : validate_account_name(values.username.split('/')[0]),
-                password: window.steem_keychain
+                password: hasCompatibleKeychain()
                     ? null
                     : !values.password
                       ? tt('g.required')
@@ -268,7 +269,7 @@ class LoginForm extends Component {
             }
         }
         const password_info =
-            !window.steem_keychain &&
+            !hasCompatibleKeychain() &&
             checkPasswordChecksum(password.value) === false
                 ? tt('loginform_jsx.password_info')
                 : null;
@@ -343,7 +344,7 @@ class LoginForm extends Component {
                     <div className="error">{username.error}&nbsp;</div>
                 ) : null}
 
-                {!window.steem_keychain && (
+                {!hasCompatibleKeychain() && (
                     <div>
                         <input
                             type="password"
@@ -506,7 +507,7 @@ export default connect(
             afterLoginRedirectToWelcome
         ) => {
             const { password, saveLogin } = data;
-            const passwordOrKeychain = window.steem_keychain
+            const passwordOrKeychain = hasCompatibleKeychain()
                 ? 'using_steemkeychain'
                 : password;
             const username = data.username.trim().toLowerCase();

@@ -15,6 +15,7 @@ import * as transactionActions from 'app/redux/TransactionReducer';
 import * as userActions from 'app/redux/UserReducer';
 import { DEBT_TICKER } from 'app/client_config';
 import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
+import { hasCompatibleKeychain } from 'app/utils/SteemKeychain';
 
 export const transactionWatches = [
     takeEvery(transactionActions.BROADCAST_OPERATION, broadcastOperation),
@@ -168,7 +169,7 @@ export function* broadcastOperation({
         return;
     }
     try {
-        if (!window.steem_keychain) {
+        if (!hasCompatibleKeychain()) {
             if (!keys || keys.length === 0) {
                 payload.keys = [];
                 // user may already be logged in, or just enterend a signing passowrd or wif
@@ -312,7 +313,7 @@ function* broadcastPayload({
                     broadcastedEvent();
                 }, 2000);
             } else {
-                if (!window.steem_keychain) {
+                if (!hasCompatibleKeychain()) {
                     broadcast.send(
                         { extensions: [], operations },
                         keys,

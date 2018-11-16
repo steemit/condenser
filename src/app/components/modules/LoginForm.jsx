@@ -344,7 +344,11 @@ class LoginForm extends Component {
                     <div className="error">{username.error}&nbsp;</div>
                 ) : null}
 
-                {!hasCompatibleKeychain() && (
+                {hasCompatibleKeychain() ? (
+                    <div>
+                        <em>{tt('loginform_jsx.using_keychain')}</em>
+                    </div>
+                ) : (
                     <div>
                         <input
                             type="password"

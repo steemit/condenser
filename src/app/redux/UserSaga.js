@@ -7,6 +7,7 @@ import { accountAuthLookup } from 'app/redux/AuthSaga';
 import { getAccount } from 'app/redux/SagaShared';
 import * as userActions from 'app/redux/UserReducer';
 import { receiveFeatureFlags } from 'app/redux/AppReducer';
+import { hasCompatibleKeychain } from 'app/utils/SteemKeychain';
 import { browserHistory } from 'react-router';
 import {
     serverApiLogin,
@@ -197,7 +198,7 @@ function* usernamePasswordLogin2({
     }
 
     let private_keys;
-    if (!window.steem_keychain) {
+    if (!hasCompatibleKeychain()) {
         try {
             const private_key = PrivateKey.fromWif(password);
             login_wif_owner_pubkey = private_key.toPublicKey().toString();
@@ -392,7 +393,7 @@ function* usernamePasswordLogin2({
             const buf = JSON.stringify(challenge, null, 0);
             const bufSha = hash.sha256(buf);
 
-            if (window.steem_keychain) {
+            if (hasCompatibleKeychain()) {
                 yield new Promise(resolve => {
                     window.steem_keychain.signBuffer(
                         username,
@@ -422,7 +423,7 @@ function* usernamePasswordLogin2({
     }
 
     // Feature Flags (TODO for steem keychain)
-    if (!window.steem_keychain && private_keys.get('posting_private')) {
+    if (!hasCompatibleKeychain() && private_keys.get('posting_private')) {
         yield fork(
             getFeatureFlags,
             username,
@@ -480,10 +481,10 @@ function* saveLogin_localStorage() {
         return;
     }
     // Save the lowest security key
-    const posting_private = window.steem_keychain
+    const posting_private = hasCompatibleKeychain()
         ? null
         : private_keys.get('posting_private');
-    if (!window.steem_keychain && !posting_private) {
+    if (!hasCompatibleKeychain() && !posting_private) {
         console.error('No posting key to save?');
         return;
     }

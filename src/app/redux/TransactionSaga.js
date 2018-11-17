@@ -329,7 +329,7 @@ function* broadcastPayload({
                     );
                 } else {
                     const authType = needsActiveAuth ? 'active' : 'posting';
-                    window.steem_keychain.broadcast(
+                    window.steem_keychain.requestBroadcast(
                         username,
                         operations,
                         authType,

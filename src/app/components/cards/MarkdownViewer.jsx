@@ -165,11 +165,7 @@ class MarkdownViewer extends Component {
                         />
                     );
                 } else if (type === 'vimeo') {
-                    var startDate = new Date(null);
-                    startDate.setSeconds(startTime);
-                    var parsedTime = startDate.toISOString().substr(11, 8).split(":");
-                    var formattedTimestamp = `t=${parsedTime[0]}h${parsedTime[1]}m${parsedTime[2]}s`;
-                    const url = `https://player.vimeo.com/video/${id}#${formattedTimestamp}`;
+                    const url = `https://player.vimeo.com/video/${id}#t=${startTime}s`;
                     sections.push(
                         <div className="videoWrapper">
                             <iframe

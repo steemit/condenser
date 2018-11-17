@@ -395,7 +395,7 @@ function* usernamePasswordLogin2({
 
             if (hasCompatibleKeychain()) {
                 yield new Promise(resolve => {
-                    window.steem_keychain.signBuffer(
+                    window.steem_keychain.requestSignBuffer(
                         username,
                         buf,
                         'Posting',
@@ -422,12 +422,14 @@ function* usernamePasswordLogin2({
         console.error('Server Login Error', error);
     }
 
-    // Feature Flags (TODO for steem keychain)
-    if (!hasCompatibleKeychain() && private_keys.get('posting_private')) {
+    // Feature Flags
+    if (hasCompatibleKeychain() || private_keys.get('posting_private')) {
         yield fork(
             getFeatureFlags,
             username,
-            private_keys.get('posting_private').toString()
+            hasCompatibleKeychain()
+                ? null
+                : private_keys.get('posting_private').toString()
         );
     }
     // TOS acceptance
@@ -452,13 +454,32 @@ function* promptTosAcceptance(username) {
 
 function* getFeatureFlags(username, posting_private) {
     try {
-        const flags = yield call(
-            [api, api.signedCallAsync],
-            'conveyor.get_feature_flags',
-            { account: username },
-            username,
-            posting_private
-        );
+        let flags;
+        if (hasCompatibleKeychain()) {
+            flags = yield new Promise((resolve, reject) => {
+                window.steem_keychain.requestSignedCall(
+                    username,
+                    'conveyor.get_feature_flags',
+                    { account: username },
+                    'posting',
+                    response => {
+                        if (!response.success) {
+                            reject(response.message);
+                        } else {
+                            resolve(response.result);
+                        }
+                    }
+                );
+            });
+        } else {
+            flags = yield call(
+                [api, api.signedCallAsync],
+                'conveyor.get_feature_flags',
+                { account: username },
+                username,
+                posting_private
+            );
+        }
         yield put(receiveFeatureFlags(flags));
     } catch (error) {
         // Do nothing; feature flags are not ready yet. Or posting_private is not available.

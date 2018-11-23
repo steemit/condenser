@@ -198,7 +198,10 @@ export function filterTags(tags) {
 }
 
 export function pricePerSteem(state) {
-    const feed_price = state.global.get('feed_price');
+    const feed_price = state.user.get(
+        'latest_feed_price',
+        state.global.get('feed_price')
+    );
     if (feed_price && feed_price.has('base') && feed_price.has('quote')) {
         const { base, quote } = feed_price.toJS();
         if (/ SBD$/.test(base) && / STEEM$/.test(quote))

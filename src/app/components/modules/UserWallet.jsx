@@ -762,7 +762,9 @@ export default connect(
         if (feed_price && feed_price.has('base') && feed_price.has('quote')) {
             const { base, quote } = feed_price.toJS();
             if (/ SBD$/.test(base) && / STEEM$/.test(quote))
-                price_per_steem = parseFloat(base.split(' ')[0]);
+                price_per_steem =
+                    parseFloat(base.split(' ')[0]) /
+                    parseFloat(quote.split(' ')[0]);
         }
         const savings_withdraws = state.user.get('savings_withdraws');
         const gprops = state.global.get('props');

@@ -196,3 +196,15 @@ export function filterTags(tags) {
         .filter(tag => typeof tag === 'string')
         .filter((value, index, self) => value && self.indexOf(value) === index);
 }
+
+export function pricePerSteem(state) {
+    const feed_price = state.global.get('feed_price');
+    if (feed_price && feed_price.has('base') && feed_price.has('quote')) {
+        const { base, quote } = feed_price.toJS();
+        if (/ SBD$/.test(base) && / STEEM$/.test(quote))
+            return (
+                parseFloat(base.split(' ')[0]) / parseFloat(quote.split(' ')[0])
+            );
+    }
+    return undefined;
+}

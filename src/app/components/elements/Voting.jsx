@@ -12,6 +12,7 @@ import {
     INVEST_TOKEN_SHORT,
 } from 'app/client_config';
 import FormattedAsset from 'app/components/elements/FormattedAsset';
+import { pricePerSteem } from 'app/utils/StateFunctions';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import {
     formatDecimal,
@@ -631,14 +632,7 @@ export default connect(
         const voting = state.global.get(
             `transaction_vote_active_${author}_${permlink}`
         );
-        let price_per_steem = undefined;
-        const feed_price = state.global.get('feed_price');
-        if (feed_price && feed_price.has('base') && feed_price.has('quote')) {
-            const { base, quote } = feed_price.toJS();
-            if (/ SBD$/.test(base) && / STEEM$/.test(quote))
-                price_per_steem = parseFloat(base.split(' ')[0]);
-        }
-
+        const price_per_steem = pricePerSteem(state);
         const sbd_print_rate = state.global.getIn(['props', 'sbd_print_rate']);
         const enable_slider =
             net_vesting_shares > VOTE_WEIGHT_DROPDOWN_THRESHOLD;

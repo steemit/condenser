@@ -48,6 +48,7 @@ export default {
     vimeoId: /(?:vimeo.com\/|player.vimeo.com\/video\/)([0-9]+)/,
     // simpleLink: new RegExp(`<a href="(.*)">(.*)<\/a>`, 'ig'),
     ipfsPrefix: /(https?:\/\/.*)?\/ipfs/i,
+    twitch: /https?:\/\/(?:www.)?twitch.tv\/(?:(videos)\/)?([a-zA-Z0-9][\w]{3,24})/i,
 };
 
 //TODO: possible this should go somewhere else.

@@ -635,8 +635,13 @@ export default connect(
         const feed_price = state.global.get('feed_price');
         if (feed_price && feed_price.has('base') && feed_price.has('quote')) {
             const { base, quote } = feed_price.toJS();
-            if (/ SBD$/.test(base) && / STEEM$/.test(quote))
-                price_per_steem = parseFloat(base.split(' ')[0]);
+            if (
+                / SBD$/.test(feed_price.base) &&
+                / STEEM$/.test(feed_price.quote)
+            )
+                price_per_steem =
+                    parseFloat(feed_price.base.split(' ')[0]) /
+                    parseFloat(feed_price.quote.split(' ')[0]);
         }
 
         const sbd_print_rate = state.global.getIn(['props', 'sbd_print_rate']);

@@ -4,6 +4,7 @@ import { parsePayoutAmount, repLog10 } from 'app/utils/ParsersAndFormatters';
 import { Long } from 'bytebuffer';
 import { VEST_TICKER, LIQUID_TICKER } from 'app/client_config';
 import { fromJS } from 'immutable';
+import { formatter } from '@steemit/steem-js';
 
 export const numberWithCommas = x => x.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
@@ -203,11 +204,7 @@ export function pricePerSteem(state) {
         state.global.get('feed_price')
     );
     if (feed_price && feed_price.has('base') && feed_price.has('quote')) {
-        const { base, quote } = feed_price.toJS();
-        if (/ SBD$/.test(base) && / STEEM$/.test(quote))
-            return (
-                parseFloat(base.split(' ')[0]) / parseFloat(quote.split(' ')[0])
-            );
+        return formatter.pricePerSteem(feed_price.toJS());
     }
     return undefined;
 }

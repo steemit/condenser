@@ -203,6 +203,7 @@ export function pricePerSteem(state) {
         'latest_feed_price',
         state.global.get('feed_price')
     );
+
     if (feed_price && feed_price.has('base') && feed_price.has('quote')) {
         return formatter.pricePerSteem(feed_price.toJS());
     }

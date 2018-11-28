@@ -729,7 +729,6 @@ module.exports = {
         state => {
             const wifShown = state.global.get('UserKeys_wifShown');
             const current_user = state.user.get('current');
-            // const current_account = current_user && state.global.getIn(['accounts', current_user.get('username')])
 
             return {
                 discussions: state.global.get('discussion_idx'),

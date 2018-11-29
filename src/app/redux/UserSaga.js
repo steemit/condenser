@@ -366,27 +366,18 @@ function* usernamePasswordLogin2({
                 })
             );
         }
-    } else {
-        if (username) feedURL = '/@' + username + '/feed';
-        yield put(
-            userActions.setUser({
-                username,
-                vesting_shares: account.get('vesting_shares'),
-                received_vesting_shares: account.get('received_vesting_shares'),
-                delegated_vesting_shares: account.get(
-                    'delegated_vesting_shares'
-                ),
-            })
-        );
     }
-
-    if (!autopost && saveLogin) yield put(userActions.saveLogin());
 
     try {
         // const challengeString = yield serverApiLoginChallenge()
         const offchainData = yield select(state => state.offchain);
-        const serverAccount = offchainData.get('account');
-        const challengeString = offchainData.get('login_challenge');
+        let serverAccount = offchainData.get('account');
+        let challengeString = offchainData.get('login_challenge');
+        // if steem keychain, set these to something arbitrary for login.
+        if (hasCompatibleKeychain()) {
+            serverAccount = '';
+            challengeString = 'challengeString';
+        }
         if (!serverAccount && challengeString) {
             const signatures = {};
             const challenge = { token: challengeString };
@@ -394,17 +385,38 @@ function* usernamePasswordLogin2({
             const bufSha = hash.sha256(buf);
 
             if (hasCompatibleKeychain()) {
-                yield new Promise(resolve => {
+                const response = yield new Promise(resolve => {
                     window.steem_keychain.requestSignBuffer(
                         username,
                         buf,
                         'Posting',
                         response => {
-                            signatures['posting'] = response.result;
-                            resolve();
+                            resolve(response);
                         }
                     );
                 });
+                console.log(response);
+                if (response.success) {
+                    signatures['posting'] = response.result;
+                } else {
+                    yield put(
+                        userActions.loginError({ error: response.message })
+                    );
+                    return;
+                }
+                feedURL = '/@' + username + '/feed';
+                yield put(
+                    userActions.setUser({
+                        username,
+                        vesting_shares: account.get('vesting_shares'),
+                        received_vesting_shares: account.get(
+                            'received_vesting_shares'
+                        ),
+                        delegated_vesting_shares: account.get(
+                            'delegated_vesting_shares'
+                        ),
+                    })
+                );
             } else {
                 const sign = (role, d) => {
                     if (!d) return;
@@ -422,6 +434,7 @@ function* usernamePasswordLogin2({
         console.error('Server Login Error', error);
     }
 
+    if (!autopost && saveLogin) yield put(userActions.saveLogin());
     // Feature Flags
     if (hasCompatibleKeychain() || private_keys.get('posting_private')) {
         yield fork(

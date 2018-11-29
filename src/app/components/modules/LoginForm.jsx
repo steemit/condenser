@@ -347,6 +347,7 @@ class LoginForm extends Component {
                 {hasCompatibleKeychain() ? (
                     <div>
                         <em>{tt('loginform_jsx.using_keychain')}</em>
+                        {error && <div className="error">{error}&nbsp;</div>}
                     </div>
                 ) : (
                     <div>

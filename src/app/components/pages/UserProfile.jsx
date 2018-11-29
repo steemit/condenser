@@ -46,46 +46,43 @@ export default class UserProfile extends React.Component {
     }
 
     shouldComponentUpdate(np, ns) {
-        const { follow } = this.props;
-        const { follow_count } = this.props;
+        const { follow, follow_count, account, accountname } = this.props;
 
         let followersLoading = false,
             npFollowersLoading = false;
         let followingLoading = false,
             npFollowingLoading = false;
 
-        const account = np.routeParams.accountname.toLowerCase();
         if (follow) {
             followersLoading = follow.getIn(
-                ['getFollowersAsync', account, 'blog_loading'],
+                ['getFollowersAsync', accountname, 'blog_loading'],
                 false
             );
             followingLoading = follow.getIn(
-                ['getFollowingAsync', account, 'blog_loading'],
+                ['getFollowingAsync', accountname, 'blog_loading'],
                 false
             );
         }
         if (np.follow) {
             npFollowersLoading = np.follow.getIn(
-                ['getFollowersAsync', account, 'blog_loading'],
+                ['getFollowersAsync', accountname, 'blog_loading'],
                 false
             );
             npFollowingLoading = np.follow.getIn(
-                ['getFollowingAsync', account, 'blog_loading'],
+                ['getFollowingAsync', accountname, 'blog_loading'],
                 false
             );
         }
 
         return (
             np.current_user !== this.props.current_user ||
-            np.accounts.get(account) !== this.props.accounts.get(account) ||
+            np.account !== this.props.account ||
             np.wifShown !== this.props.wifShown ||
             np.global_status !== this.props.global_status ||
             (npFollowersLoading !== followersLoading && !npFollowersLoading) ||
             (npFollowingLoading !== followingLoading && !npFollowingLoading) ||
             np.loading !== this.props.loading ||
             np.location.pathname !== this.props.location.pathname ||
-            np.routeParams.accountname !== this.props.routeParams.accountname ||
             np.follow_count !== this.props.follow_count ||
             np.blogmode !== this.props.blogmode ||
             ns.showResteem !== this.state.showResteem
@@ -98,7 +95,7 @@ export default class UserProfile extends React.Component {
     }
 
     loadMore(last_post, category, showResteem) {
-        const { accountname } = this.props.routeParams;
+        const { accountname } = this.props;
 
         if (!last_post) return;
 
@@ -153,20 +150,22 @@ export default class UserProfile extends React.Component {
     render() {
         const {
             state: { showResteem },
-            props: { current_user, wifShown, global_status, follow },
+            props: {
+                current_user,
+                wifShown,
+                global_status,
+                follow,
+                accountname,
+            },
             onPrint,
         } = this;
-        let { accountname, section } = this.props.routeParams;
-        // normalize account from cased params
-        accountname = accountname.toLowerCase();
         const username = current_user ? current_user.get('username') : null;
-        // const gprops = this.props.global.getIn( ['props'] ).toJS();
+
+        let { section } = this.props.routeParams;
         if (!section) section = 'blog';
 
         // @user/"posts" is deprecated in favor of "comments" as of oct-2016 (#443)
         if (section == 'posts') section = 'comments';
-
-        // const isMyAccount = current_user ? current_user.get('username') === accountname : false;
 
         // Loading status
         const status = global_status
@@ -175,7 +174,7 @@ export default class UserProfile extends React.Component {
         const fetching = (status && status.fetching) || this.props.loading;
 
         let account;
-        let accountImm = this.props.accounts.get(accountname);
+        let accountImm = this.props.account;
         if (accountImm) {
             account = accountImm.toJS();
         } else if (fetching) {
@@ -241,17 +240,10 @@ export default class UserProfile extends React.Component {
             );
         } else if (section === 'curation-rewards') {
             rewardsClass = 'active';
-            tab_content = (
-                <CurationRewards
-                    account={account}
-                    current_user={current_user}
-                />
-            );
+            tab_content = <CurationRewards account={account} />;
         } else if (section === 'author-rewards') {
             rewardsClass = 'active';
-            tab_content = (
-                <AuthorRewards account={account} current_user={current_user} />
-            );
+            tab_content = <AuthorRewards account={account} />;
         } else if (section === 'followers') {
             if (followers && followers.has('blog_result')) {
                 tab_content = (
@@ -541,9 +533,6 @@ export default class UserProfile extends React.Component {
             },
         ];
 
-        // set account join date
-        let accountjoin = account.created;
-
         const top_menu = (
             <div className="row UserProfile__top-menu">
                 <div className="columns small-10 medium-12 medium-expand">
@@ -701,7 +690,7 @@ export default class UserProfile extends React.Component {
                                     </span>
                                 )}
                                 <Icon name="calendar" />{' '}
-                                <DateJoinWrapper date={accountjoin} />
+                                <DateJoinWrapper date={account.created} />
                             </p>
                         </div>
                         <div className="UserProfile__buttons_mobile show-for-small-only">
@@ -726,18 +715,19 @@ export default class UserProfile extends React.Component {
 module.exports = {
     path: '@:accountname(/:section)',
     component: connect(
-        state => {
+        (state, ownProps) => {
             const wifShown = state.global.get('UserKeys_wifShown');
             const current_user = state.user.get('current');
+            const accountname = ownProps.routeParams.accountname.toLowerCase();
 
             return {
                 discussions: state.global.get('discussion_idx'),
                 current_user,
-                // current_account,
                 wifShown,
                 loading: state.app.get('loading'),
                 global_status: state.global.get('status'),
-                accounts: state.global.get('accounts'),
+                accountname: accountname,
+                account: state.global.getIn(['accounts', accountname]),
                 follow: state.global.get('follow'),
                 follow_count: state.global.get('follow_count'),
                 blogmode: state.app.getIn(['user_preferences', 'blogmode']),

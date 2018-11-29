@@ -27,12 +27,13 @@ export const sharedWatches = [
 ];
 
 export function* getAccount(username, force = false) {
+    console.log('yo i wanna load', username, 'force?', force);
     let account = yield select(state =>
         state.global.get('accounts').get(username)
     );
 
     // hive never serves `owner` prop (among others)
-    let isLite = account && !account.get('owner');
+    let isLite = !!account && !account.get('owner');
 
     if (!account || force || isLite) {
         console.log(

@@ -268,10 +268,9 @@ export default class UserProfile extends React.Component {
             }
         } else if (section === 'settings') {
             tab_content = <Settings routeParams={this.props.routeParams} />;
-        } else if (section === 'comments' && account.post_history) {
+        } else if (section === 'comments') {
             if (account.comments) {
-                let posts =
-                    accountImm.get('posts') || accountImm.get('comments');
+                let posts = accountImm.get('comments');
                 if (!fetching && (posts && !posts.size)) {
                     tab_content = (
                         <Callout>

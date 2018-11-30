@@ -164,9 +164,6 @@ export default class UserProfile extends React.Component {
         let { section } = this.props.routeParams;
         if (!section) section = 'blog';
 
-        // @user/"posts" is deprecated in favor of "comments" as of oct-2016 (#443)
-        if (section == 'posts') section = 'comments';
-
         // Loading status
         const status = global_status
             ? global_status.getIn([section, 'by_author'])
@@ -213,15 +210,6 @@ export default class UserProfile extends React.Component {
 
         const isMyAccount = username === account.name;
         let tab_content = null;
-
-        // const global_status = this.props.global.get('status');
-
-        // let balance_steem = parseFloat(account.balance.split(' ')[0]);
-        // let vesting_steem = vestingSteem(account, gprops).toFixed(2);
-        // const steem_balance_str = numberWithCommas(balance_steem.toFixed(2)) + " STEEM";
-        // const power_balance_str = numberWithCommas(vesting_steem) + " STEEM POWER";
-        // const sbd_balance = parseFloat(account.sbd_balance)
-        // const sbd_balance_str = numberWithCommas('$' + sbd_balance.toFixed(2));
 
         let rewardsClass = '',
             walletClass = '';
@@ -516,8 +504,6 @@ export default class UserProfile extends React.Component {
                 );
             }
         }
-
-        // const wallet_tab_active = section === 'transfers' || section === 'password' || section === 'permissions' ? 'active' : ''; // className={wallet_tab_active}
 
         let rewardsMenu = [
             {

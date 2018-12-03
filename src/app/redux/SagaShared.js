@@ -27,7 +27,6 @@ export const sharedWatches = [
 ];
 
 export function* getAccount(username, force = false) {
-    console.log('yo i wanna load', username, 'force?', force);
     let account = yield select(state =>
         state.global.get('accounts').get(username)
     );
@@ -39,9 +38,6 @@ export function* getAccount(username, force = false) {
         console.log(
             'getAccount: loading',
             username,
-            '---',
-            'present?',
-            !!account,
             'force?',
             force,
             'lite?',

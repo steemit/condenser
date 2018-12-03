@@ -39,12 +39,15 @@ export default (url, dimensions = false) => {
         }
 
         // NOTE: This forces the dimensions to be `CAPPED_SIZE` to save on
-        // bandwidth costs.
-        if (dims === NATURAL_SIZE) {
+        // bandwidth costs. Do not modify gifs.
+        if (!respUrl.match(/\.gif$/) && dims === NATURAL_SIZE) {
             dims = CAPPED_SIZE;
         }
 
-        if (CAPPED_SIZE !== dims || !rProxyDomain.test(respUrl)) {
+        if (
+            (NATURAL_SIZE !== dims && CAPPED_SIZE !== dims) ||
+            !rProxyDomain.test(respUrl)
+        ) {
             return $STM_Config.img_proxy_prefix + dims + respUrl;
         }
     }

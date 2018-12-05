@@ -2,11 +2,10 @@ import * as config from 'config';
 import * as https from 'https';
 import * as steem from '@steemit/steem-js';
 
-let cachedPinnedPostUrls = undefined;
 function pinnedPostUrls() {
     return new Promise(function(resolve, reject) {
-        if (Array.isArray(cachedPinnedPostUrls)) {
-            resolve(cachedPinnedPostUrls);
+        if (!config.pinned_posts_url) {
+            resolve([]);
         }
 
         const request = https.get(config.pinned_posts_url, resp => {
@@ -17,8 +16,7 @@ function pinnedPostUrls() {
             resp.on('end', () => {
                 const json = JSON.parse(data);
                 if (Array.isArray(json.pinned_posts)) {
-                    cachedPinnedPostUrls = json.pinned_posts;
-                    resolve(cachedPinnedPostUrls);
+                    resolve(json.pinned_posts);
                 }
             });
         });

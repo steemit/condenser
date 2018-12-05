@@ -212,7 +212,7 @@ class PostsList extends React.Component {
                     itemType="http://schema.org/blogPosts"
                 >
                     {/* Only render pinned posts when other posts are ready */}
-                    {postsInfo.length > 0 && renderPinned(pinned)}
+                    {showPinned && postsInfo.length > 0 && renderPinned(pinned)}
                     {renderSummary(postsInfo)}
                 </ul>
                 {loading && (

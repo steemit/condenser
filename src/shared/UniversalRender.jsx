@@ -14,7 +14,6 @@ import {
 } from 'react-router';
 import { Provider } from 'react-redux';
 import { api } from '@steemit/steem-js';
-import { Set } from 'immutable';
 
 import RootRoute from 'app/RootRoute';
 import * as appActions from 'app/redux/AppReducer';
@@ -303,7 +302,6 @@ export async function serverRender(
             } else {
                 content = await api.getContentAsync(params[0], params[1]);
             }
-
             if (content.author && content.permlink) {
                 // valid short post url
                 onchain.content[url.substr(2, url.length - 1)] = content;

@@ -178,6 +178,10 @@ class PostsList extends React.Component {
         const renderPinned = pinnedPosts =>
             pinnedPosts.map(pinnedPost => (
                 <li key={pinnedPost}>
+                    <div className="PinLabel">
+                        <Icon className="PinIcon" name="pin" />{' '}
+                        <span className="PinText">Pinned Post</span>
+                    </div>
                     <PostSummary
                         account={account}
                         post={`${pinnedPost.author}/${pinnedPost.permlink}`}

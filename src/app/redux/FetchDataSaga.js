@@ -39,7 +39,6 @@ export function* fetchState(location_change_action) {
         const username = m[1];
         yield fork(fetchFollowCount, username);
         yield fork(loadFollows, 'getFollowersAsync', username, 'blog');
-        yield fork(loadFollows, 'getFollowingAsync', username, 'blog');
     }
 
     // `ignore_fetch` case should only trigger on initial page load. No need to call
@@ -52,7 +51,6 @@ export function* fetchState(location_change_action) {
     if (ignore_fetch) {
         // If a user's transfer page is being loaded, fetch related account data.
         yield call(getTransferUsers, pathname);
-
         return;
     }
 
@@ -69,6 +67,7 @@ export function* fetchState(location_change_action) {
     try {
         const state = yield call(getStateAsync, url);
         yield put(globalActions.receiveState(state));
+        yield call(syncPinnedPosts);
         // If a user's transfer page is being loaded, fetch related account data.
         yield call(getTransferUsers, pathname);
     } catch (error) {
@@ -105,6 +104,13 @@ function* getTransferUsers(pathname) {
 
         yield call(getAccounts, transferUsers);
     }
+}
+
+function* syncPinnedPosts() {
+    const pinnedPosts = yield select(state =>
+        state.offchain.get('pinned_posts')
+    );
+    yield put(globalActions.syncPinnedPosts({ pinnedPosts }));
 }
 
 /**

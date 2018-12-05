@@ -14,6 +14,7 @@ const SET_COLLAPSED = 'global/SET_COLLAPSED';
 const RECEIVE_STATE = 'global/RECEIVE_STATE';
 const RECEIVE_ACCOUNT = 'global/RECEIVE_ACCOUNT';
 const RECEIVE_ACCOUNTS = 'global/RECEIVE_ACCOUNTS';
+const SYNC_PINNED_POSTS = 'global/SYNC_PINNED_POSTS';
 const RECEIVE_COMMENT = 'global/RECEIVE_COMMENT';
 const RECEIVE_CONTENT = 'global/RECEIVE_CONTENT';
 const LINK_REPLY = 'global/LINK_REPLY';
@@ -104,6 +105,17 @@ export default function reducer(state = defaultState, action = {}) {
             return payload.accounts.reduce((acc, curr) => {
                 const transformed = transformAccount(curr);
                 return mergeAccounts(acc, transformed);
+            }, state);
+        }
+
+        case SYNC_PINNED_POSTS: {
+            return payload.pinnedPosts.reduce((acc, pinnedPost) => {
+                const key = `${pinnedPost.get('author')}/${pinnedPost.get(
+                    'permlink'
+                )}`;
+                return state.updateIn(['content', key], Map(), p =>
+                    p.mergeDeep(pinnedPost)
+                );
             }, state);
         }
 
@@ -458,6 +470,11 @@ export const receiveAccount = payload => ({
 
 export const receiveAccounts = payload => ({
     type: RECEIVE_ACCOUNTS,
+    payload,
+});
+
+export const syncPinnedPosts = payload => ({
+    type: SYNC_PINNED_POSTS,
     payload,
 });
 

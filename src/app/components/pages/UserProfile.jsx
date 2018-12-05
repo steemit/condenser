@@ -295,6 +295,7 @@ export default class UserProfile extends React.Component {
                             loading={fetching}
                             category="comments"
                             loadMore={this.loadMore}
+                            showPinned={true}
                             showSpam
                         />
                     );
@@ -355,6 +356,7 @@ export default class UserProfile extends React.Component {
                                 loading={fetching}
                                 category="blog"
                                 loadMore={this.loadMore}
+                                showPinned={true}
                                 showResteem={showResteem}
                                 showSpam
                             />
@@ -387,6 +389,7 @@ export default class UserProfile extends React.Component {
                                 loading={fetching}
                                 category="recent_replies"
                                 loadMore={this.loadMore}
+                                showPinned={true}
                                 showSpam={false}
                             />
                         </div>

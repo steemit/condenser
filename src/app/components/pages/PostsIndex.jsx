@@ -237,6 +237,7 @@ class PostsIndex extends React.Component {
                             loading={fetching}
                             category={category}
                             loadMore={this.loadMore}
+                            showPinned={true}
                             showSpam={showSpam}
                         />
                     )}

@@ -28,6 +28,7 @@ import secureRandom from 'secure-random';
 import userIllegalContent from 'app/utils/userIllegalContent';
 import koaLocale from 'koa-locale';
 import { getSupportedLocales } from './utils/misc';
+import { pinnedPosts } from './utils/PinnedPosts';
 
 if (cluster.isMaster) console.log('application server starting, please wait.');
 
@@ -279,6 +280,8 @@ if (env === 'production') {
 if (env !== 'test') {
     const appRender = require('./app_render');
     app.use(function*() {
+        // Load the pinned posts and store them on the ctx for later use
+        this.pinnedPostsPromise = pinnedPosts();
         yield appRender(this, supportedLocales, resolvedAssets);
         // if (app_router.dbStatus.ok) recordWebEvent(this, 'page_load');
         const bot = this.state.isBot;

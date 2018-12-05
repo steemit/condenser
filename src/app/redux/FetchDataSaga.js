@@ -39,6 +39,7 @@ export function* fetchState(location_change_action) {
         const username = m[1];
         yield fork(fetchFollowCount, username);
         yield fork(loadFollows, 'getFollowersAsync', username, 'blog');
+        yield fork(loadFollows, 'getFollowingAsync', username, 'blog');
     }
 
     // `ignore_fetch` case should only trigger on initial page load. No need to call
@@ -51,6 +52,7 @@ export function* fetchState(location_change_action) {
     if (ignore_fetch) {
         // If a user's transfer page is being loaded, fetch related account data.
         yield call(getTransferUsers, pathname);
+
         return;
     }
 

@@ -1663,7 +1663,7 @@ babel-register@^6.26.0:
     mkdirp "^0.5.1"
     source-map-support "^0.4.15"
 
-babel-runtime@6.x.x, babel-runtime@^6.11.6, babel-runtime@^6.18.0, babel-runtime@^6.2.0, babel-runtime@^6.22.0, babel-runtime@^6.23.0, babel-runtime@^6.26.0, babel-runtime@^6.5.0, babel-runtime@^6.6.1, babel-runtime@^6.9.2:
+babel-runtime@6.x.x, babel-runtime@^6.11.6, babel-runtime@^6.18.0, babel-runtime@^6.2.0, babel-runtime@^6.22.0, babel-runtime@^6.23.0, babel-runtime@^6.25.0, babel-runtime@^6.26.0, babel-runtime@^6.5.0, babel-runtime@^6.6.1, babel-runtime@^6.9.2:
   version "6.26.0"
   resolved "https://registry.yarnpkg.com/babel-runtime/-/babel-runtime-6.26.0.tgz#965c7058668e82b55d7bfe04ff2337bc8b5647fe"
   dependencies:
@@ -2910,6 +2910,11 @@ doctrine@^2.0.0:
   dependencies:
     esutils "^2.0.2"
 
+dom-helpers@^2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/dom-helpers/-/dom-helpers-2.4.0.tgz#9bb4b245f637367b1fa670274272aa28fe06c367"
+  integrity sha1-m7SyRfY3NnsfpnAnQnKqKP4Gw2c=
+
 dom-helpers@^3.2.0, dom-helpers@^3.2.1:
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/dom-helpers/-/dom-helpers-3.3.1.tgz#fc1a4e15ffdf60ddde03a480a9c0fece821dd4a6"
@@ -3846,6 +3851,14 @@ forwarded@~0.1.2:
     jquery ">=3.0.0"
     what-input "^4.0.3"
 
+foundation-sites@~6.2.4:
+  version "6.2.4"
+  resolved "https://registry.yarnpkg.com/foundation-sites/-/foundation-sites-6.2.4.tgz#554746c9f3d505bd5646b4dcc03f8a9941e67f7b"
+  integrity sha1-VUdGyfPVBb1WRrTcwD+KmUHmf3s=
+  dependencies:
+    jquery "^2.2.0"
+    what-input "^2.0.0"
+
 frameguard@3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/frameguard/-/frameguard-3.0.0.tgz#7bcad469ee7b96e91d12ceb3959c78235a9272e9"
@@ -4572,6 +4585,13 @@ invariant@^2.0.0, invariant@^2.1.0, invariant@^2.1.1, invariant@^2.2.1, invarian
   dependencies:
     loose-envify "^1.0.0"
 
+invariant@^2.2.4:
+  version "2.2.4"
+  resolved "https://registry.yarnpkg.com/invariant/-/invariant-2.2.4.tgz#610f3c92c9359ce1db616e538008d23ff35158e6"
+  integrity sha512-phJfQVBuaJM5raOpJjSfkiD6BpbCE4Ns//LaXl6wGYtUBY83nWS6Rf9tXm2e8VaK60JEjYldbPif/A2B1C2gNA==
+  dependencies:
+    loose-envify "^1.0.0"
+
 invert-kv@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/invert-kv/-/invert-kv-1.0.0.tgz#104a8e4aaca6d3d8cd157a8ef8bfab2d7a3ffdb6"
@@ -5184,6 +5204,11 @@ jest@22.0.6:
 jquery@>=3.0.0:
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.3.1.tgz#958ce29e81c9790f31be7792df5d4d95fc57fbca"
+
+jquery@^2.2.0:
+  version "2.2.4"
+  resolved "https://registry.yarnpkg.com/jquery/-/jquery-2.2.4.tgz#2c89d6889b5eac522a7eea32c14521559c6cbf02"
+  integrity sha1-LInWiJterFIqfuoywUUhVZxsvwI=
 
 js-base64@^2.1.8, js-base64@^2.1.9:
   version "2.4.3"
@@ -7526,6 +7551,22 @@ react-dropzone@3.13.4:
     attr-accept "^1.0.3"
     prop-types "^15.5.7"
 
+react-foundation-components@^0.14.0:
+  version "0.14.0"
+  resolved "https://registry.yarnpkg.com/react-foundation-components/-/react-foundation-components-0.14.0.tgz#7b978862e88234f6d0d77cb9e045f6385fd7a75b"
+  integrity sha512-pD6iqSCcsGOy6m21pqNnZmh48+T3uBU1kDtvYQc+RVHSo9byQjT8lkGLArkxMfk9asN4clnWiyrOfhuJDFRVMA==
+  dependencies:
+    babel-runtime "^6.25.0"
+    classnames "^2.2.5"
+    dom-helpers "^2.4.0"
+    foundation-sites "~6.2.4"
+    lodash "^4.17.4"
+    prop-types "^15.6.0"
+    react-overlays "^0.7.0"
+    react-prop-types "^0.4.0"
+    uncontrollable "^5.1.0"
+    underscore.string "^3.3.4"
+
 react-fuzzy@^0.5.1:
   version "0.5.1"
   resolved "https://registry.yarnpkg.com/react-fuzzy/-/react-fuzzy-0.5.1.tgz#295c2a4079ad39402e05605d9d7accd2db8527b6"
@@ -7613,6 +7654,17 @@ react-overlays@0.7.2:
     prop-types-extra "^1.0.1"
     warning "^3.0.0"
 
+react-overlays@^0.7.0:
+  version "0.7.4"
+  resolved "https://registry.yarnpkg.com/react-overlays/-/react-overlays-0.7.4.tgz#ef2ec652c3444ab8aa014262b18f662068e56d5c"
+  integrity sha512-7vsooMx3siLAuEfTs8FYeP/lAORWWFXTO8PON3KgX0Htq1Oa+po6ioSjGyO0/GO5CVSMNhpWt6V2opeexHgBuQ==
+  dependencies:
+    classnames "^2.2.5"
+    dom-helpers "^3.2.1"
+    prop-types "^15.5.10"
+    prop-types-extra "^1.0.1"
+    warning "^3.0.0"
+
 react-portal@2.2.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/react-portal/-/react-portal-2.2.1.tgz#0cde8c35eeb0cce9a67b1e1255d5e4a2d147d1cf"
@@ -7622,6 +7674,13 @@ react-prop-types@0.3.2:
   resolved "https://registry.yarnpkg.com/react-prop-types/-/react-prop-types-0.3.2.tgz#e2763ac6f3a80199d8981c3647c44b0554c97b7f"
   dependencies:
     warning "^2.0.0"
+
+react-prop-types@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/react-prop-types/-/react-prop-types-0.4.0.tgz#f99b0bfb4006929c9af2051e7c1414a5c75b93d0"
+  integrity sha1-+ZsL+0AGkpya8gUefBQUpcdbk9A=
+  dependencies:
+    warning "^3.0.0"
 
 react-proxy@^1.1.7:
   version "1.1.8"
@@ -9218,9 +9277,24 @@ uncontrollable@3.3.1:
   dependencies:
     invariant "^2.1.0"
 
+uncontrollable@^5.1.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/uncontrollable/-/uncontrollable-5.1.0.tgz#7e9a1c50ea24e3c78b625e52d21ff3f758c7bd59"
+  integrity sha512-5FXYaFANKaafg4IVZXUNtGyzsnYEvqlr9wQ3WpZxFpEUxl29A3H6Q4G1Dnnorvq9TGOGATBApWR4YpLAh+F5hw==
+  dependencies:
+    invariant "^2.2.4"
+
 underscore.string@3.3.4:
   version "3.3.4"
   resolved "https://registry.yarnpkg.com/underscore.string/-/underscore.string-3.3.4.tgz#2c2a3f9f83e64762fdc45e6ceac65142864213db"
+  dependencies:
+    sprintf-js "^1.0.3"
+    util-deprecate "^1.0.2"
+
+underscore.string@^3.3.4:
+  version "3.3.5"
+  resolved "https://registry.yarnpkg.com/underscore.string/-/underscore.string-3.3.5.tgz#fc2ad255b8bd309e239cbc5816fd23a9b7ea4023"
+  integrity sha512-g+dpmgn+XBneLmXXo+sGlW5xQEt4ErkS3mgeN2GFbremYeMBSJKr9Wf2KJplQVaiPY/f7FN6atosWYNm9ovrYg==
   dependencies:
     sprintf-js "^1.0.3"
     util-deprecate "^1.0.2"
@@ -9559,6 +9633,11 @@ websocket@1.0.24:
     nan "^2.3.3"
     typedarray-to-buffer "^3.1.2"
     yaeti "^0.0.6"
+
+what-input@^2.0.0:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/what-input/-/what-input-2.1.1.tgz#86b6e0338d670a9fd936892b8f5115c4fe0d1d0b"
+  integrity sha1-hrbgM41nCp/ZNokrj1EVxP4NHQs=
 
 what-input@^4.0.3:
   version "4.3.1"

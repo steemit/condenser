@@ -48,12 +48,12 @@ export { default as ShowKey } from './ShowKey';
 export { default as SidebarLinks } from './SidebarLinks';
 export { default as SidebarNewUsers } from './SidebarNewUsers';
 export { default as SidebarStats } from './SidebarStats';
-export {
-    default as SlateEditor,
-    serializeHtml,
-    deserializeHtml,
-    getDemoState,
-} from './SlateEditor';
+// export {
+//     default as SlateEditor,
+//     serializeHtml,
+//     deserializeHtml,
+//     getDemoState,
+// } from './SlateEditor';
 export { default as SortOrder } from './SortOrder';
 export { default as SteemLogo } from './SteemLogo';
 export {

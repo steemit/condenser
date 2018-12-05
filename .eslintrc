@@ -42,11 +42,10 @@ find node_modules/eslint-config-airbnb -name '*.js'|xargs sed -i "s/': 2/': 1/"
     "no-redeclare": 1,
     "eol-last": 0,
     "no-loop-func": 0,
-    "no-unneeded-ternary": 0, // false trigger const b = b ? b : a
+    "no-unneeded-ternary": 0,
 
-    /* Nice to haves */
-    /*"quotes": [1, "single", "avoid-escape"],*/ "quotes": 0,
-    /*"indent", [1,4], */ "indent": 0,
+    "quotes": [1, "single", "avoid-escape"],
+    "indent": [true, 2],
     "brace-style": 0,
     "space-infix-ops": 0,
     "keyword-spacing": 0,
@@ -62,6 +61,9 @@ find node_modules/eslint-config-airbnb -name '*.js'|xargs sed -i "s/': 2/': 1/"
     "jsx-a11y/anchor-is-valid": ["warn", { "aspects": ["invalidHref"] }],
     "import/no-extraneous-dependencies": 0,
     "import/no-unresolved": 0,
-    "import/extensions": 0
+    "import/extensions": 0,
+
+    "no-unused-vars": "warn",
+    "no-underscore-dangle": 0
   }
 }

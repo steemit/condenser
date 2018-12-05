@@ -10,7 +10,7 @@ import { repLog10 } from 'app/utils/ParsersAndFormatters';
 
 const MINIMUM_REPUTATION = 15;
 
-export class Memo extends React.Component {
+class Memo extends React.Component {
     static propTypes = {
         text: PropTypes.string,
         username: PropTypes.string,

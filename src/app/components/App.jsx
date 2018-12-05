@@ -1,22 +1,28 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import AppPropTypes from 'app/utils/AppPropTypes';
-import Header from 'app/components/Steemit/modules/Header';
-import * as userActions from 'app/redux/UserReducer';
 import classNames from 'classnames';
-import ConnectedSidePanel from 'app/components/Steemit/modules/ConnectedSidePanel';
-import CloseButton from 'app/components/Steemit/elements/CloseButton';
-import Dialogs from 'app/components/Steemit/modules/Dialogs';
-import Modals from 'app/components/Steemit/modules/Modals';
-import WelcomePanel from 'app/components/Steemit/elements/WelcomePanel';
-import MiniHeader from 'app/components/Steemit/modules/MiniHeader';
 import tt from 'counterpart';
-import PageViewsCounter from 'app/components/Steemit/elements/PageViewsCounter';
-import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
-import { key_utils } from '@steemit/steem-js/lib/auth/ecc';
+
+import { usernamePasswordLogin } from 'app/redux/UserReducer';
+
 import resolveRoute from 'app/ResolveRoute';
 import { VIEW_MODE_WHISTLE } from 'shared/constants';
+
+import AppPropTypes from 'app/utils/AppPropTypes';
+import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
+import { key_utils } from '@steemit/steem-js/lib/auth/ecc';
+
+import Header from 'app/components/modules/Header';
+
+import {
+    ConnectedSidePanel,
+    Dialogs,
+    Modals,
+    MiniHeader,
+} from './Steemit/modules';
+
+import { WelcomePanel, CloseButton, PageViewsCounter } from './Steemit/modules';
 
 const pageRequiresEntropy = path => {
     const { page } = resolveRoute(path);
@@ -298,6 +304,6 @@ export default connect(
         };
     },
     dispatch => ({
-        loginUser: () => dispatch(userActions.usernamePasswordLogin({})),
+        loginUser: () => dispatch(usernamePasswordLogin({})),
     })
 )(App);

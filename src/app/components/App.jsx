@@ -13,7 +13,9 @@ import AppPropTypes from 'app/utils/AppPropTypes';
 import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 import { key_utils } from '@steemit/steem-js/lib/auth/ecc';
 
-import Header from 'app/components/modules/Header';
+import {
+    Header
+} from 'app/components/modules';
 
 import {
     ConnectedSidePanel,
@@ -22,7 +24,11 @@ import {
     MiniHeader,
 } from './Steemit/modules';
 
-import { WelcomePanel, CloseButton, PageViewsCounter } from './Steemit/modules';
+import {
+    WelcomePanel,
+    CloseButton,
+    PageViewsCounter,
+} from './Steemit/elements';
 
 const pageRequiresEntropy = path => {
     const { page } = resolveRoute(path);
@@ -73,6 +79,24 @@ class App extends React.Component {
         }
     }
 
+    shouldComponentUpdate(nextProps, nextState) {
+        const {
+            pathname,
+            new_visitor,
+            nightmodeEnabled,
+            showAnnouncement,
+        } = this.props;
+        const n = nextProps;
+        return (
+            pathname !== n.pathname ||
+            new_visitor !== n.new_visitor ||
+            this.state.showBanner !== nextState.showBanner ||
+            this.state.showCallout !== nextState.showCallout ||
+            nightmodeEnabled !== n.nightmodeEnabled ||
+            showAnnouncement !== n.showAnnouncement
+        );
+    }
+
     _addEntropyCollector() {
         if (!this.listenerActive && this.refs.App_root) {
             this.refs.App_root.addEventListener(
@@ -92,24 +116,6 @@ class App extends React.Component {
             );
             this.listenerActive = null;
         }
-    }
-
-    shouldComponentUpdate(nextProps, nextState) {
-        const {
-            pathname,
-            new_visitor,
-            nightmodeEnabled,
-            showAnnouncement,
-        } = this.props;
-        const n = nextProps;
-        return (
-            pathname !== n.pathname ||
-            new_visitor !== n.new_visitor ||
-            this.state.showBanner !== nextState.showBanner ||
-            this.state.showCallout !== nextState.showCallout ||
-            nightmodeEnabled !== n.nightmodeEnabled ||
-            showAnnouncement !== n.showAnnouncement
-        );
     }
 
     setShowBannerFalse = () => {
@@ -189,9 +195,9 @@ class App extends React.Component {
                             />
                             <ul>
                                 <li>
-                                    /*<a href="https://steemit.com/steemit/@steemitblog/steemit-com-is-now-open-source">
+                                    <a href="https://steemit.com/steemit/@steemitblog/steemit-com-is-now-open-source">
                                         ...STORY TEXT...
-                                    </a>*/
+                                    </a>
                                 </li>
                             </ul>
                         </div>
@@ -278,11 +284,11 @@ App.propTypes = {
 
 export default connect(
     (state, ownProps) => {
-        const current_user = state.user.get('current');
-        const account_user = state.global.get('accounts');
-        const current_account_name = current_user
-            ? current_user.get('username')
-            : state.offchain.get('account');
+        // const current_user = state.user.get('current');
+        // const account_user = state.global.get('accounts');
+        // const current_account_name = current_user
+        //     ? current_user.get('username')
+        //     : state.offchain.get('account');
 
         return {
             viewMode: state.app.get('viewMode'),

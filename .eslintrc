@@ -24,7 +24,7 @@ find node_modules/eslint-config-airbnb -name '*.js'|xargs sed -i "s/': 2/': 1/"
     "one-var-declaration-per-line": [0],
     "no-param-reassign": [0],
     "no-nested-ternary": [0],
-    "no-undef": 2,
+    "no-undef": 0,
     "camelcase": [0],
     "no-console": [0],
     "padded-blocks": 0,
@@ -45,7 +45,7 @@ find node_modules/eslint-config-airbnb -name '*.js'|xargs sed -i "s/': 2/': 1/"
     "no-unneeded-ternary": 0,
 
     "quotes": [1, "single", "avoid-escape"],
-    "indent": [true, 2],
+    "indent": 0,
     "brace-style": 0,
     "space-infix-ops": 0,
     "keyword-spacing": 0,
@@ -63,7 +63,11 @@ find node_modules/eslint-config-airbnb -name '*.js'|xargs sed -i "s/': 2/': 1/"
     "import/no-unresolved": 0,
     "import/extensions": 0,
 
+    "arrow-parens": ["error", "as-needed"],
+    "react/no-string-refs": 0,
+    "no-constant-condition": 0,
     "no-unused-vars": "warn",
-    "no-underscore-dangle": 0
+    "no-underscore-dangle": 0,
+    "react/require-default-props": 0
   }
 }

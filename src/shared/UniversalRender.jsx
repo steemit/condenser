@@ -264,9 +264,9 @@ export async function serverRender(
         // If a user profile URL is requested but no profile information is
         // included in the API response, return User Not Found.
         if (
-            Object.getOwnPropertyNames(onchain.accounts).length === 0 &&
             (url.match(routeRegex.UserProfile1) ||
-                url.match(routeRegex.UserProfile3))
+                url.match(routeRegex.UserProfile3)) &&
+            Object.getOwnPropertyNames(onchain.accounts).length === 0
         ) {
             // protect for invalid account
             return {

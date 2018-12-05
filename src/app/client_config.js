@@ -1,9 +1,9 @@
 // sometimes it's impossible to use html tags to style coin name, hence usage of _UPPERCASE modifier
-export const APP_NAME = 'Steemit';
+export const APP_NAME = 'Knowledgr';
 // sometimes APP_NAME is written in non-latin characters, but they are needed for technical purposes
 // ie. "Голос" > "Golos"
-export const APP_NAME_LATIN = 'Steemit';
-export const APP_NAME_UPPERCASE = 'STEEMIT';
+export const APP_NAME_LATIN = 'Knowledgr';
+export const APP_NAME_UPPERCASE = 'KNOWLEDGR';
 export const APP_ICON = 'steem';
 // FIXME figure out best way to do this on both client and server from env
 // vars. client should read $STM_Config, server should read config package.

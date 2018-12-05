@@ -7,7 +7,7 @@ export default class FoundationDropdown extends React.Component {
     static propTypes = {
         show: PropTypes.bool.isRequired,
         className: PropTypes.string,
-        children: PropTypes.any,
+        children: PropTypes.children,
         onHide: PropTypes.func,
     };
 
@@ -15,6 +15,15 @@ export default class FoundationDropdown extends React.Component {
         super(props);
         this.state = { show: props.show };
         this.closeOnOutsideClick = this.closeOnOutsideClick.bind(this);
+    }
+
+    componentWillReceiveProps(newProps) {
+        if (
+            newProps.show !== this.props.show &&
+            newProps.show !== this.state.show
+        ) {
+            this.setState({ show: newProps.show });
+        }
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -30,15 +39,6 @@ export default class FoundationDropdown extends React.Component {
                     'mousedown',
                     this.closeOnOutsideClick
                 );
-        }
-    }
-
-    componentWillReceiveProps(newProps) {
-        if (
-            newProps.show !== this.props.show &&
-            newProps.show !== this.state.show
-        ) {
-            this.setState({ show: newProps.show });
         }
     }
 

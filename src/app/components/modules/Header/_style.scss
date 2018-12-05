@@ -10,6 +10,18 @@
     background-color: themed('navBackgroundColor');
     border-bottom: themed('border');
   }
+
+  li.nav__block-list-item {
+    &:hover {
+      opacity: 0.6;
+    }
+
+    a {
+      @include themify($themes) {
+        color: themed('navLinkColor');
+      }
+    }
+  }
 }
 
 .Header__nav {

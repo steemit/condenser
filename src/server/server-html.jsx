@@ -1,3 +1,4 @@
+import * as config from 'config';
 import React from 'react';
 
 export default function ServerHTML({ body, assets, locale, title, meta }) {
@@ -162,6 +163,18 @@ export default function ServerHTML({ body, assets, locale, title, meta }) {
                         type="text/css"
                     />
                 ))}
+                {config.google_ad_enabled ? (
+                    <script
+                        dangerouslySetInnerHTML={{
+                            __html: `
+                                window.googleAds = {
+                                    test: !!${config.google_ad_test},
+                                    client: '${config.google_ad_client}',
+                                }
+                            `,
+                        }}
+                    />
+                ) : null}
                 <title>{page_title}</title>
             </head>
             <body>
@@ -169,6 +182,12 @@ export default function ServerHTML({ body, assets, locale, title, meta }) {
                 {assets.script.map((href, idx) => (
                     <script key={idx} src={href} />
                 ))}
+                {config.google_ad_enabled ? (
+                    <script
+                        async
+                        src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+                    />
+                ) : null}
             </body>
         </html>
     );

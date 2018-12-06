@@ -77,11 +77,6 @@ function* authStr({ pubkeys, authority, authType, recurse = 1 }) {
 }
 
 export function* threshold({ pubkeys, authority, authType, recurse = 1 }) {
-    console.log('-----');
-    console.log('state');
-    const state = yield select(state => state);
-    console.log(state);
-
     if (!pubkeys.size) return 0;
     let t = pubkeyThreshold({ pubkeys, authority });
     const account_auths = authority.get('account_auths');
@@ -112,12 +107,6 @@ export function* threshold({ pubkeys, authority, authType, recurse = 1 }) {
 }
 
 function pubkeyThreshold({ pubkeys, authority }) {
-    console.log('-----');
-    console.log('src/app/redux/AuthSaga.js:111');
-    console.log('authority');
-    console.log(authority);
-    console.log('pubkeys');
-    console.log(pubkeys);
     let available = 0;
     const key_auths = authority.get('key_auths');
     key_auths.forEach(k => {

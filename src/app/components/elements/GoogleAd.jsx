@@ -1,11 +1,14 @@
 import React from 'react';
 
-export default class AdComponent extends React.Component {
+export class GoogleAd extends React.Component {
     componentDidMount() {
         (window.adsbygoogle = window.adsbygoogle || []).push({});
     }
 
     render() {
+        if (typeof window === 'undefined') {
+            return null;
+        }
         if (!window.googleAds) {
             return null;
         }
@@ -13,9 +16,9 @@ export default class AdComponent extends React.Component {
         return (
             <ins
                 className="adsbygoogle"
-                style={{ display: 'block' }}
-                data-ad-client={window.googleAds.google_ad_client}
-                data-ad-test={window.googleAds.google_ad_test}
+                style={{ display: 'block', width: '100%' }}
+                data-ad-test={window.googleAds.test}
+                data-ad-client={window.googleAds.client}
                 data-ad-slot={this.props.slot}
                 data-ad-format="auto"
             />

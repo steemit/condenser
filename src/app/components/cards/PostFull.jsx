@@ -26,6 +26,7 @@ import tt from 'counterpart';
 import userIllegalContent from 'app/utils/userIllegalContent';
 import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
+import { GoogleAd } from 'app/components/elements/GoogleAd';
 
 function TimeAuthorCategory({ content, authorRepLog10, showTags }) {
     return (
@@ -528,6 +529,9 @@ class PostFull extends React.Component {
                             <Icon name="link" className="chain-right" />
                         </button>
                     </div>
+                </div>
+                <div className="row">
+                    <GoogleAd slot="1486173032" />
                 </div>
                 <div className="row">
                     <div className="column large-8 medium-10 small-12">

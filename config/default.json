@@ -13,7 +13,7 @@
       "imgSrc": "* data:",
       "objectSrc": "'none'",
       "pluginTypes": "application/pdf",
-      "scriptSrc": "'self' www.google-analytics.com connect.facebook.net",
+      "scriptSrc": "'self' www.google-analytics.com connect.facebook.net googleads.g.doubleclick.net",
       "styleSrc": "'self' 'unsafe-inline' fonts.googleapis.com",
       "reportUri": "/api/v1/csp_violation"
     },

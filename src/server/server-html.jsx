@@ -178,16 +178,16 @@ export default function ServerHTML({ body, assets, locale, title, meta }) {
                 <title>{page_title}</title>
             </head>
             <body>
-                <div id="content" dangerouslySetInnerHTML={{ __html: body }} />
-                {assets.script.map((href, idx) => (
-                    <script key={idx} src={href} />
-                ))}
                 {config.google_ad_enabled ? (
                     <script
                         async
                         src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
                     />
                 ) : null}
+                <div id="content" dangerouslySetInnerHTML={{ __html: body }} />
+                {assets.script.map((href, idx) => (
+                    <script key={idx} src={href} />
+                ))}
             </body>
         </html>
     );

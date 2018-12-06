@@ -383,8 +383,10 @@ export default connect(
         return {
             post,
             content,
-            pending_payout,
-            total_payout,
+            pending_payout: pending_payout
+                ? pending_payout.toString()
+                : pending_payout,
+            total_payout: total_payout ? total_payout.toString() : total_payout,
             username:
                 state.user.getIn(['current', 'username']) ||
                 state.offchain.get('account'),

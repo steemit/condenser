@@ -114,7 +114,7 @@ body.with-post-overlay {
     @include themify($themes) {
       position: relative;
       top: 2px;
-      left: -1px;
+      left: 1px;
       font-size: 0.875rem;
       color: themed('textColorSecondary');
     }

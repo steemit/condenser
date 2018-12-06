@@ -40,14 +40,6 @@ export default function ServerHTML({ body, assets, locale, title, meta }) {
                                     content={m.content}
                                 />
                             );
-                        if (m.name && m.content)
-                            return (
-                                <meta
-                                    key={m.name}
-                                    name={m.name}
-                                    content={m.content}
-                                />
-                            );
                         return null;
                     })}
                 <link rel="manifest" href="/static/manifest.json" />

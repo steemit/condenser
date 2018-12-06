@@ -50,6 +50,7 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
             csrf: ctx.csrf,
             new_visit: ctx.session.new_visit,
             config: $STM_Config,
+            pinned_posts: await ctx.pinnedPostsPromise,
             login_challenge,
         };
         if (ctx.session.arec) {

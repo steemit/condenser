@@ -147,6 +147,7 @@ class PostsList extends React.Component {
     render() {
         const {
             posts,
+            showPinned,
             showResteem,
             showSpam,
             loading,
@@ -173,6 +174,23 @@ class PostsList extends React.Component {
                 // rephide
                 postsInfo.push({ item, ignore });
         });
+        const pinned = this.props.pinned.toJS();
+        const renderPinned = pinnedPosts =>
+            pinnedPosts.map(pinnedPost => (
+                <li key={pinnedPost}>
+                    <div className="PinLabel">
+                        <Icon className="PinIcon" name="pin" />{' '}
+                        <span className="PinText">Pinned Post</span>
+                    </div>
+                    <PostSummary
+                        account={account}
+                        post={`${pinnedPost.author}/${pinnedPost.permlink}`}
+                        thumbSize={thumbSize}
+                        ignore={false}
+                        nsfwPref={nsfwPref}
+                    />
+                </li>
+            ));
         const renderSummary = items =>
             items.map(item => (
                 <li key={item.item}>
@@ -193,6 +211,8 @@ class PostsList extends React.Component {
                     itemScope
                     itemType="http://schema.org/blogPosts"
                 >
+                    {/* Only render pinned posts when other posts are ready */}
+                    {showPinned && postsInfo.length > 0 && renderPinned(pinned)}
                     {renderSummary(postsInfo)}
                 </ul>
                 {loading && (
@@ -224,6 +244,7 @@ export default connect(
         ]);
         const userPreferences = state.app.get('user_preferences').toJS();
         const nsfwPref = userPreferences.nsfwPref || 'warn';
+        const pinned = state.offchain.get('pinned_posts');
         return {
             ...props,
             username,
@@ -231,6 +252,7 @@ export default connect(
             ignore_result,
             pathname,
             nsfwPref,
+            pinned,
         };
     },
     dispatch => ({

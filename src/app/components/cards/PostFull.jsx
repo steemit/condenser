@@ -531,9 +531,6 @@ class PostFull extends React.Component {
                     </div>
                 </div>
                 <div className="row">
-                    <GoogleAd slot="1486173032" />
-                </div>
-                <div className="row">
                     <div className="column large-8 medium-10 small-12">
                         {showReply && renderedEditor}
                     </div>

@@ -9,7 +9,7 @@ export class GoogleAd extends React.Component {
         if (typeof window === 'undefined') {
             return null;
         }
-        if (!window.googleAds) {
+        if (!window.googleAds || !window.googleAds.enabled) {
             return null;
         }
 

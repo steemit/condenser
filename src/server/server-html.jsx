@@ -163,26 +163,39 @@ export default function ServerHTML({ body, assets, locale, title, meta }) {
                         type="text/css"
                     />
                 ))}
-                {config.google_ad_enabled ? (
-                    <script
-                        dangerouslySetInnerHTML={{
-                            __html: `
-                                window.googleAds = {
-                                    test: !!${config.google_ad_test},
-                                    client: '${config.google_ad_client}',
-                                }
-                            `,
-                        }}
-                    />
-                ) : null}
                 <title>{page_title}</title>
             </head>
             <body>
-                {config.google_ad_enabled ? (
-                    <script
-                        async
-                        src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
-                    />
+                {config.google_ad_client ? (
+                    <div>
+                        <script
+                            dangerouslySetInnerHTML={{
+                                __html: `
+                                    window.googleAds = {
+                                        enabled: !!${config.google_ad_enabled},
+                                        test: !!${config.google_ad_test},
+                                        client: '${config.google_ad_client}',
+                                    }
+                                `,
+                            }}
+                        />
+                        <script
+                            async
+                            src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+                        />
+                        <script
+                            dangerouslySetInnerHTML={{
+                                __html: `
+                                    (adsbygoogle = window.adsbygoogle || []).push({
+                                         google_ad_client: '${
+                                             config.google_ad_client
+                                         }',
+                                         enable_page_level_ads: true
+                                    });
+                                `,
+                            }}
+                        />
+                    </div>
                 ) : null}
                 <div id="content" dangerouslySetInnerHTML={{ __html: body }} />
                 {assets.script.map((href, idx) => (

@@ -69,6 +69,12 @@ find node_modules/eslint-config-airbnb -name '*.js'|xargs sed -i "s/': 2/': 1/"
     "no-constant-condition": 0,
     "no-unused-vars": "warn",
     "no-underscore-dangle": 0,
-    "react/require-default-props": 0
+    "react/require-default-props": 0,
+    "react/forbid-prop-types": 0,
+    "react/no-array-index-key": 0,
+    "jsx-a11y/no-static-element-interactions": 0,
+    "jsx-a11y/interactive-supports-focus": 0,
+    "jsx-a11y/label-has-for": 0,
+    "no-multi-assign": 0
   }
 }

@@ -75,7 +75,7 @@ $themes: (
     colorAccentReverse: $color-white,
     colorWhite: $color-white,
     backgroundColor: $color-background-dark,
-      backgroundColorEmphasis: $color-background-super-dark,
+    backgroundColorEmphasis: $color-background-super-dark,
     backgroundColorOpaque: $color-blue-dark,
     moduleBackgroundColor: $color-background-dark,
     backgroundTransparent: transparent,
@@ -197,7 +197,7 @@ $themes: (
     &:hover, &:focus {
       @include themify($themes) {
           color: themed('textColorAccentHover');
-      }
+       }
     }
   }
 }

@@ -1,0 +1,64 @@
+@font-face {
+  font-family: 'Andada';
+  font-weight: 400;
+  src: url('../fonts/andada/Andada-Regular.otf') format('opentype');
+}
+@font-face {
+  font-family: 'Andada';
+  font-style: italic;
+  src: url('../fonts/andada/Andada-Italic.otf') format('opentype');
+}
+@font-face {
+  font-family: 'Andada';
+  font-weight: bold;
+  src: url('../fonts/andada/Andada-Bold.otf') format('opentype');
+}
+@font-face {
+  font-family: 'Andada';
+  font-style: italic;
+  font-weight: bold;
+  src: url('../fonts/andada/Andada-BoldItalic.otf') format('opentype');
+}
+@font-face {
+  font-family: 'Futura';
+  font-weight: 200;
+  src: url('../fonts/futura/Futura Light.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Futura';
+  font-weight: 200;
+  font-style: italic;
+  src: url('../fonts/futura/Futura Light Italic.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Futura';
+  font-weight: 300;
+  src: url('../fonts/futura/Futura Book.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Futura';
+  font-weight: 300;
+  font-style: italic;
+  src: url('../fonts/futura/Futura Book Italic.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Futura';
+  font-weight: 400;
+  src: url('../fonts/futura/Futura Medium.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Futura';
+  font-weight: 400;
+  font-style: italic;
+  src: url('../fonts/futura/Futura Medium Italic.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Futura';
+  font-weight: 600;
+  src: url('../fonts/futura/Futura Heavy.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Futura';
+  font-weight: 800;
+  src: url('../fonts/futura/Futura Extra Black.ttf') format('truetype');
+}

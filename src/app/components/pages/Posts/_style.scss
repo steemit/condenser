@@ -1,0 +1,14 @@
+@import './Create/style';
+
+.PostsWrapper {
+  display: block;
+  text-align: center;
+
+  .Title {
+    font-size: 2em;
+  }
+
+  table {
+    margin: 0 auto;
+  }
+}

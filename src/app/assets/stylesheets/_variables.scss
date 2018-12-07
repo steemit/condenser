@@ -1,0 +1,68 @@
+//------- Default Fonts ----------
+$sans-serif: 'Futura', sans-serif;
+$serif: 'Andada', serif;
+// $monospace: 'IBM Plex Mono', monospace;
+
+//------- Default Colors ----------
+$default-black: #424242;
+$default-red: #e34132;
+$default-white: #ffffff;
+$default-offwhite: #f4f4f4;
+$default-grey: #a9a9a9;
+$default-green: #64c272;
+$default-cyan: #53d3ff;
+$default-blue: #204bb7;
+$default-teal: #30a1ad;
+$default-coral: #fd6e6f;
+
+$color-super-light: #f2f2f2;
+$color-light: #e6e6e6;
+$color-light-grey: #cccccc;
+$color-grey: #b3b3b3;
+$color-input: #666666;
+$color-dark: #4d4d4d;
+$color-black: #333333;
+
+//------- Company Colors ------------
+$observation: $default-blue;
+$hypothesis: $default-teal;
+$question: $default-coral;
+$review: #525252;
+
+//------- Color Settings ----------
+
+$black: $default-black;
+$red: $default-red;
+$white: $default-white;
+$offwhite: $default-offwhite;
+$grey: $default-grey;
+$green: $default-green;
+$blue: $default-blue;
+
+$main: $black;
+
+$txt-main-color: $black;
+$txt-light-color: $grey;
+$txt-emphasis-color: $blue;
+$txt-success-color: $green;
+$txt-failed-color: $red;
+
+$btn-default-color: $grey;
+$btn-primary-color: $black;
+$btn-text-color: $white;
+
+$bg-main-color: $white;
+$bg-light-color: $offwhite;
+$bg-grey-color: $grey;
+
+$border-focus-color: $grey;
+$border-hover-color: $grey;
+$border-main-color: $grey;
+$border-light-color: rgba($border-main-color, 0.2);
+$border-error-color: rgba($red, 0.2);
+
+//---------- Utility -------------------
+$gradient: linear-gradient(to bottom right, $blue, $main);
+$text-shadow: 0px 0px 5px darken($grey, 5%);
+$box-shadow: 0px 0px 10px 5px $border-light-color;
+$bottom-box-shadow: 0 5px 5px -2px $border-light-color;

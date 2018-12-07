@@ -3,7 +3,7 @@ import 'babel-polyfill';
 import 'whatwg-fetch';
 import store from 'store';
 import { VIEW_MODE_WHISTLE, PARAM_VIEW_MODE } from 'shared/constants';
-import './assets/stylesheets/Steemit/app.scss';
+import './assets/stylesheets/app.scss';
 import plugins from 'app/utils/JsPlugins';
 import Iso from 'iso';
 import { clientRender } from 'shared/UniversalRender';

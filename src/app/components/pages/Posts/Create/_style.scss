@@ -1,0 +1,75 @@
+.CreateWrapper {
+  font-family: Futura;
+  overflow: hidden;
+
+  .Form {
+    box-shadow: 0 0 50px $color-light-grey;
+    max-width: 820px;
+    margin: 0 auto;
+    max-height: calc(100vh - 68px);
+    min-height: calc(100vh - 68px);
+    overflow-y: auto;
+    position: relative;
+    padding: 30px 60px;
+
+    .Field,
+    .TypeSelectorWrapper {
+      margin-bottom: 40px;
+
+      .Label {
+        font-size: 18px;
+        margin-bottom: 10px;
+      }
+
+      .Type {
+        color: $color-dark;
+        font-size: 14px;
+        margin-right: 20px;
+        min-width: 20%;
+
+        span {
+          background-color: $default-green;
+          border-radius: 3px;
+          color: $white;
+          display: inline-block;
+          font-size: 13px;
+          margin-right: 5px;
+          padding: 3px;
+          text-align: center;
+          width: 28px;
+
+          &.Q {
+            background-color: $default-cyan;
+          }
+
+          &.H {
+            background-color: $default-grey;
+          }
+        }
+      }
+
+      .Types {
+        .Type {
+          color: $color-grey;
+
+          &:hover {
+            color: $color-dark;
+            text-shadow: 1px 1px 3px $color-light;
+          }
+
+          &.Active {
+            color: $color-dark;
+
+            span {
+              opacity: 1;
+            }
+          }
+
+          span {
+            opacity: 0.7;
+          }
+        }
+      }
+    }
+  }
+}

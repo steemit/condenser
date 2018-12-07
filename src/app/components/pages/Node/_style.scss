@@ -1,0 +1,266 @@
+@import './Components/style';
+
+.NodeWrapper {
+  overflow: hidden;
+
+  .NodeInfo {
+    box-shadow: 0px 0px 50px $color-light-grey;
+    max-width: 920px;
+    margin: 0 auto;
+    min-height: calc(100vh - 68px);
+    overflow-y: hidden;
+    position: relative;
+    padding: 15px 120px;
+
+    .Sticky {
+      left: 50px;
+      top: 35%;
+
+      .SideMenu {
+        width: 60px;
+
+        .Vote {
+          display: none;
+        }
+      }
+    }
+
+    @media all and (max-width: 700px) {
+      padding-left: 80px;
+      padding-right: 50px;
+
+      .Sticky {
+        left: 10px;
+        bottom: 100px;
+      }
+    }
+  }
+
+  .HeaderWrapper {
+    .Header {
+      align-items: center;
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 17px;
+      padding-top: 8px;
+
+      .Wrap {
+        display: flex;
+      }
+
+      .TypeWrapper {
+        margin-right: 10px;
+
+        .Type {
+          color: $default-green;
+          font-size: 20px;
+          font-weight: bold;
+          margin-bottom: 5px;
+          text-align: center;
+        }
+
+        .Type {
+          color: #47bf78;
+
+          &.Q {
+            color: #53d3ff;
+          }
+
+          &.H {
+            color: $color-grey;
+          }
+        }
+      }
+
+      .User {
+        display: flex;
+        align-items: center;
+
+        img {
+          float: left;
+          height: 50px;
+          margin-right: 15px;
+        }
+
+        > div {
+          .UserName {
+            color: $color-input;
+            font-size: 16px;
+            line-height: 20px;
+          }
+
+          .UserTitle {
+            color: $color-grey;
+            font-size: 12px;
+          }
+        }
+      }
+
+      .Extra {
+        color: #999999;
+        font-size: 12px;
+        font-style: italic;
+        text-align: right;
+
+        .Date {
+          font-size: 14px;
+        }
+      }
+
+      @media all and (max-width: 700px) {
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+
+        .Extra {
+          margin-left: auto;
+          margin-top: 10px;
+        }
+      }
+    }
+
+    .Title {
+      color: $color-black;
+      font-size: 28px;
+      margin-bottom: 5px;
+      position: relative;
+
+      .Votes {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
+        position: absolute;
+
+        left: -70px;
+        top: 0;
+
+        height: 100%;
+        min-height: 80px;
+        width: 60px;
+
+        font-family: Futura;
+        font-size: 18px;
+        font-weight: 400;
+
+        > div {
+          color: #cacaca;
+          cursor: pointer;
+          height: 18px;
+          margin: 3px 0;
+          position: relative;
+
+          svg {
+            width: 18px;
+            height: 18px;
+          }
+
+          &:hover {
+            opacity: 0.7;
+          }
+
+          &.Voted {
+            color: #47bf78;
+
+            &.Down {
+              color: #e5453f;
+            }
+
+            &.Normal {
+              color: #cacaca;
+            }
+          }
+        }
+      }
+    }
+
+    .CitesWrapper {
+      color: $color-input;
+      display: inline-flex;
+      font-size: 16px;
+      width: 100%;
+
+      .Cites {
+        min-width: 40%;
+        margin-right: 3%;
+      }
+
+      span {
+        color: #53d3ff;
+      }
+
+      @media all and (max-width: 700px) {
+        flex-direction: column;
+        margin: 15px 0;
+
+        div + div {
+          margin-top: 8px;
+        }
+      }
+    }
+  }
+
+  .Introduction {
+    color: #797979;
+    font-style: italic;
+    font-size: 22px;
+    margin-bottom: 30px;
+    margin-top: 20px;
+
+    span {
+      color: #d6d6d6;
+      font-family: Andada;
+      font-size: 16px;
+      font-style: normal;
+
+      &.TitleFrom {
+        color: #64c272;
+        letter-spacing: -1.2px;
+        margin-left: 30px;
+        position: relative;
+
+        &:before {
+          background: #64c272;
+          border: 2px solid white;
+          border-radius: 50%;
+          box-sizing: border-box;
+          content: '';
+          position: absolute;
+
+          width: 14px;
+          height: 14px;
+          left: -20px;
+          top: 4px;
+        }
+
+        &:after {
+          border: 2px solid #64c272;
+          border-radius: 50%;
+          content: '';
+          position: absolute;
+
+          width: 14px;
+          height: 14px;
+          left: -22px;
+          top: 2px;
+        }
+      }
+    }
+
+    .Content {
+      color: $color-grey;
+      font-size: 16px;
+      font-style: normal;
+      line-height: 1.3em;
+      margin-top: 10px;
+
+      span {
+        color: #53d3ff;
+      }
+
+      img {
+        width: 33%;
+      }
+    }
+  }
+}

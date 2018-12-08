@@ -1,7 +1,14 @@
 import * as config from 'config';
 import React from 'react';
 
-export default function ServerHTML({ body, assets, locale, title, meta }) {
+export default function ServerHTML({
+    body,
+    assets,
+    locale,
+    title,
+    meta,
+    nonce,
+}) {
     let page_title = title;
     return (
         <html lang="en">
@@ -166,9 +173,14 @@ export default function ServerHTML({ body, assets, locale, title, meta }) {
                 <title>{page_title}</title>
             </head>
             <body>
+                <div id="content" dangerouslySetInnerHTML={{ __html: body }} />
+                {assets.script.map((href, idx) => (
+                    <script key={idx} src={href} />
+                ))}
                 {config.google_ad_client ? (
                     <div>
                         <script
+                            nonce={nonce}
                             dangerouslySetInnerHTML={{
                                 __html: `
                                     window.googleAds = {
@@ -181,9 +193,11 @@ export default function ServerHTML({ body, assets, locale, title, meta }) {
                         />
                         <script
                             async
+                            nonce={nonce}
                             src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
                         />
                         <script
+                            nonce={nonce}
                             dangerouslySetInnerHTML={{
                                 __html: `
                                     (adsbygoogle = window.adsbygoogle || []).push({
@@ -197,10 +211,6 @@ export default function ServerHTML({ body, assets, locale, title, meta }) {
                         />
                     </div>
                 ) : null}
-                <div id="content" dangerouslySetInnerHTML={{ __html: body }} />
-                {assets.script.map((href, idx) => (
-                    <script key={idx} src={href} />
-                ))}
             </body>
         </html>
     );

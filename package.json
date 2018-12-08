@@ -137,6 +137,7 @@
     "uncontrollable": "3.3.1",
     "underscore.string": "3.3.4",
     "url-loader": "0.6.2",
+    "uuid": "^3.3.2",
     "web-push": "3.2.3",
     "webpack": "3.7.1",
     "webpack-dev-middleware": "1.12.0",

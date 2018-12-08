@@ -29,6 +29,7 @@ import userIllegalContent from 'app/utils/userIllegalContent';
 import koaLocale from 'koa-locale';
 import { getSupportedLocales } from './utils/misc';
 import { pinnedPosts } from './utils/PinnedPosts';
+import uuid from 'uuid';
 
 if (cluster.isMaster) console.log('application server starting, please wait.');
 
@@ -263,6 +264,10 @@ useGeneralApi(app);
 
 // helmet wants some things as bools and some as lists, makes config difficult.
 // our config uses strings, this splits them to lists on whitespace.
+app.use(function*(next) {
+    this.nonce = uuid.v4();
+    yield next;
+});
 
 if (env === 'production') {
     const helmetConfig = {
@@ -274,6 +279,10 @@ if (env === 'production') {
     if (helmetConfig.directives.reportUri === '-') {
         delete helmetConfig.directives.reportUri;
     }
+
+    helmetConfig.directives.scriptSrc.push(
+        (req, res) => `'nonce-${res.locals.nonce}'`
+    );
     app.use(helmet.contentSecurityPolicy(helmetConfig));
 }
 

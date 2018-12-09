@@ -30,6 +30,7 @@ import koaLocale from 'koa-locale';
 import { getSupportedLocales } from './utils/misc';
 import { pinnedPosts } from './utils/PinnedPosts';
 import uuid from 'uuid';
+import { runInThisContext } from 'vm';
 
 if (cluster.isMaster) console.log('application server starting, please wait.');
 
@@ -269,20 +270,26 @@ app.use(function*(next) {
     yield next;
 });
 
-if (env === 'production') {
-    const helmetConfig = {
-        directives: convertEntriesToArrays(config.get('helmet.directives')),
-        reportOnly: config.get('helmet.reportOnly'),
-        setAllHeaders: config.get('helmet.setAllHeaders'),
-    };
-    helmetConfig.directives.reportUri = helmetConfig.directives.reportUri[0];
-    if (helmetConfig.directives.reportUri === '-') {
-        delete helmetConfig.directives.reportUri;
-    }
+let helmetConfig = {};
 
-    helmetConfig.directives.scriptSrc.push(`'nonce-${res.locals.nonce}'`);
-    app.use(helmet.contentSecurityPolicy(helmetConfig));
-}
+app.use(function*(next) {
+    if (env === 'production') {
+        helmetConfig = {
+            directives: convertEntriesToArrays(config.get('helmet.directives')),
+            reportOnly: config.get('helmet.reportOnly'),
+            setAllHeaders: config.get('helmet.setAllHeaders'),
+        };
+        helmetConfig.directives.reportUri = helmetConfig.directives.reportUri[0];
+        if (helmetConfig.directives.reportUri === '-') {
+            delete helmetConfig.directives.reportUri;
+        }
+
+        console.log(this.nonce);
+
+        helmetConfig.directives.scriptSrc.push(`'nonce-${this.nonce}'`);
+        yield next;
+    }
+});
 
 if (env !== 'test') {
     const appRender = require('./app_render');
@@ -291,6 +298,7 @@ if (env !== 'test') {
         // we're inside a generator, we can't `await` here, so we pass a promise
         // so `src/server/app_render.jsx` can `await` on it.
         this.pinnedPostsPromise = pinnedPosts();
+        app.use(helmet.contentSecurityPolicy(this.helmetConfig));
         yield appRender(this, supportedLocales, resolvedAssets);
         // if (app_router.dbStatus.ok) recordWebEvent(this, 'page_load');
         const bot = this.state.isBot;

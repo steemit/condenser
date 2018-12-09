@@ -289,7 +289,7 @@ if (env === 'production') {
             .map(
                 el =>
                     el.startsWith('script-src')
-                        ? `${el} nonce-${this.response.nonce}`
+                        ? `${el} 'nonce-${this.response.nonce}'`
                         : el
             )
             .join('; ');

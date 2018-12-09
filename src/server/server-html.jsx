@@ -7,7 +7,7 @@ export default function ServerHTML({
     locale,
     title,
     meta,
-    nonce,
+    nonces,
 }) {
     let page_title = title;
     return (
@@ -180,7 +180,7 @@ export default function ServerHTML({
                 {config.google_ad_client ? (
                     <div>
                         <script
-                            nonce={nonce}
+                            nonce={nonces[0]}
                             dangerouslySetInnerHTML={{
                                 __html: `
                                     window.googleAds = {
@@ -193,11 +193,11 @@ export default function ServerHTML({
                         />
                         <script
                             async
-                            nonce={nonce}
+                            nonce={nonces[1]}
                             src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
                         />
                         <script
-                            nonce={nonce}
+                            nonce={nonces[2]}
                             dangerouslySetInnerHTML={{
                                 __html: `
                                     (adsbygoogle = window.adsbygoogle || []).push({

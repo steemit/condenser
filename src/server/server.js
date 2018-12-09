@@ -265,39 +265,39 @@ useGeneralApi(app);
 // helmet wants some things as bools and some as lists, makes config difficult.
 // our config uses strings, this splits them to lists on whitespace.
 app.use(function*(next) {
-    const nonce = uuid.v4();
-    this.nonce = nonce;
-    this.response.nonce = nonce;
+    let nonces = [];
+    for (let i = 0; i < 10; i++) {
+        nonces.push(uuid.v4());
+    }
+
+    this.nonces = nonces;
+    this.response.nonces = nonces;
     yield next;
 });
 
-if (env === 'production') {
-    const helmetConfig = {
-        directives: convertEntriesToArrays(config.get('helmet.directives')),
-        reportOnly: config.get('helmet.reportOnly'),
-        setAllHeaders: config.get('helmet.setAllHeaders'),
-    };
-    helmetConfig.directives.reportUri = helmetConfig.directives.reportUri[0];
-    if (helmetConfig.directives.reportUri === '-') {
-        delete helmetConfig.directives.reportUri;
-    }
-
-    helmetConfig.directives.scriptSrc.push(`'nonce-${res.locals.nonce}'`);
-    app.use(helmet.contentSecurityPolicy(helmetConfig));
-    app.use(function*(next) {
-        const policy = this.response.header['content-security-policy']
-            .split(/;\s+/)
-            .map(
-                el =>
-                    el.startsWith('script-src')
-                        ? `${el} 'nonce-${this.response.nonce}'`
-                        : el
-            )
-            .join('; ');
-        this.response.set('content-security-policy', policy);
-        yield next;
-    });
+// if (env === 'production') {
+const helmetConfig = {
+    directives: convertEntriesToArrays(config.get('helmet.directives')),
+    reportOnly: config.get('helmet.reportOnly'),
+    setAllHeaders: config.get('helmet.setAllHeaders'),
+};
+helmetConfig.directives.reportUri = helmetConfig.directives.reportUri[0];
+if (helmetConfig.directives.reportUri === '-') {
+    delete helmetConfig.directives.reportUri;
 }
+
+app.use(helmet.contentSecurityPolicy(helmetConfig));
+app.use(function*(next) {
+    const nonces = this.response.nonces.map(n => `'nonce-${n}'`).join(' ');
+    const policy = this.response.header['content-security-policy']
+        .split(/;\s+/)
+        .map(el => (el.startsWith('script-src') ? `${el} ${nonces}` : el))
+        .join('; ');
+    this.response.set('content-security-policy', policy);
+    console.log(this.response.header);
+    yield next;
+});
+// }
 
 if (env !== 'test') {
     const appRender = require('./app_render');

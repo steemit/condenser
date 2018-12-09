@@ -265,7 +265,9 @@ useGeneralApi(app);
 // helmet wants some things as bools and some as lists, makes config difficult.
 // our config uses strings, this splits them to lists on whitespace.
 app.use(function*(next) {
-    this.nonce = uuid.v4();
+    const nonce = uuid.v4();
+    this.nonce = nonce;
+    this.response.nonce = nonce;
     yield next;
 });
 
@@ -282,6 +284,19 @@ if (env === 'production') {
 
     helmetConfig.directives.scriptSrc.push(`'nonce-${res.locals.nonce}'`);
     app.use(helmet.contentSecurityPolicy(helmetConfig));
+    app.use(function*(next) {
+        const policy = this.response.header['content-security-policy']
+            .split(/;\s+/)
+            .map(
+                el =>
+                    el.startsWith('script-src')
+                        ? `${el} 'nonce-${this.response.nonce}'`
+                        : el
+            )
+            .join('; ');
+        this.response.set('content-security-policy', policy);
+        yield next;
+    });
 }
 
 if (env !== 'test') {

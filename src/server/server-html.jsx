@@ -173,12 +173,6 @@ export default function ServerHTML({
                     />
                 ))}
                 <title>{page_title}</title>
-            </head>
-            <body>
-                <div id="content" dangerouslySetInnerHTML={{ __html: body }} />
-                {assets.script.map((href, idx) => (
-                    <script key={idx} src={href} />
-                ))}
                 {config.google_ad_client ? (
                     <div>
                         <script
@@ -213,6 +207,12 @@ export default function ServerHTML({
                         />
                     </div>
                 ) : null}
+            </head>
+            <body>
+                <div id="content" dangerouslySetInnerHTML={{ __html: body }} />
+                {assets.script.map((href, idx) => (
+                    <script key={idx} src={href} />
+                ))}
             </body>
         </html>
     );

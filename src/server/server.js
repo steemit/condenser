@@ -282,7 +282,6 @@ if (env === 'production') {
         delete helmetConfig.directives.reportUri;
     }
 
-    helmetConfig.directives.scriptSrc.push(`'nonce-${res.locals.nonce}'`);
     app.use(helmet.contentSecurityPolicy(helmetConfig));
     app.use(function*(next) {
         const policy = this.response.header['content-security-policy']
@@ -290,7 +289,7 @@ if (env === 'production') {
             .map(
                 el =>
                     el.startsWith('script-src')
-                        ? `${el} 'nonce-${this.response.nonce}'`
+                        ? `${el} nonce-${this.response.nonce}`
                         : el
             )
             .join('; ');

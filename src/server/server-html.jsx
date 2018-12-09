@@ -8,6 +8,8 @@ export default function ServerHTML({
     title,
     meta,
     nonce,
+    nonceTwo,
+    nonceThree,
 }) {
     let page_title = title;
     return (
@@ -193,11 +195,11 @@ export default function ServerHTML({
                         />
                         <script
                             async
-                            nonce={nonce}
+                            nonce={nonceTwo}
                             src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
                         />
                         <script
-                            nonce={nonce}
+                            nonce={nonceThree}
                             dangerouslySetInnerHTML={{
                                 __html: `
                                     (adsbygoogle = window.adsbygoogle || []).push({

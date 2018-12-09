@@ -266,8 +266,14 @@ useGeneralApi(app);
 // our config uses strings, this splits them to lists on whitespace.
 app.use(function*(next) {
     const nonce = uuid.v4();
+    const nonceTwo = uuid.v4();
+    const nonceThree = uuid.v4();
     this.nonce = nonce;
+    this.nonceTwo = nonceTwo;
+    this.nonceThree = nonceThree;
     this.response.nonce = nonce;
+    this.response.nonceTwo = nonceTwo;
+    this.response.nonceThree = nonceThree;
     yield next;
 });
 
@@ -289,7 +295,7 @@ if (env === 'production') {
             .map(
                 el =>
                     el.startsWith('script-src')
-                        ? `${el} 'nonce-${this.response.nonce}'`
+                        ? `${el} 'nonce-${this.response.nonce}' 'nonce-${this.response.nonceTwo}' 'nonce-${this.response.nonceThree}' `
                         : el
             )
             .join('; ');

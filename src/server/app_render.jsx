@@ -92,7 +92,9 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
             assets = resolvedAssets;
         }
         const nonce = ctx.nonce;
-        const props = { body, assets, title, meta, nonce };
+        const nonceTwo = ctx.nonceTwo;
+        const nonceThree = ctx.nonceThree;
+        const props = { body, assets, title, meta, nonce, nonceTwo, nonceThree };
         ctx.status = statusCode;
         ctx.body =
             '<!DOCTYPE html>' + renderToString(<ServerHTML {...props} />);

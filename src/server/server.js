@@ -307,7 +307,7 @@ app.use(function*(next) {
             //            : el
             //)
             //.map(el => el.startsWith('script-src') ? `${el} 'unsafe-eval' 'nonce-${this.response.nonce}' data: http: https:` : el)
-            .map(el => el.startsWith('script-src') ? `${el} 'nonce-${this.response.nonce}' data: http: https:` : el)
+            .map(el => el.startsWith('script-src') ? `'unsafe-inline' 'unsafe-eval' data: http: https: ${el}` : el)
             .join('; ');
         policy = `${
             policy

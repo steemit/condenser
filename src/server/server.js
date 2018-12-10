@@ -60,6 +60,15 @@ app.use(
         staticCache(path.join(__dirname, '../app/assets/images'), cacheOpts)
     )
 );
+app.use(
+    mount(
+        '/javascripts',
+        staticCache(
+            path.join(__dirname, '../app/assets/javascripts'),
+            cacheOpts
+        )
+    )
+);
 // Proxy asset folder to webpack development server in development mode
 if (env === 'development') {
     const webpack_dev_port = process.env.PORT
@@ -265,39 +274,49 @@ useGeneralApi(app);
 // helmet wants some things as bools and some as lists, makes config difficult.
 // our config uses strings, this splits them to lists on whitespace.
 app.use(function*(next) {
+    // const nonce = secureRandom.randomBuffer(13).toString('hex');
     const nonce = uuid.v4();
+    // const nonce = '1';
     this.nonce = nonce;
     this.response.nonce = nonce;
     yield next;
 });
 
-if (env === 'production') {
-    const helmetConfig = {
-        directives: convertEntriesToArrays(config.get('helmet.directives')),
-        reportOnly: config.get('helmet.reportOnly'),
-        setAllHeaders: config.get('helmet.setAllHeaders'),
-    };
-    helmetConfig.directives.reportUri = helmetConfig.directives.reportUri[0];
-    if (helmetConfig.directives.reportUri === '-') {
-        delete helmetConfig.directives.reportUri;
-    }
+// if (env === 'production') {
+const helmetConfig = {
+    directives: convertEntriesToArrays(config.get('helmet.directives')),
+    reportOnly: config.get('helmet.reportOnly'),
+    setAllHeaders: config.get('helmet.setAllHeaders'),
+};
+helmetConfig.directives.reportUri = helmetConfig.directives.reportUri[0];
+if (helmetConfig.directives.reportUri === '-') {
+    delete helmetConfig.directives.reportUri;
+}
 
-    helmetConfig.directives.scriptSrc.push(`'nonce-${res.locals.nonce}'`);
-    app.use(helmet.contentSecurityPolicy(helmetConfig));
-    app.use(function*(next) {
-        const policy = this.response.header['content-security-policy']
+app.use(helmet.contentSecurityPolicy(helmetConfig));
+app.use(function*(next) {
+    if (this.session.a) {
+        yield next;
+    } else {
+        let policy = this.response.header['content-security-policy']
             .split(/;\s+/)
             .map(
                 el =>
                     el.startsWith('script-src')
-                        ? `${el} 'nonce-${this.response.nonce}'`
+                        ? `script-src 'self' 'unsafe-inline' 'unsafe-eval' https:`
                         : el
             )
+            // .map(el => el.startsWith('script-src') ? `${el} 'unsafe-eval' 'nonce-${this.response.nonce}' data: http: https:` : el)
             .join('; ');
+        policy = `${
+            policy
+        }; frame-src 'self' googleads.g.doubleclick.net https:;`;
+        console.log(policy);
         this.response.set('content-security-policy', policy);
         yield next;
-    });
-}
+    }
+});
+// }
 
 if (env !== 'test') {
     const appRender = require('./app_render');

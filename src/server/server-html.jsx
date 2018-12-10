@@ -8,7 +8,9 @@ export default function ServerHTML({
     title,
     meta,
     nonce,
+    loggedIn,
 }) {
+    console.log('NONCE', nonce);
     let page_title = title;
     return (
         <html lang="en">
@@ -175,9 +177,9 @@ export default function ServerHTML({
             <body>
                 <div id="content" dangerouslySetInnerHTML={{ __html: body }} />
                 {assets.script.map((href, idx) => (
-                    <script key={idx} src={href} />
+                    <script nonce={nonce} key={idx} src={href} />
                 ))}
-                {config.google_ad_client ? (
+                {!loggedIn && config.google_ad_client ? (
                     <div>
                         <script
                             nonce={nonce}
@@ -194,21 +196,9 @@ export default function ServerHTML({
                         <script
                             async
                             nonce={nonce}
-                            src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+                            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
                         />
-                        <script
-                            nonce={nonce}
-                            dangerouslySetInnerHTML={{
-                                __html: `
-                                    (adsbygoogle = window.adsbygoogle || []).push({
-                                         google_ad_client: '${
-                                             config.google_ad_client
-                                         }',
-                                         enable_page_level_ads: true
-                                    });
-                                `,
-                            }}
-                        />
+                        <script nonce={nonce} src="/javascripts/ga.js" />
                     </div>
                 ) : null}
             </body>

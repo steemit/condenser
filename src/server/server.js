@@ -282,7 +282,7 @@ app.use(function*(next) {
     yield next;
 });
 
-// if (env === 'production') {
+//if (env === 'production') {
 const helmetConfig = {
     directives: convertEntriesToArrays(config.get('helmet.directives')),
     reportOnly: config.get('helmet.reportOnly'),
@@ -300,13 +300,14 @@ app.use(function*(next) {
     } else {
         let policy = this.response.header['content-security-policy']
             .split(/;\s+/)
-            .map(
-                el =>
-                    el.startsWith('script-src')
-                        ? `script-src 'self' 'unsafe-inline' 'unsafe-eval' https:`
-                        : el
-            )
-            // .map(el => el.startsWith('script-src') ? `${el} 'unsafe-eval' 'nonce-${this.response.nonce}' data: http: https:` : el)
+            //.map(
+            //    el =>
+            //        el.startsWith('script-src')
+            //            ? `script-src 'self' 'unsafe-inline' 'unsafe-eval' https:`
+            //            : el
+            //)
+            //.map(el => el.startsWith('script-src') ? `${el} 'unsafe-eval' 'nonce-${this.response.nonce}' data: http: https:` : el)
+            .map(el => el.startsWith('script-src') ? `${el} 'nonce-${this.response.nonce}' data: http: https:` : el)
             .join('; ');
         policy = `${
             policy

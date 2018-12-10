@@ -18,6 +18,9 @@ export default function resolveRoute(path) {
     if (path === '/') {
         return { page: 'PostsIndex', params: ['trending'] };
     }
+    if (path === '/register') {
+        return { page: 'Register' };
+    }
     if (path === '/about.html') {
         return { page: 'About' };
     }

@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withCookies } from 'react-cookie';
 import { withRouter } from 'react-router';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 // import { Anchor } from 'react-feather';
 import 'react-sliding-pane/dist/react-sliding-pane.css';
 
-import { SideMenu } from 'components/_Common';
+import { SideMenu } from 'app/components/pages/_Common';
 import { SearchHeader, SearchItem, SearchRelatedItem } from './Components';
 
 import { SearchItems, RelatedItems } from './DummyData';

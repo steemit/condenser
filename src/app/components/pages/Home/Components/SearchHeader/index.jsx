@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { DropDown } from 'components/_Common';
+import { DropDown } from 'app/components/pages/_Common';
 
 class SearchHeader extends Component {
     constructor(props) {

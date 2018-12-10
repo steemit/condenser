@@ -14,7 +14,7 @@ export default class SvgImage extends React.Component {
             width: this.props.width,
             height: this.props.height,
         };
-        const image = require(`assets/images/${this.props.name}.svg`);
+        const image = require(`assets/images/static/${this.props.name}.svg`);
         const cn =
             'SvgImage' +
             (this.props.className ? ' ' + this.props.className : '');

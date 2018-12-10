@@ -1,6 +1,11 @@
 import App from 'app/components/App';
 import Benchmark from 'app/components/Steemit/pages/Benchmark';
 import PostsIndex from 'app/components/Steemit/pages/PostsIndex';
+
+// import {
+//     Home
+// } from 'app/components/pages';
+
 import resolveRoute from './ResolveRoute';
 
 // polyfill webpack require.ensure
@@ -14,6 +19,10 @@ export default {
         if (route.page === 'About') {
             //require.ensure([], (require) => {
             cb(null, [require('app/components/Steemit/pages/About')]);
+            //});
+        } else if (route.page === 'Register') {
+            //require.ensure([], (require) => {
+            cb(null, [require('app/components/pages/Auth/Register')]);
             //});
         } else if (route.page === 'Welcome') {
             //require.ensure([], (require) => {

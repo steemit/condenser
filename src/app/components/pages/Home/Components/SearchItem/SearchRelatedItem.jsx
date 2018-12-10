@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import * as FeatherIcons from 'react-feather';
 
-import defaultUser from 'assets/images/user1.png';
-import './SearchItem.scss';
+import defaultUser from 'assets/images/static/user1.png';
 
 class SearchRelatedItem extends Component {
     constructor(props) {

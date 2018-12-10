@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter, Link } from 'react-router';
 import { User, ChevronDown, Settings, LogOut } from 'react-feather';
 import { Transition } from 'react-spring';
 
-import logo from 'assets/images/logo_white.png';
+import logo from 'assets/images/static/logo_white.png';
 
 class NavBar extends Component {
     state = { showUserMenu: false };

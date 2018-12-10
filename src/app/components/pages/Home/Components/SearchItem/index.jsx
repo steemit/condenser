@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter, Link } from 'react-router';
 import * as FeatherIcons from 'react-feather';
 
-import defaultUser from 'assets/images/user1.png';
+import defaultUser from 'assets/images/static/user1.png';
 
 class SearchItem extends Component {
     state = { type: null };

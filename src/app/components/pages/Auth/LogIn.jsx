@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withCookies } from 'react-cookie';
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter, Link } from 'react-router';
 
-import { Input } from 'components/_Common';
+import { Input } from 'app/components/pages/_Common';
 
-import logo from 'assets/images/logo.png';
-import knowledr from 'assets/images/knowledr.png';
+import logo from 'assets/images/static/logo.png';
+import knowledr from 'assets/images/static/knowledr.png';
 
 class LogIn extends Component {
     constructor(props) {

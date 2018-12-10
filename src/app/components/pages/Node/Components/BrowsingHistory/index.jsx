@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import browsingHistory from 'assets/images/history.png';
+import browsingHistory from 'assets/images/static/history.png';
 
 class BrowsingHistory extends Component {
     constructor(props) {

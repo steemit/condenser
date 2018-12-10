@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Select from 'react-select';
 
-import { TypeSelector } from 'components/_Common';
+import { TypeSelector } from 'app/components/pages/_Common';
 import { Posts } from './DummyData';
 
 const customStyles = {

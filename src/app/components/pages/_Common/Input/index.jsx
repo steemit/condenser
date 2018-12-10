@@ -7,7 +7,7 @@ class Input extends Component {
 
         return (
             <div className="InputWrapper">
-                <div className="Label">{label}</div>
+                <div className="Label" dangerouslySetInnerHTML={label} />
                 <input
                     value={value}
                     onChange={onChange}

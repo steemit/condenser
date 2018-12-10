@@ -1,12 +1,42 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { withCookies } from 'react-cookie';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router';
 
-import { Input } from 'components/_Common';
+// import { Input } from 'app/components/pages/_Common';
 
 import logo from 'assets/images/logo.png';
-import knowledr from 'assets/images/knowledr.png';
+import knowledr from 'assets/images/static/knowledr.png';
+
+const formFields = [
+    {
+        key: 'firstName',
+        label: 'First Name',
+        placeholder: 'John',
+    },
+    {
+        key: 'lastName',
+        label: 'Last Name',
+        placeholder: 'Smith',
+    },
+    {
+        key: 'email',
+        label: 'Email Address',
+        placeholder: 'john.smith@mail.com',
+    },
+    {
+        key: 'password',
+        label: 'Password',
+        type: 'password',
+        placeholder:
+            '&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;',
+    },
+    {
+        key: 'confirmPassword',
+        label: 'Confirm Password',
+        type: 'password',
+        placeholder:
+            '&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;',
+    },
+];
 
 class Register extends Component {
     constructor(props) {
@@ -22,14 +52,8 @@ class Register extends Component {
         };
     }
 
-    componentDidMount() {
-        const { cookies } = this.props;
-        if (cookies.get('token')) {
-            this.props.history.push('/');
-        }
-    }
-
     onInputChange(field) {
+        console.log(field);
         return e => {
             this.setState({
                 [field]:
@@ -53,9 +77,9 @@ class Register extends Component {
         return (
             <div className="AuthWrapper">
                 <div className="Left">
-                    <Link to="/">
+                    <a href="/">
                         <img className="Logo" src={logo} alt="Knowledr Logo" />
-                    </Link>
+                    </a>
                     <div className="AuthForm">
                         <div className="Title">
                             We are <span>Knowledr</span>
@@ -64,38 +88,22 @@ class Register extends Component {
                             Welcome, let us introduce!
                         </div>
                         <form>
-                            <Input
-                                label="First Name"
-                                placeholder="John"
-                                value={firstName}
-                                onChange={this.onInputChange('firstName')}
-                            />
-                            <Input
-                                label="Last Name"
-                                placeholder="Smith"
-                                value={lastName}
-                                onChange={this.onInputChange('lastName')}
-                            />
-                            <Input
-                                label="Email Address"
-                                placeholder="john.smith@mail.com"
-                                value={email}
-                                onChange={this.onInputChange('email')}
-                            />
-                            <Input
-                                label="Password"
-                                placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
-                                type="password"
-                                value={password}
-                                onChange={this.onInputChange('password')}
-                            />
-                            <Input
-                                label="Cpmfirm Password"
-                                placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
-                                type="password"
-                                value={confirmPassword}
-                                onChange={this.onInputChange('confirmPassword')}
-                            />
+                            {formFields.map(field => (
+                                <div className="InputWrapper" key={field.key}>
+                                    <div
+                                        className="Label"
+                                        dangerouslySetInnerHTML={{
+                                            __html: field.label,
+                                        }}
+                                    />
+                                    <input
+                                        value={this.state[field.key]}
+                                        onChange={this.onInputChange(field.key)}
+                                        placeholder={field.placeholder}
+                                        type={field.type || 'text'}
+                                    />
+                                </div>
+                            ))}
                         </form>
                         <div className="Extra">
                             <div className="RememberMe">
@@ -122,9 +130,9 @@ class Register extends Component {
                             <button className="Black" type="submit">
                                 Sign Up
                             </button>
-                            <Link className="Button" to="/login">
+                            <a className="Button" href="/login">
                                 Log In
-                            </Link>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -145,9 +153,10 @@ Register.defaultProps = {
 };
 
 Register.propTypes = {
-    cookies: PropTypes.object.isRequired,
-    history: PropTypes.object.isRequired,
     // refCode: PropTypes.string,
 };
 
-export default withCookies(Register);
+module.exports = {
+    path: 'register',
+    component: Register,
+};

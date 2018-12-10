@@ -43,7 +43,7 @@ export default class Index extends React.Component {
         return (
             <div className="Index">
                 <div className="text-center">
-                    {/*<img src={require('app/assets/images/steemit.svg')} />*/}
+                    {/*<img src={require('app/assets/images/static/steemit.svg')} />*/}
                     <SvgImage name="steemit" width="480px" height="240px" />
                 </div>
                 <h1 className="center text-center">

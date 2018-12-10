@@ -1,0 +1,59 @@
+body {
+  font-family: $serif;
+  color: $color-black;
+}
+
+input[type='checkbox'].css-checkbox {
+  position: absolute;
+  z-index: -1000;
+  left: -1000px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  width: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+}
+
+input[type='checkbox'].css-checkbox + label.css-label {
+  padding-left: 30px;
+  height: 21px;
+  display: inline-block;
+  vertical-align: middle;
+  cursor: pointer;
+  position: relative;
+}
+
+input[type='checkbox'].css-checkbox:checked + label.css-label {
+  background-image: url('~app/assets/images/static/checkmark.svg');
+  background-position: 3px 3px;
+  background-repeat: no-repeat;
+  background-size: 15px 15px;
+}
+
+label.css-label {
+  user-select: none;
+
+  &:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 21px;
+    height: 21px;
+    border: 2px solid;
+    box-sizing: border-box;
+    border-radius: 3px;
+    border-color: $color-input;
+  }
+}
+
+a,
+button {
+  border: none;
+}
+
+img {
+  user-select: none;
+}

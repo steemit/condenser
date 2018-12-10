@@ -6,11 +6,11 @@ import { Sidebar, Segment, Menu } from 'semantic-ui-react';
 import 'katex/dist/katex.min.css';
 import { InlineMath } from 'react-katex';
 
-import defaultUser from 'assets/images/user1.png';
-import graph1 from 'assets/images/graph/1.png';
-import graph2 from 'assets/images/graph/2.png';
-import graph3 from 'assets/images/graph/3.png';
-import { Label, SideMenu } from 'components/_Common';
+import defaultUser from 'assets/images/static/user1.png';
+import graph1 from 'assets/images/static/graph/1.png';
+import graph2 from 'assets/images/static/graph/2.png';
+import graph3 from 'assets/images/static/graph/3.png';
+import { Label, SideMenu } from 'app/components/pages/_Common';
 import { Nodes } from './DummyData';
 import { BrowsingHistory } from './Components';
 import './Components/SidePanels/SidePanels.scss';

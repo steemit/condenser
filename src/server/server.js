@@ -293,6 +293,14 @@ if (helmetConfig.directives.reportUri === '-') {
     delete helmetConfig.directives.reportUri;
 }
 
+if (!helmetConfig.directives.frameSrc) {
+    helmetConfig.directives.frameSrc = [
+        `'self'`,
+        'googleads.g.doubleclick.net',
+        'https:',
+    ];
+}
+
 app.use(helmet.contentSecurityPolicy(helmetConfig));
 app.use(function*(next) {
     if (this.session.a) {
@@ -307,11 +315,16 @@ app.use(function*(next) {
             //            : el
             //)
             //.map(el => el.startsWith('script-src') ? `${el} 'unsafe-eval' 'nonce-${this.response.nonce}' data: http: https:` : el)
-            .map(el => el.startsWith('script-src') ? `'unsafe-inline' 'unsafe-eval' data: http: https: ${el}` : el)
+            .map(
+                el =>
+                    el.startsWith('script-src')
+                        ? `script-src 'unsafe-inline' 'unsafe-eval' data: http: https: ${el.replace(
+                              /^script-src/,
+                              ''
+                          )}`
+                        : el
+            )
             .join('; ');
-        policy = `${
-            policy
-        }; frame-src 'self' googleads.g.doubleclick.net https:;`;
         console.log(policy);
         this.response.set('content-security-policy', policy);
         yield next;

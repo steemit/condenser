@@ -457,6 +457,7 @@ export default connect(
         const loginBroadcastOperation = state.user.get(
             'loginBroadcastOperation'
         );
+        const shouldSeeAds = state.app.getIn(['googleAds', 'shouldSeeAds']);
         const initialValues = {
             saveLogin: saveLoginDefault,
         };
@@ -485,6 +486,7 @@ export default connect(
         return {
             login_error,
             loginBroadcastOperation,
+            shouldSeeAds,
             initialValues,
             initialUsername,
             msg,
@@ -530,7 +532,7 @@ export default connect(
 
                 // If ads are enabled, do not close the login modal. and wait
                 // for page to reload.
-                if (!window.googleAds || !window.googleAds.enabled) {
+                if (!this.props.shouldSeeAds) {
                     dispatch(userActions.closeLogin());
                 }
             } else {
@@ -558,7 +560,7 @@ export default connect(
         showChangePassword: (username, defaultPassword) => {
             // If ads are enabled, do not close the login modal. and wait for
             // page to reload.
-            if (!window.googleAds || !window.googleAds.enabled) {
+            if (!this.props.shouldSeeAds) {
                 dispatch(userActions.closeLogin());
             }
 

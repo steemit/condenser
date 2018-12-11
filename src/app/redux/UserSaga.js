@@ -391,14 +391,20 @@ function* usernamePasswordLogin2({
     // Redirect user to the appropriate page after login.
     if (afterLoginRedirectToWelcome) {
         browserHistory.push('/welcome');
+
+        // If ads are enabled, reload the page instead of changing the browser
+        // history when they log in, so headers will get re-requested.
+        if (select(state => state.app.getIn(['googleAds', 'shouldSeeAds']))) {
+            window.location.reload();
+        }
     } else if (feedURL && document.location.pathname === '/') {
         browserHistory.push(feedURL);
-    }
 
-    // If ads are enabled, reload the page instead of changing the browser
-    // history when they log in, so headers will get re-requested.
-    if (window.googleAds && window.googleAds.enabled) {
-        window.location.reload();
+        // If ads are enabled, reload the page instead of changing the browser
+        // history when they log in, so headers will get re-requested.
+        if (select(state => state.app.getIn(['googleAds', 'shouldSeeAds']))) {
+            window.location.reload();
+        }
     }
 }
 
@@ -484,7 +490,7 @@ function* logout() {
     yield put(userActions.saveLoginConfirm(false)); // Just incase it is still showing
     if (process.env.BROWSER) localStorage.removeItem('autopost2');
     serverApiLogout().then(() => {
-        if (window.googleAds && window.googleAds.enabled) {
+        if (select(state => state.app.getIn(['googleAds', 'shouldSeeAds']))) {
             window.location.reload();
         }
     });

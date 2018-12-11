@@ -1,6 +1,7 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
-export class GoogleAd extends React.Component {
+class GoogleAd extends React.Component {
     componentDidMount() {
         (window.adsbygoogle = window.adsbygoogle || []).push({});
     }
@@ -9,7 +10,7 @@ export class GoogleAd extends React.Component {
         if (typeof window === 'undefined') {
             return null;
         }
-        if (!window.googleAds || !window.googleAds.enabled) {
+        if (!this.props.shouldSeeAds) {
             return null;
         }
 
@@ -25,3 +26,8 @@ export class GoogleAd extends React.Component {
         );
     }
 }
+
+export default connect((state, ownProps) => {
+    const shouldSeeAds = state.app.getIn(['googleAds', 'shouldSeeAds']);
+    return { shouldSeeAds, ...ownProps };
+})(GoogleAd);

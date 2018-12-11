@@ -7,7 +7,7 @@ export default function ServerHTML({
     locale,
     title,
     meta,
-    loggedIn,
+    shouldSeeAds,
 }) {
     let page_title = title;
     return (
@@ -177,19 +177,8 @@ export default function ServerHTML({
                 {assets.script.map((href, idx) => (
                     <script key={idx} src={href} />
                 ))}
-                {!loggedIn && config.google_ad_enabled ? (
+                {shouldSeeAds ? (
                     <div>
-                        <script
-                            dangerouslySetInnerHTML={{
-                                __html: `
-                                    window.googleAds = {
-                                        enabled: !!${config.google_ad_enabled},
-                                        test: !!${config.google_ad_test},
-                                        client: '${config.google_ad_client}',
-                                    }
-                                `,
-                            }}
-                        />
                         <script src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" />
                         <script src="/javascripts/ga.js" />
                     </div>

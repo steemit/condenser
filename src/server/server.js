@@ -29,7 +29,6 @@ import userIllegalContent from 'app/utils/userIllegalContent';
 import koaLocale from 'koa-locale';
 import { getSupportedLocales } from './utils/misc';
 import { pinnedPosts } from './utils/PinnedPosts';
-import uuid from 'uuid';
 
 if (cluster.isMaster) console.log('application server starting, please wait.');
 
@@ -273,50 +272,50 @@ useGeneralApi(app);
 
 // helmet wants some things as bools and some as lists, makes config difficult.
 // our config uses strings, this splits them to lists on whitespace.
-app.use(function*(next) {
-    // const nonce = secureRandom.randomBuffer(13).toString('hex');
-    const nonce = uuid.v4();
-    // const nonce = '1';
-    this.nonce = nonce;
-    this.response.nonce = nonce;
-    yield next;
-});
-
-// if (env === 'production') {
-const helmetConfig = {
-    directives: convertEntriesToArrays(config.get('helmet.directives')),
-    reportOnly: config.get('helmet.reportOnly'),
-    setAllHeaders: config.get('helmet.setAllHeaders'),
-};
-helmetConfig.directives.reportUri = helmetConfig.directives.reportUri[0];
-if (helmetConfig.directives.reportUri === '-') {
-    delete helmetConfig.directives.reportUri;
-}
-
-app.use(helmet.contentSecurityPolicy(helmetConfig));
-app.use(function*(next) {
-    if (this.session.a) {
-        yield next;
-    } else {
-        let policy = this.response.header['content-security-policy']
-            .split(/;\s+/)
-            .map(
-                el =>
-                    el.startsWith('script-src')
-                        ? `script-src 'self' 'unsafe-inline' 'unsafe-eval' https:`
-                        : el
-            )
-            // .map(el => el.startsWith('script-src') ? `${el} 'unsafe-eval' 'nonce-${this.response.nonce}' data: http: https:` : el)
-            .join('; ');
-        policy = `${
-            policy
-        }; frame-src 'self' googleads.g.doubleclick.net https:;`;
-        console.log(policy);
-        this.response.set('content-security-policy', policy);
-        yield next;
+if (env === 'production') {
+    const helmetConfig = {
+        directives: convertEntriesToArrays(config.get('helmet.directives')),
+        reportOnly: config.get('helmet.reportOnly'),
+        setAllHeaders: config.get('helmet.setAllHeaders'),
+    };
+    helmetConfig.directives.reportUri = helmetConfig.directives.reportUri[0];
+    if (helmetConfig.directives.reportUri === '-') {
+        delete helmetConfig.directives.reportUri;
     }
-});
-// }
+
+    if (!helmetConfig.directives.frameSrc) {
+        helmetConfig.directives.frameSrc = [
+            `'self'`,
+            'googleads.g.doubleclick.net',
+            'https:',
+        ];
+    }
+
+    app.use(helmet.contentSecurityPolicy(helmetConfig));
+    app.use(function*(next) {
+        if (this.session.a) {
+            // If user is logged in, do not modify CSP headers further.
+            yield next;
+        } else {
+            // If user is signed out, enable ads.
+            let policy = this.response.header['content-security-policy']
+                .split(/;\s+/)
+                .map(el => {
+                    if (el.startsWith('script-src')) {
+                        const oldScriptSrc = el.replace(/^script-src/, '');
+                        `script-src 'unsafe-inline' 'unsafe-eval' data: http: https: ${
+                            scriptSrc
+                        }`;
+                    } else {
+                        el;
+                    }
+                })
+                .join('; ');
+            this.response.set('content-security-policy', policy);
+            yield next;
+        }
+    });
+}
 
 if (env !== 'test') {
     const appRender = require('./app_render');

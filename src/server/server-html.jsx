@@ -7,10 +7,8 @@ export default function ServerHTML({
     locale,
     title,
     meta,
-    nonce,
     loggedIn,
 }) {
-    console.log('NONCE', nonce);
     let page_title = title;
     return (
         <html lang="en">
@@ -177,12 +175,11 @@ export default function ServerHTML({
             <body>
                 <div id="content" dangerouslySetInnerHTML={{ __html: body }} />
                 {assets.script.map((href, idx) => (
-                    <script nonce={nonce} key={idx} src={href} />
+                    <script key={idx} src={href} />
                 ))}
                 {!loggedIn && config.google_ad_client ? (
                     <div>
                         <script
-                            nonce={nonce}
                             dangerouslySetInnerHTML={{
                                 __html: `
                                     window.googleAds = {
@@ -193,12 +190,8 @@ export default function ServerHTML({
                                 `,
                             }}
                         />
-                        <script
-                            async
-                            nonce={nonce}
-                            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
-                        />
-                        <script nonce={nonce} src="/javascripts/ga.js" />
+                        <script src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" />
+                        <script src="/javascripts/ga.js" />
                     </div>
                 ) : null}
             </body>

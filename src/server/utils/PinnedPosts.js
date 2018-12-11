@@ -34,7 +34,9 @@ export async function pinnedPosts() {
     let posts = [];
     urls.forEach(async url => {
         const [username, postId] = url.split('@')[1].split('/');
-        posts.push(await steem.api.getContentAsync(username, postId));
+        let post = await steem.api.getContentAsync(username, postId);
+        post.pinned = true;
+        posts.push(post);
     });
     return posts;
 }

@@ -128,6 +128,7 @@
     "sanitize-html": "1.14.1",
     "sass-loader": "6.0.6",
     "secure-random": "1.1.1",
+    "semantic-ui-react": "^0.84.0",
     "sendgrid": "4.10.0",
     "sequelize": "3.33.0",
     "sequelize-cli": "3.2.0",

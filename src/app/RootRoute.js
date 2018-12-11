@@ -32,6 +32,10 @@ export default {
             //require.ensure([], (require) => {
             cb(null, [require('app/components/pages/Home/Home')]);
             //});
+        } else if (route.page === 'Static/Node') {
+            //require.ensure([], (require) => {
+            cb(null, [require('app/components/pages/Node/Node')]);
+            //});
         } else if (route.page === 'Welcome') {
             //require.ensure([], (require) => {
             cb(null, [require('app/components/Steemit/pages/Welcome')]);

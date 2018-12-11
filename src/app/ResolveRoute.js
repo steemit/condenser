@@ -27,6 +27,9 @@ export default function resolveRoute(path) {
     if (path === '/static_home') {
         return { page: 'Static/Home' };
     }
+    if (path === '/static_node') {
+        return { page: 'Static/Node' };
+    }
     if (path === '/about.html') {
         return { page: 'About' };
     }

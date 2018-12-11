@@ -3,18 +3,16 @@ import PropTypes from 'prop-types';
 import { ThumbsDown, ThumbsUp, X } from 'react-feather';
 import { Sidebar, Segment, Menu } from 'semantic-ui-react';
 
-import 'katex/dist/katex.min.css';
-import { InlineMath } from 'react-katex';
+// import 'katex/dist/katex.min.css';
+// import { InlineMath } from 'react-katex';
 
 import defaultUser from 'assets/images/static/user1.png';
 import graph1 from 'assets/images/static/graph/1.png';
 import graph2 from 'assets/images/static/graph/2.png';
 import graph3 from 'assets/images/static/graph/3.png';
-import { Label, SideMenu } from 'app/components/pages/_Common';
+// import { Label/*, SideMenu*/ } from 'app/components/pages/_Common';
 import { Nodes } from './DummyData';
-import { BrowsingHistory } from './Components';
-import './Components/SidePanels/SidePanels.scss';
-import './Node.scss';
+// import { BrowsingHistory } from './Components';
 
 class Node extends Component {
     constructor(props) {
@@ -22,7 +20,7 @@ class Node extends Component {
 
         this.state = {
             // loading: true,
-            data: null,
+            data: Nodes[0],
             citesVisible: false,
             citedByVisible: false,
         };
@@ -30,18 +28,20 @@ class Node extends Component {
 
     componentDidMount() {
         // console.log(this.getParams('id'));
-        const id = this.getParams('id');
+        const id = 1; //this.getParams('id');
+        console.log(Nodes[id - 1]);
 
         if (Nodes[id - 1]) {
-            this.state = { data: Nodes[id - 1] };
+            // this.setState({ data: Nodes[id - 1] });
         } else {
-            this.props.history.push('/');
+            // this.props.history.push('/');
         }
     }
 
     getParams(key) {
-        const { match: { params } } = this.props;
-        return params[key];
+        // const { match: { params } } = this.props;
+        // return params[key];
+        return key;
     }
 
     toggleCitesPanel = () =>
@@ -81,7 +81,7 @@ class Node extends Component {
                         width="wide"
                     >
                         <div className="Panel">
-                            <div className="Header">
+                            <div className="NodeHeader">
                                 <div>Citations</div>
                                 <div
                                     className="CloseButton"
@@ -105,7 +105,7 @@ class Node extends Component {
                         visible={citedByPanel}
                     >
                         <div className="Panel">
-                            <div className="Header">
+                            <div className="NodeHeader">
                                 <div>Cited By Others</div>
                                 <div
                                     className="CloseButton"
@@ -121,15 +121,15 @@ class Node extends Component {
 
                     <Sidebar.Pusher>
                         <div className="NodeInfo">
-                            <BrowsingHistory />
+                            {/* <BrowsingHistory /> */}
                             <div className="HeaderWrapper">
-                                <div className="Header">
+                                <div className="NodeHeader">
                                     <div className="Wrap">
                                         <div className="TypeWrapper">
                                             <div className={`Type ${type}`}>
                                                 {type}
                                             </div>
-                                            <Label label="Machine" />
+                                            {/* <Label label="Machine" /> */}
                                         </div>
                                         <div className="User">
                                             <img
@@ -244,10 +244,10 @@ class Node extends Component {
                                     remaining essentially unchanged.
                                 </p>
                             </div>
-                            <SideMenu />
+                            {/* <SideMenu /> */}
                             <div className="Introduction">
                                 Figures:{' '}
-                                <InlineMath>\int_0^\infty x^2 dx</InlineMath>
+                                {/* <InlineMath>\int_0^\infty x^2 dx</InlineMath> */}
                                 <div className="Content">
                                     <img src={graph1} alt="Figure 1" />
                                     <img src={graph2} alt="Figure 2" />
@@ -270,8 +270,11 @@ function getCitations(data) {
 }
 
 Node.propTypes = {
-    history: PropTypes.object.isRequired,
-    match: PropTypes.object.isRequired,
+    // history: PropTypes.object.isRequired,
+    // match: PropTypes.object.isRequired,
 };
 
-export default Node;
+module.exports = {
+    path: 'static_node',
+    component: Node,
+};

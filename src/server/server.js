@@ -304,7 +304,7 @@ if (env === 'production') {
                     if (el.startsWith('script-src')) {
                         const oldScriptSrc = el.replace(/^script-src/, '');
                         `script-src 'unsafe-inline' 'unsafe-eval' data: http: https: ${
-                            scriptSrc
+                            oldScriptSrc
                         }`;
                     } else {
                         el;

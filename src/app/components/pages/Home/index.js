@@ -1,2 +1,2 @@
 export * from './Components';
-export { default as Home } from '.';
+export { default as Home } from './Home';

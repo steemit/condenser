@@ -28,6 +28,10 @@ export default {
             //require.ensure([], (require) => {
             cb(null, [require('app/components/pages/Auth/LogIn')]);
             //});
+        } else if (route.page === 'Static/Home') {
+            //require.ensure([], (require) => {
+            cb(null, [require('app/components/pages/Home/Home')]);
+            //});
         } else if (route.page === 'Welcome') {
             //require.ensure([], (require) => {
             cb(null, [require('app/components/Steemit/pages/Welcome')]);

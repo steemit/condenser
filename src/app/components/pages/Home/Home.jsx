@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { withCookies } from 'react-cookie';
-import { withRouter } from 'react-router';
-import { Link } from 'react-router';
+// import { Link } from 'react-router';
 // import { Anchor } from 'react-feather';
-import 'react-sliding-pane/dist/react-sliding-pane.css';
 
-import { SideMenu } from 'app/components/pages/_Common';
+// import { SideMenu } from 'app/components/pages/_Common';
 import { SearchHeader, SearchItem, SearchRelatedItem } from './Components';
+
+// import SearchHeader from 'app/components/pages/Home/Components/SearchHeader';
 
 import { SearchItems, RelatedItems } from './DummyData';
 
@@ -21,26 +19,17 @@ class Home extends Component {
         };
     }
 
-    componentDidMount() {
-        const { cookies } = this.props;
-        if (cookies.get('token')) {
-            //
-        } else {
-            this.props.history.push('/login');
-        }
-    }
-
     render() {
-        const { location, search } = this.props;
-        const { items, relatedItems } = search;
+        const { search } = this.props;
+        // const { items, relatedItems } = search || {};
         const { isPaneOpen } = this.state;
 
         return (
             <div className={`HomeWrapper ${isPaneOpen ? 'Open' : 'Close'}`}>
                 <div className="Content">
                     <div className="Results">
-                        <SearchHeader location={location} />
-                        {items.map((item, index) => (
+                        <SearchHeader />
+                        {SearchItems.map((item, index) => (
                             <SearchItem
                                 data={item}
                                 key={`${index}-${item.id}`}
@@ -50,14 +39,14 @@ class Home extends Component {
                 </div>
                 <div className="RelatedItems">
                     <h1>Related</h1>
-                    {relatedItems.map((item, index) => (
+                    {RelatedItems.map((item, index) => (
                         <SearchRelatedItem
                             data={item}
                             key={`${index}-${item.id}`}
                         />
                     ))}
                     <div className="More">
-                        <Link to="/?search=more">See more related topics</Link>
+                        <a href="/?search=more">See more related topics</a>
                     </div>
                 </div>
             </div>
@@ -65,18 +54,7 @@ class Home extends Component {
     }
 }
 
-Home.defaultProps = {
-    search: {
-        items: SearchItems,
-        relatedItems: RelatedItems,
-    },
+module.exports = {
+    path: 'static_home',
+    component: Home,
 };
-
-Home.propTypes = {
-    cookies: PropTypes.object.isRequired,
-    history: PropTypes.object.isRequired,
-    location: PropTypes.object.isRequired,
-    search: PropTypes.object,
-};
-
-export default withCookies(withRouter(Home));

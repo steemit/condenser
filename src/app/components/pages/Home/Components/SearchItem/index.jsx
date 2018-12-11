@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withRouter, Link } from 'react-router';
+// import { withRouter, Link } from 'react-router';
 import * as FeatherIcons from 'react-feather';
 
 import defaultUser from 'assets/images/static/user1.png';
@@ -9,7 +9,7 @@ class SearchItem extends Component {
     state = { type: null };
 
     componentDidMount() {
-        this.checkType();
+        // this.checkType();
     }
 
     componentDidUpdate(prevProps) {
@@ -55,12 +55,12 @@ class SearchItem extends Component {
 
         return (
             <div className="SearchItemWrapper">
-                <Link className="Title" to={`/node/${id}`}>
+                <a className="Title" href={`/static_node/${id}`}>
                     <span className={`Type ${filteredType}`}>
                         {filteredType}
                     </span>{' '}
                     {title}
-                </Link>
+                </a>
                 <div className="Info">
                     <div className="User">
                         <img src={defaultUser} alt={user.name} />
@@ -102,4 +102,4 @@ SearchItem.propTypes = {
     data: PropTypes.object.isRequired,
 };
 
-export default withRouter(SearchItem);
+export default SearchItem;

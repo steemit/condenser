@@ -394,7 +394,7 @@ function* usernamePasswordLogin2({
 
         // If ads are enabled, reload the page instead of changing the browser
         // history when they log in, so headers will get re-requested.
-        if (select(state => state.app.getIn(['googleAds', 'shouldSeeAds']))) {
+        if (select(state => state.app.getIn(['googleAds', 'enabled']))) {
             window.location.reload();
         }
     } else if (feedURL && document.location.pathname === '/') {
@@ -402,7 +402,7 @@ function* usernamePasswordLogin2({
 
         // If ads are enabled, reload the page instead of changing the browser
         // history when they log in, so headers will get re-requested.
-        if (select(state => state.app.getIn(['googleAds', 'shouldSeeAds']))) {
+        if (select(state => state.app.getIn(['googleAds', 'enabled']))) {
             window.location.reload();
         }
     }

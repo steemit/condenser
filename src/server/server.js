@@ -303,11 +303,11 @@ if (env === 'production') {
                 .map(el => {
                     if (el.startsWith('script-src')) {
                         const oldScriptSrc = el.replace(/^script-src/, '');
-                        `script-src 'unsafe-inline' 'unsafe-eval' data: https: ${
+                        return `script-src 'unsafe-inline' 'unsafe-eval' data: https: ${
                             oldScriptSrc
                         }`;
                     } else {
-                        el;
+                        return el;
                     }
                 })
                 .join('; ');

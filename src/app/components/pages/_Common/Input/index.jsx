@@ -7,13 +7,25 @@ class Input extends Component {
 
         return (
             <div className="InputWrapper">
-                <div className="Label" dangerouslySetInnerHTML={label} />
-                <input
-                    value={value}
-                    onChange={onChange}
-                    placeholder={placeholder}
-                    type={type}
+                <div
+                    className="Label"
+                    dangerouslySetInnerHTML={{ __html: label }}
                 />
+                {type === 'password' ? (
+                    <input
+                        value={value}
+                        onChange={onChange}
+                        placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
+                        type={type}
+                    />
+                ) : (
+                    <input
+                        value={value}
+                        onChange={onChange}
+                        placeholder={placeholder}
+                        type={type}
+                    />
+                )}
             </div>
         );
     }

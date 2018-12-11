@@ -20,9 +20,13 @@ export default {
             //require.ensure([], (require) => {
             cb(null, [require('app/components/Steemit/pages/About')]);
             //});
-        } else if (route.page === 'Register') {
+        } else if (route.page === 'Static/Register') {
             //require.ensure([], (require) => {
             cb(null, [require('app/components/pages/Auth/Register')]);
+            //});
+        } else if (route.page === 'Static/LogIn') {
+            //require.ensure([], (require) => {
+            cb(null, [require('app/components/pages/Auth/LogIn')]);
             //});
         } else if (route.page === 'Welcome') {
             //require.ensure([], (require) => {

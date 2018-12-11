@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { withCookies } from 'react-cookie';
-import { withRouter, Link } from 'react-router';
+// import PropTypes from 'prop-types';
 
-import { Input } from 'app/components/pages/_Common';
+import Input from 'app/components/pages/_Common/Input';
 
 import logo from 'assets/images/static/logo.png';
 import knowledr from 'assets/images/static/knowledr.png';
@@ -19,18 +17,6 @@ class LogIn extends Component {
         };
     }
 
-    componentDidMount() {
-        const { cookies, match } = this.props;
-
-        if (cookies.get('token')) {
-            if (match.path === '/logout') {
-                cookies.remove('token');
-            } else {
-                // this.props.history.push('/');
-            }
-        }
-    }
-
     onInputChange(field) {
         return e => {
             this.setState({
@@ -42,21 +28,15 @@ class LogIn extends Component {
         };
     }
 
-    onSubmit() {
-        const { cookies } = this.props;
-        cookies.set('token', Math.random() * 98765);
-        this.props.history.push('/');
-    }
-
     render() {
         const { email, password, rememberMe } = this.state;
 
         return (
             <div className="AuthWrapper">
                 <div className="Left">
-                    <Link to="/">
+                    <a href="/">
                         <img className="Logo" src={logo} alt="Knowledr Logo" />
-                    </Link>
+                    </a>
                     <div className="AuthForm">
                         <div className="Title">
                             We are <span>Knowledgr</span>
@@ -110,9 +90,9 @@ class LogIn extends Component {
                             >
                                 Log In
                             </button>
-                            <Link className="Button" to="/register">
+                            <a className="Button" href="/static_register">
                                 Sign Up
-                            </Link>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -133,9 +113,10 @@ LogIn.defaultProps = {
 };
 
 LogIn.propTypes = {
-    cookies: PropTypes.object.isRequired,
-    history: PropTypes.object.isRequired,
     // refCode: PropTypes.string,
 };
 
-export default withRouter(withCookies(LogIn));
+module.exports = {
+    path: 'static_login',
+    component: LogIn,
+};

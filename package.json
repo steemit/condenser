@@ -105,6 +105,7 @@
     "react-foundation-components": "^0.14.0",
     "react-highcharts": "8.4.2",
     "react-intl": "2.4.0",
+    "react-katex": "^2.0.2",
     "react-medium-editor": "1.8.1",
     "react-notification": "5.0.7",
     "react-overlays": "0.7.2",

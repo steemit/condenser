@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 // import { Link } from 'react-router';
 
-// import { Input } from 'app/components/pages/_Common';
+import Input from 'app/components/pages/_Common/Input';
 
 import logo from 'assets/images/logo.png';
 import knowledr from 'assets/images/static/knowledr.png';
@@ -53,7 +53,6 @@ class Register extends Component {
     }
 
     onInputChange(field) {
-        console.log(field);
         return e => {
             this.setState({
                 [field]:
@@ -89,20 +88,13 @@ class Register extends Component {
                         </div>
                         <form>
                             {formFields.map(field => (
-                                <div className="InputWrapper" key={field.key}>
-                                    <div
-                                        className="Label"
-                                        dangerouslySetInnerHTML={{
-                                            __html: field.label,
-                                        }}
-                                    />
-                                    <input
-                                        value={this.state[field.key]}
-                                        onChange={this.onInputChange(field.key)}
-                                        placeholder={field.placeholder}
-                                        type={field.type || 'text'}
-                                    />
-                                </div>
+                                <Input
+                                    key={field.key}
+                                    label={field.label}
+                                    placeholder={field.placeholder}
+                                    value={this.state[field.key]}
+                                    onChange={this.onInputChange(field.key)}
+                                />
                             ))}
                         </form>
                         <div className="Extra">
@@ -130,7 +122,7 @@ class Register extends Component {
                             <button className="Black" type="submit">
                                 Sign Up
                             </button>
-                            <a className="Button" href="/login">
+                            <a className="Button" href="/static_login">
                                 Log In
                             </a>
                         </div>
@@ -157,6 +149,6 @@ Register.propTypes = {
 };
 
 module.exports = {
-    path: 'register',
+    path: 'static_register',
     component: Register,
 };

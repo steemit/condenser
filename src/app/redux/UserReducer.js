@@ -124,9 +124,16 @@ export default function reducer(state = defaultState, action) {
                 }
             );
             if (empty) {
-                // User logged in with Active key then navigates away from the page
+                // User logged in with Active key then navigates away from the
+                // page.
+                //
                 // LOGOUT
-                return defaultState.merge({ logged_out: true });
+                //
+                // If ads are enabled, do not mark user as logged out, and wait
+                // for page to reload.
+                if (!window.googleAds || !window.googleAds.enabled) {
+                    return defaultState.merge({ logged_out: true });
+                }
             }
             const username = state.getIn(['current', 'username']);
             state = state.setIn(['authority', username, 'active'], 'none');
@@ -205,7 +212,13 @@ export default function reducer(state = defaultState, action) {
             });
 
         case LOGOUT:
-            return defaultState.merge({ logged_out: true });
+            // If ads are enabled, do not mark user as logged out, and wait for
+            // page to reload.
+            if (window.googleAds && window.googleAds.enabled) {
+                return defaultState;
+            } else {
+                return defaultState.merge({ logged_out: true });
+            }
 
         case SHOW_SIGN_UP:
             return state.set('show_signup_modal', true);

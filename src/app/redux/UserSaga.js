@@ -387,10 +387,18 @@ function* usernamePasswordLogin2({
     }
     // TOS acceptance
     yield fork(promptTosAcceptance, username);
+
+    // Redirect user to the appropriate page after login.
     if (afterLoginRedirectToWelcome) {
         browserHistory.push('/welcome');
-    } else if (feedURL) {
-        if (document.location.pathname === '/') browserHistory.push(feedURL);
+    } else if (feedURL && document.location.pathname === '/') {
+        browserHistory.push(feedURL);
+    }
+
+    // If ads are enabled, reload the page instead of changing the browser
+    // history when they log in, so headers will get re-requested.
+    if (window.googleAds && window.googleAds.enabled) {
+        window.location.reload();
     }
 }
 
@@ -475,7 +483,11 @@ function* saveLogin_localStorage() {
 function* logout() {
     yield put(userActions.saveLoginConfirm(false)); // Just incase it is still showing
     if (process.env.BROWSER) localStorage.removeItem('autopost2');
-    serverApiLogout();
+    serverApiLogout().then(() => {
+        if (window.googleAds && window.googleAds.enabled) {
+            window.location.reload();
+        }
+    });
 }
 
 function* loginError({

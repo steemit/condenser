@@ -527,7 +527,12 @@ export default connect(
                         operationType: type,
                     })
                 );
-                dispatch(userActions.closeLogin());
+
+                // If ads are enabled, do not close the login modal. and wait
+                // for page to reload.
+                if (!window.googleAds || !window.googleAds.enabled) {
+                    dispatch(userActions.closeLogin());
+                }
             } else {
                 dispatch(
                     userActions.usernamePasswordLogin({
@@ -551,7 +556,12 @@ export default connect(
             );
         },
         showChangePassword: (username, defaultPassword) => {
-            dispatch(userActions.closeLogin());
+            // If ads are enabled, do not close the login modal. and wait for
+            // page to reload.
+            if (!window.googleAds || !window.googleAds.enabled) {
+                dispatch(userActions.closeLogin());
+            }
+
             dispatch(globalActions.remove({ key: 'changePassword' }));
             dispatch(
                 globalActions.showDialog({

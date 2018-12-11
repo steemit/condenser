@@ -177,7 +177,7 @@ export default function ServerHTML({
                 {assets.script.map((href, idx) => (
                     <script key={idx} src={href} />
                 ))}
-                {!loggedIn && config.google_ad_client ? (
+                {!loggedIn && config.google_ad_enabled ? (
                     <div>
                         <script
                             dangerouslySetInnerHTML={{

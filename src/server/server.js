@@ -293,6 +293,8 @@ if (env === 'production') {
 
     app.use(helmet.contentSecurityPolicy(helmetConfig));
     app.use(function*(next) {
+        console.info('CSP SESSION.A', this.session.a);
+        console.info('CSP GOOGLE_AD_ENABLED', config.google_ad_enabled);
         if (!this.session.a && config.google_ad_enabled) {
             // If user is signed out, enable ads.
             let policy = this.response.header['content-security-policy']
@@ -309,9 +311,14 @@ if (env === 'production') {
                 })
                 .join('; ');
             this.response.set('content-security-policy', policy);
+            console.info('CSP AD HEADERS', policy);
             yield next;
         } else {
             // If user is logged in, do not modify CSP headers further.
+            console.info(
+                'CSP NORMAL HEADERS',
+                this.response.header['content-security-policy']
+            );
             yield next;
         }
     });

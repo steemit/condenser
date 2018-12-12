@@ -391,20 +391,8 @@ function* usernamePasswordLogin2({
     // Redirect user to the appropriate page after login.
     if (afterLoginRedirectToWelcome) {
         browserHistory.push('/welcome');
-
-        // If ads are enabled, reload the page instead of changing the browser
-        // history when they log in, so headers will get re-requested.
-        if (select(state => state.app.getIn(['googleAds', 'enabled']))) {
-            window.location.reload();
-        }
     } else if (feedURL && document.location.pathname === '/') {
         browserHistory.push(feedURL);
-
-        // If ads are enabled, reload the page instead of changing the browser
-        // history when they log in, so headers will get re-requested.
-        if (select(state => state.app.getIn(['googleAds', 'enabled']))) {
-            window.location.reload();
-        }
     }
 }
 
@@ -484,16 +472,28 @@ function* saveLogin_localStorage() {
     ).toString('hex');
     // autopost is a auto login for a low security key (like the posting key)
     localStorage.setItem('autopost2', data);
+    // If ads are enabled, reload the page instead of changing the browser
+    // history when they log in, so headers will get re-requested.
+    const adsEnabled = yield select(state =>
+        state.app.getIn(['googleAds', 'enabled'])
+    );
+    if (adsEnabled) {
+        window.location.reload();
+    }
 }
 
 function* logout() {
     yield put(userActions.saveLoginConfirm(false)); // Just incase it is still showing
     if (process.env.BROWSER) localStorage.removeItem('autopost2');
-    serverApiLogout().then(() => {
-        if (select(state => state.app.getIn(['googleAds', 'shouldSeeAds']))) {
-            window.location.reload();
-        }
-    });
+    yield serverApiLogout();
+    // If ads are enabled, reload the page instead of changing the browser
+    // history when they log out, so headers will get re-requested.
+    const adsEnabled = yield select(state =>
+        state.app.getIn(['googleAds', 'enabled'])
+    );
+    if (adsEnabled) {
+        window.location.reload();
+    }
 }
 
 function* loginError({

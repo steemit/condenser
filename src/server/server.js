@@ -293,9 +293,9 @@ if (env === 'production') {
 
     app.use(helmet.contentSecurityPolicy(helmetConfig));
     app.use(function*(next) {
-        console.info('CSP SESSION.A', this.session.a);
+        console.info('CSP BASIC_LOGIN', this.session.basic_login);
         console.info('CSP GOOGLE_AD_ENABLED', config.google_ad_enabled);
-        if (!this.session.a && config.google_ad_enabled) {
+        if (!this.session.basic_login && config.google_ad_enabled) {
             // If user is signed out, enable ads.
             let policy = this.response.header['content-security-policy']
                 .split(/;\s+/)

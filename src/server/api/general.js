@@ -361,6 +361,8 @@ export default function useGeneralApi(app) {
         const { csrf, account, signatures } =
             typeof params === 'string' ? JSON.parse(params) : params;
         if (!checkCSRF(this, csrf)) return;
+        console.log('BASIC_LOGIN TRUE');
+        this.session.basic_login = true;
         logRequest('login_account', this, { account });
         try {
             const db_account = yield models.Account.findOne({
@@ -469,6 +471,8 @@ export default function useGeneralApi(app) {
         const { csrf } =
             typeof params === 'string' ? JSON.parse(params) : params;
         if (!checkCSRF(this, csrf)) return;
+        console.log('BASIC_LOGIN FALSE');
+        this.session.basic_login = false;
         logRequest('logout_account', this);
         try {
             this.session.a = null;

@@ -261,6 +261,12 @@ app.use(function*(next) {
     yield next;
 });
 
+// See if helmet is causing the session to be modified
+app.use(function*(next) {
+    console.info('CSP BEFORE HELMET SESSION', this.session);
+    yield next;
+});
+
 useRedirects(app);
 useEnterAndConfirmEmailPages(app);
 useEnterAndConfirmMobilePages(app);
@@ -295,6 +301,7 @@ if (env === 'production') {
     app.use(function*(next) {
         console.info('CSP BASIC_LOGIN', this.session.basic_login);
         console.info('CSP GOOGLE_AD_ENABLED', config.google_ad_enabled);
+        console.info('CSP DURING HELMET SESSION', this.session);
         if (!this.session.basic_login && config.google_ad_enabled) {
             // If user is signed out, enable ads.
             let policy = this.response.header['content-security-policy']

@@ -363,7 +363,7 @@ export default function useGeneralApi(app) {
         if (!checkCSRF(this, csrf)) return;
         this.session.basic_login = true;
         this.session.save();
-        console.log('BASIC_LOGIN', this.session.basic_login);
+        console.log('CSP LOGIN ENDPOINT BASIC_LOGIN', this.session.basic_login);
         logRequest('login_account', this, { account });
         try {
             const db_account = yield models.Account.findOne({
@@ -587,30 +587,33 @@ export default function useGeneralApi(app) {
             typeof params === 'string' ? JSON.parse(params) : params;
         if (!checkCSRF(this, csrf)) return;
 
-        if (!this.session.a) {
-            this.body = 'missing username';
-            this.status = 500;
-            return;
-        }
+        this.body = '{}';
+        this.status = 200;
 
-        try {
-            const res = yield api.signedCallAsync(
-                'conveyor.get_tags_for_user',
-                [this.session.a],
-                config.get('conveyor_username'),
-                config.get('conveyor_posting_wif')
-            );
+        // if (!this.session.a) {
+        //     this.body = 'missing username';
+        //     this.status = 500;
+        //     return;
+        // }
 
-            this.body = JSON.stringify(res.includes(ACCEPTED_TOS_TAG));
-        } catch (error) {
-            console.error(
-                'Error in /isTosAccepted api call',
-                this.session.a,
-                error
-            );
-            this.body = JSON.stringify({ error: error.message });
-            this.status = 500;
-        }
+        // try {
+        //     const res = yield api.signedCallAsync(
+        //         'conveyor.get_tags_for_user',
+        //         [this.session.a],
+        //         config.get('conveyor_username'),
+        //         config.get('conveyor_posting_wif')
+        //     );
+
+        //     this.body = JSON.stringify(res.includes(ACCEPTED_TOS_TAG));
+        // } catch (error) {
+        //     console.error(
+        //         'Error in /isTosAccepted api call',
+        //         this.session.a,
+        //         error
+        //     );
+        //     this.body = JSON.stringify({ error: error.message });
+        //     this.status = 500;
+        // }
     });
 
     router.post('/acceptTos', koaBody, function*() {

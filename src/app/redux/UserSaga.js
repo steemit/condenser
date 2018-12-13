@@ -374,7 +374,7 @@ function* usernamePasswordLogin2({
             sign('posting', private_keys.get('posting_private'));
             // sign('active', private_keys.get('active_private'))
 
-            console.log('LOGIN USERNAME', username);
+            console.log('Logging in as', username);
             const response = yield serverApiLogin(username, signatures);
             const body = yield response.json();
 
@@ -387,7 +387,7 @@ function* usernamePasswordLogin2({
                 if (adsEnabled) {
                     var url = new URL(window.location.href);
                     url.searchParams.set('auth', 'true');
-                    console.log('LOGIN NEW URL', url.toString());
+                    console.log('New post-login URL', url.toString());
                     window.location.replace(url.toString());
                 }
             }

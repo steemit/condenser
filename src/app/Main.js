@@ -36,7 +36,7 @@ function runApp(initial_state) {
         typeof window !== undefined &&
         window.location.search.match(/[?&]{1}auth=true/)
     ) {
-        console.log('REMOVING AUTH QUERY STRING');
+        console.log('Removing temporary query string');
         window.history.replaceState('feed', 'Feed', window.location.pathname);
     }
 

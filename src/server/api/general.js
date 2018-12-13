@@ -362,10 +362,9 @@ export default function useGeneralApi(app) {
             typeof params === 'string' ? JSON.parse(params) : params;
         if (!checkCSRF(this, csrf)) return;
 
+        // Set auth, to remember if a user is authed on initial login.
         this.session.auth = true;
         this.session.save();
-        console.log('LOGIN ENDPOINT SESSION', this.session);
-        console.log('LOGIN ENDPOINT ACCOUNT', account);
 
         logRequest('login_account', this, { account });
         try {
@@ -479,7 +478,6 @@ export default function useGeneralApi(app) {
         const { csrf } =
             typeof params === 'string' ? JSON.parse(params) : params;
         if (!checkCSRF(this, csrf)) return;
-        console.log('AUTH FALSE');
         this.session.auth = false;
         logRequest('logout_account', this);
         try {
@@ -597,30 +595,30 @@ export default function useGeneralApi(app) {
         this.body = '{}';
         this.status = 200;
 
-        // if (!this.session.a) {
-        //     this.body = 'missing username';
-        //     this.status = 500;
-        //     return;
-        // }
+        if (!this.session.a) {
+            this.body = 'missing username';
+            this.status = 500;
+            return;
+        }
 
-        // try {
-        //     const res = yield api.signedCallAsync(
-        //         'conveyor.get_tags_for_user',
-        //         [this.session.a],
-        //         config.get('conveyor_username'),
-        //         config.get('conveyor_posting_wif')
-        //     );
+        try {
+            const res = yield api.signedCallAsync(
+                'conveyor.get_tags_for_user',
+                [this.session.a],
+                config.get('conveyor_username'),
+                config.get('conveyor_posting_wif')
+            );
 
-        //     this.body = JSON.stringify(res.includes(ACCEPTED_TOS_TAG));
-        // } catch (error) {
-        //     console.error(
-        //         'Error in /isTosAccepted api call',
-        //         this.session.a,
-        //         error
-        //     );
-        //     this.body = JSON.stringify({ error: error.message });
-        //     this.status = 500;
-        // }
+            this.body = JSON.stringify(res.includes(ACCEPTED_TOS_TAG));
+        } catch (error) {
+            console.error(
+                'Error in /isTosAccepted api call',
+                this.session.a,
+                error
+            );
+            this.body = JSON.stringify({ error: error.message });
+            this.status = 500;
+        }
     });
 
     router.post('/acceptTos', koaBody, function*() {

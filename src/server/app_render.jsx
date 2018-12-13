@@ -66,7 +66,6 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
             }
         }
 
-        console.log('APP RENDER SHOULD SEE ADS', ctx.adsEnabled);
         const googleAds = {
             shouldSeeAds: ctx.adsEnabled,
             enabled: !!config.google_ad_enabled,

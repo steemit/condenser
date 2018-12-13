@@ -35,6 +35,7 @@
   }
 }
 
+
 .Comment .highlighted {
   padding: 14px;
   @include themify($themes) {
@@ -66,7 +67,14 @@
 }
 
 .Comment__header {
+  margin-bottom: 4px;
   margin-left: 62px;
+  transition: 0.2s transform ease-in-out;
+}
+
+.collapsed .Comment__header {
+  margin-bottom: 3rem;
+  transform: translateY(14px);
 }
 
 .Comment__header-user {
@@ -83,10 +91,12 @@
 
 .Comment__header_collapse {
   float: right;
+  position: relative;
+  top: -2px;
   > a {
     color: $medium-gray;
     letter-spacing: 0.1rem;
-    padding: 0 0.5rem;
+    padding: 0 0 0 0.5rem;
   }
   .Icon {
     top: 5px;
@@ -100,6 +110,7 @@
 
 .Comment__footer {
   margin-left: 62px;
+  margin-top: 2px;
   @include themify($themes) {
     color: themed('textColorPrimary');
   }
@@ -225,8 +236,5 @@
 
   .depth.di-6 {
     left: -100px;
-  }
-  .Comment .highlighted { 
-    padding-left: 0;
   }
 }

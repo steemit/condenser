@@ -445,7 +445,7 @@ class PostFull extends React.Component {
                     renderedEditor
                 ) : (
                     <span>
-                        <div className="float-right">
+                        <div className="PostFull__flag float-right">
                             <Voting post={post} flag />
                         </div>
                         <div className="PostFull__header">

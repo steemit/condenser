@@ -12,3 +12,7 @@
     @include font-size(14px);
   }
 }
+
+.Comment .Reputation {
+  @include font-size(12px);
+}

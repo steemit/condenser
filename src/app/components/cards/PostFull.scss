@@ -2,13 +2,13 @@
   @include themify($themes) {
     background-color: themed('moduleBackgroundColor');
   }
+  padding-top: 1rem;
 }
 
 .PostFull {
-  padding-bottom: 1rem;
-  padding-top: 2rem;
+  padding: 1rem 0.5rem;
   margin: 0 auto;
-  max-width: 50rem;
+  max-width: 46rem;
   @include themify($themes) {
       border-bottom: themed('border');
   }
@@ -18,9 +18,15 @@
         color: themed('textColorAccent');
     }
   }
-
   .ReplyEditor {
-    margin-top: 1rem;
+    margin-top: 0;
+    padding-bottom: 1rem;
+    @include themify($themes) {
+      border-bottom: themed('border');  
+    } 
+  }
+  &__flag {
+    margin-top: -1rem;
   }
 }
 
@@ -40,7 +46,7 @@
 }
 
 .PostFull__time_author_category_large {
-  margin: 1rem 0 1rem 0;
+  margin: 1.4rem 0 1.4rem 0;
   line-height: 1.2;
   @include themify($themes) {
       color: themed('textColorSecondary');
@@ -50,7 +56,7 @@
       color: themed('textColorSecondary');
     }
   }
-  font-size: 120%;
+  font-size: 100%;
   display: flex;
   align-items: center;
   > .Userpic {
@@ -65,20 +71,22 @@
 }
 
 .PostFull__header, .PostFull__body {
-  max-width: 40rem;
   margin: 0 auto;
 }
 
 .PostFull__header {
   @include themify($themes) {
-    border-bottom: themed('border');
+    border-bottom: 2px solid $color-teal;
   }
   > h1 {
     overflow: hidden;
     font-family: $body-font-family;
-    font-size: 240%;
+    font-size: 200%;
     font-weight: 800;
     line-height: 1.1;
+    @include MQ(M) {
+      font-size: 220%;
+    }    
     .Icon {
       margin: 0 0 0 0.5rem;
       vertical-align: -30%;
@@ -104,7 +112,7 @@
 }
 
 .PostFull__body {
-  padding: 1rem 0 2rem 0;
+  padding: 2rem 0 1.5rem 0;
   clear: left;
   a {
     @extend .link;

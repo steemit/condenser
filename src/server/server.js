@@ -155,11 +155,11 @@ app.use(function*(next) {
     const jwe = this.request.query.jwe;
     if (jwe) {
         // this.path = this.path.replace(/[?&]{1}[^&]*?/, '');
-        const { account, session } = yield this.app.jweDecrypt(jwe);
+        // const { account, session } = yield this.app.jweDecrypt(jwe);
         this.session['basic_login'] = true;
         this.session.save();
-        console.log('USERNAME STORE ACCOUNT', account);
-        console.log('USERNAME STORE PREVIOUS SESSION', session);
+        // console.log('USERNAME STORE ACCOUNT', account);
+        // console.log('USERNAME STORE PREVIOUS SESSION', session);
         console.log('USERNAME STORE CURRENT SESSION', this.session);
     }
 

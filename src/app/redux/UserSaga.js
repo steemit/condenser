@@ -387,7 +387,7 @@ function* usernamePasswordLogin2({
                 );
                 if (adsEnabled) {
                     var url = new URL(window.location.href);
-                    url.searchParams.set('jwe', jwe);
+                    url.searchParams.set('jwe', 'true');
                     console.log('NEW URL', url.toString());
                     window.location.replace(url.toString());
                     // window.location.reload();

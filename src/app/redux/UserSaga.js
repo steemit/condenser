@@ -377,7 +377,6 @@ function* usernamePasswordLogin2({
             console.log('LOGIN USERNAME', username);
             const response = yield serverApiLogin(username, signatures);
             const body = yield response.json();
-            const jwe = body.jwe;
 
             if (justLoggedIn) {
                 // If ads are enabled, reload the page instead of changing the browser
@@ -387,10 +386,9 @@ function* usernamePasswordLogin2({
                 );
                 if (adsEnabled) {
                     var url = new URL(window.location.href);
-                    url.searchParams.set('jwe', 'true');
-                    console.log('NEW URL', url.toString());
+                    url.searchParams.set('auth', 'true');
+                    console.log('LOGIN NEW URL', url.toString());
                     window.location.replace(url.toString());
-                    // window.location.reload();
                 }
             }
         }

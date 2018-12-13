@@ -29,7 +29,6 @@ import userIllegalContent from 'app/utils/userIllegalContent';
 import koaLocale from 'koa-locale';
 import { getSupportedLocales } from './utils/misc';
 import { pinnedPosts } from './utils/PinnedPosts';
-import jose from 'node-jose';
 
 if (cluster.isMaster) console.log('application server starting, please wait.');
 
@@ -122,45 +121,19 @@ session(app, {
 });
 csrf(app);
 
-// Username store
-app.jweEncrypt = function(data) {
-    return jose.JWK.asKey(JSON.parse(config.jwe_key), 'json')
-        .then(key =>
-            jose.JWE.createEncrypt(key)
-                .update(data)
-                .final()
-        )
-        .then(encrypted => JSON.stringify(encrypted))
-        .then(json => new Buffer(json).toString('base64'));
-};
-app.jweDecrypt = function(encrypted) {
-    return jose.JWK.asKey(JSON.parse(config.jwe_key), 'json')
-        .then(key =>
-            jose.JWE.createDecrypt(key).decrypt(
-                JSON.parse(new Buffer(encrypted, 'base64').toString('utf8'))
-            )
-        )
-        .then(data => {
-            const payload = data.payload.toString('utf-8');
-            console.log(payload);
-            return JSON.parse(payload);
-        });
-};
+// If a user is logged in, we need to make sure that they receive the correct
+// headers.
 app.use(function*(next) {
     if (this.request.url.startsWith('/api')) {
         yield next;
         return;
     }
 
-    const jwe = this.request.query.jwe;
-    if (jwe) {
-        // this.path = this.path.replace(/[?&]{1}[^&]*?/, '');
-        // const { account, session } = yield this.app.jweDecrypt(jwe);
-        this.session['basic_login'] = true;
+    const auth = this.request.query.auth;
+    if (auth) {
+        this.session['auth'] = true;
         this.session.save();
-        // console.log('USERNAME STORE ACCOUNT', account);
-        // console.log('USERNAME STORE PREVIOUS SESSION', session);
-        console.log('USERNAME STORE CURRENT SESSION', this.session);
+        console.log('AUTH HEADER CURRENT SESSION', this.session);
     }
 
     yield next;
@@ -344,10 +317,9 @@ if (env === 'production') {
 
     app.use(helmet.contentSecurityPolicy(helmetConfig));
     app.use(function*(next) {
-        console.info('CSP BASIC_LOGIN', this.session.basic_login);
         console.info('CSP GOOGLE_AD_ENABLED', config.google_ad_enabled);
         console.info('CSP DURING HELMET SESSION', this.session);
-        if (!this.session.basic_login && config.google_ad_enabled) {
+        if (!this.session.auth && config.google_ad_enabled) {
             // If user is signed out, enable ads.
             let policy = this.response.header['content-security-policy']
                 .split(/;\s+/)

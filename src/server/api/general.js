@@ -361,17 +361,12 @@ export default function useGeneralApi(app) {
         const { csrf, account, signatures } =
             typeof params === 'string' ? JSON.parse(params) : params;
         if (!checkCSRF(this, csrf)) return;
-        this.session.basic_login = true;
+
+        this.session.auth = true;
         this.session.save();
-        console.log('CSP LOGIN ENDPOINT UID', this.session.uid);
-        console.log('CSP LOGIN ENDPOINT BASIC_LOGIN', this.session.basic_login);
-        console.log('CSP LOGIN ENDPOINT ACCOUNT', account);
-        const jwe = yield this.app.jweEncrypt(
-            JSON.stringify({
-                account: account,
-                session: this.session,
-            })
-        );
+        console.log('LOGIN ENDPOINT SESSION', this.session);
+        console.log('LOGIN ENDPOINT ACCOUNT', account);
+
         logRequest('login_account', this, { account });
         try {
             const db_account = yield models.Account.findOne({
@@ -456,7 +451,6 @@ export default function useGeneralApi(app) {
 
             this.body = JSON.stringify({
                 status: 'ok',
-                jwe: jwe,
             });
             const remote_ip = getRemoteIp(this.req);
             if (mixpanel) {
@@ -474,7 +468,6 @@ export default function useGeneralApi(app) {
             );
             this.body = JSON.stringify({
                 error: error.message,
-                jwe: jwe,
             });
             this.status = 500;
         }

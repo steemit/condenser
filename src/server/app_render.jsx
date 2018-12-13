@@ -65,8 +65,10 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
                 offchain.recover_account = account_recovery_record.account_name;
             }
         }
+
+        console.log('APP RENDER SHOULD SEE ADS', ctx.adsEnabled);
         const googleAds = {
-            shouldSeeAds: !ctx.session.a && config.google_ad_enabled,
+            shouldSeeAds: ctx.adsEnabled,
             enabled: !!config.google_ad_enabled,
             test: !!config.google_ad_test,
             client: config.google_ad_client,

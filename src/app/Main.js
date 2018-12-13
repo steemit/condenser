@@ -30,6 +30,16 @@ try {
 
 function runApp(initial_state) {
     console.log('Initial state', initial_state);
+
+    // Remove "auth=true" query string.
+    if (
+        typeof window !== undefined &&
+        window.location.search.match(/[?&]{1}auth=true/)
+    ) {
+        console.log('REMOVING AUTH QUERY STRING');
+        window.history.replaceState('feed', 'Feed', window.location.pathname);
+    }
+
     const konami = {
         code: 'xyzzy',
         enabled: false,

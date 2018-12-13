@@ -129,10 +129,15 @@ app.use(function*(next) {
         return;
     }
 
+    console.log('AUTH REQUEST QUERY', this.request.query);
     const auth = this.request.query.auth;
     if (auth) {
+        this.request.url = this.request.url.replace(/[?&]{1}auth=true/, '');
+        console.log('NEW URL', this.url);
+        console.log('NEW QUERY', this.request.query);
         this.session['auth'] = true;
         this.session.save();
+        this.request.query.auth = null;
         console.log('AUTH HEADER CURRENT SESSION', this.session);
     }
 
@@ -317,9 +322,12 @@ if (env === 'production') {
 
     app.use(helmet.contentSecurityPolicy(helmetConfig));
     app.use(function*(next) {
+        const authed = this.session.auth || this.session.a;
+        this.adsEnabled = !authed && config.google_ad_enabled;
         console.info('CSP GOOGLE_AD_ENABLED', config.google_ad_enabled);
-        console.info('CSP DURING HELMET SESSION', this.session);
-        if (!this.session.auth && config.google_ad_enabled) {
+        console.info('CSP AUTHED', authed);
+        console.info('CSP ADS ENABLED', this.adsEnabled);
+        if (this.adsEnabled) {
             // If user is signed out, enable ads.
             let policy = this.response.header['content-security-policy']
                 .split(/;\s+/)

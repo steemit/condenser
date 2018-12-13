@@ -479,8 +479,8 @@ export default function useGeneralApi(app) {
         const { csrf } =
             typeof params === 'string' ? JSON.parse(params) : params;
         if (!checkCSRF(this, csrf)) return;
-        console.log('BASIC_LOGIN FALSE');
-        this.session.basic_login = false;
+        console.log('AUTH FALSE');
+        this.session.auth = false;
         logRequest('logout_account', this);
         try {
             this.session.a = null;

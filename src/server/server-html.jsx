@@ -145,11 +145,6 @@ export default function ServerHTML({ body, assets, locale, title, meta }) {
                     content="/images/favicons/mstile-310x310.png"
                 />
                 <link
-                    href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600"
-                    rel="stylesheet"
-                    type="text/css"
-                />
-                <link
                     href="https://fonts.googleapis.com/css?family=Source+Serif+Pro:400,600"
                     rel="stylesheet"
                     type="text/css"

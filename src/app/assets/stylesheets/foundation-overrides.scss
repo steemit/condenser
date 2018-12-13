@@ -1,3 +1,15 @@
+$body-font-family: $font-primary;
+ h1 {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+ h2 {
+  font-size: 1.75rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
 .menu > li > a {
   line-height: 1.5rem;
 }

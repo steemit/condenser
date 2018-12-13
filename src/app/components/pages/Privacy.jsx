@@ -3,10 +3,10 @@ import React from 'react';
 class Privacy extends React.Component {
     render() {
         return (
-            <div className="Privacy row">
-                <div className="column large-12">
+            <div className="Privacy content-page row">
+                <div className="column">
                     <h1>Steemit, Inc Privacy Policy</h1>
-                    <h2>Effective: May 25, 2018</h2>
+                    <em>Effective: May 25, 2018</em>
                     <p className="c0">
                         <span className="c1" />
                     </p>

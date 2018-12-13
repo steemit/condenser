@@ -332,3 +332,10 @@ $themes: (
     }
   }
 }
+
+.content-page {
+  padding-top: 1rem;
+  width: 92%;
+  max-width: $content-max-width;
+  margin: 0 auto;
+}

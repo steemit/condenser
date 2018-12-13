@@ -157,7 +157,6 @@
 ### <span id="Table_of_Contents_Steemit__Inc">Steemit, Inc.</span>
 - <a href="#Who_is_the_CEO_of_Steemit">Who is the CEO of Steemit?</a>
 - <a href="#Can_I_invest_in_Steemit">Can I invest in Steemit?</a>
-- <a href="#What_does_Steemit_s_development_roadmap_look_like">What does Steemit’s development roadmap look like?</a>
 - <a href="#Am_I_allowed_to_use_the_Steem_and_Steemit_logos">Am I allowed to use the Steem and Steemit logos?</a>
 - <a href="#Can_I_purchase_official_Steemit_merchandise">Can I purchase official Steemit merchandise?</a>
 - <a href="#Did_Steemit__pre_mine__tokens">Did Steemit "pre-mine" tokens?</a>
@@ -1173,12 +1172,6 @@ https://www.linkedin.com/in/nedscott
 Steemit, Inc. is a privately held company and is not available for public investment.
 
 Though not considered an investment, you can purchase STEEM tokens which can go up or down in value. You can power up these tokens into Steem Power, which grants more influence in the Steem platform.
-
-<a href="#Table_of_Contents_Steemit__Inc">^</a>
-## <span id="What_does_Steemit_s_development_roadmap_look_like">What does Steemit’s development roadmap look like?</span>
-
-You can view the 2017 Roadmap here:
-https://steemit.com/steemit/@steemitblog/steemit-2017-roadmap
 
 <a href="#Table_of_Contents_Steemit__Inc">^</a>
 ## <span id="Am_I_allowed_to_use_the_Steem_and_Steemit_logos">Am I allowed to use the Steem and Steemit logos?</span>

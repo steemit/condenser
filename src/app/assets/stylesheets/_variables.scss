@@ -34,8 +34,10 @@ $color-border-light-lightest: #f6f6f6;
 $color-border-dark: #232F38;
 $color-border-dark-lightest: #2B3A45;
 
+$alert-color: $color-red;
+
 // Applying system fonts for the sans-serifs
 // Note: Although 'system-ui' is now in Chrome and Safari, it wasn't used since it has some issues with different languages.
 $font-primary: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 
-$alert-color: $color-red;
+$content-max-width: 46em;

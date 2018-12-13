@@ -1,4 +1,4 @@
-Last Updated June 15, 2018
+_Last updated: June 15, 2018_
 
 Welcome to Steemit!  This agreement (the “Agreement”) between you and
 Steemit, Inc. (“we”, “us”, “our”) sets out your rights to access

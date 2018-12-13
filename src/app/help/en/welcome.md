@@ -1,5 +1,5 @@
 <span id="disable_router_nav_history_direction_check"></span>
-## Welcome to Steemit!
+# Welcome to Steemit!
 
 This page is full of information to help you learn about the platform and become a successful Steemian. You can return to this page at any time by clicking on the "Welcome" link in the main menu. There is a table of contents below to help you navigate the page.
 
@@ -7,7 +7,7 @@ Included on the page is a "To Do List" with recommended steps to get started wit
 
 Below that is a section of "Helpful Posts from Steemit Users", which contains a collection of posts from users in the community that are helpful for new users getting started. 
 
-Below that is a list of recommended users to follow, a collection of other resources including the <a href="/faq.html">FAQ Page</a> and [Steem 'Bluepaper'](https://steem.io/steem-bluepaper.pdf), as well as information on where to find help. 
+Below that is a list of recommended users to follow, a collection of other resources including the <a href="/faq.html">FAQ Page</a> and [Steem 'Bluepaper'](https://steem.com/steem-bluepaper.pdf), as well as information on where to find help. 
 
 ## <span id="Table_of_Contents">Table of Contents</span>
 
@@ -296,8 +296,8 @@ Don't get discouraged if you don't earn much at first. Keep up the good work!
 ## <span id="Other_Resources">Other Resources</span>
 
 - [FAQ](https://steemit.com/faq.html) - Answers to commonly asked questions
-- [Bluepaper](https://steem.io/steem-bluepaper.pdf) - Explanation of how the platform works
-- [The Steem Whitepaper](https://steem.io/SteemWhitePaper.pdf) - Technical details of the Steem blockchain
+- [Bluepaper](https://steem.com/steem-bluepaper.pdf) - Explanation of how the platform works
+- [The Steem Whitepaper](https://steem.com/SteemWhitePaper.pdf) - Technical details of the Steem blockchain
 - [Apps Built on Steem](https://steemprojects.com/) - Directory of apps, sites and tools built by Steem community
 - [Steem Block Explorer](https://steemd.com/) - Shows the raw Steem blockchain data 
 - [Steem Blockchain Explorer](https://steemdb.com/) - Analysis pages for the Steem blockchain data

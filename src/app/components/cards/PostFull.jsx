@@ -26,6 +26,7 @@ import tt from 'counterpart';
 import userIllegalContent from 'app/utils/userIllegalContent';
 import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
+import { GoogleAd } from 'app/components/elements/GoogleAd';
 
 function TimeAuthorCategory({ content, authorRepLog10, showTags }) {
     return (

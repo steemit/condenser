@@ -76,5 +76,8 @@
   "address_prefix": "STM",
   "conveyor_posting_wif": false,
   "conveyor_username": false,
-  "pinned_posts_url": false
+  "pinned_posts_url": false,
+  "google_ad_enabled": null,
+  "google_ad_test": null,
+  "google_ad_client": null
 }

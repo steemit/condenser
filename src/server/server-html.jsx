@@ -1,6 +1,14 @@
+import * as config from 'config';
 import React from 'react';
 
-export default function ServerHTML({ body, assets, locale, title, meta }) {
+export default function ServerHTML({
+    body,
+    assets,
+    locale,
+    title,
+    meta,
+    shouldSeeAds,
+}) {
     let page_title = title;
     return (
         <html lang="en">
@@ -169,6 +177,12 @@ export default function ServerHTML({ body, assets, locale, title, meta }) {
                 {assets.script.map((href, idx) => (
                     <script key={idx} src={href} />
                 ))}
+                {shouldSeeAds ? (
+                    <div>
+                        <script src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" />
+                        <script src="/javascripts/ga.js" />
+                    </div>
+                ) : null}
             </body>
         </html>
     );

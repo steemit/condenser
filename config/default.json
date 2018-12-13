@@ -79,5 +79,6 @@
   "pinned_posts_url": false,
   "google_ad_enabled": null,
   "google_ad_test": null,
-  "google_ad_client": null
+  "google_ad_client": null,
+  "jwe_key": "{\"kty\":\"oct\",\"kid\":\"AX0zMbeGMToO95POF_z5bY0eC254lISq0-yhEr2rOWc\",\"k\":\"66scRuz58eLcPiFkQAzbwkHpHvWuz8VV66AbHu5ZiqA\"}"
 }

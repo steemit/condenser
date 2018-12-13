@@ -29,6 +29,7 @@ import userIllegalContent from 'app/utils/userIllegalContent';
 import koaLocale from 'koa-locale';
 import { getSupportedLocales } from './utils/misc';
 import { pinnedPosts } from './utils/PinnedPosts';
+import jose from 'node-jose';
 
 if (cluster.isMaster) console.log('application server starting, please wait.');
 
@@ -120,6 +121,50 @@ session(app, {
     key: config.get('session_cookie_key'),
 });
 csrf(app);
+
+// Username store
+app.jweEncrypt = function(data) {
+    return jose.JWK.asKey(JSON.parse(config.jwe_key), 'json')
+        .then(key =>
+            jose.JWE.createEncrypt(key)
+                .update(data)
+                .final()
+        )
+        .then(encrypted => JSON.stringify(encrypted))
+        .then(json => new Buffer(json).toString('base64'));
+};
+app.jweDecrypt = function(encrypted) {
+    return jose.JWK.asKey(JSON.parse(config.jwe_key), 'json')
+        .then(key =>
+            jose.JWE.createDecrypt(key).decrypt(
+                JSON.parse(new Buffer(encrypted, 'base64').toString('utf8'))
+            )
+        )
+        .then(data => {
+            const payload = data.payload.toString('utf-8');
+            console.log(payload);
+            return JSON.parse(payload);
+        });
+};
+app.use(function*(next) {
+    if (this.request.url.startsWith('/api')) {
+        yield next;
+        return;
+    }
+
+    const jwe = this.request.query.jwe;
+    if (jwe) {
+        // this.path = this.path.replace(/[?&]{1}[^&]*?/, '');
+        const { account, session } = yield this.app.jweDecrypt(jwe);
+        this.session['basic_login'] = true;
+        this.session.save();
+        console.log('USERNAME STORE ACCOUNT', account);
+        console.log('USERNAME STORE PREVIOUS SESSION', session);
+        console.log('USERNAME STORE CURRENT SESSION', this.session);
+    }
+
+    yield next;
+});
 
 koaLocale(app);
 

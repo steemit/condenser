@@ -352,7 +352,10 @@ function* usernamePasswordLogin2({
         );
     }
 
-    if (!autopost && saveLogin) yield put(userActions.saveLogin());
+    let justLoggedIn = !autopost && saveLogin;
+    if (justLoggedIn) {
+        yield put(userActions.saveLogin());
+    }
 
     try {
         // const challengeString = yield serverApiLoginChallenge()
@@ -370,7 +373,26 @@ function* usernamePasswordLogin2({
             };
             sign('posting', private_keys.get('posting_private'));
             // sign('active', private_keys.get('active_private'))
-            yield serverApiLogin(username, signatures);
+
+            console.log('LOGIN USERNAME', username);
+            const response = yield serverApiLogin(username, signatures);
+            const body = yield response.json();
+            const jwe = body.jwe;
+
+            if (justLoggedIn) {
+                // If ads are enabled, reload the page instead of changing the browser
+                // history when they log in, so headers will get re-requested.
+                const adsEnabled = yield select(state =>
+                    state.app.getIn(['googleAds', 'enabled'])
+                );
+                if (adsEnabled) {
+                    var url = new URL(window.location.href);
+                    url.searchParams.set('jwe', jwe);
+                    console.log('NEW URL', url.toString());
+                    window.location.replace(url.toString());
+                    // window.location.reload();
+                }
+            }
         }
     } catch (error) {
         // Does not need to be fatal
@@ -464,6 +486,7 @@ function* saveLogin_localStorage() {
         console.error(e);
         return;
     }
+
     const memoKey = private_keys.get('memo_private');
     const memoWif = memoKey && memoKey.toWif();
     const data = new Buffer(
@@ -472,14 +495,6 @@ function* saveLogin_localStorage() {
     ).toString('hex');
     // autopost is a auto login for a low security key (like the posting key)
     localStorage.setItem('autopost2', data);
-    // If ads are enabled, reload the page instead of changing the browser
-    // history when they log in, so headers will get re-requested.
-    const adsEnabled = yield select(state =>
-        state.app.getIn(['googleAds', 'enabled'])
-    );
-    if (adsEnabled) {
-        window.location.reload();
-    }
 }
 
 function* logout() {

@@ -170,6 +170,12 @@ export default function ServerHTML({
                         type="text/css"
                     />
                 ))}
+                {shouldSeeAds ? (
+                    <div>
+                        <script src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" />
+                        <script src="/javascripts/ga.js" />
+                    </div>
+                ) : null}
                 <title>{page_title}</title>
             </head>
             <body>
@@ -177,12 +183,6 @@ export default function ServerHTML({
                 {assets.script.map((href, idx) => (
                     <script key={idx} src={href} />
                 ))}
-                {shouldSeeAds ? (
-                    <div>
-                        <script src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" />
-                        <script src="/javascripts/ga.js" />
-                    </div>
-                ) : null}
             </body>
         </html>
     );

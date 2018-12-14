@@ -13,9 +13,9 @@ import AppPropTypes from 'app/utils/AppPropTypes';
 import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 import { key_utils } from '@steemit/steem-js/lib/auth/ecc';
 
-import {
-    Header
-} from 'app/components/modules';
+import { Header } from 'app/components/modules';
+
+import NavBar from 'app/components/pages/_Common/NavBar';
 
 import {
     ConnectedSidePanel,
@@ -246,11 +246,12 @@ class App extends React.Component {
                 {headerHidden ? null : miniHeader ? (
                     <MiniHeader />
                 ) : (
-                    <Header
-                        pathname={pathname}
-                        category={category}
-                        order={order}
-                    />
+                    // <Header
+                    //     pathname={pathname}
+                    //     category={category}
+                    //     order={order}
+                    // />
+                    <NavBar />
                 )}
 
                 <div className="App__content">

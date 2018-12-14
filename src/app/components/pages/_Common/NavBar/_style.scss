@@ -26,6 +26,9 @@ input {
   position: relative;
   z-index: 5;
 
+  position: absolute;
+  top: 0;
+
   @media all and (max-width: 700px) {
     flex-direction: column;
   }

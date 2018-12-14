@@ -10,6 +10,8 @@ import defaultUser from 'assets/images/static/user1.png';
 import graph1 from 'assets/images/static/graph/1.png';
 import graph2 from 'assets/images/static/graph/2.png';
 import graph3 from 'assets/images/static/graph/3.png';
+import Label from 'app/components/pages/_Common/Label';
+import SideMenu from 'app/components/pages/_Common/SideMenu';
 // import { Label/*, SideMenu*/ } from 'app/components/pages/_Common';
 import { Nodes } from './DummyData';
 // import { BrowsingHistory } from './Components';
@@ -129,7 +131,7 @@ class Node extends Component {
                                             <div className={`Type ${type}`}>
                                                 {type}
                                             </div>
-                                            {/* <Label label="Machine" /> */}
+                                            <Label label="Machine" />
                                         </div>
                                         <div className="User">
                                             <img
@@ -192,14 +194,14 @@ class Node extends Component {
                                         className="Cites"
                                         onClick={this.toggleCitesPanel}
                                     >
-                                        cites:{' '}
+                                        Cites:{' '}
                                         <span>{getCitations(cites)}</span>
                                     </div>
                                     <div
                                         className="CitedBy"
                                         onClick={this.toggleCitedByPanel}
                                     >
-                                        citedBy:{' '}
+                                        Cited By:{' '}
                                         <span>{getCitations(citedBy)}</span>
                                     </div>
                                 </div>
@@ -244,7 +246,7 @@ class Node extends Component {
                                     remaining essentially unchanged.
                                 </p>
                             </div>
-                            {/* <SideMenu /> */}
+                            <SideMenu />
                             <div className="Introduction">
                                 Figures:{' '}
                                 {/* <InlineMath>\int_0^\infty x^2 dx</InlineMath> */}

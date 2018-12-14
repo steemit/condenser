@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
 // import { Link } from 'react-router';
-// import { Anchor } from 'react-feather';
 
 // import { SideMenu } from 'app/components/pages/_Common';
 import { SearchHeader, SearchItem, SearchRelatedItem } from './Components';
-
-// import SearchHeader from 'app/components/pages/Home/Components/SearchHeader';
 
 import { SearchItems, RelatedItems } from './DummyData';
 

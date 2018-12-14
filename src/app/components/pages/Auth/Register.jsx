@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 
 import Input from 'app/components/pages/_Common/Input';
 
-import logo from 'assets/images/logo.png';
+import logo from 'assets/images/static/logo.png';
 import knowledr from 'assets/images/static/knowledr.png';
 
 const formFields = [

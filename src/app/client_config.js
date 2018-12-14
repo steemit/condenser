@@ -1,9 +1,9 @@
 // sometimes it's impossible to use html tags to style coin name, hence usage of _UPPERCASE modifier
-export const APP_NAME = 'Steemit';
+export const APP_NAME = 'Knowledgr';
 // sometimes APP_NAME is written in non-latin characters, but they are needed for technical purposes
 // ie. "Голос" > "Golos"
-export const APP_NAME_LATIN = 'Steemit';
-export const APP_NAME_UPPERCASE = 'STEEMIT';
+export const APP_NAME_LATIN = 'Knowledgr';
+export const APP_NAME_UPPERCASE = 'KNOWLEDGR';
 export const APP_ICON = 'steem';
 // FIXME figure out best way to do this on both client and server from env
 // vars. client should read $STM_Config, server should read config package.
@@ -40,9 +40,9 @@ export const FRACTION_DIGITS_MARKET = 3; // accurate amount of deciaml digits (e
 // meta info
 export const TWITTER_HANDLE = '@steemit';
 export const SHARE_IMAGE =
-    'https://' + APP_DOMAIN + '/images/steemit-share.png';
+    'https://' + APP_DOMAIN + '/images/Steemit/steemit-share.png';
 export const TWITTER_SHARE_IMAGE =
-    'https://' + APP_DOMAIN + '/images/steemit-twshare.png';
+    'https://' + APP_DOMAIN + '/images/Steemit/steemit-twshare.png';
 export const SITE_DESCRIPTION =
     'Steemit is a social media platform where everyone gets paid for ' +
     'creating and curating content. It leverages a robust digital points system, called Steem, that ' +

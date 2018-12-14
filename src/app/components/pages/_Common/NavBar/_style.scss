@@ -1,0 +1,161 @@
+input {
+  font-size: 14px;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 4px;
+
+  &::placeholder {
+    color: rgba($txt-main-color, 0.5);
+  }
+
+  &:invalid {
+    border: none;
+    // border: 2px rgba($red, 0.5) solid;
+  }
+}
+
+.Navigation {
+  box-sizing: border-box;
+  background-color: $black;
+  color: $white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 15px 20px;
+  position: relative;
+  z-index: 5;
+
+  position: absolute;
+  top: 0;
+
+  @media all and (max-width: 700px) {
+    flex-direction: column;
+  }
+
+  .LogoContainer {
+    a:hover {
+      border-bottom: 0;
+    }
+
+    img {
+      max-height: 35px;
+      height: 100%;
+      width: auto;
+    }
+
+    @media all and (max-width: 700px) {
+      margin-bottom: 15px;
+    }
+  }
+
+  .Content,
+  .Menu {
+    display: flex;
+    align-items: center;
+  }
+  .Content {
+    @media all and (max-width: 550px) {
+      flex-direction: column;
+
+      .Menu {
+        margin-bottom: 15px;
+      }
+    }
+  }
+
+  .Menu {
+    justify-content: space-around;
+    width: 500px;
+    font-family: $sans-serif;
+
+    .Item {
+      color: $white;
+      border-color: $white;
+    }
+
+    @media all and (max-width: 950px) {
+      width: 300px;
+    }
+  }
+
+  .SearchContainer {
+    input {
+      font-family: $sans-serif;
+      font-weight: 300;
+      color: rgba($white, 0.8);
+      background-color: rgba($white, 0.25);
+      min-width: 200px;
+    }
+  }
+
+  .UserMenu {
+    margin-left: 15px;
+    cursor: pointer;
+    position: relative;
+
+    .DropdownList {
+      position: absolute;
+      top: 50px;
+      right: 0;
+      display: flex;
+      flex-direction: column;
+      width: 250px;
+      background: white;
+      border: 1px solid $border-light-color;
+      padding: 0 15px;
+      z-index: 1;
+      box-shadow: $box-shadow;
+
+      a:hover {
+        border-bottom: none;
+        font-weight: 400;
+      }
+
+      .UserInfo {
+        display: flex;
+        align-items: center;
+        padding: 15px 0;
+
+        .Avatar {
+          height: 40px;
+
+          img {
+            width: 40px;
+            height: 40px;
+            border-radius: 100%;
+          }
+        }
+
+        .Username {
+          margin-left: 15px;
+          font-size: 20px;
+          color: $color-dark;
+        }
+      }
+
+      .List {
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        font-family: $sans-serif;
+
+        .Item {
+          display: flex;
+          align-items: center;
+          padding: 10px 5px;
+          color: rgba($color-dark, 0.65);
+
+          svg {
+            margin-right: 10px;
+          }
+
+          & + .Item {
+            border-top: 1px solid $border-light-color;
+            // padding-top: 0;
+          }
+        }
+      }
+    }
+  }
+}

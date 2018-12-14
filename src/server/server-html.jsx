@@ -1,6 +1,14 @@
+import * as config from 'config';
 import React from 'react';
 
-export default function ServerHTML({ body, assets, locale, title, meta }) {
+export default function ServerHTML({
+    body,
+    assets,
+    locale,
+    title,
+    meta,
+    shouldSeeAds,
+}) {
     let page_title = title;
     return (
         <html lang="en">
@@ -162,6 +170,12 @@ export default function ServerHTML({ body, assets, locale, title, meta }) {
                         type="text/css"
                     />
                 ))}
+                {shouldSeeAds ? (
+                    <div>
+                        <script src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" />
+                        <script src="/javascripts/ga.js" />
+                    </div>
+                ) : null}
                 <title>{page_title}</title>
             </head>
             <body>

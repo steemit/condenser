@@ -476,7 +476,7 @@
         "hate_speech_or_internet_trolling": "Hate Speech or Internet Trolling",
         "intentional_miss_categorized_content_or_spam":
             "Intentional miss-categorized content or Spam",
-        "pending_payout": "Pending Payout $%(value)s",
+        "pending_payout": "Estimated Pending Payout $%(value)s",
         "payout_declined": "Payout Declined",
         "max_accepted_payout": "Max Accepted Payout $%(value)s",
         "promotion_cost": "Promotion Cost $%(value)s",

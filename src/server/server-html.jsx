@@ -178,12 +178,12 @@ export default function ServerHTML({
                 ) : null}
                 {shouldSeeAds ? (
                     <script
-                        dangerouslySetInnerHTML={`
+                        dangerouslySetInnerHTML={{ __html: `
                       (adsbygoogle = window.adsbygoogle || []).push({
                           google_ad_client: "ca-pub-9368037717385698",
                           enable_page_level_ads: true
                       });
-                  `}
+                  `}}
                     />
                 ) : null}
                 <title>{page_title}</title>

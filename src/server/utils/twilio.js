@@ -3,7 +3,7 @@ import config from 'config';
 
 const accountSid = config.get('twilio.account_sid');
 const authToken = config.get('twilio.auth_token');
-let client;
+let client = require('twilio')(accountSid, authToken);
 
 function checkEligibility(phone) {
     // US, Canada +1
@@ -23,6 +23,7 @@ function checkEligibility(phone) {
 
     for (const prefix of [
         '1',
+        '7',
         '33',
         '34',
         '39',
@@ -43,13 +44,13 @@ function checkEligibility(phone) {
 }
 
 export default function verify(phone) {
-    if (!client) client = new twilio.LookupsClient(accountSid, authToken);
+    if (!client) client = twilio(accountSid, authToken);
     return new Promise(resolve => {
         if (!checkEligibility(phone)) {
             resolve('na');
             return;
         }
-        client.phoneNumbers(phone).get(
+        client.lookups.phoneNumbers(phone).fetch(
             {
                 type: 'carrier',
                 addOns: 'whitepages_pro_phone_rep',

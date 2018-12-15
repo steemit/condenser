@@ -11,7 +11,7 @@ if (config.get('telesign.rest_api_key')) {
     api_key = new Buffer(config.get('telesign.rest_api_key'), 'base64');
 }
 
-const use_case_code = 'BACS'; // Use Case: avoid bulk attack and spammers
+const use_case_code = 'UNKN'; // Use Case: avoid bulk attack and spammers
 
 // Testing, always blocked: 1-310-555-0100
 
@@ -65,6 +65,11 @@ function getScore(mobile) {
     });
     const resource = '/v1/phoneid/score/' + mobile.match(/\d+/g).join('');
     const method = 'GET';
+    console.log(
+        'telesign url:',
+        `https://rest-ww.telesign.com${resource}?${fields}`
+    );
+    console.log('auth headers:', authHeaders({ resource, method }));
     return fetch(`https://rest-ww.telesign.com${resource}?${fields}`, {
         method,
         headers: authHeaders({ resource, method }),

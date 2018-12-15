@@ -69,11 +69,11 @@
     "auth_token": false
   },
   "upload_image": false,
-  "steemd_connection_client": "https://api.steemit.com",
-  "steemd_connection_server": "https://api.steemit.com",
-  "steemd_use_appbase": false,
-  "chain_id": "0000000000000000000000000000000000000000000000000000000000000000",
-  "address_prefix": "STM",
+  "steemd_connection_client": "https://api.knowledgr.com",
+  "steemd_connection_server": "https://api.knowledgr.com",
+  "steemd_use_appbase": true,
+  "chain_id": "3ea6e60873c8ad342564b9f4b24def337be8c44509ce81a70d49c9169075dfcf",
+  "address_prefix": "KWR",
   "conveyor_posting_wif": false,
   "conveyor_username": false
 }

@@ -6,7 +6,7 @@ import models from 'db/models';
 import { PARAM_VIEW_MODE, VIEW_MODE_WHISTLE } from 'shared/constants';
 import { addToParams, makeParams } from 'app/utils/Links';
 import ServerHTML from 'server/server-html';
-// import twilioVerify from "server/utils/twilio";
+import twilioVerify from 'server/utils/twilio';
 import teleSignVerify from 'server/utils/teleSign';
 import CountryCode from 'app/components/elements/CountryCode';
 import { getRemoteIp, checkCSRF } from 'server/utils/misc';
@@ -201,7 +201,9 @@ export default function useEnterAndConfirmMobilePages(app) {
                                 * Message and data rates may apply
                             </div>
                             <br />
-                            <div className="error">{this.flash.error}</div>
+                            <div className="error">
+                                {this.flash && this.flash.error}
+                            </div>
                             <input
                                 type="submit"
                                 className="button"
@@ -280,6 +282,7 @@ export default function useEnterAndConfirmMobilePages(app) {
             where: { user_id, provider: 'phone' },
         });
 
+        console.log('identity mid:', mid);
         if (mid) {
             if (mid.verified) {
                 if (mid.phone === phone) {

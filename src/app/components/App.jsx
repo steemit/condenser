@@ -1,22 +1,34 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import AppPropTypes from 'app/utils/AppPropTypes';
-import Header from 'app/components/modules/Header';
-import * as userActions from 'app/redux/UserReducer';
 import classNames from 'classnames';
-import ConnectedSidePanel from 'app/components/modules/ConnectedSidePanel';
-import CloseButton from 'app/components/elements/CloseButton';
-import Dialogs from 'app/components/modules/Dialogs';
-import Modals from 'app/components/modules/Modals';
-import WelcomePanel from 'app/components/elements/WelcomePanel';
-import MiniHeader from 'app/components/modules/MiniHeader';
 import tt from 'counterpart';
-import PageViewsCounter from 'app/components/elements/PageViewsCounter';
-import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
-import { key_utils } from '@steemit/steem-js/lib/auth/ecc';
+
+import { usernamePasswordLogin } from 'app/redux/UserReducer';
+
 import resolveRoute from 'app/ResolveRoute';
 import { VIEW_MODE_WHISTLE } from 'shared/constants';
+
+import AppPropTypes from 'app/utils/AppPropTypes';
+import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
+import { key_utils } from '@steemit/steem-js/lib/auth/ecc';
+
+import { Header } from 'app/components/modules';
+
+import NavBar from 'app/components/pages/_Common/NavBar';
+
+import {
+    ConnectedSidePanel,
+    Dialogs,
+    Modals,
+    MiniHeader,
+} from './Steemit/modules';
+
+import {
+    WelcomePanel,
+    CloseButton,
+    PageViewsCounter,
+} from './Steemit/elements';
 
 const pageRequiresEntropy = path => {
     const { page } = resolveRoute(path);
@@ -67,6 +79,24 @@ class App extends React.Component {
         }
     }
 
+    shouldComponentUpdate(nextProps, nextState) {
+        const {
+            pathname,
+            new_visitor,
+            nightmodeEnabled,
+            showAnnouncement,
+        } = this.props;
+        const n = nextProps;
+        return (
+            pathname !== n.pathname ||
+            new_visitor !== n.new_visitor ||
+            this.state.showBanner !== nextState.showBanner ||
+            this.state.showCallout !== nextState.showCallout ||
+            nightmodeEnabled !== n.nightmodeEnabled ||
+            showAnnouncement !== n.showAnnouncement
+        );
+    }
+
     _addEntropyCollector() {
         if (!this.listenerActive && this.refs.App_root) {
             this.refs.App_root.addEventListener(
@@ -86,24 +116,6 @@ class App extends React.Component {
             );
             this.listenerActive = null;
         }
-    }
-
-    shouldComponentUpdate(nextProps, nextState) {
-        const {
-            pathname,
-            new_visitor,
-            nightmodeEnabled,
-            showAnnouncement,
-        } = this.props;
-        const n = nextProps;
-        return (
-            pathname !== n.pathname ||
-            new_visitor !== n.new_visitor ||
-            this.state.showBanner !== nextState.showBanner ||
-            this.state.showCallout !== nextState.showCallout ||
-            nightmodeEnabled !== n.nightmodeEnabled ||
-            showAnnouncement !== n.showAnnouncement
-        );
     }
 
     setShowBannerFalse = () => {
@@ -183,9 +195,9 @@ class App extends React.Component {
                             />
                             <ul>
                                 <li>
-                                    /*<a href="https://steemit.com/steemit/@steemitblog/steemit-com-is-now-open-source">
+                                    <a href="https://steemit.com/steemit/@steemitblog/steemit-com-is-now-open-source">
                                         ...STORY TEXT...
-                                    </a>*/
+                                    </a>
                                 </li>
                             </ul>
                         </div>
@@ -234,11 +246,12 @@ class App extends React.Component {
                 {headerHidden ? null : miniHeader ? (
                     <MiniHeader />
                 ) : (
-                    <Header
-                        pathname={pathname}
-                        category={category}
-                        order={order}
-                    />
+                    // <Header
+                    //     pathname={pathname}
+                    //     category={category}
+                    //     order={order}
+                    // />
+                    <NavBar />
                 )}
 
                 <div className="App__content">
@@ -272,11 +285,11 @@ App.propTypes = {
 
 export default connect(
     (state, ownProps) => {
-        const current_user = state.user.get('current');
-        const account_user = state.global.get('accounts');
-        const current_account_name = current_user
-            ? current_user.get('username')
-            : state.offchain.get('account');
+        // const current_user = state.user.get('current');
+        // const account_user = state.global.get('accounts');
+        // const current_account_name = current_user
+        //     ? current_user.get('username')
+        //     : state.offchain.get('account');
 
         return {
             viewMode: state.app.get('viewMode'),
@@ -298,6 +311,6 @@ export default connect(
         };
     },
     dispatch => ({
-        loginUser: () => dispatch(userActions.usernamePasswordLogin({})),
+        loginUser: () => dispatch(usernamePasswordLogin({})),
     })
 )(App);

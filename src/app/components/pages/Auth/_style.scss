@@ -1,0 +1,142 @@
+.AuthWrapper {
+  display: flex;
+
+  > div {
+    box-sizing: border-box;
+    max-height: 100vh;
+    position: relative;
+    width: 50%;
+
+    display: flex;
+    justify-content: center;
+
+    @media (max-width: 768px) {
+      width: 100%;
+    }
+
+    &.Right {
+      align-items: center;
+      background-color: $color-grey;
+      background-image: url('~app/assets/images/static/back_shapes.png');
+      background-size: contain;
+
+      box-sizing: border-box;
+      height: 100vh;
+      position: fixed;
+      right: 0;
+      width: 50%;
+
+      @media (max-width: 768px) {
+        display: none;
+      }
+
+      .Knowledr {
+        margin-left: 10%;
+        max-width: 250px;
+        width: 33%;
+      }
+    }
+  }
+
+  .Logo {
+    position: absolute;
+    cursor: pointer;
+
+    height: 30px;
+    left: 30px;
+    top: 30px;
+  }
+
+  .AuthForm {
+    max-width: 500px;
+    padding: 140px 30px 60px;
+    width: 100%;
+
+    .Title {
+      color: $color-grey;
+      font-family: 'Panton Bold';
+      font-size: 42px;
+      margin-bottom: 10px;
+
+      span {
+        color: $color-dark;
+      }
+    }
+
+    .Description {
+      color: $color-grey;
+      font-size: 17px;
+      min-height: 65px;
+    }
+
+    form {
+      box-shadow: 25px 25px 52px rgba(0, 0, 0, 0.06);
+      margin-bottom: 35px;
+
+      .InputWrapper:not(:last-child) {
+        border-bottom: 0;
+      }
+    }
+
+    .Extra {
+      display: flex;
+      justify-content: space-between;
+
+      color: $color-input;
+      font-size: 14px;
+      line-height: 21px;
+
+      .ForgetPassword {
+        cursor: pointer;
+
+        &:hover {
+          color: $color-grey;
+        }
+      }
+    }
+
+    .Buttons {
+      display: flex;
+      margin-top: 60px;
+
+      & > *:not(:last-child) {
+        margin-right: 30px;
+      }
+
+      button,
+      .Button {
+        background-color: white;
+        border: 2px solid $color-light-grey;
+        border-radius: 3px;
+        color: $color-black;
+        cursor: pointer;
+        font-family: 'Panton';
+        font-size: 14px;
+        height: 40px;
+        outline: none;
+
+        display: block;
+        line-height: 36px;
+        max-width: 120px;
+        text-align: center;
+        text-decoration: none;
+        width: 50%;
+
+        &:hover {
+          background-color: $color-light;
+        }
+
+        &.Black {
+          background-color: $color-black;
+          border-color: $color-black;
+          color: white;
+
+          &:hover {
+            border-color: $color-dark;
+            background-color: $color-dark;
+          }
+        }
+      }
+    }
+  }
+}

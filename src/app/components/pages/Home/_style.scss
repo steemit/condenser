@@ -1,0 +1,72 @@
+@import './Components/style';
+
+.HomeWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  margin: 0 auto;
+
+  .Content {
+    flex-grow: 1;
+    height: 100vh;
+    box-shadow: $box-shadow;
+    z-index: 1;
+
+    .Results {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    @media all and (max-width: 1300px) {
+      width: 100%;
+      height: auto;
+
+      .Results {
+        max-width: none;
+      }
+    }
+  }
+
+  @media all and (max-width: 1300px) {
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+}
+
+.RelatedItems {
+  background: #fbfbfb;
+  padding: 12px 20px;
+  padding-top: 37px;
+  max-width: 550px;
+  height: 100vh;
+
+  @media all and (max-width: 1300px) {
+    width: 100%;
+    max-width: none;
+    height: auto;
+  }
+
+  h1 {
+    color: #808080;
+    font-family: Futura;
+    font-size: 18px;
+    font-weight: normal;
+    padding: 0 25px;
+  }
+
+  .More {
+    text-align: center;
+    margin-bottom: 25px;
+
+    a {
+      color: #4bbefd;
+      font-family: 'Futura Lt BT';
+      font-size: 16px;
+
+      &:hover {
+        border-bottom: 0;
+      }
+    }
+  }
+}

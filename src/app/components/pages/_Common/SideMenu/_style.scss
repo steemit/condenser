@@ -1,0 +1,38 @@
+.Sticky {
+  position: absolute;
+  left: -60px;
+
+  .SideMenu {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: $sans-serif;
+    font-weight: 300;
+
+    .Vote {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 100px;
+      height: 90px;
+
+      .Value {
+        pointer-events: none;
+      }
+    }
+
+    .Icon {
+      cursor: pointer;
+
+      &:hover {
+        color: $blue;
+      }
+    }
+
+    .Item {
+      margin-bottom: 7px;
+    }
+  }
+}

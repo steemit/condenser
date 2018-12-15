@@ -24,7 +24,7 @@ import { all } from 'redux-saga/effects';
 import { syncHistoryWithStore } from 'react-router-redux';
 import rootReducer from 'app/redux/RootReducer';
 import rootSaga from 'shared/RootSaga';
-import { component as NotFound } from 'app/components/pages/NotFound';
+import { component as NotFound } from 'app/components/Steemit/pages/NotFound';
 import extractMeta from 'app/utils/ExtractMeta';
 import Translator from 'app/Translator';
 import { routeRegex } from 'app/ResolveRoute';

@@ -1,0 +1,56 @@
+.DropDownWrapper {
+  min-width: 120px;
+  font-family: Futura;
+  font-size: 16px;
+  font-weight: 500;
+  position: relative;
+  cursor: pointer;
+
+  &:before {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid #919191;
+
+    right: 5px;
+    top: 11px;
+  }
+
+  &.Open:before {
+    border-top: 0;
+    border-bottom: 5px solid #919191;
+  }
+
+  button {
+    background: white;
+    line-height: 28px;
+    outline: none;
+    padding: 0px 14px;
+    width: 100%;
+
+    color: #919191;
+    font-family: Futura;
+    font-size: 18px;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .Menu {
+    position: absolute;
+    left: 0;
+    top: 31px;
+    z-index: 1;
+    box-shadow: 1px 1px 3px $color-super-light;
+
+    button {
+      padding: 5px 14px;
+
+      &:hover {
+        background: $color-super-light;
+      }
+    }
+  }
+}

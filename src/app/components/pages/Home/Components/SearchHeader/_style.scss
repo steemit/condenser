@@ -1,0 +1,42 @@
+.SearchHeaderWrapper {
+  display: flex;
+  justify-content: space-between;
+  margin-left: 80px;
+  max-width: calc(100% - 80px);
+  min-height: 32px;
+  width: 100%;
+  padding: 30px 0;
+
+  .Title {
+    color: $color-input;
+    font-size: 25px;
+    font-weight: 400;
+
+    span {
+      color: $color-grey;
+      font-size: 19px;
+      font-style: italic;
+      margin-left: 25px;
+    }
+  }
+
+  .DropDownWrapper {
+    margin-right: 30px;
+  }
+
+  @media all and (max-width: 700px) {
+    flex-direction: column;
+    justify-content: flex-start;
+    margin: 0;
+    padding: 30px;
+    max-width: none;
+
+    .Title {
+      margin-bottom: 20px;
+    }
+
+    .DropDownWrapper {
+      margin-left: auto;
+    }
+  }
+}

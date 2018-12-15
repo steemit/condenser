@@ -1,0 +1,20 @@
+.BrowsingHistoryWrapper {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #f2f2f2;
+
+  @media all and (max-width: 700px) {
+    display: none;
+  }
+
+  .Title {
+    color: #606060;
+    font-family: Andada;
+    font-size: 18px;
+    margin-right: 10px;
+  }
+
+  img {
+    margin-top: 5px;
+  }
+}

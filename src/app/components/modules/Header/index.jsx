@@ -2,21 +2,27 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import Icon from 'app/components/elements/Icon';
+// import Icon from 'app/components/Steemit/elements/Icon';
 import resolveRoute from 'app/ResolveRoute';
 import tt from 'counterpart';
+
 import { APP_NAME } from 'app/client_config';
-import SortOrder from 'app/components/elements/SortOrder';
-import SearchInput from 'app/components/elements/SearchInput';
-import IconButton from 'app/components/elements/IconButton';
-import DropdownMenu from 'app/components/elements/DropdownMenu';
+import { SIGNUP_URL } from 'shared/constants';
+
 import * as userActions from 'app/redux/UserReducer';
 import * as appActions from 'app/redux/AppReducer';
-import Userpic from 'app/components/elements/Userpic';
-import { SIGNUP_URL } from 'shared/constants';
-import SteemLogo from 'app/components/elements/SteemLogo';
 import normalizeProfile from 'app/utils/NormalizeProfile';
-import Announcement from 'app/components/elements/Announcement';
+
+import {
+    SortOrder,
+    SearchInput,
+    IconButton,
+    DropdownMenu,
+    Userpic,
+    Announcement,
+} from 'app/components/Steemit/elements';
+
+import { AppLogo } from 'app/components/elements';
 
 class Header extends React.Component {
     static propTypes = {
@@ -267,7 +273,7 @@ class Header extends React.Component {
                     <div className="small-5 large-4 columns Header__logotype">
                         {/*LOGO*/}
                         <Link to={logo_link}>
-                            <SteemLogo />
+                            <AppLogo />
                         </Link>
                     </div>
 

@@ -1,0 +1,28 @@
+.InputWrapper {
+  border: 1px solid $color-light;
+  padding: 8px 12px;
+  position: relative;
+  background: white;
+
+  .Label {
+    color: $color-light;
+    font-family: 'Andada';
+    font-size: 14px;
+    position: absolute;
+    user-select: none;
+  }
+
+  input {
+    border: none;
+    color: $color-input;
+    font-family: 'Andada';
+    font-size: 18px;
+    padding-top: 25px;
+    outline: none;
+    width: 100%;
+
+    &::placeholder {
+      color: $color-grey;
+    }
+  }
+}

@@ -59,15 +59,6 @@ app.use(
         staticCache(path.join(__dirname, '../app/assets/images'), cacheOpts)
     )
 );
-app.use(
-    mount(
-        '/javascripts',
-        staticCache(
-            path.join(__dirname, '../app/assets/javascripts'),
-            cacheOpts
-        )
-    )
-);
 // Proxy asset folder to webpack development server in development mode
 if (env === 'development') {
     const webpack_dev_port = process.env.PORT
@@ -120,25 +111,6 @@ session(app, {
     key: config.get('session_cookie_key'),
 });
 csrf(app);
-
-// If a user is logged in, we need to make sure that they receive the correct
-// headers.
-app.use(function*(next) {
-    if (this.request.url.startsWith('/api')) {
-        yield next;
-        return;
-    }
-
-    const auth = this.request.query.auth;
-    if (auth) {
-        this.request.url = this.request.url.replace(/[?&]{1}auth=true/, '');
-        this.session['auth'] = true;
-        this.session.save();
-        this.request.query.auth = null;
-    }
-
-    yield next;
-});
 
 koaLocale(app);
 
@@ -291,6 +263,7 @@ useGeneralApi(app);
 
 // helmet wants some things as bools and some as lists, makes config difficult.
 // our config uses strings, this splits them to lists on whitespace.
+
 if (env === 'production') {
     const helmetConfig = {
         directives: convertEntriesToArrays(config.get('helmet.directives')),
@@ -301,41 +274,7 @@ if (env === 'production') {
     if (helmetConfig.directives.reportUri === '-') {
         delete helmetConfig.directives.reportUri;
     }
-
-    if (!helmetConfig.directives.frameSrc) {
-        helmetConfig.directives.frameSrc = [
-            `'self'`,
-            'googleads.g.doubleclick.net',
-            'https:',
-        ];
-    }
-
     app.use(helmet.contentSecurityPolicy(helmetConfig));
-    app.use(function*(next) {
-        const authed = this.session.auth || this.session.a;
-        this.adsEnabled = !authed && config.google_ad_enabled;
-        if (this.adsEnabled) {
-            // If user is signed out, enable ads.
-            let policy = this.response.header['content-security-policy']
-                .split(/;\s+/)
-                .map(el => {
-                    if (el.startsWith('script-src')) {
-                        const oldScriptSrc = el.replace(/^script-src/, '');
-                        return `script-src 'unsafe-inline' 'unsafe-eval' data: https: ${
-                            oldScriptSrc
-                        }`;
-                    } else {
-                        return el;
-                    }
-                })
-                .join('; ');
-            this.response.set('content-security-policy', policy);
-            yield next;
-        } else {
-            // If user is logged in, do not modify CSP headers further.
-            yield next;
-        }
-    });
 }
 
 if (env !== 'test') {

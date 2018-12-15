@@ -352,10 +352,7 @@ function* usernamePasswordLogin2({
         );
     }
 
-    let justLoggedIn = !autopost && saveLogin;
-    if (justLoggedIn) {
-        yield put(userActions.saveLogin());
-    }
+    if (!autopost && saveLogin) yield put(userActions.saveLogin());
 
     try {
         // const challengeString = yield serverApiLoginChallenge()
@@ -373,24 +370,7 @@ function* usernamePasswordLogin2({
             };
             sign('posting', private_keys.get('posting_private'));
             // sign('active', private_keys.get('active_private'))
-
-            console.log('Logging in as', username);
-            const response = yield serverApiLogin(username, signatures);
-            const body = yield response.json();
-
-            if (justLoggedIn) {
-                // If ads are enabled, reload the page instead of changing the browser
-                // history when they log in, so headers will get re-requested.
-                const adsEnabled = yield select(state =>
-                    state.app.getIn(['googleAds', 'enabled'])
-                );
-                if (adsEnabled) {
-                    var url = new URL(window.location.href);
-                    url.searchParams.set('auth', 'true');
-                    console.log('New post-login URL', url.toString());
-                    window.location.replace(url.toString());
-                }
-            }
+            yield serverApiLogin(username, signatures);
         }
     } catch (error) {
         // Does not need to be fatal
@@ -407,12 +387,10 @@ function* usernamePasswordLogin2({
     }
     // TOS acceptance
     yield fork(promptTosAcceptance, username);
-
-    // Redirect user to the appropriate page after login.
     if (afterLoginRedirectToWelcome) {
         browserHistory.push('/welcome');
-    } else if (feedURL && document.location.pathname === '/') {
-        browserHistory.push(feedURL);
+    } else if (feedURL) {
+        if (document.location.pathname === '/') browserHistory.push(feedURL);
     }
 }
 
@@ -484,7 +462,6 @@ function* saveLogin_localStorage() {
         console.error(e);
         return;
     }
-
     const memoKey = private_keys.get('memo_private');
     const memoWif = memoKey && memoKey.toWif();
     const data = new Buffer(
@@ -498,15 +475,7 @@ function* saveLogin_localStorage() {
 function* logout() {
     yield put(userActions.saveLoginConfirm(false)); // Just incase it is still showing
     if (process.env.BROWSER) localStorage.removeItem('autopost2');
-    yield serverApiLogout();
-    // If ads are enabled, reload the page instead of changing the browser
-    // history when they log out, so headers will get re-requested.
-    const adsEnabled = yield select(state =>
-        state.app.getIn(['googleAds', 'enabled'])
-    );
-    if (adsEnabled) {
-        window.location.reload();
-    }
+    serverApiLogout();
 }
 
 function* loginError({

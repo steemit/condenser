@@ -124,6 +124,7 @@ export default function reducer(state = defaultState, action) {
                 }
             );
             if (empty) {
+                // User logged in with Active key then navigates away from the page
                 // LOGOUT
                 return defaultState.merge({ logged_out: true });
             }

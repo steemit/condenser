@@ -361,11 +361,6 @@ export default function useGeneralApi(app) {
         const { csrf, account, signatures } =
             typeof params === 'string' ? JSON.parse(params) : params;
         if (!checkCSRF(this, csrf)) return;
-
-        // Set auth, to remember if a user is authed on initial login.
-        this.session.auth = true;
-        this.session.save();
-
         logRequest('login_account', this, { account });
         try {
             const db_account = yield models.Account.findOne({
@@ -448,9 +443,7 @@ export default function useGeneralApi(app) {
                 }
             }
 
-            this.body = JSON.stringify({
-                status: 'ok',
-            });
+            this.body = JSON.stringify({ status: 'ok' });
             const remote_ip = getRemoteIp(this.req);
             if (mixpanel) {
                 mixpanel.people.set(this.session.uid, {
@@ -465,9 +458,7 @@ export default function useGeneralApi(app) {
                 this.session.uid,
                 error.message
             );
-            this.body = JSON.stringify({
-                error: error.message,
-            });
+            this.body = JSON.stringify({ error: error.message });
             this.status = 500;
         }
     });
@@ -478,7 +469,6 @@ export default function useGeneralApi(app) {
         const { csrf } =
             typeof params === 'string' ? JSON.parse(params) : params;
         if (!checkCSRF(this, csrf)) return;
-        this.session.auth = false;
         logRequest('logout_account', this);
         try {
             this.session.a = null;
@@ -591,9 +581,6 @@ export default function useGeneralApi(app) {
         const { csrf } =
             typeof params === 'string' ? JSON.parse(params) : params;
         if (!checkCSRF(this, csrf)) return;
-
-        this.body = '{}';
-        this.status = 200;
 
         if (!this.session.a) {
             this.body = 'missing username';

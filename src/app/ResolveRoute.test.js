@@ -43,7 +43,7 @@ describe('resolveRoute', () => {
         ['/change_password', { page: 'ChangePassword' }],
         ['/create_account', { page: 'CreateAccount' }],
         ['/approval', { page: 'Approval' }],
-        ['/pick_account', { page: 'NotFound' }],
+        ['/pick_account', { page: 'PickAccount' }],
         ['/recover_account_step_1', { page: 'RecoverAccountStep1' }],
         ['/recover_account_step_2', { page: 'RecoverAccountStep2' }],
         ['/waiting_list.html', { page: 'WaitingList' }],

@@ -69,6 +69,9 @@ export default function resolveRoute(path) {
     if (path === '/approval') {
         return { page: 'Approval' };
     }
+    if (path === '/pick_account') {
+        return { page: 'PickAccount' };
+    }
     if (path === '/recover_account_step_1') {
         return { page: 'RecoverAccountStep1' };
     }

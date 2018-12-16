@@ -255,6 +255,9 @@ export default function useEnterAndConfirmEmailPages(app) {
         ]);
         const viewMode = params[PARAM_VIEW_MODE] ? params[PARAM_VIEW_MODE] : '';
         const picked_account_name = (this.session.picked_account_name = this.request.query.account);
+
+        console.log('picked account: ', picked_account_name);
+
         if (!picked_account_name) {
             this.flash = { error: 'Please select your account name' };
             this.redirect('/pick_account' + makeParams(params));
@@ -273,6 +276,7 @@ export default function useEnterAndConfirmEmailPages(app) {
             this.redirect('/pick_account' + makeParams(params));
             return;
         }
+        console.log(this.flash);
         let default_email = '';
         if (this.request.query && this.request.query.email)
             default_email = this.request.query.email;
@@ -321,7 +325,9 @@ export default function useEnterAndConfirmEmailPages(app) {
                                 />
                             </label>
                             <br />
-                            <div className="error">{this.flash.error}</div>
+                            <div className="error">
+                                {this.flash && this.flash.error}
+                            </div>
                             {rc_site_key ? (
                                 <button
                                     className="button g-recaptcha"

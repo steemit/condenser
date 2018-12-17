@@ -151,12 +151,23 @@ class PostsList extends React.Component {
             showResteem,
             showSpam,
             loading,
+            anyPosts,
+            pathname,
             category,
             content,
             ignore_result,
             account,
+            username,
             nsfwPref,
         } = this.props;
+        const isLoggedInOnFeed = category === 'feed' && !account;
+        const isLoggedOutOnTrending =
+            !username && (pathname === '/' || pathname === '/trending');
+        const arePinnedPostsVisible =
+            showPinned && (isLoggedInOnFeed || isLoggedOutOnTrending);
+        const arePinnedPostsReady = isLoggedInOnFeed
+            ? anyPosts
+            : postsInfo.length > 0;
         const { thumbSize } = this.state;
         const postsInfo = [];
         posts.forEach(item => {
@@ -220,7 +231,9 @@ class PostsList extends React.Component {
                     itemType="http://schema.org/blogPosts"
                 >
                     {/* Only render pinned posts when other posts are ready */}
-                    {showPinned && postsInfo.length > 0 && renderPinned(pinned)}
+                    {arePinnedPostsVisible &&
+                        arePinnedPostsReady &&
+                        renderPinned(pinned)}
                     {renderSummary(postsInfo)}
                 </ul>
                 {loading && (
@@ -255,6 +268,7 @@ export default connect(
         const pinned = state.offchain.get('pinned_posts');
         return {
             ...props,
+            pathname,
             username,
             content,
             ignore_result,

@@ -362,6 +362,7 @@ export function* fetchData(action) {
                     endOfData,
                 })
             );
+            yield call(syncPinnedPosts);
         }
     } catch (error) {
         console.error('~~ Saga fetchData error ~~>', call_name, args, error);

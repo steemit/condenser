@@ -32,11 +32,12 @@ let cachedPinnedPosts = undefined;
 export async function pinnedPosts() {
     const urls = await pinnedPostUrls();
     let posts = [];
-    urls.forEach(async url => {
+    for (const url of urls) {
         const [username, postId] = url.split('@')[1].split('/');
         let post = await steem.api.getContentAsync(username, postId);
         post.pinned = true;
         posts.push(post);
-    });
+    }
+
     return posts;
 }

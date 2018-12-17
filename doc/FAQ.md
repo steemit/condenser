@@ -1,4 +1,4 @@
-# steemit.com Repository FAQ
+# knowledgr.com Repository FAQ
 
 # Golden Rules
 
@@ -6,7 +6,7 @@
   is not appropriate for product metadiscussion - it is a workroom, not a
   cocktail party.
 
-* Not every feature that spawns a drama thread on steemit.com necessarily
+* Not every feature that spawns a drama thread on knowledgr.com necessarily
   warrants a commit/PR. Frequently, such threads occur even when nothing is
   broken or when things are working as intended.  Not all problems
   encountered warrant technical solutions.
@@ -16,10 +16,10 @@
   discussion forum.
 
 * Product improvement suggestions are encouraged, however they should be
-  sent to [sneak@steemit.com](mailto:sneak@steemit.com) for review.
+  sent to [sneak@knowledgr.com](mailto:sneak@knowledgr.com) for review.
 
 * Working code (usually) trumps all.  Requests to make changes to
-  steemit.com that include working, tested Pull Requests jump to the top of
+  knowledgr.com that include working, tested Pull Requests jump to the top of
   the queue.  (This is not a guarantee that all functionality submitted as a
   PR will be merged, however.)
 

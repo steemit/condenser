@@ -1,5 +1,5 @@
 This file contains a list of people who have made
-large contributions to the Steemit.com codebase.
+large contributions to the Knowledgr.com codebase.
 
 
 

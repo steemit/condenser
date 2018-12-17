@@ -1,12 +1,12 @@
 {
-  "database_url": "mysql://root:password@127.0.0.1/steemit_dev",
+  "database_url": "mysql://root:password@127.0.0.1/knowledgr_dev",
   "disable_signups": false,
   "facebook_app_id": false,
   "google_analytics_id": false,
   "helmet": {
     "directives": {
       "childSrc": "'self' player.twitch.tv www.youtube.com staticxx.facebook.com w.soundcloud.com player.vimeo.com",
-      "connectSrc": "'self' steemit.com https://api.steemit.com api.blocktrades.us",
+      "connectSrc": "'self' knowledgr.com https://api.knowledgr.com api.blocktrades.us",
       "defaultSrc": "'self' www.youtube.com staticxx.facebook.com player.vimeo.com",
       "fontSrc": "data: fonts.gstatic.com",
       "frameAncestors": "'none'",
@@ -20,7 +20,7 @@
     "reportOnly": false,
     "setAllHeaders": true
   },
-  "img_proxy_prefix": "https://steemitdevimages.com/",
+  "img_proxy_prefix": "https://knowledgrdevimages.com/",
   "ipfs_prefix": false,
   "mixpanel": false,
   "newrelic": false,
@@ -34,12 +34,12 @@
   },
   "registrar": {
     "account": "-",
-    "fee": "0.5 STEEM",
-    "delegation": "150250.000000 VESTS",
+    "fee": "0.5 KNLG",
+    "delegation": "150250.000000 KNLG",
     "signing_key": "5J..."
   },
   "requestAccountRecovery": {
-    "recovery_account": "steem",
+    "recovery_account": "knowledgr",
     "signing_key": "5J..."
   },
   "sendgrid": {
@@ -51,9 +51,9 @@
     }
   },
   "server_session_secret": "exiKdyF+IwRIXJDmtGIl4vWUz4i3eVSISpfZoeYc0s4=",
-  "session_cookie_key": "stm-dev",
-  "session_key": "steemses",
-  "site_domain": "steemitdev.com",
+  "session_cookie_key": "kwr-dev",
+  "session_key": "knowledgrses",
+  "site_domain": "knowledgrdev.com",
   "tarantool": {
     "host": "localhost",
     "password": "",

@@ -176,21 +176,29 @@ class PostsList extends React.Component {
         });
         const pinned = this.props.pinned.toJS();
         const renderPinned = pinnedPosts =>
-            pinnedPosts.map(pinnedPost => (
-                <li key={pinnedPost}>
-                    <div className="PinLabel">
-                        <Icon className="PinIcon" name="pin" />{' '}
-                        <span className="PinText">Pinned Post</span>
-                    </div>
-                    <PostSummary
-                        account={account}
-                        post={`${pinnedPost.author}/${pinnedPost.permlink}`}
-                        thumbSize={thumbSize}
-                        ignore={false}
-                        nsfwPref={nsfwPref}
-                    />
-                </li>
-            ));
+            pinnedPosts.map(pinnedPost => {
+                const id = `${pinnedPost.author}/${pinnedPost.permlink}`;
+                const pinnedPostContent = content.get(id);
+                const isSeen = pinnedPostContent.get('seen');
+                return (
+                    <li key={pinnedPost}>
+                        <div className="PinLabel">
+                            <Icon
+                                className="PinIcon"
+                                name={isSeen ? 'pin-disabled' : 'pin'}
+                            />{' '}
+                            <span className="PinText">Pinned Post</span>
+                        </div>
+                        <PostSummary
+                            account={account}
+                            post={id}
+                            thumbSize={thumbSize}
+                            ignore={false}
+                            nsfwPref={nsfwPref}
+                        />
+                    </li>
+                );
+            });
         const renderSummary = items =>
             items.map(item => (
                 <li key={item.item}>

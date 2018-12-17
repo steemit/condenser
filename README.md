@@ -1,27 +1,27 @@
 
-# Condenser
+# Knowledgr-frontend
 
 
-Condenser is the react.js web interface to the world's first and best
-blockchain-based social media platform, steemit.com.  It uses
-[STEEM](https://github.com/steemit/steem), a blockchain powered by DPoS Governance and ChainBase DB to store JSON-based content for a plethora of web
+Knowledgr-frontend is the react.js web interface to the world's first and best
+blockchain-based social media platform, knowledgr.com.  It uses
+[KNOWLEDGR](https://github.com/norestlabs/knowledgr), a blockchain powered by DPoS Governance and ChainBase DB to store JSON-based content for a plethora of web
 applications.   
 
-## Why would I want to use Condenser (steemit.com front-end)?
+## Why would I want to use Knowledgr-frontend (knowledgr.com front-end)?
 
 * Learning how to build blockchain-based web applications using STEEM as a
   content storage mechanism in react.js
-* Reviewing the inner workings of the steemit.com social media platform
-* Assisting with software development for steemit.com
+* Reviewing the inner workings of the knowledgr.com social media platform
+* Assisting with software development for knowledgr.com
 
 ## Installation
 
 #### Docker
 
-We highly recommend using docker to run condenser in production. This is how we run the
-live steemit.com site and it is the most supported (and fastest) method of
-both building and running condenser. We will always have the latest version
-of condenser (master branch) available on Docker Hub. Configuration settings
+We highly recommend using docker to run knowledgr-frontend in production. This is how we run the
+live knowledgr.com site and it is the most supported (and fastest) method of
+both building and running knowledgr-frontend. We will always have the latest version
+of knowledgr-frontend (master branch) available on Docker Hub. Configuration settings
 can be set using environment variables (see configuration section below for
 more information). If you need to install docker, you can get it at
 https://get.docker.com
@@ -29,34 +29,34 @@ https://get.docker.com
 To bring up a running container it's as simple as this:
 
 ```bash
-docker run -it -p 8080:8080 steemit/condenser
+docker run -it -p 8080:8080 norestlabs/knowledgr-frontend
 ```
 
 Environment variables can be added like this:
 
 ```bash
-docker run -it --env SDC_DATABASE_URL="mysql://user:pass@hostname/databasename" -p 8080:8080 steemit/condenser
+docker run -it --env SDC_DATABASE_URL="mysql://user:pass@hostname/databasename" -p 8080:8080 norestlabs/knowledgr-frontend
 ```
 
-If you would like to modify, build, and run condenser using docker, it's as
+If you would like to modify, build, and run knowledgr-frontend using docker, it's as
 simple as pulling in the github repo and issuing one command to build it,
 like this:
 
 ```bash
-git clone https://github.com/steemit/condenser
-cd condenser
-docker build -t="myname/condenser:mybranch" .
-docker run -it -p 8080:8080 myname/condenser:mybranch
+git clone https://github.com/norestlabs/knowledgr-frontend
+cd knowledgr-frontend
+docker build -t="myname/knowledgr-frontend:mybranch" .
+docker run -it -p 8080:8080 myname/knowledgr-frontend:mybranch
 ```
 
 ## Building from source without docker (the 'traditional' way):
-(better if you're planning to do condenser development)
+(better if you're planning to do knowledgr-frontend development)
 
 #### Clone the repository and make a tmp folder
 
 ```bash
-git clone https://github.com/steemit/condenser
-cd condenser
+git clone https://github.com/norestlabs/knowledgr-frontend
+cd knowledgr-frontend
 mkdir tmp
 ```
 
@@ -67,7 +67,7 @@ Install at least Node v8.7 if you don't already have it. We recommend using
 installed version(s) of node. If you need `nvm`, you can get it at
 [https://github.com/creationix/nvm](https://github.com/creationix/nvm).
 
-Condenser is known to successfully build using node 8.7, npm 5.4.2, and
+Knowledgr-frontend is known to successfully build using node 8.7, npm 5.4.2, and
 yarn 1.3.2.
 
 Using nvm, you would install like this:
@@ -77,7 +77,7 @@ nvm install v8.7
 ```
 
 We use the yarn package manager instead of the default `npm`. There are
-multiple reasons for this, one being that we have `steem-js` built from
+multiple reasons for this, one being that we have `knowledgr-js` built from
 source pulling the github repo as part of the build process and yarn
 supports this. This way the library that handles keys can be loaded by
 commit hash instead of a version name and cryptographically verified to be
@@ -90,17 +90,17 @@ yarn global add babel-cli
 yarn install --frozen-lockfile
 yarn run build
 ```
-To run condenser in production mode, run:
+To run knowledgr-frontend in production mode, run:
 
 ```bash
 yarn run production
 ```
 
-When launching condenser in production mode it will automatically use 1
+When launching knowledgr-frontend in production mode it will automatically use 1
 process per available core. You will be able to access the front-end at
 http://localhost:8080 by default.
 
-To run condenser in development mode, run:
+To run knowledgr-frontend in development mode, run:
 
 ```bash
 yarn run start
@@ -109,13 +109,13 @@ yarn run start
 It will take quite a bit longer to start in this mode (~60s) as it needs to
 build and start the webpack-dev-server.
 
-By default you will be connected to steemit.com's public steem node at
-`wss://steemd.steeemit.com`. This is actually on the real blockchain and
+By default you will be connected to knowledgr.com's public knowledgr node at
+`wss://knowledgrd.steeemit.com`. This is actually on the real blockchain and
 you would use your regular account name and credentials to login - there is
 not an official separate testnet at this time. If you intend to run a
 full-fledged site relying on your own, we recommend looking into running a
-copy of `steemd` locally instead
-[https://github.com/steemit/steem](https://github.com/steemit/steem).
+copy of `knowledgrd` locally instead
+[https://github.com/norestlabs/knowledgr](https://github.com/norestlabs/knowledgr).
 
 #### Debugging SSR code
 
@@ -126,7 +126,7 @@ You can use Chromium to connect by finding the remote client at
 
 #### Configuration
 
-The intention is to configure condenser using environment variables. You
+The intention is to configure knowledgr-frontend using environment variables. You
 can see the names of all of the available configuration environment
 variables in `config/custom-environment-variables.json`. Default values are
 stored in `config/defaults.json`.
@@ -134,21 +134,21 @@ stored in `config/defaults.json`.
 Environment variables using an example like this:
 
 ```bash
-export SDC_CLIENT_STEEMD_URL="wss://steemd.steemit.com"
-export SDC_SERVER_STEEMD_URL="wss://steemd.steemit.com"
+export SDC_CLIENT_STEEMD_URL="wss://knowledgrd.knowledgr.com"
+export SDC_SERVER_STEEMD_URL="wss://knowledgrd.knowledgr.com"
 ```
 
 Keep in mind environment variables only exist in your active session, so if
 you wish to save them for later use you can put them all in a file and
 `source` them in.
 
-If you'd like to statically configure condenser without variables you can
+If you'd like to statically configure knowledgr-frontend without variables you can
 edit the settings directly in `config/production.json`. If you're running
 in development mode, copy `config/production.json` to `config/dev.json`
 with `cp config/production.json config/dev.json` and adjust settings in
 `dev.json`.
 
-If you're intending to run condenser in a production environment one
+If you're intending to run knowledgr-frontend in a production environment one
 configuration option that you will definitely want to edit is
 `server_session_secret` which can be set by the environment variable
 `SDC_SESSION_SECRETKEY`. To generate a new value for this setting, you can
@@ -163,20 +163,20 @@ node
 ## Install mysql server
 
 If you've followed the instructions up until this point you will already
-have a running condenser installation which is entirely acceptable for
+have a running knowledgr-frontend installation which is entirely acceptable for
 development purposes. It is *not required to run a SQL server for
 development*. If you're running a full-fledged site however, you will want
 to set one up.
 
 Once set up, you can set the mysql server configuration option for
-condenser using the environment variable `SDC_DATABASE_URL`, or
+knowledgr-frontend using the environment variable `SDC_DATABASE_URL`, or
 alternatively by editing it in `config/production.json`. You will use the
 format `mysql://user:pass@hostname/databasename`.
 
 Example:
 
 ```bash
-export SDC_DATABASE_URL="mysql://root:password@127.0.0.1/steemit_dev"
+export SDC_DATABASE_URL="mysql://root:password@127.0.0.1/knowledgr_dev"
 ```
 
 Here are instructions for setting up a mysql server and running the
@@ -210,17 +210,17 @@ GRANT ALL PRIVILEGES ON *.* TO 'root'@'%';
 FLUSH PRIVILEGES;
 ```
 
-Now launch mysql client and create steemit_dev database:
+Now launch mysql client and create knowledgr_dev database:
 ```bash
 mysql -u root
-> create database steemit_dev;
+> create database knowledgr_dev;
 > quit
 ```
 
 ### Database migrations
 
 This is a required step in order for the database to be 'ready' for
-condenser's use.
+knowledgr-frontend's use.
 
 Edit the file `src/db/config/config.json` using your favorite command line
 text editor being sure that the username, password, host, and database name
@@ -285,18 +285,18 @@ If you want to test a server-side rendered page without using the network, do th
 
 ```
 yarn build
-OFFLINE_SSR_TEST=true SDC_DATABASE_URL="mysql://root@127.0.0.1/steemit_dev" NODE_ENV=production node --prof lib/server/index.js
+OFFLINE_SSR_TEST=true SDC_DATABASE_URL="mysql://root@127.0.0.1/knowledgr_dev" NODE_ENV=production node --prof lib/server/index.js
 ```
 
 This will read data from the blobs in `api_mockdata` directory. If you want to use another set of mock data, create a similar directory to that one and add an argument `OFFLINE_SSR_TEST_DATA_DIR` pointing to your new directory.
 
 ### Run blackbox tests using nightwatch
 
-To run a Selenium test suite, start the condenser docker image with a name `condenser` (like `docker run --name condenser -itp 8080:8080 steemit/condenser:latest`) and then run the blackboxtest image attached to the condneser image's network:
+To run a Selenium test suite, start the knowledgr-frontend docker image with a name `knowledgr-frontend` (like `docker run --name knowledgr-frontend -itp 8080:8080 norestlabs/knowledgr-frontend:latest`) and then run the blackboxtest image attached to the condneser image's network:
 
 ```
-docker build -t=steemit/condenser-blackboxtest blackboxtest/
-docker run --network container:condenser steemit/condenser-blackboxtest:latest
+docker build -t=norestlabs/knowledgr-frontend-blackboxtest blackboxtest/
+docker run --network container:knowledgr-frontend norestlabs/knowledgr-frontend-blackboxtest:latest
 
 ```
 
@@ -304,6 +304,6 @@ docker run --network container:condenser steemit/condenser-blackboxtest:latest
 
 To report a non-critical issue, please file an issue on this GitHub project.
 
-If you find a security issue please report details to: security@steemit.com
+If you find a security issue please report details to: security@knowledgr.com
 
 We will evaluate the risk and make a patch available before filing the issue.

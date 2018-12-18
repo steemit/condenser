@@ -9,7 +9,6 @@
 
     display: flex;
     justify-content: center;
-
     @media (max-width: 768px) {
       width: 100%;
     }
@@ -25,7 +24,6 @@
       position: fixed;
       right: 0;
       width: 50%;
-
       @media (max-width: 768px) {
         display: none;
       }
@@ -70,8 +68,12 @@
     }
 
     form {
-      box-shadow: 25px 25px 52px rgba(0, 0, 0, 0.06);
       margin-bottom: 35px;
+
+      .Inputs {
+        box-shadow: 25px 25px 52px rgba(0, 0, 0, 0.06);
+        margin-bottom: 35px;
+      }
 
       .InputWrapper:not(:last-child) {
         border-bottom: 0;
@@ -103,8 +105,8 @@
         margin-right: 30px;
       }
 
-      button,
-      .Button {
+      .Button,
+      button {
         background-color: white;
         border: 2px solid $color-light-grey;
         border-radius: 3px;
@@ -114,6 +116,8 @@
         font-size: 14px;
         height: 40px;
         outline: none;
+        padding: 0;
+        text-transform: capitalize;
 
         display: block;
         line-height: 36px;

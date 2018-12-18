@@ -3,29 +3,26 @@ import PropTypes from 'prop-types';
 
 class Input extends Component {
     render() {
-        const { label, onChange, placeholder, value, type } = this.props;
+        const { refer } = this.props;
+        const pp = Object.assign({}, this.props);
+        delete pp.refer;
 
         return (
             <div className="InputWrapper">
                 <div
                     className="Label"
-                    dangerouslySetInnerHTML={{ __html: label }}
+                    dangerouslySetInnerHTML={{ __html: pp.label }}
                 />
-                {type === 'password' ? (
+                {pp.type === 'password' ? (
                     <input
-                        value={value}
-                        onChange={onChange}
+                        {...pp}
                         placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
-                        type={type}
+                        ref={refer}
                     />
                 ) : (
-                    <input
-                        value={value}
-                        onChange={onChange}
-                        placeholder={placeholder}
-                        type={type}
-                    />
+                    <input {...pp} ref={refer} />
                 )}
+                {pp.children}
             </div>
         );
     }
@@ -37,6 +34,11 @@ Input.defaultProps = {
     placeholder: '',
     value: '',
     type: 'text',
+
+    autoComplete: 'on',
+    disabled: false,
+    refer: '',
+    required: true,
 };
 
 Input.propTypes = {
@@ -45,6 +47,11 @@ Input.propTypes = {
     placeholder: PropTypes.string,
     value: PropTypes.string,
     type: PropTypes.string,
+
+    autoComplete: PropTypes.string,
+    disabled: PropTypes.bool,
+    refer: PropTypes.string,
+    required: PropTypes.bool,
 };
 
 export default Input;

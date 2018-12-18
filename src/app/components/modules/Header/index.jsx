@@ -33,10 +33,6 @@ class Header extends React.Component {
         pathname: PropTypes.string,
     };
 
-    constructor() {
-        super();
-    }
-
     // Conside refactor.
     // I think 'last sort order' is something available through react-router-redux history.
     // Therefore no need to store it in the window global like this.

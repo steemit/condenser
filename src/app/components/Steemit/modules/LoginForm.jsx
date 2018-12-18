@@ -15,6 +15,8 @@ import { APP_URL } from 'app/client_config';
 import { PrivateKey, PublicKey } from '@steemit/steem-js/lib/auth/ecc';
 import { SIGNUP_URL } from 'shared/constants';
 
+import Input from 'app/components/pages/_Common/Input';
+
 class LoginForm extends Component {
     static propTypes = {
         // Steemit.
@@ -114,6 +116,17 @@ class LoginForm extends Component {
         const { username, password } = this.state;
         this.props.showChangePassword(username.value, password.value);
     };
+
+    onInputChange(field) {
+        return e => {
+            this.setState({
+                [field]:
+                    e.target.type === 'checkbox'
+                        ? e.target.checked
+                        : e.target.value,
+            });
+        };
+    }
 
     render() {
         if (!process.env.BROWSER) {
@@ -323,8 +336,8 @@ class LoginForm extends Component {
                 onChange={this.props.clearError}
                 method="post"
             >
-                <div className="input-group">
-                    <span className="input-group-label">@</span>
+                <div className="Inputs">
+                    {/* <div className="input-group">
                     <input
                         className="input-group-field"
                         type="text"
@@ -336,38 +349,61 @@ class LoginForm extends Component {
                         autoComplete="on"
                         disabled={submitting || isTransfer}
                     />
-                </div>
-                {username.touched && username.blur && username.error ? (
-                    <div className="error">{username.error}&nbsp;</div>
-                ) : null}
-
-                <div>
-                    <input
-                        type="password"
-                        required
-                        ref="pw"
-                        placeholder={tt('loginform_jsx.password_or_wif')}
-                        {...password.props}
+                    </div> */}
+                    <Input
+                        label="User Name"
+                        placeholder={tt('loginform_jsx.enter_your_username')}
+                        onChange={usernameOnChange}
                         autoComplete="on"
-                        disabled={submitting}
+                        disabled={submitting || isTransfer}
+                        refer="username"
+                        required
+                        {...username.props}
                     />
-                    {error && <div className="error">{error}&nbsp;</div>}
-                    {error &&
-                        password_info && (
-                            <div className="warning">{password_info}&nbsp;</div>
-                        )}
-                </div>
-                {loginBroadcastOperation && (
+                    {username.touched && username.blur && username.error ? (
+                        <div className="error">{username.error}&nbsp;</div>
+                    ) : null}
+
                     <div>
-                        <div className="info">
-                            {tt(
-                                'loginform_jsx.this_operation_requires_your_key_or_master_password',
-                                { authType }
+                        {/* <input
+                            type="password"
+                            required
+                            ref="pw"
+                            placeholder={tt('loginform_jsx.password_or_wif')}
+                            {...password.props}
+                            autoComplete="on"
+                            disabled={submitting}
+                        /> */}
+                        <Input
+                            label="Password"
+                            placeholder={tt('loginform_jsx.password_or_wif')}
+                            type="password"
+                            autoComplete="on"
+                            disabled={submitting}
+                            refer="pw"
+                            required
+                            {...password.props}
+                        />
+                        {error && <div className="error">{error}&nbsp;</div>}
+                        {error &&
+                            password_info && (
+                                <div className="warning">
+                                    {password_info}&nbsp;
+                                </div>
                             )}
-                        </div>
                     </div>
-                )}
-                <div>
+                    {loginBroadcastOperation && (
+                        <div>
+                            <div className="info">
+                                {tt(
+                                    'loginform_jsx.this_operation_requires_your_key_or_master_password',
+                                    { authType }
+                                )}
+                            </div>
+                        </div>
+                    )}
+                </div>
+                {/* <div>
                     <label
                         className="LoginForm__save-login"
                         htmlFor="saveLogin"
@@ -381,13 +417,30 @@ class LoginForm extends Component {
                             disabled={submitting}
                         />&nbsp;{tt('loginform_jsx.keep_me_logged_in')}
                     </label>
+                </div> */}
+
+                <div className="Extra">
+                    <div className="RememberMe">
+                        <input
+                            type="checkbox"
+                            name="rememberMe"
+                            id="rememberMe"
+                            className="css-checkbox"
+                            checked
+                            onChange={this.onInputChange('rememberMe')}
+                        />
+                        <label htmlFor="rememberMe" className="css-label">
+                            Remember Me
+                        </label>
+                    </div>
+                    <div className="ForgetPassword">Forget Password?</div>
                 </div>
-                <div className="login-modal-buttons">
-                    <br />
+
+                <div className="login-modal-buttons Buttons">
                     <button
                         type="submit"
                         disabled={submitting || disabled}
-                        className="button"
+                        className="button Black"
                         onClick={this.SignIn}
                     >
                         {submitLabel}
@@ -402,8 +455,15 @@ class LoginForm extends Component {
                             {tt('g.cancel')}
                         </button>
                     )}
+                    <button
+                        type="button"
+                        className="button hollow"
+                        onClick={this.SignUp}
+                    >
+                        {tt('g.sign_up')}
+                    </button>
                 </div>
-                {!isTransfer && signupLink}
+                {/* {!isTransfer && signupLink} */}
             </form>
         );
 
@@ -411,7 +471,7 @@ class LoginForm extends Component {
             <div className="LoginForm row">
                 <div className="column">
                     {message}
-                    {titleText}
+                    {/* {titleText} */}
                     {form}
                 </div>
             </div>

@@ -142,7 +142,7 @@ function link(state, child) {
     if (url) {
         state.links.add(url);
         if (state.mutate) {
-            // If this link is not relative, http, https,, steem or esteem -- add https.
+            // If this link is not relative, http, https, steem or esteem -- add https.
             if (!/^((#)|(\/(?!\/))|(((steem|esteem|https?):)?\/\/))/.test(url)) {
                 child.setAttribute('href', 'https://' + url);
             }

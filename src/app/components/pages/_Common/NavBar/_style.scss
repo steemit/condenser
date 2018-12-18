@@ -28,7 +28,6 @@ input {
 
   position: absolute;
   top: 0;
-
   @media all and (max-width: 700px) {
     flex-direction: column;
   }
@@ -43,7 +42,6 @@ input {
       height: 100%;
       width: auto;
     }
-
     @media all and (max-width: 700px) {
       margin-bottom: 15px;
     }
@@ -54,6 +52,7 @@ input {
     display: flex;
     align-items: center;
   }
+
   .Content {
     @media all and (max-width: 550px) {
       flex-direction: column;
@@ -66,20 +65,26 @@ input {
 
   .Menu {
     justify-content: space-around;
-    width: 500px;
+    // width: 500px;
     font-family: $sans-serif;
 
     .Item {
       color: $white;
       border-color: $white;
     }
-
     @media all and (max-width: 950px) {
-      width: 300px;
+      // width: 300px;
+    }
+
+    a {
+      margin-left: 20px;
+      color: white;
     }
   }
 
   .SearchContainer {
+    margin-left: 40px;
+
     input {
       font-family: $sans-serif;
       font-weight: 300;

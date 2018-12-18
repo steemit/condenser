@@ -46,7 +46,8 @@ export default {
             //});
         } else if (route.page === 'Login') {
             //require.ensure([], (require) => {
-            cb(null, [require('app/components/Steemit/pages/Login')]);
+            // cb(null, [require('app/components/Steemit/pages/Login')]);
+            cb(null, [require('app/components/pages/Auth/LogIn')]);
             //});
         } else if (route.page === 'Privacy') {
             //require.ensure([], (require) => {

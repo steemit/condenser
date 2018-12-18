@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 // import PropTypes from 'prop-types';
 
 import Input from 'app/components/pages/_Common/Input';
+import LoginForm from 'app/components/Steemit/modules/LoginForm';
 
 import logo from 'assets/images/static/logo.png';
 import knowledr from 'assets/images/static/knowledr.png';
@@ -46,20 +47,23 @@ class LogIn extends Component {
                             <br />
                             your account
                         </div>
-                        <form>
-                            <Input
-                                label="Email Address"
-                                placeholder="john.smith@mail.com"
-                                value={email}
-                                onChange={this.onInputChange('email')}
-                            />
-                            <Input
-                                label="Password"
-                                placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
-                                type="password"
-                                value={password}
-                                onChange={this.onInputChange('password')}
-                            />
+                        <LoginForm afterLoginRedirectToWelcome />
+                        {/* <form>
+                            <div className="Inputs">
+                                <Input
+                                    label="Email Address"
+                                    placeholder="john.smith@mail.com"
+                                    value={email}
+                                    onChange={this.onInputChange('email')}
+                                />
+                                <Input
+                                    label="Password"
+                                    placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
+                                    type="password"
+                                    value={password}
+                                    onChange={this.onInputChange('password')}
+                                />
+                            </div>
                         </form>
                         <div className="Extra">
                             <div className="RememberMe">
@@ -93,7 +97,7 @@ class LogIn extends Component {
                             <a className="Button" href="/static_register">
                                 Sign Up
                             </a>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
                 <div className="Right">
@@ -117,6 +121,6 @@ LogIn.propTypes = {
 };
 
 module.exports = {
-    path: 'static_login',
+    path: 'login.html',
     component: LogIn,
 };

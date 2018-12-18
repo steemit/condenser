@@ -114,6 +114,9 @@ class PostFull extends React.Component {
         });
         if (process.env.BROWSER) {
             let showEditor = localStorage.getItem('showEditor-' + formId);
+            if (this.props.username) {
+                this.setState({ showReply: true });
+            }
             if (showEditor) {
                 showEditor = JSON.parse(showEditor);
                 if (showEditor.type === 'reply') {
@@ -132,6 +135,12 @@ class PostFull extends React.Component {
             names.findIndex(name => this.props[name] !== nextProps[name]) !==
                 -1 || this.state !== nextState
         );
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.username && process.env.BROWSER) {
+            this.setState({ showReply: true });
+        }
     }
 
     fbShare(e) {
@@ -529,11 +538,7 @@ class PostFull extends React.Component {
                         </button>
                     </div>
                 </div>
-                <div className="row">
-                    <div className="column large-8 medium-10 small-12">
-                        {showReply && renderedEditor}
-                    </div>
-                </div>
+                <div>{showReply && renderedEditor}</div>
             </article>
         );
     }

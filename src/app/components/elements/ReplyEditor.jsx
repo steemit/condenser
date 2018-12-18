@@ -10,6 +10,7 @@ import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import Tooltip from 'app/components/elements/Tooltip';
 import sanitizeConfig, { allowedTags } from 'app/utils/SanitizeConfig';
+import Icon from 'app/components/elements/Icon';
 import sanitize from 'sanitize-html';
 import HtmlReady from 'shared/HtmlReady';
 import * as globalActions from 'app/redux/GlobalReducer';
@@ -400,7 +401,7 @@ class ReplyEditor extends React.Component {
 
         return (
             <div className="ReplyEditor row">
-                <div className="column small-12">
+                <div className="column">
                     <div
                         ref="draft"
                         className="ReplyEditor__draft ReplyEditor__draft-hide"
@@ -511,7 +512,7 @@ class ReplyEditor extends React.Component {
                                                     : ''
                                             }
                                             disabled={loading}
-                                            rows={isStory ? 10 : 3}
+                                            rows={isStory ? 10 : 4}
                                             placeholder={
                                                 isStory
                                                     ? tt('g.write_your_story')
@@ -522,18 +523,20 @@ class ReplyEditor extends React.Component {
                                         />
                                     </Dropzone>
                                     <p className="drag-and-drop">
-                                        {tt(
-                                            'reply_editor.insert_images_by_dragging_dropping'
-                                        )}
+                                        <a
+                                            className="drag-and-drop__link"
+                                            onClick={this.onOpenClick}
+                                        >
+                                            <Icon
+                                                className="drag-and-drop__icon"
+                                                name="photo-gallery"
+                                            />
+                                            {tt('reply_editor.select_images')}
+                                        </a>&nbsp;
+                                        {tt('reply_editor.drag_and_drop')}
                                         {noClipboardData
                                             ? ''
-                                            : tt(
-                                                  'reply_editor.pasting_from_the_clipboard'
-                                              )}
-                                        {tt('reply_editor.or_by')}{' '}
-                                        <a onClick={this.onOpenClick}>
-                                            {tt('reply_editor.selecting_them')}
-                                        </a>.
+                                            : tt('reply_editor.clipboard')}
                                     </p>
                                     {progress.message && (
                                         <div className="info">

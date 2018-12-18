@@ -286,7 +286,10 @@
         "or_by": "lub przez",
         "title": "Tytuł",
         "update_post": "Edytuj wpis",
-        "markdown_not_supported": "Formatowanie Markdown nie jest tu wspierane"
+        "markdown_not_supported": "Formatowanie Markdown nie jest tu wspierane",
+        "select_images": "Select image",
+        "drag_and_drop": "or drag and drop ",
+        "clipboard": "/ paste from clipboard"
     },
     "category_selector_jsx": {
         "tag_your_story":

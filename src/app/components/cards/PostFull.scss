@@ -18,17 +18,35 @@
         color: themed('textColorAccent');
     }
   }
-  .ReplyEditor {
-    margin-top: 0;
-    padding-bottom: 1rem;
-    @include themify($themes) {
-      border-bottom: themed('border');  
-    } 
-  }
+
   &__flag {
     margin-top: -1rem;
   }
 }
+
+  .ReplyEditor {
+    margin-top: 0;
+    padding: 1rem 0 0;
+    max-width: 46rem;    
+    border-radius: 0;
+
+    textarea {
+      border-radius: 0;
+      padding: 12px 12px 6px;
+      font-family: $font-primary;
+      line-height: 1.4;
+      border: transparent;
+      @include MQ(M) {
+        padding: 1rem 1rem 0.5rem;
+      }
+      @include themify($themes) {
+          border-top: themed('border');
+          border-left: themed('border');
+          border-right: themed('border');
+      }        
+    }
+  }
+
 
 .PostFull__time_author_category {
   font-weight: 400;

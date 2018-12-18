@@ -273,7 +273,10 @@
         "or_by": "或通过",
         "title": "标题",
         "update_post": "更新帖子",
-        "markdown_not_supported": "这里不支持Markdown标记语言"
+        "markdown_not_supported": "这里不支持Markdown标记语言",
+        "select_images": "Select image",
+        "drag_and_drop": "or drag and drop ",
+        "clipboard": "/ paste from clipboard"
     },
     "category_selector_jsx": {
         "tag_your_story": "标签(最多5个标签)，第一个标签是您文章的主要类别。",

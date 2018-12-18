@@ -35,16 +35,27 @@
 }
 
 .drag-and-drop {
-    font-size: 85%;
-    padding: 3px 8px;
-    margin: 0;
-    color: #767676;
-    background-color: #fafafa;
-    border-left: 1px solid #ccc;
-    border-right: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
-    border-bottom-right-radius: 3;
-    border-bottom-left-radius: 3;
+    @include font-size(11px);
+    line-height: 1.3;
+    padding: 10px 12px;
+    margin-bottom: 0.5rem;
+    @include themify($themes) {
+        color: themed('textColorSecondary');
+        border: themed('border');
+        background: themed('backgroundColorEmphasis');
+    }  
+    @include MQ(M) {
+      @include font-size(14px);
+      padding: 10px 16px;
+    }
+    &__link {
+      @extend .link;
+      @extend .link--accent;
+      font-weight: bold;
+    }  
+    &__icon {
+      margin-right: 8px;
+    }
 }
 
 .PostFull .ReplyEditor__body {
@@ -89,6 +100,14 @@
 .ReplyEditor .Preview .Markdown {
   border: 1px solid $light-gray;
   padding: 0.5rem 1rem;
+}
+
+.ReplyEditor .Markdown p {
+  @include font-size(14px);
+  line-height: 1.4;
+  @include MQ(M) {
+    @include font-size(16px);
+  }
 }
 
 .ReplyEditor__body {

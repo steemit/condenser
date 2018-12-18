@@ -308,7 +308,10 @@
         "or_by": "ou par",
         "title": "Titre",
         "update_post": "Mettre l'article à jour",
-        "markdown_not_supported": "Le format Markdown n'est pas supporté ici"
+        "markdown_not_supported": "Le format Markdown n'est pas supporté ici",
+        "select_images": "Select image",
+        "drag_and_drop": "or drag and drop ",
+        "clipboard": "/ paste from clipboard"
     },
     "category_selector_jsx": {
         "tag_your_story":

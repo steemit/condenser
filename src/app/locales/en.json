@@ -309,7 +309,10 @@
         "title": "Title",
         "update_post": "Update Post",
         "markdown_not_supported": "Markdown is not supported here",
-        "advanced_settings": "Advanced settings"
+        "advanced_settings": "Advanced settings",
+        "select_images": "Select image",
+        "drag_and_drop": "or drag and drop ",
+        "clipboard": "/ paste from clipboard"
     },
     "category_selector_jsx": {
         "tag_your_story":

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="100px" height="100px" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.5 (67469) - http://www.bohemiancoding.com/sketch -->
+    <title>photo-gallery</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <polygon id="path-1" points="51 44.4444444 95.5212766 100.54321 6.4787234 100.54321"></polygon>
+        <filter x="-11.8%" y="-9.8%" width="116.8%" height="126.7%" filterUnits="objectBoundingBox" id="filter-2">
+            <feOffset dx="-3" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.05 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="photo-gallery" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect fill="#3C4A70" x="0" y="0" width="100" height="100"></rect>
+        <polygon id="mountain3" fill="#1E9674" fill-rule="nonzero" points="83.5531915 59.2592593 117.06383 101.777778 50.0425532 101.777778"></polygon>
+        <polygon id="mountain1" fill="#1A9172" fill-rule="nonzero" points="19.4042553 28.3950617 75.893617 100.54321 -37.0851064 100.54321"></polygon>
+        <g id="mountain2" fill-rule="nonzero">
+            <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+            <use fill="#24AE88" xlink:href="#path-1"></use>
+        </g>
+        <circle id="sun" fill="#FFB31C" fill-rule="nonzero" cx="73" cy="24.5" r="11.5"></circle>
+    </g>
+</svg>

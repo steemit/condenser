@@ -530,11 +530,7 @@ export default connect(
                     })
                 );
 
-                // If ads are enabled, do not close the login modal. and wait
-                // for page to reload.
-                if (!this.props.shouldSeeAds) {
-                    dispatch(userActions.closeLogin());
-                }
+                dispatch(userActions.closeLogin());
             } else {
                 dispatch(
                     userActions.usernamePasswordLogin({
@@ -558,11 +554,7 @@ export default connect(
             );
         },
         showChangePassword: (username, defaultPassword) => {
-            // If ads are enabled, do not close the login modal. and wait for
-            // page to reload.
-            if (!this.props.shouldSeeAds) {
-                dispatch(userActions.closeLogin());
-            }
+            dispatch(userActions.closeLogin());
 
             dispatch(globalActions.remove({ key: 'changePassword' }));
             dispatch(

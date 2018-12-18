@@ -140,6 +140,11 @@ function* usernamePasswordLogin2({
     operationType /*high security*/,
     afterLoginRedirectToWelcome,
 }) {
+    const user = yield select(state => state.user);
+    const loginType = user.get('login_type');
+    const justLoggedIn = loginType === 'basic';
+    console.log('Login type:', loginType, 'Just logged in?', justLoggedIn);
+
     // login, using saved password
     let feedURL = false;
     let autopost, memoWif, login_owner_pubkey, login_wif_owner_pubkey;
@@ -352,8 +357,7 @@ function* usernamePasswordLogin2({
         );
     }
 
-    let justLoggedIn = !autopost && saveLogin;
-    if (justLoggedIn) {
+    if (!autopost && saveLogin) {
         yield put(userActions.saveLogin());
     }
 
@@ -389,6 +393,7 @@ function* usernamePasswordLogin2({
                     url.searchParams.set('auth', 'true');
                     console.log('New post-login URL', url.toString());
                     window.location.replace(url.toString());
+                    return;
                 }
             }
         }

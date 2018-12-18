@@ -228,14 +228,20 @@ class Post extends React.Component {
                     <div className="column large-12">
                         <div className="Post_comments__content">
                             {positiveComments.length ? (
-                                <div className="Post__comments_sort_order float-right">
-                                    {tt('post_jsx.sort_order')}: &nbsp;
-                                    <DropdownMenu
-                                        items={sort_menu}
-                                        el="li"
-                                        selected={sort_label}
-                                        position="left"
-                                    />
+                                <div className="Post_comments__container">
+                                    <div>
+                                        <h3 className="Post_comments__heading">
+                                            Comments ({replies.length})
+                                        </h3>
+                                    </div>
+                                    <div className="Post__comments_sort_order">
+                                        <DropdownMenu
+                                            items={sort_menu}
+                                            el="li"
+                                            selected={sort_label}
+                                            position="left"
+                                        />
+                                    </div>
                                 </div>
                             ) : null}
                             {positiveComments}

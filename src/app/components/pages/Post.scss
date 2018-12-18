@@ -1,9 +1,9 @@
 .Post__comments_sort_order {
-  margin: 0.5rem 0;
+  margin: 0;
+  @include font-size(16px);
   @include themify($themes) {
     color: themed('textColorSecondary');  
   }  
-  font-size: 94%;
   svg polygon {
     fill: $dark-gray;
     @include themify($themes) {
@@ -31,18 +31,39 @@
   }
 }
 
-.Post_comments__content {
-  max-width: 46rem;
-  padding: 0 0.5rem;
-  margin: 0rem auto 3.5rem;
-  @include font-size(12px);
-  @include MQ(M) {
-    @include font-size(14px);
+.Post_comments {
+  &__content {
+    max-width: 46rem;
+    padding: 0 0.5rem;
+    margin: 0rem auto 3.5rem;
+    @include font-size(12px);
+    @include MQ(M) {
+      @include font-size(14px);
+    }
+    .Markdown p {
+      line-height: 140%;
+    }
   }
-  .Markdown p {
-    line-height: 140%;
+  &__container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 0;
+    margin-bottom: 1rem;
+    @include themify($themes) {
+      border-bottom: themed('border');  
+    } 
+  }
+  &__heading {
+    margin-bottom: 0;
+    font-weight: bold;
+    @include font-size(18px);
+    @include MQ(M) {
+      @include font-size(24px);
+    }
   }
 }
+
  .Comment.root {
   padding-top: 0em;
   margin-bottom: 1.5rem;

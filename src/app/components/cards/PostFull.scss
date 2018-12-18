@@ -268,3 +268,8 @@ input.share-box {
     font-size: .8em;
   }
 }
+
+.hidden {
+  position: fixed;
+  left: -100000000px
+}

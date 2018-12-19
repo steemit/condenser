@@ -30,7 +30,20 @@ export function* getAccount(username, force = false) {
     let account = yield select(state =>
         state.global.get('accounts').get(username)
     );
-    if (force || !account) {
+
+    // hive never serves `owner` prop (among others)
+    let isLite = !!account && !account.get('owner');
+
+    if (!account || force || isLite) {
+        console.log(
+            'getAccount: loading',
+            username,
+            'force?',
+            force,
+            'lite?',
+            isLite
+        );
+
         [account] = yield call([api, api.getAccountsAsync], [username]);
         if (account) {
             account = fromJS(account);

@@ -28,9 +28,9 @@
   dependencies:
     "@steemit/libcrypto" "^1.0.1"
 
-"@steemit/steem-js@0.7.1":
-  version "0.7.1"
-  resolved "https://registry.yarnpkg.com/@steemit/steem-js/-/steem-js-0.7.1.tgz#9e9ead34ce9438513ad49e8f7d4d48d32d9c3c39"
+"@steemit/steem-js@0.7.3":
+  version "0.7.3"
+  resolved "https://registry.yarnpkg.com/@steemit/steem-js/-/steem-js-0.7.3.tgz#f7a3a780264e4cf90a397ff2aeec949f9e5d24e2"
   dependencies:
     "@steemit/rpc-auth" "^1.1.0"
     bigi "^1.4.2"
@@ -4236,7 +4236,7 @@ hide-powered-by@1.0.0:
   resolved "https://registry.yarnpkg.com/hide-powered-by/-/hide-powered-by-1.0.0.tgz#4a85ad65881f62857fc70af7174a1184dccce32b"
 
 highcharts@4.2.7, highcharts@^4.2.3:
-  version v4.2.7
+  version "4.2.7"
   resolved "https://registry.yarnpkg.com/highcharts/-/highcharts-4.2.7.tgz#45cbed8e99c9c042e95f9c51076726496f686862"
 
 history@^3.0.0:

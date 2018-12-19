@@ -69,6 +69,7 @@ export function* fetchState(location_change_action) {
     try {
         const state = yield call(getStateAsync, url);
         yield put(globalActions.receiveState(state));
+        yield call(syncPinnedPosts);
         // If a user's transfer page is being loaded, fetch related account data.
         yield call(getTransferUsers, pathname);
     } catch (error) {
@@ -105,6 +106,13 @@ function* getTransferUsers(pathname) {
 
         yield call(getAccounts, transferUsers);
     }
+}
+
+function* syncPinnedPosts() {
+    const pinnedPosts = yield select(state =>
+        state.offchain.get('pinned_posts')
+    );
+    yield put(globalActions.syncPinnedPosts({ pinnedPosts }));
 }
 
 /**

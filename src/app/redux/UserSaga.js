@@ -143,7 +143,14 @@ function* usernamePasswordLogin2({
     const user = yield select(state => state.user);
     const loginType = user.get('login_type');
     const justLoggedIn = loginType === 'basic';
-    console.log('Login type:', loginType, 'Just logged in?', justLoggedIn);
+    console.log(
+        'Login type:',
+        loginType,
+        'Just logged in?',
+        justLoggedIn,
+        'username:',
+        username
+    );
 
     // login, using saved password
     let feedURL = false;
@@ -166,6 +173,7 @@ function* usernamePasswordLogin2({
     }
     // no saved password
     if (!username || !password) {
+        console.log('No saved password');
         const offchain_account = yield select(state =>
             state.offchain.get('account')
         );
@@ -190,11 +198,13 @@ function* usernamePasswordLogin2({
 
     const account = yield call(getAccount, username);
     if (!account) {
+        console.log('No account');
         yield put(userActions.loginError({ error: 'Username does not exist' }));
         return;
     }
     //dmca user block
     if (username && DMCAUserList.includes(username)) {
+        console.log('DMCA list');
         yield put(
             userActions.loginError({ error: translate('terms_violation') })
         );
@@ -253,6 +263,7 @@ function* usernamePasswordLogin2({
         Set()
     );
     if (!fullAuths.size) {
+        console.log('No full auths');
         localStorage.removeItem('autopost2');
         const owner_pub_key = account.getIn(['owner', 'key_auths', 0, 0]);
         if (
@@ -301,6 +312,7 @@ function* usernamePasswordLogin2({
         private_keys = private_keys.remove('memo_private');
 
     if (!highSecurityLogin) {
+        console.log('Not high security login');
         if (
             posting_pubkey === owner_pubkey ||
             posting_pubkey === active_pubkey
@@ -367,11 +379,14 @@ function* usernamePasswordLogin2({
         const serverAccount = offchainData.get('account');
         const challengeString = offchainData.get('login_challenge');
         if (!serverAccount && challengeString) {
+            console.log('No server account, but challenge string');
             const signatures = {};
             const challenge = { token: challengeString };
             const bufSha = hash.sha256(JSON.stringify(challenge, null, 0));
             const sign = (role, d) => {
+                console.log('Sign before');
                 if (!d) return;
+                console.log('Sign after');
                 const sig = Signature.signBufferSha256(bufSha, d);
                 signatures[role] = sig.toHex();
             };
@@ -415,8 +430,10 @@ function* usernamePasswordLogin2({
 
     // Redirect user to the appropriate page after login.
     if (afterLoginRedirectToWelcome) {
+        console.log('Redirecting to welcome page');
         browserHistory.push('/welcome');
     } else if (feedURL && document.location.pathname === '/') {
+        console.log('Redirecting to feed page', feedURL);
         browserHistory.push(feedURL);
     }
 }
@@ -500,16 +517,26 @@ function* saveLogin_localStorage() {
     localStorage.setItem('autopost2', data);
 }
 
-function* logout() {
-    yield put(userActions.saveLoginConfirm(false)); // Just incase it is still showing
-    if (process.env.BROWSER) localStorage.removeItem('autopost2');
+function* logout(action) {
+    const payload = (action || {}).payload || {};
+    const logoutType = payload.type || 'default';
+    console.log('Logging out', arguments, 'logout type', logoutType);
+
+    // Just in case it is still showing
+    yield put(userActions.saveLoginConfirm(false));
+
+    if (process.env.BROWSER) {
+        localStorage.removeItem('autopost2');
+    }
+
     yield serverApiLogout();
+
     // If ads are enabled, reload the page instead of changing the browser
     // history when they log out, so headers will get re-requested.
     const adsEnabled = yield select(state =>
         state.app.getIn(['googleAds', 'enabled'])
     );
-    if (adsEnabled) {
+    if (logoutType == 'default' && adsEnabled) {
         window.location.reload();
     }
 }

@@ -517,16 +517,26 @@ function* saveLogin_localStorage() {
     localStorage.setItem('autopost2', data);
 }
 
-function* logout() {
-    yield put(userActions.saveLoginConfirm(false)); // Just incase it is still showing
-    if (process.env.BROWSER) localStorage.removeItem('autopost2');
+function* logout(action) {
+    const payload = (action || {}).payload || {};
+    const logoutType = payload.type || 'default';
+    console.log('Logging out', arguments, 'logout type', logoutType);
+
+    // Just in case it is still showing
+    yield put(userActions.saveLoginConfirm(false));
+
+    if (process.env.BROWSER) {
+        localStorage.removeItem('autopost2');
+    }
+
     yield serverApiLogout();
+
     // If ads are enabled, reload the page instead of changing the browser
     // history when they log out, so headers will get re-requested.
     const adsEnabled = yield select(state =>
         state.app.getIn(['googleAds', 'enabled'])
     );
-    if (adsEnabled) {
+    if (logoutType == 'default' && adsEnabled) {
         window.location.reload();
     }
 }

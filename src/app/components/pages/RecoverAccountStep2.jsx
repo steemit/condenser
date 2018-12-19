@@ -301,7 +301,7 @@ module.exports = {
                         onSuccess,
                     })
                 );
-                dispatch(userActions.logout());
+                dispatch(userActions.logout({ type: 'account_recovery' }));
             },
         })
     )(RecoverAccountStep2),

@@ -84,7 +84,7 @@ export default class DropdownMenu extends React.Component {
         const hasDropdown = items.length > 0;
 
         let entry = children || (
-            <span>
+            <span className="dropdown-trigger">
                 {this.getSelectedLabel(items, selected)}
                 {hasDropdown && <Icon name="dropdown-arrow" />}
             </span>

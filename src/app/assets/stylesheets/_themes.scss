@@ -26,6 +26,7 @@ $themes: (
     textColorAccentHover: $color-blue-original-dark,
     textColorError: $color-text-red,
     contentBorderAccent: $color-transparent,
+    buttonSkeleton: $color-background-off-white,
     buttonBackground: $color-blue-original-dark,
     buttonBackgroundHover: $color-blue-original-light,
     buttonText: $color-text-white,
@@ -60,6 +61,7 @@ $themes: (
     textColorAccentHover: $color-teal,
     textColorError: $color-text-red,
     contentBorderAccent: $color-teal,
+    buttonSkeleton: $color-background-off-white,
     buttonBackground: $color-blue-black,
     buttonBackgroundHover: $color-teal,
     buttonText: $color-text-white,
@@ -74,7 +76,7 @@ $themes: (
     colorAccentReverse: $color-white,
     colorWhite: $color-white,
     backgroundColor: $color-background-dark,
-      backgroundColorEmphasis: $color-background-super-dark,
+    backgroundColorEmphasis: $color-background-super-dark,
     backgroundColorOpaque: $color-blue-dark,
     moduleBackgroundColor: $color-background-dark,
     backgroundTransparent: transparent,
@@ -95,6 +97,7 @@ $themes: (
     textColorAccentHover: $color-teal-light,
     textColorError: $color-text-red,
     contentBorderAccent: $color-teal,
+    buttonSkeleton: $color-background-dark,
     buttonBackground: $color-white,
     buttonBackgroundHover: $color-teal,
     buttonText: $color-blue-dark,
@@ -204,17 +207,19 @@ $themes: (
 }
 
 .e-btn-hollow {
-  background-color: transparent;
   transition: 0.2s all ease-in-out;
-  box-shadow: 0px 0px 0px 0 rgba(0,0,0,0);
+  box-shadow: 0px 2px 4px 0 rgba(0,0,0,0.05);
+  border-radius: 5px;
   @include themify($themes) {
     border: themed('borderAccent');
     color: themed('textColorAccent');
+    background-color: themed('buttonSkeleton');
   }
   &:hover {
     @include themify($themes) {
       border: themed('borderDark');
       color: themed('textColorPrimary');
+      background-color: themed('backgroundColorEmphasis');
     }
   }
 }

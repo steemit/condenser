@@ -1,4 +1,7 @@
 $body-font-family: $font-primary;
+body {
+  overflow-x: hidden;
+}
  h1 {
   font-size: 2rem;
   font-weight: bold;

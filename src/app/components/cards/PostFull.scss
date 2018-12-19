@@ -22,6 +22,12 @@
   &__flag {
     margin-top: -1rem;
   }
+  &__btn-edit {
+    @extend .e-btn-hollow;
+    padding: 5px 10px;
+    @include font-size(14px);
+    font-weight: bold;
+  }
 }
 
   .ReplyEditor {
@@ -272,4 +278,328 @@ input.share-box {
 .hidden {
   position: fixed;
   left: -100000000px
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+$color-facebook: #3A5997;
+$color-twitter: #56ACEE;    
+$color-reddit: #FF4500;
+$color-linkedin: #0077B5;
+$color-url: #333;
+
+
+
+.full-bleed {
+  width: 100vw;
+  margin-left: -50vw;
+  left: 50%;    
+  position: relative; 
+}
+
+.content {
+  margin-top: 6em;
+}
+
+.comments {
+  margin-top: 4rem;
+    margin-left: auto;
+    margin-right: auto;
+    width: 88%;
+    max-width: 46rem;
+    @include font-size(14px); 
+
+    img {
+      margin: 1rem 0;
+    }
+}
+
+
+.content > *:not( img ):not( video ) {
+    margin-left: auto;
+    margin-right: auto;
+    width: 88%;
+    max-width: 46rem;
+}
+
+
+
+.content img {
+  margin: 1.5em auto;
+  max-width: 100%;
+  display: block;
+}
+
+.content img::after {
+  background-color: rgba(0, 0, 0, 1);
+  content: '';
+  display: block;
+  height: 100%;
+  position: absolute;
+  width: 100%;
+}
+
+.PostActions {
+  width: 100%;
+  max-width: 46em;
+  margin: 3em auto 2em;
+  border-top: 1px solid #eee;
+  padding-top: 2rem;
+  @include MQ(M) {
+    margin: 5em auto 2em;
+  }
+  &__post-metadata {
+    @include MQ(M) {
+      display: flex;
+      justify-content: space-between;     
+      flex-wrap: wrap;
+      align-items: center;
+    }
+  }
+
+  &__author {
+    font-weight: bold;
+    margin-bottom: 1rem;
+    margin-right: 1rem;
+    @include MQ(M) {
+      margin-bottom: 1.25rem;
+    }
+    .Userpic {
+      margin-right: 10px;
+      width: 42px;
+      height: 42px;
+    }   
+  }
+  &__author-link {
+    display: flex;
+    align-items: center;
+    @extend .link;
+    @extend .link--primary;
+  }
+  &__author-name {
+    margin: 0;
+  }
+  &__author-img {
+    border-radius: 20px;
+    padding: 0;
+    margin: 0 8px 0 0;
+    width: 30px;
+    height: 30px;
+  }
+  &__author-rep {
+    @include font-size(14px);
+    font-weight: normal;
+  }
+  &__tag-list {
+    margin: 0;
+  }
+  &__tags {
+    padding: 0;
+    margin-bottom: 1.25rem;
+    @include MQ(M) {
+      margin-bottom: 1.5rem;  
+    }
+  }
+  &__hype {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+  }
+  &__social {
+    display: flex;
+
+    svg {
+      padding: 1px;
+      @include themify($themes) {
+        fill: themed('colorWhite');
+      }            
+    }
+    svg.icon--url {
+      padding: 2px;
+      position: relative;
+      top: -1px;
+    }
+  }
+  &__social-list {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  &__social-item {
+    margin: 0 2px 0 0;
+  }
+  &__promote {
+
+  }
+  &__promote-btn {
+
+    @extend .e-btn-hollow;
+    // @include themify($themes) {
+    //   background: themed('backgroundColor');
+    // }  
+    height: 32px;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    // border: 1px solid $color-teal;
+    // border-radius: 0px;
+    // box-shadow: 0 2px 4px 0 rgba(0,0,0,0.05);   
+    // color: $color-teal;
+    text-transform: capitalize;
+    // cursor: pointer;
+    @include font-size(14px);
+    font-weight: bold;  
+    margin: 0 !important;
+
+    @extend .e-btn-hollow;
+
+    &:hover, &:focus {
+
+    }
+  }
+  &__votes {
+    @extend .full-bleed;
+    background: #000;
+  }
+  &__votes-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 68px;
+    width: 90%;
+    max-width: 46em;
+    margin: 0 auto;   
+    position: relative;
+    @include MQ(M) {
+      height: 80px;
+      padding: 0 1rem;
+    }
+  }
+  &__primary-action {
+    display: flex;
+    align-items: center;
+  }
+  &__upvote-btn, &__reblog-btn {
+    margin-right: 8px;
+  }
+  &__replies {
+    a {
+      @include font-size(14px);
+      color: $color-text-gray-light;  
+    }
+    
+    .Icon.chatboxes {
+      fill: $color-text-gray-light;      
+    }
+  }
+}
+
+.divider {
+  color: rgba(255,255,255, 0.5);
+}
+
+
+// .PostActions {
+//   .icon {
+//     padding: 8px;
+//     box-shadow: 0 2px 4px 0 rgba(0,0,0,0.05);   
+//       width: 45px;
+//       height: 32px;
+//       cursor: pointer;
+//       transition: all 0.2s ease-in-out;
+//     &--facebook {
+//       background: $color-facebook;
+//       &:hover, &:focus {
+//         background: darken($color-facebook, 15%);
+//       }
+//     }
+//     &--twitter {
+//       background: $color-twitter;
+//       &:hover, &:focus {
+//         background: darken($color-twitter, 15%);
+//       }     
+//     }   
+//     &--reddit {
+//       background: $color-reddit;
+//       &:hover, &:focus {
+//         background: darken($color-reddit, 15%);
+//       }     
+//     }
+//     &--linkedin {
+//       background: $color-linkedin;
+//       &:hover, &:focus {
+//         background: darken($color-linkedin, 15%);
+//       }     
+//     }
+//     &--url {
+//       background: $color-url;
+//       padding: 9px;
+//       &:hover, &:focus {
+//         background: lighten($color-url, 15%);
+//       }     
+//     }
+//   }
+//   .icon--white {
+//     fill: #fff;
+//   }
+// }
+
+
+// .facebook {
+//   background: $color-facebook;
+// }
+
+
+.PostActions  { 
+
+  .Icon.chevron-up-circle.upvote {
+    transform: scale(1.8);
+    margin-right: 6px;
+  }
+  .Voting__inner .FormattedAsset {
+    color: $color-white;
+    font-weight: bold;    
+    @include font-size(18px);
+  }
+  .Voting__voters_list span {
+    color: $color-text-gray-light;
+    @include font-size(15px);
+    line-height: 1;
+    font-weight: normal;
+  }
 }

@@ -76,6 +76,7 @@
       @include themify($themes) {
         stroke: themed('textColorAccent');
       }       
+      stroke-width: 2;
   }
   // exclude small devices
   @media screen and (min-width: 39.9375em) {
@@ -176,6 +177,7 @@
   fill: $color-red;
 }
 
+
 .Voting .DropdownMenu ul {
   width: 260px;
 
@@ -188,6 +190,11 @@
     padding: 0 0.5rem;
     line-height: 1.25;
   }
+}
+
+.DropdownMenu.Voting__voters_list .dropdown-trigger {
+  padding-left: 8px;
+  border-left: 1px solid $color-border-dark;
 }
 
 .DropdownMenu.Voting__voters_list ul {
@@ -205,11 +212,10 @@
   }
 }
 
-.Voting__inner {
-  @include themify($themes) {
-    border-right: themed('borderLight'); 
-  } 
-  padding-right: .8rem;
+
+
+
+.Voting__inner { 
   margin-right: .6rem;
   .DropdownMenu .Icon.dropdown-arrow {
     margin-right: -0.5rem;

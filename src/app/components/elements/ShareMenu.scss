@@ -1,7 +1,74 @@
+
+
+$color-facebook: #3A5997;
+$color-twitter: #56ACEE;    
+$color-reddit: #FF4500;
+$color-linkedin: #0077B5;
+$color-url: #333;
+
+
 .shareMenu {
     display: inline-block;
     vertical-align: middle;
     height: 2em;
+    
+    &__list {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    }
+
+    &__list-item {
+        margin: 0 2px 0 0;
+        width: 44px;
+        height: 32px;
+        background: #333;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0;
+        border-radius: 0;
+        transition: 0.2s all ease-in-out;
+        cursor: pointer;
+    
+        &--facebook {
+            background: $color-facebook;
+            &:hover, &:focus {
+                background: darken($color-facebook, 15%);
+          }
+        }
+        &--twitter {
+            background: $color-twitter;
+            &:hover, &:focus {
+                background: darken($color-twitter, 15%);
+          }     
+        }   
+        &--reddit {
+          background: $color-reddit;
+            &:hover, &:focus {
+                background: darken($color-reddit, 15%);
+          }     
+        }
+        &--linkedin {
+            background: $color-linkedin;
+            &:hover, &:focus {
+                background: darken($color-linkedin, 15%);
+            }     
+        }
+        &--url {
+          background: $color-url;
+          padding: 9px;
+          &:hover, &:focus {
+            background: lighten($color-url, 15%);
+          }     
+        }        
+    }
+    &__link {
+        padding: 5px 10px;
+    }
+
 }
 
 .shareItems {

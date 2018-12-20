@@ -49,7 +49,7 @@ const gdprFilterContent = stateContent => {
 export default function stateCleaner(state) {
     return {
         ...state,
-        accounts: gdprFilterAccounts(state.accounts),
-        content: gdprFilterContent(state.content),
+        accounts: gdprFilterAccounts(state.accounts || {}),
+        content: gdprFilterContent(state.content || {}),
     };
 }

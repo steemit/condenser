@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Select from 'react-select';
 
-import { TypeSelector } from 'app/components/pages/_Common';
+import TypeSelector from 'app/components/pages/_Common/TypeSelector';
 import { Posts } from './DummyData';
 
 const customStyles = {
@@ -32,9 +32,20 @@ class Create extends Component {
     constructor(props) {
         super(props);
 
+        const highLight = localStorage.getItem('high_light');
+        if (highLight && highLight.length > 0) {
+            localStorage.removeItem('high_light');
+            Posts.unshift({
+                id: Posts.length + 1,
+                type: 'Q',
+                title: highLight,
+            });
+        }
+
         this.state = {
             // loading: true,
             type: 'Q',
+            posts: Posts,
         };
     }
 
@@ -46,7 +57,7 @@ class Create extends Component {
     }
 
     render() {
-        const { type } = this.state;
+        const { type, posts } = this.state;
 
         return (
             <div className="CreateWrapper">
@@ -88,7 +99,7 @@ class Create extends Component {
                         <Select
                             styles={customStyles}
                             classNamePrefix="Select"
-                            defaultValue={Posts[0]}
+                            defaultValue={posts[0]}
                             placeholder="Select In Response To..."
                             getOptionValue={item => item.id}
                             getOptionLabel={item => (
@@ -99,7 +110,7 @@ class Create extends Component {
                                     {item.title}
                                 </div>
                             )}
-                            options={Posts}
+                            options={posts}
                             isClearable
                             isSearchable
                         />
@@ -159,4 +170,7 @@ class Create extends Component {
     }
 }
 
-export default Create;
+module.exports = {
+    path: 'static_create',
+    component: Create,
+};

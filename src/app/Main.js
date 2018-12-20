@@ -1,18 +1,23 @@
 import 'babel-core/register';
 import 'babel-polyfill';
 import 'whatwg-fetch';
+
 import store from 'store';
-import { VIEW_MODE_WHISTLE, PARAM_VIEW_MODE } from 'shared/constants';
-import 'normalize.css/normalize.css';
-import './assets/stylesheets/app.scss';
-import plugins from 'app/utils/JsPlugins';
 import Iso from 'iso';
-import { clientRender } from 'shared/UniversalRender';
-import ConsoleExports from './utils/ConsoleExports';
-import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 import * as steem from '@steemit/steem-js';
+
+import { clientRender } from 'shared/UniversalRender';
+import { VIEW_MODE_WHISTLE, PARAM_VIEW_MODE } from 'shared/constants';
+
+import plugins from 'app/utils/JsPlugins';
+import ConsoleExports from 'app/utils/ConsoleExports';
+import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 import { determineViewMode } from 'app/utils/Links';
 import frontendLogger from 'app/utils/FrontendLogger';
+
+import 'normalize.css/normalize.css';
+import 'medium-editor/dist/css/medium-editor.css';
+import 'app/assets/stylesheets/app.scss';
 
 window.addEventListener('error', frontendLogger);
 

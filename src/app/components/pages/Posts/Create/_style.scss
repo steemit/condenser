@@ -73,3 +73,11 @@
     }
   }
 }
+
+.Select__control {
+  .Select__input {
+    input {
+      height: auto !important;
+    }
+  }
+}

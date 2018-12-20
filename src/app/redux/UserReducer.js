@@ -70,6 +70,7 @@ export default function reducer(state = defaultState, action) {
             }
             return state.merge({
                 show_login_modal: true,
+                login_type: payload.type,
                 loginBroadcastOperation: operation,
                 loginDefault,
             });

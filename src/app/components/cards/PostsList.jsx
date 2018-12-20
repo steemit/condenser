@@ -160,14 +160,6 @@ class PostsList extends React.Component {
             username,
             nsfwPref,
         } = this.props;
-        const isLoggedInOnFeed = category === 'feed' && !account;
-        const isLoggedOutOnTrending =
-            !username && (pathname === '/' || pathname === '/trending');
-        const arePinnedPostsVisible =
-            showPinned && (isLoggedInOnFeed || isLoggedOutOnTrending);
-        const arePinnedPostsReady = isLoggedInOnFeed
-            ? anyPosts
-            : postsInfo.length > 0;
         const { thumbSize } = this.state;
         const postsInfo = [];
         posts.forEach(item => {
@@ -185,6 +177,18 @@ class PostsList extends React.Component {
                 // rephide
                 postsInfo.push({ item, ignore });
         });
+
+        // Helper functions for determining whether to show pinned posts.
+        const isLoggedInOnFeed = username && pathname === `/@${username}/feed`;
+        const isLoggedOutOnTrending =
+            !username && (pathname === '/' || pathname === '/trending');
+        const arePinnedPostsVisible =
+            showPinned && (isLoggedInOnFeed || isLoggedOutOnTrending);
+        const arePinnedPostsReady = isLoggedInOnFeed
+            ? anyPosts
+            : postsInfo.length > 0;
+        const showPinnedPosts = arePinnedPostsVisible && arePinnedPostsReady;
+
         const pinned = this.props.pinned.toJS();
         const renderPinned = pinnedPosts =>
             pinnedPosts.map(pinnedPost => {
@@ -231,9 +235,7 @@ class PostsList extends React.Component {
                     itemType="http://schema.org/blogPosts"
                 >
                     {/* Only render pinned posts when other posts are ready */}
-                    {arePinnedPostsVisible &&
-                        arePinnedPostsReady &&
-                        renderPinned(pinned)}
+                    {showPinnedPosts && renderPinned(pinned)}
                     {renderSummary(postsInfo)}
                 </ul>
                 {loading && (

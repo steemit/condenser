@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
+// import ReactDOM from 'react-dom';
 // import PropTypes from 'prop-types';
 
-import MediumEditor from 'medium-editor';
+if (typeof document !== 'undefined') {
+    var MediumEditor = require('medium-editor'); // eslint-disable-line
+}
 
 class HighLight extends Component {
     state = {
@@ -41,15 +43,11 @@ class HighLight extends Component {
     };
 
     componentDidMount() {
-        const dom = ReactDOM.findDOMNode(this); // eslint-disable-line
-        this.medium = new MediumEditor(
-            dom,
+        // const dom = ReactDOM.findDOMNode(this); // eslint-disable-line
+        this.medium = new MediumEditor( // eslint-disable-line
+            '#HighLightWrapper',
             Object.assign(this.state.staticOptions, this.props.options || {})
         );
-    }
-
-    componentDidUpdate() {
-        this.medium.restoreSelection();
     }
 
     componentWillUnmount() {
@@ -73,7 +71,11 @@ class HighLight extends Component {
     }
 
     render() {
-        return <div data-disable-editing>{this.props.children}</div>;
+        return (
+            <div data-disable-editing id="HighLightWrapper">
+                {this.props.children}
+            </div>
+        );
     }
 }
 

@@ -89,7 +89,7 @@ class PostsIndex extends React.Component {
             order = constants.DEFAULT_SORT_ORDER,
         } = this.props.routeParams;
 
-        const { categories } = this.props;
+        const { categories, pinned } = this.props;
 
         let topics_order = order;
         let posts = [];
@@ -228,13 +228,16 @@ class PostsIndex extends React.Component {
                         </div>
                     </div>
                     <hr className="articles__hr" />
-                    {!fetching && (posts && !posts.size) ? (
+                    {!fetching &&
+                    (posts && !posts.size) &&
+                    (pinned && !pinned.size) ? (
                         <Callout>{emptyText}</Callout>
                     ) : (
                         <PostsList
                             ref="list"
                             posts={posts ? posts : List()}
                             loading={fetching}
+                            anyPosts={true}
                             category={category}
                             loadMore={this.loadMore}
                             showPinned={true}
@@ -299,6 +302,7 @@ module.exports = {
                 categories: state.global
                     .getIn(['tag_idx', 'trending'])
                     .take(50),
+                pinned: state.offchain.get('pinned_posts'),
                 maybeLoggedIn: state.user.get('maybeLoggedIn'),
                 isBrowser: process.env.BROWSER,
             };

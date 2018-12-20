@@ -14,6 +14,7 @@ import Callout from 'app/components/elements/Callout';
 // import SidebarStats from 'app/components/elements/SidebarStats';
 import SidebarLinks from 'app/components/elements/SidebarLinks';
 import SidebarNewUsers from 'app/components/elements/SidebarNewUsers';
+import Notices from 'app/components/elements/Notices';
 import ArticleLayoutSelector from 'app/components/modules/ArticleLayoutSelector';
 import Topics from './Topics';
 import SortOrder from 'app/components/elements/SortOrder';
@@ -255,6 +256,11 @@ class PostsIndex extends React.Component {
                             </div>
                         )
                     )}
+                    <Notices
+                        author={'@steemitblog'}
+                        date={'12/24/18'}
+                        title="Hello world"
+                    />
                 </aside>
                 <aside className="c-sidebar c-sidebar--left">
                     <Topics

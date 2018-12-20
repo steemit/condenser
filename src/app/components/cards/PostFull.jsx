@@ -476,85 +476,18 @@ class PostFull extends React.Component {
                                     {tt('g.edit')}
                                 </a>
                             )}
+
+                        {showDeleteOption &&
+                            !showReply && (
+                                <a
+                                    className="PostFull__btn-edit"
+                                    onClick={onDeletePost}
+                                >
+                                    {tt('g.delete')}
+                                </a>
+                            )}
                     </span>
                 )}
-
-                {showPromote && (
-                    <button
-                        className="Promote__button float-right button hollow tiny"
-                        onClick={this.showPromotePost}
-                    >
-                        {tt('g.promote')}
-                    </button>
-                )}
-
-                <TagList post={content} horizontal />
-
-                <div className="PostFull__footer row">
-                    <div className="columns medium-12 large-5">
-                        <TimeAuthorCategory
-                            content={content}
-                            authorRepLog10={authorRepLog10}
-                        />
-                    </div>
-                    <div className="columns medium-12 large-2 ">
-                        <Voting post={post} />
-                    </div>
-
-                    <div className="RightShare__Menu small-11 medium-12 large-5 columns">
-                        {showReblog && (
-                            <Reblog author={author} permlink={permlink} />
-                        )}
-
-                        <span className="PostFull__reply">
-                            {showReplyOption && (
-                                <a onClick={onShowReply}>{tt('g.reply')}</a>
-                            )}{' '}
-                            {showEditOption &&
-                                !showEdit && (
-                                    <a onClick={onShowEdit}>{tt('g.edit')}</a>
-                                )}
-                            {showDeleteOption &&
-                                !showReply && (
-                                    <a onClick={onDeletePost}>
-                                        {tt('g.delete')}
-                                    </a>
-                                )}
-                        </span>
-                        <span className="PostFull__responses">
-                            <Link
-                                to={link}
-                                title={tt('g.responses', {
-                                    count: content.children,
-                                })}
-                            >
-                                <Icon
-                                    name="chatboxes"
-                                    className="space-right"
-                                />
-                                {content.children}
-                            </Link>
-                        </span>
-
-                        <span className="PostFull__views">
-                            <PageViewsCounter
-                                hidden={false}
-                                sinceDate={isPreViewCount ? 'Dec 2016' : null}
-                            />
-                        </span>
-
-                        <div className="PostActions__social">
-                            <ShareMenu menu={share_menu} />
-                            <button
-                                className="shareMenu__list-item shareMenu__list-item--url"
-                                title={tt('g.share_this_post')}
-                                onClick={this.showExplorePost}
-                            >
-                                <Icon name="link" />
-                            </button>
-                        </div>
-                    </div>
-                </div>
 
                 <section className="PostActions">
                     <div className="PostActions__post-metadata">
@@ -564,10 +497,20 @@ class PostFull extends React.Component {
                                 to={'/@' + content.author}
                             >
                                 <Userpic account={content.author} />
-                                {'@' + content.author}
-                                <span className="PostActions__author-rep">
-                                    &nbsp;({authorRepLog10})
-                                </span>
+                                <div className="PostActions__author_metadata">
+                                    <p className="PostActions__author-name">
+                                        {'@' + content.author}
+                                        <span className="PostActions__author-rep">
+                                            &nbsp;({authorRepLog10})
+                                        </span>
+                                    </p>
+                                    <p className="PostActions__author-time">
+                                        <TimeAgoWrapper
+                                            date={content.created}
+                                            className="updated"
+                                        />
+                                    </p>
+                                </div>
                             </Link>
                         </div>
                         <div className="PostActions__tags">
@@ -613,18 +556,11 @@ class PostFull extends React.Component {
                                         />
                                     )}
                                     <span className="PostActions__replies">
-                                        <Link
-                                            to={link}
-                                            title={tt('g.responses', {
-                                                count: content.children,
-                                            })}
-                                        >
-                                            <Icon
-                                                name="chatboxes"
-                                                className="space-right"
-                                            />
-                                            {content.children}
-                                        </Link>
+                                        <Icon
+                                            name="chatboxes"
+                                            className="space-right"
+                                        />
+                                        {content.children}
                                     </span>
                                 </div>
                             </div>

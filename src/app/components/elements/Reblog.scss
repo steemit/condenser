@@ -1,7 +1,7 @@
 .Reblog__button {
   path {
     @include themify($themes) {
-      fill: themed('iconColorSecondary');
+      fill: themed('colorAccent');
     }
   }
 }

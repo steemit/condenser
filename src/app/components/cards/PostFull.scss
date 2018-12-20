@@ -375,11 +375,11 @@ $color-url: #333;
 .PostActions {
   width: 100%;
   max-width: 46em;
-  margin: 3em auto 2em;
+  margin: 1em auto 2em;
   border-top: 1px solid #eee;
   padding-top: 2rem;
   @include MQ(M) {
-    margin: 5em auto 2em;
+    margin: 2em auto 2em;
   }
   &__post-metadata {
     @include MQ(M) {
@@ -398,10 +398,22 @@ $color-url: #333;
       margin-bottom: 1.25rem;
     }
     .Userpic {
-      margin-right: 10px;
+      margin-right: 8px;
       width: 42px;
       height: 42px;
+      @include MQ(M) {
+        margin-right: 10px;
+      }
     }   
+  }
+  &__author-time {
+    margin: 0;
+    font-weight: normal;
+    line-height: 1;
+    @include font-size(14px);
+    @include themify($themes) {
+      color: themed('textColorSecondary');
+    }         
   }
   &__author-link {
     display: flex;
@@ -411,6 +423,7 @@ $color-url: #333;
   }
   &__author-name {
     margin: 0;
+    line-height: 1.4;
   }
   &__author-img {
     border-radius: 20px;
@@ -422,6 +435,7 @@ $color-url: #333;
   &__author-rep {
     @include font-size(14px);
     font-weight: normal;
+    line-height: 1;
   }
   &__tag-list {
     margin: 0;
@@ -518,13 +532,15 @@ $color-url: #333;
     margin-right: 8px;
   }
   &__replies {
-    a {
       @include font-size(14px);
       color: $color-text-gray-light;  
-    }
-    
+
     .Icon.chatboxes {
-      fill: $color-text-gray-light;      
+      margin-right: 4px;  
+      margin-left: 16px;  
+      svg path {
+        fill: $color-text-gray-light;    
+      }
     }
   }
 }

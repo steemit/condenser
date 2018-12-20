@@ -8,6 +8,11 @@
       border: themed('borderDark');  
     }    
   }
+
+  .Icon > svg, .Icon span.icon {
+    width: auto;
+    height: auto;
+  }
 }
 
 .Voting__button {
@@ -195,6 +200,7 @@
 .DropdownMenu.Voting__voters_list .dropdown-trigger {
   padding-left: 8px;
   border-left: 1px solid $color-border-dark;
+  @include font-size(14px);
 }
 
 .DropdownMenu.Voting__voters_list ul {

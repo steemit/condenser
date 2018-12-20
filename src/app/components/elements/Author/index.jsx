@@ -124,7 +124,7 @@ class Author extends React.Component {
                             }}
                             to={'/@' + author}
                         >
-                            {author} <Reputation value={authorRepLog10} />
+                            {'@' + author} <Reputation value={authorRepLog10} />
                             <Icon name="dropdown-arrow" />
                         </Link>
                     </strong>

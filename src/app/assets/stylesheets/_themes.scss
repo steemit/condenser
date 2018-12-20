@@ -328,7 +328,6 @@ $themes: (
   }
 }
 
-
 .theme-dark {
   .button.hollow {
     &:hover, &:focus {
@@ -344,4 +343,11 @@ $themes: (
   width: 92%;
   max-width: $content-max-width;
   margin: 0 auto;
+}
+
+.full-bleed {
+  width: 100vw;
+  margin-left: -50vw;
+  left: 50%;    
+  position: relative; 
 }

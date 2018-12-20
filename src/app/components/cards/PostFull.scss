@@ -70,7 +70,7 @@
 }
 
 .PostFull__time_author_category_large {
-  margin: 1.4rem 0 1.4rem 0;
+  margin: 1rem 0 1rem 0;
   line-height: 1.2;
   @include themify($themes) {
       color: themed('textColorSecondary');
@@ -86,9 +86,11 @@
   > .Userpic {
     margin-top: -4px;
     float: left;
+    width: 32px;
+    height: 32px;
   }
   > .right-side {
-    margin-left: 12px;
+    margin-left: 8px;
     position: relative;
     top: -2px;
   }
@@ -108,6 +110,7 @@
     font-size: 200%;
     font-weight: 800;
     line-height: 1.1;
+    margin-top: 5px;
     @include MQ(M) {
       font-size: 220%;
     }    
@@ -119,9 +122,20 @@
   a {
     @extend .link;
     @extend .link--secondary;
-    font-weight: 600;
+    font-weight: bold;
 
   }
+  > a {
+    @extend .link--accent;
+    @include font-size(16px);
+    margin-bottom: 1rem; 
+    @include MQ(M) {
+      @include font-size(20px);
+    }
+  }
+  > a::before {
+      content: "#";
+  }  
   .PostFull__time_author_category {
     border-right: none;
     .Icon.clock {
@@ -133,6 +147,10 @@
       }
     }
   }
+}
+
+.updated {
+    @include font-size(14px);
 }
 
 .PostFull__body {
@@ -280,55 +298,12 @@ input.share-box {
   left: -100000000px
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 $color-facebook: #3A5997;
 $color-twitter: #56ACEE;    
 $color-reddit: #FF4500;
 $color-linkedin: #0077B5;
 $color-url: #333;
 
-
-
-.full-bleed {
-  width: 100vw;
-  margin-left: -50vw;
-  left: 50%;    
-  position: relative; 
-}
 
 .content {
   margin-top: 6em;
@@ -399,8 +374,6 @@ $color-url: #333;
     }
     .Userpic {
       margin-right: 8px;
-      width: 42px;
-      height: 42px;
       @include MQ(M) {
         margin-right: 10px;
       }
@@ -548,6 +521,8 @@ $color-url: #333;
 .divider {
   color: rgba(255,255,255, 0.5);
 }
+
+
 
 
 // .PostActions {

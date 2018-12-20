@@ -52,12 +52,7 @@ function TimeAuthorCategoryLarge({ content, authorRepLog10 }) {
                 <Author
                     author={content.author}
                     authorRepLog10={authorRepLog10}
-                />
-                <span>
-                    {' '}
-                    {tt('g.in')} <TagList post={content} single />
-                </span>{' '}
-                •&nbsp;{' '}
+                />{' '}
                 <TimeAgoWrapper date={content.created} className="updated" />
             </div>
         </span>
@@ -458,6 +453,7 @@ class PostFull extends React.Component {
                             <Voting post={post} flag />
                         </div>
                         <div className="PostFull__header">
+                            <TagList post={content} single />
                             {post_header}
                             <TimeAuthorCategoryLarge
                                 content={content}
@@ -567,7 +563,6 @@ class PostFull extends React.Component {
                         </div>
                     </div>
                 </section>
-
                 <div>{showReply && renderedEditor}</div>
             </article>
         );

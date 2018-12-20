@@ -46,7 +46,11 @@ export default ({ post, horizontal, single }) => {
         return <div className="TagList__horizontal">{list}</div>;
     }
     if (tags.length == 1) {
-        return <Link to={`/${sort_order}/${tags[0]}`}>{tags[0]}</Link>;
+        return (
+            <Link className="TagList__single" to={`/${sort_order}/${tags[0]}`}>
+                {tags[0]}
+            </Link>
+        );
     }
     const list = tags.map(tag => {
         return { value: tag, link: `/${sort_order}/${tag}` };

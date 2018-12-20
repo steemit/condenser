@@ -25,6 +25,10 @@ $menu-width: 250px;
         border-top: 1px solid $color-blue-black;
         color: $color-white;
         border-bottom: 1px solid $color-blue-black-darkest;
+        @include font-size(14px);
+        @include MQ(M) {
+          @include font-size(16px);
+        }
       }
       > a:hover, &:focus {
         background-color:  $color-blue-black;

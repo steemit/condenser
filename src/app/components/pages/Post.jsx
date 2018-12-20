@@ -231,7 +231,7 @@ class Post extends React.Component {
                                 <div className="Post_comments__container">
                                     <div>
                                         <h3 className="Post_comments__heading">
-                                            Comments ({replies.length})
+                                            Comments ({dis.get('children')})
                                         </h3>
                                     </div>
                                     <div className="Post__comments_sort_order">

@@ -37,7 +37,7 @@ const Notice = ({ notice }) => {
     ) : null;
 
     return (
-        <li className="Notices__notice" key={notice.title}>
+        <li className="Notices__notice">
             {tag}
             <p className="Notices__title">{title}</p>
             <p className="Notices__metadata">
@@ -61,7 +61,9 @@ const SteemitNotices = ({ notices }) => {
             </div>
             <div className="c-sidebar__content">
                 <ul className="Notices">
-                    {notices.map(notice => <Notice notice={notice} />)}
+                    {notices.map(notice => (
+                        <Notice key={notice.title} notice={notice} />
+                    ))}
                 </ul>
             </div>
         </div>

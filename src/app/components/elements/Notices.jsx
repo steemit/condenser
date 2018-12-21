@@ -1,6 +1,7 @@
 import React from 'react';
 import tt from 'counterpart';
 import { Link } from 'react-router';
+import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 
 const Notice = ({ notice }) => {
     if (!notice || !notice.title) {
@@ -31,7 +32,7 @@ const Notice = ({ notice }) => {
     const date = notice.created ? (
         <span>
             {' . '}
-            {notice.created}
+            <TimeAgoWrapper date={notice.created} />
         </span>
     ) : null;
 

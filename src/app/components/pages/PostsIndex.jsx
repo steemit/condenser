@@ -256,11 +256,7 @@ class PostsIndex extends React.Component {
                             </div>
                         )
                     )}
-                    <Notices
-                        author={'@steemitblog'}
-                        date={'12/24/18'}
-                        title="Hello world"
-                    />
+                    <Notices notices={this.props.notices} />
                 </aside>
                 <aside className="c-sidebar c-sidebar--left">
                     <Topics
@@ -307,6 +303,10 @@ module.exports = {
                     .take(50),
                 maybeLoggedIn: state.user.get('maybeLoggedIn'),
                 isBrowser: process.env.BROWSER,
+                notices: state.offchain
+                    .get('pinned_posts')
+                    .get('notices')
+                    .toJS(),
             };
         },
         dispatch => {

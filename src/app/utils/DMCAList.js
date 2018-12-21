@@ -222,6 +222,8 @@ export default `
 /karwan/@full-movie/download-2018-full-movie-hd-quality-720p-bluray-mp4
 /floridashooting/@cabintalk/debbie-the-sane-progressive-did-an-excellent-compilation-of-the-parkland-shooting
 /life/@ionutciobanu/5t4kfj-belgia
+/full/@attaya05/123putlocker-hd-watch-the-house-that-jack-built-full-movie-online-2018-and-free
+/movie/@latusycoco/watch-the-house-that-jack-built-2018-full-movie-hd-1080p
 `
     .trim()
     .split('\n');

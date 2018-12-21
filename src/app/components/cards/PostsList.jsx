@@ -151,10 +151,13 @@ class PostsList extends React.Component {
             showResteem,
             showSpam,
             loading,
+            anyPosts,
+            pathname,
             category,
             content,
             ignore_result,
             account,
+            username,
             nsfwPref,
         } = this.props;
         const { thumbSize } = this.state;
@@ -174,23 +177,43 @@ class PostsList extends React.Component {
                 // rephide
                 postsInfo.push({ item, ignore });
         });
+
+        // Helper functions for determining whether to show pinned posts.
+        const isLoggedInOnFeed = username && pathname === `/@${username}/feed`;
+        const isLoggedOutOnTrending =
+            !username && (pathname === '/' || pathname === '/trending');
+        const arePinnedPostsVisible =
+            showPinned && (isLoggedInOnFeed || isLoggedOutOnTrending);
+        const arePinnedPostsReady = isLoggedInOnFeed
+            ? anyPosts
+            : postsInfo.length > 0;
+        const showPinnedPosts = arePinnedPostsVisible && arePinnedPostsReady;
+
         const pinned = this.props.pinned;
         const renderPinned = pinnedPosts =>
-            pinnedPosts.map(pinnedPost => (
-                <li key={pinnedPost}>
-                    <div className="PinLabel">
-                        <Icon className="PinIcon" name="pin" />{' '}
-                        <span className="PinText">Pinned Post</span>
-                    </div>
-                    <PostSummary
-                        account={account}
-                        post={`${pinnedPost.author}/${pinnedPost.permlink}`}
-                        thumbSize={thumbSize}
-                        ignore={false}
-                        nsfwPref={nsfwPref}
-                    />
-                </li>
-            ));
+            pinnedPosts.map(pinnedPost => {
+                const id = `${pinnedPost.author}/${pinnedPost.permlink}`;
+                const pinnedPostContent = content.get(id);
+                const isSeen = pinnedPostContent.get('seen');
+                return (
+                    <li key={pinnedPost}>
+                        <div className="PinLabel">
+                            <Icon
+                                className="PinIcon"
+                                name={isSeen ? 'pin-disabled' : 'pin'}
+                            />{' '}
+                            <span className="PinText">Pinned Post</span>
+                        </div>
+                        <PostSummary
+                            account={account}
+                            post={id}
+                            thumbSize={thumbSize}
+                            ignore={false}
+                            nsfwPref={nsfwPref}
+                        />
+                    </li>
+                );
+            });
         const renderSummary = items =>
             items.map(item => (
                 <li key={item.item}>
@@ -212,7 +235,7 @@ class PostsList extends React.Component {
                     itemType="http://schema.org/blogPosts"
                 >
                     {/* Only render pinned posts when other posts are ready */}
-                    {showPinned && postsInfo.length > 0 && renderPinned(pinned)}
+                    {showPinnedPosts && renderPinned(pinned)}
                     {renderSummary(postsInfo)}
                 </ul>
                 {loading && (
@@ -250,6 +273,7 @@ export default connect(
             .toJS();
         return {
             ...props,
+            pathname,
             username,
             content,
             ignore_result,

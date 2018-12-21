@@ -30,7 +30,7 @@ const Notice = ({ notice }) => {
     ) : null;
     const date = notice.created ? (
         <span>
-            {' . '}
+            {' • '}
             {notice.created}
         </span>
     ) : null;

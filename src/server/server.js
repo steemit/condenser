@@ -340,11 +340,12 @@ if (env === 'production') {
 
 if (env !== 'test') {
     const appRender = require('./app_render');
+
+    // Load the pinned posts and store them on the ctx for later use. Since
+    // we're inside a generator, we can't `await` here, so we pass a promise
+    // so `src/server/app_render.jsx` can `await` on it.
+    app.pinnedPostsPromise = pinnedPosts();
     app.use(function*() {
-        // Load the pinned posts and store them on the ctx for later use. Since
-        // we're inside a generator, we can't `await` here, so we pass a promise
-        // so `src/server/app_render.jsx` can `await` on it.
-        this.pinnedPostsPromise = pinnedPosts();
         yield appRender(this, supportedLocales, resolvedAssets);
         // if (app_router.dbStatus.ok) recordWebEvent(this, 'page_load');
         const bot = this.state.isBot;

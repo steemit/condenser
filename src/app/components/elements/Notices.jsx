@@ -25,7 +25,7 @@ const Notice = ({ notice }) => {
         <span className="Notices__by"> {tt('g.by')}&nbsp;</span>
     ) : null;
     const author = notice.author ? (
-        <Link className="Notices__author-link" to={'@' + notice.author}>
+        <Link className="Notices__author-link" to={'/@' + notice.author}>
             {notice.author}
         </Link>
     ) : null;

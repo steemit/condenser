@@ -9,7 +9,7 @@ const Notice = ({ notice }) => {
     }
 
     const url = notice.permalink
-        ? `/${notice.author}/${notice.permlink}`
+        ? `/@${notice.author}/${notice.permlink}`
         : notice.url;
     const tag = notice.tag ? (
         <p className="Notices__featured">{notice.tag}</p>

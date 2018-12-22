@@ -189,7 +189,7 @@ class PostsList extends React.Component {
             : postsInfo.length > 0;
         const showPinnedPosts = arePinnedPostsVisible && arePinnedPostsReady;
 
-        const pinned = this.props.pinned.toJS();
+        const pinned = this.props.pinned;
         const renderPinned = pinnedPosts =>
             pinnedPosts.map(pinnedPost => {
                 const id = `${pinnedPost.author}/${pinnedPost.permlink}`;
@@ -267,7 +267,10 @@ export default connect(
         ]);
         const userPreferences = state.app.get('user_preferences').toJS();
         const nsfwPref = userPreferences.nsfwPref || 'warn';
-        const pinned = state.offchain.get('pinned_posts');
+        const pinned = state.offchain
+            .get('pinned_posts')
+            .get('pinned_posts')
+            .toJS();
         return {
             ...props,
             pathname,

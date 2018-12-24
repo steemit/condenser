@@ -53,6 +53,7 @@ export const icons = [
     '100',
     'pencil2',
     'pin',
+    'pin-disabled',
 ];
 const icons_map = {};
 for (const i of icons) icons_map[i] = require(`assets/icons/${i}.svg`);

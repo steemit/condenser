@@ -141,6 +141,18 @@ function* usernamePasswordLogin2({
     operationType /*high security*/,
     afterLoginRedirectToWelcome,
 }) {
+    const user = yield select(state => state.user);
+    const loginType = user.get('login_type');
+    const justLoggedIn = loginType === 'basic';
+    console.log(
+        'Login type:',
+        loginType,
+        'Just logged in?',
+        justLoggedIn,
+        'username:',
+        username
+    );
+
     // login, using saved password
     let feedURL = false;
     let autopost, memoWif, login_owner_pubkey, login_wif_owner_pubkey;
@@ -162,6 +174,7 @@ function* usernamePasswordLogin2({
     }
     // no saved password
     if (!username || !password) {
+        console.log('No saved password');
         const offchain_account = yield select(state =>
             state.offchain.get('account')
         );
@@ -186,11 +199,13 @@ function* usernamePasswordLogin2({
 
     const account = yield call(getAccount, username);
     if (!account) {
+        console.log('No account');
         yield put(userActions.loginError({ error: 'Username does not exist' }));
         return;
     }
     //dmca user block
     if (username && DMCAUserList.includes(username)) {
+        console.log('DMCA list');
         yield put(
             userActions.loginError({ error: translate('terms_violation') })
         );
@@ -241,6 +256,7 @@ function* usernamePasswordLogin2({
         let authority = yield select(state =>
             state.user.getIn(['authority', username])
         );
+
         const hasActiveAuth = authority.get('active') === 'full';
         if (!highSecurityLogin) {
             const accountName = account.get('name');
@@ -254,6 +270,7 @@ function* usernamePasswordLogin2({
             Set()
         );
         if (!fullAuths.size) {
+            console.log('No full auths');
             localStorage.removeItem('autopost2');
             const owner_pub_key = account.getIn(['owner', 'key_auths', 0, 0]);
             if (
@@ -307,6 +324,7 @@ function* usernamePasswordLogin2({
             private_keys = private_keys.remove('memo_private');
 
         if (!highSecurityLogin) {
+            console.log('Not high security login');
             if (
                 posting_pubkey === owner_pubkey ||
                 posting_pubkey === active_pubkey
@@ -379,6 +397,7 @@ function* usernamePasswordLogin2({
             challengeString = 'challengeString';
         }
         if (!serverAccount && challengeString) {
+            console.log('No server account, but challenge string');
             const signatures = {};
             const challenge = { token: challengeString };
             const buf = JSON.stringify(challenge, null, 0);
@@ -418,15 +437,34 @@ function* usernamePasswordLogin2({
                 );
             } else {
                 const sign = (role, d) => {
+                    console.log('Sign before');
                     if (!d) return;
+                    console.log('Sign after');
                     const sig = Signature.signBufferSha256(bufSha, d);
                     signatures[role] = sig.toHex();
                 };
                 sign('posting', private_keys.get('posting_private'));
                 // sign('active', private_keys.get('active_private'))
-            }
 
-            yield serverApiLogin(username, signatures);
+                console.log('Logging in as', username);
+                const response = yield serverApiLogin(username, signatures);
+                const body = yield response.json();
+
+                if (justLoggedIn) {
+                    // If ads are enabled, reload the page instead of changing the browser
+                    // history when they log in, so headers will get re-requested.
+                    const adsEnabled = yield select(state =>
+                        state.app.getIn(['googleAds', 'enabled'])
+                    );
+                    if (adsEnabled) {
+                        var url = new URL(window.location.href);
+                        url.searchParams.set('auth', 'true');
+                        console.log('New post-login URL', url.toString());
+                        window.location.replace(url.toString());
+                        return;
+                    }
+                }
+            }
         }
     } catch (error) {
         // Does not need to be fatal
@@ -446,10 +484,14 @@ function* usernamePasswordLogin2({
     }
     // TOS acceptance
     yield fork(promptTosAcceptance, username);
+
+    // Redirect user to the appropriate page after login.
     if (afterLoginRedirectToWelcome) {
+        console.log('Redirecting to welcome page');
         browserHistory.push('/welcome');
-    } else if (feedURL) {
-        if (document.location.pathname === '/') browserHistory.push(feedURL);
+    } else if (feedURL && document.location.pathname === '/') {
+        console.log('Redirecting to feed page', feedURL);
+        browserHistory.push(feedURL);
     }
 }
 
@@ -544,6 +586,7 @@ function* saveLogin_localStorage() {
         console.error(e);
         return;
     }
+
     const memoKey = private_keys ? private_keys.get('memo_private') : null;
     const memoWif = memoKey && memoKey.toWif();
     const postingPrivateWif = posting_private
@@ -557,10 +600,28 @@ function* saveLogin_localStorage() {
     localStorage.setItem('autopost2', data);
 }
 
-function* logout() {
-    yield put(userActions.saveLoginConfirm(false)); // Just incase it is still showing
-    if (process.env.BROWSER) localStorage.removeItem('autopost2');
-    serverApiLogout();
+function* logout(action) {
+    const payload = (action || {}).payload || {};
+    const logoutType = payload.type || 'default';
+    console.log('Logging out', arguments, 'logout type', logoutType);
+
+    // Just in case it is still showing
+    yield put(userActions.saveLoginConfirm(false));
+
+    if (process.env.BROWSER) {
+        localStorage.removeItem('autopost2');
+    }
+
+    yield serverApiLogout();
+
+    // If ads are enabled, reload the page instead of changing the browser
+    // history when they log out, so headers will get re-requested.
+    const adsEnabled = yield select(state =>
+        state.app.getIn(['googleAds', 'enabled'])
+    );
+    if (logoutType == 'default' && adsEnabled) {
+        window.location.reload();
+    }
 }
 
 function* loginError({

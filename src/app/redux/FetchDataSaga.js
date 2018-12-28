@@ -69,6 +69,7 @@ export function* fetchState(location_change_action) {
     try {
         const state = yield call(getStateAsync, url);
         yield put(globalActions.receiveState(state));
+        yield call(syncPinnedPosts);
         // If a user's transfer page is being loaded, fetch related account data.
         yield call(getTransferUsers, pathname);
     } catch (error) {
@@ -105,6 +106,30 @@ function* getTransferUsers(pathname) {
 
         yield call(getAccounts, transferUsers);
     }
+}
+
+function* syncPinnedPosts() {
+    // Get pinned posts from the store.
+    const pinnedPosts = yield select(state =>
+        state.offchain.get('pinned_posts')
+    );
+
+    // Mark seen posts.
+    const seenPinnedPosts = pinnedPosts.map(post =>
+        post.set(
+            'seen',
+            localStorage.getItem(`pinned-post-seen:${post.get('url')}`) ===
+                'true'
+        )
+    );
+
+    // Look up seen post URLs.
+    yield put(globalActions.syncPinnedPosts({ pinnedPosts: seenPinnedPosts }));
+
+    // Mark all pinned posts as seen.
+    pinnedPosts.forEach(post => {
+        localStorage.setItem(`pinned-post-seen:${post.get('url')}`, 'true');
+    });
 }
 
 /**

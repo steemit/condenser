@@ -395,7 +395,6 @@ function* usernamePasswordLogin2({
                         }
                     );
                 });
-                console.log(response);
                 if (response.success) {
                     signatures['posting'] = response.result;
                 } else {

@@ -147,13 +147,17 @@ class PostsList extends React.Component {
     render() {
         const {
             posts,
+            showPinned,
             showResteem,
             showSpam,
             loading,
+            anyPosts,
+            pathname,
             category,
             content,
             ignore_result,
             account,
+            username,
             nsfwPref,
         } = this.props;
         const { thumbSize } = this.state;
@@ -173,6 +177,43 @@ class PostsList extends React.Component {
                 // rephide
                 postsInfo.push({ item, ignore });
         });
+
+        // Helper functions for determining whether to show pinned posts.
+        const isLoggedInOnFeed = username && pathname === `/@${username}/feed`;
+        const isLoggedOutOnTrending =
+            !username && (pathname === '/' || pathname === '/trending');
+        const arePinnedPostsVisible =
+            showPinned && (isLoggedInOnFeed || isLoggedOutOnTrending);
+        const arePinnedPostsReady = isLoggedInOnFeed
+            ? anyPosts
+            : postsInfo.length > 0;
+        const showPinnedPosts = arePinnedPostsVisible && arePinnedPostsReady;
+
+        const pinned = this.props.pinned;
+        const renderPinned = pinnedPosts =>
+            pinnedPosts.map(pinnedPost => {
+                const id = `${pinnedPost.author}/${pinnedPost.permlink}`;
+                const pinnedPostContent = content.get(id);
+                const isSeen = pinnedPostContent.get('seen');
+                return (
+                    <li key={pinnedPost}>
+                        <div className="PinLabel">
+                            <Icon
+                                className="PinIcon"
+                                name={isSeen ? 'pin-disabled' : 'pin'}
+                            />{' '}
+                            <span className="PinText">Pinned Post</span>
+                        </div>
+                        <PostSummary
+                            account={account}
+                            post={id}
+                            thumbSize={thumbSize}
+                            ignore={false}
+                            nsfwPref={nsfwPref}
+                        />
+                    </li>
+                );
+            });
         const renderSummary = items =>
             items.map(item => (
                 <li key={item.item}>
@@ -193,6 +234,8 @@ class PostsList extends React.Component {
                     itemScope
                     itemType="http://schema.org/blogPosts"
                 >
+                    {/* Only render pinned posts when other posts are ready */}
+                    {showPinnedPosts && renderPinned(pinned)}
                     {renderSummary(postsInfo)}
                 </ul>
                 {loading && (
@@ -224,13 +267,19 @@ export default connect(
         ]);
         const userPreferences = state.app.get('user_preferences').toJS();
         const nsfwPref = userPreferences.nsfwPref || 'warn';
+        const pinned = state.offchain
+            .get('pinned_posts')
+            .get('pinned_posts')
+            .toJS();
         return {
             ...props,
+            pathname,
             username,
             content,
             ignore_result,
             pathname,
             nsfwPref,
+            pinned,
         };
     },
     dispatch => ({

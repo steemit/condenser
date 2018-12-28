@@ -469,6 +469,7 @@ export default connect(
         const loginBroadcastOperation = state.user.get(
             'loginBroadcastOperation'
         );
+        const shouldSeeAds = state.app.getIn(['googleAds', 'shouldSeeAds']);
         const initialValues = {
             saveLogin: saveLoginDefault,
         };
@@ -497,6 +498,7 @@ export default connect(
         return {
             login_error,
             loginBroadcastOperation,
+            shouldSeeAds,
             initialValues,
             initialUsername,
             msg,
@@ -542,6 +544,7 @@ export default connect(
                         operationType: type,
                     })
                 );
+
                 dispatch(userActions.closeLogin());
             } else {
                 dispatch(
@@ -567,6 +570,7 @@ export default connect(
         },
         showChangePassword: (username, defaultPassword) => {
             dispatch(userActions.closeLogin());
+
             dispatch(globalActions.remove({ key: 'changePassword' }));
             dispatch(
                 globalActions.showDialog({

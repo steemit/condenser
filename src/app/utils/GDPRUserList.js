@@ -3,6 +3,7 @@ mateja.klaric
 xondra
 tgylhn
 vichkovski
+wizzymt
 `
     .trim()
     .split('\n');

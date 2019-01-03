@@ -13,7 +13,7 @@ import graph3 from 'assets/images/static/graph/3.png';
 import HighLight from 'app/components/pages/_Common/HighLight';
 import Label from 'app/components/pages/_Common/Label';
 import SideMenu from 'app/components/pages/_Common/SideMenu';
-import { Nodes } from './DummyData';
+import { Nodes, HightLights, Note } from './DummyData';
 import BrowsingHistory from './Components/BrowsingHistory';
 
 class Node extends Component {
@@ -25,13 +25,13 @@ class Node extends Component {
             data: Nodes[0],
             citesVisible: false,
             citedByVisible: false,
+            highlightIndex: -1,
         };
     }
 
     componentDidMount() {
         // console.log(this.getParams('id'));
         const id = 1; //this.getParams('id');
-        console.log(Nodes[id - 1]);
 
         if (Nodes[id - 1]) {
             // this.setState({ data: Nodes[id - 1] });
@@ -48,10 +48,65 @@ class Node extends Component {
 
     toggleCitesPanel = () =>
         this.setState({ citesVisible: !this.state.citesVisible });
-    toggleCitedByPanel = () =>
-        this.setState({ citedByVisible: !this.state.citedByVisible });
+    toggleCitedByPanel = (highlightIndex = -1) =>
+        this.setState({
+            citedByVisible: !this.state.citedByVisible,
+            highlightIndex,
+        });
     closeCitesPanel = () => this.setState({ citesVisible: false });
-    closeCitedByPanel = () => this.setState({ citedByVisible: false });
+    closeCitedByPanel = () =>
+        this.setState({ citedByVisible: false, highlightIndex: -1 });
+
+    placeHightLights(note) {
+        const ret = note
+            .trim()
+            .replace(/\n/g, ' ')
+            .split('<br />');
+        const highLighted = {};
+        HightLights.forEach((highlight, hIndex) => {
+            if (note.indexOf(highlight.data) !== -1) {
+                if (!highLighted[highlight.data]) {
+                    highLighted[highlight.data] = highlight.data;
+                }
+                const data = highLighted[highlight.data];
+                ret.forEach((retItem, index) => {
+                    if (retItem.indexOf(highlight.data) !== -1) {
+                        highLighted[highlight.data] = data.replace(
+                            highlight.anchorText,
+                            `<Mark>${hIndex}--${
+                                highlight.anchorText
+                            }</Mark><Mark>`
+                        );
+                        ret[index] = retItem.replace(
+                            data,
+                            highLighted[highlight.data]
+                        );
+                    }
+                });
+            }
+        });
+
+        return ret.map((retItem, index) => {
+            const trimed = retItem.trim();
+            if (trimed.length <= 0)
+                return [<br key={index + '-1'} />, <br key={index + '-2'} />];
+            const texts = trimed.split('<Mark>');
+            return texts.map((text, tIndex) => {
+                if (text.indexOf('</Mark>') === -1) {
+                    return text;
+                }
+                const info = text.split('--');
+                return (
+                    <span
+                        key={index + '-' + tIndex}
+                        onClick={() => this.toggleCitedByPanel(info[0])}
+                    >
+                        {info[1].replace('</Mark>', '')}
+                    </span>
+                );
+            });
+        });
+    }
 
     render() {
         if (this.state.data == null) return <div>Loading</div>;
@@ -69,6 +124,11 @@ class Node extends Component {
         const citedByPanel = this.state.citedByVisible;
         const voteCount = (votes.up || 0) - (votes.down || 0);
 
+        const { highlightIndex } = this.state;
+        const highlightData =
+            highlightIndex === -1 ? null : HightLights[highlightIndex];
+        const hNode = highlightData ? Nodes[highlightData.node] : null;
+
         return (
             <div className="NodeWrapper">
                 <Sidebar.Pushable as={Segment}>
@@ -81,16 +141,16 @@ class Node extends Component {
                         vertical
                         visible={citesPanel}
                         width="wide"
+                        onHide={this.closeCitesPanel}
                     >
-                        <div className="Panel">
+                        <div className="Panel Left">
                             <div className="NodeHeader">
                                 <div>Citations</div>
-                                <div
-                                    className="CloseButton"
+                                <X
+                                    style={{ color: '#bbb' }}
+                                    size={20}
                                     onClick={this.closeCitesPanel}
-                                >
-                                    <X />
-                                </div>
+                                />
                             </div>
                             <div className="Main">Citations Go Here</div>
                             <div className="Extra" />
@@ -105,26 +165,83 @@ class Node extends Component {
                         vertical
                         width="wide"
                         visible={citedByPanel}
+                        onHide={this.closeCitedByPanel}
                     >
                         <div className="Panel">
                             <div className="NodeHeader">
                                 <div>Cited By Others</div>
-                                <div
-                                    className="CloseButton"
+                                <X
+                                    style={{ color: '#bbb' }}
+                                    size={20}
                                     onClick={this.closeCitedByPanel}
-                                >
-                                    <X />
-                                </div>
+                                />
                             </div>
-                            <div className="Main">Top Highlights Go Here</div>
-                            <div className="Extra" />
+                            <div className="Main">
+                                Topic that user <span>highlighted</span> in the
+                                text
+                            </div>
+                            {hNode && (
+                                <div className="Extra">
+                                    <div className={`Type ${hNode.type}`}>
+                                        {hNode.type}
+                                    </div>
+                                    {hNode.title}
+                                </div>
+                            )}
+                            <div className="NodeHeader">
+                                <div>Top Highlights</div>
+                            </div>
+                            {hNode && (
+                                <div className="Sections">
+                                    {[0, 1].map((key, index) => (
+                                        <section key={index}>
+                                            <div className="NodeHeader">
+                                                <div className="Wrap">
+                                                    <div className="User">
+                                                        <img
+                                                            src={defaultUser}
+                                                            alt={user.name}
+                                                        />
+                                                        <div>
+                                                            <div className="UserName">
+                                                                {user.name}
+                                                            </div>
+                                                            <div className="UserTitle">
+                                                                {user.title}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="Extra">
+                                                    <div className="Date">
+                                                        {date}
+                                                    </div>
+                                                    <div className="Reviews">
+                                                        {reviews} Reviews
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="Title">{title}</div>
+                                            <div className="Content">
+                                                There are many variations of
+                                                passages of Lorem Ipsum
+                                                available, but the majority have
+                                                suffered alteration in some
+                                                form, , or randomised words
+                                                which don't look even slightly
+                                                believable.
+                                            </div>
+                                        </section>
+                                    ))}
+                                </div>
+                            )}
                         </div>
                     </Sidebar>
 
                     <Sidebar.Pusher>
                         <div className="NodeInfo">
                             <BrowsingHistory />
-                            <div className="HeaderWrapper">
+                            <div className="UserInfoWrapper">
                                 <div className="NodeHeader">
                                     <div className="Wrap">
                                         <div className="TypeWrapper">
@@ -212,42 +329,12 @@ class Node extends Component {
                                     Title from an observation
                                 </span>
                                 <HighLight>
-                                    <p className="Content">
-                                        There are many variations of passages of
-                                        Lorem Ipsum available, but the majority
-                                        have suffered alteration in some form,
-                                        by injected humour, or randomised words
-                                        which don{"'"}t look even slightly
-                                        believable. If you are going to use a
-                                        passage of Lorem Ipsum, you need to be
-                                        sure there isn{"'"}t anything
-                                        embarrassing hidden in the middle of
-                                        text. All the Lorem Ipsum generators on
-                                        the Internet tend to repeat predefined
-                                        chunks as necessary, making this the
-                                        first true generator on the Internet. It
-                                        uses a dictionary of over 200 Latin{' '}
-                                        <span onClick={this.toggleCitedByPanel}>
+                                    <div className="Content">
+                                        {/* <span onClick={this.toggleCitedByPanel}>
                                             goodness
-                                        </span>, combined with a handful of
-                                        model sentence structures, to generate
-                                        Lorem Ipsum which looks reasonable. The
-                                        generated Lorem Ipsum is therefore
-                                        always free from repetition, injected
-                                        humour, or non-characteristic words etc.
-                                        <br />
-                                        <br />
-                                        Lorem Ipsum is simply dummy text of the
-                                        printing and typesetting industry. Lorem
-                                        Ipsum has been the industry{"'"}s
-                                        standard dummy text ever since the
-                                        1500s, when an unknown printer took a
-                                        galley of type and scrambled it to make
-                                        a type specimen book. It has survived
-                                        not only five centuries, but also the
-                                        leap into electronic typesetting,
-                                        remaining essentially unchanged.
-                                    </p>
+                                        </span> */}
+                                        {this.placeHightLights(Note)}
+                                    </div>
                                 </HighLight>
                             </div>
                             <SideMenu />

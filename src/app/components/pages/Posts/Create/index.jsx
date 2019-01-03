@@ -38,7 +38,7 @@ class Create extends Component {
             Posts.unshift({
                 id: Posts.length + 1,
                 type: 'Q',
-                title: highLight,
+                title: JSON.parse(highLight).anchorText,
             });
         }
 

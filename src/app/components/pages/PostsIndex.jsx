@@ -15,6 +15,7 @@ import Callout from 'app/components/elements/Callout';
 import SidebarLinks from 'app/components/elements/SidebarLinks';
 import SidebarNewUsers from 'app/components/elements/SidebarNewUsers';
 import Notices from 'app/components/elements/Notices';
+import GoogleAd from 'app/components/elements/GoogleAd';
 import ArticleLayoutSelector from 'app/components/modules/ArticleLayoutSelector';
 import Topics from './Topics';
 import SortOrder from 'app/components/elements/SortOrder';
@@ -260,7 +261,13 @@ class PostsIndex extends React.Component {
                         )
                     )}
                     <Notices notices={this.props.notices} />
+                    <GoogleAd
+                        name="sidebar-1"
+                        slot="9855000063"
+                        style={{ width: '160px', height: '600px' }}
+                    />
                 </aside>
+
                 <aside className="c-sidebar c-sidebar--left">
                     <Topics
                         order={topics_order}

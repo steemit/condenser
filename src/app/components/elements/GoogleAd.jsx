@@ -7,19 +7,29 @@ class GoogleAd extends React.Component {
     }
 
     render() {
-        if (typeof window === 'undefined') {
-            return null;
-        }
         if (!this.props.shouldSeeAds) {
             return null;
         }
 
+        const style = Object.assign(
+            {},
+            {
+                display: 'inline-block',
+                width: '100%',
+            },
+            this.props.style || {}
+        );
+
+        const className = ['adsbygoogle']
+            .concat(this.props.name ? [this.props.name] : [])
+            .join(' ');
+
         return (
             <ins
-                className="adsbygoogle"
-                style={{ display: 'block', width: '100%' }}
-                data-ad-test={window.googleAds.test}
-                data-ad-client={window.googleAds.client}
+                className={className}
+                style={style}
+                data-adtest={this.props.test}
+                data-ad-client={this.props.client}
                 data-ad-slot={this.props.slot}
                 data-ad-format="auto"
             />
@@ -29,5 +39,7 @@ class GoogleAd extends React.Component {
 
 export default connect((state, ownProps) => {
     const shouldSeeAds = state.app.getIn(['googleAds', 'shouldSeeAds']);
-    return { shouldSeeAds, ...ownProps };
+    const test = state.app.getIn(['googleAds', 'test']);
+    const client = state.app.getIn(['googleAds', 'client']);
+    return { shouldSeeAds, test, client, ...ownProps };
 })(GoogleAd);

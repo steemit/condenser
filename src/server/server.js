@@ -289,6 +289,12 @@ usePostJson(app);
 useAccountRecoveryApi(app);
 useGeneralApi(app);
 
+app.use(function*(next) {
+    this.adsEnabled =
+        !(this.session.auth || this.session.a) && config.google_ad_enabled;
+    yield next;
+});
+
 // helmet wants some things as bools and some as lists, makes config difficult.
 // our config uses strings, this splits them to lists on whitespace.
 if (env === 'production') {
@@ -312,8 +318,6 @@ if (env === 'production') {
 
     app.use(helmet.contentSecurityPolicy(helmetConfig));
     app.use(function*(next) {
-        const authed = this.session.auth || this.session.a;
-        this.adsEnabled = !authed && config.google_ad_enabled;
         if (this.adsEnabled) {
             // If user is signed out, enable ads.
             let policy = this.response.header['content-security-policy']

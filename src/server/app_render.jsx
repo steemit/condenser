@@ -67,7 +67,7 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
         }
 
         const googleAds = {
-            shouldSeeAds: ctx.adsEnabled,
+            shouldSeeAds: !!ctx.adsEnabled,
             enabled: !!config.google_ad_enabled,
             test: !!config.google_ad_test,
             client: config.google_ad_client,

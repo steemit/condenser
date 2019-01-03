@@ -11,6 +11,7 @@ class HighLight extends Component {
         staticOptions: {
             // disableEditing: true,
             toolbar: {
+                allowMultiParagraphSelection: false,
                 buttons: [
                     {
                         name: 'h1',
@@ -61,11 +62,21 @@ class HighLight extends Component {
             const start = Math.min(selection.baseOffset, selection.focusOffset);
             const offset =
                 selection.baseOffset + selection.focusOffset - start * 2;
-            const highLight = selection.anchorNode.data.substr(start, offset);
+            const highLight = {};
+            highLight.anchorText = selection.anchorNode.data.substr(
+                start,
+                offset
+            );
+            highLight.data = selection.anchorNode.data;
+            highLight.offset = {
+                baseOffset: selection.baseOffset,
+                focusOffset: selection.focusOffset,
+            };
+            console.log(selection, JSON.stringify(highLight));
 
             if (type === 'create') {
-                localStorage.setItem('high_light', highLight);
-                location.href = '/static_create';
+                localStorage.setItem('high_light', JSON.stringify(highLight));
+                // location.href = '/static_create';
             }
         };
     }

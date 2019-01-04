@@ -33,6 +33,9 @@ export default function resolveRoute(path) {
     if (path === '/static_create') {
         return { page: 'Static/Create' };
     }
+    if (path === '/static_settings') {
+        return { page: 'Static/Settings' };
+    }
     if (path === '/about.html') {
         return { page: 'About' };
     }

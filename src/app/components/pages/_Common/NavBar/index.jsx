@@ -120,7 +120,7 @@ class NavBar extends Component {
                                     >
                                         <a
                                             className="UserInfo"
-                                            href="/user/joe"
+                                            href={`/@${username}`}
                                         >
                                             <span className="Avatar">
                                                 <img
@@ -135,7 +135,8 @@ class NavBar extends Component {
                                         <div className="List">
                                             <a
                                                 className="Item"
-                                                href={`/@${username}/settings`}
+                                                // href={`/@${username}/settings`}
+                                                href={`/static_settings`}
                                             >
                                                 <Settings /> {tt('g.settings')}
                                             </a>

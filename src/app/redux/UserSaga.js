@@ -7,7 +7,11 @@ import { accountAuthLookup } from 'app/redux/AuthSaga';
 import { getAccount } from 'app/redux/SagaShared';
 import * as userActions from 'app/redux/UserReducer';
 import { receiveFeatureFlags } from 'app/redux/AppReducer';
-import { hasCompatibleKeychain } from 'app/utils/SteemKeychain';
+import {
+    hasCompatibleKeychain,
+    isLoggedInWithKeychain,
+} from 'app/utils/SteemKeychain';
+import { packLoginData, extractLoginData } from 'app/utils/UserUtil';
 import { browserHistory } from 'react-router';
 import {
     serverApiLogin,
@@ -155,22 +159,32 @@ function* usernamePasswordLogin2({
 
     // login, using saved password
     let feedURL = false;
-    let autopost, memoWif, login_owner_pubkey, login_wif_owner_pubkey;
+    let autopost,
+        memoWif,
+        login_owner_pubkey,
+        login_wif_owner_pubkey,
+        login_with_keychain;
     if (!username && !password) {
         const data = localStorage.getItem('autopost2');
         if (data) {
             // auto-login with a low security key (like a posting key)
             autopost = true; // must use simi-colon
             // The 'password' in this case must be the posting private wif .. See setItme('autopost')
-            [username, password, memoWif, login_owner_pubkey] = new Buffer(
-                data,
-                'hex'
-            )
-                .toString()
-                .split('\t');
+            [
+                username,
+                password,
+                memoWif,
+                login_owner_pubkey,
+                login_with_keychain,
+            ] = extractLoginData(data);
             memoWif = clean(memoWif);
             login_owner_pubkey = clean(login_owner_pubkey);
         }
+    }
+    // return if using steem keychain
+    if (login_with_keychain) {
+        console.log('Using steem keychain');
+        return;
     }
     // no saved password
     if (!username || !password) {
@@ -426,6 +440,7 @@ function* usernamePasswordLogin2({
                 yield put(
                     userActions.setUser({
                         username,
+                        login_with_keychain: true,
                         vesting_shares: account.get('vesting_shares'),
                         received_vesting_shares: account.get(
                             'received_vesting_shares'
@@ -546,20 +561,24 @@ function* saveLogin_localStorage() {
         return;
     }
     localStorage.removeItem('autopost2');
-    const [username, private_keys, login_owner_pubkey] = yield select(state => [
+    const [
+        username,
+        private_keys,
+        login_owner_pubkey,
+        login_with_keychain,
+    ] = yield select(state => [
         state.user.getIn(['current', 'username']),
         state.user.getIn(['current', 'private_keys']),
         state.user.getIn(['current', 'login_owner_pubkey']),
+        state.user.getIn(['current', 'login_with_keychain']),
     ]);
     if (!username) {
         console.error('Not logged in');
         return;
     }
     // Save the lowest security key
-    const posting_private = hasCompatibleKeychain()
-        ? null
-        : private_keys.get('posting_private');
-    if (!hasCompatibleKeychain() && !posting_private) {
+    const posting_private = private_keys && private_keys.get('posting_private');
+    if (!login_with_keychain && !posting_private) {
         console.error('No posting key to save?');
         return;
     }
@@ -592,10 +611,13 @@ function* saveLogin_localStorage() {
     const postingPrivateWif = posting_private
         ? posting_private.toWif()
         : 'none';
-    const data = new Buffer(
-        `${username}\t${postingPrivateWif}\t${memoWif ||
-            ''}\t${login_owner_pubkey || ''}`
-    ).toString('hex');
+    const data = packLoginData(
+        username,
+        postingPrivateWif,
+        memoWif,
+        login_owner_pubkey,
+        login_with_keychain
+    );
     // autopost is a auto login for a low security key (like the posting key)
     localStorage.setItem('autopost2', data);
 }

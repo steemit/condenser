@@ -406,11 +406,6 @@ function* usernamePasswordLogin2({
         const offchainData = yield select(state => state.offchain);
         let serverAccount = offchainData.get('account');
         let challengeString = offchainData.get('login_challenge');
-        // if steem keychain, set these to something arbitrary for login.
-        if (useKeychain) {
-            serverAccount = '';
-            challengeString = 'challengeString';
-        }
         if (!serverAccount && challengeString) {
             console.log('No server account, but challenge string');
             const signatures = {};
@@ -461,24 +456,24 @@ function* usernamePasswordLogin2({
                 };
                 sign('posting', private_keys.get('posting_private'));
                 // sign('active', private_keys.get('active_private'))
+            }
 
-                console.log('Logging in as', username);
-                const response = yield serverApiLogin(username, signatures);
-                const body = yield response.json();
+            console.log('Logging in as', username);
+            const response = yield serverApiLogin(username, signatures);
+            const body = yield response.json();
 
-                if (justLoggedIn) {
-                    // If ads are enabled, reload the page instead of changing the browser
-                    // history when they log in, so headers will get re-requested.
-                    const adsEnabled = yield select(state =>
-                        state.app.getIn(['googleAds', 'enabled'])
-                    );
-                    if (adsEnabled) {
-                        var url = new URL(window.location.href);
-                        url.searchParams.set('auth', 'true');
-                        console.log('New post-login URL', url.toString());
-                        window.location.replace(url.toString());
-                        return;
-                    }
+            if (justLoggedIn) {
+                // If ads are enabled, reload the page instead of changing the browser
+                // history when they log in, so headers will get re-requested.
+                const adsEnabled = yield select(state =>
+                    state.app.getIn(['googleAds', 'enabled'])
+                );
+                if (adsEnabled) {
+                    var url = new URL(window.location.href);
+                    url.searchParams.set('auth', 'true');
+                    console.log('New post-login URL', url.toString());
+                    window.location.replace(url.toString());
+                    return;
                 }
             }
         }

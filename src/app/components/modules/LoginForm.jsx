@@ -39,7 +39,8 @@ class LoginForm extends Component {
             );
             cryptographyFailure = true;
         }
-        this.state = { cryptographyFailure };
+        const useKeychain = hasCompatibleKeychain();
+        this.state = { useKeychain, cryptographyFailure };
         this.usernameOnChange = e => {
             const value = e.target.value.toLowerCase();
             this.state.username.props.onChange(value);
@@ -60,7 +61,7 @@ class LoginForm extends Component {
                 password.props.onChange(data);
             });
         };
-        this.initForm(props);
+        this.initForm(props, useKeychain);
     }
 
     componentDidMount() {
@@ -72,7 +73,7 @@ class LoginForm extends Component {
 
     shouldComponentUpdate = shouldComponentUpdate(this, 'LoginForm');
 
-    initForm(props) {
+    initForm(props, useKeychain) {
         reactForm({
             name: 'login',
             instance: this,
@@ -82,7 +83,7 @@ class LoginForm extends Component {
                 username: !values.username
                     ? tt('g.required')
                     : validate_account_name(values.username.split('/')[0]),
-                password: hasCompatibleKeychain()
+                password: useKeychain
                     ? null
                     : !values.password
                       ? tt('g.required')
@@ -105,6 +106,11 @@ class LoginForm extends Component {
             .textContent;
         serverApiRecordEvent('SignIn', onType);
     }
+
+    onUseKeychainCheckbox = e => {
+        const useKeychain = e.target.checked;
+        this.setState({ useKeychain });
+    };
 
     saveLoginToggle = () => {
         const { saveLogin } = this.state;
@@ -177,7 +183,7 @@ class LoginForm extends Component {
             afterLoginRedirectToWelcome,
             msg,
         } = this.props;
-        const { username, password, saveLogin } = this.state;
+        const { username, password, useKeychain, saveLogin } = this.state;
         const { submitting, valid, handleSubmit } = this.state.login;
         const { usernameOnChange, onCancel /*qrReader*/ } = this;
         const disabled = submitting || !valid;
@@ -269,8 +275,7 @@ class LoginForm extends Component {
             }
         }
         const password_info =
-            !hasCompatibleKeychain() &&
-            checkPasswordChecksum(password.value) === false
+            !useKeychain && checkPasswordChecksum(password.value) === false
                 ? tt('loginform_jsx.password_info')
                 : null;
         const isTransfer =
@@ -319,6 +324,7 @@ class LoginForm extends Component {
                     console.log('Login\tdispatchSubmit');
                     return dispatchSubmit(
                         data,
+                        useKeychain,
                         loginBroadcastOperation,
                         afterLoginRedirectToWelcome
                     );
@@ -344,9 +350,8 @@ class LoginForm extends Component {
                     <div className="error">{username.error}&nbsp;</div>
                 ) : null}
 
-                {hasCompatibleKeychain() ? (
+                {useKeychain ? (
                     <div>
-                        <em>{tt('loginform_jsx.using_keychain')}</em>
                         {error && <div className="error">{error}&nbsp;</div>}
                     </div>
                 ) : (
@@ -377,6 +382,22 @@ class LoginForm extends Component {
                                 { authType }
                             )}
                         </div>
+                    </div>
+                )}
+                {hasCompatibleKeychain() && (
+                    <div>
+                        <label
+                            className="LoginForm__save-login"
+                            htmlFor="useKeychain"
+                        >
+                            <input
+                                id="useKeychain"
+                                type="checkbox"
+                                checked={useKeychain}
+                                onChange={this.onUseKeychainCheckbox}
+                                disabled={submitting}
+                            />&nbsp;{tt('loginform_jsx.using_keychain')}
+                        </label>
                     </div>
                 )}
                 <div>
@@ -510,13 +531,11 @@ export default connect(
     dispatch => ({
         dispatchSubmit: (
             data,
+            useKeychain,
             loginBroadcastOperation,
             afterLoginRedirectToWelcome
         ) => {
             const { password, saveLogin } = data;
-            const passwordOrKeychain = hasCompatibleKeychain()
-                ? 'using_steemkeychain'
-                : password;
             const username = data.username.trim().toLowerCase();
             if (loginBroadcastOperation) {
                 const {
@@ -530,7 +549,8 @@ export default connect(
                         type,
                         operation,
                         username,
-                        password: passwordOrKeychain,
+                        password,
+                        useKeychain,
                         successCallback,
                         errorCallback,
                     })
@@ -538,7 +558,8 @@ export default connect(
                 dispatch(
                     userActions.usernamePasswordLogin({
                         username,
-                        password: passwordOrKeychain,
+                        password,
+                        useKeychain,
                         saveLogin,
                         afterLoginRedirectToWelcome,
                         operationType: type,
@@ -550,7 +571,8 @@ export default connect(
                 dispatch(
                     userActions.usernamePasswordLogin({
                         username,
-                        password: passwordOrKeychain,
+                        password,
+                        useKeychain,
                         saveLogin,
                         afterLoginRedirectToWelcome,
                     })

@@ -141,6 +141,7 @@ const clean = value =>
 function* usernamePasswordLogin2({
     username,
     password,
+    useKeychain,
     saveLogin,
     operationType /*high security*/,
     afterLoginRedirectToWelcome,
@@ -181,13 +182,13 @@ function* usernamePasswordLogin2({
             login_owner_pubkey = clean(login_owner_pubkey);
         }
     }
-    // return if using steem keychain
+    // return if already logged in using steem keychain
     if (login_with_keychain) {
-        console.log('Using steem keychain');
+        console.log('Logged in using steem keychain');
         return;
     }
     // no saved password
-    if (!username || !password) {
+    if (!username || !(password || useKeychain)) {
         console.log('No saved password');
         const offchain_account = yield select(state =>
             state.offchain.get('account')
@@ -227,7 +228,7 @@ function* usernamePasswordLogin2({
     }
 
     let private_keys;
-    if (!hasCompatibleKeychain()) {
+    if (!useKeychain) {
         try {
             const private_key = PrivateKey.fromWif(password);
             login_wif_owner_pubkey = private_key.toPublicKey().toString();
@@ -406,7 +407,7 @@ function* usernamePasswordLogin2({
         let serverAccount = offchainData.get('account');
         let challengeString = offchainData.get('login_challenge');
         // if steem keychain, set these to something arbitrary for login.
-        if (hasCompatibleKeychain()) {
+        if (useKeychain) {
             serverAccount = '';
             challengeString = 'challengeString';
         }
@@ -417,7 +418,7 @@ function* usernamePasswordLogin2({
             const buf = JSON.stringify(challenge, null, 0);
             const bufSha = hash.sha256(buf);
 
-            if (hasCompatibleKeychain()) {
+            if (useKeychain) {
                 const response = yield new Promise(resolve => {
                     window.steem_keychain.requestSignBuffer(
                         username,
@@ -488,13 +489,11 @@ function* usernamePasswordLogin2({
 
     if (!autopost && saveLogin) yield put(userActions.saveLogin());
     // Feature Flags
-    if (hasCompatibleKeychain() || private_keys.get('posting_private')) {
+    if (useKeychain || private_keys.get('posting_private')) {
         yield fork(
             getFeatureFlags,
             username,
-            hasCompatibleKeychain()
-                ? null
-                : private_keys.get('posting_private').toString()
+            useKeychain ? null : private_keys.get('posting_private').toString()
         );
     }
     // TOS acceptance
@@ -524,7 +523,7 @@ function* promptTosAcceptance(username) {
 function* getFeatureFlags(username, posting_private) {
     try {
         let flags;
-        if (hasCompatibleKeychain()) {
+        if (!posting_private && hasCompatibleKeychain()) {
             flags = yield new Promise((resolve, reject) => {
                 window.steem_keychain.requestSignedCall(
                     username,

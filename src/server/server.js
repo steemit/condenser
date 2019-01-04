@@ -320,20 +320,26 @@ if (env === 'production') {
     app.use(function*(next) {
         if (this.adsEnabled) {
             // If user is signed out, enable ads.
-            let policy = this.response.header['content-security-policy']
-                .split(/;\s+/)
-                .map(el => {
-                    if (el.startsWith('script-src')) {
-                        const oldScriptSrc = el.replace(/^script-src/, '');
-                        return `script-src 'unsafe-inline' 'unsafe-eval' data: https: ${
-                            oldScriptSrc
-                        }`;
-                    } else {
-                        return el;
-                    }
-                })
-                .join('; ');
-            this.response.set('content-security-policy', policy);
+            [
+                'content-security-policy',
+                'x-content-security-policy',
+                'x-webkit-csp',
+            ].forEach(header => {
+                let policy = this.response.header[header]
+                    .split(/;\s+/)
+                    .map(el => {
+                        if (el.startsWith('script-src')) {
+                            const oldScriptSrc = el.replace(/^script-src/, '');
+                            return `script-src 'unsafe-inline' 'unsafe-eval' data: https: ${
+                                oldScriptSrc
+                            }`;
+                        } else {
+                            return el;
+                        }
+                    })
+                    .join('; ');
+                this.response.set(header, policy);
+            });
             yield next;
         } else {
             // If user is logged in, do not modify CSP headers further.

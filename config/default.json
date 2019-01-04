@@ -79,5 +79,17 @@
   "pinned_posts_url": false,
   "google_ad_enabled": null,
   "google_ad_test": null,
-  "google_ad_client": null
+  "google_ad_client": null,
+  "google_ad_slots": {
+    "sidebar_1": {
+      "slot_id": "9855000063"
+    },
+    "in_feed_1": {
+      "slot_id": "9514544128",
+      "layout_key": "-fb+5w+4e-db+86"
+    },
+    "post_footer_1": {
+      "slot_id": "5796459261"
+    }
+  }
 }

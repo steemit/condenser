@@ -3,6 +3,10 @@ import { connect } from 'react-redux';
 
 class GoogleAd extends React.Component {
     componentDidMount() {
+        if (this.props.env === 'development') {
+            return;
+        }
+
         (window.adsbygoogle = window.adsbygoogle || []).push({});
     }
 
@@ -12,7 +16,6 @@ class GoogleAd extends React.Component {
         }
 
         const style = Object.assign(
-            {},
             {
                 display: 'inline-block',
                 width: '100%',
@@ -21,6 +24,7 @@ class GoogleAd extends React.Component {
         );
 
         const className = ['adsbygoogle']
+            .concat(this.props.env === 'development' ? ['ad-dev'] : [])
             .concat(this.props.name ? [this.props.name] : [])
             .join(' ');
 
@@ -31,15 +35,18 @@ class GoogleAd extends React.Component {
                 data-adtest={this.props.test}
                 data-ad-client={this.props.client}
                 data-ad-slot={this.props.slot}
-                data-ad-format="auto"
+                data-ad-format={this.props.format || 'auto'}
+                data-ad-layout-key={this.props.layoutKey}
+                data-full-width-responsive={this.props.fullWidthResponsive}
             />
         );
     }
 }
 
 export default connect((state, ownProps) => {
+    const env = state.app.get('env');
     const shouldSeeAds = state.app.getIn(['googleAds', 'shouldSeeAds']);
     const test = state.app.getIn(['googleAds', 'test']);
     const client = state.app.getIn(['googleAds', 'client']);
-    return { shouldSeeAds, test, client, ...ownProps };
+    return { env, shouldSeeAds, test, client, ...ownProps };
 })(GoogleAd);

@@ -625,7 +625,7 @@
         "returning_users": "返回用户:",
         "join_our": "加入我们",
         "sign_transfer": "Sign to complete transfer",
-        "using_keychain": "Using keychain extension"
+        "use_keychain": "Use keychain extension"
     },
     "chainvalidation_js": {
         "account_name_should": "帐户名称应该",

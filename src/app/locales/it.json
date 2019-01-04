@@ -684,7 +684,7 @@
         "returning_users": "Utenti di ritorno:",
         "join_our": "Unisciti al nostro",
         "sign_transfer": "Sign to complete transfer",
-        "using_keychain": "Using keychain extension"
+        "use_keychain": "Use keychain extension"
     },
     "chainvalidation_js": {
         "account_name_should": "Il nome account",

@@ -679,7 +679,7 @@
         "returning_users": "再",
         "join_our": "",
         "sign_transfer": "Sign to complete transfer",
-        "using_keychain": "Using keychain extension"
+        "use_keychain": "Use keychain extension"
     },
     "chainvalidation_js": {
         "account_name_should": "アカウント名",

@@ -665,7 +665,7 @@
         "returning_users": "Powracający użytkownicy: ",
         "join_our": "Dołącz do",
         "sign_transfer": "Sign to complete transfer",
-        "using_keychain": "Using keychain extension"
+        "use_keychain": "Use keychain extension"
     },
     "chainvalidation_js": {
         "account_name_should": "Nazwa konta powinna ",

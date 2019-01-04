@@ -396,7 +396,7 @@ class LoginForm extends Component {
                                 checked={useKeychain}
                                 onChange={this.onUseKeychainCheckbox}
                                 disabled={submitting}
-                            />&nbsp;{tt('loginform_jsx.using_keychain')}
+                            />&nbsp;{tt('loginform_jsx.use_keychain')}
                         </label>
                     </div>
                 )}

@@ -173,7 +173,7 @@ export default function ServerHTML({
                 {shouldSeeAds ? (
                     <script
                         async
-                        src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+                        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
                     />
                 ) : null}
                 {shouldSeeAds ? (

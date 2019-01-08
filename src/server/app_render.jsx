@@ -51,7 +51,7 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
             csrf: ctx.csrf,
             new_visit: ctx.session.new_visit,
             config: $STM_Config,
-            pinned_posts: await ctx.pinnedPostsPromise,
+            pinned_posts: await ctx.app.pinnedPostsPromise,
             login_challenge,
         };
         if (ctx.session.arec) {
@@ -67,16 +67,18 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
         }
 
         const googleAds = {
-            shouldSeeAds: ctx.adsEnabled,
+            shouldSeeAds: !!ctx.adsEnabled,
             enabled: !!config.google_ad_enabled,
             test: !!config.google_ad_test,
             client: config.google_ad_client,
+            adSlots: config.google_ad_slots,
         };
         // ... and that's the end of user-session-related SSR
         const initial_state = {
             app: {
                 viewMode: determineViewMode(ctx.request.search),
                 googleAds: googleAds,
+                env: process.env.NODE_ENV,
             },
         };
 

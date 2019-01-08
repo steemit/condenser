@@ -111,11 +111,12 @@ export default function reducer(state = defaultState, action = {}) {
         // Interleave pinned posts into the map of posts.
         case SYNC_PINNED_POSTS: {
             return payload.pinnedPosts.reduce((acc, pinnedPost) => {
-                const key = `${pinnedPost.get('author')}/${pinnedPost.get(
-                    'permlink'
-                )}`;
-                return state.updateIn(['content', key], Map(), p =>
-                    p.mergeDeep(pinnedPost)
+                const author = pinnedPost.get('author');
+                const permlink = pinnedPost.get('permlink');
+                return state.updateIn(
+                    ['content', `${author}/${permlink}`],
+                    Map(),
+                    p => p.mergeDeep(pinnedPost)
                 );
             }, state);
         }

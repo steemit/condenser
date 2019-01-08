@@ -173,17 +173,19 @@ export default function ServerHTML({
                 {shouldSeeAds ? (
                     <script
                         async
-                        src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+                        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
                     />
                 ) : null}
                 {shouldSeeAds ? (
                     <script
-                        dangerouslySetInnerHTML={{ __html: `
+                        dangerouslySetInnerHTML={{
+                            __html: `
                       (adsbygoogle = window.adsbygoogle || []).push({
                           google_ad_client: "ca-pub-9368037717385698",
                           enable_page_level_ads: true
                       });
-                  `}}
+                  `,
+                        }}
                     />
                 ) : null}
                 <title>{page_title}</title>

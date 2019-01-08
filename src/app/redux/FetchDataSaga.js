@@ -109,10 +109,27 @@ function* getTransferUsers(pathname) {
 }
 
 function* syncPinnedPosts() {
+    // Get pinned posts from the store.
     const pinnedPosts = yield select(state =>
         state.offchain.get('pinned_posts')
     );
-    yield put(globalActions.syncPinnedPosts({ pinnedPosts }));
+
+    // Mark seen posts.
+    const seenPinnedPosts = pinnedPosts.map(post =>
+        post.set(
+            'seen',
+            localStorage.getItem(`pinned-post-seen:${post.get('url')}`) ===
+                'true'
+        )
+    );
+
+    // Look up seen post URLs.
+    yield put(globalActions.syncPinnedPosts({ pinnedPosts: seenPinnedPosts }));
+
+    // Mark all pinned posts as seen.
+    pinnedPosts.forEach(post => {
+        localStorage.setItem(`pinned-post-seen:${post.get('url')}`, 'true');
+    });
 }
 
 /**

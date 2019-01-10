@@ -44,6 +44,13 @@ const iframeWhitelist = [
             return src;
         },
     },
+    {
+        re: /^(https?:)?\/\/spee.ch\/.*/i,
+        fn: src => {
+            //<iframe src="https://spee.ch/@Save4Memes:a" frameborder="0" allowfullscreen="true" scrolling="no" height="378" width="620">
+            return src;
+        },
+    },
 ];
 export const noImageText = '(Image not shown due to low ratings)';
 export const allowedTags = `

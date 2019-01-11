@@ -227,6 +227,7 @@ export default `
 /books/@armon/download-dear-mrs-bird-a-novel-by-a-j-pearce-pdf-ebook-epub
 /technology/@davidpm/heuristics-on-the-practice-of-programming
 /motivation/@brandonk/legendary-women-of-combat-sports
+/bitcoin/@toolsoftitans/palm-beach-confidential-buy-alerts-monthly-pick-for-free-for-1-month-with-no-delay-faq-in-thread
 `
     .trim()
     .split('\n');

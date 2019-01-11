@@ -225,6 +225,8 @@ export default `
 /full/@attaya05/123putlocker-hd-watch-the-house-that-jack-built-full-movie-online-2018-and-free
 /movie/@latusycoco/watch-the-house-that-jack-built-2018-full-movie-hd-1080p
 /books/@armon/download-dear-mrs-bird-a-novel-by-a-j-pearce-pdf-ebook-epub
+/technology/@davidpm/heuristics-on-the-practice-of-programming
+/motivation/@brandonk/legendary-women-of-combat-sports
 `
     .trim()
     .split('\n');

@@ -182,13 +182,8 @@ function* usernamePasswordLogin2({
             login_owner_pubkey = clean(login_owner_pubkey);
         }
     }
-    // return if already logged in using steem keychain
-    if (login_with_keychain) {
-        console.log('Logged in using steem keychain');
-        return;
-    }
     // no saved password
-    if (!username || !(password || useKeychain)) {
+    if (!username || !(password || useKeychain || login_with_keychain)) {
         console.log('No saved password');
         const offchain_account = yield select(state =>
             state.offchain.get('account')
@@ -223,6 +218,22 @@ function* usernamePasswordLogin2({
         console.log('DMCA list');
         yield put(
             userActions.loginError({ error: translate('terms_violation') })
+        );
+        return;
+    }
+    // return if already logged in using steem keychain
+    if (login_with_keychain) {
+        console.log('Logged in using steem keychain');
+        yield put(
+            userActions.setUser({
+                username,
+                login_with_keychain: true,
+                vesting_shares: account.get('vesting_shares'),
+                received_vesting_shares: account.get('received_vesting_shares'),
+                delegated_vesting_shares: account.get(
+                    'delegated_vesting_shares'
+                ),
+            })
         );
         return;
     }

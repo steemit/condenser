@@ -217,7 +217,7 @@ class PostsList extends React.Component {
             });
         const renderSummary = items =>
             items.map((item, i) => {
-                if (this.props.shouldSeeAds && i === 10) {
+                if (this.props.shouldSeeAds && i >= 10 && i % 10 === 0) {
                     return (
                         <div key={item.item}>
                             <li>

@@ -49,8 +49,8 @@ export default {
     // simpleLink: new RegExp(`<a href="(.*)">(.*)<\/a>`, 'ig'),
     ipfsPrefix: /(https?:\/\/.*)?\/ipfs/i,
     twitch: /https?:\/\/(?:www.)?twitch.tv\/(?:(videos)\/)?([a-zA-Z0-9][\w]{3,24})/i,
-    dtube: /https?:\/\/(?:d.tube\/\#\!\/v\/)(.*)/,
-    dtubeId: /(?:d\.tube\/#!\/v\/(.*))+/,
+    dtube: /https?:\/\/(?:d.tube\/\#\!\/v\/)([0-9a-zA-Z\/]*)/,
+    dtubeId: /(?:d\.tube\/#!\/v\/([0-9a-zA-Z\/]*))+/,
 };
 
 //TODO: possible this should go somewhere else.

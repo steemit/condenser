@@ -47,7 +47,7 @@ const iframeWhitelist = [
     {
         re: /^(https?:)?\/\/spee.ch\/.*/i,
         fn: src => {
-            //<iframe src="https://spee.ch/@Save4Memes:a" frameborder="0" allowfullscreen="true" scrolling="no" height="378" width="620">
+            //<iframe src="https://spee.ch/video-embed/@jordanbpeterson:c/responsibility-conscience-and-meaning" allowfullscreen="true" style="border:0"></iframe>
             return src;
         },
     },

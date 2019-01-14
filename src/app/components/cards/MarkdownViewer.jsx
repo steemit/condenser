@@ -193,10 +193,10 @@ class MarkdownViewer extends Component {
                         </div>
                     );
                     } else if (type === 'spee.ch') {
-                    const url = `https://spee.ch/${id}`;
+                    const url = `https://spee.ch/video-embed${id}`;
                     sections.push(
                         <div className="videoWrapper">
-                            <iframe
+                             <iframe
                                 key={idx++}
                                 src={url}
                                 width={w}

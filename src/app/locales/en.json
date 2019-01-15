@@ -249,7 +249,7 @@
         }
     },
     "navigation": {
-        "about": "About",
+        "about": "About Us",
         "explore": "Explore",
         "APP_NAME_whitepaper": "%(APP_NAME)s Whitepaper",
         "third_party_exchanges": "Third-party exchanges:",

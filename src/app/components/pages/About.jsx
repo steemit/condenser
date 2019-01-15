@@ -22,17 +22,7 @@ class About extends React.Component {
                                     with financial inclusion.
                                 </span>
                             </p>
-                        </div>
-                        <div className="AboutMission__image-container">
-                            <img
-                                className="AboutMission__img"
-                                src="/images/about/mission.jpg"
-                                alt
-                            />
-                        </div>
-                    </div>
-                    <div className="AboutMission__section">
-                        <div className="AboutMission__text-container">
+
                             <div className="AboutMission__square AboutMission__square--2" />
                             <h2 className="AboutMission__heading">Vision</h2>
                             <p className="AboutMission__text">
@@ -51,7 +41,7 @@ class About extends React.Component {
                         <div className="AboutMission__image-container">
                             <img
                                 className="AboutMission__img"
-                                src="/images/about/vision.jpg"
+                                src="/images/about/mission.jpg"
                                 alt
                             />
                         </div>
@@ -60,6 +50,16 @@ class About extends React.Component {
                         <div className="AboutMission__text-container">
                             <div className="AboutMission__square" />
                             <h2 className="AboutMission__heading">Values</h2>
+                            <h3 className="AboutMission__subheading">
+                                Cryptocurrency adoption
+                            </h3>
+                            <p className="AboutMission__text">
+                                Cryptocurrency adoption means advancing tools
+                                that contribute to the consumers’ ability to be
+                                aware of, use, hold and appreciate
+                                cryptocurrency for its benefits, such as
+                                sovereign value store and peer-to-peer payments.
+                            </p>
                             <h3 className="AboutMission__subheading">
                                 Sustainability
                             </h3>
@@ -91,16 +91,6 @@ class About extends React.Component {
                                 organization, which means taking care of their
                                 well being in return for their commitment to our
                                 mission, vision and values.
-                            </p>
-                            <h3 className="AboutMission__subheading">
-                                Cryptocurrency adoption
-                            </h3>
-                            <p className="AboutMission__text">
-                                Cryptocurrency adoption means advancing tools
-                                that contribute to the consumers’ ability to be
-                                aware of, use, hold and appreciate
-                                cryptocurrency for its benefits, such as
-                                sovereign value store and peer-to-peer payments.
                             </p>
                             <h3 className="AboutMission__subheading">Safety</h3>
                             <p className="AboutMission__text">
@@ -264,7 +254,7 @@ class About extends React.Component {
                             </ul>
                             <p>
                                 This is our principled focus for achieving
-                                success. Any aims we haven’t included in here,
+                                success. Anything we haven’t included in here,
                                 and there are plenty, because opportunities are
                                 so bountiful in this space, is not a focus for
                                 us. We encourage you to contribute and seek
@@ -289,18 +279,18 @@ class About extends React.Component {
                             </h2>
                             <p className="AboutMission__text">
                                 Steemit Inc. (The “Company”), is a private
-                                company that helps develops the open-source
+                                company that helps develop the open-source
                                 software that powers steemit.com, including
                                 steemd. The Company may own various digital
                                 assets, including, without limitation,
-                                cryptocurrencies such as STEEM. These assets are
-                                the sole property of the Company. Further, the
-                                Company’s mission, vision, goals, statements,
-                                actions, and core values do not constitute a
-                                contract, commitment, obligation, nor other duty
-                                to the Steem community nor any other Steem
-                                network user and are subject to change at any
-                                time.
+                                quantities of cryptocurrencies such as STEEM.
+                                These assets are the sole property of the
+                                Company. Further, the Company’s mission, vision,
+                                goals, statements, actions, and core values do
+                                not constitute a contract, commitment,
+                                obligation, or other duty to any person, company
+                                or cryptocurrency network user and are subject
+                                to change at any time.
                             </p>
                         </div>
                         <div className="AboutMission__image-container">

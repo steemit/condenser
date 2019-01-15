@@ -6,7 +6,7 @@ vichkovski
 wizzymt
 thedarkoverlord
 twoblokestrading
-/introduceyourself/@ruttydm/a-short-introduction
+ruttydm
 `
     .trim()
     .split('\n');

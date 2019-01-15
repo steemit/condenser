@@ -136,7 +136,7 @@ const SidePanel = ({ alignment, visible, hideSidePanel, username }) => {
             {
                 value: 'about',
                 label: tt('navigation.about'),
-                link: 'https://steem.io',
+                link: '/about.html',
             },
         ],
         legal: [

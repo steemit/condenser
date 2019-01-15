@@ -238,6 +238,7 @@ export default `
 /gintama/@iarproduct/gintama-episode-357-english-subbed
 /bitcoin/@toolsoftitans/palm-beach-confidential-buy-alerts-monthly-pick-for-free-for-1-month-with-no-delay-faq-in-thread
 /nsfw/@bleh773/3p4qxq-sexy-brunette
+/nsfw/@dirtywhale/milf
 `
     .trim()
     .split('\n');

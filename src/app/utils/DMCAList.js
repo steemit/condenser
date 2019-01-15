@@ -228,6 +228,14 @@ export default `
 /technology/@davidpm/heuristics-on-the-practice-of-programming
 /motivation/@brandonk/legendary-women-of-combat-sports
 /bitcoin/@toolsoftitans/palm-beach-confidential-buy-alerts-monthly-pick-for-free-for-1-month-with-no-delay-faq-in-thread
+/anime/@semur/boruto-naruto-next-generations-episode-73-watch-online-english-subbed
+/anime/@semur/sword-art-online-alternative-gun-gale-online-episode-12-english-subbed-online
+/attackontitan/@iarproduct/attack-on-titan-season-3-episode-1-english-subbed
+/anime/@semur/boruto-naruto-next-generations-episode-64-english-subbed-online
+/anime/@semur/tensei-shitara-slime-datta-ken-episode-5-watch-online
+/anime/@semur/black-clover-episode-48-watch-online-english-subbed
+/anime/@semur/black-clover-episode-62-anime
+/gintama/@iarproduct/gintama-episode-357-english-subbed
 `
     .trim()
     .split('\n');

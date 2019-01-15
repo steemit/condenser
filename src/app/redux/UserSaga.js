@@ -720,12 +720,13 @@ function* uploadImage({
 
     const stateUser = yield select(state => state.user);
     const username = stateUser.getIn(['current', 'username']);
+    const keychainLogin = isLoggedInWithKeychain();
     const d = stateUser.getIn(['current', 'private_keys', 'posting_private']);
     if (!username) {
         progress({ error: 'Please login first.' });
         return;
     }
-    if (!d) {
+    if (!(keychainLogin || d)) {
         progress({ error: 'Login with your posting key' });
         return;
     }
@@ -755,7 +756,8 @@ function* uploadImage({
 
     // The challenge needs to be prefixed with a constant (both on the server and checked on the client) to make sure the server can't easily make the client sign a transaction doing something else.
     const prefix = new Buffer('ImageSigningChallenge');
-    const bufSha = hash.sha256(Buffer.concat([prefix, data]));
+    const buf = Buffer.concat([prefix, data]);
+    const bufSha = hash.sha256(buf);
 
     const formData = new FormData();
     if (file) {
@@ -767,8 +769,28 @@ function* uploadImage({
         formData.append('filebase64', dataBs64);
     }
 
-    const sig = Signature.signBufferSha256(bufSha, d);
-    const postUrl = `${$STM_Config.upload_image}/${username}/${sig.toHex()}`;
+    let sig;
+    if (keychainLogin) {
+        const response = yield new Promise(resolve => {
+            window.steem_keychain.requestSignBuffer(
+                username,
+                JSON.stringify(buf),
+                'Posting',
+                response => {
+                    resolve(response);
+                }
+            );
+        });
+        if (response.success) {
+            sig = response.result;
+        } else {
+            progress({ error: response.message });
+            return;
+        }
+    } else {
+        sig = Signature.signBufferSha256(bufSha, d).toHex();
+    }
+    const postUrl = `${$STM_Config.upload_image}/${username}/${sig}`;
 
     const xhr = new XMLHttpRequest();
     xhr.open('POST', postUrl);

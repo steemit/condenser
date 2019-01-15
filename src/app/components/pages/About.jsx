@@ -41,7 +41,7 @@ class About extends React.Component {
                                 community coordination and online discussion by
                                 incorporating cryptocurrency as incentives. The
                                 company focuses on sustainability and
-                                decentralization by lowering run costs and
+                                decentralization by lowering running costs and
                                 increasing revenues, while increasing stickiness
                                 by providing better homepage and community
                                 tools, and is always demanding a secure and
@@ -210,7 +210,7 @@ class About extends React.Component {
                                 </li>
                             </ul>
                             <p>
-                                What do our Mission, Vision and Values means for
+                                What do our Mission, Vision and Values mean for
                                 our Steem development?
                             </p>
                             <ul className="AboutMission__list">
@@ -264,14 +264,13 @@ class About extends React.Component {
                             </ul>
                             <p>
                                 This is our principled focus for achieving
-                                success. Anything aims we haven’t included in
-                                here, and there are plenty, because
-                                opportunities are so bountiful in this space, is
-                                not a focus for us. We encourage you to
-                                contribute and seek opportunities by picking up
-                                anything we aren’t covering, particularly if it
-                                contributes to STEEM and cryptocurrency
-                                adoption.
+                                success. Any aims we haven’t included in here,
+                                and there are plenty, because opportunities are
+                                so bountiful in this space, is not a focus for
+                                us. We encourage you to contribute and seek
+                                opportunities by picking up anything we aren’t
+                                covering, particularly if it contributes to
+                                STEEM and cryptocurrency adoption.
                             </p>
                         </div>
                         <div className="AboutMission__image-container">

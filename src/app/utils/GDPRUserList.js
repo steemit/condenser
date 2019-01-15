@@ -5,7 +5,7 @@ tgylhn
 vichkovski
 wizzymt
 thedarkoverlord
-woblokestrading
+twoblokestrading
 `
     .trim()
     .split('\n');

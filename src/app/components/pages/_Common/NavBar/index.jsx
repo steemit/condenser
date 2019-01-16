@@ -61,17 +61,26 @@ class NavBar extends Component {
                     </div>
                     <div className="Content">
                         <div className="Menu">
-                            <a className="Item" href="/posts?type=questions">
+                            <a
+                                className="Item"
+                                href="/static_home?type=questions"
+                            >
                                 Q<span className="desktop">uestions</span>
                             </a>
-                            <a className="Item" href="/posts?type=hypotheses">
+                            <a
+                                className="Item"
+                                href="/static_home?type=hypotheses"
+                            >
                                 H<span className="desktop">ypotheses</span>
                             </a>
-                            <a className="Item" href="/posts?type=observations">
+                            <a
+                                className="Item"
+                                href="/static_home?type=observations"
+                            >
                                 Ob
                                 <span className="desktop">servations</span>
                             </a>
-                            <a className="Item" href="/create">
+                            <a className="Item" href="/static_create">
                                 <span className="desktop">Submit </span>
                                 New
                             </a>
@@ -120,7 +129,7 @@ class NavBar extends Component {
                                     >
                                         <a
                                             className="UserInfo"
-                                            href="/user/joe"
+                                            href={`/@${username}`}
                                         >
                                             <span className="Avatar">
                                                 <img
@@ -135,7 +144,8 @@ class NavBar extends Component {
                                         <div className="List">
                                             <a
                                                 className="Item"
-                                                href={`/@${username}/settings`}
+                                                // href={`/@${username}/settings`}
+                                                href={`/static_settings`}
                                             >
                                                 <Settings /> {tt('g.settings')}
                                             </a>

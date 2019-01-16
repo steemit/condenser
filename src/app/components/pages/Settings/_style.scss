@@ -1,5 +1,130 @@
 @import './Claim/style';
 
 .SettingsWrapper {
-  display: block;
+  color: $color-dark;
+  padding: 30px 0;
+  width: 90%;
+  max-width: 1024px;
+  margin: 0 auto;
+
+  button.Button {
+    background-color: white;
+    border: 2px solid $color-light-grey;
+    border-radius: 3px;
+    color: $color-black;
+    cursor: pointer;
+    font-family: 'Panton';
+    font-size: 14px;
+    height: 40px;
+    outline: none;
+    padding: 0;
+    text-transform: capitalize;
+
+    display: block;
+    line-height: 36px;
+    max-width: 120px;
+    text-align: center;
+    text-decoration: none;
+    width: 50%;
+
+    &:hover {
+      background-color: $color-light;
+    }
+
+    &.Black {
+      background-color: $color-black;
+      border-color: $color-black;
+      color: white;
+
+      &:hover {
+        border-color: $color-dark;
+        background-color: $color-dark;
+      }
+    }
+  }
+
+  > .Title {
+    font-size: 22px;
+    border-bottom: 1px solid $color-light-grey;
+  }
+
+  .SettingInputs {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 10px;
+
+    .InputRow {
+      width: 30%;
+
+      .Inputs {
+        margin: 10px 0 25px;
+
+        .Title {
+          font-size: 19px;
+          margin-bottom: 15px;
+        }
+
+        .DropDownLabel,
+        .Levels {
+          background: white;
+          padding-top: 8px;
+          border: 1px solid #e6e6e6;
+
+          .Label {
+            color: #eee;
+            margin-left: 14px;
+            font-size: 14px;
+          }
+
+          .LevelSelect {
+            display: flex;
+            justify-content: space-around;
+            padding: 0 10px 10px;
+
+            > div {
+              color: $color-light;
+              cursor: pointer;
+              width: 9%;
+              text-align: center;
+
+              &.Active {
+                color: $color-dark;
+                font-weight: bold;
+              }
+            }
+          }
+        }
+
+        .ImageButton {
+          margin-bottom: 15px;
+          background: white;
+          border-radius: 5px;
+          text-align: center;
+          padding: 5px;
+          border: 1px solid white;
+          cursor: pointer;
+
+          &.Active {
+            border-color: #4bbbd6;
+          }
+
+          img {
+            height: 30px;
+          }
+        }
+
+        .Childs {
+          border-left: 1px solid $color-light-grey;
+          padding-left: 15px;
+          margin: 15px 0;
+
+          button.Button {
+            width: 100%;
+            max-width: 100%;
+            margin-top: 15px;
+          }
+        }
+      }
+    }
+  }
 }

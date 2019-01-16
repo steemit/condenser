@@ -76,7 +76,7 @@ class HighLight extends Component {
 
             if (type === 'create') {
                 localStorage.setItem('high_light', JSON.stringify(highLight));
-                // location.href = '/static_create';
+                location.href = '/static_create';
             }
         };
     }

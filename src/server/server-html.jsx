@@ -8,6 +8,8 @@ export default function ServerHTML({
     title,
     meta,
     shouldSeeAds,
+    gptEnabled,
+    gptSlots,
 }) {
     let page_title = title;
     return (
@@ -170,6 +172,35 @@ export default function ServerHTML({
                         type="text/css"
                     />
                 ))}
+                {gptEnabled ? (
+                    <script
+                        async
+                        src="https://www.googletagservices.com/tag/js/gpt.js"
+                    />
+                ) : null}
+                {gptEnabled ? (
+                    <script
+                        dangerouslySetInnerHTML={{
+                            __html: `
+                      var googletag = googletag || {};
+                      googletag.cmd = googletag.cmd || [];
+                      googletag.cmd.push(function() {
+                          var slots = ${JSON.stringify(gptSlots)};
+                          for (var name in slots) {
+                              // TODO: Remove this after testing
+                              console.log('GPT AD', name, slots[name].args);
+                              googletag.defineSlot.apply(null, slots[name].args);
+                          }
+                          // // TODO: Remove this after testing
+                          // googletag.defineSlot('/21784675435/steemit_top-navi', [[728, 90], [970, 90]], 'div-gpt-ad-1547492443353-0').addService(googletag.pubads());
+                          googletag.pubads().enableSingleRequest();
+                          googletag.pubads().collapseEmptyDivs();
+                          googletag.enableServices();
+                      });
+                  `,
+                        }}
+                    />
+                ) : null}
                 {shouldSeeAds ? (
                     <script
                         async

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 class GoogleAd extends React.Component {
     componentDidMount() {
-        if (this.props.env === 'development') {
+        if (!this.props.shouldSeeAds) {
             return;
         }
 

@@ -26,6 +26,7 @@ class Header extends React.Component {
         category: PropTypes.string,
         order: PropTypes.string,
         pathname: PropTypes.string,
+        gptSlots: PropTypes.object,
     };
 
     constructor() {
@@ -259,7 +260,9 @@ class Header extends React.Component {
                 {this.props.showAnnouncement && (
                     <Announcement onClose={this.props.hideAnnouncement} />
                 )}
-                <GptAd slot={this.props.gptSlots['top_navi']['slot_id']} />
+                {this.props.gptSlots ? (
+                    <GptAd slot={this.props.gptSlots['top_navi']['slot_id']} />
+                ) : null}
                 <nav className="row Header__nav">
                     <div className="small-5 large-4 columns Header__logotype">
                         {/*LOGO*/}

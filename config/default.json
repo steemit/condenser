@@ -86,10 +86,14 @@
     },
     "in_feed_1": {
       "slot_id": "9514544128",
-      "layout_key": "-fb+5w+4e-db+86"
+      "layout_key": "-fb+5w+4e-db+86",
+      "every": 8
     },
     "post_footer_1": {
       "slot_id": "5796459261"
+    },
+    "market_1": {
+      "slot_id": "2777377820"
     }
   }
 }

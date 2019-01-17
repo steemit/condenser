@@ -217,7 +217,8 @@ class PostsList extends React.Component {
             });
         const renderSummary = items =>
             items.map((item, i) => {
-                if (this.props.shouldSeeAds && i === 10) {
+                const every = this.props.adSlots['in_feed_1'].every;
+                if (this.props.shouldSeeAds && i >= every && i % every === 0) {
                     return (
                         <div key={item.item}>
                             <li>

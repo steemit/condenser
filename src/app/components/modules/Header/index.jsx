@@ -261,7 +261,10 @@ class Header extends React.Component {
                     <Announcement onClose={this.props.hideAnnouncement} />
                 )}
                 {this.props.gptSlots ? (
-                    <GptAd slot={this.props.gptSlots['top_navi']['slot_id']} />
+                    <GptAd
+                        slot={this.props.gptSlots['top_navi']['slot_id']}
+                        args={this.props.gptSlots['top_navi']['args']}
+                    />
                 ) : null}
                 <nav className="row Header__nav">
                     <div className="small-5 large-4 columns Header__logotype">

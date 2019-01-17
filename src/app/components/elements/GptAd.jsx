@@ -8,17 +8,34 @@ class GptAd extends React.Component {
         }
 
         googletag.cmd.push(() => {
-            googletag.display(this.props.slot);
+            const slot = googletag.defineSlot.apply(googletag, this.props.args);
+            slot.addService(googletag.pubads());
+
+            googletag.cmd.push(() => {
+                googletag.display(this.props.slot);
+                googletag.pubads().refresh([slot]);
+                googletag
+                    .pubads()
+                    .addEventListener('slotRenderEnded', function(event) {
+                        console.log('Slot has been rendered:', event);
+                        window.dispatchEvent(new Event('gptadshown'));
+                    });
+            });
         });
     }
 
     render() {
-        console.log('props', this.props);
         if (!this.props.gptEnabled) {
             return null;
         }
 
-        return <div id={this.props.slot} />;
+        return (
+            <div
+                className="gpt-ad"
+                style={{ width: '100%' }}
+                id={this.props.slot}
+            />
+        );
     }
 }
 

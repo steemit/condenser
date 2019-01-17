@@ -182,20 +182,18 @@ export default function ServerHTML({
                     <script
                         dangerouslySetInnerHTML={{
                             __html: `
-                      var googletag = googletag || {};
+                      window.googletag = window.googletag || {};
                       googletag.cmd = googletag.cmd || [];
+                      console.log('Set up googletag');
                       googletag.cmd.push(function() {
-                          var slots = ${JSON.stringify(gptSlots)};
-                          for (var name in slots) {
-                              // TODO: Remove this after testing
-                              console.log('GPT AD', name, slots[name].args);
-                              googletag.defineSlot.apply(null, slots[name].args);
-                          }
-                          // // TODO: Remove this after testing
-                          // googletag.defineSlot('/21784675435/steemit_top-navi', [[728, 90], [970, 90]], 'div-gpt-ad-1547492443353-0').addService(googletag.pubads());
+                          console.log('Preparing to enable googletag services');
                           googletag.pubads().enableSingleRequest();
-                          googletag.pubads().collapseEmptyDivs();
+                          googletag.pubads().setTargeting('edition',['new-york']);
+                          googletag.pubads().collapseEmptyDivs(true,true);
+                          googletag.pubads().disableInitialLoad();
+                          googletag.pubads().enableAsyncRendering();
                           googletag.enableServices();
+                          console.log('Enabled googletag services');
                       });
                   `,
                         }}

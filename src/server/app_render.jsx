@@ -72,7 +72,7 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
             test: !!config.google_ad_test,
             client: config.google_ad_client,
             adSlots: config.google_ad_slots,
-            gptEnabled: !!config.gpt_enabled,
+            gptEnabled: !!ctx.gptEnabled,
             gptSlots: config.gpt_slots,
         };
         // ... and that's the end of user-session-related SSR

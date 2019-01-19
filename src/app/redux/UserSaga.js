@@ -388,7 +388,7 @@ function* usernamePasswordLogin2({
     // TOS acceptance
     yield fork(promptTosAcceptance, username);
     if (afterLoginRedirectToWelcome) {
-        browserHistory.push('/static_home');
+        browserHistory.push('/');
     } else if (feedURL) {
         if (document.location.pathname === '/') browserHistory.push(feedURL);
     }

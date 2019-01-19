@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { Set } from 'immutable';
+
+// import PropTypes from 'prop-types';
 import { ThumbsDown, ThumbsUp, X } from 'react-feather';
 import { Sidebar, Segment, Menu } from 'semantic-ui-react';
 
@@ -30,20 +33,24 @@ class Node extends Component {
     }
 
     componentDidMount() {
-        // console.log(this.getParams('id'));
-        const id = 1; //this.getParams('id');
+        let post = this.props.post;
+        if (!post) {
+            const route_params = this.props.routeParams;
+            post = route_params.username + '/' + route_params.slug;
 
-        if (Nodes[id - 1]) {
-            // this.setState({ data: Nodes[id - 1] });
-        } else {
-            // this.props.history.push('/');
+            const id = route_params.slug; //this.getParams('id');
+
+            if (Nodes[id - 1]) {
+                this.setState({ data: Nodes[id - 1] }); // eslint-disable-line
+            } else {
+                this.props.history.push('/');
+            }
         }
     }
 
     getParams(key) {
-        // const { match: { params } } = this.props;
-        // return params[key];
-        return key;
+        const { match: { params } } = this.props;
+        return params[key];
     }
 
     toggleCitesPanel = () =>
@@ -367,7 +374,27 @@ Node.propTypes = {
     // match: PropTypes.object.isRequired,
 };
 
+const emptySet = Set();
+
 module.exports = {
-    path: 'static_node',
-    component: Node,
+    path: '/(:category/)@:username/:slug',
+    component: connect((state, ownProps) => {
+        const current_user = state.user.get('current');
+        let ignoring;
+        if (current_user) {
+            const key = [
+                'follow',
+                'getFollowingAsync',
+                current_user.get('username'),
+                'ignore_result',
+            ];
+            ignoring = state.global.getIn(key, emptySet);
+        }
+        return {
+            content: state.global.get('content'),
+            ignoring,
+            sortOrder:
+                ownProps.router.getCurrentLocation().query.sort || 'trending',
+        };
+    })(Node),
 };

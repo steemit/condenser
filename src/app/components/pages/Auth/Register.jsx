@@ -76,7 +76,7 @@ class Register extends Component {
         return (
             <div className="AuthWrapper">
                 <div className="Left">
-                    <a href="/static_home">
+                    <a href="/">
                         <img className="Logo" src={logo} alt="Knowledr Logo" />
                     </a>
                     <div className="AuthForm">

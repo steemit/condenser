@@ -25,7 +25,7 @@ module.exports = {
                 BROWSER: JSON.stringify(true),
                 NODE_ENV: JSON.stringify('development'),
                 VERSION: JSON.stringify(git.long()),
-                OFFLINE_SSR_TEST: true
+                // OFFLINE_SSR_TEST: true
             }
         }),
         ...baseConfig.plugins,

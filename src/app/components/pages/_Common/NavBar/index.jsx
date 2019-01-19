@@ -80,7 +80,7 @@ class NavBar extends Component {
                                 Ob
                                 <span className="desktop">servations</span>
                             </a>
-                            <a className="Item" href="/static_create">
+                            <a className="Item" href="/create">
                                 <span className="desktop">Submit </span>
                                 New
                             </a>

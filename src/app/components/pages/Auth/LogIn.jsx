@@ -94,7 +94,7 @@ class LogIn extends Component {
                             >
                                 Log In
                             </button>
-                            <a className="Button" href="/static_register">
+                            <a className="Button" href="/register">
                                 Sign Up
                             </a>
                         </div> */}

@@ -122,7 +122,7 @@ class Register extends Component {
                             <button className="Black" type="submit">
                                 Sign Up
                             </button>
-                            <a className="Button" href="/static_login">
+                            <a className="Button" href="/login.html">
                                 Log In
                             </a>
                         </div>
@@ -149,6 +149,6 @@ Register.propTypes = {
 };
 
 module.exports = {
-    path: 'static_register',
+    path: 'register',
     component: Register,
 };

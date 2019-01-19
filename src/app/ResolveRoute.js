@@ -18,7 +18,7 @@ export default function resolveRoute(path) {
     if (path === '/') {
         return { page: 'PostsIndex', params: ['trending'] };
     }
-    if (path === '/static_register') {
+    if (path === '/register') {
         return { page: 'Static/Register' };
     }
     if (path === '/static_login') {
@@ -30,7 +30,7 @@ export default function resolveRoute(path) {
     if (path === '/static_node') {
         return { page: 'Static/Node' };
     }
-    if (path === '/static_create') {
+    if (path === '/create') {
         return { page: 'Static/Create' };
     }
     if (path === '/static_settings') {

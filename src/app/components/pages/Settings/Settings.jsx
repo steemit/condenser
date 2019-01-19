@@ -382,6 +382,6 @@ class Settings extends Component {
 }
 
 module.exports = {
-    path: 'static_settings',
+    path: '/@:username/settings',
     component: Settings,
 };

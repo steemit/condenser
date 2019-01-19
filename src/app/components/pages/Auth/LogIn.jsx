@@ -35,7 +35,7 @@ class LogIn extends Component {
         return (
             <div className="AuthWrapper">
                 <div className="Left">
-                    <a href="/static_home">
+                    <a href="/">
                         <img className="Logo" src={logo} alt="Knowledr Logo" />
                     </a>
                     <div className="AuthForm">
@@ -94,7 +94,7 @@ class LogIn extends Component {
                             >
                                 Log In
                             </button>
-                            <a className="Button" href="/static_register">
+                            <a className="Button" href="/register">
                                 Sign Up
                             </a>
                         </div> */}

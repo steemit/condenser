@@ -1,3 +1,4 @@
+/* eslint-disable */
 import App from 'app/components/App';
 import Benchmark from 'app/components/Steemit/pages/Benchmark';
 import PostsIndex from 'app/components/Steemit/pages/PostsIndex';
@@ -24,22 +25,10 @@ export default {
             //require.ensure([], (require) => {
             cb(null, [require('app/components/pages/Auth/Register')]);
             //});
-        } else if (route.page === 'Static/LogIn') {
-            //require.ensure([], (require) => {
-            cb(null, [require('app/components/pages/Auth/LogIn')]);
-            //});
-        } else if (route.page === 'Static/Home') {
-            //require.ensure([], (require) => {
-            cb(null, [require('app/components/pages/Home/Home')]);
-            //});
-        } else if (route.page === 'Static/Node') {
-            //require.ensure([], (require) => {
-            cb(null, [require('app/components/pages/Node/Node')]);
-            //});
-        } else if (route.page === 'Static/Create') {
-            //require.ensure([], (require) => {
-            cb(null, [require('app/components/pages/Posts/Create')]);
-            //});
+            // } else if (route.page === 'Static/LogIn') {
+            //     //require.ensure([], (require) => {
+            //     cb(null, [require('app/components/pages/Auth/LogIn')]);
+            //     //});
         } else if (route.page === 'Static/Settings') {
             //require.ensure([], (require) => {
             cb(null, [require('app/components/pages/Settings/Settings')]);
@@ -123,15 +112,16 @@ export default {
             cb(null, [require('app/components/Steemit/pages/Witnesses')]);
             //});
         } else if (route.page === 'SubmitPost') {
-            if (process.env.BROWSER) {
-                // require.ensure([], (require) => {
-                cb(null, [require('app/components/Steemit/pages/SubmitPost')]);
-                // });
-            } else {
-                cb(null, [
-                    require('app/components/Steemit/pages/SubmitPostServerRender'),
-                ]);
-            }
+            // if (process.env.BROWSER) {
+            //     // require.ensure([], (require) => {
+            //     cb(null, [require('app/components/Steemit/pages/SubmitPost')]);
+            //     // });
+            // } else {
+            //     cb(null, [
+            //         require('app/components/Steemit/pages/SubmitPostServerRender'),
+            //     ]);
+            // }
+            cb(null, [require('app/components/pages/Posts/Create')]);
         } else if (route.page === 'UserProfile') {
             //require.ensure([], (require) => {
             cb(null, [require('app/components/Steemit/pages/UserProfile')]);
@@ -142,7 +132,8 @@ export default {
             });
         } else if (route.page === 'Post') {
             //require.ensure([], (require) => {
-            cb(null, [require('app/components/Steemit/pages/PostPage')]);
+            // cb(null, [require('app/components/Steemit/pages/PostPage')]);
+            cb(null, [require('app/components/pages/Node/Node')]);
             //});
         } else if (route.page === 'PostNoCategory') {
             cb(null, [
@@ -150,8 +141,9 @@ export default {
             ]);
         } else if (route.page === 'PostsIndex') {
             //require.ensure([], (require) => {
-            //cb(null, [require('app/components/Steemit/pages/PostsIndex')]);
-            cb(null, [PostsIndex]);
+            // cb(null, [require('app/components/Steemit/pages/PostsIndex')]);
+            // cb(null, [PostsIndex]);
+            cb(null, [require('app/components/pages/Home/Home')]);
             //});
         } else {
             //require.ensure([], (require) => {

@@ -61,26 +61,17 @@ class NavBar extends Component {
                     </div>
                     <div className="Content">
                         <div className="Menu">
-                            <a
-                                className="Item"
-                                href="/static_home?type=questions"
-                            >
+                            <a className="Item" href="/?type=questions">
                                 Q<span className="desktop">uestions</span>
                             </a>
-                            <a
-                                className="Item"
-                                href="/static_home?type=hypotheses"
-                            >
+                            <a className="Item" href="/?type=hypotheses">
                                 H<span className="desktop">ypotheses</span>
                             </a>
-                            <a
-                                className="Item"
-                                href="/static_home?type=observations"
-                            >
+                            <a className="Item" href="/?type=observations">
                                 Ob
                                 <span className="desktop">servations</span>
                             </a>
-                            <a className="Item" href="/static_create">
+                            <a className="Item" href="/submit.html">
                                 <span className="desktop">Submit </span>
                                 New
                             </a>
@@ -144,8 +135,7 @@ class NavBar extends Component {
                                         <div className="List">
                                             <a
                                                 className="Item"
-                                                // href={`/@${username}/settings`}
-                                                href={`/static_settings`}
+                                                href={`/@${username}/settings`}
                                             >
                                                 <Settings /> {tt('g.settings')}
                                             </a>

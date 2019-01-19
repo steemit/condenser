@@ -171,6 +171,6 @@ class Create extends Component {
 }
 
 module.exports = {
-    path: 'static_create',
+    path: 'submit.html',
     component: Create,
 };

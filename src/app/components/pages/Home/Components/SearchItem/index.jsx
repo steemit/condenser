@@ -55,7 +55,7 @@ class SearchItem extends Component {
 
         return (
             <div className="SearchItemWrapper">
-                <a className="Title" href={`/static_node`}>
+                <a className="Title" href={`/knowledgr/@post/${id}`}>
                     <span className={`Type ${filteredType}`}>
                         {filteredType}
                     </span>{' '}

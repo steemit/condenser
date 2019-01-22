@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 // import PropTypes from 'prop-types';
 // import { withRouter } from 'react-router';
-import { Link } from 'react-router';
+import { Link, withRouter } from 'react-router';
 
 import { connect } from 'react-redux';
 import tt from 'counterpart';
@@ -99,11 +99,11 @@ class NavBar extends Component {
                   <ChevronDown />
                 </div>
                 {/* <Transition
-                                items={showUserMenu}
-                                from={{ height: 0, overflow: 'hidden' }}
-                                enter={{ height: 'auto' }}
-                                leave={{ height: 0, overflow: 'hidden' }}
-                            > */}
+                      items={showUserMenu}
+                      from={{ height: 0, overflow: 'hidden' }}
+                      enter={{ height: 'auto' }}
+                      leave={{ height: 0, overflow: 'hidden' }}
+                  > */}
                 {showUserMenu && (
                   // (props => (
                   <div className="DropdownList" /*style={props}*/>
@@ -192,4 +192,4 @@ const mapDispatchToProps = dispatch => ({
   hideAnnouncement: () => dispatch(userActions.hideAnnouncement()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(NavBar);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(NavBar));

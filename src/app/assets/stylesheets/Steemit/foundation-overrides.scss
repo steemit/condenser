@@ -38,6 +38,19 @@ div[role=dialog] {
   z-index: 500;
 }
 
+[type="text"], [type="password"], [type="date"], [type="datetime"], [type="datetime-local"], [type="month"], [type="week"], [type="email"], [type="number"], [type="search"], [type="tel"], [type="time"], [type="url"], [type="color"], textarea {
+  box-shadow: none;
+  height: auto;
+  margin: auto;
+  padding: auto;
+
+  &:focus,
+  &:active {
+    box-shadow: none;
+    border: none;
+  }
+}
+
 input[type=submit].disabled, input[type=submit].disabled:focus {
   opacity: 1;
   cursor: inherit;

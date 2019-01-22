@@ -1,6 +1,5 @@
 .App {
   min-height: 100vh;
-  padding-top: 50px;
 }
 
 .App.withAnnouncement {
@@ -14,7 +13,6 @@
 }
 
 .App__content {
-  margin-top: 1rem;
   @media print, screen and (min-width: 52.5em) {
     // margin-top: 2.1rem;
   }
@@ -30,7 +28,6 @@
   // /* Large and above */
   // @media screen and (min-width: 64.063em) {
   //     margin-top: 3rem;
-
 }
 
 .mini-header .App__content {

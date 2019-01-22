@@ -35,18 +35,18 @@ export function* accountAuthLookup({
   const memo = keys.get('memo_private');
   const auth = {
     posting: posting
-      ? 'none' /* yield authorityLookup({
-                  pubkeys: Set([toPub(posting)]),
-                  authority: account.get('posting'),
-                  authType: 'posting',
-              }) */
+      ? yield authorityLookup({
+          pubkeys: Set([toPub(posting)]),
+          authority: account.get('posting'),
+          authType: 'posting',
+        })
       : 'none',
     active: active
-      ? 'none' /* yield authorityLookup({
-                  pubkeys: Set([toPub(active)]),
-                  authority: account.get('active'),
-                  authType: 'active',
-              }) */
+      ? yield authorityLookup({
+          pubkeys: Set([toPub(active)]),
+          authority: account.get('active'),
+          authType: 'active',
+        })
       : 'none',
     owner: 'none',
     memo: account.get('memo_key') === toPub(memo) ? 'full' : 'none',

@@ -1,924 +1,910 @@
 {
-    "g": {
-        "age": "age",
-        "amount": "Amount",
-        "and": "and",
-        "are_you_sure": "Are you sure?",
-        "ask": "Ask",
-        "balance": "Balance: %(balanceValue)s",
-        "balances": "Balances",
-        "bid": "Bid",
-        "blog": "Blog",
-        "browse": "Browse",
-        "buy": "Buy",
-        "buy_steem_power": "Buy Steem Power",
-        "buy_or_sell": "Buy or Sell",
-        "by": "by",
-        "cancel": "Cancel",
-        "change_password": "Change Password",
-        "choose_language": "Choose Language",
-        "clear": "Clear",
-        "close": "Close",
-        "collapse_or_expand": "Collapse/Expand",
-        "comments": "Comments",
-        "confirm": "Confirm",
-        "convert": "Convert",
-        "date": "Date",
-        "delete": "Delete",
-        "dismiss": "Dismiss",
-        "edit": "Edit",
-        "email": "Email",
-        "external_link_message":
-            "This link will take you away from steemit.com",
-        "feed": "Feed",
-        "follow": "Follow",
-        "for": " for ",
-        "from": " from ",
-        "go_back": "Back",
-        "hide": "Hide",
-        "in": "in",
-        "in_reply_to": "in reply to",
-        "insufficient_balance": "Insufficient balance",
-        "invalid_amount": "Invalid amount",
-        "links": "Links",
-        "joined": "Joined",
-        "loading": "Loading",
-        "login": "Log In",
-        "logout": "Log Out",
-        "memo": "Memo",
-        "mute": "Mute",
-        "my_blog": "My blog",
-        "my_comments": "My comments",
-        "my_feed": "My feed",
-        "my_replies": "Replies to me",
-        "my_wallet": "My wallet",
-        "new": "New",
-        "newer": "Newer",
-        "next": "Next",
-        "no": "No",
-        "ok": "Ok",
-        "older": "Older",
-        "or": "or",
-        "order_placed": "Order placed: %(order)s",
-        "password": "Password",
-        "payouts": "Payouts",
-        "permissions": "Permissions",
-        "phishy_message":
-            "Link expanded to plain text; beware of a potential phishing attempt",
-        "post": "Post",
-        "post_as_user": "Post as %(username)s",
-        "posts": "Posts",
-        "powered_up_100": "Powered Up 100%%",
-        "preview": "Preview",
-        "previous": "Previous",
-        "price": "Price",
-        "print": "Print",
-        "promote": "Promote",
-        "promoted": "Promoted",
-        "re": "RE",
-        "re_to": "RE: %(topic)s",
-        "recent_password": "Recent Password",
-        "receive": "Receive ",
-        "remove": "Remove",
-        "remove_vote": "Remove Vote",
-        "replied_to": "replied to %(account)s",
-        "replies": "Replies",
-        "reply": "Reply",
-        "reply_count": {
-            "zero": "no replies",
-            "one": "1 reply",
-            "other": "%(count)s replies"
-        },
-        "reputation": "Reputation",
-        "reveal_comment": "Reveal Comment",
-        "request": "request",
-        "required": "Required",
-        "rewards": "Rewards",
-        "save": "Save",
-        "saved": "Saved",
-        "search": "Search",
-        "sell": "Sell",
-        "settings": "Settings",
-        "share_this_post": "Share this post",
-        "show": "Show",
-        "sign_in": "Sign in",
-        "sign_up": "Sign up",
-        "since": "since %(date)s",
-        "submit": "Submit",
-        "power_up": "Power Up",
-        "submit_a_story": "Post",
-        "tag": "Tag",
-        "to": " to ",
-        "topics": "Topics",
-        "toggle_nightmode": "Toggle Night Mode",
-        "all_tags": "All tags",
-        "all_tags_mobile": "All content",
-        "transfer": "Transfer ",
-        "trending_topics": "Trending Topics",
-        "type": "Type",
-        "unfollow": "Unfollow",
-        "unmute": "Unmute",
-        "unknown": "Unknown",
-        "upvote": "Upvote",
-        "upvote_post": "Upvote post",
-        "username": "Username",
-        "version": "Version",
-        "vote": "Vote",
-        "votes": "votes",
-        "wallet": "Wallet",
-        "warning": "warning",
-        "yes": "Yes",
-        "posting": "Posting",
-        "owner": "Owner",
-        "active": "Active",
-        "account_not_found": "Account not found",
-        "this_is_wrong_password": "This is the wrong password",
-        "do_you_need_to": "Do you need to",
-        "account_name": "Account Name",
-        "recover_your_account": "recover your account",
-        "reset_usernames_password": "Reset %(username)s's Password",
-        "this_will_update_usernames_authtype_key":
-            "This will update %(username)s %(authType)s key",
-        "passwords_do_not_match": "Passwords do not match",
-        "you_need_private_password_or_key_not_a_public_key":
-            "You need a private password or key (not a public key)",
-        "the_rules_of_APP_NAME": {
-            "one":
-                "The first rule of %(APP_NAME)s is: Do not lose your password.",
-            "second":
-                "The second rule of %(APP_NAME)s is: Do not lose your password.",
-            "third":
-                "The third rule of %(APP_NAME)s is: We cannot recover your password.",
-            "fourth":
-                "The fourth rule: If you can remember the password, it's not secure.",
-            "fifth": "The fifth rule: Use only randomly-generated passwords.",
-            "sixth": "The sixth rule: Do not tell anyone your password.",
-            "seventh": "The seventh rule: Always back up your password."
-        },
-        "recover_password": "Recover Account",
-        "current_password": "Current Password",
-        "generated_password": "Generated Password",
-        "backup_password_by_storing_it":
-            "Back it up by storing in your password manager or a text file",
-        "enter_account_show_password":
-            "Enter a valid account name to show the password",
-        "click_to_generate_password": "Click to generate password",
-        "re_enter_generate_password": "Re-enter Generated Password",
-        "understand_that_APP_NAME_cannot_recover_password":
-            "I understand that %(APP_NAME)s cannot recover lost passwords",
-        "i_saved_password": "I have securely saved my generated password",
-        "update_password": "Update Password",
-        "confirm_password": "Confirm Password",
-        "account_updated": "Account Updated",
-        "password_must_be_characters_or_more":
-            "Password must be %(amount)s characters or more",
-        "need_password_or_key":
-            "You need a private password or key (not a public key)",
-        "login_to_see_memo": "login to see memo",
-        "new_password": "New Password",
-        "incorrect_password": "Incorrect password",
-        "username_does_not_exist": "Username does not exist",
-        "account_name_should_start_with_a_letter":
-            "Account name should start with a letter.",
-        "account_name_should_be_shorter": "Account name should be shorter.",
-        "account_name_should_be_longer": "Account name should be longer.",
-        "account_name_should_have_only_letters_digits_or_dashes":
-            "Account name should have only letters, digits, periods or dashes.",
-        "cannot_increase_reward_of_post_within_the_last_minute_before_payout":
-            "Cannot increase reward of post within the last minute before payout",
-        "vote_currently_exists_user_must_be_indicate_a_to_reject_witness":
-            "vote currently exists, user must be indicate a desire to reject witness",
-        "only_one_APP_NAME_account_allowed_per_ip_address_every_10_minutes":
-            "Only one Steem account allowed per IP address every 10 minutes",
-        "resteem_this_post": "Resteem This Post",
-        "reblog": "Resteem",
-        "write_your_story": "Write your story...",
-        "remember_voting_and_posting_key": "Remember voting & posting key",
-        "auto_login_question_mark": "Auto login?",
-        "hide_private_key": "Hide private key",
-        "show_private_key": "Show private key",
-        "login_to_show": "Login to show",
-        "not_valid_email": "Not valid email",
-        "thank_you_for_being_an_early_visitor_to_APP_NAME":
-            "Thank you for being an early visitor to %(APP_NAME)s. We will get back to you at the earliest possible opportunity.",
-        "author_rewards": "Author rewards",
-        "curation_rewards": "Curation rewards",
-        "sorry_your_reddit_account_doesnt_have_enough_karma":
-            "Sorry, your Reddit account doesn't have enough Reddit Karma to qualify for a free sign up. Please add your email for a place on the waiting list",
-        "register_with_facebook": "Register with Facebook",
-        "or_click_the_button_below_to_register_with_facebook":
-            "Or click the button below to register with Facebook",
-        "server_returned_error": "server returned error",
-        "APP_NAME_support": "%(APP_NAME)s Support",
-        "please_email_questions_to": "Please email your questions to",
-        "next_7_strings_single_block": {
-            "authors_get_paid_when_people_like_you_upvote_their_post":
-                "Authors get paid when people like you upvote their post",
-            "if_you_enjoyed_what_you_read_earn_amount":
-                "If you enjoyed what you read here, create your account today and start earning FREE STEEM!",
-            "free_steem": "FREE STEEM!",
-            "sign_up_earn_steem": "Sign up now to earn "
-        },
-        "next_3_strings_together": {
-            "show_more": "Show more",
-            "show_less": "Show fewer",
-            "value_posts": "low value posts"
-        },
-        "read_only_mode":
-            "Due to server maintenance we are running in read only mode. We are sorry for the inconvenience.",
-        "tags_and_topics": "Tags",
-        "show_more_topics": "View all tags",
-        "basic": "Basic",
-        "advanced": "Advanced",
-        "views": {
-            "zero": "No Views",
-            "one": "%(count)s View",
-            "other": "%(count)s Views"
-        },
-        "responses": {
-            "zero": "No Responses",
-            "one": "%(count)s Response",
-            "other": "%(count)s Responses"
-        },
-        "post_key_warning": {
-            "confirm":
-                "You are about to publish a STEEM private key or master password. You will probably lose control of the associated account and all its funds.",
-            "warning":
-                "Legitimate users, including employees of Steemit Inc., will never ask you for a private key or master password.",
-            "checkbox": "I understand"
-        }
+  "g": {
+    "age": "age",
+    "amount": "Amount",
+    "and": "and",
+    "are_you_sure": "Are you sure?",
+    "ask": "Ask",
+    "balance": "Balance: %(balanceValue)s",
+    "balances": "Balances",
+    "bid": "Bid",
+    "blog": "Blog",
+    "browse": "Browse",
+    "buy": "Buy",
+    "buy_steem_power": "Buy Steem Power",
+    "buy_or_sell": "Buy or Sell",
+    "by": "by",
+    "cancel": "Cancel",
+    "change_password": "Change Password",
+    "choose_language": "Choose Language",
+    "clear": "Clear",
+    "close": "Close",
+    "collapse_or_expand": "Collapse/Expand",
+    "comments": "Comments",
+    "confirm": "Confirm",
+    "convert": "Convert",
+    "date": "Date",
+    "delete": "Delete",
+    "dismiss": "Dismiss",
+    "edit": "Edit",
+    "email": "Email",
+    "external_link_message": "This link will take you away from steemit.com",
+    "feed": "Feed",
+    "follow": "Follow",
+    "for": " for ",
+    "from": " from ",
+    "go_back": "Back",
+    "hide": "Hide",
+    "in": "in",
+    "in_reply_to": "in reply to",
+    "insufficient_balance": "Insufficient balance",
+    "invalid_amount": "Invalid amount",
+    "links": "Links",
+    "joined": "Joined",
+    "loading": "Loading",
+    "login": "Login",
+    "logout": "Logout",
+    "memo": "Memo",
+    "mute": "Mute",
+    "my_blog": "My blog",
+    "my_comments": "My comments",
+    "my_feed": "My feed",
+    "my_replies": "Replies to me",
+    "my_wallet": "My wallet",
+    "new": "New",
+    "newer": "Newer",
+    "next": "Next",
+    "no": "No",
+    "ok": "Ok",
+    "older": "Older",
+    "or": "or",
+    "order_placed": "Order placed: %(order)s",
+    "password": "Password",
+    "payouts": "Payouts",
+    "permissions": "Permissions",
+    "phishy_message":
+      "Link expanded to plain text; beware of a potential phishing attempt",
+    "post": "Post",
+    "post_as_user": "Post as %(username)s",
+    "posts": "Posts",
+    "powered_up_100": "Powered Up 100%%",
+    "preview": "Preview",
+    "previous": "Previous",
+    "price": "Price",
+    "print": "Print",
+    "promote": "Promote",
+    "promoted": "Promoted",
+    "re": "RE",
+    "re_to": "RE: %(topic)s",
+    "recent_password": "Recent Password",
+    "receive": "Receive ",
+    "remove": "Remove",
+    "remove_vote": "Remove Vote",
+    "replied_to": "replied to %(account)s",
+    "replies": "Replies",
+    "reply": "Reply",
+    "reply_count": {
+      "zero": "no replies",
+      "one": "1 reply",
+      "other": "%(count)s replies"
     },
-    "navigation": {
-        "about": "About",
-        "explore": "Explore",
-        "APP_NAME_whitepaper": "%(APP_NAME)s Whitepaper",
-        "third_party_exchanges": "Third-party exchanges:",
-        "buy_LIQUID_TOKEN": "Buy %(LIQUID_TOKEN)s",
-        "sell_LIQUID_TOKEN": "Sell %(LIQUID_TOKEN)s",
-        "currency_market": "Currency Market",
-        "stolen_account_recovery": "Stolen Accounts Recovery",
-        "change_account_password": "Change Account Password",
-        "witnesses": "Witnesses",
-        "vote_for_witnesses": "Vote for Witnesses",
-        "privacy_policy": "Privacy Policy",
-        "terms_of_service": "Terms of Service",
-        "sign_up": "Sign up",
-        "learn_more": "Learn more",
-        "welcome": "Welcome",
-        "faq": "FAQ",
-        "chat": "Steem Chat",
-        "app_center": "Apps Built on Steem",
-        "business_center": "Businesses Accepting Steem",
-        "api_docs": "Steemit API Docs",
-        "bluepaper": "Steem Bluepaper",
-        "smt_whitepaper": "SMT Whitepaper",
-        "whitepaper": "Steem Whitepaper",
-        "intro_tagline": "Your voice is worth something",
-        "intro_paragraph":
-            "Get paid for good content. Post and upvote articles on Steemit to get your share of the daily rewards pool.",
-        "jobs": "Jobs at Steemit"
+    "reputation": "Reputation",
+    "reveal_comment": "Reveal Comment",
+    "request": "request",
+    "required": "Required",
+    "rewards": "Rewards",
+    "save": "Save",
+    "saved": "Saved",
+    "search": "Search",
+    "sell": "Sell",
+    "settings": "Settings",
+    "share_this_post": "Share this post",
+    "show": "Show",
+    "sign_in": "Sign in",
+    "sign_up": "Sign up",
+    "since": "since %(date)s",
+    "submit": "Submit",
+    "power_up": "Power Up",
+    "submit_a_story": "Post",
+    "tag": "Tag",
+    "to": " to ",
+    "topics": "Topics",
+    "toggle_nightmode": "Toggle Night Mode",
+    "all_tags": "All tags",
+    "all_tags_mobile": "All content",
+    "transfer": "Transfer ",
+    "trending_topics": "Trending Topics",
+    "type": "Type",
+    "unfollow": "Unfollow",
+    "unmute": "Unmute",
+    "unknown": "Unknown",
+    "upvote": "Upvote",
+    "upvote_post": "Upvote post",
+    "username": "Username",
+    "version": "Version",
+    "vote": "Vote",
+    "votes": "votes",
+    "wallet": "Wallet",
+    "warning": "warning",
+    "yes": "Yes",
+    "posting": "Posting",
+    "owner": "Owner",
+    "active": "Active",
+    "account_not_found": "Account not found",
+    "this_is_wrong_password": "This is the wrong password",
+    "do_you_need_to": "Do you need to",
+    "account_name": "Account Name",
+    "recover_your_account": "recover your account",
+    "reset_usernames_password": "Reset %(username)s's Password",
+    "this_will_update_usernames_authtype_key":
+      "This will update %(username)s %(authType)s key",
+    "passwords_do_not_match": "Passwords do not match",
+    "you_need_private_password_or_key_not_a_public_key":
+      "You need a private password or key (not a public key)",
+    "the_rules_of_APP_NAME": {
+      "one": "The first rule of %(APP_NAME)s is: Do not lose your password.",
+      "second":
+        "The second rule of %(APP_NAME)s is: Do not lose your password.",
+      "third":
+        "The third rule of %(APP_NAME)s is: We cannot recover your password.",
+      "fourth":
+        "The fourth rule: If you can remember the password, it's not secure.",
+      "fifth": "The fifth rule: Use only randomly-generated passwords.",
+      "sixth": "The sixth rule: Do not tell anyone your password.",
+      "seventh": "The seventh rule: Always back up your password."
     },
-    "main_menu": {
-        "hot": "Hot",
-        "trending": "Trending"
+    "recover_password": "Recover Account",
+    "current_password": "Current Password",
+    "generated_password": "Generated Password",
+    "backup_password_by_storing_it":
+      "Back it up by storing in your password manager or a text file",
+    "enter_account_show_password":
+      "Enter a valid account name to show the password",
+    "click_to_generate_password": "Click to generate password",
+    "re_enter_generate_password": "Re-enter Generated Password",
+    "understand_that_APP_NAME_cannot_recover_password":
+      "I understand that %(APP_NAME)s cannot recover lost passwords",
+    "i_saved_password": "I have securely saved my generated password",
+    "update_password": "Update Password",
+    "confirm_password": "Confirm Password",
+    "account_updated": "Account Updated",
+    "password_must_be_characters_or_more":
+      "Password must be %(amount)s characters or more",
+    "need_password_or_key":
+      "You need a private password or key (not a public key)",
+    "login_to_see_memo": "login to see memo",
+    "new_password": "New Password",
+    "incorrect_password": "Incorrect password",
+    "username_does_not_exist": "Username does not exist",
+    "account_name_should_start_with_a_letter":
+      "Account name should start with a letter.",
+    "account_name_should_be_shorter": "Account name should be shorter.",
+    "account_name_should_be_longer": "Account name should be longer.",
+    "account_name_should_have_only_letters_digits_or_dashes":
+      "Account name should have only letters, digits, periods or dashes.",
+    "cannot_increase_reward_of_post_within_the_last_minute_before_payout":
+      "Cannot increase reward of post within the last minute before payout",
+    "vote_currently_exists_user_must_be_indicate_a_to_reject_witness":
+      "vote currently exists, user must be indicate a desire to reject witness",
+    "only_one_APP_NAME_account_allowed_per_ip_address_every_10_minutes":
+      "Only one Steem account allowed per IP address every 10 minutes",
+    "resteem_this_post": "Resteem This Post",
+    "reblog": "Resteem",
+    "write_your_story": "Write your story...",
+    "remember_voting_and_posting_key": "Remember voting & posting key",
+    "auto_login_question_mark": "Auto login?",
+    "hide_private_key": "Hide private key",
+    "show_private_key": "Show private key",
+    "login_to_show": "Login to show",
+    "not_valid_email": "Not valid email",
+    "thank_you_for_being_an_early_visitor_to_APP_NAME":
+      "Thank you for being an early visitor to %(APP_NAME)s. We will get back to you at the earliest possible opportunity.",
+    "author_rewards": "Author rewards",
+    "curation_rewards": "Curation rewards",
+    "sorry_your_reddit_account_doesnt_have_enough_karma":
+      "Sorry, your Reddit account doesn't have enough Reddit Karma to qualify for a free sign up. Please add your email for a place on the waiting list",
+    "register_with_facebook": "Register with Facebook",
+    "or_click_the_button_below_to_register_with_facebook":
+      "Or click the button below to register with Facebook",
+    "server_returned_error": "server returned error",
+    "APP_NAME_support": "%(APP_NAME)s Support",
+    "please_email_questions_to": "Please email your questions to",
+    "next_7_strings_single_block": {
+      "authors_get_paid_when_people_like_you_upvote_their_post":
+        "Authors get paid when people like you upvote their post",
+      "if_you_enjoyed_what_you_read_earn_amount":
+        "If you enjoyed what you read here, create your account today and start earning FREE STEEM!",
+      "free_steem": "FREE STEEM!",
+      "sign_up_earn_steem": "Sign up now to earn "
     },
-    "reply_editor": {
-        "shorten_title": "Shorten title",
-        "exceeds_maximum_length": "Exceeds maximum length (%(maxKb)sKB)",
-        "including_the_category":
-            " (including the category '%(rootCategory)s')",
-        "use_limited_amount_of_tags":
-            "You have %(tagsLength)s tags total%(includingCategory)s. Please use only 5 in your post and category line.",
-        "are_you_sure_you_want_to_clear_this_form":
-            "Are you sure you want to exit the comment editor?",
-        "uploading": "Uploading...",
-        "draft_saved": "Draft saved.",
-        "editor": "Editor",
-        "insert_images_by_dragging_dropping":
-            "Insert images by dragging & dropping, ",
-        "pasting_from_the_clipboard": "pasting from the clipboard, ",
-        "selecting_them": "selecting them",
-        "image_upload": "Image upload",
-        "power_up_100": "Power Up 100%%",
-        "default_50_50": "50%% SBD / 50%% SP",
-        "decline_payout": "Decline Payout",
-        "check_this_to_auto_upvote_your_post":
-            "Check this to auto-upvote your post",
-        "markdown_styling_guide": "Markdown Styling Guide",
-        "or_by": "or by",
-        "title": "Title",
-        "update_post": "Update Post",
-        "markdown_not_supported": "Markdown is not supported here",
-        "advanced_settings": "Advanced settings"
+    "next_3_strings_together": {
+      "show_more": "Show more",
+      "show_less": "Show fewer",
+      "value_posts": "low value posts"
     },
-    "category_selector_jsx": {
-        "tag_your_story":
-            "Tag (up to 5 tags), the first tag is your main category.",
-        "select_a_tag": "Select a tag",
-        "maximum_tag_length_is_24_characters":
-            "Maximum tag length is 24 characters",
-        "use_limited_amount_of_categories":
-            "Please use only %(amount)s categories",
-        "use_only_lowercase_letters": "Use only lowercase letters",
-        "use_one_dash": "Use only one dash",
-        "use_spaces_to_separate_tags": "Use spaces to separate tags",
-        "use_only_allowed_characters":
-            "Use only lowercase letters, digits and one dash",
-        "must_start_with_a_letter": "Must start with a letter",
-        "must_end_with_a_letter_or_number": "Must end with a letter or number"
+    "read_only_mode":
+      "Due to server maintenance we are running in read only mode. We are sorry for the inconvenience.",
+    "tags_and_topics": "Tags",
+    "show_more_topics": "View all tags",
+    "basic": "Basic",
+    "advanced": "Advanced",
+    "views": {
+      "zero": "No Views",
+      "one": "%(count)s View",
+      "other": "%(count)s Views"
     },
-    "post_advanced_settings_jsx": {
-        "payout_option_header": "Author rewards",
-        "payout_option_description":
-            "What type of tokens do you want as rewards from this post?",
-        "current_default": "Default",
-        "update_default_in_settings": "Update"
+    "responses": {
+      "zero": "No Responses",
+      "one": "%(count)s Response",
+      "other": "%(count)s Responses"
     },
-    "postfull_jsx": {
-        "this_post_is_not_available_due_to_a_copyright_claim":
-            "This post is not available due to a copyright claim.",
-        "share_on_facebook": "Share on Facebook",
-        "share_on_twitter": "Share on Twitter",
-        "share_on_reddit": "Share on Reddit",
-        "share_on_linkedin": "Share on Linkedin",
-        "recent_password": "Recent Password",
-        "in_week_convert_DEBT_TOKEN_to_LIQUID_TOKEN":
-            "In 3.5 days, convert %(amount)s %(DEBT_TOKEN)s into %(LIQUID_TOKEN)s",
-        "view_the_full_context": "View the full context",
-        "view_the_direct_parent": "View the direct parent",
-        "you_are_viewing_a_single_comments_thread_from":
-            "You are viewing a single comment's thread from"
-    },
-    "market_jsx": {
-        "action": "Action",
-        "date_created": "Date Created",
-        "last_price": "Last price",
-        "24h_volume": "24h volume",
-        "spread": "Spread",
-        "total": "Total",
-        "available": "Available",
-        "lowest_ask": "Lowest ask",
-        "highest_bid": "Highest bid",
-        "buy_orders": "Buy Orders",
-        "sell_orders": "Sell Orders",
-        "trade_history": "Trade History",
-        "open_orders": "Open Orders",
-        "sell_amount_for_atleast":
-            "Sell %(amount_to_sell)s for at least %(min_to_receive)s (%(effectivePrice)s)",
-        "buy_atleast_amount_for":
-            "Buy at least %(min_to_receive)s for %(amount_to_sell)s (%(effectivePrice)s)",
-        "price_warning_above":
-            "This price is well above the current market price of %(marketPrice)s, are you sure?",
-        "price_warning_below":
-            "This price is well below the current market price of %(marketPrice)s, are you sure?",
-        "order_cancel_confirm": "Cancel order %(order_id)s from %(user)s?",
-        "order_cancelled": "Order %(order_id)s cancelled.",
-        "higher": "Higher",
-        "lower": "Lower",
-        "total_DEBT_TOKEN_SHORT_CURRENCY_SIGN":
-            "Total %(DEBT_TOKEN_SHORT)s (%(CURRENCY_SIGN)s)",
-        "order_placed": "Order placed: %(order)s"
-    },
-    "recoveraccountstep1_jsx": {
-        "begin_recovery": "Begin Recovery",
-        "not_valid": "Not valid",
-        "account_name_is_not_found": "Account name is not found",
-        "unable_to_recover_account_not_change_ownership_recently":
-            "We are unable to recover this account, it has not changed ownership recently.",
-        "password_not_used_in_last_days":
-            "This password was not used on this account in the last 30 days.",
-        "request_already_submitted_contact_support":
-            "Your request has been already submitted and we are working on it. Please contact %(SUPPORT_EMAIL)s for the status of your request.",
-        "recover_account_intro":
-            "From time to time, a Steemian's owner key may be compromised. Stolen Account Recovery gives the rightful account owner 30 days to recover their account from the moment the thief changed their owner key. Stolen Account Recovery can only be used on %(APP_URL)s if the account owner had previously listed '%(APP_NAME)s' as their account trustee and complied with %(APP_NAME)s's Terms of Service.",
-        "login_with_facebook_or_reddit_media_to_verify_identity":
-            "Please login with Facebook or Reddit to verify your identity",
-        "login_with_social_media_to_verify_identity":
-            "Please login with %(provider)s to verify your identity",
-        "enter_email_toverify_identity":
-            "We need to verify your identity. Please enter your email address below to begin the verification.",
-        "continue_with_email": "Continue with Email",
-        "thanks_for_submitting_request_for_account_recovery":
-            "Thanks for submitting your request for Account Recovery using %(APP_NAME)s's blockchain-based multi factor authentication. We will respond to you as quickly as possible, however, please expect there may be some delay in response due to high volume of emails. Please be prepared to verify your identity.",
-        "recovering_account": "Recovering account",
-        "recover_account": "Recover Account",
-        "checking_account_owner": "Checking account owner",
-        "sending_recovery_request": "Sending recovery request",
-        "cant_confirm_account_ownership":
-            "We can't confirm account ownership. Check your password",
-        "account_recovery_request_not_confirmed":
-            "Account recovery request is not confirmed yet, please get back later, thank you for your patience."
-    },
-    "user_profile": {
-        "unknown_account": "Unknown Account",
-        "user_hasnt_made_any_posts_yet":
-            "Looks like %(name)s hasn't made any posts yet!",
-        "user_hasnt_started_bloggin_yet":
-            "Looks like %(name)s hasn't started blogging yet!",
-        "user_hasnt_followed_anything_yet":
-            "Looks like %(name)s might not be following anyone yet! If %(name)s recently added new users to follow, their personalized feed will populate once new content is available.",
-        "user_hasnt_had_any_replies_yet": "%(name)s hasn't had any replies yet",
-        "looks_like_you_havent_posted_anything_yet":
-            "Looks like you haven't posted anything yet.",
-        "create_a_post": "Create a Post",
-        "explore_trending_articles": "Explore Trending Articles",
-        "read_the_quick_start_guide": "Read The Quick Start Guide",
-        "browse_the_faq": "Browse The FAQ",
-        "followers": "Followers",
-        "this_is_users_reputations_score_it_is_based_on_history_of_votes":
-            "This is %(name)s's reputation score.\n\nThe reputation score is based on the history of votes received by the account, and is used to hide low quality content.",
-        "follower_count": {
-            "zero": "No followers",
-            "one": "1 follower",
-            "other": "%(count)s followers"
-        },
-        "followed_count": {
-            "zero": "Not following anybody",
-            "one": "1 following",
-            "other": "%(count)s following"
-        },
-        "post_count": {
-            "zero": "No posts",
-            "one": "1 post",
-            "other": "%(count)s posts"
-        },
-        "hide_resteems": "Hide Resteems",
-        "show_all": "Show All"
-    },
-    "authorrewards_jsx": {
-        "estimated_author_rewards_last_week":
-            "Estimated author rewards last week",
-        "author_rewards_history": "Author Rewards History"
-    },
-    "curationrewards_jsx": {
-        "estimated_curation_rewards_last_week":
-            "Estimated curation rewards last week",
-        "curation_rewards_history": "Curation Rewards History"
-    },
-    "post_jsx": {
-        "now_showing_comments_with_low_ratings":
-            "Now showing comments with low ratings",
-        "sort_order": "Sort Order",
-        "comments_were_hidden_due_to_low_ratings":
-            "Comments were hidden due to low ratings",
-        "comment_sort_order": {
-            "trending": "Trending",
-            "votes": "Votes",
-            "age": "Age",
-            "reputation": "Reputation"
-        }
-    },
-    "voting_jsx": {
-        "flagging_post_can_remove_rewards_the_flag_should_be_used_for_the_following":
-            "Flagging a post can remove rewards and make this material less visible. Some common reasons to flag",
-        "disagreement_on_rewards": "Disagreement on rewards",
-        "fraud_or_plagiarism": "Fraud or Plagiarism",
-        "hate_speech_or_internet_trolling": "Hate Speech or Internet Trolling",
-        "intentional_miss_categorized_content_or_spam":
-            "Intentional miss-categorized content or Spam",
-        "pending_payout": "Pending Payout $%(value)s",
-        "payout_declined": "Payout Declined",
-        "max_accepted_payout": "Max Accepted Payout $%(value)s",
-        "promotion_cost": "Promotion Cost $%(value)s",
-        "past_payouts": "Past Payouts $%(value)s",
-        "past_payouts_author": " - Author $%(value)s",
-        "past_payouts_curators": " - Curators $%(value)s",
-        "removing_your_vote": "Removing your vote",
-        "removing_your_vote_will_reset_curation_rewards_for_this_post":
-            "Removing your vote will reset your curation rewards for this post",
-        "changing_to_an_upvote": "Changing to an Up-Vote",
-        "changing_to_an_upvote_will_reset_curation_rewards_for_this_post":
-            "Changing to an Up-Vote will reset your curation rewards for this post",
-        "changing_to_a_downvote": "Changing to a Down-Vote",
-        "changing_to_a_downvote_will_reset_curation_rewards_for_this_post":
-            "Changing to a Down-Vote will reset your curation rewards for this post",
-        "confirm_flag": "Confirm Flag",
-        "and_more": "and %(count)s more",
-        "votes_plural": {
-            "one": "%(count)s vote",
-            "other": "%(count)s votes"
-        }
-    },
-    "witnesses_jsx": {
-        "witness_thread": "witness thread",
-        "external_site": "external site",
-        "disabled": "disabled",
-        "top_witnesses": "Witness Voting",
-        "you_have_votes_remaining": {
-            "zero": "You have no votes remaining",
-            "one": "You have 1 vote remaining",
-            "other": "You have %(count)s votes remaining"
-        },
-        "you_can_vote_for_maximum_of_witnesses":
-            "You can vote for a maximum of 30 witnesses",
-        "witness": "Witness",
-        "information": "Information",
-        "if_you_want_to_vote_outside_of_top_enter_account_name":
-            "If you would like to vote for a witness outside of the top 100, enter the account name below to cast a vote",
-        "set_witness_proxy":
-            "You can also choose a proxy that will vote for witnesses for you. This will reset your current witness selection.",
-        "witness_set":
-            "You have set a voting proxy. If you would like to re-enable manual voting, please clear your proxy.",
-        "witness_proxy_current": "Your current proxy is",
-        "witness_proxy_set": "Set proxy",
-        "witness_proxy_clear": "Clear proxy",
-        "proxy_update_error": "Your proxy was not updated"
-    },
-    "votesandcomments_jsx": {
-        "no_responses_yet_click_to_respond":
-            "No responses yet. Click to respond.",
-        "response_count_tooltip": {
-            "zero": "no responses. Click to respond.",
-            "one": "1 response. Click to respond.",
-            "other": "%(count)s responses. Click to respond."
-        },
-        "vote_count": {
-            "zero": "no votes",
-            "one": "1 vote",
-            "other": "%(count)s votes"
-        }
-    },
-    "userkeys_jsx": {
-        "public": "Public",
-        "private": "Private",
-        "public_something_key": "Public %(key)s Key",
-        "private_something_key": "Private %(key)s Key",
-        "posting_key_is_required_it_should_be_different":
-            "The posting key is used for posting and voting. It should be different from the active and owner keys.",
-        "the_active_key_is_used_to_make_transfers_and_place_orders":
-            "The active key is used to make transfers and place orders in the internal market.",
-        "the_owner_key_is_required_to_change_other_keys":
-            "The owner key is the master key for the account and is required to change the other keys.",
-        "the_private_key_or_password_should_be_kept_offline":
-            "The private key or password for the owner key should be kept offline as much as possible.",
-        "the_memo_key_is_used_to_create_and_read_memos":
-            "The memo key is used to create and read memos."
-    },
-    "suggestpassword_jsx": {
-        "APP_NAME_cannot_recover_passwords_keep_this_page_in_a_secure_location":
-            "%(APP_NAME)s cannot recover passwords. Keep this page in a secure location, such as a fireproof safe or safety deposit box.",
-        "APP_NAME_password_backup": "%(APP_NAME)s Password Backup",
-        "APP_NAME_password_backup_required":
-            "%(APP_NAME)s Password Backup (required)",
-        "after_printing_write_down_your_user_name":
-            "After printing, write down your user name"
-    },
-    "converttosteem_jsx": {
-        "your_existing_DEBT_TOKEN_are_liquid_and_transferable":
-            "Your existing %(DEBT_TOKEN)s are liquid and transferable. Instead you may wish to trade %(DEBT_TOKEN)s directly in this site under %(link)s or transfer to an external market.",
-        "this_is_a_price_feed_conversion":
-            "This is a price feed conversion. The 3.5 day delay is necessary to prevent abuse from gaming the price feed average.",
-        "convert_to_LIQUID_TOKEN": "Convert to %(LIQUID_TOKEN)s",
-        "DEBT_TOKEN_will_be_unavailable":
-            "This action will take place 3.5 days from now and can not be canceled. These %(DEBT_TOKEN)s will immediately become unavailable."
-    },
-    "tips_js": {
-        "liquid_token":
-            "Tradeable tokens that may be transferred anywhere at anytime.<br/>%(LIQUID_TOKEN)s can be converted to %(VESTING_TOKEN)s in a process called powering up.",
-        "influence_token":
-            "Influence tokens which give you more control over post payouts and allow you to earn on curation rewards.",
-        "estimated_value":
-            "The estimated value is based on an average value of %(LIQUID_TOKEN)s in US dollars.",
-        "non_transferable":
-            "%(VESTING_TOKEN)s is non-transferable and requires 3 months (13 payments) to convert back to %(LIQUID_TOKEN)s.",
-        "converted_VESTING_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again":
-            "Converted %(VESTING_TOKEN)s can be sent to yourself or someone else but can not transfer again without converting back to %(LIQUID_TOKEN)s.",
-        "part_of_your_steem_power_is_currently_delegated":
-            "Part of %(user_name)s's STEEM POWER is currently delegated. Delegation is donated for influence or to help new users perform actions on steemit. Your delegation amount can fluctuate."
-    },
-    "promote_post_jsx": {
-        "promote_post": "Promote Post",
-        "spend_your_DEBT_TOKEN_to_advertise_this_post":
-            "Spend your %(DEBT_TOKEN)s's to advertise this post in the promoted content section",
-        "you_successfully_promoted_this_post":
-            "You successfully promoted this post",
-        "this_post_was_hidden_due_to_low_ratings":
-            "This post was hidden due to low ratings"
-    },
-    "about_jsx": {
-        "about_app": "About %(APP_NAME)s",
-        "about_app_details":
-            "%(APP_NAME)s is a social media platform where everyone gets paid for creating and curating content. It leverages a robust digital points system, called Steem, that supports real value for digital rewards through market price discovery and liquidity.",
-        "learn_more_at_app_url": "Learn more at %(APP_URL)s",
-        "resources": "Resources"
-    },
-    "markdownviewer_jsx": {
-        "images_were_hidden_due_to_low_ratings":
-            "Images were hidden due to low ratings."
-    },
-    "postsummary_jsx": {
-        "resteemed": "resteemed",
-        "resteemed_by": "Resteemed by",
-        "reveal_it": "Reveal this post",
-        "adjust_your": "adjust your",
-        "display_preferences": "display preferences",
-        "create_an_account": "create an account",
-        "to_save_your_preferences": "to save your preferences"
-    },
-    "posts_index": {
-        "empty_feed_1": "Looks like you haven't followed anything yet",
-        "empty_feed_2":
-            "If you recently added new users to follow, your personalized feed will populate once new content is available",
-        "empty_feed_3": "Explore Trending Articles",
-        "empty_feed_4": "Read The Quick Start Guide",
-        "empty_feed_5": "Browse The FAQ",
-        "my_feed": "My Feed",
-        "accountnames_feed": "%(account_name)s's Feed"
-    },
-    "transferhistoryrow_jsx": {
-        "to_savings": "to savings",
-        "from_savings": "from savings",
-        "cancel_transfer_from_savings":
-            "Cancel transfer from savings (request %(request_id)s)",
-        "stop_power_down": "Stop power down",
-        "withdraw_vesting": "Start power down of %(powerdown_vests)s STEEM",
-        "start_power_down_of": "Start power down of",
-        "receive_interest_of": "Receive interest of",
-        "bad_actor_caution": "Caution",
-        "bad_actor_explained":
-            "This is from an account that looks fraudulent. If you wish, you may temporarily reveal this memo which may contain dangerous links.",
-        "bad_actor_reveal_memo": "I understand the risk; show anyway.",
-        "from_negative_rep_user_caution": "Caution",
-        "from_negative_rep_user_explained":
-            "This is from an account with a bad reputation. If you wish, you may temporarily reveal this memo which may contain dangerous links.",
-        "from_negative_rep_user_reveal_memo":
-            "I understand the risk; show anyway.",
-        "curation_reward": "%(curation_reward)s STEEM POWER for ",
-        "author_reward":
-            "%(sbd_payout)s%(steem_payout)s and %(author_reward)s STEEM POWER for ",
-        "claim_reward_balance": {
-            "three_rewards":
-                "Claim rewards: %(first_reward)s, %(second_reward)s and %(third_reward)s",
-            "two_rewards":
-                "Claim rewards: %(first_reward)s and %(second_reward)s",
-            "one_reward": "Claim rewards: %(reward)s"
-        },
-        "interest": "Receive interest of %(interest)s",
-        "fill_convert_request":
-            "Fill convert request: %(amount_in)s for %(amount_out)s",
-        "fill_order": {
-            "filled_by_current_owner":
-                "Paid %(open_pays)s for %(current_pays)s",
-            "open_owner_filled_my_order":
-                "Paid %(current_pays)s for %(open_pays)s"
-        },
-        "comment_benefactor_reward":
-            "%(benefactor_reward)s STEEM POWER for %(author)s/%(permlink)s",
-        "transfer_to_vesting": {
-            "from_self": {
-                "no_to": "Transfer %(amount)s to STEEM POWER",
-                "to_someone": "Transfer %(amount)s STEEM POWER to "
-            },
-            "to_self": "Receive %(amount)s STEEM POWER from ",
-            "from_user_to_user":
-                " Transfer %(amount)s STEEM POWER from %(from) to "
-        },
-        "transfer": {
-            "from_self": {
-                "to_savings": "Transfer to savings %(amount)s to ",
-                "from_savings": "Transfer from savings %(amount)s to ",
-                "not_savings": "Transfer %(amount)s to "
-            },
-            "to_self": {
-                "to_savings": "Receive from savings %(amount)s from ",
-                "from_savings": "Transfer from savings %(amount)s from ",
-                "not_savings": "Received %(amount)s from "
-            },
-            "to_someone_from_someone": {
-                "to_savings":
-                    "Transfer to savings %(amount)s from %(from)s to %(to)s",
-                "from_savings":
-                    "Transfer from savings %(amount)s from %(from)s to %(to)s",
-                "not_savings": "Transfer %(amount)s from %(from)s to %(to)s"
-            }
-        },
-        "request_id": "Request ID: %(request_id)s"
-    },
-    "savingswithdrawhistory_jsx": {
-        "cancel_this_withdraw_request": "Cancel this withdraw request?",
-        "pending_savings_withdrawals": "PENDING SAVINGS WITHDRAWS",
-        "withdraw": "Withdraw %(amount)s",
-        "to": "to %(to)s",
-        "from_to": "from %(from)s to %(to)s"
-    },
-    "explorepost_jsx": {
-        "copied": "Copied!",
-        "copy": "COPY",
-        "alternative_sources": "Alternative Sources"
-    },
-    "header_jsx": {
-        "home": "home",
-        "create_a_post": "Create a post",
-        "change_account_password": "Change Account Password",
-        "create_account": "Create Account",
-        "stolen_account_recovery": "Stolen Account Recovery",
-        "people_following": "People following %(username)s",
-        "people_followed_by": "People followed by %(username)s",
-        "curation_rewards_by": "Curation rewards by %(username)s",
-        "author_rewards_by": "Author rewards by %(username)s",
-        "replies_to": "Replies to %(username)s",
-        "comments_by": "Comments by %(username)s"
-    },
-    "loginform_jsx": {
-        "you_need_a_private_password_or_key":
-            "You need a private password or key (not a public key)",
-        "cryptography_test_failed": "Cryptography test failed",
-        "unable_to_log_you_in":
-            "We will be unable to log you in with this browser.",
-        "the_latest_versions_of": "The latest versions of ",
-        "are_well_tested_and_known_to_work_with":
-            "are well tested and known to work with %(APP_URL)s.",
-        "due_to_server_maintenance":
-            "Due to server maintenance we are running in read only mode. We are sorry for the inconvenience.",
-        "login_to_vote": "Login to Vote",
-        "login_to_post": "Login to Post",
-        "login_to_comment": "Login to Comment",
-        "posting": "Posting",
-        "active_or_owner": "Active or Owner",
-        "this_password_is_bound_to_your_account_owner_key":
-            "This password is bound to your account's owner key and can not be used to login to this site.",
-        "however_you_can_use_it_to": "However, you can use it to ",
-        "update_your_password": "update your password",
-        "to_obtain_a_more_secure_set_of_keys":
-            "to obtain a more secure set of keys.",
-        "this_password_is_bound_to_your_account_active_key":
-            "This password is bound to your account's active key and can not be used to login to this page.",
-        "you_may_use_this_active_key_on_other_more":
-            "You may use this active key on other more secure pages like the Wallet or Market pages.",
-        "you_account_has_been_successfully_created":
-            "You account has been successfully created!",
-        "you_account_has_been_successfully_recovered":
-            "You account has been successfully recovered!",
-        "password_update_succes":
-            "The password for %(accountName)s was successfully updated",
-        "password_info":
-            "This password or private key was entered incorrectly.  There is probably a handwriting or data-entry error.  Hint: A password or private key generated by Steemit will never contain 0 (zero), O (capital o), I (capital i) and l (lower case L) characters.",
-        "enter_your_username": "Enter your username",
-        "password_or_wif": "Password or WIF",
-        "this_operation_requires_your_key_or_master_password":
-            "This operation requires your %(authType)s key or Master password.",
-        "keep_me_logged_in": "Keep me logged in",
-        "amazing_community": "amazing community",
-        "to_comment_and_reward_others": " to comment and reward others.",
-        "signup_button": "Sign up now to earn ",
-        "signup_button_emphasis": "FREE STEEM!",
-        "sign_up_get_steem": "Sign up. Get STEEM!",
-        "returning_users": "Returning Users: ",
-        "join_our": "Join our",
-        "sign_transfer": "Sign to complete transfer"
-    },
-    "chainvalidation_js": {
-        "account_name_should_not_be_empty": "Account name should not be empty.",
-        "account_name_should_be_longer": "Account name should be longer.",
-        "account_name_should_be_shorter": "Account name should be shorter.",
-        "each_account_segment_should_start_with_a_letter":
-            "Each account segment should start with a letter.",
-        "each_account_segment_should_have_only_letters_digits_or_dashes":
-            "Each account segment should have only letters, digits, or dashes.",
-        "each_account_segment_should_have_only_one_dash_in_a_row":
-            "Each account segment should have only one dash in a row.",
-        "each_account_segment_should_end_with_a_letter_or_digit":
-            "Each account segment should end with a letter or digit.",
-        "each_account_segment_should_be_longer":
-            "Each account segment should be longer.",
-        "verified_exchange_no_memo":
-            "You must include a memo for your exchange transfer.",
-        "badactor":
-            "Use caution sending to this account. Please double check your spelling for possible phishing.",
-        "memo_has_privatekey":
-            "Please do not include what appears to be a private key or password.",
-        "memo_is_privatekey": "Do not use private keys in memos.",
-        "memo_is_password": "Do not use passwords in memos."
-    },
-    "settings_jsx": {
-        "invalid_url": "Invalid URL",
-        "name_is_too_long": "Name is too long",
-        "name_must_not_begin_with": "Name must not begin with @",
-        "about_is_too_long": "About is too long",
-        "location_is_too_long": "Location is too long",
-        "website_url_is_too_long": "Website URL is too long",
-        "public_profile_settings": "Public Profile Settings",
-        "preferences": "Preferences",
-        "not_safe_for_work_nsfw_content": "Not safe for work (NSFW) content",
-        "always_hide": "Always hide",
-        "always_warn": "Always warn",
-        "always_show": "Always show",
-        "choose_default_blog_payout": "Blog post rewards",
-        "choose_default_comment_payout": "Comment post rewards",
-        "muted_users": "Muted Users",
-        "update": "Update",
-        "upload_image": "Upload an image",
-        "uploading_image": "Uploading image",
-        "profile_image_url": "Profile picture url",
-        "cover_image_url": "Cover image url",
-        "profile_name": "Display Name",
-        "profile_about": "About",
-        "profile_location": "Location",
-        "profile_website": "Website",
-        "saved": "Saved!"
-    },
-    "transfer_jsx": {
-        "amount_is_in_form": "Amount is in the form 99999.999",
-        "insufficient_funds": "Insufficient funds",
-        "use_only_3_digits_of_precison": "Use only 3 digits of precison",
-        "send_to_account": "Send to account",
-        "asset": "Asset",
-        "this_memo_is_private": "This memo is private",
-        "this_memo_is_public": "This memo is public",
-        "convert_to_VESTING_TOKEN": "Convert to %(VESTING_TOKEN)s",
-        "balance_subject_to_3_day_withdraw_waiting_period":
-            "Balances subject to 3 day withdraw waiting period.",
-        "move_funds_to_another_account": "Move funds to another Steem account.",
-        "protect_funds_by_requiring_a_3_day_withdraw_waiting_period":
-            "Protect funds by requiring a 3 day withdraw waiting period.",
-        "withdraw_funds_after_the_required_3_day_waiting_period":
-            "Withdraw funds after the required 3 day waiting period.",
-        "from": "From",
-        "to": "To",
-        "asset_currently_collecting":
-            "%(asset)s currently collecting %(interest)s%% APR.",
-        "beware_of_spam_and_phishing_links":
-            "Beware of spam and phishing links in transfer memos. Do not open links from users you do not trust. Do not provide your private keys to any third party websites.",
-        "transactions_make_take_a_few_minutes":
-            "Transactions will not show until they are confirmed on the blockchain, which may take a few minutes.",
-        "autocomplete_previous_transfers": "previous transfers",
-        "autocomplete_user_following": "following",
-        "confirm_transfer": "Transfer %(amount)s from %(from)s to %(to)s?"
-    },
-    "userwallet_jsx": {
-        "transfer": "Transfer",
-        "conversion_complete_tip": "Will complete on %(date)s",
-        "in_conversion": "%(amount)s in conversion",
-        "transfer_to_savings": "Transfer to Savings",
-        "power_up": "Power Up",
-        "power_down": "Power Down",
-        "market": "Market",
-        "convert_to_LIQUID_TOKEN": "Convert to %(LIQUID_TOKEN)s",
-        "withdraw_LIQUID_TOKEN": "Withdraw %(LIQUID_TOKEN)s",
-        "withdraw_DEBT_TOKENS": "Withdraw %(DEBT_TOKENS)s",
-        "tokens_worth_about_1_of_LIQUID_TICKER":
-            "Tokens worth about $1.00 of %(LIQUID_TICKER)s, currently collecting %(sbdInterest)s%% APR.",
-        "tradeable_tokens_transferred":
-            "Tradeable tokens that may be transferred anywhere at anytime.",
-        "savings": "SAVINGS",
-        "estimated_account_value": "Estimated Account Value",
-        "next_power_down_is_scheduled_to_happen":
-            "The next power down is scheduled to happen",
-        "transfers_are_temporary_disabled": "Transfers are temporary disabled.",
-        "history": "HISTORY",
-        "redeem_rewards": "Redeem Rewards (Transfer to Balance)",
-        "buy_steem_or_steem_power": "Buy STEEM or STEEM POWER"
-    },
-    "powerdown_jsx": {
-        "power_down": "Power Down",
-        "amount": "Amount",
-        "already_power_down":
-            "You are already powering down %(AMOUNT)s %(LIQUID_TICKER)s (%(WITHDRAWN)s %(LIQUID_TICKER)s paid out so far). Note that if you change the power down amount the payout schedule will reset.",
-        "delegating":
-            "You are delegating %(AMOUNT)s %(LIQUID_TICKER)s. That amount is locked up and not available to power down until the delegation is removed and a full reward period has passed.",
-        "per_week": "That's ~%(AMOUNT)s %(LIQUID_TICKER)s per week.",
-        "warning":
-            "Leaving less than %(AMOUNT)s %(VESTING_TOKEN)s in your account is not recommended and can leave your account in a unusable state.",
-        "error": "Unable to power down (ERROR: %(MESSAGE)s)"
-    },
-    "checkloginowner_jsx": {
-        "your_password_permissions_were_reduced":
-            "Your password permissions were reduced",
-        "if_you_did_not_make_this_change":
-            "If you did not make this change please",
-        "ownership_changed_on": "Ownership Changed On ",
-        "deadline_for_recovery_is": "Deadline for recovery is",
-        "i_understand_dont_show_again": "I understand, don't show me again"
-    },
-    "termsagree_jsx": {
-        "please_review": "Please review our terms to continue",
-        "hi_user": "Hi %(username)s,",
-        "blurb":
-            "Our Terms of Service set the rules and guidelines that you must accept and follow in order to use Steemit and our Privacy Policy explains the type of information we collect and what we do with it. Don't worry, we don't sell your data to anyone. We do use it to meet legal requirements and to learn how to make Steemit better.",
-        "i_agree_to_steemits": "I agree to Steemit's",
-        "terms_of_service": "Terms of Service",
-        "privacy_policy": "Privacy Policy",
-        "continue": "Continue",
-        "cancel": "Cancel"
-    },
-    "confirmtransactionform_jsx": {
-        "confirm": "Confirm %(transactionType)s"
-    },
-    "modals_jsx": {
-        "your_transaction_failed": "Your transaction failed to process",
-        "out_of_bandwidth_title": "Why? You've run out of Resource Credits",
-        "out_of_bandwidth_reason":
-            "Actions such as posting and voting use computing resources, placing a real cost on the community members who run the Steem blockchain for everyone.",
-        "out_of_bandwidth_reason_2":
-            "To keep things free, Steem intelligently allocates Resource Credits to each user based on their Steem Power holdings, which can be used to submit a limited number of feeless transactions. When a user runs low on Resource Credits, they will either need to wait for them to recharge, or purchase additional Steem Power. This system prioritizes actions by good community members while limiting spam.",
-        "out_of_bandwidth_option_title": "To keep interacting on Steemit:",
-        "out_of_bandwidth_option_1": "Buy and hold more Steem Power",
-        "out_of_bandwidth_option_2":
-            "Wait until your Resource Credits recharge",
-        "out_of_bandwidth_option_3": "Wait until the network usage decreases"
-    },
-    "sanitizedlink_jsx": {
-        "phishylink_caution": "Link hidden; phishing attempt",
-        "phishylink_reveal": "show link"
+    "post_key_warning": {
+      "confirm":
+        "You are about to publish a STEEM private key or master password. You will probably lose control of the associated account and all its funds.",
+      "warning":
+        "Legitimate users, including employees of Steemit Inc., will never ask you for a private key or master password.",
+      "checkbox": "I understand"
     }
+  },
+  "navigation": {
+    "about": "About",
+    "explore": "Explore",
+    "APP_NAME_whitepaper": "%(APP_NAME)s Whitepaper",
+    "third_party_exchanges": "Third-party exchanges:",
+    "buy_LIQUID_TOKEN": "Buy %(LIQUID_TOKEN)s",
+    "sell_LIQUID_TOKEN": "Sell %(LIQUID_TOKEN)s",
+    "currency_market": "Currency Market",
+    "stolen_account_recovery": "Stolen Accounts Recovery",
+    "change_account_password": "Change Account Password",
+    "witnesses": "Witnesses",
+    "vote_for_witnesses": "Vote for Witnesses",
+    "privacy_policy": "Privacy Policy",
+    "terms_of_service": "Terms of Service",
+    "sign_up": "Sign up",
+    "learn_more": "Learn more",
+    "welcome": "Welcome",
+    "faq": "FAQ",
+    "chat": "Steem Chat",
+    "app_center": "Apps Built on Steem",
+    "business_center": "Businesses Accepting Steem",
+    "api_docs": "Steemit API Docs",
+    "bluepaper": "Steem Bluepaper",
+    "smt_whitepaper": "SMT Whitepaper",
+    "whitepaper": "Steem Whitepaper",
+    "intro_tagline": "Your voice is worth something",
+    "intro_paragraph":
+      "Get paid for good content. Post and upvote articles on Steemit to get your share of the daily rewards pool.",
+    "jobs": "Jobs at Steemit"
+  },
+  "main_menu": {
+    "hot": "Hot",
+    "trending": "Trending"
+  },
+  "reply_editor": {
+    "shorten_title": "Shorten title",
+    "exceeds_maximum_length": "Exceeds maximum length (%(maxKb)sKB)",
+    "including_the_category": " (including the category '%(rootCategory)s')",
+    "use_limited_amount_of_tags":
+      "You have %(tagsLength)s tags total%(includingCategory)s. Please use only 5 in your post and category line.",
+    "are_you_sure_you_want_to_clear_this_form":
+      "Are you sure you want to exit the comment editor?",
+    "uploading": "Uploading...",
+    "draft_saved": "Draft saved.",
+    "editor": "Editor",
+    "insert_images_by_dragging_dropping":
+      "Insert images by dragging & dropping, ",
+    "pasting_from_the_clipboard": "pasting from the clipboard, ",
+    "selecting_them": "selecting them",
+    "image_upload": "Image upload",
+    "power_up_100": "Power Up 100%%",
+    "default_50_50": "50%% SBD / 50%% SP",
+    "decline_payout": "Decline Payout",
+    "check_this_to_auto_upvote_your_post":
+      "Check this to auto-upvote your post",
+    "markdown_styling_guide": "Markdown Styling Guide",
+    "or_by": "or by",
+    "title": "Title",
+    "update_post": "Update Post",
+    "markdown_not_supported": "Markdown is not supported here",
+    "advanced_settings": "Advanced settings"
+  },
+  "category_selector_jsx": {
+    "tag_your_story":
+      "Tag (up to 5 tags), the first tag is your main category.",
+    "select_a_tag": "Select a tag",
+    "maximum_tag_length_is_24_characters":
+      "Maximum tag length is 24 characters",
+    "use_limited_amount_of_categories": "Please use only %(amount)s categories",
+    "use_only_lowercase_letters": "Use only lowercase letters",
+    "use_one_dash": "Use only one dash",
+    "use_spaces_to_separate_tags": "Use spaces to separate tags",
+    "use_only_allowed_characters":
+      "Use only lowercase letters, digits and one dash",
+    "must_start_with_a_letter": "Must start with a letter",
+    "must_end_with_a_letter_or_number": "Must end with a letter or number"
+  },
+  "post_advanced_settings_jsx": {
+    "payout_option_header": "Author rewards",
+    "payout_option_description":
+      "What type of tokens do you want as rewards from this post?",
+    "current_default": "Default",
+    "update_default_in_settings": "Update"
+  },
+  "postfull_jsx": {
+    "this_post_is_not_available_due_to_a_copyright_claim":
+      "This post is not available due to a copyright claim.",
+    "share_on_facebook": "Share on Facebook",
+    "share_on_twitter": "Share on Twitter",
+    "share_on_reddit": "Share on Reddit",
+    "share_on_linkedin": "Share on Linkedin",
+    "recent_password": "Recent Password",
+    "in_week_convert_DEBT_TOKEN_to_LIQUID_TOKEN":
+      "In 3.5 days, convert %(amount)s %(DEBT_TOKEN)s into %(LIQUID_TOKEN)s",
+    "view_the_full_context": "View the full context",
+    "view_the_direct_parent": "View the direct parent",
+    "you_are_viewing_a_single_comments_thread_from":
+      "You are viewing a single comment's thread from"
+  },
+  "market_jsx": {
+    "action": "Action",
+    "date_created": "Date Created",
+    "last_price": "Last price",
+    "24h_volume": "24h volume",
+    "spread": "Spread",
+    "total": "Total",
+    "available": "Available",
+    "lowest_ask": "Lowest ask",
+    "highest_bid": "Highest bid",
+    "buy_orders": "Buy Orders",
+    "sell_orders": "Sell Orders",
+    "trade_history": "Trade History",
+    "open_orders": "Open Orders",
+    "sell_amount_for_atleast":
+      "Sell %(amount_to_sell)s for at least %(min_to_receive)s (%(effectivePrice)s)",
+    "buy_atleast_amount_for":
+      "Buy at least %(min_to_receive)s for %(amount_to_sell)s (%(effectivePrice)s)",
+    "price_warning_above":
+      "This price is well above the current market price of %(marketPrice)s, are you sure?",
+    "price_warning_below":
+      "This price is well below the current market price of %(marketPrice)s, are you sure?",
+    "order_cancel_confirm": "Cancel order %(order_id)s from %(user)s?",
+    "order_cancelled": "Order %(order_id)s cancelled.",
+    "higher": "Higher",
+    "lower": "Lower",
+    "total_DEBT_TOKEN_SHORT_CURRENCY_SIGN":
+      "Total %(DEBT_TOKEN_SHORT)s (%(CURRENCY_SIGN)s)",
+    "order_placed": "Order placed: %(order)s"
+  },
+  "recoveraccountstep1_jsx": {
+    "begin_recovery": "Begin Recovery",
+    "not_valid": "Not valid",
+    "account_name_is_not_found": "Account name is not found",
+    "unable_to_recover_account_not_change_ownership_recently":
+      "We are unable to recover this account, it has not changed ownership recently.",
+    "password_not_used_in_last_days":
+      "This password was not used on this account in the last 30 days.",
+    "request_already_submitted_contact_support":
+      "Your request has been already submitted and we are working on it. Please contact %(SUPPORT_EMAIL)s for the status of your request.",
+    "recover_account_intro":
+      "From time to time, a Steemian's owner key may be compromised. Stolen Account Recovery gives the rightful account owner 30 days to recover their account from the moment the thief changed their owner key. Stolen Account Recovery can only be used on %(APP_URL)s if the account owner had previously listed '%(APP_NAME)s' as their account trustee and complied with %(APP_NAME)s's Terms of Service.",
+    "login_with_facebook_or_reddit_media_to_verify_identity":
+      "Please login with Facebook or Reddit to verify your identity",
+    "login_with_social_media_to_verify_identity":
+      "Please login with %(provider)s to verify your identity",
+    "enter_email_toverify_identity":
+      "We need to verify your identity. Please enter your email address below to begin the verification.",
+    "continue_with_email": "Continue with Email",
+    "thanks_for_submitting_request_for_account_recovery":
+      "Thanks for submitting your request for Account Recovery using %(APP_NAME)s's blockchain-based multi factor authentication. We will respond to you as quickly as possible, however, please expect there may be some delay in response due to high volume of emails. Please be prepared to verify your identity.",
+    "recovering_account": "Recovering account",
+    "recover_account": "Recover Account",
+    "checking_account_owner": "Checking account owner",
+    "sending_recovery_request": "Sending recovery request",
+    "cant_confirm_account_ownership":
+      "We can't confirm account ownership. Check your password",
+    "account_recovery_request_not_confirmed":
+      "Account recovery request is not confirmed yet, please get back later, thank you for your patience."
+  },
+  "user_profile": {
+    "unknown_account": "Unknown Account",
+    "user_hasnt_made_any_posts_yet":
+      "Looks like %(name)s hasn't made any posts yet!",
+    "user_hasnt_started_bloggin_yet":
+      "Looks like %(name)s hasn't started blogging yet!",
+    "user_hasnt_followed_anything_yet":
+      "Looks like %(name)s might not be following anyone yet! If %(name)s recently added new users to follow, their personalized feed will populate once new content is available.",
+    "user_hasnt_had_any_replies_yet": "%(name)s hasn't had any replies yet",
+    "looks_like_you_havent_posted_anything_yet":
+      "Looks like you haven't posted anything yet.",
+    "create_a_post": "Create a Post",
+    "explore_trending_articles": "Explore Trending Articles",
+    "read_the_quick_start_guide": "Read The Quick Start Guide",
+    "browse_the_faq": "Browse The FAQ",
+    "followers": "Followers",
+    "this_is_users_reputations_score_it_is_based_on_history_of_votes":
+      "This is %(name)s's reputation score.\n\nThe reputation score is based on the history of votes received by the account, and is used to hide low quality content.",
+    "follower_count": {
+      "zero": "No followers",
+      "one": "1 follower",
+      "other": "%(count)s followers"
+    },
+    "followed_count": {
+      "zero": "Not following anybody",
+      "one": "1 following",
+      "other": "%(count)s following"
+    },
+    "post_count": {
+      "zero": "No posts",
+      "one": "1 post",
+      "other": "%(count)s posts"
+    },
+    "hide_resteems": "Hide Resteems",
+    "show_all": "Show All"
+  },
+  "authorrewards_jsx": {
+    "estimated_author_rewards_last_week": "Estimated author rewards last week",
+    "author_rewards_history": "Author Rewards History"
+  },
+  "curationrewards_jsx": {
+    "estimated_curation_rewards_last_week":
+      "Estimated curation rewards last week",
+    "curation_rewards_history": "Curation Rewards History"
+  },
+  "post_jsx": {
+    "now_showing_comments_with_low_ratings":
+      "Now showing comments with low ratings",
+    "sort_order": "Sort Order",
+    "comments_were_hidden_due_to_low_ratings":
+      "Comments were hidden due to low ratings",
+    "comment_sort_order": {
+      "trending": "Trending",
+      "votes": "Votes",
+      "age": "Age",
+      "reputation": "Reputation"
+    }
+  },
+  "voting_jsx": {
+    "flagging_post_can_remove_rewards_the_flag_should_be_used_for_the_following":
+      "Flagging a post can remove rewards and make this material less visible. Some common reasons to flag",
+    "disagreement_on_rewards": "Disagreement on rewards",
+    "fraud_or_plagiarism": "Fraud or Plagiarism",
+    "hate_speech_or_internet_trolling": "Hate Speech or Internet Trolling",
+    "intentional_miss_categorized_content_or_spam":
+      "Intentional miss-categorized content or Spam",
+    "pending_payout": "Pending Payout $%(value)s",
+    "payout_declined": "Payout Declined",
+    "max_accepted_payout": "Max Accepted Payout $%(value)s",
+    "promotion_cost": "Promotion Cost $%(value)s",
+    "past_payouts": "Past Payouts $%(value)s",
+    "past_payouts_author": " - Author $%(value)s",
+    "past_payouts_curators": " - Curators $%(value)s",
+    "removing_your_vote": "Removing your vote",
+    "removing_your_vote_will_reset_curation_rewards_for_this_post":
+      "Removing your vote will reset your curation rewards for this post",
+    "changing_to_an_upvote": "Changing to an Up-Vote",
+    "changing_to_an_upvote_will_reset_curation_rewards_for_this_post":
+      "Changing to an Up-Vote will reset your curation rewards for this post",
+    "changing_to_a_downvote": "Changing to a Down-Vote",
+    "changing_to_a_downvote_will_reset_curation_rewards_for_this_post":
+      "Changing to a Down-Vote will reset your curation rewards for this post",
+    "confirm_flag": "Confirm Flag",
+    "and_more": "and %(count)s more",
+    "votes_plural": {
+      "one": "%(count)s vote",
+      "other": "%(count)s votes"
+    }
+  },
+  "witnesses_jsx": {
+    "witness_thread": "witness thread",
+    "external_site": "external site",
+    "disabled": "disabled",
+    "top_witnesses": "Witness Voting",
+    "you_have_votes_remaining": {
+      "zero": "You have no votes remaining",
+      "one": "You have 1 vote remaining",
+      "other": "You have %(count)s votes remaining"
+    },
+    "you_can_vote_for_maximum_of_witnesses":
+      "You can vote for a maximum of 30 witnesses",
+    "witness": "Witness",
+    "information": "Information",
+    "if_you_want_to_vote_outside_of_top_enter_account_name":
+      "If you would like to vote for a witness outside of the top 100, enter the account name below to cast a vote",
+    "set_witness_proxy":
+      "You can also choose a proxy that will vote for witnesses for you. This will reset your current witness selection.",
+    "witness_set":
+      "You have set a voting proxy. If you would like to re-enable manual voting, please clear your proxy.",
+    "witness_proxy_current": "Your current proxy is",
+    "witness_proxy_set": "Set proxy",
+    "witness_proxy_clear": "Clear proxy",
+    "proxy_update_error": "Your proxy was not updated"
+  },
+  "votesandcomments_jsx": {
+    "no_responses_yet_click_to_respond": "No responses yet. Click to respond.",
+    "response_count_tooltip": {
+      "zero": "no responses. Click to respond.",
+      "one": "1 response. Click to respond.",
+      "other": "%(count)s responses. Click to respond."
+    },
+    "vote_count": {
+      "zero": "no votes",
+      "one": "1 vote",
+      "other": "%(count)s votes"
+    }
+  },
+  "userkeys_jsx": {
+    "public": "Public",
+    "private": "Private",
+    "public_something_key": "Public %(key)s Key",
+    "private_something_key": "Private %(key)s Key",
+    "posting_key_is_required_it_should_be_different":
+      "The posting key is used for posting and voting. It should be different from the active and owner keys.",
+    "the_active_key_is_used_to_make_transfers_and_place_orders":
+      "The active key is used to make transfers and place orders in the internal market.",
+    "the_owner_key_is_required_to_change_other_keys":
+      "The owner key is the master key for the account and is required to change the other keys.",
+    "the_private_key_or_password_should_be_kept_offline":
+      "The private key or password for the owner key should be kept offline as much as possible.",
+    "the_memo_key_is_used_to_create_and_read_memos":
+      "The memo key is used to create and read memos."
+  },
+  "suggestpassword_jsx": {
+    "APP_NAME_cannot_recover_passwords_keep_this_page_in_a_secure_location":
+      "%(APP_NAME)s cannot recover passwords. Keep this page in a secure location, such as a fireproof safe or safety deposit box.",
+    "APP_NAME_password_backup": "%(APP_NAME)s Password Backup",
+    "APP_NAME_password_backup_required":
+      "%(APP_NAME)s Password Backup (required)",
+    "after_printing_write_down_your_user_name":
+      "After printing, write down your user name"
+  },
+  "converttosteem_jsx": {
+    "your_existing_DEBT_TOKEN_are_liquid_and_transferable":
+      "Your existing %(DEBT_TOKEN)s are liquid and transferable. Instead you may wish to trade %(DEBT_TOKEN)s directly in this site under %(link)s or transfer to an external market.",
+    "this_is_a_price_feed_conversion":
+      "This is a price feed conversion. The 3.5 day delay is necessary to prevent abuse from gaming the price feed average.",
+    "convert_to_LIQUID_TOKEN": "Convert to %(LIQUID_TOKEN)s",
+    "DEBT_TOKEN_will_be_unavailable":
+      "This action will take place 3.5 days from now and can not be canceled. These %(DEBT_TOKEN)s will immediately become unavailable."
+  },
+  "tips_js": {
+    "liquid_token":
+      "Tradeable tokens that may be transferred anywhere at anytime.<br/>%(LIQUID_TOKEN)s can be converted to %(VESTING_TOKEN)s in a process called powering up.",
+    "influence_token":
+      "Influence tokens which give you more control over post payouts and allow you to earn on curation rewards.",
+    "estimated_value":
+      "The estimated value is based on an average value of %(LIQUID_TOKEN)s in US dollars.",
+    "non_transferable":
+      "%(VESTING_TOKEN)s is non-transferable and requires 3 months (13 payments) to convert back to %(LIQUID_TOKEN)s.",
+    "converted_VESTING_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again":
+      "Converted %(VESTING_TOKEN)s can be sent to yourself or someone else but can not transfer again without converting back to %(LIQUID_TOKEN)s.",
+    "part_of_your_steem_power_is_currently_delegated":
+      "Part of %(user_name)s's STEEM POWER is currently delegated. Delegation is donated for influence or to help new users perform actions on steemit. Your delegation amount can fluctuate."
+  },
+  "promote_post_jsx": {
+    "promote_post": "Promote Post",
+    "spend_your_DEBT_TOKEN_to_advertise_this_post":
+      "Spend your %(DEBT_TOKEN)s's to advertise this post in the promoted content section",
+    "you_successfully_promoted_this_post":
+      "You successfully promoted this post",
+    "this_post_was_hidden_due_to_low_ratings":
+      "This post was hidden due to low ratings"
+  },
+  "about_jsx": {
+    "about_app": "About %(APP_NAME)s",
+    "about_app_details":
+      "%(APP_NAME)s is a social media platform where everyone gets paid for creating and curating content. It leverages a robust digital points system, called Steem, that supports real value for digital rewards through market price discovery and liquidity.",
+    "learn_more_at_app_url": "Learn more at %(APP_URL)s",
+    "resources": "Resources"
+  },
+  "markdownviewer_jsx": {
+    "images_were_hidden_due_to_low_ratings":
+      "Images were hidden due to low ratings."
+  },
+  "postsummary_jsx": {
+    "resteemed": "resteemed",
+    "resteemed_by": "Resteemed by",
+    "reveal_it": "Reveal this post",
+    "adjust_your": "adjust your",
+    "display_preferences": "display preferences",
+    "create_an_account": "create an account",
+    "to_save_your_preferences": "to save your preferences"
+  },
+  "posts_index": {
+    "empty_feed_1": "Looks like you haven't followed anything yet",
+    "empty_feed_2":
+      "If you recently added new users to follow, your personalized feed will populate once new content is available",
+    "empty_feed_3": "Explore Trending Articles",
+    "empty_feed_4": "Read The Quick Start Guide",
+    "empty_feed_5": "Browse The FAQ",
+    "my_feed": "My Feed",
+    "accountnames_feed": "%(account_name)s's Feed"
+  },
+  "transferhistoryrow_jsx": {
+    "to_savings": "to savings",
+    "from_savings": "from savings",
+    "cancel_transfer_from_savings":
+      "Cancel transfer from savings (request %(request_id)s)",
+    "stop_power_down": "Stop power down",
+    "withdraw_vesting": "Start power down of %(powerdown_vests)s STEEM",
+    "start_power_down_of": "Start power down of",
+    "receive_interest_of": "Receive interest of",
+    "bad_actor_caution": "Caution",
+    "bad_actor_explained":
+      "This is from an account that looks fraudulent. If you wish, you may temporarily reveal this memo which may contain dangerous links.",
+    "bad_actor_reveal_memo": "I understand the risk; show anyway.",
+    "from_negative_rep_user_caution": "Caution",
+    "from_negative_rep_user_explained":
+      "This is from an account with a bad reputation. If you wish, you may temporarily reveal this memo which may contain dangerous links.",
+    "from_negative_rep_user_reveal_memo": "I understand the risk; show anyway.",
+    "curation_reward": "%(curation_reward)s STEEM POWER for ",
+    "author_reward":
+      "%(sbd_payout)s%(steem_payout)s and %(author_reward)s STEEM POWER for ",
+    "claim_reward_balance": {
+      "three_rewards":
+        "Claim rewards: %(first_reward)s, %(second_reward)s and %(third_reward)s",
+      "two_rewards": "Claim rewards: %(first_reward)s and %(second_reward)s",
+      "one_reward": "Claim rewards: %(reward)s"
+    },
+    "interest": "Receive interest of %(interest)s",
+    "fill_convert_request":
+      "Fill convert request: %(amount_in)s for %(amount_out)s",
+    "fill_order": {
+      "filled_by_current_owner": "Paid %(open_pays)s for %(current_pays)s",
+      "open_owner_filled_my_order": "Paid %(current_pays)s for %(open_pays)s"
+    },
+    "comment_benefactor_reward":
+      "%(benefactor_reward)s STEEM POWER for %(author)s/%(permlink)s",
+    "transfer_to_vesting": {
+      "from_self": {
+        "no_to": "Transfer %(amount)s to STEEM POWER",
+        "to_someone": "Transfer %(amount)s STEEM POWER to "
+      },
+      "to_self": "Receive %(amount)s STEEM POWER from ",
+      "from_user_to_user": " Transfer %(amount)s STEEM POWER from %(from) to "
+    },
+    "transfer": {
+      "from_self": {
+        "to_savings": "Transfer to savings %(amount)s to ",
+        "from_savings": "Transfer from savings %(amount)s to ",
+        "not_savings": "Transfer %(amount)s to "
+      },
+      "to_self": {
+        "to_savings": "Receive from savings %(amount)s from ",
+        "from_savings": "Transfer from savings %(amount)s from ",
+        "not_savings": "Received %(amount)s from "
+      },
+      "to_someone_from_someone": {
+        "to_savings": "Transfer to savings %(amount)s from %(from)s to %(to)s",
+        "from_savings":
+          "Transfer from savings %(amount)s from %(from)s to %(to)s",
+        "not_savings": "Transfer %(amount)s from %(from)s to %(to)s"
+      }
+    },
+    "request_id": "Request ID: %(request_id)s"
+  },
+  "savingswithdrawhistory_jsx": {
+    "cancel_this_withdraw_request": "Cancel this withdraw request?",
+    "pending_savings_withdrawals": "PENDING SAVINGS WITHDRAWS",
+    "withdraw": "Withdraw %(amount)s",
+    "to": "to %(to)s",
+    "from_to": "from %(from)s to %(to)s"
+  },
+  "explorepost_jsx": {
+    "copied": "Copied!",
+    "copy": "COPY",
+    "alternative_sources": "Alternative Sources"
+  },
+  "header_jsx": {
+    "home": "home",
+    "create_a_post": "Create a post",
+    "change_account_password": "Change Account Password",
+    "create_account": "Create Account",
+    "stolen_account_recovery": "Stolen Account Recovery",
+    "people_following": "People following %(username)s",
+    "people_followed_by": "People followed by %(username)s",
+    "curation_rewards_by": "Curation rewards by %(username)s",
+    "author_rewards_by": "Author rewards by %(username)s",
+    "replies_to": "Replies to %(username)s",
+    "comments_by": "Comments by %(username)s"
+  },
+  "loginform_jsx": {
+    "you_need_a_private_password_or_key":
+      "You need a private password or key (not a public key)",
+    "cryptography_test_failed": "Cryptography test failed",
+    "unable_to_log_you_in":
+      "We will be unable to log you in with this browser.",
+    "the_latest_versions_of": "The latest versions of ",
+    "are_well_tested_and_known_to_work_with":
+      "are well tested and known to work with %(APP_URL)s.",
+    "due_to_server_maintenance":
+      "Due to server maintenance we are running in read only mode. We are sorry for the inconvenience.",
+    "login_to_vote": "Login to Vote",
+    "login_to_post": "Login to Post",
+    "login_to_comment": "Login to Comment",
+    "posting": "Posting",
+    "active_or_owner": "Active or Owner",
+    "this_password_is_bound_to_your_account_owner_key":
+      "This password is bound to your account's owner key and can not be used to login to this site.",
+    "however_you_can_use_it_to": "However, you can use it to ",
+    "update_your_password": "update your password",
+    "to_obtain_a_more_secure_set_of_keys":
+      "to obtain a more secure set of keys.",
+    "this_password_is_bound_to_your_account_active_key":
+      "This password is bound to your account's active key and can not be used to login to this page.",
+    "you_may_use_this_active_key_on_other_more":
+      "You may use this active key on other more secure pages like the Wallet or Market pages.",
+    "you_account_has_been_successfully_created":
+      "You account has been successfully created!",
+    "you_account_has_been_successfully_recovered":
+      "You account has been successfully recovered!",
+    "password_update_succes":
+      "The password for %(accountName)s was successfully updated",
+    "password_info":
+      "This password or private key was entered incorrectly.  There is probably a handwriting or data-entry error.  Hint: A password or private key generated by Steemit will never contain 0 (zero), O (capital o), I (capital i) and l (lower case L) characters.",
+    "enter_your_username": "Enter your username",
+    "password_or_wif": "Password or WIF",
+    "this_operation_requires_your_key_or_master_password":
+      "This operation requires your %(authType)s key or Master password.",
+    "keep_me_logged_in": "Keep me logged in",
+    "amazing_community": "amazing community",
+    "to_comment_and_reward_others": " to comment and reward others.",
+    "signup_button": "Sign up now to earn ",
+    "signup_button_emphasis": "FREE STEEM!",
+    "sign_up_get_steem": "Sign up. Get STEEM!",
+    "returning_users": "Returning Users: ",
+    "join_our": "Join our",
+    "sign_transfer": "Sign to complete transfer"
+  },
+  "chainvalidation_js": {
+    "account_name_should_not_be_empty": "Account name should not be empty.",
+    "account_name_should_be_longer": "Account name should be longer.",
+    "account_name_should_be_shorter": "Account name should be shorter.",
+    "each_account_segment_should_start_with_a_letter":
+      "Each account segment should start with a letter.",
+    "each_account_segment_should_have_only_letters_digits_or_dashes":
+      "Each account segment should have only letters, digits, or dashes.",
+    "each_account_segment_should_have_only_one_dash_in_a_row":
+      "Each account segment should have only one dash in a row.",
+    "each_account_segment_should_end_with_a_letter_or_digit":
+      "Each account segment should end with a letter or digit.",
+    "each_account_segment_should_be_longer":
+      "Each account segment should be longer.",
+    "verified_exchange_no_memo":
+      "You must include a memo for your exchange transfer.",
+    "badactor":
+      "Use caution sending to this account. Please double check your spelling for possible phishing.",
+    "memo_has_privatekey":
+      "Please do not include what appears to be a private key or password.",
+    "memo_is_privatekey": "Do not use private keys in memos.",
+    "memo_is_password": "Do not use passwords in memos."
+  },
+  "settings_jsx": {
+    "invalid_url": "Invalid URL",
+    "name_is_too_long": "Name is too long",
+    "name_must_not_begin_with": "Name must not begin with @",
+    "about_is_too_long": "About is too long",
+    "location_is_too_long": "Location is too long",
+    "website_url_is_too_long": "Website URL is too long",
+    "public_profile_settings": "Public Profile Settings",
+    "preferences": "Preferences",
+    "not_safe_for_work_nsfw_content": "Not safe for work (NSFW) content",
+    "always_hide": "Always hide",
+    "always_warn": "Always warn",
+    "always_show": "Always show",
+    "choose_default_blog_payout": "Blog post rewards",
+    "choose_default_comment_payout": "Comment post rewards",
+    "muted_users": "Muted Users",
+    "update": "Update",
+    "upload_image": "Upload an image",
+    "uploading_image": "Uploading image",
+    "profile_image_url": "Profile picture url",
+    "cover_image_url": "Cover image url",
+    "profile_name": "Display Name",
+    "profile_about": "About",
+    "profile_location": "Location",
+    "profile_website": "Website",
+    "saved": "Saved!"
+  },
+  "transfer_jsx": {
+    "amount_is_in_form": "Amount is in the form 99999.999",
+    "insufficient_funds": "Insufficient funds",
+    "use_only_3_digits_of_precison": "Use only 3 digits of precison",
+    "send_to_account": "Send to account",
+    "asset": "Asset",
+    "this_memo_is_private": "This memo is private",
+    "this_memo_is_public": "This memo is public",
+    "convert_to_VESTING_TOKEN": "Convert to %(VESTING_TOKEN)s",
+    "balance_subject_to_3_day_withdraw_waiting_period":
+      "Balances subject to 3 day withdraw waiting period.",
+    "move_funds_to_another_account": "Move funds to another Steem account.",
+    "protect_funds_by_requiring_a_3_day_withdraw_waiting_period":
+      "Protect funds by requiring a 3 day withdraw waiting period.",
+    "withdraw_funds_after_the_required_3_day_waiting_period":
+      "Withdraw funds after the required 3 day waiting period.",
+    "from": "From",
+    "to": "To",
+    "asset_currently_collecting":
+      "%(asset)s currently collecting %(interest)s%% APR.",
+    "beware_of_spam_and_phishing_links":
+      "Beware of spam and phishing links in transfer memos. Do not open links from users you do not trust. Do not provide your private keys to any third party websites.",
+    "transactions_make_take_a_few_minutes":
+      "Transactions will not show until they are confirmed on the blockchain, which may take a few minutes.",
+    "autocomplete_previous_transfers": "previous transfers",
+    "autocomplete_user_following": "following",
+    "confirm_transfer": "Transfer %(amount)s from %(from)s to %(to)s?"
+  },
+  "userwallet_jsx": {
+    "transfer": "Transfer",
+    "conversion_complete_tip": "Will complete on %(date)s",
+    "in_conversion": "%(amount)s in conversion",
+    "transfer_to_savings": "Transfer to Savings",
+    "power_up": "Power Up",
+    "power_down": "Power Down",
+    "market": "Market",
+    "convert_to_LIQUID_TOKEN": "Convert to %(LIQUID_TOKEN)s",
+    "withdraw_LIQUID_TOKEN": "Withdraw %(LIQUID_TOKEN)s",
+    "withdraw_DEBT_TOKENS": "Withdraw %(DEBT_TOKENS)s",
+    "tokens_worth_about_1_of_LIQUID_TICKER":
+      "Tokens worth about $1.00 of %(LIQUID_TICKER)s, currently collecting %(sbdInterest)s%% APR.",
+    "tradeable_tokens_transferred":
+      "Tradeable tokens that may be transferred anywhere at anytime.",
+    "savings": "SAVINGS",
+    "estimated_account_value": "Estimated Account Value",
+    "next_power_down_is_scheduled_to_happen":
+      "The next power down is scheduled to happen",
+    "transfers_are_temporary_disabled": "Transfers are temporary disabled.",
+    "history": "HISTORY",
+    "redeem_rewards": "Redeem Rewards (Transfer to Balance)",
+    "buy_steem_or_steem_power": "Buy STEEM or STEEM POWER"
+  },
+  "powerdown_jsx": {
+    "power_down": "Power Down",
+    "amount": "Amount",
+    "already_power_down":
+      "You are already powering down %(AMOUNT)s %(LIQUID_TICKER)s (%(WITHDRAWN)s %(LIQUID_TICKER)s paid out so far). Note that if you change the power down amount the payout schedule will reset.",
+    "delegating":
+      "You are delegating %(AMOUNT)s %(LIQUID_TICKER)s. That amount is locked up and not available to power down until the delegation is removed and a full reward period has passed.",
+    "per_week": "That's ~%(AMOUNT)s %(LIQUID_TICKER)s per week.",
+    "warning":
+      "Leaving less than %(AMOUNT)s %(VESTING_TOKEN)s in your account is not recommended and can leave your account in a unusable state.",
+    "error": "Unable to power down (ERROR: %(MESSAGE)s)"
+  },
+  "checkloginowner_jsx": {
+    "your_password_permissions_were_reduced":
+      "Your password permissions were reduced",
+    "if_you_did_not_make_this_change": "If you did not make this change please",
+    "ownership_changed_on": "Ownership Changed On ",
+    "deadline_for_recovery_is": "Deadline for recovery is",
+    "i_understand_dont_show_again": "I understand, don't show me again"
+  },
+  "termsagree_jsx": {
+    "please_review": "Please review our terms to continue",
+    "hi_user": "Hi %(username)s,",
+    "blurb":
+      "Our Terms of Service set the rules and guidelines that you must accept and follow in order to use Steemit and our Privacy Policy explains the type of information we collect and what we do with it. Don't worry, we don't sell your data to anyone. We do use it to meet legal requirements and to learn how to make Steemit better.",
+    "i_agree_to_steemits": "I agree to Steemit's",
+    "terms_of_service": "Terms of Service",
+    "privacy_policy": "Privacy Policy",
+    "continue": "Continue",
+    "cancel": "Cancel"
+  },
+  "confirmtransactionform_jsx": {
+    "confirm": "Confirm %(transactionType)s"
+  },
+  "modals_jsx": {
+    "your_transaction_failed": "Your transaction failed to process",
+    "out_of_bandwidth_title": "Why? You've run out of Resource Credits",
+    "out_of_bandwidth_reason":
+      "Actions such as posting and voting use computing resources, placing a real cost on the community members who run the Steem blockchain for everyone.",
+    "out_of_bandwidth_reason_2":
+      "To keep things free, Steem intelligently allocates Resource Credits to each user based on their Steem Power holdings, which can be used to submit a limited number of feeless transactions. When a user runs low on Resource Credits, they will either need to wait for them to recharge, or purchase additional Steem Power. This system prioritizes actions by good community members while limiting spam.",
+    "out_of_bandwidth_option_title": "To keep interacting on Steemit:",
+    "out_of_bandwidth_option_1": "Buy and hold more Steem Power",
+    "out_of_bandwidth_option_2": "Wait until your Resource Credits recharge",
+    "out_of_bandwidth_option_3": "Wait until the network usage decreases"
+  },
+  "sanitizedlink_jsx": {
+    "phishylink_caution": "Link hidden; phishing attempt",
+    "phishylink_reveal": "show link"
+  }
 }

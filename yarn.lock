@@ -422,9 +422,19 @@ airbnb-js-shims@^1.4.0:
     string.prototype.padend "^3.0.0"
     string.prototype.padstart "^3.0.0"
 
+ajv-errors@^1.0.0:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/ajv-errors/-/ajv-errors-1.0.1.tgz#f35986aceb91afadec4102fbd85014950cefa64d"
+  integrity sha512-DCRfO/4nQ+89p/RK43i8Ezd41EqdGIU4ld7nGF8OQ14oc/we5rEntLCUa7+jrn3nn83BosfwZA0wb4pon2o8iQ==
+
 ajv-keywords@^2.0.0, ajv-keywords@^2.1.0:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/ajv-keywords/-/ajv-keywords-2.1.1.tgz#617997fc5f60576894c435f940d819e135b80762"
+
+ajv-keywords@^3.1.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/ajv-keywords/-/ajv-keywords-3.2.0.tgz#e86b819c602cf8821ad637413698f1dec021847a"
+  integrity sha1-6GuBnGAs+IIa1jdBNpjx3sAhhHo=
 
 ajv@^4.9.1:
   version "4.11.8"
@@ -441,6 +451,16 @@ ajv@^5.0.0, ajv@^5.1.0, ajv@^5.1.5, ajv@^5.2.0, ajv@^5.2.3:
     fast-deep-equal "^1.0.0"
     fast-json-stable-stringify "^2.0.0"
     json-schema-traverse "^0.3.0"
+
+ajv@^6.1.0:
+  version "6.7.0"
+  resolved "https://registry.yarnpkg.com/ajv/-/ajv-6.7.0.tgz#e3ce7bb372d6577bb1839f1dfdfcbf5ad2948d96"
+  integrity sha512-RZXPviBTtfmtka9n9sy1N5M5b82CbxWIR6HIis4s3WQTXDJamc/0gpCWNGz6EWdWp4DOfjzJfhz/AS9zVPjjWg==
+  dependencies:
+    fast-deep-equal "^2.0.1"
+    fast-json-stable-stringify "^2.0.0"
+    json-schema-traverse "^0.4.1"
+    uri-js "^4.2.2"
 
 align-text@^0.1.1, align-text@^0.1.3:
   version "0.1.4"
@@ -3833,6 +3853,11 @@ fast-deep-equal@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/fast-deep-equal/-/fast-deep-equal-1.0.0.tgz#96256a3bc975595eb36d82e9929d060d893439ff"
 
+fast-deep-equal@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/fast-deep-equal/-/fast-deep-equal-2.0.1.tgz#7b05218ddf9667bf7f370bf7fdb2cb15fdd0aa49"
+  integrity sha1-ewUhjd+WZ79/Nwv3/bLLFf3Qqkk=
+
 fast-json-stable-stringify@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/fast-json-stable-stringify/-/fast-json-stable-stringify-2.0.0.tgz#d5142c0caee6b1189f87d3a76111064f86c8bbf2"
@@ -3893,18 +3918,20 @@ file-entry-cache@^2.0.0:
     flat-cache "^1.2.1"
     object-assign "^4.0.1"
 
-file-loader@0.11.2:
-  version "0.11.2"
-  resolved "https://registry.yarnpkg.com/file-loader/-/file-loader-0.11.2.tgz#4ff1df28af38719a6098093b88c82c71d1794a34"
-  dependencies:
-    loader-utils "^1.0.2"
-
 file-loader@^1.1.6:
   version "1.1.6"
   resolved "https://registry.yarnpkg.com/file-loader/-/file-loader-1.1.6.tgz#7b9a8f2c58f00a77fddf49e940f7ac978a3ea0e8"
   dependencies:
     loader-utils "^1.0.2"
     schema-utils "^0.3.0"
+
+file-loader@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/file-loader/-/file-loader-3.0.1.tgz#f8e0ba0b599918b51adfe45d66d1e771ad560faa"
+  integrity sha512-4sNIOXgtH/9WZq4NvlfU3Opn5ynUsqBwSLyM+I7UOwdGigTBYfVVQEwe/msZNX/j4pCJTIM14Fsw66Svo1oVrw==
+  dependencies:
+    loader-utils "^1.0.2"
+    schema-utils "^1.0.0"
 
 filename-regex@^2.0.0:
   version "2.0.1"
@@ -5548,6 +5575,11 @@ json-parse-better-errors@^1.0.1:
 json-schema-traverse@^0.3.0:
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/json-schema-traverse/-/json-schema-traverse-0.3.1.tgz#349a6d44c53a51de89b40805c5d5e59b417d3340"
+
+json-schema-traverse@^0.4.1:
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/json-schema-traverse/-/json-schema-traverse-0.4.1.tgz#69f6a87d9513ab8bb8fe63bdb0979c448e684660"
+  integrity sha512-xbbCH5dCYU5T8LcEhhuh7HJ88HXuW3qsI3Y0zOZFKfZEHcpWiHU/Jxzk629Brsab/mMiHQti9wMP+845RPe3Vg==
 
 json-schema@0.2.3:
   version "0.2.3"
@@ -8738,6 +8770,15 @@ schema-utils@^0.4.0:
     ajv "^5.0.0"
     ajv-keywords "^2.1.0"
 
+schema-utils@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/schema-utils/-/schema-utils-1.0.0.tgz#0b79a93204d7b600d4b2850d1f66c2a34951c770"
+  integrity sha512-i27Mic4KovM/lnGsy8whRCHhc7VicJajAjTrYg11K9zfZXnYIt4k5F+kZkwjnrhKzLic/HLU4j11mjsz2G/75g==
+  dependencies:
+    ajv "^6.1.0"
+    ajv-errors "^1.0.0"
+    ajv-keywords "^3.1.0"
+
 scmp@0.0.3:
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/scmp/-/scmp-0.0.3.tgz#3648df2d7294641e7f78673ffc29681d9bad9073"
@@ -9768,6 +9809,13 @@ universalify@^0.1.0:
 unpipe@1.0.0, unpipe@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/unpipe/-/unpipe-1.0.0.tgz#b2bf4ee8514aae6165b4817829d21b2ef49904ec"
+
+uri-js@^4.2.2:
+  version "4.2.2"
+  resolved "https://registry.yarnpkg.com/uri-js/-/uri-js-4.2.2.tgz#94c540e1ff772956e2299507c010aea6c8838eb0"
+  integrity sha512-KY9Frmirql91X2Qgjry0Wd4Y+YTdrdZheS8TFwvkbLWf/G5KNJDCh6pKL5OZctEW4+0Baa5idK2ZQuELRwPznQ==
+  dependencies:
+    punycode "^2.1.0"
 
 url-loader@0.6.2, url-loader@^0.6.2:
   version "0.6.2"

@@ -62,3 +62,18 @@
   font-weight: 800;
   src: url('../fonts/futura/Futura Extra Black.ttf') format('truetype');
 }
+
+@font-face {
+  font-family: 'Panton';
+  font-weight: 300;
+  src: url('../fonts/panton/Panton-Light.woff') format('woff');
+}
+@font-face {
+  font-family: 'Panton';
+  font-weight: 400;
+  src: url('../fonts/panton/Panton-Regular.woff') format('woff');
+}
+@font-face {
+  font-family: 'Panton Bold';
+  src: url('../fonts/panton/Panton-Bold.woff') format('woff');
+}

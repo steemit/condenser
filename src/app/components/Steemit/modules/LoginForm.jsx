@@ -471,7 +471,7 @@ class LoginForm extends Component {
             <div className="LoginForm row">
                 <div className="column">
                     {message}
-                    {/* {titleText} */}
+                    {titleText}
                     {form}
                 </div>
             </div>

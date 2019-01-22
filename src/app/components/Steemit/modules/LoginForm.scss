@@ -12,6 +12,10 @@
 
   .column {
     padding: 0;
+
+    > h3 {
+      display: none;
+    }
   }
 }
 

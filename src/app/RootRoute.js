@@ -1,7 +1,8 @@
 /* eslint-disable */
 import App from 'app/components/App';
 import Benchmark from 'app/components/Steemit/pages/Benchmark';
-import PostsIndex from 'app/components/Steemit/pages/PostsIndex';
+// import PostsIndex from 'app/components/Steemit/pages/PostsIndex';
+import Home from 'app/components/pages/Home/Home';
 
 // import {
 //     Home
@@ -154,6 +155,6 @@ export default {
         }
     },
     indexRoute: {
-        component: PostsIndex.component,
+        component: Home.component,
     },
 };

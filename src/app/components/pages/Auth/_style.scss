@@ -70,6 +70,11 @@
     form {
       margin-bottom: 35px;
 
+      [type="text"], [type="password"] {
+        padding: 0;
+        padding-top: 25px;
+      }
+
       .Inputs {
         box-shadow: 25px 25px 52px rgba(0, 0, 0, 0.06);
         margin-bottom: 35px;

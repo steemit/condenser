@@ -43,8 +43,8 @@ class CurationRewards extends React.Component {
 
     shouldComponentUpdate(nextProps, nextState) {
         return (
-            nextProps.account.transfer_history.length !==
-                this.props.account.transfer_history.length ||
+            nextProps.transfer_history.length !==
+                this.props.transfer_history.length ||
             nextState.historyIndex !== this.state.historyIndex
         );
     }
@@ -56,7 +56,7 @@ class CurationRewards extends React.Component {
 
     render() {
         const { state: { historyIndex } } = this;
-        const account = this.props.account;
+        const { transfer_history, account_name } = this.props;
 
         /// transfer log
         let rewards24 = 0,
@@ -68,7 +68,7 @@ class CurationRewards extends React.Component {
         let lastWeek = new Date(today.getTime() - 7 * oneDay).getTime();
 
         let firstDate, finalDate;
-        let curation_log = account.transfer_history
+        let curation_log = transfer_history
             .map((item, index) => {
                 // Filter out rewards
                 if (item[1].op[0] === 'curation_reward') {
@@ -90,7 +90,7 @@ class CurationRewards extends React.Component {
                         <TransferHistoryRow
                             key={index}
                             op={item}
-                            context={account.name}
+                            context={account_name}
                         />
                     );
                 }
@@ -198,9 +198,11 @@ class CurationRewards extends React.Component {
 export default connect(
     // mapStateToProps
     (state, ownProps) => {
+        const { account } = ownProps;
         return {
             state,
-            ...ownProps,
+            account_name: account.name,
+            transfer_history: account.transfer_history || [],
         };
     }
 )(CurationRewards);

@@ -37,6 +37,13 @@ const iframeWhitelist = [
             );
         },
     },
+    {
+        re: /^(https?:)?\/\/player.twitch.tv\/.*/i,
+        fn: src => {
+            //<iframe src="https://player.twitch.tv/?channel=ninja" frameborder="0" allowfullscreen="true" scrolling="no" height="378" width="620">
+            return src;
+        },
+    },
 ];
 export const noImageText = '(Image not shown due to low ratings)';
 export const allowedTags = `

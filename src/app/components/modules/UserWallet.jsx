@@ -12,6 +12,7 @@ import {
     numberWithCommas,
     vestingSteem,
     delegatedSteem,
+    pricePerSteem,
 } from 'app/utils/StateFunctions';
 import WalletSubMenu from 'app/components/elements/WalletSubMenu';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
@@ -100,7 +101,12 @@ class UserWallet extends React.Component {
         } = this.props;
         const gprops = this.props.gprops.toJS();
 
+        // do not render if account is not loaded or available
         if (!account) return null;
+
+        // do not render if state appears to contain only lite account info
+        if (!account.has('vesting_shares')) return null;
+
         let vesting_steem = vestingSteem(account.toJS(), gprops);
         let delegated_steem = delegatedSteem(account.toJS(), gprops);
 
@@ -754,16 +760,7 @@ class UserWallet extends React.Component {
 export default connect(
     // mapStateToProps
     (state, ownProps) => {
-        let price_per_steem = undefined;
-        const feed_price = state.user.get(
-            'latest_feed_price',
-            state.global.get('feed_price')
-        );
-        if (feed_price && feed_price.has('base') && feed_price.has('quote')) {
-            const { base, quote } = feed_price.toJS();
-            if (/ SBD$/.test(base) && / STEEM$/.test(quote))
-                price_per_steem = parseFloat(base.split(' ')[0]);
-        }
+        const price_per_steem = pricePerSteem(state);
         const savings_withdraws = state.user.get('savings_withdraws');
         const gprops = state.global.get('props');
         const sbd_interest = gprops.get('sbd_interest_rate');

@@ -44,6 +44,13 @@ global.webpackIsomorphicTools = new WebpackIsomorphicTools(
 global.webpackIsomorphicTools.server(ROOT, () => {
     steem.api.setOptions({
         url: config.steemd_connection_client,
+        retry: {
+            retries: 10,
+            factor: 5,
+            minTimeout: 50, // start at 50ms
+            maxTimeout: 60 * 1000,
+            randomize: true,
+        },
         useAppbaseApi: !!config.steemd_use_appbase,
     });
     steem.config.set('address_prefix', config.get('address_prefix'));

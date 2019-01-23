@@ -22,17 +22,19 @@
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@steemit/libcrypto/-/libcrypto-1.0.1.tgz#c31ab3e5deb667628169b3d54d746b015de31a79"
 
-"@steemit/rpc-auth@^1.1.0":
+"@steemit/rpc-auth@^1.1.1":
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/@steemit/rpc-auth/-/rpc-auth-1.1.1.tgz#8f6239e89783d2b251b49e9e1b9486b5d167f944"
+  integrity sha512-Eb8BW3O1y4+/+Dbf+LqGVmgXYqyfHxP9mBlmzkpjXiIepTpxoK90NIGrneqcnEGq0TR2nSt4BVv9Ur9c+hxoig==
   dependencies:
     "@steemit/libcrypto" "^1.0.1"
 
-"@steemit/steem-js@0.7.3":
-  version "0.7.3"
-  resolved "https://registry.yarnpkg.com/@steemit/steem-js/-/steem-js-0.7.3.tgz#f7a3a780264e4cf90a397ff2aeec949f9e5d24e2"
+"@steemit/steem-js@0.7.4":
+  version "0.7.4"
+  resolved "https://registry.yarnpkg.com/@steemit/steem-js/-/steem-js-0.7.4.tgz#65053fffe0ad99a4c18bd4b089c2cd78ac09bf3d"
+  integrity sha512-Ul6ZZ5X3Lhd8Kk461tQ6BIis3Yo1JPbWUxC1JD3KOdRFds7HPrK7v7qROV98jPQ/6HYI1+VJi138KIR4fQWY1A==
   dependencies:
-    "@steemit/rpc-auth" "^1.1.0"
+    "@steemit/rpc-auth" "^1.1.1"
     bigi "^1.4.2"
     bluebird "^3.4.6"
     browserify-aes "^1.0.6"
@@ -47,6 +49,7 @@
     detect-node "^2.0.3"
     ecurve "^1.0.5"
     lodash "^4.16.4"
+    retry "^0.12.0"
     secure-random "^1.1.1"
     ws "^3.3.2"
 
@@ -8173,6 +8176,11 @@ retry-as-promised@^2.0.0:
   dependencies:
     bluebird "^3.4.6"
     debug "^2.6.9"
+
+retry@^0.12.0:
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/retry/-/retry-0.12.0.tgz#1b42a6266a21f07421d1b0b54b7dc167b01c013b"
+  integrity sha1-G0KmJmoh8HQh0bC1S33BZ7AcATs=
 
 right-align@^0.1.1:
   version "0.1.3"

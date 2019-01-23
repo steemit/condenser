@@ -380,11 +380,11 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = dispatch => ({
     showLogin: e => {
         if (e) e.preventDefault();
-        dispatch(userActions.showLogin());
+        dispatch(userActions.showLogin({ type: 'basic' }));
     },
     logout: e => {
         if (e) e.preventDefault();
-        dispatch(userActions.logout());
+        dispatch(userActions.logout({ type: 'default' }));
     },
     toggleNightmode: e => {
         if (e) e.preventDefault();

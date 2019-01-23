@@ -106,3 +106,17 @@ body.with-post-overlay {
     width: 62rem;
   }
 }
+
+.PostsList__summaries .PinLabel {
+  margin-bottom: 2px;
+
+  .PinText {
+    @include themify($themes) {
+      position: relative;
+      top: 2px;
+      left: 1px;
+      font-size: 0.875rem;
+      color: themed('textColorSecondary');
+    }
+  }
+}

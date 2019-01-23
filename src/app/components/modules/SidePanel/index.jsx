@@ -20,7 +20,11 @@ const SidePanel = ({ alignment, visible, hideSidePanel, username }) => {
         const cn = ix === arr.length - 1 ? 'last' : null;
         return (
             <li key={i.value} className={cn}>
-                <a href={i.link} target="_blank" rel="noopener noreferrer">
+                <a
+                    href={i.link}
+                    target={i.internal ? null : '_blank'}
+                    rel="noopener noreferrer"
+                >
                     {i.label}&nbsp;<Icon name="extlink" />
                 </a>
             </li>
@@ -107,6 +111,11 @@ const SidePanel = ({ alignment, visible, hideSidePanel, username }) => {
                 link: 'https://steemprojects.com/',
             },
             {
+                value: 'business',
+                label: tt('navigation.business_center'),
+                link: 'https://steemeconomy.com/',
+            },
+            {
                 value: 'api_docs',
                 label: tt('navigation.api_docs'),
                 link: 'https://developers.steem.io/',
@@ -131,7 +140,8 @@ const SidePanel = ({ alignment, visible, hideSidePanel, username }) => {
             {
                 value: 'about',
                 label: tt('navigation.about'),
-                link: 'https://steem.io',
+                link: '/about.html',
+                internal: true,
             },
         ],
         legal: [

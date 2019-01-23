@@ -77,7 +77,6 @@ class Header extends React.Component {
 
         let sort_order = '';
         let topic = '';
-        let user_name = null;
         let page_name = null;
         if (route.page === 'PostsIndex') {
             sort_order = route.params[0];
@@ -123,13 +122,9 @@ class Header extends React.Component {
         ) {
             page_title = tt('header_jsx.stolen_account_recovery');
         } else if (route.page === 'UserProfile') {
-            user_name = route.params[0].slice(1);
-            // Only access account meta if it is available in state - basically do not do this server-side!
-            const acct_meta = account_meta
-                ? account_meta.getIn([user_name])
-                : false;
-            const name = acct_meta
-                ? normalizeProfile(acct_meta.toJS()).name
+            let user_name = route.params[0].slice(1);
+            const name = account_meta
+                ? normalizeProfile(account_meta.toJS()).name
                 : null;
             const user_title = name ? `${name} (@${user_name})` : user_name;
             page_title = user_title;
@@ -354,10 +349,18 @@ const mapStateToProps = (state, ownProps) => {
         };
     }
 
+    let user_profile;
+    const route = resolveRoute(ownProps.pathname);
+    if (route.page === 'UserProfile') {
+        user_profile = state.global.getIn([
+            'accounts',
+            route.params[0].slice(1),
+        ]);
+    }
+
     const userPath = state.routing.locationBeforeTransitions.pathname;
     const username = state.user.getIn(['current', 'username']);
     const loggedIn = !!username;
-    const account_user = state.global.get('accounts');
     const current_account_name = username
         ? username
         : state.offchain.get('account');
@@ -367,7 +370,7 @@ const mapStateToProps = (state, ownProps) => {
         loggedIn,
         userPath,
         nightmodeEnabled: state.user.getIn(['user_preferences', 'nightmode']),
-        account_meta: account_user,
+        account_meta: user_profile,
         current_account_name,
         showAnnouncement: state.user.get('showAnnouncement'),
         ...ownProps,
@@ -377,11 +380,11 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = dispatch => ({
     showLogin: e => {
         if (e) e.preventDefault();
-        dispatch(userActions.showLogin());
+        dispatch(userActions.showLogin({ type: 'basic' }));
     },
     logout: e => {
         if (e) e.preventDefault();
-        dispatch(userActions.logout());
+        dispatch(userActions.logout({ type: 'default' }));
     },
     toggleNightmode: e => {
         if (e) e.preventDefault();

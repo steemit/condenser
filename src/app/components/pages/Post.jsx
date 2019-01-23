@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import { sortComments } from 'app/components/cards/Comment';
 // import { Link } from 'react-router';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
+import GoogleAd from 'app/components/elements/GoogleAd';
 import { Set } from 'immutable';
 import tt from 'counterpart';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
@@ -63,7 +64,10 @@ class Post extends React.Component {
 
         if (!dis) return null;
 
-        if (!showAnyway) {
+        // A post should be hidden if it is not pinned, is not told to "show
+        // anyway", and is designated "gray".
+        const pinned = dis.get('pinned');
+        if (!pinned && !showAnyway) {
             const { gray } = dis.get('stats').toJS();
             if (gray) {
                 return (
@@ -240,6 +244,17 @@ class Post extends React.Component {
                         </div>
                     </div>
                 </div>
+                {this.props.shouldSeeAds ? (
+                    <div className="Post_footer__ad">
+                        <GoogleAd
+                            name="post-footer-1"
+                            format="auto"
+                            slot={this.props.adSlots['post_footer_1'].slot_id}
+                            style={{ display: 'block' }}
+                            fullWidthResponsive="true"
+                        />
+                    </div>
+                ) : null}
             </div>
         );
     }
@@ -264,5 +279,7 @@ export default connect((state, ownProps) => {
         ignoring,
         sortOrder:
             ownProps.router.getCurrentLocation().query.sort || 'trending',
+        shouldSeeAds: state.app.getIn(['googleAds', 'shouldSeeAds']),
+        adSlots: state.app.getIn(['googleAds', 'adSlots']).toJS(),
     };
 })(Post);

@@ -70,6 +70,7 @@ export default function reducer(state = defaultState, action) {
             }
             return state.merge({
                 show_login_modal: true,
+                login_type: payload.type,
                 loginBroadcastOperation: operation,
                 loginDefault,
             });
@@ -124,7 +125,6 @@ export default function reducer(state = defaultState, action) {
                 }
             );
             if (empty) {
-                // User logged in with Active key then navigates away from the page
                 // LOGOUT
                 return defaultState.merge({ logged_out: true });
             }

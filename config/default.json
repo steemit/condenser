@@ -5,7 +5,7 @@
   "google_analytics_id": false,
   "helmet": {
     "directives": {
-      "childSrc": "'self' www.youtube.com staticxx.facebook.com w.soundcloud.com player.vimeo.com",
+      "childSrc": "'self' player.twitch.tv www.youtube.com staticxx.facebook.com w.soundcloud.com player.vimeo.com",
       "connectSrc": "'self' steemit.com https://api.steemit.com api.blocktrades.us",
       "defaultSrc": "'self' www.youtube.com staticxx.facebook.com player.vimeo.com",
       "fontSrc": "data: fonts.gstatic.com",
@@ -75,5 +75,25 @@
   "chain_id": "0000000000000000000000000000000000000000000000000000000000000000",
   "address_prefix": "STM",
   "conveyor_posting_wif": false,
-  "conveyor_username": false
+  "conveyor_username": false,
+  "pinned_posts_url": false,
+  "google_ad_enabled": null,
+  "google_ad_test": null,
+  "google_ad_client": null,
+  "google_ad_slots": {
+    "sidebar_1": {
+      "slot_id": "9855000063"
+    },
+    "in_feed_1": {
+      "slot_id": "9514544128",
+      "layout_key": "-fb+5w+4e-db+86",
+      "every": 8
+    },
+    "post_footer_1": {
+      "slot_id": "5796459261"
+    },
+    "market_1": {
+      "slot_id": "2777377820"
+    }
+  }
 }

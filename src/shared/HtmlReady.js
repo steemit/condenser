@@ -235,6 +235,7 @@ function linkifyNode(child, state) {
         if (!child.data) return;
         child = embedYouTubeNode(child, state.links, state.images);
         child = embedVimeoNode(child, state.links, state.images);
+        child = embedTwitchNode(child, state.links, state.images);
 
         const data = XMLSerializer.serializeToString(child);
         const content = linkify(
@@ -371,6 +372,39 @@ function vimeoId(data) {
         url: m[0],
         canonical: `https://player.vimeo.com/video/${m[1]}`,
         // thumbnail: requires a callback - http://stackoverflow.com/questions/1361149/get-img-thumbnails-from-vimeo
+    };
+}
+
+function embedTwitchNode(child, links /*images*/) {
+    try {
+        const data = child.data;
+        const twitch = twitchId(data);
+        if (!twitch) return child;
+
+        child.data = data.replace(
+            twitch.url,
+            `~~~ embed:${twitch.id} twitch ~~~`
+        );
+
+        if (links) links.add(twitch.canonical);
+    } catch (error) {
+        console.error(error);
+    }
+    return child;
+}
+
+function twitchId(data) {
+    if (!data) return null;
+    const m = data.match(linksRe.twitch);
+    if (!m || m.length < 3) return null;
+
+    return {
+        id: m[1] === `videos` ? `?video=${m[2]}` : `?channel=${m[2]}`,
+        url: m[0],
+        canonical:
+            m[1] === `videos`
+                ? `https://player.twitch.tv/?video=${m[2]}`
+                : `https://player.twitch.tv/?channel=${m[2]}`,
     };
 }
 

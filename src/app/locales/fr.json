@@ -269,6 +269,7 @@
         "faq": "FAQ",
         "chat": "Salons de discussion Steemit",
         "app_center": "Centre d'applications Steemit",
+        "business_center": "Businesses Accepting Steem",
         "api_docs": "Documentation API sur Steemit",
         "whitepaper": "Livre blanc sur le Steem",
         "bluepaper": "Steem Bluepaper",
@@ -329,11 +330,11 @@
             "Le dernier caractère doit être une lettre ou un chiffre"
     },
     "post_advanced_settings_jsx": {
-        "payout_option_header": "Author rewards",
+        "payout_option_header": "Gains éditoriaux",
         "payout_option_description":
-            "What type of tokens do you want as rewards from this post?",
-        "current_default": "Default",
-        "update_default_in_settings": "Update"
+            "Quel type de jeton voulez-vous comme récompense pour cet article?",
+        "current_default": "Défaut",
+        "update_default_in_settings": "Mettre à jour"
     },
     "postfull_jsx": {
         "this_post_is_not_available_due_to_a_copyright_claim":
@@ -441,7 +442,9 @@
             "zero": "Pas d'article",
             "one": "1 article",
             "other": "%(count)s articles"
-        }
+        },
+        "hide_resteems": "Hide Resteems",
+        "show_all": "Show All"
     },
     "authorrewards_jsx": {
         "estimated_author_rewards_last_week":

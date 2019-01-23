@@ -249,7 +249,7 @@
         }
     },
     "navigation": {
-        "about": "About",
+        "about": "About Steemit, Inc.",
         "explore": "Explore",
         "APP_NAME_whitepaper": "%(APP_NAME)s Whitepaper",
         "third_party_exchanges": "Third-party exchanges:",
@@ -441,7 +441,9 @@
             "zero": "No posts",
             "one": "1 post",
             "other": "%(count)s posts"
-        }
+        },
+        "hide_resteems": "Hide Resteems",
+        "show_all": "Show All"
     },
     "authorrewards_jsx": {
         "estimated_author_rewards_last_week":

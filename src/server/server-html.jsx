@@ -1,6 +1,14 @@
+import * as config from 'config';
 import React from 'react';
 
-export default function ServerHTML({ body, assets, locale, title, meta }) {
+export default function ServerHTML({
+    body,
+    assets,
+    locale,
+    title,
+    meta,
+    shouldSeeAds,
+}) {
     let page_title = title;
     return (
         <html lang="en">
@@ -37,14 +45,6 @@ export default function ServerHTML({ body, assets, locale, title, meta }) {
                                 <meta
                                     key={m.property}
                                     property={m.property}
-                                    content={m.content}
-                                />
-                            );
-                        if (m.name && m.content)
-                            return (
-                                <meta
-                                    key={m.name}
-                                    name={m.name}
                                     content={m.content}
                                 />
                             );
@@ -170,6 +170,24 @@ export default function ServerHTML({ body, assets, locale, title, meta }) {
                         type="text/css"
                     />
                 ))}
+                {shouldSeeAds ? (
+                    <script
+                        async
+                        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+                    />
+                ) : null}
+                {shouldSeeAds ? (
+                    <script
+                        dangerouslySetInnerHTML={{
+                            __html: `
+                      (adsbygoogle = window.adsbygoogle || []).push({
+                          google_ad_client: "ca-pub-9368037717385698",
+                          enable_page_level_ads: true
+                      });
+                  `,
+                        }}
+                    />
+                ) : null}
                 <title>{page_title}</title>
             </head>
             <body>

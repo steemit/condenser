@@ -236,6 +236,8 @@ export default `
 /anime/@semur/black-clover-episode-48-watch-online-english-subbed
 /anime/@semur/black-clover-episode-62-anime
 /gintama/@iarproduct/gintama-episode-357-english-subbed
+/bitcoin/@toolsoftitans/palm-beach-confidential-buy-alerts-monthly-pick-for-free-for-1-month-with-no-delay-faq-in-thread
+/nsfw/@bleh773/3p4qxq-sexy-brunette
 `
     .trim()
     .split('\n');

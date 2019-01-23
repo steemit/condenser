@@ -6,7 +6,7 @@ import links from 'app/utils/Links';
 import Icon from 'app/components/elements/Icon';
 import * as transactionActions from 'app/redux/TransactionReducer';
 import ByteBuffer from 'bytebuffer';
-import { is, Set } from 'immutable';
+import { is, Set, List } from 'immutable';
 import * as globalActions from 'app/redux/GlobalReducer';
 import tt from 'counterpart';
 
@@ -418,7 +418,7 @@ module.exports = {
                 current_account && current_account.get('witness_votes').toSet();
             const current_proxy =
                 current_account && current_account.get('proxy');
-            const witnesses = state.global.get('witnesses');
+            const witnesses = state.global.get('witnesses', List());
             const witnessVotesInProgress = state.global.get(
                 `transaction_witness_vote_active_${username}`,
                 Set()

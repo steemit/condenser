@@ -358,7 +358,7 @@ module.exports = {
                 ),
             logout: e => {
                 if (e) e.preventDefault();
-                dispatch(userActions.logout());
+                dispatch(userActions.logout({ type: 'account_choose' }));
             },
         })
     )(PickAccount),

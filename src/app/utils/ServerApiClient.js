@@ -23,7 +23,7 @@ export function serverApiLogout() {
     const request = Object.assign({}, request_base, {
         body: JSON.stringify({ csrf: $STM_csrf }),
     });
-    fetch('/api/v1/logout_account', request);
+    return fetch('/api/v1/logout_account', request);
 }
 
 let last_call;

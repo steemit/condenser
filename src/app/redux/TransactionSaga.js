@@ -28,12 +28,12 @@ const hook = {
     preBroadcast_transfer,
     preBroadcast_vote,
     preBroadcast_account_witness_vote,
-    preBroadcast_custom_json,
     error_vote,
     error_custom_json,
     // error_account_update,
     error_account_witness_vote,
     accepted_comment,
+    accepted_custom_json,
     accepted_delete_comment,
     accepted_account_witness_vote,
     accepted_vote,
@@ -91,63 +91,6 @@ function* preBroadcast_account_witness_vote({ operation, username }) {
             witness,
         })
     );
-    return operation;
-}
-
-function* preBroadcast_custom_json({ operation }) {
-    const json = JSON.parse(operation.json);
-    if (operation.id === 'follow') {
-        try {
-            if (json[0] === 'follow') {
-                const { follower, following, what: [action] } = json[1];
-                yield put(
-                    globalActions.update({
-                        key: ['follow', 'getFollowingAsync', follower],
-                        notSet: Map(),
-                        updater: m => {
-                            //m = m.asMutable()
-                            if (action == null) {
-                                m = m.update('blog_result', Set(), r =>
-                                    r.delete(following)
-                                );
-                                m = m.update('ignore_result', Set(), r =>
-                                    r.delete(following)
-                                );
-                            } else if (action === 'blog') {
-                                m = m.update('blog_result', Set(), r =>
-                                    r.add(following)
-                                );
-                                m = m.update('ignore_result', Set(), r =>
-                                    r.delete(following)
-                                );
-                            } else if (action === 'ignore') {
-                                m = m.update('ignore_result', Set(), r =>
-                                    r.add(following)
-                                );
-                                m = m.update('blog_result', Set(), r =>
-                                    r.delete(following)
-                                );
-                            }
-                            m = m.set(
-                                'blog_count',
-                                m.get('blog_result', Set()).size
-                            );
-                            m = m.set(
-                                'ignore_count',
-                                m.get('ignore_result', Set()).size
-                            );
-                            return m; //.asImmutable()
-                        },
-                    })
-                );
-            }
-        } catch (e) {
-            console.error(
-                'TransactionSaga unrecognized follow custom_json format',
-                operation.json
-            );
-        }
-    }
     return operation;
 }
 
@@ -417,6 +360,48 @@ function* accepted_comment({ operation }) {
     // mark the time (can only post 1 per min)
     // yield put(user.actions.acceptedComment())
 }
+
+function updateFollowState(action, following, state) {
+    if (action == null) {
+        state = state.update('blog_result', Set(), r => r.delete(following));
+        state = state.update('ignore_result', Set(), r => r.delete(following));
+    } else if (action === 'blog') {
+        state = state.update('blog_result', Set(), r => r.add(following));
+        state = state.update('ignore_result', Set(), r => r.delete(following));
+    } else if (action === 'ignore') {
+        state = state.update('ignore_result', Set(), r => r.add(following));
+        state = state.update('blog_result', Set(), r => r.delete(following));
+    }
+    state = state.set('blog_count', state.get('blog_result', Set()).size);
+    state = state.set('ignore_count', state.get('ignore_result', Set()).size);
+    return state;
+}
+
+function* accepted_custom_json({ operation }) {
+    const json = JSON.parse(operation.json);
+    if (operation.id === 'follow') {
+        console.log(operation);
+        try {
+            if (json[0] === 'follow') {
+                const { follower, following, what: [action] } = json[1];
+                yield put(
+                    globalActions.update({
+                        key: ['follow', 'getFollowingAsync', follower],
+                        notSet: Map(),
+                        updater: m => updateFollowState(action, following, m),
+                    })
+                );
+            }
+        } catch (e) {
+            console.error(
+                'TransactionSaga unrecognized follow custom_json format',
+                operation.json
+            );
+        }
+    }
+    return operation;
+}
+
 function* accepted_delete_comment({ operation }) {
     yield put(globalActions.deleteContent(operation));
 }
@@ -624,6 +609,7 @@ function* error_custom_json({ operation: { id, required_posting_auths } }) {
         );
     }
 }
+
 function* error_vote({ operation: { author, permlink } }) {
     yield put(
         globalActions.remove({

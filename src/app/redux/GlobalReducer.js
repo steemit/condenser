@@ -14,6 +14,7 @@ const SET_COLLAPSED = 'global/SET_COLLAPSED';
 const RECEIVE_STATE = 'global/RECEIVE_STATE';
 const RECEIVE_ACCOUNT = 'global/RECEIVE_ACCOUNT';
 const RECEIVE_ACCOUNTS = 'global/RECEIVE_ACCOUNTS';
+const SYNC_PINNED_POSTS = 'global/SYNC_PINNED_POSTS';
 const RECEIVE_COMMENT = 'global/RECEIVE_COMMENT';
 const RECEIVE_CONTENT = 'global/RECEIVE_CONTENT';
 const LINK_REPLY = 'global/LINK_REPLY';
@@ -104,6 +105,19 @@ export default function reducer(state = defaultState, action = {}) {
             return payload.accounts.reduce((acc, curr) => {
                 const transformed = transformAccount(curr);
                 return mergeAccounts(acc, transformed);
+            }, state);
+        }
+
+        // Interleave pinned posts into the map of posts.
+        case SYNC_PINNED_POSTS: {
+            return payload.pinnedPosts.reduce((acc, pinnedPost) => {
+                const author = pinnedPost.get('author');
+                const permlink = pinnedPost.get('permlink');
+                return state.updateIn(
+                    ['content', `${author}/${permlink}`],
+                    Map(),
+                    p => p.mergeDeep(pinnedPost)
+                );
             }, state);
         }
 
@@ -259,7 +273,14 @@ export default function reducer(state = defaultState, action = {}) {
         }
 
         case RECEIVE_DATA: {
-            const { data, order, category, accountname } = payload;
+            const {
+                data,
+                order,
+                category,
+                accountname,
+                fetching,
+                endOfData,
+            } = payload;
             let new_state;
             if (
                 order === 'by_author' ||
@@ -305,10 +326,10 @@ export default function reducer(state = defaultState, action = {}) {
             new_state = new_state.updateIn(
                 ['status', category || '', order],
                 () => {
-                    if (data.length < constants.FETCH_DATA_BATCH_SIZE) {
-                        return { fetching: false, last_fetch: new Date() };
+                    if (endOfData) {
+                        return { fetching, last_fetch: new Date() };
                     }
-                    return { fetching: false };
+                    return { fetching };
                 }
             );
             return new_state;
@@ -451,6 +472,11 @@ export const receiveAccount = payload => ({
 
 export const receiveAccounts = payload => ({
     type: RECEIVE_ACCOUNTS,
+    payload,
+});
+
+export const syncPinnedPosts = payload => ({
+    type: SYNC_PINNED_POSTS,
     payload,
 });
 

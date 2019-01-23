@@ -300,11 +300,11 @@ class CommentImpl extends React.Component {
         // hide images if author is in blacklist
         const hideImages = ImageUserBlockList.includes(author);
 
-        const showDeleteOption = username === author && allowDelete;
+        const _isPaidout = comment.cashout_time === '1969-12-31T23:59:59'; // TODO: audit after HF19. #1259
         const showEditOption = username === author;
+        const showDeleteOption =
+            username === author && allowDelete && !_isPaidout;
         const showReplyOption = comment.depth < 255;
-        const archived = comment.cashout_time === '1969-12-31T23:59:59'; // TODO: audit after HF19. #1259
-        const readonly = archived || $STM_Config.read_only_mode;
 
         let body = null;
         let controls = null;
@@ -326,14 +326,12 @@ class CommentImpl extends React.Component {
                         {showReplyOption && (
                             <a onClick={onShowReply}>{tt('g.reply')}</a>
                         )}{' '}
-                        {!readonly &&
-                            showEditOption && (
-                                <a onClick={onShowEdit}>{tt('g.edit')}</a>
-                            )}{' '}
-                        {!readonly &&
-                            showDeleteOption && (
-                                <a onClick={onDeletePost}>{tt('g.delete')}</a>
-                            )}
+                        {showEditOption && (
+                            <a onClick={onShowEdit}>{tt('g.edit')}</a>
+                        )}{' '}
+                        {showDeleteOption && (
+                            <a onClick={onDeletePost}>{tt('g.delete')}</a>
+                        )}
                     </span>
                 </div>
             );

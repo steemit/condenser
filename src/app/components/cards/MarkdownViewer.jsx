@@ -31,8 +31,6 @@ class MarkdownViewer extends Component {
         text: PropTypes.string,
         className: PropTypes.string,
         large: PropTypes.bool,
-        // formId: PropTypes.string, // This is unique for every editor of every post (including reply or edit)
-        canEdit: PropTypes.bool,
         jsonMetadata: PropTypes.object,
         highQualityPost: PropTypes.bool,
         noImage: PropTypes.bool,
@@ -59,8 +57,6 @@ class MarkdownViewer extends Component {
         return (
             np.text !== this.props.text ||
             np.large !== this.props.large ||
-            // np.formId !== this.props.formId ||
-            np.canEdit !== this.props.canEdit ||
             ns.allowNoImage !== this.state.allowNoImage
         );
     }
@@ -76,7 +72,8 @@ class MarkdownViewer extends Component {
         if (!text) text = ''; // text can be empty, still view the link meta data
         const {
             large,
-            /*formId, canEdit, jsonMetadata,*/ highQualityPost,
+            highQualityPost,
+            //jsonMetadata,
         } = this.props;
 
         let html = false;
@@ -147,7 +144,7 @@ class MarkdownViewer extends Component {
         // HtmlReady inserts ~~~ embed:${id} type ~~~
         for (let section of cleanText.split('~~~ embed:')) {
             const match = section.match(
-                /^([A-Za-z0-9\_\-]+) (youtube|vimeo) ~~~/
+                /^([A-Za-z0-9\?\=\_\-]+) (youtube|vimeo|twitch) ~~~/
             );
             if (match && match.length >= 3) {
                 const id = match[1];
@@ -177,6 +174,20 @@ class MarkdownViewer extends Component {
                                 frameBorder="0"
                                 webkitallowfullscreen
                                 mozallowfullscreen
+                                allowFullScreen
+                            />
+                        </div>
+                    );
+                } else if (type === 'twitch') {
+                    const url = `https://player.twitch.tv/${id}`;
+                    sections.push(
+                        <div className="videoWrapper">
+                            <iframe
+                                key={idx++}
+                                src={url}
+                                width={w}
+                                height={h}
+                                frameBorder="0"
                                 allowFullScreen
                             />
                         </div>

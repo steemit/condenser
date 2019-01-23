@@ -11,6 +11,7 @@ import debounce from 'lodash.debounce';
 import CloseButton from 'app/components/elements/CloseButton';
 import { findParent } from 'app/utils/DomUtils';
 import Icon from 'app/components/elements/Icon';
+import GoogleAd from 'app/components/elements/GoogleAd';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 
 function topPosition(domElt) {
@@ -27,6 +28,7 @@ class PostsList extends React.Component {
         category: PropTypes.string,
         loadMore: PropTypes.func,
         showSpam: PropTypes.bool,
+        showResteem: PropTypes.bool,
         fetchState: PropTypes.func.isRequired,
         pathname: PropTypes.string,
         nsfwPref: PropTypes.string.isRequired,
@@ -113,9 +115,9 @@ class PostsList extends React.Component {
             topPosition(el) + el.offsetHeight - scrollTop - window.innerHeight <
             10
         ) {
-            const { loadMore, posts, category } = this.props;
+            const { loadMore, posts, category, showResteem } = this.props;
             if (loadMore && posts && posts.size)
-                loadMore(posts.last(), category);
+                loadMore(posts.last(), category, showResteem);
         }
         // Detect if we're in mobile mode (renders larger preview imgs)
         const mq = window.matchMedia('screen and (max-width: 39.9375em)');
@@ -146,12 +148,17 @@ class PostsList extends React.Component {
     render() {
         const {
             posts,
+            showPinned,
+            showResteem,
             showSpam,
             loading,
+            anyPosts,
+            pathname,
             category,
             content,
             ignore_result,
             account,
+            username,
             nsfwPref,
         } = this.props;
         const { thumbSize } = this.state;
@@ -164,23 +171,101 @@ class PostsList extends React.Component {
             }
             const ignore =
                 ignore_result && ignore_result.has(cont.get('author'));
+            const hideResteem =
+                !showResteem && account && cont.get('author') != account;
             const hide = cont.getIn(['stats', 'hide']);
-            if (!(ignore || hide) || showSpam)
+            if (!hideResteem && (!(ignore || hide) || showSpam))
                 // rephide
                 postsInfo.push({ item, ignore });
         });
+
+        // Helper functions for determining whether to show pinned posts.
+        const isLoggedInOnFeed = username && pathname === `/@${username}/feed`;
+        const isLoggedOutOnTrending =
+            !username && (pathname === '/' || pathname === '/trending');
+        const arePinnedPostsVisible =
+            showPinned && (isLoggedInOnFeed || isLoggedOutOnTrending);
+        const arePinnedPostsReady = isLoggedInOnFeed
+            ? anyPosts
+            : postsInfo.length > 0;
+        const showPinnedPosts = arePinnedPostsVisible && arePinnedPostsReady;
+
+        const pinned = this.props.pinned;
+        const renderPinned = pinnedPosts =>
+            pinnedPosts.map(pinnedPost => {
+                const id = `${pinnedPost.author}/${pinnedPost.permlink}`;
+                const pinnedPostContent = content.get(id);
+                const isSeen = pinnedPostContent.get('seen');
+                return (
+                    <li key={pinnedPost}>
+                        <div className="PinLabel">
+                            <Icon
+                                className="PinIcon"
+                                name={isSeen ? 'pin-disabled' : 'pin'}
+                            />{' '}
+                            <span className="PinText">Pinned Post</span>
+                        </div>
+                        <PostSummary
+                            account={account}
+                            post={id}
+                            thumbSize={thumbSize}
+                            ignore={false}
+                            nsfwPref={nsfwPref}
+                        />
+                    </li>
+                );
+            });
         const renderSummary = items =>
-            items.map(item => (
-                <li key={item.item}>
-                    <PostSummary
-                        account={account}
-                        post={item.item}
-                        thumbSize={thumbSize}
-                        ignore={item.ignore}
-                        nsfwPref={nsfwPref}
-                    />
-                </li>
-            ));
+            items.map((item, i) => {
+                const every = this.props.adSlots['in_feed_1'].every;
+                if (this.props.shouldSeeAds && i >= every && i % every === 0) {
+                    return (
+                        <div key={item.item}>
+                            <li>
+                                <PostSummary
+                                    account={account}
+                                    post={item.item}
+                                    thumbSize={thumbSize}
+                                    ignore={item.ignore}
+                                    nsfwPref={nsfwPref}
+                                />
+                            </li>
+
+                            <li>
+                                <div className="articles__summary">
+                                    <div className="articles__content-block articles__content-block--ad">
+                                        <GoogleAd
+                                            name="in-feed-1"
+                                            format="fluid"
+                                            slot={
+                                                this.props.adSlots['in_feed_1']
+                                                    .slot_id
+                                            }
+                                            layoutKey={
+                                                this.props.adSlots['in_feed_1']
+                                                    .layout_key
+                                            }
+                                            style={{ display: 'block' }}
+                                        />
+                                    </div>
+                                </div>
+                            </li>
+                        </div>
+                    );
+                } else {
+                    return (
+                        <li key={item.item}>
+                            <PostSummary
+                                account={account}
+                                post={item.item}
+                                thumbSize={thumbSize}
+                                ignore={item.ignore}
+                                nsfwPref={nsfwPref}
+                            />
+                        </li>
+                    );
+                }
+            });
 
         return (
             <div id="posts_list" className="PostsList">
@@ -189,6 +274,8 @@ class PostsList extends React.Component {
                     itemScope
                     itemType="http://schema.org/blogPosts"
                 >
+                    {/* Only render pinned posts when other posts are ready */}
+                    {showPinnedPosts && renderPinned(pinned)}
                     {renderSummary(postsInfo)}
                 </ul>
                 {loading && (
@@ -220,13 +307,23 @@ export default connect(
         ]);
         const userPreferences = state.app.get('user_preferences').toJS();
         const nsfwPref = userPreferences.nsfwPref || 'warn';
+        const pinned = state.offchain
+            .get('pinned_posts')
+            .get('pinned_posts')
+            .toJS();
+        const shouldSeeAds = state.app.getIn(['googleAds', 'shouldSeeAds']);
+        const adSlots = state.app.getIn(['googleAds', 'adSlots']).toJS();
         return {
             ...props,
+            pathname,
             username,
             content,
             ignore_result,
             pathname,
             nsfwPref,
+            pinned,
+            shouldSeeAds,
+            adSlots,
         };
     },
     dispatch => ({

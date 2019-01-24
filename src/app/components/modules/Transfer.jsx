@@ -586,6 +586,7 @@ export default connect(
 
         if (initialValues.to !== currentUser.get('username'))
             transferToSelf = false; // don't hide the to field
+
         return {
             ...ownProps,
             currentUser,

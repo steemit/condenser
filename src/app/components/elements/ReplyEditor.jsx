@@ -794,7 +794,6 @@ export default formId =>
                 formId,
                 'payoutType',
             ]);
-            debugger;
             if (!payoutType) {
                 payoutType = defaultPayoutType;
             }

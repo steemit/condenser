@@ -22,6 +22,7 @@ import {
     LIQUID_TOKEN,
     VESTING_TOKEN,
     LIQUID_TOKEN_UPPERCASE,
+    DEBT_TICKER,
 } from 'app/client_config';
 
 /** Warning .. This is used for Power UP too. */
@@ -560,7 +561,6 @@ const AssetBalance = ({ onClick, balanceValue }) => (
 );
 
 import { connect } from 'react-redux';
-import { DEBT_TICKER } from '../../client_config';
 
 export default connect(
     // mapStateToProps

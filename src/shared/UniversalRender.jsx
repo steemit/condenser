@@ -315,6 +315,14 @@ export async function serverRender(
             }
         }
 
+        // Insert the pinned posts into the list of posts, so there is no
+        // jumping of content.
+        offchain.pinned_posts.pinned_posts.forEach(pinnedPost => {
+            onchain.content[
+                `${pinnedPost.author}/${pinnedPost.permlink}`
+            ] = pinnedPost;
+        });
+
         server_store = createStore(rootReducer, {
             app: initialState.app,
             global: onchain,

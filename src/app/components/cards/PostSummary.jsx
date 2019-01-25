@@ -98,6 +98,7 @@ class PostSummary extends React.Component {
         const { gray, authorRepLog10, flagWeight, isNsfw } = content
             .get('stats', Map())
             .toJS();
+        const pinned = content.get('pinned');
         const p = extractContent(immutableAccessor, content);
         const desc = p.desc;
 
@@ -335,8 +336,11 @@ class PostSummary extends React.Component {
                 );
             }
         }
+
+        // A post is hidden if it's marked "gray" or "ignore" and it's not
+        // pinned.
         const commentClasses = [];
-        if (gray || ignore) commentClasses.push('downvoted'); // rephide
+        if (!pinned && (gray || ignore)) commentClasses.push('downvoted'); // rephide
 
         return (
             <div className="articles__summary">
@@ -383,8 +387,10 @@ export default connect(
         return {
             post,
             content,
-            pending_payout,
-            total_payout,
+            pending_payout: pending_payout
+                ? pending_payout.toString()
+                : pending_payout,
+            total_payout: total_payout ? total_payout.toString() : total_payout,
             username:
                 state.user.getIn(['current', 'username']) ||
                 state.offchain.get('account'),

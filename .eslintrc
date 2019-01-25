@@ -76,6 +76,7 @@ find node_modules/eslint-config-airbnb -name '*.js'|xargs sed -i "s/': 2/': 1/"
     "jsx-a11y/interactive-supports-focus": 0,
     "jsx-a11y/label-has-for": 0,
     "no-multi-assign": 0,
-    "class-methods-use-this": 0
+    "class-methods-use-this": 0,
+    "generator-star-spacing": 0
   }
 }

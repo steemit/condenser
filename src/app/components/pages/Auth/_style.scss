@@ -1,5 +1,4 @@
 .AuthWrapper {
-  align-items: center;
   display: flex;
   min-height: calc(100vh - 80px);
 
@@ -17,7 +16,7 @@
 
     &.Left > div {
       max-width: 500px;
-      padding: 60px 30px;
+      padding: 140px 30px 60px;
       width: 100%;
 
       .Title {

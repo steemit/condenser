@@ -2,56 +2,53 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 class Input extends Component {
-    render() {
-        const { refer } = this.props;
-        const pp = Object.assign({}, this.props);
-        delete pp.refer;
+  render() {
+    const { refer } = this.props;
+    const pp = Object.assign({}, this.props);
+    delete pp.refer;
 
-        return (
-            <div className="InputWrapper">
-                <div
-                    className="Label"
-                    dangerouslySetInnerHTML={{ __html: pp.label }}
-                />
-                {pp.type === 'password' ? (
-                    <input
-                        {...pp}
-                        placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
-                        ref={refer}
-                    />
-                ) : (
-                    <input {...pp} ref={refer} />
-                )}
-                {pp.children}
-            </div>
-        );
-    }
+    return (
+      <div className="InputWrapper">
+        <div className="Label" dangerouslySetInnerHTML={{ __html: pp.label }} />
+        {pp.type === 'password' ? (
+          <input
+            {...pp}
+            placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
+            ref={refer}
+          />
+        ) : (
+          <input {...pp} ref={refer} />
+        )}
+        {pp.children}
+      </div>
+    );
+  }
 }
 
 Input.defaultProps = {
-    label: '',
-    onChange: () => {},
-    placeholder: '',
-    value: '',
-    type: 'text',
+  label: '',
+  onChange: () => {},
+  placeholder: '',
+  value: '',
+  type: 'text',
 
-    autoComplete: 'on',
-    disabled: false,
-    refer: '',
-    required: true,
+  autoComplete: 'on',
+  disabled: false,
+  refer: '',
+  required: true,
 };
 
 Input.propTypes = {
-    label: PropTypes.string,
-    onChange: PropTypes.func,
-    placeholder: PropTypes.string,
-    value: PropTypes.string,
-    type: PropTypes.string,
+  label: PropTypes.string,
+  onChange: PropTypes.func,
+  placeholder: PropTypes.string,
+  value: PropTypes.string,
+  type: PropTypes.string,
 
-    autoComplete: PropTypes.string,
-    disabled: PropTypes.bool,
-    refer: PropTypes.string,
-    required: PropTypes.bool,
+  autoComplete: PropTypes.string,
+  disabled: PropTypes.bool,
+  refer: PropTypes.string,
+  required: PropTypes.bool,
 };
 
 export default Input;

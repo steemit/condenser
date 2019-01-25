@@ -1,5 +1,7 @@
 .AuthWrapper {
+  align-items: center;
   display: flex;
+  min-height: calc(100vh - 80px);
 
   > div {
     box-sizing: border-box;
@@ -13,6 +15,111 @@
       width: 100%;
     }
 
+    &.Left > div {
+      max-width: 500px;
+      padding: 60px 30px;
+      width: 100%;
+
+      .Title {
+        color: $color-grey;
+        font-family: 'Panton Bold';
+        font-size: 42px;
+        margin-bottom: 10px;
+
+        span {
+          color: $color-dark;
+        }
+      }
+
+      .Description,
+      .callout {
+        color: $color-grey;
+        font-size: 17px;
+        min-height: 65px;
+      }
+
+      form {
+        margin-bottom: 35px;
+
+        [type="password"],
+        [type="text"] {
+          padding: 25px 0 0;
+        }
+
+        .Inputs {
+          box-shadow: 25px 25px 52px rgba(0, 0, 0, 0.06);
+          margin-bottom: 35px;
+        }
+
+        .InputWrapper:not(:last-child) {
+          border-bottom: 0;
+        }
+      }
+
+      .Extra {
+        display: flex;
+        justify-content: space-between;
+
+        color: $color-input;
+        font-size: 14px;
+        line-height: 21px;
+
+        .ForgetPassword {
+          cursor: pointer;
+
+          &:hover {
+            color: $color-grey;
+          }
+        }
+      }
+
+      .Buttons {
+        display: flex;
+        margin-top: 60px;
+
+        & > *:not(:last-child) {
+          margin-right: 30px;
+        }
+
+        .Button,
+        button {
+          background-color: white;
+          border: 2px solid $color-light-grey;
+          border-radius: 3px;
+          color: $color-black;
+          cursor: pointer;
+          font-family: 'Panton';
+          font-size: 14px;
+          height: 40px;
+          outline: none;
+          padding: 0;
+          text-transform: capitalize;
+
+          display: block;
+          line-height: 36px;
+          max-width: 120px;
+          text-align: center;
+          text-decoration: none;
+          width: 50%;
+
+          &:hover {
+            background-color: $color-light;
+          }
+
+          &.Black {
+            background-color: $color-black;
+            border-color: $color-black;
+            color: white;
+
+            &:hover {
+              border-color: $color-dark;
+              background-color: $color-dark;
+            }
+          }
+        }
+      }
+    }
+
     &.Right {
       align-items: center;
       background-color: $color-grey;
@@ -23,6 +130,8 @@
       height: 100vh;
       position: fixed;
       right: 0;
+      top: 0;
+      bottom: 0;
       width: 50%;
       @media (max-width: 768px) {
         display: none;
@@ -43,109 +152,5 @@
     height: 30px;
     left: 30px;
     top: 30px;
-  }
-
-  .AuthForm {
-    max-width: 500px;
-    padding: 140px 30px 60px;
-    width: 100%;
-
-    .Title {
-      color: $color-grey;
-      font-family: 'Panton Bold';
-      font-size: 42px;
-      margin-bottom: 10px;
-
-      span {
-        color: $color-dark;
-      }
-    }
-
-    .Description {
-      color: $color-grey;
-      font-size: 17px;
-      min-height: 65px;
-    }
-
-    form {
-      margin-bottom: 35px;
-
-      [type="text"], [type="password"] {
-        padding: 0;
-        padding-top: 25px;
-      }
-
-      .Inputs {
-        box-shadow: 25px 25px 52px rgba(0, 0, 0, 0.06);
-        margin-bottom: 35px;
-      }
-
-      .InputWrapper:not(:last-child) {
-        border-bottom: 0;
-      }
-    }
-
-    .Extra {
-      display: flex;
-      justify-content: space-between;
-
-      color: $color-input;
-      font-size: 14px;
-      line-height: 21px;
-
-      .ForgetPassword {
-        cursor: pointer;
-
-        &:hover {
-          color: $color-grey;
-        }
-      }
-    }
-
-    .Buttons {
-      display: flex;
-      margin-top: 60px;
-
-      & > *:not(:last-child) {
-        margin-right: 30px;
-      }
-
-      .Button,
-      button {
-        background-color: white;
-        border: 2px solid $color-light-grey;
-        border-radius: 3px;
-        color: $color-black;
-        cursor: pointer;
-        font-family: 'Panton';
-        font-size: 14px;
-        height: 40px;
-        outline: none;
-        padding: 0;
-        text-transform: capitalize;
-
-        display: block;
-        line-height: 36px;
-        max-width: 120px;
-        text-align: center;
-        text-decoration: none;
-        width: 50%;
-
-        &:hover {
-          background-color: $color-light;
-        }
-
-        &.Black {
-          background-color: $color-black;
-          border-color: $color-black;
-          color: white;
-
-          &:hover {
-            border-color: $color-dark;
-            background-color: $color-dark;
-          }
-        }
-      }
-    }
   }
 }

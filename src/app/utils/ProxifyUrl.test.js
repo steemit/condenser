@@ -1,6 +1,6 @@
 /*global describe, global, before:false, it*/
 import assert from 'assert';
-import { proxifyImageUrl } from './ProxifyUrl';
+import proxifyImageUrl from './ProxifyUrl';
 
 describe('ProxifyUrl', () => {
     beforeAll(() => {

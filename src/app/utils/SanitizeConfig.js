@@ -150,7 +150,6 @@ export default ({
                 atts['srcset'] = defaultSrcSet(src);
                 atts['class'] = 'normal-size';
             }
-            console.log(atts);
             return { tagName, attribs: atts };
         },
         div: (tagName, attribs) => {

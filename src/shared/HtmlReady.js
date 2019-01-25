@@ -2,7 +2,7 @@ import xmldom from 'xmldom';
 import tt from 'counterpart';
 import linksRe, { any as linksAny } from 'app/utils/Links';
 import { validate_account_name } from 'app/utils/ChainValidation';
-import { proxifyImageUrl } from 'app/utils/ProxifyUrl';
+import proxifyImageUrl from 'app/utils/ProxifyUrl';
 import * as Phishing from 'app/utils/Phishing';
 
 export const getPhishingWarningMessage = () => tt('g.phishy_message');
@@ -218,9 +218,8 @@ function proxifyImages(doc) {
     if (!doc) return;
     [...doc.getElementsByTagName('img')].forEach(node => {
         const url = node.getAttribute('src');
-        if (!linksRe.local.test(url)) {
+        if (!linksRe.local.test(url))
             node.setAttribute('src', proxifyImageUrl(url, true));
-        }
     });
 }
 

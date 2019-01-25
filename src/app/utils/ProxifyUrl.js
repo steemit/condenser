@@ -58,4 +58,4 @@ export function proxifyImageUrl(url, dimensions = false) {
         }
     }
     return respUrl;
-}
+};

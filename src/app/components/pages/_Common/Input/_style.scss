@@ -17,8 +17,9 @@
     color: $color-input;
     font-family: 'Andada';
     font-size: 18px;
-    padding-top: 25px;
+    line-height: 1;
     outline: none;
+    padding: 25px 0 8px;
     width: 100%;
 
     &::placeholder {

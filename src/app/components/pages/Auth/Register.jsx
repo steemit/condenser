@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 
 import Input from 'app/components/pages/_Common/Input';
 
-import logo from 'assets/images/static/logo.png';
 import knowledr from 'assets/images/static/knowledr.png';
 
 const formFields = [
@@ -70,9 +69,6 @@ class Register extends Component {
     return (
       <div className="AuthWrapper">
         <div className="Left">
-          <a href="/">
-            <img className="Logo" src={logo} alt="Knowledr Logo" />
-          </a>
           <div className="AuthForm">
             <div className="Title">
               We are <span>Knowledr</span>

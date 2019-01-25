@@ -12,14 +12,18 @@
     user-select: none;
   }
 
-  input {
+  input,
+  select {
     border: none;
+    box-shadow: none;
+    box-sizing: content-box;
     color: $color-input;
     font-family: 'Andada';
     font-size: 18px;
-    line-height: 1;
+    height: auto;
     outline: none;
-    padding: 25px 0 8px;
+    line-height: inherit;
+    padding: 20px 0 0;
     width: 100%;
 
     &::placeholder {
@@ -30,5 +34,10 @@
   .error {
     margin-bottom: 0;
     font-size: 14px;
+  }
+
+  .secondary {
+    border-top: 1px solid #e6e6e6;
+    padding-top: 5px;
   }
 }

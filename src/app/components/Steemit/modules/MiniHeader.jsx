@@ -5,13 +5,19 @@ import { Link } from 'react-router';
 // import { APP_NAME } from 'app/client_config';
 import logo from 'assets/images/static/logo_white.png';
 
-export default function MiniHeader() {
+export default function MiniHeader({ isBrowser = false }) {
   return (
     <div className="Navigation">
       <div className="LogoContainer">
-        <Link to="/">
-          <img className="Logo" src={logo} alt="Knowledgr Logo" />
-        </Link>
+        {isBrowser ? (
+          <Link to="/">
+            <img className="Logo" src={logo} alt="Knowledgr Logo" />
+          </Link>
+        ) : (
+          <a href="/">
+            <img className="Logo" src={logo} alt="Knowledgr Logo" />
+          </a>
+        )}
       </div>
     </div>
     // <header className="Header">

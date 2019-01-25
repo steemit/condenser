@@ -234,7 +234,7 @@ class App extends React.Component {
         <ConnectedSidePanel alignment="right" />
 
         {headerHidden ? null : miniHeader ? (
-          <MiniHeader />
+          <MiniHeader isBrowser />
         ) : (
           // <Header pathname={pathname} category={category} order={order} />
           <NavBar pathname={pathname} category={category} order={order} />

@@ -3,9 +3,10 @@ import PropTypes from 'prop-types';
 
 class Input extends Component {
   render() {
-    const { refer } = this.props;
+    const { refer, example } = this.props;
     const pp = Object.assign({}, this.props);
     delete pp.refer;
+    delete pp.example;
 
     return (
       <div className="InputWrapper">
@@ -19,6 +20,7 @@ class Input extends Component {
         ) : (
           <input {...pp} ref={refer} />
         )}
+        {example || null}
         {pp.children}
       </div>
     );

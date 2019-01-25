@@ -35,6 +35,11 @@
         color: $color-grey;
         font-size: 17px;
         min-height: 65px;
+
+        > p {
+          font-size: 15px;
+          margin-bottom: 8px;
+        }
       }
 
       form {
@@ -52,6 +57,10 @@
 
         .InputWrapper:not(:last-child) {
           border-bottom: 0;
+        }
+
+        .secondary {
+          color: #b3b3b3;
         }
       }
 

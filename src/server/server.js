@@ -292,6 +292,8 @@ useGeneralApi(app);
 app.use(function*(next) {
     this.adsEnabled =
         !(this.session.auth || this.session.a) && config.google_ad_enabled;
+    this.gptEnabled =
+        !(this.session.auth || this.session.a) && config.gpt_enabled;
     yield next;
 });
 

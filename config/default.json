@@ -95,5 +95,12 @@
     "market_1": {
       "slot_id": "2777377820"
     }
+  },
+  "gpt_enabled": null,
+  "gpt_slots": {
+    "top_navi": {
+      "slot_id": "div-gpt-ad-1547492443353-0",
+      "args": ["/21784675435/steemit_top-navi", [[728, 90], [970, 90]], "div-gpt-ad-1547492443353-0"]
+    }
   }
 }

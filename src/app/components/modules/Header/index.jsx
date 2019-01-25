@@ -17,6 +17,7 @@ import { SIGNUP_URL } from 'shared/constants';
 import SteemLogo from 'app/components/elements/SteemLogo';
 import normalizeProfile from 'app/utils/NormalizeProfile';
 import Announcement from 'app/components/elements/Announcement';
+import GptAd from 'app/components/elements/GptAd';
 
 class Header extends React.Component {
     static propTypes = {
@@ -25,6 +26,7 @@ class Header extends React.Component {
         category: PropTypes.string,
         order: PropTypes.string,
         pathname: PropTypes.string,
+        gptSlots: PropTypes.object,
     };
 
     constructor() {
@@ -258,6 +260,12 @@ class Header extends React.Component {
                 {this.props.showAnnouncement && (
                     <Announcement onClose={this.props.hideAnnouncement} />
                 )}
+                {this.props.gptSlots ? (
+                    <GptAd
+                        slot={this.props.gptSlots['top_navi']['slot_id']}
+                        args={this.props.gptSlots['top_navi']['args']}
+                    />
+                ) : null}
                 <nav className="row Header__nav">
                     <div className="small-5 large-4 columns Header__logotype">
                         {/*LOGO*/}
@@ -365,6 +373,8 @@ const mapStateToProps = (state, ownProps) => {
         ? username
         : state.offchain.get('account');
 
+    const gptSlots = state.app.getIn(['googleAds', 'gptSlots']).toJS();
+
     return {
         username,
         loggedIn,
@@ -373,6 +383,7 @@ const mapStateToProps = (state, ownProps) => {
         account_meta: user_profile,
         current_account_name,
         showAnnouncement: state.user.get('showAnnouncement'),
+        gptSlots,
         ...ownProps,
     };
 };

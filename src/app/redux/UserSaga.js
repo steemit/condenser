@@ -180,7 +180,7 @@ function* usernamePasswordLogin2({
   const isRole = (role, fn) =>
     !userProvidedRole || role === userProvidedRole ? fn() : undefined;
 
-  const account = yield call(getAccount, username);
+  const account = yield call(getAccount, username, true);
   if (!account) {
     yield put(userActions.loginError({ error: 'Username does not exist' }));
     return;
@@ -461,15 +461,13 @@ function* saveLogin_localStorage() {
 function* logout() {
   yield put(userActions.saveLoginConfirm(false)); // Just incase it is still showing
   if (process.env.BROWSER) localStorage.removeItem('autopost2');
-  serverApiLogout();
+  yield serverApiLogout();
+  browserHistory.push('/');
 }
 
-function* loginError({
-  payload: {
-    /*error*/
-  },
-}) {
-  serverApiLogout();
+function* loginError({ payload: { error } }) {
+  console.error(error);
+  yield serverApiLogout();
 }
 
 /**

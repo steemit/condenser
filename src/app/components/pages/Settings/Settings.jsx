@@ -266,6 +266,7 @@ class Settings extends Component {
                                     expertiseLevel: lIndex + 1,
                                   })
                                 }
+                                key={lIndex}
                               >
                                 {lIndex + 1}
                               </div>

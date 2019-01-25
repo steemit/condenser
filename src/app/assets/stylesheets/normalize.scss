@@ -16,7 +16,7 @@ input[type='checkbox'].css-checkbox {
   border: 0;
 }
 
-input[type='checkbox'].css-checkbox + label.css-label {
+input[type='checkbox'].css-checkbox + div.css-label {
   padding-left: 30px;
   height: 21px;
   display: inline-block;
@@ -25,14 +25,14 @@ input[type='checkbox'].css-checkbox + label.css-label {
   position: relative;
 }
 
-input[type='checkbox'].css-checkbox:checked + label.css-label {
-  background-image: url('~app/assets/images/static/checkmark.svg');
+input[type='checkbox'].css-checkbox:checked + div.css-label {
+  background-image: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="rgb(102, 102, 102)"><path d="M9 22l-10-10.598 2.798-2.859 7.149 7.473 13.144-14.016 2.909 2.806z"></path></svg>');
   background-position: 3px 3px;
   background-repeat: no-repeat;
   background-size: 15px 15px;
 }
 
-label.css-label {
+div.css-label {
   user-select: none;
 
   &:before {

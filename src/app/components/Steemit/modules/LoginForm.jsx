@@ -307,18 +307,18 @@ class LoginForm extends Component {
       >
         <div className="Inputs">
           {/* <div className="input-group">
-                    <input
-                        className="input-group-field"
-                        type="text"
-                        required
-                        placeholder={tt('loginform_jsx.enter_your_username')}
-                        ref="username"
-                        {...username.props}
-                        onChange={usernameOnChange}
-                        autoComplete="on"
-                        disabled={submitting || isTransfer}
-                    />
-                    </div> */}
+            <input
+              className="input-group-field"
+              type="text"
+              required
+              placeholder={tt('loginform_jsx.enter_your_username')}
+              ref="username"
+              {...username.props}
+              onChange={usernameOnChange}
+              autoComplete="on"
+              disabled={submitting || isTransfer}
+            />
+          </div> */}
           <Input
             label="User Name"
             placeholder={tt('loginform_jsx.enter_your_username')}
@@ -335,14 +335,14 @@ class LoginForm extends Component {
 
           <div>
             {/* <input
-                            type="password"
-                            required
-                            ref="pw"
-                            placeholder={tt('loginform_jsx.password_or_wif')}
-                            {...password.props}
-                            autoComplete="on"
-                            disabled={submitting}
-                        /> */}
+              type="password"
+              required
+              ref="pw"
+              placeholder={tt('loginform_jsx.password_or_wif')}
+              {...password.props}
+              autoComplete="on"
+              disabled={submitting}
+            /> */}
             <Input
               label="Password"
               placeholder={tt('loginform_jsx.password_or_wif')}
@@ -371,39 +371,36 @@ class LoginForm extends Component {
           )}
         </div>
         {/* <div>
-                    <label
-                        className="LoginForm__save-login"
-                        htmlFor="saveLogin"
-                    >
-                        <input
-                            id="saveLogin"
-                            type="checkbox"
-                            ref="pw"
-                            {...saveLogin.props}
-                            onChange={this.saveLoginToggle}
-                            disabled={submitting}
-                        />&nbsp;{tt('loginform_jsx.keep_me_logged_in')}
-                    </label>
-                </div> */}
-
+          <label className="LoginForm__save-login" htmlFor="saveLogin">
+            <input
+              id="saveLogin"
+              type="checkbox"
+              ref="pw"
+              {...saveLogin.props}
+              onChange={this.saveLoginToggle}
+              disabled={submitting}
+            />&nbsp;{tt('loginform_jsx.keep_me_logged_in')}
+          </label>
+        </div> */}
         <div className="Extra">
           <div className="RememberMe">
             <input
               type="checkbox"
               name="rememberMe"
-              // id="rememberMe"
               className="css-checkbox"
               checked
-              // onChange={this.onInputChange('rememberMe')}
               id="saveLogin"
               ref="pw"
               {...saveLogin.props}
-              onChange={this.saveLoginToggle}
               disabled={submitting}
             />
-            <label htmlFor="saveLogin" className="css-label">
+            <div
+              htmlFor="saveLogin"
+              className="css-label"
+              onClick={this.saveLoginToggle}
+            >
               Remember Me
-            </label>
+            </div>
           </div>
           <div className="ForgetPassword">Forget Password?</div>
         </div>

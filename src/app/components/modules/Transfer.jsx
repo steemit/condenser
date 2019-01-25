@@ -203,7 +203,7 @@ class TransferForm extends Component {
     balanceValue() {
         const { transferType } = this.props.initialValues;
         const { currentAccount } = this.props;
-        let { asset } = this.state;
+        const { asset } = this.state;
         const isWithdraw = transferType && transferType === 'Savings Withdraw';
         return !asset || asset.value === LIQUID_TOKEN_UPPERCASE
             ? isWithdraw

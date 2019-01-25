@@ -239,6 +239,7 @@ export default `
 /bitcoin/@toolsoftitans/palm-beach-confidential-buy-alerts-monthly-pick-for-free-for-1-month-with-no-delay-faq-in-thread
 /nsfw/@bleh773/3p4qxq-sexy-brunette
 /nsfw/@dirtywhale/milf
+/happy/@janinet/watch-happy-wedding-2018-hdrip-full-telugu-movie-watch-online-free-download-hd-print
 `
     .trim()
     .split('\n');

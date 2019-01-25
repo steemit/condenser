@@ -16,19 +16,20 @@ class Home extends Component {
     this.state = {
       // loading: true,
       isPaneOpen: true,
+      hasSearch: props.location.query.search,
     };
   }
 
   render() {
     // const { search } = this.props;
     // const { items, relatedItems } = search || {};
-    const { isPaneOpen } = this.state;
+    const { isPaneOpen, hasSearch } = this.state;
 
     return (
       <div className={`HomeWrapper ${isPaneOpen ? 'Open' : 'Close'}`}>
         <div className="Content">
           <div className="Results">
-            <SearchHeader />
+            <SearchHeader hasSearch={hasSearch} />
             {SearchItems.map((item, index) => (
               <SearchItem data={item} key={`${index}-${item.id}`} />
             ))}

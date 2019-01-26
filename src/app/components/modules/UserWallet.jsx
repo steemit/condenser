@@ -699,7 +699,7 @@ class UserWallet extends React.Component {
                             <span>
                                 {tt(
                                     'userwallet_jsx.next_power_down_is_scheduled_to_happen'
-                                )}&nbsp;{' '}
+                                )}{' '}
                                 <TimeAgoWrapper
                                     date={account.get(
                                         'next_vesting_withdrawal'

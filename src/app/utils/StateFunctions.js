@@ -77,6 +77,23 @@ export function delegatedSteem(account, gprops) {
     return vesting_steemf;
 }
 
+// How much STEEM this account is powering down.
+export function powerdownSteem(account, gprops) {
+    const withdraw_rate_vests = parseFloat(
+        account.vesting_withdraw_rate.split(' ')[0]
+    );
+    const remaining_vests =
+        (parseFloat(account.to_withdraw) - parseFloat(account.withdrawn)) /
+        1000000;
+    const vests = Math.min(withdraw_rate_vests, remaining_vests);
+    const total_vests = parseFloat(gprops.total_vesting_shares.split(' ')[0]);
+    const total_vest_steem = parseFloat(
+        gprops.total_vesting_fund_steem.split(' ')[0]
+    );
+    const powerdown_steemf = total_vest_steem * (vests / total_vests);
+    return powerdown_steemf;
+}
+
 export function assetFloat(str, asset) {
     try {
         assert.equal(typeof str, 'string');

@@ -6,12 +6,12 @@ import tt from 'counterpart';
 import { List } from 'immutable';
 import SavingsWithdrawHistory from 'app/components/elements/SavingsWithdrawHistory';
 import TransferHistoryRow from 'app/components/cards/TransferHistoryRow';
-import TransactionError from 'app/components/elements/TransactionError';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import {
     numberWithCommas,
     vestingSteem,
     delegatedSteem,
+    powerdownSteem,
     pricePerSteem,
 } from 'app/utils/StateFunctions';
 import WalletSubMenu from 'app/components/elements/WalletSubMenu';
@@ -109,6 +109,7 @@ class UserWallet extends React.Component {
 
         let vesting_steem = vestingSteem(account.toJS(), gprops);
         let delegated_steem = delegatedSteem(account.toJS(), gprops);
+        let powerdown_steem = powerdownSteem(account.toJS(), gprops);
 
         let isMyAccount =
             current_user &&
@@ -402,10 +403,6 @@ class UserWallet extends React.Component {
             });
         }
 
-        const isWithdrawScheduled =
-            new Date(account.get('next_vesting_withdrawal') + 'Z').getTime() >
-            Date.now();
-
         const steem_balance_str = numberWithCommas(balance_steem.toFixed(3));
         const steem_orders_balance_str = numberWithCommas(
             steemOrders.toFixed(3)
@@ -414,6 +411,9 @@ class UserWallet extends React.Component {
         const received_power_balance_str =
             (delegated_steem < 0 ? '+' : '') +
             numberWithCommas((-delegated_steem).toFixed(3));
+        const powerdown_balance_str = numberWithCommas(
+            powerdown_steem.toFixed(3)
+        );
         const sbd_balance_str = numberWithCommas('$' + sbd_balance.toFixed(3)); // formatDecimal(account.sbd_balance, 3)
         const sbd_orders_balance_str = numberWithCommas(
             '$' + sbdOrders.toFixed(3)
@@ -695,7 +695,7 @@ class UserWallet extends React.Component {
                 </div>
                 <div className="UserWallet__balance row">
                     <div className="column small-12">
-                        {isWithdrawScheduled && (
+                        {powerdown_steem != 0 && (
                             <span>
                                 {tt(
                                     'userwallet_jsx.next_power_down_is_scheduled_to_happen'
@@ -704,11 +704,10 @@ class UserWallet extends React.Component {
                                     date={account.get(
                                         'next_vesting_withdrawal'
                                     )}
-                                />.
+                                />{' '}
+                                {'(~' + powerdown_balance_str + ' STEEM)'}.
                             </span>
                         )}
-                        {/*toggleDivestError && <div className="callout alert">{toggleDivestError}</div>*/}
-                        <TransactionError opType="withdraw_vesting" />
                     </div>
                 </div>
                 {disabledWarning && (

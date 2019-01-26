@@ -13,8 +13,9 @@ import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 import tt from 'counterpart';
 import { APP_URL } from 'app/client_config';
 import { PrivateKey, PublicKey } from '@steemit/steem-js/lib/auth/ecc';
-import { SIGNUP_URL } from 'shared/constants';
+// import { SIGNUP_URL } from 'shared/constants';
 import { connect } from 'react-redux';
+import { browserHistory } from 'react-router';
 
 import Input from 'app/components/pages/_Common/Input';
 
@@ -91,7 +92,8 @@ class LoginForm extends Component {
   SignUp() {
     const onType = document.getElementsByClassName('OpAction')[0].textContent;
     serverApiRecordEvent('FreeMoneySignUp', onType);
-    window.location.href = SIGNUP_URL;
+    // window.location.href = SIGNUP_URL;
+    browserHistory.push('/pick_account');
   }
 
   SignIn() {
@@ -277,19 +279,19 @@ class LoginForm extends Component {
       </h3>
     );
 
-    const signupLink = (
-      <div className="sign-up">
-        <hr />
-        <p>
-          {tt('loginform_jsx.join_our')}{' '}
-          <em>{tt('loginform_jsx.amazing_community')}</em>
-          {tt('loginform_jsx.to_comment_and_reward_others')}
-        </p>
-        <button type="button" className="button hollow" onClick={this.SignUp}>
-          {tt('loginform_jsx.sign_up_get_steem')}
-        </button>
-      </div>
-    );
+    // const signupLink = (
+    //   <div className="sign-up">
+    //     <hr />
+    //     <p>
+    //       {tt('loginform_jsx.join_our')}{' '}
+    //       <em>{tt('loginform_jsx.amazing_community')}</em>
+    //       {tt('loginform_jsx.to_comment_and_reward_others')}
+    //     </p>
+    //     <button type="button" className="button hollow" onClick={this.SignUp}>
+    //       {tt('loginform_jsx.sign_up_get_steem')}
+    //     </button>
+    //   </div>
+    // );
 
     const form = (
       <form

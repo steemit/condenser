@@ -9,6 +9,11 @@
     color: #797979;
     font-size: 18px;
     cursor: pointer;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 80%;
+    display: block;
 
     &:hover {
       border-bottom: 0;
@@ -44,17 +49,22 @@
     display: flex;
     margin-bottom: 17px;
     padding-top: 8px;
+    justify-content: space-between;
 
-    > svg {
-      color: #b3b3b3;
-      cursor: pointer;
-      margin-left: 42px;
+    > div.Actions {
+      width: 60%;
 
-      height: 22px;
-      width: 22px;
+      > svg {
+        color: #b3b3b3;
+        cursor: pointer;
+        margin-left: 42px;
 
-      &:hover {
-        color: #4bbefd;
+        height: 22px;
+        width: 22px;
+
+        &:hover {
+          color: #4bbefd;
+        }
       }
     }
   }
@@ -142,6 +152,7 @@
       .Extra {
         color: #999999;
         font-size: 14px;
+        text-align: right;
       }
     }
 

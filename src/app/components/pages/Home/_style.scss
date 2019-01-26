@@ -1,6 +1,7 @@
 @import './Components/style';
 
 .HomeWrapper {
+  background: #fbfbfb;
   display: flex;
   justify-content: center;
   align-items: flex-start;
@@ -8,7 +9,6 @@
 
   .Content {
     flex-grow: 1;
-    height: 100vh;
     box-shadow: $box-shadow;
     z-index: 1;
 
@@ -17,7 +17,6 @@
       margin: 0 auto;
       padding: 0 20px;
     }
-
     @media all and (max-width: 1300px) {
       width: 100%;
       height: auto;
@@ -27,7 +26,6 @@
       }
     }
   }
-
   @media all and (max-width: 1300px) {
     flex-direction: column;
     justify-content: flex-start;
@@ -35,12 +33,8 @@
 }
 
 .RelatedItems {
-  background: #fbfbfb;
-  padding: 12px 20px;
-  padding-top: 37px;
+  padding: 37px 20px 12px;
   max-width: 550px;
-  height: 100vh;
-
   @media all and (max-width: 1300px) {
     width: 100%;
     max-width: none;
@@ -54,19 +48,19 @@
     font-weight: normal;
     padding: 0 25px;
   }
+}
 
-  .More {
-    text-align: center;
-    margin-bottom: 25px;
+.More {
+  text-align: center;
+  margin-bottom: 25px;
 
-    a {
-      color: #4bbefd;
-      font-family: 'Futura Lt BT';
-      font-size: 16px;
+  a {
+    color: #4bbefd;
+    font-family: 'Futura Lt BT';
+    font-size: 16px;
 
-      &:hover {
-        border-bottom: 0;
-      }
+    &:hover {
+      border-bottom: 0;
     }
   }
 }

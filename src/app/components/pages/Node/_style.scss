@@ -353,6 +353,42 @@
         margin-left: 30px;
         position: relative;
 
+        &.None {
+          color: #d6d6d6;
+
+          &:before {
+            background: #d6d6d6;
+          }
+
+          &:after {
+            border-color: #d6d6d6;
+          }
+        }
+
+        &.Q {
+          color: #53d3ff;
+
+          &:before {
+            background: #53d3ff;
+          }
+
+          &:after {
+            border-color: #53d3ff;
+          }
+        }
+
+        &.H {
+          color: #b3b3b3;
+
+          &:before {
+            background: #b3b3b3;
+          }
+
+          &:after {
+            border-color: #b3b3b3;
+          }
+        }
+
         &:before {
           background: #64c272;
           border: 2px solid white;

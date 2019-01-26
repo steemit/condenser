@@ -7,32 +7,99 @@ import { Link } from 'react-router';
 
 // import { SideMenu } from 'app/components/pages/_Common';
 import { SearchHeader, SearchItem, SearchRelatedItem } from './Components';
-import { SearchItems, RelatedItems } from './DummyData';
+import { RelatedItems, MockItems } from './DummyData';
+
+const pageSize = 20;
 
 class Home extends Component {
   constructor(props) {
     super(props);
+    const hasSearch = props.location.query.search;
+    const items = hasSearch
+      ? MockItems.filter(item => item.title.indexOf(hasSearch) !== -1)
+      : MockItems;
 
     this.state = {
       // loading: true,
       isPaneOpen: true,
-      hasSearch: props.location.query.search,
+      hasSearch,
+      items,
+      limit: pageSize,
+      sortBy: null,
     };
+
+    this.updateLimit = this.updateLimit.bind(this);
+    this.updateState = this.updateState.bind(this);
+  }
+
+  componentWillReceiveProps(newProps) {
+    const hasSearch = newProps.location.query.search;
+    if (hasSearch !== this.state.hasSearch) {
+      const items = hasSearch
+        ? MockItems.filter(item => item.title.indexOf(hasSearch) !== -1)
+        : MockItems;
+      this.setState({
+        hasSearch: newProps.location.query.search,
+        items,
+        limit: pageSize,
+      });
+    }
+  }
+
+  updateLimit() {
+    const { limit, items } = this.state;
+    this.setState({
+      limit: Math.min(limit + pageSize, items.length),
+    });
+  }
+
+  updateState(key, value) {
+    const updates = { [key]: value };
+    const getVotes = v => v.up - v.down;
+    if (key === 'sortBy') {
+      let items = this.state.items;
+      if (value.value === 'latest') {
+        items = items.sort(
+          (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+        );
+      } else if (value.value === 'top_votes') {
+        items = items.sort((a, b) => getVotes(b.votes) - getVotes(a.votes));
+      }
+      updates.items = items;
+    }
+    this.setState(updates);
+  }
+
+  disaplyItems() {
+    const { items, limit } = this.state;
+    console.log(items);
+    return new Array(limit)
+      .fill(1)
+      .map((key, index) => items[index])
+      .filter(item => item !== null);
   }
 
   render() {
-    // const { search } = this.props;
     // const { items, relatedItems } = search || {};
-    const { isPaneOpen, hasSearch } = this.state;
+    const { isPaneOpen, hasSearch, limit, items, sortBy } = this.state;
 
     return (
       <div className={`HomeWrapper ${isPaneOpen ? 'Open' : 'Close'}`}>
         <div className="Content">
           <div className="Results">
-            <SearchHeader hasSearch={hasSearch} />
-            {SearchItems.map((item, index) => (
+            <SearchHeader
+              hasSearch={hasSearch}
+              updateState={this.updateState}
+              sortBy={sortBy}
+            />
+            {this.disaplyItems().map((item, index) => (
               <SearchItem data={item} key={`${index}-${item.id}`} />
             ))}
+            {limit < items.length && (
+              <div className="More">
+                <a onClick={this.updateLimit}>See more topics</a>
+              </div>
+            )}
           </div>
         </div>
         <div className="RelatedItems">
@@ -41,7 +108,7 @@ class Home extends Component {
             <SearchRelatedItem data={item} key={`${index}-${item.id}`} />
           ))}
           <div className="More">
-            <Link to="/?search=more">See more related topics</Link>
+            <a onClick={this.updateLimit}>See more related topics</a>
           </div>
         </div>
       </div>

@@ -9,8 +9,14 @@ class SearchHeader extends Component {
 
     this.state = {
       // loading: true,
-      sortBy: null,
+      sortBy: props.sortBy,
     };
+  }
+
+  componentWillReceiveProps(newProps) {
+    if (this.state.sortBy !== newProps.sortBy) {
+      this.setState({ sortBy: newProps.sortBy });
+    }
   }
 
   getQuery(key) {
@@ -36,7 +42,7 @@ class SearchHeader extends Component {
             { label: 'Latest', value: 'latest' },
             { label: 'Top Votes', value: 'top_votes' },
           ]}
-          onChange={value => this.setState({ sortBy: value })}
+          onChange={value => this.props.updateState('sortBy', value)}
         />
       </div>
     );

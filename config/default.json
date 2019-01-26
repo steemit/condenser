@@ -7,8 +7,8 @@
     "directives": {
       "childSrc": "'self' player.twitch.tv www.youtube.com staticxx.facebook.com w.soundcloud.com player.vimeo.com",
       "connectSrc": "'self' knowledgr.com https://api.steemit.com api.blocktrades.us",
-      "defaultSrc": "'self' www.youtube.com staticxx.facebook.com player.vimeo.com",
-      "fontSrc": "data: fonts.gstatic.com",
+      "defaultSrc": "'self' www.youtube.com staticxx.facebook.com player.vimeo.com fonts.gstatic.com",
+      // "fontSrc": "data: fonts.gstatic.com",
       "frameAncestors": "'none'",
       "imgSrc": "* data:",
       "objectSrc": "'none'",

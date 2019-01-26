@@ -15,14 +15,17 @@ class Home extends Component {
   constructor(props) {
     super(props);
     const hasSearch = props.location.query.search;
-    const items = hasSearch
+    const hasType = props.location.query.type;
+    let items = hasSearch
       ? MockItems.filter(item => item.title.indexOf(hasSearch) !== -1)
       : MockItems;
+    items = hasType ? items.filter(item => item.type === hasType) : items;
 
     this.state = {
       // loading: true,
       isPaneOpen: true,
       hasSearch,
+      hasType,
       items,
       limit: pageSize,
       sortBy: null,
@@ -34,12 +37,26 @@ class Home extends Component {
 
   componentWillReceiveProps(newProps) {
     const hasSearch = newProps.location.query.search;
-    if (hasSearch !== this.state.hasSearch) {
-      const items = hasSearch
+    let hasType = null;
+    if (window) {
+      let query = window.location.search;
+      query = query.substr(1);
+      query = query.split('&');
+      query.forEach(q => {
+        const splits = q.split('=');
+        if (splits[0] === 'type') {
+          hasType = splits[1];
+        }
+      });
+    }
+    if (hasSearch !== this.state.hasSearch || hasType !== this.state.hasType) {
+      let items = hasSearch
         ? MockItems.filter(item => item.title.indexOf(hasSearch) !== -1)
         : MockItems;
+      items = hasType ? items.filter(item => item.type === hasType) : items;
       this.setState({
-        hasSearch: newProps.location.query.search,
+        hasSearch,
+        hasType,
         items,
         limit: pageSize,
       });
@@ -72,8 +89,7 @@ class Home extends Component {
 
   disaplyItems() {
     const { items, limit } = this.state;
-    console.log(items);
-    return new Array(limit)
+    return new Array(Math.min(limit, items.length))
       .fill(1)
       .map((key, index) => items[index])
       .filter(item => item !== null);

@@ -56,7 +56,7 @@ class SearchItem extends Component {
 
     return (
       <div className="SearchItemWrapper">
-        <Link className="Title" to={`/knowledgr/@post/${id}`}>
+        <Link className="Title" to={`/knowledgr/@${user.nick}/${id}`}>
           <span className={`Type ${filteredType}`}>{filteredType}</span> {title}
         </Link>
         <div className="Info">
@@ -67,10 +67,12 @@ class SearchItem extends Component {
               <div className="UserTitle">{user.title}</div>
             </div>
           </div>
-          <FeatherIcons.MessageCircle />
-          <FeatherIcons.CornerUpLeft />
-          <FeatherIcons.CornerUpRight />
-          <FeatherIcons.Download />
+          <div className="Actions">
+            <FeatherIcons.MessageCircle />
+            <FeatherIcons.CornerUpLeft />
+            <FeatherIcons.CornerUpRight />
+            <FeatherIcons.Download />
+          </div>
         </div>
         <div className="Votes">
           <div className={`Up ${votes.you === 'up' ? 'Voted' : ''}`}>

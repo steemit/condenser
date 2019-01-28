@@ -79,5 +79,28 @@
   "pinned_posts_url": false,
   "google_ad_enabled": null,
   "google_ad_test": null,
-  "google_ad_client": null
+  "google_ad_client": null,
+  "google_ad_slots": {
+    "sidebar_1": {
+      "slot_id": "9855000063"
+    },
+    "in_feed_1": {
+      "slot_id": "9514544128",
+      "layout_key": "-fb+5w+4e-db+86",
+      "every": 8
+    },
+    "post_footer_1": {
+      "slot_id": "5796459261"
+    },
+    "market_1": {
+      "slot_id": "2777377820"
+    }
+  },
+  "gpt_enabled": null,
+  "gpt_slots": {
+    "top_navi": {
+      "slot_id": "div-gpt-ad-1547492443353-0",
+      "args": ["/21784675435/steemit_top-navi", [[728, 90], [970, 90]], "div-gpt-ad-1547492443353-0"]
+    }
+  }
 }

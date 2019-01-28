@@ -11,6 +11,7 @@ import debounce from 'lodash.debounce';
 import CloseButton from 'app/components/elements/CloseButton';
 import { findParent } from 'app/utils/DomUtils';
 import Icon from 'app/components/elements/Icon';
+import GoogleAd from 'app/components/elements/GoogleAd';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 
 function topPosition(domElt) {
@@ -215,17 +216,56 @@ class PostsList extends React.Component {
                 );
             });
         const renderSummary = items =>
-            items.map(item => (
-                <li key={item.item}>
-                    <PostSummary
-                        account={account}
-                        post={item.item}
-                        thumbSize={thumbSize}
-                        ignore={item.ignore}
-                        nsfwPref={nsfwPref}
-                    />
-                </li>
-            ));
+            items.map((item, i) => {
+                const every = this.props.adSlots['in_feed_1'].every;
+                if (this.props.shouldSeeAds && i >= every && i % every === 0) {
+                    return (
+                        <div key={item.item}>
+                            <li>
+                                <PostSummary
+                                    account={account}
+                                    post={item.item}
+                                    thumbSize={thumbSize}
+                                    ignore={item.ignore}
+                                    nsfwPref={nsfwPref}
+                                />
+                            </li>
+
+                            <li>
+                                <div className="articles__summary">
+                                    <div className="articles__content-block articles__content-block--ad">
+                                        <GoogleAd
+                                            name="in-feed-1"
+                                            format="fluid"
+                                            slot={
+                                                this.props.adSlots['in_feed_1']
+                                                    .slot_id
+                                            }
+                                            layoutKey={
+                                                this.props.adSlots['in_feed_1']
+                                                    .layout_key
+                                            }
+                                            style={{ display: 'block' }}
+                                        />
+                                    </div>
+                                </div>
+                            </li>
+                        </div>
+                    );
+                } else {
+                    return (
+                        <li key={item.item}>
+                            <PostSummary
+                                account={account}
+                                post={item.item}
+                                thumbSize={thumbSize}
+                                ignore={item.ignore}
+                                nsfwPref={nsfwPref}
+                            />
+                        </li>
+                    );
+                }
+            });
 
         return (
             <div id="posts_list" className="PostsList">
@@ -271,6 +311,8 @@ export default connect(
             .get('pinned_posts')
             .get('pinned_posts')
             .toJS();
+        const shouldSeeAds = state.app.getIn(['googleAds', 'shouldSeeAds']);
+        const adSlots = state.app.getIn(['googleAds', 'adSlots']).toJS();
         return {
             ...props,
             pathname,
@@ -280,6 +322,8 @@ export default connect(
             pathname,
             nsfwPref,
             pinned,
+            shouldSeeAds,
+            adSlots,
         };
     },
     dispatch => ({

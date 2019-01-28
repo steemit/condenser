@@ -203,7 +203,7 @@ export function* fetchData(action) {
             },
         ];
     } else if (order === 'payout') {
-        call_name = 'getPostDiscussionsByPayout';
+        call_name = 'getPostDiscussionsByPayoutAsync';
         args = [
             {
                 tag: category,
@@ -213,7 +213,7 @@ export function* fetchData(action) {
             },
         ];
     } else if (order === 'payout_comments') {
-        call_name = 'getCommentDiscussionsByPayout';
+        call_name = 'getCommentDiscussionsByPayoutAsync';
         args = [
             {
                 tag: category,

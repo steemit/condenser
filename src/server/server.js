@@ -289,6 +289,14 @@ usePostJson(app);
 useAccountRecoveryApi(app);
 useGeneralApi(app);
 
+app.use(function*(next) {
+    this.adsEnabled =
+        !(this.session.auth || this.session.a) && config.google_ad_enabled;
+    this.gptEnabled =
+        !(this.session.auth || this.session.a) && config.gpt_enabled;
+    yield next;
+});
+
 // helmet wants some things as bools and some as lists, makes config difficult.
 // our config uses strings, this splits them to lists on whitespace.
 if (env === 'production') {
@@ -312,24 +320,28 @@ if (env === 'production') {
 
     app.use(helmet.contentSecurityPolicy(helmetConfig));
     app.use(function*(next) {
-        const authed = this.session.auth || this.session.a;
-        this.adsEnabled = !authed && config.google_ad_enabled;
         if (this.adsEnabled) {
             // If user is signed out, enable ads.
-            let policy = this.response.header['content-security-policy']
-                .split(/;\s+/)
-                .map(el => {
-                    if (el.startsWith('script-src')) {
-                        const oldScriptSrc = el.replace(/^script-src/, '');
-                        return `script-src 'unsafe-inline' 'unsafe-eval' data: https: ${
-                            oldScriptSrc
-                        }`;
-                    } else {
-                        return el;
-                    }
-                })
-                .join('; ');
-            this.response.set('content-security-policy', policy);
+            [
+                'content-security-policy',
+                'x-content-security-policy',
+                'x-webkit-csp',
+            ].forEach(header => {
+                let policy = this.response.header[header]
+                    .split(/;\s+/)
+                    .map(el => {
+                        if (el.startsWith('script-src')) {
+                            const oldScriptSrc = el.replace(/^script-src/, '');
+                            return `script-src 'unsafe-inline' 'unsafe-eval' data: https: ${
+                                oldScriptSrc
+                            }`;
+                        } else {
+                            return el;
+                        }
+                    })
+                    .join('; ');
+                this.response.set(header, policy);
+            });
             yield next;
         } else {
             // If user is logged in, do not modify CSP headers further.

@@ -57,7 +57,7 @@ const SteemitNotices = ({ notices }) => {
     return (
         <div className="c-sidebar__module">
             <div className="c-sidebar__header">
-                <h3 className="c-sidebar__h3">Notices</h3>
+                <h3 className="c-sidebar__h3">Updates Log</h3>
             </div>
             <div className="c-sidebar__content">
                 <ul className="Notices">

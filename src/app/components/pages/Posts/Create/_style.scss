@@ -70,6 +70,10 @@
           }
         }
       }
+
+      textarea:focus {
+        border: 2px solid #2684ff;
+      }
     }
   }
 }

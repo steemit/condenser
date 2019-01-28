@@ -58,6 +58,7 @@ class Create extends Component {
 
   render() {
     const { type, posts } = this.state;
+    const typeString = getTypeString(type);
 
     return (
       <div className="CreateWrapper">
@@ -133,8 +134,8 @@ class Create extends Component {
             />
           </div>
           <div className="Field">
-            <div className="Label">Hypothesis Title</div>
-            <input placeholder="Hypothesis" />
+            <div className="Label">{typeString} Title</div>
+            <input placeholder={typeString} />
           </div>
           <div className="Field Multi">
             <div className="Label">Citations</div>
@@ -154,16 +155,31 @@ class Create extends Component {
           </div>
           <div className="Field">
             <div className="Label">Summary</div>
-            <input placeholder="Summary" />
+            <textarea placeholder="Summary" rows={5} />
           </div>
           <div className="Field">
-            <div className="Label">Hypothesis</div>
-            <input placeholder="Hypothesis" />
+            <div className="Label">{typeString}</div>
+            <textarea placeholder={typeString} rows={3} />
           </div>
         </div>
       </div>
     );
   }
+}
+
+function getTypeString(type) {
+  let ret = '';
+  switch (type) {
+    case 'Q':
+      ret = 'Question';
+      break;
+    case 'H':
+      ret = 'Hypothesis';
+      break;
+    default:
+      ret = 'Observation';
+  }
+  return ret;
 }
 
 module.exports = {

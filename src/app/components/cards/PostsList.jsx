@@ -11,7 +11,7 @@ import debounce from 'lodash.debounce';
 import CloseButton from 'app/components/elements/CloseButton';
 import { findParent } from 'app/utils/DomUtils';
 import Icon from 'app/components/elements/Icon';
-import GoogleAd from 'app/components/elements/GoogleAd';
+import GptAd from 'app/components/elements/GptAd';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 
 function topPosition(domElt) {
@@ -217,8 +217,8 @@ class PostsList extends React.Component {
             });
         const renderSummary = items =>
             items.map((item, i) => {
-                const every = this.props.adSlots['in_feed_1'].every;
-                if (this.props.shouldSeeAds && i >= every && i % every === 0) {
+                const every = this.props.gptSlots['in_feed'].every;
+                if (this.props.gptSlots && i >= every && i % every === 0) {
                     return (
                         <div key={item.item}>
                             <li>
@@ -231,25 +231,18 @@ class PostsList extends React.Component {
                                 />
                             </li>
 
-                            <li>
-                                <div className="articles__summary">
-                                    <div className="articles__content-block articles__content-block--ad">
-                                        <GoogleAd
-                                            name="in-feed-1"
-                                            format="fluid"
-                                            slot={
-                                                this.props.adSlots['in_feed_1']
-                                                    .slot_id
-                                            }
-                                            layoutKey={
-                                                this.props.adSlots['in_feed_1']
-                                                    .layout_key
-                                            }
-                                            style={{ display: 'block' }}
-                                        />
-                                    </div>
-                                </div>
-                            </li>
+                            <div className="articles__content-block--ad">
+                                <GptAd
+                                    slot={
+                                        this.props.gptSlots['in_feed'][
+                                            'slot_id'
+                                        ]
+                                    }
+                                    args={
+                                        this.props.gptSlots['in_feed']['args']
+                                    }
+                                />
+                            </div>
                         </div>
                     );
                 } else {
@@ -311,8 +304,7 @@ export default connect(
             .get('pinned_posts')
             .get('pinned_posts')
             .toJS();
-        const shouldSeeAds = state.app.getIn(['googleAds', 'shouldSeeAds']);
-        const adSlots = state.app.getIn(['googleAds', 'adSlots']).toJS();
+        const gptSlots = state.app.getIn(['googleAds', 'gptSlots']).toJS();
         return {
             ...props,
             pathname,
@@ -322,8 +314,7 @@ export default connect(
             pathname,
             nsfwPref,
             pinned,
-            shouldSeeAds,
-            adSlots,
+            gptSlots,
         };
     },
     dispatch => ({

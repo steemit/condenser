@@ -69,9 +69,9 @@ class SearchItem extends Component {
           </div>
           <div className="Actions">
             <FeatherIcons.MessageCircle />
-            <FeatherIcons.CornerUpLeft />
-            <FeatherIcons.CornerUpRight />
-            <FeatherIcons.Download />
+            <FeatherIcons.Share2 />
+            <FeatherIcons.CornerDownRight />
+            <FeatherIcons.Star />
           </div>
         </div>
         <div className="Votes">

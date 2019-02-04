@@ -49,7 +49,7 @@ class SearchItem extends Component {
 
   render() {
     const { data } = this.props;
-    const { id, title, type, user, votes } = data;
+    const { id, title, type, user, votes, date, reviews } = data;
     const voteCount = (votes.up || 0) - (votes.down || 0);
 
     const filteredType = this.state.type || type; //This is temporary and should be deleted.
@@ -72,6 +72,10 @@ class SearchItem extends Component {
             <FeatherIcons.Share2 />
             <FeatherIcons.CornerDownRight />
             <FeatherIcons.Star />
+          </div>
+          <div className="Extra">
+            <div className="Date">{date}</div>
+            <div className="Reviews">{reviews} Reviews</div>
           </div>
         </div>
         <div className="Votes">

@@ -103,16 +103,16 @@ export default {
       cb(null, [require('app/components/Steemit/pages/Witnesses')]);
       //});
     } else if (route.page === 'SubmitPost') {
-      // if (process.env.BROWSER) {
-      //     // require.ensure([], (require) => {
-      //     cb(null, [require('app/components/Steemit/pages/SubmitPost')]);
-      //     // });
-      // } else {
-      //     cb(null, [
-      //         require('app/components/Steemit/pages/SubmitPostServerRender'),
-      //     ]);
-      // }
-      cb(null, [require('app/components/pages/Posts/Create')]);
+      if (process.env.BROWSER) {
+        // require.ensure([], (require) => {
+        // cb(null, [require('app/components/Steemit/pages/SubmitPost')]);
+        cb(null, [require('app/components/pages/Posts/Create')]);
+        // });
+      } else {
+        cb(null, [
+          require('app/components/Steemit/pages/SubmitPostServerRender'),
+        ]);
+      }
     } else if (route.page === 'UserProfile') {
       //require.ensure([], (require) => {
       cb(null, [require('app/components/Steemit/pages/UserProfile')]);

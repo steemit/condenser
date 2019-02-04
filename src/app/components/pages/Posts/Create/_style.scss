@@ -1,14 +1,13 @@
 .CreateWrapper {
   font-family: Futura;
-  overflow: hidden;
+  overflow: auto;
 
   .Form {
-    box-shadow: 0 0 50px $color-light-grey;
+    background: white;
     max-width: 820px;
     margin: 0 auto;
     max-height: calc(100vh - 68px);
     min-height: calc(100vh - 68px);
-    overflow-y: auto;
     position: relative;
     padding: 30px 60px;
 
@@ -28,7 +27,7 @@
         min-width: 20%;
 
         span {
-          background-color: $default-green;
+          background-color: $observation;
           border-radius: 3px;
           color: $white;
           display: inline-block;
@@ -39,11 +38,15 @@
           width: 28px;
 
           &.Q {
-            background-color: $default-cyan;
+            background-color: $question;
           }
 
           &.H {
-            background-color: $default-grey;
+            background-color: $hypothesis;
+          }
+
+          &.R {
+            background-color: $review;
           }
         }
       }

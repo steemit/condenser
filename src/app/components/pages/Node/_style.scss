@@ -77,14 +77,14 @@
         text-align: center;
         width: 60px;
 
-        color: #47bf78;
+        color: $observation;
 
         &.Q {
-          color: #53d3ff;
+          color: $question;
         }
 
         &.H {
-          color: $color-grey;
+          color: $hypothesis;
         }
       }
     }
@@ -193,14 +193,14 @@
         }
 
         .Type {
-          color: #47bf78;
+          color: $observation;
 
           &.Q {
-            color: #53d3ff;
+            color: $question;
           }
 
           &.H {
-            color: $color-grey;
+            color: $hypothesis;
           }
         }
       }
@@ -254,6 +254,7 @@
     .Title {
       color: $color-black;
       font-size: 28px;
+      line-height: 1.3;
       margin-bottom: 5px;
       position: relative;
 
@@ -272,13 +273,13 @@
         width: 60px;
 
         font-family: Futura;
-        font-size: 18px;
+        font-size: 12px;
         font-weight: 400;
 
         > div {
           color: #cacaca;
           cursor: pointer;
-          height: 18px;
+          height: 12px;
           margin: 3px 0;
           position: relative;
 
@@ -348,49 +349,49 @@
       user-select: none;
 
       &.TitleFrom {
-        color: #64c272;
+        color: $observation;
         letter-spacing: -1.2px;
         margin-left: 30px;
         position: relative;
 
         &.None {
-          color: #d6d6d6;
+          color: $review;
 
           &:before {
-            background: #d6d6d6;
+            background: $review;
           }
 
           &:after {
-            border-color: #d6d6d6;
+            border-color: $review;
           }
         }
 
         &.Q {
-          color: #53d3ff;
+          color: $question;
 
           &:before {
-            background: #53d3ff;
+            background: $question;
           }
 
           &:after {
-            border-color: #53d3ff;
+            border-color: $question;
           }
         }
 
         &.H {
-          color: #b3b3b3;
+          color: $hypothesis;
 
           &:before {
-            background: #b3b3b3;
+            background: $hypothesis;
           }
 
           &:after {
-            border-color: #b3b3b3;
+            border-color: $hypothesis;
           }
         }
 
         &:before {
-          background: #64c272;
+          background: $observation;
           border: 2px solid white;
           border-radius: 50%;
           box-sizing: border-box;
@@ -404,7 +405,7 @@
         }
 
         &:after {
-          border: 2px solid #64c272;
+          border: 2px solid $observation;
           border-radius: 50%;
           content: '';
           position: absolute;

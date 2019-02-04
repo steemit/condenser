@@ -56,19 +56,15 @@ class NavBar extends Component {
           </div>
           <div className="Content">
             <div className="Menu">
+              <Link className="Item" to="/?type=Ob">
+                Ob
+                <span className="desktop">servations</span>
+              </Link>
               <Link className="Item" to="/?type=Q">
                 Q<span className="desktop">uestions</span>
               </Link>
               <Link className="Item" to="/?type=H">
                 H<span className="desktop">ypotheses</span>
-              </Link>
-              <Link className="Item" to="/?type=Ob">
-                Ob
-                <span className="desktop">servations</span>
-              </Link>
-              <Link className="Item" to="/submit.html">
-                <span className="desktop">Submit </span>
-                New
               </Link>
             </div>
             <div className="SearchContainer">

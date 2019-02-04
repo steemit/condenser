@@ -27,14 +27,14 @@
   }
 
   .Type {
-    color: #47bf78;
+    color: $observation;
 
     &.Q {
-      color: #53d3ff;
+      color: $question;
     }
 
     &.H {
-      color: $color-grey;
+      color: $hypothesis;
     }
   }
 
@@ -107,13 +107,13 @@
     width: 80px;
 
     font-family: Futura;
-    font-size: 18px;
+    font-size: 12px;
     font-weight: 400;
 
     > div {
       color: #cacaca;
       cursor: pointer;
-      height: 18px;
+      height: 12px;
       margin: 3px 0;
       position: relative;
 

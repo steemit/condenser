@@ -118,7 +118,7 @@ class Home extends Component {
             )}
           </div>
         </div>
-        <div className="RelatedItems">
+        {/* <div className="RelatedItems">
           <h1>Related</h1>
           {RelatedItems.map((item, index) => (
             <SearchRelatedItem data={item} key={`${index}-${item.id}`} />
@@ -126,7 +126,7 @@ class Home extends Component {
           <div className="More">
             <a onClick={this.updateLimit}>See more related topics</a>
           </div>
-        </div>
+        </div> */}
       </div>
     );
   }

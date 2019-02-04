@@ -1,8 +1,15 @@
 import React, { Component } from 'react';
 import Select from 'react-select';
 
+import { browserHistory } from 'react-router';
+import ReplyEditor from 'app/components/Steemit/elements/ReplyEditor';
+import { SUBMIT_FORM_ID } from 'shared/constants';
+
 import TypeSelector from 'app/components/pages/_Common/TypeSelector';
 import { Posts } from './DummyData';
+
+const formId = SUBMIT_FORM_ID;
+const SubmitReplyEditor = ReplyEditor(formId);
 
 const customStyles = {
   option: (provided, state) => ({
@@ -47,6 +54,12 @@ class Create extends Component {
       type: 'Q',
       posts: Posts,
     };
+
+    this.success = (/*operation*/) => {
+      // const { category } = operation
+      localStorage.removeItem('replyEditorData-' + formId);
+      browserHistory.push('/created'); //'/category/' + category)
+    };
   }
 
   onUpdateState(key) {
@@ -78,7 +91,7 @@ class Create extends Component {
                 type: 'Q',
                 render: () => (
                   <div>
-                    <span className="Q">Q</span> Question
+                    <span className="Q">Qu</span> Question
                   </div>
                 ),
               },
@@ -86,10 +99,18 @@ class Create extends Component {
                 type: 'H',
                 render: () => (
                   <div>
-                    <span className="H">H</span> Hypothesis
+                    <span className="H">Hy</span> Hypothesis
                   </div>
                 ),
               },
+              // {
+              //   type: 'R',
+              //   render: () => (
+              //     <div>
+              //       <span className="R">Re</span> Review
+              //     </div>
+              //   ),
+              // },
             ]}
             value={type}
             onChange={this.onUpdateState('type')}
@@ -161,6 +182,10 @@ class Create extends Component {
             <div className="Label">{typeString}</div>
             <textarea placeholder={typeString} rows={3} />
           </div>
+          <SubmitReplyEditor
+            type="submit_story"
+            successCallback={this.success}
+          />
         </div>
       </div>
     );

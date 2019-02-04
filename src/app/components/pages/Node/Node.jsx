@@ -229,7 +229,7 @@ class Node extends Component {
 
           <Sidebar.Pusher>
             <div className="NodeInfo">
-              <BrowsingHistory />
+              {/* <BrowsingHistory /> */}
               <div className="UserInfoWrapper">
                 <div className="NodeHeader">
                   <div className="Wrap">

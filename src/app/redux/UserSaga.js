@@ -53,7 +53,6 @@ export const userWatches = [
 const highSecurityPages = [
     /\/market/,
     /\/@.+\/(transfers|permissions|password)/,
-    /\/~witnesses/,
 ];
 
 function* loadSavingsWithdraw() {

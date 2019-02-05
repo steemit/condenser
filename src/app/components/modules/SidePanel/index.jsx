@@ -72,11 +72,6 @@ const SidePanel = ({ alignment, visible, hideSidePanel, username }) => {
                 label: tt('navigation.change_account_password'),
                 link: `/change_password`,
             },
-            {
-                value: 'vote_for_witnesses',
-                label: tt('navigation.vote_for_witnesses'),
-                link: `/~witnesses`,
-            },
         ],
         exchanges: [
             {

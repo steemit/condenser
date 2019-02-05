@@ -186,8 +186,6 @@
             "Account name should have only letters, digits, periods or dashes.",
         "cannot_increase_reward_of_post_within_the_last_minute_before_payout":
             "Cannot increase reward of post within the last minute before payout",
-        "vote_currently_exists_user_must_be_indicate_a_to_reject_witness":
-            "vote currently exists, user must be indicate a desire to reject witness",
         "only_one_APP_NAME_account_allowed_per_ip_address_every_10_minutes":
             "Only one Steem account allowed per IP address every 10 minutes",
         "resteem_this_post": "Resteem This Post",
@@ -258,7 +256,6 @@
         "currency_market": "Currency Market",
         "stolen_account_recovery": "Stolen Accounts Recovery",
         "change_account_password": "Change Account Password",
-        "witnesses": "Witnesses",
         "vote_for_witnesses": "Vote for Witnesses",
         "privacy_policy": "Privacy Policy",
         "terms_of_service": "Terms of Service",
@@ -498,31 +495,6 @@
             "one": "%(count)s vote",
             "other": "%(count)s votes"
         }
-    },
-    "witnesses_jsx": {
-        "witness_thread": "witness thread",
-        "external_site": "external site",
-        "disabled": "disabled",
-        "top_witnesses": "Witness Voting",
-        "you_have_votes_remaining": {
-            "zero": "You have no votes remaining",
-            "one": "You have 1 vote remaining",
-            "other": "You have %(count)s votes remaining"
-        },
-        "you_can_vote_for_maximum_of_witnesses":
-            "You can vote for a maximum of 30 witnesses",
-        "witness": "Witness",
-        "information": "Information",
-        "if_you_want_to_vote_outside_of_top_enter_account_name":
-            "If you would like to vote for a witness outside of the top 100, enter the account name below to cast a vote",
-        "set_witness_proxy":
-            "You can also choose a proxy that will vote for witnesses for you. This will reset your current witness selection.",
-        "witness_set":
-            "You have set a voting proxy. If you would like to re-enable manual voting, please clear your proxy.",
-        "witness_proxy_current": "Your current proxy is",
-        "witness_proxy_set": "Set proxy",
-        "witness_proxy_clear": "Clear proxy",
-        "proxy_update_error": "Your proxy was not updated"
     },
     "votesandcomments_jsx": {
         "no_responses_yet_click_to_respond":

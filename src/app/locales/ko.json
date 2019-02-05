@@ -177,8 +177,6 @@
             "계정명에는 알파벳과 숫자, 마침표, 대쉬만 사용 가능합니다.",
         "cannot_increase_reward_of_post_within_the_last_minute_before_payout":
             "Payout 전 마지막 순간에 게시물에 대한 보상을 늘릴 수 없습니다.",
-        "vote_currently_exists_user_must_be_indicate_a_to_reject_witness":
-            "vote currently exists, user must be indicate a desire to reject witness",
         "only_one_APP_NAME_account_allowed_per_ip_address_every_10_minutes":
             "매 10 분마다 IP 주소 당 단 하나의 Steem 계정만 허용됩니다.",
         "resteem_this_post": "Resteem This Post",
@@ -472,29 +470,6 @@
             "one": "%(count)s 보팅",
             "other": "%(count)s 보팅"
         }
-    },
-    "witnesses_jsx": {
-        "witness_thread": "witness thread",
-        "top_witnesses": "증인 투표",
-        "you_have_votes_remaining": {
-            "zero": "더이상 투표 하실 수 없습니다.",
-            "one": "현재 1명에게 투표하실 수 있습니다.",
-            "other": "현재 %(count)s명에게 투표하실 수 있습니다."
-        },
-        "you_can_vote_for_maximum_of_witnesses":
-            "최대 30명에게 투표하실 수 있습니다.",
-        "witness": "증인",
-        "information": "Information",
-        "if_you_want_to_vote_outside_of_top_enter_account_name":
-            "상위 100위권 밖에 계신 분에게 증인 투표를 하시려면 아래 칸에 해당하는 분의 계정명을 입력하세요.",
-        "set_witness_proxy":
-            "You can also choose a proxy that will vote for witnesses for you. This will reset your current witness selection.",
-        "witness_set":
-            "이미 투표 위임 설정을 하셨습니다. 다시 증인 투표를 하시려면 위임을 철회하십시오.",
-        "witness_proxy_current": "당신의 투표 권한을 위임한 증인: ",
-        "witness_proxy_set": "위임 설정",
-        "witness_proxy_clear": "위임 철회",
-        "proxy_update_error": "Your proxy was not updated"
     },
     "votesandcomments_jsx": {
         "no_responses_yet_click_to_respond":

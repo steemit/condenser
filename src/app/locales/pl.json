@@ -175,8 +175,6 @@
             "Nazwa konta powinna zawierać wyłącznie litery, cyfry, kropki lub myślniki",
         "cannot_increase_reward_of_post_within_the_last_minute_before_payout":
             "Nie można zwiększyć nagrody za post w ostatnich chwilach przed wypłatą",
-        "vote_currently_exists_user_must_be_indicate_a_to_reject_witness":
-            "głos oddany, użytkownik musi wskazać powód odrzucenia delegata",
         "only_one_APP_NAME_account_allowed_per_ip_address_every_10_minutes":
             "Dozwolone jest tylko jedno konto Steem dla danego adresu IP w ciągu 10 minut",
         "resteem_this_post": "Resteemuj ten post",
@@ -460,29 +458,6 @@
             "one": "%(count)s głos",
             "other": "%(count)s głosów"
         }
-    },
-    "witnesses_jsx": {
-        "witness_thread": "wątek delegata",
-        "top_witnesses": "Głosowanie na delegatów",
-        "you_have_votes_remaining": {
-            "zero": "Nie masz już więcej głosów",
-            "one": "Pozostał ci 1 głos",
-            "other": "Pozostało ci %(count)s głosów"
-        },
-        "you_can_vote_for_maximum_of_witnesses":
-            "Możesz głosować co najwyżej na 30 delegatów",
-        "witness": "Delegat",
-        "information": "Informacja",
-        "if_you_want_to_vote_outside_of_top_enter_account_name":
-            "Jeśli chcesz zagłosować na delegata spoza pierwszej 100, podaj nazwę konta na które chcesz oddać głos",
-        "set_witness_proxy":
-            "Możesz również wybrać pełnomocnika, który zagłosuje na delegatów za ciebie. Wybór pełnomocnika wyczyści twoje bieżące głosy.",
-        "witness_set":
-            "Wybrałeś pełnomocnika. Jeśli chcesz wrócić do ręcznego oddawania głosów, usuń pełnomocnika.",
-        "witness_proxy_current": "Twoim pełnomocnikiem jest",
-        "witness_proxy_set": "Ustaw pełnomocnika",
-        "witness_proxy_clear": "Wyczyść pełnomocnika",
-        "proxy_update_error": "Twój pełnomocnik nie został zaktualizowany"
     },
     "votesandcomments_jsx": {
         "no_responses_yet_click_to_respond":

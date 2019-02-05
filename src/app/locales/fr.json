@@ -186,8 +186,6 @@
             "L'identifiant ne peut comporter que des lettres, des chiffres, des points ou des traits d'union.",
         "cannot_increase_reward_of_post_within_the_last_minute_before_payout":
             "Les gains d'un article ne peuvent être accrus durant la dernière minute avant rétribution.",
-        "vote_currently_exists_user_must_be_indicate_a_to_reject_witness":
-            "un vote existe actuellement; l'utilisateur doit indiquer une raison pour rejeter le témoin",
         "only_one_APP_NAME_account_allowed_per_ip_address_every_10_minutes":
             "Un seul compte Steem est permis par adresse IP toutes les 10 minutes",
         "resteem_this_post": "Resteemer cet article",
@@ -489,29 +487,6 @@
             "one": "%(count)s vote",
             "other": "%(count)s votes"
         }
-    },
-    "witnesses_jsx": {
-        "witness_thread": "article introductif pour le témoin",
-        "top_witnesses": "Votes pour les témoins",
-        "you_have_votes_remaining": {
-            "zero": "Il ne vous reste plus de vote disponible",
-            "one": "Il vous reste 1 vote disponible",
-            "other": "Il vous reste %(count)s votes disponibles"
-        },
-        "you_can_vote_for_maximum_of_witnesses":
-            "Vous pouvez voter pour un maximum de 30 témoins",
-        "witness": "Témoin",
-        "information": "Information",
-        "if_you_want_to_vote_outside_of_top_enter_account_name":
-            "Si vous voulez voter pour un témoin en dehors du top 100, veuille entrer le nom du compte concerné ci-dessous afin de voter pour lui",
-        "set_witness_proxy":
-            "Vous pouvez aussi donner une procuration à quelqu'un qui votera pour les témoins en votre nom. Cela annulera votre choix de témoins actuels.",
-        "witness_set":
-            "Vous avez donné une procuration pour le vote des témoins. Si vous voulez réactiver le vote manuel, veuillez annuler votre procuration.",
-        "witness_proxy_current": "Vous avez donné une procuration à",
-        "witness_proxy_set": "Donner une procuration",
-        "witness_proxy_clear": "Annuler la procuration",
-        "proxy_update_error": "Votre procuration n'a pas été mise à jour"
     },
     "votesandcomments_jsx": {
         "no_responses_yet_click_to_respond":

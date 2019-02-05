@@ -175,8 +175,6 @@
             "Имя аккаунта должно должно состоять только из букв, цифр или дефисов.",
         "cannot_increase_reward_of_post_within_the_last_minute_before_payout":
             "Не удается увеличить вознаграждение за пост в последнюю минуту перед выплатой",
-        "vote_currently_exists_user_must_be_indicate_a_to_reject_witness":
-            "голос уже существует, пользователь должен обозначить желание убрать делегата",
         "only_one_APP_NAME_account_allowed_per_ip_address_every_10_minutes":
             "Только один Steem аккаунт разрешен с одного IP адреса каждые десять минут",
         "resteem_this_post": "Поделиться этим постом",
@@ -490,31 +488,6 @@
             "many": "%(count)s голосов",
             "other": "%(count)s голосов"
         }
-    },
-    "witnesses_jsx": {
-        "witness_thread": "пост делегата",
-        "top_witnesses": "Топ делегатов",
-        "you_have_votes_remaining": {
-            "zero": "У Вас не осталось голосов",
-            "one": "У Вас остался 1 голос",
-            "few": "У Вас осталось %(count)s голоса",
-            "many": "У Вас осталось %(count)s голосов",
-            "other": "У Вас осталось %(count)s голосов"
-        },
-        "you_can_vote_for_maximum_of_witnesses":
-            "Вы можете голосовать максимум за 30 делегатов",
-        "witness": "Делегаты",
-        "information": "Информация",
-        "if_you_want_to_vote_outside_of_top_enter_account_name":
-            "Если вы хотите проголосовать за делегата вне top 100, введите имя аккаунта ниже",
-        "set_witness_proxy":
-            "Вы также можете выбрать прокси, который будет вместо вас голосовать за делегатов. Это сбросит ваш текущий выбор делегата.",
-        "witness_set":
-            "Вы установили прокси для голосования. Если вы хотите голосовать вручную, пожалуйста, очистите ваш прокси.",
-        "witness_proxy_current": "Ваш текущий прокси",
-        "witness_proxy_set": "Установить прокси",
-        "witness_proxy_clear": "Очистить прокси",
-        "proxy_update_error": "Ваш прокси не был обновлен"
     },
     "votesandcomments_jsx": {
         "no_responses_yet_click_to_respond":

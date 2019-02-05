@@ -44,7 +44,6 @@ module.exports = {
                     best: ['slug', 'slug'],
                 },
                 proxy: null,
-                witness_votes: [],
             },
         },
     },

@@ -59,7 +59,6 @@ describe('Global reducer', () => {
         const payload = {
             account: {
                 name: 'foo',
-                witness_votes: 99,
                 beList: ['alice', 'bob', 'claire'],
                 beOrderedMap: { foo: 'barman' },
             },
@@ -70,7 +69,6 @@ describe('Global reducer', () => {
             accounts: Map({
                 foo: Map({
                     name: 'foo',
-                    witness_votes: 99,
                     be_List: List(['alice', 'bob', 'claire']),
                     be_orderedMap: OrderedMap({ foo: 'barman' }),
                 }),
@@ -96,13 +94,11 @@ describe('Global reducer', () => {
             accounts: [
                 {
                     name: 'foo',
-                    witness_votes: 99,
                     beList: ['alice', 'bob', 'claire'],
                     beorderedMap: { foo: 'barman' },
                 },
                 {
                     name: 'bar',
-                    witness_votes: 12,
                     beList: ['james', 'billy', 'samantha'],
                     beOrderedMap: { kewl: 'snoop' },
                 },
@@ -115,7 +111,6 @@ describe('Global reducer', () => {
             accounts: Map({
                 sergei: Map({
                     name: 'sergei',
-                    witness_votes: 666,
                     beList: List(['foo', 'carl', 'hanna']),
                     beorderedMap: OrderedMap({ foo: 'cramps' }),
                 }),
@@ -129,7 +124,6 @@ describe('Global reducer', () => {
             accounts: Map({
                 sergei: Map({
                     name: 'sergei',
-                    witness_votes: 666,
                     beList: List(['foo', 'carl', 'hanna']),
                     beorderedMap: OrderedMap({
                         foo: 'cramps',
@@ -137,13 +131,11 @@ describe('Global reducer', () => {
                 }),
                 foo: Map({
                     name: 'foo',
-                    witness_votes: 99,
                     beList: List(['alice', 'bob', 'claire']),
                     beorderedMap: OrderedMap({ foo: 'barman' }),
                 }),
                 bar: Map({
                     name: 'bar',
-                    witness_votes: 12,
                     beList: List(['james', 'billy', 'samantha']),
                     beOrderedMap: OrderedMap({ kewl: 'snoop' }),
                 }),

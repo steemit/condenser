@@ -335,34 +335,8 @@
             "次のスレッドのコメントの1つを表示しています "
     },
     "recoveraccountstep1_jsx": {
-        "begin_recovery": "回復を開始する",
-        "not_valid": "無効です",
-        "account_name_is_not_found": "アカウント名が存在しません",
-        "unable_to_recover_account_not_change_ownership_recently":
-            "このアカウントは最近パスワードが変更されていないため回復できません。",
-        "password_not_used_in_last_days":
-            "このパスワードは30日以内にこのアカウントで使用されていません。",
-        "request_already_submitted_contact_support":
-            "リクエストは既に送信されていて、現在作業中です。リクエストの状況については%(SUPPORT_EMAIL)sにお問い合わせください。",
         "recover_account_intro":
-            "時折、Steemianのオーナーキーが盗まれることがあります。盗難アカウントの回復は、盗んだ者がオーナーキーを変更してから30日以内に、アカウントの正しい所有者にアカウントを取り戻します。盗難アカウントの回復は、アカウントの所有者が'%(APP_NAME)s'をアカウント受託者とし、%(APP_NAME)sの利用規約に準拠している場合にのみ%(APP_URL)sで行うことができます。",
-        "login_with_facebook_or_reddit_media_to_verify_identity":
-            "FacebookまたはRedditにログインして本人確認をしてください。",
-        "login_with_social_media_to_verify_identity":
-            "%(provider)sにログインして本人確認をしてください。",
-        "enter_email_toverify_identity":
-            "本人確認が必要です。確認するには以下の欄にメールアドレスを入力してください。",
-        "continue_with_email": "メールアドレスで続ける",
-        "thanks_for_submitting_request_for_account_recovery":
-            "%(APP_NAME)sのブロックチェーンベースマルチファクタ認証を使用してアカウント回復のリクエストを送信していただきありがとうございます。出来る限り早く返答いたしますが、多数のメールが来ているため返答が遅れることがあることをご了承ください。本人確認の準備をしておいてください。",
-        "recovering_account": "アカウント回復中",
-        "recover_account": "アカウント回復",
-        "checking_account_owner": "アカウント所有者を確認しています",
-        "sending_recovery_request": "回復リクエストを送信しています",
-        "cant_confirm_account_ownership":
-            "アカウントの所有者を確認できません。パスワードを確認してください。",
-        "account_recovery_request_not_confirmed":
-            "アカウント回復リクエストはまだ確認されていません。しばらくお待ちいただき、後ほどもう一度ご確認ください。"
+            "時折、Steemianのオーナーキーが盗まれることがあります。盗難アカウントの回復は、盗んだ者がオーナーキーを変更してから30日以内に、アカウントの正しい所有者にアカウントを取り戻します。盗難アカウントの回復は、アカウントの所有者が'%(APP_NAME)s'をアカウント受託者とし、%(APP_NAME)sの利用規約に準拠している場合にのみ%(APP_URL)sで行うことができます。"
     },
     "user_profile": {
         "unknown_account": "不明なアカウント",

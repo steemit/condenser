@@ -118,10 +118,7 @@ class Header extends React.Component {
             page_title = `Pick Your New Steemit Account`;
         } else if (route.page == 'Approval') {
             page_title = `Account Confirmation`;
-        } else if (
-            route.page == 'RecoverAccountStep1' ||
-            route.page == 'RecoverAccountStep2'
-        ) {
+        } else if (route.page == 'RecoverAccountStep1') {
             page_title = tt('header_jsx.stolen_account_recovery');
         } else if (route.page === 'UserProfile') {
             let user_name = route.params[0].slice(1);

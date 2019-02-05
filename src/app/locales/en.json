@@ -347,34 +347,8 @@
             "You are viewing a single comment's thread from"
     },
     "recoveraccountstep1_jsx": {
-        "begin_recovery": "Begin Recovery",
-        "not_valid": "Not valid",
-        "account_name_is_not_found": "Account name is not found",
-        "unable_to_recover_account_not_change_ownership_recently":
-            "We are unable to recover this account, it has not changed ownership recently.",
-        "password_not_used_in_last_days":
-            "This password was not used on this account in the last 30 days.",
-        "request_already_submitted_contact_support":
-            "Your request has been already submitted and we are working on it. Please contact %(SUPPORT_EMAIL)s for the status of your request.",
         "recover_account_intro":
-            "From time to time, a Steemian's owner key may be compromised. Stolen Account Recovery gives the rightful account owner 30 days to recover their account from the moment the thief changed their owner key. Stolen Account Recovery can only be used on %(APP_URL)s if the account owner had previously listed '%(APP_NAME)s' as their account trustee and complied with %(APP_NAME)s's Terms of Service.",
-        "login_with_facebook_or_reddit_media_to_verify_identity":
-            "Please login with Facebook or Reddit to verify your identity",
-        "login_with_social_media_to_verify_identity":
-            "Please login with %(provider)s to verify your identity",
-        "enter_email_toverify_identity":
-            "We need to verify your identity. Please enter your email address below to begin the verification.",
-        "continue_with_email": "Continue with Email",
-        "thanks_for_submitting_request_for_account_recovery":
-            "Thanks for submitting your request for Account Recovery using %(APP_NAME)s's blockchain-based multi factor authentication. We will respond to you as quickly as possible, however, please expect there may be some delay in response due to high volume of emails. Please be prepared to verify your identity.",
-        "recovering_account": "Recovering account",
-        "recover_account": "Recover Account",
-        "checking_account_owner": "Checking account owner",
-        "sending_recovery_request": "Sending recovery request",
-        "cant_confirm_account_ownership":
-            "We can't confirm account ownership. Check your password",
-        "account_recovery_request_not_confirmed":
-            "Account recovery request is not confirmed yet, please get back later, thank you for your patience."
+            "From time to time, a Steemian's owner key may be compromised. Stolen Account Recovery gives the rightful account owner 30 days to recover their account from the moment the thief changed their owner key. Stolen Account Recovery can only be used on %(APP_URL)s if the account owner had previously listed '%(APP_NAME)s' as their account trustee and complied with %(APP_NAME)s's Terms of Service."
     },
     "user_profile": {
         "unknown_account": "Unknown Account",

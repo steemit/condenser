@@ -338,35 +338,8 @@
             "Stai visualizzando il commento singolo di un thread di "
     },
     "recoveraccountstep1_jsx": {
-        "begin_recovery": "Inizia il Ripristino",
-        "not_valid": "Non valido",
-        "account_name_is_not_found": "Nome account non trovato",
-        "unable_to_recover_account_not_change_ownership_recently":
-            "Non possiamo recuperare questo account, non ha cambiato proprietario di recente. ",
-        "password_not_used_in_last_days":
-            "Questa password non viene usata per questo account da 30 giorni. ",
-        "request_already_submitted_contact_support":
-            "La tua richiesta è stata già inviata e la stiamo lavorando. Puoi contattare %(SUPPORT_EMAIL)sper verificare lo stato della tua richiesta.",
         "recover_account_intro":
-            "Può succedere che ogni tanto la chiave personale di un membro di Steemit possa essere compromessa. La funzione \"Recupera account rubato\" dà 30 giorni al legittimo proprietario dell'account per recuperarlo dal momento in cui il ladro cambia la chiave personale. \"Recupera account rubato\" può essere usato solo su %(APP_URL)s se il proprietario dell'account ha precedentemente inserito %(APP_NAME)s come account fidato e accettato i Termini di Servizio di %(APP_NAME)s.",
-        "login_with_facebook_or_reddit_media_to_verify_identity":
-            "Effettua il login con Facebook o Reddit per verificare la tua identità ",
-        "login_with_social_media_to_verify_identity":
-            "Effettua il login con   %(provider)s per verificare la tua identità",
-        "enter_email_toverify_identity":
-            "Abbiamo bisogno di verificare la tua identità. Inserisci di seguito il tuo indirizzo email per iniziare la verifica. ",
-        "continue_with_email": "Continua con l'email",
-        "thanks_for_submitting_request_for_account_recovery":
-            "Grazie per aver immesso la tua richiesta per Ripristinare il tuo Account usando l'autenticazione multi fattoriale basata sulla blockchain di %(APP_NAME)s. Ti risponderemo il prima possibile, comunque  considera che potrebbero esserci ritardi nella risposta a causa del grade volume di email. Preparati a verificare la tua identità.",
-        "recovering_account": "Stiamo recuperando l'account",
-        "recover_account": "Recupero Account",
-        "checking_account_owner":
-            "Stiamo controllando il proprietario dell'account",
-        "sending_recovery_request": "Invia richiesta di recupero ",
-        "cant_confirm_account_ownership":
-            "Non siamo riusciti a confermare la proprietà dell'account. Controlla la password.",
-        "account_recovery_request_not_confirmed":
-            "La richiesta di recupero account non è ancora stata confermata. Per favore, ritorna tra un po'. Grazie per la pazienza! "
+            "Può succedere che ogni tanto la chiave personale di un membro di Steemit possa essere compromessa. La funzione \"Recupera account rubato\" dà 30 giorni al legittimo proprietario dell'account per recuperarlo dal momento in cui il ladro cambia la chiave personale. \"Recupera account rubato\" può essere usato solo su %(APP_URL)s se il proprietario dell'account ha precedentemente inserito %(APP_NAME)s come account fidato e accettato i Termini di Servizio di %(APP_NAME)s."
     },
     "user_profile": {
         "unknown_account": "Account sconosciuto",

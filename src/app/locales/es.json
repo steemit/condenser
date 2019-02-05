@@ -331,34 +331,8 @@
             "Estás viendo  los comentarios relacionados de"
     },
     "recoveraccountstep1_jsx": {
-        "begin_recovery": "Empezar Recuperación",
-        "not_valid": "No es válido",
-        "account_name_is_not_found": "Nombre de usuario no encontrado",
-        "unable_to_recover_account_not_change_ownership_recently":
-            "No podemos recuperar esta cuenta, esta no ha cambiado su propiedad recientemente.",
-        "password_not_used_in_last_days":
-            "Esta contraseña no ha sido usada en esta cuenta en los últimos 30 días.",
-        "request_already_submitted_contact_support":
-            "Tu petición ha sido enviada y estamos trabajando en ella. Por favor contacta %(SUPPORT_EMAIL)s para ver el estado de la misma.",
         "recover_account_intro":
-            "Puede ocurrir que la owner key de algún usuario se vea comprometida. La funcionalidad de recuperación de contraseñas robadas le da al propietario de la cuenta 30 días para recuperar su cuenta desde el mismo momento que el delincuente ha cambiado la owner key. Esta funcionalidad sólo puede ser usada en %(APP_URL)s si el propietario de la cuenta ha incluído %(APP_NAME)s como su cuenta de confianza y además a comulgado con las condiciones y términos de servicio de %(APP_NAME)s",
-        "login_with_facebook_or_reddit_media_to_verify_identity":
-            "Por favor accede con Fabebook o Reddit para verificar tu identidad",
-        "login_with_social_media_to_verify_identity":
-            "Por favor entra con %(provider)s para verificar tu identidad",
-        "enter_email_toverify_identity":
-            "Necesitamos verificar tu identidad. Por favor introduce tu dirección de correo electrónico debajo para empezar la verificación.",
-        "continue_with_email": "Continuar con correo electrónico",
-        "thanks_for_submitting_request_for_account_recovery":
-            "Gracias por enviar tu petición a nuestro sistema de recuperación de contraseñas usando %(APP_NAME)s basado en la autentificación multi factor. Tan pronto como sea posible recibirás una respuesta, sim embargo, puede que haya algún retraso debido al alto volumen de peticiones. Por favor, esté preparado para verificar su identidad.",
-        "recovering_account": "Recuperando cuenta",
-        "recover_account": "Recuperar Cuenta",
-        "checking_account_owner": "Comprobando propietario de la cuenta",
-        "sending_recovery_request": "Enviando solicitud de recuperación ",
-        "cant_confirm_account_ownership":
-            "No podemos confirmar la propiedad de la cuenta. Comprueba tu contraseña",
-        "account_recovery_request_not_confirmed":
-            "La solicitud de recuperación de cuenta no está confirmada todavía, por favor vuelve más tarde, gracias por tu paciencia."
+            "Puede ocurrir que la owner key de algún usuario se vea comprometida. La funcionalidad de recuperación de contraseñas robadas le da al propietario de la cuenta 30 días para recuperar su cuenta desde el mismo momento que el delincuente ha cambiado la owner key. Esta funcionalidad sólo puede ser usada en %(APP_URL)s si el propietario de la cuenta ha incluído %(APP_NAME)s como su cuenta de confianza y además a comulgado con las condiciones y términos de servicio de %(APP_NAME)s"
     },
     "user_profile": {
         "unknown_account": "Cuenta desconocida",

@@ -58,11 +58,6 @@ const SidePanel = ({ alignment, visible, hideSidePanel, username }) => {
                 link: `/tags`,
             },
             {
-                value: 'recover_account_step_1',
-                label: tt('navigation.stolen_account_recovery'),
-                link: `/recover_account_step_1`,
-            },
-            {
                 value: 'change_password',
                 label: tt('navigation.change_account_password'),
                 link: `/change_password`,

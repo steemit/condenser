@@ -54,17 +54,6 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
             pinned_posts: await ctx.app.pinnedPostsPromise,
             login_challenge,
         };
-        if (ctx.session.arec) {
-            const account_recovery_record = await models.AccountRecoveryRequest.findOne(
-                {
-                    attributes: ['id', 'account_name', 'status', 'provider'],
-                    where: { id: ctx.session.arec, status: 'confirmed' },
-                }
-            );
-            if (account_recovery_record) {
-                offchain.recover_account = account_recovery_record.account_name;
-            }
-        }
 
         const googleAds = {
             shouldSeeAds: !!ctx.adsEnabled,

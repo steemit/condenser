@@ -74,10 +74,6 @@ export default {
             //require.ensure([], (require) => {
             cb(null, [require('app/components/pages/RecoverAccountStep1')]);
             //});
-        } else if (route.page === 'RecoverAccountStep2') {
-            //require.ensure([], (require) => {
-            cb(null, [require('app/components/pages/RecoverAccountStep2')]);
-            //});
         } else if (route.page === 'WaitingList') {
             //require.ensure([], (require) => {
             cb(null, [require('app/components/pages/WaitingList')]);

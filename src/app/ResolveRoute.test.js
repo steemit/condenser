@@ -45,7 +45,6 @@ describe('resolveRoute', () => {
         ['/approval', { page: 'Approval' }],
         ['/pick_account', { page: 'NotFound' }],
         ['/recover_account_step_1', { page: 'RecoverAccountStep1' }],
-        ['/recover_account_step_2', { page: 'RecoverAccountStep2' }],
         ['/waiting_list.html', { page: 'WaitingList' }],
         ['/market', { page: 'Market' }],
         ['/~witnesses', { page: 'Witnesses' }],

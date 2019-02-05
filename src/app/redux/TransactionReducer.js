@@ -12,7 +12,6 @@ const DISMISS_ERROR = 'transaction/DISMISS_ERROR';
 const SET = 'transaction/SET';
 const REMOVE = 'transaction/REMOVE';
 // Saga-related
-export const RECOVER_ACCOUNT = 'transaction/RECOVER_ACCOUNT';
 const defaultState = fromJS({
     operations: [],
     status: { key: '', error: false, busy: false },
@@ -237,10 +236,5 @@ export const set = payload => ({
 
 export const remove = payload => ({
     type: REMOVE,
-    payload,
-});
-
-export const recoverAccount = payload => ({
-    type: RECOVER_ACCOUNT,
     payload,
 });

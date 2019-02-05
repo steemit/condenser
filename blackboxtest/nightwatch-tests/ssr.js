@@ -19,7 +19,6 @@ module.exports = {
             '/create_account',
             '/approval',
             '/recover_account_step_1',
-            '/recover_account_step_2',
             '/waiting_list.html',
             '/market',
             '/submit.html',

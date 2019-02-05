@@ -34,10 +34,6 @@
     "signing_key": "SDC_REGISTRAR_SIGNINGKEY",
     "delegation": "SDC_REGISTRAR_DELEGATION"
   },
-  "requestAccountRecovery": {
-    "recovery_account": "SDC_RECOVERY_ACCOUNT",
-    "signing_key": "SDC_RECOVERY_SIGNINGKEY"
-  },
   "sendgrid": {
     "from": "SDC_SENDGRID_FROM",
     "key": "SDC_SENDGRID_API_KEY",

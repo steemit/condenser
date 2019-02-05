@@ -348,35 +348,6 @@
         "you_are_viewing_a_single_comments_thread_from":
             "Vous visualisez un commentaire unique de l'article"
     },
-    "market_jsx": {
-        "action": "Action",
-        "date_created": "Date de création",
-        "last_price": "Dernier cours",
-        "24h_volume": "Volume des dernières 24h",
-        "spread": "Ecart",
-        "total": "Total",
-        "available": "Disponible",
-        "lowest_ask": "Demande au taux le plus bas",
-        "highest_bid": "Offre au taux le plus haut",
-        "buy_orders": "Ordres d'achat",
-        "sell_orders": "Ordres de vente",
-        "trade_history": "Historique des échanges",
-        "open_orders": "Ordres ouverts",
-        "sell_amount_for_atleast":
-            "Vendre %(amount_to_sell)s pour au moins %(min_to_receive)s ( %(effectivePrice)s )",
-        "buy_atleast_amount_for":
-            "Acheter au moins %(min_to_receive)s pour %(amount_to_sell)s ( %(effectivePrice)s )",
-        "price_warning_above":
-            "Ce cours est bien au-delà des cours du marché actuels %(marketPrice)s, êtes-vous sûr (e) ?",
-        "price_warning_below":
-            "Ce cours est bien en-deça des cours du marché actuels %(marketPrice)s, êtes-vous sûr (e) ?",
-        "order_cancel_confirm": "Annuler l'ordre %(order_id)s de %(user)s",
-        "order_cancelled": "Ordre %(order_id)s annulé.",
-        "higher": "Plus haut",
-        "lower": "Plus bas",
-        "total_DEBT_TOKEN_SHORT_CURRENCY_SIGN":
-            "Total %(DEBT_TOKEN_SHORT)s (%(CURRENCY_SIGN)s)"
-    },
     "recoveraccountstep1_jsx": {
         "begin_recovery": "Démarrer la récupération",
         "not_valid": "Invalide",

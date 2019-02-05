@@ -324,35 +324,6 @@
         "you_are_viewing_a_single_comments_thread_from":
             "Przeglądasz wątek pojedynczego komentarza"
     },
-    "market_jsx": {
-        "action": "Akcja",
-        "date_created": "Data utworzenia",
-        "last_price": "Ostatnia cena",
-        "24h_volume": "Wolumen 24h",
-        "spread": "Spread",
-        "total": "Razem",
-        "available": "Dostępne",
-        "lowest_ask": "Najniższa oferta sprzedaży (ASK)",
-        "highest_bid": "Najwyższa oferta kupna (BID)",
-        "buy_orders": "Oferty zakupu",
-        "sell_orders": "Oferty sprzedaży",
-        "trade_history": "Historia transakcji",
-        "open_orders": "Otwarte oferty",
-        "sell_amount_for_atleast":
-            "Sprzedaj %(amount_to_sell)s za co najmniej %(min_to_receive)s (%(effectivePrice)s)",
-        "buy_atleast_amount_for":
-            "Kup przynajmniej %(min_to_receive)s za %(amount_to_sell)s (%(effectivePrice)s)",
-        "price_warning_above":
-            "Ta cena jest sporo wyższa od aktualnych cen rynkowych %(marketPrice)s, czy jesteś pewien(na)?",
-        "price_warning_below":
-            "Ta cena jest sporo niższa od aktualnych cen rynkowych %(marketPrice)s, czy jesteś pewien(na)?",
-        "order_cancel_confirm": "Anulować ofertę %(order_id)s od %(user)s?",
-        "order_cancelled": "Oferta %(order_id)s anulowana.",
-        "higher": "Wyżej",
-        "lower": "Niżej",
-        "total_DEBT_TOKEN_SHORT_CURRENCY_SIGN":
-            "Razem %(DEBT_TOKEN_SHORT)s (%(CURRENCY_SIGN)s)"
-    },
     "recoveraccountstep1_jsx": {
         "begin_recovery": "Rozpocznij odzyskiwanie konta",
         "not_valid": "Wartość niepoprawna",

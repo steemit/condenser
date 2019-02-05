@@ -58,11 +58,6 @@ const SidePanel = ({ alignment, visible, hideSidePanel, username }) => {
                 link: `/tags`,
             },
             {
-                value: 'market',
-                label: tt('navigation.currency_market'),
-                link: `/market`,
-            },
-            {
                 value: 'recover_account_step_1',
                 label: tt('navigation.stolen_account_recovery'),
                 link: `/recover_account_step_1`,

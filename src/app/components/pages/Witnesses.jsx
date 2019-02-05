@@ -4,13 +4,13 @@ import tt from 'counterpart';
 
 class Witnesses extends React.Component {
     render() {
-        // TODO: set witness voting URL
         return (
-            <div className="Witnesses">
-                <div className="row">
-                    <div className="column">
-                        <h2><Link to="https://steemit.com">{tt('navigation.vote_for_witnesses')}</Link></h2>
-                    </div>
+            <div className="row">
+                <div className="column">
+                    {tt('g.external_link_message')}{': '}
+                    <Link to={`{$STM_Config.wallet_url}/~witnesses`}>
+                        {tt('navigation.vote_for_witnesses')}
+                    </Link>
                 </div>
             </div>
         );

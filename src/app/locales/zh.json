@@ -166,8 +166,6 @@
             "帐户名称应该只有字母、数字或破折号",
         "cannot_increase_reward_of_post_within_the_last_minute_before_payout":
             "在收到奖励前的最后一分钟内不能增加奖励",
-        "vote_currently_exists_user_must_be_indicate_a_to_reject_witness":
-            "已经投过此见证人，你是否想取消此见证人的投票",
         "only_one_APP_NAME_account_allowed_per_ip_address_every_10_minutes":
             "每10分钟一个IP地址只允许一个Steem账号",
         "resteem_this_post": "转发这这篇文章",
@@ -434,28 +432,6 @@
             "one": "%(count)s个投票",
             "other": "%(count)s个投票"
         }
-    },
-    "witnesses_jsx": {
-        "witness_thread": "见证人帖子",
-        "top_witnesses": "见证人投票",
-        "you_have_votes_remaining": {
-            "zero": "你无剩余选票",
-            "one": "你还剩1张选票",
-            "other": "你还剩%(count)s张选票"
-        },
-        "you_can_vote_for_maximum_of_witnesses": "你最多可以投票30位见证人",
-        "witness": "见证人",
-        "information": "信息",
-        "if_you_want_to_vote_outside_of_top_enter_account_name":
-            "如果你想为100名以外的见证人投票，请输入帐户名称进行投票",
-        "set_witness_proxy":
-            "你也可以指定代理人来代替你给见证人投票。这将重置你当前的见证人选择。",
-        "witness_set":
-            "你已经设置投票代理。如果你想重新启用手动投票，请清除你的代理。",
-        "witness_proxy_current": "你当前的投票代理人是",
-        "witness_proxy_set": "设置投票代理",
-        "witness_proxy_clear": "清除投票代理",
-        "proxy_update_error": "你的投票代理未更新"
     },
     "votesandcomments_jsx": {
         "no_responses_yet_click_to_respond": "暂无回复。点击回复。",

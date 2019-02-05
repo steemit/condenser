@@ -178,8 +178,6 @@
             "Il nome account deve essere composto solo da lettere, cifre, punti o trattini.",
         "cannot_increase_reward_of_post_within_the_last_minute_before_payout":
             "Non è possibile aumentare le ricompense del post durante l'ultimo minuto prima del pagamento",
-        "vote_currently_exists_user_must_be_indicate_a_to_reject_witness":
-            "Attualmente il voto esiste, l'utente deve indicare la volonta di rigettare il witness ",
         "only_one_APP_NAME_account_allowed_per_ip_address_every_10_minutes":
             "è possibile utilizzare un solo Steem account per indirizzo IP ogni 10 minuti",
         "resteem_this_post": "Fai il resteem di questo post",
@@ -479,29 +477,6 @@
             "one": "%(count)s voto",
             "other": "%(count)s voti"
         }
-    },
-    "witnesses_jsx": {
-        "witness_thread": "witness thread",
-        "top_witnesses": "Voto Witness ",
-        "you_have_votes_remaining": {
-            "zero": "Non hai voti residui",
-            "one": "Ti resta 1 voto",
-            "other": "Hai %(count)svoti residui"
-        },
-        "you_can_vote_for_maximum_of_witnesses":
-            "Puoi votare un massimo di 30 witness",
-        "witness": "Witness",
-        "information": "Informazioni",
-        "if_you_want_to_vote_outside_of_top_enter_account_name":
-            "Se desideri votare un witness al di fuori della top 100, inserisci di seguito il nome account per effettuare il voto. ",
-        "set_witness_proxy":
-            "Puoi anche scegliere un proxy che voterà i witnesses per te. Questo resetterà la tua attuale selezione di testimoni.",
-        "witness_set":
-            "Hai settato un proxy di voto. Se volessi riabilitare il voto manuale, cancella il tuo proxy.",
-        "witness_proxy_current": "Il tuo attuale proxy è:",
-        "witness_proxy_set": "Setta il proxy",
-        "witness_proxy_clear": "Cancella il proxy",
-        "proxy_update_error": "Il tuo proxy non è aggiornato"
     },
     "votesandcomments_jsx": {
         "no_responses_yet_click_to_respond":

@@ -260,49 +260,6 @@ describe('Global reducer', () => {
         // Assert
         expect(actual).toEqual(initial);
     });
-    it('should return correct state for a UPDATE_ACCOUNT_WITNESS_VOTE action', () => {
-        // Arrange
-        let payload = {
-            account: 'Smee',
-            witness: 'Greech',
-            approve: true,
-        };
-        const initial = reducer();
-        // Act
-        let actual = reducer(
-            initial,
-            globalActions.updateAccountWitnessVote(payload)
-        );
-        // Assert
-        expect(
-            actual.getIn(['accounts', payload.account, 'witness_votes'])
-        ).toEqual(Set([payload.witness]));
-        // Arrange
-        payload.approve = false;
-        // Act
-        actual = reducer(
-            initial,
-            globalActions.updateAccountWitnessVote(payload)
-        );
-        // Assert
-        expect(actual).toEqual(initial);
-    });
-    it('should return correct state for a UPDATE_ACCOUNT_WITNESS_PROXY action', () => {
-        // Arrange
-        let payload = {
-            account: 'Alice',
-            proxy: 'Jane',
-        };
-        const initial = reducer();
-        const expected = Map({ proxy: payload.proxy });
-        // Act
-        const actual = reducer(
-            initial,
-            globalActions.updateAccountWitnessProxy(payload)
-        );
-        // Assert
-        expect(actual.getIn(['accounts', payload.account])).toEqual(expected);
-    });
     it('should return correct state for a DELETE_CONTENT action', () => {
         // Arrange
         let payload = {

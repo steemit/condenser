@@ -22,7 +22,6 @@ module.exports = {
             '/recover_account_step_2',
             '/waiting_list.html',
             '/market',
-            '/~witnesses',
             '/submit.html',
         ].forEach(path => testHttpGet('localhost', 8080, path, browser));
     },

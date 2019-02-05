@@ -27,15 +27,12 @@ const hook = {
     preBroadcast_comment,
     preBroadcast_transfer,
     preBroadcast_vote,
-    preBroadcast_account_witness_vote,
     error_vote,
     error_custom_json,
     // error_account_update,
-    error_account_witness_vote,
     accepted_comment,
     accepted_custom_json,
     accepted_delete_comment,
-    accepted_account_witness_vote,
     accepted_vote,
     accepted_account_update,
     accepted_withdraw_vesting,
@@ -80,30 +77,6 @@ function* preBroadcast_vote({ operation, username }) {
         globalActions.voted({ username: voter, author, permlink, weight })
     );
     return operation;
-}
-function* preBroadcast_account_witness_vote({ operation, username }) {
-    if (!operation.account) operation.account = username;
-    const { account, witness, approve } = operation;
-    // give immediate feedback
-    yield put(
-        globalActions.addActiveWitnessVote({
-            account,
-            witness,
-        })
-    );
-    return operation;
-}
-
-function* error_account_witness_vote({
-    operation: { account, witness, approve },
-}) {
-    yield put(
-        globalActions.updateAccountWitnessVote({
-            account,
-            witness,
-            approve: !approve,
-        })
-    );
 }
 
 /** Keys, username, and password are not needed for the initial call.  This will check the login and may trigger an action to prompt for the password / key. */
@@ -425,21 +398,6 @@ function* accepted_vote({ operation: { author, permlink, weight } }) {
     yield call(getContent, { author, permlink });
 }
 
-function* accepted_account_witness_vote({
-    operation: { account, witness, approve },
-}) {
-    yield put(
-        globalActions.updateAccountWitnessVote({ account, witness, approve })
-    );
-
-    yield put(
-        globalActions.removeActiveWitnessVote({
-            account,
-            witness,
-        })
-    );
-}
-
 function* accepted_withdraw_vesting({ operation }) {
     let [account] = yield call(
         [api, api.getAccountsAsync],
@@ -484,8 +442,6 @@ function* accepted_account_update({ operation }) {
 //     }
 // }
 
-// function* preBroadcast_account_witness_vote({operation, username}) {
-// }
 export function* preBroadcast_comment({ operation, username }) {
     if (!operation.author) operation.author = username;
     let permlink = operation.permlink;

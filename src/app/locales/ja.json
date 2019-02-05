@@ -178,8 +178,6 @@
             "アカウント名には英数字またはダッシュが使用できます。",
         "cannot_increase_reward_of_post_within_the_last_minute_before_payout":
             "支払いの直前に投稿の報酬を増やすことはできません",
-        "vote_currently_exists_user_must_be_indicate_a_to_reject_witness":
-            "現在、投票が存在し、証人を拒否するには強い意志を示す必要があります",
         "only_one_APP_NAME_account_allowed_per_ip_address_every_10_minutes":
             "10分毎に各IPアドレスにつき1つのSteemアカウントのみ許可されています",
         "resteem_this_post": "この投稿をResteemする",
@@ -474,28 +472,6 @@
             "one": "%(count)s件の投票",
             "other": "%(count)s件の投票"
         }
-    },
-    "witnesses_jsx": {
-        "witness_thread": "証人スレッド",
-        "top_witnesses": "証人投票",
-        "you_have_votes_remaining": {
-            "zero": "これ以上投票できません",
-            "one": "あと1人に投票できます",
-            "other": "あと%(count)s人に投票できます"
-        },
-        "you_can_vote_for_maximum_of_witnesses": "最大30人の証人に投票できます",
-        "witness": "証人",
-        "information": "情報",
-        "if_you_want_to_vote_outside_of_top_enter_account_name":
-            "トップ100外の証人に投票したい場合、以下の欄にアカウント名を入力して投票してください",
-        "set_witness_proxy":
-            "証人への投票の代理人を選ぶこともできます。この操作はあなたの現在の証人選択をリセットします。",
-        "witness_set":
-            "投票の代理人を設定しています。手動による投票を再度有効にするには、代理人を解除してください。",
-        "witness_proxy_current": "現在の代理人は",
-        "witness_proxy_set": "代理人を設定",
-        "witness_proxy_clear": "代理人を解除",
-        "proxy_update_error": "代理人は更新されませんでした。"
     },
     "votesandcomments_jsx": {
         "no_responses_yet_click_to_respond":

@@ -13,7 +13,6 @@ import favicon from 'koa-favicon';
 import staticCache from 'koa-static-cache';
 import useRedirects from './redirects';
 import useGeneralApi from './api/general';
-import useAccountRecoveryApi from './api/account_recovery';
 import useEnterAndConfirmEmailPages from './sign_up_pages/enter_confirm_email';
 import useEnterAndConfirmMobilePages from './sign_up_pages/enter_confirm_mobile';
 import useUserJson from './json/user_json';
@@ -286,7 +285,6 @@ useEnterAndConfirmMobilePages(app);
 useUserJson(app);
 usePostJson(app);
 
-useAccountRecoveryApi(app);
 useGeneralApi(app);
 
 app.use(function*(next) {

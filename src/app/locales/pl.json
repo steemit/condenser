@@ -325,34 +325,8 @@
             "Przeglądasz wątek pojedynczego komentarza"
     },
     "recoveraccountstep1_jsx": {
-        "begin_recovery": "Rozpocznij odzyskiwanie konta",
-        "not_valid": "Wartość niepoprawna",
-        "account_name_is_not_found": "Nazwa konta nie została znaleziona",
-        "unable_to_recover_account_not_change_ownership_recently":
-            "Nie jesteśmy w stanie odzyskać tego konta, bo w ostatnim czasie nie zmieniło ono właściciela.",
-        "password_not_used_in_last_days":
-            "To hasło nie zostało użyte na tym koncie w ciągu ostatnich 30 dni.",
-        "request_already_submitted_contact_support":
-            "Twoje zapytanie zostało już wysłane i już nad nim pracujemy. Proszę kontaktować się z %(SUPPORT_EMAIL)s w celu uzyskania informacji o statusie jego przetwarzania.",
         "recover_account_intro":
-            "Od czasu do czasu, klucz właściciela może zostać zagrożony. Odzyskiwanie konta pozwala prawowitemu właścicielowi na odzyskanie konta w ciągu 30 dni, liczone od momentu zmiany klucza właściciela przez złodzieja. Odzyskiwanie konta można zrobić na %(APP_URL)s o ile właściciel konta uprzednio wyszczególnił '%(APP_NAME)s'  jako powiernika konta i spełnił warunki użytkowania %(APP_NAME)s's.",
-        "login_with_facebook_or_reddit_media_to_verify_identity":
-            "Proszę zalogować się z użyciem konta na Facebooku lub Reddicie by zweryfikować swoją tożsamość.",
-        "login_with_social_media_to_verify_identity":
-            "Proszę zalogować się z użyciem konta na %(provider)s by zweryfikować swoją tożsamość.",
-        "enter_email_toverify_identity":
-            "Musimy zweryfikować Twoją tożsamość. Prosimy o podanie swojego adresu email by rozpocząć proces weryfikacji.",
-        "continue_with_email": "Kontynuuj z adresem email",
-        "thanks_for_submitting_request_for_account_recovery":
-            "Dziękujemy za wysłanie zgłoszenia dotyczącego odzyskiwania konta używając wieloskładnikowej, opartej o blockchain autentykacji %(APP_NAME)s's. Odpowiemy najszybciej jak to możliwe, jednakże, możliwe są opóźnienia z powodu dużej ilości zgłoszeń. Proszę być przygotowanym do potwierdzenia tożsamości.",
-        "recovering_account": "Odzyskiwanie konta",
-        "recover_account": "Odzyskaj konto",
-        "checking_account_owner": "Sprawdzanie właściciela konta",
-        "sending_recovery_request": "Wysyłanie zapytania o odzyskanie konta",
-        "cant_confirm_account_ownership":
-            "Nie możemy potwierdzić przynależności konta. Sprawdź swoje hasło.",
-        "account_recovery_request_not_confirmed":
-            "Zapytanie o odzyskanie konta nie uzyskało jeszcze potwierdzenia, prosimy wrócić później, dziękujemy za Twoją cierpliwość."
+            "Od czasu do czasu, klucz właściciela może zostać zagrożony. Odzyskiwanie konta pozwala prawowitemu właścicielowi na odzyskanie konta w ciągu 30 dni, liczone od momentu zmiany klucza właściciela przez złodzieja. Odzyskiwanie konta można zrobić na %(APP_URL)s o ile właściciel konta uprzednio wyszczególnił '%(APP_NAME)s'  jako powiernika konta i spełnił warunki użytkowania %(APP_NAME)s's."
     },
     "user_profile": {
         "unknown_account": "Konto nieznane",

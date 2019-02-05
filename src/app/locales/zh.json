@@ -307,34 +307,8 @@
             "你正在查看单个评论的主题"
     },
     "recoveraccountstep1_jsx": {
-        "begin_recovery": "开始恢复",
-        "not_valid": "无效的",
-        "account_name_is_not_found": "未找到帐户名",
-        "unable_to_recover_account_not_change_ownership_recently":
-            "我们无法恢复这个帐户，它最近没有改变所有权。",
-        "password_not_used_in_last_days":
-            "在过去的30天里这个帐户没有使用过这个密码。",
-        "request_already_submitted_contact_support":
-            "您的请求已经提交，我们正在处理。请联系%(SUPPORT_EMAIL)s以获得您的请求的状态。",
         "recover_account_intro":
-            "有时候，Steemit 的拥有者钥匙可能会被盗用。被盗帐户恢复给予合法的帐户所有者30天，从小偷更改其所有者密钥的时候恢复其帐户。盗用帐户恢复只能在%(APP_URL)s上使用，如果帐户所有者已经明确列出 %(APP_NAME)s作为其帐户受信任者，并遵守了 %(APP_NAME)s 的服务条款。",
-        "login_with_facebook_or_reddit_media_to_verify_identity":
-            "请登录Facebook或Reddit以验证你的身份",
-        "login_with_social_media_to_verify_identity":
-            "请登录%(provider)s以验证你的身份",
-        "enter_email_toverify_identity":
-            "我们需要核实您的身份。请输入你的电子邮件地址，并开始验证。",
-        "continue_with_email": "继续使用邮箱",
-        "thanks_for_submitting_request_for_account_recovery":
-            "感谢你使用%(APP_NAME)s基于区块链的多因素身份验证提交帐户恢复请求。我们会尽快给你答复，但是由于大量的邮件可能会有一些延迟。请准备核实你的身份。",
-        "recovering_account": "正在恢复账户",
-        "recover_account": "恢复帐户",
-        "checking_account_owner": "验证账户所有者",
-        "sending_recovery_request": "发送恢复请求",
-        "cant_confirm_account_ownership":
-            "我们不能确认帐户所有权。请检查你的密码",
-        "account_recovery_request_not_confirmed":
-            "帐户恢复请求尚未确认，请稍后回来，谢谢你的耐心。"
+            "有时候，Steemit 的拥有者钥匙可能会被盗用。被盗帐户恢复给予合法的帐户所有者30天，从小偷更改其所有者密钥的时候恢复其帐户。盗用帐户恢复只能在%(APP_URL)s上使用，如果帐户所有者已经明确列出 %(APP_NAME)s作为其帐户受信任者，并遵守了 %(APP_NAME)s 的服务条款。"
     },
     "user_profile": {
         "unknown_account": "未知的账户",

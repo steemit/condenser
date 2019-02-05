@@ -23,8 +23,6 @@ const pageRequiresEntropy = path => {
 
     const entropyPages = [
         'ChangePassword',
-        'RecoverAccountStep1',
-        'RecoverAccountStep2',
         'UserProfile',
         'CreateAccount',
     ];

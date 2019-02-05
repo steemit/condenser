@@ -38,10 +38,6 @@
     "delegation": "150250.000000 VESTS",
     "signing_key": "5J..."
   },
-  "requestAccountRecovery": {
-    "recovery_account": "steem",
-    "signing_key": "5J..."
-  },
   "sendgrid": {
     "from": "noreply@example.com",
     "key": "SG.xxx_yyyy",

@@ -8,7 +8,6 @@ import {
     preBroadcast_comment,
     createPermlink,
     createPatch,
-    recoverAccount,
     preBroadcast_transfer,
     transactionWatches,
     broadcastOperation,
@@ -58,121 +57,7 @@ describe('TransactionSaga', () => {
                     updateAuthorities
                 ),
                 takeEvery(transactionActions.UPDATE_META, updateMeta),
-                takeEvery(transactionActions.RECOVER_ACCOUNT, recoverAccount),
             ]);
-        });
-    });
-
-    describe('recoverAccount', () => {
-        const gen = cloneableGenerator(recoverAccount)({
-            payload: {
-                account_to_recover: 'one',
-                old_password: 'two34567',
-                new_password: 'two34567',
-                onError: () => 'error!',
-                onSuccess: () => 'success!',
-            },
-        });
-        it('should call getAccountsAsync with account_to_recover username as argument', () => {
-            const actual = gen.next([{ id: 123, name: 'one' }]).value;
-            const mockCall = call([api, api.getAccountsAsync], ['one']);
-            expect(actual).toEqual(mockCall);
-        });
-        it('should call sendAsync with recover_account operation', () => {
-            const actual = gen.next([{ id: 123, name: 'one' }]).value;
-            const mockCall = broadcast.sendAsync(
-                {
-                    extensions: [],
-                    operations: [
-                        [
-                            'recover_account',
-                            {
-                                account_to_recover: 'one',
-                                new_owner_authority: 'idk',
-                                recent_owner_authority: 'something',
-                            },
-                        ],
-                    ],
-                },
-                ['123', '345']
-            );
-            expect(actual).toEqual(mockCall);
-        });
-        it('should call sendAsync with account_update operation', () => {
-            const actual = gen.next().value;
-            const mockCall = broadcast.sendAsync(
-                {
-                    extensions: [],
-                    operations: [
-                        [
-                            'account_update',
-                            {
-                                account_to_recover: 'one',
-                                new_owner_authority: 'idk',
-                                recent_owner_authority: 'something',
-
-                                account: 'one',
-                                active: {
-                                    weight_threshold: 1,
-                                    account_auths: [],
-                                    key_auths: [['newactive', 1]],
-                                },
-                                posting: {
-                                    weight_threshold: 1,
-                                    account_auths: [],
-                                    key_auths: [['newposting', 1]],
-                                },
-                                memo_key: 'newmemo',
-                            },
-                        ],
-                    ],
-                },
-                ['newownerprivate']
-            );
-            expect(actual).toEqual(mockCall);
-        });
-        it('should call getWithdrawRoutes with account name and outgoing as parameters', () => {
-            const noAutoVests = gen.clone();
-            const actual = noAutoVests.next().value;
-            const mockCall = call(
-                [api, api.getWithdrawRoutes],
-                ['one', 'outgoing']
-            );
-            expect(actual).toEqual(mockCall);
-            const done = noAutoVests.next().done;
-            expect(done).toBe(true);
-        });
-        it('should call getWithdrawRoutes with account name and outgoing as parameters, and be done if none are found', () => {
-            const noAutoVests = gen.clone();
-            const actual = noAutoVests.next().value;
-            const mockCall = call(
-                [api, api.getWithdrawRoutes],
-                ['one', 'outgoing']
-            );
-            expect(actual).toEqual(mockCall);
-            const done = noAutoVests.next().done;
-            expect(done).toBe(true);
-        });
-        it('should call getWithdrawRoutes with account name and outgoing as parameters, and reset all outgoing auto vesting routes to 0.', () => {
-            const withAutoVests = gen.clone();
-            withAutoVests.next([{ from_account: 'one', to_account: 'two' }])
-                .value;
-            const actual = withAutoVests.next([
-                { from_account: 'one', to_account: 'two' },
-            ]).value;
-            const mockCall = all([
-                call(
-                    [broadcast, broadcast.setWithdrawVestingRoute],
-                    [
-                        'STM7UbRctdfcdBU6rMBEX5yPjWaR68xmq6buCkotR7RVEJHYWt1Jb',
-                        'one',
-                        'two',
-                        0,
-                        true,
-                    ]
-                ),
-            ]);
-            expect(actual).toEqual(mockCall);
         });
     });
 

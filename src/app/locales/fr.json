@@ -349,34 +349,8 @@
             "Vous visualisez un commentaire unique de l'article"
     },
     "recoveraccountstep1_jsx": {
-        "begin_recovery": "Démarrer la récupération",
-        "not_valid": "Invalide",
-        "account_name_is_not_found": "Compte inexistant",
-        "unable_to_recover_account_not_change_ownership_recently":
-            "Nous sommes incapables de récupérer ce compte, car il n'a pas changé de propriétaire récemment.",
-        "password_not_used_in_last_days":
-            "Ce mot de passe n'a pas été utilisé durant les derniers 30 jours.",
-        "request_already_submitted_contact_support":
-            "Votre requête a déjà été soumise et nous nous en occupons. Veuillez s'il-vous-plaît contacter %(SUPPORT_EMAIL)s pour obtenir le statut de votre requête.",
         "recover_account_intro":
-            "Il est possible que la clé propriétaire d'un Steemien soit compromise. Le processus de récupération de comptes dérobés est autorisé pour l'utilisateur de droit pendant 30 jours à partir du moment où le voleur a modifié la clé propriétaire. La récupération de comptes dérobés ne peut être utilisée sur %(APP_URL)s que si le propriétaire du compte a ajouté '%(APP_NAME)s'comme mandataire de confiance et accepté les conditions d'utilisation de %(APP_NAME)s.",
-        "login_with_facebook_or_reddit_media_to_verify_identity":
-            "Veuillez vous identifier via Facebook ou Reddit pour vérifier votre identité.",
-        "login_with_social_media_to_verify_identity":
-            "Veuillez vous identifier via %(provider)safin de vérifier votre identité",
-        "enter_email_toverify_identity":
-            "Nous devons vérifier votre identité. Veuillez s'il-vous-plaît entrer votre adresse email ci-dessous pour démarrer le processus.",
-        "continue_with_email": "Continuer avec l'email.",
-        "thanks_for_submitting_request_for_account_recovery":
-            "Merci pour la soumission de votre requête concernant la récupération de votre compte %(APP_NAME)sen utilisant une authentification à multi-facteurs basée sur la blockchain. Nous vous répondrons aussi rapidement que possible. Cependant, il se pourrait que notre réponse prennent du temps en raison du gros volume d'emails à traiter. Veuillez vous préparer à vérifier votre identité.",
-        "recovering_account": "Récupération du compte",
-        "recover_account": "Récupérer le compte",
-        "checking_account_owner": "Vérifier le propriétaire du compte",
-        "sending_recovery_request": "Envoyer une requête de récupération",
-        "cant_confirm_account_ownership":
-            "Nous ne pouvons confirmer que vous êtes propriétaire de ce compte. Veuillez s'il-vous-plaît vérifier votre mot de passe.",
-        "account_recovery_request_not_confirmed":
-            "La requête de la récupération du compte n'est pas encore confirmée. Veuillez réessayer plus tard. Merci de votre patience."
+            "Il est possible que la clé propriétaire d'un Steemien soit compromise. Le processus de récupération de comptes dérobés est autorisé pour l'utilisateur de droit pendant 30 jours à partir du moment où le voleur a modifié la clé propriétaire. La récupération de comptes dérobés ne peut être utilisée sur %(APP_URL)s que si le propriétaire du compte a ajouté '%(APP_NAME)s'comme mandataire de confiance et accepté les conditions d'utilisation de %(APP_NAME)s."
     },
     "user_profile": {
         "unknown_account": "Compte inconnu",

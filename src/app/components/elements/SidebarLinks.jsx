@@ -28,7 +28,6 @@ const SidebarLinks = ({ username }) => (
                     </a>
                 </li>
                 {/*   <li className="c-sidebar__list-item"><a className="c-sidebar__link" href={username + ''}>Pay someone</a></li> */}
-                {/* <li className="c-sidebar__list-item"><a className="c-sidebar__link" href="/market">Token market</a></li>  */}
             </ul>
         </div>
     </div>

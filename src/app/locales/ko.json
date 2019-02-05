@@ -333,35 +333,6 @@
         "you_are_viewing_a_single_comments_thread_from":
             "You are viewing a single comment's thread from"
     },
-    "market_jsx": {
-        "action": "Action",
-        "date_created": "주문 일시",
-        "last_price": "현재 가격",
-        "24h_volume": "거래량(24H)",
-        "spread": "매도/매수 갭",
-        "total": "SBD 계",
-        "available": "주문 가능 금액",
-        "lowest_ask": "매도 주문 최저가",
-        "highest_bid": "매수 주문 최고가",
-        "buy_orders": "매수 주문",
-        "sell_orders": "매도 주문",
-        "trade_history": "거래 이력",
-        "open_orders": "미체결 주문",
-        "sell_amount_for_atleast":
-            "%(min_to_receive)s을 %(amount_to_sell)s로 판매 하시겠습니까? (%(effectivePrice)s)",
-        "buy_atleast_amount_for":
-            "%(min_to_receive)s을 %(amount_to_sell)s로 구매 하시겠습니까? (%(effectivePrice)s)",
-        "price_warning_above":
-            "This price is well above the current market price of %(marketPrice)s, are you sure?",
-        "price_warning_below":
-            "This price is well below the current market price of %(marketPrice)s, are you sure?",
-        "order_cancel_confirm": "%(order_id)s 주문을 취소하시겠습니까?",
-        "order_cancelled": "%(order_id)s 주문이 취소되었습니다.",
-        "higher": "Higher",
-        "lower": "Lower",
-        "total_DEBT_TOKEN_SHORT_CURRENCY_SIGN":
-            "Total %(DEBT_TOKEN_SHORT)s (%(CURRENCY_SIGN)s)"
-    },
     "recoveraccountstep1_jsx": {
         "begin_recovery": "Begin Recovery",
         "not_valid": "Not valid",

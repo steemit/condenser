@@ -97,7 +97,6 @@ class UserWallet extends React.Component {
             savings_withdraws,
             account,
             current_user,
-            open_orders,
         } = this.props;
         const gprops = this.props.gprops.toJS();
 
@@ -227,25 +226,8 @@ class UserWallet extends React.Component {
         const sbd_balance_savings = parseFloat(
             savings_sbd_balance.split(' ')[0]
         );
-        const sbdOrders =
-            !open_orders || !isMyAccount
-                ? 0
-                : open_orders.reduce((o, order) => {
-                      if (order.sell_price.base.indexOf('SBD') !== -1) {
-                          o += order.for_sale;
-                      }
-                      return o;
-                  }, 0) / assetPrecision;
-
-        const steemOrders =
-            !open_orders || !isMyAccount
-                ? 0
-                : open_orders.reduce((o, order) => {
-                      if (order.sell_price.base.indexOf('STEEM') !== -1) {
-                          o += order.for_sale;
-                      }
-                      return o;
-                  }, 0) / assetPrecision;
+        const sbdOrders = 0;
+        const steemOrders = 0;
 
         // set displayed estimated value
         const total_sbd =
@@ -352,7 +334,6 @@ class UserWallet extends React.Component {
                 link: '#',
                 onClick: showTransfer.bind(this, 'SBD', 'Transfer to Savings'),
             },
-            { value: tt('userwallet_jsx.market'), link: '/market' },
         ];
         if (isMyAccount) {
             steem_menu.push({
@@ -367,10 +348,6 @@ class UserWallet extends React.Component {
                 value: tt('g.sell'),
                 link: '#',
                 onClick: onShowWithdrawSteem,
-            });
-            steem_menu.push({
-                value: tt('userwallet_jsx.market'),
-                link: '/market',
             });
             power_menu.push({
                 value: tt('g.buy'),
@@ -562,11 +539,7 @@ class UserWallet extends React.Component {
                                         : null,
                                 }}
                             >
-                                <Link to="/market">
-                                    <Tooltip t={tt('market_jsx.open_orders')}>
-                                        (+{steem_orders_balance_str} STEEM)
-                                    </Tooltip>
-                                </Link>
+                                (+{steem_orders_balance_str} STEEM)
                             </div>
                         ) : null}
                     </div>
@@ -637,11 +610,7 @@ class UserWallet extends React.Component {
                                         : null,
                                 }}
                             >
-                                <Link to="/market">
-                                    <Tooltip t={tt('market_jsx.open_orders')}>
-                                        (+{sbd_orders_balance_str})
-                                    </Tooltip>
-                                </Link>
+                                (+{sbd_orders_balance_str})
                             </div>
                         ) : null}
                         {conversions}
@@ -766,7 +735,6 @@ export default connect(
         const sbd_interest = gprops.get('sbd_interest_rate');
         return {
             ...ownProps,
-            open_orders: state.market.get('open_orders'),
             price_per_steem,
             savings_withdraws,
             sbd_interest,

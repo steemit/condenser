@@ -11,6 +11,7 @@ function loadPinnedPosts() {
 
         if (!config.pinned_posts_url) {
             resolve(emptyPinnedPosts);
+            return;
         }
 
         const request = https.get(config.pinned_posts_url, resp => {

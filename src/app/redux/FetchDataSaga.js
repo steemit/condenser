@@ -248,6 +248,8 @@ export function* fetchData(action) {
     } else {
         // this should never happen. undefined behavior
         console.log("unexpected `order`", order)
+        call_name = 'getDiscussionsByTrendingAsync';
+        args = [{limit: constants.FETCH_DATA_BATCH_SIZE}]
     }
     yield put(appActions.fetchDataBegin());
     try {

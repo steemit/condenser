@@ -32,7 +32,6 @@ module.exports = function(sequelize, DataTypes) {
             underscored: true,
             classMethods: {
                 associate: function(models) {
-                    User.hasMany(models.Identity);
                     User.hasMany(models.Account);
                     User.hasMany(models.UserAttribute);
                 },

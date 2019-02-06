@@ -39,7 +39,6 @@
     "key": "SDC_SENDGRID_API_KEY",
     "templates": {
       "confirm_email": "SDC_SENDGRID_CONFIRMTEMPLATE",
-      "waiting_list_invite": "SDC_SENDGRID_WAITINGTEMPLATE"
     }
   },
   "server_session_secret": "SDC_SESSION_SECRETKEY",

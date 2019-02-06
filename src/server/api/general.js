@@ -3,7 +3,6 @@ import koa_router from 'koa-router';
 import koa_body from 'koa-body';
 import crypto from 'crypto';
 import models from 'db/models';
-import findUser from 'db/utils/find_user';
 import config from 'config';
 import { esc, escAttrs } from 'db/models';
 import {
@@ -53,60 +52,6 @@ export default function useGeneralApi(app) {
     const router = koa_router({ prefix: '/api/v1' });
     app.use(router.routes());
     const koaBody = koa_body();
-
-    /**
-     * Provides an endpoint to create user, account, and identity records.
-     * Used by faucet.
-     *
-     * HTTP params:
-     *   name
-     *   email
-     *   owner_key
-     *   secret
-     */
-    router.post('/create_user', koaBody, function*() {
-        const { name, email, owner_key, secret } =
-            typeof this.request.body === 'string'
-                ? JSON.parse(this.request.body)
-                : this.request.body;
-
-        if (secret !== process.env.CREATE_USER_SECRET)
-            throw new Error('invalid secret');
-
-        logRequest('create_user', this, { name, email, owner_key });
-
-        try {
-            if (!emailRegex.test(email.toLowerCase()))
-                throw new Error('not valid email: ' + email);
-            let user = yield models.User.create({
-                name: esc(name),
-                email: esc(email),
-            });
-            const account = yield models.Account.create({
-                user_id: user.id,
-                name: esc(name),
-                owner_key: esc(owner_key),
-            });
-            const identity = yield models.Identity.create({
-                user_id: user.id,
-                name: esc(name),
-                provider: 'email',
-                verified: true,
-                email: user.email,
-                owner_key: esc(owner_key),
-            });
-            this.body = JSON.stringify({
-                success: true,
-                user,
-                account,
-                identity,
-            });
-        } catch (error) {
-            console.error('Error in /create_user api call', error);
-            this.body = JSON.stringify({ error: error.message });
-            this.status = 500;
-        }
-    });
 
     router.post('/login_account', koaBody, function*() {
         // if (rateLimitReq(this, this.req)) return;

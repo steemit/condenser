@@ -58,10 +58,6 @@ export default {
             //require.ensure([], (require) => {
             cb(null, [require('app/components/pages/ChangePasswordPage')]);
             //});
-        } else if (route.page === 'PickAccount') {
-            //require.ensure([], (require) => {
-            cb(null, [require('app/components/pages/PickAccount')]);
-            //});
         } else if (route.page === 'CreateAccount') {
             //require.ensure([], (require) => {
             cb(null, [require('app/components/pages/CreateAccount')]);
@@ -73,10 +69,6 @@ export default {
         } else if (route.page === 'RecoverAccountStep1') {
             //require.ensure([], (require) => {
             cb(null, [require('app/components/pages/RecoverAccountStep1')]);
-            //});
-        } else if (route.page === 'WaitingList') {
-            //require.ensure([], (require) => {
-            cb(null, [require('app/components/pages/WaitingList')]);
             //});
         } else if (route.page === 'Witnesses') {
             //require.ensure([], (require) => {

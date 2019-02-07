@@ -58,10 +58,6 @@ export default {
             //require.ensure([], (require) => {
             cb(null, [require('app/components/pages/ChangePasswordPage')]);
             //});
-        } else if (route.page === 'Approval') {
-            //require.ensure([], (require) => {
-            cb(null, [require('app/components/pages/Approval')]);
-            //});
         } else if (route.page === 'RecoverAccountStep1') {
             //require.ensure([], (require) => {
             cb(null, [require('app/components/pages/RecoverAccountStep1')]);

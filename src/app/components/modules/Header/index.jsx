@@ -112,8 +112,6 @@ class Header extends React.Component {
             page_title = tt('navigation.terms_of_service');
         } else if (route.page == 'ChangePassword') {
             page_title = tt('header_jsx.change_account_password');
-        } else if (route.page == 'Approval') {
-            page_title = `Account Confirmation`;
         } else if (route.page == 'RecoverAccountStep1') {
             page_title = tt('header_jsx.stolen_account_recovery');
         } else if (route.page === 'UserProfile') {

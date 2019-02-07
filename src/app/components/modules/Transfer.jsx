@@ -623,9 +623,6 @@ export default connect(
                 dispatch(
                     globalActions.getState({ url: `@${username}/transfers` })
                 );
-                if (/Savings Withdraw/.test(transferType)) {
-                    dispatch(userActions.loadSavingsWithdraw({}));
-                }
                 dispatch(userActions.hideTransfer());
             };
             const asset2 = toVesting ? 'STEEM' : asset;

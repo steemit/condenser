@@ -371,16 +371,6 @@
         "hide_resteems": "Hide Resteems",
         "show_all": "Show All"
     },
-    "authorrewards_jsx": {
-        "estimated_author_rewards_last_week":
-            "Recompensas de autor estimadas la semana pasada",
-        "author_rewards_history": "Historial de recompensas de autor"
-    },
-    "curationrewards_jsx": {
-        "estimated_curation_rewards_last_week":
-            "Recompensas de curación aproximadas de la semana pasada",
-        "curation_rewards_history": "Historial de recompensas de curación"
-    },
     "post_jsx": {
         "now_showing_comments_with_low_ratings":
             "Mostrando ahora comentarios con bajas calificaciones",
@@ -515,21 +505,6 @@
         "empty_feed_3": "Explorar artículos en tendencia",
         "empty_feed_4": "leer la guía básica para comenzar",
         "empty_feed_5": "Explorar la FAQ"
-    },
-    "transferhistoryrow_jsx": {
-        "to_savings": "a ahorros",
-        "from_savings": "desde ahorros",
-        "cancel_transfer_from_savings": "Cancela transferencia desde ahorros",
-        "stop_power_down": "Para power down",
-        "start_power_down_of": "Comenzar power down",
-        "receive_interest_of": "Recibir interés de"
-    },
-    "savingswithdrawhistory_jsx": {
-        "cancel_this_withdraw_request": "¿Cancelar la petición de retirada?",
-        "pending_savings_withdrawals": "AHORROS PENDIENTES DE RETIRADA",
-        "withdraw": "Retirar %(amount)s",
-        "to": "a %(to)s",
-        "from_to": "de %(from)s a %(to)s"
     },
     "explorepost_jsx": {
         "copied": "¡Copiado!",

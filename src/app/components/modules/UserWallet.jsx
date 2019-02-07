@@ -4,8 +4,6 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import tt from 'counterpart';
 import { List } from 'immutable';
-import SavingsWithdrawHistory from 'app/components/elements/SavingsWithdrawHistory';
-import TransferHistoryRow from 'app/components/cards/TransferHistoryRow';
 import TransactionError from 'app/components/elements/TransactionError';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import {
@@ -94,7 +92,6 @@ class UserWallet extends React.Component {
         const {
             convertToSteem,
             price_per_steem,
-            savings_withdraws,
             account,
             current_user,
         } = this.props;
@@ -112,9 +109,6 @@ class UserWallet extends React.Component {
         let isMyAccount =
             current_user &&
             current_user.get('username') === account.get('name');
-
-        const disabledWarning = false;
-        // isMyAccount = false; // false to hide wallet transactions
 
         const showTransfer = (asset, transferType, e) => {
             e.preventDefault();
@@ -168,16 +162,6 @@ class UserWallet extends React.Component {
         // Sum savings withrawals
         let savings_pending = 0,
             savings_sbd_pending = 0;
-        if (savings_withdraws) {
-            savings_withdraws.forEach(withdraw => {
-                const [amount, asset] = withdraw.get('amount').split(' ');
-                if (asset === 'STEEM') savings_pending += parseFloat(amount);
-                else {
-                    if (asset === 'SBD')
-                        savings_sbd_pending += parseFloat(amount);
-                }
-            });
-        }
 
         // Sum conversions
         let conversionValue = 0;
@@ -253,39 +237,6 @@ class UserWallet extends React.Component {
         if (isMyAccount) {
             estimate_output = <p>{total_value}&nbsp; &nbsp; &nbsp;</p>;
         }
-
-        /// transfer log
-        let idx = 0;
-        const transfer_log = account
-            .get('transfer_history')
-            .map(item => {
-                const data = item.getIn([1, 'op', 1]);
-                const type = item.getIn([1, 'op', 0]);
-
-                // Filter out rewards
-                if (
-                    type === 'curation_reward' ||
-                    type === 'author_reward' ||
-                    type === 'comment_benefactor_reward'
-                ) {
-                    return null;
-                }
-
-                if (
-                    data.sbd_payout === '0.000 SBD' &&
-                    data.vesting_payout === '0.000000 VESTS'
-                )
-                    return null;
-                return (
-                    <TransferHistoryRow
-                        key={idx++}
-                        op={item.toJS()}
-                        context={account.get('name')}
-                    />
-                );
-            })
-            .filter(el => !!el)
-            .reverse();
 
         let steem_menu = [
             {
@@ -680,47 +631,6 @@ class UserWallet extends React.Component {
                         <TransactionError opType="withdraw_vesting" />
                     </div>
                 </div>
-                {disabledWarning && (
-                    <div className="row">
-                        <div className="column small-12">
-                            <div className="callout warning">
-                                {tt(
-                                    'userwallet_jsx.transfers_are_temporary_disabled'
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                )}
-                <div className="row">
-                    <div className="column small-12">
-                        <hr />
-                    </div>
-                </div>
-
-                {isMyAccount && <SavingsWithdrawHistory />}
-
-                <div className="row">
-                    <div className="column small-12">
-                        {/** history */}
-                        <h4>{tt('userwallet_jsx.history')}</h4>
-                        <div className="secondary">
-                            <span>
-                                {tt(
-                                    'transfer_jsx.beware_of_spam_and_phishing_links'
-                                )}
-                            </span>
-                            &nbsp;
-                            <span>
-                                {tt(
-                                    'transfer_jsx.transactions_make_take_a_few_minutes'
-                                )}
-                            </span>
-                        </div>
-                        <table>
-                            <tbody>{transfer_log}</tbody>
-                        </table>
-                    </div>
-                </div>
             </div>
         );
     }
@@ -730,13 +640,11 @@ export default connect(
     // mapStateToProps
     (state, ownProps) => {
         const price_per_steem = pricePerSteem(state);
-        const savings_withdraws = state.user.get('savings_withdraws');
         const gprops = state.global.get('props');
         const sbd_interest = gprops.get('sbd_interest_rate');
         return {
             ...ownProps,
             price_per_steem,
-            savings_withdraws,
             sbd_interest,
             gprops,
         };

@@ -338,14 +338,6 @@
         "hide_resteems": "Hide Resteems",
         "show_all": "Show All"
     },
-    "authorrewards_jsx": {
-        "estimated_author_rewards_last_week": "预计上周作者奖励",
-        "author_rewards_history": "作者奖励历史"
-    },
-    "curationrewards_jsx": {
-        "estimated_curation_rewards_last_week": "预计上周审查奖励",
-        "curation_rewards_history": "审查奖励历史"
-    },
     "post_jsx": {
         "now_showing_comments_with_low_ratings": "正在显示低评级的评论",
         "sort_order": "排序",
@@ -471,21 +463,6 @@
         "empty_feed_3": "浏览流行文章",
         "empty_feed_4": "阅读快速入门指南",
         "empty_feed_5": "浏览常见问题解答"
-    },
-    "transferhistoryrow_jsx": {
-        "to_savings": "到储蓄账户",
-        "from_savings": "从储蓄账户",
-        "cancel_transfer_from_savings": "取消从储蓄账户转账",
-        "stop_power_down": "停止Power Down",
-        "start_power_down_of": "开始Power Down",
-        "receive_interest_of": "获得的利息"
-    },
-    "savingswithdrawhistory_jsx": {
-        "cancel_this_withdraw_request": "确认取消提款请求吗？",
-        "pending_savings_withdrawals": "即将取出存款",
-        "withdraw": "取%(amount)s",
-        "to": "到%(to)s",
-        "from_to": "从%(from)s到%(to)s"
     },
     "explorepost_jsx": {
         "copied": "已复制！",

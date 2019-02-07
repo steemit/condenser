@@ -389,16 +389,6 @@
         "hide_resteems": "Hide Resteems",
         "show_all": "Show All"
     },
-    "authorrewards_jsx": {
-        "estimated_author_rewards_last_week":
-            "Gains de publication estimés pour la semaine dernière",
-        "author_rewards_history": "Historique des gains de publication"
-    },
-    "curationrewards_jsx": {
-        "estimated_curation_rewards_last_week":
-            "Gains de curation estimés pour la semaine dernière",
-        "curation_rewards_history": "Historique des gains de curation"
-    },
     "post_jsx": {
         "now_showing_comments_with_low_ratings":
             "Affichant à présent les commentaires de faible évaluation",
@@ -534,24 +524,6 @@
         "empty_feed_4": "Lire le guide de prise en main rapide",
         "empty_feed_5": "Parcourir la FAQ",
         "my_feed": "Mon Flux"
-    },
-    "transferhistoryrow_jsx": {
-        "to_savings": "vers l'épargne",
-        "from_savings": "depuis l'épargne",
-        "cancel_transfer_from_savings": "Annuler le transfert vers l'épargne",
-        "stop_power_down":
-            "Arrêter la récupération de l'influence, ou le power down",
-        "start_power_down_of":
-            "Démarrer la récupération de l'influence, ou le power down",
-        "receive_interest_of": "Recevoir les intérêts de"
-    },
-    "savingswithdrawhistory_jsx": {
-        "cancel_this_withdraw_request":
-            "Voulez-vous annuler cette demande de retrait ?",
-        "pending_savings_withdrawals": "RETRAITS D'EPARGNE EN SUSPENS",
-        "withdraw": "Retirer %(amount)s",
-        "to": "vers %(to)s",
-        "from_to": "de %(from)s vers %(to)s"
     },
     "explorepost_jsx": {
         "copied": "Copié!",

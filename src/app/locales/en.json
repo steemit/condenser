@@ -386,16 +386,6 @@
         "hide_resteems": "Hide Resteems",
         "show_all": "Show All"
     },
-    "authorrewards_jsx": {
-        "estimated_author_rewards_last_week":
-            "Estimated author rewards last week",
-        "author_rewards_history": "Author Rewards History"
-    },
-    "curationrewards_jsx": {
-        "estimated_curation_rewards_last_week":
-            "Estimated curation rewards last week",
-        "curation_rewards_history": "Curation Rewards History"
-    },
     "post_jsx": {
         "now_showing_comments_with_low_ratings":
             "Now showing comments with low ratings",
@@ -540,82 +530,6 @@
         "empty_feed_5": "Browse The FAQ",
         "my_feed": "My Feed",
         "accountnames_feed": "%(account_name)s's Feed"
-    },
-    "transferhistoryrow_jsx": {
-        "to_savings": "to savings",
-        "from_savings": "from savings",
-        "cancel_transfer_from_savings":
-            "Cancel transfer from savings (request %(request_id)s)",
-        "stop_power_down": "Stop power down",
-        "withdraw_vesting": "Start power down of %(powerdown_vests)s STEEM",
-        "start_power_down_of": "Start power down of",
-        "receive_interest_of": "Receive interest of",
-        "bad_actor_caution": "Caution",
-        "bad_actor_explained":
-            "This is from an account that looks fraudulent. If you wish, you may temporarily reveal this memo which may contain dangerous links.",
-        "bad_actor_reveal_memo": "I understand the risk; show anyway.",
-        "from_negative_rep_user_caution": "Caution",
-        "from_negative_rep_user_explained":
-            "This is from an account with a bad reputation. If you wish, you may temporarily reveal this memo which may contain dangerous links.",
-        "from_negative_rep_user_reveal_memo":
-            "I understand the risk; show anyway.",
-        "curation_reward": "%(curation_reward)s STEEM POWER for ",
-        "author_reward":
-            "%(sbd_payout)s%(steem_payout)s and %(author_reward)s STEEM POWER for ",
-        "claim_reward_balance": {
-            "three_rewards":
-                "Claim rewards: %(first_reward)s, %(second_reward)s and %(third_reward)s",
-            "two_rewards":
-                "Claim rewards: %(first_reward)s and %(second_reward)s",
-            "one_reward": "Claim rewards: %(reward)s"
-        },
-        "interest": "Receive interest of %(interest)s",
-        "fill_convert_request":
-            "Fill convert request: %(amount_in)s for %(amount_out)s",
-        "fill_order": {
-            "filled_by_current_owner":
-                "Paid %(open_pays)s for %(current_pays)s",
-            "open_owner_filled_my_order":
-                "Paid %(current_pays)s for %(open_pays)s"
-        },
-        "comment_benefactor_reward":
-            "%(benefactor_reward)s STEEM POWER for %(author)s/%(permlink)s",
-        "transfer_to_vesting": {
-            "from_self": {
-                "no_to": "Transfer %(amount)s to STEEM POWER",
-                "to_someone": "Transfer %(amount)s STEEM POWER to "
-            },
-            "to_self": "Receive %(amount)s STEEM POWER from ",
-            "from_user_to_user":
-                " Transfer %(amount)s STEEM POWER from %(from) to "
-        },
-        "transfer": {
-            "from_self": {
-                "to_savings": "Transfer to savings %(amount)s to ",
-                "from_savings": "Transfer from savings %(amount)s to ",
-                "not_savings": "Transfer %(amount)s to "
-            },
-            "to_self": {
-                "to_savings": "Receive from savings %(amount)s from ",
-                "from_savings": "Transfer from savings %(amount)s from ",
-                "not_savings": "Received %(amount)s from "
-            },
-            "to_someone_from_someone": {
-                "to_savings":
-                    "Transfer to savings %(amount)s from %(from)s to %(to)s",
-                "from_savings":
-                    "Transfer from savings %(amount)s from %(from)s to %(to)s",
-                "not_savings": "Transfer %(amount)s from %(from)s to %(to)s"
-            }
-        },
-        "request_id": "Request ID: %(request_id)s"
-    },
-    "savingswithdrawhistory_jsx": {
-        "cancel_this_withdraw_request": "Cancel this withdraw request?",
-        "pending_savings_withdrawals": "PENDING SAVINGS WITHDRAWS",
-        "withdraw": "Withdraw %(amount)s",
-        "to": "to %(to)s",
-        "from_to": "from %(from)s to %(to)s"
     },
     "explorepost_jsx": {
         "copied": "Copied!",

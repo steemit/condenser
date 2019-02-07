@@ -377,16 +377,6 @@
         "hide_resteems": "Hide Resteems",
         "show_all": "Show All"
     },
-    "authorrewards_jsx": {
-        "estimated_author_rewards_last_week":
-            "Ricompense per l'autore stimate durante l'ultima settimana",
-        "author_rewards_history": "Cronologia di Ricompense dell'autore"
-    },
-    "curationrewards_jsx": {
-        "estimated_curation_rewards_last_week":
-            "Ricompense da curatore stimate nell'ultima settimana",
-        "curation_rewards_history": "Cronologia ricompense da curatore"
-    },
     "post_jsx": {
         "now_showing_comments_with_low_ratings":
             "Commenti con voti bassi rivelati",
@@ -520,23 +510,6 @@
         "empty_feed_3": "Esplora gli Articoli in Trending",
         "empty_feed_4": "Leggi la Guida di Avvio Rapido",
         "empty_feed_5": "Leggi le FAQ"
-    },
-    "transferhistoryrow_jsx": {
-        "to_savings": "ai risparmi",
-        "from_savings": "dai risparmi",
-        "cancel_transfer_from_savings":
-            "Cancella il trasferimento dai risparmi",
-        "stop_power_down": "Interrompi il Power Down",
-        "start_power_down_of": "Avvia il Power Down di",
-        "receive_interest_of": "Ricevi l'interesse di"
-    },
-    "savingswithdrawhistory_jsx": {
-        "cancel_this_withdraw_request":
-            "Cancellare questa richiesta di prelevamento?",
-        "pending_savings_withdrawals": "PRELIEVI DEI RISPARMI IN SOSPESO",
-        "withdraw": "Ritira %(amount)s",
-        "to": "a %(to)s",
-        "from_to": "da %(from)s a %(to)s"
     },
     "explorepost_jsx": {
         "copied": "Copiato!",

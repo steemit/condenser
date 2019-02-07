@@ -29,7 +29,6 @@ export const userWatches = [
     takeLatest(userActions.SAVE_LOGIN, saveLogin_localStorage),
     takeLatest(userActions.LOGOUT, logout),
     takeLatest(userActions.LOGIN_ERROR, loginError),
-    takeLatest(userActions.LOAD_SAVINGS_WITHDRAW, loadSavingsWithdraw),
     takeLatest(userActions.UPLOAD_IMAGE, uploadImage),
     takeLatest(userActions.ACCEPT_TERMS, function*() {
         try {
@@ -50,32 +49,7 @@ export const userWatches = [
     },
 ];
 
-const highSecurityPages = [
-    /\/@.+\/(transfers|permissions|password)/,
-];
-
-function* loadSavingsWithdraw() {
-    const username = yield select(state =>
-        state.user.getIn(['current', 'username'])
-    );
-    const to = yield call([api, api.getSavingsWithdrawToAsync], username);
-    const fro = yield call([api, api.getSavingsWithdrawFromAsync], username);
-
-    const m = {};
-    for (const v of to) m[v.id] = v;
-    for (const v of fro) m[v.id] = v;
-
-    const withdraws = List(fromJS(m).values()).sort((a, b) =>
-        strCmp(a.get('complete'), b.get('complete'))
-    );
-
-    yield put(
-        userActions.set({
-            key: 'savings_withdraws',
-            value: withdraws,
-        })
-    );
-}
+const highSecurityPages = [/\/@.+\/(transfers|permissions|password)/];
 
 const strCmp = (a, b) => (a > b ? 1 : a < b ? -1 : 0);
 

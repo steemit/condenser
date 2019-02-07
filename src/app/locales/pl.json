@@ -359,16 +359,6 @@
         "hide_resteems": "Hide Resteems",
         "show_all": "Show All"
     },
-    "authorrewards_jsx": {
-        "estimated_author_rewards_last_week":
-            "Szacowane wynagrodzenie autorskie w ostatnim tygodniu",
-        "author_rewards_history": "Historia wynagrodzeń autorskich"
-    },
-    "curationrewards_jsx": {
-        "estimated_curation_rewards_last_week":
-            "Szacowane wynagrodzenie kuratorskie w ostatnim tygodniu",
-        "curation_rewards_history": "Historia wynagrodzeń kuratorskich"
-    },
     "post_jsx": {
         "now_showing_comments_with_low_ratings":
             "Od teraz komentarze o niskich ocenach będą wyświetlane",
@@ -504,22 +494,6 @@
         "empty_feed_3": "Przeglądaj aktywne posty",
         "empty_feed_4": "Przeczytaj Quick Start Guide",
         "empty_feed_5": "Przeglądaj FAQ"
-    },
-    "transferhistoryrow_jsx": {
-        "to_savings": "na konto oszczędnościowe",
-        "from_savings": "z konta oszczędnościowego",
-        "cancel_transfer_from_savings":
-            "Anuluj przelew z konta oszczędnościowego",
-        "stop_power_down": "Zatrzymaj zmniejszanie mocy",
-        "start_power_down_of": "Zacznij zmniejszanie mocy",
-        "receive_interest_of": "Odbierz odsetki od"
-    },
-    "savingswithdrawhistory_jsx": {
-        "cancel_this_withdraw_request": "Anulować zlecenie wypłaty?",
-        "pending_savings_withdrawals": "WYPŁATY OSZCZĘDNOŚCI W TOKU",
-        "withdraw": "Wypłać %(amount)s",
-        "to": "do %(to)s",
-        "from_to": "od %(from)s do %(to)s"
     },
     "explorepost_jsx": {
         "copied": "Skopiowano!",

@@ -13,8 +13,6 @@ import UserKeys from 'app/components/elements/UserKeys';
 import PasswordReset from 'app/components/elements/PasswordReset';
 import UserWallet from 'app/components/modules/UserWallet';
 import Settings from 'app/components/modules/Settings';
-import CurationRewards from 'app/components/modules/CurationRewards';
-import AuthorRewards from 'app/components/modules/AuthorRewards';
 import UserList from 'app/components/elements/UserList';
 import Follow from 'app/components/elements/Follow';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
@@ -228,10 +226,10 @@ export default class UserProfile extends React.Component {
             );
         } else if (section === 'curation-rewards') {
             rewardsClass = 'active';
-            tab_content = <CurationRewards account={account} />;
+            tab_content = <div>Moved to wallet</div>;
         } else if (section === 'author-rewards') {
             rewardsClass = 'active';
-            tab_content = <AuthorRewards account={account} />;
+            tab_content = <div>Moved to wallet</div>;
         } else if (section === 'followers') {
             if (followers && followers.has('blog_result')) {
                 tab_content = (

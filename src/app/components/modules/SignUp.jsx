@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import SvgImage from 'app/components/elements/SvgImage';
-import AddToWaitingList from 'app/components/modules/AddToWaitingList';
 
 class SignUp extends React.Component {
     constructor() {
@@ -34,9 +33,7 @@ class SignUp extends React.Component {
                         <p>
                             Membership to Steemit.com is now under invitation
                             only because of unexpectedly high sign up rate.
-                            Submit your email to get on the waiting list.
                         </p>
-                        <AddToWaitingList />
                     </div>
                 </div>
             );
@@ -95,7 +92,7 @@ class SignUp extends React.Component {
                         <br />
                         Don't have a Facebook or Reddit account? <br />
                         {this.state.waiting_list ? (
-                            <AddToWaitingList />
+                            <span>Disabled</span>
                         ) : (
                             <a
                                 href="#"

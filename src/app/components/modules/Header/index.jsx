@@ -114,8 +114,6 @@ class Header extends React.Component {
             page_title = tt('header_jsx.change_account_password');
         } else if (route.page == 'CreateAccount') {
             page_title = tt('header_jsx.create_account');
-        } else if (route.page == 'PickAccount') {
-            page_title = `Pick Your New Steemit Account`;
         } else if (route.page == 'Approval') {
             page_title = `Account Confirmation`;
         } else if (route.page == 'RecoverAccountStep1') {

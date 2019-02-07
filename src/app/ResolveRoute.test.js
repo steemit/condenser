@@ -41,7 +41,6 @@ describe('resolveRoute', () => {
         ['/support.html', { page: 'Support' }],
         ['/tos.html', { page: 'Tos' }],
         ['/change_password', { page: 'ChangePassword' }],
-        ['/create_account', { page: 'CreateAccount' }],
         ['/approval', { page: 'Approval' }],
         ['/recover_account_step_1', { page: 'RecoverAccountStep1' }],
         ['/market', { page: 'Market' }],

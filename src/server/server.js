@@ -202,12 +202,6 @@ app.use(function*(next) {
             return;
         }
     }
-    // // do not enter unless session uid & verified phone
-    // if (this.url === '/create_account' && !this.session.uid) {
-    //     this.status = 302;
-    //     this.redirect('/enter_email');
-    //     return;
-    // }
     // remember ch, cn, r url params in the session and remove them from url
     if (this.method === 'GET' && /\?[^\w]*(ch=|cn=|r=)/.test(this.url)) {
         let redir = this.url.replace(/((ch|cn|r)=[^&]+)/gi, r => {

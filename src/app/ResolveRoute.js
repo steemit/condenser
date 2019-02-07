@@ -50,9 +50,6 @@ export default function resolveRoute(path) {
     if (path === '/change_password') {
         return { page: 'ChangePassword' };
     }
-    if (path === '/create_account') {
-        return { page: 'CreateAccount' };
-    }
     if (path === '/approval') {
         return { page: 'Approval' };
     }

@@ -21,7 +21,7 @@ import { VIEW_MODE_WHISTLE } from 'shared/constants';
 const pageRequiresEntropy = path => {
     const { page } = resolveRoute(path);
 
-    const entropyPages = ['ChangePassword', 'UserProfile', 'CreateAccount'];
+    const entropyPages = ['ChangePassword', 'UserProfile'];
     /* Returns true if that page requires the entropy collection listener */
     return entropyPages.indexOf(page) !== -1;
 };
@@ -144,8 +144,7 @@ class App extends React.Component {
             order,
         } = this.props;
 
-        const miniHeader = pathname === '/create_account';
-
+        const miniHeader = false;
         const whistleView = viewMode === VIEW_MODE_WHISTLE;
         const headerHidden = whistleView;
         const params_keys = Object.keys(params);

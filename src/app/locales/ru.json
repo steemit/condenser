@@ -386,16 +386,6 @@
         "hide_resteems": "Hide Resteems",
         "show_all": "Show All"
     },
-    "authorrewards_jsx": {
-        "estimated_author_rewards_last_week":
-            "Оценочные авторские вознаграждения за прошлую неделю",
-        "author_rewards_history": "История авторских наград"
-    },
-    "curationrewards_jsx": {
-        "estimated_curation_rewards_last_week":
-            "Оценочные кураторские вознаграждения за последнюю неделю",
-        "curation_rewards_history": "История кураторских наград"
-    },
     "post_jsx": {
         "now_showing_comments_with_low_ratings":
             "Отображаем комментарии с низким рейтингом",
@@ -536,21 +526,6 @@
         "empty_feed_3": "Посмотреть статьи, набирающие популярность",
         "empty_feed_4": "Прочтите краткое руководство",
         "empty_feed_5": "Просмотреть ЧаВО"
-    },
-    "transferhistoryrow_jsx": {
-        "to_savings": "в сейф",
-        "from_savings": "из сейфа",
-        "cancel_transfer_from_savings": "Отменить перевод из сейфа",
-        "stop_power_down": "Ослабление Силы Голоса остановлено",
-        "start_power_down_of": "Ослабление Силы Голоса начато с",
-        "receive_interest_of": "Получать проценты по"
-    },
-    "savingswithdrawhistory_jsx": {
-        "cancel_this_withdraw_request": "Отменить запрос вывода средств?",
-        "pending_savings_withdrawals": "Выплаты из сейфа",
-        "withdraw": "Снять %(amount)s",
-        "to": "для %(to)s",
-        "from_to": "от %(from)s к %(to)s"
     },
     "explorepost_jsx": {
         "copied": "Скопировано!",

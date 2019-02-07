@@ -373,14 +373,6 @@
         "hide_resteems": "Hide Resteems",
         "show_all": "Show All"
     },
-    "authorrewards_jsx": {
-        "estimated_author_rewards_last_week": "이번 주 예상 저자 보상금액",
-        "author_rewards_history": "저자 보상 내역"
-    },
-    "curationrewards_jsx": {
-        "estimated_curation_rewards_last_week": "이번주 예상 큐레이션 보상금액",
-        "curation_rewards_history": "큐레이션 보상 내역"
-    },
     "post_jsx": {
         "now_showing_comments_with_low_ratings":
             "Now showing comments with low ratings",
@@ -514,21 +506,6 @@
         "empty_feed_3": "Explore Trending Articles",
         "empty_feed_4": "Read The Quick Start Guide",
         "empty_feed_5": "Browse The FAQ"
-    },
-    "transferhistoryrow_jsx": {
-        "to_savings": "to savings",
-        "from_savings": "from savings",
-        "cancel_transfer_from_savings": "Cancel transfer from savings",
-        "stop_power_down": "파워 다운 중지",
-        "start_power_down_of": "Start power down of",
-        "receive_interest_of": "Receive interest of"
-    },
-    "savingswithdrawhistory_jsx": {
-        "cancel_this_withdraw_request": "출금 요청을 취소하시겠습니까?",
-        "pending_savings_withdrawals": "출금 진행 중",
-        "withdraw": "%(amount)s 출금: ",
-        "to": "%(to)s로 전송",
-        "from_to": "%(from)s 에서 %(to)s로 전송"
     },
     "explorepost_jsx": {
         "copied": "Copied!",

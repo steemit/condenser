@@ -374,15 +374,6 @@
         "hide_resteems": "Hide Resteems",
         "show_all": "Show All"
     },
-    "authorrewards_jsx": {
-        "estimated_author_rewards_last_week": "過去1週間の推定投稿者報酬",
-        "author_rewards_history": "投稿者報酬履歴"
-    },
-    "curationrewards_jsx": {
-        "estimated_curation_rewards_last_week":
-            "過去1週間の推定キュレーション報酬",
-        "curation_rewards_history": "キュレーション報酬履歴"
-    },
     "post_jsx": {
         "now_showing_comments_with_low_ratings":
             "評価の低いコメントを表示しています。",
@@ -517,22 +508,6 @@
         "empty_feed_3": "トレンド記事を検索する",
         "empty_feed_4": "クイックスタートガイドを読む",
         "empty_feed_5": "FAQを参照する"
-    },
-    "transferhistoryrow_jsx": {
-        "to_savings": "貯蓄に",
-        "from_savings": "貯蓄から",
-        "cancel_transfer_from_savings":
-            "貯蓄からの引き出しをキャンセルしました",
-        "stop_power_down": "パワーダウンを停止しました",
-        "start_power_down_of": "パワーダウンを開始しました：",
-        "receive_interest_of": "利息受け取りました："
-    },
-    "savingswithdrawhistory_jsx": {
-        "cancel_this_withdraw_request": "引き出し依頼をキャンセルしますか？",
-        "pending_savings_withdrawals": "保留中の貯蓄引き出し",
-        "withdraw": "%(amount)sを引き出して、",
-        "to": "%(to)sの残高に加えます。",
-        "from_to": "%(from)sから%(to)sへ送ります。"
     },
     "explorepost_jsx": {
         "copied": "コピーしました！",

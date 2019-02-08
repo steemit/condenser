@@ -42,7 +42,6 @@
     "from": "noreply@example.com",
     "key": "SG.xxx_yyyy",
     "templates": {
-      "confirm_email": false,
     }
   },
   "server_session_secret": "exiKdyF+IwRIXJDmtGIl4vWUz4i3eVSISpfZoeYc0s4=",

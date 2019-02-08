@@ -209,8 +209,7 @@ export default class UserProfile extends React.Component {
         const isMyAccount = username === account.name;
         let tab_content = null;
 
-        let rewardsClass = '',
-            walletClass = '';
+        let walletClass = '';
         if (section === 'transfers') {
             walletClass = 'active';
             tab_content = (
@@ -225,10 +224,8 @@ export default class UserProfile extends React.Component {
                 </div>
             );
         } else if (section === 'curation-rewards') {
-            rewardsClass = 'active';
             tab_content = <div>Moved to wallet</div>;
         } else if (section === 'author-rewards') {
-            rewardsClass = 'active';
             tab_content = <div>Moved to wallet</div>;
         } else if (section === 'followers') {
             if (followers && followers.has('blog_result')) {
@@ -426,10 +423,6 @@ export default class UserProfile extends React.Component {
                 page_title = tt('g.my_replies');
             } else if (section === 'settings') {
                 page_title = tt('g.settings');
-            } else if (section === 'curation-rewards') {
-                page_title = tt('g.curation_rewards');
-            } else if (section === 'author-rewards') {
-                page_title = tt('g.author_rewards');
             }
         } else {
             if (section === 'blog') {
@@ -440,10 +433,6 @@ export default class UserProfile extends React.Component {
                 page_title = tt('g.replies');
             } else if (section === 'settings') {
                 page_title = tt('g.settings');
-            } else if (section === 'curation-rewards') {
-                page_title = tt('g.curation_rewards');
-            } else if (section === 'author-rewards') {
-                page_title = tt('g.author_rewards');
             }
         }
 
@@ -506,19 +495,6 @@ export default class UserProfile extends React.Component {
             }
         }
 
-        let rewardsMenu = [
-            {
-                link: `/@${accountname}/curation-rewards`,
-                label: tt('g.curation_rewards'),
-                value: tt('g.curation_rewards'),
-            },
-            {
-                link: `/@${accountname}/author-rewards`,
-                label: tt('g.author_rewards'),
-                value: tt('g.author_rewards'),
-            },
-        ];
-
         const top_menu = (
             <div className="row UserProfile__top-menu">
                 <div className="columns small-10 medium-12 medium-expand">
@@ -547,14 +523,7 @@ export default class UserProfile extends React.Component {
                                 {tt('g.replies')}
                             </Link>
                         </li>
-                        {/*<li><Link to={`/@${accountname}/feed`} activeClassName="active">Feed</Link></li>*/}
-                        <DropdownMenu
-                            className={rewardsClass}
-                            items={rewardsMenu}
-                            el="li"
-                            selected={tt('g.rewards')}
-                            position="right"
-                        />
+                        <li><Link to={`/@${accountname}/feed`} activeClassName="active">Feed</Link></li>
                     </ul>
                 </div>
                 <div className="columns shrink">

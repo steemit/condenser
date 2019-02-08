@@ -37,6 +37,7 @@
 
   .Panel {
     color: $color-dark;
+    overflow: auto;
 
     > .NodeHeader {
       align-items: center;
@@ -436,7 +437,10 @@
   }
 }
 
-.ui.wide.left.sidebar,
-.ui.wide.right.sidebar {
+.ui.wide.left.sidebar {
   width: 420px;
+}
+
+.ui.wide.right.sidebar {
+  width: 50%;
 }

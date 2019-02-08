@@ -6,10 +6,10 @@
     background: white;
     max-width: 820px;
     margin: 0 auto;
-    max-height: calc(100vh - 68px);
+    max-height: fit-content;
     min-height: calc(100vh - 68px);
     position: relative;
-    padding: 30px 60px;
+    padding: 5px;
 
     .Field,
     .TypeSelectorWrapper {
@@ -76,6 +76,11 @@
 
       textarea:focus {
         border: 2px solid #2684ff;
+      }
+
+      input {
+        border: 1px solid #cacaca;
+        width: 100%;
       }
     }
   }

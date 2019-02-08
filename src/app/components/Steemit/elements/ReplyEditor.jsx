@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import reactForm from 'app/utils/ReactForm';
+import { connect } from 'react-redux';
 import * as transactionActions from 'app/redux/TransactionReducer';
 import * as userActions from 'app/redux/UserReducer';
 import MarkdownViewer from 'app/components/Steemit/cards/MarkdownViewer';
@@ -102,14 +103,6 @@ class ReplyEditor extends React.Component {
     }
   }
 
-  componentDidMount() {
-    setTimeout(() => {
-      if (this.props.isStory) this.refs.titleRef.focus();
-      else if (this.refs.postRef) this.refs.postRef.focus();
-      else if (this.refs.rte) this.refs.rte._focus();
-    }, 300);
-  }
-
   shouldComponentUpdate = shouldComponentUpdate(this, 'ReplyEditor');
 
   componentWillUpdate(nextProps, nextState) {
@@ -185,6 +178,7 @@ class ReplyEditor extends React.Component {
   onTitleChange = e => {
     const value = e.target.value;
     // TODO block links in title (they do not make good permlinks)
+    // eslint-disable-next-line
     const hasMarkdown = /(?:\*[\w\s]*\*|\#[\w\s]*\#|_[\w\s]*_|~[\w\s]*~|\]\s*\(|\]\s*\[)/.test(
       value
     );
@@ -268,12 +262,14 @@ class ReplyEditor extends React.Component {
   onPasteCapture = e => {
     try {
       if (e.clipboardData) {
+        /* eslint-disable */
         for (const item of e.clipboardData.items) {
           if (item.kind === 'file' && /^image\//.test(item.type)) {
             const blob = item.getAsFile();
             this.upload(blob);
           }
         }
+        /* eslint-enable */
       } else {
         // http://joelb.me/blog/2011/code-snippet-accessing-clipboard-images-with-javascript/
         // contenteditable element that catches all pasted data
@@ -431,7 +427,6 @@ class ReplyEditor extends React.Component {
                     placeholder={tt('reply_editor.title')}
                     autoComplete="off"
                     ref="titleRef"
-                    tabIndex={1}
                     {...title.props}
                   />
                   <div
@@ -439,13 +434,13 @@ class ReplyEditor extends React.Component {
                     style={{ marginRight: '1rem' }}
                   >
                     {rte && (
-                      <a href="#" onClick={this.toggleRte}>
+                      <a onClick={this.toggleRte}>
                         {body.value ? 'Raw HTML' : 'Markdown'}
                       </a>
                     )}
                     {!rte &&
                       (isHtml || !body.value) && (
-                        <a href="#" onClick={this.toggleRte}>
+                        <a onClick={this.toggleRte}>
                           {tt('reply_editor.editor')}
                         </a>
                       )}
@@ -470,7 +465,6 @@ class ReplyEditor extends React.Component {
                   value={this.state.rte_value}
                   onChange={this.onChange}
                   onBlur={body.onBlur}
-                  tabIndex={2}
                 />
               ) : (
                 <span>
@@ -497,7 +491,6 @@ class ReplyEditor extends React.Component {
                         isStory ? tt('g.write_your_story') : tt('g.reply')
                       }
                       autoComplete="off"
-                      tabIndex={2}
                     />
                   </Dropzone>
                   <p className="drag-and-drop">
@@ -540,7 +533,6 @@ class ReplyEditor extends React.Component {
                     {...category.props}
                     disabled={loading}
                     isEdit={isEdit}
-                    tabIndex={3}
                   />
                   <div className="error">
                     {(category.touched || category.value) && category.error}&nbsp;
@@ -563,7 +555,7 @@ class ReplyEditor extends React.Component {
                         {this.props.payoutType == '100%' &&
                           tt('reply_editor.power_up_100')}
                       </div>
-                      <a href="#" onClick={this.showAdvancedSettings}>
+                      <a onClick={this.showAdvancedSettings}>
                         {tt('reply_editor.advanced_settings')}
                       </a>{' '}
                       <br />
@@ -575,13 +567,12 @@ class ReplyEditor extends React.Component {
             <div className={vframe_section_shrink_class}>
               {postError && <div className="error">{postError}</div>}
             </div>
-            <div className={vframe_section_shrink_class}>
+            <div className="Buttons">
               {!loading && (
                 <button
                   type="submit"
-                  className="button"
+                  className="Button Black"
                   disabled={disabled}
-                  tabIndex={4}
                 >
                   {isEdit ? tt('reply_editor.update_post') : postLabel}
                 </button>
@@ -595,20 +586,14 @@ class ReplyEditor extends React.Component {
               &nbsp;{' '}
               {!loading &&
                 this.props.onCancel && (
-                  <button
-                    type="button"
-                    className="secondary hollow button no-border"
-                    tabIndex={5}
-                    onClick={onCancel}
-                  >
+                  <button type="button" className="Button" onClick={onCancel}>
                     {tt('g.cancel')}
                   </button>
                 )}
               {!loading &&
                 !this.props.onCancel && (
                   <button
-                    className="button hollow no-border"
-                    tabIndex={5}
+                    className="Button"
                     disabled={submitting}
                     onClick={onCancel}
                   >
@@ -700,7 +685,6 @@ function stateFromMarkdown(RichTextEditor, markdown) {
   return stateFromHtml(RichTextEditor, html);
 }
 
-import { connect } from 'react-redux';
 const richTextEditor = process.env.BROWSER
   ? require('react-rte-image').default
   : null;
@@ -771,12 +755,12 @@ export default formId =>
       },
       uploadImage: (file, progress) =>
         dispatch(userActions.uploadImage({ file, progress })),
-      showAdvancedSettings: formId =>
-        dispatch(userActions.showPostAdvancedSettings({ formId })),
-      setPayoutType: (formId, payoutType) =>
+      showAdvancedSettings: id =>
+        dispatch(userActions.showPostAdvancedSettings({ formId: id })),
+      setPayoutType: (id, payoutType) =>
         dispatch(
           userActions.set({
-            key: ['current', 'post', formId, 'payoutType'],
+            key: ['current', 'post', id, 'payoutType'],
             value: payoutType,
           })
         ),
@@ -866,7 +850,7 @@ export default formId =>
         if (/^[-a-z\d]+$/.test(rootCategory))
           allCategories = allCategories.add(rootCategory);
 
-        let postHashtags = [...rtags.hashtags];
+        const postHashtags = [...rtags.hashtags];
         while (allCategories.size < 5 && postHashtags.length > 0) {
           allCategories = allCategories.add(postHashtags.shift());
         }

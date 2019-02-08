@@ -6,7 +6,6 @@ import ReplyEditor from 'app/components/Steemit/elements/ReplyEditor';
 import { SUBMIT_FORM_ID } from 'shared/constants';
 
 import TypeSelector from 'app/components/pages/_Common/TypeSelector';
-import { Posts } from './DummyData';
 
 const formId = SUBMIT_FORM_ID;
 const SubmitReplyEditor = ReplyEditor(formId);
@@ -39,20 +38,9 @@ class Create extends Component {
   constructor(props) {
     super(props);
 
-    const highLight = localStorage.getItem('high_light');
-    if (highLight && highLight.length > 0) {
-      localStorage.removeItem('high_light');
-      Posts.unshift({
-        id: Posts.length + 1,
-        type: 'Q',
-        title: JSON.parse(highLight).anchorText,
-      });
-    }
-
     this.state = {
       // loading: true,
-      type: 'Q',
-      posts: Posts,
+      type: 'Qu',
     };
 
     this.success = (/*operation*/) => {
@@ -70,7 +58,7 @@ class Create extends Component {
   }
 
   render() {
-    const { type, posts } = this.state;
+    const { type, node } = this.props;
     const typeString = getTypeString(type);
 
     return (
@@ -88,7 +76,7 @@ class Create extends Component {
                 ),
               },
               {
-                type: 'Q',
+                type: 'Qu',
                 render: () => (
                   <div>
                     <span className="Q">Qu</span> Question
@@ -96,21 +84,13 @@ class Create extends Component {
                 ),
               },
               {
-                type: 'H',
+                type: 'Hy',
                 render: () => (
                   <div>
                     <span className="H">Hy</span> Hypothesis
                   </div>
                 ),
               },
-              // {
-              //   type: 'R',
-              //   render: () => (
-              //     <div>
-              //       <span className="R">Re</span> Review
-              //     </div>
-              //   ),
-              // },
             ]}
             value={type}
             onChange={this.onUpdateState('type')}
@@ -120,7 +100,7 @@ class Create extends Component {
             <Select
               styles={customStyles}
               classNamePrefix="Select"
-              defaultValue={posts[0]}
+              defaultValue={node}
               placeholder="Select In Response To..."
               getOptionValue={item => item.id}
               getOptionLabel={item => (
@@ -128,7 +108,7 @@ class Create extends Component {
                   <span className={item.type}>{item.type}</span> {item.title}
                 </div>
               )}
-              options={posts}
+              options={[node]}
               isClearable
               isSearchable
             />
@@ -195,10 +175,10 @@ class Create extends Component {
 function getTypeString(type) {
   let ret = '';
   switch (type) {
-    case 'Q':
+    case 'Qu':
       ret = 'Question';
       break;
-    case 'H':
+    case 'Hy':
       ret = 'Hypothesis';
       break;
     default:
@@ -207,7 +187,4 @@ function getTypeString(type) {
   return ret;
 }
 
-module.exports = {
-  path: 'submit.html',
-  component: Create,
-};
+export default Create;

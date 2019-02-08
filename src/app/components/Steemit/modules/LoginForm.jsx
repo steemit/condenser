@@ -287,7 +287,7 @@ class LoginForm extends Component {
     //       <em>{tt('loginform_jsx.amazing_community')}</em>
     //       {tt('loginform_jsx.to_comment_and_reward_others')}
     //     </p>
-    //     <button type="button" className="button hollow" onClick={this.SignUp}>
+    //     <button type="button" className="button" onClick={this.SignUp}>
     //       {tt('loginform_jsx.sign_up_get_steem')}
     //     </button>
     //   </div>
@@ -420,13 +420,13 @@ class LoginForm extends Component {
             <button
               type="button float-right"
               disabled={submitting}
-              className="button hollow"
+              className="button"
               onClick={onCancel}
             >
               {tt('g.cancel')}
             </button>
           )}
-          <button type="button" className="button hollow" onClick={this.SignUp}>
+          <button type="button" className="button" onClick={this.SignUp}>
             {tt('g.sign_up')}
           </button>
         </div>

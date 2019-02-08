@@ -8,7 +8,7 @@ class TypeSelector extends Component {
       <div className="TypeSelectorWrapper">
         <div className="Label">{label}</div>
         <div className="Types">
-          {types.map(type => (
+          {types.filter(type => value === type.type).map(type => (
             <div
               role="button"
               className={`Type ${value === type.type ? 'Active' : ''}`}

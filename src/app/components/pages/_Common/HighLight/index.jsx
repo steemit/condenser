@@ -15,27 +15,27 @@ class HighLight extends Component {
         buttons: [
           {
             name: 'h1',
-            action: this.onAction('create'),
-            aria: 'Create Post',
+            action: this.onAction('Ob'),
+            aria: 'Create New Observation',
             tagNames: ['h2'],
-            contentDefault: '<b>Create</b>',
-            classList: ['Button', 'CreatePost'],
+            contentDefault: '<b>Ob</b>',
+            classList: ['Button', 'Ob'],
           },
           {
             name: 'h2',
-            action: this.onAction('share'),
-            aria: 'Share',
+            action: this.onAction('Qu'),
+            aria: 'Create New Question',
             tagNames: ['h2'],
-            contentDefault: '<b>Share</b>',
-            classList: ['Button', 'Share'],
+            contentDefault: '<b>Qu</b>',
+            classList: ['Button', 'Qu'],
           },
           {
             name: 'h3',
-            action: this.onAction('tweet'),
-            aria: 'Tweet',
+            action: this.onAction('Hy'),
+            aria: 'Create New Hypothesis',
             tagNames: ['h2'],
-            contentDefault: '<b>Tweet</b>',
-            classList: ['Button', 'Tweet'],
+            contentDefault: '<b>Hy</b>',
+            classList: ['Button', 'Hy'],
           },
         ],
         standardizeSelectionStart: true,
@@ -69,12 +69,7 @@ class HighLight extends Component {
           baseOffset: selection.baseOffset,
           focusOffset: selection.focusOffset,
         };
-        console.log(selection, JSON.stringify(highLight));
-
-        if (type === 'create') {
-          localStorage.setItem('high_light', JSON.stringify(highLight));
-          location.href = '/submit.html';
-        }
+        this.props.onHighLight(type, selection, highLight);
       }
     };
   }

@@ -80,52 +80,6 @@
           }
         }
       }
-
-      .Buttons {
-        display: flex;
-        margin-top: 60px;
-
-        & > *:not(:last-child) {
-          margin-right: 30px;
-        }
-
-        .Button,
-        button {
-          background-color: white;
-          border: 2px solid $color-light-grey;
-          border-radius: 3px;
-          color: $color-black;
-          cursor: pointer;
-          font-family: 'Panton';
-          font-size: 14px;
-          height: 40px;
-          outline: none;
-          padding: 0;
-          text-transform: capitalize;
-
-          display: block;
-          line-height: 36px;
-          max-width: 120px;
-          text-align: center;
-          text-decoration: none;
-          width: 50%;
-
-          &:hover {
-            background-color: $color-light;
-          }
-
-          &.Black {
-            background-color: $color-black;
-            border-color: $color-black;
-            color: white;
-
-            &:hover {
-              border-color: $color-dark;
-              background-color: $color-dark;
-            }
-          }
-        }
-      }
     }
 
     &.Right {

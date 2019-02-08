@@ -17,7 +17,8 @@ import graph3 from 'assets/images/static/graph/3.png';
 import HighLight from 'app/components/pages/_Common/HighLight';
 import Label from 'app/components/pages/_Common/Label';
 import SideMenu from 'app/components/pages/_Common/SideMenu';
-import BrowsingHistory from './Components/BrowsingHistory';
+import Create from 'app/components/pages/Posts/Create';
+// import BrowsingHistory from './Components/BrowsingHistory';
 import { Nodes, HightLights, Note } from './DummyData';
 import { MockItemDictionary } from '../Home/DummyData';
 
@@ -31,8 +32,10 @@ class Node extends Component {
       data: MockItemDictionary[nodeId],
       citesVisible: false,
       citedByVisible: false,
-      highlightIndex: -1,
+      highlightInfo: null,
     };
+
+    this.onHighLight = this.onHighLight.bind(this);
   }
 
   componentDidMount() {
@@ -63,14 +66,12 @@ class Node extends Component {
 
   toggleCitesPanel = () =>
     this.setState({ citesVisible: !this.state.citesVisible });
-  toggleCitedByPanel = (highlightIndex = -1) =>
+  toggleCitedByPanel = () =>
     this.setState({
       citedByVisible: !this.state.citedByVisible,
-      highlightIndex,
     });
   closeCitesPanel = () => this.setState({ citesVisible: false });
-  closeCitedByPanel = () =>
-    this.setState({ citedByVisible: false, highlightIndex: -1 });
+  closeCitedByPanel = () => this.setState({ citedByVisible: false });
 
   placeHightLights(note) {
     const ret = note
@@ -118,6 +119,15 @@ class Node extends Component {
     });
   }
 
+  onHighLight(type, selection, highLight) {
+    this.setState(
+      {
+        highlightInfo: { type, selection, highLight },
+      },
+      this.toggleCitedByPanel
+    );
+  }
+
   render() {
     if (this.state.data == null) return <div>Loading</div>;
     const {
@@ -130,10 +140,7 @@ class Node extends Component {
     const citedByPanel = this.state.citedByVisible;
     const voteCount = (votes.up || 0) - (votes.down || 0);
 
-    const { highlightIndex } = this.state;
-    const highlightData =
-      highlightIndex === -1 ? null : HightLights[highlightIndex];
-    const hNode = highlightData ? Nodes[highlightData.node] : null;
+    const { highlightInfo } = this.state;
 
     return (
       <div className="NodeWrapper">
@@ -173,58 +180,25 @@ class Node extends Component {
             visible={citedByPanel}
             onHide={this.closeCitedByPanel}
           >
-            <div className="Panel">
-              <div className="NodeHeader">
-                <div>Cited By Others</div>
-                <X
-                  style={{ color: '#bbb' }}
-                  size={20}
-                  onClick={this.closeCitedByPanel}
-                />
-              </div>
-              <div className="Main">
-                Topic that user <span>highlighted</span> in the text
-              </div>
-              {hNode && (
+            {highlightInfo && (
+              <div className="Panel">
+                <div className="NodeHeader">
+                  <div>Create New Post</div>
+                  <X
+                    style={{ color: '#bbb' }}
+                    size={20}
+                    onClick={this.closeCitedByPanel}
+                  />
+                </div>
+                <div className="Main">
+                  You <span>highlighted</span>:
+                </div>
                 <div className="Extra">
-                  <div className={`Type ${hNode.type}`}>{hNode.type}</div>
-                  {hNode.title}
+                  {highlightInfo.highLight.anchorText}
                 </div>
-              )}
-              <div className="NodeHeader">
-                <div>Top Highlights</div>
+                <Create type={highlightInfo.type} node={this.state.data.data} />
               </div>
-              {hNode && (
-                <div className="Sections">
-                  {[0, 1].map((key, index) => (
-                    <section key={index}>
-                      <div className="NodeHeader">
-                        <div className="Wrap">
-                          <div className="User">
-                            <img src={defaultUser} alt={user.name} />
-                            <div>
-                              <div className="UserName">{user.name}</div>
-                              <div className="UserTitle">{user.title}</div>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="Extra">
-                          <div className="Date">{date}</div>
-                          <div className="Reviews">{reviews} Reviews</div>
-                        </div>
-                      </div>
-                      <div className="Title">{title}</div>
-                      <div className="Content">
-                        There are many variations of passages of Lorem Ipsum
-                        available, but the majority have suffered alteration in
-                        some form, , or randomised words which don't look even
-                        slightly believable.
-                      </div>
-                    </section>
-                  ))}
-                </div>
-              )}
-            </div>
+            )}
           </Sidebar>
 
           <Sidebar.Pusher>
@@ -292,13 +266,8 @@ class Node extends Component {
                 ) : (
                   <span className="TitleFrom None">No Originatation</span>
                 )}
-                <HighLight>
-                  <div className="Content">
-                    {/* <span onClick={this.toggleCitedByPanel}>
-                                            goodness
-                                        </span> */}
-                    {this.placeHightLights(Note)}
-                  </div>
+                <HighLight onHighLight={this.onHighLight}>
+                  <div className="Content">{this.placeHightLights(Note)}</div>
                 </HighLight>
               </div>
               <SideMenu />

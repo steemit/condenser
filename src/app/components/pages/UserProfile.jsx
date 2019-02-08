@@ -9,7 +9,6 @@ import * as transactionActions from 'app/redux/TransactionReducer';
 import * as userActions from 'app/redux/UserReducer';
 import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
 import Icon from 'app/components/elements/Icon';
-import PasswordReset from 'app/components/elements/PasswordReset';
 import UserWallet from 'app/components/modules/UserWallet';
 import Settings from 'app/components/modules/Settings';
 import UserList from 'app/components/elements/UserList';
@@ -211,17 +210,11 @@ export default class UserProfile extends React.Component {
                     />
                 </div>
             );
-        } else if (section === 'password') {
-            walletClass = 'active';
-            tab_content = (
-                <div>
-                    <PasswordReset account={accountImm} />
-                </div>
-            );
         } else if (
             section === 'curation-rewards' ||
             section === 'author-rewards' ||
-            section === 'permissions'
+            section === 'permissions' ||
+            section === 'password'
         ) {
             walletClass = 'active';
             tab_content = <div>Moved to wallet</div>;

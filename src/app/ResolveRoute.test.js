@@ -40,10 +40,6 @@ describe('resolveRoute', () => {
         ['/privacy.html', { page: 'Privacy' }],
         ['/support.html', { page: 'Support' }],
         ['/tos.html', { page: 'Tos' }],
-        ['/change_password', { page: 'ChangePassword' }],
-        ['/recover_account_step_1', { page: 'RecoverAccountStep1' }],
-        ['/market', { page: 'Market' }],
-        ['/~witnesses', { page: 'Witnesses' }],
         ['/submit.html', { page: 'SubmitPost' }],
         [
             '/@maitland/feed',

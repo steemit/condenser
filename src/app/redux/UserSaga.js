@@ -97,7 +97,7 @@ function* usernamePasswordLogin(action) {
     }
 }
 
-// const isHighSecurityOperations = ['transfer', 'account_update']
+// const isHighSecurityOperations = ['transfer']
 
 const clean = value =>
     value == null || value === '' || /null|undefined/.test(value)

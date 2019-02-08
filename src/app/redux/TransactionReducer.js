@@ -85,15 +85,6 @@ export default function reducer(state = defaultState, action) {
                             errorKey = 'Insufficient balance.';
                         }
                         break;
-                    case 'withdraw_vesting':
-                        if (
-                            /Account registered by another account requires 10x account creation fee worth of Steem Power/.test(
-                                errorStr
-                            )
-                        )
-                            errorKey =
-                                'Account requires 10x the account creation fee in Steem Power (approximately 30 SP) before it can power down.';
-                        break;
                     default:
                         break;
                 }

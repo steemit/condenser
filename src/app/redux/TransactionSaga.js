@@ -34,7 +34,6 @@ const hook = {
     accepted_delete_comment,
     accepted_vote,
     accepted_account_update,
-    accepted_withdraw_vesting,
 };
 
 export function* preBroadcast_transfer({ operation }) {
@@ -395,15 +394,6 @@ function* accepted_vote({ operation: { author, permlink, weight } }) {
         })
     );
     yield call(getContent, { author, permlink });
-}
-
-function* accepted_withdraw_vesting({ operation }) {
-    let [account] = yield call(
-        [api, api.getAccountsAsync],
-        [operation.account]
-    );
-    account = fromJS(account);
-    yield put(globalActions.receiveAccount({ account }));
 }
 
 function* accepted_account_update({ operation }) {

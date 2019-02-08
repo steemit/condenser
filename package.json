@@ -122,8 +122,6 @@
     "sass-loader": "6.0.6",
     "secure-random": "1.1.1",
     "sendgrid": "4.10.0",
-    "sequelize": "3.33.0",
-    "sequelize-cli": "3.2.0",
     "speakingurl": "9.0.0",
     "sqlite3": "4.0.1",
     "statsd-client": "0.4.2",

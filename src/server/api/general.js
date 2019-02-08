@@ -1,16 +1,8 @@
 /*global $STM_Config */
 import koa_router from 'koa-router';
 import koa_body from 'koa-body';
-import crypto from 'crypto';
-import models from 'db/models';
 import config from 'config';
-import { esc, escAttrs } from 'db/models';
-import {
-    emailRegex,
-    getRemoteIp,
-    rateLimitReq,
-    checkCSRF,
-} from 'server/utils/misc';
+import { getRemoteIp, rateLimitReq, checkCSRF } from 'server/utils/misc';
 import coBody from 'co-body';
 import Mixpanel from 'mixpanel';
 import { PublicKey, Signature, hash } from '@steemit/steem-js/lib/auth/ecc';
@@ -66,13 +58,6 @@ export default function useGeneralApi(app) {
 
         logRequest('login_account', this, { account });
         try {
-            const db_account = yield models.Account.findOne({
-                attributes: ['user_id'],
-                where: { name: esc(account) },
-                logging: false,
-            });
-            if (db_account) this.session.user = db_account.user_id;
-
             if (signatures) {
                 if (!this.session.login_challenge) {
                     console.error(

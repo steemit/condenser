@@ -24,7 +24,6 @@ class UserWallet extends React.Component {
         let vesting_steem = vestingSteem(account.toJS(), gprops);
         let delegated_steem = delegatedSteem(account.toJS(), gprops);
 
-        const steem_balance_str = numberWithCommas(balance_steem.toFixed(3));
         const power_balance_str = numberWithCommas(vesting_steem.toFixed(3));
         const received_power_balance_str =
             (delegated_steem < 0 ? '+' : '') +

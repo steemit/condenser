@@ -89,7 +89,6 @@ export default class UserProfile extends React.Component {
 
     componentWillUnmount() {
         this.props.clearTransferDefaults();
-        this.props.clearPowerdownDefaults();
     }
 
     loadMore(last_post, category, showResteem) {
@@ -217,7 +216,6 @@ export default class UserProfile extends React.Component {
                     <UserWallet
                         account={accountImm}
                         showTransfer={this.props.showTransfer}
-                        showPowerdown={this.props.showPowerdown}
                         current_user={current_user}
                         withdrawVesting={this.props.withdrawVesting}
                     />
@@ -523,7 +521,14 @@ export default class UserProfile extends React.Component {
                                 {tt('g.replies')}
                             </Link>
                         </li>
-                        <li><Link to={`/@${accountname}/feed`} activeClassName="active">Feed</Link></li>
+                        <li>
+                            <Link
+                                to={`/@${accountname}/feed`}
+                                activeClassName="active"
+                            >
+                                Feed
+                            </Link>
+                        </li>
                     </ul>
                 </div>
                 <div className="columns shrink">
@@ -698,14 +703,6 @@ module.exports = {
             showTransfer: transferDefaults => {
                 dispatch(userActions.setTransferDefaults(transferDefaults));
                 dispatch(userActions.showTransfer());
-            },
-            clearPowerdownDefaults: () => {
-                dispatch(userActions.clearPowerdownDefaults());
-            },
-            showPowerdown: powerdownDefaults => {
-                console.log('power down defaults:', powerdownDefaults);
-                dispatch(userActions.setPowerdownDefaults(powerdownDefaults));
-                dispatch(userActions.showPowerdown());
             },
             withdrawVesting: ({
                 account,

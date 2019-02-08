@@ -651,18 +651,6 @@
         "redeem_rewards": "Liquidar recompensas (Transferir al saldo)",
         "buy_steem_or_steem_power": "Compra STEEM o STEEM POWER."
     },
-    "powerdown_jsx": {
-        "power_down": "Power Down",
-        "amount": "Cantidad",
-        "already_power_down":
-            "Estás haciendo un power down de %(AMOUNT)s%(LIQUID_TICKER)s (%(WITHDRAWN)s%(LIQUID_TICKER)shan sido pagados hasta ahora). Ten en cuenta que si cambias la cantidad de \"power down\" la fecha de pago se reinicializará.",
-        "delegating":
-            "Estás delegando %(AMOUNT)s%(LIQUID_TICKER)s. Esa cantidad está \"bloquedada\" y no podrás hacer \"power down\" con ella hasta que hayas cancelado la delegación y el periodo de pagos  haya vencido.",
-        "per_week": "Eso es %(AMOUNT)s%(LIQUID_TICKER)spor semana",
-        "warning":
-            "Dejar menos de %(AMOUNT)s%(VESTING_TOKEN)s en su cuenta no es recomendable y puede dejarla en un estado inutilizable.",
-        "error": "Imposible hacer \"power down\" (ERROR: %(MESSAGE)s)"
-    },
     "checkloginowner_jsx": {
         "your_password_permissions_were_reduced":
             "Sus permisos de identificacion han sido limitados.",

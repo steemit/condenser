@@ -659,18 +659,6 @@
         "redeem_rewards": "Riscuoti le ricompense (Trasferisci sul conto)",
         "buy_steem_or_steem_power": "Compra STEEM o STEEM POWER"
     },
-    "powerdown_jsx": {
-        "power_down": "Power Down",
-        "amount": "Somma",
-        "already_power_down":
-            "Stai già effettuando il powering down %(AMOUNT)s %(LIQUID_TICKER)s (%(WITHDRAWN)s %(LIQUID_TICKER)s pagati sin ora). Ricorda che se cambi l'ammontare del power down il pagamento programmato verrà resettato.",
-        "delegating":
-            "Stai delegando %(AMOUNT)s %(LIQUID_TICKER)s. Questa somma sarà bloccata e non disponibile per il power down sino a quando la delega non sarà rimossa e non sia passato un intero intervallo di ricompensa.",
-        "per_week": "È ~%(AMOUNT)s %(LIQUID_TICKER)s a settimana.",
-        "warning":
-            "Lasciare meno di %(AMOUNT)s %(VESTING_TOKEN)s sul tuo account è sconsigliato e potrebbe renderlo inutilizzabile.",
-        "error": "Impossibile effettuare il power down (ERROR: %(MESSAGE)s)"
-    },
     "checkloginowner_jsx": {
         "your_password_permissions_were_reduced":
             "I tuoi permessi delle password sono stati ridotti",

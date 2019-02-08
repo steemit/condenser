@@ -653,18 +653,6 @@
         "redeem_rewards": "내 지갑으로 입금하기",
         "buy_steem_or_steem_power": "STEEM, STEEM POWER 구입"
     },
-    "powerdown_jsx": {
-        "power_down": "파워 다운",
-        "amount": "목표량",
-        "already_power_down":
-            "이미 %(AMOUNT)s %(LIQUID_TICKER)s의 파워 다운을 진행하고 있습니다(현재까지 %(WITHDRAWN)s %(LIQUID_TICKER)s 파워 다운). 파워다운 수량을 변경하게 되면 파워 다운 일정이 초기화되니 유의하십시오..",
-        "delegating":
-            "현재 %(AMOUNT)s %(LIQUID_TICKER)s을 임대 중입니다. 이 수량은 임대 종료 후 회수 기간이 완전히 지날 때까지는 파워 다운을 할 수 없습니다.",
-        "per_week": "That's ~%(AMOUNT)s %(LIQUID_TICKER)s per week.",
-        "warning":
-            "%(VESTING_TOKEN)s가 %(AMOUNT)s 이하로 내려가면 계정의 사용에 제약이 생깁니다.",
-        "error": "파워다운 실패: %(MESSAGE)s"
-    },
     "checkloginowner_jsx": {
         "your_password_permissions_were_reduced":
             "Your password permissions were reduced",

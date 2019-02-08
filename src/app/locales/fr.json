@@ -675,19 +675,6 @@
         "redeem_rewards": "Réclamer les gains (transférer vers le solde)",
         "buy_steem_or_steem_power": "Acheter du STEEM ou du STEEM POWER"
     },
-    "powerdown_jsx": {
-        "power_down": "Diminuer son influence",
-        "amount": "Montant",
-        "already_power_down":
-            "Vous êtes actuellement en train de retirer %(AMOUNT)s %(LIQUID_TICKER)s d'influence (%(WITHDRAWN)s %(LIQUID_TICKER)s déjà payé). Veuillez noter que si le montant retiré est modifié, le compteur pour le prochain retrait sera remis à zéro également.",
-        "delegating":
-            "Vous déléguez actuellement %(AMOUNT)s %(LIQUID_TICKER)s. Ce montant est bloqué et est indisponible pour tout retrait d'influence, ou power down, tant que la délégation n'est pas annulée et qu'une période complète de gains soit passée.",
-        "per_week": "C'est environ %(AMOUNT)s%(LIQUID_TICKER)s par semaine.",
-        "warning":
-            "Laisser moins de%(AMOUNT)s%(VESTING_TOKEN)s sur votre compte n'est pas recommandé et peut rendre votre compte inutilisable.",
-        "error":
-            "Impossible d'effectuer un retrait d'influence (ERREUR : %(MESSAGE)s)"
-    },
     "checkloginowner_jsx": {
         "your_password_permissions_were_reduced":
             "Les permissions de votre mot de passe ont été réduites",

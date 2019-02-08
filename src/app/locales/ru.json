@@ -676,18 +676,6 @@
         "redeem_rewards": "Получить вознаграждение",
         "buy_steem_or_steem_power": "Купить STEEM или STEEM POWER"
     },
-    "powerdown_jsx": {
-        "power_down": "Уменьшить силу голоса (power down)",
-        "amount": "Количество",
-        "already_power_down":
-            "Вы уже запустили понижение силы голоса на %(AMOUNT)s %(LIQUID_TICKER)s (%(WITHDRAWN)s %(LIQUID_TICKER)s уже выплачено). Если вы измените количество, отсчет времени сбросится и составит 13 недель от сегодняшего дня.",
-        "delegating":
-            "Вы делегируете %(AMOUNT)s %(LIQUID_TICKER)s. Это количество заблокировано и не может быть выведено пока делегирование не будет отменено и не пройдет один полный цикл выплат вознаграждений.",
-        "per_week": "Это ~%(AMOUNT)s %(LIQUID_TICKER)s в неделю.",
-        "warning":
-            "Оставлять меньше чем %(AMOUNT)s %(LIQUID_TICKER)s не рекомендуется, т.к. это может остановить все транзакции с использованием это аккаунта.",
-        "error": "Неполучается уменьшить силу голоса (ERROR: %(MESSAGE)s)"
-    },
     "checkloginowner_jsx": {
         "your_password_permissions_were_reduced":
             "Your password permissions were reduced",

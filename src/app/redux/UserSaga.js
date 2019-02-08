@@ -53,10 +53,6 @@ const highSecurityPages = [/\/@.+\/(transfers|permissions|password)/];
 
 const strCmp = (a, b) => (a > b ? 1 : a < b ? -1 : 0);
 
-// function* getCurrentAccountWatch() {
-//     // yield* takeLatest('user/SHOW_TRANSFER', getCurrentAccount);
-// }
-
 function* removeHighSecurityKeys({ payload: { pathname } }) {
     const highSecurityPage =
         highSecurityPages.find(p => p.test(pathname)) != null;
@@ -96,8 +92,6 @@ function* usernamePasswordLogin(action) {
         yield fork(loadFollows, 'getFollowingAsync', username, 'ignore');
     }
 }
-
-// const isHighSecurityOperations = ['transfer']
 
 const clean = value =>
     value == null || value === '' || /null|undefined/.test(value)

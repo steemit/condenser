@@ -10,12 +10,8 @@ export const SAVE_LOGIN_CONFIRM = 'user/SAVE_LOGIN_CONFIRM';
 export const SAVE_LOGIN = 'user/SAVE_LOGIN';
 const REMOVE_HIGH_SECURITY_KEYS = 'user/REMOVE_HIGH_SECURITY_KEYS';
 const CHANGE_LANGUAGE = 'user/CHANGE_LANGUAGE';
-const SHOW_TRANSFER = 'user/SHOW_TRANSFER';
-const HIDE_TRANSFER = 'user/HIDE_TRANSFER';
 const SHOW_PROMOTE_POST = 'user/SHOW_PROMOTE_POST';
 const HIDE_PROMOTE_POST = 'user/HIDE_PROMOTE_POST';
-const SET_TRANSFER_DEFAULTS = 'user/SET_TRANSFER_DEFAULTS';
-const CLEAR_TRANSFER_DEFAULTS = 'user/CLEAR_TRANSFER_DEFAULTS';
 export const USERNAME_PASSWORD_LOGIN = 'user/USERNAME_PASSWORD_LOGIN';
 export const SET_USER = 'user/SET_USER';
 const CLOSE_LOGIN = 'user/CLOSE_LOGIN';
@@ -42,7 +38,6 @@ export const UPLOAD_IMAGE = 'user/UPLOAD_IMAGE';
 const defaultState = fromJS({
     current: null,
     show_login_modal: false,
-    show_transfer_modal: false,
     show_promote_post_modal: false,
     show_post_advanced_settings_modal: '', // formId
     pub_keys_used: null,
@@ -131,23 +126,11 @@ export default function reducer(state = defaultState, action) {
         case CHANGE_LANGUAGE:
             return state.set('locale', payload);
 
-        case SHOW_TRANSFER:
-            return state.set('show_transfer_modal', true);
-
-        case HIDE_TRANSFER:
-            return state.set('show_transfer_modal', false);
-
         case SHOW_PROMOTE_POST:
             return state.set('show_promote_post_modal', true);
 
         case HIDE_PROMOTE_POST:
             return state.set('show_promote_post_modal', false);
-
-        case SET_TRANSFER_DEFAULTS:
-            return state.set('transfer_defaults', fromJS(payload));
-
-        case CLEAR_TRANSFER_DEFAULTS:
-            return state.remove('transfer_defaults');
 
         case USERNAME_PASSWORD_LOGIN:
             return state; // saga
@@ -281,16 +264,6 @@ export const changeLanguage = payload => ({
     payload,
 });
 
-export const showTransfer = payload => ({
-    type: SHOW_TRANSFER,
-    payload,
-});
-
-export const hideTransfer = payload => ({
-    type: HIDE_TRANSFER,
-    payload,
-});
-
 export const showPromotePost = payload => ({
     type: SHOW_PROMOTE_POST,
     payload,
@@ -298,16 +271,6 @@ export const showPromotePost = payload => ({
 
 export const hidePromotePost = payload => ({
     type: HIDE_PROMOTE_POST,
-    payload,
-});
-
-export const setTransferDefaults = payload => ({
-    type: SET_TRANSFER_DEFAULTS,
-    payload,
-});
-
-export const clearTransferDefaults = payload => ({
-    type: CLEAR_TRANSFER_DEFAULTS,
     payload,
 });
 

@@ -83,10 +83,6 @@ export default class UserProfile extends React.Component {
         );
     }
 
-    componentWillUnmount() {
-        this.props.clearTransferDefaults();
-    }
-
     loadMore(last_post, category, showResteem) {
         const { accountname } = this.props;
 
@@ -205,7 +201,6 @@ export default class UserProfile extends React.Component {
                 <div>
                     <UserWallet
                         account={accountImm}
-                        showTransfer={this.props.showTransfer}
                         current_user={current_user}
                     />
                 </div>
@@ -639,13 +634,6 @@ module.exports = {
         dispatch => ({
             login: () => {
                 dispatch(userActions.showLogin());
-            },
-            clearTransferDefaults: () => {
-                dispatch(userActions.clearTransferDefaults());
-            },
-            showTransfer: transferDefaults => {
-                dispatch(userActions.setTransferDefaults(transferDefaults));
-                dispatch(userActions.showTransfer());
             },
             requestData: args =>
                 dispatch(fetchDataSagaActions.requestData(args)),

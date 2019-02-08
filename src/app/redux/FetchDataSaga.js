@@ -50,9 +50,6 @@ export function* fetchState(location_change_action) {
     const ignore_fetch = pathname === server_location && is_initial_state;
     is_initial_state = false;
     if (ignore_fetch) {
-        // If a user's transfer page is being loaded, fetch related account data.
-        yield call(getTransferUsers, pathname);
-
         return;
     }
 
@@ -70,42 +67,12 @@ export function* fetchState(location_change_action) {
         const state = yield call(getStateAsync, url);
         yield put(globalActions.receiveState(state));
         yield call(syncPinnedPosts);
-        // If a user's transfer page is being loaded, fetch related account data.
-        yield call(getTransferUsers, pathname);
     } catch (error) {
         console.error('~~ Saga fetchState error ~~>', url, error);
         yield put(appActions.steemApiError(error.message));
     }
 
     yield put(appActions.fetchDataEnd());
-}
-
-/**
- * Get transfer-related usernames from history and fetch their account data.
- *
- * @param {String} pathname
- */
-function* getTransferUsers(pathname) {
-    if (pathname.match(/^\/@([a-z0-9\.-]+)\/transfers/)) {
-        const username = pathname.match(/^\/@([a-z0-9\.-]+)/)[1];
-
-        const transferHistory = yield select(state =>
-            state.global.getIn(['accounts', username, 'transfer_history'])
-        );
-
-        // Find users in the transfer history to consider sending users' reputations.
-        const transferUsers = transferHistory.reduce((acc, cur) => {
-            if (cur.getIn([1, 'op', 0]) === 'transfer') {
-                const { from, to } = cur.getIn([1, 'op', 1]).toJS();
-                return acc.add(from);
-            }
-            return acc;
-            // Ensure current user is included in this list, even if they don't have transfer history.
-            // This ensures their reputation is updated - fixes #2306
-        }, new Set([username]));
-
-        yield call(getAccounts, transferUsers);
-    }
 }
 
 function* syncPinnedPosts() {
@@ -247,9 +214,9 @@ export function* fetchData(action) {
         ];
     } else {
         // this should never happen. undefined behavior
-        console.log("unexpected `order`", order)
+        console.log('unexpected `order`', order);
         call_name = 'getDiscussionsByTrendingAsync';
-        args = [{limit: constants.FETCH_DATA_BATCH_SIZE}]
+        args = [{ limit: constants.FETCH_DATA_BATCH_SIZE }];
     }
     yield put(appActions.fetchDataBegin());
     try {

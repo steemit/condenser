@@ -22,7 +22,6 @@ export const transactionWatches = [
 
 const hook = {
     preBroadcast_comment,
-    preBroadcast_transfer,
     preBroadcast_vote,
     error_vote,
     error_custom_json,
@@ -32,28 +31,6 @@ const hook = {
     accepted_vote,
 };
 
-export function* preBroadcast_transfer({ operation }) {
-    let memoStr = operation.memo;
-    if (memoStr) {
-        memoStr = toStringUtf8(memoStr);
-        memoStr = memoStr.trim();
-        if (/^#/.test(memoStr)) {
-            const memo_private = yield select(state =>
-                state.user.getIn(['current', 'private_keys', 'memo_private'])
-            );
-            if (!memo_private)
-                throw new Error(
-                    'Unable to encrypt memo, missing memo private key'
-                );
-            const account = yield call(getAccount, operation.to);
-            if (!account) throw new Error(`Unknown to account ${operation.to}`);
-            const memo_key = account.get('memo_key');
-            memoStr = memo.encode(memo_private, memo_key, memoStr);
-            operation.memo = memoStr;
-        }
-    }
-    return operation;
-}
 const toStringUtf8 = o =>
     o ? (Buffer.isBuffer(o) ? o.toString('utf-8') : o.toString()) : o;
 

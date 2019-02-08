@@ -9,7 +9,6 @@ import * as transactionActions from 'app/redux/TransactionReducer';
 import * as userActions from 'app/redux/UserReducer';
 import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
 import Icon from 'app/components/elements/Icon';
-import UserKeys from 'app/components/elements/UserKeys';
 import PasswordReset from 'app/components/elements/PasswordReset';
 import UserWallet from 'app/components/modules/UserWallet';
 import Settings from 'app/components/modules/Settings';
@@ -23,7 +22,6 @@ import Tooltip from 'app/components/elements/Tooltip';
 import DateJoinWrapper from 'app/components/elements/DateJoinWrapper';
 import tt from 'counterpart';
 import { List } from 'immutable';
-import WalletSubMenu from 'app/components/elements/WalletSubMenu';
 import Userpic from 'app/components/elements/Userpic';
 import Callout from 'app/components/elements/Callout';
 import normalizeProfile from 'app/utils/NormalizeProfile';
@@ -75,7 +73,6 @@ export default class UserProfile extends React.Component {
         return (
             np.current_user !== this.props.current_user ||
             np.account !== this.props.account ||
-            np.wifShown !== this.props.wifShown ||
             np.global_status !== this.props.global_status ||
             (npFollowersLoading !== followersLoading && !npFollowersLoading) ||
             (npFollowingLoading !== followingLoading && !npFollowingLoading) ||
@@ -147,13 +144,7 @@ export default class UserProfile extends React.Component {
     render() {
         const {
             state: { showResteem },
-            props: {
-                current_user,
-                wifShown,
-                global_status,
-                follow,
-                accountname,
-            },
+            props: { current_user, global_status, follow, accountname },
             onPrint,
         } = this;
         const username = current_user ? current_user.get('username') : null;
@@ -220,9 +211,19 @@ export default class UserProfile extends React.Component {
                     />
                 </div>
             );
-        } else if (section === 'curation-rewards') {
-            tab_content = <div>Moved to wallet</div>;
-        } else if (section === 'author-rewards') {
+        } else if (section === 'password') {
+            walletClass = 'active';
+            tab_content = (
+                <div>
+                    <PasswordReset account={accountImm} />
+                </div>
+            );
+        } else if (
+            section === 'curation-rewards' ||
+            section === 'author-rewards' ||
+            section === 'permissions'
+        ) {
+            walletClass = 'active';
             tab_content = <div>Moved to wallet</div>;
         } else if (section === 'followers') {
             if (followers && followers.has('blog_result')) {
@@ -373,32 +374,6 @@ export default class UserProfile extends React.Component {
                     </center>
                 );
             }
-        } else if (section === 'permissions' && isMyAccount) {
-            walletClass = 'active';
-            tab_content = (
-                <div>
-                    <div className="row">
-                        <div className="column">
-                            <WalletSubMenu account_name={account.name} />
-                        </div>
-                    </div>
-                    <br />
-                    <UserKeys account={accountImm} />
-                </div>
-            );
-        } else if (section === 'password') {
-            walletClass = 'active';
-            tab_content = (
-                <div>
-                    <div className="row">
-                        <div className="column">
-                            <WalletSubMenu account_name={account.name} />
-                        </div>
-                    </div>
-                    <br />
-                    <PasswordReset account={accountImm} />
-                </div>
-            );
         } else {
             //    console.log( "no matches" );
         }
@@ -479,19 +454,6 @@ export default class UserProfile extends React.Component {
             );
         }
 
-        let printLink = null;
-        if (section === 'permissions') {
-            if (isMyAccount && wifShown) {
-                printLink = (
-                    <div>
-                        <a className="float-right noPrint" onClick={onPrint}>
-                            <Icon name="printer" />&nbsp;{tt('g.print')}&nbsp;&nbsp;
-                        </a>
-                    </div>
-                );
-            }
-        }
-
         const top_menu = (
             <div className="row UserProfile__top-menu">
                 <div className="columns small-10 medium-12 medium-expand">
@@ -518,14 +480,6 @@ export default class UserProfile extends React.Component {
                                 activeClassName="active"
                             >
                                 {tt('g.replies')}
-                            </Link>
-                        </li>
-                        <li>
-                            <Link
-                                to={`/@${accountname}/feed`}
-                                activeClassName="active"
-                            >
-                                Feed
                             </Link>
                         </li>
                     </ul>
@@ -664,7 +618,6 @@ export default class UserProfile extends React.Component {
                 <div className="UserProfile__top-nav row expanded noPrint">
                     {top_menu}
                 </div>
-                <div>{printLink}</div>
                 <div>{tab_content}</div>
             </div>
         );
@@ -675,14 +628,12 @@ module.exports = {
     path: '@:accountname(/:section)',
     component: connect(
         (state, ownProps) => {
-            const wifShown = state.global.get('UserKeys_wifShown');
             const current_user = state.user.get('current');
             const accountname = ownProps.routeParams.accountname.toLowerCase();
 
             return {
                 discussions: state.global.get('discussion_idx'),
                 current_user,
-                wifShown,
                 loading: state.app.get('loading'),
                 global_status: state.global.get('status'),
                 accountname: accountname,

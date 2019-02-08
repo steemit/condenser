@@ -12,7 +12,6 @@ import * as transactionActions from 'app/redux/TransactionReducer';
 import LoginForm from 'app/components/modules/LoginForm';
 import ConfirmTransactionForm from 'app/components/modules/ConfirmTransactionForm';
 import Transfer from 'app/components/modules/Transfer';
-import SignUp from 'app/components/modules/SignUp';
 import Powerdown from 'app/components/modules/Powerdown';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import TermsAgree from 'app/components/modules/TermsAgree';
@@ -25,7 +24,6 @@ class Modals extends React.Component {
         removeNotification: () => {},
         show_terms_modal: false,
         show_promote_post_modal: false,
-        show_signup_modal: false,
         show_bandwidth_error_modal: false,
         show_powerdown_modal: false,
         show_transfer_modal: false,
@@ -39,13 +37,11 @@ class Modals extends React.Component {
         show_transfer_modal: PropTypes.bool,
         show_powerdown_modal: PropTypes.bool,
         show_bandwidth_error_modal: PropTypes.bool,
-        show_signup_modal: PropTypes.bool,
         show_promote_post_modal: PropTypes.bool,
         show_post_advanced_settings_modal: PropTypes.string,
         hideLogin: PropTypes.func.isRequired,
         username: PropTypes.string,
         hideConfirm: PropTypes.func.isRequired,
-        hideSignUp: PropTypes.func.isRequired,
         hideTransfer: PropTypes.func.isRequired,
         hidePowerdown: PropTypes.func.isRequired,
         hidePromotePost: PropTypes.func.isRequired,
@@ -67,14 +63,12 @@ class Modals extends React.Component {
             show_confirm_modal,
             show_transfer_modal,
             show_powerdown_modal,
-            show_signup_modal,
             show_bandwidth_error_modal,
             show_post_advanced_settings_modal,
             hideLogin,
             hideTransfer,
             hidePowerdown,
             hideConfirm,
-            hideSignUp,
             show_terms_modal,
             notifications,
             removeNotification,
@@ -124,12 +118,6 @@ class Modals extends React.Component {
                     <Reveal onHide={hidePowerdown} show={show_powerdown_modal}>
                         <CloseButton onClick={hidePowerdown} />
                         <Powerdown />
-                    </Reveal>
-                )}
-                {show_signup_modal && (
-                    <Reveal onHide={hideSignUp} show={show_signup_modal}>
-                        <CloseButton onClick={hideSignUp} />
-                        <SignUp />
                     </Reveal>
                 )}
                 {show_terms_modal && (
@@ -199,7 +187,6 @@ export default connect(
             show_transfer_modal: state.user.get('show_transfer_modal'),
             show_powerdown_modal: state.user.get('show_powerdown_modal'),
             show_promote_post_modal: state.user.get('show_promote_post_modal'),
-            show_signup_modal: state.user.get('show_signup_modal'),
             notifications: state.app.get('notifications'),
             show_terms_modal:
                 state.user.get('show_terms_modal') &&
@@ -236,10 +223,6 @@ export default connect(
         hidePromotePost: e => {
             if (e) e.preventDefault();
             dispatch(userActions.hidePromotePost());
-        },
-        hideSignUp: e => {
-            if (e) e.preventDefault();
-            dispatch(userActions.hideSignUp());
         },
         hideBandwidthError: e => {
             if (e) e.preventDefault();

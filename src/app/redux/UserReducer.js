@@ -48,7 +48,6 @@ const defaultState = fromJS({
     show_login_modal: false,
     show_transfer_modal: false,
     show_promote_post_modal: false,
-    show_signup_modal: false,
     show_post_advanced_settings_modal: '', // formId
     pub_keys_used: null,
     locale: DEFAULT_LANGUAGE,
@@ -204,12 +203,6 @@ export default function reducer(state = defaultState, action) {
 
         case LOGOUT:
             return defaultState.merge({ logged_out: true });
-
-        case SHOW_SIGN_UP:
-            return state.set('show_signup_modal', true);
-
-        case HIDE_SIGN_UP:
-            return state.set('show_signup_modal', false);
 
         case KEYS_ERROR:
             return state.merge({ keys_error: payload.error });
@@ -376,16 +369,6 @@ export const loginError = payload => ({
 
 export const logout = payload => ({
     type: LOGOUT,
-    payload,
-});
-
-export const showSignUp = payload => ({
-    type: SHOW_SIGN_UP,
-    payload,
-});
-
-export const hideSignUp = payload => ({
-    type: HIDE_SIGN_UP,
     payload,
 });
 

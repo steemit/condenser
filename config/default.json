@@ -21,7 +21,6 @@
   "img_proxy_prefix": "https://steemitdevimages.com/",
   "ipfs_prefix": false,
   "mixpanel": false,
-  "newrelic": false,
   "notify": {
     "gcm_key": "google secret key"
   },
@@ -29,12 +28,6 @@
   "recaptcha": {
     "secret_key": false,
     "site_key": false
-  },
-  "registrar": {
-    "account": "-",
-    "fee": "0.5 STEEM",
-    "delegation": "150250.000000 VESTS",
-    "signing_key": "5J..."
   },
   "sendgrid": {
     "from": "noreply@example.com",
@@ -46,12 +39,6 @@
   "session_cookie_key": "stm-dev",
   "session_key": "steemses",
   "site_domain": "steemitdev.com",
-  "tarantool": {
-    "host": "localhost",
-    "password": "",
-    "port": "3301",
-    "username": "guest"
-  },
   "telesign": {
     "customer_id": false,
     "rest_api_key": false

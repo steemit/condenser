@@ -1,7 +1,15 @@
 import mockData from './output';
 
 const titles = ['Physicist', 'Researcher', 'Engineer', 'Student', 'Teacher'];
-const labels = ['Math', 'Computer', 'Physics', 'Art'];
+const labels = [
+  'Math',
+  'Computer',
+  'Physics',
+  'Art',
+  'Machine',
+  'English',
+  'Science',
+];
 
 const titleCount = titles.length;
 const labelCount = labels.length;
@@ -12,6 +20,20 @@ function getTitle(index) {
 
 function getLabel(index) {
   return labels[index % labelCount];
+}
+
+function getLabels() {
+  const count = parseInt(Math.random() * labelCount);
+  const ret = [];
+  let index = 0;
+  while (ret.length < count && index < labelCount) {
+    const rand = parseInt(Math.random() * labelCount);
+    if (rand % 2 === 0) {
+      ret.push(labels[index]);
+    }
+    index += 1;
+  }
+  return ret;
 }
 
 function randomVote() {
@@ -54,6 +76,7 @@ export const MockItems = mockData.map((item, index) => {
     title: item.Title,
     type: item.Post_type,
     label: getLabel(index),
+    labels: getLabels(),
     user: {
       name: item.Author,
       nick: getNick(item.Author),

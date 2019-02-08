@@ -637,18 +637,6 @@
         "redeem_rewards": "Odbierz nagrody (transfer do salda)",
         "buy_steem_or_steem_power": "Kup STEEM lub STEEM POWER"
     },
-    "powerdown_jsx": {
-        "power_down": "Zmniejsz moc",
-        "amount": "Liczba",
-        "already_power_down":
-            "Aktualnie zmniejszasz moc %(AMOUNT)s %(LIQUID_TICKER)s (%(WITHDRAWN)s %(LIQUID_TICKER)s już wypłacono). Pamiętaj, że jeśli zmienisz ilość zmniejszanej mocy, to licznik dla następnej wypłaty zostanie wyzerowany.",
-        "delegating":
-            "Delegujesz %(AMOUNT)s %(LIQUID_TICKER)s. Kwota ta, jest zablokowana i nie jest dostępna do zmniejszenia mocy, dopóki delegacja się nie zakończy i upłynie pełen okres wypłacania nagród.",
-        "per_week": "To około%(AMOUNT)s %(LIQUID_TICKER)s na tydzień.",
-        "warning":
-            "Pozostawiając mniej niż %(AMOUNT)s %(VESTING_TOKEN)s na koncie, nie jest zalecane i może sprawić że twoje konto nie będzie działać.",
-        "error": "Nie można zmniejszyć mocy (BŁĄD: %(MESSAGE)s)"
-    },
     "checkloginowner_jsx": {
         "your_password_permissions_were_reduced":
             "Twoje uprawnienia zostały zmniejszone",

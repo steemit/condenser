@@ -655,18 +655,6 @@
         "redeem_rewards": "報酬の請求 (残高に送る)",
         "buy_steem_or_steem_power": "STEEMやSTEEM POWERを購入する"
     },
-    "powerdown_jsx": {
-        "power_down": "パワーダウン",
-        "amount": "数量",
-        "already_power_down":
-            "既に%(AMOUNT)s %(LIQUID_TICKER)sのパワーダウン中です (%(WITHDRAWN)s %(LIQUID_TICKER)sが支払い済みです) 。パワーダウン量を変更すると、支払いスケジュールがリセットされることに注意してください。",
-        "delegating":
-            " %(AMOUNT)s %(LIQUID_TICKER)sを委託しています。委託分はロックされており、委託が終了して7日が過ぎるまでパワーダウンできません。",
-        "per_week": "毎週~%(AMOUNT)s %(LIQUID_TICKER)sです。",
-        "warning":
-            "アカウントの残高を%(AMOUNT)s %(VESTING_TOKEN)s未満にするのはおすすめしません。アカウントが使用できない状態になる可能性があります。",
-        "error": "パワーダウンできません (エラー : %(MESSAGE)s)"
-    },
     "checkloginowner_jsx": {
         "your_password_permissions_were_reduced":
             "あなたのパスワード権限が減少しました。",

@@ -12,7 +12,6 @@ import * as transactionActions from 'app/redux/TransactionReducer';
 import LoginForm from 'app/components/modules/LoginForm';
 import ConfirmTransactionForm from 'app/components/modules/ConfirmTransactionForm';
 import Transfer from 'app/components/modules/Transfer';
-import Powerdown from 'app/components/modules/Powerdown';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import TermsAgree from 'app/components/modules/TermsAgree';
 import PostAdvancedSettings from 'app/components/modules/PostAdvancedSettings';
@@ -25,7 +24,6 @@ class Modals extends React.Component {
         show_terms_modal: false,
         show_promote_post_modal: false,
         show_bandwidth_error_modal: false,
-        show_powerdown_modal: false,
         show_transfer_modal: false,
         show_confirm_modal: false,
         show_login_modal: false,
@@ -35,7 +33,6 @@ class Modals extends React.Component {
         show_login_modal: PropTypes.bool,
         show_confirm_modal: PropTypes.bool,
         show_transfer_modal: PropTypes.bool,
-        show_powerdown_modal: PropTypes.bool,
         show_bandwidth_error_modal: PropTypes.bool,
         show_promote_post_modal: PropTypes.bool,
         show_post_advanced_settings_modal: PropTypes.string,
@@ -43,7 +40,6 @@ class Modals extends React.Component {
         username: PropTypes.string,
         hideConfirm: PropTypes.func.isRequired,
         hideTransfer: PropTypes.func.isRequired,
-        hidePowerdown: PropTypes.func.isRequired,
         hidePromotePost: PropTypes.func.isRequired,
         hideBandwidthError: PropTypes.func.isRequired,
         hidePostAdvancedSettings: PropTypes.func.isRequired,
@@ -62,12 +58,10 @@ class Modals extends React.Component {
             show_login_modal,
             show_confirm_modal,
             show_transfer_modal,
-            show_powerdown_modal,
             show_bandwidth_error_modal,
             show_post_advanced_settings_modal,
             hideLogin,
             hideTransfer,
-            hidePowerdown,
             hideConfirm,
             show_terms_modal,
             notifications,
@@ -112,12 +106,6 @@ class Modals extends React.Component {
                     <Reveal onHide={hideTransfer} show={show_transfer_modal}>
                         <CloseButton onClick={hideTransfer} />
                         <Transfer />
-                    </Reveal>
-                )}
-                {show_powerdown_modal && (
-                    <Reveal onHide={hidePowerdown} show={show_powerdown_modal}>
-                        <CloseButton onClick={hidePowerdown} />
-                        <Powerdown />
                     </Reveal>
                 )}
                 {show_terms_modal && (
@@ -185,7 +173,6 @@ export default connect(
             show_login_modal: state.user.get('show_login_modal'),
             show_confirm_modal: state.transaction.get('show_confirm_modal'),
             show_transfer_modal: state.user.get('show_transfer_modal'),
-            show_powerdown_modal: state.user.get('show_powerdown_modal'),
             show_promote_post_modal: state.user.get('show_promote_post_modal'),
             notifications: state.app.get('notifications'),
             show_terms_modal:
@@ -215,10 +202,6 @@ export default connect(
         hideTransfer: e => {
             if (e) e.preventDefault();
             dispatch(userActions.hideTransfer());
-        },
-        hidePowerdown: e => {
-            if (e) e.preventDefault();
-            dispatch(userActions.hidePowerdown());
         },
         hidePromotePost: e => {
             if (e) e.preventDefault();

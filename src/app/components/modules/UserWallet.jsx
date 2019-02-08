@@ -89,12 +89,7 @@ class UserWallet extends React.Component {
             onShowWithdrawSBD,
             onShowDepositPower,
         } = this;
-        const {
-            convertToSteem,
-            price_per_steem,
-            account,
-            current_user,
-        } = this.props;
+        const { price_per_steem, account, current_user } = this.props;
         const gprops = this.props.gprops.toJS();
 
         // do not render if account is not loaded or available
@@ -119,77 +114,17 @@ class UserWallet extends React.Component {
             });
         };
 
-        const savings_balance = account.get('savings_balance');
-        const savings_sbd_balance = account.get('savings_sbd_balance');
-
-        // Sum savings withrawals
-        let savings_pending = 0,
-            savings_sbd_pending = 0;
-
-        // Sum conversions
-        let conversionValue = 0;
-        const currentTime = new Date().getTime();
-        const conversions = account
-            .get('other_history', List())
-            .reduce((out, item) => {
-                if (item.getIn([1, 'op', 0], '') !== 'convert') return out;
-
-                const timestamp = new Date(
-                    item.getIn([1, 'timestamp'])
-                ).getTime();
-                const finishTime = timestamp + 86400000 * 3.5; // add 3.5day conversion delay
-                if (finishTime < currentTime) return out;
-
-                const amount = parseFloat(
-                    item.getIn([1, 'op', 1, 'amount']).replace(' SBD', '')
-                );
-                conversionValue += amount;
-
-                return out.concat([
-                    <div key={item.get(0)}>
-                        <Tooltip
-                            t={tt('userwallet_jsx.conversion_complete_tip', {
-                                date: new Date(finishTime).toLocaleString(),
-                            })}
-                        >
-                            <span>
-                                (+{tt('userwallet_jsx.in_conversion', {
-                                    amount: numberWithCommas(
-                                        '$' + amount.toFixed(3)
-                                    ),
-                                })})
-                            </span>
-                        </Tooltip>
-                    </div>,
-                ]);
-            }, []);
-
         const balance_steem = parseFloat(account.get('balance').split(' ')[0]);
-        const saving_balance_steem = parseFloat(savings_balance.split(' ')[0]);
         const sbd_balance = parseFloat(account.get('sbd_balance'));
-        const sbd_balance_savings = parseFloat(
-            savings_sbd_balance.split(' ')[0]
-        );
-        const sbdOrders = 0;
-        const steemOrders = 0;
 
         // set displayed estimated value
-        const total_sbd =
-            sbd_balance +
-            sbd_balance_savings +
-            savings_sbd_pending +
-            sbdOrders +
-            conversionValue;
-        const total_steem =
-            vesting_steem +
-            balance_steem +
-            saving_balance_steem +
-            savings_pending +
-            steemOrders;
         let total_value =
             '$' +
             numberWithCommas(
-                (total_steem * price_per_steem + total_sbd).toFixed(2)
+                (
+                    (vesting_steem + balance_steem) * price_per_steem +
+                    sbd_balance
+                ).toFixed(2)
             );
 
         // format spacing on estimated value based on account state
@@ -209,15 +144,6 @@ class UserWallet extends React.Component {
                 ),
             },
             {
-                value: tt('userwallet_jsx.transfer_to_savings'),
-                link: '#',
-                onClick: showTransfer.bind(
-                    this,
-                    'STEEM',
-                    'Transfer to Savings'
-                ),
-            },
-            {
                 value: tt('userwallet_jsx.power_up'),
                 link: '#',
                 onClick: showTransfer.bind(
@@ -232,11 +158,6 @@ class UserWallet extends React.Component {
                 value: tt('g.transfer'),
                 link: '#',
                 onClick: showTransfer.bind(this, 'SBD', 'Transfer to Account'),
-            },
-            {
-                value: tt('userwallet_jsx.transfer_to_savings'),
-                link: '#',
-                onClick: showTransfer.bind(this, 'SBD', 'Transfer to Savings'),
             },
         ];
         if (isMyAccount) {
@@ -277,42 +198,12 @@ class UserWallet extends React.Component {
         }
 
         const steem_balance_str = numberWithCommas(balance_steem.toFixed(3));
-        const steem_orders_balance_str = numberWithCommas(
-            steemOrders.toFixed(3)
-        );
         const power_balance_str = numberWithCommas(vesting_steem.toFixed(3));
         const received_power_balance_str =
             (delegated_steem < 0 ? '+' : '') +
             numberWithCommas((-delegated_steem).toFixed(3));
         const sbd_balance_str = numberWithCommas('$' + sbd_balance.toFixed(3)); // formatDecimal(account.sbd_balance, 3)
-        const sbd_orders_balance_str = numberWithCommas(
-            '$' + sbdOrders.toFixed(3)
-        );
-        const savings_balance_str = numberWithCommas(
-            saving_balance_steem.toFixed(3) + ' STEEM'
-        );
-        const savings_sbd_balance_str = numberWithCommas(
-            '$' + sbd_balance_savings.toFixed(3)
-        );
 
-        const savings_menu = [
-            {
-                value: tt('userwallet_jsx.withdraw_LIQUID_TOKEN', {
-                    LIQUID_TOKEN,
-                }),
-                link: '#',
-                onClick: showTransfer.bind(this, 'STEEM', 'Savings Withdraw'),
-            },
-        ];
-        const savings_sbd_menu = [
-            {
-                value: tt('userwallet_jsx.withdraw_DEBT_TOKENS', {
-                    DEBT_TOKENS,
-                }),
-                link: '#',
-                onClick: showTransfer.bind(this, 'SBD', 'Savings Withdraw'),
-            },
-        ];
         // set dynamic secondary wallet values
         const sbdInterest = this.props.sbd_interest / 100;
         const sbdMessage = (
@@ -424,17 +315,6 @@ class UserWallet extends React.Component {
                         ) : (
                             steem_balance_str + ' STEEM'
                         )}
-                        {steemOrders ? (
-                            <div
-                                style={{
-                                    paddingRight: isMyAccount
-                                        ? '0.85rem'
-                                        : null,
-                                }}
-                            >
-                                (+{steem_orders_balance_str} STEEM)
-                            </div>
-                        ) : null}
                     </div>
                 </div>
                 <div className="UserWallet__balance row zebra">
@@ -495,53 +375,6 @@ class UserWallet extends React.Component {
                         ) : (
                             sbd_balance_str
                         )}
-                        {sbdOrders ? (
-                            <div
-                                style={{
-                                    paddingRight: isMyAccount
-                                        ? '0.85rem'
-                                        : null,
-                                }}
-                            >
-                                (+{sbd_orders_balance_str})
-                            </div>
-                        ) : null}
-                        {conversions}
-                    </div>
-                </div>
-                <div className="UserWallet__balance row zebra">
-                    <div className="column small-12 medium-8">
-                        {tt('userwallet_jsx.savings')}
-                        <div className="secondary">
-                            <span>
-                                {tt(
-                                    'transfer_jsx.balance_subject_to_3_day_withdraw_waiting_period'
-                                )}
-                            </span>
-                        </div>
-                    </div>
-                    <div className="column small-12 medium-4">
-                        {isMyAccount ? (
-                            <DropdownMenu
-                                className="Wallet_dropdown"
-                                items={savings_menu}
-                                el="li"
-                                selected={savings_balance_str}
-                            />
-                        ) : (
-                            savings_balance_str
-                        )}
-                        <br />
-                        {isMyAccount ? (
-                            <DropdownMenu
-                                className="Wallet_dropdown"
-                                items={savings_sbd_menu}
-                                el="li"
-                                selected={savings_sbd_balance_str}
-                            />
-                        ) : (
-                            savings_sbd_balance_str
-                        )}
                     </div>
                 </div>
                 <div className="UserWallet__balance row">
@@ -597,12 +430,6 @@ export default connect(
                     successCallback,
                 })
             );
-        },
-        convertToSteem: e => {
-            //post 2018-01-31 if no calls to this function exist may be safe to remove. Investigate use of ConvertToSteem.jsx
-            e.preventDefault();
-            const name = 'convertToSteem';
-            dispatch(globalActions.showDialog({ name }));
         },
         showChangePassword: username => {
             const name = 'changePassword';

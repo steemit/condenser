@@ -357,7 +357,6 @@ if (env !== 'test') {
     app.pinnedPostsPromise = pinnedPosts();
     app.use(function*() {
         yield appRender(this, supportedLocales, resolvedAssets);
-        // if (app_router.dbStatus.ok) recordWebEvent(this, 'page_load');
         const bot = this.state.isBot;
         if (bot) {
             console.log(

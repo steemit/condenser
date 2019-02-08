@@ -24,16 +24,14 @@ class TransferForm extends Component {
     static propTypes = {
         // redux
         currentUser: PropTypes.object.isRequired,
-        toVesting: PropTypes.bool.isRequired,
         currentAccount: PropTypes.object.isRequired,
         following: PropTypes.object.isRequired,
     };
 
     constructor(props) {
         super();
-        const { transferToSelf } = props;
         this.state = {
-            advanced: !transferToSelf,
+            advanced: true,
             transferTo: false,
             autocompleteUsers: [],
         };
@@ -127,30 +125,17 @@ class TransferForm extends Component {
         const { transferType } = props.initialValues;
         const insufficientFunds = (asset, amount) => {
             const { currentAccount } = props;
-            const isWithdraw =
-                transferType && transferType === 'Savings Withdraw';
             const balanceValue =
                 !asset || asset === 'STEEM'
-                    ? isWithdraw
-                      ? currentAccount.get('savings_balance')
-                      : currentAccount.get('balance')
+                    ? currentAccount.get('balance')
                     : asset === 'SBD'
-                      ? isWithdraw
-                        ? currentAccount.get('savings_sbd_balance')
-                        : currentAccount.get('sbd_balance')
+                      ? currentAccount.get('sbd_balance')
                       : null;
             if (!balanceValue) return false;
             const balance = balanceValue.split(' ')[0];
             return parseFloat(amount) > parseFloat(balance);
         };
-        const { toVesting } = props;
-        const fields = toVesting ? ['to', 'amount'] : ['to', 'amount', 'asset'];
-        if (
-            !toVesting &&
-            transferType !== 'Transfer to Savings' &&
-            transferType !== 'Savings Withdraw'
-        )
-            fields.push('memo');
+        const fields = ['to', 'amount', 'asset', 'memo'];
         reactForm({
             name: 'transfer',
             instance: this,
@@ -169,9 +154,7 @@ class TransferForm extends Component {
                         : countDecimals(values.amount) > 3
                           ? tt('transfer_jsx.use_only_3_digits_of_precison')
                           : null,
-                asset: props.toVesting
-                    ? null
-                    : !values.asset ? tt('g.required') : null,
+                asset: !values.asset ? tt('g.required') : null,
                 memo: values.memo
                     ? validate_memo_field(
                           values.memo,
@@ -198,16 +181,9 @@ class TransferForm extends Component {
         const { transferType } = this.props.initialValues;
         const { currentAccount } = this.props;
         const { asset } = this.state;
-        const isWithdraw = transferType && transferType === 'Savings Withdraw';
         return !asset || asset.value === 'STEEM'
-            ? isWithdraw
-              ? currentAccount.get('savings_balance')
-              : currentAccount.get('balance')
-            : asset.value === 'SBD'
-              ? isWithdraw
-                ? currentAccount.get('savings_sbd_balance')
-                : currentAccount.get('sbd_balance')
-              : null;
+            ? currentAccount.get('balance')
+            : asset.value === 'SBD' ? currentAccount.get('sbd_balance') : null;
     }
 
     assetBalanceClick = e => {
@@ -242,13 +218,7 @@ class TransferForm extends Component {
         );
         const { to, amount, asset, memo } = this.state;
         const { loading, trxError, advanced } = this.state;
-        const {
-            currentUser,
-            currentAccount,
-            toVesting,
-            transferToSelf,
-            dispatchSubmit,
-        } = this.props;
+        const { currentUser, currentAccount, dispatchSubmit } = this.props;
         const { transferType } = this.props.initialValues;
         const { submitting, valid, handleSubmit } = this.state.transfer;
         // const isMemoPrivate = memo && /^#/.test(memo.value); -- private memos are not supported yet
@@ -262,36 +232,19 @@ class TransferForm extends Component {
                         ...data,
                         errorCallback: this.errorCallback,
                         currentUser,
-                        toVesting,
                         transferType,
                     });
                 })}
                 onChange={this.clearError}
             >
-                {toVesting && (
+                <div>
                     <div className="row">
                         <div className="column small-12">
-                            <p>{tt('tips_js.influence_token')}</p>
-                            <p>
-                                {tt('tips_js.non_transferable', {
-                                    LIQUID_TOKEN,
-                                    VESTING_TOKEN,
-                                })}
-                            </p>
+                            {transferTips[transferType]}
                         </div>
                     </div>
-                )}
-
-                {!toVesting && (
-                    <div>
-                        <div className="row">
-                            <div className="column small-12">
-                                {transferTips[transferType]}
-                            </div>
-                        </div>
-                        <br />
-                    </div>
-                )}
+                    <br />
+                </div>
 
                 <div className="row">
                     <div className="column small-2" style={{ paddingTop: 5 }}>
@@ -382,11 +335,12 @@ class TransferForm extends Component {
                                     }
                                 />
                             </div>
-                            {to.touched && to.error ? (
-                                <div className="error">{to.error}&nbsp;</div>
-                            ) : (
-                                <p>{toVesting && powerTip3}</p>
-                            )}
+                            {to.touched &&
+                                to.error && (
+                                    <div className="error">
+                                        {to.error}&nbsp;
+                                    </div>
+                                )}
                         </div>
                     </div>
                 )}
@@ -503,21 +457,8 @@ class TransferForm extends Component {
                                     disabled={submitting || !valid}
                                     className="button"
                                 >
-                                    {toVesting
-                                        ? tt('g.power_up')
-                                        : tt('g.next')}
+                                    {tt('g.next')}
                                 </button>
-                                {transferToSelf && (
-                                    <button
-                                        className="button hollow no-border"
-                                        disabled={submitting}
-                                        onClick={this.onAdvanced}
-                                    >
-                                        {advanced
-                                            ? tt('g.basic')
-                                            : tt('g.advanced')}
-                                    </button>
-                                )}
                             </span>
                         )}
                     </div>
@@ -527,13 +468,7 @@ class TransferForm extends Component {
         return (
             <div>
                 <div className="row">
-                    <h3 className="column">
-                        {toVesting
-                            ? tt('transfer_jsx.convert_to_VESTING_TOKEN', {
-                                  VESTING_TOKEN,
-                              })
-                            : transferType}
-                    </h3>
+                    <h3 className="column">{transferType}</h3>
                 </div>
                 {form}
             </div>
@@ -556,33 +491,18 @@ export default connect(
     // mapStateToProps
     (state, ownProps) => {
         const initialValues = state.user.get('transfer_defaults', Map()).toJS();
-        const toVesting = initialValues.asset === 'VESTS';
         const currentUser = state.user.getIn(['current']);
         const currentAccount = state.global.getIn([
             'accounts',
             currentUser.get('username'),
         ]);
 
-        if (!toVesting && !initialValues.transferType)
-            initialValues.transferType = 'Transfer to Account';
-
-        let transferToSelf =
-            toVesting ||
-            /Transfer to Savings|Savings Withdraw/.test(
-                initialValues.transferType
-            );
-        if (transferToSelf && !initialValues.to)
-            initialValues.to = currentUser.get('username');
-
-        if (initialValues.to !== currentUser.get('username'))
-            transferToSelf = false; // don't hide the to field
+        initialValues.transferType = 'Transfer to Account';
 
         return {
             ...ownProps,
             currentUser,
             currentAccount,
-            toVesting,
-            transferToSelf,
             following: state.global.getIn([
                 'follow',
                 'getFollowingAsync',
@@ -601,22 +521,9 @@ export default connect(
             asset,
             memo,
             transferType,
-            toVesting,
             currentUser,
             errorCallback,
         }) => {
-            if (
-                !toVesting &&
-                !/Transfer to Account|Transfer to Savings|Savings Withdraw/.test(
-                    transferType
-                )
-            )
-                throw new Error(
-                    `Invalid transfer params: toVesting ${
-                        toVesting
-                    }, transferType ${transferType}`
-                );
-
             const username = currentUser.get('username');
             const successCallback = () => {
                 // refresh transfer history
@@ -625,28 +532,17 @@ export default connect(
                 );
                 dispatch(userActions.hideTransfer());
             };
-            const asset2 = toVesting ? 'STEEM' : asset;
+            const asset2 = asset;
             const operation = {
                 from: username,
                 to,
                 amount: parseFloat(amount, 10).toFixed(3) + ' ' + asset2,
-                memo: toVesting ? undefined : memo ? memo : '',
+                memo: memo ? memo : '',
             };
             const confirm = () => <ConfirmTransfer operation={operation} />;
-            if (transferType === 'Savings Withdraw')
-                operation.request_id = Math.floor(
-                    (Date.now() / 1000) % 4294967295
-                );
             dispatch(
                 transactionActions.broadcastOperation({
-                    type:
-                        transferType === 'Transfer to Account'
-                            ? 'transfer'
-                            : transferType === 'Transfer to Savings'
-                              ? 'transfer_to_savings'
-                              : transferType === 'Savings Withdraw'
-                                ? 'transfer_from_savings'
-                                : null,
+                    type: 'transfer',
                     operation,
                     successCallback,
                     errorCallback,

@@ -302,10 +302,5 @@ export default connect(
                 })
             );
         },
-        showChangePassword: username => {
-            const name = 'changePassword';
-            dispatch(globalActions.remove({ key: name }));
-            dispatch(globalActions.showDialog({ name, params: { username } }));
-        },
     })
 )(UserWallet);

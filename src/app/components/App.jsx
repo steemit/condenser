@@ -18,14 +18,6 @@ import { key_utils } from '@steemit/steem-js/lib/auth/ecc';
 import resolveRoute from 'app/ResolveRoute';
 import { VIEW_MODE_WHISTLE } from 'shared/constants';
 
-const pageRequiresEntropy = path => {
-    const { page } = resolveRoute(path);
-
-    const entropyPages = ['ChangePassword', 'UserProfile'];
-    /* Returns true if that page requires the entropy collection listener */
-    return entropyPages.indexOf(page) !== -1;
-};
-
 class App extends React.Component {
     constructor(props) {
         super(props);
@@ -51,48 +43,10 @@ class App extends React.Component {
 
     componentDidMount() {
         window.addEventListener('gptadshown', this.gptadshownListener);
-
-        if (pageRequiresEntropy(this.props.pathname)) {
-            this._addEntropyCollector();
-        }
     }
 
     componentWillUnmount() {
         window.removeEventListener('gptadshown', this.gptadshownListener);
-    }
-
-    componentWillReceiveProps(np) {
-        // Add listener if the next page requires entropy and the current page didn't
-        if (
-            pageRequiresEntropy(np.pathname) &&
-            !pageRequiresEntropy(this.props.pathname)
-        ) {
-            this._addEntropyCollector();
-        } else if (!pageRequiresEntropy(np.pathname)) {
-            // Remove if next page does not require entropy
-            this._removeEntropyCollector();
-        }
-    }
-
-    _addEntropyCollector() {
-        if (!this.listenerActive && this.refs.App_root) {
-            this.refs.App_root.addEventListener(
-                'mousemove',
-                this.onEntropyEvent,
-                { capture: false, passive: true }
-            );
-            this.listenerActive = true;
-        }
-    }
-
-    _removeEntropyCollector() {
-        if (this.listenerActive && this.refs.App_root) {
-            this.refs.App_root.removeEventListener(
-                'mousemove',
-                this.onEntropyEvent
-            );
-            this.listenerActive = null;
-        }
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -116,12 +70,6 @@ class App extends React.Component {
 
     setShowBannerFalse = () => {
         this.setState({ showBanner: false });
-    };
-
-    onEntropyEvent = e => {
-        if (e.type === 'mousemove')
-            key_utils.addEntropy(e.pageX, e.pageY, e.screenX, e.screenY);
-        else console.log('onEntropyEvent Unknown', e.type, e);
     };
 
     render() {

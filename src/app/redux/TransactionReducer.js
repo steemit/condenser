@@ -4,8 +4,6 @@ import { fromJS, Map } from 'immutable';
 const CONFIRM_OPERATION = 'transaction/CONFIRM_OPERATION';
 const HIDE_CONFIRM = 'transaction/HIDE_CONFIRM';
 export const BROADCAST_OPERATION = 'transaction/BROADCAST_OPERATION';
-export const UPDATE_AUTHORITIES = 'transaction/UPDATE_AUTHORITIES';
-export const UPDATE_META = 'transaction/UPDATE_META';
 const ERROR = 'transaction/ERROR'; // Has a watcher in SagaShared
 const DELETE_ERROR = 'transaction/DELETE_ERROR';
 const DISMISS_ERROR = 'transaction/DISMISS_ERROR';
@@ -46,12 +44,6 @@ export default function reducer(state = defaultState, action) {
 
         case BROADCAST_OPERATION:
             // See TransactionSaga.js
-            return state;
-
-        case UPDATE_AUTHORITIES:
-            return state;
-
-        case UPDATE_META:
             return state;
 
         case ERROR: {
@@ -192,16 +184,6 @@ export const hideConfirm = payload => ({
 
 export const broadcastOperation = payload => ({
     type: BROADCAST_OPERATION,
-    payload,
-});
-
-export const updateAuthorities = payload => ({
-    type: UPDATE_AUTHORITIES,
-    payload,
-});
-
-export const updateMeta = payload => ({
-    type: UPDATE_META,
     payload,
 });
 

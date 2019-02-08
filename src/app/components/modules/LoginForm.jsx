@@ -110,11 +110,6 @@ class LoginForm extends Component {
         saveLogin.props.onChange(saveLoginDefault); // change UI
     };
 
-    showChangePassword = () => {
-        const { username, password } = this.state;
-        this.props.showChangePassword(username.value, password.value);
-    };
-
     render() {
         if (!process.env.BROWSER) {
             return (
@@ -213,9 +208,7 @@ class LoginForm extends Component {
                         'loginform_jsx.this_password_is_bound_to_your_account_owner_key'
                     )}
                     {tt('loginform_jsx.however_you_can_use_it_to')}
-                    <a onClick={this.showChangePassword}>
-                        {tt('loginform_jsx.update_your_password')}
-                    </a>{' '}
+                    {tt('loginform_jsx.update_your_password')}
                     {tt('loginform_jsx.to_obtain_a_more_secure_set_of_keys')}
                 </span>
             );
@@ -540,17 +533,6 @@ export default connect(
                 globalActions.showDialog({
                     name: 'qr_reader',
                     params: { handleScan: dataCallback },
-                })
-            );
-        },
-        showChangePassword: (username, defaultPassword) => {
-            dispatch(userActions.closeLogin());
-
-            dispatch(globalActions.remove({ key: 'changePassword' }));
-            dispatch(
-                globalActions.showDialog({
-                    name: 'changePassword',
-                    params: { username, defaultPassword },
                 })
             );
         },

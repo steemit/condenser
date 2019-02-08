@@ -12,7 +12,6 @@ import {
     delegatedSteem,
     pricePerSteem,
 } from 'app/utils/StateFunctions';
-import WalletSubMenu from 'app/components/elements/WalletSubMenu';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import Tooltip from 'app/components/elements/Tooltip';
 import { FormattedHTMLMessage } from 'app/Translator';
@@ -175,15 +174,11 @@ class UserWallet extends React.Component {
                 {claimbox}
                 <div className="row">
                     <div className="columns small-10 medium-12 medium-expand">
-                        {isMyAccount ? (
-                            <WalletSubMenu account_name={account.get('name')} />
-                        ) : (
-                            <div>
-                                <br />
-                                <h4>{tt('g.balances')}</h4>
-                                <br />
-                            </div>
-                        )}
+                        <div>
+                            <br />
+                            <h4>{tt('g.balances')}</h4>
+                            <br />
+                        </div>
                     </div>
                 </div>
                 <div className="UserWallet__balance row">
@@ -227,9 +222,11 @@ class UserWallet extends React.Component {
                     <div className="column small-12 medium-4">
                         {power_balance_str + ' STEEM'}
                         {delegated_steem != 0 ? (
-                            <Tooltip t="STEEM POWER delegated to/from this account">
-                                ({received_power_balance_str} STEEM)
-                            </Tooltip>
+                            <div>
+                                <Tooltip t="STEEM POWER delegated to/from this account">
+                                    ({received_power_balance_str} STEEM)
+                                </Tooltip>
+                            </div>
                         ) : null}
                     </div>
                 </div>

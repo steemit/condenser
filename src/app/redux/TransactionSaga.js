@@ -416,21 +416,6 @@ function* accepted_account_update({ operation }) {
     // }
 }
 
-// TODO remove soon, this was replaced by the UserKeys edit running usernamePasswordLogin (on dialog close)
-// function* error_account_update({operation}) {
-//     const {account} = operation
-//     const stateUser = yield select(state => state.user)
-//     const username = stateUser.getIn(['current', 'username'])
-//     if (username === account) {
-//         const pending_private_key = stateUser.getIn(['current', 'pending_private_key'])
-//         if (pending_private_key) {
-//             // remove pending key
-//             const update = { pending_private_key: undefined }
-//             yield put(user.actions.setUser(update))
-//         }
-//     }
-// }
-
 export function* preBroadcast_comment({ operation, username }) {
     if (!operation.author) operation.author = username;
     let permlink = operation.permlink;

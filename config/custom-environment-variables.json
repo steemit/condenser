@@ -38,7 +38,6 @@
     "from": "SDC_SENDGRID_FROM",
     "key": "SDC_SENDGRID_API_KEY",
     "templates": {
-      "confirm_email": "SDC_SENDGRID_CONFIRMTEMPLATE",
     }
   },
   "server_session_secret": "SDC_SESSION_SECRETKEY",

@@ -23,16 +23,24 @@
       }
     }
 
-    .Icon {
-      cursor: pointer;
-
-      &:hover {
-        color: $blue;
-      }
-    }
-
     .Item {
       margin-bottom: 7px;
+      width: 30px;
+      height: 30px;
+      background: #939393;
+      font-size: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: all .3s;
+
+      &:hover {
+        background: #93939380;
+        color: $blue;
+      }
     }
   }
 }

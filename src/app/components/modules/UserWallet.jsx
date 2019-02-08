@@ -276,10 +276,6 @@ class UserWallet extends React.Component {
             });
         }
 
-        const isWithdrawScheduled =
-            new Date(account.get('next_vesting_withdrawal') + 'Z').getTime() >
-            Date.now();
-
         const steem_balance_str = numberWithCommas(balance_steem.toFixed(3));
         const steem_orders_balance_str = numberWithCommas(
             steemOrders.toFixed(3)
@@ -557,24 +553,6 @@ class UserWallet extends React.Component {
                     </div>
                     <div className="column small-12 medium-4">
                         {estimate_output}
-                    </div>
-                </div>
-                <div className="UserWallet__balance row">
-                    <div className="column small-12">
-                        {isWithdrawScheduled && (
-                            <span>
-                                {tt(
-                                    'userwallet_jsx.next_power_down_is_scheduled_to_happen'
-                                )}&nbsp;{' '}
-                                <TimeAgoWrapper
-                                    date={account.get(
-                                        'next_vesting_withdrawal'
-                                    )}
-                                />.
-                            </span>
-                        )}
-                        {/*toggleDivestError && <div className="callout alert">{toggleDivestError}</div>*/}
-                        <TransactionError opType="withdraw_vesting" />
                     </div>
                 </div>
             </div>

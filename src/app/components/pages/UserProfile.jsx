@@ -217,7 +217,6 @@ export default class UserProfile extends React.Component {
                         account={accountImm}
                         showTransfer={this.props.showTransfer}
                         current_user={current_user}
-                        withdrawVesting={this.props.withdrawVesting}
                     />
                 </div>
             );
@@ -703,27 +702,6 @@ module.exports = {
             showTransfer: transferDefaults => {
                 dispatch(userActions.setTransferDefaults(transferDefaults));
                 dispatch(userActions.showTransfer());
-            },
-            withdrawVesting: ({
-                account,
-                vesting_shares,
-                errorCallback,
-                successCallback,
-            }) => {
-                const successCallbackWrapper = (...args) => {
-                    dispatch(
-                        globalActions.getState({ url: `@${account}/transfers` })
-                    );
-                    return successCallback(...args);
-                };
-                dispatch(
-                    transactionActions.broadcastOperation({
-                        type: 'withdraw_vesting',
-                        operation: { account, vesting_shares },
-                        errorCallback,
-                        successCallback: successCallbackWrapper,
-                    })
-                );
             },
             requestData: args =>
                 dispatch(fetchDataSagaActions.requestData(args)),

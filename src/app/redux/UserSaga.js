@@ -97,8 +97,7 @@ function* usernamePasswordLogin(action) {
     }
 }
 
-// const isHighSecurityOperations = ['transfer', 'transfer_to_vesting', 'withdraw_vesting',
-//     'limit_order_create', 'limit_order_cancel', 'account_update', 'account_witness_vote']
+// const isHighSecurityOperations = ['transfer', 'account_update']
 
 const clean = value =>
     value == null || value === '' || /null|undefined/.test(value)

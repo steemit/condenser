@@ -639,15 +639,14 @@ export default connect(
                 );
             dispatch(
                 transactionActions.broadcastOperation({
-                    type: toVesting
-                        ? 'transfer_to_vesting'
-                        : transferType === 'Transfer to Account'
-                          ? 'transfer'
-                          : transferType === 'Transfer to Savings'
-                            ? 'transfer_to_savings'
-                            : transferType === 'Savings Withdraw'
-                              ? 'transfer_from_savings'
-                              : null,
+                    type:
+                        transferType === 'Transfer to Account'
+                            ? 'transfer'
+                            : transferType === 'Transfer to Savings'
+                              ? 'transfer_to_savings'
+                              : transferType === 'Savings Withdraw'
+                                ? 'transfer_from_savings'
+                                : null,
                     operation,
                     successCallback,
                     errorCallback,

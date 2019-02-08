@@ -8,7 +8,6 @@ import {
     preBroadcast_comment,
     createPermlink,
     createPatch,
-    preBroadcast_transfer,
     transactionWatches,
     broadcastOperation,
 } from './TransactionSaga';
@@ -66,27 +65,6 @@ describe('TransactionSaga', () => {
             expect(actual).toEqual(
                 '@@ -120,12 +120,15 @@\n quite simple\n+ILU\n'
             );
-        });
-    });
-
-    describe('preBroadcast_transfer', () => {
-        const operationSansMemo = {
-            ...operation,
-            memo: undefined,
-        };
-        const arg = { operation: operationSansMemo };
-        it('should return select object if it has a memo attribute with string value starting with #', () => {
-            const genR = preBroadcast_transfer({ operation });
-            const actual = genR.next().value;
-            const expected = select(state =>
-                state.user.getIn(['current', 'private_keys', 'memo_private'])
-            );
-            expect(Object.keys(actual)).toEqual(['@@redux-saga/IO', 'SELECT']);
-        });
-        it('should return the operation unchanged if it has no memo attribute', () => {
-            let gen = preBroadcast_transfer(arg);
-            const actual = gen.next().value;
-            expect(actual).toEqual(operationSansMemo);
         });
     });
 

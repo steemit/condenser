@@ -72,11 +72,6 @@ export default function reducer(state = defaultState, action) {
                         } else if (errorStr === 'Testing, fake error')
                             errorKey = 'Testing, fake error';
                         break;
-                    case 'transfer':
-                        if (/get_balance/.test(errorStr)) {
-                            errorKey = 'Insufficient balance.';
-                        }
-                        break;
                     default:
                         break;
                 }

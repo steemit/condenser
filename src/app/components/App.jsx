@@ -124,14 +124,6 @@ class App extends React.Component {
         else console.log('onEntropyEvent Unknown', e.type, e);
     };
 
-    signUp = () => {
-        serverApiRecordEvent('Sign up', 'Hero banner');
-    };
-
-    learnMore = () => {
-        serverApiRecordEvent('Learn more', 'Hero banner');
-    };
-
     render() {
         const {
             params,

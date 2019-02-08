@@ -57,11 +57,6 @@ const SidePanel = ({ alignment, visible, hideSidePanel, username }) => {
                 label: tt('navigation.explore'),
                 link: `/tags`,
             },
-            {
-                value: 'change_password',
-                label: tt('navigation.change_account_password'),
-                link: `/change_password`,
-            },
         ],
         exchanges: [
             {

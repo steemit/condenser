@@ -198,10 +198,8 @@ class Header extends React.Component {
 
         const feed_link = `/@${username}/feed`;
         const replies_link = `/@${username}/recent-replies`;
-        const wallet_link = `/@${username}/transfers`;
         const account_link = `/@${username}`;
         const comments_link = `/@${username}/comments`;
-        const reset_password_link = `/@${username}/password`;
         const settings_link = `/@${username}/settings`;
         const pathCheck = userPath === '/submit.html' ? true : null;
 
@@ -219,20 +217,10 @@ class Header extends React.Component {
                 value: tt('g.replies'),
             },
             {
-                link: wallet_link,
-                icon: 'wallet',
-                value: tt('g.wallet'),
-            },
-            {
                 link: '#',
                 icon: 'eye',
                 onClick: toggleNightmode,
                 value: tt('g.toggle_nightmode'),
-            },
-            {
-                link: reset_password_link,
-                icon: 'key',
-                value: tt('g.change_password'),
             },
             { link: settings_link, icon: 'cog', value: tt('g.settings') },
             loggedIn

@@ -122,7 +122,6 @@ class TransferForm extends Component {
     };
 
     initForm(props) {
-        const { transferType } = props.initialValues;
         const insufficientFunds = (asset, amount) => {
             const { currentAccount } = props;
             const balanceValue =
@@ -178,7 +177,6 @@ class TransferForm extends Component {
     };
 
     balanceValue() {
-        const { transferType } = this.props.initialValues;
         const { currentAccount } = this.props;
         const { asset } = this.state;
         return !asset || asset.value === 'STEEM'
@@ -200,26 +198,9 @@ class TransferForm extends Component {
     };
 
     render() {
-        const transferTips = {
-            'Transfer to Account': tt(
-                'transfer_jsx.move_funds_to_another_account',
-                { APP_NAME }
-            ),
-            'Transfer to Savings': tt(
-                'transfer_jsx.protect_funds_by_requiring_a_3_day_withdraw_waiting_period'
-            ),
-            'Savings Withdraw': tt(
-                'transfer_jsx.withdraw_funds_after_the_required_3_day_waiting_period'
-            ),
-        };
-        const powerTip3 = tt(
-            'tips_js.converted_VESTING_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again',
-            { LIQUID_TOKEN, VESTING_TOKEN }
-        );
         const { to, amount, asset, memo } = this.state;
         const { loading, trxError, advanced } = this.state;
         const { currentUser, currentAccount, dispatchSubmit } = this.props;
-        const { transferType } = this.props.initialValues;
         const { submitting, valid, handleSubmit } = this.state.transfer;
         // const isMemoPrivate = memo && /^#/.test(memo.value); -- private memos are not supported yet
         const isMemoPrivate = false;
@@ -232,7 +213,6 @@ class TransferForm extends Component {
                         ...data,
                         errorCallback: this.errorCallback,
                         currentUser,
-                        transferType,
                     });
                 })}
                 onChange={this.clearError}
@@ -240,7 +220,9 @@ class TransferForm extends Component {
                 <div>
                     <div className="row">
                         <div className="column small-12">
-                            {transferTips[transferType]}
+                            {tt('transfer_jsx.move_funds_to_another_account', {
+                                APP_NAME,
+                            })}
                         </div>
                     </div>
                     <br />
@@ -468,7 +450,7 @@ class TransferForm extends Component {
         return (
             <div>
                 <div className="row">
-                    <h3 className="column">{transferType}</h3>
+                    <h3 className="column">Transfer</h3>
                 </div>
                 {form}
             </div>
@@ -497,8 +479,6 @@ export default connect(
             currentUser.get('username'),
         ]);
 
-        initialValues.transferType = 'Transfer to Account';
-
         return {
             ...ownProps,
             currentUser,
@@ -520,7 +500,6 @@ export default connect(
             amount,
             asset,
             memo,
-            transferType,
             currentUser,
             errorCallback,
         }) => {

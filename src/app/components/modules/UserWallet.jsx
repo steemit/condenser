@@ -34,45 +34,6 @@ class UserWallet extends React.Component {
         this.state = {
             claimInProgress: false,
         };
-        this.onShowDepositSteem = e => {
-            if (e && e.preventDefault) e.preventDefault();
-            const name = this.props.current_user.get('username');
-            const new_window = window.open();
-            new_window.opener = null;
-            new_window.location =
-                'https://blocktrades.us/?input_coin_type=eth&output_coin_type=steem&receive_address=' +
-                name;
-        };
-        this.onShowWithdrawSteem = e => {
-            e.preventDefault();
-            const new_window = window.open();
-            new_window.opener = null;
-            new_window.location =
-                'https://blocktrades.us/unregistered_trade/steem/eth';
-        };
-        this.onShowDepositPower = (current_user_name, e) => {
-            e.preventDefault();
-            const new_window = window.open();
-            new_window.opener = null;
-            new_window.location =
-                'https://blocktrades.us/?input_coin_type=eth&output_coin_type=steem_power&receive_address=' +
-                current_user_name;
-        };
-        this.onShowDepositSBD = (current_user_name, e) => {
-            e.preventDefault();
-            const new_window = window.open();
-            new_window.opener = null;
-            new_window.location =
-                'https://blocktrades.us/?input_coin_type=eth&output_coin_type=sbd&receive_address=' +
-                current_user_name;
-        };
-        this.onShowWithdrawSBD = e => {
-            e.preventDefault();
-            const new_window = window.open();
-            new_window.opener = null;
-            new_window.location =
-                'https://blocktrades.us/unregistered_trade/sbd/eth';
-        };
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'UserWallet');
     }
 
@@ -82,13 +43,6 @@ class UserWallet extends React.Component {
     };
 
     render() {
-        const {
-            onShowDepositSteem,
-            onShowWithdrawSteem,
-            onShowDepositSBD,
-            onShowWithdrawSBD,
-            onShowDepositPower,
-        } = this;
         const { price_per_steem, account, current_user } = this.props;
         const gprops = this.props.gprops.toJS();
 
@@ -137,65 +91,16 @@ class UserWallet extends React.Component {
             {
                 value: tt('userwallet_jsx.transfer'),
                 link: '#',
-                onClick: showTransfer.bind(
-                    this,
-                    'STEEM',
-                    'Transfer to Account'
-                ),
-            },
-            {
-                value: tt('userwallet_jsx.power_up'),
-                link: '#',
-                onClick: showTransfer.bind(
-                    this,
-                    'VESTS',
-                    'Transfer to Account'
-                ),
+                onClick: showTransfer.bind(this, 'STEEM', 'Transfer'),
             },
         ];
         let dollar_menu = [
             {
                 value: tt('g.transfer'),
                 link: '#',
-                onClick: showTransfer.bind(this, 'SBD', 'Transfer to Account'),
+                onClick: showTransfer.bind(this, 'SBD', 'Transfer'),
             },
         ];
-        if (isMyAccount) {
-            steem_menu.push({
-                value: tt('g.buy'),
-                link: '#',
-                onClick: onShowDepositSteem.bind(
-                    this,
-                    current_user.get('username')
-                ),
-            });
-            steem_menu.push({
-                value: tt('g.sell'),
-                link: '#',
-                onClick: onShowWithdrawSteem,
-            });
-            power_menu.push({
-                value: tt('g.buy'),
-                link: '#',
-                onClick: onShowDepositPower.bind(
-                    this,
-                    current_user.get('username')
-                ),
-            });
-            dollar_menu.push({
-                value: tt('g.buy'),
-                link: '#',
-                onClick: onShowDepositSBD.bind(
-                    this,
-                    current_user.get('username')
-                ),
-            });
-            dollar_menu.push({
-                value: tt('g.sell'),
-                link: '#',
-                onClick: onShowWithdrawSBD,
-            });
-        }
 
         const steem_balance_str = numberWithCommas(balance_steem.toFixed(3));
         const power_balance_str = numberWithCommas(vesting_steem.toFixed(3));
@@ -280,20 +185,6 @@ class UserWallet extends React.Component {
                             </div>
                         )}
                     </div>
-                    {
-                        <div className="columns shrink">
-                            {isMyAccount && (
-                                <button
-                                    className="UserWallet__buysp button hollow"
-                                    onClick={onShowDepositSteem}
-                                >
-                                    {tt(
-                                        'userwallet_jsx.buy_steem_or_steem_power'
-                                    )}
-                                </button>
-                            )}
-                        </div>
-                    }
                 </div>
                 <div className="UserWallet__balance row">
                     <div className="column small-12 medium-8">
@@ -334,28 +225,11 @@ class UserWallet extends React.Component {
                         ) : null}
                     </div>
                     <div className="column small-12 medium-4">
-                        {isMyAccount ? (
-                            <DropdownMenu
-                                className="Wallet_dropdown"
-                                items={power_menu}
-                                el="li"
-                                selected={power_balance_str + ' STEEM'}
-                            />
-                        ) : (
-                            power_balance_str + ' STEEM'
-                        )}
+                        {power_balance_str + ' STEEM'}
                         {delegated_steem != 0 ? (
-                            <div
-                                style={{
-                                    paddingRight: isMyAccount
-                                        ? '0.85rem'
-                                        : null,
-                                }}
-                            >
-                                <Tooltip t="STEEM POWER delegated to/from this account">
-                                    ({received_power_balance_str} STEEM)
-                                </Tooltip>
-                            </div>
+                            <Tooltip t="STEEM POWER delegated to/from this account">
+                                ({received_power_balance_str} STEEM)
+                            </Tooltip>
                         ) : null}
                     </div>
                 </div>

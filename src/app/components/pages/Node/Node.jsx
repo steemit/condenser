@@ -33,9 +33,11 @@ class Node extends Component {
       citesVisible: false,
       citedByVisible: false,
       highlightInfo: null,
+      highlightIndex: -1,
     };
 
     this.onHighLight = this.onHighLight.bind(this);
+    this.onReview = this.onReview.bind(this);
   }
 
   componentDidMount() {
@@ -128,6 +130,16 @@ class Node extends Component {
     );
   }
 
+  onReview() {
+    this.setState(
+      {
+        highlightInfo: null,
+        highlightIndex: parseInt(Math.random() * HightLights.length),
+      },
+      this.toggleCitedByPanel
+    );
+  }
+
   render() {
     if (this.state.data == null) return <div>Loading</div>;
     const {
@@ -140,7 +152,10 @@ class Node extends Component {
     const citedByPanel = this.state.citedByVisible;
     const voteCount = (votes.up || 0) - (votes.down || 0);
 
-    const { highlightInfo } = this.state;
+    const { highlightInfo, highlightIndex } = this.state;
+    const highlightData =
+      highlightIndex === -1 ? null : HightLights[highlightIndex];
+    const hNode = highlightData ? Nodes[highlightData.node] : null;
 
     return (
       <div className="NodeWrapper">
@@ -180,25 +195,83 @@ class Node extends Component {
             visible={citedByPanel}
             onHide={this.closeCitedByPanel}
           >
-            {highlightInfo && (
-              <div className="Panel">
-                <div className="NodeHeader">
-                  <div>Create New Post</div>
-                  <X
-                    style={{ color: '#bbb' }}
-                    size={20}
-                    onClick={this.closeCitedByPanel}
+            <div className="Panel">
+              {highlightInfo ? (
+                <div>
+                  <div className="NodeHeader">
+                    <div>Create New Post</div>
+                    <X
+                      style={{ color: '#bbb' }}
+                      size={20}
+                      onClick={this.closeCitedByPanel}
+                    />
+                  </div>
+                  <div className="Main">
+                    You <span>highlighted</span>:
+                  </div>
+                  <div className="Extra">
+                    {highlightInfo.highLight.anchorText}
+                  </div>
+                  <Create
+                    type={highlightInfo.type}
+                    node={this.state.data.data}
                   />
                 </div>
-                <div className="Main">
-                  You <span>highlighted</span>:
+              ) : (
+                <div>
+                  <div className="NodeHeader">
+                    <div>Top Reviews</div>
+                    <X
+                      style={{ color: '#bbb' }}
+                      size={20}
+                      onClick={this.closeCitedByPanel}
+                    />
+                  </div>
+                  {/* <div className="Main">
+                    Topic that user <span>highlighted</span> in the text
+                  </div>
+                  {hNode && (
+                    <div className="Extra">
+                      <div className={`Type ${hNode.type}`}>{hNode.type}</div>
+                      {hNode.title}
+                    </div>
+                  )}
+                  <div className="NodeHeader">
+                    <div>Top Highlights</div>
+                  </div> */}
+                  {hNode && (
+                    <div className="Sections">
+                      {[0, 1].map((key, index) => (
+                        <section key={index}>
+                          <div className="NodeHeader">
+                            <div className="Wrap">
+                              <div className="User">
+                                <img src={defaultUser} alt={user.name} />
+                                <div>
+                                  <div className="UserName">{user.name}</div>
+                                  <div className="UserTitle">{user.title}</div>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="Extra">
+                              <div className="Date">{date}</div>
+                              <div className="Reviews">{reviews} Reviews</div>
+                            </div>
+                          </div>
+                          <div className="Title">{title}</div>
+                          <div className="Content">
+                            There are many variations of passages of Lorem Ipsum
+                            available, but the majority have suffered alteration
+                            in some form, , or randomised words which don't look
+                            even slightly believable.
+                          </div>
+                        </section>
+                      ))}
+                    </div>
+                  )}
                 </div>
-                <div className="Extra">
-                  {highlightInfo.highLight.anchorText}
-                </div>
-                <Create type={highlightInfo.type} node={this.state.data.data} />
-              </div>
-            )}
+              )}
+            </div>
           </Sidebar>
 
           <Sidebar.Pusher>
@@ -254,6 +327,9 @@ class Node extends Component {
                   </div>
                   <div className="CitedBy" onClick={this.toggleCitedByPanel}>
                     Cited By: <span>{getCitations(citedBy)}</span>
+                  </div>
+                  <div className="Review">
+                    Review : <span onClick={this.onReview}>{reviews}</span>
                   </div>
                 </div>
               </div>

@@ -9,7 +9,7 @@ import defaultUser from 'assets/images/static/user1.png';
 import { MockItemDictionary } from '../../DummyData';
 
 class SearchItem extends Component {
-  state = { type: null, viewMore: false };
+  state = { type: null, viewMore: true };
 
   componentDidMount() {
     // this.checkType();

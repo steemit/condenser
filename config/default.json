@@ -1,6 +1,4 @@
 {
-  "database_url": "mysql://root:password@127.0.0.1/steemit_dev",
-  "disable_signups": false,
   "facebook_app_id": false,
   "google_analytics_id": false,
   "helmet": {

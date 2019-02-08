@@ -35,7 +35,7 @@ docker run -it -p 8080:8080 steemit/condenser
 Environment variables can be added like this:
 
 ```bash
-docker run -it --env SDC_DATABASE_URL="mysql://user:pass@hostname/databasename" -p 8080:8080 steemit/condenser
+docker run -it -p 8080:8080 steemit/condenser
 ```
 
 If you would like to modify, build, and run condenser using docker, it's as
@@ -212,7 +212,7 @@ If you want to test a server-side rendered page without using the network, do th
 
 ```
 yarn build
-OFFLINE_SSR_TEST=true SDC_DATABASE_URL="mysql://root@127.0.0.1/steemit_dev" NODE_ENV=production node --prof lib/server/index.js
+OFFLINE_SSR_TEST=true NODE_ENV=production node --prof lib/server/index.js
 ```
 
 This will read data from the blobs in `api_mockdata` directory. If you want to use another set of mock data, create a similar directory to that one and add an argument `OFFLINE_SSR_TEST_DATA_DIR` pointing to your new directory.

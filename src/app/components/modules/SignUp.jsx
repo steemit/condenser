@@ -23,7 +23,7 @@ class SignUp extends React.Component {
             );
         }
 
-        if (this.props.serverBusy || $STM_Config.disable_signups) {
+        if (this.props.serverBusy) {
             return (
                 <div className="row">
                     <div

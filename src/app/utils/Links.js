@@ -49,7 +49,7 @@ export default {
     // simpleLink: new RegExp(`<a href="(.*)">(.*)<\/a>`, 'ig'),
     ipfsPrefix: /(https?:\/\/.*)?\/ipfs/i,
     twitch: /https?:\/\/(?:www.)?twitch.tv\/(?:(videos)\/)?([a-zA-Z0-9][\w]{3,24})/i,
-    spee.ch: /https?:\/\/(?:www.)?spee.ch\/(?:(embed)\/)?([a-zA-Z0-9][\w]{3,24})/i,
+    speech: /https?:\/\/(?:www.)?spee.ch\/(?:(embed)\/)?([a-zA-Z0-9][\w]{3,24})/i,
 };
 
 //TODO: possible this should go somewhere else.

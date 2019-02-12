@@ -49,18 +49,10 @@ export const userWatches = [
     },
 ];
 
-const highSecurityPages = [/\/@.+\/(transfers|permissions|password)/];
-
 const strCmp = (a, b) => (a > b ? 1 : a < b ? -1 : 0);
 
 function* removeHighSecurityKeys({ payload: { pathname } }) {
-    const highSecurityPage =
-        highSecurityPages.find(p => p.test(pathname)) != null;
-    // Let the user keep the active key when going from one high security page to another.  This helps when
-    // the user logins into the Wallet then the Permissions tab appears (it was hidden).  This keeps them
-    // from getting logged out when they click on Permissions (which is really bad because that tab
-    // disappears again).
-    if (!highSecurityPage) yield put(userActions.removeHighSecurityKeys());
+    yield put(userActions.removeHighSecurityKeys());
 }
 
 /**
@@ -153,10 +145,7 @@ function* usernamePasswordLogin2({
     }
 
     const pathname = yield select(state => state.global.get('pathname'));
-    const highSecurityLogin =
-        // /owner|active/.test(userProvidedRole) ||
-        // isHighSecurityOperations.indexOf(operationType) !== -1 ||
-        highSecurityPages.find(p => p.test(pathname)) != null;
+    const highSecurityLogin = false;
 
     const isRole = (role, fn) =>
         !userProvidedRole || role === userProvidedRole ? fn() : undefined;
@@ -210,7 +199,6 @@ function* usernamePasswordLogin2({
         payload: {
             account,
             private_keys,
-            highSecurityLogin,
             login_owner_pubkey,
         },
     });
@@ -236,7 +224,7 @@ function* usernamePasswordLogin2({
             login_wif_owner_pubkey === owner_pub_key
         ) {
             yield put(userActions.loginError({ error: 'owner_login_blocked' }));
-        } else if (!highSecurityLogin && hasActiveAuth) {
+        } else if (hasActiveAuth) {
             yield put(
                 userActions.loginError({ error: 'active_login_blocked' })
             );
@@ -276,22 +264,17 @@ function* usernamePasswordLogin2({
         // provided password did not yield memo key
         private_keys = private_keys.remove('memo_private');
 
-    if (!highSecurityLogin) {
-        console.log('Not high security login');
-        if (
-            posting_pubkey === owner_pubkey ||
-            posting_pubkey === active_pubkey
-        ) {
-            yield put(
-                userActions.loginError({
-                    error:
-                        'This login gives owner or active permissions and should not be used here.  Please provide a posting only login.',
-                })
-            );
-            localStorage.removeItem('autopost2');
-            return;
-        }
+    if (posting_pubkey === owner_pubkey || posting_pubkey === active_pubkey) {
+        yield put(
+            userActions.loginError({
+                error:
+                    'This login gives owner or active permissions and should not be used here.  Please provide a posting only login.',
+            })
+        );
+        localStorage.removeItem('autopost2');
+        return;
     }
+
     const memo_pubkey = private_keys.has('memo_private')
         ? private_keys
               .get('memo_private')

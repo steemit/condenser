@@ -217,9 +217,6 @@ class LoginForm extends Component {
                 <span>
                     {tt(
                         'loginform_jsx.this_password_is_bound_to_your_account_active_key'
-                    )}{' '}
-                    {tt(
-                        'loginform_jsx.you_may_use_this_active_key_on_other_more'
                     )}
                 </span>
             );

@@ -52,10 +52,6 @@ export default function useGeneralApi(app) {
             typeof params === 'string' ? JSON.parse(params) : params;
         if (!checkCSRF(this, csrf)) return;
 
-        // Set auth, to remember if a user is authed on initial login.
-        this.session.auth = true;
-        this.session.save();
-
         logRequest('login_account', this, { account });
         try {
             if (signatures) {
@@ -161,7 +157,6 @@ export default function useGeneralApi(app) {
         const { csrf } =
             typeof params === 'string' ? JSON.parse(params) : params;
         if (!checkCSRF(this, csrf)) return;
-        this.session.auth = false;
         logRequest('logout_account', this);
         try {
             this.session.a = null;

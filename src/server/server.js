@@ -126,14 +126,6 @@ app.use(function*(next) {
         return;
     }
 
-    const auth = this.request.query.auth;
-    if (auth) {
-        this.request.url = this.request.url.replace(/[?&]{1}auth=true/, '');
-        this.session['auth'] = true;
-        this.session.save();
-        this.request.query.auth = null;
-    }
-
     yield next;
 });
 
@@ -277,14 +269,6 @@ usePostJson(app);
 
 useGeneralApi(app);
 
-app.use(function*(next) {
-    this.adsEnabled =
-        !(this.session.auth || this.session.a) && config.google_ad_enabled;
-    this.gptEnabled =
-        !(this.session.auth || this.session.a) && config.gpt_enabled;
-    yield next;
-});
-
 // helmet wants some things as bools and some as lists, makes config difficult.
 // our config uses strings, this splits them to lists on whitespace.
 if (env === 'production') {
@@ -308,8 +292,8 @@ if (env === 'production') {
 
     app.use(helmet.contentSecurityPolicy(helmetConfig));
     app.use(function*(next) {
-        if (this.adsEnabled) {
-            // If user is signed out, enable ads.
+        if (config.google_ad_enabled) {
+            // enable ads.
             [
                 'content-security-policy',
                 'x-content-security-policy',
@@ -320,19 +304,22 @@ if (env === 'production') {
                     .map(el => {
                         if (el.startsWith('script-src')) {
                             const oldSrc = el.replace(/^script-src/, '');
-                            return `script-src 'unsafe-inline' 'unsafe-eval' data: https: ${
+                            return (
+                                `script-src 'unsafe-inline' 'unsafe-eval' data: https: ` +
                                 oldSrc
-                            }`;
+                            );
                         } else if (el.startsWith('connect-src')) {
                             const oldSrc = el.replace(/^connect-src/, '');
-                            return `connect-src securepubads.g.doubleclick.net ${
+                            return (
+                                `connect-src securepubads.g.doubleclick.net ` +
                                 oldSrc
-                            }`;
+                            );
                         } else if (el.startsWith('default-src')) {
                             const oldSrc = el.replace(/^default-src/, '');
-                            return `default-src tpc.googlesyndication.com ${
+                            return (
+                                `default-src tpc.googlesyndication.com ` +
                                 oldSrc
-                            }`;
+                            );
                         } else {
                             return el;
                         }

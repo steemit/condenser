@@ -55,7 +55,6 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
         };
 
         const googleAds = {
-            shouldSeeAds: !!config.google_ad_enabled,
             enabled: !!config.google_ad_enabled,
             test: !!config.google_ad_test,
             client: config.google_ad_client,
@@ -92,17 +91,14 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
         } else {
             assets = resolvedAssets;
         }
-        const shouldSeeAds = googleAds.shouldSeeAds;
-        const gptEnabled = googleAds.gptEnabled;
-        const gptSlots = googleAds.gptSlots;
         const props = {
             body,
             assets,
             title,
             meta,
-            shouldSeeAds,
-            gptEnabled,
-            gptSlots,
+            shouldSeeAds: googleAds.enabled,
+            gptEnabled: googleAds.gptEnabled,
+            gptSlots: googleAds.gptSlots,
         };
         ctx.status = statusCode;
         ctx.body =

@@ -270,58 +270,7 @@ if (env === 'production') {
     if (helmetConfig.directives.reportUri === '-') {
         delete helmetConfig.directives.reportUri;
     }
-
-    if (!helmetConfig.directives.frameSrc) {
-        helmetConfig.directives.frameSrc = [
-            `'self'`,
-            'googleads.g.doubleclick.net',
-            'https:',
-        ];
-    }
-
     app.use(helmet.contentSecurityPolicy(helmetConfig));
-    app.use(function*(next) {
-        if (config.google_ad_enabled) {
-            // enable ads.
-            [
-                'content-security-policy',
-                'x-content-security-policy',
-                'x-webkit-csp',
-            ].forEach(header => {
-                let policy = this.response.header[header]
-                    .split(/;\s+/)
-                    .map(el => {
-                        if (el.startsWith('script-src')) {
-                            const oldSrc = el.replace(/^script-src/, '');
-                            return (
-                                `script-src 'unsafe-inline' 'unsafe-eval' data: https: ` +
-                                oldSrc
-                            );
-                        } else if (el.startsWith('connect-src')) {
-                            const oldSrc = el.replace(/^connect-src/, '');
-                            return (
-                                `connect-src securepubads.g.doubleclick.net ` +
-                                oldSrc
-                            );
-                        } else if (el.startsWith('default-src')) {
-                            const oldSrc = el.replace(/^default-src/, '');
-                            return (
-                                `default-src tpc.googlesyndication.com ` +
-                                oldSrc
-                            );
-                        } else {
-                            return el;
-                        }
-                    })
-                    .join('; ');
-                this.response.set(header, policy);
-            });
-            yield next;
-        } else {
-            // If user is logged in, do not modify CSP headers further.
-            yield next;
-        }
-    });
 }
 
 if (env !== 'test') {

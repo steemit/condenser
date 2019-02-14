@@ -423,7 +423,6 @@ export default connect(
         const loginBroadcastOperation = state.user.get(
             'loginBroadcastOperation'
         );
-        const shouldSeeAds = state.app.getIn(['googleAds', 'shouldSeeAds']);
         const initialValues = {
             saveLogin: saveLoginDefault,
         };
@@ -452,7 +451,6 @@ export default connect(
         return {
             login_error,
             loginBroadcastOperation,
-            shouldSeeAds,
             initialValues,
             initialUsername,
             msg,

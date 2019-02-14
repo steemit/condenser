@@ -16,6 +16,12 @@
       max-width: 920px;
       margin: 0 auto;
       padding: 0 20px;
+
+      .NoPost {
+        text-align: center;
+        padding: 20px;
+        font-size: 20px;
+      }
     }
     @media all and (max-width: 1300px) {
       width: 100%;

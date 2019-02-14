@@ -10,6 +10,7 @@ import { SIGNUP_URL } from 'shared/constants';
 import * as userActions from 'app/redux/UserReducer';
 import * as appActions from 'app/redux/AppReducer';
 import normalizeProfile from 'app/utils/NormalizeProfile';
+import { Userpic } from 'app/components/Steemit/elements';
 
 import { User, ChevronDown, Settings, LogOut } from 'react-feather';
 // import { Transition } from 'react-spring';
@@ -103,7 +104,8 @@ class NavBar extends Component {
                   <div className="DropdownList" /*style={props}*/>
                     <Link className="UserInfo" to={`/@${username}`}>
                       <span className="Avatar">
-                        <img src="https://via.placeholder.com/1x1" alt="User" />
+                        <Userpic account={username} />
+                        {/* <img src="https://via.placeholder.com/1x1" alt="User" /> */}
                       </span>
                       <span className="Username">{username}</span>
                     </Link>

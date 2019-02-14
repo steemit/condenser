@@ -55,12 +55,12 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
         };
 
         const googleAds = {
-            shouldSeeAds: !!ctx.adsEnabled,
+            shouldSeeAds: !!config.google_ad_enabled,
             enabled: !!config.google_ad_enabled,
             test: !!config.google_ad_test,
             client: config.google_ad_client,
             adSlots: config.google_ad_slots,
-            gptEnabled: !!ctx.gptEnabled,
+            gptEnabled: !!config.gpt_enabled,
             gptSlots: config.gpt_slots,
         };
         // ... and that's the end of user-session-related SSR

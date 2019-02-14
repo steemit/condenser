@@ -118,17 +118,6 @@ session(app, {
 });
 csrf(app);
 
-// If a user is logged in, we need to make sure that they receive the correct
-// headers.
-app.use(function*(next) {
-    if (this.request.url.startsWith('/api')) {
-        yield next;
-        return;
-    }
-
-    yield next;
-});
-
 koaLocale(app);
 
 function convertEntriesToArrays(obj) {

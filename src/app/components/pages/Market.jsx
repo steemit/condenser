@@ -7,8 +7,9 @@ class Market extends React.Component {
         return (
             <div className="row">
                 <div className="column">
-                    {tt('g.external_link_message')}{': '}
-                    <Link to={`{$STM_Config.wallet_url}/market`}>
+                    {tt('g.external_link_message')}
+                    {': '}
+                    <Link to={`${$STM_Config.wallet_url}/market`}>
                         {tt('navigation.currency_market')}
                     </Link>
                 </div>

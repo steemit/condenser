@@ -9,7 +9,7 @@ class ChangePassword extends React.Component {
             <div>
                 {tt('g.external_link_message')}
                 {': '}
-                <Link to={`{$STM_Config.wallet_url}/market`}>
+                <Link to={`${$STM_Config.wallet_url}/market`}>
                     {tt('navigation.currency_market')}
                 </Link>
             </div>

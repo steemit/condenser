@@ -21,7 +21,9 @@ class RecoverAccountStep1 extends React.Component {
                             {tt('g.external_link_message')}
                             {': '}
                             <Link
-                                to={`{$STM_Config.wallet_url}/recover_account_step_1`}
+                                to={`${
+                                    $STM_Config.wallet_url
+                                }/recover_account_step_1`}
                             >
                                 {tt('navigation.stolen_account_recovery')}
                             </Link>

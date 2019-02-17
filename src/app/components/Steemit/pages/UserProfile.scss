@@ -18,12 +18,16 @@
         color: red;
         font-weight: bold;
         margin-top: 25px;
+      }
 
-        .Expertise {
-          display: flex;
-          justify-content: space-between;
-          max-width: 200px;
-          width: 75%;
+      .Expertise {
+        display: flex;
+        justify-content: space-between;
+        max-width: 200px;
+        width: 75%;
+
+        p {
+          margin-bottom: 0;
         }
       }
     }

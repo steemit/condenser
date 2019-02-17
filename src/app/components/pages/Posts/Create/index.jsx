@@ -160,12 +160,12 @@ class Create extends Component {
           </div>
           <div className="Field">
             <div className="Label">{typeString}</div>
-            <textarea placeholder={typeString} rows={3} />
+            <SubmitReplyEditor
+              type="submit_story"
+              typePlace={typeString}
+              successCallback={this.success}
+            />
           </div>
-          <SubmitReplyEditor
-            type="submit_story"
-            successCallback={this.success}
-          />
         </div>
       </div>
     );

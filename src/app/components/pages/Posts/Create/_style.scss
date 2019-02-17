@@ -3,7 +3,7 @@
   overflow: auto;
 
   .Form {
-    background: white;
+    background: transparent;
     max-width: 820px;
     margin: 0 auto;
     max-height: fit-content;
@@ -74,7 +74,7 @@
         }
       }
 
-      textarea:focus {
+      textarea:focus, input:focus {
         border: 2px solid #2684ff;
       }
 

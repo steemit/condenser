@@ -416,7 +416,7 @@ class ReplyEditor extends React.Component {
               this.setState({ postError: null });
             }}
           >
-            <div className={vframe_section_shrink_class}>
+            {/* <div className={vframe_section_shrink_class}>
               {isStory && (
                 <span>
                   <input
@@ -448,7 +448,7 @@ class ReplyEditor extends React.Component {
                   {titleError}
                 </span>
               )}
-            </div>
+            </div> */}
 
             <div
               className={
@@ -488,7 +488,8 @@ class ReplyEditor extends React.Component {
                       disabled={loading}
                       rows={isStory ? 10 : 3}
                       placeholder={
-                        isStory ? tt('g.write_your_story') : tt('g.reply')
+                        // isStory ? tt('g.write_your_story') : tt('g.reply')
+                        this.props.typePlace
                       }
                       autoComplete="off"
                     />
@@ -523,7 +524,7 @@ class ReplyEditor extends React.Component {
               </div>
             </div>
 
-            <div
+            {/* <div
               className={vframe_section_shrink_class}
               style={{ marginTop: '0.5rem' }}
             >
@@ -539,13 +540,13 @@ class ReplyEditor extends React.Component {
                   </div>
                 </span>
               )}
-            </div>
+            </div> */}
             <div className={vframe_section_shrink_class}>
               {isStory &&
                 !isEdit && (
                   <div className="ReplyEditor__options">
                     <div>
-                      <div>
+                      {/* <div>
                         {tt('g.rewards')}
                         {': '}
                         {this.props.payoutType == '0%' &&
@@ -554,10 +555,10 @@ class ReplyEditor extends React.Component {
                           tt('reply_editor.default_50_50')}
                         {this.props.payoutType == '100%' &&
                           tt('reply_editor.power_up_100')}
-                      </div>
-                      <a onClick={this.showAdvancedSettings}>
+                      </div> */}
+                      {/* <a onClick={this.showAdvancedSettings}>
                         {tt('reply_editor.advanced_settings')}
-                      </a>{' '}
+                      </a>{' '} */}
                       <br />
                       &nbsp;
                     </div>

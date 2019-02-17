@@ -11,7 +11,7 @@ class HighLight extends Component {
     staticOptions: {
       // disableEditing: true,
       toolbar: {
-        allowMultiParagraphSelection: false,
+        allowMultiParagraphSelection: true,
         buttons: [
           {
             name: 'h1',
@@ -70,6 +70,18 @@ class HighLight extends Component {
           focusOffset: selection.focusOffset,
         };
         this.props.onHighLight(type, selection, highLight);
+
+        if (this.medium) {
+          if (this.medium.isActive) {
+            this.medium.destroy();
+            this.medium = new MediumEditor( // eslint-disable-line
+              '#HighLightWrapper',
+              Object.assign(this.state.staticOptions, this.props.options || {})
+            );
+          } else {
+            this.medium.setup();
+          }
+        }
       }
     };
   }

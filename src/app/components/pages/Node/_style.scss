@@ -54,6 +54,20 @@
               left: -45px;
               width: 45px;
             }
+
+            .LabelWrapper .Label {
+              font-size: 10px;
+            }
+
+            .Info > div.Actions > svg {
+              margin-left: 15px;
+              height: 18px;
+              width: 18px;
+            }
+
+            .Info .Extra {
+              min-width: 140px;
+            }
           }
         }
       }

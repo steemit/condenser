@@ -4,6 +4,7 @@
   margin-right: 25px;
   margin-left: 80px;
   position: relative;
+  padding-bottom: 10px;
 
   .Main {
     position: relative;
@@ -66,17 +67,15 @@
   .Info {
     align-items: center;
     display: flex;
-    margin-bottom: 17px;
+    margin-bottom: 15px;
     padding-top: 8px;
     justify-content: space-between;
 
     > div.Actions {
-      width: 60%;
-
       > svg {
         color: #b3b3b3;
         cursor: pointer;
-        margin-left: 42px;
+        margin-left: 25px;
 
         height: 22px;
         width: 22px;
@@ -91,12 +90,14 @@
       color: #999999;
       font-size: 14px;
       text-align: right;
+      min-width: 175px;
     }
   }
 
   .User {
     display: flex;
     align-items: center;
+    flex-grow: 1;
 
     img {
       float: left;

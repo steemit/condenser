@@ -43,7 +43,7 @@ function randomVote() {
   return null;
 }
 
-function dateFormat(date) {
+function dateFormat(date, short = false) {
   const month_names = [
     'January',
     'February',
@@ -61,6 +61,9 @@ function dateFormat(date) {
   const day = date.getDate();
   const month_index = date.getMonth();
   const year = date.getFullYear();
+  if (short) {
+    return `${month_names[month_index].substr(0, 3)} ${year}`;
+  }
   return `${month_names[month_index]} ${day}, ${year}`;
 }
 
@@ -69,18 +72,22 @@ function getNick(name) {
 }
 
 const dictionary = {};
+const users = [];
 
 export const MockItems = mockData.map((item, index) => {
+  const title = getTitle(index);
+  const label = getLabel(index);
+  const labels = getLabels();
   const mockItem = {
     id: item.ID,
     title: item.Title,
     type: item.Post_type,
-    label: getLabel(index),
-    labels: getLabels(),
+    label,
+    labels,
     user: {
       name: item.Author,
       nick: getNick(item.Author),
-      title: getTitle(index),
+      title,
     },
     votes: {
       up: parseInt(item.Upvotes),
@@ -106,6 +113,27 @@ export const MockItems = mockData.map((item, index) => {
     cites.push(item['Citation_' + i.toString()]);
   }
 
+  const checkUser = users.find(user => user.name === item.Author);
+  if (!checkUser) {
+    users.push({
+      name: item.Author,
+      nice: getNick(item.Author),
+      title,
+      kScore: parseInt(item.Kscore),
+      joined: dateFormat(new Date(item.Date), true),
+      posts: parseInt(Math.random() * 300),
+      followers: parseInt(Math.random() * 300),
+      following: parseInt(Math.random() * 300),
+      expertise: labels.map(label => ({
+        title: label,
+        votes: parseInt(Math.random() * 300),
+      })),
+    });
+  } else {
+    checkUser.posts += 1;
+    checkUser.kScore += parseInt(item.Kscore);
+  }
+
   if (!dictionary[mockItem.id]) {
     dictionary[mockItem.id] = { citedBy: [] };
   }
@@ -126,6 +154,7 @@ export const MockItems = mockData.map((item, index) => {
 });
 
 export const MockItemDictionary = dictionary;
+export const MockUsers = users;
 
 export const SearchItems = [
   {

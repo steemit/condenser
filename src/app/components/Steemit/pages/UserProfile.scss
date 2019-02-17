@@ -1,4 +1,67 @@
 .UserProfile {
+  display: flex;
+  min-height: calc(100vh - 66px);
+
+  .HomeWrapper {
+    width: 66%;
+  }
+
+  &__info {
+    padding: 20px 30px;
+
+    p {
+      font-size: 15px;
+    }
+
+    .Expertises {
+      > p {
+        color: red;
+        font-weight: bold;
+        margin-top: 25px;
+
+        .Expertise {
+          display: flex;
+          justify-content: space-between;
+          max-width: 200px;
+          width: 75%;
+        }
+      }
+    }
+
+    .Social {
+      margin-top: 30px;
+      display: flex;
+      font-weight: bold;
+
+      > p {
+        margin-right: 20px;
+      }
+    }
+  }
+
+  .Personal {
+    display: flex;
+
+    .Userpic {
+      width: 70px;
+      height: 70px;
+      margin: 10px 10px 10px 0;
+    }
+
+    .Title {
+      .UserName {
+        font-size: 20px;
+        font-weight: bold;
+      }
+
+      .UserKPower {
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+.UserProfile {
   .articles {
     @include MQ(M) {
       margin: 0 auto;

@@ -35,6 +35,7 @@ import SanitizedLink from 'app/components/Steemit/elements/SanitizedLink';
 import DropdownMenu from 'app/components/Steemit/elements/DropdownMenu';
 
 import { Home } from 'app/components/pages/Home/Components';
+import { MockUsers } from 'app/components/pages/Home/DummyData';
 
 export default class UserProfile extends React.Component {
   constructor() {
@@ -584,11 +585,51 @@ export default class UserProfile extends React.Component {
           'url(' + proxifyImageUrl(cover_image, '2048x512') + ')',
       };
     }
+    const accountHash =
+      account.name.split('').reduce((a, c) => (a += c.codePointAt()), 0) %
+      MockUsers.length;
+    const accountInfo = MockUsers[accountHash];
 
     return (
       <div className="UserProfile">
-        <Home location={this.props.location} userOnly={username} />
-        <div className="UserProfile__banner row expanded">
+        <Home location={this.props.location} userOnly={accountInfo.name} />
+        <div className="UserProfile__info">
+          <div className="Personal">
+            <Userpic account={account.name} />
+            <div className="Title">
+              <div className="UserName">{accountInfo.name}</div>
+              <div className="UserTitle">{accountInfo.title}</div>
+              <div className="UserKPower">K-power: {accountInfo.kScore}</div>
+            </div>
+          </div>
+          <p>
+            {accountInfo.name} is an {accountInfo.title}, an early Bitcoin
+            supporter and blockchain evangelist bringing to Platin many years of
+            experience in online marketplaces, product management, product
+            design & development, cross-functional team management and business
+            development.
+          </p>
+          <p>
+            University of Missouri Columbia<br />
+            {accountInfo.expertise.map(a => a.title).join(', ')}
+          </p>
+          <p>Joined {accountInfo.joined}</p>
+          <div className="Expertises">
+            <p>Expertise</p>
+            {accountInfo.expertise.map(exp => (
+              <div className="Expertise">
+                <p>{exp.title}</p>
+                <p>{exp.votes}</p>
+              </div>
+            ))}
+          </div>
+          <div className="Social">
+            <p>{accountInfo.followers} Followers</p>
+            <p>{accountInfo.following} Following</p>
+            <p>{accountInfo.posts} Posts</p>
+          </div>
+        </div>
+        {/* <div className="UserProfile__banner row expanded">
           <div className="column" style={cover_image_style}>
             <div style={{ position: 'relative' }}>
               <div className="UserProfile__buttons hide-for-small-only">
@@ -652,7 +693,7 @@ export default class UserProfile extends React.Component {
               <Follow follower={username} following={accountname} what="blog" />
             </div>
           </div>
-        </div>
+        </div> */}
         {/* <div className="UserProfile__top-nav row expanded noPrint">
           {top_menu}
         </div>

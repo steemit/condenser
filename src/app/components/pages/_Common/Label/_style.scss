@@ -10,6 +10,9 @@
     float: left;
     font-size: 8px;
     padding: 3px 10px;
+    font-family: "Futura", sans-serif;
+    text-transform: uppercase;
+    font-size: 12px;
 
     &:not(:last-child) {
       margin-right: 5px;

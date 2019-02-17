@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Set } from 'immutable';
-import { browserHistory } from 'react-router';
+import { Link, browserHistory } from 'react-router';
 
 // import PropTypes from 'prop-types';
 import { ThumbsDown, ThumbsUp, X } from 'react-feather';
@@ -18,6 +18,7 @@ import HighLight from 'app/components/pages/_Common/HighLight';
 import Label from 'app/components/pages/_Common/Label';
 import SideMenu from 'app/components/pages/_Common/SideMenu';
 import Create from 'app/components/pages/Posts/Create';
+import { Home } from 'app/components/pages/Home/Components';
 // import BrowsingHistory from './Components/BrowsingHistory';
 import { Nodes, HightLights, Note } from './DummyData';
 import { MockItemDictionary } from '../Home/DummyData';
@@ -51,7 +52,7 @@ class Node extends Component {
     const { nodeId } = this.state;
     const newNodeId = this.getNodeId(newProps);
     if (newNodeId !== nodeId) {
-      this.setState({ nodeId: newNodeId, data: MockItemDictionary[nodeId] });
+      this.setState({ nodeId: newNodeId, data: MockItemDictionary[newNodeId] });
     }
   }
 
@@ -71,6 +72,7 @@ class Node extends Component {
   toggleCitedByPanel = () =>
     this.setState({
       citedByVisible: !this.state.citedByVisible,
+      highlightIndex: parseInt(Math.random() * HightLights.length),
     });
   closeCitesPanel = () => this.setState({ citesVisible: false });
   closeCitedByPanel = () => this.setState({ citedByVisible: false });
@@ -156,6 +158,7 @@ class Node extends Component {
     const highlightData =
       highlightIndex === -1 ? null : HightLights[highlightIndex];
     const hNode = highlightData ? Nodes[highlightData.node] : null;
+    const citedPosts = cites.map(postId => MockItemDictionary[postId].data);
 
     return (
       <div className="NodeWrapper">
@@ -172,16 +175,21 @@ class Node extends Component {
             onHide={this.closeCitesPanel}
           >
             <div className="Panel Left">
-              <div className="NodeHeader">
-                <div>Citations</div>
-                <X
-                  style={{ color: '#bbb' }}
-                  size={20}
-                  onClick={this.closeCitesPanel}
+              <div>
+                <div className="NodeHeader">
+                  <div>Citations</div>
+                  <X
+                    style={{ color: '#bbb' }}
+                    size={20}
+                    onClick={this.closeCitesPanel}
+                  />
+                </div>
+                <Home
+                  location={this.props.location}
+                  posts={citedPosts}
+                  noSearch
                 />
               </div>
-              <div className="Main">Citations Go Here</div>
-              <div className="Extra" />
             </div>
           </Sidebar>
 
@@ -336,9 +344,14 @@ class Node extends Component {
               <div className="Introduction">
                 Introduction: <span>Linked from:</span>{' '}
                 {nodeFrom ? (
-                  <span className={`TitleFrom ${nodeFrom.data.type}`}>
+                  <Link
+                    className={`TitleFrom ${nodeFrom.data.type}`}
+                    to={`/knowledgr/@${nodeFrom.data.user.nick}/${
+                      nodeFrom.data.id
+                    }`}
+                  >
                     {limitedText(nodeFrom.data.title)}
-                  </span>
+                  </Link>
                 ) : (
                   <span className="TitleFrom None">No Originatation</span>
                 )}

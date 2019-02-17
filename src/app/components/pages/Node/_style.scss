@@ -40,6 +40,24 @@
     overflow: auto;
 
     > div {
+      .HomeWrapper .Content {
+        box-shadow: unset;
+        background: white;
+
+        .Results {
+          padding: 0;
+
+          .SearchItemWrapper {
+            margin-left: 45px;
+
+            .Votes {
+              left: -45px;
+              width: 45px;
+            }
+          }
+        }
+      }
+
       > .NodeHeader {
         align-items: center;
         display: flex;
@@ -342,6 +360,7 @@
     margin-bottom: 30px;
     margin-top: 20px;
 
+    a,
     span {
       color: #d6d6d6;
       cursor: pointer;
@@ -439,9 +458,19 @@
 }
 
 .ui.wide.left.sidebar {
-  width: 420px;
+  width: 50%;
 }
 
 .ui.wide.right.sidebar {
   width: 50%;
+}
+
+.Comments {
+  margin-top: 15px;
+  padding: 10px 0 10px 30px;
+  border-left: 1px solid #f2f2f2;
+
+  .Comment {
+    margin-bottom: 0;
+  }
 }

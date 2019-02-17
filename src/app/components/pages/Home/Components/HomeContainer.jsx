@@ -10,13 +10,16 @@ class HomeContainer extends Component {
     super(props);
     const hasSearch = props.location.query.search;
     const hasType = props.location.query.type;
-    let items = hasSearch
-      ? MockItems.filter(item => item.title.indexOf(hasSearch) !== -1)
-      : MockItems;
-    items = hasType ? items.filter(item => item.type === hasType) : items;
-    items = props.userOnly
-      ? items.filter(item => item.user.name === props.userOnly)
-      : items;
+    let items = props.posts ? props.posts : [];
+    if (!props.posts) {
+      items = hasSearch
+        ? MockItems.filter(item => item.title.indexOf(hasSearch) !== -1)
+        : MockItems;
+      items = hasType ? items.filter(item => item.type === hasType) : items;
+      items = props.userOnly
+        ? items.filter(item => item.user.name === props.userOnly)
+        : items;
+    }
 
     this.state = {
       // loading: true,
@@ -46,14 +49,21 @@ class HomeContainer extends Component {
         }
       });
     }
-    if (hasSearch !== this.state.hasSearch || hasType !== this.state.hasType) {
-      let items = hasSearch
-        ? MockItems.filter(item => item.title.indexOf(hasSearch) !== -1)
-        : MockItems;
-      items = hasType ? items.filter(item => item.type === hasType) : items;
-      items = newProps.userOnly
-        ? items.filter(item => item.user.name === newProps.userOnly)
-        : items;
+    if (
+      hasSearch !== this.state.hasSearch ||
+      hasType !== this.state.hasType ||
+      newProps.posts
+    ) {
+      let items = newProps.posts ? newProps.posts : [];
+      if (!newProps.posts) {
+        items = hasSearch
+          ? MockItems.filter(item => item.title.indexOf(hasSearch) !== -1)
+          : MockItems;
+        items = hasType ? items.filter(item => item.type === hasType) : items;
+        items = newProps.userOnly
+          ? items.filter(item => item.user.name === newProps.userOnly)
+          : items;
+      }
       this.setState({
         hasSearch,
         hasType,
@@ -104,11 +114,13 @@ class HomeContainer extends Component {
       <div className={`HomeWrapper ${isPaneOpen ? 'Open' : 'Close'}`}>
         <div className="Content">
           <div className="Results">
-            <SearchHeader
-              hasSearch={hasSearch}
-              updateState={this.updateState}
-              sortBy={sortBy}
-            />
+            {!this.props.noSearch && (
+              <SearchHeader
+                hasSearch={hasSearch}
+                updateState={this.updateState}
+                sortBy={sortBy}
+              />
+            )}
             {disaplyItems.map((item, index) => (
               <SearchItem data={item} key={`${index}-${item.id}`} />
             ))}

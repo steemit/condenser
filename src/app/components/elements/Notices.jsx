@@ -61,8 +61,8 @@ const SteemitNotices = ({ notices }) => {
             </div>
             <div className="c-sidebar__content">
                 <ul className="Notices">
-                    {notices.map(notice => (
-                        <Notice key={notice.title} notice={notice} />
+                    {notices.map((notice, i) => (
+                        <Notice key={i} notice={notice} />
                     ))}
                 </ul>
             </div>

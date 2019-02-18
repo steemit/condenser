@@ -292,6 +292,8 @@ useGeneralApi(app);
 app.use(function*(next) {
     this.adsEnabled =
         !(this.session.auth || this.session.a) && config.google_ad_enabled;
+    this.gptEnabled =
+        !(this.session.auth || this.session.a) && config.gpt_enabled;
     yield next;
 });
 
@@ -329,9 +331,19 @@ if (env === 'production') {
                     .split(/;\s+/)
                     .map(el => {
                         if (el.startsWith('script-src')) {
-                            const oldScriptSrc = el.replace(/^script-src/, '');
+                            const oldSrc = el.replace(/^script-src/, '');
                             return `script-src 'unsafe-inline' 'unsafe-eval' data: https: ${
-                                oldScriptSrc
+                                oldSrc
+                            }`;
+                        } else if (el.startsWith('connect-src')) {
+                            const oldSrc = el.replace(/^connect-src/, '');
+                            return `connect-src securepubads.g.doubleclick.net ${
+                                oldSrc
+                            }`;
+                        } else if (el.startsWith('default-src')) {
+                            const oldSrc = el.replace(/^default-src/, '');
+                            return `default-src tpc.googlesyndication.com ${
+                                oldSrc
                             }`;
                         } else {
                             return el;

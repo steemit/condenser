@@ -8,6 +8,8 @@ export default function ServerHTML({
     title,
     meta,
     shouldSeeAds,
+    gptEnabled,
+    gptSlots,
 }) {
     let page_title = title;
     return (
@@ -170,6 +172,33 @@ export default function ServerHTML({
                         type="text/css"
                     />
                 ))}
+                {gptEnabled ? (
+                    <script
+                        async
+                        src="https://www.googletagservices.com/tag/js/gpt.js"
+                    />
+                ) : null}
+                {gptEnabled ? (
+                    <script
+                        dangerouslySetInnerHTML={{
+                            __html: `
+                      window.googletag = window.googletag || {};
+                      googletag.cmd = googletag.cmd || [];
+                      console.log('Set up googletag');
+                      googletag.cmd.push(function() {
+                          console.log('Preparing to enable googletag services');
+                          googletag.pubads().enableSingleRequest();
+                          googletag.pubads().setTargeting('edition',['new-york']);
+                          googletag.pubads().collapseEmptyDivs(true,true);
+                          googletag.pubads().disableInitialLoad();
+                          googletag.pubads().enableAsyncRendering();
+                          googletag.enableServices();
+                          console.log('Enabled googletag services');
+                      });
+                  `,
+                        }}
+                    />
+                ) : null}
                 {shouldSeeAds ? (
                     <script
                         async

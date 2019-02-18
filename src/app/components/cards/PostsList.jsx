@@ -231,25 +231,20 @@ class PostsList extends React.Component {
                                 />
                             </li>
 
-                            <li>
-                                <div className="articles__summary">
-                                    <div className="articles__content-block articles__content-block--ad">
-                                        <GoogleAd
-                                            name="in-feed-1"
-                                            format="fluid"
-                                            slot={
-                                                this.props.adSlots['in_feed_1']
-                                                    .slot_id
-                                            }
-                                            layoutKey={
-                                                this.props.adSlots['in_feed_1']
-                                                    .layout_key
-                                            }
-                                            style={{ display: 'block' }}
-                                        />
-                                    </div>
-                                </div>
-                            </li>
+                            <div className="articles__content-block--ad">
+                                <GoogleAd
+                                    name="in-feed-1"
+                                    format="fluid"
+                                    slot={
+                                        this.props.adSlots['in_feed_1'].slot_id
+                                    }
+                                    layoutKey={
+                                        this.props.adSlots['in_feed_1']
+                                            .layout_key
+                                    }
+                                    style={{ display: 'block' }}
+                                />
+                            </div>
                         </div>
                     );
                 } else {

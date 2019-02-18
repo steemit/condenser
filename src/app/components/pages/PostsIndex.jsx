@@ -15,7 +15,7 @@ import Callout from 'app/components/elements/Callout';
 import SidebarLinks from 'app/components/elements/SidebarLinks';
 import SidebarNewUsers from 'app/components/elements/SidebarNewUsers';
 import Notices from 'app/components/elements/Notices';
-import GoogleAd from 'app/components/elements/GoogleAd';
+import GptAd from 'app/components/elements/GptAd';
 import ArticleLayoutSelector from 'app/components/modules/ArticleLayoutSelector';
 import Topics from './Topics';
 import SortOrder from 'app/components/elements/SortOrder';
@@ -262,19 +262,16 @@ class PostsIndex extends React.Component {
                         )
                     )}
                     <Notices notices={this.props.notices} />
-                    {this.props.shouldSeeAds ? (
-                        <div className="c-sidebar__module">
-                            <div className="c-sidebar__content sidebar-ad">
-                                <GoogleAd
-                                    name="sidebar-1"
-                                    slot={
-                                        this.props.adSlots['sidebar_1'].slot_id
-                                    }
-                                    style={{ width: '160px', height: '600px' }}
-                                />
-                            </div>
-                        </div>
-                    ) : null}
+                    <div className="sidebar-ad">
+                        {this.props.gptSlots ? (
+                            <GptAd
+                                slot={
+                                    this.props.gptSlots['right_nav']['slot_id']
+                                }
+                                args={this.props.gptSlots['right_nav']['args']}
+                            />
+                        ) : null}
+                    </div>
                 </aside>
 
                 <aside className="c-sidebar c-sidebar--left">
@@ -296,6 +293,16 @@ class PostsIndex extends React.Component {
                         </a>
                         {' ' + tt('g.next_3_strings_together.value_posts')}
                     </small>
+                    <div className="sidebar-ad">
+                        {this.props.gptSlots ? (
+                            <GptAd
+                                slot={
+                                    this.props.gptSlots['left_nav']['slot_id']
+                                }
+                                args={this.props.gptSlots['left_nav']['args']}
+                            />
+                        ) : null}
+                    </div>
                 </aside>
             </div>
         );
@@ -327,8 +334,7 @@ module.exports = {
                     .get('pinned_posts')
                     .get('notices')
                     .toJS(),
-                shouldSeeAds: state.app.getIn(['googleAds', 'shouldSeeAds']),
-                adSlots: state.app.getIn(['googleAds', 'adSlots']).toJS(),
+                gptSlots: state.app.getIn(['googleAds', 'gptSlots']).toJS(),
             };
         },
         dispatch => {

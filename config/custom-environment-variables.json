@@ -74,5 +74,6 @@
   "pinned_posts_url": "PINNED_POSTS_URL",
   "google_ad_enabled": "GOOGLE_AD_ENABLED",
   "google_ad_test": "GOOGLE_AD_TEST",
-  "google_ad_client": "GOOGLE_AD_CLIENT"
+  "google_ad_client": "GOOGLE_AD_CLIENT",
+  "gpt_enabled": "GPT_ENABLED"
 }

@@ -41,7 +41,7 @@ global.webpackIsomorphicTools = new WebpackIsomorphicTools(
 
 global.webpackIsomorphicTools.server(ROOT, () => {
     steem.api.setOptions({
-        url: config.steemd_connection_client,
+        url: config.steemd_connection_server,
         retry: {
             retries: 10,
             factor: 5,

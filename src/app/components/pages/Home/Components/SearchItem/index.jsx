@@ -85,7 +85,7 @@ class SearchItem extends Component {
               <div className="Reviews">{reviews} Reviews</div>
             </div>
           </div>
-          <Label label={[label, ...labels].join(',')} />
+          <Label label={[label].join(',')} />
           <div className="Votes">
             <div className={`Up ${votes.you === 'up' ? 'Voted' : ''}`}>
               <FeatherIcons.ThumbsUp />

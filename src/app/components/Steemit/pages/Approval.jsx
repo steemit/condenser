@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { VIEW_MODE_WHISTLE, WHISTLE_SIGNUP_COMPLETE } from 'shared/constants';
 
-import knowledr from 'assets/images/static/knowledr.png';
+import knowledgr from 'assets/images/static/knowledgr.png';
 
 class Approval extends React.Component {
   constructor(props) {
@@ -62,7 +62,7 @@ class Approval extends React.Component {
           <div className="AuthForm">{body}</div>
         </div>
         <div className="Right">
-          <img className="Knowledr" src={knowledr} alt="Knowledr Logo" />
+          <img className="Knowledgr" src={knowledgr} alt="Knowledgr Logo" />
         </div>
       </div>
     );

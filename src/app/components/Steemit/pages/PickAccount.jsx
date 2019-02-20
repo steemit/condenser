@@ -15,7 +15,7 @@ import { PARAM_VIEW_MODE } from 'shared/constants';
 import { makeParams } from 'app/utils/Links';
 
 import Input from 'app/components/pages/_Common/Input';
-import knowledr from 'assets/images/static/knowledr.png';
+import knowledgr from 'assets/images/static/knowledgr.png';
 
 class PickAccount extends React.Component {
   static propTypes = {
@@ -100,7 +100,7 @@ class PickAccount extends React.Component {
       <div className="AuthWrapper">
         <div className="Left">{this.content()}</div>
         <div className="Right">
-          <img className="Knowledr" src={knowledr} alt="Knowledr Logo" />
+          <img className="Knowledgr" src={knowledgr} alt="Knowledgr Logo" />
         </div>
       </div>
     );
@@ -281,7 +281,7 @@ class PickAccount extends React.Component {
     return (
       <div className="AuthForm">
         <div className="Title">
-          We are <span>Knowledr</span>
+          We are <span>Knowledgr</span>
         </div>
         <div className="progress">
           <div style={{ width: '10%' }} />

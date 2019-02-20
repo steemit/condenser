@@ -16,7 +16,7 @@ import path from 'path';
 import tt from 'counterpart';
 
 import Input from 'app/components/pages/_Common/Input';
-import knowledr from 'assets/images/static/knowledr.png';
+import knowledgr from 'assets/images/static/knowledgr.png';
 
 import ServerHTML from '../server-html';
 import sendEmail from '../sendEmail';
@@ -280,7 +280,7 @@ export default function useEnterAndConfirmEmailPages(app) {
     const content = (
       <div className="AuthForm">
         <div className="Title">
-          We are <span>Knowledr</span>
+          We are <span>Knowledgr</span>
         </div>
         <div className="progress">
           <div style={{ width: '50%' }} />
@@ -340,7 +340,7 @@ export default function useEnterAndConfirmEmailPages(app) {
         <div className="AuthWrapper">
           <div className="Left">{content}</div>
           <div className="Right">
-            <img className="Knowledr" src={knowledr} alt="Knowledr Logo" />
+            <img className="Knowledgr" src={knowledgr} alt="Knowledgr Logo" />
           </div>
         </div>
       </div>

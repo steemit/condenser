@@ -5,7 +5,7 @@ import Input from 'app/components/pages/_Common/Input';
 import LoginForm from 'app/components/Steemit/modules/LoginForm';
 
 // import logo from 'assets/images/static/logo.png';
-import knowledr from 'assets/images/static/knowledr.png';
+import knowledgr from 'assets/images/static/knowledgr.png';
 
 class LogIn extends Component {
   constructor(props) {
@@ -46,7 +46,7 @@ class LogIn extends Component {
           </div>
         </div>
         <div className="Right">
-          <img className="Knowledr" src={knowledr} alt="Knowledr Logo" />
+          <img className="Knowledgr" src={knowledgr} alt="Knowledgr Logo" />
         </div>
       </div>
     );

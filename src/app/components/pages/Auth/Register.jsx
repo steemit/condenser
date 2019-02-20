@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 
 import Input from 'app/components/pages/_Common/Input';
 
-import knowledr from 'assets/images/static/knowledr.png';
+import knowledgr from 'assets/images/static/knowledgr.png';
 
 const formFields = [
   {
@@ -71,7 +71,7 @@ class Register extends Component {
         <div className="Left">
           <div className="AuthForm">
             <div className="Title">
-              We are <span>Knowledr</span>
+              We are <span>Knowledgr</span>
             </div>
             <div className="Description">Welcome, let us introduce!</div>
             <form>
@@ -113,7 +113,7 @@ class Register extends Component {
           </div>
         </div>
         <div className="Right">
-          <img className="Knowledr" src={knowledr} alt="Knowledr Logo" />
+          <img className="Knowledgr" src={knowledgr} alt="Knowledgr Logo" />
         </div>
       </div>
     );

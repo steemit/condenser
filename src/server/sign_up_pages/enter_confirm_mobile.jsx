@@ -51,12 +51,6 @@ function* confirmMobileHandler() {
 
   const confirmation_code =
     this.params && this.params.code ? this.params.code : this.request.body.code;
-  console.log(
-    '-- /confirm_mobile -->',
-    this.session.uid,
-    this.session.user,
-    confirmation_code
-  );
 
   const user = yield models.User.findOne({
     attributes: ['id', 'account_status'],
@@ -71,7 +65,8 @@ function* confirmMobileHandler() {
     return;
   }
   const mid = yield models.Identity.findOne({
-    where: { user_id: user.id, provider: 'phone', confirmation_code },
+    where: { user_id: user.id, provider: 'phone' }, // TODO: Remove comment when TeleSign verification is working
+    //where: { user_id: user.id, provider: 'phone', confirmation_code },
   });
 
   if (!mid) {
@@ -223,6 +218,9 @@ export default function useEnterAndConfirmMobilePages(app) {
     const user_id = this.session.user;
     const country = this.request.body.country;
     const localPhone = this.request.body.phone;
+    console.log('--------userId: ', user_id);
+    console.log('--------country: ', country);
+    console.log('--------localPhone: ', localPhone);
     const params = addToParams({}, this.request.query, PARAM_VIEW_MODE, [
       VIEW_MODE_WHISTLE,
     ]);
@@ -323,6 +321,8 @@ export default function useEnterAndConfirmMobilePages(app) {
     //   return;
     // }
 
+    // Skip TeleSign verificiation for now
+    /* 
     const verifyResult = yield teleSignVerify({
       mobile: phone,
       confirmation_code,
@@ -334,7 +334,13 @@ export default function useEnterAndConfirmMobilePages(app) {
       this.flash = { error: verifyResult.error };
       this.redirect(enterMobileUrl);
       return;
-    }
+    } */
+    const verifyResult = {
+      // Fake result
+      phone,
+      score: 400,
+      referenceId: '25A42FB5F5980E689192F9039DDEC25B',
+    };
 
     phone = verifyResult.phone;
 
@@ -355,14 +361,6 @@ export default function useEnterAndConfirmMobilePages(app) {
         score: verifyResult.score,
       });
     }
-
-    console.log(
-      '-- /submit_mobile -->',
-      this.session.uid,
-      this.session.user,
-      phone,
-      mid.id
-    );
 
     const content = (
       <div className="AuthForm">

@@ -61,8 +61,8 @@
     "username": "guest"
   },
   "telesign": {
-    "customer_id": false,
-    "rest_api_key": false
+    "customer_id": "E0BC0679-264D-4F66-A1C1-DA142351F916",
+    "rest_api_key": "fHycVU+LMMwe0JAmdIQsQ4pdb6xHyybxzQB6q/psMI4HQGAJZ8nMfZIMCbTKqTsMmOtKOwRDO5L1APnangFh1w=="
   },
   "twilio": {
     "account_sid": false,

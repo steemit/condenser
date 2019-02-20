@@ -9479,6 +9479,18 @@ tar@^4:
     safe-buffer "^5.1.2"
     yallist "^3.0.2"
 
+telesignsdk@^2.0.1, telesignsdk@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/telesignsdk/-/telesignsdk-2.2.0.tgz#e8c95521aec23aa1b494b10ec08c66effd09947a"
+  integrity sha512-R6ch+VzIpBwqYKySMcboZWR42L1Er7JIVnFMrU0Uf9DY6VyS9nCiP1C7NN2mA8ZVPaaHupIIUZGsHp0007eiiw==
+  dependencies:
+    os "0.1.1"
+    querystring "0.2.0"
+    request "2.81.0"
+    telesignsdk "^2.0.1"
+    urijs "1.18.10"
+    uuid-v4.js "1.0.2"
+
 terraformer-wkt-parser@^1.1.0:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/terraformer-wkt-parser/-/terraformer-wkt-parser-1.1.2.tgz#336a0c8fc82094a5aff83288f69aedecd369bf0c"
@@ -9817,6 +9829,11 @@ uri-js@^4.2.2:
   dependencies:
     punycode "^2.1.0"
 
+urijs@1.18.10:
+  version "1.18.10"
+  resolved "https://registry.yarnpkg.com/urijs/-/urijs-1.18.10.tgz#b94463eaba59a1a796036a467bb633c667f221ab"
+  integrity sha1-uURj6rpZoaeWA2pGe7YzxmfyIas=
+
 url-loader@0.6.2, url-loader@^0.6.2:
   version "0.6.2"
   resolved "https://registry.yarnpkg.com/url-loader/-/url-loader-0.6.2.tgz#a007a7109620e9d988d14bce677a1decb9a993f7"
@@ -9867,6 +9884,11 @@ uue@^3.1.0:
   dependencies:
     escape-string-regexp "~1.0.5"
     extend "~3.0.0"
+
+uuid-v4.js@1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/uuid-v4.js/-/uuid-v4.js-1.0.2.tgz#624853b66318b186d033403719eb9a4ba9213f1b"
+  integrity sha1-YkhTtmMYsYbQM0A3GeuaS6khPxs=
 
 uuid@^3.0.0, uuid@^3.1.0:
   version "3.2.1"

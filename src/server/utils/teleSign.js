@@ -1,196 +1,103 @@
-import fetch from 'node-fetch';
 import config from 'config';
-import crypto from 'crypto';
-import secureRandom from 'secure-random';
+import TeleSignSDK from 'telesignsdk';
 
-const customer_id = config.get('telesign.customer_id');
+const timeout = 10 * 1000;
+const customerId = config.get('telesign.customer_id');
+const rest_endpoint = 'https://rest-api.telesign.com'; // TODO: If enterprise account, change this!
 
-let api_key = '';
-
+let apiKey = '';
 if (config.get('telesign.rest_api_key')) {
-    api_key = new Buffer(config.get('telesign.rest_api_key'), 'base64');
+  apiKey = new Buffer(config.get('telesign.rest_api_key'), 'base64');
 }
 
-const use_case_code = 'UNKN'; // Use Case: avoid bulk attack and spammers
+const client = new TeleSignSDK(
+  customerId,
+  apiKey,
+  rest_endpoint,
+  timeout // optional
+);
 
-// Testing, always blocked: 1-310-555-0100
+const accountLifeCycleEvent = 'create';
 
-/** @return {object} - {reference_id} or {error} */
-export default function* verify({
-    mobile,
-    confirmation_code,
-    ip,
-    ignore_score,
-}) {
-    try {
-        const result = yield getScore(mobile);
-        const { recommendation, score } = result.risk;
-        let phone = mobile;
-        // if (!ignore_score && recommendation !== 'allow') {
-        if (!ignore_score && (!score || score > 600)) {
-            console.log(
-                `TeleSign did not allow phone ${mobile} ip ${
-                    ip
-                }. TeleSign responded: ${recommendation}`
-            );
-            return {
-                error:
-                    'Unable to verify your phone number. Please try a different phone number.',
-                score,
-            };
+function getScore(phoneNumber) {
+  return new Promise((resolve, reject) => {
+    client.score.score(
+      (err, res) => {
+        if (err) {
+          console.log(err);
+          reject(err);
+        } else {
+          console.log(res);
+          resolve(res);
         }
-        if (
-            result.numbering &&
-            result.numbering.cleansing &&
-            result.numbering.cleansing.sms
-        ) {
-            const sms = result.numbering.cleansing.sms;
-            phone = sms.country_code + sms.phone_number;
-        }
-        const { reference_id } = yield verifySms({
-            mobile,
-            confirmation_code,
-            ip,
-        });
-        return { reference_id, score, phone };
-    } catch (error) {
-        console.log('-- verify score error -->', error);
-        return { error: 'Unable to verify phone, please try again later.' };
-    }
-}
-
-function getScore(mobile) {
-    const fields = urlencode({
-        ucid: use_case_code,
-    });
-    const resource = '/v1/phoneid/score/' + mobile.match(/\d+/g).join('');
-    const method = 'GET';
-    console.log(
-        'telesign url:',
-        `https://rest-ww.telesign.com${resource}?${fields}`
+      },
+      phoneNumber,
+      accountLifeCycleEvent
     );
-    console.log('auth headers:', authHeaders({ resource, method }));
-    return fetch(`https://rest-ww.telesign.com${resource}?${fields}`, {
-        method,
-        headers: authHeaders({ resource, method }),
-    })
-        .then(r => r.json())
-        .catch(error => {
-            console.error(
-                `ERROR: Phone ${mobile} score exception`,
-                JSON.stringify(error, null, 0)
-            );
-            return Promise.reject(error);
-        })
-        .then(response => {
-            const { status } = response;
-            if (status.code === 300) {
-                // Transaction successfully completed
-                console.log(
-                    `Phone ${mobile} score`,
-                    JSON.stringify(response, null, 0)
-                );
-                return Promise.resolve(response);
-            }
-            console.error(
-                `ERROR: Phone ${mobile} score`,
-                JSON.stringify(response, null, 0)
-            );
-            return Promise.reject(response);
-        });
+  });
 }
 
-function verifySms({ mobile, confirmation_code, ip }) {
-    // https://developer.telesign.com/v2.0/docs/rest_api-verify-sms
-    const f = {
-        phone_number: mobile,
-        language: 'en-US',
-        ucid: use_case_code,
-        verify_code: confirmation_code,
-        template: '$$CODE$$ is your Steemit confirmation code',
-    };
-    if (ip) f.originating_ip = ip;
-    const fields = urlencode(f);
-    // console.log('fields', fields) // logspam
+function verifySms(phoneNumber, confirmCode) {
+  const message = `${confirmCode} is your Knowledgr confirmation code`;
+  const messageType = 'ARN';
 
-    const resource = '/v1/verify/sms';
-    const method = 'POST';
-    return fetch('https://rest.telesign.com' + resource, {
-        method,
-        body: fields,
-        headers: authHeaders({ resource, method, fields }),
-    })
-        .then(r => r.json())
-        .catch(error => {
-            console.error(
-                `ERROR: SMS failed to ${mobile} code ${
-                    confirmation_code
-                } req ip ${ip} exception`,
-                JSON.stringify(error, null, 0)
-            );
-            return Promise.reject(error);
-        })
-        .then(response => {
-            const { status } = response;
-            if (status.code === 290) {
-                // Message in progress
-                console.log(
-                    `Sent SMS to ${mobile} code ${confirmation_code}`,
-                    JSON.stringify(response, null, 0)
-                );
-                return Promise.resolve(response);
-            }
-            console.error(
-                `ERROR: SMS failed to ${mobile} code ${confirmation_code}:`,
-                JSON.stringify(response, null, 0)
-            );
-            return Promise.reject(response);
-        });
+  console.log(message);
+
+  return new Promise((resolve, reject) => {
+    client.sms.message(
+      (err, res) => {
+        if (err) {
+          console.log(err);
+          reject(err);
+        } else {
+          console.log(res);
+          resolve(res);
+        }
+      },
+      phoneNumber,
+      message,
+      messageType
+    );
+  });
 }
 
-/**
-    @arg {string} resource `/v1/verify/AEBC93B5898342F790E4E19FED41A7DA`
-    @arg {string} method [GET|POST|PUT]
-    @arg {string} fields url query string
-*/
-function authHeaders({ resource, fields, method = 'GET' }) {
-    const auth_method = 'HMAC-SHA256';
-    const currDate = new Date().toUTCString();
-    const nonce = parseInt(
-        secureRandom.randomBuffer(8).toString('hex'),
-        16
-    ).toString(36);
+export default function* verify({
+  mobile,
+  confirmation_code,
+  ip,
+  ignore_score,
+}) {
+  try {
+    const result = yield getScore(mobile);
+    const { recommendation, score } = result.risk;
+    let phoneNumber = mobile;
 
-    let content_type = '';
-    if (/POST|PUT/.test(method))
-        content_type = 'application/x-www-form-urlencoded';
-
-    let strToSign = `${method}\n${content_type}\n\nx-ts-auth-method:${
-        auth_method
-    }\nx-ts-date:${currDate}\nx-ts-nonce:${nonce}`;
-
-    if (fields) {
-        strToSign += '\n' + fields;
+    if (!ignore_score && (!score || score > 600)) {
+      console.log(
+        `TeleSign did not allow phone ${mobile} ip ${ip}. TeleSign responded: ${
+          recommendation
+        }`
+      );
+      return {
+        error:
+          'Unable to verify your phone number. Please try a different phone number.',
+        score,
+      };
     }
-    strToSign += '\n' + resource;
-
-    // console.log('strToSign', strToSign) // logspam
-    const sig = crypto
-        .createHmac('sha256', api_key)
-        .update(strToSign, 'utf8')
-        .digest('base64');
-
-    const headers = {
-        Authorization: `TSA ${customer_id}:${sig}`,
-        'Content-Type': content_type,
-        'x-ts-date': currDate,
-        'x-ts-auth-method': auth_method,
-        'x-ts-nonce': nonce,
-    };
-    return headers;
+    if (
+      result.numbering &&
+      result.numbering.cleansing &&
+      result.numbering.cleansing.sms
+    ) {
+      const sms = result.numbering.cleansing.sms;
+      phoneNumber = sms.country_code + sms.phone_number;
+    }
+    console.log('confirmaition code:', confirmation_code);
+    const { reference_id } = yield verifySms(phoneNumber, confirmation_code);
+    console.log(reference_id);
+    return { reference_id, score, phone: phoneNumber };
+  } catch (error) {
+    console.log('-- verify score error -->', error);
+    return { error: 'Unable to verify phone, please try again later.' };
+  }
 }
-
-const urlencode = json =>
-    Object.keys(json)
-        .map(key => encodeURI(key) + '=' + encodeURI(json[key]))
-        .join('&');

@@ -91,7 +91,7 @@
         font-style: italic;
       }
 
-      > .Extra {
+      div > .Highlight {
         align-items: center;
         display: flex;
 
@@ -343,13 +343,50 @@
       font-size: 16px;
       width: 100%;
 
+      .Cites {
+        span {
+          color: $observation;
+          margin-left: 15px;
+        }
+
+        &.Q span {
+          color: $question;
+        }
+
+        &.H span {
+          color: $hypothesis;
+        }
+      }
+
+      .CitedBy {
+        display: flex;
+        cursor: pointer;
+
+        > div {
+          margin-left: 15px;
+
+          span {
+            color: $observation;
+
+            &.Q {
+              color: $question;
+            }
+
+            &.H {
+              color: $hypothesis;
+            }
+          }
+        }
+      }
+
       > div {
         margin-right: 3%;
       }
 
-      span {
+      > span {
         color: #53d3ff;
         cursor: pointer;
+        margin-left: 15px;
       }
       @media all and (max-width: 700px) {
         flex-direction: column;

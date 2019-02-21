@@ -107,10 +107,11 @@ export const MockItems = mockData.map((item, index) => {
     },
   };
 
+  const citedId = parseInt(item.Originated_From);
   const citesCount = item.Cites;
-  const cites = [];
+  const citedBy = [];
   for (let i = 1; i <= citesCount; i += 1) {
-    cites.push(item['Citation_' + i.toString()]);
+    citedBy.push(item['Citation_' + i.toString()]);
   }
 
   const checkUser = users.find(user => user.name === item.Author);
@@ -135,20 +136,21 @@ export const MockItems = mockData.map((item, index) => {
   }
 
   if (!dictionary[mockItem.id]) {
-    dictionary[mockItem.id] = { citedBy: [] };
+    dictionary[mockItem.id] = { cites: [] };
   }
 
+  if (citedId > 0) dictionary[mockItem.id].cites.push(citedId);
   dictionary[mockItem.id].data = mockItem;
-  dictionary[mockItem.id].cites = cites;
+  dictionary[mockItem.id].citedBy = citedBy;
 
-  cites.forEach(citedId => {
-    if (!dictionary[citedId]) {
-      dictionary[citedId] = { citedBy: [] };
-    }
-    if (!dictionary[citedId].citedBy.find(a => a === mockItem.id)) {
-      dictionary[citedId].citedBy.push(mockItem.id);
-    }
-  });
+  // cites.forEach(citedId => {
+  //   if (!dictionary[citedId]) {
+  //     dictionary[citedId] = { citedBy: [] };
+  //   }
+  //   if (!dictionary[citedId].citedBy.find(a => a === mockItem.id)) {
+  //     dictionary[citedId].citedBy.push(mockItem.id);
+  //   }
+  // });
 
   return mockItem;
 });

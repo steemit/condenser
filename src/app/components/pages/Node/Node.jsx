@@ -35,10 +35,12 @@ class Node extends Component {
       citedByVisible: false,
       highlightInfo: null,
       highlightIndex: -1,
+      panelType: 'review',
     };
 
     this.onHighLight = this.onHighLight.bind(this);
     this.onReview = this.onReview.bind(this);
+    this.onCitedBy = this.onCitedBy.bind(this);
   }
 
   componentDidMount() {
@@ -126,6 +128,7 @@ class Node extends Component {
   onHighLight(type, selection, highLight) {
     this.setState(
       {
+        panelType: 'highlight',
         highlightInfo: { type, selection, highLight },
       },
       this.toggleCitedByPanel
@@ -135,8 +138,19 @@ class Node extends Component {
   onReview() {
     this.setState(
       {
+        panelType: 'review',
         highlightInfo: null,
         highlightIndex: parseInt(Math.random() * HightLights.length),
+      },
+      this.toggleCitedByPanel
+    );
+  }
+
+  onCitedBy() {
+    this.setState(
+      {
+        panelType: 'cited_by',
+        highlightInfo: null,
       },
       this.toggleCitedByPanel
     );
@@ -154,11 +168,24 @@ class Node extends Component {
     const citedByPanel = this.state.citedByVisible;
     const voteCount = (votes.up || 0) - (votes.down || 0);
 
-    const { highlightInfo, highlightIndex } = this.state;
+    const { highlightInfo, highlightIndex, panelType } = this.state;
     const highlightData =
       highlightIndex === -1 ? null : HightLights[highlightIndex];
     const hNode = highlightData ? Nodes[highlightData.node] : null;
-    const citedPosts = cites.map(postId => MockItemDictionary[postId].data);
+    const citedPosts = cites
+      .map(postId => MockItemDictionary[postId].data)
+      .sort((a, b) => {
+        const voteCountA = (a.votes.up || 0) - (a.votes.down || 0);
+        const voteCountB = (b.votes.up || 0) - (b.votes.down || 0);
+        return voteCountB - voteCountA;
+      });
+    const citedByPosts = citedBy
+      .map(postId => MockItemDictionary[postId].data)
+      .sort((a, b) => {
+        const voteCountA = (a.votes.up || 0) - (a.votes.down || 0);
+        const voteCountB = (b.votes.up || 0) - (b.votes.down || 0);
+        return voteCountB - voteCountA;
+      });
 
     return (
       <div className="NodeWrapper">
@@ -204,81 +231,67 @@ class Node extends Component {
             onHide={this.closeCitedByPanel}
           >
             <div className="Panel">
-              {highlightInfo ? (
-                <div>
-                  <div className="NodeHeader">
-                    <div>Create New Post</div>
-                    <X
-                      style={{ color: '#bbb' }}
-                      size={20}
-                      onClick={this.closeCitedByPanel}
-                    />
-                  </div>
-                  <div className="Main">
-                    You <span>highlighted</span>:
-                  </div>
-                  <div className="Extra">
-                    {highlightInfo.highLight.anchorText}
-                  </div>
-                  <Create
-                    type={highlightInfo.type}
-                    node={this.state.data.data}
+              <div>
+                <div className="NodeHeader">
+                  <div>{getTitle(panelType)}</div>
+                  <X
+                    style={{ color: '#bbb' }}
+                    size={20}
+                    onClick={this.closeCitedByPanel}
                   />
                 </div>
-              ) : (
-                <div>
-                  <div className="NodeHeader">
-                    <div>Top Reviews</div>
-                    <X
-                      style={{ color: '#bbb' }}
-                      size={20}
-                      onClick={this.closeCitedByPanel}
+                {panelType === 'cited_by' && (
+                  <Home
+                    location={this.props.location}
+                    posts={citedByPosts}
+                    noSearch
+                  />
+                )}
+                {panelType === 'highlight' && (
+                  <div>
+                    <div className="Main">
+                      You <span>highlighted</span>:
+                    </div>
+                    <div className="Highlight">
+                      {highlightInfo.highLight.anchorText}
+                    </div>
+                    <Create
+                      type={highlightInfo.type}
+                      node={this.state.data.data}
                     />
                   </div>
-                  {/* <div className="Main">
-                    Topic that user <span>highlighted</span> in the text
-                  </div>
-                  {hNode && (
-                    <div className="Extra">
-                      <div className={`Type ${hNode.type}`}>{hNode.type}</div>
-                      {hNode.title}
-                    </div>
-                  )}
-                  <div className="NodeHeader">
-                    <div>Top Highlights</div>
-                  </div> */}
-                  {hNode && (
-                    <div className="Sections">
-                      {[0, 1].map((key, index) => (
-                        <section key={index}>
-                          <div className="NodeHeader">
-                            <div className="Wrap">
-                              <div className="User">
-                                <img src={defaultUser} alt={user.name} />
-                                <div>
-                                  <div className="UserName">{user.name}</div>
-                                  <div className="UserTitle">{user.title}</div>
-                                </div>
+                )}
+                {panelType === 'review' && (
+                  <div className="Sections">
+                    {[0, 1].map((key, index) => (
+                      <section key={index}>
+                        <div className="NodeHeader">
+                          <div className="Wrap">
+                            <div className="User">
+                              <img src={defaultUser} alt={user.name} />
+                              <div>
+                                <div className="UserName">{user.name}</div>
+                                <div className="UserTitle">{user.title}</div>
                               </div>
                             </div>
-                            <div className="Extra">
-                              <div className="Date">{date}</div>
-                              <div className="Reviews">{reviews} Reviews</div>
-                            </div>
                           </div>
-                          <div className="Title">{title}</div>
-                          <div className="Content">
-                            There are many variations of passages of Lorem Ipsum
-                            available, but the majority have suffered alteration
-                            in some form, , or randomised words which don't look
-                            even slightly believable.
+                          <div className="Extra">
+                            <div className="Date">{date}</div>
+                            <div className="Reviews">{reviews} Reviews</div>
                           </div>
-                        </section>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              )}
+                        </div>
+                        <div className="Title">{title}</div>
+                        <div className="Content">
+                          There are many variations of passages of Lorem Ipsum
+                          available, but the majority have suffered alteration
+                          in some form, , or randomised words which don't look
+                          even slightly believable.
+                        </div>
+                      </section>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
           </Sidebar>
 
@@ -329,12 +342,27 @@ class Node extends Component {
                     </div>
                   </div>
                 </div>
-                <div className="CitesWrapper">
-                  <div className="Cites" onClick={this.toggleCitesPanel}>
-                    Cites: <span>{getCitations(cites)}</span>
+                {nodeFrom && (
+                  <div className="CitesWrapper">
+                    <div
+                      className={`Cites ${nodeFrom.data.type}`}
+                      onClick={this.toggleCitesPanel}
+                    >
+                      Cites: <span>{limitedText(nodeFrom.data.title)}</span>
+                    </div>
                   </div>
-                  <div className="CitedBy" onClick={this.toggleCitedByPanel}>
-                    Cited By: <span>{getCitations(citedBy)}</span>
+                )}
+                <div className="CitesWrapper">
+                  <div
+                    className="CitedBy"
+                    onClick={citedBy.length > 0 ? this.onCitedBy : null}
+                  >
+                    Cited By:{' '}
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: getCitations(citedBy),
+                      }}
+                    />
                   </div>
                   <div className="Review">
                     Review : <span onClick={this.onReview}>{reviews}</span>
@@ -342,19 +370,7 @@ class Node extends Component {
                 </div>
               </div>
               <div className="Introduction">
-                Introduction: <span>Linked from:</span>{' '}
-                {nodeFrom ? (
-                  <Link
-                    className={`TitleFrom ${nodeFrom.data.type}`}
-                    to={`/knowledgr/@${nodeFrom.data.user.nick}/${
-                      nodeFrom.data.id
-                    }`}
-                  >
-                    {limitedText(nodeFrom.data.title)}
-                  </Link>
-                ) : (
-                  <span className="TitleFrom None">No Originatation</span>
-                )}
+                Introduction:
                 <HighLight onHighLight={this.onHighLight}>
                   <div className="Content">{this.placeHightLights(Note)}</div>
                 </HighLight>
@@ -386,16 +402,43 @@ function getCitations(data) {
   });
   const ret = [];
   if (citationData.Ob > 0)
-    ret.push(`${citationData.Ob} Observation${citationData.ob > 1 ? 's' : ''}`);
+    ret.push(
+      `<span>${citationData.Ob} Observation${
+        citationData.Ob > 1 ? 's' : ''
+      }</span>`
+    );
   if (citationData.Q > 0)
-    ret.push(`${citationData.Q} Question${citationData.Q > 1 ? 's' : ''}`);
+    ret.push(
+      `<span class="Q">
+        ${citationData.Q} Question${citationData.Q > 1 ? 's' : ''}
+      </span>`
+    );
   if (citationData.H > 0)
-    ret.push(`${citationData.H} Hypothesis${citationData.H > 1 ? 'es' : ''}`);
+    ret.push(
+      `<span class="H">${citationData.H} ${
+        citationData.H > 1 ? 'Hypotheses' : 'Hypothesis'
+      }</span>`
+    );
   return ret.length > 0 ? ret.join(' / ') : 'No Citations';
 }
 
 function limitedText(text) {
   return text.length < 40 ? text : text.substr(0, 37) + '...';
+}
+
+function getTitle(type) {
+  let title = 'Create New Post';
+  switch (type) {
+    case 'review':
+      title = 'Top Reviews';
+      break;
+    case 'cited_by':
+      title = 'Top Highlights';
+      break;
+    default:
+      title = 'Create New Post';
+  }
+  return title;
 }
 
 Node.propTypes = {

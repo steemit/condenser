@@ -51,8 +51,11 @@
         }
 
         .Inputs {
-          box-shadow: 25px 25px 52px rgba(0, 0, 0, 0.06);
           margin-bottom: 35px;
+
+          &-wrapper {
+            box-shadow: 25px 25px 52px rgba(0, 0, 0, 0.06);
+          }
         }
 
         .InputWrapper:not(:last-child) {

@@ -165,6 +165,8 @@ function* usernamePasswordLogin2({
     return;
   }
 
+  console.log(username, password);
+
   let userProvidedRole; // login via:  username/owner
   if (username.indexOf('/') > -1) {
     // "alice/active" will login only with Alices active key
@@ -194,6 +196,7 @@ function* usernamePasswordLogin2({
   let private_keys;
   try {
     const private_key = PrivateKey.fromWif(password);
+    console.log(private_key);
     login_wif_owner_pubkey = private_key.toPublicKey().toString();
     private_keys = fromJS({
       posting_private: isRole('posting', () => private_key),
@@ -202,6 +205,7 @@ function* usernamePasswordLogin2({
     });
   } catch (e) {
     // Password (non wif)
+    console.log(e);
     login_owner_pubkey = PrivateKey.fromSeed(username + 'owner' + password)
       .toPublicKey()
       .toString();

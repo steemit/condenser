@@ -308,43 +308,20 @@ class LoginForm extends Component {
         method="post"
       >
         <div className="Inputs">
-          {/* <div className="input-group">
-            <input
-              className="input-group-field"
-              type="text"
-              required
+          <div className="Inputs-wrapper">
+            <Input
+              label="User Name"
               placeholder={tt('loginform_jsx.enter_your_username')}
-              ref="username"
-              {...username.props}
               onChange={usernameOnChange}
               autoComplete="on"
               disabled={submitting || isTransfer}
-            />
-          </div> */}
-          <Input
-            label="User Name"
-            placeholder={tt('loginform_jsx.enter_your_username')}
-            onChange={usernameOnChange}
-            autoComplete="on"
-            disabled={submitting || isTransfer}
-            refer="username"
-            required
-            {...username.props}
-          />
-          {username.touched && username.blur && username.error ? (
-            <div className="error">{username.error}&nbsp;</div>
-          ) : null}
-
-          <div>
-            {/* <input
-              type="password"
+              refer="username"
               required
-              ref="pw"
-              placeholder={tt('loginform_jsx.password_or_wif')}
-              {...password.props}
-              autoComplete="on"
-              disabled={submitting}
-            /> */}
+              {...username.props}
+            />
+            {username.touched && username.blur && username.error ? (
+              <div className="error">{username.error}&nbsp;</div>
+            ) : null}
             <Input
               label="Password"
               placeholder={tt('loginform_jsx.password_or_wif')}
@@ -355,22 +332,22 @@ class LoginForm extends Component {
               required
               {...password.props}
             />
-            {error && <div className="error">{error}&nbsp;</div>}
-            {error &&
-              password_info && (
-                <div className="warning">{password_info}&nbsp;</div>
-              )}
-          </div>
-          {loginBroadcastOperation && (
-            <div>
-              <div className="info">
-                {tt(
-                  'loginform_jsx.this_operation_requires_your_key_or_master_password',
-                  { authType }
-                )}
+            {loginBroadcastOperation && (
+              <div>
+                <div className="info">
+                  {tt(
+                    'loginform_jsx.this_operation_requires_your_key_or_master_password',
+                    { authType }
+                  )}
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
+          {error && <div className="error">{error}&nbsp;</div>}
+          {error &&
+            password_info && (
+              <div className="warning">{password_info}&nbsp;</div>
+            )}
         </div>
         {/* <div>
           <label className="LoginForm__save-login" htmlFor="saveLogin">

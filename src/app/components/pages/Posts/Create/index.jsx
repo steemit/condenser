@@ -91,6 +91,14 @@ class Create extends Component {
                   </div>
                 ),
               },
+              {
+                type: 'R',
+                render: () => (
+                  <div>
+                    <span className="R">R</span> Review
+                  </div>
+                ),
+              },
             ]}
             value={type}
             onChange={this.onUpdateState('type')}
@@ -175,11 +183,17 @@ class Create extends Component {
 function getTypeString(type) {
   let ret = '';
   switch (type) {
+    case 'Ob':
+      ret = 'Observation';
+      break;
     case 'Qu':
       ret = 'Question';
       break;
     case 'Hy':
       ret = 'Hypothesis';
+      break;
+    case 'R':
+      ret = 'Review';
       break;
     default:
       ret = 'Observation';

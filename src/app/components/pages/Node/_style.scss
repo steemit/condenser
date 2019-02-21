@@ -347,6 +347,7 @@
         span {
           color: $observation;
           margin-left: 15px;
+          cursor: pointer;
         }
 
         &.Q span {
@@ -383,7 +384,7 @@
         margin-right: 3%;
       }
 
-      > span {
+      .Review > span {
         color: #53d3ff;
         cursor: pointer;
         margin-left: 15px;

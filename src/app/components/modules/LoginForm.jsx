@@ -97,13 +97,6 @@ class LoginForm extends Component {
         window.location.href = SIGNUP_URL;
     }
 
-    // TODO: When user signs in, call this code.
-    SignIn() {
-        const onType = document.getElementsByClassName('OpAction')[0]
-            .textContent;
-        serverApiRecordEvent('SignIn', onType);
-    }
-
     saveLoginToggle = () => {
         const { saveLogin } = this.state;
         saveLoginDefault = !saveLoginDefault;
@@ -423,6 +416,7 @@ class LoginForm extends Component {
                         username: username.value,
                         password: password.value,
                         saveLogin: saveLogin.value,
+                        loginBroadcastOperation: loginBroadcastOperation,
                     };
                     reallySubmit(data, afterLoginRedirectToWelcome);
                 })}
@@ -589,6 +583,8 @@ export default connect(
                     })
                 );
 
+                serverApiRecordEvent('SignIn', type);
+
                 dispatch(userActions.closeLogin());
             } else {
                 dispatch(
@@ -602,9 +598,15 @@ export default connect(
             }
         },
         reallySubmit: (
-            { username, password, saveLogin },
+            { username, password, saveLogin, loginBroadcastOperation },
             afterLoginRedirectToWelcome
         ) => {
+            const { type } = loginBroadcastOperation
+                ? loginBroadcastOperation.toJS()
+                : {};
+
+            serverApiRecordEvent('SignIn', type);
+
             dispatch(
                 userActions.usernamePasswordLogin({
                     username,

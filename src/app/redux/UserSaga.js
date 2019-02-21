@@ -123,13 +123,10 @@ function isPostingKey({ username, password }) {
         key_types: active, owner, posting keys.
 */
 function* checkKeyType(action) {
-    console.log('saga checkKeyType');
     const postingKeyProvided = yield call(isPostingKey, action.payload);
     if (postingKeyProvided) {
-        console.log(1, userActions.usernamePasswordLogin);
         yield put(userActions.usernamePasswordLogin(action.payload));
     } else {
-        console.log(2, userActions.showLoginWarning);
         yield put(userActions.showLoginWarning(action.payload));
     }
 }
@@ -303,6 +300,7 @@ function* usernamePasswordLogin2({
     );
     if (!fullAuths.size) {
         console.log('No full auths');
+        yield put(userActions.hideLoginWarning());
         localStorage.removeItem('autopost2');
         const owner_pub_key = account.getIn(['owner', 'key_auths', 0, 0]);
         if (

@@ -87,13 +87,11 @@
       }
 
       .Main {
-        color: $color-grey;
-        font-style: italic;
+        color: $color-dark;
       }
 
       div > .Highlight {
         align-items: center;
-        display: flex;
 
         color: #b3b3b3;
         font-style: italic;
@@ -116,6 +114,10 @@
           &.H {
             color: $hypothesis;
           }
+        }
+
+        span {
+          color: #4bbefd;
         }
       }
 

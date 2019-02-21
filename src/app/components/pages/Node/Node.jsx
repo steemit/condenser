@@ -39,8 +39,10 @@ class Node extends Component {
     };
 
     this.onHighLight = this.onHighLight.bind(this);
+    this.onCreatePost = this.onCreatePost.bind(this);
     this.onReview = this.onReview.bind(this);
     this.onCitedBy = this.onCitedBy.bind(this);
+    this.placeHightLights = this.placeHightLights.bind(this);
   }
 
   componentDidMount() {
@@ -74,7 +76,6 @@ class Node extends Component {
   toggleCitedByPanel = () =>
     this.setState({
       citedByVisible: !this.state.citedByVisible,
-      highlightIndex: parseInt(Math.random() * HightLights.length),
     });
   closeCitesPanel = () => this.setState({ citesVisible: false });
   closeCitedByPanel = () => this.setState({ citedByVisible: false });
@@ -116,7 +117,7 @@ class Node extends Component {
         return (
           <span
             key={index + '-' + tIndex}
-            onClick={() => this.toggleCitedByPanel(info[0])}
+            onClick={() => this.onHighLight(info[0])}
           >
             {info[1].replace('</Mark>', '')}
           </span>
@@ -125,11 +126,23 @@ class Node extends Component {
     });
   }
 
-  onHighLight(type, selection, highLight) {
+  onHighLight(highlightIndex = -1) {
     this.setState(
       {
         panelType: 'highlight',
+        highlightInfo: null,
+        highlightIndex,
+      },
+      this.toggleCitedByPanel
+    );
+  }
+
+  onCreatePost(type, selection, highLight) {
+    this.setState(
+      {
+        panelType: 'create_post',
         highlightInfo: { type, selection, highLight },
+        highlightIndex: -1,
       },
       this.toggleCitedByPanel
     );
@@ -140,7 +153,7 @@ class Node extends Component {
       {
         panelType: 'review',
         highlightInfo: null,
-        highlightIndex: parseInt(Math.random() * HightLights.length),
+        highlightIndex: -1,
       },
       this.toggleCitedByPanel
     );
@@ -151,6 +164,7 @@ class Node extends Component {
       {
         panelType: 'cited_by',
         highlightInfo: null,
+        highlightIndex: -1,
       },
       this.toggleCitedByPanel
     );
@@ -248,6 +262,32 @@ class Node extends Component {
                   />
                 )}
                 {panelType === 'highlight' && (
+                  <div>
+                    <div className="Main">Currently selected:</div>
+                    <div
+                      className="Highlight"
+                      dangerouslySetInnerHTML={{
+                        __html: highlightData.data.replace(
+                          highlightData.anchorText,
+                          `<span>${highlightData.anchorText}</span>`
+                        ),
+                      }}
+                    />
+                    <div className="Main">All Highlights:</div>
+                    {HightLights.map(highlightData => (
+                      <div
+                        className="Highlight"
+                        dangerouslySetInnerHTML={{
+                          __html: highlightData.data.replace(
+                            highlightData.anchorText,
+                            `<span>${highlightData.anchorText}</span>`
+                          ),
+                        }}
+                      />
+                    ))}
+                  </div>
+                )}
+                {panelType === 'create_post' && (
                   <div>
                     <div className="Main">
                       You <span>highlighted</span>:
@@ -371,7 +411,7 @@ class Node extends Component {
               </div>
               <div className="Introduction">
                 Introduction:
-                <HighLight onHighLight={this.onHighLight}>
+                <HighLight onHighLight={this.onCreatePost}>
                   <div className="Content">{this.placeHightLights(Note)}</div>
                 </HighLight>
               </div>
@@ -434,6 +474,9 @@ function getTitle(type) {
       break;
     case 'cited_by':
       title = 'Top Highlights';
+      break;
+    case 'highlight':
+      title = 'Hightlights';
       break;
     default:
       title = 'Create New Post';

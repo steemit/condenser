@@ -1,6 +1,6 @@
 import { fromJS, Set, List } from 'immutable';
 import { call, put, select, fork, takeLatest } from 'redux-saga/effects';
-import { api } from '@steemit/steem-js';
+import { api, auth } from '@steemit/steem-js';
 import { PrivateKey, Signature, hash } from '@steemit/steem-js/lib/auth/ecc';
 
 import { accountAuthLookup } from 'app/redux/AuthSaga';
@@ -25,6 +25,7 @@ export const userWatches = [
         'user/lookupPreviousOwnerAuthority',
         lookupPreviousOwnerAuthority
     ),
+    takeLatest(userActions.CHECK_KEY_TYPE, checkKeyType),
     takeLatest(userActions.USERNAME_PASSWORD_LOGIN, usernamePasswordLogin),
     takeLatest(userActions.SAVE_LOGIN, saveLogin_localStorage),
     takeLatest(userActions.LOGOUT, logout),
@@ -93,6 +94,44 @@ function* removeHighSecurityKeys({ payload: { pathname } }) {
     // from getting logged out when they click on Permissions (which is really bad because that tab
     // disappears again).
     if (!highSecurityPage) yield put(userActions.removeHighSecurityKeys());
+}
+
+function isPostingKey({ username, password }) {
+    return new Promise((res, rej) => {
+        if (auth.isWif(password)) {
+            api.getAccountsAsync([username], (err, account) => {
+                if (err) {
+                    res(false);
+                    return;
+                }
+
+                const pubKey = auth.wifToPublic(password);
+                const isActive = account[0].active.key_auths[0].includes(
+                    pubKey
+                );
+                res(!isActive);
+            });
+        } else {
+            res(false);
+        }
+    });
+}
+
+/**
+    @arg {object} action.username - Unless a WIF is provided, this is hashed with the password and key_type to create private keys.
+    @arg {object} action.password - Password or WIF private key.  A WIF becomes the posting key, a password can create all three
+        key_types: active, owner, posting keys.
+*/
+function* checkKeyType(action) {
+    console.log('saga checkKeyType');
+    const postingKeyProvided = yield call(isPostingKey, action.payload);
+    if (postingKeyProvided) {
+        console.log(1, userActions.usernamePasswordLogin);
+        yield put(userActions.usernamePasswordLogin(action.payload));
+    } else {
+        console.log(2, userActions.showLoginWarning);
+        yield put(userActions.showLoginWarning(action.payload));
+    }
 }
 
 /**

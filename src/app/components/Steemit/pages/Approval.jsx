@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 import { VIEW_MODE_WHISTLE, WHISTLE_SIGNUP_COMPLETE } from 'shared/constants';
 
 import knowledgr from 'assets/images/static/knowledgr.png';
@@ -33,7 +34,7 @@ class Approval extends React.Component {
             you{"'"}ll be sent a link to finalize your account!
           </p>
           <p>
-            You{"'"}ll be among the earliest members of the Steemit community!
+            You{"'"}ll be among the earliest members of the Knowledgr community!
           </p>
         </div>
       );
@@ -51,8 +52,11 @@ class Approval extends React.Component {
             you{"'"}ll be sent a link to finalize your account!
           </p>
           <p>
-            You{"'"}ll be among the earliest members of the Steemit community!
+            You{"'"}ll be among the earliest members of the Knowledgr community!
           </p>
+          <div className="login-link">
+            <Link to="/login.html">Get into Knowledgr</Link>
+          </div>
         </div>
       );
     }

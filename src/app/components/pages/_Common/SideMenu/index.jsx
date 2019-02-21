@@ -9,7 +9,13 @@ class SideMenu extends Component {
         <div className="SideMenu">
           <div className="Social">
             <div className="Item" title="Create New Question">
-              <span className="Icon">Q+</span>
+              <span className="Icon">Ob+</span>
+            </div>
+            <div className="Item" title="Create New Question">
+              <span className="Icon">Qu+</span>
+            </div>
+            <div className="Item" title="Create New Question">
+              <span className="Icon">Hy+</span>
             </div>
             <div className="Item" title="Create New Review">
               <span className="Icon">R+</span>

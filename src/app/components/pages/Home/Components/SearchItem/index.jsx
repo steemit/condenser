@@ -51,10 +51,16 @@ class SearchItem extends Component {
 
   render() {
     const { data } = this.props;
-    const { id, title, type, user, votes, date, reviews, label, labels } = data;
+    const { id, title, type, user, votes, date, reviews, label } = data;
     const voteCount = (votes.up || 0) - (votes.down || 0);
     const { cites } = MockItemDictionary[id];
-    const citedPosts = cites.map(postId => MockItemDictionary[postId].data);
+    const citedPosts = cites
+      .map(postId => MockItemDictionary[postId].data)
+      .sort((a, b) => {
+        const voteCountA = (a.votes.up || 0) - (a.votes.down || 0);
+        const voteCountB = (b.votes.up || 0) - (b.votes.down || 0);
+        return voteCountB - voteCountA;
+      });
 
     const filteredType = this.state.type || type; //This is temporary and should be deleted.
     const { viewMore } = this.state;
@@ -113,7 +119,8 @@ class SearchItem extends Component {
             {citedPosts.map((post, index) => {
               if (!post) return null;
               /* eslin-disable */
-              const { id, title, type, user, date, reviews } = post;
+              const { id, title, type, user, date, reviews, votes } = post;
+              const voteCount = (votes.up || 0) - (votes.down || 0);
               const filteredType = this.state.type || type; //This is temporary and should be deleted.
               /* eslin-enable */
               return (
@@ -135,6 +142,23 @@ class SearchItem extends Component {
                     <div className="Extra">
                       <div className="Date">{date}</div>
                       <div className="Reviews">{reviews} Reviews</div>
+                    </div>
+                  </div>
+                  <div className="Votes">
+                    <div className={`Up ${votes.you === 'up' ? 'Voted' : ''}`}>
+                      <FeatherIcons.ThumbsUp />
+                    </div>
+                    <div
+                      className={`VoteCount Voted ${
+                        voteCount > 0 ? 'Up' : 'Down'
+                      } ${voteCount === 0 ? 'Normal' : ''}`}
+                    >
+                      {voteCount}
+                    </div>
+                    <div
+                      className={`Down ${votes.you === 'down' ? 'Voted' : ''}`}
+                    >
+                      <FeatherIcons.ThumbsDown />
                     </div>
                   </div>
                 </div>

@@ -18,11 +18,22 @@
 
   .Comments {
     margin-top: 15px;
-    padding: 10px 0 10px 30px;
+    padding: 10px 0 10px 40px;
     border-left: 1px solid #f2f2f2;
 
     .Comment {
       margin-bottom: 0;
+    }
+
+    .Votes {
+      width: 40px;
+      left: -40px;
+      font-size: 13px;
+
+      > div svg {
+        width: 15px;
+        height: 15px;
+      }
     }
   }
 
@@ -141,6 +152,7 @@
       cursor: pointer;
       margin: 2px 0;
       position: relative;
+      line-height: 1.2;
 
       svg {
         width: 18px;

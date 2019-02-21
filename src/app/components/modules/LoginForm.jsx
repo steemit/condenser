@@ -18,7 +18,7 @@ import { SIGNUP_URL } from 'shared/constants';
 class LoginForm extends Component {
     static propTypes = {
         // Steemit.
-        login_error: PropTypes.string,
+        loginError: PropTypes.string,
         onCancel: PropTypes.func,
     };
 
@@ -97,6 +97,7 @@ class LoginForm extends Component {
         window.location.href = SIGNUP_URL;
     }
 
+    // TODO: When user signs in, call this code.
     SignIn() {
         const onType = document.getElementsByClassName('OpAction')[0]
             .textContent;
@@ -164,8 +165,12 @@ class LoginForm extends Component {
         }
 
         const {
+            walletUrl,
+            showLoginWarning,
             loginBroadcastOperation,
             dispatchSubmit,
+            reallySubmit,
+            hideWarning,
             afterLoginRedirectToWelcome,
             msg,
         } = this.props;
@@ -200,7 +205,7 @@ class LoginForm extends Component {
         let error =
             password.touched && password.error
                 ? password.error
-                : this.props.login_error;
+                : this.props.loginError;
         if (error === 'owner_login_blocked') {
             error = (
                 <span>
@@ -354,7 +359,6 @@ class LoginForm extends Component {
                         type="submit"
                         disabled={submitting || disabled}
                         className="button"
-                        onClick={this.SignIn}
                     >
                         {submitLabel}
                     </button>
@@ -373,12 +377,63 @@ class LoginForm extends Component {
             </form>
         );
 
+        const loginWarningTitleText = (
+            <h3>{tt('loginform_jsx.login_warning_title')}</h3>
+        );
+
+        const loginWarningForm = (
+            <form
+                onSubmit={handleSubmit(() => {
+                    console.log('Login\treallySubmit');
+                    const data = {
+                        username: username.value,
+                        password: password.value,
+                        saveLogin: saveLogin.value,
+                    };
+                    reallySubmit(data, afterLoginRedirectToWelcome);
+                })}
+                method="post"
+            >
+                <p>{tt('loginform_jsx.login_warning_body')}</p>
+                <p>
+                    <a
+                        href={`${walletUrl}/@${username.value}/permissions`}
+                        target="_blank"
+                    >
+                        {tt('loginform_jsx.login_warning_link_text')}
+                    </a>
+                </p>
+                <div className="login-modal-buttons">
+                    <br />
+                    <button
+                        type="submit"
+                        disabled={submitting}
+                        className="button"
+                    >
+                        {submitLabel}
+                    </button>
+                    <button
+                        type="button float-right"
+                        disabled={submitting}
+                        className="button hollow"
+                        onClick={e => {
+                            e.preventDefault();
+                            console.log('Login\thideWarning');
+                            hideWarning();
+                        }}
+                    >
+                        {tt('g.cancel')}
+                    </button>
+                </div>
+            </form>
+        );
+
         return (
             <div className="LoginForm row">
                 <div className="column">
                     {message}
-                    {titleText}
-                    {form}
+                    {showLoginWarning ? loginWarningTitleText : titleText}
+                    {showLoginWarning ? loginWarningForm : form}
                 </div>
             </div>
         );
@@ -418,7 +473,9 @@ import { connect } from 'react-redux';
 export default connect(
     // mapStateToProps
     state => {
-        const login_error = state.user.get('login_error');
+        const walletUrl = state.app.get('walletUrl');
+        const showLoginWarning = state.user.get('show_login_warning');
+        const loginError = state.user.get('login_error');
         const currentUser = state.user.get('current');
         const loginBroadcastOperation = state.user.get(
             'loginBroadcastOperation'
@@ -447,9 +504,11 @@ export default connect(
         let msg = '';
         const msg_match = window.location.hash.match(/msg\=([\w]+)/);
         if (msg_match && msg_match.length > 1) msg = msg_match[1];
-        hasError = !!login_error;
+        hasError = !!loginError;
         return {
-            login_error,
+            walletUrl,
+            showLoginWarning,
+            loginError,
             loginBroadcastOperation,
             initialValues,
             initialUsername,
@@ -497,7 +556,7 @@ export default connect(
                 dispatch(userActions.closeLogin());
             } else {
                 dispatch(
-                    userActions.usernamePasswordLogin({
+                    userActions.checkKeyType({
                         username,
                         password,
                         saveLogin,
@@ -505,6 +564,22 @@ export default connect(
                     })
                 );
             }
+        },
+        reallySubmit: (
+            { username, password, saveLogin },
+            afterLoginRedirectToWelcome
+        ) => {
+            dispatch(
+                userActions.usernamePasswordLogin({
+                    username,
+                    password,
+                    saveLogin,
+                    afterLoginRedirectToWelcome,
+                })
+            );
+        },
+        hideWarning: () => {
+            dispatch(userActions.hideLoginWarning());
         },
         clearError: () => {
             if (hasError) dispatch(userActions.loginError({ error: null }));

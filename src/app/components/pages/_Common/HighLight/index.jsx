@@ -39,6 +39,7 @@ class HighLight extends Component {
           },
         ],
         standardizeSelectionStart: true,
+        disableEditing: true,
       },
     },
   };

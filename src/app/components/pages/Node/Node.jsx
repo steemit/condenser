@@ -170,6 +170,19 @@ class Node extends Component {
     );
   }
 
+  onClickSideMenu = menuItemType => {
+    const types = ['Ob', 'Qu', 'Hy', 'R'];
+    if (types.indexOf(menuItemType) > -1) {
+      this.setState(
+        {
+          panelType: 'create_post',
+          highlightInfo: { type: menuItemType },
+        },
+        this.toggleCitedByPanel
+      );
+    }
+  };
+
   render() {
     if (this.state.data == null) return <div>Loading</div>;
     const {
@@ -289,12 +302,17 @@ class Node extends Component {
                 )}
                 {panelType === 'create_post' && (
                   <div>
-                    <div className="Main">
-                      You <span>highlighted</span>:
-                    </div>
-                    <div className="Highlight">
-                      {highlightInfo.highLight.anchorText}
-                    </div>
+                    {highlightInfo &&
+                      highlightInfo.highLight && (
+                        <div>
+                          <div className="Main">
+                            You <span>highlighted</span>:
+                          </div>
+                          <div className="Highlight">
+                            {highlightInfo.highLight.anchorText}
+                          </div>
+                        </div>
+                      )}
                     <Create
                       type={highlightInfo.type}
                       node={this.state.data.data}
@@ -415,7 +433,7 @@ class Node extends Component {
                   <div className="Content">{this.placeHightLights(Note)}</div>
                 </HighLight>
               </div>
-              <SideMenu />
+              <SideMenu onClickSideMenu={this.onClickSideMenu} />
               <div className="Introduction">
                 Figures: {/* <InlineMath>\int_0^\infty x^2 dx</InlineMath> */}
                 <div className="Content">

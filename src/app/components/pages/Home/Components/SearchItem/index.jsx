@@ -107,12 +107,14 @@ class SearchItem extends Component {
               <FeatherIcons.ThumbsDown />
             </div>
           </div>
-          <a
-            className="ViewMore"
-            onClick={() => this.setState({ viewMore: !this.state.viewMore })}
-          >
-            {viewMore ? 'View Comments' : 'Hide'}
-          </a>
+          {citedPosts.length > 0 && (
+            <a
+              className="ViewMore"
+              onClick={() => this.setState({ viewMore: !this.state.viewMore })}
+            >
+              {viewMore ? 'View Comments' : 'Hide'}
+            </a>
+          )}
         </div>
         {!viewMore && (
           <div className="Comments">

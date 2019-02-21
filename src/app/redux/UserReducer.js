@@ -3,7 +3,9 @@ import { DEFAULT_LANGUAGE } from 'app/client_config';
 
 // Action constants
 const SHOW_LOGIN = 'user/SHOW_LOGIN';
+const SHOW_LOGIN_WARNING = 'user/SHOW_LOGIN_WARNING';
 const HIDE_LOGIN = 'user/HIDE_LOGIN';
+const HIDE_LOGIN_WARNING = 'user/HIDE_LOGIN_WARNING';
 const SHOW_TERMS = 'user/SHOW_TERMS';
 export const ACCEPT_TERMS = 'user/ACCEPT_TERMS';
 export const SAVE_LOGIN_CONFIRM = 'user/SAVE_LOGIN_CONFIRM';
@@ -20,6 +22,7 @@ const SET_TRANSFER_DEFAULTS = 'user/SET_TRANSFER_DEFAULTS';
 const CLEAR_TRANSFER_DEFAULTS = 'user/CLEAR_TRANSFER_DEFAULTS';
 const SET_POWERDOWN_DEFAULTS = 'user/SET_POWERDOWN_DEFAULTS';
 const CLEAR_POWERDOWN_DEFAULTS = 'user/CLEAR_POWERDOWN_DEFAULTS';
+export const CHECK_KEY_TYPE = 'user/CHECK_KEY_TYPE';
 export const USERNAME_PASSWORD_LOGIN = 'user/USERNAME_PASSWORD_LOGIN';
 export const SET_USER = 'user/SET_USER';
 const CLOSE_LOGIN = 'user/CLOSE_LOGIN';
@@ -76,6 +79,9 @@ export default function reducer(state = defaultState, action) {
             });
         }
 
+        case SHOW_LOGIN_WARNING:
+            return state.set('show_login_warning', true);
+
         case SET_LATEST_FEED_PRICE:
             return state.set('latest_feed_price', payload);
 
@@ -85,6 +91,9 @@ export default function reducer(state = defaultState, action) {
                 loginBroadcastOperation: undefined,
                 loginDefault: undefined,
             });
+
+        case HIDE_LOGIN_WARNING:
+            return state.set('show_login_warning', false);
 
         case SHOW_TERMS: {
             let termsDefault;
@@ -167,6 +176,9 @@ export default function reducer(state = defaultState, action) {
         case CLEAR_POWERDOWN_DEFAULTS:
             return state.remove('powerdown_defaults');
 
+        case CHECK_KEY_TYPE:
+            return state; // saga
+
         case USERNAME_PASSWORD_LOGIN:
         case LOAD_SAVINGS_WITHDRAW:
             return state; // saga
@@ -185,6 +197,7 @@ export default function reducer(state = defaultState, action) {
             return state.mergeDeep({
                 current: payload,
                 show_login_modal: false,
+                show_login_warning: false,
                 loginBroadcastOperation: undefined,
                 loginDefault: undefined,
                 logged_out: undefined,
@@ -274,8 +287,18 @@ export const showLogin = payload => ({
     payload,
 });
 
+export const showLoginWarning = payload => ({
+    type: SHOW_LOGIN_WARNING,
+    payload,
+});
+
 export const hideLogin = payload => ({
     type: HIDE_LOGIN,
+    payload,
+});
+
+export const hideLoginWarning = payload => ({
+    type: HIDE_LOGIN_WARNING,
     payload,
 });
 
@@ -353,6 +376,11 @@ export const setPowerdownDefaults = payload => ({
 
 export const clearPowerdownDefaults = payload => ({
     type: CLEAR_POWERDOWN_DEFAULTS,
+    payload,
+});
+
+export const checkKeyType = payload => ({
+    type: CHECK_KEY_TYPE,
     payload,
 });
 

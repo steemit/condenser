@@ -28,11 +28,11 @@ input {
 
   // position: absolute;
   // top: 0;
-  @media all and (max-width: 700px) {
-    flex-direction: column;
-  }
 
   .LogoContainer {
+    display: flex;
+    align-items: space-between;
+
     a:hover {
       border-bottom: 0;
     }
@@ -42,6 +42,11 @@ input {
       height: 100%;
       width: auto;
     }
+
+    .usermenu-mobile {
+      display: none;
+    }
+
     @media all and (max-width: 700px) {
       margin-bottom: 15px;
     }
@@ -54,7 +59,11 @@ input {
   }
 
   .Content {
-    @media all and (max-width: 550px) {
+    .usermenu-desktop {
+      display: block;
+    }
+
+    @media all and (max-width: 450px) {
       flex-direction: column;
 
       .Menu {
@@ -72,18 +81,44 @@ input {
       color: $white;
       border-color: $white;
     }
-    @media all and (max-width: 950px) {
-      // width: 300px;
+
+    @media all and (max-width: 880px) {
+      .desktop {
+        display: none;
+      }
     }
 
     a {
-      margin-left: 20px;
+      margin-left: 10px;
+      margin-right: 10px;
       color: white;
     }
   }
 
+  @media all and (max-width: 700px) {
+    flex-direction: column;
+
+    .LogoContainer {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      align-items: center;
+
+      .usermenu-mobile {
+        display: block;
+      }
+    }
+
+    .Content {
+      .usermenu-desktop {
+        display: none;
+      }
+    }
+  }
+
   .SearchContainer {
-    margin-left: 40px;
+    margin-left: 20px;
+    margin-right: 20px;
 
     input {
       font-family: $sans-serif;

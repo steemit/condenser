@@ -12,7 +12,7 @@ import * as appActions from 'app/redux/AppReducer';
 import normalizeProfile from 'app/utils/NormalizeProfile';
 import { Userpic } from 'app/components/Steemit/elements';
 
-import { User, ChevronDown, Settings, LogOut } from 'react-feather';
+import { User, ChevronDown, Settings, LogOut, Menu } from 'react-feather';
 // import { Transition } from 'react-spring';
 
 import logo from 'assets/images/static/logo_white.png';
@@ -44,6 +44,59 @@ class NavBar extends Component {
     } = this.props;
 
     const { showUserMenu } = this.state;
+
+    const userMenu = !loggedIn ? (
+      <div className="Menu Header__user-signup">
+        <Link className="Header__login-link" to="/login.html">
+          {tt('g.login')}
+        </Link>
+        <Link className="Header__signup-link" to={SIGNUP_URL}>
+          {tt('g.sign_up')}
+        </Link>
+      </div>
+    ) : (
+      <div
+        className="UserMenu"
+        onClick={() => {
+          this.setState({
+            showUserMenu: !this.state.showUserMenu,
+          });
+        }}
+      >
+        <div>
+          <User />
+          <ChevronDown />
+        </div>
+        {/* <Transition
+              items={showUserMenu}
+              from={{ height: 0, overflow: 'hidden' }}
+              enter={{ height: 'auto' }}
+              leave={{ height: 0, overflow: 'hidden' }}
+          > */}
+        {showUserMenu && (
+          // (props => (
+          <div className="DropdownList" /*style={props}*/>
+            <Link className="UserInfo" to={`/@${username}`}>
+              <span className="Avatar">
+                <Userpic account={username} />
+                {/* <img src="https://via.placeholder.com/1x1" alt="User" /> */}
+              </span>
+              <span className="Username">{username}</span>
+            </Link>
+            <div className="List">
+              <Link className="Item" to={`/@${username}/settings`}>
+                <Settings /> {tt('g.settings')}
+              </Link>
+              <a className="Item" onClick={logout}>
+                <LogOut /> {tt('g.logout')}
+              </a>
+            </div>
+          </div>
+        )}
+        {/* </Transition> */}
+      </div>
+    );
+
     return (
       ['/login', '/logout', '/register'].indexOf(
         // this.props.location.pathname
@@ -54,74 +107,24 @@ class NavBar extends Component {
             <Link to="/">
               <img className="Logo" src={logo} alt="Knowledgr Logo" />
             </Link>
+            <div className="usermenu-mobile">{userMenu}</div>
           </div>
           <div className="Content">
             <div className="Menu">
               <Link className="Item" to="/?type=Ob">
-                Ob
-                <span className="desktop">servations</span>
+                Ob<span className="desktop">servations</span>
               </Link>
               <Link className="Item" to="/?type=Q">
-                Q<span className="desktop">uestions</span>
+                Qu<span className="desktop">estions</span>
               </Link>
               <Link className="Item" to="/?type=H">
-                H<span className="desktop">ypotheses</span>
+                Hy<span className="desktop">potheses</span>
               </Link>
             </div>
             <div className="SearchContainer">
               <input type="text" onKeyPress={() => {}} />
             </div>
-            {!loggedIn ? (
-              <div className="Menu Header__user-signup show-for-medium">
-                <Link className="Header__login-link" to="/login.html">
-                  {tt('g.login')}
-                </Link>
-                <Link className="Header__signup-link" to={SIGNUP_URL}>
-                  {tt('g.sign_up')}
-                </Link>
-              </div>
-            ) : (
-              <div
-                className="UserMenu"
-                onClick={() => {
-                  this.setState({
-                    showUserMenu: !this.state.showUserMenu,
-                  });
-                }}
-              >
-                <div>
-                  <User />
-                  <ChevronDown />
-                </div>
-                {/* <Transition
-                      items={showUserMenu}
-                      from={{ height: 0, overflow: 'hidden' }}
-                      enter={{ height: 'auto' }}
-                      leave={{ height: 0, overflow: 'hidden' }}
-                  > */}
-                {showUserMenu && (
-                  // (props => (
-                  <div className="DropdownList" /*style={props}*/>
-                    <Link className="UserInfo" to={`/@${username}`}>
-                      <span className="Avatar">
-                        <Userpic account={username} />
-                        {/* <img src="https://via.placeholder.com/1x1" alt="User" /> */}
-                      </span>
-                      <span className="Username">{username}</span>
-                    </Link>
-                    <div className="List">
-                      <Link className="Item" to={`/@${username}/settings`}>
-                        <Settings /> {tt('g.settings')}
-                      </Link>
-                      <a className="Item" onClick={logout}>
-                        <LogOut /> {tt('g.logout')}
-                      </a>
-                    </div>
-                  </div>
-                )}
-                {/* </Transition> */}
-              </div>
-            )}
+            <div className="usermenu-desktop">{userMenu}</div>
           </div>
         </div>
       )

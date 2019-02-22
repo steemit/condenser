@@ -96,25 +96,20 @@ function* removeHighSecurityKeys({ payload: { pathname } }) {
     if (!highSecurityPage) yield put(userActions.removeHighSecurityKeys());
 }
 
-function isPostingKey({ username, password }) {
-    return new Promise((res, rej) => {
-        if (auth.isWif(password)) {
-            api.getAccountsAsync([username], (err, account) => {
-                if (err) {
-                    res(false);
-                    return;
-                }
-
-                const pubKey = auth.wifToPublic(password);
-                const isActive = account[0].active.key_auths[0].includes(
-                    pubKey
-                );
-                res(!isActive);
-            });
-        } else {
-            res(false);
-        }
-    });
+function* shouldShowLoginWarning({ username, password }) {
+    const accounts = yield api.getAccountsAsync([username]);
+    if (auth.isWif(password)) {
+        // If it's a valid active key, we want to show the warning.
+        const pubKey = auth.wifToPublic(password);
+        return accounts[0].active.key_auths[0].includes(pubKey);
+    } else {
+        // If it's a valid owner key, we want to show the warning.
+        const isOwner = auth.verify(username, password, ['owner']);
+        const ownerPubKey = PrivateKey.fromSeed(username + 'owner' + password)
+            .toPublicKey()
+            .toString();
+        return accounts[0].owner.key_auths[0].includes(ownerPubKey);
+    }
 }
 
 /**
@@ -123,11 +118,10 @@ function isPostingKey({ username, password }) {
         key_types: active, owner, posting keys.
 */
 function* checkKeyType(action) {
-    const postingKeyProvided = yield call(isPostingKey, action.payload);
-    if (postingKeyProvided) {
-        yield put(userActions.usernamePasswordLogin(action.payload));
-    } else {
+    if (yield call(shouldShowLoginWarning, action.payload)) {
         yield put(userActions.showLoginWarning(action.payload));
+    } else {
+        yield put(userActions.usernamePasswordLogin(action.payload));
     }
 }
 
@@ -303,16 +297,11 @@ function* usernamePasswordLogin2({
         yield put(userActions.hideLoginWarning());
         localStorage.removeItem('autopost2');
         const owner_pub_key = account.getIn(['owner', 'key_auths', 0, 0]);
-        if (
+        const isValidActiveOrOwnerLogin =
             login_owner_pubkey === owner_pub_key ||
-            login_wif_owner_pubkey === owner_pub_key
-        ) {
-            yield put(userActions.loginError({ error: 'owner_login_blocked' }));
-        } else if (!highSecurityLogin && hasActiveAuth) {
-            yield put(
-                userActions.loginError({ error: 'active_login_blocked' })
-            );
-        } else {
+            login_wif_owner_pubkey === owner_pub_key ||
+            (!highSecurityLogin && hasActiveAuth);
+        if (!isValidActiveOrOwnerLogin) {
             const generated_type = password[0] === 'P' && password.length > 40;
             serverApiRecordEvent(
                 'login_attempt',
@@ -324,8 +313,8 @@ function* usernamePasswordLogin2({
                 })
             );
             yield put(userActions.loginError({ error: 'Incorrect Password' }));
+            return;
         }
-        return;
     }
     if (authority.get('posting') !== 'full')
         private_keys = private_keys.remove('posting_private');

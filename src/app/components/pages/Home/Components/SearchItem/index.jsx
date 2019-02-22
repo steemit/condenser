@@ -64,6 +64,14 @@ class SearchItem extends Component {
 
     const filteredType = this.state.type || type; //This is temporary and should be deleted.
     const { viewMore } = this.state;
+    const actions = (
+      <div className="Actions">
+        <FeatherIcons.MessageCircle />
+        <FeatherIcons.Share2 />
+        <FeatherIcons.CornerDownRight />
+        <FeatherIcons.Star />
+      </div>
+    );
 
     return (
       <div className="SearchItemWrapper">
@@ -80,12 +88,7 @@ class SearchItem extends Component {
                 <div className="UserTitle">{user.title}</div>
               </div>
             </div>
-            <div className="Actions">
-              <FeatherIcons.MessageCircle />
-              <FeatherIcons.Share2 />
-              <FeatherIcons.CornerDownRight />
-              <FeatherIcons.Star />
-            </div>
+            <div className="actions-wrapper desktop">{actions}</div>
             <div className="Extra">
               <div className="Date">{date}</div>
               <div className="Reviews">{reviews} Reviews</div>
@@ -168,6 +171,7 @@ class SearchItem extends Component {
             })}
           </div>
         )}
+        <div className="actions-wrapper mobile">{actions}</div>
       </div>
     );
   }

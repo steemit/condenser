@@ -82,26 +82,10 @@
     padding-top: 8px;
     justify-content: space-between;
 
-    > div.Actions {
-      > svg {
-        color: #b3b3b3;
-        cursor: pointer;
-        margin-left: 25px;
-
-        height: 22px;
-        width: 22px;
-
-        &:hover {
-          color: #4bbefd;
-        }
-      }
-    }
-
     .Extra {
       color: #999999;
       font-size: 14px;
       text-align: right;
-      min-width: 175px;
     }
   }
 
@@ -195,6 +179,55 @@
 
     .Votes {
       height: calc(100%);
+    }
+  }
+  
+  .Actions {
+    text-align: right;
+
+    > svg {
+      color: #b3b3b3;
+      cursor: pointer;
+      margin-left: 25px;
+
+      height: 22px;
+      width: 22px;
+
+      &:hover {
+        color: #4bbefd;
+      }
+    }
+  }
+
+  .actions-wrapper {
+    &.desktop {
+      display: block;
+      margin-right: 40px;
+    }
+
+    &.mobile {
+      margin-top: 10px;
+      display: none;
+    }
+  }
+
+  @media all and (max-width: 767px) {
+    margin-left: 35px;
+    margin-right: 0px;
+
+    .Votes {
+      width: 35px;
+      left: -40px;
+    }
+
+    .actions-wrapper {
+      &.mobile {
+        display: block;
+      }
+  
+      &.desktop {
+        display: none;
+      }
     }
   }
 }

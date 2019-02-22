@@ -72,6 +72,7 @@ export default function reducer(state = defaultState, action) {
                 loginDefault = fromJS(payload.loginDefault);
             }
             return state.merge({
+                login_error: undefined,
                 show_login_modal: true,
                 login_type: payload.type,
                 loginBroadcastOperation: operation,

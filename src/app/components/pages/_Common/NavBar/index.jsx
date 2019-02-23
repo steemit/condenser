@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 // import PropTypes from 'prop-types';
-import { Link, withRouter } from 'react-router';
+import { Link, NavLink, withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import tt from 'counterpart';
 
@@ -111,15 +111,30 @@ class NavBar extends Component {
           </div>
           <div className="Content">
             <div className="Menu">
-              <Link className="Item" to="/?type=Ob">
+              <NavLink
+                className="Item ob"
+                to="/?type=Ob"
+                exact
+                activeClassName="active"
+              >
                 Ob<span className="desktop">servations</span>
-              </Link>
-              <Link className="Item" to="/?type=Q">
+              </NavLink>
+              <NavLink
+                className="Item qu"
+                to="/?type=Q"
+                exact
+                activeClassName="active"
+              >
                 Qu<span className="desktop">estions</span>
-              </Link>
-              <Link className="Item" to="/?type=H">
+              </NavLink>
+              <NavLink
+                className="Item hy"
+                to="/?type=H"
+                exact
+                activeClassName="active"
+              >
                 Hy<span className="desktop">potheses</span>
-              </Link>
+              </NavLink>
             </div>
             <div className="SearchContainer">
               <input type="text" onKeyPress={() => {}} />

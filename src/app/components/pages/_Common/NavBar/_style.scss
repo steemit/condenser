@@ -80,6 +80,16 @@ input {
     .Item {
       color: $white;
       border-color: $white;
+
+      &.ob.active {
+        background-color: $observation
+      }
+      &.qu.active {
+        background-color: $question
+      }
+      &.hy.active {
+        background-color: $hypothesis
+      }
     }
 
     @media all and (max-width: 880px) {
@@ -89,8 +99,10 @@ input {
     }
 
     a {
-      margin-left: 10px;
-      margin-right: 10px;
+      padding-left: 10px;
+      padding-right: 10px;
+      padding-top: 5px;
+      padding-bottom: 5px;
       color: white;
     }
   }

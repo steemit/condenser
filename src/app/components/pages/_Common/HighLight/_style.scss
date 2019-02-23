@@ -4,26 +4,48 @@
 
 div.medium-editor-toolbar {
   ul {
-    background: #4c4c4c;
-    background: -moz-linear-gradient(top, #4c4c4c 0%, #595959 16%, #2b2b2b 76%, #1c1c1c 91%, #131313 100%);
-    background: -webkit-linear-gradient(top, #4c4c4c 0%,#595959 16%,#2b2b2b 76%,#1c1c1c 91%,#131313 100%);
-    background: linear-gradient(to bottom, #4c4c4c 0%,#595959 16%,#2b2b2b 76%,#1c1c1c 91%,#131313 100%);
+    background: white;
+    
     border-radius: 5px;
+    border: 2px solid #aaa;
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=  '#4c4c4c', endColorstr='#131313',GradientType=0 );
     padding: 0 10px;
 
     li {
       button {
-        color: white;
         margin-right: 0 !important;
         padding: 10px;
+
+        &.Ob {
+          color: $observation;
+        }
+        &.Qu {
+          color: $question;
+        }
+        &.Hy {
+          color: $hypothesis;
+        }
       }
     }
   }
 }
 
-div.medium-toolbar-arrow-under:after {
-  border-top: 8px solid #131313;
+div.medium-toolbar-arrow-under::before {
+  content: '';
+  border-top: 10px solid #aaa;
+  border-left: 9px solid transparent;
+  border-right: 9px solid transparent;
+  position: absolute;
+  margin-left: -11px;
+  left: 50%;
+  top: calc(100% - 2px);
+}
+
+div.medium-toolbar-arrow-under::after {
+  content: '';
+  border-top: 7px solid white;
   border-left: 6px solid transparent;
   border-right: 6px solid transparent;
+  left: 50%;
+  top: calc(100% - 2px);
 }

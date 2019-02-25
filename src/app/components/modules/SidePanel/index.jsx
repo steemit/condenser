@@ -17,7 +17,8 @@ const SidePanel = ({ alignment, visible, hideSidePanel, username }) => {
             : 'SidePanel__hide-signup';
 
     const makeLink = (i, ix, arr) => {
-        const isExternal = i.link.match(/^http(s?):/);
+        // A link is internal if it begins with a slash
+        const isExternal = !i.link.match(/^\//) || i.isExternal;
         if (isExternal) {
             const cn = ix === arr.length - 1 ? 'last' : null;
             return (
@@ -74,9 +75,15 @@ const SidePanel = ({ alignment, visible, hideSidePanel, username }) => {
                 link: `/change_password`,
             },
             {
+                value: 'vote_for_witnesses',
+                label: tt('navigation.vote_for_witnesses'),
+                link: `/~witnesses`,
+            },
+            {
                 value: 'advertise',
                 label: tt('navigation.advertise'),
-                link: `https://steemit.com/static/Steemit%20Media%20Kit.pdf`,
+                link: `/static/Steemit%20Media%20Kit.pdf`,
+                isExternal: true,
             },
         ],
         exchanges: [
@@ -181,21 +188,7 @@ const SidePanel = ({ alignment, visible, hideSidePanel, username }) => {
             <div className={(visible ? 'visible ' : '') + alignment}>
                 <CloseButton onClick={hideSidePanel} />
                 <ul className={`vertical menu ${loggedIn}`}>
-                    {makeLink(
-                        sidePanelLinks['extras'][0],
-                        0,
-                        sidePanelLinks['extras']
-                    )}
-                    {makeLink(
-                        sidePanelLinks['extras'][1],
-                        1,
-                        sidePanelLinks['extras']
-                    )}
-                    {makeLink(
-                        sidePanelLinks['extras'][2],
-                        2,
-                        sidePanelLinks['extras']
-                    )}
+                    {sidePanelLinks['extras'].map(makeLink)}
                 </ul>
                 <ul className="vertical menu">
                     {sidePanelLinks['internal'].map(makeLink)}

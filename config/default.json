@@ -92,11 +92,11 @@
   },
   "gpt_enabled": null,
   "gpt_slots": {
-    "top_navi_premium": {
+    "top_nav_premium": {
       "slot_id": "div-gpt-ad-1548778664403-0",
       "args": ["/21784675435/steemit_top-navi", [[220, 90], [728, 90], [970, 90]], "div-gpt-ad-1548778664403-0"]
     },
-    "top_navi": {
+    "top_nav": {
       "slot_id": "div-gpt-ad-1548778612404-0",
       "args": ["/21784675435/steemit_premium_top-navi", [[970, 90], [728, 90], [220, 90]], "div-gpt-ad-1548778612404-0"]
     },
@@ -119,6 +119,26 @@
     "in_feed": {
       "slot_id": "div-gpt-ad-1548778917304-0",
       "args": ["/21784675435/steemit_in-feed", [[728, 90], [300, 100], [890, 222], [468, 60], [970, 90], [336, 280], [234, 60]], "div-gpt-ad-1548778917304-0"]
+    },
+    "categories": {
+      "cryptocurrency": {
+        "top_nav": {
+          "slot_id": "div-gpt-ad-1550891917103-0",
+          "args": ["/21784675435/steemit_top-navi/steemit_top-navi_cryptocurrency", [[728, 90], [220, 90], [970, 90]], "div-gpt-ad-1550891917103-0"]
+        },
+        "right_nav": {
+          "slot_id": "div-gpt-ad-1550892019550-0",
+          "args": ["/21784675435/steemit_right-navigation/steemit_right-navigation_cryptocurrency", [[120, 90], [120, 240], [120, 60], [160, 600], [120, 600], [125, 125]], "div-gpt-ad-1550892019550-0"]
+        },
+        "left_nav": {
+          "slot_id": "div-gpt-ad-1550892097245-0",
+          "args": ["/21784675435/steemit_left-navigation/steemit_left-navigation_cryptocurrency", [[120, 240], [120, 600], [125, 125], [120, 90], [160, 600], [120, 60]], "div-gpt-ad-1550892097245-0"]
+        },
+        "bottom_post": {
+          "slot_id": "div-gpt-ad-1550892163180-0",
+          "args": ["/21784675435/steemit_bottom-of-post/steemit_bottom-of-post_cryptocurrency", [[336, 280], [320, 50], [468, 60], [970, 90], [890, 222], [300, 100], [728, 90], [234, 60]], "div-gpt-ad-1550892163180-0"]
+        }
+      }
     }
   }
 }

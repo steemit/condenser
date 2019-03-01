@@ -264,8 +264,8 @@ class Header extends React.Component {
                     )}
                     {this.props.gptSlots ? (
                         <GptAd
-                            slot={this.props.gptSlots['top_navi']['slot_id']}
-                            args={this.props.gptSlots['top_navi']['args']}
+                            slot={this.props.gptSlots['top_nav']['slot_id']}
+                            args={this.props.gptSlots['top_nav']['args']}
                         />
                     ) : null}
                     <nav className="row Header__nav">

@@ -653,6 +653,16 @@
         "login_to_comment": "Effettua il login per commentare",
         "posting": "Post",
         "active_or_owner": "Attivo o proprietario",
+        "this_password_is_bound_to_your_account_owner_key":
+            "Questa password è collegata alla chiave proprietaria del tuo account e non può essere usata per effettuare il login su questo sito. ",
+        "however_you_can_use_it_to": "Nonostante questo, puoi usarla per",
+        "update_your_password": "aggiornare la tua password",
+        "to_obtain_a_more_secure_set_of_keys":
+            "per ottenere un set di chiavi più sicuro. ",
+        "this_password_is_bound_to_your_account_active_key":
+            "Questa password è collegata alla chiave attiva del tuo account e non può essere usata per effettuare il login su questa pagina. ",
+        "you_may_use_this_active_key_on_other_more":
+            "Puoi usare la chiave attiva su altre pagine di sicurezza come le pagine Wallet o Market. ",
         "you_account_has_been_successfully_created":
             "Il tuo account è stato creato con successo! ",
         "you_account_has_been_successfully_recovered":

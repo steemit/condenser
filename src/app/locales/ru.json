@@ -668,6 +668,17 @@
         "login_to_comment": "Войти, чтобы оставить комментарий",
         "posting": "Постинг",
         "active_or_owner": "Активный или Владельца",
+        "this_password_is_bound_to_your_account_owner_key":
+            "Этот пароль привязан к главному ключу аккаунта и не может быть использован для входа на этот сайт.",
+        "however_you_can_use_it_to":
+            "Тем не менее его можно использовать чтобы ",
+        "update_your_password": "обновить Ваш пароль",
+        "to_obtain_a_more_secure_set_of_keys":
+            "для получения более безопасного набора ключей.",
+        "this_password_is_bound_to_your_account_active_key":
+            "Этот пароль привязан к главному ключу аккаунта и не может быть использован для входа на этот сайт.",
+        "you_may_use_this_active_key_on_other_more":
+            "Вы можете использовать этот активный ключ на других более безопасных страниц, таких как страницы: Кошелек или Биржа.",
         "you_account_has_been_successfully_created":
             "Ваш аккаунт был успешно создан!",
         "you_account_has_been_successfully_recovered":

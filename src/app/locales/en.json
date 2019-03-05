@@ -735,6 +735,16 @@
         "login_to_comment": "Login to Comment",
         "posting": "Posting",
         "active_or_owner": "Active or Owner",
+        "this_password_is_bound_to_your_account_owner_key":
+            "This password is bound to your account's owner key and can not be used to login to this site.",
+        "however_you_can_use_it_to": "However, you can use it to ",
+        "update_your_password": "update your password",
+        "to_obtain_a_more_secure_set_of_keys":
+            "to obtain a more secure set of keys.",
+        "this_password_is_bound_to_your_account_active_key":
+            "This password is bound to your account's active key and can not be used to login to this page.",
+        "you_may_use_this_active_key_on_other_more":
+            "You may use this active key on other more secure pages like the Wallet or Market pages.",
         "you_account_has_been_successfully_created":
             "You account has been successfully created!",
         "you_account_has_been_successfully_recovered":

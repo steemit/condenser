@@ -81,26 +81,44 @@
   "google_ad_test": null,
   "google_ad_client": null,
   "google_ad_slots": {
-    "sidebar_1": {
-      "slot_id": "9855000063"
+    "market_1": {
+      "slot_id": "2777377820"
     },
     "in_feed_1": {
       "slot_id": "9514544128",
       "layout_key": "-fb+5w+4e-db+86",
       "every": 8
-    },
-    "post_footer_1": {
-      "slot_id": "5796459261"
-    },
-    "market_1": {
-      "slot_id": "2777377820"
     }
   },
   "gpt_enabled": null,
   "gpt_slots": {
+    "top_navi_premium": {
+      "slot_id": "div-gpt-ad-1548778664403-0",
+      "args": ["/21784675435/steemit_top-navi", [[220, 90], [728, 90], [970, 90]], "div-gpt-ad-1548778664403-0"]
+    },
     "top_navi": {
-      "slot_id": "div-gpt-ad-1547492443353-0",
-      "args": ["/21784675435/steemit_top-navi", [[728, 90], [970, 90]], "div-gpt-ad-1547492443353-0"]
+      "slot_id": "div-gpt-ad-1548778612404-0",
+      "args": ["/21784675435/steemit_premium_top-navi", [[970, 90], [728, 90], [220, 90]], "div-gpt-ad-1548778612404-0"]
+    },
+    "left_nav_premium": {
+      "slot_id": "div-gpt-ad-1548778771262-0",
+      "args": ["/21784675435/steemit_premium_left-navigation", [[125, 125], [120, 90], [120, 600], [120, 60], [160, 600], [120, 240]], "div-gpt-ad-1548778771262-0"]
+    },
+    "left_nav": {
+      "slot_id": "div-gpt-ad-1548778799404-0",
+      "args": ["/21784675435/steemit_left-navigation", [[160, 600], [120, 240], [120, 600], [120, 60], [125, 125], [120, 90]], "div-gpt-ad-1548778799404-0"]
+    },
+    "right_nav": {
+      "slot_id": "div-gpt-ad-1548778861089-0",
+      "args": ["/21784675435/steemit_right-navigation", [[120, 600], [120, 60], [125, 125], [120, 240], [160, 600], [120, 90]], "div-gpt-ad-1548778861089-0"]
+    },
+    "bottom_post": {
+      "slot_id": "div-gpt-ad-1548778891289-0",
+      "args": ["/21784675435/steemit_bottom-of-post", [[336, 280], [320, 50], [890, 222], [300, 100], [728, 90], [234, 60], [468, 60], [970, 90]], "div-gpt-ad-1548778891289-0"]
+    },
+    "in_feed": {
+      "slot_id": "div-gpt-ad-1548778917304-0",
+      "args": ["/21784675435/steemit_in-feed", [[728, 90], [300, 100], [890, 222], [468, 60], [970, 90], [336, 280], [234, 60]], "div-gpt-ad-1548778917304-0"]
     }
   }
 }

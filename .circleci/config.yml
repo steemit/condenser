@@ -58,8 +58,8 @@ workflows:
   condenser:
     jobs:
       - build
-      - build-blackboxtest
-      - run-blackboxtest:
-          requires:
-            - build
-            - build-blackboxtest
+    #  - build-blackboxtest
+    #  - run-blackboxtest:
+    #      requires:
+    #        - build
+    #        - build-blackboxtest

@@ -644,16 +644,6 @@
         "login_to_comment": "Acceso para comentar",
         "posting": "Postear",
         "active_or_owner": "Activa o propietaria",
-        "this_password_is_bound_to_your_account_owner_key":
-            "Esta contraseña está ligada a tu contraseña owner o propia y no puede ser usada para acceder a esta página.",
-        "however_you_can_use_it_to": "Sin embargo, puedes usarla para",
-        "update_your_password": "cambiar tu contraseña",
-        "to_obtain_a_more_secure_set_of_keys":
-            "obtener un grupo más seguro de contraseñas.",
-        "this_password_is_bound_to_your_account_active_key":
-            "Esta contraseña está ligada tu contraseña activa y no puede ser usada para acceder a esta página.",
-        "you_may_use_this_active_key_on_other_more":
-            "Puede usar la contraseña activa en otras páginas más seguras como el Monedero.",
         "you_account_has_been_successfully_created":
             "Tu cuenta se ha creado con éxito!",
         "you_account_has_been_successfully_recovered":

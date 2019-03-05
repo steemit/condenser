@@ -647,16 +647,6 @@
         "login_to_comment": "ログインしてコメントします",
         "posting": "投稿",
         "active_or_owner": "アクティブまたはオーナー",
-        "this_password_is_bound_to_your_account_owner_key":
-            "このパスワードはアカウントのオーナーキーに紐付けられており、このサイトのログインには使用できません。",
-        "however_you_can_use_it_to": "ですが、",
-        "update_your_password": "パスワードを更新して",
-        "to_obtain_a_more_secure_set_of_keys":
-            "より安全なキーを入手することに使用できます。",
-        "this_password_is_bound_to_your_account_active_key":
-            "このパスワードはアカウントのアクティブキーに紐付けられており、このサイトのログインには使用できません。",
-        "you_may_use_this_active_key_on_other_more":
-            "アクティブキーはウォレットや取引所などのより安全性を重視する場所で使用できます。",
         "you_account_has_been_successfully_created":
             "あなたのアカウントは作成済みです！",
         "you_account_has_been_successfully_recovered":

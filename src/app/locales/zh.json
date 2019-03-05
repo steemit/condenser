@@ -599,15 +599,6 @@
         "login_to_comment": "登录后评论",
         "posting": "发帖",
         "active_or_owner": "Active 或 Owner",
-        "this_password_is_bound_to_your_account_owner_key":
-            "此密码已绑定到您的帐户的Owner Key，不能用于登录到此站点。",
-        "however_you_can_use_it_to": "但是，您可以使用它来",
-        "update_your_password": "修改密码",
-        "to_obtain_a_more_secure_set_of_keys": "获取一组更安全的密钥。",
-        "this_password_is_bound_to_your_account_active_key":
-            "此密码已绑定到你的帐户的Active Key，不能用于登录到此页面。",
-        "you_may_use_this_active_key_on_other_more":
-            "你可以在其他更安全的页面上使用这个Active Key，比如钱包或市场页面。",
         "you_account_has_been_successfully_created": "您的帐号已经成功创建!",
         "you_account_has_been_successfully_recovered": "您的帐号已经成功恢复!",
         "password_update_succes": "%(accountName)s的密码成功修改",

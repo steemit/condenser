@@ -297,11 +297,16 @@ function* usernamePasswordLogin2({
         yield put(userActions.hideLoginWarning());
         localStorage.removeItem('autopost2');
         const owner_pub_key = account.getIn(['owner', 'key_auths', 0, 0]);
-        const isValidActiveOrOwnerLogin =
+        if (
             login_owner_pubkey === owner_pub_key ||
-            login_wif_owner_pubkey === owner_pub_key ||
-            (!highSecurityLogin && hasActiveAuth);
-        if (!isValidActiveOrOwnerLogin) {
+            login_wif_owner_pubkey === owner_pub_key
+        ) {
+            yield put(userActions.loginError({ error: 'owner_login_blocked' }));
+        } else if (hasActiveAuth) {
+            yield put(
+                userActions.loginError({ error: 'active_login_blocked' })
+            );
+        } else {
             const generated_type = password[0] === 'P' && password.length > 40;
             serverApiRecordEvent(
                 'login_attempt',

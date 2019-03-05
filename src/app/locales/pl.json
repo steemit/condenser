@@ -635,6 +635,16 @@
         "login_to_comment": "Zaloguj się, aby skomentować",
         "posting": "Publikacja",
         "active_or_owner": "Aktywny lub właściciela",
+        "this_password_is_bound_to_your_account_owner_key":
+            "To hasło jest przypisane do klucza właściciela, i nie może być użyte do logowania na tej stronie.",
+        "however_you_can_use_it_to": "Jednakże, możesz użyć go do ",
+        "update_your_password": "aktualizacji swojego hasła",
+        "to_obtain_a_more_secure_set_of_keys":
+            "otrzymania bardziej bezpiecznego zestawu kluczy.",
+        "this_password_is_bound_to_your_account_active_key":
+            "To hasło jest przypisane do klucza aktywnego, i nie może być użyte do logowania na tej stronie.",
+        "you_may_use_this_active_key_on_other_more":
+            "Możesz używać klucza aktywnego na stronach takich jak Portfel czy Giełda.",
         "you_account_has_been_successfully_created":
             "Twoje konto zostało utworzone!",
         "you_account_has_been_successfully_recovered":

@@ -667,6 +667,16 @@
         "login_to_comment": "S'identifier pour commenter",
         "posting": "de publication",
         "active_or_owner": "Active ou propriétaire",
+        "this_password_is_bound_to_your_account_owner_key":
+            "Ce mot de passe est lié à votre clé propriétaire et ne peut pas être utilisé pour vous identifier sur ce site.",
+        "however_you_can_use_it_to": "Cependant, vous pouvez l'utiliser pour ",
+        "update_your_password": "Mettre à jour votre mot de passe",
+        "to_obtain_a_more_secure_set_of_keys":
+            "Pour obtenir un jeu de clés plus sûr.",
+        "this_password_is_bound_to_your_account_active_key":
+            "Ce mot de passe est lié à la clé active de votre compte et ne peut pas être utilisé pour vous connecter à cette page.",
+        "you_may_use_this_active_key_on_other_more":
+            "Vous pouvez utiliser cette clé active sur d'autres pages plus sécurisées comme les pages 'Portefeuille' ou 'Marché'.",
         "you_account_has_been_successfully_created":
             "Votre compte a été créé avec succès!",
         "you_account_has_been_successfully_recovered":

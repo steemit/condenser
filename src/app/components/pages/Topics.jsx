@@ -102,7 +102,7 @@ const Topics = ({
                                 className="c-sidebar__link c-sidebar__link--emphasis"
                                 to={`/tags`}
                             >
-                                {tt('g.show_more_topics')}..
+                                {tt('g.show_more_topics')}&hellip;
                             </Link>
                         </li>
                     </ul>

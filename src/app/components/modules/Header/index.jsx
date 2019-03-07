@@ -18,7 +18,7 @@ import { SIGNUP_URL } from 'shared/constants';
 import SteemLogo from 'app/components/elements/SteemLogo';
 import normalizeProfile from 'app/utils/NormalizeProfile';
 import Announcement from 'app/components/elements/Announcement';
-import GptAd from 'app/components/elements/GptAd';
+import { renderAd } from 'app/utils/AdUtils';
 
 class Header extends React.Component {
     static propTypes = {
@@ -71,6 +71,8 @@ class Header extends React.Component {
             showSidePanel,
             navigate,
             account_meta,
+            gptSlots,
+            postCategory,
         } = this.props;
 
         /*Set the document.title on each header render.*/
@@ -256,18 +258,18 @@ class Header extends React.Component {
                   }
                 : { link: '#', onClick: showLogin, value: tt('g.login') },
         ];
+
         return (
             <Headroom>
                 <header className="Header">
                     {this.props.showAnnouncement && (
                         <Announcement onClose={this.props.hideAnnouncement} />
                     )}
-                    {this.props.gptSlots ? (
-                        <GptAd
-                            slot={this.props.gptSlots['top_nav']['slot_id']}
-                            args={this.props.gptSlots['top_nav']['args']}
-                        />
-                    ) : null}
+                    <renderAd
+                        gptSlots={gptSlots}
+                        slotName="top_nav"
+                        postCategory={postCategory}
+                    />
                     <nav className="row Header__nav">
                         <div className="small-5 large-4 columns Header__logotype">
                             {/*LOGO*/}
@@ -377,6 +379,7 @@ const mapStateToProps = (state, ownProps) => {
         : state.offchain.get('account');
 
     const gptSlots = state.app.getIn(['googleAds', 'gptSlots']).toJS();
+    const postCategory = state.global.get('postCategory');
 
     return {
         username,
@@ -387,6 +390,7 @@ const mapStateToProps = (state, ownProps) => {
         current_account_name,
         showAnnouncement: state.user.get('showAnnouncement'),
         gptSlots,
+        postCategory,
         ...ownProps,
     };
 };

@@ -36,6 +36,10 @@ class Header extends React.Component {
     }
 
     componentDidMount() {
+        if (!window.googletag) {
+            return;
+        }
+
         this.gptListener = googletag
             .pubads()
             .addEventListener('slotRenderEnded', event => {
@@ -45,6 +49,10 @@ class Header extends React.Component {
     }
 
     componentWillUnmount() {
+        if (!window.googletag) {
+            return;
+        }
+
         googletag
             .pubads()
             .removeEventListener('slotRenderEnded', this.gptListener);

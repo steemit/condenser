@@ -18,7 +18,7 @@ import { SIGNUP_URL } from 'shared/constants';
 import SteemLogo from 'app/components/elements/SteemLogo';
 import normalizeProfile from 'app/utils/NormalizeProfile';
 import Announcement from 'app/components/elements/Announcement';
-import { renderAd } from 'app/utils/AdUtils';
+import { RenderAd } from 'app/utils/AdUtils';
 
 class Header extends React.Component {
     static propTypes = {
@@ -265,7 +265,7 @@ class Header extends React.Component {
                     {this.props.showAnnouncement && (
                         <Announcement onClose={this.props.hideAnnouncement} />
                     )}
-                    <renderAd
+                    <RenderAd
                         gptSlots={gptSlots}
                         slotName="top_nav"
                         postCategory={postCategory}

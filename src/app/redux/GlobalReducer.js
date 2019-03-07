@@ -78,7 +78,8 @@ export default function reducer(state = defaultState, action = {}) {
     if (pathname) {
         const route = resolveRoute(pathname);
         if (route.page === 'PostsIndex') {
-            postCategory = route.params[1];
+            let postCategory = route.params[1];
+            console.log('GlobalReducer postCategory', postCategory);
             state = state.set('postCategory', postCategory);
         }
     }

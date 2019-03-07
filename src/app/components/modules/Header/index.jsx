@@ -32,6 +32,22 @@ class Header extends React.Component {
 
     constructor() {
         super();
+        this.gptListener = null;
+    }
+
+    componentDidMount() {
+        this.gptListener = googletag
+            .pubads()
+            .addEventListener('slotRenderEnded', event => {
+                // This makes sure that the sticky header doesn't overlap the welcome splash.
+                this.forceUpdate();
+            });
+    }
+
+    componentWillUnmount() {
+        googletag
+            .pubads()
+            .removeEventListener('slotRenderEnded', this.gptListener);
     }
 
     // Conside refactor.

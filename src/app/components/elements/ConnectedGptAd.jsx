@@ -12,11 +12,9 @@ class BasicGptAd extends Component {
         const adSlot = ad['slot_id'];
         const adArgs = ad['args'];
         if (!adSlot || !adArgs) {
-            console.log('ConnectedGptAd renderAd not rendered', this.props, ad);
             return null;
         }
 
-        console.log('AdUtils renderAd adSlot adArgs', this.props, ad);
         return <GptAd slot={adSlot} args={adArgs} />;
     }
 }

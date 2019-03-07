@@ -767,8 +767,9 @@
         "returning_users": "Returning Users: ",
         "login_warning_title": "Logging in with non-posting key",
         "login_warning_body":
-            "It looks like you are trying to login with a key which is not your posting key.  This is not recommended.  Please visit the wallet page to download your keys.",
-        "login_warning_link_text": "My wallet",
+            "You are attempting to use a key with more permissions than required for everyday Steemit.com use. Since keys and passwords are more likely to get compromised the more they are used, it is strongly recommended to only use your Posting Key to log in.",
+        "continue_anyway": "Continue Anyway",
+        "login_warning_link_text": "View my Posting Key at Steemit Wallet",
         "join_our": "Join our",
         "sign_transfer": "Sign to complete transfer"
     },

@@ -197,9 +197,9 @@ class LoginForm extends Component {
         const authType = /^vote|comment/.test(opType)
             ? tt('loginform_jsx.posting')
             : tt('loginform_jsx.active_or_owner');
-        const submitLabel = loginBroadcastOperation
-            ? tt('g.sign_in')
-            : tt('g.login');
+        const submitLabel = showLoginWarning
+            ? tt('loginform_jsx.continue_anyway')
+            : loginBroadcastOperation ? tt('g.sign_in') : tt('g.login');
         let error =
             password.touched && password.error
                 ? password.error

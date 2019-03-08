@@ -1,4 +1,5 @@
 import { Map, Set, List, fromJS, Iterable } from 'immutable';
+import resolveRoute from 'app/ResolveRoute';
 import { emptyContent } from 'app/redux/EmptyState';
 import { contentStats } from 'app/utils/StateFunctions';
 import constants from './constants';
@@ -71,6 +72,16 @@ const mergeAccounts = (state, account) => {
 
 export default function reducer(state = defaultState, action = {}) {
     const payload = action.payload;
+
+    // Set post category
+    const pathname = state.get('pathname');
+    if (pathname) {
+        const route = resolveRoute(pathname);
+        if (route.page === 'PostsIndex') {
+            let postCategory = route.params[1];
+            state = state.set('postCategory', postCategory);
+        }
+    }
 
     switch (action.type) {
         case SET_COLLAPSED: {

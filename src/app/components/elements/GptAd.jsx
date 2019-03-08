@@ -3,12 +3,12 @@ import { connect } from 'react-redux';
 
 class GptAd extends React.Component {
     componentDidMount() {
-        if (!this.props.gptEnabled) {
-            return;
-        }
-
-        if (!window.googleTag) {
-            return;
+        if (
+            !this.props.gptEnabled ||
+            !process.env.BROWSER ||
+            !window.googletag
+        ) {
+            return null;
         }
 
         googletag.cmd.push(() => {
@@ -29,11 +29,11 @@ class GptAd extends React.Component {
     }
 
     render() {
-        if (!this.props.gptEnabled) {
-            return null;
-        }
-
-        if (!window.googleTag) {
+        if (
+            !this.props.gptEnabled ||
+            !process.env.BROWSER ||
+            !window.googletag
+        ) {
             return null;
         }
 

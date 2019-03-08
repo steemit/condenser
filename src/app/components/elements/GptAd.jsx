@@ -7,6 +7,10 @@ class GptAd extends React.Component {
             return;
         }
 
+        if (!window.googleTag) {
+            return;
+        }
+
         googletag.cmd.push(() => {
             const slot = googletag.defineSlot.apply(googletag, this.props.args);
             slot.addService(googletag.pubads());
@@ -26,6 +30,10 @@ class GptAd extends React.Component {
 
     render() {
         if (!this.props.gptEnabled) {
+            return null;
+        }
+
+        if (!window.googleTag) {
             return null;
         }
 

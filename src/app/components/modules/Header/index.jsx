@@ -38,7 +38,8 @@ class Header extends React.Component {
         if (
             !this.props.gptEnabled ||
             !process.env.BROWSER ||
-            !window.googletag
+            !window.googletag ||
+            !window.googletag.pubads
         ) {
             return null;
         }
@@ -55,7 +56,8 @@ class Header extends React.Component {
         if (
             !this.props.gptEnabled ||
             !process.env.BROWSER ||
-            !window.googletag
+            !window.googletag ||
+            !window.googletag.pubads
         ) {
             return null;
         }

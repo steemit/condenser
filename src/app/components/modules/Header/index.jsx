@@ -35,8 +35,12 @@ class Header extends React.Component {
     }
 
     componentDidMount() {
-        if (!window.googletag) {
-            return;
+        if (
+            !this.props.gptEnabled ||
+            !process.env.BROWSER ||
+            !window.googletag
+        ) {
+            return null;
         }
 
         this.gptListener = googletag
@@ -48,8 +52,12 @@ class Header extends React.Component {
     }
 
     componentWillUnmount() {
-        if (!window.googletag) {
-            return;
+        if (
+            !this.props.gptEnabled ||
+            !process.env.BROWSER ||
+            !window.googletag
+        ) {
+            return null;
         }
 
         googletag
@@ -395,6 +403,8 @@ const mapStateToProps = (state, ownProps) => {
         ? username
         : state.offchain.get('account');
 
+    const gptEnabled = state.app.getIn(['googleAds', 'gptEnabled']);
+
     return {
         username,
         loggedIn,
@@ -403,6 +413,7 @@ const mapStateToProps = (state, ownProps) => {
         account_meta: user_profile,
         current_account_name,
         showAnnouncement: state.user.get('showAnnouncement'),
+        gptEnabled,
         ...ownProps,
     };
 };

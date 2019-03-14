@@ -31,35 +31,8 @@ class Header extends React.Component {
 
     constructor() {
         super();
-        this.slotRenderEnded = event => {
-            const headerAd = document.querySelector('header .gpt-ad');
-            console.log(
-                'SLOT_RENDER_ENDED HEADER AD DIMENSIONS',
-                headerAd.offsetWidth,
-                headerAd.offsetHeight
-            );
-            // This makes sure that the sticky header doesn't overlap the welcome splash.
-            this.forceUpdate();
-        };
-
-        this.slotVisibilityChanged = event => {
-            const headerAd = document.querySelector('header .gpt-ad');
-            console.log(
-                'SLOT_VISIBILITY_CHANGED HEADER AD DIMENSIONS',
-                headerAd.offsetWidth,
-                headerAd.offsetHeight
-            );
-            // This makes sure that the sticky header doesn't overlap the welcome splash.
-            this.forceUpdate();
-        };
-
         this.gptadshown = event => {
             const headerAd = document.querySelector('header .gpt-ad');
-            console.log(
-                'GPTADSHOWN HEADER AD DIMENSIONS',
-                headerAd.offsetWidth,
-                headerAd.offsetHeight
-            );
             // This makes sure that the sticky header doesn't overlap the welcome splash.
             this.forceUpdate();
         };
@@ -75,13 +48,6 @@ class Header extends React.Component {
             return null;
         }
 
-        this.gptListener = googletag
-            .pubads()
-            .addEventListener('slotRenderEnded', this.slotRenderEnded)
-            .addEventListener(
-                'slotVisibilityChanged',
-                this.slotVisibilityChanged
-            );
         window.addEventListener('gptadshown', this.gptadshown);
     }
 
@@ -95,17 +61,10 @@ class Header extends React.Component {
             return null;
         }
 
-        googletag
-            .pubads()
-            .removeEventListener('slotRenderEnded', this.slotRenderEnded)
-            .removeEventListener(
-                'slotVisibilityChanged',
-                this.slotVisibilityChanged
-            );
         window.removeEventListener('gptadshown', this.gptadshown);
     }
 
-    // Conside refactor.
+    // Consider refactor.
     // I think 'last sort order' is something available through react-router-redux history.
     // Therefore no need to store it in the window global like this.
     componentWillReceiveProps(nextProps) {

@@ -47,6 +47,12 @@ class Header extends React.Component {
         this.gptListener = googletag
             .pubads()
             .addEventListener('slotRenderEnded', event => {
+                const headerAd = document.querySelector('header .gpt-ad');
+                console.log(
+                    'HEADER AD DIMENSIONS',
+                    headerAd.offsetWidth,
+                    headerAd.offsetHeight
+                );
                 // This makes sure that the sticky header doesn't overlap the welcome splash.
                 this.forceUpdate();
             });

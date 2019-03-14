@@ -31,7 +31,16 @@ class Header extends React.Component {
 
     constructor() {
         super();
-        this.gptListener = null;
+        this.slotRenderEnded = event => {
+            const headerAd = document.querySelector('header .gpt-ad');
+            console.log(
+                'SLOT_RENDER_ENDED HEADER AD DIMENSIONS',
+                headerAd.offsetWidth,
+                headerAd.offsetHeight
+            );
+            // This makes sure that the sticky header doesn't overlap the welcome splash.
+            this.forceUpdate();
+        };
     }
 
     componentDidMount() {
@@ -46,16 +55,11 @@ class Header extends React.Component {
 
         this.gptListener = googletag
             .pubads()
-            .addEventListener('slotRenderEnded', event => {
-                const headerAd = document.querySelector('header .gpt-ad');
-                console.log(
-                    'HEADER AD DIMENSIONS',
-                    headerAd.offsetWidth,
-                    headerAd.offsetHeight
-                );
-                // This makes sure that the sticky header doesn't overlap the welcome splash.
-                this.forceUpdate();
-            });
+            .addEventListener('slotRenderEnded', this.slotRenderEnded)
+            .addEventListener(
+                'slotVisibilityChanged',
+                this.slotVisibilityChanged
+            );
     }
 
     componentWillUnmount() {
@@ -70,7 +74,11 @@ class Header extends React.Component {
 
         googletag
             .pubads()
-            .removeEventListener('slotRenderEnded', this.gptListener);
+            .removeEventListener('slotRenderEnded', this.slotRenderEnded)
+            .removeEventListener(
+                'slotVisibilityChanged',
+                this.slotVisibilityChanged
+            );
     }
 
     // Conside refactor.

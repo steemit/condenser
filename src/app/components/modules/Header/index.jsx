@@ -41,6 +41,28 @@ class Header extends React.Component {
             // This makes sure that the sticky header doesn't overlap the welcome splash.
             this.forceUpdate();
         };
+
+        this.slotVisibilityChanged = event => {
+            const headerAd = document.querySelector('header .gpt-ad');
+            console.log(
+                'SLOT_VISIBILITY_CHANGED HEADER AD DIMENSIONS',
+                headerAd.offsetWidth,
+                headerAd.offsetHeight
+            );
+            // This makes sure that the sticky header doesn't overlap the welcome splash.
+            this.forceUpdate();
+        };
+
+        this.gptadshown = event => {
+            const headerAd = document.querySelector('header .gpt-ad');
+            console.log(
+                'GPTADSHOWN HEADER AD DIMENSIONS',
+                headerAd.offsetWidth,
+                headerAd.offsetHeight
+            );
+            // This makes sure that the sticky header doesn't overlap the welcome splash.
+            this.forceUpdate();
+        };
     }
 
     componentDidMount() {
@@ -60,6 +82,7 @@ class Header extends React.Component {
                 'slotVisibilityChanged',
                 this.slotVisibilityChanged
             );
+        window.addEventListener('gptadshown', this.gptadshown);
     }
 
     componentWillUnmount() {
@@ -79,6 +102,7 @@ class Header extends React.Component {
                 'slotVisibilityChanged',
                 this.slotVisibilityChanged
             );
+        window.removeEventListener('gptadshown', this.gptadshown);
     }
 
     // Conside refactor.

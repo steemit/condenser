@@ -37,6 +37,7 @@ SteemMarket.prototype.refresh = function() {
     console.info('Refreshing Steem Market data...');
 
     const url = config.steem_market_endpoint;
+    const token = config.steem_market_token;
     const key = config.steem_market_cache.key;
     if (!url) {
         console.info('No Steem Market endpoint provided...');
@@ -51,6 +52,9 @@ SteemMarket.prototype.refresh = function() {
         const options = {
             url: url,
             method: 'GET',
+            headers: {
+                Authorization: `Token ${token}`,
+            },
         };
 
         axios(options)

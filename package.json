@@ -116,6 +116,7 @@
     "react-router-redux": "4.0.8",
     "react-router-scroll": "0.4.4",
     "react-rte-image": "0.3.1",
+    "react-sparklines": "^1.7.0",
     "react-timeago": "3.4.3",
     "redux": "3.7.2",
     "redux-form": "5.3.4",

@@ -39,8 +39,15 @@ class App extends React.Component {
         this.state = {
             showCallout: true,
             showBanner: true,
+            gptBannerHeight: 0,
         };
         this.listenerActive = null;
+        this.gptadshownListener = this.gptadshown.bind(this);
+    }
+
+    gptadshown(e) {
+        const height = document.querySelector('header .gpt-ad').offsetHeight;
+        this.setState({ gptBannerHeight: height });
     }
 
     componentWillMount() {
@@ -49,9 +56,15 @@ class App extends React.Component {
     }
 
     componentDidMount() {
+        window.addEventListener('gptadshown', this.gptadshownListener);
+
         if (pageRequiresEntropy(this.props.pathname)) {
             this._addEntropyCollector();
         }
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('gptadshown', this.gptadshownListener);
     }
 
     componentWillReceiveProps(np) {
@@ -101,6 +114,7 @@ class App extends React.Component {
             new_visitor !== n.new_visitor ||
             this.state.showBanner !== nextState.showBanner ||
             this.state.showCallout !== nextState.showCallout ||
+            this.state.gptBannerHeight !== nextState.gptBannerHeight ||
             nightmodeEnabled !== n.nightmodeEnabled ||
             showAnnouncement !== n.showAnnouncement
         );
@@ -273,7 +287,6 @@ App.propTypes = {
 export default connect(
     (state, ownProps) => {
         const current_user = state.user.get('current');
-        const account_user = state.global.get('accounts');
         const current_account_name = current_user
             ? current_user.get('username')
             : state.offchain.get('account');

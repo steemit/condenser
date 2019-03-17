@@ -1,4 +1,5 @@
 import React from 'react';
+import config from 'config';
 import { renderToString } from 'react-dom/server';
 import { VIEW_MODE_WHISTLE, PARAM_VIEW_MODE } from '../shared/constants';
 import ServerHTML from './server-html';
@@ -50,6 +51,7 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
             csrf: ctx.csrf,
             new_visit: ctx.session.new_visit,
             config: $STM_Config,
+            pinned_posts: await ctx.app.pinnedPostsPromise,
             login_challenge,
         };
         if (ctx.session.arec) {
@@ -63,10 +65,23 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
                 offchain.recover_account = account_recovery_record.account_name;
             }
         }
+
+        const googleAds = {
+            shouldSeeAds: !!ctx.adsEnabled,
+            enabled: !!config.google_ad_enabled,
+            test: !!config.google_ad_test,
+            client: config.google_ad_client,
+            adSlots: config.google_ad_slots,
+            gptEnabled: !!ctx.gptEnabled,
+            gptSlots: config.gpt_slots,
+        };
         // ... and that's the end of user-session-related SSR
         const initial_state = {
             app: {
                 viewMode: determineViewMode(ctx.request.search),
+                googleAds: googleAds,
+                env: process.env.NODE_ENV,
+                walletUrl: config.wallet_url,
             },
         };
 
@@ -90,7 +105,18 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
         } else {
             assets = resolvedAssets;
         }
-        const props = { body, assets, title, meta };
+        const shouldSeeAds = googleAds.shouldSeeAds;
+        const gptEnabled = googleAds.gptEnabled;
+        const gptSlots = googleAds.gptSlots;
+        const props = {
+            body,
+            assets,
+            title,
+            meta,
+            shouldSeeAds,
+            gptEnabled,
+            gptSlots,
+        };
         ctx.status = statusCode;
         ctx.body =
             '<!DOCTYPE html>' + renderToString(<ServerHTML {...props} />);

@@ -241,6 +241,7 @@
         "faq": "常见问题",
         "chat": "Steemit聊天",
         "app_center": "Steemit应用中心",
+        "business_center": "Businesses Accepting Steem",
         "api_docs": "Steemit API文档",
         "whitepaper": "Steem白皮书",
         "intro_tagline": "妙笔生金",
@@ -404,7 +405,9 @@
             "zero": "没有帖子",
             "one": "1个帖子",
             "other": "%(count)s个帖子"
-        }
+        },
+        "hide_resteems": "Hide Resteems",
+        "show_all": "Show All"
     },
     "authorrewards_jsx": {
         "estimated_author_rewards_last_week": "预计上周作者奖励",

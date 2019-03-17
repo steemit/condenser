@@ -39,6 +39,9 @@
 @import "./elements/SanitizedLink/styles";
 @import "./elements/HelpTip/styles";
 @import "./elements/Dropdown";
+@import "./elements/Notices";
+@import "./elements/GoogleAd";
+@import "./elements/GptAd";
 
 // modules
 @import "./modules/Header/styles";
@@ -66,3 +69,4 @@
 @import "./pages/Welcome";
 @import "./pages/RecoverAccountStep1";
 @import "./pages/Witnesses";
+@import "./pages/About";

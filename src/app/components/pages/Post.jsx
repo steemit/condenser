@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import { sortComments } from 'app/components/cards/Comment';
 // import { Link } from 'react-router';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
+import GptAd from 'app/components/elements/GptAd';
 import { Set } from 'immutable';
 import tt from 'counterpart';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
@@ -63,7 +64,10 @@ class Post extends React.Component {
 
         if (!dis) return null;
 
-        if (!showAnyway) {
+        // A post should be hidden if it is not pinned, is not told to "show
+        // anyway", and is designated "gray".
+        const pinned = dis.get('pinned');
+        if (!pinned && !showAnyway) {
             const { gray } = dis.get('stats').toJS();
             if (gray) {
                 return (
@@ -240,6 +244,14 @@ class Post extends React.Component {
                         </div>
                     </div>
                 </div>
+                {this.props.gptSlots ? (
+                    <div className="Post_footer__ad">
+                        <GptAd
+                            slot={this.props.gptSlots['bottom_post']['slot_id']}
+                            args={this.props.gptSlots['bottom_post']['args']}
+                        />
+                    </div>
+                ) : null}
             </div>
         );
     }
@@ -264,5 +276,6 @@ export default connect((state, ownProps) => {
         ignoring,
         sortOrder:
             ownProps.router.getCurrentLocation().query.sort || 'trending',
+        gptSlots: state.app.getIn(['googleAds', 'gptSlots']).toJS(),
     };
 })(Post);

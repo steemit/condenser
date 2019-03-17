@@ -260,6 +260,7 @@
         "faq": "FAQ",
         "chat": "Steemitチャット",
         "app_center": "Steemitアプリセンター",
+        "business_center": "Businesses Accepting Steem",
         "api_docs": "Steemit API資料",
         "bluepaper": "Steemブルーペーパー",
         "whitepaper": "Steemホワイトペーパー",
@@ -442,7 +443,9 @@
             "zero": "投稿がありません",
             "one": "投稿1件",
             "other": "投稿%(count)s 件"
-        }
+        },
+        "hide_resteems": "Hide Resteems",
+        "show_all": "Show All"
     },
     "authorrewards_jsx": {
         "estimated_author_rewards_last_week": "過去1週間の推定投稿者報酬",

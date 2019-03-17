@@ -262,6 +262,7 @@
         "faq": "ЧаВО",
         "chat": "Чат Steemit",
         "app_center": "Центр приложений Steemit",
+        "business_center": "Businesses Accepting Steem",
         "api_docs": "API-документация Steemit",
         "bluepaper": "Синяя бумага Steem",
         "smt_whitepaper": "Белая книга SMT",
@@ -452,7 +453,9 @@
             "few": "%(count)s поста",
             "many": "%(count)s постов",
             "other": "%(count)s постов"
-        }
+        },
+        "hide_resteems": "Hide Resteems",
+        "show_all": "Show All"
     },
     "authorrewards_jsx": {
         "estimated_author_rewards_last_week":

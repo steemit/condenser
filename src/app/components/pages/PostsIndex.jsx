@@ -14,6 +14,8 @@ import Callout from 'app/components/elements/Callout';
 // import SidebarStats from 'app/components/elements/SidebarStats';
 import SidebarLinks from 'app/components/elements/SidebarLinks';
 import SidebarNewUsers from 'app/components/elements/SidebarNewUsers';
+import Notices from 'app/components/elements/Notices';
+import ConnectedGptAd from 'app/components/elements/ConnectedGptAd';
 import ArticleLayoutSelector from 'app/components/modules/ArticleLayoutSelector';
 import Topics from './Topics';
 import SortOrder from 'app/components/elements/SortOrder';
@@ -89,7 +91,7 @@ class PostsIndex extends React.Component {
             order = constants.DEFAULT_SORT_ORDER,
         } = this.props.routeParams;
 
-        const { categories } = this.props;
+        const { categories, pinned } = this.props;
 
         let topics_order = order;
         let posts = [];
@@ -228,19 +230,24 @@ class PostsIndex extends React.Component {
                         </div>
                     </div>
                     <hr className="articles__hr" />
-                    {!fetching && (posts && !posts.size) ? (
+                    {!fetching &&
+                    (posts && !posts.size) &&
+                    (pinned && !pinned.size) ? (
                         <Callout>{emptyText}</Callout>
                     ) : (
                         <PostsList
                             ref="list"
                             posts={posts ? posts : List()}
                             loading={fetching}
+                            anyPosts={true}
                             category={category}
                             loadMore={this.loadMore}
+                            showPinned={true}
                             showSpam={showSpam}
                         />
                     )}
                 </article>
+
                 <aside className="c-sidebar c-sidebar--right">
                     {this.props.isBrowser &&
                     !this.props.maybeLoggedIn &&
@@ -254,7 +261,14 @@ class PostsIndex extends React.Component {
                             </div>
                         )
                     )}
+                    <Notices notices={this.props.notices} />
+                    {this.props.gptSlots ? (
+                        <div className="sidebar-ad">
+                            <ConnectedGptAd slotName="right_nav" />
+                        </div>
+                    ) : null}
                 </aside>
+
                 <aside className="c-sidebar c-sidebar--left">
                     <Topics
                         order={topics_order}
@@ -274,6 +288,11 @@ class PostsIndex extends React.Component {
                         </a>
                         {' ' + tt('g.next_3_strings_together.value_posts')}
                     </small>
+                    {this.props.gptSlots ? (
+                        <div className="sidebar-ad">
+                            <ConnectedGptAd slotName="left_nav" />
+                        </div>
+                    ) : null}
                 </aside>
             </div>
         );
@@ -298,8 +317,14 @@ module.exports = {
                 categories: state.global
                     .getIn(['tag_idx', 'trending'])
                     .take(50),
+                pinned: state.offchain.get('pinned_posts'),
                 maybeLoggedIn: state.user.get('maybeLoggedIn'),
                 isBrowser: process.env.BROWSER,
+                notices: state.offchain
+                    .get('pinned_posts')
+                    .get('notices')
+                    .toJS(),
+                gptSlots: state.app.getIn(['googleAds', 'gptSlots']).toJS(),
             };
         },
         dispatch => {

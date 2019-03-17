@@ -217,7 +217,7 @@ export default connect(
         },
         logout: e => {
             if (e) e.preventDefault();
-            dispatch(userActions.logout());
+            dispatch(userActions.logout({ type: 'default' }));
         },
         toggleNightmode: e => {
             if (e) e.preventDefault();

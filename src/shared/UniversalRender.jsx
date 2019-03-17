@@ -264,9 +264,9 @@ export async function serverRender(
         // If a user profile URL is requested but no profile information is
         // included in the API response, return User Not Found.
         if (
-            Object.getOwnPropertyNames(onchain.accounts).length === 0 &&
             (url.match(routeRegex.UserProfile1) ||
-                url.match(routeRegex.UserProfile3))
+                url.match(routeRegex.UserProfile3)) &&
+            Object.getOwnPropertyNames(onchain.accounts).length === 0
         ) {
             // protect for invalid account
             return {
@@ -314,6 +314,14 @@ export async function serverRender(
                 };
             }
         }
+
+        // Insert the pinned posts into the list of posts, so there is no
+        // jumping of content.
+        offchain.pinned_posts.pinned_posts.forEach(pinnedPost => {
+            onchain.content[
+                `${pinnedPost.author}/${pinnedPost.permlink}`
+            ] = pinnedPost;
+        });
 
         server_store = createStore(rootReducer, {
             app: initialState.app,

@@ -1,4 +1,5 @@
 import { Map, Set, List, fromJS, Iterable } from 'immutable';
+import resolveRoute from 'app/ResolveRoute';
 import { emptyContent } from 'app/redux/EmptyState';
 import { contentStats } from 'app/utils/StateFunctions';
 import constants from './constants';
@@ -14,6 +15,7 @@ const SET_COLLAPSED = 'global/SET_COLLAPSED';
 const RECEIVE_STATE = 'global/RECEIVE_STATE';
 const RECEIVE_ACCOUNT = 'global/RECEIVE_ACCOUNT';
 const RECEIVE_ACCOUNTS = 'global/RECEIVE_ACCOUNTS';
+const SYNC_PINNED_POSTS = 'global/SYNC_PINNED_POSTS';
 const RECEIVE_COMMENT = 'global/RECEIVE_COMMENT';
 const RECEIVE_CONTENT = 'global/RECEIVE_CONTENT';
 const LINK_REPLY = 'global/LINK_REPLY';
@@ -71,6 +73,16 @@ const mergeAccounts = (state, account) => {
 export default function reducer(state = defaultState, action = {}) {
     const payload = action.payload;
 
+    // Set post category
+    const pathname = state.get('pathname');
+    if (pathname) {
+        const route = resolveRoute(pathname);
+        if (route.page === 'PostsIndex') {
+            let postCategory = route.params[1];
+            state = state.set('postCategory', postCategory);
+        }
+    }
+
     switch (action.type) {
         case SET_COLLAPSED: {
             return state.withMutations(map => {
@@ -104,6 +116,19 @@ export default function reducer(state = defaultState, action = {}) {
             return payload.accounts.reduce((acc, curr) => {
                 const transformed = transformAccount(curr);
                 return mergeAccounts(acc, transformed);
+            }, state);
+        }
+
+        // Interleave pinned posts into the map of posts.
+        case SYNC_PINNED_POSTS: {
+            return payload.pinnedPosts.reduce((acc, pinnedPost) => {
+                const author = pinnedPost.get('author');
+                const permlink = pinnedPost.get('permlink');
+                return state.updateIn(
+                    ['content', `${author}/${permlink}`],
+                    Map(),
+                    p => p.mergeDeep(pinnedPost)
+                );
             }, state);
         }
 
@@ -270,7 +295,6 @@ export default function reducer(state = defaultState, action = {}) {
             let new_state;
             if (
                 order === 'by_author' ||
-                order === 'by_author_noreblog' ||
                 order === 'by_feed' ||
                 order === 'by_comments' ||
                 order === 'by_replies'
@@ -459,6 +483,11 @@ export const receiveAccount = payload => ({
 
 export const receiveAccounts = payload => ({
     type: RECEIVE_ACCOUNTS,
+    payload,
+});
+
+export const syncPinnedPosts = payload => ({
+    type: SYNC_PINNED_POSTS,
     payload,
 });
 

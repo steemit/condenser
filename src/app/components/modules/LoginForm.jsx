@@ -18,7 +18,7 @@ import { SIGNUP_URL } from 'shared/constants';
 class LoginForm extends Component {
     static propTypes = {
         // Steemit.
-        login_error: PropTypes.string,
+        loginError: PropTypes.string,
         onCancel: PropTypes.func,
     };
 
@@ -97,12 +97,6 @@ class LoginForm extends Component {
         window.location.href = SIGNUP_URL;
     }
 
-    SignIn() {
-        const onType = document.getElementsByClassName('OpAction')[0]
-            .textContent;
-        serverApiRecordEvent('SignIn', onType);
-    }
-
     saveLoginToggle = () => {
         const { saveLogin } = this.state;
         saveLoginDefault = !saveLoginDefault;
@@ -169,8 +163,12 @@ class LoginForm extends Component {
         }
 
         const {
+            walletUrl,
+            showLoginWarning,
             loginBroadcastOperation,
             dispatchSubmit,
+            reallySubmit,
+            hideWarning,
             afterLoginRedirectToWelcome,
             msg,
         } = this.props;
@@ -199,13 +197,13 @@ class LoginForm extends Component {
         const authType = /^vote|comment/.test(opType)
             ? tt('loginform_jsx.posting')
             : tt('loginform_jsx.active_or_owner');
-        const submitLabel = loginBroadcastOperation
-            ? tt('g.sign_in')
-            : tt('g.login');
+        const submitLabel = showLoginWarning
+            ? tt('loginform_jsx.continue_anyway')
+            : loginBroadcastOperation ? tt('g.sign_in') : tt('g.login');
         let error =
             password.touched && password.error
                 ? password.error
-                : this.props.login_error;
+                : this.props.loginError;
         if (error === 'owner_login_blocked') {
             error = (
                 <span>
@@ -213,9 +211,7 @@ class LoginForm extends Component {
                         'loginform_jsx.this_password_is_bound_to_your_account_owner_key'
                     )}
                     {tt('loginform_jsx.however_you_can_use_it_to')}
-                    <a onClick={this.showChangePassword}>
-                        {tt('loginform_jsx.update_your_password')}
-                    </a>{' '}
+                    {tt('loginform_jsx.update_your_password')}
                     {tt('loginform_jsx.to_obtain_a_more_secure_set_of_keys')}
                 </span>
             );
@@ -224,9 +220,6 @@ class LoginForm extends Component {
                 <span>
                     {tt(
                         'loginform_jsx.this_password_is_bound_to_your_account_active_key'
-                    )}{' '}
-                    {tt(
-                        'loginform_jsx.you_may_use_this_active_key_on_other_more'
                     )}
                 </span>
             );
@@ -388,7 +381,6 @@ class LoginForm extends Component {
                         type="submit"
                         disabled={submitting || disabled}
                         className="button"
-                        onClick={this.SignIn}
                     >
                         {submitLabel}
                     </button>
@@ -407,12 +399,64 @@ class LoginForm extends Component {
             </form>
         );
 
+        const loginWarningTitleText = (
+            <h3>{tt('loginform_jsx.login_warning_title')}</h3>
+        );
+
+        const loginWarningForm = (
+            <form
+                onSubmit={handleSubmit(() => {
+                    console.log('Login\treallySubmit');
+                    const data = {
+                        username: username.value,
+                        password: password.value,
+                        saveLogin: saveLogin.value,
+                        loginBroadcastOperation: loginBroadcastOperation,
+                    };
+                    reallySubmit(data, afterLoginRedirectToWelcome);
+                })}
+                method="post"
+            >
+                <p>{tt('loginform_jsx.login_warning_body')}</p>
+                <p>
+                    <a
+                        href={`${walletUrl}/@${username.value}/permissions`}
+                        target="_blank"
+                    >
+                        {tt('loginform_jsx.login_warning_link_text')}
+                    </a>
+                </p>
+                <div className="login-modal-buttons">
+                    <br />
+                    <button
+                        type="submit"
+                        disabled={submitting}
+                        className="button"
+                    >
+                        {submitLabel}
+                    </button>
+                    <button
+                        type="button float-right"
+                        disabled={submitting}
+                        className="button hollow"
+                        onClick={e => {
+                            e.preventDefault();
+                            console.log('Login\thideWarning');
+                            hideWarning();
+                        }}
+                    >
+                        {tt('g.cancel')}
+                    </button>
+                </div>
+            </form>
+        );
+
         return (
             <div className="LoginForm row">
                 <div className="column">
                     {message}
-                    {titleText}
-                    {form}
+                    {showLoginWarning ? loginWarningTitleText : titleText}
+                    {showLoginWarning ? loginWarningForm : form}
                 </div>
             </div>
         );
@@ -452,11 +496,14 @@ import { connect } from 'react-redux';
 export default connect(
     // mapStateToProps
     state => {
-        const login_error = state.user.get('login_error');
+        const walletUrl = state.app.get('walletUrl');
+        const showLoginWarning = state.user.get('show_login_warning');
+        const loginError = state.user.get('login_error');
         const currentUser = state.user.get('current');
         const loginBroadcastOperation = state.user.get(
             'loginBroadcastOperation'
         );
+        const shouldSeeAds = state.app.getIn(['googleAds', 'shouldSeeAds']);
         const initialValues = {
             saveLogin: saveLoginDefault,
         };
@@ -481,10 +528,13 @@ export default connect(
         let msg = '';
         const msg_match = window.location.hash.match(/msg\=([\w]+)/);
         if (msg_match && msg_match.length > 1) msg = msg_match[1];
-        hasError = !!login_error;
+        hasError = !!loginError;
         return {
-            login_error,
+            walletUrl,
+            showLoginWarning,
+            loginError,
             loginBroadcastOperation,
+            shouldSeeAds,
             initialValues,
             initialUsername,
             msg,
@@ -527,10 +577,13 @@ export default connect(
                         operationType: type,
                     })
                 );
+
+                serverApiRecordEvent('SignIn', type);
+
                 dispatch(userActions.closeLogin());
             } else {
                 dispatch(
-                    userActions.usernamePasswordLogin({
+                    userActions.checkKeyType({
                         username,
                         password,
                         saveLogin,
@@ -538,6 +591,28 @@ export default connect(
                     })
                 );
             }
+        },
+        reallySubmit: (
+            { username, password, saveLogin, loginBroadcastOperation },
+            afterLoginRedirectToWelcome
+        ) => {
+            const { type } = loginBroadcastOperation
+                ? loginBroadcastOperation.toJS()
+                : {};
+
+            serverApiRecordEvent('SignIn', type);
+
+            dispatch(
+                userActions.usernamePasswordLogin({
+                    username,
+                    password,
+                    saveLogin,
+                    afterLoginRedirectToWelcome,
+                })
+            );
+        },
+        hideWarning: () => {
+            dispatch(userActions.hideLoginWarning());
         },
         clearError: () => {
             if (hasError) dispatch(userActions.loginError({ error: null }));
@@ -552,6 +627,7 @@ export default connect(
         },
         showChangePassword: (username, defaultPassword) => {
             dispatch(userActions.closeLogin());
+
             dispatch(globalActions.remove({ key: 'changePassword' }));
             dispatch(
                 globalActions.showDialog({

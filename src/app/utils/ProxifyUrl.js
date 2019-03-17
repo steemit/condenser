@@ -11,6 +11,7 @@
 const rProxyDomain = /^http(s)?:\/\/steemit(dev|stage)?images.com\//g;
 const rProxyDomainsDimensions = /http(s)?:\/\/steemit(dev|stage)?images.com\/([0-9]+x[0-9]+)\//g;
 const NATURAL_SIZE = '0x0/';
+const CAPPED_SIZE = '640x0/';
 
 export const imageProxy = () => $STM_Config.img_proxy_prefix;
 
@@ -36,7 +37,17 @@ export default (url, dimensions = false) => {
                 ? proxyList.shift().match(/([0-9]+x[0-9]+)\//g)[0]
                 : NATURAL_SIZE;
         }
-        if (NATURAL_SIZE !== dims || !rProxyDomain.test(respUrl)) {
+
+        // NOTE: This forces the dimensions to be `CAPPED_SIZE` to save on
+        // bandwidth costs. Do not modify gifs.
+        if (!respUrl.match(/\.gif$/) && dims === NATURAL_SIZE) {
+            dims = CAPPED_SIZE;
+        }
+
+        if (
+            (NATURAL_SIZE !== dims && CAPPED_SIZE !== dims) ||
+            !rProxyDomain.test(respUrl)
+        ) {
             return $STM_Config.img_proxy_prefix + dims + respUrl;
         }
     }

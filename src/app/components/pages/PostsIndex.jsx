@@ -15,7 +15,7 @@ import Callout from 'app/components/elements/Callout';
 import SidebarLinks from 'app/components/elements/SidebarLinks';
 import SidebarNewUsers from 'app/components/elements/SidebarNewUsers';
 import Notices from 'app/components/elements/Notices';
-import GptAd from 'app/components/elements/GptAd';
+import ConnectedGptAd from 'app/components/elements/ConnectedGptAd';
 import ArticleLayoutSelector from 'app/components/modules/ArticleLayoutSelector';
 import Topics from './Topics';
 import SortOrder from 'app/components/elements/SortOrder';
@@ -262,16 +262,11 @@ class PostsIndex extends React.Component {
                         )
                     )}
                     <Notices notices={this.props.notices} />
-                    <div className="sidebar-ad">
-                        {this.props.gptSlots ? (
-                            <GptAd
-                                slot={
-                                    this.props.gptSlots['right_nav']['slot_id']
-                                }
-                                args={this.props.gptSlots['right_nav']['args']}
-                            />
-                        ) : null}
-                    </div>
+                    {this.props.gptSlots ? (
+                        <div className="sidebar-ad">
+                            <ConnectedGptAd slotName="right_nav" />
+                        </div>
+                    ) : null}
                 </aside>
 
                 <aside className="c-sidebar c-sidebar--left">
@@ -293,16 +288,11 @@ class PostsIndex extends React.Component {
                         </a>
                         {' ' + tt('g.next_3_strings_together.value_posts')}
                     </small>
-                    <div className="sidebar-ad">
-                        {this.props.gptSlots ? (
-                            <GptAd
-                                slot={
-                                    this.props.gptSlots['left_nav']['slot_id']
-                                }
-                                args={this.props.gptSlots['left_nav']['args']}
-                            />
-                        ) : null}
-                    </div>
+                    {this.props.gptSlots ? (
+                        <div className="sidebar-ad">
+                            <ConnectedGptAd slotName="left_nav" />
+                        </div>
+                    ) : null}
                 </aside>
             </div>
         );

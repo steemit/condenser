@@ -255,10 +255,7 @@ class App extends React.Component {
                     />
                 )}
 
-                <div
-                    className="App__content"
-                    style={{ paddingTop: `${this.state.gptBannerHeight}px` }}
-                >
+                <div className="App__content">
                     {process.env.BROWSER &&
                     ip &&
                     new_visitor &&

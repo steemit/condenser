@@ -9,6 +9,7 @@ twoblokestrading
 ruttydm
 mlcuk
 m4r1a
+bridgenit
 `
     .trim()
     .split('\n');

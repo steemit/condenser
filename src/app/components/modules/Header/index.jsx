@@ -31,7 +31,11 @@ class Header extends React.Component {
 
     constructor() {
         super();
-        this.gptListener = null;
+        this.gptadshown = event => {
+            const headerAd = document.querySelector('header .gpt-ad');
+            // This makes sure that the sticky header doesn't overlap the welcome splash.
+            this.forceUpdate();
+        };
     }
 
     componentDidMount() {
@@ -44,12 +48,7 @@ class Header extends React.Component {
             return null;
         }
 
-        this.gptListener = googletag
-            .pubads()
-            .addEventListener('slotRenderEnded', event => {
-                // This makes sure that the sticky header doesn't overlap the welcome splash.
-                this.forceUpdate();
-            });
+        window.addEventListener('gptadshown', this.gptadshown);
     }
 
     componentWillUnmount() {
@@ -62,12 +61,10 @@ class Header extends React.Component {
             return null;
         }
 
-        googletag
-            .pubads()
-            .removeEventListener('slotRenderEnded', this.gptListener);
+        window.removeEventListener('gptadshown', this.gptadshown);
     }
 
-    // Conside refactor.
+    // Consider refactor.
     // I think 'last sort order' is something available through react-router-redux history.
     // Therefore no need to store it in the window global like this.
     componentWillReceiveProps(nextProps) {

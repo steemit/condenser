@@ -9,6 +9,8 @@ twoblokestrading
 ruttydm
 mlcuk
 m4r1a
+bridgenit
+bitchminer
 `
     .trim()
     .split('\n');

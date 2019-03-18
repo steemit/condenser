@@ -82,7 +82,7 @@ const SidePanel = ({ alignment, visible, hideSidePanel, username }) => {
             {
                 value: 'advertise',
                 label: tt('navigation.advertise'),
-                link: `/static/Steemit%20Media%20Kit.pdf`,
+                link: 'https://staticfiles.steemit.com/SteemitMediaKit.pdf',
                 isExternal: true,
             },
         ],

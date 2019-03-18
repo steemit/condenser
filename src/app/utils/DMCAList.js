@@ -241,11 +241,11 @@ export default `
 /nsfw/@dirtywhale/milf
 /cryptocurrency/@xeroxnet69/binance-competition-5000-btc-giveaway
 /happy/@janinet/watch-happy-wedding-2018-hdrip-full-telugu-movie-watch-online-free-download-hd-print
-/action/@padmaavat/naa-peru-surya /download/@padmaavat/1080p-naa-peru-surya-2018-telugu-full-movie-download-850mb
-/fifty/@arjuna21/fifty-shades-freed /fifty/@arjuna21/fifty-shades-freed-fifty-shades-freed-2018-full-movie-in-1080p-hd-dvdrip-bluerayrip
-/fullmovie/@marvinlox/raid-hindi /fullmovie/@marvinlox/raid-hindi-2018-full-movie-in-720p-hd-dvdrip-bluerayrip
-/baaghi/@anjaly21/baaghi-2 /baaghi/@anjaly21/baaghi-2-baaghi-2-2017-in-1080p-hd-dvdrip-bluerayrip
-/pacificrim/@alisawells/pacific-rim /pacificrim/@alisawells/pacific-rim-pacific-rim-uprising-full-movie-2018-in-1080p-hd-dvdrip-bluerayrip
+/download/@padmaavat/1080p-naa-peru-surya-2018-telugu-full-movie-download-850mb
+/fifty/@arjuna21/fifty-shades-freed-fifty-shades-freed-2018-full-movie-in-1080p-hd-dvdrip-bluerayrip
+/fullmovie/@marvinlox/raid-hindi-2018-full-movie-in-720p-hd-dvdrip-bluerayrip
+/baaghi/@anjaly21/baaghi-2-baaghi-2-2017-in-1080p-hd-dvdrip-bluerayrip
+/pacificrim/@alisawells/pacific-rim-pacific-rim-uprising-full-movie-2018-in-1080p-hd-dvdrip-bluerayrip
 /queen/@hd-movie-watch/download-queen-2018-malayalam-full-movie-hd-utorrent-720p-650mb
 /punjabimovie/@agroup85/sajjan-singh-rangroot-full-movie-punjabi-download-hd-free-mp4-filmywap
 /bharatanenenumovie/@biggboss/mahesh-babu-s-bharat-ane-nenu-telugu-movie-2018-dvdrip-download-online

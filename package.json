@@ -90,6 +90,7 @@
     "node-sass": "4.9.0",
     "os": "0.1.1",
     "picturefill": "3.0.2",
+    "qrcode.react": "^0.9.3",
     "raw-loader": "0.5.1",
     "react": "15.6.2",
     "react-ab-test": "1.7.0",

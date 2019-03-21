@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
+import Headroom from 'react-headroom';
 import Icon from 'app/components/elements/Icon';
 import resolveRoute from 'app/ResolveRoute';
 import tt from 'counterpart';
@@ -17,7 +18,7 @@ import { SIGNUP_URL } from 'shared/constants';
 import SteemLogo from 'app/components/elements/SteemLogo';
 import normalizeProfile from 'app/utils/NormalizeProfile';
 import Announcement from 'app/components/elements/Announcement';
-import GptAd from 'app/components/elements/GptAd';
+import ConnectedGptAd from 'app/components/elements/ConnectedGptAd';
 
 class Header extends React.Component {
     static propTypes = {
@@ -26,14 +27,44 @@ class Header extends React.Component {
         category: PropTypes.string,
         order: PropTypes.string,
         pathname: PropTypes.string,
-        gptSlots: PropTypes.object,
     };
 
     constructor() {
         super();
+        this.gptadshown = event => {
+            const headerAd = document.querySelector('header .gpt-ad');
+            // This makes sure that the sticky header doesn't overlap the welcome splash.
+            this.forceUpdate();
+        };
     }
 
-    // Conside refactor.
+    componentDidMount() {
+        if (
+            !this.props.gptEnabled ||
+            !process.env.BROWSER ||
+            !window.googletag ||
+            !window.googletag.pubads
+        ) {
+            return null;
+        }
+
+        window.addEventListener('gptadshown', this.gptadshown);
+    }
+
+    componentWillUnmount() {
+        if (
+            !this.props.gptEnabled ||
+            !process.env.BROWSER ||
+            !window.googletag ||
+            !window.googletag.pubads
+        ) {
+            return null;
+        }
+
+        window.removeEventListener('gptadshown', this.gptadshown);
+    }
+
+    // Consider refactor.
     // I think 'last sort order' is something available through react-router-redux history.
     // Therefore no need to store it in the window global like this.
     componentWillReceiveProps(nextProps) {
@@ -232,93 +263,91 @@ class Header extends React.Component {
                   }
                 : { link: '#', onClick: showLogin, value: tt('g.login') },
         ];
-        return (
-            <header className="Header">
-                {this.props.showAnnouncement && (
-                    <Announcement onClose={this.props.hideAnnouncement} />
-                )}
-                {this.props.gptSlots ? (
-                    <GptAd
-                        slot={this.props.gptSlots['top_navi']['slot_id']}
-                        args={this.props.gptSlots['top_navi']['args']}
-                    />
-                ) : null}
-                <nav className="row Header__nav">
-                    <div className="small-5 large-4 columns Header__logotype">
-                        {/*LOGO*/}
-                        <Link to={logo_link}>
-                            <SteemLogo />
-                        </Link>
-                    </div>
 
-                    <div className="large-4 columns show-for-large large-centered Header__sort">
-                        {/*SORT*/}
-                        <SortOrder
-                            sortOrder={order}
-                            topic={category === 'feed' ? '' : category}
-                            horizontal={true}
-                            pathname={pathname}
-                        />
-                    </div>
-                    <div className="small-7 large-4 columns Header__buttons">
-                        {/*NOT LOGGED IN SIGN IN AND SIGN UP LINKS*/}
-                        {!loggedIn && (
-                            <span className="Header__user-signup show-for-medium">
-                                <a
-                                    className="Header__login-link"
-                                    href="/login.html"
-                                    onClick={showLogin}
-                                >
-                                    {tt('g.login')}
-                                </a>
-                                <a
-                                    className="Header__signup-link"
-                                    href={SIGNUP_URL}
-                                >
-                                    {tt('g.sign_up')}
+        return (
+            <Headroom>
+                <header className="Header">
+                    {this.props.showAnnouncement && (
+                        <Announcement onClose={this.props.hideAnnouncement} />
+                    )}
+                    <ConnectedGptAd slotName="top_nav" />
+                    <nav className="row Header__nav">
+                        <div className="small-5 large-4 columns Header__logotype">
+                            {/*LOGO*/}
+                            <Link to={logo_link}>
+                                <SteemLogo />
+                            </Link>
+                        </div>
+
+                        <div className="large-4 columns show-for-large large-centered Header__sort">
+                            {/*SORT*/}
+                            <SortOrder
+                                sortOrder={order}
+                                topic={category === 'feed' ? '' : category}
+                                horizontal={true}
+                                pathname={pathname}
+                            />
+                        </div>
+                        <div className="small-7 large-4 columns Header__buttons">
+                            {/*NOT LOGGED IN SIGN IN AND SIGN UP LINKS*/}
+                            {!loggedIn && (
+                                <span className="Header__user-signup show-for-medium">
+                                    <a
+                                        className="Header__login-link"
+                                        href="/login.html"
+                                        onClick={showLogin}
+                                    >
+                                        {tt('g.login')}
+                                    </a>
+                                    <a
+                                        className="Header__signup-link"
+                                        href={SIGNUP_URL}
+                                    >
+                                        {tt('g.sign_up')}
+                                    </a>
+                                </span>
+                            )}
+
+                            {/*CUSTOM SEARCH*/}
+                            <span className="Header__search--desktop">
+                                <SearchInput />
+                            </span>
+                            <span className="Header__search">
+                                <a href="/static/search.html">
+                                    <IconButton icon="magnifyingGlass" />
                                 </a>
                             </span>
-                        )}
 
-                        {/*CUSTOM SEARCH*/}
-                        <span className="Header__search--desktop">
-                            <SearchInput />
-                        </span>
-                        <span className="Header__search">
-                            <a href="/static/search.html">
-                                <IconButton icon="magnifyingGlass" />
-                            </a>
-                        </span>
-
-                        {/*SUBMIT STORY*/}
-                        {submit_story}
-                        {/*USER AVATAR */}
-                        {loggedIn && (
-                            <DropdownMenu
-                                className={'Header__usermenu'}
-                                items={user_menu}
-                                title={username}
-                                el="span"
-                                selected={tt('g.rewards')}
-                                position="left"
+                            {/*SUBMIT STORY*/}
+                            {submit_story}
+                            {/*USER AVATAR */}
+                            {loggedIn && (
+                                <DropdownMenu
+                                    className={'Header__usermenu'}
+                                    items={user_menu}
+                                    title={username}
+                                    el="span"
+                                    selected={tt('g.rewards')}
+                                    position="left"
+                                >
+                                    <li className={'Header__userpic '}>
+                                        <span title={username}>
+                                            <Userpic account={username} />
+                                        </span>
+                                    </li>
+                                </DropdownMenu>
+                            )}
+                            {/*HAMBURGER*/}
+                            <span
+                                onClick={showSidePanel}
+                                className="toggle-menu Header__hamburger"
                             >
-                                <li className={'Header__userpic '}>
-                                    <span title={username}>
-                                        <Userpic account={username} />
-                                    </span>
-                                </li>
-                            </DropdownMenu>
-                        )}
-                        {/*HAMBURGER*/}
-                        <span
-                            onClick={showSidePanel}
-                            className="toggle-menu Header__hamburger"
-                        >
-                            <span className="hamburger" />
-                        </span>
-                    </div>
-                </nav>
-            </header>
+                                <span className="hamburger" />
+                            </span>
+                        </div>
+                    </nav>
+                </header>
+            </Headroom>
         );
     }
 }
@@ -350,7 +379,7 @@ const mapStateToProps = (state, ownProps) => {
         ? username
         : state.offchain.get('account');
 
-    const gptSlots = state.app.getIn(['googleAds', 'gptSlots']).toJS();
+    const gptEnabled = state.app.getIn(['googleAds', 'gptEnabled']);
 
     return {
         username,
@@ -360,7 +389,7 @@ const mapStateToProps = (state, ownProps) => {
         account_meta: user_profile,
         current_account_name,
         showAnnouncement: state.user.get('showAnnouncement'),
-        gptSlots,
+        gptEnabled,
         ...ownProps,
     };
 };

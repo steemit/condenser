@@ -16,28 +16,30 @@ const SidePanel = ({ alignment, visible, hideSidePanel, username }) => {
             ? 'show-for-small-only'
             : 'SidePanel__hide-signup';
 
-    const makeExternalLink = (i, ix, arr) => {
-        const cn = ix === arr.length - 1 ? 'last' : null;
-        return (
-            <li key={i.value} className={cn}>
-                <a
-                    href={i.link}
-                    target={i.internal ? null : '_blank'}
-                    rel="noopener noreferrer"
-                >
-                    {i.label}&nbsp;<Icon name="extlink" />
-                </a>
-            </li>
-        );
-    };
-
-    const makeInternalLink = (i, ix, arr) => {
-        const cn = ix === arr.length - 1 ? 'last' : null;
-        return (
-            <li key={i.value} className={cn}>
-                <Link to={i.link}>{i.label}</Link>
-            </li>
-        );
+    const makeLink = (i, ix, arr) => {
+        // A link is internal if it begins with a slash
+        const isExternal = !i.link.match(/^\//) || i.isExternal;
+        if (isExternal) {
+            const cn = ix === arr.length - 1 ? 'last' : null;
+            return (
+                <li key={i.value} className={cn}>
+                    <a
+                        href={i.link}
+                        target={i.internal ? null : '_blank'}
+                        rel="noopener noreferrer"
+                    >
+                        {i.label}&nbsp;<Icon name="extlink" />
+                    </a>
+                </li>
+            );
+        } else {
+            const cn = ix === arr.length - 1 ? 'last' : null;
+            return (
+                <li key={i.value} className={cn}>
+                    <Link to={i.link}>{i.label}</Link>
+                </li>
+            );
+        }
     };
 
     const sidePanelLinks = {
@@ -56,6 +58,12 @@ const SidePanel = ({ alignment, visible, hideSidePanel, username }) => {
                 value: 'tags',
                 label: tt('navigation.explore'),
                 link: `/tags`,
+            },
+            {
+                value: 'advertise',
+                label: tt('navigation.advertise'),
+                link: 'https://staticfiles.steemit.com/SteemitMediaKit.pdf',
+                isExternal: true,
             },
         ],
         exchanges: [
@@ -160,24 +168,10 @@ const SidePanel = ({ alignment, visible, hideSidePanel, username }) => {
             <div className={(visible ? 'visible ' : '') + alignment}>
                 <CloseButton onClick={hideSidePanel} />
                 <ul className={`vertical menu ${loggedIn}`}>
-                    {makeInternalLink(
-                        sidePanelLinks['extras'][0],
-                        0,
-                        sidePanelLinks['extras']
-                    )}
-                    {makeExternalLink(
-                        sidePanelLinks['extras'][1],
-                        1,
-                        sidePanelLinks['extras']
-                    )}
-                    {makeInternalLink(
-                        sidePanelLinks['extras'][2],
-                        2,
-                        sidePanelLinks['extras']
-                    )}
+                    {sidePanelLinks['extras'].map(makeLink)}
                 </ul>
                 <ul className="vertical menu">
-                    {sidePanelLinks['internal'].map(makeInternalLink)}
+                    {sidePanelLinks['internal'].map(makeLink)}
                 </ul>
                 <ul className="vertical menu">
                     <li>
@@ -185,16 +179,16 @@ const SidePanel = ({ alignment, visible, hideSidePanel, username }) => {
                             {tt('navigation.third_party_exchanges')}
                         </a>
                     </li>
-                    {sidePanelLinks['exchanges'].map(makeExternalLink)}
+                    {sidePanelLinks['exchanges'].map(makeLink)}
                 </ul>
                 <ul className="vertical menu">
-                    {sidePanelLinks['external'].map(makeExternalLink)}
+                    {sidePanelLinks['external'].map(makeLink)}
                 </ul>
                 <ul className="vertical menu">
-                    {sidePanelLinks['organizational'].map(makeExternalLink)}
+                    {sidePanelLinks['organizational'].map(makeLink)}
                 </ul>
                 <ul className="vertical menu">
-                    {sidePanelLinks['legal'].map(makeInternalLink)}
+                    {sidePanelLinks['legal'].map(makeLink)}
                 </ul>
             </div>
         </div>

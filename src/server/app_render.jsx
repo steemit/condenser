@@ -68,6 +68,7 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
                 viewMode: determineViewMode(ctx.request.search),
                 googleAds: googleAds,
                 env: process.env.NODE_ENV,
+                walletUrl: config.wallet_url,
             },
         };
 

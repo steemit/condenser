@@ -75,6 +75,7 @@ export function* broadcastOperation({
         errorCallback,
         allowPostUnsafe,
     };
+    console.log('broadcastOperation', operationParam);
 
     const conf = typeof confirm === 'function' ? confirm() : confirm;
     if (conf) {

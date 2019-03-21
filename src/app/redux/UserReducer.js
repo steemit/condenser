@@ -3,7 +3,9 @@ import { DEFAULT_LANGUAGE } from 'app/client_config';
 
 // Action constants
 const SHOW_LOGIN = 'user/SHOW_LOGIN';
+const SHOW_LOGIN_WARNING = 'user/SHOW_LOGIN_WARNING';
 const HIDE_LOGIN = 'user/HIDE_LOGIN';
+const HIDE_LOGIN_WARNING = 'user/HIDE_LOGIN_WARNING';
 const SHOW_TERMS = 'user/SHOW_TERMS';
 export const ACCEPT_TERMS = 'user/ACCEPT_TERMS';
 export const SAVE_LOGIN_CONFIRM = 'user/SAVE_LOGIN_CONFIRM';
@@ -12,6 +14,7 @@ const REMOVE_HIGH_SECURITY_KEYS = 'user/REMOVE_HIGH_SECURITY_KEYS';
 const CHANGE_LANGUAGE = 'user/CHANGE_LANGUAGE';
 const SHOW_PROMOTE_POST = 'user/SHOW_PROMOTE_POST';
 const HIDE_PROMOTE_POST = 'user/HIDE_PROMOTE_POST';
+export const CHECK_KEY_TYPE = 'user/CHECK_KEY_TYPE';
 export const USERNAME_PASSWORD_LOGIN = 'user/USERNAME_PASSWORD_LOGIN';
 export const SET_USER = 'user/SET_USER';
 const CLOSE_LOGIN = 'user/CLOSE_LOGIN';
@@ -58,12 +61,16 @@ export default function reducer(state = defaultState, action) {
                 loginDefault = fromJS(payload.loginDefault);
             }
             return state.merge({
+                login_error: undefined,
                 show_login_modal: true,
                 login_type: payload.type,
                 loginBroadcastOperation: operation,
                 loginDefault,
             });
         }
+
+        case SHOW_LOGIN_WARNING:
+            return state.set('show_login_warning', true);
 
         case SET_LATEST_FEED_PRICE:
             return state.set('latest_feed_price', payload);
@@ -74,6 +81,9 @@ export default function reducer(state = defaultState, action) {
                 loginBroadcastOperation: undefined,
                 loginDefault: undefined,
             });
+
+        case HIDE_LOGIN_WARNING:
+            return state.set('show_login_warning', false);
 
         case SHOW_TERMS: {
             let termsDefault;
@@ -132,6 +142,9 @@ export default function reducer(state = defaultState, action) {
         case HIDE_PROMOTE_POST:
             return state.set('show_promote_post_modal', false);
 
+        case CHECK_KEY_TYPE:
+            return state; // saga
+
         case USERNAME_PASSWORD_LOGIN:
             return state; // saga
 
@@ -149,6 +162,7 @@ export default function reducer(state = defaultState, action) {
             return state.mergeDeep({
                 current: payload,
                 show_login_modal: false,
+                show_login_warning: false,
                 loginBroadcastOperation: undefined,
                 loginDefault: undefined,
                 logged_out: undefined,
@@ -232,8 +246,18 @@ export const showLogin = payload => ({
     payload,
 });
 
+export const showLoginWarning = payload => ({
+    type: SHOW_LOGIN_WARNING,
+    payload,
+});
+
 export const hideLogin = payload => ({
     type: HIDE_LOGIN,
+    payload,
+});
+
+export const hideLoginWarning = payload => ({
+    type: HIDE_LOGIN_WARNING,
     payload,
 });
 
@@ -271,6 +295,11 @@ export const showPromotePost = payload => ({
 
 export const hidePromotePost = payload => ({
     type: HIDE_PROMOTE_POST,
+    payload,
+});
+
+export const checkKeyType = payload => ({
+    type: CHECK_KEY_TYPE,
     payload,
 });
 

@@ -95,15 +95,13 @@ class SteemMarket extends Component {
 
         return (
             <div className="steem-market">
-                <h4>Steem Coins</h4>
                 <Coin coin={steem} color="#09d6a8" />
                 <Coin coin={sbd} color="#09d6a8" />
-                <h4>Top Coins</h4>
                 {topCoins.map(coin => (
                     <Coin key={coin.get('name')} coin={coin} color="#788187" />
                 ))}
                 <p className="brought">
-                    Brought to you by{' '}
+                    Source:{' '}
                     <a href="https://coinmarketcap.com">coinmarketcap.com</a>
                 </p>
             </div>

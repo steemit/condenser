@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 class SteemMarket extends Component {
     render() {
         const steemMarketData = this.props.steemMarketData;
-        const timepoints = steemMarketData.get('timepoints');
         const topCoins = steemMarketData.get('top_coins');
         const steem = steemMarketData.get('steem');
         const sbd = steemMarketData.get('sbd');
@@ -12,11 +11,23 @@ class SteemMarket extends Component {
         return (
             <div className="steem-market">
                 <ul>
-                    <li>{`STEEM ${steem.getIn([0, 'price_usd'])}`}</li>
-                    <li>{`SBD ${steem.getIn([0, 'price_usd'])}`}</li>
+                    <li>{`STEEM ${steem.getIn([
+                        'timepoints',
+                        0,
+                        'price_usd',
+                    ])}`}</li>
+                    <li>{`SBD ${steem.getIn([
+                        'timepoints',
+                        0,
+                        'price_usd',
+                    ])}`}</li>
                     {topCoins.map(coin => {
                         const name = coin.get('name');
-                        const priceUsd = coin.get('price_usd');
+                        const priceUsd = coin.getIn([
+                            'timepoints',
+                            0,
+                            'price_usd',
+                        ]);
                         return <li key={name}>{`${name} ${priceUsd}`}</li>;
                     })}
                 </ul>

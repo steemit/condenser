@@ -14,6 +14,7 @@ import tt from 'counterpart';
 import { APP_URL } from 'app/client_config';
 import { PrivateKey, PublicKey } from '@steemit/steem-js/lib/auth/ecc';
 import { SIGNUP_URL } from 'shared/constants';
+import PdfDownload from 'app/components/elements/PdfDownload';
 
 class LoginForm extends Component {
     static propTypes = {
@@ -389,14 +390,24 @@ class LoginForm extends Component {
                 method="post"
             >
                 <p>{tt('loginform_jsx.login_warning_body')}</p>
-                <p>
+                <div>
                     <a
                         href={`${walletUrl}/@${username.value}/permissions`}
                         target="_blank"
                     >
                         {tt('loginform_jsx.login_warning_link_text')}
                     </a>
-                </p>
+                    <PdfDownload
+                        name={username.value}
+                        password={password.value}
+                        showCanvas={false}
+                        scale={200.0}
+                        widthInches={8.5}
+                        heightInches={11.0}
+                        qrSize={0.9}
+                        label="Download a PDF with keys and instructions"
+                    />
+                </div>
                 <div className="login-modal-buttons">
                     <br />
                     <button

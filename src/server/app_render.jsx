@@ -82,6 +82,7 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
                 googleAds: googleAds,
                 env: process.env.NODE_ENV,
                 walletUrl: config.wallet_url,
+                steemMarket: ctx.steemMarketData,
             },
         };
 

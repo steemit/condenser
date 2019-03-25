@@ -15,6 +15,7 @@ import Callout from 'app/components/elements/Callout';
 import SidebarLinks from 'app/components/elements/SidebarLinks';
 import SidebarNewUsers from 'app/components/elements/SidebarNewUsers';
 import Notices from 'app/components/elements/Notices';
+import SteemMarket from 'app/components/elements/SteemMarket';
 import ConnectedGptAd from 'app/components/elements/ConnectedGptAd';
 import ArticleLayoutSelector from 'app/components/modules/ArticleLayoutSelector';
 import Topics from './Topics';
@@ -262,6 +263,14 @@ class PostsIndex extends React.Component {
                         )
                     )}
                     <Notices notices={this.props.notices} />
+                    <div className="c-sidebar__module">
+                        <div className="c-sidebar__header">
+                            <h3 className="c-sidebar__h3">Coin Marketplace</h3>
+                        </div>
+                        <div className="c-sidebar__content">
+                            <SteemMarket />
+                        </div>
+                    </div>
                     {this.props.gptSlots ? (
                         <div className="sidebar-ad">
                             <ConnectedGptAd slotName="right_nav" />

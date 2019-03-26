@@ -44,6 +44,7 @@ SteemMarket.prototype.refresh = function() {
         return new Promise((res, rej) => {
             this.cache.set(key, {}, (err, success) => {
                 console.info('Stored empty Steem Market data...');
+                res();
             });
         });
     }

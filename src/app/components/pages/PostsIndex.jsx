@@ -263,14 +263,7 @@ class PostsIndex extends React.Component {
                         )
                     )}
                     <Notices notices={this.props.notices} />
-                    <div className="c-sidebar__module">
-                        <div className="c-sidebar__header">
-                            <h3 className="c-sidebar__h3">Coin Marketplace</h3>
-                        </div>
-                        <div className="c-sidebar__content">
-                            <SteemMarket />
-                        </div>
-                    </div>
+                    <SteemMarket />
                     {this.props.gptSlots ? (
                         <div className="sidebar-ad">
                             <ConnectedGptAd slotName="right_nav" />

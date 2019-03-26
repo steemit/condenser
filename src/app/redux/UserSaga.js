@@ -52,11 +52,6 @@ export const userWatches = [
 const strCmp = (a, b) => (a > b ? 1 : a < b ? -1 : 0);
 
 function* shouldShowLoginWarning({ username, password }) {
-    // If it's a high-security login page, don't show the warning.
-    if (yield isHighSecurityPage()) {
-        return false;
-    }
-
     // If it's a master key, show the warning.
     if (!auth.isWif(password)) {
         const accounts = yield api.getAccountsAsync([username]);

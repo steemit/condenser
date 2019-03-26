@@ -25,6 +25,7 @@ class Coin extends Component {
     }
 
     componentWillUnmount() {
+        const node = ReactDOM.findDOMNode(this.refs.coin);
         node.querySelectorAll('circle').forEach(circle => {
             circle.removeEventListener('mouseover', this.onPointMouseMove);
         });

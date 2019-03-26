@@ -89,21 +89,37 @@ class Coin extends Component {
 class SteemMarket extends Component {
     render() {
         const steemMarketData = this.props.steemMarketData;
+        if (steemMarketData.isEmpty()) {
+            return null;
+        }
         const topCoins = steemMarketData.get('top_coins');
         const steem = steemMarketData.get('steem');
         const sbd = steemMarketData.get('sbd');
 
         return (
-            <div className="steem-market">
-                <Coin coin={steem} color="#09d6a8" />
-                <Coin coin={sbd} color="#09d6a8" />
-                {topCoins.map(coin => (
-                    <Coin key={coin.get('name')} coin={coin} color="#788187" />
-                ))}
-                <p className="brought">
-                    Source:{' '}
-                    <a href="https://coinmarketcap.com">coinmarketcap.com</a>
-                </p>
+            <div className="c-sidebar__module">
+                <div className="c-sidebar__header">
+                    <h3 className="c-sidebar__h3">Coin Marketplace</h3>
+                </div>
+                <div className="c-sidebar__content">
+                    <div className="steem-market">
+                        <Coin coin={steem} color="#09d6a8" />
+                        <Coin coin={sbd} color="#09d6a8" />
+                        {topCoins.map(coin => (
+                            <Coin
+                                key={coin.get('name')}
+                                coin={coin}
+                                color="#788187"
+                            />
+                        ))}
+                        <p className="brought">
+                            Source:{' '}
+                            <a href="https://coinmarketcap.com">
+                                coinmarketcap.com
+                            </a>
+                        </p>
+                    </div>
+                </div>
             </div>
         );
     }

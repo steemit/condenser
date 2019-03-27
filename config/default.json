@@ -121,5 +121,11 @@
         }
       }
     }
+  },
+  "steem_market_endpoint": null,
+  "steem_market_token": null,
+  "steem_market_cache": {
+    "ttl": 7200,
+    "key": "steem-market"
   }
 }

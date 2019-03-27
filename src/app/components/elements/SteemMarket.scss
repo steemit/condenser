@@ -11,12 +11,14 @@
       position: absolute;
       bottom: 0;
       margin-bottom: 10px;
+      padding-left: 2px;
+      padding-right: 2px;
       pointer-events: none;
       background-color: rgba(51, 51, 51, 0.1);
       color: #333333;
-      opacity: 0.5;
       font-size: 0.5em;
       font-weight: bold;
+      text-shadow: 0 1px 1px rgba(255, 255, 255, 0.5);
     }
   }
   .coin-label {
@@ -32,5 +34,17 @@
   .brought {
     font-size: 0.675em;
     color: #788187;
+  }
+}
+
+.theme-dark {
+  .steem-market {
+    .chart {
+      .caption {
+        background-color: rgba(255, 255, 255, 0.2);
+        color: white;
+        text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+      }
+    }
   }
 }

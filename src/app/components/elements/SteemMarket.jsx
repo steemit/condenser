@@ -38,7 +38,7 @@ class Coin extends Component {
         const name = coin.get('name');
         const symbol = coin.get('symbol');
         const timepoints = coin.get('timepoints');
-        const priceUsd = timepoints.getIn([0, 'price_usd']);
+        const priceUsd = timepoints.last().get('price_usd');
         const pricesUsd = timepoints
             .map(point => parseFloat(point.get('price_usd')))
             .toJS();

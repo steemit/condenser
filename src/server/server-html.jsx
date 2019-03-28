@@ -10,6 +10,7 @@ export default function ServerHTML({
     shouldSeeAds,
     gptEnabled,
     gptSlots,
+    gptBiddingSlots,
 }) {
     let page_title = title;
     return (
@@ -178,6 +179,7 @@ export default function ServerHTML({
                         src="https://www.googletagservices.com/tag/js/gpt.js"
                     />
                 ) : null}
+                {gptEnabled ? <script src="/javascripts/prebid.js" /> : null}
                 {gptEnabled ? (
                     <script
                         dangerouslySetInnerHTML={{
@@ -195,6 +197,44 @@ export default function ServerHTML({
                           googletag.enableServices();
                           console.log('Enabled googletag services');
                       });
+                      // var googletag = googletag || {};
+                      // googletag.cmd = googletag.cmd || [];
+                      // googletag.cmd.push(function () {
+                      //     googletag.pubads().disableInitialLoad();
+                      // });
+
+                      var pbjs = pbjs || {};
+                      pbjs.que = pbjs.que || [];
+                      pbjs.que.push(function() {
+                          pbjs.addAdUnits(${JSON.stringify(
+                              gptBiddingSlots.ad_units
+                          )});
+                          pbjs.setConfig({
+                              priceGranularity: ${JSON.stringify(
+                                  gptBiddingSlots.custom_config
+                              )},
+                              currency: ${JSON.stringify(
+                                  gptBiddingSlots.system_currency
+                              )}
+                          });
+                          pbjs.requestBids({
+                              bidsBackHandler: initAdserver,
+                              timeout: ${JSON.stringify(
+                                  gptBiddingSlots.prebid_timeout
+                              )}
+                          });
+                      });
+
+                      setTimeout(function() {
+                          if (pbjs.initAdserverSet) return;
+                          pbjs.initAdserverSet = true;
+                          googletag.cmd.push(function() {
+                              pbjs.que.push(function() {
+                                  pbjs.setTargetingForGPTAsync();
+                                  googletag.pubads().refresh();
+                              });
+                          });
+                      }, ${JSON.stringify(gptBiddingSlots.failsafe_timeout)});
                   `,
                         }}
                     />

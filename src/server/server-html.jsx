@@ -9,8 +9,7 @@ export default function ServerHTML({
     meta,
     shouldSeeAds,
     gptEnabled,
-    gptSlots,
-    gptBiddingSlots,
+    gptBidding,
 }) {
     let page_title = title;
     return (
@@ -189,38 +188,31 @@ export default function ServerHTML({
                       console.log('Set up googletag');
                       googletag.cmd.push(function() {
                           console.log('Preparing to enable googletag services');
-                          googletag.pubads().enableSingleRequest();
-                          googletag.pubads().setTargeting('edition',['new-york']);
-                          googletag.pubads().collapseEmptyDivs(true,true);
+                          googletag.pubads().setTargeting('edition', ['new-york']);
+                          googletag.pubads().collapseEmptyDivs(true, true);
                           googletag.pubads().disableInitialLoad();
-                          googletag.pubads().enableAsyncRendering();
                           googletag.enableServices();
                           console.log('Enabled googletag services');
                       });
-                      // var googletag = googletag || {};
-                      // googletag.cmd = googletag.cmd || [];
-                      // googletag.cmd.push(function () {
-                      //     googletag.pubads().disableInitialLoad();
-                      // });
 
                       var pbjs = pbjs || {};
                       pbjs.que = pbjs.que || [];
                       pbjs.que.push(function() {
                           pbjs.addAdUnits(${JSON.stringify(
-                              gptBiddingSlots.ad_units
+                              gptBidding.ad_units
                           )});
                           pbjs.setConfig({
                               priceGranularity: ${JSON.stringify(
-                                  gptBiddingSlots.custom_config
+                                  gptBidding.custom_config
                               )},
                               currency: ${JSON.stringify(
-                                  gptBiddingSlots.system_currency
+                                  gptBidding.system_currency
                               )}
                           });
                           pbjs.requestBids({
                               bidsBackHandler: initAdserver,
                               timeout: ${JSON.stringify(
-                                  gptBiddingSlots.prebid_timeout
+                                  gptBidding.prebid_timeout
                               )}
                           });
                       });
@@ -234,7 +226,7 @@ export default function ServerHTML({
                                   googletag.pubads().refresh();
                               });
                           });
-                      }, ${JSON.stringify(gptBiddingSlots.failsafe_timeout)});
+                      }, ${JSON.stringify(gptBidding.failsafe_timeout)});
                   `,
                         }}
                     />

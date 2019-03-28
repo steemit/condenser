@@ -4,27 +4,46 @@ import GptAd from 'app/components/elements/GptAd';
 
 class BasicGptAd extends Component {
     render() {
-        const { gptSlots, slotName, postCategory } = this.props;
-        const slots = gptSlots || {};
-        const categoriesAds = slots.categories || {};
-        const categoryAds = categoriesAds[postCategory] || {};
-        const ad = categoryAds[slotName] || slots[slotName] || {};
-        const adSlot = ad['slot_id'];
-        const adArgs = ad['args'];
-        if (!adSlot || !adArgs) {
-            return null;
-        }
+        const ad = this.categoryAd || this.biddingAd || this.basicAd || {};
+        return ad.slot_id && ad.args ? (
+            <GptAd slot={ad.slot_id} args={ad.args} kind={ad.kind} />
+        ) : null;
+    }
 
-        return <GptAd slot={adSlot} args={adArgs} />;
+    get categoryAd() {
+        const { gptCategorySlots, slotName, postCategory } = this.props;
+        const slots = gptCategorySlots || {};
+        const categoryAds = slots[postCategory] || {};
+        return categoryAds[slotName];
+    }
+
+    get biddingAd() {
+        const { gptBiddingSlots, slotName } = this.props;
+        const biddingSlots = gptBiddingSlots || {};
+        return biddingSlots[slotName];
+    }
+
+    get basicAd() {
+        const { gptSlots, slotName } = this.props;
+        const slots = gptSlots || {};
+        return slots[slotName];
     }
 }
 
 const ConnectedGptAd = connect(
     (state, ownProps) => {
         const gptSlots = state.app.getIn(['googleAds', 'gptSlots']).toJS();
+        const gptBiddingSlots = state.app
+            .getIn(['googleAds', 'gptBiddingSlots'])
+            .toJS();
+        const gptCategorySlots = state.app
+            .getIn(['googleAds', 'gptCategorySlots'])
+            .toJS();
         const postCategory = state.global.get('postCategory');
         return {
             gptSlots,
+            gptBiddingSlots,
+            gptCategorySlots,
             postCategory,
             ...ownProps,
         };

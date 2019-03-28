@@ -113,12 +113,6 @@ class SteemMarket extends Component {
                                 color="#788187"
                             />
                         ))}
-                        <p className="brought">
-                            Source:{' '}
-                            <a href="https://coinmarketcap.com">
-                                coinmarketcap.com
-                            </a>
-                        </p>
                     </div>
                 </div>
             </div>

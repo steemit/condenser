@@ -1,23 +1,43 @@
 import React, { Component } from 'react';
-import QRCode from 'qrcode.react';
 import { PrivateKey } from '@steemit/steem-js/lib/auth/ecc';
+import QRious from 'qrious';
+
+function image2canvas(image, bgcolor) {
+    const canvas = document.createElement('canvas');
+    canvas.width = image.width * 32;
+    canvas.height = image.height * 32;
+
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = bgcolor;
+    ctx.fillRect(0.0, 0.0, canvas.width, canvas.height);
+    ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+
+    return canvas;
+}
 
 export default class PdfDownload extends Component {
     constructor(props) {
         super(props);
         this.downloadPdf = this.downloadPdf.bind(this);
-        this.kinds = ['active', 'owner', 'posting', 'memo'];
-        this.pairs = [
-            ['master', 'Master'],
-            ['active-public', 'Active Public'],
-            ['active-private', 'Active Private'],
-            ['owner-public', 'Owner Public'],
-            ['owner-private', 'Owner Private'],
-            ['posting-public', 'Posting Public'],
-            ['posting-private', 'Posting Private'],
-            ['memo-public', 'Memo Public'],
-            ['memo-private', 'Memo Private'],
-        ];
+    }
+
+    // Generate a list of public and private keys from a master password
+    generateKeys(name, password) {
+        return ['active', 'owner', 'posting', 'memo'].reduce(
+            (accum, kind, i) => {
+                const rawKey = PrivateKey.fromSeed(`${name}${kind}${password}`);
+                accum[`${kind}Private`] = rawKey.toString();
+                accum[`${kind}Public`] = rawKey.toPublicKey().toString();
+                return accum;
+            },
+            { master: password }
+        );
+    }
+
+    downloadPdf() {
+        const keys = this.generateKeys(this.props.name, this.props.password);
+        const filename = this.props.name + '_steem_keys.pdf';
+        this.renderPdf(keys, filename).save(filename);
     }
 
     // Generate the canvas, which will be generated into a PDF
@@ -37,52 +57,38 @@ export default class PdfDownload extends Component {
             s.addEventListener('load', res);
         });
 
-        // Load WebFont, which allows us to load the subsequent fonts and know
-        // when they're done loading.
         await new Promise((res, rej) => {
             const s = document.createElement('script');
             s.type = 'text/javascript';
-            s.id = 'webfont';
-            s.src =
-                'https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js';
-            s.integrity =
-                'sha384-0bIyOfFEbXDmR9pWVT6PKyzSRIx8gTXuOsrfXQA51wfXn3LRXt+ih6riwq9Zv2yn';
-            s.crossOrigin = 'anonymous';
+            s.src = '/static/Roboto-Regular-normal.js';
             document.body.appendChild(s);
             s.addEventListener('load', res);
         });
 
-        // Finally, load the fonts.
         await new Promise((res, rej) => {
-            window.WebFont.load({
-                google: {
-                    families: ['Roboto', 'Roboto Mono'],
-                },
-                active: res,
-            });
+            const s = document.createElement('script');
+            s.type = 'text/javascript';
+            s.src = '/static/Roboto-Bold-normal.js';
+            document.body.appendChild(s);
+            s.addEventListener('load', res);
         });
 
-        // Render the canvas.
-        this.renderPdf();
+        await new Promise((res, rej) => {
+            const s = document.createElement('script');
+            s.type = 'text/javascript';
+            s.src = '/static/RobotoMono-Regular-normal.js';
+            document.body.appendChild(s);
+            s.addEventListener('load', res);
+        });
     }
 
     render() {
         return (
             <div className="pdf-download">
-                <QRCode
-                    className="recovery-url"
+                <img
+                    src="/images/pdf-logo.svg"
                     style={{ display: 'none' }}
-                    value="https://steemitwallet.com/recover_account_step_1"
-                    size={this.props.qrSize * this.props.scale}
-                />
-                <canvas
-                    className="rendered"
-                    style={{
-                        display: this.props.showCanvas ? 'initial' : 'none',
-                        border: '1px solid #ddd',
-                    }}
-                    width={this.props.widthInches * this.props.scale}
-                    height={this.props.heightInches * this.props.scale}
+                    className="pdf-logo"
                 />
                 <button
                     style={{ display: 'block' }}
@@ -97,276 +103,293 @@ export default class PdfDownload extends Component {
         );
     }
 
-    // Generate a list of public and private keys from a master password
-    generateKeys(name, password) {
-        return this.kinds.reduce(
-            (accum, kind, i) => {
-                const rawKey = PrivateKey.fromSeed(`${name}${kind}${password}`);
-                accum[`${kind}Private`] = rawKey.toString();
-                accum[`${kind}Public`] = rawKey.toPublicKey().toString();
-                return accum;
-            },
-            { master: password }
-        );
+    renderText(
+        ctx,
+        text,
+        { scale, x, y, lineHeight, maxWidth, color, fontSize, font }
+    ) {
+        var textLines = ctx
+            .setFont(font)
+            .setFontSize(fontSize * scale)
+            .setTextColor(color)
+            .splitTextToSize(text, maxWidth);
+        ctx.text(textLines, x, y + fontSize);
+        return textLines.length * fontSize * lineHeight;
     }
 
-    // Generate and download a PDF from the canvas
-    downloadPdf() {
-        const doc = new jsPDF({
+    drawFilledRect(ctx, x, y, w, h, { color }) {
+        ctx.setDrawColor(0);
+        ctx.setFillColor(color);
+        ctx.rect(x, y, w, h, 'F');
+    }
+
+    drawStrokedRect(ctx, x, y, w, h, { color, lineWidth }) {
+        ctx.setLineWidth(lineWidth);
+        ctx.setDrawColor(color);
+        ctx.rect(x, y, w, h);
+    }
+
+    drawImageFromCanvas(ctx, selector, x, y, w, h, bgcolor) {
+        const canvas = image2canvas(document.querySelector(selector), bgcolor); // svg -> jpg
+        ctx.addImage(canvas, 'JPEG', x, y, w, h);
+    }
+
+    drawQr(ctx, data, x, y, size, bgcolor) {
+        const canvas = document.createElement('canvas');
+        var qr = new QRious({
+            element: canvas,
+            size: 250,
+            value: data,
+            background: bgcolor,
+        });
+        ctx.addImage(canvas, 'PNG', x, y, size, size);
+    }
+
+    renderPdf(keys, filename) {
+        const widthInches = this.props.widthInches, //8.5,
+            lineHeight = 1.2,
+            margin = 0.2,
+            maxLineWidth = widthInches - margin * 2.0,
+            fontSize = 24,
+            scale = 72, //ptsPerInch
+            oneLineHeight = fontSize * lineHeight / scale,
+            qrSize = 1.1;
+
+        const ctx = new jsPDF({
             orientation: 'portrait',
             unit: 'in',
+            lineHeight: lineHeight,
             format: 'letter',
-        });
+        }).setProperties({ title: filename });
 
-        const master = document.querySelector('.rendered');
-        doc.addImage(
-            master,
-            'JPEG',
-            0,
-            0,
-            this.props.widthInches,
-            this.props.heightInches
-        );
-        doc.save('keys.pdf');
-    }
+        let offset = 0.0,
+            sectionStart = 0,
+            sectionHeight = 0;
 
-    async renderPdf() {
-        const keys = this.generateKeys(this.props.name, this.props.password);
-        const canvas = document.querySelector('.rendered');
-        const ctx = canvas.getContext('2d');
-        const scale = this.props.scale;
-        const lineHeight = 1.2;
-        const widthInches = this.props.widthInches;
+        // HEADER
 
-        this.clearCanvas(ctx, canvas);
-
-        let offset = 0.0;
-
-        this.drawFilledRect(ctx, 0.0, 0.0, widthInches, 1.29, {
-            scale,
+        sectionHeight = 1.29;
+        this.drawFilledRect(ctx, 0.0, 0.0, widthInches, sectionHeight, {
             color: '#1f0fd1',
         });
 
-        await this.drawImage(
+        this.drawImageFromCanvas(
             ctx,
-            '/images/pdf-logo.svg',
-            widthInches - 0.2 - 1.9,
+            '.pdf-logo',
+            widthInches - margin - 1.9,
             0.36,
             0.98 * 1.8,
             0.3 * 1.8,
-            { scale }
+            '#1F0FD1'
         );
 
-        this.renderText(ctx, `Steem keys for @${this.props.name}`, {
+        offset += 0.265;
+        offset += this.renderText(ctx, `Steem keys for @${this.props.name}`, {
             scale,
-            x: 0.2,
-            y: 0.265,
+            x: margin,
+            y: offset,
             lineHeight: 1.0,
-            maxWidth: widthInches - 0.2 * 2.0,
+            maxWidth: maxLineWidth,
             color: 'white',
             fontSize: 0.36,
-            fontFamily: 'Roboto',
-            decoration: 'bold',
+            font: 'Roboto-Bold',
         });
 
-        this.renderText(
+        offset += 0.1;
+        offset += this.renderText(
             ctx,
             'Your recovery account partner: Steemitwallet.com',
             {
                 scale,
-                x: 0.2,
-                y: 0.745,
+                x: margin,
+                y: offset,
                 lineHeight: 1.0,
-                maxWidth: widthInches - 0.2 * 2.0,
+                maxWidth: maxLineWidth,
                 color: 'white',
                 fontSize: 0.18,
-                fontFamily: 'Roboto',
-                decoration: 'bold',
+                font: 'Roboto-Bold',
             }
         );
+        offset = sectionStart + sectionHeight;
 
-        this.renderText(
+        // BODY
+
+        offset += 0.2;
+        offset += this.renderText(
             ctx,
-            [
-                `Steemit.com is powered by Steem and uses its hierarchical key system to keep you and your tokens safe. Print this out and keep it somewhere safe. When in doubt, use your Private Posting Key as your password, not your Master Password which is only intended to be used to change your private keys. You can also view these anytime at steemd.com/${
-                    this.props.name
-                }`,
-            ].join(''),
+            'Steemit.com is powered by Steem and uses its hierarchical key ' +
+                'system to keep you and your tokens safe. Print this out and ' +
+                'keep it somewhere safe. When in doubt, use your Private ' +
+                'Posting Key as your password, not your Master Password which ' +
+                'is only intended to be used to change your private keys. You ' +
+                'can also view these anytime at: https://steemd.com/' +
+                this.props.name,
             {
                 scale,
-                x: 0.2,
-                y: 1.5,
+                x: margin,
+                y: offset,
                 lineHeight: lineHeight,
-                maxWidth: widthInches - 0.2 * 2.0,
+                maxWidth: maxLineWidth,
                 color: 'black',
                 fontSize: 0.14,
-                fontFamily: 'Roboto',
-                decoration: null,
+                font: 'Roboto-Regular',
             }
         );
 
-        offset += 2.25;
+        // PRIVATE KEYS INTRO
 
-        this.drawFilledRect(ctx, 0.0, offset, widthInches, 1.03, {
+        offset += 0.2;
+        offset += this.renderText(ctx, 'Your Private Keys', {
             scale,
-            color: '#f4f4f4',
-        });
-
-        this.renderText(ctx, ['Master Password'].join(''), {
-            scale,
-            x: 0.2,
-            y: 0.2 + offset,
+            x: margin,
+            y: offset,
             lineHeight: lineHeight,
-            maxWidth: widthInches - 0.2 * 2.0,
-            color: 'black',
-            fontSize: 0.14,
-            fontFamily: 'Roboto',
-            decoration: 'bold',
-        });
-
-        this.renderText(
-            ctx,
-            [
-                `The seed used to generate all of your other Steem keys. You can `,
-                `reset this at steemitwallet.com/@${this.props.name}/password`,
-            ].join(''),
-            {
-                scale,
-                x: 0.2,
-                y: 0.2 + 0.14 * lineHeight + offset,
-                lineHeight: lineHeight,
-                maxWidth: widthInches - 0.2 * 2.0,
-                color: 'black',
-                fontSize: 0.14,
-                fontFamily: 'Roboto',
-            }
-        );
-
-        this.renderText(ctx, keys.master, {
-            scale,
-            x: 0.2,
-            y: 0.2 + 0.36 * lineHeight + offset,
-            lineHeight: lineHeight,
-            maxWidth: widthInches - 0.2 * 2.0,
-            color: 'black',
-            fontSize: 0.14,
-            fontFamily: 'Roboto Mono',
-        });
-
-        offset += 1.08;
-
-        this.renderText(ctx, 'Your Private Keys', {
-            scale,
-            x: 0.2,
-            y: 0.14 * lineHeight + offset,
-            lineHeight: lineHeight,
-            maxWidth: widthInches - 0.2 * 2.0,
+            maxWidth: maxLineWidth,
             color: 'black',
             fontSize: 0.18,
-            fontFamily: 'Roboto',
-            decoration: 'bold',
+            font: 'Roboto-Bold',
         });
 
-        this.renderText(
+        offset += 0.1;
+        offset += this.renderText(
             ctx,
-            [
-                `Each Steem Key has a public and private key to encrypt and decrypt `,
-                `data. Private Keys are required to login or authenticate `,
-                `transactions.`,
-            ].join(''),
+            'Each Steem Key has a public and private key to encrypt and ' +
+                'decrypt data. Private Keys are required to login or ' +
+                'authenticate transactions.',
             {
                 scale,
-                x: 0.2,
-                y: 0.41 * lineHeight + offset,
+                x: margin,
+                y: offset,
                 lineHeight: lineHeight,
-                maxWidth: widthInches - 0.2 * 2.0,
+                maxWidth: maxLineWidth,
                 color: 'black',
                 fontSize: 0.14,
-                fontFamily: 'Roboto',
+                font: 'Roboto-Regular',
+            }
+        );
+        offset += 0.2;
+
+        // POSTING KEY
+
+        sectionStart = offset;
+        sectionHeight = qrSize + 0.15 * 2;
+        this.drawFilledRect(ctx, 0.0, offset, widthInches, sectionHeight, {
+            color: 'f4f4f4',
+        });
+
+        offset += 0.15;
+        this.drawQr(
+            ctx,
+            'steem://import/wif/' +
+                keys.postingPrivate +
+                '/account/' +
+                this.props.name,
+            margin,
+            offset,
+            qrSize,
+            '#f4f4f4'
+        );
+
+        offset += 0.1;
+        offset += this.renderText(ctx, ['Private Posting Key'].join(''), {
+            scale,
+            x: margin + qrSize + 0.1,
+            y: offset,
+            lineHeight: lineHeight,
+            maxWidth: maxLineWidth,
+            color: 'black',
+            fontSize: 0.14,
+            font: 'Roboto-Bold',
+        });
+
+        offset += this.renderText(
+            ctx,
+            'Use to log in to Steemit.com and do social networking ' +
+                'actions, like posting, commenting and voting.',
+            {
+                scale,
+                x: margin + qrSize + 0.1,
+                y: offset,
+                lineHeight: lineHeight,
+                maxWidth: maxLineWidth,
+                color: 'black',
+                fontSize: 0.14,
+                font: 'Roboto-Regular',
             }
         );
 
-        offset += 0.64 * lineHeight;
-
-        this.drawFilledRect(ctx, 0.0, offset + 0.2, widthInches, 1.4, {
+        offset += 0.075;
+        offset += this.renderText(ctx, keys.postingPrivate, {
             scale,
-            color: '#f4f4f4',
-        });
-
-        this.drawImageFromSelector(
-            ctx,
-            '.recovery-url',
-            0.2,
-            offset + 0.45,
-            this.props.qrSize,
-            this.props.qrSize,
-            { scale }
-        );
-
-        this.renderText(ctx, ['Private Owner Key'].join(''), {
-            scale,
-            x: 1.3,
-            y: offset + 0.45,
+            x: margin + qrSize + 0.1,
+            y: offset,
             lineHeight: lineHeight,
-            maxWidth: widthInches - 1.5,
+            maxWidth: maxLineWidth,
             color: 'black',
             fontSize: 0.14,
-            fontFamily: 'Roboto',
-            decoration: 'bold',
+            font: 'RobotoMono-Regular',
+        });
+        offset += 0.2;
+        offset = sectionStart + sectionHeight;
+
+        // MEMO KEY
+
+        offset += 0.2;
+        offset += this.renderText(ctx, 'Private Memo Key', {
+            scale,
+            x: margin,
+            y: offset,
+            lineHeight: lineHeight,
+            maxWidth: maxLineWidth,
+            color: 'black',
+            fontSize: 0.14,
+            font: 'Roboto-Bold',
         });
 
-        this.renderText(
+        offset += this.renderText(
             ctx,
-            [
-                `If your account is stolen, use this key to recover your account `,
-                `within 30 days at steemitwallet.com/recovery_account_step_1 or scan `,
-                `the QR code to the left. This key can also be used to change your `,
-                `other keys.`,
-            ].join(''),
+            'Use to encrypt and decrypt private messages.',
             {
                 scale,
-                x: 1.3,
-                y: offset + 0.45 + 0.14 * lineHeight,
+                x: margin,
+                y: offset,
                 lineHeight: lineHeight,
-                maxWidth: widthInches - 1.5,
+                maxWidth: maxLineWidth,
                 color: 'black',
                 fontSize: 0.14,
-                fontFamily: 'Roboto',
+                font: 'Roboto-Regular',
             }
         );
 
-        this.renderText(ctx, keys.ownerPrivate, {
+        offset += 0.075;
+        offset += this.renderText(ctx, keys.memoPrivate, {
             scale,
-            x: 1.3,
-            y: offset + 0.45 + 0.14 * lineHeight + 0.57,
+            x: margin,
+            y: offset,
             lineHeight: lineHeight,
-            maxWidth: widthInches - 1.5,
+            maxWidth: maxLineWidth,
             color: 'black',
             fontSize: 0.14,
-            fontFamily: 'Roboto Mono',
+            font: 'RobotoMono-Regular',
         });
 
-        offset += 0.41 + 0.14 * lineHeight + 0.65 + 0.36;
+        offset += 0.1;
 
-        this.drawStrokedRect(ctx, 0.0, offset, widthInches, 1.01, {
-            scale,
-            color: '#f4f4f4',
-            lineWidth: 1.0,
-        });
+        // ACTIVE KEY
 
-        this.renderText(ctx, ['Private Active Key'].join(''), {
+        offset += 0.2;
+        offset += this.renderText(ctx, ['Private Active Key'].join(''), {
             scale,
-            x: 0.2,
-            y: offset + 0.2,
+            x: margin,
+            y: offset,
             lineHeight: lineHeight,
-            maxWidth: widthInches - 0.2 * 2.0,
+            maxWidth: maxLineWidth,
             color: 'black',
             fontSize: 0.14,
-            fontFamily: 'Roboto',
-            decoration: 'bold',
+            font: 'Roboto-Bold',
         });
 
-        this.renderText(
+        offset += this.renderText(
             ctx,
             [
                 `Use for monetary / wallet related actions, like transferring tokens `,
@@ -374,137 +397,168 @@ export default class PdfDownload extends Component {
             ].join(''),
             {
                 scale,
-                x: 0.2,
-                y: offset + 0.2 + 0.14 * lineHeight,
+                x: margin,
+                y: offset,
                 lineHeight: lineHeight,
-                maxWidth: widthInches - 0.2 * 2.0,
+                maxWidth: maxLineWidth,
                 color: 'black',
                 fontSize: 0.14,
-                fontFamily: 'Roboto',
+                font: 'Roboto-Regular',
             }
         );
 
-        this.renderText(ctx, keys.activePrivate, {
+        offset += 0.075;
+        offset += this.renderText(ctx, keys.activePrivate, {
             scale,
-            x: 0.2,
-            y: offset + 0.2 + 0.34 * lineHeight,
+            x: margin,
+            y: offset,
             lineHeight: lineHeight,
-            maxWidth: widthInches - 0.2 * 2.0,
+            maxWidth: maxLineWidth,
             color: 'black',
             fontSize: 0.14,
-            fontFamily: 'Roboto Mono',
+            font: 'RobotoMono-Regular',
         });
+        offset += 0.2;
 
-        offset += 1.01;
+        // OWNER KEY
 
-        this.drawFilledRect(ctx, 0.0, offset, widthInches, 1.01, {
+        sectionStart = offset;
+        sectionHeight = qrSize + 0.15 * 2;
+        this.drawFilledRect(ctx, 0.0, offset, widthInches, sectionHeight, {
             scale,
             color: '#f4f4f4',
         });
 
-        this.renderText(ctx, ['Private Posting Key'].join(''), {
+        offset += 0.15;
+        this.drawQr(
+            ctx,
+            'steem://import/wif/' +
+                keys.memoPrivate +
+                '/account/' +
+                this.props.name,
+            margin,
+            offset,
+            qrSize,
+            '#f4f4f4'
+        );
+
+        offset += 0.1;
+
+        offset += this.renderText(ctx, ['Private Owner Key'].join(''), {
             scale,
-            x: 0.2,
-            y: offset + 0.2,
+            x: margin + qrSize + 0.1,
+            y: offset,
             lineHeight: lineHeight,
-            maxWidth: widthInches - 0.2 * 2.0,
+            maxWidth: maxLineWidth - qrSize - 0.1,
             color: 'black',
             fontSize: 0.14,
-            fontFamily: 'Roboto',
-            decoration: 'bold',
+            font: 'Roboto-Bold',
         });
 
-        this.renderText(
+        offset += this.renderText(
             ctx,
-            [
-                `Use to log in to Steemit.com and do social networking actions, like `,
-                `posting, commenting and voting.`,
-            ].join(''),
+            'This key is used to reset all your other keys. If your account ' +
+                'is stolen, use this key to recover your account within 30 days ' +
+                'at steemitwallet.com.',
             {
                 scale,
-                x: 0.2,
-                y: offset + 0.2 + 0.14 * lineHeight,
+                x: margin + qrSize + 0.1,
+                y: offset,
                 lineHeight: lineHeight,
-                maxWidth: widthInches - 0.2 * 2.0,
+                maxWidth: maxLineWidth - qrSize - 0.1,
                 color: 'black',
                 fontSize: 0.14,
-                fontFamily: 'Roboto',
+                font: 'Roboto-Regular',
             }
         );
 
-        this.renderText(ctx, keys.postingPrivate, {
+        offset += 0.075;
+        offset += this.renderText(ctx, keys.ownerPrivate, {
             scale,
-            x: 0.2,
-            y: offset + 0.2 + 0.34 * lineHeight,
+            x: margin + qrSize + 0.1,
+            y: offset,
             lineHeight: lineHeight,
-            maxWidth: widthInches - 0.2 * 2.0,
+            maxWidth: maxLineWidth - qrSize - 0.1,
             color: 'black',
             fontSize: 0.14,
-            fontFamily: 'Roboto Mono',
+            font: 'RobotoMono-Regular',
         });
 
-        offset += 1.01;
+        offset = sectionStart + sectionHeight;
 
-        this.drawStrokedRect(ctx, 0.0, offset, widthInches, 1.01, {
-            scale,
-            color: '#f4f4f4',
-            lineWidth: 1.0,
-        });
+        // MASTER PASSWORD
 
-        this.renderText(ctx, 'Private Memo Key', {
-            scale,
-            x: 0.2,
-            y: offset + 0.2,
-            lineHeight: lineHeight,
-            maxWidth: widthInches - 0.2 * 2.0,
-            color: 'black',
-            fontSize: 0.14,
-            fontFamily: 'Roboto',
-            decoration: 'bold',
-        });
-
-        this.renderText(ctx, 'Use to encrypt and decrypt private messages.', {
-            scale,
-            x: 0.2,
-            y: offset + 0.2 + 0.14 * lineHeight,
-            lineHeight: lineHeight,
-            maxWidth: widthInches - 0.2 * 2.0,
-            color: 'black',
-            fontSize: 0.14,
-            fontFamily: 'Roboto',
-        });
-
-        this.renderText(ctx, keys.memoPrivate, {
-            scale,
-            x: 0.2,
-            y: offset + 0.2 + 0.36 * lineHeight,
-            lineHeight: lineHeight,
-            maxWidth: widthInches - 0.2 * 2.0,
-            color: 'black',
-            fontSize: 0.14,
-            fontFamily: 'Roboto Mono',
-        });
-
-        offset += 1.01;
-
-        this.drawFilledRect(ctx, 0.0, offset, widthInches, 1.01, {
+        sectionHeight = 1;
+        sectionStart = offset;
+        this.drawFilledRect(ctx, 0.0, offset, widthInches, sectionHeight, {
             scale,
             color: '#f4f4f4',
         });
 
-        this.renderText(ctx, 'Your Public Keys', {
+        offset += 0.2;
+        offset += this.renderText(ctx, ['Master Password'].join(''), {
             scale,
-            x: 0.2,
-            y: 0.15 * lineHeight + offset,
+            x: margin,
+            y: offset,
             lineHeight: lineHeight,
-            maxWidth: widthInches - 0.2 * 2.0,
+            maxWidth: maxLineWidth,
+            color: 'black',
+            fontSize: 0.14,
+            font: 'Roboto-Bold',
+        });
+
+        offset += this.renderText(
+            ctx,
+            'The seed password used to generate this document. ' +
+                'Do not share this key.',
+            {
+                scale,
+                x: margin,
+                y: offset,
+                lineHeight: lineHeight,
+                maxWidth: maxLineWidth,
+                color: 'black',
+                fontSize: 0.14,
+                font: 'Roboto-Regular',
+            }
+        );
+
+        offset += 0.075;
+        offset += this.renderText(ctx, keys.master, {
+            scale,
+            x: margin,
+            y: offset,
+            lineHeight: lineHeight,
+            maxWidth: maxLineWidth,
+            color: 'black',
+            fontSize: 0.14,
+            font: 'RobotoMono-Regular',
+        });
+
+        offset = sectionStart + sectionHeight;
+
+        // PUBLIC KEYS INTRO
+
+        sectionStart = offset;
+        sectionHeight = 1.0;
+        this.drawFilledRect(ctx, 0.0, offset, widthInches, sectionHeight, {
+            color: '#f4f4f4',
+        });
+
+        offset += 0.1;
+        offset += this.renderText(ctx, 'Your Public Keys', {
+            scale,
+            x: margin,
+            y: offset,
+            lineHeight: lineHeight,
+            maxWidth: maxLineWidth,
             color: 'black',
             fontSize: 0.18,
-            fontFamily: 'Roboto',
-            decoration: 'bold',
+            font: 'Roboto-Bold',
         });
 
-        this.renderText(
+        offset += 0.1;
+        offset += this.renderText(
             ctx,
             [
                 `Public keys are associated with usernames and can be used to look up `,
@@ -513,203 +567,109 @@ export default class PdfDownload extends Component {
             ].join(''),
             {
                 scale,
-                x: 0.2,
-                y: 0.42 * lineHeight + offset,
+                x: margin,
+                y: offset,
                 lineHeight: lineHeight,
-                maxWidth: widthInches - 0.2 * 2.0,
+                maxWidth: maxLineWidth,
                 color: 'black',
                 fontSize: 0.15,
-                fontFamily: 'Roboto',
+                font: 'Roboto-Regular',
             }
         );
 
-        offset += 0.66 * lineHeight;
-        offset += 0.35 * lineHeight;
+        offset = sectionStart + sectionHeight;
 
+        // PUBLIC KEYS
+
+        offset += 0.2;
         this.renderText(ctx, 'Owner Public', {
             scale,
-            x: 0.2,
+            x: margin,
             y: offset,
             lineHeight: lineHeight,
-            maxWidth: widthInches - 0.2 * 2.0,
+            maxWidth: maxLineWidth,
             color: 'black',
             fontSize: 0.14,
-            fontFamily: 'Roboto',
-            decoration: 'bold',
+            font: 'Roboto-Bold',
         });
 
-        this.renderText(ctx, keys.ownerPublic, {
+        offset += this.renderText(ctx, keys.ownerPublic, {
             scale,
             x: 1.25,
             y: offset,
             lineHeight: lineHeight,
-            maxWidth: widthInches - 0.2 * 2.0,
+            maxWidth: maxLineWidth,
             color: 'black',
             fontSize: 0.14,
-            fontFamily: 'Roboto Mono',
+            font: 'RobotoMono-Regular',
         });
-
-        offset += 0.18 * lineHeight;
 
         this.renderText(ctx, 'Active Public', {
             scale,
-            x: 0.2,
+            x: margin,
             y: offset,
             lineHeight: lineHeight,
-            maxWidth: widthInches - 0.2 * 2.0,
+            maxWidth: maxLineWidth,
             color: 'black',
             fontSize: 0.14,
-            fontFamily: 'Roboto',
-            decoration: 'bold',
+            font: 'Roboto-Bold',
         });
 
-        this.renderText(ctx, keys.activePublic, {
+        offset += this.renderText(ctx, keys.activePublic, {
             scale,
             x: 1.25,
             y: offset,
             lineHeight: lineHeight,
-            maxWidth: widthInches - 0.2 * 2.0,
+            maxWidth: maxLineWidth,
             color: 'black',
             fontSize: 0.14,
-            fontFamily: 'Roboto Mono',
+            font: 'RobotoMono-Regular',
         });
-
-        offset += 0.18 * lineHeight;
 
         this.renderText(ctx, 'Posting Public', {
             scale,
-            x: 0.2,
+            x: margin,
             y: offset,
             lineHeight: lineHeight,
-            maxWidth: widthInches - 0.2 * 2.0,
+            maxWidth: maxLineWidth,
             color: 'black',
             fontSize: 0.14,
-            fontFamily: 'Roboto',
-            decoration: 'bold',
+            font: 'Roboto-Bold',
         });
 
-        this.renderText(ctx, keys.postingPublic, {
+        offset += this.renderText(ctx, keys.postingPublic, {
             scale,
             x: 1.25,
             y: offset,
             lineHeight: lineHeight,
-            maxWidth: widthInches - 0.2 * 2.0,
+            maxWidth: maxLineWidth,
             color: 'black',
             fontSize: 0.14,
-            fontFamily: 'Roboto Mono',
+            font: 'RobotoMono-Regular',
         });
-
-        offset += 0.18 * lineHeight;
 
         this.renderText(ctx, 'Memo Public', {
             scale,
-            x: 0.2,
+            x: margin,
             y: offset,
             lineHeight: lineHeight,
-            maxWidth: widthInches - 0.2 * 2.0,
+            maxWidth: maxLineWidth,
             color: 'black',
             fontSize: 0.14,
-            fontFamily: 'Roboto',
-            decoration: 'bold',
+            font: 'Roboto-Bold',
         });
 
-        this.renderText(ctx, keys.memoPublic, {
+        offset += this.renderText(ctx, keys.memoPublic, {
             scale,
             x: 1.25,
             y: offset,
             lineHeight: lineHeight,
-            maxWidth: widthInches - 0.2 * 2.0,
+            maxWidth: maxLineWidth,
             color: 'black',
             fontSize: 0.14,
-            fontFamily: 'Roboto Mono',
+            font: 'RobotoMono-Regular',
         });
-    }
 
-    loadImage(src) {
-        return new Promise((res, rej) => {
-            const img = new Image();
-            img.onload = () => res(img);
-            img.onerror = rej;
-            img.src = src;
-        });
-    }
-
-    wrapText(ctx, text, maxWidth) {
-        let words = text.split(' ');
-        let lines = [];
-        let currentLine = words[0];
-        for (let i = 1; i < words.length; i++) {
-            let word = words[i];
-            let width = ctx.measureText(currentLine + ' ' + word).width;
-            if (width < maxWidth) {
-                currentLine += ' ' + word;
-            } else {
-                lines.push(currentLine);
-                currentLine = word;
-            }
-        }
-        lines.push(currentLine);
-        return lines;
-    }
-
-    renderText(
-        ctx,
-        text,
-        {
-            scale,
-            x,
-            y,
-            lineHeight,
-            maxWidth,
-            color,
-            fontSize,
-            fontFamily,
-            decoration,
-        }
-    ) {
-        ctx.fillStyle = color;
-        ctx.font = `${decoration || ''} ${fontSize * scale}px ${fontFamily}`;
-        const wrappedText = this.wrapText(ctx, text, maxWidth * scale);
-        const baseY = y * scale;
-        const offsetY = fontSize * scale;
-        for (let i in wrappedText) {
-            const lineOffsetY = i * fontSize * lineHeight * scale;
-            ctx.fillText(
-                wrappedText[i],
-                x * scale,
-                baseY + offsetY + lineOffsetY
-            );
-        }
-    }
-
-    clearCanvas(ctx, canvas) {
-        ctx.fillStyle = 'white';
-        ctx.fillRect(0.0, 0.0, canvas.width, canvas.height);
-    }
-
-    drawFilledRect(ctx, x, y, w, h, { scale, color }) {
-        ctx.fillStyle = color;
-        ctx.fillRect(x * scale, y * scale, w * scale, h * scale);
-    }
-
-    drawStrokedRect(ctx, x, y, w, h, { scale, color, lineWidth }) {
-        ctx.lineWidth = lineWidth;
-        ctx.strokeStyle = color;
-        ctx.strokeRect(x * scale, y * scale, w * scale, h * scale);
-    }
-
-    async drawImage(ctx, url, x, y, w, h, { scale }) {
-        const img = await this.loadImage(url);
-        ctx.drawImage(img, x * scale, y * scale, w * scale, h * scale);
-    }
-
-    drawImageFromSelector(ctx, selector, x, y, w, h, { scale }) {
-        ctx.drawImage(
-            document.querySelector(selector),
-            x * scale,
-            y * scale,
-            w * this.props.scale,
-            h * this.props.scale
-        );
+        return ctx;
     }
 }

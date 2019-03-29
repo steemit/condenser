@@ -4198,7 +4198,7 @@ hide-powered-by@1.0.0:
   resolved "https://registry.yarnpkg.com/hide-powered-by/-/hide-powered-by-1.0.0.tgz#4a85ad65881f62857fc70af7174a1184dccce32b"
 
 highcharts@4.2.7, highcharts@^4.2.3:
-  version v4.2.7
+  version "4.2.7"
   resolved "https://registry.yarnpkg.com/highcharts/-/highcharts-4.2.7.tgz#45cbed8e99c9c042e95f9c51076726496f686862"
 
 history@^3.0.0:
@@ -7190,6 +7190,11 @@ qrcode.react@^0.9.3:
   dependencies:
     prop-types "^15.6.0"
     qr.js "0.0.0"
+
+qrious@^4.0.2:
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/qrious/-/qrious-4.0.2.tgz#09c4d4079d2b961617f62c69cff3b9bb66a39693"
+  integrity sha512-xWPJIrK1zu5Ypn898fBp8RHkT/9ibquV2Kv24S/JY9VYEhMBMKur1gHVsOiNUh7PHP9uCgejjpZUHUIXXKoU/g==
 
 qs@2.3.3:
   version "2.3.3"

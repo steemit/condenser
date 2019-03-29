@@ -403,20 +403,13 @@ class LoginForm extends Component {
                         type="submit"
                         disabled={submitting}
                         className="button"
-                    >
-                        {submitLabel}
-                    </button>
-                    <button
-                        type="button float-right"
-                        disabled={submitting}
-                        className="button hollow"
                         onClick={e => {
                             e.preventDefault();
                             console.log('Login\thideWarning');
                             hideWarning();
                         }}
                     >
-                        {tt('g.cancel')}
+                        {tt('g.try_again')}
                     </button>
                 </div>
             </form>

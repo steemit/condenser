@@ -213,7 +213,7 @@ export default class PdfDownload extends Component {
         offset = sectionStart + sectionHeight;
 
         // BODY
-
+        /*
         offset += 0.2;
         offset += this.renderText(
             ctx,
@@ -235,7 +235,7 @@ export default class PdfDownload extends Component {
                 font: 'Roboto-Regular',
             }
         );
-
+*/
         // PRIVATE KEYS INTRO
 
         offset += 0.2;
@@ -291,7 +291,7 @@ export default class PdfDownload extends Component {
         );
 
         offset += 0.1;
-        offset += this.renderText(ctx, ['Private Posting Key'].join(''), {
+        offset += this.renderText(ctx, 'Private Posting Key', {
             scale,
             x: margin + qrSize + 0.1,
             y: offset,
@@ -322,7 +322,7 @@ export default class PdfDownload extends Component {
         offset += this.renderText(ctx, keys.postingPrivate, {
             scale,
             x: margin + qrSize + 0.1,
-            y: offset,
+            y: sectionStart + sectionHeight - 0.75,
             lineHeight: lineHeight,
             maxWidth: maxLineWidth,
             color: 'black',
@@ -334,10 +334,28 @@ export default class PdfDownload extends Component {
 
         // MEMO KEY
 
-        offset += 0.2;
+        sectionStart = offset;
+        sectionHeight = qrSize + 0.15 * 2;
+        //this.drawFilledRect(ctx, 0.0, offset, widthInches, sectionHeight, {color: '#f4f4f4'});
+
+        offset += 0.15;
+        this.drawQr(
+            ctx,
+            'steem://import/wif/' +
+                keys.memoPrivate +
+                '/account/' +
+                this.props.name,
+            margin,
+            offset,
+            qrSize,
+            '#ffffff'
+        );
+
+        offset += 0.1;
+
         offset += this.renderText(ctx, 'Private Memo Key', {
             scale,
-            x: margin,
+            x: margin + qrSize + 0.1,
             y: offset,
             lineHeight: lineHeight,
             maxWidth: maxLineWidth,
@@ -351,7 +369,7 @@ export default class PdfDownload extends Component {
             'Use to encrypt and decrypt private messages.',
             {
                 scale,
-                x: margin,
+                x: margin + qrSize + 0.1,
                 y: offset,
                 lineHeight: lineHeight,
                 maxWidth: maxLineWidth,
@@ -364,8 +382,8 @@ export default class PdfDownload extends Component {
         offset += 0.075;
         offset += this.renderText(ctx, keys.memoPrivate, {
             scale,
-            x: margin,
-            y: offset,
+            x: margin + qrSize + 0.1,
+            y: sectionStart + sectionHeight - 0.75,
             lineHeight: lineHeight,
             maxWidth: maxLineWidth,
             color: 'black',
@@ -374,13 +392,34 @@ export default class PdfDownload extends Component {
         });
 
         offset += 0.1;
+        offset = sectionStart + sectionHeight;
 
         // ACTIVE KEY
 
-        offset += 0.2;
-        offset += this.renderText(ctx, ['Private Active Key'].join(''), {
+        sectionStart = offset;
+        sectionHeight = qrSize + 0.15 * 2;
+        this.drawFilledRect(ctx, 0.0, offset, widthInches, sectionHeight, {
+            color: '#f4f4f4',
+        });
+
+        offset += 0.15;
+        this.drawQr(
+            ctx,
+            'steem://import/wif/' +
+                keys.activePrivate +
+                '/account/' +
+                this.props.name,
+            margin,
+            offset,
+            qrSize,
+            '#f4f4f4'
+        );
+
+        offset += 0.1;
+
+        offset += this.renderText(ctx, 'Private Active Key', {
             scale,
-            x: margin,
+            x: margin + qrSize + 0.1,
             y: offset,
             lineHeight: lineHeight,
             maxWidth: maxLineWidth,
@@ -391,13 +430,11 @@ export default class PdfDownload extends Component {
 
         offset += this.renderText(
             ctx,
-            [
-                `Use for monetary / wallet related actions, like transferring tokens `,
-                `or powering up and down.`,
-            ].join(''),
+            'Use for monetary and wallet related actions, like ' +
+                'transferring tokens or powering up and down.',
             {
                 scale,
-                x: margin,
+                x: margin + qrSize + 0.1,
                 y: offset,
                 lineHeight: lineHeight,
                 maxWidth: maxLineWidth,
@@ -410,8 +447,8 @@ export default class PdfDownload extends Component {
         offset += 0.075;
         offset += this.renderText(ctx, keys.activePrivate, {
             scale,
-            x: margin,
-            y: offset,
+            x: margin + qrSize + 0.1,
+            y: sectionStart + sectionHeight - 0.75,
             lineHeight: lineHeight,
             maxWidth: maxLineWidth,
             color: 'black',
@@ -420,26 +457,25 @@ export default class PdfDownload extends Component {
         });
         offset += 0.2;
 
+        offset = sectionStart + sectionHeight;
+
         // OWNER KEY
 
         sectionStart = offset;
         sectionHeight = qrSize + 0.15 * 2;
-        this.drawFilledRect(ctx, 0.0, offset, widthInches, sectionHeight, {
-            scale,
-            color: '#f4f4f4',
-        });
+        //this.drawFilledRect(ctx, 0.0, offset, widthInches, sectionHeight, {color: '#f4f4f4'});
 
         offset += 0.15;
         this.drawQr(
             ctx,
             'steem://import/wif/' +
-                keys.memoPrivate +
+                keys.ownerPrivate +
                 '/account/' +
                 this.props.name,
             margin,
             offset,
             qrSize,
-            '#f4f4f4'
+            '#ffffff'
         );
 
         offset += 0.1;
@@ -458,8 +494,8 @@ export default class PdfDownload extends Component {
         offset += this.renderText(
             ctx,
             'This key is used to reset all your other keys. If your account ' +
-                'is stolen, use this key to recover your account within 30 days ' +
-                'at steemitwallet.com.',
+                'is compromised, use this key to recover your account within 30 ' +
+                'days at https://steemitwallet.com.',
             {
                 scale,
                 x: margin + qrSize + 0.1,
@@ -476,7 +512,7 @@ export default class PdfDownload extends Component {
         offset += this.renderText(ctx, keys.ownerPrivate, {
             scale,
             x: margin + qrSize + 0.1,
-            y: offset,
+            y: sectionStart + sectionHeight - 0.75,
             lineHeight: lineHeight,
             maxWidth: maxLineWidth - qrSize - 0.1,
             color: 'black',
@@ -491,7 +527,6 @@ export default class PdfDownload extends Component {
         sectionHeight = 1;
         sectionStart = offset;
         this.drawFilledRect(ctx, 0.0, offset, widthInches, sectionHeight, {
-            scale,
             color: '#f4f4f4',
         });
 
@@ -541,9 +576,7 @@ export default class PdfDownload extends Component {
 
         sectionStart = offset;
         sectionHeight = 1.0;
-        this.drawFilledRect(ctx, 0.0, offset, widthInches, sectionHeight, {
-            color: '#f4f4f4',
-        });
+        //this.drawFilledRect(ctx, 0.0, offset, widthInches, sectionHeight, {color: '#f4f4f4'});
 
         offset += 0.1;
         offset += this.renderText(ctx, 'Your Public Keys', {
@@ -560,11 +593,11 @@ export default class PdfDownload extends Component {
         offset += 0.1;
         offset += this.renderText(
             ctx,
-            [
-                `Public keys are associated with usernames and can be used to look up `,
-                `associated transactions on the blockchain. Your public keys are not `,
-                `required for login.`,
-            ].join(''),
+            'Public keys are associated with usernames and can be used ' +
+                'to look up associated transactions on the blockchain. Your ' +
+                'public keys are not required for login. You can also view ' +
+                'these anytime at: https://steemd.com/@' +
+                this.props.name,
             {
                 scale,
                 x: margin,
@@ -582,49 +615,6 @@ export default class PdfDownload extends Component {
         // PUBLIC KEYS
 
         offset += 0.2;
-        this.renderText(ctx, 'Owner Public', {
-            scale,
-            x: margin,
-            y: offset,
-            lineHeight: lineHeight,
-            maxWidth: maxLineWidth,
-            color: 'black',
-            fontSize: 0.14,
-            font: 'Roboto-Bold',
-        });
-
-        offset += this.renderText(ctx, keys.ownerPublic, {
-            scale,
-            x: 1.25,
-            y: offset,
-            lineHeight: lineHeight,
-            maxWidth: maxLineWidth,
-            color: 'black',
-            fontSize: 0.14,
-            font: 'RobotoMono-Regular',
-        });
-
-        this.renderText(ctx, 'Active Public', {
-            scale,
-            x: margin,
-            y: offset,
-            lineHeight: lineHeight,
-            maxWidth: maxLineWidth,
-            color: 'black',
-            fontSize: 0.14,
-            font: 'Roboto-Bold',
-        });
-
-        offset += this.renderText(ctx, keys.activePublic, {
-            scale,
-            x: 1.25,
-            y: offset,
-            lineHeight: lineHeight,
-            maxWidth: maxLineWidth,
-            color: 'black',
-            fontSize: 0.14,
-            font: 'RobotoMono-Regular',
-        });
 
         this.renderText(ctx, 'Posting Public', {
             scale,
@@ -660,6 +650,50 @@ export default class PdfDownload extends Component {
         });
 
         offset += this.renderText(ctx, keys.memoPublic, {
+            scale,
+            x: 1.25,
+            y: offset,
+            lineHeight: lineHeight,
+            maxWidth: maxLineWidth,
+            color: 'black',
+            fontSize: 0.14,
+            font: 'RobotoMono-Regular',
+        });
+
+        this.renderText(ctx, 'Active Public', {
+            scale,
+            x: margin,
+            y: offset,
+            lineHeight: lineHeight,
+            maxWidth: maxLineWidth,
+            color: 'black',
+            fontSize: 0.14,
+            font: 'Roboto-Bold',
+        });
+
+        offset += this.renderText(ctx, keys.activePublic, {
+            scale,
+            x: 1.25,
+            y: offset,
+            lineHeight: lineHeight,
+            maxWidth: maxLineWidth,
+            color: 'black',
+            fontSize: 0.14,
+            font: 'RobotoMono-Regular',
+        });
+
+        this.renderText(ctx, 'Owner Public', {
+            scale,
+            x: margin,
+            y: offset,
+            lineHeight: lineHeight,
+            maxWidth: maxLineWidth,
+            color: 'black',
+            fontSize: 0.14,
+            font: 'Roboto-Bold',
+        });
+
+        offset += this.renderText(ctx, keys.ownerPublic, {
             scale,
             x: 1.25,
             y: offset,

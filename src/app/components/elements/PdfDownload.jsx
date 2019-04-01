@@ -47,12 +47,7 @@ export default class PdfDownload extends Component {
         await new Promise((res, rej) => {
             const s = document.createElement('script');
             s.type = 'text/javascript';
-            s.id = 'js-pdf';
-            s.src =
-                'https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.debug.js';
-            s.integrity =
-                'sha384-NaWTHo/8YCBYJ59830LTz/P4aQZK1sS0SneOgAvhsIl3zBu8r9RevNg5lHCHAuQ/';
-            s.crossOrigin = 'anonymous';
+            s.src = '/static/jspdf.min.js';
             document.body.appendChild(s);
             s.addEventListener('load', res);
         });
@@ -210,6 +205,23 @@ export default class PdfDownload extends Component {
                 font: 'Roboto-Bold',
             }
         );
+
+        offset += 0.1;
+        offset += this.renderText(
+            ctx,
+            'Generated at ' + new Date().toISOString(),
+            {
+                scale,
+                x: margin,
+                y: offset,
+                lineHeight: 1.0,
+                maxWidth: maxLineWidth,
+                color: 'white',
+                fontSize: 0.14,
+                font: 'Roboto-Bold',
+            }
+        );
+
         offset = sectionStart + sectionHeight;
 
         // BODY
@@ -304,8 +316,8 @@ export default class PdfDownload extends Component {
 
         offset += this.renderText(
             ctx,
-            'Use to log in to Steemit.com and do social networking ' +
-                'actions, like posting, commenting and voting.',
+            'Use to log in to apps such as Steemit.com and perform social ' +
+                'actions like posting, commenting and voting.',
             {
                 scale,
                 x: margin + qrSize + 0.1,
@@ -322,7 +334,7 @@ export default class PdfDownload extends Component {
         offset += this.renderText(ctx, keys.postingPrivate, {
             scale,
             x: margin + qrSize + 0.1,
-            y: sectionStart + sectionHeight - 0.75,
+            y: sectionStart + sectionHeight - 0.6,
             lineHeight: lineHeight,
             maxWidth: maxLineWidth,
             color: 'black',
@@ -366,7 +378,7 @@ export default class PdfDownload extends Component {
 
         offset += this.renderText(
             ctx,
-            'Use to encrypt and decrypt private messages.',
+            'Use to encrypt and decrypt private transfer memos.',
             {
                 scale,
                 x: margin + qrSize + 0.1,
@@ -383,7 +395,7 @@ export default class PdfDownload extends Component {
         offset += this.renderText(ctx, keys.memoPrivate, {
             scale,
             x: margin + qrSize + 0.1,
-            y: sectionStart + sectionHeight - 0.75,
+            y: sectionStart + sectionHeight - 0.6,
             lineHeight: lineHeight,
             maxWidth: maxLineWidth,
             color: 'black',
@@ -430,7 +442,7 @@ export default class PdfDownload extends Component {
 
         offset += this.renderText(
             ctx,
-            'Use for monetary and wallet related actions, like ' +
+            'Use for monetary and wallet related actions, such as ' +
                 'transferring tokens or powering up and down.',
             {
                 scale,
@@ -448,7 +460,7 @@ export default class PdfDownload extends Component {
         offset += this.renderText(ctx, keys.activePrivate, {
             scale,
             x: margin + qrSize + 0.1,
-            y: sectionStart + sectionHeight - 0.75,
+            y: sectionStart + sectionHeight - 0.6,
             lineHeight: lineHeight,
             maxWidth: maxLineWidth,
             color: 'black',
@@ -480,7 +492,7 @@ export default class PdfDownload extends Component {
 
         offset += 0.1;
 
-        offset += this.renderText(ctx, ['Private Owner Key'].join(''), {
+        offset += this.renderText(ctx, 'Private Owner Key', {
             scale,
             x: margin + qrSize + 0.1,
             y: offset,
@@ -493,9 +505,10 @@ export default class PdfDownload extends Component {
 
         offset += this.renderText(
             ctx,
-            'This key is used to reset all your other keys. If your account ' +
-                'is compromised, use this key to recover your account within 30 ' +
-                'days at https://steemitwallet.com.',
+            'This key is used to reset all your other keys. It is ' +
+                'recommended to keep it offline at all times. If your ' +
+                'account is compromised, use this key to recover it ' +
+                'within 30 days at https://steemitwallet.com.',
             {
                 scale,
                 x: margin + qrSize + 0.1,
@@ -512,7 +525,7 @@ export default class PdfDownload extends Component {
         offset += this.renderText(ctx, keys.ownerPrivate, {
             scale,
             x: margin + qrSize + 0.1,
-            y: sectionStart + sectionHeight - 0.75,
+            y: sectionStart + sectionHeight - 0.6,
             lineHeight: lineHeight,
             maxWidth: maxLineWidth - qrSize - 0.1,
             color: 'black',
@@ -593,10 +606,9 @@ export default class PdfDownload extends Component {
         offset += 0.1;
         offset += this.renderText(
             ctx,
-            'Public keys are associated with usernames and can be used ' +
-                'to look up associated transactions on the blockchain. Your ' +
-                'public keys are not required for login. You can also view ' +
-                'these anytime at: https://steemd.com/@' +
+            'Public keys are associated with usernames and are used to ' +
+                'encrypt and verify messages. Your public keys are not required ' +
+                'for login. You can view these anytime at: https://steemd.com/@' +
                 this.props.name,
             {
                 scale,
@@ -613,8 +625,6 @@ export default class PdfDownload extends Component {
         offset = sectionStart + sectionHeight;
 
         // PUBLIC KEYS
-
-        offset += 0.2;
 
         this.renderText(ctx, 'Posting Public', {
             scale,

@@ -13,7 +13,7 @@ import { FormattedHTMLMessage } from 'app/Translator';
 
 class UserWallet extends React.Component {
     render() {
-        const { account, gprops } = this.props;
+        const { account, gprops, walletUrl } = this.props;
 
         // do not render if account is not loaded or available
         if (!account) return null;
@@ -33,7 +33,7 @@ class UserWallet extends React.Component {
             <div className="UserWallet">
                 <div className="UserWallet__balance row zebra">
                     <div className="column small-12 medium-8">
-                        STEEM POWER
+                        STEEM POWER{' '}
                         {delegated_steem != 0 ? (
                             <span className="secondary">
                                 {tt(
@@ -54,6 +54,11 @@ class UserWallet extends React.Component {
                         ) : null}
                     </div>
                 </div>
+                <div className="wallet-link row zebra">
+                    <p>
+                        <a href={walletUrl}>Go to wallet</a>
+                    </p>
+                </div>
             </div>
         );
     }
@@ -63,7 +68,9 @@ export default connect(
     // mapStateToProps
     (state, ownProps) => {
         const gprops = state.global.get('props');
+        const walletUrl = state.app.get('walletUrl');
         return {
+            walletUrl,
             ...ownProps,
             gprops: state.global.get('props').toJS(),
         };

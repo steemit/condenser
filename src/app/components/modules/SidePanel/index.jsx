@@ -1,11 +1,18 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import tt from 'counterpart';
 import CloseButton from 'app/components/elements/CloseButton';
 import Icon from 'app/components/elements/Icon';
 import { Link } from 'react-router';
 
-const SidePanel = ({ alignment, visible, hideSidePanel, username }) => {
+const SidePanel = ({
+    alignment,
+    visible,
+    hideSidePanel,
+    username,
+    walletUrl,
+}) => {
     if (process.env.BROWSER) {
         visible && document.addEventListener('click', hideSidePanel);
         !visible && document.removeEventListener('click', hideSidePanel);
@@ -60,10 +67,30 @@ const SidePanel = ({ alignment, visible, hideSidePanel, username }) => {
                 link: `/tags`,
             },
             {
+                value: 'market',
+                label: tt('navigation.currency_market'),
+                link: `${walletUrl}/market`,
+            },
+            {
                 value: 'advertise',
                 label: tt('navigation.advertise'),
                 link: 'https://staticfiles.steemit.com/SteemitMediaKit.pdf',
                 isExternal: true,
+            },
+            {
+                value: 'recover_account_step_1',
+                label: tt('navigation.stolen_account_recovery'),
+                link: `${walletUrl}/recover_account_step_1`,
+            },
+            {
+                value: 'change_password',
+                label: tt('navigation.change_account_password'),
+                link: `${walletUrl}/change_password`,
+            },
+            {
+                value: 'vote_for_witnesses',
+                label: tt('navigation.vote_for_witnesses'),
+                link: `${walletUrl}/~witnesses`,
             },
         ],
         exchanges: [
@@ -206,4 +233,13 @@ SidePanel.defaultProps = {
     username: undefined,
 };
 
-export default SidePanel;
+export default connect(
+    (state, ownProps) => {
+        const walletUrl = state.app.get('walletUrl');
+        return {
+            walletUrl,
+            ...ownProps,
+        };
+    },
+    dispatch => ({})
+)(SidePanel);

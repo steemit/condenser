@@ -400,11 +400,8 @@ class LoginForm extends Component {
                     <PdfDownload
                         name={username.value}
                         password={password.value}
-                        showCanvas={false}
-                        scale={200.0}
                         widthInches={8.5}
                         heightInches={11.0}
-                        qrSize={0.9}
                         label="Download a PDF with keys and instructions"
                     />
                 </div>

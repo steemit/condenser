@@ -265,9 +265,9 @@ export default class PdfDownload extends Component {
         offset += 0.1;
         offset += this.renderText(
             ctx,
-            'Each Steem Key has a public and private key to encrypt and ' +
-                'decrypt data. Private Keys are required to login or ' +
-                'authenticate transactions.',
+            'Because Steem is a blockchain protocol, every Steem account ' +
+                'has sets of public and private key pairs that are used for the ' +
+                'decentralized authentication, encryption and decryption of data.',
             {
                 scale,
                 x: margin,
@@ -316,8 +316,8 @@ export default class PdfDownload extends Component {
 
         offset += this.renderText(
             ctx,
-            'Use to log in to apps such as Steemit.com and perform social ' +
-                'actions like posting, commenting and voting.',
+            'Used to log in to apps such as Steemit.com and perform social ' +
+                'actions such as posting, commenting, and voting.',
             {
                 scale,
                 x: margin + qrSize + 0.1,
@@ -378,7 +378,7 @@ export default class PdfDownload extends Component {
 
         offset += this.renderText(
             ctx,
-            'Use to encrypt and decrypt private transfer memos.',
+            'Used to decrypt private transfer memos.',
             {
                 scale,
                 x: margin + qrSize + 0.1,
@@ -442,7 +442,7 @@ export default class PdfDownload extends Component {
 
         offset += this.renderText(
             ctx,
-            'Use for monetary and wallet related actions, such as ' +
+            'Used for monetary and wallet related actions, such as ' +
                 'transferring tokens or powering up and down.',
             {
                 scale,

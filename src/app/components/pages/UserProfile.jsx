@@ -139,7 +139,13 @@ export default class UserProfile extends React.Component {
     render() {
         const {
             state: { showResteem },
-            props: { current_user, global_status, follow, accountname },
+            props: {
+                current_user,
+                global_status,
+                follow,
+                accountname,
+                walletUrl,
+            },
             onPrint,
         } = this;
         const username = current_user ? current_user.get('username') : null;
@@ -442,6 +448,19 @@ export default class UserProfile extends React.Component {
             );
         }
 
+        let rewardsMenu = [
+            {
+                link: `${walletUrl}/@${accountname}/curation-rewards`,
+                label: tt('g.curation_rewards'),
+                value: tt('g.curation_rewards'),
+            },
+            {
+                link: `${walletUrl}/@${accountname}/author-rewards`,
+                label: tt('g.author_rewards'),
+                value: tt('g.author_rewards'),
+            },
+        ];
+
         const top_menu = (
             <div className="row UserProfile__top-menu">
                 <div className="columns small-10 medium-12 medium-expand">
@@ -470,6 +489,12 @@ export default class UserProfile extends React.Component {
                                 {tt('g.replies')}
                             </Link>
                         </li>
+                        <DropdownMenu
+                            items={rewardsMenu}
+                            el="li"
+                            selected={tt('g.rewards')}
+                            position="right"
+                        />
                     </ul>
                 </div>
                 <div className="columns shrink">
@@ -618,6 +643,7 @@ module.exports = {
         (state, ownProps) => {
             const current_user = state.user.get('current');
             const accountname = ownProps.routeParams.accountname.toLowerCase();
+            const walletUrl = state.app.get('walletUrl');
 
             return {
                 discussions: state.global.get('discussion_idx'),
@@ -629,6 +655,7 @@ module.exports = {
                 follow: state.global.get('follow'),
                 follow_count: state.global.get('follow_count'),
                 blogmode: state.app.getIn(['user_preferences', 'blogmode']),
+                walletUrl,
             };
         },
         dispatch => ({

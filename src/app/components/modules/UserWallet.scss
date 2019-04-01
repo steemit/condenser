@@ -1,12 +1,21 @@
+.UserWallet {
+    padding-top: 2rem;
+
+    .wallet-link {
+        margin-top: 1rem;
+        padding-left: 1rem;
+    }
+}
+
 .UserWallet__balance {
   padding-bottom: 1rem;
   padding-top: 1rem;
 
   &.UserWallet__balance.zebra {
       @include themify($themes) {
-        background-color: themed('tableRowEvenBackgroundColor');  
-        color: themed('textColorPrimary');  
-      }   
+        background-color: themed('tableRowEvenBackgroundColor');
+        color: themed('textColorPrimary');
+      }
   }
 }
 
@@ -20,10 +29,10 @@
   flex-wrap: wrap;
 
   @include themify($themes) {
-    border: themed('border');  
-    background-color: themed('highlightBackgroundColor');  
-    color: themed('textColorPrimary');  
-  }     
+    border: themed('border');
+    background-color: themed('highlightBackgroundColor');
+    color: themed('textColorPrimary');
+  }
 
   &-text {
     font-weight: bold;

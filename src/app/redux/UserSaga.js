@@ -198,6 +198,7 @@ function* usernamePasswordLogin2({
         const private_key = PrivateKey.fromWif(password);
         login_wif_owner_pubkey = private_key.toPublicKey().toString();
         private_keys = fromJS({
+            owner_private: isRole('owner', () => private_key),
             posting_private: isRole('posting', () => private_key),
             active_private: isRole('active', () => private_key),
             memo_private: private_key,
@@ -237,6 +238,12 @@ function* usernamePasswordLogin2({
     if (hasActiveAuth) {
         console.log('Rejecting due to detected active auth');
         yield put(userActions.loginError({ error: 'active_login_blocked' }));
+        return;
+    }
+    const hasOwnerAuth = authority.get('owner') === 'full';
+    if (hasOwnerAuth) {
+        console.log('Rejecting due to detected owner auth');
+        yield put(userActions.loginError({ error: 'owner_login_blocked' }));
         return;
     }
 

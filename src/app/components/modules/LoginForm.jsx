@@ -391,12 +391,6 @@ class LoginForm extends Component {
             >
                 <p>{tt('loginform_jsx.login_warning_body')}</p>
                 <div>
-                    <a
-                        href={`${walletUrl}/@${username.value}/permissions`}
-                        target="_blank"
-                    >
-                        {tt('loginform_jsx.login_warning_link_text')}
-                    </a>
                     <PdfDownload
                         name={username.value}
                         password={password.value}
@@ -404,6 +398,12 @@ class LoginForm extends Component {
                         heightInches={11.0}
                         label="Download a PDF with keys and instructions"
                     />
+                    <a
+                        href={`${walletUrl}/@${username.value}/permissions`}
+                        target="_blank"
+                    >
+                        {tt('loginform_jsx.login_warning_link_text')}
+                    </a>
                 </div>
                 <div className="login-modal-buttons">
                     <br />

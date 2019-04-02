@@ -19,6 +19,7 @@ export default class PdfDownload extends Component {
     constructor(props) {
         super(props);
         this.downloadPdf = this.downloadPdf.bind(this);
+        this.state = { loaded: false };
     }
 
     // Generate a list of public and private keys from a master password
@@ -44,6 +45,7 @@ export default class PdfDownload extends Component {
     async componentDidMount() {
         // Load jsPDF. It does not work with webpack, so it must be loaded here.
         // On the plus side, it is only loaded when the warning page is shown.
+        this.setState({ loaded: false });
         await new Promise((res, rej) => {
             const s = document.createElement('script');
             s.type = 'text/javascript';
@@ -76,6 +78,7 @@ export default class PdfDownload extends Component {
             document.body.appendChild(s);
             s.addEventListener('load', res);
         });
+        this.setState({ loaded: true });
     }
 
     render() {
@@ -86,15 +89,17 @@ export default class PdfDownload extends Component {
                     style={{ display: 'none' }}
                     className="pdf-logo"
                 />
-                <button
-                    style={{ display: 'block' }}
-                    onClick={e => {
-                        this.downloadPdf();
-                        e.preventDefault();
-                    }}
-                >
-                    {this.props.label}
-                </button>
+                {this.state.loaded && (
+                    <button
+                        style={{ display: 'block' }}
+                        onClick={e => {
+                            this.downloadPdf();
+                            e.preventDefault();
+                        }}
+                    >
+                        {this.props.label}
+                    </button>
+                )}
             </div>
         );
     }
@@ -191,6 +196,7 @@ export default class PdfDownload extends Component {
             font: 'Roboto-Bold',
         });
 
+        /*
         offset += 0.1;
         offset += this.renderText(
             ctx,
@@ -206,11 +212,12 @@ export default class PdfDownload extends Component {
                 font: 'Roboto-Bold',
             }
         );
+        */
 
-        offset += 0.1;
+        offset += 0.15;
         offset += this.renderText(
             ctx,
-            'Generated at ' + new Date().toISOString(),
+            'Generated at ' + new Date().toISOString() + ' by steemit.com',
             {
                 scale,
                 x: margin,

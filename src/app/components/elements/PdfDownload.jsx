@@ -217,7 +217,9 @@ export default class PdfDownload extends Component {
         offset += 0.15;
         offset += this.renderText(
             ctx,
-            'Generated at ' + new Date().toISOString() + ' by steemit.com',
+            'Generated at ' +
+                new Date().toISOString().replace(/\.\d{3}/, '') +
+                ' by steemit.com',
             {
                 scale,
                 x: margin,
@@ -720,6 +722,17 @@ export default class PdfDownload extends Component {
             color: 'black',
             fontSize: 0.14,
             font: 'RobotoMono-Regular',
+        });
+
+        this.renderText(ctx, 'v0.1', {
+            scale,
+            x: maxLineWidth - 0.2,
+            y: offset,
+            lineHeight: lineHeight,
+            maxWidth: maxLineWidth,
+            color: '#bbbbbb',
+            fontSize: 0.14,
+            font: 'Roboto-Regular',
         });
 
         return ctx;

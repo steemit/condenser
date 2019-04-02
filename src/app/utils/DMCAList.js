@@ -271,6 +271,7 @@ export default `
 /avengers/@moviescounter/avengers-infinity-war-full-movie-download-bluray-720p
 /movies/@mariampk456/2idifu-avengers-infinity-war-avengers-3-full-movie-in-1080p-hd-dvdrip-bluerayrip
 /vengadores/@kurayukamu/vengadores-infinity-war-2018-pelicula-completa-online-espanol-en-latino
+/false-flag/@ronsheckelson/sandy-hook-alleged-victims-alive-and-well
 `
     .trim()
     .split('\n');

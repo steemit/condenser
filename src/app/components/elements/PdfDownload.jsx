@@ -149,7 +149,7 @@ export default class PdfDownload extends Component {
     renderPdf(keys, filename) {
         const widthInches = this.props.widthInches, //8.5,
             lineHeight = 1.2,
-            margin = 0.2,
+            margin = 0.3,
             maxLineWidth = widthInches - margin * 2.0,
             fontSize = 24,
             scale = 72, //ptsPerInch
@@ -277,7 +277,8 @@ export default class PdfDownload extends Component {
             ctx,
             'Instead of password based authentication, blockchain accounts ' +
                 'have a set of public and private key pairs that are used for ' +
-                'authentication as well as the encryption and decryption of data.',
+                'authentication as well as the encryption and decryption of ' +
+                'data. Do not share this file with anyone.',
             {
                 scale,
                 x: margin,
@@ -333,7 +334,7 @@ export default class PdfDownload extends Component {
                 x: margin + qrSize + 0.1,
                 y: offset,
                 lineHeight: lineHeight,
-                maxWidth: maxLineWidth,
+                maxWidth: maxLineWidth - (qrSize + 0.1),
                 color: 'black',
                 fontSize: 0.14,
                 font: 'Roboto-Regular',
@@ -394,7 +395,7 @@ export default class PdfDownload extends Component {
                 x: margin + qrSize + 0.1,
                 y: offset,
                 lineHeight: lineHeight,
-                maxWidth: maxLineWidth,
+                maxWidth: maxLineWidth - (qrSize + 0.1),
                 color: 'black',
                 fontSize: 0.14,
                 font: 'Roboto-Regular',
@@ -459,7 +460,7 @@ export default class PdfDownload extends Component {
                 x: margin + qrSize + 0.1,
                 y: offset,
                 lineHeight: lineHeight,
-                maxWidth: maxLineWidth,
+                maxWidth: maxLineWidth - (qrSize + 0.1),
                 color: 'black',
                 fontSize: 0.14,
                 font: 'Roboto-Regular',
@@ -524,7 +525,7 @@ export default class PdfDownload extends Component {
                 x: margin + qrSize + 0.1,
                 y: offset,
                 lineHeight: lineHeight,
-                maxWidth: maxLineWidth - qrSize - 0.1,
+                maxWidth: maxLineWidth - (qrSize + 0.1),
                 color: 'black',
                 fontSize: 0.14,
                 font: 'Roboto-Regular',
@@ -727,7 +728,7 @@ export default class PdfDownload extends Component {
         this.renderText(ctx, 'v0.1', {
             scale,
             x: maxLineWidth - 0.2,
-            y: offset,
+            y: offset - 0.2,
             lineHeight: lineHeight,
             maxWidth: maxLineWidth,
             color: '#bbbbbb',

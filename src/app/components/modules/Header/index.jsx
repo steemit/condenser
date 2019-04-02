@@ -101,6 +101,7 @@ class Header extends React.Component {
             showSidePanel,
             navigate,
             account_meta,
+            walletUrl,
         } = this.props;
 
         /*Set the document.title on each header render.*/
@@ -231,6 +232,7 @@ class Header extends React.Component {
         const replies_link = `/@${username}/recent-replies`;
         const account_link = `/@${username}`;
         const comments_link = `/@${username}/comments`;
+        const wallet_link = `${walletUrl}/@${username}`;
         const settings_link = `/@${username}/settings`;
         const pathCheck = userPath === '/submit.html' ? true : null;
 
@@ -247,6 +249,12 @@ class Header extends React.Component {
                 icon: 'reply',
                 value: tt('g.replies'),
             },
+            {
+                link: wallet_link,
+                icon: 'wallet',
+                value: tt('g.wallet'),
+            },
+
             {
                 link: '#',
                 icon: 'eye',
@@ -380,6 +388,7 @@ const mapStateToProps = (state, ownProps) => {
         : state.offchain.get('account');
 
     const gptEnabled = state.app.getIn(['googleAds', 'gptEnabled']);
+    const walletUrl = state.app.get('walletUrl');
 
     return {
         username,
@@ -390,6 +399,7 @@ const mapStateToProps = (state, ownProps) => {
         current_account_name,
         showAnnouncement: state.user.get('showAnnouncement'),
         gptEnabled,
+        walletUrl,
         ...ownProps,
     };
 };

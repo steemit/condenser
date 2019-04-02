@@ -9,7 +9,7 @@ export default function ServerHTML({
     meta,
     shouldSeeAds,
     gptEnabled,
-    gptSlots,
+    gptBidding,
 }) {
     let page_title = title;
     return (
@@ -178,6 +178,7 @@ export default function ServerHTML({
                         src="https://www.googletagservices.com/tag/js/gpt.js"
                     />
                 ) : null}
+                {gptEnabled ? <script src="/javascripts/prebid.js" /> : null}
                 {gptEnabled ? (
                     <script
                         dangerouslySetInnerHTML={{
@@ -187,14 +188,45 @@ export default function ServerHTML({
                       console.log('Set up googletag');
                       googletag.cmd.push(function() {
                           console.log('Preparing to enable googletag services');
-                          googletag.pubads().enableSingleRequest();
-                          googletag.pubads().setTargeting('edition',['new-york']);
-                          googletag.pubads().collapseEmptyDivs(true,true);
+                          googletag.pubads().setTargeting('edition', ['new-york']);
+                          googletag.pubads().collapseEmptyDivs(true, true);
                           googletag.pubads().disableInitialLoad();
-                          googletag.pubads().enableAsyncRendering();
                           googletag.enableServices();
                           console.log('Enabled googletag services');
                       });
+
+                      var pbjs = pbjs || {};
+                      pbjs.que = pbjs.que || [];
+                      pbjs.que.push(function() {
+                          pbjs.addAdUnits(${JSON.stringify(
+                              gptBidding.ad_units
+                          )});
+                          pbjs.setConfig({
+                              priceGranularity: ${JSON.stringify(
+                                  gptBidding.custom_config
+                              )},
+                              currency: ${JSON.stringify(
+                                  gptBidding.system_currency
+                              )}
+                          });
+                          pbjs.requestBids({
+                              bidsBackHandler: initAdserver,
+                              timeout: ${JSON.stringify(
+                                  gptBidding.prebid_timeout
+                              )}
+                          });
+                      });
+
+                      setTimeout(function() {
+                          if (pbjs.initAdserverSet) return;
+                          pbjs.initAdserverSet = true;
+                          googletag.cmd.push(function() {
+                              pbjs.que.push(function() {
+                                  pbjs.setTargetingForGPTAsync();
+                                  googletag.pubads().refresh();
+                              });
+                          });
+                      }, ${JSON.stringify(gptBidding.failsafe_timeout)});
                   `,
                         }}
                     />

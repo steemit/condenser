@@ -234,6 +234,12 @@ function* usernamePasswordLogin2({
         state.user.getIn(['authority', username])
     );
     const hasActiveAuth = authority.get('active') === 'full';
+    if (hasActiveAuth) {
+        console.log('Rejecting due to detected active auth');
+        yield put(userActions.loginError({ error: 'active_login_blocked' }));
+        return;
+    }
+
     const accountName = account.get('name');
     authority = authority.set('active', 'none');
     yield put(userActions.setAuthority({ accountName, auth: authority }));
@@ -281,15 +287,19 @@ function* usernamePasswordLogin2({
     const active_pubkey = account.getIn(['active', 'key_auths', 0, 0]);
     const posting_pubkey = account.getIn(['posting', 'key_auths', 0, 0]);
 
+    const memo_pubkey = private_keys.has('memo_private')
+        ? private_keys
+              .get('memo_private')
+              .toPublicKey()
+              .toString()
+        : null;
+
     if (
-        private_keys.get('memo_private') &&
-        account.get('memo_key') !==
-            private_keys
-                .get('memo_private')
-                .toPublicKey()
-                .toString()
+        account.get('memo_key') !== memo_pubkey ||
+        memo_pubkey === owner_pubkey ||
+        memo_pubkey === active_pubkey
     )
-        // provided password did not yield memo key
+        // provided password did not yield memo key, or matched active/owner
         private_keys = private_keys.remove('memo_private');
 
     if (posting_pubkey === owner_pubkey || posting_pubkey === active_pubkey) {
@@ -302,17 +312,6 @@ function* usernamePasswordLogin2({
         localStorage.removeItem('autopost2');
         return;
     }
-
-    const memo_pubkey = private_keys.has('memo_private')
-        ? private_keys
-              .get('memo_private')
-              .toPublicKey()
-              .toString()
-        : null;
-
-    if (memo_pubkey === owner_pubkey || memo_pubkey === active_pubkey)
-        // Memo key could be saved in local storage.. In RAM it is not purged upon LOCATION_CHANGE
-        private_keys = private_keys.remove('memo_private');
 
     // If user is signing operation by operaion and has no saved login, don't save to RAM
     if (!operationType || saveLogin) {

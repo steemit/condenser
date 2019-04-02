@@ -205,9 +205,9 @@ class LoginForm extends Component {
                 <span>
                     {tt(
                         'loginform_jsx.this_password_is_bound_to_your_account_owner_key'
-                    )}
+                    )}{' '}
                     {tt('loginform_jsx.however_you_can_use_it_to')}
-                    {tt('loginform_jsx.update_your_password')}
+                    {tt('loginform_jsx.update_your_password')}{' '}
                     {tt('loginform_jsx.to_obtain_a_more_secure_set_of_keys')}
                 </span>
             );

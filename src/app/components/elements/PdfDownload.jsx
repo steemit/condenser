@@ -266,9 +266,9 @@ export default class PdfDownload extends Component {
         offset += 0.1;
         offset += this.renderText(
             ctx,
-            'Because Steem is a blockchain protocol, every Steem account ' +
-                'has sets of public and private key pairs that are used for the ' +
-                'decentralized authentication, encryption and decryption of data.',
+            'Instead of password based authentication, blockchain accounts ' +
+                'have a set of public and private key pairs that are used for ' +
+                'authentication as well as the encryption and decryption of data.',
             {
                 scale,
                 x: margin,
@@ -444,7 +444,7 @@ export default class PdfDownload extends Component {
         offset += this.renderText(
             ctx,
             'Used for monetary and wallet related actions, such as ' +
-                'transferring tokens or powering up and down.',
+                'transferring tokens or powering STEEM up and down.',
             {
                 scale,
                 x: margin + qrSize + 0.1,

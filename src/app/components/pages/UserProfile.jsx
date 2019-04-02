@@ -501,13 +501,8 @@ export default class UserProfile extends React.Component {
                     <ul className="menu" style={{ flexWrap: 'wrap' }}>
                         <li>
                             <a
-                                href={`/@${accountname}/transfers`}
+                                href={`${walletUrl}/@${accountname}`}
                                 className={walletClass}
-                                onClick={e => {
-                                    e.preventDefault();
-                                    browserHistory.push(e.target.pathname);
-                                    return false;
-                                }}
                             >
                                 {tt('g.wallet')}
                             </a>

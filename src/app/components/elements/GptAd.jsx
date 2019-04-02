@@ -39,7 +39,7 @@ class GptAd extends React.Component {
 
         return (
             <div
-                className="gpt-ad"
+                className={`gpt-ad kind-${this.props.kind}`}
                 style={{ width: '100%' }}
                 id={this.props.slot}
             />

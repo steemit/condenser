@@ -32,8 +32,11 @@ class Header extends React.Component {
     constructor() {
         super();
         this.gptadshown = event => {
-            const headerAd = document.querySelector('header .gpt-ad');
             // This makes sure that the sticky header doesn't overlap the welcome splash.
+            this.forceUpdate();
+        };
+        this.hideAnnouncement = event => {
+            this.props.hideAnnouncement(event);
             this.forceUpdate();
         };
     }
@@ -276,9 +279,12 @@ class Header extends React.Component {
             <Headroom>
                 <header className="Header">
                     {this.props.showAnnouncement && (
-                        <Announcement onClose={this.props.hideAnnouncement} />
+                        <Announcement onClose={this.hideAnnouncement} />
                     )}
-                    <ConnectedGptAd slotName="top_nav" />
+                    {/* If announcement is shown, ad will not render unless it's in a parent div! */}
+                    <div>
+                        <ConnectedGptAd slotName="top_nav" />
+                    </div>
                     <nav className="row Header__nav">
                         <div className="small-5 large-4 columns Header__logotype">
                             {/*LOGO*/}

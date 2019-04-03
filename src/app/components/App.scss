@@ -1,15 +1,6 @@
 .App {
   min-height: 100vh;
-}
-
-.App.withAnnouncement {
-  padding-top: 170px;
-  @include MQ(M) {
-    padding-top: 150px;
-  }
-  @include MQ(L) {
-    padding-top: 100px;
-  }
+  padding-top: 0px;
 }
 
 .App__content {

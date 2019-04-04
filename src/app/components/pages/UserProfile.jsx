@@ -502,6 +502,7 @@ export default class UserProfile extends React.Component {
                         <li>
                             <a
                                 href={`${walletUrl}/@${accountname}`}
+                                target="_blank"
                                 className={walletClass}
                             >
                                 {tt('g.wallet')}

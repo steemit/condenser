@@ -10,6 +10,8 @@ export const SET_USER_PREFERENCES = 'app/SET_USER_PREFERENCES';
 export const TOGGLE_NIGHTMODE = 'app/TOGGLE_NIGHTMODE';
 export const TOGGLE_BLOGMODE = 'app/TOGGLE_BLOGMODE';
 export const RECEIVE_FEATURE_FLAGS = 'app/RECEIVE_FEATURE_FLAGS';
+export const REFRESH_WEATHER = 'app/REFRESH_WEATHER';
+export const REFRESHED_WEATHER = 'app/REFRESHED_WEATHER';
 
 export const defaultState = Map({
     loading: false,
@@ -76,6 +78,12 @@ export default function reducer(state = defaultState, action = {}) {
                 ? state.get('featureFlags').merge(action.flags)
                 : Map(action.flags);
             return state.set('featureFlags', newFlags);
+        case REFRESH_WEATHER:
+            return state.set('weatherLoading', true); // saga
+        case REFRESHED_WEATHER:
+            return state
+                .set('weatherLoading', false)
+                .set('weatherData', Map(action.payload));
         default:
             return state;
     }
@@ -120,6 +128,15 @@ export const toggleBlogmode = () => ({
 export const receiveFeatureFlags = flags => ({
     type: RECEIVE_FEATURE_FLAGS,
     flags,
+});
+
+export const refreshWeather = () => ({
+    type: REFRESH_WEATHER,
+});
+
+export const refreshedWeather = payload => ({
+    type: REFRESHED_WEATHER,
+    payload,
 });
 
 export const selectors = {

@@ -127,5 +127,6 @@
   "steem_market_cache": {
     "ttl": 7200,
     "key": "steem-market"
-  }
+  },
+  "weather_endpoint": null
 }

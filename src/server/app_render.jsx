@@ -70,6 +70,8 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
                 env: process.env.NODE_ENV,
                 walletUrl: config.wallet_url,
                 steemMarket: ctx.steemMarketData,
+                weatherEndpoint: config.weather_endpoint,
+                weatherData: ctx.weatherData,
             },
         };
 

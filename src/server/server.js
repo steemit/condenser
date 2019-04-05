@@ -6,6 +6,7 @@ import koa_logger from 'koa-logger';
 import requestTime from './requesttimings';
 import StatsLoggerClient from './utils/StatsLoggerClient';
 import { SteemMarket } from './utils/SteemMarket';
+import { Weather } from './utils/Weather';
 import hardwareStats from './hardwarestats';
 import cluster from 'cluster';
 import os from 'os';
@@ -132,6 +133,13 @@ function convertEntriesToArrays(obj) {
 const steemMarket = new SteemMarket();
 app.use(function*(next) {
     this.steemMarketData = yield steemMarket.get();
+    yield next;
+});
+
+// Fetch cached weather data for homepage
+const weather = new Weather();
+app.use(function*(next) {
+    this.weatherData = yield weather.get();
     yield next;
 });
 

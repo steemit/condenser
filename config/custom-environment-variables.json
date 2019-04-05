@@ -57,5 +57,6 @@
   "google_ad_client": "GOOGLE_AD_CLIENT",
   "gpt_enabled": "GPT_ENABLED",
   "steem_market_endpoint": "STEEM_MARKET_ENDPOINT",
-  "steem_market_token": "STEEM_MARKET_TOKEN"
+  "steem_market_token": "STEEM_MARKET_TOKEN",
+  "weather_endpoint": "WEATHER_ENDPOINT"
 }

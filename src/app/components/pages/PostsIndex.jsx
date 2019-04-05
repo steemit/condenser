@@ -16,6 +16,7 @@ import SidebarLinks from 'app/components/elements/SidebarLinks';
 import SidebarNewUsers from 'app/components/elements/SidebarNewUsers';
 import Notices from 'app/components/elements/Notices';
 import SteemMarket from 'app/components/elements/SteemMarket';
+import Weather from 'app/components/elements/Weather';
 import ConnectedGptAd from 'app/components/elements/ConnectedGptAd';
 import ArticleLayoutSelector from 'app/components/modules/ArticleLayoutSelector';
 import Topics from './Topics';
@@ -250,6 +251,7 @@ class PostsIndex extends React.Component {
                 </article>
 
                 <aside className="c-sidebar c-sidebar--right">
+                    <Weather />
                     {this.props.isBrowser &&
                     !this.props.maybeLoggedIn &&
                     !this.props.username ? (

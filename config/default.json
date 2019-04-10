@@ -1,19 +1,18 @@
 {
-  "database_url": "mysql://root:password@127.0.0.1/steemit_dev",
-  "disable_signups": false,
   "facebook_app_id": false,
   "google_analytics_id": false,
   "helmet": {
     "directives": {
       "childSrc": "'self' player.twitch.tv www.youtube.com staticxx.facebook.com w.soundcloud.com player.vimeo.com",
-      "connectSrc": "'self' steemit.com https://api.steemit.com api.blocktrades.us",
-      "defaultSrc": "'self' www.youtube.com staticxx.facebook.com player.vimeo.com",
+      "connectSrc": "securepubads.g.doubleclick.net 'self' steemit.com https://api.steemit.com api.blocktrades.us",
+      "defaultSrc": "tpc.googlesyndication.com 'self' www.youtube.com staticxx.facebook.com player.vimeo.com",
       "fontSrc": "data: fonts.gstatic.com",
       "frameAncestors": "'none'",
+      "frameSrc": "'self' googleads.g.doubleclick.net https:",
       "imgSrc": "* data:",
       "objectSrc": "'none'",
       "pluginTypes": "application/pdf",
-      "scriptSrc": "'self' www.google-analytics.com connect.facebook.net",
+      "scriptSrc": "'unsafe-inline' 'unsafe-eval' data: https: 'self' www.google-analytics.com connect.facebook.net",
       "styleSrc": "'self' 'unsafe-inline' fonts.googleapis.com",
       "reportUri": "/api/v1/csp_violation"
     },
@@ -23,7 +22,6 @@
   "img_proxy_prefix": "https://steemitdevimages.com/",
   "ipfs_prefix": false,
   "mixpanel": false,
-  "newrelic": false,
   "notify": {
     "gcm_key": "google secret key"
   },
@@ -32,34 +30,16 @@
     "secret_key": false,
     "site_key": false
   },
-  "registrar": {
-    "account": "-",
-    "fee": "0.5 STEEM",
-    "delegation": "150250.000000 VESTS",
-    "signing_key": "5J..."
-  },
-  "requestAccountRecovery": {
-    "recovery_account": "steem",
-    "signing_key": "5J..."
-  },
   "sendgrid": {
     "from": "noreply@example.com",
     "key": "SG.xxx_yyyy",
     "templates": {
-      "confirm_email": false,
-      "waiting_list_invite": false
     }
   },
   "server_session_secret": "exiKdyF+IwRIXJDmtGIl4vWUz4i3eVSISpfZoeYc0s4=",
   "session_cookie_key": "stm-dev",
   "session_key": "steemses",
   "site_domain": "steemitdev.com",
-  "tarantool": {
-    "host": "localhost",
-    "password": "",
-    "port": "3301",
-    "username": "guest"
-  },
   "telesign": {
     "customer_id": false,
     "rest_api_key": false
@@ -88,7 +68,7 @@
     "in_feed_1": {
       "slot_id": "9514544128",
       "layout_key": "-fb+5w+4e-db+86",
-      "every": 8
+      "every": 15
     }
   },
   "gpt_enabled": null,
@@ -114,8 +94,8 @@
       "args": ["/21784675435/steemit_right-navigation", [[120, 600], [120, 60], [125, 125], [120, 240], [160, 600], [120, 90]], "div-gpt-ad-1548778861089-0"]
     },
     "bottom_post": {
-      "slot_id": "div-gpt-ad-1548778891289-0",
-      "args": ["/21784675435/steemit_bottom-of-post", [[336, 280], [320, 50], [890, 222], [300, 100], [728, 90], [234, 60], [468, 60], [970, 90]], "div-gpt-ad-1548778891289-0"]
+      "slot_id": "div-gpt-ad-1553686705417-0",
+      "args": ["/21784675435/steemit_bottom-of-post", [[300, 100], [234, 60], [728, 90], [220, 90], [970, 90], [336, 280], [890, 222], [320, 50], [468, 60]], "div-gpt-ad-1553686705417-0"]
     },
     "in_feed": {
       "slot_id": "div-gpt-ad-1548778917304-0",

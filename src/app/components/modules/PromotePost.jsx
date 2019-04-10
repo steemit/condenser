@@ -178,12 +178,9 @@ export default connect(
             errorCallback,
         }) => {
             const username = currentUser.get('username');
-            const successCallback = () => {
-                dispatch(
-                    globalActions.getState({ url: `@${username}/transfers` })
-                ); // refresh transfer history
-                onClose();
-            };
+            alert('Promoted posts are currently disabled');
+            //window.location.replace($STM_config.wallet_url + `/transfer?to=null&memo=@${author}/${permlink}&amount=`+parseFloat(amount, 10).toFixed(3) + ' ' + asset)
+
             const operation = {
                 from: username,
                 to: 'null',
@@ -196,14 +193,6 @@ export default connect(
                         ) + '.',
                 },
             };
-            dispatch(
-                transactionActions.broadcastOperation({
-                    type: 'transfer',
-                    operation,
-                    successCallback,
-                    errorCallback,
-                })
-            );
         },
     })
 )(PromotePost);

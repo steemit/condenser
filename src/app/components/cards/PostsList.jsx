@@ -306,7 +306,7 @@ export default connect(
             .get('pinned_posts')
             .get('pinned_posts')
             .toJS();
-        const shouldSeeAds = state.app.getIn(['googleAds', 'shouldSeeAds']);
+        const shouldSeeAds = state.app.getIn(['googleAds', 'enabled']);
         const adSlots = state.app.getIn(['googleAds', 'adSlots']).toJS();
         return {
             ...props,

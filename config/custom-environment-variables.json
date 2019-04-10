@@ -1,6 +1,4 @@
 {
-  "database_url": "SDC_DATABASE_URL",
-  "disable_signups": "SDC_DISABLE_SIGNUPS",
   "facebook_app_id": "SDC_FACEBOOK_APP_ID",
   "google_analytics_id": "SDC_GOOGLE_ANALYTICS_ID",
   "helmet": {
@@ -19,7 +17,6 @@
   },
   "img_proxy_prefix": "SDC_IMAGE_PROXY_PREFIX",
   "mixpanel": "SDC_MIXPANEL",
-  "newrelic": "SDC_NEWRELIC_LICENSE_KEY",
   "notify": {
     "gcm_key": "SDC_NOTIFY_GCM_KEY"
   },
@@ -28,32 +25,14 @@
     "secret_key": "SDC_RECAPTCHA_SECRET_KEY",
     "site_key": "SDC_RECAPTCHA_SITE_KEY"
   },
-  "registrar": {
-    "account": "SDC_REGISTRAR_ACCOUNT",
-    "fee": "SDC_REGISTRAR_AMOUNT",
-    "signing_key": "SDC_REGISTRAR_SIGNINGKEY",
-    "delegation": "SDC_REGISTRAR_DELEGATION"
-  },
-  "requestAccountRecovery": {
-    "recovery_account": "SDC_RECOVERY_ACCOUNT",
-    "signing_key": "SDC_RECOVERY_SIGNINGKEY"
-  },
   "sendgrid": {
     "from": "SDC_SENDGRID_FROM",
     "key": "SDC_SENDGRID_API_KEY",
     "templates": {
-      "confirm_email": "SDC_SENDGRID_CONFIRMTEMPLATE",
-      "waiting_list_invite": "SDC_SENDGRID_WAITINGTEMPLATE"
     }
   },
   "server_session_secret": "SDC_SESSION_SECRETKEY",
   "site_domain": "SDC_SITE_DOMAIN",
-  "tarantool": {
-    "host": "SDC_TARANTOOL_HOSTNAME",
-    "password": "SDC_TARANTOOL_PASSWORD",
-    "port": "SDC_TARANTOOL_PORT",
-    "username": "SDC_TARANTOOL_USERNAME"
-  },
   "telesign": {
     "customer_id": "SDC_TELESIGN_CUSTOMER_ID",
     "rest_api_key": "SDC_TELESIGN_API_KEY"

@@ -20,7 +20,6 @@ import { translate } from 'app/Translator';
 import DMCAUserList from 'app/utils/DMCAUserList';
 
 export const userWatches = [
-    takeLatest('@@router/LOCATION_CHANGE', removeHighSecurityKeys), // keep first to remove keys early when a page change happens
     takeLatest(
         'user/lookupPreviousOwnerAuthority',
         lookupPreviousOwnerAuthority
@@ -30,7 +29,6 @@ export const userWatches = [
     takeLatest(userActions.SAVE_LOGIN, saveLogin_localStorage),
     takeLatest(userActions.LOGOUT, logout),
     takeLatest(userActions.LOGIN_ERROR, loginError),
-    takeLatest(userActions.LOAD_SAVINGS_WITHDRAW, loadSavingsWithdraw),
     takeLatest(userActions.UPLOAD_IMAGE, uploadImage),
     takeLatest(userActions.ACCEPT_TERMS, function*() {
         try {
@@ -51,61 +49,9 @@ export const userWatches = [
     },
 ];
 
-const highSecurityPages = [
-    /\/market/,
-    /\/@.+\/(transfers|permissions|password)/,
-    /\/~witnesses/,
-];
-
-function* loadSavingsWithdraw() {
-    const username = yield select(state =>
-        state.user.getIn(['current', 'username'])
-    );
-    const to = yield call([api, api.getSavingsWithdrawToAsync], username);
-    const fro = yield call([api, api.getSavingsWithdrawFromAsync], username);
-
-    const m = {};
-    for (const v of to) m[v.id] = v;
-    for (const v of fro) m[v.id] = v;
-
-    const withdraws = List(fromJS(m).values()).sort((a, b) =>
-        strCmp(a.get('complete'), b.get('complete'))
-    );
-
-    yield put(
-        userActions.set({
-            key: 'savings_withdraws',
-            value: withdraws,
-        })
-    );
-}
-
 const strCmp = (a, b) => (a > b ? 1 : a < b ? -1 : 0);
 
-function* isHighSecurityPage(pathname = null) {
-    pathname =
-        pathname || (yield select(state => state.global.get('pathname')));
-    return highSecurityPages.find(p => p.test(pathname)) != null;
-}
-
-function* removeHighSecurityKeys({ payload: { pathname } }) {
-    // Let the user keep the active key when going from one high security page
-    // to another. This helps when the user logins into the Wallet then the
-    // Permissions tab appears (it was hidden). This keeps them from getting
-    // logged out when they click on Permissions (which is really bad because
-    // that tab disappears again).
-    const highSecurityPage = yield isHighSecurityPage(pathname);
-    if (!highSecurityPage) {
-        yield put(userActions.removeHighSecurityKeys());
-    }
-}
-
 function* shouldShowLoginWarning({ username, password }) {
-    // If it's a high-security login page, don't show the warning.
-    if (yield isHighSecurityPage()) {
-        return false;
-    }
-
     // If it's a master key, show the warning.
     if (!auth.isWif(password)) {
         const accounts = yield api.getAccountsAsync([username]);
@@ -228,7 +174,7 @@ function* usernamePasswordLogin2({
         [username, userProvidedRole] = username.split('/');
     }
 
-    const highSecurityLogin = yield isHighSecurityPage();
+    const pathname = yield select(state => state.global.get('pathname'));
     const isRole = (role, fn) =>
         !userProvidedRole || role === userProvidedRole ? fn() : undefined;
 
@@ -252,6 +198,7 @@ function* usernamePasswordLogin2({
         const private_key = PrivateKey.fromWif(password);
         login_wif_owner_pubkey = private_key.toPublicKey().toString();
         private_keys = fromJS({
+            owner_private: isRole('owner', () => private_key),
             posting_private: isRole('posting', () => private_key),
             active_private: isRole('active', () => private_key),
             memo_private: private_key,
@@ -281,7 +228,6 @@ function* usernamePasswordLogin2({
         payload: {
             account,
             private_keys,
-            highSecurityLogin,
             login_owner_pubkey,
         },
     });
@@ -289,11 +235,21 @@ function* usernamePasswordLogin2({
         state.user.getIn(['authority', username])
     );
     const hasActiveAuth = authority.get('active') === 'full';
-    if (!highSecurityLogin) {
-        const accountName = account.get('name');
-        authority = authority.set('active', 'none');
-        yield put(userActions.setAuthority({ accountName, auth: authority }));
+    if (hasActiveAuth) {
+        console.log('Rejecting due to detected active auth');
+        yield put(userActions.loginError({ error: 'active_login_blocked' }));
+        return;
     }
+    const hasOwnerAuth = authority.get('owner') === 'full';
+    if (hasOwnerAuth) {
+        console.log('Rejecting due to detected owner auth');
+        yield put(userActions.loginError({ error: 'owner_login_blocked' }));
+        return;
+    }
+
+    const accountName = account.get('name');
+    authority = authority.set('active', 'none');
+    yield put(userActions.setAuthority({ accountName, auth: authority }));
     const fullAuths = authority.reduce(
         (r, auth, type) => (auth === 'full' ? r.add(type) : r),
         Set()
@@ -308,8 +264,7 @@ function* usernamePasswordLogin2({
             login_wif_owner_pubkey === owner_pub_key
         ) {
             yield put(userActions.loginError({ error: 'owner_login_blocked' }));
-            return;
-        } else if (!highSecurityLogin && hasActiveAuth) {
+        } else if (hasActiveAuth) {
             yield put(
                 userActions.loginError({ error: 'active_login_blocked' })
             );
@@ -332,40 +287,13 @@ function* usernamePasswordLogin2({
     if (authority.get('posting') !== 'full')
         private_keys = private_keys.remove('posting_private');
 
-    if (!highSecurityLogin || authority.get('active') !== 'full')
+    if (authority.get('active') !== 'full')
         private_keys = private_keys.remove('active_private');
 
     const owner_pubkey = account.getIn(['owner', 'key_auths', 0, 0]);
     const active_pubkey = account.getIn(['active', 'key_auths', 0, 0]);
     const posting_pubkey = account.getIn(['posting', 'key_auths', 0, 0]);
 
-    if (
-        private_keys.get('memo_private') &&
-        account.get('memo_key') !==
-            private_keys
-                .get('memo_private')
-                .toPublicKey()
-                .toString()
-    )
-        // provided password did not yield memo key
-        private_keys = private_keys.remove('memo_private');
-
-    if (!highSecurityLogin) {
-        console.log('Not high security login');
-        if (
-            posting_pubkey === owner_pubkey ||
-            posting_pubkey === active_pubkey
-        ) {
-            yield put(
-                userActions.loginError({
-                    error:
-                        'This login gives owner or active permissions and should not be used here.  Please provide a posting only login.',
-                })
-            );
-            localStorage.removeItem('autopost2');
-            return;
-        }
-    }
     const memo_pubkey = private_keys.has('memo_private')
         ? private_keys
               .get('memo_private')
@@ -373,9 +301,24 @@ function* usernamePasswordLogin2({
               .toString()
         : null;
 
-    if (memo_pubkey === owner_pubkey || memo_pubkey === active_pubkey)
-        // Memo key could be saved in local storage.. In RAM it is not purged upon LOCATION_CHANGE
+    if (
+        account.get('memo_key') !== memo_pubkey ||
+        memo_pubkey === owner_pubkey ||
+        memo_pubkey === active_pubkey
+    )
+        // provided password did not yield memo key, or matched active/owner
         private_keys = private_keys.remove('memo_private');
+
+    if (posting_pubkey === owner_pubkey || posting_pubkey === active_pubkey) {
+        yield put(
+            userActions.loginError({
+                error:
+                    'This login gives owner or active permissions and should not be used here.  Please provide a posting only login.',
+            })
+        );
+        localStorage.removeItem('autopost2');
+        return;
+    }
 
     // If user is signing operation by operaion and has no saved login, don't save to RAM
     if (!operationType || saveLogin) {
@@ -435,21 +378,6 @@ function* usernamePasswordLogin2({
             console.log('Logging in as', username);
             const response = yield serverApiLogin(username, signatures);
             const body = yield response.json();
-
-            if (justLoggedIn) {
-                // If ads are enabled, reload the page instead of changing the browser
-                // history when they log in, so headers will get re-requested.
-                const adsEnabled = yield select(state =>
-                    state.app.getIn(['googleAds', 'enabled'])
-                );
-                if (adsEnabled) {
-                    var url = new URL(window.location.href);
-                    url.searchParams.set('auth', 'true');
-                    console.log('New post-login URL', url.toString());
-                    window.location.replace(url.toString());
-                    return;
-                }
-            }
         }
     } catch (error) {
         // Does not need to be fatal
@@ -569,15 +497,6 @@ function* logout(action) {
     }
 
     yield serverApiLogout();
-
-    // If ads are enabled, reload the page instead of changing the browser
-    // history when they log out, so headers will get re-requested.
-    const adsEnabled = yield select(state =>
-        state.app.getIn(['googleAds', 'enabled'])
-    );
-    if (logoutType == 'default' && adsEnabled) {
-        window.location.reload();
-    }
 }
 
 function* loginError({

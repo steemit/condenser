@@ -58,29 +58,9 @@ export default {
             //require.ensure([], (require) => {
             cb(null, [require('app/components/pages/ChangePasswordPage')]);
             //});
-        } else if (route.page === 'PickAccount') {
-            //require.ensure([], (require) => {
-            cb(null, [require('app/components/pages/PickAccount')]);
-            //});
-        } else if (route.page === 'CreateAccount') {
-            //require.ensure([], (require) => {
-            cb(null, [require('app/components/pages/CreateAccount')]);
-            //});
-        } else if (route.page === 'Approval') {
-            //require.ensure([], (require) => {
-            cb(null, [require('app/components/pages/Approval')]);
-            //});
         } else if (route.page === 'RecoverAccountStep1') {
             //require.ensure([], (require) => {
             cb(null, [require('app/components/pages/RecoverAccountStep1')]);
-            //});
-        } else if (route.page === 'RecoverAccountStep2') {
-            //require.ensure([], (require) => {
-            cb(null, [require('app/components/pages/RecoverAccountStep2')]);
-            //});
-        } else if (route.page === 'WaitingList') {
-            //require.ensure([], (require) => {
-            cb(null, [require('app/components/pages/WaitingList')]);
             //});
         } else if (route.page === 'Witnesses') {
             //require.ensure([], (require) => {

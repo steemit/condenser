@@ -47,6 +47,7 @@ export const userWatches = [
             // (exceedingly rare) ignore, UI will fall back to feed_price
         }
     },
+    takeLatest(userActions.HIDE_PINNED_POST, hidePinnedPost),
 ];
 
 const strCmp = (a, b) => (a > b ? 1 : a < b ? -1 : 0);
@@ -635,9 +636,21 @@ function* uploadImage({
     };
     xhr.upload.onprogress = function(event) {
         if (event.lengthComputable) {
-            const percent = Math.round(event.loaded / event.total * 100);
+            const percent = Math.round(event.loadedx / event.total * 100);
             progress({ message: `Uploading ${percent}%` });
         }
     };
     xhr.send(formData);
+}
+
+function* hidePinnedPost(action) {
+    console.log('userSaga hidePinnedPost', action);
+    const closedPinnedPosts = yield select(state =>
+        state.user.get('closedPinnedPosts')
+    );
+    console.log('userSaga closedPinnedPosts', closedPinnedPosts);
+    localStorage.setItem(
+        'closedPinnedPosts',
+        JSON.stringify(closedPinnedPosts)
+    );
 }

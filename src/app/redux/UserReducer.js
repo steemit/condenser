@@ -34,6 +34,7 @@ const SHOW_POST_ADVANCED_SETTINGS = 'user/SHOW_POST_ADVANCED_SETTINGS';
 const HIDE_POST_ADVANCED_SETTINGS = 'user/HIDE_POST_ADVANCED_SETTINGS';
 const HIDE_ANNOUNCEMENT = 'user/HIDE_ANNOUNCEMENT';
 const SHOW_ANNOUNCEMENT = 'user/SHOW_ANNOUNCEMENT';
+export const HIDE_PINNED_POST = 'user/HIDE_PINNED_POST';
 
 // Saga-related
 export const UPLOAD_IMAGE = 'user/UPLOAD_IMAGE';
@@ -48,6 +49,7 @@ const defaultState = fromJS({
     show_side_panel: false,
     maybeLoggedIn: false,
     showAnnouncement: true,
+    closedPinnedPosts: {},
 });
 
 export default function reducer(state = defaultState, action) {
@@ -235,6 +237,13 @@ export default function reducer(state = defaultState, action) {
                 sessionStorage.setItem('hideAnnouncement', 'true');
             return state.set('showAnnouncement', false);
 
+        case HIDE_PINNED_POST:
+            const closedPinnedPosts = state.get('closedPinnedPosts') || {};
+            return state.set('closedPinnedPosts', {
+                ...closedPinnedPosts,
+                [payload.id]: true,
+            }); // saga
+
         default:
             return state;
     }
@@ -388,4 +397,9 @@ export const hideAnnouncement = () => ({
 
 export const showAnnouncement = () => ({
     type: SHOW_ANNOUNCEMENT,
+});
+
+export const hidePinnedPost = payload => ({
+    type: HIDE_PINNED_POST,
+    payload,
 });

@@ -5,8 +5,8 @@ import * as appActions from 'app/redux/AppReducer';
 class Weather extends Component {
     render() {
         const weatherData = this.props.weatherData;
-        if (!weatherData) {
-            return;
+        if (!weatherData || Object.keys(weatherData).length <= 0) {
+            return null;
         }
 
         if (this.props.weatherLoading) {
@@ -20,6 +20,7 @@ class Weather extends Component {
         const previous = this.props.previous;
         const next = this.props.next;
         const refresh = this.props.refresh;
+        const numPeriods = weatherData.properties.periods.length;
         const today = weatherData.properties.periods[0];
         const startTime = new Date(today.startTime).toLocaleString();
         const detailedForecast = today.detailedForecast;

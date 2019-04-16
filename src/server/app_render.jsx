@@ -101,6 +101,7 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
             shouldSeeAds: googleAds.enabled,
             gptEnabled: googleAds.gptEnabled,
             gptSlots: googleAds.gptSlots,
+            adClient: googleAds.client,
         };
         ctx.status = statusCode;
         ctx.body =

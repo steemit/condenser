@@ -86,16 +86,16 @@
       "args": ["/21784675435/steemit_premium_left-navigation", [[125, 125], [120, 90], [120, 600], [120, 60], [160, 600], [120, 240]], "div-gpt-ad-1548778771262-0"]
     },
     "left_nav": {
-      "slot_id": "div-gpt-ad-1548778799404-0",
-      "args": ["/21784675435/steemit_left-navigation", [[160, 600], [120, 240], [120, 600], [120, 60], [125, 125], [120, 90]], "div-gpt-ad-1548778799404-0"]
+      "slot_id": "div-gpt-ad-1554687231046-0",
+      "args": ["/21784675435/steemit_left-navigation/steemit_left-navigation_prebid", [[120, 600],[160,600]], "div-gpt-ad-1554687231046-0"]
     },
     "right_nav": {
       "slot_id": "div-gpt-ad-1548778861089-0",
       "args": ["/21784675435/steemit_right-navigation", [[120, 600], [120, 60], [125, 125], [120, 240], [160, 600], [120, 90]], "div-gpt-ad-1548778861089-0"]
     },
     "bottom_post": {
-      "slot_id": "div-gpt-ad-1553686705417-0",
-      "args": ["/21784675435/steemit_bottom-of-post", [[300, 100], [234, 60], [728, 90], [220, 90], [970, 90], [336, 280], [890, 222], [320, 50], [468, 60]], "div-gpt-ad-1553686705417-0"]
+      "slot_id": "div-gpt-ad-1551233873698-0",
+      "args": ["/21784675435/steemit_bottom-of-post/steemit_bottom-of-post_prebid", [[728, 90]], "div-gpt-ad-1551233873698-0"]
     },
     "in_feed": {
       "slot_id": "div-gpt-ad-1548778917304-0",

@@ -82,20 +82,21 @@ function* syncPinnedPosts() {
     );
 
     // Mark seen posts.
-    const seenPinnedPosts = pinnedPosts.map(post =>
-        post.set(
+    const seenPinnedPosts = pinnedPosts.get('pinned_posts').map(post => {
+        const id = `${post.get('author')}/${post.get('permlink')}`;
+        return post.set(
             'seen',
-            localStorage.getItem(`pinned-post-seen:${post.get('url')}`) ===
-                'true'
-        )
-    );
+            localStorage.getItem(`pinned-post-seen:${id}`) === 'true'
+        );
+    });
 
     // Look up seen post URLs.
     yield put(globalActions.syncPinnedPosts({ pinnedPosts: seenPinnedPosts }));
 
     // Mark all pinned posts as seen.
-    pinnedPosts.forEach(post => {
-        localStorage.setItem(`pinned-post-seen:${post.get('url')}`, 'true');
+    pinnedPosts.get('pinned_posts').forEach(post => {
+        const id = `${post.get('author')}/${post.get('permlink')}`;
+        localStorage.setItem(`pinned-post-seen:${id}`, 'true');
     });
 }
 
@@ -214,20 +215,19 @@ export function* fetchData(action) {
         ];
     } else {
         // this should never happen. undefined behavior
-        console.log('unexpected `order`', order);
         call_name = 'getDiscussionsByTrendingAsync';
         args = [{ limit: constants.FETCH_DATA_BATCH_SIZE }];
     }
     yield put(appActions.fetchDataBegin());
     try {
         const firstPermlink = permlink;
-        var fetched = 0;
-        var endOfData = false;
-        var fetchLimitReached = false;
-        var fetchDone = false;
-        var batch = 0;
+        let fetched = 0;
+        let endOfData = false;
+        let fetchLimitReached = false;
+        let fetchDone = false;
+        let batch = 0;
         while (!fetchDone) {
-            var data = yield call([api, api[call_name]], ...args);
+            const data = yield call([api, api[call_name]], ...args);
 
             endOfData = data.length < constants.FETCH_DATA_BATCH_SIZE;
 

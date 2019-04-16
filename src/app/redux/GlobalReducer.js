@@ -74,7 +74,7 @@ export default function reducer(state = defaultState, action = {}) {
     if (pathname) {
         const route = resolveRoute(pathname);
         if (route.page === 'PostsIndex') {
-            let postCategory = route.params[1];
+            const postCategory = route.params[1];
             state = state.set('postCategory', postCategory);
         }
     }
@@ -120,7 +120,7 @@ export default function reducer(state = defaultState, action = {}) {
             return payload.pinnedPosts.reduce((acc, pinnedPost) => {
                 const author = pinnedPost.get('author');
                 const permlink = pinnedPost.get('permlink');
-                return state.updateIn(
+                return acc.updateIn(
                     ['content', `${author}/${permlink}`],
                     Map(),
                     p => p.mergeDeep(pinnedPost)

@@ -16,7 +16,7 @@ import SidebarLinks from 'app/components/elements/SidebarLinks';
 import SidebarNewUsers from 'app/components/elements/SidebarNewUsers';
 import Notices from 'app/components/elements/Notices';
 import SteemMarket from 'app/components/elements/SteemMarket';
-import ConnectedGptAd from 'app/components/elements/ConnectedGptAd';
+import GptAd from 'app/components/elements/GptAd';
 import ArticleLayoutSelector from 'app/components/modules/ArticleLayoutSelector';
 import Topics from './Topics';
 import SortOrder from 'app/components/elements/SortOrder';
@@ -266,7 +266,7 @@ class PostsIndex extends React.Component {
                     <SteemMarket />
                     {this.props.gptSlots ? (
                         <div className="sidebar-ad">
-                            <ConnectedGptAd slotName="right_nav" />
+                            <GptAd slotName="right_nav" />
                         </div>
                     ) : null}
                 </aside>
@@ -292,7 +292,7 @@ class PostsIndex extends React.Component {
                     </small>
                     {this.props.gptSlots ? (
                         <div className="sidebar-ad">
-                            <ConnectedGptAd slotName="left_nav" />
+                            <GptAd slotName="left_nav" />
                         </div>
                     ) : null}
                 </aside>

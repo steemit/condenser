@@ -18,7 +18,7 @@ import { SIGNUP_URL } from 'shared/constants';
 import SteemLogo from 'app/components/elements/SteemLogo';
 import normalizeProfile from 'app/utils/NormalizeProfile';
 import Announcement from 'app/components/elements/Announcement';
-import ConnectedGptAd from 'app/components/elements/ConnectedGptAd';
+import GptAd from 'app/components/elements/GptAd';
 
 class Header extends React.Component {
     static propTypes = {
@@ -283,7 +283,7 @@ class Header extends React.Component {
                     )}
                     {/* If announcement is shown, ad will not render unless it's in a parent div! */}
                     <div>
-                        <ConnectedGptAd slotName="top_nav" />
+                        <GptAd slotName="top_nav" />
                     </div>
                     <nav className="row Header__nav">
                         <div className="small-5 large-4 columns Header__logotype">

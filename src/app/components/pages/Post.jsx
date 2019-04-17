@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import { sortComments } from 'app/components/cards/Comment';
 // import { Link } from 'react-router';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
-import GptAd from 'app/components/elements/GptAd';
+import ConnectedGptAd from 'app/components/elements/ConnectedGptAd';
 import { Set } from 'immutable';
 import tt from 'counterpart';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
@@ -225,6 +225,11 @@ class Post extends React.Component {
                         </div>
                     </div>
                 )}
+                {this.props.gptSlots ? (
+                    <div className="Post_footer__ad">
+                        <ConnectedGptAd slotName="bottom_comments" />
+                    </div>
+                ) : null}
                 <div id="#comments" className="Post_comments row hfeed">
                     <div className="column large-12">
                         <div className="Post_comments__content">
@@ -246,10 +251,7 @@ class Post extends React.Component {
                 </div>
                 {this.props.gptSlots ? (
                     <div className="Post_footer__ad">
-                        <GptAd
-                            slot={this.props.gptSlots['bottom_post']['slot_id']}
-                            args={this.props.gptSlots['bottom_post']['args']}
-                        />
+                        <ConnectedGptAd slotName="bottom_post" />
                     </div>
                 ) : null}
             </div>

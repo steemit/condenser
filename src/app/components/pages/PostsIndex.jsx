@@ -292,6 +292,11 @@ class PostsIndex extends React.Component {
                     </small>
                     {this.props.gptSlots ? (
                         <div className="sidebar-ad">
+                            <ConnectedGptAd slotName="left_nav_2" />
+                        </div>
+                    ) : null}
+                    {this.props.gptSlots ? (
+                        <div className="sidebar-ad">
                             <ConnectedGptAd slotName="left_nav" />
                         </div>
                     ) : null}

@@ -190,8 +190,9 @@ class PostsList extends React.Component {
         const showPinnedPosts = arePinnedPostsVisible && arePinnedPostsReady;
 
         const pinned = this.props.pinned;
-        const renderPinned = pinnedPosts =>
-            pinnedPosts.map(pinnedPost => {
+        const renderPinned = pinnedPosts => {
+            if (!process.env.BROWSER) return null;
+            return pinnedPosts.map(pinnedPost => {
                 const id = `${pinnedPost.author}/${pinnedPost.permlink}`;
                 if (localStorage.getItem(`hidden-pinned-post-${id}`))
                     return null;
@@ -228,6 +229,7 @@ class PostsList extends React.Component {
                     </li>
                 );
             });
+        };
         const renderSummary = items =>
             items.map((item, i) => {
                 const every = this.props.adSlots.in_feed_1.every;

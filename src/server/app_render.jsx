@@ -4,7 +4,6 @@ import { renderToString } from 'react-dom/server';
 import { VIEW_MODE_WHISTLE, PARAM_VIEW_MODE } from '../shared/constants';
 import ServerHTML from './server-html';
 import { serverRender } from '../shared/UniversalRender';
-import models from 'db/models';
 import secureRandom from 'secure-random';
 import ErrorPage from 'server/server-error';
 import { determineViewMode } from '../app/utils/Links';
@@ -54,24 +53,14 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
             pinned_posts: await ctx.app.pinnedPostsPromise,
             login_challenge,
         };
-        if (ctx.session.arec) {
-            const account_recovery_record = await models.AccountRecoveryRequest.findOne(
-                {
-                    attributes: ['id', 'account_name', 'status', 'provider'],
-                    where: { id: ctx.session.arec, status: 'confirmed' },
-                }
-            );
-            if (account_recovery_record) {
-                offchain.recover_account = account_recovery_record.account_name;
-            }
-        }
 
         const googleAds = {
-            shouldSeeAds: !!ctx.adsEnabled,
             enabled: !!config.google_ad_enabled,
             test: !!config.google_ad_test,
             client: config.google_ad_client,
             adSlots: config.google_ad_slots,
+            gptEnabled: !!config.gpt_enabled,
+            gptSlots: config.gpt_slots,
         };
         // ... and that's the end of user-session-related SSR
         const initial_state = {
@@ -79,6 +68,8 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
                 viewMode: determineViewMode(ctx.request.search),
                 googleAds: googleAds,
                 env: process.env.NODE_ENV,
+                walletUrl: config.wallet_url,
+                steemMarket: ctx.steemMarketData,
             },
         };
 
@@ -102,8 +93,16 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
         } else {
             assets = resolvedAssets;
         }
-        const shouldSeeAds = googleAds.shouldSeeAds;
-        const props = { body, assets, title, meta, shouldSeeAds };
+        const props = {
+            body,
+            assets,
+            title,
+            meta,
+            shouldSeeAds: googleAds.enabled,
+            gptEnabled: googleAds.gptEnabled,
+            gptSlots: googleAds.gptSlots,
+            adClient: googleAds.client,
+        };
         ctx.status = statusCode;
         ctx.body =
             '<!DOCTYPE html>' + renderToString(<ServerHTML {...props} />);

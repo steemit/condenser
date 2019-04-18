@@ -76,9 +76,6 @@ export function* fetchState(location_change_action) {
 }
 
 function* syncPinnedPosts() {
-    // Bail if we're rendering serverside since there is no localStorage
-    if (!process.env.BROWSER) return null;
-
     // Get pinned posts from the store.
     const pinnedPosts = yield select(state =>
         state.offchain.get('pinned_posts')

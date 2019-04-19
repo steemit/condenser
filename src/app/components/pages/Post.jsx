@@ -246,10 +246,7 @@ class Post extends React.Component {
                 </div>
                 {this.props.gptSlots ? (
                     <div className="Post_footer__ad">
-                        <GptAd
-                            slot={this.props.gptSlots['bottom_post']['slot_id']}
-                            args={this.props.gptSlots['bottom_post']['args']}
-                        />
+                        <GptAd slotName="bottom_post" />
                     </div>
                 ) : null}
             </div>

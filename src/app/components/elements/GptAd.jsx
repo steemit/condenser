@@ -13,7 +13,7 @@ class GptAd extends Component {
 
             googletag.cmd.push(() => {
                 googletag.display(this.ad.slot_id);
-                googletag.pubads().refresh([this.ad.slot_id]);
+                googletag.pubads().refresh([slot]);
                 googletag
                     .pubads()
                     .addEventListener('slotRenderEnded', event => {

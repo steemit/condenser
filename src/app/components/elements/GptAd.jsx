@@ -9,18 +9,22 @@ class GptAd extends Component {
 
         googletag.cmd.push(() => {
             const slot = googletag.defineSlot(...this.ad.args);
-            slot.addService(googletag.pubads());
+            if (slot) {
+                slot.addService(googletag.pubads());
 
-            googletag.cmd.push(() => {
-                googletag.display(this.ad.slot_id);
-                googletag.pubads().refresh([slot]);
-                googletag
-                    .pubads()
-                    .addEventListener('slotRenderEnded', event => {
-                        console.info('Slot has been rendered:', event);
-                        window.dispatchEvent(new Event('gptadshown'));
-                    });
-            });
+                googletag.cmd.push(() => {
+                    googletag.display(this.ad.slot_id);
+                    googletag.pubads().refresh([slot]);
+                    googletag
+                        .pubads()
+                        .addEventListener('slotRenderEnded', event => {
+                            console.info('Slot has been rendered:', event);
+                            window.dispatchEvent(new Event('gptadshown'));
+                        });
+                });
+            } else {
+                console.error('Slot was not defined', this.ad);
+            }
         });
     }
     render() {

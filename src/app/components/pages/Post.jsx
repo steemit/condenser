@@ -225,6 +225,11 @@ class Post extends React.Component {
                         </div>
                     </div>
                 )}
+                {this.props.gptEnabled ? (
+                    <div className="Post_footer__ad">
+                        <GptAd slotName="bottom_post" />
+                    </div>
+                ) : null}
                 <div id="#comments" className="Post_comments row hfeed">
                     <div className="column large-12">
                         <div className="Post_comments__content">
@@ -244,9 +249,9 @@ class Post extends React.Component {
                         </div>
                     </div>
                 </div>
-                {this.props.gptSlots ? (
+                {this.props.gptEnabled ? (
                     <div className="Post_footer__ad">
-                        <GptAd slotName="bottom_post" />
+                        <GptAd slotName="basic_bottom_post" />
                     </div>
                 ) : null}
             </div>
@@ -273,6 +278,6 @@ export default connect((state, ownProps) => {
         ignoring,
         sortOrder:
             ownProps.router.getCurrentLocation().query.sort || 'trending',
-        gptSlots: state.app.getIn(['googleAds', 'gptSlots']).toJS(),
+        gptEnabled: state.app.getIn(['googleAds', 'gptEnabled']),
     };
 })(Post);

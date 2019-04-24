@@ -144,12 +144,12 @@ class MarkdownViewer extends Component {
         // HtmlReady inserts ~~~ embed:${id} type ~~~
         for (let section of cleanText.split('~~~ embed:')) {
             const match = section.match(
-                /^([A-Za-z0-9\?\=\_\-]+) (youtube|vimeo|twitch) (\d+) ~~~/
+                /^([A-Za-z0-9\?\=\_\-]+) (youtube|vimeo|twitch)\s?(\d+)? ~~~/
             );
             if (match && match.length >= 3) {
                 const id = match[1];
                 const type = match[2];
-                const startTime = match[3];
+                const startTime = match[3] ? parseInt(match[3]) : 0;
                 const w = large ? 640 : 480,
                     h = large ? 360 : 270;
                 if (type === 'youtube') {
@@ -159,7 +159,7 @@ class MarkdownViewer extends Component {
                             width={w}
                             height={h}
                             youTubeId={id}
-                            startTime={parseInt(startTime)}
+                            startTime={startTime}
                             frameBorder="0"
                             allowFullScreen="true"
                         />
@@ -197,7 +197,11 @@ class MarkdownViewer extends Component {
                 } else {
                     console.error('MarkdownViewer unknown embed type', type);
                 }
-                section = section.substring(`${id} ${type} ${startTime} ~~~`.length);
+                if (match[3]) {
+                    section = section.substring(`${id} ${type} ${startTime} ~~~`.length);
+                } else {
+                    section = section.substring(`${id} ${type} ~~~`.length);
+                }
                 if (section === '') continue;
             }
             sections.push(

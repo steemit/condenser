@@ -44,7 +44,7 @@ export default {
     imageFile: imageFile(),
     youTube: youTube(),
     youTubeId: /(?:(?:youtube.com\/watch\?v=)|(?:youtu.be\/)|(?:youtube.com\/embed\/))([A-Za-z0-9\_\-]+)/i,
-    vimeo: /https?:\/\/(?:vimeo.com\/|player.vimeo.com\/video\/)([0-9]+)(#t=((\d+)s){0,1})?\/*/,
+    vimeo: /https?:\/\/(?:vimeo.com\/|player.vimeo.com\/video\/)([0-9]+)\/?(#t=((\d+)s?))?\/?/,
     vimeoId: /(?:vimeo.com\/|player.vimeo.com\/video\/)([0-9]+)/,
     // simpleLink: new RegExp(`<a href="(.*)">(.*)<\/a>`, 'ig'),
     ipfsPrefix: /(https?:\/\/.*)?\/ipfs/i,

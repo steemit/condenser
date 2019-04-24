@@ -55,7 +55,6 @@ describe('Voting', () => {
     it('should render nothing if flag prop is true and user is not logged in.', () => {
         const mockStore = configureMockStore()({
             global: Map({}),
-            market: {},
             offchain: {},
             user: {},
             transaction: {},
@@ -80,7 +79,6 @@ describe('Voting', () => {
     it('should render flag if user is logged in and flag prop is true.', () => {
         const mockStore = configureMockStore()({
             global: mockGlobal,
-            market: {},
             offchain: {},
             user: mockUser,
             transaction: {},
@@ -108,7 +106,6 @@ describe('Voting', () => {
     it('should change state.weight and state.showWeight as expected when flag is clicked', () => {
         const mockStore = configureMockStore()({
             global: mockGlobal,
-            market: {},
             offchain: {},
             user: mockUser,
             transaction: {},
@@ -146,7 +143,6 @@ describe('Voting', () => {
     it('should not dispatch an action when flag is clicked and myVote is 0.', () => {
         const mockStore = configureMockStore()({
             global: mockGlobal,
-            market: {},
             offchain: {},
             user: mockUser,
             transaction: {},
@@ -177,7 +173,6 @@ describe('Voting', () => {
     it('should dispatch an action when flag is clicked and myVote is negative', () => {
         const mockStore = configureMockStore()({
             global: mockGlobal,
-            market: {},
             offchain: {},
             user: mockUser,
             transaction: {},
@@ -210,7 +205,6 @@ describe('Voting', () => {
     it('should render upvote and should not render flag if user is logged in and flag prop is false.', () => {
         const mockStore = configureMockStore()({
             global: mockGlobal,
-            market: {},
             offchain: {},
             user: mockUser,
             transaction: {},
@@ -236,7 +230,6 @@ describe('Voting', () => {
     it('should dispatch an action with payload when upvote button is clicked.', () => {
         const mockStore = configureMockStore()({
             global: mockGlobal,
-            market: {},
             offchain: {},
             user: mockUser,
             transaction: {},

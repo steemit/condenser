@@ -196,7 +196,7 @@ describe('htmlready', () => {
         const testString =
             '<html><p>before text https://www.youtube.com/watch?v=NrS9vvNgx7I after text</p></html>';
         const htmlified =
-            '<html xmlns="http://www.w3.org/1999/xhtml"><p>before text ~~~ embed:NrS9vvNgx7I youtube 0 ~~~ after text</p></html>';
+            '<html xmlns="http://www.w3.org/1999/xhtml"><p>before text ~~~ embed:NrS9vvNgx7I youtube ~~~ after text</p></html>';
         const res = HtmlReady(testString).html;
         expect(res).toEqual(htmlified);
     });
@@ -205,7 +205,7 @@ describe('htmlready', () => {
         const testString =
             '<html><p>before text https://vimeo.com/193628816/ after text</p></html>';
         const htmlified =
-            '<html xmlns="http://www.w3.org/1999/xhtml"><p>before text ~~~ embed:193628816 vimeo 0 ~~~ after text</p></html>';
+            '<html xmlns="http://www.w3.org/1999/xhtml"><p>before text ~~~ embed:193628816 vimeo ~~~ after text</p></html>';
         const res = HtmlReady(testString).html;
         expect(res).toEqual(htmlified);
     });
@@ -232,7 +232,7 @@ describe('htmlready', () => {
         const testString =
             '<html><p>https://vimeo.com/193628816/</p></html>';
         const htmlified =
-            '<html xmlns="http://www.w3.org/1999/xhtml"><p>~~~ embed:193628816 vimeo 0 ~~~</p></html>';
+            '<html xmlns="http://www.w3.org/1999/xhtml"><p>~~~ embed:193628816 vimeo ~~~</p></html>';
         const res = HtmlReady(testString).html;
         expect(res).toEqual(htmlified);
     });
@@ -250,7 +250,7 @@ describe('htmlready', () => {
         const testString =
             '<html><p>https://www.twitch.tv/videos/1234567890</p></html>';
         const htmlified =
-            '<html xmlns="http://www.w3.org/1999/xhtml"><p>~~~ embed:?video=1234567890 twitch 0 ~~~</p></html>';
+            '<html xmlns="http://www.w3.org/1999/xhtml"><p>~~~ embed:?video=1234567890 twitch ~~~</p></html>';
         const res = HtmlReady(testString).html;
         expect(res).toEqual(htmlified);
     });

@@ -317,7 +317,11 @@ function embedYouTubeNode(child, links, images) {
         const yt = youTubeId(data);
         if (!yt) return child;
 
-        child.data = data.replace(yt.url, `~~~ embed:${yt.id} youtube ${yt.startTime} ~~~`);
+        if (yt.startTime) {
+            child.data = data.replace(yt.url, `~~~ embed:${yt.id} youtube ${yt.startTime} ~~~`);
+        } else {
+            child.data = data.replace(yt.url, `~~~ embed:${yt.id} youtube ~~~`);
+        }
 
         if (links) links.add(yt.url);
         if (images) images.add(yt.thumbnail);
@@ -356,7 +360,11 @@ function embedVimeoNode(child, links /*images*/) {
         if (!vimeo) return child;
 
         const vimeoRegex = new RegExp(`${vimeo.url}(#t=${vimeo.startTime}s?)?`);
-        child.data = data.replace(vimeoRegex, `~~~ embed:${vimeo.id} vimeo ${vimeo.startTime} ~~~`);
+        if (vimeo.startTime > 0 ) {
+            child.data = data.replace(vimeoRegex, `~~~ embed:${vimeo.id} vimeo ${vimeo.startTime} ~~~`);
+        } else {
+            child.data = data.replace(vimeoRegex, `~~~ embed:${vimeo.id} vimeo ~~~`);
+        }
 
         if (links) links.add(vimeo.canonical);
         // if(images) images.add(vimeo.thumbnail) // not available
@@ -390,7 +398,7 @@ function embedTwitchNode(child, links /*images*/) {
 
         child.data = data.replace(
             twitch.url,
-            `~~~ embed:${twitch.id} twitch 0 ~~~`
+            `~~~ embed:${twitch.id} twitch ~~~`
         );
 
         if (links) links.add(twitch.canonical);

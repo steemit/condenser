@@ -101,7 +101,7 @@ class Post extends React.Component {
 
         // Don't render too many comments on server-side
         const commentLimit = 100;
-        if (global['process'] !== undefined && replies.length > commentLimit) {
+        if (global.process !== undefined && replies.length > commentLimit) {
             console.log(
                 `Too many comments, ${replies.length - commentLimit} omitted.`
             );
@@ -138,16 +138,16 @@ class Post extends React.Component {
             </div>
         );
 
-        let sort_orders = ['trending', 'votes', 'new', 'author_reputation'];
-        let sort_labels = [
+        const sort_orders = ['trending', 'votes', 'new', 'author_reputation'];
+        const sort_labels = [
             tt('post_jsx.comment_sort_order.trending'),
             tt('post_jsx.comment_sort_order.votes'),
             tt('post_jsx.comment_sort_order.age'),
             tt('post_jsx.comment_sort_order.reputation'),
         ];
-        let sort_menu = [];
+        const sort_menu = [];
         let sort_label;
-        let selflink = `/${dis.get('category')}/@${post}`;
+        const selflink = `/${dis.get('category')}/@${post}`;
         for (let o = 0; o < sort_orders.length; ++o) {
             if (sort_orders[o] == sortOrder) sort_label = sort_labels[o];
             sort_menu.push({
@@ -246,10 +246,7 @@ class Post extends React.Component {
                 </div>
                 {this.props.gptSlots ? (
                     <div className="Post_footer__ad">
-                        <GptAd
-                            slot={this.props.gptSlots['bottom_post']['slot_id']}
-                            args={this.props.gptSlots['bottom_post']['args']}
-                        />
+                        <GptAd slotName="bottom_post" />
                     </div>
                 ) : null}
             </div>

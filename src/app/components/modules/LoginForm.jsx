@@ -456,58 +456,6 @@ class LoginForm extends Component {
             </form>
         );
 
-        const loginWarningTitleText = (
-            <h3>{tt('loginform_jsx.login_warning_title')}</h3>
-        );
-
-        const loginWarningForm = (
-            <form
-                onSubmit={handleSubmit(() => {
-                    console.log('Login\treallySubmit');
-                    const data = {
-                        username: username.value,
-                        password: password.value,
-                        saveLogin: saveLogin.value,
-                        loginBroadcastOperation: loginBroadcastOperation,
-                    };
-                    reallySubmit(data, afterLoginRedirectToWelcome);
-                })}
-                method="post"
-            >
-                <p>{tt('loginform_jsx.login_warning_body')}</p>
-                <p>
-                    <a
-                        href={`${walletUrl}/@${username.value}/permissions`}
-                        target="_blank"
-                    >
-                        {tt('loginform_jsx.login_warning_link_text')}
-                    </a>
-                </p>
-                <div className="login-modal-buttons">
-                    <br />
-                    <button
-                        type="submit"
-                        disabled={submitting}
-                        className="button"
-                    >
-                        {submitLabel}
-                    </button>
-                    <button
-                        type="button float-right"
-                        disabled={submitting}
-                        className="button hollow"
-                        onClick={e => {
-                            e.preventDefault();
-                            console.log('Login\thideWarning');
-                            hideWarning();
-                        }}
-                    >
-                        {tt('g.cancel')}
-                    </button>
-                </div>
-            </form>
-        );
-
         return (
             <div className="LoginForm row">
                 <div className="column">

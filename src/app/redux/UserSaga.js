@@ -1,6 +1,6 @@
 import { fromJS, Set, List } from 'immutable';
 import { call, put, select, fork, takeLatest } from 'redux-saga/effects';
-import { api } from '@steemit/steem-js';
+import { api, auth } from '@steemit/steem-js';
 import { PrivateKey, Signature, hash } from '@steemit/steem-js/lib/auth/ecc';
 
 import { accountAuthLookup } from 'app/redux/AuthSaga';
@@ -20,16 +20,15 @@ import { translate } from 'app/Translator';
 import DMCAUserList from 'app/utils/DMCAUserList';
 
 export const userWatches = [
-    takeLatest('@@router/LOCATION_CHANGE', removeHighSecurityKeys), // keep first to remove keys early when a page change happens
     takeLatest(
         'user/lookupPreviousOwnerAuthority',
         lookupPreviousOwnerAuthority
     ),
+    takeLatest(userActions.CHECK_KEY_TYPE, checkKeyType),
     takeLatest(userActions.USERNAME_PASSWORD_LOGIN, usernamePasswordLogin),
     takeLatest(userActions.SAVE_LOGIN, saveLogin_localStorage),
     takeLatest(userActions.LOGOUT, logout),
     takeLatest(userActions.LOGIN_ERROR, loginError),
-    takeLatest(userActions.LOAD_SAVINGS_WITHDRAW, loadSavingsWithdraw),
     takeLatest(userActions.UPLOAD_IMAGE, uploadImage),
     takeLatest(userActions.ACCEPT_TERMS, function*() {
         try {
@@ -41,7 +40,7 @@ export const userWatches = [
     function* getLatestFeedPrice() {
         try {
             const history = yield call([api, api.getFeedHistoryAsync]);
-            const feed = history['price_history'];
+            const feed = history.price_history;
             const last = fromJS(feed[feed.length - 1]);
             yield put(userActions.setLatestFeedPrice(last));
         } catch (error) {
@@ -50,55 +49,45 @@ export const userWatches = [
     },
 ];
 
-const highSecurityPages = [
-    /\/market/,
-    /\/@.+\/(transfers|permissions|password)/,
-    /\/~witnesses/,
-];
-
-function* loadSavingsWithdraw() {
-    const username = yield select(state =>
-        state.user.getIn(['current', 'username'])
-    );
-    const to = yield call([api, api.getSavingsWithdrawToAsync], username);
-    const fro = yield call([api, api.getSavingsWithdrawFromAsync], username);
-
-    const m = {};
-    for (const v of to) m[v.id] = v;
-    for (const v of fro) m[v.id] = v;
-
-    const withdraws = List(fromJS(m).values()).sort((a, b) =>
-        strCmp(a.get('complete'), b.get('complete'))
-    );
-
-    yield put(
-        userActions.set({
-            key: 'savings_withdraws',
-            value: withdraws,
-        })
-    );
-}
-
 const strCmp = (a, b) => (a > b ? 1 : a < b ? -1 : 0);
 
-// function* getCurrentAccountWatch() {
-//     // yield* takeLatest('user/SHOW_TRANSFER', getCurrentAccount);
-// }
+function* shouldShowLoginWarning({ username, password }) {
+    // If it's a master key, show the warning.
+    if (!auth.isWif(password)) {
+        const accounts = yield api.getAccountsAsync([username]);
+        const account = accounts[0];
+        const pubKey = PrivateKey.fromSeed(username + 'posting' + password)
+            .toPublicKey()
+            .toString();
+        const postingPubKeys = account.posting.key_auths[0];
+        return postingPubKeys.includes(pubKey);
+    }
 
-function* removeHighSecurityKeys({ payload: { pathname } }) {
-    const highSecurityPage =
-        highSecurityPages.find(p => p.test(pathname)) != null;
-    // Let the user keep the active key when going from one high security page to another.  This helps when
-    // the user logins into the Wallet then the Permissions tab appears (it was hidden).  This keeps them
-    // from getting logged out when they click on Permissions (which is really bad because that tab
-    // disappears again).
-    if (!highSecurityPage) yield put(userActions.removeHighSecurityKeys());
+    // For any other case, don't show the warning.
+    return false;
 }
 
 /**
-    @arg {object} action.username - Unless a WIF is provided, this is hashed with the password and key_type to create private keys.
-    @arg {object} action.password - Password or WIF private key.  A WIF becomes the posting key, a password can create all three
-        key_types: active, owner, posting keys.
+    @arg {object} action.username - Unless a WIF is provided, this is hashed
+        with the password and key_type to create private keys.
+    @arg {object} action.password - Password or WIF private key. A WIF becomes
+        the posting key, a password can create all three key_types: active,
+        owner, posting keys.
+*/
+function* checkKeyType(action) {
+    if (yield call(shouldShowLoginWarning, action.payload)) {
+        yield put(userActions.showLoginWarning(action.payload));
+    } else {
+        yield put(userActions.usernamePasswordLogin(action.payload));
+    }
+}
+
+/**
+    @arg {object} action.username - Unless a WIF is provided, this is hashed
+        with the password and key_type to create private keys.
+    @arg {object} action.password - Password or WIF private key. A WIF becomes
+        the posting key, a password can create all three key_types: active,
+        owner, posting keys.
 */
 function* usernamePasswordLogin(action) {
     // This is a great place to mess with session-related user state (:
@@ -115,7 +104,8 @@ function* usernamePasswordLogin(action) {
         // yield put(userActions.showAnnouncement());
     }
 
-    // Sets 'loading' while the login is taking place.  The key generation can take a while on slow computers.
+    // Sets 'loading' while the login is taking place. The key generation can
+    // take a while on slow computers.
     yield call(usernamePasswordLogin2, action.payload);
     const current = yield select(state => state.user.get('current'));
     if (current) {
@@ -124,9 +114,6 @@ function* usernamePasswordLogin(action) {
         yield fork(loadFollows, 'getFollowingAsync', username, 'ignore');
     }
 }
-
-// const isHighSecurityOperations = ['transfer', 'transfer_to_vesting', 'withdraw_vesting',
-//     'limit_order_create', 'limit_order_cancel', 'account_update', 'account_witness_vote']
 
 const clean = value =>
     value == null || value === '' || /null|undefined/.test(value)
@@ -159,7 +146,7 @@ function* usernamePasswordLogin2({
         const data = localStorage.getItem('autopost2');
         if (data) {
             // auto-login with a low security key (like a posting key)
-            autopost = true; // must use simi-colon
+            autopost = true; // must use semi-colon
             // The 'password' in this case must be the posting private wif .. See setItme('autopost')
             [username, password, memoWif, login_owner_pubkey] = new Buffer(
                 data,
@@ -188,11 +175,6 @@ function* usernamePasswordLogin2({
     }
 
     const pathname = yield select(state => state.global.get('pathname'));
-    const highSecurityLogin =
-        // /owner|active/.test(userProvidedRole) ||
-        // isHighSecurityOperations.indexOf(operationType) !== -1 ||
-        highSecurityPages.find(p => p.test(pathname)) != null;
-
     const isRole = (role, fn) =>
         !userProvidedRole || role === userProvidedRole ? fn() : undefined;
 
@@ -216,6 +198,7 @@ function* usernamePasswordLogin2({
         const private_key = PrivateKey.fromWif(password);
         login_wif_owner_pubkey = private_key.toPublicKey().toString();
         private_keys = fromJS({
+            owner_private: isRole('owner', () => private_key),
             posting_private: isRole('posting', () => private_key),
             active_private: isRole('active', () => private_key),
             memo_private: private_key,
@@ -245,7 +228,6 @@ function* usernamePasswordLogin2({
         payload: {
             account,
             private_keys,
-            highSecurityLogin,
             login_owner_pubkey,
         },
     });
@@ -253,17 +235,28 @@ function* usernamePasswordLogin2({
         state.user.getIn(['authority', username])
     );
     const hasActiveAuth = authority.get('active') === 'full';
-    if (!highSecurityLogin) {
-        const accountName = account.get('name');
-        authority = authority.set('active', 'none');
-        yield put(userActions.setAuthority({ accountName, auth: authority }));
+    if (hasActiveAuth) {
+        console.log('Rejecting due to detected active auth');
+        yield put(userActions.loginError({ error: 'active_login_blocked' }));
+        return;
     }
+    const hasOwnerAuth = authority.get('owner') === 'full';
+    if (hasOwnerAuth) {
+        console.log('Rejecting due to detected owner auth');
+        yield put(userActions.loginError({ error: 'owner_login_blocked' }));
+        return;
+    }
+
+    const accountName = account.get('name');
+    authority = authority.set('active', 'none');
+    yield put(userActions.setAuthority({ accountName, auth: authority }));
     const fullAuths = authority.reduce(
         (r, auth, type) => (auth === 'full' ? r.add(type) : r),
         Set()
     );
     if (!fullAuths.size) {
         console.log('No full auths');
+        yield put(userActions.hideLoginWarning());
         localStorage.removeItem('autopost2');
         const owner_pub_key = account.getIn(['owner', 'key_auths', 0, 0]);
         if (
@@ -271,10 +264,11 @@ function* usernamePasswordLogin2({
             login_wif_owner_pubkey === owner_pub_key
         ) {
             yield put(userActions.loginError({ error: 'owner_login_blocked' }));
-        } else if (!highSecurityLogin && hasActiveAuth) {
+        } else if (hasActiveAuth) {
             yield put(
                 userActions.loginError({ error: 'active_login_blocked' })
             );
+            return;
         } else {
             const generated_type = password[0] === 'P' && password.length > 40;
             serverApiRecordEvent(
@@ -287,46 +281,19 @@ function* usernamePasswordLogin2({
                 })
             );
             yield put(userActions.loginError({ error: 'Incorrect Password' }));
+            return;
         }
-        return;
     }
     if (authority.get('posting') !== 'full')
         private_keys = private_keys.remove('posting_private');
 
-    if (!highSecurityLogin || authority.get('active') !== 'full')
+    if (authority.get('active') !== 'full')
         private_keys = private_keys.remove('active_private');
 
     const owner_pubkey = account.getIn(['owner', 'key_auths', 0, 0]);
     const active_pubkey = account.getIn(['active', 'key_auths', 0, 0]);
     const posting_pubkey = account.getIn(['posting', 'key_auths', 0, 0]);
 
-    if (
-        private_keys.get('memo_private') &&
-        account.get('memo_key') !==
-            private_keys
-                .get('memo_private')
-                .toPublicKey()
-                .toString()
-    )
-        // provided password did not yield memo key
-        private_keys = private_keys.remove('memo_private');
-
-    if (!highSecurityLogin) {
-        console.log('Not high security login');
-        if (
-            posting_pubkey === owner_pubkey ||
-            posting_pubkey === active_pubkey
-        ) {
-            yield put(
-                userActions.loginError({
-                    error:
-                        'This login gives owner or active permissions and should not be used here.  Please provide a posting only login.',
-                })
-            );
-            localStorage.removeItem('autopost2');
-            return;
-        }
-    }
     const memo_pubkey = private_keys.has('memo_private')
         ? private_keys
               .get('memo_private')
@@ -334,9 +301,24 @@ function* usernamePasswordLogin2({
               .toString()
         : null;
 
-    if (memo_pubkey === owner_pubkey || memo_pubkey === active_pubkey)
-        // Memo key could be saved in local storage.. In RAM it is not purged upon LOCATION_CHANGE
+    if (
+        account.get('memo_key') !== memo_pubkey ||
+        memo_pubkey === owner_pubkey ||
+        memo_pubkey === active_pubkey
+    )
+        // provided password did not yield memo key, or matched active/owner
         private_keys = private_keys.remove('memo_private');
+
+    if (posting_pubkey === owner_pubkey || posting_pubkey === active_pubkey) {
+        yield put(
+            userActions.loginError({
+                error:
+                    'This login gives owner or active permissions and should not be used here.  Please provide a posting only login.',
+            })
+        );
+        localStorage.removeItem('autopost2');
+        return;
+    }
 
     // If user is signing operation by operaion and has no saved login, don't save to RAM
     if (!operationType || saveLogin) {
@@ -396,21 +378,6 @@ function* usernamePasswordLogin2({
             console.log('Logging in as', username);
             const response = yield serverApiLogin(username, signatures);
             const body = yield response.json();
-
-            if (justLoggedIn) {
-                // If ads are enabled, reload the page instead of changing the browser
-                // history when they log in, so headers will get re-requested.
-                const adsEnabled = yield select(state =>
-                    state.app.getIn(['googleAds', 'enabled'])
-                );
-                if (adsEnabled) {
-                    var url = new URL(window.location.href);
-                    url.searchParams.set('auth', 'true');
-                    console.log('New post-login URL', url.toString());
-                    window.location.replace(url.toString());
-                    return;
-                }
-            }
         }
     } catch (error) {
         // Does not need to be fatal
@@ -530,15 +497,6 @@ function* logout(action) {
     }
 
     yield serverApiLogout();
-
-    // If ads are enabled, reload the page instead of changing the browser
-    // history when they log out, so headers will get re-requested.
-    const adsEnabled = yield select(state =>
-        state.app.getIn(['googleAds', 'enabled'])
-    );
-    if (logoutType == 'default' && adsEnabled) {
-        window.location.reload();
-    }
 }
 
 function* loginError({
@@ -550,7 +508,9 @@ function* loginError({
 }
 
 /**
-    If the owner key was changed after the login owner key, this function will find the next owner key history record after the change and store it under user.previous_owner_authority.
+    If the owner key was changed after the login owner key, this function will
+    find the next owner key history record after the change and store it under
+    user.previous_owner_authority.
 */
 function* lookupPreviousOwnerAuthority({ payload: {} }) {
     const current = yield select(state => state.user.getIn(['current']));
@@ -564,7 +524,6 @@ function* lookupPreviousOwnerAuthority({ payload: {} }) {
         state.global.getIn(['accounts', username, 'owner', 'key_auths'])
     );
     if (key_auths && key_auths.find(key => key.get(0) === login_owner_pubkey)) {
-        // console.log('UserSaga ---> Login matches current account owner');
         return;
     }
     // Owner history since this index was installed July 14
@@ -573,12 +532,11 @@ function* lookupPreviousOwnerAuthority({ payload: {} }) {
     );
     if (owner_history.count() === 0) return;
     owner_history = owner_history.sort((b, a) => {
-        //sort decending
+        // Sort decending
         const aa = a.get('last_valid_time');
         const bb = b.get('last_valid_time');
         return aa < bb ? -1 : aa > bb ? 1 : 0;
     });
-    // console.log('UserSaga ---> owner_history', owner_history.toJS())
     const previous_owner_authority = owner_history.find(o => {
         const auth = o.get('previous_owner_authority');
         const weight_threshold = auth.get('weight_threshold');
@@ -595,7 +553,6 @@ function* lookupPreviousOwnerAuthority({ payload: {} }) {
         console.log('UserSaga ---> Login owner does not match owner history');
         return;
     }
-    // console.log('UserSage ---> previous_owner_authority', previous_owner_authority.toJS())
     yield put(userActions.setUser({ previous_owner_authority }));
 }
 
@@ -604,7 +561,6 @@ function* uploadImage({
 }) {
     const _progress = progress;
     progress = msg => {
-        // console.log('Upload image progress', msg)
         _progress(msg);
     };
 
@@ -681,15 +637,7 @@ function* uploadImage({
         if (event.lengthComputable) {
             const percent = Math.round(event.loaded / event.total * 100);
             progress({ message: `Uploading ${percent}%` });
-            // console.log('Upload', percent)
         }
     };
     xhr.send(formData);
 }
-
-// function* getCurrentAccount() {
-//     const current = yield select(state => state.user.get('current'))
-//     if (!current) return
-//     const [account] = yield call([api, api.getAccountsAsync], [current.get('username')])
-//     yield put(g.actions.receiveAccount({ account }))
-// }

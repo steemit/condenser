@@ -167,8 +167,6 @@
             "帐户名称应该只有字母、数字或破折号",
         "cannot_increase_reward_of_post_within_the_last_minute_before_payout":
             "在收到奖励前的最后一分钟内不能增加奖励",
-        "vote_currently_exists_user_must_be_indicate_a_to_reject_witness":
-            "已经投过此见证人，你是否想取消此见证人的投票",
         "only_one_APP_NAME_account_allowed_per_ip_address_every_10_minutes":
             "每10分钟一个IP地址只允许一个Steem账号",
         "resteem_this_post": "转发这这篇文章",
@@ -322,64 +320,9 @@
         "you_are_viewing_a_single_comments_thread_from":
             "你正在查看单个评论的主题"
     },
-    "market_jsx": {
-        "action": "功能",
-        "date_created": "创建日期",
-        "last_price": "上一个成交价格",
-        "24h_volume": "24小时交易量",
-        "spread": "波动",
-        "total": "总量",
-        "available": "有效的",
-        "lowest_ask": "最低卖价",
-        "highest_bid": "最高买价",
-        "buy_orders": "买单",
-        "sell_orders": "卖单",
-        "trade_history": "交易历史",
-        "open_orders": "订单",
-        "sell_amount_for_atleast":
-            "出售%(amount_to_sell)s至少为%(min_to_receive)s(%(effectivePrice)s)",
-        "buy_atleast_amount_for":
-            "购买%(min_to_receive)s在%(amount_to_sell)s(%(effectivePrice)s)",
-        "price_warning_above":
-            "这个价格远高于目前的市场价%(marketPrice)s，您确定吗?",
-        "price_warning_below":
-            "这个价格远低于目前的市场价%(marketPrice)s，您确定吗?",
-        "order_cancel_confirm": "从%(user)s中取消订单%(order_id)s ?",
-        "order_cancelled": "订单%(order_id)s取消了。",
-        "higher": "更高的",
-        "lower": "更低的",
-        "total_DEBT_TOKEN_SHORT_CURRENCY_SIGN":
-            "总共%(DEBT_TOKEN_SHORT)s (%(CURRENCY_SIGN)s)"
-    },
     "recoveraccountstep1_jsx": {
-        "begin_recovery": "开始恢复",
-        "not_valid": "无效的",
-        "account_name_is_not_found": "未找到帐户名",
-        "unable_to_recover_account_not_change_ownership_recently":
-            "我们无法恢复这个帐户，它最近没有改变所有权。",
-        "password_not_used_in_last_days":
-            "在过去的30天里这个帐户没有使用过这个密码。",
-        "request_already_submitted_contact_support":
-            "您的请求已经提交，我们正在处理。请联系%(SUPPORT_EMAIL)s以获得您的请求的状态。",
         "recover_account_intro":
-            "有时候，Steemit 的拥有者钥匙可能会被盗用。被盗帐户恢复给予合法的帐户所有者30天，从小偷更改其所有者密钥的时候恢复其帐户。盗用帐户恢复只能在%(APP_URL)s上使用，如果帐户所有者已经明确列出 %(APP_NAME)s作为其帐户受信任者，并遵守了 %(APP_NAME)s 的服务条款。",
-        "login_with_facebook_or_reddit_media_to_verify_identity":
-            "请登录Facebook或Reddit以验证你的身份",
-        "login_with_social_media_to_verify_identity":
-            "请登录%(provider)s以验证你的身份",
-        "enter_email_toverify_identity":
-            "我们需要核实您的身份。请输入你的电子邮件地址，并开始验证。",
-        "continue_with_email": "继续使用邮箱",
-        "thanks_for_submitting_request_for_account_recovery":
-            "感谢你使用%(APP_NAME)s基于区块链的多因素身份验证提交帐户恢复请求。我们会尽快给你答复，但是由于大量的邮件可能会有一些延迟。请准备核实你的身份。",
-        "recovering_account": "正在恢复账户",
-        "recover_account": "恢复帐户",
-        "checking_account_owner": "验证账户所有者",
-        "sending_recovery_request": "发送恢复请求",
-        "cant_confirm_account_ownership":
-            "我们不能确认帐户所有权。请检查你的密码",
-        "account_recovery_request_not_confirmed":
-            "帐户恢复请求尚未确认，请稍后回来，谢谢你的耐心。"
+            "有时候，Steemit 的拥有者钥匙可能会被盗用。被盗帐户恢复给予合法的帐户所有者30天，从小偷更改其所有者密钥的时候恢复其帐户。盗用帐户恢复只能在%(APP_URL)s上使用，如果帐户所有者已经明确列出 %(APP_NAME)s作为其帐户受信任者，并遵守了 %(APP_NAME)s 的服务条款。"
     },
     "user_profile": {
         "unknown_account": "未知的账户",
@@ -408,14 +351,6 @@
         },
         "hide_resteems": "Hide Resteems",
         "show_all": "Show All"
-    },
-    "authorrewards_jsx": {
-        "estimated_author_rewards_last_week": "预计上周作者奖励",
-        "author_rewards_history": "作者奖励历史"
-    },
-    "curationrewards_jsx": {
-        "estimated_curation_rewards_last_week": "预计上周审查奖励",
-        "curation_rewards_history": "审查奖励历史"
     },
     "post_jsx": {
         "now_showing_comments_with_low_ratings": "正在显示低评级的评论",
@@ -448,28 +383,6 @@
             "one": "%(count)s个投票",
             "other": "%(count)s个投票"
         }
-    },
-    "witnesses_jsx": {
-        "witness_thread": "见证人帖子",
-        "top_witnesses": "见证人投票",
-        "you_have_votes_remaining": {
-            "zero": "你无剩余选票",
-            "one": "你还剩1张选票",
-            "other": "你还剩%(count)s张选票"
-        },
-        "you_can_vote_for_maximum_of_witnesses": "你最多可以投票30位见证人",
-        "witness": "见证人",
-        "information": "信息",
-        "if_you_want_to_vote_outside_of_top_enter_account_name":
-            "如果你想为100名以外的见证人投票，请输入帐户名称进行投票",
-        "set_witness_proxy":
-            "你也可以指定代理人来代替你给见证人投票。这将重置你当前的见证人选择。",
-        "witness_set":
-            "你已经设置投票代理。如果你想重新启用手动投票，请清除你的代理。",
-        "witness_proxy_current": "你当前的投票代理人是",
-        "witness_proxy_set": "设置投票代理",
-        "witness_proxy_clear": "清除投票代理",
-        "proxy_update_error": "你的投票代理未更新"
     },
     "votesandcomments_jsx": {
         "no_responses_yet_click_to_respond": "暂无回复。点击回复。",
@@ -564,21 +477,6 @@
         "empty_feed_3": "浏览流行文章",
         "empty_feed_4": "阅读快速入门指南",
         "empty_feed_5": "浏览常见问题解答"
-    },
-    "transferhistoryrow_jsx": {
-        "to_savings": "到储蓄账户",
-        "from_savings": "从储蓄账户",
-        "cancel_transfer_from_savings": "取消从储蓄账户转账",
-        "stop_power_down": "停止Power Down",
-        "start_power_down_of": "开始Power Down",
-        "receive_interest_of": "获得的利息"
-    },
-    "savingswithdrawhistory_jsx": {
-        "cancel_this_withdraw_request": "确认取消提款请求吗？",
-        "pending_savings_withdrawals": "即将取出存款",
-        "withdraw": "取%(amount)s",
-        "to": "到%(to)s",
-        "from_to": "从%(from)s到%(to)s"
     },
     "explorepost_jsx": {
         "copied": "已复制！",
@@ -713,18 +611,6 @@
         "history": "历史",
         "redeem_rewards": "赎回奖励(转移至余额)",
         "buy_steem_or_steem_power": "购买STEEM或STEEM Power"
-    },
-    "powerdown_jsx": {
-        "power_down": "Power Down",
-        "amount": "数量",
-        "already_power_down":
-            "您已经在Power Down%(AMOUNT)s%(LIQUID_TICKER)s(%(WITHDRAWN)s目前得到%(LIQUID_TICKER)s)。如果你想改变Power Down的总额，你的周期固定奖励数量也会发生变化。",
-        "delegating":
-            "你正在代理出%(AMOUNT)s%(LIQUID_TICKER)s。该数量将被锁定并且不能Power Down，直到你取消代理，并经过一个完整的支付周期。",
-        "per_week": "这是每周%(AMOUNT)s%(LIQUID_TICKER)s 。",
-        "warning":
-            "不建议在你的帐户中持有少于%(AMOUNT)s%(VESTING_TOKEN)s，否则可能导致你的帐户处于不可用状态。",
-        "error": "无法Power Down(错误：%(MESSAGE)s)"
     },
     "checkloginowner_jsx": {
         "your_password_permissions_were_reduced": "您的密码权限被减少",

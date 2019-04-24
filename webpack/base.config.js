@@ -105,6 +105,5 @@ module.exports = {
         ]
     },
     externals: {
-        newrelic: true
     }
 };

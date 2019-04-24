@@ -9,14 +9,17 @@ import tt from 'counterpart';
 class ExplorePost extends Component {
     static propTypes = {
         permlink: PropTypes.string.isRequired,
+        title: PropTypes.string.isRequired,
     };
 
     constructor(props) {
         super(props);
         this.state = {
             copied: false,
+            copiedMD: false,
         };
         this.onCopy = this.onCopy.bind(this);
+        this.onCopyMD = this.onCopyMD.bind(this);
         this.Steemd = this.Steemd.bind(this);
         this.Steemdb = this.Steemdb.bind(this);
         this.Busy = this.Busy.bind(this);
@@ -40,14 +43,26 @@ class ExplorePost extends Component {
         });
     }
 
+    onCopyMD() {
+        this.setState({
+            copiedMD: true,
+        });
+    }
+
     render() {
         const link = this.props.permlink;
+        const title = this.props.title;
         const steemd = 'https://steemd.com' + link;
         const steemdb = 'https://steemdb.com' + link;
         const busy = 'https://busy.org' + link;
         const steemit = 'https://steemit.com' + link;
+        const steemitmd = '[' + title + '](https://steemit.com' + link + ')';
         let text =
             this.state.copied == true
+                ? tt('explorepost_jsx.copied')
+                : tt('explorepost_jsx.copy');
+        let textMD =
+            this.state.copiedMD == true
                 ? tt('explorepost_jsx.copied')
                 : tt('explorepost_jsx.copy');
         return (
@@ -67,6 +82,21 @@ class ExplorePost extends Component {
                         className="ExplorePost__copy-button input-group-label"
                     >
                         <span>{text}</span>
+                    </CopyToClipboard>
+                </div>
+                <div className="input-group">
+                    <input
+                        className="input-group-field share-box"
+                        type="text"
+                        value={steemitmd}
+                        onChange={e => e.preventDefault()}
+                    />
+                    <CopyToClipboard
+                        text={steemitmd}
+                        onCopy={this.onCopyMD}
+                        className="ExplorePost__copy-button input-group-label"
+                    >
+                        <span>{textMD}</span>
                     </CopyToClipboard>
                 </div>
                 <h5>{tt('explorepost_jsx.alternative_sources')}</h5>

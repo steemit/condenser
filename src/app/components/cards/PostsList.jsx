@@ -8,7 +8,6 @@ import PostSummary from 'app/components/cards/PostSummary';
 import Post from 'app/components/pages/Post';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import debounce from 'lodash.debounce';
-import CloseButton from 'app/components/elements/CloseButton';
 import { findParent } from 'app/utils/DomUtils';
 import Icon from 'app/components/elements/Icon';
 import GoogleAd from 'app/components/elements/GoogleAd';
@@ -191,11 +190,19 @@ class PostsList extends React.Component {
         const showPinnedPosts = arePinnedPostsVisible && arePinnedPostsReady;
 
         const pinned = this.props.pinned;
-        const renderPinned = pinnedPosts =>
-            pinnedPosts.map(pinnedPost => {
+        const renderPinned = pinnedPosts => {
+            if (!process.env.BROWSER) return null;
+            return pinnedPosts.map(pinnedPost => {
                 const id = `${pinnedPost.author}/${pinnedPost.permlink}`;
+                if (localStorage.getItem(`hidden-pinned-post-${id}`))
+                    return null;
                 const pinnedPostContent = content.get(id);
                 const isSeen = pinnedPostContent.get('seen');
+                const close = e => {
+                    e.preventDefault();
+                    localStorage.setItem(`hidden-pinned-post-${id}`, true);
+                    this.forceUpdate();
+                };
                 return (
                     <li key={pinnedPost}>
                         <div className="PinLabel">
@@ -204,6 +211,13 @@ class PostsList extends React.Component {
                                 name={isSeen ? 'pin-disabled' : 'pin'}
                             />{' '}
                             <span className="PinText">Pinned Post</span>
+                            <a
+                                onClick={close}
+                                className="DismissPost"
+                                title="Dismiss Post"
+                            >
+                                <Icon name="close" />
+                            </a>
                         </div>
                         <PostSummary
                             account={account}
@@ -215,9 +229,10 @@ class PostsList extends React.Component {
                     </li>
                 );
             });
+        };
         const renderSummary = items =>
             items.map((item, i) => {
-                const every = this.props.adSlots['in_feed_1'].every;
+                const every = this.props.adSlots.in_feed_1.every;
                 if (this.props.shouldSeeAds && i >= every && i % every === 0) {
                     return (
                         <div key={item.item}>
@@ -235,31 +250,27 @@ class PostsList extends React.Component {
                                 <GoogleAd
                                     name="in-feed-1"
                                     format="fluid"
-                                    slot={
-                                        this.props.adSlots['in_feed_1'].slot_id
-                                    }
+                                    slot={this.props.adSlots.in_feed_1.slot_id}
                                     layoutKey={
-                                        this.props.adSlots['in_feed_1']
-                                            .layout_key
+                                        this.props.adSlots.in_feed_1.layout_key
                                     }
                                     style={{ display: 'block' }}
                                 />
                             </div>
                         </div>
                     );
-                } else {
-                    return (
-                        <li key={item.item}>
-                            <PostSummary
-                                account={account}
-                                post={item.item}
-                                thumbSize={thumbSize}
-                                ignore={item.ignore}
-                                nsfwPref={nsfwPref}
-                            />
-                        </li>
-                    );
                 }
+                return (
+                    <li key={item.item}>
+                        <PostSummary
+                            account={account}
+                            post={item.item}
+                            thumbSize={thumbSize}
+                            ignore={item.ignore}
+                            nsfwPref={nsfwPref}
+                        />
+                    </li>
+                );
             });
 
         return (
@@ -306,8 +317,9 @@ export default connect(
             .get('pinned_posts')
             .get('pinned_posts')
             .toJS();
-        const shouldSeeAds = state.app.getIn(['googleAds', 'shouldSeeAds']);
+        const shouldSeeAds = state.app.getIn(['googleAds', 'enabled']);
         const adSlots = state.app.getIn(['googleAds', 'adSlots']).toJS();
+
         return {
             ...props,
             pathname,

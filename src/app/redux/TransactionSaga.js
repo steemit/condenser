@@ -449,6 +449,8 @@ export function* createPermlink(title, author, parent_author, parent_permlink) {
         if (s === '') {
             s = base58.encode(secureRandom.randomBuffer(4));
         }
+        // only letters numbers and dashes shall survive
+        s = s.toLowerCase().replace(/[^a-z0-9-]+/g, '');
         // ensure the permlink(slug) is unique
         const slugState = yield call([api, api.getContentAsync], author, s);
         let prefix;
@@ -469,8 +471,6 @@ export function* createPermlink(title, author, parent_author, parent_permlink) {
         // STEEMIT_MAX_PERMLINK_LENGTH
         permlink = permlink.substring(permlink.length - 255, permlink.length);
     }
-    // only letters numbers and dashes shall survive
-    permlink = permlink.toLowerCase().replace(/[^a-z0-9-]+/g, '');
     return permlink;
 }
 

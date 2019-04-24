@@ -108,10 +108,10 @@
 - <a href="#How_long_does_it_take_to_transfer_STEEM_or_SBD_tokens_between_users">How long does it take to transfer STEEM or SBD tokens between users?</a>
 
 ### <span id="Table_of_Contents_Voting_and_Curating">Voting and Curating</span>
-- <a href="#What_is_my_voting_power">What is my voting power?</a>
-- <a href="#How_many_times_can_I_vote_without_depleting_my_voting_power">How many times can I vote without depleting my voting power?</a>
+- <a href="#What_is_my_voting_mana">What is my voting mana?</a>
+- <a href="#How_many_times_can_I_vote_without_depleting_my_voting_mana">How many times can I vote without depleting my voting mana?</a>
 - <a href="#Can_I_vote_with_less_than_100__of_my_voting_strength">Can I vote with less than 100% of my voting strength?</a>
-- <a href="#Where_can_I_check_my_voting_power">Where can I check my voting power?</a>
+- <a href="#Where_can_I_check_my_voting_mana">Where can I check my voting mana?</a>
 - <a href="#What_determines_how_much_of_the_curation_reward_goes_to_the_author_versus_curators">What determines how much of the curation reward goes to the author versus curators?</a>
 - <a href="#Can_I_get_curation_rewards_for_upvoting_comments">Can I get curation rewards for upvoting comments?</a>
 - <a href="#Do_I_get_curation_rewards_for_downvoting_posts_or_comments">Do I get curation rewards for downvoting posts or comments?</a>
@@ -145,7 +145,7 @@
 ### <span id="Table_of_Contents_Blockchain">Blockchain</span>
 - <a href="#What_is_a_blockchain">What is a blockchain?</a>
 - <a href="#What_is_the_Steem_blockchain">What is the Steem blockchain?</a>
-- <a href="#How_does_bandwidth_work_on_the_Steem_blockchain">How does bandwidth work on the Steem blockchain?</a>
+- <a href="#How_do_Resource_Credits_work_on_the_Steem_blockchain">How do Resource Credits work on the Steem blockchain?</a>
 - <a href="#What_is_the_difference_between_Steem_and_Steemit">What is the difference between Steem and Steemit?</a>
 - <a href="#How_is_Steem_different_from_Bitcoin">How is Steem different from Bitcoin?</a>
 - <a href="#What_is_the_difference_between_Proof_of_Work__Proof_of_Stake__and_Delegated_Proof_of_Stake">What is the difference between Proof of Work, Proof of Stake, and Delegated Proof of Stake?</a>
@@ -629,7 +629,7 @@ Language-specific groups include:
 <a href="#Table_of_Contents_Posting">^</a>
 ## <span id="Can_I_delete_something_I_posted">Can I delete something I posted?</span>
 
-The blockchain will always contain the full edit history of posts and comments, so it can never be completely deleted. If you would like to update a post so that users cannot see the content via steemit.com, you can edit the post and replace it with blank content for as long as the post is active. After seven days, the post can no longer be edited.
+The blockchain will always contain the full edit history of posts and comments, so it can never be completely deleted. If you would like to update a post so that users cannot see the content via steemit.com, you can edit the post and replace it with blank content for as long as the post is active. After seven days, the post can no longer be edited via steemit.com.
 
 <a href="#Table_of_Contents_Posting">^</a>
 ## <span id="What_does__Promoting__a_post_do">What does "Promoting" a post do?</span>
@@ -655,7 +655,7 @@ Yes, comments that are upvoted can earn rewards just like posts!
 <a href="#Table_of_Contents_Comments">^</a>
 ## <span id="How_often_can_I_comment">How often can I comment?</span>
 
-There is a 20 second wait time in between comments to limit spam.
+There is a three second wait time in between comments to limit spam.
 
 <a href="#Table_of_Contents_Comments">^</a>
 # Economics
@@ -710,7 +710,7 @@ Every day, a fixed amount of STEEM tokens are allocated to the network reward fu
 
 Up to 25% of a post's payout is awarded to curators (the people who upvoted the post) as a reward for discovering the content. The other 75% is awarded to the author.
 
-If curators vote for a post within the first 30 minutes of it being created, a portion of their curation reward is added to the author payout. This portion is linear to the age of the post between 0 and 30 minutes. As an example: upvoting at 15 minutes will donate half of your potential curation reward to the author.
+If curators vote for a post within the first 15 minutes of it being created, a portion of their curation reward remains in the rewards pool for other authors/curators. This portion is linear to the age of the post between 0 and 15 minutes. As an example: upvoting at ten minutes will donate 1/3 of your potential curation reward back to the rewards pool.
 
 <a href="#Table_of_Contents_Economics">^</a>
 ## <span id="Will_the_reward_pool_pay_out_more_or_less_depending_on_who_votes">Will the reward pool pay out more or less depending on who votes?</span>
@@ -750,7 +750,7 @@ Posts and comments remain active for 7 days. When the period is over, you are ab
 <a href="#Table_of_Contents_Economics">^</a>
 ## <span id="What_is_delegated_STEEM_Power">What is delegated Steem Power?</span>
 
-Users have the option to delegate Steem Power to other users. When a user is delegated Steem Power - their bandwidth, content votes, and curation rewards are calculated as if it were their own Steem Power. Users are not able to power down or cash out delegated Steem Power however, as it still belongs to the original owner.
+Users have the option to delegate Steem Power to other users. When a user is delegated Steem Power - their Resource Credits, content votes, and curation rewards are calculated as if it were their own Steem Power. Users are not able to power down or cash out delegated Steem Power however, as it still belongs to the original owner.
 
 Most users will have a small amount of Steem Power delegated to them by the Steemit account after creating an account via steemit.com.
 
@@ -887,45 +887,45 @@ A transfer of tokens between accounts typically takes 3 seconds. This is far fas
 <a href="#Table_of_Contents_Economics">^</a>
 # Voting and Curating
 
-## <span id="What_is_my_voting_power">What is my voting power?</span>
+## <span id="What_is_my_voting_mana">What is my voting mana?</span>
 
-Voting power is like an "energy bar" in a computer game that goes down a little bit every time you vote. You start out with 100% voting power. Every time you vote, you will use a small amount of your voting power.
+Voting mana is like an "energy bar" in a computer game that goes down a little bit every time you vote. You start out with 100% voting mana. Every time you vote, you will use a small amount of your voting mana.
 
-As you use more of your voting power, your votes will carry less influence. A vote with 50% voting power left will be worth 1/2 as much as a vote cast with 100% voting power. Not to worry, the network recharges your voting power by 20% every day.
+As you use more of your voting mana, your votes will carry less influence. A vote with 50% voting mana left will be worth 1/2 as much as a vote cast with 100% voting mana. Not to worry, the network recharges your voting mana by 20% every day.
 
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
-## <span id="How_many_times_can_I_vote_without_depleting_my_voting_power">How many times can I vote without depleting my voting power?</span>
+## <span id="How_many_times_can_I_vote_without_depleting_my_voting_mana">How many times can I vote without depleting my voting mana?</span>
 
-Every 100% vote you cast will use 2% of your remaining voting power. Your voting power will recharge by 20% each day. You can vote more than 10 times per day, but each vote will be worth less, and it will take longer to reach full voting power again.
+Every 100% vote you cast will use 2% of your remaining voting mana. Your voting mana will recharge by 20% each day. You can vote more than 10 times per day, but each vote will be worth less, and it will take longer to reach full voting mana again.
 
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
 ## <span id="Can_I_vote_with_less_than_100__of_my_voting_strength">Can I vote with less than 100% of my voting strength?</span>
 
 New users can only upvote and downvote with 100% voting strength.
 
-Once you reach about 500 Steem Power, you will see a vote slider appear when you vote. You can use the slider to adjust the weight of your vote, between 1% and 100% voting strength. Voting with less than 100% voting weight will use up less voting power, but it will also have less of an influence on the post or comment's rewards.
+Once you reach about 500 Steem Power, you will see a vote slider appear when you vote. You can use the slider to adjust the weight of your vote, between 1% and 100% voting strength. Voting with less than 100% voting weight will use up less voting mana, but it will also have less of an influence on the post or comment's rewards.
 
 <img src="https://steemitimages.com/DQmV6c21tzSrgXwPHx4tvuc1UiCXBEvzkLBH9QCZHtVN6Ma/image.png">
 
-Upvotes and downvotes use the same amount of voting power.
+Upvotes and downvotes use the same amount of voting mana.
 
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
-## <span id="Where_can_I_check_my_voting_power">Where can I check my voting power?</span>
+## <span id="Where_can_I_check_my_voting_mana">Where can I check my voting mana?</span>
 
-You can view your current voting power using third party tools such as https://steemd.com/@youraccount.
+You can view your current voting mana using third party tools such as https://steemd.com/@youraccount.
 
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
 ## <span id="What_determines_how_much_of_the_curation_reward_goes_to_the_author_versus_curators">What determines how much of the curation reward goes to the author versus curators?</span>
 
 The rewards are allocated so that 75% of the payout goes to the author of the post/comment, and 25% goes to the curator.
 
-Of the 25% that goes to the curator, that portion will be split between the author and the curator if the curator votes within the first 30 minutes. The split of the 25% between the author and curator during the first 30 minutes is calculated linearly based on the time the vote is cast.
+Of the 25% that goes to the curator, the curator will receive less than 100% if the curator votes within the first 15 minutes. The split of the 25% that the curator receives during the first 15 minutes is calculated linearly based on the time the vote is cast.
 
-- If a post is upvoted the moment of posting, 100% of the curation reward goes to the author.
-- At 3 minutes, 90% goes to the author and 10% to the curator.
-- At 15 minutes it's a 50/50 split.
-- At 27 minutes, 10% goes to the author and 90% to the curator.
-- If a post is upvoted 30 min after posting, 100% of the curation reward goes to the curator.
+- If a post is upvoted the moment of posting, 100% of the curation reward will remain in the rewards pool.
+- At 1.5 minutes, the curator receives 10%, and 90% remains in the rewards pool.
+- At 7.5 minutes, the curator receives 50%, and 50% remains in the rewards pool.
+- At 13.5 minutes, the curator receives 90%, and 10% remains in the rewards pool.
+- If a post is upvoted 15 minutes (or later) after posting, 100% of the curation reward goes to the curator.
 
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
 ## <span id="Can_I_get_curation_rewards_for_upvoting_comments">Can I get curation rewards for upvoting comments?</span>
@@ -1099,22 +1099,22 @@ A blockchain is a public ledger of all transactions ever executed. All of the tr
 The Steem blockchain is the publicly accessible distributed database, which records all posts and votes, and distributes the rewards across the network. It is where all of the text content and voting data is stored, and it is where all of the reward calculations and payouts are performed.
 
 <a href="#Table_of_Contents_Blockchain">^</a>
-## <span id="How_does_bandwidth_work_on_the_Steem_blockchain">How does bandwidth work on the Steem blockchain?</span>
+## <span id="How_do_Resource_Credits_work_on_the_Steem_blockchain">How do Resource Credits work on the Steem blockchain?</span>
 
-Since transacting on the Steem blockchain has zero fees, bandwidth rate-limiting is employed to safeguard the blockchain from spam attacks. Everything action that you take on the blockchain will consume a small amount of bandwidth. This includes posting, commenting, voting, transferring tokens, etc. Viewing content does not consume bandwidth.
+Since transacting on the Steem blockchain has zero fees, transaction rate-limiting is employed to safeguard the blockchain from spam attacks. Everything action that you take on the blockchain will consume a small amount of Resource Credits. This includes posting, commenting, voting, transferring tokens, etc. Viewing content does not consume Resource Credits.
 
-Every user has a limited amount of bandwidth to use each week. The more transactions a user does, the less bandwidth they will have left (until it recharges). Users with more Steem Power will have a higher bandwidth allowance.
+Every user has a limited amount of Resource Credits to use each week. The more transactions a user does, the less Resource Credits they will have left (until they recharge). Users with more Steem Power will have more Resource Credits.
 
-Normally everyone's bandwidth allowance is quite high, and users are able to use the network freely without any interruptions. Sometimes when the blockchain becomes busy however (due to heavy use), everyone's individual allowances may go down until the network becomes less busy.
+When the blockchain becomes busy (due to heavy use), the Resource Credit cost of transactions may become higher than during times when the blockchain is less busy.
 
-You can check how much bandwidth you currently have based on the current limit at:
+You can check how many Resource Credits you currently have at:
 https://steemd.com/@youraccount
 
-If users are below their bandwidth limit, they will be unable to transact with the blockchain until their bandwidth recharges or their limit is raised.
+If users do not have enough Resource Credits, they will be unable to transact with the blockchain until their Resource Credits recharge or they acquire additional Steem Power to increase their Resource Credit balance.
 
-If you get an error that you have exceeded your bandwidth allowance, it is normally best to just wait and try again later (when it is less busy). Usually if you wait and try again later, the transaction will likley go through.
+If you get an error that you have exceeded your Resource Credit allowance, it is normally best to just wait and try again later. Usually if you wait and try again later, the transaction will go through.
 
-If you are unable to transact for extended periods of time, or you are frequently running into bandwidth limits, then you will either need to reduce your usage to stay within your limit, or purchase more Steem Power for your account through a third-party exchange such as [BlockTrades](https://blocktrades.us/?input_coin_type=eth&output_coin_type=steem_power&receive_address=).
+If you are unable to transact for extended periods of time, or you are frequently running into Resource Credit limits, then you will either need to reduce your usage to stay within your limit, or purchase more Steem Power for your account through a third-party exchange such as [BlockTrades](https://blocktrades.us/?input_coin_type=eth&output_coin_type=steem_power&receive_address=).
 
 <a href="#Table_of_Contents_Blockchain">^</a>
 ## <span id="What_is_the_difference_between_Steem_and_Steemit">What is the difference between Steem and Steemit?</span>

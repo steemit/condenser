@@ -1,30 +1,16 @@
 import React from 'react';
-import SvgImage from 'app/components/elements/SvgImage';
-import { Link } from 'react-router';
 import Icon from 'app/components/elements/Icon';
+import SteemLogo from 'app/components/elements/SteemLogo';
 
 class NotFound extends React.Component {
     render() {
         return (
             <div>
-                <div className="Header__top header">
-                    <div className="columns">
-                        <div className="top-bar-left">
-                            <ul className="menu">
-                                <li className="Header__top-logo">
-                                    <Link to="/">
-                                        <Icon name="steem" size="2x" />
-                                    </Link>
-                                </li>
-                                <li className="Header__top-steemit show-for-medium noPrint">
-                                    <a href="/">
-                                        steemit<span className="beta">
-                                            beta
-                                        </span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
+                <div className="row Header__nav">
+                    <div className="small-5 large-4 columns Header__logotype">
+                        <a href="/">
+                            <SteemLogo />
+                        </a>
                     </div>
                 </div>
                 <div className="NotFound float-center">

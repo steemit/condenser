@@ -11,6 +11,7 @@ mlcuk
 m4r1a
 bridgenit
 bitchminer
+bisade
 `
     .trim()
     .split('\n');

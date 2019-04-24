@@ -1,6 +1,17 @@
+import * as config from 'config';
 import React from 'react';
 
-export default function ServerHTML({ body, assets, locale, title, meta }) {
+export default function ServerHTML({
+    body,
+    assets,
+    locale,
+    title,
+    meta,
+    shouldSeeAds,
+    adClient,
+    gptEnabled,
+    gptSlots,
+}) {
     let page_title = title;
     return (
         <html lang="en">
@@ -37,14 +48,6 @@ export default function ServerHTML({ body, assets, locale, title, meta }) {
                                 <meta
                                     key={m.property}
                                     property={m.property}
-                                    content={m.content}
-                                />
-                            );
-                        if (m.name && m.content)
-                            return (
-                                <meta
-                                    key={m.name}
-                                    name={m.name}
                                     content={m.content}
                                 />
                             );
@@ -170,6 +173,50 @@ export default function ServerHTML({ body, assets, locale, title, meta }) {
                         type="text/css"
                     />
                 ))}
+                {gptEnabled ? (
+                    <script
+                        async
+                        src="https://www.googletagservices.com/tag/js/gpt.js"
+                    />
+                ) : null}
+                {gptEnabled ? (
+                    <script
+                        dangerouslySetInnerHTML={{
+                            __html: `
+                      window.googletag = window.googletag || {};
+                      googletag.cmd = googletag.cmd || [];
+                      console.info('Set up googletag');
+                      googletag.cmd.push(function() {
+                          googletag.pubads().enableSingleRequest();
+                          googletag.pubads().setTargeting('edition',['new-york']);
+                          googletag.pubads().collapseEmptyDivs(true,true);
+                          googletag.pubads().disableInitialLoad();
+                          googletag.pubads().enableAsyncRendering();
+                          googletag.enableServices();
+                          console.info('Enabled googletag services');
+                      });
+                  `,
+                        }}
+                    />
+                ) : null}
+                {shouldSeeAds ? (
+                    <script
+                        async
+                        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+                    />
+                ) : null}
+                {shouldSeeAds ? (
+                    <script
+                        dangerouslySetInnerHTML={{
+                            __html: `
+                      (adsbygoogle = window.adsbygoogle || []).push({
+                          google_ad_client: "${adClient}",
+                          enable_page_level_ads: true
+                      });
+                  `,
+                        }}
+                    />
+                ) : null}
                 <title>{page_title}</title>
             </head>
             <body>

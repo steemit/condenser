@@ -178,8 +178,6 @@
             "アカウント名には英数字またはダッシュが使用できます。",
         "cannot_increase_reward_of_post_within_the_last_minute_before_payout":
             "支払いの直前に投稿の報酬を増やすことはできません",
-        "vote_currently_exists_user_must_be_indicate_a_to_reject_witness":
-            "現在、投票が存在し、証人を拒否するには強い意志を示す必要があります",
         "only_one_APP_NAME_account_allowed_per_ip_address_every_10_minutes":
             "10分毎に各IPアドレスにつき1つのSteemアカウントのみ許可されています",
         "resteem_this_post": "この投稿をResteemする",
@@ -336,65 +334,9 @@
         "you_are_viewing_a_single_comments_thread_from":
             "次のスレッドのコメントの1つを表示しています "
     },
-    "market_jsx": {
-        "action": "操作",
-        "date_created": "作成日時",
-        "last_price": "現在値",
-        "24h_volume": "出来高(24h)",
-        "spread": "スプレッド",
-        "total": "合計",
-        "available": "注文可能額",
-        "lowest_ask": "現在買値",
-        "highest_bid": "現在売値",
-        "buy_orders": "買い注文",
-        "sell_orders": "売り注文",
-        "trade_history": "マーケット履歴",
-        "open_orders": "注文一覧",
-        "sell_amount_for_atleast":
-            "%(amount_to_sell)sを%(min_to_receive)sで売ります (%(effectivePrice)s)",
-        "buy_atleast_amount_for":
-            "%(min_to_receive)sを%(amount_to_sell)sで買います (%(effectivePrice)s)",
-        "price_warning_above":
-            "この価格は現在の市場価格%(marketPrice)sを遥かに上回っています。本当によろしいですか？",
-        "price_warning_below":
-            "この価格は現在の市場価格%(marketPrice)sを遥かに下回っています。本当によろしいですか？",
-        "order_cancel_confirm":
-            "%(user)sの注文%(order_id)sをキャンセルしますか？",
-        "order_cancelled": "注文%(order_id)sはキャンセルされました",
-        "higher": "上へ",
-        "lower": "下へ",
-        "total_DEBT_TOKEN_SHORT_CURRENCY_SIGN":
-            "合計%(DEBT_TOKEN_SHORT)s (%(CURRENCY_SIGN)s)"
-    },
     "recoveraccountstep1_jsx": {
-        "begin_recovery": "回復を開始する",
-        "not_valid": "無効です",
-        "account_name_is_not_found": "アカウント名が存在しません",
-        "unable_to_recover_account_not_change_ownership_recently":
-            "このアカウントは最近パスワードが変更されていないため回復できません。",
-        "password_not_used_in_last_days":
-            "このパスワードは30日以内にこのアカウントで使用されていません。",
-        "request_already_submitted_contact_support":
-            "リクエストは既に送信されていて、現在作業中です。リクエストの状況については%(SUPPORT_EMAIL)sにお問い合わせください。",
         "recover_account_intro":
-            "時折、Steemianのオーナーキーが盗まれることがあります。盗難アカウントの回復は、盗んだ者がオーナーキーを変更してから30日以内に、アカウントの正しい所有者にアカウントを取り戻します。盗難アカウントの回復は、アカウントの所有者が'%(APP_NAME)s'をアカウント受託者とし、%(APP_NAME)sの利用規約に準拠している場合にのみ%(APP_URL)sで行うことができます。",
-        "login_with_facebook_or_reddit_media_to_verify_identity":
-            "FacebookまたはRedditにログインして本人確認をしてください。",
-        "login_with_social_media_to_verify_identity":
-            "%(provider)sにログインして本人確認をしてください。",
-        "enter_email_toverify_identity":
-            "本人確認が必要です。確認するには以下の欄にメールアドレスを入力してください。",
-        "continue_with_email": "メールアドレスで続ける",
-        "thanks_for_submitting_request_for_account_recovery":
-            "%(APP_NAME)sのブロックチェーンベースマルチファクタ認証を使用してアカウント回復のリクエストを送信していただきありがとうございます。出来る限り早く返答いたしますが、多数のメールが来ているため返答が遅れることがあることをご了承ください。本人確認の準備をしておいてください。",
-        "recovering_account": "アカウント回復中",
-        "recover_account": "アカウント回復",
-        "checking_account_owner": "アカウント所有者を確認しています",
-        "sending_recovery_request": "回復リクエストを送信しています",
-        "cant_confirm_account_ownership":
-            "アカウントの所有者を確認できません。パスワードを確認してください。",
-        "account_recovery_request_not_confirmed":
-            "アカウント回復リクエストはまだ確認されていません。しばらくお待ちいただき、後ほどもう一度ご確認ください。"
+            "時折、Steemianのオーナーキーが盗まれることがあります。盗難アカウントの回復は、盗んだ者がオーナーキーを変更してから30日以内に、アカウントの正しい所有者にアカウントを取り戻します。盗難アカウントの回復は、アカウントの所有者が'%(APP_NAME)s'をアカウント受託者とし、%(APP_NAME)sの利用規約に準拠している場合にのみ%(APP_URL)sで行うことができます。"
     },
     "user_profile": {
         "unknown_account": "不明なアカウント",
@@ -432,15 +374,6 @@
         "hide_resteems": "Hide Resteems",
         "show_all": "Show All"
     },
-    "authorrewards_jsx": {
-        "estimated_author_rewards_last_week": "過去1週間の推定投稿者報酬",
-        "author_rewards_history": "投稿者報酬履歴"
-    },
-    "curationrewards_jsx": {
-        "estimated_curation_rewards_last_week":
-            "過去1週間の推定キュレーション報酬",
-        "curation_rewards_history": "キュレーション報酬履歴"
-    },
     "post_jsx": {
         "now_showing_comments_with_low_ratings":
             "評価の低いコメントを表示しています。",
@@ -474,28 +407,6 @@
             "one": "%(count)s件の投票",
             "other": "%(count)s件の投票"
         }
-    },
-    "witnesses_jsx": {
-        "witness_thread": "証人スレッド",
-        "top_witnesses": "証人投票",
-        "you_have_votes_remaining": {
-            "zero": "これ以上投票できません",
-            "one": "あと1人に投票できます",
-            "other": "あと%(count)s人に投票できます"
-        },
-        "you_can_vote_for_maximum_of_witnesses": "最大30人の証人に投票できます",
-        "witness": "証人",
-        "information": "情報",
-        "if_you_want_to_vote_outside_of_top_enter_account_name":
-            "トップ100外の証人に投票したい場合、以下の欄にアカウント名を入力して投票してください",
-        "set_witness_proxy":
-            "証人への投票の代理人を選ぶこともできます。この操作はあなたの現在の証人選択をリセットします。",
-        "witness_set":
-            "投票の代理人を設定しています。手動による投票を再度有効にするには、代理人を解除してください。",
-        "witness_proxy_current": "現在の代理人は",
-        "witness_proxy_set": "代理人を設定",
-        "witness_proxy_clear": "代理人を解除",
-        "proxy_update_error": "代理人は更新されませんでした。"
     },
     "votesandcomments_jsx": {
         "no_responses_yet_click_to_respond":
@@ -597,22 +508,6 @@
         "empty_feed_3": "トレンド記事を検索する",
         "empty_feed_4": "クイックスタートガイドを読む",
         "empty_feed_5": "FAQを参照する"
-    },
-    "transferhistoryrow_jsx": {
-        "to_savings": "貯蓄に",
-        "from_savings": "貯蓄から",
-        "cancel_transfer_from_savings":
-            "貯蓄からの引き出しをキャンセルしました",
-        "stop_power_down": "パワーダウンを停止しました",
-        "start_power_down_of": "パワーダウンを開始しました：",
-        "receive_interest_of": "利息受け取りました："
-    },
-    "savingswithdrawhistory_jsx": {
-        "cancel_this_withdraw_request": "引き出し依頼をキャンセルしますか？",
-        "pending_savings_withdrawals": "保留中の貯蓄引き出し",
-        "withdraw": "%(amount)sを引き出して、",
-        "to": "%(to)sの残高に加えます。",
-        "from_to": "%(from)sから%(to)sへ送ります。"
     },
     "explorepost_jsx": {
         "copied": "コピーしました！",
@@ -759,18 +654,6 @@
         "history": "履歴",
         "redeem_rewards": "報酬の請求 (残高に送る)",
         "buy_steem_or_steem_power": "STEEMやSTEEM POWERを購入する"
-    },
-    "powerdown_jsx": {
-        "power_down": "パワーダウン",
-        "amount": "数量",
-        "already_power_down":
-            "既に%(AMOUNT)s %(LIQUID_TICKER)sのパワーダウン中です (%(WITHDRAWN)s %(LIQUID_TICKER)sが支払い済みです) 。パワーダウン量を変更すると、支払いスケジュールがリセットされることに注意してください。",
-        "delegating":
-            " %(AMOUNT)s %(LIQUID_TICKER)sを委託しています。委託分はロックされており、委託が終了して7日が過ぎるまでパワーダウンできません。",
-        "per_week": "毎週~%(AMOUNT)s %(LIQUID_TICKER)sです。",
-        "warning":
-            "アカウントの残高を%(AMOUNT)s %(VESTING_TOKEN)s未満にするのはおすすめしません。アカウントが使用できない状態になる可能性があります。",
-        "error": "パワーダウンできません (エラー : %(MESSAGE)s)"
     },
     "checkloginowner_jsx": {
         "your_password_permissions_were_reduced":

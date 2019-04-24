@@ -15,12 +15,12 @@ describe('ProxifyUrl', () => {
         testCase(
             'https://example.com/img.png',
             '0x0',
-            'https://steemitimages.com/0x0/https://example.com/img.png'
+            'https://steemitimages.com/640x0/https://example.com/img.png'
         );
         testCase(
             'https://example.com/img.png',
             true,
-            'https://steemitimages.com/0x0/https://example.com/img.png'
+            'https://steemitimages.com/640x0/https://example.com/img.png'
         );
         testCase(
             'https://example.com/img.png',
@@ -126,7 +126,7 @@ describe('ProxifyUrl', () => {
         testCase(
             'https://steemitimages.com/0x0/https://example.com/img.png',
             true,
-            'https://steemitimages.com/0x0/https://example.com/img.png'
+            'https://steemitimages.com/640x0/https://example.com/img.png'
         );
         //case where last is natural sizing, assumes natural sizing - straight to direct steemit file url
         testCase(
@@ -138,7 +138,7 @@ describe('ProxifyUrl', () => {
         testCase(
             'https://steemitimages.com/0x0/https://steemitimages.com/100x100/https://example.com/img.png',
             true,
-            'https://steemitimages.com/0x0/https://example.com/img.png'
+            'https://steemitimages.com/640x0/https://example.com/img.png'
         );
     });
 });

@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import { sortComments } from 'app/components/cards/Comment';
 // import { Link } from 'react-router';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
+import GptAd from 'app/components/elements/GptAd';
 import { Set } from 'immutable';
 import tt from 'counterpart';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
@@ -63,7 +64,10 @@ class Post extends React.Component {
 
         if (!dis) return null;
 
-        if (!showAnyway) {
+        // A post should be hidden if it is not pinned, is not told to "show
+        // anyway", and is designated "gray".
+        const pinned = dis.get('pinned');
+        if (!pinned && !showAnyway) {
             const { gray } = dis.get('stats').toJS();
             if (gray) {
                 return (
@@ -97,7 +101,7 @@ class Post extends React.Component {
 
         // Don't render too many comments on server-side
         const commentLimit = 100;
-        if (global['process'] !== undefined && replies.length > commentLimit) {
+        if (global.process !== undefined && replies.length > commentLimit) {
             console.log(
                 `Too many comments, ${replies.length - commentLimit} omitted.`
             );
@@ -134,16 +138,16 @@ class Post extends React.Component {
             </div>
         );
 
-        let sort_orders = ['trending', 'votes', 'new', 'author_reputation'];
-        let sort_labels = [
+        const sort_orders = ['trending', 'votes', 'new', 'author_reputation'];
+        const sort_labels = [
             tt('post_jsx.comment_sort_order.trending'),
             tt('post_jsx.comment_sort_order.votes'),
             tt('post_jsx.comment_sort_order.age'),
             tt('post_jsx.comment_sort_order.reputation'),
         ];
-        let sort_menu = [];
+        const sort_menu = [];
         let sort_label;
-        let selflink = `/${dis.get('category')}/@${post}`;
+        const selflink = `/${dis.get('category')}/@${post}`;
         for (let o = 0; o < sort_orders.length; ++o) {
             if (sort_orders[o] == sortOrder) sort_label = sort_labels[o];
             sort_menu.push({
@@ -240,6 +244,11 @@ class Post extends React.Component {
                         </div>
                     </div>
                 </div>
+                {this.props.gptSlots ? (
+                    <div className="Post_footer__ad">
+                        <GptAd slotName="bottom_post" />
+                    </div>
+                ) : null}
             </div>
         );
     }
@@ -264,5 +273,6 @@ export default connect((state, ownProps) => {
         ignoring,
         sortOrder:
             ownProps.router.getCurrentLocation().query.sort || 'trending',
+        gptSlots: state.app.getIn(['googleAds', 'gptSlots']).toJS(),
     };
 })(Post);

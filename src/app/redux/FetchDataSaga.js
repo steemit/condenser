@@ -50,9 +50,6 @@ export function* fetchState(location_change_action) {
     const ignore_fetch = pathname === server_location && is_initial_state;
     is_initial_state = false;
     if (ignore_fetch) {
-        // If a user's transfer page is being loaded, fetch related account data.
-        yield call(getTransferUsers, pathname);
-
         return;
     }
 
@@ -69,8 +66,7 @@ export function* fetchState(location_change_action) {
     try {
         const state = yield call(getStateAsync, url);
         yield put(globalActions.receiveState(state));
-        // If a user's transfer page is being loaded, fetch related account data.
-        yield call(getTransferUsers, pathname);
+        yield call(syncPinnedPosts);
     } catch (error) {
         console.error('~~ Saga fetchState error ~~>', url, error);
         yield put(appActions.steemApiError(error.message));
@@ -79,32 +75,32 @@ export function* fetchState(location_change_action) {
     yield put(appActions.fetchDataEnd());
 }
 
-/**
- * Get transfer-related usernames from history and fetch their account data.
- *
- * @param {String} pathname
- */
-function* getTransferUsers(pathname) {
-    if (pathname.match(/^\/@([a-z0-9\.-]+)\/transfers/)) {
-        const username = pathname.match(/^\/@([a-z0-9\.-]+)/)[1];
+function* syncPinnedPosts() {
+    // Bail if we're rendering serverside since there is no localStorage
+    if (!process.env.BROWSER) return null;
 
-        const transferHistory = yield select(state =>
-            state.global.getIn(['accounts', username, 'transfer_history'])
+    // Get pinned posts from the store.
+    const pinnedPosts = yield select(state =>
+        state.offchain.get('pinned_posts')
+    );
+
+    // Mark seen posts.
+    const seenPinnedPosts = pinnedPosts.get('pinned_posts').map(post => {
+        const id = `${post.get('author')}/${post.get('permlink')}`;
+        return post.set(
+            'seen',
+            localStorage.getItem(`pinned-post-seen:${id}`) === 'true'
         );
+    });
 
-        // Find users in the transfer history to consider sending users' reputations.
-        const transferUsers = transferHistory.reduce((acc, cur) => {
-            if (cur.getIn([1, 'op', 0]) === 'transfer') {
-                const { from, to } = cur.getIn([1, 'op', 1]).toJS();
-                return acc.add(from);
-            }
-            return acc;
-            // Ensure current user is included in this list, even if they don't have transfer history.
-            // This ensures their reputation is updated - fixes #2306
-        }, new Set([username]));
+    // Look up seen post URLs.
+    yield put(globalActions.syncPinnedPosts({ pinnedPosts: seenPinnedPosts }));
 
-        yield call(getAccounts, transferUsers);
-    }
+    // Mark all pinned posts as seen.
+    pinnedPosts.get('pinned_posts').forEach(post => {
+        const id = `${post.get('author')}/${post.get('permlink')}`;
+        localStorage.setItem(`pinned-post-seen:${id}`, 'true');
+    });
 }
 
 /**
@@ -137,8 +133,8 @@ export function* fetchData(action) {
                 start_permlink: permlink,
             },
         ];
-    } else if (order === 'trending30') {
-        call_name = 'getDiscussionsByTrending30Async';
+    } else if (order === 'hot') {
+        call_name = 'getDiscussionsByHotAsync';
         args = [
             {
                 tag: category,
@@ -157,28 +153,8 @@ export function* fetchData(action) {
                 start_permlink: permlink,
             },
         ];
-    } else if (order === 'active') {
-        call_name = 'getDiscussionsByActiveAsync';
-        args = [
-            {
-                tag: category,
-                limit: constants.FETCH_DATA_BATCH_SIZE,
-                start_author: author,
-                start_permlink: permlink,
-            },
-        ];
-    } else if (order === 'cashout') {
-        call_name = 'getDiscussionsByCashoutAsync';
-        args = [
-            {
-                tag: category,
-                limit: constants.FETCH_DATA_BATCH_SIZE,
-                start_author: author,
-                start_permlink: permlink,
-            },
-        ];
     } else if (order === 'payout') {
-        call_name = 'getPostDiscussionsByPayout';
+        call_name = 'getPostDiscussionsByPayoutAsync';
         args = [
             {
                 tag: category,
@@ -188,7 +164,7 @@ export function* fetchData(action) {
             },
         ];
     } else if (order === 'payout_comments') {
-        call_name = 'getCommentDiscussionsByPayout';
+        call_name = 'getCommentDiscussionsByPayoutAsync';
         args = [
             {
                 tag: category,
@@ -197,17 +173,7 @@ export function* fetchData(action) {
                 start_permlink: permlink,
             },
         ];
-    } else if (order === 'updated') {
-        call_name = 'getDiscussionsByActiveAsync';
-        args = [
-            {
-                tag: category,
-                limit: constants.FETCH_DATA_BATCH_SIZE,
-                start_author: author,
-                start_permlink: permlink,
-            },
-        ];
-    } else if (order === 'created' || order === 'recent') {
+    } else if (order === 'created') {
         call_name = 'getDiscussionsByCreatedAsync';
         args = [
             {
@@ -220,36 +186,6 @@ export function* fetchData(action) {
     } else if (order === 'by_replies') {
         call_name = 'getRepliesByLastUpdateAsync';
         args = [author, permlink, constants.FETCH_DATA_BATCH_SIZE];
-    } else if (order === 'responses') {
-        call_name = 'getDiscussionsByChildrenAsync';
-        args = [
-            {
-                tag: category,
-                limit: constants.FETCH_DATA_BATCH_SIZE,
-                start_author: author,
-                start_permlink: permlink,
-            },
-        ];
-    } else if (order === 'votes') {
-        call_name = 'getDiscussionsByVotesAsync';
-        args = [
-            {
-                tag: category,
-                limit: constants.FETCH_DATA_BATCH_SIZE,
-                start_author: author,
-                start_permlink: permlink,
-            },
-        ];
-    } else if (order === 'hot') {
-        call_name = 'getDiscussionsByHotAsync';
-        args = [
-            {
-                tag: category,
-                limit: constants.FETCH_DATA_BATCH_SIZE,
-                start_author: author,
-                start_permlink: permlink,
-            },
-        ];
     } else if (order === 'by_feed') {
         // https://github.com/steemit/steem/issues/249
         call_name = 'getDiscussionsByFeedAsync';
@@ -281,26 +217,20 @@ export function* fetchData(action) {
             },
         ];
     } else {
-        call_name = 'getDiscussionsByActiveAsync';
-        args = [
-            {
-                tag: category,
-                limit: constants.FETCH_DATA_BATCH_SIZE,
-                start_author: author,
-                start_permlink: permlink,
-            },
-        ];
+        // this should never happen. undefined behavior
+        call_name = 'getDiscussionsByTrendingAsync';
+        args = [{ limit: constants.FETCH_DATA_BATCH_SIZE }];
     }
     yield put(appActions.fetchDataBegin());
     try {
         const firstPermlink = permlink;
-        var fetched = 0;
-        var endOfData = false;
-        var fetchLimitReached = false;
-        var fetchDone = false;
-        var batch = 0;
+        let fetched = 0;
+        let endOfData = false;
+        let fetchLimitReached = false;
+        let fetchDone = false;
+        let batch = 0;
         while (!fetchDone) {
-            var data = yield call([api, api[call_name]], ...args);
+            const data = yield call([api, api[call_name]], ...args);
 
             endOfData = data.length < constants.FETCH_DATA_BATCH_SIZE;
 

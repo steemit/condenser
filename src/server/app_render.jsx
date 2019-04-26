@@ -60,7 +60,10 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
             client: config.google_ad_client,
             adSlots: config.google_ad_slots,
             gptEnabled: !!config.gpt_enabled,
-            gptSlots: config.gpt_slots,
+            gptBidding: config.gpt_bidding,
+            gptBasicSlots: config.gpt_basic_slots,
+            gptCategorySlots: config.gpt_category_slots,
+            gptBiddingSlots: config.gpt_bidding_slots,
         };
         // ... and that's the end of user-session-related SSR
         const initial_state = {
@@ -100,8 +103,8 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
             meta,
             shouldSeeAds: googleAds.enabled,
             gptEnabled: googleAds.gptEnabled,
-            gptSlots: googleAds.gptSlots,
             adClient: googleAds.client,
+            gptBidding: googleAds.gptBidding,
         };
         ctx.status = statusCode;
         ctx.body =

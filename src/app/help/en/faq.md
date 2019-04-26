@@ -13,6 +13,7 @@
 - <a href="#Where_do_the_tokens_come_from">Where do the tokens come from?</a>
 - <a href="#Where_does_the_value_come_from">Where does the value come from?</a>
 - <a href="#Why_are_people_getting_vastly_different_rewards">Why are people getting vastly different rewards?</a>
+- <a href="#Is_there_a_desktop_wallet_available_for_STEEM">Is there a desktop wallet available for STEEM?</a>
 - <a href="#What_are_Smart_Media_Tokens_SMTs">What are Smart Media Tokens (SMTs)?</a>
 
 ### <span id="Table_of_Contents_Accounts">Accounts</span>
@@ -107,10 +108,10 @@
 - <a href="#How_long_does_it_take_to_transfer_STEEM_or_SBD_tokens_between_users">How long does it take to transfer STEEM or SBD tokens between users?</a>
 
 ### <span id="Table_of_Contents_Voting_and_Curating">Voting and Curating</span>
-- <a href="#What_is_my_voting_power">What is my voting power?</a>
-- <a href="#How_many_times_can_I_vote_without_depleting_my_voting_power">How many times can I vote without depleting my voting power?</a>
+- <a href="#What_is_my_voting_mana">What is my voting mana?</a>
+- <a href="#How_many_times_can_I_vote_without_depleting_my_voting_mana">How many times can I vote without depleting my voting mana?</a>
 - <a href="#Can_I_vote_with_less_than_100__of_my_voting_strength">Can I vote with less than 100% of my voting strength?</a>
-- <a href="#Where_can_I_check_my_voting_power">Where can I check my voting power?</a>
+- <a href="#Where_can_I_check_my_voting_mana">Where can I check my voting mana?</a>
 - <a href="#What_determines_how_much_of_the_curation_reward_goes_to_the_author_versus_curators">What determines how much of the curation reward goes to the author versus curators?</a>
 - <a href="#Can_I_get_curation_rewards_for_upvoting_comments">Can I get curation rewards for upvoting comments?</a>
 - <a href="#Do_I_get_curation_rewards_for_downvoting_posts_or_comments">Do I get curation rewards for downvoting posts or comments?</a>
@@ -144,7 +145,7 @@
 ### <span id="Table_of_Contents_Blockchain">Blockchain</span>
 - <a href="#What_is_a_blockchain">What is a blockchain?</a>
 - <a href="#What_is_the_Steem_blockchain">What is the Steem blockchain?</a>
-- <a href="#How_does_bandwidth_work_on_the_Steem_blockchain">How does bandwidth work on the Steem blockchain?</a>
+- <a href="#How_do_Resource_Credits_work_on_the_Steem_blockchain">How do Resource Credits work on the Steem blockchain?</a>
 - <a href="#What_is_the_difference_between_Steem_and_Steemit">What is the difference between Steem and Steemit?</a>
 - <a href="#How_is_Steem_different_from_Bitcoin">How is Steem different from Bitcoin?</a>
 - <a href="#What_is_the_difference_between_Proof_of_Work__Proof_of_Stake__and_Delegated_Proof_of_Stake">What is the difference between Proof of Work, Proof of Stake, and Delegated Proof of Stake?</a>
@@ -236,7 +237,7 @@ You can earn digital tokens on Steemit by:
 
 **Voting and curating** - If you discover a post and upvote it before it becomes popular, you can earn a curation reward. The reward amount will depend on the amount of Steem Power you have.
 
-**Purchasing** - Users can purchase STEEM or Steem Dollar tokens directly through their Steemit wallet using bitcoin, Ether, or BitShares tokens. They are also available from other markets and exchanges including [Binance](https://www.binance.com/), [BitShares](https://openledger.info/), [Bittrex](https://bittrex.com), [BlockTrades](https://blocktrades.us), [Changelly](https://changelly.com), [GOPAX](https://www.gopax.co.kr), [HitBTC](https://hitbtc.com/), [Poloniex](https://poloniex.com), [Shapeshift.io](https://shapeshift.io), [UpBit](https://upbit.com/), and [Yensesa](https://yensesa.com).
+**Purchasing** - Users can purchase STEEM or Steem Dollar tokens directly through their Steemit wallet using bitcoin, Ether, or BitShares tokens. They are also available from other markets and exchanges including [Binance](https://www.binance.com/), [Bithumb](https://www.bithumb.com/), [BitShares](https://wallet.bitshares.org/), [Bittrex](https://bittrex.com), [BlockTrades](https://blocktrades.us), [Changelly](https://changelly.com), [GOBADA](https://www.gobaba.com/), [GOPAX](https://www.gopax.co.kr), [HitBTC](https://hitbtc.com/), [Huobi](https://www.huobi.pro/), [LocalBitcoinCash](https://www.localbitcoincash.org/), [Poloniex](https://poloniex.com), [Shapeshift.io](https://shapeshift.io), [UpBit](https://upbit.com/), and [Yensesa](https://yensesa.com).
 
 **Vesting** - STEEM tokens that are powered up to Steem Power will earn a small amount of new tokens for holding.
 
@@ -262,13 +263,18 @@ Most of the authors that you see earning high rewards are users that have spent 
 It is best to have realistic expectations, without focusing on rewards when you are first starting out. Work on building a following, making connections, and developing a good reputation. Consistency will pay off in the long run.
 
 <a href="#Table_of_Contents_General">^</a>
+## <span id="Is_there_a_desktop_wallet_available_for_STEEM">Is there a desktop wallet available for STEEM?</span>
+
+Yes. There is a third party wallet called [Vessel](https://github.com/aaroncox/vessel/), developed by one of the Steem witnesses @jesta. The latest release can be downloaded [here](https://github.com/aaroncox/vessel/releases).
+
+<a href="#Table_of_Contents_General">^</a>
 ## <span id="What_are_Smart_Media_Tokens_SMTs">What are Smart Media Tokens (SMTs)?</span>
 
 A Smart Media Token (SMT) is a native digital asset on the Steem blockchain that can be quickly launched by anyone to help monetize online content and create incentives to encourage desired user behavior.
 
 They're like Ethereum's ERC-20 tokens, but with certain built-in ‘Proof-of-Brain’ properties and a token distribution reward system designed specifically for digital content businesses.
 
-SMTs are planned to be launched in 2018!
+SMTs are planned to be launched in 2019!
 
 More information can be found on the SMTs website: [smt.steem.io](https://smt.steem.io/).
 
@@ -291,9 +297,9 @@ You will need to provide your email address and phone number.
 <a href="#Table_of_Contents_Accounts">^</a>
 ## <span id="How_long_does_the_account_approval_process_take">How long does the account approval process take?</span>
 
-Some accounts are approved faster than others. Most accounts are approved within 24 hours. Some may take a week or more to review.
+Some accounts are approved faster than others. Most accounts are approved within 24 hours. Some may take a week or two to review.
 
-If your account has not been approved after more than a week, you can ask for help in the <a href="https://steem.chat/channel/help">#help</a> channel on <a href="https://steem.chat/home">steem.chat</a>.
+If your account has not been approved after more than two weeks, you can ask for help in the <a href="https://steem.chat/channel/help">#help</a> channel on <a href="https://steem.chat/home">steem.chat</a>.
 
 <a href="#Table_of_Contents_Accounts">^</a>
 ## <span id="Can_I_speed_up_the_account_approval_process">Can I speed up the account approval process?</span>
@@ -499,7 +505,7 @@ Yes. You can see the list of followers or people you are following by clicking o
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 ## <span id="What_languages_are_supported">What languages are supported?</span>
 
-Currently steemit.com supports English, Spanish, Russian, French, Italian, Korean, Polish, and Chinese. There are also many communities using the platform that speak other languages. If you are interested in joining our translation team to add additional languages or help support the ones we have, please [email us](mailto:translate@steemit.com).
+Currently steemit.com supports English, Spanish, Russian, French, Italian, Korean, Polish, and Chinese. There are also many communities using the platform that speak other languages. If you are interested in joining our translation team to add additional languages or help support the ones we have, please email us at translate@steemit.com.
 
 <a href="#Table_of_Contents_Site_Navigation">^</a>
 # Posting
@@ -623,7 +629,7 @@ Language-specific groups include:
 <a href="#Table_of_Contents_Posting">^</a>
 ## <span id="Can_I_delete_something_I_posted">Can I delete something I posted?</span>
 
-The blockchain will always contain the full edit history of posts and comments, so it can never be completely deleted. If you would like to update a post so that users cannot see the content via steemit.com, you can edit the post and replace it with blank content for as long as the post is active. After seven days, the post can no longer be edited.
+The blockchain will always contain the full edit history of posts and comments, so it can never be completely deleted. If you would like to update a post so that users cannot see the content via steemit.com, you can edit the post and replace it with blank content for as long as the post is active. After seven days, the post can no longer be edited via steemit.com.
 
 <a href="#Table_of_Contents_Posting">^</a>
 ## <span id="What_does__Promoting__a_post_do">What does "Promoting" a post do?</span>
@@ -649,7 +655,7 @@ Yes, comments that are upvoted can earn rewards just like posts!
 <a href="#Table_of_Contents_Comments">^</a>
 ## <span id="How_often_can_I_comment">How often can I comment?</span>
 
-There is a 20 second wait time in between comments to limit spam.
+There is a three second wait time in between comments to limit spam.
 
 <a href="#Table_of_Contents_Comments">^</a>
 # Economics
@@ -679,12 +685,16 @@ STEEM and SBD are listed on the following exchanges:
 | Exchange        | STEEM           | SBD  |
 | ------------- |:-------------:| -----:|
 | [Binance](https://www.binance.com/)      | Y | N |
-| [BitShares](https://openledger.info/)      | Y      |   Y |
+| [Bithumb](https://www.bithumb.com/)  | Y | N |
+| [BitShares](https://wallet.bitshares.org/)      | Y      |   Y |
 | [Bittrex](https://bittrex.com) | Y      |    Y |
 | [BlockTrades](https://blocktrades.us) | Y      |    Y |
 | [Changelly](https://changelly.com) | Y      |    N |
+| [GOBADA](https://www.gobaba.com/)  | Y | N |
 | [GOPAX](https://www.gopax.co.kr) | Y      |    Y |
 | [HitBTC](https://hitbtc.com/) | Y      |    Y |
+| [Huobi](https://www.huobi.pro/)  | Y | N |
+| [LocalBitcoinCash](https://www.localbitcoincash.org/)  | Y | N |
 | [Poloniex](https://poloniex.com) | Y      |    Y |
 | [Shapeshift.io](https://shapeshift.io) | Y      |    N |
 | [UpBit](https://upbit.com/) | Y      |    Y |
@@ -700,7 +710,7 @@ Every day, a fixed amount of STEEM tokens are allocated to the network reward fu
 
 Up to 25% of a post's payout is awarded to curators (the people who upvoted the post) as a reward for discovering the content. The other 75% is awarded to the author.
 
-If curators vote for a post within the first 30 minutes of it being created, a portion of their curation reward is added to the author payout. This portion is linear to the age of the post between 0 and 30 minutes. As an example: upvoting at 15 minutes will donate half of your potential curation reward to the author.
+If curators vote for a post within the first 15 minutes of it being created, a portion of their curation reward remains in the rewards pool for other authors/curators. This portion is linear to the age of the post between 0 and 15 minutes. As an example: upvoting at ten minutes will donate 1/3 of your potential curation reward back to the rewards pool.
 
 <a href="#Table_of_Contents_Economics">^</a>
 ## <span id="Will_the_reward_pool_pay_out_more_or_less_depending_on_who_votes">Will the reward pool pay out more or less depending on who votes?</span>
@@ -735,12 +745,12 @@ Posts and comments remain active for 7 days. When the period is over, you are ab
 
 **Steem Power** - Steem Power (abbreviated SP) is a measurement of how much influence a user has in the Steem network. The more Steem Power a user holds, the more they can influence the value of posts and comments. Steem Power is less liquid. If a user wishes to “Power Down” SP, they will receive equal distributions of the STEEM weekly, over a 13 week period.
 
-**Steem Dollars** - Steem Dollars (commonly abbreviated SBD) are liquid stable-value currency tokens designed to be pegged to $1 USD. Steem Dollars can be traded with STEEM, and transferred to other accounts for commerce or exchange.  Steem Dollars may also be converted into STEEM via a process that takes 3.5 days. Steem Dollars can be used to buy things in marketplaces, such as [The Steemit Shop](https://thesteemitshop.com/).
+**Steem Dollars** - Steem Dollars (commonly abbreviated SBD) are liquid stable-value currency tokens designed to be pegged to $1 USD. Steem Dollars can be traded with STEEM, and transferred to other accounts for commerce or exchange.  Steem Dollars may also be converted into STEEM via a process that takes 3.5 days. 
 
 <a href="#Table_of_Contents_Economics">^</a>
 ## <span id="What_is_delegated_STEEM_Power">What is delegated Steem Power?</span>
 
-Users have the option to delegate Steem Power to other users. When a user is delegated Steem Power - their bandwidth, content votes, and curation rewards are calculated as if it were their own Steem Power. Users are not able to power down or cash out delegated Steem Power however, as it still belongs to the original owner.
+Users have the option to delegate Steem Power to other users. When a user is delegated Steem Power - their Resource Credits, content votes, and curation rewards are calculated as if it were their own Steem Power. Users are not able to power down or cash out delegated Steem Power however, as it still belongs to the original owner.
 
 Most users will have a small amount of Steem Power delegated to them by the Steemit account after creating an account via steemit.com.
 
@@ -767,7 +777,7 @@ To buy:
 
 STEEM purchases made via steemit.com are facilitated by <a href="https://blocktrades.us">BlockTrades</a>.
 
-bitcoin can also be exchanged for STEEM on external markets such as [Binance](https://www.binance.com/), [BitShares](https://openledger.info/), [Bittrex](https://bittrex.com), [Changelly](https://changelly.com), [GOPAX](https://www.gopax.co.kr), [HitBTC](https://hitbtc.com/), [Poloniex](https://poloniex.com), [Shapeshift.io](https://shapeshift.io), [UpBit](https://upbit.com/), and [Yensesa](https://yensesa.com).
+bitcoin can also be exchanged for STEEM on external markets such as [Binance](https://www.binance.com/), [Bithumb](https://www.bithumb.com/), [BitShares](https://wallet.bitshares.org/), [Bittrex](https://bittrex.com), [Changelly](https://changelly.com), [GOBADA](https://www.gobaba.com/), [GOPAX](https://www.gopax.co.kr), [HitBTC](https://hitbtc.com/), [Huobi](https://www.huobi.pro/), [LocalBitcoinCash](https://www.localbitcoincash.org/), [Poloniex](https://poloniex.com), [Shapeshift.io](https://shapeshift.io), [UpBit](https://upbit.com/), and [Yensesa](https://yensesa.com).
 
 <a href="#Table_of_Contents_Economics">^</a>
 ## <span id="How_long_does_it_take_STEEM_or_STEEM_Power_that_I_purchased_to_show_up_in_my_account">How long does it take STEEM or Steem Power that I purchased to show up in my account?</span>
@@ -877,45 +887,45 @@ A transfer of tokens between accounts typically takes 3 seconds. This is far fas
 <a href="#Table_of_Contents_Economics">^</a>
 # Voting and Curating
 
-## <span id="What_is_my_voting_power">What is my voting power?</span>
+## <span id="What_is_my_voting_mana">What is my voting mana?</span>
 
-Voting power is like an "energy bar" in a computer game that goes down a little bit every time you vote. You start out with 100% voting power. Every time you vote, you will use a small amount of your voting power.
+Voting mana is like an "energy bar" in a computer game that goes down a little bit every time you vote. You start out with 100% voting mana. Every time you vote, you will use a small amount of your voting mana.
 
-As you use more of your voting power, your votes will carry less influence. A vote with 50% voting power left will be worth 1/2 as much as a vote cast with 100% voting power. Not to worry, the network recharges your voting power by 20% every day.
+As you use more of your voting mana, your votes will carry less influence. A vote with 50% voting mana left will be worth 1/2 as much as a vote cast with 100% voting mana. Not to worry, the network recharges your voting mana by 20% every day.
 
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
-## <span id="How_many_times_can_I_vote_without_depleting_my_voting_power">How many times can I vote without depleting my voting power?</span>
+## <span id="How_many_times_can_I_vote_without_depleting_my_voting_mana">How many times can I vote without depleting my voting mana?</span>
 
-Every 100% vote you cast will use 2% of your remaining voting power. Your voting power will recharge by 20% each day. You can vote more than 10 times per day, but each vote will be worth less, and it will take longer to reach full voting power again.
+Every 100% vote you cast will use 2% of your remaining voting mana. Your voting mana will recharge by 20% each day. You can vote more than 10 times per day, but each vote will be worth less, and it will take longer to reach full voting mana again.
 
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
 ## <span id="Can_I_vote_with_less_than_100__of_my_voting_strength">Can I vote with less than 100% of my voting strength?</span>
 
 New users can only upvote and downvote with 100% voting strength.
 
-Once you reach about 500 Steem Power, you will see a vote slider appear when you vote. You can use the slider to adjust the weight of your vote, between 1% and 100% voting strength. Voting with less than 100% voting weight will use up less voting power, but it will also have less of an influence on the post or comment's rewards.
+Once you reach about 500 Steem Power, you will see a vote slider appear when you vote. You can use the slider to adjust the weight of your vote, between 1% and 100% voting strength. Voting with less than 100% voting weight will use up less voting mana, but it will also have less of an influence on the post or comment's rewards.
 
 <img src="https://steemitimages.com/DQmV6c21tzSrgXwPHx4tvuc1UiCXBEvzkLBH9QCZHtVN6Ma/image.png">
 
-Upvotes and downvotes use the same amount of voting power.
+Upvotes and downvotes use the same amount of voting mana.
 
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
-## <span id="Where_can_I_check_my_voting_power">Where can I check my voting power?</span>
+## <span id="Where_can_I_check_my_voting_mana">Where can I check my voting mana?</span>
 
-You can view your current voting power using third party tools such as https://steemd.com/@youraccount.
+You can view your current voting mana using third party tools such as https://steemd.com/@youraccount.
 
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
 ## <span id="What_determines_how_much_of_the_curation_reward_goes_to_the_author_versus_curators">What determines how much of the curation reward goes to the author versus curators?</span>
 
 The rewards are allocated so that 75% of the payout goes to the author of the post/comment, and 25% goes to the curator.
 
-Of the 25% that goes to the curator, that portion will be split between the author and the curator if the curator votes within the first 30 minutes. The split of the 25% between the author and curator during the first 30 minutes is calculated linearly based on the time the vote is cast.
+Of the 25% that goes to the curator, the curator will receive less than 100% if the curator votes within the first 15 minutes. The split of the 25% that the curator receives during the first 15 minutes is calculated linearly based on the time the vote is cast.
 
-- If a post is upvoted the moment of posting, 100% of the curation reward goes to the author.
-- At 3 minutes, 90% goes to the author and 10% to the curator.
-- At 15 minutes it's a 50/50 split.
-- At 27 minutes, 10% goes to the author and 90% to the curator.
-- If a post is upvoted 30 min after posting, 100% of the curation reward goes to the curator.
+- If a post is upvoted the moment of posting, 100% of the curation reward will remain in the rewards pool.
+- At 1.5 minutes, the curator receives 10%, and 90% remains in the rewards pool.
+- At 7.5 minutes, the curator receives 50%, and 50% remains in the rewards pool.
+- At 13.5 minutes, the curator receives 90%, and 10% remains in the rewards pool.
+- If a post is upvoted 15 minutes (or later) after posting, 100% of the curation reward goes to the curator.
 
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
 ## <span id="Can_I_get_curation_rewards_for_upvoting_comments">Can I get curation rewards for upvoting comments?</span>
@@ -1089,22 +1099,22 @@ A blockchain is a public ledger of all transactions ever executed. All of the tr
 The Steem blockchain is the publicly accessible distributed database, which records all posts and votes, and distributes the rewards across the network. It is where all of the text content and voting data is stored, and it is where all of the reward calculations and payouts are performed.
 
 <a href="#Table_of_Contents_Blockchain">^</a>
-## <span id="How_does_bandwidth_work_on_the_Steem_blockchain">How does bandwidth work on the Steem blockchain?</span>
+## <span id="How_do_Resource_Credits_work_on_the_Steem_blockchain">How do Resource Credits work on the Steem blockchain?</span>
 
-Since transacting on the Steem blockchain has zero fees, bandwidth rate-limiting is employed to safeguard the blockchain from spam attacks. Everything action that you take on the blockchain will consume a small amount of bandwidth. This includes posting, commenting, voting, transferring tokens, etc. Viewing content does not consume bandwidth.
+Since transacting on the Steem blockchain has zero fees, transaction rate-limiting is employed to safeguard the blockchain from spam attacks. Everything action that you take on the blockchain will consume a small amount of Resource Credits. This includes posting, commenting, voting, transferring tokens, etc. Viewing content does not consume Resource Credits.
 
-Every user has a limited amount of bandwidth to use each week. The more transactions a user does, the less bandwidth they will have left (until it recharges). Users with more Steem Power will have a higher bandwidth allowance.
+Every user has a limited amount of Resource Credits to use each week. The more transactions a user does, the less Resource Credits they will have left (until they recharge). Users with more Steem Power will have more Resource Credits.
 
-Normally everyone's bandwidth allowance is quite high, and users are able to use the network freely without any interruptions. Sometimes when the blockchain becomes busy however (due to heavy use), everyone's individual allowances may go down until the network becomes less busy.
+When the blockchain becomes busy (due to heavy use), the Resource Credit cost of transactions may become higher than during times when the blockchain is less busy.
 
-You can check how much bandwidth you currently have based on the current limit at:
+You can check how many Resource Credits you currently have at:
 https://steemd.com/@youraccount
 
-If users are below their bandwidth limit, they will be unable to transact with the blockchain until their bandwidth recharges or their limit is raised.
+If users do not have enough Resource Credits, they will be unable to transact with the blockchain until their Resource Credits recharge or they acquire additional Steem Power to increase their Resource Credit balance.
 
-If you get an error that you have exceeded your bandwidth allowance, it is normally best to just wait and try again later (when it is less busy). Usually if you wait and try again later, the transaction will likley go through.
+If you get an error that you have exceeded your Resource Credit allowance, it is normally best to just wait and try again later. Usually if you wait and try again later, the transaction will go through.
 
-If you are unable to transact for extended periods of time, or you are frequently running into bandwidth limits, then you will either need to reduce your usage to stay within your limit, or purchase more Steem Power for your account through a third-party exchange such as [BlockTrades](https://blocktrades.us/?input_coin_type=eth&output_coin_type=steem_power&receive_address=).
+If you are unable to transact for extended periods of time, or you are frequently running into Resource Credit limits, then you will either need to reduce your usage to stay within your limit, or purchase more Steem Power for your account through a third-party exchange such as [BlockTrades](https://blocktrades.us/?input_coin_type=eth&output_coin_type=steem_power&receive_address=).
 
 <a href="#Table_of_Contents_Blockchain">^</a>
 ## <span id="What_is_the_difference_between_Steem_and_Steemit">What is the difference between Steem and Steemit?</span>
@@ -1180,11 +1190,6 @@ The Steemit brand and logo are protected by intellectual property laws, includin
 The blue Steem logo with the three S-shaped squiggles is licensed under Creative Commons CC0, meaning you’re free to copy, modify, or distribute (even for commercial purposes) without needing to ask permission or give attribution.
 
 <a href="#Table_of_Contents_Steemit__Inc">^</a>
-## <span id="Can_I_purchase_official_Steemit_merchandise">Can I purchase official Steemit merchandise?</span>
-
-Yes. Official Steemit merchandise can be purchased from [The Steemit Shop](https://thesteemitshop.com/).
-
-<a href="#Table_of_Contents_Steemit__Inc">^</a>
 ## <span id="Did_Steemit__pre_mine__tokens">Did Steemit "pre-mine" tokens?</span>
 
 The STEEM tokens mined by Steemit, Inc. were not "pre-mined". All mining took place after the coin was officially and publicly announced on <a href="https://bitcointalk.org/index.php?topic=1410943.0">Bitcointalk.org</a>.
@@ -1241,7 +1246,9 @@ It is strongly recommended that you store an offline copy of your password somew
 <a href="#Table_of_Contents_Security">^</a>
 ## <span id="Are_my_STEEM_and_Steem_Dollar_tokens_insured_in_the_event_of_a_hack_or_if_someone_takes_over_my_account">Are my STEEM and Steem Dollar tokens insured in the event of a hack or if someone takes over my account?</span>
 
-No, liquid tokens can not be taken back if stolen or sent to the wrong account. If your tokens are in Steem Power, it is impossible for a hacker to take out more than 1/13 per week. If your tokens are in savings, there is a three-day wait period for them to become transferable.
+No, liquid tokens can not be taken back if stolen or sent to the wrong account.
+
+If your tokens are in Steem Power, it is impossible for a hacker to take out more than 1/13 per week. If your tokens are in savings, there is a three-day wait period for them to become transferable.
 
 <a href="#Table_of_Contents_Security">^</a>
 ## <span id="What_should_I_do_if_I_discover_that_someone_hacked_my_account">What should I do if I discover that someone hacked my account?</span>
@@ -1256,6 +1263,8 @@ If your password has been changed without your consent, then the account designa
 Steemit Inc. owns the default recovery account (@steem) for all users who sign up using steemit.com. Steemit can only identify users by their original email, Facebook, or Reddit logins that were used to signup via steemit.com.
 
 If you don't have the master password or owner key that was valid the past 30 days, or are unable to prove that you are the original owner of the account, then your account will be unrecoverable.
+
+The stolen account recovery process can only restore ownership of the account. It is not possible to recover funds that were stolen.
 
 <a href="#Table_of_Contents_Security">^</a>
 ## <span id="How_do_I_report_a_security_vulnerability">How do I report a security vulnerability?</span>
@@ -1351,7 +1360,7 @@ You can also create a post on steemit.com with the tag #help, and someone in the
 
 ## <span id="Third_Party_References_and_User_Links">Third Party References and User Links</span>
 
-AnonSteem, Binance, bitcoinfees, Bitcointalk, BitShares, Bittrex, blockchain.info, BlockTrades, Busy.org, Changelly, @cheetah, Coinbase, DTube, GOPAX, HitBTC, Localbitcoins, Markdown Cheatsheet, Pexels, Pixabay, Poloniex, Postimage, Shapeshift.io, Steemcleaners, SteemConnect, SteemCreate, steemd, SteemDB, steem.chat, SteemStats, SteemProjects, Streemian, The Steemit Shop, UpBit, Utopian.io, and Yensesa are third party applications/services, and are not owned or maintained by Steemit, Inc. Their listing here, as well as any other third party applications or websites that are listed, does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
+AnonSteem, Binance, bitcoinfees, Bitcointalk, Bithumb, BitShares, Bittrex, blockchain.info, BlockTrades, Busy.org, Changelly, @cheetah, Coinbase, DTube, GOBADA, GOPAX, HitBTC, Huobi, LocalBitcoinCash, Localbitcoins, Markdown Cheatsheet, Pexels, Pixabay, Poloniex, Postimage, Shapeshift.io, Steemcleaners, SteemConnect, SteemCreate, steemd, SteemDB, steem.chat, SteemStats, SteemProjects, Streemian, The Steemit Shop, UpBit, Utopian.io, Vessel, and Yensesa are third party applications/services, and are not owned or maintained by Steemit, Inc. Their listing here, as well as any other third party applications or websites that are listed, does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
 
 All links to user posts were created by our users and do not necessarily represent the views of Steemit, Inc. or its management. Their listing here does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
 

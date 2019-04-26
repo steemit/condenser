@@ -1,3 +1,4 @@
+jest.mock('./utils/GDPRUserList');
 import resolveRoute, { routeRegex } from './ResolveRoute';
 
 describe('routeRegex', () => {
@@ -7,12 +8,12 @@ describe('routeRegex', () => {
             ['UserProfile1', /^\/(@[\w\.\d-]+)\/?$/],
             [
                 'UserProfile2',
-                /^\/(@[\w\.\d-]+)\/(blog|posts|comments|recommended|transfers|curation-rewards|author-rewards|permissions|created|recent-replies|feed|password|followed|followers|settings)\/?$/,
+                /^\/(@[\w\.\d-]+)\/(blog|posts|comments|transfers|curation-rewards|author-rewards|permissions|created|recent-replies|feed|password|followed|followers|settings)\/?$/,
             ],
             ['UserProfile3', /^\/(@[\w\.\d-]+)\/[\w\.\d-]+/],
             [
                 'CategoryFilters',
-                /^\/(hot|votes|responses|trending|trending30|promoted|cashout|payout|payout_comments|created|active)\/?$/gi,
+                /^\/(hot|trending|promoted|payout|payout_comments|created)\/?$/gi,
             ],
             ['PostNoCategory', /^\/(@[\w\.\d-]+)\/([\w\d-]+)/],
             ['Post', /^\/([\w\d\-\/]+)\/(\@[\w\d\.-]+)\/([\w\d-]+)\/?($|\?)/],
@@ -39,32 +40,27 @@ describe('resolveRoute', () => {
         ['/privacy.html', { page: 'Privacy' }],
         ['/support.html', { page: 'Support' }],
         ['/tos.html', { page: 'Tos' }],
-        ['/change_password', { page: 'ChangePassword' }],
-        ['/create_account', { page: 'CreateAccount' }],
-        ['/approval', { page: 'Approval' }],
-        ['/pick_account', { page: 'NotFound' }],
-        ['/recover_account_step_1', { page: 'RecoverAccountStep1' }],
-        ['/recover_account_step_2', { page: 'RecoverAccountStep2' }],
-        ['/waiting_list.html', { page: 'WaitingList' }],
-        ['/market', { page: 'Market' }],
-        ['/~witnesses', { page: 'Witnesses' }],
         ['/submit.html', { page: 'SubmitPost' }],
         [
             '/@maitland/feed',
             { page: 'PostsIndex', params: ['home', '@maitland'] },
         ],
+        ['/@gdpr/feed', { page: 'NotFound' }],
         [
             '/@maitland/blog',
             { page: 'UserProfile', params: ['@maitland', 'blog'] },
         ],
+        ['/@gdpr/blog', { page: 'NotFound' }],
         [
             '/@cool/nice345',
             { page: 'PostNoCategory', params: ['@cool', 'nice345'] },
         ],
+        ['/@gdpr/nice345', { page: 'NotFound' }],
         [
             '/ceasar/@salad/circa90',
             { page: 'Post', params: ['ceasar', '@salad', 'circa90', ''] },
         ],
+        ['/taggy/@gdpr/nice345', { page: 'NotFound' }],
     ];
     test_cases.forEach(r => {
         it(`should resolve the route for the ${r[1].page} page`, () => {

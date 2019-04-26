@@ -178,8 +178,6 @@
             "El nombre de usuario debería tener sólo letras, dígitos o guiones.",
         "cannot_increase_reward_of_post_within_the_last_minute_before_payout":
             "No se puede aumentar la recompensa de la publicación dentro del último minuto antes del pago.",
-        "vote_currently_exists_user_must_be_indicate_a_to_reject_witness":
-            "Este voto ya existe, el usuario tiene que quitar el voto al witness",
         "only_one_APP_NAME_account_allowed_per_ip_address_every_10_minutes":
             "Sólo una cuenta Steem permitida por dirección IP cada 10 minutos",
         "resteem_this_post": "Reesteemea esta Publicación",
@@ -258,9 +256,9 @@
         "learn_more": "Para saber más",
         "welcome": "Bienvenido",
         "faq": "Preguntas Frecuentes",
-        "shop": "The Steemit Shop",
         "chat": "Chat de Steemit",
         "app_center": "Centro de Aplicaciones Steemit",
+        "business_center": "Businesses Accepting Steem",
         "api_docs": "Documentos API de Steemit",
         "bluepaper": "Steem Bluepaper",
         "smt_whitepaper": "Libro blanco de SMT",
@@ -290,7 +288,7 @@
         "selecting_them": "Seleccionándolos",
         "image_upload": "Subir imagen",
         "power_up_100": "Power Up 100%%",
-        "default_50_50": "Por defecto (50 1%% / 50 1%%)",
+        "default_50_50": "50 1%% / 50 1%%",
         "decline_payout": "Rechazar Pago",
         "check_this_to_auto_upvote_your_post":
             "Seleciona para autovotarte el post",
@@ -332,64 +330,9 @@
         "you_are_viewing_a_single_comments_thread_from":
             "Estás viendo  los comentarios relacionados de"
     },
-    "market_jsx": {
-        "action": "Acción",
-        "date_created": "Fecha de creación",
-        "last_price": "Último precio",
-        "24h_volume": "Volumen de 24 horas",
-        "spread": "Difundir",
-        "total": "Total",
-        "available": "Disponible",
-        "lowest_ask": "Oferta más baja",
-        "highest_bid": "Oferta más alta",
-        "buy_orders": "Comprar órdenes",
-        "sell_orders": "Vender órdenes",
-        "trade_history": "Historia de compra venta",
-        "open_orders": "Órdenes abiertas",
-        "sell_amount_for_atleast":
-            "Vender %(amount_to_sell)s al menos por %(min_to_receive)s (%(effectivePrice)s)",
-        "buy_atleast_amount_for":
-            "Comprar al menos %(min_to_receive)s for %(amount_to_sell)s (%(effectivePrice)s)",
-        "price_warning_above":
-            "Este precio está por debajo del precio de mercado que es %(marketPrice)s, estás seguro?",
-        "price_warning_below":
-            "Este precio está por debajo del precio de mercado que es %(marketPrice)s, estás seguro?",
-        "order_cancel_confirm": "Cancelar órden %(order_id)s de %(user)s?",
-        "order_cancelled": "Órden %(order_id)s cancelada",
-        "higher": "Más alta",
-        "lower": "Más baja",
-        "total_DEBT_TOKEN_SHORT_CURRENCY_SIGN":
-            "Total %(DEBT_TOKEN_SHORT)s (%(CURRENCY_SIGN)s)"
-    },
     "recoveraccountstep1_jsx": {
-        "begin_recovery": "Empezar Recuperación",
-        "not_valid": "No es válido",
-        "account_name_is_not_found": "Nombre de usuario no encontrado",
-        "unable_to_recover_account_not_change_ownership_recently":
-            "No podemos recuperar esta cuenta, esta no ha cambiado su propiedad recientemente.",
-        "password_not_used_in_last_days":
-            "Esta contraseña no ha sido usada en esta cuenta en los últimos 30 días.",
-        "request_already_submitted_contact_support":
-            "Tu petición ha sido enviada y estamos trabajando en ella. Por favor contacta %(SUPPORT_EMAIL)s para ver el estado de la misma.",
         "recover_account_intro":
-            "Puede ocurrir que la owner key de algún usuario se vea comprometida. La funcionalidad de recuperación de contraseñas robadas le da al propietario de la cuenta 30 días para recuperar su cuenta desde el mismo momento que el delincuente ha cambiado la owner key. Esta funcionalidad sólo puede ser usada en %(APP_URL)s si el propietario de la cuenta ha incluído %(APP_NAME)s como su cuenta de confianza y además a comulgado con las condiciones y términos de servicio de %(APP_NAME)s",
-        "login_with_facebook_or_reddit_media_to_verify_identity":
-            "Por favor accede con Fabebook o Reddit para verificar tu identidad",
-        "login_with_social_media_to_verify_identity":
-            "Por favor entra con %(provider)s para verificar tu identidad",
-        "enter_email_toverify_identity":
-            "Necesitamos verificar tu identidad. Por favor introduce tu dirección de correo electrónico debajo para empezar la verificación.",
-        "continue_with_email": "Continuar con correo electrónico",
-        "thanks_for_submitting_request_for_account_recovery":
-            "Gracias por enviar tu petición a nuestro sistema de recuperación de contraseñas usando %(APP_NAME)s basado en la autentificación multi factor. Tan pronto como sea posible recibirás una respuesta, sim embargo, puede que haya algún retraso debido al alto volumen de peticiones. Por favor, esté preparado para verificar su identidad.",
-        "recovering_account": "Recuperando cuenta",
-        "recover_account": "Recuperar Cuenta",
-        "checking_account_owner": "Comprobando propietario de la cuenta",
-        "sending_recovery_request": "Enviando solicitud de recuperación ",
-        "cant_confirm_account_ownership":
-            "No podemos confirmar la propiedad de la cuenta. Comprueba tu contraseña",
-        "account_recovery_request_not_confirmed":
-            "La solicitud de recuperación de cuenta no está confirmada todavía, por favor vuelve más tarde, gracias por tu paciencia."
+            "Puede ocurrir que la owner key de algún usuario se vea comprometida. La funcionalidad de recuperación de contraseñas robadas le da al propietario de la cuenta 30 días para recuperar su cuenta desde el mismo momento que el delincuente ha cambiado la owner key. Esta funcionalidad sólo puede ser usada en %(APP_URL)s si el propietario de la cuenta ha incluído %(APP_NAME)s como su cuenta de confianza y además a comulgado con las condiciones y términos de servicio de %(APP_NAME)s"
     },
     "user_profile": {
         "unknown_account": "Cuenta desconocida",
@@ -424,17 +367,9 @@
             "zero": "Sin publicaciones",
             "one": "1 publicación",
             "other": "%(count)s posts"
-        }
-    },
-    "authorrewards_jsx": {
-        "estimated_author_rewards_last_week":
-            "Recompensas de autor estimadas la semana pasada",
-        "author_rewards_history": "Historial de recompensas de autor"
-    },
-    "curationrewards_jsx": {
-        "estimated_curation_rewards_last_week":
-            "Recompensas de curación aproximadas de la semana pasada",
-        "curation_rewards_history": "Historial de recompensas de curación"
+        },
+        "hide_resteems": "Hide Resteems",
+        "show_all": "Show All"
     },
     "post_jsx": {
         "now_showing_comments_with_low_ratings":
@@ -470,29 +405,6 @@
             "one": "%(count)s voto",
             "other": "%(count)s votos"
         }
-    },
-    "witnesses_jsx": {
-        "witness_thread": "tema testigo",
-        "top_witnesses": "Votación para testigo",
-        "you_have_votes_remaining": {
-            "zero": "No tienes votos restantes",
-            "one": "Tienes 1 voto restante",
-            "other": "Te quedan %(count)s votos disponibles"
-        },
-        "you_can_vote_for_maximum_of_witnesses":
-            "Puedes votar como máximo a 30 testigos",
-        "witness": "Testigos",
-        "information": "Información",
-        "if_you_want_to_vote_outside_of_top_enter_account_name":
-            "SI quieres votar a un testigo que está fuera de los top 50, por favor introduce el nombre de la cuenta para votarle",
-        "set_witness_proxy":
-            "También puedes elegir un proxy que votará a los testigos por ti. Esta actividad reseteará tu actual selección de witness",
-        "witness_set":
-            "Has seleccionado un proxy de votación. Si quieres volver a habilitar el voto manual, por favor borra el proxy.",
-        "witness_proxy_current": "Tu proxy actual es",
-        "witness_proxy_set": "Crear proxy",
-        "witness_proxy_clear": "Borrar proxy",
-        "proxy_update_error": "Tu proxy no fue actualizado"
     },
     "votesandcomments_jsx": {
         "no_responses_yet_click_to_respond":
@@ -593,21 +505,6 @@
         "empty_feed_3": "Explorar artículos en tendencia",
         "empty_feed_4": "leer la guía básica para comenzar",
         "empty_feed_5": "Explorar la FAQ"
-    },
-    "transferhistoryrow_jsx": {
-        "to_savings": "a ahorros",
-        "from_savings": "desde ahorros",
-        "cancel_transfer_from_savings": "Cancela transferencia desde ahorros",
-        "stop_power_down": "Para power down",
-        "start_power_down_of": "Comenzar power down",
-        "receive_interest_of": "Recibir interés de"
-    },
-    "savingswithdrawhistory_jsx": {
-        "cancel_this_withdraw_request": "¿Cancelar la petición de retirada?",
-        "pending_savings_withdrawals": "AHORROS PENDIENTES DE RETIRADA",
-        "withdraw": "Retirar %(amount)s",
-        "to": "a %(to)s",
-        "from_to": "de %(from)s a %(to)s"
     },
     "explorepost_jsx": {
         "copied": "¡Copiado!",
@@ -753,18 +650,6 @@
         "history": "HISTORIA",
         "redeem_rewards": "Liquidar recompensas (Transferir al saldo)",
         "buy_steem_or_steem_power": "Compra STEEM o STEEM POWER."
-    },
-    "powerdown_jsx": {
-        "power_down": "Power Down",
-        "amount": "Cantidad",
-        "already_power_down":
-            "Estás haciendo un power down de %(AMOUNT)s%(LIQUID_TICKER)s (%(WITHDRAWN)s%(LIQUID_TICKER)shan sido pagados hasta ahora). Ten en cuenta que si cambias la cantidad de \"power down\" la fecha de pago se reinicializará.",
-        "delegating":
-            "Estás delegando %(AMOUNT)s%(LIQUID_TICKER)s. Esa cantidad está \"bloquedada\" y no podrás hacer \"power down\" con ella hasta que hayas cancelado la delegación y el periodo de pagos  haya vencido.",
-        "per_week": "Eso es %(AMOUNT)s%(LIQUID_TICKER)spor semana",
-        "warning":
-            "Dejar menos de %(AMOUNT)s%(VESTING_TOKEN)s en su cuenta no es recomendable y puede dejarla en un estado inutilizable.",
-        "error": "Imposible hacer \"power down\" (ERROR: %(MESSAGE)s)"
     },
     "checkloginowner_jsx": {
         "your_password_permissions_were_reduced":

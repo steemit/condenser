@@ -175,8 +175,6 @@
             "Имя аккаунта должно должно состоять только из букв, цифр или дефисов.",
         "cannot_increase_reward_of_post_within_the_last_minute_before_payout":
             "Не удается увеличить вознаграждение за пост в последнюю минуту перед выплатой",
-        "vote_currently_exists_user_must_be_indicate_a_to_reject_witness":
-            "голос уже существует, пользователь должен обозначить желание убрать делегата",
         "only_one_APP_NAME_account_allowed_per_ip_address_every_10_minutes":
             "Только один Steem аккаунт разрешен с одного IP адреса каждые десять минут",
         "resteem_this_post": "Поделиться этим постом",
@@ -259,9 +257,9 @@
         "learn_more": "Документация",
         "welcome": "Добро пожаловать",
         "faq": "ЧаВО",
-        "shop": "Магазин Steemit",
         "chat": "Чат Steemit",
         "app_center": "Центр приложений Steemit",
+        "business_center": "Businesses Accepting Steem",
         "api_docs": "API-документация Steemit",
         "bluepaper": "Синяя бумага Steem",
         "smt_whitepaper": "Белая книга SMT",
@@ -291,7 +289,7 @@
         "selecting_them": "выбрав их",
         "image_upload": "Загрузка изображения",
         "power_up_100": "Сила Голоса 100%%",
-        "default_50_50": "По умолчанию (50%% / 50%%)",
+        "default_50_50": "50%% / 50%%",
         "decline_payout": "Отказаться от выплаты",
         "check_this_to_auto_upvote_your_post":
             "Отметьте, чтобы проголосовать за свой пост",
@@ -320,6 +318,13 @@
         "must_end_with_a_letter_or_number":
             "Должно заканчиваться с буквы или номера"
     },
+    "post_advanced_settings_jsx": {
+        "payout_option_header": "Author rewards",
+        "payout_option_description":
+            "What type of tokens do you want as rewards from this post?",
+        "current_default": "Default",
+        "update_default_in_settings": "Update"
+    },
     "postfull_jsx": {
         "this_post_is_not_available_due_to_a_copyright_claim":
             "Этот пост недоступен из-за жалобы о нарушении авторских прав.",
@@ -334,64 +339,9 @@
         "you_are_viewing_a_single_comments_thread_from":
             "Вы читаете одну нить комментариев от"
     },
-    "market_jsx": {
-        "action": "Действие",
-        "date_created": "Дата создания",
-        "last_price": "Последняя цена",
-        "24h_volume": "Объем за 24 часа",
-        "spread": "Спред",
-        "total": "Итого",
-        "available": "Доступно",
-        "lowest_ask": "Лучшая цена продажи",
-        "highest_bid": "Лучшая цена покупки",
-        "buy_orders": "Заказы на покупку",
-        "sell_orders": "Заказы на продажу",
-        "trade_history": "История сделок",
-        "open_orders": "Открытые сделки",
-        "sell_amount_for_atleast":
-            "Продать %(amount_to_sell)s за %(min_to_receive)s по цене (%(effectivePrice)s)",
-        "buy_atleast_amount_for":
-            "Купить по крайней мере %(min_to_receive)s за %(amount_to_sell)s (%(effectivePrice)s)",
-        "price_warning_above":
-            "Эта цена намного выше текущей рыночной цены %(marketPrice)s, вы уверены?",
-        "price_warning_below":
-            "Эта цена намного выше текущей рыночной цены %(marketPrice)s, вы уверены?",
-        "order_cancel_confirm": "Отменить заказ %(order_id)s от %(user)s?",
-        "order_cancelled": "Заказ %(order_id)s отменен.",
-        "higher": "Дороже",
-        "lower": "Дешевле",
-        "total_DEBT_TOKEN_SHORT_CURRENCY_SIGN":
-            "Сумма %(DEBT_TOKEN_SHORT)s (%(CURRENCY_SIGN)s)"
-    },
     "recoveraccountstep1_jsx": {
-        "begin_recovery": "Начать восстановление",
-        "not_valid": "Недействительно",
-        "account_name_is_not_found": "Имя аккаунта не найдено",
-        "unable_to_recover_account_not_change_ownership_recently":
-            "Мы не можем восстановить эту учетную запись, она не изменила владельца в последнее время.",
-        "password_not_used_in_last_days":
-            "Этот пароль не использовался в этой учетной записи за последние 30 дней.",
-        "request_already_submitted_contact_support":
-            "Ваш запрос был отправлен, и мы работаем над этим. Пожалуйста, свяжитесь с %(SUPPORT_EMAIL)s для получения статуса вашего запроса.",
         "recover_account_intro":
-            "Иногда бывает что ключ владельца может быть скомпрометирован. Восстановление украденного аккаунта дает законному владельцу 30 дней чтобы вернуть аккаунт с момента изменения владельческого ключа мошенником. Восстановление украденного аккаунта в %(APP_URL)s возможно только если владелец аккаунта ранее указал %(APP_NAME)s's в качестве доверенного лица и согласился с Условиями Использования сайта %(APP_NAME)s's.",
-        "login_with_facebook_or_reddit_media_to_verify_identity":
-            "Пожалуйста, войдите используя Facebook или Reddit для подтверждения вашей личности",
-        "login_with_social_media_to_verify_identity":
-            "Пожалуйста, войдите используя %(provider)s для подтверждения вашей личности",
-        "enter_email_toverify_identity":
-            "Нам нужно подтвердить вашу личность. Пожалуйста, укажите вашу электронную почту ниже для начала проверки.",
-        "continue_with_email": "Продолжить с электронной почтой",
-        "thanks_for_submitting_request_for_account_recovery":
-            "<p>Благодарим Вас за отправку запроса на восстановление аккаунта используя основанную на блокчейне мультифакторную аутентификацию %(APP_NAME)s’a.</p> <p>Мы ответим Вам как можно быстрее, однако, пожалуйста, ожидайте что может быть некоторая задержка из-за большого объема писем.</p> <p>Пожалуйста, будьте готовы подтвердить свою личность.</p><p>С уважением,</p> <p>Ned Scott</p> <p>CEO Steemit</p>",
-        "recovering_account": "Восстанавливаем аккаунт",
-        "recover_account": "Восстановить аккаунт",
-        "checking_account_owner": "Проверяем владельца аккаунта",
-        "sending_recovery_request": "Отправляем запрос восстановления",
-        "cant_confirm_account_ownership":
-            "Мы не можем подтвердить владение аккаунтом. Проверьте ваш пароль",
-        "account_recovery_request_not_confirmed":
-            "Запрос восстановления аккаунта еще не подтвержден, пожалуйста проверьте позднее. Спасибо за ваше терпение."
+            "Иногда бывает что ключ владельца может быть скомпрометирован. Восстановление украденного аккаунта дает законному владельцу 30 дней чтобы вернуть аккаунт с момента изменения владельческого ключа мошенником. Восстановление украденного аккаунта в %(APP_URL)s возможно только если владелец аккаунта ранее указал %(APP_NAME)s's в качестве доверенного лица и согласился с Условиями Использования сайта %(APP_NAME)s's."
     },
     "user_profile": {
         "unknown_account": "Неизвестный аккаунт",
@@ -432,17 +382,9 @@
             "few": "%(count)s поста",
             "many": "%(count)s постов",
             "other": "%(count)s постов"
-        }
-    },
-    "authorrewards_jsx": {
-        "estimated_author_rewards_last_week":
-            "Оценочные авторские вознаграждения за прошлую неделю",
-        "author_rewards_history": "История авторских наград"
-    },
-    "curationrewards_jsx": {
-        "estimated_curation_rewards_last_week":
-            "Оценочные кураторские вознаграждения за последнюю неделю",
-        "curation_rewards_history": "История кураторских наград"
+        },
+        "hide_resteems": "Hide Resteems",
+        "show_all": "Show All"
     },
     "post_jsx": {
         "now_showing_comments_with_low_ratings":
@@ -481,31 +423,6 @@
             "many": "%(count)s голосов",
             "other": "%(count)s голосов"
         }
-    },
-    "witnesses_jsx": {
-        "witness_thread": "пост делегата",
-        "top_witnesses": "Топ делегатов",
-        "you_have_votes_remaining": {
-            "zero": "У Вас не осталось голосов",
-            "one": "У Вас остался 1 голос",
-            "few": "У Вас осталось %(count)s голоса",
-            "many": "У Вас осталось %(count)s голосов",
-            "other": "У Вас осталось %(count)s голосов"
-        },
-        "you_can_vote_for_maximum_of_witnesses":
-            "Вы можете голосовать максимум за 30 делегатов",
-        "witness": "Делегаты",
-        "information": "Информация",
-        "if_you_want_to_vote_outside_of_top_enter_account_name":
-            "Если вы хотите проголосовать за делегата вне top 50, введите имя аккаунта ниже",
-        "set_witness_proxy":
-            "Вы также можете выбрать прокси, который будет вместо вас голосовать за делегатов. Это сбросит ваш текущий выбор делегата.",
-        "witness_set":
-            "Вы установили прокси для голосования. Если вы хотите голосовать вручную, пожалуйста, очистите ваш прокси.",
-        "witness_proxy_current": "Ваш текущий прокси",
-        "witness_proxy_set": "Установить прокси",
-        "witness_proxy_clear": "Очистить прокси",
-        "proxy_update_error": "Ваш прокси не был обновлен"
     },
     "votesandcomments_jsx": {
         "no_responses_yet_click_to_respond":
@@ -609,21 +526,6 @@
         "empty_feed_3": "Посмотреть статьи, набирающие популярность",
         "empty_feed_4": "Прочтите краткое руководство",
         "empty_feed_5": "Просмотреть ЧаВО"
-    },
-    "transferhistoryrow_jsx": {
-        "to_savings": "в сейф",
-        "from_savings": "из сейфа",
-        "cancel_transfer_from_savings": "Отменить перевод из сейфа",
-        "stop_power_down": "Ослабление Силы Голоса остановлено",
-        "start_power_down_of": "Ослабление Силы Голоса начато с",
-        "receive_interest_of": "Получать проценты по"
-    },
-    "savingswithdrawhistory_jsx": {
-        "cancel_this_withdraw_request": "Отменить запрос вывода средств?",
-        "pending_savings_withdrawals": "Выплаты из сейфа",
-        "withdraw": "Снять %(amount)s",
-        "to": "для %(to)s",
-        "from_to": "от %(from)s к %(to)s"
     },
     "explorepost_jsx": {
         "copied": "Скопировано!",
@@ -773,18 +675,6 @@
         "history": "ИСТОРИЯ",
         "redeem_rewards": "Получить вознаграждение",
         "buy_steem_or_steem_power": "Купить STEEM или STEEM POWER"
-    },
-    "powerdown_jsx": {
-        "power_down": "Уменьшить силу голоса (power down)",
-        "amount": "Количество",
-        "already_power_down":
-            "Вы уже запустили понижение силы голоса на %(AMOUNT)s %(LIQUID_TICKER)s (%(WITHDRAWN)s %(LIQUID_TICKER)s уже выплачено). Если вы измените количество, отсчет времени сбросится и составит 13 недель от сегодняшего дня.",
-        "delegating":
-            "Вы делегируете %(AMOUNT)s %(LIQUID_TICKER)s. Это количество заблокировано и не может быть выведено пока делегирование не будет отменено и не пройдет один полный цикл выплат вознаграждений.",
-        "per_week": "Это ~%(AMOUNT)s %(LIQUID_TICKER)s в неделю.",
-        "warning":
-            "Оставлять меньше чем %(AMOUNT)s %(LIQUID_TICKER)s не рекомендуется, т.к. это может остановить все транзакции с использованием это аккаунта.",
-        "error": "Неполучается уменьшить силу голоса (ERROR: %(MESSAGE)s)"
     },
     "checkloginowner_jsx": {
         "your_password_permissions_were_reduced":

@@ -171,6 +171,8 @@
   &__more-link {
     @extend .link;
     @extend .link--accent;
+    display: inline-block;
+    margin-bottom: 1.3em;
   }
   &__label {
     display: block;

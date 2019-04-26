@@ -4,16 +4,13 @@ import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 import classnames from 'classnames';
+import * as globalActions from 'app/redux/GlobalReducer';
 import * as transactionActions from 'app/redux/TransactionReducer';
 import * as userActions from 'app/redux/UserReducer';
 import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
 import Icon from 'app/components/elements/Icon';
-import UserKeys from 'app/components/elements/UserKeys';
-import PasswordReset from 'app/components/elements/PasswordReset';
 import UserWallet from 'app/components/modules/UserWallet';
 import Settings from 'app/components/modules/Settings';
-import CurationRewards from 'app/components/modules/CurationRewards';
-import AuthorRewards from 'app/components/modules/AuthorRewards';
 import UserList from 'app/components/elements/UserList';
 import Follow from 'app/components/elements/Follow';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
@@ -21,11 +18,9 @@ import PostsList from 'app/components/cards/PostsList';
 import { isFetchingOrRecentlyUpdated } from 'app/utils/StateFunctions';
 import { repLog10 } from 'app/utils/ParsersAndFormatters.js';
 import Tooltip from 'app/components/elements/Tooltip';
-import VerticalMenu from 'app/components/elements/VerticalMenu';
-import NotifiCounter from 'app/components/elements/NotifiCounter';
 import DateJoinWrapper from 'app/components/elements/DateJoinWrapper';
 import tt from 'counterpart';
-import WalletSubMenu from 'app/components/elements/WalletSubMenu';
+import { List } from 'immutable';
 import Userpic from 'app/components/elements/Userpic';
 import Callout from 'app/components/elements/Callout';
 import normalizeProfile from 'app/utils/NormalizeProfile';
@@ -39,66 +34,59 @@ import DropdownMenu from 'app/components/elements/DropdownMenu';
 export default class UserProfile extends React.Component {
     constructor() {
         super();
-        this.state = {};
+        this.state = { showResteem: true };
         this.onPrint = () => {
             window.print();
         };
         this.loadMore = this.loadMore.bind(this);
     }
 
-    shouldComponentUpdate(np) {
-        const { follow } = this.props;
-        const { follow_count } = this.props;
+    shouldComponentUpdate(np, ns) {
+        const { follow, follow_count, account, accountname } = this.props;
 
         let followersLoading = false,
             npFollowersLoading = false;
         let followingLoading = false,
             npFollowingLoading = false;
 
-        const account = np.routeParams.accountname.toLowerCase();
         if (follow) {
             followersLoading = follow.getIn(
-                ['getFollowersAsync', account, 'blog_loading'],
+                ['getFollowersAsync', accountname, 'blog_loading'],
                 false
             );
             followingLoading = follow.getIn(
-                ['getFollowingAsync', account, 'blog_loading'],
+                ['getFollowingAsync', accountname, 'blog_loading'],
                 false
             );
         }
         if (np.follow) {
             npFollowersLoading = np.follow.getIn(
-                ['getFollowersAsync', account, 'blog_loading'],
+                ['getFollowersAsync', accountname, 'blog_loading'],
                 false
             );
             npFollowingLoading = np.follow.getIn(
-                ['getFollowingAsync', account, 'blog_loading'],
+                ['getFollowingAsync', accountname, 'blog_loading'],
                 false
             );
         }
 
         return (
             np.current_user !== this.props.current_user ||
-            np.accounts.get(account) !== this.props.accounts.get(account) ||
-            np.wifShown !== this.props.wifShown ||
+            np.account !== this.props.account ||
             np.global_status !== this.props.global_status ||
             (npFollowersLoading !== followersLoading && !npFollowersLoading) ||
             (npFollowingLoading !== followingLoading && !npFollowingLoading) ||
             np.loading !== this.props.loading ||
             np.location.pathname !== this.props.location.pathname ||
-            np.routeParams.accountname !== this.props.routeParams.accountname ||
             np.follow_count !== this.props.follow_count ||
-            np.blogmode !== this.props.blogmode
+            np.blogmode !== this.props.blogmode ||
+            ns.showResteem !== this.state.showResteem
         );
     }
 
-    componentWillUnmount() {
-        this.props.clearTransferDefaults();
-        this.props.clearPowerdownDefaults();
-    }
+    loadMore(last_post, category, showResteem) {
+        const { accountname } = this.props;
 
-    loadMore(last_post, category) {
-        const { accountname } = this.props.routeParams;
         if (!last_post) return;
 
         let order;
@@ -125,8 +113,13 @@ export default class UserProfile extends React.Component {
                 order,
                 category
             )
-        )
+        ) {
             return;
+        }
+
+        const postFilter = showResteem
+            ? null
+            : value => value.author === accountname;
         const [author, permlink] = last_post.split('/');
         this.props.requestData({
             author,
@@ -134,25 +127,32 @@ export default class UserProfile extends React.Component {
             order,
             category,
             accountname,
+            postFilter,
         });
     }
 
+    toggleShowResteem = e => {
+        e.preventDefault();
+        const newShowResteem = !this.state.showResteem;
+        this.setState({ showResteem: newShowResteem });
+    };
+
     render() {
         const {
-            props: { current_user, wifShown, global_status, follow },
+            state: { showResteem },
+            props: {
+                current_user,
+                global_status,
+                follow,
+                accountname,
+                walletUrl,
+            },
             onPrint,
         } = this;
-        let { accountname, section } = this.props.routeParams;
-        // normalize account from cased params
-        accountname = accountname.toLowerCase();
         const username = current_user ? current_user.get('username') : null;
-        // const gprops = this.props.global.getIn( ['props'] ).toJS();
+
+        let { section } = this.props.routeParams;
         if (!section) section = 'blog';
-
-        // @user/"posts" is deprecated in favor of "comments" as of oct-2016 (#443)
-        if (section == 'posts') section = 'comments';
-
-        // const isMyAccount = current_user ? current_user.get('username') === accountname : false;
 
         // Loading status
         const status = global_status
@@ -161,7 +161,7 @@ export default class UserProfile extends React.Component {
         const fetching = (status && status.fetching) || this.props.loading;
 
         let account;
-        let accountImm = this.props.accounts.get(accountname);
+        let accountImm = this.props.account;
         if (accountImm) {
             account = accountImm.toJS();
         } else if (fetching) {
@@ -201,43 +201,25 @@ export default class UserProfile extends React.Component {
         const isMyAccount = username === account.name;
         let tab_content = null;
 
-        // const global_status = this.props.global.get('status');
-
-        // let balance_steem = parseFloat(account.balance.split(' ')[0]);
-        // let vesting_steem = vestingSteem(account, gprops).toFixed(2);
-        // const steem_balance_str = numberWithCommas(balance_steem.toFixed(2)) + " STEEM";
-        // const power_balance_str = numberWithCommas(vesting_steem) + " STEEM POWER";
-        // const sbd_balance = parseFloat(account.sbd_balance)
-        // const sbd_balance_str = numberWithCommas('$' + sbd_balance.toFixed(2));
-
-        let rewardsClass = '',
-            walletClass = '';
+        let walletClass = '';
         if (section === 'transfers') {
             walletClass = 'active';
             tab_content = (
                 <div>
                     <UserWallet
                         account={accountImm}
-                        showTransfer={this.props.showTransfer}
-                        showPowerdown={this.props.showPowerdown}
                         current_user={current_user}
-                        withdrawVesting={this.props.withdrawVesting}
                     />
                 </div>
             );
-        } else if (section === 'curation-rewards') {
-            rewardsClass = 'active';
-            tab_content = (
-                <CurationRewards
-                    account={account}
-                    current_user={current_user}
-                />
-            );
-        } else if (section === 'author-rewards') {
-            rewardsClass = 'active';
-            tab_content = (
-                <AuthorRewards account={account} current_user={current_user} />
-            );
+        } else if (
+            section === 'curation-rewards' ||
+            section === 'author-rewards' ||
+            section === 'permissions' ||
+            section === 'password'
+        ) {
+            walletClass = 'active';
+            tab_content = <div>Moved to wallet</div>;
         } else if (section === 'followers') {
             if (followers && followers.has('blog_result')) {
                 tab_content = (
@@ -262,10 +244,9 @@ export default class UserProfile extends React.Component {
             }
         } else if (section === 'settings') {
             tab_content = <Settings routeParams={this.props.routeParams} />;
-        } else if (section === 'comments' && account.post_history) {
+        } else if (section === 'comments') {
             if (account.comments) {
-                let posts =
-                    accountImm.get('posts') || accountImm.get('comments');
+                let posts = accountImm.get('comments');
                 if (!fetching && (posts && !posts.size)) {
                     tab_content = (
                         <Callout>
@@ -281,6 +262,7 @@ export default class UserProfile extends React.Component {
                             loading={fetching}
                             category="comments"
                             loadMore={this.loadMore}
+                            showPinned={false}
                             showSpam
                         />
                     );
@@ -329,14 +311,23 @@ export default class UserProfile extends React.Component {
                     tab_content = <Callout>{emptyText}</Callout>;
                 } else {
                     tab_content = (
-                        <PostsList
-                            account={account.name}
-                            posts={posts}
-                            loading={fetching}
-                            category="blog"
-                            loadMore={this.loadMore}
-                            showSpam
-                        />
+                        <div>
+                            <a href="#" onClick={this.toggleShowResteem}>
+                                {showResteem
+                                    ? tt('user_profile.hide_resteems')
+                                    : tt('user_profile.show_all')}
+                            </a>
+                            <PostsList
+                                account={account.name}
+                                posts={posts}
+                                loading={fetching}
+                                category="blog"
+                                loadMore={this.loadMore}
+                                showPinned={false}
+                                showResteem={showResteem}
+                                showSpam
+                            />
+                        </div>
                     );
                 }
             } else {
@@ -365,6 +356,7 @@ export default class UserProfile extends React.Component {
                                 loading={fetching}
                                 category="recent_replies"
                                 loadMore={this.loadMore}
+                                showPinned={false}
                                 showSpam={false}
                             />
                         </div>
@@ -377,32 +369,6 @@ export default class UserProfile extends React.Component {
                     </center>
                 );
             }
-        } else if (section === 'permissions' && isMyAccount) {
-            walletClass = 'active';
-            tab_content = (
-                <div>
-                    <div className="row">
-                        <div className="column">
-                            <WalletSubMenu account_name={account.name} />
-                        </div>
-                    </div>
-                    <br />
-                    <UserKeys account={accountImm} />
-                </div>
-            );
-        } else if (section === 'password') {
-            walletClass = 'active';
-            tab_content = (
-                <div>
-                    <div className="row">
-                        <div className="column">
-                            <WalletSubMenu account_name={account.name} />
-                        </div>
-                    </div>
-                    <br />
-                    <PasswordReset account={accountImm} />
-                </div>
-            );
         } else {
             //    console.log( "no matches" );
         }
@@ -424,10 +390,6 @@ export default class UserProfile extends React.Component {
                 page_title = tt('g.my_replies');
             } else if (section === 'settings') {
                 page_title = tt('g.settings');
-            } else if (section === 'curation-rewards') {
-                page_title = tt('g.curation_rewards');
-            } else if (section === 'author-rewards') {
-                page_title = tt('g.author_rewards');
             }
         } else {
             if (section === 'blog') {
@@ -438,10 +400,6 @@ export default class UserProfile extends React.Component {
                 page_title = tt('g.replies');
             } else if (section === 'settings') {
                 page_title = tt('g.settings');
-            } else if (section === 'curation-rewards') {
-                page_title = tt('g.curation_rewards');
-            } else if (section === 'author-rewards') {
-                page_title = tt('g.author_rewards');
             }
         }
 
@@ -491,36 +449,18 @@ export default class UserProfile extends React.Component {
             );
         }
 
-        let printLink = null;
-        if (section === 'permissions') {
-            if (isMyAccount && wifShown) {
-                printLink = (
-                    <div>
-                        <a className="float-right noPrint" onClick={onPrint}>
-                            <Icon name="printer" />&nbsp;{tt('g.print')}&nbsp;&nbsp;
-                        </a>
-                    </div>
-                );
-            }
-        }
-
-        // const wallet_tab_active = section === 'transfers' || section === 'password' || section === 'permissions' ? 'active' : ''; // className={wallet_tab_active}
-
         let rewardsMenu = [
             {
-                link: `/@${accountname}/curation-rewards`,
+                link: `${walletUrl}/@${accountname}/curation-rewards`,
                 label: tt('g.curation_rewards'),
                 value: tt('g.curation_rewards'),
             },
             {
-                link: `/@${accountname}/author-rewards`,
+                link: `${walletUrl}/@${accountname}/author-rewards`,
                 label: tt('g.author_rewards'),
                 value: tt('g.author_rewards'),
             },
         ];
-
-        // set account join date
-        let accountjoin = account.created;
 
         const top_menu = (
             <div className="row UserProfile__top-menu">
@@ -547,15 +487,10 @@ export default class UserProfile extends React.Component {
                                 to={`/@${accountname}/recent-replies`}
                                 activeClassName="active"
                             >
-                                {tt('g.replies')}{' '}
-                                {isMyAccount && (
-                                    <NotifiCounter fields="comment_reply" />
-                                )}
+                                {tt('g.replies')}
                             </Link>
                         </li>
-                        {/*<li><Link to={`/@${accountname}/feed`} activeClassName="active">Feed</Link></li>*/}
                         <DropdownMenu
-                            className={rewardsClass}
                             items={rewardsMenu}
                             el="li"
                             selected={tt('g.rewards')}
@@ -567,18 +502,11 @@ export default class UserProfile extends React.Component {
                     <ul className="menu" style={{ flexWrap: 'wrap' }}>
                         <li>
                             <a
-                                href={`/@${accountname}/transfers`}
+                                href={`${walletUrl}/@${accountname}`}
+                                target="_blank"
                                 className={walletClass}
-                                onClick={e => {
-                                    e.preventDefault();
-                                    browserHistory.push(e.target.pathname);
-                                    return false;
-                                }}
                             >
-                                {tt('g.wallet')}{' '}
-                                {isMyAccount && (
-                                    <NotifiCounter fields="send,receive,account_update" />
-                                )}
+                                {tt('g.wallet')}
                             </a>
                         </li>
                         {isMyAccount && (
@@ -653,9 +581,6 @@ export default class UserProfile extends React.Component {
                                             count: followerCount,
                                         })}
                                     </Link>
-                                    {isMyAccount && (
-                                        <NotifiCounter fields="follow" />
-                                    )}
                                 </span>
                                 <span>
                                     <Link to={`/@${accountname}`}>
@@ -688,7 +613,7 @@ export default class UserProfile extends React.Component {
                                     </span>
                                 )}
                                 <Icon name="calendar" />{' '}
-                                <DateJoinWrapper date={accountjoin} />
+                                <DateJoinWrapper date={account.created} />
                             </p>
                         </div>
                         <div className="UserProfile__buttons_mobile show-for-small-only">
@@ -703,7 +628,6 @@ export default class UserProfile extends React.Component {
                 <div className="UserProfile__top-nav row expanded noPrint">
                     {top_menu}
                 </div>
-                <div>{printLink}</div>
                 <div>{tab_content}</div>
             </div>
         );
@@ -713,63 +637,27 @@ export default class UserProfile extends React.Component {
 module.exports = {
     path: '@:accountname(/:section)',
     component: connect(
-        state => {
-            const wifShown = state.global.get('UserKeys_wifShown');
+        (state, ownProps) => {
             const current_user = state.user.get('current');
-            // const current_account = current_user && state.global.getIn(['accounts', current_user.get('username')])
+            const accountname = ownProps.routeParams.accountname.toLowerCase();
+            const walletUrl = state.app.get('walletUrl');
 
             return {
                 discussions: state.global.get('discussion_idx'),
                 current_user,
-                // current_account,
-                wifShown,
                 loading: state.app.get('loading'),
                 global_status: state.global.get('status'),
-                accounts: state.global.get('accounts'),
+                accountname: accountname,
+                account: state.global.getIn(['accounts', accountname]),
                 follow: state.global.get('follow'),
                 follow_count: state.global.get('follow_count'),
                 blogmode: state.app.getIn(['user_preferences', 'blogmode']),
+                walletUrl,
             };
         },
         dispatch => ({
             login: () => {
                 dispatch(userActions.showLogin());
-            },
-            clearTransferDefaults: () => {
-                dispatch(userActions.clearTransferDefaults());
-            },
-            showTransfer: transferDefaults => {
-                dispatch(userActions.setTransferDefaults(transferDefaults));
-                dispatch(userActions.showTransfer());
-            },
-            clearPowerdownDefaults: () => {
-                dispatch(userActions.clearPowerdownDefaults());
-            },
-            showPowerdown: powerdownDefaults => {
-                console.log('power down defaults:', powerdownDefaults);
-                dispatch(userActions.setPowerdownDefaults(powerdownDefaults));
-                dispatch(userActions.showPowerdown());
-            },
-            withdrawVesting: ({
-                account,
-                vesting_shares,
-                errorCallback,
-                successCallback,
-            }) => {
-                const successCallbackWrapper = (...args) => {
-                    dispatch(
-                        globalActions.getState({ url: `@${account}/transfers` })
-                    );
-                    return successCallback(...args);
-                };
-                dispatch(
-                    transactionActions.broadcastOperation({
-                        type: 'withdraw_vesting',
-                        operation: { account, vesting_shares },
-                        errorCallback,
-                        successCallback: successCallbackWrapper,
-                    })
-                );
             },
             requestData: args =>
                 dispatch(fetchDataSagaActions.requestData(args)),

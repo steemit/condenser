@@ -1,5 +1,4 @@
-import { takeEvery } from 'redux-saga';
-import { call, put, select } from 'redux-saga/effects';
+import { call, put, select, takeEvery } from 'redux-saga/effects';
 import { Set, Map, fromJS, List } from 'immutable';
 import { api } from '@steemit/steem-js';
 import { PrivateKey } from '@steemit/steem-js/lib/auth/ecc';
@@ -14,11 +13,9 @@ const postingOps = Set(
         .split(/,\s*/)
 );
 
-export const authWatches = [watchForAuth];
-
-function* watchForAuth() {
-    yield* takeEvery('user/ACCOUNT_AUTH_LOOKUP', accountAuthLookup);
-}
+export const authWatches = [
+    takeEvery('user/ACCOUNT_AUTH_LOOKUP', accountAuthLookup),
+];
 
 export function* accountAuthLookup({
     payload: { account, private_keys, login_owner_pubkey },
@@ -35,6 +32,7 @@ export function* accountAuthLookup({
     const toPub = k => (k ? k.toPublicKey().toString() : '-');
     const posting = keys.get('posting_private');
     const active = keys.get('active_private');
+    const owner = keys.get('active_private');
     const memo = keys.get('memo_private');
     const auth = {
         posting: posting
@@ -51,7 +49,13 @@ export function* accountAuthLookup({
                   authType: 'active',
               })
             : 'none',
-        owner: 'none',
+        owner: owner
+            ? yield authorityLookup({
+                  pubkeys: Set([toPub(active)]),
+                  authority: account.get('owner'),
+                  authType: 'owner',
+              })
+            : 'none',
         memo: account.get('memo_key') === toPub(memo) ? 'full' : 'none',
     };
     const accountName = account.get('name');

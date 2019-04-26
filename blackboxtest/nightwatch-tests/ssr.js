@@ -16,13 +16,8 @@ module.exports = {
             '/support.html',
             '/tos.html',
             '/change_password',
-            '/create_account',
-            '/approval',
             '/recover_account_step_1',
-            '/recover_account_step_2',
-            '/waiting_list.html',
             '/market',
-            '/~witnesses',
             '/submit.html',
         ].forEach(path => testHttpGet('localhost', 8080, path, browser));
     },

@@ -18,51 +18,19 @@ import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 
 export const transactionWatches = [
     takeEvery(transactionActions.BROADCAST_OPERATION, broadcastOperation),
-    takeEvery(transactionActions.UPDATE_AUTHORITIES, updateAuthorities),
-    takeEvery(transactionActions.UPDATE_META, updateMeta),
-    takeEvery(transactionActions.RECOVER_ACCOUNT, recoverAccount),
 ];
 
 const hook = {
     preBroadcast_comment,
-    preBroadcast_transfer,
     preBroadcast_vote,
-    preBroadcast_account_witness_vote,
     error_vote,
     error_custom_json,
-    // error_account_update,
-    error_account_witness_vote,
     accepted_comment,
     accepted_custom_json,
     accepted_delete_comment,
-    accepted_account_witness_vote,
     accepted_vote,
-    accepted_account_update,
-    accepted_withdraw_vesting,
 };
 
-export function* preBroadcast_transfer({ operation }) {
-    let memoStr = operation.memo;
-    if (memoStr) {
-        memoStr = toStringUtf8(memoStr);
-        memoStr = memoStr.trim();
-        if (/^#/.test(memoStr)) {
-            const memo_private = yield select(state =>
-                state.user.getIn(['current', 'private_keys', 'memo_private'])
-            );
-            if (!memo_private)
-                throw new Error(
-                    'Unable to encrypt memo, missing memo private key'
-                );
-            const account = yield call(getAccount, operation.to);
-            if (!account) throw new Error(`Unknown to account ${operation.to}`);
-            const memo_key = account.get('memo_key');
-            memoStr = memo.encode(memo_private, memo_key, memoStr);
-            operation.memo = memoStr;
-        }
-    }
-    return operation;
-}
 const toStringUtf8 = o =>
     o ? (Buffer.isBuffer(o) ? o.toString('utf-8') : o.toString()) : o;
 
@@ -80,30 +48,6 @@ function* preBroadcast_vote({ operation, username }) {
         globalActions.voted({ username: voter, author, permlink, weight })
     );
     return operation;
-}
-function* preBroadcast_account_witness_vote({ operation, username }) {
-    if (!operation.account) operation.account = username;
-    const { account, witness, approve } = operation;
-    // give immediate feedback
-    yield put(
-        globalActions.addActiveWitnessVote({
-            account,
-            witness,
-        })
-    );
-    return operation;
-}
-
-function* error_account_witness_vote({
-    operation: { account, witness, approve },
-}) {
-    yield put(
-        globalActions.updateAccountWitnessVote({
-            account,
-            witness,
-            approve: !approve,
-        })
-    );
 }
 
 /** Keys, username, and password are not needed for the initial call.  This will check the login and may trigger an action to prompt for the password / key. */
@@ -131,6 +75,7 @@ export function* broadcastOperation({
         errorCallback,
         allowPostUnsafe,
     };
+    console.log('broadcastOperation', operationParam);
 
     const conf = typeof confirm === 'function' ? confirm() : confirm;
     if (conf) {
@@ -425,67 +370,6 @@ function* accepted_vote({ operation: { author, permlink, weight } }) {
     yield call(getContent, { author, permlink });
 }
 
-function* accepted_account_witness_vote({
-    operation: { account, witness, approve },
-}) {
-    yield put(
-        globalActions.updateAccountWitnessVote({ account, witness, approve })
-    );
-
-    yield put(
-        globalActions.removeActiveWitnessVote({
-            account,
-            witness,
-        })
-    );
-}
-
-function* accepted_withdraw_vesting({ operation }) {
-    let [account] = yield call(
-        [api, api.getAccountsAsync],
-        [operation.account]
-    );
-    account = fromJS(account);
-    yield put(globalActions.receiveAccount({ account }));
-}
-
-function* accepted_account_update({ operation }) {
-    let [account] = yield call(
-        [api, api.getAccountsAsync],
-        [operation.account]
-    );
-    account = fromJS(account);
-    yield put(globalActions.receiveAccount({ account }));
-
-    // bug, fork, etc.. the folowing would be mis-leading
-    // const {account} = operation
-    // const {owner, active, posting, memo_key, json_metadata} = operation
-    // {
-    //     const update = { accounts: { [account]: {memo_key, json_metadata} } }
-    //     if (posting) update.accounts[account].posting = posting
-    //     if (active) update.accounts[account].active = active
-    //     if (owner) update.accounts[account].owner = owner
-    //     yield put(g.actions.receiveState(update))
-    // }
-}
-
-// TODO remove soon, this was replaced by the UserKeys edit running usernamePasswordLogin (on dialog close)
-// function* error_account_update({operation}) {
-//     const {account} = operation
-//     const stateUser = yield select(state => state.user)
-//     const username = stateUser.getIn(['current', 'username'])
-//     if (username === account) {
-//         const pending_private_key = stateUser.getIn(['current', 'pending_private_key'])
-//         if (pending_private_key) {
-//             // remove pending key
-//             const update = { pending_private_key: undefined }
-//             yield put(user.actions.setUser(update))
-//         }
-//     }
-// }
-
-// function* preBroadcast_account_witness_vote({operation, username}) {
-// }
 export function* preBroadcast_comment({ operation, username }) {
     if (!operation.author) operation.author = username;
     let permlink = operation.permlink;
@@ -565,6 +449,8 @@ export function* createPermlink(title, author, parent_author, parent_permlink) {
         if (s === '') {
             s = base58.encode(secureRandom.randomBuffer(4));
         }
+        // only letters numbers and dashes shall survive
+        s = s.toLowerCase().replace(/[^a-z0-9-]+/g, '');
         // ensure the permlink(slug) is unique
         const slugState = yield call([api, api.getContentAsync], author, s);
         let prefix;
@@ -579,14 +465,14 @@ export function* createPermlink(title, author, parent_author, parent_permlink) {
         // comments: re-parentauthor-parentpermlink-time
         const timeStr = new Date().toISOString().replace(/[^a-zA-Z0-9]+/g, '');
         parent_permlink = parent_permlink.replace(/(-\d{8}t\d{9}z)/g, '');
+        // Periods allowed in author are not allowed in permlink.
+        parent_author = parent_author.replace(/\./g, '');
         permlink = `re-${parent_author}-${parent_permlink}-${timeStr}`;
     }
     if (permlink.length > 255) {
         // STEEMIT_MAX_PERMLINK_LENGTH
         permlink = permlink.substring(permlink.length - 255, permlink.length);
     }
-    // only letters numbers and dashes shall survive
-    permlink = permlink.toLowerCase().replace(/[^a-z0-9-]+/g, '');
     return permlink;
 }
 
@@ -633,352 +519,4 @@ function* error_vote({ operation: { author, permlink } }) {
 
 function slug(text) {
     return getSlug(text.replace(/[<>]/g, ''), { truncate: 128 });
-    //const shorten = txt => {
-    //    let t = ''
-    //    let words = 0
-    //    const txt2 = txt.replace(/ +/g, ' ') // only 1 space in a row
-    //    for (let i = 0; i < txt2.length; i++) {
-    //        const ch = txt2.charAt(i)
-    //        if (ch === '.' && i !== 0) {
-    //            if(i === txt2.length - 1)
-    //                break
-    //            // If it looks like the end of a sentence
-    //            if(txt2.charAt(i + 1) === ' ')
-    //                break
-    //        }
-    //        if (ch === ' ' || ch === '\n') {
-    //            words++
-    //            if (words === 15) break
-    //            if (i > 100) break
-    //        }
-    //        t += ch
-    //    }
-    //    return t
-    //}
-    //return shorten(text)
-    //    .replace(/\n/g, ' ')
-    //    .replace(/[ \.]/g, '-')
-    //    .replace(/[^a-zA-Z0-9-_]+/g, '') // only letters and numbers _ and -
-    //    .replace(/--/g, '-')
-    //    .toLowerCase()
-}
-
-const pwPubkey = (name, pw, role) =>
-    auth.wifToPublic(auth.toWif(name, pw.trim(), role));
-
-export function* recoverAccount({
-    payload: {
-        account_to_recover,
-        old_password,
-        new_password,
-        onError,
-        onSuccess,
-    },
-}) {
-    const [account] = yield call(
-        [api, api.getAccountsAsync],
-        [account_to_recover]
-    );
-
-    if (!account) {
-        onError('Unknown account ' + account);
-        return;
-    }
-    if (auth.isWif(new_password)) {
-        onError('Your new password should not be a WIF');
-        return;
-    }
-    if (auth.isPubkey(new_password)) {
-        onError('Your new password should not be a Public Key');
-        return;
-    }
-
-    const oldOwnerPrivate = auth.isWif(old_password)
-        ? old_password
-        : auth.toWif(account_to_recover, old_password, 'owner');
-
-    const oldOwner = auth.wifToPublic(oldOwnerPrivate);
-
-    const newOwnerPrivate = auth.toWif(
-        account_to_recover,
-        new_password.trim(),
-        'owner'
-    );
-    const newOwner = auth.wifToPublic(newOwnerPrivate);
-    const newActive = pwPubkey(
-        account_to_recover,
-        new_password.trim(),
-        'active'
-    );
-    const newPosting = pwPubkey(
-        account_to_recover,
-        new_password.trim(),
-        'posting'
-    );
-    const newMemo = pwPubkey(account_to_recover, new_password.trim(), 'memo');
-
-    const new_owner_authority = {
-        weight_threshold: 1,
-        account_auths: [],
-        key_auths: [[newOwner, 1]],
-    };
-
-    const recent_owner_authority = {
-        weight_threshold: 1,
-        account_auths: [],
-        key_auths: [[oldOwner, 1]],
-    };
-
-    try {
-        // TODO: Investigate wrapping in a redux-saga call fn, so it can be tested!.
-        yield broadcast.sendAsync(
-            {
-                extensions: [],
-                operations: [
-                    [
-                        'recover_account',
-                        {
-                            account_to_recover,
-                            new_owner_authority,
-                            recent_owner_authority,
-                        },
-                    ],
-                ],
-            },
-            [oldOwnerPrivate, newOwnerPrivate]
-        );
-
-        // change password
-        // change password probably requires a separate transaction (single trx has not been tested)
-        const { json_metadata } = account;
-        // TODO: Investigate wrapping in a redux-saga call fn, so it can be tested!
-        yield broadcast.sendAsync(
-            {
-                extensions: [],
-                operations: [
-                    [
-                        'account_update',
-                        {
-                            account: account.name,
-                            active: {
-                                weight_threshold: 1,
-                                account_auths: [],
-                                key_auths: [[newActive, 1]],
-                            },
-                            posting: {
-                                weight_threshold: 1,
-                                account_auths: [],
-                                key_auths: [[newPosting, 1]],
-                            },
-                            memo_key: newMemo,
-                            json_metadata,
-                        },
-                    ],
-                ],
-            },
-            [newOwnerPrivate]
-        );
-        // Reset all outgoing auto-vesting routes for this user. Condenser - #2835
-        const outgoingAutoVestingRoutes = yield call(
-            [api, api.getWithdrawRoutes],
-            [account.name, 'outgoing']
-        );
-        if (outgoingAutoVestingRoutes && outgoingAutoVestingRoutes.length > 0) {
-            yield all(
-                outgoingAutoVestingRoutes.map(ovr => {
-                    return call(
-                        [broadcast, broadcast.setWithdrawVestingRoute],
-                        [newActive, ovr.from_account, ovr.to_account, 0, true]
-                    );
-                })
-            );
-        }
-        if (onSuccess) onSuccess();
-    } catch (error) {
-        console.error('Recover account', error);
-        if (onError) onError(error);
-    }
-}
-
-/** auths must start with most powerful key: owner for example */
-// const twofaAccount = 'steem'
-export function* updateAuthorities({
-    payload: { accountName, signingKey, auths, twofa, onSuccess, onError },
-}) {
-    // Be sure this account is up-to-date (other required fields are sent in the update)
-    const [account] = yield call([api, api.getAccountsAsync], [accountName]);
-    if (!account) {
-        onError('Account not found');
-        return;
-    }
-    // const signingPubkey = signingKey ? signingKey.toPublicKey() : null
-    const ops2 = {};
-    let oldPrivate;
-    const addAuth = (authType, oldAuth, newAuth) => {
-        let oldAuthPubkey, oldPrivateAuth;
-        try {
-            oldPrivateAuth = PrivateKey.fromWif(oldAuth);
-            oldAuthPubkey = oldPrivateAuth.toPublic().toString();
-        } catch (e) {
-            try {
-                oldAuthPubkey = PublicKey.fromStringOrThrow(oldAuth).toString();
-            } catch (e2) {
-                //
-            }
-        }
-        if (!oldAuthPubkey) {
-            if (!oldAuth) {
-                onError('Missing old key, not sure what to replace');
-                console.error('Missing old key, not sure what to replace');
-                return false;
-            }
-            oldPrivateAuth = PrivateKey.fromSeed(
-                accountName + authType + oldAuth
-            );
-            oldAuthPubkey = oldPrivateAuth.toPublicKey().toString();
-        }
-        if (authType === 'owner' && !oldPrivate) oldPrivate = oldPrivateAuth;
-        else if (authType === 'active' && !oldPrivate)
-            oldPrivate = oldPrivateAuth;
-        else if (authType === 'posting' && !oldPrivate)
-            oldPrivate = oldPrivateAuth;
-
-        let newPrivate, newAuthPubkey;
-        try {
-            newPrivate = PrivateKey.fromWif(newAuth);
-            newAuthPubkey = newPrivate.toPublicKey().toString();
-        } catch (e) {
-            newPrivate = PrivateKey.fromSeed(accountName + authType + newAuth);
-            newAuthPubkey = newPrivate.toPublicKey().toString();
-        }
-        // if (oldAuthPubkey === newAuthPubkey) {
-        //     onError('This is the same key')
-        //     return false
-        // }
-        let authority;
-        if (authType === 'memo') {
-            account.memo_key = newAuthPubkey;
-        } else {
-            authority = fromJS(account[authType]).toJS();
-            authority.key_auths = [];
-            authority.key_auths.push([
-                newAuthPubkey,
-                authority.weight_threshold,
-            ]);
-            // const key_auths = authority.key_auths
-            // let found
-            // for (let i = 0; i < key_auths.length; i++) {
-            //     if (key_auths[i][0] === oldAuthPubkey) {
-            //         key_auths[i][0] = newAuthPubkey
-            //         found = true
-            //         break
-            //     }
-            // }
-            // if (!found) {
-            // key_auths.push([newAuthPubkey, authority.weight_threshold])
-            //     console.log(`Could not find an ${authType} key to update, adding instead`)
-            // }
-
-            // Add twofaAccount with full authority
-            // if(twofa && authType === 'owner') {
-            //     let account_auths = fromJS(authority.account_auths)
-            //     if(!account_auths.find(v => v.get(0) === twofaAccount)) {
-            //         account_auths = account_auths.push(fromJS([twofaAccount, authority.weight_threshold]))
-            //     }
-            //     authority.account_auths = account_auths.toJS()
-            // }
-        }
-        ops2[authType] = authority ? authority : account[authType];
-        return true;
-    };
-    for (const auth of auths)
-        if (!addAuth(auth.authType, auth.oldAuth, auth.newAuth)) return;
-
-    let key = oldPrivate;
-    if (!key) {
-        try {
-            key = PrivateKey.fromWif(signingKey);
-        } catch (e2) {
-            // probably updating a memo .. see if we got an active or owner
-            const auth = authType => {
-                const priv = PrivateKey.fromSeed(
-                    accountName + authType + signingKey
-                );
-                const pubkey = priv.toPublicKey().toString();
-                const authority = account[authType];
-                const key_auths = authority.key_auths;
-                for (let i = 0; i < key_auths.length; i++) {
-                    if (key_auths[i][0] === pubkey) {
-                        return priv;
-                    }
-                }
-                return null;
-            };
-            key = auth('active');
-            if (!key) key = auth('owner');
-        }
-    }
-    if (!key) {
-        onError(`Incorrect Password`);
-        throw new Error('Trying to update a memo without a signing key?');
-    }
-    const { memo_key, json_metadata } = account;
-    const payload = {
-        type: 'account_update',
-        operation: {
-            account: account.name,
-            ...ops2,
-            memo_key,
-            json_metadata,
-        },
-        keys: [key],
-        successCallback: onSuccess,
-        errorCallback: onError,
-    };
-    // console.log('sign key.toPublicKey().toString()', key.toPublicKey().toString())
-    // console.log('payload', payload)
-    yield call(broadcastOperation, { payload });
-}
-
-/** auths must start with most powerful key: owner for example */
-// const twofaAccount = 'steem'
-export function* updateMeta(params) {
-    // console.log('params', params)
-    const {
-        meta,
-        account_name,
-        signingKey,
-        onSuccess,
-        onError,
-    } = params.payload.operation;
-    console.log('meta', meta);
-    console.log('account_name', account_name);
-    // Be sure this account is up-to-date (other required fields are sent in the update)
-    const [account] = yield call([api, api.getAccountsAsync], [account_name]);
-    if (!account) {
-        onError('Account not found');
-        return;
-    }
-    if (!signingKey) {
-        onError(`Incorrect Password`);
-        throw new Error('Have to pass owner key in order to change meta');
-    }
-
-    try {
-        console.log('account.name', account.name);
-        const operations = [
-            'update_account_meta',
-            {
-                account_name: account.name,
-                json_meta: JSON.stringify(meta),
-            },
-        ];
-        yield broadcast.sendAsync({ extensions: [], operations }, [signingKey]);
-        if (onSuccess) onSuccess();
-        // console.log('sign key.toPublicKey().toString()', key.toPublicKey().toString())
-        // console.log('payload', payload)
-    } catch (e) {
-        console.error('Update meta', e);
-        if (onError) onError(e);
-    }
 }

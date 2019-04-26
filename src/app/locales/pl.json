@@ -175,8 +175,6 @@
             "Nazwa konta powinna zawierać wyłącznie litery, cyfry, kropki lub myślniki",
         "cannot_increase_reward_of_post_within_the_last_minute_before_payout":
             "Nie można zwiększyć nagrody za post w ostatnich chwilach przed wypłatą",
-        "vote_currently_exists_user_must_be_indicate_a_to_reject_witness":
-            "głos oddany, użytkownik musi wskazać powód odrzucenia delegata",
         "only_one_APP_NAME_account_allowed_per_ip_address_every_10_minutes":
             "Dozwolone jest tylko jedno konto Steem dla danego adresu IP w ciągu 10 minut",
         "resteem_this_post": "Resteemuj ten post",
@@ -326,64 +324,9 @@
         "you_are_viewing_a_single_comments_thread_from":
             "Przeglądasz wątek pojedynczego komentarza"
     },
-    "market_jsx": {
-        "action": "Akcja",
-        "date_created": "Data utworzenia",
-        "last_price": "Ostatnia cena",
-        "24h_volume": "Wolumen 24h",
-        "spread": "Spread",
-        "total": "Razem",
-        "available": "Dostępne",
-        "lowest_ask": "Najniższa oferta sprzedaży (ASK)",
-        "highest_bid": "Najwyższa oferta kupna (BID)",
-        "buy_orders": "Oferty zakupu",
-        "sell_orders": "Oferty sprzedaży",
-        "trade_history": "Historia transakcji",
-        "open_orders": "Otwarte oferty",
-        "sell_amount_for_atleast":
-            "Sprzedaj %(amount_to_sell)s za co najmniej %(min_to_receive)s (%(effectivePrice)s)",
-        "buy_atleast_amount_for":
-            "Kup przynajmniej %(min_to_receive)s za %(amount_to_sell)s (%(effectivePrice)s)",
-        "price_warning_above":
-            "Ta cena jest sporo wyższa od aktualnych cen rynkowych %(marketPrice)s, czy jesteś pewien(na)?",
-        "price_warning_below":
-            "Ta cena jest sporo niższa od aktualnych cen rynkowych %(marketPrice)s, czy jesteś pewien(na)?",
-        "order_cancel_confirm": "Anulować ofertę %(order_id)s od %(user)s?",
-        "order_cancelled": "Oferta %(order_id)s anulowana.",
-        "higher": "Wyżej",
-        "lower": "Niżej",
-        "total_DEBT_TOKEN_SHORT_CURRENCY_SIGN":
-            "Razem %(DEBT_TOKEN_SHORT)s (%(CURRENCY_SIGN)s)"
-    },
     "recoveraccountstep1_jsx": {
-        "begin_recovery": "Rozpocznij odzyskiwanie konta",
-        "not_valid": "Wartość niepoprawna",
-        "account_name_is_not_found": "Nazwa konta nie została znaleziona",
-        "unable_to_recover_account_not_change_ownership_recently":
-            "Nie jesteśmy w stanie odzyskać tego konta, bo w ostatnim czasie nie zmieniło ono właściciela.",
-        "password_not_used_in_last_days":
-            "To hasło nie zostało użyte na tym koncie w ciągu ostatnich 30 dni.",
-        "request_already_submitted_contact_support":
-            "Twoje zapytanie zostało już wysłane i już nad nim pracujemy. Proszę kontaktować się z %(SUPPORT_EMAIL)s w celu uzyskania informacji o statusie jego przetwarzania.",
         "recover_account_intro":
-            "Od czasu do czasu, klucz właściciela może zostać zagrożony. Odzyskiwanie konta pozwala prawowitemu właścicielowi na odzyskanie konta w ciągu 30 dni, liczone od momentu zmiany klucza właściciela przez złodzieja. Odzyskiwanie konta można zrobić na %(APP_URL)s o ile właściciel konta uprzednio wyszczególnił '%(APP_NAME)s'  jako powiernika konta i spełnił warunki użytkowania %(APP_NAME)s's.",
-        "login_with_facebook_or_reddit_media_to_verify_identity":
-            "Proszę zalogować się z użyciem konta na Facebooku lub Reddicie by zweryfikować swoją tożsamość.",
-        "login_with_social_media_to_verify_identity":
-            "Proszę zalogować się z użyciem konta na %(provider)s by zweryfikować swoją tożsamość.",
-        "enter_email_toverify_identity":
-            "Musimy zweryfikować Twoją tożsamość. Prosimy o podanie swojego adresu email by rozpocząć proces weryfikacji.",
-        "continue_with_email": "Kontynuuj z adresem email",
-        "thanks_for_submitting_request_for_account_recovery":
-            "Dziękujemy za wysłanie zgłoszenia dotyczącego odzyskiwania konta używając wieloskładnikowej, opartej o blockchain autentykacji %(APP_NAME)s's. Odpowiemy najszybciej jak to możliwe, jednakże, możliwe są opóźnienia z powodu dużej ilości zgłoszeń. Proszę być przygotowanym do potwierdzenia tożsamości.",
-        "recovering_account": "Odzyskiwanie konta",
-        "recover_account": "Odzyskaj konto",
-        "checking_account_owner": "Sprawdzanie właściciela konta",
-        "sending_recovery_request": "Wysyłanie zapytania o odzyskanie konta",
-        "cant_confirm_account_ownership":
-            "Nie możemy potwierdzić przynależności konta. Sprawdź swoje hasło.",
-        "account_recovery_request_not_confirmed":
-            "Zapytanie o odzyskanie konta nie uzyskało jeszcze potwierdzenia, prosimy wrócić później, dziękujemy za Twoją cierpliwość."
+            "Od czasu do czasu, klucz właściciela może zostać zagrożony. Odzyskiwanie konta pozwala prawowitemu właścicielowi na odzyskanie konta w ciągu 30 dni, liczone od momentu zmiany klucza właściciela przez złodzieja. Odzyskiwanie konta można zrobić na %(APP_URL)s o ile właściciel konta uprzednio wyszczególnił '%(APP_NAME)s'  jako powiernika konta i spełnił warunki użytkowania %(APP_NAME)s's."
     },
     "user_profile": {
         "unknown_account": "Konto nieznane",
@@ -415,16 +358,6 @@
         },
         "hide_resteems": "Hide Resteems",
         "show_all": "Show All"
-    },
-    "authorrewards_jsx": {
-        "estimated_author_rewards_last_week":
-            "Szacowane wynagrodzenie autorskie w ostatnim tygodniu",
-        "author_rewards_history": "Historia wynagrodzeń autorskich"
-    },
-    "curationrewards_jsx": {
-        "estimated_curation_rewards_last_week":
-            "Szacowane wynagrodzenie kuratorskie w ostatnim tygodniu",
-        "curation_rewards_history": "Historia wynagrodzeń kuratorskich"
     },
     "post_jsx": {
         "now_showing_comments_with_low_ratings":
@@ -460,29 +393,6 @@
             "one": "%(count)s głos",
             "other": "%(count)s głosów"
         }
-    },
-    "witnesses_jsx": {
-        "witness_thread": "wątek delegata",
-        "top_witnesses": "Głosowanie na delegatów",
-        "you_have_votes_remaining": {
-            "zero": "Nie masz już więcej głosów",
-            "one": "Pozostał ci 1 głos",
-            "other": "Pozostało ci %(count)s głosów"
-        },
-        "you_can_vote_for_maximum_of_witnesses":
-            "Możesz głosować co najwyżej na 30 delegatów",
-        "witness": "Delegat",
-        "information": "Informacja",
-        "if_you_want_to_vote_outside_of_top_enter_account_name":
-            "Jeśli chcesz zagłosować na delegata spoza pierwszej 100, podaj nazwę konta na które chcesz oddać głos",
-        "set_witness_proxy":
-            "Możesz również wybrać pełnomocnika, który zagłosuje na delegatów za ciebie. Wybór pełnomocnika wyczyści twoje bieżące głosy.",
-        "witness_set":
-            "Wybrałeś pełnomocnika. Jeśli chcesz wrócić do ręcznego oddawania głosów, usuń pełnomocnika.",
-        "witness_proxy_current": "Twoim pełnomocnikiem jest",
-        "witness_proxy_set": "Ustaw pełnomocnika",
-        "witness_proxy_clear": "Wyczyść pełnomocnika",
-        "proxy_update_error": "Twój pełnomocnik nie został zaktualizowany"
     },
     "votesandcomments_jsx": {
         "no_responses_yet_click_to_respond":
@@ -584,22 +494,6 @@
         "empty_feed_3": "Przeglądaj aktywne posty",
         "empty_feed_4": "Przeczytaj Quick Start Guide",
         "empty_feed_5": "Przeglądaj FAQ"
-    },
-    "transferhistoryrow_jsx": {
-        "to_savings": "na konto oszczędnościowe",
-        "from_savings": "z konta oszczędnościowego",
-        "cancel_transfer_from_savings":
-            "Anuluj przelew z konta oszczędnościowego",
-        "stop_power_down": "Zatrzymaj zmniejszanie mocy",
-        "start_power_down_of": "Zacznij zmniejszanie mocy",
-        "receive_interest_of": "Odbierz odsetki od"
-    },
-    "savingswithdrawhistory_jsx": {
-        "cancel_this_withdraw_request": "Anulować zlecenie wypłaty?",
-        "pending_savings_withdrawals": "WYPŁATY OSZCZĘDNOŚCI W TOKU",
-        "withdraw": "Wypłać %(amount)s",
-        "to": "do %(to)s",
-        "from_to": "od %(from)s do %(to)s"
     },
     "explorepost_jsx": {
         "copied": "Skopiowano!",
@@ -742,18 +636,6 @@
         "history": "HISTORIA",
         "redeem_rewards": "Odbierz nagrody (transfer do salda)",
         "buy_steem_or_steem_power": "Kup STEEM lub STEEM POWER"
-    },
-    "powerdown_jsx": {
-        "power_down": "Zmniejsz moc",
-        "amount": "Liczba",
-        "already_power_down":
-            "Aktualnie zmniejszasz moc %(AMOUNT)s %(LIQUID_TICKER)s (%(WITHDRAWN)s %(LIQUID_TICKER)s już wypłacono). Pamiętaj, że jeśli zmienisz ilość zmniejszanej mocy, to licznik dla następnej wypłaty zostanie wyzerowany.",
-        "delegating":
-            "Delegujesz %(AMOUNT)s %(LIQUID_TICKER)s. Kwota ta, jest zablokowana i nie jest dostępna do zmniejszenia mocy, dopóki delegacja się nie zakończy i upłynie pełen okres wypłacania nagród.",
-        "per_week": "To około%(AMOUNT)s %(LIQUID_TICKER)s na tydzień.",
-        "warning":
-            "Pozostawiając mniej niż %(AMOUNT)s %(VESTING_TOKEN)s na koncie, nie jest zalecane i może sprawić że twoje konto nie będzie działać.",
-        "error": "Nie można zmniejszyć mocy (BŁĄD: %(MESSAGE)s)"
     },
     "checkloginowner_jsx": {
         "your_password_permissions_were_reduced":

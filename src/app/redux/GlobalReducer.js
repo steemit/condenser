@@ -1,4 +1,5 @@
 import { Map, Set, List, fromJS, Iterable } from 'immutable';
+import resolveRoute from 'app/ResolveRoute';
 import { emptyContent } from 'app/redux/EmptyState';
 import { contentStats } from 'app/utils/StateFunctions';
 import constants from './constants';
@@ -18,8 +19,6 @@ const SYNC_PINNED_POSTS = 'global/SYNC_PINNED_POSTS';
 const RECEIVE_COMMENT = 'global/RECEIVE_COMMENT';
 const RECEIVE_CONTENT = 'global/RECEIVE_CONTENT';
 const LINK_REPLY = 'global/LINK_REPLY';
-const UPDATE_ACCOUNT_WITNESS_VOTE = 'global/UPDATE_ACCOUNT_WITNESS_VOTE';
-const UPDATE_ACCOUNT_WITNESS_PROXY = 'global/UPDATE_ACCOUNT_WITNESS_PROXY';
 const DELETE_CONTENT = 'global/DELETE_CONTENT';
 const VOTED = 'global/VOTED';
 const FETCHING_DATA = 'global/FETCHING_DATA';
@@ -37,8 +36,6 @@ const FETCH_JSON = 'global/FETCH_JSON';
 const FETCH_JSON_RESULT = 'global/FETCH_JSON_RESULT';
 const SHOW_DIALOG = 'global/SHOW_DIALOG';
 const HIDE_DIALOG = 'global/HIDE_DIALOG';
-const ADD_ACTIVE_WITNESS_VOTE = 'global/ADD_ACTIVE_WITNESS_VOTE';
-const REMOVE_ACTIVE_WITNESS_VOTE = 'global/REMOVE_ACTIVE_WITNESS_VOTE';
 // Saga-related:
 export const GET_STATE = 'global/GET_STATE';
 
@@ -71,6 +68,16 @@ const mergeAccounts = (state, account) => {
 
 export default function reducer(state = defaultState, action = {}) {
     const payload = action.payload;
+
+    // Set post category
+    const pathname = state.get('pathname');
+    if (pathname) {
+        const route = resolveRoute(pathname);
+        if (route.page === 'PostsIndex') {
+            const postCategory = route.params[1];
+            state = state.set('postCategory', postCategory);
+        }
+    }
 
     switch (action.type) {
         case SET_COLLAPSED: {
@@ -113,7 +120,7 @@ export default function reducer(state = defaultState, action = {}) {
             return payload.pinnedPosts.reduce((acc, pinnedPost) => {
                 const author = pinnedPost.get('author');
                 const permlink = pinnedPost.get('permlink');
-                return state.updateIn(
+                return acc.updateIn(
                     ['content', `${author}/${permlink}`],
                     Map(),
                     p => p.mergeDeep(pinnedPost)
@@ -202,23 +209,6 @@ export default function reducer(state = defaultState, action = {}) {
                 () => children
             );
             return updatedState;
-        }
-
-        case UPDATE_ACCOUNT_WITNESS_VOTE: {
-            const { account, witness, approve } = payload;
-            return state.updateIn(
-                ['accounts', account, 'witness_votes'],
-                Set(),
-                votes =>
-                    approve
-                        ? Set(votes).add(witness)
-                        : Set(votes).remove(witness)
-            );
-        }
-
-        case UPDATE_ACCOUNT_WITNESS_PROXY: {
-            const { account, proxy } = payload;
-            return state.setIn(['accounts', account, 'proxy'], proxy);
         }
 
         case DELETE_CONTENT: {
@@ -433,21 +423,6 @@ export default function reducer(state = defaultState, action = {}) {
             return state.update('active_dialogs', d => d.delete(payload.name));
         }
 
-        case ADD_ACTIVE_WITNESS_VOTE: {
-            return state.update(
-                `transaction_witness_vote_active_${payload.account}`,
-                Set(),
-                s => s.add(payload.witness)
-            );
-        }
-
-        case REMOVE_ACTIVE_WITNESS_VOTE: {
-            return state.update(
-                `transaction_witness_vote_active_${payload.account}`,
-                s => s.delete(payload.witness)
-            );
-        }
-
         default:
             return state;
     }
@@ -492,16 +467,6 @@ export const receiveContent = payload => ({
 
 export const linkReply = payload => ({
     type: LINK_REPLY,
-    payload,
-});
-
-export const updateAccountWitnessVote = payload => ({
-    type: UPDATE_ACCOUNT_WITNESS_VOTE,
-    payload,
-});
-
-export const updateAccountWitnessProxy = payload => ({
-    type: UPDATE_ACCOUNT_WITNESS_PROXY,
     payload,
 });
 
@@ -588,16 +553,6 @@ export const showDialog = payload => ({
 
 export const hideDialog = payload => ({
     type: HIDE_DIALOG,
-    payload,
-});
-
-export const addActiveWitnessVote = payload => ({
-    type: ADD_ACTIVE_WITNESS_VOTE,
-    payload,
-});
-
-export const removeActiveWitnessVote = payload => ({
-    type: REMOVE_ACTIVE_WITNESS_VOTE,
     payload,
 });
 

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 class GoogleAd extends React.Component {
     componentDidMount() {
-        if (this.props.env === 'development') {
+        if (!this.props.shouldSeeAds) {
             return;
         }
 
@@ -45,7 +45,7 @@ class GoogleAd extends React.Component {
 
 export default connect((state, ownProps) => {
     const env = state.app.get('env');
-    const shouldSeeAds = state.app.getIn(['googleAds', 'shouldSeeAds']);
+    const shouldSeeAds = state.app.getIn(['googleAds', 'enabled']);
     const test = state.app.getIn(['googleAds', 'test']);
     const client = state.app.getIn(['googleAds', 'client']);
     return { env, shouldSeeAds, test, client, ...ownProps };

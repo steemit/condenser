@@ -20,7 +20,7 @@ export default function useUserJson(app) {
         const [chainAccount] = yield api.getAccountsAsync([user_name]);
 
         if (GDPRUserList.includes(user_name)) {
-            user = 'Unavailable For Legal Reasons';
+            user = 'Content unavailable';
             status = '451';
         } else if (chainAccount) {
             user = chainAccount;

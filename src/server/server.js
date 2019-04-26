@@ -29,7 +29,6 @@ import userIllegalContent from 'app/utils/userIllegalContent';
 import koaLocale from 'koa-locale';
 import { getSupportedLocales } from './utils/misc';
 import { pinnedPosts } from './utils/PinnedPosts';
-import GDPRUserList from 'app/utils/GDPRUserList';
 
 if (cluster.isMaster) console.log('application server starting, please wait.');
 
@@ -184,7 +183,7 @@ app.use(function*(next) {
         } else {
             userCheck = p.split('/')[1].slice(1);
         }
-        if (userIllegalContent.includes(userCheck) || GDPRUserList.includes(userCheck)) {
+        if (userIllegalContent.includes(userCheck)) {
             console.log('Illegal content user found blocked', userCheck);
             this.status = 451;
             return;

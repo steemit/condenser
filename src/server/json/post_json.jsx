@@ -16,7 +16,7 @@ export default function usePostJson(app) {
         let post = yield api.getContentAsync(author, permalink);
 
         if (GDPRUserList.includes(post.author)) {
-            post = 'Unavailable For Legal Reasons';
+            post = 'Content unavailable';
             status = '451';
         } else if (post.author) {
             status = '200';

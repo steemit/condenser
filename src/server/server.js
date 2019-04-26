@@ -5,6 +5,7 @@ import helmet from 'koa-helmet';
 import koa_logger from 'koa-logger';
 import requestTime from './requesttimings';
 import StatsLoggerClient from './utils/StatsLoggerClient';
+import { SteemMarket } from './utils/SteemMarket';
 import hardwareStats from './hardwarestats';
 import cluster from 'cluster';
 import os from 'os';
@@ -13,9 +14,6 @@ import favicon from 'koa-favicon';
 import staticCache from 'koa-static-cache';
 import useRedirects from './redirects';
 import useGeneralApi from './api/general';
-import useAccountRecoveryApi from './api/account_recovery';
-import useEnterAndConfirmEmailPages from './sign_up_pages/enter_confirm_email';
-import useEnterAndConfirmMobilePages from './sign_up_pages/enter_confirm_mobile';
 import useUserJson from './json/user_json';
 import usePostJson from './json/post_json';
 import isBot from 'koa-isbot';
@@ -28,6 +26,7 @@ import secureRandom from 'secure-random';
 import userIllegalContent from 'app/utils/userIllegalContent';
 import koaLocale from 'koa-locale';
 import { getSupportedLocales } from './utils/misc';
+import { pinnedPosts } from './utils/PinnedPosts';
 
 if (cluster.isMaster) console.log('application server starting, please wait.');
 
@@ -56,6 +55,15 @@ app.use(
     mount(
         '/images',
         staticCache(path.join(__dirname, '../app/assets/images'), cacheOpts)
+    )
+);
+app.use(
+    mount(
+        '/javascripts',
+        staticCache(
+            path.join(__dirname, '../app/assets/javascripts'),
+            cacheOpts
+        )
     )
 );
 // Proxy asset folder to webpack development server in development mode
@@ -120,6 +128,13 @@ function convertEntriesToArrays(obj) {
     }, {});
 }
 
+// Fetch cached currency data for homepage
+const steemMarket = new SteemMarket();
+app.use(function*(next) {
+    this.steemMarketData = yield steemMarket.get();
+    yield next;
+});
+
 // some redirects and health status
 app.use(function*(next) {
     if (this.method === 'GET' && this.url === '/.well-known/healthcheck.json') {
@@ -127,7 +142,9 @@ app.use(function*(next) {
         this.body = {
             status: 'ok',
             docker_tag: process.env.DOCKER_TAG ? process.env.DOCKER_TAG : false,
-            source_commit: process.env.SOURCE_COMMIT ? process.env.SOURCE_COMMIT : false,
+            source_commit: process.env.SOURCE_COMMIT
+                ? process.env.SOURCE_COMMIT
+                : false,
         };
         return;
     }
@@ -172,12 +189,6 @@ app.use(function*(next) {
             return;
         }
     }
-    // // do not enter unless session uid & verified phone
-    // if (this.url === '/create_account' && !this.session.uid) {
-    //     this.status = 302;
-    //     this.redirect('/enter_email');
-    //     return;
-    // }
     // remember ch, cn, r url params in the session and remove them from url
     if (this.method === 'GET' && /\?[^\w]*(ch=|cn=|r=)/.test(this.url)) {
         let redir = this.url.replace(/((ch|cn|r)=[^&]+)/gi, r => {
@@ -250,17 +261,13 @@ app.use(function*(next) {
 });
 
 useRedirects(app);
-useEnterAndConfirmEmailPages(app);
-useEnterAndConfirmMobilePages(app);
 useUserJson(app);
 usePostJson(app);
 
-useAccountRecoveryApi(app);
 useGeneralApi(app);
 
 // helmet wants some things as bools and some as lists, makes config difficult.
 // our config uses strings, this splits them to lists on whitespace.
-
 if (env === 'production') {
     const helmetConfig = {
         directives: convertEntriesToArrays(config.get('helmet.directives')),
@@ -276,9 +283,13 @@ if (env === 'production') {
 
 if (env !== 'test') {
     const appRender = require('./app_render');
+
+    // Load the pinned posts and store them on the ctx for later use. Since
+    // we're inside a generator, we can't `await` here, so we pass a promise
+    // so `src/server/app_render.jsx` can `await` on it.
+    app.pinnedPostsPromise = pinnedPosts();
     app.use(function*() {
         yield appRender(this, supportedLocales, resolvedAssets);
-        // if (app_router.dbStatus.ok) recordWebEvent(this, 'page_load');
         const bot = this.state.isBot;
         if (bot) {
             console.log(

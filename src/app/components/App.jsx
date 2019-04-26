@@ -18,20 +18,6 @@ import { key_utils } from '@steemit/steem-js/lib/auth/ecc';
 import resolveRoute from 'app/ResolveRoute';
 import { VIEW_MODE_WHISTLE } from 'shared/constants';
 
-const pageRequiresEntropy = path => {
-    const { page } = resolveRoute(path);
-
-    const entropyPages = [
-        'ChangePassword',
-        'RecoverAccountStep1',
-        'RecoverAccountStep2',
-        'UserProfile',
-        'CreateAccount',
-    ];
-    /* Returns true if that page requires the entropy collection listener */
-    return entropyPages.indexOf(page) !== -1;
-};
-
 class App extends React.Component {
     constructor(props) {
         super(props);
@@ -39,8 +25,15 @@ class App extends React.Component {
         this.state = {
             showCallout: true,
             showBanner: true,
+            gptBannerHeight: 0,
         };
         this.listenerActive = null;
+        this.gptadshownListener = this.gptadshown.bind(this);
+    }
+
+    gptadshown(e) {
+        const height = document.querySelector('header .gpt-ad').offsetHeight;
+        this.setState({ gptBannerHeight: height });
     }
 
     componentWillMount() {
@@ -49,73 +42,34 @@ class App extends React.Component {
     }
 
     componentDidMount() {
-        if (pageRequiresEntropy(this.props.pathname)) {
-            this._addEntropyCollector();
-        }
+        window.addEventListener('gptadshown', this.gptadshownListener);
     }
 
-    componentWillReceiveProps(np) {
-        // Add listener if the next page requires entropy and the current page didn't
-        if (
-            pageRequiresEntropy(np.pathname) &&
-            !pageRequiresEntropy(this.props.pathname)
-        ) {
-            this._addEntropyCollector();
-        } else if (!pageRequiresEntropy(np.pathname)) {
-            // Remove if next page does not require entropy
-            this._removeEntropyCollector();
-        }
-    }
-
-    _addEntropyCollector() {
-        if (!this.listenerActive && this.refs.App_root) {
-            this.refs.App_root.addEventListener(
-                'mousemove',
-                this.onEntropyEvent,
-                { capture: false, passive: true }
-            );
-            this.listenerActive = true;
-        }
-    }
-
-    _removeEntropyCollector() {
-        if (this.listenerActive && this.refs.App_root) {
-            this.refs.App_root.removeEventListener(
-                'mousemove',
-                this.onEntropyEvent
-            );
-            this.listenerActive = null;
-        }
+    componentWillUnmount() {
+        window.removeEventListener('gptadshown', this.gptadshownListener);
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        const { pathname, new_visitor, nightmodeEnabled } = this.props;
+        const {
+            pathname,
+            new_visitor,
+            nightmodeEnabled,
+            showAnnouncement,
+        } = this.props;
         const n = nextProps;
         return (
             pathname !== n.pathname ||
             new_visitor !== n.new_visitor ||
             this.state.showBanner !== nextState.showBanner ||
             this.state.showCallout !== nextState.showCallout ||
-            nightmodeEnabled !== n.nightmodeEnabled
+            this.state.gptBannerHeight !== nextState.gptBannerHeight ||
+            nightmodeEnabled !== n.nightmodeEnabled ||
+            showAnnouncement !== n.showAnnouncement
         );
     }
 
     setShowBannerFalse = () => {
         this.setState({ showBanner: false });
-    };
-
-    onEntropyEvent = e => {
-        if (e.type === 'mousemove')
-            key_utils.addEntropy(e.pageX, e.pageY, e.screenX, e.screenY);
-        else console.log('onEntropyEvent Unknown', e.type, e);
-    };
-
-    signUp = () => {
-        serverApiRecordEvent('Sign up', 'Hero banner');
-    };
-
-    learnMore = () => {
-        serverApiRecordEvent('Learn more', 'Hero banner');
     };
 
     render() {
@@ -130,9 +84,7 @@ class App extends React.Component {
             order,
         } = this.props;
 
-        const miniHeader =
-            pathname === '/create_account' || pathname === '/pick_account';
-
+        const miniHeader = false;
         const whistleView = viewMode === VIEW_MODE_WHISTLE;
         const headerHidden = whistleView;
         const params_keys = Object.keys(params);
@@ -219,6 +171,7 @@ class App extends React.Component {
                     'index-page': ip,
                     'mini-header': miniHeader,
                     'whistle-view': whistleView,
+                    withAnnouncement: this.props.showAnnouncement,
                 })}
                 ref="App_root"
             >
@@ -266,7 +219,6 @@ App.propTypes = {
 export default connect(
     (state, ownProps) => {
         const current_user = state.user.get('current');
-        const account_user = state.global.get('accounts');
         const current_account_name = current_user
             ? current_user.get('username')
             : state.offchain.get('account');
@@ -287,6 +239,7 @@ export default connect(
             pathname: ownProps.location.pathname,
             order: ownProps.params.order,
             category: ownProps.params.category,
+            showAnnouncement: state.user.get('showAnnouncement'),
         };
     },
     dispatch => ({

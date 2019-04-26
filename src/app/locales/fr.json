@@ -186,8 +186,6 @@
             "L'identifiant ne peut comporter que des lettres, des chiffres, des points ou des traits d'union.",
         "cannot_increase_reward_of_post_within_the_last_minute_before_payout":
             "Les gains d'un article ne peuvent être accrus durant la dernière minute avant rétribution.",
-        "vote_currently_exists_user_must_be_indicate_a_to_reject_witness":
-            "un vote existe actuellement; l'utilisateur doit indiquer une raison pour rejeter le témoin",
         "only_one_APP_NAME_account_allowed_per_ip_address_every_10_minutes":
             "Un seul compte Steem est permis par adresse IP toutes les 10 minutes",
         "resteem_this_post": "Resteemer cet article",
@@ -267,9 +265,9 @@
         "learn_more": "En savoir plus",
         "welcome": "Bienvenue",
         "faq": "FAQ",
-        "shop": "The Steemit Shop",
         "chat": "Salons de discussion Steemit",
         "app_center": "Centre d'applications Steemit",
+        "business_center": "Businesses Accepting Steem",
         "api_docs": "Documentation API sur Steemit",
         "whitepaper": "Livre blanc sur le Steem",
         "bluepaper": "Steem Bluepaper",
@@ -300,7 +298,7 @@
         "selecting_them": "les sélectionnant",
         "image_upload": "Téléchargement d'image",
         "power_up_100": "Conversion en influence à 100%%",
-        "default_50_50": "Par défaut (50 %%/ 50%%)",
+        "default_50_50": "50 %%/ 50%%",
         "decline_payout": "Refuser les gains",
         "check_this_to_auto_upvote_your_post":
             "Cocher cette case pour auto-voter pour votre article",
@@ -329,6 +327,13 @@
         "must_end_with_a_letter_or_number":
             "Le dernier caractère doit être une lettre ou un chiffre"
     },
+    "post_advanced_settings_jsx": {
+        "payout_option_header": "Gains éditoriaux",
+        "payout_option_description":
+            "Quel type de jeton voulez-vous comme récompense pour cet article?",
+        "current_default": "Défaut",
+        "update_default_in_settings": "Mettre à jour"
+    },
     "postfull_jsx": {
         "this_post_is_not_available_due_to_a_copyright_claim":
             "Cet article n'est pas disponible en raison d'une requête de droits d'auteur.",
@@ -343,64 +348,9 @@
         "you_are_viewing_a_single_comments_thread_from":
             "Vous visualisez un commentaire unique de l'article"
     },
-    "market_jsx": {
-        "action": "Action",
-        "date_created": "Date de création",
-        "last_price": "Dernier cours",
-        "24h_volume": "Volume des dernières 24h",
-        "spread": "Ecart",
-        "total": "Total",
-        "available": "Disponible",
-        "lowest_ask": "Demande au taux le plus bas",
-        "highest_bid": "Offre au taux le plus haut",
-        "buy_orders": "Ordres d'achat",
-        "sell_orders": "Ordres de vente",
-        "trade_history": "Historique des échanges",
-        "open_orders": "Ordres ouverts",
-        "sell_amount_for_atleast":
-            "Vendre %(amount_to_sell)s pour au moins %(min_to_receive)s ( %(effectivePrice)s )",
-        "buy_atleast_amount_for":
-            "Acheter au moins %(min_to_receive)s pour %(amount_to_sell)s ( %(effectivePrice)s )",
-        "price_warning_above":
-            "Ce cours est bien au-delà des cours du marché actuels %(marketPrice)s, êtes-vous sûr (e) ?",
-        "price_warning_below":
-            "Ce cours est bien en-deça des cours du marché actuels %(marketPrice)s, êtes-vous sûr (e) ?",
-        "order_cancel_confirm": "Annuler l'ordre %(order_id)s de %(user)s",
-        "order_cancelled": "Ordre %(order_id)s annulé.",
-        "higher": "Plus haut",
-        "lower": "Plus bas",
-        "total_DEBT_TOKEN_SHORT_CURRENCY_SIGN":
-            "Total %(DEBT_TOKEN_SHORT)s (%(CURRENCY_SIGN)s)"
-    },
     "recoveraccountstep1_jsx": {
-        "begin_recovery": "Démarrer la récupération",
-        "not_valid": "Invalide",
-        "account_name_is_not_found": "Compte inexistant",
-        "unable_to_recover_account_not_change_ownership_recently":
-            "Nous sommes incapables de récupérer ce compte, car il n'a pas changé de propriétaire récemment.",
-        "password_not_used_in_last_days":
-            "Ce mot de passe n'a pas été utilisé durant les derniers 30 jours.",
-        "request_already_submitted_contact_support":
-            "Votre requête a déjà été soumise et nous nous en occupons. Veuillez s'il-vous-plaît contacter %(SUPPORT_EMAIL)s pour obtenir le statut de votre requête.",
         "recover_account_intro":
-            "Il est possible que la clé propriétaire d'un Steemien soit compromise. Le processus de récupération de comptes dérobés est autorisé pour l'utilisateur de droit pendant 30 jours à partir du moment où le voleur a modifié la clé propriétaire. La récupération de comptes dérobés ne peut être utilisée sur %(APP_URL)s que si le propriétaire du compte a ajouté '%(APP_NAME)s'comme mandataire de confiance et accepté les conditions d'utilisation de %(APP_NAME)s.",
-        "login_with_facebook_or_reddit_media_to_verify_identity":
-            "Veuillez vous identifier via Facebook ou Reddit pour vérifier votre identité.",
-        "login_with_social_media_to_verify_identity":
-            "Veuillez vous identifier via %(provider)safin de vérifier votre identité",
-        "enter_email_toverify_identity":
-            "Nous devons vérifier votre identité. Veuillez s'il-vous-plaît entrer votre adresse email ci-dessous pour démarrer le processus.",
-        "continue_with_email": "Continuer avec l'email.",
-        "thanks_for_submitting_request_for_account_recovery":
-            "Merci pour la soumission de votre requête concernant la récupération de votre compte %(APP_NAME)sen utilisant une authentification à multi-facteurs basée sur la blockchain. Nous vous répondrons aussi rapidement que possible. Cependant, il se pourrait que notre réponse prennent du temps en raison du gros volume d'emails à traiter. Veuillez vous préparer à vérifier votre identité.",
-        "recovering_account": "Récupération du compte",
-        "recover_account": "Récupérer le compte",
-        "checking_account_owner": "Vérifier le propriétaire du compte",
-        "sending_recovery_request": "Envoyer une requête de récupération",
-        "cant_confirm_account_ownership":
-            "Nous ne pouvons confirmer que vous êtes propriétaire de ce compte. Veuillez s'il-vous-plaît vérifier votre mot de passe.",
-        "account_recovery_request_not_confirmed":
-            "La requête de la récupération du compte n'est pas encore confirmée. Veuillez réessayer plus tard. Merci de votre patience."
+            "Il est possible que la clé propriétaire d'un Steemien soit compromise. Le processus de récupération de comptes dérobés est autorisé pour l'utilisateur de droit pendant 30 jours à partir du moment où le voleur a modifié la clé propriétaire. La récupération de comptes dérobés ne peut être utilisée sur %(APP_URL)s que si le propriétaire du compte a ajouté '%(APP_NAME)s'comme mandataire de confiance et accepté les conditions d'utilisation de %(APP_NAME)s."
     },
     "user_profile": {
         "unknown_account": "Compte inconnu",
@@ -435,17 +385,9 @@
             "zero": "Pas d'article",
             "one": "1 article",
             "other": "%(count)s articles"
-        }
-    },
-    "authorrewards_jsx": {
-        "estimated_author_rewards_last_week":
-            "Gains de publication estimés pour la semaine dernière",
-        "author_rewards_history": "Historique des gains de publication"
-    },
-    "curationrewards_jsx": {
-        "estimated_curation_rewards_last_week":
-            "Gains de curation estimés pour la semaine dernière",
-        "curation_rewards_history": "Historique des gains de curation"
+        },
+        "hide_resteems": "Hide Resteems",
+        "show_all": "Show All"
     },
     "post_jsx": {
         "now_showing_comments_with_low_ratings":
@@ -480,29 +422,6 @@
             "one": "%(count)s vote",
             "other": "%(count)s votes"
         }
-    },
-    "witnesses_jsx": {
-        "witness_thread": "article introductif pour le témoin",
-        "top_witnesses": "Votes pour les témoins",
-        "you_have_votes_remaining": {
-            "zero": "Il ne vous reste plus de vote disponible",
-            "one": "Il vous reste 1 vote disponible",
-            "other": "Il vous reste %(count)s votes disponibles"
-        },
-        "you_can_vote_for_maximum_of_witnesses":
-            "Vous pouvez voter pour un maximum de 30 témoins",
-        "witness": "Témoin",
-        "information": "Information",
-        "if_you_want_to_vote_outside_of_top_enter_account_name":
-            "Si vous voulez voter pour un témoin en dehors du top 50, veuille entrer le nom du compte concerné ci-dessous afin de voter pour lui",
-        "set_witness_proxy":
-            "Vous pouvez aussi donner une procuration à quelqu'un qui votera pour les témoins en votre nom. Cela annulera votre choix de témoins actuels.",
-        "witness_set":
-            "Vous avez donné une procuration pour le vote des témoins. Si vous voulez réactiver le vote manuel, veuillez annuler votre procuration.",
-        "witness_proxy_current": "Vous avez donné une procuration à",
-        "witness_proxy_set": "Donner une procuration",
-        "witness_proxy_clear": "Annuler la procuration",
-        "proxy_update_error": "Votre procuration n'a pas été mise à jour"
     },
     "votesandcomments_jsx": {
         "no_responses_yet_click_to_respond":
@@ -605,24 +524,6 @@
         "empty_feed_4": "Lire le guide de prise en main rapide",
         "empty_feed_5": "Parcourir la FAQ",
         "my_feed": "Mon Flux"
-    },
-    "transferhistoryrow_jsx": {
-        "to_savings": "vers l'épargne",
-        "from_savings": "depuis l'épargne",
-        "cancel_transfer_from_savings": "Annuler le transfert vers l'épargne",
-        "stop_power_down":
-            "Arrêter la récupération de l'influence, ou le power down",
-        "start_power_down_of":
-            "Démarrer la récupération de l'influence, ou le power down",
-        "receive_interest_of": "Recevoir les intérêts de"
-    },
-    "savingswithdrawhistory_jsx": {
-        "cancel_this_withdraw_request":
-            "Voulez-vous annuler cette demande de retrait ?",
-        "pending_savings_withdrawals": "RETRAITS D'EPARGNE EN SUSPENS",
-        "withdraw": "Retirer %(amount)s",
-        "to": "vers %(to)s",
-        "from_to": "de %(from)s vers %(to)s"
     },
     "explorepost_jsx": {
         "copied": "Copié!",
@@ -773,19 +674,6 @@
         "history": "HISTORIQUE",
         "redeem_rewards": "Réclamer les gains (transférer vers le solde)",
         "buy_steem_or_steem_power": "Acheter du STEEM ou du STEEM POWER"
-    },
-    "powerdown_jsx": {
-        "power_down": "Diminuer son influence",
-        "amount": "Montant",
-        "already_power_down":
-            "Vous êtes actuellement en train de retirer %(AMOUNT)s %(LIQUID_TICKER)s d'influence (%(WITHDRAWN)s %(LIQUID_TICKER)s déjà payé). Veuillez noter que si le montant retiré est modifié, le compteur pour le prochain retrait sera remis à zéro également.",
-        "delegating":
-            "Vous déléguez actuellement %(AMOUNT)s %(LIQUID_TICKER)s. Ce montant est bloqué et est indisponible pour tout retrait d'influence, ou power down, tant que la délégation n'est pas annulée et qu'une période complète de gains soit passée.",
-        "per_week": "C'est environ %(AMOUNT)s%(LIQUID_TICKER)s par semaine.",
-        "warning":
-            "Laisser moins de%(AMOUNT)s%(VESTING_TOKEN)s sur votre compte n'est pas recommandé et peut rendre votre compte inutilisable.",
-        "error":
-            "Impossible d'effectuer un retrait d'influence (ERREUR : %(MESSAGE)s)"
     },
     "checkloginowner_jsx": {
         "your_password_permissions_were_reduced":

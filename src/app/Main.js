@@ -30,6 +30,7 @@ try {
 
 function runApp(initial_state) {
     console.log('Initial state', initial_state);
+
     const konami = {
         code: 'xyzzy',
         enabled: false,
@@ -81,6 +82,7 @@ function runApp(initial_state) {
     const config = initial_state.offchain.config;
     steem.api.setOptions({
         url: config.steemd_connection_client,
+        retry: true,
         useAppbaseApi: !!config.steemd_use_appbase,
     });
     steem.config.set('address_prefix', config.address_prefix);

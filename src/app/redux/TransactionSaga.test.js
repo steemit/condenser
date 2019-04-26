@@ -1,16 +1,15 @@
 /* global describe, it, before, beforeEach, after, afterEach */
 
-import { call, select } from 'redux-saga/effects';
-import { api } from '@steemit/steem-js';
+import { call, select, all, takeEvery } from 'redux-saga/effects';
+import steem, { api, broadcast } from '@steemit/steem-js';
+import { cloneableGenerator } from 'redux-saga/utils';
+import * as transactionActions from 'app/redux/TransactionReducer';
 import {
     preBroadcast_comment,
     createPermlink,
     createPatch,
-    watchForBroadcast,
-    watchForUpdateAuthorities,
-    watchForUpdateMeta,
-    watchForRecoverAccount,
-    preBroadcast_transfer,
+    transactionWatches,
+    broadcastOperation,
 } from './TransactionSaga';
 import { DEBT_TICKER } from 'app/client_config';
 
@@ -42,6 +41,18 @@ const operation = {
 const username = 'Beatrice';
 
 describe('TransactionSaga', () => {
+    describe('watch user actions and trigger appropriate saga', () => {
+        const gen = transactionWatches;
+        it('should call the broadcastOperation saga with every transactionActions.BROADCAST_OPERATION action', () => {
+            expect(gen).toEqual([
+                takeEvery(
+                    transactionActions.BROADCAST_OPERATION,
+                    broadcastOperation
+                ),
+            ]);
+        });
+    });
+
     describe('createPatch', () => {
         it('should return undefined if empty arguments are passed', () => {
             const actual = createPatch('', '');
@@ -54,63 +65,6 @@ describe('TransactionSaga', () => {
             expect(actual).toEqual(
                 '@@ -120,12 +120,15 @@\n quite simple\n+ILU\n'
             );
-        });
-    });
-
-    describe('watchForBroadcast', () => {
-        const gen = watchForBroadcast();
-        it('should call takeEvery with BROADCAST_OPERATION', () => {
-            const actual = gen.next().value;
-            const expected = {
-                '@@redux-saga/IO': true,
-                TAKE: 'transaction/BROADCAST_OPERATION',
-            };
-            expect(actual).toEqual(expected);
-        });
-    });
-
-    describe('watchForUpdateAuthorities', () => {
-        const gen = watchForUpdateAuthorities();
-        it('should call takeEvery with UPDATE_AUTHORITIES', () => {
-            const actual = gen.next().value;
-            const expected = {
-                '@@redux-saga/IO': true,
-                TAKE: 'transaction/UPDATE_AUTHORITIES',
-            };
-            expect(actual).toEqual(expected);
-        });
-    });
-
-    describe('watchForUpdateMeta', () => {
-        const gen = watchForUpdateMeta();
-        it('should call takeEvery with UPDATE_META', () => {
-            const actual = gen.next().value;
-            const expected = {
-                '@@redux-saga/IO': true,
-                TAKE: 'transaction/UPDATE_META',
-            };
-            expect(actual).toEqual(expected);
-        });
-    });
-
-    describe('preBroadcast_transfer', () => {
-        const operationSansMemo = {
-            ...operation,
-            memo: undefined,
-        };
-        const arg = { operation: operationSansMemo };
-        it('should return select object if it has a memo attribute with string value starting with #', () => {
-            const genR = preBroadcast_transfer({ operation });
-            const actual = genR.next().value;
-            const expected = select(state =>
-                state.user.getIn(['current', 'private_keys', 'memo_private'])
-            );
-            expect(Object.keys(actual)).toEqual(['@@redux-saga/IO', 'SELECT']);
-        });
-        it('should return the operation unchanged if it has no memo attribute', () => {
-            let gen = preBroadcast_transfer(arg);
-            const actual = gen.next().value;
-            expect(actual).toEqual(operationSansMemo);
         });
     });
 

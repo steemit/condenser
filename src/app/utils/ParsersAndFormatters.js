@@ -9,7 +9,7 @@ function fractional_part_len(value) {
 export function formatDecimal(value, decPlaces = 2, truncate0s = true) {
     let decSeparator, fl, i, j, sign, thouSeparator, abs_value;
     if (value === null || value === void 0 || isNaN(value)) {
-        return 'NaN';
+        return ['N', 'a', 'N'];
     }
     if (truncate0s) {
         fl = fractional_part_len(value);
@@ -99,10 +99,6 @@ export function translateError(string) {
         case 'Account name should have only letters, digits, periods or dashes.':
             return tt(
                 'g.account_name_should_have_only_letters_digits_or_dashes'
-            );
-        case 'vote currently exists, user must be indicate a desire to reject witness':
-            return tt(
-                'g.vote_currently_exists_user_must_be_indicate_a_to_reject_witness'
             );
         case 'Only one Steem account allowed per IP address every 10 minutes':
             return tt(

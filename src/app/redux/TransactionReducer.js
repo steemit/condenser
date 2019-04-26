@@ -4,15 +4,12 @@ import { fromJS, Map } from 'immutable';
 const CONFIRM_OPERATION = 'transaction/CONFIRM_OPERATION';
 const HIDE_CONFIRM = 'transaction/HIDE_CONFIRM';
 export const BROADCAST_OPERATION = 'transaction/BROADCAST_OPERATION';
-export const UPDATE_AUTHORITIES = 'transaction/UPDATE_AUTHORITIES';
-export const UPDATE_META = 'transaction/UPDATE_META';
 const ERROR = 'transaction/ERROR'; // Has a watcher in SagaShared
 const DELETE_ERROR = 'transaction/DELETE_ERROR';
 const DISMISS_ERROR = 'transaction/DISMISS_ERROR';
 const SET = 'transaction/SET';
 const REMOVE = 'transaction/REMOVE';
 // Saga-related
-export const RECOVER_ACCOUNT = 'transaction/RECOVER_ACCOUNT';
 const defaultState = fromJS({
     operations: [],
     status: { key: '', error: false, busy: false },
@@ -49,12 +46,6 @@ export default function reducer(state = defaultState, action) {
             // See TransactionSaga.js
             return state;
 
-        case UPDATE_AUTHORITIES:
-            return state;
-
-        case UPDATE_META:
-            return state;
-
         case ERROR: {
             const { operations, error, errorCallback } = payload;
 
@@ -80,20 +71,6 @@ export default function reducer(state = defaultState, action) {
                             errorKey = 'You may only post once per minute.';
                         } else if (errorStr === 'Testing, fake error')
                             errorKey = 'Testing, fake error';
-                        break;
-                    case 'transfer':
-                        if (/get_balance/.test(errorStr)) {
-                            errorKey = 'Insufficient balance.';
-                        }
-                        break;
-                    case 'withdraw_vesting':
-                        if (
-                            /Account registered by another account requires 10x account creation fee worth of Steem Power/.test(
-                                errorStr
-                            )
-                        )
-                            errorKey =
-                                'Account requires 10x the account creation fee in Steem Power (approximately 30 SP) before it can power down.';
                         break;
                     default:
                         break;
@@ -148,7 +125,8 @@ export default function reducer(state = defaultState, action) {
                     // Sane error key for the bandwidth error.
                     if (
                         errorKey.includes('bandwidth') ||
-                        errorStr.includes('bandwidth')
+                        errorStr.includes('bandwidth') ||
+                        errorStr.includes('RC') // Error key for HF-20 insufficient RC error, #3001.
                     ) {
                         state = state.setIn(['errors', 'bandwidthError'], true);
                     }
@@ -204,16 +182,6 @@ export const broadcastOperation = payload => ({
     payload,
 });
 
-export const updateAuthorities = payload => ({
-    type: UPDATE_AUTHORITIES,
-    payload,
-});
-
-export const updateMeta = payload => ({
-    type: UPDATE_META,
-    payload,
-});
-
 export const error = payload => ({
     type: ERROR,
     payload,
@@ -236,10 +204,5 @@ export const set = payload => ({
 
 export const remove = payload => ({
     type: REMOVE,
-    payload,
-});
-
-export const recoverAccount = payload => ({
-    type: RECOVER_ACCOUNT,
     payload,
 });

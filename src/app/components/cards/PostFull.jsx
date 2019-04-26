@@ -26,6 +26,7 @@ import tt from 'counterpart';
 import userIllegalContent from 'app/utils/userIllegalContent';
 import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
+import { GoogleAd } from 'app/components/elements/GoogleAd';
 
 function TimeAuthorCategory({ content, authorRepLog10, showTags }) {
     return (
@@ -222,7 +223,8 @@ class PostFull extends React.Component {
 
     showExplorePost = () => {
         const permlink = this.share_params.link;
-        this.props.showExplorePost(permlink);
+        const title = this.share_params.rawtitle;
+        this.props.showExplorePost(permlink, title);
     };
 
     render() {
@@ -288,6 +290,7 @@ class PostFull extends React.Component {
         this.share_params = {
             link,
             url: 'https://' + APP_DOMAIN + link,
+            rawtitle: title,
             title: title + ' — ' + APP_NAME,
             desc: p.desc,
         };
@@ -404,15 +407,15 @@ class PostFull extends React.Component {
             );
         }
 
-        const archived =
+        const _isPaidout =
             post_content.get('cashout_time') === '1969-12-31T23:59:59'; // TODO: audit after HF19. #1259
-        const readonly = archived || $STM_Config.read_only_mode;
+        const showReblog = !_isPaidout;
         const showPromote =
-            username && !archived && post_content.get('depth') == 0;
+            username && !_isPaidout && post_content.get('depth') == 0;
         const showReplyOption = post_content.get('depth') < 255;
         const showEditOption = username === author;
         const showDeleteOption =
-            username === author && content.stats.allowDelete;
+            username === author && content.stats.allowDelete && !_isPaidout;
 
         const authorRepLog10 = repLog10(content.author_reputation);
         const isPreViewCount =
@@ -471,28 +474,28 @@ class PostFull extends React.Component {
                 )}
                 <TagList post={content} horizontal />
                 <div className="PostFull__footer row">
-                    <div className="column">
+                    <div className="columns medium-12 large-5">
                         <TimeAuthorCategory
                             content={content}
                             authorRepLog10={authorRepLog10}
                         />
+                    </div>
+                    <div className="columns medium-12 large-2 ">
                         <Voting post={post} />
                     </div>
-                    <div className="RightShare__Menu small-11 medium-5 large-5 columns text-right">
-                        {!readonly && (
+                    <div className="RightShare__Menu small-11 medium-12 large-5 columns">
+                        {showReblog && (
                             <Reblog author={author} permlink={permlink} />
                         )}
                         <span className="PostFull__reply">
                             {showReplyOption && (
                                 <a onClick={onShowReply}>{tt('g.reply')}</a>
                             )}{' '}
-                            {!readonly &&
-                                showEditOption &&
+                            {showEditOption &&
                                 !showEdit && (
                                     <a onClick={onShowEdit}>{tt('g.edit')}</a>
                                 )}{' '}
-                            {!readonly &&
-                                showDeleteOption &&
+                            {showDeleteOption &&
                                 !showReply && (
                                     <a onClick={onDeletePost}>
                                         {tt('g.delete')}
@@ -574,11 +577,11 @@ export default connect(
                 })
             );
         },
-        showExplorePost: permlink => {
+        showExplorePost: (permlink, title) => {
             dispatch(
                 globalActions.showDialog({
                     name: 'explorePost',
-                    params: { permlink },
+                    params: { permlink, title },
                 })
             );
         },

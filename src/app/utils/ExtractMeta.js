@@ -1,6 +1,7 @@
 import extractContent from 'app/utils/ExtractContent';
 import { objAccessor } from 'app/utils/Accessors';
 import normalizeProfile from 'app/utils/NormalizeProfile';
+import { makeCanonicalLink } from 'app/utils/CanonicalLinker.js';
 
 const site_desc =
     'Steemit is a social media platform where everyone gets paid for creating and curating content. It leverages a robust digital points system (Steem) for digital rewards.';
@@ -39,6 +40,7 @@ export default function extractMeta(chain_data, rp) {
             // API currently returns 'false' data with id 0.0.0 for posts that do not exist
             const d = extractContent(objAccessor, content, false);
             const url = 'https://steemit.com' + d.link;
+            const canonicalUrl = makeCanonicalLink(d);
             const title = d.title + ' — Steemit';
             const desc = d.desc + ' by ' + d.author;
             const image = d.image_link || profile.profile_image;
@@ -46,7 +48,7 @@ export default function extractMeta(chain_data, rp) {
 
             // Standard meta
             metas.push({ title });
-            metas.push({ canonical: url });
+            metas.push({ canonical: canonicalUrl });
             metas.push({ name: 'description', content: desc });
 
             // Open Graph data

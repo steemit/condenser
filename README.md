@@ -4,8 +4,7 @@
 
 Condenser is the react.js web interface to the world's first and best
 blockchain-based social media platform, steemit.com.  It uses
-[STEEM](https://github.com/steemit/steem), a blockchain powered by Graphene
-2.0 technology to store JSON-based content for a plethora of web
+[STEEM](https://github.com/steemit/steem), a blockchain powered by DPoS Governance and ChainBase DB to store JSON-based content for a plethora of web
 applications.   
 
 ## Why would I want to use Condenser (steemit.com front-end)?
@@ -19,7 +18,7 @@ applications.
 
 #### Docker
 
-We highly recommend using docker to run condenser. This is how we run the
+We highly recommend using docker to run condenser in production. This is how we run the
 live steemit.com site and it is the most supported (and fastest) method of
 both building and running condenser. We will always have the latest version
 of condenser (master branch) available on Docker Hub. Configuration settings
@@ -36,7 +35,7 @@ docker run -it -p 8080:8080 steemit/condenser
 Environment variables can be added like this:
 
 ```bash
-docker run -it --env SDC_DATABASE_URL="mysql://user:pass@hostname/databasename" -p 8080:8080 steemit/condenser
+docker run -it -p 8080:8080 steemit/condenser
 ```
 
 If you would like to modify, build, and run condenser using docker, it's as
@@ -51,6 +50,7 @@ docker run -it -p 8080:8080 myname/condenser:mybranch
 ```
 
 ## Building from source without docker (the 'traditional' way):
+(better if you're planning to do condenser development)
 
 #### Clone the repository and make a tmp folder
 
@@ -160,79 +160,6 @@ node
 > .exit
 ```
 
-## Install mysql server
-
-If you've followed the instructions up until this point you will already
-have a running condenser installation which is entirely acceptable for
-development purposes. It is *not required to run a SQL server for
-development*. If you're running a full-fledged site however, you will want
-to set one up.
-
-Once set up, you can set the mysql server configuration option for
-condenser using the environment variable `SDC_DATABASE_URL`, or
-alternatively by editing it in `config/production.json`. You will use the
-format `mysql://user:pass@hostname/databasename`.
-
-Example:
-
-```bash
-export SDC_DATABASE_URL="mysql://root:password@127.0.0.1/steemit_dev"
-```
-
-Here are instructions for setting up a mysql server and running the
-necessary migrations by operating system:
-
-OS X:
-
-```bash
-brew update
-brew doctor
-brew upgrade
-brew install mysql
-mysql.server restart
-```
-
-Debian based Linux:
-
-```bash
-sudo apt-get update
-sudo apt-get install mysql-server
-```
-
-On Ubuntu 16.04+ you may be unable to connect to mysql without root access,
-if so update the mysql root user as follows:
-
-```
-sudo mysql -u root
-DROP USER 'root'@'localhost';
-CREATE USER 'root'@'%' IDENTIFIED BY '';
-GRANT ALL PRIVILEGES ON *.* TO 'root'@'%';
-FLUSH PRIVILEGES;
-```
-
-Now launch mysql client and create steemit_dev database:
-```bash
-mysql -u root
-> create database steemit_dev;
-> quit
-```
-
-### Database migrations
-
-This is a required step in order for the database to be 'ready' for
-condenser's use.
-
-Edit the file `src/db/config/config.json` using your favorite command line
-text editor being sure that the username, password, host, and database name
-are set correctly and match your newly configured mysql setup.
-
-Run `sequelize db:migrate` in `src/db` directory, like this:
-
-```bash
-cd src/db
-yarn exec sequelize db:migrate
-```
-
 ## Style Guides For Submitting Pull Requests
 
 ### File naming and location
@@ -285,7 +212,7 @@ If you want to test a server-side rendered page without using the network, do th
 
 ```
 yarn build
-OFFLINE_SSR_TEST=true SDC_DATABASE_URL="mysql://root@127.0.0.1/steemit_dev" NODE_ENV=production node --prof lib/server/index.js
+OFFLINE_SSR_TEST=true NODE_ENV=production node --prof lib/server/index.js
 ```
 
 This will read data from the blobs in `api_mockdata` directory. If you want to use another set of mock data, create a similar directory to that one and add an argument `OFFLINE_SSR_TEST_DATA_DIR` pointing to your new directory.

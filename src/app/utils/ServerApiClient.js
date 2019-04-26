@@ -23,7 +23,7 @@ export function serverApiLogout() {
     const request = Object.assign({}, request_base, {
         body: JSON.stringify({ csrf: $STM_csrf }),
     });
-    fetch('/api/v1/logout_account', request);
+    return fetch('/api/v1/logout_account', request);
 }
 
 let last_call;
@@ -46,7 +46,6 @@ export function recordPageView(page, referer, account) {
     if (last_page_promise && page === last_page) return last_page_promise;
 
     if (!process.env.BROWSER) return Promise.resolve(0);
-
     if (window.ga) {
         // virtual pageview
         window.ga('set', 'page', page);

@@ -465,10 +465,10 @@ export function* createPermlink(title, author, parent_author, parent_permlink) {
         // comments: re-parentauthor-parentpermlink-time
         const timeStr = new Date().toISOString().replace(/[^a-zA-Z0-9]+/g, '');
         parent_permlink = parent_permlink.replace(/(-\d{8}t\d{9}z)/g, '');
+        // Periods allowed in author are not allowed in permlink.
+        parent_author = parent_author.replace(/\./g, '');
         permlink = `re-${parent_author}-${parent_permlink}-${timeStr}`;
     }
-    // only letters numbers and dashes shall survive
-    permlink = permlink.toLowerCase().replace(/[^a-z0-9-]+/g, '');
     if (permlink.length > 255) {
         // STEEMIT_MAX_PERMLINK_LENGTH
         permlink = permlink.substring(permlink.length - 255, permlink.length);

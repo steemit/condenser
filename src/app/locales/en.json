@@ -77,6 +77,7 @@
         "promoted": "Promoted",
         "re": "RE",
         "re_to": "RE: %(topic)s",
+        "read_offical_blog": "Steemit Blog",
         "recent_password": "Recent Password",
         "receive": "Receive ",
         "remove": "Remove",
@@ -115,6 +116,7 @@
         "all_tags_mobile": "All content",
         "transfer": "Transfer ",
         "trending_topics": "Trending Topics",
+        "try_again": "Try Again",
         "type": "Type",
         "unfollow": "Unfollow",
         "unmute": "Unmute",
@@ -186,8 +188,6 @@
             "Account name should have only letters, digits, periods or dashes.",
         "cannot_increase_reward_of_post_within_the_last_minute_before_payout":
             "Cannot increase reward of post within the last minute before payout",
-        "vote_currently_exists_user_must_be_indicate_a_to_reject_witness":
-            "vote currently exists, user must be indicate a desire to reject witness",
         "only_one_APP_NAME_account_allowed_per_ip_address_every_10_minutes":
             "Only one Steem account allowed per IP address every 10 minutes",
         "resteem_this_post": "Resteem This Post",
@@ -249,7 +249,7 @@
         }
     },
     "navigation": {
-        "about": "About",
+        "about": "About Steemit, Inc.",
         "explore": "Explore",
         "APP_NAME_whitepaper": "%(APP_NAME)s Whitepaper",
         "third_party_exchanges": "Third-party exchanges:",
@@ -258,8 +258,8 @@
         "currency_market": "Currency Market",
         "stolen_account_recovery": "Stolen Accounts Recovery",
         "change_account_password": "Change Account Password",
-        "witnesses": "Witnesses",
         "vote_for_witnesses": "Vote for Witnesses",
+        "advertise": "Advertise",
         "privacy_policy": "Privacy Policy",
         "terms_of_service": "Terms of Service",
         "sign_up": "Sign up",
@@ -349,65 +349,9 @@
         "you_are_viewing_a_single_comments_thread_from":
             "You are viewing a single comment's thread from"
     },
-    "market_jsx": {
-        "action": "Action",
-        "date_created": "Date Created",
-        "last_price": "Last price",
-        "24h_volume": "24h volume",
-        "spread": "Spread",
-        "total": "Total",
-        "available": "Available",
-        "lowest_ask": "Lowest ask",
-        "highest_bid": "Highest bid",
-        "buy_orders": "Buy Orders",
-        "sell_orders": "Sell Orders",
-        "trade_history": "Trade History",
-        "open_orders": "Open Orders",
-        "sell_amount_for_atleast":
-            "Sell %(amount_to_sell)s for at least %(min_to_receive)s (%(effectivePrice)s)",
-        "buy_atleast_amount_for":
-            "Buy at least %(min_to_receive)s for %(amount_to_sell)s (%(effectivePrice)s)",
-        "price_warning_above":
-            "This price is well above the current market price of %(marketPrice)s, are you sure?",
-        "price_warning_below":
-            "This price is well below the current market price of %(marketPrice)s, are you sure?",
-        "order_cancel_confirm": "Cancel order %(order_id)s from %(user)s?",
-        "order_cancelled": "Order %(order_id)s cancelled.",
-        "higher": "Higher",
-        "lower": "Lower",
-        "total_DEBT_TOKEN_SHORT_CURRENCY_SIGN":
-            "Total %(DEBT_TOKEN_SHORT)s (%(CURRENCY_SIGN)s)",
-        "order_placed": "Order placed: %(order)s"
-    },
     "recoveraccountstep1_jsx": {
-        "begin_recovery": "Begin Recovery",
-        "not_valid": "Not valid",
-        "account_name_is_not_found": "Account name is not found",
-        "unable_to_recover_account_not_change_ownership_recently":
-            "We are unable to recover this account, it has not changed ownership recently.",
-        "password_not_used_in_last_days":
-            "This password was not used on this account in the last 30 days.",
-        "request_already_submitted_contact_support":
-            "Your request has been already submitted and we are working on it. Please contact %(SUPPORT_EMAIL)s for the status of your request.",
         "recover_account_intro":
-            "From time to time, a Steemian's owner key may be compromised. Stolen Account Recovery gives the rightful account owner 30 days to recover their account from the moment the thief changed their owner key. Stolen Account Recovery can only be used on %(APP_URL)s if the account owner had previously listed '%(APP_NAME)s' as their account trustee and complied with %(APP_NAME)s's Terms of Service.",
-        "login_with_facebook_or_reddit_media_to_verify_identity":
-            "Please login with Facebook or Reddit to verify your identity",
-        "login_with_social_media_to_verify_identity":
-            "Please login with %(provider)s to verify your identity",
-        "enter_email_toverify_identity":
-            "We need to verify your identity. Please enter your email address below to begin the verification.",
-        "continue_with_email": "Continue with Email",
-        "thanks_for_submitting_request_for_account_recovery":
-            "Thanks for submitting your request for Account Recovery using %(APP_NAME)s's blockchain-based multi factor authentication. We will respond to you as quickly as possible, however, please expect there may be some delay in response due to high volume of emails. Please be prepared to verify your identity.",
-        "recovering_account": "Recovering account",
-        "recover_account": "Recover Account",
-        "checking_account_owner": "Checking account owner",
-        "sending_recovery_request": "Sending recovery request",
-        "cant_confirm_account_ownership":
-            "We can't confirm account ownership. Check your password",
-        "account_recovery_request_not_confirmed":
-            "Account recovery request is not confirmed yet, please get back later, thank you for your patience."
+            "From time to time, a Steemian's owner key may be compromised. Stolen Account Recovery gives the rightful account owner 30 days to recover their account from the moment the thief changed their owner key. Stolen Account Recovery can only be used on %(APP_URL)s if the account owner had previously listed '%(APP_NAME)s' as their account trustee and complied with %(APP_NAME)s's Terms of Service."
     },
     "user_profile": {
         "unknown_account": "Unknown Account",
@@ -444,16 +388,6 @@
         },
         "hide_resteems": "Hide Resteems",
         "show_all": "Show All"
-    },
-    "authorrewards_jsx": {
-        "estimated_author_rewards_last_week":
-            "Estimated author rewards last week",
-        "author_rewards_history": "Author Rewards History"
-    },
-    "curationrewards_jsx": {
-        "estimated_curation_rewards_last_week":
-            "Estimated curation rewards last week",
-        "curation_rewards_history": "Curation Rewards History"
     },
     "post_jsx": {
         "now_showing_comments_with_low_ratings":
@@ -498,31 +432,6 @@
             "one": "%(count)s vote",
             "other": "%(count)s votes"
         }
-    },
-    "witnesses_jsx": {
-        "witness_thread": "witness thread",
-        "external_site": "external site",
-        "disabled": "disabled",
-        "top_witnesses": "Witness Voting",
-        "you_have_votes_remaining": {
-            "zero": "You have no votes remaining",
-            "one": "You have 1 vote remaining",
-            "other": "You have %(count)s votes remaining"
-        },
-        "you_can_vote_for_maximum_of_witnesses":
-            "You can vote for a maximum of 30 witnesses",
-        "witness": "Witness",
-        "information": "Information",
-        "if_you_want_to_vote_outside_of_top_enter_account_name":
-            "If you would like to vote for a witness outside of the top 100, enter the account name below to cast a vote",
-        "set_witness_proxy":
-            "You can also choose a proxy that will vote for witnesses for you. This will reset your current witness selection.",
-        "witness_set":
-            "You have set a voting proxy. If you would like to re-enable manual voting, please clear your proxy.",
-        "witness_proxy_current": "Your current proxy is",
-        "witness_proxy_set": "Set proxy",
-        "witness_proxy_clear": "Clear proxy",
-        "proxy_update_error": "Your proxy was not updated"
     },
     "votesandcomments_jsx": {
         "no_responses_yet_click_to_respond":
@@ -625,82 +534,6 @@
         "my_feed": "My Feed",
         "accountnames_feed": "%(account_name)s's Feed"
     },
-    "transferhistoryrow_jsx": {
-        "to_savings": "to savings",
-        "from_savings": "from savings",
-        "cancel_transfer_from_savings":
-            "Cancel transfer from savings (request %(request_id)s)",
-        "stop_power_down": "Stop power down",
-        "withdraw_vesting": "Start power down of %(powerdown_vests)s STEEM",
-        "start_power_down_of": "Start power down of",
-        "receive_interest_of": "Receive interest of",
-        "bad_actor_caution": "Caution",
-        "bad_actor_explained":
-            "This is from an account that looks fraudulent. If you wish, you may temporarily reveal this memo which may contain dangerous links.",
-        "bad_actor_reveal_memo": "I understand the risk; show anyway.",
-        "from_negative_rep_user_caution": "Caution",
-        "from_negative_rep_user_explained":
-            "This is from an account with a bad reputation. If you wish, you may temporarily reveal this memo which may contain dangerous links.",
-        "from_negative_rep_user_reveal_memo":
-            "I understand the risk; show anyway.",
-        "curation_reward": "%(curation_reward)s STEEM POWER for ",
-        "author_reward":
-            "%(sbd_payout)s%(steem_payout)s and %(author_reward)s STEEM POWER for ",
-        "claim_reward_balance": {
-            "three_rewards":
-                "Claim rewards: %(first_reward)s, %(second_reward)s and %(third_reward)s",
-            "two_rewards":
-                "Claim rewards: %(first_reward)s and %(second_reward)s",
-            "one_reward": "Claim rewards: %(reward)s"
-        },
-        "interest": "Receive interest of %(interest)s",
-        "fill_convert_request":
-            "Fill convert request: %(amount_in)s for %(amount_out)s",
-        "fill_order": {
-            "filled_by_current_owner":
-                "Paid %(open_pays)s for %(current_pays)s",
-            "open_owner_filled_my_order":
-                "Paid %(current_pays)s for %(open_pays)s"
-        },
-        "comment_benefactor_reward":
-            "%(benefactor_reward)s STEEM POWER for %(author)s/%(permlink)s",
-        "transfer_to_vesting": {
-            "from_self": {
-                "no_to": "Transfer %(amount)s to STEEM POWER",
-                "to_someone": "Transfer %(amount)s STEEM POWER to "
-            },
-            "to_self": "Receive %(amount)s STEEM POWER from ",
-            "from_user_to_user":
-                " Transfer %(amount)s STEEM POWER from %(from) to "
-        },
-        "transfer": {
-            "from_self": {
-                "to_savings": "Transfer to savings %(amount)s to ",
-                "from_savings": "Transfer from savings %(amount)s to ",
-                "not_savings": "Transfer %(amount)s to "
-            },
-            "to_self": {
-                "to_savings": "Receive from savings %(amount)s from ",
-                "from_savings": "Transfer from savings %(amount)s from ",
-                "not_savings": "Received %(amount)s from "
-            },
-            "to_someone_from_someone": {
-                "to_savings":
-                    "Transfer to savings %(amount)s from %(from)s to %(to)s",
-                "from_savings":
-                    "Transfer from savings %(amount)s from %(from)s to %(to)s",
-                "not_savings": "Transfer %(amount)s from %(from)s to %(to)s"
-            }
-        },
-        "request_id": "Request ID: %(request_id)s"
-    },
-    "savingswithdrawhistory_jsx": {
-        "cancel_this_withdraw_request": "Cancel this withdraw request?",
-        "pending_savings_withdrawals": "PENDING SAVINGS WITHDRAWS",
-        "withdraw": "Withdraw %(amount)s",
-        "to": "to %(to)s",
-        "from_to": "from %(from)s to %(to)s"
-    },
     "explorepost_jsx": {
         "copied": "Copied!",
         "copy": "COPY",
@@ -764,6 +597,11 @@
         "signup_button_emphasis": "FREE STEEM!",
         "sign_up_get_steem": "Sign up. Get STEEM!",
         "returning_users": "Returning Users: ",
+        "login_warning_title": "Logging in with non-posting key",
+        "login_warning_body":
+            "You are attempting to use a key with more permissions than required for everyday Steemit.com use. Since keys and passwords are more likely to get compromised the more they are used, it is strongly recommended to only use your Posting Key to log in.",
+        "continue_anyway": "Continue Anyway",
+        "login_warning_link_text": "View my Posting Key at Steemit Wallet",
         "join_our": "Join our",
         "sign_transfer": "Sign to complete transfer"
     },
@@ -868,18 +706,6 @@
         "history": "HISTORY",
         "redeem_rewards": "Redeem Rewards (Transfer to Balance)",
         "buy_steem_or_steem_power": "Buy STEEM or STEEM POWER"
-    },
-    "powerdown_jsx": {
-        "power_down": "Power Down",
-        "amount": "Amount",
-        "already_power_down":
-            "You are already powering down %(AMOUNT)s %(LIQUID_TICKER)s (%(WITHDRAWN)s %(LIQUID_TICKER)s paid out so far). Note that if you change the power down amount the payout schedule will reset.",
-        "delegating":
-            "You are delegating %(AMOUNT)s %(LIQUID_TICKER)s. That amount is locked up and not available to power down until the delegation is removed and a full reward period has passed.",
-        "per_week": "That's ~%(AMOUNT)s %(LIQUID_TICKER)s per week.",
-        "warning":
-            "Leaving less than %(AMOUNT)s %(VESTING_TOKEN)s in your account is not recommended and can leave your account in a unusable state.",
-        "error": "Unable to power down (ERROR: %(MESSAGE)s)"
     },
     "checkloginowner_jsx": {
         "your_password_permissions_were_reduced":

@@ -223,7 +223,8 @@ class PostFull extends React.Component {
 
     showExplorePost = () => {
         const permlink = this.share_params.link;
-        this.props.showExplorePost(permlink);
+        const title = this.share_params.rawtitle;
+        this.props.showExplorePost(permlink, title);
     };
 
     render() {
@@ -289,6 +290,7 @@ class PostFull extends React.Component {
         this.share_params = {
             link,
             url: 'https://' + APP_DOMAIN + link,
+            rawtitle: title,
             title: title + ' — ' + APP_NAME,
             desc: p.desc,
         };
@@ -575,11 +577,11 @@ export default connect(
                 })
             );
         },
-        showExplorePost: permlink => {
+        showExplorePost: (permlink, title) => {
             dispatch(
                 globalActions.showDialog({
                     name: 'explorePost',
-                    params: { permlink },
+                    params: { permlink, title },
                 })
             );
         },

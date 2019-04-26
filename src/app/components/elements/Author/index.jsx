@@ -9,7 +9,7 @@ import { authorNameAndRep } from 'app/utils/ComponentFormatters';
 import AuthorDropdown from '../AuthorDropdown';
 import Reputation from 'app/components/elements/Reputation';
 import normalizeProfile from 'app/utils/NormalizeProfile';
-import EmployeeList from 'app/utils/EmployeeList';
+import AffiliationMap from 'app/utils/AffiliationMap';
 import tt from 'counterpart';
 import Overlay from 'react-overlays/lib/Overlay';
 import { findDOMNode } from 'react-dom';
@@ -107,7 +107,11 @@ class Author extends React.Component {
                         <Link to={'/@' + author}>{author}</Link>
                     </strong>{' '}
                     <Reputation value={authorRepLog10} />
-                    {EmployeeList.includes(author) ? <span className="employee">{tt("g.employees")}</span> : null}
+                    {AffiliationMap[author] ? (
+                        <span className="affiliation">
+                            {tt('g.affiliation_' + AffiliationMap[author])}
+                        </span>
+                    ) : null}
                 </span>
             );
         }
@@ -128,7 +132,11 @@ class Author extends React.Component {
                             to={'/@' + author}
                         >
                             {author} <Reputation value={authorRepLog10} />
-                            {EmployeeList.includes(author) ? <span className="employee">{tt("g.employees")}</span> : null}
+                            {EmployeeList.includes(author) ? (
+                                <span className="employee">
+                                    {tt('g.employees')}
+                                </span>
+                            ) : null}
                             <Icon name="dropdown-arrow" />
                         </Link>
                     </strong>

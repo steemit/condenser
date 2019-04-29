@@ -206,11 +206,7 @@ class PostsList extends React.Component {
                 return (
                     <li key={pinnedPost}>
                         <div className="PinLabel">
-                            <Icon
-                                className="PinIcon"
-                                name={isSeen ? 'pin-disabled' : 'pin'}
-                            />{' '}
-                            <span className="PinText">Pinned Post</span>
+                            <span className="PinText">Featured Post</span>
                             <a
                                 onClick={close}
                                 className="DismissPost"

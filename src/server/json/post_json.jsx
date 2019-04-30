@@ -2,6 +2,7 @@ import koa_router from 'koa-router';
 import React from 'react';
 import { routeRegex } from 'app/ResolveRoute';
 import { api } from '@steemit/steem-js';
+import GDPRUserList from 'app/utils/GDPRUserList';
 
 export default function usePostJson(app) {
     const router = koa_router();
@@ -14,7 +15,10 @@ export default function usePostJson(app) {
         let status = '';
         let post = yield api.getContentAsync(author, permalink);
 
-        if (post.author) {
+        if (GDPRUserList.includes(post.author)) {
+            post = 'Content unavailable';
+            status = '451';
+        } else if (post.author) {
             status = '200';
             // try parse for post metadata
             try {

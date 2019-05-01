@@ -45,7 +45,7 @@ const iframeWhitelist = [
         },
     },
     {
-        re: /^https:\/\/emb.d.tube\/\#\!\/([a-zA-Z0-9\/]+)$/,
+        re: /^https:\/\/emb.d.tube\/\#\!\/([a-zA-Z0-9\-\.\/]+)$/,
         fn: src => {
             // <iframe width="560" height="315" src="https://emb.d.tube/#!/justineh/u6qoydvy" frameborder="0" allowfullscreen></iframe>
             return src;

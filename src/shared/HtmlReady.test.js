@@ -209,4 +209,22 @@ describe('htmlready', () => {
         const res = HtmlReady(testString).html;
         expect(res).toEqual(htmlified);
     });
+
+    it('should not omit text on same line as dtube link', () => {
+        const testString =
+            '<html><p>before text https://d.tube/#!/v/tibfox/mvh7g26e after text</p></html>';
+        const htmlified =
+            '<html xmlns="http://www.w3.org/1999/xhtml"><p>before text ~~~ embed:tibfox/mvh7g26e dtube ~~~ after text</p></html>';
+        const res = HtmlReady(testString).html;
+        expect(res).toEqual(htmlified);
+    });
+
+    it('should handle dtube embed', () => {
+        const testString =
+            '<html><iframe width="560" height="315" src="https://emb.d.tube/#!/dbroze/8lsh5nf7" frameborder="0" allowfullscreen></iframe></html>';
+        const htmlified =
+            '<html xmlns="http://www.w3.org/1999/xhtml"><div class="videoWrapper"><iframe width="560" height="315" src="https://emb.d.tube/#!/dbroze/8lsh5nf7" frameborder="0" allowfullscreen="allowfullscreen" xmlns="http://www.w3.org/1999/xhtml"></iframe></div></html>';
+        const res = HtmlReady(testString).html;
+        expect(res).toEqual(htmlified);
+    });
 });

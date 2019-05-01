@@ -2,6 +2,7 @@ import koa_router from 'koa-router';
 import React from 'react';
 import { routeRegex } from 'app/ResolveRoute';
 import { api } from '@steemit/steem-js';
+import GDPRUserList from 'app/utils/GDPRUserList';
 
 export default function useUserJson(app) {
     const router = koa_router();
@@ -18,7 +19,10 @@ export default function useUserJson(app) {
 
         const [chainAccount] = yield api.getAccountsAsync([user_name]);
 
-        if (chainAccount) {
+        if (GDPRUserList.includes(user_name)) {
+            user = 'Content unavailable';
+            status = '451';
+        } else if (chainAccount) {
             user = chainAccount;
             try {
                 user.json_metadata = JSON.parse(user.json_metadata);

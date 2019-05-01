@@ -512,7 +512,7 @@ Currently steemit.com supports English, Spanish, Russian, French, Italian, Korea
 
 ## <span id="What_can_users_post_to_Steemit">What can users post to Steemit?</span>
 
-Steem is an open platform meant to host and welcome any legal content. Users can post anything they want, whether it be phrases, quotes, blogs, anecdotes, photos, videos, memes, songs, and more. Be creative!
+Steem is an open platform meant to host and welcome any legal content, that compiles with our [terms of service](/tos.html). Users can post anything they want, whether it be phrases, quotes, blogs, anecdotes, photos, videos, memes, songs, and more. Be creative!
 
 <a href="#Table_of_Contents_Posting">^</a>
 ## <span id="What_are_the_different_choices_for_post_rewards__50__50___Power_Up_100___Decline_Payout">What are the different choices for post rewards (50%/50%, Power Up 100%, Decline Payout)?</span>

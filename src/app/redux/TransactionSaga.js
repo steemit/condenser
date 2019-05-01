@@ -473,6 +473,8 @@ export function* createPermlink(title, author, parent_author, parent_permlink) {
         // STEEMIT_MAX_PERMLINK_LENGTH
         permlink = permlink.substring(permlink.length - 255, permlink.length);
     }
+    // only letters numbers and dashes shall survive
+    permlink = permlink.toLowerCase().replace(/[^a-z0-9-]+/g, '');
     return permlink;
 }
 

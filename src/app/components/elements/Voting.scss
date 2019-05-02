@@ -140,8 +140,27 @@
     cursor: default;
   }
 
+  a path {
+    fill: #ccc;
+  }
+  a:hover circle {
+    stroke: $color-red;
+  }
   a:hover path {
     fill: $color-red;
+  }
+
+  &.Voting__button--downvoted {
+    a path {
+      fill: #fff;
+    }
+    a circle {
+      fill: #f99;
+      stroke: $color-red;
+    }
+    a:hover circle {
+      fill: #f66;
+    }
   }
 }
 
@@ -158,7 +177,7 @@
     @include themify($themes) {
       fill: themed('colorAccent');
       stroke: themed('colorAccent');
-    }    
+    }
 }
 
 .Voting__button--upvoted a:hover path {
@@ -169,7 +188,7 @@
     @include themify($themes) {
       fill: themed('colorAccentHover');
       stroke: themed('colorAccentHover');
-    }  
+    }
 }
 
 .Voting__button--downvoted path {

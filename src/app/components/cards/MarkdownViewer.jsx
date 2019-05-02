@@ -144,7 +144,7 @@ class MarkdownViewer extends Component {
         // HtmlReady inserts ~~~ embed:${id} type ~~~
         for (let section of cleanText.split('~~~ embed:')) {
             const match = section.match(
-                /^([A-Za-z0-9\?\=\_\-]+) (youtube|vimeo|twitch)\s?(\d+)? ~~~/
+                /^([A-Za-z0-9\?\=\_\-\/\.]+) (youtube|vimeo|twitch|dtube)\s?(\d+)? ~~~/
             );
             if (match && match.length >= 3) {
                 const id = match[1];
@@ -165,7 +165,9 @@ class MarkdownViewer extends Component {
                         />
                     );
                 } else if (type === 'vimeo') {
-                    const url = `https://player.vimeo.com/video/${id}#t=${startTime}s`;
+                    const url = `https://player.vimeo.com/video/${id}#t=${
+                        startTime
+                    }s`;
                     sections.push(
                         <div className="videoWrapper">
                             <iframe
@@ -194,11 +196,27 @@ class MarkdownViewer extends Component {
                             />
                         </div>
                     );
+                } else if (type === 'dtube') {
+                    const url = `https://emb.d.tube/#!/${id}`;
+                    sections.push(
+                        <div className="videoWrapper">
+                            <iframe
+                                key={idx++}
+                                src={url}
+                                width={w}
+                                height={h}
+                                frameBorder="0"
+                                allowFullScreen
+                            />
+                        </div>
+                    );
                 } else {
                     console.error('MarkdownViewer unknown embed type', type);
                 }
                 if (match[3]) {
-                    section = section.substring(`${id} ${type} ${startTime} ~~~`.length);
+                    section = section.substring(
+                        `${id} ${type} ${startTime} ~~~`.length
+                    );
                 } else {
                     section = section.substring(`${id} ${type} ~~~`.length);
                 }

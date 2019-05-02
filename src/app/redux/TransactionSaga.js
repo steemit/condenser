@@ -449,6 +449,8 @@ export function* createPermlink(title, author, parent_author, parent_permlink) {
         if (s === '') {
             s = base58.encode(secureRandom.randomBuffer(4));
         }
+        // only letters numbers and dashes shall survive
+        s = s.toLowerCase().replace(/[^a-z0-9-]+/g, '');
         // ensure the permlink(slug) is unique
         const slugState = yield call([api, api.getContentAsync], author, s);
         let prefix;
@@ -461,16 +463,19 @@ export function* createPermlink(title, author, parent_author, parent_permlink) {
         permlink = prefix + s;
     } else {
         // comments: re-parentauthor-parentpermlink-time
-        const timeStr = new Date().toISOString().replace(/[^a-zA-Z0-9]+/g, '');
+        const timeStr = new Date()
+            .toISOString()
+            .replace(/[^a-zA-Z0-9]+/g, '')
+            .toLowerCase();
         parent_permlink = parent_permlink.replace(/(-\d{8}t\d{9}z)/g, '');
+        // Periods allowed in author are not allowed in permlink.
+        parent_author = parent_author.replace(/\./g, '');
         permlink = `re-${parent_author}-${parent_permlink}-${timeStr}`;
     }
     if (permlink.length > 255) {
         // STEEMIT_MAX_PERMLINK_LENGTH
         permlink = permlink.substring(permlink.length - 255, permlink.length);
     }
-    // only letters numbers and dashes shall survive
-    permlink = permlink.toLowerCase().replace(/[^a-z0-9-]+/g, '');
     return permlink;
 }
 

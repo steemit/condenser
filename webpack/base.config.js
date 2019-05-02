@@ -58,7 +58,7 @@ module.exports = {
         rules: [
             {test: /\.(jpe?g|png)/, use: 'url-loader?limit=4096'},
             {test: /\.json$/, use: 'json-loader'},
-            {test: /\.js$|\.jsx$/, exclude: /node_modules/, use: 'babel-loader'},
+            {test: /\.js$|\.jsx$/, exclude: [/node_modules/, /\*\/app\/assets\/static\/\*\.js/], use: 'babel-loader'},
             {test: /\.svg$/, use: 'svg-inline-loader'},
             {
                 test: require.resolve("blueimp-file-upload"),

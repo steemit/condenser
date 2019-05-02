@@ -236,6 +236,7 @@ function linkifyNode(child, state) {
         child = embedYouTubeNode(child, state.links, state.images);
         child = embedVimeoNode(child, state.links, state.images);
         child = embedTwitchNode(child, state.links, state.images);
+        child = embedDTubeNode(child, state.links, state.images);
 
         const data = XMLSerializer.serializeToString(child);
         const content = linkify(
@@ -318,7 +319,10 @@ function embedYouTubeNode(child, links, images) {
         if (!yt) return child;
 
         if (yt.startTime) {
-            child.data = data.replace(yt.url, `~~~ embed:${yt.id} youtube ${yt.startTime} ~~~`);
+            child.data = data.replace(
+                yt.url,
+                `~~~ embed:${yt.id} youtube ${yt.startTime} ~~~`
+            );
         } else {
             child.data = data.replace(yt.url, `~~~ embed:${yt.id} youtube ~~~`);
         }
@@ -360,10 +364,16 @@ function embedVimeoNode(child, links /*images*/) {
         if (!vimeo) return child;
 
         const vimeoRegex = new RegExp(`${vimeo.url}(#t=${vimeo.startTime}s?)?`);
-        if (vimeo.startTime > 0 ) {
-            child.data = data.replace(vimeoRegex, `~~~ embed:${vimeo.id} vimeo ${vimeo.startTime} ~~~`);
+        if (vimeo.startTime > 0) {
+            child.data = data.replace(
+                vimeoRegex,
+                `~~~ embed:${vimeo.id} vimeo ${vimeo.startTime} ~~~`
+            );
         } else {
-            child.data = data.replace(vimeoRegex, `~~~ embed:${vimeo.id} vimeo ~~~`);
+            child.data = data.replace(
+                vimeoRegex,
+                `~~~ embed:${vimeo.id} vimeo ~~~`
+            );
         }
 
         if (links) links.add(vimeo.canonical);
@@ -420,6 +430,33 @@ function twitchId(data) {
             m[1] === `videos`
                 ? `https://player.twitch.tv/?video=${m[2]}`
                 : `https://player.twitch.tv/?channel=${m[2]}`,
+    };
+}
+
+function embedDTubeNode(child, links /*images*/) {
+    try {
+        const data = child.data;
+        const dtube = dtubeId(data);
+        if (!dtube) return child;
+
+        child.data = data.replace(dtube.url, `~~~ embed:${dtube.id} dtube ~~~`);
+
+        if (links) links.add(dtube.canonical);
+    } catch (error) {
+        console.log(error);
+    }
+    return child;
+}
+
+function dtubeId(data) {
+    if (!data) return null;
+    const m = data.match(linksRe.dtube);
+    if (!m || m.length < 2) return null;
+
+    return {
+        id: m[1],
+        url: m[0],
+        canonical: `https://emb.d.tube/#!/${m[1]}`,
     };
 }
 

@@ -65,7 +65,7 @@
     padding-right: 0.5rem;
   }
   > a {
-    padding-right: 0.5rem;
+    padding-right: 0.4rem;
   }
   path {
     @include themify($themes) {
@@ -131,7 +131,7 @@
 }
 
 .Voting__button-down {
-  margin-left: 0.25rem;
+  margin-right: 0.4rem;
   .Voting__button-downvotes {
     color: #aaa;
     font-size: 80%;
@@ -141,13 +141,16 @@
   }
 
   a path {
-    fill: #ccc;
+    fill: #f99;
+  }
+  a circle {
+    stroke: #f99;
   }
   a:hover circle {
-    stroke: $color-red;
+    fill: #f66;
   }
   a:hover path {
-    fill: $color-red;
+    fill: #fff;
   }
 
   &.Voting__button--downvoted {

@@ -448,9 +448,6 @@ class PostFull extends React.Component {
                     renderedEditor
                 ) : (
                     <span>
-                        <div className="float-right">
-                            <Voting post={post} flag />
-                        </div>
                         <div className="PostFull__header">
                             {post_header}
                             <TimeAuthorCategoryLarge

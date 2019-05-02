@@ -1,0 +1,64 @@
+.DropdownMenu {
+  position: relative;
+  display: inline-block;
+
+  .Icon.dropdown-arrow {
+    top: 2px;
+    margin-right: 0;
+  }
+
+  > .VerticalMenu {
+    visibility: hidden;
+    min-width: 145px;
+    width: max-content;
+    z-index: 1000;
+    display: block;
+    border-radius: $global-radius;
+    opacity: 0;
+    position: absolute;
+    top: 100%;
+    padding: 2px;
+
+    @include themify($themes) {
+      background-color: themed('backgroundColor');
+      border: themed('borderDark');    
+    }
+    transform: translateY(10%);
+    transition: all 0.3s ease 0s, visibility 0s linear 0.3s;
+    box-shadow: 1px 1px 5px 0px rgba(50, 50, 50, 0.75);
+
+  }
+
+  &.show > .VerticalMenu {
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(0%);
+    transition-delay: 0s;
+
+    a {
+      transition: 0.2s all ease-in-out;
+      @include themify($themes) {
+        color: themed('textColorPrimary');  
+      }       
+      &:hover {
+        @include themify($themes) {
+          color: themed('textColorAccent');  
+        } 
+      }
+    }
+  }
+
+  &.left > .VerticalMenu {
+    position: absolute;
+    right: 0%;
+  }
+  &.right > .VerticalMenu {
+    position: absolute;
+    left: 0%;
+  }
+  .DropdownMenu.move-left {
+    .VerticalMenu {
+      left: -50%;
+    }
+  }
+}

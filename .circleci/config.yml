@@ -1,0 +1,65 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: docker:17-git
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Build Docker image
+          command: docker build -t condenser .
+      - run:
+          name: Save Docker image
+          command: docker save -o condenser.tar condenser
+      - persist_to_workspace:
+          root: .
+          paths:
+            - condenser.tar
+  build-blackboxtest:
+    docker:
+      - image: docker:17-git
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Build Docker image
+          command: docker build -t condenser-blackboxtest blackboxtest/
+      - run:
+          name: Save Docker image
+          command: docker save -o condenser-blackboxtest.tar condenser-blackboxtest
+      - persist_to_workspace:
+          root: .
+          paths:
+            - condenser-blackboxtest.tar
+  run-blackboxtest:
+    docker:
+      - image: docker:17-git
+    steps:
+      - checkout
+      - setup_remote_docker
+      - attach_workspace:
+          at: /tmp/workspace
+      - run:
+          name: Load Docker images
+          command: |
+            docker load -i /tmp/workspace/condenser.tar
+            docker load -i /tmp/workspace/condenser-blackboxtest.tar
+      - run:
+          name: Start condenser
+          command: |
+            docker run -ditp 8080:8080 --name condenser condenser
+            sleep 10 # let condenser start
+      - run:
+          name: Run tests
+          command: docker run --network container:condenser condenser-blackboxtest
+workflows:
+  version: 2
+  condenser:
+    jobs:
+      - build
+    #  - build-blackboxtest
+    #  - run-blackboxtest:
+    #      requires:
+    #        - build
+    #        - build-blackboxtest

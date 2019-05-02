@@ -1,0 +1,54 @@
+.LoginForm {
+  max-width: 28rem;
+  margin: 1rem auto 0.5rem auto;
+  label {
+    text-transform: none;
+  }
+  form {
+    margin-top: 1.5rem;
+  }
+}
+.pdf-download {
+  margin-top: 1em;
+  margin-bottom: 1em;
+  button {
+    color: #1A5099;
+    text-transform: initial;
+    cursor: pointer;
+  }
+}
+.sign-up {
+  .button {
+    background-color: transparent;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    font-size: 1.2rem;
+    text-transform: none;       
+  }
+  .button.hollow {
+    border: 1px solid #ddd;
+    color: $color-blue-black;
+    transition: 0.2s all ease-in-out;
+    @include font-size(16px);
+    
+    &:hover {
+      border: 1px solid $color-teal-dark;
+      color: $color-teal-dark;
+      box-shadow: 0 2px 4px 0 rgba(0,0,0,0.05);
+    }
+  }
+  em {
+    font-weight: bold;
+    font-style: normal;
+  }
+  hr {
+      margin: 1.75rem auto 2rem auto;
+  }
+  p {
+      margin-bottom: 1rem;
+  }
+}
+
+.LoginForm__save-login {
+  margin-top: 0.5rem;
+}

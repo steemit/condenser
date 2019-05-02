@@ -1,0 +1,143 @@
+.menu > li > a {
+  line-height: 1.5rem;
+}
+
+.tooltip {
+  margin-top: -1rem;
+}
+
+.dropdown-pane {
+  width: auto;
+  padding: 0;
+  box-shadow: 1px 1px 5px 0px rgba(50, 50, 50, 0.75);
+  z-index: 1000;
+  font-size: inherit;
+  background-color: $color-white;  
+
+  .VerticalMenu {
+    a:hover {
+      background-color: #f6f6f6;
+      color: $color-teal-dark;
+    }     
+  }
+}
+
+a {
+  transition: 0.2s all ease-in-out;
+  @include themify($themes) {
+    color: themed('textColorAccent');  
+  } 
+  &:hover, &:focus {
+    @include themify($themes) {
+      color: themed('textColorAccentHover');  
+    } 
+  }
+}
+
+div[role=dialog] {
+  z-index: 500;
+}
+
+input[type=submit].disabled, input[type=submit].disabled:focus {
+  opacity: 1;
+  cursor: inherit;
+  background-color: $medium-gray;
+}
+
+button, .button {
+  text-transform: uppercase;
+}
+
+.column, .columns {
+    min-width: 0;
+}
+
+.callout {
+  margin-top: 1rem;
+  @include themify($themes) {
+    color: themed('textColorPrimary');  
+    background-color: themed('highlightBackgroundColor');  
+    border: themed('border');  
+  }     
+}
+
+.close-button {
+  position: absolute;
+  cursor: pointer;
+  transition: color 0.2s ease-in-out;
+  top: 0.5rem;
+  font-size: 2em;
+  line-height: 1;
+  @include themify($themes) {
+    color: themed('textColorSecondary');  
+  } 
+  &:hover, &:focus {
+    @include themify($themes) {
+      color: themed('textColorAccent');  
+    } 
+  }
+}
+
+hr {
+  @include themify($themes) {
+    border-bottom: themed('border');  
+  }     
+}
+
+table {
+  box-shadow: inset 0 0 0 -1px red;
+}
+
+
+thead, tbody, tfoot {
+  @include themify($themes) {
+    background-color: themed('backgroundColor');    
+  }     
+}
+
+thead {
+  @include themify($themes) {
+    background-color: themed('tableRowEvenBackgroundColor');  
+    color: themed('textColorPrimary');  
+  }       
+}
+
+tbody tr:nth-child(even) {
+  @include themify($themes) {
+    background-color: themed('tableRowEvenBackgroundColor');  
+  }  
+}
+
+.reveal-overlay {
+  background-color: rgba(0, 0, 0, 0.88);
+  transition: 0.2s all ease-in-out;
+}
+
+.reveal {
+  box-shadow: 2px 2px 2px 0 rgba(0,0,0,0.1), 7px 7px 0 0 $color-teal;   
+  border-radius: 0;
+  border: transparent;
+  transition: 0.2s all ease-in-out;
+  .button {
+    @extend .e-btn;
+    @extend .e-btn--black;
+    min-width: 100px;
+  }
+  h4 {
+    font-weight: bold;
+  }
+}
+
+.progress {
+  border: none;
+  width: 100%;
+  height: 8px;
+  border-radius: 3px;
+  background-color:$color-border-light;
+  div {
+    background-color: $color-teal;
+    border-radius: 3px;
+    border: none;
+    height: 8px;
+  }
+}

@@ -1,0 +1,212 @@
+
+@import "./foundation-settings";
+@import "~foundation-sites/scss/foundation";
+
+@include foundation-everything(true);
+
+@import "./variables";
+@import "./mixins";
+@import "./layout";
+@import "./themes";
+
+@import "./foundation-overrides";
+
+@import './animation';
+
+@import "./fonts";
+@import "./forms";
+
+@import "./markdown";
+@import "src/app/components/all";
+
+/* Small only */
+@media screen and (max-width: 39.9375em) {
+  body {
+    font-size: 86%;
+  }
+}
+
+/* Medium only */
+@media screen and (min-width: 40em) and (max-width: 63.9375em) {
+  body {
+    font-size: 92%;
+  }
+}
+
+a, path, circle {
+  transition: opacity, fill, stroke .3s ease 0s;
+}
+
+.space-right {
+  margin-right: 0.4rem;
+}
+
+.clear-right {
+  clear: right;
+}
+
+.clear-left {
+  clear: left;
+}
+
+.clear-both {
+  clear: both;
+}
+
+.strikethrough {
+  text-decoration: line-through;
+}
+
+.uppercase, label {
+  text-transform: uppercase;
+}
+
+.whistle-view {
+    .whistle-hidden {
+        display:none !important;
+    }
+}
+
+
+
+.secondary {
+  @include themify($themes) {
+    color: themed('textColorSecondary');
+  }
+  font-size: 90%;
+  a {
+    transition: 0.2s all ease-in-out;
+    color: $dark-gray;
+    @include themify($themes) {
+      color: themed('textColorSecondary');
+    }
+    :hover {
+      @include themify($themes) {
+        color: themed('textColorAccent');
+      }
+    }
+
+  }
+}
+
+.ptc,
+a.ptc {
+    cursor:pointer;
+  text-decoration: none;
+  transition: 0.2s all ease-in-out;
+  @include themify($themes) {
+    color: themed('textColorPrimary');
+  }
+
+  &:hover, &:focus {
+    color: $dark-gray;
+    text-decoration: none;
+    @include themify($themes) {
+        color: themed('textColorAccent');
+    }
+  }
+}
+
+.button.hollow.no-border {
+  border: none;
+  text-decoration: underline;
+}
+
+.button.slim {
+  padding: 5px;
+  margin: 5px;
+}
+
+@keyframes loading {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.marginLeft1rem {
+  margin-left: 1rem;
+}
+
+.NotFound {
+  width: 640px;
+  margin-top: 2em;
+  text-align: center;
+  // small only
+  @media screen and (max-width: 39.9375em) {
+      width: 340px;
+  }
+}
+
+.NotFound__menu {
+ text-align: center;
+    li {
+        float: none;
+        display: inline-block;
+        text-align: center;
+        margin-right: 1%;
+        list-style: none;
+        font-weight: 400;
+    }
+    li:after {
+        content: " |";
+    }
+    li:last-child:after {
+        content: "";
+    }
+}
+
+.NotFound__header {
+  margin-top: 1em;
+}
+
+@media print {
+  .noPrint {
+    display: none;
+  }
+}
+
+h1, h2, h3, h4, h5, h6 {
+  line-height: 1.2 !important;
+}
+
+.c-sidebar {
+  width: 100%;
+  max-width: 240px;
+  font-family: helvetica, sans-serif;
+  &__module {
+      padding: 1.5em 2em;
+    @include themify($themes) {
+        background-color: themed('moduleBackgroundColor');
+        border: themed('border');
+    }
+  }
+}
+
+.phishy {
+  display: inline;
+  color: red;
+}
+
+a[rel="noopener"]:after,
+a[rel="nofollow noopener"]:after {
+  content: '';
+  background: url('data:image/svg+xml; utf8, <svg height="1024" width="768" xmlns="http://www.w3.org/2000/svg"><path d="M640 768H128V257.90599999999995L256 256V128H0v768h768V576H640V768zM384 128l128 128L320 448l128 128 192-192 128 128V128H384z"/></svg>');
+  background-size: cover;
+  display: inline-block;
+  width: 0.6em;
+  height: 0.75em;
+  top: 0.05em;
+  position: relative;
+  left: 0.2em;
+  margin-right: 0.2em;
+  opacity: .5;
+}
+
+.PostFull__body a[rel="noopener"]:after,
+.PostFull__body a[rel="nofollow noopener"]:after {
+  // $color-text-gray
+  background-image: url('data:image/svg+xml; utf8, <svg height="1024" width="768" xmlns="http://www.w3.org/2000/svg"><path d="M640 768H128V257.90599999999995L256 256V128H0v768h768V576H640V768zM384 128l128 128L320 448l128 128 192-192 128 128V128H384z" fill="%23788187"/></svg>');
+}

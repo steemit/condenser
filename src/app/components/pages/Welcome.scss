@@ -1,0 +1,39 @@
+.Welcome__banner {
+
+  position: relative;
+
+  .Welcome__welcome {
+    position: absolute;
+    width: 100%;
+    bottom: 70%;
+    color: white;
+    font-size: 160%;
+    padding-left: 38%;
+  }
+
+  .Welcome__caption {
+    position: absolute;
+    width: 100%;
+    top: 65%;
+    color: white;
+    font-size: 115%;
+    padding-left: 44%;
+    padding-right: 2%;
+  }
+
+}
+
+.HelpContent {
+
+  height: inherit;
+
+  p {
+    position: relative;
+  }
+  h2 {
+    margin-top: 8px;
+  }
+  h3 {
+    margin-top: 0;
+  }  
+}

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="18px" height="17px" viewBox="0 0 18 17" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="pinned-post-expanded-layout" transform="translate(-352.000000, -161.000000)" fill="#788187" fill-rule="nonzero">
+            <g id="Group-2" transform="translate(352.000000, 160.000000)">
+                <g id="pin">
+                    <path
+                        d="M4.46458,13.3582 L5.64309,14.5367 L2.69681,17.4829 L0.33979,17.4829 L4.46458,13.3582 Z M13.6399,8.39132 C15.3505,6.68071 16.8507,7.96175 18.0175,6.87634 L12.1249,0.983787 C11.0389,2.14992 12.3205,3.65076 10.6099,5.36137 C8.3878,7.58345 6.65013,5.28005 2.69681,9.23337 L9.7679,16.3044 C13.7212,12.3511 11.4178,10.6134 13.6399,8.39132 Z"
+                        id="icon-pin"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

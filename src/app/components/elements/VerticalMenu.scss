@@ -1,0 +1,41 @@
+.VerticalMenu {
+
+  width: 200px;
+
+  .Icon {
+    padding-left: 0.1rem;
+    margin-right: 14px;
+    top: 0;
+  }
+
+  svg path, svg polygon {
+    @include themify($themes) {
+        fill: themed('textColorSecondary');  
+    }      
+  }
+
+  > li > a {
+    color: $black;
+    line-height: 1rem;
+    position: relative;
+    transition: 0.2s all ease-in-out;
+  }
+
+  > li > a:hover {
+    text-decoration: none;
+    @include themify($themes) {
+      background-color: themed('backgroundColorOpaque');
+    }
+  }
+
+  > li.title {
+    padding: 0.4rem;
+    font-weight: bold;
+    text-align:left;
+    padding-left: 16px;
+    @include themify($themes) {
+      border-bottom: themed('border');
+    }    
+  }
+}
+

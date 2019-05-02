@@ -1,11 +1,11 @@
-import cp from 'child_process';
-import path from 'path';
-import watch from 'node-watch';
+const cp = require('child_process');
+const path = require('path');
+const watch = require('node-watch');
 
 let server;
 let started;
 let serverReload;
-const KOA_PATH = path.join(__dirname, '../../server/index');
+const KOA_PATH = path.join(__dirname, '../../src/server/index');
 
 const startServer = () => {
 
@@ -40,7 +40,7 @@ const startServer = () => {
                 });
 
                 // Start watcher on server files and restart server on change
-                const server_path = path.join(__dirname, '../../server');
+                const server_path = path.join(__dirname, '../../src/server');
                 // const app_path = path.join(__dirname, '../../app');
                 watch([server_path], () => restartServer());
             }
@@ -50,4 +50,7 @@ const startServer = () => {
 
 // kill server on exit
 process.on('exit', () => server.kill('SIGTERM'));
-export default () => !server ? startServer() : () => ({});
+
+module.exports = function () {
+    return !server ? startServer() : () => ({});
+};

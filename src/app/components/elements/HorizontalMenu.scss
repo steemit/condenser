@@ -1,0 +1,48 @@
+.HorizontalMenu {
+  display: none;
+  .active > a {
+    background: none;
+    font-weight: bold;
+    @include themify($themes) {
+      color: themed('textColorAccent');  
+    }  
+  }
+  li > a:hover {
+    // color: $black;
+  }
+  > li:first-child > a {
+    padding-left: 0;
+  }
+  > li:last-child > a {
+    padding-right: 0;
+  }
+  .input-group-button {
+    z-index: 1;
+    transform: scaleX(-1);
+    padding-left: 10px;
+  }
+}
+
+
+@media screen and (min-width: 52.5em) { 
+  ul.HorizontalMenu.menu {
+    display: flex;
+    li > a {
+      padding-right: 0.5em;
+      line-height: 1.5rem;
+      display: flex;
+      text-transform: lowercase;
+      padding-left: 0.5em;
+      padding-right: 0.5em;
+    }
+    .active {
+        font-weight: bold;
+    }
+  }
+}
+
+@media print, screen and (min-width: 52.5em) {  
+  .menu-hide-for-large {
+    display: none !important; 
+  }
+}

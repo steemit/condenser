@@ -1,0 +1,401 @@
+.Voting {
+  white-space: nowrap !important;
+  span {
+    white-space: nowrap !important;
+  }
+  .dropdown-pane {
+    @include themify($themes) {
+      border: themed('borderDark');  
+    }    
+  }
+}
+
+.Voting__button {
+  .Icon {
+    // Put the icon in a layer to improve rendering performance (scrolling especially)
+    transform: translate3d(0,0,0);
+  }
+  path {
+    fill: $dark-gray;
+  }
+  circle {
+    stroke: $dark-gray;
+  }
+  > a:hover path {
+    fill: $black;
+  }
+}
+
+.Voting__about-flag {
+  margin-right: 30px;
+  .button {  
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.2s all ease-in-out;
+    text-transform: capitalize;
+    border-radius: 0;
+    @include font-size(18px);       
+    @include themify($themes) {
+      background-color: themed('buttonBackground');  
+      box-shadow: 0px 0px 0px 0 rgba(0,0,0,0), 5px 5px 0 0 themed('buttonBoxShadow');   
+      color: themed('buttonText');
+    }
+    &:hover, &:focus {
+      @include themify($themes) {
+        background-color: themed('buttonBackgroundHover');  
+        box-shadow: 2px 2px 2px 0 rgba(0,0,0,0.1), 7px 7px 0 0 themed('buttonBoxShadowHover');   
+        color: themed('buttonTextHover');
+        text-shadow: 0 1px 0 rgba(0,0,0,0.20);
+      }
+    }
+    &:visited, &:active {
+      @include themify($themes) {
+        color: themed('buttonText');  
+      } 
+    } 
+  }
+}
+
+.Voting__button-up {
+  .Icon {
+    margin-left: 0;
+    border-radius: 50%;
+  }
+  div > a {
+    padding-right: 0.5rem;
+  }
+  > a {
+    padding-right: 0.5rem;
+  }
+  path {
+    @include themify($themes) {
+      fill: themed('textColorAccent');
+    }       
+  }
+  circle {
+      @include themify($themes) {
+        stroke: themed('textColorAccent');
+      }       
+  }
+  // exclude small devices
+  @media screen and (min-width: 39.9375em) {
+      .Icon:hover {
+          box-shadow: 0 0 0 rgba(75, 162, 242, 1);
+          animation: pulse 2s infinite;
+      }
+  }
+  .close-button {
+    position: relative;
+    margin-left: 1em;
+  }
+  > .dropdown-comp > .dropdown__content {
+    position: absolute;
+    top: -30px;
+    left: -26px;
+  }
+}
+
+.Voting__button-up > a:hover, a.confirm_weight:hover {
+    path {
+        fill: #fff;
+    }
+    circle {
+        @include themify($themes) {
+          fill: themed('colorAccent');
+          stroke: themed('colorAccent');
+        }   
+    }
+    svg {
+        background-size: contain;
+        border-radius: 50%;
+    }
+}
+
+.Voting__button-up.votingUp {
+  padding-right: 0.5rem;
+  svg {
+    border: 1px solid $color-teal;
+    border-radius: 50%;
+    border-right-color: transparent;
+    border-top-color: transparent;
+    animation: loading 500ms infinite linear;
+  }
+}
+
+.Voting__button-down.votingDown svg {
+  border: 1px solid $color-red;
+  border-radius: 50%;
+  border-right-color: transparent;
+  border-top-color: transparent;
+  animation: loading 500ms infinite linear;
+}
+
+.Voting__button-down {
+  margin-left: 0.25rem;
+  .Voting__button-downvotes {
+    color: #aaa;
+    font-size: 80%;
+    vertical-align: 15%;
+    padding-right: 0.1rem;
+    cursor: default;
+  }
+
+  a path {
+    fill: #ccc;
+  }
+  a:hover circle {
+    stroke: $color-red;
+  }
+  a:hover path {
+    fill: $color-red;
+  }
+
+  &.Voting__button--downvoted {
+    a path {
+      fill: #fff;
+    }
+    a circle {
+      fill: #f99;
+      stroke: $color-red;
+    }
+    a:hover circle {
+      fill: #f66;
+    }
+  }
+}
+
+.Voting__button--upvoted {
+  .Icon:hover {
+    animation: none !important;
+  }
+  path {
+    fill: #fff !important;
+  }
+}
+
+.Voting__button--upvoted circle {
+    @include themify($themes) {
+      fill: themed('colorAccent');
+      stroke: themed('colorAccent');
+    }
+}
+
+.Voting__button--upvoted a:hover path {
+  fill: #fff !important;
+}
+
+.Voting__button--upvoted a:hover circle {
+    @include themify($themes) {
+      fill: themed('colorAccentHover');
+      stroke: themed('colorAccentHover');
+    }
+}
+
+.Voting__button--downvoted path {
+  fill: $color-red;
+}
+
+.Voting .DropdownMenu ul {
+  width: 260px;
+
+  li > a {
+    padding: 0 0.5rem;
+    line-height: 1.25;
+  }
+
+  li > span {
+    padding: 0 0.5rem;
+    line-height: 1.25;
+  }
+}
+
+.DropdownMenu.Voting__voters_list ul {
+  li > a {
+    //font-weight: 200;
+  }
+
+  li > span {
+    padding: 0.25rem 0.5rem;
+    font-size: 82.5%;
+    display: block;
+    @include themify($themes) {
+      color: themed('textColorSecondary');  
+    }  
+  }
+}
+
+.Voting__inner {
+  @include themify($themes) {
+    border-right: themed('borderLight'); 
+  } 
+  padding-right: .8rem;
+  margin-right: .6rem;
+  .DropdownMenu .Icon.dropdown-arrow {
+    margin-right: -0.5rem;
+    position: relative;
+    top: 2px;
+  }
+  .cancel {
+    font-size: 80%;
+    padding: 0 0.4em;
+    margin-left: 0.5rem;
+    margin-right: 2px;
+    background-color: #f8f8f8;
+    border-radius: 50%;
+    border: 1px solid #dadada;
+    color: #8a8a8a;
+  }
+}
+
+.Voting__adjust_weight_down {
+    @extend .Voting__adjust_weight;
+
+    @include themify($themes) {
+      background-color: themed('backgroundColor'); 
+    } 
+
+    right: 0;
+    width: auto !important;
+    max-width: 500px;
+
+    div.clear {
+      clear: both;
+    }
+    p, span {
+      white-space: normal !important;
+    }
+    .weight-display {
+      color: $color-red !important;
+    }
+    .rangeslider {
+      margin-right: 2rem;
+    }
+}
+
+.Voting__adjust_weight {
+  padding: 20px 20px 20px;
+  margin-right: 10px;
+  width: 350px;
+  min-width: 320px;
+  overflow: hidden;
+  .Icon:hover {
+    animation: none !important;
+  }
+  .weight-display {
+    width: 3rem;
+    float: left;
+    margin-right: 0.5rem;
+    text-align: right;
+    color: $dark-gray;
+    line-height: 2.6rem;
+  }
+  a.confirm_weight {
+    float: left;
+    width: 2rem;
+    height: 2rem;
+    line-height: 2.6rem;
+  }
+  .rangeslider {
+    position: relative;
+    float: left;
+    background: #e6e6e6;
+    .rangeslider__fill, .rangeslider__handle {
+      position: absolute;
+    }
+    &, .rangeslider__fill {
+      display: block;
+      box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
+    }
+    .rangeslider__handle {
+      background: #fff;
+      border: 1px solid #ccc;
+      cursor: pointer;
+      width: 30px;
+      height: 30px;
+      border-radius: 30px;
+      top: 50%;
+      transform: translate3d(-50%,-50%,0);
+      &:active {
+        background: $color-teal;
+        box-shadow: none;
+      }
+    }
+  }
+  .rangeslider-horizontal {
+    height: 10px;
+    width: 200px;
+    background: none;
+    float: left;
+    margin-top: 18px;
+    .rangeslider__fill {
+      height: 100%;
+      background: $color-teal;
+      box-shadow: none;
+      left: 0;
+    }
+  }
+  .Voting__adjust_weight_close {
+    position: static;
+    line-height: 2.6rem;
+    font-size: 2rem;
+    margin-left: 1rem;
+  }
+}
+
+
+@media screen and (max-width: 39.9375em) {
+  .Voting__button-up {
+    .dropdown-pane {
+      margin-top: -36px;
+      position: absolute;
+      left: 1rem;
+    }
+  }
+}
+
+/* Medium and bigger */
+@media screen and (min-width: 39.9375em) {
+  .Voting__button-up {
+    display: inline-block;
+    position: relative;
+    .dropdown-pane {
+      top: -18px;
+      left: -28px;
+    }
+  }
+}
+
+/* Pulse for upvote action */
+@-webkit-keyframes pulse {
+    0% {
+        -webkit-box-shadow: 0 0 0 0 rgba(6, 214, 169, 2);
+    }
+    70% {
+        -webkit-box-shadow: 0 0 0 10px rgba(6, 214, 169, 1);
+    }
+    100% {
+        -webkit-box-shadow: 0 0 0 0 rgba(6, 214, 169, 1);
+    }
+}
+@keyframes pulse {
+    0% {
+        -moz-box-shadow: 0 0 0 0 rgba(6, 214, 169, 2);
+        box-shadow: 0 0 0 0 rgba(6, 214, 169, 2);
+    }
+    70% {
+        -moz-box-shadow: 0 0 0 10px rgba(6, 214, 169, 0);
+        box-shadow: 0 0 0 10px rgba(6, 214, 169, 0);
+    }
+    100% {
+        -moz-box-shadow: 0 0 0 0 rgba(6, 214, 169, 0);
+        box-shadow: 0 0 0 0 rgba(6, 214, 169, 0);
+    }
+}
+
+.weight-container {
+  min-width: 300px;
+  width: 90%;
+  margin: 0 auto;
+  padding-bottom: 2px;
+}

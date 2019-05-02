@@ -1,0 +1,176 @@
+.Header {
+  backface-visibility: hidden;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 100;
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.05);
+  @include themify($themes) {
+    background-color: themed('navBackgroundColor');
+    border-bottom: themed('border');
+  }
+}
+
+.Header__nav {
+    display: flex;
+    align-items: center;
+    height: 4rem;
+    max-width: none;
+}
+
+.ConnectionError {
+  margin-right: 4rem;
+  color: #ec5840;
+}
+
+.Header__logotype {
+  transition: 0.2s all ease-in-out;
+  height: 37px;
+  display: flex;
+  align-items: baseline;
+  .icon-svg {
+    @include themify($themes) {
+      fill: themed('colorAccent');
+    }
+  }
+
+  &-beta{
+    position: absolute;
+    top: 38px;
+    left: 136px;
+  }
+}
+
+.Header__sort {
+    display: flex;
+    justify-content: center;
+}
+
+.Header__search {
+    @include MQ(L) {
+        display: none;
+    }
+    &--desktop {
+        display: none;
+        @include MQ(L) {
+            display: block;
+        }
+    }
+}
+
+.Header__buttons {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    height: 4rem;
+    > .Header__user-signup {
+        > a {
+            padding-right: 0.25rem;
+            font-size: 1.125rem;
+            font-family: $font-primary;
+            &.Header__signup-link {
+                @extend .e-btn;
+                padding: 0.6rem;
+                text-transform: none;
+                margin: 0 0.75rem 0 .5rem;
+            }
+            &.Header__login-link {
+                @extend .link;
+                @extend .link--primary;
+            }
+        }
+    }
+    > a {
+        padding-left: 0.25rem;
+        padding-right: 0.25rem;
+        @include MQ(S) {
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
+        }
+    }
+    div.LoadingIndicator {
+        padding-right: 0.75rem;
+    }
+}
+
+.Header__userpic {
+    display: block;
+    width: 36px;
+    height: 36px;
+  .Userpic {
+    width: 36px !important;
+    height: 36px !important;
+    @include MQ(M) {
+        width: 40px!important;
+        height: 40px !important;
+        position: relative;
+        top: -2px;
+    }
+  }
+}
+
+span.Header__hamburger.toggle-menu {
+    width: 1rem;
+    height: 1rem;
+    @include hamburger();
+    // This margin is to prevent user avatar overlapping the hamburger in the header.
+    margin-left: 0.25rem;
+    @include MQ(S) {
+        margin-left: 0.5rem;
+    }
+    @include MQ(M) {
+        margin-left: 0.75rem;
+    }
+    cursor: pointer;
+    &::after {
+      transition: 0.2s all ease-in-out;
+      @include themify($themes) {
+        background: themed('textColorPrimary');
+        box-shadow: 0 7px 0 themed('textColorPrimary'), 0 14px 0 themed('textColorPrimary');
+      }
+    }
+    &:hover {
+      &::after {
+        @include themify($themes) {
+          background: themed('textColorAccent');
+          box-shadow: 0 7px 0 themed('textColorAccent'), 0 14px 0 themed('textColorAccent');
+        }
+      }
+    }
+}
+
+.annoucement-banner {
+  text-align: left;
+  position: relative;
+  background: #171FC9;
+  color: #fff;
+  @include themify($themes) {
+      border-bottom: themed('borderLight');
+  }  
+  @include MQ(M) {
+    text-align: center;
+  }
+  .close-button {
+    position: absolute;
+    top: 2px;
+    right: 0px;
+    transform: scale(0.85);
+    color: #fff;
+    &:hover, &:focus {
+      color: #ccc;
+    }
+  }  
+}
+
+.announcement-banner__text {
+    margin: 0;
+    padding: 10px 44px 10px 10px;
+    font-family: helvetica, sans-serif;
+    font-size: 14px;
+    line-height: 1.3;
+ }
+
+.announcement-banner__link {
+   color: #fafafa !important;
+   text-decoration: underline;
+}

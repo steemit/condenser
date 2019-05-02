@@ -1,0 +1,244 @@
+.Post {
+  @include themify($themes) {
+    background-color: themed('moduleBackgroundColor');
+  }
+}
+
+.PostFull {
+  padding-bottom: 1rem;
+  padding-top: 2rem;
+  margin: 0 auto;
+  max-width: 50rem;
+  @include themify($themes) {
+      border-bottom: themed('border');
+  }
+  .button.hollow {
+    @include themify($themes) {
+        border: themed('borderAccent');
+        color: themed('textColorAccent');
+    }
+  }
+
+  .ReplyEditor {
+    margin-top: 1rem;
+  }
+}
+
+.PostFull__time_author_category {
+  font-weight: 400;
+  border-right: none!important;
+  @include themify($themes) {
+      border-right: themed('border');
+      color: themed('textColorSecondary');
+  }
+
+  padding-right: .6rem;
+  margin-right: .6rem;
+  > span {
+    white-space: nowrap;
+  }
+}
+
+.PostFull__time_author_category_large {
+  margin: 1rem 0 1rem 0;
+  line-height: 1.2;
+  @include themify($themes) {
+      color: themed('textColorSecondary');
+    }
+  strong, a {
+    @include themify($themes) {
+      color: themed('textColorSecondary');
+    }
+  }
+  font-size: 120%;
+  display: flex;
+  align-items: center;
+  > .Userpic {
+    margin-top: -4px;
+    float: left;
+  }
+  > .right-side {
+    margin-left: 12px;
+    position: relative;
+    top: -2px;
+  }
+}
+
+.PostFull__header, .PostFull__body {
+  max-width: 40rem;
+  margin: 0 auto;
+}
+
+.PostFull__header {
+  @include themify($themes) {
+    border-bottom: themed('border');
+  }
+  > h1 {
+    overflow: hidden;
+    font-family: $body-font-family;
+    font-size: 240%;
+    font-weight: 800;
+    line-height: 1.1;
+    .Icon {
+      margin: 0 0 0 0.5rem;
+      vertical-align: -30%;
+    }
+  }
+  a {
+    @extend .link;
+    @extend .link--secondary;
+    font-weight: 600;
+
+  }
+  .PostFull__time_author_category {
+    border-right: none;
+    .Icon.clock {
+      top: 5px;
+      svg {
+        @include themify($themes) {
+            fill: themed('textColorSecondary');
+        }
+      }
+    }
+  }
+}
+
+.PostFull__body {
+  padding: 1rem 0 2rem 0;
+  clear: left;
+  a {
+    @extend .link;
+    @extend .link--accent;
+  }
+}
+
+.PostFull__footer {
+  clear: right;
+  line-height: 2rem;
+  font-size: 94%;
+  svg {
+    @include themify($themes) {
+        fill: themed('textColorSecondary');
+    }
+  }
+  .RightShare__Menu {
+    @include MQ(FL) {
+      text-align: right;
+    }
+  }
+  .VerticalMenu > li > a {
+    @include themify($themes) {
+      fill: themed('textColorSecondary');
+    }
+  }
+  span {
+    white-space: normal;
+  }
+
+  .Reblog__button {
+    padding-right: .4rem;
+    margin-right: .4rem;
+    @include themify($themes) {
+        border-right: themed('border');
+    }
+  }
+}
+
+.PostFull__responses {
+  padding-right: .4rem;
+}
+
+.PostFull__views {
+  padding-right: .4rem;
+  margin-right: .4rem;
+  font-size: 94%;
+  font-weight: 600;
+  @include themify($themes) {
+      border-right: themed('border');
+      fill: themed('textColorSecondary');
+  }
+}
+
+.PostFull__reply {
+  padding-right: .4rem;
+  margin-right: .4rem;
+  @include themify($themes) {
+      border-right: themed('border');
+  }
+  a {margin: 0 0.15rem;}
+}
+
+.PostFull__lifetime {
+  @include themify($themes) {
+    fill: themed('textColorSecondary');
+  }
+  font-size: 80%;
+}
+
+.Author__dropdown {
+  padding: 1rem;
+  > a {
+    @include hoverUnderline;
+  }
+}
+
+.explore-post {
+  margin-right: 0px!important;
+  cursor: pointer;
+  &:hover {
+    svg {
+      fill: $color-teal;
+    }
+  }
+}
+
+input.share-box {
+  width: 75%!important;
+  display: inline;
+}
+
+.ExplorePost {
+  span.extlink {
+    vertical-align: text-bottom;
+  }
+  h5 {
+    margin-top: 1em;
+  }
+  .ExplorePost__copy-button {
+    cursor: pointer;
+  }
+}
+
+.chain-right {
+    -webkit-transform: rotate(120deg);
+    -moz-transform: rotate(120deg);
+    -ms-transform: rotate(120deg);
+    -o-transform: rotate(120deg);
+    transform: rotate(120deg);
+}
+
+/* Small only */
+@media screen and (max-width: 39.9375em) {
+  .Post {
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: visible;
+  }
+  .PostFull__footer > .column {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 100%;
+    flex: 0 0 100%;
+  }
+  input.share-box {
+    height: 2.8em;
+    font-size: .8em;
+  }
+}
+
+/* Medium only */
+@media screen and (min-width: 40em) and (max-width: 63.9375em) {
+  input.share-box {
+    height: 2.8em;
+    font-size: .8em;
+  }
+}

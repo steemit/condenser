@@ -1,0 +1,331 @@
+$themes: (
+  original: (
+    colorAccent: $color-blue,
+    colorAccentHover: $color-blue-original-light,
+    colorAccentReverse: $color-blue-original-light,
+    colorWhite: $color-white,
+    backgroundColor: $color-background-off-white,
+    backgroundColorEmphasis: $color-background-almost-white,
+    backgroundColorOpaque: $color-background-off-white,
+    backgroundTransparent: transparent,
+    moduleBackgroundColor: $color-white,
+    menuBackgroundColor: $color-background-dark,
+    moduleMediumBackgroundColor: $color-white,
+    navBackgroundColor: $color-white,
+    highlightBackgroundColor: #f3faf0,
+    tableRowEvenBackgroundColor: #f4f4f4,
+    border: 1px solid $color-border-light,
+    borderLight: 1px solid $color-border-light-lightest,
+    borderDark: 1px solid $color-text-gray,
+    borderAccent: 1px solid $color-blue,
+    borderTransparent: transparent,
+    iconColorSecondary: #cacaca,
+    textColorPrimary: $color-text-dark,
+    textColorSecondary: $color-text-gray,
+    textColorAccent: $color-text-blue,
+    textColorAccentHover: $color-blue-original-dark,
+    textColorError: $color-text-red,
+    contentBorderAccent: $color-transparent,
+    buttonBackground: $color-blue-original-dark,
+    buttonBackgroundHover: $color-blue-original-light,
+    buttonText: $color-text-white,
+    buttonTextShadow: 0 1px 0 rgba(0,0,0,0.20),
+    buttonTextHover: $color-text-white,
+    buttonBoxShadow: $color-transparent,
+  ),
+  light: (
+    colorAccent: $color-teal,
+    colorAccentHover: $color-teal-dark,
+    colorAccentReverse: $color-blue-black,
+    colorWhite: $color-white,
+    backgroundColor: $color-background-off-white,
+    backgroundColorEmphasis: $color-background-almost-white,
+    backgroundColorOpaque: $color-background-off-white,
+    backgroundTransparent: transparent,
+    moduleBackgroundColor: $color-white,
+    menuBackgroundColor: $color-background-dark,
+    moduleMediumBackgroundColor: $color-transparent,
+    navBackgroundColor: $color-white,
+    highlightBackgroundColor: #f3faf0,
+    tableRowEvenBackgroundColor: #f4f4f4,
+    border: 1px solid $color-border-light,
+    borderLight: 1px solid $color-border-light-lightest,
+    borderDark: 1px solid $color-text-gray,
+    borderAccent: 1px solid $color-teal,
+    borderTransparent: transparent,
+    iconColorSecondary: #cacaca,
+    textColorPrimary: $color-text-dark,
+    textColorSecondary: $color-text-gray,
+    textColorAccent: $color-text-teal,
+    textColorAccentHover: $color-teal,
+    textColorError: $color-text-red,
+    contentBorderAccent: $color-teal,
+    buttonBackground: $color-blue-black,
+    buttonBackgroundHover: $color-teal,
+    buttonText: $color-text-white,
+    buttonTextShadow: 0 1px 0 rgba(0,0,0,0.20),
+    buttonTextHover: $color-white,
+    buttonBoxShadow: $color-teal,
+    buttonBoxShadowHover: $color-blue-black,
+  ),
+  dark: (
+    colorAccent: $color-teal,
+    colorAccentHover: $color-teal,
+    colorAccentReverse: $color-white,
+    colorWhite: $color-white,
+    backgroundColor: $color-background-dark,
+      backgroundColorEmphasis: $color-background-super-dark,
+    backgroundColorOpaque: $color-blue-dark,
+    moduleBackgroundColor: $color-background-dark,
+    backgroundTransparent: transparent,
+    menuBackgroundColor: $color-blue-dark,
+    moduleMediumBackgroundColor: $color-background-dark,
+    navBackgroundColor: $color-background-dark,
+    highlightBackgroundColor: $color-blue-black-darkest,
+    tableRowEvenBackgroundColor: #212C33,
+    border: 1px solid $color-border-dark,
+    borderLight: 1px solid $color-border-dark-lightest,
+    borderDark: 1px solid $color-text-gray-light,
+    borderAccent: 1px solid $color-teal,
+    borderTransparent: transparent,
+    iconColorSecondary: $color-text-gray-light,
+    textColorPrimary: $color-text-white,
+    textColorSecondary: $color-text-gray-light,
+    textColorAccent: $color-teal,
+    textColorAccentHover: $color-teal-light,
+    textColorError: $color-text-red,
+    contentBorderAccent: $color-teal,
+    buttonBackground: $color-white,
+    buttonBackgroundHover: $color-teal,
+    buttonText: $color-blue-dark,
+    buttonTextShadow: 0 1px 0 rgba(0,0,0,0),
+    buttonTextHover: $color-white,
+    buttonBoxShadow: $color-teal,
+    buttonBoxShadowHover: $color-white,
+    inputPriceWarning: rgba(255, 153, 0, 0.83),
+  ),
+);
+
+/*
+ * Implementation of themes
+ */
+@mixin themify($themes) {
+  @each $theme, $map in $themes {
+    .theme-#{$theme} & {
+      $theme-map: () !global;
+      @each $key, $submap in $map {
+        $value: map-get(map-get($themes, $theme), '#{$key}');
+        $theme-map: map-merge($theme-map, ($key: $value)) !global;
+      }
+      @content;
+      $theme-map: null !global;
+    }
+  }
+}
+
+@function themed($key) {
+  @return map-get($theme-map, $key);
+}
+
+
+  .theme-original {
+    background-color: $white;
+    color: $color-text-dark;
+    @include MQ(M) {
+      background-color: $color-background-off-white;
+    }
+  }
+  .theme-light {
+    background-color: $white;
+    color: $color-text-dark;
+    @include MQ(M) {
+      background-color: $color-background-off-white;
+    }
+  }
+  .theme-dark {
+    background-color: $color-background-dark;
+    color: $color-text-white;
+  }
+
+
+// Utility classes to be used with @extend
+
+.link {
+  text-decoration: none;
+  transition: 0.2s all ease-in-out;
+  &--primary {
+    @include themify($themes) {
+        color: themed('textColorPrimary');
+    }
+    &:visited, &:active {
+      @include themify($themes) {
+          color: themed('textColorPrimary');
+      }
+    }
+    &:hover, &:focus {
+      @include themify($themes) {
+          color: themed('textColorAccent');
+      }
+    }
+  }
+  &--secondary {
+    @include themify($themes) {
+        color: themed('textColorSecondary');
+    }
+    &:visited, &:active {
+      @include themify($themes) {
+          color: themed('textColorSecondary');
+      }
+    }
+    &:hover, &:focus {
+      @include themify($themes) {
+          color: themed('textColorAccent');
+      }
+    }
+  }
+  &--accent {
+    @include themify($themes) {
+        color: themed('textColorAccent');
+    }
+    &:visited, &:active {
+      @include themify($themes) {
+          color: themed('textColorAccent');
+      }
+    }
+    &:hover, &:focus {
+      @include themify($themes) {
+          color: themed('textColorAccentHover');
+      }
+    }
+  }
+}
+
+.e-btn-hollow {
+  background-color: transparent;
+  transition: 0.2s all ease-in-out;
+  box-shadow: 0px 0px 0px 0 rgba(0,0,0,0);
+  @include themify($themes) {
+    border: themed('borderAccent');
+    color: themed('textColorAccent');
+  }
+  &:hover {
+    @include themify($themes) {
+      border: themed('borderDark');
+      color: themed('textColorPrimary');
+    }
+  }
+}
+
+.e-btn {
+  text-decoration: none;
+  font-weight: bold;
+  transition: 0.2s all ease-in-out;
+  text-transform: capitalize;
+  border-radius: 0;
+  text-decoration: none;
+  @include font-size(18px);
+  @include themify($themes) {
+    background-color: themed('buttonBackground');
+    box-shadow: 0px 0px 0px 0 rgba(0,0,0,0), 2px 2px 0px 0px themed('buttonBoxShadow');
+    color: themed('buttonText');
+  }
+  &:hover, &:focus {
+    @include themify($themes) {
+      background-color: themed('buttonBackgroundHover');
+      box-shadow: 2px 2px 2px 0 rgba(0,0,0,0.1), 4px 4px 0 0 themed('buttonBoxShadowHover');
+      color: themed('buttonTextHover');
+      text-shadow: themed('buttonTextShadow');
+    }
+  }
+  &:visited, &:active {
+    @include themify($themes) {
+      color: themed('buttonText');
+    }
+    &:hover, &:focus {
+      @include themify($themes) {
+        color: themed('buttonTextHover');
+      }
+    }
+  }
+}
+
+.button.disabled, .button[disabled] {
+  opacity: 0.25;
+  cursor: not-allowed;
+  box-shadow: 0px 0px 0px 0 rgba(0,0,0,0);
+    @include themify($themes) {
+      background-color: themed('buttonBackground');
+      box-shadow: 0px 0px 0px 0 rgba(0,0,0,0);
+      color: themed('buttonText');
+    }
+  &:hover {
+    @include themify($themes) {
+      background-color: themed('buttonBackground');
+      box-shadow: 0px 0px 0px 0 rgba(0,0,0,0);
+      color: themed('buttonText');
+    }
+  }
+}
+
+// This button class doesn't applying theming (just straight styles). To be used when there are no theming classes available (e.g. in modals and static server pages in signup)
+
+.e-btn {
+  &--black {
+    background-color: $color-blue-black;
+    box-shadow: 0px 0px 0px 0 rgba(0,0,0,0), 5px 5px 0 0 $color-teal;
+    color: $color-white;
+    &:hover, &:focus {
+      background-color: $color-teal;
+      box-shadow: 2px 2px 2px 0 rgba(0,0,0,0.1), 7px 7px 0 0 $color-blue-black;
+      color: $color-white;
+      text-shadow: 0 1px 0 rgba(0,0,0,0.20);
+    }
+    &:visited, &:active {
+      background-color: $color-blue-black;
+      box-shadow: 0px 0px 0px 0 rgba(0,0,0,0), 5px 5px 0 0 $color-teal;
+      color: $color-white;
+    }
+    &.disabled, &[disabled] {
+      opacity: 0.25;
+      cursor: not-allowed;
+      box-shadow: 0px 0px 0px 0 rgba(0,0,0,0);
+      &:hover, &:focus {
+        box-shadow: 0px 0px 0px 0 rgba(0,0,0,0);
+        background-color: $color-blue-black;
+        color: $color-white;
+      }
+    }
+    &.hollow {
+      background-color: transparent;
+      box-shadow: 0px 0px 0px 0 rgba(0,0,0,0);
+      color: $color-text-gray;
+      font-weight: normal;
+      transition: 0.2s all ease-in-out;
+      border: transparent;
+      &:hover, &:focus {
+        background-color: transparent;
+        box-shadow: 0px 0px 0px 0 rgba(0,0,0,0);
+        color: $color-blue-dark;
+        font-weight: normal;
+        text-shadow: 0 1px 0 rgba(0,0,0,0.0);
+      }
+      &:visited, &:active {
+        background-color: transparent;
+        box-shadow: 0px 0px 0px 0 rgba(0,0,0,0);
+        color: $color-text-gray;
+        font-weight: normal;
+      }
+    }
+  }
+}
+
+
+.theme-dark {
+  .button.hollow {
+    &:hover, &:focus {
+      border-color: $color-teal;
+      color: $color-teal;
+      outline-color: $color-teal;
+    }
+  }
+}

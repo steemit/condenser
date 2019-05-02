@@ -1,0 +1,210 @@
+.App {
+  min-height: 100vh;
+  padding-top: 0px;
+}
+
+.App__content {
+  margin-top: 1rem;
+}
+
+.mini-header .App__content {
+  margin-top: 0;
+}
+
+.welcomeWrapper {
+  padding-bottom: 1rem;
+}
+.welcomeBanner {
+  margin-top: -1rem;
+  padding: 4em 0 0em;
+  background-color: $color-blue-black;
+  color: $color-white;
+  @include MQ(M) {
+    padding: 3em 0 3em;
+    min-height: 440px;
+  }
+  @include MQ(L) {
+    min-height: 552px;
+  }
+}
+
+.RightMenu {
+  background-color: #555;
+  height: 100vh;
+  color: #fff;
+  padding-top: 3rem;
+  .close-button {
+    color: #fff;
+  }
+  .menu > li {
+    > a {
+      color: #fff;
+      border-top: 1px solid #777;
+    }
+    > a:hover {
+      background-color: #666;
+    }
+  }
+  .menu > li.last {
+    border-bottom: 1px solid #777;
+  }
+  .button.hollow {
+    color: #fff;
+    border: none;
+  }
+}
+.PlainLink {
+    @extend .link;
+    @extend .link--secondary;
+}
+
+.welcomeBanner {
+  position: relative;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.05);
+  h2 {
+    font-weight: bold;
+    margin-bottom: 16px;
+    @include font-size(28px);
+    line-height: 1;
+    font-family: helvetica, sans-serif;
+    max-width: 240px;
+    @include opacity(0);
+    @include MQ(M) {
+      @include font-size(34px);  
+      max-width: 280px;
+    }
+  }
+  h4 {
+    color: $color-white;
+    font-weight: normal;
+    margin-bottom: 1rem;
+    width: 85%;
+    max-width: 310px;
+    /*margin: 0 auto; */
+    font-family: helvetica, sans-serif;
+    line-height: 1.3 !important;
+    @include font-size(16px);
+    @include opacity(0);
+    @include MQ(M) {
+      @include font-size(17px);
+    }
+  }
+  .buttonWrapper {
+      padding:15px;
+  }
+  .row {
+    @include MQ(M) {
+      align-items: center;  
+    }
+  }
+  .button {
+
+    min-width: 120px;
+    white-space: nowrap;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.2s all ease-in-out;
+    text-transform: initial;
+    border-radius: 0;
+    background-color: $color-white;
+    color: $color-blue-black;
+    border: none;
+    box-shadow: 0px 0px 0px 0 rgba(0,0,0,0), 2px 2px 0 0 $color-teal;
+    padding: 16px;
+    margin-right: 18px;
+    @include font-size(16px);
+    cursor: pointer;
+    font-family: $font-primary;
+    &:hover, &:focus {
+      background-color: $color-teal;
+      color: $color-white;
+      box-shadow: 0px 0px 0px 0 rgba(0,0,0,0.1), 4px 4px 0 0 $color-white;
+      text-shadow: 0 1px 0 rgba(0,0,0,0.20);
+    }
+    @include MQ(M) {
+      @include font-size(18px);
+      min-width: 132px;
+    }
+  }
+  .button--primary {
+    @include opacity(0);
+  }
+  .close-button {
+    top: 0.8rem;
+    right: 0;
+    @include MQ(M) {
+      top: 0.5rem;
+    }
+  }
+  .button.hollow {
+      background: none;
+      box-shadow: none;
+      color: $color-teal;
+      border: 1px solid $color-teal;
+  }
+  .button.ghost {
+    background: transparent;
+    color: $color-white;
+    border: 1px solid #30414A;
+    box-shadow: 0px 0px 0px 0 #30414A, 2px 2px 0 0 #30414A;     
+    @include opacity(0);
+    &:hover, &:focus {
+      box-shadow: 0px 0px 0px 0 #30414A, 4px 4px 0 0 $color-teal; 
+    } 
+  }
+
+    .heroImage {
+        max-height: 360px;
+        @include opacity(0);
+        animation: fade-in-up 0.6s ease-out both;
+        @media screen and (prefers-reduced-motion) { 
+          animation: none;
+          @include opacity(1);
+        }
+    }
+
+    .welcomeImage {
+        padding: 0em 4em 1em 3em;
+        @include MQ(M) {
+          padding: 3em;
+        }
+    }
+
+    .welcomePitch {
+        padding: 20px;
+        @include MQ(M) {
+          padding-left: 40px;
+        }
+    }
+}
+.downvoted {
+    opacity: 0.5;
+    -webkit-filter: grayscale(1); // image
+    filter: gray; // image grayscale
+    transition: 0.2s all ease-in-out;
+    color: #848282;
+    @include themify($themes) {
+        color: themed('textColorPrimary');
+    }
+    .Comment__header-user {
+      color: #848282;
+      @include themify($themes) {
+          color: themed('textColorPrimary');
+      }
+    }
+}
+.downvoted:hover {
+    opacity: 1;
+    filter: none;
+    -webkit-filter: none;
+}
+
+.App__announcement {
+  padding-right: 40px;
+  padding-top: 40px;
+  .close-button {
+    right: 0;
+  }
+}
+
+

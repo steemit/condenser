@@ -1,0 +1,26 @@
+.TagsIndex {
+  input {
+    margin-bottom: 0.5rem!important;
+  }
+
+  table tr {
+    th a {
+      position: relative;
+      transition: 0.3s all ease-in-out;
+      @include font-size(17px);
+    }
+    th a:hover::after {
+      content: '\2193';
+      position: absolute;
+      left: 100%;
+      padding-left: 4px;
+    }
+
+    td, th {
+      padding-right: 20px;
+      text-align: right;
+      &:first-child {text-align: left;}
+    }
+  }
+}
+

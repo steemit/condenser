@@ -12,11 +12,6 @@ find node_modules/eslint-config-airbnb -name '*.js'|xargs sed -i "s/': 2/': 1/"
     "node": true,
     "es6": true
   },
-  "ecmaFeatures": {
-    "blockBindings": true,
-    "forOf": true,
-    "jsx": true
-  },
   "rules": {
     "max-len": 0, /*[1, 160, 4],*/
     "comma-dangle": 0,
@@ -32,7 +27,9 @@ find node_modules/eslint-config-airbnb -name '*.js'|xargs sed -i "s/': 2/': 1/"
     "no-undef": 2,
     "camelcase": [0],
     "no-console": [0],
+    "padded-blocks": 0,
     "object-curly-spacing": [0],
+    "react/jsx-indent": [1,4],
     "react/jsx-indent-props": [1,4],
     "react/jsx-closing-bracket-location": [0],
     "no-use-before-define": [0, {"functions": false, "classes": false}],
@@ -56,9 +53,15 @@ find node_modules/eslint-config-airbnb -name '*.js'|xargs sed -i "s/': 2/': 1/"
     "no-confusing-arrow": 0,
     "space-in-parens": 0,
     "no-throw-literal": 0,
-    "react/sort-comp": [1, { "order": [ 'lifecycle' ] }],
+    "react/sort-comp": [1, { "order": [ "lifecycle" ] }],
     "react/prefer-stateless-function": 0,
     "react/prop-types": 0,
     "radix": 0,
+
+    "jsx-a11y/href-no-hash": "off",
+    "jsx-a11y/anchor-is-valid": ["warn", { "aspects": ["invalidHref"] }],
+    "import/no-extraneous-dependencies": 0,
+    "import/no-unresolved": 0,
+    "import/extensions": 0
   }
 }

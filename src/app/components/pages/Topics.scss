@@ -1,0 +1,21 @@
+ul.Topics {
+  max-width: 10rem;
+  > li {
+    list-style-type: none;
+  }
+  > li > a.active {
+    font-weight: bold;
+    overflow: hidden;
+  }
+  .show-more {
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: $dark-gray;
+  }
+}
+
+.c-sidebar__header {
+  font-weight: bold;
+  font-size: 1.125rem;
+  margin: 0 0 1rem 0;
+}

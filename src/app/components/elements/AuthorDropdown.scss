@@ -1,0 +1,55 @@
+.Author__container {
+  width: auto;
+  padding: 0;
+  box-shadow: 1px 1px 5px 0px rgba(50, 50, 50, 0.75);
+  z-index: 10;
+  font-size: inherit;
+  position: absolute;
+  width: 300px;
+  border: 1px solid #cacaca;
+  border-radius: 3px;
+  font-size: 1rem;
+    @include themify($themes) {
+        background-color: themed('backgroundColorEmphasis');
+        color: themed('textColorPrimary');
+    }
+
+  .Author__dropdown {
+    width: 290px;
+    min-height: 108px;
+
+
+    .Userpic {
+        margin-right: 1rem;
+        float: left;
+        width:75px;
+        height:75px;
+    }
+
+    .Author__name {
+      text-decoration: none;
+      display: block;
+      font-size: 110%;
+        @include themify($themes) {
+            color: themed('textColorPrimary');
+        }
+      font-weight: 600;
+      line-height: 1;
+    }
+
+    .Author__username {
+      text-decoration: none;
+      font-size: 90%;
+      font-weight: 400;
+        @include themify($themes) {
+            color: themed('textColorSecondary');
+        }
+    }
+
+    .Author__bio {
+      clear: both;
+      font-size: 90%;
+      padding-top: 15px;
+    }
+  }
+}

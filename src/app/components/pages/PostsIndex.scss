@@ -1,0 +1,960 @@
+.PostsList {
+  clear: right;
+}
+
+.PostsList__summaries {
+  list-style-type: none;
+  margin-left: 0;
+}
+
+.PostsIndex {
+    .articles__h1--no-wrap {
+        white-space: nowrap;
+    }
+}
+
+.PostsIndex__topics {
+  border-left: 1px solid $light-gray;
+}
+
+.PostsIndex__topics_compact {
+  float: right;
+  width: 15rem;
+  position: relative;
+  top: -0.8rem;
+  > select {
+    border: none;
+    border-bottom: 1px solid $medium-gray;
+    border-radius: 0;
+  }
+}
+
+.PostsIndex.fetching .PostsIndex__topics_compact {
+  visibility: hidden;
+}
+
+/* Small only */
+@media screen and (max-width: 39.9375em) {
+  .PostsIndex__left {
+    padding: 0;
+  }
+  .PostsIndex__topics_compact {
+    padding: 0 0.5rem;
+    float: none;
+    width: auto;
+  }
+}
+
+/* Medium and up */
+@media screen and (min-width: 39.94em) {
+  .PostsIndex__summaries {
+    > li:first-child {
+      .PostSummary {
+        margin-top: 0;
+        padding-top: 0;
+      }
+    }
+  }
+}
+
+
+// .container {
+//   width: 100%;
+//   padding-bottom: 4em;
+//   min-height: 100%;
+//   @include themify($themes) {
+//       background-color: themed('backgroundColor');
+//       color: themed('textColor');
+//     }
+// }
+
+
+.content-container {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  // padding-top: 65px;
+  @include MQ(M) {
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    // padding-top: 89px;
+  }
+}
+
+// Sidebar components on the homepage
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.c-sidebar {
+  width: 100%;
+  flex: 0 0 240px;
+  font-family: helvetica, sans-serif;
+  &__module {
+      padding: 1.5em 2em;
+    @include themify($themes) {
+        background-color: themed('moduleBackgroundColor');
+        border: themed('border');
+    }
+    margin-bottom: 1em;
+    box-shadow: 0px 5px 10px 0 rgba(0,0,0,0);
+    transition: 0.2s box-shadow ease-in-out;
+    animation: 1s ease-out 0s 1 fadeIn;
+    &:hover {
+      @include MQ(M) {
+        box-shadow: 0px 5px 10px 0 rgba(0,0,0,0.03);
+      }
+    }
+    &--tags {
+      display: none;
+      @include MQ(FL) {
+        display: block;
+      }
+      @include MQ(L) {
+        display: none;
+      }
+    }
+  }
+  &--left {
+    display: none;
+    order: 1;
+    @include MQ(L) {
+      display: block;
+      margin-left: 1em;
+    }
+  }
+  &--right {
+    display: none;
+    order: 3;
+    @include MQ(M) {
+      display: block;
+      margin-right: 1em;
+    }
+  }
+  &__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  &__list-item {
+    margin-bottom: 10px;
+    line-height: 1.2;
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+  &__h3 {
+    // @extend .h3;
+    font-family: $font-primary;
+    font-weight: bold;
+    @include font-size(18px);
+    margin: 0 0 16px 0;
+    &--inline {
+      display: inline;
+    }
+  }
+  &__link {
+    @extend .link;
+    @extend .link--primary;
+    font-family: $font-primary;
+    &--emphasis {
+      font-weight: bold;
+    }
+  }
+  &__more-link {
+    @extend .link;
+    @extend .link--accent;
+    display: inline-block;
+    margin-bottom: 1.3em;
+  }
+  &__label {
+    display: block;
+    @include font-size(14px);
+    margin-bottom: 2px;
+  }
+  &__score {
+    font-weight: bold;
+    @include font-size(17px);
+    margin-bottom: 24px;
+  }
+}
+
+.PostsIndex.row {
+  max-width: 860px;
+  display: flex;
+  flex-wrap: nowrap;
+  margin: 0 auto;
+  @include MQ(L) {
+    max-width: 1240px;
+  }
+}
+
+.PostsIndex.row.layout-list {
+  max-width: none;
+  @include MQ(L) {
+    max-width: 1600px;
+  }
+}
+
+.articles {
+    font-family: helvetica, sans-serif;
+    padding: 4px 1em 1em 1em;
+    transition: all 0.2s ease-out;
+    border: transparent;
+    min-width: 300px;
+    width: 100%;
+    margin: auto;
+    background-color: transparent;
+
+  @include MQ(M) {
+    margin: 0 1em;
+    padding: 0.5em 0em;
+    min-width: 550px;
+    max-width: 664px;
+    order: 2;
+
+  }
+  h2 {
+    font-family: sans-serif;
+  }
+  @include MQ(L) {
+    min-width: 664px;
+    max-width: 664px;
+    padding: 1.5em 4em;
+    @include themify($themes) {
+        border: themed('border');
+        box-shadow: 5px 5px 0 0 themed('contentBorderAccent');
+        background-color: themed('moduleBackgroundColor');
+    }
+  }
+
+  &:hover {
+    @include MQ(L) {
+      @include themify($themes) {
+          box-shadow: 6px 6px 0 0 themed('contentBorderAccent');
+      }
+    }
+  }
+
+  &__hr {
+    margin-bottom: 20px;
+    margin-top: 0px;
+    @include themify($themes) {
+        border-bottom: themed('border');
+      }
+    @include MQ(M) {
+        display: none;
+    }
+  }
+
+  &__layout-selector {
+    display: none;
+    cursor: pointer;
+    @include MQ(FL) {
+      display: flex;
+      float: right;
+    }
+    @include MQ(FM) {
+        display: flex;
+        justify-content: flex-end;
+    }
+  }
+  &__icon--layout {
+    width: 24px;
+    height: 24px;
+    position: relative;
+  }
+  &__summary {
+      margin: 0em 0 1em;
+      transition: 0.2s all ease-in-out;
+      border: transparent;
+      padding-bottom: 10px;
+      @include themify($themes) {
+          background-color: themed('moduleBackgroundColor');
+          border-bottom: themed('border');
+        }
+      @include MQ(M) {
+        margin: 0 0 40px;
+        box-shadow: 0px 5px 10px 0 rgba(0,0,0,0.0);
+        padding-bottom: 0;
+        @include themify($themes) {
+            border: themed('border');
+          }
+      }
+      &:hover {
+        @include MQ(M) {
+          box-shadow: 0px 5px 10px 0 rgba(0,0,0,0.03);
+        }
+      }
+  }
+  &__resteem-icon {
+    position: relative;
+    top: -1px;
+    padding-right: 2px;
+  }
+  &__summary-header {
+    display: flex;
+    align-items: center;
+    padding: 6px 0 8px;
+    position: relative;
+    @include MQ(M) {
+      padding: 10px 16px 5px;
+      @include themify($themes) {
+          border-bottom: themed('border');
+        }
+      }
+    &--footer {
+      @include themify($themes) {
+          border-top: themed('border');
+          border-bottom: themed('border');
+        }
+      @include MQ(M) {
+        @include themify($themes) {
+            border-bottom: transparent;
+          }
+      }
+    }
+  }
+  &__summary-footer {
+    display: flex;
+    align-items: center;
+    position: relative;
+    width: 100%;
+    @include font-size(15px);
+    @include MQ(M) {
+      padding: 16px;
+      @include themify($themes) {
+          border-top: themed('border');
+        }
+    }
+    a {
+      @extend .link;
+      @extend .link--primary;
+      @include font-size(15px);
+    }
+  }
+  &__header {
+    padding-top:5px;
+    padding-bottom: 10px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    line-height: 1;
+    @include MQ(M) {
+      padding-top: 0;
+    }
+    &-select {
+        select {
+            max-width: 300px;
+        }
+    }
+  }
+  &__header-col {
+    &--right {
+      order: 1;
+      width: 100%;
+      @media only screen and (min-width: 370px) {
+        width: auto;
+        order: 2;
+      }
+    }
+  }
+  &__resteem {
+    padding-bottom: 0px;
+    margin-top: 24px;
+
+    @include MQ(M) {
+      margin-top: 8px;
+      padding-bottom: 5px;
+      @include themify($themes) {
+          border-bottom: themed('border');
+        }
+      }
+  }
+  &__resteem-text {
+    @include font-size(13px);
+    margin-bottom: 0px;
+    @include themify($themes) {
+        color: themed('textColorSecondary');
+    }
+    @include MQ(M) {
+      margin-bottom: 2px;
+      @include font-size(14px);
+    }
+  }
+  &__resteem-username {
+    @extend .link--secondary;
+    text-decoration: none;
+  }
+  &__icon-100 {
+    padding-left: 8px;
+    display: inline-block;
+    position: relative;
+    top: -1px;
+    transform: scale(0.9);
+    transform-origin: center;
+
+  }
+  &__h1 {
+    font-family: $font-primary;
+    font-weight: bold;
+    @include font-size(18px);
+    margin: 0;
+    text-transform: capitalize;
+    @include MQ(M) {
+      @include font-size(18px);
+    }
+  }
+  &__h2 {
+    // @extend .h2;
+    margin: 0;
+    @include font-size(16px);
+      overflow : hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+    a {
+    font-weight: bold;
+    @include themify($themes) {
+        color: themed('textColorPrimary');
+    }
+     &:visited {
+        @include themify($themes) {
+            color: themed('textColorSecondary');
+        }
+      }
+    }
+    @include MQ(M) {
+      @include font-size(18px);
+    }
+  }
+  &__h3 {
+    display: inline;
+  }
+
+  &__tag-selector {
+    display: inline-block;
+    select.Topics {
+      margin-bottom: 0 !important;
+      border: transparent;
+      background-color: transparent;
+      border-bottom: 1px solid #999;
+      border-radius: 0;
+      position: relative;
+      top: -4px;
+      margin-top: 12px;
+      @include themify($themes) {
+          color: themed('textColorSecondary');
+      }
+      @media only screen and (min-width: 370px) {
+        margin-top: 0;
+      }
+    }
+    @include MQ(L) {
+      display: none;
+    }
+  }
+  &__p {
+    // @extend .p;
+    margin: 0;
+    padding-top: 4px;
+    overflow : hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+  }
+  &__link {
+    text-decoration: none;
+    @include themify($themes) {
+        color: themed('textColorPrimary');
+      }
+  }
+  // &__profile-img {
+  //   display: none;
+  //   width: 54px;
+  //   height: auto;
+  // }
+  &__text-content {
+    @include MQ(M) {
+      padding: 0 1.2em;
+    }
+  }
+  &__tags {
+    @include themify($themes) {
+        color: themed('textColorSecondary');
+      }
+    @include font-size(14px);
+    margin-bottom: 18px;
+  }
+  &__tag-link {
+     @include font-size(14px);
+    @include themify($themes) {
+        color: themed('textColorSecondary');
+      }
+    a {
+      @extend .link;
+      @extend .link--secondary;
+    }
+  }
+  &__flag {
+    width: 24px;
+    height: auto;
+    position: absolute;
+    right: -4px;
+    top: 0px;
+    padding: 2px;
+    @include MQ(M) {
+      right: 10px;
+      top: 12px;
+    }
+
+    .icon-flag-svg {
+      @include themify($themes) {
+          fill: themed('textColorSecondary');
+        }
+      transition: 0.2s all ease-in-out;
+    }
+    &:hover {
+      cursor: pointer;
+      .icon-flag-svg {
+        @include themify($themes) {
+            fill: themed('textColorError');
+          }
+      }
+    }
+  }
+  &__content-block {
+    margin-bottom: 16px;
+    @include MQ(M) {
+      &--text {
+        margin-top: 1em;
+      }
+    }
+  }
+
+  &__content-block--img + &__content-block--text {
+    margin-top: 0;
+  }
+  &__resteem, &__content-block--text, &__metadata {
+    @include MQ(M) {
+      padding-left: 1.1em;
+      padding-right: 1.1em;
+    }
+  }
+}
+
+// ,user layout-block
+
+.user {
+  display: flex;
+  align-items: center;
+  margin-right: 8px;
+  &__col {
+    line-height: 1;
+    &--right {
+      position: relative;
+      top: -2px;
+    }
+  }
+  &__link {
+    @extend .link;
+    &:hover {
+      .user__username {
+        transition: 0.2s all ease-in-out;
+        @include themify($themes) {
+            color: themed('textColorAccent');
+          }
+      }
+    }
+  }
+  &__profile-img {
+    width: 40px !important;
+    height: 40px !important;
+    margin-right: 8px;
+    transition: width 0.2s ease-out;
+    @include MQ(M) {
+      width: 48px !important;
+      height: 48px !important;
+      margin-right: 10px;
+    }
+  }
+  &__name {
+    display: inline;
+    font-weight: bold;
+    padding-right: 4px;
+    margin: 0;
+    line-height: 1.2;
+
+    a {
+      @extend .link;
+      @extend .link--primary;
+      font-weight: bold;
+      @include font-size(14px);
+      @include MQ(M) {
+        @include font-size(16px);
+      }
+    }
+  }
+  &__username, &__reputation {
+    @extend .link--secondary;
+    font-weight: normal;
+    @include font-size(14px);
+  }
+}
+
+
+
+.timestamp {
+  &__link {
+    text-decoration: none;
+  }
+  &__time {
+    @extend .link--secondary;
+    font-weight: normal;
+    @include font-size(14px);
+  }
+}
+
+
+
+.icon-svg {
+  transition: 0.2s all 0.05s ease-in-out;
+  @include themify($themes) {
+      fill: themed('textColorSecondary');
+    }
+  &--accent {
+    @include themify($themes) {
+        fill: themed('textColorAccent');
+      }
+  }
+  &--layout-line1, &--layout-line2, &--layout-line3 {
+    height: 2px;
+    @include opacity(1);
+    transition: 0.3s all ease-in-out;
+  }
+  &--layout-line2 {
+    y: 11px;
+  }
+  &--layout-line1 {
+    y: 6px;
+  }
+  &--layout-line3 {
+    y: 16px;
+  }
+}
+
+
+.articles__layout-selector {
+    display: inline-block;
+        .icon-svg {
+            &--accent {
+                @include themify($themes) {
+                    fill: themed('textColorSecondary');
+                }
+            }
+    }
+}
+
+.articles__layout-selector:hover .icon-svg {
+  &--accent {
+    @include themify($themes) {
+        fill: themed('textColorPrimary');
+      }
+  }
+}
+
+// Compressed list view CSS
+
+a#changeLayout:focus {
+  outline: none;
+}
+
+.layout-list {
+  @include MQ(M) {
+    transition: 0.3s all ease-in-out;
+
+    .icon-svg {
+      &--layout-line3 {
+        y: 22px;
+        @include opacity(0);
+      }
+      &--layout-line1, &--layout-line2 {
+
+        height: 4px;
+      }
+      &--layout-line2 {
+        y: 14px;
+      }
+      &--layout-line1 {
+        y: 6px;
+      }
+    }
+    .content-container {
+      max-width: 1520px;
+    }
+    .c-sidebar {
+      &--right {
+        display: none;
+        order: 3;
+        @include MQ(L) {
+          display: block;
+          margin-right: 1em;
+        }
+      }
+    }
+    .articles {
+      padding: 1.5em 1.5em;
+      max-width: none;
+      max-width: 1056px;
+      @include MQ(XL) {
+        min-width: 1050px;
+      }
+      @include themify($themes) {
+         background-color: themed('moduleBackgroundColor');
+         border: themed('border');
+      }
+      &__hr {
+        @include MQ(M) {
+          display: block;
+          @include themify($themes) {
+            border-bottom: themed('border');
+          }
+        }
+      }
+      &__summary {
+        border: transparent;
+        box-shadow: none;
+        padding-bottom: 0px;
+        margin: 0 0 1.4em;
+        @include themify($themes) {
+          border-bottom: themed('borderLight');
+        }
+        @include MQ(M) {
+          padding-bottom: 6px;
+        }
+      }
+      &__h2 {
+        @include font-size(16px);
+
+        @include MQ(M) {
+          -webkit-line-clamp: 2;
+        }
+        @include MQ(XL) {
+          -webkit-line-clamp: 1;
+        }
+
+      }
+      &__feature-img-container {
+        overflow: hidden;
+        width: 130px;
+        height: 77px;
+        position: relative;
+        display: inline-block;
+      }
+      &__feature-img {
+        position: absolute;
+        width:100% !important;
+        top: 50%;
+        transform:translateY(-50%)
+      }
+      &__summary-header {
+        padding: 2px 0 5px;
+        border: transparent;
+      }
+      &__summary-footer {
+        padding: 2px 0 5px;
+        border: transparent;
+        padding: 4px;
+        padding-top: 3px;
+        // @include themify($themes) {
+        //     border-bottom: themed('borderLight');
+        //   }
+      }
+      &__p {
+        @include font-size(15px);
+        -webkit-line-clamp: 1;
+        padding-right: 6px;
+        margin-top: 2px;
+        padding-top: 0px;
+      }
+      &__content {
+        display: flex;
+        align-items: top;
+      }
+      &__content-block {
+        margin-bottom: 0;
+        &--img {
+          margin-right: 14px;
+        }
+        &--text {
+          margin-top: 0;
+          min-width: 300px;
+        }
+      }
+      &__tags {
+        margin: 4px 0 0;
+      }
+      &__flag {
+        top: 0;
+      }
+      &__resteem {
+        padding-bottom: 0;
+        border-bottom: transparent;
+      }
+      &__resteem, &__content-block--text, &__metadata {
+        @include MQ(M) {
+          padding-left: 0;
+          padding-right: 0;
+        }
+      }
+    }
+    // ,user layout-list
+    .user {
+      &__name {
+        @include font-size(15px);
+        font-weight: normal;
+        a {
+          @include font-size(14px);
+        }
+      }
+    }
+  }
+}
+
+
+.layout-list {
+  @include MQ(L) {
+    .articles {
+      padding: 1.5em 3em;
+    }
+  }
+  @include MQ(XL) {
+    .articles {
+      padding: 1.5em 4em;
+    }
+  }
+}
+
+.layout-list .user .Userpic {
+  width: 24px !important;
+  height: 24px !important;
+  margin-right: 8px;
+}
+
+.layout-block .Userpic {
+  margin-right: 8px;
+  @include MQ(M) {
+    margin-right: 12px;
+  }
+}
+
+.layout-compressed {
+  @extend .layout-list;
+
+  @include MQ(M) {
+    .Userpic {
+      display: none;
+    }
+    .articles {
+      &__summary {
+        margin: 0 0 10px;
+        padding-bottom: 0;
+        @include themify($themes) {
+          border-bottom: themed('borderTransparent');
+        }
+      }
+      &__summary-header {
+        padding: 2px 0;
+      }
+      &__summary-footer {
+        padding: 0;
+      }
+      &__h2 {
+        @include font-size(14px);
+        padding-bottom: 2px;
+      }
+      .PostSummary__body {
+        padding: 0;
+        @include font-size(14px);
+      }
+      &__content-block {
+        &--img {
+          margin-right: 12px;
+        }
+      }
+      &__feature-img-container {
+        width: 90px;
+        height: 56px;
+      }
+      &__hr {
+        margin-bottom: 12px;
+      }
+    }
+    .c-sidebar {
+      &__content {
+        @include font-size(14px);
+      }
+    }
+    .user {
+      &__name {
+        a {
+          font-weight: normal;
+        }
+      }
+    }
+  }
+}
+
+
+.icon-svg {
+  transition: 0.2s all ease-in-out;
+  @include themify($themes) {
+      fill: themed('textColorSecondary');
+    }
+  &--accent {
+    @include themify($themes) {
+        fill: themed('textColorAccent');
+      }
+  }
+  &--layout-line1, &--layout-line2, &--layout-line3 {
+    height: 2px;
+    @include opacity(1);
+    transition: 0.3s all ease-in-out;
+  }
+  &--layout-line2 {
+    y: 11px;
+  }
+  &--layout-line1 {
+    y: 6px;
+  }
+  &--layout-line3 {
+    y: 16px;
+  }
+}
+
+.PostsIndex .Voting {
+  float: right;
+}
+
+
+.articles__resteem .username {
+    @extend .link;
+    @extend .link--secondary;
+    text-decoration: none;
+}
+
+
+.articles__resteem-icon path {
+    fill: #cacaca;
+}

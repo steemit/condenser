@@ -1,0 +1,665 @@
+{
+    "g": {
+        "age": "시간",
+        "amount": "양",
+        "and": "and",
+        "are_you_sure": "Are you sure?",
+        "ask": "Ask",
+        "balance": "잔고",
+        "balances": "잔고",
+        "bid": "Bid",
+        "blog": "블로그",
+        "browse": "Browse",
+        "buy": "구매",
+        "buy_or_sell": "구입/판매",
+        "by": "by",
+        "cancel": "취소",
+        "change_password": "비밀번호 변경",
+        "choose_language": "언어 선택",
+        "clear": "지우기",
+        "close": "닫기",
+        "collapse_or_expand": "닫기/펼치기",
+        "comments": "작성한 댓글",
+        "confirm": "확인",
+        "convert": "변환하기",
+        "date": "날짜",
+        "delete": "삭제",
+        "dismiss": "확인",
+        "edit": "수정",
+        "email": "Email",
+        "feed": "피드",
+        "follow": "팔로우",
+        "for": " for ",
+        "from": " from ",
+        "go_back": "Back",
+        "hide": "숨기기",
+        "in": "in",
+        "in_reply_to": "in reply to",
+        "insufficient_balance": "잔고 부족",
+        "invalid_amount": "잘못된 금액",
+        "joined": "가입일",
+        "loading": "로딩중..",
+        "login": "로그인",
+        "logout": "로그아웃",
+        "memo": "메모",
+        "mute": "차단",
+        "my_blog": "내 블로그",
+        "my_comments": "내가 쓴 댓글",
+        "my_replies": "받은 댓글",
+        "new": "최신글",
+        "newer": "최근",
+        "next": "다음",
+        "no": "No",
+        "ok": "Ok",
+        "older": "이전",
+        "or": "or",
+        "order_placed": "주문 요청됨",
+        "password": "비밀번호",
+        "payouts": "글보상",
+        "permissions": "권한",
+        "phishy_message":
+            "Link expanded to plain text; beware of a potential phishing attempt",
+        "post": "글쓰기",
+        "post_as": "Post as",
+        "posts": "Posts",
+        "powered_up_100": "Powered Up 100%%",
+        "preview": "Preview",
+        "previous": "Previous",
+        "price": "가격",
+        "print": "출력",
+        "promote": "홍보",
+        "promoted": "홍보글",
+        "re": "RE",
+        "re_to": "RE: %(topic)s",
+        "recent_password": "Recent Password",
+        "receive": "Receive ",
+        "remove": "Remove",
+        "remove_vote": "보팅 취소",
+        "replied_to": "replied to %(account)s",
+        "replies": "받은 댓글",
+        "reply": "댓글 달기",
+        "reply_count": {
+            "zero": "댓글 없음",
+            "one": "하나의 댓글",
+            "other": "%(count)개의 댓글"
+        },
+        "reputation": "평판",
+        "reveal_comment": "댓글 보이기",
+        "request": "request",
+        "required": "Required",
+        "rewards": "보상",
+        "save": "Save",
+        "saved": "Saved",
+        "search": "Search",
+        "sell": "판매",
+        "settings": "설정",
+        "share_this_post": "이 포스트 공유하기",
+        "show": "Show",
+        "sign_in": "로그인",
+        "sign_up": "회원가입",
+        "since": "since",
+        "submit": "Submit",
+        "power_up": "파워 업",
+        "submit_a_story": "글쓰기",
+        "tag": "태그",
+        "to": " to ",
+        "topics": "Topics",
+        "toggle_nightmode": "야간모드",
+        "all_tags": "전체 태그",
+        "transfer": "송금 ",
+        "trending_topics": "Trending Topics",
+        "type": "Type",
+        "unfollow": "언팔로우",
+        "unmute": "차단 해제",
+        "unknown": "Unknown",
+        "upvote": "보팅",
+        "upvote_post": "이 글에 보팅하기",
+        "username": "사용자 이름",
+        "version": "버전",
+        "vote": "보팅",
+        "votes": "보팅",
+        "wallet": "지갑",
+        "warning": "경고",
+        "yes": "예",
+        "posting": "포스팅",
+        "owner": "소유자",
+        "active": "액티브",
+        "account_not_found": "계정을 찾을 수 없습니다",
+        "this_is_wrong_password": "잘못된 비밀번호 입니다",
+        "do_you_need_to": "Do you need to",
+        "account_name": "계정 이름",
+        "recover_your_account": "recover your account",
+        "reset_usernames_password": "Reset %(username)s's Password",
+        "this_will_update_usernames_authtype_key":
+            "This will update %(username)s %(authType)s key",
+        "passwords_do_not_match": "Passwords do not match",
+        "you_need_private_password_or_key_not_a_public_key":
+            "You need a private password or key (not a public key)",
+        "the_rules_of_APP_NAME": {
+            "one": "%(APP_NAME)s 첫번째 규칙: 비밀번호를 잃어버리지 마세요.",
+            "second": "%(APP_NAME)s 두번째 규칙: 비밀번호를 잃어버리지 마세요.",
+            "third":
+                "%(APP_NAME)s 세번째 규칙: 잃어버린 비밀번호는 복구 해드릴 방법이 없습니다.",
+            "fourth":
+                "네번째 규칙: 기억할수 있는 비밀번호는 안전하지 않은 비밀번호 입니다.",
+            "fifth": "다섯번째 규칙: 무작위로 생성된 비밀번호만 사용하세요.",
+            "sixth": "여섯번째 규칙: 비밀번호는 혼자만 간직하세요.",
+            "seventh": "일곱번째 규칙: 비밀번호를 반드시 백업해 두세요."
+        },
+        "recover_password": "계정 복구",
+        "current_password": "현재 비밀번호",
+        "generated_password": "생성된 비밀번호",
+        "backup_password_by_storing_it":
+            "패스워드는 반드시 관리 프로그램이나 메모장 등을 이용해서 보관하세요.",
+        "enter_account_show_password":
+            "Enter a valid account name to show the password",
+        "click_to_generate_password": "새 비밀번호를 만드시려면 클릭하세요",
+        "re_enter_generate_password": "위에 생성된 비밀번호를 다시 입력하세요",
+        "understand_that_APP_NAME_cannot_recover_password":
+            "비밀번호를 잃어버리면 %(APP_NAME)s이 복구해줄 수 없음을 숙지하였습니다.",
+        "i_saved_password": "안전한 곳에 비밀번호를 백업 해 두었습니다.",
+        "update_password": "새 비밀번호 적용",
+        "confirm_password": "비밀번호 확인",
+        "account_updated": "변경 사항이 적용 되었습니다.",
+        "password_must_be_characters_or_more":
+            "패스워드는 %(amount)s 글자 이상 이어야 합니다.",
+        "need_password_or_key":
+            "개인 암호 또는 키 (공개 키 아님)가 필요합니다.",
+        "login_to_see_memo": "login to see memo",
+        "new_password": "새 비밀번호",
+        "incorrect_password": "잘못된 비밀번호",
+        "username_does_not_exist": "존재하지 않는 사용자 계정",
+        "account_name_should_start_with_a_letter":
+            "계정명은 반드시 알파벳으로 시작해야 합니다.",
+        "account_name_should_be_shorter": "계정명이 너무 깁니다.",
+        "account_name_should_be_longer": "계정명이 너무 짧습니다.",
+        "account_name_should_have_only_letters_digits_or_dashes":
+            "계정명에는 알파벳과 숫자, 마침표, 대쉬만 사용 가능합니다.",
+        "cannot_increase_reward_of_post_within_the_last_minute_before_payout":
+            "Payout 전 마지막 순간에 게시물에 대한 보상을 늘릴 수 없습니다.",
+        "only_one_APP_NAME_account_allowed_per_ip_address_every_10_minutes":
+            "매 10 분마다 IP 주소 당 단 하나의 Steem 계정만 허용됩니다.",
+        "resteem_this_post": "Resteem This Post",
+        "reblog": "리스팀",
+        "write_your_story": "내용을 입력하세요",
+        "remember_voting_and_posting_key": "Remember voting & posting key",
+        "auto_login_question_mark": "자동 로그인",
+        "hide_private_key": "개인 키 숨기기",
+        "show_private_key": "개인 키 보이기",
+        "login_to_show": "로그인 해 확인하기",
+        "not_valid_email": "유효하지 않은 이메일",
+        "thank_you_for_being_an_early_visitor_to_APP_NAME":
+            "Thank you for being an early visitor to %(APP_NAME)s. We will get back to you at the earliest possible opportunity.",
+        "author_rewards": "저자 보상",
+        "curation_rewards": "큐레이션 보상",
+        "sorry_your_reddit_account_doesnt_have_enough_karma":
+            "Sorry, your Reddit account doesn't have enough Reddit Karma to qualify for a free sign up. Please add your email for a place on the waiting list",
+        "register_with_facebook": "Register with Facebook",
+        "or_click_the_button_below_to_register_with_facebook":
+            "Or click the button below to register with Facebook",
+        "server_returned_error": "서버 오류",
+        "APP_NAME_support": "%(APP_NAME)s Support",
+        "please_email_questions_to": "Please email your questions to",
+        "next_7_strings_single_block": {
+            "authors_get_paid_when_people_like_you_upvote_their_post":
+                "보팅을 통해 작가들에게 금전적인 지원을 하실 수 있습니다.",
+            "if_you_enjoyed_what_you_read_earn_amount":
+                "즐겁게 읽으셨다면 여러분도 지금 바로 가입하셔서 가상화폐 STEEM 을 보상으로 받으세요!",
+            "free_steem": "FREE STEEM!",
+            "sign_up_earn_steem": "Sign up now to earn "
+        },
+        "next_3_strings_together": {
+            "show_more": "Show more",
+            "show_less": "Show fewer",
+            "value_posts": "low value posts"
+        },
+        "read_only_mode":
+            "서버 점검으로 인한 읽기 전용 모드입니다. 불편함을 드려 죄송합니다.",
+        "tags_and_topics": "태그",
+        "show_more_topics": "모든 태그 보기",
+        "basic": "Basic",
+        "advanced": "Advanced",
+        "views": {
+            "zero": "읽지 않음",
+            "one": "%(count)s명이 잃음",
+            "other": "%(count)s명이 읽음"
+        },
+        "responses": {
+            "zero": "댓글 없음",
+            "one": "%(count)s개의 댓글",
+            "other": "%(count)s개의 댓글"
+        },
+        "post_key_warning": {
+            "confirm":
+                "STEEM 개인 키 또는 마스터 비밀번호를 게시하려고 합니다. 관련된 계정과 모든 자산에 대한 제어권을 상실하게 될 것입니다.",
+            "warning":
+                "Steemit Inc.의 직원을 포함한 합법적 인 사용자는 어떠한 경우에도 개인 키 또는 마스터 비밀번호를 요구하지 않습니다.",
+            "checkbox": "네 이해합니다."
+        }
+    },
+    "navigation": {
+        "about": "스팀이란?",
+        "explore": "태그별 현황",
+        "APP_NAME_whitepaper": "%(APP_NAME)s 백서",
+        "buy_LIQUID_TOKEN": "%(LIQUID_TOKEN)s 구매",
+        "sell_LIQUID_TOKEN": "%(LIQUID_TOKEN)s 판매",
+        "currency_market": "거래소",
+        "stolen_account_recovery": "도난 계정 복구",
+        "change_account_password": "비밀번호 변경",
+        "witnesses": "증인",
+        "vote_for_witnesses": "증인 투표",
+        "privacy_policy": "개인정보 방침",
+        "terms_of_service": "이용 약관",
+        "sign_up": "가입",
+        "learn_more": "더 알아보기",
+        "welcome": "환영합니다!",
+        "faq": "자주 묻는 질문",
+        "chat": "스팀잇 채팅",
+        "app_center": "스팀잇 앱 센터",
+        "business_center": "Businesses Accepting Steem",
+        "api_docs": "스팀잇 API 문서",
+        "bluepaper": "스팀 블루페이퍼",
+        "smt_whitepaper": "SMT 화이트페이퍼",
+        "whitepaper": "스팀 화이트페이퍼",
+        "intro_tagline": "생각의 가치",
+        "intro_paragraph":
+            "당신의 생각과 글은 소중합니다. 스팀잇은 고급 컨텐츠 생산자들과 큐레이터들에게 투명한 금전적 보상을 지원합니다. 지금 참여하세요."
+    },
+    "main_menu": {
+        "hot": "인기글",
+        "trending": "대세글"
+    },
+    "reply_editor": {
+        "shorten_title": "짧은 제목",
+        "exceeds_maximum_length": "최대 용량 초과 (%(maxKb)sKB)",
+        "including_the_category": " ('%(rootCategory)s' 포함)",
+        "use_limited_amount_of_tags":
+            "You have %(tagsLength)s tags total%(includingCategory)s. Please use only 5 in your post and category line.",
+        "are_you_sure_you_want_to_clear_this_form":
+            "Are you sure you want to exit the comment editor?",
+        "uploading": "Uploading",
+        "draft_saved": "임시 저장.",
+        "editor": "에디터",
+        "insert_images_by_dragging_dropping":
+            "이미지를 추가하시려면 마우스로 끌어다가 놓으시거나, ",
+        "pasting_from_the_clipboard": "클립보드에서 붙여넣기 하시거나, ",
+        "selecting_them": "직접 업로드 하세요",
+        "image_upload": "사진 업로드",
+        "power_up_100": "100%% 스팀파워로 수령",
+        "default_50_50": "스팀파워 50%% + 스팀달러 50%%",
+        "decline_payout": "보상 받지않기",
+        "check_this_to_auto_upvote_your_post": "이 글에 자동으로 업보팅",
+        "markdown_styling_guide": "Markdown 설명서",
+        "or_by": "혹은",
+        "title": "제목",
+        "update_post": "저장",
+        "markdown_not_supported": "Markdown은 지원되지 않습니다."
+    },
+    "category_selector_jsx": {
+        "tag_your_story":
+            "태그는 최대 5개까지 입력 할 수 있습니다. 메인이 될 태그는 가장 먼저 입력하세요.",
+        "select_a_tag": "태그를 선택하세요.",
+        "maximum_tag_length_is_24_characters": "태그는 24 글자까지 가능합니다.",
+        "use_limited_amount_of_categories":
+            "태그는 최대 %(amount)s 개 까지 입력 가능합니다.",
+        "use_only_lowercase_letters": "소문자만 사용해 주세요.",
+        "use_one_dash": "대쉬는 한개만 사용 가능합니다.",
+        "use_spaces_to_separate_tags":
+            "태그와 태그 사이는 공백으로 구분 하세요.",
+        "use_only_allowed_characters":
+            "소문자, 숫자 그리고 대쉬만 사용 가능합니다.",
+        "must_start_with_a_letter": "태그는 반드시 문자로 시작해야 합니다.",
+        "must_end_with_a_letter_or_number":
+            "태그는 반드시 문자나 숫자로 끝나야 합니다."
+    },
+    "post_advanced_settings_jsx": {
+        "payout_option_header": "Author rewards",
+        "payout_option_description":
+            "What type of tokens do you want as rewards from this post?",
+        "current_default": "Default",
+        "update_default_in_settings": "Update"
+    },
+    "postfull_jsx": {
+        "this_post_is_not_available_due_to_a_copyright_claim":
+            "This post is not available due to a copyright claim.",
+        "share_on_facebook": "Facebook에 공유",
+        "share_on_twitter": "Twitter에 공유",
+        "share_on_linkedin": "Linkedin에 공유",
+        "recent_password": "최근 비밀번호",
+        "in_week_convert_DEBT_TOKEN_to_LIQUID_TOKEN":
+            "In 3.5 days, convert %(amount)s %(DEBT_TOKEN)s into %(LIQUID_TOKEN)s",
+        "view_the_full_context": "전체 글 보기",
+        "view_the_direct_parent": "상위 댓글 보기",
+        "you_are_viewing_a_single_comments_thread_from":
+            "You are viewing a single comment's thread from"
+    },
+    "recoveraccountstep1_jsx": {
+        "recover_account_intro":
+            "From time to time, a Steemian's owner key may be compromised. Stolen Account Recovery gives the rightful account owner 30 days to recover their account from the moment the thief changed their owner key. Stolen Account Recovery can only be used on %(APP_URL)s if the account owner had previously listed '%(APP_NAME)s' as their account trustee and complied with %(APP_NAME)s's Terms of Service."
+    },
+    "user_profile": {
+        "unknown_account": "Unknown Account",
+        "user_hasnt_made_any_posts_yet":
+            "%(name)s님은 아직 남긴 글이 없습니다.",
+        "user_hasnt_started_bloggin_yet":
+            "%(name)s님은 아직 블로깅을 시작하지 않았습니다.",
+        "user_hasnt_followed_anything_yet":
+            "Looks like %(name)s might not be following anyone yet! If %(name)s recently added new users to follow, their personalized feed will populate once new content is available.",
+        "user_hasnt_had_any_replies_yet": "%(name)s hasn't had any replies yet",
+        "looks_like_you_havent_posted_anything_yet":
+            "아직 포스팅을 하지 않았습니다.",
+        "create_a_post": "글쓰기",
+        "explore_trending_articles": "대세글 읽어보기",
+        "read_the_quick_start_guide": "빠른 시작 가이드",
+        "browse_the_faq": "자주 찾는 질문",
+        "followers": "팔로워",
+        "this_is_users_reputations_score_it_is_based_on_history_of_votes":
+            "이것은 %(name)s님의 평판 점수입니다.\n\n평판 점수는 %(name)s님이 받은 보팅 기록에 기반합니다. 이 평판 점수는 질이 나쁜 콘텐츠를 가려내기 위해 사용됩니다.",
+        "follower_count": {
+            "zero": "팔로워 없음",
+            "one": "한명의 팔로워",
+            "other": "%(count)s명의 팔로워"
+        },
+        "followed_count": {
+            "zero": "팔로우 없음",
+            "one": "한명 팔로우",
+            "other": "%(count)s명 팔로우"
+        },
+        "post_count": {
+            "zero": "게시글 없음",
+            "one": "하나의 게시글",
+            "other": "%(count)s 게시글"
+        },
+        "hide_resteems": "Hide Resteems",
+        "show_all": "Show All"
+    },
+    "post_jsx": {
+        "now_showing_comments_with_low_ratings":
+            "Now showing comments with low ratings",
+        "sort_order": "정렬 순서",
+        "comments_were_hidden_due_to_low_ratings":
+            "Comments were hidden due to low ratings"
+    },
+    "voting_jsx": {
+        "flagging_post_can_remove_rewards_the_flag_should_be_used_for_the_following":
+            "다운 보팅을 하시면 보상액을 없애고, 해당 게시물을 눈에 덜 띄게 만들 수 있습니다. 다운 보팅 사유는 다음과 같습니다.",
+        "disagreement_on_rewards": "동의할 수 없을 정도로 지나치게 많은 보상액",
+        "fraud_or_plagiarism": "사기 혹은 표절",
+        "hate_speech_or_internet_trolling":
+            "증오 및 혐오 발언, 악플과 비난 게시물",
+        "intentional_miss_categorized_content_or_spam":
+            "의도적인 태그 오용 혹은 스팸",
+        "pending_payout": "예상 보상금액: $%(value)s",
+        "payout_declined": "보상을 사양함",
+        "max_accepted_payout": "최대 허용 보상액 $%(value)s",
+        "promotion_cost": "홍보 비용 $%(value)s",
+        "past_payouts": "지급된 보상 $%(value)s",
+        "past_payouts_author": " - 저자 $%(value)s",
+        "past_payouts_curators": " - 큐레이터 $%(value)s",
+        "we_will_reset_curation_rewards_for_this_post":
+            "will reset your curation rewards for this post",
+        "removing_your_vote": "보팅 취소",
+        "changing_to_an_upvote": "Changing to an Up-Vote",
+        "changing_to_a_downvote": "Changing to a Down-Vote",
+        "confirm_flag": "Confirm Flag",
+        "and_more": "and %(count)s more",
+        "votes_plural": {
+            "one": "%(count)s 보팅",
+            "other": "%(count)s 보팅"
+        }
+    },
+    "votesandcomments_jsx": {
+        "no_responses_yet_click_to_respond":
+            "댓글이 없습니다. 댓글을 작성하시려면 클릭하세요.",
+        "response_count_tooltip": {
+            "zero": "댓글이 없습니다. 댓글을 작성하시려면 클릭하세요.",
+            "one": "한개의 댓글이 있습니다. 댓글을 작성하시려면 클릭하세요.",
+            "other":
+                "%(count)s개의 댓글이 있습니다. 댓글을 작성하시려면 클릭하세요."
+        },
+        "vote_count": {
+            "zero": "추천 없음",
+            "one": "1개의 추천",
+            "other": "%(count)s개의 추천"
+        }
+    },
+    "userkeys_jsx": {
+        "public": "공개",
+        "private": "개인",
+        "public_something_key": "공개 %(key)s 키",
+        "private_something_key": "개인 %(key)s 키",
+        "posting_key_is_required_it_should_be_different":
+            "포스팅 키는 새 글을 작성하거나 다른 회원의 글에 보팅할 때 필요합니다. 액티브 키나 오너 키와는 달라야 합니다.",
+        "the_active_key_is_used_to_make_transfers_and_place_orders":
+            "액티브 키는 스팀 달러나 스팀을 다른 이에게 전송하거나 내부 마켓에서 거래를 할 때 필요합니다.",
+        "the_owner_key_is_required_to_change_other_keys":
+            "오너 키는 계정의 마스터 키입니다. 다른 모든 키들을 바꿀 때 필요합니다.",
+        "the_private_key_or_password_should_be_kept_offline":
+            "개인 키와 오너 키의 비밀번호는 가능한 많이 오프라인에 저장해두세요.",
+        "the_memo_key_is_used_to_create_and_read_memos":
+            "메모 키는 사적인 메모를 작성하거나 읽을 때 필요합니다."
+    },
+    "suggestpassword_jsx": {
+        "APP_NAME_cannot_recover_passwords_keep_this_page_in_a_secure_location":
+            "%(APP_NAME)s cannot recover passwords. Keep this page in a secure location, such as a fireproof safe or safety deposit box.",
+        "APP_NAME_password_backup": "%(APP_NAME)s Password Backup",
+        "APP_NAME_password_backup_required":
+            "%(APP_NAME)s Password Backup (required)",
+        "after_printing_write_down_your_user_name":
+            "After printing, write down your user name"
+    },
+    "converttosteem_jsx": {
+        "your_existing_DEBT_TOKEN_are_liquid_and_transferable":
+            "Your existing %(DEBT_TOKEN)s are liquid and transferable. Instead you may wish to trade %(DEBT_TOKEN)s directly in this site under %(link)s or transfer to an external market.",
+        "this_is_a_price_feed_conversion":
+            "This is a price feed conversion. The 3.5 day delay is necessary to prevent abuse from gaming the price feed average",
+        "convert_to_LIQUID_TOKEN": "%(LIQUID_TOKEN)s 으로 전환",
+        "DEBT_TOKEN_will_be_unavailable":
+            "This action will take place 3.5 days from now and can not be canceled. These %(DEBT_TOKEN)s will immediately become unavailable"
+    },
+    "tips_js": {
+        "liquid_token":
+            "교환과 송금이 가능한 토큰입니다.<br/> 파워업을 통해 %(LIQUID_TOKEN)s을 %(VESTING_TOKEN)s으로 전환 하실 수 있습니다.",
+        "influence_token":
+            "스팀잇에서의 영향력을 나타냅니다. 스팀 파워가 높을수록 보팅 금액이 더 높아지고, 큐레이션 보상도 더 많이 받을 수 있습니다.",
+        "estimated_value":
+            "%(LIQUID_TOKEN)s의 평균 가격을 US달러로 환산한 기준입니다.",
+        "non_transferable":
+            "%(VESTING_TOKEN)s는 전송이 불가능하며, 다시 %(LIQUID_TOKEN)s으로 전환하기 위해서는 3달이 소요됩니다. (13회로 나누어 전환 됩니다)",
+        "converted_VESTING_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again":
+            "Converted %(VESTING_TOKEN)s can be sent to yourself or someone else but can not transfer again without converting back to %(LIQUID_TOKEN)s.",
+        "part_of_your_steem_power_is_currently_delegated":
+            "%(user_name)s 님은 STEEM POWER 를 임대 받고 있습니다. 임대 받는 양은 가입 시기에 따라 가변적입니다."
+    },
+    "promote_post_jsx": {
+        "promote_post": "Promote Post",
+        "spend_your_DEBT_TOKEN_to_advertise_this_post":
+            "%(DEBT_TOKEN)s를 지불하시면 '홍보글' 코너에 게시물이 올라갑니다.",
+        "you_successfully_promoted_this_post": "홍보 하였습니다.",
+        "this_post_was_hidden_due_to_low_ratings":
+            "다운보팅에 의해 블라인드 처리 되었습니다."
+    },
+    "about_jsx": {
+        "about_app": "About %(APP_NAME)s",
+        "about_app_details":
+            "%(APP_NAME)s is a social media platform where everyone gets paid for creating and curating content. It leverages a robust digital points system, called Steem, that supports real value for digital rewards through market price discovery and liquidity.",
+        "learn_more_at_app_url": "Learn more at %(APP_URL)s",
+        "resources": "Resources"
+    },
+    "markdownviewer_jsx": {
+        "images_were_hidden_due_to_low_ratings":
+            "Images were hidden due to low ratings."
+    },
+    "postsummary_jsx": {
+        "resteemed": "리스팀",
+        "resteemed_by": "리스팀 by",
+        "reveal_it": "Reveal this post",
+        "adjust_your": "adjust your",
+        "display_preferences": "display preferences",
+        "create_an_account": "create an account",
+        "to_save_your_preferences": "to save your preferences"
+    },
+    "posts_index": {
+        "empty_feed_1": "Looks like you haven't followed anything yet",
+        "empty_feed_2":
+            "If you recently added new users to follow, your personalized feed will populate once new content is available",
+        "empty_feed_3": "Explore Trending Articles",
+        "empty_feed_4": "Read The Quick Start Guide",
+        "empty_feed_5": "Browse The FAQ"
+    },
+    "explorepost_jsx": {
+        "copied": "Copied!",
+        "copy": "COPY",
+        "alternative_sources": "Alternative Sources"
+    },
+    "header_jsx": {
+        "home": "home",
+        "create_a_post": "Create a post",
+        "change_account_password": "Change Account Password",
+        "create_account": "Create Account",
+        "stolen_account_recovery": "Stolen Account Recovery",
+        "people_following": "People following",
+        "people_followed_by": "People followed by",
+        "curation_rewards_by": "Curation rewards by",
+        "author_rewards_by": "Author rewards by",
+        "replies_to": "Replies to",
+        "comments_by": "Comments by"
+    },
+    "loginform_jsx": {
+        "you_need_a_private_password_or_key":
+            "You need a private password or key (not a public key)",
+        "cryptography_test_failed": "Cryptography test failed",
+        "unable_to_log_you_in":
+            "We will be unable to log you in with this browser.",
+        "the_latest_versions_of": "The latest versions of ",
+        "are_well_tested_and_known_to_work_with":
+            "are well tested and known to work with %(APP_URL)s.",
+        "due_to_server_maintenance":
+            "Due to server maintenance we are running in read only mode. We are sorry for the inconvenience.",
+        "login_to_vote": "Login to Vote",
+        "login_to_post": "Login to Post",
+        "login_to_comment": "Login to Comment",
+        "posting": "Posting",
+        "active_or_owner": "Active or Owner",
+        "this_password_is_bound_to_your_account_owner_key":
+            "This password is bound to your account's owner key and can not be used to login to this site.",
+        "however_you_can_use_it_to": "However, you can use it to ",
+        "update_your_password": "update your password",
+        "to_obtain_a_more_secure_set_of_keys":
+            "to obtain a more secure set of keys.",
+        "this_password_is_bound_to_your_account_active_key":
+            "This password is bound to your account's active key and can not be used to login to this page.",
+        "you_may_use_this_active_key_on_other_more":
+            "You may use this active key on other more secure pages like the Wallet or Market pages.",
+        "you_account_has_been_successfully_created":
+            "You account has been successfully created!",
+        "you_account_has_been_successfully_recovered":
+            "You account has been successfully recovered!",
+        "password_update_succes":
+            "The password for %(accountName)s was successfully updated",
+        "password_info":
+            "암호 또는 개인키가 잘못 입력되었습니다. 타자입력의 실수 또는 데이터 입력의 오류일 수 있습니다. 힌트: steemit 에서 생성된 암호 또는 개인키에는 0(숫자 0), O(영문자O), I(대문자I), l(소문자 L)을 절대로 포함하지 않습니다.",
+        "enter_your_username": "Enter your username",
+        "password_or_wif": "Password or WIF",
+        "this_operation_requires_your_key_or_master_password":
+            "이 작업은 %(authType)s 키 또는 마스터 비밀번호가 필요합니다.",
+        "keep_me_logged_in": "로그인 유지",
+        "amazing_community": "amazing community",
+        "to_comment_and_reward_others": " to comment and reward others.",
+        "signup_button": "Sign up now to earn ",
+        "signup_button_emphasis": "FREE STEEM!",
+        "sign_up_get_steem":
+            "계정을 만들고 가상화폐 STEEM 을 보상으로 받으세요.",
+        "returning_users": "Returning Users: ",
+        "join_our": "Join our"
+    },
+    "chainvalidation_js": {
+        "account_name_should": "Account name should ",
+        "not_be_empty": "not be empty.",
+        "be_longer": "be longer.",
+        "be_shorter": "be shorter.",
+        "each_account_segment_should": "Each account segment should ",
+        "start_with_a_letter": "start with a letter.",
+        "have_only_letters_digits_or_dashes":
+            "have only letters, digits, or dashes.",
+        "have_only_one_dash_in_a_row": "have only one dash in a row.",
+        "end_with_a_letter_or_digit": "end with a letter or digit.",
+        "verified_exchange_no_memo":
+            "You must include a memo for your exchange transfer."
+    },
+    "settings_jsx": {
+        "invalid_url": "잘못된 URL 입니다",
+        "name_is_too_long": "너무 긴 사용자 이름입니다",
+        "name_must_not_begin_with": "사용자 이름은 반드시 @로 시작해야 합니다",
+        "about_is_too_long": "About is too long",
+        "location_is_too_long": "너무 긴 지역명입니다",
+        "website_url_is_too_long": "너무 긴 웹사이트 URL입니다",
+        "public_profile_settings": "공개 프로파일 설정",
+        "preferences": "컨텐츠 표시 설정",
+        "not_safe_for_work_nsfw_content": "선정적이거나 폭력적인 컨텐츠",
+        "always_hide": "항상 숨기기",
+        "always_warn": "항상 경고하기",
+        "always_show": "항상 보이기",
+        "muted_users": "내가 차단한 사용자",
+        "update": "저장",
+        "profile_image_url": "프로파일 사진 경로",
+        "cover_image_url": "커버이미지 사진 경로",
+        "profile_name": "닉네임",
+        "profile_about": "한 줄 소개",
+        "profile_location": "지역",
+        "profile_website": "웹사이트"
+    },
+    "transfer_jsx": {
+        "amount_is_in_form": "Amount is in the form 99999.999",
+        "insufficient_funds": "잔고 부족",
+        "use_only_3_digits_of_precison": "최대 소수점 3자리까지 입력 가능",
+        "send_to_account": "Send to account",
+        "asset": "Asset",
+        "this_memo_is_private": "공개되지 않는 메모입니다.",
+        "this_memo_is_public": "모두에게 공개되는 메모입니다.",
+        "convert_to_VESTING_TOKEN": "Convert to %(VESTING_TOKEN)s",
+        "balance_subject_to_3_day_withdraw_waiting_period":
+            "3일간의 예치기간이 지나야 출금하실 수 있으며, ",
+        "move_funds_to_another_account": "다른 Steem 계좌로 송금",
+        "protect_funds_by_requiring_a_3_day_withdraw_waiting_period":
+            "금고 보관 시 출금에 3일의 예치기간이 소요됩니다.",
+        "withdraw_funds_after_the_required_3_day_waiting_period":
+            "출금 시 3일의 예치기간이 소요됩니다.",
+        "from": "From",
+        "to": "To",
+        "asset_currently_collecting":
+            "%(asset)s의 연이율은 현재 %(interest)s%% 입니다.",
+        "beware_of_spam_and_phishing_links":
+            "메모에는 스팸과 피싱 링크가 포함 될 수 있으니 주의하십시오. 신뢰할 수없는 사용자의 링크를 열지 마십시오. 또한 다른 어떤 웹 사이트에도 개인키를 공개하지 마십시오."
+    },
+    "userwallet_jsx": {
+        "conversion_complete_tip": "Will complete on",
+        "in_conversion": "%(amount)s in conversion",
+        "transfer_to_savings": "금고로 전송",
+        "power_up": "파워 업",
+        "power_down": "파워 다운",
+        "market": "거래소",
+        "convert_to_LIQUID_TOKEN": "%(LIQUID_TOKEN)s 으로 전환",
+        "withdraw_LIQUID_TOKEN": "%(LIQUID_TOKEN)s 출금",
+        "withdraw_DEBT_TOKENS": "%(DEBT_TOKENS)s 출금",
+        "tokens_worth_about_1_of_LIQUID_TICKER":
+            "%(LIQUID_TICKER)s의 1달러 가치가 있는 토큰입니다. 현재 연이율은 %(sbdInterest)s%% 입니다.",
+        "savings": "예금",
+        "estimated_account_value": "추정 자산가치",
+        "next_power_down_is_scheduled_to_happen": "다음 파워다운 예정:",
+        "transfers_are_temporary_disabled":
+            "현재 일시적인 이유로 송금이 불가능합니다.",
+        "history": "거래 내역",
+        "redeem_rewards": "내 지갑으로 입금하기",
+        "buy_steem_or_steem_power": "STEEM, STEEM POWER 구입"
+    },
+    "checkloginowner_jsx": {
+        "your_password_permissions_were_reduced":
+            "Your password permissions were reduced",
+        "if_you_did_not_make_this_change":
+            "If you did not make this change please",
+        "ownership_changed_on": "Ownership Changed On ",
+        "deadline_for_recovery_is": "Deadline for recovery is",
+        "i_understand_dont_show_again": "이 메시지를 다시 보지 않기"
+    }
+}

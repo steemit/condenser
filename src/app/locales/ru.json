@@ -1,0 +1,688 @@
+{
+    "g": {
+        "age": "возраст",
+        "amount": "Количество",
+        "and": "и",
+        "are_you_sure": "Вы уверены?",
+        "ask": "Продажа",
+        "balance": "Баланс",
+        "balances": "Балансы",
+        "bid": "Покупка",
+        "blog": "Блог",
+        "browse": "Посмотреть",
+        "buy": "Купить",
+        "buy_or_sell": "Купить или Продать",
+        "by": "от",
+        "cancel": "Отмена",
+        "change_password": "Сменить пароль",
+        "choose_language": "Выберите язык",
+        "clear": "Очистить",
+        "close": "Закрыть",
+        "collapse_or_expand": "Свернуть/Развернуть",
+        "comments": "Комментарии",
+        "confirm": "Подтвердить",
+        "convert": "Конвертировать",
+        "date": "Дата",
+        "delete": "Удалить",
+        "dismiss": "Скрыть",
+        "edit": "Редактировать",
+        "email": "Электронная почта",
+        "feed": "Лента",
+        "follow": "Подписаться",
+        "for": " для ",
+        "from": " от ",
+        "go_back": "Назад",
+        "hide": "Скрыть",
+        "in": "в",
+        "in_reply_to": "в ответ на",
+        "insufficient_balance": "Недостаточный баланс",
+        "invalid_amount": "Недостаточно средств",
+        "joined": "Присоединился",
+        "loading": "Загрузка",
+        "login": "Войти",
+        "logout": "Выйти",
+        "memo": "Примечание",
+        "mute": "Заблокировать",
+        "new": "новое",
+        "newer": "Новее",
+        "next": "Следующий",
+        "no": "Нет",
+        "ok": "ОК",
+        "older": "Старее",
+        "or": "или",
+        "order_placed": "Заказ размещен",
+        "password": "Пароль",
+        "payouts": "Выплаты",
+        "permissions": "Разрешения",
+        "phishy_message":
+            "Link expanded to plain text; beware of a potential phishing attempt",
+        "post": "Пост",
+        "post_as": "Запостить как",
+        "posts": "Посты",
+        "powered_up_100": "100%% в Силе Голоса",
+        "preview": "Предварительный просмотр",
+        "previous": "Предыдущий",
+        "price": "Цена",
+        "print": "Распечатать",
+        "promote": "Продвинуть",
+        "promoted": "продвигаемое",
+        "re": "RE",
+        "re_to": "RE: %(topic)s",
+        "recent_password": "Недавний пароль",
+        "receive": "Получено ",
+        "remove": "Удалить",
+        "remove_vote": "Убрать голос",
+        "replied_to": "ответил %(account)s",
+        "replies": "Ответы",
+        "reply": "Ответить",
+        "reply_count": {
+            "zero": "нет ответов",
+            "one": "1 ответ",
+            "few": "%(count)s ответа",
+            "many": "%(count)s ответов",
+            "other": "%(count)s ответов"
+        },
+        "reputation": "Репутация",
+        "reveal_comment": "Показать комментарий",
+        "request": "запрос",
+        "required": "Обязательно",
+        "rewards": "вознаграждение",
+        "save": "Сохранить",
+        "saved": "Сохранено",
+        "search": "Поиск",
+        "sell": "Продать",
+        "settings": "Настройки",
+        "share_this_post": "Поделиться этим постом",
+        "show": "Показать",
+        "sign_in": "Войти",
+        "sign_up": "Регистрация",
+        "since": "начиная с",
+        "submit": "Отправить",
+        "power_up": "Усилить силу голоса",
+        "submit_a_story": "Добавить пост",
+        "tag": "Тег",
+        "to": " к ",
+        "all_tags": "All tags",
+        "transfer": "Перевод ",
+        "trending_topics": "Популярное",
+        "type": "Тип",
+        "unfollow": "Отписаться",
+        "unmute": "Разблокировать",
+        "unknown": "Неизвестно",
+        "upvote": "Голосовать за",
+        "upvote_post": "Проголосовать за пост",
+        "username": "Имя пользователя",
+        "version": "Версия",
+        "vote": "Проголосовать",
+        "votes": "голосов",
+        "wallet": "Кошелек",
+        "warning": "внимание",
+        "yes": "Да",
+        "posting": "Постинг",
+        "owner": "Владелец",
+        "active": "Активный",
+        "account_not_found": "Аккаунт не найден",
+        "this_is_wrong_password": "Это неправильный пароль",
+        "do_you_need_to": "Вам нужно",
+        "account_name": "Имя аккаунта",
+        "recover_your_account": "восстановить ваш аккаунт",
+        "reset_usernames_password": "Сбросить пароль пользователя %(username)s",
+        "this_will_update_usernames_authtype_key":
+            "Это обновит %(username)s %(authType)s ключ",
+        "passwords_do_not_match": "Пароли не совпадают",
+        "you_need_private_password_or_key_not_a_public_key":
+            "Вам нужен приватный пароль или ключ (не публичный ключ)",
+        "the_rules_of_APP_NAME": {
+            "one": "Первое правило сети %(APP_NAME)s: не теряйте свой пароль.",
+            "second": "Второе правило %(APP_NAME)s: Не теряйте свой пароль.",
+            "third":
+                "Третье правило %(APP_NAME)s: мы не можем восстановить ваш пароль.",
+            "fourth":
+                "Четвертое правило: если вы можете запомнить свой пароль, значит он не безопасен.",
+            "fifth":
+                "Пятое правило: используйте только сгенерированные случайным образом пароли.",
+            "sixth": "Шестое правило: Никому не говорите свой пароль.",
+            "seventh": "Седьмое правило: Всегда надежно храните свой пароль."
+        },
+        "recover_password": "Восстановить аккаунт",
+        "current_password": "Текущий пароль",
+        "generated_password": "Сгенерированный пароль",
+        "backup_password_by_storing_it":
+            "Сделайте резервную копию в менеджере паролей или текстовом файле",
+        "enter_account_show_password":
+            "Введите действительное имя аккаунта, чтобы показать пароль",
+        "click_to_generate_password": "Нажмите, чтобы сгененировать пароль",
+        "re_enter_generate_password": "Повторно введите пароль",
+        "understand_that_APP_NAME_cannot_recover_password":
+            "Я понимаю, что %(APP_NAME)s не может восстановить потерянные пароли",
+        "i_saved_password": "Я надежно сохранил сгенерированный пароль",
+        "update_password": "Обновить пароль",
+        "confirm_password": "Подтвердить пароль",
+        "account_updated": "Аккаунт обновлен",
+        "password_must_be_characters_or_more":
+            "Пароль должен содержать %(amount)s символ(а) или больше",
+        "need_password_or_key":
+            "Вам нужен приватный пароль или ключ (не публичный ключ)",
+        "login_to_see_memo": "войти чтобы увидеть примечание",
+        "new_password": "Новый пароль",
+        "incorrect_password": "Неправильный пароль",
+        "username_does_not_exist": "Имя пользователя не найдено",
+        "account_name_should_start_with_a_letter":
+            "Имя аккаунта должно начинаться с буквы.",
+        "account_name_should_be_shorter": "Имя аккаунта должно быть короче.",
+        "account_name_should_be_longer": "Имя аккаунта должно быть длиннее.",
+        "account_name_should_have_only_letters_digits_or_dashes":
+            "Имя аккаунта должно должно состоять только из букв, цифр или дефисов.",
+        "cannot_increase_reward_of_post_within_the_last_minute_before_payout":
+            "Не удается увеличить вознаграждение за пост в последнюю минуту перед выплатой",
+        "only_one_APP_NAME_account_allowed_per_ip_address_every_10_minutes":
+            "Только один Steem аккаунт разрешен с одного IP адреса каждые десять минут",
+        "resteem_this_post": "Поделиться этим постом",
+        "reblog": "Поделиться",
+        "write_your_story": "Написать свою историю",
+        "remember_voting_and_posting_key": "Запомнить голос и постинг ключ",
+        "auto_login_question_mark": "Заходить автоматически?",
+        "hide_private_key": "Скрыть приватный ключ",
+        "show_private_key": "Показать приватный ключ",
+        "login_to_show": "Войти, чтобы показать",
+        "not_valid_email": "Не действительный адрес",
+        "thank_you_for_being_an_early_visitor_to_APP_NAME":
+            "Благодарим вас за то что являетесь ранним посетителем %(APP_NAME)s. Мы свяжемся с Вами при первой же возможности.",
+        "author_rewards": "Авторские вознаграждения",
+        "curation_rewards": "Кураторские вознаграждения",
+        "sorry_your_reddit_account_doesnt_have_enough_karma":
+            "Извините, у вашего Reddit аккаунта недостаточно Reddit кармы чтобы иметь возможность бесплатной регистрации. Пожалуйста, добавьте вашу электронную почту чтобы записаться в лист ожидания",
+        "register_with_facebook": "Регистрация с Facebook",
+        "or_click_the_button_below_to_register_with_facebook":
+            "Или нажмите на кнопку ниже, чтобы зарегистрироваться в Facebook",
+        "server_returned_error": "ошибка сервера",
+        "APP_NAME_support": "%(APP_NAME)s поддержка",
+        "please_email_questions_to":
+            "Пожалуйста, шлите ваши вопросы на электронную почту",
+        "next_7_strings_single_block": {
+            "authors_get_paid_when_people_like_you_upvote_their_post":
+                "Авторы получают вознаграждение, когда пользователи голосуют за их посты",
+            "if_you_enjoyed_what_you_read_earn_amount":
+                "Если Вам понравилось то, что Вы здесь прочитали, создайте свой аккаунт сегодня и начните зарабатывать БЕСПЛАТНЫЕ STEEM-ы!",
+            "free_steem": "БЕСПЛАТНЫЕ STEEM!",
+            "sign_up_earn_steem": "Зарегистрируйтесь сейчас, чтобы заработать "
+        },
+        "next_3_strings_together": {
+            "show_more": "Показать больше",
+            "show_less": "Показать меньше",
+            "value_posts": "меньше сообщений низкой стоимости"
+        },
+        "read_only_mode":
+            "По техническим причинам вебсайт доступен только для чтения, приносим свои извинения.",
+        "tags_and_topics": "Теги и темы",
+        "show_more_topics": "Показать больше тем",
+        "basic": "Базовый",
+        "advanced": "Подробнее",
+        "views": {
+            "zero": "Нет просмотров",
+            "one": "%(count)s просмотр",
+            "few": "%(count)s просмотра",
+            "many": "%(count)s просмотров",
+            "other": "%(count)s просмотров"
+        },
+        "responses": {
+            "zero": "Нет ответов",
+            "one": "%(count)s ответ",
+            "few": "%(count)s ответа",
+            "many": "%(count)s ответов",
+            "other": "%(count)s ответов"
+        },
+        "post_key_warning": {
+            "confirm":
+                "Вы собираетесь опубликовать ваш приватный ключ или мастер-пароль, это может привести к потере вашего акканта и всех средств на нем.",
+            "warning":
+                "Если кто-то попросил вас опубликовать или показать ваш приватный ключ, это возможно злоумышленник, который пытается украсть ваши токены.",
+            "checkbox": "Я понял"
+        }
+    },
+    "navigation": {
+        "about": "О проекте",
+        "explore": "Исследовать",
+        "APP_NAME_whitepaper": "Белая книга %(APP_NAME)s",
+        "buy_LIQUID_TOKEN": "Купить %(LIQUID_TOKEN)s",
+        "sell_LIQUID_TOKEN": "Продать %(LIQUID_TOKEN)s",
+        "currency_market": "Биржа",
+        "stolen_account_recovery": "Восстановление украденного аккаунта",
+        "change_account_password": "Изменить пароль аккаунта",
+        "witnesses": "Делегаты",
+        "vote_for_witnesses": "Проголосовать за делегатов",
+        "privacy_policy": "Политика Конфиденциальности",
+        "terms_of_service": "Условия пользования",
+        "sign_up": "Присоединиться",
+        "learn_more": "Документация",
+        "welcome": "Добро пожаловать",
+        "faq": "ЧаВО",
+        "chat": "Чат Steemit",
+        "app_center": "Центр приложений Steemit",
+        "business_center": "Businesses Accepting Steem",
+        "api_docs": "API-документация Steemit",
+        "bluepaper": "Синяя бумага Steem",
+        "smt_whitepaper": "Белая книга SMT",
+        "whitepaper": "Белая книга Steem",
+        "intro_tagline": "Здесь говорят деньги.",
+        "intro_paragraph":
+            "Ваше мнение имеет цену. Присоединяйтесь к сообществу, которое платит за контент и за работу по отбору самого лучшего контента."
+    },
+    "main_menu": {
+        "hot": "актуальное",
+        "trending": "популярное"
+    },
+    "reply_editor": {
+        "shorten_title": "Сократите заголовок",
+        "exceeds_maximum_length": "Превышает максимальную длину (%(maxKb)sKB)",
+        "including_the_category": "(включая категорию «%(rootCategory)s»)",
+        "use_limited_amount_of_tags":
+            "У вас %(tagsLength)s тегов, включая %(includingCategory)s. Пожалуйста, используйте не более 5 в посте и категории.",
+        "are_you_sure_you_want_to_clear_this_form":
+            "Вы уверены, что вы хотите очистить эту форму?",
+        "uploading": "Загрузка",
+        "draft_saved": "Черновик сохранен.",
+        "editor": "Редактор",
+        "insert_images_by_dragging_dropping":
+            "Вставьте изображения, перетащив их, ",
+        "pasting_from_the_clipboard": "или вставив из буфера обмена, ",
+        "selecting_them": "выбрав их",
+        "image_upload": "Загрузка изображения",
+        "power_up_100": "Сила Голоса 100%%",
+        "default_50_50": "50%% / 50%%",
+        "decline_payout": "Отказаться от выплаты",
+        "check_this_to_auto_upvote_your_post":
+            "Отметьте, чтобы проголосовать за свой пост",
+        "markdown_styling_guide": "Руководство стилизации в Markdown",
+        "or_by": "или",
+        "title": "Заголовок",
+        "update_post": "Update Post",
+        "markdown_not_supported": "Markdown здесь не поддерживается"
+    },
+    "category_selector_jsx": {
+        "tag_your_story":
+            "Добавь теги (до 5 штук), первый тег станет основной категорией.",
+        "select_a_tag": "Выбрать тег",
+        "maximum_tag_length_is_24_characters":
+            "Максимальная длина категории 24 знака",
+        "use_limited_amount_of_categories":
+            "Пожалуйста, используйте только %(amount)s категории",
+        "use_only_lowercase_letters":
+            "Используйте только символы нижнего регистра",
+        "use_one_dash": "Используйте только одно тире",
+        "use_spaces_to_separate_tags":
+            "Используйте пробел чтобы разделить теги",
+        "use_only_allowed_characters":
+            "Используйте только строчные буквы, цифры и одно тире",
+        "must_start_with_a_letter": "Должно начинаться с буквы",
+        "must_end_with_a_letter_or_number":
+            "Должно заканчиваться с буквы или номера"
+    },
+    "post_advanced_settings_jsx": {
+        "payout_option_header": "Author rewards",
+        "payout_option_description":
+            "What type of tokens do you want as rewards from this post?",
+        "current_default": "Default",
+        "update_default_in_settings": "Update"
+    },
+    "postfull_jsx": {
+        "this_post_is_not_available_due_to_a_copyright_claim":
+            "Этот пост недоступен из-за жалобы о нарушении авторских прав.",
+        "share_on_facebook": "Поделитесь в Facebook",
+        "share_on_twitter": "Поделиться в Twitter",
+        "share_on_linkedin": "Поделиться в Linkedin",
+        "recent_password": "Недавний пароль",
+        "in_week_convert_DEBT_TOKEN_to_LIQUID_TOKEN":
+            "В 3,5 дня перевести %(amount)s %(DEBT_TOKEN)s в %(LIQUID_TOKEN)s",
+        "view_the_full_context": "Показать полный контекст",
+        "view_the_direct_parent": "Просмотр прямого родителя",
+        "you_are_viewing_a_single_comments_thread_from":
+            "Вы читаете одну нить комментариев от"
+    },
+    "recoveraccountstep1_jsx": {
+        "recover_account_intro":
+            "Иногда бывает что ключ владельца может быть скомпрометирован. Восстановление украденного аккаунта дает законному владельцу 30 дней чтобы вернуть аккаунт с момента изменения владельческого ключа мошенником. Восстановление украденного аккаунта в %(APP_URL)s возможно только если владелец аккаунта ранее указал %(APP_NAME)s's в качестве доверенного лица и согласился с Условиями Использования сайта %(APP_NAME)s's."
+    },
+    "user_profile": {
+        "unknown_account": "Неизвестный аккаунт",
+        "user_hasnt_made_any_posts_yet":
+            "Похоже, что %(name)s еще не написал постов!",
+        "user_hasnt_started_bloggin_yet":
+            "Похоже. что %(name)s еще не завёл блог!",
+        "user_hasnt_followed_anything_yet":
+            "Похоже, что %(name)s еще ни на кого не подписан! Если, %(name)s недавно подписался на новых пользователей, их персонализированный канал будет заполняться сразу после появления нового контента.",
+        "user_hasnt_had_any_replies_yet": "%(name)s еще не получил ответов",
+        "looks_like_you_havent_posted_anything_yet":
+            "Похоже, ты еще ничего не опубликовал.",
+        "create_a_post": "Создать сообщение",
+        "explore_trending_articles":
+            "Посмотреть статьи, набирающие популярность",
+        "read_the_quick_start_guide": "Прочтите краткое руководство",
+        "browse_the_faq": "Просмотреть ЧаВО",
+        "followers": "Подписчики",
+        "this_is_users_reputations_score_it_is_based_on_history_of_votes":
+            "Это репутация %(name)s.\n\nРепутация рассчитывается на основе истории полученных голосов и используется для сокрытия низкокачественного контента.",
+        "follower_count": {
+            "zero": "Нет подписчиков",
+            "one": "1 подписчик",
+            "few": "%(count)s подписчика",
+            "many": "%(count)s подписчиков",
+            "other": "%(count)s подписчиков"
+        },
+        "followed_count": {
+            "zero": "Ни на кого не подписан",
+            "one": "1 подписок",
+            "few": "%(count)s подписки",
+            "many": "%(count)s подписок",
+            "other": "%(count)s подписок"
+        },
+        "post_count": {
+            "zero": "Постов нет",
+            "one": "1 пост",
+            "few": "%(count)s поста",
+            "many": "%(count)s постов",
+            "other": "%(count)s постов"
+        },
+        "hide_resteems": "Hide Resteems",
+        "show_all": "Show All"
+    },
+    "post_jsx": {
+        "now_showing_comments_with_low_ratings":
+            "Отображаем комментарии с низким рейтингом",
+        "sort_order": "Порядок сортировки",
+        "comments_were_hidden_due_to_low_ratings":
+            "Комментарии были скрыты из-за низкого рейтинга"
+    },
+    "voting_jsx": {
+        "flagging_post_can_remove_rewards_the_flag_should_be_used_for_the_following":
+            "Голосование против уменьшает вознаграждение и снижает позицию в рейтинге.",
+        "disagreement_on_rewards": "Несогласие с вознаграждением",
+        "fraud_or_plagiarism": "Мошенничество или плагиат",
+        "hate_speech_or_internet_trolling":
+            "Разжигание ненависти или Интернет троллинг",
+        "intentional_miss_categorized_content_or_spam":
+            "Преднамеренная неправильная категоризация контента или спам",
+        "pending_payout": "Ожидаемая выплата $%(value)s",
+        "payout_declined": "Автор отказался от вознаграждения",
+        "max_accepted_payout":
+            "Максимально допустимое вознаграждение: $%(value)s",
+        "promotion_cost": "Цена продвижения: $%(value)s",
+        "past_payouts": "Предыдущие выплаты $%(value)s",
+        "past_payouts_author": " - Авторские $%(value)s",
+        "past_payouts_curators": " - Кураторские $%(value)s",
+        "we_will_reset_curation_rewards_for_this_post":
+            "это сбросит выплаты за курирование",
+        "removing_your_vote": "Удаление голоса",
+        "changing_to_an_upvote": "Изменить на голосование 'за'",
+        "changing_to_a_downvote": "Изменить на голосование 'против'",
+        "confirm_flag": "Подтвердить голос 'против'",
+        "and_more": "и %(count)s больше",
+        "votes_plural": {
+            "one": "%(count)s голоса",
+            "few": "%(count)s голоса",
+            "many": "%(count)s голосов",
+            "other": "%(count)s голосов"
+        }
+    },
+    "votesandcomments_jsx": {
+        "no_responses_yet_click_to_respond":
+            "Ответов пока нет. Нажмите чтобы ответить.",
+        "response_count_tooltip": {
+            "zero": "ответов пока нет. Нажмите чтобы ответить.",
+            "one": "1 ответ. Нажмите чтобы ответить.",
+            "few": "%(count)s ответа. Нажмите чтобы ответить.",
+            "many": "%(count)s ответов. Нажмите чтобы ответить.",
+            "other": "%(count)s ответов. Нажмите чтобы ответить."
+        },
+        "vote_count": {
+            "zero": "нет голосов",
+            "one": "1 голос",
+            "few": "%(count)s голоса",
+            "many": "%(count)s голосов",
+            "other": "%(count)s голосов"
+        }
+    },
+    "userkeys_jsx": {
+        "public": "Публичное",
+        "private": "Приватное",
+        "public_something_key": "Публичный %(key)s ключ",
+        "private_something_key": "Приватный %(key)s ключ",
+        "posting_key_is_required_it_should_be_different":
+            "Постинг ключ используется для постинга и голосования. Он должен отличаться от активного ключа и ключа владельца.",
+        "the_active_key_is_used_to_make_transfers_and_place_orders":
+            "Активный ключ используется для переводов и размещения заказов на внутреннем рынке.",
+        "the_owner_key_is_required_to_change_other_keys":
+            "Ключ владельца это главный ключ ко всему аккаунта, он необходим для изменения других ключей.",
+        "the_private_key_or_password_should_be_kept_offline":
+            "Приватный ключ или пароль должен храниться в оффлайне так часто насколько возможно.",
+        "the_memo_key_is_used_to_create_and_read_memos":
+            "Ключ примечаний используется для создания и чтения примечаний."
+    },
+    "suggestpassword_jsx": {
+        "APP_NAME_cannot_recover_passwords_keep_this_page_in_a_secure_location":
+            "%(APP_NAME)s не может восстановить пароли. Сохраните эту страницу в безопасном месте, например, в огнестойком сейфе или в депозитарной ячейке.",
+        "APP_NAME_password_backup": "%(APP_NAME)s резервное копирование пароля",
+        "APP_NAME_password_backup_required":
+            "%(APP_NAME)s резервное копирование пароля (обязательно!)",
+        "after_printing_write_down_your_user_name":
+            "После печати запишите ваше имя пользователя"
+    },
+    "converttosteem_jsx": {
+        "your_existing_DEBT_TOKEN_are_liquid_and_transferable":
+            "Ваши %(DEBT_TOKEN)s токены ликвидны. Вы можете конвертировать %(DEBT_TOKEN)s на этом сайте (%(link)s) или вывести на биржу/обменник.",
+        "this_is_a_price_feed_conversion":
+            "Конвертация на сайте выполняется три с половиной дня - это требуется, чтобы исключить манипуляции с ценами.",
+        "convert_to_LIQUID_TOKEN": "Ковертировать в %(LIQUID_TOKEN)s",
+        "DEBT_TOKEN_will_be_unavailable":
+            "Эта операция будет проходить 3-5 дней от настоящего момента и ее нельзя отменить. Эти %(DEBT_TOKEN)s мгновенно станут недоступны"
+    },
+    "tips_js": {
+        "liquid_token":
+            "Ликвидные цифровые токены, которые могут переданы куда угодно в любой момент.<br/>%(LIQUID_TOKEN)s может быть конвертирован в %(VESTING_TOKEN)s, этот процесс называется \"увеличение Силы Голоса\".",
+        "influence_token":
+            "Токены дают вам возможность влиять на вознаграждения за контент, а также возможность зарабатывать на курации контента.",
+        "estimated_value":
+            "Сметная стоимость основана на среднем значении %(LIQUID_TOKEN)s в долларах США.",
+        "non_transferable":
+            "%(VESTING_TOKEN)s - не ликвидные токены, требуется три месяца (13 еженедальных выплат) чтобы сконвертировать их в ликвидные токены %(LIQUID_TOKEN)s.",
+        "converted_VESTING_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again":
+            "Конвертированные %(VESTING_TOKEN)s токены могут быть отправлены себе или кому-либо еще, но не могут быть переданы вновь без конвертации в %(LIQUID_TOKEN)s.",
+        "part_of_your_steem_power_is_currently_delegated":
+            "Часть STEEM POWER вам делегирована, это увеличивает ваше влияние на платформе. Количество делегированных токенов со временем может изменяться."
+    },
+    "promote_post_jsx": {
+        "promote_post": "Продвинуть пост",
+        "spend_your_DEBT_TOKEN_to_advertise_this_post":
+            "Используйте ваши %(DEBT_TOKEN)s чтобы прорекламировать этот пост в секции продвигаемого контента",
+        "you_successfully_promoted_this_post":
+            "Операция продвижения успешно завершена",
+        "this_post_was_hidden_due_to_low_ratings":
+            "Этот пост был скрыт из-за низкого рейтинга"
+    },
+    "about_jsx": {
+        "about_app": "О %(APP_NAME)s",
+        "about_app_details":
+            "%(APP_NAME)s - это социальная медиа платформа в которой каждый зарабатывает за создание и курирование контента. Он использует надежную систему цифровых очков под названием Голос, который поддерживает реальную ценность для цифровых наград через выявление рыночной цены и ликвидности.",
+        "learn_more_at_app_url": "Узнать больше в %(APP_URL)s",
+        "resources": "Ресурсы"
+    },
+    "markdownviewer_jsx": {
+        "images_were_hidden_due_to_low_ratings":
+            "Изображения были скрыты из-за низкого рейтинга."
+    },
+    "postsummary_jsx": {
+        "resteemed": "Поделиться",
+        "resteemed_by": "Репостнуто",
+        "reveal_it": "посмотреть пост",
+        "adjust_your": "откорректируйте свои",
+        "display_preferences": "настройки отображения",
+        "create_an_account": "зарегистрироваться",
+        "to_save_your_preferences": "сохранить ваши настройки"
+    },
+    "posts_index": {
+        "empty_feed_1": "Похоже, что Вы еще ни на кого не подписаны",
+        "empty_feed_2":
+            "Если Вы недавно подписались на новых пользователей, Ваша персональная лента будет заполняться, когда будет доступен новый контент",
+        "empty_feed_3": "Посмотреть статьи, набирающие популярность",
+        "empty_feed_4": "Прочтите краткое руководство",
+        "empty_feed_5": "Просмотреть ЧаВО"
+    },
+    "explorepost_jsx": {
+        "copied": "Скопировано!",
+        "copy": "Копировать",
+        "alternative_sources": "Альтернативные источники"
+    },
+    "header_jsx": {
+        "home": "лента",
+        "create_a_post": "Создать пост",
+        "change_account_password": "Изменить пароль аккаунта",
+        "create_account": "Создать Аккаунт",
+        "stolen_account_recovery": "Возврат украденного аккаунта",
+        "people_following": "Подписчики",
+        "people_followed_by": "Подписчики",
+        "curation_rewards_by": "Награда за курирование",
+        "author_rewards_by": "Автор награжден",
+        "replies_to": "Ответы на",
+        "comments_by": "Комментарии"
+    },
+    "loginform_jsx": {
+        "you_need_a_private_password_or_key":
+            "Вам нужен приватный пароль или ключ (не публичный ключ)",
+        "cryptography_test_failed": "Криптографический тест не пройден",
+        "unable_to_log_you_in":
+            "У нас не получится залогинить вас в этом браузере.",
+        "the_latest_versions_of": "Последние версии ",
+        "are_well_tested_and_known_to_work_with":
+            "хорошо протестированы и работают с %(APP_URL)s.",
+        "due_to_server_maintenance":
+            "Из-за технического обслуживания сервера мы работаем в режиме чтения. Извините за неудобства.",
+        "login_to_vote": "Войти, чтобы проголосовать",
+        "login_to_post": "Войти, чтобы написать пост",
+        "login_to_comment": "Войти, чтобы оставить комментарий",
+        "posting": "Постинг",
+        "active_or_owner": "Активный или Владельца",
+        "this_password_is_bound_to_your_account_owner_key":
+            "Этот пароль привязан к главному ключу аккаунта и не может быть использован для входа на этот сайт.",
+        "however_you_can_use_it_to":
+            "Тем не менее его можно использовать чтобы ",
+        "update_your_password": "обновить Ваш пароль",
+        "to_obtain_a_more_secure_set_of_keys":
+            "для получения более безопасного набора ключей.",
+        "this_password_is_bound_to_your_account_active_key":
+            "Этот пароль привязан к главному ключу аккаунта и не может быть использован для входа на этот сайт.",
+        "you_may_use_this_active_key_on_other_more":
+            "Вы можете использовать этот активный ключ на других более безопасных страниц, таких как страницы: Кошелек или Биржа.",
+        "you_account_has_been_successfully_created":
+            "Ваш аккаунт был успешно создан!",
+        "you_account_has_been_successfully_recovered":
+            "Ваш аккаунт был успешно восстановлен!",
+        "password_update_succes":
+            "Пароль для %(accountName)s был успешно обновлен",
+        "password_info":
+            "Этот пароль или закрытый ключ был введен неправильно. Вероятно, есть ошибка почерка или ввода данных. Подсказка: пароль или закрытый ключ, сгенерированный Steemit, никогда не будет содержать символы 0 (ноль), O (прописная o), I (прописная i) и l (нижний регистр L).",
+        "enter_your_username": "Введи свое имя пользователя",
+        "password_or_wif": "Пароль или WIF",
+        "this_operation_requires_your_key_or_master_password":
+            "Для осуществления данной операции нужен ваш %(authType)s ключ или Основной пароль.",
+        "keep_me_logged_in": "Оставить меня залогиненным",
+        "amazing_community": "удивительное сообщество",
+        "to_comment_and_reward_others":
+            " комментировать и вознаграждать других.",
+        "sign_up_get_steem": "Sign up. Get STEEM",
+        "signup_button": "Зарегистрируйтесь",
+        "signup_button_emphasis": " сейчас!",
+        "returning_users": "Вернувшиеся пользователи: ",
+        "join_our": "Присоединяйтесь к нашему"
+    },
+    "chainvalidation_js": {
+        "account_name_should": "Имя аккаунта должно быть ",
+        "not_be_empty": "не может быть пустым.",
+        "be_longer": "длиннее.",
+        "be_shorter": "короче.",
+        "each_account_segment_should": "Имя аккаунта должно начинаться с ",
+        "start_with_a_letter": "должно начинаться с буквы.",
+        "have_only_letters_digits_or_dashes":
+            "должно должно состоять только из букв, цифр или дефисов.",
+        "have_only_one_dash_in_a_row": "иметь только одно тире в строке.",
+        "end_with_a_letter_or_digit": "заканчиваться буквой или цифрой.",
+        "verified_exchange_no_memo":
+            "Для перевода на биржу Вы должны указать примечание."
+    },
+    "settings_jsx": {
+        "invalid_url": "Недопустимый URL-адрес",
+        "name_is_too_long": "Имя слишком длинное",
+        "name_must_not_begin_with": "Имя не должно начинаться с @",
+        "about_is_too_long": "Информация о Вашем блоге слишком длинная",
+        "location_is_too_long": "Местоположение слишком длинное",
+        "website_url_is_too_long": "URL-адрес веб-сайта слишком длинный",
+        "public_profile_settings": "Настройки Публичного Профиля",
+        "preferences": "Настройки отображения приватных постов",
+        "not_safe_for_work_nsfw_content":
+            "Небезопасный для работы (NSFW) контент",
+        "always_hide": "Всегда скрывать",
+        "always_warn": "Всегда предупреждать",
+        "always_show": "Отображать всегда",
+        "muted_users": "Заблокированные пользователи",
+        "update": "Обновить",
+        "profile_image_url": "Добавьте url вашего изображения",
+        "cover_image_url": "URL-адрес изображения обложки",
+        "profile_name": "Отображаемое имя",
+        "profile_about": "О себе",
+        "profile_location": "Местоположение",
+        "profile_website": "Веб-сайт"
+    },
+    "transfer_jsx": {
+        "amount_is_in_form": "Сумма должна быть в формате 99999.999",
+        "insufficient_funds": "Недостаточно средств",
+        "use_only_3_digits_of_precison": "Используйте только 3 цифры точности",
+        "send_to_account": "Отправить аккаунту",
+        "asset": "Актив",
+        "this_memo_is_private": "Это примечание является приватным",
+        "this_memo_is_public": "Это примечание является публичным",
+        "convert_to_VESTING_TOKEN": "Перевести в %(VESTING_TOKEN)s",
+        "balance_subject_to_3_day_withdraw_waiting_period":
+            "Вывод баланса из сейфа на обычный счет, занимает 3 дня,",
+        "move_funds_to_another_account":
+            "Отправить средства на другой Steem аккаунт.",
+        "protect_funds_by_requiring_a_3_day_withdraw_waiting_period":
+            "Защитите средства от вывода 3-х дневным периодом ожидания.",
+        "withdraw_funds_after_the_required_3_day_waiting_period":
+            "Снять средства после необходимого 3 дневного периода ожидания.",
+        "from": "От",
+        "to": "Кому",
+        "asset_currently_collecting":
+            "начисляемые годовые на %(asset)s: %(interest)s%%.",
+        "beware_of_spam_and_phishing_links":
+            "Остерегайтесь спама и фишинговых ссылок в передачах. Не открывайте ссылки от пользователей, которым вы не доверяете. Не предоставляйте свои личные ключи третьим сторонам."
+    },
+    "userwallet_jsx": {
+        "conversion_complete_tip": "Завершается",
+        "in_conversion": "%(amount)s на конвертации",
+        "transfer_to_savings": "Отправить в сейф",
+        "power_up": "Усилить силу голоса",
+        "power_down": "Уменьшить силу голоса",
+        "market": "Биржа",
+        "convert_to_LIQUID_TOKEN": "Перевести в %(LIQUID_TOKEN)s",
+        "withdraw_LIQUID_TOKEN": "Снять %(LIQUID_TOKEN)s",
+        "withdraw_DEBT_TOKENS": "Снять %(DEBT_TOKENS)s",
+        "tokens_worth_about_1_of_LIQUID_TICKER":
+            "Стоимость токенов $1.00 в %(LIQUID_TICKER)s, начисляемые годовые %(sbdInterest)s%%.",
+        "savings": "Сберегательный счет",
+        "estimated_account_value": "Приблизительная стоимость аккаунта",
+        "next_power_down_is_scheduled_to_happen":
+            "Следующее понижение силы голоса будет",
+        "transfers_are_temporary_disabled": "Переводы временно преостановлены.",
+        "history": "ИСТОРИЯ",
+        "redeem_rewards": "Получить вознаграждение",
+        "buy_steem_or_steem_power": "Купить STEEM или STEEM POWER"
+    },
+    "checkloginowner_jsx": {
+        "your_password_permissions_were_reduced":
+            "Your password permissions were reduced",
+        "if_you_did_not_make_this_change":
+            "If you did not make this change please",
+        "ownership_changed_on": "Владелец аккаунта или пароль были изменены ",
+        "deadline_for_recovery_is": "Вы можете восстановить доступ до ",
+        "i_understand_dont_show_again": "Понятно, больше не показывать"
+    }
+}

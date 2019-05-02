@@ -1,0 +1,218 @@
+.UserProfile {
+    margin-top: -1.5rem;
+
+    .articles {
+      @include MQ(M) {
+        margin: 0 auto;
+      }
+    }
+}
+
+.UserProfile__tab_content {
+    margin-top: 1.5rem;
+}
+
+.UserProfile__top-nav {
+  background-color: $color-blue-dark;
+  padding: 0;
+  .menu {
+    background-color: transparent;
+  }
+  .menu > li > a {
+      transition: all 200ms ease-in;
+      transform: translate3d( 0, 0, 0);
+      padding-left: 0.7rem;
+      padding-right: 0.7rem;
+      background-color: transparent;
+      color: $color-white;
+      &:hover, &:focus {
+        background-color: $color-blue-black;
+      }
+      &.active {
+          @include themify($themes) {
+            background-color: themed('backgroundColor');
+            color: themed('textColorPrimary');
+          }
+          z-index: 2;
+          font-weight: bold;
+        }
+  }
+
+  div.UserProfile__top-menu {
+      max-width: 71.42857rem;
+      margin-left: auto;
+      margin-right: auto;
+      display: flex;
+      flex-flow: row wrap;
+      width: 100%;
+      // Override default svg vertical alignment
+      .Icon > svg, .Icon span.icon {
+          vertical-align: middle!important;
+      }
+  }
+}
+
+.UserProfile__section-title {
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #EEE;
+}
+
+.UserProfile__banner {
+    text-align: center;
+    color: $white;
+    a {
+        color: $white;
+    }
+    > div.column {
+        background: $color-blue-black;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: 50% 50%;
+        text-shadow: 1px 1px 4px black;
+        .button {text-shadow: none;}
+
+        min-height: 155px;
+    }
+    h1 {
+        padding-top: 20px;
+        font-weight: 600;
+        font-size: 1.84524rem!important;
+        @media screen and (max-width: 39.9375em) {
+            font-size: 1.13095rem!important;
+        }
+    }
+    .Icon {
+        margin-left: 1rem;
+        svg {fill: #def;}
+    }
+
+    .Userpic {
+        margin-right: 0.75rem;
+        vertical-align: middle;
+    }
+
+    .UserProfile__rep {
+        font-size: 80%;
+        font-weight: 200;
+    }
+
+    .UserProfile__buttons {
+        position: absolute;
+        top: 15px;
+        right: 5px;
+
+        label.button {
+            color: black;
+            border-radius: 3px;
+            background-color: white;
+        }
+    }
+
+    .UserProfile__bio {
+        margin: -0.4rem auto 0.5rem;
+        font-size: 95%;
+        max-width: 420px;
+        line-height: 1.4;
+    }
+    .UserProfile__info {
+        font-size: 90%;
+    }
+
+    .UserProfile__stats {
+        margin-bottom: 5px;
+        padding-bottom: 5px;
+        font-size: 90%;
+
+        a {
+            @include hoverUnderline;
+            vertical-align: middle;
+	    }
+
+        > span {
+            padding: 0px 10px;
+            border-left: 1px solid #CCC;
+            &:first-child {border-left: none;}
+        }
+    }
+}
+
+.UserWallet__balance {
+    > div:nth-child(2) {
+        text-align: right;
+    }
+}
+
+@media screen and (max-width: 39.9375em) {
+
+    div.UserProfile__top-nav .menu li>a {
+        padding: 8px;
+    }
+
+    .UserProfile__top-menu > div.columns {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .UserProfile__banner .Userpic {
+        width: 36px !important;
+        height: 36px !important;
+    }
+
+    .UserProfile__banner .UserProfile__buttons {
+        text-align: right;
+
+        label.button {
+            display: block;
+        }
+    }
+
+    .UserProfile__banner .UserProfile__buttons_mobile {
+        position: inherit;
+        margin-bottom: .5rem;
+        .button {
+            background-color: $white;
+            color: $black;
+        }
+    }
+
+    .UserWallet__balance {
+        > div:last-of-type {
+            text-align: left;
+        }
+    }
+
+    .UserReward__row {
+        > div:last-of-type {
+            padding-left: 20px;
+        }
+    }
+}
+
+// Temporary fix to prevent alternate User Profile pages outside the blog from taking the narrow layout.
+
+.UserProfile {
+  .articles {
+      margin-bottom: 4em;
+    &__h1 {
+      text-transform: none;
+      @include MQ(M) {
+        @include font-size(20px);
+      }
+    }
+  }
+  &__tab_content.layout-block.settings, &__tab_content.layout-block.curation-rewards, &__tab_content.layout-block.author-rewards {
+    .articles {
+        padding: 1.5em 1.5em;
+        max-width: 1056px;
+        @include MQ(XL) {
+          min-width: 1050px;
+        }
+    }
+  }
+  .settings .articles__layout-selector, .curation-rewards .articles__layout-selector, .author-rewards .articles__layout-selector  {
+      display: none;
+    }
+}
+
+

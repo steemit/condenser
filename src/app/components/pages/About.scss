@@ -1,0 +1,156 @@
+.About {
+  position: relative;
+  z-index: 1;
+
+  .h2, .AboutMission__heading {
+    margin: 0 0 12px 0;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 24px;
+    font-size: 1.5rem;
+  }
+
+  h3 {
+    font-size: 1.17em;
+    font-weight: 600;
+    margin: 1em 0;
+  }
+
+  ul {
+    padding-left: 40px;
+    line-height: 1.4em;
+  }
+
+  @media only screen and (min-width: 50em) {
+    .h2, .AboutMission__heading {
+      letter-spacing: 4px;
+      font-size: 42px;
+      font-size: 2.625rem;
+      margin-bottom: 12px;
+    }
+  }
+
+  .AboutMission {
+    width: 100%;
+    padding: 2em 0;
+  }
+
+  .AboutMission__section {
+    max-width: 1600px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 2em;
+    padding: 0 24px;
+  }
+
+  @media only screen and (min-width: 50em) {
+    .AboutMission__section {
+      flex-direction: row;
+    }
+  }
+
+  .AboutMission__section--vision .AboutMission__section__text-container {
+    color: blue;
+    order: 2;
+  }
+
+  .AboutMission__text-container, .AboutMission__image-container {
+    width: 100%;
+    margin-bottom: 24px;
+  }
+
+  @media only screen and (min-width: 50em) {
+    .AboutMission__text-container, .AboutMission__image-container {
+      padding: 2em 0 2em 4%;
+      width: 46%;
+    }
+  }
+
+  @media only screen and (min-width: 75em) {
+    .AboutMission__text-container, .AboutMission__image-container {
+      padding: 2em 0 2em 8%;
+      width: 42%;
+    }
+  }
+
+  .AboutMission__text-container {
+    max-width: 600px;
+  }
+
+  .AboutMission__square {
+    width: 8px;
+    height: 8px;
+    background: #06D6A9;
+    margin-bottom: 1.5rem;
+    &::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background: #06D6A9;
+      margin-left: 12px;
+      display: flex;
+    }
+  }
+
+  .AboutMission__text {
+    margin: 0;
+  }
+
+  .AboutMission__subheading {
+    margin-bottom: 4px;
+    font-size: 20px;
+    font-size: 1.25rem;
+  }
+
+  @media only screen and (min-width: 50em) {
+    .AboutMission__subheading {
+      margin-bottom: 6px;
+    }
+  }
+
+  .AboutMission__text {
+    font-size: 16px;
+    font-size: 1rem;
+    line-height: 1.4;
+  }
+
+  .AboutMission__list {
+    margin: 6px 0;
+  }
+
+  .AboutMission__list-item {
+    margin-bottom: 6px;
+  }
+
+  .AboutMission__img {
+    box-shadow: 10px 12px 14px 0 rgba(0, 0, 0, 0.05);
+    margin-bottom: 24px;
+  }
+
+  @media only screen and (min-width: 50em) {
+    .AboutMission__section:nth-child(even) .AboutMission__text-container {
+      order: 2;
+    }
+  }
+
+  .About-content-container, .AboutTeam__container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .AboutMission__heading-container {
+    padding-left: 14px;
+    padding-right: 14px;
+    max-width: 1200px;
+    margin: 0.83em auto;
+    .AboutMission__heading {
+      letter-spacing: 0;
+      text-transform: initial;
+    }
+  }
+
+  .AboutMission__square--2 {
+    margin-top: 6rem;
+  }
+}

@@ -1,8 +1,8 @@
 // borrowed from https://github.com/gpbl/isomorphic500/blob/master/webpack%2Futils%2Fwrite-stats.js
-import fs from 'fs';
-import path from 'path';
+const fs = require('fs');
+const path = require('path');
 
-export default function (stats) {
+module.exports = function (stats) {
     const publicPath = this.options.output.publicPath;
     const json = stats.toJson();
 
@@ -20,8 +20,10 @@ export default function (stats) {
             .map(chunk => `${publicPath}${chunk}`); // add public path to it
     };
 
-    let script = getChunks('vendor', /js/);
-    script = [...script, ...getChunks('app', /js/)];
+    const vendor = getChunks('vendor', /js/);
+    // const common = getChunks('common', /js/);
+    const app = getChunks('app', /js/);
+    const script = [...vendor, ...app];
     const style = getChunks('app', /css/);
 
     // Find compiled images in modules

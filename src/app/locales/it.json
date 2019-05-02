@@ -1,0 +1,671 @@
+{
+    "g": {
+        "age": "età",
+        "amount": "Quantità",
+        "and": "e",
+        "are_you_sure": "Sei sicuro?",
+        "ask": "Ask",
+        "balance": "Saldo",
+        "balances": "Saldi",
+        "bid": "Bid",
+        "blog": "Blog",
+        "browse": "Naviga",
+        "buy": "Acquista",
+        "buy_or_sell": "Acquista o vendi",
+        "by": "da",
+        "cancel": "Cancella",
+        "change_password": "Cambia Password",
+        "choose_language": "Scegli la lingua",
+        "clear": "Pulisci",
+        "close": "Chiudi",
+        "collapse_or_expand": "Riduci/Espandi",
+        "comments": "Commenti",
+        "confirm": "Conferma",
+        "convert": "Converti",
+        "date": "Data",
+        "delete": "Elimina",
+        "dismiss": "Abbandona",
+        "edit": "Modifica",
+        "email": "Email",
+        "feed": "Feed",
+        "follow": "Segui",
+        "for": "per",
+        "from": "da",
+        "go_back": "Indietro",
+        "hide": "Nascondi",
+        "in": "in",
+        "in_reply_to": "in risposta a",
+        "insufficient_balance": "Credito insufficiente",
+        "invalid_amount": "Importo errato",
+        "joined": "Connesso",
+        "loading": "Caricamento",
+        "login": "Login",
+        "logout": "Logout",
+        "memo": "Memo",
+        "mute": "Silenzia",
+        "new": "Nuovo",
+        "newer": "Più recente",
+        "next": "Prossimo",
+        "no": "No",
+        "ok": "Ok",
+        "older": "Meno recente",
+        "or": "o",
+        "order_placed": "Ordine piazzato",
+        "password": "Password",
+        "payouts": "Pagamenti",
+        "permissions": "Permessi",
+        "phishy_message":
+            "Link expanded to plain text; beware of a potential phishing attempt",
+        "post": "Post",
+        "post_as": "Pubblica come",
+        "posts": "Posts",
+        "powered_up_100": "Powered Up 100%%",
+        "preview": "Anteprima",
+        "previous": "Precedente",
+        "price": "Prezzo",
+        "print": "Stampa",
+        "promote": "Promuovi",
+        "promoted": "promosso",
+        "re": "RE",
+        "re_to": "RE: %(topic)s",
+        "recent_password": "Password Recente",
+        "receive": "Ricevi",
+        "remove": "Rimuovi",
+        "remove_vote": "Rimuovi il voto",
+        "replied_to": "risposto a %(account)s",
+        "replies": "Risponde",
+        "reply": "Risposta",
+        "reply_count": {
+            "zero": "Nessuna risposta",
+            "one": "1 risposta",
+            "other": "%(count)s risposte"
+        },
+        "reputation": "Reputazione",
+        "reveal_comment": "Mostra Commento",
+        "request": "richiesta",
+        "required": "Richiesto",
+        "rewards": "Ricompense",
+        "save": "Salva",
+        "saved": "Salvato",
+        "search": "Cerca",
+        "sell": "Vendi",
+        "settings": "Impostazioni",
+        "share_this_post": "Condividi questo post",
+        "show": "Mostra",
+        "sign_in": "Accedi",
+        "sign_up": "Registrati",
+        "since": "da",
+        "submit": "Sottoscrivi",
+        "power_up": "Power Up",
+        "submit_a_story": "Post",
+        "tag": "Tag",
+        "to": "a",
+        "all_tags": "All tags",
+        "transfer": "Trasferisci",
+        "trending_topics": "Trending Topics",
+        "type": "Scrivi",
+        "unfollow": "Non seguire più",
+        "unmute": "Unmute",
+        "unknown": "Sconosciuto",
+        "upvote": "Upvote",
+        "upvote_post": "Upvote post",
+        "username": "Username",
+        "version": "Versione",
+        "vote": "Vota",
+        "votes": "voti",
+        "wallet": "Wallet",
+        "warning": "avviso",
+        "yes": "Sì",
+        "posting": "Postare",
+        "owner": "Proprietario",
+        "active": "Attivo",
+        "account_not_found": "Account non trovato",
+        "this_is_wrong_password": "Password errata",
+        "do_you_need_to": "Hai bisogno di",
+        "account_name": "Nome Account",
+        "recover_your_account": "recupera il tuo account",
+        "reset_usernames_password": "Resetta la password di %(username)s",
+        "this_will_update_usernames_authtype_key":
+            "Questo aggiornerà la  %(authType)s key di %(username)s ",
+        "passwords_do_not_match": "Le password non corrispondono",
+        "you_need_private_password_or_key_not_a_public_key":
+            "Hai bisogno di una password privata o di una chiave (non di una chiave pubblica)",
+        "the_rules_of_APP_NAME": {
+            "one":
+                "La prima regola di %(APP_NAME)sè: Non perdere la tua password.",
+            "second":
+                "La seconda regola di %(APP_NAME)s è: Non perdere la tua password.",
+            "third":
+                "La terza regola di %(APP_NAME)s è: Non possiamo recuperare la tua password.",
+            "fourth":
+                "La quarta regola è: Se puoi ricordare la password, non è sicura.",
+            "fifth":
+                "La quinta regola è: Usa solo password generate in modo casuale.",
+            "sixth": "La sesta regola è: Non dire a nessuno la tua password.",
+            "seventh": "La settima regola è: Salva sempre la tua password."
+        },
+        "recover_password": "Recupera Account",
+        "current_password": "Password attuale",
+        "generated_password": "Password generata",
+        "backup_password_by_storing_it":
+            "Effettua il backup copiando la password in un file di testo o in un gestore di password. ",
+        "enter_account_show_password":
+            "Inserisci un nome account valido per visualizzare la password",
+        "click_to_generate_password": "Clicca per generare una password",
+        "re_enter_generate_password": "Inserisci di nuovo la Password Generata",
+        "understand_that_APP_NAME_cannot_recover_password":
+            "Ho capito che %(APP_NAME)s non può recuperare le password perse",
+        "i_saved_password":
+            "Ho salvato in modo sicuro la mia password generata automaticamente",
+        "update_password": "Aggiorna la password",
+        "confirm_password": "Conferma la password",
+        "account_updated": "Account aggiornato",
+        "password_must_be_characters_or_more":
+            "La password deve essere lunga %(amount)s caratteri o più",
+        "need_password_or_key":
+            "Hai bisogno di una password o di una chiave privata  (non una chiave pubblica)",
+        "login_to_see_memo": "Esegui il login per visualizzare la memo",
+        "new_password": "Nuova password",
+        "incorrect_password": "Password errata",
+        "username_does_not_exist": "Il nome utente non esiste",
+        "account_name_should_start_with_a_letter":
+            "Il nome dell'account deve iniziare con una lettera.",
+        "account_name_should_be_shorter":
+            "Il nome dell'account deve essere più corto.",
+        "account_name_should_be_longer":
+            "Il nome dell'account deve essere più lungo.",
+        "account_name_should_have_only_letters_digits_or_dashes":
+            "Il nome account deve essere composto solo da lettere, cifre, punti o trattini.",
+        "cannot_increase_reward_of_post_within_the_last_minute_before_payout":
+            "Non è possibile aumentare le ricompense del post durante l'ultimo minuto prima del pagamento",
+        "only_one_APP_NAME_account_allowed_per_ip_address_every_10_minutes":
+            "è possibile utilizzare un solo Steem account per indirizzo IP ogni 10 minuti",
+        "resteem_this_post": "Fai il resteem di questo post",
+        "reblog": "Resteem",
+        "write_your_story": "Scrivi la tua storia",
+        "remember_voting_and_posting_key":
+            "Ricorda la chiave di voto e di pubblicazione",
+        "auto_login_question_mark": "Accesso automatico?",
+        "hide_private_key": "Nascondi la chiave privata",
+        "show_private_key": "Mostra la chiave privata",
+        "login_to_show": "Esegui il login per mostrare",
+        "not_valid_email": "Email non valida",
+        "thank_you_for_being_an_early_visitor_to_APP_NAME":
+            "Ti ringraziamo per essere uno dei primi visitatori di %(APP_NAME)s. Sarai ricontattato il prima possibile. ",
+        "author_rewards": "Ricompense da autore",
+        "curation_rewards": "Ricompense da curatore",
+        "sorry_your_reddit_account_doesnt_have_enough_karma":
+            "Purtroppo il tuo account Reddit non possiede abbastanza Reddit Karma per essere usato per la registrazione gratuita. Aggiungi per favore la tua email per ottenere un posto in lista d'attesa.",
+        "register_with_facebook": "Registrati con Facebook",
+        "or_click_the_button_below_to_register_with_facebook":
+            "O premi il pulsante sottostante per registrarti con Facebook",
+        "server_returned_error": "Errore del server",
+        "APP_NAME_support": "Supporto %(APP_NAME)s",
+        "please_email_questions_to":
+            "Per piacere invia le tue domande tramite email a",
+        "next_7_strings_single_block": {
+            "authors_get_paid_when_people_like_you_upvote_their_post":
+                "Gli autori ricevono un compenso quando gli utenti come te votano il loro post. ",
+            "if_you_enjoyed_what_you_read_earn_amount":
+                "Se ti piace quello che hai letto, crea il tuo account oggi e inizia ricevendo STEEM GRATIS!",
+            "free_steem": "STEEM GRATIS!",
+            "sign_up_earn_steem": "Registrati adesso per guadagnare"
+        },
+        "next_3_strings_together": {
+            "show_more": "Mostra di più",
+            "show_less": "Mostra di meno",
+            "value_posts": "post di basso valore"
+        },
+        "read_only_mode":
+            "Server in manutenzione, modalità sola lettura attiva. Ci scusiamo per l'inconveniente.",
+        "tags_and_topics": "Tag e argomenti",
+        "show_more_topics": "Vedi più argomenti",
+        "basic": "Base",
+        "advanced": "Avanzato",
+        "views": {
+            "zero": "Nessuna Visualizzazione",
+            "one": "%(count)s Visualizzazione",
+            "other": "%(count)s Visualizzazioni"
+        },
+        "responses": {
+            "zero": "Nessuna Risposta",
+            "one": "%(count)s Risposta",
+            "other": "%(count)s Risposte"
+        },
+        "post_key_warning": {
+            "confirm":
+                "You are about to publish a STEEM private key or master password. You will probably lose control of the associated account and all its funds.",
+            "warning":
+                "Legitimate users, including employees of Steemit Inc., will never ask you for a private key or master password.",
+            "checkbox": "I understand"
+        }
+    },
+    "navigation": {
+        "about": "Circa",
+        "explore": "Esplora",
+        "APP_NAME_whitepaper": "%(APP_NAME)s Whitepaper",
+        "buy_LIQUID_TOKEN": "Compra %(LIQUID_TOKEN)s",
+        "sell_LIQUID_TOKEN": "Vendi %(LIQUID_TOKEN)s",
+        "currency_market": "Mercato della valuta",
+        "stolen_account_recovery": "Recupero degli Account Rubati",
+        "change_account_password": "Cambia la password dell'account",
+        "witnesses": "Witness",
+        "vote_for_witnesses": "Vota per i Witness",
+        "privacy_policy": "Privacy Policy",
+        "terms_of_service": "Condizioni di servizio",
+        "sign_up": "Entra",
+        "learn_more": "Scopri di più",
+        "welcome": "Benvenuto",
+        "faq": "FAQ",
+        "chat": "Steem Chat",
+        "app_center": "Steemit App Center",
+        "business_center": "Businesses Accepting Steem",
+        "api_docs": "Steemit API Docs",
+        "bluepaper": "Steem Bluepaper",
+        "smt_whitepaper": "SMT Whitepaper",
+        "whitepaper": "Steem Whitepaper",
+        "intro_tagline": "Il denaro parla",
+        "intro_paragraph":
+            "La tua voce vale qualcosa. Entra nella comunità che ti pagare per pubblicare e curare contenuti di alta qualità."
+    },
+    "main_menu": {
+        "hot": "hot",
+        "trending": "trending"
+    },
+    "reply_editor": {
+        "shorten_title": "Titolo breve",
+        "exceeds_maximum_length": "Supera la grandezza massima (%(maxKb)sKB)",
+        "including_the_category": " (inclusa la categoria '%(rootCategory)s')",
+        "use_limited_amount_of_tags":
+            "Hai %(tagsLength)s tag in totale %(includingCategory)s. Usane solo 5 nel tuo post e nella linea delle categorie.",
+        "are_you_sure_you_want_to_clear_this_form":
+            "Sicuro di voler cancellare questo form?",
+        "uploading": "Caricamento",
+        "draft_saved": "Bozza salvata",
+        "editor": "Editor",
+        "insert_images_by_dragging_dropping":
+            "Per inserire le immagini, trascinale qui",
+        "pasting_from_the_clipboard": "incollando dagli appunti,",
+        "selecting_them": "selezionandole. ",
+        "image_upload": "Carica immagine",
+        "power_up_100": "Power Up 100%%",
+        "default_50_50": "50%% / 50%%",
+        "decline_payout": "Rinuncia al pagamento",
+        "check_this_to_auto_upvote_your_post":
+            "Clicca qui per effettuare l'upvote automatico del tuo post",
+        "markdown_styling_guide": "Guida di stile Markdown",
+        "or_by": "o da",
+        "title": "Titolo",
+        "update_post": "Aggiorna il Post",
+        "markdown_not_supported": "Il Markdown non è supportato qui"
+    },
+    "category_selector_jsx": {
+        "tag_your_story":
+            "Tag (massimo 5). Il primo tag è la categoria principale. ",
+        "select_a_tag": "Seleziona un tag",
+        "maximum_tag_length_is_24_characters":
+            "La lunghezza massima di un tag è 24 caratteri",
+        "use_limited_amount_of_categories":
+            "Utilizzare solo %(amount)s categorie",
+        "use_only_lowercase_letters": "Usa solo caratteri minuscoli",
+        "use_one_dash": "Usa solo un trattino",
+        "use_spaces_to_separate_tags": "Usa gli spazi per separare i tag",
+        "use_only_allowed_characters":
+            "Usa solo lettere minuscole, cifre e un trattino",
+        "must_start_with_a_letter": "Deve iniziare con una lettera",
+        "must_end_with_a_letter_or_number":
+            "Deve terminare con una lettera o un numero"
+    },
+    "post_advanced_settings_jsx": {
+        "payout_option_header": "Author rewards",
+        "payout_option_description":
+            "What type of tokens do you want as rewards from this post?",
+        "current_default": "Default",
+        "update_default_in_settings": "Update"
+    },
+    "postfull_jsx": {
+        "this_post_is_not_available_due_to_a_copyright_claim":
+            "Questo post non è disponibile per violazione del copyright.",
+        "share_on_facebook": "Condividi su Facebook",
+        "share_on_twitter": "Condividi su Twitter",
+        "share_on_linkedin": "Condividi su Linkedin",
+        "recent_password": "Password recente",
+        "in_week_convert_DEBT_TOKEN_to_LIQUID_TOKEN":
+            "In 3,5 giorni, converti %(amount)s%(DEBT_TOKEN)s in %(LIQUID_TOKEN)s",
+        "view_the_full_context": "Vedi il contesto completo",
+        "view_the_direct_parent": "Visualizza il collegamento diretto",
+        "you_are_viewing_a_single_comments_thread_from":
+            "Stai visualizzando il commento singolo di un thread di "
+    },
+    "recoveraccountstep1_jsx": {
+        "recover_account_intro":
+            "Può succedere che ogni tanto la chiave personale di un membro di Steemit possa essere compromessa. La funzione \"Recupera account rubato\" dà 30 giorni al legittimo proprietario dell'account per recuperarlo dal momento in cui il ladro cambia la chiave personale. \"Recupera account rubato\" può essere usato solo su %(APP_URL)s se il proprietario dell'account ha precedentemente inserito %(APP_NAME)s come account fidato e accettato i Termini di Servizio di %(APP_NAME)s."
+    },
+    "user_profile": {
+        "unknown_account": "Account sconosciuto",
+        "user_hasnt_made_any_posts_yet":
+            "Sembra che %(name)snon abbia ancora pubblicato nessun post! ",
+        "user_hasnt_started_bloggin_yet":
+            "Sembra che %(name)s non abbia ancora iniziato a scrivere!",
+        "user_hasnt_followed_anything_yet":
+            "Sembra che %(name)snon stia seguendo ancora nessuno! Se %(name)sha aggiunto di recente nuovi utenti da seguire, il feed personalizzato si riempirà di contenuti non appena ce ne saranno di nuovi. ",
+        "user_hasnt_had_any_replies_yet": "%(name)s hasn't had any replies yet",
+        "looks_like_you_havent_posted_anything_yet":
+            "Looks like you haven't posted anything yet.",
+        "create_a_post": "Create a Post",
+        "explore_trending_articles": "Explore Trending Articles",
+        "read_the_quick_start_guide": "Read The Quick Start Guide",
+        "browse_the_faq": "Browse The FAQ",
+        "followers": "Followers",
+        "this_is_users_reputations_score_it_is_based_on_history_of_votes":
+            "Questo è il livello di reputazione di %(name)s. \n\nIl livello di reputazione si basa sulla storia dei voti ricevuti dall'account e viene utilizzato per nascondere contenuti di scarsa qualità. ",
+        "follower_count": {
+            "zero": "Nessun follower",
+            "one": "1 follower",
+            "other": "%(count)s follower"
+        },
+        "followed_count": {
+            "zero": "Non segue nessuno",
+            "one": "1 following",
+            "other": "%(count)s following"
+        },
+        "post_count": {
+            "zero": "Nessun post",
+            "one": "1 post",
+            "other": "%(count)s post"
+        },
+        "hide_resteems": "Hide Resteems",
+        "show_all": "Show All"
+    },
+    "post_jsx": {
+        "now_showing_comments_with_low_ratings":
+            "Commenti con voti bassi rivelati",
+        "sort_order": "Ordinamento",
+        "comments_were_hidden_due_to_low_ratings":
+            "Commenti nascosti a causa del basso rating"
+    },
+    "voting_jsx": {
+        "flagging_post_can_remove_rewards_the_flag_should_be_used_for_the_following":
+            "Flaggare un post può rimuovere le ricompense e rendere questo materiale meno visibile. Alcune ragioni comuni per effettuare un flag sono",
+        "disagreement_on_rewards": "Disaccordo sulle ricompense",
+        "fraud_or_plagiarism": "Frode o Plagio",
+        "hate_speech_or_internet_trolling": "Incitamento all'odio o Trolling",
+        "intentional_miss_categorized_content_or_spam":
+            "Contenuto volutamente categorizzato impropriamente o spam",
+        "pending_payout": "Pagamento in attesa $%(value)s",
+        "payout_declined": "Pagamento Rifiutato",
+        "max_accepted_payout":
+            "Il pagamento massimo accettato è di %(value)s $",
+        "promotion_cost": "Costo della Promozione $%(value)s",
+        "past_payouts": "Pagamenti precedenti di %(value)s $",
+        "past_payouts_author": "- Autore %(value)s $",
+        "past_payouts_curators": "- Curatori %(value)s $",
+        "we_will_reset_curation_rewards_for_this_post":
+            "sarà effettuato il reset delle ricompense del curatore in questo post. ",
+        "removing_your_vote": "Rimuovi il tuo voto",
+        "changing_to_an_upvote": "Cambia in un upvote",
+        "changing_to_a_downvote": "Cambia in un downvote",
+        "confirm_flag": "Conferma il flag",
+        "and_more": "e %(count)s in più",
+        "votes_plural": {
+            "one": "%(count)s voto",
+            "other": "%(count)s voti"
+        }
+    },
+    "votesandcomments_jsx": {
+        "no_responses_yet_click_to_respond":
+            "Non c'è ancora nessuna risposta. Clicca per rispondere.",
+        "response_count_tooltip": {
+            "zero": "Nessun commento. Clicca per commentare.",
+            "one": "1 commento. Clicca per commentare.",
+            "other": "%(count)s commenti. Clicca per commentare."
+        },
+        "vote_count": {
+            "zero": "Nessun voto",
+            "one": "1 voto",
+            "other": "%(count)s voti"
+        }
+    },
+    "userkeys_jsx": {
+        "public": "Pubblico",
+        "private": "Privato",
+        "public_something_key": "%(key)sChiave Pubblica",
+        "private_something_key": "%(key)sChiave Privata",
+        "posting_key_is_required_it_should_be_different":
+            "La chiave di pubblicazione si usa per pubblicare e votare. Dovrebbe essere diversa dalla chiave attiva e dalla chiave proprietaria. ",
+        "the_active_key_is_used_to_make_transfers_and_place_orders":
+            "La chiave attiva si usa per effettuare trasferimenti e per piazzare ordini nel market interno. ",
+        "the_owner_key_is_required_to_change_other_keys":
+            "La chiave proprietaria è la chiave principale dell'account e serve a cambiare le altre chiavi. ",
+        "the_private_key_or_password_should_be_kept_offline":
+            "Raccomandiamo di conservare offline la chiave privata e la password della chiave proprietaria. ",
+        "the_memo_key_is_used_to_create_and_read_memos":
+            "La chiave memo si usa per creare e leggere i memo. "
+    },
+    "suggestpassword_jsx": {
+        "APP_NAME_cannot_recover_passwords_keep_this_page_in_a_secure_location":
+            "%(APP_NAME)snon può recuperare la password. Conserva questa pagina in un luogo sicuro, come ad esempio una cassaforte o una cassetta di sicurezza. ",
+        "APP_NAME_password_backup": "Password Backup di %(APP_NAME)s",
+        "APP_NAME_password_backup_required":
+            "Password Backup di %(APP_NAME)s (richiesto)",
+        "after_printing_write_down_your_user_name":
+            "Dopo la stampa, scrivi il tuo nome utente. "
+    },
+    "converttosteem_jsx": {
+        "your_existing_DEBT_TOKEN_are_liquid_and_transferable":
+            "I tuoi %(DEBT_TOKEN)s sono liquidi e trasferibili. Invece se desiderassi scambiare %(DEBT_TOKEN)s direttamente in questo sito su %(link)s o trasferirli su un mercato esterno.",
+        "this_is_a_price_feed_conversion":
+            "Questa è una conversione di prezzo. L'attesa di 3,5 giorni è necessaria per evitare di abusare della media dei prezzi.",
+        "convert_to_LIQUID_TOKEN": "Converti in %(LIQUID_TOKEN)s",
+        "DEBT_TOKEN_will_be_unavailable":
+            "Questa azione avverrà tra 3,5 giorni da adesso e non può essere cancellata. Questi%(DEBT_TOKEN)s diverranno subito indisponibili"
+    },
+    "tips_js": {
+        "liquid_token":
+            "Token scambiabili che possono essere trasferiti ovunque in qualsiasi momento. <br/>%(LIQUID_TOKEN)s possono essere convertiti in %(VESTING_TOKEN)s con un processo chiamato powering up.",
+        "influence_token":
+            "Token che ti danno più controllo sui pagamenti dei post e ti consentono di guadagnare sulle ricompense da curatore.",
+        "estimated_value":
+            "Il valore stimato si basa sul valore medio di %(LIQUID_TOKEN)s in dollari US. ",
+        "non_transferable":
+            "%(VESTING_TOKEN)s non è trasferibile e richiede 3 mesi, (13 pagamenti) per riconvertirli in  %(LIQUID_TOKEN)s.",
+        "converted_VESTING_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again":
+            "I %(VESTING_TOKEN)s convertiti possono essere spediti a te stesso o a qualcun altro ma non possono non ritrasferirli senza essere convertirli di nuovo in %(LIQUID_TOKEN)s.",
+        "part_of_your_steem_power_is_currently_delegated":
+            "Parte del tuo STEEM POWER ti è attualmente delegato. La delegazione è donata per l'influenza o per aiutare i nuovi utenti ad eseguire le azioni su steemit. Il quantitativo delegato può fluttuare."
+    },
+    "promote_post_jsx": {
+        "promote_post": "Promuovi post",
+        "spend_your_DEBT_TOKEN_to_advertise_this_post":
+            "Spendi %(DEBT_TOKEN)s per pubblicizzare questo post nella sezione dei contenuti promossi.",
+        "you_successfully_promoted_this_post":
+            "Hai promosso questo post con successo",
+        "this_post_was_hidden_due_to_low_ratings":
+            "Questo post è stato nascosto a causa della bassa reputazione"
+    },
+    "about_jsx": {
+        "about_app": "About %(APP_NAME)s",
+        "about_app_details":
+            "%(APP_NAME)s è una piattaforma di social media dove tutti vengono ricompensati per la creazione e la cura di contenuti. Utilizza un complesso sistema a punti digitali, chiamato Steem che possiede un valore effettivo per le ricompense digitali attraverso la scoperta dei prezzi di mercato e la liquidità. ",
+        "learn_more_at_app_url": "Scopri di più  %(APP_URL)s",
+        "resources": "Risorse"
+    },
+    "markdownviewer_jsx": {
+        "images_were_hidden_due_to_low_ratings":
+            "Le immagini sono state nascoste a causa della bassa reputazione."
+    },
+    "postsummary_jsx": {
+        "resteemed": "condiviso",
+        "resteemed_by": "Condiviso da",
+        "reveal_it": "mostra",
+        "adjust_your": "sistema il tuo",
+        "display_preferences": "mostrare le tue preferenze",
+        "create_an_account": "creare un accout",
+        "to_save_your_preferences": "per salvare le tue preferenze"
+    },
+    "posts_index": {
+        "empty_feed_1": "Sembra che tu non stia ancora seguendo nessuno. ",
+        "empty_feed_2":
+            "Se hai da poco aggiunto nuovi utenti da seguire, quando ci saranno nuovi contenuti disponibili li vedrai nel tuo feed personalizzato.",
+        "empty_feed_3": "Esplora gli Articoli in Trending",
+        "empty_feed_4": "Leggi la Guida di Avvio Rapido",
+        "empty_feed_5": "Leggi le FAQ"
+    },
+    "explorepost_jsx": {
+        "copied": "Copiato!",
+        "copy": "Copia",
+        "alternative_sources": "Fonti alternative"
+    },
+    "header_jsx": {
+        "home": "Home",
+        "create_a_post": "Crea un post",
+        "change_account_password": "Cambia la password dell'account",
+        "create_account": "Crea un account",
+        "stolen_account_recovery": "Recupero account rubato",
+        "people_following": "Persone che seguono",
+        "people_followed_by": "Persone seguite da ",
+        "curation_rewards_by": "Ricompense da curatore da",
+        "author_rewards_by": "Ricompense da autore da",
+        "replies_to": "Risposte a ",
+        "comments_by": "Commenti di"
+    },
+    "loginform_jsx": {
+        "you_need_a_private_password_or_key":
+            "Hai bisogno di una password privata o di una chiave (non di una chiave pubblica)",
+        "cryptography_test_failed": "Test di crittofrafia fallito",
+        "unable_to_log_you_in":
+            "Non è possibile effettuare il log in con questo browser.",
+        "the_latest_versions_of": "Le ultime versioni di ",
+        "are_well_tested_and_known_to_work_with":
+            "sono testate e conosciute per funzionare con  %(APP_URL)s.",
+        "due_to_server_maintenance":
+            "A causa della manutenzione del server siamo in modalità sola lettura. Ci dispiace per l'inconveniente.",
+        "login_to_vote": "Effettua il login per votare ",
+        "login_to_post": "Effettua il login per postare",
+        "login_to_comment": "Effettua il login per commentare",
+        "posting": "Post",
+        "active_or_owner": "Attivo o proprietario",
+        "this_password_is_bound_to_your_account_owner_key":
+            "Questa password è collegata alla chiave proprietaria del tuo account e non può essere usata per effettuare il login su questo sito. ",
+        "however_you_can_use_it_to": "Nonostante questo, puoi usarla per",
+        "update_your_password": "aggiornare la tua password",
+        "to_obtain_a_more_secure_set_of_keys":
+            "per ottenere un set di chiavi più sicuro. ",
+        "this_password_is_bound_to_your_account_active_key":
+            "Questa password è collegata alla chiave attiva del tuo account e non può essere usata per effettuare il login su questa pagina. ",
+        "you_may_use_this_active_key_on_other_more":
+            "Puoi usare la chiave attiva su altre pagine di sicurezza come le pagine Wallet o Market. ",
+        "you_account_has_been_successfully_created":
+            "Il tuo account è stato creato con successo! ",
+        "you_account_has_been_successfully_recovered":
+            "Il tuo account è stato ripristinato con successo!",
+        "password_update_succes":
+            "La password dell'account %(accountName)s è stata aggiornata con successo",
+        "password_info":
+            "La password o la chiave privata è stata inserita erroneamente. C'è probabilmente un errore di battitura o un inserimento di dati errato. Suggerimento: Una password o una chiave privata generata da Steemit non conterrà mai i caratteri 0 (zero), O (o maiuscola), I (i maiuscola) e l (l minuscola).",
+        "enter_your_username": "Inserisci il tuo username",
+        "password_or_wif": "Password o WIF",
+        "this_operation_requires_your_key_or_master_password":
+            "Per eseguire l'operazione è necessaria la propria chiave %(authType)so Master password. ",
+        "keep_me_logged_in": "Voglio restare connesso",
+        "amazing_community": "una comunità incredibile",
+        "to_comment_and_reward_others": "per commentare e premiare gli altri. ",
+        "sign_up_get_steem": "Sign up. Get STEEM",
+        "signup_button": "Sign up now to earn ",
+        "signup_button_emphasis": "FREE STEEM!",
+        "returning_users": "Utenti di ritorno:",
+        "join_our": "Unisciti al nostro"
+    },
+    "chainvalidation_js": {
+        "account_name_should": "Il nome account",
+        "not_be_empty": "non deve essere vuoto.",
+        "be_longer": "essere più lungo.",
+        "be_shorter": "essere più corto.",
+        "each_account_segment_should": "Ogni segmento dell'account dovrebbe",
+        "start_with_a_letter": "iniziare con una lettera.",
+        "have_only_letters_digits_or_dashes":
+            "avere solo lettere, cifre o trattini.",
+        "have_only_one_dash_in_a_row": "avere solo un trattino per riga. ",
+        "end_with_a_letter_or_digit": "terminare con una lettera o una cifra.",
+        "verified_exchange_no_memo":
+            "Devi includere una memo per il trasferimento."
+    },
+    "settings_jsx": {
+        "invalid_url": "URL invalido",
+        "name_is_too_long": "Nome troppo lungo",
+        "name_must_not_begin_with": "Il nome non deve iniziare con @",
+        "about_is_too_long": "About troppo lungo ",
+        "location_is_too_long": "Luogo è troppo lungo",
+        "website_url_is_too_long": "L'url del sito è troppo lunga ",
+        "public_profile_settings": "Impostazioni profilo pubblico",
+        "preferences": "Impostazioni di Visualizzazione del Post Privato",
+        "not_safe_for_work_nsfw_content":
+            "Contenuto inappropriato da visualizzare da un luogo di lavoro (NSFW)",
+        "always_hide": "Nascondi sempre",
+        "always_warn": "Avverti sempre",
+        "always_show": "Mostra sempre",
+        "muted_users": "Utenti mutati",
+        "update": "Aggiornamento",
+        "profile_image_url": "Url immagine profilo",
+        "cover_image_url": "Url immagine di copertina",
+        "profile_name": "Mostra nome",
+        "profile_about": "About",
+        "profile_location": "Località",
+        "profile_website": "Sito"
+    },
+    "transfer_jsx": {
+        "amount_is_in_form": "La quantita deve essere della forma 99999.999",
+        "insufficient_funds": "Fondi insufficienti",
+        "use_only_3_digits_of_precison": "Usare solo 3 cifre di precisione",
+        "send_to_account": "Invia a un account",
+        "asset": "Asset",
+        "this_memo_is_private": "Questo memo è privato",
+        "this_memo_is_public": "Questo memo è pubblico",
+        "convert_to_VESTING_TOKEN": "Converti in %(VESTING_TOKEN)s",
+        "balance_subject_to_3_day_withdraw_waiting_period":
+            "Saldo soggetto a 3 giorni di attesa per il prelievo.",
+        "move_funds_to_another_account":
+            "Sposta i fondi verso un altro account Steem",
+        "protect_funds_by_requiring_a_3_day_withdraw_waiting_period":
+            "Proteggi i fondi richiedendo un periodo di attesa di 3 giorni.",
+        "withdraw_funds_after_the_required_3_day_waiting_period":
+            "Preleva fondi dopo il periodo di attesa necessario di 3 giorni.",
+        "from": "Da",
+        "to": "A",
+        "asset_currently_collecting":
+            "%(asset)s attualmente percepiscono %(interest)s%% ISC.",
+        "beware_of_spam_and_phishing_links":
+            "Beware of spam and phishing links in transfer memos. Do not open links from users you do not trust. Do not provide your private keys to any third party websites."
+    },
+    "userwallet_jsx": {
+        "conversion_complete_tip": "Si completerà su",
+        "in_conversion": "%(amount)s in conversione",
+        "transfer_to_savings": "Sposta nei Risparmi",
+        "power_up": "Power Up",
+        "power_down": "Power Down",
+        "market": "Market",
+        "convert_to_LIQUID_TOKEN": "Converti in %(LIQUID_TOKEN)s",
+        "withdraw_LIQUID_TOKEN": "Preleva %(LIQUID_TOKEN)s",
+        "withdraw_DEBT_TOKENS": "Preleva %(DEBT_TOKENS)s",
+        "tokens_worth_about_1_of_LIQUID_TICKER":
+            "I token valgono circa $1.00 di %(LIQUID_TICKER)s, attualmente percepiscono %(sbdInterest)s%% ISC.",
+        "savings": "RISPARMI",
+        "estimated_account_value": "Valore stimato dell'account",
+        "next_power_down_is_scheduled_to_happen":
+            "Il prossimo power downo è programmato per avvenire",
+        "transfers_are_temporary_disabled":
+            "I trasferimenti sono temporaneamente disabilitati.",
+        "history": "CRONOLOGIA",
+        "redeem_rewards": "Riscuoti le ricompense (Trasferisci sul conto)",
+        "buy_steem_or_steem_power": "Compra STEEM o STEEM POWER"
+    },
+    "checkloginowner_jsx": {
+        "your_password_permissions_were_reduced":
+            "I tuoi permessi delle password sono stati ridotti",
+        "if_you_did_not_make_this_change":
+            "Se non hai fatto questo cambio per favore",
+        "ownership_changed_on": "Proprietà Cambiata Su",
+        "deadline_for_recovery_is": "Il termine per il ripristino è",
+        "i_understand_dont_show_again": "Ho capito, non mostrare nuovamente"
+    }
+}

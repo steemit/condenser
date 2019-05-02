@@ -1,0 +1,27 @@
+.Reblog__button {
+  path {
+    @include themify($themes) {
+      fill: themed('iconColorSecondary');
+    }
+  }
+}
+
+.Reblog__button-active {
+  path {
+    @include themify($themes) {
+      fill: themed('colorAccent');
+    }
+  }
+}
+
+.Reblog__button.loading {
+  padding-right: 0.5rem;
+  svg {
+    border: 1px solid $color-teal;
+    border-radius: 100%;
+    border-right-color: transparent;
+    border-top-color: transparent;
+    animation: loading 500ms infinite linear;
+    path {opacity: 0}
+  }
+}

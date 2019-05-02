@@ -266,7 +266,7 @@ class PostsIndex extends React.Component {
                     <SteemMarket />
                     {this.props.gptEnabled ? (
                         <div className="sidebar-ad">
-                            <GptAd slotName="right_nav" />
+                            <GptAd type="Basic" slotName="right_nav" />
                         </div>
                     ) : null}
                 </aside>
@@ -293,13 +293,13 @@ class PostsIndex extends React.Component {
                     {this.props.gptEnabled ? (
                         <div>
                             <div className="sidebar-ad">
-                                <GptAd slotName="left_nav" />
+                                <GptAd type="Basic" slotName="left_nav" />
                             </div>
                             <div
                                 className="sidebar-ad"
                                 style={{ marginTop: 20 }}
                             >
-                                <GptAd slotName="left_nav_2" />
+                                <GptAd type="Bidding" slotName="left_nav_2" />
                             </div>
                         </div>
                     ) : null}

@@ -186,50 +186,189 @@ export default function ServerHTML({
                     <script
                         dangerouslySetInnerHTML={{
                             __html: `
-                      window.googletag = window.googletag || {};
-                      googletag.cmd = googletag.cmd || [];
-                      console.info('Set up googletag');
-                      googletag.cmd.push(function() {
-                          googletag.pubads().setTargeting('edition',['new-york']);
-                          googletag.pubads().collapseEmptyDivs(true,true);
-                          googletag.pubads().disableInitialLoad();
-                          googletag.enableServices();
-                          console.info('Enabled googletag services');
-                      });
+                              // window.googletag = window.googletag || {};
+                              // googletag.cmd = googletag.cmd || [];
+                              // console.info('Set up googletag');
+                              // googletag.cmd.push(function() {
+                              //     // googletag.pubads().setTargeting('edition',['new-york']);
+                              //     googletag.pubads().collapseEmptyDivs(true,true);
+                              //     googletag.pubads().disableInitialLoad();
+                              //     googletag.enableServices();
+                              //     console.info('Enabled googletag services');
+                              // });
 
-                      var pbjs = pbjs || {};
-                      pbjs.que = pbjs.que || [];
-                      pbjs.que.push(function() {
-                          pbjs.addAdUnits(${JSON.stringify(
-                              gptBidding.ad_units
-                          )});
-                          pbjs.setConfig({
-                              priceGranularity: ${JSON.stringify(
-                                  gptBidding.custom_config
-                              )},
-                              currency: ${JSON.stringify(
-                                  gptBidding.system_currency
-                              )}
-                          });
-                          pbjs.requestBids({
-                              bidsBackHandler: initAdserver,
-                              timeout: ${JSON.stringify(
-                                  gptBidding.prebid_timeout
-                              )}
-                          });
-                      });
 
-                      setTimeout(function() {
-                          if (pbjs.initAdserverSet) return;
-                          pbjs.initAdserverSet = true;
-                          googletag.cmd.push(function() {
+
+
+
+                                console.log('IN THE SERVER CODE STUFFS');
+
+                                var PREBID_TIMEOUT = 2000;
+                                var FAILSAFE_TIMEOUT = 3000;
+                                var adUnits = [
+                                  {
+                                    code: "div-gpt-ad-1551233873698-0",
+                                    mediaTypes: {
+                                      banner: {
+                                        sizes: [728, 90]
+                                      }
+                                    },
+                                    bids: [
+                                      {
+                                        bidder: "coinzilla",
+                                        params: {
+                                          placementId: "6425c7b9886e0045972"
+                                        }
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    code: "div-gpt-ad-1554687231046-0",
+                                    mediaTypes: {
+                                      banner: {
+                                        sizes: [160, 600]
+                                      }
+                                    },
+                                    bids: [
+                                      {
+                                        bidder: "coinzilla",
+                                        params: {
+                                          placementId: "3575c7b9886e2cb3619"
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ];
+                                const customConfigObject = {
+                                  buckets: [
+                                    {
+                                      precision: 2,
+                                      min: 0,
+                                      max: 1,
+                                      increment: 0.05
+                                    },
+                                    {
+                                      precision: 2,
+                                      min: 1,
+                                      max: 8,
+                                      increment: 0.1
+                                    }
+                                  ]
+                                };
+                                const systemCurrency = {
+                                  adServerCurrency: "USD",
+                                  granularityMultiplier: 1
+                                };
+
+                                var googletag = googletag || {};
+                                googletag.cmd = googletag.cmd || [];
+
+                                googletag.cmd.push(function() {
+                                  googletag.pubads().disableInitialLoad();
+                                });
+
+                                var pbjs = pbjs || {};
+                                pbjs.que = pbjs.que || [];
+
+                                pbjs.que.push(function() {
+                                  console.log('pbjs.que.push(function() {->IN THE SERVER CODE STUFFS');
+                                  pbjs.addAdUnits(adUnits);
+                                  pbjs.setConfig({
+                                    priceGranularity: customConfigObject,
+                                    currency: systemCurrency
+                                  });
+                                  pbjs.requestBids({
+                                    bidsBackHandler: initAdserver,
+                                    timeout: PREBID_TIMEOUT
+                                  });
+                                });
+
+                                function initAdserver() {
+                                  console.log('function initAdserver() {')
+                                  if (pbjs.initAdserverSet) return;
+                                  pbjs.initAdserverSet = true;
+                                  googletag.cmd.push(function() {
+                                    pbjs.que.push(function() {
+                                      console.log('pbjs.que.push(function() {')
+                                      pbjs.setTargetingForGPTAsync();
+                                      googletag.pubads().refresh();
+                                    });
+                                  });
+                                }
+
+                                setTimeout(function() {
+                                  initAdserver();
+                                }, FAILSAFE_TIMEOUT);
+
+                                googletag.cmd.push(function() {
+                                  googletag
+                                    .defineSlot(
+                                      "/21784675435/steemit_bottom-of-post/steemit_bottom-of-post_prebid",
+                                      [[728, 90]],
+                                      "div-gpt-ad-1551233873698-0"
+                                    )
+                                    .addService(googletag.pubads());
+                                  googletag
+                                    .defineSlot(
+                                      "/21784675435/steemit_left-navigation/steemit_left-navigation_prebid",
+                                      [[120, 600], [160, 600]],
+                                      "div-gpt-ad-1554687231046-0"
+                                    )
+                                    .addService(googletag.pubads());
+                                  googletag.pubads().enableSingleRequest();
+                                  googletag.enableServices();
+                                });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+                              var pbjs = pbjs || {};
+                              pbjs.que = pbjs.que || [];
                               pbjs.que.push(function() {
-                                  pbjs.setTargetingForGPTAsync();
-                                  googletag.pubads().refresh();
+                                  pbjs.addAdUnits(${JSON.stringify(
+                                      gptBidding.ad_units
+                                  )});
+                                  pbjs.setConfig({
+                                      priceGranularity: ${JSON.stringify(
+                                          gptBidding.custom_config
+                                      )},
+                                      currency: ${JSON.stringify(
+                                          gptBidding.system_currency
+                                      )}
+                                  });
+                                  pbjs.requestBids({
+                                      bidsBackHandler: initAdserver,
+                                      timeout: ${JSON.stringify(
+                                          gptBidding.prebid_timeout
+                                      )}
+                                  });
                               });
-                          });
-                      }, ${JSON.stringify(gptBidding.failsafe_timeout)});
-                  `,
+
+                              setTimeout(function() {
+                                  if (pbjs.initAdserverSet) return;
+                                  pbjs.initAdserverSet = true;
+                                  googletag.cmd.push(function() {
+                                      pbjs.que.push(function() {
+                                          pbjs.setTargetingForGPTAsync();
+                                          googletag.pubads().refresh();
+                                      });
+                                  });
+                              }, ${JSON.stringify(
+                                  gptBidding.failsafe_timeout
+                              )});*/
+                          `,
                         }}
                     />
                 ) : null}
@@ -254,7 +393,45 @@ export default function ServerHTML({
                 <title>{page_title}</title>
             </head>
             <body>
-                <div id="content" dangerouslySetInnerHTML={{ __html: body }} />
+                {
+                    <div
+                        id="content"
+                        dangerouslySetInnerHTML={{ __html: body }}
+                    />
+                }
+                {
+                    <div
+                        id="content"
+                        dangerouslySetInnerHTML={{
+                            __html: `
+                  <p>Ad 160x600 (or 120x600) - for left side</p>
+                  <br />
+                  <div id="div-gpt-ad-1554687231046-0" style="width:160px; height:600px;">
+                    <script>
+                    window.addEventListener('load', ()=>{
+                      googletag.cmd.push(function() {
+                        googletag.display("div-gpt-ad-1554687231046-0");
+                        console.log('inside display ad->div-gpt-ad-1554687231046-0')
+                      });});
+                    </script>
+                  </div>
+
+                  <br />
+                  <p>Ad 728x90 for right side</p>
+                  <br />
+                  <div id="div-gpt-ad-1551233873698-0" style="height:90px; width:728px;">
+                    <script>
+                      googletag.cmd.push(function() {
+                        googletag.display("div-gpt-ad-1551233873698-0");
+                        console.log('inside display ad->div-gpt-ad-1551233873698-0')
+                      });
+                    </script>
+                  </div>
+                `,
+                        }}
+                    />
+                }
+
                 {assets.script.map((href, idx) => (
                     <script key={idx} src={href} />
                 ))}

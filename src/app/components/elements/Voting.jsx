@@ -187,7 +187,10 @@ class Voting extends React.Component {
         };
 
         this.toggleWeightUpOrDown = up => {
-            this.setState({ showWeight: !this.state.showWeight });
+            this.setState({
+                showWeight: !this.state.showWeight,
+                showWeightDir: up ? 'up' : 'down',
+            });
         };
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'Voting');
     }
@@ -226,7 +229,13 @@ class Voting extends React.Component {
             username,
         } = this.props;
 
-        const { votingUp, votingDown, showWeight, myVote } = this.state;
+        const {
+            votingUp,
+            votingDown,
+            showWeight,
+            showWeightDir,
+            myVote,
+        } = this.state;
 
         const votingUpActive = voting && votingUp;
         const votingDownActive = voting && votingDown;
@@ -292,7 +301,7 @@ class Voting extends React.Component {
 
             const dropdown = (
                 <Dropdown
-                    show={showWeight}
+                    show={showWeight && showWeightDir == 'down'}
                     onHide={() => this.setState({ showWeight: false })}
                     onShow={() => {
                         this.setState({ showWeight: true });
@@ -536,10 +545,13 @@ class Voting extends React.Component {
             // Vote weight adjust
             dropdown = (
                 <Dropdown
-                    show={showWeight}
+                    show={showWeight && showWeightDir == 'up'}
                     onHide={() => this.setState({ showWeight: false })}
                     onShow={() => {
-                        this.setState({ showWeight: true });
+                        this.setState({
+                            showWeight: true,
+                            showWeightDir: 'up',
+                        });
                         this.readSliderWeight();
                     }}
                     title={up}

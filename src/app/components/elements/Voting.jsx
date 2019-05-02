@@ -25,17 +25,14 @@ import Dropdown from 'app/components/elements/Dropdown';
 const ABOUT_FLAG = (
     <div>
         <p>
-            {tt(
-                'voting_jsx.flagging_post_can_remove_rewards_the_flag_should_be_used_for_the_following'
-            )}
+            Downvoting a post can remove rewards and make this material less
+            visible. Some common reasons:
         </p>
         <ul>
-            <li>{tt('voting_jsx.disagreement_on_rewards')}</li>
-            <li>{tt('voting_jsx.fraud_or_plagiarism')}</li>
-            <li>{tt('voting_jsx.hate_speech_or_internet_trolling')}</li>
-            <li>
-                {tt('voting_jsx.intentional_miss_categorized_content_or_spam')}
-            </li>
+            <li>Disagreement on rewards</li>
+            <li>Fraud or plagiarism</li>
+            <li>Hate speech or trolling</li>
+            <li>Miscategorized content or spam</li>
         </ul>
     </div>
 );
@@ -262,11 +259,7 @@ class Voting extends React.Component {
         if (flag) {
             const down = (
                 <Icon
-                    name={
-                        votingDownActive
-                            ? 'empty'
-                            : myVote < 0 ? 'flag2' : 'flag1'
-                    }
+                    name={votingDownActive ? 'empty' : 'chevron-down-circle'}
                     className="flag"
                 />
             );
@@ -281,7 +274,7 @@ class Voting extends React.Component {
                 <span
                     href="#"
                     onClick={this.toggleWeightDown}
-                    title="Flag"
+                    title="Downvote"
                     id="downvote_button"
                     className="flag"
                 >
@@ -293,7 +286,7 @@ class Voting extends React.Component {
                 <a
                     href="#"
                     onClick={this.voteDown}
-                    title="Flag"
+                    title="Downvote"
                     className="flag"
                     id="revoke_downvote_button"
                 >
@@ -328,9 +321,9 @@ class Voting extends React.Component {
                                 href="#"
                                 onClick={this.voteDown}
                                 className="button outline"
-                                title="Flag"
+                                title="Downvote"
                             >
-                                Flag
+                                Submit
                             </span>
                         </div>
                     </div>
@@ -689,10 +682,7 @@ export default connect(
                         permlink,
                         weight,
                         __config: {
-                            title:
-                                weight < 0
-                                    ? tt('voting_jsx.confirm_flag')
-                                    : null,
+                            title: weight < 0 ? 'Confirm Downvote' : null,
                         },
                     },
                     confirm,

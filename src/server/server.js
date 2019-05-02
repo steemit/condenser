@@ -220,11 +220,11 @@ if (env === 'production') {
     app.use(koa_logger());
 }
 
-app.use(
-    helmet({
-        hsts: false,
-    })
-);
+// app.use(
+//     helmet({
+//         hsts: false,
+//     })
+// );
 
 app.use(
     mount(

@@ -227,7 +227,7 @@ class Post extends React.Component {
                 )}
                 {this.props.gptEnabled ? (
                     <div className="Post_footer__ad">
-                        <GptAd slotName="bottom_post" />
+                        <GptAd type="Bidding" slotName="bottom_post" />
                     </div>
                 ) : null}
                 <div id="#comments" className="Post_comments row hfeed">
@@ -251,7 +251,7 @@ class Post extends React.Component {
                 </div>
                 {this.props.gptEnabled ? (
                     <div className="Post_footer__ad">
-                        <GptAd slotName="basic_bottom_post" />
+                        <GptAd type="Basic" slotName="basic_bottom_post" />
                     </div>
                 ) : null}
             </div>

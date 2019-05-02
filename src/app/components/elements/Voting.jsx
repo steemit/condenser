@@ -25,8 +25,8 @@ import Dropdown from 'app/components/elements/Dropdown';
 const ABOUT_FLAG = (
     <div>
         <p>
-            Downvoting a post can remove rewards and make this material less
-            visible. Some common reasons:
+            Downvoting a post can decrease pending rewards and make it less
+            visible. Common reasons:
         </p>
         <ul>
             <li>Disagreement on rewards</li>
@@ -313,6 +313,7 @@ class Voting extends React.Component {
                         />
                         <div className="clear Voting__about-flag">
                             {ABOUT_FLAG}
+                            <br />
                             <span
                                 href="#"
                                 onClick={this.voteDown}

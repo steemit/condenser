@@ -46,7 +46,6 @@ class Voting extends React.Component {
     static propTypes = {
         // HTML properties
         post: PropTypes.string.isRequired,
-        flag: PropTypes.bool,
         showList: PropTypes.bool,
 
         // Redux connect properties
@@ -66,7 +65,6 @@ class Voting extends React.Component {
 
     static defaultProps = {
         showList: true,
-        flag: false,
     };
 
     constructor(props) {
@@ -109,7 +107,7 @@ class Voting extends React.Component {
                 weight = up ? MAX_WEIGHT : -MAX_WEIGHT;
             }
 
-            const isFlag = this.props.flag ? true : null;
+            const isFlag = up ? null : true;
             this.props.vote(weight, {
                 author,
                 permlink,
@@ -220,7 +218,6 @@ class Voting extends React.Component {
             active_votes,
             showList,
             voting,
-            flag,
             enable_slider,
             is_comment,
             post_obj,
@@ -230,7 +227,6 @@ class Voting extends React.Component {
         } = this.props;
 
         const { votingUp, votingDown, showWeight, myVote } = this.state;
-        if (flag && !username) return null;
 
         const votingUpActive = voting && votingUp;
         const votingDownActive = voting && votingDown;
@@ -256,7 +252,8 @@ class Voting extends React.Component {
             );
         };
 
-        if (flag) {
+        let downVote;
+        if (true) {
             const down = (
                 <Icon
                     name={votingDownActive ? 'empty' : 'chevron-down-circle'}
@@ -267,7 +264,6 @@ class Voting extends React.Component {
                 'Voting__button Voting__button-down' +
                 (myVote < 0 ? ' Voting__button--downvoted' : '') +
                 (votingDownActive ? ' votingDown' : '');
-            const flagWeight = post_obj.getIn(['stats', 'flagWeight']);
             // myVote === current vote
 
             const invokeFlag = (
@@ -303,7 +299,7 @@ class Voting extends React.Component {
                         this.readSliderWeight();
                     }}
                     title={invokeFlag}
-                    position={'left'}
+                    position={'right'}
                 >
                     <div className="Voting__adjust_weight_down">
                         {(myVote == null || myVote === 0) &&
@@ -330,18 +326,12 @@ class Voting extends React.Component {
                 </Dropdown>
             );
 
-            const flag =
-                myVote === null || myVote === 0 ? dropdown : revokeFlag;
-            return (
-                <span className="Voting">
-                    <span className={classDown}>
-                        {flagWeight > 0 && (
-                            <span className="Voting__button-downvotes">
-                                {'•'.repeat(flagWeight)}
-                            </span>
-                        )}
-                        {flag}
-                    </span>
+            const flagWeight = post_obj.getIn(['stats', 'flagWeight']);
+            //const flag =
+            //    myVote === null || myVote === 0 ? dropdown : revokeFlag;
+            downVote = (
+                <span className={classDown}>
+                    {myVote === null || myVote === 0 ? dropdown : revokeFlag}
                 </span>
             );
         }
@@ -589,6 +579,7 @@ class Voting extends React.Component {
                         {voteChevron}
                         {dropdown}
                     </span>
+                    {downVote}
                     {payoutEl}
                 </span>
                 {voters_list}
@@ -632,7 +623,6 @@ export default connect(
 
         return {
             post: ownProps.post,
-            flag: ownProps.flag,
             showList: ownProps.showList,
             author,
             permlink,

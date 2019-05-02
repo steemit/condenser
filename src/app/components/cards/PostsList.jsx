@@ -204,7 +204,7 @@ class PostsList extends React.Component {
                     this.forceUpdate();
                 };
                 return (
-                    <li key={pinnedPost}>
+                    <li key={id}>
                         <div className="PinLabel">
                             <span className="PinText">Featured</span>
                             <a

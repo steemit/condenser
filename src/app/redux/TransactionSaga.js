@@ -463,7 +463,10 @@ export function* createPermlink(title, author, parent_author, parent_permlink) {
         permlink = prefix + s;
     } else {
         // comments: re-parentauthor-parentpermlink-time
-        const timeStr = new Date().toISOString().replace(/[^a-zA-Z0-9]+/g, '');
+        const timeStr = new Date()
+            .toISOString()
+            .replace(/[^a-zA-Z0-9]+/g, '')
+            .toLowerCase();
         parent_permlink = parent_permlink.replace(/(-\d{8}t\d{9}z)/g, '');
         // Periods allowed in author are not allowed in permlink.
         parent_author = parent_author.replace(/\./g, '');

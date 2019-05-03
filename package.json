@@ -195,6 +195,7 @@
     ]
   },
   "jest": {
+    "testURL": "http://localhost:8080",
     "rootDir": "src",
     "modulePaths": [
       "<rootDir>/"

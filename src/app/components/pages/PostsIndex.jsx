@@ -303,6 +303,7 @@ class PostsIndex extends React.Component {
                                 <BiddingAd
                                     type="Bidding"
                                     slotName="left_nav_2"
+                                    id="div-gpt-ad-1554687231046-0"
                                 />
                             </div>
                         </div>

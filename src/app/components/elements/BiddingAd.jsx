@@ -75,12 +75,12 @@ class BiddingAd extends Component {
         //   googletag.enableServices();
         // });
         // This was the odl coe
+        const id = this.id;
         googletag.cmd.push(function() {
             console.log(
                 'BiddingAd::componentDidMount::2nd googletag push with display'
             );
-            console.log('window.pooponastick', window.pooponastick, googletag);
-            googletag.display('div-gpt-ad-1554687231046-0');
+            googletag.display(id);
         });
 
         // end old code
@@ -110,6 +110,7 @@ class BiddingAd extends Component {
 
     constructor(props) {
         super(props);
+        this.id = 'div-gpt-ad-1554687231046-0';
         // const { ad, enabled, type } = props;
         //
         // this.ad = {};
@@ -135,27 +136,9 @@ class BiddingAd extends Component {
     render() {
         console.log('BiddingAd::render');
 
-        // if (!this.ad || !this.enabled) {
-        //     return <div id="disabled_ad" style={{ display: 'none' }} />;
-        // }
-        // else if (this.type == 'Bidding') {
-        //   return(
-        //   <AdvertisingProvider config={BiddingConfig}>
-        //     <AdvertisingSlot id="div-gpt-ad-1551233873698-0" >
-        //       <b>div-gpt-ad-1551233873698-0</b>
-        //     </AdvertisingSlot>
-        //   </AdvertisingProvider>)
-        // }
-
         return (
-            <div className="bidding-ad" style={{ width: '100%' }}>
-                <p>Ad 160x600 (or 120x600) - for left side</p>
-                <br />
-                {/* TODO: Do we need to set styles?*/}
-                <div
-                    id="div-gpt-ad-1554687231046-0"
-                    style={{ width: 160, height: 600 }}
-                />
+            <div className="bidding-ad gpt-ad" style={{ width: '100%' }}>
+                <div id={this.id} />
                 {/*
               <br />
               <p>Ad 728x90 for right side</p>

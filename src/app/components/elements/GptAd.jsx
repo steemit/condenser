@@ -1,57 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
-const BiddingConfig = {
-    slots: [
-        {
-            id: 'div-gpt-ad-1551233873698-0',
-            path:
-                '/21784675435/steemit_bottom-of-post/steemit_bottom-of-post_prebid',
-            sizes: [[728, 90]],
-            prebid: [
-                {
-                    mediaTypes: {
-                        banner: {
-                            sizes: [[728, 90]],
-                        },
-                    },
-                    bids: [
-                        {
-                            bidder: 'coinzilla',
-                            params: {
-                                placementId: '6425c7b9886e0045972',
-                            },
-                        },
-                    ],
-                },
-            ],
-        },
-        {
-            id: 'div-gpt-ad-1554687231046-0',
-            path:
-                '/21784675435/steemit_left-navigation/steemit_left-navigation_prebid',
-            sizes: [[728, 90], [970, 90]],
-            prebid: [
-                {
-                    mediaTypes: {
-                        banner: {
-                            sizes: [[728, 90], [970, 90]],
-                        },
-                    },
-                    bids: [
-                        {
-                            bidder: 'coinzilla',
-                            params: {
-                                placementId: '3575c7b9886e2cb3619',
-                            },
-                        },
-                    ],
-                },
-            ],
-        },
-    ],
-};
-
 class GptAd extends Component {
     componentDidMount() {
         if (!this.ad.slot_id || !this.enabled) {

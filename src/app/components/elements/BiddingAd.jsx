@@ -110,7 +110,7 @@ class BiddingAd extends Component {
 
     constructor(props) {
         super(props);
-        this.id = 'div-gpt-ad-1554687231046-0';
+        this.id = this.props.id;
         // const { ad, enabled, type } = props;
         //
         // this.ad = {};
@@ -157,11 +157,10 @@ class BiddingAd extends Component {
     }
 }
 
-// BiddingAd.propTypes = {
-//     ad: PropTypes.object.isRequired, //TODO: Define this shape
-//     enabled: PropTypes.bool.isRequired,
-//     type: PropTypes.oneOf(['Bidding', 'Category', 'Basic']),
-// };
+BiddingAd.propTypes = {
+    id: PropTypes.string.isRequired, // TODO: This is the naive way, make this better with a sensible config.
+    type: PropTypes.oneOf(['Bidding', 'Category', 'Basic']),
+};
 
 export default connect(
     (state, props) => {

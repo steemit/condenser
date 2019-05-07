@@ -157,7 +157,7 @@ export default connect(
 
         // let slot = basicSlots.getIn([slotName]);
         let slot = state.app.getIn(['googleAds', `gpt${type}Slots`, slotName]);
-        console.log('GOT TYPE OF', type, slot);
+        //console.log('GOT TYPE OF', type, slot);
         // if (categorySlots.getIn([postCategory, slotName])) {
         //     console.info(
         //         `GPT-[${slotName}]::Overriding type of '${

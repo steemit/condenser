@@ -265,7 +265,11 @@ export default function ServerHTML({
 
                                 googletag.cmd.push(function() {
                                   googletag.pubads().disableInitialLoad();
+                                  googletag.pubads().enableSingleRequest();
+                                  googletag.enableServices();
                                 });
+
+
 
                                 var pbjs = pbjs || {};
                                 pbjs.que = pbjs.que || [];
@@ -277,6 +281,7 @@ export default function ServerHTML({
                                     priceGranularity: customConfigObject,
                                     currency: systemCurrency
                                   });
+                                  console.log('pbjs.que.push(function() {->BEFOR requestBids');
                                   pbjs.requestBids({
                                     bidsBackHandler: initAdserver,
                                     timeout: PREBID_TIMEOUT
@@ -284,7 +289,7 @@ export default function ServerHTML({
                                 });
 
                                 function initAdserver() {
-                                  console.log('function initAdserver() {')
+                                  console.log('function initAdserver() {', arguments)
                                   if (pbjs.initAdserverSet) return;
                                   pbjs.initAdserverSet = true;
                                   googletag.cmd.push(function() {
@@ -295,12 +300,13 @@ export default function ServerHTML({
                                     });
                                   });
                                 }
-
                                 setTimeout(function() {
+                                  // TODO: Do we need to do this twice?
                                   initAdserver();
-                                }, FAILSAFE_TIMEOUT);
+                                }, 5000);
 
                                 googletag.cmd.push(function() {
+                                  console.log("BiddingAd::componentDidMount::googletag.cmd.push");
                                   googletag
                                     .defineSlot(
                                       "/21784675435/steemit_bottom-of-post/steemit_bottom-of-post_prebid",
@@ -318,6 +324,21 @@ export default function ServerHTML({
                                   googletag.pubads().enableSingleRequest();
                                   googletag.enableServices();
                                 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -404,29 +425,7 @@ export default function ServerHTML({
                         id="content"
                         dangerouslySetInnerHTML={{
                             __html: `
-                  <p>Ad 160x600 (or 120x600) - for left side</p>
-                  <br />
-                  <div id="div-gpt-ad-1554687231046-0" style="width:160px; height:600px;">
-                    <script>
-                    window.addEventListener('load', ()=>{
-                      googletag.cmd.push(function() {
-                        googletag.display("div-gpt-ad-1554687231046-0");
-                        console.log('inside display ad->div-gpt-ad-1554687231046-0')
-                      });});
-                    </script>
-                  </div>
 
-                  <br />
-                  <p>Ad 728x90 for right side</p>
-                  <br />
-                  <div id="div-gpt-ad-1551233873698-0" style="height:90px; width:728px;">
-                    <script>
-                      googletag.cmd.push(function() {
-                        googletag.display("div-gpt-ad-1551233873698-0");
-                        console.log('inside display ad->div-gpt-ad-1551233873698-0')
-                      });
-                    </script>
-                  </div>
                 `,
                         }}
                     />

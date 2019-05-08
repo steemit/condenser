@@ -29,7 +29,11 @@ class GptAd extends Component {
 
     constructor(props) {
         super(props);
-        const { ad, enabled } = props;
+        const { ad, enabled, type } = props;
+
+        this.ad = {};
+        this.type = type;
+        this.enabled = false;
 
         if (ad) {
             console.info(
@@ -44,8 +48,6 @@ class GptAd extends Component {
                     props.slotName
                 }' will be disabled because we were unable to find the ad details.`
             );
-            this.enabled = false;
-            this.ad = {};
         }
     }
 
@@ -53,6 +55,14 @@ class GptAd extends Component {
         if (!this.ad || !this.enabled) {
             return <div id="disabled_ad" style={{ display: 'none' }} />;
         }
+        // else if (this.type == 'Bidding') {
+        //   return(
+        //   <AdvertisingProvider config={BiddingConfig}>
+        //     <AdvertisingSlot id="div-gpt-ad-1551233873698-0" >
+        //       <b>div-gpt-ad-1551233873698-0</b>
+        //     </AdvertisingSlot>
+        //   </AdvertisingProvider>)
+        // }
 
         return (
             <div
@@ -67,6 +77,7 @@ class GptAd extends Component {
 GptAd.propTypes = {
     ad: PropTypes.object.isRequired, //TODO: Define this shape
     enabled: PropTypes.bool.isRequired,
+    type: PropTypes.oneOf(['Bidding', 'Category', 'Basic']),
 };
 
 export default connect(
@@ -91,37 +102,40 @@ export default connect(
         //
         const slotName = props.slotName;
 
-        let type = 'basic';
-        let slot = basicSlots.getIn([slotName]);
-        if (categorySlots.getIn([postCategory, slotName])) {
-            console.info(
-                `GPT-[${slotName}]::Overriding type of '${
-                    type
-                }' to be 'category' due to category being set to '${
-                    postCategory
-                }' and the existence of a category named '${
-                    postCategory
-                }' which has a slot named '${slotName}'`
-            );
-            type = 'category';
-            slot = categorySlots.getIn([postCategory, slotName]);
-        } else if (biddingSlots.getIn([slotName])) {
-            console.info(
-                `GPT-[${slotName}]::Overriding type of '${
-                    type
-                }' to be 'bidding' because we have a bidding slot defined for slotName '${
-                    slotName
-                }'`
-            );
-            type = 'bidding';
-            slot = biddingSlots.getIn([slotName]);
-        } else {
-            console.info(
-                `GPT-[${slotName}]::No override for type. Sticking with '${
-                    type
-                }'`
-            );
-        }
+        let type = props.type;
+
+        // let slot = basicSlots.getIn([slotName]);
+        let slot = state.app.getIn(['googleAds', `gpt${type}Slots`, slotName]);
+        //console.log('GOT TYPE OF', type, slot);
+        // if (categorySlots.getIn([postCategory, slotName])) {
+        //     console.info(
+        //         `GPT-[${slotName}]::Overriding type of '${
+        //             type
+        //         }' to be 'category' due to category being set to '${
+        //             postCategory
+        //         }' and the existence of a category named '${
+        //             postCategory
+        //         }' which has a slot named '${slotName}'`
+        //     );
+        //     type = 'category';
+        //     slot = categorySlots.getIn([postCategory, slotName]);
+        // } else if (biddingSlots.getIn([slotName])) {
+        //     console.info(
+        //         `GPT-[${slotName}]::Overriding type of '${
+        //             type
+        //         }' to be 'bidding' because we have a bidding slot defined for slotName '${
+        //             slotName
+        //         }'`
+        //     );
+        //     type = 'bidding';
+        //     slot = biddingSlots.getIn([slotName]);
+        // } else {
+        //     console.info(
+        //         `GPT-[${slotName}]::No override for type. Sticking with '${
+        //             type
+        //         }'`
+        //     );
+        // }
 
         return {
             enabled,

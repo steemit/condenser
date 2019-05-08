@@ -9,6 +9,7 @@ import { sortComments } from 'app/components/cards/Comment';
 // import { Link } from 'react-router';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
 import GptAd from 'app/components/elements/GptAd';
+import BiddingAd from 'app/components/elements/BiddingAd';
 import { Set } from 'immutable';
 import tt from 'counterpart';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
@@ -227,7 +228,11 @@ class Post extends React.Component {
                 )}
                 {this.props.gptEnabled ? (
                     <div className="Post_footer__ad">
-                        <GptAd slotName="bottom_post" />
+                        <BiddingAd
+                            type="Bidding"
+                            slotName="bottom_post"
+                            id="div-gpt-ad-1551233873698-0"
+                        />
                     </div>
                 ) : null}
                 <div id="#comments" className="Post_comments row hfeed">
@@ -251,7 +256,7 @@ class Post extends React.Component {
                 </div>
                 {this.props.gptEnabled ? (
                     <div className="Post_footer__ad">
-                        <GptAd slotName="basic_bottom_post" />
+                        <GptAd type="Basic" slotName="basic_bottom_post" />
                     </div>
                 ) : null}
             </div>

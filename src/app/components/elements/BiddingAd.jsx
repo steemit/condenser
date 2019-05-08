@@ -54,6 +54,7 @@ import { connect } from 'react-redux';
 
 class BiddingAd extends Component {
     componentDidMount() {
+        window.addEventListener('prebidNoBids', this.prebidNoBids);
         // console.log("BiddingAd::componentDidMount")
         // googletag.cmd.push(function() {
         //   console.log("BiddingAd::componentDidMount::googletag.cmd.push")
@@ -75,6 +76,7 @@ class BiddingAd extends Component {
         //   googletag.enableServices();
         // });
         // This was the odl coe
+
         const id = this.id;
         googletag.cmd.push(function() {
             console.log(
@@ -107,10 +109,23 @@ class BiddingAd extends Component {
         //     }
         // });
     }
+    componentWillUnmount() {
+        window.removeEventListener('prebidNoBids', this.prebidNoBids);
+    }
 
+    prebidNoBids(e) {
+        console.log('Received a NOBIDS event', e, this.state);
+        if (e.slotId === this.id) {
+            console.log('Will hide this ad based on event match id', e);
+            this.setState({ shown: false });
+        }
+    }
     constructor(props) {
         super(props);
         this.id = this.props.id;
+        this.state = { shown: true };
+
+        this.prebidNoBids = this.prebidNoBids.bind(this);
         // const { ad, enabled, type } = props;
         //
         // this.ad = {};
@@ -135,25 +150,17 @@ class BiddingAd extends Component {
 
     render() {
         console.log('BiddingAd::render');
-
-        return (
-            <div className="bidding-ad gpt-ad" style={{ width: '100%' }}>
-                <div id={this.id} />
-                {/*
-              <br />
-              <p>Ad 728x90 for right side</p>
-              <br />
-              <div id="div-gpt-ad-1551233873698-0" style="height:90px; width:728px;">
-                <script>
-                  googletag.cmd.push(function() {
-                    googletag.display("div-gpt-ad-1551233873698-0");
-                    console.log('inside display ad->div-gpt-ad-1551233873698-0')
-                  });
-                </script>
-              </div>
-              */}
-            </div>
-        );
+        if (this.state.shown) {
+            console.log('WILL SHOW A BIDDING AD!!!!!!!!!!!!!!!!!');
+            return (
+                <div className="bidding-ad gpt-ad" style={{ width: '100%' }}>
+                    <div id={this.id} />
+                </div>
+            );
+        } else {
+            console.log('NO AD TO SHOW!');
+            return null;
+        }
     }
 }
 

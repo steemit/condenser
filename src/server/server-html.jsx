@@ -186,23 +186,8 @@ export default function ServerHTML({
                     <script
                         dangerouslySetInnerHTML={{
                             __html: `
-                              // window.googletag = window.googletag || {};
-                              // googletag.cmd = googletag.cmd || [];
-                              // console.info('Set up googletag');
-                              // googletag.cmd.push(function() {
-                              //     // googletag.pubads().setTargeting('edition',['new-york']);
-                              //     googletag.pubads().collapseEmptyDivs(true,true);
-                              //     googletag.pubads().disableInitialLoad();
-                              //     googletag.enableServices();
-                              //     console.info('Enabled googletag services');
-                              // });
-
-
-
-
-
-                                console.log('IN THE SERVER CODE STUFFS');
-
+                                // TODO: Move the follow values into config
+                                //       a new config file for ads would be good
                                 var PREBID_TIMEOUT = 2000;
                                 var FAILSAFE_TIMEOUT = 3000;
                                 var adUnits = [
@@ -260,6 +245,7 @@ export default function ServerHTML({
                                   granularityMultiplier: 1
                                 };
 
+                                // Begin GPT Ad Setup
                                 var googletag = googletag || {};
                                 googletag.cmd = googletag.cmd || [];
 
@@ -270,7 +256,7 @@ export default function ServerHTML({
                                 });
 
 
-
+                                // Begin Prebid Setup
                                 var pbjs = pbjs || {};
                                 pbjs.que = pbjs.que || [];
 
@@ -287,9 +273,22 @@ export default function ServerHTML({
                                     timeout: PREBID_TIMEOUT
                                   });
                                 });
-
+                                var noBids = {}
                                 function initAdserver() {
                                   console.log('function initAdserver() {', arguments)
+                                  if (arguments.length > 0) {
+                                    console.log('Received args @ initAdServer')
+                                    noBids = pbjs.getNoBids();
+                                    console.log('Result of noBids: ', noBids)
+                                  }
+                                  // Ensure this runs with our "failsafe" timeout
+                                  for (var slotId in noBids) {
+                                    var event = new Event('prebidNoBids');
+                                    event.slotId = slotId;
+                                    window.dispatchEvent(event);
+                                    console.log('Eventing a no bid event', event)
+                                  }
+
                                   if (pbjs.initAdserverSet) return;
                                   pbjs.initAdserverSet = true;
                                   googletag.cmd.push(function() {
@@ -300,11 +299,15 @@ export default function ServerHTML({
                                     });
                                   });
                                 }
-                                setTimeout(function() {
-                                  // TODO: Do we need to do this twice?
-                                  initAdserver();
-                                }, 5000);
 
+                                // TODO: Do we need to do this twice?
+                                setTimeout(function() {
+                                  // TODO: Why would we call initAdserver a second time but with no params?
+                                  initAdserver();
+                                }, FAILSAFE_TIMEOUT);
+
+                                // Begin Globally defining possible bidding ad slots.
+                                // TODO: Slot defs need to be moved to config.
                                 googletag.cmd.push(function() {
                                   console.log("BiddingAd::componentDidMount::googletag.cmd.push");
                                   googletag
@@ -324,71 +327,6 @@ export default function ServerHTML({
                                   googletag.pubads().enableSingleRequest();
                                   googletag.enableServices();
                                 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-                              var pbjs = pbjs || {};
-                              pbjs.que = pbjs.que || [];
-                              pbjs.que.push(function() {
-                                  pbjs.addAdUnits(${JSON.stringify(
-                                      gptBidding.ad_units
-                                  )});
-                                  pbjs.setConfig({
-                                      priceGranularity: ${JSON.stringify(
-                                          gptBidding.custom_config
-                                      )},
-                                      currency: ${JSON.stringify(
-                                          gptBidding.system_currency
-                                      )}
-                                  });
-                                  pbjs.requestBids({
-                                      bidsBackHandler: initAdserver,
-                                      timeout: ${JSON.stringify(
-                                          gptBidding.prebid_timeout
-                                      )}
-                                  });
-                              });
-
-                              setTimeout(function() {
-                                  if (pbjs.initAdserverSet) return;
-                                  pbjs.initAdserverSet = true;
-                                  googletag.cmd.push(function() {
-                                      pbjs.que.push(function() {
-                                          pbjs.setTargetingForGPTAsync();
-                                          googletag.pubads().refresh();
-                                      });
-                                  });
-                              }, ${JSON.stringify(
-                                  gptBidding.failsafe_timeout
-                              )});*/
                           `,
                         }}
                     />
@@ -420,17 +358,6 @@ export default function ServerHTML({
                         dangerouslySetInnerHTML={{ __html: body }}
                     />
                 }
-                {
-                    <div
-                        id="content"
-                        dangerouslySetInnerHTML={{
-                            __html: `
-
-                `,
-                        }}
-                    />
-                }
-
                 {assets.script.map((href, idx) => (
                     <script key={idx} src={href} />
                 ))}

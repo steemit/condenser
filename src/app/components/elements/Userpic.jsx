@@ -20,12 +20,14 @@ class Userpic extends Component {
     shouldComponentUpdate = shouldComponentUpdate(this, 'Userpic');
 
     render() {
-        const { account, json_metadata, size } = this.props;
+        let { account } = this.props;
+        const { json_metadata, size } = this.props;
         const hideIfDefault = this.props.hideIfDefault || false;
         const avSize = size && sizeList.indexOf(size) > -1 ? '/' + size : '';
 
-        // try to extract image url from users metaData
-        if (hideIfDefault) {
+        if (account == 'steemitblog') account = 'steemitdev';
+        else if (hideIfDefault) {
+            // try to extract image url from users metaData
             try {
                 const md = JSON.parse(json_metadata);
                 if (!/^(https?:)\/\//.test(md.profile.profile_image)) {

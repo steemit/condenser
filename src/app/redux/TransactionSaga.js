@@ -476,7 +476,46 @@ export function* createPermlink(title, author, parent_author, parent_permlink) {
         // STEEMIT_MAX_PERMLINK_LENGTH
         permlink = permlink.substring(permlink.length - 255, permlink.length);
     }
+    permlink = cleanPermlink(permlink, parent_author);
     return permlink;
+}
+
+/**
+ * Permlinks from nested comments are too long and are repeating the username of previous authors.
+ * This function removes the previous authors and only re-inject the author of the current parent comment
+ * https://github.com/steemit/condenser/issues/3278
+ *
+ * @param permlink
+ * @param parent_author
+ * @returns {string}
+ */
+function cleanPermlink(permlink, parent_author) {
+    // First let find all previous authors involved in the permlink
+    const repliersRegexp = /re-(.*?)-/gm;
+    const repliers = [];
+    let matches;
+    while (matches = repliersRegexp.exec(permlink)) {
+        if (repliers.indexOf(matches[1]) === -1) {
+            repliers.push(decodeURIComponent(matches[1]));
+        }
+    }
+
+    // Lets remove all "re-author" from the permlink
+    let removeRepliersPattern = `re-.*?-`;
+    let regex = new RegExp(removeRepliersPattern, 'g');
+    permlink = permlink.replace(regex, '');
+
+    // Some other dapps like Partiko are injecting the current replier before the "re-author"
+    // Lets remove all other authors reference from the permlink even if they are not prepended with "re-"
+    for (let ri=0; ri<repliers.length; ri++) {
+        const replier = repliers[ri];
+        removeRepliersPattern = replier + '-';
+        regex = new RegExp(removeRepliersPattern, 'g');
+        permlink = permlink.replace(regex, '');
+    }
+
+    // Finally lets re-add the author of the parent comment
+    return `re-${parent_author}-` + permlink;
 }
 
 import diff_match_patch from 'diff-match-patch';

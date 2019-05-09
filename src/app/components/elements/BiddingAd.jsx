@@ -43,6 +43,7 @@ class BiddingAd extends Component {
                 </div>
             );
         } else {
+            // TODO: One Day we will fall back to another ad type here.
             console.log('NO AD TO SHOW!');
             return null;
         }

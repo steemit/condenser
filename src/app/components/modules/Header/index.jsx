@@ -283,7 +283,18 @@ class Header extends React.Component {
                     )}
                     {/* If announcement is shown, ad will not render unless it's in a parent div! */}
                     <div>
-                        <GptAd type="Basic" slotName="top_nav" />
+                        {this.props.gptEnabled ? (
+                            // Setting a fixed height here allows the content to
+                            // render below the header without the header later
+                            // expanding and blocking the content. GPT hides the ad
+                            // div when no ad shows so this should be ok in that
+                            // situation. If GPT is disabled, this div doesn't render.
+                            <GptAd
+                                type="Basic"
+                                slotName="top_nav"
+                                style={{ height: '90px' }}
+                            />
+                        ) : null}
                     </div>
                     <nav className="row Header__nav">
                         <div className="small-5 large-4 columns Header__logotype">

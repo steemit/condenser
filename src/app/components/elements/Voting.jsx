@@ -352,17 +352,17 @@ class Voting extends React.Component {
         const max_payout = parsePayoutAmount(
             post_obj.get('max_accepted_payout')
         );
-        const pending_payout = parsePayoutAmount(
+        let pending_payout = parsePayoutAmount(
             post_obj.get('pending_payout_value')
         );
         const percent_steem_dollars =
             post_obj.get('percent_steem_dollars') / 20000;
         const pending_payout_sbd = pending_payout * percent_steem_dollars;
-        const pending_payout_sp =
+        let pending_payout_sp =
             (pending_payout - pending_payout_sbd) / price_per_steem;
-        const pending_payout_printed_sbd =
+        let pending_payout_printed_sbd =
             pending_payout_sbd * (sbd_print_rate / SBD_PRINT_RATE_MAX);
-        const pending_payout_printed_steem =
+        let pending_payout_printed_steem =
             (pending_payout_sbd - pending_payout_printed_sbd) / price_per_steem;
 
         const promoted = parsePayoutAmount(post_obj.get('promoted'));
@@ -397,6 +397,14 @@ class Voting extends React.Component {
             (cashout_time.indexOf('1969') !== 0 &&
                 !(is_comment && total_votes == 0));
         const payoutItems = [];
+
+        const minimumAmountForPayout = 0.02;
+        if (pending_payout < minimumAmountForPayout) {
+            pending_payout = 0;
+            pending_payout_printed_sbd = 0;
+            pending_payout_printed_steem = 0;
+            pending_payout_sp = 0;
+        }
 
         if (cashout_active) {
             payoutItems.push({

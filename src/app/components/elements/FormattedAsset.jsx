@@ -8,6 +8,11 @@ const FormattedAsset = ({ amount, asset, classname }) => {
     if (amount && typeof amount === 'string') {
         amount = parsePayoutAmount(amount);
     }
+
+    const minimumAmountForPayout = 0.02;
+    if (amount < minimumAmountForPayout) {
+      amount = 0.00;
+    }
     const amnt = formatDecimal(amount);
     return asset === '$' ? (
         <span className={`FormattedAsset ${classname}`}>

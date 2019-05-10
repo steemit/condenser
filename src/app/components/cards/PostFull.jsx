@@ -256,6 +256,7 @@ class PostFull extends React.Component {
             document.title = title + ' — ' + APP_NAME;
 
         let content_body = content.body;
+        content_body = content_body.replace(/(<br\s*\/?>){3,}/gi, '<br>');
         const url = `/${category}/@${author}/${permlink}`;
         const bDMCAStop = DMCAList.includes(url);
         const bIllegalContentUser = userIllegalContent.includes(content.author);

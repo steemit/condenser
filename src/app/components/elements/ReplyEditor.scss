@@ -86,6 +86,12 @@
   opacity: 0;
 }
 
+.ReplyEditor .Preview {
+  max-width: 42.125rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .ReplyEditor .Preview .Markdown {
   border: 1px solid $light-gray;
   padding: 0.5rem 1rem;

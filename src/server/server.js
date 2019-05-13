@@ -220,11 +220,11 @@ if (env === 'production') {
     app.use(koa_logger());
 }
 
-app.use(
-    helmet({
-        hsts: false,
-    })
-);
+// app.use(
+//     helmet({
+//         hsts: false,
+//     })
+// );
 
 app.use(
     mount(
@@ -288,6 +288,14 @@ if (env !== 'test') {
     // we're inside a generator, we can't `await` here, so we pass a promise
     // so `src/server/app_render.jsx` can `await` on it.
     app.pinnedPostsPromise = pinnedPosts();
+    // refresh pinned posts every five minutes
+    setInterval(function() {
+        return new Promise(function(resolve, reject) {
+            app.pinnedPostsPromise = pinnedPosts();
+            resolve();
+        });
+    }, 300000);
+
     app.use(function*() {
         yield appRender(this, supportedLocales, resolvedAssets);
         const bot = this.state.isBot;

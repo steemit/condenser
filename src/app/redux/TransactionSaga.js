@@ -394,12 +394,7 @@ export function* preBroadcast_comment({ operation, username }) {
     }
     if (!body2) body2 = body;
     if (!permlink)
-        permlink = yield createPermlink(
-            title,
-            author,
-            parent_author,
-            parent_permlink
-        );
+        permlink = yield createPermlink(title, author);
 
     const md = operation.json_metadata;
     const json_metadata = typeof md === 'string' ? md : JSON.stringify(md);
@@ -442,7 +437,7 @@ export function* preBroadcast_comment({ operation, username }) {
     return comment_op;
 }
 
-export function* createPermlink(title, author, parent_author, parent_permlink) {
+export function* createPermlink(title, author) {
     let permlink;
     if (title && title.trim() !== '') {
         let s = slug(title);
@@ -462,60 +457,16 @@ export function* createPermlink(title, author, parent_author, parent_permlink) {
         }
         permlink = prefix + s;
     } else {
-        // comments: re-parentauthor-parentpermlink-time
+        // comments: cmt-yyyymmdd-hhmmsssss
         const timeStr = new Date()
-            .toISOString()
-            .replace(/[^a-zA-Z0-9]+/g, '')
-            .toLowerCase();
-        parent_permlink = parent_permlink.replace(/(-\d{8}t\d{9}z)/g, '');
-        // Periods allowed in author are not allowed in permlink.
-        parent_author = parent_author.replace(/\./g, '');
-        permlink = `re-${parent_author}-${parent_permlink}-${timeStr}`;
+          .toISOString()
+          .replace(/[^a-zA-Z0-9]+/g, '')
+          .replace(/T/g, '-')
+          .replace(/Z/g, '');
+        permlink = `cmt-${timeStr}`;
     }
-    if (permlink.length > 255) {
-        // STEEMIT_MAX_PERMLINK_LENGTH
-        permlink = permlink.substring(permlink.length - 255, permlink.length);
-    }
-    permlink = cleanPermlink(permlink, parent_author);
+
     return permlink;
-}
-
-/**
- * Permlinks from nested comments are too long and are repeating the username of previous authors.
- * This function removes the previous authors and only re-inject the author of the current parent comment
- * https://github.com/steemit/condenser/issues/3278
- *
- * @param permlink
- * @param parent_author
- * @returns {string}
- */
-function cleanPermlink(permlink, parent_author) {
-    // First let find all previous authors involved in the permlink
-    const repliersRegexp = /re-(.*?)-/gm;
-    const repliers = [];
-    let matches;
-    while (matches = repliersRegexp.exec(permlink)) {
-        if (repliers.indexOf(matches[1]) === -1) {
-            repliers.push(decodeURIComponent(matches[1]));
-        }
-    }
-
-    // Lets remove all "re-author" from the permlink
-    let removeRepliersPattern = `re-.*?-`;
-    let regex = new RegExp(removeRepliersPattern, 'g');
-    permlink = permlink.replace(regex, '');
-
-    // Some other dapps like Partiko are injecting the current replier before the "re-author"
-    // Lets remove all other authors reference from the permlink even if they are not prepended with "re-"
-    for (let ri=0; ri<repliers.length; ri++) {
-        const replier = repliers[ri];
-        removeRepliersPattern = replier + '-';
-        regex = new RegExp(removeRepliersPattern, 'g');
-        permlink = permlink.replace(regex, '');
-    }
-
-    // Finally lets re-add the author of the parent comment
-    return `re-${parent_author}-` + permlink;
 }
 
 import diff_match_patch from 'diff-match-patch';

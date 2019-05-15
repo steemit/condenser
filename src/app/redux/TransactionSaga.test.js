@@ -69,12 +69,7 @@ describe('TransactionSaga', () => {
     });
 
     describe('createPermlink', () => {
-        const gen = createPermlink(
-            operation.title,
-            operation.author,
-            operation.parent_author,
-            operation.parent_permlink
-        );
+        const gen = createPermlink(operation.title, operation.author);
         it('should call the api to get a permlink if the title is valid', () => {
             const actual = gen.next().value;
             const mockCall = call(
@@ -89,20 +84,11 @@ describe('TransactionSaga', () => {
             expect(permlink.indexOf('test') > -1).toEqual(true); // TODO: cannot deep equal due to date stamp at runtime.
         });
         it('should generate own permlink, independent of api if title is empty', () => {
-            const gen2 = createPermlink(
-                '',
-                operation.author,
-                operation.parent_author,
-                operation.parent_permlink
-            );
+            const gen2 = createPermlink('', operation.author);
             const actual = gen2.next().value;
             expect(
-                actual.indexOf(
-                    `re-${operation.parent_author}-${
-                        operation.parent_permlink
-                    }-`
-                ) > -1
-            ).toEqual(true); // TODO: cannot deep equal due to random hash at runtime.
+                actual.match(/cmt-[0-9]{8}-[0-9]{9}/) !== null
+            ).toEqual(true);
         });
     });
 
@@ -110,12 +96,7 @@ describe('TransactionSaga', () => {
         let gen = preBroadcast_comment({ operation, username });
 
         it('should call createPermlink', () => {
-            const permlink = gen.next(
-                operation.title,
-                operation.author,
-                operation.parent_author,
-                operation.parent_permlink
-            ).value;
+            const permlink = gen.next(operation.title, operation.author).value;
             const actual = permlink.next().value;
             const expected = call(
                 [api, api.getContentAsync],

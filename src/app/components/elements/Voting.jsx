@@ -436,6 +436,7 @@ class Voting extends React.Component {
                             ': ' +
                             (parseFloat(key.get('weight')) / 100).toFixed(2) +
                             '%',
+                        link: '/@' + key.get('account'),
                     });
                 });
             }

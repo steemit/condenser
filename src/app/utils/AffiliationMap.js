@@ -4,6 +4,8 @@ const map = {
     justinw: 'steemit',
     elipowell: 'steemit',
     vandeberg: 'steemit',
+    birdinc: 'steemit',
+    gerbino: 'steemit',
     andrarchy: 'steemit',
     roadscape: 'steemit',
     steemitblog: 'steemit',

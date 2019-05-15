@@ -132,9 +132,12 @@ body.with-post-overlay {
         margin-top: 0.2rem;
 
         svg {
-            width: 0.8rem;
-            height: 0.8rem;
-            opacity: 0.5;
+            @include themify($themes) {
+                width: 0.8rem;
+                height: 0.8rem;
+                opacity: 0.5;
+                fill: themed('textColorSecondary');
+            }
         }
 
         &:hover {

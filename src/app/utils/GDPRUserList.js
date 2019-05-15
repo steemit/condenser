@@ -12,6 +12,7 @@ m4r1a
 bridgenit
 bitchminer
 bisade
+boy666
 `
     .trim()
     .split('\n');

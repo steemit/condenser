@@ -10,7 +10,6 @@ import CloseButton from 'app/components/elements/CloseButton';
 import Dialogs from 'app/components/modules/Dialogs';
 import Modals from 'app/components/modules/Modals';
 import WelcomePanel from 'app/components/elements/WelcomePanel';
-import MiniHeader from 'app/components/modules/MiniHeader';
 import tt from 'counterpart';
 import PageViewsCounter from 'app/components/elements/PageViewsCounter';
 import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
@@ -84,7 +83,6 @@ class App extends React.Component {
             order,
         } = this.props;
 
-        const miniHeader = false;
         const whistleView = viewMode === VIEW_MODE_WHISTLE;
         const headerHidden = whistleView;
         const params_keys = Object.keys(params);
@@ -169,7 +167,6 @@ class App extends React.Component {
             <div
                 className={classNames('App', themeClass, {
                     'index-page': ip,
-                    'mini-header': miniHeader,
                     'whistle-view': whistleView,
                     withAnnouncement: this.props.showAnnouncement,
                 })}
@@ -177,9 +174,7 @@ class App extends React.Component {
             >
                 <ConnectedSidePanel alignment="right" />
 
-                {headerHidden ? null : miniHeader ? (
-                    <MiniHeader />
-                ) : (
+                {headerHidden ? null : (
                     <Header
                         pathname={pathname}
                         category={category}

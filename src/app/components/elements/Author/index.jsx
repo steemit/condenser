@@ -132,9 +132,12 @@ class Author extends React.Component {
                             to={'/@' + author}
                         >
                             {author} <Reputation value={authorRepLog10} />
-                            {EmployeeList.includes(author) ? (
-                                <span className="employee">
-                                    {tt('g.employees')}
+                            {AffiliationMap[author] ? (
+                                <span className="affiliation">
+                                    {tt(
+                                        'g.affiliation_' +
+                                            AffiliationMap[author]
+                                    )}
                                 </span>
                             ) : null}
                             <Icon name="dropdown-arrow" />

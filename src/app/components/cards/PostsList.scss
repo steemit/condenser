@@ -113,23 +113,29 @@ body.with-post-overlay {
     }
 }
 
-.PostsList__summaries .PinLabel {
-    margin-bottom: 2px;
+.PostsList__summaries {
+    .articles__content {
+        position: relative;
+    }
 
     .PinText {
         @include themify($themes) {
-            position: relative;
-            top: 2px;
-            left: 1px;
-            font-size: 0.875rem;
-            color: themed('textColorSecondary');
+            text-transform: lowercase;
+            color: themed('colorAccent');
+            border: 1px solid themed('colorAccent');
+            font-size: 70%;
+            border-radius: 3px;
+            font-weight: normal;
+            font-family: Arial;
+            margin: 0 0 0 0.5rem;
+            padding: 0px 1px;
+            vertical-align: 15%;
         }
     }
 
-    A.DismissPost {
-        float: right;
-        margin-right: 0.5rem;
-        margin-top: 0.2rem;
+    A.PinDismiss {
+        position: absolute;
+        right: 0;
 
         svg {
             @include themify($themes) {

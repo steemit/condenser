@@ -31,10 +31,12 @@ class Author extends React.Component {
         follow: bool,
         mute: bool,
         authorRepLog10: number,
+        showAffiliation: bool,
     };
     static defaultProps = {
         follow: true,
         mute: true,
+        showAffiliation: false,
     };
 
     constructor(...args) {
@@ -89,7 +91,13 @@ class Author extends React.Component {
 
     shouldComponentUpdate = shouldComponentUpdate(this, 'Author');
     render() {
-        const { author, follow, mute, authorRepLog10 } = this.props; // html
+        const {
+            author,
+            follow,
+            mute,
+            authorRepLog10,
+            showAffiliation,
+        } = this.props; // html
         const { username } = this.props; // redux
         const { name, about } = this.props.account
             ? normalizeProfile(this.props.account.toJS())
@@ -107,7 +115,7 @@ class Author extends React.Component {
                         <Link to={'/@' + author}>{author}</Link>
                     </strong>{' '}
                     <Reputation value={authorRepLog10} />
-                    {AffiliationMap[author] ? (
+                    {showAffiliation && AffiliationMap[author] ? (
                         <span className="affiliation">
                             {tt('g.affiliation_' + AffiliationMap[author])}
                         </span>
@@ -132,7 +140,7 @@ class Author extends React.Component {
                             to={'/@' + author}
                         >
                             {author} <Reputation value={authorRepLog10} />
-                            {AffiliationMap[author] ? (
+                            {showAffiliation && AffiliationMap[author] ? (
                                 <span className="affiliation">
                                     {tt(
                                         'g.affiliation_' +

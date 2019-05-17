@@ -3,9 +3,7 @@ import { connect } from 'react-redux';
 
 class GptAd extends Component {
     componentDidMount() {
-        if (!this.ad.path || !this.enabled) {
-            return;
-        }
+        if (!this.ad.path || !this.enabled) return;
 
         googletag.cmd.push(() => {
             const slot = googletag.defineSlot(
@@ -40,18 +38,18 @@ class GptAd extends Component {
         this.enabled = false;
 
         if (ad) {
-            console.info(
-                `Slot named '${props.slotName}' will render with given data:`,
-                ad
-            );
+            // console.info(
+            //     `Slot named '${props.slotName}' will render with given data:`,
+            //     ad
+            // );
             this.enabled = enabled;
             this.ad = ad.toJS();
         } else {
-            console.info(
-                `Slot named '${
-                    props.slotName
-                }' will be disabled because we were unable to find the ad details.`
-            );
+            // console.info(
+            //     `Slot named '${
+            //         props.slotName
+            //     }' will be disabled because we were unable to find the ad details.`
+            // );
         }
     }
 
@@ -104,7 +102,6 @@ export default connect(
         const slotName = props.slotName;
         let type = props.type;
         let slot = state.app.getIn(['googleAds', `gpt${type}Slots`, slotName]);
-        console.log('GOT TYPE OF', type, slot);
 
         return {
             enabled,

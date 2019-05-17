@@ -161,7 +161,15 @@ class App extends React.Component {
             );
         }
 
-        const themeClass = nightmodeEnabled ? ' theme-dark' : ' theme-light';
+        let themeClass = 'theme-light';
+        if (nightmodeEnabled) {
+            themeClass = 'theme-dark';
+            document.body.classList.remove('theme-light');
+            document.body.classList.add('theme-dark');
+        } else {
+            document.body.classList.remove('theme-dark');
+            document.body.classList.add('theme-light');
+        }
 
         return (
             <div

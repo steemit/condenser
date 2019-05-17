@@ -25,6 +25,7 @@ import Userpic from 'app/components/elements/Userpic';
 import Callout from 'app/components/elements/Callout';
 import normalizeProfile from 'app/utils/NormalizeProfile';
 import userIllegalContent from 'app/utils/userIllegalContent';
+import AffiliationMap from 'app/utils/AffiliationMap';
 import proxifyImageUrl from 'app/utils/ProxifyUrl';
 import ArticleLayoutSelector from 'app/components/modules/ArticleLayoutSelector';
 import SanitizedLink from 'app/components/elements/SanitizedLink';
@@ -567,8 +568,15 @@ export default class UserProfile extends React.Component {
                                     ({rep})
                                 </span>
                             </Tooltip>
+                            {AffiliationMap[accountname] ? (
+                                <span className="affiliation">
+                                    {tt(
+                                        'g.affiliation_' +
+                                            AffiliationMap[accountname]
+                                    )}
+                                </span>
+                            ) : null}
                         </h1>
-
                         <div>
                             {about && (
                                 <p className="UserProfile__bio">{about}</p>

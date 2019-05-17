@@ -205,22 +205,14 @@ class PostsList extends React.Component {
                 };
                 return (
                     <li key={id}>
-                        <div className="PinLabel">
-                            <span className="PinText">Featured</span>
-                            <a
-                                onClick={close}
-                                className="DismissPost"
-                                title="Dismiss Post"
-                            >
-                                <Icon name="close" />
-                            </a>
-                        </div>
                         <PostSummary
                             account={account}
                             post={id}
                             thumbSize={thumbSize}
                             ignore={false}
                             nsfwPref={nsfwPref}
+                            featured
+                            featuredOnClose={close}
                         />
                     </li>
                 );

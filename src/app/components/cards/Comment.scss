@@ -63,10 +63,22 @@
       }
     }
   }
+  .Comment__body {
+    padding: 0;
+    border: none;
+  }
+  .Comment__footer {
+    padding: 0;
+    border: none;
+  }
 }
 
 .Comment__header {
   margin-left: 62px;
+  border-radius: 3px 3px 0 0;
+  border: 1px solid #f0f0f0;
+  background-color: #f0f0f0;
+  padding: 7px 14px;
 }
 
 .Comment__header-user {
@@ -78,8 +90,6 @@
     @extend .link--primary;
   }
 }
-
-
 
 .Comment__header_collapse {
   float: right;
@@ -96,10 +106,17 @@
 .Comment__body {
   margin-left: 62px;
   max-width: 50rem;
+  border: 1px solid #f0f0f0;
+  padding: 14px;
+  border-bottom: none;
 }
 
 .Comment__footer {
   margin-left: 62px;
+  border: 1px solid #f0f0f0;
+  border-radius: 3px 0;
+  padding: 3px 14px;
+
   @include themify($themes) {
     color: themed('textColorPrimary');
   }

@@ -5,10 +5,8 @@ class BiddingAd extends Component {
     componentDidMount() {
         window.addEventListener('prebidNoBids', this.prebidNoBids);
         const id = this.id;
+
         googletag.cmd.push(function() {
-            console.log(
-                'BiddingAd::componentDidMount::2nd googletag push with display'
-            );
             googletag.display(id);
         });
     }
@@ -18,7 +16,7 @@ class BiddingAd extends Component {
     }
 
     prebidNoBids(e) {
-        console.log('Received a NOBIDS event', e, this.state);
+        // console.log('Received a NOBIDS event', e, this.state);
         if (e.slotId === this.id) {
             console.log('Will hide this ad based on event match id', e);
             this.setState({ shown: false });
@@ -34,9 +32,7 @@ class BiddingAd extends Component {
     }
 
     render() {
-        console.log('BiddingAd::render');
         if (this.state.shown) {
-            console.log('WILL SHOW A BIDDING AD!!!!!!!!!!!!!!!!!');
             return (
                 <div className="bidding-ad gpt-ad" style={{ width: '100%' }}>
                     <div id={this.id} />
@@ -44,7 +40,6 @@ class BiddingAd extends Component {
             );
         } else {
             // TODO: One Day we will fall back to another ad type here.
-            console.log('NO AD TO SHOW!');
             return null;
         }
     }
@@ -57,7 +52,7 @@ BiddingAd.propTypes = {
 
 export default connect(
     (state, props) => {
-        console.log('GptBidding::connect', props);
+        // console.log('GptBidding::connect', props);
 
         return {
             ...props,

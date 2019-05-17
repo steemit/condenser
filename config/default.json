@@ -75,157 +75,90 @@
   "gpt_basic_slots": {
     "bottom-of-post": {
       "path": "/21784675435/steemit_bottom-of-post",
-      "dimensions": [[728, 90], [970, 90]],
-      "slot_id": "",
-      "args": ["/21784675435/steemit_bottom-of-post", [[728, 90], [970, 90]], ""],
-      "kind": "basic"
+      "dimensions": [[728, 90], [970, 90]]
     },
     "bottom-of-post-mobile": {
       "path": "/21784675435/steemit_bottom-of-post/steemit_bottom-of-post_mobile",
-      "dimensions": [[220, 90]],
-      "slot_id": "",
-      "args": ["/21784675435/steemit_bottom-of-post/steemit_bottom-of-post_mobile", [[220, 90]], ""],
-      "kind": "basic"
+      "dimensions": [[220, 90]]
     },
-
-
 
     "left-navigation": {
       "path": "/21784675435/steemit_left-navigation",
-      "dimensions": [[120, 600], [160, 600]],
-      "slot_id": "",
-      "args": ["/21784675435/steemit_left-navigation", [[120, 600], [160, 600]], ""],
-      "kind": "basic"
+      "dimensions": [[120, 600], [160, 600]]
     },
     "left-navigation-loggedin-mobile": {
       "path": "/21784675435/steemit_left-navigation/steemit_left-navigation_loggedin_mobile",
-      "dimensions": [[120, 240]],
-      "slot_id": "",
-      "args": ["/21784675435/steemit_left-navigation/steemit_left-navigation_loggedin_mobile", [[120, 240]], ""],
-      "kind": "basic"
+      "dimensions": [[120, 240]]
     },
     "left-navigation-loggedin": {
       "path": "",
-      "dimensions": [[120, 600], [160, 600]],
-      "slot_id": "/21784675435/steemit_left-navigation/steemit_left-navigation_loggedin",
-      "args": ["/21784675435/steemit_left-navigation/steemit_left-navigation_loggedin", [[120, 600], [160, 600]], ""],
-      "kind": "basic"
+      "dimensions": [[120, 600], [160, 600]]
     },
     "left-navigation-mobile": {
       "path": "/21784675435/steemit_left-navigation/steemit_left-navigation_mobile",
-      "dimensions": [[120, 240]],
-      "slot_id": "",
-      "args": ["/21784675435/steemit_left-navigation/steemit_left-navigation_mobile", [[120, 240]], ""],
-      "kind": "basic"
+      "dimensions": [[120, 240]]
     },
-
 
     "post-page-above-comments": {
       "path": "/21784675435/steemit_post-page-above-comments",
-      "dimensions": [[728, 90], [970, 90]],
-      "slot_id": "",
-      "args": ["/21784675435/steemit_post-page-above-comments", [[728, 90], [970, 90]], ""],
-      "kind": "basic"
+      "dimensions": [[728, 90], [970, 90]]
     },
     "post-page-above-comments-loggedin-mobile": {
       "path": "/21784675435/steemit_post-page-above-comments/steemit_post-page-above-comments_loggedin_mobile",
-      "dimensions": [[220, 90]],
-      "slot_id": "",
-      "args": ["/21784675435/steemit_post-page-above-comments/steemit_post-page-above-comments_loggedin_mobile", [[220, 90]], ""],
-      "kind": "basic"
+      "dimensions": [[220, 90]]
     },
     "post-page-above-comments-loggedin": {
       "path": "/21784675435/steemit_post-page-above-comments/steemit_post-page-above-comments_loggedin",
-      "dimensions": [[728, 90], [970, 90]],
-      "slot_id": "",
-      "args": ["/21784675435/steemit_post-page-above-comments/steemit_post-page-above-comments_loggedin", [[728, 90], [970, 90]], ""],
-      "kind": "basic"
+      "dimensions": [[728, 90], [970, 90]]
     },
     "post-page-above-comments-mobile": {
       "path": "/21784675435/steemit_post-page-above-comments/steemit_post-page-above-comments_mobile",
-      "dimensions": [[220, 90]],
-      "slot_id": "",
-      "args": ["/21784675435/steemit_post-page-above-comments/steemit_post-page-above-comments_mobile", [[220, 90]], ""],
-      "kind": "basic"
+      "dimensions": [[220, 90]]
     },
-
-
 
     "right-navigation": {
       "path": "/21784675435/steemit_right-navigation",
-      "dimensions": [[120, 600], [160, 600]],
-      "slot_id": "",
-      "args": ["/21784675435/steemit_right-navigation", [[120, 600], [160, 600]], ""],
-      "kind": "basic"
+      "dimensions": [[120, 600], [160, 600]]
     },
     "right-navigation-loggedin-mobile": {
       "path": "/21784675435/steemit_right-navigation/steemit_right-navigation_loggedin_mobile",
-      "dimensions": [[120, 240]],
-      "slot_id": "",
-      "args": ["/21784675435/steemit_right-navigation/steemit_right-navigation_loggedin_mobile", [[120, 240]], ""],
-      "kind": "basic"
+      "dimensions": [[120, 240]]
     },
     "right-navigation-loggedin": {
       "path": "/21784675435/steemit_right-navigation/steemit_right-navigation_loggedin",
-      "dimensions": [[120, 600], [160, 600]],
-      "slot_id": "",
-      "args": ["/21784675435/steemit_right-navigation/steemit_right-navigation_loggedin", [[120, 600], [160, 600]], ""],
-      "kind": "basic"
+      "dimensions": [[120, 600], [160, 600]]
     },
     "right-navigation-mobile": {
       "path": "/21784675435/steemit_right-navigation/steemit_right-navigation_mobile",
-      "dimensions": [[120, 240]],
-      "slot_id": "",
-      "args": ["/21784675435/steemit_right-navigation/steemit_right-navigation_mobile", [[120, 240]], ""],
-      "kind": "basic"
+      "dimensions": [[120, 240]]
     },
-
-
 
     "top-navigation": {
       "path": "/21784675435/steemit_top-navi",
-      "dimensions": [[728, 90], [970, 90]],
-      "slot_id": "",
-      "args": ["/21784675435/steemit_top-navi", [[728, 90], [970, 90]], ""],
-      "kind": "basic"
+      "dimensions": [[728, 90], [970, 90]]
     },
     "top-navigation-loggedin-mobile": {
       "path": "/21784675435/steemit_top-navi/steemit_top-navi_loggedin_mobile",
-      "dimensions": [[220, 90]],
-      "slot_id": "",
-      "args": ["/21784675435/steemit_top-navi/steemit_top-navi_loggedin_mobile", [[220, 90]], ""],
-      "kind": "basic"
+      "dimensions": [[220, 90]]
     },
     "top-navigation-loggedin": {
       "path": "/21784675435/steemit_top-navi/steemit_top-navi_loggedin",
-      "dimensions": [[728, 90], [970, 90]],
-      "slot_id": "",
-      "args": ["/21784675435/steemit_top-navi/steemit_top-navi_loggedin", [[728, 90], [970, 90]], ""],
-      "kind": "basic"
+      "dimensions": [[728, 90], [970, 90]]
     },
     "top-navigation-mobile": {
       "path": "/21784675435/steemit_top-navi/steemit_top-navi_mobile",
-      "dimensions": [[220, 90]],
-      "slot_id": "",
-      "args": ["/21784675435/steemit_top-navi/steemit_top-navi_mobile", [[220, 90]], ""],
-      "kind": "basic"
+      "dimensions": [[220, 90]]
     }
   },
   "gpt_category_slots": {},
   "gpt_bidding_slots":{
     "left-navigation": {
       "path": "/21784675435/steemit_bottom-of-post/steemit_bottom-of-post_prebid",
-      "dimensions": [[728, 90]],
-      "slot_id": "",
-      "args": ["/21784675435/steemit_bottom-of-post/steemit_bottom-of-post_prebid", [[728, 90]], ""],
-      "kind": "bidding"
+      "dimensions": [[728, 90]]
     },
     "bottom-of-post": {
       "path": "/21784675435/steemit_left-navigation/steemit_left-navigation_prebid",
-      "dimensions": [[120, 600], [160, 600]],
-      "slot_id": "",
-      "args": ["/21784675435/steemit_left-navigation/steemit_left-navigation_prebid", [[120, 600], [160, 600]], ""],
-      "kind": "bidding"
+      "dimensions": [[120, 600], [160, 600]]
     }
   },
   "gpt_bidding": {

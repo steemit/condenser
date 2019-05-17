@@ -32,10 +32,6 @@ class Header extends React.Component {
 
     constructor() {
         super();
-        console.log(
-            'askdfjbasdfasbdfhajbsdf',
-            GptUtils.MobilizeSlotName('asndkjasjdakjdnjksjdnkjasn')
-        );
         this.gptadshown = event => {
             // This makes sure that the sticky header doesn't overlap the welcome splash.
             this.forceUpdate();
@@ -93,7 +89,6 @@ class Header extends React.Component {
     }
 
     render() {
-        console.log('GptUtils', GptUtils);
         const {
             category,
             order,

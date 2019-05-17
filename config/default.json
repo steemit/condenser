@@ -73,78 +73,158 @@
   },
   "gpt_enabled": null,
   "gpt_basic_slots": {
-    "top_nav_premium": {
-      "slot_id": "div-gpt-ad-1548778664403-0",
-      "args": ["/21784675435/steemit_top-navi", [[220, 90], [728, 90], [970, 90]], "div-gpt-ad-1548778664403-0"],
+    "bottom-of-post": {
+      "path": "/21784675435/steemit_bottom-of-post",
+      "dimensions": [[728, 90], [970, 90]],
+      "slot_id": "",
+      "args": ["/21784675435/steemit_bottom-of-post", [[728, 90], [970, 90]], ""],
       "kind": "basic"
     },
-    "top_nav": {
-      "slot_id": "div-gpt-ad-1548778612404-0",
-      "args": ["/21784675435/steemit_premium_top-navi", [[970, 90], [728, 90], [220, 90]], "div-gpt-ad-1548778612404-0"],
+    "bottom-of-post-mobile": {
+      "path": "/21784675435/steemit_bottom-of-post/steemit_bottom-of-post_mobile",
+      "dimensions": [[220, 90]],
+      "slot_id": "",
+      "args": ["/21784675435/steemit_bottom-of-post/steemit_bottom-of-post_mobile", [[220, 90]], ""],
       "kind": "basic"
     },
-    "left_nav_premium": {
-      "slot_id": "div-gpt-ad-1548778771262-0",
-      "args": ["/21784675435/steemit_premium_left-navigation", [[125, 125], [120, 90], [120, 600], [120, 60], [160, 600], [120, 240]], "div-gpt-ad-1548778771262-0"],
+
+
+
+    "left-navigation": {
+      "path": "/21784675435/steemit_left-navigation",
+      "dimensions": [[120, 600], [160, 600]],
+      "slot_id": "",
+      "args": ["/21784675435/steemit_left-navigation", [[120, 600], [160, 600]], ""],
       "kind": "basic"
     },
-    "left_nav": {
-      "slot_id": "div-gpt-ad-1548778799404-0",
-      "args": ["/21784675435/steemit_left-navigation", [[160, 600], [120, 240], [120, 600], [120, 60], [125, 125], [120, 90]], "div-gpt-ad-1548778799404-0"],
+    "left-navigation-loggedin-mobile": {
+      "path": "/21784675435/steemit_left-navigation/steemit_left-navigation_loggedin_mobile",
+      "dimensions": [[120, 240]],
+      "slot_id": "",
+      "args": ["/21784675435/steemit_left-navigation/steemit_left-navigation_loggedin_mobile", [[120, 240]], ""],
       "kind": "basic"
     },
-    "right_nav": {
-      "slot_id": "div-gpt-ad-1548778861089-0",
-      "args": ["/21784675435/steemit_right-navigation", [[120, 600], [120, 60], [125, 125], [120, 240], [160, 600], [120, 90]], "div-gpt-ad-1548778861089-0"],
+    "left-navigation-loggedin": {
+      "path": "",
+      "dimensions": [[120, 600], [160, 600]],
+      "slot_id": "/21784675435/steemit_left-navigation/steemit_left-navigation_loggedin",
+      "args": ["/21784675435/steemit_left-navigation/steemit_left-navigation_loggedin", [[120, 600], [160, 600]], ""],
       "kind": "basic"
     },
-    "bottom_post": {
-      "slot_id": "div-gpt-ad-1553686705417-0",
-      "args": ["/21784675435/steemit_bottom-of-post", [[300, 100], [234, 60], [728, 90], [220, 90], [970, 90], [336, 280], [890, 222], [320, 50], [468, 60]], "div-gpt-ad-1553686705417-0"]
+    "left-navigation-mobile": {
+      "path": "/21784675435/steemit_left-navigation/steemit_left-navigation_mobile",
+      "dimensions": [[120, 240]],
+      "slot_id": "",
+      "args": ["/21784675435/steemit_left-navigation/steemit_left-navigation_mobile", [[120, 240]], ""],
+      "kind": "basic"
     },
-    "basic_bottom_post": {
-      "slot_id": "div-gpt-ad-1553686705417-0",
-      "args": ["/21784675435/steemit_bottom-of-post", [[300, 100], [234, 60], [728, 90], [220, 90], [970, 90], [336, 280], [890, 222], [320, 50], [468, 60]], "div-gpt-ad-1553686705417-0"]
+
+
+    "post-page-above-comments": {
+      "path": "/21784675435/steemit_post-page-above-comments",
+      "dimensions": [[728, 90], [970, 90]],
+      "slot_id": "",
+      "args": ["/21784675435/steemit_post-page-above-comments", [[728, 90], [970, 90]], ""],
+      "kind": "basic"
     },
-    "in_feed": {
-      "slot_id": "div-gpt-ad-1548778917304-0",
-      "args": ["/21784675435/steemit_in-feed", [[728, 90], [300, 100], [890, 222], [468, 60], [970, 90], [336, 280], [234, 60]], "div-gpt-ad-1548778917304-0"],
+    "post-page-above-comments-loggedin-mobile": {
+      "path": "/21784675435/steemit_post-page-above-comments/steemit_post-page-above-comments_loggedin_mobile",
+      "dimensions": [[220, 90]],
+      "slot_id": "",
+      "args": ["/21784675435/steemit_post-page-above-comments/steemit_post-page-above-comments_loggedin_mobile", [[220, 90]], ""],
+      "kind": "basic"
+    },
+    "post-page-above-comments-loggedin": {
+      "path": "/21784675435/steemit_post-page-above-comments/steemit_post-page-above-comments_loggedin",
+      "dimensions": [[728, 90], [970, 90]],
+      "slot_id": "",
+      "args": ["/21784675435/steemit_post-page-above-comments/steemit_post-page-above-comments_loggedin", [[728, 90], [970, 90]], ""],
+      "kind": "basic"
+    },
+    "post-page-above-comments-mobile": {
+      "path": "/21784675435/steemit_post-page-above-comments/steemit_post-page-above-comments_mobile",
+      "dimensions": [[220, 90]],
+      "slot_id": "",
+      "args": ["/21784675435/steemit_post-page-above-comments/steemit_post-page-above-comments_mobile", [[220, 90]], ""],
+      "kind": "basic"
+    },
+
+
+
+    "right-navigation": {
+      "path": "/21784675435/steemit_right-navigation",
+      "dimensions": [[120, 600], [160, 600]],
+      "slot_id": "",
+      "args": ["/21784675435/steemit_right-navigation", [[120, 600], [160, 600]], ""],
+      "kind": "basic"
+    },
+    "right-navigation-loggedin-mobile": {
+      "path": "/21784675435/steemit_right-navigation/steemit_right-navigation_loggedin_mobile",
+      "dimensions": [[120, 240]],
+      "slot_id": "",
+      "args": ["/21784675435/steemit_right-navigation/steemit_right-navigation_loggedin_mobile", [[120, 240]], ""],
+      "kind": "basic"
+    },
+    "right-navigation-loggedin": {
+      "path": "/21784675435/steemit_right-navigation/steemit_right-navigation_loggedin",
+      "dimensions": [[120, 600], [160, 600]],
+      "slot_id": "",
+      "args": ["/21784675435/steemit_right-navigation/steemit_right-navigation_loggedin", [[120, 600], [160, 600]], ""],
+      "kind": "basic"
+    },
+    "right-navigation-mobile": {
+      "path": "/21784675435/steemit_right-navigation/steemit_right-navigation_mobile",
+      "dimensions": [[120, 240]],
+      "slot_id": "",
+      "args": ["/21784675435/steemit_right-navigation/steemit_right-navigation_mobile", [[120, 240]], ""],
+      "kind": "basic"
+    },
+
+
+
+    "top-navigation": {
+      "path": "/21784675435/steemit_top-navi",
+      "dimensions": [[728, 90], [970, 90]],
+      "slot_id": "",
+      "args": ["/21784675435/steemit_top-navi", [[728, 90], [970, 90]], ""],
+      "kind": "basic"
+    },
+    "top-navigation-loggedin-mobile": {
+      "path": "/21784675435/steemit_top-navi/steemit_top-navi_loggedin_mobile",
+      "dimensions": [[220, 90]],
+      "slot_id": "",
+      "args": ["/21784675435/steemit_top-navi/steemit_top-navi_loggedin_mobile", [[220, 90]], ""],
+      "kind": "basic"
+    },
+    "top-navigation-loggedin": {
+      "path": "/21784675435/steemit_top-navi/steemit_top-navi_loggedin",
+      "dimensions": [[728, 90], [970, 90]],
+      "slot_id": "",
+      "args": ["/21784675435/steemit_top-navi/steemit_top-navi_loggedin", [[728, 90], [970, 90]], ""],
+      "kind": "basic"
+    },
+    "top-navigation-mobile": {
+      "path": "/21784675435/steemit_top-navi/steemit_top-navi_mobile",
+      "dimensions": [[220, 90]],
+      "slot_id": "",
+      "args": ["/21784675435/steemit_top-navi/steemit_top-navi_mobile", [[220, 90]], ""],
       "kind": "basic"
     }
   },
-  "gpt_category_slots": {
-    "cryptocurrency": {
-      "top_nav": {
-        "slot_id": "div-gpt-ad-1550891917103-0",
-        "args": ["/21784675435/steemit_top-navi/steemit_top-navi_cryptocurrency", [[728, 90], [220, 90], [970, 90]], "div-gpt-ad-1550891917103-0"],
-        "kind": "category"
-      },
-      "right_nav": {
-        "slot_id": "div-gpt-ad-1550892019550-0",
-        "args": ["/21784675435/steemit_right-navigation/steemit_right-navigation_cryptocurrency", [[120, 90], [120, 240], [120, 60], [160, 600], [120, 600], [125, 125]], "div-gpt-ad-1550892019550-0"],
-        "kind": "category"
-      },
-      "left_nav": {
-        "slot_id": "div-gpt-ad-1550892097245-0",
-        "args": ["/21784675435/steemit_left-navigation/steemit_left-navigation_cryptocurrency", [[120, 240], [120, 600], [125, 125], [120, 90], [160, 600], [120, 60]], "div-gpt-ad-1550892097245-0"],
-        "kind": "category"
-      },
-      "bottom_post": {
-        "slot_id": "div-gpt-ad-1550892163180-0",
-        "args": ["/21784675435/steemit_bottom-of-post/steemit_bottom-of-post_cryptocurrency", [[336, 280], [320, 50], [468, 60], [970, 90], [890, 222], [300, 100], [728, 90], [234, 60]], "div-gpt-ad-1550892163180-0"],
-        "kind": "category"
-      }
-    }
-  },
+  "gpt_category_slots": {},
   "gpt_bidding_slots":{
-    "left_nav_2": {
-      "slot_id": "div-gpt-ad-1554687231046-0",
-      "args": ["/21784675435/steemit_left-navigation/steemit_left-navigation_prebid", [[120, 600],[160,600]], "div-gpt-ad-1554687231046-0"],
+    "left-navigation": {
+      "path": "/21784675435/steemit_bottom-of-post/steemit_bottom-of-post_prebid",
+      "dimensions": [[728, 90]],
+      "slot_id": "",
+      "args": ["/21784675435/steemit_bottom-of-post/steemit_bottom-of-post_prebid", [[728, 90]], ""],
       "kind": "bidding"
     },
-    "bottom_post": {
-      "slot_id": "div-gpt-ad-1551233873698-0",
-      "args": ["/21784675435/steemit_bottom-of-post/steemit_bottom-of-post_prebid", [[728, 90], [320, 50], [234, 60], [336, 280], [970, 90], [468, 60], [300, 100], [890, 222]], "div-gpt-ad-1551233873698-0"],
+    "bottom-of-post": {
+      "path": "/21784675435/steemit_left-navigation/steemit_left-navigation_prebid",
+      "dimensions": [[120, 600], [160, 600]],
+      "slot_id": "",
+      "args": ["/21784675435/steemit_left-navigation/steemit_left-navigation_prebid", [[120, 600], [160, 600]], ""],
       "kind": "bidding"
     }
   },

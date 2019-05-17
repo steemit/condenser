@@ -18,6 +18,7 @@ import { SIGNUP_URL } from 'shared/constants';
 import SteemLogo from 'app/components/elements/SteemLogo';
 import normalizeProfile from 'app/utils/NormalizeProfile';
 import Announcement from 'app/components/elements/Announcement';
+import { GptUtils } from 'app/utils/GptUtils';
 import GptAd from 'app/components/elements/GptAd';
 
 class Header extends React.Component {
@@ -31,6 +32,10 @@ class Header extends React.Component {
 
     constructor() {
         super();
+        console.log(
+            'askdfjbasdfasbdfhajbsdf',
+            GptUtils.MobilizeSlotName('asndkjasjdakjdnjksjdnkjasn')
+        );
         this.gptadshown = event => {
             // This makes sure that the sticky header doesn't overlap the welcome splash.
             this.forceUpdate();
@@ -88,6 +93,7 @@ class Header extends React.Component {
     }
 
     render() {
+        console.log('GptUtils', GptUtils);
         const {
             category,
             order,
@@ -283,7 +289,22 @@ class Header extends React.Component {
                     )}
                     {/* If announcement is shown, ad will not render unless it's in a parent div! */}
                     <div>
-                        <GptAd type="Basic" slotName="top_nav" />
+                        {/* TODO: Switch to Mobile Ad when, well, mobile! */}
+                        {loggedIn ? (
+                            <GptAd
+                                type="Basic"
+                                slotName={GptUtils.MobilizeSlotName(
+                                    'top-navigation-loggedin'
+                                )}
+                            />
+                        ) : (
+                            <GptAd
+                                type="Basic"
+                                slotName={GptUtils.MobilizeSlotName(
+                                    'top-navigation'
+                                )}
+                            />
+                        )}
                     </div>
                     <nav className="row Header__nav">
                         <div className="small-5 large-4 columns Header__logotype">

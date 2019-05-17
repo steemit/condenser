@@ -74,11 +74,13 @@
 }
 
 .Comment__header {
-  margin-left: 62px;
-  border-radius: 3px 3px 0 0;
-  border: 1px solid #f0f0f0;
-  background-color: #f0f0f0;
-  padding: 7px 14px;
+  @include themify($themes) {
+    margin-left: 62px;
+    border-radius: 3px 3px 0 0;
+    border: themed('border');
+    background: themed('backgroundColorOpaque');
+    padding: 1px 5px;
+  }
 }
 
 .Comment__header-user {
@@ -104,18 +106,23 @@
 }
 
 .Comment__body {
-  margin-left: 62px;
-  max-width: 50rem;
-  border: 1px solid #f0f0f0;
-  padding: 14px;
-  border-bottom: none;
+  @include themify($themes) {
+    margin-left: 62px;
+    max-width: 50rem;
+    border: themed('border');
+    padding: 3px 7px;
+    border-top: none;
+    border-bottom: none;
+  }
 }
 
 .Comment__footer {
-  margin-left: 62px;
-  border: 1px solid #f0f0f0;
-  border-radius: 3px 0;
-  padding: 3px 14px;
+  @include themify($themes) {
+    margin-left: 62px;
+    border: themed('border');
+    border-radius: 3px 0;
+    padding: 3px 8px;
+  }
 
   @include themify($themes) {
     color: themed('textColorPrimary');

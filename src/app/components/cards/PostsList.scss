@@ -114,22 +114,21 @@ body.with-post-overlay {
 }
 
 .PostsList__summaries {
-    .articles__content {
+    .articles__summary {
         position: relative;
     }
 
     .PinText {
+        font-weight: 400;
+        display: inline;
+        padding: 0.1rem 0.2rem;
+        margin: 0 1rem 0 0.5rem;
+        border-radius: 0.3rem;
+        font-size: 0.75rem;
+        vertical-align: 15%;
         @include themify($themes) {
-            text-transform: lowercase;
-            color: themed('colorAccent');
-            border: 1px solid themed('colorAccent');
-            font-size: 70%;
-            border-radius: 3px;
-            font-weight: normal;
-            font-family: Arial;
-            margin: 0 0 0 0.5rem;
-            padding: 0px 1px;
-            vertical-align: 15%;
+            background-color: themed('colorAccent');
+            color: themed('buttonText');
         }
     }
 

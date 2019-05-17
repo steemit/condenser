@@ -139,15 +139,6 @@ class PostSummary extends React.Component {
                     {title_text}
                 </Link>
                 {featured && <span className="PinText">Featured</span>}
-                {featured && (
-                    <a
-                        onClick={featuredOnClose}
-                        className="PinDismiss"
-                        title="Dismiss Post"
-                    >
-                        <Icon name="close" />
-                    </a>
-                )}
             </h2>
         );
 
@@ -213,6 +204,16 @@ class PostSummary extends React.Component {
                             )}
                         </Link>
                     </div>
+
+                    {featured && (
+                        <a
+                            onClick={featuredOnClose}
+                            className="PinDismiss"
+                            title="Dismiss Post"
+                        >
+                            <Icon name="close" />
+                        </a>
+                    )}
                 </div>
             </div>
         );

@@ -3,18 +3,22 @@ import { connect } from 'react-redux';
 
 class GptAd extends Component {
     componentDidMount() {
-        if (!this.ad.slot_id || !this.enabled) {
+        if (!this.ad.path || !this.enabled) {
             return;
         }
 
         googletag.cmd.push(() => {
-            const slot = googletag.defineSlot(...this.ad.args);
+            const slot = googletag.defineSlot(
+                this.ad.path,
+                this.ad.dimensions,
+                this.ad.path
+            );
 
             if (slot) {
                 slot.addService(googletag.pubads());
 
                 googletag.cmd.push(() => {
-                    googletag.display(this.ad.slot_id);
+                    googletag.display(this.ad.path);
                     googletag.pubads().refresh([slot]);
                     googletag
                         .pubads()
@@ -68,14 +72,17 @@ class GptAd extends Component {
             <div
                 className="gpt-ad"
                 style={{ width: '100%' }}
-                id={this.ad.slot_id}
+                id={this.ad.path}
             />
         );
     }
 }
 
 GptAd.propTypes = {
-    ad: PropTypes.object.isRequired, //TODO: Define this shape
+    ad: PropTypes.shape({
+        path: PropTypes.string,
+        dimensions: PropTypes.array,
+    }).isRequired,
     enabled: PropTypes.bool.isRequired,
     type: PropTypes.oneOf(['Bidding', 'Category', 'Basic']),
 };
@@ -94,48 +101,10 @@ export default connect(
             `gptCategorySlots`,
         ]);
 
-        // Determine which type of ad to show
-        //
-        //   * Show a bidding ad if it's a bidding ad (e.g. Coinzilla)
-        //   * Show a category ad (an ad on just #cryptocurrency, for example)
-        //   * Fall back to a regular GPT ad
-        //
         const slotName = props.slotName;
-
         let type = props.type;
-
-        // let slot = basicSlots.getIn([slotName]);
         let slot = state.app.getIn(['googleAds', `gpt${type}Slots`, slotName]);
-        //console.log('GOT TYPE OF', type, slot);
-        // if (categorySlots.getIn([postCategory, slotName])) {
-        //     console.info(
-        //         `GPT-[${slotName}]::Overriding type of '${
-        //             type
-        //         }' to be 'category' due to category being set to '${
-        //             postCategory
-        //         }' and the existence of a category named '${
-        //             postCategory
-        //         }' which has a slot named '${slotName}'`
-        //     );
-        //     type = 'category';
-        //     slot = categorySlots.getIn([postCategory, slotName]);
-        // } else if (biddingSlots.getIn([slotName])) {
-        //     console.info(
-        //         `GPT-[${slotName}]::Overriding type of '${
-        //             type
-        //         }' to be 'bidding' because we have a bidding slot defined for slotName '${
-        //             slotName
-        //         }'`
-        //     );
-        //     type = 'bidding';
-        //     slot = biddingSlots.getIn([slotName]);
-        // } else {
-        //     console.info(
-        //         `GPT-[${slotName}]::No override for type. Sticking with '${
-        //             type
-        //         }'`
-        //     );
-        // }
+        console.log('GOT TYPE OF', type, slot);
 
         return {
             enabled,

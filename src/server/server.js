@@ -42,6 +42,7 @@ const cacheOpts = { maxAge: 86400000, gzip: true, buffer: true };
 app.use(
     favicon(path.join(__dirname, '../app/assets/images/favicons/favicon.ico'))
 );
+
 app.use(
     mount(
         '/favicons',
@@ -51,12 +52,14 @@ app.use(
         )
     )
 );
+
 app.use(
     mount(
         '/images',
         staticCache(path.join(__dirname, '../app/assets/images'), cacheOpts)
     )
 );
+
 app.use(
     mount(
         '/javascripts',
@@ -66,6 +69,14 @@ app.use(
         )
     )
 );
+
+app.use(
+    mount(
+        '/ads.txt',
+        staticCache(path.join(__dirname, '../app/assets/ads.txt'), cacheOpts)
+    )
+);
+
 // Proxy asset folder to webpack development server in development mode
 if (env === 'development') {
     const webpack_dev_port = process.env.PORT
@@ -295,7 +306,7 @@ if (env !== 'test') {
             resolve();
         });
     }, 300000);
-    
+
     app.use(function*() {
         yield appRender(this, supportedLocales, resolvedAssets);
         const bot = this.state.isBot;

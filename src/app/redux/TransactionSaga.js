@@ -457,13 +457,7 @@ export function* createPermlink(title, author) {
         }
         permlink = prefix + s;
     } else {
-        // comments: cmt-yyyymmdd-hhmmsssss
-        const timeStr = new Date()
-          .toISOString()
-          .replace(/[^a-zA-Z0-9]+/g, '')
-          .replace(/T/g, '-')
-          .replace(/Z/g, '');
-        permlink = `cmt-${timeStr}`;
+        permlink = Date.now().toString(36);
     }
 
     return permlink;

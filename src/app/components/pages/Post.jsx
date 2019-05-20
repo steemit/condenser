@@ -1,22 +1,19 @@
 import React from 'react';
-// import ReactMarkdown from 'react-markdown';
 import PropTypes from 'prop-types';
 import Comment from 'app/components/cards/Comment';
 import PostFull from 'app/components/cards/PostFull';
 import { connect } from 'react-redux';
 
 import { sortComments } from 'app/components/cards/Comment';
-// import { Link } from 'react-router';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
-import GptAd from 'app/components/elements/GptAd';
-import BiddingAd from 'app/components/elements/BiddingAd';
 import { Set } from 'immutable';
 import tt from 'counterpart';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 import { INVEST_TOKEN_UPPERCASE } from 'app/client_config';
 import { SIGNUP_URL } from 'shared/constants';
-
+import { GptUtils } from 'app/utils/GptUtils';
+import GptAd from 'app/components/elements/GptAd';
 import { isLoggedIn } from 'app/utils/UserUtil';
 
 import Icon from 'app/components/elements/Icon';
@@ -232,11 +229,21 @@ class Post extends React.Component {
                 )}
                 {this.props.gptEnabled ? (
                     <div className="Post_footer__ad">
-                        <BiddingAd
-                            type="Bidding"
-                            slotName="bottom_post"
-                            id="div-gpt-ad-1551233873698-0"
-                        />
+                        {isLoggedIn() ? (
+                            <GptAd
+                                type="Basic"
+                                slotName={GptUtils.MobilizeSlotName(
+                                    'post-page-above-comments-loggedin'
+                                )}
+                            />
+                        ) : (
+                            <GptAd
+                                type="Basic"
+                                slotName={GptUtils.MobilizeSlotName(
+                                    'post-page-above-comments'
+                                )}
+                            />
+                        )}
                     </div>
                 ) : null}
                 <div id="#comments" className="Post_comments row hfeed">
@@ -260,7 +267,15 @@ class Post extends React.Component {
                 </div>
                 {this.props.gptEnabled ? (
                     <div className="Post_footer__ad">
-                        <GptAd type="Basic" slotName="basic_bottom_post" />
+                        {/* TODO: Switch to Mobile Ad when, well, mobile! */}
+                        {false ? (
+                            <GptAd
+                                type="Basic"
+                                slotName="bottom-of-post-mobile"
+                            />
+                        ) : (
+                            <GptAd type="Basic" slotName="bottom-of-post" />
+                        )}
                     </div>
                 ) : null}
             </div>

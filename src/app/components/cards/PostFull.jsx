@@ -27,6 +27,7 @@ import userIllegalContent from 'app/utils/userIllegalContent';
 import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import { GoogleAd } from 'app/components/elements/GoogleAd';
+import ContentEditedWrapper from "../elements/ContentEditedWrapper";
 
 function TimeAuthorCategory({ content, authorRepLog10, showTags }) {
     return (
@@ -65,6 +66,8 @@ function TimeAuthorCategoryLarge({ content, authorRepLog10 }) {
                 </span>{' '}
                 •&nbsp;{' '}
                 <TimeAgoWrapper date={content.created} className="updated" />
+                &nbsp;{' '}
+                <ContentEditedWrapper createDate={content.created} updateDate={content.last_update} className="updated" />
             </div>
         </span>
     );

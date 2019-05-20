@@ -31,3 +31,61 @@ export function getViewportDimensions(w) {
     // For browsers in Quirks mode
     return { w: d.body.clientWidth, h: d.body.clientHeight };
 }
+
+function locale() {
+    if (navigator.languages != undefined) return navigator.languages[0];
+    else return navigator.language;
+}
+
+/**
+ * A naive location guess so that we don't inundate non-gdpr users with notices.
+ *
+ * @returns {boolean}
+ */
+export function showGdprNotice() {
+    const gdprCountries = [
+        'AT',
+        'BE',
+        'BG',
+        'HR',
+        'CY',
+        'CZ',
+        'DK',
+        'EE',
+        'FI',
+        'FR',
+        'DE',
+        'EL',
+        'HU',
+        'IE',
+        'IT',
+        'LV',
+        'LT',
+        'LU',
+        'MT',
+        'NL',
+        'PL',
+        'PT',
+        'RO',
+        'SK',
+        'SI',
+        'ES',
+        'SE',
+        'UK',
+    ];
+
+    const loc = locale();
+    let country = null;
+
+    // Many locales lack the country, so, let's check for that.
+    if (loc.indexOf('-') > -1) {
+        // we have a locale in the form of lang-CO
+        country = loc.split('-')[1];
+    }
+
+    let showGdprNotice = false;
+    if (gdprCountries.indexOf(country.toUpperCase()) > -1) {
+        showGdprNotice = true;
+    }
+    return showGdprNotice;
+}

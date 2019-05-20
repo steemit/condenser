@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import CookieConsent, { Cookies } from 'react-cookie-consent';
 import AppPropTypes from 'app/utils/AppPropTypes';
 import Header from 'app/components/modules/Header';
 import * as userActions from 'app/redux/UserReducer';
@@ -14,6 +15,7 @@ import tt from 'counterpart';
 import PageViewsCounter from 'app/components/elements/PageViewsCounter';
 import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 import { key_utils } from '@steemit/steem-js/lib/auth/ecc';
+import { showGdprNotice } from 'app/utils/DomUtils';
 import resolveRoute from 'app/ResolveRoute';
 import { VIEW_MODE_WHISTLE } from 'shared/constants';
 
@@ -197,6 +199,21 @@ class App extends React.Component {
                 <Dialogs />
                 <Modals />
                 <PageViewsCounter />
+                {showGdprNotice() && (
+                    <CookieConsent
+                        style={{ justifyContent: 'center' }}
+                        disableButtonStyles={true}
+                        buttonStyle={{
+                            textTransform: 'none',
+                            fontSize: '12px',
+                        }}
+                        buttonClasses="button e-btn"
+                        buttonText="I understand"
+                    >
+                        This website uses cookies to enhance the user
+                        experience.
+                    </CookieConsent>
+                )}
             </div>
         );
     }

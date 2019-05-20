@@ -5142,6 +5142,11 @@ js-base64@^2.1.8, js-base64@^2.1.9:
   version "2.4.3"
   resolved "https://registry.yarnpkg.com/js-base64/-/js-base64-2.4.3.tgz#2e545ec2b0f2957f41356510205214e98fad6582"
 
+js-cookie@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/js-cookie/-/js-cookie-2.2.0.tgz#1b2c279a6eece380a12168b92485265b35b1effb"
+  integrity sha1-Gywnmm7s44ChIWi5JIUmWzWx7/s=
+
 js-tokens@^3.0.0, js-tokens@^3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-3.0.2.tgz#9866df395102130e38f7f996bceb65443209c25b"
@@ -7337,6 +7342,13 @@ react-color@^2.11.4:
     prop-types "^15.5.10"
     reactcss "^1.2.0"
     tinycolor2 "^1.4.1"
+
+react-cookie-consent@^2.3.1:
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/react-cookie-consent/-/react-cookie-consent-2.3.1.tgz#54d2b3ab776b973b086f541b9430279bf61c4049"
+  integrity sha512-AC5AsUu5X3HMJ120ql52dk7vLB72hNTWWwkh4xWPaDFBe92vSHrLB3WwOHtTf0IRTNzHlF4/W065jMc7mPznOA==
+  dependencies:
+    js-cookie "^2.2.0"
 
 react-copy-to-clipboard@4.3.1:
   version "4.3.1"

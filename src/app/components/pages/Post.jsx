@@ -1,5 +1,4 @@
 import React from 'react';
-// import ReactMarkdown from 'react-markdown';
 import PropTypes from 'prop-types';
 import Comment from 'app/components/cards/Comment';
 import PostFull from 'app/components/cards/PostFull';
@@ -15,7 +14,6 @@ import { INVEST_TOKEN_UPPERCASE } from 'app/client_config';
 import { SIGNUP_URL } from 'shared/constants';
 import { GptUtils } from 'app/utils/GptUtils';
 import GptAd from 'app/components/elements/GptAd';
-import BiddingAd from 'app/components/elements/BiddingAd';
 import { isLoggedIn } from 'app/utils/UserUtil';
 
 class Post extends React.Component {

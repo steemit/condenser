@@ -190,6 +190,7 @@ export default function ServerHTML({
                                 //       a new config file for ads would be good
                                 var PREBID_TIMEOUT = 2000;
                                 var FAILSAFE_TIMEOUT = 3000;
+                                var MAX_RETRIES = 20;
 
                                 // Begin GPT Ad Setup
                                 var googletag = googletag || {};
@@ -199,8 +200,24 @@ export default function ServerHTML({
                                   googletag.pubads().disableInitialLoad();
                                   googletag.pubads().setTargeting("edition", ["new-york"]);
                                   googletag.pubads().collapseEmptyDivs(true, true);
-                                  googletag.pubads().enableSingleRequest();
-                                  googletag.enableServices();
+                                  // googletag.pubads().enableSingleRequest();
+                                  // googletag.enableServices();
+                                  // googletag
+                                  //   .defineSlot(
+                                  //     "/21784675435/steemit_top-navi",
+                                  //     [[728, 90]],
+                                  //     "UsedToBeGptNowAmBidding"
+                                  //   )
+                                  //   .addService(googletag.pubads());
+                                  // googletag
+                                  //   .defineSlot(
+                                  //     "/21784675435/steemit_left-navigation/steemit_left-navigation_prebid",
+                                  //     [[120, 600], [160, 600]],
+                                  //     "/21784675435/steemit_left-navigation/steemit_left-navigation_prebid"
+                                  //   )
+                                  //   .addService(googletag.pubads());
+                                  // googletag.pubads().enableSingleRequest();
+                                  // googletag.enableServices();
                                 });
 
 
@@ -209,9 +226,15 @@ export default function ServerHTML({
                                 pbjs.que = pbjs.que || [];
 
                                 pbjs.que.push(function() {
+                                  pbjs.onEvent('bidWon', function(data) {
+                                    console.log(data.bidderCode+ ' won the ad server auction for ad unit ' +data.adUnitCode+ ' at ' +data.cpm+ ' CPM');
+                                  });
                                   pbjs.addAdUnits(${JSON.stringify(
                                       gptBidding.ad_units
                                   )});
+                                  pbjs.onEvent('auctionEnd', function (adUnitCode) {
+                                    console.debug('ad unit bids back for:', adUnitCode);
+                                  });
 
                                   pbjs.setConfig({
                                     priceGranularity: ${JSON.stringify(
@@ -227,25 +250,32 @@ export default function ServerHTML({
                                     timeout: PREBID_TIMEOUT
                                   });
                                 });
-                                var noBids = {}
+                                // var noBids = {}
                                 function initAdserver() {
                                   console.info('function initAdserver() {', arguments)
-                                  if (arguments.length > 0) {
-                                    noBids = pbjs.getNoBids();
-                                    console.info('Result of noBids: ', noBids)
-                                  }
+                                  // if (arguments.length > 0) {
+                                  //   noBids = pbjs.getNoBids();
+                                  //   console.info('Result of noBids: ', noBids)
+                                  // }
                                   // Ensure this runs with our "failsafe" timeout
-                                  for (var slotId in noBids) {
-                                    var event = new Event('prebidNoBids');
-                                    event.slotId = slotId;
-                                    window.dispatchEvent(event);
-                                    console.info('Eventing a no bid event', event)
-                                  }
+                                  // for (var slotId in noBids) {
+                                  //   var event = new Event('prebidNoBids');
+                                  //   event.slotId = slotId;
+                                  //   window.dispatchEvent(event);
+                                  //   console.info('Eventing a no bid event', event)
+                                  // }
 
                                   if (pbjs.initAdserverSet) return;
+
+                                  if(!googletag.pubadsReady && pbjs.retries <= MAX_RETRIES) {
+                                    setTimeout(initAdserver, 50); //poll ms can be adjusted as desired.
+                                    pbjs.retries++;
+                                    return;
+                                  }
+
                                   pbjs.initAdserverSet = true;
                                   googletag.cmd.push(function() {
-                                    pbjs.que.push(function() {
+                                    pbjs.cmd.push(function() {
                                       pbjs.setTargetingForGPTAsync();
                                       googletag.pubads().refresh();
                                     });
@@ -261,22 +291,22 @@ export default function ServerHTML({
                                 // Begin Globally defining possible bidding ad slots.
                                 // TODO: Slot defs need to be moved to config.
                                 googletag.cmd.push(function() {
-                                  googletag
-                                    .defineSlot(
-                                      "/21784675435/steemit_bottom-of-post/steemit_bottom-of-post_prebid",
-                                      [[728, 90]],
-                                      "div-gpt-ad-1551233873698-0"
-                                    )
-                                    .addService(googletag.pubads());
-                                  googletag
-                                    .defineSlot(
-                                      "/21784675435/steemit_left-navigation/steemit_left-navigation_prebid",
-                                      [[120, 600], [160, 600]],
-                                      "div-gpt-ad-1554687231046-0"
-                                    )
-                                    .addService(googletag.pubads());
-                                  googletag.pubads().enableSingleRequest();
-                                  googletag.enableServices();
+                                  // googletag
+                                  //   .defineSlot(
+                                  //     "/21784675435/steemit_top-navi",
+                                  //     [[728, 90]],
+                                  //     "UsedToBeGptNowAmBidding"
+                                  //   )
+                                  //   .addService(googletag.pubads());
+                                  // googletag
+                                  //   .defineSlot(
+                                  //     "/21784675435/steemit_left-navigation/steemit_left-navigation_prebid",
+                                  //     [[120, 600], [160, 600]],
+                                  //     "div-gpt-ad-1554687231046-0"
+                                  //   )
+                                  //   .addService(googletag.pubads());
+                                  // // googletag.pubads().enableSingleRequest();
+                                  // googletag.enableServices();
                                 });
                           `,
                         }}

@@ -444,6 +444,7 @@ class CommentImpl extends React.Component {
                             <Author
                                 author={comment.author}
                                 authorRepLog10={authorRepLog10}
+                                showAffiliation
                             />
                         </span>
                         &nbsp; &middot; &nbsp;

@@ -393,8 +393,7 @@ export function* preBroadcast_comment({ operation, username }) {
             body2 = patch;
     }
     if (!body2) body2 = body;
-    if (!permlink)
-        permlink = yield createPermlink(title, author);
+    if (!permlink) permlink = yield createPermlink(title, author);
 
     const md = operation.json_metadata;
     const json_metadata = typeof md === 'string' ? md : JSON.stringify(md);
@@ -446,16 +445,15 @@ export function* createPermlink(title, author) {
         }
         // only letters numbers and dashes shall survive
         s = s.toLowerCase().replace(/[^a-z0-9-]+/g, '');
+
         // ensure the permlink(slug) is unique
         const slugState = yield call([api, api.getContentAsync], author, s);
-        let prefix;
         if (slugState.body !== '') {
-            // make sure slug is unique
-            prefix = base58.encode(secureRandom.randomBuffer(4)) + '-';
-        } else {
-            prefix = '';
+            const noise = base58
+                .encode(secureRandom.randomBuffer(4))
+                .toLowerCase();
+            permlink = noise + '-' + permlink;
         }
-        permlink = prefix + s;
     } else {
         permlink = Date.now().toString(36);
     }

@@ -446,13 +446,18 @@ export function* createPermlink(title, author) {
         // only letters numbers and dashes shall survive
         s = s.toLowerCase().replace(/[^a-z0-9-]+/g, '');
 
-        // ensure the permlink(slug) is unique
+        // ensure the permlink is unique
         const slugState = yield call([api, api.getContentAsync], author, s);
         if (slugState.body !== '') {
             const noise = base58
                 .encode(secureRandom.randomBuffer(4))
                 .toLowerCase();
             permlink = noise + '-' + permlink;
+        }
+
+        // ensure permlink conforms to STEEMIT_MAX_PERMLINK_LENGTH
+        if (permlink.length > 255) {
+            permlink = permlink.substring(0, 255);
         }
     } else {
         permlink = Date.now().toString(36);

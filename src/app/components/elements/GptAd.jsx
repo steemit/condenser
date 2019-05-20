@@ -14,6 +14,8 @@ class GptAd extends Component {
 
             if (slot) {
                 slot.addService(googletag.pubads());
+                googletag.pubads().enableSingleRequest();
+                googletag.enableServices();
 
                 googletag.cmd.push(() => {
                     googletag.display(this.ad.path);
@@ -21,7 +23,7 @@ class GptAd extends Component {
                     googletag
                         .pubads()
                         .addEventListener('slotRenderEnded', event => {
-                            console.info('Slot has been rendered:', event);
+                            // console.info('Slot has been rendered:', event);
                             window.dispatchEvent(new Event('gptadshown'));
                         });
                 });

@@ -152,11 +152,11 @@
   },
   "gpt_category_slots": {},
   "gpt_bidding_slots":{
-    "left-navigation": {
+    "bottom-of-post": {
       "path": "/21784675435/steemit_bottom-of-post/steemit_bottom-of-post_prebid",
       "dimensions": [[728, 90]]
     },
-    "bottom-of-post": {
+    "left-navigation": {
       "path": "/21784675435/steemit_left-navigation/steemit_left-navigation_prebid",
       "dimensions": [[120, 600], [160, 600]]
     }
@@ -166,7 +166,7 @@
     "failsafe_timeout": 3000,
     "ad_units": [
       {
-        "code": "div-gpt-ad-1551233873698-0",
+        "code": "/21784675435/steemit_top-navi",
         "mediaTypes": { "banner": { "sizes": [728, 90] } },
         "bids": [{
           "bidder": "coinzilla",
@@ -174,8 +174,8 @@
         }]
       },
       {
-        "code": "div-gpt-ad-1551234081752-0",
-        "mediaTypes": { "banner": { "sizes": [160, 600] } },
+        "code": "/21784675435/steemit_left-navigation/steemit_left-navigation_prebid",
+        "mediaTypes": { "banner": { "sizes": [[120, 600], [160, 600]] } },
         "bids": [{
           "bidder": "coinzilla",
           "params": { "placementId": "3575c7b9886e2cb3619" }

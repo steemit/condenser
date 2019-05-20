@@ -284,22 +284,13 @@ class Header extends React.Component {
                     )}
                     {/* If announcement is shown, ad will not render unless it's in a parent div! */}
                     <div>
-                        {/* TODO: Switch to Mobile Ad when, well, mobile! */}
-                        {loggedIn ? (
-                            <GptAd
-                                type="Basic"
-                                slotName={GptUtils.MobilizeSlotName(
-                                    'top-navigation-loggedin'
-                                )}
-                            />
-                        ) : (
-                            <GptAd
-                                type="Basic"
-                                slotName={GptUtils.MobilizeSlotName(
-                                    'top-navigation'
-                                )}
-                            />
-                        )}
+                        <GptAd
+                            type="Basic"
+                            id="/21784675435/steemit_top-navi"
+                            slotName={GptUtils.MobilizeSlotName(
+                                'top-navigation'
+                            )}
+                        />
                     </div>
                     <nav className="row Header__nav">
                         <div className="small-5 large-4 columns Header__logotype">

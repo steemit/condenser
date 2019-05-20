@@ -452,7 +452,9 @@ export function* createPermlink(title, author) {
             const noise = base58
                 .encode(secureRandom.randomBuffer(4))
                 .toLowerCase();
-            permlink = noise + '-' + permlink;
+            permlink = noise + '-' + s;
+        } else {
+            permlink = s;
         }
 
         // ensure permlink conforms to STEEMIT_MAX_PERMLINK_LENGTH

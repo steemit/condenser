@@ -394,12 +394,7 @@ export function* preBroadcast_comment({ operation, username }) {
     }
     if (!body2) body2 = body;
     if (!permlink)
-        permlink = yield createPermlink(
-            title,
-            author,
-            parent_author,
-            parent_permlink
-        );
+        permlink = yield createPermlink(title, author);
 
     const md = operation.json_metadata;
     const json_metadata = typeof md === 'string' ? md : JSON.stringify(md);
@@ -442,7 +437,7 @@ export function* preBroadcast_comment({ operation, username }) {
     return comment_op;
 }
 
-export function* createPermlink(title, author, parent_author, parent_permlink) {
+export function* createPermlink(title, author) {
     let permlink;
     if (title && title.trim() !== '') {
         let s = slug(title);
@@ -462,20 +457,9 @@ export function* createPermlink(title, author, parent_author, parent_permlink) {
         }
         permlink = prefix + s;
     } else {
-        // comments: re-parentauthor-parentpermlink-time
-        const timeStr = new Date()
-            .toISOString()
-            .replace(/[^a-zA-Z0-9]+/g, '')
-            .toLowerCase();
-        parent_permlink = parent_permlink.replace(/(-\d{8}t\d{9}z)/g, '');
-        // Periods allowed in author are not allowed in permlink.
-        parent_author = parent_author.replace(/\./g, '');
-        permlink = `re-${parent_author}-${parent_permlink}-${timeStr}`;
+        permlink = Date.now().toString(36);
     }
-    if (permlink.length > 255) {
-        // STEEMIT_MAX_PERMLINK_LENGTH
-        permlink = permlink.substring(permlink.length - 255, permlink.length);
-    }
+
     return permlink;
 }
 

@@ -23,7 +23,6 @@ class GptAd extends Component {
                     googletag
                         .pubads()
                         .addEventListener('slotRenderEnded', event => {
-                            // console.info('Slot has been rendered:', event);
                             window.dispatchEvent(new Event('gptadshown'));
                         });
                 });
@@ -59,14 +58,6 @@ class GptAd extends Component {
         if (!this.ad || !this.enabled) {
             return <div id="disabled_ad" style={{ display: 'none' }} />;
         }
-        // else if (this.type == 'Bidding') {
-        //   return(
-        //   <AdvertisingProvider config={BiddingConfig}>
-        //     <AdvertisingSlot id="div-gpt-ad-1551233873698-0" >
-        //       <b>div-gpt-ad-1551233873698-0</b>
-        //     </AdvertisingSlot>
-        //   </AdvertisingProvider>)
-        // }
 
         return (
             <div

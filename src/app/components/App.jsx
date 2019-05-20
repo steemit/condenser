@@ -35,12 +35,30 @@ class App extends React.Component {
         this.setState({ gptBannerHeight: height });
     }
 
+    toggleBodyNightmode(nightmodeEnabled) {
+        if (nightmodeEnabled) {
+            document.body.classList.remove('theme-light');
+            document.body.classList.add('theme-dark');
+        } else {
+            document.body.classList.remove('theme-dark');
+            document.body.classList.add('theme-light');
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const { nightmodeEnabled } = nextProps;
+        this.toggleBodyNightmode(nightmodeEnabled);
+    }
+
     componentWillMount() {
         if (process.env.BROWSER) localStorage.removeItem('autopost'); // July 14 '16 compromise, renamed to autopost2
         this.props.loginUser();
     }
 
     componentDidMount() {
+        const { nightmodeEnabled } = this.props;
+        this.toggleBodyNightmode(nightmodeEnabled);
+
         window.addEventListener('gptadshown', this.gptadshownListener);
     }
 
@@ -162,13 +180,6 @@ class App extends React.Component {
         }
 
         const themeClass = nightmodeEnabled ? ' theme-dark' : ' theme-light';
-        if (themeClass == 'theme-dark') {
-            document.body.classList.remove('theme-light');
-            document.body.classList.add('theme-dark');
-        } else {
-            document.body.classList.remove('theme-dark');
-            document.body.classList.add('theme-light');
-        }
 
         return (
             <div

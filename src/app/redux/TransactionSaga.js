@@ -462,7 +462,7 @@ export function* createPermlink(title, author) {
             permlink = permlink.substring(0, 255);
         }
     } else {
-        permlink = Date.now().toString(36);
+        permlink = Math.floor(Date.now() / 1000).toString(36);
     }
 
     return permlink;

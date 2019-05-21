@@ -14,6 +14,7 @@ import { INVEST_TOKEN_UPPERCASE } from 'app/client_config';
 import { SIGNUP_URL } from 'shared/constants';
 import { GptUtils } from 'app/utils/GptUtils';
 import GptAd from 'app/components/elements/GptAd';
+import BiddingAd from 'app/components/elements/BiddingAd';
 import { isLoggedIn } from 'app/utils/UserUtil';
 
 import Icon from 'app/components/elements/Icon';
@@ -230,15 +231,15 @@ class Post extends React.Component {
                 {this.props.gptEnabled ? (
                     <div className="Post_footer__ad">
                         {isLoggedIn() ? (
-                            <GptAd
-                                type="Basic"
+                            <BiddingAd
+                                type="Bidding"
                                 slotName={GptUtils.MobilizeSlotName(
                                     'post-page-above-comments-loggedin'
                                 )}
                             />
                         ) : (
-                            <GptAd
-                                type="Basic"
+                            <BiddingAd
+                                type="Bidding"
                                 slotName={GptUtils.MobilizeSlotName(
                                     'post-page-above-comments'
                                 )}

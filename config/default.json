@@ -91,29 +91,12 @@
       "dimensions": [[120, 240]]
     },
     "left-navigation-loggedin": {
-      "path": "",
+      "path": "/21784675435/steemit_left-navigation/steemit_left-navigation_loggedin",
       "dimensions": [[120, 600], [160, 600]]
     },
     "left-navigation-mobile": {
       "path": "/21784675435/steemit_left-navigation/steemit_left-navigation_mobile",
       "dimensions": [[120, 240]]
-    },
-
-    "post-page-above-comments": {
-      "path": "/21784675435/steemit_post-page-above-comments",
-      "dimensions": [[728, 90], [970, 90]]
-    },
-    "post-page-above-comments-loggedin-mobile": {
-      "path": "/21784675435/steemit_post-page-above-comments/steemit_post-page-above-comments_loggedin_mobile",
-      "dimensions": [[220, 90]]
-    },
-    "post-page-above-comments-loggedin": {
-      "path": "/21784675435/steemit_post-page-above-comments/steemit_post-page-above-comments_loggedin",
-      "dimensions": [[728, 90], [970, 90]]
-    },
-    "post-page-above-comments-mobile": {
-      "path": "/21784675435/steemit_post-page-above-comments/steemit_post-page-above-comments_mobile",
-      "dimensions": [[220, 90]]
     },
 
     "right-navigation": {
@@ -156,6 +139,24 @@
       "path": "/21784675435/steemit_bottom-of-post/steemit_bottom-of-post_prebid",
       "dimensions": [[728, 90]]
     },
+
+    "post-page-above-comments": {
+      "path": "/21784675435/steemit_post-page-above-comments",
+      "dimensions": [[728, 90], [970, 90]]
+    },
+    "post-page-above-comments-loggedin-mobile": {
+      "path": "/21784675435/steemit_post-page-above-comments/steemit_post-page-above-comments_loggedin_mobile",
+      "dimensions": [[220, 90]]
+    },
+    "post-page-above-comments-loggedin": {
+      "path": "/21784675435/steemit_post-page-above-comments/steemit_post-page-above-comments_loggedin",
+      "dimensions": [[728, 90], [970, 90]]
+    },
+    "post-page-above-comments-mobile": {
+      "path": "/21784675435/steemit_post-page-above-comments/steemit_post-page-above-comments_mobile",
+      "dimensions": [[220, 90]]
+    },
+
     "left-navigation": {
       "path": "/21784675435/steemit_left-navigation/steemit_left-navigation_prebid",
       "dimensions": [[120, 600], [160, 600]]
@@ -166,8 +167,8 @@
     "failsafe_timeout": 3000,
     "ad_units": [
       {
-        "code": "/21784675435/steemit_top-navi",
-        "mediaTypes": { "banner": { "sizes": [728, 90] } },
+        "code": "/21784675435/steemit_post-page-above-comments",
+        "mediaTypes": { "banner": { "sizes": [[728, 90], [220, 90], [970, 90]] } },
         "bids": [{
           "bidder": "coinzilla",
           "params": { "placementId": "6425c7b9886e0045972" }

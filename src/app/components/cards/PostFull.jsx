@@ -27,12 +27,13 @@ import userIllegalContent from 'app/utils/userIllegalContent';
 import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import { GoogleAd } from 'app/components/elements/GoogleAd';
+import ContentEditedWrapper from '../elements/ContentEditedWrapper';
 
 function TimeAuthorCategory({ content, authorRepLog10, showTags }) {
     return (
         <span className="PostFull__time_author_category vcard">
             <Icon name="clock" className="space-right" />
-            <TimeAgoWrapper date={content.created} className="updated" />
+            <TimeAgoWrapper date={content.created} />
             {} {tt('g.by')}{' '}
             <Author
                 author={content.author}
@@ -63,8 +64,12 @@ function TimeAuthorCategoryLarge({ content, authorRepLog10 }) {
                     {' '}
                     {tt('g.in')} <TagList post={content} single />
                 </span>{' '}
-                •&nbsp;{' '}
-                <TimeAgoWrapper date={content.created} className="updated" />
+                •&nbsp; <TimeAgoWrapper date={content.created} />
+                &nbsp;{' '}
+                <ContentEditedWrapper
+                    createDate={content.created}
+                    updateDate={content.last_update}
+                />
             </div>
         </span>
     );

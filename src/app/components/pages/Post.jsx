@@ -1,23 +1,23 @@
 import React from 'react';
-// import ReactMarkdown from 'react-markdown';
 import PropTypes from 'prop-types';
 import Comment from 'app/components/cards/Comment';
 import PostFull from 'app/components/cards/PostFull';
 import { connect } from 'react-redux';
 
 import { sortComments } from 'app/components/cards/Comment';
-// import { Link } from 'react-router';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
-import GptAd from 'app/components/elements/GptAd';
-import BiddingAd from 'app/components/elements/BiddingAd';
 import { Set } from 'immutable';
 import tt from 'counterpart';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 import { INVEST_TOKEN_UPPERCASE } from 'app/client_config';
 import { SIGNUP_URL } from 'shared/constants';
-
+import { GptUtils } from 'app/utils/GptUtils';
+import GptAd from 'app/components/elements/GptAd';
+import BiddingAd from 'app/components/elements/BiddingAd';
 import { isLoggedIn } from 'app/utils/UserUtil';
+
+import Icon from 'app/components/elements/Icon';
 
 class Post extends React.Component {
     static propTypes = {
@@ -63,7 +63,47 @@ class Post extends React.Component {
         }
         const dis = content.get(post);
 
-        if (!dis) return null;
+        // check if the post doesn't exist
+        // !dis may be enough but keep 'created' & 'body' test for potential compatibility
+        const emptyPost =
+            !dis ||
+            (dis.get('created') === '1970-01-01T00:00:00' &&
+                dis.get('body') === '');
+
+        if (emptyPost)
+            return (
+                <div className="NotFound float-center">
+                    <div>
+                        <Icon name="steem" size="4x" />
+                        <h4 className="NotFound__header">
+                            Sorry! This page doesnt exist.
+                        </h4>
+                        <p>
+                            Not to worry. You can head back to{' '}
+                            <a style={{ fontWeight: 800 }} href="/">
+                                our homepage
+                            </a>, or check out some great posts.
+                        </p>
+                        <ul className="NotFound__menu">
+                            <li>
+                                <a href="/created">new posts</a>
+                            </li>
+                            <li>
+                                <a href="/hot">hot posts</a>
+                            </li>
+                            <li>
+                                <a href="/trending">trending posts</a>
+                            </li>
+                            <li>
+                                <a href="/promoted">promoted posts</a>
+                            </li>
+                            <li>
+                                <a href="/active">active posts</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            );
 
         // A post should be hidden if it is not pinned, is not told to "show
         // anyway", and is designated "gray".
@@ -157,44 +197,6 @@ class Post extends React.Component {
                 link: selflink + '?sort=' + sort_orders[o] + '#comments',
             });
         }
-        const emptyPost =
-            dis.get('created') === '1970-01-01T00:00:00' &&
-            dis.get('body') === '';
-        if (emptyPost)
-            return (
-                <center>
-                    <div className="NotFound float-center">
-                        <div>
-                            <h4 className="NotFound__header">
-                                Sorry! This page doesnt exist.
-                            </h4>
-                            <p>
-                                Not to worry. You can head back to{' '}
-                                <a style={{ fontWeight: 800 }} href="/">
-                                    our homepage
-                                </a>, or check out some great posts.
-                            </p>
-                            <ul className="NotFound__menu">
-                                <li>
-                                    <a href="/created">new posts</a>
-                                </li>
-                                <li>
-                                    <a href="/hot">hot posts</a>
-                                </li>
-                                <li>
-                                    <a href="/trending">trending posts</a>
-                                </li>
-                                <li>
-                                    <a href="/promoted">promoted posts</a>
-                                </li>
-                                <li>
-                                    <a href="/active">active posts</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </center>
-            );
 
         return (
             <div className="Post">
@@ -228,11 +230,21 @@ class Post extends React.Component {
                 )}
                 {this.props.gptEnabled ? (
                     <div className="Post_footer__ad">
-                        <BiddingAd
-                            type="Bidding"
-                            slotName="bottom_post"
-                            id="div-gpt-ad-1551233873698-0"
-                        />
+                        {isLoggedIn() ? (
+                            <BiddingAd
+                                type="Bidding"
+                                slotName={GptUtils.MobilizeSlotName(
+                                    'post-page-above-comments-loggedin'
+                                )}
+                            />
+                        ) : (
+                            <BiddingAd
+                                type="Bidding"
+                                slotName={GptUtils.MobilizeSlotName(
+                                    'post-page-above-comments'
+                                )}
+                            />
+                        )}
                     </div>
                 ) : null}
                 <div id="#comments" className="Post_comments row hfeed">
@@ -256,7 +268,15 @@ class Post extends React.Component {
                 </div>
                 {this.props.gptEnabled ? (
                     <div className="Post_footer__ad">
-                        <GptAd type="Basic" slotName="basic_bottom_post" />
+                        {/* TODO: Switch to Mobile Ad when, well, mobile! */}
+                        {false ? (
+                            <GptAd
+                                type="Basic"
+                                slotName="bottom-of-post-mobile"
+                            />
+                        ) : (
+                            <GptAd type="Basic" slotName="bottom-of-post" />
+                        )}
                     </div>
                 ) : null}
             </div>

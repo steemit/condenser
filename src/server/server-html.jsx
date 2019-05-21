@@ -190,60 +190,7 @@ export default function ServerHTML({
                                 //       a new config file for ads would be good
                                 var PREBID_TIMEOUT = 2000;
                                 var FAILSAFE_TIMEOUT = 3000;
-                                var adUnits = [
-                                  {
-                                    code: "div-gpt-ad-1551233873698-0",
-                                    mediaTypes: {
-                                      banner: {
-                                        sizes: [728, 90]
-                                      }
-                                    },
-                                    bids: [
-                                      {
-                                        bidder: "coinzilla",
-                                        params: {
-                                          placementId: "6425c7b9886e0045972"
-                                        }
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    code: "div-gpt-ad-1554687231046-0",
-                                    mediaTypes: {
-                                      banner: {
-                                        sizes: [160, 600]
-                                      }
-                                    },
-                                    bids: [
-                                      {
-                                        bidder: "coinzilla",
-                                        params: {
-                                          placementId: "3575c7b9886e2cb3619"
-                                        }
-                                      }
-                                    ]
-                                  }
-                                ];
-                                const customConfigObject = {
-                                  buckets: [
-                                    {
-                                      precision: 2,
-                                      min: 0,
-                                      max: 1,
-                                      increment: 0.05
-                                    },
-                                    {
-                                      precision: 2,
-                                      min: 1,
-                                      max: 8,
-                                      increment: 0.1
-                                    }
-                                  ]
-                                };
-                                const systemCurrency = {
-                                  adServerCurrency: "USD",
-                                  granularityMultiplier: 1
-                                };
+                                var MAX_RETRIES = 20;
 
                                 // Begin GPT Ad Setup
                                 var googletag = googletag || {};
@@ -253,8 +200,6 @@ export default function ServerHTML({
                                   googletag.pubads().disableInitialLoad();
                                   googletag.pubads().setTargeting("edition", ["new-york"]);
                                   googletag.pubads().collapseEmptyDivs(true, true);
-                                  googletag.pubads().enableSingleRequest();
-                                  googletag.enableServices();
                                 });
 
 
@@ -263,39 +208,37 @@ export default function ServerHTML({
                                 pbjs.que = pbjs.que || [];
 
                                 pbjs.que.push(function() {
-                                  console.log('pbjs.que.push(function() {->IN THE SERVER CODE STUFFS');
-                                  pbjs.addAdUnits(adUnits);
+                                  pbjs.addAdUnits(${JSON.stringify(
+                                      gptBidding.ad_units
+                                  )});
+
                                   pbjs.setConfig({
-                                    priceGranularity: customConfigObject,
-                                    currency: systemCurrency
+                                    priceGranularity: ${JSON.stringify(
+                                        gptBidding.custom_config
+                                    )},
+                                    currency: ${JSON.stringify(
+                                        gptBidding.system_currency
+                                    )}
                                   });
-                                  console.log('pbjs.que.push(function() {->BEFOR requestBids');
+
                                   pbjs.requestBids({
                                     bidsBackHandler: initAdserver,
                                     timeout: PREBID_TIMEOUT
                                   });
                                 });
-                                var noBids = {}
+                                // var noBids = {}
                                 function initAdserver() {
-                                  console.log('function initAdserver() {', arguments)
-                                  if (arguments.length > 0) {
-                                    console.log('Received args @ initAdServer')
-                                    noBids = pbjs.getNoBids();
-                                    console.log('Result of noBids: ', noBids)
-                                  }
-                                  // Ensure this runs with our "failsafe" timeout
-                                  for (var slotId in noBids) {
-                                    var event = new Event('prebidNoBids');
-                                    event.slotId = slotId;
-                                    window.dispatchEvent(event);
-                                    console.log('Eventing a no bid event', event)
+                                  if (pbjs.initAdserverSet) return;
+
+                                  if(!googletag.pubadsReady && pbjs.retries <= MAX_RETRIES) {
+                                    setTimeout(initAdserver, 50); //poll ms can be adjusted as desired.
+                                    pbjs.retries++;
+                                    return;
                                   }
 
-                                  if (pbjs.initAdserverSet) return;
                                   pbjs.initAdserverSet = true;
                                   googletag.cmd.push(function() {
-                                    pbjs.que.push(function() {
-                                      console.log('pbjs.que.push(function() {')
+                                    pbjs.cmd.push(function() {
                                       pbjs.setTargetingForGPTAsync();
                                       googletag.pubads().refresh();
                                     });
@@ -304,31 +247,8 @@ export default function ServerHTML({
 
                                 // TODO: Do we need to do this twice?
                                 setTimeout(function() {
-                                  // TODO: Why would we call initAdserver a second time but with no params?
                                   initAdserver();
                                 }, FAILSAFE_TIMEOUT);
-
-                                // Begin Globally defining possible bidding ad slots.
-                                // TODO: Slot defs need to be moved to config.
-                                googletag.cmd.push(function() {
-                                  console.log("BiddingAd::componentDidMount::googletag.cmd.push");
-                                  googletag
-                                    .defineSlot(
-                                      "/21784675435/steemit_bottom-of-post/steemit_bottom-of-post_prebid",
-                                      [[728, 90]],
-                                      "div-gpt-ad-1551233873698-0"
-                                    )
-                                    .addService(googletag.pubads());
-                                  googletag
-                                    .defineSlot(
-                                      "/21784675435/steemit_left-navigation/steemit_left-navigation_prebid",
-                                      [[120, 600], [160, 600]],
-                                      "div-gpt-ad-1554687231046-0"
-                                    )
-                                    .addService(googletag.pubads());
-                                  googletag.pubads().enableSingleRequest();
-                                  googletag.enableServices();
-                                });
                           `,
                         }}
                     />

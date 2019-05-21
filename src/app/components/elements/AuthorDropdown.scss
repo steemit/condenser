@@ -50,6 +50,8 @@
       clear: both;
       font-size: 90%;
       padding-top: 15px;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 }

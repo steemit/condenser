@@ -86,7 +86,7 @@ describe('TransactionSaga', () => {
         it('should generate own permlink, independent of api if title is empty', () => {
             const gen2 = createPermlink('', operation.author);
             const actual = gen2.next().value;
-            expect(actual.match(/^[a-z0-9]{7,9}$/) !== null).toEqual(true);
+            expect(actual.match(/^[a-z0-9]{6}$/) !== null).toEqual(true);
         });
     });
 

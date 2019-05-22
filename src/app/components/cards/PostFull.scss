@@ -217,6 +217,10 @@ input.share-box {
     transform: rotate(120deg);
 }
 
+table thead th {
+  word-break: normal;
+}
+
 /* Small only */
 @media screen and (max-width: 39.9375em) {
   .Post {

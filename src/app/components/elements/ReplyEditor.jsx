@@ -53,7 +53,7 @@ class ReplyEditor extends React.Component {
 
     constructor(props) {
         super();
-        this.state = { progress: {} };
+        this.state = { progress: {}, imagesUploadCount: 0 };
         this.initForm(props);
     }
 
@@ -288,24 +288,46 @@ class ReplyEditor extends React.Component {
     };
 
     upload = (file, name = '') => {
+        // Upon drop or file selection, insert a temporary MD image tag that will be replaced
+        const { body } = this.state;
+        let { imagesUploadCount } = this.state;
+        imagesUploadCount++;
+        this.setState({imagesUploadCount: imagesUploadCount});
+        body.props.onChange(
+          body.value + `\n\n![Uploading image #${imagesUploadCount}...]()`
+        );
+
         const { uploadImage } = this.props;
         this.setState({
             progress: { message: tt('reply_editor.uploading') },
         });
         uploadImage(file, progress => {
+            const { body } = this.state;
+
             if (progress.url) {
                 this.setState({ progress: {} });
                 const { url } = progress;
                 const image_md = `![${name}](${url})`;
-                const { body } = this.state;
-                const { selectionStart, selectionEnd } = this.refs.postRef;
+
+                // Replace temporary image MD tage with the real one
                 body.props.onChange(
-                    body.value.substring(0, selectionStart) +
-                        image_md +
-                        body.value.substring(selectionEnd, body.value.length)
+                  body.value.replace(`![Uploading image #${imagesUploadCount}...]()`, image_md)
                 );
+
+                // After replacement, return where the user were while typing
+                const { selectionStart } = this.refs.postRef;
+                this.refs.postRef.selectionStart = this.refs.postRef.selectionEnd = selectionStart;
             } else {
                 this.setState({ progress });
+
+                // Remove temporary image MD tag
+                body.props.onChange(
+                  body.value.replace(`![Uploading image #${imagesUploadCount}...]()`, '')
+                );
+
+                // After replacement, return where the user were while typing
+                const { selectionStart } = this.refs.postRef;
+                this.refs.postRef.selectionStart = this.refs.postRef.selectionEnd = selectionStart;
             }
             setTimeout(() => {
                 this.setState({ progress: {} });

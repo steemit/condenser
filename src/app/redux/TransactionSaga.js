@@ -393,13 +393,7 @@ export function* preBroadcast_comment({ operation, username }) {
             body2 = patch;
     }
     if (!body2) body2 = body;
-    if (!permlink)
-        permlink = yield createPermlink(
-            title,
-            author,
-            parent_author,
-            parent_permlink
-        );
+    if (!permlink) permlink = yield createPermlink(title, author);
 
     const md = operation.json_metadata;
     const json_metadata = typeof md === 'string' ? md : JSON.stringify(md);
@@ -442,7 +436,7 @@ export function* preBroadcast_comment({ operation, username }) {
     return comment_op;
 }
 
-export function* createPermlink(title, author, parent_author, parent_permlink) {
+export function* createPermlink(title, author) {
     let permlink;
     if (title && title.trim() !== '') {
         let s = slug(title);
@@ -451,31 +445,26 @@ export function* createPermlink(title, author, parent_author, parent_permlink) {
         }
         // only letters numbers and dashes shall survive
         s = s.toLowerCase().replace(/[^a-z0-9-]+/g, '');
-        // ensure the permlink(slug) is unique
+
+        // ensure the permlink is unique
         const slugState = yield call([api, api.getContentAsync], author, s);
-        let prefix;
         if (slugState.body !== '') {
-            // make sure slug is unique
-            prefix = base58.encode(secureRandom.randomBuffer(4)) + '-';
+            const noise = base58
+                .encode(secureRandom.randomBuffer(4))
+                .toLowerCase();
+            permlink = noise + '-' + s;
         } else {
-            prefix = '';
+            permlink = s;
         }
-        permlink = prefix + s;
+
+        // ensure permlink conforms to STEEMIT_MAX_PERMLINK_LENGTH
+        if (permlink.length > 255) {
+            permlink = permlink.substring(0, 255);
+        }
     } else {
-        // comments: re-parentauthor-parentpermlink-time
-        const timeStr = new Date()
-            .toISOString()
-            .replace(/[^a-zA-Z0-9]+/g, '')
-            .toLowerCase();
-        parent_permlink = parent_permlink.replace(/(-\d{8}t\d{9}z)/g, '');
-        // Periods allowed in author are not allowed in permlink.
-        parent_author = parent_author.replace(/\./g, '');
-        permlink = `re-${parent_author}-${parent_permlink}-${timeStr}`;
+        permlink = Math.floor(Date.now() / 1000).toString(36);
     }
-    if (permlink.length > 255) {
-        // STEEMIT_MAX_PERMLINK_LENGTH
-        permlink = permlink.substring(permlink.length - 255, permlink.length);
-    }
+
     return permlink;
 }
 

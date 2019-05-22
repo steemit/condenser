@@ -14,7 +14,10 @@ import { INVEST_TOKEN_UPPERCASE } from 'app/client_config';
 import { SIGNUP_URL } from 'shared/constants';
 import { GptUtils } from 'app/utils/GptUtils';
 import GptAd from 'app/components/elements/GptAd';
+import BiddingAd from 'app/components/elements/BiddingAd';
 import { isLoggedIn } from 'app/utils/UserUtil';
+
+import Icon from 'app/components/elements/Icon';
 
 class Post extends React.Component {
     static propTypes = {
@@ -60,7 +63,47 @@ class Post extends React.Component {
         }
         const dis = content.get(post);
 
-        if (!dis) return null;
+        // check if the post doesn't exist
+        // !dis may be enough but keep 'created' & 'body' test for potential compatibility
+        const emptyPost =
+            !dis ||
+            (dis.get('created') === '1970-01-01T00:00:00' &&
+                dis.get('body') === '');
+
+        if (emptyPost)
+            return (
+                <div className="NotFound float-center">
+                    <div>
+                        <Icon name="steem" size="4x" />
+                        <h4 className="NotFound__header">
+                            Sorry! This page doesnt exist.
+                        </h4>
+                        <p>
+                            Not to worry. You can head back to{' '}
+                            <a style={{ fontWeight: 800 }} href="/">
+                                our homepage
+                            </a>, or check out some great posts.
+                        </p>
+                        <ul className="NotFound__menu">
+                            <li>
+                                <a href="/created">new posts</a>
+                            </li>
+                            <li>
+                                <a href="/hot">hot posts</a>
+                            </li>
+                            <li>
+                                <a href="/trending">trending posts</a>
+                            </li>
+                            <li>
+                                <a href="/promoted">promoted posts</a>
+                            </li>
+                            <li>
+                                <a href="/active">active posts</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            );
 
         // A post should be hidden if it is not pinned, is not told to "show
         // anyway", and is designated "gray".
@@ -154,44 +197,6 @@ class Post extends React.Component {
                 link: selflink + '?sort=' + sort_orders[o] + '#comments',
             });
         }
-        const emptyPost =
-            dis.get('created') === '1970-01-01T00:00:00' &&
-            dis.get('body') === '';
-        if (emptyPost)
-            return (
-                <center>
-                    <div className="NotFound float-center">
-                        <div>
-                            <h4 className="NotFound__header">
-                                Sorry! This page doesnt exist.
-                            </h4>
-                            <p>
-                                Not to worry. You can head back to{' '}
-                                <a style={{ fontWeight: 800 }} href="/">
-                                    our homepage
-                                </a>, or check out some great posts.
-                            </p>
-                            <ul className="NotFound__menu">
-                                <li>
-                                    <a href="/created">new posts</a>
-                                </li>
-                                <li>
-                                    <a href="/hot">hot posts</a>
-                                </li>
-                                <li>
-                                    <a href="/trending">trending posts</a>
-                                </li>
-                                <li>
-                                    <a href="/promoted">promoted posts</a>
-                                </li>
-                                <li>
-                                    <a href="/active">active posts</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </center>
-            );
 
         return (
             <div className="Post">
@@ -226,15 +231,15 @@ class Post extends React.Component {
                 {this.props.gptEnabled ? (
                     <div className="Post_footer__ad">
                         {isLoggedIn() ? (
-                            <GptAd
-                                type="Basic"
+                            <BiddingAd
+                                type="Bidding"
                                 slotName={GptUtils.MobilizeSlotName(
                                     'post-page-above-comments-loggedin'
                                 )}
                             />
                         ) : (
-                            <GptAd
-                                type="Basic"
+                            <BiddingAd
+                                type="Bidding"
                                 slotName={GptUtils.MobilizeSlotName(
                                     'post-page-above-comments'
                                 )}

@@ -51,6 +51,13 @@ const iframeWhitelist = [
             return src;
         },
     },
+    {
+        re: /^https:\/\/bit\.tube\/playerembed\/([a-zA-Z0-9\-\.\/\&\=]+)$/,
+        fn: src => {
+            // <iframe id="embediframe" width="100%" height="250" src="https://bit.tube/playerembed/55804/QmNPnt1voixSsNvVH2pWRvmMJxBpfDAcs5MFx9A4n4zTTE" frameborder="0" allow="encrypted-media" allowfullscreen="" class="embedVideoIframe"></iframe>
+            return src;
+        },
+    },
 ];
 export const noImageText = '(Image not shown due to low ratings)';
 export const allowedTags = `
@@ -83,6 +90,7 @@ export default ({
             'allowfullscreen',
             'webkitallowfullscreen',
             'mozallowfullscreen',
+            'encrypted-media',
         ],
 
         // class attribute is strictly whitelisted (below)

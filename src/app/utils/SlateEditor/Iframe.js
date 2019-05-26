@@ -34,8 +34,18 @@ export default class Iframe extends React.Component {
 
         // Detect dtube
         match = url.match(linksRe.dtubeId);
+        console.log('match dtube', match);
         if (match && match.length >= 2) {
             return 'https://emb.d.tube/#!/' + match[1];
+        }
+
+        // Detect bittube
+        match = url.match(linksRe.bittubeId);
+        console.log('iFrame', match);
+        if (match && match.length >= 2) {
+            return (
+                'https://bit.tube/playerembeded/' + match[3] + '/' + match[1]
+            );
         }
 
         console.log('unable to auto-detect embed url', url);

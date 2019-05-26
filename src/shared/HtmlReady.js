@@ -143,7 +143,9 @@ function link(state, child) {
         state.links.add(url);
         if (state.mutate) {
             // If this link is not relative, http, https, steem or esteem -- add https.
-            if (!/^((#)|(\/(?!\/))|(((steem|esteem|https?):)?\/\/))/.test(url)) {
+            if (
+                !/^((#)|(\/(?!\/))|(((steem|esteem|https?):)?\/\/))/.test(url)
+            ) {
                 child.setAttribute('href', 'https://' + url);
             }
 
@@ -237,6 +239,7 @@ function linkifyNode(child, state) {
         child = embedVimeoNode(child, state.links, state.images);
         child = embedTwitchNode(child, state.links, state.images);
         child = embedDTubeNode(child, state.links, state.images);
+        child = embedBitTubeNode(child, state.links, state.images);
 
         const data = XMLSerializer.serializeToString(child);
         const content = linkify(
@@ -457,6 +460,36 @@ function dtubeId(data) {
         id: m[1],
         url: m[0],
         canonical: `https://emb.d.tube/#!/${m[1]}`,
+    };
+}
+
+function embedBitTubeNode(child, links /*images*/) {
+    try {
+        const data = child.data;
+        const bittube = bittubeId(data);
+        if (!bittube) return child;
+
+        child.data = data.replace(
+            bittube.url,
+            `~~~ embed:${bittube.id} bittube ~~~`
+        );
+
+        if (links) links.add(bittube.canonical);
+    } catch (error) {
+        console.log(error);
+    }
+    return child;
+}
+
+function bittubeId(data) {
+    if (!data) return null;
+    const m = data.match(linksRe.bittube);
+    if (!m || m.length < 3) return null;
+
+    return {
+        id: m[3] + '/' + m[1],
+        url: m[0],
+        canonical: `https://bit.tube/playerembeded/${m[2]}/${m[1]}`,
     };
 }
 

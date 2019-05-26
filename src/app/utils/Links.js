@@ -51,6 +51,9 @@ export default {
     twitch: /https?:\/\/(?:www.)?twitch.tv\/(?:(videos)\/)?([a-zA-Z0-9][\w]{3,24})/i,
     dtube: /https:\/\/(?:emb\.)?(?:d.tube\/\#\!\/(?:v\/)?)([a-zA-Z0-9\-\.\/]*)/,
     dtubeId: /(?:d\.tube\/#!\/(?:v\/)?([a-zA-Z0-9\-\.\/]*))+/,
+
+    bittube: /https:\/\/(?:bit\.)?(?:tube\/play\?hash=)([a-zA-Z0-9\-\.\/]*)(\&channel\=)([0-9]*)+(?:\&[a-z\&\=]*)?/,
+    bittubeId: /(?:bit\.tube\/play\?hash\=?([a-zA-Z0-9\-\.\/\&\=]*))+/,
 };
 
 //TODO: possible this should go somewhere else.

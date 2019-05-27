@@ -34,7 +34,6 @@ export default class Iframe extends React.Component {
 
         // Detect dtube
         match = url.match(linksRe.dtubeId);
-        console.log('match dtube', match);
         if (match && match.length >= 2) {
             return 'https://emb.d.tube/#!/' + match[1];
         }

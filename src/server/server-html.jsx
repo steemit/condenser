@@ -272,6 +272,7 @@ export default function ServerHTML({
                     />
                 ) : null}
                 <title>{page_title}</title>
+                <script id="Cookiebot" async src="https://consent.cookiebot.com/uc.js" data-cbid="22f6c754-2d34-447c-8e14-787b9edde451" type="text/javascript" async></script>
             </head>
             <body>
                 {

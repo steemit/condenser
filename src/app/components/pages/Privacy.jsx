@@ -1005,6 +1005,7 @@ class Privacy extends React.Component {
                             correct or delete the data that we have about you.
                         </span>
                     </p>
+                    <script id="CookieDeclaration" src="https://consent.cookiebot.com/22f6c754-2d34-447c-8e14-787b9edde451/cd.js" type="text/javascript" async></script>
                     <p className="c0">
                         <span className="c1" />
                     </p>

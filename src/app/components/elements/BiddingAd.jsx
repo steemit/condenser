@@ -99,7 +99,6 @@ export default connect(
         const slotName = props.slotName;
         let type = props.type;
         let slot = state.app.getIn(['googleAds', `gpt${type}Slots`, slotName]);
-        console.log('Found slot for type', type, slot);
 
         return {
             enabled,

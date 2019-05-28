@@ -20,6 +20,12 @@ class BiddingAd extends Component {
                 googletag.cmd.push(() => {
                     googletag.display(this.ad.path);
                     this.refreshBid(this.ad.path, slot);
+
+                    googletag
+                        .pubads()
+                        .addEventListener('slotRenderEnded', e => {
+                            window.dispatchEvent(new Event('gptadshown', e));
+                        });
                 });
             }
         });

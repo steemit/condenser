@@ -276,16 +276,16 @@ describe('htmlready', () => {
         const testString =
             '<html><p>before text https://bit.tube/play?hash=QmTjFvLPGUrMdUmStTdQvKvimTpJf8p7rPPBzLD27Q3NqS&channel=6058 after text</p></html>';
         const htmlified =
-            '<html xmlns="http://www.w3.org/1999/xhtml"><p>before text ~~~ embed:play?hash=QmTjFvLPGUrMdUmStTdQvKvimTpJf8p7rPPBzLD27Q3NqS&channel=6058 bittube ~~~ after text</p></html>';
+            '<html xmlns="http://www.w3.org/1999/xhtml"><p>before text ~~~ embed:6058/QmTjFvLPGUrMdUmStTdQvKvimTpJf8p7rPPBzLD27Q3NqS bittube ~~~ after text</p></html>';
         const res = HtmlReady(testString).html;
         expect(res).toEqual(htmlified);
     });
 
-    it('should handle dtube embed', () => {
+    it('should handle bittube embed', () => {
         const testString =
             '<html><iframe id="embediframe" width="100%" height="250" src="https://bit.tube/playerembed/6058/QmTjFvLPGUrMdUmStTdQvKvimTpJf8p7rPPBzLD27Q3NqS" frameborder="0" allow="encrypted-media" allowfullscreen="" class="embedVideoIframe"></iframe></html>';
         const htmlified =
-            '<html xmlns="http://www.w3.org/1999/xhtml"><div class="videoWrapper"><iframe id="embediframe" width="100%" height="250" src="https://bit.tube/playerembed/6058/QmTjFvLPGUrMdUmStTdQvKvimTpJf8p7rPPBzLD27Q3NqS" frameborder="0" allow="encrypted-media" allowfullscreen="" class="embedVideoIframe"></iframe></div></html>';
+            '<html xmlns="http://www.w3.org/1999/xhtml"><div class="videoWrapper"><iframe id="embediframe" width="100%" height="250" src="https://bit.tube/playerembed/6058/QmTjFvLPGUrMdUmStTdQvKvimTpJf8p7rPPBzLD27Q3NqS" frameborder="0" allow="encrypted-media" allowfullscreen="" class="embedVideoIframe" xmlns="http://www.w3.org/1999/xhtml"></iframe></div></html>';
         const res = HtmlReady(testString).html;
         expect(res).toEqual(htmlified);
     });

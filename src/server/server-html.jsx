@@ -199,7 +199,7 @@ export default function ServerHTML({
                                 googletag.cmd.push(function() {
                                   googletag.pubads().disableInitialLoad();
                                   googletag.pubads().setTargeting("edition", ["new-york"]);
-                                  googletag.pubads().collapseEmptyDivs(true, true);
+                                  googletag.pubads().collapseEmptyDivs(true);
                                 });
 
 

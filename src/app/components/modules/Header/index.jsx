@@ -32,14 +32,18 @@ class Header extends React.Component {
 
     constructor() {
         super();
+        // TODO: Move to State
         this.gptadshown = event => {
             // This makes sure that the sticky header doesn't overlap the welcome splash.
             this.forceUpdate();
         };
+        // TODO: Move to State
         this.hideAnnouncement = event => {
             this.props.hideAnnouncement(event);
             this.forceUpdate();
         };
+
+        this.state = { showAd: true };
     }
 
     componentDidMount() {
@@ -88,6 +92,14 @@ class Header extends React.Component {
         }
     }
 
+    headroomOnUnpin() {
+        this.setState({ showAd: false });
+    }
+
+    headroomOnUnfix() {
+        this.setState({ showAd: true });
+    }
+
     render() {
         const {
             category,
@@ -107,6 +119,8 @@ class Header extends React.Component {
             account_meta,
             walletUrl,
         } = this.props;
+
+        const { showAd } = this.state;
 
         /*Set the document.title on each header render.*/
         const route = resolveRoute(pathname);
@@ -277,13 +291,16 @@ class Header extends React.Component {
         ];
 
         return (
-            <Headroom>
+            <Headroom
+                onUnpin={e => this.headroomOnUnpin(e)}
+                onUnfix={e => this.headroomOnUnfix(e)}
+            >
                 <header className="Header">
                     {this.props.showAnnouncement && (
                         <Announcement onClose={this.hideAnnouncement} />
                     )}
                     {/* If announcement is shown, ad will not render unless it's in a parent div! */}
-                    <div>
+                    <div style={showAd ? {} : { display: 'none' }}>
                         <BiddingAd
                             type="Bidding"
                             id="/21784675435/steemit_top-navi"
@@ -292,6 +309,7 @@ class Header extends React.Component {
                             )}
                         />
                     </div>
+
                     <nav className="row Header__nav">
                         <div className="small-5 large-4 columns Header__logotype">
                             {/*LOGO*/}

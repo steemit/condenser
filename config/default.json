@@ -4,7 +4,7 @@
   "helmet": {
     "directives": {
       "childSrc": "'self' bit.tube emb.d.tube player.twitch.tv www.youtube.com staticxx.facebook.com w.soundcloud.com player.vimeo.com",
-      "connectSrc": "securepubads.g.doubleclick.net 'self' steemit.com https://api.steemit.com api.blocktrades.us",
+      "connectSrc": "https://steemitimages.com securepubads.g.doubleclick.net 'self' steemit.com https://api.steemit.com api.blocktrades.us",
       "defaultSrc": "tpc.googlesyndication.com 'self' bit.tube emb.d.tube www.youtube.com staticxx.facebook.com player.vimeo.com",
       "fontSrc": "data: fonts.gstatic.com",
       "frameAncestors": "'none'",
@@ -157,6 +157,23 @@
       "dimensions": [[220, 90]]
     },
 
+    "top-navigation": {
+      "path": "/21784675435/steemit_top-navi",
+      "dimensions": [[728, 90], [970, 90]]
+    },
+    "top-navigation-loggedin-mobile": {
+      "path": "/21784675435/steemit_top-navi/steemit_top-navi_loggedin_mobile",
+      "dimensions": [[220, 90]]
+    },
+    "top-navigation-loggedin": {
+      "path": "/21784675435/steemit_top-navi/steemit_top-navi_loggedin",
+      "dimensions": [[728, 90], [970, 90]]
+    },
+    "top-navigation-mobile": {
+      "path": "/21784675435/steemit_top-navi/steemit_top-navi_mobile",
+      "dimensions": [[220, 90]]
+    },
+
     "left-navigation": {
       "path": "/21784675435/steemit_left-navigation/steemit_left-navigation_prebid",
       "dimensions": [[120, 600], [160, 600]]
@@ -166,6 +183,14 @@
     "prebid_timeout": 2000,
     "failsafe_timeout": 3000,
     "ad_units": [
+      {
+        "code": "/21784675435/steemit_top-navi",
+        "mediaTypes": { "banner": { "sizes": [[728, 90], [220, 90], [970, 90]] } },
+        "bids": [{
+          "bidder": "coinzilla",
+          "params": { "placementId": "6425c7b9886e0045972" }
+        }]
+      },
       {
         "code": "/21784675435/steemit_post-page-above-comments",
         "mediaTypes": { "banner": { "sizes": [[728, 90], [220, 90], [970, 90]] } },

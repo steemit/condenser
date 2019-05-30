@@ -229,6 +229,8 @@
       "granularityMultiplier": 1
     }
   },
+  "cookie_consent_enabled": null,
+  "cookie_consent_api_key": null,
   "steem_market_endpoint": null,
   "steem_market_token": null,
   "steem_market_cache": {

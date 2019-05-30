@@ -557,7 +557,9 @@
         "sign_up_now_to_earn": "Zarejestruj się aby zarabiać ",
         "free_money": "DARMOWY STEEM!",
         "returning_users": "Powracający użytkownicy: ",
-        "join_our": "Dołącz do"
+        "join_our": "Dołącz do",
+        "sign_transfer": "Sign to complete transfer",
+        "use_keychain": "Use keychain extension"
     },
     "chainvalidation_js": {
         "account_name_should": "Nazwa konta powinna ",

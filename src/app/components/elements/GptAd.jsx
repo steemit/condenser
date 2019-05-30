@@ -22,8 +22,8 @@ class GptAd extends Component {
                     googletag.pubads().refresh([slot]);
                     googletag
                         .pubads()
-                        .addEventListener('slotRenderEnded', event => {
-                            window.dispatchEvent(new Event('gptadshown'));
+                        .addEventListener('slotRenderEnded', e => {
+                            window.dispatchEvent(new Event('gptadshown', e));
                         });
                 });
             }

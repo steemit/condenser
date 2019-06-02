@@ -18,7 +18,8 @@ import { SIGNUP_URL } from 'shared/constants';
 import SteemLogo from 'app/components/elements/SteemLogo';
 import normalizeProfile from 'app/utils/NormalizeProfile';
 import Announcement from 'app/components/elements/Announcement';
-import ConnectedGptAd from 'app/components/elements/ConnectedGptAd';
+import { GptUtils } from 'app/utils/GptUtils';
+import BiddingAd from 'app/components/elements/BiddingAd';
 
 class Header extends React.Component {
     static propTypes = {
@@ -29,9 +30,14 @@ class Header extends React.Component {
         pathname: PropTypes.string,
     };
 
-    constructor() {
-        super();
-        this.gptListener = null;
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            gptAdRendered: false,
+            showAd: false,
+            showAnnouncement: this.props.showAnnouncement,
+        };
     }
 
     componentDidMount() {
@@ -44,12 +50,7 @@ class Header extends React.Component {
             return null;
         }
 
-        this.gptListener = googletag
-            .pubads()
-            .addEventListener('slotRenderEnded', event => {
-                // This makes sure that the sticky header doesn't overlap the welcome splash.
-                this.forceUpdate();
-            });
+        window.addEventListener('gptadshown', e => this.gptAdRendered(e));
     }
 
     componentWillUnmount() {
@@ -61,13 +62,9 @@ class Header extends React.Component {
         ) {
             return null;
         }
-
-        googletag
-            .pubads()
-            .removeEventListener('slotRenderEnded', this.gptListener);
     }
 
-    // Conside refactor.
+    // Consider refactor.
     // I think 'last sort order' is something available through react-router-redux history.
     // Therefore no need to store it in the window global like this.
     componentWillReceiveProps(nextProps) {
@@ -87,6 +84,23 @@ class Header extends React.Component {
         }
     }
 
+    headroomOnUnpin() {
+        this.setState({ showAd: false });
+    }
+
+    headroomOnUnfix() {
+        this.setState({ showAd: true });
+    }
+
+    gptAdRendered() {
+        this.setState({ showAd: true, gptAdRendered: true });
+    }
+
+    hideAnnouncement() {
+        this.setState({ showAnnouncement: false });
+        this.props.hideAnnouncement();
+    }
+
     render() {
         const {
             category,
@@ -104,7 +118,10 @@ class Header extends React.Component {
             showSidePanel,
             navigate,
             account_meta,
+            walletUrl,
         } = this.props;
+
+        const { showAd, showAnnouncement } = this.state;
 
         /*Set the document.title on each header render.*/
         const route = resolveRoute(pathname);
@@ -144,18 +161,7 @@ class Header extends React.Component {
             page_title = tt('navigation.privacy_policy');
         } else if (route.page == 'Tos') {
             page_title = tt('navigation.terms_of_service');
-        } else if (route.page == 'ChangePassword') {
-            page_title = tt('header_jsx.change_account_password');
-        } else if (route.page == 'CreateAccount') {
-            page_title = tt('header_jsx.create_account');
-        } else if (route.page == 'PickAccount') {
-            page_title = `Pick Your New Steemit Account`;
-        } else if (route.page == 'Approval') {
-            page_title = `Account Confirmation`;
-        } else if (
-            route.page == 'RecoverAccountStep1' ||
-            route.page == 'RecoverAccountStep2'
-        ) {
+        } else if (route.page == 'RecoverAccountStep1') {
             page_title = tt('header_jsx.stolen_account_recovery');
         } else if (route.page === 'UserProfile') {
             let user_name = route.params[0].slice(1);
@@ -243,10 +249,9 @@ class Header extends React.Component {
 
         const feed_link = `/@${username}/feed`;
         const replies_link = `/@${username}/recent-replies`;
-        const wallet_link = `/@${username}/transfers`;
         const account_link = `/@${username}`;
         const comments_link = `/@${username}/comments`;
-        const reset_password_link = `/@${username}/password`;
+        const wallet_link = `${walletUrl}/@${username}`;
         const settings_link = `/@${username}/settings`;
         const pathCheck = userPath === '/submit.html' ? true : null;
 
@@ -268,16 +273,12 @@ class Header extends React.Component {
                 icon: 'wallet',
                 value: tt('g.wallet'),
             },
+
             {
                 link: '#',
                 icon: 'eye',
                 onClick: toggleNightmode,
                 value: tt('g.toggle_nightmode'),
-            },
-            {
-                link: reset_password_link,
-                icon: 'key',
-                value: tt('g.change_password'),
             },
             { link: settings_link, icon: 'cog', value: tt('g.settings') },
             loggedIn
@@ -291,12 +292,25 @@ class Header extends React.Component {
         ];
 
         return (
-            <Headroom>
+            <Headroom
+                onUnpin={e => this.headroomOnUnpin(e)}
+                onUnfix={e => this.headroomOnUnfix(e)}
+            >
                 <header className="Header">
-                    {this.props.showAnnouncement && (
-                        <Announcement onClose={this.props.hideAnnouncement} />
+                    {showAnnouncement && (
+                        <Announcement onClose={e => this.hideAnnouncement(e)} />
                     )}
-                    <ConnectedGptAd slotName="top_nav" />
+                    {/* If announcement is shown, ad will not render unless it's in a parent div! */}
+                    <div style={showAd ? {} : { display: 'none' }}>
+                        <BiddingAd
+                            type="Bidding"
+                            id="/21784675435/steemit_top-navi"
+                            slotName={GptUtils.MobilizeSlotName(
+                                'top-navigation'
+                            )}
+                        />
+                    </div>
+
                     <nav className="row Header__nav">
                         <div className="small-5 large-4 columns Header__logotype">
                             {/*LOGO*/}
@@ -406,6 +420,7 @@ const mapStateToProps = (state, ownProps) => {
         : state.offchain.get('account');
 
     const gptEnabled = state.app.getIn(['googleAds', 'gptEnabled']);
+    const walletUrl = state.app.get('walletUrl');
 
     return {
         username,
@@ -416,6 +431,7 @@ const mapStateToProps = (state, ownProps) => {
         current_account_name,
         showAnnouncement: state.user.get('showAnnouncement'),
         gptEnabled,
+        walletUrl,
         ...ownProps,
     };
 };

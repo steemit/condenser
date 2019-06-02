@@ -75,50 +75,6 @@ export class Memo extends React.Component {
                 : tt('g.login_to_see_memo');
         }
 
-        if (isFromBadActor && !this.state.revealMemo) {
-            renderText = (
-                <div className="bad-actor-warning">
-                    <div className="bad-actor-caution">
-                        {tt('transferhistoryrow_jsx.bad_actor_caution')}
-                    </div>
-                    <div className="bad-actor-explained">
-                        {tt('transferhistoryrow_jsx.bad_actor_explained')}
-                    </div>
-                    <div
-                        className="ptc bad-actor-reveal-memo"
-                        role="button"
-                        onClick={this.onRevealMemo}
-                    >
-                        {tt('transferhistoryrow_jsx.bad_actor_reveal_memo')}
-                    </div>
-                </div>
-            );
-        } else if (fromNegativeRepUser && !this.state.revealMemo) {
-            renderText = (
-                <div className="from-negative-rep-user-warning">
-                    <div className="from-negative-rep-user-caution">
-                        {tt(
-                            'transferhistoryrow_jsx.from_negative_rep_user_caution'
-                        )}
-                    </div>
-                    <div className="from-negative-rep-user-explained">
-                        {tt(
-                            'transferhistoryrow_jsx.from_negative_rep_user_explained'
-                        )}
-                    </div>
-                    <div
-                        className="ptc from-negative-rep-user-reveal-memo"
-                        role="button"
-                        onClick={this.onRevealMemo}
-                    >
-                        {tt(
-                            'transferhistoryrow_jsx.from_negative_rep_user_reveal_memo'
-                        )}
-                    </div>
-                </div>
-            );
-        }
-
         return <span className={classes}>{renderText}</span>;
     }
 }

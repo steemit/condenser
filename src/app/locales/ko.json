@@ -178,8 +178,6 @@
             "계정명에는 알파벳과 숫자, 마침표, 대쉬만 사용 가능합니다.",
         "cannot_increase_reward_of_post_within_the_last_minute_before_payout":
             "Payout 전 마지막 순간에 게시물에 대한 보상을 늘릴 수 없습니다.",
-        "vote_currently_exists_user_must_be_indicate_a_to_reject_witness":
-            "vote currently exists, user must be indicate a desire to reject witness",
         "only_one_APP_NAME_account_allowed_per_ip_address_every_10_minutes":
             "매 10 분마다 IP 주소 당 단 하나의 Steem 계정만 허용됩니다.",
         "resteem_this_post": "Resteem This Post",
@@ -349,64 +347,9 @@
         "you_are_viewing_a_single_comments_thread_from":
             "You are viewing a single comment's thread from"
     },
-    "market_jsx": {
-        "action": "Action",
-        "date_created": "주문 일시",
-        "last_price": "현재 가격",
-        "24h_volume": "거래량(24H)",
-        "spread": "매도/매수 갭",
-        "total": "SBD 계",
-        "available": "주문 가능 금액",
-        "lowest_ask": "매도 주문 최저가",
-        "highest_bid": "매수 주문 최고가",
-        "buy_orders": "매수 주문",
-        "sell_orders": "매도 주문",
-        "trade_history": "거래 이력",
-        "open_orders": "미체결 주문",
-        "sell_amount_for_atleast":
-            "%(min_to_receive)s을 %(amount_to_sell)s로 판매 하시겠습니까? (%(effectivePrice)s)",
-        "buy_atleast_amount_for":
-            "%(min_to_receive)s을 %(amount_to_sell)s로 구매 하시겠습니까? (%(effectivePrice)s)",
-        "price_warning_above":
-            "This price is well above the current market price of %(marketPrice)s, are you sure?",
-        "price_warning_below":
-            "This price is well below the current market price of %(marketPrice)s, are you sure?",
-        "order_cancel_confirm": "%(order_id)s 주문을 취소하시겠습니까?",
-        "order_cancelled": "%(order_id)s 주문이 취소되었습니다.",
-        "higher": "Higher",
-        "lower": "Lower",
-        "total_DEBT_TOKEN_SHORT_CURRENCY_SIGN":
-            "Total %(DEBT_TOKEN_SHORT)s (%(CURRENCY_SIGN)s)"
-    },
     "recoveraccountstep1_jsx": {
-        "begin_recovery": "Begin Recovery",
-        "not_valid": "Not valid",
-        "account_name_is_not_found": "Account name is not found",
-        "unable_to_recover_account_not_change_ownership_recently":
-            "We are unable to recover this account, it has not changed ownership recently.",
-        "password_not_used_in_last_days":
-            "This password was not used on this account in the last 30 days.",
-        "request_already_submitted_contact_support":
-            "Your request has been already submitted and we are working on it. Please contact %(SUPPORT_EMAIL)s for the status of your request.",
         "recover_account_intro":
-            "From time to time, a Steemian's owner key may be compromised. Stolen Account Recovery gives the rightful account owner 30 days to recover their account from the moment the thief changed their owner key. Stolen Account Recovery can only be used on %(APP_URL)s if the account owner had previously listed '%(APP_NAME)s' as their account trustee and complied with %(APP_NAME)s's Terms of Service.",
-        "login_with_facebook_or_reddit_media_to_verify_identity":
-            "Please login with Facebook or Reddit to verify your identity",
-        "login_with_social_media_to_verify_identity":
-            "Please login with %(provider)s to verify your identity",
-        "enter_email_toverify_identity":
-            "We need to verify your identity. Please enter your email address below to begin the verification.",
-        "continue_with_email": "Continue with Email",
-        "thanks_for_submitting_request_for_account_recovery":
-            "Thanks for submitting your request for Account Recovery using %(APP_NAME)s's blockchain-based multi factor authentication. We will respond to you as quickly as possible, however, please expect there may be some delay in response due to high volume of emails. Please be prepared to verify your identity.",
-        "recovering_account": "Recovering account",
-        "recover_account": "Recover Account",
-        "checking_account_owner": "Checking account owner",
-        "sending_recovery_request": "Sending recovery request",
-        "cant_confirm_account_ownership":
-            "We can't confirm account ownership. Check your password",
-        "account_recovery_request_not_confirmed":
-            "Account recovery request is not confirmed yet, please get back later, thank you for your patience."
+            "From time to time, a Steemian's owner key may be compromised. Stolen Account Recovery gives the rightful account owner 30 days to recover their account from the moment the thief changed their owner key. Stolen Account Recovery can only be used on %(APP_URL)s if the account owner had previously listed '%(APP_NAME)s' as their account trustee and complied with %(APP_NAME)s's Terms of Service."
     },
     "user_profile": {
         "unknown_account": "Unknown Account",
@@ -444,14 +387,6 @@
         "hide_resteems": "Hide Resteems",
         "show_all": "Show All"
     },
-    "authorrewards_jsx": {
-        "estimated_author_rewards_last_week": "이번 주 예상 저자 보상금액",
-        "author_rewards_history": "저자 보상 내역"
-    },
-    "curationrewards_jsx": {
-        "estimated_curation_rewards_last_week": "이번주 예상 큐레이션 보상금액",
-        "curation_rewards_history": "큐레이션 보상 내역"
-    },
     "post_jsx": {
         "now_showing_comments_with_low_ratings":
             "Now showing comments with low ratings",
@@ -486,29 +421,6 @@
             "one": "%(count)s 보팅",
             "other": "%(count)s 보팅"
         }
-    },
-    "witnesses_jsx": {
-        "witness_thread": "witness thread",
-        "top_witnesses": "증인 투표",
-        "you_have_votes_remaining": {
-            "zero": "더이상 투표 하실 수 없습니다.",
-            "one": "현재 1명에게 투표하실 수 있습니다.",
-            "other": "현재 %(count)s명에게 투표하실 수 있습니다."
-        },
-        "you_can_vote_for_maximum_of_witnesses":
-            "최대 30명에게 투표하실 수 있습니다.",
-        "witness": "증인",
-        "information": "Information",
-        "if_you_want_to_vote_outside_of_top_enter_account_name":
-            "상위 100위권 밖에 계신 분에게 증인 투표를 하시려면 아래 칸에 해당하는 분의 계정명을 입력하세요.",
-        "set_witness_proxy":
-            "You can also choose a proxy that will vote for witnesses for you. This will reset your current witness selection.",
-        "witness_set":
-            "이미 투표 위임 설정을 하셨습니다. 다시 증인 투표를 하시려면 위임을 철회하십시오.",
-        "witness_proxy_current": "당신의 투표 권한을 위임한 증인: ",
-        "witness_proxy_set": "위임 설정",
-        "witness_proxy_clear": "위임 철회",
-        "proxy_update_error": "Your proxy was not updated"
     },
     "votesandcomments_jsx": {
         "no_responses_yet_click_to_respond":
@@ -609,21 +521,6 @@
         "empty_feed_4": "Read The Quick Start Guide",
         "empty_feed_5": "Browse The FAQ"
     },
-    "transferhistoryrow_jsx": {
-        "to_savings": "to savings",
-        "from_savings": "from savings",
-        "cancel_transfer_from_savings": "Cancel transfer from savings",
-        "stop_power_down": "파워 다운 중지",
-        "start_power_down_of": "Start power down of",
-        "receive_interest_of": "Receive interest of"
-    },
-    "savingswithdrawhistory_jsx": {
-        "cancel_this_withdraw_request": "출금 요청을 취소하시겠습니까?",
-        "pending_savings_withdrawals": "출금 진행 중",
-        "withdraw": "%(amount)s 출금: ",
-        "to": "%(to)s로 전송",
-        "from_to": "%(from)s 에서 %(to)s로 전송"
-    },
     "explorepost_jsx": {
         "copied": "Copied!",
         "copy": "COPY",
@@ -688,7 +585,9 @@
         "sign_up_get_steem":
             "계정을 만들고 가상화폐 STEEM 을 보상으로 받으세요.",
         "returning_users": "Returning Users: ",
-        "join_our": "Join our"
+        "join_our": "Join our",
+        "sign_transfer": "Sign to complete transfer",
+        "use_keychain": "Use keychain extension"
     },
     "chainvalidation_js": {
         "account_name_should": "Account name should ",
@@ -769,18 +668,6 @@
         "history": "거래 내역",
         "redeem_rewards": "내 지갑으로 입금하기",
         "buy_steem_or_steem_power": "STEEM, STEEM POWER 구입"
-    },
-    "powerdown_jsx": {
-        "power_down": "파워 다운",
-        "amount": "목표량",
-        "already_power_down":
-            "이미 %(AMOUNT)s %(LIQUID_TICKER)s의 파워 다운을 진행하고 있습니다(현재까지 %(WITHDRAWN)s %(LIQUID_TICKER)s 파워 다운). 파워다운 수량을 변경하게 되면 파워 다운 일정이 초기화되니 유의하십시오..",
-        "delegating":
-            "현재 %(AMOUNT)s %(LIQUID_TICKER)s을 임대 중입니다. 이 수량은 임대 종료 후 회수 기간이 완전히 지날 때까지는 파워 다운을 할 수 없습니다.",
-        "per_week": "That's ~%(AMOUNT)s %(LIQUID_TICKER)s per week.",
-        "warning":
-            "%(VESTING_TOKEN)s가 %(AMOUNT)s 이하로 내려가면 계정의 사용에 제약이 생깁니다.",
-        "error": "파워다운 실패: %(MESSAGE)s"
     },
     "checkloginowner_jsx": {
         "your_password_permissions_were_reduced":

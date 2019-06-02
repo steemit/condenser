@@ -5,6 +5,7 @@ import helmet from 'koa-helmet';
 import koa_logger from 'koa-logger';
 import requestTime from './requesttimings';
 import StatsLoggerClient from './utils/StatsLoggerClient';
+import { SteemMarket } from './utils/SteemMarket';
 import hardwareStats from './hardwarestats';
 import cluster from 'cluster';
 import os from 'os';
@@ -13,9 +14,6 @@ import favicon from 'koa-favicon';
 import staticCache from 'koa-static-cache';
 import useRedirects from './redirects';
 import useGeneralApi from './api/general';
-import useAccountRecoveryApi from './api/account_recovery';
-import useEnterAndConfirmEmailPages from './sign_up_pages/enter_confirm_email';
-import useEnterAndConfirmMobilePages from './sign_up_pages/enter_confirm_mobile';
 import useUserJson from './json/user_json';
 import usePostJson from './json/post_json';
 import isBot from 'koa-isbot';
@@ -29,6 +27,7 @@ import userIllegalContent from 'app/utils/userIllegalContent';
 import koaLocale from 'koa-locale';
 import { getSupportedLocales } from './utils/misc';
 import { pinnedPosts } from './utils/PinnedPosts';
+import fs from 'fs';
 
 if (cluster.isMaster) console.log('application server starting, please wait.');
 
@@ -40,10 +39,17 @@ const env = process.env.NODE_ENV || 'development';
 // cache of a thousand days
 const cacheOpts = { maxAge: 86400000, gzip: true, buffer: true };
 
+// import ads.txt to be served statically
+const adstxt = fs.readFileSync(
+    path.join(__dirname, '../app/assets/ads.txt'),
+    'utf8'
+);
+
 // Serve static assets without fanfare
 app.use(
     favicon(path.join(__dirname, '../app/assets/images/favicons/favicon.ico'))
 );
+
 app.use(
     mount(
         '/favicons',
@@ -53,12 +59,14 @@ app.use(
         )
     )
 );
+
 app.use(
     mount(
         '/images',
         staticCache(path.join(__dirname, '../app/assets/images'), cacheOpts)
     )
 );
+
 app.use(
     mount(
         '/javascripts',
@@ -68,6 +76,14 @@ app.use(
         )
     )
 );
+
+app.use(
+    mount('/ads.txt', function*() {
+        this.type = 'text/plain';
+        this.body = adstxt;
+    })
+);
+
 // Proxy asset folder to webpack development server in development mode
 if (env === 'development') {
     const webpack_dev_port = process.env.PORT
@@ -121,25 +137,6 @@ session(app, {
 });
 csrf(app);
 
-// If a user is logged in, we need to make sure that they receive the correct
-// headers.
-app.use(function*(next) {
-    if (this.request.url.startsWith('/api')) {
-        yield next;
-        return;
-    }
-
-    const auth = this.request.query.auth;
-    if (auth) {
-        this.request.url = this.request.url.replace(/[?&]{1}auth=true/, '');
-        this.session['auth'] = true;
-        this.session.save();
-        this.request.query.auth = null;
-    }
-
-    yield next;
-});
-
 koaLocale(app);
 
 function convertEntriesToArrays(obj) {
@@ -148,6 +145,13 @@ function convertEntriesToArrays(obj) {
         return result;
     }, {});
 }
+
+// Fetch cached currency data for homepage
+const steemMarket = new SteemMarket();
+app.use(function*(next) {
+    this.steemMarketData = yield steemMarket.get();
+    yield next;
+});
 
 // some redirects and health status
 app.use(function*(next) {
@@ -203,12 +207,6 @@ app.use(function*(next) {
             return;
         }
     }
-    // // do not enter unless session uid & verified phone
-    // if (this.url === '/create_account' && !this.session.uid) {
-    //     this.status = 302;
-    //     this.redirect('/enter_email');
-    //     return;
-    // }
     // remember ch, cn, r url params in the session and remove them from url
     if (this.method === 'GET' && /\?[^\w]*(ch=|cn=|r=)/.test(this.url)) {
         let redir = this.url.replace(/((ch|cn|r)=[^&]+)/gi, r => {
@@ -240,11 +238,11 @@ if (env === 'production') {
     app.use(koa_logger());
 }
 
-app.use(
-    helmet({
-        hsts: false,
-    })
-);
+// app.use(
+//     helmet({
+//         hsts: false,
+//     })
+// );
 
 app.use(
     mount(
@@ -281,21 +279,10 @@ app.use(function*(next) {
 });
 
 useRedirects(app);
-useEnterAndConfirmEmailPages(app);
-useEnterAndConfirmMobilePages(app);
 useUserJson(app);
 usePostJson(app);
 
-useAccountRecoveryApi(app);
 useGeneralApi(app);
-
-app.use(function*(next) {
-    this.adsEnabled =
-        !(this.session.auth || this.session.a) && config.google_ad_enabled;
-    this.gptEnabled =
-        !(this.session.auth || this.session.a) && config.gpt_enabled;
-    yield next;
-});
 
 // helmet wants some things as bools and some as lists, makes config difficult.
 // our config uses strings, this splits them to lists on whitespace.
@@ -309,55 +296,7 @@ if (env === 'production') {
     if (helmetConfig.directives.reportUri === '-') {
         delete helmetConfig.directives.reportUri;
     }
-
-    if (!helmetConfig.directives.frameSrc) {
-        helmetConfig.directives.frameSrc = [
-            `'self'`,
-            'googleads.g.doubleclick.net',
-            'https:',
-        ];
-    }
-
     app.use(helmet.contentSecurityPolicy(helmetConfig));
-    app.use(function*(next) {
-        if (this.adsEnabled) {
-            // If user is signed out, enable ads.
-            [
-                'content-security-policy',
-                'x-content-security-policy',
-                'x-webkit-csp',
-            ].forEach(header => {
-                let policy = this.response.header[header]
-                    .split(/;\s+/)
-                    .map(el => {
-                        if (el.startsWith('script-src')) {
-                            const oldSrc = el.replace(/^script-src/, '');
-                            return `script-src 'unsafe-inline' 'unsafe-eval' data: https: ${
-                                oldSrc
-                            }`;
-                        } else if (el.startsWith('connect-src')) {
-                            const oldSrc = el.replace(/^connect-src/, '');
-                            return `connect-src securepubads.g.doubleclick.net ${
-                                oldSrc
-                            }`;
-                        } else if (el.startsWith('default-src')) {
-                            const oldSrc = el.replace(/^default-src/, '');
-                            return `default-src tpc.googlesyndication.com ${
-                                oldSrc
-                            }`;
-                        } else {
-                            return el;
-                        }
-                    })
-                    .join('; ');
-                this.response.set(header, policy);
-            });
-            yield next;
-        } else {
-            // If user is logged in, do not modify CSP headers further.
-            yield next;
-        }
-    });
 }
 
 if (env !== 'test') {
@@ -367,9 +306,16 @@ if (env !== 'test') {
     // we're inside a generator, we can't `await` here, so we pass a promise
     // so `src/server/app_render.jsx` can `await` on it.
     app.pinnedPostsPromise = pinnedPosts();
+    // refresh pinned posts every five minutes
+    setInterval(function() {
+        return new Promise(function(resolve, reject) {
+            app.pinnedPostsPromise = pinnedPosts();
+            resolve();
+        });
+    }, 300000);
+
     app.use(function*() {
         yield appRender(this, supportedLocales, resolvedAssets);
-        // if (app_router.dbStatus.ok) recordWebEvent(this, 'page_load');
         const bot = this.state.isBot;
         if (bot) {
             console.log(

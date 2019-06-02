@@ -8,8 +8,11 @@ export default function ServerHTML({
     title,
     meta,
     shouldSeeAds,
+    adClient,
     gptEnabled,
-    gptSlots,
+    gptBidding,
+    shouldSeeCookieConsent,
+    cookieConsentApiKey,
 }) {
     let page_title = title;
     return (
@@ -179,23 +182,76 @@ export default function ServerHTML({
                     />
                 ) : null}
                 {gptEnabled ? (
+                    <script src="https://staticfiles.steemit.com/prebid2.12.0.js" />
+                ) : null}
+                {gptEnabled ? (
                     <script
                         dangerouslySetInnerHTML={{
                             __html: `
-                      window.googletag = window.googletag || {};
-                      googletag.cmd = googletag.cmd || [];
-                      console.log('Set up googletag');
-                      googletag.cmd.push(function() {
-                          console.log('Preparing to enable googletag services');
-                          googletag.pubads().enableSingleRequest();
-                          googletag.pubads().setTargeting('edition',['new-york']);
-                          googletag.pubads().collapseEmptyDivs(true,true);
-                          googletag.pubads().disableInitialLoad();
-                          googletag.pubads().enableAsyncRendering();
-                          googletag.enableServices();
-                          console.log('Enabled googletag services');
-                      });
-                  `,
+                                // TODO: Move the follow values into config
+                                //       a new config file for ads would be good
+                                var PREBID_TIMEOUT = 2000;
+                                var FAILSAFE_TIMEOUT = 3000;
+                                var MAX_RETRIES = 20;
+
+                                // Begin GPT Ad Setup
+                                var googletag = googletag || {};
+                                googletag.cmd = googletag.cmd || [];
+
+                                googletag.cmd.push(function() {
+                                  googletag.pubads().disableInitialLoad();
+                                  googletag.pubads().setTargeting("edition", ["new-york"]);
+                                  googletag.pubads().collapseEmptyDivs(true);
+                                });
+
+
+                                // Begin Prebid Setup
+                                var pbjs = pbjs || {};
+                                pbjs.que = pbjs.que || [];
+
+                                pbjs.que.push(function() {
+                                  pbjs.addAdUnits(${JSON.stringify(
+                                      gptBidding.ad_units
+                                  )});
+
+                                  pbjs.setConfig({
+                                    priceGranularity: ${JSON.stringify(
+                                        gptBidding.custom_config
+                                    )},
+                                    currency: ${JSON.stringify(
+                                        gptBidding.system_currency
+                                    )}
+                                  });
+
+                                  pbjs.requestBids({
+                                    bidsBackHandler: initAdserver,
+                                    timeout: PREBID_TIMEOUT
+                                  });
+                                });
+                                // var noBids = {}
+                                function initAdserver() {
+                                  if (pbjs.initAdserverSet) return;
+
+                                  if(!googletag.pubadsReady && pbjs.retries <= MAX_RETRIES) {
+                                    setTimeout(initAdserver, 50); //poll ms can be adjusted as desired.
+                                    pbjs.retries++;
+                                    return;
+                                  }
+
+                                  pbjs.initAdserverSet = true;
+                                  googletag.cmd.push(function() {
+                                    pbjs.cmd.push(function() {
+                                      pbjs.setTargetingForGPTAsync();
+                                      googletag.pubads().refresh();
+                                    });
+                                  });
+                                }
+
+                                // TODO: Do we need to do this twice?
+                                setTimeout(function() {
+                                  initAdserver();
+                                }, FAILSAFE_TIMEOUT);
+                          `,
                         }}
                     />
                 ) : null}
@@ -210,17 +266,30 @@ export default function ServerHTML({
                         dangerouslySetInnerHTML={{
                             __html: `
                       (adsbygoogle = window.adsbygoogle || []).push({
-                          google_ad_client: "ca-pub-9368037717385698",
+                          google_ad_client: "${adClient}",
                           enable_page_level_ads: true
                       });
                   `,
                         }}
                     />
                 ) : null}
+                {shouldSeeCookieConsent ? (
+                    <script
+                            id="Cookiebot"
+                            src="https://consent.cookiebot.com/uc.js"
+                            data-cbid={cookieConsentApiKey}
+                            type="text/javascript" async
+                    />
+                ) : null}
                 <title>{page_title}</title>
             </head>
             <body>
-                <div id="content" dangerouslySetInnerHTML={{ __html: body }} />
+                {
+                    <div
+                        id="content"
+                        dangerouslySetInnerHTML={{ __html: body }}
+                    />
+                }
                 {assets.script.map((href, idx) => (
                     <script key={idx} src={href} />
                 ))}

@@ -59,7 +59,6 @@ describe('Global reducer', () => {
         const payload = {
             account: {
                 name: 'foo',
-                witness_votes: 99,
                 beList: ['alice', 'bob', 'claire'],
                 beOrderedMap: { foo: 'barman' },
             },
@@ -70,7 +69,6 @@ describe('Global reducer', () => {
             accounts: Map({
                 foo: Map({
                     name: 'foo',
-                    witness_votes: 99,
                     be_List: List(['alice', 'bob', 'claire']),
                     be_orderedMap: OrderedMap({ foo: 'barman' }),
                 }),
@@ -96,13 +94,11 @@ describe('Global reducer', () => {
             accounts: [
                 {
                     name: 'foo',
-                    witness_votes: 99,
                     beList: ['alice', 'bob', 'claire'],
                     beorderedMap: { foo: 'barman' },
                 },
                 {
                     name: 'bar',
-                    witness_votes: 12,
                     beList: ['james', 'billy', 'samantha'],
                     beOrderedMap: { kewl: 'snoop' },
                 },
@@ -115,7 +111,6 @@ describe('Global reducer', () => {
             accounts: Map({
                 sergei: Map({
                     name: 'sergei',
-                    witness_votes: 666,
                     beList: List(['foo', 'carl', 'hanna']),
                     beorderedMap: OrderedMap({ foo: 'cramps' }),
                 }),
@@ -129,7 +124,6 @@ describe('Global reducer', () => {
             accounts: Map({
                 sergei: Map({
                     name: 'sergei',
-                    witness_votes: 666,
                     beList: List(['foo', 'carl', 'hanna']),
                     beorderedMap: OrderedMap({
                         foo: 'cramps',
@@ -137,13 +131,11 @@ describe('Global reducer', () => {
                 }),
                 foo: Map({
                     name: 'foo',
-                    witness_votes: 99,
                     beList: List(['alice', 'bob', 'claire']),
                     beorderedMap: OrderedMap({ foo: 'barman' }),
                 }),
                 bar: Map({
                     name: 'bar',
-                    witness_votes: 12,
                     beList: List(['james', 'billy', 'samantha']),
                     beOrderedMap: OrderedMap({ kewl: 'snoop' }),
                 }),
@@ -259,49 +251,6 @@ describe('Global reducer', () => {
         actual = reducer(initial, globalActions.linkReply(payload));
         // Assert
         expect(actual).toEqual(initial);
-    });
-    it('should return correct state for a UPDATE_ACCOUNT_WITNESS_VOTE action', () => {
-        // Arrange
-        let payload = {
-            account: 'Smee',
-            witness: 'Greech',
-            approve: true,
-        };
-        const initial = reducer();
-        // Act
-        let actual = reducer(
-            initial,
-            globalActions.updateAccountWitnessVote(payload)
-        );
-        // Assert
-        expect(
-            actual.getIn(['accounts', payload.account, 'witness_votes'])
-        ).toEqual(Set([payload.witness]));
-        // Arrange
-        payload.approve = false;
-        // Act
-        actual = reducer(
-            initial,
-            globalActions.updateAccountWitnessVote(payload)
-        );
-        // Assert
-        expect(actual).toEqual(initial);
-    });
-    it('should return correct state for a UPDATE_ACCOUNT_WITNESS_PROXY action', () => {
-        // Arrange
-        let payload = {
-            account: 'Alice',
-            proxy: 'Jane',
-        };
-        const initial = reducer();
-        const expected = Map({ proxy: payload.proxy });
-        // Act
-        const actual = reducer(
-            initial,
-            globalActions.updateAccountWitnessProxy(payload)
-        );
-        // Assert
-        expect(actual.getIn(['accounts', payload.account])).toEqual(expected);
     });
     it('should return correct state for a DELETE_CONTENT action', () => {
         // Arrange

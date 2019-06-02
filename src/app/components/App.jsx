@@ -10,27 +10,12 @@ import CloseButton from 'app/components/elements/CloseButton';
 import Dialogs from 'app/components/modules/Dialogs';
 import Modals from 'app/components/modules/Modals';
 import WelcomePanel from 'app/components/elements/WelcomePanel';
-import MiniHeader from 'app/components/modules/MiniHeader';
 import tt from 'counterpart';
 import PageViewsCounter from 'app/components/elements/PageViewsCounter';
 import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 import { key_utils } from '@steemit/steem-js/lib/auth/ecc';
 import resolveRoute from 'app/ResolveRoute';
 import { VIEW_MODE_WHISTLE } from 'shared/constants';
-
-const pageRequiresEntropy = path => {
-    const { page } = resolveRoute(path);
-
-    const entropyPages = [
-        'ChangePassword',
-        'RecoverAccountStep1',
-        'RecoverAccountStep2',
-        'UserProfile',
-        'CreateAccount',
-    ];
-    /* Returns true if that page requires the entropy collection listener */
-    return entropyPages.indexOf(page) !== -1;
-};
 
 class App extends React.Component {
     constructor(props) {
@@ -39,15 +24,23 @@ class App extends React.Component {
         this.state = {
             showCallout: true,
             showBanner: true,
-            gptBannerHeight: 0,
         };
         this.listenerActive = null;
-        this.gptadshownListener = this.gptadshown.bind(this);
     }
 
-    gptadshown(e) {
-        const height = document.querySelector('header .gpt-ad').offsetHeight;
-        this.setState({ gptBannerHeight: height });
+    toggleBodyNightmode(nightmodeEnabled) {
+        if (nightmodeEnabled) {
+            document.body.classList.remove('theme-light');
+            document.body.classList.add('theme-dark');
+        } else {
+            document.body.classList.remove('theme-dark');
+            document.body.classList.add('theme-light');
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const { nightmodeEnabled } = nextProps;
+        this.toggleBodyNightmode(nightmodeEnabled);
     }
 
     componentWillMount() {
@@ -56,49 +49,8 @@ class App extends React.Component {
     }
 
     componentDidMount() {
-        window.addEventListener('gptadshown', this.gptadshownListener);
-
-        if (pageRequiresEntropy(this.props.pathname)) {
-            this._addEntropyCollector();
-        }
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener('gptadshown', this.gptadshownListener);
-    }
-
-    componentWillReceiveProps(np) {
-        // Add listener if the next page requires entropy and the current page didn't
-        if (
-            pageRequiresEntropy(np.pathname) &&
-            !pageRequiresEntropy(this.props.pathname)
-        ) {
-            this._addEntropyCollector();
-        } else if (!pageRequiresEntropy(np.pathname)) {
-            // Remove if next page does not require entropy
-            this._removeEntropyCollector();
-        }
-    }
-
-    _addEntropyCollector() {
-        if (!this.listenerActive && this.refs.App_root) {
-            this.refs.App_root.addEventListener(
-                'mousemove',
-                this.onEntropyEvent,
-                { capture: false, passive: true }
-            );
-            this.listenerActive = true;
-        }
-    }
-
-    _removeEntropyCollector() {
-        if (this.listenerActive && this.refs.App_root) {
-            this.refs.App_root.removeEventListener(
-                'mousemove',
-                this.onEntropyEvent
-            );
-            this.listenerActive = null;
-        }
+        const { nightmodeEnabled } = this.props;
+        this.toggleBodyNightmode(nightmodeEnabled);
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -114,7 +66,6 @@ class App extends React.Component {
             new_visitor !== n.new_visitor ||
             this.state.showBanner !== nextState.showBanner ||
             this.state.showCallout !== nextState.showCallout ||
-            this.state.gptBannerHeight !== nextState.gptBannerHeight ||
             nightmodeEnabled !== n.nightmodeEnabled ||
             showAnnouncement !== n.showAnnouncement
         );
@@ -122,20 +73,6 @@ class App extends React.Component {
 
     setShowBannerFalse = () => {
         this.setState({ showBanner: false });
-    };
-
-    onEntropyEvent = e => {
-        if (e.type === 'mousemove')
-            key_utils.addEntropy(e.pageX, e.pageY, e.screenX, e.screenY);
-        else console.log('onEntropyEvent Unknown', e.type, e);
-    };
-
-    signUp = () => {
-        serverApiRecordEvent('Sign up', 'Hero banner');
-    };
-
-    learnMore = () => {
-        serverApiRecordEvent('Learn more', 'Hero banner');
     };
 
     render() {
@@ -149,9 +86,6 @@ class App extends React.Component {
             category,
             order,
         } = this.props;
-
-        const miniHeader =
-            pathname === '/create_account' || pathname === '/pick_account';
 
         const whistleView = viewMode === VIEW_MODE_WHISTLE;
         const headerHidden = whistleView;
@@ -237,7 +171,6 @@ class App extends React.Component {
             <div
                 className={classNames('App', themeClass, {
                     'index-page': ip,
-                    'mini-header': miniHeader,
                     'whistle-view': whistleView,
                     withAnnouncement: this.props.showAnnouncement,
                 })}
@@ -245,9 +178,7 @@ class App extends React.Component {
             >
                 <ConnectedSidePanel alignment="right" />
 
-                {headerHidden ? null : miniHeader ? (
-                    <MiniHeader />
-                ) : (
+                {headerHidden ? null : (
                     <Header
                         pathname={pathname}
                         category={category}

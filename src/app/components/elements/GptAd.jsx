@@ -1,54 +1,106 @@
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
-class GptAd extends React.Component {
+class GptAd extends Component {
     componentDidMount() {
-        if (
-            !this.props.gptEnabled ||
-            !process.env.BROWSER ||
-            !window.googletag
-        ) {
-            return null;
-        }
+        if (!this.ad.path || !this.enabled) return;
 
         googletag.cmd.push(() => {
-            const slot = googletag.defineSlot.apply(googletag, this.props.args);
-            slot.addService(googletag.pubads());
+            const slot = googletag.defineSlot(
+                this.ad.path,
+                this.ad.dimensions,
+                this.ad.path
+            );
 
-            googletag.cmd.push(() => {
-                googletag.display(this.props.slot);
-                googletag.pubads().refresh([slot]);
-                googletag
-                    .pubads()
-                    .addEventListener('slotRenderEnded', function(event) {
-                        console.log('Slot has been rendered:', event);
-                        window.dispatchEvent(new Event('gptadshown'));
-                    });
-            });
+            if (slot) {
+                slot.addService(googletag.pubads());
+                googletag.pubads().enableSingleRequest();
+                googletag.enableServices();
+
+                googletag.cmd.push(() => {
+                    googletag.display(this.ad.path);
+                    googletag.pubads().refresh([slot]);
+                    googletag
+                        .pubads()
+                        .addEventListener('slotRenderEnded', e => {
+                            window.dispatchEvent(new Event('gptadshown', e));
+                        });
+                });
+            }
         });
     }
 
+    constructor(props) {
+        super(props);
+        const { ad, enabled, type } = props;
+
+        this.ad = {};
+        this.type = type;
+        this.enabled = false;
+
+        if (ad) {
+            // console.info(
+            //     `Slot named '${props.slotName}' will render with given data:`,
+            //     ad
+            // );
+            this.enabled = enabled;
+            this.ad = ad.toJS();
+        } else {
+            // console.info(
+            //     `Slot named '${
+            //         props.slotName
+            //     }' will be disabled because we were unable to find the ad details.`
+            // );
+        }
+    }
+
     render() {
-        if (
-            !this.props.gptEnabled ||
-            !process.env.BROWSER ||
-            !window.googletag
-        ) {
-            return null;
+        if (!this.ad || !this.enabled) {
+            return <div id="disabled_ad" style={{ display: 'none' }} />;
         }
 
         return (
             <div
                 className="gpt-ad"
                 style={{ width: '100%' }}
-                id={this.props.slot}
+                id={this.ad.path}
             />
         );
     }
 }
 
-export default connect((state, ownProps) => {
-    const env = state.app.get('env');
-    const gptEnabled = state.app.getIn(['googleAds', 'gptEnabled']);
-    return { env, gptEnabled, ...ownProps };
-})(GptAd);
+GptAd.propTypes = {
+    ad: PropTypes.shape({
+        path: PropTypes.string,
+        dimensions: PropTypes.array,
+    }).isRequired,
+    enabled: PropTypes.bool.isRequired,
+    type: PropTypes.oneOf(['Bidding', 'Category', 'Basic']),
+};
+
+export default connect(
+    (state, props) => {
+        const enabled =
+            !!state.app.getIn(['googleAds', 'gptEnabled']) &&
+            !!process.env.BROWSER &&
+            !!window.googletag;
+        const postCategory = state.global.get('postCategory');
+        const basicSlots = state.app.getIn(['googleAds', `gptBasicSlots`]);
+        const biddingSlots = state.app.getIn(['googleAds', `gptBiddingSlots`]);
+        const categorySlots = state.app.getIn([
+            'googleAds',
+            `gptCategorySlots`,
+        ]);
+
+        const slotName = props.slotName;
+        let type = props.type;
+        let slot = state.app.getIn(['googleAds', `gpt${type}Slots`, slotName]);
+
+        return {
+            enabled,
+            ad: slot,
+            ...props,
+        };
+    },
+    dispatch => ({})
+)(GptAd);
